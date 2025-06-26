@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
-import {TBlockId, TConnection} from '@gravity-ui/graph';
+import {ECameraScaleLevel, TBlockId, TConnection} from '@gravity-ui/graph';
 import {Flex} from '@gravity-ui/uikit';
 import {SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 
@@ -94,7 +94,7 @@ export function FlowGraphImpl() {
         <YTGraph
             className={block('graph')}
             {...config}
-            data={config.scale === 100 ? groups : data}
+            data={config.scale === ECameraScaleLevel.Minimalistic ? groups : data}
             renderBlock={({className, style, data}) => {
                 return (
                     <Flex className={block('item-container', className)} style={style}>
@@ -170,9 +170,10 @@ function useFlowGraphData() {
                 sourceBlockId: string,
                 targetBlockId: string,
             ) {
-                connections.push({sourceBlockId, targetBlockId, ...{points: []}});
+                connections.push({sourceBlockId, targetBlockId});
             }
 
+            // Collect streams
             Object.values(streams).forEach((stream) => {
                 const streamBlock = makeBlock('stream', stream, {
                     name: stream.name,
@@ -183,6 +184,7 @@ function useFlowGraphData() {
                 res.data.blocks.push(streamBlock);
             });
 
+            // Collect computations and their groups
             Object.entries(computations).forEach(([name, computation]) => {
                 const groupId = `\n\n__group(${computation.id})__\n\n`;
 
@@ -248,7 +250,7 @@ function useFlowGraphData() {
                 collectStreams('timer_streams', {groupId});
             });
 
-            // Collect group connections
+            // Transform connections to group connections
             const connectionIds = new Set<string>();
             res.data.connections.forEach((item) => {
                 const {sourceBlockId, targetBlockId} = item;
