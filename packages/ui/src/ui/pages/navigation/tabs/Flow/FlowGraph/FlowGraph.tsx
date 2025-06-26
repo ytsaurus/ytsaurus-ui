@@ -39,6 +39,7 @@ import {StreamCanvasBlock} from './renderers/StreamCanvas';
 
 import './FlowGraph.scss';
 import {FlowGroupBlock} from './utils/FlowGroupBlock';
+import {ComputationGroupCanvasBlock} from './renderers/ComputationGroupCanvas';
 
 const block = cn('yt-flow-graph');
 
@@ -78,7 +79,7 @@ export function FlowGraphImpl() {
         {
             computation: ComputationCanvasBlock,
             stream: StreamCanvasBlock,
-            'computation-group': ComputationCanvasBlock,
+            'computation-group': ComputationGroupCanvasBlock,
         },
         {useDefaultConncation: true},
     );
@@ -190,6 +191,7 @@ function useFlowGraphData() {
                     computation,
                     streamSize: STREAM_SIZE,
                     computationSize: COMPUTATION_SIZE,
+                    backgroundTheme: STATUS_TO_BG_THEME[computation.status],
                 });
 
                 res.groups.blocks.push(groupBlock);
