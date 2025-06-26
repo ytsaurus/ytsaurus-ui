@@ -2,6 +2,8 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
+import partition_ from 'lodash/partition';
+
 import {ECameraScaleLevel, TBlockId, TConnection} from '@gravity-ui/graph';
 import {Flex} from '@gravity-ui/uikit';
 import {SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
@@ -9,7 +11,7 @@ import {SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types
 import {
     FlowComputation,
     FlowComputationStreamType,
-    FlowNodeStatus,
+    FlowSink,
     FlowStream,
 } from '../../../../../../shared/yt-types';
 
@@ -40,6 +42,8 @@ import {StreamCanvasBlock} from './renderers/StreamCanvas';
 import './FlowGraph.scss';
 import {FlowGroupBlock} from './utils/FlowGroupBlock';
 import {ComputationGroupCanvasBlock} from './renderers/ComputationGroupCanvas';
+import {Sink} from './renderers/Sink';
+import {STATUS_TO_BG_THEME} from './renderers/FlowGraphRenderer';
 
 const block = cn('yt-flow-graph');
 
@@ -70,7 +74,8 @@ export type FlowGraphBlock =
     | (YTGraphBlock<'stream', FlowStream> & {
           icon?: SVGIconSvgrData;
           stream_type?: FlowComputationStreamType;
-      });
+      })
+    | (YTGraphBlock<'sink', FlowSink> & {icon?: SVGIconSvgrData; stream_type?: never});
 
 export type FlowGraphBlockItem<T extends FlowGraphBlock['is']> = FlowGraphBlock & {is: T};
 
@@ -80,6 +85,7 @@ export function FlowGraphImpl() {
             computation: ComputationCanvasBlock,
             stream: StreamCanvasBlock,
             'computation-group': ComputationGroupCanvasBlock,
+            sink: StreamCanvasBlock,
         },
         {useDefaultConncation: true},
     );
@@ -121,7 +127,9 @@ function renderContent({item, ...rest}: {item: FlowGraphBlock; detailed?: boolea
         case 'stream':
             return <Stream className={block('item')} item={item} {...rest} />;
         case 'computation-group':
-            return <Computation className={block('item')} item={item as any} {...rest} />;
+            return <Computation className={block('item')} item={item} {...rest} />;
+        case 'sink':
+            return <Sink className={block('item')} item={item} />;
     }
 }
 
@@ -135,18 +143,9 @@ const ICON_BY_TYPE: Record<
     timer_streams: {icon: ClockIcon},
 };
 
-const STATUS_TO_BG_THEME: Partial<
-    Record<FlowNodeStatus, 'success' | 'info' | 'warning' | 'danger'>
-> = {
-    warning: 'warning',
-    alert: 'warning',
-    error: 'danger',
-    fatal: 'danger',
-    maximum: 'danger',
-};
-
 const COMPUTATION_SIZE = {width: 240, height: 108};
 const STREAM_SIZE = {width: 160, height: 84};
+const SINK_SIZE = {width: 200, height: 60};
 
 function useFlowGraphData() {
     const loadedData = useSelector(getFlowGraphData);
@@ -155,7 +154,7 @@ function useFlowGraphData() {
 
     const data: {data: FlowData; groups: FlowData; groupById: Map<string, FlowGroupBlock>} =
         React.useMemo(() => {
-            const {computations = {}, streams = {}} = loadedData ?? {};
+            const {computations = {}, streams = {}, sinks = {}, sources = {}} = loadedData ?? {};
 
             const res: typeof data = {
                 data: {blocks: [], connections: []},
@@ -250,6 +249,26 @@ function useFlowGraphData() {
                 collectStreams('timer_streams', {groupId});
             });
 
+            // Collect sinks
+            Object.entries(sinks).forEach(([_key, item]) => {
+                const sink = makeBlock('sink', item, {...SINK_SIZE, icon: ReceiptIcon});
+                addConnection(res.data.connections, item.stream_id, item.id);
+                blockById.set(sink.id, sink);
+
+                res.data.blocks.push(sink);
+                res.groups.blocks.push(sink);
+            });
+
+            // Collect sources
+            Object.entries(sources).forEach(([_key, item]) => {
+                const source = makeBlock('sink', item, {...SINK_SIZE, icon: FileCodeIcon});
+                addConnection(res.data.connections, item.id, item.stream_id);
+                blockById.set(item.id, source);
+
+                res.data.blocks.push(source);
+                res.groups.blocks.push(source);
+            });
+
             // Transform connections to group connections
             const connectionIds = new Set<string>();
             res.data.connections.forEach((item) => {
@@ -296,6 +315,8 @@ function useFlowGraphData() {
             }
         });
 
+        const [_groups, other] = partition_(blocks, ({is}) => is === 'computation-group');
+
         return {
             data: {
                 blocks: [
@@ -314,6 +335,7 @@ function useFlowGraphData() {
                         }
                         return item;
                     }),
+                    ...other,
                 ],
                 connections: data.data.connections,
             },

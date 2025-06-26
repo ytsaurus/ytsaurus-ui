@@ -546,33 +546,54 @@ export type FlowExecuteData = {
 
 type ComputationId = string;
 type StreamId = string;
+type SinkId = string;
+type SourceId = string;
 
 export type FlowDescribePipelineData = {
     computations: Record<ComputationId, FlowComputation>;
+    // All elements are always linked with computation, every stream belong to a computaion
     streams: Record<StreamId, FlowStream>;
+
+    // A sink has incoming connection from an element of computation.output_streams
+    sinks: Record<SinkId, FlowSink>;
+    // A sources has outgouing connection to a computation or to a computation.input_streams
+    sources: Record<SourceId, FlowSink>;
 };
 
-export type FlowComputation = FlowComputationStreams & {
-    id: ComputationId;
-    metrics: {
-        cpu_usage_current: number;
-        cpu_usage_30s: number;
-        cpu_usage_10m: number;
-        memory_usage_current: number;
-        memory_usage_30s: number;
-        memory_usage_current: number;
-    };
-    partitions_stats?: {
-        count: 1;
-        count_by_state?: Record<
-            'Completed' | 'Executing' | 'Transient' | 'Interrupted',
-            number | undefined
-        >;
-    };
-    group_by_schema_str: string;
-    epoch_per_second: number;
+export type FlowNodeBase = {
+    id: string;
+    name: string;
     status: FlowNodeStatus;
+
+    description?: string;
+    messages?: Array<FlowMessage>;
 };
+
+export type FlowMessage = {level: FlowNodeStatus} & (
+    | {yson?: unknown; text?: never}
+    | {text?: string; yson?: never}
+);
+
+export type FlowComputation = FlowNodeBase &
+    FlowComputationStreams & {
+        metrics: {
+            cpu_usage_current: number;
+            cpu_usage_30s: number;
+            cpu_usage_10m: number;
+            memory_usage_current: number;
+            memory_usage_30s: number;
+            memory_usage_current: number;
+        };
+        partitions_stats?: {
+            count: 1;
+            count_by_state?: Record<
+                'Completed' | 'Executing' | 'Transient' | 'Interrupted',
+                number | undefined
+            >;
+        };
+        group_by_schema_str: string;
+        epoch_per_second: number;
+    };
 
 export type FlowNodeStatus =
     | 'minimum'
@@ -602,12 +623,13 @@ type FlowComputationStreamType =
     | 'source_streams'
     | 'timer_streams';
 
-export type FlowStream = {
-    id: string;
-    name: string;
+export type FlowStream = FlowNodeBase & {
     bytes_per_second?: number;
     messages_per_second?: number;
     inflight_bytes?: number;
     inflight_rows?: number;
-    status: FlowNodeStatus;
+};
+
+export type FlowSink = FlowNodeBase & {
+    stream_id: StreamId;
 };
