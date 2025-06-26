@@ -18,7 +18,7 @@ const FONT_SIZE = {
 
 const ELLIPSIS_CHAR = '\u2026';
 
-export type YTGraphFontSize = keyof typeof FONT_SIZE;
+export type YTGraphFontSize = keyof typeof FONT_SIZE | number;
 
 export type BaseMeta = {};
 
@@ -75,8 +75,12 @@ export class YTGrapCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canva
         return this.connectedState.$geometry.value;
     }
 
+    protected getFontHeight(type: YTGraphFontSize): number {
+        return typeof type === 'number' ? type : FONT_SIZE[type] ?? FONT_SIZE.normal;
+    }
+
     protected getFont(type: YTGraphFontSize = 'normal') {
-        return `normal ${FONT_SIZE[type] ?? FONT_SIZE.normal}px YS Text, Arial, sans-serif`;
+        return `normal ${this.getFontHeight(type)}px YS Text, Arial, sans-serif`;
     }
 
     protected drawRoundBlock({
@@ -335,10 +339,13 @@ export class YTGrapCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canva
         const isSameText = res === text;
 
         res = isSameText ? res : res.slice(0, res.length - 1) + ELLIPSIS_CHAR;
+
+        const height: number = this.getFontHeight(fontSize);
+
         return {
             fitText: res,
             fitTextWidth: isSameText ? width : this.context.ctx.measureText(res).width,
-            height: FONT_SIZE[fontSize],
+            height,
         };
     }
 
@@ -381,7 +388,7 @@ export class YTGrapCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canva
             xPos,
             yPos: yPos + l.height,
             text: v.fitText,
-            fontSize: 'header',
+            fontSize,
             padding,
         });
     }
