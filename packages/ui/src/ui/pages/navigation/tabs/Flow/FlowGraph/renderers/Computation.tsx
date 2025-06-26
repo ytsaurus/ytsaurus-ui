@@ -21,7 +21,7 @@ type ComputationProps = {
 
     detailed?: boolean;
 
-    item: FlowGraphBlockItem<'computation'>;
+    item: Omit<FlowGraphBlockItem<'computation'>, 'is'>;
 };
 
 export function Computation({detailed, item, className}: ComputationProps) {
@@ -58,6 +58,7 @@ export function Computation({detailed, item, className}: ComputationProps) {
             />
             <ComputaionProgress stats={item.meta?.partitions_stats} />
             {detailed && <ComputationDetails item={item} />}
+            {detailed && <FlowMessages data={item.meta.messages} />}
         </div>
     );
 }

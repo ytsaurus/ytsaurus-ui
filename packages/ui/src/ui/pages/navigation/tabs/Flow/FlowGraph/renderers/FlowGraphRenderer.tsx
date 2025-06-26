@@ -43,3 +43,20 @@ export function FlowCaption1({text}: {text: React.ReactNode}) {
         </Text>
     );
 }
+
+export function FlowMessages({data}: {data?: Array<FlowMessage>}) {
+    return !data?.length ? null : (
+        <div>
+            <FlowCaption1 text={'Messages'} />
+            {data?.map(({level, yson, text}, index) => {
+                const theme = STATUS_TO_BG_THEME[level];
+                return (
+                    <div className={block('message', {theme})} key={index}>
+                        {text?.length! > 0 && <FlowCaption1 text={text} />}
+                        {Boolean(yson) && <Yson value={yson} />}
+                    </div>
+                );
+            })}
+        </div>
+    );
+}
