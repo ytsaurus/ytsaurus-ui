@@ -6,7 +6,7 @@ import {OperationType} from '../enums';
 import {iconToBase} from '../../../../../components/YTGraph/utils/iconToBase';
 import {getOperationType} from './getOperationType';
 import {getBlockIcon} from './getBlockIcon';
-import {TMultipointConnection} from '@gravity-ui/graph/build/plugins/elk/types';
+import {TMultipointConnection} from '@gravity-ui/graph/build/react-components/elk/types';
 
 export const createBlocks = (
     graph: ProcessedGraph,
