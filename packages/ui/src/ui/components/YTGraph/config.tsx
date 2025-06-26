@@ -42,6 +42,7 @@ class NoopBGLayer extends Component {
 
 export function useConfig<T extends TBlock>(
     blockComponents: Record<T['is'], typeof CanvasBlock<T>>,
+    {useDefaultConncation}: {useDefaultConncation?: boolean} = {},
 ): {
     config: HookGraphParams;
     isBlock: (v: unknown) => v is CanvasBlock<T>;
@@ -54,7 +55,7 @@ export function useConfig<T extends TBlock>(
     const config = React.useMemo(() => {
         const config: HookGraphParams = {
             settings: {
-                connection: MultipointConnection,
+                connection: useDefaultConncation ? undefined : MultipointConnection,
                 canDuplicateBlocks: false,
                 canCreateNewConnections: false,
                 canZoomCamera: true,
