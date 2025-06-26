@@ -1,5 +1,6 @@
 import React from 'react';
-import {Flex, Text} from '@gravity-ui/uikit';
+import {Flex} from '@gravity-ui/uikit';
+import {FlowCaption1, FlowCaption2} from './FlowGraphRenderer';
 
 export function FlowMeta({
     items,
@@ -19,12 +20,8 @@ export function FlowMeta({
                         shrink={1}
                         style={{overflow: 'hidden'}}
                     >
-                        <Text variant="caption-1" color="secondary" ellipsis>
-                            {label}
-                        </Text>
-                        <Text variant="caption-2" style={{lineHeight: '12px'}} ellipsis>
-                            {value}
-                        </Text>
+                        <FlowCaption1 text={label} />
+                        <FlowCaption2 text={value} />
                     </Flex>
                 );
             })}
