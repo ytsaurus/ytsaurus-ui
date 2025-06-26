@@ -8,7 +8,7 @@ import {FlowGraphBlockItem} from '../FlowGraph';
 
 import {FlowMeta} from './FlowMeta';
 
-import {FlowCaption2, FlowIcon} from './FlowGraphRenderer';
+import {FlowCaption2, FlowIcon, FlowMessages} from './FlowGraphRenderer';
 
 type StreamProps = {
     className?: string;
@@ -59,6 +59,7 @@ export function Stream({item, detailed, className}: StreamProps) {
                     },
                 ]}
             />
+            {detailed && <FlowMessages data={item.meta.messages} />}
         </div>
     );
 }
