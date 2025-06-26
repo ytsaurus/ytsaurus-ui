@@ -587,11 +587,19 @@ export type FlowNodeStatus =
 
 export type FlowComputationStreams = Record<FlowComputationStreamType, Array<StreamId>>;
 
+/**
+ * - Elements of sources_streams/timer_streams/output_streams should be groupped with their computation
+ *   - the elements should have specific relative postion inside the group:
+ *     - source_streams should be placed on the left-bottom area
+ *     - output_streams should be placed on the right area
+ *     - timer_streams should be placed on the bottom area
+ * - An item from input_streams is always an item of output_streams at least of one onother block
+ */
+
 type FlowComputationStreamType =
     | 'input_streams'
     | 'output_streams'
     | 'source_streams'
-    | 'sink_streams'
     | 'timer_streams';
 
 export type FlowStream = {
