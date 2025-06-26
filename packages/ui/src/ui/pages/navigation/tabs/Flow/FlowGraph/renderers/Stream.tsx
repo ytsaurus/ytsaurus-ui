@@ -1,7 +1,6 @@
 import React from 'react';
-import cn from 'bem-cn-lite';
 
-import {Flex, Icon, Text} from '@gravity-ui/uikit';
+import {Flex, Text} from '@gravity-ui/uikit';
 
 import format from '../../../../../../common/hammer/format';
 
@@ -9,9 +8,7 @@ import {FlowGraphBlockItem} from '../FlowGraph';
 
 import {FlowMeta} from './FlowMeta';
 
-import './Stream.scss';
-
-const block = cn('yt-flow-stream');
+import {FlowCaption2, FlowIcon} from './FlowGraphRenderer';
 
 type StreamProps = {
     className?: string;
@@ -23,16 +20,10 @@ type StreamProps = {
 
 export function Stream({item, detailed, className}: StreamProps) {
     return (
-        <div className={block(null, className)}>
+        <div className={className}>
             <Flex gap={1} alignItems="center" style={{paddingBottom: '10px'}} overflow="hidden">
-                {item.icon && (
-                    <Flex shrink={0}>
-                        <Icon className={block('icon')} data={item.icon} />
-                    </Flex>
-                )}
-                <Text variant="caption-2" style={{lineHeight: '12px'}} ellipsis>
-                    {item.name}
-                </Text>
+                <FlowIcon data={item.icon} />
+                <FlowCaption2 text={item.name} />
             </Flex>
             <FlowMeta
                 items={[
