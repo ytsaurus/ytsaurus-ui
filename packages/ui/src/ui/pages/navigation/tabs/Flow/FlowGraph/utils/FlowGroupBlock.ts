@@ -22,6 +22,8 @@ export class FlowGroupBlock implements YTGraphBlock<'computation-group', FlowCom
     selected = false;
     anchors = [];
 
+    backgroundTheme?: YTGraphBlock<'computation-group', FlowComputation>['backgroundTheme'];
+
     sizes: {stream: Size; computation: Size};
 
     constructor({
@@ -29,15 +31,18 @@ export class FlowGroupBlock implements YTGraphBlock<'computation-group', FlowCom
         computation,
         streamSize,
         computationSize,
+        backgroundTheme,
     }: {
         id: string;
         computation: FlowComputation;
         streamSize: Size;
         computationSize: Size;
+        backgroundTheme: YTGraphBlock<'computation-group', FlowComputation>['backgroundTheme'];
     }) {
         this.id = id;
         this.meta = computation;
         this.name = computation.id;
+        this.backgroundTheme = backgroundTheme;
 
         this.sizes = {stream: streamSize, computation: computationSize};
 
