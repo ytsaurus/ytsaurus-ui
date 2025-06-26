@@ -40,7 +40,6 @@ export function useCustomGroups({
         );
 
         return () => {
-            groups.detachLayer();
             graph.detachLayer(groups);
         };
     }, [graph, customGroups]);

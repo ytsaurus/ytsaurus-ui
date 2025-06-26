@@ -4,14 +4,13 @@ import {
     CanvasBlock,
     ECameraScaleLevel,
     Graph,
-    GraphCanvas,
     GraphState,
-    HookGraphParams,
     TBlock,
     TConnection,
-    useGraph,
-    useGraphEvent,
 } from '@gravity-ui/graph';
+
+import {GraphCanvas, HookGraphParams, useGraph, useGraphEvent} from '@gravity-ui/graph/react';
+
 import {useThemeValue} from '@gravity-ui/uikit';
 
 import {PopupPortal} from './PopupLayer';
@@ -94,18 +93,22 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
         graph.api.zoomToViewPort({padding: 100});
     }, [graph]);
 
+    const [element, setElement] = React.useState<HTMLDivElement | null>(null);
+
     React.useEffect(() => {
+        if (!element) {
+            return undefined;
+        }
         const resizeObserver = new ResizeObserver(() => {
             setTimeout(() => {
                 graph.api.zoomToViewPort({padding: 100});
             }, 100);
         });
-        const graphHtml = graph.getGraphHTML();
-        resizeObserver.observe(graphHtml);
+        resizeObserver.observe(element);
         return () => {
-            resizeObserver.unobserve(graphHtml);
+            resizeObserver.unobserve(element);
         };
-    }, [graph]);
+    }, [element]);
 
     React.useEffect(() => {
         graph.setColors(getGraphColors());
@@ -138,7 +141,7 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     );
 
     return (
-        <div className={block(null, className)}>
+        <div ref={setElement} className={block(null, className)}>
             <GraphCanvas
                 graph={graph}
                 renderBlock={renderBlockCallback as any}

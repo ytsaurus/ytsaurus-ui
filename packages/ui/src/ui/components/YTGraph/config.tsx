@@ -1,18 +1,12 @@
 import React from 'react';
 
 import ELK, {ElkExtendedEdge, ElkNode} from 'elkjs';
-import {
-    CanvasBlock,
-    ECameraScaleLevel,
-    HookGraphParams,
-    MultipointConnection,
-    TBlock,
-    TConnection,
-    useElk,
-} from '@gravity-ui/graph';
+import {CanvasBlock, Component, ECameraScaleLevel, TBlock, TConnection} from '@gravity-ui/graph';
+
+import {HookGraphParams, MultipointConnection, useElk} from '@gravity-ui/graph/react';
+
 import {RecursivePartial} from '@gravity-ui/graph/build/utils/types/helpers';
 import {TGraphColors} from '@gravity-ui/graph/build/graphConfig';
-import {Component} from '@gravity-ui/graph/build/lib';
 
 import {getCssColor} from '../../utils/get-css-color';
 import {useMemoizedIfEqual} from '../../hooks/use-updater';
