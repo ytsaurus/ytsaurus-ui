@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
-import {TConnection} from '@gravity-ui/graph';
+import {TBlockId, TConnection} from '@gravity-ui/graph';
 import {Flex} from '@gravity-ui/uikit';
 import {SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 
@@ -38,6 +38,7 @@ import {ComputationCanvasBlock} from './renderers/ComputationCanvas';
 import {StreamCanvasBlock} from './renderers/StreamCanvas';
 
 import './FlowGraph.scss';
+import {FlowGroupBlock} from './utils/FlowGroupBlock';
 
 const block = cn('yt-flow-graph');
 
@@ -63,18 +64,26 @@ export function FlowGraph({pipeline_path, yson}: {pipeline_path: string; yson: b
 }
 
 export type FlowGraphBlock =
-    | YTGraphBlock<'computation', FlowComputation>
-    | (YTGraphBlock<'stream', FlowStream> & {icon?: SVGIconSvgrData});
+    | (YTGraphBlock<'computation-group', FlowComputation> & {stream_type?: never})
+    | (YTGraphBlock<'computation', FlowComputation> & {stream_type?: never})
+    | (YTGraphBlock<'stream', FlowStream> & {
+          icon?: SVGIconSvgrData;
+          stream_type?: FlowComputationStreamType;
+      });
 
 export type FlowGraphBlockItem<T extends FlowGraphBlock['is']> = FlowGraphBlock & {is: T};
 
 export function FlowGraphImpl() {
-    const config = useConfig<FlowGraphBlock>({
-        computation: ComputationCanvasBlock,
-        stream: StreamCanvasBlock,
-    });
+    const config = useConfig<FlowGraphBlock>(
+        {
+            computation: ComputationCanvasBlock,
+            stream: StreamCanvasBlock,
+            'computation-group': ComputationCanvasBlock,
+        },
+        {useDefaultConncation: true},
+    );
 
-    const {isEmpty, data} = useFlowGraphData();
+    const {isEmpty, data, groups, groupBlocks} = useFlowGraphData();
 
     if (isEmpty) {
         return <NoContent warning="The graph is empty" />;
@@ -84,7 +93,7 @@ export function FlowGraphImpl() {
         <YTGraph
             className={block('graph')}
             {...config}
-            data={data}
+            data={config.scale === 100 ? groups : data}
             renderBlock={({className, style, data}) => {
                 return (
                     <Flex className={block('item-container', className)} style={style}>
@@ -99,7 +108,7 @@ export function FlowGraphImpl() {
                     </div>
                 );
             }}
-            hasGroups
+            customGroups={groupBlocks}
         />
     );
 }
@@ -110,6 +119,8 @@ function renderContent({item, ...rest}: {item: FlowGraphBlock; detailed?: boolea
             return <Computation className={block('item')} item={item} {...rest} />;
         case 'stream':
             return <Stream className={block('item')} item={item} {...rest} />;
+        case 'computation-group':
+            return <Computation className={block('item')} item={item as any} {...rest} />;
     }
 }
 
@@ -120,7 +131,6 @@ const ICON_BY_TYPE: Record<
     input_streams: {icon: FileCodeIcon},
     output_streams: {icon: FileCodeIcon},
     source_streams: {icon: FileCodeIcon},
-    sink_streams: {icon: ReceiptIcon},
     timer_streams: {icon: ClockIcon},
 };
 
@@ -134,108 +144,205 @@ const STATUS_TO_BG_THEME: Partial<
     maximum: 'danger',
 };
 
+const COMPUTATION_SIZE = {width: 240, height: 108};
+const STREAM_SIZE = {width: 160, height: 84};
+
 function useFlowGraphData() {
     const loadedData = useSelector(getFlowGraphData);
 
-    const data: YTGraphData<FlowGraphBlock, TConnection> = React.useMemo(() => {
-        const {computations = {}, streams = {}} = loadedData ?? {};
+    type FlowData = YTGraphData<FlowGraphBlock, TConnection>;
 
-        const res: typeof data = {blocks: [], connections: []};
+    const data: {data: FlowData; groups: FlowData; groupById: Map<string, FlowGroupBlock>} =
+        React.useMemo(() => {
+            const {computations = {}, streams = {}} = loadedData ?? {};
 
-        const blockOptionsById: Map<string, {type: FlowComputationStreamType; groupId?: string}> =
-            new Map();
+            const res: typeof data = {
+                data: {blocks: [], connections: []},
+                groups: {blocks: [], connections: []},
+                groupById: new Map<string, FlowGroupBlock>(),
+            };
 
-        Object.entries(computations).forEach(([name, computation]) => {
-            const groupId = `group(${computation.id})`;
+            const blockById: Map<TBlockId, FlowGraphBlock> = new Map();
 
-            const block: (typeof res)['blocks'][number] = makeBlock('computation', computation, {
-                name,
-                width: 240,
-                height: 108,
-                groupId,
-                backgroundTheme: STATUS_TO_BG_THEME[computation.status],
-            });
-            res.blocks.push(block);
-
-            function addConnection(sourceBlockId: string, targetBlockId: string) {
-                res.connections.push({sourceBlockId, targetBlockId, ...{points: []}});
+            function addConnection(
+                connections: FlowData['connections'],
+                sourceBlockId: string,
+                targetBlockId: string,
+            ) {
+                connections.push({sourceBlockId, targetBlockId, ...{points: []}});
             }
 
-            function collectStreams<K extends FlowComputationStreamType>(key: K) {
-                const streams = computation[key] ?? [];
-
-                streams.forEach((id) => {
-                    blockOptionsById.set(id, {
-                        type: key,
-                        groupId:
-                            key !== 'input_streams' && key !== 'output_streams'
-                                ? groupId
-                                : undefined,
-                    });
-                    const isInput =
-                        key === 'input_streams' ||
-                        key === 'source_streams' ||
-                        key === 'timer_streams';
-
-                    if (isInput) {
-                        addConnection(id, computation.id);
-                    } else {
-                        addConnection(computation.id, id);
-                    }
-
-                    if (key === 'timer_streams') {
-                        addConnection(computation.id, id);
-                    }
-                });
-            }
-
-            collectStreams('input_streams');
-            collectStreams('output_streams');
-            collectStreams('source_streams');
-            collectStreams('sink_streams');
-            collectStreams('timer_streams');
-        });
-
-        Object.values(streams).forEach((stream) => {
-            const {type, ...rest} = blockOptionsById.get(stream.id) ?? {};
-            const options = ICON_BY_TYPE[type!];
-            res.blocks.push(
-                makeBlock('stream', stream, {
-                    width: 160,
-                    height: 84,
+            Object.values(streams).forEach((stream) => {
+                const streamBlock = makeBlock('stream', stream, {
                     name: stream.name,
-                    ...options,
-                    backgroundTheme: STATUS_TO_BG_THEME[stream.status],
-                    ...rest,
-                }),
-            );
+                    ...STREAM_SIZE,
+                });
+
+                blockById.set(streamBlock.id, streamBlock);
+                res.data.blocks.push(streamBlock);
+            });
+
+            Object.entries(computations).forEach(([name, computation]) => {
+                const groupId = `\n\n__group(${computation.id})__\n\n`;
+
+                const groupBlock = new FlowGroupBlock({
+                    id: groupId,
+                    computation,
+                    streamSize: STREAM_SIZE,
+                    computationSize: COMPUTATION_SIZE,
+                });
+
+                res.groups.blocks.push(groupBlock);
+                res.groupById.set(groupId, groupBlock);
+
+                const block: (typeof res)['data']['blocks'][number] = makeBlock(
+                    'computation',
+                    computation,
+                    {
+                        name,
+                        groupId,
+                        backgroundTheme: STATUS_TO_BG_THEME[computation.status],
+                        ...COMPUTATION_SIZE,
+                    },
+                );
+                blockById.set(block.id, block);
+                res.data.blocks.push(block);
+
+                function collectStreams<K extends FlowComputationStreamType>(
+                    key: K,
+                    options?: {groupId: string},
+                ) {
+                    const streams = computation[key] ?? [];
+
+                    streams.forEach((id) => {
+                        const isInput =
+                            key === 'input_streams' ||
+                            key === 'source_streams' ||
+                            key === 'timer_streams';
+
+                        if (isInput) {
+                            addConnection(res.data.connections, id, computation.id);
+                        } else {
+                            addConnection(res.data.connections, computation.id, id);
+                        }
+
+                        if (key === 'timer_streams') {
+                            addConnection(res.data.connections, computation.id, id);
+                        }
+
+                        if (options?.groupId) {
+                            Object.assign(blockById.get(id)!, {
+                                stream_type: key,
+                                ...options,
+                                ...ICON_BY_TYPE[key],
+                            });
+                        }
+                    });
+                }
+
+                collectStreams('input_streams');
+                collectStreams('output_streams', {groupId});
+                collectStreams('source_streams', {groupId});
+                collectStreams('timer_streams', {groupId});
+            });
+
+            // Collect group connections
+            const connectionIds = new Set<string>();
+            res.data.connections.forEach((item) => {
+                const {sourceBlockId, targetBlockId} = item;
+                const src = blockById.get(sourceBlockId)!;
+                const dst = blockById.get(targetBlockId)!;
+
+                let source: string | undefined;
+                let target: string | undefined;
+
+                if (src.groupId && dst.groupId) {
+                    if (src.groupId !== dst.groupId) {
+                        source = src.groupId;
+                        target = dst.groupId;
+                    }
+                } else if (src.groupId) {
+                    source = src.groupId;
+                    target = dst.id;
+                } else if (dst.groupId) {
+                    source = src.id;
+                    target = dst.groupId;
+                }
+
+                if (source && target) {
+                    const id = `_${source}->${target}_`;
+                    if (!connectionIds.has(id)) {
+                        connectionIds.add(id);
+                        addConnection(res.groups.connections, source, target);
+                    }
+                }
+            });
+
+            return res;
+        }, [loadedData]);
+
+    const elkRes = useElkLayout(data.groups);
+    const res = React.useMemo(() => {
+        const {blocks, connections} = elkRes.data;
+
+        blocks.forEach(({id, x, y}) => {
+            const group = data.groupById.get(id);
+            if (group) {
+                Object.assign(group, {x, y});
+            }
         });
 
-        return res;
-    }, [loadedData]);
+        return {
+            data: {
+                blocks: [
+                    ...data.data.blocks.map((item) => {
+                        const group = data.groupById.get(item.groupId!);
+                        if (!group) {
+                            return item;
+                        }
+
+                        if (item.is === 'computation') {
+                            return group.updateBlockPosition('computation', item);
+                        }
+
+                        if (item.stream_type) {
+                            return group.updateBlockPosition(item.stream_type, item);
+                        }
+                        return item;
+                    }),
+                ],
+                connections: data.data.connections,
+            },
+            groups: {
+                blocks,
+                connections,
+            },
+            groupBlocks: blocks.filter(({is}) => is === 'computation-group'),
+        };
+    }, [elkRes.isLoading, elkRes.data, data]);
 
     return {
-        isEmpty: !data.blocks.length,
-        ...useElkLayout(data),
+        isEmpty: !data.data.blocks.length,
+        ...elkRes,
+        ...res,
     };
 }
 
-function makeBlock<T extends FlowGraphBlock['is'], D extends FlowGraphBlockItem<T>>(
-    type: T,
-    item: D['meta'],
-    options?: Partial<D>,
-) {
+function makeBlock<
+    T extends FlowGraphBlock['is'],
+    D extends FlowGraphBlockItem<T>,
+    O extends Partial<D>,
+>(type: T, item: D['meta'], options: O) {
     return {
         id: item.id,
         is: type,
         name: item.id,
-        x: NaN,
-        y: NaN,
         selected: false,
         anchors: [],
-        width: 136,
-        height: 70,
         ...options,
         meta: item,
+        // the values should be overriden by layout process
+        x: 0,
+        y: 0,
     };
 }
