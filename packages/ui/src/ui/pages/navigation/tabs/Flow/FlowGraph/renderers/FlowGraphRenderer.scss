@@ -1,0 +1,23 @@
+.yt-flow-graph-renderer {
+    &__icon {
+        color: var(--yql-graph-icon-color);
+    }
+
+    &__message {
+        &_theme_info {
+            background-color: var(--info-backgound);
+        }
+        &_theme_success {
+            background-color: var(--success-backgound);
+        }
+        &_theme_warning {
+            background-color: var(--warning-backgound);
+        }
+        &_theme_danger {
+            background-color: var(--danger-backgound);
+        }
+        &_theme_default {
+            background-color: var(--default-color);
+        }
+    }
+}
