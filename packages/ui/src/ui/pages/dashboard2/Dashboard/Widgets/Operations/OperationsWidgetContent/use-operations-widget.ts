@@ -23,6 +23,7 @@ export function useOperationsWidget(props: PluginWidgetProps) {
 
     const authors = data.authors as Array<Author>;
     const pool = data.pool as string;
+    const limit = (data?.limit as {value?: number})?.value || 0;
 
     const {
         data: operations,
@@ -35,6 +36,7 @@ export function useOperationsWidget(props: PluginWidgetProps) {
         state,
         authors,
         pool,
+        limit
     });
 
     return {filters: {state}, data: {operations, isLoading, isFetching, error}};
