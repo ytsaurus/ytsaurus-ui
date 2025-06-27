@@ -79,7 +79,7 @@ export function useQueriesWidget(props: PluginWidgetProps) {
         error,
         isLoading,
         isFetching,
-    } = useListQueries(makeRequests(requestedStates));
+    } = useListQueries({id: widgetId, requests: makeRequests(requestedStates)});
 
-    return {queries, error, isLoading, isFetching};
+    return {queries, error, isLoading: isLoading || isFetching};
 }

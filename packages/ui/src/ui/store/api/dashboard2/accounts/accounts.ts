@@ -8,6 +8,7 @@ import {ytApiV3} from '../../../../rum/rum-wrap-api';
 import {parseAccountData} from '../../../../utils/accounts/accounts-selector';
 
 type AccountsWidgetArgs = {
+    id: string;
     accountsList: string[];
     medium?: string[] | string;
 };
