@@ -10,6 +10,8 @@ import {
     getQueryFilterState,
 } from '../../../../../../store/selectors/dashboard2/queries';
 
+import {defaultDashboardItems} from '../../../../../../constants/dashboard2';
+
 import {QueryEngine} from '../../../../../../../shared/constants/engines';
 import {ListQueriesParams} from '../../../../../../../shared/yt-types';
 
@@ -29,6 +31,7 @@ export function useQueriesWidget(props: PluginWidgetProps) {
     const {id: widgetId, data} = props;
 
     const users = map_(data?.authors as Array<Author>, ({value}) => value);
+    const limit = (data?.limit as {value?: number})?.value || 0;
 
     const queryState = useSelector((state: RootState) => getQueryFilterState(state, widgetId));
     const engine = useSelector((state: RootState) => getQueryFilterEngine(state, widgetId));
@@ -56,6 +59,7 @@ export function useQueriesWidget(props: PluginWidgetProps) {
                         state,
                         user,
                         output_format: 'json',
+                        limit: limit ?? defaultDashboardItems.queries.data.limit,
                     })),
                 );
             });
@@ -66,7 +70,7 @@ export function useQueriesWidget(props: PluginWidgetProps) {
             engine: queryEngine?.length ? queryEngine : undefined,
             user,
             output_format: 'json',
-            limit: 10,
+            limit: limit ?? defaultDashboardItems.queries.data.limit,
         }));
     };
 

@@ -3,8 +3,8 @@ import {Author} from '../OperationsWidgetContent/use-operations-widget';
 export type OperationsSettingsValues = {
     name: string;
     authors: Array<Author>;
-    autoheight: boolean;
     pool: string;
+    limit: number;
 };
 
 export function useOperationsSettings() {
@@ -15,6 +15,15 @@ export function useOperationsSettings() {
             caption: 'Name',
             extras: {
                 placeholder: 'Operations',
+            },
+        },
+        {
+            name: 'limit',
+            type: 'number' as const,
+            required: true,
+            caption: 'Limit(per author)',
+            extras: {
+                hidePrettyValue: true,
             },
         },
         {
@@ -30,11 +39,6 @@ export function useOperationsSettings() {
             name: 'pool',
             type: 'pool' as const,
             caption: 'Pool',
-        },
-        {
-            type: 'tumbler' as const,
-            name: 'autoheight',
-            caption: 'Use autoheight',
         },
     ];
 }

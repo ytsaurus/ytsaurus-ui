@@ -5,7 +5,6 @@ import {getMediumList} from '../../../../../../store/selectors/thor';
 export type AccountsSettingsValues = {
     name: string;
     accounts: string[];
-    autoheight: boolean;
     columns: string[];
 };
 
@@ -41,11 +40,6 @@ export function useAccountsSettings() {
             extras: {
                 suggestColumns: ['Nodes', 'Chunks'],
             },
-        },
-        {
-            type: 'tumbler' as const,
-            name: 'autoheight',
-            caption: 'Use autoheight',
         },
     ];
 }
