@@ -12,7 +12,7 @@ import {Engine} from './cells/Engine';
 import {Duration} from './cells/Duration';
 import {StartTime} from './cells/StartTime';
 
-import {useQueriesWidget} from './use-queries-widget';
+import {useQueriesWidget} from '../hooks/use-queries-widget';
 
 type Query = {
     general: {
@@ -53,14 +53,14 @@ const columns = [
 ];
 
 export function QueriesWidgetContent(props: PluginWidgetProps) {
-    const {queries, error, isLoading, isFetching} = useQueriesWidget(props);
+    const {queries, error, isLoading} = useQueriesWidget(props);
 
     return (
         <WidgetTable
             data={queries || []}
             columns={columns}
             itemHeight={40}
-            isLoading={isLoading || isFetching}
+            isLoading={isLoading}
             fallback={{itemsName: 'queries'}}
             error={error}
         />

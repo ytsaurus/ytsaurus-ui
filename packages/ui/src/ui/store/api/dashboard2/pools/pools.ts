@@ -10,6 +10,7 @@ export type PoolQueryParams = {
 };
 
 export type PoolsQueryArgs = {
+    id: string;
     type: 'favourite' | 'usable' | 'custom';
     favouriteList: {path: string}[];
     customList: PoolQueryParams[];

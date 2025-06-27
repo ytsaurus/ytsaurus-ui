@@ -38,6 +38,6 @@ export function useQueriesSettings() {
                 max: 50,
                 hidePrettyValue: true,
             },
-        }
+        },
     ];
 }
