@@ -24,11 +24,12 @@ export async function fetchOperations(
         state?: string;
         authors?: Array<{value: string; type: string}>;
         pool?: string;
+        limit?: number;
     },
     api: BaseQueryApi,
 ) {
     try {
-        const {cluster: _cluster, authorType, state: operationState, authors, pool} = args;
+        const {cluster: _cluster, authorType, state: operationState, authors, pool, limit} = args;
         const state = api.getState() as RootState;
         const user = state.global.login;
 
@@ -38,7 +39,7 @@ export async function fetchOperations(
             let requests = map_(authors, (item) => ({
                 command: 'list_operations' as const,
                 parameters: {
-                    limit: 10,
+                    limit: limit ?? 10,
                     state: operationState === 'all' ? undefined : operationState,
                     user: item.value,
                     pool: pool?.length ? pool : undefined,
@@ -50,7 +51,7 @@ export async function fetchOperations(
                     {
                         command: 'list_operations' as const,
                         parameters: {
-                            limit: 10,
+                            limit: limit ?? 10,
                             state: operationState === 'all' ? undefined : operationState,
                             pool,
                         },
@@ -65,7 +66,7 @@ export async function fetchOperations(
         } else {
             response = await ytApiV3Id.listOperations(YTApiId.listDashboardOperations, {
                 parameters: {
-                    limit: 10,
+                    limit: limit ?? 10,
                     state: operationState === 'all' ? undefined : operationState,
                     user,
                     pool: pool?.length ? pool : undefined,
