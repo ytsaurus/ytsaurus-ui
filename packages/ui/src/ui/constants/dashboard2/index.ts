@@ -2,7 +2,8 @@ import {DashKitProps} from '@gravity-ui/dashkit';
 
 const navigationLayoutWidth = 16;
 const accountsLayoutWidth = 20;
-const queriesLayoutWidth = 20;
+const queriesLayoutWidth = 18;
+const servicesLayoutWidth = 18;
 
 export const defaultDashboardItems = {
     navigation: {
@@ -23,23 +24,23 @@ export const defaultDashboardItems = {
             x: 0,
             y: 21,
         },
-        data: {name: 'Operations'},
+        data: {name: 'Operations', limit: {value: 5}},
     },
     queries: {
         layout: {
-            h: 12,
+            h: 9.5,
             i: 'queries',
             w: queriesLayoutWidth,
             x: 0,
             y: 0,
         },
-        data: {name: 'Queries'},
+        data: {name: 'Queries', limit: {value: 3}},
     },
     services: {
         layout: {
-            h: 12,
+            h: 9.5,
             i: 'services',
-            w: 20,
+            w: servicesLayoutWidth,
             x: 0,
             y: 0,
         },
@@ -94,7 +95,7 @@ export const dashboardConfig: DashKitProps['config'] = {
         },
         {
             id: 'operations',
-            data: {name: 'Operations'},
+            data: defaultDashboardItems.operations.data,
             type: 'operations',
             namespace: 'dashboard',
             orderId: 3,
