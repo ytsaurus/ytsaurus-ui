@@ -6,16 +6,22 @@ import {WidgetBase} from '../components/WidgetBase/WidgetBase';
 
 import {NavigationWidgetContent} from '../Widgets/Navigation/NavigationWidgetContent/NavigationWidgetContent';
 import {NavigationWidgetControls} from '../Widgets/Navigation/NavigationWidgetControls/NavigationWidgetControls';
+import {NavigationWidgetHeader} from '../Widgets/Navigation/NavigationWidgetHeader/NavigationWidgetHeader';
 import {OperationsWidgetContent} from '../Widgets/Operations/OperationsWidgetContent/OperationsWidgetContent';
 import {OperationsWidgetControls} from '../Widgets/Operations/OperationsWidgetControls/OperationsWidgetControls';
+import {OperationsWidgetHeader} from '../Widgets/Operations/OperationsWidgetHeader/OperationsWidgetHeader';
 import {AccountsWidgetContent} from '../Widgets/Accounts/AccountsWidgetContent/AccountsWidgetContent';
 import {AccountsWidgetControls} from '../Widgets/Accounts/AccountsWidgetControls/AccountsWidgetControls';
+import {AccountsWidgetHeader} from '../Widgets/Accounts/AccountsWidgetHeader/AccountsWidgetHeader';
 import {PoolsWidgetContent} from '../Widgets/Pools/PoolsWidgetContent/PoolsWidgetContent';
 import {PoolsWidgetControls} from '../Widgets/Pools/PoolsWidgetControls/PoolsWidgetControls';
+import {PoolsWidgetHeader} from '../Widgets/Pools/PoolsWidgetHeader/PoolsWidgetHeader';
 import {QueriesWidgetControls} from '../Widgets/Queries/QueriesWidgetControls/QueriesWidgetControls';
 import {QueriesWidgetContent} from '../Widgets/Queries/QueriesWidgetContent/QueriesWidgetContent';
+import {QueriesWidgetHeader} from '../Widgets/Queries/QueriesWidgetHeader/QueriesWidgetHeader';
 import {ServicesWidgetContent} from '../Widgets/Services/ServicesWidgetContent/ServicesWidgetContent';
 import {ServicesWidgetControls} from '../Widgets/Services/ServicesWidgetControls/ServicesWidgetControls';
+import {ServicesWidgetHeader} from '../Widgets/Services/ServicesWidgetHeader/ServicesWidgetHeader';
 import {defaultDashboardItems} from '../../../../constants/dashboard2';
 
 export function registerPlugins() {
@@ -28,9 +34,7 @@ export function registerPlugins() {
         },
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
-                {...props}
-                title="Navigation"
-                type="navigation"
+                header={<NavigationWidgetHeader {...props} />}
                 controls={<NavigationWidgetControls {...props} />}
                 content={<NavigationWidgetContent {...props} />}
             />
@@ -46,9 +50,7 @@ export function registerPlugins() {
         },
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
-                {...props}
-                title="Operations"
-                type="operations"
+                header={<OperationsWidgetHeader {...props} />}
                 controls={<OperationsWidgetControls {...props} />}
                 content={<OperationsWidgetContent {...props} />}
             />
@@ -64,11 +66,9 @@ export function registerPlugins() {
         },
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
-                {...props}
-                title="Accounts"
-                type="accounts"
                 content={<AccountsWidgetContent {...props} />}
                 controls={<AccountsWidgetControls {...props} />}
+                header={<AccountsWidgetHeader {...props} />}
             />
         ),
     });
@@ -82,9 +82,7 @@ export function registerPlugins() {
         },
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
-                {...props}
-                title="Pools"
-                type="pools"
+                header={<PoolsWidgetHeader {...props} />}
                 content={<PoolsWidgetContent {...props} />}
                 controls={<PoolsWidgetControls {...props} />}
             />
@@ -100,9 +98,7 @@ export function registerPlugins() {
         },
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
-                {...props}
-                title="Queries"
-                type="queries"
+                header={<QueriesWidgetHeader {...props} />}
                 controls={<QueriesWidgetControls {...props} />}
                 content={<QueriesWidgetContent {...props} />}
             />
@@ -118,9 +114,7 @@ export function registerPlugins() {
         },
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
-                {...props}
-                title="Serviсes"
-                type="services"
+                header={<ServicesWidgetHeader {...props} />}
                 content={<ServicesWidgetContent {...props} />}
                 controls={<ServicesWidgetControls {...props} />}
             />

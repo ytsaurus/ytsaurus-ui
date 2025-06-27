@@ -12,7 +12,7 @@ import {Health} from '../../../../../../components/Health/Health';
 
 import {Type} from './cells/Type';
 
-import {useServicesWidget} from './use-services-widget';
+import {useServicesWidget} from '../hooks/use-services-widget';
 
 const columnHelper = createColumnHelper<ServiceInfo>();
 

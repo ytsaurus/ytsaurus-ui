@@ -13,7 +13,7 @@ import {UserPool} from './cells/UserPool';
 import {StartTime} from './cells/StartTime';
 import {State} from './cells/State';
 
-import {useOperationsWidget} from './use-operations-widget';
+import {useOperationsWidget} from '../hooks/use-operations-widget';
 
 import './OperationsWidgetContent.scss';
 
@@ -57,7 +57,7 @@ const columns = [
 export function OperationsWidgetContent(props: PluginWidgetProps) {
     const {
         filters: {state},
-        data: {operations, isLoading, isFetching, error},
+        data: {operations, isLoading, error},
     } = useOperationsWidget(props);
 
     return (
@@ -66,7 +66,7 @@ export function OperationsWidgetContent(props: PluginWidgetProps) {
             columns={columns}
             className={block()}
             itemHeight={60}
-            isLoading={isLoading || isFetching}
+            isLoading={isLoading}
             fallback={{itemsName: `${!state || state === 'all' ? '' : state + ' '}operations`}}
             error={error}
         />

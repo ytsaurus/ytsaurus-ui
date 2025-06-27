@@ -19,6 +19,7 @@ export function usePoolsWidget(props: PluginWidgetProps) {
     const favouritePools = useSelector(getFavouritePools);
     const type = useSelector((state: RootState) => getPoolsTypeFilter(state, props.id));
     const {data, isLoading, isFetching, error} = usePoolsQuery({
+        id: props.id,
         type,
         favouriteList: favouritePools,
         customList: userPools,
@@ -29,5 +30,5 @@ export function usePoolsWidget(props: PluginWidgetProps) {
         map_(resources, (resource) => includes_(resourcesColumns, resource)),
     );
 
-    return {visibleColumns, data: {pools: data, isLoading, isFetching, error}};
+    return {visibleColumns, data: {pools: data, isLoading: isLoading || isFetching, error}};
 }
