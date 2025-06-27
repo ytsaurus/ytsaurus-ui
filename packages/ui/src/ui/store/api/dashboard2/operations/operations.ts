@@ -17,17 +17,17 @@ export type OperationProgressInfo = {
     state?: StatusLabelState | NavigationFlowState;
 };
 
-export async function fetchOperations(
-    args: {
-        cluster: string;
-        authorType: 'me' | 'my-list';
-        state?: string;
-        authors?: Array<{value: string; type: string}>;
-        pool?: string;
-        limit?: number;
-    },
-    api: BaseQueryApi,
-) {
+type OperationsQueryArgs = {
+    id: string;
+    cluster: string;
+    authorType: 'me' | 'my-list';
+    state?: string;
+    authors?: Array<{value: string; type: string}>;
+    pool?: string;
+    limit?: number;
+};
+
+export async function fetchOperations(args: OperationsQueryArgs, api: BaseQueryApi) {
     try {
         const {cluster: _cluster, authorType, state: operationState, authors, pool, limit} = args;
         const state = api.getState() as RootState;
@@ -59,12 +59,12 @@ export async function fetchOperations(
                 ];
             }
 
-            response = await ytApiV3Id.executeBatch(YTApiId.listDashboardOperations, {
+            response = await ytApiV3Id.executeBatch(YTApiId.operationsDashboard, {
                 requests,
             });
             response = map_(response, (item) => item?.output);
         } else {
-            response = await ytApiV3Id.listOperations(YTApiId.listDashboardOperations, {
+            response = await ytApiV3Id.listOperations(YTApiId.operationsDashboard, {
                 parameters: {
                     limit: limit ?? 10,
                     state: operationState === 'all' ? undefined : operationState,
