@@ -28,7 +28,7 @@ export function useServicesWidget(props: PluginWidgetProps) {
         items = customItems;
     }
 
-    const {data, isLoading, error} = useServicesQuery({cluster, items});
+    const {data, isLoading, isFetching, error} = useServicesQuery({cluster, items});
 
-    return {data, isLoading, error};
+    return {data, isLoading: isLoading || isFetching, error};
 }
