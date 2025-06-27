@@ -1,4 +1,4 @@
-import {Author} from '../OperationsWidgetContent/use-operations-widget';
+import {Author} from '../hooks/use-operations-widget';
 
 export type OperationsSettingsValues = {
     name: string;

@@ -8,7 +8,7 @@ import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/componen
 import {PoolCell} from './cells/Pool';
 import {ResourceCell} from './cells/Resource';
 
-import {usePoolsWidget} from './use-pools-widget';
+import {usePoolsWidget} from '../hooks/use-pools-widget';
 
 export type PoolResource = {
     value: number;
@@ -58,7 +58,7 @@ const columns = [
 export function PoolsWidgetContent(props: PluginWidgetProps) {
     const {
         visibleColumns,
-        data: {pools, isFetching, isLoading, error},
+        data: {pools, isLoading, error},
     } = usePoolsWidget(props);
 
     return (
@@ -67,7 +67,7 @@ export function PoolsWidgetContent(props: PluginWidgetProps) {
             columns={columns}
             columnsVisibility={visibleColumns}
             itemHeight={50}
-            isLoading={isLoading || isFetching}
+            isLoading={isLoading}
             fallback={{itemsName: 'pools'}}
             error={error}
         />

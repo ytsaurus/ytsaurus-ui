@@ -5,16 +5,21 @@ import {YTApiId, ytApiV4Id} from '../../../../rum/rum-wrap-api';
 import {durationDates} from '../../../../utils/date';
 import {QueryStatus} from '../../../../types/query-tracker';
 
+type FetchQueriesArgs = {
+    requests: ListQueriesParams[];
+    id: string;
+};
+
 const makeRequests = (args: ListQueriesParams[]) =>
     map_(args, (arg) => ({
         command: 'list_queries' as const,
         parameters: {...arg},
     }));
 
-export async function fetchQuerieslist(args: ListQueriesParams[]) {
+export async function fetchQuerieslist({requests}: FetchQueriesArgs) {
     try {
-        const response = await ytApiV4Id.executeBatch(YTApiId.listQueries, {
-            requests: makeRequests(args),
+        const response = await ytApiV4Id.executeBatch(YTApiId.queriesDashboard, {
+            requests: makeRequests(requests),
         });
 
         const {results} = response;

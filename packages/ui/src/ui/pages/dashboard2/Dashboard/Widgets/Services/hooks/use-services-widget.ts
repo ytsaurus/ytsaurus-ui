@@ -15,20 +15,20 @@ export function useServicesWidget(props: PluginWidgetProps) {
     const cluster = useSelector(getCluster);
     const favouriteCliques = useSelector(getFavouriteChyt);
     const favouriteBundles = useSelector(getFavouriteBundles);
-    
+
     const type = useSelector((state: RootState) => getServicesTypeFilter(state, props.id));
-    
+
     let items = [];
     if (type === 'favourite') {
         items = [
             ...favouriteCliques.map((clique) => ({service: 'chyt', item: clique.path})),
-            ...favouriteBundles.map((bundle) => ({service: 'bundle', item: bundle.path}))
-        ]
+            ...favouriteBundles.map((bundle) => ({service: 'bundle', item: bundle.path})),
+        ];
     } else {
         items = customItems;
     }
 
-    const {data, isLoading, isFetching, error} = useServicesQuery({cluster, items});
+    const {data, isLoading, isFetching, error} = useServicesQuery({id: props.id, cluster, items});
 
     return {data, isLoading: isLoading || isFetching, error};
 }

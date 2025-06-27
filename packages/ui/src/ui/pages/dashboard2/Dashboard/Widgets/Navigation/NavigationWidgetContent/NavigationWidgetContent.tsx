@@ -1,24 +1,18 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
 import {PluginWidgetProps} from '@gravity-ui/dashkit';
 
-import {RootState} from '../../../../../../store/reducers';
-import {usePathsQuery} from '../../../../../../store/api/dashboard2/navigation';
-import {getCluster} from '../../../../../../store/selectors/global';
-import {getNavigationTypeFilter} from '../../../../../../store/selectors/dashboard2/navigation';
-
 import {WidgetSkeleton} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetSkeleton/WidgetSkeleton';
+
+import {useNavigationWidget} from '../hooks/use-navigation-widget';
 
 import {NavigationWidgetContentBase} from './NavigationWidgetContentBase';
 
 export function NavigationWidgetContent(props: PluginWidgetProps) {
-    const type = useSelector((state: RootState) => getNavigationTypeFilter(state, props.id));
-    const cluster = useSelector(getCluster);
-    const {data: items, isLoading, isFetching} = usePathsQuery({cluster, type});
+    const {type, items, isLoading} = useNavigationWidget(props);
 
     return (
         <>
-            {isLoading || isFetching ? (
+            {isLoading ? (
                 <WidgetSkeleton itemHeight={30} />
             ) : (
                 <NavigationWidgetContentBase pathsType={type} items={items || []} />
