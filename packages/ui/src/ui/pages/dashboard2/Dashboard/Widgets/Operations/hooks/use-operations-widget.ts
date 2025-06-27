@@ -31,13 +31,14 @@ export function useOperationsWidget(props: PluginWidgetProps) {
         isFetching,
         error,
     } = useOperationsQuery({
+        id,
         cluster,
         authorType,
         state,
         authors,
         pool,
-        limit
+        limit,
     });
 
-    return {filters: {state}, data: {operations, isLoading, isFetching, error}};
+    return {filters: {state}, data: {operations, isLoading: isLoading || isFetching, error}};
 }
