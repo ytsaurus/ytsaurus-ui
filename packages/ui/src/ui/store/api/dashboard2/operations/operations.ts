@@ -31,7 +31,7 @@ export async function fetchOperations(args: OperationsQueryArgs, api: BaseQueryA
     try {
         const {cluster: _cluster, authorType, state: operationState, authors, pool, limit} = args;
         const state = api.getState() as RootState;
-        const user = state.global.login;
+        const user = state.global.login;;
 
         let response;
 
@@ -64,6 +64,7 @@ export async function fetchOperations(args: OperationsQueryArgs, api: BaseQueryA
             });
             response = map_(response, (item) => item?.output);
         } else {
+            console.log('SINGLE')
             response = await ytApiV3Id.listOperations(YTApiId.operationsDashboard, {
                 parameters: {
                     limit: limit ?? 10,

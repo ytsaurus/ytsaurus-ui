@@ -17,12 +17,11 @@ export type Author = {
 export function useOperationsWidget(props: PluginWidgetProps) {
     const {id, data} = props;
     const cluster = useSelector(getCluster);
-
     const state = useSelector((state: RootState) => getOperationsStateFilter(state, id));
     const authorType = useSelector((state: RootState) => getOperationsAuthorTypeFilter(state, id));
 
-    const authors = data.authors as Array<Author>;
-    const pool = data.pool as string;
+    const authors = data?.authors as Array<Author> | undefined;
+    const pool = data?.pool as string | undefined;
     const limit = (data?.limit as {value?: number})?.value || 0;
 
     const {
