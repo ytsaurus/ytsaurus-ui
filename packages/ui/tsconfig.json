@@ -3,6 +3,11 @@
   "compilerOptions": {
     "target": "ES2018",
     "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true
-  }
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react-jsx",
+    "importHelpers": true,
+  },
+  "include": [
+      ".storybook/**/*",
+  ]
 }
