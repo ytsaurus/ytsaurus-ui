@@ -3,6 +3,8 @@ import {Text} from '@gravity-ui/uikit';
 import {PluginWidgetProps} from '@gravity-ui/dashkit';
 import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
+import hammer from '../../../../../../common/hammer';
+
 import {AccountInfo} from '../../../../../../store/api/dashboard2/accounts/accounts';
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
@@ -42,7 +44,7 @@ export function AccountsWidgetContent(props: PluginWidgetProps) {
                         },
                         header: (header) => (
                             <Text variant={'subheader-1'} whiteSpace={'nowrap'} ellipsis>
-                                {header.column.id}
+                                {hammer.format['ReadableField'](header.column.id)}
                             </Text>
                         ),
                     }),
