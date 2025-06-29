@@ -40,7 +40,11 @@ export function useAccountsWidget(props: PluginWidgetProps) {
     } = useAccountsQuery({
         id: props.id,
         accountsList,
-        medium: data?.disk_columns ? data.disk_columns.map((item) => item.name) : undefined,
+        medium: data?.columns
+            ? data.columns
+                  .map((item) => item.name)
+                  .filter((item) => !['Nodes', 'Chunks'].includes(item))
+            : undefined,
     });
 
     return {
@@ -48,7 +52,6 @@ export function useAccountsWidget(props: PluginWidgetProps) {
         isLoading: isLoading || isFetching,
         error,
         type,
-        diskColumns: data?.disk_columns,
-        baseColumns: data?.columns,
+        userColumns: data?.columns,
     };
 }
