@@ -31,6 +31,7 @@ export function useAccountsSettings() {
             caption: 'Disk space columns(mediums)',
             extras: {
                 suggestColumns: mediumList,
+                formatReadable: true,
             },
         },
         {
