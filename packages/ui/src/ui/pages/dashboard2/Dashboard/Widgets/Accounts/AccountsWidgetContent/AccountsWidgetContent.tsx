@@ -19,7 +19,7 @@ import './AccountsWidgetContent.scss';
 const columnHelper = createColumnHelper<AccountInfo>();
 
 export function AccountsWidgetContent(props: PluginWidgetProps) {
-    const {accounts, baseColumns, diskColumns, isLoading, error, type} = useAccountsWidget(props);
+    const {accounts, userColumns, isLoading, error, type} = useAccountsWidget(props);
 
     const columns = useMemo(() => {
         const cols = [
@@ -29,10 +29,34 @@ export function AccountsWidgetContent(props: PluginWidgetProps) {
                 maxSize: 200,
             }),
         ];
-        if (diskColumns?.length) {
+
+        if (userColumns?.length) {
             cols.push(
-                ...diskColumns.map((column) =>
-                    columnHelper.accessor(column.name, {
+                ...userColumns.map((column) => {
+                    if (column.name === 'Chunks' || column.name === 'Nodes') {
+                        return columnHelper.accessor(
+                            column.name === 'Chunks' ? 'chunkCount' : 'nodeCount',
+                            {
+                                cell: (item) => {
+                                    const value = item.getValue();
+                                    return (
+                                        <AccountsProgressCell
+                                            type={'Number'}
+                                            {...(typeof value === 'object' && value !== null
+                                                ? value
+                                                : {})}
+                                        />
+                                    );
+                                },
+                                header: () => (
+                                    <Text variant={'subheader-1'} whiteSpace={'nowrap'} ellipsis>
+                                        {column.name}
+                                    </Text>
+                                ),
+                            },
+                        );
+                    }
+                    return columnHelper.accessor(column.name, {
                         cell: (medium) => {
                             const value = medium.getValue();
                             return (
@@ -47,35 +71,12 @@ export function AccountsWidgetContent(props: PluginWidgetProps) {
                                 {hammer.format['ReadableField'](header.column.id)}
                             </Text>
                         ),
-                    }),
-                ),
-            );
-        }
-
-        if (baseColumns?.length) {
-            cols.push(
-                ...baseColumns.map((column) =>
-                    columnHelper.accessor(column.name === 'Chunks' ? 'chunkCount' : 'nodeCount', {
-                        cell: (item) => {
-                            const value = item.getValue();
-                            return (
-                                <AccountsProgressCell
-                                    type={'Number'}
-                                    {...(typeof value === 'object' && value !== null ? value : {})}
-                                />
-                            );
-                        },
-                        header: () => (
-                            <Text variant={'subheader-1'} whiteSpace={'nowrap'} ellipsis>
-                                {column.name}
-                            </Text>
-                        ),
-                    }),
-                ),
+                    });
+                }),
             );
         }
         return cols;
-    }, [baseColumns, diskColumns]);
+    }, [userColumns]);
 
     return (
         <WidgetTable
