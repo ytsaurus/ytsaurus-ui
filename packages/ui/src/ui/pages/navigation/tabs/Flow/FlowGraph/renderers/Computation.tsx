@@ -72,10 +72,10 @@ type FlowComputationPartitionStates = keyof Required<
     Required<FlowComputation>['partitions_stats']
 >['count_by_state'];
 const STATE_TO_THEME: Record<FlowComputationPartitionStates, ProgressTheme> = {
-    Completed: 'info',
-    Transient: 'warning',
-    Executing: 'success',
-    Interrupted: 'default',
+    completed: 'info',
+    transient: 'warning',
+    executing: 'success',
+    interrupted: 'default',
 };
 
 function ComputaionProgress({stats}: ComputationProgressProps) {
