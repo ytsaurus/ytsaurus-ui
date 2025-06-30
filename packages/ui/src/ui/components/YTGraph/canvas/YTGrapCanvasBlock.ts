@@ -11,14 +11,20 @@ const COUNTER_BLOCK_HEIGHT = 30;
 const COUNTER_RADIUS = 4;
 
 const FONT_SIZE = {
-    normal: 14,
-    header: 18,
-    header2: 24,
+    detailed_normal: 14,
+    detailed_header: 18,
+    detailed_header2: 24,
+    schematic_normal: 18,
+    schematic_header: 24,
+    schematic_header2: 32,
+    minimalistic_normal: 28,
+    minimalistic_header: 44,
+    minimalistic_header2: 62,
 };
 
 const ELLIPSIS_CHAR = '\u2026';
 
-export type YTGraphFontSize = keyof typeof FONT_SIZE | number;
+export type YTGraphFontSize = 'normal' | 'header' | 'header2' | number;
 
 export type BaseMeta = {};
 
@@ -48,22 +54,29 @@ type RoundedBlockProps = {
     inProgress?: boolean;
 };
 
+type ZoomMode = 'minimalistic' | 'schematic' | 'detailed';
+
 export class YTGrapCanvasBlock<T extends YTGraphBlock<string, {}>> extends CanvasBlock<T> {
     icon: null | HTMLImageElement = null;
 
+    zoomLevel: ZoomMode = 'detailed';
+
     override renderMinimalisticBlock() {
+        this.zoomLevel = 'minimalistic';
         this.renderBlock('minimalistic');
     }
 
     override renderSchematicView() {
+        this.zoomLevel = 'schematic';
         this.renderBlock('schematic');
     }
 
     override renderDetailedView() {
-        this.renderBlock('schematic');
+        this.zoomLevel = 'detailed';
+        this.renderBlock('detailed');
     }
 
-    renderBlock(_mode: 'minimalistic' | 'schematic') {
+    renderBlock(_mode: ZoomMode) {
         this.drawBorder({});
         this.drawInnerText({
             text: this.state.name,
@@ -76,7 +89,12 @@ export class YTGrapCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canva
     }
 
     protected getFontHeight(type: YTGraphFontSize): number {
-        return typeof type === 'number' ? type : FONT_SIZE[type] ?? FONT_SIZE.normal;
+        if (typeof type === 'number') {
+            return type;
+        }
+
+        const mode_type = `${this.zoomLevel}_${type}` as const;
+        return FONT_SIZE[mode_type];
     }
 
     protected getFont(type: YTGraphFontSize = 'normal') {

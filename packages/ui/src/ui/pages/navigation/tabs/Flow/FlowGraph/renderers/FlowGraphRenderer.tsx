@@ -28,17 +28,24 @@ export function FlowIcon({data}: {data?: SVGIconSvgrData}) {
     );
 }
 
-export function FlowCaption2({text}: {text: React.ReactNode}) {
+export function FlowCaption2({
+    text,
+    children,
+}: {
+    text?: React.ReactNode;
+    children?: React.ReactNode;
+}) {
     return (
-        <Text variant="caption-2" style={{lineHeight: '12px'}} ellipsis>
+        <Text variant="inherit" style={{lineHeight: '17px'}} ellipsis>
             {text}
+            {children}
         </Text>
     );
 }
 
 export function FlowCaption1({text}: {text: React.ReactNode}) {
     return (
-        <Text variant="caption-1" color="secondary" ellipsis>
+        <Text variant="caption-2" color="secondary" ellipsis>
             {text}
         </Text>
     );
@@ -46,14 +53,16 @@ export function FlowCaption1({text}: {text: React.ReactNode}) {
 
 export function FlowMessages({data}: {data?: Array<FlowMessage>}) {
     return !data?.length ? null : (
-        <div>
-            <FlowCaption1 text={'Messages'} />
+        <div className={block('messages')}>
+            <Text className={block('messages-header')} variant="inherit" color="secondary">
+                Messages
+            </Text>
             {data?.map(({level, yson, text}, index) => {
                 const theme = STATUS_TO_BG_THEME[level];
                 return (
                     <div className={block('message', {theme})} key={index}>
                         {text?.length! > 0 && <FlowCaption1 text={text} />}
-                        {Boolean(yson) && <Yson value={yson} />}
+                        {Boolean(yson) && <FlowCaption1 text={<Yson value={yson} />} />}
                     </div>
                 );
             })}
