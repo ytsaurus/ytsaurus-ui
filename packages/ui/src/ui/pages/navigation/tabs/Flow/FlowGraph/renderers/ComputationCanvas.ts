@@ -1,7 +1,13 @@
 import CpuIcon from '@gravity-ui/icons/svgs/cpu.svg';
 
+import {TAnchor} from '@gravity-ui/graph/build';
+
 import format from '../../../../../../common/hammer/format';
-import {YTGrapCanvasBlock, YTGraphFontSize} from '../../../../../../components/YTGraph';
+import {
+    NoopComponent,
+    YTGrapCanvasBlock,
+    YTGraphFontSize,
+} from '../../../../../../components/YTGraph';
 
 import {FlowGraphBlockItem} from '../FlowGraph';
 
@@ -85,4 +91,17 @@ export class ComputationCanvasBlock extends YTGrapCanvasBlock<FlowGraphBlockItem
             padding: this.PADDING,
         });
     }
+
+    getAnchorPosition({index = 0}: TAnchor) {
+        const {length = 0} = this.state.anchors;
+
+        const {width, height} = this.getGeometry();
+        const step = width / (length + 1);
+
+        return {y: height, x: step * (index + 1)};
+    }
+
+    renderAnchor: YTGrapCanvasBlock<FlowGraphBlockItem<'computation'>>['renderAnchor'] = () => {
+        return NoopComponent.create();
+    };
 }
