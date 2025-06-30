@@ -5,6 +5,7 @@ import {Flex, Icon, Text} from '@gravity-ui/uikit';
 import {SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 import {FlowMessage, FlowNodeStatus} from '../../../../../../../shared/yt-types';
 import Yson from '../../../../../../components/Yson/Yson';
+import {YTErrorInline} from '../../../../../../containers/YTErrorInline/YTErrorInline';
 
 import './FlowGraphRenderer.scss';
 
@@ -57,12 +58,19 @@ export function FlowMessages({data}: {data?: Array<FlowMessage>}) {
             <Text className={block('messages-header')} variant="inherit" color="secondary">
                 Messages
             </Text>
-            {data?.map(({level, yson, text}, index) => {
+            {data?.map(({level, yson, text, error}, index) => {
                 const theme = STATUS_TO_BG_THEME[level];
+                const errorType = theme === 'warning' ? 'alert' : undefined;
                 return (
                     <div className={block('message', {theme})} key={index}>
-                        {text?.length! > 0 && <FlowCaption1 text={text} />}
-                        {Boolean(yson) && <FlowCaption1 text={<Yson value={yson} />} />}
+                        {text?.length! > 0 && text}
+                        {Boolean(yson) && <Yson value={yson} />}
+                        {Boolean(error) && (
+                            <YTErrorInline
+                                error={error ?? new Error('Some error')}
+                                type={errorType}
+                            />
+                        )}
                     </div>
                 );
             })}
