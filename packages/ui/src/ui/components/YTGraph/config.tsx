@@ -1,7 +1,7 @@
 import React from 'react';
 
 import ELK, {ElkExtendedEdge, ElkNode} from 'elkjs';
-import {CanvasBlock, Component, ECameraScaleLevel, TBlock, TConnection} from '@gravity-ui/graph';
+import {CanvasBlock, ECameraScaleLevel, TBlock, TConnection} from '@gravity-ui/graph';
 
 import {HookGraphParams, MultipointConnection, useElk} from '@gravity-ui/graph/react';
 
@@ -11,6 +11,7 @@ import {TGraphColors} from '@gravity-ui/graph/build/graphConfig';
 import {getCssColor} from '../../utils/get-css-color';
 import {useMemoizedIfEqual} from '../../hooks/use-updater';
 import {YTGraphBlock, YTGraphData} from './YTGraph';
+import {NoopComponent} from './canvas/NoopComponent';
 
 export const getGraphColors = (): RecursivePartial<TGraphColors> => {
     return {
@@ -26,13 +27,6 @@ export const getGraphColors = (): RecursivePartial<TGraphColors> => {
         },
     };
 };
-
-class NoopBGLayer extends Component {
-    render() {
-        // noop;
-        return;
-    }
-}
 
 export function useConfig<T extends TBlock>(
     blockComponents: Record<T['is'], typeof CanvasBlock<T>>,
@@ -54,9 +48,8 @@ export function useConfig<T extends TBlock>(
                 canCreateNewConnections: false,
                 canZoomCamera: true,
                 blockComponents,
-                // TODO: figure out how to use correct types here
                 // @ts-expect-error
-                background: NoopBGLayer,
+                background: NoopComponent,
             },
             viewConfiguration: {
                 colors: {
