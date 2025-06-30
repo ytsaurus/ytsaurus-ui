@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 
 import partition_ from 'lodash/partition';
 
-import {ECameraScaleLevel, TBlockId, TConnection} from '@gravity-ui/graph';
+import {ECameraScaleLevel, TAnchor, TBlock, TBlockId, TConnection} from '@gravity-ui/graph';
 import {Flex} from '@gravity-ui/uikit';
 import {SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 
@@ -165,12 +165,20 @@ function useFlowGraphData() {
 
             const blockById: Map<TBlockId, FlowGraphBlock> = new Map();
 
-            function addConnection(
+            function addConnection<AnthorType extends string>(
                 connections: FlowData['connections'],
                 sourceBlockId: string,
                 targetBlockId: string,
+                {anchorType}: {anchorType?: AnthorType} = {},
             ) {
-                connections.push({sourceBlockId, targetBlockId});
+                const c: (typeof connections)[number] = {sourceBlockId, targetBlockId};
+                connections.push(c);
+                if (anchorType) {
+                    const src = blockById.get(sourceBlockId)!;
+                    const dst = blockById.get(targetBlockId)!;
+
+                    makeTimerAnchors(anchorType, src, dst, c);
+                }
             }
 
             // Collect streams
@@ -199,7 +207,7 @@ function useFlowGraphData() {
                 res.groups.blocks.push(groupBlock);
                 res.groupById.set(groupId, groupBlock);
 
-                const block: (typeof res)['data']['blocks'][number] = makeBlock(
+                const computationBlock: (typeof res)['data']['blocks'][number] = makeBlock(
                     'computation',
                     computation,
                     {
@@ -209,8 +217,8 @@ function useFlowGraphData() {
                         ...COMPUTATION_SIZE,
                     },
                 );
-                blockById.set(block.id, block);
-                res.data.blocks.push(block);
+                blockById.set(computationBlock.id, computationBlock);
+                res.data.blocks.push(computationBlock);
 
                 function collectStreams<K extends FlowComputationStreamType>(
                     key: K,
@@ -219,19 +227,17 @@ function useFlowGraphData() {
                     const streams = computation[key] ?? [];
 
                     streams.forEach((id) => {
-                        const isInput =
-                            key === 'input_streams' ||
-                            key === 'source_streams' ||
-                            key === 'timer_streams';
-
-                        if (isInput) {
+                        if (key === 'input_streams' || key === 'source_streams') {
                             addConnection(res.data.connections, id, computation.id);
-                        } else {
+                        } else if (key === 'output_streams') {
                             addConnection(res.data.connections, computation.id, id);
-                        }
-
-                        if (key === 'timer_streams') {
-                            addConnection(res.data.connections, computation.id, id);
+                        } else if (key === 'timer_streams') {
+                            addConnection(res.data.connections, computation.id, id, {
+                                anchorType: key,
+                            });
+                            addConnection(res.data.connections, id, computation.id, {
+                                anchorType: key,
+                            });
                         }
 
                         if (options?.groupId) {
@@ -372,4 +378,23 @@ function makeBlock<
         x: 0,
         y: 0,
     };
+}
+
+function makeTimerAnchors<T extends string>(type: T, src: TBlock, dst: TBlock, c: TConnection) {
+    const srcAnchor: TAnchor = {
+        id: `anchor:out:${src.id as string}:${dst.id as string}:`,
+        blockId: src.id,
+        type,
+    };
+    const dstAnchor: TAnchor = {
+        id: `anchor:in:${src.id as string}:${dst.id as string}:`,
+        blockId: dst.id,
+        type,
+    };
+
+    src.anchors.push({...srcAnchor, index: src.anchors.length});
+    dst.anchors.push({...dstAnchor, index: dst.anchors.length});
+
+    c.targetAnchorId = dstAnchor.id;
+    c.sourceAnchorId = srcAnchor.id;
 }

@@ -1,6 +1,8 @@
+import {TAnchor} from '@gravity-ui/graph';
+
 import format from '../../../../../../common/hammer/format';
 
-import {YTGrapCanvasBlock} from '../../../../../../components/YTGraph';
+import {NoopComponent, YTGrapCanvasBlock} from '../../../../../../components/YTGraph';
 import {FlowGraphBlockItem} from '../FlowGraph';
 
 const PADDING = 10;
@@ -47,4 +49,17 @@ export class StreamCanvasBlock extends YTGrapCanvasBlock<FlowGraphBlockItem<'str
             fontSize: 'header',
         });
     }
+
+    getAnchorPosition({index = 0}: TAnchor) {
+        const {length = 0} = this.state.anchors;
+
+        const {width} = this.getGeometry();
+        const step = width / (length + 1);
+
+        return {y: 0, x: step * (index + 1)};
+    }
+
+    renderAnchor: YTGrapCanvasBlock<FlowGraphBlockItem<'computation'>>['renderAnchor'] = () => {
+        return NoopComponent.create();
+    };
 }
