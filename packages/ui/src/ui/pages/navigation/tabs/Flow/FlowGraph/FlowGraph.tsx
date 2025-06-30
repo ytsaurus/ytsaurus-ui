@@ -143,9 +143,9 @@ const ICON_BY_TYPE: Record<
     timer_streams: {icon: ClockIcon},
 };
 
-const COMPUTATION_SIZE = {width: 240, height: 108};
-const STREAM_SIZE = {width: 160, height: 84};
-const SINK_SIZE = {width: 200, height: 60};
+const COMPUTATION_SIZE = {width: 320, height: 130};
+const STREAM_SIZE = {width: 240, height: 100};
+const SINK_SIZE = {width: 200, height: 80};
 
 function useFlowGraphData() {
     const loadedData = useSelector(getFlowGraphData);

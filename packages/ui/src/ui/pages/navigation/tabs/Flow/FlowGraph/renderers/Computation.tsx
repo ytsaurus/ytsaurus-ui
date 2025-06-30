@@ -10,9 +10,10 @@ import MetaTable from '../../../../../../components/MetaTable/MetaTable';
 
 import {FlowGraphBlockItem} from '../FlowGraph';
 
-import {FlowMeta} from './FlowMeta';
-import './Computation.scss';
 import {FlowCaption1, FlowCaption2, FlowMessages} from './FlowGraphRenderer';
+import {FlowMeta} from './FlowMeta';
+
+import './Computation.scss';
 
 const block = cn('yt-flow-computation');
 
@@ -29,7 +30,7 @@ export function Computation({detailed, item, className}: ComputationProps) {
 
     return (
         <div className={block(null, className)}>
-            <Flex gap={4} alignItems="baseline" style={{paddingBottom: '10px'}}>
+            <Flex className={block('name')} gap={4} alignItems="baseline">
                 <Flex grow={1} overflow="hidden">
                     <FlowCaption2 text={item.name} />
                 </Flex>
@@ -96,12 +97,12 @@ function ComputaionProgress({stats}: ComputationProgressProps) {
         <div>
             <Progress className={block('progress')} stack={stack} size="xs" />
             <Flex style={{paddingTop: '8px'}} alignItems="baseline" gap={2}>
-                <Text variant="caption-2">
+                <FlowCaption2>
                     {format.Number(count)}{' '}
                     <Text color="secondary" variant="inherit">
                         partitions
                     </Text>
-                </Text>
+                </FlowCaption2>
                 <ComputationProgressHistory data={history} />
             </Flex>
         </div>
@@ -138,7 +139,7 @@ function ComputationProgressHistoryItem({
                     })}
                 />
             </div>
-            <Text variant="caption-2">{value}</Text>
+            <FlowCaption2>{value}</FlowCaption2>
         </Flex>
     );
 }

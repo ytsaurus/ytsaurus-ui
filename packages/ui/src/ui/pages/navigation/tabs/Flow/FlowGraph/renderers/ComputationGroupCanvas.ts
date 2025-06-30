@@ -9,7 +9,7 @@ export class ComputationGroupCanvasBlock extends ComputationCanvasBlock {
     }
 
     override getComputationFontSize(): YTGraphFontSize {
-        return 64;
+        return 'header2';
     }
 
     override renderBlock() {
