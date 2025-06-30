@@ -131,7 +131,7 @@ export const language: languages.IMonarchLanguage & Record<string, unknown> = {
             [/{(@variables)}/, 'variable'],
             [/[?;,.]/, 'delimiter'],
             [/[(){}[\]]/, '@brackets'],
-            [/(\w+\.)*`\/\/(.*)`/g, {token: 'path'}],
+            [/(\w+\.)*`\/\/(.*?)`/g, {token: 'path'}],
             // identifiers and keywords
             [/@keywordsDouble/, 'keyword'],
             [/@typeKeywordsDouble/, 'keyword.type'],
