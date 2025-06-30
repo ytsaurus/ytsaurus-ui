@@ -30,7 +30,7 @@ export class ComputationCanvasBlock extends YTGrapCanvasBlock<FlowGraphBlockItem
     }
 
     renderHeader() {
-        const {count, count_by_state: {Executing} = {}} = this.state.meta.partitions_stats ?? {};
+        const {count, count_by_state: {executing} = {}} = this.state.meta.partitions_stats ?? {};
 
         const textWidth = this.drawInnerText({
             yPos: this.PADDING,
@@ -42,9 +42,9 @@ export class ComputationCanvasBlock extends YTGrapCanvasBlock<FlowGraphBlockItem
 
         const counts: Array<string> = [];
         if (Number.isFinite(count)) {
-            if (Number.isFinite(Executing)) {
-                counts.push(String(Executing));
-                if (count !== Executing) {
+            if (Number.isFinite(executing)) {
+                counts.push(String(executing));
+                if (count !== executing) {
                     counts.push(String(count));
                 }
 
