@@ -570,8 +570,7 @@ export type FlowNodeBase = {
 };
 
 export type FlowMessage = {level: FlowNodeStatus} & (
-    | {yson?: unknown; text?: never; error?: never}
-    | {text?: string; yson?: never; error?: never}
+    | {yson?: unknown; text?: string; error?: never}
     | {error?: YTError; yson?: never; text?: never}
 );
 

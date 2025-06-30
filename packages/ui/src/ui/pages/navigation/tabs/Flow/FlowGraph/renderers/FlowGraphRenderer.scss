@@ -29,4 +29,8 @@
             background-color: var(--default-background);
         }
     }
+
+    &__messages-body {
+        min-width: 50vw;
+    }
 }
