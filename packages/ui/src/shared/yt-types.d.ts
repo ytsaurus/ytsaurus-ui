@@ -587,7 +587,7 @@ export type FlowComputation = FlowNodeBase &
         partitions_stats?: {
             count: 1;
             count_by_state?: Record<
-                'Completed' | 'Executing' | 'Transient' | 'Interrupted',
+                'completed' | 'executing' | 'transient' | 'interrupted',
                 number | undefined
             >;
         };
