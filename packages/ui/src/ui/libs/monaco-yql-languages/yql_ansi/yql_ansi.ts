@@ -55,7 +55,7 @@ export const language: languages.IMonarchLanguage & Record<string, unknown> = {
             [/(@variables)::(@variables)/, 'support.function'],
             [/[;,.]/, 'delimiter'],
             [/[(){}[\]]/, '@brackets'],
-            [/(\w+\.)*`\/\/(.*)`/g, {token: 'path'}],
+            [/(\w+\.)*`\/\/(.*?)`/g, {token: 'path'}],
             // identifiers and keywords
             [
                 /@?[a-zA-Z_$]\w*/,

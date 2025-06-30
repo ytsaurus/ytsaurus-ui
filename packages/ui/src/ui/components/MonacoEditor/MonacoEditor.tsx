@@ -28,7 +28,7 @@ export type Props = {
 
 const THEMES: Record<string, string> = {
     dark: YT_DARK_MONACO_THEME,
-    'dark-hc': 'hc-black',
+    'dark-hc': YT_DARK_MONACO_THEME,
     light: YT_LIGHT_MONACO_THEME,
     'light-hc': YT_LIGHT_MONACO_THEME,
 };
@@ -138,7 +138,7 @@ const MonacoEditor: FC<Props> = ({
         }
 
         if (theme !== prevProps.current.theme) {
-            options.theme = theme;
+            options.theme = THEMES[theme];
         }
 
         if (readOnly !== prevProps.current.readOnly) {

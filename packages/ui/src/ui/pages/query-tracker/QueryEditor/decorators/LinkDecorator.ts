@@ -1,5 +1,5 @@
 import * as monaco from 'monaco-editor';
-import {getClusterAndPath} from '../../../../libs/monaco-yql-languages/helpers/getClusterAndPath';
+import {getClustersAndPaths} from '../../../../libs/monaco-yql-languages/helpers/getClusterAndPath';
 import {QueryEngine} from '../../../../../shared/constants/engines';
 import {BaseDecorator} from './BaseDecorator';
 import {CommandKey} from '../../../../packages/ya-timeline/lib/utils';
@@ -43,9 +43,11 @@ export class LinkDecorator extends BaseDecorator {
         const decorations: monaco.editor.IModelDeltaDecoration[] = [];
         for (let i = 1; i <= lineCount; i++) {
             const line = model.getLineContent(i);
-            const {path, cluster, position} = getClusterAndPath(line, this.engine);
+            const paths = getClustersAndPaths(line, this.engine);
 
-            if (path) {
+            paths.forEach(({path, position, cluster}) => {
+                if (!path || !position) return;
+
                 newLinks.push({
                     path,
                     line: i,
@@ -56,10 +58,12 @@ export class LinkDecorator extends BaseDecorator {
                 decorations.push({
                     range: new monaco.Range(i, position.start, i, position.end),
                     options: {
-                        hoverMessage: {value: `Follow link (${this.commandKey} + click)`},
+                        hoverMessage: {
+                            value: `Follow link (${this.commandKey} + click)`,
+                        },
                     },
                 });
-            }
+            });
         }
 
         if (!isEqual_(newLinks, this.links)) {
