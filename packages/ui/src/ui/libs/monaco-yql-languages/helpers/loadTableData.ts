@@ -1,4 +1,4 @@
-import {getClusterAndPath} from './getClusterAndPath';
+import {getClustersAndPaths} from './getClusterAndPath';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {YT} from '../../../config/yt-config';
 import ypath from '../../../common/thor/ypath';
@@ -8,15 +8,13 @@ import {JSONParser} from '../../../pages/query-tracker/module/api';
 import {BatchSubRequest} from '../../../../shared/yt-types';
 
 export const loadTableData = async (query: string, engine: QueryEngine) => {
-    const tablePaths = query.match(/(\w+\.)*`(\/\/([^`]*))`/g); // get all table paths
-    if (!tablePaths) return {};
+    const tablePaths = getClustersAndPaths(query, engine);
 
     const useClusterMatch = [...query.matchAll(/(USE|use)\s([^;]+)/g)][0];
     const useClusterName = useClusterMatch?.[2].replace(/[^\w]/g, '') || null;
 
     const requests: BatchSubRequest[] = [];
-    tablePaths.forEach((tablePath) => {
-        const {path, cluster} = getClusterAndPath(tablePath, engine);
+    tablePaths.forEach(({cluster, path}) => {
         const pathCluster = cluster || useClusterName;
         if (!path || !pathCluster) return;
 
@@ -41,9 +39,10 @@ export const loadTableData = async (query: string, engine: QueryEngine) => {
 
     const res: Record<string, string[]> = {};
     tableSchemas.forEach((response, index) => {
-        if (response.output) {
+        const path = requests[index].parameters.path.replace('/@schema', '');
+        if (response.output && path) {
             const columns: {name: string}[] = ypath.getValue(response.output, '');
-            res[tablePaths[index]] = columns.map(({name}) => name);
+            res[path] = columns.map(({name}) => name);
         }
     });
 

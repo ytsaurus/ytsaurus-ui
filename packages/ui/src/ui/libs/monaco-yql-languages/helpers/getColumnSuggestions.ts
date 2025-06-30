@@ -26,8 +26,9 @@ export const getColumnSuggestions: Props = async ({tableSuggestions, model, engi
 
     const tables = await loadTableData(model.getValue(), engine);
     tableSuggestions.tables?.forEach(({name, alias}) => {
-        if (name in tables) {
-            tables[name].forEach((column) => {
+        const path = name.replace(/`/g, '');
+        if (path in tables) {
+            tables[path].forEach((column) => {
                 const fullPath = alias ? `${alias}.${column}` : column;
                 result.push({
                     label: {

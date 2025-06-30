@@ -18,7 +18,10 @@ type Props = (data: {
 }) => Promise<languages.CompletionItem[]>;
 
 export const getDirectoryContent: Props = async ({model, monacoCursorPosition, engine, range}) => {
-    const {path, cluster} = getPathFromMonacoModel(model, monacoCursorPosition, engine);
+    const pathData = getPathFromMonacoModel(model, monacoCursorPosition, engine);
+    if (!pathData) return [];
+
+    const {path, cluster} = pathData;
     if (!path || !cluster) return [];
 
     const clusterConfig = YT.clusters[cluster];
