@@ -12,20 +12,21 @@
     }
 
     &__message {
+        margin-bottom: 2px;
         &_theme_info {
-            background-color: var(--info-backgound);
+            background-color: var(--info-background);
         }
         &_theme_success {
-            background-color: var(--success-backgound);
+            background-color: var(--success-background);
         }
         &_theme_warning {
-            background-color: var(--warning-backgound);
+            background-color: var(--warning-background);
         }
         &_theme_danger {
-            background-color: var(--danger-backgound);
+            background-color: var(--danger-background);
         }
         &_theme_default {
-            background-color: var(--default-color);
+            background-color: var(--default-background);
         }
     }
 }

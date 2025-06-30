@@ -44,6 +44,7 @@ import {FlowGroupBlock} from './utils/FlowGroupBlock';
 import {ComputationGroupCanvasBlock} from './renderers/ComputationGroupCanvas';
 import {Sink} from './renderers/Sink';
 import {STATUS_TO_BG_THEME} from './renderers/FlowGraphRenderer';
+import {SinkCanvasBlock} from './renderers/SinkCanvas';
 
 const block = cn('yt-flow-graph');
 
@@ -85,7 +86,7 @@ export function FlowGraphImpl() {
             computation: ComputationCanvasBlock,
             stream: StreamCanvasBlock,
             'computation-group': ComputationGroupCanvasBlock,
-            sink: StreamCanvasBlock,
+            sink: SinkCanvasBlock,
         },
         {useDefaultConncation: true},
     );
