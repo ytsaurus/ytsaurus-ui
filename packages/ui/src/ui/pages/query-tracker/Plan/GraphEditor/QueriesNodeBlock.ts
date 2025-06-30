@@ -32,6 +32,10 @@ const TEXT_SIZE = 14;
 export class QueriesCanvasBlock extends YTGrapCanvasBlock<QueriesNodeBlock> {
     icon: null | HTMLImageElement = null;
 
+    override renderDetailedView() {
+        this.renderBlock('schematic');
+    }
+
     override renderBlock(mode: 'minimalistic' | 'schematic') {
         this.drawBorder({
             progressPercent: this.getProgressPercent(),

@@ -1,12 +1,14 @@
 .yt-flow-computation {
+    &__name {
+        padding-bottom: 12px;
+    }
+
     &__details {
-        padding-top: 12px;
-        font-size: var(--g-text-caption-2-font-size);
-        line-height: var(--g-text-caption-2-line-height);
+        padding-top: 16px;
     }
 
     &__meta {
-        padding-bottom: 12px;
+        padding-bottom: 16px;
     }
 
     &__progress {
