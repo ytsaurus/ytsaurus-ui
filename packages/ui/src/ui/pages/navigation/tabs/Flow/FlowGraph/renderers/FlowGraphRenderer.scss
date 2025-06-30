@@ -3,6 +3,14 @@
         color: var(--yql-graph-icon-color);
     }
 
+    &__messages {
+        padding-top: 16px;
+    }
+
+    &__messages-header {
+        margin-bottom: 8px;
+    }
+
     &__message {
         &_theme_info {
             background-color: var(--info-backgound);
