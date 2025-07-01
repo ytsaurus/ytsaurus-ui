@@ -8,6 +8,7 @@ export type UploadFileManagerFileFormValues = {
 };
 
 interface FileSettingsFormProps {
+    className?: string;
     initialValues: UploadFileManagerFileFormValues;
     formId: string;
     isDisabled: boolean;
@@ -21,9 +22,11 @@ export const UploadFileManagerFileSettingsForm: React.FC<FileSettingsFormProps> 
     isDisabled,
     onValidation,
     initialValues,
+    className,
 }) => {
     return (
         <YTDFDialog<UploadFileManagerFileFormValues>
+            className={className}
             onAdd={(formApi) => {
                 const values = formApi.getState().values;
 

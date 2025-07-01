@@ -1,0 +1,9 @@
+.yt-upload-file-manager {
+    &__form {
+        flex-grow: 1;
+
+        & .df-dialog__body {
+            padding: 0;
+        }
+    }
+}

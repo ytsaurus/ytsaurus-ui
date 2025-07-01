@@ -1,4 +1,6 @@
 import * as React from 'react';
+import cn from 'bem-cn-lite';
+
 import {Button, Toaster} from '@gravity-ui/uikit';
 
 import Link from '../../../components/Link/Link';
@@ -9,6 +11,10 @@ import FileUploadProgress from '../../../components/FileUploadProgress/FileUploa
 
 import UploadFileManagerFileSettingsForm from './UploadFileManagerFileSettingsForm';
 import {useUploadFileManager} from '../../../containers/UploadFileManager';
+
+import './UploadFileManager.scss';
+
+const block = cn('yt-upload-file-manager');
 
 interface UploadFileManagerProps extends WithVisibleProps {
     title: string;
@@ -49,6 +55,7 @@ export const UploadFileManager: React.FC<UploadFileManagerProps> = (props) => {
                     {uploadSettings.file && (
                         <React.Fragment>
                             <UploadFileManagerFileSettingsForm
+                                className={block('form')}
                                 onValidation={uploadSettings.onValidation}
                                 isDisabled={uploadSettings.isProgress}
                                 formId={uploadSettings.formId}
@@ -112,6 +119,7 @@ export const UploadFileManager: React.FC<UploadFileManagerProps> = (props) => {
     return (
         <React.Fragment>
             <Modal
+                className={block()}
                 size="m"
                 title={props.title}
                 visible={props.visible}
