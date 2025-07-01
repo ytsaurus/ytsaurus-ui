@@ -1,16 +1,20 @@
+@mixin error-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    padding: 8px;
+    margin-bottom: 10px;
+    margin-top: 4px;;
+
+    border-radius: var(--g-border-radius-l);
+
+    background-color: var(--light-background);
+}
+
 .elements-error-details {
     &__details {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-
-        padding: 8px;
-        margin-bottom: 10px;
-        margin-top: 4px;;
-
-        border-radius: var(--g-border-radius-l);
-
-        background-color: var(--light-background);
+        @include error-details;
     }
 
     &__message {
