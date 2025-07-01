@@ -7,7 +7,6 @@ import {createColumnHelper} from '@gravity-ui/table/tanstack';
 import {OperationProgressInfo} from '../../../../../../store/api/dashboard2/operations/operations';
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
-import {useAutoHeight} from '../../../../../../pages/dashboard2/Dashboard/hooks/use-autoheight';
 
 import {Title} from './cells/Title';
 import {UserPool} from './cells/UserPool';
@@ -55,21 +54,11 @@ const columns = [
     }),
 ];
 
-// 1 react-grid height value ~ 25.3px
-const operationsLayout = {
-    baseHeight: 4.5,
-    defaultHeight: 12,
-    rowHeight: 2.3,
-    minWidth: 10,
-};
-
 export function OperationsWidgetContent(props: PluginWidgetProps) {
     const {
         filters: {state},
         data: {operations, isLoading, isFetching, error},
     } = useOperationsWidget(props);
-
-    useAutoHeight(props, operationsLayout, operations?.length || 0);
 
     return (
         <WidgetTable
