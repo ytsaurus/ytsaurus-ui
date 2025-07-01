@@ -15,6 +15,7 @@ import {PoolsWidgetControls} from '../Widgets/Pools/PoolsWidgetControls/PoolsWid
 import {QueriesWidgetControls} from '../Widgets/Queries/QueriesWidgetControls/QueriesWidgetControls';
 import {QueriesWidgetContent} from '../Widgets/Queries/QueriesWidgetContent/QueriesWidgetContent';
 import {ServicesWidgetContent} from '../Widgets/Services/ServicesWidgetContent/ServicesWidgetContent';
+import {ServicesWidgetControls} from '../Widgets/Services/ServicesWidgetControls/ServicesWidgetControls';
 import {defaultDashboardItems} from '../../../../constants/dashboard2';
 
 export function registerPlugins() {
@@ -121,6 +122,7 @@ export function registerPlugins() {
                 title="Serviсes"
                 type="services"
                 content={<ServicesWidgetContent {...props} />}
+                controls={<ServicesWidgetControls {...props} />}
             />
         ),
     });
