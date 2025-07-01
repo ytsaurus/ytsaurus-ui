@@ -1,15 +1,25 @@
 .widget-table {
     width: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    max-width: 100%;
 }
 
 .yt-dashboard-widget {
-    padding-bottom: 5px;
+    padding-bottom: 21px;
 }
 
 .table-widget-container{
     height: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
     position: relative;
     width: 100%;
+    max-width: 100%;
+}
+
+.gt-table__header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
 }
