@@ -9,12 +9,13 @@ type Props = {
 };
 
 export const RightButtonsGroup: FC<Props> = ({onQueryCreate}) => {
-    const chatComponent = UIFactory.getAIChat();
+    const chatComponents = UIFactory.getAIChat();
 
     return (
         <Flex gap={2}>
             <QueriesListSidebarToggleButton />
-            {chatComponent}
+            {chatComponents?.chat}
+            {chatComponents?.toggleButton}
             <NewQueryButton onClick={onQueryCreate} />
         </Flex>
     );

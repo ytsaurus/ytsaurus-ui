@@ -4,7 +4,8 @@ import {ErrorTreeNode} from './ErrorTreeNode';
 import {useMonaco} from '../../hooks/useMonaco';
 import {Position} from 'monaco-editor';
 import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
-import {Text} from '@gravity-ui/uikit';
+import {Flex, Text} from '@gravity-ui/uikit';
+import UIFactory from '../../../../UIFactory';
 
 type Props = {
     rootError?: QueryError;
@@ -12,6 +13,7 @@ type Props = {
 
 export const ErrorTree: FC<Props> = ({rootError}) => {
     const {getEditor} = useMonaco();
+    const chatComponents = UIFactory.getAIChat();
 
     const handleErrorClick = useCallback(
         ({row, column}: ErrorPosition) => {
@@ -31,8 +33,18 @@ export const ErrorTree: FC<Props> = ({rootError}) => {
 
     return (
         <div>
-            <Text variant="subheader-3">Query error</Text>{' '}
-            <ClipboardButton title="Copy error" view="flat-secondary" text={text} size="l" />
+            <Flex gap={2} alignItems="center">
+                <div>
+                    <Text variant="subheader-3">Query error</Text>{' '}
+                    <ClipboardButton
+                        title="Copy error"
+                        view="flat-secondary"
+                        text={text}
+                        size="l"
+                    />
+                </div>
+                {chatComponents && chatComponents.askAboutErrorButton}
+            </Flex>
             <ErrorTreeNode error={rootError} onErrorClick={handleErrorClick} expanded />
         </div>
     );
