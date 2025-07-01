@@ -22,7 +22,7 @@ monaco.editor.defineTheme(YT_DARK_MONACO_THEME, {
     inherit: true,
     rules: [
         {token: 'tablepath', foreground: '3e999f'},
-        {token: 'path', foreground: '3e999f'},
+        {token: 'path', foreground: '3e999f', fontStyle: 'underline'},
         {token: 'string.sql', foreground: 'ce9178'},
     ],
     colors: {

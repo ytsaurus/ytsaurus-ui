@@ -1,6 +1,6 @@
 import {Position, editor} from 'monaco-editor';
 import {QueryEngine} from '../../../../shared/constants/engines';
-import {getClusterAndPath} from './getClusterAndPath';
+import {getClustersAndPaths} from './getClusterAndPath';
 
 export const getPathFromMonacoModel = (
     model: editor.ITextModel,
@@ -10,12 +10,22 @@ export const getPathFromMonacoModel = (
     const line = model.getLineContent(monacoCursorPosition.lineNumber);
     const editedPart = line.substring(0, monacoCursorPosition.column);
 
-    const {path, cluster} = getClusterAndPath(editedPart, engine);
+    const paths = getClustersAndPaths(editedPart, engine);
+    const currentPath = paths.find(({position}) => {
+        return (
+            position &&
+            position.start <= monacoCursorPosition.column &&
+            position.end >= monacoCursorPosition.column
+        );
+    });
+
+    if (!currentPath) return null;
+
     const useArray = model.getValue().match(/(USE|use)\s\w+/g);
     const useClusterName = useArray ? useArray.pop()?.replace(/(USE|use)\s/, '') : null;
 
     return {
-        path,
-        cluster: cluster || useClusterName,
+        path: currentPath.path,
+        cluster: currentPath.cluster || useClusterName,
     };
 };
