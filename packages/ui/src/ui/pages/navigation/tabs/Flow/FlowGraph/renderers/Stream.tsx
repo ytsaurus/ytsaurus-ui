@@ -32,7 +32,7 @@ export function Stream({item, detailed, className}: StreamProps) {
                         value: (
                             <Flex direction="column">
                                 <Text variant="inherit" whiteSpace="nowrap" ellipsis>
-                                    {format.Number(item.meta?.messages_per_second)} per/s
+                                    {format.Number(item.meta?.messages_per_second)} pcs/s
                                 </Text>
                                 <Text variant="inherit" whiteSpace="nowrap" ellipsis>
                                     {format.Bytes(item.meta?.bytes_per_second, {
