@@ -1,13 +1,19 @@
 import React from 'react';
 import block from 'bem-cn-lite';
+import {AxiosError} from 'axios';
+import {Button, Flex, Text} from '@gravity-ui/uikit';
 
 import hammer from '../../common/hammer';
+
+import {YTError, YTErrorRaw} from '../../../@types/types';
 
 import ErrorDetails, {ErrorDetailsProps} from '../../components/ErrorDetails/ErrorDetails';
 import HelpLink from '../../components/HelpLink/HelpLink';
 import FormattedText from '../formatters/FormattedText';
 import {rumLogError} from '../../rum/rum-counter';
 import {ErrorToClipboardButton} from '../../components/ErrorToClipboardButton/ErrorToClipboardButton';
+import {showErrorPopup} from '../../utils/utils';
+
 import Icon from '../Icon/Icon';
 
 import i18n from './i18n';
@@ -34,6 +40,7 @@ export type YTErrorBlockProps = {
     className?: string;
     topMargin?: 'none' | 'half';
     bottomMargin?: boolean;
+    view?: 'normal' | 'compact';
 
     error?: ErrorDetailsProps['error'];
     settings?: ErrorDetailsProps['settings'];
@@ -65,30 +72,50 @@ export class YTErrorBlock extends React.Component<YTErrorBlockProps> {
     }
 
     renderMessage() {
-        const {message} = this.props;
+        const {message, error, view} = this.props;
         const className = b('message');
+        const content = view !== 'compact' ? message : (message ?? (error ? ErrorDetails.renderMessage(error as YTErrorRaw) : undefined));
         return (
             <div className={className}>
-                {typeof message !== 'string' ? message : <FormattedText text={message} />}
+                {typeof content !== 'string' ? content : <FormattedText text={content} />}
             </div>
         );
     }
 
     renderBody() {
-        const {error, settings, maxCollapsedDepth, defaultExpandedCount} = this.props;
+        const {
+            view = 'normal',
+            error,
+            settings,
+            maxCollapsedDepth,
+            defaultExpandedCount,
+        } = this.props;
         const className = b('body');
+
         return (
-            <div className={className}>
+            <Flex direction={'column'} gap={2} className={className}>
                 {this.renderMessage()}
-                {error && (
-                    <ErrorDetails
-                        error={error}
-                        settings={settings}
-                        maxCollapsedDepth={maxCollapsedDepth}
-                        defaultExpadedCount={defaultExpandedCount}
-                    />
-                )}
-            </div>
+                {error &&
+                    (view === 'normal' ? (
+                        <ErrorDetails
+                            error={error}
+                            settings={settings}
+                            maxCollapsedDepth={maxCollapsedDepth}
+                            defaultExpadedCount={defaultExpandedCount}
+                        />
+                    ) : (
+                        <Button
+                            style={{width: 'fit-content'}}
+                            view={'outlined'}
+                            size={'l'}
+                            onClick={() =>
+                                showErrorPopup(error as YTError | AxiosError, {hideOopsMsg: true})
+                            }
+                        >
+                            <Text color={'secondary'}>Details</Text>
+                        </Button>
+                    ))}
+            </Flex>
         );
     }
 
