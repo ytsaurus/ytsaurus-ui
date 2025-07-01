@@ -17,7 +17,7 @@ import {Page} from '../../../../../shared/constants/settings';
 
 export type ServiceInfo = {
     general: {name: string; url: string};
-    type: 'bundle' | 'CHYT';
+    type: 'Bundle' | 'CHYT';
     status?: YTHealth | StrawberryCliqueHealthType;
     config: string;
 };
@@ -79,7 +79,7 @@ async function fetchBundles(items: ServicesItem[], cluster: string) {
         const instances = item?.bundle_controller_target_config?.tablet_node_count;
 
         return {
-            type: 'bundle' as const,
+            type: 'Bundle' as const,
             general: {
                 name: items?.[idx]?.item || 'unknown',
                 url: makeItemLink('bundle', items?.[idx]?.item || 'unknown', cluster),
@@ -98,9 +98,9 @@ async function fetchChyt(items: ServicesItem[], cluster: string, isAdmin: boolea
     );
 
     const cliques = map_(cliquesResponses, ({result: item}, idx) => {
-        const cpu = `${item.ctl_attributes?.total_cpu} ${item.ctl_attributes?.total_cpu && item.ctl_attributes?.total_cpu > 1 ? 'cores' : 'core'}`;
-        const memory = hammer.format['Bytes'](item.ctl_attributes?.total_memory || '');
         const instances = item.ctl_attributes?.instance_count || 0;
+        const cpu = `${(item.ctl_attributes?.total_cpu || 0) / instances} ${item.ctl_attributes?.total_cpu && item.ctl_attributes?.total_cpu > 1 ? 'cores' : 'core'}`;
+        const memory = hammer.format['Bytes'](((item.ctl_attributes?.total_memory || 0) / instances) || '');
         const alias = items?.[idx]?.item || 'unknown';
         return {
             type: 'CHYT' as const,
