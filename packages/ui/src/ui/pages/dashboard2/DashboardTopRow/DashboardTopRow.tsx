@@ -11,8 +11,6 @@ import {
 } from '../../../store/reducers/dashboard2/dashboard';
 import {getCluster, getCurrentUserName} from '../../../store/selectors/global';
 
-import {RequestQuotaButton} from '../../../components/RequestQuotaButton/RequestQuotaButton';
-
 import {Page} from '../../../../shared/constants/settings';
 
 import UIFactory from '../../../UIFactory';
@@ -36,11 +34,14 @@ export function DashboardTopRow() {
         <RowWithName page={Page.DASHBOARD}>
             <Flex grow={true} justifyContent={'flex-end'} gap={3}>
                 <MyRolesLink />
-                <RequestQuotaButton page={Page.DASHBOARD} />
                 {editMode && <CopyConfigButton />}
                 {editMode && <AddWidgetMenu />}
                 {editMode && <CancelButton onCancel={cancel} />}
-                <Button size={'m'} view={'action'} onClick={editMode ? () => save() : () => edit()}>
+                <Button
+                    size={'m'}
+                    view={'outlined'}
+                    onClick={editMode ? () => save() : () => edit()}
+                >
                     {editMode ? 'Save dashboard' : 'Edit dashboard'}
                 </Button>
             </Flex>
