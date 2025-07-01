@@ -5,6 +5,7 @@ import filter_ from 'lodash/filter';
 import find_ from 'lodash/find';
 
 import hammer from '../../../../common/hammer';
+import ypath from '../../../../common/thor/ypath';
 
 import {RootState} from '../../../../store/reducers';
 import {isDeveloper} from '../../../../store/selectors/global/is-developer';
@@ -12,6 +13,7 @@ import {isDeveloper} from '../../../../store/selectors/global/is-developer';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {getBatchError} from '../../../../utils/utils';
 import {StrawberryCliqueHealthType, chytApiAction} from '../../../../utils/strawberryControllerApi';
+import {defaultColumns} from '../../../../constants/chyt';
 import {YTHealth} from '../../../../types';
 import {Page} from '../../../../../shared/constants/settings';
 
@@ -93,21 +95,35 @@ async function fetchBundles(items: ServicesItem[], cluster: string) {
 }
 
 async function fetchChyt(items: ServicesItem[], cluster: string, isAdmin: boolean) {
-    const cliquesResponses = await Promise.all(
-        map_(items, ({item}) => chytApiAction('get_brief_info', cluster, {alias: item}, {isAdmin})),
+    const cliquesList = await chytApiAction(
+        'list',
+        cluster,
+        {
+            attributes: [
+                'yt_operation_id' as const,
+                'creator' as const,
+                'state' as const,
+                'health' as const,
+                'health_reason' as const,
+                ...defaultColumns,
+            ],
+        },
+        {isAdmin},
     );
 
-    const cliques = map_(cliquesResponses, ({result: item}, idx) => {
-        const instances = item.ctl_attributes?.instance_count || 0;
-        const cpu = `${(item.ctl_attributes?.total_cpu || 0) / instances} ${item.ctl_attributes?.total_cpu && item.ctl_attributes?.total_cpu > 1 ? 'cores' : 'core'}`;
-        const memory = hammer.format['Bytes'](
-            (item.ctl_attributes?.total_memory || 0) / instances || '',
-        );
-        const alias = items?.[idx]?.item || 'unknown';
+    const cliquesResponses = cliquesList.result
+        .map((item) => [ypath.getValue(item), ypath.getAttributes(item)])
+        .filter(([alias]) => items.map((i) => i.item).includes(alias));
+
+    const cliques = map_(cliquesResponses, ([alias, item]) => {
+        const instances = item?.instance_count || 0;
+        const cpu = `${(item?.total_cpu || 0) / instances} ${item?.total_cpu && item?.total_cpu > 1 ? 'cores' : 'core'}`;
+        const memory = hammer.format['Bytes']((item?.total_memory || 0) / instances || '');
+
         return {
             type: 'CHYT' as const,
             general: {
-                name: alias,
+                name: alias || 'unkwnown',
                 url: makeItemLink('chyt', alias, cluster),
             },
             status: item?.health,
