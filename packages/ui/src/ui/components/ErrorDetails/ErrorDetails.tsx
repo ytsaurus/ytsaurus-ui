@@ -53,6 +53,23 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
         }
     }
 
+    static renderMessage(error: YTErrorRaw) {
+        const {message, code} = error;
+
+        const value = ypath.getValue(message);
+        let text = value;
+        if ('string' === typeof text) {
+            const msg = unescapeSlashX(text);
+            text = <FormattedText text={msg} />;
+        }
+        return (
+            <span className={b('message')}>
+                {text}
+                {code !== undefined && <React.Fragment>[{ypath.getValue(code)}]</React.Fragment>}
+            </span>
+        );
+    }
+
     state: State = {
         showDetails: Boolean(this.props.defaultExpadedCount),
         currentTab: ErrorDetails.prepareDefaultTab(this.props),
@@ -189,25 +206,6 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
         );
     }
 
-    renderMessage() {
-        const {
-            error: {message, code},
-        } = this.props;
-
-        const value = ypath.getValue(message);
-        let text = value;
-        if ('string' === typeof text) {
-            const msg = unescapeSlashX(text);
-            text = <FormattedText text={msg} />;
-        }
-        return (
-            <span className={b('message')}>
-                {text}
-                {code !== undefined && <React.Fragment>[{ypath.getValue(code)}]</React.Fragment>}
-            </span>
-        );
-    }
-
     renderToggler() {
         const {showDetails} = this.state;
 
@@ -230,14 +228,14 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
                     <Flex direction="column">
                         <Link theme="primary" onClick={this.toggleDetails}>
                             {this.renderToggler()}
-                            {this.renderMessage()}
+                            {ErrorDetails.renderMessage(this.props.error as YTErrorRaw)}
                         </Link>
                         <div className={'toggle-subject'}>
                             {showDetails && this.renderDetails()}
                         </div>
                     </Flex>
                 ) : (
-                    this.renderMessage()
+                    ErrorDetails.renderMessage(this.props.error as YTErrorRaw)
                 )}
             </div>
         );
