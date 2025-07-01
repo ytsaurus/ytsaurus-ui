@@ -52,7 +52,7 @@ export function Computation({detailed, item, className}: ComputationProps) {
                         value: format.Bytes(memory_usage_current),
                     },
                     {
-                        label: 'Epoch, per/s',
+                        label: 'Epoch, pcs/s',
                         value: format.Number(item.meta?.epoch_per_second),
                     },
                 ]}
