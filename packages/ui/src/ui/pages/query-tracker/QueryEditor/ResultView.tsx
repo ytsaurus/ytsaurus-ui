@@ -10,6 +10,7 @@ import XmarkIcon from '@gravity-ui/icons/svgs/xmark.svg';
 import {ResultMode} from './QueryEditor';
 import cn from 'bem-cn-lite';
 import './ResultView.scss';
+import UIFactory from '../../../UIFactory';
 
 const b = cn('yt-qt-result-view');
 
@@ -24,6 +25,9 @@ export const ResultView = memo<Props>(function ResultView({
     resultViewMode,
     setResultViewMode,
 }) {
+    const chatComponents = UIFactory.getAIChat();
+    const hasError = Boolean(query.error?.message);
+
     return (
         <QueryResults
             query={query}
@@ -32,6 +36,7 @@ export const ResultView = memo<Props>(function ResultView({
             toolbar={
                 <>
                     <Flex gap={2} className={b('results-toolbar-buttons')}>
+                        {hasError && chatComponents && chatComponents.askAboutErrorButton}
                         <ShareButton />
                         <EditQueryACOModal query_id={query.id} />
                     </Flex>

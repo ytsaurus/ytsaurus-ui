@@ -41,6 +41,8 @@ export const getCliqueLoading = (state: RootState) => getState(state).cliqueLoad
 
 export const getQueryItem = (state: RootState) => getState(state).queryItem;
 
+export const getQueryItemError = (state: RootState) => getState(state).queryItem?.error;
+
 export const isQueryExecuted = (state: RootState): boolean => {
     const queryItem = getQueryItem(state);
     // TODO: Use real query's state
