@@ -13,7 +13,6 @@ import {
     toggleEditting,
 } from '../../../store/reducers/dashboard2/dashboard';
 import {getDashboardConfig} from '../../../store/selectors/dashboard2/dashboard';
-import {getCurrentUserName} from '../../../store/selectors/global/username';
 
 import {defaultDashboardItems} from '../../../constants/dashboard2';
 import {makeDefaultConfig} from '../../../utils/dashboard2/make-default-config';
@@ -62,12 +61,11 @@ export function editConfig(
 export function copyConfig(cluster: string): ThunkAction<void, RootState, any, any> {
     return (dispatch, getState) => {
         const state = getState();
-        const username = getCurrentUserName(state);
 
         let config = state.settings.data[`local::${cluster}::dashboard::config`];
 
         if (!config) {
-            config = makeDefaultConfig(username);
+            config = makeDefaultConfig();
         }
 
         dispatch(updateEdittingConfig(config));

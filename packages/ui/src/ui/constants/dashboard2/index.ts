@@ -1,15 +1,13 @@
 import {DashKitProps} from '@gravity-ui/dashkit';
 
-export const rowHeight = 12;
-
-const navigationLayoutWidth = 13;
-const accountsLayoutWidth = 18;
-const queriesLayoutWidth = 18;
+const navigationLayoutWidth = 16;
+const accountsLayoutWidth = 20;
+const queriesLayoutWidth = 20;
 
 export const defaultDashboardItems = {
     navigation: {
         layout: {
-            h: rowHeight,
+            h: 21,
             i: 'navigation',
             w: navigationLayoutWidth,
             x: 0,
@@ -19,51 +17,51 @@ export const defaultDashboardItems = {
     },
     operations: {
         layout: {
-            h: rowHeight,
+            h: 16,
             i: 'operations',
-            w: 23,
-            x: navigationLayoutWidth,
-            y: 0,
+            w: 36,
+            x: 0,
+            y: 21,
         },
         data: {name: 'Operations'},
     },
     queries: {
         layout: {
-            h: rowHeight,
+            h: 12,
             i: 'queries',
             w: queriesLayoutWidth,
             x: 0,
-            y: rowHeight,
+            y: 0,
         },
         data: {name: 'Queries'},
     },
     services: {
         layout: {
-            h: rowHeight,
+            h: 12,
             i: 'services',
-            w: 18,
+            w: 20,
             x: 0,
-            y: rowHeight * 2,
+            y: 0,
         },
         data: {name: 'Services'},
     },
     accounts: {
         layout: {
-            h: rowHeight,
+            h: 10.5,
             i: 'accounts',
             w: accountsLayoutWidth,
-            x: queriesLayoutWidth,
-            y: rowHeight,
+            x: navigationLayoutWidth,
+            y: 0,
         },
         data: {name: 'Accounts', columns: [{name: 'Nodes'}, {name: 'Chunks'}]},
     },
     pools: {
         layout: {
-            h: rowHeight,
+            h: 10.5,
             i: 'pools',
-            w: 18,
-            x: 18,
-            y: rowHeight * 2,
+            w: accountsLayoutWidth,
+            x: navigationLayoutWidth,
+            y: 10.5,
         },
         data: {name: 'Pools', columns: ['memory', 'cpu', 'operations']},
     },
@@ -71,7 +69,7 @@ export const defaultDashboardItems = {
 
 export const dashboardConfig: DashKitProps['config'] = {
     salt: '0.1231231023012831',
-    counter: 6,
+    counter: 4,
     items: [
         {
             id: 'navigation',
@@ -81,32 +79,32 @@ export const dashboardConfig: DashKitProps['config'] = {
             orderId: 0,
         },
         {
-            id: 'operations',
-            data: {name: 'Operations'},
-            type: 'operations',
-            namespace: 'dashboard',
-            orderId: 1,
-        },
-        {
-            id: 'queries',
-            data: {name: 'Queries'},
-            type: 'queries',
-            namespace: 'dashboard',
-            orderId: 2,
-        },
-        {
             id: 'accounts',
             data: defaultDashboardItems.accounts.data,
             type: 'accounts',
             namespace: 'dashboard',
-            orderId: 4,
+            orderId: 1,
+        },
+        {
+            id: 'pools',
+            data: defaultDashboardItems.pools.data,
+            type: 'pools',
+            namespace: 'dashboard',
+            orderId: 2,
+        },
+        {
+            id: 'operations',
+            data: {name: 'Operations'},
+            type: 'operations',
+            namespace: 'dashboard',
+            orderId: 3,
         },
     ],
     layout: [
         defaultDashboardItems['navigation'].layout,
-        defaultDashboardItems['operations'].layout,
-        defaultDashboardItems['queries'].layout,
         defaultDashboardItems['accounts'].layout,
+        defaultDashboardItems['pools'].layout,
+        defaultDashboardItems['operations'].layout,
     ],
     aliases: {},
     connections: [],
