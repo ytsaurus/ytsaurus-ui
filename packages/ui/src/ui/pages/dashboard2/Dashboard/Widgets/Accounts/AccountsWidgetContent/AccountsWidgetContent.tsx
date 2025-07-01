@@ -98,7 +98,11 @@ export function AccountsWidgetContent(props: PluginWidgetProps) {
                                 />
                             );
                         },
-                        header: () => <Text variant={'subheader-1'}>{column.name}</Text>,
+                        header: () => (
+                            <Text variant={'subheader-1'} whiteSpace={'nowrap'} ellipsis>
+                                {column.name}
+                            </Text>
+                        ),
                     }),
                 ),
             );
