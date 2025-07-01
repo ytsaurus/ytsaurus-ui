@@ -10,14 +10,32 @@ export type PoolQueryParams = {
 };
 
 export type PoolsQueryArgs = {
-    queries: PoolQueryParams[];
+    type: 'favourite' | 'usable' | 'custom';
+    favouriteList: {path: string}[];
+    customList: PoolQueryParams[];
 };
+
+function parseStringToTreePool({path}: {path: string}) {
+    const startIdx = path.indexOf('[');
+    const endIdx = path.indexOf(']');
+
+    if (startIdx === -1 || endIdx === -1 || endIdx < startIdx) {
+        return {tree: '', pool: ''};
+    }
+
+    const pool = path.slice(0, startIdx);
+    const tree = path.slice(startIdx + 1, endIdx);
+
+    return {tree, pool};
+}
 
 const QUOTA_LIMIT = 50;
 
 export async function fetchPools(args: PoolsQueryArgs) {
     try {
-        const {queries} = args;
+        const {customList, favouriteList, type} = args;
+        const queries =
+            type === 'favourite' ? (favouriteList || []).map(parseStringToTreePool) : customList;
         const response = await ytApiV3.executeBatch({
             parameters: {
                 requests: map_(queries, ({tree, pool}) => ({
