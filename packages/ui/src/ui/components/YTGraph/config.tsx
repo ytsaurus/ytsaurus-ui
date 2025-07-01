@@ -20,7 +20,7 @@ export const getGraphColors = (): RecursivePartial<TGraphColors> => {
             selectedBackground: getCssColor('--yql-graph-color-edge-highlight'),
         },
         block: {
-            background: getCssColor('--g-color-base-generic-ultralight'),
+            background: getCssColor('--g-color-base-float'),
             selectedBorder: getCssColor('--yql-graph-color-edge-highlight'),
             border: getCssColor('--yql-graph-color-edge'),
             text: getCssColor('--yql-graph-color-text-label'),
