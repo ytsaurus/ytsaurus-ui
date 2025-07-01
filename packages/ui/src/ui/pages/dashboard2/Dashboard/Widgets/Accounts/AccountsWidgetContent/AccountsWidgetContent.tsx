@@ -16,7 +16,6 @@ import {getCluster} from '../../../../../../store/selectors/global';
 import {AccountInfo} from '../../../../../../store/api/dashboard2/accounts/accounts';
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
-import {useAutoHeight} from '../../../../../../pages/dashboard2/Dashboard/hooks/use-autoheight';
 import {ColumnSortByInfo} from '../../../../../../pages/navigation/modals/TableMergeSortModal/TableSortByControl';
 
 import {AccountsProgressCell} from './cells/AccountsProgressCell';
@@ -30,16 +29,6 @@ type AccountsWidgetData = {
     accounts?: string[];
     disk_columns?: ColumnSortByInfo[];
     columns?: ColumnSortByInfo[];
-};
-
-// 1 react-grid height value ~ 25.3px
-const accountsLayout = {
-    baseHeight: 4.5,
-    defaultHeight: 12,
-
-    rowHeight: 1.9,
-
-    minWidth: 10,
 };
 
 export function AccountsWidgetContent(props: PluginWidgetProps) {
@@ -116,8 +105,6 @@ export function AccountsWidgetContent(props: PluginWidgetProps) {
         }
         return cols;
     }, [data?.columns, data?.disk_columns]);
-
-    useAutoHeight(props, accountsLayout, accounts?.length || 0);
 
     return (
         <WidgetTable
