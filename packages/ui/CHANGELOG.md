@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.98.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.97.0...ui-v1.98.0) (2025-07-01)
+
+
+### Features
+
+* **Navigation/MapNode:** Support uploading files through the UI [[#1173](https://github.com/ytsaurus/ytsaurus-ui/issues/1173)] ([8acf29e](https://github.com/ytsaurus/ytsaurus-ui/commit/8acf29e863e427f247653706dd2d66119a91ca51))
+* **Scheduling/Overview:** allow to customize columns [YTFRONT-4402] ([06d92bc](https://github.com/ytsaurus/ytsaurus-ui/commit/06d92bca76d61f26938b253b15f2a69e23a9ad18))
+
+
+### Bug Fixes
+
+* **Navigation/Tablets:** arrow click [YTFRONT-5030] ([044d0ae](https://github.com/ytsaurus/ytsaurus-ui/commit/044d0ae66d7fa10970ee46b9186cb770a4f83e33))
+* **Navigation/UploadFileManager:** reset state after closing and shift menu item ([b7ac155](https://github.com/ytsaurus/ytsaurus-ui/commit/b7ac155abd41fd6dfedbfebb4b7a8923aa22be7b))
+* **Operations:** dont show special status instead of suspended [YTFRONT-5035] ([f305463](https://github.com/ytsaurus/ytsaurus-ui/commit/f305463f731c89afbd5e0b5ac5253303f1fb2940))
+
 ## [1.97.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.96.0...ui-v1.97.0) (2025-06-23)
 
 
