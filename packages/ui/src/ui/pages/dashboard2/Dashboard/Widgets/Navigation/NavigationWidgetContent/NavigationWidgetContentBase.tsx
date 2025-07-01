@@ -10,8 +10,6 @@ import {getCluster} from '../../../../../../store/selectors/global';
 import {MapNodeIcon} from '../../../../../../components/MapNodeIcon/MapNodeIcon';
 import Link from '../../../../../../components/Link/Link';
 
-import {WidgetFallback} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetFallback/WidgetFallback';
-
 import {Page} from '../../../../../../../shared/constants/settings';
 
 import './NavigationWidgetContent.scss';
@@ -49,9 +47,10 @@ export function NavigationWidgetContentBase(props: Props) {
                     ))}
                 </Flex>
             ) : (
-                <WidgetFallback
-                    itemsName={`${hammer.format['ReadableField'](pathsType).toLowerCase()} paths`}
-                />
+                <Text
+                    variant={'body-1'}
+                    color={'secondary'}
+                >{`No ${`${hammer.format['ReadableField'](pathsType).toLowerCase()} paths`} found`}</Text>
             )}
         </>
     );
