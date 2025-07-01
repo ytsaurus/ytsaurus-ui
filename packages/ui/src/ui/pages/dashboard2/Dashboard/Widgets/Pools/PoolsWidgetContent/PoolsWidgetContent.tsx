@@ -4,7 +4,6 @@ import {createColumnHelper} from '@gravity-ui/table/tanstack';
 import {PluginWidgetProps} from '@gravity-ui/dashkit';
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
-import {useAutoHeight} from '../../../../../../pages/dashboard2/Dashboard/hooks/use-autoheight';
 
 import {PoolCell} from './cells/Pool';
 import {ResourceCell} from './cells/Resource';
@@ -56,23 +55,11 @@ const columns = [
     }),
 ];
 
-// 1 react-grid height value ~ 25.3px
-const poolsLayout = {
-    baseHeight: 4.5,
-    defaultHeight: 12,
-
-    rowHeight: 1.9,
-
-    minWidth: 10,
-};
-
 export function PoolsWidgetContent(props: PluginWidgetProps) {
     const {
         visibleColumns,
         data: {pools, isFetching, isLoading, error},
     } = usePoolsWidget(props);
-
-    useAutoHeight(props, poolsLayout, pools?.length || 0);
 
     return (
         <WidgetTable
