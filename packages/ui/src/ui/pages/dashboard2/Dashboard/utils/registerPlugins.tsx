@@ -11,6 +11,7 @@ import {OperationsWidgetControls} from '../Widgets/Operations/OperationsWidgetCo
 import {AccountsWidgetContent} from '../Widgets/Accounts/AccountsWidgetContent/AccountsWidgetContent';
 import {AccountsWidgetControls} from '../Widgets/Accounts/AccountsWidgetControls/AccountsWidgetControls';
 import {PoolsWidgetContent} from '../Widgets/Pools/PoolsWidgetContent/PoolsWidgetContent';
+import {PoolsWidgetControls} from '../Widgets/Pools/PoolsWidgetControls/PoolsWidgetControls';
 import {QueriesWidgetControls} from '../Widgets/Queries/QueriesWidgetControls/QueriesWidgetControls';
 import {QueriesWidgetContent} from '../Widgets/Queries/QueriesWidgetContent/QueriesWidgetContent';
 import {ServicesWidgetContent} from '../Widgets/Services/ServicesWidgetContent/ServicesWidgetContent';
@@ -84,6 +85,7 @@ export function registerPlugins() {
                 title="Pools"
                 type="pools"
                 content={<PoolsWidgetContent {...props} />}
+                controls={<PoolsWidgetControls {...props} />}
             />
         ),
     });
