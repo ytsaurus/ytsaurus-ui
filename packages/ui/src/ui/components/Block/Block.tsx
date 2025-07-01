@@ -124,7 +124,7 @@ export class YTErrorBlock extends React.Component<YTErrorBlockProps> {
     }
 
     render() {
-        const {type, className, topMargin, bottomMargin, disableLogger} = this.props;
+        const {type, className, topMargin, bottomMargin, disableLogger, error} = this.props;
 
         return (
             <React.Fragment>
@@ -138,7 +138,7 @@ export class YTErrorBlock extends React.Component<YTErrorBlockProps> {
                     {this.renderHeading()}
                     {this.renderBody()}
                     {this.renderHelp()}
-                    {this.renderCopy()}
+                    {error && this.renderCopy()}
                 </div>
                 {!disableLogger && <ErrorLogger error={this.props.error} type={type} />}
             </React.Fragment>
