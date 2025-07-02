@@ -43,6 +43,7 @@ const columns = [
     columnHelper.accessor('userPool', {
         header: () => <Text variant={'subheader-1'}>{'User/Pools'}</Text>,
         cell: (userPool) => <UserPool userPool={userPool.getValue()} />,
+        maxSize: 200,
     }),
     columnHelper.accessor('startTime', {
         header: () => <Text variant={'subheader-1'}>{'Start time'}</Text>,
@@ -59,7 +60,7 @@ export function OperationsWidgetContent(props: PluginWidgetProps) {
         filters: {state},
         data: {operations, isLoading, error},
     } = useOperationsWidget(props);
-    console.log(operations);
+
     return (
         <WidgetTable
             data={operations || []}
