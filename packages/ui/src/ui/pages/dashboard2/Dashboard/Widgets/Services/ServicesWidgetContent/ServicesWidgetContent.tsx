@@ -1,5 +1,4 @@
 import React from 'react';
-import {Text} from '@gravity-ui/uikit';
 import {PluginWidgetProps} from '@gravity-ui/dashkit';
 import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
@@ -7,6 +6,7 @@ import {ServiceInfo} from '../../../../../../store/api/dashboard2/services/servi
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
 import {GeneralCell} from '../../../../../../pages/dashboard2/Dashboard/components/GeneralCell/GeneralCell';
+import {WidgetText} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetText/WidgetText';
 
 import {Health} from '../../../../../../components/Health/Health';
 
@@ -20,6 +20,7 @@ const columns = [
     columnHelper.accessor('general', {
         cell: (general) => <GeneralCell {...general.getValue()} />,
         header: 'Name',
+        maxSize: 150,
     }),
     columnHelper.accessor('type', {
         cell: (type) => <Type type={type.getValue()} />,
@@ -30,7 +31,7 @@ const columns = [
         header: 'Health',
     }),
     columnHelper.accessor('config', {
-        cell: (config) => <Text whiteSpace={'nowrap'}>{config.getValue()}</Text>,
+        cell: (config) => <WidgetText>{config.getValue()}</WidgetText>,
         header: 'Config',
     }),
 ];
