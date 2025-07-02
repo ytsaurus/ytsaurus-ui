@@ -1,9 +1,9 @@
 import React from 'react';
-import {Text} from '@gravity-ui/uikit';
 import {PluginWidgetProps} from '@gravity-ui/dashkit';
 import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
+import {WidgetText} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetText/WidgetText';
 
 import {QueryStatus} from '../../../../../../types/query-tracker';
 
@@ -39,8 +39,9 @@ const columns = [
         header: () => 'Type',
     }),
     columnHelper.accessor('author', {
-        cell: (author) => <Text>{author.getValue()}</Text>,
+        cell: (author) => <WidgetText>{author.getValue()}</WidgetText>,
         header: () => 'Author',
+        maxSize: 150,
     }),
     columnHelper.accessor('duration', {
         cell: (duration) => <Duration duration={duration.getValue()} />,
@@ -48,7 +49,7 @@ const columns = [
     }),
     columnHelper.accessor('start_time', {
         cell: (startTime) => <StartTime startTime={startTime.getValue()} />,
-        header: () => <Text whiteSpace={'nowrap'}>Start time</Text>,
+        header: () => <WidgetText>Start time</WidgetText>,
     }),
 ];
 
