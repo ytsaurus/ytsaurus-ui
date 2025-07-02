@@ -95,7 +95,7 @@ export function WidgetTable<T>({
     return (
         <div ref={tableContainerRef} className={containerBlock()}>
             {isLoading ? (
-                <div style={{maxWidth: '100%'}}>
+                <div style={{maxWidth: '100%', height: '100%'}}>
                     <WidgetSkeleton itemHeight={itemHeight} />
                 </div>
             ) : error ? (
