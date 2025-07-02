@@ -1,6 +1,8 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
-import {Flex, Text} from '@gravity-ui/uikit';
+import {Flex} from '@gravity-ui/uikit';
+
+import {WidgetText} from '../../../../../../../pages/dashboard2/Dashboard/components/WidgetText/WidgetText';
 
 import {getCluster} from '../../../../../../../store/selectors/global';
 
@@ -25,15 +27,15 @@ export function UserPool(props: Props) {
         <Flex direction={'column'}>
             <Flex direction={'row'} title={'User'} gap={1} alignItems={'center'}>
                 <Icon face={'solid'} awesome={'user'} />
-                <Text>{user}</Text>
+                <WidgetText>{user}</WidgetText>
             </Flex>
             <Flex direction={'row'} gap={1} alignItems={'center'}>
                 <Icon face={'solid'} awesome={'poll-people'} />
                 {pools?.length > 1 ? (
-                    `${pools?.length}`
+                    `${pools?.length || 0}`
                 ) : (
                     <TemplatePools
-                        pools={[{tree: pools?.[0]?.tree, pool: pools?.[0].pool?.[0]}]}
+                        pools={[{tree: pools?.[0]?.tree, pool: pools?.[0]?.pool?.[0]}]}
                         cluster={cluster}
                         compact
                     />
