@@ -49,7 +49,7 @@ const operationsWidgetConfigLong: DashKitProps['config'] = {
     layout: [
         {
             ...defaultDashboardItems['operations'].layout,
-            w: 15,
+            w: 13,
             h: 9,
         },
     ],
