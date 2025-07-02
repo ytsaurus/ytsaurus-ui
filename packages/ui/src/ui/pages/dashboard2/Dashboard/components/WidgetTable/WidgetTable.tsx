@@ -3,13 +3,13 @@ import b from 'bem-cn-lite';
 import {AxiosError} from 'axios';
 import {Table, useTable} from '@gravity-ui/table';
 import {ColumnDef} from '@gravity-ui/table/tanstack';
-import {Flex, Text} from '@gravity-ui/uikit';
 
 import {YTErrorBlock} from '../../../../../components/Error/Error';
 
 import {YTError} from '../../../../../../@types/types';
 
 import {WidgetSkeleton} from '../WidgetSkeleton/WidgetSkeleton';
+import {WidgetNoItemsTextFallback} from '../WidgetFallback/WidgetFallback';
 
 import './WidgetTable.scss';
 
@@ -105,17 +105,7 @@ export function WidgetTable<T>({
                     {data?.length ? (
                         <Table table={table} className={block()} verticalAlign={'middle'} />
                     ) : (
-                        <Flex
-                            height={'100%'}
-                            width={'100%'}
-                            justifyContent={'center'}
-                            alignItems={'center'}
-                        >
-                            <Text
-                                variant={'body-3'}
-                                color={'secondary'}
-                            >{`No ${fallback?.itemsName} found`}</Text>
-                        </Flex>
+                        <WidgetNoItemsTextFallback itemsName={fallback.itemsName} />
                     )}
                 </>
             )}
