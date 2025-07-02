@@ -26,6 +26,7 @@ const servicesWidgetConfig: DashKitProps['config'] = {
     layout: [
         {
             ...defaultDashboardItems['services'].layout,
+            w: 15,
         },
     ],
     aliases: {},
