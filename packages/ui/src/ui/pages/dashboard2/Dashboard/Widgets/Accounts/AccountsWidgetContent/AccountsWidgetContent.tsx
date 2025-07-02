@@ -8,6 +8,7 @@ import hammer from '../../../../../../common/hammer';
 import {AccountInfo} from '../../../../../../store/api/dashboard2/accounts/accounts';
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
+import {WidgetText} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetText/WidgetText';
 
 import {useAccountsWidget} from '../hooks/use-accounts-widget';
 
@@ -49,10 +50,9 @@ export function AccountsWidgetContent(props: PluginWidgetProps) {
                                     );
                                 },
                                 header: () => (
-                                    <Text variant={'subheader-1'} whiteSpace={'nowrap'} ellipsis>
-                                        {column.name}
-                                    </Text>
+                                    <WidgetText variant={'subheader-1'}>{column.name}</WidgetText>
                                 ),
+                                maxSize: 200,
                             },
                         );
                     }
@@ -67,10 +67,11 @@ export function AccountsWidgetContent(props: PluginWidgetProps) {
                             );
                         },
                         header: (header) => (
-                            <Text variant={'subheader-1'} whiteSpace={'nowrap'} ellipsis>
+                            <WidgetText variant={'subheader-1'}>
                                 {hammer.format['ReadableField'](header.column.id)}
-                            </Text>
+                            </WidgetText>
                         ),
+                        maxSize: 200,
                     });
                 }),
             );
