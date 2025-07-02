@@ -1,7 +1,8 @@
 import React from 'react';
-import {Text} from '@gravity-ui/uikit';
 
 import hammer from '../../../../../../../common/hammer';
+
+import {WidgetText} from '../../../../../../../pages/dashboard2/Dashboard/components/WidgetText/WidgetText';
 
 type Props = {
     engine: string;
@@ -9,8 +10,8 @@ type Props = {
 
 export function Engine({engine}: Props) {
     return (
-        <Text color={'secondary'} whiteSpace={'nowrap'}>
+        <WidgetText color={'secondary'}>
             {hammer.format['ReadableField'](engine).toUpperCase()}
-        </Text>
+        </WidgetText>
     );
 }
