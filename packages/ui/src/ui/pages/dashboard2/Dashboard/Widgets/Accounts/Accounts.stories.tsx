@@ -33,6 +33,7 @@ const accountsWidgetConfig: DashKitProps['config'] = {
     layout: [
         {
             ...defaultDashboardItems['accounts'].layout,
+            w: 18,
             x: 0,
         },
     ],
@@ -95,7 +96,6 @@ export const Loading = {
                     'https://test-cluster.yt.my-domain.com/api/v3/execute_batch',
                     async ({request}) => {
                         const body = await await request.clone().json();
-                        console.log(body);
                         if (
                             body.requests[0].parameters.path !==
                             '//sys/users/test-user/@usable_accounts'
