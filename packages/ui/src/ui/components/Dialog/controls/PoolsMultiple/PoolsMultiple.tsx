@@ -15,10 +15,11 @@ export interface PoolPair {
 
 type Props = DialogControlProps<PoolPair[]> & {
     disabled?: boolean;
+    mode?: 'multiple' | 'single';
 };
 
 export function PoolsMultiple(props: Props) {
-    const {value, onChange, disabled} = props;
+    const {value, onChange, disabled, mode = 'multiple'} = props;
 
     const {trees, isTreesLoading, treesOptions} = useTrees(value);
 
@@ -64,7 +65,7 @@ export function PoolsMultiple(props: Props) {
                     )}
                 </Flex>
             ))}
-            {isPoolsPairsAvailable && (
+            {isPoolsPairsAvailable && mode !== 'single' && (
                 <Flex>
                     <Button size={'m'} onClick={addPair} disabled={disabled}>
                         <Flex alignItems={'center'} gap={2}>

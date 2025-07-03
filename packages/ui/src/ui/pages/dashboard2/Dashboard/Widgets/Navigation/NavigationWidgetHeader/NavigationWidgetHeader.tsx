@@ -7,12 +7,15 @@ import {useNavigationWidget} from '../hooks/use-navigation-widget';
 
 export function NavigationWidgetHeader(props: PluginWidgetProps) {
     const {items, isLoading} = useNavigationWidget(props);
+    const name = props.data?.name as string | undefined;
+    const id = props.id;
     return (
         <WidgetHeader
-            title={'Navigation'}
+            title={name ?? 'Navigation'}
             isLoading={isLoading}
             count={items?.length}
             page={'NAVIGATION'}
+            id={id}
         />
     );
 }

@@ -219,7 +219,7 @@ function updateResourcePerMedium(
                         {
                             total: mediumData,
                             committed: recursiveCommittedPerMedium[mediumName],
-                            limit: limitPerMedium[mediumName],
+                            limit: limitPerMedium?.[mediumName] ?? 0,
                         },
                         name,
                         format,
