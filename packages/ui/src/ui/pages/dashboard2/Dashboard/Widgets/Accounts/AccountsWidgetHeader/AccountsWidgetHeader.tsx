@@ -14,6 +14,7 @@ export function AccountsWidgetHeader(props: PluginWidgetProps) {
             count={accounts?.length}
             page={'ACCOUNTS'}
             isLoading={isLoading}
+            id={props.id}
         />
     );
 }

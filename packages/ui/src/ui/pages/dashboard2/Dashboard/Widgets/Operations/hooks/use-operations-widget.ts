@@ -21,7 +21,7 @@ export function useOperationsWidget(props: PluginWidgetProps) {
     const authorType = useSelector((state: RootState) => getOperationsAuthorTypeFilter(state, id));
 
     const authors = data?.authors as Array<Author> | undefined;
-    const pool = data?.pool as string | undefined;
+    const pool = data?.pool as [{tree: string; pool: string}] | undefined;
     const limit = (data?.limit as {value?: number})?.value || 0;
 
     const {
