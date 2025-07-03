@@ -85,6 +85,17 @@ if [ "false" = "$(yt exists //sys/pool_trees/default/yt-e2e-weight-null)" ]; the
     yt create --type scheduler_pool --attributes '{name="yt-e2e-weight-null";weight=#;pool_tree="default";parent_name="<Root>"}'
 fi
 
+if [ "false" = "$(yt exists  //sys/interface-settings/root)" ]; then
+    yt create -r document //sys/interface-settings/root
+fi
+
+yt set //sys/interface-settings/root '{
+    "global::newDashboardPage"=true;
+    "local::ui::scheduling::favourites"=[{"path"="<Root>[default]"}];
+    "local::ui::accounts::favourites"=[{"path"="e2e-overcommit-'${E2E_SUFFIX}'"};{"path"="e2e-parent-'${E2E_SUFFIX}'"}];
+    "local::ui::favourites"=[{"path"="'${E2E_DIR}'"}];
+}'
+
 function createAccountByPath {
     path=$1
     nodeCount=$2
