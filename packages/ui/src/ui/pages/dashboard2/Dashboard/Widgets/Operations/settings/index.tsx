@@ -3,7 +3,7 @@ import {Author} from '../hooks/use-operations-widget';
 export type OperationsSettingsValues = {
     name: string;
     authors: Array<Author>;
-    pool: string;
+    pool: {tree: string; pool: string};
     limit: number;
 };
 
@@ -37,8 +37,11 @@ export function useOperationsSettings() {
         },
         {
             name: 'pool',
-            type: 'pool' as const,
+            type: 'pools-multiple' as const,
             caption: 'Pool',
+            extras: {
+                mode: 'single' as const,
+            },
         },
     ];
 }

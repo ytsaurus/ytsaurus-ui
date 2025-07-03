@@ -34,6 +34,7 @@ export function registerPlugins() {
         },
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
+                {...props}
                 header={<NavigationWidgetHeader {...props} />}
                 controls={<NavigationWidgetControls {...props} />}
                 content={<NavigationWidgetContent {...props} />}
@@ -50,6 +51,7 @@ export function registerPlugins() {
         },
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
+                {...props}
                 header={<OperationsWidgetHeader {...props} />}
                 controls={<OperationsWidgetControls {...props} />}
                 content={<OperationsWidgetContent {...props} />}
@@ -66,6 +68,7 @@ export function registerPlugins() {
         },
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
+                {...props}
                 content={<AccountsWidgetContent {...props} />}
                 controls={<AccountsWidgetControls {...props} />}
                 header={<AccountsWidgetHeader {...props} />}
@@ -82,6 +85,7 @@ export function registerPlugins() {
         },
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
+                {...props}
                 header={<PoolsWidgetHeader {...props} />}
                 content={<PoolsWidgetContent {...props} />}
                 controls={<PoolsWidgetControls {...props} />}
@@ -98,6 +102,7 @@ export function registerPlugins() {
         },
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
+                {...props}
                 header={<QueriesWidgetHeader {...props} />}
                 controls={<QueriesWidgetControls {...props} />}
                 content={<QueriesWidgetContent {...props} />}
@@ -114,6 +119,7 @@ export function registerPlugins() {
         },
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
+                {...props}
                 header={<ServicesWidgetHeader {...props} />}
                 content={<ServicesWidgetContent {...props} />}
                 controls={<ServicesWidgetControls {...props} />}
