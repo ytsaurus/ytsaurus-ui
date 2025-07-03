@@ -1,4 +1,4 @@
-import React, {MouseEvent, useState} from 'react';
+import React, {FC, MouseEvent, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {Button, Icon} from '@gravity-ui/uikit';
 import Modal from '../../../components/Modal/Modal';
@@ -24,7 +24,12 @@ export const NewQueryPromt = (props: {
     );
 };
 
-export const NewQueryButton = ({onClick}: {onClick: () => void}) => {
+type Props = {
+    onClick: () => void;
+    hideText?: boolean;
+};
+
+export const NewQueryButton: FC<Props> = ({onClick, hideText}) => {
     const dirtyQuery = useSelector(isQueryDraftEditted);
     const [visible, setVisible] = useState(false);
     const cluster = useSelector(getCluster);
@@ -60,7 +65,7 @@ export const NewQueryButton = ({onClick}: {onClick: () => void}) => {
                 onClick={handleClick}
             >
                 <Icon data={FilePlusIcon} size={16} />
-                New
+                {!hideText && 'New'}
             </Button>
             <NewQueryPromt confirm={handleConfirm} cancel={handleCancel} visible={visible} />
         </React.Fragment>

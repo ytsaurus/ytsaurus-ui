@@ -47,6 +47,7 @@ export const QueryCliqueSelector: FC<Props> = ({
             getOptionHeight={() => 58}
             disabled={loading && !listItems.length}
             renderEmptyOptions={() => <Flex justifyContent="center">No access clique</Flex>}
+            popupWidth={285}
         >
             {(items) =>
                 items.map(({alias, active, id}) => {
