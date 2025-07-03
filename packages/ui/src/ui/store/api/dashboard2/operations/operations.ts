@@ -23,7 +23,7 @@ type OperationsQueryArgs = {
     authorType: 'me' | 'my-list';
     state?: string;
     authors?: Array<{value: string; type: string}>;
-    pool?: string;
+    pool?: Array<{tree: string; pool: string}>;
     limit?: number;
 };
 
@@ -42,18 +42,20 @@ export async function fetchOperations(args: OperationsQueryArgs, api: BaseQueryA
                     limit: limit ?? 10,
                     state: operationState === 'all' ? undefined : operationState,
                     user: item.value,
-                    pool: pool?.length ? pool : undefined,
+                    pool: pool?.[0]?.pool?.length ? pool?.[0]?.pool : undefined,
+                    pool_tree: pool?.[0]?.tree?.length ? pool?.[0]?.tree : undefined,
                 } as ListOperationsParams,
             }));
 
-            if (pool?.length && !authors?.length) {
+            if (!authors?.length) {
                 requests = [
                     {
                         command: 'list_operations' as const,
                         parameters: {
                             limit: limit ?? 10,
                             state: operationState === 'all' ? undefined : operationState,
-                            pool,
+                            pool: pool?.[0]?.pool?.length ? pool?.[0]?.pool : undefined,
+                            pool_tree: pool?.[0]?.tree?.length ? pool?.[0]?.tree : undefined,
                         },
                     },
                 ];
@@ -62,20 +64,25 @@ export async function fetchOperations(args: OperationsQueryArgs, api: BaseQueryA
             response = await ytApiV3Id.executeBatch(YTApiId.operationsDashboard, {
                 requests,
             });
-            response = map_(response, (item) => item?.output);
         } else {
-            response = await ytApiV3Id.listOperations(YTApiId.operationsDashboard, {
-                parameters: {
-                    limit: limit ?? 10,
-                    state: operationState === 'all' ? undefined : operationState,
-                    user,
-                    pool: pool?.length ? pool : undefined,
-                },
+            response = await ytApiV3Id.executeBatch(YTApiId.operationsDashboard, {
+                requests: [
+                    {
+                        command: 'list_operations' as const,
+                        parameters: {
+                            limit: limit ?? 10,
+                            state: operationState === 'all' ? undefined : operationState,
+                            user,
+                            pool: pool?.[0]?.pool?.length ? pool?.[0]?.pool : undefined,
+                            pool_tree: pool?.[0]?.tree?.length ? pool?.[0]?.tree : undefined,
+                        },
+                    },
+                ],
             });
         }
+        response = map_(response, (item) => item?.output);
 
         const operations = [];
-
         for (let authorIdx = 0; authorIdx < response.length; authorIdx++) {
             if (!response[authorIdx]?.operations) continue;
 
