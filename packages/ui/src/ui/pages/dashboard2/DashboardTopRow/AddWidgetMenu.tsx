@@ -28,7 +28,7 @@ export function AddWidgetMenu() {
     return (
         <DropdownMenu
             renderSwitcher={(props) => (
-                <Button {...props} size={'m'}>
+                <Button {...props} size={'m'} qa={'add-widget-button'}>
                     <Flex alignItems={'center'} gap={3}>
                         Add widget
                         {dropdownOpened ? <ChevronDown /> : <ChevronUp />}

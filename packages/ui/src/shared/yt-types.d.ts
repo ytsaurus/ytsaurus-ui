@@ -388,6 +388,7 @@ export interface RegisterQueueConsumerParams extends BaseBatchParams {
 
 export interface ListOperationsParams extends BaseBatchParams {
     pool?: string;
+    pool_tree?: string;
     limit?: number;
     user?: string;
     state?: string;

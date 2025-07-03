@@ -38,7 +38,8 @@ export default defineConfig({
         ignoreHTTPSErrors: true,
         testIdAttribute: 'data-qa',
 
-        screenshot: 'only-on-failure',
+        screenshot: 'on',
+        trace: 'on-first-retry',
         video: 'retain-on-failure',
     },
     expect: {

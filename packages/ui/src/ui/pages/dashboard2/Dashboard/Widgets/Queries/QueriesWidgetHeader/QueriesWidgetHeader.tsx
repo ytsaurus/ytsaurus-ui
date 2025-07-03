@@ -7,13 +7,15 @@ import {useQueriesWidget} from '../hooks/use-queries-widget';
 
 export function QueriesWidgetHeader(props: PluginWidgetProps) {
     const {queries, isLoading} = useQueriesWidget(props);
-
+    const name = props.data?.name as string | undefined;
+    const id = props.id;
     return (
         <WidgetHeader
             count={queries?.length}
-            title={'Queries'}
+            title={name ?? 'Queries'}
             page={'QUERIES'}
             isLoading={isLoading}
+            id={id}
         />
     );
 }

@@ -12,7 +12,7 @@ import {USE_CACHE, USE_MAX_SIZE} from '../../../../../shared/constants/yt-api';
 
 export function usePools(trees: string[]) {
     const poolRequests = useMemo(() => {
-        return trees.map((tree) => ({
+        return (trees || []).map((tree) => ({
             command: 'list' as const,
             parameters: {
                 path: `//sys/scheduler/orchid/scheduler/pool_trees/${tree}/pools`,

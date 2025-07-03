@@ -7,6 +7,14 @@ import {useServicesWidget} from '../hooks/use-services-widget';
 
 export function ServicesWidgetHeader(props: PluginWidgetProps) {
     const {data, isLoading} = useServicesWidget(props);
-
-    return <WidgetHeader title={'Services'} count={data?.length} isLoading={isLoading} />;
+    const name = props.data?.name as string | undefined;
+    const id = props.id;
+    return (
+        <WidgetHeader
+            title={name ?? 'Services'}
+            count={data?.length}
+            isLoading={isLoading}
+            id={id}
+        />
+    );
 }
