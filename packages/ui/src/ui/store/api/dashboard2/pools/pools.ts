@@ -30,7 +30,7 @@ function parseStringToTreePool({path}: {path: string}) {
     return {tree, pool};
 }
 
-const QUOTA_LIMIT = 50;
+const QUOTA_LIMIT = 100;
 
 export async function fetchPools(args: PoolsQueryArgs) {
     try {
@@ -51,46 +51,46 @@ export async function fetchPools(args: PoolsQueryArgs) {
         const pools = map_(response, (item, index) => {
             const {output} = item;
 
-            const operationsGarantee = ypath.getValue(output, '/max_operation_count');
+            const operationsGuarantee = ypath.getValue(output, '/max_operation_count');
             const operationsUsage = ypath.getValue(output, '/running_operation_count');
 
-            const garantee = ypath.getValue(output, '/estimated_guarantee_resources');
+            const guarantee = ypath.getValue(output, '/estimated_guarantee_resources');
             const usage = ypath.getValue(output, '/resource_usage');
 
             const cpu = {
                 value:
-                    (ypath.getValue(usage, '/cpu') / ypath.getValue(garantee, '/cpu')) *
+                    (ypath.getValue(usage, '/cpu') / ypath.getValue(guarantee, '/cpu')) *
                     QUOTA_LIMIT,
-                garantee: ypath.getValue(garantee, '/cpu'),
+                guarantee: ypath.getValue(guarantee, '/cpu'),
                 usage: ypath.getValue(usage, '/cpu'),
             };
 
             const memory = {
                 value:
                     (ypath.getValue(usage, '/user_memory') /
-                        ypath.getValue(garantee, '/user_memory')) *
-                    50,
-                garantee: ypath.getValue(garantee, '/user_memory'),
+                        ypath.getValue(guarantee, '/user_memory')) *
+                    QUOTA_LIMIT,
+                guarantee: ypath.getValue(guarantee, '/user_memory'),
                 usage: ypath.getValue(usage, '/user_memory'),
             };
 
             const gpu = {
                 value:
-                    (ypath.getValue(usage, '/gpu') / ypath.getValue(garantee, '/gpu')) *
+                    (ypath.getValue(usage, '/gpu') / ypath.getValue(guarantee, '/gpu')) *
                     QUOTA_LIMIT,
-                garantee: ypath.getValue(garantee, '/gpu'),
+                guarantee: ypath.getValue(guarantee, '/gpu'),
                 usage: ypath.getValue(usage, '/gpu'),
             };
 
             const operations = {
-                value: (operationsUsage / operationsGarantee) * QUOTA_LIMIT,
-                garantee: operationsGarantee,
+                value: (operationsUsage / operationsGuarantee) * QUOTA_LIMIT,
+                guarantee: operationsGuarantee,
                 usage: operationsUsage,
             };
 
             return {
                 general: {
-                    pool: queries?.[index]?.pool || 'unkwown',
+                    pool: queries?.[index]?.pool || 'unknown',
                     tree: queries?.[index]?.tree || 'unknown',
                 },
                 cpu,
