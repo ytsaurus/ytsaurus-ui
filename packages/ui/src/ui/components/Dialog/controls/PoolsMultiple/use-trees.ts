@@ -36,6 +36,7 @@ export function useTrees(value: PoolPair[]) {
     }, [treesLoadedWithData]);
 
     const uniqueTrees = useMemo(() => {
+        if (!value) return [];
         return value.map((pair) => pair.tree).filter((tree) => Boolean(tree));
     }, [value]);
 
