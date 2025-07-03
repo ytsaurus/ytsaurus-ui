@@ -17,9 +17,12 @@ type Props = PoolResource & {
 };
 
 export function ResourceCell(props: Props) {
-    const {value, usage, garantee, type} = props;
+    const {value, usage, guarantee, type} = props;
 
-    const theme = value <= 50 ? 'info' : value > 100 ? 'danger' : 'warning';
+    const theme = value < 100 ? 'info' : 'warning';
+
+    const usageText = (type === 'memory' ? hammer.format['Bytes'](usage) : usage) || '-';
+    const guaranteeText = (type === 'memory' ? hammer.format['Bytes'](guarantee) : guarantee) || '-';
 
     return (
         <Tooltip
@@ -27,17 +30,17 @@ export function ResourceCell(props: Props) {
             content={
                 <Flex direction={'column'} gap={2}>
                     <Text>
-                        Usage: {type === 'memory' ? hammer.format['Bytes'](usage) : usage || '-'}
+                        Usage: {usageText}
                     </Text>
                     <Text>
-                        Garantee:{' '}
-                        {type === 'memory' ? hammer.format['Bytes'](garantee) : garantee || '-'}
+                        Guarantee:{' '}
+                        {guaranteeText}
                     </Text>
                 </Flex>
             }
         >
-            <Progress value={value} theme={theme} />
-            {type !== 'operations' && <div className={block('tick')} />}
+            <Progress text={`${usageText} / ${guaranteeText}`} value={value} theme={theme} />
+            {/* {type !== 'operations' && <div className={block('tick')} />} */}
         </Tooltip>
     );
 }
