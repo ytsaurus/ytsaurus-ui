@@ -13,7 +13,7 @@ import {usePoolsWidget} from '../hooks/use-pools-widget';
 export type PoolResource = {
     value: number;
     usage: number;
-    garantee: number;
+    guarantee: number;
 };
 
 type Pool = {
