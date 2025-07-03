@@ -1,11 +1,3 @@
 .query-tracker-meta-form {
-    display: flex;
-    align-items: center;
-
-    &__control {
-        &_name {
-            display: inline-flex;
-            align-items: center;
-        }
-    }
+    overflow: hidden;
 }
