@@ -68,6 +68,10 @@ const e2eConfig: Partial<AppConfig> = {
         },
         externalProxy: 'external.proxy.my',
     },
+    userSettingsConfig: {
+        cluster: 'ui',
+        mapNodePath: '//sys/interface-settings',
+    },
 };
 
 export default e2eConfig;
