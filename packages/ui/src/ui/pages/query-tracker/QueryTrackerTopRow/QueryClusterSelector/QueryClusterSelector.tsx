@@ -50,6 +50,7 @@ export const QueryClusterSelector: FC<Props> = ({clusters, value, onChange}) => 
             value={value}
             getOptionHeight={() => 52}
             qa="query-cluster-selector"
+            popupWidth={200}
         >
             {(items) =>
                 items.map(({id, name, environment}) => (
