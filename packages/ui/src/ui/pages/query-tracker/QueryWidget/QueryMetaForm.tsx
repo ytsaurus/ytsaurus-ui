@@ -1,17 +1,19 @@
 import React, {useCallback} from 'react';
 import cn from 'bem-cn-lite';
-import {Text} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from 'react-redux';
-import {EditableAsText} from '../../../components/EditableAsText/EditableAsText';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
-import {getQuery, getQueryDraft} from '../module/query/selectors';
+import {getQueryDraft} from '../module/query/selectors';
 import {QuerySettingsButton} from '../QuerySettingsButton';
 import {QueryFilesButton} from '../QueryFilesButton';
 import {updateQueryDraft} from '../module/query/actions';
 import {NewQueryButton} from '../NewQueryButton';
-import {QueryEngineSelector} from '../QueryEngineSelector';
+import {QueryEngineSelect} from '../QueryEngineSelector';
+import {QueryTrackerOpenButton} from '../QueryTrackerOpenButton/QueryTrackerOpenButton';
 
 import './QueryMetaForm.scss';
+import {QuerySelectorsByEngine} from '../QueryTrackerTopRow/QuerySelectorsByEngine';
+import {Flex} from '@gravity-ui/uikit';
+import {QueryEngine} from '../../../../shared/constants/engines';
 
 const block = cn('query-tracker-meta-form');
 export function QueryMetaForm({
@@ -21,82 +23,79 @@ export function QueryMetaForm({
     path,
 }: {
     className: string;
-    cluster?: string;
-    path?: string;
+    cluster: string;
+    path: string;
     onClickOnNewQueryButton: () => void;
 }) {
     const dispatch = useDispatch();
     const draft = useSelector(getQueryDraft);
-    const originalQuery = useSelector(getQuery);
-
-    const onNameChange = useCallback(
-        (name?: string) => {
-            dispatch(updateQueryDraft({annotations: {title: name}}));
-        },
-        [dispatch],
-    );
 
     const onSettingsChange = useCallback(
         (settings: Record<string, string>) => dispatch(updateQueryDraft({settings})),
         [dispatch],
     );
 
-    const queryName = draft.annotations?.title;
+    const handleChangeEngine = useCallback(
+        (newEngine: QueryEngine) => {
+            const newSettings = {...draft.settings};
+
+            if (newEngine !== QueryEngine.SPYT) {
+                delete newSettings.discovery_group;
+            }
+
+            if (newEngine !== QueryEngine.CHYT) {
+                delete newSettings.clique;
+            }
+
+            dispatch(updateQueryDraft({settings: newSettings}));
+        },
+        [dispatch, draft.settings],
+    );
 
     return (
-        <div className={block(null, className)}>
-            <Toolbar
-                itemsToWrap={[
-                    {
-                        name: 'query-name',
-                        marginRight: 'half',
-                        node: (
-                            <EditableAsText
-                                withControls
-                                className={block('control', {name: true})}
-                                onChange={onNameChange}
-                                text={queryName}
-                                key={originalQuery?.id}
-                                size="l"
-                            >
-                                <Text
-                                    title={queryName}
-                                    variant="body-1"
-                                    color={queryName ? 'primary' : 'secondary'}
-                                    ellipsis
-                                >
-                                    {queryName || 'No name'}
-                                </Text>
-                            </EditableAsText>
-                        ),
-                    },
-                    {
-                        name: 'Engine',
-                        marginRight: 'half',
-                        node: <QueryEngineSelector cluster={cluster} path={path} />,
-                    },
-                    {
-                        name: 'Settings',
-                        marginRight: 'half',
-                        node: (
-                            <QuerySettingsButton
-                                settings={draft.settings}
-                                onChange={onSettingsChange}
-                            />
-                        ),
-                    },
-                    {
-                        name: 'Files',
-                        marginRight: 'half',
-                        node: <QueryFilesButton />,
-                    },
-                    {
-                        name: 'NewQuery',
-                        marginRight: 'half',
-                        node: <NewQueryButton onClick={onClickOnNewQueryButton} />,
-                    },
-                ]}
-            />
-        </div>
+        <Toolbar
+            className={block(null, className)}
+            itemsToWrap={[
+                {
+                    name: 'Engine',
+                    marginRight: 'half',
+                    node: <QueryEngineSelect onChange={handleChangeEngine} />,
+                },
+                {
+                    name: 'Configs',
+                    marginRight: 'half',
+                    node: (
+                        <Flex gap={3}>
+                            <QuerySelectorsByEngine />
+                        </Flex>
+                    ),
+                },
+                {
+                    name: 'Settings',
+                    marginRight: 'half',
+                    node: (
+                        <QuerySettingsButton
+                            settings={draft.settings}
+                            onChange={onSettingsChange}
+                        />
+                    ),
+                },
+                {
+                    name: 'Files',
+                    marginRight: 'half',
+                    node: <QueryFilesButton />,
+                },
+                {
+                    name: 'NewQuery',
+                    marginRight: 'half',
+                    node: <NewQueryButton onClick={onClickOnNewQueryButton} hideText />,
+                },
+                {
+                    name: 'OpenPage',
+                    marginRight: 'half',
+                    node: <QueryTrackerOpenButton cluster={cluster} path={path} />,
+                },
+            ]}
+        />
     );
 }
