@@ -1,26 +1,15 @@
-import React, {FC, useCallback, useEffect, useState} from 'react';
+import React, {FC, useCallback, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import {Page} from '../../../../shared/constants/settings';
-import {
-    getCliqueLoading,
-    getCliqueMap,
-    getQueryDraft,
-    getQueryGetParams,
-} from '../module/query/selectors';
-import {
-    loadCliqueByCluster,
-    resetQueryTracker,
-    setUserLastChoice,
-    updateQueryDraft,
-} from '../module/query/actions';
+import {getQueryDraft, getQueryGetParams} from '../module/query/selectors';
+import {resetQueryTracker, setUserLastChoice, updateQueryDraft} from '../module/query/actions';
 import {RightButtonsGroup} from './RightButtonsGroup';
 import {HeadSpacer} from '../../../containers/ClusterPageHeader/HeadSpacer';
 import {Flex, Text, Tooltip} from '@gravity-ui/uikit';
 import {QueryEngineSelect, QueryEngineSelector} from '../QueryEngineSelector';
 import {QuerySettingsButton} from '../QuerySettingsButton';
 import {QueryFilesButton} from '../QueryFilesButton';
-import {getClusterList} from '../../../store/selectors/slideoutMenu';
 import {QuerySelectorsByEngine} from './QuerySelectorsByEngine';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import './QueryTrackerTopRow.scss';
@@ -35,20 +24,9 @@ const block = cn('query-tracker-top-row');
 const QueryTrackerTopRow: FC = () => {
     const dispatch = useDispatch();
     const {cluster, path} = useSelector(getQueryGetParams);
-    const {annotations, settings, engine} = useSelector(getQueryDraft);
-    const clusters = useSelector(getClusterList);
-    const cliqueMap = useSelector(getCliqueMap);
-    const cliqueLoading = useSelector(getCliqueLoading);
+    const {annotations, settings} = useSelector(getQueryDraft);
     const [nameEdit, setNameEdit] = useState(false);
     const isDesktop = useIsDesktop();
-
-    const currentCluster = settings?.cluster;
-
-    useEffect(() => {
-        if ((engine === QueryEngine.CHYT || engine === QueryEngine.SPYT) && settings?.cluster) {
-            dispatch(loadCliqueByCluster(engine, settings.cluster));
-        }
-    }, [engine, settings?.cluster, dispatch]);
 
     const handleChangeEngine = useCallback(
         (newEngine: QueryEngine) => {
@@ -87,50 +65,6 @@ const QueryTrackerTopRow: FC = () => {
         [dispatch],
     );
 
-    const handleClusterChange = useCallback(
-        (clusterId: string) => {
-            const newSettings: Record<string, string> = settings ? {...settings} : {};
-            if (clusterId) {
-                newSettings.cluster = clusterId;
-            } else {
-                delete newSettings['cluster'];
-            }
-            delete newSettings['clique'];
-            dispatch(updateQueryDraft({settings: newSettings}));
-            dispatch(setUserLastChoice(true));
-        },
-        [dispatch, settings],
-    );
-
-    const handleCliqueChange = useCallback(
-        (alias: string) => {
-            const newSettings: Record<string, string> = settings ? {...settings} : {};
-            if (!alias && 'clique' in newSettings) {
-                delete newSettings.clique;
-            } else {
-                newSettings.clique = alias;
-            }
-            dispatch(updateQueryDraft({settings: newSettings}));
-            dispatch(
-                setSettingByKey(`local::${currentCluster}::queryTracker::lastChytClique`, alias),
-            );
-        },
-        [currentCluster, dispatch, settings],
-    );
-
-    const handlePathChange = useCallback(
-        (newPath: string) => {
-            dispatch(updateQueryDraft({settings: {...settings, discovery_group: newPath}}));
-            dispatch(
-                setSettingByKey(
-                    `local::${currentCluster}::queryTracker::lastDiscoveryPath`,
-                    newPath,
-                ),
-            );
-        },
-        [currentCluster, dispatch, settings],
-    );
-
     const name = annotations?.title || NAME_PLACEHOLDER;
 
     return (
@@ -165,16 +99,7 @@ const QueryTrackerTopRow: FC = () => {
                         ) : (
                             <QueryEngineSelect onChange={handleChangeEngine} />
                         )}
-                        <QuerySelectorsByEngine
-                            settings={settings}
-                            engine={engine}
-                            clusters={clusters}
-                            cliqueMap={cliqueMap}
-                            cliqueLoading={cliqueLoading}
-                            onClusterChange={handleClusterChange}
-                            onCliqueChange={handleCliqueChange}
-                            onPathChange={handlePathChange}
-                        />
+                        <QuerySelectorsByEngine />
                         <Flex gap={2}>
                             <QuerySettingsButton
                                 settings={settings}

@@ -1,13 +1,12 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import {Button} from '@gravity-ui/uikit';
+import {Button, Flex} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from 'react-redux';
 import Icon from '../../../components/Icon/Icon';
 import {getCluster} from '../../../store/selectors/global';
 import {getPath} from '../../../store/selectors/navigation';
 import {QueryEditor} from '../QueryEditor';
 import {QueryMetaForm} from './QueryMetaForm';
-import {QueryTrackerOpenButton} from '../QueryTrackerOpenButton/QueryTrackerOpenButton';
 import {QueriesPooling} from '../hooks/QueriesPooling/context';
 import {createQueryFromTablePath} from '../module/query/actions';
 import {QueryEngine} from '../../../../shared/constants/engines';
@@ -30,33 +29,21 @@ export default function QueryWidget({onClose}: QueryWidgetProps) {
     return (
         <div className={block()}>
             <QueriesPooling>
-                <div className={block('header')}>
+                <Flex
+                    alignItems="center"
+                    justifyContent="space-between"
+                    className={block('header')}
+                >
                     <QueryMetaForm
                         onClickOnNewQueryButton={handleClickOnNewQueryButton}
                         className={block('meta-form')}
                         cluster={cluster}
                         path={path}
                     />
-                    <div className={block('header-controls')}>
-                        <div className={block('header-control-left')}>
-                            <QueryTrackerOpenButton
-                                className={block('control')}
-                                cluster={cluster}
-                                path={path}
-                            />
-                        </div>
-                        <div className={block('header-control-right')}>
-                            <Button
-                                view="flat"
-                                className={block('control')}
-                                onClick={onClose}
-                                size="l"
-                            >
-                                <Icon awesome="times" size={16} />
-                            </Button>
-                        </div>
-                    </div>
-                </div>
+                    <Button view="flat" className={block('control')} onClick={onClose} size="l">
+                        <Icon awesome="times" size={16} />
+                    </Button>
+                </Flex>
                 <QueryEditor />
             </QueriesPooling>
         </div>
