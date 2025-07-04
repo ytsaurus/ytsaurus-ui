@@ -2,7 +2,7 @@ import {createQueryUrl} from '../../utils/navigation';
 import {AnyAction} from 'redux';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../../store/reducers';
-import {getCliqueControllerIsSupported, getCluster} from '../../../../store/selectors/global';
+import {getCluster} from '../../../../store/selectors/global';
 import {QueryEngine} from '../../../../../shared/constants/engines';
 import {
     DraftQuery,
@@ -17,8 +17,10 @@ import {
 import {requestQueriesList} from '../queries_list/actions';
 import {
     SHARED_QUERY_ACO,
+    getCliqueMap,
     getCurrentQuery,
     getQueryDraft,
+    getQueryDraftSettings,
     getQueryEngine,
     getQuery as selectQuery,
 } from './selectors';
@@ -30,6 +32,7 @@ import {
     SetQueryAction,
     SetQueryCliqueLoading,
     SetQueryClusterClique,
+    SetQueryClusterLoading,
     SetQueryErrorLoadAction,
     SetQueryPatchAction,
     SetQueryReadyAction,
@@ -49,8 +52,10 @@ import {
     SET_QUERY,
     SET_QUERY_CLIQUE_LOADING,
     SET_QUERY_CLUSTER_CLIQUE,
+    SET_QUERY_CLUSTER_LOADING,
     SET_QUERY_PATCH,
     SET_QUERY_READY,
+    SET_SUPPORTED_ENGINE,
     UPDATE_ACO_QUERY,
     UPDATE_DRAFT,
 } from '../query-tracker-contants';
@@ -61,15 +66,42 @@ import {
     getLastUserChoiceQueryDiscoveryPath,
     getLastUserChoiceQueryEngine,
 } from '../../../../store/selectors/settings/settings-queries';
+import {getClusterParams, prepareClusterUiConfig} from '../../../../store/actions/cluster-params';
+import {RumWrapper} from '../../../../rum/rum-wrap-api';
+import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
+import {ClusterUiConfig} from '../../../../../shared/yt-types';
+import {setSettingByKey} from '../../../../store/actions/settings';
+import {selectClusterConfigs} from '../queryNavigation/selectors';
+import {getQueryResultGlobalSettings} from '../query_result/selectors';
+import {createTableSelect} from '../../Navigation/helpers/createTableSelect';
+
+const checkCliqueControllerIsSupported =
+    (clusterId: string, engine: QueryEngine): ThunkAction<void, RootState, unknown, any> =>
+    async (dispatch) => {
+        const supportedControllers = await getCliqueControllerSupportByCluster(clusterId);
+
+        if (
+            (engine === QueryEngine.SPYT && !supportedControllers.spyt) ||
+            (engine === QueryEngine.CHYT && !supportedControllers.chyt)
+        ) {
+            dispatch(updateQueryDraft({engine: QueryEngine.YQL}));
+        }
+
+        dispatch({
+            type: SET_SUPPORTED_ENGINE,
+            data: supportedControllers,
+        });
+    };
 
 export const setCurrentClusterToQuery =
     (): ThunkAction<void, RootState, unknown, any> => async (dispatch, getState) => {
         const state = getState();
         const cluster = getCluster(state);
-        const {settings} = getQueryDraft(state);
+        const {settings, engine} = getQueryDraft(state);
 
         if (settings && 'cluster' in settings) return;
 
+        dispatch(checkCliqueControllerIsSupported(cluster, engine));
         dispatch(updateQueryDraft({settings: {...settings, cluster}}));
     };
 
@@ -99,22 +131,136 @@ export const setUserLastChoice =
         dispatch(updateQueryDraft({settings: newSettings}));
     };
 
+const getCliqueControllerSupportByCluster = async (
+    cluster: string,
+): Promise<QueryState['draft']['supportedEngines']> => {
+    if (!cluster) {
+        return {
+            spyt: false,
+            chyt: false,
+            yql: true,
+            ql: true,
+        };
+    }
+
+    const rumId = new RumWrapper(cluster, RumMeasureTypes.CLUSTER_PARAMS);
+    const {data} = await getClusterParams(rumId, cluster);
+    const [uiConfigOutput] = prepareClusterUiConfig(data.uiConfig, data.uiDevConfig) as [
+        ClusterUiConfig,
+    ];
+
+    return {
+        yql: true,
+        chyt: Boolean(uiConfigOutput.chyt_controller_base_url),
+        spyt: Boolean(uiConfigOutput.livy_controller_base_url),
+        ql: true,
+    };
+};
+
+export const loadTablePromptToQuery =
+    (
+        cluster: string,
+        path: string,
+        engine: QueryEngine,
+        newQuerySettings?: Record<string, string>,
+    ): ThunkAction<void, RootState, unknown, any> =>
+    async (dispatch, getState) => {
+        const state = getState();
+        const {pageSize} = getQueryResultGlobalSettings();
+        const clusters = selectClusterConfigs(state);
+
+        const clusterConfig = clusters[cluster];
+        if (!clusterConfig) return;
+
+        const query = await createTableSelect({clusterConfig, path, engine, limit: pageSize});
+        dispatch(createEmptyQuery(engine, query, newQuerySettings));
+    };
+
+export const setQueryEngine =
+    (engine: QueryEngine): ThunkAction<void, RootState, unknown, any> =>
+    (dispatch, getState) => {
+        const settings = getQueryDraftSettings(getState());
+
+        const newSettings = {...settings};
+        if (engine !== QueryEngine.SPYT) {
+            delete newSettings.discovery_group;
+        }
+
+        if (engine !== QueryEngine.CHYT) {
+            delete newSettings.clique;
+        }
+
+        dispatch(updateQueryDraft({settings: newSettings}));
+    };
+
+export const setQueryCluster =
+    (clusterId: string): ThunkAction<void, RootState, unknown, any> =>
+    async (dispatch, getState) => {
+        const state = getState();
+        const {settings = {}, engine} = getQueryDraft(state);
+
+        try {
+            dispatch({type: SET_QUERY_CLUSTER_LOADING, data: true});
+            await dispatch(checkCliqueControllerIsSupported(clusterId, engine));
+
+            const newSettings = {...settings};
+            if (clusterId) {
+                newSettings.cluster = clusterId;
+            } else {
+                delete newSettings['cluster'];
+            }
+            delete newSettings['clique'];
+
+            dispatch(updateQueryDraft({settings: newSettings}));
+            dispatch(setUserLastChoice(true));
+        } finally {
+            dispatch({type: SET_QUERY_CLUSTER_LOADING, data: false});
+        }
+    };
+
+export const setQueryClique =
+    (alias: string): ThunkAction<void, RootState, unknown, any> =>
+    (dispatch, getState) => {
+        const settings = getQueryDraftSettings(getState());
+
+        const newSettings = {...settings};
+        if (!alias && 'clique' in newSettings) {
+            delete newSettings.clique;
+        } else {
+            newSettings.clique = alias;
+        }
+        dispatch(updateQueryDraft({settings: newSettings}));
+        dispatch(
+            setSettingByKey(`local::${settings?.cluster}::queryTracker::lastChytClique`, alias),
+        );
+    };
+
+export const setQueryPath =
+    (newPath: string): ThunkAction<void, RootState, unknown, any> =>
+    (dispatch, getState) => {
+        const settings = getQueryDraftSettings(getState());
+        dispatch(updateQueryDraft({settings: {...settings, discovery_group: newPath}}));
+        dispatch(
+            setSettingByKey(
+                `local::${settings?.cluster}::queryTracker::lastDiscoveryPath`,
+                newPath,
+            ),
+        );
+    };
+
 export const loadCliqueByCluster =
     (
         engine: QueryEngine.SPYT | QueryEngine.CHYT,
         cluster: string,
     ): ThunkAction<void, RootState, unknown, SetQueryClusterClique | SetQueryCliqueLoading> =>
-    (dispatch, getState) => {
-        const state = getState();
+    async (dispatch, getState) => {
         const isSpyt = engine === QueryEngine.SPYT;
+        const cliqueMap = getCliqueMap(getState());
 
-        if (
-            cluster in state.queryTracker.query.cliqueMap &&
-            state.queryTracker.query.cliqueMap[cluster][engine]
-        )
-            return;
+        if (cluster in cliqueMap && cliqueMap[cluster][engine]) return;
 
-        const supportedControllers = getCliqueControllerIsSupported(state);
+        const supportedControllers = await getCliqueControllerSupportByCluster(cluster);
+
         if ((isSpyt && !supportedControllers.spyt) || (!isSpyt && !supportedControllers.chyt))
             return; // Clique selector is not supported on cluster
 
@@ -211,9 +357,12 @@ export function createQueryFromTablePath(
     | SetQueryPatchAction
     | UpdateDraftAction
     | SetQueryReadyAction
+    | SetQueryClusterLoading
 > {
     return async (dispatch, getState) => {
         dispatch({type: REQUEST_QUERY});
+        dispatch({type: SET_QUERY_CLUSTER_LOADING, data: true});
+
         try {
             const state = getState();
             const defaultQueryACO = getDefaultQueryACO(state);
@@ -245,6 +394,9 @@ export function createQueryFromTablePath(
             }
         } catch (e) {
             dispatch(createEmptyQuery(engine));
+        } finally {
+            dispatch(checkCliqueControllerIsSupported(cluster, engine));
+            dispatch({type: SET_QUERY_CLUSTER_LOADING, data: false});
         }
     };
 }

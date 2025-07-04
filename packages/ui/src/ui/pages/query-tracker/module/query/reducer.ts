@@ -10,10 +10,12 @@ import {
     SET_QUERY,
     SET_QUERY_CLIQUE_LOADING,
     SET_QUERY_CLUSTER_CLIQUE,
+    SET_QUERY_CLUSTER_LOADING,
     SET_QUERY_LOAD_ERROR,
     SET_QUERY_PARAMS,
     SET_QUERY_PATCH,
     SET_QUERY_READY,
+    SET_SUPPORTED_ENGINE,
     UPDATE_ACO_QUERY,
     UPDATE_DRAFT,
     UPDATE_QUERY,
@@ -34,12 +36,19 @@ export interface QueryState {
     };
     dirtySinceLastSubmit: boolean;
     cliqueLoading: boolean;
+    clusterLoading: boolean;
     cliqueMap: Record<string, Record<string, ChytInfo[]>>;
     state: 'init' | 'loading' | 'ready' | 'error';
 }
 
 const initialQueryDraftState: QueryState['draft'] = {
     engine: QueryEngine.YQL,
+    supportedEngines: {
+        yql: true,
+        chyt: true,
+        spyt: true,
+        ql: true,
+    },
     query: '',
     files: [],
     settings: {},
@@ -54,6 +63,7 @@ const initState: QueryState = {
     dirtySinceLastSubmit: false,
     cliqueMap: {},
     cliqueLoading: false,
+    clusterLoading: false,
     state: 'init',
 };
 
@@ -148,6 +158,9 @@ export function reducer(state = initState, action: Actions): QueryState {
         case SET_QUERY_CLIQUE_LOADING: {
             return {...state, cliqueLoading: action.data};
         }
+        case SET_QUERY_CLUSTER_LOADING: {
+            return {...state, clusterLoading: action.data};
+        }
         case SET_QUERY_CLUSTER_CLIQUE: {
             return {
                 ...state,
@@ -168,6 +181,15 @@ export function reducer(state = initState, action: Actions): QueryState {
                 draft: {...state.draft, ...action.data},
             };
         }
+        case SET_SUPPORTED_ENGINE: {
+            return {
+                ...state,
+                draft: {
+                    ...state.draft,
+                    supportedEngines: action.data,
+                },
+            };
+        }
     }
 
     return state;
@@ -186,7 +208,9 @@ type Actions =
     | UpdateACOQueryAction
     | SetQueryClusterClique
     | SetQueryCliqueLoading
-    | SetDirtySubmit;
+    | SetQueryClusterLoading
+    | SetDirtySubmit
+    | SetSupportedEngines;
 
 export type RequestQueryAction = Action<typeof REQUEST_QUERY>;
 
@@ -215,6 +239,7 @@ export type SetQueryParamsAction = ActionD<
 >;
 
 export type SetQueryCliqueLoading = ActionD<typeof SET_QUERY_CLIQUE_LOADING, boolean>;
+export type SetQueryClusterLoading = ActionD<typeof SET_QUERY_CLUSTER_LOADING, boolean>;
 
 export type SetQueryClusterClique = ActionD<
     typeof SET_QUERY_CLUSTER_CLIQUE,
@@ -228,4 +253,9 @@ export type SetQueryClusterClique = ActionD<
 export type UpdateACOQueryAction = ActionD<
     typeof UPDATE_ACO_QUERY,
     {access_control_object: string} | {access_control_objects: Array<string>}
+>;
+
+export type SetSupportedEngines = ActionD<
+    typeof SET_SUPPORTED_ENGINE,
+    QueryState['draft']['supportedEngines']
 >;

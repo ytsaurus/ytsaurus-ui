@@ -20,9 +20,18 @@ type Props = {
     onChange: (data: SaveFormData) => void;
     validator: SettingsItemEditFormProps['validator'];
     canEdit?: SettingsItemEditFormProps['config'];
+    canRemove?: boolean;
 };
 
-export const SettingsItem: FC<Props> = ({name, value, canEdit, onDelete, validator, onChange}) => {
+export const SettingsItem: FC<Props> = ({
+    name,
+    value,
+    canEdit,
+    canRemove,
+    onDelete,
+    validator,
+    onChange,
+}) => {
     const [edit, setEdit] = useState(false);
     const handleDelete = () => {
         onDelete(name);
@@ -73,11 +82,13 @@ export const SettingsItem: FC<Props> = ({name, value, canEdit, onDelete, validat
                     </Tooltip>
                 )}
 
-                <Tooltip content="Remove" placement="top">
-                    <Button onClick={handleDelete} view="flat" size="l">
-                        <Icon data={TrashBinIcon} size={16} />
-                    </Button>
-                </Tooltip>
+                {canRemove && (
+                    <Tooltip content="Remove" placement="top">
+                        <Button onClick={handleDelete} view="flat" size="l">
+                            <Icon data={TrashBinIcon} size={16} />
+                        </Button>
+                    </Tooltip>
+                )}
             </div>
         </div>
     );

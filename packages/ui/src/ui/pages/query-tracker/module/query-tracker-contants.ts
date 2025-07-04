@@ -8,6 +8,7 @@ export const enum QueriesHistoryCursorDirection {
 export const REQUEST_QUERY = 'query-tracker/REQUEST_QUERY';
 export const SET_QUERY_READY = 'query-tracker/SET_QUERY_READY';
 export const SET_QUERY = 'query-tracker/SET_QUERY';
+export const SET_SUPPORTED_ENGINE = 'query-tracker/SET_SUPPORTED_ENGINE';
 export const UPDATE_QUERY = 'query-tracker/UPDATE_QUERY';
 export const UPDATE_DRAFT = 'query-tracker/UPDATE_DRAFT';
 export const UPDATE_QUERY_ITEM = 'query-tracker/UPDATE_QUERY_ITEM';
@@ -15,6 +16,7 @@ export const SET_QUERY_LOAD_ERROR = 'query-tracker/SET_QUERY_LOAD_ERROR';
 export const SET_QUERY_PATCH = 'query-tracker/SET_QUERY_PATCH';
 export const SET_QUERY_PARAMS = 'query-tracker/SET_QUERY_PARAMS';
 export const SET_QUERY_CLIQUE_LOADING = 'query-tracker/SET_QUERY_CLIQUE_LOADING';
+export const SET_QUERY_CLUSTER_LOADING = 'query-tracker/SET_QUERY_CLUSTER_LOADING';
 export const SET_QUERY_CLUSTER_CLIQUE = 'query-tracker/SET_QUERY_CLUSTER_CLIQUE';
 export const UPDATE_ACO_QUERY = 'query-tracker/UPDATE_ACO_QUERY';
 export const SET_DIRTY_SUBMIT = 'query-tracker/SET_DIRTY_SUBMIT';

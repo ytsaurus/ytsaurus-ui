@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import cn from 'bem-cn-lite';
 import {Button, Flex} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from 'react-redux';
@@ -21,9 +21,10 @@ export default function QueryWidget({onClose}: QueryWidgetProps) {
     const dispatch = useDispatch();
     const cluster = useSelector(getCluster);
     const path = useSelector(getPath);
+    const stablePath = useRef(path); // save table path after open widget
 
     const handleClickOnNewQueryButton = () => {
-        dispatch(createQueryFromTablePath(QueryEngine.YQL, cluster, path));
+        dispatch(createQueryFromTablePath(QueryEngine.YQL, cluster, stablePath.current));
     };
 
     return (
@@ -38,7 +39,7 @@ export default function QueryWidget({onClose}: QueryWidgetProps) {
                         onClickOnNewQueryButton={handleClickOnNewQueryButton}
                         className={block('meta-form')}
                         cluster={cluster}
-                        path={path}
+                        path={stablePath.current}
                     />
                     <Button view="flat" className={block('control')} onClick={onClose} size="l">
                         <Icon awesome="times" size={16} />

@@ -1,19 +1,19 @@
 import React, {useCallback} from 'react';
 import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from 'react-redux';
-import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {getQueryDraft} from '../module/query/selectors';
 import {QuerySettingsButton} from '../QuerySettingsButton';
 import {QueryFilesButton} from '../QueryFilesButton';
-import {updateQueryDraft} from '../module/query/actions';
+import {loadTablePromptToQuery, updateQueryDraft} from '../module/query/actions';
 import {NewQueryButton} from '../NewQueryButton';
-import {QueryEngineSelect} from '../QueryEngineSelector';
+import {QueryEngineSelector} from '../QueryTrackerTopRow/QueryEngineSelector';
 import {QueryTrackerOpenButton} from '../QueryTrackerOpenButton/QueryTrackerOpenButton';
 
 import './QueryMetaForm.scss';
 import {QuerySelectorsByEngine} from '../QueryTrackerTopRow/QuerySelectorsByEngine';
 import {Flex} from '@gravity-ui/uikit';
 import {QueryEngine} from '../../../../shared/constants/engines';
+import {QueryClusterSelector} from '../QueryTrackerTopRow/QueryClusterSelector';
 
 const block = cn('query-tracker-meta-form');
 export function QueryMetaForm({
@@ -37,65 +37,29 @@ export function QueryMetaForm({
 
     const handleChangeEngine = useCallback(
         (newEngine: QueryEngine) => {
-            const newSettings = {...draft.settings};
-
-            if (newEngine !== QueryEngine.SPYT) {
-                delete newSettings.discovery_group;
-            }
-
-            if (newEngine !== QueryEngine.CHYT) {
-                delete newSettings.clique;
-            }
-
-            dispatch(updateQueryDraft({settings: newSettings}));
+            dispatch(
+                loadTablePromptToQuery(cluster, path, newEngine, {
+                    cluster: draft.settings?.cluster!,
+                }),
+            );
         },
-        [dispatch, draft.settings],
+        [dispatch, cluster, path, draft.settings],
     );
 
     return (
-        <Toolbar
-            className={block(null, className)}
-            itemsToWrap={[
-                {
-                    name: 'Engine',
-                    marginRight: 'half',
-                    node: <QueryEngineSelect onChange={handleChangeEngine} />,
-                },
-                {
-                    name: 'Configs',
-                    marginRight: 'half',
-                    node: (
-                        <Flex gap={3}>
-                            <QuerySelectorsByEngine />
-                        </Flex>
-                    ),
-                },
-                {
-                    name: 'Settings',
-                    marginRight: 'half',
-                    node: (
-                        <QuerySettingsButton
-                            settings={draft.settings}
-                            onChange={onSettingsChange}
-                        />
-                    ),
-                },
-                {
-                    name: 'Files',
-                    marginRight: 'half',
-                    node: <QueryFilesButton />,
-                },
-                {
-                    name: 'NewQuery',
-                    marginRight: 'half',
-                    node: <NewQueryButton onClick={onClickOnNewQueryButton} hideText />,
-                },
-                {
-                    name: 'OpenPage',
-                    marginRight: 'half',
-                    node: <QueryTrackerOpenButton cluster={cluster} path={path} />,
-                },
-            ]}
-        />
+        <Flex className={block(null, className)} gap={3} justifyContent="space-between" grow={1}>
+            <Flex gap={3}>
+                <QueryClusterSelector className={block('cluster')} />
+                <QueryEngineSelector onChange={handleChangeEngine} className={block('engine')} />
+                <QuerySelectorsByEngine />
+            </Flex>
+
+            <Flex gap={3}>
+                <QuerySettingsButton settings={draft.settings} onChange={onSettingsChange} />
+                <QueryFilesButton />
+                <NewQueryButton onClick={onClickOnNewQueryButton} hideText />
+                <QueryTrackerOpenButton cluster={cluster} path={path} />
+            </Flex>
+        </Flex>
     );
 }

@@ -7,7 +7,6 @@ import ypath from '../../../common/thor/ypath';
 import type {Plan, Progress} from '../Plan/models/plan';
 import {TypeArray} from '../../../components/SchemaDataType/dataTypes';
 import {getClusterConfigByName, getClusterProxy} from '../../../store/selectors/global';
-import {generateQuerySettings, generateQueryText} from '../utils/query_generate';
 import {RootState} from '../../../store/reducers';
 import {makeDirectDownloadPath} from '../../../utils/navigation';
 import {QueriesHistoryCursorDirection, UPDATE_QUERIES_LIST} from './query-tracker-contants';
@@ -25,6 +24,8 @@ import {VisualizationState} from './queryChart/queryChartSlice';
 import {YTError} from '../../../types';
 import {QueryStatus} from '../../../types/query-tracker';
 import {JSONSerializer} from '../../../common/yt-api';
+import {createTablePrompt} from '../Navigation/helpers/createTableSelect';
+import {getQueryResultGlobalSettings} from './query_result/selectors';
 
 function getQTApiSetup(): {proxy?: string} {
     const QT_CLUSTER = getQueryTrackerCluster();
@@ -75,6 +76,7 @@ export type QueryFile = {
 export interface DraftQuery {
     id?: QueryItemId;
     engine: QueryEngine;
+    supportedEngines: Record<QueryEngine, boolean>;
     files: QueryFile[];
     query: string;
     annotations?: {
@@ -191,6 +193,8 @@ export async function generateQueryFromTable(
     {cluster, path, defaultQueryACO}: {cluster: string; path: string; defaultQueryACO: string},
 ): Promise<DraftQuery | undefined> {
     const selectedCluster = getClusterConfigByName(cluster);
+    const {pageSize} = getQueryResultGlobalSettings();
+
     const node = await ytApiV3.get({
         parameters: {
             path: `${path}/@`,
@@ -205,23 +209,25 @@ export async function generateQueryFromTable(
 
     const commonData = {
         engine,
+        supportedEngines: {
+            spyt: false,
+            chyt: false,
+            yql: true,
+            ql: true,
+        },
         files: [],
         annotations: {},
         access_control_object: defaultQueryACO,
         access_control_objects: [defaultQueryACO],
-        settings: generateQuerySettings(engine, cluster),
+        settings: {
+            cluster,
+        },
     };
 
     if (node.type === 'table') {
         const schema = ypath.getValue(node.schema) as {name: string}[];
         return {
-            query: generateQueryText(cluster, engine, {
-                path,
-                columns: schema.map(({name}) => name),
-                pageSize: 50,
-                schemaExists: Boolean(schema.length),
-                dynamic: node.dynamic,
-            }),
+            query: createTablePrompt({schema, path, engine, cluster, limit: pageSize}),
             ...commonData,
         };
     } else if (node.type === 'document' && 'view' === ypath.getValue(node._yql_type)) {
