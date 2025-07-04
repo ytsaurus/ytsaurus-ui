@@ -3,16 +3,26 @@ import {QueryClusterSelector} from './QueryClusterSelector';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {QueryCliqueSelector} from './QueryCliqueSelector';
 import {useDispatch, useSelector} from 'react-redux';
-import {getCliqueLoading, getCliqueMap, getQueryDraft} from '../module/query/selectors';
+import {
+    getCliqueLoading,
+    getCliqueMap,
+    getClusterLoading,
+    getQueryDraft,
+} from '../module/query/selectors';
 import {getClusterList} from '../../../store/selectors/slideoutMenu';
-import {loadCliqueByCluster, setUserLastChoice, updateQueryDraft} from '../module/query/actions';
-import {setSettingByKey} from '../../../store/actions/settings';
+import {
+    loadCliqueByCluster,
+    setQueryClique,
+    setQueryCluster,
+    setQueryPath,
+} from '../module/query/actions';
 
 export const QuerySelectorsByEngine: FC = () => {
     const dispatch = useDispatch();
     const clusters = useSelector(getClusterList);
     const cliqueMap = useSelector(getCliqueMap);
     const cliqueLoading = useSelector(getCliqueLoading);
+    const clusterLoading = useSelector(getClusterLoading);
     const {settings = {}, engine} = useSelector(getQueryDraft);
     const currentCluster = settings?.cluster;
 
@@ -24,46 +34,23 @@ export const QuerySelectorsByEngine: FC = () => {
 
     const handleClusterChange = useCallback(
         (clusterId: string) => {
-            const newSettings: Record<string, string> = settings ? {...settings} : {};
-            if (clusterId) {
-                newSettings.cluster = clusterId;
-            } else {
-                delete newSettings['cluster'];
-            }
-            delete newSettings['clique'];
-            dispatch(updateQueryDraft({settings: newSettings}));
-            dispatch(setUserLastChoice(true));
+            dispatch(setQueryCluster(clusterId));
         },
-        [dispatch, settings],
+        [dispatch],
     );
 
     const handleCliqueChange = useCallback(
         (alias: string) => {
-            const newSettings: Record<string, string> = settings ? {...settings} : {};
-            if (!alias && 'clique' in newSettings) {
-                delete newSettings.clique;
-            } else {
-                newSettings.clique = alias;
-            }
-            dispatch(updateQueryDraft({settings: newSettings}));
-            dispatch(
-                setSettingByKey(`local::${currentCluster}::queryTracker::lastChytClique`, alias),
-            );
+            dispatch(setQueryClique(alias));
         },
-        [currentCluster, dispatch, settings],
+        [dispatch],
     );
 
     const handlePathChange = useCallback(
         (newPath: string) => {
-            dispatch(updateQueryDraft({settings: {...settings, discovery_group: newPath}}));
-            dispatch(
-                setSettingByKey(
-                    `local::${currentCluster}::queryTracker::lastDiscoveryPath`,
-                    newPath,
-                ),
-            );
+            dispatch(setQueryPath(newPath));
         },
-        [currentCluster, dispatch, settings],
+        [dispatch],
     );
 
     const clusterCliqueList =
@@ -74,6 +61,7 @@ export const QuerySelectorsByEngine: FC = () => {
         return (
             <>
                 <QueryClusterSelector
+                    loading={clusterLoading}
                     clusters={clusters}
                     value={settings.cluster}
                     onChange={handleClusterChange}
@@ -93,6 +81,7 @@ export const QuerySelectorsByEngine: FC = () => {
         return (
             <>
                 <QueryClusterSelector
+                    loading={clusterLoading}
                     clusters={clusters}
                     value={settings.cluster}
                     onChange={handleClusterChange}
@@ -110,6 +99,7 @@ export const QuerySelectorsByEngine: FC = () => {
 
     return (
         <QueryClusterSelector
+            loading={clusterLoading}
             clusters={clusters}
             value={settings.cluster}
             onChange={handleClusterChange}

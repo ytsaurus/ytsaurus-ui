@@ -7,7 +7,7 @@ import ypath from '../../../common/thor/ypath';
 import type {Plan, Progress} from '../Plan/models/plan';
 import {TypeArray} from '../../../components/SchemaDataType/dataTypes';
 import {getClusterConfigByName, getClusterProxy} from '../../../store/selectors/global';
-import {generateQuerySettings, generateQueryText} from '../utils/query_generate';
+import {generateQueryText} from '../utils/query_generate';
 import {RootState} from '../../../store/reducers';
 import {makeDirectDownloadPath} from '../../../utils/navigation';
 import {QueriesHistoryCursorDirection, UPDATE_QUERIES_LIST} from './query-tracker-contants';
@@ -75,6 +75,7 @@ export type QueryFile = {
 export interface DraftQuery {
     id?: QueryItemId;
     engine: QueryEngine;
+    supportedEngines: Record<QueryEngine, boolean>;
     files: QueryFile[];
     query: string;
     annotations?: {
@@ -235,11 +236,19 @@ export async function generateQueryFromTable(
 
     const commonData = {
         engine,
+        supportedEngines: {
+            spyt: false,
+            chyt: false,
+            yql: true,
+            ql: true,
+        },
         files: [],
         annotations: {},
         access_control_object: defaultQueryACO,
         access_control_objects: [defaultQueryACO],
-        settings: generateQuerySettings(engine, cluster),
+        settings: {
+            cluster,
+        },
     };
 
     if (node.type === 'table') {
