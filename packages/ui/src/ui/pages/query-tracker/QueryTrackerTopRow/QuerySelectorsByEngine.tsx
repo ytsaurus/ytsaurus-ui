@@ -5,7 +5,7 @@ import {QueryCliqueSelector} from './QueryCliqueSelector';
 import {useDispatch, useSelector} from 'react-redux';
 import {getCliqueLoading, getCliqueMap, getQueryDraft} from '../module/query/selectors';
 import {getClusterList} from '../../../store/selectors/slideoutMenu';
-import {loadCliqueByCluster, setUserLastChoice, updateQueryDraft} from '../module/query/actions';
+import {loadCliqueByCluster, setQueryCluster, updateQueryDraft} from '../module/query/actions';
 import {setSettingByKey} from '../../../store/actions/settings';
 
 export const QuerySelectorsByEngine: FC = () => {
@@ -24,17 +24,9 @@ export const QuerySelectorsByEngine: FC = () => {
 
     const handleClusterChange = useCallback(
         (clusterId: string) => {
-            const newSettings: Record<string, string> = settings ? {...settings} : {};
-            if (clusterId) {
-                newSettings.cluster = clusterId;
-            } else {
-                delete newSettings['cluster'];
-            }
-            delete newSettings['clique'];
-            dispatch(updateQueryDraft({settings: newSettings}));
-            dispatch(setUserLastChoice(true));
+            dispatch(setQueryCluster(clusterId));
         },
-        [dispatch, settings],
+        [dispatch],
     );
 
     const handleCliqueChange = useCallback(

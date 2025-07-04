@@ -34,6 +34,8 @@ export const getQueryText = (state: RootState) => getState(state).draft.query;
 
 export const getQueryEngine = (state: RootState) => getState(state).draft.engine;
 
+export const getQuerySupportedEngine = (state: RootState) => getState(state).draft.supportedEngines;
+
 export const isQueryLoading = (state: RootState) => getState(state).state === 'loading';
 
 export const getCliqueMap = (state: RootState) => getState(state).cliqueMap;
@@ -57,6 +59,13 @@ export const hasLoadedQueryItem = (state: RootState) => {
     const queryItem = getState(state).queryItem;
     return Boolean(queryItem?.id);
 };
+
+export const getQueryTrackerSupportedEngines = createSelector(
+    [getQuerySupportedEngine],
+    (supportedEngines) => {
+        return Object.entries(supportedEngines).filter(([_, supported]) => supported);
+    },
+);
 
 export const getQueryTrackerRequestOptions = createSelector(
     [getSettingQueryTrackerStage, getSettingQueryTrackerYQLAgentStage],
