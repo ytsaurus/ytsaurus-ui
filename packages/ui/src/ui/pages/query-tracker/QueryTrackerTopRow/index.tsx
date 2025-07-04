@@ -2,12 +2,17 @@ import React, {FC, useCallback, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import {Page} from '../../../../shared/constants/settings';
-import {getQueryDraft, getQueryGetParams} from '../module/query/selectors';
-import {resetQueryTracker, setUserLastChoice, updateQueryDraft} from '../module/query/actions';
+import {getQueryDraft} from '../module/query/selectors';
+import {
+    resetQueryTracker,
+    setQueryEngine,
+    setUserLastChoice,
+    updateQueryDraft,
+} from '../module/query/actions';
 import {RightButtonsGroup} from './RightButtonsGroup';
 import {HeadSpacer} from '../../../containers/ClusterPageHeader/HeadSpacer';
 import {Flex, Text, Tooltip} from '@gravity-ui/uikit';
-import {QueryEngineSelect, QueryEngineSelector} from '../QueryEngineSelector';
+import {QueryEngineSelector} from './QueryEngineSelector';
 import {QuerySettingsButton} from '../QuerySettingsButton';
 import {QueryFilesButton} from '../QueryFilesButton';
 import {QuerySelectorsByEngine} from './QuerySelectorsByEngine';
@@ -15,37 +20,26 @@ import {QueryEngine} from '../../../../shared/constants/engines';
 import './QueryTrackerTopRow.scss';
 import cn from 'bem-cn-lite';
 import {EditableAsText} from '../../../components/EditableAsText/EditableAsText';
-import {useIsDesktop} from '../../../hooks/useIsDesktop';
 import {setSettingByKey} from '../../../store/actions/settings';
+import {useIsDesktop} from '../../../hooks/useIsDesktop';
+import {QueryClusterSelector} from './QueryClusterSelector';
 
 const NAME_PLACEHOLDER = 'No name';
 const block = cn('query-tracker-top-row');
 
 const QueryTrackerTopRow: FC = () => {
     const dispatch = useDispatch();
-    const {cluster, path} = useSelector(getQueryGetParams);
+    const isDesktop = useIsDesktop();
     const {annotations, settings} = useSelector(getQueryDraft);
     const [nameEdit, setNameEdit] = useState(false);
-    const isDesktop = useIsDesktop();
 
     const handleChangeEngine = useCallback(
         (newEngine: QueryEngine) => {
-            const newSettings = {...settings};
-
-            if (newEngine !== QueryEngine.SPYT) {
-                delete newSettings.discovery_group;
-                delete newSettings.discovery_path; // old request type. Deprecated
-            }
-
-            if (newEngine !== QueryEngine.CHYT) {
-                delete newSettings.clique;
-            }
-
-            dispatch(updateQueryDraft({settings: newSettings}));
+            dispatch(setQueryEngine(newEngine));
             dispatch(setSettingByKey(`global::queryTracker::lastEngine`, newEngine));
             dispatch(setUserLastChoice());
         },
-        [dispatch, settings],
+        [dispatch],
     );
 
     const handleCreateNewQuery = useCallback(() => {
@@ -90,15 +84,8 @@ const QueryTrackerTopRow: FC = () => {
                 {!nameEdit && (
                     <>
                         <HeadSpacer />
-                        {isDesktop ? (
-                            <QueryEngineSelector
-                                cluster={cluster}
-                                path={path}
-                                onChange={handleChangeEngine}
-                            />
-                        ) : (
-                            <QueryEngineSelect onChange={handleChangeEngine} />
-                        )}
+                        <QueryClusterSelector />
+                        <QueryEngineSelector isDesktop={isDesktop} onChange={handleChangeEngine} />
                         <QuerySelectorsByEngine />
                         <Flex gap={2}>
                             <QuerySettingsButton

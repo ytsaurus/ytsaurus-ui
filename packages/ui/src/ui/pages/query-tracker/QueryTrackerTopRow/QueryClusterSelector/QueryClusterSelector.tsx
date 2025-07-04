@@ -1,22 +1,31 @@
-import React, {FC} from 'react';
-import {useSelector} from 'react-redux';
+import React, {FC, ReactElement} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {Select} from '@gravity-ui/uikit';
 
 import {ClusterConfig} from '../../../../../shared/yt-types';
-import {getQueryTrackerInfoClusters} from '../../../../pages/query-tracker/module/query_aco/selectors';
+import {getQueryTrackerInfoClusters} from '../../module/query_aco/selectors';
 import {QuerySelector} from '../QuerySelector';
-import {QueryClusterItem} from './QueryClusterItem';
+import {QueryClusterItem, Props as QueryClusterItemProps} from './QueryClusterItem';
 import {YT, isMultiClusterInstallation} from '../../../../config/yt-config';
+import {getClusterLoading, getQueryDraft} from '../../module/query/selectors';
+import {getClusterList} from '../../../../store/selectors/slideoutMenu';
+import {setQueryCluster} from '../../module/query/actions';
 
 type Props = {
-    clusters: ClusterConfig[];
-    value: string | undefined;
-    onChange: (clusterId: string) => void;
+    className?: string;
 };
 
-export const QueryClusterSelector: FC<Props> = ({clusters, value, onChange}) => {
+export const QueryClusterSelector: FC<Props> = ({className}) => {
+    const dispatch = useDispatch();
     const infoClusters = useSelector(getQueryTrackerInfoClusters);
+    const loading = useSelector(getClusterLoading);
+    const clusters = useSelector(getClusterList);
+    const {settings} = useSelector(getQueryDraft);
     const isMultiCluster = isMultiClusterInstallation();
+
+    const handleOnChange = (clusterId: string) => {
+        dispatch(setQueryCluster(clusterId));
+    };
 
     const values = React.useMemo((): Array<Pick<ClusterConfig, 'id' | 'name' | 'environment'>> => {
         if (!infoClusters?.length) {
@@ -42,15 +51,20 @@ export const QueryClusterSelector: FC<Props> = ({clusters, value, onChange}) => 
 
     return (
         <QuerySelector
+            className={className}
+            disabled={loading}
             placeholder="Cluster"
             filterPlaceholder="Search"
             items={values}
-            onChange={onChange}
-            hasClear
-            value={value}
+            onChange={handleOnChange}
+            value={settings?.cluster}
             getOptionHeight={() => 52}
             qa="query-cluster-selector"
             popupWidth={200}
+            renderSelectedOption={(option) => {
+                const {name} = (option.children as ReactElement<QueryClusterItemProps>).props;
+                return <>{name}</>;
+            }}
         >
             {(items) =>
                 items.map(({id, name, environment}) => (

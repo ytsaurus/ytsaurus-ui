@@ -6,19 +6,29 @@ import {makePathByQueryEngine} from './makePathByQueryEngine';
 import {ClusterConfig} from '../../../../../shared/yt-types';
 import unipika from '../../../../common/thor/unipika';
 
-type Props = (data: {
+type Props = {
     clusterConfig: ClusterConfig;
     path: string;
     engine: QueryEngine;
     limit: number;
-}) => Promise<string>;
+};
 
-export const createTableSelect: Props = async ({clusterConfig, path, engine, limit}) => {
+export const createTablePrompt = ({
+    schema,
+    path,
+    engine,
+    limit,
+    cluster,
+}: Omit<Props, 'clusterConfig'> & {cluster: string; schema: {name: string}[]}) => {
+    return `SELECT
+${schema.map((i) => '    ' + unipika.prettyprint(i.name, {asHTML: false}).replaceAll('"', '`')).join(',\r\n')}
+FROM ${makePathByQueryEngine({path, cluster: cluster, engine})}
+LIMIT ${limit}`;
+};
+
+export const createTableSelect = async ({clusterConfig, path, engine, limit}: Props) => {
     const attributes = await loadTableAttributes(path, clusterConfig);
     const schema: NavigationTableSchema[] = ypath.getValue(attributes.schema);
 
-    return `SELECT
-${schema.map((i) => '    ' + unipika.prettyprint(i.name, {asHTML: false}).replaceAll('"', '`')).join(',\r\n')}
-FROM ${makePathByQueryEngine({path, cluster: clusterConfig.id, engine})}
-LIMIT ${limit}`;
+    return createTablePrompt({schema, path, engine, limit, cluster: clusterConfig.id});
 };
