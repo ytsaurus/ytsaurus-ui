@@ -15,6 +15,7 @@ export const enum QueriesHistoryCursorDirection {
 export const REQUEST_QUERY = 'query-tracker/REQUEST_QUERY';
 export const SET_QUERY_READY = 'query-tracker/SET_QUERY_READY';
 export const SET_QUERY = 'query-tracker/SET_QUERY';
+export const SET_SUPPORTED_ENGINE = 'query-tracker/SET_SUPPORTED_ENGINE';
 export const UPDATE_QUERY = 'query-tracker/UPDATE_QUERY';
 export const UPDATE_DRAFT = 'query-tracker/UPDATE_DRAFT';
 export const UPDATE_QUERY_ITEM = 'query-tracker/UPDATE_QUERY_ITEM';

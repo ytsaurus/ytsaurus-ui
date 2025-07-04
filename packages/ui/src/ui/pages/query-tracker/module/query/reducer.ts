@@ -14,6 +14,7 @@ import {
     SET_QUERY_PARAMS,
     SET_QUERY_PATCH,
     SET_QUERY_READY,
+    SET_SUPPORTED_ENGINE,
     UPDATE_ACO_QUERY,
     UPDATE_DRAFT,
     UPDATE_QUERY,
@@ -40,6 +41,12 @@ export interface QueryState {
 
 const initialQueryDraftState: QueryState['draft'] = {
     engine: QueryEngine.YQL,
+    supportedEngines: {
+        spyt: true,
+        chyt: true,
+        yql: true,
+        ql: true,
+    },
     query: '',
     files: [],
     settings: {},
@@ -168,6 +175,15 @@ export function reducer(state = initState, action: Actions): QueryState {
                 draft: {...state.draft, ...action.data},
             };
         }
+        case SET_SUPPORTED_ENGINE: {
+            return {
+                ...state,
+                draft: {
+                    ...state.draft,
+                    supportedEngines: action.data,
+                },
+            };
+        }
     }
 
     return state;
@@ -186,7 +202,8 @@ type Actions =
     | UpdateACOQueryAction
     | SetQueryClusterClique
     | SetQueryCliqueLoading
-    | SetDirtySubmit;
+    | SetDirtySubmit
+    | SetSupportedEngines;
 
 export type RequestQueryAction = Action<typeof REQUEST_QUERY>;
 
@@ -228,4 +245,9 @@ export type SetQueryClusterClique = ActionD<
 export type UpdateACOQueryAction = ActionD<
     typeof UPDATE_ACO_QUERY,
     {access_control_object: string} | {access_control_objects: Array<string>}
+>;
+
+export type SetSupportedEngines = ActionD<
+    typeof SET_SUPPORTED_ENGINE,
+    QueryState['draft']['supportedEngines']
 >;

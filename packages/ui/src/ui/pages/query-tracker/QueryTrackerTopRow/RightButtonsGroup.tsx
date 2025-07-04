@@ -15,7 +15,7 @@ export const RightButtonsGroup: FC<Props> = ({onQueryCreate}) => {
         <Flex gap={2}>
             <QueriesListSidebarToggleButton />
             {chatComponent}
-            <NewQueryButton onClick={onQueryCreate} />
+            <NewQueryButton onClick={onQueryCreate} text="New" />
         </Flex>
     );
 };

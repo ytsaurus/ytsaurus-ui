@@ -1,16 +1,10 @@
-import React, {FC, useCallback} from 'react';
+import React, {FC, useCallback, useMemo} from 'react';
 import {Select} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from 'react-redux';
-import {getQueryDraft} from '../module/query/selectors';
-import {Engines} from '../module/api';
-import {QueryEnginesNames} from '../utils/query';
+import {getQueryDraft, getQueryTrackerSupportedEngines} from '../module/query/selectors';
 import {QueryEngine} from '../../../../shared/constants/engines';
+import {QueryEnginesNames} from '../utils/query';
 import {createQueryFromTablePath, updateQueryDraft} from '../module/query/actions';
-
-const engineOptions = Engines.map((key) => ({
-    value: key,
-    content: QueryEnginesNames[key],
-}));
 
 type Props = {
     cluster?: string;
@@ -21,6 +15,16 @@ type Props = {
 export const QueryEngineSelect: FC<Props> = ({onChange, cluster, path}) => {
     const dispatch = useDispatch();
     const draft = useSelector(getQueryDraft);
+    const supportedEngines = useSelector(getQueryTrackerSupportedEngines);
+
+    const options = useMemo(() => {
+        return supportedEngines.map(([key]) => {
+            return {
+                value: key,
+                content: QueryEnginesNames[key as QueryEngine],
+            };
+        });
+    }, [supportedEngines]);
 
     const handleChange = useCallback(
         (value: string[]) => {
@@ -34,7 +38,5 @@ export const QueryEngineSelect: FC<Props> = ({onChange, cluster, path}) => {
         [onChange, cluster, dispatch, path],
     );
 
-    return (
-        <Select options={engineOptions} value={[draft.engine]} size="l" onUpdate={handleChange} />
-    );
+    return <Select options={options} value={[draft.engine]} size="l" onUpdate={handleChange} />;
 };

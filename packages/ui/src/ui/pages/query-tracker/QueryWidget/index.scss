@@ -9,9 +9,7 @@
     height: 100%;
 
     &__header {
-        display: flex;
         min-height: 52px;
-        align-items: center;
         padding: 0 12px;
         border-bottom: 1px solid var(--dark-divider);
     }
@@ -20,24 +18,15 @@
         margin-right: 8px;
     }
 
-    &__header-controls {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        flex-wrap: nowrap;
-    }
-
-    &__header-control-right {
-        flex: 1 0;
-        display: flex;
-        justify-content: flex-end;
-    }
-
     &__meta-form {
         margin-right: 12px;
     }
 
     .flex-split__pane:nth-child(1) {
         overflow: visible;
+
+        .yt-monaco-editor {
+            overflow-x: scroll;
+        }
     }
 }

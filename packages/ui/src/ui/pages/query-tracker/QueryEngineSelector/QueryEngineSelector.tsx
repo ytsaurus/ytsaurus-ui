@@ -1,17 +1,16 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {ModalWithoutHandledScrollBar as Modal} from '../../../components/Modal/Modal';
-import {QueryEnginesNames} from '../utils/query';
-import {Engines} from '../module/api';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {createQueryFromTablePath, updateQueryDraft} from '../module/query/actions';
-import {getQueryDraft, hasLoadedQueryItem, isQueryDraftEditted} from '../module/query/selectors';
+import {
+    getQueryDraft,
+    getQueryTrackerSupportedEngines,
+    hasLoadedQueryItem,
+    isQueryDraftEditted,
+} from '../module/query/selectors';
 import RadioButton from '../../../components/RadioButton/RadioButton';
-
-const EngineOptions = Engines.map((key) => ({
-    value: key,
-    text: QueryEnginesNames[key],
-}));
+import {QueryEnginesNames} from '../utils/query';
 
 interface Props {
     className?: string;
@@ -28,6 +27,16 @@ export function QueryEngineSelector({className, cluster, path, onChange}: Props)
     const [modalVisibility, setModalVisibility] = useState<boolean>(false);
     const [selectedEngine, setSelectedEngine] = useState<QueryEngine | undefined>(undefined);
     const showPrompt = (isEdited || hasLoadedQuery) && cluster && path;
+    const supportedEngines = useSelector(getQueryTrackerSupportedEngines);
+
+    const options = useMemo(() => {
+        return supportedEngines.map(([key]) => {
+            return {
+                value: key,
+                text: QueryEnginesNames[key as QueryEngine],
+            };
+        });
+    }, [supportedEngines]);
 
     const updateEngine = useCallback(
         (engine: QueryEngine) => {
@@ -72,7 +81,7 @@ export function QueryEngineSelector({className, cluster, path, onChange}: Props)
                 value={draft.engine}
                 onUpdate={onEngineSelected}
                 name="query-tracker-engine-selector"
-                items={EngineOptions}
+                items={options}
             />
             <Modal
                 title="Switching engine"

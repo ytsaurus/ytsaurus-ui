@@ -2,7 +2,7 @@ import {createQueryUrl} from '../../utils/navigation';
 import {AnyAction} from 'redux';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../../store/reducers';
-import {getCliqueControllerIsSupported, getCluster} from '../../../../store/selectors/global';
+import {getCluster} from '../../../../store/selectors/global';
 import {QueryEngine} from '../../../../../shared/constants/engines';
 import {
     DraftQuery,
@@ -17,6 +17,7 @@ import {
 import {requestQueriesList} from '../queries_list/actions';
 import {
     SHARED_QUERY_ACO,
+    getCliqueMap,
     getCurrentQuery,
     getQueryDraft,
     getQueryEngine,
@@ -51,6 +52,7 @@ import {
     SET_QUERY_CLUSTER_CLIQUE,
     SET_QUERY_PATCH,
     SET_QUERY_READY,
+    SET_SUPPORTED_ENGINE,
     UPDATE_ACO_QUERY,
     UPDATE_DRAFT,
 } from '../query-tracker-contants';
@@ -61,6 +63,10 @@ import {
     getLastUserChoiceQueryDiscoveryPath,
     getLastUserChoiceQueryEngine,
 } from '../../../../store/selectors/settings/settings-queries';
+import {getClusterParams, prepareClusterUiConfig} from '../../../../store/actions/cluster-params';
+import {RumWrapper} from '../../../../rum/rum-wrap-api';
+import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
+import {ClusterUiConfig} from '../../../../../shared/yt-types';
 
 export const setCurrentClusterToQuery =
     (): ThunkAction<void, RootState, unknown, any> => async (dispatch, getState) => {
@@ -99,22 +105,74 @@ export const setUserLastChoice =
         dispatch(updateQueryDraft({settings: newSettings}));
     };
 
+const getCliqueControllerSupportByCluster = async (
+    cluster: string,
+): Promise<QueryState['draft']['supportedEngines']> => {
+    const rumId = new RumWrapper(cluster, RumMeasureTypes.CLUSTER_PARAMS);
+    const {data} = await getClusterParams(rumId, cluster);
+    const [uiConfigOutput] = prepareClusterUiConfig(data.uiConfig, data.uiDevConfig) as [
+        ClusterUiConfig,
+    ];
+
+    return {
+        spyt: Boolean(uiConfigOutput.livy_controller_base_url),
+        chyt: Boolean(uiConfigOutput.chyt_controller_base_url),
+        yql: true,
+        ql: true,
+    };
+};
+
+const checkCliqueControllerIsSupported =
+    (clusterId: string, engine: QueryEngine): ThunkAction<void, RootState, unknown, any> =>
+    async (dispatch) => {
+        const supportedControllers = await getCliqueControllerSupportByCluster(clusterId);
+
+        if (
+            (engine === QueryEngine.SPYT && !supportedControllers.spyt) ||
+            (engine === QueryEngine.CHYT && !supportedControllers.chyt)
+        ) {
+            dispatch(updateQueryDraft({engine: QueryEngine.YQL}));
+        }
+
+        dispatch({
+            type: SET_SUPPORTED_ENGINE,
+            data: supportedControllers,
+        });
+    };
+
+export const setQueryCluster =
+    (clusterId: string): ThunkAction<void, RootState, unknown, any> =>
+    async (dispatch, getState) => {
+        const state = getState();
+        const {settings = {}, engine} = getQueryDraft(state);
+
+        await dispatch(checkCliqueControllerIsSupported(clusterId, engine));
+
+        const newSettings = {...settings};
+        if (clusterId) {
+            newSettings.cluster = clusterId;
+        } else {
+            delete newSettings['cluster'];
+        }
+        delete newSettings['clique'];
+
+        dispatch(updateQueryDraft({settings: newSettings}));
+        dispatch(setUserLastChoice(true));
+    };
+
 export const loadCliqueByCluster =
     (
         engine: QueryEngine.SPYT | QueryEngine.CHYT,
         cluster: string,
     ): ThunkAction<void, RootState, unknown, SetQueryClusterClique | SetQueryCliqueLoading> =>
-    (dispatch, getState) => {
-        const state = getState();
+    async (dispatch, getState) => {
         const isSpyt = engine === QueryEngine.SPYT;
+        const cliqueMap = getCliqueMap(getState());
 
-        if (
-            cluster in state.queryTracker.query.cliqueMap &&
-            state.queryTracker.query.cliqueMap[cluster][engine]
-        )
-            return;
+        if (cluster in cliqueMap && cliqueMap[cluster][engine]) return;
 
-        const supportedControllers = getCliqueControllerIsSupported(state);
+        const supportedControllers = await getCliqueControllerSupportByCluster(cluster);
+
         if ((isSpyt && !supportedControllers.spyt) || (!isSpyt && !supportedControllers.chyt))
             return; // Clique selector is not supported on cluster
 

@@ -75,6 +75,7 @@ export type QueryFile = {
 export interface DraftQuery {
     id?: QueryItemId;
     engine: QueryEngine;
+    supportedEngines: Record<QueryEngine, boolean>;
     files: QueryFile[];
     query: string;
     annotations?: {
@@ -235,6 +236,12 @@ export async function generateQueryFromTable(
 
     const commonData = {
         engine,
+        supportedEngines: {
+            spyt: false,
+            chyt: false,
+            yql: true,
+            ql: true,
+        },
         files: [],
         annotations: {},
         access_control_object: defaultQueryACO,
