@@ -23,13 +23,6 @@ export function getClusterProxy(clusterConfig: ClusterConfig): string {
     return clusterConfig.proxy;
 }
 
-export const getCliqueControllerIsSupported = createSelector([getClusterUiConfig], (uiConfig) => {
-    return {
-        chyt: Boolean(uiConfig.chyt_controller_base_url),
-        spyt: Boolean(uiConfig.livy_controller_base_url),
-    };
-});
-
 export const getClusterUiConfigEnablePerAccountTabletAccounting = (state: RootState) => {
     return state.global.clusterUiConfig.enable_per_account_tablet_accounting ?? false;
 };

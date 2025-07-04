@@ -4,7 +4,7 @@ import {Button} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from 'react-redux';
 
 import Icon from '../../components/Icon/Icon';
-import {YQLKitButton} from '../../containers/YQLKitButton/YQLKitButton';
+import {YQLKitButton} from '../YQLKitButton/YQLKitButton';
 import {QueryWidgetLazy} from '../../pages/query-tracker/QueryWidget/side-panel';
 import {QueryEngine} from '../../../shared/constants/engines';
 import {createQueryFromTablePath} from '../../pages/query-tracker/module/query/actions';

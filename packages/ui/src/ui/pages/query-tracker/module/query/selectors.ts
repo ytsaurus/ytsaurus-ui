@@ -13,6 +13,8 @@ import {YTError} from '../../../../types';
 import {isYTError} from '../../../../../shared/utils';
 import {getQueryResults} from '../query_result/selectors';
 import {getDefaultQueryACO, selectIsMultipleAco} from '../query_aco/selectors';
+import {QueryEngine} from '../../../../../shared/constants/engines';
+import {QueryEnginesNames} from '../../utils/query';
 
 const QT_STAGE = getQueryTrackerStage();
 const getState = (state: RootState) => state.queryTracker.query;
@@ -26,6 +28,7 @@ export const getQueryAnnotations = (state: RootState) => getState(state).queryIt
 export const getQueryGetParams = (state: RootState) => getState(state).params;
 
 export const getQueryDraft = (state: RootState) => getState(state).draft;
+export const getQueryDraftSettings = (state: RootState) => getState(state).draft.settings || {};
 export const getQueryDraftCluster = (state: RootState) => getQueryDraft(state).settings?.cluster;
 
 export const getQueryFiles = (state: RootState) => getState(state).draft.files;
@@ -34,10 +37,13 @@ export const getQueryText = (state: RootState) => getState(state).draft.query;
 
 export const getQueryEngine = (state: RootState) => getState(state).draft.engine;
 
+export const getQuerySupportedEngine = (state: RootState) => getState(state).draft.supportedEngines;
+
 export const isQueryLoading = (state: RootState) => getState(state).state === 'loading';
 
 export const getCliqueMap = (state: RootState) => getState(state).cliqueMap;
 export const getCliqueLoading = (state: RootState) => getState(state).cliqueLoading;
+export const getClusterLoading = (state: RootState) => getState(state).clusterLoading;
 
 export const getQueryItem = (state: RootState) => getState(state).queryItem;
 
@@ -57,6 +63,21 @@ export const hasLoadedQueryItem = (state: RootState) => {
     const queryItem = getState(state).queryItem;
     return Boolean(queryItem?.id);
 };
+
+export const getSupportedEnginesOptions = createSelector(
+    [getQuerySupportedEngine],
+    (supportedEngines) => {
+        const items = Object.entries(supportedEngines).filter(([_, supported]) => supported);
+
+        return items.map(([key]) => {
+            return {
+                value: key,
+                text: QueryEnginesNames[key as QueryEngine],
+                content: QueryEnginesNames[key as QueryEngine],
+            };
+        });
+    },
+);
 
 export const getQueryTrackerRequestOptions = createSelector(
     [getSettingQueryTrackerStage, getSettingQueryTrackerYQLAgentStage],

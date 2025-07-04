@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useRef} from 'react';
+import React, {FC, useCallback, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
     selectLoading,
@@ -25,7 +25,6 @@ import {QueryEngine} from '../../../../../shared/constants/engines';
 import {getNavigationUrl} from '../helpers/getNavigationUrl';
 import {createTableSelect} from '../helpers/createTableSelect';
 import {getQueryResultGlobalSettings} from '../../module/query_result/selectors';
-import {useToggle} from 'react-use';
 import {NewQueryPromt} from '../../NewQueryButton/NewQueryButton';
 import {ItemsList} from '../ItemsList';
 
@@ -33,7 +32,7 @@ const b = cn('navigation-node-list');
 
 export const NodeList: FC = () => {
     const dispatch = useDispatch();
-    const [showPrompt, togglePrompt] = useToggle(false);
+    const [showPrompt, setShowPrompt] = useState(false);
     const newQueryParams = useRef<{path: string; engine: QueryEngine} | null>(null);
     const clusterConfig = useSelector(selectNavigationClusterConfig);
     const nodes = useSelector(selectNodeListByFilter);
@@ -107,22 +106,22 @@ export const NodeList: FC = () => {
     );
 
     const handlePromptConfirm = useCallback(() => {
-        const editor = getEditor('queryEditor');
         const parameters = newQueryParams.current;
-        if (!editor || !parameters) return;
-        dispatch(makeNewQueryWithTableSelect(parameters.path, parameters.engine, editor));
-        togglePrompt();
-    }, [dispatch, getEditor, togglePrompt]);
+        if (!parameters) return;
+
+        dispatch(makeNewQueryWithTableSelect(parameters.path, parameters.engine));
+        setShowPrompt(false);
+    }, [dispatch, setShowPrompt]);
 
     const handlePromptCancel = useCallback(() => {
         newQueryParams.current = null;
-        togglePrompt();
-    }, [togglePrompt]);
+        setShowPrompt(false);
+    }, [setShowPrompt]);
 
     const handleNewQuery = useCallback(
         async (path: string, newEngine: QueryEngine) => {
             if (dirtyQuery) {
-                togglePrompt();
+                setShowPrompt(true);
                 newQueryParams.current = {path, engine: newEngine};
                 return;
             }
@@ -130,7 +129,7 @@ export const NodeList: FC = () => {
             newQueryParams.current = {path, engine: newEngine};
             handlePromptConfirm();
         },
-        [dirtyQuery, handlePromptConfirm, togglePrompt],
+        [dirtyQuery, handlePromptConfirm, setShowPrompt],
     );
 
     return (

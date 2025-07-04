@@ -11,6 +11,7 @@ import {PopupWithCloseButton} from './PopupWithCloseButton';
 import {VALIDATOR_ERRORS_TEXT, formValidator} from './formValidator';
 
 const SETTINGS_WITHOUT_EDIT_NODE = ['cluster', 'clique'];
+const SETTING_WITHOUT_REMOVE = 'cluster';
 
 const block = cn('query-settings-popup');
 
@@ -113,6 +114,7 @@ export const QuerySettingsButton = ({
                                     ? undefined
                                     : {name: true, value: true}
                             }
+                            canRemove={name !== SETTING_WITHOUT_REMOVE}
                             validator={validator}
                             onDelete={handleDelete}
                             onChange={handleChangeSettings}

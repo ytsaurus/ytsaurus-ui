@@ -47,7 +47,7 @@ function handleUiConfigError(path: string, error: any, type?: string) {
 
 const toast = new Toaster();
 
-function prepareClusterUiConfig(uiConfig: BatchResultsItem, uiDevConfig: BatchResultsItem) {
+export function prepareClusterUiConfig(uiConfig: BatchResultsItem, uiDevConfig: BatchResultsItem) {
     if (uiConfig.error && uiConfig.error.code !== yt.codes.NODE_DOES_NOT_EXIST) {
         handleUiConfigError('//sys/@ui_config', uiConfig.error);
         toast.add({
@@ -69,6 +69,27 @@ function prepareClusterUiConfig(uiConfig: BatchResultsItem, uiDevConfig: BatchRe
 
 type GlobalThunkAction<T = unknown> = ThunkAction<T, RootState, any, FIX_MY_TYPE>;
 
+export function getClusterParams(
+    rumId: RumWrapper<typeof RumMeasureTypes.CLUSTER_PARAMS>,
+    cluster: string,
+) {
+    return wrapApiPromiseByToaster(
+        rumId.fetch(
+            YTApiId.clusterParams,
+            axios.request({
+                url: '/api/cluster-params/' + cluster,
+                method: 'GET',
+            }),
+        ),
+        {
+            skipSuccessToast: true,
+            toasterName: 'cluster_initialization_failure',
+            errorTitle: 'Cluster initialization failure',
+            errorContent: 'An error occured',
+        },
+    );
+}
+
 export function initClusterParams(cluster: string): GlobalThunkAction<Promise<void>> {
     return (dispatch, getState) => {
         initYTApiClusterParams(cluster);
@@ -78,23 +99,9 @@ export function initClusterParams(cluster: string): GlobalThunkAction<Promise<vo
         });
 
         const login = getCurrentUserName(getState());
-
         const rumId = new RumWrapper(cluster, RumMeasureTypes.CLUSTER_PARAMS);
-        return wrapApiPromiseByToaster(
-            rumId.fetch(
-                YTApiId.clusterParams,
-                axios.request({
-                    url: '/api/cluster-params/' + cluster,
-                    method: 'GET',
-                }),
-            ),
-            {
-                skipSuccessToast: true,
-                toasterName: 'cluster_initialization_failure',
-                errorTitle: 'Cluster initialization failure',
-                errorContent: 'An error occured',
-            },
-        )
+
+        return getClusterParams(rumId, cluster)
             .then(({data}) => {
                 const {mediumList, schedulerVersion, masterVersion, uiConfig, uiDevConfig} = data;
                 const error = getBatchError([mediumList], 'Cluster initialization failure');

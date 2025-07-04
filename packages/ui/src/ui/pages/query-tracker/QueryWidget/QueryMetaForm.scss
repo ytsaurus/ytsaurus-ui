@@ -1,3 +1,14 @@
 .query-tracker-meta-form {
+    $self: &;
+
     overflow: hidden;
+
+    div#{$self}__cluster {
+        width: 120px;
+        flex-shrink: 0;
+    }
+
+    .yt-query-selector-control {
+        min-width: 120px;
+    }
 }
