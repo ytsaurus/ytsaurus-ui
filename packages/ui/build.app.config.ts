@@ -12,7 +12,7 @@ if (debugPort) {
     console.log({debugPort}, '\n');
 }
 
-const isDev = process.env.APP_ENV === 'development';
+const isDev = process.env.APP_ENV === 'development' || 'local';
 
 const port = Number(process.env.LOCAL_DEV_PORT);
 
