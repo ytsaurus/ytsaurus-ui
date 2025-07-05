@@ -3,13 +3,6 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {test} from '../../../../../../../../playwright-storybook/core';
 
-<<<<<<< Updated upstream
-import {AppThemeFont} from '../../../../../../containers/App/AppThemeFont';
-
-import {Default} from '../__stories__/Accounts.stories';
-
-import {accountsResponse} from './accounts-response';
-=======
 import {Default, Empty, Error, Loading} from '../__stories__/Accounts.stories';
 import {
     accountsHandler,
@@ -17,7 +10,6 @@ import {
     accountsHandlerError,
     accountsHandlerWithLoading,
 } from './mocks';
->>>>>>> Stashed changes
 
 test('Accounts: story <Default>', async ({mount, expectScreenshot, router}) => {
     yt.setup.setGlobalOption('proxy', 'test-cluster.yt.my-domain.com');
