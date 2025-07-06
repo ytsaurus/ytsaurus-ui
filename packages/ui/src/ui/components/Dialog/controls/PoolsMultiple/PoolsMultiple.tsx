@@ -28,7 +28,9 @@ export function PoolsMultiple(props: Props) {
     const {removePair, addPair, updateTree, updatePool} = useActions(value, onChange);
 
     const isPoolsPairsAvailable =
-        Boolean(value.length) && value[value.length - 1]?.pool && value[value.length - 1]?.tree;
+        Boolean(value?.length) &&
+        value?.[value?.length - 1]?.pool &&
+        value?.[value.length - 1]?.tree;
 
     return (
         <Flex gap={2} direction={'column'}>
