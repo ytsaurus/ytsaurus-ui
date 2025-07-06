@@ -7,6 +7,7 @@ import {
     checkTableItemsInWidget,
     checkWidgetContains,
     enableEditMode,
+    openCreateWidgetDialog,
     openSettings,
     saveEdit,
     setCustomName,
@@ -42,7 +43,7 @@ test('Dashboard - Edit widgets names', async ({page}) => {
 
             await enableEditMode(page);
             await openSettings(page, widgetId);
-            await setCustomName(page, widgetId, customWidgetName);
+            await setCustomName(page, customWidgetName);
             await submitSettings(page);
             await saveEdit(page);
 
@@ -182,4 +183,49 @@ test('Dashboard - Operations widget running', async ({page}) => {
     await runningOption.click();
 
     await checkTableItemsInWidget(page, 'operations', {equal: 1});
+});
+
+test('Dashboard - Create widgets', async ({page}) => {
+    await page.goto(makeClusterUrl('dashboard'));
+
+    await enableEditMode(page);
+    const types = ['navigation', 'operations', 'accounts', 'pools'];
+    for (const type of types) {
+        await test.step(`Create ${type} widget`, async () => {
+            const customWidgetName = `New ${type} widget`;
+            await openCreateWidgetDialog(page, type);
+            await setCustomName(page, customWidgetName);
+            await submitSettings(page);
+        });
+    }
+
+    await saveEdit(page);
+
+    for (const type of types) {
+        const newWidget = page.locator(
+            `[data-qa="dashkit-grid-item"]:has-text("New ${type} widget")`,
+        );
+        await newWidget.scrollIntoViewIfNeeded();
+        await newWidget.waitFor();
+    }
+});
+
+test('Dashboard - Cancel editting', async ({page}) => {
+    await page.goto(makeClusterUrl('dashboard'));
+
+    await enableEditMode(page);
+    await openCreateWidgetDialog(page, 'navigation');
+    await setCustomName(page, 'willberemoved');
+    await submitSettings(page);
+
+    const willBeRemovedTitle = page.locator(
+        '[data-qa="dashkit-grid-item"]:has-text("willberemoved")',
+    );
+    await willBeRemovedTitle.scrollIntoViewIfNeeded();
+    await willBeRemovedTitle.waitFor();
+
+    const cancelButton = page.locator('button:has-text("Cancel")');
+    await cancelButton.click();
+
+    await willBeRemovedTitle.waitFor({state: 'detached'});
 });
