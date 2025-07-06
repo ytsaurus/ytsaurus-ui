@@ -37,8 +37,8 @@ export async function openSettings(page: Page, widgetId: string) {
     });
 }
 
-export async function setCustomName(page: Page, widgetId: string, name: string) {
-    return test.step(`Set custom name to ${widgetId} widget`, async () => {
+export async function setCustomName(page: Page, name: string) {
+    return test.step(`Set custom widget name`, async () => {
         await page.fill('input[name="name"]', name);
     });
 }
