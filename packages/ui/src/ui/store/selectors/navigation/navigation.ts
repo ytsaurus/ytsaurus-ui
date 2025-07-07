@@ -109,9 +109,15 @@ export const getSupportedTabs = createSelector(
             supportedByAttribute.push(Tab.TABLETS);
         }
 
+        const schema = ypath.getValue(attributes?.schema);
+        const hasSortedColumns = schema?.some((item: {sort_order?: unknown}) => {
+            return Boolean(item.sort_order);
+        });
+
         if (
             attributes?.dynamic === true &&
-            attributes?.sorted === false &&
+            schema?.length > 0 &&
+            !hasSortedColumns &&
             (attributes?.type === 'table' ||
                 attributes?.type === 'replicated_table' ||
                 attributes?.type === 'chaos_replicated_table')
