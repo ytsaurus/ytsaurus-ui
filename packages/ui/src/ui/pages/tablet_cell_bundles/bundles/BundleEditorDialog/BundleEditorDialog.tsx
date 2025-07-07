@@ -48,7 +48,6 @@ import {docsUrl} from '../../../../config';
 import './BundleEditorDialog.scss';
 import {Pick2} from '../../../../../@types/types';
 import {getQueryMemoryLimitIsSupported} from '../../../../store/selectors/global/supported-features';
-import {concatValidators} from '../../../../common/hammer/concat-validators';
 import {validateNumber} from '../../../../common/hammer/validate-number';
 
 const block = cn('bundle-editor');
@@ -581,10 +580,7 @@ export function BundleEditorDialog() {
                     format: 'Number',
                     hasClear: true,
                 },
-                validator: concatValidators(
-                    simpleBundleValidate,
-                    validateNumber.bind(null, {ge: 0}),
-                ),
+                validator: validateNumber.bind(null, {gt: 0}),
             },
             {
                 name: 'query_thread_pool_size',
@@ -595,26 +591,20 @@ export function BundleEditorDialog() {
                     format: 'Number',
                     hasClear: true,
                 },
-                validator: concatValidators(
-                    simpleBundleValidate,
-                    validateNumber.bind(null, {ge: 0}),
-                ),
+                validator: validateNumber.bind(null, {gt: 0}),
             },
             {
                 name: 'write_thread_pool_size',
                 type: 'bundle-input',
                 caption: 'Tablet cells per node',
-                tooltip:
+                warning:
                     'Changing tablet cell count is discouraged. Do not modify this parameter unless you understand what you are doing',
                 extras: {
                     postfix: 'threads',
                     format: 'Number',
                     hasClear: true,
                 },
-                validator: concatValidators(
-                    simpleBundleValidate,
-                    validateNumber.bind(null, {ge: 0}),
-                ),
+                validator: validateNumber.bind(null, {gt: 0}),
             },
         ],
     };
