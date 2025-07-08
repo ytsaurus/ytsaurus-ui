@@ -130,7 +130,7 @@ function renderContent({item, ...rest}: {item: FlowGraphBlock; detailed?: boolea
         case 'computation-group':
             return <Computation className={block('item')} item={item} {...rest} />;
         case 'sink':
-            return <Sink className={block('item')} item={item} />;
+            return <Sink className={block('item')} item={item} {...rest} />;
     }
 }
 
