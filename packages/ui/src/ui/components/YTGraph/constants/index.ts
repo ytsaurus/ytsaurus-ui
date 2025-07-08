@@ -19,7 +19,7 @@ const GRAPH_COLORS_ = {
 
 const GRAPH_BACKGROUND_COLORS_ = {
     info: () => getCssColor('--info-background'),
-    warning: () => getCssColor('--warning-background'),
+    warning: () => getCssColor('--alert-background'),
     danger: () => getCssColor('--danger-background'),
     success: () => getCssColor('--success-background'),
 };

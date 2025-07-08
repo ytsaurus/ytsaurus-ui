@@ -26,7 +26,7 @@ export function YTErrorInline({className, error, message, type}: YTErrorInlinePr
         }
     }
     return (
-        <Flex className={className} alignItems="baseline" overflow="hidden" inline>
+        <Flex className={className} alignItems="baseline" overflow="hidden" inline gap={1}>
             <Flex overflow="hidden" alignItems="baseline" shrink={1}>
                 <Text variant="inherit" color={type === 'alert' ? 'warning' : 'danger'} ellipsis>
                     {msg}
