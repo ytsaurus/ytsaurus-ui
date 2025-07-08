@@ -7,6 +7,7 @@ import {FlowComputation} from '../../../../../../../shared/yt-types';
 
 import format from '../../../../../../common/hammer/format';
 import MetaTable from '../../../../../../components/MetaTable/MetaTable';
+import {addProgressStackSpacers} from '../../../../../../utils/progress';
 
 import {FlowGraphBlockItem} from '../FlowGraph';
 
@@ -90,7 +91,7 @@ function ComputaionProgress({stats}: ComputationProgressProps) {
 
             return {value: (v / count) * 100, theme};
         });
-        return {stack, history};
+        return {stack: addProgressStackSpacers(stack), history};
     }, [stats, count]);
 
     return (
