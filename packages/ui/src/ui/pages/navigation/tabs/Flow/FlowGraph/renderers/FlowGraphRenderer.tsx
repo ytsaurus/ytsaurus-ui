@@ -88,7 +88,7 @@ function FlowMessageItem({item}: {item: FlowMessage}) {
     return (
         <div className={block('message', {theme})}>
             {Boolean(error) ? (
-                <YTErrorInline error={error ?? new Error('Some error')} type={errorType} />
+                <YTErrorInline error={error} type={errorType} />
             ) : Boolean(yson) ? (
                 <FlowMessageItemYson item={item} />
             ) : (
