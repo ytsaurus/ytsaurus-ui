@@ -22,6 +22,7 @@ import {
     LOAD_RESOURCE_USAGE,
     OPERATION_DETAIL_PARTIAL,
 } from '../../../constants/operations/detail';
+import {TYPED_OUTPUT_FORMAT} from '../../../constants/index';
 import {DetailedOperationSelector} from '../../../pages/operations/selectors';
 import {checkUserTransaction, prepareActions} from '../../../utils/operations/detail';
 import {prepareAttributes} from '../../../utils';
@@ -35,6 +36,7 @@ import {getJobsMonitoringDescriptors} from '../../../store/actions/operations/jo
 import {getCluster} from '../../../store/selectors/global';
 import type {RootState} from './../../../store/reducers';
 import type {OperationDetailActionType} from '../../reducers/operations/detail';
+import {JSONParser} from '../../../pages/query-tracker/module/api';
 
 const toaster = new Toaster();
 const operationDetailsRequests = new CancelHelper();
@@ -83,14 +85,7 @@ export function getOperation(
         const params = Object.assign(
             {
                 include_scheduler: true,
-                output_format: {
-                    $value: 'json' as const,
-                    $attributes: {
-                        stringify: true,
-                        annotate_with_types: true,
-                        encode_utf8: false,
-                    },
-                },
+                output_format: TYPED_OUTPUT_FORMAT,
             },
             isAlias ? {operation_alias: id} : {operation_id: id},
         );
@@ -98,7 +93,7 @@ export function getOperation(
         dispatch({type: GET_OPERATION.REQUEST, data: {isAlias, id}});
 
         return ytApiV3
-            .getOperation(params, operationDetailsRequests)
+            .getOperation({parameters: params, setup: {...JSONParser}}, operationDetailsRequests)
             .then(checkUserTransaction)
             .then(([operationAttributes, userTransactionAlive]) => {
                 const preparedAttributes = prepareAttributes(operationAttributes);
