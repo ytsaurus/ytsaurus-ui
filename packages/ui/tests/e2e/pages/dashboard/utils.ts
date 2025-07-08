@@ -1,5 +1,21 @@
 import {Page, expect, test} from '@playwright/test';
 
+import {setUserSettings} from '../../../utils/settings';
+import {CLUSTER, E2E_DIR, E2E_SUFFIX, makeClusterUrl} from '../../../utils';
+
+export async function setupDashboard(page: Page) {
+    await page.goto(makeClusterUrl('dashboard'));
+    await setUserSettings(page, 'global::newDashboardPage', true);
+    await setUserSettings(page, `local::${CLUSTER}::accounts::favourites`, [
+        {path: `e2e-overcommit-${E2E_SUFFIX}`},
+        {path: `e2e-parent-${E2E_SUFFIX}`},
+    ]);
+    await setUserSettings(page, `local::${CLUSTER}::scheduling::favourites`, [
+        {path: '<Root>[default]'},
+    ]);
+    await setUserSettings(page, `local::${CLUSTER}::favourites`, [{path: E2E_DIR}]);
+}
+
 export async function enableEditMode(page: Page) {
     return test.step('Enable edit mode', async () => {
         const editButton = await page.waitForSelector('button:has-text("Edit dashboard")');
@@ -23,8 +39,10 @@ export async function cancelEdit(page: Page) {
 
 export async function submitSettings(page: Page) {
     return test.step(`Submit widget settings`, async () => {
-        const submitButton = page.locator('button[type="submit"]');
+        const submitButton = page.locator('.g-dialog button[type="submit"]');
+        await submitButton.waitFor({state: 'visible'});
         await submitButton.click();
+        await submitButton.waitFor({state: 'hidden'});
     });
 }
 
