@@ -343,7 +343,7 @@ export class YTGrapCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canva
 
         let width = Infinity;
         let res = text;
-        while (width > maxWidth) {
+        while (width > maxWidth && res.length > 0) {
             width = this.context.ctx.measureText(res).width;
             if (width <= maxWidth) {
                 break;

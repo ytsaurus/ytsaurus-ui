@@ -8,9 +8,9 @@ import {FlowMessage, FlowNodeStatus} from '../../../../../../../shared/yt-types'
 
 import format from '../../../../../../common/hammer/format';
 import {ExpandButton} from '../../../../../../components/ExpandButton';
+import {YTErrorBlock} from '../../../../../../components/Block/Block';
 import Yson from '../../../../../../components/Yson/Yson';
 import {ClickableText} from '../../../../../../components/ClickableText/ClickableText';
-import {YTErrorInline} from '../../../../../../containers/YTErrorInline/YTErrorInline';
 
 import './FlowGraphRenderer.scss';
 
@@ -84,31 +84,40 @@ function FlowMessagesDialog({data, onClose}: FlowMessagesProps & {onClose(): voi
 function FlowMessageItem({item}: {item: FlowMessage}) {
     const {level, yson, error} = item;
     const theme = STATUS_TO_BG_THEME[level];
-    const errorType = theme === 'warning' ? 'alert' : undefined;
     return (
         <div className={block('message', {theme})}>
-            {Boolean(error) ? (
-                <YTErrorInline error={error} type={errorType} />
-            ) : Boolean(yson) ? (
-                <FlowMessageItemYson item={item} />
-            ) : (
+            {!error && !yson ? (
                 item.text
+            ) : (
+                <FlowMessageItemExpandable
+                    item={item}
+                    errorType={theme === 'warning' ? 'alert' : undefined}
+                />
             )}
         </div>
     );
 }
 
-function FlowMessageItemYson({item}: {item: FlowMessage}) {
+function FlowMessageItemExpandable({item, errorType}: {item: FlowMessage; errorType?: 'alert'}) {
     const [expanded, setExpanded] = React.useState(false);
 
-    const {yson, text} = item;
+    const toggleExpand = () => setExpanded(!expanded);
+
+    const {yson, error, text} = item;
     return (
         <Flex gap={1} alignItems="baseline">
-            <ExpandButton expanded={expanded} toggleExpanded={() => setExpanded(!expanded)} />
-            <span>
-                {text ?? format.NO_VALUE}
-                {expanded && <Yson value={yson} />}
-            </span>
+            <ExpandButton expanded={expanded} toggleExpanded={toggleExpand} />
+            <div>
+                <span onClick={toggleExpand} style={{cursor: 'pointer'}}>
+                    {text ?? format.NO_VALUE}
+                </span>
+                {expanded && (
+                    <React.Fragment>
+                        {Boolean(yson) && <Yson value={yson} />}
+                        {Boolean(error) && <YTErrorBlock error={error} type={errorType} />}
+                    </React.Fragment>
+                )}
+            </div>
         </Flex>
     );
 }
