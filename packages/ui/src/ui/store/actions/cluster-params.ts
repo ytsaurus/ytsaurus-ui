@@ -27,7 +27,7 @@ import {RootState} from '../../store/reducers';
 import {YT} from '../../config/yt-config';
 import {GLOBAL_PARTIAL} from '../../constants/global';
 import {FIX_MY_TYPE, YTError} from '../../../@types/types';
-import {initYTApiClusterParams} from '../../common/yt-api-init';
+import {initYTApiClusterParams} from '../../common/yt-api';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
 import {updateTitle} from './global';
 import {reloadUserSettings, setSetting} from './settings';
