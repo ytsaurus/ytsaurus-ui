@@ -1,6 +1,6 @@
 import {getBatchError} from '../../../../utils/utils';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
-import {JSONParser} from '../../module/api';
+import {JSONParser} from '../../../../common/yt-api';
 import {getClusterProxy} from '../../../../store/selectors/global';
 import {BatchSubRequest, ClusterConfig} from '../../../../../shared/yt-types';
 import {Toaster} from '@gravity-ui/uikit';

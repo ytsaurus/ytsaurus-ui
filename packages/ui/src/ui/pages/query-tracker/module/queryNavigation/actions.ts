@@ -31,7 +31,7 @@ import {getTableTypeByAttributes} from '../../../../utils/navigation/getTableTyp
 import {Toaster} from '@gravity-ui/uikit';
 import {loadDynamicTableRequest} from '../../Navigation/api/loadDynamicTable';
 import {loadStaticTable} from '../../Navigation/api/loadStaticTable';
-import {JSONParser} from '../api';
+import {JSONParser} from '../../../../common/yt-api';
 import {toggleFavourite} from '../../../../store/actions/favourites';
 import {createNestedNS} from '../../../../../shared/utils/settings';
 import {NAMESPACES} from '../../../../../shared/constants/settings';

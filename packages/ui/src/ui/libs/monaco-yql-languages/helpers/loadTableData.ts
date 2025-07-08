@@ -4,7 +4,7 @@ import {YT} from '../../../config/yt-config';
 import ypath from '../../../common/thor/ypath';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {getClusterProxy} from '../../../store/selectors/global';
-import {JSONParser} from '../../../pages/query-tracker/module/api';
+import {JSONParser} from '../../../common/yt-api';
 import {BatchSubRequest} from '../../../../shared/yt-types';
 
 export const loadTableData = async (query: string, engine: QueryEngine) => {
