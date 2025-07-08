@@ -24,7 +24,7 @@ import {CancelTokenSource} from 'axios';
 import {VisualizationState} from './queryChart/queryChartSlice';
 import {YTError} from '../../../types';
 import {QueryStatus} from '../../../types/query-tracker';
-import {JSONParser} from '../../../common/yt-api';
+import {JSONSerializer} from '../../../common/yt-api';
 
 function getQTApiSetup(): {proxy?: string} {
     const QT_CLUSTER = getQueryTrackerCluster();
@@ -199,7 +199,7 @@ export async function generateQueryFromTable(
         },
         setup: {
             proxy: getClusterProxy(selectedCluster),
-            ...JSONParser,
+            JSONSerializer,
         },
     });
 
@@ -227,7 +227,7 @@ export async function generateQueryFromTable(
     } else if (node.type === 'document' && 'view' === ypath.getValue(node._yql_type)) {
         const query = await ytApiV3.get({
             parameters: {path},
-            setup: {proxy: getClusterProxy(selectedCluster), ...JSONParser},
+            setup: {proxy: getClusterProxy(selectedCluster), JSONSerializer},
         });
         return {query, ...commonData};
     }
@@ -268,7 +268,7 @@ export function getQuery(query_id: string): ThunkAction<Promise<QueryItem>, Root
             parameters: {stage, ...makeGetQueryParams(query_id)},
             setup: {
                 ...getQTApiSetup(),
-                ...JSONParser,
+                JSONSerializer,
             },
         });
     };
@@ -389,7 +389,7 @@ export function readQueryResults(
                     },
                 },
             },
-            setup: {...getQTApiSetup(), ...JSONParser},
+            setup: {...getQTApiSetup(), JSONSerializer},
             cancellation,
         })) as QueryResult;
         return {...result, rows: mapQueryRowNames(result.rows)};
@@ -508,7 +508,7 @@ export function getQueryResultMeta(
             parameters: {stage, query_id, result_index},
             setup: {
                 ...getQTApiSetup(),
-                ...JSONParser,
+                JSONSerializer,
             },
         });
     };

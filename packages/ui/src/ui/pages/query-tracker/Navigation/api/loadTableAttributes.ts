@@ -1,6 +1,6 @@
 import {getBatchError} from '../../../../utils/utils';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
-import {JSONParser} from '../../../../common/yt-api';
+import {JSONSerializer} from '../../../../common/yt-api';
 import {getClusterProxy} from '../../../../store/selectors/global';
 import {BatchSubRequest, ClusterConfig} from '../../../../../shared/yt-types';
 import {Toaster} from '@gravity-ui/uikit';
@@ -10,7 +10,7 @@ const toaster = new Toaster();
 export const loadTableAttributes = async (path: string, clusterConfig: ClusterConfig) => {
     const setup = {
         proxy: getClusterProxy(clusterConfig),
-        ...JSONParser,
+        JSONSerializer,
     };
 
     const requests: BatchSubRequest[] = [

@@ -31,7 +31,7 @@ import {getTableTypeByAttributes} from '../../../../utils/navigation/getTableTyp
 import {Toaster} from '@gravity-ui/uikit';
 import {loadDynamicTableRequest} from '../../Navigation/api/loadDynamicTable';
 import {loadStaticTable} from '../../Navigation/api/loadStaticTable';
-import {JSONParser} from '../../../../common/yt-api';
+import {JSONSerializer} from '../../../../common/yt-api';
 import {toggleFavourite} from '../../../../store/actions/favourites';
 import {createNestedNS} from '../../../../../shared/utils/settings';
 import {NAMESPACES} from '../../../../../shared/constants/settings';
@@ -97,7 +97,7 @@ export const loadNodeByPath =
             ytApiV3Id.list(YTApiId.navigationListNodes, {
                 setup: {
                     proxy: getClusterProxy(clusterConfig),
-                    ...JSONParser,
+                    JSONSerializer,
                 },
                 parameters: {
                     path,
@@ -207,7 +207,7 @@ export const loadPath =
             const type = await ytApiV3Id.get(YTApiId.navigationGetType, {
                 setup: {
                     proxy: getClusterProxy(clusterConfig),
-                    ...JSONParser,
+                    JSONSerializer,
                 },
                 parameters: {
                     path: `${path}/@type`,
