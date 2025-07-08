@@ -29,7 +29,7 @@ export function OperationsWidgetControls(props: PluginWidgetProps) {
     const onStateFilterUpdate = (value: string[]) => {
         dispatch(setOperationsStateFilter(id, value[0]));
     };
-    const onAuthorTypeFilterUpdate = (value: 'me' | 'my-list') => {
+    const onAuthorTypeFilterUpdate = (value: 'me' | 'custom') => {
         dispatch(setOperationsAuthorTypeFilter(id, value));
     };
 
@@ -52,7 +52,7 @@ export function OperationsWidgetControls(props: PluginWidgetProps) {
             <RadioButton
                 options={[
                     {value: 'me', content: 'Me'},
-                    {value: 'my-list', content: 'My list'},
+                    {value: 'custom', content: 'Custom'},
                 ]}
                 onUpdate={onAuthorTypeFilterUpdate}
                 value={authorType}

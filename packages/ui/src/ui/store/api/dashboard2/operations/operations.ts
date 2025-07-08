@@ -20,7 +20,7 @@ export type OperationProgressInfo = {
 type OperationsQueryArgs = {
     id: string;
     cluster: string;
-    authorType: 'me' | 'my-list';
+    authorType: 'me' | 'custom';
     state?: string;
     authors?: Array<{value: string; type: string}>;
     pool?: Array<{tree: string; pool: string}>;
@@ -35,7 +35,7 @@ export async function fetchOperations(args: OperationsQueryArgs, api: BaseQueryA
 
         let response;
 
-        if (authorType === 'my-list') {
+        if (authorType === 'custom') {
             let requests = map_(authors, (item) => ({
                 command: 'list_operations' as const,
                 parameters: {
