@@ -23,8 +23,10 @@ export async function cancelEdit(page: Page) {
 
 export async function submitSettings(page: Page) {
     return test.step(`Submit widget settings`, async () => {
-        const submitButton = page.locator('button[type="submit"]');
+        const submitButton = page.locator('.g-dialog button[type="submit"]');
+        await submitButton.waitFor({state: 'visible'});
         await submitButton.click();
+        await submitButton.waitFor({state: 'hidden'});
     });
 }
 
