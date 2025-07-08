@@ -76,24 +76,22 @@ const secureDecoding = (value: string) => {
     }
 };
 
-export const JSONParser = {
-    JSONSerializer: {
-        stringify(data: unknown) {
-            return JSON.stringify(data);
-        },
-        parse(data: string) {
-            return JSON.parse(data, (_, value) => {
-                if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-                    return Object.keys(value).reduce<Record<any, any>>((acc, k) => {
-                        acc[secureDecoding(k)] =
-                            typeof value[k] === 'string' ? secureDecoding(value[k]) : value[k];
+export const JSONSerializer = {
+    stringify(data: unknown) {
+        return JSON.stringify(data);
+    },
+    parse(data: string) {
+        return JSON.parse(data, (_, value) => {
+            if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+                return Object.keys(value).reduce<Record<any, any>>((acc, k) => {
+                    acc[secureDecoding(k)] =
+                        typeof value[k] === 'string' ? secureDecoding(value[k]) : value[k];
 
-                        return acc;
-                    }, {});
-                }
+                    return acc;
+                }, {});
+            }
 
-                return value;
-            });
-        },
+            return value;
+        });
     },
 };

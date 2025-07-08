@@ -2,7 +2,7 @@ import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {injectColumnsFromSchema} from '../../../../utils/navigation/content/table/table-ts';
 import {NavigationTableSchema} from '../../module/queryNavigation/queryNavigationSlice';
 import {UnipikaValue} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
-import {JSONParser} from '../../../../common/yt-api';
+import {JSONSerializer} from '../../../../common/yt-api';
 import {TypeArray} from '../../../../components/SchemaDataType/dataTypes';
 import {getClusterProxy} from '../../../../store/selectors/global';
 import {ClusterConfig} from '../../../../../shared/yt-types';
@@ -37,7 +37,7 @@ export const loadStaticTable: LoadStaticTableRows = async ({
                 headers: rawResponse?.headers,
             };
         },
-        ...JSONParser,
+        JSONSerializer,
     };
 
     const parameters = {

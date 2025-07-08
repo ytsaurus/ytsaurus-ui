@@ -36,7 +36,7 @@ import {getJobsMonitoringDescriptors} from '../../../store/actions/operations/jo
 import {getCluster} from '../../../store/selectors/global';
 import type {RootState} from './../../../store/reducers';
 import type {OperationDetailActionType} from '../../reducers/operations/detail';
-import {JSONParser} from '../../../common/yt-api';
+import {JSONSerializer} from '../../../common/yt-api';
 
 const toaster = new Toaster();
 const operationDetailsRequests = new CancelHelper();
@@ -93,7 +93,7 @@ export function getOperation(
         dispatch({type: GET_OPERATION.REQUEST, data: {isAlias, id}});
 
         return ytApiV3
-            .getOperation({parameters: params, setup: {...JSONParser}}, operationDetailsRequests)
+            .getOperation({parameters: params, setup: {JSONSerializer}}, operationDetailsRequests)
             .then(checkUserTransaction)
             .then(([operationAttributes, userTransactionAlive]) => {
                 const preparedAttributes = prepareAttributes(operationAttributes);
