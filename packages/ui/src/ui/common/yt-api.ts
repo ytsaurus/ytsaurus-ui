@@ -9,6 +9,7 @@ import {BAN_USER, BLOCK_USER} from '../constants/index';
 import {YT} from '../config/yt-config';
 import {getClusterProxy} from '../store/selectors/global';
 import {getConfigData} from '../config/ui-settings';
+import unipika from '../common/thor/unipika';
 
 export function initYTApiClusterParams(cluster: string) {
     const {clusters} = YT;
@@ -66,3 +67,33 @@ function getToken() {
     const tokenName = cluster && getXsrfCookieName(cluster);
     return tokenName && Cookies.get(tokenName);
 }
+
+const secureDecoding = (value: string) => {
+    try {
+        return unipika.decode(value);
+    } catch (e) {
+        return value;
+    }
+};
+
+export const JSONParser = {
+    JSONSerializer: {
+        stringify(data: unknown) {
+            return JSON.stringify(data);
+        },
+        parse(data: string) {
+            return JSON.parse(data, (_, value) => {
+                if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+                    return Object.keys(value).reduce<Record<any, any>>((acc, k) => {
+                        acc[secureDecoding(k)] =
+                            typeof value[k] === 'string' ? secureDecoding(value[k]) : value[k];
+
+                        return acc;
+                    }, {});
+                }
+
+                return value;
+            });
+        },
+    },
+};

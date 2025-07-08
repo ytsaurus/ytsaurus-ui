@@ -20,11 +20,11 @@ import {AnyAction} from 'redux';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {getLastSelectedACONamespaces, selectIsMultipleAco} from './query_aco/selectors';
 import {setSettingByKey} from '../../../store/actions/settings';
-import unipika from '../../../common/thor/unipika';
 import {CancelTokenSource} from 'axios';
 import {VisualizationState} from './queryChart/queryChartSlice';
 import {YTError} from '../../../types';
 import {QueryStatus} from '../../../types/query-tracker';
+import {JSONParser} from '../../../common/yt-api';
 
 function getQTApiSetup(): {proxy?: string} {
     const QT_CLUSTER = getQueryTrackerCluster();
@@ -167,36 +167,6 @@ export const isSingleProgress = (
 export const AbortableStatuses = ['running', 'pending'];
 
 export const CompletedStates = ['draft', 'aborted', 'completed', 'failed'];
-
-const secureDecoding = (value: string) => {
-    try {
-        return unipika.decode(value);
-    } catch (e) {
-        return value;
-    }
-};
-
-export const JSONParser = {
-    JSONSerializer: {
-        stringify(data: unknown) {
-            return JSON.stringify(data);
-        },
-        parse(data: string) {
-            return JSON.parse(data, (_, value) => {
-                if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-                    return Object.keys(value).reduce<Record<any, any>>((acc, k) => {
-                        acc[secureDecoding(k)] =
-                            typeof value[k] === 'string' ? secureDecoding(value[k]) : value[k];
-
-                        return acc;
-                    }, {});
-                }
-
-                return value;
-            });
-        },
-    },
-};
 
 export type QueriiesListCursorParams = {
     cursor_time: string;

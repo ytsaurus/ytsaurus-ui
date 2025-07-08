@@ -36,7 +36,7 @@ import {getJobsMonitoringDescriptors} from '../../../store/actions/operations/jo
 import {getCluster} from '../../../store/selectors/global';
 import type {RootState} from './../../../store/reducers';
 import type {OperationDetailActionType} from '../../reducers/operations/detail';
-import {JSONParser} from '../../../pages/query-tracker/module/api';
+import {JSONParser} from '../../../common/yt-api';
 
 const toaster = new Toaster();
 const operationDetailsRequests = new CancelHelper();
