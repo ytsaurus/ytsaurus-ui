@@ -22,7 +22,6 @@
     }
 
     &_full .flex-split__pane:nth-child(1) {
-        flex: initial;
         /* In order to override flex basis from split component */
         flex-basis: initial !important;
     }
