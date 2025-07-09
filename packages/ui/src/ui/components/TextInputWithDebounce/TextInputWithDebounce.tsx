@@ -1,5 +1,5 @@
 import React from 'react';
-import throttle_ from 'lodash/throttle';
+import debounce_ from 'lodash/debounce';
 
 import {TextInput, TextInputProps} from '@gravity-ui/uikit';
 
@@ -23,13 +23,12 @@ function TextInputWithDebounce(props: TextInputWithDebounceProps) {
     const [input, setInput] = React.useState<string | undefined>();
 
     const handleChangeExt = React.useMemo(() => {
-        return throttle_(onUpdate as any, debounce);
+        return debounce_(onUpdate as any, debounce);
     }, [debounce, onUpdate]);
 
     const handleChange = React.useCallback(
         (text: string) => {
             setInput(text);
-            handleChangeExt.cancel();
             handleChangeExt(text);
         },
         [handleChangeExt, setInput],
@@ -57,6 +56,12 @@ function TextInputWithDebounce(props: TextInputWithDebounceProps) {
         },
         [setInput, onBlur],
     );
+
+    React.useEffect(() => {
+        return () => {
+            handleChangeExt.cancel();
+        };
+    }, [handleChangeExt]);
 
     return (
         <TextInput
