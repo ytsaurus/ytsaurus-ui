@@ -1,6 +1,7 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 import b from 'bem-cn-lite';
+import {AxiosError} from 'axios';
 import {Flex} from '@gravity-ui/uikit';
 
 import hammer from '../../../../../../common/hammer';
@@ -11,9 +12,11 @@ import {WidgetText} from '../../../../../../pages/dashboard2/Dashboard/component
 import {WidgetNoItemsTextFallback} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetFallback/WidgetFallback';
 
 import {MapNodeIcon} from '../../../../../../components/MapNodeIcon/MapNodeIcon';
+import {YTErrorBlock} from '../../../../../../components/Error/Error';
 import Link from '../../../../../../components/Link/Link';
 
 import {Page} from '../../../../../../../shared/constants/settings';
+import {YTError} from '../../../../../../../@types/types';
 
 import './NavigationWidgetContent.scss';
 
@@ -29,10 +32,15 @@ type NavigationItem = {
 type Props = {
     items: NavigationItem[];
     pathsType: 'last_visited' | 'favourite';
+    error?: unknown;
 };
 
 export function NavigationWidgetContentBase(props: Props) {
-    const {items, pathsType} = props;
+    const {items, pathsType, error} = props;
+
+    if (error) {
+        return <YTErrorBlock view={'compact'} error={error as YTError | AxiosError} />;
+    }
 
     return (
         <>
