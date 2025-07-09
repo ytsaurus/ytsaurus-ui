@@ -3,7 +3,7 @@ import React, {FC, useState} from 'react';
 import {ECameraScaleLevel} from '@gravity-ui/graph';
 import {Loader} from '@gravity-ui/uikit';
 
-import {YTGraph, useConfig, useElkLayout} from '../../../../components/YTGraph';
+import {YTGraph, useConfig, useElkLayout, useGraphScale} from '../../../../components/YTGraph';
 
 import {ProcessedGraph} from '../utils';
 import {useResultProgress} from '../PlanContext';
@@ -16,7 +16,8 @@ type Props = {
 };
 
 const Graph: FC<Props> = ({processedGraph}) => {
-    const {config, isBlock, scale, setScale} = useConfig<QueriesNodeBlock>({
+    const {scale, setScale} = useGraphScale();
+    const {config, isBlock} = useConfig<QueriesNodeBlock>({
         block: QueriesCanvasBlock,
     });
 
