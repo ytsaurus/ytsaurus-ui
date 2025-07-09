@@ -8,14 +8,14 @@ import {useNavigationWidget} from '../hooks/use-navigation-widget';
 import {NavigationWidgetContentBase} from './NavigationWidgetContentBase';
 
 export function NavigationWidgetContent(props: PluginWidgetProps) {
-    const {type, items, isLoading} = useNavigationWidget(props);
+    const {type, items, isLoading, error} = useNavigationWidget(props);
 
     return (
         <>
             {isLoading ? (
                 <WidgetSkeleton itemHeight={30} />
             ) : (
-                <NavigationWidgetContentBase pathsType={type} items={items || []} />
+                <NavigationWidgetContentBase pathsType={type} items={items || []} error={error} />
             )}
         </>
     );
