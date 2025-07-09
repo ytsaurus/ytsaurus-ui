@@ -30,20 +30,17 @@ export const getGraphColors = (): RecursivePartial<TGraphColors> => {
 
 export function useConfig<T extends TBlock>(
     blockComponents: Record<T['is'], typeof CanvasBlock<T>>,
-    {useDefaultConncation}: {useDefaultConncation?: boolean} = {},
+    {useDefaultConnection}: {useDefaultConnection?: boolean} = {},
 ): {
     config: HookGraphParams;
     isBlock: (v: unknown) => v is CanvasBlock<T>;
-    scale: ECameraScaleLevel;
-    setScale: (v: ECameraScaleLevel) => void;
 } {
-    const [scale, setScale] = React.useState<ECameraScaleLevel>(ECameraScaleLevel.Schematic);
     const [blockComponentsCached] = useMemoizedIfEqual(blockComponents);
 
     const config = React.useMemo(() => {
         const config: HookGraphParams = {
             settings: {
-                connection: useDefaultConncation ? undefined : MultipointConnection,
+                connection: useDefaultConnection ? undefined : MultipointConnection,
                 canDuplicateBlocks: false,
                 canCreateNewConnections: false,
                 canZoomCamera: true,
@@ -64,9 +61,14 @@ export function useConfig<T extends TBlock>(
                 return knownTypes.has((v as Partial<CanvasBlock<T>>).state?.is!);
             },
         };
-    }, [blockComponentsCached]);
+    }, [blockComponentsCached, useDefaultConnection]);
 
-    return {...config, scale, setScale};
+    return {...config};
+}
+
+export function useGraphScale() {
+    const [scale, setScale] = React.useState<ECameraScaleLevel>(ECameraScaleLevel.Schematic);
+    return {scale, setScale};
 }
 
 const LAYOUT_OPTIONS = {
