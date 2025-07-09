@@ -9,11 +9,17 @@ import {getNavigationTypeFilter} from '../../../../../../store/selectors/dashboa
 export function useNavigationWidget(props: PluginWidgetProps) {
     const type = useSelector((state: RootState) => getNavigationTypeFilter(state, props.id));
     const cluster = useSelector(getCluster);
-    const {data: items, isLoading, isFetching} = usePathsQuery({id: props.id, cluster, type});
+    const {
+        data: items,
+        isLoading,
+        isFetching,
+        error,
+    } = usePathsQuery({id: props.id, cluster, type});
 
     return {
         type,
         items,
         isLoading: isLoading || isFetching,
+        error,
     };
 }
