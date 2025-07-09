@@ -6,6 +6,7 @@ import {
     Graph,
     GraphState,
     TBlock,
+    TBlockId,
     TConnection,
 } from '@gravity-ui/graph';
 
@@ -72,9 +73,23 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     useAutoGroups({allowAutoGroups, graph});
     useCustomGroups({customGroups, graph});
 
+    const [selectedBlocks, setSelectedBlocks] = React.useState<Array<TBlockId>>([]);
+
     React.useEffect(() => {
-        setEntities(data);
-    }, [data, setEntities]);
+        const selectionIds = new Set(selectedBlocks);
+        const connections = !selectedBlocks?.length
+            ? data.connections
+            : data?.connections?.map((item) => {
+                  if (
+                      selectionIds.has(item.sourceBlockId) ||
+                      selectionIds.has(item.targetBlockId)
+                  ) {
+                      return {...item, selected: true};
+                  }
+                  return item;
+              });
+        setEntities({...data, connections});
+    }, [data, selectedBlocks, setEntities]);
 
     useGraphEvent(graph, 'camera-change', (data) => {
         const cameraScale = graph.cameraService.getCameraBlockScaleLevel(data.scale);
@@ -146,6 +161,9 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
                 graph={graph}
                 renderBlock={renderBlockCallback as any}
                 className={block('graph')}
+                onBlockSelectionChange={({list}) => {
+                    setSelectedBlocks(list);
+                }}
             />
             {renderPopup !== undefined && (
                 <PopupPortal graph={graph} renderContent={renderPopup} isBlockNode={isBlock} />
