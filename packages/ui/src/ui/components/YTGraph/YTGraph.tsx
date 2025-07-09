@@ -91,6 +91,12 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
         setEntities({...data, connections});
     }, [data, selectedBlocks, setEntities]);
 
+    React.useEffect(() => {
+        if (config.settings) {
+            graph.updateSettings(config.settings);
+        }
+    }, [graph, config.settings]);
+
     useGraphEvent(graph, 'camera-change', (data) => {
         const cameraScale = graph.cameraService.getCameraBlockScaleLevel(data.scale);
         setScale(

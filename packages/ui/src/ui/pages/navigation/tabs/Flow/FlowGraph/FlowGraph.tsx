@@ -27,6 +27,7 @@ import {
     YTGraphData,
     useConfig,
     useElkLayout,
+    useGraphScale,
 } from '../../../../../components/YTGraph';
 import {NoContent} from '../../../../../components/NoContent/NoContent';
 import {YTErrorBlock} from '../../../../../components/Error/Error';
@@ -81,6 +82,9 @@ export type FlowGraphBlock =
 export type FlowGraphBlockItem<T extends FlowGraphBlock['is']> = FlowGraphBlock & {is: T};
 
 export function FlowGraphImpl() {
+    const {scale, setScale} = useGraphScale();
+    const useGroups = scale === ECameraScaleLevel.Minimalistic;
+
     const config = useConfig<FlowGraphBlock>(
         {
             computation: ComputationCanvasBlock,
@@ -88,7 +92,7 @@ export function FlowGraphImpl() {
             'computation-group': ComputationGroupCanvasBlock,
             sink: SinkCanvasBlock,
         },
-        {useDefaultConncation: true},
+        {useDefaultConnection: !useGroups},
     );
 
     const {isEmpty, data, groups, groupBlocks} = useFlowGraphData();
@@ -100,8 +104,9 @@ export function FlowGraphImpl() {
     return (
         <YTGraph
             className={block('graph')}
+            setScale={setScale}
             {...config}
-            data={config.scale === ECameraScaleLevel.Minimalistic ? groups : data}
+            data={useGroups ? groups : data}
             renderBlock={({className, style, data}) => {
                 return (
                     <Flex className={block('item-container', className)} style={style}>
