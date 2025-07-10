@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.99.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.98.0...ui-v1.99.0) (2025-07-10)
+
+
+### Features
+
+* **Operations/PyDLTelemetry:** add uifactory property for tab [YTFRONT-4892] ([9421322](https://github.com/ytsaurus/ytsaurus-ui/commit/9421322323b791538279e29ada3d3ef4d92104b9))
+
+
+### Bug Fixes
+
+* **Bundles/BundleEditor:** thread pools fields should '&gt;0' [YTFRONT-4947] ([1aa4438](https://github.com/ytsaurus/ytsaurus-ui/commit/1aa4438ca2befb96ba9944d0fa46a53ecc371135))
+* **Navigation/Queue:** use schema for Queue tab visibility [YTFRONT-5056] ([90c5b09](https://github.com/ytsaurus/ytsaurus-ui/commit/90c5b09be23246ea6b9e3d70d3bce8c00259833b))
+* **Operations:** utf8 parsing problem [YTFRONT-4982] ([cdece79](https://github.com/ytsaurus/ytsaurus-ui/commit/cdece798e4e92e2dd98bfea41d8f5aecc84ef8ef))
+* **Queries:** multiple paths in one line [YTFRONT-4920] ([a143785](https://github.com/ytsaurus/ytsaurus-ui/commit/a1437853104a3c15e481a5ec278bfadcabb78340))
+* **Queries:** query result full view [YTFRONT-5071] ([1b340e7](https://github.com/ytsaurus/ytsaurus-ui/commit/1b340e73c13ed996c38fabb4cbd4dd14c90ba0ee))
+
 ## [1.98.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.97.0...ui-v1.98.0) (2025-07-01)
 
 
