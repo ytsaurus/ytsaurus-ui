@@ -10,7 +10,10 @@ import format from '../../../../../../common/hammer/format';
 import {ExpandButton} from '../../../../../../components/ExpandButton';
 import {YTErrorBlock} from '../../../../../../components/Block/Block';
 import Yson from '../../../../../../components/Yson/Yson';
-import {ClickableText} from '../../../../../../components/ClickableText/ClickableText';
+import {
+    ClickableText,
+    ClickableTextProps,
+} from '../../../../../../components/ClickableText/ClickableText';
 
 import './FlowGraphRenderer.scss';
 
@@ -62,9 +65,27 @@ type FlowMessagesProps = {data?: Array<FlowMessage>};
 export function FlowMessages({data}: FlowMessagesProps) {
     const [visible, setVisible] = React.useState(false);
 
+    const color = React.useMemo(() => {
+        return data?.reduce(
+            (acc, {level}) => {
+                const theme = STATUS_TO_BG_THEME[level];
+                if (theme === 'danger') {
+                    return theme;
+                }
+                if (theme === 'warning') {
+                    return theme;
+                }
+                return acc;
+            },
+            undefined as ClickableTextProps['color'],
+        );
+    }, [data]);
+
     return !data?.length ? null : (
         <div className={block('messages')}>
-            <ClickableText onClick={() => setVisible(true)}>Messages ({data.length})</ClickableText>
+            <ClickableText color={color} onClick={() => setVisible(true)}>
+                Messages ({data.length})
+            </ClickableText>
             {visible && <FlowMessagesDialog data={data} onClose={() => setVisible(false)} />}
         </div>
     );

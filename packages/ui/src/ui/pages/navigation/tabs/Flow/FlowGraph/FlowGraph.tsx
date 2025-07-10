@@ -44,7 +44,7 @@ import './FlowGraph.scss';
 import {FlowGroupBlock} from './utils/FlowGroupBlock';
 import {ComputationGroupCanvasBlock} from './renderers/ComputationGroupCanvas';
 import {Sink} from './renderers/Sink';
-import {STATUS_TO_BG_THEME} from './renderers/FlowGraphRenderer';
+import {FlowMessages, STATUS_TO_BG_THEME} from './renderers/FlowGraphRenderer';
 import {SinkCanvasBlock} from './renderers/SinkCanvas';
 
 const block = cn('yt-flow-graph');
@@ -95,34 +95,39 @@ export function FlowGraphImpl() {
         {useDefaultConnection: !useGroups},
     );
 
-    const {isEmpty, data, groups, groupBlocks} = useFlowGraphData();
+    const {isEmpty, data, groups, groupBlocks, messages} = useFlowGraphData();
 
     if (isEmpty) {
         return <NoContent warning="The graph is empty" />;
     }
 
     return (
-        <YTGraph
-            className={block('graph')}
-            setScale={setScale}
-            {...config}
-            data={useGroups ? groups : data}
-            renderBlock={({className, style, data}) => {
-                return (
-                    <Flex className={block('item-container', className)} style={style}>
-                        {renderContent({item: data})}
-                    </Flex>
-                );
-            }}
-            renderPopup={({data}) => {
-                return (
-                    <div className={block('item-popup', {type: data.is})}>
-                        {renderContent({item: data, detailed: true})}
-                    </div>
-                );
-            }}
-            customGroups={groupBlocks}
-        />
+        <div className={block()}>
+            <div className={block('graph-messages')}>
+                <FlowMessages data={messages} />
+            </div>
+            <YTGraph
+                className={block('graph')}
+                setScale={setScale}
+                {...config}
+                data={useGroups ? groups : data}
+                renderBlock={({className, style, data}) => {
+                    return (
+                        <Flex className={block('item-container', className)} style={style}>
+                            {renderContent({item: data})}
+                        </Flex>
+                    );
+                }}
+                renderPopup={({data}) => {
+                    return (
+                        <div className={block('item-popup', {type: data.is})}>
+                            {renderContent({item: data, detailed: true})}
+                        </div>
+                    );
+                }}
+                customGroups={groupBlocks}
+            />
+        </div>
     );
 }
 
@@ -363,6 +368,7 @@ function useFlowGraphData() {
         isEmpty: !data.data.blocks.length,
         ...elkRes,
         ...res,
+        messages: loadedData?.messages,
     };
 }
 
