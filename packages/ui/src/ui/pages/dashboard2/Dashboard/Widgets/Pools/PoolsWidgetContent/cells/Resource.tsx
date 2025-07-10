@@ -22,20 +22,16 @@ export function ResourceCell(props: Props) {
     const theme = value < 100 ? 'info' : 'warning';
 
     const usageText = (type === 'memory' ? hammer.format['Bytes'](usage) : usage) || '-';
-    const guaranteeText = (type === 'memory' ? hammer.format['Bytes'](guarantee) : guarantee) || '-';
+    const guaranteeText =
+        (type === 'memory' ? hammer.format['Bytes'](guarantee) : guarantee) || '-';
 
     return (
         <Tooltip
             className={block()}
             content={
                 <Flex direction={'column'} gap={2}>
-                    <Text>
-                        Usage: {usageText}
-                    </Text>
-                    <Text>
-                        Guarantee:{' '}
-                        {guaranteeText}
-                    </Text>
+                    <Text>Usage: {usageText}</Text>
+                    <Text>Guarantee: {guaranteeText}</Text>
                 </Flex>
             }
         >
