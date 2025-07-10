@@ -94,7 +94,7 @@
     "@gravity-ui/date-utils": "^2.5.3",
     "@gravity-ui/dialog-fields": "^5.0.10",
     "@gravity-ui/eslint-config": "^3.2.0",
-    "@gravity-ui/graph": "^1.0.1",
+    "@gravity-ui/graph": "^1.1.4",
     "@gravity-ui/icons": "^2.0.0",
     "@gravity-ui/illustrations": "^2.1.0",
     "@gravity-ui/navigation": "^2.15.3",
