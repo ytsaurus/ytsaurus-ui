@@ -10,7 +10,7 @@ export const initialState: FlowFiltersState = {
 
 export const FLOW_VIEW_MODES = [
     'graph',
-    'graph-data',
+    'graph_data',
     'computations',
     'workers',
     'monitoring',

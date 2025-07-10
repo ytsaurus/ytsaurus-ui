@@ -88,8 +88,8 @@ function FlowContent({viewMode}: {viewMode: FlowViewMode}) {
         case 'computations':
             return <FlowLayout path={path} viewMode={viewMode} />;
         case 'graph':
-        case 'graph-data':
-            return <FlowGraph pipeline_path={path} yson={viewMode === 'graph-data'} />;
+        case 'graph_data':
+            return <FlowGraph pipeline_path={path} yson={viewMode === 'graph_data'} />;
 
         default:
             return (
