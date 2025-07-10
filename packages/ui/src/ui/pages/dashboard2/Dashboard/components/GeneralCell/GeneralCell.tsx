@@ -12,7 +12,7 @@ type Props = {
 export function GeneralCell(props: Props) {
     const {copy, name, url, startIcon} = props;
     return (
-        <Flex direction={'row'} alignItems={'center'} gap={1}>
+        <Flex style={{marginLeft: '-5px'}} direction={'row'} alignItems={'center'} gap={1}>
             {copy && <ClipboardButton text={name || '-'} />}
             {startIcon && <span style={{flexShrink: 0}}>{startIcon}</span>}
             <Text whiteSpace={'nowrap'} ellipsis>

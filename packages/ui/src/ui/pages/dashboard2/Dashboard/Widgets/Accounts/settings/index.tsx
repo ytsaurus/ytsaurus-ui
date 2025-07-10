@@ -5,7 +5,6 @@ import {getMediumList} from '../../../../../../store/selectors/thor';
 export type AccountsSettingsValues = {
     name: string;
     accounts: string[];
-    autoheight: boolean;
     columns: string[];
 };
 
@@ -26,26 +25,23 @@ export function useAccountsSettings() {
             name: 'accounts',
             caption: 'Accounts',
         },
-        {
-            type: 'table-sort-by' as const,
-            name: 'disk_columns',
-            caption: 'Disk space columns(mediums)',
-            extras: {
-                suggestColumns: mediumList,
-            },
-        },
+        // {
+        //     type: 'table-sort-by' as const,
+        //     name: 'disk_columns',
+        //     caption: 'Disk space columns(mediums)',
+        //     extras: {
+        //         suggestColumns: mediumList,
+        //         formatReadable: true,
+        //     },
+        // },
         {
             type: 'table-sort-by' as const,
             name: 'columns',
             caption: 'Columns',
             extras: {
-                suggestColumns: ['Nodes', 'Chunks'],
+                suggestColumns: ['Nodes', 'Chunks', ...mediumList],
+                formatReadable: true,
             },
-        },
-        {
-            type: 'tumbler' as const,
-            name: 'autoheight',
-            caption: 'Use autoheight',
         },
     ];
 }

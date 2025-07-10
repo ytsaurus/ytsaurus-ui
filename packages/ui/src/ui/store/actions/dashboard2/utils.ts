@@ -3,6 +3,8 @@ import {ThunkAction} from '@reduxjs/toolkit';
 import filter_ from 'lodash/filter';
 import isEqual_ from 'lodash/isEqual';
 
+import hammer from '../../../common/hammer';
+
 import {RootState} from '../../../store/reducers';
 import {setSettingByKey} from '../../../store/actions/settings';
 import {getCluster} from '../../../store/selectors/global';
@@ -28,7 +30,7 @@ export function createWidgetDataFieldAction<FieldType>(
                 ...filter_(config.items, (item) => !isEqual_(item, oldItem)),
                 newItem,
             ];
-            const newConfig = {...config, salt: crypto.randomUUID(), items: newItems};
+            const newConfig = {...config, salt: hammer.guid(), items: newItems};
 
             dispatch(
                 setSettingByKey(

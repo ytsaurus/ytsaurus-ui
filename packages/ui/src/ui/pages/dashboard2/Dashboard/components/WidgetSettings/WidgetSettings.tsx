@@ -42,7 +42,7 @@ export function WidgetSettings() {
     return (
         <YTDFDialog<SettingsValues>
             onAdd={onAdd}
-            key={item?.id}
+            key={hammer.guid()}
             headerProps={{
                 title: `${hammer.format['ReadableField'](item?.type + ' widget') || 'Widget'} settings`,
             }}

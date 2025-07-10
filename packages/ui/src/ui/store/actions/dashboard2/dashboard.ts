@@ -3,6 +3,7 @@ import {ConfigItem, DashKit, DashKitProps} from '@gravity-ui/dashkit';
 
 import find_ from 'lodash/find';
 import remove_ from 'lodash/remove';
+import hammer from '../../../common/hammer';
 
 import {RootState} from '../../../store/reducers';
 import {setSettingByKey} from '../../../store/actions/settings';
@@ -13,7 +14,6 @@ import {
     toggleEditting,
 } from '../../../store/reducers/dashboard2/dashboard';
 import {getDashboardConfig} from '../../../store/selectors/dashboard2/dashboard';
-import {getCurrentUserName} from '../../../store/selectors/global/username';
 
 import {defaultDashboardItems} from '../../../constants/dashboard2';
 import {makeDefaultConfig} from '../../../utils/dashboard2/make-default-config';
@@ -62,12 +62,11 @@ export function editConfig(
 export function copyConfig(cluster: string): ThunkAction<void, RootState, any, any> {
     return (dispatch, getState) => {
         const state = getState();
-        const username = getCurrentUserName(state);
 
         let config = state.settings.data[`local::${cluster}::dashboard::config`];
 
         if (!config) {
-            config = makeDefaultConfig(username);
+            config = makeDefaultConfig();
         }
 
         dispatch(updateEdittingConfig(config));
@@ -88,9 +87,7 @@ export function updateEdittingConfig(
     edittingConfig: DashKitProps['config'],
 ): ThunkAction<void, RootState, any, any> {
     return (dispatch) => {
-        dispatch(
-            setEdittingConfig({edittingConfig: {...edittingConfig, salt: crypto.randomUUID()}}),
-        );
+        dispatch(setEdittingConfig({edittingConfig: {...edittingConfig, salt: hammer.guid()}}));
     };
 }
 

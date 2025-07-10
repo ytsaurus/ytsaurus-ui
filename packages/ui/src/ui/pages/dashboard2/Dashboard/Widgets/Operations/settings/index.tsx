@@ -1,10 +1,10 @@
-import {Author} from '../OperationsWidgetContent/use-operations-widget';
+import {Author} from '../hooks/use-operations-widget';
 
 export type OperationsSettingsValues = {
     name: string;
     authors: Array<Author>;
-    autoheight: boolean;
-    pool: string;
+    pool: {tree: string; pool: string};
+    limit: number;
 };
 
 export function useOperationsSettings() {
@@ -18,6 +18,15 @@ export function useOperationsSettings() {
             },
         },
         {
+            name: 'limit',
+            type: 'number' as const,
+            required: true,
+            caption: 'Limit(per author)',
+            extras: {
+                hidePrettyValue: true,
+            },
+        },
+        {
             name: 'authors',
             type: 'acl-subjects' as const,
             caption: 'Authors',
@@ -28,13 +37,11 @@ export function useOperationsSettings() {
         },
         {
             name: 'pool',
-            type: 'pool' as const,
+            type: 'pools-multiple' as const,
             caption: 'Pool',
-        },
-        {
-            type: 'tumbler' as const,
-            name: 'autoheight',
-            caption: 'Use autoheight',
+            extras: {
+                mode: 'single' as const,
+            },
         },
     ];
 }
