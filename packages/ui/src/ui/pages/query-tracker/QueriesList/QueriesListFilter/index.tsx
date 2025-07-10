@@ -7,13 +7,13 @@ import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 import './index.scss';
 import {QueryEngineFilter} from './QueryEngineFilter';
 import {QueryEngine} from '../../../../../shared/constants/engines';
-import {QueryTextFilter} from './QueryTextFilter';
 import {useQuriesHistoryFilter} from '../../hooks/QueryListFilter';
 import Dropdown from '../../../../components/Dropdown/Dropdown';
 import Button from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
 import ColumnSelector from '../../../../components/ColumnSelector/ColumnSelector';
 import {useQueryHistoryListColumns} from '../QueriesHistoryList/useQueryListColumns';
+import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';
 
 const AuthorFilter: ControlGroupOption[] = [
     {
@@ -68,10 +68,10 @@ export function QueriesHistoryListFilter({className}: QueriesHistoryListFilterPr
             </div>
             {filterViewMode === QueriesListMode.History && (
                 <div className={b('row')}>
-                    <QueryTextFilter
+                    <TextInputWithDebounce
                         placeholder="Search in query name, body and access control"
                         value={filter?.filter}
-                        onChange={onChangeTextFilter}
+                        onUpdate={onChangeTextFilter}
                     />
                     <Tooltip
                         content={
