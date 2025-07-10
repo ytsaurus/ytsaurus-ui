@@ -1,30 +1,19 @@
 import {ProcessedGraph} from '../../utils';
-import {ECameraScaleLevel, TBlockId} from '@gravity-ui/graph';
+import {ECameraScaleLevel} from '@gravity-ui/graph';
 import {QueriesNodeBlock} from '../QueriesNodeBlock';
 import type {Progress} from '../../models/plan';
 import {OperationType} from '../enums';
-import {iconToBase} from './iconToBase';
+import {iconToBase} from '../../../../../components/YTGraph/utils/iconToBase';
 import {getOperationType} from './getOperationType';
 import {getBlockIcon} from './getBlockIcon';
-import {TConnectionId} from '@gravity-ui/graph/build/store/connection/ConnectionState';
-import {TPoint} from '@gravity-ui/graph/build/utils/types/shapes';
-import {TMultipointConnection} from '@gravity-ui/graph/build/plugins/elk/types';
+import {TMultipointConnection} from '@gravity-ui/graph/build/react-components/elk/types';
 
-const ICON_SIZE = 24;
-
-export const createBlocks = async (
+export const createBlocks = (
     graph: ProcessedGraph,
     progress: Progress | null,
-    positions: {
-        edges: Record<TConnectionId, Pick<TMultipointConnection, 'points' | 'labels'>>;
-        blocks: Record<TConnectionId, TPoint>;
-    },
     level: ECameraScaleLevel,
-    sizes: {height: number; width: number},
-): Promise<{blocks: QueriesNodeBlock[]; connections: TMultipointConnection[]}> => {
+): {blocks: QueriesNodeBlock[]; connections: TMultipointConnection[]} => {
     const isMinimalisticView = level === ECameraScaleLevel.Minimalistic;
-
-    if (Object.keys(positions.blocks).length === 0) return {blocks: [], connections: []};
 
     const blocks = graph.nodes.map((node) => {
         let name = (node.title || node.id).replace('Yt', '');
@@ -37,13 +26,13 @@ export const createBlocks = async (
             bottomText = node.label;
         }
 
-        const {x, y} = positions.blocks[node.id]!;
         return {
-            x: x as number,
-            y: y as number,
-            width: sizes.width,
-            height: sizes.height,
-            id: node.id as TBlockId,
+            x: NaN,
+            y: NaN,
+            ...{level: node.level},
+            width: 100,
+            height: 100,
+            id: node.id as string,
             is: 'block',
             selected: false,
             name,
@@ -51,12 +40,9 @@ export const createBlocks = async (
             meta: {
                 level,
                 icon: {
-                    src: iconToBase(icon, '#657B8F'),
-                    height: ICON_SIZE,
-                    width: ICON_SIZE,
+                    src: iconToBase(icon),
                 },
                 bottomText,
-                textSize: 14,
                 padding: 10,
                 nodeProgress: progress ? progress[node.id] : undefined,
                 schemas: node.schemas,
@@ -71,7 +57,6 @@ export const createBlocks = async (
             id: id,
             sourceBlockId: edge.from,
             targetBlockId: edge.to,
-            ...positions.edges[id],
         };
     });
 

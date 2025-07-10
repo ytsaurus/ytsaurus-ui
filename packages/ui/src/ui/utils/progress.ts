@@ -68,7 +68,7 @@ export function getProgressTheme(
 }
 
 export function addProgressStackSpacers(
-    items: Array<{value: number; color: string}>,
+    items: Array<{value: number; color?: string}>,
     spaceSize = 1,
 ) {
     const res: typeof items = [];
@@ -85,6 +85,6 @@ export function addProgressStackSpacers(
         }
     }
     return res.map((item) => {
-        return {value: (item.value / sum) * 100, color: item.color};
+        return {...item, value: (item.value / sum) * 100};
     });
 }
