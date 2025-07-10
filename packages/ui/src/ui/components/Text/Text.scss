@@ -1,29 +1,58 @@
 .yt-text {
-    &__secondary {
-        color: var(--secondary-text);
-
-        &_disabled {
-            color: var(--disabled-link);
+    &_clickable {
+        &:hover {
+            color: var(--g-color-text-danger);
+            cursor: pointer;
         }
     }
 
-    &__bold {
-        font-weight: var(--yt-font-weight-bold);
-    }
-
-    &__warning {
-        color: var(--warning-text);
-    }
-
-    &__warning-light {
-        color: var(--warning-color);
-    }
-
-    &__no-wrap {
+    &_ellipsis {
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
         white-space: nowrap;
     }
 
-    &__escaped {
+    &_color {
+        &_secondary {
+            color: var(--secondary-text);
+        }
+
+        &_success {
+            color: var(--success-text);
+        }
+
+        &_info {
+            color: var(--g-color-text-info);
+        }
+
+        &_warning {
+            color: var(--warning-text);
+        }
+
+        &_warning-light {
+            color: var(--warning-color);
+        }
+
+        &_danger {
+            color: var(--danger-text);
+        }
+    }
+
+    &_disabled {
+        color: var(--disabled-link);
+        cursor: unset;
+    }
+
+    &_bold {
+        font-weight: var(--yt-font-weight-bold);
+    }
+
+    &_no-wrap {
+        white-space: nowrap;
+    }
+
+    &_escaped {
         & .unipika {
             display: inline;
             white-space: nowrap;

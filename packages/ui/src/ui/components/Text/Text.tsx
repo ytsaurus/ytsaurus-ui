@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {HTMLAttributes} from 'react';
 import cn from 'bem-cn-lite';
 
 import './Text.scss';
@@ -13,31 +13,43 @@ interface Props {
 }
 
 export function Secondary({children, disabled}: Props & {disabled?: boolean}) {
-    return <span className={block('secondary', {disabled})}>{children}</span>;
+    return (
+        <YTText color="secondary" disabled={disabled}>
+            {children}
+        </YTText>
+    );
 }
 
 export function Bold({children}: Props) {
-    return <span className={block('bold')}>{children}</span>;
+    return <YTText bold>{children}</YTText>;
 }
 
 export function SecondaryBold({children}: Props) {
     return (
-        <Secondary>
-            <Bold>{children}</Bold>
-        </Secondary>
+        <YTText color="secondary" bold>
+            {children}
+        </YTText>
     );
 }
 
 export function Warning({children, className}: Props) {
-    return <span className={block('warning', className)}>{children}</span>;
+    return (
+        <YTText className={className} color="warning">
+            {children}
+        </YTText>
+    );
 }
 
 export function WarningLight({children, className}: Props) {
-    return <span className={block('warning-light', className)}>{children}</span>;
+    return (
+        <YTText className={className} color="warning-light">
+            {children}
+        </YTText>
+    );
 }
 
 export function NoWrap({children}: Props) {
-    return <span className={block('no-wrap')}>{children}</span>;
+    return <YTText noWrap>{children}</YTText>;
 }
 
 export function Escaped({text, onClick}: {text: string; onClick?: (e: React.MouseEvent) => void}) {
@@ -45,11 +57,50 @@ export function Escaped({text, onClick}: {text: string; onClick?: (e: React.Mous
         ...UNIPIKA_ESCAPED_SETTINGS,
         asHTML: true,
     });
+    return <YTText escaped onClick={onClick} dangerouslySetInnerHTML={{__html: textNode}} />;
+}
+
+export type TextProps = Pick<
+    HTMLAttributes<HTMLSpanElement>,
+    'className' | 'onClick' | 'role' | 'dangerouslySetInnerHTML' | 'children'
+> & {
+    ellipsis?: boolean;
+    color?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'warning-light' | 'danger';
+    disabled?: boolean;
+    bold?: boolean;
+    noWrap?: boolean;
+    escaped?: boolean;
+};
+
+export function YTText({
+    className,
+    color,
+    ellipsis,
+    disabled,
+    bold,
+    noWrap,
+    escaped,
+    children,
+    ...rest
+}: TextProps) {
     return (
         <span
-            onClick={onClick}
-            className={block('escaped')}
-            dangerouslySetInnerHTML={{__html: textNode}}
-        />
+            className={block(
+                {
+                    color,
+                    ellipsis,
+                    bold,
+                    disabled,
+                    'no-wrap': noWrap,
+                    escaped,
+                    clickable: Boolean(rest.onClick),
+                },
+                className,
+            )}
+            role={rest.onClick ? 'button' : rest.role}
+            {...rest}
+        >
+            {children}
+        </span>
     );
 }
