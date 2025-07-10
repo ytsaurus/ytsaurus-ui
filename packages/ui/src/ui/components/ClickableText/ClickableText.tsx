@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import './ClickableText.scss';
+import {YTText} from '../../components/Text/Text';
 
 const block = cn('yt-clickable-text');
 
@@ -10,7 +10,7 @@ export type ClickableTextProps = {
     /**
      * 'info' is default value
      */
-    color?: 'info' | 'secondary' | 'primary';
+    color?: 'info' | 'secondary' | 'primary' | 'warning' | 'warning-light' | 'danger';
     onClick?: (e: React.MouseEvent) => void;
     children: React.ReactNode;
     title?: string;
@@ -18,8 +18,8 @@ export type ClickableTextProps = {
 
 export function ClickableText({className, color = 'info', onClick, children}: ClickableTextProps) {
     return (
-        <span className={block({color}, className)} role="button" onClick={onClick}>
+        <YTText className={block(null, className)} color={color} onClick={onClick}>
             {children}
-        </span>
+        </YTText>
     );
 }
