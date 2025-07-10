@@ -5,6 +5,8 @@ import Link from '../../../../../components/Link/Link';
 
 import {Page} from '../../../../../../shared/constants/settings';
 
+import {WidgetText} from '../WidgetText/WidgetText';
+
 type Props = {
     title: string;
     count?: number;
@@ -17,17 +19,17 @@ export function WidgetHeader(props: Props) {
     const {title, count, page, isLoading, id} = props;
 
     return (
-        <Flex direction={'row'} gap={2} qa={`${id}-header`}>
+        <Flex direction={'row'} gap={2} qa={`${id}-header`} width={'60%'}>
             {page ? (
-                <Link url={Page[page]} routed>
-                    <Text variant={'subheader-3'} color={'primary'}>
+                <WidgetText variant={'subheader-3'} color={'primary'} width={'auto'}>
+                    <Link theme={'primary'} url={Page[page]} routed>
                         {title}
-                    </Text>
-                </Link>
+                    </Link>
+                </WidgetText>
             ) : (
-                <Text variant={'subheader-3'} color={'primary'}>
+                <WidgetText variant={'subheader-3'} color={'primary'} width={'auto'}>
                     {title}
-                </Text>
+                </WidgetText>
             )}
             {!isLoading && Boolean(count) && (
                 <Text color={'secondary'} variant={'subheader-3'} qa={`${id}-items-count`}>
