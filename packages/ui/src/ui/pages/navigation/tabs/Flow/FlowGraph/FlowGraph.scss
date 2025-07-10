@@ -1,4 +1,11 @@
 .yt-flow-graph {
+    position: relative;
+    &__graph-messages {
+        position: absolute;
+        top: -60px;
+        right: 0;
+    }
+
     &__graph {
         position: relative;
 

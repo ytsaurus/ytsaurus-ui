@@ -558,6 +558,8 @@ export type FlowDescribePipelineData = {
     sinks: Record<SinkId, FlowSink>;
     // A sources has outgouing connection to a computation or to a computation.input_streams
     sources: Record<SourceId, FlowSink>;
+
+    messages?: Array<FlowMessage>;
 };
 
 export type FlowNodeBase = {
