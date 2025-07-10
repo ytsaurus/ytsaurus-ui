@@ -14,6 +14,7 @@ import {QueriesHistoryListFilter} from './QueriesListFilter';
 import {Vcs} from '../Vcs';
 import {Navigation} from '../Navigation';
 import {selectIsVcsVisible} from '../module/vcs/selectors';
+import {getQueryListLimit} from '../../../store/selectors/settings/settings-queries';
 
 const b = block('queires-list');
 
@@ -48,11 +49,12 @@ const useQueryTabs = (): [TabsItemProps[], string, (tab: string) => void] => {
 
 export function QueriesList() {
     const [tabs, tab, setTab] = useQueryTabs();
+    const limit = useSelector(getQueryListLimit);
 
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(requestQueriesList());
-    }, [dispatch]);
+    }, [dispatch, limit]);
 
     const isVsc = tab === QueriesListMode.VCS;
 
