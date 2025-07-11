@@ -64,7 +64,6 @@ const WRITE_ATTRIBUTES = {
     yson: {
         enable_type_conversion: true,
     },
-    yamr: {},
     dsv: {
         enable_string_to_all_conversion: true,
     },
@@ -74,14 +73,13 @@ const WRITE_ATTRIBUTES = {
     xlsx: {},
 };
 
-type FileType = 'json' | 'yson' | 'yamr' | 'dsv' | 'schemaful_dsv' | 'xlsx';
+type FileType = 'json' | 'yson' | 'dsv' | 'schemaful_dsv' | 'xlsx';
 
 const getFileTypes = (payload: {cluster: string}) => {
     const fileTypes: Array<{value: FileType; text: FileType}> = [
         {value: 'json', text: 'json'},
         {value: 'yson', text: 'yson'},
         {value: 'dsv', text: 'dsv'},
-        {value: 'yamr', text: 'yamr'},
         {value: 'schemaful_dsv', text: 'schemaful_dsv'},
     ];
 

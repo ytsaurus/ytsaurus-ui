@@ -24,7 +24,6 @@ import Modal from '../../../../../components/Modal/Modal';
 import Icon from '../../../../../components/Icon/Icon';
 import Link from '../../../../../components/Link/Link';
 import Tabs from '../../../../../components/Tabs/Tabs';
-import Select from '../../../../../components/Select/Select';
 
 import {getRowsPerTablePage, getShowDecoded} from '../../../../../store/selectors/settings';
 import {getSchema} from '../../../../../store/selectors/navigation/tabs/schema';
@@ -75,7 +74,7 @@ type Props = ReduxProps &
     };
 
 type State = {
-    format: 'dsv' | 'schemaful_dsv' | 'yamr' | 'yson' | 'json' | 'excel';
+    format: 'dsv' | 'schemaful_dsv' | 'yson' | 'json' | 'excel';
     visible?: boolean;
     excelExporter: boolean;
     rowsMode: 'range' | 'all';
@@ -178,10 +177,6 @@ export class DownloadManager extends React.Component<Props, State> {
             format,
             encodeUtf,
             ysonFormat,
-            withSubkey,
-            keyColumn,
-            valueColumn,
-            subkeyColumn,
             schemafulDsvMissingMode,
             valueSentinel,
             withHeaders,
@@ -200,23 +195,6 @@ export class DownloadManager extends React.Component<Props, State> {
 
         if (format === 'yson') {
             currentAttributes['format'] = ysonFormat;
-        }
-
-        if (format === 'yamr') {
-            currentAttributes['lenval'] = false;
-            currentAttributes['has_subkey'] = withSubkey;
-
-            if (keyColumn) {
-                currentAttributes['key'] = keyColumn;
-            }
-
-            if (valueColumn) {
-                currentAttributes['value'] = valueColumn;
-            }
-
-            if (subkeyColumn && subkeyColumn) {
-                currentAttributes['subkey'] = subkeyColumn;
-            }
         }
 
         if (format === 'schemaful_dsv') {
@@ -357,16 +335,6 @@ export class DownloadManager extends React.Component<Props, State> {
                 doc: this.makeDocsUrl('#schemaful_dsv'),
                 show: true,
             },
-            yamr: {
-                name: 'yamr' as const,
-                caption: 'YAMR',
-                description:
-                    'Legacy tab-separated format with fixed set of columns used in YAMR. ' +
-                    'Please note that this format can only contain 2 or 3 columns, ' +
-                    'columns named "key", "subkey" and "value" respectively are downloaded by default.',
-                doc: this.makeDocsUrl('#yamr'),
-                show: true,
-            },
             yson: {
                 name: 'yson' as const,
                 caption: 'YSON',
@@ -463,19 +431,6 @@ export class DownloadManager extends React.Component<Props, State> {
             return map_(preparedColumns, (column) => this.parseColumn(column, useQuotes));
         }
         return undefined;
-    }
-
-    prepareYamrColumns() {
-        const {columns} = this.props;
-
-        return map_(columns, ({name}) => {
-            const column = this.parseColumn(name, false);
-            return {
-                value: column,
-                title: column,
-                name: column,
-            };
-        });
     }
 
     renderPaginator() {
@@ -705,70 +660,6 @@ export class DownloadManager extends React.Component<Props, State> {
         });
     }
 
-    renderYamr() {
-        const {withSubkey} = this.state;
-        const {columns} = this.props;
-
-        return (
-            <div className={block('with-subkey')}>
-                <Checkbox
-                    size="l"
-                    checked={withSubkey}
-                    disabled={columns.length < 3}
-                    onChange={this.toggleWithSubkey}
-                >
-                    With subkey
-                </Checkbox>
-            </div>
-        );
-    }
-
-    renderYamrColumns() {
-        const {withSubkey, keyColumn, subkeyColumn, valueColumn} = this.state;
-
-        return (
-            <div className={block('yamr-columns')}>
-                <div className="elements-form__field">
-                    <div className="elements-form__label">Key</div>
-                    <Select
-                        value={keyColumn ? [keyColumn] : undefined}
-                        onUpdate={(vals) => this.changeKeyColumn(vals[0])}
-                        items={this.prepareYamrColumns()}
-                        placeholder="Choose key column..."
-                        hideFilter
-                        width="max"
-                    />
-                </div>
-
-                {withSubkey && (
-                    <div className="elements-form__field">
-                        <div className="elements-form__label">Subkey</div>
-                        <Select
-                            hideFilter
-                            value={subkeyColumn ? [subkeyColumn] : undefined}
-                            items={this.prepareYamrColumns()}
-                            onUpdate={(vals) => this.changeSubkeyColumn(vals[0])}
-                            placeholder="Choose subkey column..."
-                            width="max"
-                        />
-                    </div>
-                )}
-
-                <div className="elements-form__field">
-                    <div className="elements-form__label">Value</div>
-                    <Select
-                        hideFilter
-                        value={valueColumn ? [valueColumn] : undefined}
-                        onUpdate={(vals) => this.changeValueColumn(vals[0])}
-                        items={this.prepareYamrColumns()}
-                        placeholder="Choose value column..."
-                        width="max"
-                    />
-                </div>
-            </div>
-        );
-    }
-
     renderYson() {
         const {ysonFormat} = this.state;
 
@@ -864,15 +755,13 @@ export class DownloadManager extends React.Component<Props, State> {
                     <div className={block('settings', 'pretty-scroll')}>
                         <div className={block('shared-settings', 'elements-form__field')}>
                             {this.renderRows()}
-                            {format !== 'yamr' && this.renderColumns()}
-                            {format === 'yamr' && this.renderYamr()}
+                            {this.renderColumns()}
                         </div>
 
                         <div className={block('type-settings')}>
                             {format === 'dsv' &&
                                 this.renderSeparatorEditors({showKeyValueSeparator: true})}
                             {format === 'schemaful_dsv' && this.renderSchemafulDsv()}
-                            {format === 'yamr' && this.renderYamrColumns()}
                             {format === 'json' && this.renderJson()}
                             {format === 'yson' && this.renderYson()}
                             {format === 'excel' && this.renderExcel()}
