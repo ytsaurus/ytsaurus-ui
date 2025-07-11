@@ -11,10 +11,11 @@ import {YT, isMultiClusterInstallation} from '../../../../config/yt-config';
 type Props = {
     clusters: ClusterConfig[];
     value: string | undefined;
+    loading: boolean;
     onChange: (clusterId: string) => void;
 };
 
-export const QueryClusterSelector: FC<Props> = ({clusters, value, onChange}) => {
+export const QueryClusterSelector: FC<Props> = ({clusters, value, loading, onChange}) => {
     const infoClusters = useSelector(getQueryTrackerInfoClusters);
     const isMultiCluster = isMultiClusterInstallation();
 
@@ -42,14 +43,15 @@ export const QueryClusterSelector: FC<Props> = ({clusters, value, onChange}) => 
 
     return (
         <QuerySelector
+            disabled={loading}
             placeholder="Cluster"
             filterPlaceholder="Search"
             items={values}
             onChange={onChange}
-            hasClear
             value={value}
             getOptionHeight={() => 52}
             qa="query-cluster-selector"
+            popupWidth={200}
         >
             {(items) =>
                 items.map(({id, name, environment}) => (

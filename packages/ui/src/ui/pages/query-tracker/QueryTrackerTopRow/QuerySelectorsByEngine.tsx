@@ -1,29 +1,58 @@
-import React, {FC} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {QueryClusterSelector} from './QueryClusterSelector';
-import {ClusterConfig} from '../../../../shared/yt-types';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {QueryCliqueSelector} from './QueryCliqueSelector';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+    getCliqueLoading,
+    getCliqueMap,
+    getClusterLoading,
+    getQueryDraft,
+} from '../module/query/selectors';
+import {getClusterList} from '../../../store/selectors/slideoutMenu';
+import {
+    loadCliqueByCluster,
+    setQueryClique,
+    setQueryCluster,
+    setQueryPath,
+} from '../module/query/actions';
 
-type Props = {
-    settings?: Record<string, string>;
-    engine: QueryEngine;
-    clusters: ClusterConfig[];
-    cliqueMap: Record<string, Record<string, {alias: string; yt_operation_id?: string}[]>>;
-    cliqueLoading: boolean;
-    onClusterChange: (clusterId: string) => void;
-    onCliqueChange: (alias: string) => void;
-    onPathChange: (path: string) => void;
-};
-export const QuerySelectorsByEngine: FC<Props> = ({
-    settings = {},
-    clusters,
-    cliqueMap,
-    cliqueLoading,
-    engine,
-    onClusterChange,
-    onCliqueChange,
-    onPathChange,
-}) => {
+export const QuerySelectorsByEngine: FC = () => {
+    const dispatch = useDispatch();
+    const clusters = useSelector(getClusterList);
+    const cliqueMap = useSelector(getCliqueMap);
+    const cliqueLoading = useSelector(getCliqueLoading);
+    const clusterLoading = useSelector(getClusterLoading);
+    const {settings = {}, engine} = useSelector(getQueryDraft);
+    const currentCluster = settings?.cluster;
+
+    useEffect(() => {
+        if ((engine === QueryEngine.CHYT || engine === QueryEngine.SPYT) && currentCluster) {
+            dispatch(loadCliqueByCluster(engine, currentCluster));
+        }
+    }, [engine, currentCluster, dispatch]);
+
+    const handleClusterChange = useCallback(
+        (clusterId: string) => {
+            dispatch(setQueryCluster(clusterId));
+        },
+        [dispatch],
+    );
+
+    const handleCliqueChange = useCallback(
+        (alias: string) => {
+            dispatch(setQueryClique(alias));
+        },
+        [dispatch],
+    );
+
+    const handlePathChange = useCallback(
+        (newPath: string) => {
+            dispatch(setQueryPath(newPath));
+        },
+        [dispatch],
+    );
+
     const clusterCliqueList =
         settings.cluster && settings.cluster in cliqueMap ? cliqueMap[settings.cluster] : {};
     const cliqueList = engine in clusterCliqueList ? clusterCliqueList[engine] : [];
@@ -32,15 +61,16 @@ export const QuerySelectorsByEngine: FC<Props> = ({
         return (
             <>
                 <QueryClusterSelector
+                    loading={clusterLoading}
                     clusters={clusters}
                     value={settings.cluster}
-                    onChange={onClusterChange}
+                    onChange={handleClusterChange}
                 />
                 <QueryCliqueSelector
                     loading={cliqueLoading}
                     cliqueList={cliqueList}
                     value={settings.clique}
-                    onChange={onCliqueChange}
+                    onChange={handleCliqueChange}
                     showStatus
                 />
             </>
@@ -51,16 +81,17 @@ export const QuerySelectorsByEngine: FC<Props> = ({
         return (
             <>
                 <QueryClusterSelector
+                    loading={clusterLoading}
                     clusters={clusters}
                     value={settings.cluster}
-                    onChange={onClusterChange}
+                    onChange={handleClusterChange}
                 />
                 <QueryCliqueSelector
                     placeholder="Discovery path"
                     loading={cliqueLoading}
                     cliqueList={cliqueList}
                     value={settings.discovery_group}
-                    onChange={onPathChange}
+                    onChange={handlePathChange}
                 />
             </>
         );
@@ -68,9 +99,10 @@ export const QuerySelectorsByEngine: FC<Props> = ({
 
     return (
         <QueryClusterSelector
+            loading={clusterLoading}
             clusters={clusters}
             value={settings.cluster}
-            onChange={onClusterChange}
+            onChange={handleClusterChange}
         />
     );
 };

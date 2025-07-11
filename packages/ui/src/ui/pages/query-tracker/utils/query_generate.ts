@@ -48,21 +48,6 @@ export function generateSPYTQuery(tableParams: GenerateTableQueryParams): string
     return `SELECT\n${INDENT}${columnsToQuery}\nFROM yt.\`ytTable:/${path}${pathModifiers}\`\nLIMIT ${pageSize};\n`;
 }
 
-export function generateQuerySettings(
-    engine: QueryEngine,
-    cluster: string,
-): Record<string, string> | undefined {
-    switch (engine) {
-        case QueryEngine.CHYT:
-        case QueryEngine.YT_QL:
-        case QueryEngine.SPYT:
-            return {
-                cluster,
-            };
-    }
-    return {};
-}
-
 export function generateQueryText(
     cluster: string,
     engine: QueryEngine,

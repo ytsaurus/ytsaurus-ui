@@ -1,17 +1,16 @@
 import React, {useCallback, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {ModalWithoutHandledScrollBar as Modal} from '../../../components/Modal/Modal';
-import {QueryEnginesNames} from '../utils/query';
-import {Engines} from '../module/api';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {createQueryFromTablePath, updateQueryDraft} from '../module/query/actions';
-import {getQueryDraft, hasLoadedQueryItem, isQueryDraftEditted} from '../module/query/selectors';
+import {
+    getClusterLoading,
+    getQueryDraft,
+    getSupportedEnginesOptions,
+    hasLoadedQueryItem,
+    isQueryDraftEditted,
+} from '../module/query/selectors';
 import RadioButton from '../../../components/RadioButton/RadioButton';
-
-const EngineOptions = Engines.map((key) => ({
-    value: key,
-    text: QueryEnginesNames[key],
-}));
 
 interface Props {
     className?: string;
@@ -25,9 +24,12 @@ export function QueryEngineSelector({className, cluster, path, onChange}: Props)
     const draft = useSelector(getQueryDraft);
     const isEdited = useSelector(isQueryDraftEditted);
     const hasLoadedQuery = useSelector(hasLoadedQueryItem);
+    const loading = useSelector(getClusterLoading);
+
     const [modalVisibility, setModalVisibility] = useState<boolean>(false);
     const [selectedEngine, setSelectedEngine] = useState<QueryEngine | undefined>(undefined);
     const showPrompt = (isEdited || hasLoadedQuery) && cluster && path;
+    const options = useSelector(getSupportedEnginesOptions);
 
     const updateEngine = useCallback(
         (engine: QueryEngine) => {
@@ -72,7 +74,8 @@ export function QueryEngineSelector({className, cluster, path, onChange}: Props)
                 value={draft.engine}
                 onUpdate={onEngineSelected}
                 name="query-tracker-engine-selector"
-                items={EngineOptions}
+                items={options}
+                disabled={loading}
             />
             <Modal
                 title="Switching engine"
