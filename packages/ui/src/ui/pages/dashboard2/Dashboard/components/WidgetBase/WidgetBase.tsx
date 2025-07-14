@@ -18,7 +18,7 @@ export function WidgetBase(props: Props) {
 
     return (
         <Flex id={id} gap={2} direction={'column'} className={block()}>
-            <Flex direction={'row'} justifyContent={'space-between'}>
+            <Flex direction={'row'} justifyContent={'space-between'} width={'100%'} gap={2}>
                 {header}
                 <Flex direction={'row'} gap={3}>
                     {controls}

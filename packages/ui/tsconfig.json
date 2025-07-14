@@ -3,6 +3,9 @@
   "compilerOptions": {
     "target": "ES2018",
     "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true
-  }
+    "allowSyntheticDefaultImports": true,
+  },
+  "include": [
+      ".storybook/*",
+  ]
 }

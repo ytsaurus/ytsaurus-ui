@@ -117,7 +117,7 @@ function AppWithRumContext() {
 
 export default React.memo(AppWithRumContext);
 
-function ThemeUpdater() {
+export function ThemeUpdater() {
     const dispatch = useDispatch();
     const theme = useThemeValue() as AppThemeFontProps['theme'];
     React.useEffect(() => {
@@ -127,7 +127,7 @@ function ThemeUpdater() {
     return null;
 }
 
-function useThemeProviderProperties() {
+export function useThemeProviderProperties() {
     const selectedTheme = useSelector(getSettingTheme);
     const useContrastTheme: boolean = useSelector(shouldUseSafeColors);
     const systemLightTheme = useContrastTheme ? 'light-hc' : 'light';

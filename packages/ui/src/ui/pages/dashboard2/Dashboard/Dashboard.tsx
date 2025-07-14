@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {Lang, configure} from '@gravity-ui/uikit';
 import {DashKit} from '@gravity-ui/dashkit';
 
 import isEqual_ from 'lodash/isEqual';
@@ -23,8 +22,6 @@ import {useDashboardActions} from '../hooks/use-dashboard-actions';
 import {WidgetSettings} from './components/WidgetSettings/WidgetSettings';
 
 import {registerPlugins} from './utils/registerPlugins';
-
-configure({lang: Lang.En});
 
 registerPlugins();
 
