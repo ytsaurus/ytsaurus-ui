@@ -23,7 +23,10 @@ interface GlobalSettings {
     'global::pagesPinned': Record<string, boolean>;
     'global::navigationPanelExpand': boolean | undefined;
     'global::newDashboardPage': boolean;
+    'global::lang': AppLang;
 }
+
+export type AppLang = 'en' | 'ru';
 
 interface EditorSettings {
     'global::editor::vimMode': boolean;

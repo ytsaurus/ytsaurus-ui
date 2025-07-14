@@ -61,6 +61,8 @@ import {Item} from '../../components/Select/Select';
 import {useThunkDispatch} from '../../store/thunkDispatch';
 import {BooleanSettingItem} from '../SettingsMenu/BooleanSettingItem';
 
+import i18n from './i18n';
+
 export interface SettingsPage {
     title: string;
     icon: IconProps;
@@ -208,6 +210,19 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                                 'There is some difference in UI for development-team and regular users, ' +
                                 'enabling of the option allows to see exactly the same what see a regular user.'
                             }
+                        />,
+                    ),
+                isAdmin &&
+                    makeItem(
+                        'global::lang',
+                        i18n('Language'),
+                        'top',
+                        <SettingsMenuRadioByKey
+                            settingKey="global::lang"
+                            options={[
+                                {value: 'en', content: 'English'},
+                                {value: 'ru', content: 'Русский'},
+                            ]}
                         />,
                     ),
                 makeItem(
