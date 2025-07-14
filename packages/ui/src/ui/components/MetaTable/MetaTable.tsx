@@ -11,6 +11,8 @@ import {toClassName} from '../../utils/utils';
 
 import Link from '../Link/Link';
 import Icon from '../Icon/Icon';
+import {Secondary} from '../Text/Text';
+import {Tooltip} from '../Tooltip/Tooltip';
 
 import './MetaTable.scss';
 
@@ -36,6 +38,7 @@ export interface MetaTableItem {
     icon?: React.ReactNode;
     visible?: boolean;
     helpUrl?: string;
+    tooltip?: React.ReactNode;
     className?: string;
     qa?: string;
 }
@@ -69,21 +72,30 @@ export default class MetaTable extends Component<MetaTableProps> {
     }
 
     renderValue(item: MetaTableItem) {
-        const {value, key, helpUrl, className, qa} = item;
+        const {value, key, helpUrl, tooltip, className, qa} = item;
+
+        const questionIcon = (
+            <React.Fragment>
+                {' '}
+                <Icon className={itemBlock('help-icon')} awesome={'question-circle'} />
+            </React.Fragment>
+        );
         return (
-            <div
+            <Tooltip
+                content={tooltip}
                 className={itemBlock('value', {key: toClassName(key)}, className)}
                 key={key + '-value'}
-                data-qa={qa}
+                qa={qa}
             >
                 {typeof value === 'boolean' ? String(value) : value}
-                {helpUrl && (
+                {helpUrl ? (
                     <Link theme={'ghost'} url={helpUrl}>
-                        {' '}
-                        <Icon awesome={'question-circle'} />
+                        {questionIcon}
                     </Link>
+                ) : (
+                    Boolean(tooltip) && <Secondary>{questionIcon}</Secondary>
                 )}
-            </div>
+            </Tooltip>
         );
     }
 

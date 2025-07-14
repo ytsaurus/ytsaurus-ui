@@ -68,4 +68,9 @@
     &__file {
         @include reset-li();
     }
+
+    &__help-icon {
+        position: relative;
+        top: -1px;
+    }
 }

@@ -15,12 +15,13 @@ export type TooltipProps = Omit<
     children?: React.ReactNode;
     useFlex?: boolean;
     ellipsis?: boolean;
+    qa?: string;
 };
 
 const SHOW_HIDE_DELAY = 400;
 
 export function Tooltip(props: TooltipProps) {
-    const {content, className, children, theme, useFlex, ellipsis, ...rest} = props;
+    const {content, className, children, theme, useFlex, ellipsis, qa, ...rest} = props;
 
     const anchorRef = React.useRef<HTMLDivElement>(null);
     const popoverRef = React.useRef<PopoverInstanceProps>(null);
@@ -72,6 +73,7 @@ export function Tooltip(props: TooltipProps) {
             onMouseOver={handleOpen}
             onMouseOut={handleClose}
             onClick={toggleOpen}
+            data-qa={qa}
         >
             {children}
             {content ? (
