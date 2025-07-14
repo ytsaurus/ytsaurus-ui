@@ -1,0 +1,58 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<script>
+window.YT = {
+    cluster: 'test-cluster',
+    clusters: {
+        'test-cluster': {
+            id: 'test-cluster',
+            name: 'Test Cluster',
+            proxy: 'test-proxy',
+        }
+    },
+    parameters: {
+        version: { version: '1.0.0', build: 'test' },
+        login: 'test-user',
+        authWay: 'oauth',
+    },
+}
+window.__DATA__ = {
+    settings: {
+        data:{
+            [`local::test-cluster::lastVisited`]: [
+                {count: 8, path: '//home'},
+                {count: 83, path: '/'},
+                {count: 4, path: '//home/queue'},
+                {count: 2, path: '//home/producer'},
+                {count: 1, path: '//home/consumer'},
+                {count: 1, path: '//home/secret/path'},
+                {count: 1, path: '//home/dynamic/sorted'},
+                {count: 2, path: '//home/static'},
+                {count: 2, path: '//tmp/trash'},
+                {count: 2, path: '//tmp/simple'},
+                {count: 1, path: '//tmp/not/a/simple/super/wide/super/long/mega/really'},
+                {count: 1, path: '//home/id/1239172312983719-1111-123231202123/temp/tests/wide/megawide'},
+                {count: 1, path: '//'},
+                {count: 1, path: '//home/super-extra-mega-large-wide-not-a-short/111-1111-111-111'},
+                {count: 1, path: '//home/superhome'},
+            ],
+            [`local::test-cluster::accounts::favourites`]: [
+                {path: 'mega-large-wide-big-name-it-cant-fit-in'}
+            ],
+            [`local::test-cluster::chyt::favourites`]: [
+                {path: 'my-clique'},
+                {path: 'my-super-mega-wide-big-large-clique-that-cant-fit-in'},
+            ],
+            [`local::test-cluster::bundles::favourites`]: [
+                {path: 'my-bundle'}
+            ],
+            [`local::test-cluster::scheduling::favourites`]: [
+                {path: 'supermegawideextralargenameofpoolthatcantfitin[physical]'},
+                {path: 'root[physical]'},
+                {path: 'notroot[physical]'}
+            ],
+        }, 
+        meta:{useRemoteSettings: true}
+    },
+}
+</script>

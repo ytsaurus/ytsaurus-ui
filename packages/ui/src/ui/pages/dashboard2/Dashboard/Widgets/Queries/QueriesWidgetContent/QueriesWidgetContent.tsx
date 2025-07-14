@@ -49,7 +49,7 @@ const columns = [
     }),
     columnHelper.accessor('start_time', {
         cell: (startTime) => <StartTime startTime={startTime.getValue()} />,
-        header: () => <WidgetText>Start time</WidgetText>,
+        header: () => 'Start time',
     }),
 ];
 
