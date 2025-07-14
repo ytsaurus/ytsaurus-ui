@@ -25,6 +25,11 @@ import {ServicesWidgetHeader} from '../Widgets/Services/ServicesWidgetHeader/Ser
 import {defaultDashboardItems} from '../../../../constants/dashboard2';
 
 export function registerPlugins() {
+    DashKit.setSettings({
+        gridLayout: {
+            margin: [8, 8],
+        },
+    });
     DashKit.registerPlugins({
         type: 'navigation',
         defaultLayout: {
