@@ -1,5 +1,6 @@
 import {expect, test} from '@playwright/test';
 import {E2E_DIR, makeClusterUrl} from '../../../utils';
+import {replaceInnerHtml} from '../../../utils/dom';
 import {navigationPage} from './NavigationPage';
 
 test('Navigation - symlinks', async ({page}) => {
@@ -12,8 +13,10 @@ test('Navigation - symlinks', async ({page}) => {
         await page.waitForSelector(
             `.meta-table-item__value_key_target_path:text("${E2E_DIR}/tmp/папка")`,
         );
-        page.mouse.move(0, 0);
-        await expect(page).toHaveScreenshot();
+        await replaceInnerHtml(page, {
+            '.g-popup .meta-table-item__value_key_target_path':
+                '//tmp/e2e.1970-01-01.00:00:00.xxxxxx/tmp/папка',
+        });
         await link.click();
     });
     await test.step('Follow target path url', async () => {

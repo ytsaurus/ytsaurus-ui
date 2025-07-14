@@ -1,4 +1,4 @@
-import './i18n';
+import {ytSetLang} from './i18n';
 import './appearance';
 import './common/hammer';
 
@@ -19,7 +19,6 @@ import './legacy-styles/legacy.scss';
 import './styles/redefinitions/redefinitions.scss';
 import {ErrorYsonSettingsProvider} from './containers/ErrorYsonSettingsProvider/ErrorYsonSettingsProvider';
 
-import {ytSetLang} from './i18n';
 import UIFactory, {UIFactory as UIFactoryType, configureUIFactory} from './UIFactory';
 
 function AppWithStore({store, history}: ReturnType<typeof createMainEntryStore>) {

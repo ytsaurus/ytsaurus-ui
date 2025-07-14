@@ -1,10 +1,16 @@
 import map_ from 'lodash/map';
 
 import React from 'react';
+
+// @ts-expect-error
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
+
+import format from '../../../common/hammer/format';
 import {Template} from '../../../components/MetaTable/templates/Template';
 
-export default function metaTablePresetSize(attributes, mediumList) {
+import i18n from './i18n';
+
+export default function metaTablePresetSize(attributes: unknown, mediumList: Array<string>) {
     const [uncompressedDataSize, compressedDataSize, primaryMedium] = ypath.getValues(attributes, [
         '/uncompressed_data_size',
         '/compressed_data_size',
@@ -31,6 +37,10 @@ export default function metaTablePresetSize(attributes, mediumList) {
                 />
             ),
             visible: Boolean(usageMediumDiskSpace || mediumDiskSpace),
+            tooltip: i18n('medium_disk_space:tooltip', {
+                name: format.ReadableField(medium),
+                medium,
+            }),
         };
     });
 
@@ -41,11 +51,13 @@ export default function metaTablePresetSize(attributes, mediumList) {
             key: 'uncompressed_data_size',
             value: <Template.FormattedValue value={uncompressedDataSize} format="Bytes" />,
             visible: Boolean(uncompressedDataSize),
+            tooltip: i18n('uncompressed_size:tooltip'),
         },
         {
             key: 'compressed_data_size',
             value: <Template.FormattedValue value={compressedDataSize} format="Bytes" />,
             visible: Boolean(compressedDataSize),
+            tooltip: i18n('compressed_size:tooltip'),
         },
         {
             key: 'primary_medium',
@@ -57,6 +69,7 @@ export default function metaTablePresetSize(attributes, mediumList) {
             label: 'Total disk space',
             value: <Template.FormattedValue value={usageDiskSpace || diskSpace} format="Bytes" />,
             visible: Boolean(usageDiskSpace || diskSpace),
+            tooltip: i18n('disk_space:tooltip'),
         },
         ...(showMediums ? mediumsTemplates : []),
     ];

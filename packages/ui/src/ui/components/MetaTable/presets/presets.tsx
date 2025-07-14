@@ -14,6 +14,8 @@ import {main} from './index';
 import {getCommonFields} from '../../../pages/navigation/content/Table/TableMeta/commonFields';
 import {Props as AutomaticModeSwitchProps} from '../../../pages/navigation/content/Table/TableMeta/AutomaticModeSwitch';
 
+import i18n from './i18n';
+
 export function replicatedTableTracker(attributes: any) {
     const value = ypath.getValue(
         attributes,
@@ -32,6 +34,7 @@ export function tableSize(attributes: any, isDynamic: boolean, mediumList: strin
         '/chunk_count',
         '/data_weight',
     ]);
+
     return [
         {
             key: 'rowCount',
@@ -50,6 +53,7 @@ export function tableSize(attributes: any, isDynamic: boolean, mediumList: strin
             key: 'dataWeight',
             label: 'Data weight',
             value: <Template.FormattedValue value={dataWeight} format="Bytes" />,
+            tooltip: i18n('data_weight:tooltip'),
             visible: Boolean(chunkCount),
         },
     ];
