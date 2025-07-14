@@ -19,15 +19,15 @@ export function WidgetHeader(props: Props) {
     const {title, count, page, isLoading, id} = props;
 
     return (
-        <Flex direction={'row'} gap={2} qa={`${id}-header`} width={'60%'}>
+        <Flex direction={'row'} gap={2} qa={`${id}-header`} grow={2} minWidth={0}>
             {page ? (
-                <WidgetText variant={'subheader-3'} color={'primary'} width={'auto'}>
+                <WidgetText variant={'subheader-3'} color={'primary'} width={'100%'}>
                     <Link theme={'primary'} url={Page[page]} routed>
                         {title}
                     </Link>
                 </WidgetText>
             ) : (
-                <WidgetText variant={'subheader-3'} color={'primary'} width={'auto'}>
+                <WidgetText variant={'subheader-3'} color={'primary'} width={'100%'}>
                     {title}
                 </WidgetText>
             )}
