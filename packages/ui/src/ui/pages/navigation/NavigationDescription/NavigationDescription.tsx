@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
@@ -21,6 +21,7 @@ import {NavigationDescriptionOverview} from './NavigationDescriptionOverview';
 import {AnnotationWithPartial} from './AnnotationWithPartial';
 
 import './NavigationDescription.scss';
+import useResizeObserver from '../../../hooks/useResizeObserver';
 
 const block = cn('navigation-description');
 
@@ -30,6 +31,7 @@ type Props = {
 
 function NavigationDescription({className}: Props) {
     const dispatch = useDispatch();
+    const wrapperRef = useRef<HTMLDivElement>(null);
 
     const edittingAnnotation = useSelector(getEdittingAnnotation);
     const editMode = useSelector(getEditMode);
@@ -39,12 +41,20 @@ function NavigationDescription({className}: Props) {
     const {description, descriptionType, visible} = useDescription();
     const {ytAnnotationPath} = useYTAnnotation();
 
+    const handleResize = useCallback(() => {
+        setTimeout(() => {
+            window.dispatchEvent(new Event('resize'));
+        }, 0);
+    }, []);
+
+    useResizeObserver({element: wrapperRef.current, onResize: handleResize});
+
     if (!visible) {
         return null;
     }
 
     return (
-        <div className={block(null, className)}>
+        <div ref={wrapperRef} className={block(null, className)}>
             <CollapsibleSection
                 className={block('collapsible', {expanded})}
                 name={'Description'}
