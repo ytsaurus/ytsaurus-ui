@@ -1,17 +1,16 @@
+import './i18n';
 import './appearance';
-import './redefinitions';
 import './common/hammer';
 
 import React from 'react';
 import {createRoot} from 'react-dom/client';
-import {Provider} from 'react-redux';
+import {Provider, useSelector} from 'react-redux';
 import {Router} from 'react-router';
 
+import {getSettingsData} from './store/selectors/settings/settings-base';
 import {createMainEntryStore} from './store/store.main';
 
 import App from './containers/App/App';
-
-import {configure} from '@gravity-ui/uikit';
 
 import '@gravity-ui/uikit/styles/fonts.css';
 import '@gravity-ui/uikit/styles/styles.css';
@@ -20,17 +19,28 @@ import './legacy-styles/legacy.scss';
 import './styles/redefinitions/redefinitions.scss';
 import {ErrorYsonSettingsProvider} from './containers/ErrorYsonSettingsProvider/ErrorYsonSettingsProvider';
 
+import {ytSetLang} from './i18n';
 import UIFactory, {UIFactory as UIFactoryType, configureUIFactory} from './UIFactory';
 
-configure({lang: 'en'});
-
-function AppRoot({store, history}: ReturnType<typeof createMainEntryStore>) {
+function AppWithStore({store, history}: ReturnType<typeof createMainEntryStore>) {
     return (
         <Provider store={store}>
-            <ErrorYsonSettingsProvider>
-                <Router history={history}>{UIFactory.wrapApp(<App />)}</Router>
-            </ErrorYsonSettingsProvider>
+            <AppRoot history={history} />
         </Provider>
+    );
+}
+
+function AppRoot({history}: Pick<ReturnType<typeof createMainEntryStore>, 'history'>) {
+    const lang = useSelector(getSettingsData)['global::lang'] ?? 'en';
+
+    React.useMemo(() => {
+        ytSetLang(lang);
+    }, [lang]);
+
+    return (
+        <ErrorYsonSettingsProvider key={lang}>
+            <Router history={history}>{UIFactory.wrapApp(<App />)}</Router>
+        </ErrorYsonSettingsProvider>
     );
 }
 
@@ -39,5 +49,5 @@ export function renderApp(overrides: UIFactoryType) {
     const {store, history} = createMainEntryStore();
 
     const root = createRoot(document.getElementById('root')!);
-    root.render(<AppRoot {...{store, history}} />);
+    root.render(<AppWithStore {...{store, history}} />);
 }
