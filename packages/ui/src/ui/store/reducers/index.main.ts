@@ -45,7 +45,7 @@ import {getMainLocations} from '../../store/location.main';
 import {flow} from '../../store/reducers/flow';
 import {rootApi} from '../../store/api';
 
-const appReducers = {
+export const appReducers = {
     acl,
     aclFilters,
     actions,
