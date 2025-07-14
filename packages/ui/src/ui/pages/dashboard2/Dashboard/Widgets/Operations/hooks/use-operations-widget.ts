@@ -17,7 +17,6 @@ export type Author = {
 export function useOperationsWidget(props: PluginWidgetProps) {
     const {id, data} = props;
     const cluster = useSelector(getCluster);
-
     const state = useSelector((state: RootState) => getOperationsStateFilter(state, id));
     const authorType = useSelector((state: RootState) => getOperationsAuthorTypeFilter(state, id));
 

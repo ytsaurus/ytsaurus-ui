@@ -1,8 +1,8 @@
 import React from 'react';
 
 export interface AppThemeFontProps {
-    theme: 'light' | 'dark' | 'system' | 'light-hc' | 'dark-hc';
-    fontType?: string;
+    theme?: 'light' | 'dark' | 'system' | 'light-hc' | 'dark-hc';
+    fontType: string;
     children: React.ReactNode;
 }
 

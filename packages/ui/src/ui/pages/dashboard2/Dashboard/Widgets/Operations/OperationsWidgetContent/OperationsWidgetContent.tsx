@@ -60,7 +60,7 @@ export function OperationsWidgetContent(props: PluginWidgetProps) {
         filters: {state},
         data: {operations, isLoading, error},
     } = useOperationsWidget(props);
-
+    console.log(operations);
     return (
         <WidgetTable
             data={operations || []}
