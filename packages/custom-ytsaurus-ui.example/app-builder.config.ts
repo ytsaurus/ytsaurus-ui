@@ -14,12 +14,20 @@ if (debugPort) {
     console.log({debugPort}, '\n');
 }
 
+const useRspack = ['1', 'true'].includes(String(process.env.USE_RSPACK).toLowerCase());
+const rspackConfig: Pick<ServiceConfig['client'], 'bundler' | 'cache' | 'javaScriptLoader'> = {
+    bundler: 'rspack',
+    javaScriptLoader: 'swc',
+    cache: true,
+};
+
 const uiLink = fs.readlinkSync(path.resolve(__dirname, 'src/ytsaurus-ui.ui'));
 const includesByLinks = [uiLink, fs.readlinkSync(path.resolve(__dirname, 'src/shared'))];
 
 export default function () {
     return {
         client: {
+            ...(useRspack ? rspackConfig : {}),
             watchOptions: {
                 aggregateTimeout: 1000,
             },
