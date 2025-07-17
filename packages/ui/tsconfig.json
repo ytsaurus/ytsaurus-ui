@@ -1,7 +1,7 @@
 {
   "extends": "@gravity-ui/tsconfig/tsconfig.json",
   "compilerOptions": {
-    "target": "ES2018",
+    "target": "ES2022",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
   },
