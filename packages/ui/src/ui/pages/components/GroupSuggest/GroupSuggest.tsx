@@ -44,7 +44,7 @@ function GroupSuggest(props: Props) {
         className,
         showTags,
         value,
-        disablePortal = true,
+        disablePortal,
         ...rest
     } = props;
 
