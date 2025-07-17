@@ -1,5 +1,7 @@
 import hammer from '@ytsaurus/interface-helpers/lib/hammer';
 
+import moment from 'moment';
+
 import forEach_ from 'lodash/forEach';
 
 const format = hammer.format;
@@ -80,6 +82,62 @@ format['ReadableField'] = function (value, settings) {
     }
 
     return formatted;
+};
+
+// copied from @ytsaurus/interface-helpers
+/**
+ * Show a readable time duration string
+ * @param {Number} value - number of milliseconds
+ * @param {Object} settings
+ * @param {String} settings.format - 'milliseconds' or omitted
+ */
+format['TimeDuration'] = function (value, settings) {
+    const TIME_MEASURES = [
+        'years',
+        'months',
+        'days',
+        'hours',
+        'minutes',
+        'seconds',
+        'milliseconds',
+    ];
+    const OUTPUT_FORMATTER = {
+        years: 'y ',
+        months: 'm ',
+        days: 'd ',
+        hours: ':',
+        minutes: ':',
+        seconds: '',
+        milliseconds: '.',
+    };
+    let durationOutput;
+    let durationHash;
+
+    const showMilliseconds = parseSetting(settings, 'format') === 'milliseconds';
+
+    if (format.validNumber(value)) {
+        durationOutput = '';
+        durationHash = moment.duration(value);
+
+        TIME_MEASURES.forEach(function (measure) {
+            const measureValue = durationHash[measure]();
+
+            if (measure === 'years' || measure === 'months' || measure === 'days') {
+                if (measureValue > 0) {
+                    durationOutput += measureValue + OUTPUT_FORMATTER[measure];
+                }
+            } else if (measure === 'hours' || measure === 'minutes' || measure === 'seconds') {
+                durationOutput += format['StrPad'](measureValue, '0') + OUTPUT_FORMATTER[measure];
+            } else if (measure === 'milliseconds' && showMilliseconds) {
+                durationOutput +=
+                    OUTPUT_FORMATTER[measure] + format['StrPad'](measureValue, '0', 3);
+            }
+        });
+
+        return durationOutput;
+    } else {
+        return format.NO_VALUE;
+    }
 };
 
 format['UnderscoreToHyphen'] = format['CssTemplateField'] = function (value) {
