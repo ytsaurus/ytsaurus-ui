@@ -12,18 +12,18 @@ if (debugPort) {
     console.log({debugPort}, '\n');
 }
 
-const isDev = process.env.APP_ENV === 'development';
+const useRspack = ['1', 'true'].includes(String(process.env.USE_RSPACK).toLowerCase());
 
 const port = Number(process.env.LOCAL_DEV_PORT);
 
-const devConfig = {
+const rspackConfig: Pick<ServiceConfig['client'], 'bundler' | 'cache' | 'javaScriptLoader'> = {
     bundler: 'rspack',
     javaScriptLoader: 'swc',
-    cache: 'true',
+    cache: true,
 };
 
 const client: ServiceConfig['client'] = {
-    ...(isDev ? devConfig : {}),
+    ...(useRspack ? rspackConfig : {}),
     watchOptions: {
         aggregateTimeout: 1000,
     },
@@ -38,11 +38,13 @@ const client: ServiceConfig['client'] = {
     disableReactRefresh: true,
     analyzeBundle,
 
-    ...(port ? {
-        devServer: {
-            port,
-        }
-    }: null),
+    ...(port
+        ? {
+              devServer: {
+                  port,
+              },
+          }
+        : null),
 };
 
 const server: ServiceConfig['server'] = {
@@ -50,9 +52,11 @@ const server: ServiceConfig['server'] = {
     watchThrottle: 1000,
     inspectBrk: debugPort,
 
-    ...(port ? {
-        port: port + 1,
-    }: null),
+    ...(port
+        ? {
+              port: port + 1,
+          }
+        : null),
 };
 
 export default {client, server};

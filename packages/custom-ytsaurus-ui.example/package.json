@@ -8,7 +8,7 @@
     "deps:check": "scripts/check-files.sh && scripts/sync-dependencies.sh check",
     "deps:sync": "scripts/check-links.sh && scripts/sync-dependencies.sh sync",
     "dev": "npm run deps:check && APP_DEV_MODE=1 APP_INSTALLATION=custom npm run dev:app",
-    "dev:app": "APP_ENV=${APP_ENV:-development} NODE_OPTIONS=\"--max-http-header-size=204800 ${NODE_OPTIONS}\" app-builder dev --config ./app-builder.config.ts",
+    "dev:app": "USE_RSPACK=1 APP_ENV=${APP_ENV:-development} NODE_OPTIONS=\"--max-http-header-size=204800 ${NODE_OPTIONS}\" app-builder dev --config ./app-builder.config.ts",
     "lint": "npm run lint:js && npm run lint:styles",
     "lint:fix": "npm run lint:js -- --fix && npm run lint:styles -- --fix",
     "lint:js": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --ignore-pattern src/ui/vendor --quiet",
