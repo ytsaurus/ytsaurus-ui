@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.99.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.98.0...ui-v1.99.0) (2025-07-18)
+
+
+### Features
+
+* **CodeAssistant:** send query error to chat [YTFRONT-5054] ([3de6250](https://github.com/ytsaurus/ytsaurus-ui/commit/3de62503f9920c301859731f046f74b3f8528ea2))
+* **Navigtaion/Table/MetaTable:** add description for size-items [YTFRONT-3929] ([497a717](https://github.com/ytsaurus/ytsaurus-ui/commit/497a71713d12f4df0e0d49524277fc272170697b))
+* **Operations/PyDLTelemetry:** add uifactory property for tab [YTFRONT-4892] ([9421322](https://github.com/ytsaurus/ytsaurus-ui/commit/9421322323b791538279e29ada3d3ef4d92104b9))
+
+
+### Bug Fixes
+
+* **Bundles/BundleEditor:** thread pools fields should '&gt;0' [YTFRONT-4947] ([1aa4438](https://github.com/ytsaurus/ytsaurus-ui/commit/1aa4438ca2befb96ba9944d0fa46a53ecc371135))
+* **Navigation/Queue:** use schema for Queue tab visibility [YTFRONT-5056] ([90c5b09](https://github.com/ytsaurus/ytsaurus-ui/commit/90c5b09be23246ea6b9e3d70d3bce8c00259833b))
+* **Navigation/Table:** get rid of YAMR from Download/Upload dialogs [YTFRONT-3982] ([e33b5b1](https://github.com/ytsaurus/ytsaurus-ui/commit/e33b5b1dfdb9c8a3e00905e7307e6a1410a3d31a))
+* **Navigation:** table virtualization problem [YTFRONT-5074] ([cf81b6f](https://github.com/ytsaurus/ytsaurus-ui/commit/cf81b6fca8f34fa3f04d2cbf9f2e2abed86f3651))
+* **Operation/Details:** move to bottom Alerts/Tasks section from 'vanilla' operations in gpu-trees [YTFRONT-4961] ([d1ba329](https://github.com/ytsaurus/ytsaurus-ui/commit/d1ba329448d5c43c29bc3fafa52f6a8dfef748a2))
+* **Operations:** utf8 parsing problem [YTFRONT-4982] ([cdece79](https://github.com/ytsaurus/ytsaurus-ui/commit/cdece798e4e92e2dd98bfea41d8f5aecc84ef8ef))
+* **Queries:** list queries filter debounce [YTFRONT-5059] ([aa208df](https://github.com/ytsaurus/ytsaurus-ui/commit/aa208df0ab412276988c30b0124a77e07a67ff46))
+* **Queries:** monaco scroll [YTFRONT-5091] ([1918dd2](https://github.com/ytsaurus/ytsaurus-ui/commit/1918dd2028089b176c27004fbcc74c8ba691e89a))
+* **Queries:** multiple paths in one line [YTFRONT-4920] ([a143785](https://github.com/ytsaurus/ytsaurus-ui/commit/a1437853104a3c15e481a5ec278bfadcabb78340))
+* **Queries:** query result full view [YTFRONT-5071] ([1b340e7](https://github.com/ytsaurus/ytsaurus-ui/commit/1b340e73c13ed996c38fabb4cbd4dd14c90ba0ee))
+
 ## [1.98.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.97.0...ui-v1.98.0) (2025-07-01)
 
 
