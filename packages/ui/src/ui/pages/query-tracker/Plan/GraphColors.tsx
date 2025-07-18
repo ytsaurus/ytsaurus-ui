@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {useThemeValue} from '@gravity-ui/uikit';
 import isEqual_ from 'lodash/isEqual';
-import {getCSSPropertyValue, getHEXColor} from '../../../utils/get-css-color';
+import {getCssColor} from '../../../utils/get-css-color';
 
 export type GraphColors = ReturnType<typeof getGraphColors>;
 const GraphColorsContext = React.createContext<GraphColors | undefined>(undefined);
@@ -30,44 +30,42 @@ export function GraphColorsProvider({children, container}: GraphColorsProviderPr
 
 export function getGraphColors(container?: HTMLElement | null) {
     const getColor = (name: string) => {
-        return getHEXColor(
-            getCSSPropertyValue(`--yql-graph-color-${name}`, container ?? undefined),
-        );
+        return getCssColor(name, {container});
     };
     return {
         operation: {
-            new: getColor('operation-new'),
-            newBorder: getColor('operation-new-border'),
-            newBackground: getColor('operation-new-background'),
-            pending: getColor('operation-pending'),
-            completed: getColor('operation-completed'),
-            completedBorder: getColor('operation-completed-border'),
-            completedBackground: getColor('operation-completed-background'),
-            aborted: getColor('operation-aborted'),
-            abortedBorder: getColor('operation-aborted-border'),
-            abortedBackground: getColor('operation-aborted-background'),
-            failed: getColor('operation-failed'),
-            failedBorder: getColor('operation-failed-border'),
-            failedBackground: getColor('operation-failed-background'),
-            running: getColor('operation-running'),
-            runningBorder: getColor('operation-running-border'),
-            runningBackground: getColor('operation-running-background'),
-            started: getColor('operation-started'),
-            startedBorder: getColor('operation-started-border'),
-            startedBackground: getColor('operation-started-background'),
+            new: getColor('--yql-graph-color-operation-new'),
+            newBorder: getColor('--yql-graph-color-operation-new-border'),
+            newBackground: getColor('--yql-graph-color-operation-new-background'),
+            pending: getColor('--yql-graph-color-operation-pending'),
+            completed: getColor('--yql-graph-color-operation-completed'),
+            completedBorder: getColor('--yql-graph-color-operation-completed-border'),
+            completedBackground: getColor('--yql-graph-color-operation-completed-background'),
+            aborted: getColor('--yql-graph-color-operation-aborted'),
+            abortedBorder: getColor('--yql-graph-color-operation-aborted-border'),
+            abortedBackground: getColor('--yql-graph-color-operation-aborted-background'),
+            failed: getColor('--yql-graph-color-operation-failed'),
+            failedBorder: getColor('--yql-graph-color-operation-failed-border'),
+            failedBackground: getColor('--yql-graph-color-operation-failed-background'),
+            running: getColor('--yql-graph-color-operation-running'),
+            runningBorder: getColor('--yql-graph-color-operation-running-border'),
+            runningBackground: getColor('--yql-graph-color-operation-running-background'),
+            started: getColor('--yql-graph-color-operation-started'),
+            startedBorder: getColor('--yql-graph-color-operation-started-border'),
+            startedBackground: getColor('--yql-graph-color-operation-started-background'),
         },
         table: {
-            fill1: getColor('table-fill1'),
-            fill2: getColor('table-fill2'),
+            fill1: getColor('--yql-graph-color-table-fill1'),
+            fill2: getColor('--yql-graph-color-table-fill2'),
         },
         edge: {
-            color: getColor('edge'),
-            highlight: getColor('edge-highlight'),
+            color: getColor('--yql-graph-color-edge'),
+            highlight: getColor('--yql-graph-color-edge-highlight'),
         },
         text: {
-            label: getColor('text-label'),
-            link: getColor('text-link'),
-            operationCount: getColor('text-operation-count'),
+            label: getColor('--yql-graph-color-text-label'),
+            link: getColor('--yql-graph-color-text-link'),
+            operationCount: getColor('--yql-graph-color-text-operation-count'),
         },
     } as const;
 }

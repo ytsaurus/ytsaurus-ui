@@ -1,0 +1,42 @@
+.yt-flow-computation {
+    &__name {
+        padding-bottom: 12px;
+    }
+
+    &__details {
+        padding-top: 16px;
+    }
+
+    &__meta {
+        padding-bottom: 16px;
+    }
+
+    &__progress {
+        width: 100%;
+    }
+
+    &__progress-history-item-color {
+        width: 12px;
+        height: 12px;
+        border-radius: 2px;
+
+        margin-bottom: -2px;
+        margin-right: 2px;
+
+        &_theme_success {
+            background-color: var(--success-color);
+        }
+        &_theme_info {
+            background-color: var(--info-color);
+        }
+        &_theme_warning {
+            background-color: var(--warning-color);
+        }
+        &_theme_danger {
+            background-color: var(--danger-color);
+        }
+        &_theme_default {
+            background-color: var(--default-color);
+        }
+    }
+}
