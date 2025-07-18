@@ -34,6 +34,11 @@ export interface OperationDetailState {
     details: {
         alert_events: Array<AlertEvent>;
         runtime?: Array<RuntimeItem>;
+        specification?: unknown;
+        resources?: Array<unknown>;
+        error?: YTError;
+        events?: Array<unknown>;
+        intermediateResources?: unknown;
     };
     resourcesStatus: (typeof LOADING_STATUS)[keyof typeof LOADING_STATUS];
     resources: {intermediateResources?: unknown};

@@ -5,5 +5,5 @@ export const SUPPORTED_FEATURES_SUCCESS = 'SUPPORTED_FEATURES_SUCCESS';
 export const SUPPORTED_FEATURES_FAILURE = 'SUPPORTED_FEATURES_FAILURE';
 export const SUPPORTED_FEATURES_CANCELLED = 'SUPPORTED_FEATURES_CANCELLED';
 
-export const UI_TAB_SIZE = 'l';
-export const UI_COLLAPSIBLE_SIZE = 'ss';
+export const UI_TAB_SIZE = 'l' as const;
+export const UI_COLLAPSIBLE_SIZE = 'ss' as const;
