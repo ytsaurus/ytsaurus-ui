@@ -62,6 +62,7 @@ interface CompletedStats {
 interface OwnProps {
     className?: string;
     collapsibleSize?: 'ss';
+    collapsed?: boolean;
 }
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
@@ -242,13 +243,14 @@ class Tasks extends React.Component<Props, State> {
     }
 
     render() {
-        const {className, jobs, collapsibleSize} = this.props;
+        const {className, jobs, collapsibleSize, collapsed} = this.props;
         return !jobs?.items?.length ? null : (
             <CollapsibleSection
                 name="Tasks"
                 className={className}
                 size={collapsibleSize}
                 marginDirection="bottom"
+                collapsed={collapsed}
             >
                 {this.renderContent()}
             </CollapsibleSection>
