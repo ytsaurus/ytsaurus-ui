@@ -5,10 +5,7 @@ import {Plus} from '@gravity-ui/icons';
 
 import map_ from 'lodash/map';
 
-import {useFetchBatchQuery} from '../../../../store/api/yt';
 import {getClusterUiConfig} from '../../../../store/selectors/global';
-
-import {YTApiId} from '../../../../rum/rum-wrap-api';
 
 import {DialogControlProps} from '../../Dialog.types';
 
@@ -30,29 +27,12 @@ export function ServicesSelect(props: Props) {
 
     const chytAllowed = useSelector(getClusterUiConfig).chyt_controller_base_url;
 
-    const {data: bundlesAllowedResp} = useFetchBatchQuery({
-        parameters: {
-            requests: [
-                {
-                    command: 'exists' as const,
-                    parameters: {
-                        path: '//sys/bundle_controller/orchid/bundle_controller/state/bundles',
-                    },
-                },
-            ],
-        },
-        id: YTApiId.tabletBundleControllerState,
-        errorTitle: 'Failed to fetch bundle controller existance',
-    });
-
-    const serviceTypeOptions: {value: 'chyt' | 'bundle'; content: 'CHYT' | 'Bundle'}[] = [];
+    const serviceTypeOptions: {value: 'chyt' | 'bundle'; content: 'CHYT' | 'Bundle'}[] = [
+        {value: 'bundle', content: 'Bundle'},
+    ];
 
     if (chytAllowed) {
         serviceTypeOptions.push({value: 'chyt', content: 'CHYT'});
-    }
-
-    if (bundlesAllowedResp?.[0]?.output) {
-        serviceTypeOptions.push({value: 'bundle', content: 'Bundle'});
     }
 
     const {bundles, isBundlesLoading} = useBunldesList();

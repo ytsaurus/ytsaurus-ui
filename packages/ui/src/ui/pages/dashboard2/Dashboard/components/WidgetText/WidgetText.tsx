@@ -8,7 +8,7 @@ type Props = Omit<TextProps, 'ellipsis' | 'whiteSpace'> & {
 
 export function WidgetText(props: Props) {
     return (
-        <Flex width={props?.width ?? '100%'} overflow={'hidden'}>
+        <Flex width={props?.width} overflow={'hidden'}>
             <Text {...props} ellipsis whiteSpace={'nowrap'}>
                 {props.children}
             </Text>

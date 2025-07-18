@@ -1,3 +1,4 @@
+import {BatchResultsItem} from './../../../../../shared/yt-types.d';
 import {BaseQueryApi} from '@reduxjs/toolkit/query';
 
 import map_ from 'lodash/map';
@@ -16,6 +17,8 @@ import {StrawberryCliqueHealthType, chytApiAction} from '../../../../utils/straw
 import {defaultColumns} from '../../../../constants/chyt';
 import {YTHealth} from '../../../../types';
 import {Page} from '../../../../../shared/constants/settings';
+import {USE_MAX_SIZE} from '../../../../../shared/constants/yt-api';
+import {pluralize} from '../../../../utils';
 
 export type ServiceInfo = {
     general: {name: string; url: string};
@@ -37,16 +40,18 @@ const makeItemLink = (type: 'chyt' | 'bundle', name: string, cluster: string) =>
 
 const bundlesRequests = (items: ServicesItem[]) => [
     {
-        command: 'exists' as const,
+        command: 'list' as const,
         parameters: {
-            path: '//sys/bundle_controller/orchid/bundle_controller/state/bundles',
+            path: '//sys/tablet_cells',
+            attributes: ['tablet_cell_bundle'],
+            ...USE_MAX_SIZE,
         },
     },
     ...map_(items, ({item}) => ({
         command: 'get' as const,
         parameters: {
             path: `//sys/tablet_cell_bundles/${item}`,
-            attributes: ['health', 'bundle_controller_target_config'],
+            attributes: ['health', 'bundle_controller_target_config', 'enable_bundle_controller'],
         },
     })),
 ];
@@ -59,34 +64,76 @@ function makeServiceConfig(instances: number, memory: string, cpu: string) {
     return config;
 }
 
-async function fetchBundles(items: ServicesItem[], cluster: string) {
-    const response = await ytApiV3Id.executeBatch(YTApiId.tabletCellBundles, {
-        parameters: {requests: bundlesRequests(items)},
-    });
+type BundleControllerTargetConfig = {
+    tablet_node_resource_guarantee?: {
+        memory?: number;
+        vcpu?: number;
+    };
+    tablet_node_count?: number;
+};
 
-    const error = getBatchError(response, 'Tablet cell bundles cannot be loaded');
+type BundleInfo = {
+    health?: YTHealth;
+    bundle_controller_target_config: BundleControllerTargetConfig;
+    enable_bundle_controller?: boolean;
+};
+
+type TabletCellInfo = {tablet_cell_bundle?: string};
+
+type TabletCellsResponse = Array<{$attributes: TabletCellInfo; $value?: string}>;
+
+type BundlesResponse = {
+    $attributes: BundleInfo;
+    $value?: string;
+};
+
+async function fetchBundles(items: ServicesItem[], cluster: string) {
+    const bundlesResponse = await ytApiV3Id.executeBatch<TabletCellsResponse | BundlesResponse>(
+        YTApiId.tabletCellBundles,
+        {
+            parameters: {requests: bundlesRequests(items)},
+        },
+    );
+
+    const error = getBatchError(bundlesResponse, 'Tablet cell bundles cannot be loaded');
     if (error) {
         throw error;
     }
 
-    const [isBundlesSupported, ...bundles] = response;
+    const [cells, ...bundles] = bundlesResponse;
 
-    if (!isBundlesSupported || !bundles?.length) return [];
-
-    const bundlesInfo = map_(bundles, ({output}, idx) => {
+    if (!bundlesResponse?.length) return [];
+    const bundlesInfo = map_(bundles || [], ({output}, idx) => {
         if (!output) {
             return undefined;
         }
 
-        const item = output?.$attributes;
+        const item = ypath.getAttributes(output) as BundleInfo;
 
-        const memory = hammer.format['Bytes'](
-            item?.bundle_controller_target_config?.tablet_node_resource_guarantee?.memory || '-',
-        );
-        const cpu = hammer.format['vCores'](
-            item?.bundle_controller_target_config?.tablet_node_resource_guarantee?.vcpu || '-',
-        );
-        const instances = Number(item?.bundle_controller_target_config?.tablet_node_count || 0);
+        let memory = '-';
+        let cpu = '-';
+        let instances = 0;
+
+        let config = '';
+        if (item?.enable_bundle_controller) {
+            memory = hammer.format['Bytes'](
+                item?.bundle_controller_target_config?.tablet_node_resource_guarantee?.memory ||
+                    '-',
+            );
+            cpu = hammer.format['vCores'](
+                item?.bundle_controller_target_config?.tablet_node_resource_guarantee?.vcpu || '-',
+            );
+            instances = Number(item?.bundle_controller_target_config?.tablet_node_count || 0);
+            config = makeServiceConfig(instances, memory, cpu);
+        } else {
+            const cellsCount =
+                (cells as BatchResultsItem<TabletCellsResponse>)?.output?.filter?.(
+                    (cell) =>
+                        (ypath.getAttributes(cell) as TabletCellInfo)?.tablet_cell_bundle ===
+                        items?.[idx]?.item,
+                )?.length || 0;
+            config = `${cellsCount} tablet ${pluralize(cellsCount, 'cell', 'cells')}`;
+        }
 
         return {
             type: 'Bundle' as const,
@@ -94,8 +141,8 @@ async function fetchBundles(items: ServicesItem[], cluster: string) {
                 name: items?.[idx]?.item || 'unknown',
                 url: makeItemLink('bundle', items?.[idx]?.item || 'unknown', cluster),
             },
-            status: item?.health as YTHealth,
-            config: makeServiceConfig(instances, memory, cpu),
+            status: item?.health,
+            config,
         };
     }).filter(Boolean) as ServiceInfo[];
 
