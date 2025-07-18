@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {connect, ConnectedProps, useSelector} from 'react-redux';
+import {ConnectedProps, connect, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
@@ -16,6 +16,7 @@ import {getCluster} from '../../../../../../store/selectors/global';
 import {
     getOperationAlertEvents,
     getOperationDetailsLoadingStatus,
+    selectIsOperationInGpuTree,
 } from '../../../../../../store/selectors/operations/operation';
 
 import {useRumMeasureStop} from '../../../../../../rum/RumUiContext';
@@ -93,9 +94,14 @@ class Details extends Component<ReduxProps> {
     }
 
     renderAlerts() {
-        const {alertEvents, collapsibleSize} = this.props;
+        const {alertEvents, collapsibleSize, isVanillaGpuOperation} = this.props;
         return !alertEvents?.length ? null : (
-            <CollapsibleSection name="Alerts" size={collapsibleSize} marginDirection="bottom">
+            <CollapsibleSection
+                name="Alerts"
+                size={collapsibleSize}
+                marginDirection="bottom"
+                collapsed={isVanillaGpuOperation}
+            >
                 <AlertEvents items={alertEvents} />
             </CollapsibleSection>
         );
@@ -147,8 +153,14 @@ class Details extends Component<ReduxProps> {
     }
 
     renderJobs() {
-        const {collapsibleSize} = this.props;
-        return <Tasks className={block('jobs')} collapsibleSize={collapsibleSize} />;
+        const {collapsibleSize, isVanillaGpuOperation} = this.props;
+        return (
+            <Tasks
+                className={block('jobs')}
+                collapsibleSize={collapsibleSize}
+                collapsed={isVanillaGpuOperation}
+            />
+        );
     }
 
     renderResources() {
@@ -191,6 +203,7 @@ class Details extends Component<ReduxProps> {
     }
 
     render() {
+        const {isVanillaGpuOperation} = this.props;
         return (
             <div className={block()}>
                 <div className={block('section')}>
@@ -199,12 +212,25 @@ class Details extends Component<ReduxProps> {
                 </div>
 
                 <div className={block('section')}>
-                    {this.renderAlerts()}
-                    {this.renderError()}
-                    {this.renderRuntime()}
-                    {this.renderJobs()}
-                    {this.renderResources()}
-                    {this.renderEvents()}
+                    {isVanillaGpuOperation ? (
+                        <React.Fragment>
+                            {this.renderError()}
+                            {this.renderRuntime()}
+                            {this.renderResources()}
+                            {this.renderEvents()}
+                            {this.renderAlerts()}
+                            {this.renderJobs()}
+                        </React.Fragment>
+                    ) : (
+                        <React.Fragment>
+                            {this.renderAlerts()}
+                            {this.renderError()}
+                            {this.renderRuntime()}
+                            {this.renderJobs()}
+                            {this.renderResources()}
+                            {this.renderEvents()}
+                        </React.Fragment>
+                    )}
                 </div>
             </div>
         );
@@ -212,12 +238,14 @@ class Details extends Component<ReduxProps> {
 }
 
 const mapStateToProps = (state: RootState) => {
+    const operation = state.operations.detail.operation;
     return {
         cluster: getCluster(state),
-        operation: state.operations.detail.operation,
+        operation,
         ...state.operations.detail.details,
         collapsibleSize: UI_COLLAPSIBLE_SIZE,
         alertEvents: getOperationAlertEvents(state),
+        isVanillaGpuOperation: operation.type === 'vanilla' && selectIsOperationInGpuTree(state),
     };
 };
 
