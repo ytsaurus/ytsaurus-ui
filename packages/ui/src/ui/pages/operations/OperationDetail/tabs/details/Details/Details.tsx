@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {connect, useSelector} from 'react-redux';
+import {connect, ConnectedProps, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
@@ -10,31 +10,35 @@ import Button from '../../../../../../components/Button/Button';
 import {YTErrorBlock} from '../../../../../../components/Error/Error';
 import Icon from '../../../../../../components/Icon/Icon';
 
+import {RootState} from '../../../../../../store/reducers';
+import {showEditPoolsWeightsModal} from '../../../../../../store/actions/operations';
+import {getCluster} from '../../../../../../store/selectors/global';
+import {
+    getOperationAlertEvents,
+    getOperationDetailsLoadingStatus,
+} from '../../../../../../store/selectors/operations/operation';
+
+import {useRumMeasureStop} from '../../../../../../rum/RumUiContext';
+import {RumMeasureTypes} from '../../../../../../rum/rum-measure-types';
+import {isFinalLoadingStatus} from '../../../../../../utils/utils';
+import {useAppRumMeasureStart} from '../../../../../../rum/rum-app-measures';
+
+import {UI_COLLAPSIBLE_SIZE} from '../../../../../../constants/global';
+
 import DataFlow, {intermediateResourcesProps, resourcesProps} from '../DataFlow/DataFlow';
 import Specification, {specificationProps} from '../Specification/Specification';
 import Runtime, {operationProps, runtimeProps} from '../Runtime/Runtime';
 import Events, {eventsProps} from '../Events/Events';
 import Tasks from '../Tasks/Tasks';
-
-import {showEditPoolsWeightsModal} from '../../../../../../store/actions/operations';
-
-import {useRumMeasureStop} from '../../../../../../rum/RumUiContext';
-import {RumMeasureTypes} from '../../../../../../rum/rum-measure-types';
-import {isFinalLoadingStatus} from '../../../../../../utils/utils';
-import {
-    getOperationAlertEvents,
-    getOperationDetailsLoadingStatus,
-} from '../../../../../../store/selectors/operations/operation';
-import {useAppRumMeasureStart} from '../../../../../../rum/rum-app-measures';
+export {operationProps} from '../Runtime/Runtime';
 
 import './Details.scss';
-import {UI_COLLAPSIBLE_SIZE} from '../../../../../../constants/global';
-
-export {operationProps} from '../Runtime/Runtime';
 
 const block = cn('operation-details');
 
-class Details extends Component {
+type ReduxProps = ConnectedProps<typeof connector>;
+
+class Details extends Component<ReduxProps> {
     static propTypes = {
         error: PropTypes.object,
         specification: specificationProps.isRequired,
@@ -56,7 +60,8 @@ class Details extends Component {
     };
 
     renderDescription() {
-        const {description, collapsibleSize} = this.props.operation;
+        const {collapsibleSize} = this.props;
+        const {description} = this.props.operation;
 
         return (
             description && (
@@ -126,7 +131,8 @@ class Details extends Component {
         const {runtime, operation, cluster, collapsibleSize} = this.props;
 
         return (
-            runtime?.length > 0 && (
+            runtime !== undefined &&
+            runtime.length > 0 && (
                 <CollapsibleSection
                     name="Runtime"
                     className={block('runtime')}
@@ -142,7 +148,7 @@ class Details extends Component {
 
     renderJobs() {
         const {collapsibleSize} = this.props;
-        return <Tasks className={block('jobs')} size={collapsibleSize} />;
+        return <Tasks className={block('jobs')} collapsibleSize={collapsibleSize} />;
     }
 
     renderResources() {
@@ -205,16 +211,11 @@ class Details extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    const {operations, global} = state;
-
-    const {cluster} = global;
-    const {operation} = operations.detail;
-
+const mapStateToProps = (state: RootState) => {
     return {
-        cluster,
-        operation,
-        ...operations.detail.details,
+        cluster: getCluster(state),
+        operation: state.operations.detail.operation,
+        ...state.operations.detail.details,
         collapsibleSize: UI_COLLAPSIBLE_SIZE,
         alertEvents: getOperationAlertEvents(state),
     };
@@ -224,7 +225,9 @@ const mapDispatchToProps = {
     showEditPoolsWeightsModal,
 };
 
-const DetailsConnected = connect(mapStateToProps, mapDispatchToProps)(Details);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+const DetailsConnected = connector(Details) as unknown as React.ComponentType<{}>;
 
 export default function DetailsWithRum() {
     const loadState = useSelector(getOperationDetailsLoadingStatus);

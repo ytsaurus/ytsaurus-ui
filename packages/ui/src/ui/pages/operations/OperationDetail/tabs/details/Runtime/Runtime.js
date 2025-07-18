@@ -44,7 +44,6 @@ export const operationProps = PropTypes.shape({
     duration: PropTypes.number,
     startTime: PropTypes.string,
     finishTime: PropTypes.string,
-    description: PropTypes.object,
     pools: PropTypes.arrayOf(
         PropTypes.shape({
             tree: PropTypes.string.isRequired,
