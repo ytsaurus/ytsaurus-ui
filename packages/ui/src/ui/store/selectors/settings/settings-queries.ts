@@ -10,6 +10,10 @@ export const getLastUserChoiceQueryEngine = createSelector([getSettingsData], (d
     return data[`global::queryTracker::lastEngine`];
 });
 
+export const getQueryListLimit = createSelector([getSettingsData], (data) => {
+    return data[`global::queryTracker::queryListLimit`] || 50;
+});
+
 export const getLastUserChoiceQueryDiscoveryPath = createSelector(
     [getSettingsData, getQueryDraft],
     (data, {settings}) => {

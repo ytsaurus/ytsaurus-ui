@@ -17,6 +17,7 @@ import {
     SET_QUERIES_LIST_MODE,
     UPDATE_QUERIES_LIST,
 } from '../query-tracker-contants';
+import {getQueryListLimit} from '../../../../store/selectors/settings/settings-queries';
 
 export type QueriesListAction =
     | Action<typeof LOAD_QUERIES_LIST_REQUEST>
@@ -72,11 +73,13 @@ export function requestQueriesList(params?: {
         dispatch({type: LOAD_QUERIES_LIST_REQUEST});
         try {
             const state = getState();
+            const limit = getQueryListLimit(state);
             const result = await wrapApiPromiseByToaster(
                 dispatch(
                     loadQueriesList({
                         params: getQueriesListFilterParams(state),
                         cursor: getQueriesListCursorParams(state),
+                        limit,
                     }),
                 ),
                 {

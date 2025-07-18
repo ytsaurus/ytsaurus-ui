@@ -145,6 +145,7 @@ interface QueryTrackerSettings {
     'global::queryTracker::useNewGraphView': boolean;
     'global::queryTracker::suggestions': boolean;
     'global::queryTracker::lastEngine': QueryEngine;
+    'global::queryTracker::queryListLimit': number;
 }
 
 interface VCSSettings {

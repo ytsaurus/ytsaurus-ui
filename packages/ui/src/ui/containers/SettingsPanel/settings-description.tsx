@@ -699,6 +699,18 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                           ),
                       ]
                     : []),
+                makeItem(
+                    'global::queryTracker::queryListLimit',
+                    'Query list limit',
+                    'top',
+                    <SettingsMenuRadio
+                        description="Select the default number of rows to display in the query list."
+                        settingName={'queryListLimit'}
+                        settingNS={NAMESPACES.QUERY_TRACKER}
+                        items={pageSizeRadioButtonItems}
+                        convertValue={Number}
+                    />,
+                ),
             ]),
         ),
 
