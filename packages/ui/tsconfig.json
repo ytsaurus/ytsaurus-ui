@@ -1,11 +1,11 @@
 {
   "extends": "@gravity-ui/tsconfig/tsconfig.json",
   "compilerOptions": {
-    "target": "ES2022",
+    "target": "ES2018",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
   },
   "include": [
-      ".storybook/**/*",
+      ".storybook/*",
   ]
 }

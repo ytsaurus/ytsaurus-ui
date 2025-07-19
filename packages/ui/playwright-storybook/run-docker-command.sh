@@ -60,7 +60,7 @@ run_command() {
         echo "    $envFile"
     fi
 
-    $CONTAINER_TOOL run --rm --network host -it \
+    $CONTAINER_TOOL run --rm --network host \
         -e DOCKER_CI=1 \
         -w /work \
         -v $(pwd):/work \

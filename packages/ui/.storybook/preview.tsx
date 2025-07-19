@@ -1,5 +1,4 @@
 import '../src/ui/appearance';
-import '../src/ui/redefinitions';
 import '../src/ui/common/hammer';
 
 import {configure} from '@gravity-ui/uikit';

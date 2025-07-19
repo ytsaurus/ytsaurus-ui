@@ -5,7 +5,7 @@ import path from 'path';
 
 const config: StorybookConfig = {
     framework: '@storybook/react-webpack5',
-    stories: ['../src/**/*.mdx', '../src/**/*.stories.@(ts|tsx)'],
+    stories: ['../src/**/*.stories.@(ts|tsx)'],
     staticDirs: ['../public'],
     docs: {
         defaultName: 'Docs',

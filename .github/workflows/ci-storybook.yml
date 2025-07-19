@@ -82,7 +82,7 @@ jobs:
             cache: "npm"
         - name: Install Packages
           run: npm ci
-        - name: Build artifact
+        - name: Run tests
           run: |
             cd packages/ui
             npm run test:storybook:visual
@@ -95,7 +95,7 @@ jobs:
     publish-and-comment-tests-report:
       name: Publish report of pw-components tests and create comment
       needs:
-        - build
+        - tests
       if: ${{ always() }}
       runs-on: ubuntu-latest
       steps:
@@ -104,7 +104,7 @@ jobs:
           continue-on-error: true
           with:
             name: report
-            path: ./report
+            path: ./playwright-storybook/report
         - name: Install AWS CLI
           uses: unfor19/install-aws-cli-action@v1
           with:

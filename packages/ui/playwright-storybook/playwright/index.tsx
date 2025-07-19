@@ -19,7 +19,6 @@ import {AppThemeFont} from '../../src/ui/containers/App/AppThemeFont';
 import {registerPlugins} from '../../src/ui/pages/dashboard2/Dashboard/utils/registerPlugins';
 
 import '../../src/ui/appearance';
-import '../../src/ui/redefinitions';
 import '../../src/ui/common/hammer';
 
 import '../../src/ui/legacy-styles/legacy.scss';
