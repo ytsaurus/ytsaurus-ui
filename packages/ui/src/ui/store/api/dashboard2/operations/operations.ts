@@ -17,64 +17,72 @@ export type OperationProgressInfo = {
     state?: StatusLabelState | NavigationFlowState;
 };
 
-export async function fetchOperations(
-    args: {
-        cluster: string;
-        authorType: 'me' | 'my-list';
-        state?: string;
-        authors?: Array<{value: string; type: string}>;
-        pool?: string;
-    },
-    api: BaseQueryApi,
-) {
+type OperationsQueryArgs = {
+    id: string;
+    cluster: string;
+    authorType: 'me' | 'custom';
+    state?: string;
+    authors?: Array<{value: string; type: string}>;
+    pool?: Array<{tree: string; pool: string}>;
+    limit?: number;
+};
+
+export async function fetchOperations(args: OperationsQueryArgs, api: BaseQueryApi) {
     try {
-        const {cluster: _cluster, authorType, state: operationState, authors, pool} = args;
+        const {cluster: _cluster, authorType, state: operationState, authors, pool, limit} = args;
         const state = api.getState() as RootState;
         const user = state.global.login;
 
         let response;
 
-        if (authorType === 'my-list') {
+        if (authorType === 'custom') {
             let requests = map_(authors, (item) => ({
                 command: 'list_operations' as const,
                 parameters: {
-                    limit: 10,
+                    limit: limit ?? 10,
                     state: operationState === 'all' ? undefined : operationState,
                     user: item.value,
-                    pool: pool?.length ? pool : undefined,
+                    pool: pool?.[0]?.pool?.length ? pool?.[0]?.pool : undefined,
+                    pool_tree: pool?.[0]?.tree?.length ? pool?.[0]?.tree : undefined,
                 } as ListOperationsParams,
             }));
 
-            if (pool?.length && !authors?.length) {
+            if (!authors?.length) {
                 requests = [
                     {
                         command: 'list_operations' as const,
                         parameters: {
-                            limit: 10,
+                            limit: limit ?? 10,
                             state: operationState === 'all' ? undefined : operationState,
-                            pool,
+                            pool: pool?.[0]?.pool?.length ? pool?.[0]?.pool : undefined,
+                            pool_tree: pool?.[0]?.tree?.length ? pool?.[0]?.tree : undefined,
                         },
                     },
                 ];
             }
 
-            response = await ytApiV3Id.executeBatch(YTApiId.listDashboardOperations, {
+            response = await ytApiV3Id.executeBatch(YTApiId.operationsDashboard, {
                 requests,
             });
-            response = map_(response, (item) => item?.output);
         } else {
-            response = await ytApiV3Id.listOperations(YTApiId.listDashboardOperations, {
-                parameters: {
-                    limit: 10,
-                    state: operationState === 'all' ? undefined : operationState,
-                    user,
-                    pool: pool?.length ? pool : undefined,
-                },
+            response = await ytApiV3Id.executeBatch(YTApiId.operationsDashboard, {
+                requests: [
+                    {
+                        command: 'list_operations' as const,
+                        parameters: {
+                            limit: limit ?? 10,
+                            state: operationState === 'all' ? undefined : operationState,
+                            user,
+                            pool: pool?.[0]?.pool?.length ? pool?.[0]?.pool : undefined,
+                            pool_tree: pool?.[0]?.tree?.length ? pool?.[0]?.tree : undefined,
+                        },
+                    },
+                ],
             });
         }
+        response = map_(response, (item) => item?.output);
 
         const operations = [];
-
         for (let authorIdx = 0; authorIdx < response.length; authorIdx++) {
             if (!response[authorIdx]?.operations) continue;
 

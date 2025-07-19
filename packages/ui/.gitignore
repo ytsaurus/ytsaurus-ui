@@ -37,3 +37,9 @@ run_local_cluster.sh
 *.tmp
 *.bak
 tests/downloads/
+
+storybook-static
+playwright-storybook/.cache
+playwright-storybook/report
+playwright-storybook/test-results
+playwright-storybook/report-docker

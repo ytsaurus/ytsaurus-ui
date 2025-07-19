@@ -1,10 +1,9 @@
 import React from 'react';
-import {Text} from '@gravity-ui/uikit';
 import {PluginWidgetProps} from '@gravity-ui/dashkit';
 import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
-import {useAutoHeight} from '../../../../../../pages/dashboard2/Dashboard/hooks/use-autoheight';
+import {WidgetText} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetText/WidgetText';
 
 import {QueryStatus} from '../../../../../../types/query-tracker';
 
@@ -13,7 +12,7 @@ import {Engine} from './cells/Engine';
 import {Duration} from './cells/Duration';
 import {StartTime} from './cells/StartTime';
 
-import {useQueriesWidget} from './use-queries-widget';
+import {useQueriesWidget} from '../hooks/use-queries-widget';
 
 type Query = {
     general: {
@@ -40,8 +39,9 @@ const columns = [
         header: () => 'Type',
     }),
     columnHelper.accessor('author', {
-        cell: (author) => <Text>{author.getValue()}</Text>,
+        cell: (author) => <WidgetText>{author.getValue()}</WidgetText>,
         header: () => 'Author',
+        maxSize: 150,
     }),
     columnHelper.accessor('duration', {
         cell: (duration) => <Duration duration={duration.getValue()} />,
@@ -49,29 +49,19 @@ const columns = [
     }),
     columnHelper.accessor('start_time', {
         cell: (startTime) => <StartTime startTime={startTime.getValue()} />,
-        header: () => <Text whiteSpace={'nowrap'}>Start time</Text>,
+        header: () => 'Start time',
     }),
 ];
 
-// 1 react-grid height value ~ 25.3px
-const queriesLayout = {
-    baseHeight: 4.66,
-    defaultHeight: 12,
-    rowHeight: 1.67,
-    minWidth: 10,
-};
-
 export function QueriesWidgetContent(props: PluginWidgetProps) {
-    const {queries, error, isLoading, isFetching} = useQueriesWidget(props);
-
-    useAutoHeight(props, queriesLayout, queries?.length || 0);
+    const {queries, error, isLoading} = useQueriesWidget(props);
 
     return (
         <WidgetTable
             data={queries || []}
             columns={columns}
             itemHeight={40}
-            isLoading={isLoading || isFetching}
+            isLoading={isLoading}
             fallback={{itemsName: 'queries'}}
             error={error}
         />

@@ -3,6 +3,7 @@ import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
 
+import hammer from '../../../../common/hammer';
 import unipika from '../../../../common/thor/unipika';
 
 import {ColumnSelector} from '../../../../components/common/ColumnSelector';
@@ -16,6 +17,7 @@ const block = cn('table-sort-by-control');
 export interface TableSortByControlProps extends DialogControlProps<Array<ColumnSortByInfo>> {
     suggestColumns: Array<string>;
     allowDescending?: boolean;
+    formatReadable?: boolean;
 }
 
 export interface ColumnSortByInfo {
@@ -24,7 +26,7 @@ export interface ColumnSortByInfo {
 }
 
 export function TableSortByControl(props: TableSortByControlProps) {
-    const {value, suggestColumns, onChange, allowDescending} = props;
+    const {value, suggestColumns, onChange, allowDescending, formatReadable} = props;
     const columns = React.useMemo(() => {
         return map_(value, 'name');
     }, [value]);
@@ -72,7 +74,11 @@ export function TableSortByControl(props: TableSortByControlProps) {
                                 <Icon awesome={icon} />
                             </span>
                         )}
-                        <span className={block('item-name')}>{unipika.decode(name)}</span>
+                        <span className={block('item-name')}>
+                            {formatReadable
+                                ? hammer.format['ReadableField'](unipika.decode(name))
+                                : unipika.decode(name)}
+                        </span>
                     </div>
                 );
             }}

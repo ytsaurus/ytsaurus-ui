@@ -5,7 +5,7 @@
   "compilerOptions": {
     "declaration": true,
     "module": "ESNext",
-    "target": "ES2018",
+    "target": "ES2022",
     "isolatedModules": true,
     "outDir": "../../dist/public/build",
     "baseUrl": ".",
@@ -13,6 +13,6 @@
       "*": ["../../node_modules/*"]
     },
     "jsx": "react",
-    "lib": ["ES2018", "DOM", "DOM.Iterable", "ES2019.Array", "WebWorker"]
+    "lib": ["ES2022", "ES2018", "DOM", "DOM.Iterable", "ES2019.Array", "WebWorker"]
   }
 }

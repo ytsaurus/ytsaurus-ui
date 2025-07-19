@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "playwright test ${PW_OPTIONS}",
+    "start": "playwright test ${PW_OPTIONS} --trace on",
     "screenshots": "E2E_MATCH=${E2E_MATCH:-.screen.} E2E_TEST_DIR=./screenshots playwright test ${PW_OPTIONS}"
   },
   "keywords": [],
@@ -12,6 +12,6 @@
   "license": "ISC",
   "private": true,
   "devDependencies": {
-    "@playwright/test": "^1.44.1"
+    "@playwright/test": "^1.51.1"
   }
 }

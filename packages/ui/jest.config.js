@@ -1,7 +1,7 @@
 module.exports = {
     verbose: true,
-    testEnvironment: 'node',
-    setupFilesAfterEnv: ['jest-extended'],
+    testEnvironment: 'jsdom',
+    setupFilesAfterEnv: ['jest-extended', '<rootDir>/src/ui/test-utils/setup-tests.ts'],
     testMatch: ['<rootDir>/src/**/?(*.)spec.{js,jsx,ts,tsx}'],
     collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}'],
     coveragePathIgnorePatterns: [
