@@ -211,7 +211,7 @@ export function wrapApiPromiseByToaster<
                     title: options.successTitle || 'Success',
                     content:
                         'function' === typeof successContent ? successContent(res) : successContent,
-                    autoHiding: options.autoHide === false ? false : options.timeout ?? 10000,
+                    autoHiding: options.autoHide === false ? false : (options.timeout ?? 10000),
                 });
             }
             return res;

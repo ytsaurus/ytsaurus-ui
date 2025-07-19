@@ -423,7 +423,7 @@ class UploadManager extends React.Component<Props, State> {
                             onUploadProgress: this.onUploadProgress,
                             proxy: uploadConfig.uploadTableUseLocalmode
                                 ? `${location.host}/localmode/api/yt/${cluster}`
-                                : externalProxy ?? proxy,
+                                : (externalProxy ?? proxy),
                         },
                         parameters: {
                             transaction_id,

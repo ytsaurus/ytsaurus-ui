@@ -40,7 +40,7 @@ export function isDocsAllowed() {
 }
 
 export function docsUrl<T, K = string>(url: T, alt?: K) {
-    return isDocsAllowed() ? url : alt ?? '';
+    return isDocsAllowed() ? url : (alt ?? '');
 }
 
 export function getDocsBaseUrl() {
