@@ -96,7 +96,9 @@ function FlowMessagesDialog({data, onClose}: FlowMessagesProps & {onClose(): voi
         <Dialog open={true} onClose={onClose}>
             <Dialog.Header caption="Messages" />
             <Dialog.Body className={block('messages-body')}>
-                {data?.map((item, index) => <FlowMessageItem item={item} key={index} />)}
+                {data?.map((item, index) => (
+                    <FlowMessageItem item={item} key={index} />
+                ))}
             </Dialog.Body>
         </Dialog>
     );

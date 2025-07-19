@@ -162,7 +162,7 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
         const loadAll = getExpandedPoolsLoadAll(state);
         const expandedPools: Map<string, ExpandedPoolInfo> = loadAll
             ? new Map()
-            : getSchedulingOperationsExpandedPools(state)[tree] ?? new Map();
+            : (getSchedulingOperationsExpandedPools(state)[tree] ?? new Map());
         const expandedPoolNames: Array<string> = [...expandedPools.keys()];
 
         const operationsExpandedPools: Array<string> = [...expandedPoolNames];
