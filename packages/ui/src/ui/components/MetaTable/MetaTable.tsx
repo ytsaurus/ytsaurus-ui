@@ -114,7 +114,7 @@ export default class MetaTable extends Component<MetaTableProps> {
 
     renderGroup(group: Array<MetaTableItem>, index: number, groupTitles?: Array<string>) {
         const {rowGap} = this.props;
-        const title = !groupTitles?.length ? null : groupTitles[index!] ?? <>&nbsp;</>;
+        const title = !groupTitles?.length ? null : (groupTitles[index!] ?? <>&nbsp;</>);
         const visibleItems = filter_(group, (item) => item.visible !== false);
 
         return !visibleItems?.length ? null : (

@@ -219,7 +219,7 @@ export default function Table({
     ]);
 
     const calculatedStartIndex = (page - 1) * pageSize;
-    const firstRowIndex = sortable ? 1 : startIndex ?? calculatedStartIndex + 1;
+    const firstRowIndex = sortable ? 1 : (startIndex ?? calculatedStartIndex + 1);
     const sortedRows = React.useMemo(() => {
         return getSortedData(rows, columns, sortOrder, firstRowIndex);
     }, [rows, columns, sortOrder, firstRowIndex]);

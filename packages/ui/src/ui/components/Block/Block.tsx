@@ -77,7 +77,8 @@ export class YTErrorBlock extends React.Component<YTErrorBlockProps> {
         const content =
             view !== 'compact'
                 ? message
-                : message ?? (error ? ErrorDetails.renderMessage(error as YTErrorRaw) : undefined);
+                : (message ??
+                  (error ? ErrorDetails.renderMessage(error as YTErrorRaw) : undefined));
         return (
             <div className={className}>
                 {typeof content !== 'string' ? content : <FormattedText text={content} />}
