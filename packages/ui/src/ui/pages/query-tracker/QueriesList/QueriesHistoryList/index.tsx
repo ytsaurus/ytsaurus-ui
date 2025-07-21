@@ -1,246 +1,32 @@
-import moment from 'moment';
-import groupBy_ from 'lodash/groupBy';
-import noop_ from 'lodash/noop';
-import {Text} from '@gravity-ui/uikit';
-import block from 'bem-cn-lite';
-import React, {useCallback, useContext, useEffect, useMemo, useRef} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
-import {QueryStatus} from '../../../../types/query-tracker';
+import DataTable, {Settings} from '@gravity-ui/react-data-table';
 import {QueryItem} from '../../module/api';
 import {refreshQueriesListIfNeeded} from '../../module/queries_list/actions';
-import {getQueriesListTimestamp, getUncompletedItems} from '../../module/queries_list/selectors';
-import hammer from '../../../../common/hammer';
-
-import Pagination from '../../../../components/Pagination/Pagination';
-import {QueryStatusIcon} from '../../../../components/QueryStatus';
-import {QueriesPoolingContext} from '../../hooks/QueriesPooling/context';
-import {formatTime} from '../../../../components/common/Timeline/util';
-import {QueryEnginesNames} from '../../utils/query';
+import {
+    getQueriesListTimestamp,
+    getQueryListByDate,
+    getQueryListColumns,
+    isQueriesListLoading,
+} from '../../module/queries_list/selectors';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
-import {useQuriesHistoryFilter} from '../../hooks/QueryListFilter';
-import {QueryDuration} from '../../QueryDuration';
 import {useQueryNavigation} from '../../hooks/Query';
-import {useQueriesPagination, useQueryList} from '../../hooks/QueriesList';
-import EditQueryNameModal from '../EditQueryNameModal/EditQueryNameModal';
-import {UPDATE_QUERIES_LIST} from '../../module/query-tracker-contants';
+import {ListPagination} from './ListPagination';
+import {useUpdater} from '../../../../hooks/use-updater';
+import block from 'bem-cn-lite';
 
-import {useQueryHistoryListColumns} from './useQueryListColumns';
-
-import './index.scss';
+import './QueriesHistoryList.scss';
+import './QueryHistoryItem.scss';
 
 const b = block('queries-history-list');
-
 const itemBlock = block('query-history-item');
-
-function useQueriesHistoryUpdate() {
-    const pollingContext = useContext(QueriesPoolingContext);
-    const uncompletedItems = useSelector(getUncompletedItems);
-    const dispatch = useDispatch();
-
-    const queryListUpdateHandler = useMemo(
-        () => (items: QueryItem[]) => {
-            dispatch({
-                type: UPDATE_QUERIES_LIST,
-                data: items,
-            });
-        },
-        [dispatch],
-    );
-
-    useEffect(
-        function pollingEffect() {
-            if (!uncompletedItems?.length) {
-                return;
-            }
-            pollingContext.watch(uncompletedItems, queryListUpdateHandler);
-        },
-        [pollingContext, queryListUpdateHandler, uncompletedItems],
-    );
-}
-
-function useRefreshHistoryList(timeout = 5000) {
-    // Naive history list's polling impl
-    const dispatch = useDispatch();
-    useEffect(() => {
-        let timer: ReturnType<typeof setTimeout>;
-        function start() {
-            timer = setTimeout(() => {
-                dispatch(refreshQueriesListIfNeeded(start));
-            }, timeout);
-        }
-
-        start();
-
-        return () => {
-            if (timer) {
-                clearTimeout(timer);
-            }
-        };
-    }, [timeout, dispatch]);
-}
-
-function useQueryHistoryList() {
-    useRefreshHistoryList();
-    useQueriesHistoryUpdate();
-    return useQueryList();
-}
 
 type HeaderTableItem = {header: string};
 type TableItem = QueryItem | HeaderTableItem;
 
-const isHeaderTableItem = (b: TableItem): b is HeaderTableItem => {
-    return (b as HeaderTableItem).header !== undefined;
+const isHeaderTableItem = (item: TableItem): item is HeaderTableItem => {
+    return (item as HeaderTableItem).header !== undefined;
 };
-
-export const NameColumns: Column<TableItem> = {
-    name: 'Name',
-    align: 'left',
-    className: itemBlock('name_row'),
-    render: ({row}) => {
-        if (isHeaderTableItem(row)) {
-            return <div className={itemBlock('separator')}>{row.header}</div>;
-        }
-
-        const name = row.annotations?.title;
-        return (
-            <div className={itemBlock('name')} title={name}>
-                <QueryStatusIcon className={itemBlock('status-icon')} status={row.state} />
-                <Text
-                    className={itemBlock('name-container')}
-                    color={name ? 'primary' : 'secondary'}
-                    ellipsis
-                >
-                    {name || 'No name'}
-                </Text>
-            </div>
-        );
-    },
-};
-
-export const ActionColumns: Column<TableItem> = {
-    name: ' ',
-    align: 'left',
-    width: 20,
-    className: itemBlock('action_row'),
-    render: ({row}) => {
-        if (isHeaderTableItem(row)) {
-            return null;
-        }
-
-        return (
-            <div className={itemBlock('action')} onClick={(e) => e.stopPropagation()}>
-                <EditQueryNameModal className={itemBlock('name-edit')} query={row} />
-            </div>
-        );
-    },
-};
-
-const TypeColumns: Column<TableItem> = {
-    name: 'Type',
-    align: 'center',
-    width: 60,
-    render: ({row}) => {
-        if (isHeaderTableItem(row)) {
-            return null;
-        }
-
-        return (
-            <Text variant="body-1" color="secondary">
-                {row.engine in QueryEnginesNames ? QueryEnginesNames[row.engine] : row.engine}
-            </Text>
-        );
-    },
-};
-
-const DurationColumns: Column<TableItem> = {
-    name: 'Duration',
-    align: 'left',
-    width: 100,
-    render: ({row}) => {
-        if (isHeaderTableItem(row)) {
-            return null;
-        }
-
-        if (row.state === QueryStatus.RUNNING) {
-            return hammer.format.NO_VALUE;
-        }
-        return <QueryDuration query={row} />;
-    },
-};
-
-const StartedColumns: Column<TableItem> = {
-    name: 'Started',
-    align: 'left',
-    width: 60,
-    render: ({row}) => {
-        if (isHeaderTableItem(row)) {
-            return null;
-        }
-
-        return (
-            <Text variant="body-1" color="secondary">
-                {formatTime(row.start_time)}
-            </Text>
-        );
-    },
-};
-
-export const AuthorColumns: Column<TableItem> = {
-    name: 'Author',
-    align: 'left',
-    width: 120,
-    className: itemBlock('author_row'),
-    render: ({row}) => {
-        if (isHeaderTableItem(row)) {
-            return null;
-        }
-
-        return (
-            <Text variant="body-1" ellipsis title={row.user}>
-                {row.user}
-            </Text>
-        );
-    },
-};
-
-const ACOColumns: Column<TableItem> = {
-    name: 'ACO',
-    align: 'left',
-    width: 60,
-    className: itemBlock('access_control_object'),
-    render: ({row}) => {
-        if (isHeaderTableItem(row)) {
-            return null;
-        }
-
-        const title = row.access_control_objects?.join(', ');
-
-        return (
-            <Text variant="body-1" ellipsis title={title}>
-                {title}
-            </Text>
-        );
-    },
-};
-
-export const MyColumns: Column<TableItem>[] = [
-    NameColumns,
-    TypeColumns,
-    DurationColumns,
-    StartedColumns,
-    ACOColumns,
-    ActionColumns,
-];
-export const AllColumns: Column<TableItem>[] = [
-    NameColumns,
-    TypeColumns,
-    DurationColumns,
-    AuthorColumns,
-    StartedColumns,
-    ACOColumns,
-    ActionColumns,
-];
 
 const tableSettings: Settings = {
     displayIndices: false,
@@ -249,12 +35,23 @@ const tableSettings: Settings = {
     syncHeadOnResize: true,
 };
 
+function QueriesHistoryListUpdater() {
+    const dispatch = useDispatch();
+
+    const updateFn = React.useCallback(() => {
+        dispatch(refreshQueriesListIfNeeded());
+    }, [dispatch]);
+
+    useUpdater(updateFn, {timeout: 5000});
+
+    return null;
+}
+
 export function QueriesHistoryList() {
-    const [items, isLoading] = useQueryHistoryList();
-    const [filter] = useQuriesHistoryFilter();
-    const {columns} = useQueryHistoryListColumns({type: filter.user});
+    const itemsByDate = useSelector(getQueryListByDate);
+    const isLoading = useSelector(isQueriesListLoading);
+    const {columns} = useSelector(getQueryListColumns);
     const timestamp = useSelector(getQueriesListTimestamp);
-    const {first, last, goBack, goNext, goFirst} = useQueriesPagination();
     const [selectedId, goToQuery] = useQueryNavigation();
     const scrollElemRef = useRef<HTMLDivElement | null>(null);
 
@@ -266,35 +63,18 @@ export function QueriesHistoryList() {
 
     const setClassName = useCallback(
         (item: TableItem) => {
-            if (isHeaderTableItem(item)) {
-                return itemBlock({
-                    header: Boolean(item.header),
-                });
-            }
-
+            const isHeader = isHeaderTableItem(item);
             return itemBlock({
-                selected: item.id === selectedId,
+                header: isHeader ? Boolean(item.header) : undefined,
+                selected: isHeader ? undefined : item.id === selectedId,
             });
         },
         [selectedId],
     );
 
-    const itemsByDate = useMemo(
-        () =>
-            Object.entries(
-                groupBy_(items, (item) => moment(item.start_time).format('DD MMMM YYYY')),
-            ).reduce((ret, [header, items]) => {
-                ret.push({
-                    header,
-                });
-
-                return ret.concat(items.map((item) => item));
-            }, [] as Array<TableItem>),
-        [items],
-    );
-
     return (
         <div className={b()}>
+            <QueriesHistoryListUpdater />
             <div className={b('list-wrapper')} ref={scrollElemRef}>
                 <DataTableYT
                     className={b('list')}
@@ -328,27 +108,7 @@ export function QueriesHistoryList() {
                     }}
                 />
                 <div className={b('pagination')}>
-                    {(!first || !last) && (
-                        <Pagination
-                            size="m"
-                            first={{
-                                handler: goFirst,
-                                disabled: first,
-                            }}
-                            previous={{
-                                handler: goBack,
-                                disabled: first,
-                            }}
-                            next={{
-                                handler: goNext,
-                                disabled: last,
-                            }}
-                            last={{
-                                handler: noop_,
-                                disabled: true,
-                            }}
-                        />
-                    )}
+                    <ListPagination />
                 </div>
             </div>
         </div>
