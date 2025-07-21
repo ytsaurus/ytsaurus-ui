@@ -1,12 +1,5 @@
 export const UPDATE_QUERIES_LIST = 'query-tracker/UPDATE_QUERIES_LIST';
 
-export const LOAD_QUERIES_LIST_REQUEST = 'query-tracker/LOAD_QUERIES_LIST_REQUEST';
-export const LOAD_QUERIES_LIST_SUCCESS = 'query-tracker/LOAD_QUERIES_LIST_SUCCESS';
-export const LOAD_QUERIES_LIST_ERROR = 'query-tracker/LOAD_QUERIES_LIST_ERROR';
-export const SET_QUERIES_LIST_FILTER = 'query-tracker/SET_QUERIES_LIST_FILTER';
-export const SET_QUERIES_LIST_MODE = 'query-tracker/SET_QUERIES_LIST_MODE';
-export const SET_QUERIES_LIST_CURSOR = 'query-tracker/SET_QUERIES_LIST_CURSOR';
-
 export const enum QueriesHistoryCursorDirection {
     PAST = 'past',
     FUTURE = 'future',

@@ -2,7 +2,7 @@ import {produce} from 'immer';
 import {updateIfChanged} from '../../../../utils/utils';
 import {LocationParameters} from '../../../../store/location';
 import {RootState} from '../../../../store/reducers';
-import {initialState as listInitialState} from '../queries_list/reducer';
+import {initialState as listInitialState} from '../queries_list/queryListSlice';
 import {initialState as navigationInitialState} from '../queryNavigation/queryNavigationSlice';
 
 export const draftQueryParameters: LocationParameters = {
