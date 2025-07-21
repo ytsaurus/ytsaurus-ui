@@ -328,7 +328,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             [Tab.JOBS_MONITOR]: {show: jobsMonitorVisible || activeTab === Tab.JOBS_MONITOR},
             [Tab.MONITOR]: {show: monitorTabVisible},
             [Tab.JOBS_TIMELINE]: {show: timelineTabVisible},
-            [Tab.PYDL_TELEMETRY]: {show: pyDLTelemetryTabVisible},
+            [Tab.PYDL_TELEMETRY]: {show: pyDLTelemetryTabVisible, title: 'PyDL Telemetry'},
             [Tab.PERFORMANCE]: {
                 show: Boolean(operationPerformanceUrlTemplate),
                 external: true,
