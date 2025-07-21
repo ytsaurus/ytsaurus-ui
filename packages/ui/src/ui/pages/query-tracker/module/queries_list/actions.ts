@@ -1,46 +1,15 @@
-import {Action} from 'redux';
 import {ThunkAction} from 'redux-thunk';
-import {ActionD} from '../../../../types';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {RootState} from '../../../../store/reducers';
-import {QueryItem, loadQueriesList} from '../api';
-import {QueriesListState} from './reducer';
+import {loadQueriesList} from '../api';
 import {getQueriesList, getQueriesListCursorParams, getQueriesListFilterParams} from './selectors';
-import {QueriesListCursor, QueriesListFilter} from './types';
-import {
-    LOAD_QUERIES_LIST_ERROR,
-    LOAD_QUERIES_LIST_REQUEST,
-    LOAD_QUERIES_LIST_SUCCESS,
-    QueriesHistoryCursorDirection,
-    SET_QUERIES_LIST_CURSOR,
-    SET_QUERIES_LIST_FILTER,
-    SET_QUERIES_LIST_MODE,
-    UPDATE_QUERIES_LIST,
-} from '../query-tracker-contants';
+import {QueriesListFilter} from './types';
+import {QueriesHistoryCursorDirection} from '../query-tracker-contants';
+import {setCursor, setFilter, setLoading, updateListState} from './queryListSlice';
 
-export type QueriesListAction =
-    | Action<typeof LOAD_QUERIES_LIST_REQUEST>
-    | ActionD<
-          typeof LOAD_QUERIES_LIST_SUCCESS,
-          {
-              hasMore: boolean;
-              list: QueryItem[];
-              timestamp?: number;
-              direction?: QueriesHistoryCursorDirection;
-          }
-      >
-    | ActionD<typeof LOAD_QUERIES_LIST_ERROR, string | Error>
-    | ActionD<typeof SET_QUERIES_LIST_FILTER, QueriesListFilter>
-    | ActionD<
-          typeof SET_QUERIES_LIST_MODE,
-          {listMode: QueriesListState['listMode']; reset?: boolean}
-      >
-    | ActionD<typeof SET_QUERIES_LIST_CURSOR, QueriesListCursor | undefined>
-    | ActionD<typeof UPDATE_QUERIES_LIST, QueryItem[]>;
+type AsyncAction = ThunkAction<any, RootState, any, any>;
 
-export function refreshQueriesListIfNeeded(
-    onDone?: () => void,
-): ThunkAction<any, RootState, any, QueriesListAction> {
+export function refreshQueriesListIfNeeded(onDone?: () => void): AsyncAction {
     return async (dispatch, getState) => {
         try {
             const state = getState();
@@ -65,13 +34,12 @@ export function refreshQueriesListIfNeeded(
         }
     };
 }
-export function requestQueriesList(params?: {
-    refresh?: boolean;
-}): ThunkAction<any, RootState, any, QueriesListAction> {
+export function requestQueriesList(params?: {refresh?: boolean}): AsyncAction {
     return async (dispatch, getState) => {
-        dispatch({type: LOAD_QUERIES_LIST_REQUEST});
+        const state = getState();
+
+        dispatch(setLoading(true));
         try {
-            const state = getState();
             const result = await wrapApiPromiseByToaster(
                 dispatch(
                     loadQueriesList({
@@ -85,30 +53,26 @@ export function requestQueriesList(params?: {
                     errorTitle: 'Failed to load queries list',
                 },
             );
-            dispatch({
-                type: LOAD_QUERIES_LIST_SUCCESS,
-                data: {
-                    list: result.queries,
-                    timestamp: params?.refresh ? undefined : result.timestamp,
+            dispatch(
+                updateListState({
+                    items: result.queries,
                     hasMore: result.incomplete,
-                },
-            });
-        } catch (e: unknown) {
-            dispatch({type: LOAD_QUERIES_LIST_ERROR, data: e as Error});
+                    timestamp: params?.refresh ? undefined : result.timestamp,
+                }),
+            );
+        } finally {
+            dispatch(setLoading(false));
         }
     };
 }
 
-export function loadNextQueriesList(
-    direction = QueriesHistoryCursorDirection.PAST,
-): ThunkAction<any, RootState, any, QueriesListAction> {
+export function loadNextQueriesList(direction = QueriesHistoryCursorDirection.PAST): AsyncAction {
     return (dispatch, getState) => {
         const state = getState();
         const items = getQueriesList(state);
         if (items.length) {
-            dispatch({
-                type: SET_QUERIES_LIST_CURSOR,
-                data: {
+            dispatch(
+                setCursor({
                     cursorTime:
                         items[
                             direction === QueriesHistoryCursorDirection.FUTURE
@@ -116,54 +80,26 @@ export function loadNextQueriesList(
                                 : items.length - 1
                         ].start_time,
                     direction,
-                },
-            });
+                }),
+            );
             dispatch(requestQueriesList());
         }
     };
 }
 
-export function resetCursor(
-    {
-        silent,
-    }: {
-        silent?: boolean;
-    } = {silent: false},
-): ThunkAction<any, RootState, any, QueriesListAction> {
+export function resetCursor(silent = false): AsyncAction {
     return (dispatch) => {
-        dispatch({
-            type: SET_QUERIES_LIST_CURSOR,
-            data: undefined,
-        });
+        dispatch(setCursor(undefined));
         if (!silent) {
             dispatch(requestQueriesList());
         }
     };
 }
 
-export function applyFilter(
-    patch: QueriesListFilter,
-): ThunkAction<any, RootState, any, QueriesListAction> {
+export function applyFilter(patch: QueriesListFilter): AsyncAction {
     return (dispatch) => {
-        dispatch(resetCursor({silent: true}));
-        dispatch({
-            type: SET_QUERIES_LIST_FILTER,
-            data: patch,
-        });
-        dispatch(requestQueriesList());
-    };
-}
-
-export function applyListMode(
-    listMode: QueriesListState['listMode'],
-): ThunkAction<any, RootState, any, QueriesListAction> {
-    return (dispatch) => {
-        dispatch({
-            type: SET_QUERIES_LIST_MODE,
-            data: {
-                listMode,
-            },
-        });
+        dispatch(resetCursor(true));
+        dispatch(setFilter(patch));
         dispatch(requestQueriesList());
     };
 }

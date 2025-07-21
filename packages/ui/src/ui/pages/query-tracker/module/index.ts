@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import {reducer as listReducer} from './queries_list/reducer';
+import queryList from './queries_list/queryListSlice';
 import {reducer as queryReducer} from './query/reducer';
 import {reducer as queryResultsReducer} from './query_result/reducer';
 import {reducer as queryAcoReducer} from './query_aco/reducer';
@@ -9,7 +9,7 @@ import {queryNavigationReducer} from './queryNavigation/queryNavigationSlice';
 import {queryChartReducer} from './queryChart/queryChartSlice';
 
 export const queryTracker = combineReducers({
-    list: listReducer,
+    list: queryList,
     query: queryReducer,
     results: queryResultsReducer,
     aco: queryAcoReducer,

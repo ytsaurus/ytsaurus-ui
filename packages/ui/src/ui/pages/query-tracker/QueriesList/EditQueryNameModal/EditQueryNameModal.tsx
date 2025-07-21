@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from 'react';
-import {YTDFDialog, makeErrorFields} from '../../../../components/Dialog';
+import {FormApi, YTDFDialog, makeErrorFields} from '../../../../components/Dialog';
 import Button from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
 
@@ -15,22 +15,25 @@ interface FormValues {
     name: string;
 }
 
-export default function EditQueryNameModal({query, className}: Props) {
-    const [error, setError] = useState(undefined);
-    const [visible, setVisible] = useState(false);
-    const {state} = query;
-
+export default function EditQueryNameModal({query: {state, annotations, id}, className}: Props) {
     const dispatch = useThunkDispatch();
+    const [error, setError] = useState<Error | undefined>(undefined);
+    const [visible, setVisible] = useState(false);
+
+    const handleSubmit = (form: FormApi<FormValues>) => {
+        const {name} = form.getState().values;
+        setError(undefined);
+        return dispatch(setQueryName(id, {...annotations, title: name})).catch((err) => {
+            setError(err);
+            throw err;
+        });
+    };
 
     const initialValues = useMemo(() => {
         return {
-            name: query.annotations?.title || '',
+            name: annotations?.title || '',
         };
-    }, [query.annotations?.title]);
-
-    const handleSubmit = (name: string) => {
-        return dispatch(setQueryName(query.id, {...query.annotations, title: name}));
-    };
+    }, [annotations?.title]);
 
     return state === 'completed' || state === 'failed' || state === 'draft' ? (
         <div className={className}>
@@ -56,13 +59,7 @@ export default function EditQueryNameModal({query, className}: Props) {
                         setError(undefined);
                         setVisible(false);
                     }}
-                    onAdd={(form) => {
-                        const {name} = form.getState().values;
-                        return handleSubmit(name).catch((err) => {
-                            setError(err);
-                            throw err;
-                        });
-                    }}
+                    onAdd={handleSubmit}
                     initialValues={initialValues}
                     fields={[
                         {

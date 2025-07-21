@@ -60,37 +60,3 @@
         text-align: center;
     }
 }
-
-.queries-history-list {
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
-    flex: 1;
-
-    &__filter {
-        padding: 12px 12px 0;
-        margin-bottom: 8px;
-    }
-
-    &__list-wrapper {
-        flex: 1;
-        overflow: auto;
-        display: flex;
-        flex-direction: column;
-
-        .elements-table-wrapper {
-            overflow: auto;
-        }
-    }
-
-    &__list-wrapper > &__list {
-        flex: 1;
-    }
-
-    &__pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 8px 0;
-    }
-}

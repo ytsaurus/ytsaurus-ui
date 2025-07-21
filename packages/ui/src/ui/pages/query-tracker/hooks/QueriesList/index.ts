@@ -10,7 +10,7 @@ import {
 import {loadNextQueriesList, resetCursor} from '../../module/queries_list/actions';
 import {setSettingByKey} from '../../../../store/actions/settings';
 import {getSettingQueryTrackerQueriesListSidebarVisibilityMode} from '../../module/settings/selector';
-import {QueriesHistoryCursorDirection} from '../../../../pages/query-tracker/module/query-tracker-contants';
+import {QueriesHistoryCursorDirection} from '../../module/query-tracker-contants';
 
 export function useQueryList(): [QueryItem[], boolean] {
     const items = useSelector(getQueriesList);
