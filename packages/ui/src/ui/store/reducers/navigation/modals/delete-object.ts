@@ -10,7 +10,7 @@ import type {ActionD, YTError} from '../../../../types';
 
 export type DeleteObjectItem = {
     titleUnquoted?: string;
-    $attributes: object;
+    $attributes: Record<string, unknown>;
     name: string;
     path: string;
     type: string;

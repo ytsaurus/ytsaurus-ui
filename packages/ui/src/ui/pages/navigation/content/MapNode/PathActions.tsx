@@ -38,7 +38,7 @@ interface Props {
         type: string;
         dynamic: boolean;
         path: string;
-        $attributes: object;
+        $attributes: Record<string, unknown>;
         $value: unknown;
         tabletState: TabletStateType;
     };

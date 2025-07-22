@@ -26,7 +26,7 @@ import type {PreparedRole} from '../utils/acl';
 import type {UISettingsMonitoring} from '../../shared/ui-settings';
 import type {SubjectCardProps} from '../components/SubjectLink/SubjectLink';
 import type {QueryItem} from '../pages/query-tracker/module/api';
-import type {Node} from '../utils/navigation/content/map-nodes/node';
+import type {BaseMapNode} from '../utils/navigation/content/map-nodes/node';
 import type {PreloadErrorType} from '../constants';
 import type {RootState} from '../store/reducers';
 import {YTError} from '../types';
@@ -471,7 +471,7 @@ export interface UIFactory {
         | undefined
         | {
               additionalAttributes: Array<string>;
-              renderNodeIcon: (item: Node) => React.ReactNode;
+              renderNodeIcon: (item: BaseMapNode) => React.ReactNode;
           };
 
     getInlineSuggestionsApi(): InlineSuggestionsApi | undefined;
