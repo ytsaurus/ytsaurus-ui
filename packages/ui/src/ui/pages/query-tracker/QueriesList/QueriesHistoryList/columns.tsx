@@ -1,13 +1,13 @@
 import React from 'react';
-import hammer from '../../../../common/hammer';
 import {Text} from '@gravity-ui/uikit';
+import {Column} from '@gravity-ui/react-data-table';
+import block from 'bem-cn-lite';
+import hammer from '../../../../common/hammer';
 import {QueryStatusIcon} from '../../../../components/QueryStatus';
 import {formatTime} from '../../../../components/common/Timeline/util';
-import {Column} from '@gravity-ui/react-data-table';
 import {QueryEnginesNames} from '../../utils/query';
 import {QueryItem} from '../../module/api';
 import EditQueryNameModal from '../EditQueryNameModal/EditQueryNameModal';
-import block from 'bem-cn-lite';
 import {QueryStatus} from '../../../../types/query-tracker';
 import {QueryDuration} from '../../QueryDuration';
 import './QueryHistoryItem.scss';

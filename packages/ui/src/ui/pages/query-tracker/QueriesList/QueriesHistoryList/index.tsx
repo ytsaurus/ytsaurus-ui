@@ -1,22 +1,23 @@
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import DataTable, {Settings} from '@gravity-ui/react-data-table';
 import {QueryItem} from '../../module/api';
-import {refreshQueriesListIfNeeded} from '../../module/queries_list/actions';
 import {
-    getQueriesListTimestamp,
     getQueryListByDate,
     getQueryListColumns,
+    hasQueriesListMore,
     isQueriesListLoading,
 } from '../../module/queries_list/selectors';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
 import {useQueryNavigation} from '../../hooks/Query';
-import {ListPagination} from './ListPagination';
 import {useUpdater} from '../../../../hooks/use-updater';
 import block from 'bem-cn-lite';
 
 import './QueriesHistoryList.scss';
 import './QueryHistoryItem.scss';
+import {loadNextQueriesList, requestQueriesList} from '../../module/queries_list/actions';
+import {InfiniteScrollLoader} from '../../../../components/InfiniteScrollLoader';
+import {QueriesHistoryCursorDirection} from '../../module/query-tracker-contants';
 
 const b = block('queries-history-list');
 const itemBlock = block('query-history-item');
@@ -39,7 +40,7 @@ function QueriesHistoryListUpdater() {
     const dispatch = useDispatch();
 
     const updateFn = React.useCallback(() => {
-        dispatch(refreshQueriesListIfNeeded());
+        dispatch(requestQueriesList());
     }, [dispatch]);
 
     useUpdater(updateFn, {timeout: 5000});
@@ -48,18 +49,18 @@ function QueriesHistoryListUpdater() {
 }
 
 export function QueriesHistoryList() {
+    const dispatch = useDispatch();
     const itemsByDate = useSelector(getQueryListByDate);
     const isLoading = useSelector(isQueriesListLoading);
     const {columns} = useSelector(getQueryListColumns);
-    const timestamp = useSelector(getQueriesListTimestamp);
+    const hasMore = useSelector(hasQueriesListMore);
     const [selectedId, goToQuery] = useQueryNavigation();
-    const scrollElemRef = useRef<HTMLDivElement | null>(null);
 
-    useEffect(() => {
-        if (scrollElemRef?.current) {
-            scrollElemRef.current.scrollTop = 0;
-        }
-    }, [scrollElemRef, timestamp]);
+    const showPagination = hasMore && itemsByDate.length > 0;
+
+    const handleLoadMore = () => {
+        dispatch(loadNextQueriesList(QueriesHistoryCursorDirection.PAST));
+    };
 
     const setClassName = useCallback(
         (item: TableItem) => {
@@ -75,13 +76,13 @@ export function QueriesHistoryList() {
     return (
         <div className={b()}>
             <QueriesHistoryListUpdater />
-            <div className={b('list-wrapper')} ref={scrollElemRef}>
+            <div className={b('list-wrapper')}>
                 <DataTableYT
                     className={b('list')}
                     loading={isLoading}
                     columns={columns}
                     data={itemsByDate}
-                    useThemeYT={true}
+                    useThemeYT
                     rowKey={(row) => {
                         if (isHeaderTableItem(row)) {
                             return row.header;
@@ -94,7 +95,7 @@ export function QueriesHistoryList() {
                             goToQuery(item);
                         }
                     }}
-                    disableRightGap={true}
+                    disableRightGap
                     settings={tableSettings}
                     rowClassName={setClassName}
                     getColSpansOfRow={({row}) => {
@@ -107,9 +108,13 @@ export function QueriesHistoryList() {
                         return undefined;
                     }}
                 />
-                <div className={b('pagination')}>
-                    <ListPagination />
-                </div>
+                {showPagination && (
+                    <InfiniteScrollLoader
+                        className={b('pagination')}
+                        loading={isLoading}
+                        onLoadMore={handleLoadMore}
+                    />
+                )}
             </div>
         </div>
     );

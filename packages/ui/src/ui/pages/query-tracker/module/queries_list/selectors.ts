@@ -23,8 +23,6 @@ export const isQueriesListLoading = (state: RootState) => state.queryTracker.lis
 
 export const getQueriesList = (state: RootState) => getQueriesListState(state).items;
 
-export const getQueriesListTimestamp = (state: RootState) => getQueriesListState(state).timestamp;
-
 export const hasQueriesListMore = (state: RootState) => getQueriesListState(state).hasMore;
 
 export const getQueriesFilters = (state: RootState) => getQueriesListState(state).filter || {};
