@@ -1,4 +1,4 @@
-import {createSelector} from '@reduxjs/toolkit';
+import memoize_ from 'lodash/memoize';
 
 import {RootState} from '../../../store/reducers';
 import {accountsApi} from '../../../store/api/accounts';
@@ -11,27 +11,29 @@ export const getAccountsTypeFilter = createWidgetDataFieldSelector<
     'favourite' | 'usable' | 'custom'
 >('type', 'favourite');
 
-const createGetAccountsList = (widgetId: string) =>
-    createSelector(
-        [
-            (state: RootState) => getAccountsTypeFilter(state, widgetId),
-            (state: RootState) => {
-                const cluster = getCluster(state);
-                return accountsApi.endpoints.usableAccounts.select({cluster})(state);
-            },
-            getFavouriteAccounts,
-            (_, custom) => custom,
-        ],
-        (type, usable, favourite, custom) => {
-            if (type === 'favourite') {
-                return favourite?.length ? favourite.map((item) => item?.path) : [];
-            }
-            if (type === 'usable') {
-                return usable?.data || [];
-            }
-            return custom;
-        },
-    );
+const createUsableAccountsSelector = memoize_((cluster: string) =>
+    accountsApi.endpoints.usableAccounts.select({cluster}),
+);
+
+const createGetAccountsList = memoize_((widgetId: string) => {
+    return (state: RootState, custom: string[]): string[] => {
+        const type = getAccountsTypeFilter(state, widgetId);
+
+        if (type === 'favourite') {
+            const favourite = getFavouriteAccounts(state);
+            return favourite?.length ? favourite.map((item) => item?.path) : [];
+        }
+
+        if (type === 'usable') {
+            const cluster = getCluster(state);
+            const usableAccountsSelector = createUsableAccountsSelector(cluster);
+            const usableAccountsResult = usableAccountsSelector(state);
+            return usableAccountsResult?.data || [];
+        }
+
+        return custom;
+    };
+});
 
 export const getAccountsList = (state: RootState, widgetId: string, custom: string[]): string[] =>
     createGetAccountsList(widgetId)(state, custom);
