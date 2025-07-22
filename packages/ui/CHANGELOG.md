@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.99.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.99.0...ui-v1.99.1) (2025-07-22)
+
+
+### Bug Fixes
+
+* **Navigation:** now renderNodeIcon is called with correct argument ([9d4bc5a](https://github.com/ytsaurus/ytsaurus-ui/commit/9d4bc5a8e2f75497b799ab8fe9fc71438c0b89d5))
+
 ## [1.99.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.98.0...ui-v1.99.0) (2025-07-18)
 
 
