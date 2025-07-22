@@ -27,6 +27,118 @@ type OperationsQueryArgs = {
     limit?: number;
 };
 
+function createOperationRequestParameters(
+    limit: number | undefined,
+    operationState: string | undefined,
+    pool: Array<{tree: string; pool: string}> | undefined,
+): Partial<ListOperationsParams> {
+    return {
+        limit: limit ?? 10,
+        state: operationState === 'all' ? undefined : operationState,
+        pool: pool?.[0]?.pool?.length ? pool?.[0]?.pool : undefined,
+        pool_tree: pool?.[0]?.tree?.length ? pool?.[0]?.tree : undefined,
+    };
+}
+
+function createCustomAuthorRequests(
+    authors: Array<{value: string; type: string}> | undefined,
+    limit: number | undefined,
+    operationState: string | undefined,
+    pool: Array<{tree: string; pool: string}> | undefined,
+) {
+    if (!authors?.length) {
+        return [
+            {
+                command: 'list_operations' as const,
+                parameters: createOperationRequestParameters(limit, operationState, pool),
+            },
+        ];
+    }
+
+    return map_(authors, (item) => ({
+        command: 'list_operations' as const,
+        parameters: {
+            ...createOperationRequestParameters(limit, operationState, pool),
+            user: item?.value ? item?.value : undefined,
+        } as ListOperationsParams,
+    }));
+}
+
+function calculateProgress(jobs: any): OperationProgressInfo {
+    const progress: OperationProgressInfo = {
+        completed: 0,
+        running: 0,
+        jobs: 0,
+    };
+
+    if (jobs) {
+        const completed =
+            typeof jobs?.completed === 'object' ? jobs?.completed?.total : jobs?.completed;
+        progress.completed = (completed / (jobs?.total || 1)) * 100;
+        progress.running = ((jobs?.running || 1) / (jobs?.total || 1)) * 100;
+        progress.jobs = progress.completed + progress.running;
+    }
+
+    return progress;
+}
+
+function extractPoolsFromTrees(
+    trees: Record<string, {pool?: string} & unknown>,
+): {tree: string; pool: string[]}[] {
+    const pools: {tree: string; pool: string[]}[] = [];
+
+    forEach_(Object.values(trees), (tree, idx) => {
+        if (Object.keys(trees)?.[idx] && tree?.pool) {
+            pools.push({tree: Object.keys(trees)[idx], pool: [tree.pool]});
+        }
+    });
+
+    return pools;
+}
+
+function processOperation(operation: unknown) {
+    const id: string = ypath.getValue(operation, '/id') ?? 'unknown';
+    const title: string = ypath.getValue(operation, '/brief_spec/title') ?? id;
+    const startTime = ypath.getValue(operation, '/start_time');
+    const jobs = ypath.getValue(operation, '/brief_progress/jobs');
+
+    const progress = calculateProgress(jobs);
+
+    const operationState: StatusLabelState | NavigationFlowState | undefined = ypath.getValue(
+        operation,
+        '/state',
+    );
+    const operationUser: string = ypath.getValue(operation, '/authenticated_user');
+
+    const trees: Record<string, {pool?: string} & unknown> = ypath.getValue(
+        operation,
+        '/runtime_parameters/scheduling_options_per_pool_tree',
+    );
+
+    const pools = extractPoolsFromTrees(trees);
+
+    return {
+        title: {title, id},
+        startTime,
+        progress: {state: operationState, ...progress},
+        userPool: {user: operationUser, pools},
+    };
+}
+
+function processOperationsResponse(response: any[]) {
+    const operations = [];
+
+    for (let authorIdx = 0; authorIdx < response.length; authorIdx++) {
+        if (!response[authorIdx]?.operations) continue;
+
+        for (const operation of response[authorIdx].operations) {
+            operations.push(processOperation(operation));
+        }
+    }
+
+    return operations;
+}
+
 export async function fetchOperations(args: OperationsQueryArgs, api: BaseQueryApi) {
     try {
         const {cluster: _cluster, authorType, state: operationState, authors, pool, limit} = args;
@@ -36,31 +148,7 @@ export async function fetchOperations(args: OperationsQueryArgs, api: BaseQueryA
         let response;
 
         if (authorType === 'custom') {
-            let requests = map_(authors, (item) => ({
-                command: 'list_operations' as const,
-                parameters: {
-                    limit: limit ?? 10,
-                    state: operationState === 'all' ? undefined : operationState,
-                    user: item.value,
-                    pool: pool?.[0]?.pool?.length ? pool?.[0]?.pool : undefined,
-                    pool_tree: pool?.[0]?.tree?.length ? pool?.[0]?.tree : undefined,
-                } as ListOperationsParams,
-            }));
-
-            if (!authors?.length) {
-                requests = [
-                    {
-                        command: 'list_operations' as const,
-                        parameters: {
-                            limit: limit ?? 10,
-                            state: operationState === 'all' ? undefined : operationState,
-                            pool: pool?.[0]?.pool?.length ? pool?.[0]?.pool : undefined,
-                            pool_tree: pool?.[0]?.tree?.length ? pool?.[0]?.tree : undefined,
-                        },
-                    },
-                ];
-            }
-
+            const requests = createCustomAuthorRequests(authors, limit, operationState, pool);
             response = await ytApiV3Id.executeBatch(YTApiId.operationsDashboard, {
                 requests,
             });
@@ -70,69 +158,16 @@ export async function fetchOperations(args: OperationsQueryArgs, api: BaseQueryA
                     {
                         command: 'list_operations' as const,
                         parameters: {
-                            limit: limit ?? 10,
-                            state: operationState === 'all' ? undefined : operationState,
+                            ...createOperationRequestParameters(limit, operationState, pool),
                             user,
-                            pool: pool?.[0]?.pool?.length ? pool?.[0]?.pool : undefined,
-                            pool_tree: pool?.[0]?.tree?.length ? pool?.[0]?.tree : undefined,
                         },
                     },
                 ],
             });
         }
+
         response = map_(response, (item) => item?.output);
-
-        const operations = [];
-        for (let authorIdx = 0; authorIdx < response.length; authorIdx++) {
-            if (!response[authorIdx]?.operations) continue;
-
-            for (const operation of response[authorIdx].operations) {
-                const id: string = ypath.getValue(operation, '/id') ?? 'unknown';
-                const title: string = ypath.getValue(operation, '/brief_spec/title') ?? id;
-                const startTime = ypath.getValue(operation, '/start_time');
-
-                const jobs = ypath.getValue(operation, '/brief_progress/jobs');
-
-                const progress: OperationProgressInfo = {
-                    completed: 0,
-                    running: 0,
-                    jobs: 0,
-                };
-
-                if (jobs) {
-                    const completed =
-                        typeof jobs.completed === 'object' ? jobs.completed.total : jobs.completed;
-
-                    progress['completed'] = (completed / (jobs.total || 1)) * 100;
-                    progress['running'] = ((jobs.running || 1) / (jobs.total || 1)) * 100;
-                    progress['jobs'] = progress['completed'] + progress['running'];
-                }
-
-                const operationState: StatusLabelState | NavigationFlowState | undefined =
-                    ypath.getValue(operation, '/state');
-                const user: string = ypath.getValue(operation, '/authenticated_user');
-
-                const trees: Record<string, {pool?: string} & unknown> = ypath.getValue(
-                    operation,
-                    '/runtime_parameters/scheduling_options_per_pool_tree',
-                );
-
-                const pools: {tree: string; pool: string[]}[] = [];
-
-                forEach_(Object.values(trees), (tree, idx) => {
-                    if (Object.keys(trees)?.[idx] && tree?.pool) {
-                        pools.push({tree: Object.keys(trees)[idx], pool: [tree.pool]});
-                    }
-                });
-
-                operations.push({
-                    title: {title, id},
-                    startTime,
-                    progress: {state: operationState, ...progress},
-                    userPool: {user, pools},
-                });
-            }
-        }
+        const operations = processOperationsResponse(response);
 
         return {data: operations};
     } catch (error) {
