@@ -2,7 +2,6 @@ import React, {useCallback, useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import DataTable, {Settings} from '@gravity-ui/react-data-table';
 import {QueryItem} from '../../module/api';
-import {refreshQueriesListIfNeeded} from '../../module/queries_list/actions';
 import {
     getQueriesListTimestamp,
     getQueryListByDate,
@@ -17,6 +16,7 @@ import block from 'bem-cn-lite';
 
 import './QueriesHistoryList.scss';
 import './QueryHistoryItem.scss';
+import {requestQueriesList} from '../../module/queries_list/actions';
 
 const b = block('queries-history-list');
 const itemBlock = block('query-history-item');
@@ -39,7 +39,7 @@ function QueriesHistoryListUpdater() {
     const dispatch = useDispatch();
 
     const updateFn = React.useCallback(() => {
-        dispatch(refreshQueriesListIfNeeded());
+        dispatch(requestQueriesList());
     }, [dispatch]);
 
     useUpdater(updateFn, {timeout: 5000});

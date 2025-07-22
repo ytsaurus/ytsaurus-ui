@@ -13,11 +13,6 @@ export enum QueriesListMode {
     Navigation = 'navigation',
 }
 
-export const getQueriesListModes = ({vcs}: {vcs: boolean}): QueriesListMode[] => {
-    const queriesListMode = Object.values(QueriesListMode);
-    return vcs ? queriesListMode : queriesListMode.filter((item) => item !== QueriesListMode.VCS);
-};
-
 export const QueriesListFilterPresets: Record<QueriesListMode, Partial<QueriesListFilter>> = {
     [QueriesListMode.History]: {
         is_tutorial: false,
@@ -50,6 +45,6 @@ export type QueriesListFilter = {
 };
 
 export type QueriesListCursor = {
-    cursorTime: string;
+    cursorTime?: string;
     direction: QueriesHistoryCursorDirection;
 };

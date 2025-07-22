@@ -6,6 +6,7 @@ import {
     QueriesListMode,
 } from './types';
 import type {QueryItem} from '../api';
+import {QueriesHistoryCursorDirection} from '../query-tracker-contants';
 
 export type State = 'loading' | 'ready' | 'error';
 
@@ -15,7 +16,7 @@ export type QueriesListState = {
     hasMore: boolean;
     timestamp: number; // Determines is the list is changed(by filter or cursor).
     filter: QueriesListFilter;
-    cursor?: QueriesListCursor;
+    cursor: QueriesListCursor;
     listMode: QueriesListMode;
 };
 
@@ -25,7 +26,9 @@ export const initialState: QueriesListState = {
     hasMore: false,
     timestamp: 0,
     filter: DefaultQueriesListFilter[QueriesListMode.History],
-    cursor: undefined,
+    cursor: {
+        direction: QueriesHistoryCursorDirection.PAST,
+    },
     listMode: QueriesListMode.History,
 };
 
@@ -39,7 +42,7 @@ const queryListSlice = createSlice({
         setFilter: (state, action: PayloadAction<QueriesListFilter>) => {
             state.filter = action.payload;
         },
-        setCursor: (state, action: PayloadAction<QueriesListCursor | undefined>) => {
+        setCursor: (state, action: PayloadAction<QueriesListCursor>) => {
             state.cursor = action.payload;
         },
         setListMode: (state, action: PayloadAction<QueriesListMode>) => {

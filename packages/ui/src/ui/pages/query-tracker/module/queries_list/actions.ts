@@ -7,34 +7,10 @@ import {QueriesListFilter} from './types';
 import {QueriesHistoryCursorDirection} from '../query-tracker-contants';
 import {getQueryListLimit} from '../../../../store/selectors/settings/settings-queries';
 import {setCursor, setFilter, setLoading, updateListState} from './queryListSlice';
+import moment from 'moment';
 
 type AsyncAction = ThunkAction<any, RootState, any, any>;
 
-export function refreshQueriesListIfNeeded(onDone?: () => void): AsyncAction {
-    return async (dispatch, getState) => {
-        try {
-            const state = getState();
-            const list = getQueriesList(state);
-            if (list?.length) {
-                const newQueriesResp = await dispatch(
-                    loadQueriesList({
-                        params: getQueriesListFilterParams(state),
-                        cursor: {
-                            cursor_direction: QueriesHistoryCursorDirection.FUTURE,
-                            cursor_time: list[0].start_time,
-                        },
-                        limit: 1,
-                    }),
-                );
-                if (newQueriesResp.queries.length) {
-                    dispatch(requestQueriesList({refresh: true}));
-                }
-            }
-        } finally {
-            onDone?.();
-        }
-    };
-}
 export function requestQueriesList(params?: {refresh?: boolean}): AsyncAction {
     return async (dispatch, getState) => {
         const state = getState();
@@ -55,9 +31,14 @@ export function requestQueriesList(params?: {refresh?: boolean}): AsyncAction {
                     errorTitle: 'Failed to load queries list',
                 },
             );
+
+            const items = result.queries.sort((a, b) =>
+                moment(b.start_time).diff(moment(a.start_time)),
+            );
+
             dispatch(
                 updateListState({
-                    items: result.queries,
+                    items,
                     hasMore: result.incomplete,
                     timestamp: params?.refresh ? undefined : result.timestamp,
                 }),
@@ -72,15 +53,14 @@ export function loadNextQueriesList(direction = QueriesHistoryCursorDirection.PA
     return (dispatch, getState) => {
         const state = getState();
         const items = getQueriesList(state);
+
+        const isFuture = direction === QueriesHistoryCursorDirection.FUTURE;
+        const lastItem = items[isFuture ? 0 : items.length - 1];
+
         if (items.length) {
             dispatch(
                 setCursor({
-                    cursorTime:
-                        items[
-                            direction === QueriesHistoryCursorDirection.FUTURE
-                                ? 0
-                                : items.length - 1
-                        ].start_time,
+                    cursorTime: lastItem.start_time,
                     direction,
                 }),
             );
@@ -91,7 +71,11 @@ export function loadNextQueriesList(direction = QueriesHistoryCursorDirection.PA
 
 export function resetCursor(silent = false): AsyncAction {
     return (dispatch) => {
-        dispatch(setCursor(undefined));
+        dispatch(
+            setCursor({
+                direction: QueriesHistoryCursorDirection.PAST,
+            }),
+        );
         if (!silent) {
             dispatch(requestQueriesList());
         }
