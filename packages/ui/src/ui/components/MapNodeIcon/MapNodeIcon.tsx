@@ -15,12 +15,14 @@ import {isLinkToTrashNode} from '../../utils/navigation/isLinkToTrashNode';
 import QueueConsumerIcon from '../../assets/img/svg/icons/queue-consumer.svg';
 import QueueProducerIcon from '../../assets/img/svg/icons/queue-producer.svg';
 
+import type {BaseMapNode} from '../../utils/navigation/content/map-nodes/node';
+
 import './MapNodeIcon.scss';
 
-export function MapNodeIcon({node}: {node: Record<string, unknown>}) {
+export function MapNodeIcon({node}: {node: BaseMapNode}) {
     const item = ypath.getAttributes(node);
     const iconType = item?.type === 'table' && item?.dynamic ? 'table_dynamic' : item?.type;
-    let icon = UIFactory.getNavigationMapNodeSettings()?.renderNodeIcon(item);
+    let icon = UIFactory.getNavigationMapNodeSettings()?.renderNodeIcon(node);
 
     if (icon) {
         // do nothing
