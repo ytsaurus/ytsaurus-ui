@@ -112,10 +112,16 @@
     "@gravity-ui/unipika": "^5.1.0",
     "@gravity-ui/websql-autocomplete": "^12.3.0",
     "@gravity-ui/yagr": "^4.3.1",
+    "@playwright/experimental-ct-react": "^1.53.2",
+    "@playwright/test": "^1.53.2",
     "@reduxjs/toolkit": "^2.6.0",
     "@statoscope/cli": "^5.28.2",
     "@statoscope/stats-validator-plugin-webpack": "^5.28.2",
     "@statoscope/stats-validator-reporter-stats-report": "^5.28.2",
+    "@storybook/addon-styling-webpack": "^2.0.0",
+    "@storybook/addon-webpack5-compiler-babel": "^3.0.6",
+    "@storybook/cli": "^9.0.16",
+    "@storybook/react-webpack5": "^9.0.16",
     "@types/d3": "^7.4.0",
     "@types/express": "^4.17.13",
     "@types/fontfaceobserver": "^2.1.0",
@@ -134,6 +140,7 @@
     "@types/react-router": "^5.1.18",
     "@types/react-router-dom": "^5.3.3",
     "@types/type-is": "^1.6.3",
+    "@vitejs/plugin-react": "^4.6.0",
     "@ytsaurus/interface-helpers": "^0.3.0",
     "bem-cn-lite": "^4.1.0",
     "bignumber.js": "^9.1.2",
@@ -164,6 +171,8 @@
     "monaco-editor": "^0.40.0",
     "monaco-editor-webpack-plugin": "^7.1.0",
     "monaco-vim": "^0.4.2",
+    "msw": "^2.10.3",
+    "msw-storybook-addon": "^2.0.5",
     "postcss": "^8.4.29",
     "postcss-scss": "^4.0.7",
     "prop-types": "^15.6.0",
@@ -190,9 +199,12 @@
     "sass": "^1.67.0",
     "screenfull": "^6.0.2",
     "split.js": "^1.6.5",
+    "storybook": "^9.0.16",
     "typescript": "^5.2.2",
     "vis-data": "^7.1.7",
     "vis-network": "^9.1.2",
+    "vite-plugin-commonjs": "^0.10.4",
+    "vite-plugin-svgr": "^4.3.0",
     "wc-react": "^0.5.1",
     "web-worker": "^1.3.0"
   },
@@ -216,5 +228,10 @@
     "react-use": {
       "screenfull": "$screenfull"
     }
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }
