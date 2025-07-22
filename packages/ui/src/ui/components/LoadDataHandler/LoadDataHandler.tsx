@@ -11,8 +11,8 @@ const toaster = new Toaster();
 
 interface LoadDataHandlerProps {
     alwaysShowError?: boolean;
-    loaded: boolean;
-    error: boolean;
+    loaded?: boolean;
+    error?: boolean;
     errorData?: YTError;
     children: React.ReactNode;
 }
