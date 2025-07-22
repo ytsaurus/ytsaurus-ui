@@ -4,6 +4,8 @@ import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
 
+import {Link} from '@gravity-ui/uikit';
+
 import Icon from '../../components/Icon/Icon';
 
 import withCollapsible from '../../hocs/withCollapsible';
@@ -27,6 +29,7 @@ type LabelsGroupItem = {
     name: string;
     isDefault?: boolean;
     onClick: () => void;
+    url?: string;
 };
 
 class LabelsGroup extends Component<LabelsGroupProps> {
@@ -65,7 +68,7 @@ class LabelsGroup extends Component<LabelsGroupProps> {
 
     renderLabel(label: LabelsGroupItem) {
         const {onRemove} = this.props;
-        const {name, isDefault, onClick} = label;
+        const {name, url, isDefault, onClick} = label;
 
         const onLabelClick = () => this.handleLabelClick(label);
         const onRemoveClick = (evt: React.MouseEvent<HTMLElement>) =>
@@ -77,7 +80,13 @@ class LabelsGroup extends Component<LabelsGroupProps> {
                 className={block('label', {clickable: Boolean(onClick)})}
                 key={name}
             >
-                {name}
+                {url ? (
+                    <Link href={url} target="_blank">
+                        {name}
+                    </Link>
+                ) : (
+                    name
+                )}
 
                 {onRemove && !isDefault && (
                     <span onClick={onRemoveClick} className={block('close')}>
