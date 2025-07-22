@@ -516,10 +516,7 @@ const mapStateToProps = (state: RootState) => {
 
     const monitorTabVisible = Boolean(monitoringComponent) || Boolean(monitorTabUrlTemplate);
 
-    const pyDLTelemetryTabVisible = Boolean(
-        UIFactory.PyDLTelemetrySetup?.hasTelemtery(operation) &&
-            ['completed', 'failed', 'aborted'].includes(operation?.state),
-    );
+    const pyDLTelemetryTabVisible = Boolean(UIFactory.PyDLTelemetrySetup?.hasTelemtery(operation));
 
     return {
         cluster: getCurrentCluster(state),
