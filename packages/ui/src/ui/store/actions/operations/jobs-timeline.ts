@@ -1,5 +1,4 @@
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {getBatchError} from '../../../utils/utils';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../reducers';
 import {Action} from 'redux';
@@ -55,6 +54,16 @@ export const getJobsWithEvents =
             const listResponse = await ytApiV3Id.listJobs(YTApiId.operationGetJobs, {
                 operation_id: operationId,
                 cancellation: cancelHelper.removeAllAndSave,
+                attributes: [
+                    'events',
+                    'state',
+                    'job_cookie',
+                    'task_name',
+                    'start_time',
+                    'finish_time',
+                    'address',
+                    'allocation_id',
+                ],
             });
 
             const jobs = listResponse.jobs as OperationJob[];
@@ -63,28 +72,8 @@ export const getJobsWithEvents =
                 return;
             }
 
-            const requests = jobs.map(({id}) => {
-                return {
-                    command: 'get_job' as const,
-                    parameters: {
-                        operation_id: operationId,
-                        job_id: id,
-                    },
-                };
-            });
-
-            const response = await ytApiV3Id.executeBatch<OperationJob>(YTApiId.operationGetJobs, {
-                parameters: {requests},
-                cancellation: cancelHelper.removeAllAndSave,
-            });
-
-            const error = getBatchError(response, 'Get operation jobs error');
-            if (error) {
-                throw error;
-            }
-
-            const result = response.reduce<Pick<JobsTimelineState, 'jobs' | 'eventsInterval'>>(
-                (acc, {output: job}) => {
+            const result = jobs.reduce<Pick<JobsTimelineState, 'jobs' | 'eventsInterval'>>(
+                (acc, job) => {
                     if (!job?.events || !job.events.length) return acc;
 
                     const jobEvents = job.events;
