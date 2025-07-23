@@ -127,11 +127,7 @@ export function initClusterParams(cluster: string): GlobalThunkAction<Promise<vo
                 return rumId
                     .fetch(
                         YTApiId.clusterParamsIsDeveloper,
-                        checkIsDeveloper(
-                            login,
-                            undefined,
-                            YTApiId[YTApiId.clusterParamsIsDeveloper],
-                        ),
+                        checkIsDeveloper(login, undefined, YTApiId.clusterParamsIsDeveloper),
                     )
                     .then((isDeveloper) => {
                         if (isDeveloper) {

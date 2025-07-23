@@ -8,7 +8,7 @@ export const queueApi = rootApi.injectEndpoints({
     endpoints: (build) => ({
         export: build.mutation({
             queryFn: exportsMutation,
-            invalidatesTags: [String(YTApiId.queueExportConfig)],
+            invalidatesTags: [YTApiId.queueExportConfig],
         }),
         createConsumer: build.mutation({
             queryFn: createConsumer,

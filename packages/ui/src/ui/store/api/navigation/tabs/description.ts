@@ -51,14 +51,14 @@ export const descriptionApi = rootApi.injectEndpoints({
         }),
         annotation: build.query<string, {cluster: string; path: string}>({
             queryFn: annotationQuery,
-            providesTags: [String(YTApiId.navigationGetAnnotation)],
+            providesTags: [YTApiId.navigationGetAnnotation],
         }),
     }),
 });
 
 export function invalidateYTAnnotation(): ThunkAction<void, RootState, never, Action> {
     return (dispatch) => {
-        dispatch(descriptionApi.util.invalidateTags([String(YTApiId.navigationGetAnnotation)]));
+        dispatch(descriptionApi.util.invalidateTags([YTApiId.navigationGetAnnotation]));
     };
 }
 

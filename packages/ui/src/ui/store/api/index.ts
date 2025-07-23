@@ -1,7 +1,7 @@
 import {BaseQueryFn, createApi} from '@reduxjs/toolkit/query/react';
-import {YTApiId} from '../../rum/rum-wrap-api';
+import {YTApiIdType} from '../../../shared/constants/yt-api-id';
 
-const tagTypes = Object.keys(YTApiId);
+const tagTypes = [] as Array<YTApiIdType>;
 
 const baseQuery: BaseQueryFn = () => {
     return {data: undefined};

@@ -8,6 +8,8 @@ import some_ from 'lodash/some';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
+import {YTApiIdType} from '../../../shared/constants/yt-api-id';
+
 import UIFactory from '../../UIFactory';
 import {
     ACE,
@@ -211,7 +213,7 @@ export function makeCheckPermissionBatchSubRequestUI({
 
 export function checkPermissions(
     arr: Array<CheckPermissionItem>,
-    ytApiId?: YTApiId,
+    ytApiId?: YTApiIdType,
 ): Promise<CheckPermissionResult[]> {
     const requests = map_(arr, makeCheckPermissionBatchSubRequestUI);
 
