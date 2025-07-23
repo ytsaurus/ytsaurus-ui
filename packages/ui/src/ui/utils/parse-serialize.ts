@@ -30,7 +30,7 @@ export const parseSerializeBoolean: Serialization<boolean> = {
     serialize: (v: boolean) => (v ? `${v}` : ''),
 };
 
-export function parseSerializeSymbolCreate<K extends string>(): Serialization<K> {
+export function parseSerializeSymbolCreate<K extends string | undefined>(): Serialization<K> {
     return parseSerializeString as any;
 }
 
