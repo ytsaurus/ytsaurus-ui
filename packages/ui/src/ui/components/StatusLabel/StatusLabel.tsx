@@ -16,6 +16,7 @@ function getViewState(label?: StatusLabelProps['label']): ViewState {
         preparing: 'preparing',
         pending: 'preparing',
         starting: 'preparing',
+        waiting: 'preparing',
 
         // running states
         running: 'running',

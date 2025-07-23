@@ -53,7 +53,7 @@ export type JobState =
     | 'running'
     | 'starting'
     | 'suspended'
-    | 'running';
+    | 'waiting';
 
 export interface CompetitiveJobs {
     archive_job_count: number;

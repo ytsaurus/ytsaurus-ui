@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import Loader from '../Loader/Loader';
+import Loader from '../../pages/query-tracker/Plan/components/Loader/Loader';
 import {useVirtual} from 'react-virtual-alpha';
 
-import {handleRefs, hasKey} from '../../utils';
+import {handleRefs, hasKey} from '../../pages/query-tracker/Plan/utils';
 
 import {findNextIndex} from './helpers';
 

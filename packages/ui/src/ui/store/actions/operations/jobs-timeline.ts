@@ -74,10 +74,13 @@ export const getJobsWithEvents =
 
             const result = jobs.reduce<Pick<JobsTimelineState, 'jobs' | 'eventsInterval'>>(
                 (acc, job) => {
-                    if (!job?.events || !job.events.length) return acc;
+                    // filter valid jobs
+                    if (!job?.events || job.job_cookie === undefined || !job.events.length)
+                        return acc;
 
                     const jobEvents = job.events;
-                    const isRunning = job.state === 'running';
+                    const isRunning = job.state === 'running' || job.state === 'waiting';
+                    const isAborted = job.state === 'aborted';
 
                     // stretch running job timeline
                     const maxTime = isRunning
@@ -87,7 +90,7 @@ export const getJobsWithEvents =
                     const percent = (maxTime - minTime) / 100;
 
                     const timeLineJob: TimelineJob = {
-                        id: job.job_id,
+                        id: job.id,
                         cookieId: job.job_cookie,
                         allocationId: job.allocation_id,
                         groupName: job.task_name || '',
@@ -126,13 +129,24 @@ export const getJobsWithEvents =
                         }
                     }
 
-                    // stretch running job timeline
-                    if (isRunning) {
+                    if (isRunning || isAborted) {
                         const lastEventIndex = timeLineJob.events.length - 1;
                         const {startTime} = timeLineJob.events[lastEventIndex];
-                        timeLineJob.events[lastEventIndex].endTime = Date.now();
-                        timeLineJob.events[lastEventIndex].percent =
-                            (Date.now() - startTime) / percent;
+
+                        // stretch running job timeline
+                        if (isRunning) {
+                            timeLineJob.events[lastEventIndex].endTime = Date.now();
+                            timeLineJob.events[lastEventIndex].percent =
+                                (Date.now() - startTime) / percent;
+                        }
+
+                        // set endTime to finish_time for aborted jobs
+                        if (isAborted && timeLineJob.finish_time) {
+                            const endTime = dayjs(timeLineJob.finish_time).valueOf();
+                            timeLineJob.events[lastEventIndex].endTime = endTime;
+                            timeLineJob.events[lastEventIndex].percent =
+                                (endTime - startTime) / percent;
+                        }
                     }
 
                     acc.jobs.push(timeLineJob);

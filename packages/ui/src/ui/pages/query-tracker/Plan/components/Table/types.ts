@@ -1,6 +1,6 @@
 import type * as React from 'react';
 
-import type {ListProps} from '../List';
+import type {ListProps} from '../../../../../components/List';
 
 export type SortOrder = 'ascending' | 'descending';
 export type Align = 'left' | 'center' | 'right';
