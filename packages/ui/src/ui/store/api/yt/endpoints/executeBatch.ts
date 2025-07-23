@@ -1,11 +1,12 @@
-import {BatchParameters, YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
+import {YTApiIdType} from '../../../../../shared/constants/yt-api-id';
+import {BatchParameters, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {BatchResultsItem} from '../../../../../shared/yt-types';
 import {WrapApiOptions, getBatchError, wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {YTError} from '../../../../types';
 import {YTEndpointApiArgs} from './types';
 
 export type BatchApiArgs = YTEndpointApiArgs<BatchParameters> & {
-    id: YTApiId;
+    id: YTApiIdType;
     errorTitle: string;
     toaster?: WrapApiOptions<unknown, 'v3'>;
 };

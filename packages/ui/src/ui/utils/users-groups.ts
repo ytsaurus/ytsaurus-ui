@@ -1,4 +1,6 @@
-import {YTApiId, ytApiV3Id} from '../rum/rum-wrap-api';
+import {YTApiIdType} from '../../shared/constants/yt-api-id';
+
+import {ytApiV3Id} from '../rum/rum-wrap-api';
 import {USE_CACHE, USE_MAX_SIZE} from '../../shared/constants/yt-api';
 import ytLocalStorage from './yt-local-storage';
 
@@ -7,7 +9,7 @@ interface Params {
     attributes?: Array<string>;
 }
 
-export function fetchFullList1M(id: YTApiId, {path, attributes = [], ...rest}: Params) {
+export function fetchFullList1M(id: YTApiIdType, {path, attributes = [], ...rest}: Params) {
     return ytApiV3Id.list(id, {path, attributes, ...USE_MAX_SIZE, ...rest});
 }
 
@@ -21,7 +23,7 @@ function isUsersCacheEnabled() {
     return usersDisabledCacheEndTime < Date.now();
 }
 
-export function listAllUsers(id: YTApiId, {attributes}: Pick<Params, 'attributes'> = {}) {
+export function listAllUsers(id: YTApiIdType, {attributes}: Pick<Params, 'attributes'> = {}) {
     const useCache = isUsersCacheEnabled();
 
     return ytApiV3Id.list(id, {
@@ -42,7 +44,7 @@ function isGroupsCacheEnabled() {
     return groupsDisabledCacheEndTime < Date.now();
 }
 
-export function listAllGroups(id: YTApiId, {attributes}: Pick<Params, 'attributes'> = {}) {
+export function listAllGroups(id: YTApiIdType, {attributes}: Pick<Params, 'attributes'> = {}) {
     const useCache = isGroupsCacheEnabled();
 
     return ytApiV3Id.list(id, {

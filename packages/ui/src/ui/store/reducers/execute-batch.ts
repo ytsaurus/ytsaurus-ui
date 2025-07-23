@@ -1,16 +1,17 @@
+import {YTApiIdType} from '../../../shared/constants/yt-api-id';
+
 import {ActionD, YTError} from '../../types';
 import {
     EXECUTE_BATCH_RETRY_HIDE_MODAL,
     EXECUTE_BATCH_RETRY_SHOW_MODAL,
 } from '../../constants/execute-batch';
 import {ExecuteBatchOptions} from '../actions/execute-batch';
-import {YTApiId} from '../../rum/rum-wrap-api';
 import {BatchResultsItem, BatchSubRequest} from '../../../shared/yt-types';
 
 export interface ExecuteBatchStateItem extends HandleExecuteBatchRetryParams {
     id: string;
     showModal: boolean;
-    ytApiId: YTApiId;
+    ytApiId: YTApiIdType;
 }
 
 export type ExecuteBatchState = Record<string, ExecuteBatchStateItem>;

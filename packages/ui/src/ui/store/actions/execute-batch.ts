@@ -1,6 +1,8 @@
 import concat_ from 'lodash/concat';
 import filter_ from 'lodash/filter';
 
+import {YTApiIdType} from '../../../shared/constants/yt-api-id';
+
 import {getBatchError, getBatchErrorIndices} from '../../utils/utils';
 import {YTError} from '../../types';
 import {ExecuteBatchAction, HandleExecuteBatchRetryParams} from '../reducers/execute-batch';
@@ -13,7 +15,7 @@ import {
 import {rumLogError} from '../../rum/rum-counter';
 import {getExecuteBatchState} from '../selectors/execute-batch';
 import {CancelTokenSource} from 'axios';
-import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
+import {ytApiV3Id} from '../../rum/rum-wrap-api';
 import {BatchResultsItem, BatchSubRequest} from '../../../shared/yt-types';
 
 const MAX_REQUESTS_COUNT_PER_BATCH = 100;
@@ -33,7 +35,7 @@ export interface ExecuteBatchOptions {
  * @param options
  */
 export async function executeBatchWithRetries<T>(
-    id: YTApiId,
+    id: YTApiIdType,
     requests: Array<BatchSubRequest>,
     options: ExecuteBatchOptions,
 ): Promise<Array<BatchResultsItem<T>>> {
@@ -101,7 +103,7 @@ function isBatchError<T>(error: any): error is BatchError<T> {
 }
 
 async function handleBatchSlice<T>(
-    id: YTApiId,
+    id: YTApiIdType,
     requests: Array<BatchSubRequest>,
     options: ExecuteBatchOptions,
 ): Promise<Array<BatchResultsItem<T>>> {
@@ -143,7 +145,7 @@ async function handleBatchSlice<T>(
 }
 
 async function handleFailedRequests<T>(
-    id: YTApiId,
+    id: YTApiIdType,
     requests: Array<BatchSubRequest> = [],
     error: YTError,
     options: ExecuteBatchOptions,
@@ -169,7 +171,7 @@ function makeId() {
 }
 
 function showExecuteBatchRetryModal(
-    ytApiId: YTApiId,
+    ytApiId: YTApiIdType,
     params: HandleExecuteBatchRetryParams,
 ): ExecuteBatchThunkAction {
     return (dispatch) => {

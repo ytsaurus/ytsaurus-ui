@@ -19,15 +19,15 @@ export const ytApi = rootApi.injectEndpoints({
     endpoints: (build) => ({
         fetchBatch: build.query<BatchApiResults, BatchApiArgs>({
             queryFn: executeBatchV3,
-            providesTags: (_result, _error, arg) => [String(arg.id)],
+            providesTags: (_result, _error, arg) => [arg.id],
         }),
         updateBatch: build.mutation<BatchApiResults, BatchApiArgs>({
             queryFn: executeBatchV3,
-            invalidatesTags: (_result, _error, arg) => [String(arg.id)],
+            invalidatesTags: (_result, _error, arg) => [arg.id],
         }),
         listQueries: build.query({
             queryFn: listQueries,
-            providesTags: (_result, _error, _arg) => [String(YTApiId.listQueries)],
+            providesTags: (_result, _error, _arg) => [YTApiId.listQueries],
         }),
         flowExecute: build.query({
             queryFn: flowExecute,
