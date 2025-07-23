@@ -13,7 +13,7 @@ import {
 } from '../../../../../store/selectors/operations/jobs-timeline';
 import {getJobsWithEvents} from '../../../../../store/actions/operations/jobs-timeline';
 import {TimeLineHeader} from './TimeLineHeader';
-import {JobsGroups} from './JobsGroups';
+import {OperationTimeline} from './OperationTimeline';
 import {useUpdater} from '../../../../../hooks/use-updater';
 import WithStickyToolbar from '../../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {MAX_JOBS_COUNT} from './constants';
@@ -68,7 +68,7 @@ export const JobsTimeline: FC = () => {
     return (
         <WithStickyToolbar
             toolbar={<TimeLineHeader />}
-            content={<JobsGroups />}
+            content={<OperationTimeline />}
             className={block()}
             padding="skip-horizontal"
         />

@@ -29,10 +29,7 @@ export type TimelineJob = {
 export type JobsTimelineState = {
     isLoading: boolean;
     jobsCountError: boolean;
-    selectedJob: {
-        id: string;
-        timelineId: string;
-    };
+    selectedJob: string;
     jobs: TimelineJob[];
     filter: string;
     interval?: Interval;
@@ -43,10 +40,7 @@ export type JobsTimelineState = {
 const initialState: JobsTimelineState = {
     isLoading: false,
     jobsCountError: false,
-    selectedJob: {
-        id: '',
-        timelineId: '',
-    },
+    selectedJob: '',
     jobs: [],
     filter: '',
     interval: undefined,
@@ -67,13 +61,7 @@ const jobsTimelineSlice = createSlice({
         setJobsCountError(state, action: PayloadAction<boolean>) {
             state.jobsCountError = action.payload;
         },
-        setSelectedJob(
-            state,
-            action: PayloadAction<{
-                id: string;
-                timelineId: string;
-            }>,
-        ) {
+        setSelectedJob(state, action: PayloadAction<string>) {
             state.selectedJob = action.payload;
         },
         setJobs(
