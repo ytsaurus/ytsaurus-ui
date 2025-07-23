@@ -36,6 +36,7 @@ function postformat(value) {
         ['acl', 'ACL'],
         ['id', 'Id'],
         ['cpu', 'CPU'],
+        ['ram', 'RAM'],
         ['gpu', 'GPU'],
         ['In memory', 'In-memory'],
         ['Yt', 'YT'],
