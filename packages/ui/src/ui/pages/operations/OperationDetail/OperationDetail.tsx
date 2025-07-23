@@ -542,7 +542,7 @@ const mapStateToProps = (state: RootState, routerProps: RouteProps) => {
         monitorTabTitle,
         monitorTabUrlTemplate,
         monitoringComponent,
-        timelineTabVisible: getSettingsTimelineTabVisible(state),
+        timelineTabVisible: getSettingsTimelineTabVisible(state) && operation?.type === 'vanilla',
         jobsMonitorIsSupported: Boolean(UIFactory.getMonitorComponentForJob()),
         jobsMonitorVisible: getJobsMonitorTabVisible(state),
         hasStatististicsTab: getOperationStatiscsHasData(state),

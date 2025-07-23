@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import {List} from '../List';
+import {List} from '../../../../../components/List';
 import {handleRefs} from '../../utils';
 
 import {ColumnType, DataTableProps, SortOrder, SortState} from './types';

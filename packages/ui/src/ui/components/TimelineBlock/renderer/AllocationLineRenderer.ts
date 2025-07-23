@@ -1,6 +1,4 @@
-import {TimelineEvent, yaTimelineConfig} from '../../../packages/ya-timeline';
-import {AbstractEventRenderer} from '../../../packages/ya-timeline/components/Events';
-import {Hitbox} from '../../../packages/ya-timeline/components/Events/AbstractEventRenderer';
+import {AbstractEventRenderer, TimelineEvent} from '@gravity-ui/timeline';
 
 export type AllocationLineEvent = TimelineEvent & {
     allocationId: string;
@@ -16,15 +14,17 @@ export class AllocationLineRenderer extends AbstractEventRenderer {
         rawX0: number,
         rawX1: number,
         y: number,
+        h: number,
     ) {
-        const y0 = y - yaTimelineConfig.LINE_HEIGHT / 2;
+        const height = h * 2;
+        const y0 = y - height / 2;
         ctx.beginPath();
         ctx.fillStyle = 'rgba(107, 132, 153, 0.3)';
-        ctx.rect(rawX0, y0, rawX1 - rawX0, yaTimelineConfig.LINE_HEIGHT);
+        ctx.rect(rawX0, y0, rawX1 - rawX0, height);
         ctx.fill();
     }
 
-    getHitbox(_event: TimelineEvent, rawX0: number, rawX1: number): Hitbox {
+    getHitbox(_event: TimelineEvent, rawX0: number, rawX1: number) {
         const {x0, x1} = this.getFixedXCoordinates(rawX0, rawX1);
         this.hitboxResult.left = x0;
         this.hitboxResult.right = x1;
