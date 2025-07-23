@@ -168,8 +168,8 @@ export const AbortableStatuses = ['running', 'pending'];
 
 export const CompletedStates = ['draft', 'aborted', 'completed', 'failed'];
 
-export type QueriiesListCursorParams = {
-    cursor_time: string;
+export type QueriesListCursorParams = {
+    cursor_time?: string;
     cursor_direction: QueriesHistoryCursorDirection;
 };
 
@@ -182,7 +182,7 @@ export type QueriesListParams = {
 
 export type QueriesListRequestParams = {
     params: QueriesListParams;
-    cursor?: QueriiesListCursorParams;
+    cursor?: QueriesListCursorParams;
     limit?: number;
 };
 

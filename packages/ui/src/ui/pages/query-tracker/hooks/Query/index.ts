@@ -15,7 +15,7 @@ export const useQueryNavigation = (): [QueryItem['id'] | undefined, (id: QueryIt
         (item: QueryItem) => {
             history.push(createQueryUrl(cluster, item.id));
         },
-        [history],
+        [cluster, history],
     );
 
     return [selectedItem?.id, goToQuery];

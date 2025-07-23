@@ -49,11 +49,11 @@ import {getDefaultTableColumnLimit} from '../../../../store/selectors/settings';
 import {isYqlTypesEnabled} from '../../../../store/selectors/navigation/content/table';
 import {getClusterProxy, getCurrentUserName} from '../../../../store/selectors/global';
 import {getQueryResultGlobalSettings} from '../query_result/selectors';
-import {SET_QUERIES_LIST_MODE} from '../query-tracker-contants';
 import {QueriesListMode} from '../queries_list/types';
 import type {ClusterConfig} from '../../../../../shared/yt-types';
 import {YTError} from '../../../../../@types/types';
 import {setSettingByKey} from '../../../../store/actions/settings';
+import {setListMode} from '../queries_list/queryListSlice';
 
 const toaster = new Toaster();
 
@@ -315,12 +315,7 @@ export const openPath =
         await dispatch(
             setSettingByKey('global::queryTracker::queriesListSidebarVisibilityMode', true),
         );
-        dispatch({
-            type: SET_QUERIES_LIST_MODE,
-            data: {
-                listMode: QueriesListMode.Navigation,
-            },
-        });
+        dispatch(setListMode(QueriesListMode.Navigation));
         dispatch(setNodeType(BodyType.Loading));
         dispatch(loadPath(cleanPath, clusterConfig));
     };
