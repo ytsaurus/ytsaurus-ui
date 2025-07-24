@@ -3,6 +3,7 @@
     display: inline-flex;
     align-items: center;
     overflow: hidden;
+    max-width: 100%;
 
     &__name {
         flex-grow: 1;
