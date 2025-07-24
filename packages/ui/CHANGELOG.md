@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.100.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.99.1...ui-v1.100.0) (2025-07-24)
+
+
+### Features
+
+* **Navigation/Flow:** add Graph-view [YTFRONT-3978] ([12c79d9](https://github.com/ytsaurus/ytsaurus-ui/commit/12c79d9c1e7138863833d03d1d45b161ee8e5059))
+
 ## [1.99.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.99.0...ui-v1.99.1) (2025-07-22)
 
 
