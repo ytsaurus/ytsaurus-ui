@@ -56,7 +56,7 @@ type RoundedBlockProps = {
 
 type ZoomMode = 'minimalistic' | 'schematic' | 'detailed';
 
-export class YTGrapCanvasBlock<T extends YTGraphBlock<string, {}>> extends CanvasBlock<T> {
+export class YTGraphCanvasBlock<T extends YTGraphBlock<string, {}>> extends CanvasBlock<T> {
     icon: null | HTMLImageElement = null;
 
     zoomLevel: ZoomMode = 'detailed';

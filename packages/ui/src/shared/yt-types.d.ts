@@ -587,7 +587,7 @@ export type FlowComputation = FlowNodeBase &
             memory_usage_current: number;
         };
         partitions_stats?: {
-            count: 1;
+            count: number;
             count_by_state?: Record<
                 'completed' | 'executing' | 'transient' | 'interrupted',
                 number | undefined

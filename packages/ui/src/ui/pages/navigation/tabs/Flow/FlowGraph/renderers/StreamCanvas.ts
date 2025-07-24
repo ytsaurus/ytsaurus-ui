@@ -2,12 +2,12 @@ import {TAnchor} from '@gravity-ui/graph';
 
 import format from '../../../../../../common/hammer/format';
 
-import {NoopComponent, YTGrapCanvasBlock} from '../../../../../../components/YTGraph';
+import {NoopComponent, YTGraphCanvasBlock} from '../../../../../../components/YTGraph';
 import {FlowGraphBlockItem} from '../FlowGraph';
 
 const PADDING = 10;
 
-export class StreamCanvasBlock extends YTGrapCanvasBlock<FlowGraphBlockItem<'stream'>> {
+export class StreamCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockItem<'stream'>> {
     renderBlock(mode: 'minimalistic' | 'schematic'): void {
         this.drawBorder({backgroundTheme: this.state.backgroundTheme});
 
@@ -59,7 +59,7 @@ export class StreamCanvasBlock extends YTGrapCanvasBlock<FlowGraphBlockItem<'str
         return {y: 0, x: step * (index + 1)};
     }
 
-    renderAnchor: YTGrapCanvasBlock<FlowGraphBlockItem<'computation'>>['renderAnchor'] = () => {
+    renderAnchor: YTGraphCanvasBlock<FlowGraphBlockItem<'computation'>>['renderAnchor'] = () => {
         return NoopComponent.create();
     };
 }
