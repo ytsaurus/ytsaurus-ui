@@ -11,6 +11,9 @@ import {YTApiId} from '../../../../shared/constants/yt-api-id';
 
 import {MutationOptions, UseQueryOptions} from './types';
 import {listQueries} from './endpoints/listQueries';
+import {flowExecute} from './endpoints/flowExecute';
+import {FlowExecuteCommand, FlowExecuteData} from '../../../../shared/yt-types';
+import {OverrideDataType} from './endpoints/types';
 
 export const ytApi = rootApi.injectEndpoints({
     endpoints: (build) => ({
@@ -26,15 +29,24 @@ export const ytApi = rootApi.injectEndpoints({
             queryFn: listQueries,
             providesTags: (_result, _error, _arg) => [String(YTApiId.listQueries)],
         }),
+        flowExecute: build.query({
+            queryFn: flowExecute,
+            providesTags: (_result, _error, _args) => {
+                const {flow_command, pipeline_path} = _args.parameters;
+                return [`flowExecute_${flow_command}_${pipeline_path}`];
+            },
+        }),
     }),
 });
 
-const {
-    useFetchBatchQuery: useFetchBatchQueryRaw,
-    useUpdateBatchMutation: useUpdateBatchMutationRaw,
-} = ytApi;
+export const {useListQueriesQuery} = ytApi;
 
-export const useListQueriesQuery = ytApi.useListQueriesQuery;
+export function useFlowExecuteQuery<T extends FlowExecuteCommand>(
+    ...args: Parameters<typeof flowExecute>
+) {
+    const res = ytApi.useFlowExecuteQuery(...args);
+    return res as OverrideDataType<typeof res, FlowExecuteData[T]>;
+}
 
 type BatchQueryResult = typeof ytApi.endpoints.fetchBatch.Types.ResultType;
 type BatchQueryArgs = typeof ytApi.endpoints.fetchBatch.Types.QueryArg;
@@ -90,14 +102,8 @@ export function useFetchBatchQuery<T>(
                   cluster,
               };
 
-    const {data, ...restResult} = useFetchBatchQueryRaw(customArgs, customOptions);
-
-    const typedData = data as BatchApiResults<T> | undefined;
-
-    return {
-        ...restResult,
-        data: typedData,
-    };
+    const res = ytApi.useFetchBatchQuery(customArgs, customOptions);
+    return res as OverrideDataType<typeof res, BatchApiResults<T>>;
 }
 
 type BatchMutationDefinition = typeof ytApi.endpoints.updateBatch.Types.MutationDefinition;
@@ -145,7 +151,7 @@ type BatchMutationReturnType = TypedUseMutationResult<
 export function useUpdateBatchMutation<T>(
     options?: MutationOptions<BatchMutationReturnType, BatchMutationDefinition>,
 ) {
-    const [updateFn, result] = useUpdateBatchMutationRaw(options);
+    const [updateFn, result] = ytApi.useUpdateBatchMutation(options);
     // cluster param makes no sense for mutation requests
     const typedUpdateFn = async (args: Omit<BatchApiArgs, 'cluster'>) => {
         // adding cluster param for types compatibility

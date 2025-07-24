@@ -187,4 +187,7 @@ export enum YTApiId {
     //dashboard
     poolsInfo,
     listDashboardOperations,
+
+    //pipeline/flow
+    flowExecuteDescribePipeline,
 }
