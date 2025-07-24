@@ -1,9 +1,9 @@
-import {YTGrapCanvasBlock} from '../../../../../../components/YTGraph';
+import {YTGraphCanvasBlock} from '../../../../../../components/YTGraph';
 import {FlowGraphBlockItem} from '../FlowGraph';
 
 const PADDING = 10;
 
-export class SinkCanvasBlock extends YTGrapCanvasBlock<FlowGraphBlockItem<'sink'>> {
+export class SinkCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockItem<'sink'>> {
     renderBlock(mode: 'minimalistic' | 'schematic'): void {
         this.drawBorder({backgroundTheme: this.state.backgroundTheme});
 

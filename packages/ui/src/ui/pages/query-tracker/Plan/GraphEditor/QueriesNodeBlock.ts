@@ -1,6 +1,6 @@
 import {ECameraScaleLevel} from '@gravity-ui/graph';
 
-import {YTGrapCanvasBlock, YTGraphBlock} from '../../../../components/YTGraph';
+import {YTGraphBlock, YTGraphCanvasBlock} from '../../../../components/YTGraph';
 
 import {type NodeDetails, NodeProgress} from '../models/plan';
 import {OperationSchemas} from '../utils';
@@ -29,7 +29,7 @@ const DEFAULT_ICON_OFFSET = 20;
 const ICON_SIZE = 24;
 const TEXT_SIZE = 14;
 
-export class QueriesCanvasBlock extends YTGrapCanvasBlock<QueriesNodeBlock> {
+export class QueriesCanvasBlock extends YTGraphCanvasBlock<QueriesNodeBlock> {
     icon: null | HTMLImageElement = null;
 
     override renderDetailedView() {

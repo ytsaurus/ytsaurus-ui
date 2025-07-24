@@ -5,13 +5,13 @@ import {TAnchor} from '@gravity-ui/graph/build';
 import format from '../../../../../../common/hammer/format';
 import {
     NoopComponent,
-    YTGrapCanvasBlock,
+    YTGraphCanvasBlock,
     YTGraphFontSize,
 } from '../../../../../../components/YTGraph';
 
 import {FlowGraphBlockItem} from '../FlowGraph';
 
-export class ComputationCanvasBlock extends YTGrapCanvasBlock<FlowGraphBlockItem<'computation'>> {
+export class ComputationCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockItem<'computation'>> {
     PADDING = 15;
 
     getComputationFontSize(): YTGraphFontSize {
@@ -41,23 +41,21 @@ export class ComputationCanvasBlock extends YTGrapCanvasBlock<FlowGraphBlockItem
         });
 
         const counts: Array<string> = [];
-        if (Number.isFinite(count)) {
-            if (Number.isFinite(executing)) {
-                counts.push(String(executing));
-                if (count !== executing) {
-                    counts.push(String(count));
-                }
-
-                this.drawInnerText({
-                    yPos: this.PADDING,
-                    xPos: this.PADDING * 2 + textWidth!,
-                    text: counts.join('/'),
-                    color: 'secondary',
-                    padding: this.PADDING,
-                    fontSize: this.getComputationFontSize(),
-                    align: 'right',
-                });
+        if (Number.isFinite(count) && Number.isFinite(executing)) {
+            counts.push(String(executing));
+            if (count !== executing) {
+                counts.push(String(count));
             }
+
+            this.drawInnerText({
+                yPos: this.PADDING,
+                xPos: this.PADDING * 2 + textWidth!,
+                text: counts.join('/'),
+                color: 'secondary',
+                padding: this.PADDING,
+                fontSize: this.getComputationFontSize(),
+                align: 'right',
+            });
         }
     }
 
@@ -101,7 +99,7 @@ export class ComputationCanvasBlock extends YTGrapCanvasBlock<FlowGraphBlockItem
         return {y: height, x: step * (index + 1)};
     }
 
-    renderAnchor: YTGrapCanvasBlock<FlowGraphBlockItem<'computation'>>['renderAnchor'] = () => {
+    renderAnchor: YTGraphCanvasBlock<FlowGraphBlockItem<'computation'>>['renderAnchor'] = () => {
         return NoopComponent.create();
     };
 }
