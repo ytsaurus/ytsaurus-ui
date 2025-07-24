@@ -1,18 +1,14 @@
-import {ApiMethodParams, BatchParameters, YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
+import {BatchParameters, YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {BatchResultsItem} from '../../../../../shared/yt-types';
 import {WrapApiOptions, getBatchError, wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {YTError} from '../../../../types';
+import {YTEndpointApiArgs} from './types';
 
-export type BatchApiArgs = {
+export type BatchApiArgs = YTEndpointApiArgs<BatchParameters> & {
     id: YTApiId;
     errorTitle: string;
     toaster?: WrapApiOptions<unknown, 'v3'>;
-} & Omit<ApiMethodParams<BatchParameters>, 'setup'> &
-    BatchCluster;
-
-export type BatchCluster =
-    // cluster or setup param should be required for the case of selection
-    {cluster: string} | Required<Pick<ApiMethodParams<BatchParameters>, 'setup'>>;
+};
 
 export type BatchApiResults<T = unknown> = Array<BatchResultsItem<T>>;
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import partition_ from 'lodash/partition';
@@ -19,7 +19,6 @@ import ClockIcon from '@gravity-ui/icons/svgs/clock.svg';
 import FileCodeIcon from '@gravity-ui/icons/svgs/file-code.svg';
 import ReceiptIcon from '@gravity-ui/icons/svgs/receipt.svg';
 
-import {useUpdater} from '../../../../../hooks/use-updater';
 import Yson from '../../../../../components/Yson/Yson';
 import {
     YTGraph,
@@ -29,11 +28,13 @@ import {
     useElkLayout,
     useGraphScale,
 } from '../../../../../components/YTGraph';
+import Loader from '../../../../../components/Loader/Loader';
 import {NoContent} from '../../../../../components/NoContent/NoContent';
 import {YTErrorBlock} from '../../../../../components/Error/Error';
 
-import {loadFlowGraph} from '../../../../../store/actions/flow/graph';
-import {getFlowGraphData, getFlowGraphError} from '../../../../../store/selectors/flow/graph';
+import {getCluster} from '../../../../../store/selectors/global/cluster';
+
+import {useFlowExecuteQuery} from '../../../../../store/api/yt';
 
 import {Computation} from './renderers/Computation';
 import {Stream} from './renderers/Stream';
@@ -49,15 +50,12 @@ import {SinkCanvasBlock} from './renderers/SinkCanvas';
 
 const block = cn('yt-flow-graph');
 
-export function FlowGraph({pipeline_path, yson}: {pipeline_path: string; yson: boolean}) {
-    const dispatch = useDispatch();
-    const updateFn = React.useCallback(() => {
-        dispatch(loadFlowGraph(pipeline_path));
-    }, [pipeline_path, dispatch]);
-    useUpdater(updateFn);
+export function FlowGraph({yson, pipeline_path}: {pipeline_path: string; yson: boolean}) {
+    const {error, data, isLoading} = useFlowGraphLoadedData({pipeline_path});
 
-    const data = useSelector(getFlowGraphData);
-    const error = useSelector(getFlowGraphError);
+    if (isLoading) {
+        return <Loader visible centered />;
+    }
 
     if (error) {
         return <YTErrorBlock error={error} />;
@@ -65,7 +63,11 @@ export function FlowGraph({pipeline_path, yson}: {pipeline_path: string; yson: b
 
     return (
         <div className={block()}>
-            {yson ? <Yson value={data} folding virtualized /> : <FlowGraphImpl />}
+            {yson ? (
+                <Yson value={data} folding virtualized />
+            ) : (
+                <FlowGraphImpl pipeline_path={pipeline_path} />
+            )}
         </div>
     );
 }
@@ -81,7 +83,7 @@ export type FlowGraphBlock =
 
 export type FlowGraphBlockItem<T extends FlowGraphBlock['is']> = FlowGraphBlock & {is: T};
 
-export function FlowGraphImpl() {
+export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
     const {scale, setScale} = useGraphScale();
     const useGroups = scale === ECameraScaleLevel.Minimalistic;
 
@@ -95,7 +97,13 @@ export function FlowGraphImpl() {
         {useDefaultConnection: !useGroups},
     );
 
-    const {isEmpty, data, groups, groupBlocks, messages} = useFlowGraphData();
+    const {isEmpty, isLoading, data, groups, groupBlocks, messages} = useFlowGraphData({
+        pipeline_path,
+    });
+
+    if (isLoading) {
+        return <Loader visible centered />;
+    }
 
     if (isEmpty) {
         return <NoContent warning="The graph is empty" />;
@@ -158,8 +166,16 @@ const COMPUTATION_SIZE = {width: 320, height: 130};
 const STREAM_SIZE = {width: 240, height: 100};
 const SINK_SIZE = {width: 200, height: 80};
 
-function useFlowGraphData() {
-    const loadedData = useSelector(getFlowGraphData);
+function useFlowGraphLoadedData({pipeline_path}: {pipeline_path: string}) {
+    const cluster = useSelector(getCluster);
+    return useFlowExecuteQuery({
+        cluster,
+        parameters: {pipeline_path, flow_command: 'describe-pipeline'},
+    });
+}
+
+function useFlowGraphData(params: {pipeline_path: string}) {
+    const {data: loadedData} = useFlowGraphLoadedData(params);
 
     type FlowData = YTGraphData<FlowGraphBlock, TConnection>;
 
