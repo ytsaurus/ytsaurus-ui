@@ -1,3 +1,4 @@
+import {useCallback} from 'react';
 import {useSelector} from 'react-redux';
 import {PluginWidgetProps} from '@gravity-ui/dashkit';
 
@@ -48,31 +49,34 @@ export function useQueriesWidget(props: PluginWidgetProps) {
         requestedStates = mapQueryStateToRequestStates[queryState];
     }
 
-    const makeRequests = (states: string[] | undefined) => {
-        if (states?.length) {
-            const requests: ListQueriesParams[] = [];
+    const makeRequests = useCallback(
+        (states: string[] | undefined) => {
+            if (states?.length) {
+                const requests: ListQueriesParams[] = [];
 
-            users.forEach((user) => {
-                requests.push(
-                    ...map_(states, (state) => ({
-                        engine: queryEngine,
-                        state,
-                        user,
-                        output_format: 'json',
-                        limit: limit ?? defaultDashboardItems.queries.data.limit,
-                    })),
-                );
-            });
+                users.forEach((user) => {
+                    requests.push(
+                        ...map_(states, (state) => ({
+                            engine: queryEngine,
+                            state,
+                            user,
+                            output_format: 'json',
+                            limit: limit ?? defaultDashboardItems.queries.data.limit,
+                        })),
+                    );
+                });
 
-            return requests;
-        }
-        return map_(users, (user) => ({
-            engine: queryEngine?.length ? queryEngine : undefined,
-            user,
-            output_format: 'json',
-            limit: limit ?? defaultDashboardItems.queries.data.limit,
-        }));
-    };
+                return requests;
+            }
+            return map_(users, (user) => ({
+                engine: queryEngine?.length ? queryEngine : undefined,
+                user,
+                output_format: 'json',
+                limit: limit ?? defaultDashboardItems.queries.data.limit,
+            }));
+        },
+        [limit, queryEngine, users],
+    );
 
     const {
         data: queries,
