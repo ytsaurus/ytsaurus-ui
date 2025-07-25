@@ -10,6 +10,7 @@ import ypath from '../../../../common/thor/ypath';
 
 import {RootState} from '../../../../store/reducers';
 import {isDeveloper} from '../../../../store/selectors/global/is-developer';
+import {getFavouriteBundles, getFavouriteChyt} from '../../../../store/selectors/favourites';
 
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {getBatchError} from '../../../../utils/utils';
@@ -194,17 +195,31 @@ async function fetchChyt(items: ServicesItem[], cluster: string, isAdmin: boolea
 }
 
 type FetchServicesArgs = {
+    type: 'favourite' | 'custom';
     id: string;
     cluster: string;
-    items?: ServicesItem[];
+    customItems?: ServicesItem[];
 };
 
 export async function fetchServices(args: FetchServicesArgs, api: BaseQueryApi) {
     try {
-        const {cluster, items} = args;
+        const {type, cluster, customItems} = args;
 
         const state = api.getState() as RootState;
         const isAdmin = isDeveloper(state);
+        const favouriteCliques = getFavouriteChyt(state);
+        const favouriteBundles = getFavouriteBundles(state);
+
+        let items: ServicesItem[] = [];
+
+        if (type === 'favourite') {
+            items = [
+                ...favouriteCliques.map((clique) => ({service: 'chyt', item: clique.path})),
+                ...favouriteBundles.map((bundle) => ({service: 'bundle', item: bundle.path})),
+            ];
+        } else {
+            items = customItems || [];
+        }
 
         const requestedCliques = filter_(items, ({service}) => service === 'chyt');
         const requestedBundles = filter_(items, ({service}) => service === 'bundle');
