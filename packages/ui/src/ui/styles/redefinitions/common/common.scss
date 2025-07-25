@@ -15,3 +15,7 @@
 .gn-collapse-button .gn-collapse-button__icon {
     color: var(--g-color-text-secondary);
 }
+
+.gn-settings-menu__item-icon {
+    color: var(--gn-aside-header-item-icon-color, var(--_--item-icon-color));
+}
