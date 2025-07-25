@@ -1,3 +1,4 @@
+import {useMemo} from 'react';
 import {PluginWidgetProps} from '@gravity-ui/dashkit';
 import {useSelector} from 'react-redux';
 
@@ -25,10 +26,12 @@ export function usePoolsWidget(props: PluginWidgetProps) {
         customList: userPools,
     });
 
-    const visibleColumns = zipObject_(
-        resources,
-        map_(resources, (resource) => includes_(resourcesColumns, resource)),
-    );
+    const visibleColumns = useMemo(() => {
+        return zipObject_(
+            resources,
+            map_(resources, (resource) => includes_(resourcesColumns, resource)),
+        );
+    }, [resourcesColumns]);
 
     return {visibleColumns, data: {pools: data, isLoading: isLoading || isFetching, error}};
 }
