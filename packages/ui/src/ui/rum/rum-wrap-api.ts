@@ -23,7 +23,7 @@ import {
     PipelineParams,
     TableParams,
 } from '../../shared/yt-types';
-import {YTApiId} from '../../shared/constants/yt-api-id';
+import {YTApiId, YTApiIdType} from '../../shared/constants/yt-api-id';
 
 import {rumDebugLog2, rumGetTime, rumSendDelta} from './rum-counter';
 import {RumMeasureTypes} from './rum-measure-types';
@@ -56,15 +56,15 @@ type YTApiV3OmitT = Omit<YTApiV3, 'get' | 'list' | 'executeBatch'>;
 
 type YTApiV3WithId = {
     [K in keyof YTApiV3OmitT]: {
-        (id: YTApiId, ...args: Parameters<YTApiV3OmitT[K]>): ReturnType<YTApiV3OmitT[K]>;
+        (id: YTApiIdType, ...args: Parameters<YTApiV3OmitT[K]>): ReturnType<YTApiV3OmitT[K]>;
     };
 } & {
     executeBatch<T = any>(
-        id: YTApiId,
+        id: YTApiIdType,
         ...args: ApiMethodParameters<BatchParameters>
     ): Promise<Array<BatchResultsItem<T>>>;
-    get<Value = any>(id: YTApiId, ...args: ApiMethodParameters<GetParams>): Promise<Value>;
-    list<Value = any>(id: YTApiId, ...args: ApiMethodParameters<GetParams>): Promise<Value>;
+    get<Value = any>(id: YTApiIdType, ...args: ApiMethodParameters<GetParams>): Promise<Value>;
+    list<Value = any>(id: YTApiIdType, ...args: ApiMethodParameters<GetParams>): Promise<Value>;
 };
 
 type YTApiV4 = {
@@ -121,22 +121,25 @@ type YTApiV4OmitT = Omit<YTApiV4, 'get' | 'list' | 'executeBatch'>;
 
 type YTApiV4WithId = {
     [K in keyof YTApiV4OmitT]: {
-        (id: YTApiId, ...args: Parameters<YTApiV4OmitT[K]>): ReturnType<YTApiV4OmitT[K]>;
+        (id: YTApiIdType, ...args: Parameters<YTApiV4OmitT[K]>): ReturnType<YTApiV4OmitT[K]>;
     };
 } & {
     executeBatch<T = any>(
-        id: YTApiId,
+        id: YTApiIdType,
         ...args: ApiMethodParameters<BatchParameters>
     ): Promise<{results: Array<BatchResultsItem<T>>}>;
-    get<Value = any>(id: YTApiId, ...args: ApiMethodParameters<GetParams>): Promise<{value: Value}>;
+    get<Value = any>(
+        id: YTApiIdType,
+        ...args: ApiMethodParameters<GetParams>
+    ): Promise<{value: Value}>;
     list<Value = any>(
-        id: YTApiId,
+        id: YTApiIdType,
         ...args: ApiMethodParameters<GetParams>
     ): Promise<{value: Value}>;
 };
 
 type ApiWithId<ApiT extends Record<string, (...args: ApiMethodParameters<any>) => Promise<any>>> = {
-    [K in keyof ApiT]: (id: YTApiId, ...args: Parameters<ApiT[K]>) => ReturnType<ApiT[K]>;
+    [K in keyof ApiT]: (id: YTApiIdType, ...args: Parameters<ApiT[K]>) => ReturnType<ApiT[K]>;
 };
 
 export interface BatchParameters {
@@ -165,10 +168,10 @@ function makeApiWithId<
         ytApi,
         (acc, _fn, k) => {
             const method = k as keyof ApiT;
-            acc[method] = <T>(id: YTApiId, ...args: ApiMethodParameters<T>) => {
+            acc[method] = <T>(id: YTApiIdType, ...args: ApiMethodParameters<T>) => {
                 const startTime = Date.now();
                 return (ytApi as any)[method](...injectRequestId(id, args)).finally(() => {
-                    rumDebugLog2(`fetch.${YTApiId[id]}`, Date.now() - startTime);
+                    rumDebugLog2(`fetch.${id}`, Date.now() - startTime);
                 });
             };
             return acc;
@@ -178,7 +181,7 @@ function makeApiWithId<
 }
 
 export function injectRequestId<T>(
-    id: YTApiId,
+    id: YTApiIdType,
     args: ApiMethodParameters<T>,
 ): ApiMethodParameters<T> {
     const [first, ...rest] = args;
@@ -193,9 +196,9 @@ export function injectRequestId<T>(
     }
 }
 
-function makeSetupWithId(id: YTApiId, setup: {requestHeaders?: object} | undefined) {
+function makeSetupWithId(id: YTApiIdType, setup: {requestHeaders?: object} | undefined) {
     const {requestHeaders} = setup || {};
-    return {...setup, requestHeaders: {...requestHeaders, [YT_API_REQUEST_ID_HEADER]: YTApiId[id]}};
+    return {...setup, requestHeaders: {...requestHeaders, [YT_API_REQUEST_ID_HEADER]: id}};
 }
 
 export const ytApiV3 = yt.v3 as YTApiV3;
@@ -225,12 +228,12 @@ export class RumWrapper<Id extends ValueOf<typeof RumMeasureTypes>> {
         return this.id;
     }
 
-    fetch<T>(id: YTApiId, loadPromise: Promise<T>) {
+    fetch<T>(id: YTApiIdType, loadPromise: Promise<T>) {
         const wrapId = this.gen('fetch', id);
         return wrapPromiseWithRum(wrapId, loadPromise);
     }
 
-    parse<T>(id: YTApiId, parsePromise: Promise<T>) {
+    parse<T>(id: YTApiIdType, parsePromise: Promise<T>) {
         const wrapId = this.gen('parse', id);
         return wrapPromiseWithRum(wrapId, parsePromise);
     }
@@ -243,11 +246,11 @@ export class RumWrapper<Id extends ValueOf<typeof RumMeasureTypes>> {
         return res as ExcludePromise<T>;
     }
 
-    private gen(stage: string, id?: YTApiId) {
+    private gen(stage: string, id?: YTApiIdType) {
         if (id === undefined) {
             return this.prefix + '.' + stage;
         }
-        return this.prefix + '.' + stage + '.' + YTApiId[id];
+        return this.prefix + '.' + stage + '.' + id;
     }
 }
 
