@@ -1,7 +1,7 @@
 import React, {FC, useEffect} from 'react';
 import throttle_ from 'lodash/throttle';
 import block from 'bem-cn-lite';
-import {type ChartKitRef} from '@gravity-ui/chartkit';
+import type {ChartKitRef} from '@gravity-ui/chartkit';
 import {Chart} from './Chart';
 import useResizeObserver from '../../../../hooks/useResizeObserver';
 import './QueryResultsVisualization.scss';
@@ -21,7 +21,7 @@ type Props = {
 export const QueryResultsVisualization: FC<Props> = ({resultIndex}) => {
     const dispatch = useDispatch();
     const containerRef = React.useRef<HTMLDivElement>(null);
-    const chartKitRef = React.useRef<ChartKitRef>();
+    const chartKitRef = React.useRef<ChartKitRef>(null);
     const loading = useSelector(selectChartLoading);
 
     useEffect(() => {

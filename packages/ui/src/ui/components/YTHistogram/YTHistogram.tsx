@@ -1,11 +1,12 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import YagrChartKit, {
+import {
+    YTChartKitLazy,
     RawSerieData,
     YagrWidgetData,
     getSerieColor,
-} from '../YagrChartKit/YagrChartKit';
+} from '../../components/YTChartKit';
 import './YTHistogram.scss';
 
 import format from '../../common/hammer/format';
@@ -112,7 +113,7 @@ function YTHistogram({
 
     return (
         <div className={block(null, className)}>
-            <YagrChartKit type={'yagr'} data={yagrData} />
+            <YTChartKitLazy type={'yagr'} data={yagrData} />
         </div>
     );
 }

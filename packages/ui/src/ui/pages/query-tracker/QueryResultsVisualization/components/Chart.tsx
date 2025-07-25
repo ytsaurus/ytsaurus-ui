@@ -1,19 +1,16 @@
 import React, {forwardRef, useMemo} from 'react';
-import ChartKit from '../../../../components/YagrChartKit/YagrChartKit';
-import {settings} from '@gravity-ui/chartkit';
-import type {ChartKitRef} from '@gravity-ui/chartkit';
-import {prepareWidgetData} from '../preparers/prepareWidgetData';
 import {useSelector} from 'react-redux';
+
+import {YTChartKitLazy, ChartKitRef} from '../../../../components/YTChartKit';
+
+import {prepareWidgetData} from '../preparers/prepareWidgetData';
 import {
     selectCurrentChartVisualization,
     selectQueryResult,
 } from '../../module/queryChart/selectors';
 import {EmptyPlaceholdersMessage} from './EmptyPlaceholdersMessage';
-import {D3Plugin} from '@gravity-ui/chartkit/d3';
 
-settings.set({plugins: [...settings.get('plugins'), D3Plugin]});
-
-export const BaseChart = forwardRef<ChartKitRef | undefined>(function BaseChartComponent(_, ref) {
+export const BaseChart = forwardRef<ChartKitRef | null>(function BaseChartComponent(_, ref) {
     const result = useSelector(selectQueryResult);
     const visualization = useSelector(selectCurrentChartVisualization);
 
@@ -31,7 +28,7 @@ export const BaseChart = forwardRef<ChartKitRef | undefined>(function BaseChartC
         return <EmptyPlaceholdersMessage />;
     }
 
-    return <ChartKit type="d3" data={widgetData} ref={ref} key={axisKey} />;
+    return <YTChartKitLazy type="d3" data={widgetData} chartRef={ref} key={axisKey} />;
 });
 
 export const Chart = React.memo(BaseChart);
