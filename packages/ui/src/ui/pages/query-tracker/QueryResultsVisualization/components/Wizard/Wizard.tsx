@@ -12,7 +12,7 @@ import Button from '../../../../../components/Button/Button';
 import {useToggle} from 'react-use';
 import cn from 'bem-cn-lite';
 import {Icon, Select} from '@gravity-ui/uikit';
-import {ChartKitWidgetAxisType} from '@gravity-ui/chartkit';
+import type {ChartKitWidgetAxisType} from '@gravity-ui/chartkit';
 import {changeAxisType, changeField} from '../../../module/queryChart/actions';
 import {getAxisNameByType} from '../../helpers/getAxisNameByType';
 import './Wizard.scss';

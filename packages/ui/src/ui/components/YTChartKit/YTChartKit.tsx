@@ -1,15 +1,18 @@
-import ChartKit, {settings} from '@gravity-ui/chartkit';
+import React from 'react';
+
+import ChartKit, {ChartKitProps, ChartKitWidget, ChartKitRef, settings} from '@gravity-ui/chartkit';
 import {YagrPlugin} from '@gravity-ui/chartkit/yagr';
-export type {RawSerieData, YagrWidgetData} from '@gravity-ui/chartkit/yagr';
+import {D3Plugin} from '@gravity-ui/chartkit/d3';
 
 import '@gravity-ui/yagr/dist/index.css';
 
-settings.set({plugins: [YagrPlugin]});
+settings.set({plugins: [...settings.get('plugins'), YagrPlugin, D3Plugin]});
 
-const COLORS = ['rgb(77, 162, 241)', 'rgb(255, 61, 100)'];
+export type {ChartKitProps, ChartKitWidget, ChartKitRef};
 
-export function getSerieColor(serieIndex: number) {
-    return COLORS[serieIndex % COLORS.length];
+export default function YTChartKit<T extends keyof ChartKitWidget>({
+    chartRef,
+    ...props
+}: ChartKitProps<T> & {chartRef?: React.ForwardedRef<ChartKitRef>}) {
+    return <ChartKit<T> {...props} {...({ref: chartRef} as any)} />;
 }
-
-export default ChartKit;
