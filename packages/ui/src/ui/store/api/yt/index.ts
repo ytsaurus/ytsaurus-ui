@@ -33,7 +33,7 @@ export const ytApi = rootApi.injectEndpoints({
             queryFn: flowExecute,
             providesTags: (_result, _error, _args) => {
                 const {flow_command, pipeline_path} = _args.parameters;
-                return [`flowExecute_${flow_command}_${pipeline_path}`];
+                return [`flowExecuteDescribePipeline_${flow_command}_${pipeline_path}`];
             },
         }),
     }),

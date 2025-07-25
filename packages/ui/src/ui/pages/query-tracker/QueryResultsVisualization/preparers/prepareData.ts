@@ -1,7 +1,13 @@
 import {QueryResult} from './types';
 import {ChartType} from '../constants';
 import {getPointValue} from './getPointData';
-import {AreaSeries, BarXSeries, BarYSeries, LineSeries, ScatterSeries} from '@gravity-ui/chartkit';
+import type {
+    AreaSeries,
+    BarXSeries,
+    BarYSeries,
+    LineSeries,
+    ScatterSeries,
+} from '@gravity-ui/chartkit';
 
 export const prepareData = (
     rows: QueryResult,
