@@ -1,10 +1,11 @@
 import compact_ from 'lodash/compact';
 import React from 'react';
-import YagrChartKit, {
+import {
+    YTChartKitLazy,
     RawSerieData,
     YagrWidgetData,
     getSerieColor,
-} from '../YagrChartKit/YagrChartKit';
+} from '../../components/YTChartKit';
 
 import formatLib from '../../common/hammer/format';
 
@@ -112,7 +113,7 @@ function HistogramChart({className, pdf, ecdf, format, dataName, lineOnly}: Hist
 
     return (
         <div className={className}>
-            <YagrChartKit type={'yagr'} data={yagrData} />
+            <YTChartKitLazy type={'yagr'} data={yagrData} />
         </div>
     );
 }
