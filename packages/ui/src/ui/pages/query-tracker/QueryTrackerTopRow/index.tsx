@@ -1,73 +1,45 @@
-import React, {FC, useCallback, useEffect, useState} from 'react';
+import React, {FC, useCallback, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import {Page} from '../../../../shared/constants/settings';
+import {getQueryDraft} from '../module/query/selectors';
 import {
-    getCliqueLoading,
-    getCliqueMap,
-    getQueryDraft,
-    getQueryGetParams,
-} from '../module/query/selectors';
-import {
-    loadCliqueByCluster,
     resetQueryTracker,
+    setQueryEngine,
     setUserLastChoice,
     updateQueryDraft,
 } from '../module/query/actions';
 import {RightButtonsGroup} from './RightButtonsGroup';
 import {HeadSpacer} from '../../../containers/ClusterPageHeader/HeadSpacer';
 import {Flex, Text, Tooltip} from '@gravity-ui/uikit';
-import {QueryEngineSelect, QueryEngineSelector} from '../QueryEngineSelector';
+import {QueryEngineSelector} from './QueryEngineSelector';
 import {QuerySettingsButton} from '../QuerySettingsButton';
 import {QueryFilesButton} from '../QueryFilesButton';
-import {getClusterList} from '../../../store/selectors/slideoutMenu';
 import {QuerySelectorsByEngine} from './QuerySelectorsByEngine';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import './QueryTrackerTopRow.scss';
 import cn from 'bem-cn-lite';
 import {EditableAsText} from '../../../components/EditableAsText/EditableAsText';
-import {useIsDesktop} from '../../../hooks/useIsDesktop';
 import {setSettingByKey} from '../../../store/actions/settings';
+import {useIsDesktop} from '../../../hooks/useIsDesktop';
+import {QueryClusterSelector} from './QueryClusterSelector';
 
 const NAME_PLACEHOLDER = 'No name';
 const block = cn('query-tracker-top-row');
 
 const QueryTrackerTopRow: FC = () => {
     const dispatch = useDispatch();
-    const {cluster, path} = useSelector(getQueryGetParams);
-    const {annotations, settings, engine} = useSelector(getQueryDraft);
-    const clusters = useSelector(getClusterList);
-    const cliqueMap = useSelector(getCliqueMap);
-    const cliqueLoading = useSelector(getCliqueLoading);
-    const [nameEdit, setNameEdit] = useState(false);
     const isDesktop = useIsDesktop();
-
-    const currentCluster = settings?.cluster;
-
-    useEffect(() => {
-        if ((engine === QueryEngine.CHYT || engine === QueryEngine.SPYT) && settings?.cluster) {
-            dispatch(loadCliqueByCluster(engine, settings.cluster));
-        }
-    }, [engine, settings?.cluster, dispatch]);
+    const {annotations, settings} = useSelector(getQueryDraft);
+    const [nameEdit, setNameEdit] = useState(false);
 
     const handleChangeEngine = useCallback(
         (newEngine: QueryEngine) => {
-            const newSettings = {...settings};
-
-            if (newEngine !== QueryEngine.SPYT) {
-                delete newSettings.discovery_group;
-                delete newSettings.discovery_path; // old request type. Deprecated
-            }
-
-            if (newEngine !== QueryEngine.CHYT) {
-                delete newSettings.clique;
-            }
-
-            dispatch(updateQueryDraft({settings: newSettings}));
+            dispatch(setQueryEngine(newEngine));
             dispatch(setSettingByKey(`global::queryTracker::lastEngine`, newEngine));
             dispatch(setUserLastChoice());
         },
-        [dispatch, settings],
+        [dispatch],
     );
 
     const handleCreateNewQuery = useCallback(() => {
@@ -85,50 +57,6 @@ const QueryTrackerTopRow: FC = () => {
         (newSettings: Record<string, string>) =>
             dispatch(updateQueryDraft({settings: newSettings})),
         [dispatch],
-    );
-
-    const handleClusterChange = useCallback(
-        (clusterId: string) => {
-            const newSettings: Record<string, string> = settings ? {...settings} : {};
-            if (clusterId) {
-                newSettings.cluster = clusterId;
-            } else {
-                delete newSettings['cluster'];
-            }
-            delete newSettings['clique'];
-            dispatch(updateQueryDraft({settings: newSettings}));
-            dispatch(setUserLastChoice(true));
-        },
-        [dispatch, settings],
-    );
-
-    const handleCliqueChange = useCallback(
-        (alias: string) => {
-            const newSettings: Record<string, string> = settings ? {...settings} : {};
-            if (!alias && 'clique' in newSettings) {
-                delete newSettings.clique;
-            } else {
-                newSettings.clique = alias;
-            }
-            dispatch(updateQueryDraft({settings: newSettings}));
-            dispatch(
-                setSettingByKey(`local::${currentCluster}::queryTracker::lastChytClique`, alias),
-            );
-        },
-        [currentCluster, dispatch, settings],
-    );
-
-    const handlePathChange = useCallback(
-        (newPath: string) => {
-            dispatch(updateQueryDraft({settings: {...settings, discovery_group: newPath}}));
-            dispatch(
-                setSettingByKey(
-                    `local::${currentCluster}::queryTracker::lastDiscoveryPath`,
-                    newPath,
-                ),
-            );
-        },
-        [currentCluster, dispatch, settings],
     );
 
     const name = annotations?.title || NAME_PLACEHOLDER;
@@ -156,25 +84,9 @@ const QueryTrackerTopRow: FC = () => {
                 {!nameEdit && (
                     <>
                         <HeadSpacer />
-                        {isDesktop ? (
-                            <QueryEngineSelector
-                                cluster={cluster}
-                                path={path}
-                                onChange={handleChangeEngine}
-                            />
-                        ) : (
-                            <QueryEngineSelect onChange={handleChangeEngine} />
-                        )}
-                        <QuerySelectorsByEngine
-                            settings={settings}
-                            engine={engine}
-                            clusters={clusters}
-                            cliqueMap={cliqueMap}
-                            cliqueLoading={cliqueLoading}
-                            onClusterChange={handleClusterChange}
-                            onCliqueChange={handleCliqueChange}
-                            onPathChange={handlePathChange}
-                        />
+                        <QueryClusterSelector />
+                        <QueryEngineSelector isDesktop={isDesktop} onChange={handleChangeEngine} />
+                        <QuerySelectorsByEngine />
                         <Flex gap={2}>
                             <QuerySettingsButton
                                 settings={settings}
