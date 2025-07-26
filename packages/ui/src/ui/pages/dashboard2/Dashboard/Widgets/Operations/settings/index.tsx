@@ -18,15 +18,6 @@ export function useOperationsSettings() {
             },
         },
         {
-            name: 'limit',
-            type: 'number' as const,
-            required: true,
-            caption: 'Limit(per author)',
-            extras: {
-                hidePrettyValue: true,
-            },
-        },
-        {
             name: 'authors',
             type: 'acl-subjects' as const,
             caption: 'Authors',
@@ -41,6 +32,15 @@ export function useOperationsSettings() {
             caption: 'Pool',
             extras: {
                 mode: 'single' as const,
+            },
+        },
+        {
+            name: 'limit',
+            type: 'number' as const,
+            required: true,
+            caption: 'Limit(per author)',
+            extras: {
+                hidePrettyValue: true,
             },
         },
     ];
