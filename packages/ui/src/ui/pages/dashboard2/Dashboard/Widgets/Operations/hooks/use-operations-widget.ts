@@ -21,8 +21,9 @@ export function useOperationsWidget(props: PluginWidgetProps) {
     const state = useSelector((state: RootState) => getOperationsStateFilter(state, id));
     const authorType = useSelector((state: RootState) => getOperationsAuthorTypeFilter(state, id));
 
-    const authors = data.authors as Array<Author>;
-    const pool = data.pool as string;
+    const authors = data?.authors as Array<Author> | undefined;
+    const pool = data?.pool as [{tree: string; pool: string}] | undefined;
+    const limit = (data?.limit as {value?: number})?.value || 0;
 
     const {
         data: operations,
@@ -30,12 +31,14 @@ export function useOperationsWidget(props: PluginWidgetProps) {
         isFetching,
         error,
     } = useOperationsQuery({
+        id,
         cluster,
         authorType,
         state,
         authors,
         pool,
+        limit,
     });
 
-    return {filters: {state}, data: {operations, isLoading, isFetching, error}};
+    return {filters: {state}, data: {operations, isLoading: isLoading || isFetching, error}};
 }

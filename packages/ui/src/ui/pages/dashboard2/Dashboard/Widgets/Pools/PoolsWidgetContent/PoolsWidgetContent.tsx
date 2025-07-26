@@ -4,17 +4,16 @@ import {createColumnHelper} from '@gravity-ui/table/tanstack';
 import {PluginWidgetProps} from '@gravity-ui/dashkit';
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
-import {useAutoHeight} from '../../../../../../pages/dashboard2/Dashboard/hooks/use-autoheight';
 
 import {PoolCell} from './cells/Pool';
 import {ResourceCell} from './cells/Resource';
 
-import {usePoolsWidget} from './use-pools-widget';
+import {usePoolsWidget} from '../hooks/use-pools-widget';
 
 export type PoolResource = {
     value: number;
     usage: number;
-    garantee: number;
+    guarantee: number;
 };
 
 type Pool = {
@@ -56,23 +55,11 @@ const columns = [
     }),
 ];
 
-// 1 react-grid height value ~ 25.3px
-const poolsLayout = {
-    baseHeight: 4.5,
-    defaultHeight: 12,
-
-    rowHeight: 1.9,
-
-    minWidth: 10,
-};
-
 export function PoolsWidgetContent(props: PluginWidgetProps) {
     const {
         visibleColumns,
-        data: {pools, isFetching, isLoading, error},
+        data: {pools, isLoading, error},
     } = usePoolsWidget(props);
-
-    useAutoHeight(props, poolsLayout, pools?.length || 0);
 
     return (
         <WidgetTable
@@ -80,7 +67,7 @@ export function PoolsWidgetContent(props: PluginWidgetProps) {
             columns={columns}
             columnsVisibility={visibleColumns}
             itemHeight={50}
-            isLoading={isLoading || isFetching}
+            isLoading={isLoading}
             fallback={{itemsName: 'pools'}}
             error={error}
         />
