@@ -2,8 +2,8 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import {
-    YTChartKitLazy,
     RawSerieData,
+    YTChartKitLazy,
     YagrWidgetData,
     getSerieColor,
 } from '../../components/YTChartKit';
