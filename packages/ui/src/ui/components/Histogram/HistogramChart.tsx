@@ -1,8 +1,8 @@
 import compact_ from 'lodash/compact';
 import React from 'react';
 import {
-    YTChartKitLazy,
     RawSerieData,
+    YTChartKitLazy,
     YagrWidgetData,
     getSerieColor,
 } from '../../components/YTChartKit';
