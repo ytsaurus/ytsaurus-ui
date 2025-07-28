@@ -52,6 +52,7 @@ import {
     readableAccountUsageColumnName,
 } from '../../../../store/selectors/accounts/account-usage';
 import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
+import ArrowUpRightFromSquareIcon from '@gravity-ui/icons/svgs/arrow-up-right-from-square.svg';
 
 import {YTErrorBlock} from '../../../../components/Error/Error';
 import {
@@ -83,9 +84,9 @@ import './AccountUsageDetails.scss';
 import {AccountActionsField, AccountRequestData} from './AccountActionsField';
 import {DetailTableCell} from './DetailTableCell';
 import {Page} from '../../../../constants/index';
-import Link from '../../../../components/Link/Link';
 import PathView from '../../../../containers/PathFragment/PathFragment';
-import {isFolderNode} from '../../../../utils/navigation/isFolderNode';
+import {Button, Flex, Icon as GravityIcon, Tooltip} from '@gravity-ui/uikit';
+import {makeRoutedURL} from '../../../../store/window-store';
 
 const TABLE_SETTINGS: Settings = {
     displayIndices: false,
@@ -196,21 +197,31 @@ function useColumnsByPreset(mediums: Array<string>) {
             header: <PathHeader />,
             sortable: false,
             render(item) {
-                const {path, type} = item.row;
+                const {path} = item.row;
                 if (!path) {
                     return <Warning>Permission denied</Warning>;
                 }
 
-                if (isFolderNode(type)) {
-                    const url = `/${cluster}/${Page.NAVIGATION}?path=${path}`;
-                    return (
-                        <Link url={url} title={url} theme="primary">
-                            {path}
-                        </Link>
-                    );
-                }
-
-                return <PathView path={path} lastFragmentOnly={viewType === 'tree'} />;
+                const url = makeRoutedURL(`/${cluster}/${Page.NAVIGATION}?path=${path}`);
+                return (
+                    <Flex alignItems="center" gap={1}>
+                        <span>
+                            <PathView path={path} lastFragmentOnly={viewType === 'tree'} />
+                        </span>
+                        <Tooltip content="Open original path in Navigation">
+                            <Button
+                                className={block('link')}
+                                href={url}
+                                title={url}
+                                view="flat"
+                                target="_blank"
+                                size="xs"
+                            >
+                                <GravityIcon data={ArrowUpRightFromSquareIcon} size="14" />
+                            </Button>
+                        </Tooltip>
+                    </Flex>
+                );
             },
             onClick: ({row}) => {
                 const {path} = row;

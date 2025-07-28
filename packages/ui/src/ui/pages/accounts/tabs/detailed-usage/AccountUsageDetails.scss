@@ -1,7 +1,13 @@
 .account-usage-details {
+    $self: &;
+
     &__row {
         &:hover {
             background-color: var(--g-color-base-simple-hover-solid);
+
+            #{$self}__link {
+                display: block;
+            }
         }
     }
     &__no-wrap {
@@ -28,5 +34,14 @@
         min-width: 200px;
         text-align: right;
         padding-right: 2em;
+    }
+
+    &__link {
+        display: none;
+        color: var(--external-link);
+
+        &:hover {
+            color: var(--g-color-text-link-hover);
+        }
     }
 }
