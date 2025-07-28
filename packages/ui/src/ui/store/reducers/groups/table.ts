@@ -9,6 +9,7 @@ export type Group = {
     members?: string[];
     memberOf?: string[];
     idm?: boolean;
+    externalSystem?: string;
 };
 
 type EphemeralStateType = {

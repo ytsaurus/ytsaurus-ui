@@ -23,10 +23,11 @@ import type {Group} from '../../store/reducers/groups/table';
 import type {OrderType} from '../../utils/sort-helpers';
 import type {RootState} from '../../store/reducers';
 import type {GroupSubject, Subject, UserSubject} from '../../utils/acl/acl-types';
+import {getExternalSystem} from '../../utils/getExternalSystem';
 
 // Table
 
-const GROUP_ATTRIBUTES = ['member_of', 'members', 'upravlyator_managed'];
+const GROUP_ATTRIBUTES = ['member_of', 'members', 'upravlyator_managed', 'ldap'];
 
 export function fetchGroups() {
     return (dispatch: Dispatch) => {
@@ -38,14 +39,23 @@ export function fetchGroups() {
                 forEach_(data, (item) => {
                     const {
                         $value: name,
-                        $attributes: {members, member_of: memberOf = [], upravlyator_managed: idm},
+                        $attributes: {
+                            members,
+                            member_of: memberOf = [],
+                            upravlyator_managed: idm,
+                            ldap,
+                        },
                     } = item;
                     members.sort();
+
+                    const hasIdm = flags.get(idm || false)!;
+
                     groups.push({
                         name,
                         members,
                         memberOf,
-                        idm: flags.get(idm || false)!,
+                        idm: hasIdm,
+                        externalSystem: getExternalSystem(Boolean(ldap), hasIdm),
                     });
                 });
                 return dispatch({
