@@ -1,16 +1,18 @@
 import React from 'react';
 import block from 'bem-cn-lite';
 
-import ErrorDetails, {ErrorDetailsProps} from '../../components/ErrorDetails/ErrorDetails';
-import HelpLink from '../../components/HelpLink/HelpLink';
-import Icon from '../Icon/Icon';
-
 import hammer from '../../common/hammer';
 
-import './Block.scss';
+import ErrorDetails, {ErrorDetailsProps} from '../../components/ErrorDetails/ErrorDetails';
+import HelpLink from '../../components/HelpLink/HelpLink';
 import FormattedText from '../formatters/FormattedText';
 import {rumLogError} from '../../rum/rum-counter';
 import {ErrorToClipboardButton} from '../../components/ErrorToClipboardButton/ErrorToClipboardButton';
+import Icon from '../Icon/Icon';
+
+import i18n from './i18n';
+
+import './Block.scss';
 
 const b = block('yt-error-block');
 
@@ -95,7 +97,11 @@ export class YTErrorBlock extends React.Component<YTErrorBlockProps> {
 
         const className = b('heading');
 
-        return <div className={className}>{header || hammer.format['ReadableField'](type)}</div>;
+        return (
+            <div className={className}>
+                {header || hammer.format['ReadableField'](type ? i18n(type) : undefined)}
+            </div>
+        );
     }
 
     renderHelp() {
