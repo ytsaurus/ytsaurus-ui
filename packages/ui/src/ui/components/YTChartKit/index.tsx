@@ -16,3 +16,4 @@ export function getSerieColor(serieIndex: number) {
 }
 
 export {YTChartKitPie} from './YTChartKitPie';
+export {YTChartKitHistogram} from './YTChartKitHistogram';
