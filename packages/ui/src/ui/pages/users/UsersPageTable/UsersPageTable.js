@@ -20,7 +20,6 @@ import {
     getUsersPageEditableUser,
     getUsersTableDataState,
 } from '../../../store/selectors/users';
-import {isIdmAclAvailable} from '../../../config';
 import {UserActions} from '../UserActions/UserActions';
 
 import './UsersPageTable.scss';
@@ -43,7 +42,7 @@ const COLUMN_NAMES = {
     request_queue_size_limit: 'Request queue',
     read_request_rate_limit: 'Read request rate',
     write_request_rate_limit: 'Write request rate',
-    upravlyator_managed: 'IDM',
+    externalSystem: 'External system',
 
     // pseudo columns
     actions: '',
@@ -128,15 +127,6 @@ class UsersPageTable extends React.Component {
         );
     }
 
-    renderIdmCell = (col, {row} = {}) => {
-        const {upravlyator_managed: idm} = row;
-        return (
-            <div className={block('content', {col})}>
-                <div className={block(col)}>{idm && idm.toString()}</div>
-            </div>
-        );
-    };
-
     renderGroupsCell(col, {row} = {}) {
         const {[col]: value} = row;
         return (
@@ -151,6 +141,16 @@ class UsersPageTable extends React.Component {
         return (
             <div className={block('content', {col})}>
                 <span>{value}</span>
+            </div>
+        );
+    };
+
+    renderExternalSystemCell = (col, {row} = {}) => {
+        const {externalSystem} = row;
+
+        return (
+            <div className={block('content', {col})}>
+                <div className={block(col)}>{externalSystem}</div>
             </div>
         );
     };
@@ -191,14 +191,10 @@ class UsersPageTable extends React.Component {
                 render: this.renderBannedCell.bind(this, 'banned'),
                 align: DataTable.CENTER,
             },
-            ...(!isIdmAclAvailable()
-                ? []
-                : [
-                      {
-                          ...columnProps('upravlyator_managed'),
-                          render: this.renderIdmCell.bind(this, 'upravlyator_managed'),
-                      },
-                  ]),
+            {
+                ...columnProps('externalSystem', DISABLED_SORTING),
+                render: this.renderExternalSystemCell.bind(this, 'externalSystem'),
+            },
             {
                 ...columnProps('member_of', DISABLED_SORTING),
                 render: this.renderGroupsCell.bind(this, 'member_of'),
