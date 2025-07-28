@@ -3,6 +3,8 @@ import block from 'bem-cn-lite';
 import {Button, Popup, PopupPlacement} from '@gravity-ui/uikit';
 import {ItemSelector, ItemSelectorProps} from '@gravity-ui/components';
 
+import unipika from '../../../common/thor/unipika';
+
 import {SelectControl} from '../SelectControl/SelectControl';
 
 import i18n from './i18n';
@@ -100,7 +102,7 @@ export function ColumnSelector<T>({
                         displayArrow
                         disabled={disabled}
                         placeholder={i18n('label_placeholder')}
-                        value={value}
+                        value={value?.map?.((item) => unipika.decode(item)) || []}
                         focused={focused}
                         width={controlWidth}
                     />
