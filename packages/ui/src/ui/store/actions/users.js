@@ -15,6 +15,7 @@ import {getBatchError} from '../../utils/utils';
 import {YTApiId, ytApiV3Id, ytApiV4Id} from '../../rum/rum-wrap-api';
 import UIFactory from '../../UIFactory';
 import {sha256} from '../../utils/sha256';
+import {getExternalSystem} from '../../utils/getExternalSystem';
 
 const USER_ATTRIBUTES = [
     'name',
@@ -26,15 +27,24 @@ const USER_ATTRIBUTES = [
     'request_queue_size_limit',
     'write_request_rate_limit',
     'upravlyator_managed',
+    'ldap',
 ];
 
 export function prepareUserData(item) {
     const {
-        $attributes: {member_of: groups, member_of_closure: allGroups, upravlyator_managed: idm},
+        $attributes: {
+            member_of: groups,
+            member_of_closure: allGroups,
+            upravlyator_managed: idm,
+            ldap,
+        },
     } = item;
     groups.sort();
     allGroups.sort();
-    item.$attributes.idm = flags.get(idm || false);
+    const hasIdm = flags.get(idm || false);
+
+    item.$attributes.idm = hasIdm;
+    item.$attributes.externalSystem = getExternalSystem(ldap, hasIdm);
     item.$attributes['transitiveGroups'] = difference_(allGroups, groups);
     return item.$attributes;
 }
