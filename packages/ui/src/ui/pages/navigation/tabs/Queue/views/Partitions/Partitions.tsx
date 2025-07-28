@@ -55,11 +55,14 @@ const getColumns = createSelector(
                 } else if (name === 'host') {
                     return host<SelectedPartition>(
                         caption,
-                        (x) => x.meta?.host,
+                        (x) => x?.meta?.host || format.NO_VALUE,
                         block('hover-action'),
                     );
                 } else if (name === 'cell_id') {
-                    return string<SelectedPartition>(caption, (x) => x.meta?.cell_id);
+                    return string<SelectedPartition>(
+                        caption,
+                        (x) => x?.meta?.cell_id || format.NO_VALUE,
+                    );
                 } else if (name === 'write_rate') {
                     return multimeter<SelectedPartition>(
                         writeRateName[rateMode],
