@@ -27,7 +27,6 @@ import {
 } from '../../../store/selectors/groups';
 
 import './GroupsPageTable.scss';
-import {isIdmAclAvailable} from '../../../config';
 import type {RootState} from '../../../store/reducers';
 import type {OrderType} from '../../../utils/sort-helpers';
 import {GroupActions} from '../GroupActions/GroupActions';
@@ -44,7 +43,7 @@ const TABLE_SETTINGS = {
 
 const COLUMN_NAMES: Record<string, string> = {
     name: 'Name',
-    idm: 'IDM',
+    externalSystem: 'External system',
     size: 'Size',
     responsibles: 'Responsible users',
     actions: '',
@@ -110,11 +109,12 @@ class GroupsPageTable extends React.Component<GroupsPageTableProps> {
         toggleGroupExpand(groupName!, !isExpanded);
     };
 
-    renderIdmCell(col: string, {row}: {row: GroupsTreeNode}) {
-        const {idm} = row;
+    renderExternalSystemCell(col: string, {row}: {row: GroupsTreeNode}) {
+        const {externalSystem} = row;
+
         return (
             <div className={block('content', {col})}>
-                <div className={block(col)}>{idm && idm.toString()}</div>
+                <div className={block(col)}>{externalSystem}</div>
             </div>
         );
     }
@@ -173,14 +173,10 @@ class GroupsPageTable extends React.Component<GroupsPageTableProps> {
                 ...columnProps('name'),
                 render: this.renderNameCell.bind(this, 'name'),
             },
-            ...(!isIdmAclAvailable()
-                ? []
-                : [
-                      {
-                          ...columnProps('idm'),
-                          render: this.renderIdmCell.bind(this, 'idm'),
-                      },
-                  ]),
+            {
+                ...columnProps('externalSystem', DISABLED_SORTING),
+                render: this.renderExternalSystemCell.bind(this, 'externalSystem'),
+            },
             {
                 ...columnProps('members', DISABLED_SORTING),
                 render: this.renderUsersCell.bind(this, 'members'),
