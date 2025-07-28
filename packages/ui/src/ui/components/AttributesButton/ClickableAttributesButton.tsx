@@ -5,6 +5,7 @@ import AttributesButton, {AttributesButtonProps} from './AttributesButton';
 
 import {openAttributesModal} from '../../store/actions/modals/attributes-modal';
 import {ButtonProps} from '../Button/Button';
+import i18n from './i18n';
 
 interface Props extends Omit<AttributesButtonProps, 'onClick' | 'title'> {
     title: React.ReactNode;
@@ -32,7 +33,7 @@ function ClickableAttributesButton({
     attributes,
     openAttributesModal,
     withTooltip = true,
-    tooltipProps = {placement: 'bottom-end', content: 'Show attributes'},
+    tooltipProps = {placement: 'bottom-end', content: i18n('tooltip-content')},
     ...rest
 }: Props & ConnectedProps<typeof connector>) {
     return (
