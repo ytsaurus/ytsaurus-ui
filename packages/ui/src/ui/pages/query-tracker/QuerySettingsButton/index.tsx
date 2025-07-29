@@ -18,9 +18,11 @@ const block = cn('query-settings-popup');
 export const QuerySettingsButton = ({
     settings,
     className,
+    popupClassName,
     onChange,
 }: {
     className?: string;
+    popupClassName?: string;
     onChange: (settings: Record<string, string>) => void;
     settings?: Record<string, string>;
 }) => {
@@ -92,7 +94,7 @@ export const QuerySettingsButton = ({
             <PopupWithCloseButton
                 anchorRef={ref}
                 open={opened}
-                className={block()}
+                className={block(null, popupClassName)}
                 onClose={toggleOpened}
             >
                 <div className={block('header')}>

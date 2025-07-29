@@ -55,8 +55,12 @@ export function QueryMetaForm({
             </Flex>
 
             <Flex gap={3}>
-                <QuerySettingsButton settings={draft.settings} onChange={onSettingsChange} />
-                <QueryFilesButton />
+                <QuerySettingsButton
+                    popupClassName={block('settings')}
+                    settings={draft.settings}
+                    onChange={onSettingsChange}
+                />
+                <QueryFilesButton popupClassName={block('files')} />
                 <NewQueryButton onClick={onClickOnNewQueryButton} hideText />
                 <QueryTrackerOpenButton cluster={cluster} path={path} />
             </Flex>
