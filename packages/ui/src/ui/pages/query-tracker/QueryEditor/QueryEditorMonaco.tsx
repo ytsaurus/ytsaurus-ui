@@ -34,12 +34,16 @@ type Decorators =
     | {isInitialized: false; linkDecorator: null; lineDecorator: null; errorDecorator: null}
     | {
           isInitialized: true;
-          linkDecorator: LinkDecorator;
+          linkDecorator: LinkDecorator | null;
           lineDecorator: LineDecoration;
           errorDecorator: ErrorDecorator;
       };
 
-export const QueryEditorMonaco: FC = () => {
+type Props = {
+    pathNavigation?: boolean;
+};
+
+export const QueryEditorMonaco: FC<Props> = ({pathNavigation = true}) => {
     const [changed, setChanged] = useState(false);
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
     const {setEditor} = useMonaco();
@@ -71,11 +75,9 @@ export const QueryEditorMonaco: FC = () => {
             if (!decorators.current.isInitialized) {
                 decorators.current = {
                     isInitialized: true,
-                    linkDecorator: new LinkDecorator(
-                        editorRef.current,
-                        engine,
-                        getControlCommandKey(),
-                    ),
+                    linkDecorator: pathNavigation
+                        ? new LinkDecorator(editorRef.current, engine, getControlCommandKey())
+                        : null,
                     lineDecorator: new LineDecoration(editorRef.current),
                     errorDecorator: new ErrorDecorator(editorRef.current),
                 };

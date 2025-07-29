@@ -17,9 +17,13 @@ const b = cn('yt-qt-query-editor-view');
 
 type Props = {
     onStartQuery?: (queryId: string) => boolean | void;
+    pathNavigation?: boolean;
 };
 
-export const QueryEditorView = memo<Props>(function QueryEditorView({onStartQuery}) {
+export const QueryEditorView = memo<Props>(function QueryEditorView({
+    onStartQuery,
+    pathNavigation,
+}) {
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
     const {setEditor} = useMonaco();
     const id = useSelector(getQueryId);
@@ -77,7 +81,7 @@ export const QueryEditorView = memo<Props>(function QueryEditorView({onStartQuer
 
     return (
         <div className={b()}>
-            <QueryEditorMonaco />
+            <QueryEditorMonaco pathNavigation={pathNavigation} />
             <div className={b('actions')}>
                 <div className="query-run-action">
                     <Button qa="qt-run" view="action" onClick={runQueryCallback}>
