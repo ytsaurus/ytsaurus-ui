@@ -45,7 +45,7 @@ export default function QueryWidget({onClose}: QueryWidgetProps) {
                         <Icon awesome="times" size={16} />
                     </Button>
                 </Flex>
-                <QueryEditor />
+                <QueryEditor pathNavigation={false} />
             </QueriesPooling>
         </div>
     );
