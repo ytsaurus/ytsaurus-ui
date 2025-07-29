@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {useMemoizedIfEqual} from './use-updater';
+import {useMemoizedIfEqual} from './use-memoized';
 
 type RMI = `${number}${'px' | '%'}`;
 type RootMargin =

@@ -9,7 +9,7 @@ import {RecursivePartial} from '@gravity-ui/graph/build/utils/types/helpers';
 import {TGraphColors} from '@gravity-ui/graph/build/graphConfig';
 
 import {getCssColor} from '../../utils/get-css-color';
-import {useMemoizedIfEqual} from '../../hooks/use-updater';
+import {useMemoizedIfEqual} from '../../hooks';
 import {YTGraphBlock, YTGraphData} from './YTGraph';
 import {NoopComponent} from './canvas/NoopComponent';
 

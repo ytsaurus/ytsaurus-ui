@@ -1,9 +1,9 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
-import isEqual_ from 'lodash/isEqual';
 
 import {Updater} from '../utils/hammer/updater';
 import {getUseAutoRefresh} from '../store/selectors/settings/settings-ts';
+import {useMemoizedIfEqual} from './use-memoized';
 
 export const DEFAULT_UPDATER_TIMEOUT = 30 * 1000;
 
@@ -75,17 +75,4 @@ export function useUpdaterWithMemoizedParams<ArgsT extends Array<unknown>>(
     }, [fn, params]);
 
     useUpdater(updateFn, options);
-}
-
-export function useMemoizedIfEqual<ArgsT extends Array<unknown>>(...args: ArgsT) {
-    const ref = React.useRef<ArgsT>(args);
-
-    const params = React.useMemo(() => {
-        if (!isEqual_(ref.current, args)) {
-            ref.current = args;
-        }
-        return ref.current;
-    }, [args]);
-
-    return params;
 }
