@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from 'react-redux';
+import {ClipboardButton, Flex} from '@gravity-ui/uikit';
 
 import entries_ from 'lodash/entries';
 import map_ from 'lodash/map';
@@ -265,28 +266,34 @@ function getBundleStateField(orchidData: OrchidBundlesData) {
 function renderDetails(details: Array<[string, number]>) {
     const list = details.map(([k, v]) => `${k} - ${v}`);
     return (
-        <ul className={block('tooltip-list')}>
-            {list.map((text, i) => {
-                return (
-                    <li key={i} className={block('tooltip-item')}>
-                        {text}
-                    </li>
-                );
-            })}
-        </ul>
+        <Flex direction={'row'} gap={2}>
+            <ul className={block('tooltip-list')}>
+                {list.map((text, i) => {
+                    return (
+                        <li key={i} className={block('tooltip-item')}>
+                            {text}
+                        </li>
+                    );
+                })}
+            </ul>
+            <ClipboardButton text={list.join('\n')} />
+        </Flex>
     );
 }
 
 function renderErrors(alerts: OrchidBundlesData['alerts']) {
     return (
-        <ol className={block('tooltip-list', {alerts: true})}>
-            {alerts.map((alert) => {
-                return (
-                    <li key={alert.id} className={block('tooltip-item')}>
-                        {alert.id} - {alert.description}
-                    </li>
-                );
-            })}
-        </ol>
+        <Flex direction={'row'} gap={2}>
+            <ol className={block('tooltip-list', {alerts: true})}>
+                {alerts.map((alert) => {
+                    return (
+                        <li key={alert.id} className={block('tooltip-item')}>
+                            {alert.id} - {alert.description}
+                        </li>
+                    );
+                })}
+            </ol>
+            <ClipboardButton text={alerts.map((item) => item.description).join('\n')} />
+        </Flex>
     );
 }
