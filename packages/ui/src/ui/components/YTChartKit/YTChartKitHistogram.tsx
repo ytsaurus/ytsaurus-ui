@@ -5,6 +5,7 @@ import {LineSeries, TooltipDataChunkBarX} from '@gravity-ui/chartkit';
 import format from '../../common/hammer/format';
 import {ColorCircle} from '../../components/ColorCircle/ColorCircle';
 
+import {useMemoizedArgsWithIncarnaction} from './hack';
 import {ChartKitWidgetData, YTChartKitLazy} from '.';
 
 export type YTChartKitHistogramProps = {
@@ -14,11 +15,12 @@ export type YTChartKitHistogramProps = {
     xPlotLines?: Record<string, number | undefined>;
 };
 
-export function YTChartKitHistogram({
-    data = [],
-    barCount = 10,
-    xPlotLines = {},
-}: YTChartKitHistogramProps) {
+export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
+    const {
+        memoizedArgs: [data = [], barCount = 10, xPlotLines = {}],
+        incarnation,
+    } = useMemoizedArgsWithIncarnaction(props.data, props.barCount, props.xPlotLines);
+
     const chartData = React.useMemo(() => {
         const {min, max} = data.reduce(
             (acc, v) => {
@@ -130,5 +132,6 @@ export function YTChartKitHistogram({
         };
         return res;
     }, [data, barCount]);
-    return <YTChartKitLazy type="d3" data={chartData} />;
+
+    return <YTChartKitLazy key={incarnation} type="d3" data={chartData} />;
 }
