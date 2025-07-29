@@ -31,7 +31,7 @@ export function AddWidgetMenu() {
                 <Button {...props} size={'m'} qa={'add-widget-button'}>
                     <Flex alignItems={'center'} gap={3}>
                         Add widget
-                        {dropdownOpened ? <ChevronDown /> : <ChevronUp />}
+                        {dropdownOpened ? <ChevronUp /> : <ChevronDown />}
                     </Flex>
                 </Button>
             )}
