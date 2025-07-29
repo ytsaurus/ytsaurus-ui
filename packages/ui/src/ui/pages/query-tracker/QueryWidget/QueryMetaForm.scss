@@ -11,4 +11,9 @@
     .yt-query-selector-control {
         min-width: 120px;
     }
+
+    &__settings,
+    &__files {
+        max-width: 400px
+    }
 }
