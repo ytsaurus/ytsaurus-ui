@@ -9,7 +9,7 @@ import {useClusterColorClassName} from '../../../../containers/ClusterPageHeader
 const block = cn('query-cluster-item');
 const IconBlock = cn('query-cluster-icon');
 
-type Props = Pick<ClusterConfig, 'id' | 'name' | 'environment'> & {className?: string};
+export type Props = Pick<ClusterConfig, 'id' | 'name' | 'environment'> & {className?: string};
 
 export const QueryClusterItem: FC<Props> = ({id, name, environment, className}) => {
     const clusterColorClassName = useClusterColorClassName(id);

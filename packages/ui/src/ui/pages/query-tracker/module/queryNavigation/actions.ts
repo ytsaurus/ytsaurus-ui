@@ -39,10 +39,7 @@ import {isTableNode} from '../../../../utils/navigation/isTableNode';
 import {isFolderNode} from '../../../../utils/navigation/isFolderNode';
 import {loadTableAttributes} from '../../Navigation/api/loadTableAttributes';
 import {QueryEngine} from '../../../../../shared/constants/engines';
-import {createEmptyQuery, loadCliqueByCluster, updateQueryDraft} from '../query/actions';
-import {createTableSelect} from '../../Navigation/helpers/createTableSelect';
-import {insertTextWhereCursor} from '../../Navigation/helpers/insertTextWhereCursor';
-import {editor as monacoEditor} from 'monaco-editor';
+import {loadCliqueByCluster, loadTablePromptToQuery} from '../query/actions';
 import {getQueryDraft} from '../query/selectors';
 import {getRequestOutputFormat} from '../../../../utils/navigation/content/table/table';
 import {getDefaultTableColumnLimit} from '../../../../store/selectors/settings';
@@ -276,25 +273,17 @@ export const copyPathToClipboard =
     };
 
 export const makeNewQueryWithTableSelect =
-    (path: string, engine: QueryEngine, editor: monacoEditor.IStandaloneCodeEditor): AsyncAction =>
+    (path: string, engine: QueryEngine): AsyncAction =>
     async (dispatch, getState) => {
-        const state = getState();
-        const {pageSize} = getQueryResultGlobalSettings();
-        const clusterConfig = selectNavigationClusterConfig(state);
-        const {settings} = getQueryDraft(state);
+        const clusterConfig = selectNavigationClusterConfig(getState());
 
         if (!clusterConfig) return;
-        await dispatch(createEmptyQuery());
 
-        const newSettings: Record<string, string> = settings ? {...settings} : {};
-        newSettings.cluster = clusterConfig.id;
         if (engine === QueryEngine.CHYT) {
             dispatch(loadCliqueByCluster(engine, clusterConfig.id));
         }
-        dispatch(updateQueryDraft({engine, settings: newSettings}));
 
-        const text = await createTableSelect({clusterConfig, path, engine, limit: pageSize});
-        insertTextWhereCursor(text, editor);
+        dispatch(loadTablePromptToQuery(clusterConfig.id, path, engine));
     };
 
 // open path in navigation tab on monaco path click
