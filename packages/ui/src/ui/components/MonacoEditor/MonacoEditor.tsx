@@ -6,7 +6,12 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import {initVimMode} from 'monaco-vim/src';
 import {useSelector} from 'react-redux';
 import {getTheme} from '../../store/selectors/global';
-import {YT_DARK_MONACO_THEME, YT_LIGHT_MONACO_THEME} from './MonacoEditorThemes';
+import {
+    YT_DARK_HC_MONACO_THEME,
+    YT_DARK_MONACO_THEME,
+    YT_LIGHT_HC_MONACO_THEME,
+    YT_LIGHT_MONACO_THEME,
+} from './MonacoEditorThemes';
 import isEqual_ from 'lodash/isEqual';
 import '../../libs/monaco-yql-languages/monaco.contribution';
 import './MonacoEditor.scss';
@@ -28,9 +33,9 @@ export type Props = {
 
 const THEMES: Record<string, string> = {
     dark: YT_DARK_MONACO_THEME,
-    'dark-hc': YT_DARK_MONACO_THEME,
+    'dark-hc': YT_DARK_HC_MONACO_THEME,
     light: YT_LIGHT_MONACO_THEME,
-    'light-hc': YT_LIGHT_MONACO_THEME,
+    'light-hc': YT_LIGHT_HC_MONACO_THEME,
 };
 
 const MonacoEditor: FC<Props> = ({
