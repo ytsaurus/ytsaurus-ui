@@ -4,13 +4,19 @@ import format from '../../common/hammer/format';
 
 import {ChartKitWidgetData, YTChartKitLazy} from '.';
 import {PieSeriesData} from '@gravity-ui/chartkit/build';
+import {useMemoizedArgsWithIncarnaction} from './hack';
 
 type YTChartKitPieProps = {
     format: 'Bytes' | 'Number';
     data?: Record<string, number>;
 };
 
-export function YTChartKitPie({format: fmt = 'Number', data = {}}: YTChartKitPieProps) {
+export function YTChartKitPie({format: fmt = 'Number', ...rest}: YTChartKitPieProps) {
+    const {
+        memoizedArgs: [data = {}],
+        incarnation,
+    } = useMemoizedArgsWithIncarnaction(rest.data);
+
     const chartData: ChartKitWidgetData = React.useMemo(() => {
         const sum =
             Object.values(data).reduce((acc, v) => {
@@ -52,5 +58,5 @@ export function YTChartKitPie({format: fmt = 'Number', data = {}}: YTChartKitPie
         } as ChartKitWidgetData;
     }, [data, fmt]);
 
-    return <YTChartKitLazy type="d3" data={chartData} />;
+    return <YTChartKitLazy key={incarnation} type="d3" data={chartData} />;
 }
