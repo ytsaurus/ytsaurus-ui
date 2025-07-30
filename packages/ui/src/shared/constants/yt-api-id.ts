@@ -107,6 +107,7 @@ export const enum YTApiId {
     operationTreeConfigs = 'operationTreeConfigs',
     listJobs100 = 'listJobs100',
     jobsOperationIncarnations = 'jobsOperationIncarnations',
+    listOperationEvents = 'listOperationEvents',
 
     resourcePlannerPoolDetails = 'resourcePlannerPoolDetails',
 

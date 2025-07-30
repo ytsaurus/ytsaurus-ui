@@ -5,7 +5,7 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import ypath from '../../../../../common/thor/ypath';
 
 import {RootState} from '../../../../../store/reducers';
-import {ytApi} from '../../../../../store/api/yt';
+import {batchApi} from '../../../yt';
 import {getAttributes, getPath} from '../../../../../store/selectors/navigation';
 import {getCluster} from '../../../../../store/selectors/global';
 
@@ -65,7 +65,7 @@ export async function exportsMutation(args: ExportsMutationArgs, api: BaseQueryA
 
         const {prevConfig, type, newConfig} = args;
 
-        const configs: QueueExport<number> = ytApi.endpoints.fetchBatch.select({
+        const configs: QueueExport<number> = batchApi.endpoints.fetchBatch.select({
             ...makeGetExportsParams(path),
             cluster,
         })(state).data?.[0].output as QueueExport<number>;

@@ -18,6 +18,8 @@ import {
     GetQueryTrackerInfoResponse,
     ListJobsParameters,
     ListJobsResponse,
+    ListOperationEventsParameters,
+    ListOperationEventsResponse,
     OutputFormat,
     PathParams,
     PipelineParams,
@@ -115,6 +117,10 @@ type YTApiV4 = {
     ): Promise<FlowExecuteData[Command]>;
 
     remountTable(...args: ApiMethodParameters<TableParams>): Promise<void>;
+
+    listOperationEvents(
+        ...args: ApiMethodParameters<ListOperationEventsParameters>
+    ): Promise<ListOperationEventsResponse>;
 
     [method: string]: (...args: ApiMethodParameters<any>) => Promise<any>;
 };
