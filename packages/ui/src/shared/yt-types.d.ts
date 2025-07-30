@@ -655,3 +655,24 @@ export type ReadTableOutputFormat = {
         column_names?: Array<string>;
     };
 };
+
+type IncarnationSwitchReason =
+    | 'job_aborted'
+    | 'job_failed'
+    | 'job_interrupted'
+    | 'job_lack_after_revival';
+
+export type ListOperationEventsParameters = {
+    operation_id: string;
+    event_type: string;
+};
+
+export type OperationEvent = {
+    incarnation: string;
+    timestamp: string;
+    event_type: string;
+    incarnation_switch_info: Record<string, unknown>;
+    incarnation_switch_reason?: IncarnationSwitchReason;
+};
+
+export type ListOperationEventsResponse = Array<OperationEvent>;

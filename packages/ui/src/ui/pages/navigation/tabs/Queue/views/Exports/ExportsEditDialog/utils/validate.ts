@@ -1,7 +1,7 @@
 import ypath from '../../../../../../../../common/thor/ypath';
 import {ytApiV3} from '../../../../../../../../rum/rum-wrap-api';
 
-import {BatchApiResults} from '../../../../../../../../store/api/yt/endpoints/executeBatch';
+import {BatchApiResults} from '../../../../../../../../store/api/yt/executeBatch';
 
 import {QueueExport} from '../../../../../../../../types/navigation/queue/queue';
 
