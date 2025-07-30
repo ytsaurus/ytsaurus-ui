@@ -635,3 +635,15 @@ export type FlowStream = FlowNodeBase & {
 export type FlowSink = FlowNodeBase & {
     stream_id: StreamId;
 };
+
+export type ListOperationEventsParameters = {
+    operation_id: string;
+    event_type: string; // currently its value can be only "event_started"
+};
+
+export type ListOperationEventsResponse = Array<{
+    timestamp: string;
+    event_type: string; // currently its value can be only "event_started"
+    incarnation_switch_info: Record<string, unknown>;
+    incarnation_switch_reason?: string;
+}>;
