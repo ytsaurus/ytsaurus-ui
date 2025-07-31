@@ -2,19 +2,17 @@ import {EventDisplayMode} from '../../../../../../components/TimelineBlock/enums
 
 export const getTimeLineDisplayMode = ({
     jobId,
-    timeLineId,
     filter = '',
     selectedJob = [],
 }: {
     jobId: string;
-    timeLineId: string;
     filter?: string;
     selectedJob?: string[];
 }): EventDisplayMode => {
     const hasFilter = Boolean(filter);
     const hasSelectedJobs = selectedJob && Boolean(selectedJob[0]);
     const matchesFilter = hasFilter && jobId.includes(filter);
-    const isSelected = selectedJob[0] === timeLineId;
+    const isSelected = selectedJob[0] === jobId;
 
     if (matchesFilter && isSelected) {
         return EventDisplayMode.SelectedFound;
