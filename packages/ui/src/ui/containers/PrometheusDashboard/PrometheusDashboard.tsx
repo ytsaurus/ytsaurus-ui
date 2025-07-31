@@ -7,7 +7,7 @@ import {YTError} from '../../../@types/types';
 
 import {YTErrorBlock} from '../../components/Block/Block';
 import type {PrometheusDashboardType} from '../../store/reducers/prometheusDashboard/prometheusDahsboard';
-import {YTTimeline} from '../../components/common/YTTimeline';
+import {YTTimeline} from '../../components/Timeline';
 import {Toolbar} from '../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {StickyContainer} from '../../components/StickyContainer/StickyContainer';
 import {YTErrors} from '../../rum/constants';
@@ -39,9 +39,9 @@ export const PrometheusDashboard = React.memo(function ({
     return !params ? null : (
         <PrometheusDashboardProvider type={type}>
             <StickyContainer topOffset={toolbarStickyTop}>
-                {({topStickyClassName}) => (
+                {({stickyTopClassName}) => (
                     <React.Fragment>
-                        <PrometheusTimeline className={topStickyClassName} />
+                        <PrometheusTimeline className={stickyTopClassName} />
                         {error && <YTErrorBlock error={error} />}
                         <MissingParametersWarning templating={layout?.templating} params={params} />
                         {layout?.panels === undefined ? null : (

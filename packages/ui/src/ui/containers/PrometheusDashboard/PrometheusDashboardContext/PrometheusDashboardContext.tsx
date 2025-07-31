@@ -6,7 +6,7 @@ import {
     prometheusDashboardSlice,
 } from '../../../store/reducers/prometheusDashboard/prometheusDahsboard';
 import {RootState} from '../../../store/reducers';
-import {calcFromTo} from '../../../components/common/YTTimeline';
+import {calcFromTo} from '../../../components/Timeline';
 import {PrometheusWidgetId} from '../types';
 
 type PrometheusDashboardContextData = {
