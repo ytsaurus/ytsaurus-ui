@@ -2,10 +2,11 @@ import React, {useMemo} from 'react';
 import cn from 'bem-cn-lite';
 import {Icon, List, ListItemData, Loader, Text} from '@gravity-ui/uikit';
 import {QueryItem} from '../../module/api';
-import {useQueryList} from '../../hooks/QueriesList';
 import {useQueryNavigation} from '../../hooks/Query';
 import tutorialIcon from '../../../../assets/img/svg/learn.svg';
 import './index.scss';
+import {useSelector} from 'react-redux';
+import {getQueriesList, isQueriesListLoading} from '../../module/queries_list/selectors';
 
 const itemCn = cn('query-tutorial-item');
 const block = cn('queries-tutorial-list');
@@ -22,7 +23,8 @@ function renderItem(item: QueryItem) {
 }
 
 export function QueriesTutorialList({className}: {className: string}) {
-    const [items, isLoading] = useQueryList();
+    const items = useSelector(getQueriesList);
+    const isLoading = useSelector(isQueriesListLoading);
 
     const [selectedId, goToQuery] = useQueryNavigation();
 
