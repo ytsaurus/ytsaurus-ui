@@ -85,6 +85,11 @@ module.exports = {
     _getOperation: v3._getOperation,
     listOperations: v3._listOperations,
     getOperation: v3.getOperation,
+    listOperationEvents: {
+        name: 'list_operation_events',
+        method: 'POST',
+        dataType: 'json',
+    },
 
     // Jobs
     listJobs: v3.listJobs,
