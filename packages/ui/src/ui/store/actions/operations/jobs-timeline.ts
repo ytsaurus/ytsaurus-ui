@@ -87,7 +87,7 @@ export const getJobsWithEvents =
                     const percent = (maxTime - minTime) / 100;
 
                     const timeLineJob: TimelineJob = {
-                        id: job.job_id,
+                        id: job.id,
                         cookieId: job.job_cookie,
                         allocationId: job.allocation_id,
                         groupName: job.task_name || '',
