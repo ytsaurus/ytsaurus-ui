@@ -34,11 +34,11 @@ export function BundleMonitoringPrometheus(props: BundleMonitoringProps) {
     const {type, setType, params} = useBundleMonitoring(props);
     return (
         <StickyContainer>
-            {({topStickyClassName}) => {
+            {({stickyTopClassName}) => {
                 return (
                     <React.Fragment>
                         <Toolbar
-                            className={block('toolbar', topStickyClassName)}
+                            className={block('toolbar', stickyTopClassName)}
                             itemsToWrap={[
                                 {
                                     node: (

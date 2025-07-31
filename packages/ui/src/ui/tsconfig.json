@@ -13,6 +13,6 @@
       "*": ["../../node_modules/*"]
     },
     "jsx": "react",
-    "lib": ["ES2022", "ES2018", "DOM", "DOM.Iterable", "ES2019.Array", "WebWorker"]
+    "lib": ["ES2022", "DOM", "DOM.Iterable", "WebWorker"]
   }
 }

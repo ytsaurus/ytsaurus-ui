@@ -13,6 +13,7 @@ export function MasterLocalContainers({allValue}: {allValue: string}) {
     const {data} = useFetchBatchQuery<Array<string>>({
         id: YTApiId.systemClusterMasters,
         parameters: {requests: [{command: 'list', parameters: {path: '//sys/cluster_masters'}}]},
+        errorTitle: 'Failed to load masters',
     });
 
     const options = React.useMemo(() => {
