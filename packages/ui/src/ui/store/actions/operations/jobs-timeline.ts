@@ -74,10 +74,12 @@ export const getJobsWithEvents =
 
             const result = jobs.reduce<Pick<JobsTimelineState, 'jobs' | 'eventsInterval'>>(
                 (acc, job) => {
-                    if (!job?.events || !job.events.length) return acc;
+                    // filter valid jobs
+                    if (!job?.events || job.job_cookie === undefined || !job.events.length)
+                        return acc;
 
                     const jobEvents = job.events;
-                    const isRunning = job.state === 'running';
+                    const isRunning = job.state === 'running' || job.state === 'waiting';
 
                     // stretch running job timeline
                     const maxTime = isRunning
@@ -87,7 +89,7 @@ export const getJobsWithEvents =
                     const percent = (maxTime - minTime) / 100;
 
                     const timeLineJob: TimelineJob = {
-                        id: job.job_id,
+                        id: job.id,
                         cookieId: job.job_cookie,
                         allocationId: job.allocation_id,
                         groupName: job.task_name || '',
