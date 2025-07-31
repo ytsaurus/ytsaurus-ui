@@ -636,14 +636,23 @@ export type FlowSink = FlowNodeBase & {
     stream_id: StreamId;
 };
 
+type IncarnationSwitchReason =
+    | 'job_aborted'
+    | 'job_failed'
+    | 'job_interrupted'
+    | 'job_lack_after_revival';
+
 export type ListOperationEventsParameters = {
     operation_id: string;
-    event_type: string; // currently its value can be only "event_started"
+    event_type: string;
 };
 
-export type ListOperationEventsResponse = Array<{
+export type OperationEvent = {
+    incarnation: string;
     timestamp: string;
-    event_type: string; // currently its value can be only "event_started"
+    event_type: string;
     incarnation_switch_info: Record<string, unknown>;
-    incarnation_switch_reason?: string;
-}>;
+    incarnation_switch_reason?: IncarnationSwitchReason;
+};
+
+export type ListOperationEventsResponse = Array<OperationEvent>;
