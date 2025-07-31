@@ -1,14 +1,23 @@
 import {batchApi, useFetchBatchQuery, useUpdateBatchMutation} from './executeBatch';
 import {listQueriesApi, useListQueriesQuery} from './listQueries';
 import {flowApi, useFlowExecuteQuery} from './flow';
-import {listOperationEventsApi, useListOperationEventsQuery} from './listOperationEvents';
+import {
+    getOperationEvents,
+    listOperationEventsApi,
+    useListOperationEventsQuery,
+} from './listOperationEvents';
 
 export {
+    // queries
     useFetchBatchQuery,
-    useUpdateBatchMutation,
     useListQueriesQuery,
     useFlowExecuteQuery,
     useListOperationEventsQuery,
+    // mutations
+    useUpdateBatchMutation,
+    // selectors
+    getOperationEvents,
+    // api
     batchApi,
     listQueriesApi,
     flowApi,
