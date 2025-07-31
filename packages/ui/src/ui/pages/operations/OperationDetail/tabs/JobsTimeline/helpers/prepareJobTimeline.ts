@@ -1,14 +1,23 @@
 import {JobsTimelineState} from '../../../../../../store/reducers/operations/jobs/jobs-timeline-slice';
-import {JobLineEvent} from '../../../../../../components/TimelineBlock/renderer/JobLineRenderer';
+import {
+    JobLineEvent,
+    JobLineRenderer,
+} from '../../../../../../components/TimelineBlock/renderer/JobLineRenderer';
 import {getColorByState} from '../../../../../../components/TimelineBlock/helpers/getColorByState';
-import {AllocationLineEvent} from '../../../../../../components/TimelineBlock/renderer/AllocationLineRenderer';
+import {
+    AllocationLineEvent,
+    AllocationLineRenderer,
+} from '../../../../../../components/TimelineBlock/renderer/AllocationLineRenderer';
 import {getTimeLineDisplayMode} from './getTimeLineDisplayMode';
+import {TimelineAxis} from '@gravity-ui/timeline';
 
 interface AllocationData {
     from: number;
     to: number;
     cookieId: string;
 }
+
+const AXIS_ID = 'main';
 
 export const prepareJobTimeline = ({
     jobs,
@@ -25,6 +34,7 @@ export const prepareJobTimeline = ({
     const allocationMap = new Map<string, AllocationData>();
     const validJobs = jobs.filter((job) => job.cookieId !== undefined);
 
+    const cookieIdSet = new Set<string>();
     for (const job of validJobs) {
         if (!job.allocationId) continue;
 
@@ -33,6 +43,7 @@ export const prepareJobTimeline = ({
         const jobStartTime = firstEvent.startTime;
         const jobEndTime = lastEvent.endTime;
         const cookieId = job.cookieId.toString();
+        cookieIdSet.add(cookieId);
 
         const existingAllocation = allocationMap.get(job.allocationId);
 
@@ -48,26 +59,35 @@ export const prepareJobTimeline = ({
         }
     }
 
+    const cookieIds = Array.from(cookieIdSet);
+
+    const axes: TimelineAxis[] = [
+        {
+            id: AXIS_ID,
+            tracksCount: cookieIdSet.size,
+            top: 0,
+            height: axesRowHeight,
+        },
+    ];
+
     // Convert allocations to events
     const allocations: AllocationLineEvent[] = Array.from(allocationMap.entries()).map(
         ([allocationId, allocation]) => ({
-            renderType: 'allocationLine' as const,
-            allocationId,
-            axisId: allocation.cookieId,
-            eventsCount: 1,
-            trackIndex: 0,
+            id: allocationId,
+            axisId: AXIS_ID,
+            trackIndex: cookieIds.indexOf(allocation.cookieId),
             from: allocation.from,
             to: allocation.to,
+            renderer: new AllocationLineRenderer(),
+            allocationId,
         }),
     );
 
     // Process jobs and collect axes
-    const axes = new Set<string>();
     const timelines: JobLineEvent[] = [];
 
     for (const job of validJobs) {
         const cookieId = job.cookieId.toString();
-        axes.add(cookieId);
 
         const jobEvents = job.events;
         const firstEvent = jobEvents[0];
@@ -85,17 +105,16 @@ export const prepareJobTimeline = ({
         }));
 
         timelines.push({
-            renderType: 'jobLine' as const,
-            axisId: cookieId,
-            eventsCount: jobEvents.length,
-            trackIndex: 0,
+            id: job.id,
+            axisId: AXIS_ID,
+            trackIndex: cookieIds.indexOf(cookieId),
             from: firstEvent.startTime,
             to: lastEvent.endTime,
+            renderer: new JobLineRenderer(),
             jobId: job.id,
             parts,
             displayMode: getTimeLineDisplayMode({
                 jobId: job.id,
-                timeLineId: `jobLine:${cookieId}:${firstEvent.startTime}-${lastEvent.endTime}`,
                 filter,
                 selectedJob,
             }),
@@ -108,16 +127,8 @@ export const prepareJobTimeline = ({
         });
     }
 
-    // Prepare axis
-    const axesArray = Array.from(axes).map((id, index) => ({
-        id,
-        top: axesRowHeight * index,
-        height: axesRowHeight,
-        tracksCount: 1,
-    }));
-
     return {
-        axes: axesArray,
-        timelines: [...timelines, ...allocations],
+        axes,
+        timelines: [...allocations, ...timelines],
     };
 };
