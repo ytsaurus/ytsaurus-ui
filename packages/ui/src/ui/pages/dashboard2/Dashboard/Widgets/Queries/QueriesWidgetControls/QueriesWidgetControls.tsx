@@ -2,7 +2,6 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import b from 'bem-cn-lite';
 import {Flex, Select} from '@gravity-ui/uikit';
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
 
 import map_ from 'lodash/map';
 
@@ -19,6 +18,8 @@ import {
 } from '../../../../../../store/actions/dashboard2/queries';
 
 import {QueryEngine} from '../../../../../../../shared/constants/engines';
+
+import type {QueriesWidgetProps} from '../types';
 
 import './QueriesWidgetControls.scss';
 
@@ -41,7 +42,7 @@ const engineOptions = [
     })),
 ];
 
-export function QueriesWidgetControls(props: PluginWidgetProps) {
+export function QueriesWidgetControls(props: QueriesWidgetProps) {
     const {id} = props;
 
     const dispatch = useDispatch();

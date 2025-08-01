@@ -1,5 +1,4 @@
 import React from 'react';
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
 import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
@@ -13,6 +12,7 @@ import {Duration} from './cells/Duration';
 import {StartTime} from './cells/StartTime';
 
 import {useQueriesWidget} from '../hooks/use-queries-widget';
+import type {QueriesWidgetProps} from '../types';
 
 type Query = {
     general: {
@@ -53,7 +53,7 @@ const columns = [
     }),
 ];
 
-export function QueriesWidgetContent(props: PluginWidgetProps) {
+export function QueriesWidgetContent(props: QueriesWidgetProps) {
     const {queries, error, isLoading} = useQueriesWidget(props);
 
     return (
