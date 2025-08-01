@@ -1,14 +1,3 @@
-export type Author = {
-    value: string;
-    type: 'users';
-};
-
-export type QueriesSettingsValues = {
-    name: string;
-    authors: Array<Author>;
-    limit: number;
-};
-
 export function useQueriesSettings() {
     return [
         {

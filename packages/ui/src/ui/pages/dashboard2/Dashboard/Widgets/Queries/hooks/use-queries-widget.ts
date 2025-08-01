@@ -1,6 +1,5 @@
 import {useCallback} from 'react';
 import {useSelector} from 'react-redux';
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
 
 import map_ from 'lodash/map';
 
@@ -15,6 +14,7 @@ import {defaultDashboardItems} from '../../../../../../constants/dashboard2';
 
 import {QueryEngine} from '../../../../../../../shared/constants/engines';
 import {ListQueriesParams} from '../../../../../../../shared/yt-types';
+import {QueriesWidgetProps} from '../types';
 
 const mapQueryStateToRequestStates: Record<string, string[]> = {
     running: ['running', 'pending'],
@@ -23,16 +23,11 @@ const mapQueryStateToRequestStates: Record<string, string[]> = {
     aborted: ['aborting', 'aborted'],
 };
 
-export type Author = {
-    value: string;
-    type: 'users';
-};
-
-export function useQueriesWidget(props: PluginWidgetProps) {
+export function useQueriesWidget(props: QueriesWidgetProps) {
     const {id: widgetId, data} = props;
 
-    const users = map_(data?.authors as Array<Author>, ({value}) => value);
-    const limit = (data?.limit as {value?: number})?.value || 0;
+    const users = map_(data?.authors, ({value}) => value);
+    const limit = data?.limit?.value || 0;
 
     const queryState = useSelector((state: RootState) => getQueryFilterState(state, widgetId));
     const engine = useSelector((state: RootState) => getQueryFilterEngine(state, widgetId));
