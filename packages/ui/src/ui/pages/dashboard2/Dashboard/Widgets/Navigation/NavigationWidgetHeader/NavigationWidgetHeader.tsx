@@ -1,13 +1,13 @@
 import React from 'react';
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
 
 import {WidgetHeader} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetHeader/WidgetHeader';
 
 import {useNavigationWidget} from '../hooks/use-navigation-widget';
+import type {NavigationWidgetProps} from '../types';
 
-export function NavigationWidgetHeader(props: PluginWidgetProps) {
+export function NavigationWidgetHeader(props: NavigationWidgetProps) {
     const {items, isLoading} = useNavigationWidget(props);
-    const name = props.data?.name as string | undefined;
+    const name = props.data?.name;
     const id = props.id;
     return (
         <WidgetHeader
