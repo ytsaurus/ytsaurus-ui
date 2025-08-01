@@ -1,6 +1,5 @@
 import React, {useMemo} from 'react';
 import {Text} from '@gravity-ui/uikit';
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
 import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
 import format from '../../../../../../common/hammer/format';
@@ -11,6 +10,7 @@ import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/componen
 import {WidgetText} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetText/WidgetText';
 
 import {useAccountsWidget} from '../hooks/use-accounts-widget';
+import type {AccountsWidgetProps} from '../types';
 
 import {AccountsProgressCell} from './cells/AccountsProgressCell';
 import {AccountsNameCell} from './cells/AccountsNameCell';
@@ -19,7 +19,7 @@ import './AccountsWidgetContent.scss';
 
 const columnHelper = createColumnHelper<AccountInfo>();
 
-export function AccountsWidgetContent(props: PluginWidgetProps) {
+export function AccountsWidgetContent(props: AccountsWidgetProps) {
     const {accounts, userColumns, isLoading, error, type} = useAccountsWidget(props);
 
     const columns = useMemo(() => {

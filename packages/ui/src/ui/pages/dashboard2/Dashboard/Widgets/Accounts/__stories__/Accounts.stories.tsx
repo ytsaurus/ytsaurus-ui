@@ -11,6 +11,8 @@ import {baseWidgetProps} from '../../../utils/mocks';
 import {AccountsWidgetControls} from '../AccountsWidgetControls/AccountsWidgetControls';
 import {AccountsWidgetContent} from '../AccountsWidgetContent/AccountsWidgetContent';
 import {AccountsWidgetHeader} from '../AccountsWidgetHeader/AccountsWidgetHeader';
+import {AccountsWidgetProps} from '../types';
+
 import {
     accountsHandler,
     accountsHandlerEmpty,
@@ -48,9 +50,9 @@ const BaseComponent = () => (
     <div style={{height: 255, width: 750}}>
         <WidgetBase
             {...extenedAccountsProps}
-            controls={<AccountsWidgetControls {...extenedAccountsProps} />}
-            content={<AccountsWidgetContent {...extenedAccountsProps} />}
-            header={<AccountsWidgetHeader {...extenedAccountsProps} />}
+            controls={<AccountsWidgetControls {...(extenedAccountsProps as AccountsWidgetProps)} />}
+            content={<AccountsWidgetContent {...(extenedAccountsProps as AccountsWidgetProps)} />}
+            header={<AccountsWidgetHeader {...(extenedAccountsProps as AccountsWidgetProps)} />}
         />
     </div>
 );
