@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ytsaurus-ui-chart-v0.3.0...ytsaurus-ui-chart-v0.4.0) (2025-08-01)
+
+
+### Bug Fixes
+
+* **ui-helm-chart:** minor fix for ci ([01ca584](https://github.com/ytsaurus/ytsaurus-ui/commit/01ca584373e45111045f2450215c627f55d9702e))
+
 ## [0.3.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ytsaurus-ui-chart-v0.2.1...ytsaurus-ui-chart-v0.3.0) (2025-08-01)
 
 ### Bug Fixes
