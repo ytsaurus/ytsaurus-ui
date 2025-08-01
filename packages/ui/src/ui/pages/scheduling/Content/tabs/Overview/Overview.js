@@ -44,7 +44,6 @@ import {
     getOperationRefId,
     getSchedulingAbcFilter,
 } from '../../../../../store/selectors/scheduling/attributes-to-filter';
-import {SCHEDULING_POOL_TREE_TABLE_ID} from '../../../../../constants/scheduling';
 import {SCHEDULING_POOL_TREE_TABLE_ID, SchedulingTab} from '../../../../../constants/scheduling';
 
 import {poolsTableItems} from '../../../../../utils/scheduling/overviewTable';
