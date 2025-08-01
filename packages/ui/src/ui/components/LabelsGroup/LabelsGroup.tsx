@@ -4,6 +4,8 @@ import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
 
+import {Link} from '@gravity-ui/uikit';
+
 import Icon from '../../components/Icon/Icon';
 
 import withCollapsible from '../../hocs/withCollapsible';
@@ -13,7 +15,24 @@ import Button from '../../components/Button/Button';
 
 const block = cn('labels-group');
 
-class LabelsGroup extends Component {
+type LabelsGroupProps = {
+    items: Array<LabelsGroupItem>;
+
+    onClick?: (item: LabelsGroupItem) => void;
+    onRemove?: (item: LabelsGroupItem) => void;
+    onRemoveAll?: () => void;
+
+    renderToggler: () => React.ReactNode;
+};
+
+type LabelsGroupItem = {
+    name: string;
+    isDefault?: boolean;
+    onClick: () => void;
+    url?: string;
+};
+
+class LabelsGroup extends Component<LabelsGroupProps> {
     static propTypes = {
         // from parent
         onClick: PropTypes.func,
@@ -30,7 +49,7 @@ class LabelsGroup extends Component {
         renderToggler: PropTypes.func.isRequired,
     };
 
-    handleLabelClick = (label) => {
+    handleLabelClick = (label: LabelsGroupItem) => {
         const {onClick} = this.props;
 
         if (typeof onClick === 'function') {
@@ -38,7 +57,7 @@ class LabelsGroup extends Component {
         }
     };
 
-    handleRemoveClick = (evt, label) => {
+    handleRemoveClick = (evt: React.MouseEvent<HTMLElement>, label: LabelsGroupItem) => {
         const {onRemove} = this.props;
 
         evt.stopPropagation();
@@ -47,16 +66,27 @@ class LabelsGroup extends Component {
         }
     };
 
-    renderLabel(label) {
+    renderLabel(label: LabelsGroupItem) {
         const {onRemove} = this.props;
-        const {name, isDefault, onClick} = label;
+        const {name, url, isDefault, onClick} = label;
 
         const onLabelClick = () => this.handleLabelClick(label);
-        const onRemoveClick = (evt) => this.handleRemoveClick(evt, label);
+        const onRemoveClick = (evt: React.MouseEvent<HTMLElement>) =>
+            this.handleRemoveClick(evt, label);
 
         return (
-            <li onClick={onLabelClick} className={block('label', {clickable: onClick})} key={name}>
-                {name}
+            <li
+                onClick={onLabelClick}
+                className={block('label', {clickable: Boolean(onClick)})}
+                key={name}
+            >
+                {url ? (
+                    <Link href={url} target="_blank">
+                        {name}
+                    </Link>
+                ) : (
+                    name
+                )}
 
                 {onRemove && !isDefault && (
                     <span onClick={onRemoveClick} className={block('close')}>

@@ -15,7 +15,7 @@ import {StickyContainer} from '../../../components/StickyContainer/StickyContain
 
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 
-import {useMemoizedIfEqual, useUpdater} from '../../../hooks/use-updater';
+import {useMemoizedIfEqual, useUpdater} from '../../../hooks';
 import {setSettingsSystemNodesCollapsed} from '../../../store/actions/settings/settings';
 import {loadSystemNodes} from '../../../store/actions/system/nodes';
 import {RoleGroupInfo} from '../../../store/reducers/system/proxies';
