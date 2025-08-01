@@ -3,7 +3,7 @@ import {Text} from '@gravity-ui/uikit';
 import {PluginWidgetProps} from '@gravity-ui/dashkit';
 import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
-import hammer from '../../../../../../common/hammer';
+import format from '../../../../../../common/hammer/format';
 
 import {AccountInfo} from '../../../../../../store/api/dashboard2/accounts/accounts';
 
@@ -68,7 +68,7 @@ export function AccountsWidgetContent(props: PluginWidgetProps) {
                         },
                         header: (header) => (
                             <WidgetText variant={'subheader-1'}>
-                                {hammer.format['ReadableField'](header.column.id)}
+                                {format.ReadableField(header.column.id)}
                             </WidgetText>
                         ),
                         maxSize: 200,

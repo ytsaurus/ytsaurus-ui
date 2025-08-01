@@ -4,7 +4,7 @@ import {Flex, Progress, Text} from '@gravity-ui/uikit';
 
 import {Tooltip} from '../../../../../../../components/Tooltip/Tooltip';
 
-import hammer from '../../../../../../../common/hammer';
+import format from '../../../../../../../common/hammer/format';
 
 import {PoolResource} from '../PoolsWidgetContent';
 
@@ -21,9 +21,9 @@ export function ResourceCell(props: Props) {
 
     const theme = value < 100 ? 'info' : 'warning';
 
-    const usageText = (type === 'memory' ? hammer.format['Bytes'](usage) : usage) || '-';
+    const usageText = (type === 'memory' ? format.Bytes(usage) : usage) || format.NO_VALUE;
     const guaranteeText =
-        (type === 'memory' ? hammer.format['Bytes'](guarantee) : guarantee) || '-';
+        (type === 'memory' ? format.Bytes(guarantee) : guarantee) || format.NO_VALUE;
 
     return (
         <Tooltip

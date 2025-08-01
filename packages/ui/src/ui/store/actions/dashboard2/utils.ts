@@ -3,7 +3,7 @@ import {ThunkAction} from '@reduxjs/toolkit';
 import filter_ from 'lodash/filter';
 import isEqual_ from 'lodash/isEqual';
 
-import hammer from '../../../common/hammer';
+import guid from '../../../common/hammer/guid';
 
 import {RootState} from '../../../store/reducers';
 import {setSettingByKey} from '../../../store/actions/settings';
@@ -30,7 +30,7 @@ export function createWidgetDataFieldAction<FieldType>(
                 ...filter_(config.items, (item) => !isEqual_(item, oldItem)),
                 newItem,
             ];
-            const newConfig = {...config, salt: hammer.guid(), items: newItems};
+            const newConfig = {...config, salt: guid(), items: newItems};
 
             dispatch(
                 setSettingByKey(
