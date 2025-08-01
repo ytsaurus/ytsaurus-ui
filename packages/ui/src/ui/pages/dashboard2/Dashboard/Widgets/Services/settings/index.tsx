@@ -1,10 +1,3 @@
-import {ServicePair} from '../../../../../../components/Dialog/controls/ServicesSelect/ServicesSelect';
-
-export type ServicesSettingsValues = {
-    name: string;
-    services: ServicePair[];
-};
-
 export function useServicesSettings() {
     return [
         {
