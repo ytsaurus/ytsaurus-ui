@@ -77,6 +77,14 @@ jobs:
             echo Corresponding image already exists
           fi
 
+      - name: Guthub Packages Login
+        if: ${{ steps.release.outputs['packages/ui-helm-chart--release_created'] }}
+        uses: docker/login-action@v3.1.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: "Publish helm chart"
         if: ${{ steps.release.outputs['packages/ui-helm-chart--release_created'] }}
         run: |
