@@ -1,15 +1,15 @@
 import React from 'react';
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
 
 import {WidgetHeader} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetHeader/WidgetHeader';
 
 import {usePoolsWidget} from '../hooks/use-pools-widget';
+import type {PoolsWidgetProps} from '../types';
 
-export function PoolsWidgetHeader(props: PluginWidgetProps) {
+export function PoolsWidgetHeader(props: PoolsWidgetProps) {
     const {
         data: {pools, isLoading},
     } = usePoolsWidget(props);
-    const name = props.data?.name as string | undefined;
+    const name = props.data?.name;
     const id = props.id;
     return (
         <WidgetHeader

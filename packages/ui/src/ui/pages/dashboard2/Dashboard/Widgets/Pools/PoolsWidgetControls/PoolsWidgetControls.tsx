@@ -1,13 +1,14 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {RadioButton} from '@gravity-ui/uikit';
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
 
 import {RootState} from '../../../../../../store/reducers';
 import {setPoolsTypeFilter} from '../../../../../../store/actions/dashboard2/pools';
 import {getPoolsTypeFilter} from '../../../../../../store/selectors/dashboard2/pools';
 
-export function PoolsWidgetControls(props: PluginWidgetProps) {
+import type {PoolsWidgetProps} from '../types';
+
+export function PoolsWidgetControls(props: PoolsWidgetProps) {
     const dispatch = useDispatch();
 
     const type = useSelector((state: RootState) => getPoolsTypeFilter(state, props.id));

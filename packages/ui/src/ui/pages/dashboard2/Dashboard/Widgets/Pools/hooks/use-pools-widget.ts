@@ -1,5 +1,4 @@
 import {useMemo} from 'react';
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
 import {useSelector} from 'react-redux';
 
 import map_ from 'lodash/map';
@@ -12,9 +11,11 @@ import {usePoolsQuery} from '../../../../../../store/api/dashboard2/pools';
 import {getFavouritePools} from '../../../../../../store/selectors/favourites';
 import {getPoolsTypeFilter} from '../../../../../../store/selectors/dashboard2/pools';
 
+import type {PoolsWidgetProps} from '../types';
+
 const resources = ['cpu', 'memory', 'operations', 'gpu'];
 
-export function usePoolsWidget(props: PluginWidgetProps) {
+export function usePoolsWidget(props: PoolsWidgetProps) {
     const userPools = props.data?.pools as PoolQueryParams[];
     const resourcesColumns = props.data?.columns as string[];
     const favouritePools = useSelector(getFavouritePools);
