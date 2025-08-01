@@ -2,7 +2,7 @@ import React from 'react';
 import {ClipboardButton, Progress} from '@gravity-ui/uikit';
 import b from 'bem-cn-lite';
 
-import hammer from '../../../../../../../common/hammer';
+import format from '../../../../../../../common/hammer/format';
 
 import {Resource} from '../../../../../../../store/api/dashboard2/accounts/accounts';
 
@@ -38,7 +38,7 @@ export function AccountsProgressCell(props: Props) {
         >
             <Progress
                 stack={stack}
-                text={`${hammer.format[type](committed + uncommitted)} / ${hammer.format[type](limit)}`}
+                text={`${format[type](committed + uncommitted)} / ${format[type](limit)}`}
             />
         </Tooltip>
     );

@@ -2,6 +2,8 @@ import React from 'react';
 import b from 'bem-cn-lite';
 import {Flex, Progress} from '@gravity-ui/uikit';
 
+import format from '../../../../../../../common/hammer/format';
+
 import {OperationProgressInfo} from '../../../../../../../store/api/dashboard2/operations/operations';
 
 import StatusLabel from '../../../../../../../components/StatusLabel/StatusLabel';
@@ -30,7 +32,7 @@ export function State({progress}: Props) {
         return (
             <Flex direction={'column'} gap={1}>
                 <StatusLabel label={'failed'} className={block('label')} />
-                <Progress className={block('bar')} size={'s'} value={0} text={'-'} />
+                <Progress className={block('bar')} size={'s'} value={0} text={format.NO_VALUE} />
             </Flex>
         );
     }

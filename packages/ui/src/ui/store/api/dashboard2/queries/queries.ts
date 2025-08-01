@@ -1,5 +1,7 @@
 import map_ from 'lodash/map';
 
+import format from '../../../../common/hammer/format';
+
 import {ListQueriesParams} from '../../../../../shared/yt-types';
 import {YTApiId, ytApiV4Id} from '../../../../rum/rum-wrap-api';
 import {durationDates} from '../../../../utils/date';
@@ -32,12 +34,12 @@ export async function fetchQuerieslist({requests}: FetchQueriesArgs) {
                 author: query?.user || 'unknown',
                 general: {
                     name: query?.annotations?.title ?? 'No name',
-                    state: (query?.state || '') as QueryStatus,
+                    state: (query?.state || format.NO_VALUE) as QueryStatus,
                     id: query?.id,
                 },
                 duration: durationDates(query?.start_time || 0, query?.finish_time || 0),
-                engine: query?.engine === 'ql' ? 'yt_ql' : query?.engine || '-',
-                start_time: query?.start_time || '-',
+                engine: query?.engine === 'ql' ? 'yt_ql' : query?.engine || format.NO_VALUE,
+                start_time: query?.start_time || format.NO_VALUE,
             }));
         });
 

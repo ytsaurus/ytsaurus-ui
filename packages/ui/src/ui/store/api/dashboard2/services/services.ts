@@ -5,7 +5,7 @@ import map_ from 'lodash/map';
 import filter_ from 'lodash/filter';
 import find_ from 'lodash/find';
 
-import hammer from '../../../../common/hammer';
+import format from '../../../../common/hammer/format';
 import ypath from '../../../../common/thor/ypath';
 
 import {RootState} from '../../../../store/reducers';
@@ -111,18 +111,19 @@ async function fetchBundles(items: ServicesItem[], cluster: string) {
 
         const item = ypath.getAttributes(output) as BundleInfo;
 
-        let memory = '-';
-        let cpu = '-';
+        let memory = format.NO_VALUE;
+        let cpu = format.NO_VALUE;
         let instances = 0;
 
         let config = '';
         if (item?.enable_bundle_controller) {
-            memory = hammer.format['Bytes'](
+            memory = format.Bytes(
                 item?.bundle_controller_target_config?.tablet_node_resource_guarantee?.memory ||
-                    '-',
+                    format.NO_VALUE,
             );
-            cpu = hammer.format['vCores'](
-                item?.bundle_controller_target_config?.tablet_node_resource_guarantee?.vcpu || '-',
+            cpu = format.vCores(
+                item?.bundle_controller_target_config?.tablet_node_resource_guarantee?.vcpu ||
+                    format.NO_VALUE,
             );
             instances = Number(item?.bundle_controller_target_config?.tablet_node_count || 0);
             config = makeServiceConfig(instances, memory, cpu);
@@ -178,7 +179,7 @@ async function fetchChyt(items: ServicesItem[], cluster: string, isAdmin: boolea
     const cliques = map_(cliquesResponses, ([alias, item]) => {
         const instances = Number(item?.instance_count || 0);
         const cpu = `${(item?.total_cpu || 0) / instances} ${item?.total_cpu && item?.total_cpu > 1 ? 'cores' : 'core'}`;
-        const memory = hammer.format['Bytes']((item?.total_memory || 0) / instances || '');
+        const memory = format.Bytes((item?.total_memory || 0) / instances || format.NO_VALUE);
 
         return {
             type: 'CHYT' as const,
