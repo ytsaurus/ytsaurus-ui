@@ -1,7 +1,3 @@
-export type NavigationSettingsValues = {
-    name: string;
-};
-
 export function useNavigationSettings() {
     return [
         {

@@ -1,14 +1,14 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {RadioButton} from '@gravity-ui/uikit';
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
 
 import {RootState} from '../../../../../../store/reducers';
 import {getNavigationTypeFilter} from '../../../../../../store/selectors/dashboard2/navigation';
-
 import {setNavigationTypeFilter} from '../../../../../../store/actions/dashboard2/navigation';
 
-export function NavigationWidgetControls(props: PluginWidgetProps) {
+import type {NavigationWidgetProps} from '../types';
+
+export function NavigationWidgetControls(props: NavigationWidgetProps) {
     const dispatch = useDispatch();
     const type = useSelector((state: RootState) => getNavigationTypeFilter(state, props.id));
     const onUpdate = (value: 'last_visited' | 'favourite') => {
