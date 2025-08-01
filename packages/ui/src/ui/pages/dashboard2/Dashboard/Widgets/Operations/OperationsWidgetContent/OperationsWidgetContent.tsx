@@ -1,7 +1,6 @@
 import React from 'react';
 import b from 'bem-cn-lite';
 import {Text} from '@gravity-ui/uikit';
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
 import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
 import {OperationProgressInfo} from '../../../../../../store/api/dashboard2/operations/operations';
@@ -14,6 +13,7 @@ import {StartTime} from './cells/StartTime';
 import {State} from './cells/State';
 
 import {useOperationsWidget} from '../hooks/use-operations-widget';
+import type {OperationsWidgetProps} from '../types';
 
 import './OperationsWidgetContent.scss';
 
@@ -55,7 +55,7 @@ const columns = [
     }),
 ];
 
-export function OperationsWidgetContent(props: PluginWidgetProps) {
+export function OperationsWidgetContent(props: OperationsWidgetProps) {
     const {
         filters: {state},
         data: {operations, isLoading, error},
