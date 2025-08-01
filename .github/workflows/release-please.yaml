@@ -76,3 +76,12 @@ jobs:
           else 
             echo Corresponding image already exists
           fi
+
+      - name: "Publish helm chart"
+        if: ${{ steps.release.outputs['packages/ui-helm-chart--release_created'] }}
+        run: |
+          set -x
+
+          cd packages/ui-helm-chart
+          helm package .
+          helm push ytsaurus-ui-chart-*.tgz oci://ghcr.io/ytsaurus/ui-chart
