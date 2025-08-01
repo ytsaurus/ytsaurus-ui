@@ -3,7 +3,8 @@ import {ConfigItem, DashKit, DashKitProps} from '@gravity-ui/dashkit';
 
 import find_ from 'lodash/find';
 import remove_ from 'lodash/remove';
-import hammer from '../../../common/hammer';
+
+import guid from '../../../common/hammer/guid';
 
 import {RootState} from '../../../store/reducers';
 import {setSettingByKey} from '../../../store/actions/settings';
@@ -87,7 +88,7 @@ export function updateEdittingConfig(
     edittingConfig: DashKitProps['config'],
 ): ThunkAction<void, RootState, any, any> {
     return (dispatch) => {
-        dispatch(setEdittingConfig({edittingConfig: {...edittingConfig, salt: hammer.guid()}}));
+        dispatch(setEdittingConfig({edittingConfig: {...edittingConfig, salt: guid()}}));
     };
 }
 

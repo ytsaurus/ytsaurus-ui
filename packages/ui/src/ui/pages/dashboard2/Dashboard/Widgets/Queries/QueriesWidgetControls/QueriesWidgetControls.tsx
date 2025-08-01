@@ -6,7 +6,7 @@ import {PluginWidgetProps} from '@gravity-ui/dashkit';
 
 import map_ from 'lodash/map';
 
-import hammer from '../../../../../../common/hammer';
+import format from '../../../../../../common/hammer/format';
 
 import {RootState} from '../../../../../../store/reducers';
 import {
@@ -29,7 +29,7 @@ const stateOptions = [
     {value: '', content: 'All'},
     ...map_(statuses, (item) => ({
         value: item,
-        content: hammer.format['ReadableField'](item.toLowerCase()),
+        content: format.ReadableField(item.toLowerCase()),
     })),
 ];
 
@@ -37,7 +37,7 @@ const engineOptions = [
     {value: '', content: 'All'},
     ...map_(Object.keys(QueryEngine), (item) => ({
         value: item,
-        content: hammer.format['ReadableField'](item).toUpperCase(),
+        content: format.ReadableField(item).toUpperCase(),
     })),
 ];
 

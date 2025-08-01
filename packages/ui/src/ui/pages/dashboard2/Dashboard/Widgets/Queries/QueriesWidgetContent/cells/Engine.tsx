@@ -1,6 +1,6 @@
 import React from 'react';
 
-import hammer from '../../../../../../../common/hammer';
+import format from '../../../../../../../common/hammer/format';
 
 import {WidgetText} from '../../../../../../../pages/dashboard2/Dashboard/components/WidgetText/WidgetText';
 
@@ -10,8 +10,6 @@ type Props = {
 
 export function Engine({engine}: Props) {
     return (
-        <WidgetText color={'secondary'}>
-            {hammer.format['ReadableField'](engine).toUpperCase()}
-        </WidgetText>
+        <WidgetText color={'secondary'}>{format.ReadableField(engine).toUpperCase()}</WidgetText>
     );
 }

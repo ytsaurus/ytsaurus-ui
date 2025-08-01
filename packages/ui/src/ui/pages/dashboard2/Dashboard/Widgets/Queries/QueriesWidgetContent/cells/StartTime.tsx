@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text} from '@gravity-ui/uikit';
 
-import hammer from '../../../../../../../common/hammer';
+import format from '../../../../../../../common/hammer/format';
 
 type Props = {
     startTime?: string;
@@ -10,7 +10,7 @@ type Props = {
 export function StartTime({startTime}: Props) {
     return (
         <Text color={'secondary'} whiteSpace={'nowrap'}>
-            {hammer.format['DateTime'](startTime, {format: 'human'})}
+            {format.DateTime(startTime, {format: 'human'})}
         </Text>
     );
 }
