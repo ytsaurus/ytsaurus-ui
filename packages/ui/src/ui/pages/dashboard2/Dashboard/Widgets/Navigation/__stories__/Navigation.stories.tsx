@@ -27,10 +27,10 @@ const meta = {
 const BaseComponent = () => (
     <div style={{height: 535, width: 350}}>
         <WidgetBase
+            {...baseWidgetProps}
             controls={<NavigationWidgetControls {...baseWidgetProps} />}
             content={<NavigationWidgetContent {...baseWidgetProps} />}
             header={<NavigationWidgetHeader {...baseWidgetProps} />}
-            {...baseWidgetProps}
         />
     </div>
 );
