@@ -1,0 +1,4747 @@
+{
+    "panels": [
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_write_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Table write data weight rate",
+            "gridPos": {
+                "x": 0,
+                "y": 1,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_write_row_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Table write row count rate",
+            "gridPos": {
+                "x": 12,
+                "y": 1,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_commit_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Table commit data weight rate",
+            "gridPos": {
+                "x": 0,
+                "y": 7,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_commit_row_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Table commit row count rate",
+            "gridPos": {
+                "x": 12,
+                "y": 7,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Table lookup data weight rate",
+            "gridPos": {
+                "x": 0,
+                "y": 13,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Table select data weight rate",
+            "gridPos": {
+                "x": 12,
+                "y": 13,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_unmerged_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Table lookup unmerged data weight rate",
+            "gridPos": {
+                "x": 0,
+                "y": 19,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_unmerged_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Table select unmerged data weight rate",
+            "gridPos": {
+                "x": 12,
+                "y": 19,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_chunk_reader_statistics_data_bytes_read_from_disk\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Table lookup data bytes read from disk",
+            "gridPos": {
+                "x": 0,
+                "y": 25,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_chunk_reader_statistics_data_bytes_read_from_disk\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Table select data bytes read from disk",
+            "gridPos": {
+                "x": 12,
+                "y": 25,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_chunk_reader_statistics_data_bytes_transmitted\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Table lookup data bytes transmitted",
+            "gridPos": {
+                "x": 0,
+                "y": 31,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_chunk_reader_statistics_data_bytes_transmitted\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Table select data bytes transmitted",
+            "gridPos": {
+                "x": 12,
+                "y": 31,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_chunk_reader_statistics_meta_bytes_read_from_disk\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Table lookup chunk meta bytes read from disk",
+            "gridPos": {
+                "x": 0,
+                "y": 37,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_chunk_reader_statistics_meta_bytes_read_from_disk\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Table select chunk meta bytes read from disk",
+            "gridPos": {
+                "x": 12,
+                "y": 37,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_row_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Table lookup row count rate",
+            "gridPos": {
+                "x": 0,
+                "y": 43,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_row_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Table select row count rate",
+            "gridPos": {
+                "x": 12,
+                "y": 43,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_unmerged_row_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Table lookup unmerged row count rate",
+            "gridPos": {
+                "x": 0,
+                "y": 49,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_unmerged_row_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Table select unmerged row count rate",
+            "gridPos": {
+                "x": 12,
+                "y": 49,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_multiread_cumulative_cpu_time\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Table lookup CPU usage",
+            "gridPos": {
+                "x": 0,
+                "y": 55,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_execute_cumulative_cpu_time\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Table select CPU usage",
+            "gridPos": {
+                "x": 12,
+                "y": 55,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_decompression_cpu_time\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Table lookup decompression cpu time rate",
+            "gridPos": {
+                "x": 0,
+                "y": 61,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_decompression_cpu_time\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Table select decompression cpu time rate",
+            "gridPos": {
+                "x": 12,
+                "y": 61,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_multiread_request_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Table lookup request count",
+            "gridPos": {
+                "x": 0,
+                "y": 67,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_execute_request_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Table select request count",
+            "gridPos": {
+                "x": 12,
+                "y": 67,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_fetch_table_rows_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Fetch table rows data weight rate",
+            "gridPos": {
+                "x": 0,
+                "y": 73,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_fetch_table_rows_row_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Fetch table rows row count rate",
+            "gridPos": {
+                "x": 12,
+                "y": 73,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 79
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_multiread_request_duration_max\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Table lookup max duration",
+            "gridPos": {
+                "x": 0,
+                "y": 80,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_execute_request_duration_max\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Table select max duration",
+            "gridPos": {
+                "x": 12,
+                "y": 80,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 86
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_time_remote_wait_max\", user=~\"\", yt_service=~\"QueryService\", method=~\"Multiread\", pod=~\"$pod\", queue=~\".+\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Table lookup (QueryService::Multiread) RPC acknowledge time",
+            "gridPos": {
+                "x": 0,
+                "y": 87,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_time_remote_wait_max\", user=~\"\", yt_service=~\"QueryService\", method=~\"Execute\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Table select (QueryService::Execute) RPC acknowledge time",
+            "gridPos": {
+                "x": 12,
+                "y": 87,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 93
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_reader_statistics_data_bytes_read_from_disk\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Tablet background data bytes read from disk",
+            "gridPos": {
+                "x": 0,
+                "y": 94,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_reader_statistics_meta_bytes_read_from_disk\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Tablet background chunk meta bytes read from disk",
+            "gridPos": {
+                "x": 12,
+                "y": 94,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_reader_statistics_data_bytes_read_from_cache\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Tablet background data bytes read from cache",
+            "gridPos": {
+                "x": 0,
+                "y": 100,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_reader_unmerged_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Tablet background unmerged data weight read rate",
+            "gridPos": {
+                "x": 12,
+                "y": 100,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_reader_decompression_cpu_time\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Tablet background decompression cpu time",
+            "gridPos": {
+                "x": 0,
+                "y": 106,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_writer_compression_cpu_time\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Tablet background compression cpu time",
+            "gridPos": {
+                "x": 12,
+                "y": 106,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_writer_disk_space\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Tablet background disk bytes written (with replication)",
+            "gridPos": {
+                "x": 0,
+                "y": 112,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_writer_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Tablet background data weight written (without replication)",
+            "gridPos": {
+                "x": 12,
+                "y": 112,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 118
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_compactor_scheduled_compactions\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Scheduled compactions rate",
+            "gridPos": {
+                "x": 0,
+                "y": 119,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_compactor_scheduled_partitionings\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Scheduled partitionings rate",
+            "gridPos": {
+                "x": 12,
+                "y": 119,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_compactor_running_compactions\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Running compactions",
+            "gridPos": {
+                "x": 0,
+                "y": 125,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_compactor_running_partitionings\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Running partitionings",
+            "gridPos": {
+                "x": 12,
+                "y": 125,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_compactor_feasible_compactions\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Compaction queue size",
+            "gridPos": {
+                "x": 0,
+                "y": 131,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_compactor_feasible_partitionings\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Partitioning queue size",
+            "gridPos": {
+                "x": 12,
+                "y": 131,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_flusher_running_store_flushes\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Running flushes",
+            "gridPos": {
+                "x": 0,
+                "y": 137,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_tablet_overlapping_store_count_max\", table_path=~\".+\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Max overlapping store count",
+            "gridPos": {
+                "x": 12,
+                "y": 137,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 143
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_used\", category=~\"tablet_dynamic\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Tablet dynamic memory",
+            "gridPos": {
+                "x": 0,
+                "y": 144,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_used\", category=~\"tablet_static\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Tablet static memory",
+            "gridPos": {
+                "x": 12,
+                "y": 144,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_used\", category=~\"query\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Query memory usage",
+            "gridPos": {
+                "x": 0,
+                "y": 150,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_total_used\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Tracked memory usage",
+            "gridPos": {
+                "x": 12,
+                "y": 150,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_yt_alloc_total_bytes_used\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Allocated memory",
+            "gridPos": {
+                "x": 0,
+                "y": 156,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_memory_usage_rss\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Process memory usage (rss)",
+            "gridPos": {
+                "x": 12,
+                "y": 156,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 162
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_used\", category=~\".+\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Node memory categories",
+            "gridPos": {
+                "x": 0,
+                "y": 163,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "type": "text",
+            "options": {
+                "content": "",
+                "mode": "markdown"
+            },
+            "title": "",
+            "gridPos": {
+                "x": 12,
+                "y": 163,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 169
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"$pod\", thread=~\"TabletLookup\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "TabletLookup thread CPU",
+            "gridPos": {
+                "x": 0,
+                "y": 170,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"$pod\", thread=~\"Query\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Query thread CPU",
+            "gridPos": {
+                "x": 12,
+                "y": 170,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"$pod\", thread=~\"TabletSlot.*\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "TabletSlot threads CPU",
+            "gridPos": {
+                "x": 0,
+                "y": 176,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"$pod\", thread=~\"Compression\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Compression thread pool CPU",
+            "gridPos": {
+                "x": 12,
+                "y": 176,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"$pod\", thread=~\"ChunkReader\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "ChunkReader thread CPU",
+            "gridPos": {
+                "x": 0,
+                "y": 182,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"$pod\", thread=~\"ChunkWriter\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "ChunkWriter thread CPU",
+            "gridPos": {
+                "x": 12,
+                "y": 182,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"$pod\", thread=~\"Control\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Control thread CPU",
+            "gridPos": {
+                "x": 0,
+                "y": 188,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_action_queue_time_total_max\", pod=~\"$pod\", thread=~\"Control\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Control thread action total time",
+            "gridPos": {
+                "x": 12,
+                "y": 188,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_cpu_wait\", pod=~\"$pod\", thread=~\"\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "CPU wait (all threads)",
+            "gridPos": {
+                "x": 6,
+                "y": 194,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 200
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_count\", user=~\"\", yt_service=~\".+\", method=~\".+\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "RPC request rate",
+            "gridPos": {
+                "x": 0,
+                "y": 201,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_failed_request_count\", user=~\"\", yt_service=~\".+\", method=~\".+\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "RPC failed request rate",
+            "gridPos": {
+                "x": 12,
+                "y": 201,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 207
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_request_time_ack_max\", user=~\"\", yt_service=~\"TransactionSupervisorService\", method=~\"PingTransaction\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "PingTransaction acknowledge time",
+            "gridPos": {
+                "x": 0,
+                "y": 208,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_request_time_total_max\", user=~\"\", yt_service=~\"TransactionSupervisorService\", method=~\"PingTransaction\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "PingTransaction total time",
+            "gridPos": {
+                "x": 12,
+                "y": 208,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_time_remote_wait_max\", user=~\"\", yt_service=~\"TransactionParticipantService\", method=~\".+\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "TransactionParticipantService RPC acknowledge time",
+            "gridPos": {
+                "x": 0,
+                "y": 214,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_time_remote_wait_max\", user=~\"\", yt_service=~\"TransactionSupervisorService\", method=~\".+\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "TransactionSupervisorService RPC acknowledge time",
+            "gridPos": {
+                "x": 12,
+                "y": 214,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 220
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_remote_changelog_write_quorum_lag_max\", tablet_cell_bundle=~\".+\", cell_id=~\"\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Hydra remote changelog replica quorum lag time",
+            "gridPos": {
+                "x": 0,
+                "y": 221,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_hydra_restart_count\", tablet_cell_bundle=~\".+\", cell_id=~\"\", pod=~\"$pod\", reason=~\".+\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Hydra restart rate",
+            "gridPos": {
+                "x": 12,
+                "y": 221,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_hydra_mutation_wait_time_max\", tablet_cell_bundle=~\".+\", cell_id=~\"\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Hydra mutation wait time",
+            "gridPos": {
+                "x": 6,
+                "y": 227,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 233
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_time_remote_wait_max\", user=~\"\", yt_service=~\"DataNodeService\", method=~\"PutBlocks\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Data Node put blocks RPC acknowledge time",
+            "gridPos": {
+                "x": 0,
+                "y": 234,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_location_put_blocks_wall_time_max\", location_type=~\"Store|store\", location_id=~\"\", medium=~\"ssd_journals\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Data Node changelogs put blocks wall time max",
+            "gridPos": {
+                "x": 12,
+                "y": 234,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_location_multiplexed_changelogs_changelog_flush_io_time_max\", location_type=~\"Store|store\", location_id=~\"\", medium=~\"ssd_journals\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Data Node Multiplexed changelogs flush time",
+            "gridPos": {
+                "x": 0,
+                "y": 240,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_location_split_changelogs_changelog_flush_io_time_max\", location_type=~\"Store|store\", location_id=~\"\", medium=~\"ssd_journals\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Data Node Split changelogs flush time",
+            "gridPos": {
+                "x": 12,
+                "y": 240,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_location_multiplexed_changelogs_bytes\", location_type=~\"Store|store\", location_id=~\"\", medium=~\"ssd_journals\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Data node Multiplexed changelogs bytes rate",
+            "gridPos": {
+                "x": 0,
+                "y": 246,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_location_split_changelogs_bytes\", location_type=~\"Store|store\", location_id=~\"\", medium=~\"ssd_journals\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Data node Split changelogs bytes rate",
+            "gridPos": {
+                "x": 12,
+                "y": 246,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_location_multiplexed_changelogs_records\", location_type=~\"Store|store\", location_id=~\"\", medium=~\"ssd_journals\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Data node Multiplexed changelogs records rate",
+            "gridPos": {
+                "x": 0,
+                "y": 252,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_location_split_changelogs_records\", location_type=~\"Store|store\", location_id=~\"\", medium=~\"ssd_journals\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Data node Split changelogs records rate",
+            "gridPos": {
+                "x": 12,
+                "y": 252,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 258
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_versioned_chunk_meta_cache_weight\", pod=~\"$pod\", segment=~\"\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            },
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Versioned chunk meta cache usage",
+            "gridPos": {
+                "x": 0,
+                "y": 259,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_versioned_chunk_meta_cache_missed_weight\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Versioned chunk meta cache miss rate",
+            "gridPos": {
+                "x": 12,
+                "y": 259,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_block_cache_.*compressed_data_weight\", pod=~\"$pod\", segment=~\"\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            },
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Block cache usage",
+            "gridPos": {
+                "x": 0,
+                "y": 265,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_block_cache_.*compressed_data_missed_weight\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Block cache miss rate",
+            "gridPos": {
+                "x": 12,
+                "y": 265,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_chunk_meta_cache_weight\", pod=~\"$pod\", segment=~\"\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            },
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Chunk meta cache usage",
+            "gridPos": {
+                "x": 0,
+                "y": 271,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_chunk_meta_cache_missed_weight\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Chunk meta cache miss rate",
+            "gridPos": {
+                "x": 12,
+                "y": 271,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_blocks_ext_cache_weight\", pod=~\"$pod\", segment=~\"\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            },
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Block ext cache usage",
+            "gridPos": {
+                "x": 0,
+                "y": 277,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_blocks_ext_cache_missed_weight\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Block ext cache miss rate",
+            "gridPos": {
+                "x": 12,
+                "y": 277,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_used\", category=~\"versioned_chunk_meta\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            },
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Cached versioned chunk meta memory",
+            "gridPos": {
+                "x": 6,
+                "y": 283,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 289
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-data-node.*\", __name__=~\"yt_location_blob_block_bytes\", location_type=~\"Store|store\", medium=~\".+\", category=~\".+\", direction=~\"write\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Disk bytes written per medium",
+            "gridPos": {
+                "x": 0,
+                "y": 290,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-data-node.*\", __name__=~\"yt_location_blob_block_bytes\", location_type=~\"Store|store\", medium=~\".+\", category=~\".+\", direction=~\"read\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Disk bytes read per medium",
+            "gridPos": {
+                "x": 12,
+                "y": 290,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-data-node.*\", __name__=~\"yt_location_.*_value\", location_type=~\"Store|store\", location_id=~\"\", medium=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Data node disk throttlers",
+            "gridPos": {
+                "x": 0,
+                "y": 296,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_throttlers_static_store_preload_in_value\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Tablet node preload throttler",
+            "gridPos": {
+                "x": 12,
+                "y": 296,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 302
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_request_message_body_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Rpc client (yt_node) request message body size",
+            "gridPos": {
+                "x": 0,
+                "y": 303,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_request_message_attachment_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Rpc client (yt_node) request message attachment size",
+            "gridPos": {
+                "x": 12,
+                "y": 303,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_response_message_body_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Rpc client (yt_node) response message body size",
+            "gridPos": {
+                "x": 0,
+                "y": 309,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_response_message_attachment_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Rpc client (yt_node) response message attachment size",
+            "gridPos": {
+                "x": 12,
+                "y": 309,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 315
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_message_body_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Rpc server (yt_node) request message body size",
+            "gridPos": {
+                "x": 0,
+                "y": 316,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_message_attachment_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Rpc server (yt_node) request message attachment size",
+            "gridPos": {
+                "x": 12,
+                "y": 316,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_response_message_body_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Rpc server (yt_node) response message body size",
+            "gridPos": {
+                "x": 0,
+                "y": 322,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_response_message_attachment_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Rpc server (yt_node) response message attachment size",
+            "gridPos": {
+                "x": 12,
+                "y": 322,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 328
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_message_body_bytes\", user=~\"\", yt_service=~\".+\", method=~\".+\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Rpc server (yt_node) request message body size (per method)",
+            "gridPos": {
+                "x": 0,
+                "y": 329,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_message_attachment_bytes\", user=~\"\", yt_service=~\".+\", method=~\".+\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Rpc server (yt_node) request message attachment size (per method)",
+            "gridPos": {
+                "x": 12,
+                "y": 329,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_response_message_body_bytes\", user=~\"\", yt_service=~\".+\", method=~\".+\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Rpc server (yt_node) response message body size (per method)",
+            "gridPos": {
+                "x": 0,
+                "y": 335,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_response_message_attachment_bytes\", user=~\"\", yt_service=~\".+\", method=~\".+\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Rpc server (yt_node) response message attachment size (per method)",
+            "gridPos": {
+                "x": 12,
+                "y": 335,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 341
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"sys|porto_iss\", __name__=~\"/Net/Ifs/RxBytes\", intf=~\".+\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Network received bytes",
+            "gridPos": {
+                "x": 0,
+                "y": 342,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"sys|porto_iss\", __name__=~\"/Net/Ifs/TxBytes\", intf=~\".+\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Network transmitted bytes",
+            "gridPos": {
+                "x": 12,
+                "y": 342,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_bus_pending_out_bytes\", network=~\".+\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Pending out bytes",
+            "gridPos": {
+                "x": 6,
+                "y": 348,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 354
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_job_controller_resource_usage_cpu\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Job CPU usage",
+            "gridPos": {
+                "x": 0,
+                "y": 355,
+                "w": 24,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 361
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_cluster_node_throttlers_total_in_queue_size\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Total in throttler queue size",
+            "gridPos": {
+                "x": 0,
+                "y": 362,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_cluster_node_throttlers_total_out_queue_size\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Total out throttler queue size",
+            "gridPos": {
+                "x": 12,
+                "y": 362,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 368
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_data_node_throttlers_.*_in_queue_size\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Data node in-throttlers queue size",
+            "gridPos": {
+                "x": 0,
+                "y": 369,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_data_node_throttlers_.*_out_queue_size\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Data node out-throttlers queue size",
+            "gridPos": {
+                "x": 12,
+                "y": 369,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 375
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_throttlers_.*_in_queue_size\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Tablet node in-throttlers queue size",
+            "gridPos": {
+                "x": 0,
+                "y": 376,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_throttlers_.*_out_queue_size\", pod=~\"$pod\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Tablet node out-throttlers queue size",
+            "gridPos": {
+                "x": 12,
+                "y": 376,
+                "w": 12,
+                "h": 6
+            }
+        }
+    ],
+    "tags": [],
+    "templating": {
+        "list": [
+            {
+                "name": "pod",
+                "label": "Pod",
+                "type": "textbox",
+                "options": [
+                    {
+                        "selected": true,
+                        "text": "tnd-0",
+                        "value": "tnd-0"
+                    }
+                ],
+                "current": {
+                    "selected": true,
+                    "text": "tnd-0",
+                    "value": "tnd-0"
+                },
+                "query": "tnd-0",
+                "hide": 0,
+                "skipUrlSync": false,
+                "allFormat": "glob"
+            }
+        ]
+    },
+    "uid": "ytsaurus-artemis-local",
+    "title": "YTsaurus Artemis Local"
+}

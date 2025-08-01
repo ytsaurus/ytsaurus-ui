@@ -122,6 +122,7 @@ export enum YTApiId {
 
     systemCAInstances,
     systemCAStates,
+    systemClusterMasters,
     systemChunks,
     systemMasters,
     systemMastersConfig,
@@ -190,4 +191,6 @@ export enum YTApiId {
 
     //pipeline/flow
     flowExecuteDescribePipeline,
+
+    prometheusMonitoringLayout,
 }

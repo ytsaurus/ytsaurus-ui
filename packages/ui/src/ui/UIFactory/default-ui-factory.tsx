@@ -1,18 +1,36 @@
 import React from 'react';
-import AppNavigationPageLayout from '../containers/AppNavigation/AppNavigationPageLayout';
-import {defaultAclApi} from '../utils/acl/external-acl-api';
-import {SupportComponentLazy} from '../containers/SupportComponent/lazy';
-import {YTUserSuggestLazy} from '../containers/UserSuggest/YTUserSuggestLazy';
-import {docsUrls} from '../constants/docsUrls';
-import {YTSubjectSuggestLazy} from '../containers/ACL/SubjectsControl/lazy';
-import {RoleActionsLazy} from '../containers/ACL';
-import OperationDetailMonitorLinks from '../pages/operations/OperationDetail/tabs/monitor/OperationDetailsMonitorLinks';
-import {PERMISSIONS_SETTINGS} from '../constants/acl';
-import {uiSettings} from '../config/ui-settings';
+
 import {YT} from '../config/yt-config';
+
+import {getConfigData, uiSettings} from '../config/ui-settings';
+import {PERMISSIONS_SETTINGS} from '../constants/acl';
+import {docsUrls} from '../constants/docsUrls';
+import {SchedulingExtraTabs} from '../constants/scheduling';
+
 import {DefaultSubjectLinkLazy} from '../components/SubjectLink/lazy';
 import type {SubjectCardProps} from '../components/SubjectLink/SubjectLink';
+
+import {RoleActionsLazy} from '../containers/ACL';
+import {YTSubjectSuggestLazy} from '../containers/ACL/SubjectsControl/lazy';
+import AppNavigationPageLayout from '../containers/AppNavigation/AppNavigationPageLayout';
+import {SupportComponentLazy} from '../containers/SupportComponent/lazy';
+import {YTUserSuggestLazy} from '../containers/UserSuggest/YTUserSuggestLazy';
+
+import OperationDetailMonitorLinks from '../pages/operations/OperationDetail/tabs/monitor/OperationDetailsMonitorLinks';
+import {SchedulingMonitoring} from '../pages/scheduling/Content/tabs/Monitoring/SchedulingMonitoring';
 import {QUERY_RESULT_CHART_TAB} from '../pages/query-tracker/QueryResultsVisualization';
+
+import {AccountsMonitorPrometheus} from '../pages/accounts/tabs/monitor/AccountsMonitorPromehteus/AccountsMonitorPrometheus';
+import {QueueMetricsPrometheus} from '../pages/navigation/tabs/Queue/views/QueueMetrics/QueueMetricsPrometheus/QueueMetricsPrometheus';
+import {ConsumerMetricsPrometheus} from '../pages/navigation/tabs/Consumer/views/ConsumerMetrics/ConsumerMetricsPrometheus/ConsumerMetricsPrometheus';
+import {ChytMonitoringPrometheus} from '../pages/chyt/ChytPageClique/ChytMonitoringPrometheus';
+import {SystemMonitoringPrometheusLazy} from '../pages/system/SystemMonitoringPrometheus/lazy';
+import {BundleMonitoringPrometheusLazy} from '../pages/tablet_cell_bundles/bundle/BundleMonitoringPrometheus/lazy';
+import {OperationMonitoringPrometheus} from '../pages/operations/OperationDetail/tabs/monitor/OperationMonitoringPrometheus';
+import {JobMonitoringPrometheus} from '../pages/operations/OperationDetail/tabs/JobsMonitor/JobMonitoringPrometheus/JobMonitoringPrometheus';
+import {NavigationFlowMonitoringPrometheus} from '../pages/navigation/tabs/Flow/FlowMonitoringPrometheus/FlowMonitoringPrometheus';
+
+import {defaultAclApi} from '../utils/acl/external-acl-api';
 
 import {UIFactory} from './index';
 
@@ -53,21 +71,31 @@ export const defaultUIFactory: UIFactory = {
     },
 
     getSchedulingExtraTabs() {
-        if (!uiSettings.schedulingMonitoring?.urlTemplate) {
-            return [];
+        const res = [];
+
+        if (getConfigData().allowPrometheusDashboards) {
+            res.push({
+                name: SchedulingExtraTabs.PROMETHEUS_DASHBOARD,
+                title: 'Monitoring',
+                component: SchedulingMonitoring,
+            });
         }
 
-        const {urlTemplate, title = 'Monitoring'} = uiSettings.schedulingMonitoring;
-
-        return [
-            {
+        if (uiSettings.schedulingMonitoring?.urlTemplate) {
+            const {urlTemplate, title = 'Monitoring'} = uiSettings.schedulingMonitoring;
+            res.push({
                 name: 'monitoring',
                 title,
                 urlTemplate,
-            },
-        ];
+            });
+        }
+
+        return res;
     },
     getSystemMonitoringTab() {
+        if (getConfigData().allowPrometheusDashboards) {
+            return {component: SystemMonitoringPrometheusLazy};
+        }
         if (!uiSettings?.systemMonitoring) return undefined;
         return uiSettings.systemMonitoring;
     },
@@ -76,6 +104,10 @@ export const defaultUIFactory: UIFactory = {
         return uiSettings.componentVersionsMonitoring;
     },
     getMonitoringForAccounts() {
+        if (getConfigData().allowPrometheusDashboards) {
+            return {component: AccountsMonitorPrometheus};
+        }
+
         if (!uiSettings?.accountsMonitoring?.urlTemplate) {
             return undefined;
         }
@@ -84,6 +116,9 @@ export const defaultUIFactory: UIFactory = {
         return {urlTemplate, title};
     },
     getMonitoringForBundle() {
+        if (getConfigData().allowPrometheusDashboards) {
+            return {component: BundleMonitoringPrometheusLazy};
+        }
         if (!uiSettings.bundlesMonitoring?.urlTemplate) {
             return undefined;
         }
@@ -92,6 +127,10 @@ export const defaultUIFactory: UIFactory = {
         return {urlTemplate, title};
     },
     getMonitoringForOperation(params) {
+        if (getConfigData().allowPrometheusDashboards) {
+            return {component: OperationMonitoringPrometheus};
+        }
+
         if (!uiSettings.operationsMonitoring?.urlTemplate) {
             return undefined;
         }
@@ -108,9 +147,16 @@ export const defaultUIFactory: UIFactory = {
         return {urlTemplate, title};
     },
     getMonitorComponentForJob() {
+        if (getConfigData().allowPrometheusDashboards) {
+            return JobMonitoringPrometheus;
+        }
         return undefined;
     },
     getMonitoringComponentForChyt() {
+        if (getConfigData().allowPrometheusDashboards) {
+            return {component: ChytMonitoringPrometheus};
+        }
+
         const {urlTemplate, title} = uiSettings.chytMonitoring ?? {};
         if (!urlTemplate) {
             return undefined;
@@ -119,6 +165,10 @@ export const defaultUIFactory: UIFactory = {
         return {urlTemplate, title};
     },
     getMonitoringComponentForNavigationFlow() {
+        if (getConfigData().allowPrometheusDashboards) {
+            return {component: NavigationFlowMonitoringPrometheus};
+        }
+
         const {urlTemplate, title} = uiSettings.navigationFlowMonitoring ?? {};
         if (!urlTemplate) {
             return undefined;
@@ -212,10 +262,16 @@ export const defaultUIFactory: UIFactory = {
     },
 
     getComponentForConsumerMetrics() {
+        if (getConfigData().allowPrometheusDashboards) {
+            return ConsumerMetricsPrometheus;
+        }
         return undefined;
     },
 
     getComonentForQueueMetrics() {
+        if (getConfigData().allowPrometheusDashboards) {
+            return QueueMetricsPrometheus;
+        }
         return undefined;
     },
 
