@@ -6,7 +6,7 @@ import {Tooltip} from '../../../../../../../components/Tooltip/Tooltip';
 
 import format from '../../../../../../../common/hammer/format';
 
-import {PoolResource} from '../PoolsWidgetContent';
+import type {PoolResource} from '../../types';
 
 import './Resource.scss';
 
