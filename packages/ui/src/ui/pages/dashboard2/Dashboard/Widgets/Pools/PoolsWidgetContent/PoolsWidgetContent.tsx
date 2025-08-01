@@ -1,7 +1,6 @@
 import React from 'react';
 import {Text} from '@gravity-ui/uikit';
 import {createColumnHelper} from '@gravity-ui/table/tanstack';
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
 
@@ -9,20 +8,7 @@ import {PoolCell} from './cells/Pool';
 import {ResourceCell} from './cells/Resource';
 
 import {usePoolsWidget} from '../hooks/use-pools-widget';
-
-export type PoolResource = {
-    value: number;
-    usage: number;
-    guarantee: number;
-};
-
-type Pool = {
-    general: {pool: string; tree: string};
-    cpu: PoolResource;
-    memory: PoolResource;
-    gpu: PoolResource;
-    operations: PoolResource;
-};
+import type {Pool, PoolsWidgetProps} from '../types';
 
 const columnHelper = createColumnHelper<Pool>();
 
@@ -55,7 +41,7 @@ const columns = [
     }),
 ];
 
-export function PoolsWidgetContent(props: PluginWidgetProps) {
+export function PoolsWidgetContent(props: PoolsWidgetProps) {
     const {
         visibleColumns,
         data: {pools, isLoading, error},

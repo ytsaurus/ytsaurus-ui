@@ -1,11 +1,3 @@
-import {PoolPair} from '../../../../../../components/Dialog/controls/PoolsMultiple/PoolsMultiple';
-
-export type PoolsSettingsValues = {
-    name: string;
-    pools: PoolPair[];
-    columns: string[];
-};
-
 export function usePoolsSettings() {
     const columnsOptions = [
         {value: 'cpu', content: 'CPU'},

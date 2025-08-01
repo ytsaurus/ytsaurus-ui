@@ -11,6 +11,7 @@ import {baseWidgetProps} from '../../../utils/mocks';
 import {PoolsWidgetControls} from '../PoolsWidgetControls/PoolsWidgetControls';
 import {PoolsWidgetContent} from '../PoolsWidgetContent/PoolsWidgetContent';
 import {PoolsWidgetHeader} from '../PoolsWidgetHeader/PoolsWidgetHeader';
+import type {PoolsWidgetProps} from '../types';
 import {
     poolsHandler,
     poolsHandlerEmpty,
@@ -37,15 +38,15 @@ const extendPoolsProps = {
         ...defaultDashboardItems.pools.data,
         name: baseWidgetProps.data.name,
     },
-};
+} as PoolsWidgetProps;
 
 const BaseComponent = () => (
     <div style={{height: 260, width: 560}}>
         <WidgetBase
+            {...extendPoolsProps}
             controls={<PoolsWidgetControls {...extendPoolsProps} />}
             content={<PoolsWidgetContent {...extendPoolsProps} />}
             header={<PoolsWidgetHeader {...extendPoolsProps} />}
-            {...extendPoolsProps}
         />
     </div>
 );
