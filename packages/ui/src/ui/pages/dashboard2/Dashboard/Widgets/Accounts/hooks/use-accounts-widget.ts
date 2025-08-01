@@ -1,4 +1,3 @@
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
 import {useSelector} from 'react-redux';
 
 import {RootState} from '../../../../../../store/reducers';
@@ -11,16 +10,10 @@ import {getCluster} from '../../../../../../store/selectors/global';
 import {isDeveloper} from '../../../../../../store/selectors/global/is-developer';
 import {useUsableAccountsQuery} from '../../../../../../store/api/accounts';
 
-import {ColumnSortByInfo} from '../../../../../navigation/modals/TableMergeSortModal/TableSortByControl';
+import {AccountsWidgetProps} from '../types';
 
-export type AccountsWidgetData = {
-    accounts?: string[];
-    disk_columns?: ColumnSortByInfo[];
-    columns?: ColumnSortByInfo[];
-};
-
-export function useAccountsWidget(props: PluginWidgetProps) {
-    const {data}: {data: AccountsWidgetData & PluginWidgetProps['data']} = props;
+export function useAccountsWidget(props: AccountsWidgetProps) {
+    const {data} = props;
 
     const cluster = useSelector(getCluster);
     const type = useSelector((state: RootState) => getAccountsTypeFilter(state, props.id));
