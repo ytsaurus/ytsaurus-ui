@@ -1,15 +1,15 @@
 import {useSelector} from 'react-redux';
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
 
 import {useServicesQuery} from '../../../../../../store/api/dashboard2/services';
-import type {ServicesItem} from '../../../../../../store/api/dashboard2/services/services';
 
 import {RootState} from '../../../../../../store/reducers';
 import {getCluster} from '../../../../../../store/selectors/global';
 import {getServicesTypeFilter} from '../../../../../../store/selectors/dashboard2/services';
 
-export function useServicesWidget(props: PluginWidgetProps) {
-    const customItems = props.data?.services as ServicesItem[];
+import type {ServicesWidgetProps} from '../types';
+
+export function useServicesWidget(props: ServicesWidgetProps) {
+    const customItems = props.data?.services;
 
     const cluster = useSelector(getCluster);
 
