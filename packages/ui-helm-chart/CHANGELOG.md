@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ytsaurus-ui-chart-v0.2.0...ytsaurus-ui-chart-v0.2.1) (2025-08-01)
+
+
+### Bug Fixes
+
+* **ui-helm-chart:** publish as oci://ghcr.io/ytsaurus/ui-chart ([5443146](https://github.com/ytsaurus/ytsaurus-ui/commit/54431462310f9be527e2c6a91401b93e290139b5))
+
 ## [0.2.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ytsaurus-ui-chart-v0.1.3...ytsaurus-ui-chart-v0.2.0) (2025-04-21)
 
 
