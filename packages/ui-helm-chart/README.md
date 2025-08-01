@@ -3,15 +3,17 @@
 ## Using with [ytop-chart](https://github.com/ytsaurus/ytsaurus-k8s-operator/pkgs/container/ytop-chart)
 
 Follow all required steps to [start the YTsaurus cluster](https://ytsaurus.tech/docs/en/overview/try-yt#starting-ytsaurus-cluster1). Then install the chart:
+
 ```bash
-helm upgrade --install ytsaurus-ui github/ytsaurus-ui/packages/ui-helm-chart/
+helm upgrade --install ytsaurus-ui oci://ghcr.io/ytsaurus/ui-chart
 ```
 
 ## Using with a custom cluster
 
-### Pre-requirements 
+### Pre-requirements
 
 The instructions below describe how to start the YTsaurus UI from the helm chart. You are supposed to have already:
+
 - configured the `kubectl` cli-tool (for example, use [minikube](https://minikube.sigs.k8s.io/docs/start/)),
 - started your YT-cluster and know the hostname of `http_proxy`,
 - prepared a special robot-user for the YTsaurus UI and ready to provide its token (see the [Token management](https://ytsaurus.tech/docs/user-guide/storage/auth) section).
@@ -56,9 +58,10 @@ _EOF
 Then you are ready to install or upgrade the chart:
 
 ```bash
-helm upgrade --install yt-ui github/ytsaurus-ui/packages/ui-helm-chart/ -f values.yaml
-# or run specific version of UI (all versions: https://github.com/ytsaurus/ytsaurus-ui/pkgs/container/ui)
-helm upgrade --install yt-ui github/ytsaurus-ui/packages/ui-helm-chart/ -f values.yaml --set ui.image.tag=1.60.1
+helm upgrade --install yt-ui oci://ghcr.io/ytsaurus/ui-chart -f values.yaml
+
+# Run specific version of UI (all versions: https://github.com/ytsaurus/ytsaurus-ui/pkgs/container/ui)
+helm upgrade --install yt-ui oci://ghcr.io/ytsaurus/ui-chart -f values.yaml --set ui.image.tag=1.60.1
 ```
 
 You may want to add port-forwarding to open the YTsaurus UI in your browser:
