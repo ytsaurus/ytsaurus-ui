@@ -85,5 +85,5 @@ jobs:
           cd packages/ui-helm-chart
           helm package .
 
-          VERSION=$(echo ${{steps.release.outputs['packages/ui-helm-chart--tag_name']}} | sed 's/ytsaurus-ui-chart-v/ytsaurus-ui-chart-/')
-          helm push ytsaurus-ui-chart-${VERSION}.tgz oci://ghcr.io/ytsaurus/ui-chart
+          FILE_NAME=$(echo ${{steps.release.outputs['packages/ui-helm-chart--tag_name']}} | sed 's/ytsaurus-ui-chart-v/ytsaurus-ui-chart-/')
+          helm push ${FILE_NAME}.tgz oci://ghcr.io/ytsaurus/ui-chart
