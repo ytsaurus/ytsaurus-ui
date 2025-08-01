@@ -9,6 +9,7 @@ import {baseWidgetProps} from '../../../utils/mocks';
 import {QueriesWidgetControls} from '../QueriesWidgetControls/QueriesWidgetControls';
 import {QueriesWidgetContent} from '../QueriesWidgetContent/QueriesWidgetContent';
 import {QueriesWidgetHeader} from '../QueriesWidgetHeader/QueriesWidgetHeader';
+import {QueriesWidgetProps} from '../types';
 import {
     queriesHandler,
     queriesHandlerEmpty,
@@ -32,10 +33,10 @@ const meta = {
 const BaseComponent = () => (
     <div style={{height: 235, width: 650}}>
         <WidgetBase
-            controls={<QueriesWidgetControls {...baseWidgetProps} />}
-            content={<QueriesWidgetContent {...baseWidgetProps} />}
-            header={<QueriesWidgetHeader {...baseWidgetProps} />}
             {...baseWidgetProps}
+            controls={<QueriesWidgetControls {...(baseWidgetProps as QueriesWidgetProps)} />}
+            content={<QueriesWidgetContent {...(baseWidgetProps as QueriesWidgetProps)} />}
+            header={<QueriesWidgetHeader {...(baseWidgetProps as QueriesWidgetProps)} />}
         />
     </div>
 );
