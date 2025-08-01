@@ -9,6 +9,7 @@ import {baseWidgetProps} from '../../../utils/mocks';
 import {OperationsWidgetControls} from '../OperationsWidgetControls/OperationsWidgetControls';
 import {OperationsWidgetContent} from '../OperationsWidgetContent/OperationsWidgetContent';
 import {OperationsWidgetHeader} from '../OperationsWidgetHeader/OperationsWidgetHeader';
+import type {OperationsWidgetProps} from '../types';
 import {
     operationsHandler,
     operationsHandlerEmpty,
@@ -33,10 +34,10 @@ const meta = {
 const BaseComponent = () => (
     <div style={{height: 455, width: '100%'}}>
         <WidgetBase
-            controls={<OperationsWidgetControls {...baseWidgetProps} />}
-            content={<OperationsWidgetContent {...baseWidgetProps} />}
-            header={<OperationsWidgetHeader {...baseWidgetProps} />}
             {...baseWidgetProps}
+            controls={<OperationsWidgetControls {...(baseWidgetProps as OperationsWidgetProps)} />}
+            content={<OperationsWidgetContent {...(baseWidgetProps as OperationsWidgetProps)} />}
+            header={<OperationsWidgetHeader {...(baseWidgetProps as OperationsWidgetProps)} />}
         />
     </div>
 );
@@ -82,10 +83,10 @@ export const Error = {
 const SmallComponent = () => (
     <div style={{height: 230, width: 680}}>
         <WidgetBase
-            controls={<OperationsWidgetControls {...baseWidgetProps} />}
-            content={<OperationsWidgetContent {...baseWidgetProps} />}
-            header={<OperationsWidgetHeader {...baseWidgetProps} />}
             {...baseWidgetProps}
+            controls={<OperationsWidgetControls {...(baseWidgetProps as OperationsWidgetProps)} />}
+            content={<OperationsWidgetContent {...(baseWidgetProps as OperationsWidgetProps)} />}
+            header={<OperationsWidgetHeader {...(baseWidgetProps as OperationsWidgetProps)} />}
         />
     </div>
 );
