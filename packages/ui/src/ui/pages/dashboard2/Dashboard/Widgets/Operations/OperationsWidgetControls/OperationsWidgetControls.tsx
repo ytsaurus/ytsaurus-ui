@@ -2,7 +2,6 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import b from 'bem-cn-lite';
 import {Flex, RadioButton, Select} from '@gravity-ui/uikit';
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
 
 import {RootState} from '../../../../../../store/reducers';
 import {
@@ -14,11 +13,13 @@ import {
     getOperationsStateFilter,
 } from '../../../../../../store/selectors/dashboard2/operations';
 
+import type {OperationsWidgetProps} from '../types';
+
 import './OperationsWidgetControls.scss';
 
 const block = b('yt-operations-widget-controls');
 
-export function OperationsWidgetControls(props: PluginWidgetProps) {
+export function OperationsWidgetControls(props: OperationsWidgetProps) {
     const {id} = props;
 
     const dispatch = useDispatch();

@@ -1,15 +1,15 @@
 import React from 'react';
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
 
 import {WidgetHeader} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetHeader/WidgetHeader';
 
 import {useOperationsWidget} from '../hooks/use-operations-widget';
+import type {OperationsWidgetProps} from '../types';
 
-export function OperationsWidgetHeader(props: PluginWidgetProps) {
+export function OperationsWidgetHeader(props: OperationsWidgetProps) {
     const {
         data: {isLoading, operations},
     } = useOperationsWidget(props);
-    const name = props.data?.name as string | undefined;
+    const name = props.data?.name;
     const id = props.id;
     return (
         <WidgetHeader
