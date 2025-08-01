@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Button, DropdownMenu, Flex} from '@gravity-ui/uikit';
 import {ChevronDown, ChevronUp} from '@gravity-ui/icons';
 
-import hammer from '../../../common/hammer';
+import format from '../../../common/hammer/format';
 
 import {useDashboardActions} from '../hooks/use-dashboard-actions';
 
@@ -22,7 +22,7 @@ export function AddWidgetMenu() {
 
     const menuItems = widgetsNames.map((item) => ({
         action: () => add(item),
-        text: hammer.format['ReadableField'](item),
+        text: format.ReadableField(item),
     }));
 
     return (

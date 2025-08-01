@@ -4,7 +4,7 @@ import b from 'bem-cn-lite';
 import {AxiosError} from 'axios';
 import {Flex} from '@gravity-ui/uikit';
 
-import hammer from '../../../../../../common/hammer';
+import format from '../../../../../../common/hammer/format';
 
 import {getCluster} from '../../../../../../store/selectors/global';
 
@@ -59,7 +59,7 @@ export function NavigationWidgetContentBase(props: Props) {
                 </Flex>
             ) : (
                 <WidgetNoItemsTextFallback
-                    itemsName={`${hammer.format['ReadableField'](pathsType).toLowerCase()} paths`}
+                    itemsName={`${format.ReadableField(pathsType).toLowerCase()} paths`}
                 />
             )}
         </>
