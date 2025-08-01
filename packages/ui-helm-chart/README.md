@@ -58,10 +58,13 @@ _EOF
 Then you are ready to install or upgrade the chart:
 
 ```bash
-helm upgrade --install yt-ui oci://ghcr.io/ytsaurus/ui-chart -f values.yaml
+helm upgrade --install yt-ui oci://ghcr.io/ytsaurus/ui-chart \
+    -f values.yaml
 
 # Run specific version of UI (all versions: https://github.com/ytsaurus/ytsaurus-ui/pkgs/container/ui)
-helm upgrade --install yt-ui oci://ghcr.io/ytsaurus/ui-chart -f values.yaml --set ui.image.tag=1.60.1
+helm upgrade --install yt-ui oci://ghcr.io/ytsaurus/ui-chart \
+    -f values.yaml \
+    --set ui.image.tag=1.60.1
 ```
 
 You may want to add port-forwarding to open the YTsaurus UI in your browser:
