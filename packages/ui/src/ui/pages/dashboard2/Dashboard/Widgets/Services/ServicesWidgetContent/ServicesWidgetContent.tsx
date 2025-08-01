@@ -1,5 +1,4 @@
 import React from 'react';
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
 import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
 import {ServiceInfo} from '../../../../../../store/api/dashboard2/services/services';
@@ -13,6 +12,7 @@ import {Health} from '../../../../../../components/Health/Health';
 import {Type} from './cells/Type';
 
 import {useServicesWidget} from '../hooks/use-services-widget';
+import type {ServicesWidgetProps} from '../types';
 
 const columnHelper = createColumnHelper<ServiceInfo>();
 
@@ -36,7 +36,7 @@ const columns = [
     }),
 ];
 
-export function ServicesWidgetContent(props: PluginWidgetProps) {
+export function ServicesWidgetContent(props: ServicesWidgetProps) {
     const {data, error, isLoading} = useServicesWidget(props);
 
     return (

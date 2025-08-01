@@ -9,6 +9,7 @@ import {baseWidgetProps} from '../../../utils/mocks';
 import {ServicesWidgetControls} from '../ServicesWidgetControls/ServicesWidgetControls';
 import {ServicesWidgetContent} from '../ServicesWidgetContent/ServicesWidgetContent';
 import {ServicesWidgetHeader} from '../ServicesWidgetHeader/ServicesWidgetHeader';
+import type {ServicesWidgetProps} from '../types';
 import {
     servicesHandler,
     servicesHandlerEmpty,
@@ -32,10 +33,10 @@ const meta = {
 const BaseComponent = () => (
     <div style={{height: 240, width: 550}}>
         <WidgetBase
-            controls={<ServicesWidgetControls {...baseWidgetProps} />}
-            content={<ServicesWidgetContent {...baseWidgetProps} />}
-            header={<ServicesWidgetHeader {...baseWidgetProps} />}
             {...baseWidgetProps}
+            controls={<ServicesWidgetControls {...(baseWidgetProps as ServicesWidgetProps)} />}
+            content={<ServicesWidgetContent {...(baseWidgetProps as ServicesWidgetProps)} />}
+            header={<ServicesWidgetHeader {...(baseWidgetProps as ServicesWidgetProps)} />}
         />
     </div>
 );
