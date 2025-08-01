@@ -2,6 +2,8 @@ import React from 'react';
 
 import {DashKit, PluginWidgetProps} from '@gravity-ui/dashkit';
 
+import {defaultDashboardItems} from '../../../../constants/dashboard2';
+
 import {WidgetBase} from '../components/WidgetBase/WidgetBase';
 
 import {NavigationWidgetContent} from '../Widgets/Navigation/NavigationWidgetContent/NavigationWidgetContent';
@@ -22,7 +24,6 @@ import {QueriesWidgetHeader} from '../Widgets/Queries/QueriesWidgetHeader/Querie
 import {ServicesWidgetContent} from '../Widgets/Services/ServicesWidgetContent/ServicesWidgetContent';
 import {ServicesWidgetControls} from '../Widgets/Services/ServicesWidgetControls/ServicesWidgetControls';
 import {ServicesWidgetHeader} from '../Widgets/Services/ServicesWidgetHeader/ServicesWidgetHeader';
-import {defaultDashboardItems} from '../../../../constants/dashboard2';
 
 export function registerPlugins() {
     DashKit.setSettings({

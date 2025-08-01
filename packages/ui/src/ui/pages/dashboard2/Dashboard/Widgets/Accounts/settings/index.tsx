@@ -2,12 +2,6 @@ import {useSelector} from 'react-redux';
 
 import {getMediumList} from '../../../../../../store/selectors/thor';
 
-export type AccountsSettingsValues = {
-    name: string;
-    accounts: string[];
-    columns: string[];
-};
-
 export function useAccountsSettings() {
     const mediumList = useSelector(getMediumList);
 
