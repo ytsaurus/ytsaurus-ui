@@ -26,6 +26,7 @@ import {ServicesWidgetControls} from '../Widgets/Services/ServicesWidgetControls
 import {ServicesWidgetHeader} from '../Widgets/Services/ServicesWidgetHeader/ServicesWidgetHeader';
 import type {OperationsWidgetProps} from '../Widgets/Operations/types';
 import type {PoolsWidgetProps} from '../Widgets/Pools/types';
+import type {QueriesWidgetProps} from '../Widgets/Queries/types';
 
 export function registerPlugins() {
     DashKit.setSettings({
@@ -111,9 +112,9 @@ export function registerPlugins() {
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
                 {...props}
-                header={<QueriesWidgetHeader {...props} />}
-                controls={<QueriesWidgetControls {...props} />}
-                content={<QueriesWidgetContent {...props} />}
+                header={<QueriesWidgetHeader {...(props as QueriesWidgetProps)} />}
+                controls={<QueriesWidgetControls {...(props as QueriesWidgetProps)} />}
+                content={<QueriesWidgetContent {...(props as QueriesWidgetProps)} />}
             />
         ),
     });
