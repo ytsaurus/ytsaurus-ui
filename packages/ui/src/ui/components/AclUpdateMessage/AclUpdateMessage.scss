@@ -2,6 +2,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    overflow: hidden;
 
     &__link {
         margin: 0 3px;
@@ -9,5 +10,6 @@
 
     &__subject {
         margin: 0 2px;
+        overflow: hidden;
     }
 }

@@ -34,7 +34,7 @@ export interface UserSubject {
     user: string;
 }
 
-export type Subject = (GroupSubject | TvmSubject | UserSubject) & {name?: string};
+export type Subject = (GroupSubject | TvmSubject | UserSubject) & {name?: string; url?: string};
 
 export interface GetGroupResponse {
     group: Group;
