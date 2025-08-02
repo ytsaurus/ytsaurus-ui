@@ -85,11 +85,13 @@ type TabletCellsResponse = Array<{$attributes: TabletCellInfo; $value?: string}>
 
 type BundlesResponse = {
     $attributes: BundleInfo;
-    $value?: string;
+    $value?: string | null;
 };
 
+export type DashboardBundlesResponse = TabletCellsResponse | BundlesResponse;
+
 async function fetchBundles(items: ServicesItem[], cluster: string) {
-    const bundlesResponse = await ytApiV3Id.executeBatch<TabletCellsResponse | BundlesResponse>(
+    const bundlesResponse = await ytApiV3Id.executeBatch<DashboardBundlesResponse>(
         YTApiId.tabletCellBundles,
         {
             parameters: {requests: bundlesRequests(items)},
