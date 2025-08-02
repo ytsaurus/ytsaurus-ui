@@ -188,6 +188,12 @@ export type QueriesListRequestParams = {
     limit?: number;
 };
 
+export type QueriesListResponse = {
+    incomplete: boolean;
+    queries: QueryItem[];
+    timestamp: number;
+};
+
 export async function generateQueryFromTable(
     engine: QueryEngine,
     {cluster, path, defaultQueryACO}: {cluster: string; path: string; defaultQueryACO: string},
@@ -240,16 +246,11 @@ export async function generateQueryFromTable(
     return undefined;
 }
 
-export function loadQueriesList({params, cursor, limit}: QueriesListRequestParams): ThunkAction<
-    Promise<{
-        incomplete: boolean;
-        queries: QueryItem[];
-        timestamp: number;
-    }>,
-    RootState,
-    any,
-    any
-> {
+export function loadQueriesList({
+    params,
+    cursor,
+    limit,
+}: QueriesListRequestParams): ThunkAction<Promise<QueriesListResponse>, RootState, any, any> {
     return async (_dispatch, getState) => {
         const state = getState();
         const {stage} = getQueryTrackerRequestOptions(state);
