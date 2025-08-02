@@ -15,4 +15,5 @@ export const Dashboard2TopRowLazy = withLazyLoading(
     React.lazy(async () => {
         return {default: (await importPage()).DashboardTopRow};
     }),
+    false,
 );

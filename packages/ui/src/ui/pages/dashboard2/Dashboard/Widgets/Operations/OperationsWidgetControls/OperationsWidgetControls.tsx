@@ -2,7 +2,6 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import b from 'bem-cn-lite';
 import {Flex, RadioButton, Select} from '@gravity-ui/uikit';
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
 
 import {RootState} from '../../../../../../store/reducers';
 import {
@@ -14,11 +13,13 @@ import {
     getOperationsStateFilter,
 } from '../../../../../../store/selectors/dashboard2/operations';
 
+import type {OperationsWidgetProps} from '../types';
+
 import './OperationsWidgetControls.scss';
 
 const block = b('yt-operations-widget-controls');
 
-export function OperationsWidgetControls(props: PluginWidgetProps) {
+export function OperationsWidgetControls(props: OperationsWidgetProps) {
     const {id} = props;
 
     const dispatch = useDispatch();
@@ -29,7 +30,7 @@ export function OperationsWidgetControls(props: PluginWidgetProps) {
     const onStateFilterUpdate = (value: string[]) => {
         dispatch(setOperationsStateFilter(id, value[0]));
     };
-    const onAuthorTypeFilterUpdate = (value: 'me' | 'my-list') => {
+    const onAuthorTypeFilterUpdate = (value: 'me' | 'custom') => {
         dispatch(setOperationsAuthorTypeFilter(id, value));
     };
 
@@ -52,7 +53,7 @@ export function OperationsWidgetControls(props: PluginWidgetProps) {
             <RadioButton
                 options={[
                     {value: 'me', content: 'Me'},
-                    {value: 'my-list', content: 'My list'},
+                    {value: 'custom', content: 'Custom'},
                 ]}
                 onUpdate={onAuthorTypeFilterUpdate}
                 value={authorType}

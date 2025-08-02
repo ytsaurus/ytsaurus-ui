@@ -1,12 +1,3 @@
-import {PoolPair} from '../../../../../../components/Dialog/controls/PoolsMultiple/PoolsMultiple';
-
-export type PoolsSettingsValues = {
-    name: string;
-    pools: PoolPair[];
-    columns: string[];
-    autoheight: boolean;
-};
-
 export function usePoolsSettings() {
     const columnsOptions = [
         {value: 'cpu', content: 'CPU'},
@@ -39,11 +30,6 @@ export function usePoolsSettings() {
                 options: columnsOptions,
                 multiple: true,
             },
-        },
-        {
-            type: 'tumbler' as const,
-            name: 'autoheight',
-            caption: 'Use autoheight',
         },
     ];
 }

@@ -1,9 +1,17 @@
 import map_ from 'lodash/map';
 
+import format from '../../../../common/hammer/format';
+
 import {ListQueriesParams} from '../../../../../shared/yt-types';
 import {YTApiId, ytApiV4Id} from '../../../../rum/rum-wrap-api';
 import {durationDates} from '../../../../utils/date';
 import {QueryStatus} from '../../../../types/query-tracker';
+import {QueriesListResponse} from '../../../../pages/query-tracker/module/api';
+
+type FetchQueriesArgs = {
+    requests: ListQueriesParams[];
+    id: string;
+};
 
 const makeRequests = (args: ListQueriesParams[]) =>
     map_(args, (arg) => ({
@@ -11,11 +19,14 @@ const makeRequests = (args: ListQueriesParams[]) =>
         parameters: {...arg},
     }));
 
-export async function fetchQuerieslist(args: ListQueriesParams[]) {
+export async function fetchQuerieslist({requests}: FetchQueriesArgs) {
     try {
-        const response = await ytApiV4Id.executeBatch(YTApiId.listQueries, {
-            requests: makeRequests(args),
-        });
+        const response = await ytApiV4Id.executeBatch<QueriesListResponse>(
+            YTApiId.queriesDashboard,
+            {
+                requests: makeRequests(requests),
+            },
+        );
 
         const {results} = response;
 
@@ -27,12 +38,15 @@ export async function fetchQuerieslist(args: ListQueriesParams[]) {
                 author: query?.user || 'unknown',
                 general: {
                     name: query?.annotations?.title ?? 'No name',
-                    state: (query?.state || '') as QueryStatus,
+                    state: (query?.state || format.NO_VALUE) as QueryStatus,
                     id: query?.id,
                 },
-                duration: durationDates(query?.start_time || 0, query?.finish_time || 0),
-                engine: query?.engine === 'ql' ? 'yt_ql' : query?.engine || '-',
-                start_time: query?.start_time || '-',
+                duration: durationDates(
+                    String(query?.start_time || 0),
+                    String(query?.finish_time || 0),
+                ),
+                engine: query?.engine === 'ql' ? 'yt_ql' : query?.engine || format.NO_VALUE,
+                start_time: query?.start_time || format.NO_VALUE,
             }));
         });
 

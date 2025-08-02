@@ -1,5 +1,4 @@
 import {useSelector} from 'react-redux';
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
 
 import {RootState} from '../../../../../../store/reducers';
 import {useOperationsQuery} from '../../../../../../store/api/dashboard2/operations';
@@ -9,20 +8,18 @@ import {
 } from '../../../../../../store/selectors/dashboard2/operations';
 import {getCluster} from '../../../../../../store/selectors/global';
 
-export type Author = {
-    value: string;
-    type: 'users';
-};
+import {OperationsWidgetProps} from '../types';
 
-export function useOperationsWidget(props: PluginWidgetProps) {
+export function useOperationsWidget(props: OperationsWidgetProps) {
     const {id, data} = props;
     const cluster = useSelector(getCluster);
 
     const state = useSelector((state: RootState) => getOperationsStateFilter(state, id));
     const authorType = useSelector((state: RootState) => getOperationsAuthorTypeFilter(state, id));
 
-    const authors = data.authors as Array<Author>;
-    const pool = data.pool as string;
+    const authors = data?.authors;
+    const pool = data?.pool;
+    const limit = data?.limit?.value || 0;
 
     const {
         data: operations,
@@ -30,12 +27,14 @@ export function useOperationsWidget(props: PluginWidgetProps) {
         isFetching,
         error,
     } = useOperationsQuery({
+        id,
         cluster,
         authorType,
         state,
         authors,
         pool,
+        limit,
     });
 
-    return {filters: {state}, data: {operations, isLoading, isFetching, error}};
+    return {filters: {state}, data: {operations, isLoading: isLoading || isFetching, error}};
 }

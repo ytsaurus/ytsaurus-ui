@@ -1,8 +1,3 @@
-export type NavigationSettingsValues = {
-    name: string;
-    autoheight: string;
-};
-
 export function useNavigationSettings() {
     return [
         {
@@ -12,11 +7,6 @@ export function useNavigationSettings() {
             extras: {
                 placeholder: 'Navigation',
             },
-        },
-        {
-            type: 'tumbler' as const,
-            name: 'autoheight',
-            caption: 'Use autoheight',
         },
     ];
 }

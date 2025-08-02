@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import map_ from 'lodash/map';
 
-import hammer from '../../../../../common/hammer';
+import format from '../../../../../common/hammer/format';
 
 import {
     getCopyConfigDialogVisibility,
@@ -28,7 +28,7 @@ export function CopyConfigDialog() {
 
     const copyConfigOptions = map_(clusterList, (cluster) => ({
         value: cluster.name.toLowerCase(),
-        content: hammer.format['ReadableField'](cluster.name),
+        content: format.ReadableField(cluster.name),
     }));
 
     return (

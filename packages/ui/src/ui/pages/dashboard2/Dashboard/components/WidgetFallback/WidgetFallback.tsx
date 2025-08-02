@@ -8,7 +8,7 @@ type Props = {
     error?: unknown;
 };
 
-export function WidgetFallback(props: Props) {
+export function WidgetPrettyFallback(props: Props) {
     const {itemsName, error} = props;
 
     return (
@@ -37,6 +37,14 @@ export function WidgetFallback(props: Props) {
             ) : (
                 <NoContent hint={`No ${itemsName || 'items'} found`} imageSize={100} />
             )}
+        </Flex>
+    );
+}
+
+export function WidgetNoItemsTextFallback({itemsName}: {itemsName?: string}) {
+    return (
+        <Flex width={'100%'} height={'100%'} justifyContent={'center'} alignItems={'center'}>
+            <Text variant={'body-3'} color={'secondary'}>{`No ${itemsName} found`}</Text>
         </Flex>
     );
 }

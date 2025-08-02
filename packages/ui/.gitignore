@@ -37,3 +37,10 @@ run_local_cluster.sh
 *.tmp
 *.bak
 tests/downloads/
+
+storybook-static
+src/ui/playwright-components/.cache
+src/ui/playwright-components/report
+src/ui/playwright-components/test-results
+src/ui/playwright-components/report-docker
+public/mockServiceWorker.js

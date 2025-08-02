@@ -1,20 +1,19 @@
 import React from 'react';
 import b from 'bem-cn-lite';
 import {Text} from '@gravity-ui/uikit';
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
 import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
 import {OperationProgressInfo} from '../../../../../../store/api/dashboard2/operations/operations';
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
-import {useAutoHeight} from '../../../../../../pages/dashboard2/Dashboard/hooks/use-autoheight';
 
 import {Title} from './cells/Title';
 import {UserPool} from './cells/UserPool';
 import {StartTime} from './cells/StartTime';
 import {State} from './cells/State';
 
-import {useOperationsWidget} from './use-operations-widget';
+import {useOperationsWidget} from '../hooks/use-operations-widget';
+import type {OperationsWidgetProps} from '../types';
 
 import './OperationsWidgetContent.scss';
 
@@ -44,6 +43,7 @@ const columns = [
     columnHelper.accessor('userPool', {
         header: () => <Text variant={'subheader-1'}>{'User/Pools'}</Text>,
         cell: (userPool) => <UserPool userPool={userPool.getValue()} />,
+        maxSize: 200,
     }),
     columnHelper.accessor('startTime', {
         header: () => <Text variant={'subheader-1'}>{'Start time'}</Text>,
@@ -55,21 +55,11 @@ const columns = [
     }),
 ];
 
-// 1 react-grid height value ~ 25.3px
-const operationsLayout = {
-    baseHeight: 4.5,
-    defaultHeight: 12,
-    rowHeight: 2.3,
-    minWidth: 10,
-};
-
-export function OperationsWidgetContent(props: PluginWidgetProps) {
+export function OperationsWidgetContent(props: OperationsWidgetProps) {
     const {
         filters: {state},
-        data: {operations, isLoading, isFetching, error},
+        data: {operations, isLoading, error},
     } = useOperationsWidget(props);
-
-    useAutoHeight(props, operationsLayout, operations?.length || 0);
 
     return (
         <WidgetTable
@@ -77,7 +67,7 @@ export function OperationsWidgetContent(props: PluginWidgetProps) {
             columns={columns}
             className={block()}
             itemHeight={60}
-            isLoading={isLoading || isFetching}
+            isLoading={isLoading}
             fallback={{itemsName: `${!state || state === 'all' ? '' : state + ' '}operations`}}
             error={error}
         />

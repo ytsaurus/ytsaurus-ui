@@ -1,14 +1,3 @@
-export type Author = {
-    value: string;
-    type: 'users';
-};
-
-export type QueriesSettingsValues = {
-    name: string;
-    authors: Array<Author>;
-    autoheight: boolean;
-};
-
 export function useQueriesSettings() {
     return [
         {
@@ -30,9 +19,14 @@ export function useQueriesSettings() {
             },
         },
         {
-            type: 'tumbler' as const,
-            name: 'autoheight',
-            caption: 'Use autoheight',
+            name: 'limit',
+            type: 'number' as const,
+            required: true,
+            caption: 'Limit(per author)',
+            extras: {
+                max: 50,
+                hidePrettyValue: true,
+            },
         },
     ];
 }

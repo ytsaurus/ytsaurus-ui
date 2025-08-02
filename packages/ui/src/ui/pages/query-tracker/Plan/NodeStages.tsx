@@ -72,7 +72,7 @@ function prepareData(data: Stages, state?: NodeState, finishedAt?: string) {
         currentStage = nextStage;
         currentTime = nextTime;
     }
-    const finishTime = isOperationFinished(state) ? finishedAt ?? currentTime : undefined;
+    const finishTime = isOperationFinished(state) ? (finishedAt ?? currentTime) : undefined;
     stages.push({
         stage: currentStage,
         duration: duration(currentTime, finishTime),

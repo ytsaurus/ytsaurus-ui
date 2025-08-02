@@ -2,11 +2,10 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import b from 'bem-cn-lite';
 import {Flex, Select} from '@gravity-ui/uikit';
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
 
 import map_ from 'lodash/map';
 
-import hammer from '../../../../../../common/hammer';
+import format from '../../../../../../common/hammer/format';
 
 import {RootState} from '../../../../../../store/reducers';
 import {
@@ -20,6 +19,8 @@ import {
 
 import {QueryEngine} from '../../../../../../../shared/constants/engines';
 
+import type {QueriesWidgetProps} from '../types';
+
 import './QueriesWidgetControls.scss';
 
 const block = b('yt-queries-widget-controls');
@@ -29,7 +30,7 @@ const stateOptions = [
     {value: '', content: 'All'},
     ...map_(statuses, (item) => ({
         value: item,
-        content: hammer.format['ReadableField'](item.toLowerCase()),
+        content: format.ReadableField(item.toLowerCase()),
     })),
 ];
 
@@ -37,11 +38,11 @@ const engineOptions = [
     {value: '', content: 'All'},
     ...map_(Object.keys(QueryEngine), (item) => ({
         value: item,
-        content: hammer.format['ReadableField'](item).toUpperCase(),
+        content: format.ReadableField(item).toUpperCase(),
     })),
 ];
 
-export function QueriesWidgetControls(props: PluginWidgetProps) {
+export function QueriesWidgetControls(props: QueriesWidgetProps) {
     const {id} = props;
 
     const dispatch = useDispatch();
