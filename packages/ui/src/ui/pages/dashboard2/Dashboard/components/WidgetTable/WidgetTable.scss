@@ -1,23 +1,23 @@
-.widget-table {
-    width: 100%;
-    overflow: hidden scroll;
-    max-width: 100%;
-}
-
 .yt-dashboard-widget {
     padding-bottom: 21px;
-}
 
-.table-widget-container{
-    height: 100%;
-    overflow: hidden scroll;
-    position: relative;
-    width: 100%;
-    max-width: 100%;
-}
+    .table-widget-container {
+        height: 100%;
+        overflow: hidden scroll;
+        position: relative;
+        width: 100%;
+        max-width: 100%;
 
-.gt-table__header {
-    position: sticky;
-    top: 0;
-    z-index: 2;
+        .widget-table {
+            width: 100%;
+            overflow: hidden scroll;
+            max-width: 100%;
+        }
+
+        .gt-table__header {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+    }
 }
