@@ -51,6 +51,7 @@
     "show:docker-image-name:stable": "npm run -s show:docker-image-name | sed s/-nightly$//",
     "show:file-types": "find src -type f | rev | cut -d '.' -f 1 | rev | sort | uniq -c | sort -rn",
     "show:version": "echo ${npm_package_version}",
+    "storybook": "storybook dev -p 8008",
     "start": "NODE_OPTIONS=\"--max-http-header-size=204800 ${NODE_OPTIONS}\" node dist/server",
     "test": "npm run test:unit",
     "test:smoke": "cd smoke-tests; npm ci; npm test",
