@@ -8,13 +8,16 @@ import {RootState} from '../../../../store/reducers';
 import ypath from '../../../../common/thor/ypath';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {NavigationFlowState, StatusLabelState} from '../../../../types/common/states';
-import {ListOperationsParams} from '../../../../../shared/yt-types';
+import {BatchResultsItem, ListOperationsParams} from '../../../../../shared/yt-types';
+
+type OperationState = StatusLabelState | NavigationFlowState;
+type PoolValue = {tree: string; pool: string};
 
 export type OperationProgressInfo = {
     completed: number;
     running: number;
     jobs: number;
-    state?: StatusLabelState | NavigationFlowState;
+    state?: OperationState;
 };
 
 type OperationsQueryArgs = {
@@ -23,14 +26,47 @@ type OperationsQueryArgs = {
     authorType: 'me' | 'custom';
     state?: string;
     authors?: Array<{value: string; type: string}>;
-    pool?: Array<{tree: string; pool: string}>;
+    pool?: Array<PoolValue>;
     limit?: number;
+};
+
+type OperationBriefSpec = {
+    title?: string;
+    [key: string]: unknown;
+};
+
+type OperationBriefProgress = {
+    // FIX_ME: how completed can be {total: ..., ...} ?
+    jobs?: Record<string, number> | Record<string, any>;
+    [key: string]: unknown;
+};
+
+type SchedulingOperationsPerPoolTree = Record<string, {pool?: string; [key: string]: unknown}>;
+
+type OperationRuntimeParameters = {
+    scheduling_options_per_pool_tree?: SchedulingOperationsPerPoolTree;
+    [key: string]: unknown;
+};
+
+type Operation = {
+    id: string;
+    state: OperationState;
+    start_time?: string;
+    brief_spec: OperationBriefSpec;
+    brief_progress: OperationBriefProgress;
+    authenticated_user: string;
+    runtime_parameters: OperationRuntimeParameters;
+    [key: string]: unknown;
+};
+
+export type DashboardOperationsResponse = {
+    operations: Array<Operation>;
 };
 
 function createOperationRequestParameters(
     limit: number | undefined,
     operationState: string | undefined,
-    pool: Array<{tree: string; pool: string}> | undefined,
+    pool: Array<PoolValue> | undefined,
 ): Partial<ListOperationsParams> {
     return {
         limit: limit ?? 10,
@@ -44,7 +80,7 @@ function createCustomAuthorRequests(
     authors: Array<{value: string; type: string}> | undefined,
     limit: number | undefined,
     operationState: string | undefined,
-    pool: Array<{tree: string; pool: string}> | undefined,
+    pool: Array<PoolValue> | undefined,
 ) {
     if (!authors?.length) {
         return [
@@ -64,7 +100,7 @@ function createCustomAuthorRequests(
     }));
 }
 
-function calculateProgress(jobs: any): OperationProgressInfo {
+function calculateProgress(jobs: Operation['brief_progress']['jobs']): OperationProgressInfo {
     const progress: OperationProgressInfo = {
         completed: 0,
         running: 0,
@@ -83,9 +119,13 @@ function calculateProgress(jobs: any): OperationProgressInfo {
 }
 
 function extractPoolsFromTrees(
-    trees: Record<string, {pool?: string} & unknown>,
+    trees: Operation['runtime_parameters']['scheduling_options_per_pool_tree'],
 ): {tree: string; pool: string[]}[] {
     const pools: {tree: string; pool: string[]}[] = [];
+
+    if (!trees) {
+        return [];
+    }
 
     forEach_(Object.values(trees), (tree, idx) => {
         if (Object.keys(trees)?.[idx] && tree?.pool) {
@@ -96,24 +136,25 @@ function extractPoolsFromTrees(
     return pools;
 }
 
-function processOperation(operation: unknown) {
-    const id: string = ypath.getValue(operation, '/id') ?? 'unknown';
+function processOperation(operation: Operation) {
+    const id: Operation['id'] = ypath.getValue(operation, '/id') ?? 'unknown';
     const title: string = ypath.getValue(operation, '/brief_spec/title') ?? id;
-    const startTime = ypath.getValue(operation, '/start_time');
-    const jobs = ypath.getValue(operation, '/brief_progress/jobs');
+    const startTime: Operation['start_time'] = ypath.getValue(operation, '/start_time');
+    const jobs: Operation['brief_progress']['jobs'] = ypath.getValue(
+        operation,
+        '/brief_progress/jobs',
+    );
 
     const progress = calculateProgress(jobs);
 
-    const operationState: StatusLabelState | NavigationFlowState | undefined = ypath.getValue(
+    const operationState: Operation['state'] = ypath.getValue(operation, '/state');
+    const operationUser: Operation['authenticated_user'] = ypath.getValue(
         operation,
-        '/state',
+        '/authenticated_user',
     );
-    const operationUser: string = ypath.getValue(operation, '/authenticated_user');
 
-    const trees: Record<string, {pool?: string} & unknown> = ypath.getValue(
-        operation,
-        '/runtime_parameters/scheduling_options_per_pool_tree',
-    );
+    const trees: Operation['runtime_parameters']['scheduling_options_per_pool_tree'] =
+        ypath.getValue(operation, '/runtime_parameters/scheduling_options_per_pool_tree');
 
     const pools = extractPoolsFromTrees(trees);
 
@@ -125,7 +166,7 @@ function processOperation(operation: unknown) {
     };
 }
 
-function processOperationsResponse(response: any[]) {
+function processOperationsResponse(response: DashboardOperationsResponse[]) {
     const operations = [];
 
     for (let authorIdx = 0; authorIdx < response.length; authorIdx++) {
@@ -145,29 +186,35 @@ export async function fetchOperations(args: OperationsQueryArgs, api: BaseQueryA
         const state = api.getState() as RootState;
         const user = state.global.login;
 
-        let response;
+        let response: Array<BatchResultsItem<DashboardOperationsResponse>>;
 
         if (authorType === 'custom') {
             const requests = createCustomAuthorRequests(authors, limit, operationState, pool);
-            response = await ytApiV3Id.executeBatch(YTApiId.operationsDashboard, {
-                requests,
-            });
+            response = await ytApiV3Id.executeBatch<DashboardOperationsResponse>(
+                YTApiId.operationsDashboard,
+                {
+                    requests,
+                },
+            );
         } else {
-            response = await ytApiV3Id.executeBatch(YTApiId.operationsDashboard, {
-                requests: [
-                    {
-                        command: 'list_operations' as const,
-                        parameters: {
-                            ...createOperationRequestParameters(limit, operationState, pool),
-                            user,
+            response = await ytApiV3Id.executeBatch<DashboardOperationsResponse>(
+                YTApiId.operationsDashboard,
+                {
+                    requests: [
+                        {
+                            command: 'list_operations' as const,
+                            parameters: {
+                                ...createOperationRequestParameters(limit, operationState, pool),
+                                user,
+                            },
                         },
-                    },
-                ],
-            });
+                    ],
+                },
+            );
         }
 
-        response = map_(response, (item) => item?.output);
-        const operations = processOperationsResponse(response);
+        const res = map_(response, (item) => item?.output || {operations: []});
+        const operations = processOperationsResponse(res);
 
         return {data: operations};
     } catch (error) {
