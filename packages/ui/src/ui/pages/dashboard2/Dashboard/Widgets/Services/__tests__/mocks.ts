@@ -1,43 +1,33 @@
 import {HttpResponse, http} from 'msw';
+import {DashboardBundlesResponse} from '../../../../../../store/api/dashboard2/services/services';
+import {BatchResultsItem} from '../../../../../../../shared/yt-types';
 
-export const bundlesResponse = [
+export const bundlesResponse: Array<BatchResultsItem<DashboardBundlesResponse>> = [
     {
-        output: true,
+        output: [
+            {
+                $attributes: {
+                    tablet_cell_bundle: 'my-bundle',
+                },
+                $value: '11ff11-998f00-3fe02bc-2asd18',
+            },
+            {
+                $attributes: {
+                    tablet_cell_bundle: 'not-my-bundle',
+                },
+                $value: '11ff11-998f00-3fe02bc-2asd18',
+            },
+        ],
     },
     {
         output: {
             $attributes: {
                 health: 'good',
                 bundle_controller_target_config: {
-                    cpu_limits: {
-                        lookup_thread_pool_size: 4,
-                        query_thread_pool_size: 4,
-                        write_thread_pool_size: 4,
-                    },
-                    memory_limits: {
-                        compressed_block_cache: 1073741824,
-                        lookup_row_cache: 1073741824,
-                        reserved: 24696061952,
-                        tablet_dynamic: 2147483648,
-                        tablet_static: 4294967296,
-                        uncompressed_block_cache: 1073741824,
-                        versioned_chunk_meta: 2147483648,
-                    },
-                    rpc_proxy_count: 0,
-                    rpc_proxy_resource_guarantee: {
-                        memory: 21474836480,
-                        net: 2684354560,
-                        net_bytes: 335544320,
-                        type: 'medium',
-                        vcpu: 10000,
-                    },
                     tablet_node_count: 1,
                     tablet_node_resource_guarantee: {
-                        memory: 107374182400,
-                        net: 5368709120,
-                        net_bytes: 671088640,
-                        type: 'cpu_intensive',
-                        vcpu: 28000,
+                        memory: 21474836480,
+                        vcpu: 4000,
                     },
                 },
             },
@@ -47,37 +37,13 @@ export const bundlesResponse = [
     {
         output: {
             $attributes: {
-                health: 'good',
+                enable_bundle_controller: true,
+                health: 'failed',
                 bundle_controller_target_config: {
-                    cpu_limits: {
-                        lookup_thread_pool_size: 1,
-                        query_thread_pool_size: 1,
-                        write_thread_pool_size: 1,
-                    },
-                    memory_limits: {
-                        compressed_block_cache: 1073741824,
-                        lookup_row_cache: 1073741824,
-                        reserved: 8589934592,
-                        tablet_dynamic: 2147483648,
-                        tablet_static: 4294967296,
-                        uncompressed_block_cache: 1073741824,
-                        versioned_chunk_meta: 2147483648,
-                    },
-                    rpc_proxy_count: 0,
-                    rpc_proxy_resource_guarantee: {
-                        memory: 21474836480,
-                        net: 2684354560,
-                        net_bytes: 335544320,
-                        type: 'medium',
-                        vcpu: 10000,
-                    },
                     tablet_node_count: 1,
                     tablet_node_resource_guarantee: {
-                        memory: 21474836480,
-                        net: 1342177280,
-                        net_bytes: 167772160,
-                        type: 'tiny',
-                        vcpu: 4000,
+                        memory: 107374182400,
+                        vcpu: 28000,
                     },
                 },
             },
@@ -87,20 +53,6 @@ export const bundlesResponse = [
 ];
 export const chytResponse = {
     result: [
-        {
-            $value: 'my-clique',
-            $attributes: {
-                creation_time: '2023-12-26T14:50:21.652708Z',
-                creator: 'robot-my-robot',
-                health: 'failed',
-                health_reason: 'info state contains error',
-                instance_count: 2,
-                state: 'active',
-                total_cpu: 32,
-                total_memory: 139586437120,
-                yt_operation_id: '720c21db-a36e5525-3fe03e8-3e65f1d4',
-            },
-        },
         {
             $value: 'my-super-mega-wide-big-large-clique-that-cant-fit-in',
             $attributes: {
