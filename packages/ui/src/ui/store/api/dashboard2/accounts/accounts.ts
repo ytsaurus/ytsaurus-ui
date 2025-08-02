@@ -43,10 +43,56 @@ export type AccountInfo = {
     [key: string]: Resource | string;
 };
 
+type MasterMemory = Partial<{
+    total: number;
+    chunk_host: number;
+    per_cell: Record<string, number>;
+    [key: string]: any;
+}>;
+
+type DetailedMasterMemory = Partial<{
+    nodes: number;
+    chunks: number;
+    attributes: number;
+    tablets: number;
+    schemas: number;
+    [key: string]: any;
+}>;
+
+type AccountsResponseResource = Partial<{
+    node_count: number;
+    chunk_count: number;
+    tablet_count: number;
+    tablet_static_memory: number;
+    disk_space_per_medium: Record<string, number>;
+    chunk_host_cell_master_memory: number;
+    master_memory: MasterMemory;
+    detailed_master_memory: DetailedMasterMemory;
+    [key: string]: any;
+}>;
+
+export type DashboardAccountsResponse = {
+    $attributes: Partial<{
+        name: string;
+        committed_resource_usage: AccountsResponseResource;
+        resource_limits: AccountsResponseResource;
+        allow_children_limit_overcommit: boolean;
+        resource_usage: AccountsResponseResource;
+        total_children_resource_limts: AccountsResponseResource;
+        recursive_resource_usage: AccountsResponseResource;
+        recursive_commited_resource_usage: AccountsResponseResource;
+        recursive_violated_resource_limits: AccountsResponseResource;
+        total_children_resource_limits: AccountsResponseResource;
+        recursive_committed_resource_usage: AccountsResponseResource;
+        responsibles: any;
+    }>;
+    $value: any;
+};
+
 export async function fetchAccounts(args: AccountsWidgetArgs) {
     try {
         const {accountsList, medium} = args;
-        const response = await ytApiV3.executeBatch({
+        const response = await ytApiV3.executeBatch<DashboardAccountsResponse>({
             parameters: {
                 requests: map_(accountsList, (account) => ({
                     command: 'get' as const,
