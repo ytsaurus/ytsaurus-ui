@@ -32,12 +32,25 @@ function parseStringToTreePool({path}: {path: string}) {
 
 const QUOTA_LIMIT = 100;
 
+type Resources = {
+    cpu?: number;
+    gpu?: number;
+    user_memory?: number;
+};
+
+export type DashboardPoolsResponse = {
+    max_operation_count?: number;
+    running_operation_count?: number;
+    estimated_guarantee_resources?: Resources;
+    resource_usage?: Resources;
+};
+
 export async function fetchPools(args: PoolsQueryArgs) {
     try {
         const {customList, favouriteList, type} = args;
         const queries =
             type === 'favourite' ? (favouriteList || []).map(parseStringToTreePool) : customList;
-        const response = await ytApiV3.executeBatch({
+        const response = await ytApiV3.executeBatch<DashboardPoolsResponse>({
             parameters: {
                 requests: map_(queries, ({tree, pool}) => ({
                     command: 'get' as const,
