@@ -6,6 +6,7 @@ import {ListQueriesParams} from '../../../../../shared/yt-types';
 import {YTApiId, ytApiV4Id} from '../../../../rum/rum-wrap-api';
 import {durationDates} from '../../../../utils/date';
 import {QueryStatus} from '../../../../types/query-tracker';
+import {QueriesListResponse} from '../../../../pages/query-tracker/module/api';
 
 type FetchQueriesArgs = {
     requests: ListQueriesParams[];
@@ -20,9 +21,12 @@ const makeRequests = (args: ListQueriesParams[]) =>
 
 export async function fetchQuerieslist({requests}: FetchQueriesArgs) {
     try {
-        const response = await ytApiV4Id.executeBatch(YTApiId.queriesDashboard, {
-            requests: makeRequests(requests),
-        });
+        const response = await ytApiV4Id.executeBatch<QueriesListResponse>(
+            YTApiId.queriesDashboard,
+            {
+                requests: makeRequests(requests),
+            },
+        );
 
         const {results} = response;
 
@@ -37,7 +41,10 @@ export async function fetchQuerieslist({requests}: FetchQueriesArgs) {
                     state: (query?.state || format.NO_VALUE) as QueryStatus,
                     id: query?.id,
                 },
-                duration: durationDates(query?.start_time || 0, query?.finish_time || 0),
+                duration: durationDates(
+                    String(query?.start_time || 0),
+                    String(query?.finish_time || 0),
+                ),
                 engine: query?.engine === 'ql' ? 'yt_ql' : query?.engine || format.NO_VALUE,
                 start_time: query?.start_time || format.NO_VALUE,
             }));
