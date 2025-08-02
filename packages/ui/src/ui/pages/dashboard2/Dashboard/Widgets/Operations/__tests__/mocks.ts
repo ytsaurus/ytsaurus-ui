@@ -1,6 +1,8 @@
 import {HttpResponse, http} from 'msw';
+import {BatchResultsItem} from '../../../../../../../shared/yt-types';
+import {DashboardOperationsResponse} from '../../../../../../store/api/dashboard2/operations/operations';
 
-export const batchResponse = [
+export const batchResponse: Array<BatchResultsItem<DashboardOperationsResponse>> = [
     {
         output: {
             operations: [
@@ -12,7 +14,7 @@ export const batchResponse = [
                     authenticated_user: 'robot-chyt',
                     start_time: '2025-04-29T13:22:18.889403Z',
                     brief_progress: {
-                        state: 'running',
+                        state: 'running' as const,
                         jobs: {
                             total: 20,
                             running: 20,
