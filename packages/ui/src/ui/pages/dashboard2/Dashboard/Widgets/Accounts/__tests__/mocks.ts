@@ -1,6 +1,8 @@
 import {HttpResponse, http} from 'msw';
+import {DashboardAccountsResponse} from '../../../../../../store/api/dashboard2/accounts/accounts';
+import {BatchResultsItem} from '../../../../../../../shared/yt-types';
 
-export const accountsResponse = [
+export const accountsResponse: Array<BatchResultsItem<DashboardAccountsResponse>> = [
     {
         output: {
             $attributes: {
