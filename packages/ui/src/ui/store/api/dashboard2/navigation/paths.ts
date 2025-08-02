@@ -30,6 +30,16 @@ type FetchPathsArgs = {
     id: string;
 };
 
+export type DashboardNavigationResponse = {
+    path: string;
+    type: string;
+    target_path?: string;
+    sorted?: boolean;
+    dynamic?: boolean;
+    treat_as_queue_consumer?: boolean;
+    treat_as_queue_producer?: boolean;
+};
+
 export async function fetchPaths(args: FetchPathsArgs, api: BaseQueryApi) {
     try {
         const {type} = args;
@@ -39,7 +49,7 @@ export async function fetchPaths(args: FetchPathsArgs, api: BaseQueryApi) {
 
         const paths = type === 'last_visited' ? lastVisited : favourites;
 
-        const response = await ytApiV3.executeBatch<{type: string; target_path?: string}>({
+        const response = await ytApiV3.executeBatch<DashboardNavigationResponse>({
             parameters: {
                 requests: makePathsAttributesRequests(map_(paths, (item) => item?.path)),
             },
