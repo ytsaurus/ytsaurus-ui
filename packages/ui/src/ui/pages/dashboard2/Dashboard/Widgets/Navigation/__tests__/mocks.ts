@@ -1,6 +1,8 @@
 import {HttpResponse, http} from 'msw';
+import {BatchResultsItem} from '../../../../../../../shared/yt-types';
+import {DashboardNavigationResponse} from '../../../../../../store/api/dashboard2/navigation/paths';
 
-const pathsResponse = [
+const pathsResponse: Array<BatchResultsItem<DashboardNavigationResponse>> = [
     {
         output: {
             type: 'map_node',
@@ -47,6 +49,7 @@ const pathsResponse = [
             message:
                 'Access denied for user "autushka": "read" permission for node //home/some-node is not allowed by any matching ACE',
             attributes: {
+                // @ts-ignore
                 datetime: '2025-07-18T10:18:03.033991Z',
                 permission: ['read'],
                 user: 'autushka',
@@ -72,6 +75,7 @@ const pathsResponse = [
     {
         output: {
             path: '//tmp/trash',
+            type: 'map_node',
         },
     },
     {
