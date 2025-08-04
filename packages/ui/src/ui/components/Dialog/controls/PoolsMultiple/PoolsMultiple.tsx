@@ -91,8 +91,11 @@ PoolsMultiple.getDefaultValue = () => {
 
 PoolsMultiple.validate = (value: PoolPair[]) => {
     if (!value.length) return;
-    if (value[value.length - 1].tree && !value[value.length - 1].pool) {
+    if (value?.[value.length - 1].tree && !value?.[value.length - 1]?.pool) {
         return 'Pool option is required';
+    }
+    if (!value?.[value.length - 1]?.tree?.length) {
+        return 'Tree should not be empty';
     }
     return;
 };
