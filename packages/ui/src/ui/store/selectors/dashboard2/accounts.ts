@@ -1,4 +1,4 @@
-import memoize_ from 'lodash/memoize';
+import {createSelector} from '@reduxjs/toolkit';
 
 import {RootState} from '../../../store/reducers';
 import {accountsApi} from '../../../store/api/accounts';
@@ -11,29 +11,26 @@ export const getAccountsTypeFilter = createWidgetDataFieldSelector<
     'favourite' | 'usable' | 'custom'
 >('type', 'favourite');
 
-const createUsableAccountsSelector = memoize_((cluster: string) =>
-    accountsApi.endpoints.usableAccounts.select({cluster}),
-);
+const getCustomAccountsList = (_state: RootState, _widgetId: string, custom: string[]) => custom;
 
-const createGetAccountsList = memoize_((widgetId: string) => {
-    return (state: RootState, custom: string[]): string[] => {
-        const type = getAccountsTypeFilter(state, widgetId);
+const getUsableAccountsImpl = (state: RootState, cluster: string) =>
+    accountsApi.endpoints.usableAccounts.select({cluster})(state)?.data;
 
+const getUsableAccounts = (state: RootState) => {
+    const cluster = getCluster(state);
+    return getUsableAccountsImpl(state, cluster);
+};
+
+export const getAccountsList = createSelector(
+    [getFavouriteAccounts, getUsableAccounts, getCustomAccountsList, getAccountsTypeFilter],
+    (favourite, usable, custom, type) => {
         if (type === 'favourite') {
-            const favourite = getFavouriteAccounts(state);
             return favourite?.length ? favourite.map((item) => item?.path) : [];
         }
-
         if (type === 'usable') {
-            const cluster = getCluster(state);
-            const usableAccountsSelector = createUsableAccountsSelector(cluster);
-            const usableAccountsResult = usableAccountsSelector(state);
-            return usableAccountsResult?.data || [];
+            return usable || [];
         }
 
         return custom;
-    };
-});
-
-export const getAccountsList = (state: RootState, widgetId: string, custom: string[]): string[] =>
-    createGetAccountsList(widgetId)(state, custom);
+    },
+);
