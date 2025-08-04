@@ -3,6 +3,8 @@ import Link, {LinkProps} from '../../components/Link/Link';
 
 import Icon, {IconProps} from '../Icon/Icon';
 
+import i18n from './i18n';
+
 interface Props {
     className?: string;
     theme?: LinkProps['theme'];
@@ -32,7 +34,13 @@ function ChartLink(props: Props) {
     );
 
     return (
-        <Link className={className} target="_blank" theme={theme} url={url} title={title ?? 'View'}>
+        <Link
+            className={className}
+            target="_blank"
+            theme={theme}
+            url={url}
+            title={title ?? i18n('View')}
+        >
             {wrapContent ? wrapContent(content) : content}
         </Link>
     );
