@@ -1,14 +1,18 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 import {Text} from '@gravity-ui/uikit';
 import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
-import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
+import {RootState} from '../../../../../../store/reducers';
+import {getPoolsTypeFilter} from '../../../../../../store/selectors/dashboard2/pools';
 
-import {PoolCell} from './cells/Pool';
-import {ResourceCell} from './cells/Resource';
+import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
 
 import {usePoolsWidget} from '../hooks/use-pools-widget';
 import type {Pool, PoolsWidgetProps} from '../types';
+
+import {PoolCell} from './cells/Pool';
+import {ResourceCell} from './cells/Resource';
 
 const columnHelper = createColumnHelper<Pool>();
 
@@ -47,6 +51,9 @@ export function PoolsWidgetContent(props: PoolsWidgetProps) {
         data: {pools, isLoading, error},
     } = usePoolsWidget(props);
 
+    const type = useSelector((state: RootState) => getPoolsTypeFilter(state, props.id));
+    const itemsName = type === 'favourite' ? 'favourite pools' : 'selected pools';
+
     return (
         <WidgetTable
             data={pools || []}
@@ -54,7 +61,7 @@ export function PoolsWidgetContent(props: PoolsWidgetProps) {
             columnsVisibility={visibleColumns}
             itemHeight={50}
             isLoading={isLoading}
-            fallback={{itemsName: 'pools'}}
+            fallback={{itemsName}}
             error={error}
         />
     );
