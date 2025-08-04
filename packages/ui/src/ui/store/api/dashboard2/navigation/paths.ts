@@ -1,8 +1,6 @@
 import {BaseQueryApi} from '@reduxjs/toolkit/query';
 import map_ from 'lodash/map';
 
-import {RootState} from '../../../reducers';
-import {getFavouritePaths, getLastVisitedPaths} from '../../../selectors/favourites';
 import {ytApiV3} from '../../../../rum/rum-wrap-api';
 
 function makePathsAttributesRequests(paths: string[]) {
@@ -28,6 +26,8 @@ type FetchPathsArgs = {
     cluster: string;
     type: PathsType;
     id: string;
+    favouritePaths: Array<{item: string; path: string}>;
+    lastVisitedPaths: Array<{item: string; path: string}>;
 };
 
 export type DashboardNavigationResponse = {
@@ -40,14 +40,11 @@ export type DashboardNavigationResponse = {
     treat_as_queue_producer?: boolean;
 };
 
-export async function fetchPaths(args: FetchPathsArgs, api: BaseQueryApi) {
+export async function fetchPaths(args: FetchPathsArgs, _api: BaseQueryApi) {
     try {
-        const {type} = args;
-        const state = api.getState() as RootState;
-        const lastVisited = getLastVisitedPaths(state);
-        const favourites = getFavouritePaths(state);
+        const {type, lastVisitedPaths, favouritePaths} = args;
 
-        const paths = type === 'last_visited' ? lastVisited : favourites;
+        const paths = type === 'last_visited' ? lastVisitedPaths : favouritePaths;
 
         const response = await ytApiV3.executeBatch<DashboardNavigationResponse>({
             parameters: {
