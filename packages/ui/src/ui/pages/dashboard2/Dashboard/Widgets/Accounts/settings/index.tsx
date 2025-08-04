@@ -19,15 +19,6 @@ export function useAccountsSettings() {
             name: 'accounts',
             caption: 'Accounts',
         },
-        // {
-        //     type: 'table-sort-by' as const,
-        //     name: 'disk_columns',
-        //     caption: 'Disk space columns(mediums)',
-        //     extras: {
-        //         suggestColumns: mediumList,
-        //         formatReadable: true,
-        //     },
-        // },
         {
             type: 'table-sort-by' as const,
             name: 'columns',

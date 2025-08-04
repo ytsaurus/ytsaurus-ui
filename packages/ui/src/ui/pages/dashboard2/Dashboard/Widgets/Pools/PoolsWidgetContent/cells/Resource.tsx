@@ -36,7 +36,6 @@ export function ResourceCell(props: Props) {
             }
         >
             <Progress text={`${usageText} / ${guaranteeText}`} value={value} theme={theme} />
-            {/* {type !== 'operations' && <div className={block('tick')} />} */}
         </Tooltip>
     );
 }
