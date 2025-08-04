@@ -1,4 +1,4 @@
-import {useCallback} from 'react';
+import {useMemo} from 'react';
 import {useSelector} from 'react-redux';
 
 import map_ from 'lodash/map';
@@ -38,47 +38,45 @@ export function useQueriesWidget(props: QueriesWidgetProps) {
         queryEngine = QueryEngine.YT_QL;
     }
 
-    let requestedStates: string[] | undefined = queryState ? [queryState] : undefined;
+    const requestedStates: string[] | undefined = useMemo(() => {
+        if (!queryState) {
+            return undefined;
+        }
 
-    if (queryState && mapQueryStateToRequestStates[queryState]) {
-        requestedStates = mapQueryStateToRequestStates[queryState];
-    }
+        if (mapQueryStateToRequestStates[queryState]) {
+            return mapQueryStateToRequestStates[queryState];
+        }
 
-    const makeRequests = useCallback(
-        (states: string[] | undefined) => {
-            if (states?.length) {
-                const requests: ListQueriesParams[] = [];
+        return [queryState];
+    }, [queryState]);
 
-                users.forEach((user) => {
-                    requests.push(
-                        ...map_(states, (state) => ({
-                            engine: queryEngine,
-                            state,
-                            user,
-                            output_format: 'json',
-                            limit: limit ?? defaultDashboardItems.queries.data.limit,
-                        })),
-                    );
-                });
+    const requests = useMemo(() => {
+        if (requestedStates?.length) {
+            const requests: ListQueriesParams[] = [];
 
-                return requests;
-            }
-            return map_(users, (user) => ({
-                engine: queryEngine?.length ? queryEngine : undefined,
-                user,
-                output_format: 'json',
-                limit: limit ?? defaultDashboardItems.queries.data.limit,
-            }));
-        },
-        [limit, queryEngine, users],
-    );
+            users.forEach((user) => {
+                requests.push(
+                    ...map_(requestedStates, (state) => ({
+                        engine: queryEngine,
+                        state,
+                        user,
+                        output_format: 'json',
+                        limit: limit ?? defaultDashboardItems.queries.data.limit,
+                    })),
+                );
+            });
 
-    const {
-        data: queries,
-        error,
-        isLoading,
-        isFetching,
-    } = useListQueries({id: widgetId, requests: makeRequests(requestedStates)});
+            return requests;
+        }
+        return map_(users, (user) => ({
+            engine: queryEngine?.length ? queryEngine : undefined,
+            user,
+            output_format: 'json',
+            limit: limit ?? defaultDashboardItems.queries.data.limit,
+        }));
+    }, [limit, queryEngine, requestedStates, users]);
+
+    const {data: queries, error, isLoading, isFetching} = useListQueries({id: widgetId, requests});
 
     return {queries, error, isLoading: isLoading || isFetching};
 }
