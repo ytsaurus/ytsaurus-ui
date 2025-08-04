@@ -6,7 +6,14 @@ import '@gravity-ui/yagr/dist/index.css';
 
 settings.set({plugins: [YagrPlugin]});
 
-const COLORS = ['rgb(77, 162, 241)', 'rgb(255, 61, 100)'];
+const COLORS = [
+    'var(--g-color-line-info)',
+    'var(--g-color-line-danger)',
+    'var(--g-color-line-positive)',
+    'var(--g-color-line-warning)',
+    'var(--g-color-line-utility)',
+    'var(--g-color-line-misc)',
+];
 
 export function getSerieColor(serieIndex: number) {
     return COLORS[serieIndex % COLORS.length];

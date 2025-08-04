@@ -7,7 +7,7 @@ import {
 } from '../../../constants/scheduling';
 import {parseSortState} from '../../../utils';
 import {produce} from 'immer';
-import {updateIfChanged} from '../../../utils/utils';
+import {updateByLocationParams, updateIfChanged} from '../../../utils/utils';
 import {RootState} from '../../../store/reducers';
 import {aclFiltersParams, getAclFiltersPreparedState} from '../acl/url-mapping';
 import {
@@ -15,6 +15,8 @@ import {
     parseSerializeNumber,
     parseSerializeString,
 } from '../../../utils/parse-serialize';
+import {LocationParameters} from '../../../store/location';
+import {prometheusDashboardExpandedParams} from '../prometheusDashboard/url-mapping';
 
 export const schedulingParams = {
     pool: {
@@ -96,10 +98,6 @@ export const schedulingDetailsParams = {
     },
 };
 
-export const schedulingMonitorParams = {
-    ...schedulingParams,
-};
-
 export const schedulingAclParams = {
     ...schedulingParams,
     ...aclFiltersParams,
@@ -133,4 +131,15 @@ export function getSchedulingMonitorPreparedState(state: RootState, location: {q
 export function getSchedulingAclPreparedState(prevState: RootState, {query}: {query: RootState}) {
     const state = getAclFiltersPreparedState(prevState, {query});
     return getSchedulingPreparedState(state, {query});
+}
+
+export const schedulingMonitoringParams: LocationParameters = {
+    ...schedulingParams,
+    ...prometheusDashboardExpandedParams('scheduler-pool'),
+};
+
+export function getSchedulingMonitoringParams(state: RootState, {query}: {query: RootState}) {
+    return produce(state, (draft) => {
+        return updateByLocationParams({draft, query}, schedulingMonitoringParams);
+    });
 }
