@@ -10,7 +10,6 @@ import {
 
 import {FormApi, YTDFDialog} from '../../../../../components/Dialog';
 
-import guid from '../../../../../common/hammer/guid';
 import format from '../../../../../common/hammer/format';
 
 import {SettingsValues} from './SettingsValues';
@@ -43,7 +42,7 @@ export function WidgetSettings() {
     return (
         <YTDFDialog<SettingsValues>
             onAdd={onAdd}
-            key={guid()}
+            key={`${item?.id}_${item?.type}`}
             headerProps={{
                 title: `${format.ReadableField(item?.type + ' widget') || 'Widget'} settings`,
             }}
