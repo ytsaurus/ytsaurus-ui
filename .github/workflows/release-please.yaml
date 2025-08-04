@@ -94,4 +94,4 @@ jobs:
           helm package .
 
           FILE_NAME=$(echo ${{steps.release.outputs['packages/ui-helm-chart--tag_name']}} | sed 's/ytsaurus-ui-chart-v/ytsaurus-ui-chart-/')
-          helm push ${FILE_NAME}.tgz oci://ghcr.io/ytsaurus/ui-chart
+          helm push ${FILE_NAME}.tgz oci://ghcr.io/ytsaurus
