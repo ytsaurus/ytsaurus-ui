@@ -10,7 +10,6 @@ import ypath from '../../../../common/thor/ypath';
 
 import {RootState} from '../../../../store/reducers';
 import {isDeveloper} from '../../../../store/selectors/global/is-developer';
-import {getFavouriteBundles, getFavouriteChyt} from '../../../../store/selectors/favourites';
 
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {getBatchError} from '../../../../utils/utils';
@@ -202,16 +201,16 @@ type FetchServicesArgs = {
     id: string;
     cluster: string;
     customItems?: ServicesItem[];
+    favouriteCliques: Array<{item: string; path: string}>;
+    favouriteBundles: Array<{item: string; path: string}>;
 };
 
 export async function fetchServices(args: FetchServicesArgs, api: BaseQueryApi) {
     try {
-        const {type, cluster, customItems} = args;
+        const {type, cluster, customItems, favouriteCliques, favouriteBundles} = args;
 
         const state = api.getState() as RootState;
         const isAdmin = isDeveloper(state);
-        const favouriteCliques = getFavouriteChyt(state);
-        const favouriteBundles = getFavouriteBundles(state);
 
         let items: ServicesItem[] = [];
 
