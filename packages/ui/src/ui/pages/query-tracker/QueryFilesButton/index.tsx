@@ -22,7 +22,11 @@ import {updateQueryDraft} from '../module/query/actions';
 
 const b = cn('query-files-popup');
 
-export const QueryFilesButton: FC = () => {
+type Props = {
+    popupClassName?: string;
+};
+
+export const QueryFilesButton: FC<Props> = ({popupClassName}) => {
     const dispatch = useDispatch();
     const {files, deletedFiles, addFormOpen, addFormType, showTabs} = useSelector(
         selectQueryFilesButtonConfig,
@@ -112,7 +116,7 @@ export const QueryFilesButton: FC = () => {
                 anchorRef={btnRef}
                 open={open}
                 onClose={handleTogglePopup}
-                className={b()}
+                className={b(null, popupClassName)}
             >
                 <div className={b('header')}>
                     <Text variant="subheader-3">Attachments</Text>

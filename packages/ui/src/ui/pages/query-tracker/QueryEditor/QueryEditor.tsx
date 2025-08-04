@@ -17,11 +17,12 @@ const b = block('query-container');
 type Props = {
     onStartQuery?: (queryId: string) => boolean | void;
     showStatusInTitle?: boolean;
+    pathNavigation?: boolean;
 };
 
 export type ResultMode = 'full' | 'minimized' | 'split';
 
-export const QueryEditor: FC<Props> = ({onStartQuery, showStatusInTitle}) => {
+export const QueryEditor: FC<Props> = ({onStartQuery, showStatusInTitle, pathNavigation}) => {
     const dispatch = useDispatch();
     const query = useCurrentQuery();
     const {isQueryTrackerInfoLoading} = useQueryACO();
@@ -69,7 +70,9 @@ export const QueryEditor: FC<Props> = ({onStartQuery, showStatusInTitle}) => {
                 onResizeEnd={setSize}
                 getInitialSizes={() => partSizes}
             >
-                {resultViewMode !== 'full' && <QueryEditorView onStartQuery={onStartQuery} />}
+                {resultViewMode !== 'full' && (
+                    <QueryEditorView onStartQuery={onStartQuery} pathNavigation={pathNavigation} />
+                )}
 
                 {query?.id && isExecuted && (
                     <ResultView

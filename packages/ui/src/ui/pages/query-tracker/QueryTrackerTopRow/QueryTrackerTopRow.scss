@@ -12,4 +12,10 @@
             cursor: inherit;
         }
     }
+
+    @media (max-width: 1400px) {
+        .g-button__text {
+            display: none;
+        }
+    }
 }
