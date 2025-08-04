@@ -67,7 +67,7 @@ export function PoolsMultiple(props: Props) {
                     )}
                 </Flex>
             ))}
-            {isPoolsPairsAvailable && mode !== 'single' && (
+            {isPoolsPairsAvailable && mode === 'multiple' && (
                 <Flex>
                     <Button size={'m'} onClick={addPair} disabled={disabled}>
                         <Flex alignItems={'center'} gap={2}>

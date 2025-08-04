@@ -1,8 +1,7 @@
 import React from 'react';
 import {Flex, Text, TextProps} from '@gravity-ui/uikit';
 
-type Props = Omit<TextProps, 'ellipsis' | 'whiteSpace'> & {
-    children: React.ReactNode;
+type Props = React.PropsWithChildren<Omit<TextProps, 'ellipsis' | 'whiteSpace'>> & {
     width?: string;
 };
 
