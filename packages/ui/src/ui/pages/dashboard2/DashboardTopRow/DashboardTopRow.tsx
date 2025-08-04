@@ -30,6 +30,8 @@ export function DashboardTopRow() {
 
     const {edit, cancel, save} = useDashboardActions();
 
+    const handleClick = editMode ? save : edit;
+
     return (
         <RowWithName page={Page.DASHBOARD}>
             <Flex grow={true} justifyContent={'flex-end'} gap={3}>
@@ -37,11 +39,7 @@ export function DashboardTopRow() {
                 {editMode && <CopyConfigButton />}
                 {editMode && <AddWidgetMenu />}
                 {editMode && <CancelButton onCancel={cancel} />}
-                <Button
-                    size={'m'}
-                    view={'outlined'}
-                    onClick={editMode ? () => save() : () => edit()}
-                >
+                <Button size={'m'} view={'outlined'} onClick={handleClick}>
                     {editMode ? 'Save dashboard' : 'Edit dashboard'}
                 </Button>
             </Flex>
