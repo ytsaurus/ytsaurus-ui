@@ -6,6 +6,7 @@ import {Subject} from '../../utils/acl/acl-types';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import Link from '../../components/Link/Link';
 import Tag from '../../components/Tag/Tag';
+import i18n from './i18n';
 
 const block = cn('acl-update-message');
 
@@ -32,13 +33,11 @@ function AclUpdateMessageImpl(props: Props) {
 
     return (
         <div className={block()}>
-            Role is
-            <span className={block('link')}>
-                <Link url={link} target="_blank">
-                    {state}
-                </Link>
-            </span>
-            for{' '}
+            {i18n('role.is')}{' '}
+            <Link url={link} target="_blank" className={block('link')}>
+                {state}
+            </Link>{' '}
+            {i18n('for')}{' '}
             <span className={block('subject')}>
                 <FormattedSubject {...subject} />
             </span>
