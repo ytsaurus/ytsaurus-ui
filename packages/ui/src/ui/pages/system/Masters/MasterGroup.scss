@@ -115,10 +115,10 @@
         &-version {
             cursor: pointer;
         }
+    }
 
-        &-cell {
-            cursor: pointer;
-        }
+    &__quorum-cell {
+        white-space: nowrap;
     }
 
     &__nonvoting {
