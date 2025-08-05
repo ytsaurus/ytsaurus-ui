@@ -30,7 +30,7 @@ interface State {
     prevFilter?: string;
 }
 
-export default class FilterWithRegExp extends React.PureComponent<Props, State> {
+export class FilterWithRegExp extends React.PureComponent<Props, State> {
     static getDerivedStateFromProps(props: Props, state: State) {
         if (state.prevFilter === props.value.filter) {
             return null;
