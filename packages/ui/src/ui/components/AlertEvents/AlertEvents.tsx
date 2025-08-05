@@ -11,6 +11,7 @@ import Icon from '../../components/Icon/Icon';
 import Link from '../../components/Link/Link';
 import {showErrorPopup} from '../../utils/utils';
 import {compareWithUndefined} from '../../utils/sort-helpers';
+import i18n from './i18n';
 
 import './AlertEvents.scss';
 
@@ -31,7 +32,7 @@ export interface AlertInfo {
 
 const columns: Array<Column<AlertInfo>> = [
     {
-        name: 'Type',
+        name: i18n('columns.type'),
         render({row}) {
             return (
                 <span>
@@ -47,7 +48,7 @@ const columns: Array<Column<AlertInfo>> = [
         },
     },
     {
-        name: 'Period',
+        name: i18n('columns.period'),
         render({row}) {
             const {from, to} = row;
             return (
@@ -84,7 +85,7 @@ const columns: Array<Column<AlertInfo>> = [
                         });
                     }}
                 >
-                    Details
+                    {i18n('details')}
                 </ClickableText>
             );
         },
@@ -127,7 +128,7 @@ function AlertEvents({className, items}: Props) {
             />
             {all.length > VISIBLE_COUNT ? (
                 <ClickableText onClick={toggleShowAll}>
-                    {allVisible ? 'Less' : 'More'}
+                    {allVisible ? i18n('less') : i18n('more')}
                 </ClickableText>
             ) : null}
         </div>
