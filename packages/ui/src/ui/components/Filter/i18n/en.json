@@ -1,0 +1,4 @@
+{
+  "placeholder": "Filter...",
+  "error": "Invalid prop 'debounce' supplied to {{componentName}}'. It should be either number or false."
+}

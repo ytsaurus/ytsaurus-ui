@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import key from 'hotkeys-js';
+import i18n from './i18n';
 
 import debounce_ from 'lodash/debounce';
 
@@ -11,9 +12,7 @@ import Hotkey from '../../components/Hotkey/Hotkey';
 function NumberOrFalse(props: FilterProps, _propName: 'debounce', componentName: string) {
     const value = props.debounce;
     if (typeof value !== 'number') {
-        return new Error(
-            `Invalid prop 'debounce' supplied to ${componentName}'. It should be either number or false.`,
-        );
+        return new Error(i18n('error', {componentName}));
     }
     return undefined;
 }
@@ -84,7 +83,6 @@ export default class Filter extends Component<FilterProps, State> {
 
     static defaultProps = {
         size: 'm',
-        placeholder: 'Filter...',
         autofocus: true,
         debounce: 200,
         invalid: false,
@@ -141,7 +139,7 @@ export default class Filter extends Component<FilterProps, State> {
         const {
             className,
             size,
-            placeholder,
+            placeholder = i18n('placeholder'),
             autofocus,
             hotkey,
             invalid,
