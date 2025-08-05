@@ -6,6 +6,7 @@ import Button from '../Button/Button';
 import TextInputWithDebounce, {
     TextInputWithDebounceProps,
 } from '../TextInputWithDebounce/TextInputWithDebounce';
+import i18n from './i18n';
 
 import './FilterWithRegExp.scss';
 const block = cn('filter-with-regexp');
@@ -85,8 +86,8 @@ export class FilterWithRegExp extends React.PureComponent<Props, State> {
         const {
             className,
             size,
-            placeholder = 'Enter filter...',
-            placeholderRegexp = 'Enter regexp...',
+            placeholder = i18n('placeholder'),
+            placeholderRegexp = i18n('placeholder_regexp'),
             value,
             pin,
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
