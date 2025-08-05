@@ -1,3 +1,4 @@
+import {dateTimeParse} from '@gravity-ui/date-utils';
 import map_ from 'lodash/map';
 
 import format from '../../../../common/hammer/format';
@@ -42,8 +43,8 @@ export async function fetchQuerieslist({requests}: FetchQueriesArgs) {
                     id: query?.id,
                 },
                 duration: durationDates(
-                    String(query?.start_time || 0),
-                    String(query?.finish_time || 0),
+                    String(query?.start_time || dateTimeParse('now')),
+                    String(query?.finish_time || dateTimeParse('now')),
                 ),
                 engine: query?.engine === 'ql' ? 'yt_ql' : query?.engine || format.NO_VALUE,
                 start_time: query?.start_time || format.NO_VALUE,
