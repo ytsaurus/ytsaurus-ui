@@ -1,6 +1,12 @@
 .yt-clipboard-button {
     color: var(--g-color-text-secondary);
 
+    &_view_clear {
+        svg {
+            color: var(--g-color-text-secondary);
+        }
+    }
+
     &_inline-margin {
         & .yt-tooltip {
             margin-top: -5px;

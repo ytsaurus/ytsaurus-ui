@@ -2,14 +2,19 @@ import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
-import hammer from '../../../common/hammer';
+
+import {Flex} from '@gravity-ui/uikit';
+
+import format from '../../../common/hammer/format';
 import {getMastersHostType} from '../../../store/selectors/settings';
 import Icon from '../../../components/Icon/Icon';
+
 import {SwitchLeaderButton} from './SwitchLeader';
 import {Instance} from './Instance';
 
 import map_ from 'lodash/map';
 import './MasterGroup.scss';
+import {CellTag} from './CellTag';
 
 const b = block('master-group');
 
@@ -44,7 +49,6 @@ class MasterGroup extends Component {
         const {quorum, cellTag, cellId, instances} = this.props;
         const status = quorum ? quorum.status : 'unknown';
         const quorumTitle = quorum && `Leader committed version: ${quorum.leaderCommitedVersion}`;
-        const cellTitle = `Cell tag: ${cellTag}`;
         const icons = {
             quorum: 'check-circle',
             'weak-quorum': 'exclamation-circle',
@@ -70,7 +74,7 @@ class MasterGroup extends Component {
                             <Icon face="solid" awesome={icons[status]} />
                         </div>
                         <div className={b('quorum-label')}>
-                            {hammer.format['Readable'](status, {
+                            {format.Readable(status, {
                                 delimiter: '-',
                             })}
                         </div>
@@ -81,16 +85,17 @@ class MasterGroup extends Component {
                     </Fragment>
                 )}
 
-                <div className={b('host', {quorum: true})}>
-                    <div className={b('quorum-version')} title={quorumTitle}>
-                        <span>{quorum && quorum.leaderCommitedVersion}</span>
+                {Boolean(quorum?.leaderCommitedVersion) || cellTag !== undefined ? (
+                    <div className={b('host', {quorum: true})}>
+                        <div className={b('quorum-version')} title={quorumTitle}>
+                            <span>{quorum && quorum.leaderCommitedVersion}</span>
+                        </div>
+                        <Flex alignItems="center">
+                            <CellTag className={b('quorum-cell')} cellTag={cellTag} />
+                            <SwitchLeaderButton cellId={cellId} hosts={instances} />
+                        </Flex>
                     </div>
-                    <div className={b('quorum-cell')} title={cellTitle}>
-                        {cellTag && <Icon className={b('icon-glyph')} face="solid" awesome="tag" />}
-                        {hammer.format['Hex'](cellTag)}
-                        {cellId && <SwitchLeaderButton cellId={cellId} hosts={instances} />}
-                    </div>
-                </div>
+                ) : null}
             </Fragment>
         );
     }
