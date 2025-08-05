@@ -3,9 +3,10 @@ import cn from 'bem-cn-lite';
 
 import reduce_ from 'lodash/reduce';
 
-import FilterWithRegExp, {
+import {
+    FilterWithRegExp,
     FilterWithRegExpValue,
-} from '../../../../../../components/Filter/FilterWithRegExp';
+} from '../../../../../../components/FilterWithRegExp';
 import TagSelector from '../../../../../../components/TagSelector/TagSelector';
 
 import './TagsFilter.scss';
