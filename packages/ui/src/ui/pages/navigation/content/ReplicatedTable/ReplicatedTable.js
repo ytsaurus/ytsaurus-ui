@@ -50,6 +50,7 @@ const tableSets = {
         items: [
             'name',
             'cluster',
+            'content_type',
             'mode',
             'error_count',
             'replication_lag_time',
@@ -61,6 +62,7 @@ const tableSets = {
         items: [
             'name',
             'cluster',
+            'content_type',
             'mode',
             'error_count',
             'replication_lag_time',
@@ -100,6 +102,13 @@ class ReplicatedTable extends Component {
             sort: false,
             get(replica) {
                 return ypath.getValue(replica, '/@cluster_name');
+            },
+        },
+        content_type: {
+            align: 'left',
+            sort: false,
+            get(replica) {
+                return ypath.getValue(replica, '/@content_type');
             },
         },
         mode: {
@@ -262,6 +271,7 @@ class ReplicatedTable extends Component {
             templates: {
                 name: ReplicatedTable.renderName,
                 cluster: ReplicatedTable.renderField,
+                content_type: ReplicatedTable.renderField,
                 mode: ReplicatedTable.renderField,
                 errors: ReplicatedTable.renderErrors,
                 error_count: ReplicatedTable.renderAsReadableField,
