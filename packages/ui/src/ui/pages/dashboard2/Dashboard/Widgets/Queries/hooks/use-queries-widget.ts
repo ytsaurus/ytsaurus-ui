@@ -50,6 +50,7 @@ export function useQueriesWidget(props: QueriesWidgetProps) {
         return [queryState];
     }, [queryState]);
 
+    // TODO: move requests comptations to api
     const requests = useMemo(() => {
         if (requestedStates?.length) {
             const requests: ListQueriesParams[] = [];
