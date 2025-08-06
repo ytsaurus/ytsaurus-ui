@@ -1,9 +1,8 @@
-// @ts-ignore
-import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {AxiosProgressEvent} from 'axios';
 
 import {YT} from '../../config/yt-config';
 import CancelHelper from '../../utils/cancel-helper';
+import {ytApiV3} from '../../rum/rum-wrap-api';
 
 interface StartUploadProps {
     file: File;
@@ -21,7 +20,7 @@ export const uploadFile = (opts: StartUploadProps) => {
 
     const cancelHelper = opts.cancelHelper;
 
-    return yt.v3
+    return ytApiV3
         .create({
             path: filePath,
             type: 'file',
@@ -29,8 +28,8 @@ export const uploadFile = (opts: StartUploadProps) => {
             ignore_existing: true,
         })
         .then(() => {
-            return yt.v3.startTransaction({}).then((transactionId: string) => {
-                return yt.v3
+            return ytApiV3.startTransaction({}).then((transactionId: string) => {
+                return ytApiV3
                     .writeFile({
                         setup: {
                             onUploadProgress: opts.handleUploadProgress,
@@ -42,14 +41,14 @@ export const uploadFile = (opts: StartUploadProps) => {
                             ping_ancestor_transactions: true,
                             transaction_id: transactionId,
                         },
-                        cancelToken: cancelHelper.generateNextToken(),
+                        cancellation: cancelHelper.removeAllAndSave,
                         data: file,
                     })
                     .then(() => {
-                        return yt.v3.commitTransaction({transaction_id: transactionId});
+                        return ytApiV3.commitTransaction({transaction_id: transactionId});
                     })
                     .catch(async (err: any) => {
-                        await yt.v3.abortTransaction({transaction_id: transactionId});
+                        await ytApiV3.abortTransaction({transaction_id: transactionId});
 
                         throw err;
                     });
