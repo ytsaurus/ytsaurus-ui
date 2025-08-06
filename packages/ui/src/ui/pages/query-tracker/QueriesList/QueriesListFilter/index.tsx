@@ -1,18 +1,28 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 import block from 'bem-cn-lite';
 import {ControlGroupOption, Icon as GravityIcon, RadioButton, Tooltip} from '@gravity-ui/uikit';
-import {QueriesListAuthorFilter, QueriesListMode} from '../../module/queries_list/types';
+import {
+    QueriesListAuthorFilter,
+    QueriesListFilter,
+    QueriesListMode,
+} from '../../module/queries_list/types';
 import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 
 import './index.scss';
 import {QueryEngineFilter} from './QueryEngineFilter';
 import {QueryEngine} from '../../../../../shared/constants/engines';
-import {useQuriesHistoryFilter} from '../../hooks/QueryListFilter';
 import Dropdown from '../../../../components/Dropdown/Dropdown';
 import Button from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
 import ColumnSelector from '../../../../components/ColumnSelector/ColumnSelector';
-import {useQueryHistoryListColumns} from '../QueriesHistoryList/useQueryListColumns';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+    getQueriesFilters,
+    getQueriesListMode,
+    getQueryListColumns,
+} from '../../module/queries_list/selectors';
+import {applyFilter} from '../../module/queries_list/actions';
+import {setSettingByKey} from '../../../../store/actions/settings';
 import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';
 
 const AuthorFilter: ControlGroupOption[] = [
@@ -33,27 +43,37 @@ type QueriesHistoryListFilterProps = {
 };
 
 export function QueriesHistoryListFilter({className}: QueriesHistoryListFilterProps) {
-    const [filter, filterViewMode, onChange] = useQuriesHistoryFilter();
-    const {allowedColumns, handleColumnChange} = useQueryHistoryListColumns({type: filter.user});
+    const dispatch = useDispatch();
+    const filter = useSelector(getQueriesFilters);
+    const filterViewMode = useSelector(getQueriesListMode);
+    const {allowedColumns} = useSelector(getQueryListColumns);
 
-    const onChangeAuthorFilter = useCallback(
-        (user: string) => {
-            onChange('user', user as QueriesListAuthorFilter);
-        },
-        [onChange],
+    const handleColumnChange = (selectedColumns: {
+        items: Array<{checked: boolean; name: string}>;
+    }) => {
+        dispatch(
+            setSettingByKey(
+                `global::queryTracker::history::Columns`,
+                selectedColumns.items.filter(({checked}) => checked).map(({name}) => name),
+            ),
+        );
+    };
+
+    const setFilter = React.useMemo(
+        () => ({
+            user: (value: string) => {
+                dispatch(applyFilter({user: value as QueriesListFilter['user']}));
+            },
+            engine: (value?: QueryEngine) => {
+                dispatch(applyFilter({engine: value as QueriesListFilter['engine']}));
+            },
+            filter: (value?: string) => {
+                dispatch(applyFilter({filter: value as QueriesListFilter['filter']}));
+            },
+        }),
+        [dispatch],
     );
-    const onChangeEngineFilter = useCallback(
-        (engine?: QueryEngine) => {
-            onChange('engine', engine);
-        },
-        [onChange],
-    );
-    const onChangeTextFilter = useCallback(
-        (text?: string) => {
-            onChange('filter', text || undefined);
-        },
-        [onChange],
-    );
+
     return (
         <div className={b(null, className)}>
             <div className={b('row')}>
@@ -61,17 +81,17 @@ export function QueriesHistoryListFilter({className}: QueriesHistoryListFilterPr
                     <RadioButton
                         options={AuthorFilter}
                         value={filter?.user || QueriesListAuthorFilter.My}
-                        onUpdate={onChangeAuthorFilter}
+                        onUpdate={setFilter.user}
                     />
                 )}
-                <QueryEngineFilter value={filter?.engine} onChange={onChangeEngineFilter} />
+                <QueryEngineFilter value={filter?.engine} onChange={setFilter.engine} />
             </div>
             {filterViewMode === QueriesListMode.History && (
                 <div className={b('row')}>
                     <TextInputWithDebounce
                         placeholder="Search in query name, body and access control"
                         value={filter?.filter}
-                        onUpdate={onChangeTextFilter}
+                        onUpdate={setFilter.filter}
                     />
                     <Tooltip
                         content={
