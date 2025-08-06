@@ -70,6 +70,8 @@ export const useUploadFileManager = (opts: UseUploadFileManagerProps) => {
                     throw error;
                 });
         }
+
+        return Promise.reject(new Error('File is invalid'));
     };
 
     const initialValues = React.useMemo(() => {
