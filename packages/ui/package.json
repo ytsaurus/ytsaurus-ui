@@ -216,6 +216,8 @@
   },
   "gitHead": "aba657f50f894370eaef7f27d5083386e218afe8",
   "overrides": {
+    "dayjs": "$dayjs",
+    "rbush": "$rbush",
     "axios": "$axios",
     "react-split-pane": {
       "react": "$react",
