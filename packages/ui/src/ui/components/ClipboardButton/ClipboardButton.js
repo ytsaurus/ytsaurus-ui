@@ -107,6 +107,7 @@ export default class ClipboardButton extends Component {
                     {
                         'visbile-on-row-hover': visibleOnRowHover,
                         'inline-margin': inlineMargins,
+                        view: this.props.view,
                     },
                     className,
                 )}

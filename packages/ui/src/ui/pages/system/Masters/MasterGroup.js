@@ -2,9 +2,17 @@ import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
-import hammer from '../../../common/hammer';
+
+import {Flex} from '@gravity-ui/uikit';
+
+import format from '../../../common/hammer/format';
 import {getMastersHostType} from '../../../store/selectors/settings';
 import Icon from '../../../components/Icon/Icon';
+import {Secondary} from '../../../components/Text/Text';
+import {Tooltip} from '../../../components/Tooltip/Tooltip';
+import MetaTable from '../../../components/MetaTable/MetaTable';
+import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
+
 import {SwitchLeaderButton} from './SwitchLeader';
 import {Instance} from './Instance';
 
@@ -44,7 +52,6 @@ class MasterGroup extends Component {
         const {quorum, cellTag, cellId, instances} = this.props;
         const status = quorum ? quorum.status : 'unknown';
         const quorumTitle = quorum && `Leader committed version: ${quorum.leaderCommitedVersion}`;
-        const cellTitle = `Cell tag: ${cellTag}`;
         const icons = {
             quorum: 'check-circle',
             'weak-quorum': 'exclamation-circle',
@@ -58,6 +65,8 @@ class MasterGroup extends Component {
             unknown: 'unknown',
         };
 
+        const hexCellTag = format.Hex(cellTag);
+
         return (
             <Fragment>
                 {quorum && (
@@ -70,7 +79,7 @@ class MasterGroup extends Component {
                             <Icon face="solid" awesome={icons[status]} />
                         </div>
                         <div className={b('quorum-label')}>
-                            {hammer.format['Readable'](status, {
+                            {format.Readable(status, {
                                 delimiter: '-',
                             })}
                         </div>
@@ -81,16 +90,64 @@ class MasterGroup extends Component {
                     </Fragment>
                 )}
 
-                <div className={b('host', {quorum: true})}>
-                    <div className={b('quorum-version')} title={quorumTitle}>
-                        <span>{quorum && quorum.leaderCommitedVersion}</span>
+                {Boolean(quorum?.leaderCommitedVersion) || cellTag !== undefined ? (
+                    <div className={b('host', {quorum: true})}>
+                        <div className={b('quorum-version')} title={quorumTitle}>
+                            <span>{quorum && quorum.leaderCommitedVersion}</span>
+                        </div>
+                        <Flex alignItems="center">
+                            <Tooltip
+                                className={b('quorum-cell')}
+                                placement={['top', 'bottom']}
+                                content={
+                                    <MetaTable
+                                        items={[
+                                            {
+                                                key: 'Hexadecimal cell tag',
+                                                value: (
+                                                    <>
+                                                        {hexCellTag}{' '}
+                                                        <ClipboardButton
+                                                            view="clear"
+                                                            size="xs"
+                                                            text={hexCellTag}
+                                                        >
+                                                            {hexCellTag}
+                                                        </ClipboardButton>
+                                                    </>
+                                                ),
+                                            },
+                                            {
+                                                key: 'Decimal cell tag',
+                                                value: (
+                                                    <>
+                                                        {cellTag}{' '}
+                                                        <ClipboardButton
+                                                            view="clear"
+                                                            theme=""
+                                                            size="xs"
+                                                            text={cellTag}
+                                                        >
+                                                            {cellTag}
+                                                        </ClipboardButton>
+                                                    </>
+                                                ),
+                                            },
+                                        ]}
+                                    />
+                                }
+                            >
+                                {cellTag && (
+                                    <Icon className={b('icon-glyph')} face="solid" awesome="tag" />
+                                )}
+                                {hexCellTag}
+                                <Secondary> / </Secondary>
+                                {cellTag}
+                            </Tooltip>
+                            <SwitchLeaderButton cellId={cellId} hosts={instances} />
+                        </Flex>
                     </div>
-                    <div className={b('quorum-cell')} title={cellTitle}>
-                        {cellTag && <Icon className={b('icon-glyph')} face="solid" awesome="tag" />}
-                        {hammer.format['Hex'](cellTag)}
-                        {cellId && <SwitchLeaderButton cellId={cellId} hosts={instances} />}
-                    </div>
-                </div>
+                ) : null}
             </Fragment>
         );
     }
