@@ -3,7 +3,6 @@ import {createSelector} from 'reselect';
 import type {RootState} from '../../../reducers';
 import type {YtQueueStatus} from '../../../reducers/navigation/tabs/queue/types';
 
-const metaMock = {cell_id: '890', host: 'lbk-vla-249.search.yandex.net'};
 export const emptyRate = {'1m': 0, '1h': 0, '1d': 0};
 
 export const getFamily = (state: RootState) =>
@@ -69,7 +68,7 @@ export const getPartitions = createSelector(
         partitionsData
             ?.map((partition, index) => ({
                 ...partition,
-                meta: partition.meta ?? metaMock,
+                meta: partition.meta,
                 partition_index: index,
                 write_data_weight_rate: partition.write_data_weight_rate ?? emptyRate,
                 write_row_count_rate: partition.write_row_count_rate ?? emptyRate,
@@ -77,8 +76,8 @@ export const getPartitions = createSelector(
             ?.filter(
                 (partition) =>
                     partition.partition_index.toString(10).includes(queuePartitionIndex) &&
-                    partition.meta.host.includes(queueTabletCellHost) &&
-                    partition.meta.cell_id.includes(queueTabletCellId),
+                    partition?.meta?.host?.includes?.(queueTabletCellHost) &&
+                    partition?.meta?.cell_id?.includes?.(queueTabletCellId),
             ) ?? [],
 );
 
