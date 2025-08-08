@@ -1,5 +1,5 @@
 import React, {FC, PropsWithChildren, useCallback, useEffect, useMemo, useRef} from 'react';
-import {SelectEvent, Timeline, TimelineEvent} from '@gravity-ui/timeline';
+import {SelectEvent, Timeline, TimelineEvent, TimelineMarker} from '@gravity-ui/timeline';
 import {TimelineCanvas, useTimelineEvent} from '@gravity-ui/timeline/react';
 import {Flex} from '@gravity-ui/uikit';
 import {GroupCollapse, Props as GroupCollapseProps} from './GroupCollapse';
@@ -11,15 +11,18 @@ import {VirtualList} from '../../pages/query-tracker/Plan/components/List/Virtua
 
 import './TimelineBlock.scss';
 
+const MAX_LIST_VISIBLE_COUNT = 25;
+
 const block = cn('yt-events-block');
 
 type Interval = {from: number; to: number};
 
-type Props<TEvent extends TimelineEvent> = {
+type Props<TEvent extends TimelineEvent, TMarker extends TimelineMarker> = {
     group: {title: string; items: TimelineJob[]; listItems: string[]};
     rowHeight: number;
+    topPadding: number;
     className?: string;
-    timeline: Timeline<TEvent>;
+    timeline: Timeline<TEvent, TMarker>;
     filter: string;
     selectedJob: string;
     tooltip: (event?: TEvent) => React.ReactNode;
@@ -34,17 +37,18 @@ const Wrap: FC<PropsWithChildren<{collapse?: GroupCollapseProps}>> = ({children,
         <React.Fragment>{children}</React.Fragment>
     );
 
-export const TimelineBlock = <TEvent extends TimelineEvent>({
+export const TimelineBlock = <TEvent extends TimelineEvent, TMarker extends TimelineMarker>({
     className,
     timeline,
     group,
     filter,
     selectedJob,
     rowHeight,
+    topPadding,
     tooltip,
     onTimelineClick,
     onCameraChange,
-}: Props<TEvent>) => {
+}: Props<TEvent, TMarker>) => {
     const sidebarRef = useRef<HTMLDivElement>(null);
     const timelineWrapRef = useRef<HTMLDivElement>(null);
 
@@ -81,7 +85,9 @@ export const TimelineBlock = <TEvent extends TimelineEvent>({
         <Wrap collapse={{title: group.title}}>
             <Flex
                 className={block(null, className)}
-                style={{height: `${Math.min(group.listItems.length, 25) * rowHeight}px`}}
+                style={{
+                    height: `${Math.min(group.listItems.length, MAX_LIST_VISIBLE_COUNT) * rowHeight + topPadding}px`,
+                }}
             >
                 <VirtualList
                     className={block('list')}

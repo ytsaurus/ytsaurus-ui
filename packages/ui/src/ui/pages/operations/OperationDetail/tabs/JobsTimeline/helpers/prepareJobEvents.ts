@@ -111,6 +111,7 @@ export const prepareJobEvents = ({
                 endTime: job.finish_time,
                 address: job.address,
                 allocationId: job.allocationId,
+                incarnation: job.incarnation,
             },
         });
     }
