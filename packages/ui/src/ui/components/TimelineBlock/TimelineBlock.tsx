@@ -11,6 +11,7 @@ import hammer from '../../common/hammer';
 
 import './TimelineBlock.scss';
 import {getJobTrackId} from '../../pages/operations/OperationDetail/tabs/JobsTimeline/helpers/getJobTrackId';
+import {MarkerSelectEvent} from '@gravity-ui/timeline/build/types/events';
 
 const MAX_LIST_VISIBLE_COUNT = 25;
 
@@ -26,7 +27,8 @@ type Props<TEvent extends TimelineEvent, TMarker extends TimelineMarker> = {
     timeline: Timeline<TEvent, TMarker>;
     selectedJob: string;
     tooltip: (event?: TEvent) => React.ReactNode;
-    onTimelineClick: (events: SelectEvent) => void;
+    onTimelineClick: (events: SelectEvent<TEvent>) => void;
+    onMarkerClick: (markers: MarkerSelectEvent<TMarker>) => void;
     onCameraChange: (interval: Interval) => void;
 };
 
@@ -46,6 +48,7 @@ export const TimelineBlock = <TEvent extends TimelineEvent, TMarker extends Time
     topPadding,
     tooltip,
     onTimelineClick,
+    onMarkerClick,
     onCameraChange,
 }: Props<TEvent, TMarker>) => {
     const sidebarRef = useRef<HTMLDivElement>(null);
@@ -76,6 +79,8 @@ export const TimelineBlock = <TEvent extends TimelineEvent, TMarker extends Time
     useTimelineEvent(timeline, 'on-camera-change', onCameraChange);
 
     useTimelineEvent(timeline, 'on-select-change', onTimelineClick);
+
+    useTimelineEvent(timeline, 'on-marker-select-change', onMarkerClick);
 
     return (
         <Wrap>
