@@ -33,7 +33,12 @@ export const MetaData: FC<Props> = ({meta, showCopyButton, className}) => {
         <div className={block(null, className)}>
             {meta.allocationId && (
                 <>
-                    <Text color="secondary">AllocationId:</Text> <span>{meta.allocationId}</span>
+                    <Text color="secondary">Allocation id:</Text> <span>{meta.allocationId}</span>
+                </>
+            )}
+            {meta.incarnation && (
+                <>
+                    <Text color="secondary">Incarnation id:</Text> <span>{meta.incarnation}</span>
                 </>
             )}
             <Text color="secondary">Address:</Text>{' '}
