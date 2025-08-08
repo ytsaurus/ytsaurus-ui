@@ -37,6 +37,7 @@ type OperationJob = RawJob & {
     allocation_id?: string;
     job_cookie: number;
     task_name: string;
+    operation_incarnation: string;
 };
 
 export const getJobsWithEvents =
@@ -63,6 +64,7 @@ export const getJobsWithEvents =
                     'finish_time',
                     'address',
                     'allocation_id',
+                    'operation_incarnation',
                 ],
             });
 
@@ -92,6 +94,7 @@ export const getJobsWithEvents =
                     const timeLineJob: TimelineJob = {
                         id: job.id,
                         cookieId: job.job_cookie,
+                        incarnation: job.operation_incarnation,
                         allocationId: job.allocation_id,
                         groupName: job.task_name || '',
                         events: [],

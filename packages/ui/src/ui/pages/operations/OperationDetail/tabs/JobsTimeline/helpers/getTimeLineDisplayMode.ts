@@ -4,11 +4,17 @@ export const getTimeLineDisplayMode = ({
     jobId,
     filter = '',
     selectedJob = [],
+    selectedByIncarnation = false,
 }: {
     jobId: string;
     filter?: string;
     selectedJob?: string[];
+    selectedByIncarnation?: boolean;
 }): EventDisplayMode => {
+    if (selectedByIncarnation) {
+        return EventDisplayMode.FoundIncarnation;
+    }
+
     const hasFilter = Boolean(filter);
     const hasSelectedJobs = selectedJob && Boolean(selectedJob[0]);
     const matchesFilter = hasFilter && jobId.includes(filter);
