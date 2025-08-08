@@ -22,10 +22,12 @@ const AXIS_ID = 'main';
 export const prepareJobEvents = ({
     jobs,
     selectedJob = [],
+    selectedIncarnation = '',
     filter = '',
 }: {
     jobs: JobsTimelineState['jobs'];
     selectedJob?: string[];
+    selectedIncarnation?: string;
     filter?: string;
 }) => {
     // Process allocations
@@ -92,6 +94,13 @@ export const prepareJobEvents = ({
             phases: event.phases,
         }));
 
+        const displayMode = getTimeLineDisplayMode({
+            jobId: job.id,
+            filter,
+            selectedJob,
+            selectedByIncarnation: selectedIncarnation === job.incarnation,
+        });
+
         timelines.push({
             id: job.id,
             axisId: AXIS_ID,
@@ -101,16 +110,13 @@ export const prepareJobEvents = ({
             renderer: new JobLineRenderer(),
             jobId: job.id,
             parts,
-            displayMode: getTimeLineDisplayMode({
-                jobId: job.id,
-                filter,
-                selectedJob,
-            }),
+            displayMode,
             meta: {
                 startTime: job.start_time,
                 endTime: job.finish_time,
                 address: job.address,
                 allocationId: job.allocationId,
+                incarnation: job.incarnation,
             },
         });
     }

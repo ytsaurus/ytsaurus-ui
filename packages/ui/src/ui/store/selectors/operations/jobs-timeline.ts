@@ -6,6 +6,8 @@ export const selectLoading = (state: RootState) => state.operations.jobsTimeline
 export const selectInterval = (state: RootState) => state.operations.jobsTimeline.interval;
 export const selectFilter = (state: RootState) => state.operations.jobsTimeline.filter;
 export const selectActiveJob = (state: RootState) => state.operations.jobsTimeline.selectedJob;
+export const selectActiveIncarnation = (state: RootState) =>
+    state.operations.jobsTimeline.selectedIncarnation;
 export const selectJobsOverloadError = (state: RootState) =>
     state.operations.jobsTimeline.jobsCountError;
 export const selectError = (state: RootState) => state.operations.jobsTimeline.error;
