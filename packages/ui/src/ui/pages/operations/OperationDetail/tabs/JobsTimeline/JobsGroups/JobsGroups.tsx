@@ -25,6 +25,7 @@ import {ROW_HEIGHT} from '../constants';
 import './JobsGroups.scss';
 import {TimelineBlock} from '../../../../../../components/TimelineBlock/TimelineBlock';
 import {prepareAxis} from '../helpers/prepareAxes';
+import {prepareMarkers} from '../helpers/prepareMarkers';
 
 const block = cn('yt-timeline-event-group');
 
@@ -119,6 +120,7 @@ export const JobsGroups: FC = () => {
                             end: interval?.to || 0,
                             axes: prepareAxis(groups[name].items, 12),
                             events: [],
+                            markers: prepareMarkers(groups[name].items),
                             selectedEventIds: [],
                         },
                         viewConfiguration: {

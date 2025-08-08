@@ -28,6 +28,7 @@ export type JobLineEvent = TimelineEvent & {
         startTime: string;
         endTime?: string;
         address: string;
+        incarnation?: string;
     };
     displayMode: EventDisplayMode;
 };
