@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.14.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.13.0...javascript-wrapper-v0.14.0) (2025-08-08)
+
+
+### Features
+
+* add listOperationEvents method ([cb514a7](https://github.com/ytsaurus/ytsaurus-ui/commit/cb514a7e388628fb0f76db12ada1f7eb8a123164))
+
 ## [0.13.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.12.1...javascript-wrapper-v0.13.0) (2025-06-20)
 
 
