@@ -11,27 +11,26 @@ export const getAccountsTypeFilter = createWidgetDataFieldSelector<
     'favourite' | 'usable' | 'custom'
 >('type', 'favourite');
 
-const createGetAccountsList = (widgetId: string) =>
-    createSelector(
-        [
-            (state: RootState) => getAccountsTypeFilter(state, widgetId),
-            (state: RootState) => {
-                const cluster = getCluster(state);
-                return accountsApi.endpoints.usableAccounts.select({cluster})(state);
-            },
-            getFavouriteAccounts,
-            (_, custom) => custom,
-        ],
-        (type, usable, favourite, custom) => {
-            if (type === 'favourite') {
-                return favourite?.length ? favourite.map((item) => item?.path) : [];
-            }
-            if (type === 'usable') {
-                return usable?.data || [];
-            }
-            return custom;
-        },
-    );
+const getCustomAccountsList = (_state: RootState, _widgetId: string, custom: string[]) => custom;
 
-export const getAccountsList = (state: RootState, widgetId: string, custom: string[]): string[] =>
-    createGetAccountsList(widgetId)(state, custom);
+const getUsableAccountsImpl = (state: RootState, cluster: string) =>
+    accountsApi.endpoints.usableAccounts.select({cluster})(state)?.data;
+
+const getUsableAccounts = (state: RootState) => {
+    const cluster = getCluster(state);
+    return getUsableAccountsImpl(state, cluster);
+};
+
+export const getAccountsList = createSelector(
+    [getFavouriteAccounts, getUsableAccounts, getCustomAccountsList, getAccountsTypeFilter],
+    (favourite, usable, custom, type) => {
+        if (type === 'favourite') {
+            return favourite?.length ? favourite.map((item) => item?.path) : [];
+        }
+        if (type === 'usable') {
+            return usable || [];
+        }
+
+        return custom;
+    },
+);

@@ -10,7 +10,7 @@ import {
 
 import {FormApi, YTDFDialog} from '../../../../../components/Dialog';
 
-import hammer from '../../../../../common/hammer';
+import format from '../../../../../common/hammer/format';
 
 import {SettingsValues} from './SettingsValues';
 
@@ -42,9 +42,9 @@ export function WidgetSettings() {
     return (
         <YTDFDialog<SettingsValues>
             onAdd={onAdd}
-            key={item?.id}
+            key={`${item?.id}_${item?.type}`}
             headerProps={{
-                title: `${hammer.format['ReadableField'](item?.type + ' widget') || 'Widget'} settings`,
+                title: `${format.ReadableField(item?.type + ' widget') || 'Widget'} settings`,
             }}
             pristineSubmittable
             initialValues={item?.data}

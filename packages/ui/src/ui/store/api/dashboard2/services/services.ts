@@ -1,10 +1,12 @@
+import {BatchResultsItem} from './../../../../../shared/yt-types.d';
 import {BaseQueryApi} from '@reduxjs/toolkit/query';
 
 import map_ from 'lodash/map';
 import filter_ from 'lodash/filter';
 import find_ from 'lodash/find';
 
-import hammer from '../../../../common/hammer';
+import format from '../../../../common/hammer/format';
+import ypath from '../../../../common/thor/ypath';
 
 import {RootState} from '../../../../store/reducers';
 import {isDeveloper} from '../../../../store/selectors/global/is-developer';
@@ -12,12 +14,15 @@ import {isDeveloper} from '../../../../store/selectors/global/is-developer';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {getBatchError} from '../../../../utils/utils';
 import {StrawberryCliqueHealthType, chytApiAction} from '../../../../utils/strawberryControllerApi';
+import {defaultColumns} from '../../../../constants/chyt';
 import {YTHealth} from '../../../../types';
 import {Page} from '../../../../../shared/constants/settings';
+import {USE_MAX_SIZE} from '../../../../../shared/constants/yt-api';
+import {pluralize} from '../../../../utils';
 
 export type ServiceInfo = {
     general: {name: string; url: string};
-    type: 'bundle' | 'CHYT';
+    type: 'Bundle' | 'CHYT';
     status?: YTHealth | StrawberryCliqueHealthType;
     config: string;
 };
@@ -35,57 +40,112 @@ const makeItemLink = (type: 'chyt' | 'bundle', name: string, cluster: string) =>
 
 const bundlesRequests = (items: ServicesItem[]) => [
     {
-        command: 'exists' as const,
+        command: 'list' as const,
         parameters: {
-            path: '//sys/bundle_controller/orchid/bundle_controller/state/bundles',
+            path: '//sys/tablet_cells',
+            attributes: ['tablet_cell_bundle'],
+            ...USE_MAX_SIZE,
         },
     },
     ...map_(items, ({item}) => ({
         command: 'get' as const,
         parameters: {
             path: `//sys/tablet_cell_bundles/${item}`,
-            attributes: ['health', 'bundle_controller_target_config'],
+            attributes: ['health', 'bundle_controller_target_config', 'enable_bundle_controller'],
         },
     })),
 ];
 
-async function fetchBundles(items: ServicesItem[], cluster: string) {
-    const response = await ytApiV3Id.executeBatch(YTApiId.tabletCellBundles, {
-        parameters: {requests: bundlesRequests(items)},
-    });
+function makeServiceConfig(instances: number, memory: string, cpu: string) {
+    let config = '0 instances';
+    if (instances !== 0) {
+        config = `${instances} x (${memory}, ${cpu})`;
+    }
+    return config;
+}
 
-    const error = getBatchError(response, 'Tablet cell bundles cannot be loaded');
+type BundleControllerTargetConfig = {
+    tablet_node_resource_guarantee?: {
+        memory?: number;
+        vcpu?: number;
+    };
+    tablet_node_count?: number;
+};
+
+type BundleInfo = {
+    health?: YTHealth;
+    bundle_controller_target_config: BundleControllerTargetConfig;
+    enable_bundle_controller?: boolean;
+};
+
+type TabletCellInfo = {tablet_cell_bundle?: string};
+
+type TabletCellsResponse = Array<{$attributes: TabletCellInfo; $value?: string}>;
+
+type BundlesResponse = {
+    $attributes: BundleInfo;
+    $value?: string | null;
+};
+
+export type DashboardBundlesResponse = TabletCellsResponse | BundlesResponse;
+
+async function fetchBundles(items: ServicesItem[], cluster: string) {
+    const bundlesResponse = await ytApiV3Id.executeBatch<DashboardBundlesResponse>(
+        YTApiId.tabletCellBundles,
+        {
+            parameters: {requests: bundlesRequests(items)},
+        },
+    );
+
+    const error = getBatchError(bundlesResponse, 'Tablet cell bundles cannot be loaded');
     if (error) {
         throw error;
     }
 
-    const [isBundlesSupported, ...bundles] = response;
+    const [cells, ...bundles] = bundlesResponse;
 
-    if (!isBundlesSupported || !bundles?.length) return [];
-
-    const bundlesInfo = map_(bundles, ({output}, idx) => {
+    if (!bundlesResponse?.length) return [];
+    const bundlesInfo = map_(bundles || [], ({output}, idx) => {
         if (!output) {
             return undefined;
         }
 
-        const item = output?.$attributes;
+        const item = ypath.getAttributes(output) as BundleInfo;
 
-        const memory = hammer.format['Bytes'](
-            item?.bundle_controller_target_config?.tablet_node_resource_guarantee?.memory || '',
-        );
-        const cpu = hammer.format['vCores'](
-            item?.bundle_controller_target_config?.tablet_node_resource_guarantee?.vcpu || '',
-        );
-        const instances = item?.bundle_controller_target_config?.tablet_node_count;
+        let memory = format.NO_VALUE;
+        let cpu = format.NO_VALUE;
+        let instances = 0;
+
+        let config = '';
+        if (item?.enable_bundle_controller) {
+            memory = format.Bytes(
+                item?.bundle_controller_target_config?.tablet_node_resource_guarantee?.memory ||
+                    format.NO_VALUE,
+            );
+            cpu = format.vCores(
+                item?.bundle_controller_target_config?.tablet_node_resource_guarantee?.vcpu ||
+                    format.NO_VALUE,
+            );
+            instances = Number(item?.bundle_controller_target_config?.tablet_node_count || 0);
+            config = makeServiceConfig(instances, memory, cpu);
+        } else {
+            const cellsCount =
+                (cells as BatchResultsItem<TabletCellsResponse>)?.output?.filter?.(
+                    (cell) =>
+                        (ypath.getAttributes(cell) as TabletCellInfo)?.tablet_cell_bundle ===
+                        items?.[idx]?.item,
+                )?.length || 0;
+            config = `${cellsCount} tablet ${pluralize(cellsCount, 'cell', 'cells')}`;
+        }
 
         return {
-            type: 'bundle' as const,
+            type: 'Bundle' as const,
             general: {
                 name: items?.[idx]?.item || 'unknown',
                 url: makeItemLink('bundle', items?.[idx]?.item || 'unknown', cluster),
             },
-            status: item?.health as YTHealth,
-            config: `${instances} x (${memory}, ${cpu})`,
+            status: item?.health,
+            config,
         };
     }).filter(Boolean) as ServiceInfo[];
 
@@ -93,42 +153,79 @@ async function fetchBundles(items: ServicesItem[], cluster: string) {
 }
 
 async function fetchChyt(items: ServicesItem[], cluster: string, isAdmin: boolean) {
-    const cliquesResponses = await Promise.all(
-        map_(items, ({item}) => chytApiAction('get_brief_info', cluster, {alias: item}, {isAdmin})),
+    if (!items?.length) {
+        return [];
+    }
+
+    const cliquesList = await chytApiAction(
+        'list',
+        cluster,
+        {
+            attributes: [
+                'yt_operation_id' as const,
+                'creator' as const,
+                'state' as const,
+                'health' as const,
+                'health_reason' as const,
+                ...defaultColumns,
+            ],
+        },
+        {isAdmin},
     );
 
-    const cliques = map_(cliquesResponses, ({result: item}, idx) => {
-        const cpu = `${item.ctl_attributes?.total_cpu} ${item.ctl_attributes?.total_cpu && item.ctl_attributes?.total_cpu > 1 ? 'cores' : 'core'}`;
-        const memory = hammer.format['Bytes'](item.ctl_attributes?.total_memory || '');
-        const instances = item.ctl_attributes?.instance_count || 0;
-        const alias = items?.[idx]?.item || 'unknown';
+    const cliquesResponses = cliquesList.result
+        .map((item) => [ypath.getValue(item), ypath.getAttributes(item)])
+        .filter(([alias]) => items.map((i) => i.item).includes(alias));
+
+    const cliques = map_(cliquesResponses, ([alias, item]) => {
+        const instances = Number(item?.instance_count || 0);
+        const cpu = `${(item?.total_cpu || 0) / instances} ${item?.total_cpu && item?.total_cpu > 1 ? 'cores' : 'core'}`;
+        const memory = format.Bytes((item?.total_memory || 0) / instances || format.NO_VALUE);
+
         return {
             type: 'CHYT' as const,
             general: {
-                name: alias,
+                name: alias || 'unkwnown',
                 url: makeItemLink('chyt', alias, cluster),
             },
             status: item?.health,
-            config: `${instances} x (${memory}, ${cpu})`,
+            config: makeServiceConfig(instances, memory, cpu),
         };
     });
 
     return cliques;
 }
 
-export async function fetchServices(
-    args: {cluster: string; items?: ServicesItem[]},
-    api: BaseQueryApi,
-) {
+type FetchServicesArgs = {
+    type: 'favourite' | 'custom';
+    id: string;
+    cluster: string;
+    customItems?: ServicesItem[];
+    favouriteCliques: Array<{item: string; path: string}>;
+    favouriteBundles: Array<{item: string; path: string}>;
+};
+
+export async function fetchServices(args: FetchServicesArgs, api: BaseQueryApi) {
     try {
-        const {cluster, items} = args;
+        const {type, cluster, customItems, favouriteCliques, favouriteBundles} = args;
 
         const state = api.getState() as RootState;
         const isAdmin = isDeveloper(state);
 
+        let items: ServicesItem[] = [];
+
+        if (type === 'favourite') {
+            items = [
+                ...favouriteCliques.map((clique) => ({service: 'chyt', item: clique.path})),
+                ...favouriteBundles.map((bundle) => ({service: 'bundle', item: bundle.path})),
+            ];
+        } else {
+            items = customItems || [];
+        }
+
         const requestedCliques = filter_(items, ({service}) => service === 'chyt');
         const requestedBundles = filter_(items, ({service}) => service === 'bundle');
-        //Boolean(getClusterUiConfig(state).chyt_controller_base_url)
+
         const cliques = await fetchChyt(requestedCliques, cluster, isAdmin);
         const bundles = await fetchBundles(requestedBundles, cluster);
 

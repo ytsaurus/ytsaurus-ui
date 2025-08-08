@@ -23,7 +23,7 @@ export function NodesColumnHeader(
     return (
         <ColumnHeader
             {...props}
-            column={props.options ? column?.column ?? props.column : props.column}
+            column={props.options ? (column?.column ?? props.column) : props.column}
             order={column ? order : undefined}
             onSort={(columnName) => {
                 const colInfo = props.options?.find(({column}) => columnName === column);

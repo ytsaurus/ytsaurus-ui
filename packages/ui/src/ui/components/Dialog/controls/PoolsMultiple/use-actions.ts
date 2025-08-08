@@ -12,6 +12,10 @@ export function useActions(value: PoolPair[], onChange: (v: PoolPair[]) => void)
     };
 
     const updateTree = (index: number, newTree: string) => {
+        if (!newTree) {
+            removePair(index);
+            return;
+        }
         const newValue = [...value];
         newValue[index] = {
             ...newValue[index],

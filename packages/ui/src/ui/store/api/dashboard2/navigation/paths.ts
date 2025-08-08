@@ -1,8 +1,6 @@
 import {BaseQueryApi} from '@reduxjs/toolkit/query';
 import map_ from 'lodash/map';
 
-import {RootState} from '../../../reducers';
-import {getFavouritePaths, getLastVisitedPaths} from '../../../selectors/favourites';
 import {ytApiV3} from '../../../../rum/rum-wrap-api';
 
 function makePathsAttributesRequests(paths: string[]) {
@@ -24,16 +22,31 @@ function makePathsAttributesRequests(paths: string[]) {
 
 type PathsType = 'last_visited' | 'favourite';
 
-export async function fetchPaths(args: {cluster: string; type: PathsType}, api: BaseQueryApi) {
+type FetchPathsArgs = {
+    cluster: string;
+    type: PathsType;
+    id: string;
+    favouritePaths: Array<{item: string; path: string}>;
+    lastVisitedPaths: Array<{item: string; path: string}>;
+};
+
+export type DashboardNavigationResponse = {
+    path: string;
+    type: string;
+    target_path?: string;
+    sorted?: boolean;
+    dynamic?: boolean;
+    treat_as_queue_consumer?: boolean;
+    treat_as_queue_producer?: boolean;
+};
+
+export async function fetchPaths(args: FetchPathsArgs, _api: BaseQueryApi) {
     try {
-        const {type} = args;
-        const state = api.getState() as RootState;
-        const lastVisited = getLastVisitedPaths(state);
-        const favourites = getFavouritePaths(state);
+        const {type, lastVisitedPaths, favouritePaths} = args;
 
-        const paths = type === 'last_visited' ? lastVisited : favourites;
+        const paths = type === 'last_visited' ? lastVisitedPaths : favouritePaths;
 
-        const response = await ytApiV3.executeBatch<{type: string; target_path?: string}>({
+        const response = await ytApiV3.executeBatch<DashboardNavigationResponse>({
             parameters: {
                 requests: makePathsAttributesRequests(map_(paths, (item) => item?.path)),
             },

@@ -1,5 +1,5 @@
+import {useMemo} from 'react';
 import {useSelector} from 'react-redux';
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
 
 import map_ from 'lodash/map';
 
@@ -10,8 +10,11 @@ import {
     getQueryFilterState,
 } from '../../../../../../store/selectors/dashboard2/queries';
 
+import {defaultDashboardItems} from '../../../../../../constants/dashboard2';
+
 import {QueryEngine} from '../../../../../../../shared/constants/engines';
 import {ListQueriesParams} from '../../../../../../../shared/yt-types';
+import {QueriesWidgetProps} from '../types';
 
 const mapQueryStateToRequestStates: Record<string, string[]> = {
     running: ['running', 'pending'],
@@ -20,15 +23,11 @@ const mapQueryStateToRequestStates: Record<string, string[]> = {
     aborted: ['aborting', 'aborted'],
 };
 
-export type Author = {
-    value: string;
-    type: 'users';
-};
-
-export function useQueriesWidget(props: PluginWidgetProps) {
+export function useQueriesWidget(props: QueriesWidgetProps) {
     const {id: widgetId, data} = props;
 
-    const users = map_(data?.authors as Array<Author>, ({value}) => value);
+    const users = map_(data?.authors, ({value}) => value);
+    const limit = data?.limit?.value || 0;
 
     const queryState = useSelector((state: RootState) => getQueryFilterState(state, widgetId));
     const engine = useSelector((state: RootState) => getQueryFilterEngine(state, widgetId));
@@ -39,23 +38,31 @@ export function useQueriesWidget(props: PluginWidgetProps) {
         queryEngine = QueryEngine.YT_QL;
     }
 
-    let requestedStates: string[] | undefined = queryState ? [queryState] : undefined;
+    const requestedStates: string[] | undefined = useMemo(() => {
+        if (!queryState) {
+            return undefined;
+        }
 
-    if (queryState && mapQueryStateToRequestStates[queryState]) {
-        requestedStates = mapQueryStateToRequestStates[queryState];
-    }
+        if (mapQueryStateToRequestStates[queryState]) {
+            return mapQueryStateToRequestStates[queryState];
+        }
 
-    const makeRequests = (states: string[] | undefined) => {
-        if (states?.length) {
+        return [queryState];
+    }, [queryState]);
+
+    // TODO: move requests comptations to api
+    const requests = useMemo(() => {
+        if (requestedStates?.length) {
             const requests: ListQueriesParams[] = [];
 
             users.forEach((user) => {
                 requests.push(
-                    ...map_(states, (state) => ({
+                    ...map_(requestedStates, (state) => ({
                         engine: queryEngine,
                         state,
                         user,
                         output_format: 'json',
+                        limit: limit ?? defaultDashboardItems.queries.data.limit,
                     })),
                 );
             });
@@ -66,16 +73,16 @@ export function useQueriesWidget(props: PluginWidgetProps) {
             engine: queryEngine?.length ? queryEngine : undefined,
             user,
             output_format: 'json',
-            limit: 10,
+            limit: limit ?? defaultDashboardItems.queries.data.limit,
         }));
-    };
+    }, [limit, queryEngine, requestedStates, users]);
 
     const {
         data: queries,
         error,
         isLoading,
         isFetching,
-    } = useListQueries(makeRequests(requestedStates));
+    } = useListQueries({id: widgetId, requests}, {refetchOnMountOrArgChange: true});
 
-    return {queries, error, isLoading, isFetching};
+    return {queries, error, isLoading: isLoading || isFetching};
 }

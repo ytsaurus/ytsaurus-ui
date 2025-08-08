@@ -2,21 +2,39 @@ import React from 'react';
 
 import {DashKit, PluginWidgetProps} from '@gravity-ui/dashkit';
 
+import {defaultDashboardItems} from '../../../../constants/dashboard2';
+
 import {WidgetBase} from '../components/WidgetBase/WidgetBase';
 
 import {NavigationWidgetContent} from '../Widgets/Navigation/NavigationWidgetContent/NavigationWidgetContent';
 import {NavigationWidgetControls} from '../Widgets/Navigation/NavigationWidgetControls/NavigationWidgetControls';
+import {NavigationWidgetHeader} from '../Widgets/Navigation/NavigationWidgetHeader/NavigationWidgetHeader';
 import {OperationsWidgetContent} from '../Widgets/Operations/OperationsWidgetContent/OperationsWidgetContent';
 import {OperationsWidgetControls} from '../Widgets/Operations/OperationsWidgetControls/OperationsWidgetControls';
+import {OperationsWidgetHeader} from '../Widgets/Operations/OperationsWidgetHeader/OperationsWidgetHeader';
 import {AccountsWidgetContent} from '../Widgets/Accounts/AccountsWidgetContent/AccountsWidgetContent';
 import {AccountsWidgetControls} from '../Widgets/Accounts/AccountsWidgetControls/AccountsWidgetControls';
+import {AccountsWidgetHeader} from '../Widgets/Accounts/AccountsWidgetHeader/AccountsWidgetHeader';
 import {PoolsWidgetContent} from '../Widgets/Pools/PoolsWidgetContent/PoolsWidgetContent';
+import {PoolsWidgetControls} from '../Widgets/Pools/PoolsWidgetControls/PoolsWidgetControls';
+import {PoolsWidgetHeader} from '../Widgets/Pools/PoolsWidgetHeader/PoolsWidgetHeader';
 import {QueriesWidgetControls} from '../Widgets/Queries/QueriesWidgetControls/QueriesWidgetControls';
 import {QueriesWidgetContent} from '../Widgets/Queries/QueriesWidgetContent/QueriesWidgetContent';
+import {QueriesWidgetHeader} from '../Widgets/Queries/QueriesWidgetHeader/QueriesWidgetHeader';
 import {ServicesWidgetContent} from '../Widgets/Services/ServicesWidgetContent/ServicesWidgetContent';
-import {defaultDashboardItems} from '../../../../constants/dashboard2';
+import {ServicesWidgetControls} from '../Widgets/Services/ServicesWidgetControls/ServicesWidgetControls';
+import {ServicesWidgetHeader} from '../Widgets/Services/ServicesWidgetHeader/ServicesWidgetHeader';
+import type {OperationsWidgetProps} from '../Widgets/Operations/types';
+import type {PoolsWidgetProps} from '../Widgets/Pools/types';
+import type {QueriesWidgetProps} from '../Widgets/Queries/types';
+import type {ServicesWidgetProps} from '../Widgets/Services/types';
 
 export function registerPlugins() {
+    DashKit.setSettings({
+        gridLayout: {
+            margin: [8, 8],
+        },
+    });
     DashKit.registerPlugins({
         type: 'navigation',
         defaultLayout: {
@@ -27,8 +45,7 @@ export function registerPlugins() {
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
                 {...props}
-                title="Navigation"
-                type="navigation"
+                header={<NavigationWidgetHeader {...props} />}
                 controls={<NavigationWidgetControls {...props} />}
                 content={<NavigationWidgetContent {...props} />}
             />
@@ -45,10 +62,9 @@ export function registerPlugins() {
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
                 {...props}
-                title="Operations"
-                type="operations"
-                controls={<OperationsWidgetControls {...props} />}
-                content={<OperationsWidgetContent {...props} />}
+                header={<OperationsWidgetHeader {...(props as OperationsWidgetProps)} />}
+                controls={<OperationsWidgetControls {...(props as OperationsWidgetProps)} />}
+                content={<OperationsWidgetContent {...(props as OperationsWidgetProps)} />}
             />
         ),
     });
@@ -63,10 +79,9 @@ export function registerPlugins() {
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
                 {...props}
-                title="Accounts"
-                type="accounts"
                 content={<AccountsWidgetContent {...props} />}
                 controls={<AccountsWidgetControls {...props} />}
+                header={<AccountsWidgetHeader {...props} />}
             />
         ),
     });
@@ -81,9 +96,9 @@ export function registerPlugins() {
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
                 {...props}
-                title="Pools"
-                type="pools"
-                content={<PoolsWidgetContent {...props} />}
+                header={<PoolsWidgetHeader {...(props as PoolsWidgetProps)} />}
+                content={<PoolsWidgetContent {...(props as PoolsWidgetProps)} />}
+                controls={<PoolsWidgetControls {...(props as PoolsWidgetProps)} />}
             />
         ),
     });
@@ -98,10 +113,9 @@ export function registerPlugins() {
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
                 {...props}
-                title="Queries"
-                type="queries"
-                controls={<QueriesWidgetControls {...props} />}
-                content={<QueriesWidgetContent {...props} />}
+                header={<QueriesWidgetHeader {...(props as QueriesWidgetProps)} />}
+                controls={<QueriesWidgetControls {...(props as QueriesWidgetProps)} />}
+                content={<QueriesWidgetContent {...(props as QueriesWidgetProps)} />}
             />
         ),
     });
@@ -116,9 +130,9 @@ export function registerPlugins() {
         renderer: (props: PluginWidgetProps) => (
             <WidgetBase
                 {...props}
-                title="Serviсes"
-                type="services"
-                content={<ServicesWidgetContent {...props} />}
+                header={<ServicesWidgetHeader {...(props as ServicesWidgetProps)} />}
+                content={<ServicesWidgetContent {...(props as ServicesWidgetProps)} />}
+                controls={<ServicesWidgetControls {...(props as ServicesWidgetProps)} />}
             />
         ),
     });
