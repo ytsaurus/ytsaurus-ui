@@ -1,32 +1,33 @@
 import React from 'react';
 import {AxiosError} from 'axios';
 import {useSelector} from 'react-redux';
-import {Alert, Card, Disclosure, Flex, Loader, Text} from '@gravity-ui/uikit';
+import {Alert, Card, Disclosure, Flex, Loader} from '@gravity-ui/uikit';
 
-// import ypath from '../../../../../common/thor/ypath';
-
+import {getOperation} from '../../../../../store/selectors/operations/operation';
 import {getIncarnationsInfo} from '../../../../../store/selectors/operations/incarnations';
 import {RootState} from '../../../../../store/reducers';
 
 import {YTErrorBlock} from '../../../../../components/Error/Error';
+
+import UIFactory from '../../../../../UIFactory';
+
 import {IncarnationMeta} from './IncarnationMeta';
 import {IncarnationCardHeader} from './IncarnationCardHeader';
 import {IncarnationsToolbar} from './IncarnationsToolbar';
 import {IncarnationsCount} from './IncarnationsCount';
-// import {FailReasons} from './FailReasons';
 
 import {incarnationCn, incarnationInfoCn} from './constants';
 
 import './Incarnations.scss';
 
-type Props = {
-    operationId: string;
-};
+export function Incarnations() {
+    const operation = useSelector(getOperation);
 
-export function Incarnations({operationId}: Props) {
     const {incarnations, error, isLoading} = useSelector((state: RootState) =>
-        getIncarnationsInfo(state, {operation_id: operationId, event_type: 'incarnation_started'}),
+        getIncarnationsInfo(state, {operation_id: operation.id, event_type: 'incarnation_started'}),
     );
+
+    const telemetrySetup = UIFactory.IncarnationsTelemetrySetup;
 
     if (error) {
         return <YTErrorBlock error={error as AxiosError} />;
@@ -41,7 +42,7 @@ export function Incarnations({operationId}: Props) {
             ) : (
                 <Flex direction={'column'} gap={2}>
                     <IncarnationsToolbar />
-                    <IncarnationsCount operationId={operationId} />
+                    <IncarnationsCount />
                     {incarnations?.length ? (
                         incarnations.map((incarnation) => (
                             <Card key={incarnation.id} view={'outlined'} className={incarnationCn}>
@@ -51,9 +52,13 @@ export function Incarnations({operationId}: Props) {
                                         direction={'row'}
                                         justifyContent={'space-between'}
                                         className={incarnationInfoCn}
+                                        basis={3}
                                     >
                                         <IncarnationMeta incarnation={incarnation} />
-                                        {/* <FailReasons operation={operation} /> */}
+                                        {telemetrySetup?.hasTelemtery(operation) &&
+                                            telemetrySetup?.renderInfo({
+                                                incarnationId: incarnation.id,
+                                            })}
                                     </Flex>
                                 </Disclosure>
                             </Card>

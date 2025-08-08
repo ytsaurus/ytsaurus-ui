@@ -10,19 +10,18 @@ $item-margin: 30px;
         padding: var(--g-spacing-3);
     }
     &__incarnation-button {
+        width: fit-content;
         --g-button-background-color-hover: transparent;
         --g-button-padding: 0;
     }
+
     &__incarnation-info {
         margin-top: 15px;
     }
-    &__fail-reasons {
-        width: 50%;
-    }
 
-    &__reason {
-        padding: var(--g-spacing-3);
-    }
+    // &__reason {
+    //     padding: var(--g-spacing-3);
+    // }
 
     &__details {
         @include error-details;

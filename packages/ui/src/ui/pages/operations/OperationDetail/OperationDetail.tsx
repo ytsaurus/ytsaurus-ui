@@ -433,10 +433,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                     {jobsMonitorIsSupported && (
                         <Route path={`${path}/${Tab.JOBS_MONITOR}`} component={JobsMonitor} />
                     )}
-                    <Route
-                        path={`${path}/${Tab.INCARNATIONS}`}
-                        render={() => <Incarnations operationId={operationId} />}
-                    />
+                    <Route path={`${path}/${Tab.INCARNATIONS}`} render={() => <Incarnations />} />
                     <Route path={`${path}/:tab`} component={Placeholder} />
                     <Redirect from={url} to={`${path}/${DEFAULT_TAB}`} />
                 </Switch>
@@ -526,8 +523,6 @@ const mapStateToProps = (state: RootState, routerProps: RouteProps) => {
 
     const monitorTabVisible = Boolean(monitoringComponent) || Boolean(monitorTabUrlTemplate);
 
-    const pyDLTelemetryTabVisible = Boolean(UIFactory.PyDLTelemetrySetup?.hasTelemtery(operation));
-
     return {
         cluster: getCurrentCluster(state),
         operation,
@@ -544,7 +539,6 @@ const mapStateToProps = (state: RootState, routerProps: RouteProps) => {
         monitorTabTitle,
         monitorTabUrlTemplate,
         monitoringComponent,
-        pyDLTelemetryTabVisible,
         timelineTabVisible: getSettingsTimelineTabVisible(state),
         jobsMonitorIsSupported: Boolean(UIFactory.getMonitorComponentForJob()),
         jobsMonitorVisible: getJobsMonitorTabVisible(state),

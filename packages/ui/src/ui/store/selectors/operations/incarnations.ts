@@ -82,7 +82,7 @@ export const getIncarnationsInfo = createSelector(
         }
 
         if (idFilter) {
-            incarnations = incarnations.filter((inc) => inc.id.startsWith(idFilter));
+            incarnations = incarnations.filter((inc) => inc.id.startsWith(idFilter)).reverse();
         }
 
         return {incarnations, isLoading, error: error as YTError | undefined};
