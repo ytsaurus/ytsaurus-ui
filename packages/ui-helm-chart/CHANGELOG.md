@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.6.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ytsaurus-ui-chart-v0.5.0...ytsaurus-ui-chart-v0.6.0) (2025-08-08)
+
+
+### Features
+
+* **ui-helm-chart:** add ability to specify nodePort ([b4dde38](https://github.com/ytsaurus/ytsaurus-ui/commit/b4dde38a0ec1dee964d124dcbdc4ab7d52590573))
+
+
+### Bug Fixes
+
+* **ui-helm-chart:** minor fix for ci ([01ca584](https://github.com/ytsaurus/ytsaurus-ui/commit/01ca584373e45111045f2450215c627f55d9702e))
+* **ui-helm-chart:** minor fix for ci ([e2fc6bf](https://github.com/ytsaurus/ytsaurus-ui/commit/e2fc6bf7f012f0c4e7f828ca2afc641c58566269))
+* **ui-helm-chart:** minor fix for ci [YTFRONT-5125] ([e6b911b](https://github.com/ytsaurus/ytsaurus-ui/commit/e6b911ba71dc657f65042b61269c1d275628c748))
+* **ui-helm-chart:** publish as oci://ghcr.io/ytsaurus/ui-chart ([5443146](https://github.com/ytsaurus/ytsaurus-ui/commit/54431462310f9be527e2c6a91401b93e290139b5))
+
 ## [0.5.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ytsaurus-ui-chart-v0.4.0...ytsaurus-ui-chart-v0.5.0) (2025-08-04)
 
 
