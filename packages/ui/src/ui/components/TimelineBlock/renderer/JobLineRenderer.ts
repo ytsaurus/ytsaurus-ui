@@ -27,6 +27,7 @@ export type JobLineEvent = TimelineEvent & {
         startTime: string;
         endTime?: string;
         address: string;
+        incarnation?: string;
     };
     displayMode: EventDisplayMode;
 };
@@ -56,6 +57,10 @@ export class JobLineRenderer extends AbstractEventRenderer {
 
         if (displayMode === EventDisplayMode.Found) {
             this.renderFilterBackground(ctx, x0, x1, y0, h);
+        }
+
+        if (displayMode === EventDisplayMode.FoundIncarnation) {
+            this.renderIncarnationBackground(ctx, x0, x1, y0, h);
         }
 
         let startX = x0;
@@ -118,17 +123,17 @@ export class JobLineRenderer extends AbstractEventRenderer {
         y: number,
         h: number,
     ) {
-        const borderThickness = SELECTION_OUTLINE_THICKNESS;
+        this.renderBackground(ctx, x0, x1, y, h, 'rgba(255, 219, 77)');
+    }
 
-        ctx.beginPath();
-        ctx.rect(
-            x0 - borderThickness,
-            y - borderThickness,
-            x1 - x0 + borderThickness * 2,
-            h + borderThickness * 2,
-        );
-        ctx.fillStyle = 'rgba(255, 219, 77)';
-        ctx.fill();
+    renderIncarnationBackground(
+        ctx: CanvasRenderingContext2D,
+        x0: number,
+        x1: number,
+        y: number,
+        h: number,
+    ) {
+        this.renderBackground(ctx, x0, x1, y, h, 'rgb(244,94,2)');
     }
 
     renderSelectedBorder(
@@ -177,5 +182,26 @@ export class JobLineRenderer extends AbstractEventRenderer {
 
     getFixedXCoordinates(x0: number, x1: number) {
         return x1 - x0 < MIN_LINE_WIDTH ? {x0, x1: x0 + MIN_LINE_WIDTH} : {x0, x1};
+    }
+
+    private renderBackground(
+        ctx: CanvasRenderingContext2D,
+        x0: number,
+        x1: number,
+        y: number,
+        h: number,
+        fillColor: string,
+    ) {
+        const borderThickness = SELECTION_OUTLINE_THICKNESS;
+
+        ctx.beginPath();
+        ctx.rect(
+            x0 - borderThickness,
+            y - borderThickness,
+            x1 - x0 + borderThickness * 2,
+            h + borderThickness * 2,
+        );
+        ctx.fillStyle = fillColor;
+        ctx.fill();
     }
 }
