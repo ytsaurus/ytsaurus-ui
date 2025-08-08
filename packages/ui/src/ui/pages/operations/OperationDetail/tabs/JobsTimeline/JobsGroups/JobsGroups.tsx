@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useEffect, useMemo, useRef} from 'react';
 import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from 'react-redux';
-import {SelectEvent, Timeline, TimelineState} from '@gravity-ui/timeline';
+import {SelectEvent, Timeline, TimelineMarker, TimelineState} from '@gravity-ui/timeline';
 import {
     selectActiveJob,
     selectFilter,
@@ -25,6 +25,7 @@ import {ROW_HEIGHT} from '../constants';
 import './JobsGroups.scss';
 import {TimelineBlock} from '../../../../../../components/TimelineBlock/TimelineBlock';
 import {prepareAxis} from '../helpers/prepareAxes';
+import {prepareMarkers} from '../helpers/prepareMarkers';
 
 const block = cn('yt-timeline-event-group');
 
@@ -117,14 +118,18 @@ export const JobsGroups: FC = () => {
                         settings: {
                             start: interval?.from || 0,
                             end: interval?.to || 0,
-                            axes: prepareAxis(groups[name].items, 12),
+                            axes: prepareAxis(groups[name].items, 12, 15),
                             events: [],
+                            markers: prepareMarkers(groups[name].items),
                             selectedEventIds: [],
                         },
                         viewConfiguration: {
                             axes: {
                                 trackHeight: ROW_HEIGHT,
                                 lineHeight: 12,
+                            },
+                            markers: {
+                                collapseMinDistance: 10,
                             },
                             hideRuler: true,
                         },
@@ -155,13 +160,15 @@ export const JobsGroups: FC = () => {
             <div className={block('wrap')}>
                 {timelinesCollection.map(({name, timeline}) => {
                     return (
-                        <TimelineBlock<JobLineEvent | AllocationLineEvent>
+                        <TimelineBlock<JobLineEvent | AllocationLineEvent, TimelineMarker>
+                            className={block('block')}
                             key={name}
                             timeline={timeline}
                             group={groups[name]}
                             filter={filter}
                             selectedJob={timelineId}
                             rowHeight={ROW_HEIGHT}
+                            topPadding={15}
                             tooltip={handleMakeTimelineContent}
                             onCameraChange={handleBoundsChanged}
                             onTimelineClick={handleTimeLineClick}

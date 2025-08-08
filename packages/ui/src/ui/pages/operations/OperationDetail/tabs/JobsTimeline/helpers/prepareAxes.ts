@@ -3,9 +3,9 @@ import {TimelineAxis} from '@gravity-ui/timeline';
 
 export const AXIS_ID = 'main';
 
-type Props = (jobs: TimelineJob[], axesRowHeight: number) => TimelineAxis[];
+type Props = (jobs: TimelineJob[], axesRowHeight: number, topPadding: number) => TimelineAxis[];
 
-export const prepareAxis: Props = (jobs, axesRowHeight = 0) => {
+export const prepareAxis: Props = (jobs, axesRowHeight, topPadding) => {
     const validJobs = jobs.filter((job) => job.cookieId !== undefined);
 
     const cookieIdSet = new Set<string>();
@@ -18,7 +18,7 @@ export const prepareAxis: Props = (jobs, axesRowHeight = 0) => {
         {
             id: AXIS_ID,
             tracksCount: cookieIdSet.size,
-            top: 0,
+            top: topPadding,
             height: axesRowHeight,
         },
     ];

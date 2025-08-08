@@ -18,6 +18,7 @@ export type JobEvent = {
 export type TimelineJob = {
     id: string;
     cookieId: number;
+    incarnation?: string;
     allocationId?: string;
     groupName: string;
     events: JobEvent[];
