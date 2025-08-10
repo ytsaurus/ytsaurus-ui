@@ -31,7 +31,7 @@ import {
     selectQueryResults,
 } from './selectors';
 import {getPointValue} from '../../QueryResultsVisualization/preparers/getPointData';
-import {ChartKitWidgetAxisType} from '@gravity-ui/chartkit/build/types/widget-data/axis';
+import type {ChartKitWidgetAxisType} from '@gravity-ui/chartkit/build/types/widget-data/axis';
 import {selectIsMultipleAco} from '../query_aco/selectors';
 import cloneDeep_ from 'lodash/cloneDeep';
 import {loadQueryResult} from '../query_result/actions';

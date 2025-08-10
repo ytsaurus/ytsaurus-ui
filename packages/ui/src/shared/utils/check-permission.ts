@@ -1,6 +1,7 @@
 import {YT_API_REQUEST_ID_HEADER} from '../constants';
 import {FIX_MY_TYPE} from '../../@types/types';
 import {BatchResultsItem, BatchSubRequest, YTPermissionType} from '../yt-types';
+import {YTApiIdType} from '../constants/yt-api-id';
 
 const yt = require('@ytsaurus/javascript-wrapper')();
 
@@ -44,7 +45,7 @@ function checkUserPermissionByAcl(
     }) as Promise<Array<BatchResultsItem<CheckPermissionResult>>>;
 }
 
-export function checkIsDeveloper(login: string, setup: unknown, ytApiId: string) {
+export function checkIsDeveloper(login: string, setup: unknown, ytApiId: YTApiIdType) {
     return checkUserPermissionByAcl('admins', login, ['write'], setup, ytApiId)
         .then((d) => {
             const {output} = d[0];

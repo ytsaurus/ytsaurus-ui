@@ -21,7 +21,9 @@ export function NoContent({warning, hint, className, padding, imageSize}: Props)
         <Flex className={block({padding}, className)} alignItems="center" justifyContent="center">
             <NotFound height={imageSize || 140} width={imageSize || 140} />
             <div className={block('text')}>
-                <b className={block('warning')}>{warning}</b>
+                <div>
+                    <b className={block('warning')}>{warning}</b>
+                </div>
                 <Text variant={'subheader-2'} color={'primary'}>
                     {hint}
                 </Text>

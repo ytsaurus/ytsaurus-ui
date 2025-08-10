@@ -9,7 +9,7 @@ import {YTErrorBlock} from '../../../components/Error/Error';
 import OperationsListTable from './OperationsListTable/OperationsListTable';
 import OperationsListToolbar from './OperationsListToolbar/OperationsListToolbar';
 import {updateOperationsByParams} from '../../../store/actions/operations/list';
-import {useMemoizedIfEqual, useUpdater} from '../../../hooks/use-updater';
+import {useMemoizedIfEqual, useUpdater} from '../../../hooks';
 import {useAppRumMeasureStart} from '../../../rum/rum-app-measures';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 import {useRumMeasureStop} from '../../../rum/RumUiContext';
