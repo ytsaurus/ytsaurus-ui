@@ -22,7 +22,7 @@ function preparePoolChildResource(data, type, treeResources, resource) {
         const demand = ypath.getNumber(attributes, '/resource_demand/' + resource);
         const guaranteed = ypath.getNumber(
             attributes,
-            '/promised_fair_share_resources/' + resource,
+            '/estimated_guarantee_resources/' + resource,
         );
 
         const limitResource = RESOURCE_LIMIT_MAPPER[resource] || resource;
