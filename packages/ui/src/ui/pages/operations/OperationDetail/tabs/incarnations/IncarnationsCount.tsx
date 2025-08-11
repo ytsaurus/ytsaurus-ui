@@ -19,7 +19,7 @@ import './Incarnations.scss';
 export function IncarnationsCount() {
     const operation = useSelector(getOperation);
 
-    const {incarnations} = useSelector((state: RootState) =>
+    const {count} = useSelector((state: RootState) =>
         getIncarnationsInfo(state, {
             operation_id: operation.id,
             event_type: 'incarnation_started',
@@ -31,7 +31,7 @@ export function IncarnationsCount() {
         <ul className={incarnationsCountCn}>
             <li className={incarnationsCountItemCn}>
                 <span className={incarnationsCountTypeCn}>All</span>
-                <span className={incarnationsCountItemCountCn}>{incarnations?.length || 0}</span>
+                <span className={incarnationsCountItemCountCn}>{count}</span>
             </li>
             {telemetrySetup?.hasTelemtery(operation) && telemetrySetup?.renderCount()}
         </ul>

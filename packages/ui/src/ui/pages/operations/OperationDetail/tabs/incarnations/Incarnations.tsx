@@ -15,6 +15,7 @@ import {IncarnationMeta} from './IncarnationMeta';
 import {IncarnationCardHeader} from './IncarnationCardHeader';
 import {IncarnationsToolbar} from './IncarnationsToolbar';
 import {IncarnationsCount} from './IncarnationsCount';
+import {IncarnationInfoDialog} from './IncarnationInfoDialog';
 
 import {incarnationCn, incarnationInfoCn} from './constants';
 
@@ -48,12 +49,7 @@ export function Incarnations() {
                             <Card key={incarnation.id} view={'outlined'} className={incarnationCn}>
                                 <Disclosure>
                                     <IncarnationCardHeader incarnation={incarnation} />
-                                    <Flex
-                                        direction={'row'}
-                                        justifyContent={'space-between'}
-                                        className={incarnationInfoCn}
-                                        basis={3}
-                                    >
+                                    <Flex direction={'row'} className={incarnationInfoCn}>
                                         <IncarnationMeta incarnation={incarnation} />
                                         {telemetrySetup?.hasTelemtery(operation) &&
                                             telemetrySetup?.renderInfo({
@@ -68,6 +64,7 @@ export function Incarnations() {
                     )}
                 </Flex>
             )}
+            <IncarnationInfoDialog />
         </>
     );
 }

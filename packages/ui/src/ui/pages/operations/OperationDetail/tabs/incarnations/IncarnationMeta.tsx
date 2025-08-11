@@ -22,7 +22,7 @@ export function IncarnationMeta(props: Props) {
     const operation = useSelector(getOperation);
 
     return (
-        <Flex gap={1} direction={'column'}>
+        <Flex gap={1} direction={'column'} width={'40%'}>
             <MetaTable
                 items={[
                     // ...incarnation.switch_info,

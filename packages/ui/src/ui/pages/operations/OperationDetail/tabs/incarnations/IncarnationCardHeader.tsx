@@ -1,4 +1,5 @@
 import React from 'react';
+import {useDispatch} from 'react-redux';
 import {Button, ClipboardButton, Disclosure, Flex, Icon, Text} from '@gravity-ui/uikit';
 import {ChevronDown, ChevronUp} from '@gravity-ui/icons';
 
@@ -6,6 +7,7 @@ import StatusLabel, {ViewState} from '../../../../../components/StatusLabel/Stat
 import {formatInterval} from '../../../../../components/common/Timeline';
 import AttributesButton from '../../../../../components/AttributesButton/AttributesButton';
 
+import {toggleIncarnationInfoDialog} from '../../../../../store/reducers/operations/incarnations';
 import type {
     Incarnation,
     IncarnationFinishReason,
@@ -43,6 +45,8 @@ type Props = {
 export function IncarnationCardHeader(props: Props) {
     const {incarnation} = props;
 
+    const dispatch = useDispatch();
+
     return (
         <Disclosure.Summary>
             {(props) => (
@@ -72,7 +76,11 @@ export function IncarnationCardHeader(props: Props) {
                         <Text whiteSpace={'nowrap'} variant={'inherit'} ellipsis>
                             {makeIncarnationInterval(incarnation)}
                         </Text>
-                        <AttributesButton />
+                        <AttributesButton
+                            onClick={() =>
+                                dispatch(toggleIncarnationInfoDialog({infoDialog: {incarnation}}))
+                            }
+                        />
                     </Flex>
                 </Flex>
             )}

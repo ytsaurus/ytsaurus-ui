@@ -499,6 +499,7 @@ export interface UIFactory {
         renderInfo({incarnationId}: {incarnationId: string}): React.ReactNode | undefined;
         renderFilter(): React.ReactNode | undefined;
         hasTelemtery(operation: DetailedOperationSelector): boolean;
+        telemetryFilterDefaultState: boolean;
     };
 }
 

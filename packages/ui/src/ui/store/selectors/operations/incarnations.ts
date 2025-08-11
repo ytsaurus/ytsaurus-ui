@@ -2,12 +2,13 @@ import React from 'react';
 import {dateTimeParse} from '@gravity-ui/date-utils';
 import {createSelector} from '@reduxjs/toolkit';
 
-import {IncarnationSwitchReason, OperationEvent} from '../../../../shared/yt-types';
 import {YTError} from '../../../../@types/types';
+
+import {IncarnationSwitchReason, OperationEvent} from '../../../../shared/yt-types';
 import format from '../../../common/hammer/format';
 
+import {getIdFilter, getIncarnationsList} from '../../../store/reducers/operations/incarnations';
 import {getOperationEvents} from '../../../store/api/yt';
-import {getIdFilter} from '../../../store/reducers/operations/incarnations';
 import {OperationSelector} from '../../../pages/operations/selectors';
 
 import {getOperation} from './operation';
@@ -23,6 +24,7 @@ export type Incarnation = {
     switch_info: Array<{key: string; label: string; value: React.ReactNode}>;
     trigger_job_id?: string;
     finish_reason: IncarnationFinishReason;
+    switch_reason?: string;
 };
 
 export type Incarnations = Array<Incarnation>;
@@ -44,10 +46,11 @@ function makeFinishReason(event: OperationEvent, operation: OperationSelector) {
 }
 
 export const getIncarnationsInfo = createSelector(
-    [getOperation, getOperationEvents, getIdFilter],
-    (operation, events, idFilter) => {
-        const {data: operationEvents, isLoading, error} = events;
+    [getOperation, getIncarnationsList, getIdFilter, getOperationEvents],
+    (operation, operationEvents, idFilter, incarnationsReqInfo) => {
         let incarnations: Incarnations = [];
+
+        const {isLoading, error} = incarnationsReqInfo;
 
         if (!operationEvents) {
             return {incarnations, isLoading, error: error as YTError | undefined};
@@ -75,6 +78,7 @@ export const getIncarnationsInfo = createSelector(
                 trigger_job_id: event?.incarnation_switch_info?.trigger_job_id as
                     | string
                     | undefined,
+                switch_reason: event.incarnation_switch_reason,
                 switch_info,
             };
 
@@ -85,6 +89,11 @@ export const getIncarnationsInfo = createSelector(
             incarnations = incarnations.filter((inc) => inc.id.startsWith(idFilter)).reverse();
         }
 
-        return {incarnations, isLoading, error: error as YTError | undefined};
+        return {
+            incarnations,
+            count: operationEvents?.length,
+            isLoading,
+            error: error as YTError | undefined,
+        };
     },
 );

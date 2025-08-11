@@ -1,35 +1,65 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+
+import type {OperationEvent} from '../../../../shared/yt-types';
+
+import UIFactory from '../../../UIFactory';
+import {listOperationEventsApi} from '../../../store/api/yt';
+import type {Incarnation} from '../../../store/selectors/operations/incarnations';
+
 import {RootState} from '..';
 
 type IncarnationsState = {
     idFilter?: string;
-    showOnlyWithTelemetry?: boolean;
+    incarnationsList?: Array<OperationEvent>;
+    showIncarnationsOnlyWithTelemetry?: boolean;
+    incarnationsWithTelemetry: Array<string>;
+    infoDialog?: {
+        incarnation: Incarnation;
+    } | null;
 };
 
 const incarnationsSlice = createSlice({
     name: 'incarnations',
-    initialState: {} as IncarnationsState,
+    initialState: {
+        incarnationsWithTelemetry: [],
+        showIncarnationsOnlyWithTelemetry:
+            UIFactory.IncarnationsTelemetrySetup?.telemetryFilterDefaultState,
+        showInfoDialog: false,
+    } as IncarnationsState,
     reducers: {
         setIdFilter: (state, {payload}: PayloadAction<Pick<IncarnationsState, 'idFilter'>>) => ({
             ...state,
             idFilter: payload.idFilter,
         }),
-        setShowOnlyWithTelemetry: (
+        setIncarnationsList: (
             state,
-            {payload}: PayloadAction<Pick<IncarnationsState, 'showOnlyWithTelemetry'>>,
+            {payload}: PayloadAction<Pick<IncarnationsState, 'incarnationsList'>>,
         ) => ({
             ...state,
-            showOnlyWithTelemetry: payload.showOnlyWithTelemetry,
+            incarnationsList: payload.incarnationsList,
         }),
+        toggleIncarnationInfoDialog: (
+            state,
+            {payload}: PayloadAction<Pick<IncarnationsState, 'infoDialog'>>,
+        ) => ({...state, infoDialog: payload.infoDialog}),
+    },
+    extraReducers: (builder) => {
+        builder.addMatcher(
+            listOperationEventsApi.endpoints.listOperationEvents.matchFulfilled,
+            (state, {payload}) => {
+                state.incarnationsList = payload;
+            },
+        );
     },
     selectors: {
-        getShowOnlyWithTelenetry: (state) => state.showOnlyWithTelemetry,
         getIdFilter: (state) => state.idFilter,
+        getIncarnationsList: (state) => state.incarnationsList,
+        getIncarnationInfoDialog: (state) => state.infoDialog,
     },
 });
 
 export const incarnations = incarnationsSlice.reducer;
-export const {setIdFilter, setShowOnlyWithTelemetry} = incarnationsSlice.actions;
-export const {getShowOnlyWithTelenetry, getIdFilter} = incarnationsSlice.getSelectors(
-    (state: RootState) => state.operations.incarnations,
-);
+export const {setIdFilter, setIncarnationsList, toggleIncarnationInfoDialog} =
+    incarnationsSlice.actions;
+export const {getIdFilter, getIncarnationsList, getIncarnationInfoDialog} =
+    incarnationsSlice.getSelectors((state: RootState) => state.operations.incarnations);

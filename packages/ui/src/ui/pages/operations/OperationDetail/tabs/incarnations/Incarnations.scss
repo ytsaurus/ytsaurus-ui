@@ -16,12 +16,9 @@ $item-margin: 30px;
     }
 
     &__incarnation-info {
+        width: 100%;
         margin-top: 15px;
     }
-
-    // &__reason {
-    //     padding: var(--g-spacing-3);
-    // }
 
     &__details {
         @include error-details;
