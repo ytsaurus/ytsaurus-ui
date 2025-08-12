@@ -6,7 +6,7 @@ import DataTable from '@gravity-ui/react-data-table';
 import {Loader} from '@gravity-ui/uikit';
 import {getSettingTableDisplayRawStrings} from '../../../../../store/selectors/settings';
 import {getSchemaByName} from '../../../../../store/selectors/navigation/tabs/schema';
-import {showCellPreviewModal} from '../../../../../store/actions/navigation/modals/cell-preview';
+import {onCellPreview} from '../../../../../store/actions/navigation/modals/cell-preview';
 import {prepareColumns} from '../../../../../utils/navigation/prepareColumns';
 
 import './DataTableWrapper.scss';
@@ -35,7 +35,7 @@ export default function DataTableWrapper(props) {
 
     const onShowPreview = React.useCallback(
         (columnName, rowIndex, tag) => {
-            dispatch(showCellPreviewModal(columnName, rowIndex, tag));
+            dispatch(onCellPreview({columnName, rowIndex, tag}));
         },
         [dispatch],
     );

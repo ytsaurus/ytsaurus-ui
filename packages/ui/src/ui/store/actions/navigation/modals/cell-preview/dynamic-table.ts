@@ -10,17 +10,17 @@ import type {CancelTokenSource} from 'axios';
 import {getCliCommandResultFormat} from './format';
 
 export const getDynamicTableCellPath = ({
-    index,
+    rowIndex,
     path,
     columnName,
 }: {
     path: string;
     columnName: string;
-    index: number;
+    rowIndex: number;
 }): CellPreviewActionType => {
     return (_, getState) => {
         const yqlTypes = getYqlTypes(getState());
-        const key = getCurrentRowKey(getState(), index);
+        const key = getCurrentRowKey(getState(), rowIndex);
         const keyColumns = getKeyColumns(getState());
 
         const offset = Query.prepareKey(key, yqlTypes);
@@ -56,16 +56,14 @@ export const loadDynamicTableCellPreview = ({
     output_format: any;
     cancellation: (token: CancelTokenSource) => void;
 }) => {
-    return async () => {
-        const setup = {};
+    const setup = {};
 
-        return await ytApiV3Id.selectRows(YTApiId.dynTableSelectRowsPreload, {
-            setup,
-            parameters: {
-                output_format,
-                query: cellPath,
-            },
-            cancellation,
-        });
-    };
+    return ytApiV3Id.selectRows(YTApiId.dynTableSelectRowsPreload, {
+        setup,
+        parameters: {
+            output_format,
+            query: cellPath,
+        },
+        cancellation,
+    });
 };
