@@ -494,9 +494,12 @@ export interface UIFactory {
 
     getAnalyticsService(): AnalyticsService[];
 
-    PyDLTelemetrySetup?: {
-        renderPyDLTelemetry(): React.ReactNode | undefined;
+    IncarnationsTelemetrySetup?: {
+        renderCount(): React.ReactNode | undefined;
+        renderInfo({incarnationId}: {incarnationId: string}): React.ReactNode | undefined;
+        renderFilter(): React.ReactNode | undefined;
         hasTelemtery(operation: DetailedOperationSelector): boolean;
+        telemetryFilterDefaultState: boolean;
     };
 }
 

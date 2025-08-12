@@ -73,6 +73,8 @@ import {UI_TAB_SIZE} from '../../../constants/global';
 import {OperationPool, OperationStates} from '../selectors';
 import {JobsTimeline} from './tabs/JobsTimeline';
 import {getSettingsTimelineTabVisible} from '../../../store/selectors/settings/settings-ts';
+import {Incarnations} from './tabs/incarnations/Incarnations';
+import {getOperationEvents, listOperationEventsApi} from '../../../store/api/yt';
 
 const detailBlock = cn('operation-detail');
 
@@ -144,6 +146,11 @@ function SpecialWaitingStatus({type}: {type: 'jobs' | 'resources'}) {
 class OperationDetail extends React.Component<ReduxProps & RouteProps> {
     get settings() {
         return unipika.prepareSettings();
+    }
+
+    componentDidMount() {
+        const {operationId} = this.props.match.params;
+        this.props.listOperationEvents(operationId);
     }
 
     handlePoolsEditClick = () => {
@@ -318,7 +325,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             monitorTabUrlTemplate,
             timelineTabVisible,
             operationPerformanceUrlTemplate,
-            pyDLTelemetryTabVisible,
+            operationEvents,
         } = this.props;
         const path = `/${cluster}/${Page.OPERATIONS}/${operationId}`;
 
@@ -328,7 +335,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             [Tab.JOBS_MONITOR]: {show: jobsMonitorVisible || activeTab === Tab.JOBS_MONITOR},
             [Tab.MONITOR]: {show: monitorTabVisible},
             [Tab.JOBS_TIMELINE]: {show: timelineTabVisible},
-            [Tab.PYDL_TELEMETRY]: {show: pyDLTelemetryTabVisible, title: 'PyDL Telemetry'},
+            [Tab.INCARNATIONS]: {show: Boolean(operationEvents?.length)},
             [Tab.PERFORMANCE]: {
                 show: Boolean(operationPerformanceUrlTemplate),
                 external: true,
@@ -377,14 +384,11 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             jobsMonitorIsSupported,
             monitoringComponent,
             timelineTabVisible,
-            pyDLTelemetryTabVisible,
         } = this.props;
         const {url, params} = match;
         const {operationId} = params;
 
         const path = `/${cluster}/${Page.OPERATIONS}/${operationId}`;
-
-        const PyDLTelemetry = UIFactory.PyDLTelemetrySetup?.renderPyDLTelemetry;
 
         // NOTE: <Redirect> has issues with urls which contain '*', and since every operation alias starts with it,
         // we have to redirect to real operation id in those cases
@@ -429,9 +433,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                     {jobsMonitorIsSupported && (
                         <Route path={`${path}/${Tab.JOBS_MONITOR}`} component={JobsMonitor} />
                     )}
-                    {pyDLTelemetryTabVisible && (
-                        <Route path={`${path}/${Tab.PYDL_TELEMETRY}`} render={PyDLTelemetry} />
-                    )}
+                    <Route path={`${path}/${Tab.INCARNATIONS}`} render={() => <Incarnations />} />
                     <Route path={`${path}/:tab`} component={Placeholder} />
                     <Redirect from={url} to={`${path}/${DEFAULT_TAB}`} />
                 </Switch>
@@ -499,14 +501,19 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
     }
 }
 
-const mapStateToProps = (state: RootState) => {
+const mapStateToProps = (state: RootState, routerProps: RouteProps) => {
     const {operation, errorData, loading, loaded, error, actions, details} =
         state.operations.detail;
     const totalJobWallTime = getTotalJobWallTime(state);
     const cpuTimeSpent = getTotalCpuTimeSpent(state);
     const erasedTrees = getOperationErasedTrees(state);
-
     const {runtime} = details;
+
+    const {operationId} = routerProps.match.params;
+    const {data: operationEvents} = getOperationEvents(state, {
+        operation_id: operationId,
+        event_type: 'incarnation_started',
+    });
 
     const {
         component: monitoringComponent,
@@ -515,8 +522,6 @@ const mapStateToProps = (state: RootState) => {
     } = UIFactory.getMonitoringForOperation(operation) || {};
 
     const monitorTabVisible = Boolean(monitoringComponent) || Boolean(monitorTabUrlTemplate);
-
-    const pyDLTelemetryTabVisible = Boolean(UIFactory.PyDLTelemetrySetup?.hasTelemtery(operation));
 
     return {
         cluster: getCurrentCluster(state),
@@ -534,13 +539,13 @@ const mapStateToProps = (state: RootState) => {
         monitorTabTitle,
         monitorTabUrlTemplate,
         monitoringComponent,
-        pyDLTelemetryTabVisible,
         timelineTabVisible: getSettingsTimelineTabVisible(state),
         jobsMonitorIsSupported: Boolean(UIFactory.getMonitorComponentForJob()),
         jobsMonitorVisible: getJobsMonitorTabVisible(state),
         hasStatististicsTab: getOperationStatiscsHasData(state),
         isGpuOperation: selectIsOperationInGpuTree(state),
         operationPerformanceUrlTemplate: getOperationPerformanceUrlTemplate(state),
+        operationEvents,
     };
 };
 
@@ -549,6 +554,11 @@ const mapDispatchToProps = {
     getOperation,
     showEditPoolsWeightsModal,
     updateListJobsFilter,
+    listOperationEvents: (operationId: string) =>
+        listOperationEventsApi.endpoints.listOperationEvents.initiate({
+            operation_id: operationId,
+            event_type: 'incarnation_started',
+        }),
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
