@@ -12,7 +12,7 @@ import ArrowUpRightFromSquareIcon from '@gravity-ui/icons/svgs/arrow-up-right-fr
 import {prepareColumns} from '../../../../utils/navigation/prepareColumns';
 import {TypeArray} from '../../../../components/SchemaDataType/dataTypes';
 import {YsonSettings} from '../../../../store/selectors/thor/unipika';
-import {showCellPreviewModal} from '../../../../store/actions/navigation/modals/cell-preview';
+import {onCellPreview} from '../../../../store/actions/navigation/modals/cell-preview';
 
 const b = cn('navigation-preview-tab');
 
@@ -26,7 +26,7 @@ export const PreviewTab: FC<Props> = ({table, ysonSettings, onEditorInsert}) => 
     const dispatch = useDispatch();
     const onShowPreview = React.useCallback(
         (columnName: string, rowIndex: number) => {
-            dispatch(showCellPreviewModal(columnName, rowIndex));
+            dispatch(onCellPreview({columnName, rowIndex}));
         },
         [dispatch],
     );

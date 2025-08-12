@@ -24,10 +24,10 @@ import {isYqlTypesEnabled} from '../../../../selectors/navigation/content/table'
 
 const getCellPath = ({
     columnName,
-    index,
+    rowIndex,
 }: {
     columnName: string;
-    index: number;
+    rowIndex: number;
 }): CellPreviewActionType => {
     return (dispatch, getState) => {
         const path: string = getPath(getState());
@@ -35,7 +35,7 @@ const getCellPath = ({
 
         const action = isDynamic ? getDynamicTableCellPath : getStaticTableCellPath;
 
-        return dispatch(action({path, columnName, index}));
+        return dispatch(action({path, columnName, rowIndex}));
     };
 };
 
@@ -64,7 +64,7 @@ const loadCellPreview = ({
     cellPath: string;
     useYqlTypes: boolean;
 }): CellPreviewActionType => {
-    return (dispatch, getState) => {
+    return (_dispatch, getState) => {
         const isDynamic = getIsDynamic(getState());
 
         const output_format: any = getDefaultRequestOutputFormat({
@@ -77,25 +77,27 @@ const loadCellPreview = ({
 
         const action = isDynamic ? loadDynamicTableCellPreview : loadStaticTableCellPreview;
 
-        return dispatch(
-            action({
-                cellPath,
-                output_format,
-                cancellation: cellPreviewCancelHelper.removeAllAndSave,
-            }),
-        );
+        return action({
+            cellPath,
+            output_format,
+            cancellation: cellPreviewCancelHelper.removeAllAndSave,
+        });
     };
 };
 
-export const showCellPreviewModal = (
-    columnName: string,
-    index: number,
-    tag?: string,
-): CellPreviewActionType => {
+export const onCellPreview = ({
+    columnName,
+    rowIndex,
+    tag,
+}: {
+    columnName: string;
+    rowIndex: number;
+    tag?: string;
+}): CellPreviewActionType => {
     return async (dispatch, getState) => {
         const useYqlTypes = isYqlTypesEnabled(getState());
 
-        const cellPath = dispatch(getCellPath({columnName, index}));
+        const cellPath = dispatch(getCellPath({columnName, rowIndex}));
 
         const ytCliDownloadCommand: string = dispatch(getCliCommand({cellPath, columnName, tag}));
 

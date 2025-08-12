@@ -8,11 +8,11 @@ import {getCliCommandResultFormat} from './format';
 export const getStaticTableCellPath = ({
     path,
     columnName,
-    index,
+    rowIndex: index,
 }: {
     path: string;
     columnName: string;
-    index: number;
+    rowIndex: number;
 }): CellPreviewActionType => {
     return (_, getState) => {
         const offset = getOffsetValue(getState());
@@ -43,14 +43,12 @@ export const loadStaticTableCellPreview = ({
     cellPath: string;
     output_format: any;
     cancellation: (token: CancelTokenSource) => void;
-}): CellPreviewActionType => {
-    return async () => {
-        return await ytApiV4.readTable({
-            parameters: {
-                path: cellPath,
-                output_format,
-            },
-            cancellation,
-        });
-    };
+}): Promise<unknown> => {
+    return ytApiV4.readTable({
+        parameters: {
+            path: cellPath,
+            output_format,
+        },
+        cancellation,
+    });
 };
