@@ -234,7 +234,7 @@ function renderDefaultTooltip({
             ? `<b>${colValue}</b> partitions contain in range from <b>${colX0}</b> to <b>${colX1}</b> - ${dataName}`
             : undefined,
         lineValue !== undefined
-            ? `<b>${lp}${lineValue}</b> of tablets conains <b>${lp}${lineX}</b> or less`
+            ? `<b>${lp}${lineValue}</b> of tablets contains <b>${lp}${lineX}</b> or less`
             : undefined,
     ]).join('<br/>');
 }
