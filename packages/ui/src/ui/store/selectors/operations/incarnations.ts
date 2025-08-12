@@ -13,7 +13,7 @@ import {OperationSelector} from '../../../pages/operations/selectors';
 
 import {getOperation} from './operation';
 
-export type IncarnationFinishReason = IncarnationSwitchReason | 'running' | 'finished' | 'system';
+export type IncarnationFinishReason = IncarnationSwitchReason | 'Running' | 'Finished' | 'System';
 
 export type Incarnation = {
     id: string;
@@ -50,7 +50,7 @@ export const getIncarnationsInfo = createSelector(
     (operation, operationEvents, idFilter, incarnationsReqInfo) => {
         let incarnations: Incarnations = [];
 
-        const {isLoading, error} = incarnationsReqInfo;
+        const {data, isLoading, error} = incarnationsReqInfo;
 
         if (!operationEvents) {
             return {incarnations, isLoading, error: error as YTError | undefined};
@@ -91,7 +91,7 @@ export const getIncarnationsInfo = createSelector(
 
         return {
             incarnations,
-            count: operationEvents?.length,
+            count: data?.length || 0,
             isLoading,
             error: error as YTError | undefined,
         };

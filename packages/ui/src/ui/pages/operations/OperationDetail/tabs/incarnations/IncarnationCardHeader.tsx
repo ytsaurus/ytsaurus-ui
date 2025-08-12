@@ -35,6 +35,10 @@ function makeStatus(status: IncarnationFinishReason): ViewState {
         return status.split('_')[1] as ViewState;
     }
 
+    if (status === 'System') {
+        return 'unknown' as ViewState;
+    }
+
     return status.toLowerCase() as ViewState;
 }
 
