@@ -6,9 +6,10 @@ import {
 } from '../../../../../utils/navigation/content/table/table';
 import {UnipikaValue} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 import {TypeArray} from '../../../../../components/SchemaDataType/dataTypes';
+import {tableReadParameters, tableReadSetup} from './readTable';
 
 type LoadDynamicTableRequest = (props: {
-    setup: unknown;
+    setup?: unknown;
     parameters: unknown;
     cancellation?: unknown;
     reverseRows?: boolean;
@@ -25,8 +26,11 @@ export const readDynamicTable: LoadDynamicTableRequest = async ({
     reverseRows,
 }) => {
     const {data} = await ytApiV3Id.selectRows(YTApiId.dynTableSelectRowsPreload, {
-        setup,
-        parameters,
+        setup: {
+            ...(setup as object),
+            ...tableReadSetup,
+        },
+        parameters: {...(parameters as object), ...tableReadParameters},
         cancellation,
     });
 

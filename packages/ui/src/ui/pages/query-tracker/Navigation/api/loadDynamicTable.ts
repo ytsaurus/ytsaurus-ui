@@ -101,18 +101,6 @@ export const loadDynamicTableRequest: LoadDynamicTable = async ({
 
     const setup = {
         proxy: getClusterProxy(clusterConfig),
-        transformResponse({
-            parsedData,
-            rawResponse,
-        }: {
-            parsedData: string;
-            rawResponse: Record<string, string>;
-        }) {
-            return {
-                data: parsedData,
-                headers: rawResponse?.headers,
-            };
-        },
         JSONSerializer,
     };
 

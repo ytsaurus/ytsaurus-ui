@@ -1,7 +1,5 @@
 import {type CellPreviewActionType} from '../../../modals/cell-preview';
 import {getOffsetValue} from '../../../../selectors/navigation/content/table';
-import type {CancelTokenSource} from 'axios';
-import {ytApiV4} from '../../../../../rum/rum-wrap-api';
 import {YSON_AS_TEXT, prettyPrint} from '../../../../../utils/unipika';
 import {getCliCommandResultFormat} from './format';
 
@@ -33,22 +31,4 @@ export const getStaticTableCliCommand = ({
     tag?: string;
 }): string => {
     return `yt read-table '${cellPath}' ${getCliCommandResultFormat({columnName, tag})}`;
-};
-
-export const loadStaticTableCellPreview = ({
-    cellPath,
-    output_format,
-    cancellation,
-}: {
-    cellPath: string;
-    output_format: any;
-    cancellation: (token: CancelTokenSource) => void;
-}): Promise<unknown> => {
-    return ytApiV4.readTable({
-        parameters: {
-            path: cellPath,
-            output_format,
-        },
-        cancellation,
-    });
 };
