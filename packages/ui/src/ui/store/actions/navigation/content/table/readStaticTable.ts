@@ -7,6 +7,7 @@ import {
 } from '../../../../../utils/navigation/content/table/table';
 import {UnipikaValue} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 import {TypeArray} from '../../../../../components/SchemaDataType/dataTypes';
+import {tableReadParameters, tableReadSetup} from './readTable';
 
 type LoadStaticTableRows = (props: {
     setup: unknown;
@@ -26,11 +27,13 @@ export const readStaticTable: LoadStaticTableRows = async ({
     cancellation,
     reverseRows,
 }) => {
-    const {data, headers} = await ytApiV3Id.readTable(YTApiId.tableRead, {
-        setup,
-        parameters,
+    const tmp = await ytApiV3Id.readTable(YTApiId.tableRead, {
+        setup: {...(setup as object), ...tableReadSetup},
+        parameters: {...(parameters as object), ...tableReadParameters},
         cancellation,
     });
+
+    const {data, headers} = tmp;
 
     const error = parseErrorFromResponse(data);
     if (error) return Promise.reject(getParsedError(error));

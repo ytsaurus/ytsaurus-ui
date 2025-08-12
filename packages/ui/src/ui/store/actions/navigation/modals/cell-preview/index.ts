@@ -10,17 +10,11 @@ import {
 } from '../../../modals/cell-preview';
 import unipika from '../../../../../common/thor/unipika';
 import {getIsDynamic} from '../../../../selectors/navigation/content/table-ts';
-import {
-    getDynamicTableCellPath,
-    getDynamicTableCliCommand,
-    loadDynamicTableCellPreview,
-} from './dynamic-table';
-import {
-    getStaticTableCellPath,
-    getStaticTableCliCommand,
-    loadStaticTableCellPreview,
-} from './static-table';
+import {getDynamicTableCellPath, getDynamicTableCliCommand} from './dynamic-table';
+import {getStaticTableCellPath, getStaticTableCliCommand} from './static-table';
 import {isYqlTypesEnabled} from '../../../../selectors/navigation/content/table';
+import {readStaticTable} from '../../content/table/readStaticTable';
+import {readDynamicTable} from '../../content/table/readDynamicTable';
 
 const getCellPath = ({
     columnName,
@@ -75,13 +69,21 @@ const loadCellPreview = ({
             output_format.$attributes.value_format = 'yql';
         }
 
-        const action = isDynamic ? loadDynamicTableCellPreview : loadStaticTableCellPreview;
-
-        return action({
-            cellPath,
-            output_format,
-            cancellation: cellPreviewCancelHelper.removeAllAndSave,
-        });
+        return isDynamic
+            ? readDynamicTable({
+                  setup: {},
+                  parameters: {
+                      output_format,
+                      query: cellPath,
+                      dump_error_into_response: true,
+                  },
+                  cancellation: cellPreviewCancelHelper.removeAllAndSave,
+              })
+            : readStaticTable({
+                  setup: {},
+                  parameters: {path: cellPath, output_format, dump_error_into_response: true},
+                  cancellation: cellPreviewCancelHelper.removeAllAndSave,
+              });
     };
 };
 
@@ -115,11 +117,8 @@ export const onCellPreview = ({
         let isIncomplete = false;
 
         try {
-            const json = await dispatch(loadCellPreview({cellPath, useYqlTypes}));
-
-            const parsed = JSON.parse(json);
-
-            const column = parsed.rows[0][columnName];
+            const {rows, yqlTypes} = await dispatch(loadCellPreview({cellPath, useYqlTypes}));
+            const column = rows[0][columnName];
 
             if (useYqlTypes) {
                 const value = column[0];
@@ -128,7 +127,7 @@ export const onCellPreview = ({
                 const flags: {incomplete: boolean} = {incomplete: false};
 
                 const {$type, $value, $tag} = unipika.converters.yql(
-                    [value, parsed.yql_type_registry[typeIndex]],
+                    [value, yqlTypes[typeIndex]],
                     {
                         maxStringSize: undefined,
                         maxListSize: undefined,

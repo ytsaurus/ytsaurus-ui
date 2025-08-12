@@ -25,26 +25,12 @@ export const loadStaticTable: LoadStaticTableRows = async ({
 }) => {
     const setup = {
         proxy: getClusterProxy(clusterConfig),
-        transformResponse({
-            parsedData,
-            rawResponse,
-        }: {
-            parsedData: string;
-            rawResponse: Record<string, string>;
-        }) {
-            return {
-                data: parsedData,
-                headers: rawResponse?.headers,
-            };
-        },
         JSONSerializer,
     };
 
     const parameters = {
         path: path + '[#' + 0 + ':#' + limit + ']',
         output_format,
-        dump_error_into_response: true,
-        omit_inaccessible_columns: true,
         table_reader: {
             workload_descriptor: {category: 'user_interactive'},
         },

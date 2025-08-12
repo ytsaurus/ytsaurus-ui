@@ -34,10 +34,7 @@ import Columns from '../../../../../utils/navigation/content/table/columns';
 import {getCluster} from '../../../../../store/selectors/global';
 import {
     getColumnsValues,
-    getParsedError,
     getRequestOutputFormat,
-    parseErrorFromResponse,
-    prepareRows,
 } from '../../../../../utils/navigation/content/table/table';
 
 import {getAttributes, getPath, getTransaction} from '../../../../../store/selectors/navigation';
@@ -79,7 +76,7 @@ import {readDynamicTable} from './readDynamicTable';
 const requests = new CancelHelper();
 const toaster = new Toaster();
 
-function loadDynamicTable(requestOutputFormat, setup, state, type, useZeroRangeForPreload) {
+function loadDynamicTable(requestOutputFormat, state, type, useZeroRangeForPreload) {
     const {login} = state.global;
 
     const path = getPath(state);
@@ -131,7 +128,6 @@ function loadDynamicTable(requestOutputFormat, setup, state, type, useZeroRangeF
         return id.fetch(
             apiId,
             readStaticTable({
-                setup,
                 parameters: {
                     path: {
                         $value: path,
@@ -155,8 +151,6 @@ function loadDynamicTable(requestOutputFormat, setup, state, type, useZeroRangeF
                     },
                     transaction,
                     output_format: outputFormat,
-                    dump_error_into_response: true,
-                    omit_inaccessible_columns: true,
                 },
                 cancellation: requests.saveCancelToken,
                 reverseRows: moveBackward,
@@ -223,25 +217,14 @@ function loadDynamicTable(requestOutputFormat, setup, state, type, useZeroRangeF
                 return id
                     .fetch(
                         YTApiId.dynTableSelectRowsPreload,
-                        ytApiV3Id.selectRows(YTApiId.dynTableSelectRowsPreload, {
-                            setup,
+                        readDynamicTable({
                             parameters,
                             cancellation: requests.saveCancelToken,
                         }),
                     )
-                    .then(({data}) => {
-                        const error = parseErrorFromResponse(data);
-
-                        if (error) {
-                            return Promise.reject(getParsedError(error));
-                        }
-
-                        const {columns, rows, yqlTypes} = prepareRows(data, moveBackward);
-
+                    .then((data) => {
                         return {
-                            rows,
-                            columns,
-                            yqlTypes,
+                            ...data,
                             omittedColumns,
                         };
                     });
@@ -285,7 +268,6 @@ function loadDynamicTable(requestOutputFormat, setup, state, type, useZeroRangeF
             .fetch(
                 YTApiId.dynTableSelectRows,
                 readDynamicTable({
-                    setup,
                     parameters,
                     cancellation: requests.saveCancelToken,
                 }),
@@ -299,7 +281,7 @@ function loadDynamicTable(requestOutputFormat, setup, state, type, useZeroRangeF
     }
 }
 
-async function loadStaticTable(requestOutputFormat, setup, state, type, useZeroRangeForPreload) {
+async function loadStaticTable(requestOutputFormat, state, type, useZeroRangeForPreload) {
     const path = getPath(state);
     const stringLimit = getCellSize(state);
     const transaction = getTransaction(state);
@@ -330,8 +312,6 @@ async function loadStaticTable(requestOutputFormat, setup, state, type, useZeroR
         },
         transaction,
         output_format: outputFormat,
-        dump_error_into_response: true,
-        omit_inaccessible_columns: true,
         relativePath: useZeroRangeForPreload
             ? '[#0:#0]'
             : '[#' + offsetValue + ':#' + (offsetValue + requestedPageSize) + ']',
@@ -345,7 +325,6 @@ async function loadStaticTable(requestOutputFormat, setup, state, type, useZeroR
     return await id.fetch(
         apiId,
         readStaticTable({
-            setup,
             parameters,
             cancellation: requests.saveCancelToken,
             reverseRows: moveBackward,
@@ -356,19 +335,11 @@ async function loadStaticTable(requestOutputFormat, setup, state, type, useZeroR
 function loadTableRows(type, state, requestOutputFormat) {
     const isDynamic = getIsDynamic(state);
     const isStrict = getIsStrict(state);
-    const setup = {
-        transformResponse({parsedData, rawResponse}) {
-            return {
-                data: parsedData,
-                headers: rawResponse?.headers,
-            };
-        },
-    };
     const useZeroRangeForPreload = isStrict && type === LOAD_TYPE.PRELOAD;
 
     const loadPromise = isDynamic
-        ? loadDynamicTable(requestOutputFormat, setup, state, type, useZeroRangeForPreload)
-        : loadStaticTable(requestOutputFormat, setup, state, type, useZeroRangeForPreload);
+        ? loadDynamicTable(requestOutputFormat, state, type, useZeroRangeForPreload)
+        : loadStaticTable(requestOutputFormat, state, type, useZeroRangeForPreload);
 
     return loadPromise.then((result) => {
         const schemaColumns = getTableColumnNamesFromSchema(state);
