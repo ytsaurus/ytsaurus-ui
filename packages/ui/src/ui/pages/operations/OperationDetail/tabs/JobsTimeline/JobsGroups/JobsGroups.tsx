@@ -1,11 +1,11 @@
-import React, {FC, useCallback, useEffect, useMemo} from 'react';
+import React, {FC, useCallback, useEffect, useMemo, useRef} from 'react';
 import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from 'react-redux';
+import {SelectEvent, Timeline, TimelineMarker, TimelineState} from '@gravity-ui/timeline';
 import {
     selectActiveJob,
     selectFilter,
     selectInterval,
-    selectJobGroupsCount,
     selectJobsInIntervalByGroup,
 } from '../../../../../../store/selectors/operations/jobs-timeline';
 import {
@@ -13,46 +13,43 @@ import {
     setInterval,
     setSelectedJob,
 } from '../../../../../../store/reducers/operations/jobs/jobs-timeline-slice';
-import hammer from '../../../../../../common/hammer';
 import {useSidePanel} from '../../../../../../hooks/use-side-panel';
 import {EventsSidePanel} from '../EventsSidePanel';
-import {prepareJobTimeline} from '../helpers/prepareJobTimeline';
 import {
     JobLineEvent,
     JobLineRenderer,
 } from '../../../../../../components/TimelineBlock/renderer/JobLineRenderer';
-import {
-    AllocationLineEvent,
-    AllocationLineRenderer,
-} from '../../../../../../components/TimelineBlock/renderer/AllocationLineRenderer';
-import {EventTimelineTooltip} from '../../../../../../components/TimelineBlock/EventTimelineTooltip';
+import {AllocationLineEvent} from '../../../../../../components/TimelineBlock/renderer/AllocationLineRenderer';
 import {EventTimelineTooltipContent} from '../EventsTimeline/EventTimelineTooltipContent';
-import {Item} from '../../../../../../components/TimelineBlock/TimelineTable';
 import {ROW_HEIGHT} from '../constants';
 import './JobsGroups.scss';
 import {TimelineBlock} from '../../../../../../components/TimelineBlock/TimelineBlock';
+import {prepareAxis} from '../helpers/prepareAxes';
+import {prepareMarkers} from '../helpers/prepareMarkers';
 
 const block = cn('yt-timeline-event-group');
 
 export const JobsGroups: FC = () => {
     const dispatch = useDispatch();
-    const jobGroups = useSelector(selectJobsInIntervalByGroup);
-    const groupsCount = useSelector(selectJobGroupsCount);
+    const {groups, groupNames} = useSelector(selectJobsInIntervalByGroup);
     const interval = useSelector(selectInterval);
-    const {timelineId} = useSelector(selectActiveJob);
+    const timelineId = useSelector(selectActiveJob);
     const filter = useSelector(selectFilter);
+    const timelinesRef = useRef<Map<string, Timeline<JobLineEvent | AllocationLineEvent>>>(
+        new Map(),
+    );
 
     const handleTimeLineClick = useCallback(
-        (events: (JobLineEvent | AllocationLineEvent)[]) => {
-            const job = events.find((event) => event.renderType === 'jobLine');
+        ({events}: SelectEvent) => {
+            if (!events.length) {
+                dispatch(setSelectedJob(''));
+                return;
+            }
+
+            const job = events.find((event) => event.renderer instanceof JobLineRenderer);
             if (!job) return;
 
-            dispatch(
-                setSelectedJob({
-                    id: (job as JobLineEvent).jobId,
-                    timelineId: `jobLine:${job.axisId}:${job.from}-${job.to}`,
-                }),
-            );
+            dispatch(setSelectedJob(job.id));
         },
         [dispatch],
     );
@@ -66,20 +63,28 @@ export const JobsGroups: FC = () => {
 
     const handleSidePanelClose = useCallback(
         (onClose: () => void) => () => {
-            dispatch(setSelectedJob({id: '', timelineId: ''}));
+            dispatch(setSelectedJob(''));
             onClose();
         },
         [dispatch],
     );
 
     const handleSidePanelOutsideClick = useCallback(
-        (onClose: () => void) => (e: MouseEvent) => {
+        (onClose: () => void) => async (e: MouseEvent) => {
             if (e.target instanceof Element && e.target.localName !== 'events-timeline-canvas') {
-                dispatch(setSelectedJob({id: '', timelineId: ''}));
+                await dispatch(setSelectedJob(''));
                 onClose();
             }
         },
         [dispatch],
+    );
+
+    const handleMakeTimelineContent = useCallback(
+        (event: JobLineEvent | AllocationLineEvent | undefined) => {
+            if (!event || !('jobId' in event)) return null;
+            return <EventTimelineTooltipContent event={event} />;
+        },
+        [],
     );
 
     const {openWidget, closeWidget, widgetContent} = useSidePanel('JobsTimeline', {
@@ -98,88 +103,79 @@ export const JobsGroups: FC = () => {
         operation();
     }, [closeWidget, openWidget, timelineId]);
 
-    const groups = useMemo(() => {
-        if (!interval) return [];
-
-        const groupNames = Object.keys(jobGroups).sort();
-        return groupNames.map((groupName) => {
-            const group = jobGroups[groupName].sort(
-                (a, b) => Number(a.cookieId) - Number(b.cookieId),
-            );
-            const readableGroupName = hammer.format['ReadableField'](groupName);
-            const title = `${readableGroupName} (${group.length} / ${groupsCount[groupName]})`;
-
-            const tableItems = group.reduce<Record<string, Item>>((acc, item) => {
-                if (item.cookieId === undefined) return acc;
-
-                acc[item.cookieId] = {
-                    id: `${item.cookieId}: ${item.start_time}-${item.finish_time}`,
-                    content: `${readableGroupName} ${item.cookieId}`,
-                };
-                return acc;
-            }, {});
-
-            const {timelines, axes} = prepareJobTimeline({
-                jobs: group,
-                selectedJob: [timelineId],
-                filter,
-                axesRowHeight: ROW_HEIGHT,
-            });
-
-            return (
-                <TimelineBlock<JobLineEvent | AllocationLineEvent>
-                    key={groupName}
-                    className={block()}
-                    collapse={{
-                        title,
-                    }}
-                    tableItems={Object.values(tableItems)}
-                    timelines={timelines}
-                    axes={axes}
-                    selectedJob={[timelineId]}
-                    interval={interval}
-                    rowHeight={ROW_HEIGHT}
-                    onTimelineClick={handleTimeLineClick}
-                    onBoundsChanged={handleBoundsChanged}
-                    tooltip={(e) => {
-                        if (!e) return;
-
-                        const {offset, events} = e.detail;
-                        const event = events.find((i) => i.renderType === 'jobLine');
-                        if (!event) return null;
-
-                        const jobEvent = event as JobLineEvent;
-
-                        return (
-                            <EventTimelineTooltip offset={offset}>
-                                <EventTimelineTooltipContent
-                                    events={jobEvent.parts}
-                                    jobId={jobEvent.jobId}
-                                    metaData={jobEvent.meta}
-                                />
-                            </EventTimelineTooltip>
-                        );
-                    }}
-                    renderers={[
-                        {id: 'jobLine', renderer: new JobLineRenderer()},
-                        {id: 'allocationLine', renderer: new AllocationLineRenderer()},
-                    ]}
-                />
-            );
+    const timelinesCollection = useMemo(() => {
+        Array.from(timelinesRef.current.keys()).forEach((key) => {
+            if (!groupNames.includes(key)) {
+                timelinesRef.current.delete(key);
+            }
         });
-    }, [
-        filter,
-        groupsCount,
-        handleBoundsChanged,
-        handleTimeLineClick,
-        interval,
-        jobGroups,
-        timelineId,
-    ]);
+
+        return groupNames.map((name) => {
+            if (!timelinesRef.current.has(name)) {
+                timelinesRef.current.set(
+                    name,
+                    new Timeline({
+                        settings: {
+                            start: interval?.from || 0,
+                            end: interval?.to || 0,
+                            axes: prepareAxis(groups[name].items, 12, 15),
+                            events: [],
+                            markers: prepareMarkers(groups[name].items),
+                            selectedEventIds: [],
+                        },
+                        viewConfiguration: {
+                            axes: {
+                                trackHeight: ROW_HEIGHT,
+                                lineHeight: 12,
+                            },
+                            markers: {
+                                collapseMinDistance: 10,
+                            },
+                            hideRuler: true,
+                        },
+                    }),
+                );
+            }
+
+            const timeline = timelinesRef.current.get(name)!;
+
+            // change timeline
+            if (timeline.state === TimelineState.READY) {
+                const {start, end} = timeline.api.getInterval();
+
+                if (interval && (start !== interval.from || end !== interval.to)) {
+                    timeline.api.setRange(interval.from || 0, interval.to || 0);
+                }
+            }
+
+            return {
+                name,
+                timeline,
+            };
+        });
+    }, [groupNames, interval, groups]);
 
     return (
         <>
-            <div className={block('wrap')}>{groups}</div>
+            <div className={block('wrap')}>
+                {timelinesCollection.map(({name, timeline}) => {
+                    return (
+                        <TimelineBlock<JobLineEvent | AllocationLineEvent, TimelineMarker>
+                            className={block('block')}
+                            key={name}
+                            timeline={timeline}
+                            group={groups[name]}
+                            filter={filter}
+                            selectedJob={timelineId}
+                            rowHeight={ROW_HEIGHT}
+                            topPadding={15}
+                            tooltip={handleMakeTimelineContent}
+                            onCameraChange={handleBoundsChanged}
+                            onTimelineClick={handleTimeLineClick}
+                        />
+                    );
+                })}
+            </div>
             <>{widgetContent}</>
         </>
     );
