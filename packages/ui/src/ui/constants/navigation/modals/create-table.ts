@@ -15,9 +15,10 @@ export const ColumnAggregateTypes = {
     MIN: 'min',
     MAX: 'max',
     FIRST: 'first',
+    XDELTA: 'xdelta',
 };
 
-export type ColumnAggregateType = 'sum' | 'min' | 'max' | 'first';
+export type ColumnAggregateType = 'sum' | 'min' | 'max' | 'first' | 'xdelta';
 
 export const ColumnDataTypes = {
     INT64: 'int64',
