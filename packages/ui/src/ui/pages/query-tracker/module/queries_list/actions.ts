@@ -33,9 +33,8 @@ export function requestQueriesList(params?: {refresh?: boolean}): AsyncAction {
                 },
             );
 
-            const items = [
-                ...new Map([...list, ...result.queries].map((item) => [item.id, item])).values(),
-            ];
+            const rawItems = params?.refresh ? result.queries : [...list, ...result.queries];
+            const items = [...new Map(rawItems.map((item) => [item.id, item])).values()];
 
             dispatch(
                 updateListState({

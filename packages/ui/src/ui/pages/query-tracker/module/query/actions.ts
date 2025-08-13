@@ -461,7 +461,8 @@ export function runQuery(
         if (!handled) {
             dispatch(loadQuery(query_id));
         }
-        dispatch(requestQueriesList());
+
+        dispatch(requestQueriesList({refresh: true}));
     };
 }
 
