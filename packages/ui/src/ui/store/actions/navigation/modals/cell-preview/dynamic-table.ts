@@ -15,7 +15,7 @@ export const getDynamicTableCellPath = ({
     path: string;
     columnName: string;
     rowIndex: number;
-}): CellPreviewActionType => {
+}): CellPreviewActionType<string> => {
     return (_, getState) => {
         const yqlTypes = getYqlTypes(getState());
         const key = getCurrentRowKey(getState(), rowIndex);

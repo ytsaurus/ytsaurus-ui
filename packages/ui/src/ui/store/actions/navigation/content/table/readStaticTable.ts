@@ -1,39 +1,30 @@
-import {YTApiId, ytApiV3Id} from '../../../../../rum/rum-wrap-api';
+import {ytApiV3} from '../../../../../rum/rum-wrap-api';
 import {
     getParsedError,
     parseErrorFromResponse,
     prepareHeaders,
     prepareRows,
 } from '../../../../../utils/navigation/content/table/table';
-import {UnipikaValue} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
-import {TypeArray} from '../../../../../components/SchemaDataType/dataTypes';
-import {tableReadParameters, tableReadSetup} from './readTable';
+import {
+    ReadTableParameters,
+    ReadTableResult,
+    tableReadParameters,
+    tableReadSetup,
+} from './readTable';
 
-type LoadStaticTableRows = (props: {
-    setup: unknown;
-    parameters: unknown;
-    cancellation?: unknown;
-    reverseRows?: boolean;
-}) => Promise<{
-    columns: string[];
-    rows: UnipikaValue[];
-    omittedColumns: string[];
-    yqlTypes: TypeArray[] | null;
-}>;
-
-export const readStaticTable: LoadStaticTableRows = async ({
+export async function readStaticTable({
     setup,
     parameters,
     cancellation,
     reverseRows,
-}) => {
-    const tmp = await ytApiV3Id.readTable(YTApiId.tableRead, {
-        setup: {...(setup as object), ...tableReadSetup},
-        parameters: {...(parameters as object), ...tableReadParameters},
+}: ReadTableParameters<{path: string}>): Promise<ReadTableResult> {
+    const tmp = await ytApiV3.readTable({
+        setup: {...setup, ...tableReadSetup},
+        parameters: {...parameters, ...tableReadParameters},
         cancellation,
     });
 
-    const {data, headers} = tmp;
+    const {data, headers} = tmp as any;
 
     const error = parseErrorFromResponse(data);
     if (error) return Promise.reject(getParsedError(error));
@@ -41,5 +32,13 @@ export const readStaticTable: LoadStaticTableRows = async ({
     const {columns, rows, yqlTypes} = prepareRows(data, reverseRows);
     const omittedColumns = prepareHeaders(headers);
 
-    return {columns, omittedColumns, rows, yqlTypes};
-};
+    const value_format = parameters.output_format.$attributes.value_format;
+
+    return {
+        columns,
+        omittedColumns,
+        rows,
+        yqlTypes,
+        useYqlTypes: value_format === 'yql',
+    };
+}

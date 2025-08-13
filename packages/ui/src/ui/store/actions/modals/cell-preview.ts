@@ -5,7 +5,7 @@ import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../reducers';
 import {batch} from 'react-redux';
 
-export type CellPreviewActionType<R = any> = ThunkAction<R, RootState, any, CellPreviewAction>;
+export type CellPreviewActionType<R = unknown> = ThunkAction<R, RootState, any, CellPreviewAction>;
 
 export const cellPreviewCancelHelper = new CancelHelper();
 export const openCellPreview = (): CellPreviewAction => {

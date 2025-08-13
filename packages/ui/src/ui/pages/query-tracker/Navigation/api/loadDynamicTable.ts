@@ -4,22 +4,21 @@ import unipika from '../../../../common/thor/unipika';
 import Query from '../../../../utils/navigation/content/table/query';
 import {injectColumnsFromSchema} from '../../../../utils/navigation/content/table/table-ts';
 import {NavigationTableSchema} from '../../module/queryNavigation/queryNavigationSlice';
-import {UnipikaValue} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 import {JSONSerializer} from '../../../../common/yt-api';
-import {TypeArray} from '../../../../components/SchemaDataType/dataTypes';
 import {getClusterProxy} from '../../../../store/selectors/global';
-import {ClusterConfig} from '../../../../../shared/yt-types';
+import {ClusterConfig, ReadTableOutputFormat} from '../../../../../shared/yt-types';
 import {readDynamicTable} from '../../../../store/actions/navigation/content/table/readDynamicTable';
+import {ReadTableResult} from '../../../../store/actions/navigation/content/table/readTable';
 
-type LoadDynamicTable = (props: {
+type LoadDynamicTableParams = {
     path: string;
     clusterConfig: ClusterConfig;
     schema: NavigationTableSchema[];
     login: string;
     keyColumns: string[];
     limit: number;
-    output_format: Record<string, any> | string;
-}) => Promise<{columns: string[]; rows: UnipikaValue[]; yqlTypes: TypeArray[] | null}>;
+    output_format: ReadTableOutputFormat;
+};
 
 type ColumnPermission = {
     action: string;
@@ -29,7 +28,7 @@ type ColumnPermission = {
     subject_name: string;
 };
 
-export const loadDynamicTableRequest: LoadDynamicTable = async ({
+export async function loadDynamicTableRequest({
     clusterConfig,
     path,
     login,
@@ -37,7 +36,7 @@ export const loadDynamicTableRequest: LoadDynamicTable = async ({
     keyColumns,
     limit,
     output_format,
-}) => {
+}: LoadDynamicTableParams): Promise<ReadTableResult> {
     const allColumns = schema.map(({name}) => name);
     const permissions = await wrapApiPromiseByToaster<{columns: ColumnPermission[]}>(
         ytApiV3Id.checkPermission(YTApiId.dynTableCheckPerm, {
@@ -104,7 +103,7 @@ export const loadDynamicTableRequest: LoadDynamicTable = async ({
         JSONSerializer,
     };
 
-    const {columns, rows, yqlTypes} = await wrapApiPromiseByToaster(
+    const {columns, ...rest} = await wrapApiPromiseByToaster(
         readDynamicTable({setup, parameters}),
         {
             skipSuccessToast: true,
@@ -116,7 +115,6 @@ export const loadDynamicTableRequest: LoadDynamicTable = async ({
     const schemaColumns = schema.map(({name}) => name);
     return {
         columns: injectColumnsFromSchema(columns, omittedColumns, schemaColumns),
-        rows,
-        yqlTypes,
+        ...rest,
     };
-};
+}

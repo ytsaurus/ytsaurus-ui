@@ -1,31 +1,23 @@
-import {YTApiId, ytApiV3Id} from '../../../../../rum/rum-wrap-api';
+import {ytApiV3} from '../../../../../rum/rum-wrap-api';
 import {
     getParsedError,
     parseErrorFromResponse,
     prepareRows,
 } from '../../../../../utils/navigation/content/table/table';
-import {UnipikaValue} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
-import {TypeArray} from '../../../../../components/SchemaDataType/dataTypes';
-import {tableReadParameters, tableReadSetup} from './readTable';
+import {
+    ReadTableParameters,
+    ReadTableResult,
+    tableReadParameters,
+    tableReadSetup,
+} from './readTable';
 
-type LoadDynamicTableRequest = (props: {
-    setup?: unknown;
-    parameters: unknown;
-    cancellation?: unknown;
-    reverseRows?: boolean;
-}) => Promise<{
-    columns: string[];
-    rows: UnipikaValue[];
-    yqlTypes: TypeArray[] | null;
-}>;
-
-export const readDynamicTable: LoadDynamicTableRequest = async ({
+export async function readDynamicTable({
     setup,
     parameters,
     cancellation,
     reverseRows,
-}) => {
-    const {data} = await ytApiV3Id.selectRows(YTApiId.dynTableSelectRowsPreload, {
+}: ReadTableParameters<{query: string}>): Promise<ReadTableResult> {
+    const {data} = await ytApiV3.selectRows({
         setup: {
             ...(setup as object),
             ...tableReadSetup,
@@ -38,5 +30,13 @@ export const readDynamicTable: LoadDynamicTableRequest = async ({
     if (error) return Promise.reject(getParsedError(error));
 
     const {columns, rows, yqlTypes} = prepareRows(data, reverseRows);
-    return {columns, rows, yqlTypes};
-};
+
+    const value_format = parameters.output_format.$attributes.value_format;
+
+    return {
+        columns,
+        rows,
+        yqlTypes,
+        useYqlTypes: value_format === 'yql',
+    };
+}

@@ -22,7 +22,7 @@ const getCellPath = ({
 }: {
     columnName: string;
     rowIndex: number;
-}): CellPreviewActionType => {
+}): CellPreviewActionType<string> => {
     return (dispatch, getState) => {
         const path: string = getPath(getState());
         const isDynamic = getIsDynamic(getState());
@@ -41,7 +41,7 @@ const getCliCommand = ({
     cellPath: string;
     columnName: string;
     tag?: string;
-}): CellPreviewActionType => {
+}): CellPreviewActionType<string> => {
     return (_dispatch, getState) => {
         const isDynamic = getIsDynamic(getState());
 
@@ -57,17 +57,14 @@ const loadCellPreview = ({
 }: {
     cellPath: string;
     useYqlTypes: boolean;
-}): CellPreviewActionType => {
+}): CellPreviewActionType<ReturnType<typeof readDynamicTable>> => {
     return (_dispatch, getState) => {
         const isDynamic = getIsDynamic(getState());
 
-        const output_format: any = getDefaultRequestOutputFormat({
+        const output_format = getDefaultRequestOutputFormat({
             stringLimit: PREVIEW_LIMIT,
+            useYqlTypes,
         });
-
-        if (useYqlTypes) {
-            output_format.$attributes.value_format = 'yql';
-        }
 
         return isDynamic
             ? readDynamicTable({
@@ -75,13 +72,12 @@ const loadCellPreview = ({
                   parameters: {
                       output_format,
                       query: cellPath,
-                      dump_error_into_response: true,
                   },
                   cancellation: cellPreviewCancelHelper.removeAllAndSave,
               })
             : readStaticTable({
                   setup: {},
-                  parameters: {path: cellPath, output_format, dump_error_into_response: true},
+                  parameters: {path: cellPath, output_format},
                   cancellation: cellPreviewCancelHelper.removeAllAndSave,
               });
     };
@@ -114,20 +110,21 @@ export const onCellPreview = ({
             $tag?: string;
         } = {};
 
-        let isIncomplete = false;
+        let isIncomplete: boolean | undefined = false;
 
         try {
-            const {rows, yqlTypes} = await dispatch(loadCellPreview({cellPath, useYqlTypes}));
-            const column = rows[0][columnName];
+            const loadedData = await dispatch(loadCellPreview({cellPath, useYqlTypes}));
 
-            if (useYqlTypes) {
+            if (loadedData.useYqlTypes) {
+                const {rows, yqlTypes} = loadedData;
+                const column = rows[0][columnName];
                 const value = column[0];
                 const typeIndex = column[1];
 
                 const flags: {incomplete: boolean} = {incomplete: false};
 
                 const {$type, $value, $tag} = unipika.converters.yql(
-                    [value, yqlTypes[typeIndex]],
+                    [value, yqlTypes?.[typeIndex]],
                     {
                         maxStringSize: undefined,
                         maxListSize: undefined,
@@ -142,6 +139,9 @@ export const onCellPreview = ({
                 data.$value = $tag ? $value.$value : $value;
                 data.$tag = $tag;
             } else {
+                const {rows} = loadedData;
+                const column = rows[0][columnName];
+
                 const hasType = column && column.$type;
 
                 data.$type = column.$type;
