@@ -560,9 +560,9 @@ export const toggleShareQuery =
         }
 
         await dispatch(updateACOQuery({aco, query_id: query.id}));
-        await dispatch(requestQueriesList());
         dispatch({
             type: UPDATE_ACO_QUERY,
             data: {access_control_objects: aco},
         });
+        dispatch(requestQueriesList());
     };
