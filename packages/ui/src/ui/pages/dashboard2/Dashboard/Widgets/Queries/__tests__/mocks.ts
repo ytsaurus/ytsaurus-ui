@@ -13,6 +13,7 @@ export const queriesResponse: {results: Array<BatchResultsItem<QueriesListRespon
                         id: 'cf0afa8a-2b77cf2b-47a0a07b-339419b4',
                         engine: QueryEngine.SPYT,
                         query: 'SELECT * FROM home_table',
+                        supportedEngines: {spyt: true, yql: true, ql: true, chyt: true},
                         files: [],
                         start_time: '2025-06-10T07:28:13.371172Z',
                         finish_time: '2025-06-10T07:28:18.347557Z',
@@ -32,6 +33,7 @@ export const queriesResponse: {results: Array<BatchResultsItem<QueriesListRespon
                     {
                         id: 'a0c86a32-4c254502-6aa4b458-98f2579f',
                         engine: QueryEngine.CHYT,
+                        supportedEngines: {spyt: true, yql: true, ql: true, chyt: true},
                         query: 'SELECT * FROM home_table',
                         files: [],
                         start_time: '2025-06-10T07:27:23.857268Z',
@@ -53,6 +55,7 @@ export const queriesResponse: {results: Array<BatchResultsItem<QueriesListRespon
                         engine: QueryEngine.YQL,
                         query: 'SELECT * FROM home_table',
                         files: [],
+                        supportedEngines: {spyt: true, yql: true, ql: true, chyt: true},
                         start_time: '2025-06-10T07:26:17.848980Z',
                         finish_time: '2025-06-10T07:26:18.798600Z',
                         settings: {
