@@ -348,6 +348,10 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                 return `[${aggr}] aggregate might be only applied to a column of type int64/uint64/double`;
             }
         }
+
+        if (aggr === AggrTypes.XDELTA && type !== ColumnDataTypes.STRING) {
+            return `[${aggr}] aggregate might be only applied to a column of type string`;
+        }
         return undefined;
     }
 
