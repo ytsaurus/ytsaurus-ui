@@ -12,7 +12,6 @@ function tablePage(page: Page) {
 
 test('StickyToolbar: navigation', async ({page}) => {
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/static-table`));
-
     await test.step('toolbar + table', async () => {
         await tablePage(page).waitForTableContent('.navigation-table', 10);
         await page.mouse.wheel(0, 720);
@@ -25,6 +24,16 @@ test('StickyToolbar: navigation', async ({page}) => {
         await page.click(`:text('\`${E2E_DIR}/static-table\`')`, {force: true});
         await page.keyboard.press('ControlOrMeta+A');
         await page.keyboard.press('Backspace');
+        await page.addStyleTag({
+            content: `
+            .monaco-editor .cursor,
+            .monaco-editor .cursors-layer > .cursor {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+            }
+            `,
+        });
 
         await expect(page).toHaveScreenshot();
     });
