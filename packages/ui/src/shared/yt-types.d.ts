@@ -636,3 +636,22 @@ export type FlowStream = FlowNodeBase & {
 export type FlowSink = FlowNodeBase & {
     stream_id: StreamId;
 };
+
+export type ReadTableParameters = BaseBatchParams & {
+    path: string;
+    output_format: ReadTableOutputFormat;
+    dump_error_into_response?: boolean;
+    omit_inaccessible_columns?: boolean;
+};
+
+export type ReadTableOutputFormat = {
+    $value: 'web_json';
+    $attributes: {
+        value_format?: 'yql';
+        field_weight_limit?: number;
+        string_weight_limit?: number;
+        max_selected_column_count?: number;
+        max_all_column_names_count?: number;
+        column_names?: Array<string>;
+    };
+};

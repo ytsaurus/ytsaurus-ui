@@ -69,10 +69,8 @@ export function getRequestOutputFormat(
         stringLimit,
         defaultTableColumnLimit,
         columnNamesLimit: 3000,
+        useYqlTypes,
     });
-    if (useYqlTypes) {
-        outputFormat.$attributes.value_format = 'yql';
-    }
     if (columnNames.length) {
         outputFormat.$attributes.column_names = columnNames;
     }
@@ -83,14 +81,18 @@ export function getDefaultRequestOutputFormat({
     stringLimit,
     tableColumnLimit = undefined,
     columnNamesLimit = undefined,
+    useYqlTypes,
 }) {
     return {
+        /** @type {'web_json'} */
         $value: 'web_json',
         $attributes: {
             field_weight_limit: stringLimit,
             string_weight_limit: stringLimit ? Math.round(stringLimit / 10) : undefined,
             max_selected_column_count: tableColumnLimit,
             max_all_column_names_count: columnNamesLimit,
+            /** @type {'yql' | undefined} */
+            value_format: useYqlTypes ? 'yql' : undefined,
         },
     };
 }

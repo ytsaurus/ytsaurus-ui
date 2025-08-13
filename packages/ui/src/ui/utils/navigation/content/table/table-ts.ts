@@ -3,7 +3,7 @@ import reduce_ from 'lodash/reduce';
 
 export function injectColumnsFromSchema(
     columns: Array<string>,
-    omittedColumns: Array<string>,
+    omittedColumns: Array<string> = [],
     schemaColumns: Array<string>,
 ) {
     const toSkip = reduce_(

@@ -1,5 +1,5 @@
 import reduce_ from 'lodash/reduce';
-import {CancelTokenSource} from 'axios';
+import {AxiosProgressEvent, CancelTokenSource} from 'axios';
 
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
@@ -21,6 +21,7 @@ import {
     OutputFormat,
     PathParams,
     PipelineParams,
+    ReadTableParameters,
     TableParams,
 } from '../../shared/yt-types';
 import {YTApiId, YTApiIdType} from '../../shared/constants/yt-api-id';
@@ -49,6 +50,7 @@ interface YTApiV3 {
         }>
     ): Promise<any>;
     listJobs(...args: ApiMethodParameters<ListJobsParameters>): Promise<ListJobsResponse>;
+    readTable(...args: ApiMethodParameters<ReadTableParameters>): Promise<unknown>;
     [method: string]: (...args: ApiMethodParameters<any>) => Promise<any>;
 }
 
@@ -147,16 +149,28 @@ export interface BatchParameters {
     output_format?: OutputFormat;
 }
 
-type SaveCancellationCb = (cancel: CancelTokenSource) => void;
+export type SaveCancellationCb = (cancel: CancelTokenSource) => void;
 
 export type ApiMethodParameters<PrametersT = unknown> =
     | [ApiMethodParams<PrametersT> | ApiMethodParams<PrametersT>['parameters']]
     | [ApiMethodParams<PrametersT> | ApiMethodParams<PrametersT>['parameters'], unknown];
 
+export type YTApiSetup = {
+    proxy?: string;
+    requestHeaders?: Record<string, string>;
+    transformResponse?: (d: {parsedData: any; rawResponse: any}) => any;
+    transformError?: (d: {parsedData: any; rawError: any}) => any;
+    onUploadProgress?: (e: AxiosProgressEvent) => void;
+    JSONSerializer?: {
+        parse: (data: string) => any;
+        stringify: (data: any) => string;
+    };
+};
+
 export interface ApiMethodParams<ParametersT> {
     parameters: ParametersT;
     data?: any;
-    setup?: any;
+    setup?: YTApiSetup;
     cancellation?: SaveCancellationCb;
 }
 
@@ -196,7 +210,7 @@ export function injectRequestId<T>(
     }
 }
 
-function makeSetupWithId(id: YTApiIdType, setup: {requestHeaders?: object} | undefined) {
+function makeSetupWithId(id: YTApiIdType, setup: YTApiSetup | undefined) {
     const {requestHeaders} = setup || {};
     return {...setup, requestHeaders: {...requestHeaders, [YT_API_REQUEST_ID_HEADER]: id}};
 }

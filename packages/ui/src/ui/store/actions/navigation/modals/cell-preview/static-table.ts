@@ -11,7 +11,7 @@ export const getStaticTableCellPath = ({
     path: string;
     columnName: string;
     rowIndex: number;
-}): CellPreviewActionType => {
+}): CellPreviewActionType<string> => {
     return (_, getState) => {
         const offset = getOffsetValue(getState());
 

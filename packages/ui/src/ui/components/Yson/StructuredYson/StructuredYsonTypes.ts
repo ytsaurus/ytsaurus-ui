@@ -23,7 +23,12 @@ interface BaseUnipikaValue {
     $attributes?: UnipikaMap['$value'];
 }
 
-export type UnipikaValue = UnipikaMap | UnipikaList | UnipikaString | UnipikaPrimitive;
+export type UnipikaValue = {$incomplete?: boolean} & (
+    | UnipikaMap
+    | UnipikaList
+    | UnipikaString
+    | UnipikaPrimitive
+);
 
 export interface UnipikaMap extends BaseUnipikaValue {
     $type: 'map';

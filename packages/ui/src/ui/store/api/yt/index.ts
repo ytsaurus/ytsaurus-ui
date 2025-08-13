@@ -76,9 +76,7 @@ type BatchQueryArgs = typeof ytApi.endpoints.fetchBatch.Types.QueryArg;
  * });
  */
 export function useFetchBatchQuery<T>(
-    args: BatchQueryArgs extends {setup: unknown}
-        ? BatchQueryArgs
-        : Omit<BatchQueryArgs, 'cluster'>,
+    args: BatchQueryArgs,
     options?: UseQueryOptions<BatchQueryResult, BatchQueryArgs>,
 ) {
     const useAutoRefresh = useSelector(getUseAutoRefresh);
@@ -95,7 +93,7 @@ export function useFetchBatchQuery<T>(
     };
 
     const customArgs =
-        'setup' in args
+        'setup' in args && 'proxy' in args.setup
             ? args
             : {
                   ...args,
