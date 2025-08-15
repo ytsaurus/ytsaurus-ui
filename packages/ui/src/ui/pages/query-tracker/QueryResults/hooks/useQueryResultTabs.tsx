@@ -42,6 +42,8 @@ export const useQueryResultTabs = (
     const [tab, setTab] = useState<QueryResultTab>(QueryResultTab.META);
     const [activeResultParams, setResultParams] =
         useState<ResultCurrentState['activeResultParams']>(undefined);
+    const [resultTabShown, setResultTabShown] = useState(false);
+    const [progressTabShown, setProgressTabShown] = useState(false);
     const dispatch = useDispatch();
     const resultsMeta = useSelector((state: RootState) => getQueryResults(state, query?.id || ''));
 
@@ -147,16 +149,44 @@ export const useQueryResultTabs = (
         if (query) {
             dispatch(loadQueryResultsErrors(query));
         }
-        setActiveTab(tabs?.[0]?.id, query?.id);
-    }, [dispatch, query?.id, isCompleted]);
+    }, [dispatch, query, query?.id, isCompleted]);
 
     useEffect(() => {
-        const hasResultTab = tabs.some((tab) => tab.id === QueryResultTab.PROGRESS);
-        if (hasResultTab && query?.state === QueryStatus.RUNNING && !progressActive) {
+        setResultTabShown(false);
+        setProgressTabShown(false);
+        setProgressActive(false);
+    }, [query?.id]);
+
+    useEffect(() => {
+        if (!tabs.length) return;
+
+        const resultTabItem = tabs.find((tabItem) => tabItem.id.startsWith('result/'));
+        if (resultTabItem && !resultTabShown) {
+            setResultTabShown(true);
+            setActiveTab(resultTabItem.id, query?.id);
+            return;
+        }
+
+        const progressTabItem = tabs.find((tabItem) => tabItem.id === QueryResultTab.PROGRESS);
+        if (progressTabItem && !progressTabShown && !resultTabShown) {
+            setProgressTabShown(true);
             setProgressActive(true);
             setTab(QueryResultTab.PROGRESS);
+            return;
         }
-    }, [progressActive, query?.state, tabs]);
+
+        if (!resultTabShown && !progressTabShown && tabs[0]) {
+            setActiveTab(tabs[0].id, query?.id);
+        }
+    }, [
+        progressActive,
+        query?.state,
+        tabs,
+        setActiveTab,
+        query?.id,
+        resultTabShown,
+        progressTabShown,
+    ]);
 
     return [
         tabs,
