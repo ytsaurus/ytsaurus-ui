@@ -270,6 +270,7 @@ const attributesToLoad = [
     '_restore_path',
     '_yql_key_meta',
     '_yql_op_id',
+    '_yql_op_url',
     '_yql_row_spec',
     '_yql_subkey_meta',
     '_yql_type',

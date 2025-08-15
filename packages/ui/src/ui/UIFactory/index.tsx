@@ -446,7 +446,7 @@ export interface UIFactory {
     yqlWidgetSetup?: {
         renderButton(props: YQLButtonProps): React.ReactNode;
         renderWidget(props?: {visible?: boolean; onClose: () => void}): React.ReactNode;
-        renderYqlOperationLink(yqlOperationId: string): React.ReactNode;
+        renderYqlOperationLink(yqlOperationId: string, yqlOperationUrl?: string): React.ReactNode;
     };
 
     getExperimentalPages(): string[];
