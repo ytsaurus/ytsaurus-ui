@@ -44,3 +44,4 @@ src/ui/playwright-components/report
 src/ui/playwright-components/test-results
 src/ui/playwright-components/report-docker
 public/mockServiceWorker.js
+core.*
