@@ -5,9 +5,11 @@ import {SubjectCard} from '../../SubjectLink/SubjectLink';
 import AccountLink from '../../../pages/accounts/AccountLink';
 import UIFactory from '../../../UIFactory';
 import {makeTTLItems} from './ttl';
+import {Flex, Icon, Label, Link} from '@gravity-ui/uikit';
+import AbbrSqlIcon from '@gravity-ui/icons/svgs/abbr-sql.svg';
 
 export default function metaTablePresetMain(attributes) {
-    const [id, owner, account, creationTime, modificationTime, accessTime, yql_op_id] =
+    const [id, owner, account, creationTime, modificationTime, accessTime, yql_op_id, yql_op_url] =
         ypath.getValues(attributes, [
             '/id',
             '/owner',
@@ -16,9 +18,15 @@ export default function metaTablePresetMain(attributes) {
             '/modification_time',
             '/access_time',
             '/_yql_op_id',
+            '/_yql_op_url',
         ]);
 
-    const yqlLink = yql_op_id ? UIFactory.yqlWidgetSetup?.renderYqlOperationLink(yql_op_id) : null;
+    const qtUrl = yql_op_url;
+
+    const yqlLink =
+        yql_op_id && !yql_op_url
+            ? UIFactory.yqlWidgetSetup?.renderYqlOperationLink(yql_op_id)
+            : null;
 
     return [
         {
@@ -54,6 +62,22 @@ export default function metaTablePresetMain(attributes) {
             key: 'YQL operation',
             value: yqlLink,
             visible: Boolean(yqlLink),
+        },
+        {
+            key: 'QT operation',
+            value: (
+                <Link href={qtUrl} target="_blank">
+                    <Flex alignItems="center" gap={1}>
+                        <Label theme="info">
+                            <Flex alignItems="center" justifyContent="center">
+                                <Icon data={AbbrSqlIcon} size={16} />
+                            </Flex>
+                        </Label>
+                        {yql_op_id}
+                    </Flex>
+                </Link>
+            ),
+            visible: Boolean(qtUrl),
         },
     ];
 }
