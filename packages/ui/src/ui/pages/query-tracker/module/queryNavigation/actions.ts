@@ -98,7 +98,7 @@ export const loadNodeByPath =
                 },
                 parameters: {
                     path,
-                    attributes: ['type', 'broken', 'dynamic'],
+                    attributes: ['type', 'broken', 'dynamic', 'sorted', 'target_path'],
                 },
             }),
             {
@@ -115,11 +115,13 @@ export const loadNodeByPath =
                 const name = ypath.getValue(item);
                 const newPath = path + '/' + name;
                 const attributes = ypath.getAttributes(item);
+                const {target_path, ...restAttributes} = attributes;
 
                 return {
                     name,
-                    ...attributes,
+                    ...restAttributes,
                     path: newPath,
+                    targetPath: target_path,
                     isFavorite: favorites.includes(newPath),
                 };
             })
