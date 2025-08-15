@@ -7,7 +7,7 @@ import UIFactory from '../../../UIFactory';
 import {makeTTLItems} from './ttl';
 
 export default function metaTablePresetMain(attributes) {
-    const [id, owner, account, creationTime, modificationTime, accessTime, yql_op_id] =
+    const [id, owner, account, creationTime, modificationTime, accessTime, yql_op_id, yql_op_url] =
         ypath.getValues(attributes, [
             '/id',
             '/owner',
@@ -16,9 +16,12 @@ export default function metaTablePresetMain(attributes) {
             '/modification_time',
             '/access_time',
             '/_yql_op_id',
+            '/_yql_op_url',
         ]);
 
-    const yqlLink = yql_op_id ? UIFactory.yqlWidgetSetup?.renderYqlOperationLink(yql_op_id) : null;
+    const yqlLink = yql_op_id
+        ? UIFactory.yqlWidgetSetup?.renderYqlOperationLink(yql_op_id, yql_op_url)
+        : null;
 
     return [
         {
