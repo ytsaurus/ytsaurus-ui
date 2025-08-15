@@ -15,7 +15,9 @@ export type NavigationNode = {
     type?: string;
     broken?: boolean;
     dynamic?: boolean;
+    sorted?: boolean;
     path: string;
+    targetPath?: string;
     isFavorite: boolean;
 };
 
