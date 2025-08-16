@@ -41,7 +41,7 @@ type ColumnCellProps = {
     allowRawStrings?: boolean | null;
     rowIndex: number;
     columnName: string;
-    onShowPreview: (columnName: string, rowIndex: number, tag?: string) => void;
+    onShowPreview: (columnName: string, rowIndex: number, tag?: string) => void | Promise<void>;
 };
 
 export function ColumnCell({
@@ -111,6 +111,8 @@ export function ColumnCell({
         </div>
     );
 
+    const [isPreviewInProgress, setPreviewInProgress] = React.useState(false);
+
     return (
         <div
             className={block(null, className) /*dataTableBlock('value')*/}
@@ -154,7 +156,17 @@ export function ColumnCell({
                                 view="flat-secondary"
                                 size="m"
                                 qa="truncated-preview-button"
-                                onClick={() => onShowPreview(columnName, rowIndex, tag)}
+                                onClick={async () => {
+                                    setPreviewInProgress(true);
+                                    try {
+                                        if (!isPreviewInProgress) {
+                                            await onShowPreview(columnName, rowIndex, tag);
+                                        }
+                                    } finally {
+                                        setPreviewInProgress(false);
+                                    }
+                                }}
+                                loading={isPreviewInProgress}
                             >
                                 <UIKitIcon data={Eye} size="12" />
                             </Button>
