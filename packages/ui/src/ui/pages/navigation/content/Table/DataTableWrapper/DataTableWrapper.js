@@ -35,7 +35,7 @@ export default function DataTableWrapper(props) {
 
     const onShowPreview = React.useCallback(
         (columnName, rowIndex, tag) => {
-            dispatch(onCellPreview({columnName, rowIndex, tag}));
+            return dispatch(onCellPreview({columnName, rowIndex, tag}));
         },
         [dispatch],
     );
