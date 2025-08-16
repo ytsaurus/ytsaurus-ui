@@ -9,7 +9,7 @@ echo -n Checking file names for '*.js'  duplicates...
 
 function dieIfDuplicates {
     tmp=`mktemp`
-    find src -name "*.ts*" | sed -e 's/\.ts$/.js/g' -e 's/\.tsx$/.js/g' | xargs -I {} bash -c "test -f {} && echo {}" > $tmp
+    find src -regex '.*\.tsx?' | sed -e 's/\.ts$/.js/g' -e 's/\.tsx$/.js/g' | xargs -I {} bash -c "test -f {} && echo {}" > $tmp
     count=`cat $tmp | wc -l`
     if [ $count -ne 0 ]; then
         echo
