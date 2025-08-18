@@ -17,8 +17,9 @@ export const EventTimelineTooltipContent: FC<Props> = ({event: {parts, jobId, me
         return parts.reduce<React.ReactElement[]>((ac, {state, phases, interval}) => {
             const eventDuration = interval.to - interval.from;
             const items = phases.reduce<React.ReactElement[]>((acc, {phase, startTime}, i, arr) => {
-                const duration =
-                    i > 0 ? startTime - arr[i - 1].startTime : startTime - interval.from;
+                const nextPhase = arr[i + 1];
+                const phaseEndTime = nextPhase ? nextPhase.startTime : interval.to;
+                const duration = phaseEndTime - startTime;
 
                 acc.push(
                     <EventTimelineTooltipContentRow
@@ -47,7 +48,7 @@ export const EventTimelineTooltipContent: FC<Props> = ({event: {parts, jobId, me
 
     return (
         <Flex direction="column" gap={3} className={block()}>
-            <Text variant="subheader-2">Job id: {jobId}</Text>
+            <Text variant="subheader-2">Job id {jobId}</Text>
             <MetaData meta={meta} />
             <Flex direction="column" gap={1} className={block('phases')}>
                 {phaseItems}

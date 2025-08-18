@@ -36,16 +36,18 @@ export const EventsTable: FC<Props> = ({events}) => {
                     startTime: getDateTime(event.startTime),
                 });
 
-                let prevTime = event.startTime;
-                event.phases.forEach((eventPhase) => {
+                event.phases.forEach((eventPhase, index) => {
+                    const nextPhase = event.phases[index + 1];
+                    const phaseEndTime = nextPhase ? nextPhase.startTime : event.endTime;
+                    const phaseDuration = phaseEndTime - eventPhase.startTime;
+
                     acc.push({
                         phase: <PhaseNameCell state={event.state} phase={eventPhase.phase} />,
-                        duration: hammer.format['TimeDuration'](eventPhase.startTime - prevTime, {
+                        duration: hammer.format['TimeDuration'](phaseDuration, {
                             format: 'milliseconds',
                         }),
                         startTime: getDateTime(eventPhase.startTime),
                     });
-                    prevTime = eventPhase.startTime;
                 });
                 return acc;
             },
