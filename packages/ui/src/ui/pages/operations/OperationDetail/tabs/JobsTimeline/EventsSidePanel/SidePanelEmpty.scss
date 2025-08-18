@@ -1,0 +1,12 @@
+.yt-side-panel-empty {
+    width: 100%;
+    height: 100%;
+
+    &__message {
+        flex-direction: column;
+
+        .no-content__text {
+            padding: 0;
+        }
+    }
+}

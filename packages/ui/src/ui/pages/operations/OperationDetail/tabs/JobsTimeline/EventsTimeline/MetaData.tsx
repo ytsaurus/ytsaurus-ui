@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Text} from '@gravity-ui/uikit';
+import {Flex, Text} from '@gravity-ui/uikit';
 import {JobLineEvent} from '../../../../../../components/TimelineBlock/renderer/JobLineRenderer';
 import cn from 'bem-cn-lite';
 import './MetaData.scss';
@@ -20,6 +20,31 @@ type Props = {
     className?: string;
 };
 
+type ItemProps = {
+    title: string;
+    value: string;
+    showCopy?: boolean;
+};
+
+const MetaItem: FC<ItemProps> = ({title, value, showCopy}) => {
+    return (
+        <>
+            <Text color="secondary">{title}</Text>
+            <Flex alignItems="flex-start" gap={1}>
+                <span>{value}</span>
+                {showCopy && (
+                    <ClipboardButton
+                        className={block('copy-button')}
+                        view="flat-secondary"
+                        text={value}
+                        size="s"
+                    />
+                )}
+            </Flex>
+        </>
+    );
+};
+
 export const MetaData: FC<Props> = ({meta, showCopyButton, className}) => {
     let duration;
     if (meta.endTime && meta.startTime) {
@@ -32,31 +57,40 @@ export const MetaData: FC<Props> = ({meta, showCopyButton, className}) => {
     return (
         <div className={block(null, className)}>
             {meta.allocationId && (
-                <>
-                    <Text color="secondary">Allocation id:</Text> <span>{meta.allocationId}</span>
-                </>
+                <MetaItem
+                    title="Allocation id"
+                    value={meta.allocationId}
+                    showCopy={showCopyButton}
+                />
             )}
             {meta.incarnation && (
-                <>
-                    <Text color="secondary">Incarnation id:</Text> <span>{meta.incarnation}</span>
-                </>
+                <MetaItem
+                    title="Incarnation id"
+                    value={meta.incarnation}
+                    showCopy={showCopyButton}
+                />
             )}
-            <Text color="secondary">Address:</Text>{' '}
-            <span>
-                {hammer.format['Address'](meta.address)} &nbsp;
-                {showCopyButton && (
-                    <ClipboardButton view="flat-secondary" text={meta.address} size="s" />
-                )}
-            </span>
-            <Text color="secondary">Start:</Text>{' '}
-            <span>{hammer.format['DateTime'](meta.startTime)}</span>
-            <Text color="secondary">End:</Text>{' '}
-            <span>{meta.endTime ? hammer.format['DateTime'](meta.endTime) : '—'}</span>
+            <MetaItem
+                title="Address"
+                value={hammer.format['Address'](meta.address)}
+                showCopy={showCopyButton}
+            />
+            <MetaItem
+                title="Start"
+                value={hammer.format['DateTime'](meta.startTime)}
+                showCopy={showCopyButton}
+            />
+            <MetaItem
+                title="End"
+                value={meta.endTime ? hammer.format['DateTime'](meta.endTime) : '—'}
+                showCopy={showCopyButton}
+            />
             {duration && (
-                <>
-                    <Text color="secondary">Duration:</Text>{' '}
-                    <span>{hammer.format['TimeDuration'](duration.asMilliseconds())}</span>
-                </>
+                <MetaItem
+                    title="Duration"
+                    value={hammer.format['TimeDuration'](duration.asMilliseconds())}
+                    showCopy={showCopyButton}
+                />
             )}
         </div>
     );
