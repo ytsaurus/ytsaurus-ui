@@ -44,6 +44,20 @@ class Modal extends Component<ModalProps> {
         confirmText: 'Apply',
     };
 
+    componentDidMount() {
+        document.addEventListener('keydown', this.handleKeyDown);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.handleKeyDown);
+    }
+
+    handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === 'Escape' && this.props.visible) {
+            this.props.onCancel();
+        }
+    };
+
     _isConfirmDisabled = () => {
         const {isConfirmDisabled} = this.props;
         return typeof isConfirmDisabled === 'function' && isConfirmDisabled();
