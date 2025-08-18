@@ -1,58 +1,67 @@
 import React, {FC, useCallback, useEffect, useRef} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
     getSelectedJob,
     selectActiveJob,
 } from '../../../../../../store/selectors/operations/jobs-timeline';
-import {Button, Flex, Icon, Text} from '@gravity-ui/uikit';
+import {setSelectedJob} from '../../../../../../store/reducers/operations/jobs/jobs-timeline-slice';
+import {Flex, Text} from '@gravity-ui/uikit';
 import Link from '../../../../../../components/Link/Link';
-import XmarkIcon from '@gravity-ui/icons/svgs/xmark.svg';
 import cn from 'bem-cn-lite';
 import {EventsTable} from './EventsTable';
 import {getCluster} from '../../../../../../store/selectors/global';
 import {getOperationId} from '../../../../../../store/selectors/operations/operation';
 import './EventsSidePanel.scss';
 import {MetaData} from '../EventsTimeline/MetaData';
+import {SidePanelEmpty} from './SidePanelEmpty';
 
 const block = cn('yt-events-side-panel');
 
-type Props = {
-    onClose: () => void;
-    onOutsideClick?: (e: MouseEvent) => void;
-};
-
-export const EventsSidePanel: FC<Props> = ({onClose, onOutsideClick}) => {
+export const EventsSidePanel: FC = () => {
+    const dispatch = useDispatch();
+    const containerRef = useRef<HTMLDivElement>(null);
     const id = useSelector(selectActiveJob);
     const job = useSelector(getSelectedJob);
     const cluster = useSelector(getCluster);
     const operationId = useSelector(getOperationId);
-    const panelRef = useRef<HTMLDivElement>(null);
 
-    const handleDocumentClick = useCallback(
-        (e: MouseEvent) => {
-            if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
-                onOutsideClick?.(e);
+    const handleOutsideClick = useCallback(
+        (event: MouseEvent) => {
+            if (
+                id &&
+                containerRef.current &&
+                !containerRef.current.contains(event.target as Node)
+            ) {
+                // exclude timeline & gutter click
+                const target = event.target as Element;
+                const timelineElement = target.closest('.yt-operation-timeline');
+                const gutterElement = target.closest('.gutter');
+                const headerControls = target.closest('.yt-timeline-header');
+
+                if (!timelineElement && !gutterElement && !headerControls) {
+                    dispatch(setSelectedJob(''));
+                }
             }
         },
-        [onOutsideClick],
+        [dispatch, id],
     );
 
     useEffect(() => {
-        document.addEventListener('click', handleDocumentClick);
+        document.addEventListener('click', handleOutsideClick);
 
         return () => {
-            document.removeEventListener('click', handleDocumentClick);
+            document.removeEventListener('click', handleOutsideClick);
         };
-    }, [handleDocumentClick]);
+    }, [handleOutsideClick]);
 
-    if (!id || !job) return null;
+    if (!id || !job) return <SidePanelEmpty />;
 
     return (
-        <div ref={panelRef} className={block()}>
+        <div ref={containerRef} className={block()}>
             <Flex alignItems="center" justifyContent="space-between">
                 <Flex alignItems="center" justifyContent="center" gap={1}>
                     <Text variant="subheader-3">
-                        Job id:{' '}
+                        Job id{' '}
                         <Link
                             theme="primary"
                             url={`/${cluster}/job/${operationId}/${id}`}
@@ -62,9 +71,6 @@ export const EventsSidePanel: FC<Props> = ({onClose, onOutsideClick}) => {
                         </Link>
                     </Text>
                 </Flex>
-                <Button view="flat" onClick={onClose}>
-                    <Icon data={XmarkIcon} size={16} />
-                </Button>
             </Flex>
             <MetaData
                 className={block('meta')}
