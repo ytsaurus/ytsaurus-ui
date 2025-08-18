@@ -2,4 +2,8 @@
     display: grid;
     grid-template-columns: max-content 1fr;
     grid-gap: 0 8px;
+
+    &__copy-button {
+        margin-top: -2px;
+    }
 }
