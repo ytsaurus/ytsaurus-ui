@@ -13,7 +13,7 @@ import {
     setInterval,
     setSelectedJob,
 } from '../../../../../../store/reducers/operations/jobs/jobs-timeline-slice';
-import {useSidePanel} from '../../../../../../hooks/use-side-panel';
+import {splitScreen} from '../../../../../../store/actions/global';
 import {EventsSidePanel} from '../EventsSidePanel';
 import {
     JobLineEvent,
@@ -26,8 +26,11 @@ import './JobsGroups.scss';
 import {TimelineBlock} from '../../../../../../components/TimelineBlock/TimelineBlock';
 import {prepareAxis} from '../helpers/prepareAxes';
 import {prepareMarkers} from '../helpers/prepareMarkers';
+import withSplit from '../../../../../../hocs/withSplit';
 
 const block = cn('yt-timeline-event-group');
+
+export const SidePanelPortal = withSplit(React.Fragment);
 
 export const JobsGroups: FC = () => {
     const dispatch = useDispatch();
@@ -61,24 +64,6 @@ export const JobsGroups: FC = () => {
         [dispatch],
     );
 
-    const handleSidePanelClose = useCallback(
-        (onClose: () => void) => () => {
-            dispatch(setSelectedJob(''));
-            onClose();
-        },
-        [dispatch],
-    );
-
-    const handleSidePanelOutsideClick = useCallback(
-        (onClose: () => void) => async (e: MouseEvent) => {
-            if (e.target instanceof Element && e.target.localName !== 'events-timeline-canvas') {
-                await dispatch(setSelectedJob(''));
-                onClose();
-            }
-        },
-        [dispatch],
-    );
-
     const handleMakeTimelineContent = useCallback(
         (event: JobLineEvent | AllocationLineEvent | undefined) => {
             if (!event || !('jobId' in event)) return null;
@@ -87,21 +72,9 @@ export const JobsGroups: FC = () => {
         [],
     );
 
-    const {openWidget, closeWidget, widgetContent} = useSidePanel('JobsTimeline', {
-        renderContent({onClose}) {
-            return (
-                <EventsSidePanel
-                    onClose={handleSidePanelClose(onClose)}
-                    onOutsideClick={handleSidePanelOutsideClick(onClose)}
-                />
-            );
-        },
-    });
-
     useEffect(() => {
-        const operation = timelineId ? openWidget : closeWidget;
-        operation();
-    }, [closeWidget, openWidget, timelineId]);
+        dispatch(splitScreen('JobsTimeline'));
+    }, [dispatch]);
 
     const timelinesCollection = useMemo(() => {
         Array.from(timelinesRef.current.keys()).forEach((key) => {
@@ -176,7 +149,9 @@ export const JobsGroups: FC = () => {
                     );
                 })}
             </div>
-            <>{widgetContent}</>
+            <SidePanelPortal>
+                <EventsSidePanel />
+            </SidePanelPortal>
         </>
     );
 };
