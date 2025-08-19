@@ -2,8 +2,14 @@ import {ThunkAction} from 'redux-thunk';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {RootState} from '../../../../store/reducers';
 import {loadQueriesList} from '../api';
-import {getQueriesList, getQueriesListCursorParams, getQueriesListFilterParams} from './selectors';
-import {QueriesListFilter} from './types';
+import {
+    getQueriesFilters,
+    getQueriesList,
+    getQueriesListCursorParams,
+    getQueriesListFilterParams,
+    getQueriesListMode,
+} from './selectors';
+import {DefaultQueriesListFilter, QueriesListFilter} from './types';
 import {QueriesHistoryCursorDirection} from '../query-tracker-contants';
 import {setCursor, setFilter, setLoading, updateListState} from './queryListSlice';
 
@@ -82,10 +88,22 @@ export function resetCursor(silent = false): AsyncAction {
     };
 }
 
-export function applyFilter(patch: QueriesListFilter): AsyncAction {
-    return (dispatch) => {
-        dispatch(resetCursor(true));
-        dispatch(setFilter(patch));
+export function resetFilter(): AsyncAction {
+    return (dispatch, getState) => {
+        const state = getState();
+        const listMode = getQueriesListMode(state);
+
+        dispatch(setFilter({...DefaultQueriesListFilter[listMode]}));
         dispatch(requestQueriesList());
+    };
+}
+
+export function applyFilter(patch: QueriesListFilter): AsyncAction {
+    return (dispatch, getState) => {
+        const filter = getQueriesFilters(getState());
+
+        dispatch(resetCursor(true));
+        dispatch(setFilter({...filter, ...patch}));
+        dispatch(requestQueriesList({refresh: true}));
     };
 }

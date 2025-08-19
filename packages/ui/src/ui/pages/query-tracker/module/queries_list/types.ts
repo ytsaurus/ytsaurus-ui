@@ -1,5 +1,6 @@
 import {QueryEngine} from '../../../../../shared/constants/engines';
 import type {QueriesHistoryCursorDirection} from '../query-tracker-contants';
+import {QueryStatus} from '../../../../types/query-tracker';
 
 export enum QueriesListAuthorFilter {
     All = 'all',
@@ -38,8 +39,11 @@ export const DefaultQueriesListFilter: Record<QueriesListMode, Partial<QueriesLi
 };
 
 export type QueriesListFilter = {
-    user?: QueriesListAuthorFilter;
+    user?: string;
     engine?: QueryEngine;
+    from?: number;
+    to?: number;
+    state?: QueryStatus;
     filter?: string;
     is_tutorial?: boolean;
 };
