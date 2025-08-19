@@ -3,7 +3,12 @@ import {RootState} from '../../../../store/reducers';
 import {getCurrentUserName} from '../../../../store/selectors/global';
 import {QueriesListParams, QueryItem} from '../api';
 import {isQueryProgress} from '../../utils/query';
-import {QueriesListAuthorFilter, QueriesListFilterPresets, QueriesListMode} from './types';
+import {
+    DefaultQueriesListFilter,
+    QueriesListAuthorFilter,
+    QueriesListFilterPresets,
+    QueriesListMode,
+} from './types';
 import {getSettingsData} from '../../../../store/selectors/settings/settings-base';
 import {selectIsVcsVisible} from '../vcs/selectors';
 import groupBy_ from 'lodash/groupBy';
@@ -75,6 +80,21 @@ export const getQueryListColumns = createSelector(
     },
 );
 
+export const hasCustomHistoryFilters = createSelector(
+    [getQueriesFilters, getSettingsData],
+    (filter) => {
+        const {from, to, state, user} = filter;
+        const defaultFilter = DefaultQueriesListFilter[QueriesListMode.History];
+
+        const fromChanged = from !== undefined;
+        const toChanged = to !== undefined;
+        const stateChanged = state !== undefined;
+        const userChanged = user !== defaultFilter.user;
+
+        return fromChanged || toChanged || stateChanged || userChanged;
+    },
+);
+
 export const getUncompletedItems = createSelector(getQueriesList, (items) => {
     return items.filter(isQueryProgress);
 });
@@ -94,23 +114,28 @@ export function getQueriesListFilterParams(state: RootState): QueriesListParams 
         ...getQueriesFilters(state),
         ...(QueriesListFilterPresets[listMode] || {}),
     };
-    const {is_tutorial, ...filter} = filterParams;
-    if (is_tutorial) {
-        filter.filter = `is_tutorial`;
-    }
+    const {is_tutorial, from, to, state: queryState, ...filter} = filterParams;
+
+    let user = filter.user;
     if (filter.user === 'my') {
-        const user = getCurrentUserName(state);
-        if (user) {
-            return {
-                ...filter,
-                user,
-            };
-        }
+        user = getCurrentUserName(state);
     }
-    return {
+    if (filter.user === 'all') {
+        user = undefined;
+    }
+
+    const params = {
         ...filter,
-        user: undefined,
+        from_time: from,
+        to_time: to,
+        state: queryState ? queryState[0].toUpperCase() + queryState.slice(1) : undefined,
+        user,
     };
+
+    if (is_tutorial) {
+        params.filter = `is_tutorial`;
+    }
+    return params;
 }
 
 export function getQueryListHistoryColumns(state: RootState) {
