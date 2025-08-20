@@ -12,7 +12,6 @@ import format from '../../../../../../common/hammer/format';
 
 import ErrorBoundary from '../../../../../../components/ErrorBoundary/ErrorBoundary';
 
-import {operationProps} from '../../details/Runtime/Runtime';
 import {getTheme} from '../../../../../../store/selectors/global';
 
 import WithStickyToolbar from '../../../../../../components/WithStickyToolbar/WithStickyToolbar';
@@ -46,7 +45,7 @@ interface State {
 
 class JobSizes extends React.Component<Props, State> {
     static propTypes = {
-        operation: operationProps.isRequired,
+        operation: PropTypes.object.isRequired,
         chartKitTheme: PropTypes.string.isRequired,
     };
 

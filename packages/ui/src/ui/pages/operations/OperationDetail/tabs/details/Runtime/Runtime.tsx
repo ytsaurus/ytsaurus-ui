@@ -1,6 +1,5 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
+import React, {Component, FC} from 'react';
+import {ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
@@ -15,59 +14,60 @@ import {showEditPoolsWeightsModal} from '../../../../../../store/actions/operati
 import hammer from '../../../../../../common/hammer';
 import {OperationPool} from '../../../../../../components/OperationPool/OperationPool';
 import ypath from '../../../../../../common/thor/ypath';
+import {RuntimeItem, RuntimeProgress} from '../../../../../../store/reducers/operations/detail';
 
 const headingBlock = cn('elements-heading');
 const runtimeBlock = cn('runtime');
 
-export const runtimeProps = PropTypes.arrayOf(
-    PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        progress: PropTypes.object.isRequired,
-    }),
-);
+export type PoolItem = {
+    tree: string;
+    pool: string;
+};
 
-function StarvingStatus({progress}) {
+export type Operation = {
+    $value?: string;
+    $attributes?: Record<string, any>;
+    type?: string;
+    user?: string;
+    pool?: string;
+    state?: string;
+    title?: string;
+    suspended?: boolean;
+    duration?: number;
+    startTime?: string;
+    finishTime?: string;
+    pools?: PoolItem[];
+};
+
+type StarvingStatusProps = {
+    progress: RuntimeProgress;
+};
+
+const StarvingStatus: FC<StarvingStatusProps> = ({progress}) => {
     const {starvation_status} = progress || {};
     const res = starvation_status ? hammer.format.Readable(starvation_status) : undefined;
     return res || null; // returns null to prevent react warning
-}
+};
 
-export const operationProps = PropTypes.shape({
-    $value: PropTypes.string,
-    $attributes: PropTypes.object,
-    type: PropTypes.string,
-    user: PropTypes.string,
-    pool: PropTypes.string,
-    state: PropTypes.string,
-    title: PropTypes.string,
-    suspended: PropTypes.bool,
-    duration: PropTypes.number,
-    startTime: PropTypes.string,
-    finishTime: PropTypes.string,
-    pools: PropTypes.arrayOf(
-        PropTypes.shape({
-            tree: PropTypes.string.isRequired,
-            pool: PropTypes.string.isRequired,
-        }),
-    ),
-});
+const mapDispatchToProps = {
+    showEditPoolsWeightsModal,
+};
 
-class Runtime extends Component {
-    static propTypes = {
-        // from parent component
-        runtime: runtimeProps.isRequired,
-        operation: operationProps.isRequired,
-        cluster: PropTypes.string.isRequired,
-        // from connect
-        showEditPoolsWeightsModal: PropTypes.func.isRequired,
-    };
+const connector = connect(null, mapDispatchToProps);
 
+export type Props = {
+    runtime: RuntimeItem[];
+    operation: Operation;
+    cluster: string;
+} & ConnectedProps<typeof connector>;
+
+class Runtime extends Component<Props> {
     handlePoolEditClick = () => {
         const {showEditPoolsWeightsModal, operation} = this.props;
         showEditPoolsWeightsModal(operation);
     };
 
-    renderTree({progress, name}) {
+    renderTree({progress, name}: RuntimeItem) {
         const {cluster, operation, showEditPoolsWeightsModal} = this.props;
         const {state} = operation;
 
@@ -182,4 +182,4 @@ class Runtime extends Component {
     }
 }
 
-export default connect(null, {showEditPoolsWeightsModal})(Runtime);
+export default connector(Runtime);

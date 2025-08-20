@@ -11,7 +11,6 @@ import {
     completedTableProps,
     intermediateTableProps,
 } from '../../../../../../utils/operations/tabs/details/resources/resourcesTablesProps';
-import {operationProps} from '../Runtime/Runtime';
 
 import {hasProgressTasks} from '../../../../../../utils/operations/tabs/details/data-flow';
 
@@ -209,7 +208,7 @@ class DataFlow extends React.Component {
 }
 
 DataFlow.propTypes = {
-    operation: operationProps.isRequired,
+    operation: PropTypes.object.isRequired,
     resources: resourcesProps.isRequired,
     intermediateResources: intermediateResourcesProps,
 };

@@ -19,9 +19,26 @@ export interface AlertEvent {
     error: unknown;
 }
 
+export type RuntimeProgress = {
+    starvation_status?: any;
+    pool: string;
+    weight: number;
+    fifo_index: number;
+    fair_share_ratio: number;
+    usage_ratio: number;
+    demand_ratio: number;
+    dominant_resource: any;
+    scheduling_status: any;
+    scheduling_segment?: any;
+    partitions?: {
+        completed: number;
+        total: number;
+    };
+};
+
 export interface RuntimeItem {
     name: string;
-    progress: Record<string, unknown>;
+    progress: RuntimeProgress;
 }
 
 export interface OperationDetailState {

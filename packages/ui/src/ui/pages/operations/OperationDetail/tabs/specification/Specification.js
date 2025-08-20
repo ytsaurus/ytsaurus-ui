@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect, useSelector} from 'react-redux';
 import unipika from '../../../../../common/thor/unipika';
+import PropTypes from 'prop-types';
 
 import keys_ from 'lodash/keys';
 import throttle_ from 'lodash/throttle';
@@ -11,8 +12,6 @@ import {CollapsibleSectionStateLess} from '../../../../../components/Collapsible
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
 import HelpLink from '../../../../../components/HelpLink/HelpLink';
 import Yson from '../../../../../components/Yson/Yson';
-
-import {operationProps} from '../../../../../pages/operations/OperationDetail/tabs/details/Details/Details';
 
 import {
     getOperationDetailsLoadingStatus,
@@ -158,7 +157,7 @@ function Specification({operation, operationId}) {
 
 Specification.propTypes = {
     // from connect
-    operation: operationProps.isRequired,
+    operation: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
