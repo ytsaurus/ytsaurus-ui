@@ -1,5 +1,39 @@
 # Changelog
 
+## [1.101.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.100.0...ui-v1.101.0) (2025-08-20)
+
+
+### Features
+
+* **Dashboard2/PoolsWidget:** add favourite/custom list setting [YTFRONT-3400] ([989c148](https://github.com/ytsaurus/ytsaurus-ui/commit/989c1480c82e05f3ca4decc46f1258457078c70f))
+* **Dashboard2/ServicesWidget:** add favourite/custom list setting [YTFRONT-3400] ([127d2c9](https://github.com/ytsaurus/ytsaurus-ui/commit/127d2c9e80238a0c8dae5b6552f205ca03c939cc))
+* **Dashboard2:** add items count to widget header [YTFRONT-3400] ([040d913](https://github.com/ytsaurus/ytsaurus-ui/commit/040d913f22525a919695bff2725053feb6ba3bf9))
+* **Groups:** replace idm column to external system [YTFRONT-5113] ([75d3473](https://github.com/ytsaurus/ytsaurus-ui/commit/75d347388cb2d5526ceb6df8df3916f5d8daef5f))
+* **Monaco:** new colors for dark and light contrast theme [YTFRONT-5060] ([a49bf9d](https://github.com/ytsaurus/ytsaurus-ui/commit/a49bf9d3318d36432da64cdd2a07dae5148784b5))
+* **Navigation/CreateTable:** add new aggregate type [YTFRONT-5153] ([7e0ee63](https://github.com/ytsaurus/ytsaurus-ui/commit/7e0ee63ca4ae849e55d483709f229ad346c13aee))
+* **Navigation/YqlWidget:** qt operation link [YTFRONT-4994] ([8b9688c](https://github.com/ytsaurus/ytsaurus-ui/commit/8b9688c3e000716b1143cdd597b01d97944d9073))
+* **Queries/List:** add additional list filters [YTFRONT-5058] ([fc5ad97](https://github.com/ytsaurus/ytsaurus-ui/commit/fc5ad976051beb0a6b7299e1f9cdda80ce4c7286))
+* **Queries/List:** infinite query list [YTFRONT-5060] ([9a58558](https://github.com/ytsaurus/ytsaurus-ui/commit/9a5855808e5eb4292bf4b700df70158c44ad1a30))
+* **Queries:** filter engines by selected cluster [YTFRONT-4852] ([7a0daaf](https://github.com/ytsaurus/ytsaurus-ui/commit/7a0daaf443d186a54c2f4cb8e7f24f9646ceb425))
+* **Queries:** qt menu redesign [YTFRONT-4852] ([04a5b2c](https://github.com/ytsaurus/ytsaurus-ui/commit/04a5b2c5387a5aec06cad5c90f9c4eadabc5af25))
+* **Users:** replace idm column to external system [YTFRONT-5113] ([dc25858](https://github.com/ytsaurus/ytsaurus-ui/commit/dc258587276e1c06e6917b95e827e569f1852e61))
+
+
+### Bug Fixes
+
+* **Accounts/DetailedUsage:** move navigation link from path to button [YTFRONT-4896] ([27ebab3](https://github.com/ytsaurus/ytsaurus-ui/commit/27ebab38598675470b198f9491d43b088f1df3b8))
+* **Accounts:** typo in the graphic [YTFRONT-5151] ([3a1975c](https://github.com/ytsaurus/ytsaurus-ui/commit/3a1975c72a1999dcbeb59f22275ac86e96de4a8a))
+* **ColumnSelector:** decode columns with non-english names [YTFRONT-4873] ([d9a552d](https://github.com/ytsaurus/ytsaurus-ui/commit/d9a552d7d7d801066d2a38abc6d665c86057f420))
+* **Dashboard2/Accounts:** make mediums readable [YTFRONT-3400] ([4432bea](https://github.com/ytsaurus/ytsaurus-ui/commit/4432bea9fe9b44b913b65f41cd4ad8f19034b51d))
+* **Dashboard2/Accounts:** merge column controls [YTFRONT-3400] ([d25f743](https://github.com/ytsaurus/ytsaurus-ui/commit/d25f743c3cc43d66bded37cb6cfeb83c0938dde4))
+* **Dashboard2:** add limits for queries and operations [YTFRONT-3400] ([cd35267](https://github.com/ytsaurus/ytsaurus-ui/commit/cd35267539ec48251e27a72220960bf7ee510eee))
+* **Modal:** close modal when pressing esc [YTFRONT-2533] ([72ddde9](https://github.com/ytsaurus/ytsaurus-ui/commit/72ddde9d60dbcce5c3a476896aa81b2e27b3480b))
+* **Navigation:** fix cancellation ([cfa5d83](https://github.com/ytsaurus/ytsaurus-ui/commit/cfa5d836e6acb247a54cc19842b15706e073489f))
+* **Queries/List:** incorrect order of elements when starting a query [YTFRONT-4770] ([f3a59a3](https://github.com/ytsaurus/ytsaurus-ui/commit/f3a59a3b907ef8e860d83d96fe5a1feec613cb82))
+* **Queries/Navigation:** correct element icons [YTFRONT-5099] ([7e64c6d](https://github.com/ytsaurus/ytsaurus-ui/commit/7e64c6da3096eb4efb8ddffbcb6a0febb81727d3))
+* **Queries/Result:** result tab priority [YTFRONT-5122] ([153313f](https://github.com/ytsaurus/ytsaurus-ui/commit/153313f7ecfbb92aa07a2d6f8bf2ab50e63d664e))
+* **Queries/Share:** changed dependency on list query [YTFRONT-4770] ([bbb62f7](https://github.com/ytsaurus/ytsaurus-ui/commit/bbb62f79708b60ce3ff1745fdf5fee0623a18c32))
+
 ## [1.100.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.99.1...ui-v1.100.0) (2025-07-24)
 
 
