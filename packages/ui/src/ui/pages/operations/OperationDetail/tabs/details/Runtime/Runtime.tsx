@@ -15,6 +15,8 @@ import hammer from '../../../../../../common/hammer';
 import {OperationPool} from '../../../../../../components/OperationPool/OperationPool';
 import ypath from '../../../../../../common/thor/ypath';
 import {RuntimeItem, RuntimeProgress} from '../../../../../../store/reducers/operations/detail';
+import {Flex, Icon, Tooltip} from '@gravity-ui/uikit';
+import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 
 const headingBlock = cn('elements-heading');
 const runtimeBlock = cn('runtime');
@@ -111,6 +113,13 @@ class Runtime extends Component<Props> {
                             },
                             {
                                 key: 'fifo_index',
+                                label: (
+                                    <Tooltip content="Operation's position in the pool's queue. Operations on lower positions will be scheduled sooner.">
+                                        <Flex alignItems="center" gap={1}>
+                                            FIFO index <Icon data={CircleQuestionIcon} size={16} />
+                                        </Flex>
+                                    </Tooltip>
+                                ),
                                 value: (
                                     <Template.FormattedValue
                                         value={progress.fifo_index}
@@ -146,7 +155,14 @@ class Runtime extends Component<Props> {
                             },
                             {
                                 key: 'gang',
-                                value: isGang,
+                                label: (
+                                    <Tooltip content="Indicates whether operation's jobs perform a single collective computation and must be scheduled simultaneously.">
+                                        <Flex alignItems="center" gap={1}>
+                                            Gang <Icon data={CircleQuestionIcon} size={16} />
+                                        </Flex>
+                                    </Tooltip>
+                                ),
+                                value: isGang ? 'True' : 'False',
                             },
                             ...(isGang
                                 ? [
