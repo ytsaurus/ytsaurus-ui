@@ -8,7 +8,6 @@ import keys_ from 'lodash/keys';
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
-import {operationProps} from '../../../pages/operations/OperationDetail/tabs/details/Runtime/Runtime';
 import {YTErrorBlock} from '../../../components/Error/Error';
 import Modal from '../../../components/Modal/Modal';
 import Link from '../../../components/Link/Link';
@@ -31,7 +30,7 @@ PoolsWeightsEditModal.propTypes = {
     visible: PropTypes.bool.isRequired,
     editable: PropTypes.bool.isRequired,
     cluster: PropTypes.string.isRequired,
-    operation: operationProps,
+    operation: PropTypes.object,
 
     hideEditPoolsWeightsModal: PropTypes.func.isRequired,
     setPoolsAndWeights: PropTypes.func.isRequired,

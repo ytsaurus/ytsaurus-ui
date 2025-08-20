@@ -8,7 +8,6 @@ import format from '../../../../../../common/hammer/format';
 
 import ErrorBoundary from '../../../../../../components/ErrorBoundary/ErrorBoundary';
 
-import {operationProps} from '../../../../../../pages/operations/OperationDetail/tabs/details/Runtime/Runtime';
 import {getTheme} from '../../../../../../store/selectors/global';
 
 import {getOperationDetailsLoadingStatus} from '../../../../../../store/selectors/operations/operation';
@@ -36,7 +35,7 @@ interface State {
 
 class PartitionSizes extends React.Component<ReduxProps, State> {
     static propTypes = {
-        operation: operationProps.isRequired,
+        operation: PropTypes.object.isRequired,
         chartKitTheme: PropTypes.string.isRequired,
     };
 

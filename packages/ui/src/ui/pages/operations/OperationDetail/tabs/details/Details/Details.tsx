@@ -28,10 +28,9 @@ import {UI_COLLAPSIBLE_SIZE} from '../../../../../../constants/global';
 
 import DataFlow, {intermediateResourcesProps, resourcesProps} from '../DataFlow/DataFlow';
 import Specification, {specificationProps} from '../Specification/Specification';
-import Runtime, {operationProps, runtimeProps} from '../Runtime/Runtime';
+import Runtime from '../Runtime/Runtime';
 import Events, {eventsProps} from '../Events/Events';
 import Tasks from '../Tasks/Tasks';
-export {operationProps} from '../Runtime/Runtime';
 
 import './Details.scss';
 
@@ -43,12 +42,12 @@ class Details extends Component<ReduxProps> {
     static propTypes = {
         error: PropTypes.object,
         specification: specificationProps.isRequired,
-        operation: operationProps.isRequired,
+        operation: PropTypes.object.isRequired,
         cluster: PropTypes.string.isRequired,
         result: PropTypes.shape({
             error: PropTypes.object.isRequired,
         }),
-        runtime: runtimeProps,
+        runtime: PropTypes.object,
         events: eventsProps,
         resources: resourcesProps,
         intermediateResources: intermediateResourcesProps,
