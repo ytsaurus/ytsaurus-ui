@@ -23,7 +23,6 @@ const columns: ComponentProps<typeof BundlesTable>['columns'] = [
     'bundle',
     'health',
     'tabletCells',
-    'enable_bundle_balancer',
     'changelog_account',
     'actions',
 ];

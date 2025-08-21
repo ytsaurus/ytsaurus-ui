@@ -90,7 +90,6 @@ function collectBundlesAttrs(dst, attrs) {
         ...dst,
         bundle_controller_target_config: ypath.getValue(attrs, '/bundle_controller_target_config'),
         enable_bundle_controller: ypath.getValue(attrs, '/enable_bundle_controller') || false,
-        enable_bundle_balancer: ypath.getValue(attrs, '/enable_bundle_balancer'),
         changelog_account: ypath.getValue(attrs, '/options/changelog_account'),
         snapshot_account: ypath.getValue(attrs, '/options/snapshot_account'),
         node_tag_filter: ypath.getValue(attrs, '/node_tag_filter'),

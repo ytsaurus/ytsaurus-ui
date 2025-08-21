@@ -58,7 +58,6 @@ const calcColumns = createSelector([getTabletBundlesTableMode], (mode: BundlesTa
                 'uncompressed',
                 'compressed',
                 'enable_bundle_controller',
-                'enable_bundle_balancer',
                 'changelog_account',
             );
         }
