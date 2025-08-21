@@ -58,9 +58,11 @@ const mapDispatchToProps = {
 const connector = connect(null, mapDispatchToProps);
 
 export type Props = {
+    isAbsoluteValue: boolean;
     runtime: RuntimeItem[];
     operation: Operation;
     cluster: string;
+    treeConfigs?: {tree: string; config: Record<string, any>}[];
 } & ConnectedProps<typeof connector>;
 
 class Runtime extends Component<Props> {
@@ -70,8 +72,18 @@ class Runtime extends Component<Props> {
     };
 
     renderTree({progress, name}: RuntimeItem) {
-        const {cluster, operation, showEditPoolsWeightsModal} = this.props;
+        const {cluster, operation, showEditPoolsWeightsModal, treeConfigs} = this.props;
         const {state} = operation;
+
+        const {config} = treeConfigs?.find((item) => item.tree === name) || {};
+        const main_resource = config?.main_resource || 'cpu';
+        const total = config?.resource_limits?.[main_resource];
+        const detailed_fair_share = progress?.detailed_fair_share?.total[main_resource];
+
+        const fair_share =
+            total !== undefined && detailed_fair_share !== undefined
+                ? detailed_fair_share * total
+                : undefined;
 
         const pool = {
             pool: progress.pool,
@@ -83,9 +95,11 @@ class Runtime extends Component<Props> {
 
         return (
             <div className={runtimeBlock('tree')} key={name}>
-                <div className={headingBlock({size: 's'})}>
-                    {hammer.format['ReadableField'](name)}
-                </div>
+                <Flex gap={2}>
+                    <div className={headingBlock({size: 's'})}>
+                        {hammer.format['ReadableField'](name)}
+                    </div>
+                </Flex>
                 <MetaTable
                     items={[
                         [
@@ -129,15 +143,30 @@ class Runtime extends Component<Props> {
                             },
                             {
                                 key: 'fair_share',
-                                value: formatShare(progress.fair_share_ratio),
+                                value: this.props.isAbsoluteValue
+                                    ? hammer.format['Number'](fair_share, {
+                                          digits: 6,
+                                          digitsOnlyForFloat: true,
+                                      }) + ` ${hammer.format.Readable(main_resource)}`
+                                    : formatShare(progress.fair_share_ratio),
                             },
                             {
                                 key: 'usage',
-                                value: formatShare(progress.usage_ratio),
+                                value: this.props.isAbsoluteValue
+                                    ? hammer.format['Number'](
+                                          progress?.resource_usage?.[main_resource],
+                                          {digits: 6, digitsOnlyForFloat: true},
+                                      ) + ` ${hammer.format.Readable(main_resource)}`
+                                    : formatShare(progress.usage_ratio),
                             },
                             {
                                 key: 'demand',
-                                value: formatShare(progress.demand_ratio),
+                                value: this.props.isAbsoluteValue
+                                    ? hammer.format['Number'](
+                                          progress?.resource_demand?.[main_resource],
+                                          {digits: 6, digitsOnlyForFloat: true},
+                                      ) + ` ${hammer.format.Readable(main_resource)}`
+                                    : formatShare(progress.demand_ratio),
                             },
                         ],
                         [
