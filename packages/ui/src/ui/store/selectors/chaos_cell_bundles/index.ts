@@ -57,7 +57,6 @@ const COLUMNS_SORTABLE_AS_IS = new Set<keyof ChaosBundle>([
     'tablets',
     'uncompressed',
     'compressed',
-    'enable_bundle_balancer',
     'node_tag_filter',
     'memory',
     'tablet_count',

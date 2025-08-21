@@ -58,15 +58,6 @@ export default function BundleGeneralMeta() {
             value: <BundleBalancerValue value={bundleData.enable_bundle_controller} />,
         },
         {
-            key: 'Bundle balancer',
-            value: (
-                <BundleBalancerValue
-                    value={bundleData.enable_bundle_balancer}
-                    blocking={bundleData.enable_bundle_controller}
-                />
-            ),
-        },
-        {
             key: 'Node tag filter',
             value: bundleData.node_tag_filter || hammer.format.NO_VALUE,
         },

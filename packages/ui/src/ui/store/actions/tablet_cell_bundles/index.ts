@@ -90,7 +90,6 @@ export function fetchTabletsBundles(): TabletsBundlesThunkAction {
                     path: '//sys/tablet_cell_bundles',
                     attributes: [
                         'nodes',
-                        'enable_bundle_balancer',
                         'health',
                         'options',
                         'node_tag_filter',

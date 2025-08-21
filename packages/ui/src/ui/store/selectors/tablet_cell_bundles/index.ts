@@ -184,7 +184,6 @@ const COLUMNS_SORTABLE_AS_IS = new Set<keyof TabletBundle>([
     'tablets',
     'uncompressed',
     'compressed',
-    'enable_bundle_balancer',
     'enable_bundle_controller',
     'node_tag_filter',
     'memory',

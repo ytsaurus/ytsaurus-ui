@@ -77,7 +77,6 @@ export interface ChaosBundle {
     uncompressed: number;
 
     bundle_controller_target_config: BundleControllerConfig;
-    enable_bundle_balancer: boolean;
     enable_bundle_controller: boolean;
     changelog_account: string;
     snapshot_account: string;

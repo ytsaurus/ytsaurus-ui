@@ -48,7 +48,6 @@ const COLUMN_TITLE: {[name: string]: string} = {
     uncompressed: 'Uncompressed size',
     compressed: 'Compressed size',
     enable_bundle_controller: 'Bundle controller',
-    enable_bundle_balancer: 'Bundle balancer',
     changelog_account: 'Changelog and Snapshot account',
     node_tag_filter: 'Node tag filter',
     actions: ' ',
@@ -63,7 +62,6 @@ const COLUMN_TITLE: {[name: string]: string} = {
 };
 
 const SHORT_TITLE: typeof COLUMN_TITLE = {
-    enable_bundle_balancer: 'BB',
     enable_bundle_controller: 'BC',
 };
 
@@ -155,14 +153,6 @@ class BundlesTable extends React.Component<ReduxProps> {
     renderBytes(colName: keyof TabletBundle, data: {row: TabletBundle}) {
         const {[colName]: value} = data?.row || {};
         return hammer.format['Bytes'](value);
-    }
-
-    renderBB(data: {row: TabletBundle}) {
-        const {bundle, enable_bundle_balancer: value} = data?.row || {};
-        const isTotalAggregatedRow = !bundle;
-        if (isTotalAggregatedRow) return null;
-
-        return <BundleBalancerValue value={value} />;
     }
 
     renderBC(data: {row: TabletBundle}) {
@@ -471,14 +461,6 @@ const Columns = {
             align: 'right',
             render: this.renderBytes.bind(this, 'compressed'),
             width: 120,
-        };
-    },
-    enable_bundle_balancer(this: BundlesTable): Column<TabletBundle> {
-        return {
-            ...this.sortableColumn('enable_bundle_balancer'),
-            align: 'center',
-            render: this.renderBB,
-            width: 80,
         };
     },
     enable_bundle_controller(this: BundlesTable): Column<TabletBundle> {
