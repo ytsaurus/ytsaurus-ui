@@ -21,6 +21,10 @@
         overflow: auto;
     }
 
+    &__runtime-switch {
+        margin-bottom: 20px;
+    }
+
     .collapsible-section {
         box-shadow: 0 2px 5px var(--default-background);
         border: 1px solid var(--light-divider);

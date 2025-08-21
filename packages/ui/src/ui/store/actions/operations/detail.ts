@@ -197,9 +197,38 @@ export function loadOperationPoolTreeConfigs({
     unknown,
     OperationDetailActionType
 > {
-    return (dispatch) => {
+    return async (dispatch) => {
         const treeNames = pools?.map((i) => i.tree);
-        return wrapApiPromiseByToaster(
+
+        const resources = await ytApiV3Id.executeBatch(YTApiId.operationTreeConfigs, {
+            requests: treeNames.map((item) => ({
+                command: 'get',
+                parameters: {
+                    path: `//sys/pool_trees/${item}/@config/main_resource`,
+                    ...USE_CACHE,
+                },
+            })),
+        });
+
+        const limits = await wrapApiPromiseByToaster(
+            ytApiV3Id.executeBatch(YTApiId.operationTreeConfigs, {
+                requests: treeNames.map((item) => ({
+                    command: 'get',
+                    parameters: {
+                        path: `//sys/scheduler/orchid/scheduler/pool_trees/${item}/pools/<Root>/resource_limits`,
+                        ...USE_CACHE,
+                    },
+                })),
+            }),
+            {
+                toasterName: 'operationTreeConfigs',
+                skipSuccessToast: true,
+                batchType: 'v3' as const,
+                errorTitle: 'Failed to load tree limits',
+            },
+        );
+
+        const configs = await wrapApiPromiseByToaster(
             ytApiV3Id.executeBatch(YTApiId.operationTreeConfigs, {
                 requests: treeNames.map((item) => ({
                     command: 'get',
@@ -212,15 +241,22 @@ export function loadOperationPoolTreeConfigs({
                 batchType: 'v3' as const,
                 errorTitle: 'Failed to load tree configs',
             },
-        ).then((data) => {
-            dispatch({
-                type: OPERATION_DETAIL_PARTIAL,
-                data: {
-                    treeConfigs: data.map((item, index) => {
-                        return {tree: treeNames[index], config: item.output};
-                    }),
-                },
-            });
+        );
+
+        dispatch({
+            type: OPERATION_DETAIL_PARTIAL,
+            data: {
+                treeConfigs: configs.map((item, index) => {
+                    return {
+                        tree: treeNames[index],
+                        config: {
+                            ...item.output,
+                            resource_limits: limits[index].output,
+                            main_resource: resources[index].output || 'cpu',
+                        },
+                    };
+                }),
+            },
         });
     };
 }

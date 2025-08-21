@@ -9,6 +9,7 @@ import CollapsibleSection from '../../../../../../components/CollapsibleSection/
 import Button from '../../../../../../components/Button/Button';
 import {YTErrorBlock} from '../../../../../../components/Error/Error';
 import Icon from '../../../../../../components/Icon/Icon';
+import {Flex, Switch} from '@gravity-ui/uikit';
 
 import {RootState} from '../../../../../../store/reducers';
 import {showEditPoolsWeightsModal} from '../../../../../../store/actions/operations';
@@ -43,6 +44,7 @@ class Details extends Component<ReduxProps> {
         error: PropTypes.object,
         specification: specificationProps.isRequired,
         operation: PropTypes.object.isRequired,
+        treeConfigs: PropTypes.array,
         cluster: PropTypes.string.isRequired,
         result: PropTypes.shape({
             error: PropTypes.object.isRequired,
@@ -52,6 +54,14 @@ class Details extends Component<ReduxProps> {
         resources: resourcesProps,
         intermediateResources: intermediateResourcesProps,
         showEditPoolsWeightsModal: PropTypes.func.isRequired,
+    };
+
+    state = {
+        isAbsoluteValue: true,
+    };
+
+    handleSwitchChange = (checked: boolean) => {
+        this.setState({isAbsoluteValue: checked});
     };
 
     handleEditClick = () => {
@@ -133,7 +143,7 @@ class Details extends Component<ReduxProps> {
     }
 
     renderRuntime() {
-        const {runtime, operation, cluster, collapsibleSize} = this.props;
+        const {runtime, operation, cluster, collapsibleSize, treeConfigs} = this.props;
 
         return (
             runtime !== undefined &&
@@ -145,7 +155,20 @@ class Details extends Component<ReduxProps> {
                     size={collapsibleSize}
                     marginDirection="bottom"
                 >
-                    <Runtime runtime={runtime} operation={operation} cluster={cluster} />
+                    <Flex className={block('runtime-switch')} gap={2}>
+                        Show abs. resources{' '}
+                        <Switch
+                            checked={this.state.isAbsoluteValue}
+                            onUpdate={this.handleSwitchChange}
+                        ></Switch>
+                    </Flex>
+                    <Runtime
+                        isAbsoluteValue={this.state.isAbsoluteValue}
+                        runtime={runtime}
+                        treeConfigs={treeConfigs}
+                        operation={operation}
+                        cluster={cluster}
+                    />
                 </CollapsibleSection>
             )
         );
@@ -241,6 +264,7 @@ const mapStateToProps = (state: RootState) => {
     return {
         cluster: getCluster(state),
         operation,
+        treeConfigs: state.operations.detail.treeConfigs,
         ...state.operations.detail.details,
         collapsibleSize: UI_COLLAPSIBLE_SIZE,
         alertEvents: getOperationAlertEvents(state),

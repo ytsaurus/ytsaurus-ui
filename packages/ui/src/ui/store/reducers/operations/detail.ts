@@ -34,6 +34,11 @@ export type RuntimeProgress = {
         completed: number;
         total: number;
     };
+    detailed_fair_share?: {
+        total: Record<string, number>;
+    };
+    resource_usage?: Record<string, number>;
+    resource_demand?: Record<string, number>;
 };
 
 export interface RuntimeItem {
@@ -61,7 +66,12 @@ export interface OperationDetailState {
     resources: {intermediateResources?: unknown};
     monitorChartStates: Record<string, boolean>;
 
-    treeConfigs: undefined | Array<{tree: string; config: {main_resource?: 'gpu'}}>;
+    treeConfigs:
+        | undefined
+        | Array<{
+              tree: string;
+              config: {main_resource?: 'gpu'; resource_limits?: Record<string, number>};
+          }>;
 }
 
 const initialState: OperationDetailState = {
