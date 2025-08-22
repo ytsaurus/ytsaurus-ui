@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.102.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.101.0...ui-v1.102.0) (2025-08-22)
+
+
+### Features
+
+* **Bundles:** remove bundle balancer [YTFRONT-5160] ([7b5f141](https://github.com/ytsaurus/ytsaurus-ui/commit/7b5f141e9b7f3498049e2af55f8b3682c7560c77))
+* **Operations/Runtime:** add absolute values [YTFRONT-5120] ([a986bd4](https://github.com/ytsaurus/ytsaurus-ui/commit/a986bd4796c42983ec522ffeedfb935b217dfef8))
+* **Operations/Runtime:** add tooltips [YTFRONT-5120] ([a26b6e4](https://github.com/ytsaurus/ytsaurus-ui/commit/a26b6e41625c5963e3c604d8e76948657b77f4e8))
+
 ## [1.101.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.100.0...ui-v1.101.0) (2025-08-20)
 
 
