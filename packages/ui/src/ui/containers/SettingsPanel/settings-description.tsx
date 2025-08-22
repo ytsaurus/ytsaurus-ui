@@ -52,7 +52,7 @@ import {
 import {YT} from '../../config/yt-config';
 import Link from '../../components/Link/Link';
 import Button from '../../components/Button/Button';
-import {AddTokenForm, VcsList} from '../../pages/query-tracker/Vcs/SettingsMenu';
+import {AddVcsTokenForm, VcsList} from '../../pages/query-tracker/Vcs/SettingsMenu';
 import {selectIsVcsVisible, selectVcsConfig} from '../../pages/query-tracker/module/vcs/selectors';
 import {SettingsMenuRadioByKey, SettingsMenuSelect} from '../SettingsMenu/SettingsMenuSelect';
 import {getDefaultQueryACO} from '../../pages/query-tracker/module/query_aco/selectors';
@@ -616,7 +616,12 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 'VCS',
                 LogoGitlabIcon,
                 compact_([
-                    makeItem('addTokenForm', 'Add or replace token', undefined, <AddTokenForm />),
+                    makeItem(
+                        'addTokenForm',
+                        'Add or replace token',
+                        undefined,
+                        <AddVcsTokenForm />,
+                    ),
                     Boolean(vcsConfig.some((i) => i.hasToken)) &&
                         makeItem(
                             'existingTokenList',
