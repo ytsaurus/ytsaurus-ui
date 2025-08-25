@@ -2,14 +2,23 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import DataTable from '@gravity-ui/react-data-table';
+
 import {Loader} from '@gravity-ui/uikit';
 
-import {getSettingTableDisplayRawStrings} from '../../../../../store/selectors/settings';
-import {getSchemaByName} from '../../../../../store/selectors/navigation/tabs/schema';
-import {YsonSettings} from '../../../../../store/selectors/thor/unipika';
-import {onCellPreview} from '../../../../../store/actions/navigation/modals/cell-preview';
-import {NameWithSortOrder, prepareColumns} from '../../../../../utils/navigation/prepareColumns';
 import {TypeArray} from '../../../../../components/SchemaDataType/dataTypes';
+
+import {injectTableCellData} from '../../../../../store/actions/navigation/content/table/table-ts';
+import {getOffsetValue} from '../../../../../store/selectors/navigation/content/table';
+import {getSchemaByName} from '../../../../../store/selectors/navigation/tabs/schema';
+import {getSettingTableDisplayRawStrings} from '../../../../../store/selectors/settings';
+import {YsonSettings} from '../../../../../store/selectors/thor/unipika';
+import {
+    CellDataHandler,
+    onCellPreview,
+} from '../../../../../store/actions/navigation/modals/cell-preview';
+import {NameWithSortOrder, prepareColumns} from '../../../../../utils/navigation/prepareColumns';
+import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
+import CancelHelper from '../../../../../utils/cancel-helper';
 
 import './DataTableWrapper.scss';
 
@@ -39,11 +48,46 @@ export default function DataTableWrapper(props: DataTableWrapperProps) {
     const {columns, keyColumns, ysonSettings, yqlTypes, loading, loaded, isFullScreen, ...rest} =
         props;
 
+    const offsetValue = useSelector(getOffsetValue);
+    const dataHandler = React.useMemo(() => {
+        const cancelHelper = new CancelHelper();
+        return {
+            cancelHelper,
+            saveCancellation: (token) => {
+                cancelHelper.saveCancelToken(token);
+            },
+            onStartLoading: () => {},
+            onError: ({error, columnName, rowIndex}) => {
+                wrapApiPromiseByToaster(Promise.reject(error), {
+                    toasterName: `incomplete_cell_${columnName}_${rowIndex}`,
+                    errorContent: `Failed to load cell data: ${JSON.stringify({columnName, rowIndex})}`,
+                });
+            },
+            onSuccess: ({data, columnName, rowIndex}) => {
+                dispatch(injectTableCellData({data, offsetValue, columnName, rowIndex}));
+            },
+        } as CellDataHandler & {cancelHelper: CancelHelper};
+    }, [offsetValue]);
+
+    React.useEffect(() => {
+        return () => {
+            dataHandler.cancelHelper.removeAllRequests();
+        };
+    }, [dataHandler]);
+
     const onShowPreview = React.useCallback(
         (columnName: string, rowIndex: number, tag?: string) => {
-            return dispatch(onCellPreview({columnName, rowIndex, tag}));
+            const allowInjectData = tag?.startsWith('image/') || tag?.startsWith('audio/');
+            return dispatch(
+                onCellPreview({
+                    columnName,
+                    rowIndex,
+                    tag,
+                    dataHandler: allowInjectData ? dataHandler : undefined,
+                }),
+            );
         },
-        [dispatch],
+        [dispatch, dataHandler],
     );
     const dtColumns = prepareColumns({
         columns,

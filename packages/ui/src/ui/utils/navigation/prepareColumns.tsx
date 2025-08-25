@@ -11,6 +11,8 @@ import map_ from 'lodash/map';
 import {TypeArray} from '../../components/SchemaDataType/dataTypes';
 import type {YsonSettings} from '../../store/selectors/thor/unipika';
 
+export type NameWithSortOrder = {name: string; sortOrder?: string};
+
 export function prepareColumns({
     columns,
     keyColumns,
@@ -20,9 +22,9 @@ export function prepareColumns({
     schemaByName,
     onShowPreview,
 }: {
-    columns: {name: string; sortOrder?: string}[];
+    columns: NameWithSortOrder[];
     keyColumns: string[];
-    yqlTypes: TypeArray[] | null;
+    yqlTypes?: TypeArray[] | null;
     ysonSettings: YsonSettings;
     useRawStrings: boolean | null | undefined;
     schemaByName: Record<string, any>;

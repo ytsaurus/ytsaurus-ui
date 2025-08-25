@@ -42,7 +42,9 @@ const ephemeralState = {
     /** @type {Array<string>} */
     omittedColumns: [],
     deniedKeyColumns: [],
+    /** @type {import('../../../../../store/actions/navigation/content/table/readTable').ReadTableResult['rows']} */
     rows: [],
+    /** @type {import('../../../../../store/actions/navigation/content/table/readTable').ReadTableResult['yqlTypes'] | null} */
     yqlTypes: null,
     isOffsetSelectorOpen: false,
     isColumnSelectorOpen: false,
