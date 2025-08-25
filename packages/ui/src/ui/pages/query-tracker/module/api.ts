@@ -73,11 +73,17 @@ export type QueryFile = {
     type: QueryFileType;
 };
 
+export type QuerySecret = {
+    id: string;
+    ypath: string;
+};
+
 export interface DraftQuery {
     id?: QueryItemId;
     engine: QueryEngine;
     supportedEngines: Record<QueryEngine, boolean>;
     files: QueryFile[];
+    secrets: QuerySecret[];
     query: string;
     annotations?: {
         title?: string;
@@ -222,6 +228,7 @@ export async function generateQueryFromTable(
             ql: true,
         },
         files: [],
+        secrets: [],
         annotations: {},
         access_control_object: defaultQueryACO,
         access_control_objects: [defaultQueryACO],
@@ -295,6 +302,7 @@ export function startQuery(
             settings,
             annotations,
             files,
+            secrets,
             access_control_objects,
             access_control_object,
         } = queryInstance;
@@ -304,6 +312,7 @@ export function startQuery(
                 stage,
                 query,
                 files,
+                secrets,
                 engine,
                 annotations,
                 ...(isMultipleAco ? {access_control_objects} : {access_control_object}),

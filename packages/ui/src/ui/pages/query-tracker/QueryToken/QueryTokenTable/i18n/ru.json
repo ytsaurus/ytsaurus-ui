@@ -1,0 +1,6 @@
+{
+  "field_name": "Имя",
+  "field_cluster-and-path": "Кластер и путь",
+  "title_remove-token": "Удалить токен",
+  "confirm_remove-token": "Вы уверены, что хотите удалить токен \"{{name}}\"?"
+}

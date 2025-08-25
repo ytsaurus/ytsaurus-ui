@@ -71,14 +71,14 @@ describe('actions/navigation/path-editor', () => {
                     },
                 },
             });
-            store.dispatch(loadSuggestionsList(path));
+            store.dispatch(loadSuggestionsList({path}));
 
             expect(loadSuggestions).not.toHaveBeenCalled();
             expect(store.getActions().length).toBe(0);
         });
 
         it(`should dispatch ${types.FETCH_SUGGESTIONS.REQUEST}`, () => {
-            store.dispatch(loadSuggestionsList());
+            store.dispatch(loadSuggestionsList({}));
 
             const actions = store.getActions();
 
@@ -88,20 +88,20 @@ describe('actions/navigation/path-editor', () => {
         it('should call loadSuggestions()', () => {
             const customFilter = jest.fn();
 
-            store.dispatch(loadSuggestionsList(path, customFilter));
+            store.dispatch(loadSuggestionsList({path, customFilter}));
 
             expect(loadSuggestions).toHaveBeenCalled();
-            expect(loadSuggestions).toHaveBeenCalledWith(path, customFilter);
+            expect(loadSuggestions).toHaveBeenCalledWith({path, customFilter});
         });
 
         it('should call preparePath()', () => {
-            store.dispatch(loadSuggestionsList(path));
+            store.dispatch(loadSuggestionsList({path}));
 
             expect(preparePath).toHaveBeenCalled();
         });
 
         it(`should dispatch ${types.FETCH_SUGGESTIONS.SUCCESS}`, async () => {
-            await store.dispatch(loadSuggestionsList(path));
+            await store.dispatch(loadSuggestionsList({path}));
 
             expect(store.getActions()).toContainEqual(Action.SUCCESS);
         });
@@ -110,7 +110,7 @@ describe('actions/navigation/path-editor', () => {
             preparePath.mockImplementation(() => {
                 throw new Error('Oops! Something went wrong');
             });
-            await store.dispatch(loadSuggestionsList(path));
+            await store.dispatch(loadSuggestionsList({path}));
 
             expect(store.getActions()).toContainEqual(Action.FAILURE);
             expect(loadSuggestions).not.toHaveBeenCalled();
@@ -120,7 +120,7 @@ describe('actions/navigation/path-editor', () => {
             loadSuggestions.mockImplementation(() =>
                 Promise.reject(new Error('Oops! Something went wrong')),
             );
-            await store.dispatch(loadSuggestionsList(path));
+            await store.dispatch(loadSuggestionsList({path}));
 
             expect(store.getActions()).toContainEqual(Action.FAILURE);
         });

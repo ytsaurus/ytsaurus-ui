@@ -23,6 +23,7 @@ function logError(action: string, name: string) {
 export function setSettingByKey<K extends SettingKey, T extends DescribedSettings[K]>(
     path: K,
     value: T,
+    options?: {silent?: boolean},
 ): SettingsThunkAction {
     return (dispatch, getState) => {
         const state = getState();
@@ -51,7 +52,9 @@ export function setSettingByKey<K extends SettingKey, T extends DescribedSetting
                 data: {path, value: previousValue},
             });
 
-            showToasterError(`Set ${path}`, error);
+            if (!options?.silent) {
+                showToasterError(`Set ${path}`, error);
+            }
 
             throw error;
         });

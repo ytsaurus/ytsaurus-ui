@@ -32,6 +32,7 @@ export const getQueryDraftSettings = (state: RootState) => getState(state).draft
 export const getQueryDraftCluster = (state: RootState) => getQueryDraft(state).settings?.cluster;
 
 export const getQueryFiles = (state: RootState) => getState(state).draft.files;
+export const getQuerySecrets = (state: RootState) => getState(state).draft.secrets;
 
 export const getQueryText = (state: RootState) => getState(state).draft.query;
 
@@ -159,3 +160,7 @@ export const getProgressYQLStatistics = (state: RootState) => {
 
     return progress.yql_statistics;
 };
+
+export const getCurrentSecretIds = createSelector([getQuerySecrets], (secrets) => {
+    return secrets.map((secret) => secret.id);
+});

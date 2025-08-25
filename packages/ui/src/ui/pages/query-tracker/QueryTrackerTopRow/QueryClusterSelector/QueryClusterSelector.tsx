@@ -51,6 +51,7 @@ export const QueryClusterSelector: FC<Props> = ({className}) => {
 
     return (
         <QuerySelector
+            size="l"
             className={className}
             disabled={loading}
             placeholder="Cluster"

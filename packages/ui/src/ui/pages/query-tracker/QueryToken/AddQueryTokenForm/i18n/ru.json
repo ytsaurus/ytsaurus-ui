@@ -1,0 +1,18 @@
+{
+  "title_add-query-token": "Добавить токен запроса",
+  "field_token-name": "Имя токена",
+  "field_token-name-placeholder": "Уникальное имя токена",
+  "field_cluster": "Кластер",
+  "field_cluster-placeholder": "Выберите кластер",
+  "field_token-path": "Путь к файлу токена",
+  "field_token-path-placeholder": "//home...",
+  "alert_name-required": "Имя обязательно",
+  "alert_name-exists": "Имя уже существует",
+  "alert_cluster-required": "Кластер обязателен",
+  "alert_path-required": "Путь обязателен",
+  "alert_cluster-config-error": "Не удается найти конфигурацию кластера",
+  "alert_path-not-exist": "Путь не существует",
+  "alert_path-not-file": "Путь должен указывать на узел типа file",
+  "alert_token-file-security": "Пользователь самостоятельно обеспечивает безопасность файла с токенами средствами ACL. Доступ должны иметь только вы",
+  "action_add-query-token": "Добавить токен запроса"
+}
