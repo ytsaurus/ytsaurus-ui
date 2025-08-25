@@ -1,5 +1,6 @@
-import {getPath} from '../../../../selectors/navigation';
+import {CancelTokenSource} from 'axios';
 import {batch} from 'react-redux';
+import {getPath} from '../../../../selectors/navigation';
 import {getDefaultRequestOutputFormat} from '../../../../../utils/navigation/content/table/table';
 import {CELL_PREVIEW, PREVIEW_LIMIT} from '../../../../../constants/modals/cell-preview';
 import {isCancelled} from '../../../../../utils/cancel-helper';
@@ -15,6 +16,8 @@ import {getStaticTableCellPath, getStaticTableCliCommand} from './static-table';
 import {isYqlTypesEnabled} from '../../../../selectors/navigation/content/table';
 import {readStaticTable} from '../../content/table/readStaticTable';
 import {readDynamicTable} from '../../content/table/readDynamicTable';
+import {ReadTableResult} from '../../content/table/readTable';
+import {YTError} from '../../../../../types';
 
 const getCellPath = ({
     columnName,
@@ -54,9 +57,11 @@ const getCliCommand = ({
 const loadCellPreview = ({
     cellPath,
     useYqlTypes,
+    cancellation,
 }: {
     cellPath: string;
     useYqlTypes: boolean;
+    cancellation?: (token: CancelTokenSource) => void;
 }): CellPreviewActionType<ReturnType<typeof readDynamicTable>> => {
     return (_dispatch, getState) => {
         const isDynamic = getIsDynamic(getState());
@@ -68,29 +73,36 @@ const loadCellPreview = ({
 
         return isDynamic
             ? readDynamicTable({
-                  setup: {},
                   parameters: {
                       output_format,
                       query: cellPath,
                   },
-                  cancellation: cellPreviewCancelHelper.removeAllAndSave,
+                  cancellation: cancellation ?? cellPreviewCancelHelper.removeAllAndSave,
               })
             : readStaticTable({
-                  setup: {},
                   parameters: {path: cellPath, output_format},
-                  cancellation: cellPreviewCancelHelper.removeAllAndSave,
+                  cancellation: cancellation ?? cellPreviewCancelHelper.removeAllAndSave,
               });
     };
+};
+
+export type CellDataHandler = {
+    saveCancellation: (token: CancelTokenSource) => void;
+    onStartLoading: (d: {columnName: string; rowIndex: number}) => void;
+    onSuccess: (d: {columnName: string; rowIndex: number; data: ReadTableResult}) => void;
+    onError: (d: {columnName: string; rowIndex: number; error: YTError}) => void;
 };
 
 export const onCellPreview = ({
     columnName,
     rowIndex,
     tag,
+    dataHandler,
 }: {
     columnName: string;
     rowIndex: number;
     tag?: string;
+    dataHandler?: CellDataHandler;
 }): CellPreviewActionType => {
     return async (dispatch, getState) => {
         const useYqlTypes = isYqlTypesEnabled(getState());
@@ -99,10 +111,14 @@ export const onCellPreview = ({
 
         const ytCliDownloadCommand: string = dispatch(getCliCommand({cellPath, columnName, tag}));
 
-        batch(() => {
-            dispatch({type: CELL_PREVIEW.REQUEST, data: {ytCliDownloadCommand}});
-            dispatch(openCellPreview());
-        });
+        if (dataHandler) {
+            dataHandler.onStartLoading({columnName, rowIndex});
+        } else {
+            batch(() => {
+                dispatch({type: CELL_PREVIEW.REQUEST, data: {ytCliDownloadCommand}});
+                dispatch(openCellPreview());
+            });
+        }
 
         const data: {
             $type?: string;
@@ -113,7 +129,13 @@ export const onCellPreview = ({
         let isIncomplete: boolean | undefined = false;
 
         try {
-            const loadedData = await dispatch(loadCellPreview({cellPath, useYqlTypes}));
+            const loadedData = await dispatch(
+                loadCellPreview({
+                    cellPath,
+                    useYqlTypes,
+                    cancellation: dataHandler?.saveCancellation,
+                }),
+            );
 
             if (loadedData.useYqlTypes) {
                 const {rows, yqlTypes} = loadedData;
@@ -154,16 +176,24 @@ export const onCellPreview = ({
                 ? 'Unable to load content more than 16MiB. Please use the command bellow to load it locally.'
                 : 'You could use the command bellow to load it locally.';
 
-            dispatch({
-                type: CELL_PREVIEW.SUCCESS,
-                data: {
-                    data,
-                    noticeText,
-                },
-            });
+            if (dataHandler) {
+                dataHandler.onSuccess({columnName, rowIndex, data: loadedData});
+            } else {
+                dispatch({
+                    type: CELL_PREVIEW.SUCCESS,
+                    data: {
+                        data,
+                        noticeText,
+                    },
+                });
+            }
         } catch (error: any) {
             if (!isCancelled(error)) {
-                dispatch({type: CELL_PREVIEW.FAILURE, data: {error}});
+                if (dataHandler) {
+                    dataHandler.onError({columnName, rowIndex, error});
+                } else {
+                    dispatch({type: CELL_PREVIEW.FAILURE, data: {error}});
+                }
             }
         }
     };
