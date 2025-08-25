@@ -9,7 +9,7 @@ import {readQueryResults} from '../api';
 import {prepareFormattedValue} from '../query_result/utils/format';
 import {batch} from 'react-redux';
 
-export const showQueryTrackerCellPreviewModal = (
+export const onCellPreviewQueryResults = (
     queryId: string,
     queryIndex: number,
     options: {columnName: string; rowIndex: number},
