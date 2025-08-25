@@ -18,7 +18,7 @@ import NotRenderUntilFirstVisible from '../NotRenderUntilFirstVisible/NotRenderU
 import ArrowUpRightFromSquareIcon from '@gravity-ui/icons/svgs/arrow-up-right-from-square.svg';
 
 import './index.scss';
-import {showQueryTrackerCellPreviewModal} from '../module/cell-preview/actions';
+import {onCellPreviewQueryResults} from '../module/cell-preview/actions';
 
 const b = block('query-result-table');
 
@@ -80,7 +80,7 @@ export const QueryResultsView = React.memo(
         const handleShowPreviewClick = React.useCallback(
             (columnName: string, rowIndex: number) => {
                 dispatch(
-                    showQueryTrackerCellPreviewModal(query.id, index, {
+                    onCellPreviewQueryResults(query.id, index, {
                         columnName,
                         rowIndex,
                     }),
