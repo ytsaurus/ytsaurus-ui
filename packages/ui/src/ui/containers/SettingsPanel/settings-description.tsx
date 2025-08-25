@@ -60,6 +60,7 @@ import {getQueryACO, setUserDefaultACO} from '../../pages/query-tracker/module/q
 import {Item} from '../../components/Select/Select';
 import {useThunkDispatch} from '../../store/thunkDispatch';
 import {BooleanSettingItem} from '../SettingsMenu/BooleanSettingItem';
+import {AddQueryTokenForm, QueryTokenList} from '../../pages/query-tracker/QueryToken';
 
 import i18n from './i18n';
 
@@ -704,6 +705,8 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                           ),
                       ]
                     : []),
+                makeItem('addQtTokenForm', 'Add query token', 'top', <AddQueryTokenForm />),
+                makeItem('existingQtTokenList', 'Existing query tokens', 'top', <QueryTokenList />),
             ]),
         ),
 

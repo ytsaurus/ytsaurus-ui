@@ -1,0 +1,9 @@
+.yq-add-query-token-form {
+    width: 360px;
+
+    &__top-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+}

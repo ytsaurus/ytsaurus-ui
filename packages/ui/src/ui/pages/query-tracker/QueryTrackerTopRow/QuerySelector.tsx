@@ -15,21 +15,31 @@ type Props<T> = {
     children: (items: T[]) => ReactElement<SelectOption<T>, typeof Option>[];
 } & Omit<SelectProps, 'children' | 'onUpdate' | 'value'>;
 
-const Filter: Required<SelectProps>['renderFilter'] = ({onChange, onKeyDown, ref, value}) => {
-    return (
-        <div className={popupBlock('filter')}>
-            <TextInput
-                ref={ref}
-                value={value}
-                size="l"
-                onKeyDown={onKeyDown}
-                onChange={(e) => onChange(e.target.value)}
-            />
-        </div>
-    );
+const Filter = (size: SelectProps['size']) => {
+    const FilterComponent: Required<SelectProps>['renderFilter'] = ({
+        onChange,
+        onKeyDown,
+        ref,
+        value,
+    }) => {
+        return (
+            <div className={popupBlock('filter')}>
+                <TextInput
+                    ref={ref}
+                    value={value}
+                    size={size}
+                    onKeyDown={onKeyDown}
+                    onChange={(e) => onChange(e.target.value)}
+                />
+            </div>
+        );
+    };
+
+    return FilterComponent;
 };
 
 export const QuerySelector = <T,>({
+    size,
     items,
     children,
     className,
@@ -44,13 +54,13 @@ export const QuerySelector = <T,>({
 
     return (
         <Select
-            size="l"
+            size={size}
             filterable
             className={controlBlock(null, className)}
             popupClassName={popupBlock(null, popupClassName)}
             value={value ? [value] : []}
             onUpdate={handleChange}
-            renderFilter={Filter}
+            renderFilter={Filter(size)}
             {...props}
         >
             {children(items)}
