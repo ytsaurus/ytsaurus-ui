@@ -1,0 +1,12 @@
+{
+  "title_queries": "Запросы",
+  "field_default-aco": "ACO по умолчанию",
+  "field_new-graph-progress": "Использовать новый граф прогресса",
+  "context_new-graph-progress-description": "Включить экспериментальный вид графа для вкладки Прогресс запроса",
+  "field_query-assistant": "Помощник по запросам",
+  "context_query-assistant-description": "Использовать помощника по запросам для автозаполнения",
+  "context_tab-accept-suggestion": "[Tab] - принять предложение",
+  "context_esc-decline-suggestion": "[Esc] - отклонить предложение",
+  "title_query-token": "Токены запроса",
+  "title_existing-query-tokens": "Существующие токены запросов"
+}

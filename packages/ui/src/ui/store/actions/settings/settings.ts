@@ -2,12 +2,14 @@ import {ThunkAction} from 'redux-thunk';
 
 import {RootState} from '../../../store/reducers';
 
-import {setSetting} from './index';
+import {setSetting, setSettingByKey} from './index';
 
 // @ts-ignore
 import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
 import {AnnotationVisibilityType} from '../../../../shared/constants/settings-ts';
 import {AccountUsageViewType} from '../../../store/reducers/accounts/usage/accounts-usage-filters';
+import {getQueryTokens} from '../../selectors/settings/settings-queries';
+import {QueryToken} from '../../../../shared/constants/settings-types';
 
 type SettingThunkAction = ThunkAction<any, RootState, any, any>;
 
@@ -227,5 +229,22 @@ export function setSettingSystemNodesNodeType(nodeType: Array<string>): SettingT
         dispatch(
             setSetting(SettingName.SYSTEM.NODES_NODE_TYPE, NAMESPACES.SYSTEM, nodeType.join(',')),
         );
+    };
+}
+
+export function appendQueryToken(token: QueryToken): SettingThunkAction {
+    return async (dispatch, getState) => {
+        const tokens = getQueryTokens(getState());
+        await dispatch(
+            setSettingByKey('global::queryTracker::tokens', [...tokens, token], {silent: true}),
+        );
+    };
+}
+
+export function removeQueryToken(name: string): SettingThunkAction {
+    return (dispatch, getState) => {
+        const tokens = getQueryTokens(getState());
+        const result = tokens.filter((token) => token.name !== name);
+        dispatch(setSettingByKey('global::queryTracker::tokens', result));
     };
 }

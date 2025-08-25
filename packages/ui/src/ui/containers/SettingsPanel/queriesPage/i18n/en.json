@@ -1,0 +1,12 @@
+{
+  "title_queries": "Queries",
+  "field_default-aco": "Default ACO",
+  "field_new-graph-progress": "Use new graph progress",
+  "context_new-graph-progress-description": "Enable experimental graph view for Progress tab of a query",
+  "field_query-assistant": "Query assistant",
+  "context_query-assistant-description": "Use query assistant to autocomplete",
+  "context_tab-accept-suggestion": "[Tab] - accept suggestion",
+  "context_esc-decline-suggestion": "[Esc] - decline suggestion",
+  "title_query-token": "Request tokens",
+  "title_existing-query-tokens": "Existing query tokens"
+}

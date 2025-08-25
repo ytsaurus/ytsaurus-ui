@@ -1,6 +1,6 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
-import {Flex, IconProps, Text} from '@gravity-ui/uikit';
+import {IconProps} from '@gravity-ui/uikit';
 
 import compact_ from 'lodash/compact';
 import filter_ from 'lodash/filter';
@@ -54,12 +54,9 @@ import Link from '../../components/Link/Link';
 import Button from '../../components/Button/Button';
 import {AddVcsTokenForm, VcsList} from '../../pages/query-tracker/Vcs/SettingsMenu';
 import {selectIsVcsVisible, selectVcsConfig} from '../../pages/query-tracker/module/vcs/selectors';
-import {SettingsMenuRadioByKey, SettingsMenuSelect} from '../SettingsMenu/SettingsMenuSelect';
-import {getDefaultQueryACO} from '../../pages/query-tracker/module/query_aco/selectors';
-import {getQueryACO, setUserDefaultACO} from '../../pages/query-tracker/module/query_aco/actions';
-import {Item} from '../../components/Select/Select';
-import {useThunkDispatch} from '../../store/thunkDispatch';
+import {SettingsMenuRadioByKey} from '../SettingsMenu/SettingsMenuSelect';
 import {BooleanSettingItem} from '../SettingsMenu/BooleanSettingItem';
+import {queriesPage} from './queriesPage';
 
 import i18n from './i18n';
 
@@ -90,7 +87,6 @@ function wrapEscapeText(text: string) {
 }
 
 function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
-    const dispatch = useThunkDispatch();
     const clusterNS = useSelector(getCurrentClusterNS);
 
     const httpProxyVersion = useSelector(getHttpProxyVersion);
@@ -98,7 +94,6 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
     const masterVersion = useSelector(getGlobalMasterVersion);
     const vcsConfig = useSelector(selectVcsConfig);
     const isVcsVisible = useSelector(selectIsVcsVisible);
-    const defaultUserACO = useSelector(getDefaultQueryACO);
     const hasQuerySuggestions = Boolean(UIFactory.getInlineSuggestionsApi());
 
     return compact_([
@@ -649,64 +644,10 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 ],
             },
         ]),
-        makePage(
-            'Queries',
-            undefined,
-            compact_([
-                cluster &&
-                    makeItem(
-                        'defaultACO',
-                        'Default ACO',
-                        undefined,
-                        <SettingsMenuSelect
-                            getOptionsOnMount={() =>
-                                dispatch(getQueryACO()).then((data) => {
-                                    return data.access_control_objects.reduce(
-                                        (acc: Item[], item: string) => {
-                                            acc.push({value: item, text: item});
-                                            return acc;
-                                        },
-                                        [] as Item[],
-                                    );
-                                })
-                            }
-                            setSetting={(value) => value && dispatch(setUserDefaultACO(value))}
-                            getSetting={() => defaultUserACO}
-                        />,
-                    ),
-                makeItem(
-                    'global::queryTracker::useNewGraphView',
-                    'Use new graph progress',
-                    'top',
-                    <BooleanSettingItem
-                        settingKey="global::queryTracker::useNewGraphView"
-                        description="Enable experimental graph vew for Progress tab of a query"
-                        oneLine
-                    />,
-                ),
-                ...(hasQuerySuggestions
-                    ? [
-                          makeItem(
-                              'global::queryTracker::suggestions',
-                              'Query assistant',
-                              'top',
-                              <BooleanSettingItem
-                                  settingKey="global::queryTracker::suggestions"
-                                  description={
-                                      <Flex direction="column">
-                                          <div>Use query assistant to autocomplete</div>
-                                          <Text color="secondary">[Tab] - accept suggestion</Text>
-                                          <Text color="secondary">[Esc] - decline suggestion</Text>
-                                      </Flex>
-                                  }
-                                  oneLine
-                              />,
-                          ),
-                      ]
-                    : []),
-            ]),
-        ),
-
+        queriesPage({
+            cluster,
+            hasQuerySuggestions,
+        }),
         makePage(
             'About',
             infoIcon,

@@ -1,0 +1,18 @@
+{
+  "title_add-query-token": "Add Query Token",
+  "field_token-name": "Token name",
+  "field_token-name-placeholder": "Unique token name",
+  "field_cluster": "Cluster",
+  "field_cluster-placeholder": "Select cluster",
+  "field_token-path": "Path to token file",
+  "field_token-path-placeholder": "//home...",
+  "alert_name-required": "Name is required",
+  "alert_name-exists": "Name already exists",
+  "alert_cluster-required": "Cluster is required",
+  "alert_path-required": "Path is required",
+  "alert_cluster-config-error": "Cannot find cluster config",
+  "alert_path-not-exist": "Path does not exist",
+  "alert_path-not-file": "Path must point to a file node",
+  "alert_token-file-security": "The user himself ensures the security of the file with tokens by means of ACL. Only you should have access",
+  "action_add-query-token": "Add Query Token"
+}

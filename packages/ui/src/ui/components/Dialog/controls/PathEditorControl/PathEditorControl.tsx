@@ -10,6 +10,7 @@ interface Props {
     placeholder?: string;
     disabled?: boolean;
     autoFocus?: boolean;
+    cluster?: string;
 }
 
 export function PathEditorControl(props: Props) {
