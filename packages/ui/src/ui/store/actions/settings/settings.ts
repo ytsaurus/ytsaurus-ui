@@ -2,12 +2,15 @@ import {ThunkAction} from 'redux-thunk';
 
 import {RootState} from '../../../store/reducers';
 
-import {setSetting} from './index';
+import {setSetting, setSettingByKey} from './index';
 
 // @ts-ignore
 import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
 import {AnnotationVisibilityType} from '../../../../shared/constants/settings-ts';
 import {AccountUsageViewType} from '../../../store/reducers/accounts/usage/accounts-usage-filters';
+import {getQueryTokens} from '../../selectors/settings/settings-queries';
+import {wrapApiPromiseByToaster} from '../../../utils/utils';
+import {QueryToken} from '../../../../shared/constants/settings-types';
 
 type SettingThunkAction = ThunkAction<any, RootState, any, any>;
 
@@ -227,5 +230,32 @@ export function setSettingSystemNodesNodeType(nodeType: Array<string>): SettingT
         dispatch(
             setSetting(SettingName.SYSTEM.NODES_NODE_TYPE, NAMESPACES.SYSTEM, nodeType.join(',')),
         );
+    };
+}
+
+export function appendQueryToken(token: QueryToken): SettingThunkAction {
+    return (dispatch, getState) => {
+        const tokens = getQueryTokens(getState());
+        wrapApiPromiseByToaster(
+            dispatch(setSettingByKey('global::queryTracker::tokens', [...tokens, token])),
+            {
+                skipSuccessToast: true,
+                toasterName: `add-query-token`,
+                errorTitle: 'Cannot add query token',
+            },
+        );
+    };
+}
+
+export function removeQueryToken(name: string): SettingThunkAction {
+    return (dispatch, getState) => {
+        const tokens = getQueryTokens(getState());
+        const result = tokens.filter((token) => token.name !== name);
+
+        wrapApiPromiseByToaster(dispatch(setSettingByKey('global::queryTracker::tokens', result)), {
+            skipSuccessToast: true,
+            toasterName: `remove-query-token`,
+            errorTitle: 'Cannot remove query token',
+        });
     };
 }

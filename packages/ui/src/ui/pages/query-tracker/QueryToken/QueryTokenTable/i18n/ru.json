@@ -1,0 +1,8 @@
+{
+  "field_name": "Имя",
+  "field_cluster": "Кластер",
+  "field_path": "Путь",
+  "context_no-tokens": "Нет токенов",
+  "title_remove-token": "Удалить токен",
+  "confirm_remove-token": "Вы уверены, что хотите удалить токен \"{{name}}\"?"
+}

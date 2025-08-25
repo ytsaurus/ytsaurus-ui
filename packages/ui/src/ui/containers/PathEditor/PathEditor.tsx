@@ -46,11 +46,17 @@ export interface EventPayload {
     path: string;
 }
 
+export type LoadSuggestionsParams = {
+    path: string;
+    customFilter: SuggestionFilter | undefined;
+    cluster: string | undefined;
+};
+
 export interface PathEditorProps {
     suggestions: Suggestion[];
     suggestionsError?: boolean;
     errorMessage?: string;
-    loadSuggestionsList: (path: string, customFilter?: SuggestionFilter) => void;
+    loadSuggestionsList: (params: LoadSuggestionsParams) => void;
     removeActiveRequests: () => void;
     // from parent component
     className?: string;
@@ -61,6 +67,7 @@ export interface PathEditorProps {
     hasClear?: boolean;
     showErrors?: boolean;
     customFilter?: SuggestionFilter;
+    cluster?: string;
     onChange?: (newPath: string) => void;
     onFocus?: (e: FocusEvent<HTMLInputElement>, payload: EventPayload) => void;
     onBlur?: (path: string) => void;
@@ -130,11 +137,11 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
     }
 
     componentDidMount() {
-        const {loadSuggestionsList, customFilter, autoFocus} = this.props;
+        const {loadSuggestionsList, customFilter, cluster, autoFocus} = this.props;
         const {path} = this.state;
 
         if (path) {
-            loadSuggestionsList(path, customFilter);
+            loadSuggestionsList({path, customFilter, cluster});
         }
         if (autoFocus) {
             this._setFocus();
@@ -177,9 +184,9 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
     }
 
     debounceLoading(path: string) {
-        const {loadSuggestionsList, customFilter, onChange} = this.props;
+        const {loadSuggestionsList, customFilter, cluster, onChange} = this.props;
 
-        loadSuggestionsList(path, customFilter);
+        loadSuggestionsList({path, customFilter, cluster});
         this.callCallback(onChange, path);
     }
 

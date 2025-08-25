@@ -51,6 +51,7 @@ const initialQueryDraftState: QueryState['draft'] = {
     },
     query: '',
     files: [],
+    secrets: [],
     settings: {},
     access_control_object: DEFAULT_QUERY_ACO, // deprecated parameter
     access_control_objects: [DEFAULT_QUERY_ACO],

@@ -23,6 +23,7 @@ import {EditableAsText} from '../../../components/EditableAsText/EditableAsText'
 import {setSettingByKey} from '../../../store/actions/settings';
 import {useIsDesktop} from '../../../hooks/useIsDesktop';
 import {QueryClusterSelector} from './QueryClusterSelector';
+import {LazyQueryTokenButton} from '../QueryToken/lazy';
 
 const NAME_PLACEHOLDER = 'No name';
 const block = cn('query-tracker-top-row');
@@ -93,6 +94,7 @@ const QueryTrackerTopRow: FC = () => {
                                 onChange={handleSettingsChange}
                             />
                             <QueryFilesButton />
+                            <LazyQueryTokenButton />
                         </Flex>
                     </>
                 )}

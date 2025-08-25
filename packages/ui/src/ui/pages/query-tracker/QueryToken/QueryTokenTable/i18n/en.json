@@ -1,0 +1,8 @@
+{
+  "field_name": "Name",
+  "field_cluster": "Cluster",
+  "field_path": "Path",
+  "context_no-tokens": "No tokens",
+  "title_remove-token": "Remove token",
+  "confirm_remove-token": "Are you sure you want to remove the token \"{{name}}\"?"
+}
