@@ -1,31 +1,37 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import DataTable from '@gravity-ui/react-data-table';
 import {Loader} from '@gravity-ui/uikit';
+
 import {getSettingTableDisplayRawStrings} from '../../../../../store/selectors/settings';
 import {getSchemaByName} from '../../../../../store/selectors/navigation/tabs/schema';
+import {YsonSettings} from '../../../../../store/selectors/thor/unipika';
 import {onCellPreview} from '../../../../../store/actions/navigation/modals/cell-preview';
-import {prepareColumns} from '../../../../../utils/navigation/prepareColumns';
+import {NameWithSortOrder, prepareColumns} from '../../../../../utils/navigation/prepareColumns';
+import {TypeArray} from '../../../../../components/SchemaDataType/dataTypes';
 
 import './DataTableWrapper.scss';
 
 const block = cn('data-table-wrapper');
 
-const rowKey = (row, index) => index;
+const rowKey = (_row: unknown, index: number) => index;
 
-DataTableWrapper.propTypes = {
-    isFullScreen: PropTypes.bool.isRequired,
-    loading: PropTypes.bool.isRequired,
-    loaded: PropTypes.bool.isRequired,
-    columns: PropTypes.array.isRequired,
-    keyColumns: PropTypes.arrayOf(PropTypes.string),
-    ysonSettings: PropTypes.object,
-    yqlTypes: PropTypes.array,
+DataTableWrapper.propTypes = {};
+
+export type DataTableWrapperProps = {
+    isFullScreen: boolean;
+    loading: boolean;
+    loaded: boolean;
+    columns: Array<NameWithSortOrder>;
+    keyColumns: Array<string>;
+    ysonSettings: YsonSettings;
+    yqlTypes?: Array<TypeArray>;
+
+    data: Array<unknown>;
 };
 
-export default function DataTableWrapper(props) {
+export default function DataTableWrapper(props: DataTableWrapperProps) {
     const dispatch = useDispatch();
     const useRawStrings = useSelector(getSettingTableDisplayRawStrings);
     const schemaByName = useSelector(getSchemaByName);
@@ -34,7 +40,7 @@ export default function DataTableWrapper(props) {
         props;
 
     const onShowPreview = React.useCallback(
-        (columnName, rowIndex, tag) => {
+        (columnName: string, rowIndex: number, tag?: string) => {
             return dispatch(onCellPreview({columnName, rowIndex, tag}));
         },
         [dispatch],
