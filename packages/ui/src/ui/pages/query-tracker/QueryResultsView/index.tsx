@@ -79,11 +79,7 @@ export const QueryResultsView = React.memo(
 
         const handleShowPreviewClick = React.useCallback(
             (columnName: string, rowIndex: number) => {
-                dispatch(
-                    onCellPreviewQueryResults(query.id, index, {
-                        columnName,
-                        rowIndex,
-                    }),
+                return dispatch(
                 );
             },
             [index, query.id],
