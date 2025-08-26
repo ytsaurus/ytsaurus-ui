@@ -13,6 +13,7 @@ import {
 import {
     REQUEST_QUERY_RESULTS,
     SET_QUERY_RESULTS,
+    SET_QUERY_RESULTS_CELL_DATA,
     SET_QUERY_RESULTS_ERROR,
     SET_QUERY_RESULTS_ERRORS,
     SET_QUERY_RESULTS_PAGE,
@@ -71,6 +72,27 @@ export function reducer(state = initialState, action: QueryResultsActions): Quer
                         },
                     },
                 },
+            };
+        }
+        case SET_QUERY_RESULTS_CELL_DATA: {
+            const {queryId, resultIndex, rowIndex, columnName, cellData} = action.data;
+            const queryResults = {...state[queryId]};
+            const queryResultsTab = {...queryResults[resultIndex]};
+            queryResults[resultIndex] = queryResultsTab;
+
+            if (!queryResultsTab.resultReady) {
+                return state;
+            }
+
+            const rows = [...queryResultsTab.results];
+            queryResultsTab.results = rows;
+
+            const rowData = {...rows[rowIndex], [columnName]: cellData};
+            rows[rowIndex] = rowData;
+
+            return {
+                ...state,
+                [queryId]: queryResults,
             };
         }
         case SET_QUERY_RESULTS_PAGE: {
@@ -190,4 +212,14 @@ export type QueryResultsActions =
     | SetQueryResultsErrorAction
     | SetQueryResultsSettingsAction
     | SetQueryResultsPageAction
-    | SetQueryResultsErrorsAction;
+    | SetQueryResultsErrorsAction
+    | ActionD<
+          typeof SET_QUERY_RESULTS_CELL_DATA,
+          {
+              queryId: string;
+              resultIndex: number;
+              rowIndex: number;
+              columnName: string;
+              cellData: QueryResultReadyState['results'][number][string];
+          }
+      >;

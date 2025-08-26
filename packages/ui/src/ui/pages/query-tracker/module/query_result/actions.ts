@@ -2,6 +2,7 @@ import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../../store/reducers';
 import {
     QueryItem,
+    QueryResult,
     QueryResultMetaScheme,
     getQueryResultMeta,
     getQueryResultMetaList,
@@ -21,6 +22,7 @@ import {QueryResultsActions} from './reducer';
 import {
     REQUEST_QUERY_RESULTS,
     SET_QUERY_RESULTS,
+    SET_QUERY_RESULTS_CELL_DATA,
     SET_QUERY_RESULTS_ERROR,
     SET_QUERY_RESULTS_ERRORS,
     SET_QUERY_RESULTS_PAGE,
@@ -126,6 +128,42 @@ export function loadQueryResult(
                 },
             });
         }
+    };
+}
+
+export function injectQueryResults({
+    queryId,
+    resultIndex,
+    rowIndex,
+    columnName,
+    data,
+}: {
+    queryId: string;
+    resultIndex: number;
+    rowIndex: number;
+    columnName: string;
+    data: QueryResult;
+}): ThunkAction<void, RootState, unknown, QueryResultsActions> {
+    return (dispatch) => {
+        const {rows, yql_type_registry: types} = data;
+
+        const [value, typeIndex] = rows[0][columnName];
+        const cellData = prepareFormattedValue(value, types[Number(typeIndex)], {
+            maxListSize: undefined,
+            maxStringSize: undefined,
+            treatValAsData: true,
+        });
+
+        dispatch({
+            type: SET_QUERY_RESULTS_CELL_DATA,
+            data: {
+                queryId,
+                resultIndex,
+                rowIndex,
+                columnName,
+                cellData,
+            },
+        });
     };
 }
 

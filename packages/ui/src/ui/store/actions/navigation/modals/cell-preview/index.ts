@@ -1,5 +1,6 @@
 import {CancelTokenSource} from 'axios';
 import {batch} from 'react-redux';
+
 import {getPath} from '../../../../selectors/navigation';
 import {getDefaultRequestOutputFormat} from '../../../../../utils/navigation/content/table/table';
 import {CELL_PREVIEW, PREVIEW_LIMIT} from '../../../../../constants/modals/cell-preview';
@@ -16,8 +17,7 @@ import {getStaticTableCellPath, getStaticTableCliCommand} from './static-table';
 import {isYqlTypesEnabled} from '../../../../selectors/navigation/content/table';
 import {readStaticTable} from '../../content/table/readStaticTable';
 import {readDynamicTable} from '../../content/table/readDynamicTable';
-import {ReadTableResult} from '../../content/table/readTable';
-import {YTError} from '../../../../../types';
+import {CellDataHandlerNavigation} from '../../../../../types/navigation/table-cell-preview';
 
 const getCellPath = ({
     columnName,
@@ -86,13 +86,6 @@ const loadCellPreview = ({
     };
 };
 
-export type CellDataHandler = {
-    saveCancellation: (token: CancelTokenSource) => void;
-    onStartLoading: (d: {columnName: string; rowIndex: number}) => void;
-    onSuccess: (d: {columnName: string; rowIndex: number; data: ReadTableResult}) => void;
-    onError: (d: {columnName: string; rowIndex: number; error: YTError}) => void;
-};
-
 export const onCellPreview = ({
     columnName,
     rowIndex,
@@ -102,7 +95,7 @@ export const onCellPreview = ({
     columnName: string;
     rowIndex: number;
     tag?: string;
-    dataHandler?: CellDataHandler;
+    dataHandler?: CellDataHandlerNavigation;
 }): CellPreviewActionType => {
     return async (dispatch, getState) => {
         const useYqlTypes = isYqlTypesEnabled(getState());

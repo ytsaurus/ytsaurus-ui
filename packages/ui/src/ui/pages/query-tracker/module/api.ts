@@ -338,7 +338,7 @@ export function abortQuery(params: {
     };
 }
 
-type QueryResult = {
+export type QueryResult = {
     all_column_names: string[];
     incomplete_all_column_names: boolean;
     incomplete_columns: boolean;

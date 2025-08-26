@@ -24,6 +24,7 @@ export const SET_DIRTY_SUBMIT = 'query-tracker/SET_DIRTY_SUBMIT';
 export const REQUEST_QUERY_RESULTS = 'query-tracker/REQUEST_QUERY_RESULTS';
 // To create initial result
 export const SET_QUERY_RESULTS = 'query-tracker/SET_QUERY_RESULTS';
+export const SET_QUERY_RESULTS_CELL_DATA = 'query-tracker/SET_QUERY_RESULTS_CELL_DATA';
 export const SET_QUERY_RESULTS_PAGE = 'query-tracker/SET_QUERY_RESULTS_PAGE';
 export const SET_QUERY_RESULTS_ERROR = 'query-tracker/SET_QUERY_RESULTS_ERROR';
 export const SET_QUERY_RESULTS_ERRORS = 'query-tracker/SET_QUERY_RESULTS_ERRORS';

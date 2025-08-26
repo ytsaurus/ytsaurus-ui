@@ -2,8 +2,16 @@ import {Flex, Icon, Link, Loader, Text} from '@gravity-ui/uikit';
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import block from 'bem-cn-lite';
+
+import ArrowUpRightFromSquareIcon from '@gravity-ui/icons/svgs/arrow-up-right-from-square.svg';
+
 import {RootState} from '../../../store/reducers';
-import {getQueryResult} from '../module/query_result/selectors';
+import {
+    CellDataHandlerQueries,
+    isInlinePreviewAllowed,
+    onErrorTableCellPreview,
+} from '../../../types/navigation/table-cell-preview';
+import {getQueryResult, getQueryResultSettings} from '../module/query_result/selectors';
 import {YTErrorBlock} from '../../../components/Error/Error';
 import {ResultsTable} from './ResultsTable';
 import {QueryItem} from '../module/api';
@@ -15,10 +23,11 @@ import {
 import {YQLSchemeTable} from './YQLSchemeTable';
 import {ResultPaginator} from './ResultPaginator';
 import NotRenderUntilFirstVisible from '../NotRenderUntilFirstVisible/NotRenderUntilFirstVisible';
-import ArrowUpRightFromSquareIcon from '@gravity-ui/icons/svgs/arrow-up-right-from-square.svg';
-
 import './index.scss';
 import {onCellPreviewQueryResults} from '../module/cell-preview/actions';
+import {ShowPreviewCallback} from './YQLTable/YQLTable';
+import CancelHelper from '../../../utils/cancel-helper';
+import {injectQueryResults} from '../module/query_result/actions';
 
 const b = block('query-result-table');
 
@@ -36,7 +45,7 @@ function QueryReadyResultView({
     onShowPreview,
 }: {
     result: QueryResultReadyState;
-    onShowPreview: (colName: string, rowIndex: number) => void;
+    onShowPreview: ShowPreviewCallback;
 }) {
     const mode = result?.settings?.viewMode;
     const {start, end, total, truncated} = getResultRowsInfo(result);
@@ -76,13 +85,66 @@ export const QueryResultsView = React.memo(
         const dispatch = useDispatch();
 
         const result = useSelector((state: RootState) => getQueryResult(state, query.id, index));
+        const page = result?.page;
+        const {pageSize} = useSelector((state: RootState) =>
+            getQueryResultSettings(state, query.id, index),
+        );
+        const dataHandler = React.useMemo(() => {
+            const cancelHelper = new CancelHelper();
+
+            return {
+                onStartLoading: () => {},
+                onSuccess: ({columnName, rowIndex, data}) => {
+                    dispatch(
+                        injectQueryResults({
+                            queryId: query.id,
+                            resultIndex: index,
+                            columnName,
+                            rowIndex,
+                            data,
+                        }),
+                    );
+                },
+                onError: onErrorTableCellPreview,
+
+                cancelHelper,
+                saveCancellation: (token) => {
+                    cancelHelper.saveCancelToken(token);
+                },
+                page,
+                pageSize,
+            } as CellDataHandlerQueries & {
+                cancelHelper: CancelHelper;
+                page: number;
+                pageSize: number;
+            };
+        }, [query, index, page, pageSize, dispatch]);
+
+        React.useEffect(() => {
+            return () => {
+                dataHandler.cancelHelper.removeAllRequests();
+            };
+        }, [dataHandler]);
 
         const handleShowPreviewClick = React.useCallback(
-            (columnName: string, rowIndex: number) => {
-                return dispatch(
+            async (columnName: string, rowIndex: number, tag: string | undefined) => {
+                const allowInlinePreview = isInlinePreviewAllowed(tag);
+                const {page, pageSize} = dataHandler;
+                await dispatch(
+                    onCellPreviewQueryResults(
+                        query.id,
+                        index,
+                        {
+                            columnName,
+                            rowIndex,
+                            page,
+                            pageSize,
+                        },
+                        allowInlinePreview ? dataHandler : undefined,
+                    ),
                 );
             },
-            [index, query.id],
+            [index, query.id, dataHandler],
         );
 
         return (

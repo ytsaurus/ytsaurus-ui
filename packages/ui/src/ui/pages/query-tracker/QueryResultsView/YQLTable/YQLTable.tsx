@@ -53,6 +53,12 @@ const transposeTableSettings: Settings = {
     displayIndices: false,
 };
 
+export type ShowPreviewCallback = (
+    colName: string,
+    rowIndex: number,
+    tag: string | undefined,
+) => void;
+
 type Props = {
     className?: string;
     resultType?: string;
@@ -75,7 +81,7 @@ type Props = {
     onSort?: (sortOrder?: SortOrder | SortOrder[]) => void;
     showFullValueInDialog?: boolean;
     containerRef?: React.Ref<HTMLDivElement>;
-    onShowPreview: (colName: string, rowIndex: number) => void;
+    onShowPreview: ShowPreviewCallback;
 };
 
 const emptyArray: any[] = [];
