@@ -12,12 +12,13 @@ import {getOffsetValue} from '../../../../../store/selectors/navigation/content/
 import {getSchemaByName} from '../../../../../store/selectors/navigation/tabs/schema';
 import {getSettingTableDisplayRawStrings} from '../../../../../store/selectors/settings';
 import {YsonSettings} from '../../../../../store/selectors/thor/unipika';
-import {
-    CellDataHandler,
-    onCellPreview,
-} from '../../../../../store/actions/navigation/modals/cell-preview';
+import {onCellPreview} from '../../../../../store/actions/navigation/modals/cell-preview';
 import {NameWithSortOrder, prepareColumns} from '../../../../../utils/navigation/prepareColumns';
-import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
+import {
+    CellDataHandlerNavigation,
+    isInlinePreviewAllowed,
+    onErrorTableCellPreview,
+} from '../../../../../types/navigation/table-cell-preview';
 import CancelHelper from '../../../../../utils/cancel-helper';
 
 import './DataTableWrapper.scss';
@@ -57,16 +58,11 @@ export default function DataTableWrapper(props: DataTableWrapperProps) {
                 cancelHelper.saveCancelToken(token);
             },
             onStartLoading: () => {},
-            onError: ({error, columnName, rowIndex}) => {
-                wrapApiPromiseByToaster(Promise.reject(error), {
-                    toasterName: `incomplete_cell_${columnName}_${rowIndex}`,
-                    errorContent: `Failed to load cell data: ${JSON.stringify({columnName, rowIndex})}`,
-                });
-            },
+            onError: onErrorTableCellPreview,
             onSuccess: ({data, columnName, rowIndex}) => {
                 dispatch(injectTableCellData({data, offsetValue, columnName, rowIndex}));
             },
-        } as CellDataHandler & {cancelHelper: CancelHelper};
+        } as CellDataHandlerNavigation & {cancelHelper: CancelHelper};
     }, [offsetValue]);
 
     React.useEffect(() => {
@@ -77,7 +73,7 @@ export default function DataTableWrapper(props: DataTableWrapperProps) {
 
     const onShowPreview = React.useCallback(
         (columnName: string, rowIndex: number, tag?: string) => {
-            const allowInjectData = tag?.startsWith('image/') || tag?.startsWith('audio/');
+            const allowInjectData = isInlinePreviewAllowed(tag);
             return dispatch(
                 onCellPreview({
                     columnName,

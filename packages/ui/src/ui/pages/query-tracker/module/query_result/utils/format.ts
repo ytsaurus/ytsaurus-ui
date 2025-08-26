@@ -95,7 +95,7 @@ export function prepareFormattedValue(
             asHTML: false,
             maxStringSize: undefined,
         });
-        formatValue = $rawValue.length < maxFormattedLength;
+        formatValue = $rawValue.length < maxFormattedLength || isMediaTag(fullValue.$tag);
     }
 
     const $formattedValue = formatValue ? formatResults(convertedValue, settings) : `Escaped value`;
@@ -112,4 +112,12 @@ export function prepareFormattedValue(
         $incomplete: flags.incomplete,
         $tagValue: tag,
     };
+}
+
+function isMediaTag(tag?: string) {
+    if ('string' !== typeof tag) {
+        return false;
+    }
+
+    return tag.startsWith('audio/') || tag.startsWith('video/') || tag.startsWith('image/');
 }

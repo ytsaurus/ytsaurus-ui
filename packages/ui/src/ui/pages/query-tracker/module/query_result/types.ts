@@ -10,6 +10,7 @@ export enum QueryResultState {
 export type QueryResultLoadingState = {
     state: QueryResultState.Init | QueryResultState.Loading;
     resultReady?: false;
+    page?: undefined;
 };
 
 export type QueryResultColumn = {
@@ -51,5 +52,6 @@ export type QueryResultErrorState = {
     state: QueryResultState.Error;
     resultReady?: false;
     error: Error;
+    page?: undefined;
 };
 export type QueryResult = QueryResultLoadingState | QueryResultReadyState | QueryResultErrorState;

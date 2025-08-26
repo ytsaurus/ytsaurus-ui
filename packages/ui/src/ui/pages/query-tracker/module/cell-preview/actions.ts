@@ -1,3 +1,5 @@
+import {batch} from 'react-redux';
+
 import {
     CellPreviewActionType,
     cellPreviewCancelHelper,
@@ -7,33 +9,48 @@ import {isCancelled} from '../../../../utils/cancel-helper';
 import {CELL_PREVIEW, PREVIEW_LIMIT} from '../../../../constants/modals/cell-preview';
 import {readQueryResults} from '../api';
 import {prepareFormattedValue} from '../query_result/utils/format';
-import {batch} from 'react-redux';
+import {CellDataHandlerQueries} from '../../../../types/navigation/table-cell-preview';
 
 export const onCellPreviewQueryResults = (
     queryId: string,
     queryIndex: number,
-    options: {columnName: string; rowIndex: number},
+    opts: {columnName: string; rowIndex: number; page: number; pageSize: number},
+    dataHandler?: CellDataHandlerQueries,
 ): CellPreviewActionType => {
     return async (dispatch) => {
-        batch(() => {
-            dispatch({type: CELL_PREVIEW.REQUEST, data: {}});
-            dispatch(openCellPreview());
-        });
+        const {columnName, rowIndex, page, pageSize} = opts;
+
+        if (dataHandler) {
+            dataHandler.onStartLoading({columnName, rowIndex});
+        } else {
+            batch(() => {
+                dispatch({type: CELL_PREVIEW.REQUEST, data: {}});
+                dispatch(openCellPreview());
+            });
+        }
+
+        const cancellation =
+            dataHandler?.saveCancellation ?? cellPreviewCancelHelper.removeAllAndSave;
 
         try {
+            const start = page * pageSize + rowIndex;
             const response = await dispatch(
                 readQueryResults(
                     queryId,
                     queryIndex,
-                    {start: options.rowIndex, end: options.rowIndex + 1},
-                    [options.columnName],
+                    {start, end: start + 1},
+                    [columnName],
                     {cellsSize: PREVIEW_LIMIT, stringLimit: Math.round(PREVIEW_LIMIT / 10)},
-                    cellPreviewCancelHelper.removeAllAndSave,
+                    cancellation,
                 ),
             );
 
-            const dataRow: unknown = response.rows[0][options.columnName][0];
-            const typeIndex = response.rows[0][options.columnName][1];
+            if (dataHandler) {
+                return await dataHandler.onSuccess({columnName, rowIndex, data: response});
+            }
+
+            const dataRow: unknown = response.rows[0][columnName][0];
+            const typeIndex = response.rows[0][columnName][1];
 
             const type = response.yql_type_registry[Number(typeIndex)];
 
@@ -49,7 +66,11 @@ export const onCellPreviewQueryResults = (
             });
         } catch (error: any) {
             if (!isCancelled(error)) {
-                dispatch({type: CELL_PREVIEW.FAILURE, data: {error}});
+                if (dataHandler) {
+                    dataHandler?.onError({columnName, rowIndex, error});
+                } else {
+                    dispatch({type: CELL_PREVIEW.FAILURE, data: {error}});
+                }
             }
         }
     };
