@@ -1,2 +1,3 @@
 export {AddQueryTokenForm} from './AddQueryTokenForm';
-export {QueryTokenList} from './QueryTokenList';
+export {QueryTokenTable} from './QueryTokenTable';
+export {QueryTokenButton} from './QueryTokenButton';
