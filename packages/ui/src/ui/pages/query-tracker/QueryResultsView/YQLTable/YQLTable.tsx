@@ -154,12 +154,12 @@ export default function Table({
                         </React.Fragment>
                     ) : null;
 
-                    const handlePreviewClick = () => {
-                        onShowPreview(name, index);
-                    };
-
                     const isTruncated: boolean = value.$incomplete;
                     const tag = value.$tagValue;
+
+                    const handlePreviewClick = () => {
+                        return onShowPreview(name, index, tag);
+                    };
 
                     if (isStrippedDown) {
                         return (
@@ -473,6 +473,8 @@ function TableCell({children, rawValue, onPreviewClick, isTruncated, tag}: Table
 
     const isTruncatedTaggedType = Boolean(tag && isTruncated);
 
+    const [isPreviewInProgress, setPreviewInProgress] = React.useState(false);
+
     return (
         <span ref={cellNodeRef}>
             {isTruncatedTaggedType ? (
@@ -490,7 +492,17 @@ function TableCell({children, rawValue, onPreviewClick, isTruncated, tag}: Table
                             className={cellActionClassName}
                             view="flat-secondary"
                             size="s"
-                            onClick={onPreviewClick}
+                            loading={isPreviewInProgress}
+                            onClick={async () => {
+                                try {
+                                    setPreviewInProgress(true);
+                                    if (!isPreviewInProgress) {
+                                        await onPreviewClick();
+                                    }
+                                } finally {
+                                    setPreviewInProgress(false);
+                                }
+                            }}
                         >
                             <UIKitIcon data={Eye} size="12" />
                         </Button>
