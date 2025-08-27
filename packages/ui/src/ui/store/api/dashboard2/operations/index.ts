@@ -6,9 +6,7 @@ export const operationsWidgetApi = dashboardApi.injectEndpoints({
     endpoints: (build) => ({
         operations: build.query({
             queryFn: fetchOperations,
-            providesTags: (_result, _error, arg) => [
-                String(YTApiId.operationsDashboard) + String(arg.id),
-            ],
+            providesTags: (_result, _error, arg) => [`${YTApiId.operationsDashboard}_${arg.id}`],
         }),
     }),
 });

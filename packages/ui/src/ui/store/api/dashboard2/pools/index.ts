@@ -7,9 +7,7 @@ const poolsWidgetApi = rootApi.injectEndpoints({
     endpoints: (build) => ({
         pools: build.query({
             queryFn: fetchPools,
-            providesTags: (_result, _error, arg) => [
-                String(YTApiId.poolsDashboard) + String(arg.id),
-            ],
+            providesTags: (_result, _error, arg) => [`${YTApiId.poolsDashboard}_${arg.id}`],
         }),
     }),
 });

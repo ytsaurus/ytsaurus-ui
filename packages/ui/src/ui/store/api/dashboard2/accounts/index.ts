@@ -8,9 +8,7 @@ const accountsWidgetApi = rootApi.injectEndpoints({
     endpoints: (build) => ({
         accounts: build.query({
             queryFn: fetchAccounts,
-            providesTags: (_result, _error, arg) => [
-                String(YTApiId.accountsDashboard) + String(arg.id),
-            ],
+            providesTags: (_result, _error, arg) => [`${YTApiId.accountsDashboard}_${arg.id}`],
         }),
     }),
 });
