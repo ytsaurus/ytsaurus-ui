@@ -6,9 +6,7 @@ export const navigationWidgetApi = dashboardApi.injectEndpoints({
     endpoints: (build) => ({
         paths: build.query({
             queryFn: fetchPaths,
-            providesTags: (_result, _error, arg) => [
-                String(YTApiId.navigationDashboard) + String(arg.id),
-            ],
+            providesTags: (_result, _error, arg) => [`${YTApiId.navigationDashboard}_${arg.id}`],
         }),
     }),
 });

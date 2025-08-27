@@ -7,9 +7,7 @@ const queriesWidgetApi = rootApi.injectEndpoints({
     endpoints: (build) => ({
         list: build.query({
             queryFn: fetchQuerieslist,
-            providesTags: (_result, _error, arg) => [
-                String(YTApiId.queriesDashboard) + String(arg.id),
-            ],
+            providesTags: (_result, _error, arg) => [`${YTApiId.queriesDashboard}_${arg.id}`],
         }),
     }),
 });
