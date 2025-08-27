@@ -105,6 +105,7 @@ export enum YTApiId {
     operationTreeConfigs,
     listJobs100,
     jobsOperationIncarnations,
+    listOperationEvents,
 
     resourcePlannerPoolDetails,
 
