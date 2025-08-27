@@ -167,6 +167,12 @@ export const useQueryResultTabs = (
             return;
         }
 
+        const errorTabItem = tabs.find((tabItem) => tabItem.id === QueryResultTab.ERROR);
+        if (errorTabItem && query?.state === QueryStatus.FAILED) {
+            setActiveTab(errorTabItem.id, query?.id);
+            return;
+        }
+
         const progressTabItem = tabs.find((tabItem) => tabItem.id === QueryResultTab.PROGRESS);
         if (progressTabItem && !progressTabShown && !resultTabShown) {
             setProgressTabShown(true);
