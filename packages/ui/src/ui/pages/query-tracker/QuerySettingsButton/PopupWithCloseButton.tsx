@@ -24,6 +24,8 @@ export const PopupWithCloseButton: FC<PropsWithChildren<Props>> = ({
             open={open}
             className={block(null, className)}
             onOutsideClick={onClose}
+            placement="bottom"
+            hasArrow
         >
             <Button view="flat" className={block('close-button')} onClick={onClose}>
                 <Icon data={XmarkIcon} />
