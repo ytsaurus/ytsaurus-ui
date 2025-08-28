@@ -1,6 +1,6 @@
 import {expect, test} from '@playwright/test';
 import {makeClusterUrl} from '../../../utils';
-import {basePage} from '../../../utils/BasePage';
+import {basePage} from '../../../widgets/BasePage';
 
 test('Settings: checking the functionality of the menu', async ({page}) => {
     await page.goto(makeClusterUrl('path-viewer'));

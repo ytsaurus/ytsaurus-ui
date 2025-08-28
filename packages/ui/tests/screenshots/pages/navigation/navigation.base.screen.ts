@@ -1,6 +1,6 @@
 import {expect, test} from '@playwright/test';
 import {E2E_DIR, makeClusterUrl} from '../../../utils';
-import {navigationPage} from './NavigationPage';
+import {navigationPage} from '../../../widgets/NavigationPage';
 
 test('Navigation: map_node - Content', async ({page}) => {
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}`));

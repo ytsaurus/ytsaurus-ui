@@ -1,7 +1,7 @@
 import {expect, test} from '@playwright/test';
 import {E2E_DIR, makeClusterUrl} from '../../../utils';
 import {replaceInnerHtml} from '../../../utils/dom';
-import {navigationPage} from './NavigationPage';
+import {navigationPage} from '../../../widgets/NavigationPage';
 
 test('Navigation - symlinks', async ({page}) => {
     await test.step('Render link-button', async () => {

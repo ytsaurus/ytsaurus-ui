@@ -1,18 +1,17 @@
 import {expect, test} from '@playwright/test';
 import {E2E_DIR, makeClusterUrl} from '../../../utils';
-import {TablePage} from './TablePage';
+import {table} from '../../../widgets/TablePage';
 import {replaceInnerHtml} from '../../../utils/dom';
 
 test('Navigation: truncated table - Content', async ({page}) => {
-    const tablePage = new TablePage({page});
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/truncated-table`), {
         waitUntil: 'networkidle',
     });
 
-    await tablePage.waitForTableContent('.navigation-table', 1);
-    await tablePage.replaceTableMeta();
+    await table(page).waitForTableContent('.navigation-table', 1);
+    await table(page).replaceTableMeta();
 
-    await tablePage.resizePageForScreenshot();
+    await table(page).resizePageForScreenshot();
 
     await expect(page).toHaveScreenshot();
 
@@ -21,8 +20,8 @@ test('Navigation: truncated table - Content', async ({page}) => {
             .locator('.data-table__table-wrapper tr:nth-child(1) td:nth-child(n+2) .yt-column-cell')
             .all();
 
-        for (const column of columns) {
-            await tablePage.openCellPreviewDialog(column);
+        for (let i = 0; i < columns.length; ++i) {
+            await table(page).showCellPreview(1, i);
 
             await page.getByTestId('cell-preview-modal-content').isVisible();
 

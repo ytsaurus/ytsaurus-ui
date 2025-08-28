@@ -1,8 +1,8 @@
 import {Page} from '@playwright/test';
-import {E2E_DIR_NAME} from '.';
-import {replaceInnerHtml} from './dom';
+import {E2E_DIR_NAME} from '../utils';
+import {replaceInnerHtml} from '../utils/dom';
 
-class HasPage {
+export class HasPage {
     readonly page;
     constructor(page: Page) {
         this.page = page;

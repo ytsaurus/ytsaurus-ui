@@ -1,6 +1,6 @@
 import {expect, test} from '@playwright/test';
 import {CLUSTER_TITLE, E2E_DIR, makeClusterUrl} from '../../utils';
-import {BasePage} from '../../utils/BasePage';
+import {BasePage} from '../../widgets/BasePage';
 
 function replaceNbsps(str: string) {
     var re = new RegExp(String.fromCharCode(160), "g");

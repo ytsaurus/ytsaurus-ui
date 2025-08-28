@@ -1,6 +1,6 @@
 import {Page} from '@playwright/test';
-import {BasePage} from '../../../utils/BasePage';
-import {replaceInnerHtml, replaceInnerHtmlForDateTime} from '../../../utils/dom';
+import {BasePage} from './BasePage';
+import {replaceInnerHtml, replaceInnerHtmlForDateTime} from '../utils/dom';
 
 export class NavigationPage extends BasePage {
     async replaceAttributes() {

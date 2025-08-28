@@ -1,18 +1,13 @@
-import {Page, expect, test} from '@playwright/test';
+import {expect, test} from '@playwright/test';
 import {E2E_DIR, makeClusterUrl} from '../../../utils';
 import {replaceInnerHtml} from '../../../utils/dom';
-import {TablePage} from './TablePage';
-import {navigationPage} from './NavigationPage';
-
-function tablePage(page: Page) {
-    return new TablePage({page});
-}
+import {table} from '../../../widgets/TablePage';
 
 test('Navigation: table - Content', async ({page}) => {
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/static-table`));
 
-    await tablePage(page).waitForTableContent('.navigation-table', 10);
-    await tablePage(page).replaceTableMeta();
+    await table(page).waitForTableContent('.navigation-table', 10);
+    await table(page).replaceTableMeta();
 
     await expect(page).toHaveScreenshot();
 
@@ -56,8 +51,8 @@ test('Navigation: table - Content', async ({page}) => {
 test('Navigation: table - Schema', async ({page}) => {
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/dynamic-table&navmode=schema`));
 
-    await tablePage(page).waitForTable('.navigation-schema', 3);
-    await tablePage(page).replaceBreadcrumbsTestDir();
+    await table(page).waitForTable('.navigation-schema', 3);
+    await table(page).replaceBreadcrumbsTestDir();
     page.getByTestId('');
 
     await expect(page).toHaveScreenshot();
@@ -68,8 +63,8 @@ test('Navigation: table - Remount needed', async ({page}) => {
 
     page.locator('.data-table_theme_yt-internal').waitFor();
 
-    await tablePage(page).replaceBreadcrumbsTestDir();
-    await tablePage(page).replaceTableMeta();
+    await table(page).replaceBreadcrumbsTestDir();
+    await table(page).replaceTableMeta();
 
     await test.step('Remount alert visible', async () => {
         await expect(page).toHaveScreenshot();
@@ -79,8 +74,8 @@ test('Navigation: table - Remount needed', async ({page}) => {
 
         await expect(page.locator('.remount-alert')).toBeHidden();
 
-        await tablePage(page).replaceBreadcrumbsTestDir();
-        await tablePage(page).replaceTableMeta();
+        await table(page).replaceBreadcrumbsTestDir();
+        await table(page).replaceTableMeta();
 
         await expect(page).toHaveScreenshot();
     });
@@ -89,8 +84,8 @@ test('Navigation: table - Remount needed', async ({page}) => {
 test('Navigation: table - Tablets', async ({page}) => {
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/dynamic-table&navmode=tablets`));
 
-    await tablePage(page).waitForTable('.navigation-tablets', 2);
-    await tablePage(page).replaceBreadcrumbsTestDir();
+    await table(page).waitForTable('.navigation-tablets', 2);
+    await table(page).replaceBreadcrumbsTestDir();
 
     page.getByTestId('');
     await replaceInnerHtml(page, {
@@ -104,8 +99,8 @@ test('Navigation: table - Tablets', async ({page}) => {
 test('Navigation: static-table - rowselector', async ({page}) => {
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/static-table`));
 
-    await tablePage(page).replaceTableMeta();
-    await tablePage(page).waitForTableContent('.navigation-table', 10);
+    await table(page).replaceTableMeta();
+    await table(page).waitForTableContent('.navigation-table', 10);
 
     await page.click('.navigation-table-overview__input', {force: true});
     const slider = await page.waitForSelector('.rc-slider-handle');
@@ -131,8 +126,8 @@ test('Navigation: table - userColumnPresets', async ({page, context}) => {
 
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/static-table`));
 
-    await tablePage(page).waitForTableContent('.navigation-table', 10);
-    await tablePage(page).replaceTableMeta();
+    await table(page).waitForTableContent('.navigation-table', 10);
+    await table(page).replaceTableMeta();
 
     await test.step('select only the "key" column', async () => {
         await page.getByTestId('table-columns-button').click();
@@ -161,8 +156,8 @@ test('Navigation: table - userColumnPresets', async ({page, context}) => {
 
         await context.waitForEvent('page', {
             predicate: async (page) => {
-                await tablePage(page).waitForTableContent('.navigation-table', 10);
-                await tablePage(page).replaceTableMeta();
+                await table(page).waitForTableContent('.navigation-table', 10);
+                await table(page).replaceTableMeta();
 
                 await page.getByText('key0').waitFor();
 
@@ -177,23 +172,23 @@ test('Navigation: table - userColumnPresets', async ({page, context}) => {
 test('Navigation: yql-v3-types', async ({page}) => {
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/tmp/yql-v3-types-table`));
 
-    await tablePage(page).replaceTableMeta();
-    await tablePage(page).waitForTableContent('.navigation-table', 5);
+    await table(page).replaceTableMeta();
+    await table(page).waitForTableContent('.navigation-table', 5);
 
     await test.step('yql-v3-types enabled', async () => {
         await expect(page).toHaveScreenshot();
     });
 
     await test.step('Diable yql-v3-types', async () => {
-        await tablePage(page).settingsToggleVisibility();
-        await tablePage(page).settingsShowByName('YQL V3 types');
-        await tablePage(page).setCheckboxValue('settings_yql-v3-types', false);
-        await tablePage(page).settingsToggleVisibility();
+        await table(page).settingsToggleVisibility();
+        await table(page).settingsShowByName('YQL V3 types');
+        await table(page).setCheckboxValue('settings_yql-v3-types', false);
+        await table(page).settingsToggleVisibility();
     });
 
     await test.step('yql-v3-types disabled', async () => {
-        await tablePage(page).waitForHidden('.data-table__row .yql_datetime64');
-        await tablePage(page).waitForTableContent('.navigation-table', 5);
+        await table(page).waitForHidden('.data-table__row .yql_datetime64');
+        await table(page).waitForTableContent('.navigation-table', 5);
         await expect(page).toHaveScreenshot();
     });
 });
