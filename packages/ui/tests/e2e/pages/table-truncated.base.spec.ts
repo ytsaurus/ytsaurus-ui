@@ -1,6 +1,6 @@
 import {expect, test} from '@playwright/test';
 import {E2E_DIR, makeClusterUrl} from '../../utils';
-import {BasePage} from '../../utils/BasePage';
+import {BasePage} from '../../widgets/BasePage';
 
 const PATH = `${E2E_DIR}/truncated-table`;
 

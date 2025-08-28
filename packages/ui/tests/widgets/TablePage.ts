@@ -1,6 +1,6 @@
 import {NavigationPage} from './NavigationPage';
-import {replaceInnerHtml} from '../../../utils/dom';
-import type {Locator} from '@playwright/test';
+import {replaceInnerHtml} from '../utils/dom';
+import {Locator, Page} from '@playwright/test';
 
 export class TablePage extends NavigationPage {
     async waitForTableContent(selector: string, rowCount: number) {
@@ -21,9 +21,11 @@ export class TablePage extends NavigationPage {
 
     async openCellPreviewDialog(column: Locator) {
         await column.hover();
-
         const eyeIcon = column.getByTestId('truncated-preview-button');
-
         await eyeIcon.click();
     }
+}
+
+export function table(page: Page) {
+    return new TablePage({page});
 }

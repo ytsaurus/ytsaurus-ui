@@ -1,6 +1,6 @@
 import {Page, expect, test} from '@playwright/test';
 import {makeClusterUrl} from '../../../utils';
-import {BasePage} from '../../../utils/BasePage';
+import {BasePage} from '../../../widgets/BasePage';
 import {replaceInnerHtml, replaceInnerHtmlForDateTime} from '../../../utils/dom';
 
 const HOST_MASK = 'my-hostname:11111';
@@ -141,7 +141,9 @@ test('Components - Versions', async ({page}) => {
         .locator('.components-versions__details .elements-table-wrapper')
         .waitFor({state: 'visible'});
 
-    await components(page).scrollIntoVeiwIfNeededPassingByToolbar('.components-versions__details .elements-table-wrapper')
+    await components(page).scrollIntoVeiwIfNeededPassingByToolbar(
+        '.components-versions__details .elements-table-wrapper',
+    );
 
     await page.waitForSelector('tr:nth-child(15) .yt-host');
 

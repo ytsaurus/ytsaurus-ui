@@ -1,6 +1,6 @@
 import {Page, expect, test} from '@playwright/test';
 import {makeClusterUrl} from '../../../utils';
-import {BasePage} from '../../../utils/BasePage';
+import {BasePage} from '../../../widgets/BasePage';
 import {replaceInnerHtml, replaceInnerHtmlProgress} from '../../../utils/dom';
 
 const HARDWARE_LIMIT = '000.00 GiB';

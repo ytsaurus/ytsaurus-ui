@@ -1,6 +1,6 @@
 import {expect, test} from '@playwright/test';
 import {makeClusterUrl} from '../../utils';
-import {BasePage} from '../../utils/BasePage';
+import {BasePage} from '../../widgets/BasePage';
 
 class ACOPage extends BasePage {
     async open() {

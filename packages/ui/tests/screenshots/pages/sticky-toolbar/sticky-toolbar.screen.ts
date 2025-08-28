@@ -1,8 +1,8 @@
 import {Page, expect, test} from '@playwright/test';
 import {E2E_DIR, makeClusterUrl} from '../../../utils';
 //import {replaceInnerHtml} from '../../../utils/dom';
-import {TablePage} from '../navigation/TablePage';
-import {navigationPage} from '../navigation/NavigationPage';
+import {TablePage} from '../../../widgets/TablePage';
+import {navigationPage} from '../../../widgets/NavigationPage';
 import {replaceInnerHtml} from '../../../utils/dom';
 import {setUserSettings} from '../../../utils/settings';
 
