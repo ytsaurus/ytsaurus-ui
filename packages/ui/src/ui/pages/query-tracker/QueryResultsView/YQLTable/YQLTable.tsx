@@ -509,6 +509,7 @@ function TableCell({children, rawValue, onPreviewClick, isTruncated, tag}: Table
                                     setPreviewInProgress(false);
                                 }
                             }}
+                            qa="query:reqult:show-preview"
                         >
                             <UIKitIcon data={Eye} size="12" />
                         </Button>
