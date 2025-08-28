@@ -1,6 +1,6 @@
 import {NavigationPage} from './NavigationPage';
 import {replaceInnerHtml} from '../utils/dom';
-import {Locator, Page} from '@playwright/test';
+import {Page} from '@playwright/test';
 
 export class TablePage extends NavigationPage {
     async waitForTableContent(selector: string, rowCount: number) {
@@ -19,10 +19,23 @@ export class TablePage extends NavigationPage {
         });
     }
 
-    async openCellPreviewDialog(column: Locator) {
-        await column.hover();
-        const eyeIcon = column.getByTestId('truncated-preview-button');
-        await eyeIcon.click();
+    getNavigationTableTBodyLocator() {
+        return this.page.locator('.navigation-table .data-table-wrapper tbody');
+    }
+
+    async showCellPreview(row: number, column: number) {
+        const cellLoc = this.getNavigationTableTBodyLocator().locator(
+            `tr:nth-child(${row}) td:nth-child(${column})`,
+        );
+
+        await cellLoc.locator('.yt-column-cell').hover();
+        await cellLoc.getByTestId('truncated-preview-button').click();
+
+        return cellLoc;
+    }
+
+    async openQueriesWidget() {
+        return this.page.getByTestId('qa:navigation:open-queries-widget').click();
     }
 }
 

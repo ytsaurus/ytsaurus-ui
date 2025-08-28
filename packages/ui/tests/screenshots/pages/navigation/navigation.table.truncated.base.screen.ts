@@ -21,7 +21,7 @@ test('Navigation: truncated table - Content', async ({page}) => {
             .all();
 
         for (let i = 0; i < columns.length; ++i) {
-            await table(page).showCellPreview(1, i);
+            await table(page).showCellPreview(1, i + 2);
 
             await page.getByTestId('cell-preview-modal-content').isVisible();
 

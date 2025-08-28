@@ -23,20 +23,26 @@ export async function replaceInnerHtml(
     }, toReplace);
 }
 
+export const FAKE_DATE = '01 Jan 1970';
+
+export const FAKE_DATE_TIME = '01 Jan 1970 00:00:00';
 export async function replaceInnerHtmlForDateTime(page: Page, selectors: Array<string>) {
-    replaceInnerHtmlForSimilarElements(page, selectors, '01 Jan 1970 00:00:00');
+    replaceInnerHtmlForSimilarElements(page, selectors, FAKE_DATE_TIME);
 }
 
+export const FAKE_DATE_TIME_ISO = '1970-01-01T00:00:00.000000Z';
 export async function replaceInnerHtmlForIsoDate(page: Page, selectors: Array<string>) {
-    replaceInnerHtmlForSimilarElements(page, selectors, '1970-01-01T00:00:00.000000Z');
+    replaceInnerHtmlForSimilarElements(page, selectors, FAKE_DATE_TIME_ISO);
 }
 
+export const FAKE_DURATION = 'XX:XX:XX';
 export async function replaceInnerHtmlForDuration(page: Page, selectors: Array<string>) {
-    replaceInnerHtmlForSimilarElements(page, selectors, 'XX:XX:XX');
+    replaceInnerHtmlForSimilarElements(page, selectors, FAKE_DURATION);
 }
 
+export const FAKE_ID = '00000000-11111111-22222222-33333333';
 export async function replaceInnerHtmlForId(page: Page, selectors: Array<string>) {
-    replaceInnerHtmlForSimilarElements(page, selectors, '00000000-11111111-22222222-33333333');
+    replaceInnerHtmlForSimilarElements(page, selectors, FAKE_ID);
 }
 
 export async function replaceInnerHtmlProgress(page: Page) {

@@ -106,6 +106,7 @@ export function OpenQueryButtons({className, autoOpen}: OpenQueryButtonProps) {
                         className={b('btn')}
                         selected={panelMode === 'qt'}
                         title="Open Queries widget"
+                        qa="qa:navigation:open-queries-widget"
                     >
                         QT Kit
                     </Button>

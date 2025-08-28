@@ -13,7 +13,7 @@ class QueryPage extends HasPage {
 
     async showCellPreview(row: number, column: number) {
         const cellLoc = await this.getResultTBodyLocator().locator(
-            `tr:nth(${row}) td:nth(${column})`,
+            `tr:nth-child(${row}) td:nth-child(${column})`,
         );
 
         await cellLoc.getByTestId('query:reqult:show-preview').click();
