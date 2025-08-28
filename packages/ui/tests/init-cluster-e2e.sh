@@ -25,10 +25,10 @@ createAndMountDynamicTable "//tmp/userColumnPresets" "[{name=hash;sort_order=asc
 
 suffix=E=$(mktemp -u XXXXXX)
 # to lower case
-E2E_SUFFIX=$(mktemp -u XXXXXX | tr '[:upper:]' '[:lower:]')
+export E2E_SUFFIX=$(mktemp -u XXXXXX | tr '[:upper:]' '[:lower:]')
 echo E2E_SUFFIX=$E2E_SUFFIX >./e2e-env.tmp
 
-E2E_DIR="$(date "+//tmp/e2e.%Y-%m-%d.%H:%M:%S.${E2E_SUFFIX}")"
+export E2E_DIR="$(date "+//tmp/e2e.%Y-%m-%d.%H:%M:%S.${E2E_SUFFIX}")"
 echo E2E_DIR=${E2E_DIR} >>./e2e-env.tmp
 
 yt create map_node ${E2E_DIR}
@@ -241,3 +241,5 @@ yt create -r --attributes "{schema=[
     done
     set -x
 ) | yt write-table --format json ${YQLV3_TABLE}
+
+$(dirname $0)/init-cluster-e2e/table.truncated.image-audio.sh
