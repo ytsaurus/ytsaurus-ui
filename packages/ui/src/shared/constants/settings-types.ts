@@ -2,6 +2,12 @@ import {DashKitProps} from '@gravity-ui/dashkit';
 import {NodeType} from './system';
 import {QueryEngine} from './engines';
 
+export type QueryToken = {
+    name: string;
+    cluster: string;
+    path: string;
+};
+
 export interface Namespace {
     name: string;
     value: string;
@@ -145,6 +151,7 @@ interface QueryTrackerSettings {
     'global::queryTracker::useNewGraphView': boolean;
     'global::queryTracker::suggestions': boolean;
     'global::queryTracker::lastEngine': QueryEngine;
+    'global::queryTracker::tokens': QueryToken[];
 }
 
 interface VCSSettings {

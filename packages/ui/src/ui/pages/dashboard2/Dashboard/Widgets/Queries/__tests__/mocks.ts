@@ -15,6 +15,7 @@ export const queriesResponse: {results: Array<BatchResultsItem<QueriesListRespon
                         query: 'SELECT * FROM home_table',
                         supportedEngines: {spyt: true, yql: true, ql: true, chyt: true},
                         files: [],
+                        secrets: [],
                         start_time: '2025-06-10T07:28:13.371172Z',
                         finish_time: '2025-06-10T07:28:18.347557Z',
                         settings: {
@@ -36,6 +37,7 @@ export const queriesResponse: {results: Array<BatchResultsItem<QueriesListRespon
                         supportedEngines: {spyt: true, yql: true, ql: true, chyt: true},
                         query: 'SELECT * FROM home_table',
                         files: [],
+                        secrets: [],
                         start_time: '2025-06-10T07:27:23.857268Z',
                         finish_time: '2025-06-10T07:27:32.222630Z',
                         settings: {
@@ -55,6 +57,7 @@ export const queriesResponse: {results: Array<BatchResultsItem<QueriesListRespon
                         engine: QueryEngine.YQL,
                         query: 'SELECT * FROM home_table',
                         files: [],
+                        secrets: [],
                         supportedEngines: {spyt: true, yql: true, ql: true, chyt: true},
                         start_time: '2025-06-10T07:26:17.848980Z',
                         finish_time: '2025-06-10T07:26:18.798600Z',
