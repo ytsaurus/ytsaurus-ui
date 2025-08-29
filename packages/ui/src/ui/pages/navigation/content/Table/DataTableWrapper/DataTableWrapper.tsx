@@ -42,49 +42,14 @@ export type DataTableWrapperProps = {
 };
 
 export default function DataTableWrapper(props: DataTableWrapperProps) {
-    const dispatch = useDispatch();
     const useRawStrings = useSelector(getSettingTableDisplayRawStrings);
     const schemaByName = useSelector(getSchemaByName);
 
     const {columns, keyColumns, ysonSettings, yqlTypes, loading, loaded, isFullScreen, ...rest} =
         props;
 
-    const offsetValue = useSelector(getOffsetValue);
-    const dataHandler = React.useMemo(() => {
-        const cancelHelper = new CancelHelper();
-        return {
-            cancelHelper,
-            saveCancellation: (token) => {
-                cancelHelper.saveCancelToken(token);
-            },
-            onStartLoading: () => {},
-            onError: onErrorTableCellPreview,
-            onSuccess: ({data, columnName, rowIndex}) => {
-                dispatch(injectTableCellData({data, offsetValue, columnName, rowIndex}));
-            },
-        } as CellDataHandlerNavigation & {cancelHelper: CancelHelper};
-    }, [offsetValue]);
+    const {onShowPreview} = useShowPrevewHandler();
 
-    React.useEffect(() => {
-        return () => {
-            dataHandler.cancelHelper.removeAllRequests();
-        };
-    }, [dataHandler]);
-
-    const onShowPreview = React.useCallback(
-        (columnName: string, rowIndex: number, tag?: string) => {
-            const allowInjectData = isInlinePreviewAllowed(tag);
-            return dispatch(
-                onCellPreview({
-                    columnName,
-                    rowIndex,
-                    tag,
-                    dataHandler: allowInjectData ? dataHandler : undefined,
-                }),
-            );
-        },
-        [dispatch, dataHandler],
-    );
     const dtColumns = prepareColumns({
         columns,
         keyColumns,
@@ -129,4 +94,47 @@ export default function DataTableWrapper(props: DataTableWrapperProps) {
             )}
         </div>
     );
+}
+
+function useShowPrevewHandler() {
+    const dispatch = useDispatch();
+    const offsetValue = useSelector(getOffsetValue);
+
+    const {dataHandler, onShowPreview} = React.useMemo(() => {
+        const cancelHelper = new CancelHelper();
+
+        const dataHandler = {
+            cancelHelper,
+            saveCancellation: (token) => {
+                cancelHelper.saveCancelToken(token);
+            },
+            onStartLoading: () => {},
+            onError: onErrorTableCellPreview,
+            onSuccess: ({data, columnName, rowIndex}) => {
+                dispatch(injectTableCellData({data, offsetValue, columnName, rowIndex}));
+            },
+        } as CellDataHandlerNavigation & {cancelHelper: CancelHelper};
+
+        const onShowPreview = (columnName: string, rowIndex: number, tag?: string) => {
+            const allowInjectData = isInlinePreviewAllowed(tag);
+            return dispatch(
+                onCellPreview({
+                    columnName,
+                    rowIndex,
+                    tag,
+                    dataHandler: allowInjectData ? dataHandler : undefined,
+                }),
+            );
+        };
+
+        return {onShowPreview, dataHandler};
+    }, [dispatch, offsetValue]);
+
+    React.useEffect(() => {
+        return () => {
+            dataHandler.cancelHelper.removeAllRequests();
+        };
+    }, [dataHandler]);
+
+    return {onShowPreview};
 }

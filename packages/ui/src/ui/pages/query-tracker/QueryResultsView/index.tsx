@@ -82,70 +82,18 @@ function QueryReadyResultView({
 
 export const QueryResultsView = React.memo(
     function QueryResultsView({query, index}: {query: QueryItem; index: number}) {
-        const dispatch = useDispatch();
-
         const result = useSelector((state: RootState) => getQueryResult(state, query.id, index));
         const page = result?.page;
         const {pageSize} = useSelector((state: RootState) =>
             getQueryResultSettings(state, query.id, index),
         );
-        const dataHandler = React.useMemo(() => {
-            const cancelHelper = new CancelHelper();
 
-            return {
-                onStartLoading: () => {},
-                onSuccess: ({columnName, rowIndex, data}) => {
-                    dispatch(
-                        injectQueryResults({
-                            queryId: query.id,
-                            resultIndex: index,
-                            columnName,
-                            rowIndex,
-                            data,
-                        }),
-                    );
-                },
-                onError: onErrorTableCellPreview,
-
-                cancelHelper,
-                saveCancellation: (token) => {
-                    cancelHelper.saveCancelToken(token);
-                },
-                page,
-                pageSize,
-            } as CellDataHandlerQueries & {
-                cancelHelper: CancelHelper;
-                page: number;
-                pageSize: number;
-            };
-        }, [query, index, page, pageSize, dispatch]);
-
-        React.useEffect(() => {
-            return () => {
-                dataHandler.cancelHelper.removeAllRequests();
-            };
-        }, [dataHandler]);
-
-        const handleShowPreviewClick = React.useCallback(
-            async (columnName: string, rowIndex: number, tag: string | undefined) => {
-                const allowInlinePreview = isInlinePreviewAllowed(tag);
-                const {page, pageSize} = dataHandler;
-                await dispatch(
-                    onCellPreviewQueryResults(
-                        query.id,
-                        index,
-                        {
-                            columnName,
-                            rowIndex,
-                            page,
-                            pageSize,
-                        },
-                        allowInlinePreview ? dataHandler : undefined,
-                    ),
-                );
-            },
-            [index, query.id, dataHandler],
-        );
+        const {onShowPreview} = useShowPreviewHandler({
+            queryId: query.id,
+            resultIndex: index,
+            page,
+            pageSize,
+        });
 
         return (
             <div className={b()}>
@@ -157,10 +105,7 @@ export const QueryResultsView = React.memo(
                 )}
                 {result?.resultReady && (
                     <>
-                        <QueryReadyResultView
-                            result={result}
-                            onShowPreview={handleShowPreviewClick}
-                        />
+                        <QueryReadyResultView result={result} onShowPreview={onShowPreview} />
                         {result.settings.viewMode === QueryResultsViewMode.Table && (
                             <ResultPaginator
                                 className={b('pagination')}
@@ -176,3 +121,80 @@ export const QueryResultsView = React.memo(
     },
     (prev, next) => prev.query.id === next.query.id && prev.index === next.index,
 );
+
+function useShowPreviewHandler({
+    queryId,
+    resultIndex,
+    page,
+    pageSize,
+}: {
+    queryId: string;
+    resultIndex: number;
+    page?: number;
+    pageSize: number;
+}) {
+    const dispatch = useDispatch();
+
+    const {dataHandler, onShowPreview} = React.useMemo(() => {
+        const cancelHelper = new CancelHelper();
+
+        const dataHandler = {
+            onStartLoading: () => {},
+            onSuccess: ({columnName, rowIndex, data}) => {
+                dispatch(
+                    injectQueryResults({
+                        queryId,
+                        resultIndex,
+                        columnName,
+                        rowIndex,
+                        data,
+                    }),
+                );
+            },
+            onError: onErrorTableCellPreview,
+
+            cancelHelper,
+            saveCancellation: (token) => {
+                cancelHelper.saveCancelToken(token);
+            },
+            page,
+            pageSize,
+        } as CellDataHandlerQueries & {
+            cancelHelper: CancelHelper;
+            page: number;
+            pageSize: number;
+        };
+
+        const onShowPreview = async (
+            columnName: string,
+            rowIndex: number,
+            tag: string | undefined,
+        ) => {
+            const allowInlinePreview = isInlinePreviewAllowed(tag);
+            const {page, pageSize} = dataHandler;
+            await dispatch(
+                onCellPreviewQueryResults(
+                    queryId,
+                    resultIndex,
+                    {
+                        columnName,
+                        rowIndex,
+                        page,
+                        pageSize,
+                    },
+                    allowInlinePreview ? dataHandler : undefined,
+                ),
+            );
+        };
+
+        return {dataHandler, onShowPreview};
+    }, [queryId, resultIndex, page, pageSize, dispatch]);
+
+    React.useEffect(() => {
+        return () => {
+            dataHandler.cancelHelper.removeAllRequests();
+        };
+    }, [dataHandler]);
+
+    return {onShowPreview};
+}
