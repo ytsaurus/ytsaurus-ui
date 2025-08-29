@@ -5,7 +5,8 @@ import './AclUpdateMessage.scss';
 import {Subject} from '../../utils/acl/acl-types';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import Link from '../../components/Link/Link';
-import Tag from '../../components/Tag/Tag';
+import {AclSubject} from '../../components/AclSubject/AclSubject';
+import {AppStoreProvider} from '../../containers/App/AppStoreProvider';
 import i18n from './i18n';
 
 const block = cn('acl-update-message');
@@ -14,18 +15,6 @@ interface Props {
     link: string;
     state: string;
     subject: Subject;
-}
-
-function FormattedSubject(subject: Subject) {
-    if ('group' in subject) {
-        return <Tag asUsername text={`group ${subject.group}`} />;
-    }
-
-    if ('tvm_id' in subject) {
-        return <Tag asUsername text={`tvm ${subject.tvm_id}`} />;
-    }
-
-    return <Tag asUsername text={subject.user} />;
 }
 
 function AclUpdateMessageImpl(props: Props) {
@@ -39,9 +28,8 @@ function AclUpdateMessageImpl(props: Props) {
             </Link>{' '}
             {i18n('for')}{' '}
             <span className={block('subject')}>
-                <FormattedSubject {...subject} />
+                <AclSubject subject={subject} />
             </span>
-            .
         </div>
     );
 }
@@ -49,7 +37,9 @@ function AclUpdateMessageImpl(props: Props) {
 export default function AclUpdateMessage(props: Props) {
     return (
         <ErrorBoundary>
-            <AclUpdateMessageImpl {...props} />
+            <AppStoreProvider>
+                <AclUpdateMessageImpl {...props} />
+            </AppStoreProvider>
         </ErrorBoundary>
     );
 }
