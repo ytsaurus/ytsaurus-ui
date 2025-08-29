@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.102.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.101.0...ui-v1.102.0) (2025-08-29)
+
+
+### Features
+
+* **Bundles:** remove bundle balancer [YTFRONT-5160] ([7b5f141](https://github.com/ytsaurus/ytsaurus-ui/commit/7b5f141e9b7f3498049e2af55f8b3682c7560c77))
+* **Navigation/Table:** inline preview for `audio`, `image` tags [YTFRONT-5022] ([b84ed7d](https://github.com/ytsaurus/ytsaurus-ui/commit/b84ed7d9e3c96e6a1f55e43945c8e4e5d808e373))
+* **Operations/Runtime:** add absolute values [YTFRONT-5120] ([a986bd4](https://github.com/ytsaurus/ytsaurus-ui/commit/a986bd4796c42983ec522ffeedfb935b217dfef8))
+* **Operations/Runtime:** add tooltips [YTFRONT-5120] ([a26b6e4](https://github.com/ytsaurus/ytsaurus-ui/commit/a26b6e41625c5963e3c604d8e76948657b77f4e8))
+* **Queries/Result:** inline preview for `image`,`audio` tags  [YTFRONT-5022] ([0c400d7](https://github.com/ytsaurus/ytsaurus-ui/commit/0c400d73bd42396c758edf1c187604ea033a318e))
+* **System:** add decimal value for cell-tag [YTFRONT-4939] ([f3d53bb](https://github.com/ytsaurus/ytsaurus-ui/commit/f3d53bb94dc515ba6dafd3d0198fd299c34e2111))
+
+
+### Bug Fixes
+
+* **Queries/Result:** result tab priority [YTFRONT-5122] ([6d83a4b](https://github.com/ytsaurus/ytsaurus-ui/commit/6d83a4be1b9cff4291312250a8c4817c1b041bc0))
+* **Scheduling:** use 'estimated_guarantee_resources' instead of 'promised_fair_share_resources' [YTFRONT-4015] ([4031d70](https://github.com/ytsaurus/ytsaurus-ui/commit/4031d70961dc27b9697ef5d7170d4b8b427afe22))
+
 ## [1.101.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.100.0...ui-v1.101.0) (2025-08-20)
 
 
