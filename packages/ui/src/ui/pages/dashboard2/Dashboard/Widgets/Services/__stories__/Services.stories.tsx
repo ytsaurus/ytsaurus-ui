@@ -1,4 +1,5 @@
 import * as React from 'react';
+import type {Meta, StoryFn} from '@storybook/react';
 
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
@@ -19,10 +20,10 @@ import {
 
 yt.setup.setGlobalOption('proxy', 'test-cluster.yt.my-domain.com');
 
-const meta = {
+const meta: Meta = {
     title: 'Dashboard/Services Widget',
     decorators: [
-        (Story: any) => (
+        (Story: StoryFn) => (
             <div style={{padding: '20px', height: '1000px'}}>
                 <Story />
             </div>
