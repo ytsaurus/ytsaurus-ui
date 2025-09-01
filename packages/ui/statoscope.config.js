@@ -15,7 +15,16 @@ module.exports = {
             '@statoscope/webpack/no-packages-dups': [
                 'error',
                 {
-                    exclude: ['clsx', 'react-is', 'redux', 'screenfull'],
+                    exclude: [
+                        'd3-array',
+                        'd3-path',
+                        'd3-shape',
+                        'clsx',
+                        'internmap',
+                        'react-is',
+                        'redux',
+                        'screenfull',
+                    ],
                 },
             ],
             // ensure that the download time of entrypoints is not over the limit (10 sec)

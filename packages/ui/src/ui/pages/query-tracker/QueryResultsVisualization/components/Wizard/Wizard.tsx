@@ -12,12 +12,12 @@ import Button from '../../../../../components/Button/Button';
 import {useToggle} from 'react-use';
 import cn from 'bem-cn-lite';
 import {Icon, Select} from '@gravity-ui/uikit';
-import type {ChartKitWidgetAxisType} from '@gravity-ui/chartkit';
+import type {ChartAxisType} from '@gravity-ui/chartkit/d3';
 import {changeAxisType, changeField} from '../../../module/queryChart/actions';
 import {getAxisNameByType} from '../../helpers/getAxisNameByType';
 import './Wizard.scss';
 
-const axisTypes: ChartKitWidgetAxisType[] = ['category', 'datetime', 'linear', 'logarithmic'];
+const axisTypes: ChartAxisType[] = ['category', 'datetime', 'linear', 'logarithmic'];
 
 const b = cn('yt-chart-wizard');
 
@@ -49,7 +49,7 @@ export const Wizard: FC = () => {
     };
 
     const handleTypeChange = (value: string[]) => {
-        dispatch(changeAxisType(value[0] as ChartKitWidgetAxisType));
+        dispatch(changeAxisType(value[0] as ChartAxisType));
     };
 
     const handleAddField = (data: {value: string; oldValue: string; name: FieldKey}) => {
@@ -69,7 +69,7 @@ export const Wizard: FC = () => {
             <Select
                 width="max"
                 label="Axis type:"
-                value={[axisType]}
+                value={[axisType!]}
                 filterable
                 options={axisTypes.map((item) => ({
                     content: item,

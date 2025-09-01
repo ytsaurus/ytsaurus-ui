@@ -1,21 +1,20 @@
-import type {ChartKitWidgetData} from '@gravity-ui/chartkit';
+import type {ChartAxis, ChartData} from '@gravity-ui/chartkit/d3';
 import {QueryResult} from './types';
 import {ChartType} from '../constants';
 import {preparePie} from './preparePie';
 import {Config, VisualizationState} from '../../module/queryChart/queryChartSlice';
 import {prepareData} from './prepareData';
-import type {ChartKitWidgetSeriesOptions} from '@gravity-ui/chartkit/build/types/widget-data/series';
 import {getPointValue} from './getPointData';
 import {prepareWaterfall} from './prepareWaterfall';
 
-const options: ChartKitWidgetSeriesOptions = {
+const options = {
     [ChartType.BarX]: {
         barMaxWidth: 50,
         barPadding: 0.05,
         groupPadding: 0.4,
         dataSorting: {
-            direction: 'desc',
-            key: 'name',
+            direction: 'desc' as const,
+            key: 'name' as const,
         },
     },
     [ChartType.Line]: {
@@ -26,7 +25,7 @@ const options: ChartKitWidgetSeriesOptions = {
 export const prepareWidgetData = (
     result: QueryResult,
     {type, xField, yField, config}: VisualizationState,
-): ChartKitWidgetData | null => {
+): ChartData | null => {
     if (!xField || !yField.length || !result) return null;
 
     switch (type) {
@@ -68,7 +67,7 @@ export const prepareWidgetData = (
                     title: config.xAxis.title,
                 },
                 yAxis: config.yAxis
-                    ? config.yAxis.map((axis) => ({
+                    ? config.yAxis.map((axis: ChartAxis) => ({
                           type: config.xAxis.type,
                           title: axis.title,
                           ...(config.xAxis.type === 'category'

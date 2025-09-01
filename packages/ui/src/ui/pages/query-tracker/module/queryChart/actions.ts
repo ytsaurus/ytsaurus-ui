@@ -31,7 +31,7 @@ import {
     selectQueryResults,
 } from './selectors';
 import {getPointValue} from '../../QueryResultsVisualization/preparers/getPointData';
-import type {ChartKitWidgetAxisType} from '@gravity-ui/chartkit/build/types/widget-data/axis';
+import type {ChartAxisType} from '@gravity-ui/chartkit/d3';
 import {selectIsMultipleAco} from '../query_aco/selectors';
 import cloneDeep_ from 'lodash/cloneDeep';
 import {loadQueryResult} from '../query_result/actions';
@@ -79,7 +79,7 @@ export const saveQueryChartConfig = (): AsyncAction => (dispatch, getState) => {
 };
 
 export const changeAxisType =
-    (axisType: ChartKitWidgetAxisType): AsyncAction =>
+    (axisType: ChartAxisType): AsyncAction =>
     (dispatch, getState) => {
         const state = getState();
         const result = selectQueryResult(state);
@@ -111,7 +111,7 @@ export const changeField =
         const type = selectChartAxisType(getState());
 
         dispatch(setFiled(data));
-        dispatch(changeAxisType(type));
+        dispatch(changeAxisType(type!));
     };
 
 export const changeConfig =
