@@ -20,14 +20,12 @@ export function NoContent({warning, hint, className, padding, imageSize}: Props)
     return (
         <Flex className={block({padding}, className)} alignItems="center" justifyContent="center">
             <NotFound height={imageSize || 140} width={imageSize || 140} />
-            <div className={block('text')}>
-                <div>
-                    <b className={block('warning')}>{warning}</b>
-                </div>
-                <Text variant={'subheader-2'} color={'primary'}>
+            <Flex className={block('text')} direction={'column'} gap={2}>
+                <Text variant={'subheader-3'}>{warning}</Text>
+                <Text variant={'inherit'} color={'secondary'}>
                     {hint}
                 </Text>
-            </div>
+            </Flex>
         </Flex>
     );
 }
