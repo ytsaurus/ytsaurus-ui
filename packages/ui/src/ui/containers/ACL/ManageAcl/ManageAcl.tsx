@@ -123,7 +123,6 @@ function ManageAcl(props: Props) {
                     readApprovers: roleListValueToSubjectList(readApprovers),
                 },
                 version,
-                mode: 'keep-missing-fields',
             });
         },
         [idmKind, path, updateAcl, version],
