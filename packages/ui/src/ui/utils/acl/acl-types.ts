@@ -42,7 +42,7 @@ export interface GetGroupResponse {
 }
 
 export interface UpdateResponse {
-    status: Array<RoleUpdateStatus>;
+    status: RoleUpdateStatus | Array<RoleUpdateStatus>;
 }
 
 export interface RoleUpdateStatus {
@@ -259,5 +259,4 @@ export interface UpdateAclParams {
     version?: string;
     poolTree?: string;
     comment?: string;
-    mode?: 'keep-missing-fields';
 }

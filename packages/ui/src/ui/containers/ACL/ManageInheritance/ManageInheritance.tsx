@@ -88,7 +88,6 @@ function ManageInheritance(props: Props) {
                 idmKind,
                 values,
                 version,
-                mode: 'keep-missing-fields',
             });
         },
         [idmKind, path, updateAcl, version],
