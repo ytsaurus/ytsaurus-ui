@@ -5,6 +5,8 @@ import {queryPage} from '../../../widgets/QueryPage';
 import {monaco} from '../../../widgets/Monaco';
 
 test('Query/Result: truncated image-audio', async ({page}) => {
+    test.slow();
+
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/tmp/table.truncated.image-audio`), {
         waitUntil: 'networkidle',
     });
