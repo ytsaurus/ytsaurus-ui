@@ -7,6 +7,8 @@ import throttle_ from 'lodash/throttle';
 import SimpleModal from '../../components/Modal/SimpleModal';
 import {Tooltip} from '../Tooltip/Tooltip';
 
+import i18n from './i18n';
+
 import './CommaSeparateListWithRestCounter.scss';
 
 const block = cn('comma-separated-list-with-rest-counter');
@@ -214,7 +216,7 @@ export default class CommaSeparatedListWithRestCounter extends React.Component<
         }
 
         const clickable = !this.allowItemsInTooltip();
-        const toolTip = !clickable ? this.renderTooltip() : 'Click to show all items';
+        const toolTip = !clickable ? this.renderTooltip() : i18n('click-to-show-all');
 
         const {showDialog} = this.state;
         const key = showDialog; // the key is required to hide tooltip behind the dialog with all items
