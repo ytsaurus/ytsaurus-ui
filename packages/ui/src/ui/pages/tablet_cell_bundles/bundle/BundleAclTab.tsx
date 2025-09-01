@@ -16,7 +16,7 @@ export default function BundleAclTab({className}: {className: string}) {
             ) : (
                 <NoContent
                     className={className}
-                    hint={"The cluster is not ready to work with bundle's ACL"}
+                    warning={"The cluster is not ready to work with bundle's ACL"}
                 />
             )}
         </ErrorBoundary>
