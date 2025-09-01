@@ -1,6 +1,5 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import PropTypes from 'prop-types';
 
 import isEqual_ from 'lodash/isEqual';
 import throttle_ from 'lodash/throttle';
@@ -12,11 +11,31 @@ import './CommaSeparateListWithRestCounter.scss';
 
 const block = cn('comma-separated-list-with-rest-counter');
 
-function counterText(length) {
+function counterText(length: number) {
     return `  +${length}`; // one space more than required
 }
 
 const MAX_TOOLTIP_COUNT = 20;
+
+export type CommaSeparatedListWithRestCounterProps = {
+    className?: string;
+    items?: Array<string>;
+    maxTooltipCount?: number;
+
+    itemRenderer?: (v: string) => React.ReactNode;
+};
+
+type State = {
+    offsetWidth?: number;
+    offsetHeight?: number;
+    font?: string;
+    lineHeight?: string;
+    items?: Array<string>;
+    rows?: Array<Array<string>>;
+    restCounter?: number;
+
+    showDialog?: boolean;
+};
 
 /**
  * The rendered result depends on:
@@ -29,29 +48,24 @@ const MAX_TOOLTIP_COUNT = 20;
  * So you must force re-rendering of the component from outside
  * for each changing of these properties. Or the properties should be constant.
  */
-export default class CommaSeparatedListWithRestCounter extends React.Component {
-    static propTypes = {
-        className: PropTypes.string,
-        items: PropTypes.arrayOf(PropTypes.string),
-        maxTooltipCount: PropTypes.number, // maximum items in tooltip should be <= MAX_TOOLTIP_COUNT
-
-        itemRenderer: PropTypes.func,
-    };
-
+export default class CommaSeparatedListWithRestCounter extends React.Component<
+    CommaSeparatedListWithRestCounterProps,
+    State
+> {
     static defaultProps = {
         maxTooltipCount: MAX_TOOLTIP_COUNT,
     };
 
-    ref;
+    ref?: HTMLDivElement | null;
     unmounted = false;
 
-    state = {
+    state: State = {
         restCounter: 0,
         rows: [],
         showDialog: false,
     };
 
-    onRef = (ref) => {
+    onRef = (ref: HTMLDivElement | null) => {
         this.ref = ref;
         this.updateState();
     };
@@ -71,7 +85,8 @@ export default class CommaSeparatedListWithRestCounter extends React.Component {
 
         const {items} = this.props;
         if (!this.ref || !items || !items.length) {
-            return this.setStateIfChanged({rows: [], restCounter: 0});
+            this.setStateIfChanged({rows: [], restCounter: 0});
+            return;
         }
 
         const {offsetWidth, offsetHeight} = this.ref;
@@ -79,18 +94,19 @@ export default class CommaSeparatedListWithRestCounter extends React.Component {
         const font = `${fontWeight} ${fontSize}/${lineHeight} ${fontFamily}`;
 
         if (!offsetWidth || !offsetHeight) {
-            return this.setStateIfChanged({rows: [], restCounter: 0});
+            this.setStateIfChanged({rows: [], restCounter: 0});
+            return;
         }
 
         const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d')!;
         ctx.font = font;
         const rows = [];
         let pos = 0;
 
         const lh = parseInt(lineHeight);
 
-        let currentRow = [];
+        let currentRow: Array<string> = [];
         let currentRowWidth = 0;
         while ((rows.length + 1) * lh <= offsetHeight && pos < items.length) {
             const isLastItem = pos === items.length - 1;
@@ -138,10 +154,12 @@ export default class CommaSeparatedListWithRestCounter extends React.Component {
         this.setStateIfChanged(stateToCompare);
     };
 
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     updateState = throttle_(this.updateStateImpl, 30);
 
-    setStateIfChanged(toCompare) {
-        const changed = Object.keys(toCompare).some((key) => {
+    setStateIfChanged(toCompare: State) {
+        const changed = Object.keys(toCompare).some((k) => {
+            const key = k as keyof typeof toCompare;
             return !isEqual_(this.state[key], toCompare[key]);
         });
 
@@ -153,7 +171,7 @@ export default class CommaSeparatedListWithRestCounter extends React.Component {
 
     renderRows() {
         const {rows} = this.state;
-        return rows.map((row, index) => {
+        return rows?.map((row, index) => {
             return (
                 <div key={index} className={block('row')}>
                     {this.renderRow(row, index === rows.length - 1)}
@@ -162,7 +180,7 @@ export default class CommaSeparatedListWithRestCounter extends React.Component {
         });
     }
 
-    renderRow(items, isLastRow) {
+    renderRow(items: Array<string>, isLastRow: boolean) {
         return (
             <React.Fragment>
                 <div className={block('row-items')}>{this.renderItems(items, isLastRow)}</div>
@@ -171,7 +189,7 @@ export default class CommaSeparatedListWithRestCounter extends React.Component {
         );
     }
 
-    renderItems(items, isLastRow) {
+    renderItems(items: Array<string>, isLastRow: boolean) {
         return items.map((item, index) => {
             const isLastItem = index === items.length - 1;
             const comma = !isLastRow || !isLastItem || this.state.restCounter ? ', ' : '';
@@ -184,7 +202,7 @@ export default class CommaSeparatedListWithRestCounter extends React.Component {
         });
     }
 
-    renderItem = (item) => {
+    renderItem = (item: string) => {
         const {itemRenderer} = this.props;
         return itemRenderer ? itemRenderer(item) : item;
     };
@@ -202,7 +220,7 @@ export default class CommaSeparatedListWithRestCounter extends React.Component {
         const key = showDialog; // the key is required to hide tooltip behind the dialog with all items
 
         return (
-            <Tooltip key={key} className={block('hover-tooltip')} content={toolTip}>
+            <Tooltip key={String(key)} className={block('hover-tooltip')} content={toolTip}>
                 <div className={block('row-counter', {clickable})} onClick={this.onCounterClick}>
                     +{restCounter}
                 </div>
@@ -229,7 +247,7 @@ export default class CommaSeparatedListWithRestCounter extends React.Component {
         const {items} = this.state;
         return (
             <div className={block('tooltip', 'yc-root')}>
-                {items.map((item) => {
+                {items?.map((item) => {
                     return <div key={item}>{this.renderItem(item)}</div>;
                 })}
             </div>
@@ -237,8 +255,8 @@ export default class CommaSeparatedListWithRestCounter extends React.Component {
     }
 
     allowItemsInTooltip() {
-        const {maxTooltipCount} = this.props;
-        const {items} = this.state;
+        const {maxTooltipCount = MAX_TOOLTIP_COUNT} = this.props;
+        const {items = []} = this.state;
         return items.length <= Math.min(MAX_TOOLTIP_COUNT, maxTooltipCount);
     }
 
