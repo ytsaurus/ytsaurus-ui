@@ -43,7 +43,7 @@ export const selectChartConfig = createSelector(
 
 export const selectChartAxisType = createSelector(
     [selectChartConfig],
-    (config) => config?.xAxis.type,
+    (config) => config.xAxis.type,
 );
 
 export const selectAvailableFields = (state: RootState) => {

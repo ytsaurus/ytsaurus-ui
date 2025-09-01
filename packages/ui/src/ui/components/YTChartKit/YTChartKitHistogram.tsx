@@ -1,12 +1,12 @@
 import React from 'react';
 
-import {LineSeries, TooltipDataChunkBarX} from '@gravity-ui/chartkit';
+import {ChartData, LineSeries, TooltipDataChunkBarX} from '@gravity-ui/chartkit/d3';
 
 import format from '../../common/hammer/format';
 import {ColorCircle} from '../../components/ColorCircle/ColorCircle';
 
 import {useMemoizedArgsWithIncarnaction} from './hack';
-import {ChartKitWidgetData, YTChartKitLazy} from '.';
+import {YTChartKitLazy} from '.';
 
 export type YTChartKitHistogramProps = {
     data?: Array<number>;
@@ -70,7 +70,7 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
             return format.Number(v, {digits: 2});
         };
 
-        const res: ChartKitWidgetData = {
+        const res: ChartData = {
             legend: {enabled: true},
             xAxis: {
                 min,

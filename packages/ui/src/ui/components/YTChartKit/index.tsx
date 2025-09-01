@@ -1,5 +1,5 @@
 import React from 'react';
-export type {ChartKitProps, ChartKitWidget, ChartKitWidgetData, ChartKitRef} from './YTChartKit';
+export type {ChartKitProps, ChartKitWidget, ChartKitRef} from './YTChartKit';
 export type {RawSerieData, YagrWidgetData} from '@gravity-ui/chartkit/yagr';
 
 import withLazyLoading from '../../hocs/withLazyLoading';
