@@ -15,9 +15,11 @@ import {TextInput} from '@gravity-ui/uikit';
 import Icon from '../../components/Icon/Icon';
 
 import {renderText} from '../../components/templates/utils';
+import Button from '../Button/Button';
+
+import i18n from './i18n';
 
 import './ColumnSelector.scss';
-import Button from '../Button/Button';
 
 const b = cn('column-selector');
 
@@ -296,7 +298,7 @@ export default class ColumnSelector extends Component {
     renderSearchBox() {
         return (
             <TextInput
-                placeholder="Search..."
+                placeholder={i18n('search')}
                 onUpdate={this._changeFilter}
                 value={this.state.filter}
                 hasClear={true}
