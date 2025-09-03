@@ -1,6 +1,7 @@
+import {PrometheusDashboardType} from '../../../../shared/prometheus/types';
 import {LocationParameters} from '../../../store/location';
 import {makeTimeRangeSerialization} from '../../../utils/parse-serialize';
-import {PrometheusDashboardType, initialState} from './prometheusDahsboard';
+import {initialState} from './prometheusDahsboard';
 
 export function prometheusDashboardExpandedParams(
     type: PrometheusDashboardType,

@@ -21,7 +21,7 @@ import {useElementSize} from '../../../../hooks/useResizeObserver';
 import {PrometheusPlugins} from '../../PrometheusDashKit';
 import {PrometheusWidgetToolbar} from '../../PrometheusWidgetToolbar/PrometheusWidgetToolbar';
 import {usePrometheusDashboardContext} from '../../PrometheusDashboardContext/PrometheusDashboardContext';
-import {TimeseriesTarget} from '../../types';
+import {TimeseriesTarget} from '../../../../../shared/prometheus/types';
 
 import './timeseries.scss';
 
