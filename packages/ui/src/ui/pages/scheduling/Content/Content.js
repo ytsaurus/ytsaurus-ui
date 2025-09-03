@@ -6,6 +6,8 @@ import cn from 'bem-cn-lite';
 
 import reduce_ from 'lodash/reduce';
 
+import {formatByParams} from '../../../../shared/utils/format';
+
 import Tabs from '../../../components/Tabs/Tabs';
 import Placeholder from '../../../pages/components/Placeholder';
 import {OverviewWithRum} from '../../../pages/scheduling/Content/tabs/Overview/Overview';
@@ -26,7 +28,6 @@ import {
     isPoolAclAllowed,
 } from '../../../store/selectors/scheduling/scheduling';
 import {makeTabProps} from '../../../utils';
-import {formatByParams} from '../../../utils/format';
 
 import './Content.scss';
 import {getCluster} from '../../../store/selectors/global';
