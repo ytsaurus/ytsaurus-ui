@@ -27,7 +27,7 @@ import {
 } from '../../../../store/actions/components/versions/versions_v2';
 import {VersionSummaryRow} from '../../../../store/reducers/components/versions/versions_v2';
 import {getCluster} from '../../../../store/selectors/global';
-import {formatByParams} from '../../../../utils/format';
+import {formatByParams} from '../../../../../shared/utils/format';
 import UIFactory from '../../../../UIFactory';
 
 import './VersionSummary.scss';
