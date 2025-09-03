@@ -23,7 +23,7 @@ import {DEFAULT_TAB, Tab} from '../../../constants/job';
 import {RootState} from '../../../store/reducers';
 import {Page} from '../../../constants/index';
 import {makeTabProps} from '../../../utils';
-import {formatByParams} from '../../../utils/format';
+import {formatByParams} from '../../../../shared/utils/format';
 import hammer from '../../../common/hammer';
 import {RouteInfo} from '../Job';
 
