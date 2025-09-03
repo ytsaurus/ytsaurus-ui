@@ -6,8 +6,9 @@ import {Button, Icon} from '@gravity-ui/uikit';
 import maximizeSvg from '@gravity-ui/icons/svgs/chevrons-expand-up-right.svg';
 import minimizeSvg from '@gravity-ui/icons/svgs/chevrons-collapse-up-right.svg';
 
+import {PrometheusWidgetId} from '../../../../shared/prometheus/types';
+
 import {usePrometheusDashboardContext} from '../PrometheusDashboardContext/PrometheusDashboardContext';
-import {PrometheusWidgetId} from '../types';
 
 import './PrometheusWidgetToolbar.scss';
 
