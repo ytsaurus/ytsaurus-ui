@@ -4,7 +4,6 @@ import ypath from '../../../../common/thor/ypath';
 import {QueryEngine} from '../../../../../shared/constants/engines';
 import {makePathByQueryEngine} from './makePathByQueryEngine';
 import {ClusterConfig} from '../../../../../shared/yt-types';
-import unipika from '../../../../common/thor/unipika';
 
 type Props = {
     clusterConfig: ClusterConfig;
@@ -21,7 +20,7 @@ export const createTablePrompt = ({
     cluster,
 }: Omit<Props, 'clusterConfig'> & {cluster: string; schema: {name: string}[]}) => {
     return `SELECT
-${schema.map((i) => '    ' + unipika.prettyprint(i.name, {asHTML: false}).replaceAll('"', '`')).join(',\r\n')}
+${schema.map((i) => '    `' + i.name + '`').join(',\r\n')}
 FROM ${makePathByQueryEngine({path, cluster: cluster, engine})}
 LIMIT ${limit}`;
 };

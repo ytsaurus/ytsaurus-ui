@@ -242,6 +242,9 @@ yt create -r --attributes "{schema=[
     set -x
 ) | yt write-table --format json ${YQLV3_TABLE}
 
+CYRILLIC_TABLE=${E2E_DIR}/tmp/cyrillic-table
+yt create --attributes '{"schema"=[{"name"="Тест1"; "type"="string"};{"name"="Тест2"; "type"="string"}]}' table ${CYRILLIC_TABLE}
+
 if [ "${SKIP_QUERIES}" != "true" ]; then
     # create an operation with problematic symbols
     yt start-query yql 'SELECT count + 1, type || "ã ã" || "this is ÂÅ!" FROM ui.`'${E2E_DIR}'/locked`;' --settings '{"symbols"="ãÂÅỞã";"test_cyr"="Привет";"smyle"="😅"}'

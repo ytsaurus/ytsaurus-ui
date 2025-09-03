@@ -16,7 +16,7 @@ import {createTableSelect} from '../helpers/createTableSelect';
 import {useMonaco} from '../../hooks/useMonaco';
 import {getQueryEngine} from '../../module/query/selectors';
 import {getPageSize} from '../../../../store/selectors/navigation/content/table-ts';
-import {getTableYsonSettings} from '../../../../store/selectors/thor/unipika';
+import {getYsonSettingsDisableDecode} from '../../../../store/selectors/thor/unipika';
 
 const enum TableTab {
     Schema = 'schema',
@@ -33,7 +33,7 @@ export const NavigationTable: FC = () => {
     const engine = useSelector(getQueryEngine);
     const limit = useSelector(getPageSize);
     const path = useSelector(selectNavigationPath);
-    const ysonSettings = useSelector(getTableYsonSettings);
+    const ysonSettings = useSelector(getYsonSettingsDisableDecode);
     const {getEditor} = useMonaco();
 
     const handleChangeTab = (id: string) => {

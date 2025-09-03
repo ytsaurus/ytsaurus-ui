@@ -40,6 +40,7 @@ import UIFactory from '../../../UIFactory';
 import {RootState} from '../../../store/reducers';
 import {NavigationAction, NavigationState} from '../../../store/reducers/navigation/navigation';
 import {fetchOriginatingQueuePath} from './tabs/queue/exports';
+import {JSONSerializer} from '../../../common/yt-api';
 
 type NavigationThunk<T = void> = ThunkAction<T, RootState, unknown, NavigationAction>;
 
@@ -71,16 +72,21 @@ export function updateView(settings: {trackVisit?: boolean} = {}): NavigationThu
                 ytApiV3Id.executeBatch(
                     YTApiId.navigationAttributes,
                     {
-                        requests: [
-                            {
-                                command: 'get' as const,
-                                parameters: {
-                                    ...prepareRequest('/@', requestParams),
-                                    attributes: getAttributesToLoad(),
+                        parameters: {
+                            requests: [
+                                {
+                                    command: 'get' as const,
+                                    parameters: {
+                                        ...prepareRequest('/@', requestParams),
+                                        attributes: getAttributesToLoad(),
+                                    },
                                 },
-                            },
-                        ],
-                        output_format: TYPED_OUTPUT_FORMAT,
+                            ],
+                            output_format: TYPED_OUTPUT_FORMAT,
+                        },
+                        setup: {
+                            JSONSerializer,
+                        },
                     },
                     saveRequestCancellation,
                 ),
