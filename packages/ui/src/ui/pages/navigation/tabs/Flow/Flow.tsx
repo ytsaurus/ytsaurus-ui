@@ -22,7 +22,7 @@ import {
     setFlowViewMode,
 } from '../../../../store/reducers/flow/filters';
 import UIFactory from '../../../../UIFactory';
-import {formatByParams} from '../../../../utils/format';
+import {formatByParams} from '../../../../../shared/utils/format';
 
 import {FlowLayout} from './FlowLayout/FlowLayout';
 import {FlowDynamicSpec, FlowStaticSpec} from './PipelineSpec/PipelineSpec';

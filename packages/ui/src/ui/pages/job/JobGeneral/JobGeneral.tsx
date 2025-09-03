@@ -22,8 +22,10 @@ import {getJobGeneralYsonSettings} from '../../../store/selectors/thor/unipika';
 import {DEFAULT_TAB, Tab} from '../../../constants/job';
 import {RootState} from '../../../store/reducers';
 import {Page} from '../../../constants/index';
+
 import {TabSettings, makeTabProps} from '../../../utils';
-import {formatByParams} from '../../../utils/format';
+import {formatByParams} from '../../../../shared/utils/format';
+
 import hammer from '../../../common/hammer';
 import {RouteInfo} from '../Job';
 

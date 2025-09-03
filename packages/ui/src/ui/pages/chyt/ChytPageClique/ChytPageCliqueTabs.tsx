@@ -2,12 +2,13 @@ import React, {useEffect, useState} from 'react';
 import {Redirect, Route, Switch, useRouteMatch} from 'react-router';
 import {useSelector} from '../../../store/redux-hooks';
 
+import {formatByParams} from '../../../../shared/utils/format';
+
 import {ChytCliquePageTab} from '../../../constants/chyt-page';
 import Tabs from '../../../components/Tabs/Tabs';
 import {getCluster} from '../../../store/selectors/global';
 import {getChytCurrentAlias} from '../../../store/selectors/chyt';
 import {makeTabProps} from '../../../utils';
-import {formatByParams} from '../../../utils/format';
 import UIFactory from '../../../UIFactory';
 import {ytApiV4} from '../../../rum/rum-wrap-api';
 

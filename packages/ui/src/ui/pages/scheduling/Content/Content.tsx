@@ -1,19 +1,20 @@
 import cn from 'bem-cn-lite';
 import reduce_ from 'lodash/reduce';
+
 import React from 'react';
 import {Redirect, Route, Switch, withRouter} from 'react-router';
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 
+import {formatByParams} from '../../../../shared/utils/format';
 import Tabs from '../../../components/Tabs/Tabs';
+import Placeholder from '../../../pages/components/Placeholder';
+import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import {UI_TAB_SIZE} from '../../../constants/global';
 import {
     DEFAULT_TAB,
     SCHEDULING_ALLOWED_ROOT_TABS,
     SchedulingTab,
 } from '../../../constants/scheduling';
-import Placeholder from '../../../pages/components/Placeholder';
 import {Overview} from '../../../pages/scheduling/Content/tabs/Overview/Overview';
-
 import PoolAcl from '../../../pages/scheduling/Content/tabs/PoolAcl/PoolAcl';
 import {useSelector} from '../../../store/redux-hooks';
 import {getCluster} from '../../../store/selectors/global';
@@ -26,7 +27,6 @@ import {
 } from '../../../store/selectors/scheduling/scheduling';
 import {TabSettings, makeTabProps} from '../../../utils';
 import {makeSchedulingUrl} from '../../../utils/app-url';
-import {formatByParams} from '../../../utils/format';
 import './Content.scss';
 import SchedulingExpandedPoolsUpdater from './SchedulingExpandedPoolsUpdater';
 import {PoolAttributes} from './tabs/PoolAttributes/PoolAttributes';
