@@ -27,6 +27,11 @@ class QueryPage extends HasPage {
             '.query-results .query-meta-info__start-time': FAKE_DATE,
         });
     }
+
+    async queryWidgetContent() {
+        const content = await this.page.waitForSelector('.monaco-editor .view-lines');
+        return await content.innerText();
+    }
 }
 
 export function queryPage(page: Page) {

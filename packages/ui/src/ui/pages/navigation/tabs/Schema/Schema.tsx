@@ -9,7 +9,6 @@ import {ColumnInfo} from '../../../../components/ElementsTable/ElementsTableHead
 import MetaTable from '../../../../components/MetaTable/MetaTable';
 import HelpLink from '../../../../components/HelpLink/HelpLink';
 import Link from '../../../../components/Link/Link';
-import {FormattedText} from '../../../../components/formatters';
 import Filter from '../../../../components/Filter/Filter';
 import Icon from '../../../../components/Icon/Icon';
 import ErrorIcon from '../../../../components/ErrorIcon/ErrorIcon';
@@ -109,7 +108,7 @@ class Schema extends Component<SchemaProps> {
                 item: SchemaItem,
                 column: Exclude<keyof SchemaItem, 'type_v3' | 'name' | 'required'>,
             ) {
-                return <FormattedText text={item[column]} />;
+                return item[column];
             },
             name(item: Record<string, string>, column: string) {
                 const {sort_order} = item;
@@ -125,7 +124,7 @@ class Schema extends Component<SchemaProps> {
                                 }
                             />
                         )}
-                        <FormattedText text={item[column]} />
+                        {item[column]}
                     </span>
                 );
             },

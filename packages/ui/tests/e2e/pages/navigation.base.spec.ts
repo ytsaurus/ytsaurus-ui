@@ -1,5 +1,7 @@
 import {expect, test} from '@playwright/test';
 import {CLUSTER, E2E_DIR, makeClusterTille, makeClusterUrl} from '../../utils';
+import {table} from '../../widgets/TablePage';
+import {queryPage} from '../../widgets/QueryPage';
 
 test('Navigation - Content', async ({page}) => {
     await page.goto(makeClusterUrl('navigation'));
@@ -194,4 +196,43 @@ test('Navigation - escaped symbols are highlighted and cyrillic', async ({page})
         );
         expect(await breadcrumbLink.innerText()).toEqual('Компоненты для Paysup.json');
     });
+});
+
+test('Navigation - cyrillic table', async ({page}) => {
+    await test.step('check columns', async () => {
+        await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/tmp/cyrillic-table`));
+        await table(page).waitForTable('.navigation-table', 1);
+
+        await page.waitForSelector('.data-table__head-cell:has-text("Тест1")');
+        await page.waitForSelector('.data-table__head-cell:has-text("Тест2")');
+    });
+
+    await test.step('check columns setup', async () => {
+        await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/tmp/cyrillic-table`));
+        const button = await page.waitForSelector('button[title="Choose columns"]');
+        await button.click();
+
+        await page.waitForSelector('.column-selector__list-item-name:has-text("Тест1")');
+        await page.waitForSelector('.column-selector__list-item-name:has-text("Тест2")');
+    });
+
+    await test.step('check schema', async () => {
+        await page.goto(
+            makeClusterUrl(`navigation?navmode=schema&path=${E2E_DIR}/tmp/cyrillic-table`),
+        );
+
+        await page.waitForSelector('.elements-table__cell:has-text("Тест1")');
+        await page.waitForSelector('.elements-table__cell:has-text("Тест2")');
+    });
+});
+
+test('Navigation - QT kit', async ({page}) => {
+    await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/tmp/cyrillic-table`));
+
+    await table(page).waitForTable('.navigation-table', 1);
+    await table(page).openQueriesWidget();
+    const queryBody = await queryPage(page).queryWidgetContent();
+
+    const result = ['Тест1', 'Тест2'].every((i) => queryBody.includes(i));
+    expect(result).toBeTruthy();
 });

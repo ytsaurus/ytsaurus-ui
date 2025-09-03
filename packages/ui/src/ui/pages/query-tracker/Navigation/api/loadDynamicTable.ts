@@ -42,6 +42,7 @@ export async function loadDynamicTableRequest({
         ytApiV3Id.checkPermission(YTApiId.dynTableCheckPerm, {
             setup: {
                 proxy: getClusterProxy(clusterConfig),
+                JSONSerializer,
             },
             parameters: {
                 columns: allColumns,
