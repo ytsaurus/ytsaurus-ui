@@ -3,6 +3,7 @@ import reduce_ from 'lodash/reduce';
 
 import {createSelector} from 'reselect';
 
+import {formatByParams} from '../../../../shared/utils/format';
 import {RootState} from '../../../store/reducers';
 import ypath from '../../../common/thor/ypath';
 import {AlertInfo} from '../../../components/AlertEvents/AlertEvents';
@@ -10,7 +11,6 @@ import {calculateLoadingStatus} from '../../../utils/utils';
 import {FIX_MY_TYPE} from '../../../types';
 import {prepareFaqUrl} from '../../../utils/operations/tabs/details/alerts';
 import {getClusterUiConfig} from '../global';
-import {formatByParams} from '../../../utils/format';
 
 const getOperationErasedTreesRaw = (state: RootState) => {
     return ypath.getValue(state.operations.detail, '/operation/@runtime_parameters/erased_trees');

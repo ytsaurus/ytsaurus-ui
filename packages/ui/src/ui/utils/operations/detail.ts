@@ -1,11 +1,11 @@
 import moment from 'moment';
 
+import {formatByParams} from '../../../shared/utils/format';
 import ypath from '../../common/thor/ypath';
 import {getMetrics} from '../../common/utils/metrics';
-import {hasTaskHistograms} from './jobs';
-import {ytApiV3} from '../../..../../rum/rum-wrap-api';
+import {ytApiV3} from '../../rum/rum-wrap-api';
 import {PLEASE_PROCEED_TEXT} from '../../utils/actions';
-import {formatByParams} from '../../utils/format';
+import {hasTaskHistograms} from './jobs';
 
 import type {DetailedOperationSelector} from '../../pages/operations/selectors';
 import type {IconName} from '../../components/Icon/Icon';
