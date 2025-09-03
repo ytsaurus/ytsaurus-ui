@@ -17,7 +17,7 @@ import {
     usePrometheusDashboardContext,
 } from './PrometheusDashboardContext/PrometheusDashboardContext';
 import {PrometheusDashKit} from './PrometheusDashKit';
-import {DashboardInfo} from './types';
+import {DashboardInfo} from '../../../shared/prometheus/types';
 
 import './PrometheusDashboard.scss';
 

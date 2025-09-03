@@ -2,20 +2,22 @@ import React from 'react';
 import {Config, DashKit, Plugin} from '@gravity-ui/dashkit';
 import cn from 'bem-cn-lite';
 
-import './PrometheusDashKit.scss';
-import {renderPluginText} from './plugins/text';
-import {renderPluginRow} from './plugins/row';
-import {renderPluginTimeseries} from './plugins/timeseries';
-import {usePrometheusDashboardContext} from './PrometheusDashboardContext/PrometheusDashboardContext';
 import {
     DashboardInfo,
     PanelType,
     PanelTypeSpecificProps,
     PluginRenderProps,
-    PrometheusWidgetId,
     WidgetType,
-} from './types';
+} from '../../../shared/prometheus/types';
+
+import {renderPluginText} from './plugins/text';
+import {renderPluginRow} from './plugins/row';
+import {renderPluginTimeseries} from './plugins/timeseries';
+import {usePrometheusDashboardContext} from './PrometheusDashboardContext/PrometheusDashboardContext';
+
 import {PrometheusDashboardProps} from './PrometheusDashboard';
+
+import './PrometheusDashKit.scss';
 
 const block = cn('yt-prometheus-dashkit');
 

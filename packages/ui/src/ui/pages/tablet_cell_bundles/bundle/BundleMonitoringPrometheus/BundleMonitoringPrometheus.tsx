@@ -3,10 +3,11 @@ import cn from 'bem-cn-lite';
 
 import {RadioButton} from '@gravity-ui/uikit';
 
+import {PrometheusDashboardType} from '../../../../../shared/prometheus/types';
+
 import {HEADER_HEIGHT} from '../../../../constants';
 import {StickyContainer} from '../../../../components/StickyContainer/StickyContainer';
 import {PrometheusDashboard} from '../../../../containers/PrometheusDashboard/PrometheusDashboard';
-import {PrometheusDashboardType} from '../../../../store/reducers/prometheusDashboard/prometheusDahsboard';
 import type {BundleMonitoringProps} from '../../../../UIFactory';
 import {
     TOOLBAR_COMPONENT_HEIGHT,
