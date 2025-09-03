@@ -1,6 +1,6 @@
+import {PrometheusDashboardType} from '../../../../shared/prometheus/types';
 import {LocationParameters} from '../../../store/location';
 import {makeBase64ParseSerialize, makeTimeRangeSerialization} from '../../../utils/parse-serialize';
-
 import {initialState} from './prometheusDashboard';
 
 export const prometheusDashboardParams: LocationParameters = {
