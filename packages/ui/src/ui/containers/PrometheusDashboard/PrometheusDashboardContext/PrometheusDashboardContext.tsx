@@ -5,9 +5,10 @@ import {
     PrometheusDashboardType,
     prometheusDashboardSlice,
 } from '../../../store/reducers/prometheusDashboard/prometheusDahsboard';
+import {PrometheusWidgetId} from '../../../../shared/prometheus/types';
+
 import {RootState} from '../../../store/reducers';
 import {calcFromTo} from '../../../components/Timeline';
-import {PrometheusWidgetId} from '../types';
 
 type PrometheusDashboardContextData = {
     expandedId?: PrometheusWidgetId;
