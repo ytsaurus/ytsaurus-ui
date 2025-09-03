@@ -7,7 +7,7 @@ import {Flex} from '@gravity-ui/uikit';
 import {YTError} from '../../../../../@types/types';
 
 import format from '../../../../common/hammer/format';
-import {formatByPramsQuotedEnv} from '../../../../utils/format';
+import {formatByParamsQuotedEnv} from '../../../../../shared/utils/format';
 import {IntersectionObserverContainer} from '../../../../components/IntersectionObserverContainer/IntersectionObserverContainer';
 
 import {YTChartKitLazy, getSerieColor} from '../../../../components/YTChartKit';
@@ -161,7 +161,7 @@ function replaceExprParams(
     params: Record<string, {toString(): string}>,
     stepSec: number,
 ) {
-    let res = formatByPramsQuotedEnv(expr, params);
+    let res = formatByParamsQuotedEnv(expr, params);
     for (const k of Object.keys(SPECIAL_EXPR_ENV)) {
         const key = k as keyof typeof SPECIAL_EXPR_ENV;
         if (res.indexOf(key)) {
