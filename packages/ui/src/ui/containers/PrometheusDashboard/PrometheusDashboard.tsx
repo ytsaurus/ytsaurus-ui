@@ -6,7 +6,6 @@ import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
 import {YTError} from '../../../@types/types';
 
 import {YTErrorBlock} from '../../components/Block/Block';
-import type {PrometheusDashboardType} from '../../store/reducers/prometheusDashboard/prometheusDahsboard';
 import {YTTimeline} from '../../components/Timeline';
 import {Toolbar} from '../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {StickyContainer} from '../../components/StickyContainer/StickyContainer';
@@ -17,9 +16,10 @@ import {
     usePrometheusDashboardContext,
 } from './PrometheusDashboardContext/PrometheusDashboardContext';
 import {PrometheusDashKit} from './PrometheusDashKit';
-import {DashboardInfo} from '../../../shared/prometheus/types';
+import {DashboardInfo, PrometheusDashboardType} from '../../../shared/prometheus/types';
 
 import './PrometheusDashboard.scss';
+import {getDashboardPath} from '../../../shared/prometheus/utils';
 
 const block = cn('yt-prometheus-dashboard');
 
@@ -45,7 +45,7 @@ export const PrometheusDashboard = React.memo(function ({
                         {error && <YTErrorBlock error={error} />}
                         <MissingParametersWarning templating={layout?.templating} params={params} />
                         {layout?.panels === undefined ? null : (
-                            <PrometheusDashKit panels={layout.panels} params={params} />
+                            <PrometheusDashKit type={type} panels={layout.panels} params={params} />
                         )}
                     </React.Fragment>
                 )}
@@ -64,7 +64,7 @@ function useLoadedLayout({type, params}: PrometheusDashboardProps) {
     React.useEffect(() => {
         ytApiV3Id
             .get<DashboardInfo>(YTApiId.prometheusMonitoringLayout, {
-                path: `//sys/interface-monitoring/${type}`,
+                path: getDashboardPath(type),
             })
             .then((layout) => {
                 setData({layout});
@@ -88,7 +88,7 @@ function makeNotImplementedLayout({type, params}: PrometheusDashboardProps) {
                 type: 'text' as const,
                 options: {
                     content: [
-                        `####   \`//sys/interface-monitoring/${type}\` is not exist`,
+                        `####   \`${getDashboardPath(type)}\` is not exist`,
                         '  You have to provide correct dashboard description, see expected parameters below:',
                         '```json',
                         JSON.stringify(params, null, 4),
