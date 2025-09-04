@@ -1,12 +1,12 @@
 import {TABLE_DEFAULTS} from '../../../../constants/settings/table';
-import {getSettingsDataFromInitialConfig} from '../../../../config';
 import {RootState} from '../../../../store/reducers';
+import {getSettingsInitialData} from '../../../../store/reducers/settings';
 import {QueryResult, QueryResultReadyState, QueryResultState} from './types';
 
 export const getQueryResultsState = (state: RootState) => state.queryTracker.results;
 
 export const getQueryResultGlobalSettings = (): QueryResultReadyState['settings'] => {
-    const settings = getSettingsDataFromInitialConfig().data;
+    const settings = getSettingsInitialData();
 
     return {
         pageSize:
