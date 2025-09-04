@@ -66,3 +66,7 @@ export const getPreviewCellYsonSettings = createSelector([getYsonSettings], clon
 export const getFlowSpecYsonSettings = createSelector([getYsonSettings], clone_);
 
 export const getErrorsYsonSettings = createSelector([getYsonSettings], clone_);
+
+export const getYsonSettingsDisableDecode = createSelector([getYsonSettings], (settings) => {
+    return {...settings, decodeUTF8: false};
+});

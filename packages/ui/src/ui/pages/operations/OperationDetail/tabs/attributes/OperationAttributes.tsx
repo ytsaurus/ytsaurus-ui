@@ -7,7 +7,7 @@ import {
     getOperationTypedAttributes,
 } from '../../../../../store/selectors/operations/operation';
 import Yson from '../../../../../components/Yson/Yson';
-import {getOperationAttributesYsonSettings} from '../../../../../store/selectors/thor/unipika';
+import {getYsonSettingsDisableDecode} from '../../../../../store/selectors/thor/unipika';
 import {useRumMeasureStop} from '../../../../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../../../../rum/rum-measure-types';
 import {isFinalLoadingStatus} from '../../../../../utils/utils';
@@ -37,7 +37,7 @@ function useOperationAttributesRumMesures() {
 
 function OperationAttributes({className}: {className: string}) {
     const typedAttributes = useSelector(getOperationTypedAttributes);
-    const settings = useSelector(getOperationAttributesYsonSettings);
+    const settings = useSelector(getYsonSettingsDisableDecode);
     const id = useSelector(getOperationId);
 
     useOperationAttributesRumMesures();

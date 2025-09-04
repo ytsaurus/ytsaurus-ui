@@ -242,4 +242,9 @@ yt create -r --attributes "{schema=[
     set -x
 ) | yt write-table --format json ${YQLV3_TABLE}
 
+if [ "${SKIP_QUERIES}" != "true" ]; then
+    # create an operation with problematic symbols
+    yt start-query yql 'SELECT count + 1, type || "ã ã" || "this is ÂÅ!" FROM ui.`'${E2E_DIR}'/locked`;' --settings '{"symbols"="ãÂÅỞã";"test_cyr"="Привет";"smyle"="😅"}'
+fi
+
 $(dirname $0)/init-cluster-e2e/table.truncated.image-audio.sh
