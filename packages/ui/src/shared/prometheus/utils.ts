@@ -1,4 +1,4 @@
-import {formatByParamsQuotedEnv} from '../utils/format';
+import {escapeChars, formatByParamsQuotedEnv} from '../utils/format';
 
 import {PanelType, PrometheusDashboardType, PrometheusWidgetId} from './types';
 
@@ -36,7 +36,7 @@ export function replaceExprParams(
     params: Record<string, {toString(): string}>,
     stepSec: number,
 ) {
-    let res = formatByParamsQuotedEnv(expr, params);
+    let res = formatByParamsQuotedEnv(expr, params, {sanitizeParams: (v) => escapeChars(v)});
     for (const k of Object.keys(SPECIAL_EXPR_ENV)) {
         const key = k as keyof typeof SPECIAL_EXPR_ENV;
         if (res.indexOf(key)) {

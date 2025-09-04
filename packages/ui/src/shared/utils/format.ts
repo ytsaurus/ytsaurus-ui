@@ -21,9 +21,24 @@ export function formatByParams(template: string, params: Record<string, {toStrin
 export function formatByParamsQuotedEnv(
     template: string,
     params: Record<string, {toString(): string}>,
+    {sanitizeParams = (v) => v}: {sanitizeParams?: (v: string) => string} = {},
 ) {
     return Object.keys(params).reduce((acc, key) => {
-        const res = acc.replace(new RegExp(`"\\$${key}"`, 'g'), `"${params[key]}"`);
+        const replacement = sanitizeParams(params[key].toString());
+        const res = acc.replace(new RegExp(`"\\$${key}"`, 'g'), `"${replacement}"`);
         return res;
     }, template);
+}
+
+const DEFAULT_CHARS = {
+    '\\': '\\\\',
+    '"': '\\"',
+};
+
+export function escapeChars(v: string, map: Record<string, string> = DEFAULT_CHARS) {
+    let res = '';
+    for (let i = 0; i < v.length; ++i) {
+        res += map[v[i]] ?? v[i];
+    }
+    return res;
 }
