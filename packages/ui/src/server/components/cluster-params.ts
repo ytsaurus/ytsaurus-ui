@@ -245,9 +245,7 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
     });
 }
 
-const CACHE_TIME = 2 * 60 * 1000;
-
-const getCached = createAutoUpdatedCache(fetchClusterParams, CACHE_TIME);
+const getCached = createAutoUpdatedCache(fetchClusterParams);
 
 export async function getPreloadedClusterParams(cluster: string, ctx: AppContext) {
     const ctxObject: Parameters<typeof fetchClusterParams>[1] = {ctx};

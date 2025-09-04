@@ -93,7 +93,7 @@ const routes: AppRoutes = {
     'PUT    /api/settings/:ytAuthCluster/:username/:path': {handler: settingsSetItem},
     'DELETE /api/settings/:ytAuthCluster/:username/:path': {handler: settingsDeleteItem},
 
-    'GET /api/prometheus/query_range': {handler: prometheusQueryRange},
+    'POST /api/:ytAuthCluster/prometheus/chart-data': {handler: prometheusQueryRange},
 
     'GET  /api/table-column-preset/:ytAuthCluster/:hash': {
         handler: tableColumnPresetGet,

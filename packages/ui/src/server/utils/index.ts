@@ -198,7 +198,7 @@ export async function sendAndLogError(
     ctx.logError('Error', e, extra);
 
     if (e instanceof ErrorWithCode) {
-        status = e.code;
+        return res.status(e.code).send({message: toString_(e), data: e.data});
     }
 
     if (e instanceof Error) {
@@ -222,9 +222,11 @@ export const makeAuthClusterCookieName = (ytAuthCluster: string) => {
 
 export class ErrorWithCode extends Error {
     code: number;
+    data?: Record<string, unknown>;
 
-    constructor(code: number, message: string) {
+    constructor(code: number, message: string, attributes?: Record<string, unknown>) {
         super(message);
         this.code = code;
+        this.data = attributes;
     }
 }
