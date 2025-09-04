@@ -4,6 +4,8 @@ import axios, {AxiosResponse} from 'axios';
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import Cookies from 'js-cookie';
 
+import {getBatchError} from '../../../shared/utils/error';
+
 import ypath from '../../common/thor/ypath';
 import {checkIsDeveloper} from '../../../shared/utils/check-permission';
 import {INIT_CLUSTER_PARAMS, PRELOAD_ERROR, UPDATE_CLUSTER} from '../../constants/index';
@@ -20,7 +22,7 @@ import {rumLogError} from '../../rum/rum-counter';
 import {Toaster} from '@gravity-ui/uikit';
 import {RumWrapper, YTApiId} from '../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../rum/rum-measure-types';
-import {getBatchError, wrapApiPromiseByToaster} from '../../utils/utils';
+import {wrapApiPromiseByToaster} from '../../utils/utils';
 import {BatchResultsItem, RawVersion} from '../../../shared/yt-types';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../store/reducers';
