@@ -3,7 +3,7 @@ import remoteProvider, {SettingsProvider} from '../../common/utils/settings-remo
 import localProvider from '../../common/utils/settings-local-provider';
 
 import {SET_SETTING_VALUE, UNSET_SETTING_VALUE, UPDATE_SETTING_DATA} from '../../constants/index';
-import {getSettingsDataFromInitialConfig} from '../../config';
+import {getConfigData} from '../../config/ui-settings';
 import {YT} from '../../config/yt-config';
 import {ActionD} from '../../types';
 import {DescribedSettings} from '../../../shared/constants/settings-types';
@@ -15,11 +15,15 @@ export interface SettingsState {
 
 const initialState: SettingsState = getInitialState();
 
+export function getSettingsInitialData() {
+    return initialState.data;
+}
+
 function getInitialState() {
     const {
         parameters: {login},
     } = YT;
-    const settings = getSettingsDataFromInitialConfig();
+    const settings = getConfigData().settings;
     const {
         data,
         meta: {useRemoteSettings, errorMessage},

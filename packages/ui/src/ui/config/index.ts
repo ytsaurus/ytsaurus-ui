@@ -12,9 +12,6 @@ function getClusterSpecificUISettings(cluster: string) {
 export function hasOdinPage() {
     return getConfigData().odinPageEnabled;
 }
-export function getSettingsDataFromInitialConfig() {
-    return getConfigData().settings;
-}
 
 export function ytApiUseCORS() {
     return getConfigData().ytApiUseCORS;

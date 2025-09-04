@@ -7,11 +7,11 @@ import {
     TREE_STATE,
 } from '../../../../constants/operations/statistics';
 import {GET_OPERATION} from '../../../../constants/operations/detail';
+import {getSettingsInitialData} from '../../../../store/reducers/settings';
 
-import {getSettingsDataFromInitialConfig} from '../../../../config';
 import type {ActionD, ValueOf} from '../../../../types';
 
-const settings = getSettingsDataFromInitialConfig().data;
+const settings = getSettingsInitialData();
 
 const activeAggregation = settings['global::operations::statisticsAggregationType'];
 

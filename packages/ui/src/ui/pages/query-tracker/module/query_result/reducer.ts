@@ -1,6 +1,7 @@
 import {ActionD} from '../../../../types';
-import {getSettingsDataFromInitialConfig} from '../../../../config';
 import {TABLE_DEFAULTS} from '../../../../constants/settings/table';
+import {getSettingsInitialData} from '../../../../store/reducers/settings';
+
 import type {QueryItem, QueryItemId} from '../api';
 import {
     QueryResult,
@@ -24,7 +25,7 @@ export type QueryResultsState = Record<QueryItemId, QueryResult[]>;
 
 const initialState: QueryResultsState = {};
 
-const settings = getSettingsDataFromInitialConfig().data;
+const settings = getSettingsInitialData();
 
 const userPageSize =
     settings['global::navigation::rowsPerTablePage'] || TABLE_DEFAULTS.rowsPerTablePage;

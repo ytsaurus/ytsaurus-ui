@@ -10,6 +10,8 @@ import {CypressNodeTypes} from '../../../../utils/cypress-attributes';
 import {getAttributes} from '../index';
 import Columns from '../../../../utils/navigation/content/table/columns';
 import {getColumnsValues} from '../../../../utils/navigation/content/table/table';
+import {getSettingsData} from '../../../../store/selectors/settings/settings-base';
+import {TABLE_DEFAULTS} from '../../../../constants/settings/table';
 
 export const getLoaded = (state: RootState) => state.navigation.content.table.loaded;
 export const getLoading = (state: RootState) => state.navigation.content.table.loading;
@@ -31,8 +33,30 @@ export const getOmittedColumns = (state: RootState) =>
 export const getDeniedKeyColumns = (state: RootState) =>
     state.navigation.content.table.deniedKeyColumns;
 
-export const getPageSize = (state: RootState) => state.navigation.content.table.pageSize;
-export const getCellSize = (state: RootState) => state.navigation.content.table.cellSize;
+const getPageSizeRaw = (state: RootState) => state.navigation.content.table.pageSize;
+const getCellSizeRaw = (state: RootState) => state.navigation.content.table.cellSize;
+
+export const getCellSize = createSelector(
+    [getCellSizeRaw, getSettingsData],
+    (cellSize, settings) => {
+        return (
+            cellSize ??
+            settings['global::navigation::maximumTableStringSize'] ??
+            TABLE_DEFAULTS.maximumTableStringSize
+        );
+    },
+);
+
+export const getPageSize = createSelector(
+    [getPageSizeRaw, getSettingsData],
+    (pageSize, settings) => {
+        return (
+            pageSize ??
+            settings['global::navigation::rowsPerTablePage'] ??
+            TABLE_DEFAULTS.rowsPerTablePage
+        );
+    },
+);
 
 const getNavigationPathAttributes = (state: RootState) =>
     state.navigation.navigation.attributes as any;

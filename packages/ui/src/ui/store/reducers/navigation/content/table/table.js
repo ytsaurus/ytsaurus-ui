@@ -18,14 +18,6 @@ import {
     SET_TABLE_COLUMNS_PRESET_HASH,
     TOGGLE_FULL_SCREEN,
 } from '../../../../../constants/navigation/content/table';
-import {getSettingsDataFromInitialConfig} from '../../../../../config';
-import {TABLE_DEFAULTS} from '../../../../../constants/settings/table';
-
-const settings = getSettingsDataFromInitialConfig().data;
-const userPageSize =
-    settings['global::navigation::rowsPerTablePage'] || TABLE_DEFAULTS.rowsPerTablePage;
-const userCellSize =
-    settings['global::navigation::maximumTableStringSize'] || TABLE_DEFAULTS.maximumTableStringSize;
 
 const ephemeralState = {
     /** @type {boolean} */
@@ -65,8 +57,8 @@ const persistedState = {
     offsetMode: 'row',
     /** @type {number  | string} */
     offsetValue: '',
-    pageSize: userPageSize,
-    cellSize: userCellSize,
+    pageSize: undefined,
+    cellSize: undefined,
     columnsPresetHash: '',
     columnsPreset: {columns: undefined, hash: undefined, error: undefined},
 };
