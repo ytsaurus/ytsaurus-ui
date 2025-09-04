@@ -5,8 +5,9 @@ import sortBy_ from 'lodash/sortBy';
 
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
+import {getBatchError, splitBatchResults} from '../../../../shared/utils/error';
+
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {getBatchError, splitBatchResults} from '../../../utils/utils';
 import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
 import {loadSchedulersAndAgents} from './index';
 import {changeMaintenance} from './masters';

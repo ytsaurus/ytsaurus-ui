@@ -6,6 +6,7 @@ import reduce_ from 'lodash/reduce';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
 import {CheckPermissionResult} from '../../../../shared/utils/check-permission';
+import {getBatchError, splitBatchResults} from '../../../../shared/utils/error';
 
 import {RootState} from '../../reducers';
 import {
@@ -35,7 +36,7 @@ import {
 } from '../../selectors/tablet_cell_bundles';
 
 import copy from 'copy-to-clipboard';
-import {getBatchError, splitBatchResults, wrapApiPromiseByToaster} from '../../../utils/utils';
+import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {getCluster, getCurrentUserName} from '../../selectors/global';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {getAppBrowserHistory} from '../../../store/window-store';

@@ -4,6 +4,8 @@ import forEach_ from 'lodash/forEach';
 import keys_ from 'lodash/keys';
 import map_ from 'lodash/map';
 
+import {getBatchError} from '../../../../shared/utils/error';
+
 import hammer from '../../../common/hammer';
 import {
     TABLETS_BUNDLES_EDITOR_LOAD_FAILURE,
@@ -18,7 +20,7 @@ import type {
     TabletCellBundleEditorAction,
 } from '../../../store/reducers/tablet_cell_bundles/tablet-cell-bundle-editor';
 import {fetchTabletsBundles} from '../../../store/actions/tablet_cell_bundles';
-import {getBatchError, wrapApiPromiseByToaster} from '../../../utils/utils';
+import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {makeBatchSubRequest, prepareSetCommandForBatch} from '../../../utils/cypress-attributes';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';

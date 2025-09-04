@@ -3,6 +3,8 @@ import isEmpty_ from 'lodash/isEmpty';
 import map_ from 'lodash/map';
 import update_ from 'lodash/update';
 
+import {getBatchError, splitBatchResults} from '../../../../shared/utils/error';
+
 import {
     INTEGRAL_GUARANTEES_PREFIX,
     InitialPoolResourceInfo,
@@ -12,12 +14,7 @@ import {
     prepareCurrentTree,
     prepareTrees,
 } from '../../../utils/scheduling/scheduling';
-import {
-    extractBatchV4Values,
-    getBatchError,
-    splitBatchResults,
-    wrapApiPromiseByToaster,
-} from '../../../utils/utils';
+import {extractBatchV4Values, wrapApiPromiseByToaster} from '../../../utils/utils';
 import {makeGet, makeList} from '../../../utils/batch';
 import {updateNodeAttributes} from '../../../utils/cypress-attributes';
 

@@ -1,8 +1,8 @@
 import axios, {AxiosError} from 'axios';
 import {YTErrorRaw} from '../../@types/types';
 import {isYTError} from '../../shared/utils';
+import {UIBatchError} from '../../shared/utils/error';
 import {YTErrors} from './constants';
-import {UIBatchError} from '../utils/errors/ui-error';
 import {getYtErrorCode} from '../utils/errors';
 
 const RUM = getRumInstance();
