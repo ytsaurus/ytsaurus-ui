@@ -22,8 +22,9 @@ import {PrometheusPlugins} from '../../PrometheusDashKit';
 import {PrometheusWidgetToolbar} from '../../PrometheusWidgetToolbar/PrometheusWidgetToolbar';
 import {usePrometheusDashboardContext} from '../../PrometheusDashboardContext/PrometheusDashboardContext';
 import {
+    ChartDataResponse,
+    QueryRangeData,
     QueryRangePostData,
-    QueryRangeResponse,
     TimeseriesTarget,
 } from '../../../../../shared/prometheus/types';
 
@@ -125,26 +126,24 @@ function useLoadQueriesData({
          * Temporary solution without storing results in store
          * TODO: use rtk-query later
          */
-        const promises = targets.map((_item, targetIndex) => {
-            return axios
-                .post<
-                    QueryRangeResponse,
-                    AxiosResponse<QueryRangeResponse>,
-                    QueryRangePostData
-                >(`/api/${YT.cluster}/prometheus/chart-data`, {dashboardType, id, start, end, step, params, targetIndex}, {cancelToken: cancelHelper.generateNextToken(), params: {id}})
-                .then(({data}) => data);
-        });
-
-        Promise.all(promises)
-            .then((results) => {
-                setChartData({
-                    data: makeYagrWidgetData(title, targets, results, {end, start, step}),
-                    loading: false,
-                });
-            })
-            .catch((error) => {
-                setChartData({error: isCancelled(error) ? undefined : error, loading: false});
-            });
+        axios
+            .post<
+                ChartDataResponse,
+                AxiosResponse<ChartDataResponse>,
+                QueryRangePostData
+            >(`/api/${YT.cluster}/prometheus/chart-data`, {dashboardType, id, start, end, step, params}, {cancelToken: cancelHelper.generateNextToken(), params: {id}})
+            .then(
+                ({data}) => {
+                    const {results} = data;
+                    setChartData({
+                        data: makeYagrWidgetData(title, targets, results, {end, start, step}),
+                        loading: false,
+                    });
+                },
+                (error) => {
+                    setChartData({error: isCancelled(error) ? undefined : error, loading: false});
+                },
+            );
     }, [id, targets, params, cancelHelper, title, pointCount, from, to]);
 
     return chartData;
@@ -153,7 +152,7 @@ function useLoadQueriesData({
 function makeYagrWidgetData(
     title: string,
     targets: Array<TimeseriesTarget>,
-    results: Array<QueryRangeResponse>,
+    results: Array<QueryRangeData>,
     {end, start, step}: {end: number; start: number; step: number},
 ): YagrWidgetData {
     const res: YagrWidgetData = {
