@@ -3,11 +3,12 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {RadioButton} from '@gravity-ui/uikit';
 
+import {PrometheusDashboardType} from '../../../../shared/prometheus/types';
+
 import format from '../../../common/hammer/format';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {PrometheusDashboard} from '../../../containers/PrometheusDashboard/PrometheusDashboard';
 import {getCluster} from '../../../store/selectors/global';
-import type {PrometheusDashboardType} from '../../../store/reducers/prometheusDashboard/prometheusDahsboard';
 import {systemMonitoring} from '../../../store/reducers/system/monitoring';
 
 import {MasterLocalContainers} from './MasterLocalContainers';

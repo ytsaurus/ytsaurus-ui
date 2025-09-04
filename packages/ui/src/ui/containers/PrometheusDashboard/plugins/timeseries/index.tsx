@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios';
+import axios, {AxiosResponse} from 'axios';
 import cn from 'bem-cn-lite';
 
 import {Flex} from '@gravity-ui/uikit';
@@ -7,7 +7,8 @@ import {Flex} from '@gravity-ui/uikit';
 import {YTError} from '../../../../../@types/types';
 
 import format from '../../../../common/hammer/format';
-import {formatByParamsQuotedEnv} from '../../../../../shared/utils/format';
+import {YT} from '../../../../config/yt-config';
+
 import {IntersectionObserverContainer} from '../../../../components/IntersectionObserverContainer/IntersectionObserverContainer';
 
 import {YTChartKitLazy, getSerieColor} from '../../../../components/YTChartKit';
@@ -15,13 +16,16 @@ import {YagrWidgetData} from '@gravity-ui/chartkit/yagr';
 import {InlineError} from '../../../../components/InlineError/InlineError';
 import CancelHelper, {isCancelled} from '../../../../utils/cancel-helper';
 import Loader from '../../../../components/Loader/Loader';
-import {humanizeInterval} from '../../../../components/common/Timeline/util';
 import {useElementSize} from '../../../../hooks/useResizeObserver';
 
 import {PrometheusPlugins} from '../../PrometheusDashKit';
 import {PrometheusWidgetToolbar} from '../../PrometheusWidgetToolbar/PrometheusWidgetToolbar';
 import {usePrometheusDashboardContext} from '../../PrometheusDashboardContext/PrometheusDashboardContext';
-import {TimeseriesTarget} from '../../../../../shared/prometheus/types';
+import {
+    QueryRangePostData,
+    QueryRangeResponse,
+    TimeseriesTarget,
+} from '../../../../../shared/prometheus/types';
 
 import './timeseries.scss';
 
@@ -69,7 +73,7 @@ function PrometheusChart({
 
     const pointCount = useElementSize({element: element as Element})?.contentRect.width;
 
-    const {error, data: chartData, loading} = useLoadQueriesData({data, pointCount, from, to});
+    const {error, data: chartData, loading} = useLoadQueriesData({id, data, pointCount, from, to});
 
     return (
         <React.Fragment>
@@ -90,11 +94,12 @@ function PrometheusChart({
 }
 
 function useLoadQueriesData({
+    id,
     data: {title, targets, params},
     pointCount,
     from,
     to,
-}: Pick<PrometheusChartProps, 'data'> & {pointCount?: number; from?: number; to?: number}) {
+}: Pick<PrometheusChartProps, 'data' | 'id'> & {pointCount?: number; from?: number; to?: number}) {
     const [cancelHelper] = React.useState(new CancelHelper());
     const [chartData, setChartData] = React.useState<{
         data?: YagrWidgetData;
@@ -114,17 +119,19 @@ function useLoadQueriesData({
         const start = from / 1000;
         const step = Math.max(1, Math.floor((end - start) / Math.max(10, pointCount)));
 
+        const {__ytDashboardType: dashboardType} = params;
+
         /**
          * Temporary solution without storing results in store
          * TODO: use rtk-query later
          */
-        const promises = targets.map((item) => {
-            const query = replaceExprParams(item.expr, params, step);
+        const promises = targets.map((_item, targetIndex) => {
             return axios
-                .get<QueryRangeResponse>('/api/prometheus/query_range', {
-                    params: {query, start, end, step},
-                    cancelToken: cancelHelper.generateNextToken(),
-                })
+                .post<
+                    QueryRangeResponse,
+                    AxiosResponse<QueryRangeResponse>,
+                    QueryRangePostData
+                >(`/api/${YT.cluster}/prometheus/chart-data`, {dashboardType, id, start, end, step, params, targetIndex}, {cancelToken: cancelHelper.generateNextToken(), params: {id}})
                 .then(({data}) => data);
         });
 
@@ -138,37 +145,9 @@ function useLoadQueriesData({
             .catch((error) => {
                 setChartData({error: isCancelled(error) ? undefined : error, loading: false});
             });
-    }, [targets, params, cancelHelper, title, pointCount, from, to]);
+    }, [id, targets, params, cancelHelper, title, pointCount, from, to]);
 
     return chartData;
-}
-
-const SPECIAL_EXPR_ENV = {
-    $__rate_interval: calculateRateInterval,
-};
-
-/**
- * Poor implementation of
- * https://github.com/grafana/grafana/blob/192d3783d5bede8362c1eed0c27422f431478b5a/pkg/promlib/models/query.go#L345-L366
- */
-function calculateRateInterval(stepSec: number) {
-    const minStep = 15000;
-    return humanizeInterval(0, Math.max(stepSec * 1000 + minStep, minStep * 4));
-}
-
-function replaceExprParams(
-    expr: string,
-    params: Record<string, {toString(): string}>,
-    stepSec: number,
-) {
-    let res = formatByParamsQuotedEnv(expr, params);
-    for (const k of Object.keys(SPECIAL_EXPR_ENV)) {
-        const key = k as keyof typeof SPECIAL_EXPR_ENV;
-        if (res.indexOf(key)) {
-            res = res.replace(key, SPECIAL_EXPR_ENV[key](stepSec));
-        }
-    }
-    return res;
 }
 
 function makeYagrWidgetData(
@@ -219,17 +198,3 @@ function makeYagrWidgetData(
     }
     return res;
 }
-
-type QueryRangeResponse = {
-    status: 'success';
-    data: {
-        resultType: 'matrix';
-        result: Array<MetricValues>;
-    };
-};
-
-type MetricValues = {
-    metric: Record<string, string>;
-    values: Array<[number, `${number}`]>;
-    legendFormat?: string;
-};

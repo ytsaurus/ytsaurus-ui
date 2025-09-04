@@ -7,8 +7,10 @@ import {
     PanelType,
     PanelTypeSpecificProps,
     PluginRenderProps,
+    PrometheusDashboardType,
     WidgetType,
 } from '../../../shared/prometheus/types';
+import {makePanelId} from '../../../shared/prometheus/utils';
 
 import {renderPluginText} from './plugins/text';
 import {renderPluginRow} from './plugins/row';
@@ -22,14 +24,15 @@ import './PrometheusDashKit.scss';
 const block = cn('yt-prometheus-dashkit');
 
 export type PrometheusDashKitProps = {
+    type: PrometheusDashboardType;
     panels?: DashboardInfo['panels'];
     params: Required<PrometheusDashboardProps>['params'];
 };
 
 const salt = `${Math.random().toString()}`;
 
-export function PrometheusDashKit({panels, params}: PrometheusDashKitProps) {
-    const {config} = useDashKitConfig(panels, params);
+export function PrometheusDashKit({type, panels, params}: PrometheusDashKitProps) {
+    const {config} = useDashKitConfig(type, panels, params);
     return (
         <div className={block()}>
             {!config ? null : <DashKit config={config} editMode={false} />}
@@ -38,6 +41,7 @@ export function PrometheusDashKit({panels, params}: PrometheusDashKitProps) {
 }
 
 function useDashKitConfig(
+    dashboardType: PrometheusDashboardType,
     panels: PrometheusDashKitProps['panels'],
     params: Record<string, {toString(): string}>,
 ) {
@@ -56,7 +60,9 @@ function useDashKitConfig(
 
                 function addToLayout<T>(extraProps: T) {
                     const itemType: WidgetType = `prometheus.${type}`;
-                    const data = Object.assign(rest, extraProps, {params});
+                    const data = Object.assign(rest, extraProps, {
+                        params: {...params, __ytDashboardType: dashboardType},
+                    });
                     acc.layout.push({...gridPos, i: id});
                     acc.items.push({
                         id,
@@ -123,12 +129,6 @@ function useDashKitConfig(
     }, [config]);
 
     return {config};
-}
-
-function makePanelId(
-    item: Exclude<PrometheusDashKitProps['panels'], undefined>[number],
-): PrometheusWidgetId {
-    return `${item.type}_${item.gridPos.x}_${item.gridPos.y}`;
 }
 
 function getVisiblePanels(expandedId?: string, panels: PrometheusDashKitProps['panels'] = []) {

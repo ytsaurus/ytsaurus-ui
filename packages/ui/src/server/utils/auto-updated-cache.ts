@@ -4,9 +4,11 @@ const delay = (ms: number) =>
         timeout.unref();
     });
 
-export function createAutoUpdatedCache<TKey, TRest extends any[], TResult>(
+const CACHE_TIME = 2 * 60 * 1000;
+
+export function createAutoUpdatedCache<TKey extends string | number, TRest extends any[], TResult>(
     getter: (key: TKey, ...rest: TRest) => Promise<TResult>,
-    cacheTime: number,
+    cacheTime: number = CACHE_TIME,
 ) {
     const store = new Map<TKey, ReturnType<typeof getter>>();
 

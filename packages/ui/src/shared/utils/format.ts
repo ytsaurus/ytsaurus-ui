@@ -18,7 +18,7 @@ export function formatByParams(template: string, params: Record<string, {toStrin
  * @param params
  * @example formatByParamas('hello {user}', {user: 'world'}); // returns 'hello world'
  */
-export function formatByPramsQuotedEnv(
+export function formatByParamsQuotedEnv(
     template: string,
     params: Record<string, {toString(): string}>,
 ) {
