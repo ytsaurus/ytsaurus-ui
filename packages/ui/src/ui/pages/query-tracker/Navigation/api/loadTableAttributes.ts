@@ -1,4 +1,4 @@
-import {getBatchError} from '../../../../utils/utils';
+import {getBatchError} from '../../../../../shared/utils/error';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {JSONSerializer} from '../../../../common/yt-api';
 import {getClusterProxy} from '../../../../store/selectors/global';
