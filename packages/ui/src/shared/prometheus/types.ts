@@ -47,10 +47,13 @@ export type QueryRangePostData = {
     end: number;
     step: number;
     params: PluginRendererDataParams;
-    targetIndex: number;
 };
 
-export type QueryRangeResponse = {
+export type ChartDataResponse = {
+    results: Array<QueryRangeData>;
+};
+
+export type QueryRangeData = {
     status: 'success';
     data: {
         resultType: 'matrix';
