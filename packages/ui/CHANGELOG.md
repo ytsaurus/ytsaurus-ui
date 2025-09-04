@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.103.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.102.0...ui-v1.103.0) (2025-09-04)
+
+
+### Features
+
+* **Navigation/ReplicatedTable:** add column for content_type [YTFRONT-4964] ([c9b16f3](https://github.com/ytsaurus/ytsaurus-ui/commit/c9b16f3763f01b0b3a67bdf46b8e09ded849c08c))
+* update @gravity-ui/chartkit v5.22.4 [YTFRONT-5116] ([e2b0be8](https://github.com/ytsaurus/ytsaurus-ui/commit/e2b0be8a721a14777784cdb6df0be86af6b715b5))
+
+
+### Bug Fixes
+
+* **Navigation/Table:** use getInitialSettingsData from reducers [YTFRONT-5137] ([a94a549](https://github.com/ytsaurus/ytsaurus-ui/commit/a94a54986e2b409adbdce0440d7f902a2dcf84ad))
+
 ## [1.102.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.101.0...ui-v1.102.0) (2025-08-29)
 
 
