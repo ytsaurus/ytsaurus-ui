@@ -1,12 +1,9 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {
-    PrometheusDashboardType,
-    prometheusDashboardSlice,
-} from '../../../store/reducers/prometheusDashboard/prometheusDahsboard';
-import {PrometheusWidgetId} from '../../../../shared/prometheus/types';
+import {PrometheusDashboardType, PrometheusWidgetId} from '../../../../shared/prometheus/types';
 
+import {prometheusDashboardSlice} from '../../../store/reducers/prometheusDashboard/prometheusDahsboard';
 import {RootState} from '../../../store/reducers';
 import {calcFromTo} from '../../../components/Timeline';
 
