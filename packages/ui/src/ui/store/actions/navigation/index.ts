@@ -2,6 +2,9 @@ import {ThunkAction} from 'redux-thunk';
 
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
+
+import {getBatchError} from '../../../../shared/utils/error';
+
 import {getMetrics} from '../../../common/utils/metrics';
 import {navigationTrackVisit} from '../../../store/actions/favourites';
 import {RumWrapper, YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';
@@ -18,7 +21,6 @@ import {
     saveRequestCancellation,
 } from '../../../utils/navigation';
 import {prepareAttributes} from '../../../utils/index';
-import {getBatchError} from '../../../utils/utils';
 import {getPermissionDeniedError} from '../../../utils/errors';
 
 import {GENERIC_ERROR_MESSAGE, TYPED_OUTPUT_FORMAT} from '../../../constants/index';

@@ -11,6 +11,8 @@ import pickBy_ from 'lodash/pickBy';
 import {BatchSubRequest} from '../../../../shared/yt-types';
 
 import {RootState} from '../../../store/reducers';
+import {splitBatchResults} from '../../../../shared/utils/error';
+
 import {getSchedulingNS} from '../../../store/selectors/settings';
 import {toggleFavourite} from '../../../store/actions/favourites';
 import {
@@ -39,13 +41,11 @@ import {
     TOGGLE_EDIT_VISIBILITY,
 } from '../../../constants/scheduling';
 import {loadSchedulingData, setPoolAttributes} from './scheduling-ts';
-import {splitBatchResults} from '../../../utils/utils';
 
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {YTErrors} from '../../../rum/constants';
 import {PoolTreeNode} from '../../../utils/scheduling/pool-child';
 import {SortState} from '../../../types';
-
 import {toaster} from '../../../utils/toaster';
 
 const setName = (path: string, newName?: string, prevName?: string) => {

@@ -1,6 +1,8 @@
 import {ThunkAction} from 'redux-thunk';
+
+import {splitBatchResults} from '../../../../shared/utils/error';
 import {getQueryTrackerCluster} from '../../../config';
-import {extractBatchV4Values, splitBatchResults} from '../../../utils/utils';
+import {extractBatchV4Values} from '../../../utils/utils';
 import {BatchResultsItem, BatchSubRequest} from '../../../../shared/yt-types';
 import {YTApiId, ytApiV3, ytApiV4Id} from '../../../rum/rum-wrap-api';
 import ypath from '../../../common/thor/ypath';

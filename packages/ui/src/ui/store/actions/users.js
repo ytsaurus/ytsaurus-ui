@@ -2,6 +2,8 @@ import difference_ from 'lodash/difference';
 import forEach_ from 'lodash/forEach';
 import map_ from 'lodash/map';
 
+import {getBatchError} from '../../../shared/utils/error';
+
 import {
     USERS_EDIT_USER,
     USERS_EDIT_USER_DATA_FIELDS,
@@ -11,7 +13,6 @@ import {
 import {getCluster} from '../../store/selectors/global';
 import {listAllUsers} from '../../utils/users-groups';
 import {flags} from '../../utils/index';
-import {getBatchError} from '../../utils/utils';
 import {YTApiId, ytApiV3Id, ytApiV4Id} from '../../rum/rum-wrap-api';
 import UIFactory from '../../UIFactory';
 import {sha256} from '../../utils/sha256';
