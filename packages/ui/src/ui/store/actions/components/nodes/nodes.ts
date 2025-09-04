@@ -5,6 +5,8 @@ import forEach_ from 'lodash/forEach';
 import compact_ from 'lodash/compact';
 import type {ThunkAction} from 'redux-thunk';
 
+import {splitBatchResults} from '../../../../../shared/utils/error';
+
 import ypath from '../../../../common/thor/ypath';
 
 import {setSetting} from '../../../../store/actions/settings';
@@ -36,7 +38,7 @@ import CancelHelper from '../../../../utils/cancel-helper';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import type {ActionD, FIX_MY_TYPE, PartialDeep} from '../../../../types';
 import {prepareAttributes} from '../../../../utils/cypress-attributes';
-import {splitBatchResults, wrapApiPromiseByToaster} from '../../../../utils/utils';
+import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {NodeType} from '../../../../../shared/constants/system';
 import {BatchSubRequest} from '../../../../../shared/yt-types';
 

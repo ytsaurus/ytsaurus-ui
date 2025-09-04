@@ -1,7 +1,8 @@
 import {YTApiIdType} from '../../../../../shared/constants/yt-api-id';
+import {getBatchError} from '../../../../../shared/utils/error';
 import {BatchParameters, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {BatchResultsItem} from '../../../../../shared/yt-types';
-import {WrapApiOptions, getBatchError, wrapApiPromiseByToaster} from '../../../../utils/utils';
+import {WrapApiOptions, wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {YTError} from '../../../../types';
 import {YTEndpointApiArgs} from '../types';
 

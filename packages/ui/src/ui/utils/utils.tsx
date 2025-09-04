@@ -9,6 +9,8 @@ import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 import set_ from 'lodash/set';
 
+import {getBatchError} from '../../shared/utils/error';
+
 import {TypedKeys, YTError} from '../types';
 import {Link, ProgressProps} from '@gravity-ui/uikit';
 import {
@@ -24,18 +26,10 @@ import {showErrorModal} from '../store/actions/modals/errors';
 import {LocationParameters} from '../store/location';
 import {BatchResultsItem} from '../../shared/yt-types';
 
-import {UIBatchError} from './errors/ui-error';
 import {isCancelled} from './cancel-helper';
 import {YTErrors} from '../rum/constants';
 import {getWindowStore} from '../store/window-store';
 import {toaster} from './toaster';
-
-export function getBatchError<T = unknown>(
-    batchResults: Array<BatchResultsItem<T>>,
-    message: string,
-): YTError | undefined {
-    return splitBatchResults(batchResults, new UIBatchError(message)).error;
-}
 
 const COMMANDS_V4_WITH_VALUE: Record<string, boolean> = {
     get: true,
@@ -68,15 +62,6 @@ export function extractBatchV4Values<V, T extends {value?: V}>(
     return {...rest, results: res};
 }
 
-export interface SplitedBatchResults<T> {
-    error: YTError | undefined;
-    results: Array<T>;
-    outputs: Array<T | undefined>;
-    errorIndices: Array<number>;
-    resultIndices: Array<number>;
-    errorIgnoredIndices: Array<number>;
-}
-
 export const USE_IGNORE_NODE_DOES_NOT_EXIST = {ignoreErrorCodes: [YTErrors.NODE_DOES_NOT_EXIST]};
 export const USE_SKIP_ERROR_FN_NODE_DOES_NOT_EXIST: Pick<
     Required<CommonWrapApiOptions<unknown>>,
@@ -84,54 +69,6 @@ export const USE_SKIP_ERROR_FN_NODE_DOES_NOT_EXIST: Pick<
 > = {
     skipErrorFn: ({code}) => code === YTErrors.NODE_DOES_NOT_EXIST,
 };
-
-export function splitBatchResults<T = unknown>(
-    batchResults: Array<BatchResultsItem<T>>,
-    inputError: string | UIBatchError,
-    {ignoreErrorCodes}: {ignoreErrorCodes?: Array<number>} = {},
-): SplitedBatchResults<T> {
-    const dstError: UIBatchError =
-        typeof inputError === 'string' ? new UIBatchError(inputError) : inputError;
-
-    const ignoreCodes = new Set<number | undefined>(ignoreErrorCodes);
-    const errorIgnoredIndices: Array<number> = [];
-
-    const innerErrors: Array<YTError> = [];
-    const results: Array<T> = [];
-    const outputs: Array<T | undefined> = [];
-    const errorIndices: Array<number> = [];
-    const resultIndices: Array<number> = [];
-    forEach_(batchResults, (res, index) => {
-        const {error, output} = res;
-        outputs.push(output);
-        if (error) {
-            if (ignoreCodes.has(error.code)) {
-                errorIgnoredIndices.push(index);
-            } else {
-                innerErrors.push(error);
-                errorIndices.push(index);
-            }
-        } else {
-            results.push(output!);
-            resultIndices.push(index);
-        }
-    });
-
-    if (innerErrors.length) {
-        dstError.inner_errors = dstError.inner_errors ?? [];
-        dstError.inner_errors.push(...innerErrors);
-    }
-
-    const error = !innerErrors.length ? undefined : dstError;
-    return {
-        error: error as UIBatchError,
-        results,
-        outputs,
-        errorIndices,
-        resultIndices,
-        errorIgnoredIndices,
-    };
-}
 
 export function getBatchErrorIndices<T>(results: Array<BatchResultsItem<T>>) {
     return reduce_(
