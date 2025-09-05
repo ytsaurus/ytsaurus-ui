@@ -1,5 +1,7 @@
 import * as stream from 'stream';
 
+import path from 'path';
+
 import forEach_ from 'lodash/forEach';
 import pick_ from 'lodash/pick';
 import toString_ from 'lodash/toString';
@@ -10,7 +12,8 @@ import {AppContext} from '@gravity-ui/nodekit';
 import {isYTError} from '../../shared/utils';
 import {getApp} from '../ServerFactory';
 import {YT_CYPRESS_COOKIE_NAME} from '../../shared/constants';
-import path from 'path';
+import {UIBatchError} from '../../shared/utils/error';
+import {YTError} from '../../@types/types';
 
 export function isProductionEnv() {
     return getApp().config.appEnv !== 'development';
@@ -198,7 +201,7 @@ export async function sendAndLogError(
     ctx.logError('Error', e, extra);
 
     if (e instanceof ErrorWithCode) {
-        return res.status(e.code).send({message: toString_(e), data: e.data});
+        return res.status(e.httpStatusCode).send(e);
     }
 
     if (e instanceof Error) {
@@ -220,13 +223,11 @@ export const makeAuthClusterCookieName = (ytAuthCluster: string) => {
     return `${ytAuthCluster}_${YT_CYPRESS_COOKIE_NAME}`;
 };
 
-export class ErrorWithCode extends Error {
-    code: number;
-    data?: Record<string, unknown>;
+export class ErrorWithCode extends UIBatchError {
+    httpStatusCode: number;
 
-    constructor(code: number, message: string, attributes?: Record<string, unknown>) {
-        super(message);
-        this.code = code;
-        this.data = attributes;
+    constructor(httpStatusCode: number, error: string | YTError<{attributes?: object}>) {
+        super(error);
+        this.httpStatusCode = httpStatusCode;
     }
 }
