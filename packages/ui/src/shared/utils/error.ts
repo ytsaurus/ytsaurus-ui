@@ -3,6 +3,26 @@ import forEach_ from 'lodash/forEach';
 import {YTError} from '../../@types/types';
 import {BatchResultsItem} from '../yt-types';
 
+export class UIBatchError implements YTError {
+    message = '';
+
+    code?: number;
+    attributes?: any;
+    inner_errors?: YTError[];
+
+    constructor(error: string | YTError<{attributes?: object}>) {
+        delete this.code;
+        delete this.attributes;
+        delete this.inner_errors;
+
+        if (typeof error === 'string') {
+            this.message = error;
+        } else {
+            Object.assign(this, error);
+        }
+    }
+}
+
 export function getBatchError<T = unknown>(
     batchResults: Array<BatchResultsItem<T>>,
     message: string,
@@ -65,20 +85,4 @@ export interface SplitedBatchResults<T> {
     errorIndices: Array<number>;
     resultIndices: Array<number>;
     errorIgnoredIndices: Array<number>;
-}
-
-export class UIBatchError implements YTError {
-    message: string;
-
-    code?: number;
-    attributes?: any;
-    inner_errors?: YTError[];
-
-    constructor(msg: string) {
-        this.message = msg;
-
-        delete this.code;
-        delete this.attributes;
-        delete this.inner_errors;
-    }
 }

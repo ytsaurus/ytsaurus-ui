@@ -22,7 +22,7 @@ function fetchPrometheusDashboard(key: DashboardTypeColonCluster) {
         const cluster = key.substring(colonPos + 1);
 
         if (colonPos === -1 || !cluster || !dashboardType) {
-            throw new ErrorWithCode(400, `Unexpected key value`, {key});
+            throw new ErrorWithCode(400, {message: `Unexpected key value`, attributes: {key}});
         }
 
         if (!cx.get('requestId')) {
@@ -79,7 +79,10 @@ export function getPreloadedPrometheusDashboard({
     dashboardType: PrometheusDashboardType | null;
 }) {
     if (!dashboardType || !PROMETHEUS_DASHBOARD_TYPES.find((i) => i === dashboardType)) {
-        throw new ErrorWithCode(400, `Unexpected value of dashboardType`, {dashboardType});
+        throw new ErrorWithCode(400, {
+            message: `Unexpected value of dashboardType`,
+            attributes: {dashboardType},
+        });
     }
 
     return getCached(`${dashboardType}:${cluster}`);
