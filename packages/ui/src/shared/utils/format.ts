@@ -1,3 +1,7 @@
+function defaultKeyToRegex(key: string): RegExp {
+    return new RegExp(`{${key}}`, 'g');
+}
+
 /**
  * Replaces occurrences of strings like '{key1}', '{key2}'
  * by corresponding values from params, i.e. params['key1'], params['key2']
@@ -5,9 +9,13 @@
  * @param params
  * @example formatByParamas('hello {user}', {user: 'world'}); // returns 'hello world'
  */
-export function formatByParams(template: string, params: Record<string, {toString(): string}>) {
+export function formatByParams(
+    template: string,
+    params: Record<string, {toString(): string}>,
+    {keyToRegex = defaultKeyToRegex}: {keyToRegex?: (k: string) => RegExp} = {},
+) {
     return Object.keys(params).reduce((acc, key) => {
-        return acc.replace(new RegExp(`{${key}}`, 'g'), params[key].toString());
+        return acc.replace(keyToRegex(key), params[key].toString());
     }, template);
 }
 
