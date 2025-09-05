@@ -1,10 +1,12 @@
 import type {PluginWidgetProps} from '@gravity-ui/dashkit';
 
+import {YTPermissionType} from '../yt-types';
+
 import type {PrometheusDashboardType} from './dashboard-type';
 export {PrometheusDashboardType};
 
 export type DashboardInfo = {
-    templating: {list: Array<{name: string}>};
+    templating: {list: Array<{name: string}>; permissions?: Array<PermissionTemplate>};
     panels: Array<DashboardPanel>;
 };
 
@@ -13,12 +15,33 @@ export type DashboardPanel = {
     gridPos: {x: number; y: number; w: number; h: number};
 } & DashaboardPanelByType;
 
+/**
+ * The strings contain substrings like `$pool`, `$tree` that should be replaced with corresponding parameters
+ */
+export type StringTemplate = string;
+
+export type PermissionTemplate = {
+    permission: YTPermissionType;
+    path: StringTemplate;
+    cluster?: StringTemplate;
+    ignorePaths?: Array<StringTemplate>;
+};
+
 export type DashaboardPanelByType =
     | {type: 'row'}
     | {type: 'text'; options: {mode: 'markdown'; content: string}}
     | {type: 'timeseries'; targets: Array<TimeseriesTarget>; title: string};
 
-export type TimeseriesTarget = {expr: string; legendFormat: string; refId: string};
+/**
+ * The strings contains substrings like `"$pool"`, `"$tree"` that should be replaced with corresponding parameters
+ */
+export type PrometheusExpresstionString = string;
+
+export type TimeseriesTarget = {
+    expr: PrometheusExpresstionString;
+    legendFormat: string;
+    refId: string;
+};
 
 export type PanelType = DashaboardPanelByType['type'];
 export type PanelProps<K extends PanelType> = Omit<DashaboardPanelByType & {type: K}, 'type'> &
