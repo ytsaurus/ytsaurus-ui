@@ -38,7 +38,7 @@ const sendApiError = (res: Response, error: unknown) => {
         status = error.response?.status;
         message = error.response?.statusText;
     } else if (error instanceof ErrorWithCode) {
-        status = error.code;
+        status = error.httpStatusCode;
         message = error.message;
     } else if (error instanceof Error) {
         message = error.message;
