@@ -18,7 +18,7 @@ function getRobotSecret(cluster: string, type: 'oauthToken' | 'prometheusAuthori
             require(ytInterfaceSecret)?.[type]; // Backward compatibility
     }
 
-    return res;
+    return res || process.env.YT_TOKEN;
 }
 
 function getRobotOAuthToken(cluster: string) {
