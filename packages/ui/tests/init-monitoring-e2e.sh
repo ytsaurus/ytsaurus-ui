@@ -33,3 +33,7 @@ yt mount-table --sync //tmp/consumer
     done
     set -x
 ) | yt insert-rows --format yson //tmp/queue
+
+if [ "false" = "$(yt exists //sys/pool_trees/default/no-access)" ]; then
+    yt create --type scheduler_pool --attributes '{name="no-access";pool_tree="default";parent_name="<Root>";weight=1}'
+fi

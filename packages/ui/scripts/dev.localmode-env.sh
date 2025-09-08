@@ -53,6 +53,8 @@ if [ $? -ne 0 -o "${useStop}" = "1" ]; then
     echo "Use following environment variables to control behavior of the script:"
     echo "    PROMETHEUS=1     - to add --run-prometheus"
     echo "    SKIP_PULL=1      - to add --ui-skip-pull true --yt-skip-pull true"
+    echo "    WITH_AUTH=1      - to add --with-auth, also adds 'export YT_TOKEN=password'"
+    echo "    DEBUG_LOGGING=1  - to add --enable-debug-logging"
     echo "    "
   ) >&2
 
@@ -62,6 +64,15 @@ if [ $? -ne 0 -o "${useStop}" = "1" ]; then
 
   if [ "$SKIP_PULL" != "" ]; then
     command="$command --ui-skip-pull true --yt-skip-pull true"
+  fi
+
+  if [ "$WITH_AUTH" != "" ]; then
+    command="$command --with-auth"
+    export YT_TOKEN=password
+  fi
+
+  if [ "$DEBUG_LOGGING" != "" ]; then
+    command="$command --enable-debug-logging"
   fi
 
   if [ "$UI_VERSION_LOCAL" != "" ]; then

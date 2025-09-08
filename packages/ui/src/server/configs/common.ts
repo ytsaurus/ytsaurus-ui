@@ -3,13 +3,12 @@ import typeis from 'type-is';
 import {AuthPolicy} from '@gravity-ui/expresskit';
 import {AppConfig} from '@gravity-ui/nodekit';
 
+import {ytAuthConfigFromEnv} from '../utils/configs/auth-config-from-env';
+
 const path = require('path');
 
-const {ALLOW_PASSWORD_AUTH, YT_AUTH_CLUSTER_ID, YT_AUTH_ALLOW_INSECURE} = process.env;
-
 const ytAuthConfig: Partial<AppConfig> = {
-    allowPasswordAuth: Boolean(ALLOW_PASSWORD_AUTH || YT_AUTH_CLUSTER_ID),
-    ytAuthAllowInsecure: Boolean(YT_AUTH_ALLOW_INSECURE),
+    ...ytAuthConfigFromEnv,
     appAuthPolicy: AuthPolicy.required,
 };
 
