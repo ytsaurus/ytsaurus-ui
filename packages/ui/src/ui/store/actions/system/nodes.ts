@@ -6,13 +6,14 @@ import reduce_ from 'lodash/reduce';
 import {Toaster} from '@gravity-ui/uikit';
 
 import {USE_CACHE, USE_MAX_SIZE} from '../../../../shared/constants/yt-api';
+import {splitBatchResults} from '../../../../shared/utils/error';
 import hammer from '../../../common/hammer';
 import ypath from '../../../common/thor/ypath';
 import {SYSTEM_FETCH_NODES, UNAWARE} from '../../../constants';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {isRetryFutile} from '../../../utils/index';
 import {getNodeffectiveState, incrementStateCounter} from '../../../utils/system/proxies';
-import {showErrorPopup, splitBatchResults} from '../../../utils/utils';
+import {showErrorPopup} from '../../../utils/utils';
 
 import {ThunkAction} from 'redux-thunk';
 import {NodeType} from '../../../../shared/constants/system';

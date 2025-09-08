@@ -9,6 +9,8 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {Toaster} from '@gravity-ui/uikit';
 
+import {getBatchError} from '../../../../../shared/utils/error';
+
 import ypath from '../../../../common/thor/ypath';
 import {prepareRequest, saveRequestCancellation} from '../../../../utils/navigation';
 import {
@@ -35,7 +37,7 @@ import {getCluster} from '../../../../store/selectors/global';
 import {getPath, getTransaction} from '../../../../store/selectors/navigation';
 import {changeColumnSortOrder} from '../../../../store/actions/tables';
 import {RumWrapper, YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
-import {getBatchError, showErrorPopup} from '../../../../utils/utils';
+import {showErrorPopup} from '../../../../utils/utils';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import hammer from '../../../../common/hammer';
 import {GENERIC_ERROR_MESSAGE} from '../../../../constants';
