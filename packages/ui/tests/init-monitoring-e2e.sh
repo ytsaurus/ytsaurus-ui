@@ -11,6 +11,8 @@ if [ -z "${YT_PROXY}" ]; then
     exit 2
 fi
 
+BASE_DIR=$(readlink -f $(dirname $0))
+
 # Import known dashboards
 pushd $(dirname $0)/data/monitoring/json
 ls | xargs -I {} bash -c "
@@ -36,4 +38,9 @@ yt mount-table --sync //tmp/consumer
 
 if [ "false" = "$(yt exists //sys/pool_trees/default/no-access)" ]; then
     yt create --type scheduler_pool --attributes '{name="no-access";pool_tree="default";parent_name="<Root>";weight=1}'
+    yt set //sys/pool_trees/default/no-access/@acl '[]'
+fi
+
+if [ -n "$WITH_AUTH" ]; then
+  ${BASE_DIR}/init-cluster-e2e/utils/add.user.sh user user
 fi
