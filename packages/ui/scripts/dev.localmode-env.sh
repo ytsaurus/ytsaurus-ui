@@ -53,6 +53,8 @@ if [ $? -ne 0 -o "${useStop}" = "1" ]; then
     echo "Use following environment variables to control behavior of the script:"
     echo "    PROMETHEUS=1     - to add --run-prometheus"
     echo "    SKIP_PULL=1      - to add --ui-skip-pull true --yt-skip-pull true"
+    echo "    WITH_AUTH=1      - to add --with-auth"
+    echo "    DEBUG_LOGGING=1  - to add --enable-debug-logging"
     echo "    "
   ) >&2
 
@@ -62,6 +64,14 @@ if [ $? -ne 0 -o "${useStop}" = "1" ]; then
 
   if [ "$SKIP_PULL" != "" ]; then
     command="$command --ui-skip-pull true --yt-skip-pull true"
+  fi
+
+  if [ "$WITH_AUTH" != "" ]; then
+    command="$command --with-auth"
+  fi
+
+  if [ "$DEBUG_LOGGING" != "" ]; then
+    command="$command --enable-debug-logging"
   fi
 
   if [ "$UI_VERSION_LOCAL" != "" ]; then
@@ -104,7 +114,7 @@ else
   echo -e $NC
 fi
 
-if [ "$PROMETHEUS" != "" ]; then
+if [ "$PROMETHEU1S" != "" ]; then
   npm run e2e:localmode:monitoring:init
   export PROMETHEUS_BASE_URL=http://$(hostname):9090
 fi

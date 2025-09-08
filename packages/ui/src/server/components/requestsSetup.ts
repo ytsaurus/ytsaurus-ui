@@ -5,6 +5,8 @@ import {ClusterConfig} from '../../shared/yt-types';
 import {getClusterConfig} from '../components/utils';
 import {getApp} from '../ServerFactory';
 
+const DEFAULT_ADMIN_TOKEN = 'password';
+
 function getRobotSecret(cluster: string, type: 'oauthToken' | 'prometheusAuthorizationHeader') {
     const {ytInterfaceSecret} = getApp().config as YTCoreConfig;
 
@@ -18,7 +20,7 @@ function getRobotSecret(cluster: string, type: 'oauthToken' | 'prometheusAuthori
             require(ytInterfaceSecret)?.[type]; // Backward compatibility
     }
 
-    return res;
+    return res || DEFAULT_ADMIN_TOKEN;
 }
 
 function getRobotOAuthToken(cluster: string) {
