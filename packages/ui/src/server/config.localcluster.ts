@@ -1,6 +1,7 @@
 import {YT_LOCAL_CLUSTER_ID} from './constants';
 import {ClusterConfig, YTConfig} from '../shared/yt-types';
 import {getApp} from './ServerFactory';
+import {ytAuthConfigFromEnv} from './utils/configs/auth-config-from-env';
 
 const localProxy = process.env.PROXY;
 
@@ -9,6 +10,8 @@ const localThemes: Record<string, ClusterConfig['theme']> = {
     [localProxy!]: 'grapefruit',
 };
 
+const {allowPasswordAuth} = ytAuthConfigFromEnv;
+
 function makeClusterConfig(id: string, name: string, proxy: string): ClusterConfig {
     return {
         ...getApp().config?.localmodeClusterConfig,
@@ -16,7 +19,7 @@ function makeClusterConfig(id: string, name: string, proxy: string): ClusterConf
         id,
         name,
         proxy,
-        authentication: 'none',
+        authentication: allowPasswordAuth ? 'basic' : 'none',
         secure: false,
         theme: localThemes[id] ?? 'mint',
         description: 'Local',
