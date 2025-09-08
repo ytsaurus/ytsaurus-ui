@@ -104,8 +104,10 @@ export default function AppNavigation({children}: ExtProps) {
         },
         [dispatch],
     );
+    const navRef = React.useRef(null);
 
     const props: AppNavigationProps = {
+        ref: navRef,
         className,
         clusterConfig,
         logoClassName: block('logo-icon', {'no-cluster': !cluster}),
@@ -130,6 +132,6 @@ export default function AppNavigation({children}: ExtProps) {
         onChangeCompact,
         children,
     };
-
+    console.log(navRef)
     return UIFactory.renderAppNavigation(props);
 }

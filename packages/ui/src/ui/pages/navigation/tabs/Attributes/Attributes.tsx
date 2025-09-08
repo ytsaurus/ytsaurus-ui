@@ -36,6 +36,7 @@ function Attributes() {
     const attributes = useSelector(getAttributesTab);
     const attributesPath = useSelector(getAttributesPath);
     const {loading, loaded, error} = useSelector(getAttributesLoadingInfo);
+    const ref = React.useRef(null);
 
     const settings = unipika.prepareSettings();
 
@@ -48,11 +49,12 @@ function Attributes() {
     if (initialLoading) {
         return <Loader className={block({loading: initialLoading})} />;
     }
-
+    console.log(ref);
     return (
         <Fragment>
             {error != undefined && <YTErrorBlock error={error} />}
             <Yson
+                ref={ref}
                 settings={settings}
                 value={attributes}
                 folding

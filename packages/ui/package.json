@@ -103,7 +103,7 @@
     "@gravity-ui/graph": "^1.1.4",
     "@gravity-ui/icons": "^2.0.0",
     "@gravity-ui/illustrations": "^2.1.0",
-    "@gravity-ui/navigation": "^2.15.3",
+    "@gravity-ui/navigation": "file:gravity-ui-navigation-2.33.0.tgz",
     "@gravity-ui/prettier-config": "^1.1.0",
     "@gravity-ui/react-data-table": "^2.1.1",
     "@gravity-ui/stylelint-config": "^4.0.1",

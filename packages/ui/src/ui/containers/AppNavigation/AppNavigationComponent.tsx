@@ -37,6 +37,7 @@ function AppNavigationComponent({
     toggleSettingsVisible,
 
     onChangeCompact,
+    ref,
 }: Omit<AppNavigationProps, 'compact' | 'rememberSize' | 'className'>) {
     const dispatch = useDispatch();
     const panelItems = React.useMemo(() => {
@@ -75,6 +76,7 @@ function AppNavigationComponent({
             onClosePanel={onClosePanel}
             menuItems={menuItems}
             headerDecoration
+            ref={ref}
             logo={{
                 text: () => 'YTsaurus',
                 textSize: 22,

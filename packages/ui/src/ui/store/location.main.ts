@@ -177,4 +177,5 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     [`/*/${Page.QUERIES}/*`, [draftQueryParameters, getDraftQueryParameters]],
 
     ['global', [globalParams, getGlobalPreparedState]],
+    // [`/showSettingWithLabel*`, []],
 ]

@@ -24,12 +24,14 @@ export interface AppNavigationProps {
     panelClassName: string;
     onClosePanel: () => void;
 
-    settingsContent: React.ReactNode;
+    settingsContent: React.ReactNode | ((props: any) => React.ReactNode);
     settingsVisible: boolean;
     toggleSettingsVisible: () => void;
 
     compact: boolean;
     onChangeCompact: (compact: boolean) => void;
+
+    ref: React.RefObject<any>;
 }
 
 const Aside = React.lazy(

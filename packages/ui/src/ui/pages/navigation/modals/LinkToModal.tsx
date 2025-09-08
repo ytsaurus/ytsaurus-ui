@@ -98,6 +98,11 @@ export default function LinkToModal() {
                         }
                     },
                 },
+                {
+                    name: 'override',
+                    type: 'checkbox' as const,
+                    caption: 'Override existing link',
+                },
                 ...errorFields,
             ]}
         />
