@@ -9,6 +9,7 @@ import {remoteInputUrl} from '../../utils/operations/tabs/details/specification/
 import {FIX_MY_TYPE} from '../../types';
 import {RootState} from '../../store/reducers';
 import {JobsState} from '../../store/reducers/operations/jobs/jobs';
+import {CypressNodeRaw} from '../../../shared/yt-types';
 
 export interface OperationPool {
     tree: string;
@@ -211,7 +212,7 @@ export class DetailedOperationSelector extends OperationSelector {
     totalFailedJobs?: number;
     failedJobsProgress?: number;
 
-    description?: string;
+    description?: string | CypressNodeRaw<Record<string, unknown>, unknown>;
     title?: string;
 
     typedSpec?: any;

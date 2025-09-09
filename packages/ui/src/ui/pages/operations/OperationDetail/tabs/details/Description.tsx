@@ -1,6 +1,5 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import unipika from '../../../../../common/thor/unipika';
+import React, {FC} from 'react';
+import {useSelector} from 'react-redux';
 import ypath from '../../../../../common/thor/ypath';
 
 import keys_ from 'lodash/keys';
@@ -9,49 +8,27 @@ import map_ from 'lodash/map';
 import CollapsableText from '../../../../../components/CollapsableText/CollapsableText';
 import MetaTable from '../../../../../components/MetaTable/MetaTable';
 import Yson from '../../../../../components/Yson/Yson';
+import {canRenderAsMap} from './helpers/canRenderAsMap';
+import {getYsonSettingsDisableDecode} from '../../../../../store/selectors/thor/unipika';
+import {DetailedOperationSelector} from '../../../selectors';
 
-export default class Description extends Component {
-    static propTypes = {
-        description: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-    };
+type Props = {
+    description: DetailedOperationSelector['description'];
+};
 
-    get settings() {
-        return {...unipika.prepareSettings(), escapeWhitespace: false};
-    }
+export const Description: FC<Props> = ({description}) => {
+    const settings = useSelector(getYsonSettingsDisableDecode);
 
-    // TODO support getting correct type in UNIPIKA (e.g. account for tagged type)
-    renderAsMap(value) {
-        const {
-            utils: {
-                yson: {attributes, type},
-            },
-        } = unipika;
-        const isWithoutTags = !Object.hasOwnProperty.call(attributes(value), '_type_tag');
-        const isMap = type(value) === 'object';
-
-        return isMap && isWithoutTags;
-    }
-
-    renderAsYSON(value) {
-        return <Yson settings={this.settings} value={value} />;
-    }
-
-    renderMetaTable(description) {
+    if (canRenderAsMap(description)) {
         const value = ypath.getValue(description);
         const keys = keys_(value).sort();
         const items = map_(keys, (key) => ({
             key,
-            value: <CollapsableText settings={this.settings} value={value[key]} />,
+            value: <CollapsableText settings={settings} value={value[key]} />,
         }));
 
         return <MetaTable items={items} />;
     }
 
-    render() {
-        const {description} = this.props;
-
-        return this.renderAsMap(description)
-            ? this.renderMetaTable(description)
-            : this.renderAsYSON(description);
-    }
-}
+    return <Yson settings={settings} value={description} />;
+};
