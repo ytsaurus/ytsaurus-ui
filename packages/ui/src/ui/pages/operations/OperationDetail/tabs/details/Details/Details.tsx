@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
 import AlertEvents from '../../../../../../components/AlertEvents/AlertEvents';
-import OperationDescription from '../../../../../../pages/operations/OperationDetail/tabs/details/Description';
+import {Description} from '../../../../../../pages/operations/OperationDetail/tabs/details/Description';
 import CollapsibleSection from '../../../../../../components/CollapsibleSection/CollapsibleSection';
 import Button from '../../../../../../components/Button/Button';
 import {YTErrorBlock} from '../../../../../../components/Error/Error';
@@ -74,14 +74,14 @@ class Details extends Component<ReduxProps> {
         const {description} = this.props.operation;
 
         return (
-            description && (
+            Boolean(description) && (
                 <CollapsibleSection
                     name="Description"
                     className={block('description')}
                     size={collapsibleSize}
                     marginDirection="bottom"
                 >
-                    <OperationDescription description={description} />
+                    <Description description={description} />
                 </CollapsibleSection>
             )
         );
