@@ -14,6 +14,8 @@ import {TypeArray} from '../../components/SchemaDataType/dataTypes';
 import {Tooltip} from '../../components/Tooltip/Tooltip';
 import {UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
 
+import i18n from './i18n';
+
 import './ColumnCell.scss';
 
 const block = cn('yt-column-cell');
@@ -96,9 +98,9 @@ export function ColumnCell({
 
     const allowRawCopy = value?.$type === 'string';
     const useRawString = allowRawCopy && allowRawStrings;
-    let copyTooltip = 'Hold SHIFT-key to copy raw value';
+    let copyTooltip = i18n('hold-shift-raw');
     if (useRawString) {
-        copyTooltip = 'Hold SHIFT-key to copy escaped value';
+        copyTooltip = i18n('hold-shift-escaped');
     }
 
     const visibleValue = !useRawString ? (
@@ -120,7 +122,7 @@ export function ColumnCell({
             onMouseLeave={handleMouseLeave}
         >
             {isIncompleteTagged ? (
-                <Label theme="warning" text={`Incomplete '${tag}' type`} />
+                <Label theme="warning" text={i18n('incomplete-type', {tag})} />
             ) : (
                 visibleValue
             )}
