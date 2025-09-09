@@ -147,6 +147,10 @@ export function convertFromUIPermissions<
             vital = true;
             return REGISTER_QUEUE_CONSUMER;
         }
+        if (item === REGISTER_QUEUE_CONSUMER) {
+            vital = false;
+            return REGISTER_QUEUE_CONSUMER;
+        }
         return item;
     });
     return {
