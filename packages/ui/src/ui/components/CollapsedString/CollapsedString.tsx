@@ -2,8 +2,11 @@ import React, {FC, useMemo} from 'react';
 import {useToggle} from 'react-use';
 import cn from 'bem-cn-lite';
 
-import './CollapsedString.scss';
 import {ClickableText} from '../../components/ClickableText/ClickableText';
+
+import i18n from '../CollapsableText/i18n';
+
+import './CollapsedString.scss';
 
 type Props = {
     value: string;
@@ -25,7 +28,7 @@ export const CollapsedString: FC<Props> = ({value, limit = 200}) => {
             {text}
             {hasToggle && (
                 <ClickableText className={block('toggle')} onClick={toggleExpanded}>
-                    {expanded ? 'Hide' : 'Show more'}
+                    {expanded ? i18n('show-less') : i18n('show-more')}
                 </ClickableText>
             )}
         </div>
