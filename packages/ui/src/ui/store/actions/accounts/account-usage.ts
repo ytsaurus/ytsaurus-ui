@@ -56,7 +56,10 @@ import {
     setSettingsAccountUsageColumnsTree,
     setSettingsAccountUsageViewType,
 } from '../settings/settings';
-import {AccountUsageDataParams} from '../../reducers/accounts/usage/account-usage-types';
+import {
+    AccountUsageDataItem,
+    AccountUsageDataParams,
+} from '../../reducers/accounts/usage/account-usage-types';
 import {fetchAccountUsageListDiff, fetchAccountUsageTreeDiff} from './account-usage-diff';
 import {updateSortStateArray} from '../../../utils/sort-helpers';
 import {Action} from 'redux';
@@ -376,26 +379,23 @@ export function setAccountUsageColumns(columns: Array<string>): FiltersThunkActi
 export const openAccountAttributesModal =
     ({
         cluster,
-        account,
-        path,
+        row,
     }: {
         cluster: string;
-        account: string;
-        path: string;
+        row: AccountUsageDataItem;
     }): ThunkAction<void, RootState, null, Action> =>
     (dispatch, getState) => {
         const accountsUsageBaseUrl = getAccountsUsageBaseUrl(getState());
         return dispatch(
             openModal({
-                title: path,
+                title: row.path,
                 promise: axios
                     .request({
                         method: 'POST',
                         url: accountsUsageBaseUrl + 'get-versioned-resource-usage',
                         data: {
+                            ...row,
                             cluster,
-                            account,
-                            path,
                             timestamp_rounding_policy: 'closest',
                         },
                         withCredentials: true,

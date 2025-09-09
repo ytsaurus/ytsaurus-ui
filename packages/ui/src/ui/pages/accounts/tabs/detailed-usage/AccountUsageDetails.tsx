@@ -363,9 +363,8 @@ function useColumnsByPreset(mediums: Array<string>) {
             render(item) {
                 return (
                     <AccountActionsField
-                        path={item.row.path}
                         cluster={cluster}
-                        account={item.row.account}
+                        row={item.row}
                         onAttributeButtonClick={handleAttributeButtonClick}
                     />
                 );
