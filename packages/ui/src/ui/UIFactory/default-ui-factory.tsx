@@ -13,7 +13,7 @@ import {YT} from '../config/yt-config';
 import {DefaultSubjectLinkLazy} from '../components/SubjectLink/lazy';
 import type {SubjectCardProps} from '../components/SubjectLink/SubjectLink';
 import {QUERY_RESULT_CHART_TAB} from '../pages/query-tracker/QueryResultsVisualization';
-import {Incarnations} from '../pages/operations/OperationDetail/tabs/incarnations/Incarnations';
+import {IncarnationsLazy} from '../pages/operations/OperationDetail/tabs/incarnations/IncarnationsLazy';
 
 import {UIFactory} from './index';
 
@@ -327,6 +327,6 @@ export const defaultUIFactory: UIFactory = {
         return [];
     },
     renderIncarnationsTab() {
-        return <Incarnations />;
+        return <IncarnationsLazy />;
     },
 };

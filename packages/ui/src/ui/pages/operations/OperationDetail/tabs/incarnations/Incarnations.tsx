@@ -32,7 +32,7 @@ export type IncarnationProps = {
     incarnationsAlert?: React.ReactNode;
 };
 
-export function Incarnations() {
+export default function Incarnations() {
     const {incarnations, error, isLoading} = useSelector(getIncarnationsInfo);
 
     return (

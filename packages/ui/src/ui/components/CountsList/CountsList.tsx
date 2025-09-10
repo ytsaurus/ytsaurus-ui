@@ -62,7 +62,7 @@ function SelectedItems({
     );
 }
 
-export function CountsList({hideAll, items}: CountsListProps) {
+export function CountsList({hideAll, items, selectedItems, renderActions}: CountsListProps) {
     const displayedItems = prepareItems(items);
     const allItemsCount = getSumCount(items);
     const displayedItemsCount = getSumCount(displayedItems);
@@ -75,7 +75,7 @@ export function CountsList({hideAll, items}: CountsListProps) {
             {!hideAll &&
                 otherItemsCount > 0 &&
                 renderItem({type: i18n('other'), count: otherItemsCount})}
-            <SelectedItems />
+            <SelectedItems selectedItems={selectedItems} renderActions={renderActions} />
         </ul>
     );
 }
