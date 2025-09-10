@@ -23,6 +23,10 @@ $item-margin: 30px;
         margin-right: $item-margin;
         position: relative;
 
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
         &:not(:last-child):after {
             content: '•';
             position: absolute;
