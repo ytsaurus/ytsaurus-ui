@@ -19,7 +19,7 @@ export const Tab = {
     PARTITION_SIZES: 'partition_sizes',
     MONITOR: 'monitor',
     PERFORMANCE: 'performance',
-    PYDL_TELEMETRY: 'pydl_telemetry',
+    INCARNATIONS: 'incarnations',
 } as const;
 
 export type OperationTabType = ValueOf<typeof Tab>;
