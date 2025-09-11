@@ -1,20 +1,13 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 
+import {CountsList} from '../../../../../components/CountsList/CountsList';
+
 import {getIncarnationsInfo} from '../../../../../store/selectors/operations/incarnations';
-
-import {
-    incarnationsCountCn,
-    incarnationsCountItemCn,
-    incarnationsCountItemCountCn,
-    incarnationsCountTypeCn,
-} from './constants';
-
-import './Incarnations.scss';
 
 export type IncarnationsCountProps = {
     items: Array<{
-        name: string;
+        type: string;
         count: number;
     }>;
 };
@@ -26,7 +19,7 @@ export function IncarnationsCount() {
         <IncarnationsCountTemplate
             items={[
                 {
-                    name: 'All',
+                    type: i18n('all'),
                     count: count || 0,
                 },
             ]}
@@ -37,14 +30,5 @@ export function IncarnationsCount() {
 export function IncarnationsCountTemplate(props: IncarnationsCountProps) {
     const {items} = props;
 
-    return (
-        <ul className={incarnationsCountCn}>
-            {items.map((item) => (
-                <li key={`${item.name} ${item.count}`} className={incarnationsCountItemCn}>
-                    <span className={incarnationsCountTypeCn}>{item.name}</span>
-                    <span className={incarnationsCountItemCountCn}>{item.count}</span>
-                </li>
-            ))}
-        </ul>
-    );
+    return <CountsList hideAll items={items} />;
 }
