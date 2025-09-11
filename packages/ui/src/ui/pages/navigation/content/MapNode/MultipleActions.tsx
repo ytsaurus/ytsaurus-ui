@@ -39,7 +39,7 @@ import './MultipleActions.scss';
 
 const b = block('multiple-actions');
 
-export default function MultipleActions(props: {className: string}) {
+export default function MultipleActions(props: {className?: string}) {
     const {className} = props;
 
     const dispatch = useDispatch();
