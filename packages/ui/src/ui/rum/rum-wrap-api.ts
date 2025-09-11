@@ -100,7 +100,9 @@ type YTApiV4 = {
     ): Promise<string>;
 
     getPipelineSpec(...args: ApiMethodParameters<PipelineParams>): Promise<any>;
-    setPipelineSpec(...args: ApiMethodParameters<PipelineParams & ExpectedVersion>): Promise<void>;
+    setPipelineSpec(
+        ...args: ApiMethodParameters<PipelineParams & {force?: boolean} & ExpectedVersion>
+    ): Promise<void>;
     removePipelineSpec(...args: ApiMethodParameters<PipelineParams>): Promise<void>;
     getPipelineDynamicSpec(...args: ApiMethodParameters<PipelineParams>): Promise<any>;
     setPipelineDynamicSpec(
