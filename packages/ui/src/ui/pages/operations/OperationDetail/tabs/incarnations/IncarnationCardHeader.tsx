@@ -1,6 +1,6 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {Button, ClipboardButton, Disclosure, Flex, Icon, Text} from '@gravity-ui/uikit';
+import {Button, type ButtonProps, ClipboardButton, Flex, Icon, Text} from '@gravity-ui/uikit';
 import {ArrowUpRightFromSquare, ChevronDown, ChevronUp} from '@gravity-ui/icons';
 
 import format from '../../../../../common/hammer/format';
@@ -58,7 +58,8 @@ function makeStatus(status: IncarnationFinishReason): ViewState {
 
 type Props = {
     incarnation: Incarnation;
-};
+    expanded: boolean;
+} & ButtonProps;
 
 export function IncarnationCardHeader(props: Props) {
     const {incarnation} = props;
@@ -69,53 +70,42 @@ export function IncarnationCardHeader(props: Props) {
     const operation = useSelector(getOperation);
 
     return (
-        <Disclosure.Summary>
-            {(props) => (
-                <Flex justifyContent={'space-between'} style={{overflow: 'hidden'}}>
-                    <Flex direction={'row'} gap={2} alignItems={'center'}>
-                        <Button
-                            {...props}
-                            view={'flat'}
-                            width={'max'}
-                            className={incarnationButtonCn}
-                        >
-                            <Flex alignItems={'center'} gap={2} style={{height: '100%'}}>
-                                <Text variant={'subheader-2'}>{incarnation.id}</Text>
-                                <Icon data={props.expanded ? ChevronUp : ChevronDown} size={'16'} />
-                            </Flex>
-                        </Button>
-                        <ClipboardButton text={incarnation.id} />
-                        <Link
-                            routed
-                            target={'_blank'}
-                            url={`/${cluster}/${Page.OPERATIONS}/${operation.id}/jobs?state=all&incarnation=${incarnation.id}`}
-                        >
-                            <Flex alignContent={'center'} gap={1}>
-                                {i18n('jobs')}
-                                <ArrowUpRightFromSquare />
-                            </Flex>
-                        </Link>
+        <Flex justifyContent={'space-between'} style={{overflow: 'hidden'}}>
+            <Flex direction={'row'} gap={2} alignItems={'center'}>
+                <Button {...props} view={'flat'} width={'max'} className={incarnationButtonCn}>
+                    <Flex alignItems={'center'} gap={2} style={{height: '100%'}}>
+                        <Text variant={'subheader-2'}>{incarnation.id}</Text>
+                        <Icon data={props.expanded ? ChevronUp : ChevronDown} size={'16'} />
                     </Flex>
-                    <Flex direction={'row'} gap={4} alignItems={'center'}>
-                        <StatusLabel
-                            text={format.ReadableField(incarnation.finish_reason)}
-                            state={makeStatus(incarnation.finish_reason)}
-                            showIcon={false}
-                            renderPlaque
-                        />
-                        <Text whiteSpace={'nowrap'} variant={'inherit'} ellipsis>
-                            {makeIncarnationInterval(incarnation)}
-                        </Text>
-                        <AttributesButton
-                            onClick={() =>
-                                dispatch(toggleIncarnationInfoDialog({infoDialog: {incarnation}}))
-                            }
-                        />
+                </Button>
+                <ClipboardButton text={incarnation.id} />
+                <Link
+                    routed
+                    target={'_blank'}
+                    url={`/${cluster}/${Page.OPERATIONS}/${operation.id}/jobs?state=all&incarnation=${incarnation.id}`}
+                >
+                    <Flex alignContent={'center'} gap={1}>
+                        {i18n('jobs')}
+                        <ArrowUpRightFromSquare />
                     </Flex>
-                </Flex>
-            )}
-        </Disclosure.Summary>
+                </Link>
+            </Flex>
+            <Flex direction={'row'} gap={4} alignItems={'center'}>
+                <StatusLabel
+                    text={format.ReadableField(incarnation.finish_reason)}
+                    state={makeStatus(incarnation.finish_reason)}
+                    showIcon={false}
+                    renderPlaque
+                />
+                <Text whiteSpace={'nowrap'} variant={'inherit'} ellipsis>
+                    {makeIncarnationInterval(incarnation)}
+                </Text>
+                <AttributesButton
+                    onClick={() =>
+                        dispatch(toggleIncarnationInfoDialog({infoDialog: {incarnation}}))
+                    }
+                />
+            </Flex>
+        </Flex>
     );
 }
-
-IncarnationCardHeader.displayName = 'DisclosureSummary';
