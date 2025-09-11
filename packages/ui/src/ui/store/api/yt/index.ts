@@ -2,6 +2,7 @@ import {batchApi, useFetchBatchQuery, useUpdateBatchMutation} from './executeBat
 import {listQueriesApi, useListQueriesQuery} from './listQueries';
 import {flowApi, useFlowExecuteQuery} from './flow';
 import {
+    getIncarnations,
     getOperationEvents,
     listOperationEventsApi,
     useListOperationEventsQuery,
@@ -17,6 +18,7 @@ export {
     useUpdateBatchMutation,
     // selectors
     getOperationEvents,
+    getIncarnations,
     // api
     batchApi,
     listQueriesApi,
