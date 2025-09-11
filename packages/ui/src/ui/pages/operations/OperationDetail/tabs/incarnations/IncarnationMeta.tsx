@@ -16,6 +16,8 @@ import MetaTable from '../../../../../components/MetaTable/MetaTable';
 import YTLink from '../../../../../components/Link/Link';
 import {Template} from '../../../../../components/MetaTable/templates/Template';
 
+import i18n from './i18n';
+
 type Props = {
     incarnation: Incarnation;
 };
@@ -41,7 +43,7 @@ export function IncarnationMeta(props: Props) {
                     {incarnation.trigger_job_id}
                 </YTLink>
             ),
-            label: 'Id',
+            label: i18n('id'),
             visible: Boolean(incarnation?.trigger_job_id),
         },
         {
@@ -51,7 +53,7 @@ export function IncarnationMeta(props: Props) {
                     {format.ReadableField(String(switch_info?.abort_reason))}
                 </Label>
             ),
-            label: 'Abort reason',
+            label: i18n('abort-reason'),
             visible: Boolean(switch_info?.abort_reason),
         },
         {
@@ -61,7 +63,7 @@ export function IncarnationMeta(props: Props) {
                     {format.ReadableField(String(switch_info?.interruption_reason))}
                 </Label>
             ),
-            label: 'Interruption reason',
+            label: i18n('interruption-reason'),
             visible: Boolean(switch_info?.interruption_reason),
         },
         {
@@ -72,17 +74,17 @@ export function IncarnationMeta(props: Props) {
                     onClick={() => dispatch(showErrorModal(switch_info?.trigger_job_error))}
                 />
             ),
-            label: 'Error',
+            label: i18n('error'),
             visible: Boolean(switch_info?.trigger_job_error),
         },
     ];
 
     return (
         <Flex gap={1} direction={'column'} width={'40%'}>
-            <Text variant={'subheader-2'}>Trigger job info</Text>
+            <Text variant={'subheader-2'}>{i18n('trigger-job-info')}</Text>
             <MetaTable items={tableItems} />
             {!tableItems.some((item) => item.visible) && (
-                <Text variant={'inherit'}> No info to display</Text>
+                <Text variant={'inherit'}> {i18n('no-info-to-display')}</Text>
             )}
         </Flex>
     );

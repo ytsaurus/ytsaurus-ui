@@ -22,6 +22,8 @@ import {getOperation} from '../../../../../store/selectors/operations/operation'
 
 import {incarnationButtonCn} from './constants';
 
+import i18n from './i18n';
+
 function makeIncarnationInterval(incarnation: Incarnation) {
     const {start_datetime, finish_datetime} = incarnation;
 
@@ -89,7 +91,7 @@ export function IncarnationCardHeader(props: Props) {
                             url={`/${cluster}/${Page.OPERATIONS}/${operation.id}/jobs?state=all&incarnation=${incarnation.id}`}
                         >
                             <Flex alignContent={'center'} gap={1}>
-                                Jobs
+                                {i18n('jobs')}
                                 <ArrowUpRightFromSquare />
                             </Flex>
                         </Link>

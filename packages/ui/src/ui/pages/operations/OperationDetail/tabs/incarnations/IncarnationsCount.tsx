@@ -5,6 +5,8 @@ import {CountsList} from '../../../../../components/CountsList/CountsList';
 
 import {getIncarnationsInfo} from '../../../../../store/selectors/operations/incarnations';
 
+import i18n from './i18n';
+
 export type IncarnationsCountProps = {
     items: Array<{
         type: string;
