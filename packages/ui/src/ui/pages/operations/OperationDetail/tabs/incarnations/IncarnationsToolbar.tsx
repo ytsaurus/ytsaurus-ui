@@ -4,6 +4,8 @@ import {Flex, TextInput} from '@gravity-ui/uikit';
 
 import {getIdFilter, setIdFilter} from '../../../../../store/reducers/operations/incarnations';
 
+import i18n from './i18n';
+
 export function IncarnationsToolbar() {
     return <IncarnationsToolbarTemplate />;
 }
@@ -26,7 +28,7 @@ export function IncarnationsToolbarTemplate(props: IncarnationsToolbarTemplatePr
     return (
         <Flex direction={'row'} gap={2} alignItems={'center'} width={800}>
             <TextInput
-                placeholder={'Incarnation id...'}
+                placeholder={i18n('placeholder_incarnation-id')}
                 value={idFilter}
                 onUpdate={handleIdFilterChange}
             />

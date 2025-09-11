@@ -1,0 +1,13 @@
+{
+    "alert_no-incarnations": "Нет инкарнаций для отображения",
+    "trigger-job-info": "Информация о запустившей задаче",
+    "no-info-to-display": "Нет информации для отображения",
+    "id": "Идентификатор",
+    "abort-reason": "Причина прерывания",
+    "interruption-reason": "Причина остановки",
+    "error": "Ошибка",
+    "all": "Все",
+    "placeholder_incarnation-id": "Идентификатор инкарнации...",
+    "jobs": "Задачи",
+    "incarnation-info": "Информация об инкарнации"
+}
