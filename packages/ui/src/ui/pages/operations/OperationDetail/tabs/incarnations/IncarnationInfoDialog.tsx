@@ -11,6 +11,8 @@ import {
 
 import {detailsCn} from './constants';
 
+import i18n from './i18n';
+
 import './Incarnations.scss';
 
 export function IncarnationInfoDialog() {
@@ -39,7 +41,7 @@ export function IncarnationInfoDialog() {
 
     return (
         <DialogWrapper size={'m'} open={Boolean(data)} onClose={handleClose}>
-            <DialogWrapper.Header caption={'Incarnation info'} />
+            <DialogWrapper.Header caption={i18n('incarnation-info')} />
             <DialogWrapper.Body>
                 <Yson className={detailsCn} settings={{format: 'json'}} value={value ?? {}} />
             </DialogWrapper.Body>

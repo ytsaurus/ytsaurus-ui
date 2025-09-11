@@ -1,0 +1,13 @@
+{
+    "alert_no-incarnations": "No incarnations to show",
+    "trigger-job-info": "Trigger job info",
+    "no-info-to-display": "No info to display",
+    "id": "Id",
+    "abort-reason": "Abort reason",
+    "interruption-reason": "Interruption reason",
+    "error": "Error",
+    "all": "All",
+    "placeholder_incarnation-id": "Incarnation id...",
+    "jobs": "Jobs",
+    "incarnation-info": "Incarnation info"
+}

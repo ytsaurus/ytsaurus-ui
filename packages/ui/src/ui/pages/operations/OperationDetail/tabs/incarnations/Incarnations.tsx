@@ -18,6 +18,8 @@ import {IncarnationInfoDialog} from './IncarnationInfoDialog';
 
 import {incarnationCn, incarnationInfoCn} from './constants';
 
+import i18n from './i18n';
+
 import './Incarnations.scss';
 
 export type IncarnationProps = {
@@ -86,7 +88,7 @@ export function IncarnationsTemplate(props: IncarnationProps) {
                         </Card>
                     ))
                 ) : (
-                    <Alert theme={'info'} message={'No incarnations to show'} />
+                    <Alert theme={'info'} message={i18n('alert_no-incarnations')} />
                 )}
             </Flex>
             <IncarnationInfoDialog />
