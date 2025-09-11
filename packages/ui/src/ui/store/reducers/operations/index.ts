@@ -8,6 +8,7 @@ import jobs from './jobs/jobs';
 import jobsOperationIncarnations from './jobs/jobs-operation-incarnations';
 import jobsMonitor from './jobs/jobs-monitor';
 import {jobsTimelineReducer} from './jobs/jobs-timeline-slice';
+import {incarnations} from './incarnations';
 
 export default combineReducers({
     page,
@@ -17,5 +18,6 @@ export default combineReducers({
     jobs,
     jobsMonitor,
     jobsOperationIncarnations,
+    incarnations,
     jobsTimeline: jobsTimelineReducer,
 });
