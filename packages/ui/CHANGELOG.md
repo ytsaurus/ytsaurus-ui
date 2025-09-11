@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.103.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.103.0...ui-v1.103.1) (2025-09-11)
+
+
+### Bug Fixes
+
+* **Accounts/DetailedUsage:** use all fileds of row for '/get-versioned-resource-usage' [YTFRONT-5187] ([a8e73d6](https://github.com/ytsaurus/ytsaurus-ui/commit/a8e73d6b57c8a939b84d83162b3a188c2b03b65f))
+* **Acl:** added "vital" param to requestPermissions call, because it is required for "Register queue consumer (vital)" permission ([c7e96a2](https://github.com/ytsaurus/ytsaurus-ui/commit/c7e96a2ec55af73616dc6e8aea906cf4293cf4ce))
+* **ACL:** get rid of 'mode: keep-missing-fields' [YTFRONT-5039] ([ea90bfa](https://github.com/ytsaurus/ytsaurus-ui/commit/ea90bfa3a927f168f3bf6da7cc4f1af684a37d32))
+* **Operation:** utf8 error in description [YTFRONT-4982] ([f60f965](https://github.com/ytsaurus/ytsaurus-ui/commit/f60f965ddc6fd4c8d4756cc3fd66b12849edc2e6))
+
 ## [1.103.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.102.0...ui-v1.103.0) (2025-09-04)
 
 
