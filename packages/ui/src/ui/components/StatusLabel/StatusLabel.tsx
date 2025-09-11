@@ -74,6 +74,7 @@ export type StatusLabelProps = {
     text?: string;
     state?: ViewState;
     iconState?: ViewState;
+    showIcon?: boolean;
 };
 
 export default function StatusLabel({
@@ -83,16 +84,16 @@ export default function StatusLabel({
     text,
     state,
     iconState,
+    showIcon = true,
 }: StatusLabelProps) {
     const mappedState = getViewState(label);
     const icon = getIcon(iconState ?? mappedState);
     const mods = {state: state ?? mappedState};
-
     return !label && !(text || state) ? (
         <span />
     ) : (
         <span className={b(null, renderPlaque ? b('plaque', mods, className) : b(mods, className))}>
-            <Icon awesome={icon} />
+            {showIcon && <Icon awesome={icon} />}
             <span>{text ?? hammer.format['ReadableField'](label)}</span>
         </span>
     );
