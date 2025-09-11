@@ -57,14 +57,6 @@ export function IncarnationsTemplate(props: IncarnationProps) {
         renderTelemetryInfo,
     } = props;
 
-    if (isLoading) {
-        return (
-            <Flex justifyContent={'center'} alignItems={'center'}>
-                <Loader />
-            </Flex>
-        );
-    }
-
     if (error) {
         return <YTErrorBlock error={error as YTError | AxiosError} />;
     }
@@ -74,21 +66,41 @@ export function IncarnationsTemplate(props: IncarnationProps) {
             <Flex direction={'column'} gap={2}>
                 {incarnationsToolbar}
                 {incarnationsCount}
-                {incarnationsAlert}
-                {incarnations?.length ? (
-                    incarnations.map((incarnation) => (
-                        <Card key={incarnation.id} view={'outlined'} className={incarnationCn}>
-                            <Disclosure keepMounted={false}>
-                                <IncarnationCardHeader incarnation={incarnation} />
-                                <Flex direction={'row'} className={incarnationInfoCn}>
-                                    <IncarnationMeta incarnation={incarnation} />
-                                    {renderTelemetryInfo?.(incarnation.id)}
-                                </Flex>
-                            </Disclosure>
-                        </Card>
-                    ))
+                {isLoading ? (
+                    <Flex justifyContent={'center'} alignItems={'center'}>
+                        <Loader />
+                    </Flex>
                 ) : (
-                    <Alert theme={'info'} message={i18n('alert_no-incarnations')} />
+                    <>
+                        {' '}
+                        {incarnationsAlert}
+                        {incarnations?.length ? (
+                            incarnations.map((incarnation) => (
+                                <Card
+                                    key={incarnation.id}
+                                    view={'outlined'}
+                                    className={incarnationCn}
+                                >
+                                    <Disclosure keepMounted={false}>
+                                        <Disclosure.Summary>
+                                            {(summaryProps) => (
+                                                <IncarnationCardHeader
+                                                    incarnation={incarnation}
+                                                    {...summaryProps}
+                                                />
+                                            )}
+                                        </Disclosure.Summary>
+                                        <Flex direction={'row'} className={incarnationInfoCn}>
+                                            <IncarnationMeta incarnation={incarnation} />
+                                            {renderTelemetryInfo?.(incarnation.id)}
+                                        </Flex>
+                                    </Disclosure>
+                                </Card>
+                            ))
+                        ) : (
+                            <Alert theme={'info'} message={i18n('alert_no-incarnations')} />
+                        )}
+                    </>
                 )}
             </Flex>
             <IncarnationInfoDialog />
