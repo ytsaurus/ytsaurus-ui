@@ -35,10 +35,6 @@ export function IncarnationInfoDialog() {
         dispatch(toggleIncarnationInfoDialog({infoDialog: null}));
     };
 
-    if (!data) {
-        return null;
-    }
-
     return (
         <DialogWrapper size={'m'} open={Boolean(data)} onClose={handleClose}>
             <DialogWrapper.Header caption={i18n('incarnation-info')} />
