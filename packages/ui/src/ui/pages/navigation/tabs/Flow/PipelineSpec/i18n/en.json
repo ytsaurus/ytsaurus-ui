@@ -1,0 +1,8 @@
+{
+  "alert_force-mode-unrecoverable": "Force mode allows to update the pipeline while it is in \"Paused\" state. It is an unsafe action, especially when the pipeline topology is being changed. This may potentially leave the pipeline in an unrecoverable state.",
+  "for-more-details-1": "For more details about force mode updates, refer to",
+  "for-more-details-2": "documentation",
+  "force": "Force",
+  "pipeline-path": "Pipeline path",
+  "specification": "Specification"
+}
