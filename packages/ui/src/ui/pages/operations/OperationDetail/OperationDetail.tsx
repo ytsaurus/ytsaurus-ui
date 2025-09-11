@@ -245,6 +245,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                             operationRefId={$value}
                             state={state}
                             erasedTrees={erasedTrees}
+                            editBtnVisibility="always"
                         />
                     ),
                 },

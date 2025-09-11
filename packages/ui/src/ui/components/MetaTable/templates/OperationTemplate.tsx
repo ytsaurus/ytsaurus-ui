@@ -4,7 +4,7 @@ import ypath from '../../../common/thor/ypath';
 import cn from 'bem-cn-lite';
 
 import OperationWeight from '../../../pages/operations/OperationWeight/OperationWeight';
-import {OperationPool} from '../../../components/OperationPool/OperationPool';
+import {OperationPool, OperationPoolProps} from '../../../components/OperationPool/OperationPool';
 import CollapsibleList from '../../../components/CollapsibleList/CollapsibleList';
 import Icon from '../../../components/Icon/Icon';
 import Link from '../../../components/Link/Link';
@@ -29,24 +29,28 @@ export interface Pool {
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 
-interface TemplatePoolsProps {
+type TemplatePoolsProps = Pick<
+    OperationPoolProps,
+    | 'allowDetachEditBtn'
+    | 'cluster'
+    | 'compact'
+    | 'editBtnVisibility'
+    | 'onEdit'
+    | 'operationRefId'
+    | 'state'
+> & {
     className?: string;
-    cluster: string;
     reserveEditButton?: boolean;
-    compact?: boolean;
-    onEdit?: () => void;
-    state?: 'completed' | 'failed' | 'aborted' | string;
     pools: Pool[];
     erasedTrees?: Record<string, boolean | undefined>;
-    allowDetachEditBtn?: boolean;
-    operationRefId?: string;
-}
+};
 
 export function TemplatePools({
     pools = [],
     cluster,
     state,
     onEdit,
+    editBtnVisibility,
     operationRefId = undefined,
     compact = false,
     erasedTrees = {},
@@ -60,6 +64,7 @@ export function TemplatePools({
                     compact={compact}
                     cluster={cluster}
                     onEdit={onEdit}
+                    editBtnVisibility={editBtnVisibility}
                     operationRefId={operationRefId}
                     state={state}
                     pool={pool}
