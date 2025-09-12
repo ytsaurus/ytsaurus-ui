@@ -85,6 +85,38 @@ format['ReadableField'] = function (value, settings) {
     return formatted;
 };
 
+format['DateTime'] = function (value, settings) {
+    const dateFormat = parseSetting(settings, 'format', 'full');
+    const datePattern = parseSetting(settings, 'pattern');
+
+    if (typeof value === 'undefined') {
+        return format.NO_VALUE;
+    }
+
+    value = format.toMoment(value);
+
+    if (datePattern) {
+        return value.format(datePattern);
+    }
+
+    switch (dateFormat) {
+        case 'human':
+            return value.fromNow();
+        case 'full':
+            return value.format('DD MMM YYYY HH:mm:ss');
+        case 'short':
+            return value.format('DD MMM HH:mm');
+        case 'day':
+            return value.format('DD MMM YYYY');
+        case 'month':
+            return value.format('MMMM YYYY');
+        default:
+            throw new Error(
+                'hammer.format.DateTime: Unknown `format` option. Please specify one of [human, full, short, day, month] or use `pattern` option.',
+            );
+    }
+};
+
 // copied from @ytsaurus/interface-helpers
 /**
  * Show a readable time duration string
