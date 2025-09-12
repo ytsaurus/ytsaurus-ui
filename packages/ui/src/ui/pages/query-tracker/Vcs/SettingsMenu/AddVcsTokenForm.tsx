@@ -4,12 +4,12 @@ import {Button, TextInput} from '@gravity-ui/uikit';
 import {getVcsTokensAvailability, saveToken} from '../../module/vcs/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-import './AddTokenForm.scss';
+import './AddVcsTokenForm.scss';
 import {selectVcsConfig} from '../../module/vcs/selectors';
 
 const block = cn('add-token-form');
 
-export const AddTokenForm: FC = () => {
+export const AddVcsTokenForm: FC = () => {
     const dispatch = useDispatch();
     const [isSaving, setSaving] = useState(false);
     const [vcs, setVcs] = useState<string | undefined>();

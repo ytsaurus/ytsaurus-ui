@@ -7,6 +7,7 @@ import ypath from '../../common/thor/ypath';
 
 import CancelHelper from '../cancel-helper';
 import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
+import {getClusterConfigByName, getClusterProxy} from '../../store/selectors/global';
 
 export const pathEditorRequests = new CancelHelper();
 
@@ -33,14 +34,25 @@ export function preparePath(currentPath) {
     return ypath.YPath.create(currentPath, 'absolute').toSubpath(-2).stringify();
 }
 
-export function loadSuggestions(path, customFilter) {
+export function loadSuggestions({path, customFilter, cluster}) {
     const parentPath = preparePath(path);
 
+    const apiSetup = {
+        parameters: {path: parentPath, attributes: ['type', 'dynamic']},
+        cancellation: pathEditorRequests.saveCancelToken,
+    };
+
+    if (cluster) {
+        const clusterConfig = getClusterConfigByName(cluster);
+        if (clusterConfig) {
+            apiSetup.setup = {
+                proxy: getClusterProxy(clusterConfig),
+            };
+        }
+    }
+
     return ytApiV3Id
-        .list(YTApiId.pathEditorLoadSuggestions, {
-            parameters: {path: parentPath, attributes: ['type', 'dynamic']},
-            cancellation: pathEditorRequests.saveCancelToken,
-        })
+        .list(YTApiId.pathEditorLoadSuggestions, apiSetup)
         .then(ypath.getValue)
         .then((nodes) => prepareSuggestions(path, parentPath, nodes))
         .then((suggestions) => (customFilter ? customFilter(suggestions) : suggestions));

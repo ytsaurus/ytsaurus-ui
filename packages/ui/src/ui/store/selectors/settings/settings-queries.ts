@@ -23,3 +23,7 @@ export const getLastUserChoiceQueryChytClique = createSelector(
         return data[`local::${settings?.cluster}::queryTracker::lastChytClique`];
     },
 );
+
+export const getQueryTokens = createSelector([getSettingsData], (data) => {
+    return data['global::queryTracker::tokens'] || [];
+});

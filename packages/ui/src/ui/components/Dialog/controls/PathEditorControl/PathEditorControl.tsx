@@ -10,10 +10,11 @@ interface Props {
     placeholder?: string;
     disabled?: boolean;
     autoFocus?: boolean;
+    cluster?: string;
 }
 
 export function PathEditorControl(props: Props) {
-    const {value, placeholder, onChange, ...rest} = props;
+    const {value, placeholder, onChange, cluster, ...rest} = props;
 
     const handleApply = React.useCallback(
         (value: Props['value']) => {
@@ -29,6 +30,7 @@ export function PathEditorControl(props: Props) {
             placeholder={placeholder}
             onApply={handleApply}
             onChange={handleApply}
+            cluster={cluster}
             {...rest}
         />
     );

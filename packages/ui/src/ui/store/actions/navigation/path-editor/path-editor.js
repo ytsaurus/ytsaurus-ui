@@ -5,7 +5,7 @@ import {
     preparePath,
 } from '../../../../utils/navigation/path-editor';
 
-export function loadSuggestionsList(path, customFilter) {
+export function loadSuggestionsList({path, customFilter, cluster}) {
     return (dispatch, getState) => {
         const {suggestionsPath, suggestionsLoaded} = getState().navigation.pathEditor;
         let currentParentPath;
@@ -24,7 +24,7 @@ export function loadSuggestionsList(path, customFilter) {
         }
         dispatch({type: FETCH_SUGGESTIONS.REQUEST});
 
-        return loadSuggestions(path, customFilter)
+        return loadSuggestions({path, customFilter, cluster})
             .then((suggestions) => {
                 dispatch({
                     type: FETCH_SUGGESTIONS.SUCCESS,
