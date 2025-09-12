@@ -110,6 +110,8 @@ format['DateTime'] = function (value, settings) {
             return value.format('DD MMM YYYY');
         case 'month':
             return value.format('MMMM YYYY');
+        case 'time':
+            return value.format('HH:mm:ss');
         default:
             throw new Error(
                 'hammer.format.DateTime: Unknown `format` option. Please specify one of [human, full, short, day, month] or use `pattern` option.',

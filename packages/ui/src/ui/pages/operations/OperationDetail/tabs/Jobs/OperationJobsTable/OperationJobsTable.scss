@@ -5,7 +5,7 @@
     &__table {
         table-layout: fixed;
 
-        min-width: calc(1280px - 2 * var(--section-main-padding-horizontal));
+        min-width: 1270px;
 
         &-item {
             padding: 8px;
@@ -30,7 +30,7 @@
 
                 &_start-time,
                 &_finish-time {
-                    width: 160px;
+                    width: 100px;
                 }
 
                 &_progress {
@@ -49,9 +49,7 @@
         }
     }
 
-    &__in-progress,
-    &__start-time,
-    &__finish-time {
+    &__in-progress {
         height: 22px;
     }
 
