@@ -49,6 +49,7 @@ export const docsUrls = {
     'common:regular_system_processes': '',
     'acl:permissions': `${baseUrl}/user-guide/storage/access-control#authorization`,
     'dynamic-tables:queues#creating-a-consumer': `${baseUrl}/user-guide/dynamic-tables/queues#creating-a-consumer`,
+    'flow:update_static_spec:force': '',
 };
 
 export type DocsUrls = typeof docsUrls;

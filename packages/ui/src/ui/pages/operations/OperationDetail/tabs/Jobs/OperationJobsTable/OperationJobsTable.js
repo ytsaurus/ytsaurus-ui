@@ -20,6 +20,7 @@ import MetaTable from '../../../../../../components/MetaTable/MetaTable';
 import Yson from '../../../../../../components/Yson/Yson';
 import Link from '../../../../../../components/Link/Link';
 import CollapsibleSection from '../../../../../../components/CollapsibleSection/CollapsibleSection';
+import {TemplateTime} from '../../../../../../components/MetaTable/templates/TemplateTime';
 
 import {
     getCompetitiveJobs,
@@ -404,9 +405,11 @@ class OperationJobsTable extends React.Component {
 
     renderStartTime(item) {
         return (
-            <span className={block('start-time', 'elements-ellipsis')}>
-                {hammer.format['DateTime'](item.startTime)}
-            </span>
+            <TemplateTime
+                className={block('start-time')}
+                time={item.startTime}
+                valueFormat="DateTimeTwoLines"
+            />
         );
     }
 
@@ -416,9 +419,11 @@ class OperationJobsTable extends React.Component {
                 In progress...
             </span>
         ) : (
-            <span className={block('finish-time elements-ellipsis')}>
-                {hammer.format['DateTime'](item.finishTime)}
-            </span>
+            <TemplateTime
+                className={block('finish-time')}
+                time={item.finishTime}
+                valueFormat="DateTimeTwoLines"
+            />
         );
     }
 

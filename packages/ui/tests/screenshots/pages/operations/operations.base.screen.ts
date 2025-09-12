@@ -45,7 +45,8 @@ class OperationsPage extends BasePage {
     async replaceJobsData() {
         await replaceInnerHtml(this.page, {
             '.operation-detail-jobs__id-job-link': '00000000-11111111-22222-33333333',
-            '.operation-detail-jobs__start-time': '01 Jan 1970 00:00:00',
+            '.operation-detail-jobs__start-time :nth-child(1)': '01 Jan 1970',
+            '.operation-detail-jobs__start-time :nth-child(2)': '00:00:00',
             '.operation-detail-jobs__table-item_type_duration': '00:00:00',
         });
     }

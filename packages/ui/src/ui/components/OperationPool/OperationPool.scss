@@ -8,12 +8,14 @@
     &__pool-edit {
         margin: -5px 0;
         margin-left: 4px;
-
-        visibility: hidden;
     }
 
     &__pool-edit_detachable {
         display: none;
+    }
+
+    &__pool-edit_visibility_by-hover {
+        visibility: hidden;
     }
 
     &:hover {

@@ -15,9 +15,20 @@ import './OperationPool.scss';
 
 const block = cn('operation-pool');
 
-const renderButton = (onEdit?: () => void, detachable?: boolean) => {
+const renderButton = (
+    onEdit?: () => void,
+    {
+        detachable,
+        visibility,
+    }: {detachable?: boolean; visibility?: OperationPoolProps['editBtnVisibility']} = {},
+) => {
     return !onEdit ? null : (
-        <span className={block('pool-edit', {detachable})}>
+        <span
+            className={block('pool-edit', {
+                detachable: detachable && visibility !== 'always',
+                visibility,
+            })}
+        >
             <Button size="s" view="flat-secondary" onClick={onEdit} title="Edit pool">
                 <Icon awesome="pencil" />
             </Button>
@@ -32,6 +43,7 @@ export type OperationPoolProps = {
     allowDetachEditBtn?: boolean;
     compact?: boolean;
     onEdit?: () => void;
+    editBtnVisibility?: 'always' | 'by-hover';
     state?: 'completed' | 'failed' | 'aborted' | string;
     pool: {
         pool: string;
@@ -50,6 +62,7 @@ export function OperationPool({
     allowDetachEditBtn,
     compact = false,
     onEdit,
+    editBtnVisibility = 'by-hover',
     pool,
     state,
     erased,
@@ -90,7 +103,11 @@ export function OperationPool({
                 </Tooltip>
             )}
             {!compact && isLightweight && <LightWeightIcon />}
-            {isCorrectState && renderButton(onEdit, allowDetachEditBtn)}
+            {isCorrectState &&
+                renderButton(onEdit, {
+                    detachable: allowDetachEditBtn,
+                    visibility: editBtnVisibility,
+                })}
         </li>
     );
 }

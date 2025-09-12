@@ -35,16 +35,22 @@ export function loadFlowStaticSpec(pipeline_path: string): AsyncAction {
     };
 }
 
-export function updateFlowStaticSpec({
-    data,
-    path,
-}: {
-    data: FlowSpecState['data'];
-    path: string;
-}): AsyncAction<Promise<void>> {
+export function updateFlowStaticSpec(
+    {
+        data,
+        path,
+    }: {
+        data: FlowSpecState['data'];
+        path: string;
+    },
+    {force}: {force?: boolean},
+): AsyncAction<Promise<void>> {
     return (dispatch, getState) => {
         return ytApiV4
-            .setPipelineSpec({pipeline_path: path, expected_version: data?.version}, data?.spec)
+            .setPipelineSpec(
+                {pipeline_path: path, expected_version: data?.version, force},
+                data?.spec,
+            )
             .then(() => {
                 const pipeline_path = getFlowStaticSpecPath(getState());
                 if (pipeline_path && pipeline_path === path) {
