@@ -170,6 +170,7 @@
     "luxon": "^1.28.1",
     "lz-string": "~1.4.4",
     "moment": "^2.29.4",
+    "moment-timezone": "^0.6.0",
     "monaco-editor": "^0.40.0",
     "monaco-editor-webpack-plugin": "^7.1.0",
     "monaco-vim": "^0.4.2",

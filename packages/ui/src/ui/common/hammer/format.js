@@ -85,15 +85,15 @@ format['ReadableField'] = function (value, settings) {
     return formatted;
 };
 
-format['DateTime'] = function (value, settings) {
+format['DateTime'] = function (v, settings) {
     const dateFormat = parseSetting(settings, 'format', 'full');
     const datePattern = parseSetting(settings, 'pattern');
 
-    if (typeof value === 'undefined') {
+    if (v === undefined || v === null) {
         return format.NO_VALUE;
     }
 
-    value = format.toMoment(value);
+    const value = format.toMoment(v);
 
     if (datePattern) {
         return value.format(datePattern);
@@ -110,6 +110,8 @@ format['DateTime'] = function (value, settings) {
             return value.format('DD MMM YYYY');
         case 'month':
             return value.format('MMMM YYYY');
+        case 'time':
+            return value.format('HH:mm:ss');
         default:
             throw new Error(
                 'hammer.format.DateTime: Unknown `format` option. Please specify one of [human, full, short, day, month] or use `pattern` option.',
