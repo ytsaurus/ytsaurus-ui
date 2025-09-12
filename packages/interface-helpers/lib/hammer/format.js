@@ -194,43 +194,6 @@ format['BytesPerSecond'] = function (value, settings) {
     }
 };
 
-format['DateTime'] = function (value, settings) {
-    const dateFormat = parseSetting(settings, 'format', 'full');
-    const datePattern = parseSetting(settings, 'pattern');
-
-    if (typeof value === 'undefined') {
-        return format.NO_VALUE;
-    }
-
-    value = format.toMoment(value);
-
-    if (datePattern) {
-        return value.format(datePattern);
-    }
-
-    switch (dateFormat) {
-        case 'human':
-            return value.fromNow();
-        case 'full':
-            return value.format('DD MMM YYYY HH:mm:ss');
-        case 'short':
-            return value.format('DD MMM HH:mm');
-        case 'day':
-            return value.format('DD MMM YYYY');
-        case 'month':
-            return value.format('MMMM YYYY');
-        default:
-            throw new Error(
-                'hammer.format.DateTime: Unknown `format` option. Please specify one of [human, full, short, day, month] or use `pattern` option.',
-            );
-    }
-};
-
-// Alias for DateTime format: 'human' option
-format['DateTimeHuman'] = function (value) {
-    return format['DateTime'](value, {format: 'human'});
-};
-
 format['Uppercase'] = function (value) {
     return value && value.toUpperCase();
 };
@@ -259,61 +222,6 @@ format['StrPad'] = function (string, padStr, length, right) {
     }
     padStr = padStr.substr(0, tailLength);
     return right ? string + padStr : padStr + string;
-};
-
-/**
- * Show a readable time duration string
- * @param {Number} value - number of milliseconds
- * @param {Object} settings
- * @param {String} settings.format - 'milliseconds' or omitted
- */
-format['TimeDuration'] = function (value, settings) {
-    const TIME_MEASURES = [
-        'years',
-        'months',
-        'days',
-        'hours',
-        'minutes',
-        'seconds',
-        'milliseconds',
-    ];
-    const OUTPUT_FORMATTER = {
-        years: 'y ',
-        months: 'm ',
-        days: 'd ',
-        hours: ':',
-        minutes: ':',
-        seconds: '',
-        milliseconds: '.',
-    };
-    let durationOutput;
-    let durationHash;
-
-    const showMilliseconds = parseSetting(settings, 'format') === 'milliseconds';
-
-    if (format.validNumber(value)) {
-        durationOutput = '';
-        durationHash = moment.duration(value);
-
-        TIME_MEASURES.forEach(function (measure) {
-            const measureValue = durationHash[measure]();
-
-            if (measure === 'years' || measure === 'months' || measure === 'days') {
-                if (measureValue > 0) {
-                    durationOutput += measureValue + OUTPUT_FORMATTER[measure];
-                }
-            } else if (measure === 'hours' || measure === 'minutes' || measure === 'seconds') {
-                durationOutput += format['StrPad'](measureValue, '0') + OUTPUT_FORMATTER[measure];
-            } else if (measure === 'milliseconds' && showMilliseconds) {
-                durationOutput +=
-                    OUTPUT_FORMATTER[measure] + format['StrPad'](measureValue, '0', 3);
-            }
-        });
-
-        return durationOutput;
-    } else {
-        return format.NO_VALUE;
-    }
 };
 
 format['Percent'] = function (value, settings) {
