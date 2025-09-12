@@ -1,10 +1,10 @@
 @use 'sass:math';
 
-@import '../../../../../styles/mixins.scss';
+@import '../../styles/mixins.scss';
 
 $item-margin: 30px;
 
-.nodes-types {
+.counts-list {
     min-width: 1100px;
 
     &__list {
@@ -22,6 +22,10 @@ $item-margin: 30px;
         @include reset-li();
         margin-right: $item-margin;
         position: relative;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
 
         &:not(:last-child):after {
             content: '•';
