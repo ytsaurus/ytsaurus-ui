@@ -10,8 +10,9 @@ import {RootState} from '..';
 type IncarnationsState = {
     idFilter?: string;
     incarnationsList?: Array<OperationEvent>;
-    infoDialog?: {
-        incarnation: Incarnation;
+    infoDialog: {
+        visible: boolean;
+        incarnation: Incarnation | null;
     } | null;
 };
 
@@ -19,6 +20,7 @@ const incarnationsSlice = createSlice({
     name: 'incarnations',
     initialState: {
         showInfoDialog: false,
+        infoDialog: {incarnation: null, visible: false},
     } as IncarnationsState,
     reducers: {
         setIdFilter: (state, {payload}: PayloadAction<Pick<IncarnationsState, 'idFilter'>>) => ({
