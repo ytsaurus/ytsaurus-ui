@@ -535,7 +535,7 @@ const mapStateToProps = (state: RootState) => {
         monitorTabUrlTemplate,
         monitoringComponent,
         pyDLTelemetryTabVisible,
-        timelineTabVisible: getSettingsTimelineTabVisible(state),
+        timelineTabVisible: getSettingsTimelineTabVisible(state) && operation?.type === 'vanilla',
         jobsMonitorIsSupported: Boolean(UIFactory.getMonitorComponentForJob()),
         jobsMonitorVisible: getJobsMonitorTabVisible(state),
         hasStatististicsTab: getOperationStatiscsHasData(state),

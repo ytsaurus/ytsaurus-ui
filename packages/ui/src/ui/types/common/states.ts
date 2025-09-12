@@ -23,4 +23,4 @@ export type StatusLabelState =
     | 'running'
     | 'starting'
     | 'suspended'
-    | 'running';
+    | 'waiting';
