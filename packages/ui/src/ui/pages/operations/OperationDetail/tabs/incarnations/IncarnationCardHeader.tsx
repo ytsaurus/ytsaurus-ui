@@ -102,7 +102,9 @@ export function IncarnationCardHeader(props: Props) {
                 </Text>
                 <AttributesButton
                     onClick={() =>
-                        dispatch(toggleIncarnationInfoDialog({infoDialog: {incarnation}}))
+                        dispatch(
+                            toggleIncarnationInfoDialog({infoDialog: {incarnation, visible: true}}),
+                        )
                     }
                 />
             </Flex>

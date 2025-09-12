@@ -19,8 +19,8 @@ export function IncarnationInfoDialog() {
     const dispatch = useDispatch();
 
     const data = useSelector(getIncarnationInfoDialog);
-    const switchInfo = data?.incarnation.switch_info;
-    const switchReason = data?.incarnation.switch_reason;
+    const switchInfo = data?.incarnation?.switch_info;
+    const switchReason = data?.incarnation?.switch_reason;
 
     const value: Record<string, unknown> = {};
 
@@ -32,11 +32,15 @@ export function IncarnationInfoDialog() {
     }
 
     const handleClose = () => {
-        dispatch(toggleIncarnationInfoDialog({infoDialog: null}));
+        dispatch(
+            toggleIncarnationInfoDialog({
+                infoDialog: {incarnation: data?.incarnation || null, visible: false},
+            }),
+        );
     };
 
     return (
-        <DialogWrapper size={'m'} open={Boolean(data)} onClose={handleClose}>
+        <DialogWrapper size={'m'} open={Boolean(data?.visible)} onClose={handleClose}>
             <DialogWrapper.Header caption={i18n('incarnation-info')} />
             <DialogWrapper.Body>
                 <Yson className={detailsCn} settings={{format: 'json'}} value={value ?? {}} />
