@@ -24,7 +24,7 @@ import {
 yt.setup.setGlobalOption('proxy', 'test-cluster.yt.my-domain.com');
 
 const meta: Meta = {
-    title: 'Dashboard/Accounts Widget',
+    title: 'Pages/Dashboard/Accounts Widget',
     decorators: [
         (Story: StoryFn) => (
             <div style={{padding: '20px', height: '1000px'}}>
