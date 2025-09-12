@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.103.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.103.1...ui-v1.103.2) (2025-09-12)
+
+
+### Bug Fixes
+
+* **UTF8:** encoding table schema [YTFRONT-5161] ([ded51be](https://github.com/ytsaurus/ytsaurus-ui/commit/ded51be9fbe5c26ed78caa69d6bde785bcf09510))
+
 ## [1.103.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.103.0...ui-v1.103.1) (2025-09-11)
 
 
