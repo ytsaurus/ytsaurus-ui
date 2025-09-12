@@ -9,7 +9,8 @@ import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import {FormattedLink, FormattedText} from '../../../../components/formatters';
 
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
-import MetaTable, {TemplateTime} from '../../../../components/MetaTable/MetaTable';
+import MetaTable from '../../../../components/MetaTable/MetaTable';
+import {TemplateTime} from '../../../../components/MetaTable/templates/TemplateTime';
 import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 import {Loader} from '@gravity-ui/uikit';
 import Link from '../../../../components/Link/Link';
