@@ -8,6 +8,8 @@ import CollapsableText from '../../../components/CollapsableText/CollapsableText
 import Link from '../../../components/Link/Link';
 import Icon from '../../../components/Icon/Icon';
 
+import {TemplateTime} from './TemplateTime';
+
 const itemBlock = cn('meta-table-item');
 
 /* ----------------------------------------------------------------------------------------------------------------- */
@@ -72,24 +74,6 @@ export function TemplateNumber({value = hammer.format.NO_VALUE}) {
 
 TemplateNumber.propTypes = {
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-};
-
-/* ----------------------------------------------------------------------------------------------------------------- */
-
-export function TemplateTime({time, valueFormat = 'DateTime', settings}) {
-    const content = hammer.format[valueFormat](time, settings);
-
-    return (
-        <span className={itemBlock('time')} title={content}>
-            {content}
-        </span>
-    );
-}
-
-TemplateTime.propTypes = {
-    time: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    valueFormat: PropTypes.string,
-    settings: PropTypes.object,
 };
 
 /* ----------------------------------------------------------------------------------------------------------------- */
