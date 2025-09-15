@@ -17,6 +17,8 @@ import ypath from '../../../../common/thor/ypath';
 import {YTApiId} from '../../../../../shared/constants/yt-api-id';
 import {USE_CACHE, USE_MAX_SIZE} from '../../../../../shared/constants/yt-api';
 
+import i18n from './i18n';
+
 type Props = DialogControlProps<string[]> & {
     disabled?: boolean;
 };
@@ -41,7 +43,7 @@ export function AccountsMultiple(props: Props) {
             ],
         },
         id: YTApiId.listAccounts,
-        errorTitle: 'Failed to fetch accounts list',
+        errorTitle: i18n('toaster_failed-fetch-accounts'),
     });
 
     const {data: usableAccounts} = useUsableAccountsQuery({cluster});
@@ -87,12 +89,12 @@ export function AccountsMultiple(props: Props) {
                 <Flex direction={'row'} gap={1}>
                     <Button size={'m'} onClick={setFavorite}>
                         <Flex alignItems={'center'} gap={2}>
-                            Favourite
+                            {i18n('action_favourite')}
                         </Flex>
                     </Button>
                     <Button size={'m'} onClick={setUsable}>
                         <Flex alignItems={'center'} gap={2}>
-                            Usable
+                            {i18n('action_usable')}
                         </Flex>
                     </Button>
                 </Flex>

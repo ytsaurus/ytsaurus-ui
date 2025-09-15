@@ -9,6 +9,8 @@ import type {ResponsibleType, RoleConverted, Subject} from '../../../../utils/ac
 import type {PreparedRole} from '../../../../utils/acl';
 import {RoleListControlProps} from './RoleListControl';
 
+import i18n from './i18n';
+
 export const block = cn('role-list-control');
 
 export function prepareRoleListValue(roles: Array<PreparedRole>, otherMembers: Array<string> = []) {
@@ -38,19 +40,19 @@ export function prepareRoleListValue(roles: Array<PreparedRole>, otherMembers: A
 
     return {
         newItems: [],
-        current: {title: 'Current', data: currentArr.concat(otherArr)},
+        current: {title: i18n('title_current'), data: currentArr.concat(otherArr)},
         toAdd: {
-            title: 'Will be added',
+            title: i18n('title_will-be-added'),
             itemClassName: block('item-to-add'),
             data: toAdd.map((item) => prepareItemOfCurrent(item, {frozen: true})),
         },
         toRemove: {
-            title: 'Will be removed',
+            title: i18n('title_will-be-removed'),
             itemClassName: block('item-to-remove'),
             data: toRemove.map((item) => prepareItemOfCurrent(item, {frozen: true})),
         },
         unrecognized: {
-            title: 'Unrecognized',
+            title: i18n('title_unrecognized'),
             itemClassName: block('item-unrecognized'),
             data: unrecognized.map((item) => prepareItemOfCurrent(item, {frozen: true})),
         },
