@@ -8,6 +8,8 @@ import {Datepicker, DatepickerOutputDates} from '../../../../components/common/D
 
 import './BeforeDatePicker.scss';
 
+import i18n from './i18n';
+
 const block = cn('before-date-picker');
 
 const UNLIMITED = 'unlimited';
@@ -18,9 +20,9 @@ type AllowedType = 'unlimited' | 'period' | 'date';
 
 const ALLOWED_VIEW_TYPE: Array<AllowedType> = [UNLIMITED, PERIOD, DATE];
 const TEXT: Record<AllowedType, string> = {
-    [UNLIMITED]: 'Forever',
-    [PERIOD]: 'Period',
-    [DATE]: 'To Date',
+    [UNLIMITED]: i18n('value_forever'),
+    [PERIOD]: i18n('value_period'),
+    [DATE]: i18n('value_to-date'),
 };
 
 const DAY_MS = 1000 * 60 * 60 * 24;
@@ -146,7 +148,7 @@ class BeforeDatePicker extends React.Component<IdmDatePickerProps, State> {
                     onUpdate={this.onChangePeriod}
                     value={String(dayCount || '')}
                     size={size}
-                    placeholder="Enter days"
+                    placeholder={i18n('field_enter-days')}
                 />
             );
         }
@@ -170,7 +172,7 @@ class BeforeDatePicker extends React.Component<IdmDatePickerProps, State> {
         const daysCount = Number.parseInt(valueStr);
         if (String(daysCount) !== valueStr) {
             if (valueStr !== '') {
-                this.setState({periodError: 'Please enter a valid number'});
+                this.setState({periodError: i18n('alert_valid-number')});
             }
             return;
         }

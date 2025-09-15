@@ -1,0 +1,11 @@
+{
+    "action_remove": "Remove",
+    "action_add-service": "Add Service",
+    "field_select-item": "Select item",
+    "field_select-service": "Select service",
+    "field_select-clique": "Select clique",
+    "field_select-bundle": "Select bundle",
+    "alert_no-services-available": "There are no services available on current cluster",
+    "alert_clique-option-required": "Clique option is required",
+    "alert_bundle-option-required": "Bundle option is required"
+}

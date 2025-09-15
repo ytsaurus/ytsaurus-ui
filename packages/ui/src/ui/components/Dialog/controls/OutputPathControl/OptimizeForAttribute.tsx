@@ -2,9 +2,11 @@ import React, {FC} from 'react';
 import {Attribute} from '../../../../store/reducers/navigation/modals/tableMergeSortModalSlice';
 import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 
+import i18n from './i18n';
+
 const options = [
-    {value: 'scan', content: 'Scan'},
-    {value: 'lookup', content: 'Lookup'},
+    {value: 'scan', content: i18n('value_scan')},
+    {value: 'lookup', content: i18n('value_lookup')},
 ];
 
 type Props = {
@@ -20,7 +22,7 @@ export const OptimizeForAttribute: FC<Props> = ({attribute, onChange}) => {
 
     return (
         <>
-            <div>Optimize for:</div>
+            <div>{i18n('field_optimize-for')}</div>
             <SegmentedRadioGroup
                 defaultValue={attribute.value}
                 onUpdate={handleAttributeUpdate}

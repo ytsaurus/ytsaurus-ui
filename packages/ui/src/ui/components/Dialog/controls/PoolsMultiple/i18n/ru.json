@@ -1,0 +1,9 @@
+{
+    "field_select-tree": "Выберите дерево",
+    "field_select-pool": "Выберите пул",
+    "action_remove": "Удалить",
+    "action_add-pool-pair": "Добавить пару пулов",
+    "alert_pool-option-required": "Необходимо выбрать пул",
+    "alert_tree-not-empty": "Дерево не должно быть пустым",
+    "toaster_fetch-failed": "Не удалось запросить список пуллов"
+}

@@ -1,0 +1,11 @@
+{
+    "field_optimize-for": "Оптимизировать для:",
+    "field_erasure-codec": "Кодек стирания:",
+    "field_compression": "Сжатие:",
+    "label_level": "уровень",
+    "value_scan": "Сканирование",
+    "value_lookup": "Поиск",
+    "context_compression-codec-tooltip": "Устанавливает формат сжатия для выходной таблицы. Атрибут может быть указан с командами write_file, write_table и в выходных путях операций. Этот атрибут несовместим с <append=true>.",
+    "context_erasure-codec-tooltip": "Отключает кодирование стирания для создания таблицы. Атрибут может отслеживаться с командами write_file, write_table и в выходных путях операций. Этот атрибут несовместим с <append=true>.",
+    "context_optimize-for-tooltip": "Устанавливает формат хранения для выходной таблицы. Атрибут может быть указан с командой write_table и в выходных путях операций. Этот атрибут несовместим с <append=true>."
+}

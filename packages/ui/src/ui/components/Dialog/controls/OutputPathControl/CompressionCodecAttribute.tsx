@@ -3,6 +3,8 @@ import {Attribute} from '../../../../store/reducers/navigation/modals/tableMerge
 import {CompressionCodecs} from '../../../../store/selectors/global/supported-features';
 import SelectWithSubItems from '../SelectWithSubItems/SelectWithSubItems';
 
+import i18n from './i18n';
+
 type Props = {
     attribute: Attribute;
     codecs: CompressionCodecs;
@@ -29,11 +31,11 @@ export const CompressionCodecAttribute: FC<Props> = ({attribute, codecs, onChang
 
     return (
         <React.Fragment>
-            <div>Compression:</div>
+            <div>{i18n('field_compression')}</div>
             <SelectWithSubItems
                 value={newValue}
                 {...codecs}
-                labels={['', 'level']}
+                labels={['', i18n('label_level')]}
                 onChange={handleChange}
             />
         </React.Fragment>
