@@ -2,6 +2,8 @@ import React, {FC} from 'react';
 import {Attribute} from '../../../../store/reducers/navigation/modals/tableMergeSortModalSlice';
 import {SelectSingle} from '../../../Select/Select';
 
+import i18n from './i18n';
+
 type Props = {
     attribute: Attribute;
     codecs: {value: string; text: string}[];
@@ -19,7 +21,7 @@ export const ErasureCodecAttribute: FC<Props> = ({attribute, codecs, onChange}) 
 
     return (
         <>
-            <div>Erasure codec:</div>
+            <div>{i18n('field_erasure-codec')}</div>
             <SelectSingle value={attribute.value} onChange={handleChange} items={codecs} />
         </>
     );

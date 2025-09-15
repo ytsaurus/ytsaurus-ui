@@ -9,6 +9,8 @@ import './ClusterSelectControl.scss';
 import {ClusterConfig} from '../../../../../shared/yt-types';
 import {YT} from '../../../../config/yt-config';
 
+import i18n from './i18n';
+
 const block = cn('cluster-select-control');
 
 interface Props {
@@ -74,7 +76,7 @@ function ClusterSelectControl({
                 className={block({empty: !value}, className)}
                 onUpdate={handleChange}
                 items={items}
-                placeholder={placeholder ?? 'Cluster...'}
+                placeholder={placeholder ?? i18n('field_cluster')}
                 disabled={disabled}
                 width={width}
             />
