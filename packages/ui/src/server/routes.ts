@@ -34,6 +34,7 @@ import {
     removeToken,
 } from './controllers/vcs';
 import {ytTabletErrorsApi} from './controllers/yt-tablet-errors-api';
+import {operationLogsList, operationLogsView} from './controllers/operation-logs';
 
 const HOME_INDEX_TARGET: AppRouteDescription = {handler: homeIndexFactory(), ui: true};
 
@@ -90,6 +91,9 @@ const routes: AppRoutes = {
     'POST /api/table-column-preset/:ytAuthCluster': {handler: tableColumnPresetSave},
 
     'POST /api/tablet-errors/:ytAuthCluster/:action': {handler: ytTabletErrorsApi},
+
+    'POST /api/logs/operation/list/:operationId': {handler: operationLogsList},
+    'POST /api/logs/operation/view/:operationId': {handler: operationLogsView},
 
     'GET /:ytAuthCluster/': HOME_INDEX_TARGET,
     'GET /:ytAuthCluster/:page': HOME_INDEX_TARGET,

@@ -76,6 +76,7 @@
     "@gravity-ui/expresskit": "^2.2.0",
     "@gravity-ui/i18n": "^1.0.0",
     "@gravity-ui/nodekit": "^2.2.1",
+    "@yandex-data-ui/dynamic-logs-viewer": "file:yandex-data-ui-dynamic-logs-viewer-1.2.0-u6.tgz",
     "@ytsaurus/javascript-wrapper": "^0.14.0",
     "axios": "^1.8.4",
     "cacheable-lookup": "^6.1.0",

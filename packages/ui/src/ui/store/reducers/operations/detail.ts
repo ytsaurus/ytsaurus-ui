@@ -88,12 +88,14 @@ const initialState: OperationDetailState = {
     treeConfigs: undefined,
 };
 
+export type OperationDetailSuccessActionData = Pick<
+    OperationDetailState,
+    'operation' | 'actions' | 'details'
+>;
+
 export type OperationDetailActionType =
     | ActionD<typeof GET_OPERATION.REQUEST, {id: string; isAlias: boolean}>
-    | ActionD<
-          typeof GET_OPERATION.SUCCESS,
-          Pick<OperationDetailState, 'operation' | 'actions' | 'details'>
-      >
+    | ActionD<typeof GET_OPERATION.SUCCESS, OperationDetailSuccessActionData>
     | ActionD<typeof GET_OPERATION.FAILURE, OperationDetailState['errorData']>
     | Action<typeof LOAD_RESOURCE_USAGE.REQUEST>
     | ActionD<
