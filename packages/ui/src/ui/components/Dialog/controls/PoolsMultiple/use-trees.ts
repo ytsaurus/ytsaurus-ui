@@ -7,6 +7,7 @@ import {useFetchBatchQuery} from '../../../../store/api/yt';
 import {YTApiId} from '../../../../rum/rum-wrap-api';
 
 import {PoolPair} from './PoolsMultiple';
+import i18n from './i18n';
 
 export function useTrees(value: PoolPair[]) {
     const {data: trees, isLoading: isTreesLoading} = useFetchBatchQuery<string>({
@@ -21,7 +22,7 @@ export function useTrees(value: PoolPair[]) {
                 },
             ],
         },
-        errorTitle: 'Failed to fetch list of pools trees',
+        errorTitle: i18n('toaster_fetch-failed'),
     });
 
     const treesLoadedWithData = trees && trees?.length && trees?.[0].output;

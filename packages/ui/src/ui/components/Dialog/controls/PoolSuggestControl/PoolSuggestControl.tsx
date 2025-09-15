@@ -22,6 +22,8 @@ import {useDefaultPoolTree} from '../../../../hooks/global-pool-trees';
 
 import './PoolSuggestControl.scss';
 
+import i18n from './i18n';
+
 const block = cn('pool-suggest-control');
 
 type Props = DialogControlProps<string> & {
@@ -152,7 +154,7 @@ function useLoadedPools(cluster?: string, poolTrees?: string[]): Array<string> |
         return wrapApiPromiseByToaster(promise, {
             skipSuccessToast: true,
             toasterName: 'load-pool-names',
-            errorTitle: 'Failed to load pools',
+            errorTitle: i18n('alert_failed-load-pools'),
         }).then((result) => {
             setPoolNames(result);
         });

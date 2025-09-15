@@ -8,6 +8,8 @@ import {useTrees} from './use-trees';
 import {usePools} from './use-pools';
 import {useActions} from './use-actions';
 
+import i18n from './i18n';
+
 export interface PoolPair {
     tree: string;
     pool: string;
@@ -46,7 +48,7 @@ export function PoolsMultiple(props: Props) {
                         width={'max'}
                         loading={isTreesLoading}
                         disabled={disabled}
-                        placeholder={'Select tree'}
+                        placeholder={i18n('field_select-tree')}
                     />
                     <Select
                         onUpdate={(newValue) => updatePool(index, newValue[0])}
@@ -58,11 +60,11 @@ export function PoolsMultiple(props: Props) {
                         width={'max'}
                         loading={isPoolsLoading && Boolean(pair.tree)}
                         disabled={disabled || !pair.tree}
-                        placeholder={'Select pool'}
+                        placeholder={i18n('field_select-pool')}
                     />
                     {value.length > 1 && (
                         <Button view={'flat'} onClick={() => removePair(index)} disabled={disabled}>
-                            Remove
+                            {i18n('action_remove')}
                         </Button>
                     )}
                 </Flex>
@@ -72,7 +74,7 @@ export function PoolsMultiple(props: Props) {
                     <Button size={'m'} onClick={addPair} disabled={disabled}>
                         <Flex alignItems={'center'} gap={2}>
                             <Plus />
-                            Add Pool Pair
+                            {i18n('action_add-pool-pair')}
                         </Flex>
                     </Button>
                 </Flex>
@@ -92,10 +94,10 @@ PoolsMultiple.getDefaultValue = () => {
 PoolsMultiple.validate = (value: PoolPair[]) => {
     if (!value.length) return;
     if (value?.[value.length - 1].tree && !value?.[value.length - 1]?.pool) {
-        return 'Pool option is required';
+        return i18n('alert_pool-option-required');
     }
     if (!value?.[value.length - 1]?.tree?.length) {
-        return 'Tree should not be empty';
+        return i18n('alert_tree-not-empty');
     }
     return;
 };
