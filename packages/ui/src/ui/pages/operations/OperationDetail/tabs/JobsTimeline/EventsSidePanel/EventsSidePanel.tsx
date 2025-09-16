@@ -22,7 +22,7 @@ type Props = {
 };
 
 export const EventsSidePanel: FC<Props> = ({onClose, onOutsideClick}) => {
-    const {id} = useSelector(selectActiveJob);
+    const id = useSelector(selectActiveJob);
     const job = useSelector(getSelectedJob);
     const cluster = useSelector(getCluster);
     const operationId = useSelector(getOperationId);
