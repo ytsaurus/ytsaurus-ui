@@ -101,7 +101,6 @@ type Story = StoryObj<StatusLabelProps>;
 export const Default: Story = {
     args: {
         label: 'running',
-        showIcon: true,
         renderPlaque: false,
     },
     render: (args) => <StatusLabel {...args} />,
@@ -170,7 +169,7 @@ export const WithPlaque: Story = {
     args: {
         label: 'suspended',
         renderPlaque: true,
-        showIcon: true,
+        hideIcon: false,
     },
     render: (args) => (
         <Flex direction="column" gap="3">
@@ -199,7 +198,6 @@ export const WithCustomText: Story = {
     args: {
         label: 'running',
         text: 'Custom Status Text',
-        showIcon: true,
         renderPlaque: false,
     },
     render: (args) => <StatusLabel {...args} />,
@@ -208,7 +206,7 @@ export const WithCustomText: Story = {
 export const WithoutIcon: Story = {
     args: {
         label: 'completed',
-        showIcon: false,
+        hideIcon: true,
         renderPlaque: false,
     },
     render: (args) => <StatusLabel {...args} />,
@@ -258,7 +256,7 @@ export const Playground: Story = {
         label: undefined,
         text: undefined,
         renderPlaque: false,
-        showIcon: true,
+        hideIcon: false,
         state: undefined,
         iconState: undefined,
         className: '',
