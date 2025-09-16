@@ -1,0 +1,7 @@
+@import '../../../../../components/ErrorDetails/ErrorDetails.scss';
+
+.incarnation-info-dialog {
+    &__details {
+        @include error-details;
+    }
+}

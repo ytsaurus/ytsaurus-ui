@@ -1,6 +1,7 @@
 import React from 'react';
 import {AxiosError} from 'axios';
 import {useSelector} from 'react-redux';
+import b from 'bem-cn-lite';
 import {Alert, Card, Disclosure, Flex, Loader} from '@gravity-ui/uikit';
 
 import type {YTError} from '../../../../../../@types/types';
@@ -16,11 +17,11 @@ import {IncarnationsToolbar} from './IncarnationsToolbar';
 import {IncarnationsCount} from './IncarnationsCount';
 import {IncarnationInfoDialog} from './IncarnationInfoDialog';
 
-import {incarnationCn, incarnationInfoCn} from './constants';
-
 import i18n from './i18n';
 
 import './Incarnations.scss';
+
+const block = b('incarnations');
 
 export type IncarnationProps = {
     incarnations: YTIncarnations;
@@ -79,7 +80,7 @@ export function IncarnationsTemplate(props: IncarnationProps) {
                                 <Card
                                     key={incarnation.id}
                                     view={'outlined'}
-                                    className={incarnationCn}
+                                    className={block('incarnation')}
                                 >
                                     <Disclosure keepMounted={false}>
                                         <Disclosure.Summary>
@@ -90,7 +91,10 @@ export function IncarnationsTemplate(props: IncarnationProps) {
                                                 />
                                             )}
                                         </Disclosure.Summary>
-                                        <Flex direction={'row'} className={incarnationInfoCn}>
+                                        <Flex
+                                            direction={'row'}
+                                            className={block('incarnation-info')}
+                                        >
                                             <IncarnationMeta incarnation={incarnation} />
                                             {renderTelemetryInfo?.(incarnation.id)}
                                         </Flex>

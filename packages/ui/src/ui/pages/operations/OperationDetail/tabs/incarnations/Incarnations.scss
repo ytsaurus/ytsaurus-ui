@@ -1,23 +1,10 @@
-@import '../../../../../components/ErrorDetails/ErrorDetails.scss';
-
 .incarnations {
     &__incarnation {
         padding: var(--g-spacing-3);
-    }
-    &__incarnation-button {
-        width: fit-content;
-        --g-button-background-color-hover: transparent;
-        --g-button-padding: 0;
-        display: flex;
-        align-items: center;
     }
 
     &__incarnation-info {
         width: 100%;
         margin-top: 15px;
-    }
-
-    &__details {
-        @include error-details;
     }
 }

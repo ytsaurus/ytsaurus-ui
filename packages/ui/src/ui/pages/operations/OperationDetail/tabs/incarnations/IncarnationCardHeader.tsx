@@ -1,7 +1,7 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {Button, type ButtonProps, ClipboardButton, Flex, Icon, Text} from '@gravity-ui/uikit';
-import {ArrowUpRightFromSquare, ChevronDown, ChevronUp} from '@gravity-ui/icons';
+import {type ButtonProps, ClipboardButton, Flex, Text} from '@gravity-ui/uikit';
+import {ArrowUpRightFromSquare} from '@gravity-ui/icons';
 
 import {Page} from '../../../../../../shared/constants/settings';
 
@@ -14,7 +14,7 @@ import type {Incarnation} from '../../../../../store/selectors/operations/incarn
 import {getCluster} from '../../../../../store/selectors/global';
 import {getOperation} from '../../../../../store/selectors/operations/operation';
 
-import {incarnationButtonCn} from './constants';
+import {IncarnationButton} from './IncarnationButton';
 
 import i18n from './i18n';
 
@@ -34,12 +34,7 @@ export function IncarnationCardHeader(props: Props) {
     return (
         <Flex justifyContent={'space-between'} style={{overflow: 'hidden'}}>
             <Flex direction={'row'} gap={2} alignItems={'center'}>
-                <Button {...props} view={'flat'} width={'max'} className={incarnationButtonCn}>
-                    <Flex alignItems={'center'} gap={2} style={{height: '100%'}}>
-                        <Text variant={'subheader-2'}>{incarnation.id}</Text>
-                        <Icon data={props.expanded ? ChevronUp : ChevronDown} size={'16'} />
-                    </Flex>
-                </Button>
+                <IncarnationButton incarnationId={incarnation.id} {...props} />
                 <ClipboardButton text={incarnation.id} />
                 <Link
                     routed
