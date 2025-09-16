@@ -35,8 +35,7 @@ export const operationData: OperationDetailSuccessActionData = {
 export const mockIncarnations: Incarnations = [
     {
         id: 'incarnation-1',
-        start_datetime: '2024-01-15T10:00:00Z',
-        finish_datetime: '2024-01-15T10:30:00Z',
+        interval: '2024-01-15 10:00 — 10:30',
         switch_info: {
             trigger_job_id: '55d99491-46b071c4-42e0384-5000ba2',
             abort_reason: 'allocation_finished',
@@ -56,29 +55,30 @@ export const mockIncarnations: Incarnations = [
             },
         },
         trigger_job_id: 'job-123',
-        finish_reason: 'operation_completed',
+        finish_reason: 'Operation completed',
+        finish_status: 'completed',
         switch_reason: 'job_completed',
     },
     {
         id: 'incarnation-2',
-        start_datetime: '2024-01-15T10:30:00Z',
-        finish_datetime: '2024-01-15T11:00:00Z',
+        interval: '2024-01-15 10:30 — 11:00',
         switch_info: {
             reason: 'job_failed',
             error: 'Memory limit exceeded',
         },
         trigger_job_id: 'job-456',
-        finish_reason: 'job_failed',
+        finish_reason: 'Job failed',
+        finish_status: 'failed',
         switch_reason: 'job_failed',
     },
     {
         id: 'incarnation-3',
-        start_datetime: '2024-01-15T11:00:00Z',
-        finish_datetime: '2024-01-15T11:45:00Z',
+        interval: '2024-01-15 11:00 — 11:45',
         switch_info: {
             reason: 'system_restart',
         },
-        finish_reason: 'system',
+        finish_reason: 'System',
+        finish_status: 'unknown',
         switch_reason: 'system_restart',
     },
 ];
