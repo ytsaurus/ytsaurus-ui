@@ -1,6 +1,11 @@
 import axios from 'axios';
-import {ELogsPanelLevel, TLogsPanelSelectOption} from '@yandex-data-ui/dynamic-logs-viewer';
-import {LogLevelGroup} from '../../../../../types/operations/logs';
+import {
+    ELogsPanelLevel,
+    TLogsPanelSelectOption,
+    TLogsPanelSelectOptionData,
+} from '@yandex-data-ui/dynamic-logs-viewer';
+import {LogGroup} from '../../../../../types/operations/logs';
+import {SelectOptionGroup} from '@gravity-ui/uikit';
 
 type ListOperationLogsQueryArgs = {
     operationId: string;
@@ -12,7 +17,7 @@ type ListOperationLogsBodyArgs = {
 
 export type ListOperationLogsArgs = ListOperationLogsBodyArgs & ListOperationLogsQueryArgs;
 
-export type ListOperationLogsResponse = Array<LogLevelGroup>;
+export type ListOperationLogsResponse = Array<LogGroup>;
 
 export async function listOperationLogs(args: ListOperationLogsArgs) {
     try {
@@ -31,13 +36,22 @@ export async function listOperationLogs(args: ListOperationLogsArgs) {
         const res: TLogsPanelSelectOption[] = [];
 
         data.forEach((logsLevel) => {
-            logsLevel.logs.forEach((log) => {
-                res.push({
-                    value: log.name,
-                    content: log.name,
-                    data: {logName: log.name, level: logsLevel.log_level as ELogsPanelLevel},
-                });
+            const group: SelectOptionGroup<TLogsPanelSelectOptionData> = {
+                label: logsLevel.group_info.name,
+            };
+            const options: (typeof group)['options'] = [];
+            logsLevel.log_level_groups.forEach((logGroup) => {
+                for (const l of logGroup.logs) {
+                    options.push({
+                        data: {logName: l.name, level: logGroup.log_level as ELogsPanelLevel},
+                        value: l.name,
+                        text: l.name,
+                    });
+                }
             });
+
+            group.options = options;
+            res.push(group);
         });
 
         return {data: res};

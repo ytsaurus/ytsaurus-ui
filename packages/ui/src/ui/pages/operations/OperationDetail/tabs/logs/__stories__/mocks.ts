@@ -47,51 +47,94 @@ const operationLogsView: ViewOperationLogsResponse = [
 
 const operationLogsList: ListOperationLogsResponse = [
     {
-        log_level: 'ERROR',
-        logs: [
+        group_info: {
+            name: 'job-proxy',
+            jobs_filter: {
+                task_name: 'main_task',
+                job_cookie: 12345,
+            },
+        },
+        log_level_groups: [
             {
-                name: 'stderr',
-                file_paths: [
-                    '/var/log/yt/job-proxy/stderr.log',
-                    '/var/log/yt/scheduler/stderr.log',
+                log_level: 'ERROR' as const,
+                logs: [
+                    {
+                        name: 'stderr',
+                        file_paths: ['/var/log/yt/job-proxy/stderr.log'],
+                    },
+                    {
+                        name: 'error',
+                        file_paths: ['/var/log/yt/job-proxy/error.log'],
+                    },
                 ],
             },
             {
-                name: 'error',
-                file_paths: ['/var/log/yt/job-proxy/error.log'],
+                log_level: 'INFO',
+                logs: [
+                    {
+                        name: 'stdout',
+                        file_paths: ['/var/log/yt/job-proxy/stdout.log'],
+                    },
+                    {
+                        name: 'info',
+                        file_paths: ['/var/log/yt/job-proxy/info.log'],
+                    },
+                ],
+            },
+            {
+                log_level: 'DEBUG',
+                logs: [
+                    {
+                        name: 'debug',
+                        file_paths: ['/var/log/yt/job-proxy/debug.log'],
+                    },
+                ],
             },
         ],
     },
     {
-        log_level: 'INFO',
-        logs: [
+        group_info: {
+            name: 'scheduler',
+            jobs_filter: {
+                task_name: 'scheduler_task',
+                job_cookie: 67890,
+            },
+        },
+        log_level_groups: [
             {
-                name: 'stdout',
-                file_paths: [
-                    '/var/log/yt/job-proxy/stdout.log',
-                    '/var/log/yt/scheduler/stdout.log',
+                log_level: 'ERROR' as const,
+                logs: [
+                    {
+                        name: 'stderr',
+                        file_paths: ['/var/log/yt/scheduler/stderr.log'],
+                    },
                 ],
             },
             {
-                name: 'info',
-                file_paths: ['/var/log/yt/job-proxy/info.log'],
+                log_level: 'INFO',
+                logs: [
+                    {
+                        name: 'stdout',
+                        file_paths: ['/var/log/yt/scheduler/stdout.log'],
+                    },
+                    {
+                        name: 'access',
+                        file_paths: ['/var/log/yt/scheduler/access.log'],
+                    },
+                ],
             },
             {
-                name: 'access',
-                file_paths: ['/var/log/yt/job-proxy/access.log'],
-            },
-        ],
-    },
-    {
-        log_level: 'DEBUG',
-        logs: [
-            {
-                name: 'debug',
-                file_paths: ['/var/log/yt/job-proxy/debug.log', '/var/log/yt/scheduler/debug.log'],
-            },
-            {
-                name: 'trace',
-                file_paths: ['/var/log/yt/job-proxy/trace.log'],
+                log_level: 'DEBUG',
+                logs: [
+                    {
+                        name: 'debug',
+                        file_paths: ['/var/log/yt/scheduler/debug.log'],
+                    },
+                    {
+                        name: 'trace',
+                        file_paths: ['/var/log/yt/scheduler/trace.log'],
+                    },
+                ],
             },
         ],
     },
