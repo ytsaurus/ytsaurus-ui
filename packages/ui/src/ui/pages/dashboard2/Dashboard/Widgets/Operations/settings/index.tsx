@@ -31,6 +31,8 @@ export function useOperationsSettings() {
             required: true,
             caption: 'Limit(per author)',
             extras: {
+                min: 0,
+                max: 50,
                 hidePrettyValue: true,
             },
         },
