@@ -5,6 +5,7 @@ import isEmpty_ from 'lodash/isEmpty';
 
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
 import {NoContent} from '../../../../../components/NoContent/NoContent';
+import {RootState} from '../../../../../store/reducers';
 import {
     getIsRoot,
     getPool,
@@ -16,6 +17,7 @@ import {RumMeasureTypes} from '../../../../../rum/rum-measure-types';
 import {useRumMeasureStop} from '../../../../../rum/RumUiContext';
 import {isFinalLoadingStatus} from '../../../../../utils/utils';
 import {getAclLoadState} from '../../../../../store/selectors/acl';
+import {LoadingStatus} from '../../../../../constants';
 import {IdmObjectType} from '../../../../../constants/acl';
 import {useAppRumMeasureStart} from '../../../../../rum/rum-app-measures';
 
@@ -42,7 +44,7 @@ function PoolAcl() {
     );
 }
 
-function PoolAclWithRum({loadState}) {
+function PoolAclWithRum({loadState}: {loadState: LoadingStatus}) {
     useAppRumMeasureStart({
         type: RumMeasureTypes.SCHEDULING_ACL,
         additionalStartType: RumMeasureTypes.SCHEDULING,
@@ -61,7 +63,7 @@ function PoolAclWithRum({loadState}) {
     return <PoolAcl />;
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: RootState) => {
     return {
         loadState: getAclLoadState(state, IdmObjectType.POOL),
     };
