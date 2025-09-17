@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {useSelector} from '../../../store/redux-hooks';
 import {Redirect, Route, Switch, withRouter} from 'react-router';
 import cn from 'bem-cn-lite';
@@ -21,7 +20,7 @@ import {
     getTree,
     isPoolAclAllowed,
 } from '../../../store/selectors/scheduling/scheduling';
-import {makeTabProps} from '../../../utils';
+import {TabSettings, makeTabProps} from '../../../utils';
 import {formatByParams} from '../../../utils/format';
 
 import './Content.scss';
@@ -32,20 +31,13 @@ import {UI_TAB_SIZE} from '../../../constants/global';
 
 const block = cn('scheduling-content');
 
-Content.propTypes = {
-    // from parent
-    className: PropTypes.string,
-    // from react-router
-    match: PropTypes.shape({
-        path: PropTypes.string.isRequired,
-        url: PropTypes.string.isRequired,
-    }).isRequired,
-    location: PropTypes.shape({
-        search: PropTypes.string.isRequired,
-    }).isRequired,
+type ContentProps = {
+    className?: string;
+    match: {path: string; url: string};
+    location: {search: string};
 };
 
-function Content({className, match, location}) {
+function Content({className, match, location}: ContentProps) {
     const cluster = useSelector(getCluster);
     const pool = useSelector(getPool);
     const tree = useSelector(getTree);
@@ -53,7 +45,7 @@ function Content({className, match, location}) {
     const isRoot = useSelector(getIsRoot);
     const allowAcl = useSelector(isPoolAclAllowed);
 
-    const localTab = {...Tab};
+    const localTab: Record<string, string> = {...Tab};
 
     const showSettings = reduce_(
         Tab,
@@ -61,10 +53,10 @@ function Content({className, match, location}) {
             acc[tab] = {show: SCHEDULING_ALLOWED_ROOT_TABS[tab] || !isRoot};
             return acc;
         },
-        {},
+        {} as Record<string, TabSettings>,
     );
 
-    const titleDict = {};
+    const titleDict: Record<string, string> = {};
 
     const aclTab = showSettings[Tab.ACL];
     aclTab.show = aclTab.show && allowAcl;
@@ -76,11 +68,11 @@ function Content({className, match, location}) {
         extraOptions: {isRoot, isEphemeral},
     });
 
-    const extraRoutes = [];
+    const extraRoutes: Array<React.ReactElement> = [];
 
     extraTabs.forEach((tab) => {
         const {name, title, component, urlTemplate} = tab;
-        const tabSettings = {show: true};
+        const tabSettings: TabSettings = {show: true};
         showSettings[name] = tabSettings;
 
         if (urlTemplate) {
