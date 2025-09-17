@@ -245,7 +245,7 @@ type PoolResources = Partial<
 
 interface SetResourceGuaranteeParams {
     poolPath: string;
-    values: PoolResources & {guaranteeType: string};
+    values: PoolResources & {guaranteeType?: string};
     initials: PoolResources;
     tree: string;
 }
