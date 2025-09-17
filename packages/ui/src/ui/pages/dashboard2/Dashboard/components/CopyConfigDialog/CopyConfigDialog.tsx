@@ -47,6 +47,7 @@ export function CopyConfigDialog() {
                     extras: {
                         options: copyConfigOptions,
                         width: 'max',
+                        filterable: true,
                         placeholder: 'Cluster',
                     },
                 },
