@@ -26,8 +26,9 @@ export function OperationLogs() {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedLogIds, setSelectedLogIds] = useState<string[]>([]);
     const [timeRange, setTimeRange] = useState<TLogsPanelProps['timeRange']>(null);
-    const [paginationOptions, setPaginationOptions] =
-        useState<ViewOperationLogsArgs['pagination_options']>();
+    const [paginationOptions, setPaginationOptions] = useState<
+        ViewOperationLogsArgs['pagination_options']
+    >({pagination_directions: 'BACKWARD', page_size: 1});
     const [settings, setSettings] = useState({
         wrapLines: true,
         renderLinks: true,
@@ -36,7 +37,11 @@ export function OperationLogs() {
 
     const logsPanelRef = useRef(null);
 
-    const {data: logsView, isLoading: isViewLoading} = useOperationLogsViewQuery({
+    const {
+        data: logsView,
+        isLoading: isViewLoading,
+        refetch,
+    } = useOperationLogsViewQuery({
         ...operationParams,
         substring_filter: {
             substring: searchQuery,
@@ -56,7 +61,8 @@ export function OperationLogs() {
         },
     });
 
-    const loadLogsBelow = async () => {
+    const loadLogsAbove = async () => {
+        console.log('above');
         if (!logsView?.length) {
             return;
         }
@@ -66,10 +72,27 @@ export function OperationLogs() {
         if (!lastLog) {
             return;
         }
-        setPaginationOptions({pagination_directions: 'FORWARD'});
+        setPaginationOptions({pagination_directions: 'BACKWARD', page_size: 5});
+        refetch();
+    };
+
+    const loadLogsBelow = async () => {
+        console.log('below');
+        if (!logsView?.length) {
+            return;
+        }
+
+        const lastLog = logsView.findLast((item) => 'meta' in item);
+
+        if (!lastLog) {
+            return;
+        }
+        setPaginationOptions({pagination_directions: 'FORWARD', page_size: 5});
+        refetch();
     };
 
     const loadLogsFromTail = async () => {
+        console.log('tail');
         if (!logsView?.length) {
             return;
         }
@@ -80,11 +103,13 @@ export function OperationLogs() {
             return;
         }
 
-        setPaginationOptions({pagination_directions: 'FORWARD', page_size: 20});
+        setPaginationOptions({pagination_directions: 'FORWARD', page_size: 5});
         logsPanelRef.current?.scrollToItem(logsView.length - 1, 'end');
+        refetch();
     };
 
     const loadLogsFromHead = async () => {
+        console.log('head');
         if (!logsView?.length) {
             return;
         }
@@ -95,8 +120,9 @@ export function OperationLogs() {
             return;
         }
 
-        setPaginationOptions({pagination_directions: 'BACKWARD', page_size: 20});
+        setPaginationOptions({pagination_directions: 'BACKWARD', page_size: 5});
         logsPanelRef.current?.scrollToItem(0, 'end');
+        refetch();
     };
 
     return (
@@ -113,7 +139,7 @@ export function OperationLogs() {
             onTimeRangeChange={setTimeRange}
             loading={isViewLoading || isListLoading}
             logItemsList={logsView ?? []}
-            loadLogsAbove={async () => {}}
+            loadLogsAbove={loadLogsAbove}
             loadLogsBelow={loadLogsBelow}
             loadLogsFromHead={loadLogsFromHead}
             loadLogsFromTail={loadLogsFromTail}
