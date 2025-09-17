@@ -7,6 +7,7 @@ import {queryFilesFormReducer} from './queryFilesForm/queryFilesFormSlice';
 import {vcsReducer} from './vcs/vcsSlice';
 import {queryNavigationReducer} from './queryNavigation/queryNavigationSlice';
 import {queryChartReducer} from './queryChart/queryChartSlice';
+import {queryTabsReducer} from './queryTabs/queryTabsSlice';
 
 export const queryTracker = combineReducers({
     list: queryList,
@@ -17,4 +18,5 @@ export const queryTracker = combineReducers({
     vcs: vcsReducer,
     queryNavigation: queryNavigationReducer,
     queryChart: queryChartReducer,
+    tabs: queryTabsReducer,
 });
