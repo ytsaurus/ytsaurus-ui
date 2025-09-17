@@ -1,3 +1,5 @@
+import {ValueOf} from '../../../@types/types';
+
 export const SCHEDULING_DATA_REQUEST = 'SCHEDULING_DATA_REQUEST';
 export const SCHEDULING_DATA_SUCCESS = 'SCHEDULING_DATA_SUCCESS';
 export const SCHEDULING_DATA_FAILURE = 'SCHEDULING_DATA_FAILURE';
@@ -36,7 +38,10 @@ export const Tab = {
     OVERVIEW: 'overview',
     DETAILS: 'details',
     ACL: 'acl',
-};
+} as const;
+
+export type SchedulingTab = ValueOf<typeof Tab>;
+
 export const DEFAULT_TAB = Tab.OVERVIEW;
 
 export const CREATE_POOL_DIALOG_TREE_ITEMS_REQUEST = 'CREATE_POOL_DIALOG_TREE_ITEMS_REQUEST';
@@ -48,7 +53,7 @@ export const CREATE_POOL_DIALOG_TREE_CREATE_FAILURE = 'CREATE_POOL_DIALOG_TREE_C
 
 export const SCHEDULING_MONITOR_CHART_STATUS = 'SCHEDULING_MONITOR_CHART_STATUS';
 
-export const SCHEDULING_ALLOWED_ROOT_TABS = {
+export const SCHEDULING_ALLOWED_ROOT_TABS: Partial<Record<SchedulingTab, boolean>> = {
     [Tab.OVERVIEW]: true,
     [Tab.DETAILS]: true,
 };
