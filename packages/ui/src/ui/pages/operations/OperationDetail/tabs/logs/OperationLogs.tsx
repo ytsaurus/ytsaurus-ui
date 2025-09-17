@@ -1,15 +1,15 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
-import {LogsPanel, TLogsPanelProps} from '@yandex-data-ui/dynamic-logs-viewer';
+import {ELogsPanelLevel, LogsPanel, TLogsPanelProps} from '@yandex-data-ui/dynamic-logs-viewer';
 
 import {
     useOperationLogsListQuery,
     useOperationLogsViewQuery,
 } from '../../../../../store/api/operations/operaion-detail/logs';
+import {ViewOperationLogsArgs} from '../../../../../store/api/operations/operaion-detail/logs/view';
 import {getOperation} from '../../../../../store/selectors/operations/operation';
 import {getCluster} from '../../../../../store/selectors/global';
-import {LogsMeta} from '../../../../../store/api/operations/operaion-detail/logs/view';
-import {LogLevel} from '../../../../../types/operations/logs';
+import {LogMeta} from '../../../../../types/operations/logs';
 
 export function OperationLogs() {
     const cluster = useSelector(getCluster);
@@ -20,16 +20,21 @@ export function OperationLogs() {
         operationId: operation.id,
     };
 
-    const {data: logsList, isLoading: isListLoading} = useOperationLogsListQuery(operationParams);
+    const {data: logsListResponse, isLoading: isListLoading} =
+        useOperationLogsListQuery(operationParams);
 
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedLogIds, setSelectedLogIds] = useState<string[]>([]);
     const [timeRange, setTimeRange] = useState<TLogsPanelProps['timeRange']>(null);
+    const [paginationOptions, setPaginationOptions] =
+        useState<ViewOperationLogsArgs['pagination_options']>();
     const [settings, setSettings] = useState({
         wrapLines: true,
         renderLinks: true,
         caseInsensitiveSearch: true,
     });
+
+    const logsPanelRef = useRef(null);
 
     const {data: logsView, isLoading: isViewLoading} = useOperationLogsViewQuery({
         ...operationParams,
@@ -37,22 +42,71 @@ export function OperationLogs() {
             substring: searchQuery,
             is_substring_case_sensetive: false,
         },
-        names_filter: selectedLogIds.map((name) => ({
-            log_name: name,
-        })),
+        log_group_filters:
+            logsListResponse?.raw?.map?.((group) => ({
+                group_info: group.group_info,
+                logs_filter: [
+                    {log_name: 'abc', file_paths: ['asd'], log_meta: {log_level: 'ERROR' as const}},
+                ],
+            })) ?? [],
+        pagination_options: paginationOptions,
         time_range_filter: {
             ts_from: String(timeRange?.start?.value),
             ts_to: String(timeRange?.end?.value),
         },
     });
 
+    const loadLogsBelow = async () => {
+        if (!logsView?.length) {
+            return;
+        }
+
+        const lastLog = logsView.findLast((item) => 'meta' in item);
+
+        if (!lastLog) {
+            return;
+        }
+        setPaginationOptions({pagination_directions: 'FORWARD'});
+    };
+
+    const loadLogsFromTail = async () => {
+        if (!logsView?.length) {
+            return;
+        }
+
+        const lastLog = logsView.findLast((item) => 'meta' in item);
+
+        if (!lastLog) {
+            return;
+        }
+
+        setPaginationOptions({pagination_directions: 'FORWARD', page_size: 20});
+        logsPanelRef.current?.scrollToItem(logsView.length - 1, 'end');
+    };
+
+    const loadLogsFromHead = async () => {
+        if (!logsView?.length) {
+            return;
+        }
+
+        const lastLog = logsView.findLast((item) => 'meta' in item);
+
+        if (!lastLog) {
+            return;
+        }
+
+        setPaginationOptions({pagination_directions: 'BACKWARD', page_size: 20});
+        logsPanelRef.current?.scrollToItem(0, 'end');
+    };
+
     return (
-        <LogsPanel<LogsMeta>
+        <LogsPanel<LogMeta>
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
             settings={settings}
+            ref={logsPanelRef}
             onSettingsChange={setSettings}
-            logsSelectorOptions={logsList ?? []}
+            logsSelectorOptions={logsListResponse?.options ?? []}
             logsSelectorSelectedIds={selectedLogIds}
             onLogsSelectorSelectedIdsChange={setSelectedLogIds}
             timeRange={timeRange}
@@ -60,12 +114,12 @@ export function OperationLogs() {
             loading={isViewLoading || isListLoading}
             logItemsList={logsView ?? []}
             loadLogsAbove={async () => {}}
-            loadLogsBelow={async () => {}}
-            loadLogsFromHead={async () => {}}
-            loadLogsFromTail={async () => {}}
-            loadLogsAroundTargetLog={async () => {}}
+            loadLogsBelow={loadLogsBelow}
+            loadLogsFromHead={loadLogsFromHead}
+            loadLogsFromTail={loadLogsFromTail}
+            loadLogsAroundTargetLog={loadLogsBelow}
             updateListWithLastResults={() => {}}
-            getLogListItemLevel={(item) => item.meta.level as LogLevel}
+            getLogListItemLevel={(item) => item.meta?.log_level as ELogsPanelLevel}
             getLogListItemName={(item) => item.id}
         />
     );

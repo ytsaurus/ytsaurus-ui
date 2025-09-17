@@ -1,8 +1,8 @@
 import axios from 'axios';
 import {TLogsPanelEntry} from '@yandex-data-ui/dynamic-logs-viewer/build/esm';
 import {
-    LogLevel,
-    LogNamesFilter,
+    LogGroupFilter,
+    LogMeta,
     LogPaginationOptions,
     LogRow,
     LogSubstringFilter,
@@ -15,14 +15,10 @@ type ViewOperationLogsQueryArgs = {
 
 type ViewOperationLogsBodyArgs = {
     cluster: string;
-    names_filter: Array<LogNamesFilter>;
+    log_group_filters: Array<LogGroupFilter>;
     substring_filter?: LogSubstringFilter;
     time_range_filter?: LogTimeRangeFilter;
     pagination_options?: LogPaginationOptions;
-};
-
-export type LogsMeta = {
-    level: LogLevel;
 };
 
 export type ViewOperationLogsArgs = ViewOperationLogsBodyArgs & ViewOperationLogsQueryArgs;
@@ -45,7 +41,7 @@ export async function viewOperationLogs(args: ViewOperationLogsArgs) {
             return {data: []};
         }
 
-        const res: TLogsPanelEntry<LogsMeta>[] = [];
+        const res: TLogsPanelEntry<LogMeta>[] = [];
 
         view.forEach((logRow) => {
             res.push({
@@ -53,7 +49,7 @@ export async function viewOperationLogs(args: ViewOperationLogsArgs) {
                 id: logRow.log_name,
                 displayTimestamp: logRow.formatted_ts,
                 timestamp: String(logRow.raw_ts),
-                meta: {level: 'ERROR'},
+                meta: {log_level: logRow.log_level},
             });
         });
 

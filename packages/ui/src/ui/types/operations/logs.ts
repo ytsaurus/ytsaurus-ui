@@ -1,13 +1,13 @@
 export type LogLevel = 'ERROR' | 'INFO' | 'DEBUG';
 
+export type LogMeta = {
+    log_level: LogLevel;
+};
+
 type LogEntry = {
     name: string;
     file_paths: Array<string>;
-};
-
-export type LogLevelGroup = {
     log_level: LogLevel;
-    logs: Array<LogEntry>;
 };
 
 export type LogNamesFilter = {
@@ -25,19 +25,35 @@ export type JobsFilter = {
     job_cookie: number;
 };
 
-export type LogGroup = {
-    group_info: GroupInfo;
-    log_level_groups: Array<LogLevelGroup>;
+export type LogRow = {
+    log_name: string;
+    file_path: string;
+    raw_ts: number;
+    formatted_ts: string;
+    content: string;
+    log_group?: string;
+    log_level: LogLevel;
+};
+
+export type LogFilter = {
+    log_name: string;
+    file_paths: Array<string>;
+    log_meta: LogMeta;
 };
 
 export type LogGroupFilter = {
     group_info: GroupInfo;
-    names_filter: Array<LogNamesFilter>;
+    logs_filter: Array<LogFilter>;
 };
 
 export type LogSubstringFilter = {
     substring: string;
     is_substring_case_sensetive?: boolean;
+};
+
+export type LogGroup = {
+    group_info: GroupInfo;
+    logs: Array<LogEntry>;
 };
 
 export type LogTimeRangeFilter = {
@@ -49,15 +65,6 @@ export type PaginationDirection = 'FORWARD' | 'BACKWARD';
 
 export type LogPaginationOptions = {
     pagination_directions: PaginationDirection;
-    pivot_ts: number;
-    page_size: number;
-};
-
-export type LogRow = {
-    log_name: string;
-    file_path: string;
-    raw_ts: number;
-    formatted_ts: string;
-    content: string;
-    log_group?: string;
+    pivot_ts?: number;
+    page_size?: number;
 };

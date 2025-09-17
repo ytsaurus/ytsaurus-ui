@@ -19,6 +19,11 @@ export type ListOperationLogsArgs = ListOperationLogsBodyArgs & ListOperationLog
 
 export type ListOperationLogsResponse = Array<LogGroup>;
 
+export type ListOperationLogsResult = {
+    raw: ListOperationLogsResponse;
+    options: TLogsPanelSelectOption[];
+};
+
 export async function listOperationLogs(args: ListOperationLogsArgs) {
     try {
         const {operationId, cluster} = args;
@@ -30,31 +35,29 @@ export async function listOperationLogs(args: ListOperationLogsArgs) {
         );
 
         if (!data) {
-            return {data: []};
+            return {data: {options: [], raw: []}};
         }
 
         const res: TLogsPanelSelectOption[] = [];
 
-        data.forEach((logsLevel) => {
+        data.forEach((logsGroup) => {
             const group: SelectOptionGroup<TLogsPanelSelectOptionData> = {
-                label: logsLevel.group_info.name,
+                label: logsGroup.group_info.name,
             };
             const options: (typeof group)['options'] = [];
-            logsLevel.log_level_groups.forEach((logGroup) => {
-                for (const l of logGroup.logs) {
-                    options.push({
-                        data: {logName: l.name, level: logGroup.log_level as ELogsPanelLevel},
-                        value: l.name,
-                        text: l.name,
-                    });
-                }
+            logsGroup.logs.forEach((log) => {
+                options.push({
+                    data: {logName: log.name, level: log.log_level as ELogsPanelLevel},
+                    value: log.name,
+                    text: log.name,
+                });
             });
 
             group.options = options;
             res.push(group);
         });
 
-        return {data: res};
+        return {data: {options: res, raw: data}};
     } catch (error) {
         return {error};
     }

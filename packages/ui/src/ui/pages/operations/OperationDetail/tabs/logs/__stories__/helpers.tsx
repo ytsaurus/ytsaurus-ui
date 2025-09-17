@@ -39,5 +39,9 @@ export function OperationLogsWithStore() {
         type: GET_OPERATION.SUCCESS,
         data: operationData,
     });
-    return <div style={{height: '1000px'}}><OperationLogs /></div>;
+    return (
+        <div style={{height: '200px'}}>
+            <OperationLogs />
+        </div>
+    );
 }
