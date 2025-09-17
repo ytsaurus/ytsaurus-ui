@@ -118,7 +118,7 @@ export const initialState = {
     ...persistedState,
 };
 
-type SchedulingState = typeof initialState;
+export type SchedulingState = typeof initialState;
 
 const reducer = (state = initialState, action: SchedulingAction) => {
     switch (action.type) {

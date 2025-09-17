@@ -1,3 +1,5 @@
+import {ThunkAction} from 'redux-thunk';
+
 import isEmpty_ from 'lodash/isEmpty';
 import map_ from 'lodash/map';
 import mapKeys_ from 'lodash/mapKeys';
@@ -6,14 +8,17 @@ import omit_ from 'lodash/omit';
 import pick_ from 'lodash/pick';
 import pickBy_ from 'lodash/pickBy';
 
-// @ts-expect-error
-import yt from '@ytsaurus/javascript-wrapper/lib/yt';
+import {BatchSubRequest} from '../../../../shared/yt-types';
 
+import {RootState} from '../../../store/reducers';
 import {getSchedulingNS} from '../../../store/selectors/settings';
 import {toggleFavourite} from '../../../store/actions/favourites';
 import {getPools, getTree} from '../../../store/selectors/scheduling/scheduling';
+import {PoolInfo} from '../../../store/selectors/scheduling/scheduling-pools';
+import {SchedulingAction, SchedulingState} from '../../../store/reducers/scheduling/scheduling';
 import {
     POOL_GENERAL_TYPE_TO_ATTRIBUTE,
+    PoolEditorFormValues,
     computePoolPath,
 } from '../../../utils/scheduling/scheduling';
 
@@ -31,22 +36,29 @@ import {
 } from '../../../constants/scheduling';
 import {loadSchedulingData, setPoolAttributes} from './scheduling-ts';
 import {splitBatchResults} from '../../../utils/utils';
-import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
+
+import {YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';
+import {YTErrors} from '../../../rum/constants';
+
 import {toaster} from '../../../utils/toaster';
 
-const setName = (path, newName, prevName) => {
+const setName = (path: string, newName?: string, prevName?: string) => {
     if (prevName === newName) {
         return Promise.resolve();
     }
 
-    return yt.v3.set({path: `${path}/@name`}, newName);
+    return ytApiV3.set({path: `${path}/@name`}, newName);
 };
 
-const makeOtherAttributesCommands = (path, values, initialValues) => {
+const makeOtherAttributesCommands = (
+    path: string,
+    values: PoolEditorFormValues['otherSettings'],
+    initialValues: PoolEditorFormValues['otherSettings'],
+) => {
     const initialSortParamsString = initialValues.fifoSortParams.join('|');
     const newSortParamsString = values.fifoSortParams.join('|');
 
-    const commands = [];
+    const commands: Array<BatchSubRequest> = [];
 
     if (initialValues.forbidImmediateOperations !== values.forbidImmediateOperations) {
         commands.push({
@@ -81,14 +93,21 @@ const makeOtherAttributesCommands = (path, values, initialValues) => {
     return commands;
 };
 
-const setResourceAttributes = (path, values, omittedValues, attribute) => {
+type ResourceLimits = PoolEditorFormValues['resourceLimits'];
+
+const setResourceAttributes = (
+    path: string,
+    values: Partial<Record<keyof ResourceLimits, number>>,
+    omittedValues: Partial<ResourceLimits>,
+    attribute: 'resource_limits',
+) => {
     if (isEmpty_(values) && isEmpty_(omittedValues)) {
         return Promise.resolve();
     }
 
-    const keyMapper = {userSlots: 'user_slots'};
-    const omittedValuesList = map_(omittedValues, (value, key) => keyMapper[key] || key);
-    const preparedValues = mapKeys_(values, (value, key) => keyMapper[key] || key);
+    const keyMapper: Record<string, string> = {userSlots: 'user_slots'};
+    const omittedValuesList = map_(omittedValues, (_value, key) => keyMapper[key] || key);
+    const preparedValues = mapKeys_(values, (_value, key) => keyMapper[key] || key);
 
     return ytApiV3Id
         .get(YTApiId.schedulingGetAttrsBeforeEdit, {path: `${path}/@${attribute}`})
@@ -96,48 +115,39 @@ const setResourceAttributes = (path, values, omittedValues, attribute) => {
             const result = {...resources, ...preparedValues};
             const input = omit_(result, omittedValuesList);
 
-            return yt.v3.set({path: `${path}/@${attribute}`}, input);
+            return ytApiV3.set({path: `${path}/@${attribute}`}, input);
         })
         .catch((error) => {
             if (error.code === 500) {
                 // attribute not found
-                return yt.v3.set({path: `${path}/@${attribute}`}, preparedValues);
+                return ytApiV3.set({path: `${path}/@${attribute}`}, preparedValues);
             }
 
             return Promise.reject(error);
         });
 };
 
-const makeGeneralCommands = (path, values, initialValues) => {
-    const isInitial = (value, initialValue) => value === initialValue;
-    const isOmitted = (value, omittedValues) =>
+type GeneralValues = PoolEditorFormValues['general'];
+
+const makeGeneralCommands = (
+    path: string,
+    values: Partial<GeneralValues>,
+    initialValues: GeneralValues,
+) => {
+    const isInitial = (value: unknown, initialValue: unknown) => value === initialValue;
+    const isOmitted = (value: string, omittedValues: unknown) =>
         Object.prototype.hasOwnProperty.call(omittedValues, value);
 
-    //const {name: abcServiceName, slug: abcServiceSlug, id} = prepareAbcService(values.abcService);
     const omittedValues = pickBy_(
         values,
-        (value) => value === '' || value === undefined || value === null,
+        (value: string) => value === '' || value === undefined || value === null,
     );
 
-    const commands = [];
-
-    // if (!isInitial(abcServiceSlug, initialValues.abcService?.value)) {
-    //     commands.push({
-    //         command: abcServiceSlug ? 'set' : 'remove',
-    //         parameters: {
-    //             path: `${path}/@abc`,
-    //         },
-    //         input: !abcServiceSlug ? undefined : {
-    //             slug: abcServiceSlug,
-    //             name: abcServiceName,
-    //             id,
-    //         },
-    //     });
-    // }
+    const commands: Array<BatchSubRequest> = [];
 
     if (!isInitial(values.mode, initialValues.mode)) {
         commands.push({
-            command: 'set',
+            command: 'set' as const,
             parameters: {
                 path: `${path}/@mode`,
             },
@@ -145,7 +155,7 @@ const makeGeneralCommands = (path, values, initialValues) => {
         });
     }
 
-    if (!isInitial(values.weight, initialValues.weight)) {
+    if (!isInitial(values.weight?.value, initialValues.weight?.value)) {
         if (isOmitted('weight', omittedValues)) {
             commands.push({
                 command: 'remove',
@@ -159,7 +169,7 @@ const makeGeneralCommands = (path, values, initialValues) => {
                 parameters: {
                     path: `${path}/@weight`,
                 },
-                input: Number(values.weight),
+                input: Number(values.weight?.value),
             });
         }
     }
@@ -167,15 +177,21 @@ const makeGeneralCommands = (path, values, initialValues) => {
     return commands;
 };
 
-function isInvalidNumber(value) {
+function isInvalidNumber(value: number | string) {
     return value === '' || isNaN(Number(value));
 }
 
-function isValidNumber(value) {
+function isValidNumber(value: number | string) {
     return !isInvalidNumber(value);
 }
 
-export function editPool(pool, values, initialValues) {
+type SchedulingThunk<T> = ThunkAction<T, RootState, unknown, SchedulingAction>;
+
+export function editPool(
+    pool: PoolInfo,
+    values: PoolEditorFormValues,
+    initialValues: PoolEditorFormValues,
+): SchedulingThunk<Promise<void>> {
     return (dispatch, getState) => {
         const state = getState();
 
@@ -184,13 +200,17 @@ export function editPool(pool, values, initialValues) {
         const poolPath = computePoolPath(pool, pools);
         const path = `//sys/pool_trees/${tree}/${poolPath}`;
 
-        const filteredResourceLimitsValues = pickBy_(values.resourceLimits, isValidNumber);
-        const omittedResourceLimitsValues = pickBy_(values.resourceLimits, isInvalidNumber);
+        const filteredResourceLimitsValues: Partial<(typeof values)['resourceLimits']> = pickBy_(
+            values.resourceLimits,
+            isValidNumber,
+        );
+        const omittedResourceLimitsValues: Partial<(typeof values)['resourceLimits']> = pickBy_(
+            values.resourceLimits,
+            isInvalidNumber,
+        );
         const resourceLimitsValues = mapValues_(filteredResourceLimitsValues, (value) =>
             Number(value),
         );
-        delete resourceLimitsValues['error-block'];
-        delete omittedResourceLimitsValues['error-block'];
 
         dispatch({type: SCHEDULING_EDIT_POOL_REQUEST});
 
@@ -205,6 +225,7 @@ export function editPool(pool, values, initialValues) {
                 if (error) {
                     return Promise.reject(error);
                 }
+                return undefined;
             }),
             setPoolAttributes({
                 poolPath: path,
@@ -226,12 +247,12 @@ export function editPool(pool, values, initialValues) {
                 omittedResourceLimitsValues,
                 'resource_limits',
             ),
+            setName(path, values.general.name, initialValues.general.name),
         ])
-            .then(setName(path, values.general.name, initialValues.general.name))
             .then(() => {
                 toaster.add({
                     name: 'edit pool',
-                    timeout: 10000,
+                    autoHiding: 10000,
                     theme: 'success',
                     title: `Successfully edited ${pool.name}. Please wait.`,
                 });
@@ -241,7 +262,7 @@ export function editPool(pool, values, initialValues) {
                 setTimeout(() => dispatch(loadSchedulingData()), 3000);
             })
             .catch((error) => {
-                if (error.code !== yt.codes.CANCELLED) {
+                if (error.code !== YTErrors.CANCELLED) {
                     dispatch({
                         type: SCHEDULING_EDIT_POOL_FAILURE,
                         data: {error},
@@ -249,11 +270,12 @@ export function editPool(pool, values, initialValues) {
 
                     return Promise.reject(error);
                 }
+                return undefined;
             });
     };
 }
 
-export function openEditModal(item) {
+export function openEditModal(item: PoolInfo) {
     return {
         type: TOGGLE_EDIT_VISIBILITY,
         data: {
@@ -263,7 +285,7 @@ export function openEditModal(item) {
     };
 }
 
-export function closeEditModal({cancelled} = {}) {
+export function closeEditModal({cancelled}: {cancelled?: boolean} = {}): SchedulingThunk<void> {
     return (dispatch) => {
         dispatch({
             type: TOGGLE_EDIT_VISIBILITY,
@@ -279,7 +301,7 @@ export function closeEditModal({cancelled} = {}) {
     };
 }
 
-export function changeTree(tree) {
+export function changeTree(tree: string): SchedulingThunk<void> {
     return (dispatch) => {
         dispatch({
             type: CHANGE_TREE,
@@ -290,21 +312,21 @@ export function changeTree(tree) {
     };
 }
 
-export function changeTableTreeState(treeState) {
+export function changeTableTreeState(treeState: SchedulingState['treeState']): SchedulingAction {
     return {
         type: CHANGE_TABLE_TREE_STATE,
         data: {treeState},
     };
 }
 
-export function changePool(pool) {
+export function changePool(pool: string): SchedulingAction {
     return {
         type: CHANGE_POOL,
         data: {pool},
     };
 }
 
-export function changeContentMode(evt) {
+export function changeContentMode(evt: any): SchedulingAction {
     return {
         type: CHANGE_CONTENT_MODE,
         data: {
@@ -313,14 +335,14 @@ export function changeContentMode(evt) {
     };
 }
 
-export function changePoolChildrenFilter(poolChildrenFilter) {
+export function changePoolChildrenFilter(poolChildrenFilter: string) {
     return {
         type: CHANGE_POOL_CHILDREN_FILTER,
         data: {poolChildrenFilter},
     };
 }
 
-export function togglePoolFavourites(pool, tree) {
+export function togglePoolFavourites(pool: string, tree: string): SchedulingThunk<void> {
     return (dispatch, getState) => {
         const value = `${pool}[${tree}]`;
         const parentNS = getSchedulingNS(getState());
