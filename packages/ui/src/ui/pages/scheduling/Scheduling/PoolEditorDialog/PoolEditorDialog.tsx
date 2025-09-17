@@ -18,13 +18,10 @@ import {
     getTree,
 } from '../../../../store/selectors/scheduling/scheduling';
 import {
-    InitialPoolResourceInfo,
     POOL_GENERAL_TYPE_TO_ATTRIBUTE,
     POOL_INTEGRAL_GUARANTEE_FIELD_TO_ATTR,
     POOL_STRONG_RESOURCE_TYPE_TO_ATTRIBUTE,
-    PoolGeneralResourceType,
-    PoolIntegralResourceType,
-    PoolStrongResourceType,
+    PoolEditorFormValues,
     getInitialValues,
 } from '../../../../utils/scheduling/scheduling';
 import {isAbcPoolName, isTopLevelPool} from '../../../../utils/scheduling/pool';
@@ -61,28 +58,6 @@ function makeError(error: any) {
     return isEmpty_(error) ? null : <YTErrorBlock className={block('error')} error={error} />;
 }
 
-export interface PoolEditorFormValues {
-    general: Record<PoolGeneralResourceType, InitialPoolResourceInfo> & {
-        weight: {value?: number; error?: string};
-    }; // TODO add description for another fields
-    resourceGuarantee: Record<PoolStrongResourceType, InitialPoolResourceInfo>;
-    integralGuarantee: Record<
-        Exclude<PoolIntegralResourceType, 'guaranteeType'>,
-        InitialPoolResourceInfo
-    > & {guaranteeType?: 'none' | 'burst' | 'relaxed'};
-    resourceLimits: {
-        cpu: number | string;
-        gpu: number | string;
-        memory: number | string;
-        userSlots: number | string;
-    };
-    otherSettings: {
-        forbidImmediateOperations: boolean;
-        fifoSortParams: Array<string>;
-        createEphemeralSubpools: boolean;
-    };
-}
-
 export function PoolEditorDialog() {
     const dispatch = useDispatch();
 
@@ -102,7 +77,7 @@ export function PoolEditorDialog() {
         {key: 'fair_share', value: 'fair_share', title: 'fair_share'},
         {key: 'fifo', value: 'fifo', title: 'fifo'},
     ];
-    const [initialValues, initialFormValues] = useMemo(() => {
+    const initialFormValues = useMemo(() => {
         const data = getInitialValues(editItem, allowedSources);
         const formData: PoolEditorFormValues = {
             ...data,
@@ -113,7 +88,7 @@ export function PoolEditorDialog() {
                 },
             },
         };
-        return [data, formData];
+        return formData;
     }, [editItem, allowedSources]); // don't pass pools into memo's array
 
     const editCloseHandler = useCallback(() => {
@@ -127,7 +102,7 @@ export function PoolEditorDialog() {
             const data = {
                 general: {
                     ...pick_(general, ['name', 'mode']),
-                    weight: general.weight.value,
+                    weight: general.weight,
                     ...pickBy_(
                         pick_(general, Object.keys(POOL_GENERAL_TYPE_TO_ATTRIBUTE)),
                         (item: {limit: number}, k) => {
@@ -135,7 +110,7 @@ export function PoolEditorDialog() {
                                 return false;
                             }
                             const key = k as keyof typeof POOL_GENERAL_TYPE_TO_ATTRIBUTE;
-                            const initialValue = initialValues.general[key].limit;
+                            const initialValue = initialFormValues.general[key]?.limit;
                             return item.limit !== initialValue;
                         },
                     ),
@@ -147,7 +122,7 @@ export function PoolEditorDialog() {
                             return false;
                         }
                         const key = k as keyof typeof resourceGuarantee;
-                        const initialValue = initialValues.resourceGuarantee[key].limit;
+                        const initialValue = initialFormValues.resourceGuarantee[key]?.limit;
                         return item.limit !== initialValue;
                     },
                 ),
@@ -158,7 +133,7 @@ export function PoolEditorDialog() {
                             return false;
                         }
                         const key = k as keyof typeof integralGuarantee;
-                        const initialValue = initialValues.integralGuarantee[key];
+                        const initialValue = initialFormValues.integralGuarantee[key];
                         if (typeof item === 'object' && typeof initialValue === 'object') {
                             return item.limit !== initialValue.limit;
                         } else {
@@ -173,9 +148,9 @@ export function PoolEditorDialog() {
                     'createEphemeralSubpools',
                 ]),
             };
-            await dispatch(editPool(editItem, data, initialValues));
+            await dispatch(editPool(editItem!, data, initialFormValues));
         },
-        [editItem, initialValues, dispatch],
+        [editItem, initialFormValues, dispatch],
     );
 
     const user = useSelector(getCurrentUserName);
@@ -306,7 +281,7 @@ export function PoolEditorDialog() {
                             extras: {
                                 pool: editItem?.name || '',
                                 resourceType: 'maxOperationCount',
-                                initialLimit: initialValues.general.maxOperationCount.limit,
+                                initialLimit: initialFormValues.general.maxOperationCount?.limit,
                                 min: 0,
                                 max: Infinity,
                                 sourcesSkipParent: true,
@@ -320,7 +295,8 @@ export function PoolEditorDialog() {
                             extras: {
                                 pool: editItem?.name || '',
                                 resourceType: 'maxRunningOperationCount',
-                                initialLimit: initialValues.general.maxRunningOperationCount.limit,
+                                initialLimit:
+                                    initialFormValues.general.maxRunningOperationCount?.limit,
                                 min: 0,
                                 max: Infinity,
                                 sourcesSkipParent: true,
@@ -345,7 +321,7 @@ export function PoolEditorDialog() {
                             extras: {
                                 pool: editItem?.name || '',
                                 resourceType: 'cpuStrong',
-                                initialLimit: initialValues.resourceGuarantee.cpuStrong.limit,
+                                initialLimit: initialFormValues.resourceGuarantee.cpuStrong?.limit,
                                 decimalPlaces: 2,
                             },
                         },
@@ -359,7 +335,7 @@ export function PoolEditorDialog() {
                                           pool: editItem?.name || '',
                                           resourceType: 'gpuStrong' as const,
                                           initialLimit:
-                                              initialValues.resourceGuarantee.gpuStrong.limit,
+                                              initialFormValues.resourceGuarantee.gpuStrong?.limit,
                                       },
                                   },
                               ]
@@ -372,7 +348,8 @@ export function PoolEditorDialog() {
                                 format: 'Bytes',
                                 pool: editItem?.name || '',
                                 resourceType: 'memoryStrong' as const,
-                                initialLimit: initialValues.resourceGuarantee.memoryStrong.limit,
+                                initialLimit:
+                                    initialFormValues.resourceGuarantee.memoryStrong?.limit,
                             },
                         },
                         warningField,
@@ -411,7 +388,7 @@ export function PoolEditorDialog() {
                             extras: {
                                 pool: editItem?.name || '',
                                 resourceType: 'burstCpu',
-                                initialLimit: initialValues.integralGuarantee.burstCpu.limit,
+                                initialLimit: initialFormValues.integralGuarantee.burstCpu?.limit,
                                 decimalPlaces: 2,
                             },
                         },
@@ -425,7 +402,7 @@ export function PoolEditorDialog() {
                                           pool: editItem?.name || '',
                                           resourceType: 'burstGpu' as const,
                                           initialLimit:
-                                              initialValues.integralGuarantee.burstGpu.limit,
+                                              initialFormValues.integralGuarantee.burstGpu?.limit,
                                       },
                                   },
                               ]
@@ -437,7 +414,7 @@ export function PoolEditorDialog() {
                             extras: {
                                 pool: editItem?.name || '',
                                 resourceType: 'flowCpu',
-                                initialLimit: initialValues.integralGuarantee.flowCpu.limit,
+                                initialLimit: initialFormValues.integralGuarantee.flowCpu?.limit,
                                 decimalPlaces: 2,
                             },
                         },
@@ -451,7 +428,7 @@ export function PoolEditorDialog() {
                                           pool: editItem?.name || '',
                                           resourceType: 'flowGpu' as const,
                                           initialLimit:
-                                              initialValues.integralGuarantee.flowGpu.limit,
+                                              initialFormValues.integralGuarantee.flowGpu?.limit,
                                       },
                                   },
                               ]
