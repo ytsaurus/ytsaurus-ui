@@ -74,6 +74,8 @@ import {setSettingByKey} from '../../../../store/actions/settings';
 import {selectClusterConfigs} from '../queryNavigation/selectors';
 import {getQueryResultGlobalSettings} from '../query_result/selectors';
 import {createTableSelect} from '../../Navigation/helpers/createTableSelect';
+import {ResetQueryTabsAction, resetQueryTabs} from '../queryTabs/queryTabsSlice';
+import {updateQueryTabs} from '../queryTabs/actions';
 
 const checkCliqueControllerIsSupported =
     (clusterId: string, engine: QueryEngine): ThunkAction<void, RootState, unknown, any> =>
@@ -334,6 +336,7 @@ export function loadQuery(
         } finally {
             dispatch(setCurrentClusterToQuery());
             dispatch(setUserLastChoice());
+            dispatch(updateQueryTabs());
         }
     };
 }
@@ -405,7 +408,7 @@ export function createEmptyQuery(
     engine?: QueryEngine,
     query?: string,
     settings?: Record<string, string>,
-): ThunkAction<any, RootState, any, SetQueryAction> {
+): ThunkAction<any, RootState, any, SetQueryAction | ResetQueryTabsAction> {
     return (dispatch, getState) => {
         const state = getState();
         const lastEngine = getLastUserChoiceQueryEngine(state);
@@ -429,6 +432,7 @@ export function createEmptyQuery(
         });
         dispatch(setCurrentClusterToQuery());
         dispatch(setUserLastChoice());
+        dispatch(resetQueryTabs());
     };
 }
 

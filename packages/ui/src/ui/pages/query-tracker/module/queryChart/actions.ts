@@ -10,6 +10,7 @@ import {
     getQueryDraft,
     getQueryItem,
 } from '../query/selectors';
+import {getCurrentUserName} from '../../../../store/selectors/global/username';
 import {
     Config,
     FieldKey,
@@ -41,8 +42,17 @@ const DELAY = 2 * 1000;
 type AsyncAction = ThunkAction<void, RootState, undefined, Action>;
 
 const saveChartConfig = (dispatch: Dispatch, getState: () => RootState) => {
-    dispatch(setSaved(false));
     const state = getState();
+
+    const currentUser = getCurrentUserName(state);
+    const queryItem = getQueryItem(state);
+
+    if (!queryItem || currentUser !== queryItem.user) {
+        return;
+    }
+
+    dispatch(setSaved(false));
+
     const annotations = getQueryAnnotations(state);
     const isMultipleAco = selectIsMultipleAco(state);
     const aco = getCurrentQueryACO(state);
