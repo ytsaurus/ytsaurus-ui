@@ -142,7 +142,7 @@ export interface OperationInfo {
     burstCPU: number;
     flowGPU: number;
     integralType?: string;
-    mode?: string;
+    mode?: 'fifo' | 'fair_share';
 
     operationCount?: number;
     maxOperationCount?: number;

@@ -170,6 +170,33 @@ export const POOL_RESOURCE_TYPE_TO_ATTRIBUTE = {
     ...POOL_INTEGRAL_GUARANTEE_FIELD_TO_ATTR,
 };
 
+export interface PoolEditorFormValues {
+    general: Partial<
+        Record<PoolGeneralResourceType, InitialPoolResourceInfo> & {
+            mode: 'fifo' | 'fair_share';
+            weight: {value?: number; error?: string};
+            name: string;
+        }
+    >; // TODO add description for another fields
+    resourceGuarantee: Partial<Record<PoolStrongResourceType, InitialPoolResourceInfo>>;
+    integralGuarantee: Partial<
+        Record<Exclude<PoolIntegralResourceType, 'guaranteeType'>, InitialPoolResourceInfo> & {
+            guaranteeType: 'none' | 'burst' | 'relaxed';
+        }
+    >;
+    resourceLimits: {
+        cpu: number | string;
+        gpu: number | string;
+        memory: number | string;
+        userSlots: number | string;
+    };
+    otherSettings: {
+        forbidImmediateOperations: boolean;
+        fifoSortParams: Array<string>;
+        createEphemeralSubpools: boolean;
+    };
+}
+
 export type PoolStrongResourceType = keyof typeof POOL_STRONG_RESOURCE_TYPE_TO_ATTRIBUTE;
 export type PoolIntegralResourceType = keyof typeof POOL_INTEGRAL_GUARANTEE_FIELD_TO_ATTR;
 export type PoolGeneralResourceType = keyof typeof POOL_GENERAL_TYPE_TO_ATTRIBUTE;
@@ -217,7 +244,7 @@ export function getInitialValues(editItem: PoolInfo | undefined, allowedSources:
                 : undefined,
             parent: editItem?.parent,
             mode: editItem?.mode,
-            weight: ypath.getNumber(editItem, '/cypressAttributes/weight'),
+            weight: ypath.getNumber(editItem, '/cypressAttributes/weight') as number | undefined,
             maxOperationCount: Object.assign(
                 getPoolResourceInitialValue(editItem, 'maxOperationCount', allowSource),
                 {source: undefined},
