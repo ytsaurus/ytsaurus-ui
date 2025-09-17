@@ -54,7 +54,7 @@ export const defaultDashboardItems = {
             x: navigationLayoutWidth,
             y: 0,
         },
-        data: {name: 'Accounts', columns: [{name: 'Nodes'}, {name: 'Chunks'}]},
+        data: {name: 'Accounts', columns: [{name: 'Nodes'}, {name: 'Chunks'}, {name: 'default'}]},
     },
     pools: {
         layout: {
