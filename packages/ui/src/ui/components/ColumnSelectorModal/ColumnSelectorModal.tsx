@@ -1,5 +1,4 @@
 import React from 'react';
-import hammer from '../../common/hammer';
 import block from 'bem-cn-lite';
 
 import forEach_ from 'lodash/forEach';
@@ -9,6 +8,7 @@ import reduce_ from 'lodash/reduce';
 import Modal from '../Modal/Modal';
 import ColumnSelector, {makeItemsCopy} from '../ColumnSelector/ColumnSelector';
 import NoContentImage from '../../assets/img/svg/modal-no-content.svg';
+import i18n from './i18n';
 
 import './ColumnSelectorModal.scss';
 
@@ -16,14 +16,12 @@ const b = block('column-selector-modal');
 
 export type ColumnSelectorModalProps<DataT> = {
     items: Array<ColumnSelectorItem<DataT>>;
-    srcItems: Array<ColumnSelectorItem<DataT>>;
+    srcItems?: Array<ColumnSelectorItem<DataT>>;
     isVisible?: boolean;
-    onChange: (items: Array<ColumnSelectorItem<DataT>>) => void;
     onConfirm: (items: Array<ColumnSelectorItem<DataT>>) => void;
     onCancel: () => void;
 
-    itemRenderer: (item: ColumnSelectorItem<DataT>) => React.ReactNode;
-    entity: string;
+    itemRenderer?: (item: ColumnSelectorItem<DataT>) => React.ReactNode;
 };
 
 export type ColumnSelectorItem<DataT> = {
@@ -39,10 +37,6 @@ type Props<T> = ColumnSelectorModalProps<T>;
 type State<T> = Pick<Props<T>, 'items' | 'srcItems'> & {itemsOrder: Array<string>};
 
 export default class ColumnSelectorModal<T = never> extends React.Component<Props<T>, State<T>> {
-    static defaultProps: Partial<Props<unknown>> = {
-        entity: 'columns',
-    };
-
     state: State<T> = {
         srcItems: this.props.srcItems || this.props.items,
         items: makeItemsCopy(this.props.items),
@@ -86,7 +80,7 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
         return items.sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name));
     }
 
-    _getSelectorProps<P>(props: P, items: Props<T>['items']) {
+    _getSelectorProps<P>(props: P, items?: Props<T>['items']) {
         return {
             ...props,
             items,
@@ -195,7 +189,7 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
     }
 
     renderContent() {
-        const {isVisible, entity, ...rest} = this.props; // eslint-disable-line
+        const {isVisible, ...rest} = this.props; // eslint-disable-line
         const {items, srcItems} = this.state;
 
         const headingCN = block('elements-heading')({size: 's'}, b('header'));
@@ -213,14 +207,14 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
                 <div className={b()}>
                     <div className={b('panel', {left: 'yes'})}>
                         <div className={headingCN}>
-                            All &nbsp;
-                            <span className="elements-secondary-text">{srcItems.length}</span>
+                            {i18n('all')} &nbsp;
+                            <span className="elements-secondary-text">{srcItems?.length}</span>
                         </div>
 
                         {this.renderColumnSelector({
                             props: selectorProps,
-                            title: `No available ${entity}`,
-                            description: `No ${entity} matching your filtering criteria`,
+                            title: i18n('no-available-columns'),
+                            description: i18n('no-columns-matching'),
                         })}
                     </div>
 
@@ -232,8 +226,8 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
 
                         {this.renderColumnSelector({
                             props: sortableSelectorProps,
-                            title: `No selected ${entity}`,
-                            description: `Add ${entity} you need from the All section.`,
+                            title: i18n('no-selected-columns'),
+                            description: i18n('add-columns-you-need'),
                         })}
                     </div>
                 </div>
@@ -242,8 +236,8 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
     }
 
     render() {
-        const {isVisible, entity} = this.props;
-        const title = `${hammer.format['FirstUppercase'](entity)} setup`;
+        const {isVisible} = this.props;
+        const title = i18n('columns-setup');
 
         return (
             <Modal
@@ -251,7 +245,7 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
                 title={title}
                 borderless={true}
                 visible={isVisible}
-                confirmText="Apply"
+                confirmText={i18n('apply')}
                 onConfirm={this._handleCONFIRMButtonClick}
                 onCancel={this._handleCANCELButtonClick}
                 content={this.renderContent()}

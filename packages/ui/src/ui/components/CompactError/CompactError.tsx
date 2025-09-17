@@ -5,6 +5,8 @@ import {Text} from '@gravity-ui/uikit';
 import {showErrorPopup} from '../../utils/utils';
 import {ClickableText} from '../../components/ClickableText/ClickableText';
 
+import i18n from './i18n';
+
 import './CompactError.scss';
 
 const block = cn('compact-error-block');
@@ -29,7 +31,7 @@ export default function CompactError({error, maxMessageLength}: Props) {
     const message = messageFromError(error, maxMessageLength);
     return (
         <Text variant="body-1" color="danger" className={block()}>
-            {message ?? 'An error occurred'}
+            {message ?? i18n('an-error-occurred')}
             <ClickableText
                 className={block('link')}
                 onClick={() => {
