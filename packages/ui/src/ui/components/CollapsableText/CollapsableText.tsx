@@ -4,6 +4,8 @@ import Button from '../Button/Button';
 
 import Yson from '../Yson/Yson';
 
+import i18n from './i18n';
+
 import './CollapsableText.scss';
 
 const block = cn('elements-collapsable-text');
@@ -99,7 +101,7 @@ class CollapsableText extends React.Component<CollapsableTextProps> {
         return (
             this.textSize! > lineHeight! * lineCount! && (
                 <Button className={block('toggler')} view="flat" size="s" onClick={this.toggle}>
-                    {collapsed ? 'Show more' : 'Show less'}
+                    {collapsed ? i18n('show-more') : i18n('show-less')}
                 </Button>
             )
         );

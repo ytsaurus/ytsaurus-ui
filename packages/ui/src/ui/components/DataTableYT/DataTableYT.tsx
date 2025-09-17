@@ -14,6 +14,8 @@ import {
 import {HEADER_HEIGHT} from '../../constants';
 import {useScrollableElementContenxt} from '../../hooks/use-scrollable-element';
 
+import i18n from './i18n';
+
 import './DataTableYT.scss';
 
 const block = cn('yt-data-table');
@@ -77,7 +79,7 @@ class DataTableYT<T> extends React.Component<DataTableYtProps<T>> {
         if (loaded && data.length === 0) {
             return (
                 <div>
-                    <NoContent padding="regular" warning={noItemsText ?? 'No items to display'} />
+                    <NoContent padding="regular" warning={noItemsText ?? i18n('no-items')} />
                 </div>
             );
         }
