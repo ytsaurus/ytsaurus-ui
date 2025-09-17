@@ -3,7 +3,7 @@ import {generateSuggestion} from '../helpers/generateSuggestions';
 import {getRangeToInsertSuggestion} from '../helpers/getRangeToInsertSuggestion';
 
 export const keywords =
-    '$row|$rows|action|all|and|any|as|asc|assume|begin|bernoulli|between|by|case|columns|commit|compact|create|cross|cube|declare|define|delete|desc|dict|discard|distinct|do|drop|else|empty_action|end|erase|evaluate|exclusion|exists|export|flatten|for|from|full|group|grouping|having|if|ignore|ilike|import|in|inner|insert|into|is|join|left|like|limit|list|match|not|null|nulls|offset|on|only|optional|or|order|over|partition|pragma|presort|process|reduce|regexp|repeatable|replace|respect|result|return|right|rlike|rollup|sample|schema|select|semi|set|sets|stream|subquery|table|tablesample|then|truncate|union|update|upsert|use|using|values|view|when|where|window|with|without|xor'.split(
+    'intersect|except|$row|$rows|action|all|and|any|as|asc|assume|begin|bernoulli|between|by|case|columns|commit|compact|create|cross|cube|declare|define|delete|desc|dict|discard|distinct|do|drop|else|empty_action|end|erase|evaluate|exclusion|exists|export|flatten|for|from|full|group|grouping|having|if|ignore|ilike|import|in|inner|insert|into|is|join|left|like|limit|list|match|not|null|nulls|offset|on|only|optional|or|order|over|partition|pragma|presort|process|reduce|regexp|repeatable|replace|respect|result|return|right|rlike|rollup|sample|schema|select|semi|set|sets|stream|subquery|table|tablesample|then|truncate|union|update|upsert|use|using|values|view|when|where|window|with|without|xor'.split(
         '|',
     );
 export const typeKeywords =
