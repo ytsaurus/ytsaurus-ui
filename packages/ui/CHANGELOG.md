@@ -1,5 +1,38 @@
 # Changelog
 
+## [2.0.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.103.1...ui-v2.0.0) (2025-09-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* **interface-helpers:** move format.DateTime to ui/src/common/hammer/format [YTFRONT-5171]
+
+### Features
+
+* **Navigation/Flow:** add 'force'-flag for static spec editing [YTFRONT-5185] ([26a75b6](https://github.com/ytsaurus/ytsaurus-ui/commit/26a75b63fdab09fe416e7372629cb33a7acf7307))
+* **OperationDetail/Incarnations:** add incarnations tab [YTFRONT-5119] ([7f6264c](https://github.com/ytsaurus/ytsaurus-ui/commit/7f6264ca9e4fde6df1f37305910c88d90313cc2a))
+* **Queries:** add secrets button [YTFRONT-5162] ([8b6a834](https://github.com/ytsaurus/ytsaurus-ui/commit/8b6a8342a8e2e1b3c7137ad5fc987e587ed270d5))
+
+
+### Bug Fixes
+
+* **Navigation/ACL:** fix a mispring [YTFRONT-5166] ([85f1c06](https://github.com/ytsaurus/ytsaurus-ui/commit/85f1c066d0f762ddc02bfafd46676792823e7635))
+* **Operation/Details:** edit button should be always visible [YTFRONT-5164] ([658a55a](https://github.com/ytsaurus/ytsaurus-ui/commit/658a55a28fb5b1a04f43038395ebea62715f3e39))
+* **Operation/Jobs:** do not allow to collapse 'Id/Address' column [YTFRONT-5171] ([0fb04a9](https://github.com/ytsaurus/ytsaurus-ui/commit/0fb04a912c4d4a255a9efe161aa94962d920a736))
+* **UTF8:** encoding table schema [YTFRONT-5161] ([ded51be](https://github.com/ytsaurus/ytsaurus-ui/commit/ded51be9fbe5c26ed78caa69d6bde785bcf09510))
+
+
+### Code Refactoring
+
+* **interface-helpers:** move format.DateTime to ui/src/common/hammer/format [YTFRONT-5171] ([53721f4](https://github.com/ytsaurus/ytsaurus-ui/commit/53721f4c0e9c81d41070d5ebc0240e5402be0427))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @ytsaurus/interface-helpers bumped from ^0.3.0 to ^1.0.0
+
 ## [1.103.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.103.0...ui-v1.103.1) (2025-09-11)
 
 
