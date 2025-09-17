@@ -26,6 +26,7 @@ export function useQueriesSettings() {
             required: true,
             caption: i18n('field_limit'),
             extras: {
+                min: 0,
                 max: 50,
                 hidePrettyValue: true,
             },
