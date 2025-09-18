@@ -8,4 +8,4 @@ JavaScript helpers for YTsaurus platform UI
 
 ## Example
 
-hammer.format\['Bytes'\](123456789) ----> "117.74 MiB"
+hammer.format\['Bytes'\](123456789) ----> "117.74 MiB" 
