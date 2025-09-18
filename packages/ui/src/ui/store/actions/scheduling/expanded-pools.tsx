@@ -35,6 +35,7 @@ import {SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {flattenAttributes} from '../../../utils/scheduling/scheduling';
 import {UIBatchError} from '../../../utils/errors/ui-error';
+import {PoolTreeNode} from '../../../utils/scheduling/pool-child';
 
 type ExpandedPoolsThunkAction = ThunkAction<
     any,
@@ -511,7 +512,7 @@ export function setLoadAllOperations(loadAll: boolean): ExpandedPoolsThunkAction
 
 function calcExpandedPoolInfo(
     poolName: string,
-    poolsByName: Record<string, PoolInfo>,
+    poolsByName: Record<string, PoolTreeNode>,
 ): ExpandedPoolInfo {
     let data = poolsByName[poolName];
     const isEphemeral = data?.isEphemeral;
