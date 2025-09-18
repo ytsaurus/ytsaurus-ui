@@ -9,6 +9,7 @@ import {
     getQueryFilterEngine,
     getQueryFilterState,
 } from '../../../../../../store/selectors/dashboard2/queries';
+import {getCluster} from '../../../../../../store/selectors/global';
 
 import {defaultDashboardItems} from '../../../../../../constants/dashboard2';
 
@@ -29,6 +30,7 @@ export function useQueriesWidget(props: QueriesWidgetProps) {
     const users = map_(data?.authors, ({value}) => value);
     const limit = data?.limit?.value || 0;
 
+    const cluster = useSelector(getCluster);
     const queryState = useSelector((state: RootState) => getQueryFilterState(state, widgetId));
     const engine = useSelector((state: RootState) => getQueryFilterEngine(state, widgetId));
 
@@ -82,7 +84,7 @@ export function useQueriesWidget(props: QueriesWidgetProps) {
         error,
         isLoading,
         isFetching,
-    } = useListQueries({id: widgetId, requests}, {refetchOnMountOrArgChange: true});
+    } = useListQueries({id: widgetId, requests, cluster}, {refetchOnMountOrArgChange: true});
 
     return {queries, error, isLoading: isLoading || isFetching};
 }

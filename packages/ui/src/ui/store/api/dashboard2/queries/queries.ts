@@ -10,6 +10,7 @@ import {QueryStatus} from '../../../../types/query-tracker';
 import {QueriesListResponse} from '../../../../types/query-tracker/api';
 
 type FetchQueriesArgs = {
+    cluster: string;
     requests: ListQueriesParams[];
     id: string;
 };
