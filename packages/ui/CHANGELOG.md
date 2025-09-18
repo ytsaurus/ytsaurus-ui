@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.1.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v2.0.0...ui-v2.1.0) (2025-09-18)
+
+
+### Features
+
+* **yql:** add syntax highlighting for new YQL keywords ([ab6ff5a](https://github.com/ytsaurus/ytsaurus-ui/commit/ab6ff5af05eb06512ce183ebd9cce5d214c03555))
+
+
+### Bug Fixes
+
+* minor fix to publish new release ([e90a68b](https://github.com/ytsaurus/ytsaurus-ui/commit/e90a68bbb5f165acb4c9e9b0237a3978227c01f5))
+
 ## [2.0.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v1.103.1...ui-v2.0.0) (2025-09-17)
 
 
