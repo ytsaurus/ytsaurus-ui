@@ -7,7 +7,6 @@ import type {SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/type
 import type {MetaTableItem} from '../components/MetaTable/MetaTable';
 import type {LocationParameters, PathParameters} from '../store/location';
 import type {TabletBundle} from '../store/reducers/tablet_cell_bundles';
-import type {PoolInfo} from '../store/selectors/scheduling/scheduling-pools';
 import type {ClusterConfig, ClusterUiConfig} from '../../shared/yt-types';
 import type {ClusterAppearance} from '../appearance';
 import type {AppNavigationProps} from '../containers/AppNavigation/AppNavigationPageLayout';
@@ -30,6 +29,7 @@ import type {PreloadErrorType} from '../constants';
 import type {RootState} from '../store/reducers';
 import {YTError} from '../types';
 import {AnalyticsService} from '../common/utils/metrics';
+import {PoolTreeNode} from '../utils/scheduling/pool-child';
 
 type HeaderItemOrPage =
     | {
@@ -299,8 +299,8 @@ export interface UIFactory {
 
     renderTransferQuotaNoticeForPool(props: {
         className?: string;
-        pool?: PoolInfo;
-        parentPool?: PoolInfo;
+        pool?: PoolTreeNode;
+        parentPool?: PoolTreeNode;
         clusterUiConfig?: ClusterUiConfig;
         isTopLevel?: boolean;
     }): React.ReactNode;
@@ -337,7 +337,7 @@ export interface UIFactory {
     }): undefined | Array<MetaTableItem>;
 
     getExtraMetaTableItemsForPool(props: {
-        pool: PoolInfo;
+        pool: PoolTreeNode;
         clusterUiConfig?: ClusterUiConfig;
     }): undefined | Array<MetaTableItem>;
 
