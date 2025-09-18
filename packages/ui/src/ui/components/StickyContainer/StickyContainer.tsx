@@ -35,7 +35,9 @@ export function StickyContainer({
 
     const stickyTop = intersectionRatio !== 1 && boundingClientRect?.top! < topOffset;
 
-    const style = {'--yt-sticky-container-top-offset': `${topOffset}px`} as CSSProperties;
+    const style = React.useMemo(() => {
+        return {'--yt-sticky-container-top-offset': `${topOffset}px`} as CSSProperties;
+    }, [topOffset]);
 
     return (
         <div className={block(null, className)} style={style}>

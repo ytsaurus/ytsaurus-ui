@@ -34,6 +34,7 @@ import {
     removeToken,
 } from './controllers/vcs';
 import {ytTabletErrorsApi} from './controllers/yt-tablet-errors-api';
+import {prometheusQueryRange} from './controllers/prometheus';
 
 const HOME_INDEX_TARGET: AppRouteDescription = {handler: homeIndexFactory(), ui: true};
 
@@ -83,6 +84,8 @@ const routes: AppRoutes = {
     'GET    /api/settings/:ytAuthCluster/:username/:path': {handler: settingsGetItem},
     'PUT    /api/settings/:ytAuthCluster/:username/:path': {handler: settingsSetItem},
     'DELETE /api/settings/:ytAuthCluster/:username/:path': {handler: settingsDeleteItem},
+
+    'POST /api/:ytAuthCluster/prometheus/chart-data': {handler: prometheusQueryRange},
 
     'GET  /api/table-column-preset/:ytAuthCluster/:hash': {
         handler: tableColumnPresetGet,

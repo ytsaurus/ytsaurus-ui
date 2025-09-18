@@ -4,12 +4,15 @@ import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 import sortBy_ from 'lodash/sortBy';
 
-import ypath from '../../../common/thor/ypath';
 import {Toaster} from '@gravity-ui/uikit';
+
+import {getBatchError, splitBatchResults} from '../../../../shared/utils/error';
+
+import ypath from '../../../common/thor/ypath';
 
 import createActionTypes from '../../../constants/utils';
 import {isRetryFutile} from '../../../utils';
-import {getBatchError, showErrorPopup, splitBatchResults} from '../../../utils/utils';
+import {showErrorPopup} from '../../../utils/utils';
 
 import {YTErrors} from '../../../rum/constants';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
