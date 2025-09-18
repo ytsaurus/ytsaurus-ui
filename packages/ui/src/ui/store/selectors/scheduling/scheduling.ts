@@ -59,9 +59,10 @@ export const getPool = (state: RootState) => state.scheduling.scheduling.pool;
 
 export const getSchedulingEditItem = (state: RootState) => state.scheduling.scheduling.editItem;
 
-export const getCurrentPool = createSelector([getPool, getPools], (pool, pools) =>
-    find_(pools, (item) => item.name === pool),
-);
+export const getCurrentPool = createSelector([getPool, getPools], (pool, pools) => {
+    const res = find_(pools, (item) => item.name === pool);
+    return res;
+});
 
 const getSortStateRaw = (state: RootState) => state.tables[SCHEDULING_POOL_TREE_TABLE_ID];
 export const getSortState = createSelector([getSortStateRaw, getCurrentPool], schedulingSortState);
@@ -245,7 +246,7 @@ export const getSortedPoolChildren = createSelector(
             addGetParams: [currentPool],
             groupBy: {
                 asc: true,
-                get(item: PoolInfo | OperationInfo) {
+                get(item: Partial<PoolInfo> | Partial<OperationInfo>) {
                     return item.type === 'operation' ? 0 : 1;
                 },
             },
@@ -285,7 +286,11 @@ export const getCurrentPoolPath = createSelector(
     },
 );
 
-export function calculatePoolPath(pool: string, pools: Array<PoolInfo>, tree: string) {
+export function calculatePoolPath(
+    pool: string,
+    pools: Array<{name: string; parent?: string}>,
+    tree: string,
+) {
     const prefix = `//sys/pool_trees/${tree}`;
 
     let current = pool;
@@ -315,7 +320,7 @@ export const getSchedulingTopPoolOfEditItem = createSelector(
 
         let item = pool;
         while (item) {
-            const parent = mapOfPools[item.parent];
+            const parent = mapOfPools[item.parent!];
             if (isAbcPoolName(item.parent)) {
                 return item;
             }
@@ -333,20 +338,20 @@ export const getSchedulingTopPoolOfEditItem = createSelector(
 export const getSchedulingSourcesOfEditItem = createSelector(
     [getSchedulingEditItem, getSchedulingTopPoolOfEditItem, getSchedulingPoolsMapByName],
     (pool, topPool, mapOfPools): Array<string> => {
-        if (!pool?.name || !mapOfPools) {
+        if (!pool?.name || !mapOfPools || !topPool) {
             return [];
         }
 
         const res: Array<string> = [];
-        visitTreeItems(
+        visitTreeItems<{name: string}>(
             topPool,
-            (item: PoolInfo) => {
+            (item) => {
                 if (pool.name !== item.name) {
                     res.push(item.name);
                 }
             },
             {
-                isNeedToSkipChildren: (item: PoolInfo) => {
+                isNeedToSkipChildren: (item) => {
                     return item?.name === pool?.name;
                 },
             },
