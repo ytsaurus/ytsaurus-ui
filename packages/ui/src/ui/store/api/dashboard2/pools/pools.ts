@@ -10,6 +10,7 @@ export type PoolQueryParams = {
 };
 
 export type PoolsQueryArgs = {
+    cluster: string;
     id: string;
     type: 'favourite' | 'usable' | 'custom';
     favouriteList: {path: string}[];
