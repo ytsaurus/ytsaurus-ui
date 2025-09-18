@@ -25,6 +25,7 @@ import {
 import {ActionD, YTError} from '../../../types';
 import {Action} from 'redux';
 import {PoolInfo} from '../../../store/selectors/scheduling/scheduling-pools';
+import {PoolTreeNode} from '../../../utils/scheduling/pool-child';
 
 export interface SchedulingEphemeralState {
     loading: boolean;
@@ -44,7 +45,7 @@ export interface SchedulingEphemeralState {
     trees: Array<string>;
 
     editVisibility: boolean;
-    editItem?: PoolInfo;
+    editItem?: PoolTreeNode;
 
     deleteVisibility: boolean;
     deleteItem?: PoolInfo;
