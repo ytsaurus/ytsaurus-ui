@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.0.0](https://github.com/ytsaurus/ytsaurus-ui/compare/interface-helpers-v0.3.1...interface-helpers-v1.0.0) (2025-09-18)
+
+
+### ⚠ BREAKING CHANGES
+
+* **interface-helpers:** move format.DateTime to ui/src/common/hammer/format [YTFRONT-5171]
+
+### Bug Fixes
+
+* **Operation/Jobs:** do not allow to collapse 'Id/Address' column [YTFRONT-5171] ([0fb04a9](https://github.com/ytsaurus/ytsaurus-ui/commit/0fb04a912c4d4a255a9efe161aa94962d920a736))
+
+
+### Code Refactoring
+
+* **interface-helpers:** move format.DateTime to ui/src/common/hammer/format [YTFRONT-5171] ([53721f4](https://github.com/ytsaurus/ytsaurus-ui/commit/53721f4c0e9c81d41070d5ebc0240e5402be0427))
+
 ## [0.3.1](https://github.com/ytsaurus/ytsaurus-ui/compare/interface-helpers-v0.3.0...interface-helpers-v0.3.1) (2024-07-25)
 
 
