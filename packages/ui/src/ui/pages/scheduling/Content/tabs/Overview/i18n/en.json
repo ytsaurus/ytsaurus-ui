@@ -1,0 +1,15 @@
+{
+  "burst-unit": "Burst unit",
+  "flow-unit": "Flow unit",
+  "general": "General",
+  "guarantee-type": "guarantee-type",
+  "integral-guarantees": "Integral guarantees",
+  "integral-guarantee": "Integral guarantee",
+  "mode": "Mode",
+  "operations": "Operations",
+  "operations-running": "Running operations",
+  "pool-configuration": "{{pool_name}} configuration",
+  "strong-guarantees": "Strong guarantees",
+  "weight": "Weight",
+  "user-slots": "User slots"
+}
