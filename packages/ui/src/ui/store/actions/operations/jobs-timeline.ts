@@ -1,5 +1,4 @@
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {getBatchError} from '../../../utils/utils';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../reducers';
 import {Action} from 'redux';
@@ -38,6 +37,7 @@ type OperationJob = RawJob & {
     allocation_id?: string;
     job_cookie: number;
     task_name: string;
+    operation_incarnation: string;
 };
 
 export const getJobsWithEvents =
@@ -55,6 +55,17 @@ export const getJobsWithEvents =
             const listResponse = await ytApiV3Id.listJobs(YTApiId.operationGetJobs, {
                 operation_id: operationId,
                 cancellation: cancelHelper.removeAllAndSave,
+                attributes: [
+                    'events',
+                    'state',
+                    'job_cookie',
+                    'task_name',
+                    'start_time',
+                    'finish_time',
+                    'address',
+                    'allocation_id',
+                    'operation_incarnation',
+                ],
             });
 
             const jobs = listResponse.jobs as OperationJob[];
@@ -63,32 +74,15 @@ export const getJobsWithEvents =
                 return;
             }
 
-            const requests = jobs.map(({id}) => {
-                return {
-                    command: 'get_job' as const,
-                    parameters: {
-                        operation_id: operationId,
-                        job_id: id,
-                    },
-                };
-            });
-
-            const response = await ytApiV3Id.executeBatch<OperationJob>(YTApiId.operationGetJobs, {
-                parameters: {requests},
-                cancellation: cancelHelper.removeAllAndSave,
-            });
-
-            const error = getBatchError(response, 'Get operation jobs error');
-            if (error) {
-                throw error;
-            }
-
-            const result = response.reduce<Pick<JobsTimelineState, 'jobs' | 'eventsInterval'>>(
-                (acc, {output: job}) => {
-                    if (!job?.events || !job.events.length) return acc;
+            const result = jobs.reduce<Pick<JobsTimelineState, 'jobs' | 'eventsInterval'>>(
+                (acc, job) => {
+                    // filter valid jobs
+                    if (!job?.events || job.job_cookie === undefined || !job.events.length)
+                        return acc;
 
                     const jobEvents = job.events;
-                    const isRunning = job.state === 'running';
+                    const isRunning = job.state === 'running' || job.state === 'waiting';
+                    const isAborted = job.state === 'aborted';
 
                     // stretch running job timeline
                     const maxTime = isRunning
@@ -98,8 +92,9 @@ export const getJobsWithEvents =
                     const percent = (maxTime - minTime) / 100;
 
                     const timeLineJob: TimelineJob = {
-                        id: job.job_id,
+                        id: job.id,
                         cookieId: job.job_cookie,
+                        incarnation: job.operation_incarnation,
                         allocationId: job.allocation_id,
                         groupName: job.task_name || '',
                         events: [],
@@ -137,13 +132,24 @@ export const getJobsWithEvents =
                         }
                     }
 
-                    // stretch running job timeline
-                    if (isRunning) {
+                    if (isRunning || isAborted) {
                         const lastEventIndex = timeLineJob.events.length - 1;
                         const {startTime} = timeLineJob.events[lastEventIndex];
-                        timeLineJob.events[lastEventIndex].endTime = Date.now();
-                        timeLineJob.events[lastEventIndex].percent =
-                            (Date.now() - startTime) / percent;
+
+                        // stretch running job timeline
+                        if (isRunning) {
+                            timeLineJob.events[lastEventIndex].endTime = Date.now();
+                            timeLineJob.events[lastEventIndex].percent =
+                                (Date.now() - startTime) / percent;
+                        }
+
+                        // set endTime to finish_time for aborted jobs
+                        if (isAborted && timeLineJob.finish_time) {
+                            const endTime = dayjs(timeLineJob.finish_time).valueOf();
+                            timeLineJob.events[lastEventIndex].endTime = endTime;
+                            timeLineJob.events[lastEventIndex].percent =
+                                (endTime - startTime) / percent;
+                        }
                     }
 
                     acc.jobs.push(timeLineJob);
