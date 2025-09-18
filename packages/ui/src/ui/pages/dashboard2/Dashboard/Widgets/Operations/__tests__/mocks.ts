@@ -453,9 +453,16 @@ export const batchResponse: Array<BatchResultsItem<DashboardOperationsResponse>>
             ],
         },
     },
+    {
+        error: {
+            message: 'Oops got an error',
+            code: 500,
+            inner_errors: [],
+        },
+    },
 ];
 
-export const batchResponseLong = [
+export const batchResponseLong: Array<BatchResultsItem<DashboardOperationsResponse>> = [
     {
         output: {
             operations: [
