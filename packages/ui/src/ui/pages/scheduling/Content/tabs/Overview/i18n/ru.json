@@ -1,0 +1,15 @@
+{
+  "burst-unit": "Burst unit",
+  "flow-unit": "Flow unit",
+  "general": "Основные",
+  "guarantee-type": "Тип гарантии",
+  "integral-guarantees": "Интегральные гарантии",
+  "integral-guarantee": "Интегральная гарантия",
+  "mode": "Режим",
+  "operations": "Операции",
+  "operations-running": "Запущенные операции",
+  "pool-configuration": "{{pool_name}} конфигурация",
+  "strong-guarantees": "Строгие гарантии",
+  "weight": "Вес",
+  "user-slots": "Пользовательские слоты"
+}
