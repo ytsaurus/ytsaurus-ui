@@ -2,6 +2,8 @@ import React from 'react';
 import {useSelector} from '../../../../../../store/redux-hooks';
 import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
+import format from '../../../../../../common/hammer/format';
+
 import {RootState} from '../../../../../../store/reducers';
 import {ServiceInfo} from '../../../../../../store/api/dashboard2/services/services';
 import {getServicesTypeFilter} from '../../../../../../store/selectors/dashboard2/services';
@@ -36,7 +38,7 @@ const columns = [
         header: () => i18n('field_health'),
     }),
     columnHelper.accessor('config', {
-        cell: (config) => <WidgetText>{config.getValue()}</WidgetText>,
+        cell: (config) => <WidgetText>{config.getValue() ?? format.NO_VALUE}</WidgetText>,
         header: () => i18n('field_config'),
     }),
 ];
