@@ -8,7 +8,7 @@ import cn from 'bem-cn-lite';
 import {Progress} from '@gravity-ui/uikit';
 
 import ElementsTableSticky from '../../../../../components/ElementsTable/ElementsTableSticky';
-import Overview from '../../../../../pages/scheduling/Content/tabs/Overview/Overview';
+import Overview from '../../../../../pages/scheduling/Content/tabs/OverviewOld/Overview';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
 import RadioButton from '../../../../../components/RadioButton/RadioButton';
 import Filter from '../../../../../components/Filter/Filter';
@@ -46,7 +46,7 @@ import {Bold, Secondary} from '../../../../../components/Text/Text';
 import SchedulingOperationsError from '../SchedulingOperationsError/SchedulingOperationsError';
 import {getPoolPathsByName} from '../../../../../store/actions/scheduling/expanded-pools';
 
-import PoolTags from '../Overview/PoolTags';
+import PoolTags from '../OverviewOld/PoolTags';
 
 import './Details.scss';
 
