@@ -10,6 +10,7 @@ import {parseAccountData} from '../../../../utils/accounts/accounts-selector';
 type AccountsWidgetArgs = {
     id: string;
     accountsList: string[];
+    cluster: string;
     medium?: string[] | string;
 };
 

@@ -33,6 +33,7 @@ export function useAccountsWidget(props: AccountsWidgetProps) {
     } = useAccountsQuery({
         id: props.id,
         accountsList,
+        cluster,
         medium: data?.columns
             ? data.columns
                   .map((item) => item.name)
