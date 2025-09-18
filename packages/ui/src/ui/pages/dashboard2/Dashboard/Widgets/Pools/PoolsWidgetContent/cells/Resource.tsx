@@ -12,14 +12,14 @@ import './Resource.scss';
 
 const block = b('pool-resource');
 
-type Props = PoolResource & {
-    type: Omit<keyof PoolResource, 'name'>;
+type Props = Partial<PoolResource> & {
+    type?: Partial<Omit<keyof PoolResource, 'name'>>;
 };
 
 export function ResourceCell(props: Props) {
     const {value, usage, guarantee, type} = props;
 
-    const theme = value < 100 ? 'info' : 'warning';
+    const theme = value && value < 100 ? 'info' : 'warning';
 
     const usageText = (type === 'memory' ? format.Bytes(usage) : usage) || format.NO_VALUE;
     const guaranteeText =
@@ -35,7 +35,7 @@ export function ResourceCell(props: Props) {
                 </Flex>
             }
         >
-            <Progress text={`${usageText} / ${guaranteeText}`} value={value} theme={theme} />
+            <Progress text={`${usageText} / ${guaranteeText}`} value={value || 0} theme={theme} />
         </Tooltip>
     );
 }

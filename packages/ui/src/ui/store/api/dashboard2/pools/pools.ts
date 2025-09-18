@@ -65,6 +65,16 @@ export async function fetchPools(args: PoolsQueryArgs) {
         const pools = map_(response, (item, index) => {
             const {output} = item;
 
+            if (item.error) {
+                return {
+                    general: {
+                        pool: queries?.[index]?.pool || 'unknown',
+                        tree: queries?.[index]?.tree || 'unknown',
+                        error: item.error,
+                    },
+                };
+            }
+
             const operationsGuarantee = ypath.getValue(output, '/max_operation_count');
             const operationsUsage = ypath.getValue(output, '/running_operation_count');
 
