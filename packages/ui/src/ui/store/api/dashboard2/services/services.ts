@@ -12,16 +12,15 @@ import {RootState} from '../../../../store/reducers';
 import {isDeveloper} from '../../../../store/selectors/global/is-developer';
 
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
-import {getBatchError} from '../../../../utils/utils';
 import {StrawberryCliqueHealthType, chytApiAction} from '../../../../utils/strawberryControllerApi';
 import {defaultColumns} from '../../../../constants/chyt';
-import {YTHealth} from '../../../../types';
+import {YTError, YTHealth} from '../../../../types';
 import {Page} from '../../../../../shared/constants/settings';
 import {USE_MAX_SIZE} from '../../../../../shared/constants/yt-api';
 import {pluralize} from '../../../../utils';
 
 export type ServiceInfo = {
-    general: {name: string; url: string};
+    general: {name: string; url?: string; error?: YTError};
     type: 'Bundle' | 'CHYT';
     status?: YTHealth | StrawberryCliqueHealthType;
     config: string;
@@ -97,15 +96,20 @@ async function fetchBundles(items: ServicesItem[], cluster: string) {
         },
     );
 
-    const error = getBatchError(bundlesResponse, 'Tablet cell bundles cannot be loaded');
-    if (error) {
-        throw error;
-    }
-
     const [cells, ...bundles] = bundlesResponse;
 
     if (!bundlesResponse?.length) return [];
-    const bundlesInfo = map_(bundles || [], ({output}, idx) => {
+    const bundlesInfo = map_(bundles || [], ({output, error}, idx) => {
+        if (error) {
+            return {
+                type: 'Bundle',
+                general: {
+                    name: items?.[idx]?.item || 'unknown',
+                    error: error,
+                },
+            };
+        }
+
         if (!output) {
             return undefined;
         }
@@ -177,7 +181,7 @@ async function fetchChyt(items: ServicesItem[], cluster: string, isAdmin: boolea
         .map((item) => [ypath.getValue(item), ypath.getAttributes(item)])
         .filter(([alias]) => items.map((i) => i.item).includes(alias));
 
-    const cliques = map_(cliquesResponses, ([alias, item]) => {
+    const cliques: ServiceInfo[] = map_(cliquesResponses, ([alias, item]) => {
         const instances = Number(item?.instance_count || 0);
         const cpu = `${(item?.total_cpu || 0) / instances} ${item?.total_cpu && item?.total_cpu > 1 ? 'cores' : 'core'}`;
         const memory = format.Bytes((item?.total_memory || 0) / instances || format.NO_VALUE);
@@ -191,6 +195,22 @@ async function fetchChyt(items: ServicesItem[], cluster: string, isAdmin: boolea
             status: item?.health,
             config: makeServiceConfig(instances, memory, cpu),
         };
+    });
+
+    map_(items, (item) => {
+        if (!cliques.find((clique) => clique.general.name === item.item)) {
+            cliques.push({
+                type: 'CHYT' as const,
+                general: {
+                    name: item.item,
+                    error: {
+                        code: 500,
+                        message: `Can not find ${item.item} clique on current cluster`,
+                    },
+                },
+                config: format.NO_VALUE,
+            });
+        }
     });
 
     return cliques;

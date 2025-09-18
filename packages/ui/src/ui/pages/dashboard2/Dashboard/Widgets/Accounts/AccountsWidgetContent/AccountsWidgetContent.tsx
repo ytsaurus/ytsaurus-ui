@@ -24,8 +24,8 @@ export function AccountsWidgetContent(props: AccountsWidgetProps) {
 
     const columns = useMemo(() => {
         const cols = [
-            columnHelper.accessor('name', {
-                cell: (name) => <AccountsNameCell name={name.getValue()} />,
+            columnHelper.accessor('general', {
+                cell: (general) => <AccountsNameCell {...general.getValue()} />,
                 header: () => <Text variant={'subheader-1'}>{'Name'}</Text>,
                 maxSize: 200,
             }),
