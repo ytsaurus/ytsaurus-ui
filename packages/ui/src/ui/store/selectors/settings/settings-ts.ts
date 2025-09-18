@@ -190,9 +190,5 @@ export const getSettingQueryTrackerYQLAgentStage = createSelector(
 export const getCurrentClusterNS = createSelector([getCluster, getClusterNS], (cluster, ns) => {
     return cluster ? ns : undefined;
 });
-
-export const getSettingNewDashboardPage = (state: RootState) =>
-    getSettingsData(state)['global::autoRefresh'];
-
 export const getUseAutoRefresh = (state: RootState) =>
     getSettingsData(state)['global::autoRefresh'];
