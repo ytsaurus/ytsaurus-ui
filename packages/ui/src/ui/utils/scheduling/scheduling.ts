@@ -7,6 +7,8 @@ import ypath from '../../common/thor/ypath';
 import {ROOT_POOL_NAME} from '../../constants/scheduling';
 import type {OperationInfo, PoolInfo} from '../../store/selectors/scheduling/scheduling-pools';
 import {attachTreeLeaves, prepareTree} from '../../common/hammer/tree-list';
+import {ValueOf} from '../../types';
+import {PoolData, PoolTreeNode} from './pool-child';
 
 function getPool(pools: Array<PoolInfo>, name: string) {
     return find_(pools, (pool) => pool.name === name);
@@ -23,14 +25,17 @@ export function prepareCurrentTree(defaultTree: unknown, trees: Array<string>, t
 }
 
 export function preparePools(
-    pools: Record<string, PoolInfo>,
-    operations: Record<string, OperationInfo>,
+    pools: Record<string, Partial<PoolInfo & {type: 'pool'}>>,
+    operations: Record<string, Partial<OperationInfo>>,
 ) {
-    const treeNodesMap = prepareTree<PoolInfo, OperationInfo>(pools, (entry: PoolInfo) =>
-        ypath.getValue(entry, '/parent'),
-    );
+    const treeNodesMap = prepareTree<
+        ValueOf<typeof pools>,
+        ValueOf<typeof operations>,
+        PoolData<'pool'>,
+        PoolData<'operation'>
+    >(pools, (entry: ValueOf<typeof pools>) => ypath.getValue(entry, '/parent') as string);
 
-    attachTreeLeaves(treeNodesMap, operations, (operation: OperationInfo) =>
+    attachTreeLeaves(treeNodesMap, operations, (operation: Partial<OperationInfo>) =>
         ypath.getValue(operation, '/pool'),
     );
 
@@ -52,7 +57,7 @@ export function computePathItems(pools: Array<PoolInfo>, name: string) {
     return pathItems;
 }
 
-export function computePoolPath(pool: PoolInfo, pools: Array<PoolInfo>) {
+export function computePoolPath(pool: {name: string; parent?: string}, pools: Array<typeof pool>) {
     const partitions = [pool.name];
     let parent: string | undefined = pool.parent;
 
@@ -100,12 +105,12 @@ export function flattenAttributes(obj: any) {
     return toReturn;
 }
 
-function getResourceLimit(pool: PoolInfo | undefined, limitKey: string): number | '' {
+function getResourceLimit(pool: PoolTreeNode | undefined, limitKey: string): number | '' {
     const value = Number(ypath.getValue(pool, `/cypressAttributes/resource_limits/${limitKey}`));
     return isNaN(value) ? '' : value;
 }
 
-function prepareValueDetails(pool: PoolInfo | undefined, path: string) {
+function prepareValueDetails(pool: PoolTreeNode | undefined, path: string) {
     if (!pool) {
         return {};
     }
@@ -119,7 +124,7 @@ function prepareValueDetails(pool: PoolInfo | undefined, path: string) {
     };
 }
 
-function prepareMinGuaranteed(pool?: PoolInfo, path = '') {
+function prepareMinGuaranteed(pool?: PoolTreeNode, path = '') {
     const res = reduce_(
         pool?.children,
         (sum, item) => {
@@ -202,7 +207,7 @@ export type PoolIntegralResourceType = keyof typeof POOL_INTEGRAL_GUARANTEE_FIEL
 export type PoolGeneralResourceType = keyof typeof POOL_GENERAL_TYPE_TO_ATTRIBUTE;
 export type PoolResourceType = keyof typeof POOL_RESOURCE_TYPE_TO_ATTRIBUTE;
 
-export function getPoolResourceInfo(pool: PoolInfo, type: PoolResourceType) {
+export function getPoolResourceInfo(pool: PoolTreeNode, type: PoolResourceType) {
     const path = '/cypressAttributes/' + POOL_RESOURCE_TYPE_TO_ATTRIBUTE[type];
     return prepareValueDetails(pool, path);
 }
@@ -213,7 +218,7 @@ export interface InitialPoolResourceInfo {
 }
 
 export function getPoolResourceInitialValue(
-    pool: PoolInfo | undefined,
+    pool: PoolTreeNode | undefined,
     type: PoolResourceType,
     allowSource: boolean,
 ): InitialPoolResourceInfo {
@@ -227,7 +232,10 @@ export function getPoolResourceInitialValue(
     };
 }
 
-export function getInitialValues(editItem: PoolInfo | undefined, allowedSources: Array<string>) {
+export function getInitialValues(
+    editItem: PoolTreeNode | undefined,
+    allowedSources: Array<string>,
+) {
     const slug = ypath.getValue(editItem, '/abc/slug');
 
     const allowSource = -1 !== indexOf_(allowedSources, editItem?.parent);
