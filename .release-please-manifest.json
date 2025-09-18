@@ -1,6 +1,6 @@
 {
   "packages/javascript-wrapper": "0.14.0",
-  "packages/interface-helpers": "1.0.0",
+  "packages/interface-helpers": "1.0.1",
   "packages/ui": "2.0.0",
   "packages/ui-helm-chart": "0.5.0"
 }

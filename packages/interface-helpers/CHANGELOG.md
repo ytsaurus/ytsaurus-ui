@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/ytsaurus/ytsaurus-ui/compare/interface-helpers-v1.0.0...interface-helpers-v1.0.1) (2025-09-18)
+
+
+### Bug Fixes
+
+* minor fix to publish new release ([3789eb5](https://github.com/ytsaurus/ytsaurus-ui/commit/3789eb57374dc4ae1e1c0a436eb743b9f2a5aae3))
+
 ## [1.0.0](https://github.com/ytsaurus/ytsaurus-ui/compare/interface-helpers-v0.3.1...interface-helpers-v1.0.0) (2025-09-18)
 
 
