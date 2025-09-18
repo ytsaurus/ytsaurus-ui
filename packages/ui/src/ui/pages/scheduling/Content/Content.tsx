@@ -7,7 +7,7 @@ import reduce_ from 'lodash/reduce';
 
 import Tabs from '../../../components/Tabs/Tabs';
 import Placeholder from '../../../pages/components/Placeholder';
-import {OverviewWithRum} from '../../../pages/scheduling/Content/tabs/Overview/Overview';
+import {OverviewWithRum} from '../../../pages/scheduling/Content/tabs/OverviewOld/Overview';
 import Details from '../../../pages/scheduling/Content/tabs/Details/Details';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 
@@ -28,6 +28,7 @@ import {getCluster} from '../../../store/selectors/global';
 import SchedulingExpandedPoolsUpdater from './SchedulingExpandedPoolsUpdater';
 import UIFactory from '../../../UIFactory';
 import {UI_TAB_SIZE} from '../../../constants/global';
+import {Overview} from '../../../pages/scheduling/Content/tabs/Overview/Overview';
 
 const block = cn('scheduling-content');
 
@@ -113,7 +114,8 @@ function Content({className, match, location}: ContentProps) {
                 />
 
                 <Switch>
-                    <Route path={`${match.path}/${Tab.OVERVIEW}`} component={OverviewWithRum} />
+                    <Route path={`${match.path}/${Tab.OVERVIEW}`} component={Overview} />
+                    <Route path={`${match.path}/${Tab.OVERVIEW_OLD}`} component={OverviewWithRum} />
                     <Route path={`${match.path}/${Tab.DETAILS}`} component={Details} />
                     {extraRoutes}
                     {aclTab.show && <Route path={`${match.path}/${Tab.ACL}`} component={PoolAcl} />}
