@@ -8,6 +8,7 @@ import {YTApiId, ytApiV4Id} from '../../../../rum/rum-wrap-api';
 import {durationDates} from '../../../../utils/date';
 import {QueryStatus} from '../../../../types/query-tracker';
 import {QueriesListResponse} from '../../../../types/query-tracker/api';
+import {YTError} from '../../../../types';
 
 type FetchQueriesArgs = {
     cluster: string;
@@ -32,7 +33,16 @@ export async function fetchQuerieslist({requests}: FetchQueriesArgs) {
 
         const {results} = response;
 
+        let requestedQueriesErrors: YTError | undefined = {
+            message: 'Oops, something went wrong',
+            inner_errors: [],
+        };
+
         const queries = map_(results, (item) => {
+            if (item.error) {
+                requestedQueriesErrors?.inner_errors?.push?.(item.error);
+                return [];
+            }
             if (!item?.output?.queries) {
                 return [];
             }
@@ -52,7 +62,11 @@ export async function fetchQuerieslist({requests}: FetchQueriesArgs) {
             }));
         });
 
-        return {data: queries.flat()};
+        if (!requestedQueriesErrors?.inner_errors?.length) {
+            requestedQueriesErrors = undefined;
+        }
+
+        return {data: {queries: queries.flat(), requestedQueriesErrors}};
     } catch (error) {
         return {error};
     }

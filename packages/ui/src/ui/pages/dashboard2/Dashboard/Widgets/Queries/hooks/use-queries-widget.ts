@@ -80,11 +80,16 @@ export function useQueriesWidget(props: QueriesWidgetProps) {
     }, [limit, queryEngine, requestedStates, users]);
 
     const {
-        data: queries,
+        data: queriesResponse,
         error,
         isLoading,
         isFetching,
     } = useListQueries({id: widgetId, requests, cluster}, {refetchOnMountOrArgChange: true});
 
-    return {queries, error, isLoading: isLoading || isFetching};
+    return {
+        queries: queriesResponse?.queries,
+        error,
+        isLoading: isLoading || isFetching,
+        requestedQueriesErrors: queriesResponse?.requestedQueriesErrors,
+    };
 }
