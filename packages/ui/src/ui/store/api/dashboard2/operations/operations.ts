@@ -8,6 +8,7 @@ import {RootState} from '../../../../store/reducers';
 import ypath from '../../../../common/thor/ypath';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {NavigationFlowState, StatusLabelState} from '../../../../types/common/states';
+import {YTError} from '../../../../types';
 import {BatchResultsItem, ListOperationsParams} from '../../../../../shared/yt-types';
 
 type OperationState = StatusLabelState | NavigationFlowState;
@@ -213,10 +214,29 @@ export async function fetchOperations(args: OperationsQueryArgs, api: BaseQueryA
             );
         }
 
-        const res = map_(response, (item) => item?.output || {operations: []});
+        let requestedOperationsErrors: YTError | undefined = {
+            message: 'Oops, something went wrong',
+            inner_errors: [],
+        };
+
+        const res = map_(response, (item) => {
+            if (item.output) {
+                return item.output;
+            }
+
+            if (item.error) {
+                requestedOperationsErrors?.inner_errors?.push?.(item.error);
+            }
+
+            return {operations: []};
+        });
+
         const operations = processOperationsResponse(res);
 
-        return {data: operations};
+        if (!requestedOperationsErrors.inner_errors?.length) {
+            requestedOperationsErrors = undefined;
+        }
+        return {data: {operations, requestedOperationsErrors}};
     } catch (error) {
         return {error};
     }

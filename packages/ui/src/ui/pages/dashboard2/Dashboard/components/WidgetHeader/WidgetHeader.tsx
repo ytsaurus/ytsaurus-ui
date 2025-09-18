@@ -1,7 +1,11 @@
 import React from 'react';
-import {Flex, Text} from '@gravity-ui/uikit';
+import {useDispatch} from 'react-redux';
+import {Button, Flex, Text} from '@gravity-ui/uikit';
+import {CircleExclamation} from '@gravity-ui/icons';
 
 import Link from '../../../../../components/Link/Link';
+import {YTError} from '../../../../../types';
+import {showErrorModal} from '../../../../../store/actions/modals/errors';
 
 import {Page} from '../../../../../../shared/constants/settings';
 
@@ -13,10 +17,13 @@ type Props = {
     page?: keyof typeof Page;
     isLoading?: boolean;
     id?: string;
+    error?: YTError;
 };
 
 export function WidgetHeader(props: Props) {
-    const {title, count, page, isLoading, id} = props;
+    const {title, count, page, isLoading, id, error} = props;
+
+    const dispatch = useDispatch();
 
     return (
         <Flex
@@ -42,6 +49,17 @@ export function WidgetHeader(props: Props) {
                 <Text color={'secondary'} variant={'subheader-3'} qa={`${id}-items-count`}>
                     {count}
                 </Text>
+            )}
+            {error && (
+                <Button
+                    view={'flat'}
+                    size={'s'}
+                    onClick={() => dispatch(showErrorModal(error, {hideOopsMsg: true}))}
+                >
+                    <Flex alignItems={'center'} width={'100%'} height={'100%'}>
+                        <CircleExclamation color={'var(--danger-color)'} />
+                    </Flex>
+                </Button>
             )}
         </Flex>
     );

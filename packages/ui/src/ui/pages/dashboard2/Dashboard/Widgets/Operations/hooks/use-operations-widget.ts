@@ -22,7 +22,7 @@ export function useOperationsWidget(props: OperationsWidgetProps) {
     const limit = data?.limit?.value || 0;
 
     const {
-        data: operations,
+        data: queryData,
         isLoading,
         isFetching,
         error,
@@ -36,5 +36,13 @@ export function useOperationsWidget(props: OperationsWidgetProps) {
         limit,
     });
 
-    return {filters: {state}, data: {operations, isLoading: isLoading || isFetching, error}};
+    return {
+        filters: {state},
+        data: {
+            operations: queryData?.operations,
+            isLoading: isLoading || isFetching,
+            error,
+            requestedOperationsErrors: queryData?.requestedOperationsErrors,
+        },
+    };
 }
