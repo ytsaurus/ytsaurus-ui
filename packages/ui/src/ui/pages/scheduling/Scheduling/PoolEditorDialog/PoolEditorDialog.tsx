@@ -32,15 +32,13 @@ import {getCluster, getCurrentUserName} from '../../../../store/selectors/global
 import {getCurrentTreeGpuLimit} from '../../../../store/selectors/scheduling/scheduling-ts';
 
 import {RootState} from '../../../../store/reducers';
-import {
-    PoolInfo,
-    getSchedulingPoolsMapByName,
-} from '../../../../store/selectors/scheduling/scheduling-pools';
+import {getSchedulingPoolsMapByName} from '../../../../store/selectors/scheduling/scheduling-pools';
 import Link from '../../../../components/Link/Link';
 
 import './PoolEditorDialog.scss';
 import UIFactory from '../../../../UIFactory';
 import {createQuotaReqTicketUrl} from '../../../../config';
+import {PoolTreeNode} from '../../../../utils/scheduling/pool-child';
 
 const block = cn('pool-editor-dialog');
 
@@ -507,7 +505,7 @@ export function PoolEditorDialog() {
     );
 }
 
-function useTransferNotice(editItem?: PoolInfo): [DialogField<PoolEditorFormValues>] | [] {
+function useTransferNotice(editItem?: PoolTreeNode): [DialogField<PoolEditorFormValues>] | [] {
     const {parent} = editItem || {};
     //    const abcInfo = abcInfoFromAttributes(cypressAttributes);
     const poolsByName = useSelector(getSchedulingPoolsMapByName);
@@ -533,8 +531,8 @@ function useTransferNotice(editItem?: PoolInfo): [DialogField<PoolEditorFormValu
 }
 
 function useChangeIntegralTypeNotice(
-    editItem: PoolInfo | undefined,
-    pools: Array<PoolInfo>,
+    editItem: {name: string; parent?: string} | undefined,
+    pools: Array<{name: string; parent?: string}>,
     tree: string,
 ): [DialogField<PoolEditorFormValues>] | [] {
     const {name, parent} = editItem || {};

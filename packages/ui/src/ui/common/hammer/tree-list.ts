@@ -8,22 +8,25 @@ import {utils} from './utils';
 
 import {OldSortState} from '../../types';
 
-export interface TreeNode<T, L> {
+export type TreeNode<T, L, E = {}, LE = E> = E & {
     name: string;
-    parent?: string | Array<string>;
+    parent?: string;
     attributes: T;
-    children: Array<TreeNode<T, L>>;
-    leaves: Array<LeafNode<L>>;
+    children: Array<TreeNode<T, L, E>>;
+    leaves: Array<LeafNode<L, LE>>;
     isLeafNode?: false;
-}
+    _initedBy?: string;
+};
 
-export interface LeafNode<L = unknown> {
+export type LeafNode<L = unknown, E = {}> = E & {
     name: string;
     attributes: L;
     isLeafNode: true;
-}
 
-export type TreeItem<T, L> = TreeNode<T, L> | LeafNode<L>;
+    parent?: undefined;
+};
+
+export type TreeItem<T, L, E = {}, LE = E> = TreeNode<T, L, E> | LeafNode<L, LE>;
 
 /**
  * Create a treeNode with a given name or return an existing treeNode
@@ -61,11 +64,11 @@ function getTreeLeafNode<L>(leafNode: L, name: string): LeafNode<L> {
  * @param entries - input data in map format { treeNodeName: treeNodeData }
  * @param parentGetter - returns an array of parents or a single parent treeNode name
  */
-export function prepareTree<T, L = T>(
+export function prepareTree<T, L = T, E = {}, LE = E>(
     entries: Record<string, T>,
-    parentGetter: (item: T) => string | Array<string>,
+    parentGetter: (item: T) => string,
 ) {
-    const treeNodeMap: Record<string, TreeNode<T, L>> = {};
+    const treeNodeMap: Record<string, TreeNode<T, L, E, LE>> = {};
 
     each_(entries, (entry, name) => {
         const parentNames = parentGetter(entry);
