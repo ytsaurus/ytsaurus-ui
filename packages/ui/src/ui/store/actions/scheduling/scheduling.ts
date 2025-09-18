@@ -40,6 +40,7 @@ import {loadSchedulingData, setPoolAttributes} from './scheduling-ts';
 import {splitBatchResults} from '../../../utils/utils';
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {YTErrors} from '../../../rum/constants';
+import {PoolTreeNode} from '../../../utils/scheduling/pool-child';
 
 const toaster = new Toaster();
 
@@ -189,7 +190,7 @@ function isValidNumber(value: number | string) {
 type SchedulingThunk<T> = ThunkAction<T, RootState, unknown, SchedulingAction>;
 
 export function editPool(
-    pool: PoolInfo,
+    pool: PoolTreeNode,
     values: PoolEditorFormValues,
     initialValues: PoolEditorFormValues,
 ): SchedulingThunk<Promise<void>> {
