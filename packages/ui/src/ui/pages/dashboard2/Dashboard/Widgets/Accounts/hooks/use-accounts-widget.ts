@@ -19,7 +19,10 @@ export function useAccountsWidget(props: AccountsWidgetProps) {
     const type = useSelector((state: RootState) => getAccountsTypeFilter(state, props.id));
     const isAdmin = useSelector(isDeveloper);
 
-    useUsableAccountsQuery({cluster}, {skip: isAdmin});
+    const {isLoading: isUsableLoading, isFetching: isUsableFetching} = useUsableAccountsQuery(
+        {cluster},
+        {skip: isAdmin},
+    );
 
     const accountsList = useSelector((state: RootState) =>
         getAccountsList(state, props.id, data?.accounts || []),
@@ -43,7 +46,7 @@ export function useAccountsWidget(props: AccountsWidgetProps) {
 
     return {
         accounts,
-        isLoading: isLoading || isFetching,
+        isLoading: isLoading || isFetching || isUsableFetching || isUsableLoading,
         error,
         type,
         userColumns: data?.columns,
