@@ -1,8 +1,6 @@
 import React from 'react';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 
-import map_ from 'lodash/map';
-
 import format from '../../../../../common/hammer/format';
 
 import {
@@ -10,9 +8,11 @@ import {
     toggleCopyConfigDialogVisibility,
 } from '../../../../../store/reducers/dashboard2/dashboard';
 import {copyConfig} from '../../../../../store/actions/dashboard2/dashboard';
-import {getClusterList} from '../../../../../store/selectors/slideoutMenu';
+import {getCluster} from '../../../../../store/selectors/global';
 
 import {FormApi, YTDFDialog} from '../../../../../components/Dialog';
+
+import {YT} from '../../../../../config/yt-config';
 
 import i18n from './i18n';
 
@@ -23,15 +23,14 @@ interface FormValues {
 export function CopyConfigDialog() {
     const dispatch = useDispatch();
 
-    const clusterList = useSelector(getClusterList);
+    const cluster = useSelector(getCluster);
     const copyConfigDialogVisibility = useSelector(getCopyConfigDialogVisibility);
 
     const onClose = () => dispatch(toggleCopyConfigDialogVisibility());
 
-    const copyConfigOptions = map_(clusterList, (cluster) => ({
-        value: cluster.name.toLowerCase(),
-        content: format.ReadableField(cluster.name),
-    }));
+    const copyConfigOptions = Object.entries(YT.clusters)
+        .filter(([configCluster, _]) => configCluster !== cluster)
+        .map(([cluster]) => ({value: cluster, content: format.ReadableField(cluster)}));
 
     return (
         <YTDFDialog<FormValues>
