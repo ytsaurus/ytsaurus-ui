@@ -44,16 +44,21 @@ export const getJobsMonitorFromTo = createSelector(
     },
 );
 
-export const getJobsMonitorDescriptor = createSelector(
+export const getUniqueJobsMonitorDescriptor = createSelector(
     [getJobsMonitoringItemsWithDescriptor],
     (jobs) => {
-        const tmp = map_(jobs, 'monitoring_descriptor');
-        return tmp.join('|');
+        const descriptors = new Set(map_(jobs, 'monitoring_descriptor'));
+        return [...descriptors].join('|');
     },
 );
 
 export const getJobsMonitorTabVisible = createSelector(
-    [getOperationId, getJobsMonitorOperationId, getJobsMonitorDescriptor, getJobsMonitorError],
+    [
+        getOperationId,
+        getJobsMonitorOperationId,
+        getUniqueJobsMonitorDescriptor,
+        getJobsMonitorError,
+    ],
     (opId, jobMonId, jobsDescriptor, error) => {
         if (opId !== jobMonId) {
             return false;
