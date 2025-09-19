@@ -5,7 +5,7 @@ import {Tabs} from '@gravity-ui/uikit';
 import {QueryMetaInfo} from './QueryMetaRow';
 import QueryMetaTable from '../QueryMetaTable';
 import {QueryResultActions} from './QueryResultActions';
-import {QueryResultTab, parseResultTabIndex, useQueryResultTabs} from './hooks/useQueryResultTabs';
+import {parseResultTabIndex} from './helpers/parseResultTabIndex';
 import {YQLStatisticsTable} from '../QueryResultsView/YQLStatistics';
 import NotRenderUntilFirstVisible from '../NotRenderUntilFirstVisible/NotRenderUntilFirstVisible';
 import {PlanProvider} from '../Plan/PlanContext';
@@ -14,10 +14,17 @@ import {QueryResultContainer} from './QueryResultContainer';
 import {QueryChartTab} from './QueryChartTab';
 import {PlanContainer} from './PlanContainer';
 import {extractOperationIdToCluster} from './helpers/extractOperationIdToCluster';
+import {QueryResultTab, setActiveTab, setUserChangeTab} from '../module/queryTabs/queryTabsSlice';
 
 import './index.scss';
 import {ErrorTree} from './ErrorTree';
 import {QueryProgress} from './QueryResultActions/QueryProgress';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+    selectActiveQueryResultTab,
+    selectActiveResultParams,
+    selectQueryResultTabs,
+} from '../module/queryTabs/selectors';
 const b = block('query-results');
 
 type Props = {
@@ -33,7 +40,11 @@ export const QueryResults = React.memo<Props>(function QueryResults({
     toolbar,
     minimized = false,
 }) {
-    const [tabs, setTab, {activeTabId, category, activeResultParams}] = useQueryResultTabs(query);
+    const dispatch = useDispatch();
+    const tabs = useSelector(selectQueryResultTabs);
+    const activeTabId = useSelector(selectActiveQueryResultTab);
+    const activeResultParams = useSelector(selectActiveResultParams);
+
     const operationIdToCluster = React.useMemo(() => {
         return extractOperationIdToCluster(
             isSingleProgress(query?.progress) ? query?.progress?.yql_statistics : undefined,
@@ -44,6 +55,11 @@ export const QueryResults = React.memo<Props>(function QueryResults({
 
     const progress = isSingleProgress(query?.progress) ? query.progress : {};
     const resultIndex = activeResultParams?.resultIndex;
+
+    const onTabChange = (id: string) => {
+        dispatch(setUserChangeTab(true));
+        dispatch(setActiveTab(id as QueryResultTab));
+    };
 
     return (
         <div className={b(null, className)}>
@@ -63,19 +79,19 @@ export const QueryResults = React.memo<Props>(function QueryResults({
                             className={b('tabs')}
                             items={tabs}
                             activeTab={activeTabId}
-                            onSelectTab={(tabId: string) => setTab(tabId, query?.id)}
+                            onSelectTab={onTabChange}
                         />
-                        {category === QueryResultTab.RESULT && Number.isInteger(resultIndex) && (
+                        {activeTabId?.includes('result') && Number.isInteger(resultIndex) && (
                             <div className={b('tab_actions')}>
                                 <QueryResultActions query={query} resultIndex={resultIndex ?? 0} />
                             </div>
                         )}
-                        {category === QueryResultTab.PROGRESS && <PlanActions />}
+                        {activeTabId === 'progress' && <PlanActions />}
                     </div>
                     <div className={b('content')}>
                         <NotRenderUntilFirstVisible
                             hide={
-                                category !== QueryResultTab.RESULT && !Number.isInteger(resultIndex)
+                                !activeTabId?.includes('result') && !Number.isInteger(resultIndex)
                             }
                             className={b('result-wrap')}
                         >
@@ -85,21 +101,20 @@ export const QueryResults = React.memo<Props>(function QueryResults({
                             />
                         </NotRenderUntilFirstVisible>
                         <NotRenderUntilFirstVisible
-                            hide={!category.includes(QueryResultTab.CHART_TAB)}
+                            hide={!activeTabId?.includes('chart-tab')}
                             className={b('result-wrap')}
                         >
                             <QueryChartTab
                                 query={query}
-                                resultIndex={parseResultTabIndex(category) || 0}
+                                resultIndex={parseResultTabIndex(activeTabId) || 0}
                             />
                         </NotRenderUntilFirstVisible>
-                        {category === QueryResultTab.ERROR && <ErrorTree rootError={query.error} />}
-                        {category === QueryResultTab.META && <QueryMetaTable query={query} />}
-
-                        <NotRenderUntilFirstVisible hide={category !== QueryResultTab.STATISTIC}>
+                        {activeTabId === 'error' && <ErrorTree rootError={query.error} />}
+                        {activeTabId === 'meta' && <QueryMetaTable query={query} />}
+                        <NotRenderUntilFirstVisible hide={activeTabId !== 'statistic'}>
                             <YQLStatisticsTable />
                         </NotRenderUntilFirstVisible>
-                        {category === QueryResultTab.PROGRESS && (
+                        {activeTabId === 'progress' && (
                             <PlanContainer
                                 isActive={true}
                                 operationIdToCluster={operationIdToCluster}

@@ -15,7 +15,6 @@ const QueryResultsVisualizationLazy = withLazyLoading(
 );
 
 export const QUERY_RESULT_CHART_TAB = {
-    title: 'Chart',
     renderContent: (props: {query: QueryItem; resultIndex: number}) => (
         <QueryResultsVisualizationLazy {...props} />
     ),

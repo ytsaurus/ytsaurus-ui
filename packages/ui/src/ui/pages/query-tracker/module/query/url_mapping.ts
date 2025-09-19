@@ -30,10 +30,16 @@ export const draftQueryParameters: LocationParameters = {
         stateKey: 'queryTracker.queryNavigation.path',
         initialState: navigationInitialState.path,
     },
+    activeTabId: {
+        stateKey: 'queryTracker.tabs.activeTabId',
+    },
 };
 
 export function getDraftQueryParameters(state: RootState, props: {query: RootState}): RootState {
     const queryParams = props.query.queryTracker.query.params;
+    const queryTabsParams = props.query.queryTracker.tabs;
+    const isActiveTabFromUrl = Boolean(queryTabsParams.activeTabId);
+
     return produce(state, (draft) => {
         updateIfChanged(draft.queryTracker.query.params, 'engine', queryParams.engine);
         updateIfChanged(draft.queryTracker.query.params, 'path', queryParams.path);
@@ -54,5 +60,8 @@ export function getDraftQueryParameters(state: RootState, props: {query: RootSta
             'path',
             props.query.queryTracker.queryNavigation.path,
         );
+
+        updateIfChanged(draft.queryTracker.tabs, 'activeTabId', queryTabsParams.activeTabId);
+        updateIfChanged(draft.queryTracker.tabs, 'userChangeTab', isActiveTabFromUrl);
     });
 }

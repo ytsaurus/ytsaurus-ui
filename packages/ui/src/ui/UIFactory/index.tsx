@@ -130,7 +130,6 @@ export type ExtraTab = {
 };
 
 export type QueryResultChartTab = {
-    title: string;
     renderContent: (params: {query: QueryItem; resultIndex: number}) => React.ReactNode;
 };
 
