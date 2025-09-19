@@ -19,6 +19,11 @@ window.YT = {
 window.__DATA__ = {
     settings: {
         data:{
+            'global::yson::binaryAsHex': true,
+            'global::yson::compact': false,
+            'global::yson::escapeWhitespace': true,
+            'global::yson::format': "raw-json",
+            'global::yson::showDecoded': true,
             [`local::test-cluster::lastVisited`]: [
                 {count: 8, path: '//home'},
                 {count: 83, path: '/'},
@@ -37,14 +42,16 @@ window.__DATA__ = {
                 {count: 1, path: '//home/superhome'},
             ],
             [`local::test-cluster::accounts::favourites`]: [
-                {path: 'mega-large-wide-big-name-it-cant-fit-in'}
+                {path: 'mega-large-wide-big-name-it-cant-fit-in'},
             ],
             [`local::test-cluster::chyt::favourites`]: [
+                {path: 'my-clique'},
                 {path: 'my-super-mega-wide-big-large-clique-that-cant-fit-in'},
             ],
             [`local::test-cluster::bundles::favourites`]: [
                 {path: 'my-bundle'},
-                {path: 'my-bundle-with-bundle-controller'}
+                {path: 'my-bundle-with-bundle-controller'},
+                {path: 'my-errored-bundle'}
             ],
             [`local::test-cluster::scheduling::favourites`]: [
                 {path: 'supermegawideextralargenameofpoolthatcantfitin[physical]'},

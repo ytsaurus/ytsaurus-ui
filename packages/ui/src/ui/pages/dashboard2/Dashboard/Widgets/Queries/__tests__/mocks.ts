@@ -78,6 +78,24 @@ export const queriesResponse: {results: Array<BatchResultsItem<QueriesListRespon
                 timestamp: 1880524495742530000,
             },
         },
+        {
+            error: {
+                code: 500,
+                message: 'Oops some error occured',
+            },
+        },
+        {
+            error: {
+                code: 500,
+                message: 'Oops another error occured',
+            },
+        },
+        {
+            error: {
+                code: 500,
+                message: 'And another',
+            },
+        },
     ],
 };
 

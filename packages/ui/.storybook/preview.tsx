@@ -7,7 +7,7 @@ import {initialize, mswLoader} from 'msw-storybook-addon';
 import {Preview} from '@storybook/react';
 
 import {WithStrictMode} from './decorators/withStrictMode';
-import {WithTheme} from './decorators/withTheme';
+import {WithThemeAndModals} from './decorators/withThemeAndModals';
 import {WithRouter} from './decorators/withRouter';
 import {WithStore} from './decorators/withStore';
 import {WithDashboard} from './decorators/withDashboard';
@@ -25,7 +25,7 @@ initialize();
 
 const preview: Preview = {
     loaders: [mswLoader],
-    decorators: [WithRouter, WithStrictMode, WithTheme, WithStore, WithDashboard],
+    decorators: [WithRouter, WithStrictMode, WithThemeAndModals, WithStore, WithDashboard],
     parameters: {
         jsx: {showFunctions: true}, // To show functions in sources
         options: {

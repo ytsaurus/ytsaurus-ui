@@ -1,3 +1,4 @@
+import React from 'react';
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
@@ -11,6 +12,21 @@ test('Queries: story <Default>', async ({mount, expectScreenshot, router}) => {
     await router.use(queriesHandler);
 
     await mount(Default.render?.());
+    await expectScreenshot();
+});
+
+test('Queries: story <Default> with error modal', async ({
+    mount,
+    expectScreenshot,
+    router,
+    page,
+}) => {
+    yt.setup.setGlobalOption('proxy', 'test-cluster.yt.my-domain.com');
+    await router.use(queriesHandler);
+
+    await mount(<div style={{width: 1000, height: 600}}>{Default.render?.()}</div>);
+    await page.locator('.g-button.g-button_pin_round-round').click();
+
     await expectScreenshot();
 });
 
