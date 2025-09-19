@@ -35,6 +35,7 @@ export function GeneralCell(props: Props) {
                 <Button
                     view={'flat'}
                     size={'s'}
+                    qa={'item-error'}
                     onClick={() => dispatch(showErrorModal(error, {hideOopsMsg: true}))}
                 >
                     <Flex alignItems={'center'} width={'100%'} height={'100%'}>

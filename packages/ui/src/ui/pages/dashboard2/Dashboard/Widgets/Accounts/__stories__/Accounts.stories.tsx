@@ -48,7 +48,7 @@ const extenedAccountsProps = {
 };
 
 const BaseComponent = () => (
-    <div style={{height: 255, width: 750}}>
+    <div style={{height: 315, width: 750}}>
         <WidgetBase
             {...extenedAccountsProps}
             controls={<AccountsWidgetControls {...(extenedAccountsProps as AccountsWidgetProps)} />}
