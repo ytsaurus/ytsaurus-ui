@@ -482,6 +482,12 @@ export const accountsResponse: Array<BatchResultsItem<DashboardAccountsResponse>
             $value: {},
         },
     },
+    {
+        error: {
+            code: 500,
+            message: 'Account not found',
+        },
+    },
 ];
 
 export const accountsHandler = http.post(
