@@ -39,7 +39,13 @@ export function NavigationWidgetContentBase(props: Props) {
     const {items, pathsType, error} = props;
 
     if (error) {
-        return <YTErrorBlock view={'compact'} error={error as YTError | AxiosError} />;
+        return (
+            <YTErrorBlock
+                view={'compact'}
+                error={error as YTError | AxiosError}
+                className={block('error')}
+            />
+        );
     }
 
     return (
