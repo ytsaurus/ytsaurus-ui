@@ -6,6 +6,7 @@ import Account from '../../../../pages/accounts/selector';
 
 import {ytApiV3} from '../../../../rum/rum-wrap-api';
 import {parseAccountData} from '../../../../utils/accounts/accounts-selector';
+import {UNKNOWN_ITEM_NAME} from '../../../../constants/dashboard2';
 
 import {YTError} from '../../../../types';
 
@@ -114,7 +115,7 @@ export async function fetchAccounts(args: AccountsWidgetArgs) {
             if (!output) {
                 return {
                     general: {
-                        name: accountsList?.[idx] || 'noname',
+                        name: accountsList?.[idx] || UNKNOWN_ITEM_NAME,
                         error: item.error,
                     },
                 };
@@ -122,7 +123,9 @@ export async function fetchAccounts(args: AccountsWidgetArgs) {
             const account = new Account(parseAccountData(output));
 
             const res: AccountInfo = {
-                general: {name: output?.$attributes?.name || accountsList?.[idx] || 'noname'},
+                general: {
+                    name: output?.$attributes?.name || accountsList?.[idx] || UNKNOWN_ITEM_NAME,
+                },
                 chunkCount: account.getChunkCountProgressInfo(),
                 nodeCount: account.getNodeCountProgressInfo(),
             };
