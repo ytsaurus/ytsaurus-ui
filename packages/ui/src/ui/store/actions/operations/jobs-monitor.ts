@@ -8,7 +8,7 @@ import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 
 type JobsMonitorThunkAction = ThunkAction<unknown, RootState, unknown, JobsMonitorAction>;
 
-const cancelHerlper = new CancelHelper();
+const cancelHelper = new CancelHelper();
 
 export function getJobsMonitoringDescriptors(operation_id: string): JobsMonitorThunkAction {
     return (dispatch, getState) => {
@@ -21,8 +21,14 @@ export function getJobsMonitoringDescriptors(operation_id: string): JobsMonitorT
 
         return ytApiV3Id
             .listJobs(YTApiId.listJobs100, {
-                parameters: {operation_id, limit: maxJobCount, with_monitoring_descriptor: true},
-                cancellation: cancelHerlper.removeAllAndSave,
+                parameters: {
+                    operation_id,
+                    limit: maxJobCount,
+                    sort_field: 'start_time',
+                    attributes: ['monitoring_descriptor', 'start_time', 'finish_time'],
+                    with_monitoring_descriptor: true,
+                },
+                cancellation: cancelHelper.removeAllAndSave,
             })
             .then(({jobs}) => {
                 dispatch({type: JOBS_MONITOR.SUCCESS, data: {jobs, operation_id}});

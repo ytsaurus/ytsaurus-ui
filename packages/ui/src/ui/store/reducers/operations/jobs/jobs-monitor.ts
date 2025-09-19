@@ -4,6 +4,7 @@ import {mergeStateOnClusterChange} from '../../../../store/reducers/utils';
 import {ActionD, YTError} from '../../../../types';
 
 export interface JobItem {
+    id: string;
     monitoring_descriptor?: string;
     start_time?: string;
     finish_time?: string;

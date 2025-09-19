@@ -163,7 +163,7 @@ const getOperationMonitoredJobCount = createSelector([getOperation], (operation)
 export const getOperationJobsMonitorTabSettings = createSelector(
     [getOperationMonitoredJobCount],
     (jobsCount) => {
-        const maxJobCount = 200;
+        const maxJobCount = 1000;
         return {visible: jobsCount > 0 && jobsCount <= maxJobCount, maxJobCount};
     },
 );

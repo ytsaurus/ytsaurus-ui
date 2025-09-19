@@ -6,18 +6,18 @@ import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary
 import Loader from '../../../../../components/Loader/Loader';
 import {NoContent} from '../../../../../components/NoContent/NoContent';
 import {
-    getJobsMonitorDescriptor,
     getJobsMonitorError,
     getJobsMonitorFromTo,
     getJobsMonitorItemsLoaded,
     getJobsMonitorItemsLoading,
+    getUniqueJobsMonitorDescriptor,
 } from '../../../../../store/selectors/operations/jobs-monitor';
 import {getCluster} from '../../../../../store/selectors/global';
 import UIFactory from '../../../../../UIFactory';
 
 function JobsMonitor() {
     const cluster = useSelector(getCluster);
-    const job_descriptor = useSelector(getJobsMonitorDescriptor);
+    const job_descriptor = useSelector(getUniqueJobsMonitorDescriptor);
     const {from, to} = useSelector(getJobsMonitorFromTo);
     const error = useSelector(getJobsMonitorError);
     const loaded = useSelector(getJobsMonitorItemsLoaded);
