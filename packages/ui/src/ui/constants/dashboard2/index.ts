@@ -110,3 +110,5 @@ export const dashboardConfig: DashKitProps['config'] = {
     aliases: {},
     connections: [],
 };
+
+export const UNKNOWN_ITEM_NAME = 'unknown';

@@ -18,6 +18,7 @@ import {YTError, YTHealth} from '../../../../types';
 import {Page} from '../../../../../shared/constants/settings';
 import {USE_MAX_SIZE} from '../../../../../shared/constants/yt-api';
 import {pluralize} from '../../../../utils';
+import {UNKNOWN_ITEM_NAME} from '../../../../constants/dashboard2';
 
 export type ServiceInfo = {
     general: {name: string; url?: string; error?: YTError};
@@ -104,7 +105,7 @@ async function fetchBundles(items: ServicesItem[], cluster: string) {
             return {
                 type: 'Bundle',
                 general: {
-                    name: items?.[idx]?.item || 'unknown',
+                    name: items?.[idx]?.item || UNKNOWN_ITEM_NAME,
                     error: error,
                 },
             };
