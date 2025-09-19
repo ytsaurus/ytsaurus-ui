@@ -9,6 +9,7 @@ import {durationDates} from '../../../../utils/date';
 import {QueryStatus} from '../../../../types/query-tracker';
 import {QueriesListResponse} from '../../../../types/query-tracker/api';
 import {YTError} from '../../../../types';
+import {UNKNOWN_ITEM_NAME} from '../../../../constants/dashboard2';
 
 type FetchQueriesArgs = {
     cluster: string;
@@ -47,7 +48,7 @@ export async function fetchQuerieslist({requests}: FetchQueriesArgs) {
                 return [];
             }
             return map_(item.output.queries, (query) => ({
-                author: query?.user || 'unknown',
+                author: query?.user || UNKNOWN_ITEM_NAME,
                 general: {
                     name: query?.annotations?.title ?? 'No name',
                     state: (query?.state || format.NO_VALUE) as QueryStatus,
