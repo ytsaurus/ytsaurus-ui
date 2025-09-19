@@ -51,6 +51,12 @@ export const poolsResponse: Array<BatchResultsItem<DashboardPoolsResponse>> = [
             },
         },
     },
+    {
+        error: {
+            code: 500,
+            message: 'Pool not found',
+        },
+    },
 ];
 
 export const poolsHandler = http.post(
