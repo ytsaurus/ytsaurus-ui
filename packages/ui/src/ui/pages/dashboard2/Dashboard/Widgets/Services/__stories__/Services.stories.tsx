@@ -17,6 +17,7 @@ import {
     servicesHandlerError,
     servicesHandlerWithLoading,
 } from '../__tests__/mocks';
+import {ServicesEmptyWidgetStory} from './helpers';
 
 yt.setup.setGlobalOption('proxy', 'test-cluster.yt.my-domain.com');
 
@@ -32,7 +33,7 @@ const meta: Meta = {
 };
 
 const BaseComponent = () => (
-    <div style={{height: 240, width: 550}}>
+    <div style={{height: 335, width: 550}}>
         <WidgetBase
             {...baseWidgetProps}
             controls={<ServicesWidgetControls {...(baseWidgetProps as ServicesWidgetProps)} />}
@@ -63,7 +64,7 @@ export const Loading = {
 };
 
 export const Empty = {
-    render: BaseComponent,
+    render: () => <ServicesEmptyWidgetStory />,
     parameters: {
         msw: {
             handlers: servicesHandlerEmpty,
