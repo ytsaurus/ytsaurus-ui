@@ -50,6 +50,12 @@ export const bundlesResponse: Array<BatchResultsItem<DashboardBundlesResponse>> 
             $value: null,
         },
     },
+    {
+        error: {
+            code: 500,
+            message: 'Something happend',
+        },
+    },
 ];
 export const chytResponse = {
     result: [
