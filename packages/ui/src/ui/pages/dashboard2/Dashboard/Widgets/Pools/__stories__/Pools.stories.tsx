@@ -42,7 +42,7 @@ const extendPoolsProps = {
 } as PoolsWidgetProps;
 
 const BaseComponent = () => (
-    <div style={{height: 260, width: 560}}>
+    <div style={{height: 305, width: 560}}>
         <WidgetBase
             {...extendPoolsProps}
             controls={<PoolsWidgetControls {...extendPoolsProps} />}
