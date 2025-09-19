@@ -1,0 +1,4 @@
+{
+  "alert_no-jobs-with-monitoring-descriptor": "There are no jobs with \"monitoring_descriptor\"",
+  "alert_descriptors-limit-exceeded": "The limit of {{limit}} unique descriptors has been exceeded"
+}

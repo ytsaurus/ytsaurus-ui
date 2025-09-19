@@ -152,21 +152,13 @@ export const getOperationExperimentAssignments = createSelector(
     },
 );
 
-const getOperationMonitoredJobCount = createSelector([getOperation], (operation) => {
+export const getOperationMonitoredJobCount = createSelector([getOperation], (operation) => {
     const res = ypath.getNumberDeprecated(
         operation,
         '/@brief_progress/registered_monitoring_descriptor_count',
     );
     return res;
 });
-
-export const getOperationJobsMonitorTabSettings = createSelector(
-    [getOperationMonitoredJobCount],
-    (jobsCount) => {
-        const maxJobCount = 200;
-        return {visible: jobsCount > 0 && jobsCount <= maxJobCount, maxJobCount};
-    },
-);
 
 export const selectIsOperationInGpuTree = createSelector(
     [getOperationTreeConfigs],
