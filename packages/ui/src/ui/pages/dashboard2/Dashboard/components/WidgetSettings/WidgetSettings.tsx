@@ -44,7 +44,7 @@ export function WidgetSettings() {
     return (
         <YTDFDialog<SettingsValues>
             onAdd={onAdd}
-            key={`${item?.id}_${item?.type}`}
+            key={`${item?.id}_${item?.type}_${JSON.stringify(item?.data)}`}
             headerProps={{
                 title: item?.type
                     ? i18n('title_widget-settings-typed', {type: format.ReadableField(item.type)})
