@@ -1,0 +1,9 @@
+{
+  "title": "Navigation",
+  "field_name": "Name",
+  "value_last-visited": "Last visited",
+  "value_favourite": "Favourite",
+  "fallback-item_last-visited": "last visited paths",
+  "fallback-item_favourite": "favourite paths",
+  "placeholder_navigation": "Navigation"
+}

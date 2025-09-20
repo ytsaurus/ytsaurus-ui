@@ -5,6 +5,8 @@ import {WidgetHeader} from '../../../../../../pages/dashboard2/Dashboard/compone
 import {usePoolsWidget} from '../hooks/use-pools-widget';
 import type {PoolsWidgetProps} from '../types';
 
+import i18n from '../i18n';
+
 export function PoolsWidgetHeader(props: PoolsWidgetProps) {
     const {
         data: {pools, isLoading},
@@ -13,7 +15,7 @@ export function PoolsWidgetHeader(props: PoolsWidgetProps) {
     const id = props.id;
     return (
         <WidgetHeader
-            title={name ?? 'Pools'}
+            title={name ?? i18n('title')}
             count={pools?.length}
             isLoading={isLoading}
             page={'SCHEDULING'}

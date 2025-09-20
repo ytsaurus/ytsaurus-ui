@@ -4,8 +4,6 @@ import b from 'bem-cn-lite';
 import {AxiosError} from 'axios';
 import {Flex} from '@gravity-ui/uikit';
 
-import format from '../../../../../../common/hammer/format';
-
 import {getCluster} from '../../../../../../store/selectors/global';
 
 import {WidgetText} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetText/WidgetText';
@@ -17,6 +15,8 @@ import Link from '../../../../../../components/Link/Link';
 
 import {Page} from '../../../../../../../shared/constants/settings';
 import {YTError} from '../../../../../../../@types/types';
+
+import i18n from '../i18n';
 
 import './NavigationWidgetContent.scss';
 
@@ -59,7 +59,9 @@ export function NavigationWidgetContentBase(props: Props) {
                 </Flex>
             ) : (
                 <WidgetNoItemsTextFallback
-                    itemsName={`${format.ReadableField(pathsType).toLowerCase()} paths`}
+                    itemsName={i18n(
+                        `fallback-item_${pathsType === 'last_visited' ? 'last-visited' : 'favourite'}`,
+                    )}
                 />
             )}
         </>

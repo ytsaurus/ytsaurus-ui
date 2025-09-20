@@ -1,0 +1,9 @@
+{
+  "title": "Навигация",
+  "field_name": "Имя",
+  "value_last-visited": "Последние посещенные",
+  "value_favourite": "Избранные",
+  "fallback-item_last-visited": "Последних посещенных путей",
+  "fallback-item_favourite": "Избранных путей",
+  "placeholder_navigation": "Навигация"
+}

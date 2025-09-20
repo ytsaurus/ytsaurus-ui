@@ -1,0 +1,5 @@
+{
+  "title_widget-settings": "Настройки виджета",
+  "title_widget-settings-typed": "Настройки виджета {{type}}",
+  "alert_widget-get-error": "Не удается получить текущий виджет, попробуйте еще раз"
+}
