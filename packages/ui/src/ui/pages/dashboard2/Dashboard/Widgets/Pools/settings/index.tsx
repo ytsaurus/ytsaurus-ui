@@ -1,31 +1,33 @@
+import i18n from '../i18n';
+
 export function usePoolsSettings() {
     const columnsOptions = [
-        {value: 'cpu', content: 'CPU'},
-        {value: 'memory', content: 'RAM'},
-        {value: 'operations', content: 'Operations'},
-        {value: 'gpu', content: 'GPU'},
+        {value: 'cpu', content: i18n('field_cpu')},
+        {value: 'memory', content: i18n('field_ram')},
+        {value: 'operations', content: i18n('field_operations')},
+        {value: 'gpu', content: i18n('field_gpu')},
     ];
 
     return [
         {
             type: 'text' as const,
             name: 'name',
-            caption: 'Name',
+            caption: i18n('field_name'),
             extras: {
-                placeholder: 'Pools',
+                placeholder: i18n('placeholder_pools'),
             },
         },
         {
             type: 'pools-multiple' as const,
             name: 'pools',
-            caption: 'Pools',
+            caption: i18n('field_pools'),
         },
         {
             type: 'select' as const,
             name: 'columns',
-            caption: 'Resources columns',
+            caption: i18n('field_resources-columns'),
             extras: {
-                placeholder: 'Default',
+                placeholder: i18n('value_default'),
                 width: 'max' as const,
                 options: columnsOptions,
                 multiple: true,

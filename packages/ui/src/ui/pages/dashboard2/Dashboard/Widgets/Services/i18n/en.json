@@ -1,0 +1,16 @@
+{
+  "title": "Services",
+  "field_name": "Name",
+  "field_type": "Type",
+  "field_health": "Health",
+  "field_config": "Config",
+  "field_services": "Services",
+  "value_favourite": "Favourite",
+  "value_custom": "Custom",
+  "fallback-item": "services",
+  "fallback-item_favourite": "favourite services",
+  "fallback-item_selected": "selected services",
+  "fallback-item_custom": "custom services",
+  "fallback-item_default": "services",
+  "placeholder_services": "Services"
+}
