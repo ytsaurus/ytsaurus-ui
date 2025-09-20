@@ -8,6 +8,8 @@ import {setAccountsTypeFilter} from '../../../../../../store/actions/dashboard2/
 
 import type {AccountsWidgetProps} from '../types';
 
+import i18n from '../i18n';
+
 export function AccountsWidgetControls(props: AccountsWidgetProps) {
     const dispatch = useDispatch();
 
@@ -20,9 +22,9 @@ export function AccountsWidgetControls(props: AccountsWidgetProps) {
     return (
         <RadioButton
             options={[
-                {value: 'favourite', content: 'Favourite'},
-                {value: 'usable', content: 'Usable'},
-                {value: 'custom', content: 'Custom'},
+                {value: 'favourite', content: i18n('value_favourite')},
+                {value: 'usable', content: i18n('value_usable')},
+                {value: 'custom', content: i18n('value_custom')},
             ]}
             value={type}
             onUpdate={onUpdate}

@@ -1,0 +1,19 @@
+{
+  "title": "Пулы",
+  "field_name": "Имя",
+  "field_pool": "Пул",
+  "field_gpu": "GPU",
+  "field_cpu": "CPU",
+  "field_ram": "RAM",
+  "field_operations": "Операции",
+  "field_pools": "Пулы",
+  "field_resources-columns": "Колонки ресурсов",
+  "value_favourite": "Избранные",
+  "value_custom": "Пользовательские",
+  "value_default": "По умолчанию",
+  "fallback-item": "пулов",
+  "fallback-item_favourite": "Избранных пулов",
+  "fallback-item_custom": "Выбранных пулов",
+  "fallback-item_default": "Пулов",
+  "placeholder_pools": "Пулы"
+}

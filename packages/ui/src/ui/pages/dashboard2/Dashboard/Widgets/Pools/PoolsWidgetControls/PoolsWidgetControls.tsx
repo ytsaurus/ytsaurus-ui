@@ -8,6 +8,8 @@ import {getPoolsTypeFilter} from '../../../../../../store/selectors/dashboard2/p
 
 import type {PoolsWidgetProps} from '../types';
 
+import i18n from '../i18n';
+
 export function PoolsWidgetControls(props: PoolsWidgetProps) {
     const dispatch = useDispatch();
 
@@ -20,8 +22,8 @@ export function PoolsWidgetControls(props: PoolsWidgetProps) {
     return (
         <RadioButton
             options={[
-                {value: 'favourite', content: 'Favourite'},
-                {value: 'custom', content: 'Custom'},
+                {value: 'favourite', content: i18n('value_favourite')},
+                {value: 'custom', content: i18n('value_custom')},
             ]}
             value={type}
             onUpdate={onUpdate}

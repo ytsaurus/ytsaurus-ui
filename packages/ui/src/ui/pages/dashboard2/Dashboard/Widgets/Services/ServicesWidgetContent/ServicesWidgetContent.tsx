@@ -17,25 +17,27 @@ import {Type} from './cells/Type';
 import {useServicesWidget} from '../hooks/use-services-widget';
 import type {ServicesWidgetProps} from '../types';
 
+import i18n from '../i18n';
+
 const columnHelper = createColumnHelper<ServiceInfo>();
 
 const columns = [
     columnHelper.accessor('general', {
         cell: (general) => <GeneralCell {...general.getValue()} />,
-        header: 'Name',
+        header: () => i18n('field_name'),
         maxSize: 150,
     }),
     columnHelper.accessor('type', {
         cell: (type) => <Type type={type.getValue()} />,
-        header: 'Type',
+        header: () => i18n('field_type'),
     }),
     columnHelper.accessor('status', {
         cell: (status) => <Health value={status.getValue()} />,
-        header: 'Health',
+        header: () => i18n('field_health'),
     }),
     columnHelper.accessor('config', {
         cell: (config) => <WidgetText>{config.getValue()}</WidgetText>,
-        header: 'Config',
+        header: () => i18n('field_config'),
     }),
 ];
 
@@ -43,7 +45,7 @@ export function ServicesWidgetContent(props: ServicesWidgetProps) {
     const {data, error, isLoading} = useServicesWidget(props);
 
     const type = useSelector((state: RootState) => getServicesTypeFilter(state, props.id));
-    const itemsName = type === 'favourite' ? 'favourite services' : 'selected services';
+    const itemsName = i18n(`fallback-item_${type || 'default'}`);
 
     return (
         <WidgetTable

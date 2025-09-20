@@ -12,6 +12,8 @@ import {WidgetText} from '../../../../../../pages/dashboard2/Dashboard/component
 import {useAccountsWidget} from '../hooks/use-accounts-widget';
 import type {AccountsWidgetProps} from '../types';
 
+import i18n from '../i18n';
+
 import {AccountsProgressCell} from './cells/AccountsProgressCell';
 import {AccountsNameCell} from './cells/AccountsNameCell';
 
@@ -26,7 +28,7 @@ export function AccountsWidgetContent(props: AccountsWidgetProps) {
         const cols = [
             columnHelper.accessor('name', {
                 cell: (name) => <AccountsNameCell name={name.getValue()} />,
-                header: () => <Text variant={'subheader-1'}>{'Name'}</Text>,
+                header: () => <Text variant={'subheader-1'}>{i18n('field_name')}</Text>,
                 maxSize: 200,
             }),
         ];
@@ -85,7 +87,7 @@ export function AccountsWidgetContent(props: AccountsWidgetProps) {
             data={accounts || []}
             itemHeight={50}
             isLoading={isLoading}
-            fallback={{itemsName: `${type} accounts`}}
+            fallback={{itemsName: i18n(`fallback-item_${type}`)}}
             error={error}
         />
     );

@@ -16,6 +16,8 @@ import {SettingsValues} from './SettingsValues';
 
 import {useSettingsFields} from './use-settings-fields';
 
+import i18n from './i18n';
+
 import './WidgetSettings.scss';
 
 export function WidgetSettings() {
@@ -33,7 +35,7 @@ export function WidgetSettings() {
     const onAdd = async (form: FormApi<SettingsValues>) => {
         const {values} = form.getState();
         if (!item) {
-            return Promise.reject("Can't get current widget, please try again");
+            return Promise.reject(i18n('alert_widget-get-error'));
         }
         dispatch(editConfig(item?.target, values, item));
         return Promise.resolve();
@@ -44,7 +46,9 @@ export function WidgetSettings() {
             onAdd={onAdd}
             key={`${item?.id}_${item?.type}`}
             headerProps={{
-                title: `${format.ReadableField(item?.type + ' widget') || 'Widget'} settings`,
+                title: item?.type
+                    ? i18n('title_widget-settings-typed', {type: format.ReadableField(item.type)})
+                    : i18n('title_widget-settings'),
             }}
             pristineSubmittable
             initialValues={item?.data}

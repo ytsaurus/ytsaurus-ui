@@ -15,6 +15,8 @@ import {State} from './cells/State';
 import {useOperationsWidget} from '../hooks/use-operations-widget';
 import type {OperationsWidgetProps} from '../types';
 
+import i18n from '../i18n';
+
 import './OperationsWidgetContent.scss';
 
 const block = b('yt-operations-widget-content');
@@ -36,24 +38,26 @@ const columnHelper = createColumnHelper<Operations>();
 
 const columns = [
     columnHelper.accessor('title', {
-        header: () => <Text variant={'subheader-1'}>{'Title'}</Text>,
+        header: () => <Text variant={'subheader-1'}>{i18n('field_title')}</Text>,
         cell: (title) => <Title title={title.getValue()} />,
         maxSize: 200,
     }),
     columnHelper.accessor('userPool', {
-        header: () => <Text variant={'subheader-1'}>{'User/Pools'}</Text>,
+        header: () => <Text variant={'subheader-1'}>{i18n('field_user-pools')}</Text>,
         cell: (userPool) => <UserPool userPool={userPool.getValue()} />,
         maxSize: 200,
     }),
     columnHelper.accessor('startTime', {
-        header: () => <Text variant={'subheader-1'}>{'Start time'}</Text>,
+        header: () => <Text variant={'subheader-1'}>{i18n('field_start-time')}</Text>,
         cell: (startTime) => <StartTime startTime={startTime.getValue()} />,
     }),
     columnHelper.accessor('progress', {
-        header: () => <Text variant={'subheader-1'}>{'State'}</Text>,
+        header: () => <Text variant={'subheader-1'}>{i18n('field_state')}</Text>,
         cell: (progress) => <State progress={progress.getValue()} />,
     }),
 ];
+
+type StateFilter = 'running' | 'aborted' | 'completed' | 'failed' | 'pending' | 'all';
 
 export function OperationsWidgetContent(props: OperationsWidgetProps) {
     const {
@@ -68,7 +72,9 @@ export function OperationsWidgetContent(props: OperationsWidgetProps) {
             className={block()}
             itemHeight={60}
             isLoading={isLoading}
-            fallback={{itemsName: `${!state || state === 'all' ? '' : state + ' '}operations`}}
+            fallback={{
+                itemsName: i18n(`fallback-item_${(state || 'all') as StateFilter}`),
+            }}
             error={error}
         />
     );

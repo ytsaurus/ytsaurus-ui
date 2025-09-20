@@ -1,0 +1,13 @@
+{
+  "action_edit-dashboard": "Edit dashboard",
+  "action_save-dashboard": "Save dashboard",
+  "action_cancel": "Cancel",
+  "action_copy-from": "Copy from",
+  "action_add-widget": "Add widget",
+  "title_navigation": "Navigation",
+  "title_operations": "Operations",
+  "title_pools": "Pools",
+  "title_accounts": "Accounts",
+  "title_queries": "Queries",
+  "title_services": "Services"
+}

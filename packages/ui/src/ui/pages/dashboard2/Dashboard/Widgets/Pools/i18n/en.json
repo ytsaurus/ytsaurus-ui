@@ -1,0 +1,19 @@
+{
+  "title": "Pools",
+  "field_name": "Name",
+  "field_pool": "Pool",
+  "field_gpu": "GPU",
+  "field_cpu": "CPU",
+  "field_ram": "RAM",
+  "field_operations": "Operations",
+  "field_pools": "Pools",
+  "field_resources-columns": "Resources columns",
+  "value_favourite": "Favourite",
+  "value_custom": "Custom",
+  "value_default": "Default",
+  "fallback-item": "pools",
+  "fallback-item_favourite": "favourite pools",
+  "fallback-item_custom": "custom pools",
+  "fallback-item_default": "pools",
+  "placeholder_pools": "Pools"
+}

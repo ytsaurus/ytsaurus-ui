@@ -9,6 +9,7 @@ import format from '../../../../../../common/hammer/format';
 
 import {RootState} from '../../../../../../store/reducers';
 import {
+    type QueryStatusesFilter,
     getQueryFilterEngine,
     getQueryFilterState,
 } from '../../../../../../store/selectors/dashboard2/queries';
@@ -22,20 +23,27 @@ import {QueryEngine} from '../../../../../../../shared/constants/engines';
 import type {QueriesWidgetProps} from '../types';
 
 import './QueriesWidgetControls.scss';
+import i18n from '../i18n';
 
 const block = b('yt-queries-widget-controls');
 
-const statuses = ['draft', 'running', 'completed', 'failed', 'aborted'];
+const statuses: Required<QueryStatusesFilter[]> = [
+    'draft',
+    'running',
+    'completed',
+    'failed',
+    'aborted',
+];
 const stateOptions = [
-    {value: '', content: 'All'},
+    {value: '', content: i18n('value_all')},
     ...map_(statuses, (item) => ({
         value: item,
-        content: format.ReadableField(item.toLowerCase()),
+        content: i18n(`status_${item}`),
     })),
 ];
 
 const engineOptions = [
-    {value: '', content: 'All'},
+    {value: '', content: i18n('value_all')},
     ...map_(Object.keys(QueryEngine), (item) => ({
         value: item,
         content: format.ReadableField(item).toUpperCase(),
@@ -64,14 +72,14 @@ export function QueriesWidgetControls(props: QueriesWidgetProps) {
                 onUpdate={onStateUpdate}
                 options={stateOptions}
                 className={block('select')}
-                label={`State:`}
+                label={i18n('label_state')}
                 defaultValue={[queryState || '']}
             />
             <Select
                 onUpdate={onEngineUpdate}
                 options={engineOptions}
                 className={block('select')}
-                label={`Engine:`}
+                label={i18n('label_engine')}
                 defaultValue={[engine || '']}
             />
         </Flex>
