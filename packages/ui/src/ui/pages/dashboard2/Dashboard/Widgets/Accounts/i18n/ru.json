@@ -1,0 +1,13 @@
+{
+  "title": "Аккаунты",
+  "field_name": "Имя",
+  "field_accounts": "Аккаунты",
+  "field_columns": "Колонки",
+  "value_favourite": "Избранные",
+  "value_usable": "Доступные",
+  "value_custom": "Пользовательские",
+  "fallback-item_favourite": "Избранных аккаунтов",
+  "fallback-item_usable": "Доступных аккаунтов",
+  "fallback-item_custom": "Пользовательских аккаунтов",
+  "placeholder_accounts": "Аккаунты"
+}

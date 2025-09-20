@@ -1,0 +1,16 @@
+{
+  "title": "Сервисы",
+  "field_name": "Имя",
+  "field_type": "Тип",
+  "field_health": "Состояние",
+  "field_config": "Конфигурация",
+  "field_services": "Сервисы",
+  "value_favourite": "Избранные",
+  "value_custom": "Пользовательские",
+  "fallback-item": "сервисов",
+  "fallback-item_favourite": "Избранных сервисов",
+  "fallback-item_selected": "Выбранных сервисов",
+  "fallback-item_custom": "Пользовательских сервисов",
+  "fallback-item_default": "Сервисов",
+  "placeholder_services": "Сервисы"
+}

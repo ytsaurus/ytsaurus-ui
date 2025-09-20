@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import {Button, DropdownMenu, Flex} from '@gravity-ui/uikit';
 import {ChevronDown, ChevronUp} from '@gravity-ui/icons';
 
-import format from '../../../common/hammer/format';
-
 import {useDashboardActions} from '../hooks/use-dashboard-actions';
+
+import i18n from './i18n';
 
 export function AddWidgetMenu() {
     const {add} = useDashboardActions();
@@ -22,7 +22,7 @@ export function AddWidgetMenu() {
 
     const menuItems = widgetsNames.map((item) => ({
         action: () => add(item),
-        text: format.ReadableField(item),
+        text: i18n(`title_${item}`),
     }));
 
     return (
@@ -30,7 +30,7 @@ export function AddWidgetMenu() {
             renderSwitcher={(props) => (
                 <Button {...props} size={'m'} qa={'add-widget-button'}>
                     <Flex alignItems={'center'} gap={3}>
-                        Add widget
+                        {i18n('action_add-widget')}
                         {dropdownOpened ? <ChevronUp /> : <ChevronDown />}
                     </Flex>
                 </Button>

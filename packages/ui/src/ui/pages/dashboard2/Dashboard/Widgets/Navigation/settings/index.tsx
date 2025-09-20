@@ -1,11 +1,13 @@
+import i18n from '../i18n';
+
 export function useNavigationSettings() {
     return [
         {
             type: 'text' as const,
             name: 'name',
-            caption: 'Name',
+            caption: i18n('field_name'),
             extras: {
-                placeholder: 'Navigation',
+                placeholder: i18n('placeholder_navigation'),
             },
         },
     ];

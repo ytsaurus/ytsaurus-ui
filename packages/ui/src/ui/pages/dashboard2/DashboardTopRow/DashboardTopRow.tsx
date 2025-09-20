@@ -21,6 +21,8 @@ import {useDashboardActions} from '../hooks/use-dashboard-actions';
 
 import {AddWidgetMenu} from './AddWidgetMenu';
 
+import i18n from './i18n';
+
 import './DashboardTopRow.scss';
 
 const block = b('dashboard-top-row');
@@ -40,7 +42,7 @@ export function DashboardTopRow() {
                 {editMode && <AddWidgetMenu />}
                 {editMode && <CancelButton onCancel={cancel} />}
                 <Button size={'m'} view={'outlined'} onClick={handleClick}>
-                    {editMode ? 'Save dashboard' : 'Edit dashboard'}
+                    {editMode ? i18n('action_save-dashboard') : i18n('action_edit-dashboard')}
                 </Button>
             </Flex>
             <CopyConfigDialog />
@@ -51,7 +53,7 @@ export function DashboardTopRow() {
 function CancelButton({onCancel}: {onCancel: () => void}) {
     return (
         <Button size={'m'} view={'outlined'} onClick={onCancel}>
-            Cancel
+            {i18n('action_cancel')}
         </Button>
     );
 }
@@ -64,7 +66,7 @@ function CopyConfigButton() {
             view={'outlined'}
             onClick={() => dispatch(toggleCopyConfigDialogVisibility())}
         >
-            Copy from
+            {i18n('action_copy-from')}
         </Button>
     );
 }

@@ -5,6 +5,8 @@ import {WidgetHeader} from '../../../../../../pages/dashboard2/Dashboard/compone
 import {useOperationsWidget} from '../hooks/use-operations-widget';
 import type {OperationsWidgetProps} from '../types';
 
+import i18n from '../i18n';
+
 export function OperationsWidgetHeader(props: OperationsWidgetProps) {
     const {
         data: {isLoading, operations},
@@ -13,7 +15,7 @@ export function OperationsWidgetHeader(props: OperationsWidgetProps) {
     const id = props.id;
     return (
         <WidgetHeader
-            title={name ?? 'Operations'}
+            title={name ?? i18n('title')}
             count={operations?.length}
             isLoading={isLoading}
             page={'OPERATIONS'}

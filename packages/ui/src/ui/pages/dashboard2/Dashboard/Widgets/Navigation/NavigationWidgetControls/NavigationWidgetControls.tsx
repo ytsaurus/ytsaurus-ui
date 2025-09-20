@@ -8,6 +8,8 @@ import {setNavigationTypeFilter} from '../../../../../../store/actions/dashboard
 
 import type {NavigationWidgetProps} from '../types';
 
+import i18n from '../i18n';
+
 export function NavigationWidgetControls(props: NavigationWidgetProps) {
     const dispatch = useDispatch();
     const type = useSelector((state: RootState) => getNavigationTypeFilter(state, props.id));
@@ -18,8 +20,8 @@ export function NavigationWidgetControls(props: NavigationWidgetProps) {
     return (
         <RadioButton
             options={[
-                {value: 'last_visited', content: 'Last visited'},
-                {value: 'favourite', content: 'Favourite'},
+                {value: 'last_visited', content: i18n('value_last-visited')},
+                {value: 'favourite', content: i18n('value_favourite')},
             ]}
             value={type}
             onUpdate={onUpdate}

@@ -1,20 +1,22 @@
+import i18n from '../i18n';
+
 export function useQueriesSettings() {
     return [
         {
             type: 'text' as const,
             name: 'name',
-            caption: 'Name',
+            caption: i18n('field_name'),
             extras: {
-                placeholder: 'Queries',
+                placeholder: i18n('placeholder_queries'),
             },
         },
         {
             name: 'authors',
             type: 'acl-subjects' as const,
-            caption: 'Authors',
+            caption: i18n('field_author'),
             required: true,
             extras: {
-                placeholder: 'Enter name or login',
+                placeholder: i18n('placeholder_enter-name-or-login'),
                 allowedTypes: ['users' as const],
             },
         },
@@ -22,7 +24,7 @@ export function useQueriesSettings() {
             name: 'limit',
             type: 'number' as const,
             required: true,
-            caption: 'Limit(per author)',
+            caption: i18n('field_limit'),
             extras: {
                 max: 50,
                 hidePrettyValue: true,

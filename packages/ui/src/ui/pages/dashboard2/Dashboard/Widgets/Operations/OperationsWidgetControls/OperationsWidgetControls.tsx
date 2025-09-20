@@ -15,6 +15,8 @@ import {
 
 import type {OperationsWidgetProps} from '../types';
 
+import i18n from '../i18n';
+
 import './OperationsWidgetControls.scss';
 
 const block = b('yt-operations-widget-controls');
@@ -38,22 +40,22 @@ export function OperationsWidgetControls(props: OperationsWidgetProps) {
         <Flex direction={'row'} alignItems={'center'} gap={3}>
             <Select
                 options={[
-                    {value: 'all', content: 'All'},
-                    {value: 'pending', content: 'Pending'},
-                    {value: 'completed', content: 'Completed'},
-                    {value: 'running', content: 'Running'},
-                    {value: 'failed', content: 'Failed'},
-                    {value: 'aborted', content: 'Aborted'},
+                    {value: 'all', content: i18n('value_all')},
+                    {value: 'pending', content: i18n('value_pending')},
+                    {value: 'completed', content: i18n('value_completed')},
+                    {value: 'running', content: i18n('value_running')},
+                    {value: 'failed', content: i18n('value_failed')},
+                    {value: 'aborted', content: i18n('value_aborted')},
                 ]}
-                label={'State:'}
+                label={i18n('label_state')}
                 value={[state]}
                 onUpdate={onStateFilterUpdate}
                 className={block('state')}
             />
             <RadioButton
                 options={[
-                    {value: 'me', content: 'Me'},
-                    {value: 'custom', content: 'Custom'},
+                    {value: 'me', content: i18n('value_me')},
+                    {value: 'custom', content: i18n('value_custom')},
                 ]}
                 onUpdate={onAuthorTypeFilterUpdate}
                 value={authorType}

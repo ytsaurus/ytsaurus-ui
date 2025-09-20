@@ -2,6 +2,8 @@ import {useSelector} from 'react-redux';
 
 import {getMediumList} from '../../../../../../store/selectors/thor';
 
+import i18n from '../i18n';
+
 export function useAccountsSettings() {
     const mediumList = useSelector(getMediumList);
 
@@ -9,20 +11,20 @@ export function useAccountsSettings() {
         {
             type: 'text' as const,
             name: 'name',
-            caption: 'Name',
+            caption: i18n('field_name'),
             extras: {
-                placeholder: 'Accounts',
+                placeholder: i18n('placeholder_accounts'),
             },
         },
         {
             type: 'accounts-with-presets' as const,
             name: 'accounts',
-            caption: 'Accounts',
+            caption: i18n('field_accounts'),
         },
         {
             type: 'table-sort-by' as const,
             name: 'columns',
-            caption: 'Columns',
+            caption: i18n('field_columns'),
             extras: {
                 suggestColumns: ['Nodes', 'Chunks', ...mediumList],
                 formatReadable: true,

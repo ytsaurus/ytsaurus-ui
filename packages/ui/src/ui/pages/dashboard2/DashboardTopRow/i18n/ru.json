@@ -1,0 +1,13 @@
+{
+  "action_edit-dashboard": "Редактировать дашборд",
+  "action_save-dashboard": "Сохранить дашборд",
+  "action_cancel": "Отмена",
+  "action_copy-from": "Копировать из",
+  "action_add-widget": "Добавить виджет",
+  "title_navigation": "Навигация",
+  "title_operations": "Операции",
+  "title_pools": "Пулы",
+  "title_accounts": "Аккаунты",
+  "title_queries": "Запросы",
+  "title_services": "Сервисы"
+}
