@@ -1,0 +1,15 @@
+{
+    schema=[
+        {
+            name=session_id;
+            type_v3=string
+        };
+        {
+            name=response;
+            type_v3={
+              type_name=optional;
+              item=yson;
+            }
+        }
+    ]
+}

@@ -226,6 +226,20 @@ test('Navigation - cyrillic table', async ({page}) => {
     });
 });
 
+test('Navigation - truncated cyrillic table', async ({page}) => {
+    await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/tmp/cyrillic-truncated-table`));
+
+    await table(page).waitForTable('.navigation-table', 1);
+    await table(page).showCellPreview(1, 3);
+
+    const modalContent = await page.waitForSelector(
+        '[data-qa="cell-preview-modal-content"] .data-table__table',
+    );
+    const text = await modalContent.innerText();
+    const result = text.includes('пользователь просит оценить утверждение');
+    expect(result).toBeTruthy();
+});
+
 test('Navigation - QT kit', async ({page}) => {
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/tmp/cyrillic-table`));
 

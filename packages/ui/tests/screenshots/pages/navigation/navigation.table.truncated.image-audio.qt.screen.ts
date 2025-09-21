@@ -35,5 +35,10 @@ test('Query/Result: truncated image-audio', async ({page}) => {
     await imageLoc.locator('img').waitFor({state: 'visible'});
     await audioLoc.locator('audio').waitFor({state: 'visible'});
 
+    await page.$eval('.query-result-table', (element) => {
+        element.scrollTop = 0;
+        element.scrollLeft = 0;
+    });
+
     await expect(page).toHaveScreenshot();
 });
