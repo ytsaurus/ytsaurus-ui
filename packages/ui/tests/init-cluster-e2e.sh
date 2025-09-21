@@ -242,6 +242,11 @@ yt create -r --attributes "{schema=[
     set -x
 ) | yt write-table --format json ${YQLV3_TABLE}
 
+CYRILLIC_TRUNCATED_TABLE=${E2E_DIR}/tmp/cyrillic-truncated-table
+CYRILLIC_TRUNCATED_TABLE_SCHEMA=$(cat $(dirname $0)/data/cyrillic-truncated-table/table.schema)
+yt create --attributes "$CYRILLIC_TRUNCATED_TABLE_SCHEMA" table ${CYRILLIC_TRUNCATED_TABLE}
+cat $(dirname $0)/data/cyrillic-truncated-table/data | yt write-table --format yson ${CYRILLIC_TRUNCATED_TABLE}
+
 CYRILLIC_TABLE=${E2E_DIR}/tmp/cyrillic-table
 yt create --attributes '{"schema"=[{"name"="Тест1"; "type"="string"};{"name"="Тест2"; "type"="string"}]}' table ${CYRILLIC_TABLE}
 
