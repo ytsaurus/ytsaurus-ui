@@ -6,14 +6,14 @@ import capitalize_ from 'lodash/capitalize';
 
 import Label from '../../../../../components/Label/Label';
 import UIFactory from '../../../../../UIFactory';
-import {PoolInfo} from '../../../../../store/selectors/scheduling/scheduling-pools';
 import {getCluster, getClusterUiConfig} from '../../../../../store/selectors/global';
+import {PoolTreeNode} from '../../../../../utils/scheduling/pool-child';
 
 import './PoolTags.scss';
 
 const block = cn('scheduling-pool-tags');
 
-function PoolTags({pool}: {pool: PoolInfo}) {
+function PoolTags({pool}: {pool: PoolTreeNode}) {
     const cluster = useSelector(getCluster);
     const clusterUiConfig = useSelector(getClusterUiConfig);
 

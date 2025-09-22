@@ -4,6 +4,8 @@ import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
 import hammer from '../../../common/hammer';
+import * as treeList from '../../../common/hammer/tree-list';
+
 import {createSelector} from 'reselect';
 import {getCluster} from '../../../store/selectors/global';
 
@@ -27,6 +29,7 @@ import {
 } from './scheduling-pools';
 import {RootState} from '../../../store/reducers';
 import {isAbcPoolName, isTopLevelPool} from '../../../utils/scheduling/pool';
+import {PoolOrOperation, PoolTreeNode} from '../../../utils/scheduling/pool-child';
 import {visitTreeItems} from '../../../utils/utils';
 import {getExpandedPoolsLoadAll, getSchedulingOperationsExpandedPools} from './expanded-pools';
 import {
@@ -89,17 +92,22 @@ export const getPoolsNames = createSelector(
     (pools): Array<string> => map_(pools, (_v, name) => name).sort(),
 );
 
-const DETAILS_CONTENT_MODES = {
-    cpu: 'cpu',
-    memory: 'memory',
-    gpu: 'gpu',
-    user_slots: 'user_slots',
-    operations: 'operations',
-    integral: 'integral',
-};
+export const SCHEDULING_CONTENT_MODES = [
+    'summary',
+    'cpu',
+    'memory',
+    'gpu',
+    'user_slots',
+    'operations',
+    'integral_guarantees',
+    'custom',
+] as const;
 
-export const getContentMode = createSelector([getContentModeRaw], (mode) => {
-    return DETAILS_CONTENT_MODES[mode] || DETAILS_CONTENT_MODES.cpu;
+export type SchedulingContentMode = (typeof SCHEDULING_CONTENT_MODES)[number];
+
+export const getSchedulingContentMode = createSelector([getContentModeRaw], (mode) => {
+    const index = SCHEDULING_CONTENT_MODES.indexOf(mode as any);
+    return SCHEDULING_CONTENT_MODES[index !== -1 ? index : 0];
 });
 
 export const getIsRoot = createSelector(getPool, (pool) => pool === ROOT_POOL_NAME);
@@ -158,27 +166,36 @@ const getFilteredTree = createSelector(
     [getCurrentPool, getSchedulingFilteredPoolNames],
     (treeRoot, visiblePools) => {
         if (treeRoot) {
-            return hammer.treeList.filterTree(
+            const res = treeList.filterTree(
                 treeRoot,
                 (pool: {name: string}) => {
                     return visiblePools === undefined || visiblePools.has(pool.name);
                 },
-                true,
+                false,
             );
+            return res;
         }
         return undefined;
     },
 );
 
-export const getTableItems = createSelector(
+export const getSchedulingTableItems = createSelector(
     [getFilteredTree, getSortState],
     (filteredTree, sortState) => {
         if (filteredTree) {
             const isRoot = filteredTree && filteredTree.name === ROOT_POOL_NAME;
-            const tree = isRoot ? filteredTree : {children: [filteredTree]};
-            const sortedTree = hammer.treeList.sortTree(tree, sortState, poolsTableItems);
+            const tree = isRoot
+                ? filteredTree
+                : ({
+                      name: '',
+                      children: [filteredTree],
+                      leaves: [],
+                      attributes: {},
+                      type: 'pool',
+                  } as PoolTreeNode);
+            const sortedTree = treeList.sortTree(tree, sortState, poolsTableItems);
 
-            return hammer.treeList.flattenTree(sortedTree);
+            return treeList.flattenTree(sortedTree);
         }
 
         return [];
@@ -186,8 +203,13 @@ export const getTableItems = createSelector(
 );
 
 export const getSchedulingOverviewMaxDepth = createSelector(
-    [getTableItems, getExpandedPoolsLoadAll, getTree, getSchedulingOperationsExpandedPools],
-    (items: Array<{level: number; name: string}>, allExpanded, tree, expandedPoolsMap) => {
+    [
+        getSchedulingTableItems,
+        getExpandedPoolsLoadAll,
+        getTree,
+        getSchedulingOperationsExpandedPools,
+    ],
+    (items: Array<{level?: number; name?: string}>, allExpanded, tree, expandedPoolsMap) => {
         if (allExpanded) {
             return reduce_(
                 items,
@@ -207,8 +229,9 @@ export const getSchedulingOverviewMaxDepth = createSelector(
         return reduce_(
             items,
             (acc, item) => {
-                if (expandedPools.has(item.name)) {
-                    return acc < item.level + 1 ? item.level + 1 : acc;
+                const {level = 0, name = ''} = item;
+                if (expandedPools.has(name)) {
+                    return acc < level + 1 ? level + 1 : acc;
                 }
                 return acc;
             },
@@ -219,7 +242,7 @@ export const getSchedulingOverviewMaxDepth = createSelector(
 
 const getPoolChildrenData = createSelector(
     [getCurrentPool, getCurrentPoolChildren, getCurrentPoolOperations],
-    (pool, pools, operations = []) => {
+    (pool, pools, operations = []): undefined | Array<PoolOrOperation<'pool' | 'operation'>> => {
         if (pool && pools) {
             return [...pools, ...operations];
         }
@@ -230,7 +253,7 @@ const getPoolChildrenData = createSelector(
 
 const getFilteredPoolChildren = createSelector(
     [getPoolChildrenData, getPoolChildrenFilter],
-    (poolChildrenData, poolChildrenFilter) => {
+    (poolChildrenData, poolChildrenFilter): typeof poolChildrenData => {
         return hammer.filter.filter({
             data: poolChildrenData,
             input: poolChildrenFilter,
@@ -241,7 +264,7 @@ const getFilteredPoolChildren = createSelector(
 
 export const getSortedPoolChildren = createSelector(
     [getFilteredPoolChildren, getPoolChildrenSortState, getCurrentPool],
-    (filteredPoolChildren, poolChildrenSortState, currentPool) => {
+    (filteredPoolChildren, poolChildrenSortState, currentPool): typeof filteredPoolChildren => {
         return hammer.utils.sort(filteredPoolChildren, poolChildrenSortState, childTableItems, {
             addGetParams: [currentPool],
             groupBy: {
@@ -250,14 +273,14 @@ export const getSortedPoolChildren = createSelector(
                     return item.type === 'operation' ? 0 : 1;
                 },
             },
-        });
+        }) as typeof filteredPoolChildren;
     },
 );
 
 export const getPollChildrenTableItems = createSelector(
     [getCurrentPool, getSortedPoolChildren],
     (currentPool, sortedPoolChildren) => {
-        const extras = [];
+        const extras = [] as Exclude<typeof sortedPoolChildren, undefined>;
         let isChildPool = false;
         if (currentPool && currentPool.name !== ROOT_POOL_NAME) {
             extras.push(currentPool);

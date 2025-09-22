@@ -1,0 +1,12 @@
+.yt-expandable-cell {
+    padding-left: 10px;
+
+    &__child {
+        padding-left: 20px;
+    }
+
+    &__level {
+        padding-left: 10px;
+        border-right: var(--g-color-line-generic);
+    }
+}
