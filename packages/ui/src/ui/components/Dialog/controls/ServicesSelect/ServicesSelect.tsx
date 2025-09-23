@@ -13,6 +13,8 @@ import {useBunldesList} from './use-bundles-list';
 import {useCliquesList} from './use-cliques-list';
 import {useActions} from './use-actions';
 
+import i18n from './i18n';
+
 export type ServicePair = {
     service: string;
     item: string;
@@ -59,10 +61,10 @@ export function ServicesSelect(props: Props) {
 
     const makeItemPlaceholder = (pair: Partial<ServicePair>) => {
         if (!pair.service) {
-            return 'Select item';
+            return i18n('field_select-item');
         }
 
-        return `Select ${pair.service === 'chyt' ? 'clique' : 'bundle'}`;
+        return pair.service === 'chyt' ? i18n('field_select-clique') : i18n('field_select-bundle');
     };
 
     return (
@@ -79,7 +81,7 @@ export function ServicesSelect(props: Props) {
                                 hasClear
                                 width={'max'}
                                 disabled={disabled}
-                                placeholder={'Select service'}
+                                placeholder={i18n('field_select-service')}
                             />
                             <Select
                                 onUpdate={(newValue) => updateItem(index, newValue[0])}
@@ -98,7 +100,7 @@ export function ServicesSelect(props: Props) {
                                     onClick={() => removePair(index)}
                                     disabled={disabled}
                                 >
-                                    Remove
+                                    {i18n('action_remove')}
                                 </Button>
                             )}
                         </Flex>
@@ -110,7 +112,7 @@ export function ServicesSelect(props: Props) {
                                 <Button size={'m'} onClick={addPair} disabled={disabled}>
                                     <Flex alignItems={'center'} gap={2}>
                                         <Plus />
-                                        Add Service
+                                        {i18n('action_add-service')}
                                     </Flex>
                                 </Button>
                             </Flex>
@@ -118,7 +120,7 @@ export function ServicesSelect(props: Props) {
                 </Flex>
             ) : (
                 <Text color={'danger'} variant={'body-2'}>
-                    There are no services available on current cluster
+                    {i18n('alert_no-services-available')}
                 </Text>
             )}
         </>
@@ -137,7 +139,9 @@ ServicesSelect.validate = (value: ServicePair[]) => {
     if (!value.length) return;
     if (value[value.length - 1]?.service && !value[value.length - 1]?.item) {
         const {service} = value[value.length - 1];
-        return `${service === 'chyt' ? 'Clique' : 'Bundle'} option is required`;
+        return service === 'chyt'
+            ? i18n('alert_clique-option-required')
+            : i18n('alert_bundle-option-required');
     }
     return;
 };

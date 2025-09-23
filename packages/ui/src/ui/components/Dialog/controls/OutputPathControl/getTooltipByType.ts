@@ -1,12 +1,11 @@
 import {PathAttribute} from '../../../../store/reducers/navigation/modals/tableMergeSortModalSlice';
 
+import i18n from './i18n';
+
 const TOOLTIP_MAP: Record<PathAttribute, string> = {
-    [PathAttribute.COMPRESSION_CODEC]:
-        'Sets the compression format for output table. The attribute can be specified with the write_file, write_table commands, and on operation output paths. This attribute is incompatible with <append=true>.',
-    [PathAttribute.ERASURE_CODEC]:
-        'Turn off erasure-coding to create a table. The attribute can be monitored with the write_file, write_table commands, and on operation output paths. This attribute is incompatible with <append=true>.',
-    [PathAttribute.OPTIMIZE_FOR]:
-        'Sets the storage format for output table. The attribute can be specified with the write_table command and on the output paths of operations. This attribute is not compatible with <append=true>.',
+    [PathAttribute.COMPRESSION_CODEC]: i18n('context_compression-codec-tooltip'),
+    [PathAttribute.ERASURE_CODEC]: i18n('context_erasure-codec-tooltip'),
+    [PathAttribute.OPTIMIZE_FOR]: i18n('context_optimize-for-tooltip'),
 };
 
 export const getTooltipByType = (type: string) =>

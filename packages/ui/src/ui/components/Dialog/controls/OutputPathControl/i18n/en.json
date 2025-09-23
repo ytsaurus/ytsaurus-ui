@@ -1,0 +1,11 @@
+{
+    "field_optimize-for": "Optimize for:",
+    "field_erasure-codec": "Erasure codec:",
+    "field_compression": "Compression:",
+    "label_level": "level",
+    "value_scan": "Scan",
+    "value_lookup": "Lookup",
+    "context_compression-codec-tooltip": "Sets the compression format for output table. The attribute can be specified with the write_file, write_table commands, and on operation output paths. This attribute is incompatible with <append=true>.",
+    "context_erasure-codec-tooltip": "Turn off erasure-coding to create a table. The attribute can be monitored with the write_file, write_table commands, and on operation output paths. This attribute is incompatible with <append=true>.",
+    "context_optimize-for-tooltip": "Sets the storage format for output table. The attribute can be specified with the write_table command and on the output paths of operations. This attribute is not compatible with <append=true>."
+}
