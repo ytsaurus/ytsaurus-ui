@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, {isAxiosError} from 'axios';
 import type {Request, Response} from 'express';
 
 // @ts-ignore
@@ -27,6 +27,8 @@ import {ErrorWithCode, sendAndLogError} from '../utils';
 
 export async function prometheusQueryRange(req: Request, res: Response) {
     const BASE_URL = req.ctx.config.prometheusBaseUrl;
+
+    const queries: Array<object> = [];
 
     try {
         const {ytAuthCluster} = req.params;
@@ -92,6 +94,7 @@ export async function prometheusQueryRange(req: Request, res: Response) {
             Promise.all(
                 targets.map(({expr}) => {
                     const query = replaceExprParams(expr, chartParams, step);
+                    queries.push({query, start, end, step});
                     return axios
                         .get<QueryRangeData>(`${BASE_URL}/api/v1/query_range?`, {
                             params: {query, start, end, step},
@@ -105,6 +108,11 @@ export async function prometheusQueryRange(req: Request, res: Response) {
 
         res.send({results});
     } catch (e: any) {
+        if (isAxiosError(e)) {
+            Object.assign(e.response?.data, {queries});
+        } else {
+            Object.assign(e, {queries});
+        }
         sendAndLogError(req.ctx, res, null, e);
     }
 }

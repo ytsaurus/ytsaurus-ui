@@ -40,7 +40,7 @@ export function replaceExprParams(
     for (const k of Object.keys(SPECIAL_EXPR_ENV)) {
         const key = k as keyof typeof SPECIAL_EXPR_ENV;
         if (res.indexOf(key)) {
-            res = res.replace(key, SPECIAL_EXPR_ENV[key](stepSec));
+            res = res.replaceAll(key, SPECIAL_EXPR_ENV[key](stepSec));
         }
     }
     return res;
