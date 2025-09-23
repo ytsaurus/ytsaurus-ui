@@ -18,7 +18,7 @@ import block from 'bem-cn-lite';
 
 import Yson from '../../components/Yson/Yson';
 import {YTErrorBlock} from '../../components/Error/Error';
-import {type YsonSettings, getYsonSettingsDisableDecode} from '../../store/selectors/thor/unipika';
+import {type YsonSettings, getPreviewCellYsonSettings} from '../../store/selectors/thor/unipika';
 import {closeCellPreviewAndCancelRequest} from '../../store/actions/modals/cell-preview';
 import {isMediaTag} from '../../utils/yql-types';
 
@@ -36,7 +36,7 @@ export const CellPreviewModal: React.FC = () => {
     const noticeText = useSelector(selectCellPreviewNoticeText);
     const error = useSelector(selectErrorPreviewCellPath);
 
-    const unipikaSettings = useSelector(getYsonSettingsDisableDecode);
+    const unipikaSettings = useSelector(getPreviewCellYsonSettings);
 
     return (
         <SimpleModal

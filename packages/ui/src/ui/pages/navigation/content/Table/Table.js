@@ -41,7 +41,7 @@ import {
     getYqlTypes,
 } from '../../../../store/selectors/navigation/content/table-ts';
 import {getCluster} from '../../../../store/selectors/global';
-import {getYsonSettingsDisableDecode} from '../../../../store/selectors/thor/unipika';
+import {getTableYsonSettings} from '../../../../store/selectors/thor/unipika';
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
 import {isFinalLoadingStatus} from '../../../../utils/utils';
@@ -109,7 +109,6 @@ const renderColumnSelectorModal = (props) => {
             onConfirm={updateColumns}
             isVisible={isColumnSelectorOpen}
             onCancel={closeColumnSelectorModal}
-            itemRenderer={({name, caption = name}) => <span title={caption}>{caption}</span>}
         />
     );
 };
@@ -210,7 +209,7 @@ function Table(props) {
 const mapStateToProps = (state) => {
     const {loading, loaded, error, errorData, isColumnSelectorOpen, isFullScreen} =
         state.navigation.content.table;
-    const settings = getYsonSettingsDisableDecode(state);
+    const settings = getTableYsonSettings(state);
     const {isSplit} = state.global.splitScreen;
 
     const path = getPath(state);
