@@ -21,7 +21,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_partition_rows_written\", partition_index=~\"\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\".+\", service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_partition_rows_written\", partition_index=~\"\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\"}[$__rate_interval])",
                     "refId": "A",
                     "legendFormat": "Rows written"
                 },
@@ -30,7 +30,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_partition_rows_trimmed\", partition_index=~\"\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\".+\", service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_partition_rows_trimmed\", partition_index=~\"\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\"}[$__rate_interval])",
                     "refId": "B",
                     "legendFormat": "Row trimmed"
                 }
@@ -87,7 +87,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_partition_data_weight_written\", partition_index=~\"\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\".+\", service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_partition_data_weight_written\", partition_index=~\"\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -131,7 +131,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_partitions\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\"}",
+                    "expr": "{cluster=~\".+\", service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_partitions\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\"}",
                     "refId": "A"
                 }
             ],
@@ -175,7 +175,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_consumers\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\", vital=~\"true\"}",
+                    "expr": "{cluster=~\".+\", service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_consumers\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\", vital=~\"true\"}",
                     "refId": "A",
                     "legendFormat": "Vital"
                 },
@@ -184,7 +184,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_consumers\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\", vital=~\"false\"}",
+                    "expr": "{cluster=~\".+\", service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_consumers\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\", vital=~\"false\"}",
                     "refId": "B",
                     "legendFormat": "Non-vital"
                 }
@@ -241,7 +241,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_partition_row_count\", partition_index=~\"\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\"}",
+                    "expr": "{cluster=~\".+\", service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_partition_row_count\", partition_index=~\"\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\"}",
                     "refId": "A",
                     "legendFormat": "Row count"
                 }
@@ -286,7 +286,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_partition_data_weight\", partition_index=~\"\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\"}",
+                    "expr": "{cluster=~\".+\", service=~\"yt-queue-agent\", __name__=~\"yt_queue_agent_queue_partition_data_weight\", partition_index=~\"\", queue_cluster=~\"$queue_cluster\", queue_path=~\"$queue_path\"}",
                     "refId": "A",
                     "legendFormat": "Data weight"
                 }
@@ -320,8 +320,11 @@
             }
         }
     ],
-    "title": "Queue metrics dashboard for UI",
-    "tags": [],
+    "title": "Queue metrics [Autogenerated]",
+    "tags": [
+        "YT",
+        "autogen"
+    ],
     "templating": {
         "list": [
             {
@@ -331,16 +334,16 @@
                 "options": [
                     {
                         "selected": true,
-                        "text": "",
-                        "value": ""
+                        "text": ".*",
+                        "value": ".*"
                     }
                 ],
                 "current": {
                     "selected": true,
-                    "text": "",
-                    "value": ""
+                    "text": ".*",
+                    "value": ".*"
                 },
-                "query": "",
+                "query": ".*",
                 "hide": 0,
                 "skipUrlSync": false,
                 "allFormat": "glob"
@@ -352,19 +355,26 @@
                 "options": [
                     {
                         "selected": true,
-                        "text": "",
-                        "value": ""
+                        "text": ".*",
+                        "value": ".*"
                     }
                 ],
                 "current": {
                     "selected": true,
-                    "text": "",
-                    "value": ""
+                    "text": ".*",
+                    "value": ".*"
                 },
-                "query": "",
+                "query": ".*",
                 "hide": 0,
                 "skipUrlSync": false,
                 "allFormat": "glob"
+            }
+        ],
+        "permissions": [
+            {
+                "permission": "read",
+                "path": "$queue_path",
+                "cluster": "$queue_cluster"
             }
         ]
     },
