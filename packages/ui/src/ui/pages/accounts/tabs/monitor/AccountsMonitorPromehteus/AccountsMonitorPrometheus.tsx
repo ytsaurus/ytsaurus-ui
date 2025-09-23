@@ -12,5 +12,5 @@ export function AccountsMonitorPrometheus({cluster, account}: {cluster: string; 
               };
     }, [cluster, account]);
 
-    return <PrometheusDashboardLazy type="account" params={params} />;
+    return <PrometheusDashboardLazy type="master-accounts" params={params} />;
 }

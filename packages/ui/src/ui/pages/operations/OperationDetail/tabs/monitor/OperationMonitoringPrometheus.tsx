@@ -53,7 +53,7 @@ export function OperationMonitoringPrometheus({cluster, operation}: OperationMon
                 />
             )}
             <PrometheusDashboard
-                type="operation"
+                type="scheduler-operation"
                 params={currentParams}
                 timeRange={Object.assign(
                     {from: new Date(startTime!).getTime()},

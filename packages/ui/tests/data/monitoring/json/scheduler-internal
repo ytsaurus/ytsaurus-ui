@@ -21,7 +21,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_memory_generic_bytes_in_use_by_app\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_memory_generic_bytes_in_use_by_app\"}",
                     "refId": "A",
                     "legendFormat": "{{pod}}"
                 }
@@ -53,7 +53,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-controller-agent\", __name__=~\"yt_memory_generic_bytes_in_use_by_app\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-controller-agent\", __name__=~\"yt_memory_generic_bytes_in_use_by_app\"}",
                     "refId": "A",
                     "legendFormat": "{{pod}}"
                 }
@@ -85,7 +85,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_resource_tracker_cpu_wait\", thread=~\"\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_resource_tracker_cpu_wait\", thread=~\"\"}",
                     "refId": "A"
                 }
             ],
@@ -116,7 +116,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-controller-agent\", __name__=~\"yt_resource_tracker_cpu_wait\", thread=~\"\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-controller-agent\", __name__=~\"yt_resource_tracker_cpu_wait\", thread=~\"\"}",
                     "refId": "A"
                 }
             ],
@@ -147,7 +147,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"Control\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"Control\"}",
                     "refId": "A",
                     "legendFormat": "{{pod}}"
                 }
@@ -179,7 +179,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-controller-agent\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"Control\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-controller-agent\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"Control\"}",
                     "refId": "A",
                     "legendFormat": "{{pod}}"
                 }
@@ -211,7 +211,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"NodeShard\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"NodeShard\"}",
                     "refId": "A",
                     "legendFormat": "{{pod}}"
                 }
@@ -243,7 +243,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-controller-agent\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"Controller\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-controller-agent\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"Controller\"}",
                     "refId": "A",
                     "legendFormat": "{{pod}}"
                 }
@@ -275,7 +275,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"FSUpdatePool|OrchidWorker|Background\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"FSUpdatePool|OrchidWorker|Background\"}",
                     "refId": "A",
                     "legendFormat": "{{thread}}"
                 }
@@ -307,7 +307,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-controller-agent\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"JobTracker\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-controller-agent\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"JobTracker\"}",
                     "refId": "A",
                     "legendFormat": "{{pod}}"
                 }
@@ -339,7 +339,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"RpcHeavy\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"RpcHeavy\"}",
                     "refId": "A",
                     "legendFormat": "{{pod}}"
                 }
@@ -371,7 +371,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-controller-agent\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"RpcHeavy\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-controller-agent\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"RpcHeavy\"}",
                     "refId": "A",
                     "legendFormat": "{{pod}}"
                 }
@@ -403,7 +403,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_action_queue_time_cumulative\", bucket=~\".+\", thread=~\"Control\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_action_queue_time_cumulative\", bucket=~\".+\", thread=~\"Control\"}[$__rate_interval])",
                     "refId": "A",
                     "legendFormat": "{{bucket}}"
                 }
@@ -444,7 +444,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_running_operation_count|yt_scheduler_pools_total_operation_count\", pool=~\"<Root>\", tree=~\"physical\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_running_operation_count|yt_scheduler_pools_total_operation_count\", pool=~\"<Root>\", tree=~\"default\"}",
                     "refId": "A",
                     "legendFormat": "{{__name__}}"
                 }
@@ -489,7 +489,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_schedulable_element_count\", pool=~\"<Root>\", tree=~\".+\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_schedulable_element_count\", pool=~\"<Root>\", tree=~\".+\"}",
                     "refId": "A",
                     "legendFormat": "{{tree}}"
                 }
@@ -534,7 +534,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_scheduler_preschedule_job_count\", schedule_jobs_stage=~\"\", scheduling_stage=~\"\", tree=~\".+\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_preschedule_job_count\", schedule_jobs_stage=~\"\", scheduling_stage=~\"\", tree=~\".+\"}[$__rate_interval])",
                     "refId": "A",
                     "legendFormat": "{{tree}}"
                 }
@@ -572,7 +572,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_scheduler_schedule_job_attempt_count\", schedule_jobs_stage=~\"\", scheduling_stage=~\"\", tree=~\".+\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_schedule_job_attempt_count\", schedule_jobs_stage=~\"\", scheduling_stage=~\"\", tree=~\".+\"}[$__rate_interval])",
                     "refId": "A",
                     "legendFormat": "{{tree}}"
                 }
@@ -610,7 +610,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_scheduler_preschedule_job_count\", scheduling_stage!~\"non_preemptive|regular.*\", tree=~\"physical\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_preschedule_job_count\", scheduling_stage!~\"non_preemptive|regular.*\", tree=~\"default\"}[$__rate_interval])",
                     "refId": "A",
                     "legendFormat": "{{scheduling_stage}}"
                 }
@@ -648,7 +648,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_operation_satisfaction_distribution\", pool=~\"<Root>\", quantile=~\".+\", tree=~\"physical\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_operation_satisfaction_distribution\", pool=~\"<Root>\", quantile=~\".+\", tree=~\"default\"}",
                     "refId": "A",
                     "legendFormat": "{{quantile}}"
                 }
@@ -689,7 +689,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_logging_enqueued_events_rate|yt_logging_dropped_events\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_logging_enqueued_events_rate|yt_logging_dropped_events\"}[$__rate_interval])",
                     "refId": "A",
                     "legendFormat": "{{pod}}, {{__name__}}"
                 }
@@ -721,7 +721,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-controller-agent\", __name__=~\"yt_logging_enqueued_events\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-controller-agent\", __name__=~\"yt_logging_enqueued_events\"}[$__rate_interval])",
                     "refId": "A",
                     "legendFormat": "{{pod}}"
                 }
@@ -762,7 +762,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-controller-agent\", __name__=~\"yt_controller_agent_jobs_aborted_job_count\", abort_reason!~\"preemption|^$\", job_type=~\"\", tree=~\"\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-controller-agent\", __name__=~\"yt_controller_agent_jobs_aborted_job_count\", abort_reason!~\"preemption|^$\", job_type=~\"\", tree=~\"\"}[$__rate_interval])",
                     "refId": "A",
                     "legendFormat": "{{abort_reason}}"
                 }
@@ -800,7 +800,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_metrics_total_time_aborted_rate|yt_scheduler_pools_metrics_total_time_completed\", pool=~\"<Root>\", tree=~\"physical\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_metrics_total_time_aborted_rate|yt_scheduler_pools_metrics_total_time_completed\", pool=~\"<Root>\", tree=~\"default\"}[$__rate_interval])",
                     "refId": "A",
                     "legendFormat": "{{__name__}}"
                 }
@@ -847,7 +847,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_rpc_server_request_count\", user=~\"\", yt_service=~\"JobTrackerService|AllocationTrackerService\", method=~\"Heartbeat\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_rpc_server_request_count\", user=~\"\", yt_service=~\"JobTrackerService|AllocationTrackerService\", method=~\"Heartbeat\"}[$__rate_interval])",
                     "refId": "A",
                     "legendFormat": "{{pod}}"
                 }
@@ -892,7 +892,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_rpc_server_request_queue_size\", user=~\"\", yt_service=~\"JobTrackerService|AllocationTrackerService\", method=~\"Heartbeat\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_rpc_server_request_queue_size\", user=~\"\", yt_service=~\"JobTrackerService|AllocationTrackerService\", method=~\"Heartbeat\"}",
                     "refId": "A",
                     "legendFormat": "{{pod}}"
                 }
@@ -937,7 +937,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_rpc_server_request_time_total_max\", user=~\"\", yt_service=~\"JobTrackerService|AllocationTrackerService\", method=~\"Heartbeat\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_rpc_server_request_time_total_max\", user=~\"\", yt_service=~\"JobTrackerService|AllocationTrackerService\", method=~\"Heartbeat\"}",
                     "refId": "A",
                     "legendFormat": "{{pod}}, {{__name__}}"
                 }
@@ -982,7 +982,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_rpc_server_concurrency|yt_rpc_server_concurrency_limit\", user=~\"\", yt_service=~\"JobTrackerService|AllocationTrackerService\", method=~\"Heartbeat\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_rpc_server_concurrency|yt_rpc_server_concurrency_limit\", user=~\"\", yt_service=~\"JobTrackerService|AllocationTrackerService\", method=~\"Heartbeat\"}",
                     "refId": "A",
                     "legendFormat": "{{pod}}, {{__name__}}"
                 }
@@ -1027,7 +1027,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_scheduler_node_heartbeat_concurrent_limit_reached_count_rate|yt_scheduler_node_heartbeat_concurrent_complexity_limit_reached_count\", host=~\"Aggr\", user=~\"\", limit_type=~\"\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_node_heartbeat_concurrent_limit_reached_count_rate|yt_scheduler_node_heartbeat_concurrent_complexity_limit_reached_count\", host=~\"Aggr\", user=~\"\", limit_type=~\"\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -1071,7 +1071,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-scheduler\", __name__=~\"yt_rpc_server_request_count\", user=~\"\", yt_service=~\"ControllerAgentTrackerService\", method=~\".*Heartbeat\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_rpc_server_request_count\", user=~\"\", yt_service=~\"ControllerAgentTrackerService\", method=~\".*Heartbeat\"}[$__rate_interval])",
                     "refId": "A",
                     "legendFormat": "{{method}}"
                 }
@@ -1116,7 +1116,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-scheduler\", __name__=~\"yt_rpc_server_request_time_total_max\", user=~\"\", yt_service=~\"ControllerAgentTrackerService\", method=~\".*Heartbeat\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_rpc_server_request_time_total_max\", user=~\"\", yt_service=~\"ControllerAgentTrackerService\", method=~\".*Heartbeat\"}",
                     "refId": "A",
                     "legendFormat": "{{method}}"
                 }
@@ -1170,7 +1170,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-controller-agent\", __name__=~\"yt_rpc_server_request_count\", user=~\"\", yt_service=~\"JobTrackerService\", method=~\"Heartbeat\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-controller-agent\", __name__=~\"yt_rpc_server_request_count\", user=~\"\", yt_service=~\"JobTrackerService\", method=~\"Heartbeat\"}[$__rate_interval])",
                     "refId": "A",
                     "legendFormat": "{{pod}}"
                 }
@@ -1202,7 +1202,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-controller-agent\", __name__=~\"yt_rpc_server_request_count\", user=~\"\", yt_service=~\"JobTrackerService\", method=~\"SettleJob\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-controller-agent\", __name__=~\"yt_rpc_server_request_count\", user=~\"\", yt_service=~\"JobTrackerService\", method=~\"SettleJob\"}[$__rate_interval])",
                     "refId": "A",
                     "legendFormat": "{{pod}}"
                 }
@@ -1234,7 +1234,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-controller-agent\", __name__=~\"yt_rpc_server_request_time_total_max\", user=~\"\", yt_service=~\"JobTrackerService\", method=~\"Heartbeat\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-controller-agent\", __name__=~\"yt_rpc_server_request_time_total_max\", user=~\"\", yt_service=~\"JobTrackerService\", method=~\"Heartbeat\"}",
                     "refId": "A",
                     "legendFormat": "{{pod}}"
                 }
@@ -1266,7 +1266,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-controller-agent\", __name__=~\"yt_rpc_server_request_time_total_max\", user=~\"\", yt_service=~\"JobTrackerService\", method=~\"SettleJob\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-controller-agent\", __name__=~\"yt_rpc_server_request_time_total_max\", user=~\"\", yt_service=~\"JobTrackerService\", method=~\"SettleJob\"}",
                     "refId": "A",
                     "legendFormat": "{{pod}}"
                 }
@@ -1298,7 +1298,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-controller-agent\", __name__=~\"yt_rpc_server_request_queue_size\", user=~\"\", yt_service=~\"JobTrackerService\", method=~\"Heartbeat\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-controller-agent\", __name__=~\"yt_rpc_server_request_queue_size\", user=~\"\", yt_service=~\"JobTrackerService\", method=~\"Heartbeat\"}",
                     "refId": "A",
                     "legendFormat": "{{pod}}"
                 }
@@ -1330,7 +1330,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-controller-agent\", __name__=~\"yt_rpc_server_request_queue_size\", user=~\"\", yt_service=~\"JobTrackerService\", method=~\"SettleJob\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-controller-agent\", __name__=~\"yt_rpc_server_request_queue_size\", user=~\"\", yt_service=~\"JobTrackerService\", method=~\"SettleJob\"}",
                     "refId": "A",
                     "legendFormat": "{{pod}}"
                 }
@@ -1351,7 +1351,35 @@
             }
         }
     ],
-    "tags": [],
-    "uid": "ytsaurus-scheduler-internal",
-    "title": "YTsaurus Scheduler Internal"
+    "title": "Scheduler [Autogenerated]",
+    "tags": [
+        "YT",
+        "autogen"
+    ],
+    "templating": {
+        "list": [
+            {
+                "name": "cluster",
+                "label": "Cluster",
+                "type": "textbox",
+                "options": [
+                    {
+                        "selected": true,
+                        "text": ".*",
+                        "value": ".*"
+                    }
+                ],
+                "current": {
+                    "selected": true,
+                    "text": ".*",
+                    "value": ".*"
+                },
+                "query": ".*",
+                "hide": 0,
+                "skipUrlSync": false,
+                "allFormat": "glob"
+            }
+        ]
+    },
+    "uid": "ytsaurus-scheduler-internal"
 }

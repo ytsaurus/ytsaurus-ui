@@ -1,0 +1,782 @@
+{
+    "panels": [
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_merger_nodes_being_merged\", account=~\"$account\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Nodes being merged",
+            "gridPos": {
+                "x": 0,
+                "y": 1,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_merger_account_queue_size\", account=~\"$account\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Account queue size",
+            "gridPos": {
+                "x": 12,
+                "y": 1,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 7
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\".*\", job_type=~\"merge_chunks\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Chunk server jobs info",
+            "gridPos": {
+                "x": 0,
+                "y": 8,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_merger_jobs_awaiting_chunk_creation\", account=~\"{{account}}\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Jobs awaiting chunk creation",
+            "gridPos": {
+                "x": 12,
+                "y": 8,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_merger_jobs_undergoing_chunk_creation\", account=~\"{{account}}\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Jobs undergoing chunk creation",
+            "gridPos": {
+                "x": 0,
+                "y": 14,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_merger_jobs_awaiting_node_heartbeat\", account=~\"{{account}}\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Jobs awaiting node heartbeat",
+            "gridPos": {
+                "x": 12,
+                "y": 14,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_merger_sessions_awaiting_finalization\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Sessions awaiting finalization",
+            "gridPos": {
+                "x": 0,
+                "y": 20,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_merger_completed_job_count\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Completed job count",
+            "gridPos": {
+                "x": 12,
+                "y": 20,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_merger_chunk_count_saving\", account=~\"{{account}}\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Chunk count saving",
+            "gridPos": {
+                "x": 0,
+                "y": 26,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_merger_chunk_replacements_failed\", account=~\"{{account}}\"}",
+                    "refId": "A"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_merger_chunk_replacements_succeeded\", account=~\"{{account}}\"}",
+                    "refId": "B"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Chunk replacement rate",
+            "gridPos": {
+                "x": 12,
+                "y": 26,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_merger_auto_merge_fallback_count\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Auto merge fallback count",
+            "gridPos": {
+                "x": 0,
+                "y": 32,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_merger_max_chunk_count_violated_criteria\", account=~\"{{account}}\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Max chunk count violated criteria",
+            "gridPos": {
+                "x": 12,
+                "y": 32,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 38
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_merger_max_row_count_violated_criteria\", account=~\"{{account}}\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Max row count violated criteria",
+            "gridPos": {
+                "x": 0,
+                "y": 39,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_merger_max_data_weight_violated_criteria\", account=~\"{{account}}\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Max data weight violated criteria",
+            "gridPos": {
+                "x": 12,
+                "y": 39,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_merger_max_uncompressed_data_violated_criteria\", account=~\"{{account}}\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Max uncompressed data violated criteria",
+            "gridPos": {
+                "x": 0,
+                "y": 45,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_merger_max_compressed_data_violated_criteria\", account=~\"{{account}}\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Max compressed data violated criteria",
+            "gridPos": {
+                "x": 12,
+                "y": 45,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_merger_max_input_chunk_data_weight_violated_criteria\", account=~\"{{account}}\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Max input chunk data weight violated criteria",
+            "gridPos": {
+                "x": 0,
+                "y": 51,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_merger_max_chunk_meta_size_violated_criteria\", account=~\"{{account}}\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Max chunk meta size violated criteria",
+            "gridPos": {
+                "x": 12,
+                "y": 51,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_merger_stuck_nodes_count\", account=~\"{{account}}\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Stuck nodes count",
+            "gridPos": {
+                "x": 0,
+                "y": 57,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_merger_average_merge_duration\", account=~\"{{account}}\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Average merge duration",
+            "gridPos": {
+                "x": 12,
+                "y": 57,
+                "w": 12,
+                "h": 6
+            }
+        }
+    ],
+    "title": "Master Merge Jobs",
+    "tags": [
+        "YT",
+        "autogen"
+    ],
+    "templating": {
+        "list": []
+    },
+    "uid": "ytsaurus-master-merge-jobs"
+}

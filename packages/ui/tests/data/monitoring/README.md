@@ -4,10 +4,10 @@ We have to get rid of `service=...` parameter from description for locamode clus
 
 ```bash
 # cd https://github.com/ytsaurus/ytsaurus/tree/main/yt/admin/dashboards
-$ generate_dashboards=$(bash -c 'cd /path/to/yt/admin/dashboards && ya make && echo $(pwd)/yt_dashboards/bin/generate_dashboards')
+$ generate_dashboards=$(bash -c 'cd /path/to/yt/admin/dashboards && ya make -DOPENSOURCE=true && echo $(pwd)/yt_dashboards/bin/generate_dashboards')
 $ $generate_dashboards list | grep grafana | cut -d ' ' -f 1 \
     | xargs -I {} bash -c "
         echo {};
-        $generate_dashboards json {} --backend grafana | sed 's/service=[^,]+,//g' > ~/github/ytsaurus-ui/packages/ui/tests/data/monitoring/json/{}
+        $generate_dashboards json {} --backend grafana > ~/github/ytsaurus-ui/packages/ui/tests/data/monitoring/json/{}
     "
 ```

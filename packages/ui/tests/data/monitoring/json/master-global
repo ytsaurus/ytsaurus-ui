@@ -21,81 +21,22 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{cluster=~\"$cluster\", service=~\"yt-exec-node.*\", __name__=~\"yt_build_version\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"ms.*\", thread=~\"Automaton\"}",
                     "refId": "A"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {
-                        "stacking": {
-                            "group": "A",
-                            "mode": "normal"
-                        },
-                        "fillOpacity": 100
-                    }
+                    "custom": {}
                 },
                 "overrides": []
             },
-            "title": "Versions",
+            "title": "Automaton CPU (Primary Cell)",
             "gridPos": {
                 "x": 0,
                 "y": 1,
-                "w": 24,
-                "h": 6
-            }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 7
-            },
-            "type": "row"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${PROMETHEUS_DS_UID}"
-            },
-            "type": "timeseries",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${PROMETHEUS_DS_UID}"
-                    },
-                    "expr": "{cluster=~\"$cluster\", service=~\"yt-exec-node.*\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"Job\"}",
-                    "refId": "A"
-                }
-            ],
-            "fieldConfig": {
-                "defaults": {
-                    "unit": "short",
-                    "custom": {}
-                },
-                "overrides": [
-                    {
-                        "matcher": {
-                            "id": "byFrameRefID",
-                            "options": "A"
-                        },
-                        "properties": [
-                            {
-                                "id": "min",
-                                "value": 0
-                            }
-                        ]
-                    }
-                ]
-            },
-            "title": "Job CPU Wait",
-            "gridPos": {
-                "x": 0,
-                "y": 8,
-                "w": 12,
+                "w": 8,
                 "h": 6
             }
         },
@@ -111,562 +52,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{cluster=~\"$cluster\", service=~\"yt-exec-node.*\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"Control\"}",
-                    "refId": "A"
-                }
-            ],
-            "fieldConfig": {
-                "defaults": {
-                    "unit": "short",
-                    "custom": {}
-                },
-                "overrides": [
-                    {
-                        "matcher": {
-                            "id": "byFrameRefID",
-                            "options": "A"
-                        },
-                        "properties": [
-                            {
-                                "id": "min",
-                                "value": 0
-                            }
-                        ]
-                    }
-                ]
-            },
-            "title": "Control",
-            "gridPos": {
-                "x": 12,
-                "y": 8,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${PROMETHEUS_DS_UID}"
-            },
-            "type": "timeseries",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${PROMETHEUS_DS_UID}"
-                    },
-                    "expr": "{cluster=~\"$cluster\", service=~\"yt-exec-node.*\", __name__=~\"yt_resource_tracker_user_cpu\", thread=~\"JobEnvironment\"}",
-                    "refId": "A"
-                }
-            ],
-            "fieldConfig": {
-                "defaults": {
-                    "unit": "short",
-                    "custom": {}
-                },
-                "overrides": [
-                    {
-                        "matcher": {
-                            "id": "byFrameRefID",
-                            "options": "A"
-                        },
-                        "properties": [
-                            {
-                                "id": "min",
-                                "value": 0
-                            }
-                        ]
-                    }
-                ]
-            },
-            "title": "JobEnvironment CPU Wait",
-            "gridPos": {
-                "x": 6,
-                "y": 14,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 20
-            },
-            "type": "row"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${PROMETHEUS_DS_UID}"
-            },
-            "type": "timeseries",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${PROMETHEUS_DS_UID}"
-                    },
-                    "expr": "{cluster=~\"$cluster\", service=~\"yt-exec-node.*\", __name__=~\"yt_memory_generic_bytes_in_use_by_app\"}",
-                    "refId": "A"
-                }
-            ],
-            "fieldConfig": {
-                "defaults": {
-                    "unit": "short",
-                    "custom": {}
-                },
-                "overrides": [
-                    {
-                        "matcher": {
-                            "id": "byFrameRefID",
-                            "options": "A"
-                        },
-                        "properties": [
-                            {
-                                "id": "min",
-                                "value": 0
-                            }
-                        ]
-                    }
-                ]
-            },
-            "title": "Nodes Used Memory",
-            "gridPos": {
-                "x": 0,
-                "y": 21,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${PROMETHEUS_DS_UID}"
-            },
-            "type": "timeseries",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${PROMETHEUS_DS_UID}"
-                    },
-                    "expr": "{cluster=~\"$cluster\", service=~\"yt-exec-node.*\", __name__=~\"yt_job_controller_resource_limits_user_memory\"}",
-                    "refId": "A"
-                }
-            ],
-            "fieldConfig": {
-                "defaults": {
-                    "unit": "short",
-                    "custom": {}
-                },
-                "overrides": [
-                    {
-                        "matcher": {
-                            "id": "byFrameRefID",
-                            "options": "A"
-                        },
-                        "properties": [
-                            {
-                                "id": "min",
-                                "value": 0
-                            }
-                        ]
-                    }
-                ]
-            },
-            "title": "Total Nodes User Job Memory Limit",
-            "gridPos": {
-                "x": 12,
-                "y": 21,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 27
-            },
-            "type": "row"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${PROMETHEUS_DS_UID}"
-            },
-            "type": "timeseries",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${PROMETHEUS_DS_UID}"
-                    },
-                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-controller-agent\", __name__=~\"yt_controller_agent_jobs_started_job_count_rate|yt_controller_agent_jobs_completed_job_count\", interruption_reason=~\"\", job_type=~\"\", tree=~\"\"}[$__rate_interval])",
-                    "refId": "A"
-                }
-            ],
-            "fieldConfig": {
-                "defaults": {
-                    "unit": "short",
-                    "custom": {}
-                },
-                "overrides": [
-                    {
-                        "matcher": {
-                            "id": "byFrameRefID",
-                            "options": "A"
-                        },
-                        "properties": [
-                            {
-                                "id": "min",
-                                "value": 0
-                            }
-                        ]
-                    }
-                ]
-            },
-            "title": "Controller Started And Completed Jobs",
-            "gridPos": {
-                "x": 0,
-                "y": 28,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${PROMETHEUS_DS_UID}"
-            },
-            "type": "timeseries",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${PROMETHEUS_DS_UID}"
-                    },
-                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-exec-node.*\", __name__=~\"yt_job_controller_job_final_state\", origin=~\"\", state=~\"completed\"}[$__rate_interval])",
-                    "refId": "A"
-                }
-            ],
-            "fieldConfig": {
-                "defaults": {
-                    "unit": "short",
-                    "custom": {}
-                },
-                "overrides": [
-                    {
-                        "matcher": {
-                            "id": "byFrameRefID",
-                            "options": "A"
-                        },
-                        "properties": [
-                            {
-                                "id": "min",
-                                "value": 0
-                            }
-                        ]
-                    }
-                ]
-            },
-            "title": "Node Completed Jobs",
-            "gridPos": {
-                "x": 12,
-                "y": 28,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${PROMETHEUS_DS_UID}"
-            },
-            "type": "timeseries",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${PROMETHEUS_DS_UID}"
-                    },
-                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-controller-agent\", __name__=~\"yt_controller_agent_jobs_failed_job_count\", job_type=~\"\", tree=~\"\"}[$__rate_interval])",
-                    "refId": "A"
-                }
-            ],
-            "fieldConfig": {
-                "defaults": {
-                    "unit": "short",
-                    "custom": {}
-                },
-                "overrides": [
-                    {
-                        "matcher": {
-                            "id": "byFrameRefID",
-                            "options": "A"
-                        },
-                        "properties": [
-                            {
-                                "id": "min",
-                                "value": 0
-                            }
-                        ]
-                    }
-                ]
-            },
-            "title": "Controller Failed Jobs",
-            "gridPos": {
-                "x": 0,
-                "y": 34,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${PROMETHEUS_DS_UID}"
-            },
-            "type": "timeseries",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${PROMETHEUS_DS_UID}"
-                    },
-                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-exec-node.*\", __name__=~\"yt_job_controller_job_final_state\", origin=~\"\", state=~\"failed\"}[$__rate_interval])",
-                    "refId": "A"
-                }
-            ],
-            "fieldConfig": {
-                "defaults": {
-                    "unit": "short",
-                    "custom": {}
-                },
-                "overrides": [
-                    {
-                        "matcher": {
-                            "id": "byFrameRefID",
-                            "options": "A"
-                        },
-                        "properties": [
-                            {
-                                "id": "min",
-                                "value": 0
-                            }
-                        ]
-                    }
-                ]
-            },
-            "title": "Node Failed Jobs",
-            "gridPos": {
-                "x": 12,
-                "y": 34,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${PROMETHEUS_DS_UID}"
-            },
-            "type": "timeseries",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${PROMETHEUS_DS_UID}"
-                    },
-                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-controller-agent\", __name__=~\"yt_controller_agent_jobs_aborted_job_count\", abort_reason=~\"\", job_type=~\"\", tree=~\"\"}[$__rate_interval])",
-                    "refId": "A"
-                }
-            ],
-            "fieldConfig": {
-                "defaults": {
-                    "unit": "short",
-                    "custom": {}
-                },
-                "overrides": [
-                    {
-                        "matcher": {
-                            "id": "byFrameRefID",
-                            "options": "A"
-                        },
-                        "properties": [
-                            {
-                                "id": "min",
-                                "value": 0
-                            }
-                        ]
-                    }
-                ]
-            },
-            "title": "Controller Aborted Jobs",
-            "gridPos": {
-                "x": 0,
-                "y": 40,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${PROMETHEUS_DS_UID}"
-            },
-            "type": "timeseries",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${PROMETHEUS_DS_UID}"
-                    },
-                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-exec-node.*\", __name__=~\"yt_job_controller_job_final_state\", origin=~\"\", state=~\"aborted\"}[$__rate_interval])",
-                    "refId": "A"
-                }
-            ],
-            "fieldConfig": {
-                "defaults": {
-                    "unit": "short",
-                    "custom": {}
-                },
-                "overrides": [
-                    {
-                        "matcher": {
-                            "id": "byFrameRefID",
-                            "options": "A"
-                        },
-                        "properties": [
-                            {
-                                "id": "min",
-                                "value": 0
-                            }
-                        ]
-                    }
-                ]
-            },
-            "title": "Node Aborted Jobs",
-            "gridPos": {
-                "x": 12,
-                "y": 40,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${PROMETHEUS_DS_UID}"
-            },
-            "type": "timeseries",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${PROMETHEUS_DS_UID}"
-                    },
-                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-exec-node.*\", __name__=~\"yt_job_controller_job_proxy_process_exit_count\", terminated_by_signal=~\"aborted\"}[$__rate_interval])",
-                    "refId": "A"
-                }
-            ],
-            "fieldConfig": {
-                "defaults": {
-                    "unit": "short",
-                    "custom": {}
-                },
-                "overrides": [
-                    {
-                        "matcher": {
-                            "id": "byFrameRefID",
-                            "options": "A"
-                        },
-                        "properties": [
-                            {
-                                "id": "min",
-                                "value": 0
-                            }
-                        ]
-                    }
-                ]
-            },
-            "title": "Job Proxy Aborts",
-            "gridPos": {
-                "x": 6,
-                "y": 46,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${PROMETHEUS_DS_UID}"
-            },
-            "type": "timeseries",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${PROMETHEUS_DS_UID}"
-                    },
-                    "expr": "{cluster=~\"$cluster\", service=~\"yt-exec-node.*\", __name__=~\"yt_job_controller_active_job_count\", origin=~\"\"}",
-                    "refId": "A"
-                }
-            ],
-            "fieldConfig": {
-                "defaults": {
-                    "unit": "short",
-                    "custom": {}
-                },
-                "overrides": [
-                    {
-                        "matcher": {
-                            "id": "byFrameRefID",
-                            "options": "A"
-                        },
-                        "properties": [
-                            {
-                                "id": "min",
-                                "value": 0
-                            }
-                        ]
-                    }
-                ]
-            },
-            "title": "Active Job Count",
-            "gridPos": {
-                "x": 6,
-                "y": 52,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 58
-            },
-            "type": "row"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${PROMETHEUS_DS_UID}"
-            },
-            "type": "timeseries",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${PROMETHEUS_DS_UID}"
-                    },
-                    "expr": "{cluster=~\"$cluster\", service=~\"porto_iss\", __name__=~\"/Porto/Containers/Ifs/RxBytes\", host=~\"cluster\", intf=~\"veth\", name=~\"yt_{{cluster}}_.*exe_nodes|yt_{{cluster}}_cloud_nodes|yt_{{cluster}}_.*gpu_nodes\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_rpc_server_request_time_execution_max\", user=~\"\", yt_service=~\".+\", method=~\"IncrementalHeartbeat\", pod=~\"ms.*\"}",
                     "refId": "A"
                 }
             ],
@@ -677,11 +63,11 @@
                 },
                 "overrides": []
             },
-            "title": "Nodes Network RX",
+            "title": "Incremental HB duration (Primary Cell)",
             "gridPos": {
-                "x": 0,
-                "y": 59,
-                "w": 12,
+                "x": 8,
+                "y": 1,
+                "w": 8,
                 "h": 6
             }
         },
@@ -697,7 +83,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{cluster=~\"$cluster\", service=~\"porto_iss\", __name__=~\"/Porto/Containers/Ifs/TxBytes\", host=~\"cluster\", intf=~\"veth\", name=~\"yt_{{cluster}}_.*exe_nodes|yt_{{cluster}}_cloud_nodes|yt_{{cluster}}_.*gpu_nodes\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_resource_tracker_memory_usage_rss\", pod=~\"ms.*\"}",
                     "refId": "A"
                 }
             ],
@@ -708,11 +94,11 @@
                 },
                 "overrides": []
             },
-            "title": "Nodes Network TX",
+            "title": "Memory (Primary Cell)",
             "gridPos": {
-                "x": 12,
-                "y": 59,
-                "w": 12,
+                "x": 16,
+                "y": 1,
+                "w": 8,
                 "h": 6
             }
         },
@@ -728,7 +114,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{cluster=~\"$cluster\", service=~\"porto_iss\", __name__=~\"/Porto/Containers/Ifs/RxBytes\", host=~\"cluster\", intf=~\"veth\", name=~\"yt_{{cluster}}_controller_agents\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_resource_tracker_utilization\", pod=~\"ms.*\", thread=~\"RpcLight\"}",
                     "refId": "A"
                 }
             ],
@@ -739,11 +125,11 @@
                 },
                 "overrides": []
             },
-            "title": "Controller Agent Network RX",
+            "title": "RpcLight Utilization (Primary Cell)",
             "gridPos": {
                 "x": 0,
-                "y": 65,
-                "w": 12,
+                "y": 7,
+                "w": 8,
                 "h": 6
             }
         },
@@ -759,7 +145,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{cluster=~\"$cluster\", service=~\"porto_iss\", __name__=~\"/Porto/Containers/Ifs/TxBytes\", host=~\"cluster\", intf=~\"veth\", name=~\"yt_{{cluster}}_controller_agents\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_resource_tracker_utilization\", pod=~\"ms.*\", thread=~\"RpcHeavy\"}",
                     "refId": "A"
                 }
             ],
@@ -770,22 +156,13 @@
                 },
                 "overrides": []
             },
-            "title": "Controller Agent Network TX",
+            "title": "RpcHeavy Utilization (Primary Cell)",
             "gridPos": {
-                "x": 12,
-                "y": 65,
-                "w": 12,
+                "x": 8,
+                "y": 7,
+                "w": 8,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 71
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -799,7 +176,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-controller-agent\", __name__=~\"yt_controller_agent_job_tracker_node_heartbeat_throttled_heartbeat_count\"}[$__rate_interval])",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_blob_refresh_queue_size\", cell_tag=~\"\", pod=~\"ms.*\"}",
                     "refId": "A"
                 }
             ],
@@ -810,22 +187,13 @@
                 },
                 "overrides": []
             },
-            "title": "Controller Agent Heartbeats Throttled",
+            "title": "Blob Refresh Queue Size (Primary Cell)",
             "gridPos": {
-                "x": 0,
-                "y": 72,
-                "w": 24,
+                "x": 16,
+                "y": 7,
+                "w": 8,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 78
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -839,82 +207,718 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{cluster=~\"$cluster\", service=~\"yt-exec-node.*\", __name__=~\"yt_cluster_node_alerts\", error_code=~\".+\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_blob_requisition_update_queue_size\", cell_tag=~\"\", pod=~\"ms.*\"}",
                     "refId": "A"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {
-                        "stacking": {
-                            "group": "A",
-                            "mode": "normal"
-                        },
-                        "fillOpacity": 100
-                    }
+                    "custom": {}
                 },
                 "overrides": []
             },
-            "title": "Node Alerts",
+            "title": "Blob Requisition Update Queue Size (Primary Cell)",
             "gridPos": {
                 "x": 0,
-                "y": 79,
-                "w": 12,
+                "y": 13,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_underreplicated_chunk_count\", cell_tag=~\"\", pod=~\"ms.*\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "URC Count (Primary Cell)",
+            "gridPos": {
+                "x": 8,
+                "y": 13,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_overreplicated_chunk_count\", cell_tag=~\"\", pod=~\"ms.*\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "ORC Count (Primary Cell)",
+            "gridPos": {
+                "x": 16,
+                "y": 13,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_data_missing_chunk_count\", cell_tag=~\"\", pod=~\"ms.*\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "DMC Count (Primary Cell)",
+            "gridPos": {
+                "x": 0,
+                "y": 19,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_parity_missing_chunk_count\", cell_tag=~\"\", pod=~\"ms.*\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "PMC Count (Primary Cell)",
+            "gridPos": {
+                "x": 8,
+                "y": 19,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_unsafely_placed_chunk_count\", cell_tag=~\"\", pod=~\"ms.*\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Unsafely Placed Count (Primary Cell)",
+            "gridPos": {
+                "x": 16,
+                "y": 19,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_lost_vital_chunk_count\", cell_tag=~\"\", pod=~\"ms.*\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "LVC Count (Primary Cell)",
+            "gridPos": {
+                "x": 0,
+                "y": 25,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_hydra_leader_sync_time_max\", cell_id=~\"\", pod=~\"ms.*\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Leader Sync Time (Primary Cell)",
+            "gridPos": {
+                "x": 8,
+                "y": 25,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunks_created\", cell_tag=~\"\", pod=~\"ms.*\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Chunks Created (Primary Cell)",
+            "gridPos": {
+                "x": 16,
+                "y": 25,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunks_destroyed\", cell_tag=~\"\", pod=~\"ms.*\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Chunks Destroyed (Primary Cell)",
+            "gridPos": {
+                "x": 0,
+                "y": 31,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_lists_created\", cell_tag=~\"\", pod=~\"ms.*\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Chunk Lists Created (Primary Cell)",
+            "gridPos": {
+                "x": 8,
+                "y": 31,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_lists_destroyed\", cell_tag=~\"\", pod=~\"ms.*\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Chunks Lists Destroyed (Primary Cell)",
+            "gridPos": {
+                "x": 16,
+                "y": 31,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_hydra_restart_count\", cell_id=~\"\", pod=~\"ms.*\", reason=~\".+\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Hydra Restarts (Primary Cell)",
+            "gridPos": {
+                "x": 0,
+                "y": 37,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_hydra_fork_executor_fork_duration_max\", cell_id=~\"\", pod=~\"ms.*\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Fork Duration (Primary Cell)",
+            "gridPos": {
+                "x": 8,
+                "y": 37,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_ref_counted_tracker_total_objects_alive\", pod=~\"ms.*\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "RCT Objects Alive (Primary Cell)",
+            "gridPos": {
+                "x": 16,
+                "y": 37,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_ref_counted_tracker_total_bytes_alive\", pod=~\"ms.*\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "RCT Bytes Alive (Primary Cell)",
+            "gridPos": {
+                "x": 0,
+                "y": 43,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_tablet_server_update_tablet_stores_store_count\", tablet_cell_bundle=~\"\", pod=~\"ms.*\", table_type=~\"\", update_reason=~\"\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Tablet Store Updates: Store Count (Primary Cell)",
+            "gridPos": {
+                "x": 8,
+                "y": 43,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_tablet_server_update_tablet_stores_cumulative_time\", tablet_cell_bundle=~\"\", pod=~\"ms.*\", table_type=~\"\", update_reason=~\"\"}[$__rate_interval])",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Tablet Store Updates: Cumulative Time (Primary Cell)",
+            "gridPos": {
+                "x": 16,
+                "y": 43,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_node_tracker_decommissioned_node_count\", cell_tag=~\".+\", flavor=~\".+\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Decommissioned Node Count",
+            "gridPos": {
+                "x": 0,
+                "y": 49,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_node_tracker_banned_node_count\", cell_tag=~\".+\", flavor=~\".+\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Banned Node Count",
+            "gridPos": {
+                "x": 8,
+                "y": 49,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_node_tracker_offline_node_count\", cell_tag=~\".+\", flavor=~\".+\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Offline Node Count",
+            "gridPos": {
+                "x": 16,
+                "y": 49,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_node_tracker_chunk_locations_being_disposed\", cell_tag=~\".+\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Chunk Locations Being Disposed",
+            "gridPos": {
+                "x": 0,
+                "y": 55,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_node_tracker_chunk_locations_awaiting_disposal\", cell_tag=~\".+\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Chunk Locations Awaiting Disposal",
+            "gridPos": {
+                "x": 8,
+                "y": 55,
+                "w": 8,
                 "h": 6
             }
         },
         {
             "type": "text",
             "options": {
-                "content": "<h2>Not Supported</h2>",
+                "content": "",
                 "mode": "markdown"
             },
-            "title": "Node Disabled Slots",
+            "title": "",
             "gridPos": {
-                "x": 12,
-                "y": 79,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 85
-            },
-            "type": "row"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${PROMETHEUS_DS_UID}"
-            },
-            "type": "timeseries",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${PROMETHEUS_DS_UID}"
-                    },
-                    "expr": "{cluster=~\"$cluster\", service=~\"yt-exec-node.*\", __name__=~\"yt_exec_node_.*orto_volume_surplus\", location_id=~\"\"}",
-                    "refId": "A"
-                }
-            ],
-            "fieldConfig": {
-                "defaults": {
-                    "unit": "short",
-                    "custom": {}
-                },
-                "overrides": []
-            },
-            "title": "Volume Surplus",
-            "gridPos": {
-                "x": 0,
-                "y": 86,
-                "w": 12,
+                "x": 16,
+                "y": 55,
+                "w": 8,
                 "h": 6
             }
         },
@@ -930,7 +934,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{cluster=~\"$cluster\", service=~\"yt-exec-node.*\", __name__=~\"yt_exec_node_.*porto_layer_surplus\", location_id=~\"\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_node_tracker_data_nodes_being_disposed\", cell_tag=~\".+\"}",
                     "refId": "A"
                 }
             ],
@@ -941,11 +945,11 @@
                 },
                 "overrides": []
             },
-            "title": "Layer Surplus",
+            "title": "Data Nodes Being Disposed",
             "gridPos": {
-                "x": 12,
-                "y": 86,
-                "w": 12,
+                "x": 0,
+                "y": 61,
+                "w": 8,
                 "h": 6
             }
         },
@@ -961,7 +965,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{cluster=~\"$cluster\", service=~\"yt-exec-node.*\", __name__=~\"yt_porto_volume_count\", backend=~\".+\", container_category=~\"daemon\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_node_tracker_data_nodes_awaiting_for_being_disposed\", cell_tag=~\".+\"}",
                     "refId": "A"
                 }
             ],
@@ -972,11 +976,11 @@
                 },
                 "overrides": []
             },
-            "title": "Porto Volume Count",
+            "title": "Data Nodes Awaiting For Being Disposed",
             "gridPos": {
-                "x": 6,
-                "y": 92,
-                "w": 12,
+                "x": 8,
+                "y": 61,
+                "w": 8,
                 "h": 6
             }
         },
@@ -992,7 +996,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-exec-node.*\", __name__=~\"yt_exec_node_job_envir onment_porto_command.*_rate|yt_exec_node_job_environment_porto_command.*\", command!~\"-\"}[$__rate_interval])",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_node_tracker_full_node_count\", cell_tag=~\".+\", flavor=~\".+\"}",
                     "refId": "A"
                 }
             ],
@@ -1003,51 +1007,11 @@
                 },
                 "overrides": []
             },
-            "title": "Porto Commands",
+            "title": "Full Node Count",
             "gridPos": {
-                "x": 6,
-                "y": 98,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 104
-            },
-            "type": "row"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${PROMETHEUS_DS_UID}"
-            },
-            "type": "timeseries",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${PROMETHEUS_DS_UID}"
-                    },
-                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-exec-node.*\", __name__=~\"yt_volumes_create_errors\"}[$__rate_interval])",
-                    "refId": "A"
-                }
-            ],
-            "fieldConfig": {
-                "defaults": {
-                    "unit": "short",
-                    "custom": {}
-                },
-                "overrides": []
-            },
-            "title": "Volume Creation Errors",
-            "gridPos": {
-                "x": 0,
-                "y": 105,
-                "w": 12,
+                "x": 16,
+                "y": 61,
+                "w": 8,
                 "h": 6
             }
         },
@@ -1063,7 +1027,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-exec-node.*\", __name__=~\"yt_volumes_remove_errors\"}[$__rate_interval])",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_node_tracker_with_alerts_node_count\", cell_tag=~\".+\", flavor=~\".+\"}",
                     "refId": "A"
                 }
             ],
@@ -1074,22 +1038,13 @@
                 },
                 "overrides": []
             },
-            "title": "Volume Removal Errors",
+            "title": "With Alerts Node Count",
             "gridPos": {
-                "x": 12,
-                "y": 105,
-                "w": 12,
+                "x": 0,
+                "y": 67,
+                "w": 8,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 111
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -1103,8 +1058,40 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-exec-node.*\", __name__=~\"yt_job_controller_chunk_cache_cache_miss_artifacts_size\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_jobs_aborted\", cell_tag=~\"\", job_type=~\"\"}[$__rate_interval])",
                     "refId": "A"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_jobs_completed\", cell_tag=~\"\", job_type=~\"\"}[$__rate_interval])",
+                    "refId": "B"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_jobs_failed\", cell_tag=~\"\", job_type=~\"\"}[$__rate_interval])",
+                    "refId": "C"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_jobs_started\", cell_tag=~\"\", job_type=~\"\"}[$__rate_interval])",
+                    "refId": "D"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_misscheduled_jobs\", cell_tag=~\"\", job_type=~\"\"}[$__rate_interval])",
+                    "refId": "E"
                 }
             ],
             "fieldConfig": {
@@ -1114,22 +1101,13 @@
                 },
                 "overrides": []
             },
-            "title": "Cache Miss Artifacts Size",
+            "title": "Job Rates",
             "gridPos": {
-                "x": 0,
-                "y": 112,
-                "w": 24,
+                "x": 8,
+                "y": 67,
+                "w": 8,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 118
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -1143,7 +1121,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{cluster=~\"$cluster\", service=~\"yt-exec-node.*\", __name__=~\"yt_porto_memory_major_page_faults\", container_category=~\".+\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_running_job_count\", cell_tag=~\"\", job_type=~\".+\"}",
                     "refId": "A"
                 }
             ],
@@ -1154,16 +1132,16 @@
                 },
                 "overrides": []
             },
-            "title": "Page Faults",
+            "title": "Running Jobs",
             "gridPos": {
-                "x": 0,
-                "y": 119,
-                "w": 24,
+                "x": 16,
+                "y": 67,
+                "w": 8,
                 "h": 6
             }
         }
     ],
-    "title": "Exe Nodes [AUTOGENERATED]",
+    "title": "Master Global [Autogenerated]",
     "tags": [
         "YT",
         "autogen"
@@ -1172,9 +1150,26 @@
         "list": [
             {
                 "name": "cluster",
-                "label": "YT cluster"
+                "label": "Cluster",
+                "type": "textbox",
+                "options": [
+                    {
+                        "selected": true,
+                        "text": ".*",
+                        "value": ".*"
+                    }
+                ],
+                "current": {
+                    "selected": true,
+                    "text": ".*",
+                    "value": ".*"
+                },
+                "query": ".*",
+                "hide": 0,
+                "skipUrlSync": false,
+                "allFormat": "glob"
             }
         ]
     },
-    "uid": "ytsaurus-exe-nodes"
+    "uid": "ytsaurus-master-global"
 }
