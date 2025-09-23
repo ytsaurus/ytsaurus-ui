@@ -1,0 +1,501 @@
+{
+    "panels": [
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "({cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_porto_vcpu_guarantee\", proxy_role=~\"$proxy_role\", container_category=~\"pod\"}) / (100)",
+                    "refId": "A",
+                    "legendFormat": "\"Container CPU Guarantee\""
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "({cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_porto_vcpu_total\", proxy_role=~\"$proxy_role\", container_category=~\"pod\"}) / (100)",
+                    "refId": "B",
+                    "legendFormat": "\"Container CPU Usage\""
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "({cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_resource_tracker_total_cpu\", proxy_role=~\"$proxy_role\", thread=~\".+\"}) / (100)",
+                    "refId": "C",
+                    "legendFormat": "\"{{thread}}\""
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "CPU Total",
+            "gridPos": {
+                "x": 0,
+                "y": 1,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "({cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_porto_vcpu_guarantee\", proxy_role=~\"$proxy_role\", container_category=~\"pod\"}) / (100)",
+                    "refId": "A",
+                    "legendFormat": "\"Guarantee {{container}}\""
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "((topk(5, {cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_porto_vcpu_total\", proxy_role=~\"$proxy_role\", container_category=~\"pod\"}))) / (100)",
+                    "refId": "B",
+                    "legendFormat": "\"Usage {{container}}\""
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "((bottomk(5, {cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_porto_vcpu_total\", proxy_role=~\"$proxy_role\", container_category=~\"pod\"}))) / (100)",
+                    "refId": "C",
+                    "legendFormat": "\"Usage {{container}}\""
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "CPU per container",
+            "gridPos": {
+                "x": 12,
+                "y": 1,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_porto_memory_memory_limit\", proxy_role=~\"$proxy_role\", container_category=~\"pod\"}",
+                    "refId": "A",
+                    "legendFormat": "\"Container Memory Guarantee\""
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_porto_memory_anon_usage\", proxy_role=~\"$proxy_role\", container_category=~\"pod\"}",
+                    "refId": "B",
+                    "legendFormat": "\"Container Memory Usage\""
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Memory Total",
+            "gridPos": {
+                "x": 0,
+                "y": 7,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_porto_memory_memory_limit\", proxy_role=~\"$proxy_role\", container_category=~\"pod\"}",
+                    "refId": "A",
+                    "legendFormat": "\"Guarantee {{container}}\""
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "(topk(5, {cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_porto_memory_anon_usage\", proxy_role=~\"$proxy_role\", container_category=~\"pod\"}))",
+                    "refId": "B",
+                    "legendFormat": "\"Usage {{container}}\""
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "(bottomk(5, {cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_porto_memory_anon_usage\", proxy_role=~\"$proxy_role\", container_category=~\"pod\"}))",
+                    "refId": "C",
+                    "legendFormat": "\"Usage {{container}}\""
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Memory per container",
+            "gridPos": {
+                "x": 12,
+                "y": 7,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_porto_network_tx_limit\", proxy_role=~\"$proxy_role\", container_category=~\"pod\"}",
+                    "refId": "A",
+                    "legendFormat": "\"Container Net Tx Guarantee\""
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_porto_network_tx_bytes\", proxy_role=~\"$proxy_role\", container_category=~\"pod\"}",
+                    "refId": "B",
+                    "legendFormat": "\"Container Net Tx Bytes Rate\""
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_bus_out_bytes\", proxy_role=~\"$proxy_role\", band=~\"\", encrypted=~\"\", network=~\"\"}[$__rate_interval])",
+                    "refId": "C",
+                    "legendFormat": "\"Rpc Proxy TX Bytes Rate\""
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Net TX total",
+            "gridPos": {
+                "x": 0,
+                "y": 13,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_porto_network_tx_limit\", proxy_role=~\"$proxy_role\", container_category=~\"pod\"}",
+                    "refId": "A",
+                    "legendFormat": "\"Guarantee {{container}}\""
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "(topk(5, {cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_porto_network_tx_bytes\", proxy_role=~\"$proxy_role\", container_category=~\"pod\"}))",
+                    "refId": "B",
+                    "legendFormat": "\"Usage {{container}}\""
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "(bottomk(5, {cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_porto_network_tx_bytes\", proxy_role=~\"$proxy_role\", container_category=~\"pod\"}))",
+                    "refId": "C",
+                    "legendFormat": "\"Usage {{container}}\""
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Net TX per container",
+            "gridPos": {
+                "x": 12,
+                "y": 13,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_porto_network_rx_limit\", proxy_role=~\"$proxy_role\", container_category=~\"pod\"}",
+                    "refId": "A",
+                    "legendFormat": "\"Container Net Rx Guarantee\""
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_porto_network_rx_bytes\", proxy_role=~\"$proxy_role\", container_category=~\"pod\"}",
+                    "refId": "B",
+                    "legendFormat": "\"Container Net Rx Bytes Rate\""
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_bus_in_bytes\", proxy_role=~\"$proxy_role\", band=~\"\", encrypted=~\"\", network=~\"\"}[$__rate_interval])",
+                    "refId": "C",
+                    "legendFormat": "\"Rpc Proxy RX Bytes Rate\""
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Net RX Total",
+            "gridPos": {
+                "x": 0,
+                "y": 19,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_porto_network_rx_limit\", proxy_role=~\"$proxy_role\", container_category=~\"pod\"}",
+                    "refId": "A",
+                    "legendFormat": "\"Guarantee {{container}}\""
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "(topk(5, {cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_porto_network_rx_bytes\", proxy_role=~\"$proxy_role\", container_category=~\"pod\"}))",
+                    "refId": "B",
+                    "legendFormat": "\"Usage {{container}}\""
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "(bottomk(5, {cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_porto_network_rx_bytes\", proxy_role=~\"$proxy_role\", container_category=~\"pod\"}))",
+                    "refId": "C",
+                    "legendFormat": "\"Usage {{container}}\""
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Net RX per container",
+            "gridPos": {
+                "x": 12,
+                "y": 19,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_.*heap_usage_user\", user=~\".+\", proxy_role=~\"$proxy_role\"}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "title": "Memory per user",
+            "gridPos": {
+                "x": 0,
+                "y": 25,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "type": "text",
+            "options": {
+                "content": "",
+                "mode": "markdown"
+            },
+            "title": "",
+            "gridPos": {
+                "x": 12,
+                "y": 25,
+                "w": 12,
+                "h": 6
+            }
+        }
+    ],
+    "title": "Bundle RPC proxy resource overview [Autogenerated]",
+    "tags": [
+        "YT",
+        "autogen"
+    ],
+    "templating": {
+        "list": [
+            {
+                "name": "cluster",
+                "label": "Cluster",
+                "type": "textbox",
+                "options": [
+                    {
+                        "selected": true,
+                        "text": ".*",
+                        "value": ".*"
+                    }
+                ],
+                "current": {
+                    "selected": true,
+                    "text": ".*",
+                    "value": ".*"
+                },
+                "query": ".*",
+                "hide": 0,
+                "skipUrlSync": false,
+                "allFormat": "glob"
+            },
+            {
+                "name": "proxy_role",
+                "label": "Proxy role",
+                "type": "textbox",
+                "options": [
+                    {
+                        "selected": true,
+                        "text": "default",
+                        "value": "default"
+                    }
+                ],
+                "current": {
+                    "selected": true,
+                    "text": "default",
+                    "value": "default"
+                },
+                "query": "default",
+                "hide": 0,
+                "skipUrlSync": false,
+                "allFormat": "glob"
+            }
+        ]
+    },
+    "uid": "ytsaurus-bundle-ui-rpc-proxy-overview"
+}
