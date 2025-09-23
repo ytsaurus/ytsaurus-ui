@@ -68,8 +68,8 @@ export async function prometheusQueryRange(req: Request, res: Response) {
         const {permissions, list} = templating;
 
         const chartParams = list.reduce(
-            (acc, {name}) => {
-                acc[name] = rawParmas[name];
+            (acc, {name, default_for_ui}) => {
+                acc[name] = rawParmas[name] ?? default_for_ui;
                 return acc;
             },
             {} as typeof rawParmas,
