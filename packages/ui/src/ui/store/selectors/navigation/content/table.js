@@ -4,6 +4,7 @@ import filter_ from 'lodash/filter';
 import map_ from 'lodash/map';
 
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
+import unipika from '../../../../common/thor/unipika';
 import {createSelector} from 'reselect';
 
 import {getAttributes} from '../../../../store/selectors/navigation';
@@ -48,6 +49,12 @@ export const getVisibleColumns = createSelector(
         return Columns.orderColumns(visibleColumns, columnsOrder);
     },
 );
+
+export const getDecodedVisibleColumns = createSelector([getVisibleColumns], (columns) => {
+    return columns.map((data) => {
+        return {...data, name: unipika.decode(data.name)};
+    });
+});
 
 export const getAllColumns = createSelector(
     [getColumns, getOmittedColumns],

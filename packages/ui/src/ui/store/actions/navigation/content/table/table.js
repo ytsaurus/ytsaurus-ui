@@ -66,6 +66,7 @@ import {mergeScreen} from '../../../../../store/actions/global';
 import {waitForFontFamilies} from '../../../../../store/actions/global/fonts';
 import {injectColumnsFromSchema} from '../../../../../utils/navigation/content/table/table-ts';
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../../../../rum/rum-wrap-api';
+import unipika from '../../../../../common/thor/unipika';
 
 import {loadColumnPresetIfDefined, saveColumnPreset, setTablePresetHash} from './columns-preset';
 import {makeTableRumId} from './table-rum-id';
@@ -97,9 +98,16 @@ function loadDynamicTable(requestOutputFormat, state, type, useZeroRangeForPrelo
         limit--;
     }
 
+    const decodedColumns = decodeNameField(columns);
     const outputFormat =
         requestOutputFormat ||
-        getRequestOutputFormat(columns, stringLimit, login, defaultTableColumnLimit, useYqlTypes);
+        getRequestOutputFormat(
+            decodedColumns,
+            stringLimit,
+            login,
+            defaultTableColumnLimit,
+            useYqlTypes,
+        );
 
     const cluster = getCluster(state);
     const isDynamic = getIsDynamic(state);
@@ -190,9 +198,10 @@ function loadDynamicTable(requestOutputFormat, state, type, useZeroRangeForPrelo
                     return Promise.reject({deniedKeyColumns});
                 }
 
+                const columns = map_(availableColumns, unipika.decode);
                 const parameters = {
                     query: Query.prepareQuery({
-                        columns: availableColumns,
+                        columns,
                         path,
                         keyColumns,
                         offsetColumns,
@@ -225,8 +234,9 @@ function loadDynamicTable(requestOutputFormat, state, type, useZeroRangeForPrelo
         const columns = getVisibleColumns(state);
         const omittedColumns = getOmittedColumns(state);
         const deniedKeyColumns = getDeniedKeyColumns(state);
+        const decodedColumns = decodeNameField(columns);
         const outputFormat = getRequestOutputFormat(
-            columns,
+            decodedColumns,
             stringLimit,
             login,
             defaultTableColumnLimit,
@@ -241,7 +251,7 @@ function loadDynamicTable(requestOutputFormat, state, type, useZeroRangeForPrelo
 
         const parameters = {
             query: Query.prepareQuery({
-                columns,
+                columns: decodedColumns,
                 path,
                 keyColumns,
                 offsetColumns,
@@ -284,9 +294,16 @@ async function loadStaticTable(requestOutputFormat, state, type, useZeroRangeFor
     const columns = getColumns(state);
     const offsetValue = getNextOffset(state).offsetValue;
     const useYqlTypes = isYqlTypesEnabled(state);
+    const decodedColumns = decodeNameField(columns);
     const outputFormat =
         requestOutputFormat ||
-        getRequestOutputFormat(columns, stringLimit, login, defaultTableColumnLimit, useYqlTypes);
+        getRequestOutputFormat(
+            decodedColumns,
+            stringLimit,
+            login,
+            defaultTableColumnLimit,
+            useYqlTypes,
+        );
 
     const parameters = prepareRequest({
         path,
@@ -666,4 +683,13 @@ export function abortAndReset() {
         requests.removeAllRequests();
         dispatch({type: GET_TABLE_DATA.CANCELLED});
     };
+}
+
+export function decodeNameField(columns) {
+    return map_(columns, (item) => {
+        return {
+            ...item,
+            name: unipika.decode(item.name),
+        };
+    });
 }

@@ -3,7 +3,6 @@ import map_ from 'lodash/map';
 import reverse_ from 'lodash/reverse';
 
 import Columns from '../../../../utils/navigation/content/table/columns';
-import {JSONSerializer} from '../../../../common/yt-api';
 
 export function parseErrorFromResponse(data) {
     // TODO use JSON.parse when error format is fixed
@@ -26,7 +25,7 @@ export function parseErrorFromResponse(data) {
 }
 
 export function prepareRows(rowData, reverseRows = false) {
-    const data = JSONSerializer.parse(rowData);
+    const data = JSON.parse(rowData);
     const rows = reverseRows ? reverse_(data.rows) : data.rows;
     return {
         rows: rows,
