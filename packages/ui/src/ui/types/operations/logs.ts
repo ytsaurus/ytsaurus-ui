@@ -4,7 +4,7 @@ export type LogMeta = {
     log_level: LogLevel;
 };
 
-type LogEntry = {
+export type LogEntry = {
     name: string;
     file_paths: Array<string>;
     log_level: LogLevel;

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {
-    LogNamesFilter,
+    LogFilter,
     LogPaginationOptions,
     LogRow,
     LogSubstringFilter,
@@ -14,15 +14,15 @@ type ViewJobLogsQueryArgs = {
 
 type ViewJobLogsBodyArgs = {
     cluster: string;
-    names_filter: Array<LogNamesFilter>;
+    logs_filter: Array<LogFilter>;
     substring_filter: LogSubstringFilter;
     time_range_filter: LogTimeRangeFilter;
     pagination_options: LogPaginationOptions;
 };
 
-type ViewJobLogsArgs = ViewJobLogsBodyArgs & ViewJobLogsQueryArgs;
+export type ViewJobLogsArgs = ViewJobLogsBodyArgs & ViewJobLogsQueryArgs;
 
-type ViewJobLogsResponse = Array<LogRow>;
+export type ViewJobLogsResponse = Array<LogRow>;
 
 export function viewJobLogs(args: ViewJobLogsArgs) {
     try {

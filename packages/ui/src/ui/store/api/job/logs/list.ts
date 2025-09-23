@@ -1,5 +1,7 @@
 import axios from 'axios';
-import {LogLevelGroup} from '../../../../types/operations/logs';
+import {ELogsPanelLevel, TLogsPanelSelectOption} from '@yandex-data-ui/dynamic-logs-viewer';
+import {type LogEntry} from '../../../../types/operations/logs';
+
 
 type ListJobLogsQueryArgs = {
     operationId: string;
@@ -10,17 +12,37 @@ type ListJobLogsBodyArgs = {
     cluster: string;
 };
 
-type ListJobLogsArgs = ListJobLogsBodyArgs & ListJobLogsQueryArgs;
+export type ListJobLogsArgs = ListJobLogsBodyArgs & ListJobLogsQueryArgs;
 
-type ListJobLogsResponse = Array<LogLevelGroup>;
+export type ListJobLogsResponse = Array<LogEntry>;
 
-export function listJobLogs(args: ListJobLogsArgs) {
+export type ListJobLogsResult = {
+    raw: ListJobLogsResponse;
+    options: TLogsPanelSelectOption[];
+};
+
+export async function listJobLogs(args: ListJobLogsArgs) {
     try {
         const {operationId, jobId, cluster} = args;
-        const list = axios.post<ListJobLogsResponse>(`api/logs/job/list/${operationId}/${jobId}`, {
+        const {data} = await axios.post<ListJobLogsResponse>(`api/logs/job/list/${operationId}/${jobId}`, {
             cluster,
         });
-        return {data: list};
+
+        if (!data) {
+            return {data: {options: [], raw: []}};
+        }
+
+        const res: TLogsPanelSelectOption[] = [];
+
+        data.forEach((log) => {
+            res.push({
+                data: {logName: log.name, level: log.log_level as ELogsPanelLevel},
+                value: log.name,
+                text: log.name,
+            });
+        });
+
+        return {data: {options: res, raw: data}};
     } catch (error) {
         return {error};
     }
