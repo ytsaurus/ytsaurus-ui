@@ -6,7 +6,10 @@ import type {PrometheusDashboardType} from './dashboard-type';
 export {PrometheusDashboardType};
 
 export type DashboardInfo = {
-    templating: {list: Array<{name: string}>; permissions?: Array<PermissionTemplate>};
+    templating: {
+        list: Array<{name: string; default_for_ui?: unknown}>;
+        permissions?: Array<PermissionTemplate>;
+    };
     panels: Array<DashboardPanel>;
 };
 

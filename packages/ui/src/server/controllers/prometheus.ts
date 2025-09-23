@@ -68,8 +68,11 @@ export async function prometheusQueryRange(req: Request, res: Response) {
         const {permissions, list} = templating;
 
         const chartParams = list.reduce(
-            (acc, {name}) => {
-                acc[name] = rawParmas[name];
+            (acc, {name, default_for_ui}) => {
+                const value = rawParmas[name] ?? default_for_ui;
+                if (value !== undefined) {
+                    acc[name] = value;
+                }
                 return acc;
             },
             {} as typeof rawParmas,
@@ -88,7 +91,7 @@ export async function prometheusQueryRange(req: Request, res: Response) {
         const results = await req.ctx.call('Fetch prometheus data', () =>
             Promise.all(
                 targets.map(({expr}) => {
-                    const query = replaceExprParams(expr, rawParmas, step);
+                    const query = replaceExprParams(expr, chartParams, step);
                     return axios
                         .get<QueryRangeData>(`${BASE_URL}/api/v1/query_range?`, {
                             params: {query, start, end, step},

@@ -136,9 +136,9 @@ function MissingParametersWarning({
 }: Pick<Partial<DashboardInfo>, 'templating'> &
     Pick<Required<PrometheusDashboardProps>, 'params'>) {
     const details: YTError | undefined = React.useMemo(() => {
-        const inner_errors = templating?.list.reduce((acc, {name: n}) => {
+        const inner_errors = templating?.list.reduce((acc, {name: n, default_for_ui}) => {
             const name = n as keyof typeof params;
-            if (params[name] === undefined) {
+            if (params[name] === undefined && default_for_ui === undefined) {
                 acc.push({message: `Missing parameter "${name}".`});
             }
             return acc;
