@@ -32,7 +32,7 @@ export function formatByParamsQuotedEnv(
     {sanitizeParams = (v) => v}: {sanitizeParams?: (v: string) => string} = {},
 ) {
     return Object.keys(params).reduce((acc, key) => {
-        const replacement = sanitizeParams(params[key].toString());
+        const replacement = sanitizeParams(String(params[key]));
         const res = acc.replace(new RegExp(`"\\$${key}"`, 'g'), `"${replacement}"`);
         return res;
     }, template);
