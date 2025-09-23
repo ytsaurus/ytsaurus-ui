@@ -1,25 +1,41 @@
 export const PROMETHEUS_DASHBOARD_TYPES = [
-    'account',
-    'bundle-ui-user-load',
-    'bundle-ui-resource',
+    // accounts
+    'master-accounts',
+
+    // bundles
     'bundle-ui-cpu',
-    'bundle-ui-memory',
     'bundle-ui-disk',
-    'bundle-ui-lsm',
-    'bundle-ui-network',
     'bundle-ui-efficiency',
-    'bundle-ui-rpc-proxy-overview',
+    'bundle-ui-lsm',
+    'bundle-ui-memory',
+    'bundle-ui-network',
+    'bundle-ui-resource',
     'bundle-ui-rpc-proxy',
-    'chyt-monitoring',
+    'bundle-ui-rpc-proxy-overview',
+    'bundle-ui-user-load',
+
+    // system
     'cluster-resources',
-    'flow-general',
-    'job',
     'master-global',
     'master-local',
-    'operation',
+    'scheduler-internal',
+
+    // chyt
+    'chyt-monitoring',
+
+    // components
+    'http-proxies',
+
+    // navigation
     'queue-metrics',
     'queue-consumer-metrics',
-    'scheduler-internal',
+    'flow-general',
+
+    // operations
+    'scheduler-operation',
+    'job',
+
+    // scheduling
     'scheduler-pool',
 ] as const;
 
