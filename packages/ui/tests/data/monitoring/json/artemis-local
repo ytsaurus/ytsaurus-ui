@@ -21,7 +21,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_write_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_write_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -71,7 +71,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_write_row_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_write_row_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -108,7 +108,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_commit_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_commit_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -158,7 +158,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_commit_row_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_commit_row_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -195,7 +195,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -245,7 +245,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -295,7 +295,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_unmerged_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_unmerged_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -345,7 +345,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_unmerged_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_unmerged_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -395,7 +395,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_chunk_reader_statistics_data_bytes_read_from_disk\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_chunk_reader_statistics_data_bytes_read_from_disk\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -445,7 +445,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_chunk_reader_statistics_data_bytes_read_from_disk\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_chunk_reader_statistics_data_bytes_read_from_disk\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -495,7 +495,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_chunk_reader_statistics_data_bytes_transmitted\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_chunk_reader_statistics_data_bytes_transmitted\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -545,7 +545,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_chunk_reader_statistics_data_bytes_transmitted\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_chunk_reader_statistics_data_bytes_transmitted\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -595,7 +595,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_chunk_reader_statistics_meta_bytes_read_from_disk\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_chunk_reader_statistics_meta_bytes_read_from_disk\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -645,7 +645,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_chunk_reader_statistics_meta_bytes_read_from_disk\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_chunk_reader_statistics_meta_bytes_read_from_disk\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -695,7 +695,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_row_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_row_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -732,7 +732,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_row_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_row_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -769,7 +769,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_unmerged_row_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_unmerged_row_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -806,7 +806,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_unmerged_row_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_unmerged_row_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -843,7 +843,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_multiread_cumulative_cpu_time\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_multiread_cumulative_cpu_time\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -880,7 +880,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_execute_cumulative_cpu_time\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_execute_cumulative_cpu_time\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -917,7 +917,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_decompression_cpu_time\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_decompression_cpu_time\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -954,7 +954,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_decompression_cpu_time\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_decompression_cpu_time\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -991,7 +991,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_multiread_request_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_multiread_request_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -1028,7 +1028,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_execute_request_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_execute_request_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -1065,7 +1065,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_fetch_table_rows_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_fetch_table_rows_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -1115,7 +1115,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_fetch_table_rows_row_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_fetch_table_rows_row_count\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -1161,7 +1161,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_multiread_request_duration_max\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_multiread_request_duration_max\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -1192,7 +1192,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_execute_request_duration_max\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_execute_request_duration_max\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", user=~\".+\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -1232,7 +1232,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_time_remote_wait_max\", user=~\"\", yt_service=~\"QueryService\", method=~\"Multiread\", pod=~\"$pod\", queue=~\".+\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_time_remote_wait_max\", user=~\"\", yt_service=~\"QueryService\", method=~\"Multiread\", pod=~\"$pod\", queue=~\".+\"}",
                     "refId": "A"
                 }
             ],
@@ -1263,7 +1263,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_time_remote_wait_max\", user=~\"\", yt_service=~\"QueryService\", method=~\"Execute\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_time_remote_wait_max\", user=~\"\", yt_service=~\"QueryService\", method=~\"Execute\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -1303,7 +1303,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_reader_statistics_data_bytes_read_from_disk\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_reader_statistics_data_bytes_read_from_disk\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -1353,7 +1353,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_reader_statistics_meta_bytes_read_from_disk\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_reader_statistics_meta_bytes_read_from_disk\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -1403,7 +1403,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_reader_statistics_data_bytes_read_from_cache\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_reader_statistics_data_bytes_read_from_cache\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -1453,7 +1453,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_reader_unmerged_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_reader_unmerged_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -1503,7 +1503,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_reader_decompression_cpu_time\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_reader_decompression_cpu_time\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -1540,7 +1540,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_writer_compression_cpu_time\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_writer_compression_cpu_time\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -1577,7 +1577,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_writer_disk_space\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_writer_disk_space\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -1627,7 +1627,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_writer_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_writer_data_weight\", tablet_cell_bundle=~\".+\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -1686,7 +1686,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_compactor_scheduled_compactions\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_compactor_scheduled_compactions\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -1717,7 +1717,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_compactor_scheduled_partitionings\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_compactor_scheduled_partitionings\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -1748,7 +1748,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_compactor_running_compactions\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_compactor_running_compactions\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -1779,7 +1779,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_compactor_running_partitionings\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_compactor_running_partitionings\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -1810,7 +1810,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_compactor_feasible_compactions\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_compactor_feasible_compactions\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -1841,7 +1841,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_compactor_feasible_partitionings\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_compactor_feasible_partitionings\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -1872,7 +1872,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_flusher_running_store_flushes\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_flusher_running_store_flushes\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -1903,7 +1903,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_tablet_overlapping_store_count_max\", table_path=~\".+\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_tablet_overlapping_store_count_max\", table_path=~\".+\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -1943,7 +1943,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_used\", category=~\"tablet_dynamic\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_used\", category=~\"tablet_dynamic\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -1987,7 +1987,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_used\", category=~\"tablet_static\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_used\", category=~\"tablet_static\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -2031,7 +2031,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_used\", category=~\"query\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_used\", category=~\"query\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -2075,7 +2075,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_total_used\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_total_used\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -2119,7 +2119,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_yt_alloc_total_bytes_used\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_yt_alloc_total_bytes_used\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -2163,7 +2163,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_memory_usage_rss\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_memory_usage_rss\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -2216,7 +2216,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_used\", category=~\".+\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_used\", category=~\".+\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -2289,7 +2289,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"$pod\", thread=~\"TabletLookup\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"$pod\", thread=~\"TabletLookup\"}",
                     "refId": "A"
                 }
             ],
@@ -2320,7 +2320,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"$pod\", thread=~\"Query\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"$pod\", thread=~\"Query\"}",
                     "refId": "A"
                 }
             ],
@@ -2351,7 +2351,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"$pod\", thread=~\"TabletSlot.*\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"$pod\", thread=~\"TabletSlot.*\"}",
                     "refId": "A"
                 }
             ],
@@ -2382,7 +2382,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"$pod\", thread=~\"Compression\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"$pod\", thread=~\"Compression\"}",
                     "refId": "A"
                 }
             ],
@@ -2413,7 +2413,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"$pod\", thread=~\"ChunkReader\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"$pod\", thread=~\"ChunkReader\"}",
                     "refId": "A"
                 }
             ],
@@ -2444,7 +2444,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"$pod\", thread=~\"ChunkWriter\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"$pod\", thread=~\"ChunkWriter\"}",
                     "refId": "A"
                 }
             ],
@@ -2475,7 +2475,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"$pod\", thread=~\"Control\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"$pod\", thread=~\"Control\"}",
                     "refId": "A"
                 }
             ],
@@ -2506,7 +2506,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_action_queue_time_total_max\", pod=~\"$pod\", thread=~\"Control\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_action_queue_time_total_max\", pod=~\"$pod\", thread=~\"Control\"}",
                     "refId": "A"
                 }
             ],
@@ -2537,7 +2537,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_cpu_wait\", pod=~\"$pod\", thread=~\"\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_cpu_wait\", pod=~\"$pod\", thread=~\"\"}",
                     "refId": "A"
                 }
             ],
@@ -2577,7 +2577,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_count\", user=~\"\", yt_service=~\".+\", method=~\".+\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_count\", user=~\"\", yt_service=~\".+\", method=~\".+\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -2608,7 +2608,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_failed_request_count\", user=~\"\", yt_service=~\".+\", method=~\".+\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_failed_request_count\", user=~\"\", yt_service=~\".+\", method=~\".+\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -2648,7 +2648,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_request_time_ack_max\", user=~\"\", yt_service=~\"TransactionSupervisorService\", method=~\"PingTransaction\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_request_time_ack_max\", user=~\"\", yt_service=~\"TransactionSupervisorService\", method=~\"PingTransaction\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -2679,7 +2679,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_request_time_total_max\", user=~\"\", yt_service=~\"TransactionSupervisorService\", method=~\"PingTransaction\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_request_time_total_max\", user=~\"\", yt_service=~\"TransactionSupervisorService\", method=~\"PingTransaction\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -2710,7 +2710,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_time_remote_wait_max\", user=~\"\", yt_service=~\"TransactionParticipantService\", method=~\".+\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_time_remote_wait_max\", user=~\"\", yt_service=~\"TransactionParticipantService\", method=~\".+\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -2741,7 +2741,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_time_remote_wait_max\", user=~\"\", yt_service=~\"TransactionSupervisorService\", method=~\".+\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_time_remote_wait_max\", user=~\"\", yt_service=~\"TransactionSupervisorService\", method=~\".+\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -2781,7 +2781,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_remote_changelog_write_quorum_lag_max\", tablet_cell_bundle=~\".+\", cell_id=~\"\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_remote_changelog_write_quorum_lag_max\", tablet_cell_bundle=~\".+\", cell_id=~\"\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -2812,7 +2812,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_hydra_restart_count\", tablet_cell_bundle=~\".+\", cell_id=~\"\", pod=~\"$pod\", reason=~\".+\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_hydra_restart_count\", tablet_cell_bundle=~\".+\", cell_id=~\"\", pod=~\"$pod\", reason=~\".+\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -2843,7 +2843,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_hydra_mutation_wait_time_max\", tablet_cell_bundle=~\".+\", cell_id=~\"\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_hydra_mutation_wait_time_max\", tablet_cell_bundle=~\".+\", cell_id=~\"\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -2883,7 +2883,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_time_remote_wait_max\", user=~\"\", yt_service=~\"DataNodeService\", method=~\"PutBlocks\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_time_remote_wait_max\", user=~\"\", yt_service=~\"DataNodeService\", method=~\"PutBlocks\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -2914,7 +2914,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_location_put_blocks_wall_time_max\", location_type=~\"Store|store\", location_id=~\"\", medium=~\"ssd_journals\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_location_put_blocks_wall_time_max\", location_type=~\"Store|store\", location_id=~\"\", medium=~\"ssd_journals\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -2945,7 +2945,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_location_multiplexed_changelogs_changelog_flush_io_time_max\", location_type=~\"Store|store\", location_id=~\"\", medium=~\"ssd_journals\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_location_multiplexed_changelogs_changelog_flush_io_time_max\", location_type=~\"Store|store\", location_id=~\"\", medium=~\"ssd_journals\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -2976,7 +2976,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_location_split_changelogs_changelog_flush_io_time_max\", location_type=~\"Store|store\", location_id=~\"\", medium=~\"ssd_journals\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_location_split_changelogs_changelog_flush_io_time_max\", location_type=~\"Store|store\", location_id=~\"\", medium=~\"ssd_journals\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -3007,7 +3007,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_location_multiplexed_changelogs_bytes\", location_type=~\"Store|store\", location_id=~\"\", medium=~\"ssd_journals\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_location_multiplexed_changelogs_bytes\", location_type=~\"Store|store\", location_id=~\"\", medium=~\"ssd_journals\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -3051,7 +3051,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_location_split_changelogs_bytes\", location_type=~\"Store|store\", location_id=~\"\", medium=~\"ssd_journals\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_location_split_changelogs_bytes\", location_type=~\"Store|store\", location_id=~\"\", medium=~\"ssd_journals\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -3095,7 +3095,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_location_multiplexed_changelogs_records\", location_type=~\"Store|store\", location_id=~\"\", medium=~\"ssd_journals\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_location_multiplexed_changelogs_records\", location_type=~\"Store|store\", location_id=~\"\", medium=~\"ssd_journals\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -3126,7 +3126,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_location_split_changelogs_records\", location_type=~\"Store|store\", location_id=~\"\", medium=~\"ssd_journals\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_location_split_changelogs_records\", location_type=~\"Store|store\", location_id=~\"\", medium=~\"ssd_journals\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -3166,7 +3166,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_versioned_chunk_meta_cache_weight\", pod=~\"$pod\", segment=~\"\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_versioned_chunk_meta_cache_weight\", pod=~\"$pod\", segment=~\"\"}",
                     "refId": "A"
                 }
             ],
@@ -3214,7 +3214,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_versioned_chunk_meta_cache_missed_weight\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_versioned_chunk_meta_cache_missed_weight\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -3258,7 +3258,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_block_cache_.*compressed_data_weight\", pod=~\"$pod\", segment=~\"\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_block_cache_.*compressed_data_weight\", pod=~\"$pod\", segment=~\"\"}",
                     "refId": "A"
                 }
             ],
@@ -3306,7 +3306,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_block_cache_.*compressed_data_missed_weight\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_block_cache_.*compressed_data_missed_weight\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -3350,7 +3350,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_chunk_meta_cache_weight\", pod=~\"$pod\", segment=~\"\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_chunk_meta_cache_weight\", pod=~\"$pod\", segment=~\"\"}",
                     "refId": "A"
                 }
             ],
@@ -3398,7 +3398,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_chunk_meta_cache_missed_weight\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_chunk_meta_cache_missed_weight\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -3442,7 +3442,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_blocks_ext_cache_weight\", pod=~\"$pod\", segment=~\"\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_blocks_ext_cache_weight\", pod=~\"$pod\", segment=~\"\"}",
                     "refId": "A"
                 }
             ],
@@ -3490,7 +3490,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_blocks_ext_cache_missed_weight\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_blocks_ext_cache_missed_weight\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -3534,7 +3534,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_used\", category=~\"versioned_chunk_meta\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_used\", category=~\"versioned_chunk_meta\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -3591,7 +3591,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-data-node.*\", __name__=~\"yt_location_blob_block_bytes\", location_type=~\"Store|store\", medium=~\".+\", category=~\".+\", direction=~\"write\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-data-node.*\", __name__=~\"yt_location_blob_block_bytes\", location_type=~\"Store|store\", medium=~\".+\", category=~\".+\", direction=~\"write\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -3635,7 +3635,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-data-node.*\", __name__=~\"yt_location_blob_block_bytes\", location_type=~\"Store|store\", medium=~\".+\", category=~\".+\", direction=~\"read\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-data-node.*\", __name__=~\"yt_location_blob_block_bytes\", location_type=~\"Store|store\", medium=~\".+\", category=~\".+\", direction=~\"read\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -3679,7 +3679,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-data-node.*\", __name__=~\"yt_location_.*_value\", location_type=~\"Store|store\", location_id=~\"\", medium=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-data-node.*\", __name__=~\"yt_location_.*_value\", location_type=~\"Store|store\", location_id=~\"\", medium=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -3723,7 +3723,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_throttlers_static_store_preload_in_value\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_throttlers_static_store_preload_in_value\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -3776,7 +3776,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_request_message_body_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_request_message_body_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\", recognized=~\"\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -3820,7 +3820,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_request_message_attachment_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_request_message_attachment_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\", recognized=~\"\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -3864,7 +3864,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_response_message_body_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_response_message_body_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\", recognized=~\"\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -3908,7 +3908,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_response_message_attachment_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_response_message_attachment_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\", recognized=~\"\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -3961,7 +3961,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_message_body_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_message_body_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\", recognized=~\"\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -4005,7 +4005,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_message_attachment_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_message_attachment_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\", recognized=~\"\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -4049,7 +4049,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_response_message_body_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_response_message_body_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\", recognized=~\"\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -4093,7 +4093,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_response_message_attachment_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_response_message_attachment_bytes\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\", recognized=~\"\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -4146,7 +4146,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_message_body_bytes\", user=~\"\", yt_service=~\".+\", method=~\".+\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_message_body_bytes\", user=~\"\", yt_service=~\".+\", method=~\".+\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -4196,7 +4196,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_message_attachment_bytes\", user=~\"\", yt_service=~\".+\", method=~\".+\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_message_attachment_bytes\", user=~\"\", yt_service=~\".+\", method=~\".+\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -4246,7 +4246,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_response_message_body_bytes\", user=~\"\", yt_service=~\".+\", method=~\".+\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_response_message_body_bytes\", user=~\"\", yt_service=~\".+\", method=~\".+\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -4296,7 +4296,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_response_message_attachment_bytes\", user=~\"\", yt_service=~\".+\", method=~\".+\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_response_message_attachment_bytes\", user=~\"\", yt_service=~\".+\", method=~\".+\", pod=~\"$pod\", queue=~\"\"}[$__rate_interval])",
                     "refId": "A"
                 }
             ],
@@ -4355,7 +4355,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"sys|porto_iss\", __name__=~\"/Net/Ifs/RxBytes\", intf=~\".+\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"sys|porto_iss\", __name__=~\"/Net/Ifs/RxBytes\", intf=~\".+\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -4399,7 +4399,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"sys|porto_iss\", __name__=~\"/Net/Ifs/TxBytes\", intf=~\".+\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"sys|porto_iss\", __name__=~\"/Net/Ifs/TxBytes\", intf=~\".+\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -4443,7 +4443,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_bus_pending_out_bytes\", network=~\".+\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_bus_pending_out_bytes\", network=~\".+\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -4483,7 +4483,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_job_controller_resource_usage_cpu\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_job_controller_resource_usage_cpu\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -4523,7 +4523,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_cluster_node_throttlers_total_in_queue_size\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_cluster_node_throttlers_total_in_queue_size\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -4554,7 +4554,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_cluster_node_throttlers_total_out_queue_size\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_cluster_node_throttlers_total_out_queue_size\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -4594,7 +4594,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_data_node_throttlers_.*_in_queue_size\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_data_node_throttlers_.*_in_queue_size\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -4625,7 +4625,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_data_node_throttlers_.*_out_queue_size\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-data-node.*|yt-exec-node.*|yt-tablet-node.*\", __name__=~\"yt_data_node_throttlers_.*_out_queue_size\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -4665,7 +4665,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_throttlers_.*_in_queue_size\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_throttlers_.*_in_queue_size\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -4696,7 +4696,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_throttlers_.*_out_queue_size\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_throttlers_.*_out_queue_size\", pod=~\"$pod\"}",
                     "refId": "A"
                 }
             ],
@@ -4716,7 +4716,10 @@
             }
         }
     ],
-    "tags": [],
+    "tags": [
+        "YT",
+        "autogen"
+    ],
     "templating": {
         "list": [
             {
