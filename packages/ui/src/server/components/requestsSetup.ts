@@ -34,6 +34,7 @@ export interface YTApiSetup {
     useHeavyProxy: boolean;
     timeout: number;
     disableHeavyProxies: boolean;
+    requestHeaders?: Record<string, string>;
 }
 
 function getClusterSetup(clusterConfig: ClusterConfig): {

@@ -1,4 +1,7 @@
+import fs from 'fs';
 import {defineConfig, devices} from '@playwright/test';
+
+import {AUTH_FILE} from './contants';
 
 /**
  * Read environment variables from file.
@@ -10,6 +13,10 @@ const headless = process.env.HEADLESS !== 'false';
 
 const {E2E_MATCH = '.spec.', E2E_TEST_DIR = './e2e'} = process.env;
 const testMatch = new RegExp(E2E_MATCH.replace(/\./g, '\\.'));
+
+function storageState() {
+    return fs.existsSync(AUTH_FILE) ? AUTH_FILE : undefined;
+}
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -37,6 +44,7 @@ export default defineConfig({
 
         ignoreHTTPSErrors: true,
         testIdAttribute: 'data-qa',
+        storageState: storageState(),
 
         screenshot: 'only-on-failure',
         video: 'retain-on-failure',
