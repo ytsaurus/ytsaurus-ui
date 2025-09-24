@@ -6,10 +6,12 @@ import {RadioButton} from '@gravity-ui/uikit';
 import {PrometheusDashboardType} from '../../../../shared/prometheus/types';
 
 import format from '../../../common/hammer/format';
+import {PoolTreeSuggestControl} from '../../../components/Dialog/controls/PoolTreeSuggestControl/PoolTreeSuggestControl';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {PrometheusDashboard} from '../../../containers/PrometheusDashboard/PrometheusDashboard';
 import {getCluster} from '../../../store/selectors/global';
 import {systemMonitoring} from '../../../store/reducers/system/monitoring';
+import {useDefaultPoolTree} from '../../../hooks/global-pool-trees';
 
 import {MasterLocalContainers} from './MasterLocalContainers';
 
@@ -57,6 +59,8 @@ function useDashboardParameters() {
     const container =
         useSelector(systemMonitoring.selectors.getMasterLocalContainer) ?? SYSTEM_DASHBOARDS[0];
 
+    const clusterResourcesExtra = useClusterResourcesExtraParams();
+
     const {params, extraTools} = React.useMemo(() => {
         switch (type) {
             case 'master-local':
@@ -68,12 +72,20 @@ function useDashboardParameters() {
                         },
                     ],
                 };
+            case 'cluster-resources': {
+                const {params, extraTools} = clusterResourcesExtra;
+                const p = {cluster, ...params};
+                return {
+                    params: p,
+                    extraTools,
+                };
+            }
             default: {
                 const p = {cluster};
-                return {params: p as typeof p};
+                return {params: p};
             }
         }
-    }, [type, container, cluster]);
+    }, [type, container, clusterResourcesExtra, cluster]);
 
     return {
         type,
@@ -84,4 +96,35 @@ function useDashboardParameters() {
         params,
         extraTools,
     };
+}
+
+function useClusterResourcesExtraParams() {
+    const defaultTree = useDefaultPoolTree();
+    const [tree, setTree] = React.useState<string | undefined>();
+
+    React.useEffect(() => {
+        if (defaultTree !== undefined) {
+            setTree(defaultTree);
+        }
+    }, [defaultTree]);
+
+    return React.useMemo(() => {
+        return {
+            params: tree !== undefined ? {tree} : undefined,
+            extraTools: [
+                {
+                    node: (
+                        <PoolTreeSuggestControl
+                            value={tree !== undefined ? [tree] : []}
+                            onChange={([value]) => {
+                                setTree(value);
+                            }}
+                            placeholder={'Tree...'}
+                        />
+                    ),
+                    width: 200,
+                },
+            ],
+        };
+    }, [tree]);
 }

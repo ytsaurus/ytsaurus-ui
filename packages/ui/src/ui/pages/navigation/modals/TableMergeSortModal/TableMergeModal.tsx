@@ -180,6 +180,9 @@ export default function TableMergeModal() {
                             name: 'poolTree',
                             type: 'pool-tree',
                             caption: 'Pool tree',
+                            extras: {
+                                multiple: true,
+                            },
                         },
                         {
                             name: 'pool',
