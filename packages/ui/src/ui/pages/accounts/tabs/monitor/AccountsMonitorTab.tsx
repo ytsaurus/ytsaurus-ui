@@ -7,6 +7,8 @@ import {getActiveAccount} from '../../../../store/selectors/accounts/accounts';
 import {getCluster} from '../../../../store/selectors/global';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 
+import i18n from './i18n';
+
 function AccountsMonitorTab(props: {
     component: React.ComponentType<{cluster: string; account: string}>;
 }) {
@@ -15,7 +17,7 @@ function AccountsMonitorTab(props: {
     const cluster = useSelector(getCluster);
 
     if (!account) {
-        return <AccountsNoContent hint={'Please choose one to display charts'} />;
+        return <AccountsNoContent hint={i18n('please-choose-one-to-display')} />;
     }
 
     return (
