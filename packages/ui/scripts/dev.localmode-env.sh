@@ -18,6 +18,10 @@ export APP_ENV=local
 export PROXY=$proxyHost:$proxyPort
 export YT_LOCAL_CLUSTER_ID=ui
 
+if [ "$WITH_AUTH" != "" ]; then
+  export YT_TOKEN=password
+fi
+
 curl http://${PROXY}/hosts | head -n 1 | grep '\["'
 if [ $? -ne 0 -o "${useStop}" = "1" ]; then
 
@@ -68,7 +72,6 @@ if [ $? -ne 0 -o "${useStop}" = "1" ]; then
 
   if [ "$WITH_AUTH" != "" ]; then
     command="$command --with-auth"
-    export YT_TOKEN=password
   fi
 
   if [ "$DEBUG_LOGGING" != "" ]; then

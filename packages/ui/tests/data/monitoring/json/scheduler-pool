@@ -1758,7 +1758,7 @@
                 "path": "//sys/pool_trees/$tree/$pool",
                 "cluster": "$cluster",
                 "ignorePaths": [
-                    "//sys/pool_trees/$pool/<Root>"
+                    "//sys/pool_trees/$tree/<Root>"
                 ]
             },
             {
