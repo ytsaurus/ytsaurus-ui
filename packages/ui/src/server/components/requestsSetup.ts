@@ -33,6 +33,7 @@ export interface YTApiSetup {
     useEncodedParameters: boolean;
     useHeavyProxy: boolean;
     timeout: number;
+    requestHeaders?: Record<string, string>;
 }
 
 function getClusterSetup(clusterConfig: ClusterConfig): {
