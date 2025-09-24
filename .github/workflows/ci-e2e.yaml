@@ -185,11 +185,64 @@ jobs:
           path: packages/ui/tests/playwright-report/
           retention-days: 7
 
+  e2e-with-passw-auth:
+    name: E2E with password auth
+    runs-on: ${{ needs.start-vm.outputs.label }}
+    needs:
+      - start-vm
+      - e2e-build
+      - e2e-local
+      - e2e-local-as-remote
+      - run-local-cluster-sh
+      - e2e-screenshots
+    steps:
+      - name: Run containers for 'Local'
+        run: |
+          run_local_cluster.sh --stop || true
+          run_local_cluster.sh --cluster-name ui --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e  --init-operations-archive --with-auth --run-prometheus
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "npm"
+      - name: npm ci
+        run: |
+          cd packages/ui/tests
+          npm ci
+      - name: Install browsers
+        run: |
+          cd packages/ui/tests
+          npx playwright install chromium
+      - name: Init YT local
+        run: |
+          cd packages/ui
+          YT_TOKEN=password YT_PROXY=`hostname`:8000 npm run e2e:localmode:monitoring:init
+      - name: YT auth
+        run: |
+          cd packages/ui
+          npm run e2e:localmode:passwd:auth
+      - name: E2E-monitoring
+        run: |
+          cd packages/ui
+          npm run e2e:localmode:passwd
+      - name: Upload local test-results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: passwd_test-results
+          path: packages/ui/tests/playwright-report/
+          retention-days: 7
+
   publish-and-comment:
     name: Publish results and create comment
     needs:
       - start-vm
       - e2e-screenshots
+      - e2e-with-passwd-auth
     if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
@@ -211,6 +264,12 @@ jobs:
         with:
           name: screenshots_test-results
           path: ./screenshots
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: passwd_test-results
+          path: ./passwd
       - name: Install AWS CLI
         uses: unfor19/install-aws-cli-action@v1
         with:
@@ -221,24 +280,24 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.UI_S3_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.UI_S3_SECRET_KEY }}
-          REPORTS: 'local remote screenshots'
+          REPORTS: "local remote screenshots passwd"
         run: |
-            message=""
-            for i in $REPORTS
-            do
-              if [ -d "./$i" ]; then
-                aws s3 cp ./$i s3://playwright-reports/${{ github.event.pull_request.number }}/$i/ --endpoint-url=https://ytsaurus-ui-test-results.s3-private.mds.yandex.net --recursive
-                message="${message}[E2E-$i report](https://ytsaurus-ui-test-results.s3-website.mds.yandex.net/playwright-reports/${{ github.event.pull_request.number }}/$i/index.html) is ready.\n"
-              fi
-            done
-
-            if [ -z "$message" ]; then
-              message="No test reports are available for this run."
+          message=""
+          for i in $REPORTS
+          do
+            if [ -d "./$i" ]; then
+              aws s3 cp ./$i s3://playwright-reports/${{ github.event.pull_request.number }}/$i/ --endpoint-url=https://ytsaurus-ui-test-results.s3-private.mds.yandex.net --recursive
+              message="${message}[E2E-$i report](https://ytsaurus-ui-test-results.s3-website.mds.yandex.net/playwright-reports/${{ github.event.pull_request.number }}/$i/index.html) is ready.\n"
             fi
+          done
 
-            echo "message<<EOF" >> $GITHUB_OUTPUT
-            echo -e "$message" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
+          if [ -z "$message" ]; then
+            message="No test reports are available for this run."
+          fi
+
+          echo "message<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$message" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
         shell: bash
       - name: Create Comment
         uses: marocchino/sticky-pull-request-comment@v2
@@ -263,4 +322,3 @@ jobs:
           github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
           label: ${{ needs.start-vm.outputs.label }}
           instance-id: ${{ needs.start-vm.outputs.instance-id }}
-

@@ -9,7 +9,7 @@ type InlineErrorProps = {
 
 export function InlineError({error}: InlineErrorProps) {
     return !error ? null : (
-        <span>
+        <span className={'yt-error-inline'}>
             {error.message || 'An error occured.'} &nbsp;
             <ClickableText onClick={() => showErrorPopup(error)}>Details</ClickableText>
         </span>
