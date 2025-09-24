@@ -10,10 +10,11 @@ import {usePoolTreesLoaded} from '../../../../hooks/global-pool-trees';
 
 type Props = DialogControlProps<string[]> & {
     disabled?: boolean;
+    multiple?: boolean;
 };
 
 export function PoolTreeSuggestControl(props: Props) {
-    const {value, onChange, disabled, placeholder} = props;
+    const {value, onChange, disabled, placeholder, multiple} = props;
     const treeNames = useSelector(getAllPoolTreeNames);
 
     usePoolTreesLoaded();
@@ -33,7 +34,7 @@ export function PoolTreeSuggestControl(props: Props) {
             placeholder={placeholder}
             width="max"
             filterable={items?.length > 5}
-            multiple
+            multiple={multiple}
         />
     );
 }

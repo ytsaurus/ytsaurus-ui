@@ -167,6 +167,9 @@ export default function TableSortModal() {
                             name: 'poolTree',
                             type: 'pool-tree',
                             caption: 'Pool tree',
+                            extras: {
+                                multiple: true,
+                            },
                         },
                         {
                             name: 'pool',

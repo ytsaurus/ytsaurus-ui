@@ -255,6 +255,9 @@ function CreateChytButton() {
                                     name: 'tree',
                                     type: 'pool-tree',
                                     caption: 'Pool tree',
+                                    extras: {
+                                        multiple: true,
+                                    },
                                 },
                                 {
                                     name: 'pool',
