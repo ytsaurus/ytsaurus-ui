@@ -169,27 +169,28 @@ async function checkDashboardPermissions(
     const userWithSetup = await Promise.all(
         permissionEntries.map(([cluster]) => {
             const userYtApiSetup = getUserYTApiSetup(cluster, req);
-            return getXSRFToken(req, userYtApiSetup).then((data) => {
-                return {cluster, user: data.login, userYtApiSetup};
+            return getXSRFToken(req, userYtApiSetup).then(({login, csrf_token}) => {
+                return {cluster, user: login, userYtApiSetup, csrf_token};
             });
         }),
     );
 
     const checkResults = await Promise.all(
         permissionEntries.map(([_cluster, requests], index) => {
-            const {user, userYtApiSetup} = userWithSetup[index];
+            const {user, userYtApiSetup, csrf_token} = userWithSetup[index];
             const {setup} = userYtApiSetup;
             return yt.v3.executeBatch({
-                setup,
+                setup: {
+                    ...setup,
+                    requestHeaders: {
+                        ...setup.requestHeaders,
+                        'X-Csrf-Token': csrf_token,
+                    },
+                },
                 parameters: {
                     requests: requests.map((item) => {
-                        return {
-                            ...item,
-                            parameters: {
-                                ...item.parameters,
-                                user,
-                            },
-                        };
+                        Object.assign(item.parameters, {user});
+                        return item;
                     }),
                 },
             }) as Promise<Array<BatchResultsItem<CheckPermissionResult>>>;
