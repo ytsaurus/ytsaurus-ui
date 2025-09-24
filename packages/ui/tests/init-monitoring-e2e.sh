@@ -41,6 +41,7 @@ if [ "false" = "$(yt exists //sys/pool_trees/default/no-access)" ]; then
     yt set //sys/pool_trees/default/no-access/@acl '[]'
 fi
 
-if [ -n "$WITH_AUTH" ]; then
+if [ -n "$WITH_AUTH" -a "true" != "$(yt exists //sys/users/user)" ]; then
   ${BASE_DIR}/init-cluster-e2e/utils/add.user.sh user user
+  yt set //sys/pool_trees/default/no-access/@acl/end '{action=deny;permissions=[use];subjects=[user]}'
 fi
