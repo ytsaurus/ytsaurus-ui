@@ -325,7 +325,7 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
                 {this.renderBaseInput()}
                 <Button
                     size={'s'}
-                    view={'action'}
+                    view={'outlined'}
                     style={{height: '100%'}}
                     onClick={() => onApply?.(path)}
                 >
