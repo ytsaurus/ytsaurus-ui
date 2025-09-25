@@ -42,5 +42,13 @@ function DashboardPathEditor() {
         event.target?.select();
     }, []);
 
-    return <PathEditor autoFocus defaultPath={''} onApply={handleApply} onFocus={handleFocus} />;
+    return (
+        <PathEditor
+            hasConfirmButton
+            autoFocus
+            defaultPath={''}
+            onApply={handleApply}
+            onFocus={handleFocus}
+        />
+    );
 }
