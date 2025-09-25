@@ -105,6 +105,7 @@ function useBundleMonitoring({cluster, tablet_cell_bundle}: BundleMonitoringProp
         params: {
             cluster,
             tablet_cell_bundle,
+            proxy_role: tablet_cell_bundle,
         },
     };
 }
