@@ -1,6 +1,6 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {RadioButton} from '@gravity-ui/uikit';
+import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 
 import {RootState} from '../../../../../../store/reducers';
 import {setServicesTypeFilter} from '../../../../../../store/actions/dashboard2/services';
@@ -18,13 +18,13 @@ export function ServicesWidgetControls(props: ServicesWidgetProps) {
     };
 
     return (
-        <RadioButton
+        <SegmentedRadioGroup
             options={[
                 {value: 'favourite', content: 'Favourite'},
                 {value: 'custom', content: 'Custom'},
             ]}
             value={type}
             onUpdate={onUpdate}
-        ></RadioButton>
+        ></SegmentedRadioGroup>
     );
 }

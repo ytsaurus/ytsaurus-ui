@@ -1,6 +1,6 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {ChartType} from '../../QueryResultsVisualization/constants';
-import type {ChartData} from '@gravity-ui/chartkit/d3';
+import type {ChartData} from '@gravity-ui/chartkit/gravity-charts';
 
 export type Config = Pick<Required<ChartData>, 'title' | 'xAxis' | 'yAxis' | 'legend'>;
 

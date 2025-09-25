@@ -5,7 +5,7 @@ import fill_ from 'lodash/fill';
 import isEmpty_ from 'lodash/isEmpty';
 import reduce_ from 'lodash/reduce';
 
-import {Button, Flex, RadioButton} from '@gravity-ui/uikit';
+import {Button, Flex, SegmentedRadioGroup} from '@gravity-ui/uikit';
 import {DialogWrapper as Dialog} from '../../../components/DialogWrapper/DialogWrapper';
 // @ts-ignore
 import unipika from '@gravity-ui/unipika/lib/unipika';
@@ -689,7 +689,7 @@ function FullValueDialog(props: FullValueDialogProps) {
             <Dialog.Divider />
             <Dialog.Body>
                 <Flex direction="column" gap={2} width="70vw" maxHeight="80vh">
-                    <RadioButton
+                    <SegmentedRadioGroup
                         className={block('full-value-radio-buttons')}
                         options={[
                             {value: 'parsed', content: 'Parsed'},

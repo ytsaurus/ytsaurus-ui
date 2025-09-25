@@ -1,6 +1,6 @@
 import React, {FC, useMemo} from 'react';
 import {QueriesListAuthorFilter, QueriesListFilter} from '../../module/queries_list/types';
-import {ControlGroupOption, RadioButton} from '@gravity-ui/uikit';
+import {ControlGroupOption, SegmentedRadioGroup} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from 'react-redux';
 import {getQueriesFilters} from '../../module/queries_list/selectors';
 import {applyFilter} from '../../module/queries_list/actions';
@@ -33,5 +33,5 @@ export const QueryFastUserFilter: FC = () => {
         return QueriesListAuthorFilter.All;
     }, [login, user]);
 
-    return <RadioButton options={AuthorFilter} value={value} onUpdate={handleUserChange} />;
+    return <SegmentedRadioGroup options={AuthorFilter} value={value} onUpdate={handleUserChange} />;
 };

@@ -1,4 +1,4 @@
-import type {ChartAxis, ChartData} from '@gravity-ui/chartkit/d3';
+import type {ChartAxis, ChartData} from '@gravity-ui/chartkit/gravity-charts';
 import {QueryResult} from './types';
 import {ChartType} from '../constants';
 import {preparePie} from './preparePie';

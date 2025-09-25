@@ -1,6 +1,6 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {RadioButton} from '@gravity-ui/uikit';
+import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 
 import {RootState} from '../../../../../../store/reducers';
 import {getNavigationTypeFilter} from '../../../../../../store/selectors/dashboard2/navigation';
@@ -16,13 +16,13 @@ export function NavigationWidgetControls(props: NavigationWidgetProps) {
     };
 
     return (
-        <RadioButton
+        <SegmentedRadioGroup
             options={[
                 {value: 'last_visited', content: 'Last visited'},
                 {value: 'favourite', content: 'Favourite'},
             ]}
             value={type}
             onUpdate={onUpdate}
-        ></RadioButton>
+        ></SegmentedRadioGroup>
     );
 }

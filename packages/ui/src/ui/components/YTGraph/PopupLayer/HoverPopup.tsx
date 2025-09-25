@@ -54,19 +54,18 @@ export function HoverPopup<B extends TBlock>({
                 onMouseMove={stopPropagation}
             />
 
-            <Popup
-                open
-                key={`${x}-${y}`}
-                anchorRef={{current: element}}
-                onMouseEnter={() => {
-                    handleClearTimeout();
-                    setPopupBlock(hoverBlock);
-                }}
-                onMouseLeave={() => {
-                    setPopupBlock(undefined);
-                }}
-            >
-                {content}
+            <Popup open key={`${x}-${y}`} anchorElement={element} placement="bottom">
+                <div
+                    onMouseEnter={() => {
+                        handleClearTimeout();
+                        setPopupBlock(hoverBlock);
+                    }}
+                    onMouseLeave={() => {
+                        setPopupBlock(undefined);
+                    }}
+                >
+                    {content}
+                </div>
             </Popup>
         </>
     );

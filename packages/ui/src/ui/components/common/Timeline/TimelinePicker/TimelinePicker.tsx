@@ -301,9 +301,14 @@ export class TimelinePicker extends React.Component<TimelinePickerProps, State> 
                             {picker}
                         </div>
                         <Popup
-                            anchorRef={this._datepickerRef}
+                            anchorElement={this._datepickerRef.current}
                             open={opened}
-                            onClose={this.onPopupClose}
+                            placement="bottom"
+                            onOpenChange={(open, event) => {
+                                if (!open) {
+                                    this.onPopupClose(event as MouseEvent | KeyboardEvent);
+                                }
+                            }}
                         >
                             <div className={b('shortcuts')}>
                                 <div className={b('range-datepicker')}>

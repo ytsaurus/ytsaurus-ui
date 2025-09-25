@@ -1,7 +1,7 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import b from 'bem-cn-lite';
-import {Flex, RadioButton, Select} from '@gravity-ui/uikit';
+import {Flex, SegmentedRadioGroup, Select} from '@gravity-ui/uikit';
 
 import {RootState} from '../../../../../../store/reducers';
 import {
@@ -50,7 +50,7 @@ export function OperationsWidgetControls(props: OperationsWidgetProps) {
                 onUpdate={onStateFilterUpdate}
                 className={block('state')}
             />
-            <RadioButton
+            <SegmentedRadioGroup
                 options={[
                     {value: 'me', content: 'Me'},
                     {value: 'custom', content: 'Custom'},

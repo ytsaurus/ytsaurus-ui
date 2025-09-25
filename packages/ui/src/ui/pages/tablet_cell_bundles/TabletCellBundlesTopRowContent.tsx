@@ -1,8 +1,7 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-
-import {Breadcrumbs, BreadcrumbsItem} from '../../components/Breadcrumbs';
+import {Breadcrumbs} from '@gravity-ui/uikit';
 import {useHistory} from 'react-router';
 
 import Favourites, {FavouritesItem} from '../../components/Favourites/Favourites';
@@ -137,16 +136,15 @@ function BundleBreadcrumbs({className, bcItems, setActiveBundle}: BundleBreadcru
         return bcItems.map((item) => {
             const text = item.text || item.title || '';
             return (
-                <BreadcrumbsItem key={text} href={item.href}>
+                <Breadcrumbs.Item key={text} href={item.href}>
                     {text}
-                </BreadcrumbsItem>
+                </Breadcrumbs.Item>
             );
         });
     }, [bcItems]);
 
     return (
         <Breadcrumbs
-            navigate={history.push}
             onAction={handleItemClick}
             className={className}
             showRoot

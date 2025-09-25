@@ -24,7 +24,7 @@ export const EventTimelineTooltip: FC<PropsWithChildren<Props>> = ({children, of
             }}
         >
             <div ref={anchorRef} className={block('anchor')} />
-            <Popup anchorRef={anchorRef} open disablePortal>
+            <Popup anchorElement={anchorRef.current} open placement="bottom">
                 {children}
             </Popup>
         </div>

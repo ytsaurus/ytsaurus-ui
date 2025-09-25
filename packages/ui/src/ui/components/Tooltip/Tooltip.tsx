@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {Popover, PopoverInstanceProps, PopoverProps} from '@gravity-ui/uikit';
+import {Popover, PopoverInstanceProps, PopoverProps} from '@gravity-ui/uikit/legacy';
 import './Tooltip.scss';
 import {FIX_MY_TYPE} from '../../types';
 
