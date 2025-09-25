@@ -2,20 +2,14 @@ import {BaseQueryApi} from '@reduxjs/toolkit/query';
 import map_ from 'lodash/map';
 
 import {ytApiV3} from '../../../../rum/rum-wrap-api';
+import {attributesForNodeIcon} from '../../../../constants/navigation/map-node';
 
 function makePathsAttributesRequests(paths: string[]) {
     return map_(paths, (path) => ({
         command: 'get' as const,
         parameters: {
             path: `${path}/@`,
-            attributes: [
-                'path',
-                'treat_as_queue_consumer',
-                'treat_as_queue_producer',
-                'type',
-                'dynamic',
-                'sorted',
-            ],
+            attributes: ['path', ...attributesForNodeIcon],
         },
     }));
 }

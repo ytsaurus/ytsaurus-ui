@@ -22,6 +22,10 @@
         @include reset-li();
         @include ellipsis();
 
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
         line-height: 30px;
 
         width: 100%;
