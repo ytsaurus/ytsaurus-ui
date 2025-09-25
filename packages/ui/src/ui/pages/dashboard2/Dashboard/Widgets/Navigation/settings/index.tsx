@@ -8,5 +8,10 @@ export function useNavigationSettings() {
                 placeholder: 'Navigation',
             },
         },
+        {
+            type: 'tumbler' as const,
+            name: 'show_navigation_input',
+            caption: 'Show navigation input',
+        },
     ];
 }

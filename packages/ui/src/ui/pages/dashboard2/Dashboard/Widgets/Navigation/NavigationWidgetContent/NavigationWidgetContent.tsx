@@ -13,11 +13,11 @@ import {NavigationWidgetContentBase} from './NavigationWidgetContentBase';
 import {getCluster} from '../../../../../../store/selectors/global';
 
 export function NavigationWidgetContent(props: NavigationWidgetProps) {
-    const {type, items, isLoading, error} = useNavigationWidget(props);
+    const {type, items, isLoading, error, showNavigationInput} = useNavigationWidget(props);
 
     return (
         <Flex width={'100%'} direction={'column'} gap={2}>
-            <DashboardPathEditor />
+            {showNavigationInput && <DashboardPathEditor />}
             {isLoading ? (
                 <WidgetSkeleton itemHeight={30} />
             ) : (
@@ -47,6 +47,7 @@ function DashboardPathEditor() {
             hasConfirmButton
             autoFocus
             defaultPath={''}
+            placeholder={'Enter the path to navigate...'}
             onApply={handleApply}
             onFocus={handleFocus}
         />
