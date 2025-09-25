@@ -2,11 +2,11 @@ import React from 'react';
 
 import ChartKit, {ChartKitProps, ChartKitRef, ChartKitWidget, settings} from '@gravity-ui/chartkit';
 import {YagrPlugin} from '@gravity-ui/chartkit/yagr';
-import {D3Plugin} from '@gravity-ui/chartkit/d3';
+import {GravityChartsPlugin} from '@gravity-ui/chartkit/gravity-charts';
 
 import '@gravity-ui/yagr/dist/index.css';
 
-settings.set({plugins: [...settings.get('plugins'), YagrPlugin, D3Plugin]});
+settings.set({plugins: [...settings.get('plugins'), YagrPlugin, GravityChartsPlugin]});
 
 export type {ChartKitProps, ChartKitWidget, ChartKitRef};
 

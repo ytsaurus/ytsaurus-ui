@@ -10,13 +10,13 @@ import './Button.scss';
 
 const block = cn('yt-button');
 
-export interface ButtonProps extends ButtonImplProps {
+export type ButtonProps = {
     withTooltip?: boolean;
     tooltipProps?: TooltipProps;
     hotkey?: HotkeyProps['settings'];
 
     inlineMargins?: boolean;
-}
+} & ButtonImplProps;
 
 export default class Button extends Component<ButtonProps> {
     static propTypes = {

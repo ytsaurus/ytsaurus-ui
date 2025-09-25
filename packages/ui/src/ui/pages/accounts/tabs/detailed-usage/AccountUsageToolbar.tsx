@@ -1,8 +1,8 @@
 import React, {useCallback, useMemo} from 'react';
+import {Breadcrumbs} from '@gravity-ui/uikit';
 
 import map_ from 'lodash/map';
 import reverse_ from 'lodash/reverse';
-import {Breadcrumbs, BreadcrumbsItem} from '../../../../components/Breadcrumbs';
 
 import moment from 'moment';
 import cn from 'bem-cn-lite';
@@ -477,12 +477,12 @@ export function UsageBreadcrumbs() {
         return map_(pathArr, (item, index) => {
             const text = item.item;
             return (
-                <BreadcrumbsItem
+                <Breadcrumbs.Item
                     key={text}
                     href={makeRoutedURL(`${window.location.pathname}?path=${item.value}`)}
                 >
                     {index ? <PathFragment name={text} /> : <Icon awesome={'folder-tree'} />}
-                </BreadcrumbsItem>
+                </Breadcrumbs.Item>
             );
         });
     }, [pathArr]);
@@ -494,7 +494,7 @@ export function UsageBreadcrumbs() {
     }, [dispatch]);
 
     return (
-        <Breadcrumbs navigate={history.push} onAction={handleBreadcrumbClick} showRoot>
+        <Breadcrumbs onAction={handleBreadcrumbClick} showRoot>
             {items}
         </Breadcrumbs>
     );

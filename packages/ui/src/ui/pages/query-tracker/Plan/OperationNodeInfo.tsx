@@ -1,6 +1,10 @@
 import * as React from 'react';
 
-import {RadioButton, RadioButtonOption, RadioButtonWidth} from '@gravity-ui/uikit';
+import {
+    type ControlGroupOption,
+    SegmentedRadioGroup,
+    SegmentedRadioGroupWidth,
+} from '@gravity-ui/uikit';
 import {NodeDetails, NodeProgress} from './models/plan';
 import cn from 'bem-cn-lite';
 
@@ -20,7 +24,7 @@ export interface OperationNodeInfoProps {
     schemas?: OperationSchemas;
     containerRef?: React.Ref<HTMLDivElement>;
     className?: string;
-    radioWidth?: RadioButtonWidth;
+    radioWidth?: SegmentedRadioGroupWidth;
 }
 
 export default function OperationNodeInfo({
@@ -31,7 +35,7 @@ export default function OperationNodeInfo({
     radioWidth,
     className,
 }: OperationNodeInfoProps) {
-    const items: RadioButtonOption[] = [];
+    const items: ControlGroupOption[] = [];
     if (hasStagesInfo(progress)) {
         items.push({value: 'stages', content: 'Stages'});
     }
@@ -48,7 +52,7 @@ export default function OperationNodeInfo({
     return (
         <div ref={containerRef} className={block(null, className)}>
             {items.length > 1 && (
-                <RadioButton
+                <SegmentedRadioGroup
                     className={block('selector')}
                     value={item}
                     options={items}

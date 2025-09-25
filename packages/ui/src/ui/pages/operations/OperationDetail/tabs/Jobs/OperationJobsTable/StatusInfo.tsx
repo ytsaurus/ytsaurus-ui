@@ -31,8 +31,8 @@ export const StatusInfo: FC<Props> = ({state, info}) => {
                         </Label>
                     </div>
 
-                    <Popup open={open} hasArrow anchorRef={anchorRef} onMouseLeave={toggleOpen}>
-                        <div className={block('popup')}>
+                    <Popup open={open} anchorElement={anchorRef.current} placement="bottom">
+                        <div className={block('popup')} onMouseLeave={toggleOpen}>
                             <div>{reason}</div>
                             <ClipboardButton
                                 title="Copy reason"

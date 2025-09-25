@@ -36,5 +36,5 @@ export const QueryFastUserFilter: FC = () => {
         return QueriesListAuthorFilter.All;
     }, [login, user]);
 
-    return <RadioButton options={AuthorFilter} value={value} onUpdate={handleUserChange} />;
+    return <SegmentedRadioGroup options={AuthorFilter} value={value} onUpdate={handleUserChange} />;
 };

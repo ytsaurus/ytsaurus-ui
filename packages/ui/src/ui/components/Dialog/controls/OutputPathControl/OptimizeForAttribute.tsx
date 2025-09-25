@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {Attribute} from '../../../../store/reducers/navigation/modals/tableMergeSortModalSlice';
-import {RadioButton} from '@gravity-ui/uikit';
+import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 
 const options = [
     {value: 'scan', content: 'Scan'},
@@ -21,7 +21,7 @@ export const OptimizeForAttribute: FC<Props> = ({attribute, onChange}) => {
     return (
         <>
             <div>Optimize for:</div>
-            <RadioButton
+            <SegmentedRadioGroup
                 defaultValue={attribute.value}
                 onUpdate={handleAttributeUpdate}
                 options={options}

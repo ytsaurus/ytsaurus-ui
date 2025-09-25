@@ -2,7 +2,7 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 import {Route, RouteComponentProps, Switch, useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
-import {Breadcrumbs, BreadcrumbsItem} from '../../../components/Breadcrumbs';
+import {Breadcrumbs} from '@gravity-ui/uikit';
 import {Tab as ComponentsTab} from '../../../constants/components/main';
 import {Page} from '../../../constants/index';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
@@ -41,25 +41,25 @@ function ComponentsBreadcrumbs() {
 
     const items = React.useMemo(() => {
         const result = [
-            <BreadcrumbsItem key="<Root>" href={makeComponentsNodesUrl({cluster})}>
+            <Breadcrumbs.Item key="<Root>" href={makeComponentsNodesUrl({cluster})}>
                 {'<Root>'}
-            </BreadcrumbsItem>,
+            </Breadcrumbs.Item>,
         ];
         if (nodeHost) {
             result.push(
-                <BreadcrumbsItem
+                <Breadcrumbs.Item
                     key="<Root>"
                     href={makeComponentsNodesUrl({cluster, host: nodeHost})}
                 >
                     {nodeHost}
-                </BreadcrumbsItem>,
+                </Breadcrumbs.Item>,
             );
         }
         return result;
     }, [cluster, nodeHost]);
 
     return (
-        <Breadcrumbs navigate={history.push} showRoot className={block('breadcrumbs')}>
+        <Breadcrumbs showRoot className={block('breadcrumbs')}>
             {items}
         </Breadcrumbs>
     );

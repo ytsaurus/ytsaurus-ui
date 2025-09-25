@@ -367,7 +367,11 @@ export default function Graph({isActive, className, graph, showMinimap, prepareN
                         />
                     </div>
                     {nodeInfo && isActive ? (
-                        <Popup anchorRef={nodeInfoRef} open placement={nodeInfo.placement}>
+                        <Popup
+                            anchorElement={nodeInfoRef.current}
+                            open
+                            placement={nodeInfo.placement}
+                        >
                             <OperationNodeInfo {...nodeInfo} containerRef={nodeInfoContainerRef} />
                         </Popup>
                     ) : null}

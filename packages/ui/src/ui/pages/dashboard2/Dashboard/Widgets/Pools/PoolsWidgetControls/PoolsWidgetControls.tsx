@@ -1,6 +1,6 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {RadioButton} from '@gravity-ui/uikit';
+import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 
 import {RootState} from '../../../../../../store/reducers';
 import {setPoolsTypeFilter} from '../../../../../../store/actions/dashboard2/pools';
@@ -20,13 +20,13 @@ export function PoolsWidgetControls(props: PoolsWidgetProps) {
     };
 
     return (
-        <RadioButton
+        <SegmentedRadioGroup
             options={[
                 {value: 'favourite', content: i18n('value_favourite')},
                 {value: 'custom', content: i18n('value_custom')},
             ]}
             value={type}
             onUpdate={onUpdate}
-        ></RadioButton>
+        ></SegmentedRadioGroup>
     );
 }
