@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
-import {Button, Flex, Link, RadioButton, Text} from '@gravity-ui/uikit';
+import {Button, Flex, Link, SegmentedRadioGroup, Text} from '@gravity-ui/uikit';
 
 import {YTAlertBlock} from '../../../../components/Alert/Alert';
 import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
@@ -57,7 +57,7 @@ export function Flow() {
         <div className={block()}>
             <FlowState />
             <Flex className={block('toolbar')}>
-                <RadioButton<FlowViewMode>
+                <SegmentedRadioGroup<FlowViewMode>
                     options={options}
                     value={viewMode}
                     onUpdate={(value) => dispatch(setFlowViewMode(value))}

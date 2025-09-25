@@ -76,7 +76,7 @@ export class BasePage extends HasPage {
         await this.page.evaluate(
             (data) => {
                 const elements = document.querySelectorAll<HTMLSpanElement>(
-                    '.yt-u-breadcrumbs .string',
+                    '.g-breadcrumbs .string',
                 );
                 const element = Array.from(elements).find((i) => i.innerText === data.title);
                 if (element) {
@@ -88,13 +88,13 @@ export class BasePage extends HasPage {
     }
 
     async replaceBreadcrumbsTestDir() {
-        await this.page.waitForSelector('.g-breadcrumbs2');
+        await this.page.waitForSelector('.g-breadcrumbs');
         await this.replaceBreadcrumbsByTitle(E2E_DIR_NAME, 'e2e.1970-01-01.00:00:00.xxxxxxxxxxx');
     }
 
     async replaceBreadrumbsLastItem() {
         await replaceInnerHtml(this.page, {
-            '.g-breadcrumbs2 .g-breadcrumbs2__item:last-child a': 'localhost:XXXXX',
+            '.g-breadcrumbs .g-breadcrumbs__item:last-child a': 'localhost:XXXXX',
         });
     }
 

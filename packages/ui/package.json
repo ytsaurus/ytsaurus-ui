@@ -93,24 +93,24 @@
   },
   "devDependencies": {
     "@gravity-ui/app-builder": "^0.26.0",
-    "@gravity-ui/chartkit": "^5.22.4",
-    "@gravity-ui/components": "^3.7.0",
-    "@gravity-ui/dashkit": "^8.26.0",
-    "@gravity-ui/date-components": "^2.12.0",
+    "@gravity-ui/chartkit": "^7.11.1",
+    "@gravity-ui/components": "^4.12.0",
+    "@gravity-ui/dashkit": "^9.1.1",
+    "@gravity-ui/date-components": "^3.3.2",
     "@gravity-ui/date-utils": "^2.5.3",
-    "@gravity-ui/dialog-fields": "^5.0.10",
+    "@gravity-ui/dialog-fields": "^6.0.6",
     "@gravity-ui/eslint-config": "^3.2.0",
     "@gravity-ui/graph": "^1.1.4",
     "@gravity-ui/icons": "^2.0.0",
     "@gravity-ui/illustrations": "^2.1.0",
-    "@gravity-ui/navigation": "^2.15.3",
+    "@gravity-ui/navigation": "^3.7.0",
     "@gravity-ui/prettier-config": "^1.1.0",
     "@gravity-ui/react-data-table": "^2.1.1",
     "@gravity-ui/stylelint-config": "^4.0.1",
     "@gravity-ui/table": "^1.10.1",
     "@gravity-ui/timeline": "^1.21.3",
     "@gravity-ui/tsconfig": "^1.0.0",
-    "@gravity-ui/uikit": "^6.37.0",
+    "@gravity-ui/uikit": "^7.23.0",
     "@gravity-ui/unipika": "^5.1.0",
     "@gravity-ui/websql-autocomplete": "^12.3.0",
     "@gravity-ui/yagr": "^4.3.1",
@@ -239,7 +239,7 @@
   },
   "msw": {
     "workerDirectory": [
-      "public"
+      "./public"
     ]
   }
 }

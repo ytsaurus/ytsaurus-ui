@@ -81,7 +81,6 @@ const QueryTrackerTopRow: FC = () => {
                         <Text ellipsis>{name}</Text>
                     </Tooltip>
                 </EditableAsText>
-
                 {!nameEdit && (
                     <>
                         <HeadSpacer />

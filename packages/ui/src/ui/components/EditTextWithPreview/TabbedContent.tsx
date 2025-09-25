@@ -49,7 +49,7 @@ function Actions(props: {actions: Required<Props>['actions']; useDropdown: boole
             {useDropdown ? (
                 <DropdownMenu items={actions} />
             ) : (
-                actions.map(({text, icon, action}, index) => {
+                actions.map(({text, iconStart, action}, index) => {
                     return (
                         <Button
                             key={index}
@@ -57,7 +57,7 @@ function Actions(props: {actions: Required<Props>['actions']; useDropdown: boole
                             size={'m'}
                             className={block('actions-item')}
                         >
-                            {icon}
+                            {iconStart}
                             {text}
                         </Button>
                     );

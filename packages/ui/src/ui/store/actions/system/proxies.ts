@@ -1,8 +1,6 @@
 import axios from 'axios';
 import map_ from 'lodash/map';
 
-import {Toaster} from '@gravity-ui/uikit';
-
 import {isRetryFutile} from '../../../utils/index';
 import {showErrorPopup} from '../../../utils/utils';
 import {getCluster} from '../../../store/selectors/global';
@@ -11,8 +9,7 @@ import type {HttpProxiesAction, RoleGroupItemInfo} from '../../../store/reducers
 import {ThunkAction} from 'redux-thunk';
 import type {RootState} from '../../../store/reducers';
 import {FETCH_PROXIES} from '../../../constants/system/nodes';
-
-const toaster = new Toaster();
+import {toaster} from '../../../utils/toaster';
 
 type ProxiesThunkAction<T = void> = ThunkAction<T, RootState, unknown, HttpProxiesAction>;
 

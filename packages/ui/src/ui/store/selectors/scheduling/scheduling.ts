@@ -106,14 +106,14 @@ export const getIsRoot = createSelector(getPool, (pool) => pool === ROOT_POOL_NA
 export const getTreesSelectItems = createSelector(getTrees, (trees) =>
     map_(trees, (tree) => ({
         value: tree,
-        text: hammer.format['Readable'](tree) as string,
+        content: hammer.format['Readable'](tree) as string,
     })),
 );
 
 export const getPoolsSelectItems = createSelector(getPoolsNames, (pools) => {
     const items = map_(pools, (pool) => ({
         value: pool,
-        text: pool,
+        content: pool,
     }));
 
     return items;

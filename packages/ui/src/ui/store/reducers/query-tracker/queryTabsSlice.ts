@@ -1,5 +1,4 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {TabsItemProps} from '@gravity-ui/uikit/build/esm/components/Tabs/Tabs';
 
 type Index = number;
 export type QueryResultTab =
@@ -10,7 +9,7 @@ export type QueryResultTab =
     | `result/${Index}`
     | `chart-tab/${Index}`;
 
-export type QueryTab = TabsItemProps & {id: QueryResultTab};
+export type QueryTab = {id: QueryResultTab; title: string};
 
 type QueryResultTabsState = {
     activeTabId: QueryResultTab | undefined;

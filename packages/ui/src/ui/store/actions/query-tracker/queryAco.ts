@@ -1,6 +1,5 @@
 import {AnyAction} from 'redux';
 import {ThunkAction} from 'redux-thunk';
-import {Toaster} from '@gravity-ui/uikit';
 import type {AxiosError} from 'axios';
 import {YTApiId, ytApiV4Id} from '../../../rum/rum-wrap-api';
 import {
@@ -11,6 +10,7 @@ import {showErrorPopup} from '../../../utils/utils';
 import {QUERY_ACO_LOADING, QueryACOActions} from '../../reducers/query-tracker/queryAco';
 import {RootState} from '../../reducers';
 import {setSettingByKey} from '../settings';
+import {toaster} from '../../../utils/toaster';
 
 type QueryTrackerInfoResponse = Awaited<ReturnType<typeof ytApiV4Id.getQueryTrackerInfo>>;
 
@@ -59,7 +59,6 @@ export const getQueryTrackerInfo = (): ThunkAction<
             .catch((error) => {
                 // @todo Remove the condition when the method will be implemented on all clusters
                 if (error?.status !== 404) {
-                    const toaster = new Toaster();
                     toaster.add({
                         name: 'aco',
                         theme: 'danger',

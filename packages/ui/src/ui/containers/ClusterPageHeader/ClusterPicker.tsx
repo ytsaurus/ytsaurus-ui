@@ -55,11 +55,15 @@ export const ClusterPicker: FC<Props> = ({clusterConfig}) => {
             <Icon awesome={'chevron-down'} size="l" />
             <Popup
                 className={block('popup')}
-                placement={['bottom-start', 'top-start']}
-                anchorRef={iconRef}
+                placement="bottom"
+                anchorElement={iconRef.current}
                 open={visible}
-                onClose={handleClosePopup}
-                offset={[0, 5]}
+                onOpenChange={(open) => {
+                    if (!open) {
+                        handleClosePopup();
+                    }
+                }}
+                offset={{mainAxis: 5}}
             >
                 {visible && (
                     <ClustersPanel

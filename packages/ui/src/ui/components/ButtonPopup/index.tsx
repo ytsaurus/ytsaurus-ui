@@ -26,9 +26,13 @@ export const ButtonWithPopup = ({icon, header, children, counter}: ButtonPopupPr
             </Button>
             <Popup
                 open={open}
-                anchorRef={btnRef}
-                placement={'bottom-start'}
-                onOutsideClick={toggle}
+                anchorElement={btnRef.current}
+                placement="bottom-start"
+                onOpenChange={(isOpen, _event, reason) => {
+                    if (!isOpen && reason === 'outside-press') {
+                        toggle();
+                    }
+                }}
             >
                 <div className={b()}>
                     <div className={b('top-row')}>

@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 
 import compact_ from 'lodash/compact';
 
-import {Button, ClipboardButton, Flex, Icon, Loader, Popover} from '@gravity-ui/uikit';
+import {Button, ClipboardButton, Flex, Icon, Loader, Tooltip} from '@gravity-ui/uikit';
 import {Column} from '@gravity-ui/react-data-table';
 
 import {AclMode, IdmObjectType} from '../../constants/acl';
@@ -18,7 +18,6 @@ import {MyPermissions} from './MyPermissinos/MyPermissions';
 import LoadDataHandler from '../../components/LoadDataHandler/LoadDataHandler';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import DataTableYT from '../../components/DataTableYT/DataTableYT';
-import {Tooltip} from '../../components/Tooltip/Tooltip';
 import {SubjectCard} from '../../components/SubjectLink/SubjectLink';
 
 import withVisible, {WithVisibleProps} from '../../hocs/withVisible';
@@ -221,16 +220,15 @@ class ACL extends Component<Props> {
                     return (
                         <Flex className={block('subject', {level: String(level)})} wrap gap={1}>
                             {Boolean(hasInherited) && (
-                                <Popover
-                                    className={block('inherited', {hidden: !row.inherited})}
-                                    content={<InheritanceMessage data={inheritedFrom} />}
-                                >
-                                    <Icon
-                                        className={block('inherited-icon')}
-                                        data={aclInheritedSvg}
-                                        size={16}
-                                    />
-                                </Popover>
+                                <Tooltip content={<InheritanceMessage data={inheritedFrom} />}>
+                                    <div className={block('inherited', {hidden: !row.inherited})}>
+                                        <Icon
+                                            className={block('inherited-icon')}
+                                            data={aclInheritedSvg}
+                                            size={16}
+                                        />
+                                    </div>
+                                </Tooltip>
                             )}
                             <Flex grow wrap gap={1}>
                                 {ACL.renderSubjectLink(row)}

@@ -8,7 +8,7 @@ import map_ from 'lodash/map';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
-import {ButtonProps, DropdownMenu, Toaster} from '@gravity-ui/uikit';
+import {ButtonProps, DropdownMenu} from '@gravity-ui/uikit';
 import {DialogWrapper as Dialog} from '../../../components/DialogWrapper/DialogWrapper';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import PathEditor from '../../../containers/PathEditor/PathEditor';
@@ -25,6 +25,7 @@ import {PreparedJob} from '../../../types/operations/job';
 import {showErrorPopup} from '../../../utils/utils';
 import hammer from '../../../common/hammer';
 import {YTError} from '../../../types';
+import {toaster} from '../../../utils/toaster';
 
 import './JobActions.scss';
 
@@ -56,7 +57,6 @@ interface IntermediateAction extends Action {
     handler: ({currentOption}: Record<string, any>) => void;
 }
 
-const toaster = new Toaster();
 const block = cn('job-actions');
 const codeBlock = cn('elements-code');
 
@@ -279,7 +279,6 @@ export default function JobActions({className}: {className?: string}) {
                         textButtonApply="Copy"
                         showError={false}
                         preset="success"
-                        listenKeyEnter
                     />
                 </Dialog>
 
@@ -301,7 +300,6 @@ export default function JobActions({className}: {className?: string}) {
                         textButtonApply="Confirm"
                         showError={false}
                         preset="success"
-                        listenKeyEnter
                     />
                 </Dialog>
             </div>

@@ -1,10 +1,11 @@
 import React from 'react';
 import {ConnectedProps, connect} from 'react-redux';
 
+import {openAttributesModal} from '../../store/actions/modals/attributes-modal';
+import {ButtonProps} from '../../components/Button/Button';
+
 import AttributesButton, {AttributesButtonProps} from './AttributesButton';
 
-import {openAttributesModal} from '../../store/actions/modals/attributes-modal';
-import {ButtonProps} from '../Button/Button';
 import i18n from './i18n';
 
 interface Props extends Omit<AttributesButtonProps, 'onClick' | 'title'> {
@@ -34,6 +35,7 @@ function ClickableAttributesButton({
     openAttributesModal,
     withTooltip = true,
     tooltipProps = {placement: 'bottom-end', content: i18n('tooltip-content')},
+    // Extract potentially problematic props
     ...rest
 }: Props & ConnectedProps<typeof connector>) {
     return (

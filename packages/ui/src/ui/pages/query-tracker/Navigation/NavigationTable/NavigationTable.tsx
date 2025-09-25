@@ -1,5 +1,5 @@
 import React, {FC, useState} from 'react';
-import {RadioButton} from '@gravity-ui/uikit';
+import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import './NavigationTable.scss';
 import {SchemaTab} from './SchemaTab';
@@ -51,7 +51,7 @@ export const NavigationTable: FC = () => {
 
     return (
         <div className={b()}>
-            <RadioButton
+            <SegmentedRadioGroup
                 defaultValue={activeTab}
                 onUpdate={handleChangeTab}
                 options={[

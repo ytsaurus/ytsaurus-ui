@@ -5,7 +5,6 @@ import reduce_ from 'lodash/reduce';
 import sortBy_ from 'lodash/sortBy';
 
 import ypath from '../../../common/thor/ypath';
-import {Toaster} from '@gravity-ui/uikit';
 
 import createActionTypes from '../../../constants/utils';
 import {isRetryFutile} from '../../../utils';
@@ -26,12 +25,11 @@ import {
 } from '../../reducers/system/masters';
 import {ThunkAction} from 'redux-thunk';
 import type {RootState} from '../../reducers';
+import {toaster} from '../../../utils/toaster';
 
 export const FETCH_MASTER_CONFIG = createActionTypes('MASTER_CONFIG');
 export const FETCH_MASTER_DATA = createActionTypes('MASTER_DATA');
 export const SET_MASTER_ALERTS = 'SET_MASTER_ALERTS';
-
-const toaster = new Toaster();
 
 const {NODE_DOES_NOT_EXIST} = YTErrors;
 

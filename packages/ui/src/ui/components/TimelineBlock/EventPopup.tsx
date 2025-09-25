@@ -18,7 +18,6 @@ export const EventPopup = <
 >({
     timeline,
     content,
-    parentRef,
     delay = 400,
 }: Props<TEvent, TMarker>) => {
     const anchorRef = useRef<HTMLDivElement>(null);
@@ -55,37 +54,19 @@ export const EventPopup = <
         [delay, timeline.api],
     );
 
-    const handleEventLeave = useCallback(() => {
-        if (hoverTimeout.current) {
-            clearTimeout(hoverTimeout.current);
-        }
-        setShowPopup(false);
-        setEventData(undefined);
-    }, []);
-
-    const handleParentLeave = useCallback(
-        (e: MouseEvent) => {
-            if (parentRef && parentRef.current && parentRef.current.contains(e.target as Node)) {
-                return;
+    const handleOpenChange = useCallback((open: boolean) => {
+        if (!open) {
+            if (hoverTimeout.current) {
+                clearTimeout(hoverTimeout.current);
             }
-            handleEventLeave();
-        },
-        [handleEventLeave, parentRef],
-    );
-
-    useEffect(() => {
-        document.addEventListener('mouseleave', handleParentLeave);
-
-        return () => {
-            document.removeEventListener('mouseleave', handleParentLeave);
-        };
-    }, [handleParentLeave, parentRef]);
+            setShowPopup(false);
+            setEventData(undefined);
+        }
+    }, []);
 
     useTimelineEvent(timeline, 'on-hover', handleEventsHover);
 
-    useTimelineEvent(timeline, 'on-leave', handleEventLeave);
-
-    useTimelineEvent(timeline, 'on-camera-change', handleEventLeave);
+    useTimelineEvent(timeline, 'on-leave', () => handleOpenChange(false));
 
     if (!eventData) return null;
 
@@ -105,10 +86,10 @@ export const EventPopup = <
             ></div>
             <Popup
                 key={eventData.event.id}
-                anchorRef={anchorRef}
+                anchorElement={anchorRef.current}
                 open={showPopup}
-                onMouseLeave={handleEventLeave}
-                onOutsideClick={handleEventLeave}
+                onOpenChange={handleOpenChange}
+                placement={['bottom-start']}
             >
                 {content(eventData.event)}
             </Popup>

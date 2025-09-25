@@ -7,8 +7,6 @@ import reduce_ from 'lodash/reduce';
 
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
-import {Toaster} from '@gravity-ui/uikit';
-
 import ypath from '../../../../common/thor/ypath';
 import {prepareRequest, saveRequestCancellation} from '../../../../utils/navigation';
 import {
@@ -41,6 +39,7 @@ import hammer from '../../../../common/hammer';
 import {GENERIC_ERROR_MESSAGE} from '../../../../constants';
 import {waitForFontFamilies} from '../../../../store/actions/global/fonts';
 import UIFactory from '../../../../UIFactory';
+import {toaster} from '../../../../utils/toaster';
 
 function getList(path, transaction, cluster) {
     const id = new RumWrapper(cluster, RumMeasureTypes.NAVIGATION_CONTENT_MAP_NODE);
@@ -210,8 +209,7 @@ export function updateResourceUsage() {
                             details: error,
                         },
                     });
-                    const toast = new Toaster();
-                    toast.add({
+                    toaster.add({
                         theme: 'danger',
                         name: 'map_node_update_resources',
                         timeout: 500000,

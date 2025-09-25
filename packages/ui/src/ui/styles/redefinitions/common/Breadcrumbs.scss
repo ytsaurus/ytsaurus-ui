@@ -1,22 +1,15 @@
 .g-breadcrumbs {
-    .g-breadcrumbs__switcher,
-    .g-breadcrumbs__item {
-        min-width: 30px;
-        border-radius: 4px;
-        padding: 0 4px;
-
-        &:last-child {
-            padding-right: 8px;
-        }
+    &__item {
+        color: var(--secondary-text);
     }
-
-    .g-breadcrumbs__switcher-wrapper {
-        .g-breadcrumbs__switcher {
-            min-width: unset;
+    &__link {
+        &:hover {
+            color: var(--hover-link) !important;
+            cursor: pointer;
         }
-    }
-
-    .g-breadcrumbs__item_current {
-        flex-shrink: 0;
+        &_is-current {
+            color: var(--primary-text);
+            font-weight: 400;
+        }
     }
 }

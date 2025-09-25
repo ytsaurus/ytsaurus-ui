@@ -9,13 +9,13 @@ import {RemoteCopyModalStateAction} from '../../../../store/reducers/navigation/
 import {REMOTE_COPY_MODAL_PARTIAL} from '../../../../constants/navigation/modals';
 import {RemoteCopyParams} from '../../../../../@types/types';
 import axios from 'axios';
-import {Toaster} from '@gravity-ui/uikit';
 import Link from '../../../../components/Link/Link';
 import {ytApiV3} from '../../../../rum/rum-wrap-api';
 import {showErrorPopup, wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {YTError} from '../../../../types';
 import {WithAttrs} from '../../../../utils/cypress-attributes';
 import {ClickableText} from '../../../../components/ClickableText/ClickableText';
+import {toaster} from '../../../../utils/toaster';
 
 type RemoteCopyThunkAction = ThunkAction<any, RootState, any, RemoteCopyModalStateAction>;
 
@@ -82,7 +82,6 @@ export function remoteCopy(params: RemoteCopyParams): RemoteCopyThunkAction {
             dispatch(hideRemoteCopyModal());
             const {dstCluster} = params;
 
-            const toaster = new Toaster();
             toaster.add({
                 theme: 'success',
                 name: 'remoteCopyStarted',

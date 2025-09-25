@@ -70,7 +70,7 @@ class MemoryProgress extends React.Component<MemoryProgressProps & ReduxProps> {
 
         return (
             memoryData?.length! > 0 && (
-                <div className={block('popup')}>
+                <div className={block('popup', 'tooltip-content')}>
                     <ul className={block('content')}>
                         {map_(memoryData, (item) => this.renderItem(item))}
                     </ul>
@@ -81,12 +81,7 @@ class MemoryProgress extends React.Component<MemoryProgressProps & ReduxProps> {
 
     render() {
         return (
-            <Tooltip
-                className={block()}
-                tooltipContentClassName={block('tooltip-content')}
-                content={this.renderPopupContent()}
-                placement={'auto'}
-            >
+            <Tooltip className={block()} content={this.renderPopupContent()} placement={'auto'}>
                 <div>{this.renderProgress()}</div>
             </Tooltip>
         );

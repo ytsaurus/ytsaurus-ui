@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
 import {YTErrorBlock} from '../../../../../../components/Error/Error';
-import {Button, Toaster} from '@gravity-ui/uikit';
+import {Button} from '@gravity-ui/uikit';
 import ConfirmMessage from './../ConfirmMessage';
 
 import {deleteAccount} from '../../../../../../utils/accounts/editor';
 import {closeEditorModal} from '../../../../../../store/actions/accounts/accounts';
-
-const toaster = new Toaster();
+import {toaster} from '../../../../../../utils/toaster';
 
 class DeleteContent extends Component {
     static propTypes = {

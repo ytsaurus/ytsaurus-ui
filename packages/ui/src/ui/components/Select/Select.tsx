@@ -2,7 +2,15 @@ import React from 'react';
 import filter_ from 'lodash/filter';
 import cn from 'bem-cn-lite';
 
-import {Button, Select, SelectOption, SelectProps, Text, TextInput} from '@gravity-ui/uikit';
+import {
+    Button,
+    Select,
+    SelectOption,
+    SelectProps,
+    SelectRenderControlProps,
+    Text,
+    TextInput,
+} from '@gravity-ui/uikit';
 
 import {Chevron} from '../../icons/Chevron';
 import hammer from '../../common/hammer';
@@ -87,7 +95,6 @@ export function SelectSingle<T extends string = string>(props: SelectSingleProps
         },
         [onChange],
     );
-
     return (
         <SelectFacade
             value={value !== undefined ? [value] : undefined}
@@ -156,6 +163,7 @@ class CustomSelect extends React.Component<
                 className={block(null, className)}
                 disablePortal={false}
                 {...props}
+                options={props.options}
                 filterable={!hideFilter}
                 renderOption={this.renderOption}
                 renderControl={this.renderControl}
@@ -250,19 +258,19 @@ class CustomSelect extends React.Component<
 
 type Extra = Parameters<Required<SelectProps>['renderControl']>[0];
 
-interface ValueControlProps extends Omit<Extra, 'ref'> {
+interface ValueControlProps extends Omit<Extra, 'ref' | 'triggerProps'> {
     controlRef: React.Ref<HTMLElement>;
     hashByValue: Map<string, SelectOption>;
     maxVisibleValues?: YTSelectProps['maxVisibleValues'];
     placeholder?: SelectProps['placeholder'];
     className?: string;
+    triggerProps?: SelectRenderControlProps['triggerProps'];
 }
 
 function ValueControl({
     className,
     value,
     label,
-    onClick,
     hashByValue,
     controlRef,
     width,
@@ -272,6 +280,7 @@ function ValueControl({
     maxVisibleValuesTextLength,
     placeholder,
     renderItem,
+    triggerProps,
 }: ValueControlProps &
     Pick<SelectProps, 'value' | 'pin' | 'label' | 'width' | 'disabled'> &
     Pick<Required<YTSelectProps>, 'renderItem'> &
@@ -284,7 +293,7 @@ function ValueControl({
             className={block(null, className)}
             ref={controlRef as any}
             view="outlined"
-            onClick={onClick}
+            onClick={triggerProps?.onClick}
             width={w}
             style={style}
             {...{pin, disabled}}

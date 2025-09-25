@@ -1,6 +1,6 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {Flex, RadioButton} from '@gravity-ui/uikit';
+import {Flex, SegmentedRadioGroup} from '@gravity-ui/uikit';
 
 import {
     getDescriptionType,
@@ -19,7 +19,7 @@ export function SwitchDescription() {
 
     return (
         <Flex direction={'row'} gap={1}>
-            <RadioButton
+            <SegmentedRadioGroup
                 options={[
                     {value: 'yt', content: 'YT'},
                     {

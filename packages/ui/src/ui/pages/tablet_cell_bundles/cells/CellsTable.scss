@@ -49,6 +49,12 @@
         align-items: center;
     }
 
+    &__cell-navigation-link {
+        span {
+            margin-bottom: 3px;
+        }
+    }
+
     &__wrapped {
         padding-top: 4px;
     }

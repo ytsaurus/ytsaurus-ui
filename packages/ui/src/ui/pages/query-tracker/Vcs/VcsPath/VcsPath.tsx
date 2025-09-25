@@ -1,6 +1,5 @@
 import React, {FC, useCallback, useMemo, useState} from 'react';
-import {Button, Flex, Icon, Loader} from '@gravity-ui/uikit';
-import {Breadcrumbs, BreadcrumbsItem} from '../../../../components/Breadcrumbs';
+import {Breadcrumbs, Button, Flex, Icon, Loader} from '@gravity-ui/uikit';
 import FolderTreeIcon from '@gravity-ui/icons/svgs/folder-tree.svg';
 import {EditableAsText} from '../../../../components/EditableAsText/EditableAsText';
 import './VcsPath.scss';
@@ -45,7 +44,7 @@ export const VcsPath: FC<Props> = ({path, onPathChange}) => {
         let href = '';
         return path.split('/').map((text) => {
             href += `${href ? '/' : ''}` + text;
-            return <BreadcrumbsItem key={href}>{text}</BreadcrumbsItem>;
+            return <Breadcrumbs.Item key={href}>{text}</Breadcrumbs.Item>;
         });
     }, [path]);
 

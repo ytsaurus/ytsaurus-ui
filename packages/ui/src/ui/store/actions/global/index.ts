@@ -14,7 +14,6 @@ import {
     getGlobalUsers,
     getPoolTrees,
 } from '../../../store/selectors/global';
-import {Toaster} from '@gravity-ui/uikit';
 import {showErrorPopup} from '../../../utils/utils';
 import {GLOBAL_PARTIAL} from '../../../constants/global';
 import {loadDefaultPoolTree, ytGetPoolTrees} from '../../../utils/poolTrees';
@@ -33,6 +32,7 @@ import {reloadUserSettings} from '../settings';
 import {YT} from '../../../config/yt-config';
 import {getConfigData} from '../../../config/ui-settings';
 import {GloablStateAction} from '../../../store/reducers/global';
+import {toaster} from '../../../utils/toaster';
 
 export function setTheme(theme: 'light' | 'dark' | 'system' | 'light-hc' | 'dark-hc') {
     return {type: GLOBAL_SET_THEME, data: theme};
@@ -241,7 +241,6 @@ function showErrorToaster(
     listType: 'users' | 'groups' | 'bundles' | 'accounts' | 'pools',
     reloadFn: () => void,
 ) {
-    const toaster = new Toaster();
     toaster.add({
         name: `global/${listType}`,
         autoHiding: false,
@@ -315,8 +314,6 @@ export function mergeScreen() {
 export function handleAuthError({ytAuthCluster}: {ytAuthCluster?: string} = {}) {
     if (getConfigData().allowPasswordAuth) {
         if (!ytAuthCluster) {
-            const toaster = new Toaster();
-
             toaster.add({
                 name: `global/ytAuthCluster}`,
                 autoHiding: false,

@@ -30,7 +30,7 @@ export interface ColumnSelectorProps<ItemType> {
     popupPlacement?: PopupPlacement;
 }
 
-const defaultPlacement: PopupPlacement = ['bottom-start', 'bottom-end', 'top-start', 'top-end'];
+const defaultPlacement = 'bottom';
 
 export function ColumnSelector<T>({
     className,
@@ -110,10 +110,14 @@ export function ColumnSelector<T>({
             </div>
             {renderPopup && (
                 <Popup
-                    anchorRef={refControl}
+                    anchorElement={refControl.current}
                     placement={popupPlacement}
                     open={focused}
-                    onClose={handleClosePopup}
+                    onOpenChange={(open) => {
+                        if (!open) {
+                            handleClosePopup();
+                        }
+                    }}
                 >
                     <ItemSelector
                         selectorTitle={i18n('label_columns')}

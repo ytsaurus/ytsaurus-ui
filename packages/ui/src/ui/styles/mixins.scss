@@ -69,3 +69,9 @@
     margin: 0;
     margin-bottom: nth($size, 3);
 }
+
+@mixin top-row-breadcrumbs() {
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin: 0 16px;
+}

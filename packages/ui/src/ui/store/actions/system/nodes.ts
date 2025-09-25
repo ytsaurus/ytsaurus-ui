@@ -3,8 +3,6 @@ import filter_ from 'lodash/filter';
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
-import {Toaster} from '@gravity-ui/uikit';
-
 import {USE_CACHE, USE_MAX_SIZE} from '../../../../shared/constants/yt-api';
 import hammer from '../../../common/hammer';
 import ypath from '../../../common/thor/ypath';
@@ -30,6 +28,7 @@ import type {
     RoleGroupInfo,
     RoleGroupItemInfo,
 } from '../../../store/reducers/system/proxies';
+import {toaster} from '../../../utils/toaster';
 
 type SystemNodesThunkAction<T = void> = ThunkAction<T, RootState, unknown, SystemNodesAction>;
 
@@ -114,8 +113,6 @@ export function loadSystemNodes(
 
                 const data = error?.response?.data || error;
                 const {code, message} = data;
-
-                const toaster = new Toaster();
 
                 toaster.add({
                     name: 'load/system/nodes',

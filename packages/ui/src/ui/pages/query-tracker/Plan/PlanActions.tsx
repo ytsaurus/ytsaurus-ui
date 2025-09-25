@@ -1,5 +1,5 @@
 import React from 'react';
-import {RadioButton} from '@gravity-ui/uikit';
+import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 
 import {PlanView, usePlanView, usePlanViews, useSetPlanView} from './PlanContext';
 
@@ -9,7 +9,7 @@ export default function PlanActions() {
     const setPlanView = useSetPlanView();
 
     return (
-        <RadioButton
+        <SegmentedRadioGroup
             options={planViews}
             value={currentView}
             onUpdate={(value) => {
