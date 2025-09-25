@@ -1,5 +1,6 @@
 .yt-queries-widget-controls {
     &__select {
-        width: 150px;
+        width: fit-content;
+        min-width: 150px;
     }
 }

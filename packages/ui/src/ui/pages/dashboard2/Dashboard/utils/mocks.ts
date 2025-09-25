@@ -4,7 +4,9 @@ export const baseWidgetProps: PluginWidgetProps = {
     params: {},
     width: 2,
     height: 2,
-    data: {name: 'SUPER MEGA WIDE HEADER THAT CANNOT FIT IN 1111-1111-1111-1111'},
+    data: {
+        name: 'SUPER MEGA WIDE HEADER THAT CANNOT FIT IN 1111-1111-1111-1111-1111-1111-1111-1111-1111',
+    },
     namespace: '',
     layout: [],
     onStateAndParamsChange: () => {},

@@ -33,7 +33,7 @@ const meta: Meta = {
 };
 
 const BaseComponent = () => (
-    <div style={{height: 455, width: '100%'}}>
+    <div style={{height: 455, width: 700}}>
         <WidgetBase
             {...baseWidgetProps}
             controls={<OperationsWidgetControls {...(baseWidgetProps as OperationsWidgetProps)} />}

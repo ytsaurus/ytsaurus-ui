@@ -1,0 +1,13 @@
+{
+  "title": "Accounts",
+  "field_name": "Name",
+  "field_accounts": "Accounts",
+  "field_columns": "Columns",
+  "value_favourite": "Favourite",
+  "value_usable": "Usable",
+  "value_custom": "Custom",
+  "fallback-item_favourite": "favourite accounts",
+  "fallback-item_usable": "usable accounts",
+  "fallback-item_custom": "custom accounts",
+  "placeholder_accounts": "Accounts"
+}

@@ -8,6 +8,8 @@ import {getServicesTypeFilter} from '../../../../../../store/selectors/dashboard
 
 import type {ServicesWidgetProps} from '../types';
 
+import i18n from '../i18n';
+
 export function ServicesWidgetControls(props: ServicesWidgetProps) {
     const dispatch = useDispatch();
 
@@ -20,8 +22,8 @@ export function ServicesWidgetControls(props: ServicesWidgetProps) {
     return (
         <RadioButton
             options={[
-                {value: 'favourite', content: 'Favourite'},
-                {value: 'custom', content: 'Custom'},
+                {value: 'favourite', content: i18n('value_favourite')},
+                {value: 'custom', content: i18n('value_custom')},
             ]}
             value={type}
             onUpdate={onUpdate}

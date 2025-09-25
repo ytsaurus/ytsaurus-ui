@@ -14,6 +14,8 @@ import {getClusterList} from '../../../../../store/selectors/slideoutMenu';
 
 import {FormApi, YTDFDialog} from '../../../../../components/Dialog';
 
+import i18n from './i18n';
+
 interface FormValues {
     cluster: string[];
 }
@@ -37,18 +39,18 @@ export function CopyConfigDialog() {
                 const {cluster} = form.getState().values;
                 await dispatch(copyConfig(cluster[0]));
             }}
-            headerProps={{title: 'Copy config'}}
+            headerProps={{title: i18n('title_copy-config')}}
             visible={copyConfigDialogVisibility}
             fields={[
                 {
                     type: 'select',
                     name: 'cluster',
-                    caption: 'Cluser',
+                    caption: i18n('field_cluster'),
                     extras: {
                         options: copyConfigOptions,
                         width: 'max',
                         filterable: true,
-                        placeholder: 'Cluster',
+                        placeholder: i18n('field_cluster'),
                     },
                 },
             ]}
