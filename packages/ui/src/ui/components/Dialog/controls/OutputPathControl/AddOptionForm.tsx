@@ -39,8 +39,17 @@ export const AddOptionForm: FC<Props> = ({attributes, onChange}) => {
             <Button ref={btnRef} view="outlined" onClick={toggleOpen}>
                 <Icon data={PlusIcon} size={16} />
             </Button>
-            <Popup anchorRef={btnRef} open={isOpen} contentClassName={popup()} onClose={toggleOpen}>
-                {items}
+            <Popup
+                anchorElement={btnRef.current}
+                open={isOpen}
+                placement="bottom"
+                onOpenChange={(open) => {
+                    if (!open) {
+                        toggleOpen();
+                    }
+                }}
+            >
+                <div className={popup()}>{items}</div>
             </Popup>
         </>
     );

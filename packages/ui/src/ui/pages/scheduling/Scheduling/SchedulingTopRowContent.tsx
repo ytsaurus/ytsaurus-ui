@@ -2,8 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import some_ from 'lodash/some';
-
-import {Breadcrumbs, BreadcrumbsItem} from '../../../components/Breadcrumbs';
+import {Breadcrumbs} from '@gravity-ui/uikit';
 import {useHistory} from 'react-router';
 
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
@@ -129,23 +128,18 @@ function SchedulingBreadcrumbs() {
                 ? window.location.pathname
                 : calcRootPathname(window.location.pathname, cluster);
             return (
-                <BreadcrumbsItem
+                <Breadcrumbs.Item
                     key={text}
                     href={makeRoutedURL(pathname, {tree, text, filter: ''})}
                 >
                     {text}
-                </BreadcrumbsItem>
+                </Breadcrumbs.Item>
             );
         });
     }, [bcItems, cluster, tree]);
 
     return (
-        <Breadcrumbs
-            navigate={history.push}
-            onAction={handleChangePool}
-            className={block('breadcrumbs')}
-            showRoot
-        >
+        <Breadcrumbs onAction={handleChangePool} className={block('breadcrumbs')} showRoot>
             {items}
         </Breadcrumbs>
     );

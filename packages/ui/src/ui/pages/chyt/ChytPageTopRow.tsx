@@ -5,8 +5,7 @@ import cn from 'bem-cn-lite';
 
 import ypath from '../../common/thor/ypath';
 
-import {Button, Text} from '@gravity-ui/uikit';
-import {Breadcrumbs, BreadcrumbsItem} from '../../components/Breadcrumbs';
+import {Breadcrumbs, Button, Text} from '@gravity-ui/uikit';
 
 import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
 import {YTDFDialog, makeErrorFields} from '../../components/Dialog';
@@ -79,16 +78,16 @@ function ChytBreadcrumbs() {
 
     const items = React.useMemo(() => {
         const result = [
-            <BreadcrumbsItem key="<Root>" href={`/${cluster}/${Page.CHYT}`}>
+            <Breadcrumbs.Item key="<Root>" href={`/${cluster}/${Page.CHYT}`}>
                 {'<Root>'}
-            </BreadcrumbsItem>,
+            </Breadcrumbs.Item>,
         ];
 
         if (alias) {
             result.push(
-                <BreadcrumbsItem key={alias} href={`/${cluster}/${Page.CHYT}/${alias}`}>
+                <Breadcrumbs.Item key={alias} href={`/${cluster}/${Page.CHYT}/${alias}`}>
                     {alias}
-                </BreadcrumbsItem>,
+                </Breadcrumbs.Item>,
             );
         }
 
@@ -110,9 +109,7 @@ function ChytBreadcrumbs() {
                 disableEdit={Boolean(!alias)}
                 renderEditor={(props) => <ChytAliasSuggest cluster={cluster} {...props} />}
             >
-                <Breadcrumbs navigate={history.push} showRoot>
-                    {items}
-                </Breadcrumbs>
+                <Breadcrumbs showRoot>{items}</Breadcrumbs>
             </EditableAsText>
             {alias && <ClipboardButton text={alias} />}
         </div>

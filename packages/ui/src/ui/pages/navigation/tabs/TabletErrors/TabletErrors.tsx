@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {RadioButton} from '@gravity-ui/uikit';
+import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 
 import {getConfigData} from '../../../../config/ui-settings';
 import {updateTabletErrorsViewMode} from '../../../../store/actions/navigation/tabs/tablet-errors/tablet-errors-background';
@@ -35,7 +35,7 @@ export default function TabletErrors() {
     return (
         <div>
             {allowTabletErrorsAPI && (
-                <RadioButton<typeof viewMode>
+                <SegmentedRadioGroup<typeof viewMode>
                     value={viewMode}
                     onUpdate={(v) => dispatch(updateTabletErrorsViewMode(v))}
                     options={[

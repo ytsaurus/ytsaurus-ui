@@ -23,7 +23,6 @@ export default function DataTypePopup({children, type, hideIcon, className}: Pro
     return (
         <Popover
             className={block(null, className)}
-            tooltipClassName={block('tooltip')}
             content={
                 type ? (
                     <div className={block('tooltip-container')}>
@@ -32,7 +31,7 @@ export default function DataTypePopup({children, type, hideIcon, className}: Pro
                 ) : null
             }
             hasArrow={false}
-            delayOpening={400}
+            openDelay={400}
         >
             <span className={block('container')}>
                 {children}

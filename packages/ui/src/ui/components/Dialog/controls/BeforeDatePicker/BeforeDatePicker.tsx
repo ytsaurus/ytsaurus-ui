@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
 
 import {FocusBlurContainer} from '@gravity-ui/dialog-fields';
-import {RadioButton, TextInput, TextInputSize} from '@gravity-ui/uikit';
+import {SegmentedRadioGroup, TextInput, TextInputSize} from '@gravity-ui/uikit';
 import {Datepicker, DatepickerOutputDates} from '../../../../components/common/Datepicker';
 
 import './BeforeDatePicker.scss';
@@ -106,18 +106,18 @@ class BeforeDatePicker extends React.Component<IdmDatePickerProps, State> {
 
         return (
             <div>
-                <RadioButton
+                <SegmentedRadioGroup
                     size={size as any}
                     value={viewType || undefined}
                     onChange={this.onChangeViewType}
                     className={block('view-type')}
                 >
                     {ALLOWED_VIEW_TYPE.map((item) => (
-                        <RadioButton.Option key={item} value={item}>
+                        <SegmentedRadioGroup.Option key={item} value={item}>
                             {TEXT[item]}
-                        </RadioButton.Option>
+                        </SegmentedRadioGroup.Option>
                     ))}
-                </RadioButton>
+                </SegmentedRadioGroup>
             </div>
         );
     }

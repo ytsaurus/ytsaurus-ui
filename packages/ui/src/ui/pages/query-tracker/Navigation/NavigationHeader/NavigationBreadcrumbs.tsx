@@ -1,8 +1,7 @@
 import React, {FC, useCallback, useMemo} from 'react';
-import {Button, Icon} from '@gravity-ui/uikit';
+import {Breadcrumbs, Button, Icon} from '@gravity-ui/uikit';
 import FolderTreeIcon from '@gravity-ui/icons/svgs/folder-tree.svg';
 import {BreadcrumbsItem as BreadcrumbsItemComponent} from './BreadcrumbsItem';
-import {Breadcrumbs, BreadcrumbsItem} from '../../../../components/Breadcrumbs';
 
 type Props = {
     path: string;
@@ -42,13 +41,13 @@ export const NavigationBreadcrumbs: FC<Props> = ({
         return result.map((item, index) => {
             const isCurrent = index === result.length - 1;
             return (
-                <BreadcrumbsItem key={item.text}>
+                <Breadcrumbs.Item key={item.text}>
                     <BreadcrumbsItemComponent
                         item={item}
                         isCurrent={isCurrent}
                         onClick={handleBreadcrumbsClick}
                     />
-                </BreadcrumbsItem>
+                </Breadcrumbs.Item>
             );
         });
     }, [cluster, path, handleBreadcrumbsClick]);

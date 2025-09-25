@@ -3,7 +3,7 @@ import {useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {Flex} from '@gravity-ui/uikit';
+import {Breadcrumbs, Flex} from '@gravity-ui/uikit';
 
 import {getMetrics} from '../../../common/utils/metrics';
 
@@ -34,7 +34,6 @@ import {
 
 import Favourites from '../../../components/Favourites/Favourites';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
-import {Breadcrumbs, BreadcrumbsItem} from '../../../components/Breadcrumbs';
 import Link from '../../../components/Link/Link';
 import Editor from '../../../components/Editor/Editor';
 import {EditButton} from '../../../components/EditableAsText/EditableAsText';
@@ -217,19 +216,19 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
             });
 
             return (
-                <BreadcrumbsItem key={text} href={url}>
+                <Breadcrumbs.Item key={text} href={url}>
                     {index ? (
                         <Escaped text={text} onClick={isLastItem ? onEdit : undefined} />
                     ) : (
                         <Icon awesome={'folder-tree'} face={'solid'} />
                     )}
-                </BreadcrumbsItem>
+                </Breadcrumbs.Item>
             );
         });
     }, [bcItems, mode, onEdit]);
 
     return (
-        <Breadcrumbs navigate={history.push} showRoot className={block('breadcrumbs')}>
+        <Breadcrumbs showRoot className={block('breadcrumbs')}>
             {items}
         </Breadcrumbs>
     );

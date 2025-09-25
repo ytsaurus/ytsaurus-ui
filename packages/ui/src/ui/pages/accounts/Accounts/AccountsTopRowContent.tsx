@@ -1,10 +1,10 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import some_ from 'lodash/some';
+import {Breadcrumbs} from '@gravity-ui/uikit';
 
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import Favourites, {FavouritesItem} from '../../../components/Favourites/Favourites';
-import {Breadcrumbs, BreadcrumbsItem} from '../../../components/Breadcrumbs';
 import {
     getFavouriteAccounts,
     isActiveAcountInFavourites,
@@ -104,16 +104,16 @@ function AccountsBreadcrumbs() {
                 : calcRootPathname(window.location.pathname, cluster);
 
             return (
-                <BreadcrumbsItem key={text} href={makeRoutedURL(pathname, {account})}>
+                <Breadcrumbs.Item key={text} href={makeRoutedURL(pathname, {account})}>
                     {text}
-                </BreadcrumbsItem>
+                </Breadcrumbs.Item>
             );
         });
     }, [bcItems, cluster]);
 
     return (
         <Breadcrumbs
-            navigate={history.push}
+            // navigate={history.push}
             className={block('breadcrumbs')}
             onAction={handleBreadcrumbsClick}
             showRoot

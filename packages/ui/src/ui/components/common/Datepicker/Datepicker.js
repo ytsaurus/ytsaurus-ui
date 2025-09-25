@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import {FieldWrapper} from '../FieldWrapper/FieldWrapper';
 
 import {PopupContent} from './PopupContent/PopupContent';
-import {AVAILABLE_POPUP_PLACEMENT, DISPLAY_FORMAT, OUTPUT_FORMAT, TABS} from './constants';
+import {DISPLAY_FORMAT, OUTPUT_FORMAT, TABS} from './constants';
 import i18n from './i18n';
 import {
     createDateTime,
@@ -572,14 +572,19 @@ export class Datepicker extends React.PureComponent {
                             </Sheet>
                         ) : (
                             <Popup
-                                contentClassName={b('popup', popupClassName)}
                                 open={active && !disabled}
-                                anchorRef={this.ControlNodeRef}
-                                placement={AVAILABLE_POPUP_PLACEMENT}
-                                onClose={this.onClose}
+                                anchorElement={this.ControlNodeRef.current}
+                                placement="bottom"
+                                onOpenChange={(open) => {
+                                    if (!open) {
+                                        this.onClose();
+                                    }
+                                }}
                             >
-                                <div className={b('popup-content')}>
-                                    {this.renderContent(mobile)}
+                                <div className={b('popup', popupClassName)}>
+                                    <div className={b('popup-content')}>
+                                        {this.renderContent(mobile)}
+                                    </div>
                                 </div>
                             </Popup>
                         )}
