@@ -148,11 +148,14 @@ export function ChytCliqueActions({
                 <React.Fragment>
                     {sqlButton}
                     <DropdownMenu
-                        switcher={
-                            <Button view={color === 'secondary' ? 'flat-secondary' : 'flat'}>
+                        renderSwitcher={(props) => (
+                            <Button
+                                {...props}
+                                view={color === 'secondary' ? 'flat-secondary' : 'flat'}
+                            >
                                 <Icon awesome="ellipsis-h" />
                             </Button>
-                        }
+                        )}
                         items={menuItems}
                     />
                 </React.Fragment>

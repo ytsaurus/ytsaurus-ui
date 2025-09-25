@@ -1,6 +1,6 @@
 import React, {FC, useMemo, useState} from 'react';
-import {Tabs} from '@gravity-ui/uikit';
 import {QueryFile} from '../../../types/query-tracker/api';
+import {Tab, TabList, TabPanel, TabProvider} from '@gravity-ui/uikit';
 import {DeletedFileItem} from './DeletedFileItem';
 import cn from 'bem-cn-lite';
 import './FilesTabs.scss';
@@ -66,27 +66,24 @@ export const FilesTabs: FC<Props> = ({
 
     return (
         <div className={block(null, className)}>
-            <Tabs
-                activeTab={activeTab}
-                items={[
-                    {
-                        id: FileTabs.Current,
-                        title: 'Current',
-                        counter: files.length,
-                        disabled: !files.length,
-                    },
-                    {
-                        id: FileTabs.Deleted,
-                        title: 'Deleted',
-                        counter: deletedFilesCounter,
-                        disabled: !deletedFilesCounter,
-                    },
-                ]}
-                onSelectTab={setActiveTab}
-            />
-            <div className={block('list')}>
-                {activeTab === FileTabs.Current ? currentFileItems : deletedFileItems}
-            </div>
+            <TabProvider value={activeTab}>
+                <TabList onUpdate={setActiveTab}>
+                    <Tab value={FileTabs.Current} counter={files.length} disabled={!files.length}>
+                        Current
+                    </Tab>
+                    <Tab
+                        value={FileTabs.Deleted}
+                        counter={deletedFilesCounter}
+                        disabled={!deletedFilesCounter}
+                    >
+                        Deleted
+                    </Tab>
+                </TabList>
+                <div className={block('list')}>
+                    <TabPanel value={FileTabs.Current}>{currentFileItems}</TabPanel>
+                    <TabPanel value={FileTabs.Deleted}>{deletedFileItems}</TabPanel>
+                </div>
+            </TabProvider>
         </div>
     );
 };

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import block from 'bem-cn-lite';
 
-import {RadioButton, RadioButtonProps} from '@gravity-ui/uikit';
+import {SegmentedRadioGroup, SegmentedRadioGroupProps} from '@gravity-ui/uikit';
 
 import {KeysByType} from '../../../@types/types';
 import {DescribedSettings} from '../../../shared/constants/settings-types';
@@ -125,7 +125,7 @@ type SettingsMenuRadioByKeyProps<K extends KeysByType<DescribedSettings, string>
     'children'
 > & {
     settingKey: K;
-    options: RadioButtonProps<DescribedSettings[K]>['options'];
+    options: SegmentedRadioGroupProps<DescribedSettings[K]>['options'];
 };
 
 export function SettingsMenuRadioByKey<K extends KeysByType<DescribedSettings, string>>({
@@ -137,7 +137,7 @@ export function SettingsMenuRadioByKey<K extends KeysByType<DescribedSettings, s
 
     return (
         <SettingsItemLayot {...rest}>
-            <RadioButton options={options} value={value} onUpdate={onUpdate} />
+            <SegmentedRadioGroup options={options} value={value} onUpdate={onUpdate} />
         </SettingsItemLayot>
     );
 }

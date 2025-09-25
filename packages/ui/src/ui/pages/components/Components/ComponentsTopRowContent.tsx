@@ -2,13 +2,12 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 import {Route, RouteComponentProps, Switch, useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
-import {Breadcrumbs, BreadcrumbsItem} from '../../../components/Breadcrumbs';
+import {Breadcrumbs} from '@gravity-ui/uikit';
 import {Tab as ComponentsTab} from '../../../constants/components/main';
 import {Page} from '../../../constants/index';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import {nodeHostSelector} from '../../../store/selectors/components/node/node';
 import {getCluster} from '../../../store/selectors/global';
-import {makeComponentsNodesUrl} from '../../../utils/app-url';
 
 import './ComponentsTopRowContent.scss';
 
@@ -38,28 +37,40 @@ function ComponentsBreadcrumbs() {
     const cluster = useSelector(getCluster);
     const nodeHost = useSelector(nodeHostSelector);
     const history = useHistory();
-
     const items = React.useMemo(() => {
         const result = [
-            <BreadcrumbsItem key="<Root>" href={makeComponentsNodesUrl({cluster})}>
+            <Breadcrumbs.Item
+                href={`/${cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}`}
+                onClick={(e) => {
+                    e.preventDefault();
+                    history.push(`/${cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}`);
+                }}
+                key="<Root>"
+            >
                 {'<Root>'}
-            </BreadcrumbsItem>,
+            </Breadcrumbs.Item>,
         ];
         if (nodeHost) {
             result.push(
-                <BreadcrumbsItem
-                    key="<Root>"
-                    href={makeComponentsNodesUrl({cluster, host: nodeHost})}
+                <Breadcrumbs.Item
+                    key={nodeHost}
+                    href={`/${cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}/${nodeHost}`}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        history.push(
+                            `/${cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}/${nodeHost}`,
+                        );
+                    }}
                 >
                     {nodeHost}
-                </BreadcrumbsItem>,
+                </Breadcrumbs.Item>,
             );
         }
         return result;
-    }, [cluster, nodeHost]);
+    }, [cluster, nodeHost, history]);
 
     return (
-        <Breadcrumbs navigate={history.push} showRoot className={block('breadcrumbs')}>
+        <Breadcrumbs showRoot className={block('breadcrumbs')}>
             {items}
         </Breadcrumbs>
     );

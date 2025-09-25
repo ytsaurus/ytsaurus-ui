@@ -1,10 +1,10 @@
 import {ThunkAction} from 'redux-thunk';
-import {Toaster} from '@gravity-ui/uikit';
 import {CREATE_ACO_MODAL} from '../../../../constants/navigation/modals';
 import {CreateACOModalAction} from '../../../../store/reducers/navigation/modals/create-aco';
 import {RootState} from '../../../reducers';
 import {ytApiV3} from '../../../../rum/rum-wrap-api';
 import {updateView} from '../index';
+import {toaster} from '../../../../utils/toaster';
 
 type CreateAcoModalThunkAction<R = any> = ThunkAction<R, RootState, unknown, CreateACOModalAction>;
 
@@ -44,9 +44,7 @@ export function createACO(params: CreateACOActionParams): CreateAcoModalThunkAct
                 dispatch(closeCreateACOModal());
                 dispatch(updateView());
 
-                const toast = new Toaster();
-
-                toast.add({
+                toaster.add({
                     name: 'create-aco',
                     theme: 'success',
                     title: 'ACO created',

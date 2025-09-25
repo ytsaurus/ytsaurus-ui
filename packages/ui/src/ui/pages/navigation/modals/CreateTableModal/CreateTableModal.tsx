@@ -548,7 +548,6 @@ class CreateTableModalContentImpl extends React.Component<Props> {
 
         return (
             <YTDFDialog<FIX_MY_TYPE>
-                virtualized
                 pristineSubmittable
                 className={block(null, className)}
                 size={'l'}
@@ -850,6 +849,8 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                         getNoItemsMessage: getNoSuggestionsMsg,
                                     },
                                 },
+                                // TODO: fix this, so the definition of onChange didnt change, but the compiler throw errors
+                                // @ts-ignore
                                 onChange: (
                                     _value: unknown,
                                     _oldValue: unknown,
@@ -885,6 +886,8 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                         )}
                                     </div>
                                 ),
+                                // TODO: fix this, so the definition of onChange didnt change, but the compiler throw errors
+                                // @ts-ignore
                                 onChange: (
                                     _value: unknown,
                                     _oldValue: unknown,

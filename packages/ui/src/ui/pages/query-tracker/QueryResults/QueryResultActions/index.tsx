@@ -1,4 +1,4 @@
-import {Button, ControlGroupOption, Icon, RadioButton} from '@gravity-ui/uikit';
+import {Button, ControlGroupOption, Icon, SegmentedRadioGroup} from '@gravity-ui/uikit';
 import {getQueryResult} from '../../../../store/selectors/query-tracker/queryResult';
 import block from 'bem-cn-lite';
 import React, {useCallback} from 'react';
@@ -113,7 +113,7 @@ export function QueryResultActions({query, resultIndex}: Props) {
                 </>
             )}
 
-            <RadioButton
+            <SegmentedRadioGroup
                 className={b('item')}
                 options={ModeVariants}
                 value={queryResult?.settings?.viewMode}

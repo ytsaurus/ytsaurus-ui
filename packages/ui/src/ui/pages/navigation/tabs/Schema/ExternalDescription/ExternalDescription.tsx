@@ -1,5 +1,6 @@
 import React from 'react';
-import {Popover, Text} from '@gravity-ui/uikit';
+import {Text} from '@gravity-ui/uikit';
+import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
 import Icon from '../../../../../components/Icon/Icon';
 import MetaTable from '../../../../../components/MetaTable/MetaTable';
 import {MarkdownLinePreview} from '../../../../../components/MarkdownLinePreview/MarkdownLinePreview';
@@ -49,17 +50,18 @@ export function ExternalDescription({type, data, column}: Props) {
             />
         </>
     );
+
     return (
         <div className={block()}>
             {hasWarning ? (
-                <Popover
+                <Tooltip
                     className={block('warning')}
                     content={typeMismatchElement}
                     placement={'left'}
                     disabled={!hasWarning}
                 >
                     <Icon className={block('icon')} awesome="exclamation-triangle" face="solid" />
-                </Popover>
+                </Tooltip>
             ) : null}
             {markdown ? (
                 <MarkdownLinePreview

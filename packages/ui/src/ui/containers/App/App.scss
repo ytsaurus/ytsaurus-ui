@@ -49,7 +49,7 @@ body {
     --tooltip-z-index: 70000;
     --bug-report-z-index: 60000;
     --dialog-suggest-z-index: 50000;
-    --dialog-z-index: 6901;
+    --dialog-z-index: 999;
     --dialog-backdrop-z-index: 6900;
     --aside-header-z-index: 1010;
     --query-editor-container-z-index: 1008;
@@ -141,11 +141,11 @@ body {
         }
     }
 
-    // Temporary fix for screenshot tests
-    & .gn-aside-header__collapse-button {
-        border-top: 1px solid var(--gn-aside-header-collapse-button-divider-line-color);
-        height: 20px;
-    }
+    // // Temporary fix for screenshot tests
+    // & .gn-aside-header__collapse-button {
+    //     border-top: 1px solid var(--gn-aside-header-collapse-button-divider-line-color);
+    //     height: 20px;
+    // }
 
     & .g-dialog-footer {
         padding: 12px 32px;

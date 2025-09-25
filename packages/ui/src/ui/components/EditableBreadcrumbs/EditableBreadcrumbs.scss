@@ -1,0 +1,14 @@
+@import '../../styles/redefinitions/common/Breadcrumbs.scss';
+@import '../../styles/mixins.scss';
+
+.editable-breadcrumbs {
+    &_view_top-row {
+        @include top-row-breadcrumbs();
+    }
+}
+
+.editable-as-text_edit {
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin-right: 16px;
+}

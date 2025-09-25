@@ -5,16 +5,14 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {ROOT_ACCOUNT_NAME} from '../../constants/accounts/accounts';
 import {EDITOR_TABS} from '../../constants/accounts/editor';
 import hammer from '../../common/hammer';
-import {Toaster} from '@gravity-ui/uikit';
 import {IdmObjectType} from '../../constants/acl';
 import {showErrorPopup} from '../../utils/utils';
 import {updateAcl} from '../../utils/acl/acl-api';
+import {toaster} from '../toaster';
 
 const basePath = '//sys/accounts/';
 
-const toaster = new Toaster();
-
-const ERRRO_TOASTER_TIMEOUT = 10000;
+const ERROR_TOASTER_TIMEOUT = 10000;
 const SUCCESS_TOASTER_TIMEOUT = 5000;
 
 export function setResponsibleUsers(cluster, users, accountName, inheritAcl) {
@@ -74,7 +72,7 @@ function createAccount(accountName, parentName) {
         .catch((err) => {
             toaster.add({
                 name: 'create account',
-                timeout: ERRRO_TOASTER_TIMEOUT,
+                timeout: ERROR_TOASTER_TIMEOUT,
                 theme: 'danger',
                 title: `Failed to create account ${accountName}`,
                 content: err.message,
@@ -99,7 +97,7 @@ export function setAccountParent(accountName, parentName) {
         .catch((err) => {
             toaster.add({
                 name: 'set parent for account',
-                timeout: ERRRO_TOASTER_TIMEOUT,
+                timeout: ERROR_TOASTER_TIMEOUT,
                 theme: 'danger',
                 title: `Failed to set Parent for ${accountName}`,
                 content: err.message,
@@ -127,7 +125,7 @@ export function setAccountAbc(accountName, abcId, abcSlug) {
         .catch((err) => {
             toaster.add({
                 name: 'account abc service',
-                timeout: ERRRO_TOASTER_TIMEOUT,
+                timeout: ERROR_TOASTER_TIMEOUT,
                 theme: 'danger',
                 title: `Failed to set ABC for ${accountName}`,
                 content: err.message,
@@ -167,7 +165,7 @@ export function createAccountHome(accountName) {
         .catch((err) => {
             toaster.add({
                 name: 'account create home',
-                timeout: ERRRO_TOASTER_TIMEOUT,
+                timeout: ERROR_TOASTER_TIMEOUT,
                 theme: 'danger',
                 title: `Failed to create home for ${accountName}`,
                 content: err.message,

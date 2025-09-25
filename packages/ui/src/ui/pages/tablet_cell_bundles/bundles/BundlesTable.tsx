@@ -2,8 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
-import {Progress} from '@gravity-ui/uikit';
-import {HelpPopover} from '@gravity-ui/components';
+import {HelpMark, Progress} from '@gravity-ui/uikit';
 
 import AccountLink from '../../../pages/accounts/AccountLink';
 import ClickableAttributesButton from '../../../components/AttributesButton/ClickableAttributesButton';
@@ -192,11 +191,13 @@ class BundlesTable extends React.Component<ReduxProps> {
              be less than displayed in this column.`;
             return (
                 <div className={block('nodes')}>
-                    <HelpPopover
-                        className={block('help-tooltip')}
-                        delayClosing={50}
-                        placement={'auto'}
-                        content={help_tooltip}
+                    <HelpMark
+                        popoverProps={{
+                            closeDelay: 50,
+                            placement: 'auto',
+                            content: help_tooltip,
+                            className: block('help-tooltip'),
+                        }}
                     />
                     {nodes?.length}
                 </div>

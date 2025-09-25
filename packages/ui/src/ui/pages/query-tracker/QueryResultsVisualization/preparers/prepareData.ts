@@ -7,7 +7,7 @@ import type {
     BarYSeries,
     LineSeries,
     ScatterSeries,
-} from '@gravity-ui/chartkit/d3';
+} from '@gravity-ui/chartkit/gravity-charts';
 
 export const prepareData = (
     rows: QueryResult,

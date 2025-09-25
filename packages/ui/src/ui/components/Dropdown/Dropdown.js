@@ -72,11 +72,14 @@ class Dropdown extends Component {
 
         return (
             <Popup
-                placement={directions}
-                onClose={this.close}
+                placement={directions && directions.length > 0 ? directions[0] : 'bottom'}
+                onOpenChange={(open) => {
+                    if (!open) {
+                        this.close();
+                    }
+                }}
                 open={true}
-                anchorRef={this.anchor}
-                hasArrow
+                anchorElement={this.anchor.current}
                 {...popup}
             >
                 {this.renderTemplate()}

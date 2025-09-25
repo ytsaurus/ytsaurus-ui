@@ -6,7 +6,6 @@ import moment from 'moment';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
 import Link from '../../../../components/Link/Link';
-import {Toaster} from '@gravity-ui/uikit';
 
 import {checkIsTrash, getRawPath} from '../../../../store/selectors/navigation';
 import {showErrorPopup, wrapBatchPromise} from '../../../../utils/utils';
@@ -36,8 +35,7 @@ import type {
 import {BatchSubRequest} from '../../../../../shared/yt-types';
 import type {YTError} from '../../../../types';
 import type {AppThunkDispatch} from '../../../../store/thunkDispatch';
-
-const toaster = new Toaster();
+import {toaster} from '../../../../utils/toaster';
 
 function prepareRestorePath(path: string, type: string) {
     const lastChar = path.charAt(path.length - 1);

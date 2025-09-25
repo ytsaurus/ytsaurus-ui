@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {ChartData, LineSeries, TooltipDataChunkBarX} from '@gravity-ui/chartkit/d3';
+import {ChartData, LineSeries, TooltipDataChunkBarX} from '@gravity-ui/chartkit/gravity-charts';
 
 import format from '../../common/hammer/format';
 import {ColorCircle} from '../../components/ColorCircle/ColorCircle';
@@ -133,5 +133,5 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
         return res;
     }, [data, barCount]);
 
-    return <YTChartKitLazy key={incarnation} type="d3" data={chartData} />;
+    return <YTChartKitLazy key={incarnation} type="gravity-charts" data={chartData} />;
 }

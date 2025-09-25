@@ -161,8 +161,13 @@ class CellsTable extends React.Component<Props & ReduxProps> {
         return (
             <div className={block('actions')}>
                 <Tooltip placement={['bottom', 'top']} content={'Go to Navigation'}>
-                    <Link url={cellNavigationLink(cluster, id)} theme="ghost" routed>
-                        <Icon awesome="folder" />
+                    <Link
+                        className={block('cell-navigation-link')}
+                        url={cellNavigationLink(cluster, id)}
+                        theme="ghost"
+                        routed
+                    >
+                        <Icon awesome="folder" size={13} />
                     </Link>
                 </Tooltip>
                 <ClickableAttributesButton

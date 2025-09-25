@@ -10,13 +10,15 @@ import './Button.scss';
 
 const block = cn('yt-button');
 
-export interface ButtonProps extends ButtonImplProps {
+export type ButtonCustomElementType = Exclude<React.ElementType, 'a' | 'button'> | undefined;
+
+export type ButtonProps<T extends ButtonCustomElementType = undefined> = {
     withTooltip?: boolean;
     tooltipProps?: TooltipProps;
     hotkey?: HotkeyProps['settings'];
 
     inlineMargins?: boolean;
-}
+} & ButtonImplProps<T>;
 
 export default class Button extends Component<ButtonProps> {
     static propTypes = {

@@ -432,11 +432,15 @@ export default class Suggest extends Component<SuggestProps, State> {
         return (
             <Popup
                 className={popupClassName}
-                placement={popupPlacement ?? ['bottom-start', 'top-start']}
-                anchorRef={this.input}
+                placement={popupPlacement ?? 'bottom'}
+                anchorElement={this.input.current}
                 // don't show popup with suggestions after clear button click
                 open={!this.isClearClicked && popupVisible && items.length > 0}
-                onClose={this.hideSuggestions}
+                onOpenChange={(open) => {
+                    if (!open) {
+                        this.hideSuggestions();
+                    }
+                }}
             >
                 {this.renderSuggestions(items)}
             </Popup>

@@ -32,7 +32,7 @@ import {
     selectQueryResults,
 } from '../../selectors/query-tracker/queryChart';
 import {getPointValue} from '../../../pages/query-tracker/QueryResultsVisualization/preparers/getPointData';
-import type {ChartAxisType} from '@gravity-ui/chartkit/d3';
+import type {ChartAxisType} from '@gravity-ui/chartkit/gravity-charts';
 import {selectIsMultipleAco} from '../../selectors/query-tracker/queryAco';
 import cloneDeep_ from 'lodash/cloneDeep';
 import {loadQueryResult} from './queryResult';

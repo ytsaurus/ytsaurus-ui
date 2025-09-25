@@ -2,15 +2,22 @@
     gap: 0 8px;
 
     &__name-input {
+        display: flex;
+        align-items: center;
         flex: 150px 1;
         max-width: 120px;
         cursor: pointer;
-
         &.edit {
             width: 100%;
             max-width: 100%;
             cursor: inherit;
         }
+    }
+
+    .editable-as-text_edit {
+        width: 100% !important;
+        max-width: 100% !important;
+        cursor: inherit;
     }
 
     @media (max-width: 1400px) {

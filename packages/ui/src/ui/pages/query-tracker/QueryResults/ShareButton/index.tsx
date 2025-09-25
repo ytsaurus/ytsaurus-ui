@@ -1,5 +1,5 @@
 import React, {FC, useCallback, useState} from 'react';
-import {Button, DropdownMenu, Icon, Toaster} from '@gravity-ui/uikit';
+import {Button, DropdownMenu, Icon} from '@gravity-ui/uikit';
 import ArrowShapeTurnUpRightIcon from '@gravity-ui/icons/svgs/arrow-shape-turn-up-right.svg';
 import ChevronUpIcon from '@gravity-ui/icons/svgs/chevron-up.svg';
 import ChevronDownIcon from '@gravity-ui/icons/svgs/chevron-down.svg';
@@ -11,11 +11,11 @@ import {toggleShareQuery} from '../../../../store/actions/query-tracker/query';
 import {useDispatch, useSelector} from 'react-redux';
 import {isSupportedShareQuery} from '../../../../store/selectors/query-tracker/queryAco';
 import {useToggle} from 'react-use';
+import {toaster} from '../../../../utils/toaster';
 import './index.scss';
 import cn from 'bem-cn-lite';
 
 const b = cn('query-share-button');
-const toaster = new Toaster();
 
 export const ShareButton: FC = () => {
     const dispatch = useDispatch();

@@ -1,10 +1,9 @@
 import React from 'react';
 import {ThunkAction} from 'redux-thunk';
 import {UnknownAction} from 'redux';
-import {Text, Toaster} from '@gravity-ui/uikit';
+import {Text} from '@gravity-ui/uikit';
 import axios, {AxiosError} from 'axios';
 
-import {AppStoreProvider} from '../../../../../containers/App/AppStoreProvider';
 import {DownloadShortInfo} from '../../../../../pages/navigation/content/Table/DownloadManager/DownloadShortInfo/DownloadShortInfo';
 
 import {RootState} from '../../../../reducers';
@@ -14,6 +13,7 @@ import {downloadFileFromResponse} from '../../../../../utils/download-file';
 import {copyFileToClipboard} from '../../../../../utils/copy-file-to-clipboard';
 import {showErrorPopup} from '../../../../../utils/utils';
 import {YTError} from '../../../../../types';
+import {toaster} from '../../../../../utils/toaster';
 
 const requestDownloadFile = async (url: string) =>
     axios({
@@ -22,8 +22,6 @@ const requestDownloadFile = async (url: string) =>
         responseType: 'blob',
         withCredentials: true,
     });
-
-const toaster = new Toaster();
 
 const HIDING_TIMING = 5000;
 
@@ -82,11 +80,7 @@ const updateToaster = (
             title: 'Downloading',
             name: `downloadingFile_${id}`,
             theme: 'info',
-            content: (
-                <AppStoreProvider>
-                    <DownloadShortInfo id={id} filename={options?.filename || ''} />
-                </AppStoreProvider>
-            ),
+            content: <DownloadShortInfo id={id} filename={options?.filename || ''} />,
             autoHiding: false,
         });
     }

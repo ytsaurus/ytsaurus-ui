@@ -64,7 +64,7 @@ test('Dashboard - Operations widget authors', async ({page}) => {
     await submitSettings(page);
     await saveEdit(page);
 
-    await page.locator('#operations .g-radio-button__option-control[value="custom"]').click();
+    await page.locator('[data-qa="operations-author-filter"] [value="custom"]').click();
     await page.locator('#operations:has-text("No operations found")').waitFor();
 });
 
@@ -73,7 +73,7 @@ test('Dashboard - Operations widget pools', async ({page}) => {
 
     const widget = page.locator('#operations');
     await widget.scrollIntoViewIfNeeded();
-    await page.locator('#operations .g-radio-button__option-control[value="me"]').click();
+    await page.locator('[data-qa="operations-author-filter"] [value="me"]').click();
 
     await page.waitForSelector('#operations .gt-table__row');
 
@@ -104,7 +104,7 @@ test('Dashboard - Operations widget running', async ({page}) => {
     const widget = page.locator('#operations');
     await widget.scrollIntoViewIfNeeded();
 
-    await page.locator('#operations .g-radio-button__option-control[value="me"]').click();
+    await page.locator('[data-qa="operations-state-filter"]').click();
 
     const stateSelect = page.locator('#operations .g-select-control__button:has-text("State:")');
     await stateSelect.click();

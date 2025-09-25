@@ -1,17 +1,16 @@
-import React from 'react';
+import React, {Key} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
 
 import ypath from '../../common/thor/ypath';
 
-import {Button, Text} from '@gravity-ui/uikit';
-import {Breadcrumbs, BreadcrumbsItem} from '../../components/Breadcrumbs';
+import {Breadcrumbs, Button, Flex, Text} from '@gravity-ui/uikit';
 
 import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
 import {YTDFDialog, makeErrorFields} from '../../components/Dialog';
 import Favourites, {FavouritesItem} from '../../components/Favourites/Favourites';
-import {EditableAsText} from '../../components/EditableAsText/EditableAsText';
+import {EditableBreadcrumbs} from '../../components/EditableBreadcrumbs';
 import Suggest from '../../components/Suggest/Suggest';
 import {Page} from '../../constants';
 import {RowWithName} from '../../containers/AppNavigation/TopRowContent/SectionName';
@@ -35,8 +34,10 @@ export default function ChytPageTopRow() {
     return (
         <RowWithName page={Page.CHYT} name="CHYT cliques">
             <ChytFavourites />
-            <ChytBreadcrumbs />
-            <CreateChytButton />
+            <Flex justifyContent={'space-between'} alignItems={'center'} grow={1}>
+                <ChytBreadcrumbs />
+                <CreateChytButton />
+            </Flex>
         </RowWithName>
     );
 }
@@ -77,18 +78,33 @@ function ChytBreadcrumbs() {
     const cluster = useSelector(getCluster);
     const alias = useSelector(getChytCurrentAlias);
 
+    const handleBreadcrumbClick = React.useCallback(
+        (key: Key) => {
+            history.push(`/${cluster}/${Page.CHYT}/${key}`);
+        },
+        [history, cluster],
+    );
+
     const items = React.useMemo(() => {
         const result = [
-            <BreadcrumbsItem key="<Root>" href={`/${cluster}/${Page.CHYT}`}>
+            <Breadcrumbs.Item
+                key="/"
+                href={`/${cluster}/${Page.CHYT}`}
+                onClick={(e) => e.preventDefault()}
+            >
                 {'<Root>'}
-            </BreadcrumbsItem>,
+            </Breadcrumbs.Item>,
         ];
 
         if (alias) {
             result.push(
-                <BreadcrumbsItem key={alias} href={`/${cluster}/${Page.CHYT}/${alias}`}>
+                <Breadcrumbs.Item
+                    key={alias}
+                    href={`/${cluster}/${Page.CHYT}/${alias}`}
+                    onClick={(e) => e.preventDefault()}
+                >
                     {alias}
-                </BreadcrumbsItem>,
+                </Breadcrumbs.Item>,
             );
         }
 
@@ -96,26 +112,23 @@ function ChytBreadcrumbs() {
     }, [alias, cluster]);
 
     return (
-        <div className={block('breadcrumbs')}>
-            <EditableAsText
-                className={block('editable')}
-                onChange={(text) => {
-                    if (!text) {
-                        history.push(`/${cluster}/${Page.CHYT}`);
-                    } else if (text !== alias) {
-                        history.push(`/${cluster}/${Page.CHYT}/${text}`);
-                    }
-                }}
-                text={alias}
-                disableEdit={Boolean(!alias)}
-                renderEditor={(props) => <ChytAliasSuggest cluster={cluster} {...props} />}
-            >
-                <Breadcrumbs navigate={history.push} showRoot>
-                    {items}
-                </Breadcrumbs>
-            </EditableAsText>
-            {alias && <ClipboardButton text={alias} />}
-        </div>
+        <EditableBreadcrumbs
+            className={block('breadcrumbs')}
+            onChange={(text) => {
+                if (!text) {
+                    history.push(`/${cluster}/${Page.CHYT}`);
+                } else if (text !== alias) {
+                    history.push(`/${cluster}/${Page.CHYT}/${text}`);
+                }
+            }}
+            onAction={handleBreadcrumbClick}
+            text={alias}
+            disableEdit={Boolean(!alias)}
+            renderEditor={(props) => <ChytAliasSuggest cluster={cluster} {...props} />}
+            endContent={<>{alias && <ClipboardButton text={alias} />}</>}
+        >
+            {items}
+        </EditableBreadcrumbs>
     );
 }
 

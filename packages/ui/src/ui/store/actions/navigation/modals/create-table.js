@@ -4,7 +4,6 @@ import axios from 'axios';
 import uniq_ from 'lodash/uniq';
 
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import {Toaster} from '@gravity-ui/uikit';
 import {updateView} from '../../../../store/actions/navigation';
 
 import {CREATE_TABLE_MODAL_DATA_FIELDS} from '../../../../constants/navigation/modals/create-table';
@@ -13,6 +12,7 @@ import {showErrorPopup} from '../../../../utils/utils';
 import Link from '../../../../components/Link/Link';
 import {genNavigationUrl} from '../../../../utils/navigation/navigation';
 import {getCluster} from '../../../selectors/global';
+import {toaster} from '../../../../utils/toaster';
 
 export function openCreateTableModal(parentDirectory) {
     return (dispatch) => {
@@ -31,8 +31,6 @@ export function closeCreateTableModal() {
         });
     };
 }
-
-const toaster = new Toaster();
 
 export function createTable(path, attributes) {
     return (dispatch, getState) => {

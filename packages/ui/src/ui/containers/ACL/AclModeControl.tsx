@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {RadioButton} from '@gravity-ui/uikit';
+import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 
 import {AclMode} from '../../constants/acl';
 import format from '../../common/hammer/format';
@@ -18,7 +18,7 @@ export function AclModeControl({
     aclMode,
 }: Pick<ACLReduxProps, 'aclMode' | 'updateAclFilters'>) {
     return (
-        <RadioButton
+        <SegmentedRadioGroup
             value={aclMode}
             options={ACL_MODE_OPTIONS}
             onUpdate={(value) => {

@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 import {ConnectedProps, connect} from 'react-redux';
+import {LayoutCellsLarge, ListUl} from '@gravity-ui/icons';
+import {Icon, SegmentedRadioGroup} from '@gravity-ui/uikit';
 
 import Filter from '../../components/Filter/Filter';
-import RadioButton from '../../components/RadioButton/RadioButton';
 import {updateFilter, updateViewMode} from '../../store/actions/clusters-menu';
 import {HeaderLinks} from '../../containers/ClustersMenu/HeaderLinks';
 import {LINKS_ITEM_CLUSTERS} from '../../containers/ClustersMenu/header-links-items';
@@ -38,21 +39,19 @@ function ClustersMenuHeader({viewMode, updateViewMode, clusterFilter, updateFilt
                     </div>
                 </div>
                 <div className={b('view')}>
-                    <RadioButton<'table' | 'dashboard'>
+                    <SegmentedRadioGroup<'table' | 'dashboard'>
                         size="m"
                         name="cluster-menu-mode"
                         value={viewMode}
-                        onUpdate={(value) => updateViewMode(value)}
-                        items={[
+                        onUpdate={(value: 'table' | 'dashboard') => updateViewMode(value)}
+                        options={[
                             {
                                 value: 'table',
-                                text: '',
-                                icon: {awesome: 'list'},
+                                content: <Icon data={ListUl} size={13} />,
                             },
                             {
                                 value: 'dashboard',
-                                text: '',
-                                icon: {awesome: 'table'},
+                                content: <Icon data={LayoutCellsLarge} size={13} />,
                             },
                         ]}
                     />

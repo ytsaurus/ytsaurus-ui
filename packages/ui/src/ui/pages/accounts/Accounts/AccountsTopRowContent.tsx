@@ -1,10 +1,10 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import some_ from 'lodash/some';
+import {Breadcrumbs} from '@gravity-ui/uikit';
 
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import Favourites, {FavouritesItem} from '../../../components/Favourites/Favourites';
-import {Breadcrumbs, BreadcrumbsItem} from '../../../components/Breadcrumbs';
 import {
     getFavouriteAccounts,
     isActiveAcountInFavourites,
@@ -88,36 +88,37 @@ function AccountsBreadcrumbs() {
     // @ts-ignore
     const bcItems = useSelector(getActiveAccountBreadcrumbs).slice(1);
     const dispatch = useDispatch();
-    const history = useHistory();
     const cluster = useSelector(getCluster);
+    const history = useHistory();
 
     const handleBreadcrumbsClick = (key: string | number) => {
         dispatch(setActiveAccount(key === ROOT_PLACEHOLDER ? '' : key));
+        const account = key === ROOT_PLACEHOLDER ? '' : key;
+        const pathname = account
+            ? window.location.pathname
+            : calcRootPathname(window.location.pathname, cluster);
+        history.push(makeRoutedURL(pathname, {account}));
     };
 
     const items = React.useMemo(() => {
         return [{text: ''}, ...bcItems].map((item) => {
             const account = item.text;
             const text = account || ROOT_PLACEHOLDER;
-            const pathname = account
-                ? window.location.pathname
-                : calcRootPathname(window.location.pathname, cluster);
 
             return (
-                <BreadcrumbsItem key={text} href={makeRoutedURL(pathname, {account})}>
+                <Breadcrumbs.Item
+                    key={text}
+                    href={calcRootPathname(window.location.pathname, cluster)}
+                    onClick={(e) => e.preventDefault()}
+                >
                     {text}
-                </BreadcrumbsItem>
+                </Breadcrumbs.Item>
             );
         });
-    }, [bcItems, cluster]);
+    }, [bcItems, cluster, window.location.pathname]);
 
     return (
-        <Breadcrumbs
-            navigate={history.push}
-            className={block('breadcrumbs')}
-            onAction={handleBreadcrumbsClick}
-            showRoot
-        >
+        <Breadcrumbs className={block('breadcrumbs')} onAction={handleBreadcrumbsClick} showRoot>
             {items}
         </Breadcrumbs>
     );

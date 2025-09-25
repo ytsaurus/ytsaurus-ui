@@ -1,8 +1,8 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {Key, useCallback, useMemo} from 'react';
+import {Box, Breadcrumbs} from '@gravity-ui/uikit';
 
 import map_ from 'lodash/map';
 import reverse_ from 'lodash/reverse';
-import {Breadcrumbs, BreadcrumbsItem} from '../../../../components/Breadcrumbs';
 
 import moment from 'moment';
 import cn from 'bem-cn-lite';
@@ -130,6 +130,7 @@ function AccountUsageToolbar() {
                         itemsToWrap={[
                             {
                                 node: <UsageBreadcrumbsMemo />,
+                                growable: true,
                             },
                         ]}
                     />
@@ -472,31 +473,41 @@ export function UsageBreadcrumbs() {
     const dispatch = useDispatch();
     const pathArr = useSelector(getAccountUsageTreeItemsBasePathSplitted);
     const history = useHistory();
-
     const items = useMemo(() => {
         return map_(pathArr, (item, index) => {
             const text = item.item;
             return (
-                <BreadcrumbsItem
+                <Breadcrumbs.Item
                     key={text}
                     href={makeRoutedURL(`${window.location.pathname}?path=${item.value}`)}
+                    onClick={(e) => e.preventDefault()}
                 >
                     {index ? <PathFragment name={text} /> : <Icon awesome={'folder-tree'} />}
-                </BreadcrumbsItem>
+                </Breadcrumbs.Item>
             );
         });
-    }, [pathArr]);
+    }, [pathArr, window.location.pathname]);
 
-    const handleBreadcrumbClick = useCallback(() => {
-        setTimeout(() => {
-            dispatch(fetchAccountUsage());
-        }, 0);
-    }, [dispatch]);
+    const handleBreadcrumbClick = useCallback(
+        (key: Key) => {
+            history.push(
+                makeRoutedURL(
+                    `${window.location.pathname}?path=${pathArr.find((i) => i.item === key)?.value}`,
+                ),
+            );
+            setTimeout(() => {
+                dispatch(fetchAccountUsage());
+            }, 0);
+        },
+        [dispatch, history, pathArr],
+    );
 
     return (
-        <Breadcrumbs navigate={history.push} onAction={handleBreadcrumbClick} showRoot>
-            {items}
-        </Breadcrumbs>
+        <Box overflow={'hidden'} width={'100%'} style={{display: 'block'}}>
+            <Breadcrumbs onAction={handleBreadcrumbClick} showRoot>
+                {items}
+            </Breadcrumbs>
+        </Box>
     );
 }
 

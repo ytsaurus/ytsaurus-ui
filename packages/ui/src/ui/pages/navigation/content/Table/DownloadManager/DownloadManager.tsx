@@ -13,7 +13,7 @@ import values_ from 'lodash/values';
 import qs from 'qs';
 import axios from 'axios';
 
-import {Checkbox, RadioButton, TextInput} from '@gravity-ui/uikit';
+import {Checkbox, SegmentedRadioGroup, TextInput} from '@gravity-ui/uikit';
 
 import ColumnSelector from '../../../../../components/ColumnSelector/ColumnSelector';
 import Pagination from '../../../../../components/Pagination/Pagination';
@@ -504,7 +504,7 @@ export class DownloadManager extends React.Component<Props, State> {
         return (
             <React.Fragment>
                 <div className="elements-form__label">Rows</div>
-                <RadioButton
+                <SegmentedRadioGroup
                     size="m"
                     className="elements-form__field"
                     value={rowsMode}
@@ -549,7 +549,7 @@ export class DownloadManager extends React.Component<Props, State> {
         return (
             <React.Fragment>
                 <div className="elements-form__label">Columns</div>
-                <RadioButton
+                <SegmentedRadioGroup
                     size="m"
                     className="elements-form__field"
                     value={columnsMode}
@@ -584,7 +584,7 @@ export class DownloadManager extends React.Component<Props, State> {
             <div className={block('schemaful-dsv')}>
                 <div className="elements-form__field">
                     <div className="elements-form__label">Missing value mode</div>
-                    <RadioButton
+                    <SegmentedRadioGroup
                         size="m"
                         value={schemafulDsvMissingMode}
                         name="download-manager-schemaful-dsv-mode"
@@ -666,7 +666,7 @@ export class DownloadManager extends React.Component<Props, State> {
         return (
             <div className={block('yson')}>
                 <div className="elements-form__label">Format</div>
-                <RadioButton
+                <SegmentedRadioGroup
                     size="m"
                     value={ysonFormat}
                     name="download-manager-yson-format"
@@ -698,7 +698,7 @@ export class DownloadManager extends React.Component<Props, State> {
         return (
             <React.Fragment>
                 <div className="elements-form__label">Number precision mode</div>
-                <RadioButton
+                <SegmentedRadioGroup
                     size="m"
                     value={excelNumberPrecisionMode}
                     onUpdate={(v) => this.setState({number_precision_mode: v})}
@@ -782,7 +782,7 @@ export class DownloadManager extends React.Component<Props, State> {
         return (
             <ConfirmButton
                 filename={filename}
-                url={url}
+                href={url}
                 title="Download to clipboard"
                 disabled={Boolean(error)}
                 qa="download-to-clipboard-static-table"
@@ -799,7 +799,7 @@ export class DownloadManager extends React.Component<Props, State> {
             <ConfirmButton
                 className={classNameConfirm}
                 filename={filename}
-                url={url}
+                href={url}
                 title="Download"
                 disabled={Boolean(error)}
                 view="action"
