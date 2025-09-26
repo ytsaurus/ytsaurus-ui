@@ -17,14 +17,14 @@ import {SupportComponentLazy} from '../containers/SupportComponent/lazy';
 import {YTUserSuggestLazy} from '../containers/UserSuggest/YTUserSuggestLazy';
 
 import OperationDetailMonitorLinks from '../pages/operations/OperationDetail/tabs/monitor/OperationDetailsMonitorLinks';
-import {SchedulingMonitoring} from '../pages/scheduling/Content/tabs/Monitoring/SchedulingMonitoring';
 import {QUERY_RESULT_CHART_TAB} from '../pages/query-tracker/QueryResultsVisualization';
 import {IncarnationsLazy} from '../pages/operations/OperationDetail/tabs/incarnations/IncarnationsLazy';
 
-import {AccountsMonitorPrometheus} from '../pages/accounts/tabs/monitor/AccountsMonitorPromehteus/AccountsMonitorPrometheus';
+import {AccountsMonitoringPrometheusLazy} from '../pages/accounts/tabs/monitor/AccountsMonitorPromehteus/lazy';
 import {QueueMetricsPrometheus} from '../pages/navigation/tabs/Queue/views/QueueMetrics/QueueMetricsPrometheus/QueueMetricsPrometheus';
 import {ConsumerMetricsPrometheus} from '../pages/navigation/tabs/Consumer/views/ConsumerMetrics/ConsumerMetricsPrometheus/ConsumerMetricsPrometheus';
 import {ChytMonitoringPrometheus} from '../pages/chyt/ChytPageClique/ChytMonitoringPrometheus';
+import {SchedulingMonitoringLazy} from '../pages/scheduling/Content/tabs/Monitoring/lazy';
 import {SystemMonitoringPrometheusLazy} from '../pages/system/SystemMonitoringPrometheus/lazy';
 import {BundleMonitoringPrometheusLazy} from '../pages/tablet_cell_bundles/bundle/BundleMonitoringPrometheus/lazy';
 import {OperationMonitoringPrometheus} from '../pages/operations/OperationDetail/tabs/monitor/OperationMonitoringPrometheus';
@@ -78,7 +78,7 @@ export const defaultUIFactory: UIFactory = {
             res.push({
                 name: SchedulingExtraTabs.PROMETHEUS_DASHBOARD,
                 title: 'Monitoring',
-                component: SchedulingMonitoring,
+                component: SchedulingMonitoringLazy,
             });
         }
 
@@ -106,7 +106,7 @@ export const defaultUIFactory: UIFactory = {
     },
     getMonitoringForAccounts() {
         if (getConfigData().allowPrometheusDashboards) {
-            return {component: AccountsMonitorPrometheus};
+            return {component: AccountsMonitoringPrometheusLazy};
         }
 
         if (!uiSettings?.accountsMonitoring?.urlTemplate) {
