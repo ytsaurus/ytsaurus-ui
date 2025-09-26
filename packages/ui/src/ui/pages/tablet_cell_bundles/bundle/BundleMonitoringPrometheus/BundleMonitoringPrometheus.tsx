@@ -7,7 +7,7 @@ import {PrometheusDashboardType} from '../../../../../shared/prometheus/types';
 
 import {HEADER_HEIGHT} from '../../../../constants';
 import {StickyContainer} from '../../../../components/StickyContainer/StickyContainer';
-import {PrometheusDashboard} from '../../../../containers/PrometheusDashboard/PrometheusDashboard';
+import {PrometheusDashboardLazy} from '../../../../containers/PrometheusDashboard/lazy';
 import type {BundleMonitoringProps} from '../../../../UIFactory';
 import {
     TOOLBAR_COMPONENT_HEIGHT,
@@ -58,7 +58,7 @@ export function BundleMonitoringPrometheus(props: BundleMonitoringProps) {
                                 },
                             ]}
                         />
-                        <PrometheusDashboard
+                        <PrometheusDashboardLazy
                             type={type}
                             params={params}
                             toolbarStickyTop={HEADER_HEIGHT + TOOLBAR_COMPONENT_HEIGHT}
