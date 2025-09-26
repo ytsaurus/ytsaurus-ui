@@ -1,8 +1,8 @@
 import React from 'react';
 
-import {PrometheusDashboard} from '../../../../../../containers/PrometheusDashboard/PrometheusDashboard';
+import {PrometheusDashboardLazy} from '../../../../../../containers/PrometheusDashboard/lazy';
 import {JobMonitoringProps} from '../../../../../../UIFactory';
 
 export function JobMonitoringPrometheus(props: JobMonitoringProps) {
-    return <PrometheusDashboard type="job" params={props} />;
+    return <PrometheusDashboardLazy type="job" params={props} />;
 }
