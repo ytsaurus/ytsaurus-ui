@@ -48,4 +48,5 @@ jobs:
             npm run docker:push --dockertag=${UI_TAG}
           else 
             echo Corresponding image already exists: $TARGET_IMAGE
+            exit 1
           fi
