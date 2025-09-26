@@ -4,7 +4,7 @@ import map_ from 'lodash/map';
 
 import {RadioButton} from '@gravity-ui/uikit';
 
-import {PrometheusDashboard} from '../../../../../containers/PrometheusDashboard/PrometheusDashboard';
+import {PrometheusDashboardLazy} from '../../../../../containers/PrometheusDashboard/lazy';
 import {Toolbar} from '../../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {OperationMonitoringTabProps} from '../../../../../UIFactory';
 
@@ -52,7 +52,7 @@ export function OperationMonitoringPrometheus({cluster, operation}: OperationMon
                     ]}
                 />
             )}
-            <PrometheusDashboard
+            <PrometheusDashboardLazy
                 type="scheduler-operation"
                 params={currentParams}
                 timeRange={Object.assign(
