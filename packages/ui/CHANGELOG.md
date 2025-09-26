@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.2.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v2.1.0...ui-v2.2.0) (2025-09-26)
+
+
+### Features
+
+* **Queries:** share query with active tab [YTFRONT-5001] ([9ea4fcb](https://github.com/ytsaurus/ytsaurus-ui/commit/9ea4fcba2c443463a26504825fba6cc6c2ea771e))
+
+
+### Bug Fixes
+
+* **Operations/JobsMonitoring:** full list of descriptors [YTFRONT-5192] ([8a3c244](https://github.com/ytsaurus/ytsaurus-ui/commit/8a3c24477092f8a8af1f2b74d8c33cdfb10a53f2))
+* **UTF8:** truncated cell encoding [YTFRONT-5206] ([69f44f7](https://github.com/ytsaurus/ytsaurus-ui/commit/69f44f78f9c7d941d0ec13729ebfa03b88399903))
+* **UTF8:** truncated modal [YTFRONT-5202] ([a64ede7](https://github.com/ytsaurus/ytsaurus-ui/commit/a64ede7cc6ba11635e6a4c523e594583d1f09f29))
+
 ## [2.1.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v2.0.0...ui-v2.1.0) (2025-09-18)
 
 
