@@ -39,7 +39,8 @@ export function NodeName({node, className}: {node: ProcessedNode; className?: st
                     }
                     hasArrow={false}
                     placement={['right', 'left']}
-                    delay={300}
+                    openDelay={300}
+                    closeDelay={300}
                 >
                     <Icon className={block('icon')} data={infoIcon} size={12} />
                 </Popover>

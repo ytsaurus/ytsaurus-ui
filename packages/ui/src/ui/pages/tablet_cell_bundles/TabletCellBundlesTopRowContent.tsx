@@ -123,8 +123,6 @@ interface BundleBreadcrumbsProps {
 }
 
 function BundleBreadcrumbs({className, bcItems, setActiveBundle}: BundleBreadcrumbsProps) {
-    const history = useHistory();
-
     const handleItemClick = React.useCallback(
         (item: string | number) => {
             setActiveBundle(item.toString());

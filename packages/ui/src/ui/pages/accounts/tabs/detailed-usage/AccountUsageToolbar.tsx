@@ -471,7 +471,6 @@ function ViewType() {
 export function UsageBreadcrumbs() {
     const dispatch = useDispatch();
     const pathArr = useSelector(getAccountUsageTreeItemsBasePathSplitted);
-    const history = useHistory();
 
     const items = useMemo(() => {
         return map_(pathArr, (item, index) => {

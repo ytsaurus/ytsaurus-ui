@@ -1,4 +1,3 @@
-import {TabsItemProps} from '@gravity-ui/uikit';
 import times_ from 'lodash/times';
 import has_ from 'lodash/has';
 import find_ from 'lodash/find';
@@ -35,9 +34,14 @@ type ResultCurrentState = {
     activeResultParams?: {queryId: string; resultIndex: number};
 };
 
+type CustomTabs = Array<{
+    id: string;
+    title: string;
+}>;
+
 export const useQueryResultTabs = (
     query?: QueryItem,
-): [TabsItemProps[], (tab: string, queryId?: string) => void, ResultCurrentState] => {
+): [CustomTabs, (tab: string, queryId?: string) => void, ResultCurrentState] => {
     const [progressActive, setProgressActive] = useState(false);
     const [tab, setTab] = useState<QueryResultTab>(QueryResultTab.META);
     const [activeResultParams, setResultParams] =
@@ -79,7 +83,7 @@ export const useQueryResultTabs = (
         if (!query) {
             return [];
         }
-        const items: TabsItemProps[] = [];
+        const items: CustomTabs = [];
         const progress = isSingleProgress(query?.progress) ? query.progress : {};
 
         if (query.state === QueryStatus.FAILED) {

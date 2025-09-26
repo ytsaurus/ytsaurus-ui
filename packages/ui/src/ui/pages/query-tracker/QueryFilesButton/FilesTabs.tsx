@@ -1,5 +1,5 @@
 import React, {FC, useMemo, useState} from 'react';
-import {Tabs} from '@gravity-ui/uikit';
+import {Tab, TabList, TabProvider} from '@gravity-ui/uikit';
 import {QueryFile} from '../module/api';
 import {DeletedFileItem} from './DeletedFileItem';
 import cn from 'bem-cn-lite';
@@ -66,27 +66,29 @@ export const FilesTabs: FC<Props> = ({
 
     return (
         <div className={block(null, className)}>
-            <Tabs
-                activeTab={activeTab}
-                items={[
-                    {
-                        id: FileTabs.Current,
-                        title: 'Current',
-                        counter: files.length,
-                        disabled: !files.length,
-                    },
-                    {
-                        id: FileTabs.Deleted,
-                        title: 'Deleted',
-                        counter: deletedFilesCounter,
-                        disabled: !deletedFilesCounter,
-                    },
-                ]}
-                onSelectTab={setActiveTab}
-            />
-            <div className={block('list')}>
-                {activeTab === FileTabs.Current ? currentFileItems : deletedFileItems}
-            </div>
+            <TabProvider value={activeTab}>
+                {/* <Tabs
+                    activeTab={activeTab}
+                    items={[
+                        {
+                            id: FileTabs.Current,
+                            title: 'Current',
+                            counter: files.length,
+                            disabled: !files.length,
+                        },
+                        {
+                            id: FileTabs.Deleted,
+                            title: 'Deleted',
+                            counter: deletedFilesCounter,
+                            disabled: !deletedFilesCounter,
+                        },
+                    ]}
+                    onSelectTab={setActiveTab}
+                /> */}
+                <TabList className={block('list')} onUpdate={setActiveTab}>
+                    {activeTab === FileTabs.Current ? currentFileItems : deletedFileItems}
+                </TabList>
+            </TabProvider>
         </div>
     );
 };

@@ -1,7 +1,7 @@
 import React, {ReactNode} from 'react';
 import block from 'bem-cn-lite';
 import {QueryItem, isSingleProgress} from '../module/api';
-import {Tabs} from '@gravity-ui/uikit';
+import {Tab, TabList, TabProvider} from '@gravity-ui/uikit';
 import {QueryMetaInfo} from './QueryMetaRow';
 import QueryMetaTable from '../QueryMetaTable';
 import {QueryResultActions} from './QueryResultActions';
@@ -59,18 +59,29 @@ export const QueryResults = React.memo<Props>(function QueryResults({
                     defaultView="graph"
                 >
                     <div className={b('header')}>
-                        <Tabs
-                            className={b('tabs')}
-                            items={tabs}
-                            activeTab={activeTabId}
-                            onSelectTab={(tabId: string) => setTab(tabId, query?.id)}
-                        />
-                        {category === QueryResultTab.RESULT && Number.isInteger(resultIndex) && (
-                            <div className={b('tab_actions')}>
-                                <QueryResultActions query={query} resultIndex={resultIndex ?? 0} />
-                            </div>
-                        )}
-                        {category === QueryResultTab.PROGRESS && <PlanActions />}
+                        <TabProvider
+                            value={activeTabId}
+                            onUpdate={(tabId: string) => setTab(tabId, query?.id)}
+                        >
+                            <TabList className={b('tabs')}>
+                                {category === QueryResultTab.RESULT &&
+                                    Number.isInteger(resultIndex) && (
+                                        <Tab value={QueryResultTab.RESULT}>
+                                            <div className={b('tab_actions')}>
+                                                <QueryResultActions
+                                                    query={query}
+                                                    resultIndex={resultIndex ?? 0}
+                                                />
+                                            </div>
+                                        </Tab>
+                                    )}
+                                {category === QueryResultTab.PROGRESS && (
+                                    <Tab value={QueryResultTab.PROGRESS}>
+                                        <PlanActions />
+                                    </Tab>
+                                )}
+                            </TabList>
+                        </TabProvider>
                     </div>
                     <div className={b('content')}>
                         <NotRenderUntilFirstVisible
