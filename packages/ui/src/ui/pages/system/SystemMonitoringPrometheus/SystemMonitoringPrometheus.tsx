@@ -8,7 +8,7 @@ import {PrometheusDashboardType} from '../../../../shared/prometheus/types';
 import format from '../../../common/hammer/format';
 import {PoolTreeSuggestControl} from '../../../components/Dialog/controls/PoolTreeSuggestControl/PoolTreeSuggestControl';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
-import {PrometheusDashboard} from '../../../containers/PrometheusDashboard/PrometheusDashboard';
+import {PrometheusDashboardLazy} from '../../../containers/PrometheusDashboard/lazy';
 import {getCluster} from '../../../store/selectors/global';
 import {systemMonitoring} from '../../../store/reducers/system/monitoring';
 import {useDefaultPoolTree} from '../../../hooks/global-pool-trees';
@@ -45,7 +45,7 @@ export function SystemMonitoringPrometheus() {
                     ...(extraTools ?? []),
                 ]}
             />
-            <PrometheusDashboard type={type} params={params} />
+            <PrometheusDashboardLazy type={type} params={params} />
         </React.Fragment>
     );
 }
