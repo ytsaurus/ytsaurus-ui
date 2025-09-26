@@ -88,7 +88,6 @@ function AccountsBreadcrumbs() {
     // @ts-ignore
     const bcItems = useSelector(getActiveAccountBreadcrumbs).slice(1);
     const dispatch = useDispatch();
-    const history = useHistory();
     const cluster = useSelector(getCluster);
 
     const handleBreadcrumbsClick = (key: string | number) => {

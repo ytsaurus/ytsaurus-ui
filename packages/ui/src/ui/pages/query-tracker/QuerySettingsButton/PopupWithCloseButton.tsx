@@ -25,7 +25,7 @@ export const PopupWithCloseButton: FC<PropsWithChildren<Props>> = ({
             anchorElement={anchorRef.current}
             open={open}
             className={block(null, className)}
-            onOpenChange={(isOpen, event, reason) => {
+            onOpenChange={(isOpen, _event, reason) => {
                 if (!isOpen && reason === 'outside-press') {
                     onClose();
                 }

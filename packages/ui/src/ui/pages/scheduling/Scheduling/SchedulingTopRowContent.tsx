@@ -114,7 +114,6 @@ function SchedulingBreadcrumbs() {
     const dispatch = useDispatch();
     const tree = useSelector(getTree);
     const cluster = useSelector(getCluster);
-    const history = useHistory();
 
     const handleChangePool = (name: string | number) => {
         setTimeout(() => {

@@ -52,7 +52,6 @@ function RetryBatchImpl(props: ExecuteBatchStateItem) {
             <Dialog.Footer
                 preset={'default'}
                 showError={false}
-                listenKeyEnter={false}
                 textButtonCancel={disableSkip ? 'Abort' : 'Skip'}
                 textButtonApply={'Retry'}
                 onClickButtonApply={handleRetry}

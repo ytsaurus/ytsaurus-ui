@@ -279,7 +279,6 @@ export default function JobActions({className}: {className?: string}) {
                         textButtonApply="Copy"
                         showError={false}
                         preset="success"
-                        listenKeyEnter
                     />
                 </Dialog>
 
@@ -301,7 +300,6 @@ export default function JobActions({className}: {className?: string}) {
                         textButtonApply="Confirm"
                         showError={false}
                         preset="success"
-                        listenKeyEnter
                     />
                 </Dialog>
             </div>

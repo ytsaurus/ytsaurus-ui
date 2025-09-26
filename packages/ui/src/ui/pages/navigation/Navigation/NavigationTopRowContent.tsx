@@ -204,7 +204,6 @@ function NavigationPathEditor({hideEditor}: {hideEditor: () => void}) {
 function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
     const bcItems = useSelector(getNavigationBreadcrumbs);
     const mode = useSelector(getMode);
-    const history = useHistory();
 
     const items = React.useMemo(() => {
         return bcItems.map(({text, state}, index) => {
