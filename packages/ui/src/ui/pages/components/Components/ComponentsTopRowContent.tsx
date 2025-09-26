@@ -37,7 +37,6 @@ function ComponentsNodeTopRowContent() {
 function ComponentsBreadcrumbs() {
     const cluster = useSelector(getCluster);
     const nodeHost = useSelector(nodeHostSelector);
-    const history = useHistory();
 
     const items = React.useMemo(() => {
         const result = [
