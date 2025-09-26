@@ -18,6 +18,7 @@ export type JobEvent = {
 export type TimelineJob = {
     id: string;
     cookieId: number;
+    incarnation?: string;
     allocationId?: string;
     groupName: string;
     events: JobEvent[];
@@ -29,10 +30,8 @@ export type TimelineJob = {
 export type JobsTimelineState = {
     isLoading: boolean;
     jobsCountError: boolean;
-    selectedJob: {
-        id: string;
-        timelineId: string;
-    };
+    selectedJob: string;
+    selectedIncarnation: string;
     jobs: TimelineJob[];
     filter: string;
     interval?: Interval;
@@ -43,10 +42,8 @@ export type JobsTimelineState = {
 const initialState: JobsTimelineState = {
     isLoading: false,
     jobsCountError: false,
-    selectedJob: {
-        id: '',
-        timelineId: '',
-    },
+    selectedJob: '',
+    selectedIncarnation: '',
     jobs: [],
     filter: '',
     interval: undefined,
@@ -67,14 +64,11 @@ const jobsTimelineSlice = createSlice({
         setJobsCountError(state, action: PayloadAction<boolean>) {
             state.jobsCountError = action.payload;
         },
-        setSelectedJob(
-            state,
-            action: PayloadAction<{
-                id: string;
-                timelineId: string;
-            }>,
-        ) {
+        setSelectedJob(state, action: PayloadAction<string>) {
             state.selectedJob = action.payload;
+        },
+        setSelectedIncarnation(state, action: PayloadAction<string>) {
+            state.selectedIncarnation = action.payload;
         },
         setJobs(
             state,
@@ -104,6 +98,7 @@ export const {
     setJobs,
     setJobsCountError,
     setSelectedJob,
+    setSelectedIncarnation,
     setLoading,
     setInterval,
     setFilter,

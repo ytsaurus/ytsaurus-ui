@@ -1,0 +1,14 @@
+.yt-operation-timeline {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+
+    &__wrap {
+        margin-top: 10px;
+    }
+
+    &__block {
+        .yq-virtual-list {
+            margin-top: 15px;
+        }
+    }
+}
