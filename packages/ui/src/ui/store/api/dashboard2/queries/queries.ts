@@ -8,8 +8,11 @@ import {YTApiId, ytApiV4Id} from '../../../../rum/rum-wrap-api';
 import {durationDates} from '../../../../utils/date';
 import {QueryStatus} from '../../../../types/query-tracker';
 import {QueriesListResponse} from '../../../../pages/query-tracker/module/api';
+import {YTError} from '../../../../types';
+import {UNKNOWN_ITEM_NAME} from '../../../../constants/dashboard2';
 
 type FetchQueriesArgs = {
+    cluster: string;
     requests: ListQueriesParams[];
     id: string;
 };
@@ -31,12 +34,21 @@ export async function fetchQuerieslist({requests}: FetchQueriesArgs) {
 
         const {results} = response;
 
+        let requestedQueriesErrors: YTError | undefined = {
+            message: 'Oops, something went wrong',
+            inner_errors: [],
+        };
+
         const queries = map_(results, (item) => {
+            if (item.error) {
+                requestedQueriesErrors?.inner_errors?.push?.(item.error);
+                return [];
+            }
             if (!item?.output?.queries) {
                 return [];
             }
             return map_(item.output.queries, (query) => ({
-                author: query?.user || 'unknown',
+                author: query?.user || UNKNOWN_ITEM_NAME,
                 general: {
                     name: query?.annotations?.title ?? 'No name',
                     state: (query?.state || format.NO_VALUE) as QueryStatus,
@@ -51,7 +63,11 @@ export async function fetchQuerieslist({requests}: FetchQueriesArgs) {
             }));
         });
 
-        return {data: queries.flat()};
+        if (!requestedQueriesErrors?.inner_errors?.length) {
+            requestedQueriesErrors = undefined;
+        }
+
+        return {data: {queries: queries.flat(), requestedQueriesErrors}};
     } catch (error) {
         return {error};
     }

@@ -1,5 +1,6 @@
 import {PluginWidgetProps} from '@gravity-ui/dashkit';
 import type {PoolPair} from '../../../../../components/Dialog/controls/PoolsMultiple/PoolsMultiple';
+import {YTError} from '../../../../../types';
 
 export type PoolResource = {
     value: number;
@@ -8,11 +9,11 @@ export type PoolResource = {
 };
 
 export type Pool = {
-    general: {pool: string; tree: string};
-    cpu: PoolResource;
-    memory: PoolResource;
-    gpu: PoolResource;
-    operations: PoolResource;
+    general: {pool: string; tree: string; error?: YTError};
+    cpu?: PoolResource;
+    memory?: PoolResource;
+    gpu?: PoolResource;
+    operations?: PoolResource;
 };
 
 export type PoolsWidgetData = {

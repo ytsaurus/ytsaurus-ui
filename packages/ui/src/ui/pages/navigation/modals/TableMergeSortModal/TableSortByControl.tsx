@@ -51,7 +51,7 @@ export function TableSortByControl(props: TableSortByControlProps) {
             className={block()}
             value={columns}
             onUpdate={handleChange}
-            items={suggestColumns}
+            items={[...suggestColumns, ...value.map((item) => item.name)]}
             renderItemValue={(name: string) => {
                 const desc = descendingMap[name];
                 const icon = desc ? 'sort-amount-up' : 'sort-amount-down-alt';

@@ -7,7 +7,7 @@ import type {OperationsWidgetProps} from '../types';
 
 export function OperationsWidgetHeader(props: OperationsWidgetProps) {
     const {
-        data: {isLoading, operations},
+        data: {isLoading, operations, requestedOperationsErrors},
     } = useOperationsWidget(props);
     const name = props.data?.name;
     const id = props.id;
@@ -18,6 +18,7 @@ export function OperationsWidgetHeader(props: OperationsWidgetProps) {
             isLoading={isLoading}
             page={'OPERATIONS'}
             id={id}
+            error={requestedOperationsErrors}
         />
     );
 }

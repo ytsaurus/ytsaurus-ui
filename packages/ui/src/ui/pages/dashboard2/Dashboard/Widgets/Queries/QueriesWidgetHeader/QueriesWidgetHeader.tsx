@@ -6,7 +6,7 @@ import {useQueriesWidget} from '../hooks/use-queries-widget';
 import {QueriesWidgetProps} from '../types';
 
 export function QueriesWidgetHeader(props: QueriesWidgetProps) {
-    const {queries, isLoading} = useQueriesWidget(props);
+    const {queries, isLoading, requestedQueriesErrors} = useQueriesWidget(props);
     const name = props.data?.name as string | undefined;
     const id = props.id;
     return (
@@ -16,6 +16,7 @@ export function QueriesWidgetHeader(props: QueriesWidgetProps) {
             page={'QUERIES'}
             isLoading={isLoading}
             id={id}
+            error={requestedQueriesErrors}
         />
     );
 }

@@ -3,6 +3,7 @@ import map_ from 'lodash/map';
 import ypath from '../../../../common/thor/ypath';
 
 import {ytApiV3} from '../../../../rum/rum-wrap-api';
+import {UNKNOWN_ITEM_NAME} from '../../../../constants/dashboard2';
 
 export type PoolQueryParams = {
     tree: string;
@@ -10,6 +11,7 @@ export type PoolQueryParams = {
 };
 
 export type PoolsQueryArgs = {
+    cluster: string;
     id: string;
     type: 'favourite' | 'usable' | 'custom';
     favouriteList: {path: string}[];
@@ -64,6 +66,16 @@ export async function fetchPools(args: PoolsQueryArgs) {
         const pools = map_(response, (item, index) => {
             const {output} = item;
 
+            if (item.error) {
+                return {
+                    general: {
+                        pool: queries?.[index]?.pool || 'unknown',
+                        tree: queries?.[index]?.tree || 'unknown',
+                        error: item.error,
+                    },
+                };
+            }
+
             const operationsGuarantee = ypath.getValue(output, '/max_operation_count');
             const operationsUsage = ypath.getValue(output, '/running_operation_count');
 
@@ -103,8 +115,8 @@ export async function fetchPools(args: PoolsQueryArgs) {
 
             return {
                 general: {
-                    pool: queries?.[index]?.pool || 'unknown',
-                    tree: queries?.[index]?.tree || 'unknown',
+                    pool: queries?.[index]?.pool || UNKNOWN_ITEM_NAME,
+                    tree: queries?.[index]?.tree || UNKNOWN_ITEM_NAME,
                 },
                 cpu,
                 gpu,

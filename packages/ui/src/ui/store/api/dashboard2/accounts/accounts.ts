@@ -6,10 +6,14 @@ import Account from '../../../../pages/accounts/selector';
 
 import {ytApiV3} from '../../../../rum/rum-wrap-api';
 import {parseAccountData} from '../../../../utils/accounts/accounts-selector';
+import {UNKNOWN_ITEM_NAME} from '../../../../constants/dashboard2';
+
+import {YTError} from '../../../../types';
 
 type AccountsWidgetArgs = {
     id: string;
     accountsList: string[];
+    cluster: string;
     medium?: string[] | string;
 };
 
@@ -39,8 +43,11 @@ export type Resource = Partial<{
 }>;
 
 export type AccountInfo = {
-    name: string;
-    [key: string]: Resource | string;
+    general: {
+        name: string;
+        error?: YTError;
+    };
+    [key: string]: Resource | Record<string, string | YTError | undefined>;
 };
 
 type MasterMemory = Partial<{
@@ -107,13 +114,18 @@ export async function fetchAccounts(args: AccountsWidgetArgs) {
             const {output} = item;
             if (!output) {
                 return {
-                    name: accountsList?.[idx] || 'noname',
+                    general: {
+                        name: accountsList?.[idx] || UNKNOWN_ITEM_NAME,
+                        error: item.error,
+                    },
                 };
             }
             const account = new Account(parseAccountData(output));
 
             const res: AccountInfo = {
-                name: output?.$attributes?.name || accountsList?.[idx] || 'noname',
+                general: {
+                    name: output?.$attributes?.name || accountsList?.[idx] || UNKNOWN_ITEM_NAME,
+                },
                 chunkCount: account.getChunkCountProgressInfo(),
                 nodeCount: account.getNodeCountProgressInfo(),
             };

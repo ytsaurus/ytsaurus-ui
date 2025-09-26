@@ -16,6 +16,7 @@ import {appReducers} from '../../store/reducers/index.main';
 import {rootApi} from '../../store/api';
 import {defaultUIFactory} from '../../UIFactory/default-ui-factory';
 import {AppThemeFont} from '../../containers/App/AppThemeFont';
+import ModalErrors from '../../containers/ModalErrors/ModalErrors';
 import {registerPlugins} from '../../pages/dashboard2/Dashboard/utils/registerPlugins';
 
 import '../../appearance';
@@ -46,6 +47,7 @@ beforeMount(async ({App}) => {
                         {/* ignore theme prop error, applying theme inside mountFixture.tsx */}
                         {/* @ts-ignore */}
                         <AppThemeFont>
+                            <ModalErrors />
                             <App />
                         </AppThemeFont>
                     </ThemeProvider>
