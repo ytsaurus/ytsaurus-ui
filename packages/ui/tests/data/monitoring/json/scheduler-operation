@@ -1,0 +1,793 @@
+{
+    "panels": [
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            },
+            "type": "row"
+        },
+        {
+            "type": "text",
+            "options": {
+                "content": "<h2>Resources</h2>",
+                "mode": "markdown"
+            },
+            "title": "",
+            "gridPos": {
+                "x": 0,
+                "y": 1,
+                "w": 24,
+                "h": 2
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 3
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_operations_by_slot_resource_usage_cpu\", pool=~\"$pool\", slot_index=~\"$slot_index\", tree=~\"$tree\"}",
+                    "refId": "A",
+                    "legendFormat": "Usage"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_operations_by_slot_resource_demand_cpu\", pool=~\"$pool\", slot_index=~\"$slot_index\", tree=~\"$tree\"}",
+                    "refId": "B",
+                    "legendFormat": "Demand"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_operations_by_slot_specified_resource_limits_cpu\", pool=~\"$pool\", slot_index=~\"$slot_index\", tree=~\"$tree\"}",
+                    "refId": "C",
+                    "legendFormat": "Configured limit"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "axisLabel": "Cores",
+                        "hideFrom": {
+                            "legend": false
+                        }
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "C"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "CPU",
+            "gridPos": {
+                "x": 0,
+                "y": 4,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_operations_by_slot_resource_usage_user_memory\", pool=~\"$pool\", slot_index=~\"$slot_index\", tree=~\"$tree\"}",
+                    "refId": "A",
+                    "legendFormat": "Usage"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_operations_by_slot_resource_demand_user_memory\", pool=~\"$pool\", slot_index=~\"$slot_index\", tree=~\"$tree\"}",
+                    "refId": "B",
+                    "legendFormat": "Demand"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_operations_by_slot_specified_resource_limits_user_memory\", pool=~\"$pool\", slot_index=~\"$slot_index\", tree=~\"$tree\"}",
+                    "refId": "C",
+                    "legendFormat": "Configured limit"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "axisLabel": "Bytes",
+                        "hideFrom": {
+                            "legend": false
+                        }
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            },
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            },
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "C"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "bytes"
+                            },
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Memory",
+            "gridPos": {
+                "x": 8,
+                "y": 4,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_operations_by_slot_resource_usage_gpu\", pool=~\"$pool\", slot_index=~\"$slot_index\", tree=~\"$tree\"}",
+                    "refId": "A",
+                    "legendFormat": "Usage"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_operations_by_slot_resource_demand_gpu\", pool=~\"$pool\", slot_index=~\"$slot_index\", tree=~\"$tree\"}",
+                    "refId": "B",
+                    "legendFormat": "Demand"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_operations_by_slot_specified_resource_limits_gpu\", pool=~\"$pool\", slot_index=~\"$slot_index\", tree=~\"$tree\"}",
+                    "refId": "C",
+                    "legendFormat": "Configured limit"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "axisLabel": "GPUs",
+                        "hideFrom": {
+                            "legend": false
+                        }
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "C"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "GPU",
+            "gridPos": {
+                "x": 16,
+                "y": 4,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 10
+            },
+            "type": "row"
+        },
+        {
+            "type": "text",
+            "options": {
+                "content": "**Demand**: amount of resources needed to run all waiting and running jobs of the operation.<br>\n**Usage**: model resource consumption of the operation from scheduler's point of view. Represents the number of resources that are reserved for the operation. Actual resource consumption may differ.<br>\n**Configured Limit**: maximum amount of resources given to the operation that is specified in its specification and can be changed by updating runtime parameters.",
+                "mode": "markdown"
+            },
+            "title": "",
+            "gridPos": {
+                "x": 0,
+                "y": 11,
+                "w": 24,
+                "h": 4
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 15
+            },
+            "type": "row"
+        },
+        {
+            "type": "text",
+            "options": {
+                "content": "<h2>Detailed Resource Distribution</h2>",
+                "mode": "markdown"
+            },
+            "title": "",
+            "gridPos": {
+                "x": 0,
+                "y": 16,
+                "w": 24,
+                "h": 2
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 18
+            },
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_operations_by_slot_dominant_usage_share\", pool=~\"$pool\", slot_index=~\"$slot_index\", tree=~\"$tree\"}",
+                    "refId": "A",
+                    "legendFormat": "Usage"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_operations_by_slot_dominant_demand_share\", pool=~\"$pool\", slot_index=~\"$slot_index\", tree=~\"$tree\"}",
+                    "refId": "B",
+                    "legendFormat": "Demand"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_operations_by_slot_dominant_fair_share_total\", pool=~\"$pool\", slot_index=~\"$slot_index\", tree=~\"$tree\"}",
+                    "refId": "C",
+                    "legendFormat": "Fair share"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "axisLabel": "Cluster share",
+                        "hideFrom": {
+                            "legend": false
+                        }
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "C"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Dominant Shares",
+            "gridPos": {
+                "x": 0,
+                "y": 19,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_operations_by_slot_fair_share_total_cpu\", pool=~\"$pool\", slot_index=~\"$slot_index\", tree=~\"$tree\"}",
+                    "refId": "A",
+                    "legendFormat": "CPU"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_operations_by_slot_fair_share_total_memory\", pool=~\"$pool\", slot_index=~\"$slot_index\", tree=~\"$tree\"}",
+                    "refId": "B",
+                    "legendFormat": "Memory"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_operations_by_slot_fair_share_total_gpu\", pool=~\"$pool\", slot_index=~\"$slot_index\", tree=~\"$tree\"}",
+                    "refId": "C",
+                    "legendFormat": "GPU"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "axisLabel": "Cluster share",
+                        "hideFrom": {
+                            "legend": false
+                        }
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "C"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Fair Share per Resource",
+            "gridPos": {
+                "x": 8,
+                "y": 19,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_operations_by_slot_dominant_fair_share_strong_guarantee\", pool=~\"$pool\", slot_index=~\"$slot_index\", tree=~\"$tree\"}",
+                    "refId": "A",
+                    "legendFormat": "Strong guarantee"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_operations_by_slot_dominant_fair_share_integral_guarantee\", pool=~\"$pool\", slot_index=~\"$slot_index\", tree=~\"$tree\"}",
+                    "refId": "B",
+                    "legendFormat": "Integral guarantee"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_operations_by_slot_dominant_fair_share_weight_proportional\", pool=~\"$pool\", slot_index=~\"$slot_index\", tree=~\"$tree\"}",
+                    "refId": "C",
+                    "legendFormat": "Weight proportional"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100,
+                        "axisLabel": "Cluster share",
+                        "hideFrom": {
+                            "legend": false
+                        }
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "C"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "title": "Dominant Fair Share per Type",
+            "gridPos": {
+                "x": 16,
+                "y": 19,
+                "w": 8,
+                "h": 6
+            }
+        },
+        {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 25
+            },
+            "type": "row"
+        },
+        {
+            "type": "text",
+            "options": {
+                "content": "**Usage**, **Demand**, **Fair share**: share of the cluster that is used, demanded or should be given to the pool. For example, 1.0 or 100% corresponds to the total amount of resources in the cluster.<br>\n**Fair Share** can be split into three parts: strong guarantee, integral guarantee and free resources, which are distributed between pools in proportion to their weights.<br>",
+                "mode": "markdown"
+            },
+            "title": "",
+            "gridPos": {
+                "x": 0,
+                "y": 26,
+                "w": 24,
+                "h": 3
+            }
+        }
+    ],
+    "title": "Scheduler Operation [Autogenerated]",
+    "tags": [
+        "YT",
+        "autogen"
+    ],
+    "templating": {
+        "list": [
+            {
+                "name": "cluster",
+                "label": "YT cluster"
+            },
+            {
+                "name": "cluster",
+                "label": "Cluster",
+                "type": "textbox",
+                "options": [
+                    {
+                        "selected": true,
+                        "text": ".*",
+                        "value": ".*"
+                    }
+                ],
+                "current": {
+                    "selected": true,
+                    "text": ".*",
+                    "value": ".*"
+                },
+                "query": ".*",
+                "hide": 0,
+                "skipUrlSync": false,
+                "allFormat": "glob"
+            },
+            {
+                "name": "tree",
+                "label": "Tree"
+            },
+            {
+                "name": "tree",
+                "label": "Tree",
+                "type": "textbox",
+                "options": [
+                    {
+                        "selected": true,
+                        "text": "default",
+                        "value": "default"
+                    }
+                ],
+                "current": {
+                    "selected": true,
+                    "text": "default",
+                    "value": "default"
+                },
+                "query": "default",
+                "hide": 0,
+                "skipUrlSync": false,
+                "allFormat": "glob"
+            },
+            {
+                "name": "pool",
+                "label": "Pool"
+            },
+            {
+                "name": "pool",
+                "label": "Pool",
+                "type": "textbox",
+                "options": [
+                    {
+                        "selected": true,
+                        "text": "<Root>",
+                        "value": "<Root>"
+                    }
+                ],
+                "current": {
+                    "selected": true,
+                    "text": "<Root>",
+                    "value": "<Root>"
+                },
+                "query": "<Root>",
+                "hide": 0,
+                "skipUrlSync": false,
+                "allFormat": "glob"
+            },
+            {
+                "name": "slot_index",
+                "label": "Slot index"
+            },
+            {
+                "name": "slot_index",
+                "label": "Slot index",
+                "type": "textbox",
+                "options": [
+                    {
+                        "selected": true,
+                        "text": "0",
+                        "value": "0"
+                    }
+                ],
+                "current": {
+                    "selected": true,
+                    "text": "0",
+                    "value": "0"
+                },
+                "query": "0",
+                "hide": 0,
+                "skipUrlSync": false,
+                "allFormat": "glob"
+            }
+        ]
+    },
+    "uid": "ytsaurus-scheduler-operation"
+}
