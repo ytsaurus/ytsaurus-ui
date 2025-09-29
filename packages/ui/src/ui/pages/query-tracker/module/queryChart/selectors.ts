@@ -3,7 +3,7 @@ import {RootState} from '../../../../store/reducers';
 import {getQueryResultsState} from '../query_result/selectors';
 import {getQueryDraft} from '../query/selectors';
 import {QueryResultReadyState} from '../query_result/types';
-import {NumberTypes} from '../../QueryResultsVisualization/preparers/getPointData';
+import {NumberTypes} from './constants/yqlTypes';
 
 export const selectChartVisualization = (state: RootState) =>
     state.queryTracker.queryChart.visualization;

@@ -3,6 +3,7 @@ import {QueryResult} from './types';
 import {ChartType} from '../constants';
 import {preparePie} from './preparePie';
 import {Config, VisualizationState} from '../../module/queryChart/queryChartSlice';
+import {DateTime64Types, DateTimeTypes} from '../../module/queryChart/constants/yqlTypes';
 import {prepareData} from './prepareData';
 import {getPointValue} from './getPointData';
 import {prepareWaterfall} from './prepareWaterfall';
@@ -22,27 +23,50 @@ const options = {
     },
 };
 
+const shouldUseDateTimeAxis = (result: QueryResult, xField: string): boolean => {
+    if (!result.length || !result[0][xField]) return false;
+    const xFieldType = result[0][xField].$type;
+    return DateTimeTypes.includes(xFieldType) || DateTime64Types.includes(xFieldType);
+};
+
 export const prepareWidgetData = (
     result: QueryResult,
     {type, xField, yField, config}: VisualizationState,
 ): ChartData | null => {
     if (!xField || !yField.length || !result) return null;
 
+    // Auto-detect datetime axis type based on data
+    let adjustedConfig = config;
+    if (shouldUseDateTimeAxis(result, xField) && config.xAxis.type === 'linear') {
+        adjustedConfig = {
+            ...config,
+            xAxis: {
+                ...config.xAxis,
+                type: 'datetime' as const,
+            },
+        };
+    }
+
     switch (type) {
         case ChartType.Pie: {
             return {
                 series: {data: preparePie(result, xField, yField[0])},
-                ...config,
+                ...adjustedConfig,
             };
         }
         case ChartType.Waterfall: {
             return {
                 series: {
                     data: yField.map((field) =>
-                        prepareWaterfall(result, xField, field, config.xAxis.type === 'category'),
+                        prepareWaterfall(
+                            result,
+                            xField,
+                            field,
+                            adjustedConfig.xAxis.type === 'category',
+                        ),
                     ),
                 },
-                ...config,
+                ...adjustedConfig,
             };
         }
         case ChartType.BarX:
@@ -52,25 +76,31 @@ export const prepareWidgetData = (
             return {
                 series: {
                     data: yField.map((field) =>
-                        prepareData(result, xField, field, type, config.xAxis.type === 'category'),
+                        prepareData(
+                            result,
+                            xField,
+                            field,
+                            type,
+                            adjustedConfig.xAxis.type === 'category',
+                        ),
                     ),
                     options,
                 },
-                ...config,
+                ...adjustedConfig,
             };
         }
         case ChartType.BarY: {
             const newConfig: Config = {
-                ...config,
+                ...adjustedConfig,
                 xAxis: {
                     type: 'linear',
-                    title: config.xAxis.title,
+                    title: adjustedConfig.xAxis.title,
                 },
-                yAxis: config.yAxis
-                    ? config.yAxis.map((axis: ChartAxis) => ({
-                          type: config.xAxis.type,
+                yAxis: adjustedConfig.yAxis
+                    ? adjustedConfig.yAxis.map((axis: ChartAxis) => ({
+                          type: adjustedConfig.xAxis.type,
                           title: axis.title,
-                          ...(config.xAxis.type === 'category'
+                          ...(adjustedConfig.xAxis.type === 'category'
                               ? {
                                     categories: result.map((row) =>
                                         getPointValue(row[xField]).toString(),
@@ -84,7 +114,13 @@ export const prepareWidgetData = (
             return {
                 series: {
                     data: yField.map((field) =>
-                        prepareData(result, xField, field, type, config.xAxis.type === 'category'),
+                        prepareData(
+                            result,
+                            xField,
+                            field,
+                            type,
+                            adjustedConfig.xAxis.type === 'category',
+                        ),
                     ),
                     options,
                 },
