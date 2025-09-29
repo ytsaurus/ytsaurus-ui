@@ -7,10 +7,10 @@ import {
 } from '../../../store/selectors/query-tracker/query';
 import {
     getQueryACOOptions,
-    getQueryTrackerInfo,
     isQueryTrackerInfoLoading as isQueryTrackerInfoLoadingSelector,
+    selectQueryTrackerInfo,
 } from '../../../store/selectors/query-tracker/queryAco';
-import {getQueryACO} from '../../../store/actions/query-tracker/queryAco';
+import {getQueryTrackerInfo} from '../../../store/actions/query-tracker/queryAco';
 import {setDraftQueryACO, setQueryACO} from '../../../store/actions/query-tracker/query';
 
 export const useQueryACO = () => {
@@ -19,7 +19,7 @@ export const useQueryACO = () => {
     const currentDraftQueryACO = useSelector(getCurrentDraftQueryACO);
     const selectOptions = useSelector(getQueryACOOptions);
     const isQueryTrackerInfoLoading = useSelector(isQueryTrackerInfoLoadingSelector);
-    const trackerInfo = useSelector(getQueryTrackerInfo);
+    const trackerInfo = useSelector(selectQueryTrackerInfo);
     const [loading, setLoading] = useState(false);
 
     const changeCurrentQueryACO = useCallback(
@@ -45,7 +45,7 @@ export const useQueryACO = () => {
     );
 
     const loadQueryTrackerInfo = () => {
-        dispatch(getQueryACO());
+        dispatch(getQueryTrackerInfo());
     };
 
     return {

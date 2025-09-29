@@ -1,5 +1,8 @@
 import React, {FC} from 'react';
-import {getQueryACO, setUserDefaultACO} from '../../../store/actions/query-tracker/queryAco';
+import {
+    getQueryTrackerInfo,
+    setUserDefaultACO,
+} from '../../../store/actions/query-tracker/queryAco';
 import {Item} from '../../../components/Select/Select';
 import {SettingsMenuSelect} from '../../SettingsMenu/SettingsMenuSelect';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
@@ -13,7 +16,7 @@ export const DefaultAcoSelect: FC = () => {
     return (
         <SettingsMenuSelect
             getOptionsOnMount={() =>
-                dispatch(getQueryACO()).then((data) => {
+                dispatch(getQueryTrackerInfo()).then((data) => {
                     return data.access_control_objects.reduce((acc: Item[], item: string) => {
                         acc.push({value: item, text: item});
                         return acc;

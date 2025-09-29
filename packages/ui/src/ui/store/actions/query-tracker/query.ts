@@ -65,6 +65,7 @@ import {
     getLastUserChoiceQueryChytClique,
     getLastUserChoiceQueryDiscoveryPath,
     getLastUserChoiceQueryEngine,
+    getLastUserChoiceYqlVersion,
 } from '../../selectors/settings/settings-queries';
 import {getClusterParams, prepareClusterUiConfig} from '../cluster-params';
 import {RumWrapper} from '../../../rum/rum-wrap-api';
@@ -77,8 +78,10 @@ import {createTableSelect} from '../../../pages/query-tracker/Navigation/helpers
 import {ResetQueryTabsAction, resetQueryTabs} from '../../reducers/query-tracker/queryTabsSlice';
 import {updateQueryTabs} from './queryTabs/queryTabs';
 
+type AsyncAction = ThunkAction<void, RootState, unknown, any>;
+
 const checkCliqueControllerIsSupported =
-    (clusterId: string, engine: QueryEngine): ThunkAction<void, RootState, unknown, any> =>
+    (clusterId: string, engine: QueryEngine): AsyncAction =>
     async (dispatch) => {
         const supportedControllers = await getCliqueControllerSupportByCluster(clusterId);
 
@@ -95,26 +98,26 @@ const checkCliqueControllerIsSupported =
         });
     };
 
-export const setCurrentClusterToQuery =
-    (): ThunkAction<void, RootState, unknown, any> => async (dispatch, getState) => {
-        const state = getState();
-        const cluster = getCluster(state);
-        const {settings, engine} = getQueryDraft(state);
+export const setCurrentClusterToQuery = (): AsyncAction => async (dispatch, getState) => {
+    const state = getState();
+    const cluster = getCluster(state);
+    const {settings, engine} = getQueryDraft(state);
 
-        if (settings && 'cluster' in settings) return;
+    if (settings && 'cluster' in settings) return;
 
-        dispatch(checkCliqueControllerIsSupported(cluster, engine));
-        dispatch(updateQueryDraft({settings: {...settings, cluster}}));
-    };
+    dispatch(checkCliqueControllerIsSupported(cluster, engine));
+    dispatch(updateQueryDraft({settings: {...settings, cluster}}));
+};
 
 export const setUserLastChoice =
-    (clearProps?: boolean): ThunkAction<void, RootState, unknown, any> =>
+    (clearProps?: boolean): AsyncAction =>
     (dispatch, getState) => {
         const state = getState();
         const {settings} = getQueryDraft(state);
         const engine = getQueryEngine(state);
         const lastPath = getLastUserChoiceQueryDiscoveryPath(state);
         const lastClique = getLastUserChoiceQueryChytClique(state);
+        const lastVersion = getLastUserChoiceYqlVersion(state);
 
         const newSettings = {...settings};
         if (clearProps) {
@@ -128,6 +131,10 @@ export const setUserLastChoice =
 
         if (engine === QueryEngine.CHYT && lastClique) {
             newSettings.clique = lastClique;
+        }
+
+        if (engine === QueryEngine.YQL && lastVersion) {
+            newSettings.yql_version = lastVersion;
         }
 
         dispatch(updateQueryDraft({settings: newSettings}));
@@ -165,7 +172,7 @@ export const loadTablePromptToQuery =
         path: string,
         engine: QueryEngine,
         newQuerySettings?: Record<string, string>,
-    ): ThunkAction<void, RootState, unknown, any> =>
+    ): AsyncAction =>
     async (dispatch, getState) => {
         const state = getState();
         const {pageSize} = getQueryResultGlobalSettings();
@@ -179,7 +186,7 @@ export const loadTablePromptToQuery =
     };
 
 export const setQueryEngine =
-    (engine: QueryEngine): ThunkAction<void, RootState, unknown, any> =>
+    (engine: QueryEngine): AsyncAction =>
     (dispatch, getState) => {
         const settings = getQueryDraftSettings(getState());
 
@@ -192,11 +199,15 @@ export const setQueryEngine =
             delete newSettings.clique;
         }
 
+        if (engine !== QueryEngine.YQL) {
+            delete newSettings.yql_version;
+        }
+
         dispatch(updateQueryDraft({settings: newSettings}));
     };
 
 export const setQueryCluster =
-    (clusterId: string): ThunkAction<void, RootState, unknown, any> =>
+    (clusterId: string): AsyncAction =>
     async (dispatch, getState) => {
         const state = getState();
         const {settings = {}, engine} = getQueryDraft(state);
@@ -221,7 +232,7 @@ export const setQueryCluster =
     };
 
 export const setQueryClique =
-    (alias: string): ThunkAction<void, RootState, unknown, any> =>
+    (alias: string): AsyncAction =>
     (dispatch, getState) => {
         const settings = getQueryDraftSettings(getState());
 
@@ -237,8 +248,19 @@ export const setQueryClique =
         );
     };
 
+export const setQueryYqlVersion =
+    (version: string): AsyncAction =>
+    (dispatch, getState) => {
+        const settings = getQueryDraftSettings(getState());
+
+        dispatch(updateQueryDraft({settings: {...settings, yql_version: version}}));
+        dispatch(
+            setSettingByKey(`local::${settings?.cluster}::queryTracker::lastYqlVersion`, version),
+        );
+    };
+
 export const setQueryPath =
-    (newPath: string): ThunkAction<void, RootState, unknown, any> =>
+    (newPath: string): AsyncAction =>
     (dispatch, getState) => {
         const settings = getQueryDraftSettings(getState());
         dispatch(updateQueryDraft({settings: {...settings, discovery_group: newPath}}));

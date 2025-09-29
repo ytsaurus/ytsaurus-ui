@@ -184,6 +184,9 @@ export type QueryTrackerLastDiscoveryPath = {
 export type QueryTrackerLastChytClique = {
     [key in `local::${Cluster}::queryTracker::lastChytClique`]: string;
 };
+export type QueryTrackerLastYqlVersion = {
+    [key in `local::${Cluster}::queryTracker::lastYqlVersion`]: string;
+};
 
 export type SchedulingOverviewColumnNames =
     | 'name'
@@ -236,6 +239,7 @@ export type DescribedSettings = GlobalSettings &
     QueryTrackerUserDefaultACOSettings &
     QueryTrackerLastDiscoveryPath &
     QueryTrackerLastChytClique &
+    QueryTrackerLastYqlVersion &
     ComponentsSettings &
     SchedulingSettings &
     DashboardSettings;
