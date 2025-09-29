@@ -782,7 +782,7 @@ export class DownloadManager extends React.Component<Props, State> {
         return (
             <ConfirmButton
                 filename={filename}
-                url={url}
+                href={url}
                 title="Download to clipboard"
                 disabled={Boolean(error)}
                 qa="download-to-clipboard-static-table"
@@ -799,7 +799,7 @@ export class DownloadManager extends React.Component<Props, State> {
             <ConfirmButton
                 className={classNameConfirm}
                 filename={filename}
-                url={url}
+                href={url}
                 title="Download"
                 disabled={Boolean(error)}
                 view="action"
