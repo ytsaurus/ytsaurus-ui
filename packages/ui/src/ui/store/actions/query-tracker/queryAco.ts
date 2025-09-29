@@ -14,7 +14,7 @@ import {setSettingByKey} from '../settings';
 
 type QueryTrackerInfoResponse = Awaited<ReturnType<typeof ytApiV4Id.getQueryTrackerInfo>>;
 
-export const getQueryACO = (): ThunkAction<
+export const getQueryTrackerInfo = (): ThunkAction<
     Promise<QueryTrackerInfoResponse>,
     any,
     any,

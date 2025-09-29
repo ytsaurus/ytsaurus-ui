@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useEffect, useMemo} from 'react';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {QueryCliqueSelector} from './QueryCliqueSelector';
 import {useDispatch, useSelector} from 'react-redux';
@@ -11,14 +11,32 @@ import {
     loadCliqueByCluster,
     setQueryClique,
     setQueryPath,
+    setQueryYqlVersion,
 } from '../../../store/actions/query-tracker/query';
+import {Select} from '@gravity-ui/uikit';
+import {
+    getAvailableYql,
+    getDefaultYqlVersion,
+} from '../../../store/selectors/query-tracker/queryAco';
+import cn from 'bem-cn-lite';
+import './QuerySelectorsByEngine.scss';
+
+const block = cn('yt-query-selector-by-engine');
 
 export const QuerySelectorsByEngine: FC = () => {
     const dispatch = useDispatch();
     const cliqueMap = useSelector(getCliqueMap);
     const cliqueLoading = useSelector(getCliqueLoading);
     const {settings = {}, engine} = useSelector(getQueryDraft);
+    const availableYql = useSelector(getAvailableYql);
+    const defaultYqlVersion = useSelector(getDefaultYqlVersion);
     const currentCluster = settings?.cluster;
+
+    const options = useMemo(() => {
+        return availableYql.map((value) => {
+            return {value, content: value};
+        });
+    }, [availableYql]);
 
     useEffect(() => {
         if ((engine === QueryEngine.CHYT || engine === QueryEngine.SPYT) && currentCluster) {
@@ -34,9 +52,26 @@ export const QuerySelectorsByEngine: FC = () => {
         dispatch(setQueryPath(newPath));
     };
 
+    const handleYqlVersionChange = (value: string[]) => {
+        dispatch(setQueryYqlVersion(value[0]));
+    };
+
     const clusterCliqueList =
         settings.cluster && settings.cluster in cliqueMap ? cliqueMap[settings.cluster] : {};
     const cliqueList = engine in clusterCliqueList ? clusterCliqueList[engine] : [];
+
+    if (engine === QueryEngine.YQL && availableYql.length) {
+        const value = settings?.yql_version || defaultYqlVersion;
+        return (
+            <Select
+                className={block('version')}
+                size="l"
+                options={options}
+                value={value ? [value] : undefined}
+                onUpdate={handleYqlVersionChange}
+            />
+        );
+    }
 
     if (engine === QueryEngine.CHYT || engine === QueryEngine.SPYT) {
         const isChyt = engine === QueryEngine.CHYT;

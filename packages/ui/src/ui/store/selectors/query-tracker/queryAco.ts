@@ -38,7 +38,16 @@ export const selectAvailableAco = (state: RootState) =>
 
 export const isQueryTrackerInfoLoading = (state: RootState) => selectAcoState(state).loading;
 
-export const getQueryTrackerInfo = (state: RootState) => selectAcoState(state).data;
+export const selectQueryTrackerInfo = (state: RootState) => selectAcoState(state).data;
+
+export const getAvailableYql = createSelector([selectQueryTrackerInfo], (qtInfo) => {
+    const versions = qtInfo?.engines_info?.yql?.available_yql_versions;
+    return Array.isArray(versions) ? versions : [];
+});
+
+export const getDefaultYqlVersion = createSelector([selectQueryTrackerInfo], (qtInfo) => {
+    return qtInfo?.engines_info?.yql.default_yql_ui_version;
+});
 
 export const isSupportedShareQuery = createSelector(
     [selectIsMultipleAco, selectAvailableAco],
