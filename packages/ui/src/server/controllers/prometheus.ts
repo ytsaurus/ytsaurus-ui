@@ -1,4 +1,4 @@
-import axios, {isAxiosError} from 'axios';
+import axios from 'axios';
 import type {Request, Response} from 'express';
 
 // @ts-ignore
@@ -27,8 +27,6 @@ import {ErrorWithCode, sendAndLogError} from '../utils';
 
 export async function prometheusQueryRange(req: Request, res: Response) {
     const BASE_URL = req.ctx.config.prometheusBaseUrl;
-
-    const queries: Array<object> = [];
 
     try {
         const {ytAuthCluster} = req.params;
@@ -90,29 +88,32 @@ export async function prometheusQueryRange(req: Request, res: Response) {
 
         const {targets} = panel;
 
-        const results = await req.ctx.call('Fetch prometheus data', () =>
-            Promise.all(
-                targets.map(({expr}) => {
-                    const query = replaceExprParams(expr, chartParams, step);
-                    queries.push({query, start, end, step});
+        const results = await req.ctx.call('Fetch prometheus data', () => {
+            const queries = targets.map(({expr}) => {
+                const query = replaceExprParams(expr, chartParams, step);
+                return {query, start, end, step};
+            });
+
+            return Promise.all(
+                queries.map((params) => {
                     return axios
                         .get<QueryRangeData>(`${BASE_URL}/api/v1/query_range?`, {
-                            params: {query, start, end, step},
+                            params,
                         })
                         .then(async (response) => {
                             return response.data;
                         });
                 }),
-            ),
-        );
+            ).finally(() => {
+                res.appendHeader(
+                    'X-UI-Prometheus-Params',
+                    queries.map((item) => JSON.stringify(item)),
+                );
+            });
+        });
 
         res.send({results});
     } catch (e: any) {
-        if (isAxiosError(e)) {
-            Object.assign(e.response?.data, {queries});
-        } else {
-            Object.assign(e, {queries});
-        }
         sendAndLogError(req.ctx, res, null, e);
     }
 }
