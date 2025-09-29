@@ -4,10 +4,10 @@ import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {getCurrentDraftQueryACO, getCurrentQueryACO} from '../module/query/selectors';
 import {
     getQueryACOOptions,
-    getQueryTrackerInfo,
     isQueryTrackerInfoLoading as isQueryTrackerInfoLoadingSelector,
+    selectQueryTrackerInfo,
 } from '../module/query_aco/selectors';
-import {getQueryACO} from '../module/query_aco/actions';
+import {getQueryTrackerInfo} from '../module/query_aco/actions';
 import {setDraftQueryACO, setQueryACO} from '../module/query/actions';
 
 export const useQueryACO = () => {
@@ -16,7 +16,7 @@ export const useQueryACO = () => {
     const currentDraftQueryACO = useSelector(getCurrentDraftQueryACO);
     const selectOptions = useSelector(getQueryACOOptions);
     const isQueryTrackerInfoLoading = useSelector(isQueryTrackerInfoLoadingSelector);
-    const trackerInfo = useSelector(getQueryTrackerInfo);
+    const trackerInfo = useSelector(selectQueryTrackerInfo);
     const [loading, setLoading] = useState(false);
 
     const changeCurrentQueryACO = useCallback(
@@ -42,7 +42,7 @@ export const useQueryACO = () => {
     );
 
     const loadQueryTrackerInfo = () => {
-        dispatch(getQueryACO());
+        dispatch(getQueryTrackerInfo());
     };
 
     return {

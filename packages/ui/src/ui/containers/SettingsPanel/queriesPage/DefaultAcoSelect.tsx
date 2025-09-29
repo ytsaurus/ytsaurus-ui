@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {
-    getQueryACO,
+    getQueryTrackerInfo,
     setUserDefaultACO,
 } from '../../../pages/query-tracker/module/query_aco/actions';
 import {Item} from '../../../components/Select/Select';
@@ -16,7 +16,7 @@ export const DefaultAcoSelect: FC = () => {
     return (
         <SettingsMenuSelect
             getOptionsOnMount={() =>
-                dispatch(getQueryACO()).then((data) => {
+                dispatch(getQueryTrackerInfo()).then((data) => {
                     return data.access_control_objects.reduce((acc: Item[], item: string) => {
                         acc.push({value: item, text: item});
                         return acc;
