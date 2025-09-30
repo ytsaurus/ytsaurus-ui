@@ -24,7 +24,7 @@ export const QueryDateFilter: FC = () => {
 
     return (
         <Flex alignItems="center" gap={1}>
-            <DatePicker
+            {/* <DatePicker
                 placeholder="Start date"
                 format="DD.MM.YYYY"
                 value={from ? dateTime({input: from}) : null}
@@ -38,7 +38,7 @@ export const QueryDateFilter: FC = () => {
                 value={to ? dateTime({input: to}) : null}
                 onUpdate={setFilter.to}
                 hasClear
-            />
+            /> */}
         </Flex>
     );
 };
