@@ -1,6 +1,6 @@
 import React, {ReactNode} from 'react';
 import block from 'bem-cn-lite';
-import {QueryItem, isSingleProgress} from '../module/api';
+import {QueryItem, isSingleProgress} from '../../../store/actions/queries/api';
 import {Tabs} from '@gravity-ui/uikit';
 import {QueryMetaInfo} from './QueryMetaRow';
 import QueryMetaTable from '../QueryMetaTable';
@@ -14,7 +14,11 @@ import {QueryResultContainer} from './QueryResultContainer';
 import {QueryChartTab} from './QueryChartTab';
 import {PlanContainer} from './PlanContainer';
 import {extractOperationIdToCluster} from './helpers/extractOperationIdToCluster';
-import {QueryResultTab, setActiveTab, setUserChangeTab} from '../module/queryTabs/queryTabsSlice';
+import {
+    QueryResultTab,
+    setActiveTab,
+    setUserChangeTab,
+} from '../../../store/reducers/queries/queryTabsSlice';
 
 import './index.scss';
 import {ErrorTree} from './ErrorTree';
@@ -24,7 +28,7 @@ import {
     selectActiveQueryResultTab,
     selectActiveResultParams,
     selectQueryResultTabs,
-} from '../module/queryTabs/selectors';
+} from '../../../store/selectors/queries/queryTabs';
 const b = block('query-results');
 
 type Props = {

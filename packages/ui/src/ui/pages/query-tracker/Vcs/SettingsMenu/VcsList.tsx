@@ -3,7 +3,7 @@ import {VcsListItem} from './VcsListItem';
 import cn from 'bem-cn-lite';
 import './VcsList.scss';
 import {useDispatch} from 'react-redux';
-import {removeToken} from '../../module/vcs/actions';
+import {removeToken} from '../../../../store/actions/queries/vcs';
 import {VcsConfig} from '../../../../../shared/vcs';
 
 const block = cn('vcs-list');

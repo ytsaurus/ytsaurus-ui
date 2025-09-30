@@ -9,7 +9,7 @@ import {
     selectPath,
     selectPreview,
     selectShowFilter,
-} from '../../module/vcs/selectors';
+} from '../../../../store/selectors/queries/vcs';
 import {VcsListFolder} from './VcsListFolder';
 import {
     addFileToQuery,
@@ -17,10 +17,10 @@ import {
     getFolderContent,
     insertFileToQuery,
     openFilePreview,
-} from '../../module/vcs/actions';
+} from '../../../../store/actions/queries/vcs';
 import {VcsListFile} from './VcsListFile';
 import {VcsListPreview} from './VcsListPreview';
-import {setPreview} from '../../module/vcs/vcsSlice';
+import {setPreview} from '../../../../store/reducers/queries/vcsSlice';
 import {NoContent} from '../../../../components/NoContent/NoContent';
 import {VcsPath} from '../VcsPath';
 import {Alert} from '@gravity-ui/uikit';

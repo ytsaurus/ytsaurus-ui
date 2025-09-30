@@ -1,7 +1,7 @@
 import React, {FC, useEffect} from 'react';
-import {QueryItem} from '../module/api';
+import {QueryItem} from '../../../store/actions/queries/api';
 import {useDispatch} from 'react-redux';
-import {loadQueryResult} from '../module/query_result/actions';
+import {loadQueryResult} from '../../../store/actions/queries/queryResult';
 import {QueryResultsView} from '../QueryResultsView';
 
 type Props = {

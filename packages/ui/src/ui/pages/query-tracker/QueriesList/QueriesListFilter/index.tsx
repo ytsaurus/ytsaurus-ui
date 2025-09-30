@@ -1,7 +1,7 @@
 import React from 'react';
 import block from 'bem-cn-lite';
 import {Icon, Tooltip} from '@gravity-ui/uikit';
-import {QueriesListFilter, QueriesListMode} from '../../module/queries_list/types';
+import {QueriesListFilter, QueriesListMode} from '../../../../types/query-tracker/queryList';
 import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 import FunnelIcon from '@gravity-ui/icons/svgs/funnel.svg';
 
@@ -17,8 +17,8 @@ import {
     getQueriesListMode,
     getQueryListColumns,
     hasCustomHistoryFilters,
-} from '../../module/queries_list/selectors';
-import {applyFilter} from '../../module/queries_list/actions';
+} from '../../../../store/selectors/queries/queriesList';
+import {applyFilter} from '../../../../store/actions/queries/queriesList';
 import {setSettingByKey} from '../../../../store/actions/settings';
 import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';
 import {FilterDropdown} from './FilterDropdown';

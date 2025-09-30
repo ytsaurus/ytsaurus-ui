@@ -1,13 +1,10 @@
 import React, {FC} from 'react';
-import {
-    getQueryACO,
-    setUserDefaultACO,
-} from '../../../pages/query-tracker/module/query_aco/actions';
+import {getQueryACO, setUserDefaultACO} from '../../../store/actions/queries/queryAco';
 import {Item} from '../../../components/Select/Select';
 import {SettingsMenuSelect} from '../../SettingsMenu/SettingsMenuSelect';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {useSelector} from 'react-redux';
-import {getDefaultQueryACO} from '../../../pages/query-tracker/module/query_aco/selectors';
+import {getDefaultQueryACO} from '../../../store/selectors/queries/queryAco';
 
 export const DefaultAcoSelect: FC = () => {
     const dispatch = useThunkDispatch();

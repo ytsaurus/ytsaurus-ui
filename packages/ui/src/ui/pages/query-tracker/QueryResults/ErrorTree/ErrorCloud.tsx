@@ -1,4 +1,4 @@
-import {ErrorPosition, QueryError} from '../../module/api';
+import {ErrorPosition, QueryError} from '../../../../store/actions/queries/api';
 import {useToggle} from 'react-use';
 import {Text} from '@gravity-ui/uikit';
 import React, {FC, useCallback, useState} from 'react';

@@ -3,7 +3,7 @@ import block from 'bem-cn-lite';
 import {Button, Icon, Text} from '@gravity-ui/uikit';
 import {useDispatch} from 'react-redux';
 import format from '../../../../common/hammer/format';
-import {QueryItem} from '../../module/api';
+import {QueryItem} from '../../../../store/actions/queries/api';
 import {QueryDuration} from '../../QueryDuration';
 import stopIcon from '../../../../assets/img/svg/icons/stop-circle.svg';
 
@@ -11,7 +11,7 @@ import {QueryStatusView} from '../../../../components/QueryStatus';
 
 import './index.scss';
 import {isAbortable} from '../../utils/query';
-import {abortCurrentQuery} from '../../module/query/actions';
+import {abortCurrentQuery} from '../../../../store/actions/queries/query';
 
 const b = block('query-meta-info');
 

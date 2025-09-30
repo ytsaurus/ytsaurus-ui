@@ -1,9 +1,12 @@
 import React, {FC, useMemo} from 'react';
-import {QueriesListAuthorFilter, QueriesListFilter} from '../../module/queries_list/types';
+import {
+    QueriesListAuthorFilter,
+    QueriesListFilter,
+} from '../../../../types/query-tracker/queryList';
 import {ControlGroupOption, RadioButton} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from 'react-redux';
-import {getQueriesFilters} from '../../module/queries_list/selectors';
-import {applyFilter} from '../../module/queries_list/actions';
+import {getQueriesFilters} from '../../../../store/selectors/queries/queriesList';
+import {applyFilter} from '../../../../store/actions/queries/queriesList';
 import {getCurrentUserName} from '../../../../store/selectors/global';
 
 const AuthorFilter: ControlGroupOption[] = [

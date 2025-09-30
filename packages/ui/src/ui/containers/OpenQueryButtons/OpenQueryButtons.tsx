@@ -7,7 +7,7 @@ import Icon from '../../components/Icon/Icon';
 import {YQLKitButton} from '../YQLKitButton/YQLKitButton';
 import {QueryWidgetLazy} from '../../pages/query-tracker/QueryWidget/side-panel';
 import {QueryEngine} from '../../../shared/constants/engines';
-import {createQueryFromTablePath} from '../../pages/query-tracker/module/query/actions';
+import {createQueryFromTablePath} from '../../store/actions/queries/query';
 import {createNewQueryUrl} from '../../pages/query-tracker/utils/navigation';
 import {getNavigationSqlService} from '../../store/selectors/settings/navigation';
 import {getPath} from '../../store/selectors/navigation';

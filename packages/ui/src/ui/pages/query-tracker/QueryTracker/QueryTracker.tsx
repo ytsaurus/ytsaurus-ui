@@ -3,17 +3,17 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Route, Switch} from 'react-router';
 import FlexSplitPane from '../../../components/FlexSplitPane/FlexSplitPane';
 import {QueriesPooling} from '../hooks/QueriesPooling/context';
-import {isEngine} from '../module/api';
+import {isEngine} from '../../../store/actions/queries/api';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {
     createEmptyQuery,
     createQueryFromTablePath,
     goToQuery,
     loadQuery,
-} from '../module/query/actions';
+} from '../../../store/actions/queries/query';
 import {usePreventUnload} from '../../../hooks/use-prevent-unload';
 import {useQueriesListSidebarToggle} from '../hooks/QueriesList';
-import {getDirtySinceLastSubmit, getQueryGetParams} from '../module/query/selectors';
+import {getDirtySinceLastSubmit, getQueryGetParams} from '../../../store/selectors/queries/query';
 import {QueriesList} from '../QueriesList';
 import {useQueryACO} from '../QueryACO/useQueryACO';
 import {MonacoContext} from '../context/MonacoContext';
@@ -22,11 +22,11 @@ import cn from 'bem-cn-lite';
 
 import './QueryTracker.scss';
 import {QueryEditorSplit} from './QueryEditorSplit';
-import {selectFileEditor} from '../module/queryFilesForm/selectors';
-import {selectNavigationCluster} from '../module/queryNavigation/selectors';
+import {selectFileEditor} from '../../../store/selectors/queries/queryFilesForm';
+import {selectNavigationCluster} from '../../../store/selectors/queries/queryNavigation';
 import {setSettingByKey} from '../../../store/actions/settings';
 import {CellPreviewModal} from '../../../containers/CellPreviewModal/CellPreviewModal';
-import {SET_QUERY_PARAMS} from '../module/query-tracker-contants';
+import {SET_QUERY_PARAMS} from '../../../store/reducers/queries/query-tracker-contants';
 import {RedirectConfirmModal} from '../../../components/RedirectConfirmModal';
 import {getLastUserChoiceQueryEngine} from '../../../store/selectors/settings/settings-queries';
 

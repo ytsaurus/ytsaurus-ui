@@ -53,7 +53,7 @@ import {YT} from '../../config/yt-config';
 import Link from '../../components/Link/Link';
 import Button from '../../components/Button/Button';
 import {AddVcsTokenForm, VcsList} from '../../pages/query-tracker/Vcs/SettingsMenu';
-import {selectIsVcsVisible, selectVcsConfig} from '../../pages/query-tracker/module/vcs/selectors';
+import {selectIsVcsVisible, selectVcsConfig} from '../../store/selectors/queries/vcs';
 import {SettingsMenuRadioByKey} from '../SettingsMenu/SettingsMenuSelect';
 import {BooleanSettingItem} from '../SettingsMenu/BooleanSettingItem';
 import {queriesPage} from './queriesPage';

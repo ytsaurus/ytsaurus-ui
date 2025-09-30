@@ -86,10 +86,7 @@ import {
     getChaosBundlesPreparedState,
     getChaosCellsPreparedState,
 } from './reducers/chaos_cell_bundles/url-mapping';
-import {
-    draftQueryParameters,
-    getDraftQueryParameters,
-} from '../pages/query-tracker/module/query/url_mapping';
+import {draftQueryParameters, getDraftQueryParameters} from './reducers/queries/url_mapping';
 
 import {chytListParams, getGhytListPreparedState} from './reducers/chyt/url-mapping';
 

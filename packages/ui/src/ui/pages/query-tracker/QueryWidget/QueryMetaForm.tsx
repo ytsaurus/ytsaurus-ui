@@ -1,10 +1,10 @@
 import React, {useCallback} from 'react';
 import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from 'react-redux';
-import {getQueryDraft} from '../module/query/selectors';
+import {getQueryDraft} from '../../../store/selectors/queries/query';
 import {QuerySettingsButton} from '../QuerySettingsButton';
 import {QueryFilesButton} from '../QueryFilesButton';
-import {loadTablePromptToQuery, updateQueryDraft} from '../module/query/actions';
+import {loadTablePromptToQuery, updateQueryDraft} from '../../../store/actions/queries/query';
 import {NewQueryButton} from '../NewQueryButton';
 import {QueryEngineSelector} from '../QueryTrackerTopRow/QueryEngineSelector';
 import {QueryTrackerOpenButton} from '../QueryTrackerOpenButton/QueryTrackerOpenButton';

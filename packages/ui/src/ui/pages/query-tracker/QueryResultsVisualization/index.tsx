@@ -1,6 +1,6 @@
 import React from 'react';
 import withLazyLoading from '../../../hocs/withLazyLoading';
-import {QueryItem} from '../module/api';
+import type {QueryItem} from '../../../store/actions/queries/api';
 
 const QueryResultsVisualizationLazy = withLazyLoading(
     React.lazy(async () => {

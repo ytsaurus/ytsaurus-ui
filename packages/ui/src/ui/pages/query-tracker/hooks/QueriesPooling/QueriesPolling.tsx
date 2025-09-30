@@ -1,4 +1,4 @@
-import {QueryItem} from '../../module/api';
+import {QueryItem} from '../../../../store/actions/queries/api';
 import {isQueryProgress} from '../../utils/query';
 
 type QueryChangeHandler = (value: QueryItem[]) => void;

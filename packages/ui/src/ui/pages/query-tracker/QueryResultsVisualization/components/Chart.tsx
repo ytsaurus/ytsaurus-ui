@@ -7,7 +7,7 @@ import {prepareWidgetData} from '../preparers/prepareWidgetData';
 import {
     selectCurrentChartVisualization,
     selectQueryResult,
-} from '../../module/queryChart/selectors';
+} from '../../../../store/selectors/queries/queryChart';
 import {EmptyPlaceholdersMessage} from './EmptyPlaceholdersMessage';
 
 export const BaseChart = forwardRef<ChartKitRef | null>(function BaseChartComponent(_, ref) {

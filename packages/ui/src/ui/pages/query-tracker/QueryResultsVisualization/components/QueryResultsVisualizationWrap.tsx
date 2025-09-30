@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {QueryItem} from '../../module/api';
+import {QueryItem} from '../../../../store/actions/queries/api';
 import {QueryResultsVisualization} from './QueryResultsVisualization';
 
 type Props = {query: QueryItem; resultIndex: number};

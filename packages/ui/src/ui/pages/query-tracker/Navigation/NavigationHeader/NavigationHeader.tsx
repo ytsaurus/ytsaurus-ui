@@ -11,22 +11,22 @@ import {
     selectNavigationFilter,
     selectNavigationNodeType,
     selectNavigationPath,
-} from '../../module/queryNavigation/selectors';
+} from '../../../../store/selectors/queries/queryNavigation';
 import {
     BodyType,
     setCluster,
     setFilter,
     setNodeType,
     setPath,
-} from '../../module/queryNavigation/queryNavigationSlice';
+} from '../../../../store/reducers/queries/queryNavigationSlice';
 import {
     copyPathToClipboard,
     loadNodeByPath,
     toggleFavoritePath,
-} from '../../module/queryNavigation/actions';
+} from '../../../../store/actions/queries/queryNavigation';
 import {makePathByQueryEngine} from '../helpers/makePathByQueryEngine';
 import {insertTextWhereCursor} from '../helpers/insertTextWhereCursor';
-import {getQueryEngine} from '../../module/query/selectors';
+import {getQueryEngine} from '../../../../store/selectors/queries/query';
 import {useMonaco} from '../../hooks/useMonaco';
 import {makeRoutedURL} from '../../../../store/location';
 import {Page} from '../../../../../shared/constants/settings';

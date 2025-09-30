@@ -1,12 +1,15 @@
 import React, {useMemo} from 'react';
 import cn from 'bem-cn-lite';
 import {Icon, List, ListItemData, Loader, Text} from '@gravity-ui/uikit';
-import {QueryItem} from '../../module/api';
+import {QueryItem} from '../../../../store/actions/queries/api';
 import {useQueryNavigation} from '../../hooks/Query';
 import tutorialIcon from '../../../../assets/img/svg/learn.svg';
 import './index.scss';
 import {useSelector} from 'react-redux';
-import {getQueriesList, isQueriesListLoading} from '../../module/queries_list/selectors';
+import {
+    getQueriesList,
+    isQueriesListLoading,
+} from '../../../../store/selectors/queries/queriesList';
 
 const itemCn = cn('query-tutorial-item');
 const block = cn('queries-tutorial-list');

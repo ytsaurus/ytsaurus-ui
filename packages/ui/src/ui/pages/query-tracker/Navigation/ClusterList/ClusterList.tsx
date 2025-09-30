@@ -4,8 +4,11 @@ import {QueryClusterItem} from '../../QueryTrackerTopRow/QueryClusterSelector/Qu
 import './ClusterList.scss';
 import cn from 'bem-cn-lite';
 import {ClusterConfig} from '../../../../../shared/yt-types';
-import {setNavigationCluster} from '../../module/queryNavigation/actions';
-import {selectClustersByFilter, selectLoading} from '../../module/queryNavigation/selectors';
+import {setNavigationCluster} from '../../../../store/actions/queries/queryNavigation';
+import {
+    selectClustersByFilter,
+    selectLoading,
+} from '../../../../store/selectors/queries/queryNavigation';
 import {ItemsList} from '../ItemsList';
 
 const b = cn('navigation-cluster-list');
