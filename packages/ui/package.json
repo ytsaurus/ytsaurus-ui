@@ -239,7 +239,7 @@
   },
   "msw": {
     "workerDirectory": [
-      "public"
+      "./public"
     ]
   }
 }
