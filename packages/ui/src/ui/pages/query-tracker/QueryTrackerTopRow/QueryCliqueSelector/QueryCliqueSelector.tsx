@@ -37,6 +37,7 @@ export const QueryCliqueSelector: FC<Props> = ({
 
     return (
         <QuerySelector
+            size="l"
             placeholder={placeholder}
             filterPlaceholder="Search"
             hasClear
