@@ -10,6 +10,8 @@ import {getFavouritePaths} from '../../../../../../store/selectors/favourites';
 import {NavigationWidgetProps} from '../types';
 
 export function useNavigationWidget(props: NavigationWidgetProps) {
+    const showNavigationInput = props.data?.show_navigation_input;
+
     const type = useSelector((state: RootState) => getNavigationTypeFilter(state, props.id));
     const cluster = useSelector(getCluster);
 
@@ -28,5 +30,6 @@ export function useNavigationWidget(props: NavigationWidgetProps) {
         items,
         isLoading: isLoading || isFetching,
         error,
+        showNavigationInput: showNavigationInput === undefined || showNavigationInput === true,
     };
 }

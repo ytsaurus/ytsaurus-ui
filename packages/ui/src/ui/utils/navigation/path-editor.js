@@ -8,19 +8,20 @@ import ypath from '../../common/thor/ypath';
 import CancelHelper from '../cancel-helper';
 import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
 import {getClusterConfigByName, getClusterProxy} from '../../store/selectors/global';
+import {attributesForNodeIcon} from '../../constants/navigation/map-node';
 
 export const pathEditorRequests = new CancelHelper();
 
 function prepareSuggestions(initialPath, parentPath, children) {
     let suggestions = map_(children, (child) => {
         const prepared = {};
-
         prepared.parentPath = parentPath;
         prepared.childPath = '/' + unipika.decode(ypath.getValue(child));
         prepared.path = prepared.parentPath + prepared.childPath;
         prepared.type = ypath.getValue(child, '/@type');
         prepared.dynamic = ypath.getValue(child, '/@dynamic');
         prepared.targetPathBroken = ypath.getValue(child, '/@broken');
+        prepared.attributes = ypath.getAttributes(child);
 
         return prepared;
     });
@@ -38,7 +39,7 @@ export function loadSuggestions({path, customFilter, cluster}) {
     const parentPath = preparePath(path);
 
     const apiSetup = {
-        parameters: {path: parentPath, attributes: ['type', 'dynamic']},
+        parameters: {path: parentPath, attributes: [...attributesForNodeIcon]},
         cancellation: pathEditorRequests.saveCancelToken,
     };
 
