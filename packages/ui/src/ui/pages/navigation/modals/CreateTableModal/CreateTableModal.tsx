@@ -849,6 +849,8 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                         getNoItemsMessage: getNoSuggestionsMsg,
                                     },
                                 },
+                                // TODO: fix this, so the definition of onChange didnt change, but the compiler throw errors
+                                // @ts-ignore
                                 onChange: (
                                     _value: unknown,
                                     _oldValue: unknown,
@@ -884,6 +886,8 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                         )}
                                     </div>
                                 ),
+                                // TODO: fix this, so the definition of onChange didnt change, but the compiler throw errors
+                                // @ts-ignore
                                 onChange: (
                                     _value: unknown,
                                     _oldValue: unknown,

@@ -86,7 +86,13 @@ export const FilesTabs: FC<Props> = ({
                     onSelectTab={setActiveTab}
                 /> */}
                 <TabList className={block('list')} onUpdate={setActiveTab}>
-                    {activeTab === FileTabs.Current ? currentFileItems : deletedFileItems}
+                    <Tab value={FileTabs.Current} counter={files.length} disabled={!files.length}>
+                        Current
+                    </Tab>
+                    <Tab value={FileTabs.Deleted} counter={deletedFilesCounter} disabled={!deletedFilesCounter}>
+                        Deleted
+                    </Tab>
+                    {/* {activeTab === FileTabs.Current ? currentFileItems : deletedFileItems} */}
                 </TabList>
             </TabProvider>
         </div>
