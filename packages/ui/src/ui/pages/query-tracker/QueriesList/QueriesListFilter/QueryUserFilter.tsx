@@ -3,9 +3,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getAllUserNames, getCurrentUserName} from '../../../../store/selectors/global';
 import {useAllUserNamesFiltered} from '../../../../hooks/global';
 import {Select, SelectOption} from '@gravity-ui/uikit';
-import {getQueriesFilters} from '../../module/queries_list/selectors';
-import {QueriesListAuthorFilter} from '../../module/queries_list/types';
-import {applyFilter} from '../../module/queries_list/actions';
+import {getQueriesFilters} from '../../../../store/selectors/queries/queriesList';
+import {QueriesListAuthorFilter} from '../../../../types/query-tracker/queryList';
+import {applyFilter} from '../../../../store/actions/queries/queriesList';
 
 const ALL_STATUS_KEY = '__all';
 

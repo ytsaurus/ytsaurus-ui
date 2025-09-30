@@ -3,7 +3,7 @@ import {useDispatch} from 'react-redux';
 import {
     NavigationTable,
     NavigationTableSchema,
-} from '../../module/queryNavigation/queryNavigationSlice';
+} from '../../../../store/reducers/queries/queryNavigationSlice';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
 import './PreviewTab.scss';
 import cn from 'bem-cn-lite';

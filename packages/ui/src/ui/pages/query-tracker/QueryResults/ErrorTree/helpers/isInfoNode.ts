@@ -1,4 +1,4 @@
-import {QueryError} from '../../../module/api';
+import {QueryError} from '../../../../../store/actions/queries/api';
 
 const INFO_NODE_SEVERITY = 'Info';
 

@@ -4,16 +4,16 @@ import {
     selectAvailableFields,
     selectChartAxisType,
     selectCurrentChartVisualization,
-} from '../../../module/queryChart/selectors';
+} from '../../../../../store/selectors/queries/queryChart';
 import PlusIcon from '@gravity-ui/icons/svgs/plus.svg';
-import {FieldKey} from '../../../module/queryChart/queryChartSlice';
+import {FieldKey} from '../../../../../store/reducers/queries/queryChartSlice';
 import {ChartField} from './ChartField';
 import Button from '../../../../../components/Button/Button';
 import {useToggle} from 'react-use';
 import cn from 'bem-cn-lite';
 import {Icon, Select} from '@gravity-ui/uikit';
 import type {ChartAxisType} from '@gravity-ui/chartkit/d3';
-import {changeAxisType, changeField} from '../../../module/queryChart/actions';
+import {changeAxisType, changeField} from '../../../../../store/actions/queries/queryChart';
 import {getAxisNameByType} from '../../helpers/getAxisNameByType';
 import './Wizard.scss';
 

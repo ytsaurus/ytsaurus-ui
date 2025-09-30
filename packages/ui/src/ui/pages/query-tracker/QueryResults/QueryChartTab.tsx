@@ -1,8 +1,8 @@
 import {FC, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import UIFactory from '../../../UIFactory';
-import {QueryItem} from '../module/api';
-import {loadQueryResult} from '../module/query_result/actions';
+import {QueryItem} from '../../../store/actions/queries/api';
+import {loadQueryResult} from '../../../store/actions/queries/queryResult';
 
 type Props = {
     query: QueryItem;

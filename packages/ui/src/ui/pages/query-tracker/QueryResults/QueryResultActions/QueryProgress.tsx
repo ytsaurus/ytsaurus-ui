@@ -1,7 +1,7 @@
 import React, {FC, useMemo} from 'react';
 import {Flex, Progress, Tooltip} from '@gravity-ui/uikit';
 import {QueryStatus} from '../../../../types/query-tracker';
-import {QueryItem, isSingleProgress} from '../../module/api';
+import {QueryItem, isSingleProgress} from '../../../../store/actions/queries/api';
 import {calculateQueryProgress} from '../helpers/calculateQueryProgress';
 import {QueryEngine} from '../../../../../shared/constants/engines';
 

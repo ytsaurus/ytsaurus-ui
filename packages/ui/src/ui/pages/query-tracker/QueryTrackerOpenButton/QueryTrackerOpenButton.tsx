@@ -3,7 +3,11 @@ import {Button, ButtonProps} from '@gravity-ui/uikit';
 import Link from '../../../components/Link/Link';
 import Icon from '../../../components/Icon/Icon';
 import {createNewQueryUrl, createQueryUrl} from '../utils/navigation';
-import {getQuery, getQueryEngine, isQueryDraftEditted} from '../module/query/selectors';
+import {
+    getQuery,
+    getQueryEngine,
+    isQueryDraftEditted,
+} from '../../../store/selectors/queries/query';
 import {useSelector} from 'react-redux';
 
 interface Props {

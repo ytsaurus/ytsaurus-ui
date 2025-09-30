@@ -3,10 +3,10 @@ import block from 'bem-cn-lite';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../../store/reducers';
 import {Select, SelectOption} from '@gravity-ui/uikit';
-import {getQueryResult} from '../../module/query_result/selectors';
+import {getQueryResult} from '../../../../store/selectors/queries/queryResult';
 import SimplePagination from '../../../../components/Pagination/SimplePagination';
-import {applySettings, updateQueryResult} from '../../module/query_result/actions';
-import {QueryResultReadyState} from '../../module/query_result/types';
+import {applySettings, updateQueryResult} from '../../../../store/actions/queries/queryResult';
+import {QueryResultReadyState} from '../../../../types/query-tracker/queryResult';
 import './index.scss';
 
 type Props = {

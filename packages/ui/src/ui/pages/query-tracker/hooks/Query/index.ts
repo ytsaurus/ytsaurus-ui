@@ -2,9 +2,9 @@ import {useCallback} from 'react';
 import {useSelector} from 'react-redux';
 import {useHistory} from 'react-router';
 import {createQueryUrl} from '../../utils/navigation';
-import {QueryItem} from '../../module/api';
+import {QueryItem} from '../../../../store/actions/queries/api';
 import {getCluster} from '../../../../store/selectors/global';
-import {getQuery} from '../../module/query/selectors';
+import {getQuery} from '../../../../store/selectors/queries/query';
 
 export const useQueryNavigation = (): [QueryItem['id'] | undefined, (id: QueryItem) => void] => {
     const selectedItem = useSelector(getQuery);

@@ -4,9 +4,9 @@ import LinkIcon from '@gravity-ui/icons/svgs/link.svg';
 import {AddFileButton} from './AddFileButton';
 import './FilesAddForm.scss';
 import cn from 'bem-cn-lite';
-import {QueryFile} from '../module/api';
+import {QueryFile} from '../../../store/actions/queries/api';
 import FilePlusIcon from '@gravity-ui/icons/svgs/file-plus.svg';
-import {QueryFileAddForm} from '../module/queryFilesForm/queryFilesFormSlice';
+import {QueryFileAddForm} from '../../../store/reducers/queries/queryFilesFormSlice';
 import {FileItemForm, FileValidator} from './FileItemForm';
 import guid from '../../../common/hammer/guid';
 

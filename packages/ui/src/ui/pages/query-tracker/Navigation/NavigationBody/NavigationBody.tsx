@@ -1,8 +1,8 @@
 import React, {FC} from 'react';
 import {NavigationEmpty} from './NavigationEmpty';
 import {useSelector} from 'react-redux';
-import {selectNavigationNodeType} from '../../module/queryNavigation/selectors';
-import {BodyType} from '../../module/queryNavigation/queryNavigationSlice';
+import {selectNavigationNodeType} from '../../../../store/selectors/queries/queryNavigation';
+import {BodyType} from '../../../../store/reducers/queries/queryNavigationSlice';
 import {ClusterList} from '../ClusterList';
 import {NodeList} from '../NodeList';
 import {NavigationTable} from '../NavigationTable';

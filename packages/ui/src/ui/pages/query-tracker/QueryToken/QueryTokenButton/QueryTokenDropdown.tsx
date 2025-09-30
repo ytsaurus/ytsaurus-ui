@@ -5,9 +5,9 @@ import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from 'react-redux';
 import {getQueryTokens} from '../../../../store/selectors/settings/settings-queries';
 import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
-import {updateQueryDraft} from '../../module/query/actions';
-import {QuerySecret} from '../../module/api';
-import {getCurrentSecretIds} from '../../module/query/selectors';
+import {updateQueryDraft} from '../../../../store/actions/queries/query';
+import {QuerySecret} from '../../../../store/actions/queries/api';
+import {getCurrentSecretIds} from '../../../../store/selectors/queries/query';
 import i18n from './i18n';
 
 const block = cn('yt-qt-token-dropdown');

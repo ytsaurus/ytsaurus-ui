@@ -1,11 +1,11 @@
 import React, {FC, useEffect, useMemo, useState} from 'react';
 import {Item, SelectSingle} from '../../../../components/Select/Select';
 import {Button, TextInput} from '@gravity-ui/uikit';
-import {getVcsTokensAvailability, saveToken} from '../../module/vcs/actions';
+import {getVcsTokensAvailability, saveToken} from '../../../../store/actions/queries/vcs';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import './AddVcsTokenForm.scss';
-import {selectVcsConfig} from '../../module/vcs/selectors';
+import {selectVcsConfig} from '../../../../store/selectors/queries/vcs';
 
 const block = cn('add-token-form');
 

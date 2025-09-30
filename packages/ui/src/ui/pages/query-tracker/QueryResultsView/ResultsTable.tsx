@@ -1,8 +1,8 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {YCLOUD_THEME} from '@gravity-ui/react-data-table/build/esm/lib/constants';
 import YQLTable, {ShowPreviewCallback} from './YQLTable/YQLTable';
-import {formatResults} from '../module/query_result/utils/format';
-import {QueryResultReadyState} from '../module/query_result/types';
+import {formatResults} from '../../../utils/queries/format';
+import {QueryResultReadyState} from '../../../types/query-tracker/queryResult';
 import isEqual_ from 'lodash/isEqual';
 
 const settings = {

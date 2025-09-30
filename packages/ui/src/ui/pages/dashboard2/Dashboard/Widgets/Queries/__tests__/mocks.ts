@@ -1,5 +1,5 @@
 import {HttpResponse, http} from 'msw';
-import {QueriesListResponse} from '../../../../../../pages/query-tracker/module/api';
+import {QueriesListResponse} from '../../../../../../store/actions/queries/api';
 import {BatchResultsItem} from '../../../../../../../shared/yt-types';
 import {QueryEngine} from '../../../../../../../shared/constants/engines';
 import {QueryStatus} from '../../../../../../types/query-tracker';

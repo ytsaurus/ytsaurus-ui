@@ -1,12 +1,12 @@
 import React, {FC, useMemo, useState} from 'react';
 import {Tabs} from '@gravity-ui/uikit';
-import {QueryFile} from '../module/api';
+import {QueryFile} from '../../../store/actions/queries/api';
 import {DeletedFileItem} from './DeletedFileItem';
 import cn from 'bem-cn-lite';
 import './FilesTabs.scss';
 import {FileItem} from './FileItem';
 import {FileValidator} from './FileItemForm';
-import {QueryFileEditor} from '../module/queryFilesForm/queryFilesFormSlice';
+import {QueryFileEditor} from '../../../store/reducers/queries/queryFilesFormSlice';
 
 const block = cn('files-tabs');
 

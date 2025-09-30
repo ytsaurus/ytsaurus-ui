@@ -1,13 +1,13 @@
 import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import DataTable, {Settings} from '@gravity-ui/react-data-table';
-import {QueryItem} from '../../module/api';
+import {QueryItem} from '../../../../store/actions/queries/api';
 import {
     getQueryListByDate,
     getQueryListColumns,
     hasQueriesListMore,
     isQueriesListLoading,
-} from '../../module/queries_list/selectors';
+} from '../../../../store/selectors/queries/queriesList';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
 import {useQueryNavigation} from '../../hooks/Query';
 import {useUpdater} from '../../../../hooks/use-updater';
@@ -15,9 +15,12 @@ import block from 'bem-cn-lite';
 
 import './QueriesHistoryList.scss';
 import './QueryHistoryItem.scss';
-import {loadNextQueriesList, requestQueriesList} from '../../module/queries_list/actions';
+import {
+    loadNextQueriesList,
+    requestQueriesList,
+} from '../../../../store/actions/queries/queriesList';
 import {InfiniteScrollLoader} from '../../../../components/InfiniteScrollLoader';
-import {QueriesHistoryCursorDirection} from '../../module/query-tracker-contants';
+import {QueriesHistoryCursorDirection} from '../../../../store/reducers/queries/query-tracker-contants';
 
 const b = block('queries-history-list');
 const itemBlock = block('query-history-item');

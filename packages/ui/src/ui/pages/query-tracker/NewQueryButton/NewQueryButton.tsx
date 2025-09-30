@@ -2,7 +2,7 @@ import React, {FC, MouseEvent, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {Button, Icon} from '@gravity-ui/uikit';
 import Modal from '../../../components/Modal/Modal';
-import {isQueryDraftEditted} from '../module/query/selectors';
+import {isQueryDraftEditted} from '../../../store/selectors/queries/query';
 import FilePlusIcon from '@gravity-ui/icons/svgs/file-plus.svg';
 import {Page} from '../../../../shared/constants/settings';
 import {getCluster} from '../../../store/selectors/global';

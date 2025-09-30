@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {ErrorPosition, QueryError} from '../../module/api';
+import {ErrorPosition, QueryError} from '../../../../store/actions/queries/api';
 import {ErrorCloud} from './ErrorCloud';
 import {isInfoNode} from './helpers/isInfoNode';
 

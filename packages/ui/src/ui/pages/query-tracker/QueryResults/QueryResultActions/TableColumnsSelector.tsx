@@ -1,4 +1,4 @@
-import {QueryResultColumn} from '../../module/query_result/types';
+import {QueryResultColumn} from '../../../../types/query-tracker/queryResult';
 import React, {useCallback, useMemo} from 'react';
 import {Button, Icon, Text} from '@gravity-ui/uikit';
 import filterIcon from '../../../../assets/img/svg/icons/filter.svg';

@@ -1,6 +1,6 @@
 import {useDispatch, useSelector} from 'react-redux';
 import {setSettingByKey} from '../../../../store/actions/settings';
-import {getSettingQueryTrackerQueriesListSidebarVisibilityMode} from '../../module/settings/selector';
+import {getSettingQueryTrackerQueriesListSidebarVisibilityMode} from '../../../../store/selectors/queries/settings';
 
 export const useQueriesListSidebarToggle = () => {
     const dispatch = useDispatch();

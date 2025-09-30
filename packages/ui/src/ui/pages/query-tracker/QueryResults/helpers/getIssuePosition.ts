@@ -1,4 +1,4 @@
-import {QueryError} from '../../module/api';
+import {QueryError} from '../../../../store/actions/queries/api';
 
 export const getIssuePosition = (issue: QueryError) => {
     const position = issue.attributes?.start_position;

@@ -4,7 +4,7 @@ import {Button, Icon, TextInput} from '@gravity-ui/uikit';
 import XmarkIcon from '@gravity-ui/icons/svgs/xmark.svg';
 import CheckIcon from '@gravity-ui/icons/svgs/check.svg';
 import './FileItemForm.scss';
-import {QueryFile} from '../module/api';
+import {QueryFile} from '../../../store/actions/queries/api';
 
 const block = cn('file-item-form');
 

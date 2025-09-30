@@ -1,6 +1,6 @@
 import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import cn from 'bem-cn-lite';
-import {QueryFile} from '../module/api';
+import {QueryFile} from '../../../store/actions/queries/api';
 import {Button, Icon, Text} from '@gravity-ui/uikit';
 import clipIcon from '@gravity-ui/icons/svgs/paperclip.svg';
 import {VALIDATOR_ERRORS_TEXT} from '../QuerySettingsButton/formValidator';
@@ -15,10 +15,14 @@ import {
     QueryFileEditor,
     setAddForm,
     setFileEditor,
-} from '../module/queryFilesForm/queryFilesFormSlice';
-import {selectQueryFilesButtonConfig} from '../module/queryFilesForm/selectors';
-import {changeQueryFile, deleteQueryFile, restoreQueryFile} from '../module/queryFilesForm/actions';
-import {updateQueryDraft} from '../module/query/actions';
+} from '../../../store/reducers/queries/queryFilesFormSlice';
+import {selectQueryFilesButtonConfig} from '../../../store/selectors/queries/queryFilesForm';
+import {
+    changeQueryFile,
+    deleteQueryFile,
+    restoreQueryFile,
+} from '../../../store/actions/queries/queryFilesForm';
+import {updateQueryDraft} from '../../../store/actions/queries/query';
 
 const b = cn('query-files-popup');
 

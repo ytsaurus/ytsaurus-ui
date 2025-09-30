@@ -1,3 +1,3 @@
-import {Result} from '../../module/query_result/types';
+import {Result} from '../../../../types/query-tracker/queryResult';
 
 export type QueryResult = Record<string, Result>[];

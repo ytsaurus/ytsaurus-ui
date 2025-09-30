@@ -1,5 +1,5 @@
 import * as monaco from 'monaco-editor';
-import {QTEditorError} from '../../module/types/editor';
+import {QTEditorError} from '../../../../types/query-tracker/editor';
 import {BaseDecorator} from './BaseDecorator';
 
 export class ErrorDecorator extends BaseDecorator {
