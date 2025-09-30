@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v2.2.0...ui-v2.3.0) (2025-09-30)
+
+
+### Features
+
+* **Dashboard2:** internalization for Dashboard page [YTFRONT-3400] ([fdef408](https://github.com/ytsaurus/ytsaurus-ui/commit/fdef4081b15178d9b5255730905c1bec5cc35f0c))
+* **Operation/Timeline:** show incarnations [YTFRONT-4980] ([7f3209d](https://github.com/ytsaurus/ytsaurus-ui/commit/7f3209d98cadd8fd15fb6a16a2919c32a7c16f84))
+
 ## [2.2.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v2.1.0...ui-v2.2.0) (2025-09-26)
 
 
