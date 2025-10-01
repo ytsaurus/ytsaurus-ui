@@ -1,0 +1,11 @@
+{
+    "action_remove": "Удалить",
+    "action_add-service": "Добавить сервис",
+    "field_select-item": "Выберите элемент",
+    "field_select-service": "Выберите сервис",
+    "field_select-clique": "Выберите клику",
+    "field_select-bundle": "Выберите бандл",
+    "alert_no-services-available": "На текущем кластере нет доступных сервисов",
+    "alert_clique-option-required": "Необходимо выбрать клику",
+    "alert_bundle-option-required": "Необходимо выбрать бандл"
+}

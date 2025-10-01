@@ -1,0 +1,9 @@
+{
+    "field_select-tree": "Select tree",
+    "field_select-pool": "Select pool",
+    "action_remove": "Remove",
+    "action_add-pool-pair": "Add Pool Pair",
+    "alert_pool-option-required": "Pool option is required",
+    "alert_tree-not-empty": "Tree should not be empty",
+    "toaster_fetch-failed": "Failed to fetch pools list"
+}
