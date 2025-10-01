@@ -1,14 +1,14 @@
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../reducers';
 import {Action} from 'redux';
-import {CompletedStates, isSingleProgress} from '../api';
+import {isSingleProgress} from '../api';
 import {
     QueryResultTab,
     QueryTab,
     setActiveTab,
     setTabs,
 } from '../../../reducers/queries/queryTabsSlice';
-import {QueryStatus} from '../../../../types/query-tracker';
+import {CompletedStates, QueryStatus} from '../../../../types/query-tracker';
 import times_ from 'lodash/times';
 import find_ from 'lodash/find';
 import UIFactory from '../../../../UIFactory';
