@@ -3,7 +3,7 @@ import {useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {Box, Breadcrumbs, Flex} from '@gravity-ui/uikit';
+import {Breadcrumbs, Flex, Key} from '@gravity-ui/uikit';
 
 import {getMetrics} from '../../../common/utils/metrics';
 
@@ -36,7 +36,6 @@ import Favourites from '../../../components/Favourites/Favourites';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
 import Link from '../../../components/Link/Link';
 import Editor from '../../../components/Editor/Editor';
-import {EditButton} from '../../../components/EditableAsText/EditableAsText';
 import Button from '../../../components/Button/Button';
 import Icon from '../../../components/Icon/Icon';
 import MetaTable from '../../../components/MetaTable/MetaTable';
@@ -63,7 +62,7 @@ function NavigationTopRowContent() {
     return (
         <RowWithName page={Page.NAVIGATION} className={block()} urlParams={{path: defaultPath}}>
             <NavigationFavourites />
-            <Flex justifyContent={'space-between'} alignItems={'center'} grow={1}>
+            <Flex justifyContent={'space-between'} alignItems={'center'} grow={1} shrink={1} overflow={'hidden'}>
                 <EditableNavigationBreadcrumbs />
                 <NavigationTools />
             </Flex>
@@ -201,11 +200,11 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
     const history = useHistory();
 
     const items = React.useMemo(() => {
-        return bcItems.map(({text, state}, index) => {
+        return bcItems.map(({text, state: _state}, index) => {
             const isLastItem = index === bcItems.length - 1;
 
             return (
-                <Breadcrumbs.Item key={text}>
+                <Breadcrumbs.Item key={`${JSON.stringify({text, index})}`}>
                     {index ? (
                         <Escaped text={text} onClick={isLastItem ? onEdit : undefined} />
                     ) : (
@@ -218,8 +217,10 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
 
     return (
         <EditableBreadcrumbs
-            onAction={(key) => {
-                const item = bcItems.find(({text}) => text === key);
+            onAction={(key: Key) => {
+                const {text: keyText} = JSON.parse(key as string);
+                console.log('keyText', keyText);
+                const item = bcItems.find(({text}) => text === keyText);
                 if (item) {
                     const url = makeRoutedURL(window.location.pathname, {
                         path: item.state.path,
@@ -227,12 +228,14 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
                         filter: '',
                     });
                     history.push(url);
+                    console.log('url', url);
                 }
             }}
             className={block('breadcrumbs')}
             beforeEditorContent={<NavigationTargetPathButton />}
             afterEditorContent={<NavigationPathToClipboard />}
             renderEditor={(props) => <NavigationPathEditor hideEditor={props.onBlur} />}
+            showRoot
         >
             {items}
         </EditableBreadcrumbs>

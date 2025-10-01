@@ -2,8 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import some_ from 'lodash/some';
-import {Breadcrumbs} from '@gravity-ui/uikit';
-import {useHistory} from 'react-router';
+import {Breadcrumbs, Flex, Key, Select} from '@gravity-ui/uikit';
 
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
@@ -27,11 +26,9 @@ import {ROOT_POOL_NAME, SCHEDULING_ALLOWED_ROOT_TABS, Tab} from '../../../consta
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
 import {getSchedulingBreadcrumbItems} from '../../../store/selectors/scheduling/scheduling-ts';
 import {Page} from '../../../constants';
-import {EditButton} from '../../../components/EditableAsText/EditableAsText';
-import Select from '../../../components/Select/Select';
+import {EditableBreadcrumbs} from '../../../components/EditableBreadcrumbs/EditableBreadcrumbs';
 import CreatePoolButton from '../Instruments/CreatePoolDialog/CreatePoolDialog';
 
-import {makeRoutedURL} from '../../../store/location';
 import {getCluster, getClusterUiConfig} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
 
@@ -47,15 +44,17 @@ function SchedulingTopRowContent() {
         <RowWithName page={Page.SCHEDULING} className={block()} urlParams={{pool: ''}}>
             <SchedulingFavourites />
             <SchedulingPhysicalTree />
-            <EditableSchedulingBreadcrumbs />
-            <span className={block('actions')}>
-                {UIFactory.renderTopRowExtraControlsForPool({
-                    itemClassName: block('extra-control'),
-                    pool,
-                    clusterUiConfig,
-                })}
-                <CreatePoolButton />
-            </span>
+            <Flex grow={1} shrink={1} justifyContent={'space-between'}>
+                <SchedulingBreadcrumbs />
+                <span className={block('actions')}>
+                    {UIFactory.renderTopRowExtraControlsForPool({
+                        itemClassName: block('extra-control'),
+                        pool,
+                        clusterUiConfig,
+                    })}
+                    <CreatePoolButton />
+                </span>
+            </Flex>
         </RowWithName>
     );
 }
@@ -122,14 +121,10 @@ function SchedulingBreadcrumbs() {
     };
 
     const items = React.useMemo(() => {
-        return ['<Root>', ...bcItems.slice(1)].map((text) => {
-            const pathname = text
-                ? window.location.pathname
-                : calcRootPathname(window.location.pathname, cluster);
+        return ['<Root>', ...bcItems.slice(1)].map((text, index) => {
             return (
                 <Breadcrumbs.Item
-                    key={text}
-                    href={makeRoutedURL(pathname, {tree, text, filter: ''})}
+                    key={`${JSON.stringify({text, index})}`}
                 >
                     {text}
                 </Breadcrumbs.Item>
@@ -138,9 +133,18 @@ function SchedulingBreadcrumbs() {
     }, [bcItems, cluster, tree]);
 
     return (
-        <Breadcrumbs onAction={handleChangePool} className={block('breadcrumbs')} showRoot>
+        <EditableBreadcrumbs
+            onAction={(key: Key) => {
+                const {text: keyText} = JSON.parse(key as string);
+                handleChangePool(keyText);
+            }}
+            className={block('breadcrumbs')}
+            showRoot
+            afterEditorContent={<CurrentPoolToClipboardButton />}
+            renderEditor={(props) => <PoolsSuggest autoFocus onCancelEdit={props.onBlur} />}
+        >
             {items}
-        </Breadcrumbs>
+        </EditableBreadcrumbs>
     );
 }
 
@@ -150,28 +154,6 @@ function calcRootPathname(pathname: string, cluster: string) {
         pathname.endsWith('/' + tab),
     );
     return isAllowedTab ? pathname : `/${cluster}/${Page.SCHEDULING}/${Tab.OVERVIEW}`;
-}
-
-function EditableSchedulingBreadcrumbs() {
-    const [editMode, setEditMode] = React.useState(false);
-    const toggleEdit = React.useCallback(() => {
-        setEditMode(!editMode);
-    }, [editMode, setEditMode]);
-
-    return (
-        <div className={block('editable-breadcrumbs', {edit: editMode})}>
-            {editMode ? (
-                <PoolsSuggest autoFocus onCancelEdit={toggleEdit} />
-            ) : (
-                <React.Fragment>
-                    <SchedulingBreadcrumbs />
-                    <EditButton onClick={toggleEdit} />
-                    <div className={block('btn-spacer')} />
-                    <CurrentPoolToClipboardButton />
-                </React.Fragment>
-            )}
-        </div>
-    );
 }
 
 function SchedulingPhysicalTree() {
@@ -185,8 +167,8 @@ function SchedulingPhysicalTree() {
         <div className={block('tree')}>
             <Select
                 value={[tree]}
-                hideFilter={treeItems?.length <= 5}
-                items={treeItems}
+                filterable={treeItems?.length <= 5}
+                options={treeItems}
                 onUpdate={(vals) => onChange(vals[0])}
                 className={block('path-tree')}
                 placeholder="Select tree..."
