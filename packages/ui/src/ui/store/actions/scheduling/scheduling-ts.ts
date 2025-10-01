@@ -369,15 +369,16 @@ export function schedulingLoadFilterAttributes(
     };
 }
 
-export function schedulingSetAbcFilter(abcServiceFilter: {
-    id: number;
-    slug: string;
+export function schedulingSetAbcFilter(abcService?: {
+    id?: number;
+    slug?: string;
 }): SchedulingThunkAction {
     return (dispatch, getState) => {
+        const {id, slug} = abcService ?? {};
         dispatch(schedulingLoadFilterAttributes(getTree(getState())));
         dispatch({
             type: SCHEDULING_DATA_PARTITION,
-            data: {abcServiceFilter},
+            data: {abcServiceFilter: {id, slug}},
         });
     };
 }

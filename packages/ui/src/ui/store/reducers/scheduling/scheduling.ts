@@ -25,6 +25,7 @@ import {
 import {ActionD, YTError} from '../../../types';
 import {Action} from 'redux';
 import {PoolInfo} from '../../../store/selectors/scheduling/scheduling-pools';
+import {SchedulingContentMode} from '../../../store/selectors/scheduling/scheduling';
 import {PoolTreeNode} from '../../../utils/scheduling/pool-child';
 
 export interface SchedulingEphemeralState {
@@ -64,7 +65,7 @@ export interface TreeResources {
 export interface SchedulingPersistentState {
     treeState: 'collapsed' | 'expanded';
     poolChildrenFilter: '';
-    contentMode: 'cpu' | 'memory' | 'gpu' | 'user_slots' | 'operations' | 'integral';
+    contentMode: SchedulingContentMode;
 
     tree: string;
     pool: string;

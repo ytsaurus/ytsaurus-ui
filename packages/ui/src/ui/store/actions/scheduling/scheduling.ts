@@ -13,7 +13,11 @@ import {BatchSubRequest} from '../../../../shared/yt-types';
 import {RootState} from '../../../store/reducers';
 import {getSchedulingNS} from '../../../store/selectors/settings';
 import {toggleFavourite} from '../../../store/actions/favourites';
-import {getPools, getTree} from '../../../store/selectors/scheduling/scheduling';
+import {
+    SchedulingContentMode,
+    getPools,
+    getTree,
+} from '../../../store/selectors/scheduling/scheduling';
 import {PoolInfo} from '../../../store/selectors/scheduling/scheduling-pools';
 import {SchedulingAction, SchedulingState} from '../../../store/reducers/scheduling/scheduling';
 import {
@@ -327,13 +331,8 @@ export function changePool(pool: string): SchedulingAction {
     };
 }
 
-export function changeContentMode(evt: any): SchedulingAction {
-    return {
-        type: CHANGE_CONTENT_MODE,
-        data: {
-            contentMode: evt.target.value,
-        },
-    };
+export function schedulingChangeContentMode(contentMode: SchedulingContentMode): SchedulingAction {
+    return {type: CHANGE_CONTENT_MODE, data: {contentMode}};
 }
 
 export function changePoolChildrenFilter(poolChildrenFilter: string) {

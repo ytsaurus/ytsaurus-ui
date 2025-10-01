@@ -35,9 +35,9 @@ import {
     getIsRoot,
     getSchedulingIsInitialLoading,
     getSchedulingOverviewMaxDepth,
+    getSchedulingTableItems,
     getSchedulingTreeState,
     getSortState,
-    getTableItems,
     getTree,
 } from '../../../../../store/selectors/scheduling/scheduling';
 import {
@@ -519,7 +519,7 @@ class Overview extends Component {
 
 const mapStateToProps = (state) => {
     const sortState = getSortState(state);
-    const items = getTableItems(state);
+    const items = getSchedulingTableItems(state);
     const itemsMaxDepth = getSchedulingOverviewMaxDepth(state);
     const cluster = getCluster(state);
     const currentPool = getCurrentPool(state);
