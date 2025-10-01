@@ -2,7 +2,7 @@ import React from 'react';
 import filter_ from 'lodash/filter';
 import cn from 'bem-cn-lite';
 
-import {Button, Select, SelectOption, SelectProps, Text, TextInput} from '@gravity-ui/uikit';
+import {Button, ButtonButtonProps, Select, SelectOption, SelectProps, Text, TextInput} from '@gravity-ui/uikit';
 
 import {Chevron} from '../../icons/Chevron';
 import hammer from '../../common/hammer';
@@ -256,6 +256,7 @@ interface ValueControlProps extends Omit<Extra, 'ref'> {
     maxVisibleValues?: YTSelectProps['maxVisibleValues'];
     placeholder?: SelectProps['placeholder'];
     className?: string;
+    onClick?: ButtonButtonProps['onClick'];
 }
 
 function ValueControl({

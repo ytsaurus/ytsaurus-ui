@@ -1,3 +1,5 @@
+@import '../../../styles/redefinitions/common/Breadcrumbs.scss';
+
 .navigation-top-row-content {
     &__favourites {
         padding-right: 15px;
@@ -5,19 +7,13 @@
 
     &__editable-breadcrumbs {
         padding-left: 8px;
-        display: flex;
-        align-items: center;
-        gap: 0 8px;
-        flex-grow: 1;
-        flex-shrink: 1;
-        overflow: hidden;
+        width: 100%;
 
         padding-right: 1ex;
     }
 
     &__breadcrumbs {
         margin: 0 8px;
-        overflow: hidden;
     }
 
     &__restore {
@@ -40,9 +36,9 @@
         align-items: center;
     }
 
-    .g-breadcrumbs__switcher:first-child,
-    .g-breadcrumbs__item:first-child {
-        text-overflow: unset;
-        padding-right: 0px;
-    }
+    // .g-breadcrumbs__switcher:first-child,
+    // .g-breadcrumbs__item:first-child {
+    //     text-overflow: unset;
+    //     padding-right: 0px;
+    // }
 }
