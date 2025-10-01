@@ -15,7 +15,7 @@ import Filter from '../../../../../components/Filter/Filter';
 import WithStickyToolbar from '../../../../../components/WithStickyToolbar/WithStickyToolbar';
 
 import {
-    changeContentMode,
+    schedulingChangeContentMode,
     changePool,
     changePoolChildrenFilter,
     openEditModal,
@@ -26,7 +26,7 @@ import {calculateTotalOverPools} from '../../../../../utils/scheduling/details';
 import {childTableItems} from '../../../../../utils/scheduling/detailsTable';
 import {getCluster} from '../../../../../store/selectors/global';
 import {
-    getContentMode,
+    getSchedulingContentMode,
     getCurrentPool,
     getPollChildrenTableItems,
     getPoolChildrenFilter,
@@ -279,7 +279,7 @@ class Details extends Component {
                     'actions',
                 ],
             },
-            integral: {
+            integral_guarantees: {
                 items: [
                     'name',
                     'FI',
@@ -502,7 +502,7 @@ class Details extends Component {
                 <RadioButton
                     size="m"
                     value={mode}
-                    onChange={changeContentMode}
+                    onUpdate={changeContentMode}
                     name="navigation-tablets-mode"
                     items={[
                         {
@@ -526,7 +526,7 @@ class Details extends Component {
                             text: 'Operations',
                         },
                         {
-                            value: 'integral',
+                            value: 'integral_guarantees',
                             text: 'Integral guarantees',
                         },
                     ]}
@@ -567,7 +567,7 @@ const mapStateToProps = (state) => {
     const currentPool = getCurrentPool(state);
     const sortState = getPoolChildrenSortState(state);
     const items = getPollChildrenTableItems(state);
-    const mode = getContentMode(state);
+    const mode = getSchedulingContentMode(state);
     const filter = getPoolChildrenFilter(state);
     const cluster = getCluster(state);
     const children = getSortedPoolChildren(state);
@@ -579,7 +579,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     changePoolChildrenFilter,
-    changeContentMode,
+    changeContentMode: schedulingChangeContentMode,
     openEditModal,
     openPoolDeleteModal,
     changePool,
