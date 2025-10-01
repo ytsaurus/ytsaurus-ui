@@ -27,7 +27,6 @@ import {VisualizationState} from '../../reducers/queries/queryChartSlice';
 import {YTError} from '../../../types';
 import {QueryStatus} from '../../../types/query-tracker';
 import {JSONSerializer} from '../../../common/yt-api';
-import {createTablePrompt} from '../../../pages/query-tracker/Navigation/helpers/createTableSelect';
 import {getQueryResultGlobalSettings} from '../../selectors/queries/queryResult';
 
 function getQTApiSetup(): {proxy?: string} {
@@ -242,6 +241,10 @@ export async function generateQueryFromTable(
 
     if (node.type === 'table') {
         const schema = ypath.getValue(node.schema) as {name: string}[];
+        const {createTablePrompt} = await import(
+            /* webpackChunkName: "query-navigation" */
+            '../../../pages/query-tracker/Navigation/helpers/createTableSelect'
+        );
         return {
             query: createTablePrompt({schema, path, engine, cluster, limit: pageSize}),
             ...commonData,
