@@ -12,7 +12,7 @@ export type TreeNode<T, L, E = {}, LE = E> = E & {
     name: string;
     parent?: string;
     attributes: T;
-    children: Array<TreeNode<T, L, E>>;
+    children: Array<TreeNode<T, L, E, LE>>;
     leaves: Array<LeafNode<L, LE>>;
     isLeafNode?: false;
     _initedBy?: string;
@@ -27,6 +27,9 @@ export type LeafNode<L = unknown, E = {}> = E & {
 };
 
 export type TreeItem<T, L, E = {}, LE = E> = TreeNode<T, L, E> | LeafNode<L, LE>;
+
+export type TreeLeaf<T extends TreeNode<unknown, unknown>> = T['leaves'][number];
+export type TreeNodeOrLeaf<T extends TreeNode<unknown, unknown>> = T | TreeLeaf<T>;
 
 /**
  * Create a treeNode with a given name or return an existing treeNode
@@ -124,9 +127,9 @@ function truthyFilterPredicate() {
     return true;
 }
 
-type FilterPredicate<T, L, FilterLeaves> = FilterLeaves extends true
-    ? (value: TreeItem<T, L>) => boolean
-    : (value: TreeNode<T, L>) => boolean;
+type FilterPredicate<T extends TreeNode<unknown, unknown>, FilterLeaves> = FilterLeaves extends true
+    ? (value: T | T['leaves'][number]) => boolean
+    : (value: T) => boolean;
 
 /**
  * Filter tree children according to `filterPredicate`.
@@ -135,27 +138,29 @@ type FilterPredicate<T, L, FilterLeaves> = FilterLeaves extends true
  * the same predicate will be used to filter leaves if filterLeaves option is set.
  * @param filterLeaves - determines whether to include all leaves or filter leaves.
  */
-export function filterTree<T, L, FilterLeavesT extends undefined | boolean>(
-    treeNode: TreeNode<T, L>,
-    filterPredicate: FilterPredicate<T, L, FilterLeavesT>,
+export function filterTree<
+    T extends TreeNode<unknown, unknown>,
+    FilterLeavesT extends undefined | boolean,
+>(
+    treeNode: T,
+    filterPredicate: FilterPredicate<T, FilterLeavesT>,
     filterLeaves?: FilterLeavesT,
-) {
+): T {
     const treeNodeCopy: typeof treeNode = Object.assign({}, treeNode, {
         children: [],
     });
 
     // Attach filtered or copied leaves
     if (filterLeaves) {
-        treeNodeCopy.leaves = treeNode.leaves.filter(
-            filterPredicate as (v: LeafNode<L>) => boolean,
-        );
+        treeNodeCopy.leaves = treeNode.leaves.filter(filterPredicate as FilterPredicate<T, true>);
     } else if (filterPredicate(treeNode)) {
         treeNodeCopy.leaves = treeNode.leaves.slice();
     } else {
         treeNodeCopy.leaves = [];
     }
 
-    each_(treeNode.children, (childEntry) => {
+    each_(treeNode.children, (c) => {
+        const childEntry = c as typeof treeNode;
         if (filterPredicate(childEntry)) {
             const copiedChildEntry = filterTree(childEntry, truthyFilterPredicate, filterLeaves);
 
@@ -172,9 +177,61 @@ export function filterTree<T, L, FilterLeavesT extends undefined | boolean>(
     return treeNodeCopy;
 }
 
-export interface FieldDescr<T, L> {
-    get?: (v: TreeItem<T, L>) => unknown;
-    sort?: (v: TreeItem<T, L>) => unknown;
+export function filterTreeEachChild<T extends TreeNode<unknown, unknown>>(
+    treeNode: T | undefined,
+    nodePredicate: (node: T) => boolean,
+    leafPredicate?: (leaf: T['leaves'][number]) => boolean,
+    isCollapsed?: (node: T) => boolean,
+): T | undefined {
+    if (!treeNode) {
+        return undefined;
+    }
+
+    const collapsed = isCollapsed?.(treeNode);
+
+    const newChildren: typeof treeNode.children = [];
+    if (!collapsed) {
+        treeNode.children?.reduce((acc, item) => {
+            const filtered = filterTreeEachChild(
+                item as T,
+                nodePredicate,
+                leafPredicate,
+                isCollapsed,
+            );
+            if (filtered) {
+                acc.push(filtered);
+            }
+            return acc;
+        }, newChildren);
+    }
+
+    let newLeaves: typeof treeNode.leaves = [];
+    if (!collapsed) {
+        newLeaves = leafPredicate
+            ? treeNode.leaves?.reduce(
+                  (acc, leaf) => {
+                      if (leafPredicate(leaf)) {
+                          acc.push(leaf);
+                      }
+                      return acc;
+                  },
+                  [] as typeof treeNode.leaves,
+              )
+            : treeNode.leaves;
+    }
+
+    const pickByLeaves = leafPredicate ? newLeaves?.length : false;
+
+    if (pickByLeaves || newChildren?.length || nodePredicate(treeNode)) {
+        return {...treeNode, leaves: newLeaves, children: newChildren};
+    }
+
+    return undefined;
+}
+
+export interface FieldDescr<T extends TreeNode<unknown, unknown>> {
+    get?: (v: TreeNodeOrLeaf<T>) => unknown;
+    sort?: boolean | ((v: TreeNodeOrLeaf<T>) => unknown);
     sortWithUndefined?: boolean;
 }
 
@@ -184,15 +241,16 @@ export interface FieldDescr<T, L> {
  * @param sortInfo - { field: , asc: }
  * @param fields - description for all possible sort fields in column-like format.
  */
-export function sortTree<T, L, FieldT extends string>(
-    treeNode: TreeNode<T, L>,
+export function sortTree<T extends TreeNode<unknown, unknown>, FieldT extends string>(
+    treeNode: T,
     sortInfo: OldSortState,
-    fields: Record<FieldT, FieldDescr<T, L>>,
+    fields: Record<FieldT, FieldDescr<T>>,
 ) {
     treeNode.children = utils.sort(treeNode.children, sortInfo, fields);
     treeNode.leaves = utils.sort(treeNode.leaves, sortInfo, fields);
 
-    treeNode.children = map_(treeNode.children, (childEntry) => {
+    treeNode.children = map_(treeNode.children, (c) => {
+        const childEntry = c as typeof treeNode;
         return sortTree(childEntry, sortInfo, fields);
     });
 
@@ -206,7 +264,9 @@ function augmentTreeNode<T extends {name: string}>(entry: T, level: number, base
     });
 }
 
-export type FlatItem<T, L> = (LeafNode<L> | TreeNode<T, L>) & {
+export type FlatItem<T, L> = (LeafNode<L> | TreeNode<T, L>) & FlatItemDetails;
+
+export type FlatItemDetails = {
     key?: string;
     level?: number;
 };
@@ -221,14 +281,14 @@ export type FlatItem<T, L> = (LeafNode<L> | TreeNode<T, L>) & {
  * @param level - used for calculating level of a tree node
  * @param basePath - used for calculating tree node unique key
  */
-export function flattenTree<T, L>(
-    treeNode: Pick<TreeNode<T, L>, 'children' | 'leaves' | 'name'>,
+export function flattenTree<T extends TreeNode<unknown, unknown>>(
+    treeNode: T,
     level = 0,
     basePath = '',
 ) {
     basePath += treeNode.name + '/';
 
-    let tree: Array<FlatItem<T, L>> = [];
+    let tree: Array<TreeNodeOrLeaf<T> & FlatItemDetails> = [];
 
     tree = tree.concat(
         map_(treeNode.leaves, (leaf) => {
