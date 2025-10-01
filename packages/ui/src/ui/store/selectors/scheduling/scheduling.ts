@@ -4,6 +4,8 @@ import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
 import hammer from '../../../common/hammer';
+import * as treeList from '../../../common/hammer/tree-list';
+
 import {createSelector} from 'reselect';
 import {getCluster} from '../../../store/selectors/global';
 
@@ -164,27 +166,99 @@ const getFilteredTree = createSelector(
     [getCurrentPool, getSchedulingFilteredPoolNames],
     (treeRoot, visiblePools) => {
         if (treeRoot) {
-            return hammer.treeList.filterTree(
-                treeRoot,
-                (pool: {name: string}) => {
-                    return visiblePools === undefined || visiblePools.has(pool.name);
-                },
-                true,
-            );
+            const res = treeList.filterTree(treeRoot, (pool: {name: string}) => {
+                return visiblePools === undefined || visiblePools.has(pool.name);
+            });
+            return res;
         }
         return undefined;
     },
 );
 
-export const getTableItems = createSelector(
+export const getSchedulingTableItems = createSelector(
     [getFilteredTree, getSortState],
     (filteredTree, sortState) => {
         if (filteredTree) {
             const isRoot = filteredTree && filteredTree.name === ROOT_POOL_NAME;
-            const tree = isRoot ? filteredTree : {children: [filteredTree]};
-            const sortedTree = hammer.treeList.sortTree(tree, sortState, poolsTableItems);
+            const tree = isRoot
+                ? filteredTree
+                : ({
+                      name: '',
+                      children: [filteredTree],
+                      leaves: [],
+                      attributes: {},
+                      type: 'pool',
+                  } as PoolTreeNode);
+            const sortedTree = treeList.sortTree(tree, sortState, poolsTableItems);
 
-            return hammer.treeList.flattenTree(sortedTree);
+            return treeList.flattenTree(sortedTree);
+        }
+
+        return [];
+    },
+);
+
+export const getCurrentTreeExpandedPools = createSelector(
+    [getTree, getSchedulingOperationsExpandedPools],
+    (tree, expandedPools) => {
+        return expandedPools[tree];
+    },
+);
+
+const getSchedulingOverviewFilteredTree = createSelector(
+    [getCurrentPool, getSchedulingFilteredPoolNames, getCurrentTreeExpandedPools],
+    (treeRoot, visiblePools, expandedPools) => {
+        if (treeRoot) {
+            const res = treeList.filterTreeEachChild(
+                treeRoot,
+                (pool: {name: string; parent?: string}) => {
+                    const {name, parent} = pool;
+                    const isVisible = visiblePools === undefined || visiblePools.has(name);
+
+                    if (!isVisible) {
+                        return false;
+                    }
+
+                    if (!parent || parent === ROOT_POOL_NAME) {
+                        return true;
+                    }
+
+                    return Boolean(expandedPools?.has(parent));
+                },
+                (leaf) => {
+                    const {pool} = leaf;
+                    const isVisible = visiblePools === undefined || visiblePools.has(pool!);
+
+                    if (!isVisible) {
+                        return false;
+                    }
+
+                    return pool === ROOT_POOL_NAME || Boolean(expandedPools?.has(pool!));
+                },
+            );
+            return res;
+        }
+        return undefined;
+    },
+);
+
+export const getSchedulingOverviewTableItems = createSelector(
+    [getSchedulingOverviewFilteredTree, getSortState],
+    (filteredTree, sortState) => {
+        if (filteredTree) {
+            const isRoot = filteredTree && filteredTree.name === ROOT_POOL_NAME;
+            const tree = isRoot
+                ? filteredTree
+                : ({
+                      name: '',
+                      children: [filteredTree],
+                      leaves: [],
+                      attributes: {},
+                      type: 'pool',
+                  } as PoolTreeNode);
+            const sortedTree = treeList.sortTree(tree, sortState, poolsTableItems);
+
+            return treeList.flattenTree(sortedTree);
         }
 
         return [];
@@ -192,8 +266,8 @@ export const getTableItems = createSelector(
 );
 
 export const getSchedulingOverviewMaxDepth = createSelector(
-    [getTableItems, getExpandedPoolsLoadAll, getTree, getSchedulingOperationsExpandedPools],
-    (items: Array<{level: number; name: string}>, allExpanded, tree, expandedPoolsMap) => {
+    [getSchedulingTableItems, getExpandedPoolsLoadAll, getCurrentTreeExpandedPools],
+    (items: Array<{level?: number; name?: string}>, allExpanded, expandedPools) => {
         if (allExpanded) {
             return reduce_(
                 items,
@@ -205,7 +279,6 @@ export const getSchedulingOverviewMaxDepth = createSelector(
             );
         }
 
-        const expandedPools = expandedPoolsMap[tree];
         if (!expandedPools?.size) {
             return 0;
         }
@@ -213,8 +286,9 @@ export const getSchedulingOverviewMaxDepth = createSelector(
         return reduce_(
             items,
             (acc, item) => {
-                if (expandedPools.has(item.name)) {
-                    return acc < item.level + 1 ? item.level + 1 : acc;
+                const {level = 0, name = ''} = item;
+                if (expandedPools.has(name)) {
+                    return acc < level + 1 ? level + 1 : acc;
                 }
                 return acc;
             },
