@@ -90,17 +90,22 @@ export const getPoolsNames = createSelector(
     (pools): Array<string> => map_(pools, (_v, name) => name).sort(),
 );
 
-const DETAILS_CONTENT_MODES = {
-    cpu: 'cpu',
-    memory: 'memory',
-    gpu: 'gpu',
-    user_slots: 'user_slots',
-    operations: 'operations',
-    integral: 'integral',
-};
+export const SCHEDULING_CONTENT_MODES = [
+    'summary',
+    'cpu',
+    'memory',
+    'gpu',
+    'user_slots',
+    'operations',
+    'integral_guarantees',
+    'custom',
+] as const;
 
-export const getContentMode = createSelector([getContentModeRaw], (mode) => {
-    return DETAILS_CONTENT_MODES[mode] || DETAILS_CONTENT_MODES.cpu;
+export type SchedulingContentMode = (typeof SCHEDULING_CONTENT_MODES)[number];
+
+export const getSchedulingContentMode = createSelector([getContentModeRaw], (mode) => {
+    const index = SCHEDULING_CONTENT_MODES.indexOf(mode as any);
+    return SCHEDULING_CONTENT_MODES[index !== -1 ? index : 0];
 });
 
 export const getIsRoot = createSelector(getPool, (pool) => pool === ROOT_POOL_NAME);
