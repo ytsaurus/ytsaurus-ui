@@ -3,19 +3,25 @@ import React from 'react';
 import {SchedulingOverviewColumnNames} from '../../../shared/constants/settings-types';
 
 import SchedulingOperationsLoader from '../../pages/scheduling/Content/tabs/ScherdulingOperataionsLoader/SchedulingOperationsLoader';
-import {PoolInfo} from '../../store/selectors/scheduling/scheduling-pools';
+import {PoolOrOperation} from '../../utils/scheduling/pool-child';
+
 import {ColumnInfo} from '../../components/ElementsTable/ElementsTableHeader';
+
+type ItemType = PoolOrOperation<'pool' | 'operation'>;
 
 export const poolsTableItems: Record<
     SchedulingOverviewColumnNames,
-    Omit<ColumnInfo, 'caption'> & {get(item: PoolInfo): React.ReactNode; caption?: string}
+    Omit<ColumnInfo, 'caption'> & {
+        get(item: ItemType): React.ReactNode;
+        caption?: string;
+    }
 > = {
     name: {
         sort: true,
         caption: 'Pool / Operation',
         captionTail: <SchedulingOperationsLoader />,
         align: 'left',
-        get(item: PoolInfo) {
+        get(item: ItemType) {
             if (item.type === 'pool') {
                 return item.name;
             }
@@ -26,7 +32,7 @@ export const poolsTableItems: Record<
         sort: true,
         align: 'right',
         title: 'FIFO Index',
-        get(item: PoolInfo) {
+        get(item: ItemType) {
             return item.fifoIndex;
         },
     },
@@ -34,7 +40,7 @@ export const poolsTableItems: Record<
         sort: true,
         align: 'right',
         title: 'Effective weight',
-        get(item: PoolInfo) {
+        get(item: ItemType) {
             return item.weight;
         },
     },
@@ -42,13 +48,13 @@ export const poolsTableItems: Record<
         caption: 'Operations',
         sort: true,
         align: 'center',
-        get(item: PoolInfo) {
+        get(item: ItemType) {
             return [item.operationCount, item.runningOperationCount];
         },
     },
     dominant_resource: {
         sort: true,
-        get(item: PoolInfo) {
+        get(item: ItemType) {
             return item.dominantResource;
         },
         caption: 'Dom. res.',
@@ -59,7 +65,7 @@ export const poolsTableItems: Record<
         sort: true,
         caption: 'Guarantee',
         title: 'Effective dominant strong guarantee share',
-        get(item: PoolInfo) {
+        get(item: ItemType) {
             return item.minShareRatio;
         },
         align: 'right',
@@ -68,7 +74,7 @@ export const poolsTableItems: Record<
         sort: true,
         title: 'Dominant fair share',
         align: 'right',
-        get(item: PoolInfo) {
+        get(item: ItemType) {
             return item.fairShareRatio;
         },
     },
@@ -76,7 +82,7 @@ export const poolsTableItems: Record<
         sort: true,
         title: 'Dominant usage share',
         align: 'right',
-        get(item: PoolInfo) {
+        get(item: ItemType) {
             return item.usageRatio;
         },
     },
@@ -84,7 +90,7 @@ export const poolsTableItems: Record<
         sort: true,
         title: 'Dominant demand share',
         align: 'right',
-        get(item: PoolInfo) {
+        get(item: ItemType) {
             return item.demandRatio;
         },
     },
@@ -93,7 +99,7 @@ export const poolsTableItems: Record<
         caption: 'Usage / Fair share',
         align: 'center',
         sortWithUndefined: true,
-        get(item: PoolInfo) {
+        get(item: ItemType) {
             const {fairShareRatio, usageRatio} = item;
             const x = Number(usageRatio) / Number(fairShareRatio);
             if (isNaN(usageRatio!) || isNaN(fairShareRatio!) || isNaN(x)) {
@@ -106,7 +112,7 @@ export const poolsTableItems: Record<
         sort: true,
         title: 'User',
         align: 'left',
-        get(item: PoolInfo) {
+        get(item: ItemType) {
             return item.attributes.user;
         },
     },
@@ -115,7 +121,7 @@ export const poolsTableItems: Record<
         title: 'Type',
         caption: 'Type',
         align: 'left',
-        get(item: PoolInfo) {
+        get(item: ItemType) {
             return item.attributes.type;
         },
     },

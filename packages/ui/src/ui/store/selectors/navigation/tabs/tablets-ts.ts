@@ -184,7 +184,7 @@ function sortTreeInPlace(root: TreeNode<TabletInfo, TabletInfo>, sortState?: Old
                 };
                 return acc;
             },
-            {} as Record<string, FieldDescr<TabletInfo, TabletInfo>>,
+            {} as Record<string, FieldDescr<typeof root>>,
         ),
     });
 }
