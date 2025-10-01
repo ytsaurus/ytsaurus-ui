@@ -123,8 +123,16 @@ interface BundleBreadcrumbsProps {
 }
 
 function BundleBreadcrumbs({className, bcItems, setActiveBundle}: BundleBreadcrumbsProps) {
+    const cluster = useSelector(getCluster);
+    const history = useHistory();
+
     const handleItemClick = React.useCallback(
         (item: string | number) => {
+            if (item === '<bundles>') {
+                history.push(`/${cluster}/${Page.TABLET_CELL_BUNDLES}`);
+            } else {
+                history.push(`/${cluster}/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.TABLET_CELLS}?activeBundle=${item}`);
+            }
             setActiveBundle(item.toString());
         },
         [setActiveBundle],
@@ -134,7 +142,7 @@ function BundleBreadcrumbs({className, bcItems, setActiveBundle}: BundleBreadcru
         return bcItems.map((item) => {
             const text = item.text || item.title || '';
             return (
-                <Breadcrumbs.Item key={text} href={item.href}>
+                <Breadcrumbs.Item key={text}>
                     {text}
                 </Breadcrumbs.Item>
             );

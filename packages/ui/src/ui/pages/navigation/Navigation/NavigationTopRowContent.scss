@@ -1,15 +1,12 @@
-@import '../../../styles/redefinitions/common/Breadcrumbs.scss';
-
 .navigation-top-row-content {
     &__favourites {
         padding-right: 15px;
     }
 
     &__editable-breadcrumbs {
-        padding-left: 8px;
-        width: 100%;
-
-        padding-right: 1ex;
+        flex-grow: 1;
+        overflow-y: visible;
+        overflow: hidden;
     }
 
     &__breadcrumbs {

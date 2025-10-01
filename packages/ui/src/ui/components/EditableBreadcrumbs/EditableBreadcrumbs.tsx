@@ -75,8 +75,8 @@ export function EditableBreadcrumbs(props: Props) {
             onModeChange={onModeChange}
             renderContent={
                 (contentProps) => 
-                    <Box style={{width: '100%'}} className={contentProps.className}>
-                        <Breadcrumbs {...breadcrumbsProps} endContent={<div style={{marginLeft: '8px'}}>{beforeEditorContent}{contentProps.renderEditButton()}{afterEditorContent}</div>}>
+                    <Box style={{flexGrow: 1, flexShrink: 1}} className={contentProps.className}>
+                        <Breadcrumbs {...breadcrumbsProps} showRoot endContent={<div style={{marginLeft: '8px'}}>{beforeEditorContent}{contentProps.renderEditButton()}{afterEditorContent}</div>}>
                             {children}
                         </Breadcrumbs>
                     </Box>

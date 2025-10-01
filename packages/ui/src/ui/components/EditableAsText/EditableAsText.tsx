@@ -47,7 +47,6 @@ export function EditableAsText(props: Props) {
         size,
         disableEdit,
         cancelOnClose,
-        openOnClick,
         renderEditor,
         renderContent,
         onModeChange,
@@ -77,12 +76,6 @@ export function EditableAsText(props: Props) {
     const startTextEdit = useCallback(() => {
         handleChangeMode(true);
     }, [handleChangeMode]);
-
-    const handleWrapClick = () => {
-        if (!editMode && openOnClick) {
-            startTextEdit();
-        }
-    };
 
     const handleChange = React.useCallback((val?: string) => setInput(val ?? ''), [setInput]);
 
