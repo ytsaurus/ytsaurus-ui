@@ -103,7 +103,6 @@ export function SchedulingMeta() {
         <CollapsibleSection
             className={block()}
             name={i18n('pool-configuration', {pool_name: pool.name})}
-            marginDirection="bottom"
         >
             <MetaTable items={items} subTitles={subTitles} />
         </CollapsibleSection>

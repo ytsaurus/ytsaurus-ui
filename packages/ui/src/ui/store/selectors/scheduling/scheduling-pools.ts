@@ -161,6 +161,9 @@ export interface OperationInfo {
     maxRunningOperationCount?: number;
 
     pool: string;
+
+    title?: never;
+    user?: never;
 }
 
 export interface PoolInfo extends Omit<OperationInfo, 'type' | 'pool'> {
