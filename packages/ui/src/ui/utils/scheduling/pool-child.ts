@@ -133,7 +133,7 @@ function isPoolItem(item: PoolTreeNode | PoolLeafNode): item is PoolTreeNode {
     return item.type === 'pool';
 }
 
-type PoolOrOperation<T extends 'pool' | 'operation'> = T extends 'pool'
+export type PoolOrOperation<T extends 'pool' | 'operation'> = T extends 'pool'
     ? PoolTreeNode
     : PoolLeafNode;
 
