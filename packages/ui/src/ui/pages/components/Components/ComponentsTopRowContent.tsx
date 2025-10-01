@@ -8,7 +8,6 @@ import {Page} from '../../../constants/index';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import {nodeHostSelector} from '../../../store/selectors/components/node/node';
 import {getCluster} from '../../../store/selectors/global';
-import {makeComponentsNodesUrl} from '../../../utils/app-url';
 
 import './ComponentsTopRowContent.scss';
 
@@ -37,25 +36,24 @@ function ComponentsNodeTopRowContent() {
 function ComponentsBreadcrumbs() {
     const cluster = useSelector(getCluster);
     const nodeHost = useSelector(nodeHostSelector);
-
+    const history = useHistory();
     const items = React.useMemo(() => {
         const result = [
-            <Breadcrumbs.Item key="<Root>" href={makeComponentsNodesUrl({cluster})}>
+            <Breadcrumbs.Item onClick={() => history.push(`/${cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}`)} key="<Root>">
                 {'<Root>'}
             </Breadcrumbs.Item>,
         ];
         if (nodeHost) {
             result.push(
                 <Breadcrumbs.Item
-                    key="<Root>"
-                    href={makeComponentsNodesUrl({cluster, host: nodeHost})}
+                    key={nodeHost}
                 >
                     {nodeHost}
                 </Breadcrumbs.Item>,
             );
         }
         return result;
-    }, [cluster, nodeHost]);
+    }, [cluster, nodeHost, history]);
 
     return (
         <Breadcrumbs showRoot className={block('breadcrumbs')}>
