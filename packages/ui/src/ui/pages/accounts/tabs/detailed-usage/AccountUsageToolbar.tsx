@@ -1,5 +1,5 @@
-import React, {useCallback, useMemo} from 'react';
-import {Breadcrumbs} from '@gravity-ui/uikit';
+import React, {Key, useCallback, useMemo} from 'react';
+import {Box, Breadcrumbs} from '@gravity-ui/uikit';
 
 import map_ from 'lodash/map';
 import reverse_ from 'lodash/reverse';
@@ -130,6 +130,7 @@ function AccountUsageToolbar() {
                         itemsToWrap={[
                             {
                                 node: <UsageBreadcrumbsMemo />,
+                                growable: true,
                             },
                         ]}
                     />
@@ -471,14 +472,13 @@ function ViewType() {
 export function UsageBreadcrumbs() {
     const dispatch = useDispatch();
     const pathArr = useSelector(getAccountUsageTreeItemsBasePathSplitted);
-
+    const history = useHistory();
     const items = useMemo(() => {
         return map_(pathArr, (item, index) => {
             const text = item.item;
             return (
                 <Breadcrumbs.Item
                     key={text}
-                    href={makeRoutedURL(`${window.location.pathname}?path=${item.value}`)}
                 >
                     {index ? <PathFragment name={text} /> : <Icon awesome={'folder-tree'} />}
                 </Breadcrumbs.Item>
@@ -486,16 +486,19 @@ export function UsageBreadcrumbs() {
         });
     }, [pathArr]);
 
-    const handleBreadcrumbClick = useCallback(() => {
+    const handleBreadcrumbClick = useCallback((key: Key) => {
+        history.push(makeRoutedURL(`${window.location.pathname}?path=${pathArr.find(i => i.item === key)?.value}`));
         setTimeout(() => {
             dispatch(fetchAccountUsage());
         }, 0);
-    }, [dispatch]);
+    }, [dispatch, history, pathArr]);
 
     return (
-        <Breadcrumbs onAction={handleBreadcrumbClick} showRoot>
-            {items}
-        </Breadcrumbs>
+        <Box overflow={'hidden'} width={'100%'} style={{display: 'block'}}>
+            <Breadcrumbs onAction={handleBreadcrumbClick} showRoot>
+                {items}
+            </Breadcrumbs>
+        </Box>
     );
 }
 
