@@ -3,7 +3,7 @@ import {useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {Breadcrumbs, Flex} from '@gravity-ui/uikit';
+import {Box, Breadcrumbs, Flex} from '@gravity-ui/uikit';
 
 import {getMetrics} from '../../../common/utils/metrics';
 
@@ -42,6 +42,7 @@ import Icon from '../../../components/Icon/Icon';
 import MetaTable from '../../../components/MetaTable/MetaTable';
 import {Escaped} from '../../../components/Text/Text';
 import {Tooltip} from '../../../components/Tooltip/Tooltip';
+import {EditableBreadcrumbs} from '../../../components/EditableBreadcrumbs/EditableBreadcrumbs';
 
 import PathEditor from '../../../containers/PathEditor/PathEditor';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
@@ -62,8 +63,10 @@ function NavigationTopRowContent() {
     return (
         <RowWithName page={Page.NAVIGATION} className={block()} urlParams={{path: defaultPath}}>
             <NavigationFavourites />
-            <EditableNavigationBreadcrumbs />
-            <NavigationTools />
+            <Flex justifyContent={'space-between'} alignItems={'center'} grow={1}>
+                <EditableNavigationBreadcrumbs />
+                <NavigationTools />
+            </Flex>
         </RowWithName>
     );
 }
@@ -156,16 +159,7 @@ function EditableNavigationBreadcrumbs() {
 
     return (
         <div className={block('editable-breadcrumbs')}>
-            {editMode ? (
-                <NavigationPathEditor hideEditor={toggleEditMode} />
-            ) : (
-                <React.Fragment>
-                    <NavigationBreadcrumbs onEdit={toggleEditMode} />
-                    <NavigationTargetPathButton />
-                    <EditButton onClick={toggleEditMode} />
-                    <NavigationPathToClipboard />
-                </React.Fragment>
-            )}
+            <NavigationBreadcrumbs onEdit={toggleEditMode} />
         </div>
     );
 }
@@ -204,18 +198,14 @@ function NavigationPathEditor({hideEditor}: {hideEditor: () => void}) {
 function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
     const bcItems = useSelector(getNavigationBreadcrumbs);
     const mode = useSelector(getMode);
+    const history = useHistory();
 
     const items = React.useMemo(() => {
         return bcItems.map(({text, state}, index) => {
             const isLastItem = index === bcItems.length - 1;
-            const url = makeRoutedURL(window.location.pathname, {
-                path: state.path,
-                navmode: mode === Tab.ACL ? mode : Tab.CONTENT,
-                filter: '',
-            });
 
             return (
-                <Breadcrumbs.Item key={text} href={url}>
+                <Breadcrumbs.Item key={text}>
                     {index ? (
                         <Escaped text={text} onClick={isLastItem ? onEdit : undefined} />
                     ) : (
@@ -227,9 +217,25 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
     }, [bcItems, mode, onEdit]);
 
     return (
-        <Breadcrumbs showRoot className={block('breadcrumbs')}>
+        <EditableBreadcrumbs
+            onAction={(key) => {
+                const item = bcItems.find(({text}) => text === key);
+                if (item) {
+                    const url = makeRoutedURL(window.location.pathname, {
+                        path: item.state.path,
+                        navmode: mode === Tab.ACL ? mode : Tab.CONTENT,
+                        filter: '',
+                    });
+                    history.push(url);
+                }
+            }}
+            className={block('breadcrumbs')}
+            beforeEditorContent={<NavigationTargetPathButton />}
+            afterEditorContent={<NavigationPathToClipboard />}
+            renderEditor={(props) => <NavigationPathEditor hideEditor={props.onBlur} />}
+        >
             {items}
-        </Breadcrumbs>
+        </EditableBreadcrumbs>
     );
 }
 

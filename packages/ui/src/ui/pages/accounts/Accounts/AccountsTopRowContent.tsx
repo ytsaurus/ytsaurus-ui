@@ -89,21 +89,24 @@ function AccountsBreadcrumbs() {
     const bcItems = useSelector(getActiveAccountBreadcrumbs).slice(1);
     const dispatch = useDispatch();
     const cluster = useSelector(getCluster);
+    const history = useHistory();
 
     const handleBreadcrumbsClick = (key: string | number) => {
         dispatch(setActiveAccount(key === ROOT_PLACEHOLDER ? '' : key));
+        const account = key === ROOT_PLACEHOLDER ? '' : key;
+        const pathname = account
+            ? window.location.pathname
+            : calcRootPathname(window.location.pathname, cluster);
+        history.push(makeRoutedURL(pathname, {account}));
     };
 
     const items = React.useMemo(() => {
         return [{text: ''}, ...bcItems].map((item) => {
             const account = item.text;
             const text = account || ROOT_PLACEHOLDER;
-            const pathname = account
-                ? window.location.pathname
-                : calcRootPathname(window.location.pathname, cluster);
 
             return (
-                <Breadcrumbs.Item key={text} href={makeRoutedURL(pathname, {account})}>
+                <Breadcrumbs.Item key={text}>
                     {text}
                 </Breadcrumbs.Item>
             );
@@ -112,7 +115,6 @@ function AccountsBreadcrumbs() {
 
     return (
         <Breadcrumbs
-            // navigate={history.push}
             className={block('breadcrumbs')}
             onAction={handleBreadcrumbsClick}
             showRoot

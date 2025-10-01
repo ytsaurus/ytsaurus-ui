@@ -57,7 +57,7 @@ export const NavigationBreadcrumbs: FC<Props> = ({
             <Button size="s" view="flat" onClick={onClusterChangeClick}>
                 <Icon data={FolderTreeIcon} size={16} />
             </Button>
-            <Breadcrumbs showRoot>{items}</Breadcrumbs>
+            <Breadcrumbs maxItems={Infinity} showRoot>{items}</Breadcrumbs>
         </>
     );
 };
