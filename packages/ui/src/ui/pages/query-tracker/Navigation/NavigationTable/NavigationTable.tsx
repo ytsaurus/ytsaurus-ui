@@ -24,7 +24,7 @@ const enum TableTab {
     Meta = 'meta',
 }
 
-const b = cn('navigation-table');
+const b = cn('qt-navigation-table');
 
 export const NavigationTable: FC = () => {
     const [activeTab, setActiveTab] = useState(TableTab.Schema);

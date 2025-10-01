@@ -14,7 +14,7 @@ import {
 import {usePreventUnload} from '../../../hooks/use-prevent-unload';
 import {useQueriesListSidebarToggle} from '../hooks/QueriesList';
 import {getDirtySinceLastSubmit, getQueryGetParams} from '../../../store/selectors/queries/query';
-import {QueriesList} from '../QueriesList';
+import {LazyQueriesList} from '../QueriesList/lazy';
 import {useQueryACO} from '../QueryACO/useQueryACO';
 import {MonacoContext} from '../context/MonacoContext';
 
@@ -150,7 +150,7 @@ export default function QueryTracker({match}: Props) {
                         minSize={minSize}
                         getInitialSizes={getSize}
                     >
-                        {isQueriesListSidebarVisible ? <QueriesList /> : null}
+                        {isQueriesListSidebarVisible ? <LazyQueriesList /> : null}
                         <QueryEditorSplit
                             fileEditorFullWidth={fileEditor.isFullWidth}
                             fileEditorVisible={fileEditor.isOpen}
