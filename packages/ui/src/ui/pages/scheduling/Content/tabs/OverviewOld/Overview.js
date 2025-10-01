@@ -280,12 +280,21 @@ class Overview extends Component {
         const expanderIcon = itemState && (
             <Icon
                 className={expanderClassIcon}
-                awesome={itemState.collapsed ? 'angle-down' : 'angle-up'}
+                awesome={itemState.collapsed ? 'angle-right' : 'angle-down'}
             />
         );
 
         return (
-            <span onClick={empty ? undefined : toggleItemState} className={expanderClass}>
+            <span
+                onClick={
+                    empty
+                        ? undefined
+                        : (...args) => {
+                              toggleItemState(...args);
+                          }
+                }
+                className={expanderClass}
+            >
                 {item.type !== 'operation' && expanderIcon}
                 <span
                     className={block('operation-icon', {

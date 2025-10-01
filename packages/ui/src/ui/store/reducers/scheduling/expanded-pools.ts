@@ -30,7 +30,7 @@ export interface ExpandedPoolsState {
      * expandedPools: Record<tree_name, Map<pool_name, ExpandedPoolInfo>>
      * example: `{'childPoolName': {parentPoolPath: 'parentPoolName/subParentName', isEphemeral: true}}`
      */
-    expandedPools: Record<string, Map<string, ExpandedPoolInfo>>;
+    expandedPools: Record<string, Map<string, ExpandedPoolInfo> | undefined>;
     loadAll: boolean;
 }
 
