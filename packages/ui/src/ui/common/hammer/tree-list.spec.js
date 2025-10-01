@@ -83,26 +83,42 @@ describe('hammer.tree-list', () => {
             });
         });
 
-        describe('attachTreeLeaves()', () => {
-            it('Exports', () => {
-                expect(treeList.attachTreeLeaves).toBeDefined();
-            });
-
+        describe('attachTreeLeaves', () => {
             describe('behavior', () => {
-                // TODO
-                // let treeNodes;
-                //
-                // beforeEach(() => {
-                //     treeNodes = treeList.prepareTree(entries, parentGetter);
-                // });
+                let treeNodes;
+
+                const leaf1 = {payload: 100, parent: 'entry1'};
+                const leaf2 = {payload: 200, parent: 'entry2'};
+
+                const leaves = {leaf1, leaf2};
+
+                beforeEach(() => {
+                    treeNodes = treeList.prepareTree(entries, parentGetter);
+                    treeList.attachTreeLeaves(treeNodes, leaves, (item) => item.parent);
+                });
+
+                it('leaves', () => {
+                    const {entry1, entry2} = treeNodes;
+
+                    expect(entry1.leaves).toEqual([
+                        {
+                            attributes: leaf1,
+                            isLeafNode: true,
+                            name: 'leaf1',
+                        },
+                    ]);
+                    expect(entry2.leaves).toEqual([
+                        {
+                            attributes: leaf2,
+                            isLeafNode: true,
+                            name: 'leaf2',
+                        },
+                    ]);
+                });
             });
         });
 
         describe('filterTree()', () => {
-            it('Exports', () => {
-                expect(treeList.filterTree).toBeDefined();
-            });
-
             describe('behavior', () => {
                 let treeNodes, filteredNodes;
 
@@ -125,6 +141,128 @@ describe('hammer.tree-list', () => {
                         (entry) => entry.name.indexOf('entry1') !== -1,
                     );
                     expect(filteredNodes.children).toHaveLength(1);
+                });
+
+                describe('filterTreeEachChild', () => {
+                    let treeNodes;
+
+                    beforeEach(() => {
+                        treeNodes = treeList.prepareTree(
+                            {...entries, entry5: {payload: 50, memberOf: ['entry4']}},
+                            parentGetter,
+                        );
+                    });
+
+                    it('missing', () => {
+                        const res = treeList.filterTreeEachChild(
+                            treeNodes[ROOT_NODE],
+                            (entry) => entry.name === 'missing_entry',
+                        );
+                        expect(res).toEqual(undefined);
+                    });
+
+                    it('by child', () => {
+                        const res = treeList.filterTreeEachChild(
+                            treeNodes[ROOT_NODE],
+                            (entry) => entry.name === 'entry5',
+                        );
+                        expect(res).toEqual({
+                            _initedBy: 'entry1',
+                            attributes: {},
+                            children: [
+                                {
+                                    _initedBy: 'entry1',
+                                    attributes: {
+                                        memberOf: [],
+                                        payload: 10,
+                                    },
+                                    children: [
+                                        {
+                                            _initedBy: 'entry4',
+                                            attributes: {
+                                                memberOf: ['entry1'],
+                                                payload: 40,
+                                            },
+                                            children: [
+                                                {
+                                                    _initedBy: 'entry5',
+                                                    attributes: {
+                                                        memberOf: ['entry4'],
+                                                        payload: 50,
+                                                    },
+                                                    children: [],
+                                                    leaves: [],
+                                                    name: 'entry5',
+                                                    parent: ['entry4'],
+                                                },
+                                            ],
+                                            leaves: [],
+                                            name: 'entry4',
+                                            parent: ['entry1'],
+                                        },
+                                    ],
+                                    leaves: [],
+                                    name: 'entry1',
+                                    parent: 'Root',
+                                },
+                            ],
+                            leaves: [],
+                            name: 'Root',
+                        });
+                    });
+                    it('by leaf', () => {
+                        treeList.attachTreeLeaves(
+                            treeNodes,
+                            {leaf1: {payload: 500, parent: 'entry4'}},
+                            (item) => item.parent,
+                        );
+
+                        const res = treeList.filterTreeEachChild(
+                            treeNodes[ROOT_NODE],
+                            () => false,
+                            (entry) => entry.name === 'leaf1',
+                        );
+                        expect(res).toEqual({
+                            _initedBy: 'entry1',
+                            attributes: {},
+                            children: [
+                                {
+                                    _initedBy: 'entry1',
+                                    attributes: {
+                                        memberOf: [],
+                                        payload: 10,
+                                    },
+                                    children: [
+                                        {
+                                            _initedBy: 'entry4',
+                                            attributes: {
+                                                memberOf: ['entry1'],
+                                                payload: 40,
+                                            },
+                                            children: [],
+                                            leaves: [
+                                                {
+                                                    attributes: {
+                                                        parent: 'entry4',
+                                                        payload: 500,
+                                                    },
+                                                    isLeafNode: true,
+                                                    name: 'leaf1',
+                                                },
+                                            ],
+                                            name: 'entry4',
+                                            parent: ['entry1'],
+                                        },
+                                    ],
+                                    leaves: [],
+                                    name: 'entry1',
+                                    parent: 'Root',
+                                },
+                            ],
+                            leaves: [],
+                            name: 'Root',
+                        });
+                    });
                 });
             });
         });
