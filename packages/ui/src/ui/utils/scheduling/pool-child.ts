@@ -66,9 +66,11 @@ function preparePoolChildResource<T extends 'pool' | 'operation'>(
 
 export type PoolData<T extends 'pool' | 'operation'> = {
     type: T;
+    pool?: string;
     cypressAttributes?: unknown;
     mode?: 'fair_share' | 'fifo';
     pool_operation_count?: number;
+    child_pool_count?: number;
     incomplete?: boolean;
     operationCount?: number;
     maxOperationCount?: number;
@@ -162,11 +164,17 @@ export function updatePoolChild<T extends 'pool' | 'operation'>(
             data.mode = ypath.getValue(attributes, '/mode');
 
             data.leaves = map_(data.leaves, (leaf) => {
-                const res = updatePoolChild(leaf, {}, 'operation', treeResources);
+                const res = updatePoolChild(
+                    Object.assign(leaf, {pool: data.name}),
+                    {},
+                    'operation',
+                    treeResources,
+                );
                 return res;
             });
 
             const child_pool_count = ypath.getNumber(attributes, '/child_pool_count');
+            data.child_pool_count = child_pool_count;
             if (child_pool_count > 0 && !data.children.length) {
                 for (let i = 0; i < child_pool_count; ++i) {
                     data.children.push({
@@ -189,7 +197,13 @@ export function updatePoolChild<T extends 'pool' | 'operation'>(
                 );
                 if (data.pool_operation_count! > 0) {
                     const emptyOp = updatePoolChild(
-                        {attributes: {}, isLeafNode: true, name: '', type: 'operation'},
+                        {
+                            attributes: {},
+                            isLeafNode: true,
+                            name: '',
+                            type: 'operation',
+                            pool: data.name,
+                        },
                         {},
                         'operation',
                         treeResources,
@@ -199,6 +213,7 @@ export function updatePoolChild<T extends 'pool' | 'operation'>(
                         data.leaves.push({
                             ...emptyOp,
                             name: `##fake_operation_${data.name}_${i}`,
+                            pool: data.name,
                         });
                     }
                 }
