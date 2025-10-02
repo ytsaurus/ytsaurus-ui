@@ -102,7 +102,7 @@ function useDashKitConfig(
                 connections: [],
             } as Config,
         );
-    }, [panels, collapsedRows, params, expandedId]);
+    }, [panels, collapsedRows, params, expandedId, dashboardType]);
 
     React.useMemo(() => {
         const widthByY = config?.layout?.reduce(

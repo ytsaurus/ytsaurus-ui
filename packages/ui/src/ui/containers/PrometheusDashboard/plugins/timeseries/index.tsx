@@ -78,7 +78,7 @@ function PrometheusChart({
 
     return (
         <React.Fragment>
-            <Flex ref={setElement} className={block('widget')} direction="column">
+            <Flex ref={setElement} className={block('widget')} direction="column" id={id}>
                 {chartData ? (
                     <YTChartKitLazy type="yagr" data={chartData} />
                 ) : (
