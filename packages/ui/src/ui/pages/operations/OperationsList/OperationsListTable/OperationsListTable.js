@@ -206,8 +206,9 @@ class OperationsListTable extends Component {
                             cluster={cluster}
                             pools={pools}
                             state={state}
-                            compact
                             allowDetachEditBtn
+                            hideIcon
+                            hideTree
                         />
                     )}
                 </UserPoolItem>
