@@ -37,7 +37,8 @@ export function UserPool(props: Props) {
                     <TemplatePools
                         pools={[{tree: pools?.[0]?.tree, pool: pools?.[0]?.pool?.[0]}]}
                         cluster={cluster}
-                        compact
+                        hideIcon
+                        hideTree
                     />
                 )}
             </Flex>
