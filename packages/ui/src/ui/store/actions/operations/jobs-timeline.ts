@@ -1,5 +1,3 @@
-import {getBatchError} from '../../../../shared/utils/error';
-
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../reducers';
