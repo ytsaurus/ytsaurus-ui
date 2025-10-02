@@ -29,6 +29,7 @@ import {
 } from '../../../../../shared/prometheus/types';
 
 import './timeseries.scss';
+import {KEY_WITH_DOUBLE_CURLY_BRACES, formatByParams} from '../../../../../shared/utils/format';
 
 const block = cn('yt-prometheus-timeseries');
 
@@ -136,7 +137,13 @@ function useLoadQueriesData({
                 ({data}) => {
                     const {results} = data;
                     setChartData({
-                        data: makeYagrWidgetData(title, targets, results, {end, start, step}),
+                        data: makeYagrWidgetData(
+                            title,
+                            targets,
+                            results,
+                            {end, start, step},
+                            params,
+                        ),
                         loading: false,
                     });
                 },
@@ -154,6 +161,7 @@ function makeYagrWidgetData(
     targets: Array<TimeseriesTarget>,
     results: Array<QueryRangeData>,
     {end, start, step}: {end: number; start: number; step: number},
+    params: Record<string, string | number>,
 ): YagrWidgetData {
     const res: YagrWidgetData = {
         data: {graphs: [], timeline: []},
@@ -170,30 +178,53 @@ function makeYagrWidgetData(
     const {timeline} = res.data;
 
     for (let serie = 0; serie < results?.length; ++serie) {
-        const graph: (typeof res)['data']['graphs'][number] = {
-            name: format.ReadableField(targets[serie].legendFormat),
-            data: new Array(timeline.length),
-            formatter: format.Number,
-            color: getSerieColor(serie),
-        };
-        res.data.graphs.push(graph);
+        const {legendFormat} = targets[serie];
+        for (let serie_i = 0; serie_i < (results[serie]?.data?.result?.length ?? 0); ++serie_i) {
+            const serie_i_data = results[serie]?.data?.result[serie_i];
+            if (!serie_i_data) {
+                continue;
+            }
 
-        const {values = []} = results[serie]?.data?.result?.[0] ?? {};
+            const {values = [], metric} = serie_i_data;
 
-        if (!values.length) {
-            continue;
-        }
+            const graph: (typeof res)['data']['graphs'][number] = {
+                name: legendFormat?.length
+                    ? formatByParams(
+                          legendFormat,
+                          {...params, ...metric},
+                          KEY_WITH_DOUBLE_CURLY_BRACES,
+                      )
+                    : genSerieName(metric),
+                data: new Array(timeline.length),
+                formatter: format.Number,
+                color: getSerieColor(res.data.graphs.length),
+            };
+            res.data.graphs.push(graph);
 
-        let i = 0;
-        for (; i < values.length; ++i) {
-            const [t, valueStr] = values[i];
-            const pos = Math.round((t - start) / step);
-            graph.data[pos] = Number(valueStr);
-        }
+            if (!values.length) {
+                continue;
+            }
 
-        if (i === 0) {
-            res.data.graphs.pop();
+            let i = 0;
+            for (; i < values.length; ++i) {
+                const [t, valueStr] = values[i];
+                const pos = Math.round((t - start) / step);
+                graph.data[pos] = Number(valueStr);
+            }
+
+            if (i === 0) {
+                res.data.graphs.pop();
+            }
         }
     }
     return res;
+}
+
+function genSerieName(obj: Record<string, unknown>) {
+    if (!obj) {
+        return undefined;
+    }
+    return Object.keys(obj).reduce((acc, key) => {
+        return acc + `${key}:${obj[key]}; `;
+    }, '');
 }
