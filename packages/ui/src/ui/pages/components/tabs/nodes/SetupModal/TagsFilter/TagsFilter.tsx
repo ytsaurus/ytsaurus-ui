@@ -129,7 +129,7 @@ function TagsFilter(props: Props) {
     const modes = allowedModes.map((m) => {
         const itemMode = m!;
         return {
-            icon: <Icon awesome={ICONS[itemMode]} />,
+            iconStart: <Icon awesome={ICONS[itemMode]} />,
             text: itemMode[0].toUpperCase() + itemMode.substring(1),
             action: () => handleChange({...value, mode: itemMode}),
         };
@@ -140,11 +140,11 @@ function TagsFilter(props: Props) {
             {control}
             <DropdownMenu
                 items={modes}
-                switcher={
-                    <Button size={size} width={'auto'} pin={'clear-round'}>
+                renderSwitcher={(props) => (
+                    <Button {...props} size={size} width={'auto'} pin={'clear-round'}>
                         <Icon awesome={ICONS[mode]} />
                     </Button>
-                }
+                )}
             />
         </div>
     );
