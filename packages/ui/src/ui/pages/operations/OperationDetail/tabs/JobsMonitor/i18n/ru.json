@@ -1,4 +1,4 @@
 {
   "alert_no-jobs-with-monitoring-descriptor": "Нет задач с \"monitoring_descriptor\"",
-  "alert_descriptors-limit-exceeded": "Превышен лимит {{limit}} уникальных дескрипторов"
+  "alert_descriptors-limited": "Дескрипторов мониторинга больше {{limit}}. Показаны первые {{limit}} дескрипторов мониторинга из самых свежих задач."
 }

@@ -1,0 +1,9 @@
+.yt-jobs-monitor {
+    &_exceeded-limit {
+        .yt-monitoring-dashboard {
+            .yt-monitoring-dashboard__title-link {
+                top: -146px;
+            }
+        }
+    }
+}
