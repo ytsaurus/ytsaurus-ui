@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v2.3.0...ui-v2.3.1) (2025-10-02)
+
+
+### Bug Fixes
+
+* **Queries:** wrong clique selector size [YTFRONT-5227] ([db610ec](https://github.com/ytsaurus/ytsaurus-ui/commit/db610ec8fcd8a22296a4cb864a11412e2465b7ac))
+
 ## [2.3.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v2.2.0...ui-v2.3.0) (2025-09-30)
 
 
