@@ -94,6 +94,7 @@ export interface DraftQuery {
         discovery_path?: string; // old request type. Deprecated
         discovery_group?: string;
         execution_mode?: 'validate' | 'optimize';
+        yql_version?: string;
     } & Record<string, string>;
     error?: unknown;
     access_control_object: string;

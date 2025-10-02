@@ -526,12 +526,20 @@ export type FlowViewWorkerInfo = {
     address: FlowViewWorkerId;
 };
 
+export type YqlTInfo = {
+    available_yql_versions: string[];
+    default_yql_ui_version: string;
+};
+
 export type GetQueryTrackerInfoResponse = {
     cluster_name: string;
     access_control_objects: string[];
     query_tracker_stage: string;
     supported_features: {access_control: boolean; multiple_aco?: boolean};
     clusters?: Array<string>;
+    engines_info?: {
+        yql: YqlTInfo;
+    };
 };
 
 export type FlowExecuteCommand = 'describe-pipeline';
