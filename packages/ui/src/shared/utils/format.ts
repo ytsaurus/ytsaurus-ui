@@ -2,6 +2,12 @@ function defaultKeyToRegex(key: string): RegExp {
     return new RegExp(`{${key}}`, 'g');
 }
 
+export const KEY_WITH_DOUBLE_CURLY_BRACES = {
+    keyToRegex(key: string) {
+        return new RegExp(`{{${key}}}`, 'g');
+    },
+};
+
 /**
  * Replaces occurrences of strings like '{key1}', '{key2}'
  * by corresponding values from params, i.e. params['key1'], params['key2']
