@@ -111,7 +111,8 @@ class Runtime extends Component<Props> {
                                         cluster={cluster}
                                         state={state}
                                         pool={pool}
-                                        compact
+                                        hideIcon
+                                        hideTree
                                     />
                                 ),
                             },

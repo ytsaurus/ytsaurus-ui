@@ -33,11 +33,12 @@ type TemplatePoolsProps = Pick<
     OperationPoolProps,
     | 'allowDetachEditBtn'
     | 'cluster'
-    | 'compact'
     | 'editBtnVisibility'
     | 'onEdit'
     | 'operationRefId'
     | 'state'
+    | 'hideIcon'
+    | 'hideTree'
 > & {
     className?: string;
     reserveEditButton?: boolean;
@@ -52,7 +53,8 @@ export function TemplatePools({
     onEdit,
     editBtnVisibility,
     operationRefId = undefined,
-    compact = false,
+    hideIcon,
+    hideTree,
     erasedTrees = {},
     allowDetachEditBtn,
 }: TemplatePoolsProps) {
@@ -61,7 +63,6 @@ export function TemplatePools({
             {pools.map((pool) => (
                 <OperationPool
                     key={pool.pool + '/' + pool.tree}
-                    compact={compact}
                     cluster={cluster}
                     onEdit={onEdit}
                     editBtnVisibility={editBtnVisibility}
@@ -70,6 +71,8 @@ export function TemplatePools({
                     pool={pool}
                     erased={erasedTrees[pool.tree]}
                     allowDetachEditBtn={allowDetachEditBtn}
+                    hideIcon={hideIcon}
+                    hideTree={hideTree}
                 />
             ))}
         </ul>
