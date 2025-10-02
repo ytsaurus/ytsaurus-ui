@@ -53,6 +53,22 @@ export const getUniqueJobsMonitorDescriptors = createSelector(
     },
 );
 
+export const getLimitedJobsMonitorDescriptors = createSelector(
+    [getJobsMonitoringItemsWithDescriptor],
+    (jobs) => {
+        const descriptors = new Set<string>();
+        for (const job of jobs) {
+            if (job.monitoring_descriptor && descriptors.size < MAX_DESCRIPTORS_COUNT) {
+                descriptors.add(job.monitoring_descriptor);
+            }
+            if (descriptors.size >= MAX_DESCRIPTORS_COUNT) {
+                break;
+            }
+        }
+        return [...descriptors];
+    },
+);
+
 export const getJobsMonitorTabVisible = createSelector(
     [
         getOperationId,
@@ -61,7 +77,7 @@ export const getJobsMonitorTabVisible = createSelector(
         getJobsMonitorError,
     ],
     (opId, jobMonId, jobsDescriptorArray, error) => {
-        if (opId !== jobMonId || jobsDescriptorArray.length > MAX_DESCRIPTORS_COUNT) {
+        if (opId !== jobMonId) {
             return false;
         }
         if (!isEmpty_(error)) {

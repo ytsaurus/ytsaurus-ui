@@ -24,6 +24,7 @@ export function getJobsMonitoringDescriptors(operation_id: string): JobsMonitorT
                 parameters: {
                     operation_id,
                     sort_field: 'start_time',
+                    sort_order: 'descending',
                     attributes: ['monitoring_descriptor', 'start_time', 'finish_time'],
                     with_monitoring_descriptor: true,
                 },

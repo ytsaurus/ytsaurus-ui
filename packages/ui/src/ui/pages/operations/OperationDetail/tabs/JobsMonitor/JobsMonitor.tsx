@@ -11,23 +11,34 @@ import {
     getJobsMonitorFromTo,
     getJobsMonitorItemsLoaded,
     getJobsMonitorItemsLoading,
+    getLimitedJobsMonitorDescriptors,
     getUniqueJobsMonitorDescriptors,
 } from '../../../../../store/selectors/operations/jobs-monitor';
 import {getCluster} from '../../../../../store/selectors/global';
 import UIFactory from '../../../../../UIFactory';
-import {Alert} from '@gravity-ui/uikit';
+import {Alert, Flex} from '@gravity-ui/uikit';
 
 import i18n from './i18n';
 
 function JobsMonitor() {
     const cluster = useSelector(getCluster);
-    const jobDescriptors = useSelector(getUniqueJobsMonitorDescriptors);
+    const allJobDescriptors = useSelector(getUniqueJobsMonitorDescriptors);
+    const limitedJobDescriptors = useSelector(getLimitedJobsMonitorDescriptors);
     const {from, to} = useSelector(getJobsMonitorFromTo);
     const error = useSelector(getJobsMonitorError);
     const loaded = useSelector(getJobsMonitorItemsLoaded);
     const loading = useSelector(getJobsMonitorItemsLoading);
 
-    const job_descriptor = useMemo(() => jobDescriptors.join('|'), [jobDescriptors]);
+    const job_descriptor = useMemo(() => limitedJobDescriptors.join('|'), [limitedJobDescriptors]);
+
+    const alert = useMemo(() => {
+        return allJobDescriptors.length > MAX_DESCRIPTORS_COUNT ? (
+            <Alert
+                message={i18n('alert_descriptors-limited', {limit: MAX_DESCRIPTORS_COUNT})}
+                theme="warning"
+            />
+        ) : undefined;
+    }, [allJobDescriptors]);
 
     if (!loaded && loading) {
         return <Loader visible centered />;
@@ -37,21 +48,14 @@ function JobsMonitor() {
         return <NoContent warning={i18n('alert_no-jobs-with-monitoring-descriptor')} />;
     }
 
-    if (jobDescriptors.length > MAX_DESCRIPTORS_COUNT) {
-        return (
-            <Alert
-                message={i18n('alert_descriptors-limit-exceeded', {limit: MAX_DESCRIPTORS_COUNT})}
-                theme="warning"
-            />
-        );
-    }
-
     const JobMonitorComponent = UIFactory.getMonitorComponentForJob()!;
 
     return (
         <ErrorBoundary>
-            {error && <YTErrorBlock error={error} />}
-            <JobMonitorComponent {...{cluster, job_descriptor, from, to}} />
+            <Flex direction="column" gap={1}>
+                {error && <YTErrorBlock error={error} />}
+                <JobMonitorComponent {...{cluster, job_descriptor, from, to}} alerts={alert} />
+            </Flex>
         </ErrorBoundary>
     );
 }
