@@ -45,7 +45,12 @@ export const PrometheusDashboard = React.memo(function ({
                         {error && <YTErrorBlock error={error} />}
                         <MissingParametersWarning templating={layout?.templating} params={params} />
                         {layout?.panels === undefined ? null : (
-                            <PrometheusDashKit type={type} panels={layout.panels} params={params} />
+                            <PrometheusDashKit
+                                key={type}
+                                type={type}
+                                panels={layout.panels}
+                                params={params}
+                            />
                         )}
                     </React.Fragment>
                 )}
