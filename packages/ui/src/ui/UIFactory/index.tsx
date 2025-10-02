@@ -232,6 +232,7 @@ export interface UIFactory {
         | React.ComponentType<{
               cluster: string;
               job_descriptor: string;
+              alerts?: React.ReactNode;
               from?: number;
               to?: number;
           }>;
