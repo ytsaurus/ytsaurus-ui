@@ -70,7 +70,6 @@ export type PoolData<T extends 'pool' | 'operation'> = {
     cypressAttributes?: unknown;
     mode?: 'fair_share' | 'fifo';
     pool_operation_count?: number;
-    child_pool_count?: number;
     incomplete?: boolean;
     operationCount?: number;
     maxOperationCount?: number;
@@ -174,7 +173,6 @@ export function updatePoolChild<T extends 'pool' | 'operation'>(
             });
 
             const child_pool_count = ypath.getNumber(attributes, '/child_pool_count');
-            data.child_pool_count = child_pool_count;
             if (child_pool_count > 0 && !data.children.length) {
                 for (let i = 0; i < child_pool_count; ++i) {
                     data.children.push({

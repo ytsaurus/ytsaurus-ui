@@ -205,6 +205,11 @@ export const getCurrentTreeExpandedPools = createSelector(
     },
 );
 
+export const getSchedulingIsVisiblePoolFn = createSelector(
+    [getCurrentTreeExpandedPools, getExpandedPoolsLoadAll],
+    (expandedPools, loadAll) => {},
+);
+
 const getSchedulingOverviewFilteredTree = createSelector(
     [getCurrentPool, getSchedulingFilteredPoolNames, getCurrentTreeExpandedPools],
     (treeRoot, visiblePools, expandedPools) => {

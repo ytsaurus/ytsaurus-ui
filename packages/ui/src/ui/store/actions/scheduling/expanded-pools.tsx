@@ -1,4 +1,5 @@
 import {ThunkAction} from 'redux-thunk';
+import {batch} from 'react-redux';
 import {RootState} from '../../reducers';
 
 import forEach_ from 'lodash/forEach';
@@ -133,7 +134,7 @@ export function loadExpandedPools(tree: string): ExpandedPoolsThunkAction {
                         throw new EmptyFullPath();
                     } else {
                         dispatch(addFullPathToExpandedPoolsNoLoad(tree, full_path, is_ephemeral));
-                        dispatch(loadExpandedOperationsAndPools(tree));
+                        return dispatch(loadExpandedOperationsAndPools(tree));
                     }
                 })
                 .catch((e) => {
@@ -396,8 +397,10 @@ export function setExpandedPools(changes: Record<string, boolean>): ExpandedPool
             }
         });
 
-        dispatch(updateExpandedPoolNoLoad(tree, treeExpandedPools));
-        dispatch(loadExpandedPools(tree));
+        batch(async () => {
+            await dispatch(updateExpandedPoolNoLoad(tree, treeExpandedPools));
+            await dispatch(loadExpandedPools(tree));
+        });
     };
 }
 
