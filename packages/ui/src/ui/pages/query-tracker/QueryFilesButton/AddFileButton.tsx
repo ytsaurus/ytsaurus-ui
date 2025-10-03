@@ -1,7 +1,7 @@
 import React, {FC, useRef, useState} from 'react';
 import {Button, Icon} from '@gravity-ui/uikit';
 import FilePlusIcon from '@gravity-ui/icons/svgs/file-plus.svg';
-import {QueryFile} from '../../../store/actions/queries/api';
+import {QueryFile} from '../../../types/query-tracker/api';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import guid from '../../../common/hammer/guid';
 

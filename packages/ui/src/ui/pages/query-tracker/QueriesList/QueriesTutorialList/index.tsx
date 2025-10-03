@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react';
 import cn from 'bem-cn-lite';
 import {Icon, List, ListItemData, Loader, Text} from '@gravity-ui/uikit';
-import {QueryItem} from '../../../../store/actions/queries/api';
+import {QueryItem} from '../../../../types/query-tracker/api';
 import {useQueryNavigation} from '../../hooks/Query';
 import tutorialIcon from '../../../../assets/img/svg/learn.svg';
 import './index.scss';

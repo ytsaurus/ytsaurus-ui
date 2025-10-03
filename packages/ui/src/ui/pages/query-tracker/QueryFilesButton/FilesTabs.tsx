@@ -1,6 +1,6 @@
 import React, {FC, useMemo, useState} from 'react';
 import {Tabs} from '@gravity-ui/uikit';
-import {QueryFile} from '../../../store/actions/queries/api';
+import {QueryFile} from '../../../types/query-tracker/api';
 import {DeletedFileItem} from './DeletedFileItem';
 import cn from 'bem-cn-lite';
 import './FilesTabs.scss';

@@ -3,7 +3,7 @@ import block from 'bem-cn-lite';
 import hammer from '../../../common/hammer';
 
 import './index.scss';
-import {QueryItem} from '../../../store/actions/queries/api';
+import {QueryItem} from '../../../types/query-tracker/api';
 import {Button} from '@gravity-ui/uikit';
 import Yson from '../../../components/Yson/Yson';
 import SimpleModal from '../../../components/Modal/SimpleModal';

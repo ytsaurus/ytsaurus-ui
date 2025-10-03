@@ -2,7 +2,12 @@ import forOwn_ from 'lodash/forOwn';
 import {createSelector} from 'reselect';
 import {RootState} from '../../reducers';
 import {QueryStatus} from '../../../types/query-tracker';
-import {DraftQuery, QTRequestOptions, QueryItem, isSingleProgress} from '../../actions/queries/api';
+import {
+    DraftQuery,
+    QTRequestOptions,
+    QueryItem,
+    isSingleProgress,
+} from '../../../types/query-tracker/api';
 import {
     getSettingQueryTrackerStage,
     getSettingQueryTrackerYQLAgentStage,

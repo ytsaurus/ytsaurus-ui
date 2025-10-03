@@ -3,7 +3,7 @@ import {CancelTokenSource} from 'axios';
 import type {YTError} from '../../../@types/types';
 
 import type {ReadTableResult} from '../../store/actions/navigation/content/table/readTable';
-import type {QueryResult} from '../../store/actions/queries/api';
+import type {QueryResult} from '../query-tracker/api';
 import {wrapApiPromiseByToaster} from '../../utils/utils';
 
 export type CellDataHandler<DataT> = {

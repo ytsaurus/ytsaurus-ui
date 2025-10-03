@@ -1,7 +1,7 @@
 import {Label} from '@gravity-ui/uikit';
 import React, {useEffect, useState} from 'react';
 import {QueryStatus} from '../../../types/query-tracker';
-import {QueryItem} from '../../../store/actions/queries/api';
+import {QueryItem} from '../../../types/query-tracker/api';
 import {queryDuration} from '../utils/date';
 import {isQueryCompleted} from '../utils/query';
 

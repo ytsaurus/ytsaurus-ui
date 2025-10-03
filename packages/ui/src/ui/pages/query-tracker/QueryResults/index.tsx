@@ -1,6 +1,6 @@
 import React, {ReactNode} from 'react';
 import block from 'bem-cn-lite';
-import {QueryItem, isSingleProgress} from '../../../store/actions/queries/api';
+import {QueryItem, isSingleProgress} from '../../../types/query-tracker/api';
 import {Tabs} from '@gravity-ui/uikit';
 import {QueryMetaInfo} from './QueryMetaRow';
 import QueryMetaTable from '../QueryMetaTable';

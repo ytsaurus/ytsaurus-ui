@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Route, Switch} from 'react-router';
 import FlexSplitPane from '../../../components/FlexSplitPane/FlexSplitPane';
 import {QueriesPooling} from '../hooks/QueriesPooling/context';
-import {isEngine} from '../../../store/actions/queries/api';
+import {isEngine} from '../../../types/query-tracker/api';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {
     createEmptyQuery,

@@ -2,7 +2,7 @@ import {ActionD} from '../../../types';
 import {TABLE_DEFAULTS} from '../../../constants/settings/table';
 import {getSettingsInitialData} from '../settings';
 
-import type {QueryItem, QueryItemId} from '../../actions/queries/api';
+import type {QueryItem, QueryItemId} from '../../../types/query-tracker/api';
 import {
     QueryResult,
     QueryResultErrorState,

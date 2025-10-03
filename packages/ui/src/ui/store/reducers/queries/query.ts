@@ -2,7 +2,7 @@ import {Action} from 'redux';
 
 import {ActionD} from '../../../types';
 
-import type {DraftQuery, QueryItem} from '../../actions/queries/api';
+import type {DraftQuery, QueryItem} from '../../../types/query-tracker/api';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {
     REQUEST_QUERY,

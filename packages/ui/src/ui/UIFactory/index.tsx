@@ -24,7 +24,7 @@ import type {PreparedAclSubject} from '../utils/acl/acl-types';
 import type {PreparedRole} from '../utils/acl';
 import type {UISettingsMonitoring} from '../../shared/ui-settings';
 import type {SubjectCardProps} from '../components/SubjectLink/SubjectLink';
-import type {QueryItem} from '../store/actions/queries/api';
+import type {QueryItem} from '../types/query-tracker/api';
 import type {BaseMapNode} from '../utils/navigation/content/map-nodes/node';
 import type {PreloadErrorType} from '../constants';
 import type {RootState} from '../store/reducers';

@@ -3,7 +3,8 @@ import {FormApi, YTDFDialog, makeErrorFields} from '../../../../components/Dialo
 import Button from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
 
-import {QueryItem, setQueryName} from '../../../../store/actions/queries/api';
+import type {QueryItem} from '../../../../types/query-tracker/api';
+import {setQueryName} from '../../../../store/actions/queries/api';
 import {useThunkDispatch} from '../../../../store/thunkDispatch';
 
 export interface Props {

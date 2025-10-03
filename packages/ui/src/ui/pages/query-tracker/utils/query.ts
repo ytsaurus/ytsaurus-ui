@@ -1,5 +1,5 @@
 import {AbortableStatuses, CompletedStates, ProgressStatuses} from '../../../types/query-tracker';
-import type {QueryItem} from '../../../store/actions/queries/api';
+import type {QueryItem} from '../../../types/query-tracker/api';
 
 export function isQueryProgress(query: QueryItem): boolean {
     return ProgressStatuses.includes(query.state);

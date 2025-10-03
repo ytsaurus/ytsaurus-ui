@@ -1,5 +1,5 @@
 import React, {FC, useCallback, useMemo} from 'react';
-import {ErrorPosition, QueryError} from '../../../../store/actions/queries/api';
+import {ErrorPosition, QueryError} from '../../../../types/query-tracker/api';
 import {ErrorTreeNode} from './ErrorTreeNode';
 import {useMonaco} from '../../hooks/useMonaco';
 import {Position} from 'monaco-editor';

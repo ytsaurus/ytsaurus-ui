@@ -1,6 +1,6 @@
 import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import cn from 'bem-cn-lite';
-import {QueryFile} from '../../../store/actions/queries/api';
+import {QueryFile} from '../../../types/query-tracker/api';
 import {Button, Icon, Text} from '@gravity-ui/uikit';
 import clipIcon from '@gravity-ui/icons/svgs/paperclip.svg';
 import {VALIDATOR_ERRORS_TEXT} from '../QuerySettingsButton/formValidator';
