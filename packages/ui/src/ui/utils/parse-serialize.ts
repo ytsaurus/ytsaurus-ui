@@ -151,3 +151,28 @@ export function makeObjectParseSerialize<T extends object>(initialValue: T, io: 
         },
     };
 }
+
+export function makeBase64ParseSerialize(initialValue: unknown) {
+    return {
+        parse(v: string) {
+            try {
+                if (v === undefined) {
+                    return initialValue;
+                }
+                const res = JSON.parse(atob(v));
+                if (isEqual_(res, initialValue)) {
+                    return initialValue;
+                }
+                return res;
+            } catch {
+                return initialValue;
+            }
+        },
+        serialize(v: unknown) {
+            if (isEqual_(v, initialValue) || v === undefined) {
+                return undefined;
+            }
+            return btoa(JSON.stringify(v));
+        },
+    };
+}

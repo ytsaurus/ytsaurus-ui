@@ -33,6 +33,7 @@ import {getJobsPreparedState, jobsParams} from './reducers/operations/jobs/url-m
 
 import {
     accountAclParams,
+    accountMonitorParams,
     accountOnlyParams,
     accountUsageParams,
     accountsParams,
@@ -92,6 +93,8 @@ import {chytListParams, getGhytListPreparedState} from './reducers/chyt/url-mapp
 
 import type {PathParameters} from '../store/location';
 
+import {prometheusDashboardParams} from './reducers/prometheusDashboard/url-mapping';
+
 // prettier-ignore
 export const getMainLocations = (): Array<[string, PathParameters]> => [
     ['/', [clustersMenuParams, getClustersMenuPreparedState]],
@@ -121,6 +124,7 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     [`/*/${Page.ACCOUNTS}/${AccountsTab.GENERAL}`, [accountsParams, getAccountsPreparedState]],
     [`/*/${Page.ACCOUNTS}/${AccountsTab.USAGE}`, [accountUsageParams, getAccountsUsageState]],
     [`/*/${Page.ACCOUNTS}/${AccountsTab.ACL}`, [accountAclParams, getAccountsAclState]],
+    [`/*/${Page.ACCOUNTS}/${AccountsTab.MONITOR}`, [accountMonitorParams]],
     [`/*/${Page.ACCOUNTS}/*`, [accountOnlyParams, getAccountOnlyPreparedState]],
     [`/*/${Page.ACCOUNTS}`, [accountOnlyParams, getAccountOnlyPreparedState]],
 
