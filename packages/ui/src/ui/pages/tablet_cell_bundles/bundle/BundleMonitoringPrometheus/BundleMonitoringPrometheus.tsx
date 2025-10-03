@@ -13,6 +13,7 @@ import {
     TOOLBAR_COMPONENT_HEIGHT,
     Toolbar,
 } from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
+import {usePrometheusDashboardType} from '../../../../store/reducers/prometheusDashboard/prometheusDahsboard';
 
 import './BundleMonitoringPrometheus.scss';
 
@@ -70,37 +71,20 @@ export function BundleMonitoringPrometheus(props: BundleMonitoringProps) {
     );
 }
 
-/*
-        <React.Fragment>
-            <Toolbar
-                itemsToWrap={[
-                    {
-                        node: (
-                            <RadioButton
-                                value={type}
-                                onUpdate={setType}
-                                options={SYSTEM_DASHBOARDS.map((item) => ({
-                                    value: item,
-                                    content: format.ReadableField(item.replace(/-/g, '_')),
-                                }))}
-                            />
-                        ),
-                    },
-                    ...(extraTools ?? []),
-                ]}
-            />
-            <PrometheusDashboard type={type} params={params} />
-        </React.Fragment>
-
-*/
-
 function useBundleMonitoring({cluster, tablet_cell_bundle}: BundleMonitoringProps) {
-    const [type, setType] = React.useState<PrometheusDashboardType>(
-        Object.keys(BUNDLE_DASHBOARDS)[0] as PrometheusDashboardType,
-    );
+    const {type, setType} = usePrometheusDashboardType();
+
+    const effectiveType = React.useMemo(() => {
+        let res = type;
+        if (Object.keys(BUNDLE_DASHBOARDS).indexOf(type!) === -1) {
+            res = Object.keys(BUNDLE_DASHBOARDS)[0] as PrometheusDashboardType;
+            setType(res);
+        }
+        return res;
+    }, [type, setType]);
 
     return {
-        type,
+        type: effectiveType!,
         setType,
         params: {
             cluster,

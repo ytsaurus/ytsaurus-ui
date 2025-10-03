@@ -67,6 +67,7 @@ import {
     schedulingParams,
 } from '../store/reducers/scheduling/url-mapping';
 import {
+    bundlesPrometheusParams,
     getTabletsBundlesAclPreparedState,
     getTabletsBundlesPreparedState,
     getTabletsCellsPreparedState,
@@ -94,6 +95,8 @@ import {
     getSystemMonitoringState,
     systemMonitoringParams,
 } from './reducers/system/monitoring/url-mapping';
+import {ChytCliquePageTab} from '../constants/chyt-page';
+import {prometheusDashboardParams} from './reducers/prometheusDashboard/url-mapping';
 
 // prettier-ignore
 export const getMainLocations = (): Array<[string, PathParameters]> => [
@@ -133,6 +136,7 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     [`/*/${Page.ACCOUNTS}`, [accountOnlyParams, getAccountOnlyPreparedState]],
 
     [`/*/${Page.CHYT}`, [chytListParams, getGhytListPreparedState]],
+    [`/*/${Page.CHYT}/*/${ChytCliquePageTab.MONITORING}`, [prometheusDashboardParams]],
 
     [`/*/${Page.DASHBOARD}`, [dashboardParams, getDashboardPreparedState]],
 
@@ -165,6 +169,7 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     ],
 
     [`/*/${Page.TABLET_CELL_BUNDLES}`, [tabletsAllBundlesParams, getTabletsBundlesPreparedState]],
+    [`/*/${Page.TABLET_CELL_BUNDLES}/monitor`, [bundlesPrometheusParams]],
     [`/*/${Page.TABLET_CELL_BUNDLES}/*`, [tabletsBundlesParams, getTabletsBundlesPreparedState]],
 
     [

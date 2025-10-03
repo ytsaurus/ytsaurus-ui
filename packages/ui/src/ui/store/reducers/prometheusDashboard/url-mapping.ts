@@ -1,6 +1,10 @@
-import {PrometheusDashboardType} from '../../../../shared/prometheus/types';
+import {produce} from 'immer';
+
 import {LocationParameters} from '../../../store/location';
 import {makeBase64ParseSerialize, makeTimeRangeSerialization} from '../../../utils/parse-serialize';
+import {RootState} from '../../../store/reducers/index.main';
+import {updateByLocationParams} from '../../../utils/utils';
+
 import {initialState} from './prometheusDashboard';
 
 export const prometheusDashboardParams: LocationParameters = {
@@ -24,3 +28,9 @@ export const prometheusDashboardParams: LocationParameters = {
         options: makeBase64ParseSerialize(initialState.params),
     },
 };
+
+export function getPrometheusDashbaordPreparedState(state: RootState, {query}: {query: RootState}) {
+    return produce(state, (draft) => {
+        return updateByLocationParams({draft, query}, prometheusDashboardParams);
+    });
+}
