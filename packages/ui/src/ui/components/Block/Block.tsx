@@ -1,6 +1,8 @@
 import React from 'react';
 import block from 'bem-cn-lite';
 import {AxiosError} from 'axios';
+import cloneDeepWith_ from 'lodash/cloneDeepWith';
+
 import {Button, Flex, Text} from '@gravity-ui/uikit';
 
 import hammer from '../../common/hammer';
@@ -55,7 +57,19 @@ export type YTErrorBlockProps = {
     disableLogger?: boolean;
 };
 
-export class YTErrorBlock extends React.Component<YTErrorBlockProps> {
+export function YTErrorBlock({error, ...props}: YTErrorBlockProps) {
+    const e = React.useMemo(() => {
+        return cloneDeepWith_(error, (value) => {
+            // Some UI-side errors might contain fields with `undefined`,
+            // such values might not be rendered as yson, so we have to replace them with null
+            return value === undefined ? null : undefined;
+        });
+    }, [error]);
+
+    return <YTErrorBlockImpl {...props} error={e} />;
+}
+
+class YTErrorBlockImpl extends React.Component<YTErrorBlockProps> {
     static defaultProps = {
         type: 'error',
     };
