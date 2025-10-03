@@ -95,10 +95,6 @@ import {draftQueryParameters, getDraftQueryParameters} from './reducers/query-tr
 import {chytListParams, getGhytListPreparedState} from './reducers/chyt/url-mapping';
 
 import type {PathParameters} from '../store/location';
-import {
-    getSystemMonitoringState,
-    systemMonitoringParams,
-} from './reducers/system/monitoring/url-mapping';
 import {ChytCliquePageTab} from '../constants/chyt-page';
 import {prometheusDashboardParams} from './reducers/prometheusDashboard/url-mapping';
 
@@ -164,7 +160,7 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     [`/*/${Page.SCHEDULING}`, [schedulingParams, getSchedulingPreparedState]],
 
     [`/*/${Page.SYSTEM}`, [systemParams, getSystemPreparedState]],
-    [`/*/${Page.SYSTEM}/monitoring`, [systemMonitoringParams, getSystemMonitoringState]],
+    [`/*/${Page.SYSTEM}/monitoring`, [prometheusDashboardParams]],
 
     [
         `/*/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.TABLET_CELLS}`,
