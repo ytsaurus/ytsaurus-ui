@@ -16,7 +16,7 @@ import {
     parseSerializeString,
 } from '../../../utils/parse-serialize';
 import {LocationParameters} from '../../../store/location';
-import {prometheusDashboardExpandedParams} from '../prometheusDashboard/url-mapping';
+import {prometheusDashboardParams} from '../prometheusDashboard/url-mapping';
 
 export const schedulingParams = {
     pool: {
@@ -135,7 +135,7 @@ export function getSchedulingAclPreparedState(prevState: RootState, {query}: {qu
 
 export const schedulingMonitoringParams: LocationParameters = {
     ...schedulingParams,
-    ...prometheusDashboardExpandedParams('scheduler-pool'),
+    ...prometheusDashboardParams,
 };
 
 export function getSchedulingMonitoringParams(state: RootState, {query}: {query: RootState}) {
