@@ -1,7 +1,7 @@
 import {AccountsTab} from '../constants/accounts/accounts';
 import {Tab as ComponentsTab} from '../constants/components/main';
 import {Tab as OperationTab} from '../constants/operations/detail';
-import {Tab as SchedulingTab} from '../constants/scheduling';
+import {SchedulingExtraTabs, SchedulingTab} from '../constants/scheduling';
 import {Page} from '../constants/index';
 
 import {
@@ -33,6 +33,7 @@ import {getJobsPreparedState, jobsParams} from './reducers/operations/jobs/url-m
 
 import {
     accountAclParams,
+    accountMonitorParams,
     accountOnlyParams,
     accountUsageParams,
     accountsParams,
@@ -60,14 +61,17 @@ import {getTabletPreparedState, tabletParams} from '../store/reducers/tablet/url
 import {
     getSchedulingAclPreparedState,
     getSchedulingDetailsPreparedState,
+    getSchedulingMonitoringParams,
     getSchedulingOverviewPreparedState,
     getSchedulingPreparedState,
     schedulingAclParams,
     schedulingDetailsParams,
+    schedulingMonitoringParams,
     schedulingOverviewParams,
     schedulingParams,
 } from '../store/reducers/scheduling/url-mapping';
 import {
+    bundlesPrometheusParams,
     getTabletsBundlesAclPreparedState,
     getTabletsBundlesPreparedState,
     getTabletsCellsPreparedState,
@@ -94,6 +98,8 @@ import {
 import {chytListParams, getGhytListPreparedState} from './reducers/chyt/url-mapping';
 
 import type {PathParameters} from '../store/location';
+import {ChytCliquePageTab} from '../constants/chyt-page';
+import {prometheusDashboardParams} from './reducers/prometheusDashboard/url-mapping';
 
 // prettier-ignore
 export const getMainLocations = (): Array<[string, PathParameters]> => [
@@ -124,10 +130,12 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     [`/*/${Page.ACCOUNTS}/${AccountsTab.GENERAL}`, [accountsParams, getAccountsPreparedState]],
     [`/*/${Page.ACCOUNTS}/${AccountsTab.USAGE}`, [accountUsageParams, getAccountsUsageState]],
     [`/*/${Page.ACCOUNTS}/${AccountsTab.ACL}`, [accountAclParams, getAccountsAclState]],
+    [`/*/${Page.ACCOUNTS}/${AccountsTab.MONITOR}`, [accountMonitorParams]],
     [`/*/${Page.ACCOUNTS}/*`, [accountOnlyParams, getAccountOnlyPreparedState]],
     [`/*/${Page.ACCOUNTS}`, [accountOnlyParams, getAccountOnlyPreparedState]],
 
     [`/*/${Page.CHYT}`, [chytListParams, getGhytListPreparedState]],
+    [`/*/${Page.CHYT}/*/${ChytCliquePageTab.MONITORING}`, [prometheusDashboardParams]],
 
     [`/*/${Page.DASHBOARD}`, [dashboardParams, getDashboardPreparedState]],
 
@@ -151,9 +159,11 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
         `/*/${Page.SCHEDULING}/${SchedulingTab.ACL}`,
         [schedulingAclParams, getSchedulingAclPreparedState],
     ],
+    [`/*/${Page.SCHEDULING}/${SchedulingExtraTabs.PROMETHEUS_DASHBOARD}`, [schedulingMonitoringParams, getSchedulingMonitoringParams]],
     [`/*/${Page.SCHEDULING}`, [schedulingParams, getSchedulingPreparedState]],
 
     [`/*/${Page.SYSTEM}`, [systemParams, getSystemPreparedState]],
+    [`/*/${Page.SYSTEM}/monitoring`, [prometheusDashboardParams]],
 
     [
         `/*/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.TABLET_CELLS}`,
@@ -166,6 +176,7 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     ],
 
     [`/*/${Page.TABLET_CELL_BUNDLES}`, [tabletsAllBundlesParams, getTabletsBundlesPreparedState]],
+    [`/*/${Page.TABLET_CELL_BUNDLES}/monitor`, [bundlesPrometheusParams]],
     [`/*/${Page.TABLET_CELL_BUNDLES}/*`, [tabletsBundlesParams, getTabletsBundlesPreparedState]],
 
     [

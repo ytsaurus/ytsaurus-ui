@@ -6,7 +6,10 @@
     "noUnusedParameters": false,
     "outDir": "../../dist",
     "resolveJsonModule": true,
-    "declaration": true
+    "declaration": true,
+    "target": "es2021",
+    "module": "NodeNext",
+    "moduleResolution": "nodenext"
   },
   "include": ["**/*", "../@types"],
   "exclude": ["node_modules"],

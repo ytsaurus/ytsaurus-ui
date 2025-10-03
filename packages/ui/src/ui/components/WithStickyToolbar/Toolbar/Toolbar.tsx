@@ -25,8 +25,10 @@ interface Props {
         shrinkable?: boolean;
         marginRight?: 'half';
         overflow?: 'hidden';
+        width?: number;
     }>;
     children?: React.ReactNode;
+    marginTopSkip?: boolean;
 }
 
 export class Toolbar extends React.Component<Props> {
@@ -36,9 +38,9 @@ export class Toolbar extends React.Component<Props> {
     };
 
     render() {
-        const {className, children} = this.props;
+        const {className, children, marginTopSkip} = this.props;
         return (
-            <div className={block(null, className)}>
+            <div className={block({'margin-top-skip': marginTopSkip}, className)}>
                 <div className={block('container')}>{this.renderItems()}</div>
                 {children}
             </div>
@@ -48,7 +50,7 @@ export class Toolbar extends React.Component<Props> {
     renderItems() {
         const {itemsToWrap = []} = this.props;
         return itemsToWrap.map(
-            ({name, node, growable, shrinkable, wrapperClassName, marginRight}, index) => {
+            ({name, node, growable, shrinkable, wrapperClassName, marginRight, width}, index) => {
                 return node ? (
                     <div
                         key={name || index}
@@ -57,6 +59,7 @@ export class Toolbar extends React.Component<Props> {
                             {name, growable, shrinkable, 'margin-right': marginRight},
                             wrapperClassName,
                         )}
+                        style={{width}}
                     >
                         {node}
                     </div>

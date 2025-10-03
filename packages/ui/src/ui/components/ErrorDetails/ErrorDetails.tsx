@@ -1,5 +1,5 @@
 import React from 'react';
-import {AxiosError} from 'axios';
+import {AxiosError, isAxiosError} from 'axios';
 import {Flex} from '@gravity-ui/uikit';
 import Link from '../../components/Link/Link';
 import block from 'bem-cn-lite';
@@ -174,12 +174,11 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
         const {settings, defaultExpadedCount = 0, maxCollapsedDepth = Infinity} = this.props;
 
         const {inner_errors: innerErrors = []} = this.props.error as YTErrorRaw;
-        const {isAxiosError = false, response} = this.props.error as AxiosError;
-
-        if (!innerErrors.length && isAxiosError && response?.data) {
-            const innerError = isYTError(response.data)
+        if (isAxiosError<YTErrorRaw>(this.props.error)) {
+            const {response} = this.props.error;
+            const innerError = isYTError(response?.data)
                 ? response.data
-                : {attributes: response.data as YTErrorRaw['attributes'], message: 'Error'};
+                : {attributes: response?.data as YTErrorRaw['attributes'], message: 'Error'};
             innerErrors.push(innerError);
         }
 
