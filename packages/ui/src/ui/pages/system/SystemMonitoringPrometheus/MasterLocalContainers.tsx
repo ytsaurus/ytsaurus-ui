@@ -1,15 +1,19 @@
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import sortBy_ from 'lodash/sortBy';
 
 import {Flex, Select} from '@gravity-ui/uikit';
 import {useFetchBatchQuery} from '../../../store/api/yt';
-import {systemMonitoring} from '../../../store/reducers/system/monitoring';
 import {YTApiId} from '../../../rum/rum-wrap-api';
 
-export function MasterLocalContainers({allValue}: {allValue: string}) {
-    const dispatch = useDispatch();
-    const container = useSelector(systemMonitoring.selectors.getMasterLocalContainer) ?? allValue;
-
+export function MasterLocalContainers({
+    allValue,
+    container,
+    setContainer,
+}: {
+    allValue: string;
+    container: string;
+    setContainer: (v: string) => void;
+}) {
     const {data} = useFetchBatchQuery<Array<string>>({
         id: YTApiId.systemClusterMasters,
         parameters: {requests: [{command: 'list', parameters: {path: '//sys/cluster_masters'}}]},
@@ -18,7 +22,7 @@ export function MasterLocalContainers({allValue}: {allValue: string}) {
 
     const options = React.useMemo(() => {
         const res = [{value: allValue, content: allValue}];
-        data?.[0]?.output?.forEach((i) => {
+        sortBy_(data?.[0]?.output).forEach((i) => {
             res.push({value: i, content: i});
         });
         return res;
@@ -31,7 +35,7 @@ export function MasterLocalContainers({allValue}: {allValue: string}) {
                 options={options}
                 value={[container]}
                 onUpdate={([v]) => {
-                    dispatch(systemMonitoring.actions.onUpdate({masterLocalContainer: v}));
+                    setContainer(v);
                 }}
             />
         </Flex>
