@@ -1,5 +1,5 @@
 import omit_ from 'lodash/omit';
-import {QueryItem, isSingleProgress} from '../../store/actions/queries/api';
+import {QueryItem, isSingleProgress} from './api';
 
 export const cleanupQueryForDraft = (query: QueryItem): QueryItem => {
     return {

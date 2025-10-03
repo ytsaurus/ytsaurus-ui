@@ -1,7 +1,7 @@
 import {createSelector} from 'reselect';
 import {RootState} from '../../reducers';
 import {getCurrentUserName} from '../global';
-import {QueriesListParams, QueryItem} from '../../actions/queries/api';
+import {QueriesListParams, QueryItem} from '../../../types/query-tracker/api';
 import {isQueryProgress} from '../../../pages/query-tracker/utils/query';
 import {
     DefaultQueriesListFilter,

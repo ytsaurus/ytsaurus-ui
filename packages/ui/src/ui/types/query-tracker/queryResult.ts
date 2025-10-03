@@ -1,4 +1,4 @@
-import {QueryResultMeta} from '../../store/actions/queries/api';
+import {QueryResultMeta} from './api';
 import {DataType} from '../../components/SchemaDataType/dataTypes';
 
 export enum QueryResultState {

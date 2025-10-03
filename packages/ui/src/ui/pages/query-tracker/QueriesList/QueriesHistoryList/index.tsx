@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import DataTable, {Settings} from '@gravity-ui/react-data-table';
-import {QueryItem} from '../../../../store/actions/queries/api';
+import {QueryItem} from '../../../../types/query-tracker/api';
 import {
     getQueryListByDate,
     getQueryListColumns,
