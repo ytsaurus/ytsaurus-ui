@@ -1,4 +1,4 @@
-import {QueryError} from '../../module/api';
+import {QueryError} from '../../../../types/query-tracker/api';
 
 export const calculateCloudLevel = (root: QueryError, extracted = 0) => {
     let issue = root;

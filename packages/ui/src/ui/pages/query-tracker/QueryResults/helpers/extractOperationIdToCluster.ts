@@ -1,4 +1,4 @@
-import {YQLSstatistics} from '../../module/api';
+import {YQLSstatistics} from '../../../../types/query-tracker/api';
 
 export const extractOperationIdToCluster = (
     statistics: YQLSstatistics | undefined,

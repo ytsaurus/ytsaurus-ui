@@ -4,7 +4,7 @@ import {
     selectNavigationCluster,
     selectNavigationError,
     selectNavigationPath,
-} from '../../module/queryNavigation/selectors';
+} from '../../../../store/selectors/queries/queryNavigation';
 import {NavigationError as PrettyError} from '../../../navigation/Navigation/NavigationError/NavigationError';
 import './NavigationError.scss';
 import cn from 'bem-cn-lite';

@@ -6,7 +6,7 @@ import {Button, DropdownMenu, DropdownMenuItem} from '@gravity-ui/uikit';
 
 import Icon from '../../../components/Icon/Icon';
 import {getCluster} from '../../../store/selectors/global';
-import {updateQueryDraft} from '../../../pages/query-tracker/module/query/actions';
+import {updateQueryDraft} from '../../../store/actions/queries/query';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import UIFactory from '../../../UIFactory';
 

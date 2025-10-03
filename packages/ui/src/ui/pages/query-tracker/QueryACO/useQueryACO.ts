@@ -1,14 +1,14 @@
 import {useCallback, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {useThunkDispatch} from '../../../store/thunkDispatch';
-import {getCurrentDraftQueryACO, getCurrentQueryACO} from '../module/query/selectors';
+import {getCurrentDraftQueryACO, getCurrentQueryACO} from '../../../store/selectors/queries/query';
 import {
     getQueryACOOptions,
     getQueryTrackerInfo,
     isQueryTrackerInfoLoading as isQueryTrackerInfoLoadingSelector,
-} from '../module/query_aco/selectors';
-import {getQueryACO} from '../module/query_aco/actions';
-import {setDraftQueryACO, setQueryACO} from '../module/query/actions';
+} from '../../../store/selectors/queries/queryAco';
+import {getQueryACO} from '../../../store/actions/queries/queryAco';
+import {setDraftQueryACO, setQueryACO} from '../../../store/actions/queries/query';
 
 export const useQueryACO = () => {
     const dispatch = useThunkDispatch();

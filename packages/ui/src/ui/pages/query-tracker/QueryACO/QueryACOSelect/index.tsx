@@ -3,7 +3,7 @@ import {Select} from '@gravity-ui/uikit';
 import {useCallback} from 'react';
 import {useQueryACO} from '../useQueryACO';
 import './QueryACOSelect.scss';
-import {selectIsMultipleAco} from '../../module/query_aco/selectors';
+import {selectIsMultipleAco} from '../../../../store/selectors/queries/queryAco';
 import {useSelector} from 'react-redux';
 import {hideSharedAco} from './hideSharedAco';
 

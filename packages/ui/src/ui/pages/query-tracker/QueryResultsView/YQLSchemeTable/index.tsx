@@ -1,7 +1,10 @@
 import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
 import React from 'react';
 import {Text} from '@gravity-ui/uikit';
-import {QueryResultColumn, QueryResultReadyState} from '../../module/query_result/types';
+import {
+    QueryResultColumn,
+    QueryResultReadyState,
+} from '../../../../types/query-tracker/queryResult';
 import block from 'bem-cn-lite';
 import './index.scss';
 import {MOVING} from '@gravity-ui/react-data-table/build/esm/lib/constants';

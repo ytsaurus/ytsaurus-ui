@@ -2,8 +2,16 @@ import React, {FC, useEffect} from 'react';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {QueryCliqueSelector} from './QueryCliqueSelector';
 import {useDispatch, useSelector} from 'react-redux';
-import {getCliqueLoading, getCliqueMap, getQueryDraft} from '../module/query/selectors';
-import {loadCliqueByCluster, setQueryClique, setQueryPath} from '../module/query/actions';
+import {
+    getCliqueLoading,
+    getCliqueMap,
+    getQueryDraft,
+} from '../../../store/selectors/queries/query';
+import {
+    loadCliqueByCluster,
+    setQueryClique,
+    setQueryPath,
+} from '../../../store/actions/queries/query';
 
 export const QuerySelectorsByEngine: FC = () => {
     const dispatch = useDispatch();

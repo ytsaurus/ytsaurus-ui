@@ -8,13 +8,13 @@ import {
     selectNavigationClusterConfig,
     selectNavigationPath,
     selectTableWithFilter,
-} from '../../module/queryNavigation/selectors';
+} from '../../../../store/selectors/queries/queryNavigation';
 import MetaTable from '../../../../components/MetaTable/MetaTable';
 import {PreviewTab} from './PreviewTab';
 import {insertTextWhereCursor} from '../helpers/insertTextWhereCursor';
 import {createTableSelect} from '../helpers/createTableSelect';
 import {useMonaco} from '../../hooks/useMonaco';
-import {getQueryEngine} from '../../module/query/selectors';
+import {getQueryEngine} from '../../../../store/selectors/queries/query';
 import {getPageSize} from '../../../../store/selectors/navigation/content/table-ts';
 import {getYsonSettingsDisableDecode} from '../../../../store/selectors/thor/unipika';
 
@@ -24,7 +24,7 @@ const enum TableTab {
     Meta = 'meta',
 }
 
-const b = cn('navigation-table');
+const b = cn('qt-navigation-table');
 
 export const NavigationTable: FC = () => {
     const [activeTab, setActiveTab] = useState(TableTab.Schema);

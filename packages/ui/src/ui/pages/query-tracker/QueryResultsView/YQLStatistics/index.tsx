@@ -1,7 +1,7 @@
 import {useSelector} from 'react-redux';
 import React from 'react';
 
-import {getProgressYQLStatistics} from '../../module/query/selectors';
+import {getProgressYQLStatistics} from '../../../../store/selectors/queries/query';
 import {StatisticTable, StatisticTree} from '../../../../components/StatisticTable';
 
 import './index.scss';

@@ -4,7 +4,7 @@ import {NavigationHeader} from './NavigationHeader';
 import {NavigationBody} from './NavigationBody';
 import cn from 'bem-cn-lite';
 import {useDispatch} from 'react-redux';
-import {initNavigation} from '../module/queryNavigation/actions';
+import {initNavigation} from '../../../store/actions/queries/queryNavigation';
 
 const b = cn('query-navigation');
 

@@ -1,11 +1,10 @@
 import React, {FC, useCallback} from 'react';
 import {Select} from '@gravity-ui/uikit';
-import {Engines} from '../../module/api';
-import {QueryEngine} from '../../../../../shared/constants/engines';
-import {QueryEnginesNames} from '../../utils/query';
+import {Engines} from '../../../../types/query-tracker/api';
+import {QueryEngine, QueryEnginesNames} from '../../../../../shared/constants/engines';
 import {useDispatch, useSelector} from 'react-redux';
-import {getQueriesFilters} from '../../module/queries_list/selectors';
-import {applyFilter} from '../../module/queries_list/actions';
+import {getQueriesFilters} from '../../../../store/selectors/queries/queriesList';
+import {applyFilter} from '../../../../store/actions/queries/queriesList';
 
 const ALL_ENGINE_KEY = '__all';
 

@@ -1,11 +1,11 @@
-import {QueryResultColumn} from '../../module/query_result/types';
+import {QueryResultColumn} from '../../../../types/query-tracker/queryResult';
 import qs from 'qs';
 import React, {useMemo, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {getCluster} from '../../../../store/selectors/global';
 import {DownloadManager} from '../../../navigation/content/Table/DownloadManager/DownloadManager';
-import {getDownloadQueryResultURL} from '../../module/api';
-import {getQueryResult} from '../../module/query_result/selectors';
+import {getDownloadQueryResultURL} from '../../../../store/actions/queries/api';
+import {getQueryResult} from '../../../../store/selectors/queries/queryResult';
 import {RootState} from '../../../../store/reducers';
 import {useThunkDispatch} from '../../../../store/thunkDispatch';
 import {FIX_MY_TYPE} from '../../../../../@types/types';

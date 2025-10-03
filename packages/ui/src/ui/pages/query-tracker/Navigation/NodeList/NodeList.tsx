@@ -4,7 +4,7 @@ import {
     selectLoading,
     selectNavigationClusterConfig,
     selectNodeListByFilter,
-} from '../../module/queryNavigation/selectors';
+} from '../../../../store/selectors/queries/queryNavigation';
 import {NodeListRow} from './NodeListRow';
 import {
     copyPathToClipboard,
@@ -12,19 +12,19 @@ import {
     loadTableAttributesByPath,
     makeNewQueryWithTableSelect,
     toggleFavoritePath,
-} from '../../module/queryNavigation/actions';
+} from '../../../../store/actions/queries/queryNavigation';
 import './NodeList.scss';
 import cn from 'bem-cn-lite';
 import {isFolderNode} from '../../../../utils/navigation/isFolderNode';
 import {isTableNode} from '../../../../utils/navigation/isTableNode';
 import {useMonaco} from '../../hooks/useMonaco';
 import {insertTextWhereCursor} from '../helpers/insertTextWhereCursor';
-import {getQueryEngine, isQueryDraftEditted} from '../../module/query/selectors';
+import {getQueryEngine, isQueryDraftEditted} from '../../../../store/selectors/queries/query';
 import {makePathByQueryEngine} from '../helpers/makePathByQueryEngine';
 import {QueryEngine} from '../../../../../shared/constants/engines';
 import {getNavigationUrl} from '../helpers/getNavigationUrl';
 import {createTableSelect} from '../helpers/createTableSelect';
-import {getQueryResultGlobalSettings} from '../../module/query_result/selectors';
+import {getQueryResultGlobalSettings} from '../../../../store/selectors/queries/queryResult';
 import {NewQueryPromt} from '../../NewQueryButton/NewQueryButton';
 import {ItemsList} from '../ItemsList';
 

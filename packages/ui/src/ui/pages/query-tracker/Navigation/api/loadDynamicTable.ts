@@ -3,7 +3,7 @@ import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import unipika from '../../../../common/thor/unipika';
 import Query from '../../../../utils/navigation/content/table/query';
 import {injectColumnsFromSchema} from '../../../../utils/navigation/content/table/table-ts';
-import {NavigationTableSchema} from '../../module/queryNavigation/queryNavigationSlice';
+import {NavigationTableSchema} from '../../../../store/reducers/queries/queryNavigationSlice';
 import {JSONSerializer} from '../../../../common/yt-api';
 import {getClusterProxy} from '../../../../store/selectors/global';
 import {ClusterConfig, ReadTableOutputFormat} from '../../../../../shared/yt-types';

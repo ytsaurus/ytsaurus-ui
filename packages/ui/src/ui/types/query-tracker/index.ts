@@ -17,3 +17,7 @@ export const ProgressStatuses = [
     QueryStatus.FAILING,
     QueryStatus.ABORTING,
 ];
+
+export const AbortableStatuses = ['running', 'pending'];
+
+export const CompletedStates = ['draft', 'aborted', 'completed', 'failed'];

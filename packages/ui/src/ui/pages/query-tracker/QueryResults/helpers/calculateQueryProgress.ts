@@ -1,4 +1,4 @@
-import {SingleProgress} from '../../module/api';
+import {SingleProgress} from '../../../../types/query-tracker/api';
 
 export const calculateQueryProgress = (progress: SingleProgress): number => {
     if (!progress) return 0;

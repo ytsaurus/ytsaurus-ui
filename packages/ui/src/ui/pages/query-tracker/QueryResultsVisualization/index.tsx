@@ -1,13 +1,13 @@
 import React from 'react';
 import withLazyLoading from '../../../hocs/withLazyLoading';
-import {QueryItem} from '../module/api';
+import type {QueryItem} from '../../../types/query-tracker/api';
 
 const QueryResultsVisualizationLazy = withLazyLoading(
     React.lazy(async () => {
         return {
             default: (
                 await import(
-                    /* webpackChunkName: "query-results" */ './components/QueryResultsVisualizationWrap'
+                    /* webpackChunkName: "query-visualization" */ './components/QueryResultsVisualizationWrap'
                 )
             ).QueryResultsVisualizationWrap,
         };

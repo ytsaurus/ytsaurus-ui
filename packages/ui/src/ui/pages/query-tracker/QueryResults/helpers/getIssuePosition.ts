@@ -1,4 +1,4 @@
-import {QueryError} from '../../module/api';
+import {QueryError} from '../../../../types/query-tracker/api';
 
 export const getIssuePosition = (issue: QueryError) => {
     const position = issue.attributes?.start_position;

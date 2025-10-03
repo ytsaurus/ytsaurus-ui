@@ -3,17 +3,17 @@ import block from 'bem-cn-lite';
 import {Tabs} from '@gravity-ui/uikit';
 import {QueriesHistoryList} from './QueriesHistoryList';
 
-import {getQueriesListMode, getQueriesListTabs} from '../module/queries_list/selectors';
+import {getQueriesListMode, getQueriesListTabs} from '../../../store/selectors/queries/queriesList';
 import {useDispatch, useSelector} from 'react-redux';
-import {QueriesListMode} from '../module/queries_list/types';
-import {requestQueriesList} from '../module/queries_list/actions';
+import {QueriesListMode} from '../../../types/query-tracker/queryList';
+import {requestQueriesList} from '../../../store/actions/queries/queriesList';
 
 import './index.scss';
 import {QueriesTutorialList} from './QueriesTutorialList';
 import {QueriesHistoryListFilter} from './QueriesListFilter';
 import {Vcs} from '../Vcs';
 import {Navigation} from '../Navigation';
-import {setListMode} from '../module/queries_list/queryListSlice';
+import {setListMode} from '../../../store/reducers/queries/queryListSlice';
 
 const b = block('queries-list');
 

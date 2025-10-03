@@ -1,5 +1,5 @@
 import React, {FC, MouseEvent} from 'react';
-import {NavigationNode} from '../../module/queryNavigation/queryNavigationSlice';
+import {NavigationNode} from '../../../../store/reducers/queries/queryNavigationSlice';
 import './NodeListRow.scss';
 import cn from 'bem-cn-lite';
 import {Button, DropdownMenu, Icon} from '@gravity-ui/uikit';

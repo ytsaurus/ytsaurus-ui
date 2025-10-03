@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {Select} from '@gravity-ui/uikit';
-import {FieldKey} from '../../../module/queryChart/queryChartSlice';
+import {FieldKey} from '../../../../../store/reducers/queries/queryChartSlice';
 import './ChartField.scss';
 
 type Props = {

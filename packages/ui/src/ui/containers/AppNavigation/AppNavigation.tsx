@@ -15,7 +15,6 @@ import {
     getRootPagesCluster,
 } from '../../store/selectors/global';
 
-import SettingsPanel from '../SettingsPanel/SettingsPanel';
 import {useClusterFromLocation} from '../../hooks/use-cluster';
 
 import './AppNavigation.scss';
@@ -24,6 +23,7 @@ import {AppNavigationProps} from './AppNavigationPageLayout';
 import {getSettingNavigationPanelExpanded} from '../../store/selectors/settings';
 import {setSettingNavigationPanelExpanded} from '../../store/actions/settings/settings';
 import {setAsideHeaderWidth} from '../../store/actions/global';
+import {SettingsPanelLazy} from '../SettingsPanel/lazy';
 
 const block = cn('app-navigation');
 
@@ -122,7 +122,7 @@ export default function AppNavigation({children}: ExtProps) {
         panelClassName: block('panel'),
         panelVisible,
         onClosePanel,
-        settingsContent: <SettingsPanel />,
+        settingsContent: <SettingsPanelLazy />,
         settingsVisible,
         toggleSettingsVisible,
 
