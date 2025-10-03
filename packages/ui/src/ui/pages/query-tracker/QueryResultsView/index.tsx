@@ -14,7 +14,7 @@ import {
 import {getQueryResult, getQueryResultSettings} from '../../../store/selectors/queries/queryResult';
 import {YTErrorBlock} from '../../../components/Error/Error';
 import {ResultsTable} from './ResultsTable';
-import {QueryItem} from '../../../store/actions/queries/api';
+import {QueryItem} from '../../../types/query-tracker/api';
 import {
     QueryResultReadyState,
     QueryResultState,

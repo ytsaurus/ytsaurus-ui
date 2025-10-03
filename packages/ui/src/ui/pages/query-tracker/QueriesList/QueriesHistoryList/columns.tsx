@@ -5,7 +5,7 @@ import block from 'bem-cn-lite';
 import hammer from '../../../../common/hammer';
 import {QueryStatusIcon} from '../../../../components/QueryStatus';
 import {formatTime} from '../../../../components/common/Timeline/util';
-import {QueryItem} from '../../../../store/actions/queries/api';
+import {QueryItem} from '../../../../types/query-tracker/api';
 import EditQueryNameModal from '../EditQueryNameModal/EditQueryNameModal';
 import {QueryStatus} from '../../../../types/query-tracker';
 import {QueryDuration} from '../../QueryDuration';

@@ -1,5 +1,5 @@
 import React, {memo} from 'react';
-import {QueryItem} from '../../../store/actions/queries/api';
+import {QueryItem} from '../../../types/query-tracker/api';
 import {QueryResults} from '../QueryResults';
 import {Button, Flex, Icon} from '@gravity-ui/uikit';
 import {ShareButton} from '../QueryResults/ShareButton';

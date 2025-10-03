@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../../store/reducers';
 import transposeIcon from '../../../../assets/img/svg/transpose.svg';
 import {SET_QUERY_RESULTS_SETTINGS} from '../../../../store/reducers/queries/query-tracker-contants';
-import {QueryItem} from '../../../../store/actions/queries/api';
+import {QueryItem} from '../../../../types/query-tracker/api';
 import {
     QueryResultReadyState,
     QueryResultsViewMode,

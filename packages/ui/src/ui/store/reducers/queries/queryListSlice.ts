@@ -5,7 +5,7 @@ import {
     QueriesListFilter,
     QueriesListMode,
 } from '../../../types/query-tracker/queryList';
-import type {QueryItem} from '../../actions/queries/api';
+import type {QueryItem} from '../../../types/query-tracker/api';
 import {QueriesHistoryCursorDirection} from './query-tracker-contants';
 
 export type State = 'loading' | 'ready' | 'error';

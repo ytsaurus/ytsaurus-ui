@@ -5,7 +5,7 @@ import LinkIcon from '@gravity-ui/icons/svgs/link.svg';
 import ArrowRotateRightIcon from '@gravity-ui/icons/svgs/arrow-rotate-right.svg';
 import cn from 'bem-cn-lite';
 import './DeletedFileItem.scss';
-import {QueryFile} from '../../../store/actions/queries/api';
+import {QueryFile} from '../../../types/query-tracker/api';
 import PencilToSquareIcon from '@gravity-ui/icons/svgs/pencil-to-square.svg';
 import {QueryFileEditor} from '../../../store/reducers/queries/queryFilesFormSlice';
 

@@ -7,7 +7,7 @@ import {ListQueriesParams} from '../../../../../shared/yt-types';
 import {YTApiId, ytApiV4Id} from '../../../../rum/rum-wrap-api';
 import {durationDates} from '../../../../utils/date';
 import {QueryStatus} from '../../../../types/query-tracker';
-import {QueriesListResponse} from '../../../actions/queries/api';
+import {QueriesListResponse} from '../../../../types/query-tracker/api';
 
 type FetchQueriesArgs = {
     requests: ListQueriesParams[];

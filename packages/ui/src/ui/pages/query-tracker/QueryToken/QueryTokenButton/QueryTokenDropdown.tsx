@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getQueryTokens} from '../../../../store/selectors/settings/settings-queries';
 import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 import {updateQueryDraft} from '../../../../store/actions/queries/query';
-import {QuerySecret} from '../../../../store/actions/queries/api';
+import {QuerySecret} from '../../../../types/query-tracker/api';
 import {getCurrentSecretIds} from '../../../../store/selectors/queries/query';
 import i18n from './i18n';
 
