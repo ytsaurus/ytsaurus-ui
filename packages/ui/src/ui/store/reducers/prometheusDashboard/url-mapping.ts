@@ -1,19 +1,36 @@
-import {LocationParameters} from '../../../store/location';
-import {makeTimeRangeSerialization} from '../../../utils/parse-serialize';
-import {PrometheusDashboardType, initialState} from './prometheusDahsboard';
+import {produce} from 'immer';
 
-export function prometheusDashboardExpandedParams(
-    type: PrometheusDashboardType,
-): LocationParameters {
-    return {
-        pdExpanded: {
-            stateKey: `prometheusDashboard.expandedPanels.${type}`,
-            initialState: initialState.expandedPanels[type],
-        },
-        pdTime: {
-            stateKey: 'prometheusDashboard.timeRangeFilter',
-            initialState: initialState.timeRangeFilter,
-            options: makeTimeRangeSerialization(initialState.timeRangeFilter),
-        },
-    };
+import {RootState} from '../../../store/reducers/index.main';
+import {LocationParameters} from '../../../store/location';
+import {makeBase64ParseSerialize, makeTimeRangeSerialization} from '../../../utils/parse-serialize';
+import {updateByLocationParams} from '../../../utils/utils';
+
+import {initialState} from './prometheusDahsboard';
+
+export const prometheusDashboardParams: LocationParameters = {
+    pdExpanded: {
+        stateKey: `prometheusDashboard.expandedPanels`,
+        initialState: initialState.expandedPanels,
+        options: makeBase64ParseSerialize(initialState.expandedPanels),
+    },
+    pdTime: {
+        stateKey: 'prometheusDashboard.timeRangeFilter',
+        initialState: initialState.timeRangeFilter,
+        options: makeTimeRangeSerialization(initialState.timeRangeFilter),
+    },
+    pdType: {
+        stateKey: 'prometheusDashboard.type',
+        initialState: initialState.type,
+    },
+    pdParams: {
+        stateKey: `prometheusDashboard.params`,
+        initialState: initialState.params,
+        options: makeBase64ParseSerialize(initialState.params),
+    },
+};
+
+export function getPrometheusDashbaordPreparedState(state: RootState, {query}: {query: RootState}) {
+    return produce(state, (draft) => {
+        return updateByLocationParams({draft, query}, prometheusDashboardParams);
+    });
 }

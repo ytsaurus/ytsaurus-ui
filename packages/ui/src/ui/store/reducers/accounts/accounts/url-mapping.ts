@@ -6,6 +6,7 @@ import {parseSortState} from '../../../../utils';
 import {initialUsageFiltersState} from '../usage/accounts-usage-filters';
 import {parseSortStateArray, serializeSortStateArray} from '../../../../utils/url-mapping';
 import {RootState} from '../../../../store/reducers';
+import {prometheusDashboardParams} from '../../../../store/reducers/prometheusDashboard/url-mapping';
 import {produce} from 'immer';
 import {updateIfChanged} from '../../../../utils/utils';
 import {aclFiltersParams, getAclFiltersPreparedState} from '../../acl/url-mapping';
@@ -197,3 +198,8 @@ export function getAccountsAclState(prevState: RootState, {query}: {query: RootS
         updateIfChanged(draftAccounts, 'activeAccount', queryAccounts.activeAccount);
     });
 }
+
+export const accountMonitorParams = {
+    ...accountOnlyParams,
+    ...prometheusDashboardParams,
+};

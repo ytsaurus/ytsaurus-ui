@@ -1,8 +1,13 @@
+import React from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {EMPTY_OBJECT} from '../../../constants/empty';
-import type {PrometheusWidgetId} from '../../../containers/PrometheusDashboard/types';
 
+type PrometheusWidgetId = string;
 export type PrometheusDashboardType = 'scheduler-pool';
+
+import {RootState} from '../index.main';
 
 export type PrometheusDashboardState = {
     expandedPanels: Partial<Record<PrometheusDashboardType, PrometheusWidgetId>>;
@@ -10,16 +15,24 @@ export type PrometheusDashboardState = {
     timeRangeFilter:
         | {shortcutValue: string; from?: number; to?: number}
         | {from: number; to: number; shortcutValue?: undefined};
+
+    type?: PrometheusDashboardType;
+    params: Partial<Record<PrometheusDashboardType, Record<string, unknown>>>;
 };
 
 export const initialState: PrometheusDashboardState = {
     expandedPanels: EMPTY_OBJECT,
     timeRangeFilter: {shortcutValue: '30m'},
+    params: EMPTY_OBJECT,
 };
 
 export const prometheusDashboardSlice = createSlice({
     initialState,
     name: 'prometheusDashboard',
+    selectors: {
+        getType: (state) => state.type,
+        getParams: (state) => state.params,
+    },
     reducers: {
         setExpandedId(
             state,
@@ -30,13 +43,80 @@ export const prometheusDashboardSlice = createSlice({
                 id: PrometheusWidgetId | undefined;
             }>,
         ) {
-            const {[type]: _prevId, ...rest} = state.expandedPanels;
-            const res = id === undefined ? rest : {...state, [type]: id};
+            if (id === undefined) {
+                delete state.expandedPanels[type];
+            } else {
+                // eslint-disable-next-line no-param-reassign
+                state.expandedPanels[type] = id;
+            }
+        },
+        setType(
+            state,
+            {
+                payload: {type},
+            }: PayloadAction<{
+                type: PrometheusDashboardType;
+            }>,
+        ) {
+            // eslint-disable-next-line no-param-reassign
+            state.type = type;
+        },
+        setParams(
+            state,
+            {
+                payload: {type, params},
+            }: PayloadAction<{type: PrometheusDashboardType; params: Record<string, unknown>}>,
+        ) {
+            Object.keys(params).forEach((k) => {
+                const v = params[k];
+                // eslint-disable-next-line no-param-reassign
+                const dst = (state.params[type] = state.params[type] ?? {});
 
-            return {...state, expandedPanels: Object.keys(res).length === 0 ? EMPTY_OBJECT : res};
+                if (v === undefined) {
+                    delete dst[k];
+                } else {
+                    dst[k] = v;
+                }
+            });
         },
         setTimeRangeFilter(state, {payload}: PayloadAction<Pick<typeof state, 'timeRangeFilter'>>) {
             return {...state, ...payload};
         },
     },
 });
+
+export const prometheusDashboardSelectors = prometheusDashboardSlice.getSelectors(
+    (state: RootState) => state.prometheusDashboard,
+);
+
+export function usePrometheusDashboardParams<T extends Record<string, unknown>>(
+    type: PrometheusDashboardType,
+) {
+    const dispatch = useDispatch();
+    const params = useSelector(prometheusDashboardSelectors.getParams)[type] as T;
+
+    return {
+        params,
+        setParams: React.useCallback(
+            (v: typeof params) => {
+                dispatch(prometheusDashboardSlice.actions.setParams({type, params: v}));
+            },
+            [type, dispatch],
+        ),
+    };
+}
+
+export function usePrometheusDashboardType<T extends PrometheusDashboardType>() {
+    const dispatch = useDispatch();
+    const type = useSelector(prometheusDashboardSelectors.getType) as T;
+
+    return {
+        type,
+        setType: React.useCallback(
+            (v: typeof type) => {
+                dispatch(prometheusDashboardSlice.actions.setType({type: v}));
+            },
+            [dispatch],
+        ),
+    };
+}
