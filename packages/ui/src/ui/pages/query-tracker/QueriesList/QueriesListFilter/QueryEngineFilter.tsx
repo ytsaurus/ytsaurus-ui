@@ -1,8 +1,7 @@
 import React, {FC, useCallback} from 'react';
 import {Select} from '@gravity-ui/uikit';
 import {Engines} from '../../../../store/actions/queries/api';
-import {QueryEngine} from '../../../../../shared/constants/engines';
-import {QueryEnginesNames} from '../../utils/query';
+import {QueryEngine, QueryEnginesNames} from '../../../../../shared/constants/engines';
 import {useDispatch, useSelector} from 'react-redux';
 import {getQueriesFilters} from '../../../../store/selectors/queries/queriesList';
 import {applyFilter} from '../../../../store/actions/queries/queriesList';

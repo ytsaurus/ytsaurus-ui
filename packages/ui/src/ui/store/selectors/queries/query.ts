@@ -13,8 +13,7 @@ import {YTError} from '../../../types';
 import {isYTError} from '../../../../shared/utils';
 import {getQueryResults} from './queryResult';
 import {getDefaultQueryACO, selectIsMultipleAco} from './queryAco';
-import {QueryEngine} from '../../../../shared/constants/engines';
-import {QueryEnginesNames} from '../../../pages/query-tracker/utils/query';
+import {QueryEngine, QueryEnginesNames} from '../../../../shared/constants/engines';
 
 const QT_STAGE = getQueryTrackerStage();
 const getState = (state: RootState) => state.queryTracker.query;

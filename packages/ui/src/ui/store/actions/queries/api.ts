@@ -173,11 +173,6 @@ export const isSingleProgress = (
     return Boolean(progress) && !('queries_count' in progress!);
 };
 
-// Define these constants based on string values to avoid circular dependencies
-export const AbortableStatuses = ['running', 'pending'];
-
-export const CompletedStates = ['draft', 'aborted', 'completed', 'failed'];
-
 export type QueriesListCursorParams = {
     cursor_time?: string;
     cursor_direction: QueriesHistoryCursorDirection;
