@@ -33,6 +33,7 @@ import {getJobsPreparedState, jobsParams} from './reducers/operations/jobs/url-m
 
 import {
     accountAclParams,
+    accountMonitorParams,
     accountOnlyParams,
     accountUsageParams,
     accountsParams,
@@ -70,6 +71,7 @@ import {
     schedulingParams,
 } from '../store/reducers/scheduling/url-mapping';
 import {
+    bundlesPrometheusParams,
     getTabletsBundlesAclPreparedState,
     getTabletsBundlesPreparedState,
     getTabletsCellsPreparedState,
@@ -97,6 +99,8 @@ import {
     getSystemMonitoringState,
     systemMonitoringParams,
 } from './reducers/system/monitoring/url-mapping';
+import {ChytCliquePageTab} from '../constants/chyt-page';
+import {prometheusDashboardParams} from './reducers/prometheusDashboard/url-mapping';
 
 // prettier-ignore
 export const getMainLocations = (): Array<[string, PathParameters]> => [
@@ -127,10 +131,12 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     [`/*/${Page.ACCOUNTS}/${AccountsTab.GENERAL}`, [accountsParams, getAccountsPreparedState]],
     [`/*/${Page.ACCOUNTS}/${AccountsTab.USAGE}`, [accountUsageParams, getAccountsUsageState]],
     [`/*/${Page.ACCOUNTS}/${AccountsTab.ACL}`, [accountAclParams, getAccountsAclState]],
+    [`/*/${Page.ACCOUNTS}/${AccountsTab.MONITOR}`, [accountMonitorParams]],
     [`/*/${Page.ACCOUNTS}/*`, [accountOnlyParams, getAccountOnlyPreparedState]],
     [`/*/${Page.ACCOUNTS}`, [accountOnlyParams, getAccountOnlyPreparedState]],
 
     [`/*/${Page.CHYT}`, [chytListParams, getGhytListPreparedState]],
+    [`/*/${Page.CHYT}/*/${ChytCliquePageTab.MONITORING}`, [prometheusDashboardParams]],
 
     [`/*/${Page.DASHBOARD}`, [dashboardParams, getDashboardPreparedState]],
 
@@ -171,6 +177,7 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     ],
 
     [`/*/${Page.TABLET_CELL_BUNDLES}`, [tabletsAllBundlesParams, getTabletsBundlesPreparedState]],
+    [`/*/${Page.TABLET_CELL_BUNDLES}/monitor`, [bundlesPrometheusParams]],
     [`/*/${Page.TABLET_CELL_BUNDLES}/*`, [tabletsBundlesParams, getTabletsBundlesPreparedState]],
 
     [
