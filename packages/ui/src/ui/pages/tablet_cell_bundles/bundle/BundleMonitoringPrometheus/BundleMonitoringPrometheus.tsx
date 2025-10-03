@@ -3,8 +3,6 @@ import cn from 'bem-cn-lite';
 
 import {RadioButton} from '@gravity-ui/uikit';
 
-import {PrometheusDashboardType} from '../../../../../shared/prometheus/types';
-
 import {HEADER_HEIGHT} from '../../../../constants';
 import {StickyContainer} from '../../../../components/StickyContainer/StickyContainer';
 import {PrometheusDashboardLazy} from '../../../../containers/PrometheusDashboard/lazy';
@@ -19,7 +17,7 @@ import './BundleMonitoringPrometheus.scss';
 
 const block = cn('yt-bundle-monitoring-prometheus');
 
-const BUNDLE_DASHBOARDS: Partial<Record<PrometheusDashboardType, {title: string}>> = {
+const BUNDLE_DASHBOARDS = {
     'bundle-ui-user-load': {title: 'User load'},
     'bundle-ui-resource': {title: 'Resources'},
     'bundle-ui-cpu': {title: 'CPU'},
@@ -31,6 +29,10 @@ const BUNDLE_DASHBOARDS: Partial<Record<PrometheusDashboardType, {title: string}
     'bundle-ui-rpc-proxy-overview': {title: 'Proxy resources'},
     'bundle-ui-rpc-proxy': {title: 'Proxy details'},
 };
+
+const BUNDLE_DASHBOARDS_NAMES = Object.keys(BUNDLE_DASHBOARDS) as Array<
+    keyof typeof BUNDLE_DASHBOARDS
+>;
 
 export function BundleMonitoringPrometheus(props: BundleMonitoringProps) {
     const {type, setType, params} = useBundleMonitoring(props);
@@ -72,19 +74,10 @@ export function BundleMonitoringPrometheus(props: BundleMonitoringProps) {
 }
 
 function useBundleMonitoring({cluster, tablet_cell_bundle}: BundleMonitoringProps) {
-    const {type, setType} = usePrometheusDashboardType();
-
-    const effectiveType = React.useMemo(() => {
-        let res = type;
-        if (Object.keys(BUNDLE_DASHBOARDS).indexOf(type!) === -1) {
-            res = Object.keys(BUNDLE_DASHBOARDS)[0] as PrometheusDashboardType;
-            setType(res);
-        }
-        return res;
-    }, [type, setType]);
+    const {type, setType} = usePrometheusDashboardType(BUNDLE_DASHBOARDS_NAMES);
 
     return {
-        type: effectiveType!,
+        type,
         setType,
         params: {
             cluster,

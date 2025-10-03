@@ -1,5 +1,5 @@
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import {RadioButton} from '@gravity-ui/uikit';
 
@@ -10,7 +10,10 @@ import {PoolTreeSuggestControl} from '../../../components/Dialog/controls/PoolTr
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {PrometheusDashboardLazy} from '../../../containers/PrometheusDashboard/lazy';
 import {getCluster} from '../../../store/selectors/global';
-import {systemMonitoring} from '../../../store/reducers/system/monitoring';
+import {
+    usePrometheusDashboardParams,
+    usePrometheusDashboardType,
+} from '../../../store/reducers/prometheusDashboard/prometheusDahsboard';
 import {useDefaultPoolTree} from '../../../hooks/global-pool-trees';
 
 import {MasterLocalContainers} from './MasterLocalContainers';
@@ -25,7 +28,7 @@ const SYSTEM_DASHBOARDS: Array<PrometheusDashboardType> = [
 const ALL_PODS = '.*';
 
 export function SystemMonitoringPrometheus() {
-    const {type, setType, params, extraTools} = useDashboardParameters();
+    const {type, setType, params, extraTools} = useSystemDashboardParameters();
     return (
         <React.Fragment>
             <Toolbar
@@ -50,14 +53,18 @@ export function SystemMonitoringPrometheus() {
     );
 }
 
-function useDashboardParameters() {
-    const dispatch = useDispatch();
+type ViewParams = {
+    container?: string;
+};
+
+function useSystemDashboardParameters() {
     const cluster = useSelector(getCluster);
-    const type =
-        (useSelector(systemMonitoring.selectors.getActiveTab) as PrometheusDashboardType) ??
-        SYSTEM_DASHBOARDS[0];
-    const container =
-        useSelector(systemMonitoring.selectors.getMasterLocalContainer) ?? SYSTEM_DASHBOARDS[0];
+
+    const {type, setType} = usePrometheusDashboardType(SYSTEM_DASHBOARDS);
+    const {
+        params: {container = ALL_PODS},
+        setParams: setViewParams,
+    } = usePrometheusDashboardParams<ViewParams>(type);
 
     const clusterResourcesExtra = useClusterResourcesExtraParams();
 
@@ -68,7 +75,16 @@ function useDashboardParameters() {
                     params: {cluster, pod: container},
                     extraTools: [
                         {
-                            node: <MasterLocalContainers key="pod" allValue={ALL_PODS} />,
+                            node: (
+                                <MasterLocalContainers
+                                    key="pod"
+                                    allValue={ALL_PODS}
+                                    container={container}
+                                    setContainer={(v) => {
+                                        setViewParams({container: v});
+                                    }}
+                                />
+                            ),
                         },
                     ],
                 };
@@ -89,10 +105,9 @@ function useDashboardParameters() {
 
     return {
         type,
-        setType: (v: typeof type) => dispatch(systemMonitoring.actions.onUpdate({activeTab: v})),
+        setType,
         container,
-        setContainer: (v: string) =>
-            dispatch(systemMonitoring.actions.onUpdate({masterLocalContainer: v})),
+        setContainer: (v: string) => setViewParams({container: v}),
         params,
         extraTools,
     };

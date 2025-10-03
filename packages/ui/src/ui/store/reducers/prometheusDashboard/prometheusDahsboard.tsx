@@ -95,7 +95,7 @@ export function usePrometheusDashboardParams<T extends Record<string, unknown>>(
     type: PrometheusDashboardType,
 ) {
     const dispatch = useDispatch();
-    const params = useSelector(prometheusDashboardSelectors.getParams)[type] as T;
+    const params: T = (useSelector(prometheusDashboardSelectors.getParams)[type] ?? {}) as T;
 
     return {
         params,
@@ -108,17 +108,30 @@ export function usePrometheusDashboardParams<T extends Record<string, unknown>>(
     };
 }
 
-export function usePrometheusDashboardType<T extends PrometheusDashboardType>() {
+export function usePrometheusDashboardType<T extends PrometheusDashboardType>(
+    allowedValues?: Array<T>,
+) {
     const dispatch = useDispatch();
     const type = useSelector(prometheusDashboardSelectors.getType) as T;
 
+    const setType = React.useCallback(
+        (v: typeof type) => {
+            dispatch(prometheusDashboardSlice.actions.setType({type: v}));
+        },
+        [dispatch],
+    );
+
+    const effectiveType = React.useMemo(() => {
+        let res = type;
+        if (allowedValues && -1 === allowedValues.indexOf(type)) {
+            res = allowedValues[0];
+            setType(res);
+        }
+        return res;
+    }, [type, setType, allowedValues]);
+
     return {
-        type,
-        setType: React.useCallback(
-            (v: typeof type) => {
-                dispatch(prometheusDashboardSlice.actions.setType({type: v}));
-            },
-            [dispatch],
-        ),
+        type: effectiveType,
+        setType,
     };
 }
