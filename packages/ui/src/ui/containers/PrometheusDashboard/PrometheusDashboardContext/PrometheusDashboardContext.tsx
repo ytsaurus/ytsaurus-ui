@@ -3,9 +3,9 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {PrometheusDashboardType, PrometheusWidgetId} from '../../../../shared/prometheus/types';
 
-import {prometheusDashboardSlice} from '../../../store/reducers/prometheusDashboard/prometheusDahsboard';
+import {prometheusDashboardSlice} from '../../../store/reducers/prometheusDashboard/prometheusDashboard';
+import {usePrometheusDashbordTimeRange} from '../../../store/reducers/prometheusDashboard/prometheusDashboard-hooks';
 import {RootState} from '../../../store/reducers';
-import {calcFromTo} from '../../../components/Timeline';
 
 type PrometheusDashboardContextData = {
     expandedId?: PrometheusWidgetId;
@@ -31,17 +31,17 @@ function throwContextError() {
 export function PrometheusDashboardProvider({
     children,
     type,
-    timeRange,
 }: {
     children: React.ReactNode;
     type: PrometheusDashboardType;
-    timeRange?: {from: number; to?: number};
 }) {
     const dispatch = useDispatch();
-    const {expandedPanels, timeRangeFilter} = useSelector(
-        (state: RootState) => state.prometheusDashboard,
+    const expandedPanels = useSelector(
+        (state: RootState) => state.prometheusDashboard.expandedPanels,
     );
     const {[type]: expandedId} = expandedPanels ?? {};
+
+    const {timeRange, setTimeRange} = usePrometheusDashbordTimeRange();
 
     const value = React.useMemo(() => {
         return {
@@ -53,23 +53,10 @@ export function PrometheusDashboardProvider({
                     dispatch(prometheusDashboardSlice.actions.setExpandedId({type, id}));
                 }
             },
-            timeRangeFilter,
-            setTimeRangeFilter(v: typeof timeRangeFilter) {
-                dispatch(prometheusDashboardSlice.actions.setTimeRangeFilter({timeRangeFilter: v}));
-            },
+            timeRangeFilter: timeRange,
+            setTimeRangeFilter: setTimeRange,
         };
-    }, [expandedId, timeRangeFilter, type, dispatch]);
-
-    React.useEffect(() => {
-        if (timeRangeFilter.from === undefined || timeRangeFilter.to === undefined || timeRange) {
-            const {from, to} = {...calcFromTo(timeRangeFilter), ...timeRange};
-            dispatch(
-                prometheusDashboardSlice.actions.setTimeRangeFilter({
-                    timeRangeFilter: {...timeRangeFilter, from, to},
-                }),
-            );
-        }
-    }, [timeRangeFilter, dispatch]);
+    }, [expandedId, timeRange, setTimeRange, type, dispatch]);
 
     return (
         <PrometheusDashboardContext.Provider value={value}>

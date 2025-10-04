@@ -13,7 +13,7 @@ import {getCluster} from '../../../store/selectors/global';
 import {
     usePrometheusDashboardParams,
     usePrometheusDashboardType,
-} from '../../../store/reducers/prometheusDashboard/prometheusDahsboard';
+} from '../../../store/reducers/prometheusDashboard/prometheusDashboard-hooks';
 import {useDefaultPoolTree} from '../../../hooks/global-pool-trees';
 
 import {MasterLocalContainers} from './MasterLocalContainers';

@@ -11,7 +11,7 @@ import {
     TOOLBAR_COMPONENT_HEIGHT,
     Toolbar,
 } from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
-import {usePrometheusDashboardType} from '../../../../store/reducers/prometheusDashboard/prometheusDahsboard';
+import {usePrometheusDashboardType} from '../../../../store/reducers/prometheusDashboard/prometheusDashboard-hooks';
 
 import './BundleMonitoringPrometheus.scss';
 

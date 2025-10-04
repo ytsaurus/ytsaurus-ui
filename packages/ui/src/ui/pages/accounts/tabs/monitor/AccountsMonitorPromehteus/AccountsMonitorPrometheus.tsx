@@ -11,7 +11,7 @@ import Select from '../../../../../components/Select/Select';
 import {Toolbar} from '../../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {getAccountsMapByName} from '../../../../../store/selectors/accounts/accounts-ts';
 import {getMediumList} from '../../../../../store/selectors/thor';
-import {usePrometheusDashboardParams} from '../../../../../store/reducers/prometheusDashboard/prometheusDahsboard';
+import {usePrometheusDashboardParams} from '../../../../../store/reducers/prometheusDashboard/prometheusDashboard-hooks';
 
 import i18n from '../i18n';
 
