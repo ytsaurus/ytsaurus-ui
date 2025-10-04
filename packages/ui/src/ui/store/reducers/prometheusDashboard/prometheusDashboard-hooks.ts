@@ -2,13 +2,10 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import isEqual_ from 'lodash/isEqual';
 
+import type {PrometheusDashboardType} from '../../../../shared/prometheus/types';
 import {calcFromTo} from '../../../components/Timeline';
 
-import {
-    PrometheusDashboardType,
-    prometheusDashboardSelectors,
-    prometheusDashboardSlice,
-} from './prometheusDashboard';
+import {prometheusDashboardSelectors, prometheusDashboardSlice} from './prometheusDashboard';
 
 export function usePrometheusDashboardParams<ParamsT extends Record<string, unknown>>(t: string) {
     const type = t as PrometheusDashboardType;
