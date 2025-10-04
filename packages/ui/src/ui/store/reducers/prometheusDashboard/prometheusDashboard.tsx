@@ -1,13 +1,10 @@
-import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {EMPTY_OBJECT} from '../../../constants/empty';
 
 type PrometheusWidgetId = string;
 export type PrometheusDashboardType = 'scheduler-pool';
 
-import {RootState} from '../index.main';
+import {EMPTY_OBJECT} from '../../../constants/empty';
+import {RootState} from '../../../store/reducers/index.main';
 
 export type PrometheusDashboardState = {
     expandedPanels: Partial<Record<PrometheusDashboardType, PrometheusWidgetId>>;
@@ -32,6 +29,7 @@ export const prometheusDashboardSlice = createSlice({
     selectors: {
         getType: (state) => state.type,
         getParams: (state) => state.params,
+        getTimeRange: (state) => state.timeRangeFilter,
     },
     reducers: {
         setExpandedId(
@@ -88,48 +86,3 @@ export const prometheusDashboardSlice = createSlice({
 export const prometheusDashboardSelectors = prometheusDashboardSlice.getSelectors(
     (state: RootState) => state.prometheusDashboard,
 );
-
-export function usePrometheusDashboardParams<T extends Record<string, unknown>>(
-    type: PrometheusDashboardType,
-) {
-    const dispatch = useDispatch();
-    const params: T = (useSelector(prometheusDashboardSelectors.getParams)[type] ?? {}) as T;
-
-    return {
-        params,
-        setParams: React.useCallback(
-            (v: typeof params) => {
-                dispatch(prometheusDashboardSlice.actions.setParams({type, params: v}));
-            },
-            [type, dispatch],
-        ),
-    };
-}
-
-export function usePrometheusDashboardType<T extends PrometheusDashboardType>(
-    allowedValues?: Array<T>,
-) {
-    const dispatch = useDispatch();
-    const type = useSelector(prometheusDashboardSelectors.getType) as T;
-
-    const setType = React.useCallback(
-        (v: typeof type) => {
-            dispatch(prometheusDashboardSlice.actions.setType({type: v}));
-        },
-        [dispatch],
-    );
-
-    const effectiveType = React.useMemo(() => {
-        let res = type;
-        if (allowedValues && -1 === allowedValues.indexOf(type)) {
-            res = allowedValues[0];
-            setType(res);
-        }
-        return res;
-    }, [type, setType, allowedValues]);
-
-    return {
-        type: effectiveType,
-        setType,
-    };
-}
