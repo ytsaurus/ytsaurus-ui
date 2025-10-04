@@ -1,7 +1,7 @@
 import {LocationParameters} from '../../../store/location';
 import {makeBase64ParseSerialize, makeTimeRangeSerialization} from '../../../utils/parse-serialize';
 
-import {initialState} from './prometheusDahsboard';
+import {initialState} from './prometheusDashboard';
 
 export const prometheusDashboardParams: LocationParameters = {
     pdExpanded: {
