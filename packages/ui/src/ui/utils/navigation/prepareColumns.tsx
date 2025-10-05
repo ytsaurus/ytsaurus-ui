@@ -21,6 +21,7 @@ export function prepareColumns({
     useRawStrings,
     schemaByName,
     onShowPreview,
+    useYqlTypes,
 }: {
     columns: NameWithSortOrder[];
     keyColumns: string[];
@@ -29,6 +30,7 @@ export function prepareColumns({
     useRawStrings: boolean | null | undefined;
     schemaByName: Record<string, any>;
     onShowPreview: (columnName: string, rowIndex: number, tag?: string) => void;
+    useYqlTypes?: boolean;
 }) {
     return map_(columns, (column) => {
         const render = ({value, index}: {value?: any; index: number; row: any}) => (
@@ -40,6 +42,7 @@ export function prepareColumns({
                 rowIndex={index}
                 columnName={column.name}
                 onShowPreview={onShowPreview}
+                useYqlTypes={useYqlTypes}
             />
         );
         const {sortOrder} = column;
