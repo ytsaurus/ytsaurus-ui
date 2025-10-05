@@ -26,7 +26,8 @@ export function RequestPermission(props: Props) {
 
     const objectType = ypath.getValue(error?.attributes, '/object_type');
     const errorPath = ypath.getValue(error?.attributes, '/path');
-    const isRequestPermissionsForPathAllowed = objectType === 'map_node';
+    const isRequestPermissionsForPathAllowed =
+        objectType === 'map_node' || objectType === 'portal_exit';
 
     const path = errorPath ?? currentPath;
 
