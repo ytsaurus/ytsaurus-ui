@@ -44,6 +44,7 @@ type ColumnCellProps = {
     rowIndex: number;
     columnName: string;
     onShowPreview: (columnName: string, rowIndex: number, tag?: string) => void | Promise<void>;
+    useYqlTypes?: boolean;
 };
 
 export function ColumnCell({
@@ -55,6 +56,7 @@ export function ColumnCell({
     rowIndex,
     columnName,
     onShowPreview,
+    useYqlTypes,
 }: ColumnCellProps) {
     const [hovered, setHovered] = useState(false);
     const handleMouseEnter = () => setHovered(true);
@@ -96,7 +98,9 @@ export function ColumnCell({
         return {tag, isIncompleteTagged, isIncompleteValue};
     }, [value, formatType, ysonSettings]);
 
-    const allowRawCopy = value?.$type === 'string';
+    const rawValue = useYqlTypes ? value?.[0] : value?.$value;
+
+    const allowRawCopy = typeof rawValue === 'string';
     const useRawString = allowRawCopy && allowRawStrings;
     let copyTooltip = i18n('hold-shift-raw');
     if (useRawString) {
@@ -108,7 +112,7 @@ export function ColumnCell({
     ) : (
         <div className={'unipika-wrapper'}>
             <pre className={'unipika'}>
-                <span className={'string'}>{value?.$value}</span>
+                <span className={'string'}>{rawValue}</span>
             </pre>
         </div>
     );
@@ -142,11 +146,11 @@ export function ColumnCell({
                                 <ClipboardButton
                                     view="flat-secondary"
                                     size="m"
-                                    text={useRawString ? value.$value : unquote(escapedValue)}
+                                    text={useRawString ? rawValue : unquote(escapedValue)}
                                     onCopy={(event: React.MouseEvent) => {
                                         if (event?.shiftKey && allowRawCopy) {
                                             copyToClipboard(
-                                                useRawString ? unquote(escapedValue) : value.$value,
+                                                useRawString ? unquote(escapedValue) : rawValue,
                                             );
                                         }
                                     }}

@@ -10,7 +10,10 @@ import {TypeArray} from '../../../../../components/SchemaDataType/dataTypes';
 import {injectTableCellData} from '../../../../../store/actions/navigation/content/table/table-ts';
 import {getOffsetValue} from '../../../../../store/selectors/navigation/content/table';
 import {getSchemaByName} from '../../../../../store/selectors/navigation/tabs/schema';
-import {getSettingTableDisplayRawStrings} from '../../../../../store/selectors/settings';
+import {
+    getSettingTableDisplayRawStrings,
+    shouldUseYqlTypes,
+} from '../../../../../store/selectors/settings';
 import {YsonSettings} from '../../../../../store/selectors/thor/unipika';
 import {onCellPreview} from '../../../../../store/actions/navigation/modals/cell-preview';
 import {NameWithSortOrder, prepareColumns} from '../../../../../utils/navigation/prepareColumns';
@@ -43,6 +46,7 @@ export type DataTableWrapperProps = {
 
 export default function DataTableWrapper(props: DataTableWrapperProps) {
     const useRawStrings = useSelector(getSettingTableDisplayRawStrings);
+    const useYqlTypes = useSelector(shouldUseYqlTypes);
     const schemaByName = useSelector(getSchemaByName);
 
     const {columns, keyColumns, ysonSettings, yqlTypes, loading, loaded, isFullScreen, ...rest} =
@@ -58,6 +62,7 @@ export default function DataTableWrapper(props: DataTableWrapperProps) {
         useRawStrings,
         schemaByName,
         onShowPreview,
+        useYqlTypes,
     });
     const initialLoading = loading && !loaded;
     const updating = loading && loaded;
