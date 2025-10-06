@@ -1,5 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
+import reduce_ from 'lodash/reduce';
 
 import {Flex} from '@gravity-ui/uikit';
 
@@ -96,7 +97,7 @@ function PrometheusChart({
 
 function useLoadQueriesData({
     id,
-    data: {title, targets, params},
+    data: {title, targets, params, fieldConfig},
     pointCount,
     from,
     to,
@@ -116,6 +117,35 @@ function useLoadQueriesData({
         //cancelHelper,
     });
 
+    const fieldOverrides = React.useMemo(() => {
+        return {
+            axisLabel: fieldConfig?.defaults?.custom?.axisLabel,
+            propertiesByRefId: reduce_(
+                fieldConfig?.overrides,
+                (acc, item) => {
+                    const {matcher, properties} = item;
+                    if (matcher.id !== 'byFrameRefID') {
+                        return acc;
+                    }
+                    const refId = matcher.options;
+                    // eslint-disable-next-line no-param-reassign
+                    acc[refId] = reduce_(
+                        properties,
+                        (propsAcc, propItem) => {
+                            // eslint-disable-next-line no-param-reassign
+                            propsAcc[propItem.id] = propItem.value;
+                            return propsAcc;
+                        },
+                        {} as {unit: 'bytes' | unknown} & Record<string, unknown>,
+                    );
+
+                    return acc;
+                },
+                {} as Record<string, {unit?: 'bytes' | unknown}>,
+            ),
+        };
+    }, [fieldConfig]);
+
     const chartData: {data?: YagrWidgetData; error?: YTError; isLoading?: boolean} =
         React.useMemo(() => {
             if (!data || !data?.responseData) {
@@ -129,16 +159,31 @@ function useLoadQueriesData({
             const {responseData: rawData, start, end, step} = data;
             const {results} = rawData;
 
+            const {axisLabel, propertiesByRefId} = fieldOverrides;
             return {
-                data: makeYagrWidgetData(title, targets, results, {end, start, step}, params),
+                data: makeYagrWidgetData(
+                    {title, axisLabel, propertiesByRefId},
+                    targets,
+                    results,
+                    {end, start, step},
+                    params,
+                ),
             };
-        }, [data, error, params, targets, title, isLoading]);
+        }, [data, error, params, targets, title, fieldOverrides, isLoading]);
 
     return chartData;
 }
 
 function makeYagrWidgetData(
-    title: string,
+    {
+        title,
+        axisLabel,
+        propertiesByRefId,
+    }: {
+        title: string;
+        axisLabel: string;
+        propertiesByRefId: Record<string, {unit?: 'bytes' | unknown}>;
+    },
     targets: Array<TimeseriesTarget>,
     results: Array<QueryRangeData>,
     {end, start, step}: {end: number; start: number; step: number},
@@ -156,6 +201,11 @@ function makeYagrWidgetData(
                     },
                 },
             },
+            axes: {
+                y: {
+                    label: axisLabel,
+                },
+            },
         },
     };
 
@@ -168,7 +218,8 @@ function makeYagrWidgetData(
     const metrics: Array<{metric: Record<string, unknown>; graphIndex: number}> = [];
 
     for (let serie = 0; serie < results?.length; ++serie) {
-        const {legendFormat} = targets[serie];
+        const {legendFormat, refId} = targets[serie];
+        const {unit} = propertiesByRefId[refId] ?? {};
         for (let serie_i = 0; serie_i < (results[serie]?.data?.result?.length ?? 0); ++serie_i) {
             const serie_i_data = results[serie]?.data?.result[serie_i];
             if (!serie_i_data) {
@@ -186,7 +237,7 @@ function makeYagrWidgetData(
                       )
                     : undefined,
                 data: new Array(timeline.length),
-                formatter: format.Number,
+                formatter: unit === 'bytes' ? format.Bytes : format.Number,
                 color: getSerieColor(res.data.graphs.length),
             };
             if (!graph.name) {
