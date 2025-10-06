@@ -168,6 +168,13 @@ function makeYagrWidgetData(
         libraryConfig: {
             title: {text: title},
             legend: {show: true},
+            tooltip: {
+                title: {
+                    y: ({x}) => {
+                        return format.DateTime(x / 1000);
+                    },
+                },
+            },
         },
     };
 
