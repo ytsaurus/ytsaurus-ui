@@ -33,7 +33,12 @@ export type PermissionTemplate = {
 export type DashaboardPanelByType =
     | {type: 'row'}
     | {type: 'text'; options: {mode: 'markdown'; content: string}}
-    | {type: 'timeseries'; targets: Array<TimeseriesTarget>; title: string};
+    | {
+          type: 'timeseries';
+          targets: Array<TimeseriesTarget>;
+          title: string;
+          fieldConfig: FieldConfig;
+      };
 
 /**
  * The strings contains substrings like `"$pool"`, `"$tree"` that should be replaced with corresponding parameters
@@ -43,7 +48,27 @@ export type PrometheusExpresstionString = string;
 export type TimeseriesTarget = {
     expr: PrometheusExpresstionString;
     legendFormat: string;
-    refId: string;
+    refId: RefIdValue;
+};
+
+export type FieldConfig = {
+    defaults: {
+        unit: 'short';
+        custom: {
+            axisLabel: 'Cores';
+            hideFrom: {
+                legend: number;
+            };
+        };
+    };
+    overrides: Array<FieldConfigTargetOverrides>;
+};
+
+type RefIdValue = string;
+
+export type FieldConfigTargetOverrides = {
+    matcher: {id: 'byFrameRefID'; options: RefIdValue};
+    properties: Array<{id: string; value: unknown} | {id: 'unit'; value: 'bytes' | unknown}>;
 };
 
 export type PanelType = DashaboardPanelByType['type'];
