@@ -9,7 +9,7 @@ import {
     selectRepository,
     selectShowFilter,
     selectVcsConfig,
-} from '../../../../store/selectors/queries/vcs';
+} from '../../../../store/selectors/query-tracker/vcs';
 import {SelectSingle} from '../../../../components/Select/Select';
 import {
     changeCurrentBranch,
@@ -17,12 +17,12 @@ import {
     getVcsRepositories,
     getVcsTokensAvailability,
     setLastVcs,
-} from '../../../../store/actions/queries/vcs';
+} from '../../../../store/actions/query-tracker/vcs';
 import './VcsHeader.scss';
 import cn from 'bem-cn-lite';
 import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 import {Flex, Icon, TextInput, Tooltip} from '@gravity-ui/uikit';
-import {setListFilter} from '../../../../store/reducers/queries/vcsSlice';
+import {setListFilter} from '../../../../store/reducers/query-tracker/vcsSlice';
 
 const block = cn('vcs-header');
 

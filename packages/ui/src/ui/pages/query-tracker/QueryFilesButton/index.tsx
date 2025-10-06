@@ -15,14 +15,14 @@ import {
     QueryFileEditor,
     setAddForm,
     setFileEditor,
-} from '../../../store/reducers/queries/queryFilesFormSlice';
-import {selectQueryFilesButtonConfig} from '../../../store/selectors/queries/queryFilesForm';
+} from '../../../store/reducers/query-tracker/queryFilesFormSlice';
+import {selectQueryFilesButtonConfig} from '../../../store/selectors/query-tracker/queryFilesForm';
 import {
     changeQueryFile,
     deleteQueryFile,
     restoreQueryFile,
-} from '../../../store/actions/queries/queryFilesForm';
-import {updateQueryDraft} from '../../../store/actions/queries/query';
+} from '../../../store/actions/query-tracker/queryFilesForm';
+import {updateQueryDraft} from '../../../store/actions/query-tracker/query';
 
 const b = cn('query-files-popup');
 

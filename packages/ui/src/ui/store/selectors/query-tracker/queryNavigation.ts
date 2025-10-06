@@ -1,7 +1,7 @@
 import {RootState} from '../../reducers';
 import {createSelector} from 'reselect';
 import {getClusterList} from '../slideoutMenu';
-import {NavigationNode} from '../../reducers/queries/queryNavigationSlice';
+import {NavigationNode} from '../../reducers/query-tracker/queryNavigationSlice';
 import {makeGetSetting} from '../settings';
 import {createNestedNS} from '../../../../shared/utils/settings';
 import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';

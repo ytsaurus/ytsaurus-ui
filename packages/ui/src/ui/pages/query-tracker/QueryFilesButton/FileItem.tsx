@@ -9,7 +9,7 @@ import LinkIcon from '@gravity-ui/icons/svgs/link.svg';
 import PencilToSquareIcon from '@gravity-ui/icons/svgs/pencil-to-square.svg';
 import {FileItemForm, FileValidator} from './FileItemForm';
 import {QueryFile} from '../../../types/query-tracker/api';
-import {QueryFileEditor} from '../../../store/reducers/queries/queryFilesFormSlice';
+import {QueryFileEditor} from '../../../store/reducers/query-tracker/queryFilesFormSlice';
 
 const block = cn('file-item');
 

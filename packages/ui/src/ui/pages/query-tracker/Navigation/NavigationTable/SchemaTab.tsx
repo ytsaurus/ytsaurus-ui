@@ -2,13 +2,13 @@ import React, {FC} from 'react';
 import {
     NavigationTableSchema,
     setFilter,
-} from '../../../../store/reducers/queries/queryNavigationSlice';
+} from '../../../../store/reducers/query-tracker/queryNavigationSlice';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
 import {Column} from '@gravity-ui/react-data-table';
 import {Text, TextInput} from '@gravity-ui/uikit';
 import Icon from '../../../../components/Icon/Icon';
 import {useDispatch, useSelector} from 'react-redux';
-import {selectNavigationFilter} from '../../../../store/selectors/queries/queryNavigation';
+import {selectNavigationFilter} from '../../../../store/selectors/query-tracker/queryNavigation';
 import unipika from '../../../../common/thor/unipika';
 
 type Props = {

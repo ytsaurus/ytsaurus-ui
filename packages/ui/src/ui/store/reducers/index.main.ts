@@ -37,7 +37,7 @@ import UIFactory, {UIFactoryClusterPageInfo} from '../../UIFactory';
 import {registerExtraPage} from '../../pages';
 import {registerLocationParameters} from '../../store/location';
 import {registerHeaderLink} from '../../containers/ClustersMenu/header-links-items';
-import {queryTracker} from './queries';
+import {queryTracker} from './query-tracker';
 import {odinPageInfo, odinRootPageInfo} from '../../pages/odin/lazy';
 import {hasOdinPage} from '../../config';
 import {chyt} from './chyt';

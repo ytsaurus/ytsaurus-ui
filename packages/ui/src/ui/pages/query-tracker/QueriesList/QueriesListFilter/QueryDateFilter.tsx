@@ -1,10 +1,10 @@
 import React, {FC, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {getQueriesFilters} from '../../../../store/selectors/queries/queriesList';
+import {getQueriesFilters} from '../../../../store/selectors/query-tracker/queriesList';
 import {DatePicker} from '@gravity-ui/date-components';
 import {DateTime, dateTime} from '@gravity-ui/date-utils';
 import {Flex} from '@gravity-ui/uikit';
-import {applyFilter} from '../../../../store/actions/queries/queriesList';
+import {applyFilter} from '../../../../store/actions/query-tracker/queriesList';
 
 export const QueryDateFilter: FC = () => {
     const dispatch = useDispatch();

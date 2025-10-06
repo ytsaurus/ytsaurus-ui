@@ -6,12 +6,12 @@ import {
     getCliqueLoading,
     getCliqueMap,
     getQueryDraft,
-} from '../../../store/selectors/queries/query';
+} from '../../../store/selectors/query-tracker/query';
 import {
     loadCliqueByCluster,
     setQueryClique,
     setQueryPath,
-} from '../../../store/actions/queries/query';
+} from '../../../store/actions/query-tracker/query';
 
 export const QuerySelectorsByEngine: FC = () => {
     const dispatch = useDispatch();

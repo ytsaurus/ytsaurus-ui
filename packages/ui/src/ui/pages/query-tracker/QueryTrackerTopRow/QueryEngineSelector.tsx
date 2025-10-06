@@ -7,8 +7,11 @@ import {
     getSupportedEnginesOptions,
     hasLoadedQueryItem,
     isQueryDraftEditted,
-} from '../../../store/selectors/queries/query';
-import {createQueryFromTablePath, updateQueryDraft} from '../../../store/actions/queries/query';
+} from '../../../store/selectors/query-tracker/query';
+import {
+    createQueryFromTablePath,
+    updateQueryDraft,
+} from '../../../store/actions/query-tracker/query';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {ModalWithoutHandledScrollBar as Modal} from '../../../components/Modal/Modal';
 import RadioButton from '../../../components/RadioButton/RadioButton';

@@ -7,7 +7,7 @@ import {
     getQueryListColumns,
     hasQueriesListMore,
     isQueriesListLoading,
-} from '../../../../store/selectors/queries/queriesList';
+} from '../../../../store/selectors/query-tracker/queriesList';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
 import {useQueryNavigation} from '../../hooks/Query';
 import {useUpdater} from '../../../../hooks/use-updater';
@@ -18,9 +18,9 @@ import './QueryHistoryItem.scss';
 import {
     loadNextQueriesList,
     requestQueriesList,
-} from '../../../../store/actions/queries/queriesList';
+} from '../../../../store/actions/query-tracker/queriesList';
 import {InfiniteScrollLoader} from '../../../../components/InfiniteScrollLoader';
-import {QueriesHistoryCursorDirection} from '../../../../store/reducers/queries/query-tracker-contants';
+import {QueriesHistoryCursorDirection} from '../../../../store/reducers/query-tracker/query-tracker-contants';
 
 const b = block('queries-history-list');
 const itemBlock = block('query-history-item');

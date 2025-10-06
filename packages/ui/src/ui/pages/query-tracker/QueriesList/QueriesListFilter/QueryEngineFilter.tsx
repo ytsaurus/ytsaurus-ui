@@ -3,8 +3,8 @@ import {Select} from '@gravity-ui/uikit';
 import {Engines} from '../../../../types/query-tracker/api';
 import {QueryEngine, QueryEnginesNames} from '../../../../../shared/constants/engines';
 import {useDispatch, useSelector} from 'react-redux';
-import {getQueriesFilters} from '../../../../store/selectors/queries/queriesList';
-import {applyFilter} from '../../../../store/actions/queries/queriesList';
+import {getQueriesFilters} from '../../../../store/selectors/query-tracker/queriesList';
+import {applyFilter} from '../../../../store/actions/query-tracker/queriesList';
 
 const ALL_ENGINE_KEY = '__all';
 

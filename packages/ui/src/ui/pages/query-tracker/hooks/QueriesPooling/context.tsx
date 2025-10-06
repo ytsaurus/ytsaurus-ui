@@ -1,6 +1,6 @@
 import React, {createContext, useMemo} from 'react';
 import {QueriesPollingService} from './QueriesPolling';
-import {requestQueries} from '../../../../store/actions/queries/api';
+import {requestQueries} from '../../../../store/actions/query-tracker/api';
 import {useThunkDispatch} from '../../../../store/thunkDispatch';
 
 export const QueriesPoolingContext = createContext<QueriesPollingService>(

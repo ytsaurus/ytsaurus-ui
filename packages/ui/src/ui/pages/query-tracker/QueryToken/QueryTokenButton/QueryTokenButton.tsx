@@ -5,7 +5,7 @@ import {QueryTokenDropdown} from './QueryTokenDropdown';
 import {useToggle} from 'react-use';
 import {PopupWithCloseButton} from '../../QuerySettingsButton/PopupWithCloseButton';
 import {useSelector} from 'react-redux';
-import {getQuerySecrets} from '../../../../store/selectors/queries/query';
+import {getQuerySecrets} from '../../../../store/selectors/query-tracker/query';
 
 export const QueryTokenButton: FC = () => {
     const btnRef = useRef<HTMLButtonElement>(null);

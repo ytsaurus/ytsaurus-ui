@@ -6,7 +6,7 @@ import cn from 'bem-cn-lite';
 import './FilesTabs.scss';
 import {FileItem} from './FileItem';
 import {FileValidator} from './FileItemForm';
-import {QueryFileEditor} from '../../../store/reducers/queries/queryFilesFormSlice';
+import {QueryFileEditor} from '../../../store/reducers/query-tracker/queryFilesFormSlice';
 
 const block = cn('files-tabs');
 

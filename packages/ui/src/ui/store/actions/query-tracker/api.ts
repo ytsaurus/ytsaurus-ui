@@ -7,20 +7,23 @@ import ypath from '../../../common/thor/ypath';
 import {getClusterConfigByName, getClusterProxy} from '../../selectors/global';
 import {RootState} from '../../reducers';
 import {makeDirectDownloadPath} from '../../../utils/navigation';
-import {UPDATE_QUERIES_LIST} from '../../reducers/queries/query-tracker-contants';
+import {UPDATE_QUERIES_LIST} from '../../reducers/query-tracker/query-tracker-contants';
 import {
     getEffectiveApiStage,
     getQueryAnnotations,
     getQueryTrackerRequestOptions,
-} from '../../selectors/queries/query';
+} from '../../selectors/query-tracker/query';
 import {AnyAction} from 'redux';
 import {QueryEngine} from '../../../../shared/constants/engines';
-import {getLastSelectedACONamespaces, selectIsMultipleAco} from '../../selectors/queries/queryAco';
+import {
+    getLastSelectedACONamespaces,
+    selectIsMultipleAco,
+} from '../../selectors/query-tracker/queryAco';
 import {setSettingByKey} from '../settings';
 import {CancelTokenSource} from 'axios';
 import {JSONSerializer} from '../../../common/yt-api';
 import {createTablePrompt} from '../../../pages/query-tracker/Navigation/helpers/createTableSelect';
-import {getQueryResultGlobalSettings} from '../../selectors/queries/queryResult';
+import {getQueryResultGlobalSettings} from '../../selectors/query-tracker/queryResult';
 import type {
     DraftQuery,
     QueriesListRequestParams,
@@ -346,7 +349,10 @@ export function requestQueries(
         })) as unknown as {results: BatchResultsItem<QueryItem>[]};
 
         const extracted = extractBatchV4Values(resp, requests);
-        const {results} = splitBatchResults(extracted.results ?? [], 'Failed to fetch queries');
+        const {results} = splitBatchResults(
+            extracted.results ?? [],
+            'Failed to fetch query-tracker',
+        );
         return results;
     };
 }

@@ -1,9 +1,9 @@
 import React, {ChangeEvent, FC} from 'react';
 import {Checkbox, Text, TextInput} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from 'react-redux';
-import {selectChartConfig} from '../../../../../store/selectors/queries/queryChart';
+import {selectChartConfig} from '../../../../../store/selectors/query-tracker/queryChart';
 import cn from 'bem-cn-lite';
-import {changeConfig} from '../../../../../store/actions/queries/queryChart';
+import {changeConfig} from '../../../../../store/actions/query-tracker/queryChart';
 import './ConfigWizard.scss';
 
 const b = cn('yt-chart-config-wizard');

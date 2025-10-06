@@ -2,7 +2,7 @@ import type {ChartAxis, ChartData} from '@gravity-ui/chartkit/d3';
 import {QueryResult} from './types';
 import {ChartType} from '../constants';
 import {preparePie} from './preparePie';
-import {Config, VisualizationState} from '../../../../store/reducers/queries/queryChartSlice';
+import {Config, VisualizationState} from '../../../../store/reducers/query-tracker/queryChartSlice';
 import {DateTime64Types, DateTimeTypes} from '../../../../types/query-tracker/yqlTypes';
 import {prepareData} from './prepareData';
 import {getPointValue} from './getPointData';

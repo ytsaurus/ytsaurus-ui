@@ -8,7 +8,7 @@ import {getPath} from '../../../store/selectors/navigation';
 import {QueryEditor} from '../QueryEditor';
 import {QueryMetaForm} from './QueryMetaForm';
 import {QueriesPooling} from '../hooks/QueriesPooling/context';
-import {createQueryFromTablePath} from '../../../store/actions/queries/query';
+import {createQueryFromTablePath} from '../../../store/actions/query-tracker/query';
 import {QueryEngine} from '../../../../shared/constants/engines';
 
 import './index.scss';

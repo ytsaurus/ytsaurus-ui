@@ -2,7 +2,7 @@ import {FC, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import UIFactory from '../../../UIFactory';
 import {QueryItem} from '../../../types/query-tracker/api';
-import {loadQueryResult} from '../../../store/actions/queries/queryResult';
+import {loadQueryResult} from '../../../store/actions/query-tracker/queryResult';
 
 type Props = {
     query: QueryItem;

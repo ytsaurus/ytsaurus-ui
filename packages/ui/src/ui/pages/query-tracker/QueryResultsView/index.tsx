@@ -11,7 +11,10 @@ import {
     isInlinePreviewAllowed,
     onErrorTableCellPreview,
 } from '../../../types/navigation/table-cell-preview';
-import {getQueryResult, getQueryResultSettings} from '../../../store/selectors/queries/queryResult';
+import {
+    getQueryResult,
+    getQueryResultSettings,
+} from '../../../store/selectors/query-tracker/queryResult';
 import {YTErrorBlock} from '../../../components/Error/Error';
 import {ResultsTable} from './ResultsTable';
 import {QueryItem} from '../../../types/query-tracker/api';
@@ -24,10 +27,10 @@ import {YQLSchemeTable} from './YQLSchemeTable';
 import {ResultPaginator} from './ResultPaginator';
 import NotRenderUntilFirstVisible from '../NotRenderUntilFirstVisible/NotRenderUntilFirstVisible';
 import './index.scss';
-import {onCellPreviewQueryResults} from '../../../store/actions/queries/cellPreview';
+import {onCellPreviewQueryResults} from '../../../store/actions/query-tracker/cellPreview';
 import {ShowPreviewCallback} from './YQLTable/YQLTable';
 import CancelHelper from '../../../utils/cancel-helper';
-import {injectQueryResults} from '../../../store/actions/queries/queryResult';
+import {injectQueryResults} from '../../../store/actions/query-tracker/queryResult';
 
 const b = block('query-result-table');
 

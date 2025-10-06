@@ -3,9 +3,12 @@ import {ThunkAction} from 'redux-thunk';
 import {Toaster} from '@gravity-ui/uikit';
 import type {AxiosError} from 'axios';
 import {YTApiId, ytApiV4Id} from '../../../rum/rum-wrap-api';
-import {getEffectiveApiStage, getQueryTrackerRequestOptions} from '../../selectors/queries/query';
+import {
+    getEffectiveApiStage,
+    getQueryTrackerRequestOptions,
+} from '../../selectors/query-tracker/query';
 import {showErrorPopup} from '../../../utils/utils';
-import {QUERY_ACO_LOADING, QueryACOActions} from '../../reducers/queries/queryAco';
+import {QUERY_ACO_LOADING, QueryACOActions} from '../../reducers/query-tracker/queryAco';
 import {RootState} from '../../reducers';
 import {setSettingByKey} from '../settings';
 

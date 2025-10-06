@@ -11,7 +11,7 @@ import {QueryStatusView} from '../../../../components/QueryStatus';
 
 import './index.scss';
 import {isAbortable} from '../../utils/query';
-import {abortCurrentQuery} from '../../../../store/actions/queries/query';
+import {abortCurrentQuery} from '../../../../store/actions/query-tracker/query';
 
 const b = block('query-meta-info');
 

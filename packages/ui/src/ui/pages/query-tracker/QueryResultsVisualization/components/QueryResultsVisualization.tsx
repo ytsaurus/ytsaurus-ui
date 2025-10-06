@@ -8,8 +8,8 @@ import './QueryResultsVisualization.scss';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 import {ChartLeftMenu} from './ChartLeftMenu';
 import {useDispatch, useSelector} from 'react-redux';
-import {changeVisualizationResultIndex} from '../../../../store/actions/queries/queryChart';
-import {selectChartLoading} from '../../../../store/selectors/queries/queryChart';
+import {changeVisualizationResultIndex} from '../../../../store/actions/query-tracker/queryChart';
+import {selectChartLoading} from '../../../../store/selectors/query-tracker/queryChart';
 import {Flex, Loader} from '@gravity-ui/uikit';
 
 const b = block('query-result-visualization');

@@ -2,10 +2,10 @@ import {QueryFile} from './api';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../reducers';
 import {Action} from 'redux';
-import {getQueryFiles} from '../../selectors/queries/query';
+import {getQueryFiles} from '../../selectors/query-tracker/query';
 import {updateQueryDraft} from './query';
-import {setDeletedFiles} from '../../reducers/queries/queryFilesFormSlice';
-import {selectDeletedFiles} from '../../selectors/queries/queryFilesForm';
+import {setDeletedFiles} from '../../reducers/query-tracker/queryFilesFormSlice';
+import {selectDeletedFiles} from '../../selectors/query-tracker/queryFilesForm';
 import {Toaster} from '@gravity-ui/uikit';
 
 const toaster = new Toaster();

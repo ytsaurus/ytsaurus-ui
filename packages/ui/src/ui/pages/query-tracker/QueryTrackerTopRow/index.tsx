@@ -2,13 +2,13 @@ import React, {FC, useCallback, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import {Page} from '../../../../shared/constants/settings';
-import {getQueryDraft} from '../../../store/selectors/queries/query';
+import {getQueryDraft} from '../../../store/selectors/query-tracker/query';
 import {
     resetQueryTracker,
     setQueryEngine,
     setUserLastChoice,
     updateQueryDraft,
-} from '../../../store/actions/queries/query';
+} from '../../../store/actions/query-tracker/query';
 import {RightButtonsGroup} from './RightButtonsGroup';
 import {HeadSpacer} from '../../../containers/ClusterPageHeader/HeadSpacer';
 import {Flex, Text, Tooltip} from '@gravity-ui/uikit';

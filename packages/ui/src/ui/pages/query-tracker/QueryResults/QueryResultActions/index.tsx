@@ -1,11 +1,11 @@
 import {Button, ControlGroupOption, Icon, RadioButton} from '@gravity-ui/uikit';
-import {getQueryResult} from '../../../../store/selectors/queries/queryResult';
+import {getQueryResult} from '../../../../store/selectors/query-tracker/queryResult';
 import block from 'bem-cn-lite';
 import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../../store/reducers';
 import transposeIcon from '../../../../assets/img/svg/transpose.svg';
-import {SET_QUERY_RESULTS_SETTINGS} from '../../../../store/reducers/queries/query-tracker-contants';
+import {SET_QUERY_RESULTS_SETTINGS} from '../../../../store/reducers/query-tracker/query-tracker-contants';
 import {QueryItem} from '../../../../types/query-tracker/api';
 import {
     QueryResultReadyState,

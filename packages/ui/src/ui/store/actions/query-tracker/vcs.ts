@@ -19,13 +19,13 @@ import {
     setVcs,
     setVcsConfig,
     setVcsTokensAvailability,
-} from '../../reducers/queries/vcsSlice';
-import {selectVcs, selectVcsConfig} from '../../selectors/queries/vcs';
-import {getQueryFiles} from '../../selectors/queries/query';
+} from '../../reducers/query-tracker/vcsSlice';
+import {selectVcs, selectVcsConfig} from '../../selectors/query-tracker/vcs';
+import {getQueryFiles} from '../../selectors/query-tracker/query';
 import {updateQueryDraft} from './query';
 import guid from '../../../common/hammer/guid';
-import {selectFileEditor} from '../../selectors/queries/queryFilesForm';
-import {setFileEditor} from '../../reducers/queries/queryFilesFormSlice';
+import {selectFileEditor} from '../../selectors/query-tracker/queryFilesForm';
+import {setFileEditor} from '../../reducers/query-tracker/queryFilesFormSlice';
 import {VcsRepository} from '../../../../shared/vcs';
 import {
     getVcsBranch,

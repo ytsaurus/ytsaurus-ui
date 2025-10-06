@@ -1,7 +1,7 @@
 import type {Plan, Progress} from '../../pages/query-tracker/Plan/models/plan';
 import {TypeArray} from '../../components/SchemaDataType/dataTypes';
-import {QueriesHistoryCursorDirection} from '../../store/reducers/queries/query-tracker-contants';
-import {VisualizationState} from '../../store/reducers/queries/queryChartSlice';
+import {QueriesHistoryCursorDirection} from '../../store/reducers/query-tracker/query-tracker-contants';
+import {VisualizationState} from '../../store/reducers/query-tracker/queryChartSlice';
 import {YTError} from '../index';
 import {QueryStatus} from './index';
 import {QueryEngine} from '../../../shared/constants/engines';
