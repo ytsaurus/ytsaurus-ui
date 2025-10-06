@@ -9,7 +9,11 @@ import {
     getQueriesListFilterParams,
     getQueriesListMode,
 } from '../../selectors/query-tracker/queriesList';
-import {DefaultQueriesListFilter, QueriesListFilter} from '../../../types/query-tracker/queryList';
+import {
+    DefaultQueriesListFilter,
+    QueriesListFilter,
+    QueriesListMode,
+} from '../../../types/query-tracker/queryList';
 import {QueriesHistoryCursorDirection} from '../../reducers/query-tracker/query-tracker-contants';
 import {
     setCursor,
@@ -109,6 +113,20 @@ export function applyFilter(patch: QueriesListFilter): AsyncAction {
 
         dispatch(resetCursor(true));
         dispatch(setFilter({...filter, ...patch}));
+        dispatch(requestQueriesList({refresh: true}));
+    };
+}
+
+export function applyListMode(listMode: QueriesListMode): AsyncAction {
+    return (dispatch) => {
+        dispatch(
+            updateListState({
+                listMode,
+                filter: DefaultQueriesListFilter[listMode],
+                cursor: {direction: QueriesHistoryCursorDirection.PAST},
+                items: [],
+            }),
+        );
         dispatch(requestQueriesList({refresh: true}));
     };
 }

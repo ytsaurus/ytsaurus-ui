@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo} from 'react';
+import React, {useEffect, useMemo, useRef} from 'react';
 import block from 'bem-cn-lite';
 import {Tabs} from '@gravity-ui/uikit';
 import {QueriesHistoryList} from './QueriesHistoryList';
@@ -8,15 +8,15 @@ import {
     getQueriesListTabs,
 } from '../../../store/selectors/query-tracker/queriesList';
 import {useDispatch, useSelector} from 'react-redux';
-import {QueriesListMode} from '../../../types/query-tracker/queryList';
-import {requestQueriesList} from '../../../store/actions/query-tracker/queriesList';
+import {DefaultQueriesListFilter, QueriesListMode} from '../../../types/query-tracker/queryList';
+import {applyListMode, requestQueriesList} from '../../../store/actions/query-tracker/queriesList';
 
 import './index.scss';
 import {QueriesTutorialList} from './QueriesTutorialList';
 import {QueriesHistoryListFilter} from './QueriesListFilter';
 import {Vcs} from '../Vcs';
 import {Navigation} from '../Navigation';
-import {setListMode} from '../../../store/reducers/query-tracker/queryListSlice';
+import {setFilter} from '../../../store/reducers/query-tracker/queryListSlice';
 
 const b = block('queries-list');
 
@@ -31,13 +31,18 @@ export function QueriesList() {
     const dispatch = useDispatch();
     const activeTab = useSelector(getQueriesListMode);
     const tabsList = useSelector(getQueriesListTabs);
+    const isInitializedRef = useRef(false);
 
     useEffect(() => {
+        if (!isInitializedRef.current) {
+            isInitializedRef.current = true;
+            dispatch(setFilter(DefaultQueriesListFilter[activeTab]));
+        }
         dispatch(requestQueriesList());
-    }, [dispatch]);
+    }, [dispatch, activeTab]);
 
     const handleTabSelect = (tabId: string) => {
-        dispatch(setListMode(tabId as QueriesListMode));
+        dispatch(applyListMode(tabId as QueriesListMode));
     };
 
     const tabs = useMemo(
