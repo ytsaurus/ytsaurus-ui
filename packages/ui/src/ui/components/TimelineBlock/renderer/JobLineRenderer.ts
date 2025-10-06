@@ -65,32 +65,48 @@ export class JobLineRenderer extends AbstractEventRenderer {
 
         let startX = x0;
         parts.forEach(({color, percentage, state, phases, interval}) => {
-            const width = percentage * percent;
+            const width = Math.max(0, Math.min(percentage * percent, x1 - startX));
 
             if (state.toLowerCase() === 'running') {
                 const phaseCount = phases.length;
                 for (let i = 0; i < phaseCount; i++) {
-                    const startPosition = timeToPosition(phases[i].startTime);
-                    const endPosition =
+                    const rawStartPosition = timeToPosition(phases[i].startTime);
+                    const rawEndPosition =
                         i === phaseCount - 1
                             ? timeToPosition(interval.to)
                             : timeToPosition(phases[i + 1].startTime);
-                    const isRunningPhase = phases[i].phase?.toLowerCase() === 'running';
-                    const lineColor = isRunningPhase ? color : getCssColor('--purple-color');
 
-                    ctx.beginPath();
-                    ctx.fillStyle = convertToRGBA(
-                        lineColor || DEFAULT_COLOR,
-                        isTransparent ? 0.4 : 0.7,
-                    );
-                    ctx.rect(startPosition, y0, endPosition - startPosition, h);
-                    ctx.fill();
+                    // Clamp positions to [x0, x1] bounds
+                    const startPosition = Math.max(x0, Math.min(x1, rawStartPosition));
+                    const endPosition = Math.max(startPosition, Math.min(x1, rawEndPosition));
+
+                    const phaseWidth = endPosition - startPosition;
+
+                    // Only draw if there's visible width
+                    if (phaseWidth > 0) {
+                        const isRunningPhase = phases[i].phase?.toLowerCase() === 'running';
+                        const lineColor = isRunningPhase ? color : getCssColor('--purple-color');
+
+                        ctx.beginPath();
+                        ctx.fillStyle = convertToRGBA(
+                            lineColor || DEFAULT_COLOR,
+                            isTransparent ? 0.4 : 0.7,
+                        );
+                        ctx.rect(startPosition, y0, phaseWidth, h);
+                        ctx.fill();
+                    }
                 }
             } else {
-                ctx.beginPath();
-                ctx.fillStyle = convertToRGBA(color || DEFAULT_COLOR, isTransparent ? 0.4 : 0.7);
-                ctx.rect(startX, y0, width, h);
-                ctx.fill();
+                // Only draw if there's visible width
+                if (width > 0) {
+                    ctx.beginPath();
+                    ctx.fillStyle = convertToRGBA(
+                        color || DEFAULT_COLOR,
+                        isTransparent ? 0.4 : 0.7,
+                    );
+                    ctx.rect(startX, y0, width, h);
+                    ctx.fill();
+                }
             }
             startX += width;
         });
