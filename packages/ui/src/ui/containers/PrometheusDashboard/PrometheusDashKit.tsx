@@ -12,9 +12,9 @@ import {
 } from '../../../shared/prometheus/types';
 import {makePanelId} from '../../../shared/prometheus/utils';
 
-import {renderPluginText} from './plugins/text';
+import {renderPluginText} from './plugins/text/text';
 import {renderPluginRow} from './plugins/row';
-import {renderPluginTimeseries} from './plugins/timeseries';
+import {renderPluginTimeseries} from './plugins/timeseries/timeseries';
 import {usePrometheusDashboardContext} from './PrometheusDashboardContext/PrometheusDashboardContext';
 
 import {PrometheusDashboardProps} from './PrometheusDashboard';
