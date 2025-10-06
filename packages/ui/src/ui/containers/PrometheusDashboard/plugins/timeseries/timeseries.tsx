@@ -165,6 +165,8 @@ function makeYagrWidgetData(
 
     const {timeline} = res.data;
 
+    const metrics: Array<{metric: Record<string, unknown>; graphIndex: number}> = [];
+
     for (let serie = 0; serie < results?.length; ++serie) {
         const {legendFormat} = targets[serie];
         for (let serie_i = 0; serie_i < (results[serie]?.data?.result?.length ?? 0); ++serie_i) {
@@ -182,11 +184,15 @@ function makeYagrWidgetData(
                           {...params, ...metric},
                           KEY_WITH_DOUBLE_CURLY_BRACES,
                       )
-                    : genSerieName(metric),
+                    : undefined,
                 data: new Array(timeline.length),
                 formatter: format.Number,
                 color: getSerieColor(res.data.graphs.length),
             };
+            if (!graph.name) {
+                const graphIndex = res.data.graphs.length;
+                metrics.push({metric, graphIndex});
+            }
             res.data.graphs.push(graph);
 
             if (!values.length) {
@@ -205,14 +211,46 @@ function makeYagrWidgetData(
             }
         }
     }
+
+    for (let i = 0; i < metrics.length; ++i) {
+        udpateMissingLegend(res.data.graphs, metrics, i);
+    }
+
     return res;
 }
 
-function genSerieName(obj: Record<string, unknown>) {
+function udpateMissingLegend(
+    graphs: Array<{name?: string}>,
+    metrics: Array<{metric: Record<string, unknown>; graphIndex: number}>,
+    index: number,
+) {
+    const {metric, graphIndex} = metrics[index] ?? {};
+    const {metric: otherMetric} = metrics[index === 0 ? 1 : 0] ?? {};
+
+    const dst = graphs[graphIndex];
+    dst.name = genSerieName(metric, otherMetric);
+}
+
+function genSerieName(obj: Record<string, unknown>, other: Record<string, unknown> = {}) {
     if (!obj) {
         return undefined;
     }
-    return Object.keys(obj).reduce((acc, key) => {
-        return acc + `${key}:${obj[key]}; `;
+
+    const res = Object.keys(obj).reduce((acc, key) => {
+        if (obj[key] === other[key]) {
+            return acc;
+        }
+
+        const v = obj[key];
+        const value = key === '__name__' ? v : `${key}:${v}; `;
+
+        return acc + value;
     }, '');
+
+    return Object.keys(other ?? {}).reduce((acc, key) => {
+        if (key in obj) {
+            return acc;
+        }
+        return acc + `${key}:${format.NO_VALUE}; `;
+    }, res);
 }
