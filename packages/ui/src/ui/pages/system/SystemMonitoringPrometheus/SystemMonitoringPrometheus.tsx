@@ -48,7 +48,7 @@ export function SystemMonitoringPrometheus() {
                     ...(extraTools ?? []),
                 ]}
             />
-            <PrometheusDashboardLazy type={type} params={params} />
+            <PrometheusDashboardLazy key={type} type={type} params={params} />
         </React.Fragment>
     );
 }
