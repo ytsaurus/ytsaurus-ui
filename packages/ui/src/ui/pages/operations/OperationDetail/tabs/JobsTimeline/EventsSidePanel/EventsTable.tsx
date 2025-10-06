@@ -6,6 +6,7 @@ import './EventsTable.scss';
 import cn from 'bem-cn-lite';
 import hammer from '../../../../../../common/hammer';
 import {getPhaseColor} from '../helpers/getPhaseColor';
+import {isFinalState} from '../helpers/isFinalState';
 
 const block = cn('yt-events-table');
 
@@ -28,11 +29,16 @@ export const EventsTable: FC<Props> = ({events}) => {
     const data = useMemo(() => {
         return events.reduce<{phase: ReactNode; duration: string; startTime: string}[]>(
             (acc, event) => {
+                const eventDuration = event.endTime - event.startTime;
+                const isFinal = isFinalState(event.state);
+
                 acc.push({
                     phase: <PhaseNameCell state={event.state} phase="&mdash;" />,
-                    duration: hammer.format['TimeDuration'](event.endTime - event.startTime, {
-                        format: 'milliseconds',
-                    }),
+                    duration: isFinal
+                        ? hammer.format.NO_VALUE
+                        : hammer.format['TimeDuration'](eventDuration, {
+                              format: 'milliseconds',
+                          }),
                     startTime: getDateTime(event.startTime),
                 });
 
@@ -43,9 +49,11 @@ export const EventsTable: FC<Props> = ({events}) => {
 
                     acc.push({
                         phase: <PhaseNameCell state={event.state} phase={eventPhase.phase} />,
-                        duration: hammer.format['TimeDuration'](phaseDuration, {
-                            format: 'milliseconds',
-                        }),
+                        duration: isFinal
+                            ? hammer.format.NO_VALUE
+                            : hammer.format['TimeDuration'](phaseDuration, {
+                                  format: 'milliseconds',
+                              }),
                         startTime: getDateTime(eventPhase.startTime),
                     });
                 });

@@ -85,9 +85,20 @@ export const getJobsWithEvents =
                     const isAborted = job.state === 'aborted';
 
                     // stretch running job timeline
-                    const maxTime = isRunning
-                        ? Date.now()
-                        : dayjs(jobEvents.at(-1)!.time).valueOf();
+                    const lastEventTime = dayjs(jobEvents.at(-1)!.time).valueOf();
+                    const finishTime = job.finish_time
+                        ? dayjs(job.finish_time).valueOf()
+                        : lastEventTime;
+
+                    let maxTime: number;
+                    if (isRunning) {
+                        maxTime = Date.now();
+                    } else if (isAborted) {
+                        maxTime = Math.max(lastEventTime, finishTime);
+                    } else {
+                        maxTime = lastEventTime;
+                    }
+
                     const minTime = dayjs(jobEvents[0].time).valueOf();
                     const percent = (maxTime - minTime) / 100;
 
@@ -144,8 +155,8 @@ export const getJobsWithEvents =
                         }
 
                         // set endTime to finish_time for aborted jobs
-                        if (isAborted && timeLineJob.finish_time) {
-                            const endTime = dayjs(timeLineJob.finish_time).valueOf();
+                        if (isAborted) {
+                            const endTime = Math.max(finishTime, startTime);
                             timeLineJob.events[lastEventIndex].endTime = endTime;
                             timeLineJob.events[lastEventIndex].percent =
                                 (endTime - startTime) / percent;
