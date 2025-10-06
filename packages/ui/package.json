@@ -117,7 +117,7 @@
     "@gravity-ui/uikit": "^7.23.0",
     "@gravity-ui/unipika": "^5.1.0",
     "@gravity-ui/websql-autocomplete": "^12.3.0",
-    "@gravity-ui/yagr": "^4.3.1",
+    "@gravity-ui/yagr": "^4.9.1",
     "@playwright/experimental-ct-react": "1.53.1",
     "@playwright/test": "1.53.1",
     "@reduxjs/toolkit": "^2.6.0",
