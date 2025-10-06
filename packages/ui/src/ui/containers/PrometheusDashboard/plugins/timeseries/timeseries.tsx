@@ -1,10 +1,11 @@
 import React from 'react';
-import axios, {AxiosResponse} from 'axios';
 import cn from 'bem-cn-lite';
 
 import {Flex} from '@gravity-ui/uikit';
 
 import {YTError} from '../../../../../@types/types';
+import {QueryRangeData, TimeseriesTarget} from '../../../../../shared/prometheus/types';
+import {KEY_WITH_DOUBLE_CURLY_BRACES, formatByParams} from '../../../../../shared/utils/format';
 
 import format from '../../../../common/hammer/format';
 import {YT} from '../../../../config/yt-config';
@@ -14,22 +15,16 @@ import {IntersectionObserverContainer} from '../../../../components/Intersection
 import {YTChartKitLazy, getSerieColor} from '../../../../components/YTChartKit';
 import {YagrWidgetData} from '@gravity-ui/chartkit/yagr';
 import {InlineError} from '../../../../components/InlineError/InlineError';
-import CancelHelper, {isCancelled} from '../../../../utils/cancel-helper';
 import Loader from '../../../../components/Loader/Loader';
 import {useElementSize} from '../../../../hooks/useResizeObserver';
 
 import {PrometheusPlugins} from '../../PrometheusDashKit';
 import {PrometheusWidgetToolbar} from '../../PrometheusWidgetToolbar/PrometheusWidgetToolbar';
 import {usePrometheusDashboardContext} from '../../PrometheusDashboardContext/PrometheusDashboardContext';
-import {
-    ChartDataResponse,
-    QueryRangeData,
-    QueryRangePostData,
-    TimeseriesTarget,
-} from '../../../../../shared/prometheus/types';
+
+import {usePrometheusFetchQuery} from '../../../../store/api/prometheus';
 
 import './timeseries.scss';
-import {KEY_WITH_DOUBLE_CURLY_BRACES, formatByParams} from '../../../../../shared/utils/format';
 
 const block = cn('yt-prometheus-timeseries');
 
@@ -75,7 +70,11 @@ function PrometheusChart({
 
     const pointCount = useElementSize({element: element as Element})?.contentRect.width;
 
-    const {error, data: chartData, loading} = useLoadQueriesData({id, data, pointCount, from, to});
+    const {
+        error,
+        data: chartData,
+        isLoading,
+    } = useLoadQueriesData({id, data, pointCount, from, to});
 
     return (
         <React.Fragment>
@@ -86,7 +85,7 @@ function PrometheusChart({
                     <>
                         <div className={block('widget-title')}>{title}</div>
                         {error && <InlineError error={error} />}
-                        {!chartData && loading && <Loader visible centered />}
+                        {!chartData && isLoading && <Loader visible centered />}
                     </>
                 )}
             </Flex>
@@ -102,56 +101,38 @@ function useLoadQueriesData({
     from,
     to,
 }: Pick<PrometheusChartProps, 'data' | 'id'> & {pointCount?: number; from?: number; to?: number}) {
-    const [cancelHelper] = React.useState(new CancelHelper());
-    const [chartData, setChartData] = React.useState<{
-        data?: YagrWidgetData;
-        error?: YTError;
-        loading?: boolean;
-    }>({});
+    // const [cancelHelper] = React.useState(new CancelHelper());
 
-    React.useEffect(() => {
-        if (!pointCount || from === undefined || to === undefined) {
-            return;
-        }
+    const {__ytDashboardType: dashboardType} = params;
 
-        cancelHelper.removeAllRequests();
-        setChartData({loading: true});
+    const {data, isLoading, error} = usePrometheusFetchQuery({
+        cluster: YT.cluster,
+        dashboardType,
+        id,
+        from,
+        to,
+        pointCount,
+        params,
+        //cancelHelper,
+    });
 
-        const end = to / 1000;
-        const start = from / 1000;
-        const step = Math.max(1, Math.floor((end - start) / Math.max(10, pointCount)));
+    const chartData: {data?: YagrWidgetData; error?: YTError; isLoading?: boolean} =
+        React.useMemo(() => {
+            if (!data || !data?.responseData) {
+                return {isLoading};
+            }
 
-        const {__ytDashboardType: dashboardType} = params;
+            if (error) {
+                return {error: error as YTError};
+            }
 
-        /**
-         * Temporary solution without storing results in store
-         * TODO: use rtk-query later
-         */
-        axios
-            .post<
-                ChartDataResponse,
-                AxiosResponse<ChartDataResponse>,
-                QueryRangePostData
-            >(`/api/${YT.cluster}/prometheus/chart-data`, {dashboardType, id, start, end, step, params}, {cancelToken: cancelHelper.generateNextToken(), params: {id}})
-            .then(
-                ({data}) => {
-                    const {results} = data;
-                    setChartData({
-                        data: makeYagrWidgetData(
-                            title,
-                            targets,
-                            results,
-                            {end, start, step},
-                            params,
-                        ),
-                        loading: false,
-                    });
-                },
-                (error) => {
-                    setChartData({error: isCancelled(error) ? undefined : error, loading: false});
-                },
-            );
-    }, [id, targets, params, cancelHelper, title, pointCount, from, to]);
+            const {responseData: rawData, start, end, step} = data;
+            const {results} = rawData;
+
+            return {
+                data: makeYagrWidgetData(title, targets, results, {end, start, step}, params),
+            };
+        }, [data, error, params, targets, title, isLoading]);
 
     return chartData;
 }
