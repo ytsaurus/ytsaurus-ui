@@ -72,7 +72,6 @@ import {getCurrentCluster} from '../../../store/selectors/thor';
 import {UI_TAB_SIZE} from '../../../constants/global';
 import {OperationPool, OperationStates} from '../selectors';
 import {JobsTimeline} from './tabs/JobsTimeline';
-import {getSettingsTimelineTabVisible} from '../../../store/selectors/settings/settings-ts';
 import {getOperationEvents, listOperationEventsApi} from '../../../store/api/yt';
 
 const detailBlock = cn('operation-detail');
@@ -542,7 +541,7 @@ const mapStateToProps = (state: RootState, routerProps: RouteProps) => {
         monitorTabTitle,
         monitorTabUrlTemplate,
         monitoringComponent,
-        timelineTabVisible: getSettingsTimelineTabVisible(state) && operation?.type === 'vanilla',
+        timelineTabVisible: operation?.type === 'vanilla',
         jobsMonitorIsSupported: Boolean(UIFactory.getMonitorComponentForJob()),
         jobsMonitorVisible: getJobsMonitorTabVisible(state),
         hasStatististicsTab: getOperationStatiscsHasData(state),
