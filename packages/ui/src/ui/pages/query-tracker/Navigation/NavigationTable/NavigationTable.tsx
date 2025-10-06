@@ -8,13 +8,13 @@ import {
     selectNavigationClusterConfig,
     selectNavigationPath,
     selectTableWithFilter,
-} from '../../../../store/selectors/queries/queryNavigation';
+} from '../../../../store/selectors/query-tracker/queryNavigation';
 import MetaTable from '../../../../components/MetaTable/MetaTable';
 import {PreviewTab} from './PreviewTab';
 import {insertTextWhereCursor} from '../helpers/insertTextWhereCursor';
 import {createTableSelect} from '../helpers/createTableSelect';
 import {useMonaco} from '../../hooks/useMonaco';
-import {getQueryEngine} from '../../../../store/selectors/queries/query';
+import {getQueryEngine} from '../../../../store/selectors/query-tracker/query';
 import {getPageSize} from '../../../../store/selectors/navigation/content/table-ts';
 import {getYsonSettingsDisableDecode} from '../../../../store/selectors/thor/unipika';
 

@@ -14,7 +14,7 @@ import {
     setNodes,
     setPath,
     setTable,
-} from '../../reducers/queries/queryNavigationSlice';
+} from '../../reducers/query-tracker/queryNavigationSlice';
 import {
     selectClusterConfigs,
     selectFavouritePaths,
@@ -22,7 +22,7 @@ import {
     selectNavigationClusterConfig,
     selectNavigationNodes,
     selectNavigationPath,
-} from '../../selectors/queries/queryNavigation';
+} from '../../selectors/query-tracker/queryNavigation';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import ypath from '../../../common/thor/ypath';
 import {makeMetaItems} from '../../../components/MetaTable/presets/presets';
@@ -40,17 +40,17 @@ import {isFolderNode} from '../../../utils/navigation/isFolderNode';
 import {loadTableAttributes} from '../../../pages/query-tracker/Navigation/api/loadTableAttributes';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {loadCliqueByCluster, loadTablePromptToQuery} from './query';
-import {getQueryDraft} from '../../selectors/queries/query';
+import {getQueryDraft} from '../../selectors/query-tracker/query';
 import {getRequestOutputFormat} from '../../../utils/navigation/content/table/table';
 import {getDefaultTableColumnLimit} from '../../selectors/settings';
 import {isYqlTypesEnabled} from '../../selectors/navigation/content/table';
 import {getClusterProxy, getCurrentUserName} from '../../selectors/global';
-import {getQueryResultGlobalSettings} from '../../selectors/queries/queryResult';
+import {getQueryResultGlobalSettings} from '../../selectors/query-tracker/queryResult';
 import {QueriesListMode} from '../../../types/query-tracker/queryList';
 import type {ClusterConfig} from '../../../../shared/yt-types';
 import {YTError} from '../../../../@types/types';
 import {setSettingByKey} from '../settings';
-import {setListMode} from '../../reducers/queries/queryListSlice';
+import {setListMode} from '../../reducers/query-tracker/queryListSlice';
 
 const toaster = new Toaster();
 

@@ -9,7 +9,7 @@ import {
     getQueryAnnotations,
     getQueryDraft,
     getQueryItem,
-} from '../../selectors/queries/query';
+} from '../../selectors/query-tracker/query';
 import {getCurrentUserName} from '../../selectors/global/username';
 import {
     Config,
@@ -22,7 +22,7 @@ import {
     setResultIndex,
     setSaved,
     setVisualization,
-} from '../../reducers/queries/queryChartSlice';
+} from '../../reducers/query-tracker/queryChartSlice';
 import {
     selectChartAxisType,
     selectChartConfig,
@@ -30,10 +30,10 @@ import {
     selectCurrentChartVisualization,
     selectQueryResult,
     selectQueryResults,
-} from '../../selectors/queries/queryChart';
+} from '../../selectors/query-tracker/queryChart';
 import {getPointValue} from '../../../pages/query-tracker/QueryResultsVisualization/preparers/getPointData';
 import type {ChartAxisType} from '@gravity-ui/chartkit/d3';
-import {selectIsMultipleAco} from '../../selectors/queries/queryAco';
+import {selectIsMultipleAco} from '../../selectors/query-tracker/queryAco';
 import cloneDeep_ from 'lodash/cloneDeep';
 import {loadQueryResult} from './queryResult';
 

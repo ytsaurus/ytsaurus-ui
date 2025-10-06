@@ -17,8 +17,8 @@ import {
     getQueriesListMode,
     getQueryListColumns,
     hasCustomHistoryFilters,
-} from '../../../../store/selectors/queries/queriesList';
-import {applyFilter} from '../../../../store/actions/queries/queriesList';
+} from '../../../../store/selectors/query-tracker/queriesList';
+import {applyFilter} from '../../../../store/actions/query-tracker/queriesList';
 import {setSettingByKey} from '../../../../store/actions/settings';
 import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';
 import {FilterDropdown} from './FilterDropdown';

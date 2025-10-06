@@ -23,7 +23,7 @@ import {
     getQueryDraftSettings,
     getQueryEngine,
     getQuery as selectQuery,
-} from '../../selectors/queries/query';
+} from '../../selectors/query-tracker/query';
 import {getAppBrowserHistory} from '../../window-store';
 import {
     QueryState,
@@ -37,13 +37,13 @@ import {
     SetQueryPatchAction,
     SetQueryReadyAction,
     UpdateDraftAction,
-} from '../../reducers/queries/query';
+} from '../../reducers/query-tracker/query';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {prepareQueryPlanIds} from '../../../types/query-tracker/query';
 import {chytApiAction, spytApiAction} from '../../../utils/strawberryControllerApi';
 import guid from '../../../common/hammer/guid';
 import {getSettingQueryTrackerStage} from '../../selectors/settings/settings-ts';
-import {getDefaultQueryACO, selectIsMultipleAco} from '../../selectors/queries/queryAco';
+import {getDefaultQueryACO, selectIsMultipleAco} from '../../selectors/query-tracker/queryAco';
 import UIFactory from '../../../UIFactory';
 
 import {
@@ -58,7 +58,7 @@ import {
     SET_SUPPORTED_ENGINE,
     UPDATE_ACO_QUERY,
     UPDATE_DRAFT,
-} from '../../reducers/queries/query-tracker-contants';
+} from '../../reducers/query-tracker/query-tracker-contants';
 import {loadVisualization} from './queryChart';
 import {ChytInfo} from '../../reducers/chyt/list';
 import {
@@ -71,10 +71,10 @@ import {RumWrapper} from '../../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 import {ClusterUiConfig} from '../../../../shared/yt-types';
 import {setSettingByKey} from '../settings';
-import {selectClusterConfigs} from '../../selectors/queries/queryNavigation';
-import {getQueryResultGlobalSettings} from '../../selectors/queries/queryResult';
+import {selectClusterConfigs} from '../../selectors/query-tracker/queryNavigation';
+import {getQueryResultGlobalSettings} from '../../selectors/query-tracker/queryResult';
 import {createTableSelect} from '../../../pages/query-tracker/Navigation/helpers/createTableSelect';
-import {ResetQueryTabsAction, resetQueryTabs} from '../../reducers/queries/queryTabsSlice';
+import {ResetQueryTabsAction, resetQueryTabs} from '../../reducers/query-tracker/queryTabsSlice';
 import {updateQueryTabs} from './queryTabs/queryTabs';
 
 const checkCliqueControllerIsSupported =

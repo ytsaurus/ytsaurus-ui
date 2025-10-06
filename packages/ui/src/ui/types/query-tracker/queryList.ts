@@ -1,5 +1,5 @@
 import {QueryEngine} from '../../../shared/constants/engines';
-import type {QueriesHistoryCursorDirection} from '../../store/reducers/queries/query-tracker-contants';
+import type {QueriesHistoryCursorDirection} from '../../store/reducers/query-tracker/query-tracker-contants';
 import {QueryStatus} from './index';
 
 export enum QueriesListAuthorFilter {

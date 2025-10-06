@@ -22,7 +22,7 @@ import {
     UPDATE_QUERY_ITEM,
 } from './query-tracker-contants';
 import {cleanupQueryForDraft} from '../../../types/query-tracker/query';
-import {DEFAULT_QUERY_ACO} from '../../selectors/queries/query';
+import {DEFAULT_QUERY_ACO} from '../../selectors/query-tracker/query';
 import {ChytInfo} from '../chyt/list';
 
 export interface QueryState {

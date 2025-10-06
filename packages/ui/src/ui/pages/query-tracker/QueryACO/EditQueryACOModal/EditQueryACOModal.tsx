@@ -5,8 +5,8 @@ import {useQueryACO} from '../useQueryACO';
 import {useToggle} from 'react-use';
 import PencilIcon from '@gravity-ui/icons/svgs/pencil.svg';
 import {useDispatch, useSelector} from 'react-redux';
-import {selectIsMultipleAco} from '../../../../store/selectors/queries/queryAco';
-import {requestQueriesList} from '../../../../store/actions/queries/queriesList';
+import {selectIsMultipleAco} from '../../../../store/selectors/query-tracker/queryAco';
+import {requestQueriesList} from '../../../../store/actions/query-tracker/queriesList';
 
 type Props = {
     query_id: string;

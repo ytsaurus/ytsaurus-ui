@@ -9,7 +9,7 @@ import {useSelector} from 'react-redux';
 import {
     getQueriesList,
     isQueriesListLoading,
-} from '../../../../store/selectors/queries/queriesList';
+} from '../../../../store/selectors/query-tracker/queriesList';
 
 const itemCn = cn('query-tutorial-item');
 const block = cn('queries-tutorial-list');

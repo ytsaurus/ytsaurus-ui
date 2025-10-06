@@ -3,13 +3,13 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Select} from '@gravity-ui/uikit';
 
 import {ClusterConfig} from '../../../../../shared/yt-types';
-import {getQueryTrackerInfoClusters} from '../../../../store/selectors/queries/queryAco';
+import {getQueryTrackerInfoClusters} from '../../../../store/selectors/query-tracker/queryAco';
 import {QuerySelector} from '../QuerySelector';
 import {QueryClusterItem, Props as QueryClusterItemProps} from './QueryClusterItem';
 import {YT, isMultiClusterInstallation} from '../../../../config/yt-config';
-import {getClusterLoading, getQueryDraft} from '../../../../store/selectors/queries/query';
+import {getClusterLoading, getQueryDraft} from '../../../../store/selectors/query-tracker/query';
 import {getClusterList} from '../../../../store/selectors/slideoutMenu';
-import {setQueryCluster} from '../../../../store/actions/queries/query';
+import {setQueryCluster} from '../../../../store/actions/query-tracker/query';
 
 type Props = {
     className?: string;

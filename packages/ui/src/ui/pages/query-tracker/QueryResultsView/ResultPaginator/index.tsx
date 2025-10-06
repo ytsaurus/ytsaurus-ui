@@ -3,9 +3,12 @@ import block from 'bem-cn-lite';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../../store/reducers';
 import {Select, SelectOption} from '@gravity-ui/uikit';
-import {getQueryResult} from '../../../../store/selectors/queries/queryResult';
+import {getQueryResult} from '../../../../store/selectors/query-tracker/queryResult';
 import SimplePagination from '../../../../components/Pagination/SimplePagination';
-import {applySettings, updateQueryResult} from '../../../../store/actions/queries/queryResult';
+import {
+    applySettings,
+    updateQueryResult,
+} from '../../../../store/actions/query-tracker/queryResult';
 import {QueryResultReadyState} from '../../../../types/query-tracker/queryResult';
 import './index.scss';
 

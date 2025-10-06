@@ -7,7 +7,7 @@ import {
     getQuery,
     getQueryEngine,
     isQueryDraftEditted,
-} from '../../../store/selectors/queries/query';
+} from '../../../store/selectors/query-tracker/query';
 import {useSelector} from 'react-redux';
 
 interface Props {

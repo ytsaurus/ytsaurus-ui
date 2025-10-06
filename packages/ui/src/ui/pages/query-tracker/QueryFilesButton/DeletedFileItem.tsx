@@ -7,7 +7,7 @@ import cn from 'bem-cn-lite';
 import './DeletedFileItem.scss';
 import {QueryFile} from '../../../types/query-tracker/api';
 import PencilToSquareIcon from '@gravity-ui/icons/svgs/pencil-to-square.svg';
-import {QueryFileEditor} from '../../../store/reducers/queries/queryFilesFormSlice';
+import {QueryFileEditor} from '../../../store/reducers/query-tracker/queryFilesFormSlice';
 
 const block = cn('deleted-file-item');
 

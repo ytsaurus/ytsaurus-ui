@@ -1,4 +1,4 @@
-import {NavigationTableSchema} from '../../../../store/reducers/queries/queryNavigationSlice';
+import {NavigationTableSchema} from '../../../../store/reducers/query-tracker/queryNavigationSlice';
 import {loadTableAttributes} from '../api/loadTableAttributes';
 import ypath from '../../../../common/thor/ypath';
 import {QueryEngine} from '../../../../../shared/constants/engines';

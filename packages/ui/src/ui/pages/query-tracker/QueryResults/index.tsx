@@ -18,7 +18,7 @@ import {
     QueryResultTab,
     setActiveTab,
     setUserChangeTab,
-} from '../../../store/reducers/queries/queryTabsSlice';
+} from '../../../store/reducers/query-tracker/queryTabsSlice';
 
 import './index.scss';
 import {ErrorTree} from './ErrorTree';
@@ -28,7 +28,7 @@ import {
     selectActiveQueryResultTab,
     selectActiveResultParams,
     selectQueryResultTabs,
-} from '../../../store/selectors/queries/queryTabs';
+} from '../../../store/selectors/query-tracker/queryTabs';
 const b = block('query-results');
 
 type Props = {

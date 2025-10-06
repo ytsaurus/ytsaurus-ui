@@ -9,9 +9,9 @@ import {
     getQueryId,
     getQueryText,
     isQueryLoading,
-} from '../../../store/selectors/queries/query';
+} from '../../../store/selectors/query-tracker/query';
 import {useMonacoQuerySuggestions} from '../querySuggestionsModule/useMonacoQuerySuggestions';
-import {updateQueryDraft} from '../../../store/actions/queries/query';
+import {updateQueryDraft} from '../../../store/actions/query-tracker/query';
 import {getHashLineNumber} from './helpers/getHashLineNumber';
 import MonacoEditor, {MonacoEditorConfig} from '../../../components/MonacoEditor';
 import {WaitForFont} from '../../../containers/WaitForFont/WaitForFont';
@@ -26,7 +26,7 @@ import {
     checkControlCommandKey,
     getControlCommandKey,
 } from '../../../packages/ya-timeline/lib/utils';
-import {openPath} from '../../../store/actions/queries/queryNavigation';
+import {openPath} from '../../../store/actions/query-tracker/queryNavigation';
 
 const b = cn('yq-query-editor-monaco');
 

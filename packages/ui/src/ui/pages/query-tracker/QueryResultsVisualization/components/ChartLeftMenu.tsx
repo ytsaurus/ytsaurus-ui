@@ -1,14 +1,14 @@
 import React, {FC, useEffect} from 'react';
 import {Select} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from 'react-redux';
-import {setVisualizationType} from '../../../../store/reducers/queries/queryChartSlice';
-import {selectCurrentChartVisualization} from '../../../../store/selectors/queries/queryChart';
+import {setVisualizationType} from '../../../../store/reducers/query-tracker/queryChartSlice';
+import {selectCurrentChartVisualization} from '../../../../store/selectors/query-tracker/queryChart';
 import './ChartLeftMenu.scss';
 import cn from 'bem-cn-lite';
 import {ChartType} from '../constants';
 import {ConfigWizard, Wizard} from './Wizard';
-import {getQueryDraft} from '../../../../store/selectors/queries/query';
-import {saveQueryChartConfig} from '../../../../store/actions/queries/queryChart';
+import {getQueryDraft} from '../../../../store/selectors/query-tracker/query';
+import {saveQueryChartConfig} from '../../../../store/actions/query-tracker/queryChart';
 
 const options: {value: (typeof ChartType)[keyof typeof ChartType]; content: string}[] = (
     Object.keys(ChartType) as Array<keyof typeof ChartType>

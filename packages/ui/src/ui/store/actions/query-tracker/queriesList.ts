@@ -8,15 +8,15 @@ import {
     getQueriesListCursorParams,
     getQueriesListFilterParams,
     getQueriesListMode,
-} from '../../selectors/queries/queriesList';
+} from '../../selectors/query-tracker/queriesList';
 import {DefaultQueriesListFilter, QueriesListFilter} from '../../../types/query-tracker/queryList';
-import {QueriesHistoryCursorDirection} from '../../reducers/queries/query-tracker-contants';
+import {QueriesHistoryCursorDirection} from '../../reducers/query-tracker/query-tracker-contants';
 import {
     setCursor,
     setFilter,
     setLoading,
     updateListState,
-} from '../../reducers/queries/queryListSlice';
+} from '../../reducers/query-tracker/queryListSlice';
 
 type AsyncAction = ThunkAction<any, RootState, any, any>;
 
@@ -40,7 +40,7 @@ export function requestQueriesList(params?: {refresh?: boolean}): AsyncAction {
                 {
                     toasterName: 'load_history_list',
                     skipSuccessToast: true,
-                    errorTitle: 'Failed to load queries list',
+                    errorTitle: 'Failed to load query-tracker list',
                 },
             );
 

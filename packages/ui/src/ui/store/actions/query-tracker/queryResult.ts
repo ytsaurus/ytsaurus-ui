@@ -13,7 +13,7 @@ import {
     getQueryResultGlobalSettings,
     getQueryResultSettings,
     hasQueryResult,
-} from '../../selectors/queries/queryResult';
+} from '../../selectors/query-tracker/queryResult';
 import {
     QueryResultErrorState,
     QueryResultReadyState,
@@ -27,7 +27,7 @@ import {Type, parseV3Type} from '../../../components/SchemaDataType/dateTypesV3'
 import ypath from '../../../common/thor/ypath';
 import forEach_ from 'lodash/forEach';
 import {waitForFontFamilies} from '../global/fonts';
-import {QueryResultsActions} from '../../reducers/queries/queryResult';
+import {QueryResultsActions} from '../../reducers/query-tracker/queryResult';
 import {
     REQUEST_QUERY_RESULTS,
     SET_QUERY_RESULTS,
@@ -36,7 +36,7 @@ import {
     SET_QUERY_RESULTS_ERRORS,
     SET_QUERY_RESULTS_PAGE,
     SET_QUERY_RESULTS_SETTINGS,
-} from '../../reducers/queries/query-tracker-contants';
+} from '../../reducers/query-tracker/query-tracker-contants';
 
 export function applySettings(
     queryId: QueryItem['id'],

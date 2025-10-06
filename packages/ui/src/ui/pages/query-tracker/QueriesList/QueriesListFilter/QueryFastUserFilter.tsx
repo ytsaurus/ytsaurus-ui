@@ -5,8 +5,8 @@ import {
 } from '../../../../types/query-tracker/queryList';
 import {ControlGroupOption, RadioButton} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from 'react-redux';
-import {getQueriesFilters} from '../../../../store/selectors/queries/queriesList';
-import {applyFilter} from '../../../../store/actions/queries/queriesList';
+import {getQueriesFilters} from '../../../../store/selectors/query-tracker/queriesList';
+import {applyFilter} from '../../../../store/actions/query-tracker/queriesList';
 import {getCurrentUserName} from '../../../../store/selectors/global';
 
 const AuthorFilter: ControlGroupOption[] = [

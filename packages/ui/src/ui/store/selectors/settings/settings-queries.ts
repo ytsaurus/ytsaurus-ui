@@ -1,6 +1,6 @@
 import {createSelector} from 'reselect';
 import {getSettingsData} from './settings-base';
-import {getQueryDraft} from '../queries/query';
+import {getQueryDraft} from '../query-tracker/query';
 
 export const getQuerySuggestionsEnabled = createSelector(getSettingsData, (data) => {
     return data['global::queryTracker::suggestions'] || false;

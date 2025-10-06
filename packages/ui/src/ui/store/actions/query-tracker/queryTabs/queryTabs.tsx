@@ -7,13 +7,13 @@ import {
     QueryTab,
     setActiveTab,
     setTabs,
-} from '../../../reducers/queries/queryTabsSlice';
+} from '../../../reducers/query-tracker/queryTabsSlice';
 import {CompletedStates, QueryStatus} from '../../../../types/query-tracker';
 import times_ from 'lodash/times';
 import find_ from 'lodash/find';
 import UIFactory from '../../../../UIFactory';
-import {getQuery} from '../../../selectors/queries/query';
-import {selectUserChangedQueryResultTab} from '../../../selectors/queries/queryTabs';
+import {getQuery} from '../../../selectors/query-tracker/query';
+import {selectUserChangedQueryResultTab} from '../../../selectors/query-tracker/queryTabs';
 import {loadQueryResultsErrors} from '../queryResult';
 import i18n from './i18n';
 
@@ -85,7 +85,7 @@ export const updateQueryTabs = (): AsyncAction => (dispatch, getState) => {
     tabs.push({id: 'meta', title: i18n('title_metadata')});
     dispatch(setTabs(tabs));
 
-    // Load query results errors for completed queries
+    // Load query results errors for completed query-tracker
     const isCompleted = find_(CompletedStates, (status) => query?.state === status);
     if (query && isCompleted) {
         dispatch(loadQueryResultsErrors(query));

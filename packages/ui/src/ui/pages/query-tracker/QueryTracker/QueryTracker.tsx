@@ -10,10 +10,13 @@ import {
     createQueryFromTablePath,
     goToQuery,
     loadQuery,
-} from '../../../store/actions/queries/query';
+} from '../../../store/actions/query-tracker/query';
 import {usePreventUnload} from '../../../hooks/use-prevent-unload';
 import {useQueriesListSidebarToggle} from '../hooks/QueriesList';
-import {getDirtySinceLastSubmit, getQueryGetParams} from '../../../store/selectors/queries/query';
+import {
+    getDirtySinceLastSubmit,
+    getQueryGetParams,
+} from '../../../store/selectors/query-tracker/query';
 import {LazyQueriesList} from '../QueriesList/lazy';
 import {useQueryACO} from '../QueryACO/useQueryACO';
 import {MonacoContext} from '../context/MonacoContext';
@@ -22,11 +25,11 @@ import cn from 'bem-cn-lite';
 
 import './QueryTracker.scss';
 import {QueryEditorSplit} from './QueryEditorSplit';
-import {selectFileEditor} from '../../../store/selectors/queries/queryFilesForm';
-import {selectNavigationCluster} from '../../../store/selectors/queries/queryNavigation';
+import {selectFileEditor} from '../../../store/selectors/query-tracker/queryFilesForm';
+import {selectNavigationCluster} from '../../../store/selectors/query-tracker/queryNavigation';
 import {setSettingByKey} from '../../../store/actions/settings';
 import {CellPreviewModal} from '../../../containers/CellPreviewModal/CellPreviewModal';
-import {SET_QUERY_PARAMS} from '../../../store/reducers/queries/query-tracker-contants';
+import {SET_QUERY_PARAMS} from '../../../store/reducers/query-tracker/query-tracker-contants';
 import {RedirectConfirmModal} from '../../../components/RedirectConfirmModal';
 import {getLastUserChoiceQueryEngine} from '../../../store/selectors/settings/settings-queries';
 
