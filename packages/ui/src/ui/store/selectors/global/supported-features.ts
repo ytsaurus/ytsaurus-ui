@@ -85,18 +85,17 @@ function prepareItemsSubitems(arr: Array<string> = []): CompressionCodecs {
     const {items, subItemsMap} = res;
 
     for (const item of arr) {
-        const parts = item.split('_');
-        const [first, ...rest] = parts;
+        const match = item.match(/^(.+_)(\d+)$/);
 
-        if (rest.length) {
-            const value = first + '_';
+        if (match) {
+            const value = match[1];
+            const subValue = match[2];
 
             if (!subItemsMap[value]) {
                 items.push({value, content: value});
             }
 
             const dst = (subItemsMap[value] = subItemsMap[value] || new Array<string>());
-            const subValue = rest.join('_');
             dst.push({value: subValue, content: subValue});
         } else {
             items.push({value: item, content: item});
