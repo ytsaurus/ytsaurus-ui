@@ -1,6 +1,7 @@
 import {
     compareArraysBySizeThenByItems,
     compareVectors,
+    compareWithUndefined,
     multiSortWithUndefined,
     nextSortOrderValue,
     oldSortStateToOrderType,
@@ -1033,6 +1034,172 @@ describe('multiSortWithUndefined', () => {
             expect(compareVectors(undefined, undefined, -1, 1)).toBe(0);
             expect(compareVectors(undefined, undefined, 1, -1)).toBe(0);
             expect(compareVectors(undefined, undefined, -1, -1)).toBe(0);
+        });
+    });
+
+    describe('compareWithUndefined', () => {
+        describe('basic comparison with default parameters', () => {
+            it('should return 0 when both values are equal', () => {
+                expect(compareWithUndefined(5, 5)).toBe(0);
+                expect(compareWithUndefined('test', 'test')).toBe(0);
+                expect(compareWithUndefined(true, true)).toBe(0);
+                expect(compareWithUndefined(false, false)).toBe(0);
+            });
+
+            it('should return 0 when both values are undefined', () => {
+                expect(compareWithUndefined(undefined, undefined)).toBe(0);
+            });
+
+            it('should return 0 when both values are null', () => {
+                expect(compareWithUndefined(null, null)).toBe(0);
+            });
+
+            it('should return 1 when left value is undefined and right is defined', () => {
+                expect(compareWithUndefined(undefined, 5)).toBe(1);
+                expect(compareWithUndefined(undefined, 'test')).toBe(1);
+                expect(compareWithUndefined(undefined, true)).toBe(1);
+                expect(compareWithUndefined(undefined, false)).toBe(1);
+            });
+
+            it('should return 1 when left value is null and right is defined', () => {
+                expect(compareWithUndefined(null, 5)).toBe(1);
+                expect(compareWithUndefined(null, 'test')).toBe(1);
+                expect(compareWithUndefined(null, true)).toBe(1);
+            });
+
+            it('should return -1 when left value is defined and right is undefined', () => {
+                expect(compareWithUndefined(5, undefined)).toBe(-1);
+                expect(compareWithUndefined('test', undefined)).toBe(-1);
+                expect(compareWithUndefined(true, undefined)).toBe(-1);
+                expect(compareWithUndefined(false, undefined)).toBe(-1);
+            });
+
+            it('should return -1 when left value is defined and right is null', () => {
+                expect(compareWithUndefined(5, null)).toBe(-1);
+                expect(compareWithUndefined('test', null)).toBe(-1);
+                expect(compareWithUndefined(true, null)).toBe(-1);
+            });
+
+            it('should compare numbers correctly when both are defined', () => {
+                expect(compareWithUndefined(1, 2)).toBe(-1);
+                expect(compareWithUndefined(2, 1)).toBe(1);
+                expect(compareWithUndefined(10, 5)).toBe(1);
+                expect(compareWithUndefined(5, 10)).toBe(-1);
+            });
+
+            it('should compare strings correctly when both are defined', () => {
+                expect(compareWithUndefined('a', 'b')).toBe(-1);
+                expect(compareWithUndefined('b', 'a')).toBe(1);
+                expect(compareWithUndefined('apple', 'banana')).toBe(-1);
+                expect(compareWithUndefined('banana', 'apple')).toBe(1);
+            });
+
+            it('should compare booleans correctly when both are defined', () => {
+                expect(compareWithUndefined(false, true)).toBe(-1);
+                expect(compareWithUndefined(true, false)).toBe(1);
+            });
+        });
+
+        describe('with custom orderK parameter', () => {
+            it('should reverse comparison when orderK is -1', () => {
+                expect(compareWithUndefined(1, 2, -1)).toBe(1);
+                expect(compareWithUndefined(2, 1, -1)).toBe(-1);
+                expect(compareWithUndefined('a', 'b', -1)).toBe(1);
+                expect(compareWithUndefined('b', 'a', -1)).toBe(-1);
+            });
+
+            it('should maintain normal comparison when orderK is 1', () => {
+                expect(compareWithUndefined(1, 2, 1)).toBe(-1);
+                expect(compareWithUndefined(2, 1, 1)).toBe(1);
+                expect(compareWithUndefined('a', 'b', 1)).toBe(-1);
+                expect(compareWithUndefined('b', 'a', 1)).toBe(1);
+            });
+
+            it('should not affect undefined handling with orderK', () => {
+                expect(compareWithUndefined(undefined, 5, -1)).toBe(1);
+                expect(compareWithUndefined(5, undefined, -1)).toBe(-1);
+                expect(compareWithUndefined(undefined, undefined, -1)).toBe(0);
+            });
+        });
+
+        describe('with custom undefinedOrderK parameter', () => {
+            it('should reverse undefined ordering when undefinedOrderK is -1', () => {
+                expect(compareWithUndefined(undefined, 5, 1, -1)).toBe(-1);
+                expect(compareWithUndefined(5, undefined, 1, -1)).toBe(1);
+                expect(compareWithUndefined(null, 5, 1, -1)).toBe(-1);
+                expect(compareWithUndefined(5, null, 1, -1)).toBe(1);
+            });
+
+            it('should maintain normal undefined ordering when undefinedOrderK is 1', () => {
+                expect(compareWithUndefined(undefined, 5, 1, 1)).toBe(1);
+                expect(compareWithUndefined(5, undefined, 1, 1)).toBe(-1);
+                expect(compareWithUndefined(null, 5, 1, 1)).toBe(1);
+                expect(compareWithUndefined(5, null, 1, 1)).toBe(-1);
+            });
+
+            it('should not affect defined value comparison with undefinedOrderK', () => {
+                expect(compareWithUndefined(1, 2, 1, -1)).toBe(-1);
+                expect(compareWithUndefined(2, 1, 1, -1)).toBe(1);
+                expect(compareWithUndefined('a', 'b', 1, -1)).toBe(-1);
+                expect(compareWithUndefined('b', 'a', 1, -1)).toBe(1);
+            });
+
+            it('should still return 0 for both undefined regardless of undefinedOrderK', () => {
+                expect(compareWithUndefined(undefined, undefined, 1, -1)).toBe(0);
+                expect(compareWithUndefined(null, null, 1, -1)).toBe(0);
+            });
+        });
+
+        describe('with both custom orderK and undefinedOrderK parameters', () => {
+            it('should apply both parameters correctly', () => {
+                // Reverse both order and undefined order
+                expect(compareWithUndefined(1, 2, -1, -1)).toBe(1);
+                expect(compareWithUndefined(2, 1, -1, -1)).toBe(-1);
+                expect(compareWithUndefined(undefined, 5, -1, -1)).toBe(-1);
+                expect(compareWithUndefined(5, undefined, -1, -1)).toBe(1);
+            });
+
+            it('should handle mixed parameter combinations', () => {
+                // Normal order, reverse undefined order
+                expect(compareWithUndefined(1, 2, 1, -1)).toBe(-1);
+                expect(compareWithUndefined(undefined, 5, 1, -1)).toBe(-1);
+                expect(compareWithUndefined(5, undefined, 1, -1)).toBe(1);
+
+                // Reverse order, normal undefined order
+                expect(compareWithUndefined(1, 2, -1, 1)).toBe(1);
+                expect(compareWithUndefined(undefined, 5, -1, 1)).toBe(1);
+                expect(compareWithUndefined(5, undefined, -1, 1)).toBe(-1);
+            });
+        });
+
+        describe('edge cases', () => {
+            it('should handle zero values correctly', () => {
+                expect(compareWithUndefined(0, 0)).toBe(0);
+                expect(compareWithUndefined(0, 1)).toBe(-1);
+                expect(compareWithUndefined(1, 0)).toBe(1);
+                expect(compareWithUndefined(0, undefined)).toBe(-1);
+                expect(compareWithUndefined(undefined, 0)).toBe(1);
+            });
+
+            it('should handle empty strings correctly', () => {
+                expect(compareWithUndefined('', '')).toBe(0);
+                expect(compareWithUndefined('', 'a')).toBe(-1);
+                expect(compareWithUndefined('a', '')).toBe(1);
+                expect(compareWithUndefined('', undefined)).toBe(-1);
+                expect(compareWithUndefined(undefined, '')).toBe(1);
+            });
+
+            it('should handle mixed null and undefined', () => {
+                expect(compareWithUndefined(null, undefined)).toBe(1);
+                expect(compareWithUndefined(undefined, null)).toBe(1);
+            });
+
+            it('should handle negative numbers', () => {
+                expect(compareWithUndefined(-1, -2)).toBe(1);
+                expect(compareWithUndefined(-2, -1)).toBe(-1);
+                expect(compareWithUndefined(-1, 1)).toBe(-1);
+                expect(compareWithUndefined(1, -1)).toBe(1);
+            });
         });
     });
 });
