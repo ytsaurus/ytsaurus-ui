@@ -671,6 +671,7 @@ class CreateTableModalContentImpl extends React.Component<Props> {
                                 ),
                                 extras: {
                                     ...compressionCodecs,
+                                    disablePortal: false,
                                 },
                             },
                             {
