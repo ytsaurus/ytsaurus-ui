@@ -133,11 +133,11 @@ function useDashKitConfig(
 
 function getVisiblePanels(expandedId?: string, panels: PrometheusDashKitProps['panels'] = []) {
     const expandedPanelIndex = !expandedId
-        ? undefined
+        ? -1
         : panels?.findIndex((item) => expandedId === makePanelId(item));
 
-    const expandedPanel = expandedPanelIndex ? panels?.[expandedPanelIndex] : undefined;
-    if (!expandedPanelIndex || !expandedPanel) {
+    const expandedPanel = expandedPanelIndex !== -1 ? panels?.[expandedPanelIndex] : undefined;
+    if (!expandedPanel) {
         return panels;
     }
 
