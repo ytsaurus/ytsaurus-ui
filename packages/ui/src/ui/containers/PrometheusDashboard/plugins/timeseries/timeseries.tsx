@@ -237,7 +237,7 @@ function makeYagrWidgetData(
                       )
                     : undefined,
                 data: new Array(timeline.length),
-                formatter: unit === 'bytes' ? format.Bytes : format.Number,
+                formatter: unit === 'bytes' ? format.Bytes : format.NumberSmart,
                 color: getSerieColor(res.data.graphs.length),
             };
             if (!graph.name) {
