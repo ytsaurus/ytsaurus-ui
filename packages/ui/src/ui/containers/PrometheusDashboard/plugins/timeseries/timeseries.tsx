@@ -24,6 +24,7 @@ import {PrometheusWidgetToolbar} from '../../PrometheusWidgetToolbar/PrometheusW
 import {usePrometheusDashboardContext} from '../../PrometheusDashboardContext/PrometheusDashboardContext';
 
 import {usePrometheusFetchQuery} from '../../../../store/api/prometheus';
+import {compareWithUndefined} from '../../../../utils/sort-helpers';
 
 import './timeseries.scss';
 
@@ -198,6 +199,17 @@ function makeYagrWidgetData(
                 title: {
                     y: ({x}) => {
                         return format.DateTime(x / 1000);
+                    },
+                },
+                sort: {
+                    y: ({value: left}, {value: right}) => {
+                        if (isNaN(left as number)) {
+                            return 1;
+                        }
+                        if (isNaN(right as number)) {
+                            return -1;
+                        }
+                        return compareWithUndefined(left, right, -1, -1);
                     },
                 },
             },
