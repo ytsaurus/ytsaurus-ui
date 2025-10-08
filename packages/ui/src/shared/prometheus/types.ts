@@ -52,12 +52,12 @@ export type TimeseriesTarget = {
 };
 
 export type FieldConfig = {
-    defaults: {
-        unit: 'short';
-        custom: {
-            axisLabel: 'Cores';
-            hideFrom: {
-                legend: number;
+    defaults?: {
+        unit?: 'short';
+        custom?: {
+            axisLabel?: string;
+            hideForm?: {
+                legend: boolean;
             };
         };
     };
