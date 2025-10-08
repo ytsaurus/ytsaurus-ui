@@ -1,0 +1,27 @@
+.yt-chart-history {
+    flex-grow: 1;
+
+    &__group-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+    }
+
+    &__list {
+        .g-list__item {
+            padding: 0 10px;
+            border-bottom: 1px solid var(--g-color-line-generic);
+            cursor: pointer;
+
+            &:first-child {
+                border-top: 1px solid var(--g-color-line-generic);
+            }
+        }
+    }
+
+    &__pagination {
+        padding: 16px;
+        min-height: 60px;
+    }
+}

@@ -32,6 +32,7 @@ import {YTError} from '../types';
 import {AnalyticsService} from '../common/utils/metrics';
 import type {DetailedOperationSelector} from '../pages/operations/selectors';
 import {JobItem} from '../store/reducers/operations/jobs/jobs-monitor';
+import type {ChatMessage} from '../types/ai-chat';
 
 type HeaderItemOrPage =
     | {
@@ -477,14 +478,6 @@ export interface UIFactory {
 
     getInlineSuggestionsApi(): InlineSuggestionsApi | undefined;
 
-    getAIChat():
-        | {
-              chat: React.ReactNode;
-              toggleButton: React.ReactNode;
-              askAboutErrorButton: React.ReactNode;
-          }
-        | undefined;
-
     renderCustomPreloaderError: (params: {
         cluster: string;
         errorType: PreloadErrorType;
@@ -496,6 +489,11 @@ export interface UIFactory {
     getAnalyticsService(): AnalyticsService[];
 
     renderIncarnationsTab(): React.ReactNode;
+
+    getAiChatMessageComponent(
+        message: ChatMessage,
+        className?: string,
+    ): React.ReactElement | undefined;
 
     renderOperationLogsTab: () => React.ReactNode;
 

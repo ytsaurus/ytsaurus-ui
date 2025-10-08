@@ -3,6 +3,7 @@ import {AsideFallback, MenuItem, PageLayout} from '@gravity-ui/navigation';
 
 import {ClusterConfig} from '../../../shared/yt-types';
 import {AuthWay} from '../../../shared/constants';
+import {ChatSidePanel} from '../AiChat/ChatSidePanel';
 
 export interface AppNavigationProps {
     initialCompact?: boolean;
@@ -46,6 +47,7 @@ export function AppNavigationPageLayout(props: AppNavigationProps) {
             </React.Suspense>
 
             <PageLayout.Content>{props.children}</PageLayout.Content>
+            <ChatSidePanel />
         </PageLayout>
     );
 }

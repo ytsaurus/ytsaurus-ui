@@ -11,6 +11,7 @@ interface NoContentProps {
     hint?: React.ReactNode;
     padding?: 'large' | 'regular';
     imageSize?: number;
+    vertical?: boolean;
 }
 
 export default {
@@ -46,6 +47,10 @@ export default {
         imageSize: {
             control: 'number',
             description: 'Size of the illustration in pixels',
+        },
+        vertical: {
+            control: 'boolean',
+            description: 'Display content in vertical layout',
         },
         className: {
             control: 'text',
@@ -122,6 +127,17 @@ export const Playground: Story = {
             <NoContent {...args} />
         </div>
     ),
+};
+
+export const WithVerticalLayout: Story = {
+    args: {
+        warning: 'No content available',
+        hint: 'Content will be displayed vertically',
+        padding: 'regular',
+        imageSize: 140,
+        vertical: true,
+    },
+    render: (args) => <NoContent {...args} />,
 };
 
 export const WithAction: Story = {

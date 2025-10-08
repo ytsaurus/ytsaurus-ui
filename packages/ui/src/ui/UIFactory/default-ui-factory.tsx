@@ -317,9 +317,6 @@ export const defaultUIFactory: UIFactory = {
     getInlineSuggestionsApi() {
         return undefined;
     },
-    getAIChat() {
-        return undefined;
-    },
     renderMarkdown() {
         return undefined;
     },
@@ -333,6 +330,9 @@ export const defaultUIFactory: UIFactory = {
         return undefined;
     },
     renderJobLogsTab() {
+        return undefined;
+    },
+    getAiChatMessageComponent() {
         return undefined;
     },
 };

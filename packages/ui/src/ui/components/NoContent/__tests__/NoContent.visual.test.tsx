@@ -28,3 +28,8 @@ test('NoContent: WithLargePadding', async ({mount, expectScreenshot}) => {
     await mount(<NoContentStories.WithLargePadding />);
     await expectScreenshot();
 });
+
+test('NoContent: WithVerticalLayout', async ({mount, expectScreenshot}) => {
+    await mount(<NoContentStories.WithVerticalLayout />);
+    await expectScreenshot();
+});

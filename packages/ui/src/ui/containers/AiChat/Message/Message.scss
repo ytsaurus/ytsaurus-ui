@@ -1,0 +1,16 @@
+.yt-ai-chat-message {
+    $self: &;
+    width: 100%;
+
+    &__body {
+        max-width: 100%;
+        padding: 8px 12px;
+        border-radius: var(--g-border-radius-s);
+    }
+
+    &_question {
+        #{$self}__body {
+            background: var(--dark-background);
+        }
+    }
+}
