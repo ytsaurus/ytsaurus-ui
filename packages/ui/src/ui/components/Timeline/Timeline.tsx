@@ -62,6 +62,23 @@ export const timelineDefaultProps = {
     wrapper: TimelineDefaultWrapper,
 };
 
+const SHOW_IN_DEFAULT_SHORTCUTS: Array<Array<TimelineShortcut>> = [
+    [
+        {title: '5 minues', time: '5m'},
+        {title: '30 minues', time: '30m'},
+        {title: '2 hours', time: '2h'},
+        {title: '6 hours', time: '6h'},
+        {title: '12 hours', time: '12h'},
+    ],
+    [
+        {title: '1 days', time: '1d'},
+        {title: '1 week', time: '1w'},
+        {title: '1 month', time: '1mo'},
+        {title: '3 month', time: '3mo'},
+        {title: '1 year', time: '1y'},
+    ],
+];
+
 export class Timeline extends React.Component<TimelineProps> {
     static defaultProps = timelineDefaultProps;
 
@@ -141,7 +158,7 @@ export class Timeline extends React.Component<TimelineProps> {
                 from={from}
                 to={to}
                 hasDatePicker={hasDatePicker}
-                shortcuts={shortcuts}
+                shortcuts={shortcuts ?? SHOW_IN_DEFAULT_SHORTCUTS}
                 shortcut={shortcut}
                 topShortcuts={topShortcuts}
                 onUpdate={this.setTime}
