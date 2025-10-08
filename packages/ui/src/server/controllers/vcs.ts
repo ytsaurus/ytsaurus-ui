@@ -1,8 +1,8 @@
 import {AppRouteHandler, Request, Response} from '@gravity-ui/expresskit';
-import axios from 'axios';
 import {VcsRepository} from '../../shared/vcs';
-import {ErrorWithCode, sendError} from '../utils';
+import {ErrorWithCode} from '../utils';
 import {VcsFactory} from '../components/vcs';
+import {sendApiError} from '../utils/sendApiError';
 
 const COOKIE_OPTIONS = {
     httpOnly: true,
@@ -28,28 +28,6 @@ const VCS_COOKIE_PREFIX = 'vcs_token_';
 const cookieNameByVcsId = (vcsId?: string) => {
     if (!vcsId) throw new ErrorWithCode(400, ERROR_MESSAGE.VCS_ID_REQUIRED);
     return VCS_COOKIE_PREFIX + vcsId;
-};
-
-const sendApiError = (res: Response, error: unknown) => {
-    let status;
-    let message;
-
-    if (axios.isAxiosError(error)) {
-        status = error.response?.status;
-        message = error.response?.statusText;
-    } else if (error instanceof ErrorWithCode) {
-        status = error.code;
-        message = error.message;
-    } else if (error instanceof Error) {
-        message = error.message;
-    }
-
-    if (status === 401) {
-        status = 500;
-        message = ERROR_MESSAGE.UNAUTHORIZED;
-    }
-
-    sendError(res, message, status || 500);
 };
 
 export const getVcsTokensAvailability: AppRouteHandler = (req: Request, res: Response) => {
