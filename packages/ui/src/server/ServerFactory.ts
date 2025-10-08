@@ -18,6 +18,7 @@ export interface ServerFactory {
         vcs: Omit<VCSSettings, 'type'>,
         token?: string,
     ): VcsApi | undefined;
+    getAuthHeaders(type: 'ai-chat', req: Request): Record<string, string | undefined> | undefined;
 }
 
 let app: ExpressKit;
@@ -50,6 +51,9 @@ const serverFactory: ServerFactory = {
         return await renderLayout<ConfigData>(params);
     },
     createCustomVcsApi() {
+        return undefined;
+    },
+    getAuthHeaders(_type, _req) {
         return undefined;
     },
 };

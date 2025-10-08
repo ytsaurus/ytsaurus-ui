@@ -34,6 +34,14 @@ import {
     removeToken,
 } from './controllers/vcs';
 import {ytTabletErrorsApi} from './controllers/yt-tablet-errors-api';
+import {
+    createConversation,
+    deleteConversation,
+    getConversationItems,
+    getConversations,
+    sendMessage,
+    summarizeConversationTitle,
+} from './controllers/ai-chat';
 
 const HOME_INDEX_TARGET: AppRouteDescription = {handler: homeIndexFactory(), ui: true};
 
@@ -90,6 +98,15 @@ const routes: AppRoutes = {
     'POST /api/table-column-preset/:ytAuthCluster': {handler: tableColumnPresetSave},
 
     'POST /api/tablet-errors/:ytAuthCluster/:action': {handler: ytTabletErrorsApi},
+
+    'POST /api/code-assistant/create-conversation': {handler: createConversation},
+    'POST /api/code-assistant/send-message': {handler: sendMessage},
+    'GET /api/code-assistant/conversations': {handler: getConversations},
+    'GET /api/code-assistant/conversations/:conversationId/items': {handler: getConversationItems},
+    'DELETE /api/code-assistant/conversations/:conversationId': {handler: deleteConversation},
+    'POST /api/code-assistant/conversations/:conversationId/summarize-title': {
+        handler: summarizeConversationTitle,
+    },
 
     'GET /:ytAuthCluster/': HOME_INDEX_TARGET,
     'GET /:ytAuthCluster/:page': HOME_INDEX_TARGET,

@@ -1,6 +1,6 @@
 import React, {FC, PropsWithChildren} from 'react';
 import cn from 'bem-cn-lite';
-import {Button, Icon, Popup} from '@gravity-ui/uikit';
+import {Button, Icon, Popup, PopupProps} from '@gravity-ui/uikit';
 import XmarkIcon from '@gravity-ui/icons/svgs/xmark.svg';
 import './PopupWithCloseButton.scss';
 
@@ -10,6 +10,7 @@ type Props = {
     anchorRef: React.RefObject<HTMLElement>;
     open: boolean;
     className?: string;
+    placement?: PopupProps['placement'];
     onClose: () => void;
 };
 
@@ -19,6 +20,7 @@ export const PopupWithCloseButton: FC<PropsWithChildren<Props>> = ({
     onClose,
     children,
     className,
+    placement = 'bottom',
 }) => {
     return (
         <Popup
@@ -30,7 +32,7 @@ export const PopupWithCloseButton: FC<PropsWithChildren<Props>> = ({
                     onClose();
                 }
             }}
-            placement="bottom"
+            placement={placement}
         >
             <Button view="flat" className={block('close-button')} onClick={onClose}>
                 <Icon data={XmarkIcon} />

@@ -3,6 +3,7 @@ import moment from 'moment';
 import {JOIN_MENU_ITEMS, SPLIT_MENU_ITEMS} from '../../constants/index';
 import {mergeScreen, updateTitle} from '../../store/actions/global';
 import {setSetting} from '../../store/actions/settings';
+import {setIsOpen} from '../../store/reducers/ai/chatSlice';
 import {
     getKnownPages,
     getRecentClustersInfo,
@@ -75,6 +76,8 @@ export function trackPageVisit(page) {
         dispatch(updateTitle({page: known[page]}));
 
         dispatch(mergeScreen());
+        // Close AI chat on page navigation
+        dispatch(setIsOpen(false));
 
         window.setTimeout(() => {
             getMetrics().countHit({page, cluster, login});

@@ -15,6 +15,7 @@ import {YT} from '../../config/yt-config';
 import UIFactory from '../../UIFactory';
 import {getSettingsCluster} from '../../store/selectors/global';
 import {importManageTokens} from '../ManageTokens';
+import {ChatToggleFooterButton} from '../AiChat/ChatToggleButton';
 
 import './AppNavigationComponent.scss';
 import {getAllowManageTokens} from '../../store/selectors/manage-tokens';
@@ -110,6 +111,7 @@ function AppNavigationComponent({
                             </React.Fragment>
                         ),
                     ),
+                    <ChatToggleFooterButton key="ai-chat" compact={compact} />,
                 ];
 
                 if (showSettings) {

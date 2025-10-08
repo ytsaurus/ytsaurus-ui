@@ -1,0 +1,11 @@
+{
+  "context": "Компонент AI чата",
+  "action_new-chat": "Новый чат",
+  "action_history": "История",
+  "action_remove-token": "Удалить токен",
+  "action_close-chat": "Закрыть чат",
+  "title_remove-token": "Удалить токен",
+  "confirm_remove-token": "Вы уверены, что хотите удалить токен?",
+  "action_remove": "Удалить"
+}
+

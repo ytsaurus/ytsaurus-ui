@@ -1,4 +1,6 @@
 .no-content {
+    $self: &;
+
     &_padding_large {
         padding-top: 120px;
         padding-bottom: 120px;
@@ -7,6 +9,12 @@
     &_padding_regular {
         padding-top: 20px;
         padding-bottom: 20px;
+    }
+
+    &_vertical {
+        #{$self}__text {
+            padding-left: 0;
+        }
     }
 
     &__text {

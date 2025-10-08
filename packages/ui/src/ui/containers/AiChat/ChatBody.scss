@@ -1,0 +1,10 @@
+.yt-ai-chat-body {
+    &__messages {
+        flex-grow: 1;
+        padding-bottom: 8px;
+    }
+
+    &__current-answer {
+        margin-top: 8px;
+    }
+}

@@ -1,0 +1,14 @@
+.yt-chart-history-item {
+    $self: &;
+    overflow: hidden;
+
+    &__remove-button {
+        visibility: hidden;
+    }
+
+    &:hover {
+        #{$self}__remove-button {
+            visibility: visible;
+        }
+    }
+}
