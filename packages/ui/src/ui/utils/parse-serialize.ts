@@ -139,7 +139,7 @@ export function makeObjectParseSerialize<T extends object>(initialValue: T, io: 
                         return acc;
                     }
 
-                    const {serialize} = io[k];
+                    const {serialize} = io?.[k] ?? {};
                     if (serialize) {
                         acc += `${acc.length ? ',' : ''}${key}-${serialize(v)}`;
                     }
