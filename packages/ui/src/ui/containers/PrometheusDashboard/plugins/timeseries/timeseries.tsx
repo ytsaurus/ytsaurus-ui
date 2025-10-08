@@ -120,6 +120,7 @@ function useLoadQueriesData({
 
     const fieldOverrides = React.useMemo(() => {
         return {
+            showLegend: !fieldConfig?.defaults?.custom?.hideForm?.legend,
             axisLabel: fieldConfig?.defaults?.custom?.axisLabel,
             propertiesByRefId: reduce_(
                 fieldConfig?.overrides,
@@ -160,10 +161,9 @@ function useLoadQueriesData({
             const {responseData: rawData, start, end, step} = data;
             const {results} = rawData;
 
-            const {axisLabel, propertiesByRefId} = fieldOverrides;
             return {
                 data: makeYagrWidgetData(
-                    {title, axisLabel, propertiesByRefId},
+                    {title, ...fieldOverrides},
                     targets,
                     results,
                     {end, start, step},
@@ -180,10 +180,12 @@ function makeYagrWidgetData(
         title,
         axisLabel,
         propertiesByRefId,
+        showLegend,
     }: {
         title: string;
-        axisLabel: string;
+        axisLabel?: string;
         propertiesByRefId: Record<string, {unit?: 'bytes' | unknown}>;
+        showLegend?: boolean;
     },
     targets: Array<TimeseriesTarget>,
     results: Array<QueryRangeData>,
@@ -194,7 +196,7 @@ function makeYagrWidgetData(
         data: {graphs: [], timeline: []},
         libraryConfig: {
             title: {text: title},
-            legend: {show: true},
+            legend: {show: showLegend},
             tooltip: {
                 title: {
                     y: ({x}) => {

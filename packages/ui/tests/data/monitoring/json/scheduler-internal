@@ -29,7 +29,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideForm": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
