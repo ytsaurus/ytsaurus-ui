@@ -14,11 +14,17 @@ interface Props {
     hint?: React.ReactNode;
     padding?: 'large' | 'regular';
     imageSize?: number;
+    vertical?: boolean;
 }
 
-export function NoContent({warning, hint, className, padding, imageSize}: Props) {
+export function NoContent({warning, hint, className, padding, imageSize, vertical}: Props) {
     return (
-        <Flex className={block({padding}, className)} alignItems="center" justifyContent="center">
+        <Flex
+            className={block({padding, vertical}, className)}
+            alignItems="center"
+            justifyContent="center"
+            direction={vertical ? 'column' : 'row'}
+        >
             <NotFound height={imageSize || 140} width={imageSize || 140} />
             <Flex className={block('text')} direction={'column'} gap={2}>
                 <Text variant={'subheader-3'}>{warning}</Text>

@@ -1,0 +1,18 @@
+.yt-ai-chat {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 0 8px;
+    overflow-y: scroll;
+
+    &__header {
+        position: sticky;
+        top: 0;
+        right: 0;
+        z-index: 10;
+        margin-bottom: 8px;
+        background: var(--g-color-base-background);
+    }
+}

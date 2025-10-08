@@ -1,0 +1,11 @@
+{
+  "context": "AI Chat component",
+  "action_new-chat": "New chat",
+  "action_history": "History",
+  "action_remove-token": "Remove token",
+  "action_close-chat": "Close chat",
+  "title_remove-token": "Remove token",
+  "confirm_remove-token": "Are you sure you want to remove the token?",
+  "action_remove": "Remove"
+}
+
