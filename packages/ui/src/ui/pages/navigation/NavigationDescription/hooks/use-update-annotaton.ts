@@ -19,7 +19,7 @@ export function useUpdateAnnotation() {
                     {
                         command: 'set' as const,
                         parameters: prepareRequest('/@annotation', {
-                            path,
+                            path: `${path}&`,
                         }),
                         input: annotation,
                     },
