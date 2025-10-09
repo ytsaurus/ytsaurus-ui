@@ -548,7 +548,6 @@ class CreateTableModalContentImpl extends React.Component<Props> {
 
         return (
             <YTDFDialog<FIX_MY_TYPE>
-                virtualized
                 pristineSubmittable
                 className={block(null, className)}
                 size={'l'}

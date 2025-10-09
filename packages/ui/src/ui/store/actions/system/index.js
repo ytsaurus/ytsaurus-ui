@@ -1,11 +1,8 @@
-import {Toaster} from '@gravity-ui/uikit';
-
 import {getAgents, getSchedulers} from '../../../store/actions/system/schedulers';
 import {FETCH_SCHEDULERS} from '../../../constants/system/schedulers';
 import {isRetryFutile} from '../../../utils/index';
 import {showErrorPopup} from '../../../utils/utils';
-
-const toaster = new Toaster();
+import {toaster} from '../../../utils/toaster';
 
 export function loadSchedulersAndAgents() {
     return (dispatch) => {

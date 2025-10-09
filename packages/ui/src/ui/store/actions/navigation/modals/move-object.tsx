@@ -2,7 +2,6 @@ import React from 'react';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
-import {Toaster} from '@gravity-ui/uikit';
 import Link from '../../../../components/Link/Link';
 
 import {MOVE_OBJECT} from '../../../../constants/navigation/modals/move-object';
@@ -18,9 +17,9 @@ import {YTApiId} from '../../../../rum/rum-wrap-api';
 import {rumLogError} from '../../../../rum/rum-counter';
 import {wrapBatchPromise} from '../../../../utils/utils';
 import {Dispatch} from 'redux';
+import {toaster} from '../../../../utils/toaster';
 
 const requests = new CancelHelper();
-const toaster = new Toaster();
 
 interface MoveOptions {
     preserve_account?: boolean;

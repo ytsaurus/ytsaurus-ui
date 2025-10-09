@@ -4,7 +4,6 @@ import {ThunkAction} from 'redux-thunk';
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {Dispatch} from 'redux';
 
-import {Toaster} from '@gravity-ui/uikit';
 import Link from '../../../../components/Link/Link';
 
 import {
@@ -18,9 +17,9 @@ import {
 import {HIDE_ERROR} from '../../../../constants/navigation/modals/path-editing-popup';
 import CancelHelper from '../../../../utils/cancel-helper';
 import {RootState} from '../../../../store/reducers';
+import {toaster} from '../../../../utils/toaster';
 
 const requests = new CancelHelper();
-const toaster = new Toaster();
 
 export function createDirectory(
     {path, recursive}: {path: string; recursive?: boolean},

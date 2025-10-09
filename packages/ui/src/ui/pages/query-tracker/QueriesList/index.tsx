@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo, useRef} from 'react';
 import block from 'bem-cn-lite';
-import {TabList, TabProvider} from '@gravity-ui/uikit';
+import {Tab, TabList, TabPanel, TabProvider} from '@gravity-ui/uikit';
 import {QueriesHistoryList} from './QueriesHistoryList';
 
 import {
@@ -20,17 +20,34 @@ import {setFilter} from '../../../store/reducers/query-tracker/queryListSlice';
 
 const b = block('queries-list');
 
-// const TabNames = {
-//     [QueriesListMode.History]: 'History',
-//     [QueriesListMode.Tutorials]: 'Tutorials',
-//     [QueriesListMode.VCS]: 'VCS',
-//     [QueriesListMode.Navigation]: 'Navigation',
-// };
+const TabNames: Record<QueriesListMode, string> = {
+    [QueriesListMode.History]: 'History',
+    [QueriesListMode.Tutorials]: 'Tutorials',
+    [QueriesListMode.VCS]: 'VCS',
+    [QueriesListMode.Navigation]: 'Navigation',
+};
+
+const TabContent: Record<QueriesListMode, React.ReactNode> = {
+    [QueriesListMode.History]: (
+        <>
+            <QueriesHistoryListFilter className={b('filter')} />
+            <QueriesHistoryList />
+        </>
+    ),
+    [QueriesListMode.Tutorials]: (
+        <>
+            <QueriesHistoryListFilter className={b('filter')} />
+            <QueriesTutorialList className={b('list-content')} />
+        </>
+    ),
+    [QueriesListMode.VCS]: <Vcs />,
+    [QueriesListMode.Navigation]: <Navigation />,
+};
 
 export function QueriesList() {
     const dispatch = useDispatch();
     const activeTab = useSelector(getQueriesListMode);
-    // const tabsList = useSelector(getQueriesListTabs);
+    const tabsList = useSelector(getQueriesListTabs);
 
     useEffect(() => {
         if (!isInitializedRef.current) {
@@ -44,44 +61,26 @@ export function QueriesList() {
         dispatch(applyListMode(tabId as QueriesListMode));
     };
 
-    // const tabs = useMemo(
-    //     () =>
-    //         tabsList.map((tab) => {
-    //             return {
-    //                 id: tab as string,
-    //                 title: TabNames[tab],
-    //             };
-    //         }),
-    //     [tabsList],
-    // );
-
-    const isVsc = activeTab === QueriesListMode.VCS;
-
     return (
         <div className={b()}>
             <TabProvider
-                // className={b('tabs')}
-                // items={tabs}
                 value={activeTab}
                 onUpdate={handleTabSelect}
             >
-                <TabList>
-                    {activeTab === QueriesListMode.Navigation ? (
-                        <div className={b('content')}>
-                            <Navigation />
-                        </div>
-                    ) : (
-                        <div className={b('content')}>
-                            {!isVsc && <QueriesHistoryListFilter className={b('filter')} />}
-
-                            {activeTab === QueriesListMode.History && <QueriesHistoryList />}
-                            {activeTab === QueriesListMode.Tutorials && (
-                                <QueriesTutorialList className={b('list-content')} />
-                            )}
-                            {isVsc && <Vcs />}
-                        </div>
-                    )}
+                <TabList className={b('tabs')}>
+                    {tabsList.map((tab) => (
+                        <Tab key={tab} value={tab}>
+                            {TabNames[tab]}
+                        </Tab>
+                    ))}
                 </TabList>
+                <div className={b('content')}>
+                    {tabsList.map((tab) => (
+                        <TabPanel key={tab} value={tab}>
+                            {TabContent[tab]}
+                        </TabPanel>
+                    ))}
+                </div>
             </TabProvider>
         </div>
     );

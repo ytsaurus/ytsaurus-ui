@@ -3,9 +3,9 @@ import {DialogControlProps} from '../../components/Dialog/Dialog.types';
 import {AccountSuggestImpl} from './AccountsSuggest';
 import {getCurrentUserName} from '../../store/selectors/global';
 import {useSelector} from 'react-redux';
-import {Toaster} from '@gravity-ui/uikit';
 import {showErrorPopup} from '../../utils/utils';
 import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
+import {toaster} from '../../utils/toaster';
 
 export function UsableAccountSuggest(props: DialogControlProps<string | undefined>) {
     const {onChange, placeholder, value} = props;
@@ -19,7 +19,6 @@ export function UsableAccountSuggest(props: DialogControlProps<string | undefine
                 setItems(accounts);
             })
             .catch((e: any) => {
-                const toaster = new Toaster();
                 toaster.add({
                     name: 'usable_accounts',
                     theme: 'danger',

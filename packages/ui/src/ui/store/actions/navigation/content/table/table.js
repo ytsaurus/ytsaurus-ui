@@ -5,7 +5,6 @@ import keyBy_ from 'lodash/keyBy';
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
-import {Toaster} from '@gravity-ui/uikit';
 import {getMetrics} from '../../../../../common/utils/metrics';
 import ypath from '../../../../../common/thor/ypath';
 
@@ -67,6 +66,7 @@ import {waitForFontFamilies} from '../../../../../store/actions/global/fonts';
 import {injectColumnsFromSchema} from '../../../../../utils/navigation/content/table/table-ts';
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../../../../rum/rum-wrap-api';
 import unipika from '../../../../../common/thor/unipika';
+import {toaster} from '../../../../../utils/toaster';
 
 import {loadColumnPresetIfDefined, saveColumnPreset, setTablePresetHash} from './columns-preset';
 import {makeTableRumId} from './table-rum-id';
@@ -74,7 +74,6 @@ import {readStaticTable} from './readStaticTable';
 import {readDynamicTable} from './readDynamicTable';
 
 const requests = new CancelHelper();
-const toaster = new Toaster();
 
 function loadDynamicTable(requestOutputFormat, state, type, useZeroRangeForPreload) {
     const {login} = state.global;

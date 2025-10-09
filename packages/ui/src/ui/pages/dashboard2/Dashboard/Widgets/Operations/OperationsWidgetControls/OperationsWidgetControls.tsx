@@ -51,6 +51,7 @@ export function OperationsWidgetControls(props: OperationsWidgetProps) {
                 value={[state]}
                 onUpdate={onStateFilterUpdate}
                 className={block('state')}
+                qa={'operations-state-filter'}
             />
             <SegmentedRadioGroup
                 options={[
@@ -59,6 +60,7 @@ export function OperationsWidgetControls(props: OperationsWidgetProps) {
                 ]}
                 onUpdate={onAuthorTypeFilterUpdate}
                 value={authorType}
+                qa={'operations-author-filter'}
             />
         </Flex>
     );

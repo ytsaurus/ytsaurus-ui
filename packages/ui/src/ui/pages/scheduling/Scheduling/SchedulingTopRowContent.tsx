@@ -1,8 +1,9 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-import some_ from 'lodash/some';
 import {Breadcrumbs, Flex, Key, Select} from '@gravity-ui/uikit';
+import {useHistory} from 'react-router';
+import some_ from 'lodash/some';
 
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
@@ -44,7 +45,7 @@ function SchedulingTopRowContent() {
         <RowWithName page={Page.SCHEDULING} className={block()} urlParams={{pool: ''}}>
             <SchedulingFavourites />
             <SchedulingPhysicalTree />
-            <Flex grow={1} shrink={1} justifyContent={'space-between'}>
+            <Flex grow={1} shrink={1} justifyContent={'space-between'} alignItems={'center'}>
                 <SchedulingBreadcrumbs />
                 <span className={block('actions')}>
                     {UIFactory.renderTopRowExtraControlsForPool({
@@ -113,10 +114,11 @@ function SchedulingBreadcrumbs() {
     const dispatch = useDispatch();
     const tree = useSelector(getTree);
     const cluster = useSelector(getCluster);
-
+    const history = useHistory();
     const handleChangePool = (name: string | number) => {
         setTimeout(() => {
             dispatch(changePool(name.toString()));
+            history.push(calcRootPathname(window.location.pathname, cluster));
         }, 0);
     };
 
@@ -124,7 +126,9 @@ function SchedulingBreadcrumbs() {
         return ['<Root>', ...bcItems.slice(1)].map((text, index) => {
             return (
                 <Breadcrumbs.Item
+                    href={calcRootPathname(window.location.pathname, cluster)}
                     key={`${JSON.stringify({text, index})}`}
+                    onClick={(e) => e.preventDefault()}
                 >
                     {text}
                 </Breadcrumbs.Item>
@@ -134,6 +138,7 @@ function SchedulingBreadcrumbs() {
 
     return (
         <EditableBreadcrumbs
+            view={'top-row'}
             onAction={(key: Key) => {
                 const {text: keyText} = JSON.parse(key as string);
                 handleChangePool(keyText);
@@ -141,7 +146,7 @@ function SchedulingBreadcrumbs() {
             className={block('breadcrumbs')}
             showRoot
             afterEditorContent={<CurrentPoolToClipboardButton />}
-            renderEditor={(props) => <PoolsSuggest autoFocus onCancelEdit={props.onBlur} />}
+            renderEditor={(props) => <PoolsSuggest autoFocus onCancelEdit={props.onBlur} className={block('pool-suggest')} />}
         >
             {items}
         </EditableBreadcrumbs>

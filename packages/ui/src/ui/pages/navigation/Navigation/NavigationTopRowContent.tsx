@@ -59,11 +59,18 @@ const block = cn('navigation-top-row-content');
 
 function NavigationTopRowContent() {
     const defaultPath = useSelector(getNavigationDefaultPath);
+
+    const [editMode, setEditMode] = React.useState(false);
+
+    const toggleEditMode = React.useCallback(() => {
+        setEditMode(!editMode);
+    }, [setEditMode, editMode]);
+
     return (
         <RowWithName page={Page.NAVIGATION} className={block()} urlParams={{path: defaultPath}}>
             <NavigationFavourites />
-            <Flex justifyContent={'space-between'} alignItems={'center'} grow={1} shrink={1} overflow={'hidden'}>
-                <EditableNavigationBreadcrumbs />
+            <Flex justifyContent={'space-between'} alignItems={'center'} grow={1} shrink={1}>
+                <NavigationBreadcrumbs onEdit={toggleEditMode} />
                 <NavigationTools />
             </Flex>
         </RowWithName>
@@ -149,20 +156,6 @@ function onCopyToClipboard() {
     getMetrics().countEvent('navigation_copy-path');
 }
 
-function EditableNavigationBreadcrumbs() {
-    const [editMode, setEditMode] = React.useState(false);
-
-    const toggleEditMode = React.useCallback(() => {
-        setEditMode(!editMode);
-    }, [setEditMode, editMode]);
-
-    return (
-        <div className={block('editable-breadcrumbs')}>
-            <NavigationBreadcrumbs onEdit={toggleEditMode} />
-        </div>
-    );
-}
-
 function NavigationPathEditor({hideEditor}: {hideEditor: () => void}) {
     const dispatch = useDispatch();
     const actualPath = useSelector(getActualPath);
@@ -200,26 +193,32 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
     const history = useHistory();
 
     const items = React.useMemo(() => {
-        return bcItems.map(({text, state: _state}, index) => {
+        return bcItems.map(({text, state}, index) => {
             const isLastItem = index === bcItems.length - 1;
 
             return (
-                <Breadcrumbs.Item key={`${JSON.stringify({text, index})}`}>
+                <Breadcrumbs.Item 
+                    href={makeRoutedURL(window.location.pathname, {
+                        path: state.path,
+                        navmode: mode === Tab.ACL ? mode : Tab.CONTENT,
+                        filter: '',
+                    })}
+                    onClick={(e) => e.preventDefault()} key={`${JSON.stringify({text, index})}`}
+                >
                     {index ? (
                         <Escaped text={text} onClick={isLastItem ? onEdit : undefined} />
                     ) : (
-                        <Icon awesome={'folder-tree'} face={'solid'} />
+                         <Icon awesome={'folder-tree'} face={'solid'} />
                     )}
                 </Breadcrumbs.Item>
             );
         });
-    }, [bcItems, mode, onEdit]);
+    }, [bcItems, mode, onEdit, window.location.pathname]);
 
     return (
         <EditableBreadcrumbs
             onAction={(key: Key) => {
                 const {text: keyText} = JSON.parse(key as string);
-                console.log('keyText', keyText);
                 const item = bcItems.find(({text}) => text === keyText);
                 if (item) {
                     const url = makeRoutedURL(window.location.pathname, {
@@ -228,14 +227,13 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
                         filter: '',
                     });
                     history.push(url);
-                    console.log('url', url);
                 }
             }}
-            className={block('breadcrumbs')}
+            showRoot
+            view={'top-row'}
             beforeEditorContent={<NavigationTargetPathButton />}
             afterEditorContent={<NavigationPathToClipboard />}
             renderEditor={(props) => <NavigationPathEditor hideEditor={props.onBlur} />}
-            showRoot
         >
             {items}
         </EditableBreadcrumbs>

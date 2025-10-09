@@ -128,12 +128,14 @@ function BundleBreadcrumbs({className, bcItems, setActiveBundle}: BundleBreadcru
 
     const handleItemClick = React.useCallback(
         (item: string | number) => {
-            if (item === '<bundles>') {
-                history.push(`/${cluster}/${Page.TABLET_CELL_BUNDLES}`);
-            } else {
-                history.push(`/${cluster}/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.TABLET_CELLS}?activeBundle=${item}`);
+            if (history.location.pathname !== `/${cluster}/${Page.TABLET_CELL_BUNDLES}`) {
+                if (item === '<bundles>') {
+                    history.push(`/${cluster}/${Page.TABLET_CELL_BUNDLES}`);
+                } else {
+                    setActiveBundle(item.toString());
+                    history.push(`/${cluster}/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.TABLET_CELLS}?activeBundle=${item}`);
+                }
             }
-            setActiveBundle(item.toString());
         },
         [setActiveBundle],
     );
@@ -142,7 +144,7 @@ function BundleBreadcrumbs({className, bcItems, setActiveBundle}: BundleBreadcru
         return bcItems.map((item) => {
             const text = item.text || item.title || '';
             return (
-                <Breadcrumbs.Item key={text}>
+                <Breadcrumbs.Item key={text} href={item.href} onClick={(e) => e.preventDefault()}>
                     {text}
                 </Breadcrumbs.Item>
             );
@@ -152,8 +154,8 @@ function BundleBreadcrumbs({className, bcItems, setActiveBundle}: BundleBreadcru
     return (
         <Breadcrumbs
             onAction={handleItemClick}
-            className={className}
             showRoot
+            className={className}
         >
             {items}
         </Breadcrumbs>

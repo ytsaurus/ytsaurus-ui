@@ -1,7 +1,7 @@
 import React, {ReactNode} from 'react';
 import block from 'bem-cn-lite';
 import {QueryItem, isSingleProgress} from '../../../types/query-tracker/api';
-import {Tab, TabList, TabProvider} from '@gravity-ui/uikit';
+import {Tab, TabList, TabPanel, TabProvider} from '@gravity-ui/uikit';
 import {QueryMetaInfo} from './QueryMetaRow';
 import QueryMetaTable from '../QueryMetaTable';
 import {QueryResultActions} from './QueryResultActions';
@@ -78,64 +78,70 @@ export const QueryResults = React.memo<Props>(function QueryResults({
                     progress={progress?.yql_progress}
                     defaultView="graph"
                 >
-                    <div className={b('header')}>
-                        <TabProvider
-                            value={activeTabId}
-                            onUpdate={(tabId: string) => setTab(tabId, query?.id)}
-                        >
+                    <TabProvider
+                        value={activeTabId}
+                        onUpdate={(tabId: string) => setTab(tabId, query?.id)}
+                    >
+                        <div className={b('header')}>
                             <TabList className={b('tabs')}>
-                                {category === QueryResultTab.RESULT &&
-                                    Number.isInteger(resultIndex) && (
-                                        <Tab value={QueryResultTab.RESULT}>
+                                {tabs.map((tab) => (
+                                    <Tab key={tab.id} value={tab.id}>
+                                        {tab.title}
+                                    </Tab>
+                                ))}
+                            </TabList>
+                            {tabs.map((tab) => (
+                                <TabPanel key={tab.id} value={tab.id}>
+                                    {tab.id.startsWith(QueryResultTab.RESULT) &&
+                                        category === QueryResultTab.RESULT &&
+                                        Number.isInteger(resultIndex) && (
                                             <div className={b('tab_actions')}>
                                                 <QueryResultActions
                                                     query={query}
                                                     resultIndex={resultIndex ?? 0}
                                                 />
                                             </div>
-                                        </Tab>
-                                    )}
-                                {category === QueryResultTab.PROGRESS && (
-                                    <Tab value={QueryResultTab.PROGRESS}>
-                                        <PlanActions />
-                                    </Tab>
-                                )}
-                            </TabList>
-                        </TabProvider>
-                    </div>
-                    <div className={b('content')}>
-                        <NotRenderUntilFirstVisible
-                            hide={
-                                !activeTabId?.includes('result') && !Number.isInteger(resultIndex)
-                            }
-                            className={b('result-wrap')}
-                        >
-                            <QueryResultContainer
-                                query={query}
-                                activeResultParams={activeResultParams}
-                            />
-                        </NotRenderUntilFirstVisible>
-                        <NotRenderUntilFirstVisible
-                            hide={!activeTabId?.includes('chart-tab')}
-                            className={b('result-wrap')}
-                        >
-                            <QueryChartTab
-                                query={query}
-                                resultIndex={parseResultTabIndex(activeTabId) || 0}
-                            />
-                        </NotRenderUntilFirstVisible>
-                        {activeTabId === 'error' && <ErrorTree rootError={query.error} />}
-                        {activeTabId === 'meta' && <QueryMetaTable query={query} />}
-                        <NotRenderUntilFirstVisible hide={activeTabId !== 'statistic'}>
-                            <YQLStatisticsTable />
-                        </NotRenderUntilFirstVisible>
-                        {activeTabId === 'progress' && (
-                            <PlanContainer
-                                isActive={true}
-                                operationIdToCluster={operationIdToCluster}
-                            />
-                        )}
-                    </div>
+                                        )}
+                                    {tab.id === QueryResultTab.PROGRESS &&
+                                        category === QueryResultTab.PROGRESS && <PlanActions />}
+                                </TabPanel>
+                            ))}
+                        </div>
+                        <div className={b('content')}>
+                            <NotRenderUntilFirstVisible
+                                hide={
+                                    category !== QueryResultTab.RESULT && !Number.isInteger(resultIndex)
+                                }
+                                className={b('result-wrap')}
+                            >
+                                <QueryResultContainer
+                                    query={query}
+                                    activeResultParams={activeResultParams}
+                                />
+                            </NotRenderUntilFirstVisible>
+                            <NotRenderUntilFirstVisible
+                                hide={!category.includes(QueryResultTab.CHART_TAB)}
+                                className={b('result-wrap')}
+                            >
+                                <QueryChartTab
+                                    query={query}
+                                    resultIndex={parseResultTabIndex(category) || 0}
+                                />
+                            </NotRenderUntilFirstVisible>
+                            {category === QueryResultTab.ERROR && <ErrorTree rootError={query.error} />}
+                            {category === QueryResultTab.META && <QueryMetaTable query={query} />}
+
+                            <NotRenderUntilFirstVisible hide={category !== QueryResultTab.STATISTIC}>
+                                <YQLStatisticsTable />
+                            </NotRenderUntilFirstVisible>
+                            {category === QueryResultTab.PROGRESS && (
+                                <PlanContainer
+                                    isActive={true}
+                                    operationIdToCluster={operationIdToCluster}
+                                />
+                            )}
+                        </div>
+                    </TabProvider>
                 </PlanProvider>
             </NotRenderUntilFirstVisible>
             <div></div>

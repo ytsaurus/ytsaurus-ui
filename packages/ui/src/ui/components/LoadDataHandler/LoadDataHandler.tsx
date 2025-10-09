@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
 
-import {Toaster} from '@gravity-ui/uikit';
 import {YTErrorBlock} from '../../components/Error/Error';
 import hammer from '../../common/hammer';
 
 import {showErrorPopup} from '../../utils/utils';
 import {YTError} from '../../types';
-
-const toaster = new Toaster();
+import {toaster} from '../../utils/toaster';
 
 interface LoadDataHandlerProps {
     alwaysShowError?: boolean;

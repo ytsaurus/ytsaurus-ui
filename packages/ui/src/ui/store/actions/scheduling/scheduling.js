@@ -6,8 +6,6 @@ import omit_ from 'lodash/omit';
 import pick_ from 'lodash/pick';
 import pickBy_ from 'lodash/pickBy';
 
-import {Toaster} from '@gravity-ui/uikit';
-
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
@@ -34,8 +32,8 @@ import {
 import {loadSchedulingData, setPoolAttributes} from './scheduling-ts';
 import {splitBatchResults} from '../../../utils/utils';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
+import {toaster} from '../../../utils/toaster';
 
-const toaster = new Toaster();
 
 const setName = (path, newName, prevName) => {
     if (prevName === newName) {

@@ -50,7 +50,7 @@ export default function SelectFacade(props: YTSelectProps) {
         },
         [onChange, onUpdate],
     );
-    console.log('value', value);
+
     const filteredValue = React.useMemo(() => {
         const res = filter_(value, Boolean);
         return res.length ? res : emptyValue;

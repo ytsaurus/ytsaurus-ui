@@ -8,7 +8,6 @@ import reduce_ from 'lodash/reduce';
 
 import {ThunkAction} from 'redux-thunk';
 
-import {Toaster} from '@gravity-ui/uikit';
 import ypath from '../../../../common/thor/ypath';
 
 // @ts-ignore
@@ -38,6 +37,7 @@ import {Page} from '../../../../constants';
 import {executeBatchWithRetries} from '../../execute-batch';
 import {YTApiId} from '../../../../rum/rum-wrap-api';
 import {BatchSubRequest} from '../../../../../shared/yt-types';
+import {toaster} from '../../../../utils/toaster';
 
 type ActionType<R = any> = ThunkAction<R, RootState, any, NavAttrEditorAction>;
 
@@ -98,7 +98,6 @@ export function showNavigationAttributesEditor(paths: Array<string>): ActionType
             })
             .catch((e: any) => {
                 dispatch({type: NAVIGATION_ATTRIBUTES_EDITOR_ERROR, data: e});
-                const toaster = new Toaster();
                 toaster.add({
                     name: 'show_attrs_editor_' + join_(paths),
                     theme: 'danger',
@@ -238,7 +237,6 @@ export function navigationSetNodeAttributes(
                             throw error;
                         }
 
-                        const toaster = new Toaster();
                         toaster.add({
                             theme: 'success',
                             name: 'merge_' + staticTables.join(','),
