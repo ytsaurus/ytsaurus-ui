@@ -481,7 +481,10 @@ function AttributesEditorLoaded() {
                                     UIFactory.docsUrls['storage:compression#compression_codecs'],
                                 ),
                             ),
-                            extras: compressionCodecs,
+                            extras: {
+                                ...compressionCodecs,
+                                disablePortal: false,
+                            },
                         },
                         {
                             name: '_storageOption',
