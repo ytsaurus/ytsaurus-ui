@@ -110,7 +110,8 @@ export const QueryResults = React.memo<Props>(function QueryResults({
                         <div className={b('content')}>
                             <NotRenderUntilFirstVisible
                                 hide={
-                                    category !== QueryResultTab.RESULT && !Number.isInteger(resultIndex)
+                                    category !== QueryResultTab.RESULT &&
+                                    !Number.isInteger(resultIndex)
                                 }
                                 className={b('result-wrap')}
                             >
@@ -128,10 +129,14 @@ export const QueryResults = React.memo<Props>(function QueryResults({
                                     resultIndex={parseResultTabIndex(category) || 0}
                                 />
                             </NotRenderUntilFirstVisible>
-                            {category === QueryResultTab.ERROR && <ErrorTree rootError={query.error} />}
+                            {category === QueryResultTab.ERROR && (
+                                <ErrorTree rootError={query.error} />
+                            )}
                             {category === QueryResultTab.META && <QueryMetaTable query={query} />}
 
-                            <NotRenderUntilFirstVisible hide={category !== QueryResultTab.STATISTIC}>
+                            <NotRenderUntilFirstVisible
+                                hide={category !== QueryResultTab.STATISTIC}
+                            >
                                 <YQLStatisticsTable />
                             </NotRenderUntilFirstVisible>
                             {category === QueryResultTab.PROGRESS && (

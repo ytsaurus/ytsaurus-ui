@@ -20,10 +20,7 @@ export default function TTLInfo({
     }
 
     return (
-        <Tooltip
-            className={className}
-            content={<MetaTable items={ttlItems} />}
-        >
+        <Tooltip className={className} content={<MetaTable items={ttlItems} />}>
             <TTLLabel size={size} />
         </Tooltip>
     );

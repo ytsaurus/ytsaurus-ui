@@ -56,7 +56,6 @@ import {
 import {USE_CACHE} from '../../../../shared/constants/yt-api';
 import {toaster} from '../../../utils/toaster';
 
-
 type SchedulingThunkAction<T = unknown> = ThunkAction<T, RootState, unknown, SchedulingAction>;
 
 export function loadSchedulingData(): SchedulingThunkAction {

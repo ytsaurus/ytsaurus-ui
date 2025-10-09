@@ -41,7 +41,12 @@ function TabletBreadcrumbs() {
         <>
             <EditableAsText className={block('editable')} text={id} onChange={handleEdit}>
                 <Breadcrumbs showRoot className={block('breadcrumbs')}>
-                    <Breadcrumbs.Item href={`/${cluster}/${Page.TABLET}/${id}`} onClick={(e) => e.preventDefault()}>{id}</Breadcrumbs.Item>
+                    <Breadcrumbs.Item
+                        href={`/${cluster}/${Page.TABLET}/${id}`}
+                        onClick={(e) => e.preventDefault()}
+                    >
+                        {id}
+                    </Breadcrumbs.Item>
                 </Breadcrumbs>
             </EditableAsText>
         </>

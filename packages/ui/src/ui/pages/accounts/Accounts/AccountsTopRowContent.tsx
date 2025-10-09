@@ -106,7 +106,11 @@ function AccountsBreadcrumbs() {
             const text = account || ROOT_PLACEHOLDER;
 
             return (
-                <Breadcrumbs.Item key={text} href={calcRootPathname(window.location.pathname, cluster)} onClick={(e) => e.preventDefault()}>
+                <Breadcrumbs.Item
+                    key={text}
+                    href={calcRootPathname(window.location.pathname, cluster)}
+                    onClick={(e) => e.preventDefault()}
+                >
                     {text}
                 </Breadcrumbs.Item>
             );
@@ -114,11 +118,7 @@ function AccountsBreadcrumbs() {
     }, [bcItems, cluster, window.location.pathname]);
 
     return (
-        <Breadcrumbs
-            className={block('breadcrumbs')}
-            onAction={handleBreadcrumbsClick}
-            showRoot
-        >
+        <Breadcrumbs className={block('breadcrumbs')} onAction={handleBreadcrumbsClick} showRoot>
             {items}
         </Breadcrumbs>
     );

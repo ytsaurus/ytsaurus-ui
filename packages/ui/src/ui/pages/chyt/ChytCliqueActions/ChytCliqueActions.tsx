@@ -149,7 +149,10 @@ export function ChytCliqueActions({
                     {sqlButton}
                     <DropdownMenu
                         renderSwitcher={(props) => (
-                            <Button {...props} view={color === 'secondary' ? 'flat-secondary' : 'flat'}>
+                            <Button
+                                {...props}
+                                view={color === 'secondary' ? 'flat-secondary' : 'flat'}
+                            >
                                 <Icon awesome="ellipsis-h" />
                             </Button>
                         )}

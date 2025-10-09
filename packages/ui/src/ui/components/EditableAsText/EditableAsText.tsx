@@ -156,11 +156,11 @@ export function EditableAsText(props: EditableAsTextProps) {
                         </>
                     )}
                 </div>
-            ) : (
-                renderContent ? (
-                    renderContent({
-                        renderEditButton: () => (
-                            <>{!disableEdit && (
+            ) : renderContent ? (
+                renderContent({
+                    renderEditButton: () => (
+                        <>
+                            {!disableEdit && (
                                 <Button
                                     className={block('control', {type: 'edit'})}
                                     view="outlined"
@@ -169,25 +169,25 @@ export function EditableAsText(props: EditableAsTextProps) {
                                 >
                                     <Icon awesome={'pencil'} size={controlSize} />
                                 </Button>
-                            )}</>
-                        ),
-                        className: block(null, className),
-                    })
-                ) : (
-                    <div className={block(null, className)}>
-                        {children}
-                        {!disableEdit && (
-                            <Button
-                                className={block('control', {type: 'edit'})}
-                                view="outlined"
-                                onClick={startTextEdit}
-                                size={controlSize}
-                            >
-                                <Icon awesome={'pencil'} size={controlSize} />
-                            </Button>
-                        )}
-                    </div>
-                )
+                            )}
+                        </>
+                    ),
+                    className: block(null, className),
+                })
+            ) : (
+                <div className={block(null, className)}>
+                    {children}
+                    {!disableEdit && (
+                        <Button
+                            className={block('control', {type: 'edit'})}
+                            view="outlined"
+                            onClick={startTextEdit}
+                            size={controlSize}
+                        >
+                            <Icon awesome={'pencil'} size={controlSize} />
+                        </Button>
+                    )}
+                </div>
             )}
         </>
     );

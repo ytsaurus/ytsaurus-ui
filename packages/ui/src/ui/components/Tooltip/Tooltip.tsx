@@ -16,14 +16,22 @@ export type TooltipProps = Omit<GravityTooltipProps, 'children'> & {
 };
 
 export function Tooltip(props: TooltipProps) {
-    const {content, className, children, useFlex, ellipsis, qa, openDelay, closeDelay, placement, ...rest} = props;
+    const {
+        content,
+        className,
+        children,
+        useFlex,
+        ellipsis,
+        qa,
+        openDelay,
+        closeDelay,
+        placement,
+        ...rest
+    } = props;
 
     if (!content) {
         return (
-            <div
-                className={block({flex: useFlex, ellipsis}, className)}
-                data-qa={qa}
-            >
+            <div className={block({flex: useFlex, ellipsis}, className)} data-qa={qa}>
                 {children}
             </div>
         );
@@ -38,7 +46,10 @@ export function Tooltip(props: TooltipProps) {
             placement={placement ?? 'right'}
         >
             <div
-                className={block({flex: useFlex, 'has-tooltip': true, ellipsis, width: '100%'}, className)}
+                className={block(
+                    {flex: useFlex, 'has-tooltip': true, ellipsis, width: '100%'},
+                    className,
+                )}
                 data-qa={qa}
             >
                 <>{children}</>

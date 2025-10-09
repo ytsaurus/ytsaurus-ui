@@ -22,7 +22,6 @@ import {executeBatchWithRetries} from '../../execute-batch';
 import {YTApiId} from '../../../../rum/rum-wrap-api';
 import {toaster} from '../../../../utils/toaster';
 
-
 export function restoreObjects(items) {
     return (dispatch) => {
         dispatch({type: RESTORE_OBJECT.REQUEST});

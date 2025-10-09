@@ -1,4 +1,4 @@
-import React, { Key } from 'react';
+import React, {Key} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
@@ -78,20 +78,31 @@ function ChytBreadcrumbs() {
     const cluster = useSelector(getCluster);
     const alias = useSelector(getChytCurrentAlias);
 
-    const handleBreadcrumbClick = React.useCallback((key: Key) => {
-        history.push(`/${cluster}/${Page.CHYT}/${key}`);
-    }, [history, cluster]);
+    const handleBreadcrumbClick = React.useCallback(
+        (key: Key) => {
+            history.push(`/${cluster}/${Page.CHYT}/${key}`);
+        },
+        [history, cluster],
+    );
 
     const items = React.useMemo(() => {
         const result = [
-            <Breadcrumbs.Item key="/" href={`/${cluster}/${Page.CHYT}`} onClick={(e) => e.preventDefault()}>
+            <Breadcrumbs.Item
+                key="/"
+                href={`/${cluster}/${Page.CHYT}`}
+                onClick={(e) => e.preventDefault()}
+            >
                 {'<Root>'}
             </Breadcrumbs.Item>,
         ];
 
         if (alias) {
             result.push(
-                <Breadcrumbs.Item key={alias} href={`/${cluster}/${Page.CHYT}/${alias}`} onClick={(e) => e.preventDefault()}>
+                <Breadcrumbs.Item
+                    key={alias}
+                    href={`/${cluster}/${Page.CHYT}/${alias}`}
+                    onClick={(e) => e.preventDefault()}
+                >
                     {alias}
                 </Breadcrumbs.Item>,
             );

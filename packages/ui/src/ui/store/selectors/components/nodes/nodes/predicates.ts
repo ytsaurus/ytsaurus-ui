@@ -26,7 +26,6 @@ import {isRangeFilterDefined} from '../../../../../utils/components/nodes/setup'
 import {toaster} from '../../../../../utils/toaster';
 import {RootState} from '../../../../reducers';
 
-
 export const getSetupFiltersRaw = (state: RootState) => state.components.nodes.setup;
 
 export const getNodes = (state: RootState): Array<Node> => state.components.nodes.nodes.nodes;

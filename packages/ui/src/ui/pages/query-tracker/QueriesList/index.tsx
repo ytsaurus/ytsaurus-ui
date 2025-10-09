@@ -63,10 +63,7 @@ export function QueriesList() {
 
     return (
         <div className={b()}>
-            <TabProvider
-                value={activeTab}
-                onUpdate={handleTabSelect}
-            >
+            <TabProvider value={activeTab} onUpdate={handleTabSelect}>
                 <TabList className={b('tabs')}>
                     {tabsList.map((tab) => (
                         <Tab key={tab} value={tab}>

@@ -80,9 +80,7 @@ const updateToaster = (
             title: 'Downloading',
             name: `downloadingFile_${id}`,
             theme: 'info',
-            content: (
-                <DownloadShortInfo id={id} filename={options?.filename || ''} />
-            ),
+            content: <DownloadShortInfo id={id} filename={options?.filename || ''} />,
             autoHiding: false,
         });
     }

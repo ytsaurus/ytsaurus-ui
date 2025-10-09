@@ -41,7 +41,11 @@ export const NavigationBreadcrumbs: FC<Props> = ({
         return result.map((item, index) => {
             const isCurrent = index === result.length - 1;
             return (
-                <Breadcrumbs.Item key={`${item.text}-${index}`} href={item.href} onClick={(e) => e.preventDefault()}>
+                <Breadcrumbs.Item
+                    key={`${item.text}-${index}`}
+                    href={item.href}
+                    onClick={(e) => e.preventDefault()}
+                >
                     <BreadcrumbsItemComponent
                         item={item}
                         isCurrent={isCurrent}

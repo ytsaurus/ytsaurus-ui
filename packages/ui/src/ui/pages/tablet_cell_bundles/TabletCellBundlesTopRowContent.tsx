@@ -133,7 +133,9 @@ function BundleBreadcrumbs({className, bcItems, setActiveBundle}: BundleBreadcru
                     history.push(`/${cluster}/${Page.TABLET_CELL_BUNDLES}`);
                 } else {
                     setActiveBundle(item.toString());
-                    history.push(`/${cluster}/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.TABLET_CELLS}?activeBundle=${item}`);
+                    history.push(
+                        `/${cluster}/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.TABLET_CELLS}?activeBundle=${item}`,
+                    );
                 }
             }
         },
@@ -152,11 +154,7 @@ function BundleBreadcrumbs({className, bcItems, setActiveBundle}: BundleBreadcru
     }, [bcItems]);
 
     return (
-        <Breadcrumbs
-            onAction={handleItemClick}
-            showRoot
-            className={className}
-        >
+        <Breadcrumbs onAction={handleItemClick} showRoot className={className}>
             {items}
         </Breadcrumbs>
     );
