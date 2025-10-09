@@ -475,14 +475,6 @@ export interface UIFactory {
 
     getInlineSuggestionsApi(): InlineSuggestionsApi | undefined;
 
-    getAIChat():
-        | {
-              chat: React.ReactNode;
-              toggleButton: React.ReactNode;
-              askAboutErrorButton: React.ReactNode;
-          }
-        | undefined;
-
     renderCustomPreloaderError: (params: {
         cluster: string;
         errorType: PreloadErrorType;
