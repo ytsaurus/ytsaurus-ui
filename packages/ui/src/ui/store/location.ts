@@ -1,7 +1,9 @@
+import {produce} from 'immer';
 import isEmpty_ from 'lodash/isEmpty';
 import {stateToParams} from 'redux-location-state/lib/stateToParams';
 
 import {paramsToQuery} from '../utils';
+import {updateByLocationParams} from '../utils/utils';
 import {getWindowStore} from './window-store';
 
 interface LocationWithState<T> {
@@ -44,7 +46,7 @@ interface ParameterDescription<T = any> {
     };
 }
 
-export type PathParameters = [LocationParameters, MapLocationToStateFn];
+export type PathParameters = [LocationParameters, MapLocationToStateFn] | [LocationParameters];
 
 const storeSetup: Array<[string, PathParameters]> = [];
 
@@ -71,13 +73,25 @@ export function registerLocationParameters(path: string, data: PathParameters) {
     }
 }
 
-export function mapLocationToState<T>(state: T, location: LocationWithState<T>) {
+export function mapLocationToState<T extends Object>(state: T, location: LocationWithState<T>) {
     const matchedState = storeSetup.find(([path]) => match(path, location.pathname));
     const findState = matchedState
         ? matchedState
         : storeSetup.find(([setupPath]) => setupPath === 'global');
-    state = findState ? findState[1][1](state, location) : state;
-    return state;
+    const locationSetup = findState?.[1] ?? [];
+    if (!locationSetup) {
+        return state;
+    }
+
+    const [params, applyToState] = locationSetup;
+    if (applyToState) {
+        return applyToState(state, location);
+    }
+
+    const {query} = location;
+    return produce(state, (draft) => {
+        return updateByLocationParams({draft, query}, params!);
+    });
 }
 
 function makeRoutedURLByPath(pathname: string, paramOverrides: any = {}) {

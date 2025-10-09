@@ -33,6 +33,7 @@ import {getJobsPreparedState, jobsParams} from './reducers/operations/jobs/url-m
 
 import {
     accountAclParams,
+    accountMonitorParams,
     accountOnlyParams,
     accountUsageParams,
     accountsParams,
@@ -121,6 +122,7 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     [`/*/${Page.ACCOUNTS}/${AccountsTab.GENERAL}`, [accountsParams, getAccountsPreparedState]],
     [`/*/${Page.ACCOUNTS}/${AccountsTab.USAGE}`, [accountUsageParams, getAccountsUsageState]],
     [`/*/${Page.ACCOUNTS}/${AccountsTab.ACL}`, [accountAclParams, getAccountsAclState]],
+    [`/*/${Page.ACCOUNTS}/${AccountsTab.MONITOR}`, [accountMonitorParams]],
     [`/*/${Page.ACCOUNTS}/*`, [accountOnlyParams, getAccountOnlyPreparedState]],
     [`/*/${Page.ACCOUNTS}`, [accountOnlyParams, getAccountOnlyPreparedState]],
 
