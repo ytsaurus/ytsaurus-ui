@@ -1,14 +1,16 @@
+@import '../../styles/mixins.scss';
+
 .chyt-page-top-row {
     &__create-clique {
         padding-left: 1em;
     }
 
-    &__breadcrumbs {
-        margin-left: 10px;
-    }
-
     &__alias-suggest {
         min-width: 200px;
+    }
+
+    &__breadcrumbs {
+        @include top-row-breadcrumbs();
     }
 
     &__create-dialog {

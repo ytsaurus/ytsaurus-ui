@@ -1,20 +1,11 @@
+@import '../../styles/mixins.scss';
+@import '../../styles/redefinitions/common/Breadcrumbs.scss';
+
 .tablet-cell-bundles-top-row-content {
     &__breadcrumbs {
-        flex-grow: 1;
-        padding-left: 18px;
+        @include top-row-breadcrumbs();
     }
 
-    &__breadcrumbs-link {
-        color: var(--secondary-text) !important;
-
-        &:hover {
-            color: var(--hover-link) !important;
-        }
-
-        &_current {
-            color: var(--primary-text) !important;
-        }
-    }
     &__extra-control {
         padding-left: 10px;
     }

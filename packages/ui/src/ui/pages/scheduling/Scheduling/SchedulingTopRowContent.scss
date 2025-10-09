@@ -11,6 +11,10 @@
         z-index: var(--dialog-suggest-z-index) !important;
     }
 
+    &__pool-suggest {
+        margin-left: 16px;
+    }
+
     &__btn-spacer {
         padding-left: 8px;
         flex: 0 0 8px;
@@ -21,9 +25,6 @@
     }
 
     &__breadcrumbs {
-        margin: 0 8px 0 12px;
-        flex-grow: 1;
-        flex-shrink: 1;
         display: block;
     }
 

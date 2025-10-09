@@ -8,7 +8,7 @@ import './EditableAsText.scss';
 import Button, {ButtonProps} from '../Button/Button';
 const block = cn('editable-as-text');
 
-interface Props {
+export interface EditableAsTextProps {
     className?: string;
     editorClassName?: string;
 
@@ -37,7 +37,7 @@ interface Props {
     onModeChange?: (isEdit: boolean) => void;
 }
 
-export function EditableAsText(props: Props) {
+export function EditableAsText(props: EditableAsTextProps) {
     const {
         children,
         onChange,
@@ -50,6 +50,7 @@ export function EditableAsText(props: Props) {
         renderEditor,
         renderContent,
         onModeChange,
+        editorClassName,
         saveButtonView = 'normal',
         cancelButtonView = 'normal',
     } = props;
@@ -110,11 +111,11 @@ export function EditableAsText(props: Props) {
     );
 
     const controlSize = size ? size : 'm';
-
+    console.log(editorClassName);
     return (
         <>
             {editMode ? (
-                <div className={block(null, className)}>
+                <div className={block({edit: !disableEdit}, className)}>
                     {renderEditor ? (
                         renderEditor({
                             value: input,

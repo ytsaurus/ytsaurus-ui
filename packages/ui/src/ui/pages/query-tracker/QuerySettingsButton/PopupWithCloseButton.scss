@@ -1,8 +1,6 @@
 .popup-with-close-button {
-    .g-popup__content {
-        position: relative;
-        border-radius: var(--g-border-radius-l);
-    }
+    padding: 18px 32px 24px;
+    --g-popup-border-radius: var(--g-border-radius-l);
 
     &__close-button {
         position: absolute;

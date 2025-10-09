@@ -3,9 +3,7 @@ import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {JSONSerializer} from '../../../../common/yt-api';
 import {getClusterProxy} from '../../../../store/selectors/global';
 import {BatchSubRequest, ClusterConfig} from '../../../../../shared/yt-types';
-import {Toaster} from '@gravity-ui/uikit';
-
-const toaster = new Toaster();
+import {toaster} from '../../../../utils/toaster';
 
 export const loadTableAttributes = async (path: string, clusterConfig: ClusterConfig) => {
     const setup = {

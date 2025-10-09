@@ -2,36 +2,15 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import {BreadcrumbsProps, Box, Breadcrumbs} from '@gravity-ui/uikit';
 
-import {EditableAsText} from '../EditableAsText/EditableAsText';
+import {EditableAsText, EditableAsTextProps} from '../EditableAsText/EditableAsText';
 
 import './EditableBreadcrumbs.scss';
 
 const block = cn('editable-breadcrumbs');
 
-interface Props extends BreadcrumbsProps {
-    className?: string;
-    editorClassName?: string;
-    
-    text?: string;
+interface Props extends BreadcrumbsProps, Omit<EditableAsTextProps, 'onChange'> {
+    view?: 'top-row';
     onChange?: (value?: string) => void;
-    
-    disableEdit?: boolean;
-    withControls?: boolean;
-    cancelOnClose?: boolean;
-    openOnClick?: boolean;
-    size?: 's' | 'm' | 'l' | 'xl';
-    saveButtonView?: 'normal' | 'action' | 'outlined' | 'raised' | 'flat' | 'flat-secondary' | 'flat-info' | 'flat-success' | 'flat-warning' | 'flat-danger' | 'flat-utility';
-    cancelButtonView?: 'normal' | 'action' | 'outlined' | 'raised' | 'flat' | 'flat-secondary' | 'flat-info' | 'flat-success' | 'flat-warning' | 'flat-danger' | 'flat-utility';
-    
-    renderEditor?: (props: {
-        value?: string;
-        onBlur: () => void;
-        onChange: (value?: string) => void;
-        className?: string;
-        onApply: (value?: string) => void;
-    }) => React.ReactNode;
-    onModeChange?: (isEdit: boolean) => void;
-    
     children: React.ReactNode;
     beforeEditorContent?: React.ReactNode;
     afterEditorContent?: React.ReactNode;
@@ -42,7 +21,6 @@ export function EditableBreadcrumbs(props: Props) {
         className,
         editorClassName,
         text,
-        onChange,
         disableEdit,
         withControls,
         cancelOnClose,
@@ -55,15 +33,16 @@ export function EditableBreadcrumbs(props: Props) {
         children,
         beforeEditorContent,
         afterEditorContent,
+        view,
         ...breadcrumbsProps
     } = props;
 
     return (
         <EditableAsText
             className={block(null, className)}
-            editorClassName={editorClassName}
+            editorClassName={block('editor')}
             text={text}
-            onChange={onChange ?? (() => {})}
+            onChange={() => {}}
             disableEdit={disableEdit}
             withControls={withControls}
             cancelOnClose={cancelOnClose}
@@ -75,8 +54,8 @@ export function EditableBreadcrumbs(props: Props) {
             onModeChange={onModeChange}
             renderContent={
                 (contentProps) => 
-                    <Box style={{flexGrow: 1, flexShrink: 1}} className={contentProps.className}>
-                        <Breadcrumbs {...breadcrumbsProps} showRoot endContent={<div style={{marginLeft: '8px'}}>{beforeEditorContent}{contentProps.renderEditButton()}{afterEditorContent}</div>}>
+                    <Box style={{flexGrow: 1, flexShrink: 1}} className={block({view: view}, contentProps.className)}>
+                        <Breadcrumbs {...breadcrumbsProps} showRoot endContent={<>{beforeEditorContent}{contentProps.renderEditButton()}{afterEditorContent}</>}>
                             {children}
                         </Breadcrumbs>
                     </Box>

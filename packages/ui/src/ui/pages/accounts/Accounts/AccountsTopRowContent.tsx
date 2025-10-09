@@ -106,12 +106,12 @@ function AccountsBreadcrumbs() {
             const text = account || ROOT_PLACEHOLDER;
 
             return (
-                <Breadcrumbs.Item key={text}>
+                <Breadcrumbs.Item key={text} href={calcRootPathname(window.location.pathname, cluster)} onClick={(e) => e.preventDefault()}>
                     {text}
                 </Breadcrumbs.Item>
             );
         });
-    }, [bcItems, cluster]);
+    }, [bcItems, cluster, window.location.pathname]);
 
     return (
         <Breadcrumbs

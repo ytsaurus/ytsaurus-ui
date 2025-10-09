@@ -1,10 +1,8 @@
 .query-settings-popup {
     width: 600px;
 
-    .g-popup__content{
-        padding: 18px 32px 24px;
-        border-radius: var(--g-border-radius-l);
-    }
+    --g-popup-border-radius: var(--g-border-radius-l);
+    padding: 18px 32px 24px;
 
     &__header {
         padding-bottom: 12px;

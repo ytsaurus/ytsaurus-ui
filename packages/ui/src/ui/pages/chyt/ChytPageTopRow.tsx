@@ -84,14 +84,14 @@ function ChytBreadcrumbs() {
 
     const items = React.useMemo(() => {
         const result = [
-            <Breadcrumbs.Item key="/">
+            <Breadcrumbs.Item key="/" href={`/${cluster}/${Page.CHYT}`} onClick={(e) => e.preventDefault()}>
                 {'<Root>'}
             </Breadcrumbs.Item>,
         ];
 
         if (alias) {
             result.push(
-                <Breadcrumbs.Item key={alias}>
+                <Breadcrumbs.Item key={alias} href={`/${cluster}/${Page.CHYT}/${alias}`} onClick={(e) => e.preventDefault()}>
                     {alias}
                 </Breadcrumbs.Item>,
             );

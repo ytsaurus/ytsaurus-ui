@@ -28,7 +28,6 @@ import ypath from '../../../common/thor/ypath';
 import {makeMetaItems} from '../../../components/MetaTable/presets/presets';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {getTableTypeByAttributes} from '../../../utils/navigation/getTableTypeByAttributes';
-import {Toaster} from '@gravity-ui/uikit';
 import {loadDynamicTableRequest} from '../../../pages/query-tracker/Navigation/api/loadDynamicTable';
 import {loadStaticTable} from '../../../pages/query-tracker/Navigation/api/loadStaticTable';
 import {JSONSerializer} from '../../../common/yt-api';
@@ -51,8 +50,7 @@ import type {ClusterConfig} from '../../../../shared/yt-types';
 import {YTError} from '../../../../@types/types';
 import {setSettingByKey} from '../settings';
 import {setListMode} from '../../reducers/query-tracker/queryListSlice';
-
-const toaster = new Toaster();
+import {toaster} from '../../../utils/toaster';
 
 type AsyncAction = ThunkAction<void, RootState, undefined, Action>;
 

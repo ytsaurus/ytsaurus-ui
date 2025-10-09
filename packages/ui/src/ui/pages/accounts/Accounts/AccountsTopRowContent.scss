@@ -1,11 +1,8 @@
-@import '../../../styles/redefinitions/common/Breadcrumbs.scss';
+@import '../../../styles/mixins.scss';
 
 .accounts-top-row-content {
     &__breadcrumbs {
-        padding-left: 12px;
-        flex-grow: 1;
-        flex-shrink: 1;
-        overflow: hidden;
+        @include top-row-breadcrumbs();
         min-width: 160px;
     }
 

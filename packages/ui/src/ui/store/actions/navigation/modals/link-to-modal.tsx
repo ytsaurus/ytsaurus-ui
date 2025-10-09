@@ -7,9 +7,9 @@ import {
 import {RootState} from '../../../../store/reducers';
 import {LINK_TO_MODAL_PARTIAL} from '../../../../constants/navigation/modals';
 import {ytApiV3} from '../../../../rum/rum-wrap-api';
-import {Toaster} from '@gravity-ui/uikit';
 import {getCluster} from '../../../../store/selectors/global';
 import Link from '../../../../components/Link/Link';
+import {toaster} from '../../../../utils/toaster';
 
 type LinkToModalThunkAction<R = any> = ThunkAction<R, RootState, unknown, LinkToModalAction>;
 
@@ -47,8 +47,7 @@ export function createLink(params: Pick<LinkToState, 'path' | 'target'>): LinkTo
             })
             .then(() => {
                 dispatch(hideLinkToModal());
-                const toast = new Toaster();
-                toast.add({
+                toaster.add({
                     name: 'create-link',
                     theme: 'success',
                     title: 'Link created',

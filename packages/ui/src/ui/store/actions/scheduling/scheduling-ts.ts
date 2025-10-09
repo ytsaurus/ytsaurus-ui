@@ -23,8 +23,6 @@ import {updateNodeAttributes} from '../../../utils/cypress-attributes';
 
 import {ThunkAction} from 'redux-thunk';
 
-import {Toaster} from '@gravity-ui/uikit';
-
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
@@ -56,8 +54,8 @@ import {
     schedulingOverviewHasFilter,
 } from '../../../store/selectors/scheduling/attributes-to-filter';
 import {USE_CACHE} from '../../../../shared/constants/yt-api';
+import {toaster} from '../../../utils/toaster';
 
-const toaster = new Toaster();
 
 type SchedulingThunkAction<T = unknown> = ThunkAction<T, RootState, unknown, SchedulingAction>;
 
