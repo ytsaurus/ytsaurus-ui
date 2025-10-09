@@ -178,15 +178,13 @@ class ColumnsWrapper extends React.Component<Props & CWProps, CWState> {
                             action: () => this.toggleKeyColumn(item, ASCENDING),
                         },
                     ]}
-                    renderSwitcher={
-                        (props) => (
-                            <Tooltip content={title}>
-                                <Button view={'flat'} {...props}>
-                                    <Icon awesome={icon} className={block('sort-icon')} />
-                                </Button>
-                            </Tooltip>
-                        )
-                    }
+                    renderSwitcher={(props) => (
+                        <Tooltip content={title}>
+                            <Button view={'flat'} {...props}>
+                                <Icon awesome={icon} className={block('sort-icon')} />
+                            </Button>
+                        </Tooltip>
+                    )}
                 />
             </React.Fragment>
         );

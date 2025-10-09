@@ -28,7 +28,7 @@ import {UIBatchError} from './errors/ui-error';
 import {isCancelled} from './cancel-helper';
 import {YTErrors} from '../rum/constants';
 import {getWindowStore} from '../store/window-store';
-import { toaster } from './toaster';
+import {toaster} from './toaster';
 
 export function getBatchError<T = unknown>(
     batchResults: Array<BatchResultsItem<T>>,

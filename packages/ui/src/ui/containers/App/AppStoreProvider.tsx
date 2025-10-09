@@ -19,9 +19,5 @@ export function AppStoreProvider({children}: {children: React.ReactNode}) {
 
 export function AppThemeProvider({children}: {children: React.ReactNode}) {
     const theme = useSelector(getTheme);
-    return (
-        <ThemeProvider theme={theme}>
-            {children}
-        </ThemeProvider>
-    );
+    return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
 }

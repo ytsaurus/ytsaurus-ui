@@ -479,7 +479,8 @@ export function UsageBreadcrumbs() {
             return (
                 <Breadcrumbs.Item
                     key={text}
-                    href={makeRoutedURL(`${window.location.pathname}?path=${item.value}`)} onClick={(e) => e.preventDefault()}
+                    href={makeRoutedURL(`${window.location.pathname}?path=${item.value}`)}
+                    onClick={(e) => e.preventDefault()}
                 >
                     {index ? <PathFragment name={text} /> : <Icon awesome={'folder-tree'} />}
                 </Breadcrumbs.Item>
@@ -487,12 +488,19 @@ export function UsageBreadcrumbs() {
         });
     }, [pathArr, window.location.pathname]);
 
-    const handleBreadcrumbClick = useCallback((key: Key) => {
-        history.push(makeRoutedURL(`${window.location.pathname}?path=${pathArr.find(i => i.item === key)?.value}`));
-        setTimeout(() => {
-            dispatch(fetchAccountUsage());
-        }, 0);
-    }, [dispatch, history, pathArr]);
+    const handleBreadcrumbClick = useCallback(
+        (key: Key) => {
+            history.push(
+                makeRoutedURL(
+                    `${window.location.pathname}?path=${pathArr.find((i) => i.item === key)?.value}`,
+                ),
+            );
+            setTimeout(() => {
+                dispatch(fetchAccountUsage());
+            }, 0);
+        },
+        [dispatch, history, pathArr],
+    );
 
     return (
         <Box overflow={'hidden'} width={'100%'} style={{display: 'block'}}>

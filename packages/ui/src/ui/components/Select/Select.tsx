@@ -2,7 +2,15 @@ import React from 'react';
 import filter_ from 'lodash/filter';
 import cn from 'bem-cn-lite';
 
-import {Button, Select, SelectOption, SelectProps, SelectRenderControlProps, Text, TextInput} from '@gravity-ui/uikit';
+import {
+    Button,
+    Select,
+    SelectOption,
+    SelectProps,
+    SelectRenderControlProps,
+    Text,
+    TextInput,
+} from '@gravity-ui/uikit';
 
 import {Chevron} from '../../icons/Chevron';
 import hammer from '../../common/hammer';

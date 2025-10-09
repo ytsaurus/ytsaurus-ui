@@ -39,7 +39,14 @@ function ComponentsBreadcrumbs() {
     const history = useHistory();
     const items = React.useMemo(() => {
         const result = [
-            <Breadcrumbs.Item href={`/${cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}`} onClick={(e) => {e.preventDefault(); history.push(`/${cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}`)}} key="<Root>">
+            <Breadcrumbs.Item
+                href={`/${cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}`}
+                onClick={(e) => {
+                    e.preventDefault();
+                    history.push(`/${cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}`);
+                }}
+                key="<Root>"
+            >
                 {'<Root>'}
             </Breadcrumbs.Item>,
         ];
@@ -48,7 +55,12 @@ function ComponentsBreadcrumbs() {
                 <Breadcrumbs.Item
                     key={nodeHost}
                     href={`/${cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}/${nodeHost}`}
-                    onClick={(e) => {e.preventDefault(); history.push(`/${cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}/${nodeHost}`)}}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        history.push(
+                            `/${cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}/${nodeHost}`,
+                        );
+                    }}
                 >
                     {nodeHost}
                 </Breadcrumbs.Item>,

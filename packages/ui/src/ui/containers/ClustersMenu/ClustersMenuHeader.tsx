@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 import {ConnectedProps, connect} from 'react-redux';
-import {ListUl, LayoutCellsLarge} from '@gravity-ui/icons';
+import {LayoutCellsLarge, ListUl} from '@gravity-ui/icons';
 import {Icon, SegmentedRadioGroup} from '@gravity-ui/uikit';
 
 import Filter from '../../components/Filter/Filter';
@@ -47,11 +47,11 @@ function ClustersMenuHeader({viewMode, updateViewMode, clusterFilter, updateFilt
                         options={[
                             {
                                 value: 'table',
-                                content: <Icon data={ListUl} size={13}/>,
+                                content: <Icon data={ListUl} size={13} />,
                             },
                             {
                                 value: 'dashboard',
-                                content: <Icon data={LayoutCellsLarge} size={13}/>,
+                                content: <Icon data={LayoutCellsLarge} size={13} />,
                             },
                         ]}
                     />

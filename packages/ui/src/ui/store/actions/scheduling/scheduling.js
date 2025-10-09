@@ -34,7 +34,6 @@ import {splitBatchResults} from '../../../utils/utils';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {toaster} from '../../../utils/toaster';
 
-
 const setName = (path, newName, prevName) => {
     if (prevName === newName) {
         return Promise.resolve();

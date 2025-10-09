@@ -220,9 +220,7 @@ class ACL extends Component<Props> {
                     return (
                         <Flex className={block('subject', {level: String(level)})} wrap gap={1}>
                             {Boolean(hasInherited) && (
-                                <Tooltip
-                                    content={<InheritanceMessage data={inheritedFrom} />}
-                                >
+                                <Tooltip content={<InheritanceMessage data={inheritedFrom} />}>
                                     <div className={block('inherited', {hidden: !row.inherited})}>
                                         <Icon
                                             className={block('inherited-icon')}

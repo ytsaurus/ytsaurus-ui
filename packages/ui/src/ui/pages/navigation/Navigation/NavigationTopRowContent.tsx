@@ -197,18 +197,19 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
             const isLastItem = index === bcItems.length - 1;
 
             return (
-                <Breadcrumbs.Item 
+                <Breadcrumbs.Item
                     href={makeRoutedURL(window.location.pathname, {
                         path: state.path,
                         navmode: mode === Tab.ACL ? mode : Tab.CONTENT,
                         filter: '',
                     })}
-                    onClick={(e) => e.preventDefault()} key={`${JSON.stringify({text, index})}`}
+                    onClick={(e) => e.preventDefault()}
+                    key={`${JSON.stringify({text, index})}`}
                 >
                     {index ? (
                         <Escaped text={text} onClick={isLastItem ? onEdit : undefined} />
                     ) : (
-                         <Icon awesome={'folder-tree'} face={'solid'} />
+                        <Icon awesome={'folder-tree'} face={'solid'} />
                     )}
                 </Breadcrumbs.Item>
             );

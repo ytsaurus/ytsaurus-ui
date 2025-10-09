@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import {BreadcrumbsProps, Box, Breadcrumbs} from '@gravity-ui/uikit';
+import {Box, Breadcrumbs, BreadcrumbsProps} from '@gravity-ui/uikit';
 
 import {EditableAsText, EditableAsTextProps} from '../EditableAsText/EditableAsText';
 
@@ -52,14 +52,26 @@ export function EditableBreadcrumbs(props: Props) {
             cancelButtonView={cancelButtonView}
             renderEditor={renderEditor}
             onModeChange={onModeChange}
-            renderContent={
-                (contentProps) => 
-                    <Box style={{flexGrow: 1, flexShrink: 1}} className={block({view: view}, contentProps.className)}>
-                        <Breadcrumbs {...breadcrumbsProps} showRoot endContent={<>{beforeEditorContent}{contentProps.renderEditButton()}{afterEditorContent}</>}>
-                            {children}
-                        </Breadcrumbs>
-                    </Box>
-            }
+            renderContent={(contentProps) => (
+                <Box
+                    style={{flexGrow: 1, flexShrink: 1}}
+                    className={block({view: view}, contentProps.className)}
+                >
+                    <Breadcrumbs
+                        {...breadcrumbsProps}
+                        showRoot
+                        endContent={
+                            <>
+                                {beforeEditorContent}
+                                {contentProps.renderEditButton()}
+                                {afterEditorContent}
+                            </>
+                        }
+                    >
+                        {children}
+                    </Breadcrumbs>
+                </Box>
+            )}
             children={<></>}
         />
     );

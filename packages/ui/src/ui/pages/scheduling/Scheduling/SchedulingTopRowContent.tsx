@@ -146,7 +146,13 @@ function SchedulingBreadcrumbs() {
             className={block('breadcrumbs')}
             showRoot
             afterEditorContent={<CurrentPoolToClipboardButton />}
-            renderEditor={(props) => <PoolsSuggest autoFocus onCancelEdit={props.onBlur} className={block('pool-suggest')} />}
+            renderEditor={(props) => (
+                <PoolsSuggest
+                    autoFocus
+                    onCancelEdit={props.onBlur}
+                    className={block('pool-suggest')}
+                />
+            )}
         >
             {items}
         </EditableBreadcrumbs>

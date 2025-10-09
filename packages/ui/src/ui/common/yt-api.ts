@@ -2,7 +2,6 @@ import Cookies from 'js-cookie';
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
-
 import {getWindowStore} from '../store/window-store';
 import {getClusterConfig, getXsrfCookieName} from '../utils';
 import {BAN_USER, BLOCK_USER} from '../constants/index';

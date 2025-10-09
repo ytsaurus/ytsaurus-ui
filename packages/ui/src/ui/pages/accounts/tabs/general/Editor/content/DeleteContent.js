@@ -10,7 +10,6 @@ import {deleteAccount} from '../../../../../../utils/accounts/editor';
 import {closeEditorModal} from '../../../../../../store/actions/accounts/accounts';
 import {toaster} from '../../../../../../utils/toaster';
 
-
 class DeleteContent extends Component {
     static propTypes = {
         //from parent

@@ -71,17 +71,17 @@ export const FilesTabs: FC<Props> = ({
                     <Tab value={FileTabs.Current} counter={files.length} disabled={!files.length}>
                         Current
                     </Tab>
-                    <Tab value={FileTabs.Deleted} counter={deletedFilesCounter} disabled={!deletedFilesCounter}>
+                    <Tab
+                        value={FileTabs.Deleted}
+                        counter={deletedFilesCounter}
+                        disabled={!deletedFilesCounter}
+                    >
                         Deleted
                     </Tab>
                 </TabList>
                 <div className={block('list')}>
-                    <TabPanel value={FileTabs.Current}>
-                        {currentFileItems}
-                    </TabPanel>
-                    <TabPanel value={FileTabs.Deleted}>
-                        {deletedFileItems}
-                    </TabPanel>
+                    <TabPanel value={FileTabs.Current}>{currentFileItems}</TabPanel>
+                    <TabPanel value={FileTabs.Deleted}>{deletedFileItems}</TabPanel>
                 </div>
             </TabProvider>
         </div>
