@@ -5,6 +5,8 @@ import map_ from 'lodash/map';
 import filter_ from 'lodash/filter';
 import find_ from 'lodash/find';
 
+import {getBatchError} from '../../../../../shared/utils/error';
+
 import format from '../../../../common/hammer/format';
 import ypath from '../../../../common/thor/ypath';
 
@@ -12,7 +14,6 @@ import {RootState} from '../../../../store/reducers';
 import {isDeveloper} from '../../../../store/selectors/global/is-developer';
 
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
-import {getBatchError} from '../../../../utils/utils';
 import {StrawberryCliqueHealthType, chytApiAction} from '../../../../utils/strawberryControllerApi';
 import {defaultColumns} from '../../../../constants/chyt';
 import {YTHealth} from '../../../../types';

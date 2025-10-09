@@ -315,7 +315,7 @@ export function paramsToQuery(params: any): string {
     return qs.stringify(params, {encoder: (str) => customEncodeURIComponent(str)});
 }
 
-export function isNull(value: any): boolean {
+export function isNull<T>(value: T | undefined | null): value is null | undefined {
     return value === null || value === undefined;
 }
 

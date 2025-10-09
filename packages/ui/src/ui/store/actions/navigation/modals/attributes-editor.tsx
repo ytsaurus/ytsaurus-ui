@@ -9,10 +9,12 @@ import reduce_ from 'lodash/reduce';
 import {ThunkAction} from 'redux-thunk';
 
 import {Toaster} from '@gravity-ui/uikit';
-import ypath from '../../../../common/thor/ypath';
 
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
+
+import {getBatchError} from '../../../../../shared/utils/error';
+import ypath from '../../../../common/thor/ypath';
 
 import {
     NAVIGATION_ATTRIBUTES_EDITOR_ERROR,
@@ -27,7 +29,7 @@ import {
     getNavigationAttributesEditorPath,
     getNavigationAttributesEditorStaticTables,
 } from '../../../../store/selectors/navigation/modals/attributes-editor';
-import {getBatchError, showErrorPopup, wrapApiPromiseByToaster} from '../../../../utils/utils';
+import {showErrorPopup, wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {OperationShortInfo} from '../../../../pages/components/OperationShortInfo/OperationShortInfo';
 import {AppStoreProvider} from '../../../../containers/App/AppStoreProvider';
 import {updateView} from '../index';

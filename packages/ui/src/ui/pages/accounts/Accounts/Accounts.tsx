@@ -6,6 +6,8 @@ import reduce_ from 'lodash/reduce';
 
 import {Redirect, Route, Switch} from 'react-router';
 
+import {formatByParams} from '../../../../shared/utils/format';
+
 import Tabs from '../../../components/Tabs/Tabs';
 
 import {Page} from '../../../constants/index';
@@ -20,7 +22,6 @@ import {
 } from '../../../store/selectors/accounts/accounts-ts';
 import {getLastVisitedTabs} from '../../../store/selectors/settings';
 import {TabSettings, makeTabProps} from '../../../utils';
-import {formatByParams} from '../../../utils/format';
 
 import AccountsGeneralTab from '../tabs/general/AccountsGeneralTab';
 import AccountStatisticTab from '../tabs/statistic/AccountStatisticTab';
