@@ -252,4 +252,4 @@ export {registerDialogControl, registerDialogTabControl, RoleListControl};
 // eslint-disable-next-line no-restricted-imports
 export type * from '@gravity-ui/dialog-fields';
 export {EditableList, TabFieldVertical} from '@gravity-ui/dialog-fields';
-export type {ControlStaticApi} from '@gravity-ui/dialog-fields/build/cjs/dialog/types';
+export type {ControlStaticApi} from '@gravity-ui/dialog-fields';

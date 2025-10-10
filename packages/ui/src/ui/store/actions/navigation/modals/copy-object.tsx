@@ -2,7 +2,6 @@ import React from 'react';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
-import {Toaster} from '@gravity-ui/uikit';
 import Link from '../../../../components/Link/Link';
 
 import {COPY_OBJECT} from '../../../../constants/navigation/modals/copy-object';
@@ -17,9 +16,9 @@ import {executeBatchWithRetries} from '../../execute-batch';
 import {YTApiId} from '../../../../rum/rum-wrap-api';
 import {wrapBatchPromise} from '../../../../utils/utils';
 import {Dispatch} from 'redux';
+import {toaster} from '../../../../utils/toaster';
 
 const requests = new CancelHelper();
-const toaster = new Toaster();
 
 interface CopyOptions {
     preserve_account?: boolean;

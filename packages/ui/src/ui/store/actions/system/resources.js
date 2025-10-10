@@ -1,15 +1,12 @@
-import {Toaster} from '@gravity-ui/uikit';
-
 import createActionTypes from '../../../constants/utils';
 import {isRetryFutile} from '../../../utils/index';
 import {showErrorPopup} from '../../../utils/utils';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
+import {toaster} from '../../../utils/toaster';
 
 export const FETCH_RESOURCES = createActionTypes('RESOURCES');
 export const FETCH_NODE_ATTRS = createActionTypes('NODE_ATTRS');
-
-const toaster = new Toaster();
 
 export function loadSystemResources() {
     return (dispatch) => {

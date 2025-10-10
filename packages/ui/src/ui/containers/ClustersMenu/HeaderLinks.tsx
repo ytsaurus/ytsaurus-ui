@@ -130,12 +130,12 @@ export function HeaderLinks({currentUrl, showTitle}: Props) {
             <div className={b('links', {theme: 'collapsed'})}>
                 <DropdownMenu
                     popupProps={{className: b('popup')}}
-                    switcher={
-                        <Button>
+                    renderSwitcher={(props) => (
+                        <Button {...props}>
                             Links&nbsp;
                             <Icon awesome={'chevron-down'} />
                         </Button>
-                    }
+                    )}
                     items={map_(items, (item) => {
                         return {action() {}, ...item};
                     })}

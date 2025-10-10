@@ -251,22 +251,22 @@ class MapNodeToolbar extends React.PureComponent {
             {
                 action: this.createTableButtonClick,
                 text: <NoWrap>Table</NoWrap>,
-                icon: <Icon awesome={'table'} face={'solid'} />,
+                iconStart: <Icon awesome={'table'} face={'solid'} />,
             },
             {
                 action: this.createDirectoryButtonClick,
                 text: <NoWrap>Directory</NoWrap>,
-                icon: <Icon awesome={'folder'} face={'solid'} />,
+                iconStart: <Icon awesome={'folder'} face={'solid'} />,
             },
             {
                 action: this.createLinkButtonClick,
                 text: <NoWrap>Link</NoWrap>,
-                icon: <Icon awesome={'link'} />,
+                iconStart: <Icon awesome={'link'} />,
             },
             showACOCreateButton && {
                 action: this.createACOButtonClick,
                 text: <NoWrap>ACO</NoWrap>,
-                icon: <Icon awesome={'acl-object'} />,
+                iconStart: <Icon awesome={'acl-object'} />,
             },
             ...(!uploadTableExcelBaseUrl
                 ? []
@@ -274,13 +274,13 @@ class MapNodeToolbar extends React.PureComponent {
                       {
                           action: this.uploadTableButtonClick,
                           text: <NoWrap>Upload xlsx</NoWrap>,
-                          icon: <Icon awesome={'upload'} />,
+                          iconStart: <Icon awesome={'upload'} />,
                       },
                   ]),
             {
                 action: this.uploadFileButtonClick,
                 text: <NoWrap>Upload file</NoWrap>,
-                icon: <Icon awesome={'upload'} />,
+                iconStart: <Icon awesome={'upload'} />,
             },
         ]);
 
@@ -343,11 +343,11 @@ class MapNodeToolbar extends React.PureComponent {
                             menuSize={'n'}
                             popupClass={block('create-popup')}
                             items={menuItems}
-                            switcher={
-                                <Button size="m" title="Create object">
+                            renderSwitcher={(props) => (
+                                <Button {...props} size="m" title="Create object">
                                     Create object
                                 </Button>
-                            }
+                            )}
                         />
                     </div>
                 </div>

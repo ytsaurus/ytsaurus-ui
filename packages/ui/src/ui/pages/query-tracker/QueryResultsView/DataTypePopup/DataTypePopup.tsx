@@ -1,5 +1,5 @@
 import React from 'react';
-import {Icon, Popover} from '@gravity-ui/uikit';
+import {Icon, Tooltip} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import {StrictReactNode} from '../YQLTable/utils';
 import infoIcon from '../../../../assets/img/svg/icons/exclamation-circle.svg';
@@ -21,9 +21,8 @@ export default function DataTypePopup({children, type, hideIcon, className}: Pro
         return <span className={block(null, className)}>{children}</span>;
     }
     return (
-        <Popover
+        <Tooltip
             className={block(null, className)}
-            tooltipClassName={block('tooltip')}
             content={
                 type ? (
                     <div className={block('tooltip-container')}>
@@ -31,13 +30,12 @@ export default function DataTypePopup({children, type, hideIcon, className}: Pro
                     </div>
                 ) : null
             }
-            hasArrow={false}
-            delayOpening={400}
+            openDelay={400}
         >
             <span className={block('container')}>
                 {children}
                 {!hideIcon && <Icon className={block('icon')} data={infoIcon} size={12} />}
             </span>
-        </Popover>
+        </Tooltip>
     );
 }

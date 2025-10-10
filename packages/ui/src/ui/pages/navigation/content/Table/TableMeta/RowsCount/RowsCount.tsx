@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {Popover} from '@gravity-ui/uikit';
+import {Tooltip} from '@gravity-ui/uikit';
 import Icon from '../../../../../../components/Icon/Icon';
 import hammer from '../../../../../../common/hammer';
 
@@ -16,7 +16,7 @@ export function RowsCount(props: {count: number; isDynamic: boolean}) {
             {isDynamic ? '≈ ' : ''}
             {hammer.format['Number'](count)}
             {!isDynamic ? null : (
-                <Popover
+                <Tooltip
                     content={
                         <span>
                             This value corresponds to the number of rows stored in the on-disk
@@ -30,7 +30,7 @@ export function RowsCount(props: {count: number; isDynamic: boolean}) {
                     <span className={block('question')}>
                         <Icon awesome={'question-circle'} />
                     </span>
-                </Popover>
+                </Tooltip>
             )}
         </React.Fragment>
     );

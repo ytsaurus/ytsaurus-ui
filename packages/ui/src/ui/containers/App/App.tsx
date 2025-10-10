@@ -2,7 +2,13 @@ import React from 'react';
 import {Route, Switch} from 'react-router';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {ThemeProvider, useThemeType, useThemeValue} from '@gravity-ui/uikit';
+import {
+    ThemeProvider,
+    ToasterComponent,
+    ToasterProvider,
+    useThemeType,
+    useThemeValue,
+} from '@gravity-ui/uikit';
 
 import ModalErrors from '../../containers/ModalErrors/ModalErrors';
 import AttributesModal from '../../components/AttributesModal/AttributesModal';
@@ -26,6 +32,8 @@ import {getFontType} from '../../store/selectors/global/fonts';
 import UIFactory from '../../UIFactory';
 
 import {AppThemeFont, AppThemeFontProps} from './AppThemeFont';
+
+import {toaster} from '../../utils/toaster';
 
 import './App.scss';
 
@@ -101,16 +109,20 @@ function AppWithRum() {
 
 function AppWithRumContext() {
     const {theme, systemLightTheme, systemDarkTheme} = useThemeProviderProperties();
+    console.log('AppWithRumContext', toaster);
     return (
         <RumUiProvider>
-            <ThemeProvider
-                theme={theme as any}
-                systemLightTheme={systemLightTheme}
-                systemDarkTheme={systemDarkTheme}
-            >
-                <ThemeUpdater />
-                <AppWithRum />
-            </ThemeProvider>
+            <ToasterProvider toaster={toaster}>
+                <ThemeProvider
+                    theme={theme as any}
+                    systemLightTheme={systemLightTheme}
+                    systemDarkTheme={systemDarkTheme}
+                >
+                    <ThemeUpdater />
+                    <AppWithRum />
+                    <ToasterComponent />
+                </ThemeProvider>
+            </ToasterProvider>
         </RumUiProvider>
     );
 }

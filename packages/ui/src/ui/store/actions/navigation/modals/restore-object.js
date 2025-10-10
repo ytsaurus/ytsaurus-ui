@@ -8,7 +8,6 @@ import {
 } from '../../../../store/actions/navigation/modals/path-editing-popup';
 import {findCorrectObjectName} from '../../../../utils/navigation/restore-object';
 import {NetworkCode} from '../../../../constants/navigation/modals/path-editing-popup';
-import {Toaster} from '@gravity-ui/uikit';
 import {preparePath} from '../../../../utils/navigation';
 import Link from '../../../../components/Link/Link';
 import {showErrorPopup, wrapBatchPromise} from '../../../../utils/utils';
@@ -21,8 +20,7 @@ import map_ from 'lodash/map';
 
 import {executeBatchWithRetries} from '../../execute-batch';
 import {YTApiId} from '../../../../rum/rum-wrap-api';
-
-const toaster = new Toaster();
+import {toaster} from '../../../../utils/toaster';
 
 export function restoreObjects(items) {
     return (dispatch) => {

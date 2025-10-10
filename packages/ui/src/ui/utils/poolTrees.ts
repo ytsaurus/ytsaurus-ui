@@ -1,8 +1,8 @@
-import {Toaster} from '@gravity-ui/uikit';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {YTApiId, ytApiV3Id} from '../rum/rum-wrap-api';
 import {showErrorPopup} from './utils';
+import {toaster} from './toaster';
 
 const SCHEDULER_POOL_TREES = '//sys/scheduler/config/pool_trees_root';
 
@@ -40,8 +40,7 @@ export function loadDefaultPoolTree() {
             .catch((error) => {
                 if (error && error.code !== yt.codes.NODE_DOES_NOT_EXIST) {
                 }
-                const toast = new Toaster();
-                toast.add({
+                toaster.add({
                     name: 'load-default-pool-tree',
                     theme: 'danger',
                     title: 'Failed',

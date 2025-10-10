@@ -1,21 +1,8 @@
+@import '../../../styles/mixins.scss';
+
 .components-top-row-content {
     &__breadcrumbs {
-        padding-left: 8px;
-        flex-grow: 1;
-        flex-shrink: 1;
-        overflow: hidden;
+        @include top-row-breadcrumbs();
         min-width: 160px;
-    }
-
-    &__breadcrumbs-item {
-        color: var(--secondary-text) !important;
-
-        &_current {
-            color: var(--primary-text) !important;
-        }
-
-        &:hover {
-            color: var(--hover-link) !important;
-        }
     }
 }

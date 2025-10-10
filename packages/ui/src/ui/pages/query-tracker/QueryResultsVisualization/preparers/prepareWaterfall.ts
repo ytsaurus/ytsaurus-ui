@@ -1,7 +1,7 @@
 import {QueryResult} from './types';
 import {ChartType} from '../constants';
 import {getPointValue} from './getPointData';
-import type {WaterfallSeries} from '@gravity-ui/chartkit/d3';
+import type {WaterfallSeries} from '@gravity-ui/chartkit/gravity-charts';
 
 export const prepareWaterfall = (
     rows: QueryResult,

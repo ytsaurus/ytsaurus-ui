@@ -160,31 +160,31 @@ class ColumnsWrapper extends React.Component<Props & CWProps, CWState> {
                 <DropdownMenu
                     items={[
                         {
-                            icon: <Icon awesome={'sort-alt'} />,
+                            iconStart: <Icon awesome={'sort-alt'} />,
                             active: !current,
                             text: 'Unordered',
                             action: () => this.toggleKeyColumn(item, undefined),
                         },
                         {
-                            icon: <Icon awesome={'sort-amount-up'} />,
+                            iconStart: <Icon awesome={'sort-amount-up'} />,
                             active: current === DESCENDING,
                             text: 'Descending',
                             action: () => this.toggleKeyColumn(item, DESCENDING),
                         },
                         {
-                            icon: <Icon awesome={'sort-amount-down-alt'} />,
+                            iconStart: <Icon awesome={'sort-amount-down-alt'} />,
                             active: current === ASCENDING,
                             text: 'Ascending',
                             action: () => this.toggleKeyColumn(item, ASCENDING),
                         },
                     ]}
-                    switcher={
+                    renderSwitcher={(props) => (
                         <Tooltip content={title}>
-                            <Button view={'flat'}>
+                            <Button view={'flat'} {...props}>
                                 <Icon awesome={icon} className={block('sort-icon')} />
                             </Button>
                         </Tooltip>
-                    }
+                    )}
                 />
             </React.Fragment>
         );

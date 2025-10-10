@@ -33,3 +33,7 @@
 .g-dialog-divider {
     margin: 0;
 }
+
+.g-modal__content {
+    transform: unset !important;
+}

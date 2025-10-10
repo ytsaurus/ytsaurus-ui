@@ -6,7 +6,6 @@ import {ThunkAction} from 'redux-thunk';
 
 // @ts-ignore
 import unipika from '../../../../../common/thor/unipika';
-import {Toaster} from '@gravity-ui/uikit';
 
 import {
     SET_TABLE_COLUMNS_PRESET,
@@ -22,6 +21,7 @@ import {
 import {RootState} from '../../../../../store/reducers';
 import {YTApiId} from '../../../../../rum/rum-wrap-api';
 import {makeTableRumId} from './table-rum-id';
+import {toaster} from '../../../../../utils/toaster';
 
 const getColumnPresetEndpoint = (cluster: string) => `/api/table-column-preset/${cluster}`;
 
@@ -66,7 +66,7 @@ export function loadColumnPresetIfDefined(): ColumnPresetThunkAction {
             .catch((error) => {
                 dispatch(setTablePresetError(error));
 
-                new Toaster().add({
+                toaster.add({
                     theme: 'danger',
                     name: 'loadColumnPreset',
                     title: 'Failed to get preset of columns',

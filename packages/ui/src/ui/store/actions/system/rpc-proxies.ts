@@ -2,8 +2,6 @@ import {ThunkAction} from 'redux-thunk';
 
 import reduce_ from 'lodash/reduce';
 
-import {Toaster} from '@gravity-ui/uikit';
-
 import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
 import ypath from '../../../common/thor/ypath';
 import {FETCH_RPC_PROXIES} from '../../../constants/system/nodes';
@@ -14,6 +12,7 @@ import {RpcProxiesAction} from '../../../store/reducers/system/rpc-proxies';
 import {isRetryFutile} from '../../../utils/index';
 import {extractProxyCounters, extractRoleGroups} from '../../../utils/system/proxies';
 import {showErrorPopup} from '../../../utils/utils';
+import {toaster} from '../../../utils/toaster';
 
 type RPCProxiesThunkAction<T = void> = ThunkAction<
     Promise<T>,
@@ -78,7 +77,6 @@ export function loadSystemRPCProxies(): RPCProxiesThunkAction<
                 const data = error?.response?.data || error;
                 const {code, message} = data;
 
-                const toaster = new Toaster();
                 toaster.add({
                     name: 'load/system/rpc-proxies',
                     autoHiding: false,

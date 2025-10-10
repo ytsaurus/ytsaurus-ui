@@ -8,7 +8,7 @@ import './EditableAsText.scss';
 import Button, {ButtonProps} from '../Button/Button';
 const block = cn('editable-as-text');
 
-interface Props {
+export interface EditableAsTextProps {
     className?: string;
     editorClassName?: string;
 
@@ -30,10 +30,14 @@ interface Props {
         className?: string;
         onApply: (value?: string) => void;
     }) => React.ReactNode;
+    renderContent?: (props: {
+        renderEditButton: () => React.ReactNode;
+        className?: string;
+    }) => React.ReactNode;
     onModeChange?: (isEdit: boolean) => void;
 }
 
-export function EditableAsText(props: Props) {
+export function EditableAsText(props: EditableAsTextProps) {
     const {
         children,
         onChange,
@@ -43,8 +47,8 @@ export function EditableAsText(props: Props) {
         size,
         disableEdit,
         cancelOnClose,
-        openOnClick,
         renderEditor,
+        renderContent,
         onModeChange,
         saveButtonView = 'normal',
         cancelButtonView = 'normal',
@@ -72,12 +76,6 @@ export function EditableAsText(props: Props) {
     const startTextEdit = useCallback(() => {
         handleChangeMode(true);
     }, [handleChangeMode]);
-
-    const handleWrapClick = () => {
-        if (!editMode && openOnClick) {
-            startTextEdit();
-        }
-    };
 
     const handleChange = React.useCallback((val?: string) => setInput(val ?? ''), [setInput]);
 
@@ -114,12 +112,9 @@ export function EditableAsText(props: Props) {
     const controlSize = size ? size : 'm';
 
     return (
-        <div
-            className={block(null, [className || '', editMode ? 'edit' : ''])}
-            onClick={handleWrapClick}
-        >
+        <>
             {editMode ? (
-                <>
+                <div className={block({edit: !disableEdit}, className)}>
                     {renderEditor ? (
                         renderEditor({
                             value: input,
@@ -159,9 +154,27 @@ export function EditableAsText(props: Props) {
                             </Button>
                         </>
                     )}
-                </>
+                </div>
+            ) : renderContent ? (
+                renderContent({
+                    renderEditButton: () => (
+                        <>
+                            {!disableEdit && (
+                                <Button
+                                    className={block('control', {type: 'edit'})}
+                                    view="outlined"
+                                    onClick={startTextEdit}
+                                    size={controlSize}
+                                >
+                                    <Icon awesome={'pencil'} size={controlSize} />
+                                </Button>
+                            )}
+                        </>
+                    ),
+                    className: block(null, className),
+                })
             ) : (
-                <React.Fragment>
+                <div className={block(null, className)}>
                     {children}
                     {!disableEdit && (
                         <Button
@@ -173,9 +186,9 @@ export function EditableAsText(props: Props) {
                             <Icon awesome={'pencil'} size={controlSize} />
                         </Button>
                     )}
-                </React.Fragment>
+                </div>
             )}
-        </div>
+        </>
     );
 }
 

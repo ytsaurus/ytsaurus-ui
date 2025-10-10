@@ -1,8 +1,7 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
-
-import {Breadcrumbs, BreadcrumbsItem} from '../../components/Breadcrumbs';
+import {Breadcrumbs} from '@gravity-ui/uikit';
 import {useHistory} from 'react-router';
 
 import Favourites, {FavouritesItem} from '../../components/Favourites/Favourites';
@@ -124,11 +123,21 @@ interface BundleBreadcrumbsProps {
 }
 
 function BundleBreadcrumbs({className, bcItems, setActiveBundle}: BundleBreadcrumbsProps) {
+    const cluster = useSelector(getCluster);
     const history = useHistory();
 
     const handleItemClick = React.useCallback(
         (item: string | number) => {
-            setActiveBundle(item.toString());
+            if (history.location.pathname !== `/${cluster}/${Page.TABLET_CELL_BUNDLES}`) {
+                if (item === '<bundles>') {
+                    history.push(`/${cluster}/${Page.TABLET_CELL_BUNDLES}`);
+                } else {
+                    setActiveBundle(item.toString());
+                    history.push(
+                        `/${cluster}/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.TABLET_CELLS}?activeBundle=${item}`,
+                    );
+                }
+            }
         },
         [setActiveBundle],
     );
@@ -137,20 +146,15 @@ function BundleBreadcrumbs({className, bcItems, setActiveBundle}: BundleBreadcru
         return bcItems.map((item) => {
             const text = item.text || item.title || '';
             return (
-                <BreadcrumbsItem key={text} href={item.href}>
+                <Breadcrumbs.Item key={text} href={item.href} onClick={(e) => e.preventDefault()}>
                     {text}
-                </BreadcrumbsItem>
+                </Breadcrumbs.Item>
             );
         });
     }, [bcItems]);
 
     return (
-        <Breadcrumbs
-            navigate={history.push}
-            onAction={handleItemClick}
-            className={className}
-            showRoot
-        >
+        <Breadcrumbs onAction={handleItemClick} showRoot className={className}>
             {items}
         </Breadcrumbs>
     );

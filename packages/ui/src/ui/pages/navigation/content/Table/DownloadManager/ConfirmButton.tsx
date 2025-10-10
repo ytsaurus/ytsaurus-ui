@@ -1,27 +1,27 @@
+import {ButtonButtonProps} from '@gravity-ui/uikit';
 import Button, {ButtonProps} from '../../../../../components/Button/Button';
 import React, {FC, MouseEvent} from 'react';
 
-type Props = {
+type Props = Omit<Exclude<ButtonProps, ButtonButtonProps>, 'onClick'> & {
     className?: string;
     filename: string;
-    url: string;
     title: string;
     qa?: string;
     onClick: (url: string, filename: string) => void;
-} & Omit<ButtonProps, 'onClick'>;
+};
 
 export const ConfirmButton: FC<Props> = ({
-    url,
     className,
     title,
     qa,
     filename,
     onClick,
+    href,
     ...props
 }) => {
     const handleClick = (e: MouseEvent) => {
         e.preventDefault();
-        onClick(url, filename);
+        onClick(href, filename);
     };
 
     return (
@@ -31,8 +31,8 @@ export const ConfirmButton: FC<Props> = ({
             title={title}
             target="_blank"
             onClick={handleClick}
-            href={url}
             qa={qa}
+            href={href}
             {...props}
         >
             {title}

@@ -25,11 +25,11 @@ import {
     getOdinOverviewVisiblePresets,
 } from '../_selectors/odin-overview';
 import {reloadSetting, setSetting} from '../../../store/actions/settings';
-import {Toaster} from '@gravity-ui/uikit';
 import {showErrorPopup} from '../../../utils/utils';
 import {NAMESPACES} from '../../../../shared/constants/settings';
 import {ODIN_LAST_VISITED_TAB, ODIN_VISIBLE_METRIC_PRESETS, YA_NAMESPACES} from '../odin-settings';
 import {OdinRootState} from '../_reducers';
+import {toaster} from '../../../utils/toaster';
 
 type OdinOverviewThunkAction = ThunkAction<any, OdinRootState & RootState, any, OdinOverviewAction>;
 
@@ -275,7 +275,7 @@ export function odinOverviewAddPreset(name: string, isDefault: boolean): OdinOve
                     const data = error?.response?.data || error;
                     const {message} = data;
 
-                    new Toaster().add({
+                    toaster.add({
                         name: 'add-preset',
                         autoHiding: false,
                         theme: 'danger',
@@ -318,7 +318,7 @@ export function odinOverviewRemovePreset(name: string): OdinOverviewThunkAction 
                 const data = error?.response?.data || error;
                 const {message} = data;
 
-                new Toaster().add({
+                toaster.add({
                     name: 'delete-preset',
                     autoHiding: false,
                     theme: 'danger',
@@ -349,7 +349,7 @@ export function odinOverviewToggleDefaultPreset(name: string): OdinOverviewThunk
                 const data = error?.response?.data || error;
                 const {message} = data;
 
-                new Toaster().add({
+                toaster.add({
                     name: 'set-deault-preset',
                     autoHiding: false,
                     theme: 'danger',

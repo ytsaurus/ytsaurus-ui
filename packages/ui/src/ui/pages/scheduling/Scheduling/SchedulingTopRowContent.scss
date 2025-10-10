@@ -1,5 +1,4 @@
 .scheduling-top-row-content {
-    min-width: 900px;
     &__favourites {
         padding-right: 15px;
     }
@@ -12,6 +11,10 @@
         z-index: var(--dialog-suggest-z-index) !important;
     }
 
+    &__pool-suggest {
+        margin-left: 16px;
+    }
+
     &__btn-spacer {
         padding-left: 8px;
         flex: 0 0 8px;
@@ -21,35 +24,8 @@
         padding-right: 15px;
     }
 
-    &__editable-breadcrumbs {
-        display: flex;
-        align-items: center;
-        padding-right: 15px;
-        flex-grow: 1;
-        flex-shrink: 1;
-        overflow: hidden;
-
-        &_edit {
-            padding-left: 2ex;
-        }
-    }
-
     &__breadcrumbs {
-        margin: 0 8px 0 12px;
-        flex-shrink: 1;
-        overflow: hidden;
-    }
-
-    &__breadcrumbs-link {
-        color: var(--secondary-text) !important;
-
-        &_current {
-            color: var(--primary-text) !important;
-        }
-
-        &:hover {
-            color: var(--hover-link) !important;
-        }
+        display: block;
     }
 
     &__pool-suggest {
