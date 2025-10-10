@@ -1,0 +1,21 @@
+.yt-expandable-cell {
+    &__child {
+        padding-left: 20px;
+    }
+
+    &__expand {
+        margin-right: 4px;
+        &_hidden {
+            visibility: hidden;
+        }
+    }
+
+    &__splitter {
+        padding-left: 28px;
+
+        &:after {
+            height: 100%;
+            border-left: 1px solid var(--g-color-line-generic);
+        }
+    }
+}
