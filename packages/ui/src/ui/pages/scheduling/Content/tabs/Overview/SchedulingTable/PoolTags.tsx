@@ -4,16 +4,16 @@ import cn from 'bem-cn-lite';
 
 import capitalize_ from 'lodash/capitalize';
 
-import Label from '../../../../../components/Label/Label';
-import UIFactory from '../../../../../UIFactory';
-import {getCluster, getClusterUiConfig} from '../../../../../store/selectors/global';
-import {PoolTreeNode} from '../../../../../utils/scheduling/pool-child';
+import Label from '../../../../../../components/Label/Label';
+import UIFactory from '../../../../../../UIFactory';
+import {getCluster, getClusterUiConfig} from '../../../../../../store/selectors/global';
+import type {PoolLeafNode, PoolTreeNode} from '../../../../../../utils/scheduling/pool-child';
 
 import './PoolTags.scss';
 
 const block = cn('scheduling-pool-tags');
 
-function PoolTags({pool}: {pool: PoolTreeNode}) {
+function PoolTags({pool}: {pool: PoolTreeNode | PoolLeafNode}) {
     const cluster = useSelector(getCluster);
     const clusterUiConfig = useSelector(getClusterUiConfig);
 

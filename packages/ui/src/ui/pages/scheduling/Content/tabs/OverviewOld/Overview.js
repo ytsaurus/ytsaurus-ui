@@ -70,7 +70,7 @@ import {
     setLoadAllOperations,
 } from '../../../../../store/actions/scheduling/expanded-pools';
 import {PoolsSuggest} from '../../../../../pages/scheduling/PoolsSuggest/PoolsSuggest';
-import PoolTags from './PoolTags';
+import PoolTags from '../Overview/SchedulingTable/PoolTags';
 import UIFactory from '../../../../../UIFactory';
 
 import './Overview.scss';
