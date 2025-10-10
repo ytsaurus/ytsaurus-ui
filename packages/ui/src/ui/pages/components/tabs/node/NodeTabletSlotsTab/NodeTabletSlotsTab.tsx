@@ -1,4 +1,4 @@
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../../store/redux-hooks';
 import React from 'react';
 
 import NodeTabletSlots from '../../../../../pages/components/tabs/node/NodeTabletSlots/NodeTabletSlots';

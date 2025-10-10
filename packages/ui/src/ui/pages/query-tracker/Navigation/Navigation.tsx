@@ -3,7 +3,7 @@ import './Navigation.scss';
 import {NavigationHeader} from './NavigationHeader';
 import {NavigationBody} from './NavigationBody';
 import cn from 'bem-cn-lite';
-import {useDispatch} from 'react-redux';
+import {useDispatch} from '../../../store/redux-hooks';
 import {initNavigation} from '../../../store/actions/query-tracker/queryNavigation';
 
 const b = cn('query-navigation');

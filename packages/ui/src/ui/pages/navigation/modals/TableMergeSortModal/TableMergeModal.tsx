@@ -4,7 +4,7 @@ import map_ from 'lodash/map';
 import pickBy_ from 'lodash/pickBy';
 
 import {DialogError, FormApi, YTDFDialog} from '../../../../components/Dialog';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
     getNavigationTableAttributesValues,
     getNavigationTableMergeVisible,

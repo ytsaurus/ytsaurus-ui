@@ -1,6 +1,5 @@
 import {useCallback, useState} from 'react';
-import {useSelector} from 'react-redux';
-import {useThunkDispatch} from '../../../store/thunkDispatch';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {
     getCurrentDraftQueryACO,
     getCurrentQueryACO,
@@ -14,7 +13,7 @@ import {getQueryTrackerInfo} from '../../../store/actions/query-tracker/queryAco
 import {setDraftQueryACO, setQueryACO} from '../../../store/actions/query-tracker/query';
 
 export const useQueryACO = () => {
-    const dispatch = useThunkDispatch();
+    const dispatch = useDispatch();
     const currentQueryACO = useSelector(getCurrentQueryACO);
     const currentDraftQueryACO = useSelector(getCurrentDraftQueryACO);
     const selectOptions = useSelector(getQueryACOOptions);

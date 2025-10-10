@@ -2,6 +2,8 @@ import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../reducers';
 import {Action} from 'redux';
+
+import format from '../../../common/hammer/format';
 import {getOperationId} from '../../selectors/operations/operation';
 import {RawJob} from '../../../types/operations/job';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
@@ -109,8 +111,8 @@ export const getJobsWithEvents =
                         allocationId: job.allocation_id,
                         groupName: job.task_name || '',
                         events: [],
-                        start_time: job.start_time,
-                        finish_time: job.finish_time,
+                        start_time: job?.start_time || format.NO_VALUE,
+                        finish_time: job?.finish_time || format.NO_VALUE,
                         address: job.address,
                     };
 

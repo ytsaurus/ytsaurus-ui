@@ -1,6 +1,6 @@
 import cn from 'bem-cn-lite';
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import type {RouteComponentProps} from 'react-router';
 
 import NodeBundles from '../../../../../pages/components/tabs/node/NodeBundles/NodeBundles';

@@ -1,5 +1,5 @@
 import React from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch} from '../store/redux-hooks';
 
 import withSplit from '../hocs/withSplit';
 import {mergeScreen, splitScreen} from '../store/actions/global';

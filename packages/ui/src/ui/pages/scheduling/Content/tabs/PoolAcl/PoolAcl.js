@@ -1,5 +1,6 @@
 import React from 'react';
-import {connect, useSelector} from 'react-redux';
+import {connect} from 'react-redux';
+import {useSelector} from '../../../../../store/redux-hooks';
 
 import isEmpty_ from 'lodash/isEmpty';
 

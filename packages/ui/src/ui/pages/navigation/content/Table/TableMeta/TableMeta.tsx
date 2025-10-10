@@ -1,6 +1,7 @@
 import React, {useMemo} from 'react';
 import cn from 'bem-cn-lite';
-import {connect, useSelector} from 'react-redux';
+import {connect} from 'react-redux';
+import {useSelector} from '../../../../../store/redux-hooks';
 import ypath from '../../../../../common/thor/ypath';
 
 import {makeMetaItems} from '../../../../../components/MetaTable/presets/presets';

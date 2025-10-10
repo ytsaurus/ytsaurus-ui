@@ -1,4 +1,4 @@
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 import {BaseQueryFn, TypedUseMutationResult} from '@reduxjs/toolkit/query/react';
 
 import {getUseAutoRefresh} from '../../../../store/selectors/settings/settings-ts';

@@ -4,7 +4,7 @@ import {YTDFDialog, makeErrorFields} from '../../../../components/Dialog';
 import {useQueryACO} from '../useQueryACO';
 import {useToggle} from 'react-use';
 import PencilIcon from '@gravity-ui/icons/svgs/pencil.svg';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {selectIsMultipleAco} from '../../../../store/selectors/query-tracker/queryAco';
 import {requestQueriesList} from '../../../../store/actions/query-tracker/queriesList';
 

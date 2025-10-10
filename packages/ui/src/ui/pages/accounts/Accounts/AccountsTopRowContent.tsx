@@ -9,7 +9,7 @@ import {
     getFavouriteAccounts,
     isActiveAcountInFavourites,
 } from '../../../store/selectors/favourites';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {
     getAccountsMapByName,
     getActiveAccount,

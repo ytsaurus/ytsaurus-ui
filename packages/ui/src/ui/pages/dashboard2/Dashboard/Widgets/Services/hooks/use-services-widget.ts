@@ -1,4 +1,4 @@
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../../../store/redux-hooks';
 
 import {useServicesQuery} from '../../../../../../store/api/dashboard2/services';
 

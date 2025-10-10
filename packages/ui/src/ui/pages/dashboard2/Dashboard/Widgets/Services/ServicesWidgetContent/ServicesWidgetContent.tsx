@@ -1,5 +1,5 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../../../store/redux-hooks';
 import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
 import {RootState} from '../../../../../../store/reducers';

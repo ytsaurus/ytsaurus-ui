@@ -1,5 +1,5 @@
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import {StickyContainer} from '../../../../components/StickyContainer/StickyContainer';

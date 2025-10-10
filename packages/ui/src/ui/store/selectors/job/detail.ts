@@ -7,26 +7,10 @@ import map_ from 'lodash/map';
 import sumBy_ from 'lodash/sumBy';
 import values_ from 'lodash/values';
 
+import {RootState} from '../../reducers';
 import {PLEASE_PROCEED_TEXT} from '../../../utils/actions';
-import {
-    JobPipes,
-    JobSpecification,
-    PipesIO,
-    PreparedJob,
-    StatisticsIO,
-} from '../../../types/operations/job';
+import {JobPipes, PipesIO, StatisticsIO} from '../../../types/operations/job';
 import {Action as JobAction} from '../../../pages/job/JobActions/JobActions';
-
-interface State {
-    job: {
-        general: {
-            job: PreparedJob;
-        };
-        specification: {
-            specification: JobSpecification;
-        };
-    };
-}
 
 const prepareStatisticsIO = (obj: PipesIO, type: string, index?: number): StatisticsIO => {
     return {
@@ -35,10 +19,10 @@ const prepareStatisticsIO = (obj: PipesIO, type: string, index?: number): Statis
     };
 };
 
-export const getJob = (state: State) => state.job.general.job;
-const getJobSpecification = (state: State) => state.job.specification.specification;
+export const getJob = (state: RootState) => state.job.general.job;
+const getJobSpecification = (state: RootState) => state.job.specification.specification;
 
-const getPipesIO = createSelector(getJob, (job: PreparedJob): JobPipes => {
+const getPipesIO = createSelector(getJob, (job) => {
     return ypath.getValue(job, '/statistics/user_job/pipes') || {};
 });
 
@@ -67,24 +51,24 @@ export const getJobStatisticsIO = createSelector(
     },
 );
 
-const getUserCpuTimeSum = createSelector(getJob, (job: PreparedJob): number =>
+const getUserCpuTimeSum = createSelector(getJob, (job): number =>
     ypath.getNumberDeprecated(job, '/statistics/user_job/cpu/user/sum'),
 );
-const getWaitCpuTimeSum = createSelector(getJob, (job: PreparedJob): number =>
+const getWaitCpuTimeSum = createSelector(getJob, (job): number =>
     ypath.getNumberDeprecated(job, '/statistics/user_job/cpu/wait/sum'),
 );
 
-const getGpuUtilizationSum = createSelector(getJob, (job: PreparedJob): number =>
+const getGpuUtilizationSum = createSelector(getJob, (job): number =>
     ypath.getNumberDeprecated(job, '/statistics/user_job/gpu/cumulative_utilization_gpu/sum'),
 );
-const getGpuPowerSum = createSelector(getJob, (job: PreparedJob): number =>
+const getGpuPowerSum = createSelector(getJob, (job): number =>
     ypath.getNumberDeprecated(job, '/statistics/user_job/gpu/cumulative_power/sum'),
 );
-const getGpuMemorySum = createSelector(getJob, (job: PreparedJob): number =>
+const getGpuMemorySum = createSelector(getJob, (job): number =>
     ypath.getNumberDeprecated(job, '/statistics/user_job/gpu/cumulative_memory/sum'),
 );
 
-const getTimeExec = createSelector(getJob, (job: PreparedJob): number =>
+const getTimeExec = createSelector(getJob, (job): number =>
     ypath.getNumberDeprecated(job, '/statistics/time/exec/sum'),
 );
 
@@ -97,7 +81,7 @@ export const getAverageWaitCpuTime = createSelector(
     (waitCpuTimeSum, timeExec) => waitCpuTimeSum / timeExec,
 );
 
-export const getGpuDevices = createSelector(getJob, (job: PreparedJob) =>
+export const getGpuDevices = createSelector(getJob, (job) =>
     ypath.getNumberDeprecated(job, '/exec_attributes/gpu_devices/length'),
 );
 export const getAverageGpuUtilization = createSelector(
@@ -141,7 +125,7 @@ export const getJobPivotKeysData = createSelector([getJobSpecification], (specif
     );
 });
 
-export const getJobActions = createSelector(getJob, (job: PreparedJob) => {
+export const getJobActions = createSelector(getJob, (job) => {
     const actions: JobAction[] = [];
     const state = job.state;
 

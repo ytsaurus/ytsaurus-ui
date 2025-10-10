@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import {useHistory, useRouteMatch} from 'react-router';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';

@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import {ResolveThunks, connect} from 'react-redux';
-import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
@@ -115,28 +114,6 @@ function Shards(props: ShardsProps) {
         </ErrorBoundary>
     );
 }
-
-Shards.propTypes = {
-    // from connect
-    loading: PropTypes.bool.isRequired,
-    loaded: PropTypes.bool.isRequired,
-    error: PropTypes.bool.isRequired,
-    errorData: PropTypes.object.isRequired,
-
-    shards: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.string.isRequired,
-            name: PropTypes.string.isRequired,
-            total_account_statistics: PropTypes.shape({
-                node_count: PropTypes.number.isRequired,
-            }).isRequired,
-        }),
-    ).isRequired,
-
-    getShards: PropTypes.func.isRequired,
-    abortAllRequests: PropTypes.func.isRequired,
-    cluster: PropTypes.string.isRequired,
-};
 
 const mapStateToProps = (state: RootState) => {
     const {loading, loaded, error, errorData, shards} = state.components.shards;

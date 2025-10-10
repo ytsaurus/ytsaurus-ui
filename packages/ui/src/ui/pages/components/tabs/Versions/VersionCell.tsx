@@ -9,7 +9,7 @@ import {ClickableText} from '../../../../components/ClickableText/ClickableText'
 import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
 
 import './VersionCell.scss';
-import {useDispatch} from 'react-redux';
+import {useDispatch} from '../../../../store/redux-hooks';
 import {changeVersionStateTypeFilters} from '../../../../store/actions/components/versions/versions_v2';
 import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 import {uiSettings} from '../../../../config/ui-settings';

@@ -15,7 +15,7 @@ class ACOPage extends BasePage {
     }
 
     async clickOnACLTab() {
-        await this.page.getByText('ACL').click();
+        await this.page.getByRole('button', {name: 'ACL'}).click();
     }
 }
 

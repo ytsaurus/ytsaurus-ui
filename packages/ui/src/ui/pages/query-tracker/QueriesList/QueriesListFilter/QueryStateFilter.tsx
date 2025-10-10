@@ -2,7 +2,7 @@ import React, {FC, useCallback} from 'react';
 import {Select} from '@gravity-ui/uikit';
 import {QueryStatus} from '../../../../types/query-tracker';
 import hammer from '../../../../common/hammer';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {applyFilter} from '../../../../store/actions/query-tracker/queriesList';
 import {getQueriesFilters} from '../../../../store/selectors/query-tracker/queriesList';
 

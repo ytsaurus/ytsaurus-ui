@@ -3,7 +3,7 @@ import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import './NavigationTable.scss';
 import {SchemaTab} from './SchemaTab';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 import {
     selectNavigationClusterConfig,
     selectNavigationPath,

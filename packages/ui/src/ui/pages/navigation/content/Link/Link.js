@@ -2,7 +2,8 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import PropTypes from 'prop-types';
-import {connect, useSelector} from 'react-redux';
+import {connect} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 
 import {main} from '../../../../components/MetaTable/presets';
 import MetaTable from '../../../../components/MetaTable/MetaTable';

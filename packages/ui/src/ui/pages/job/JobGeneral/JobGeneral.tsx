@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 import {Redirect, Route, Switch, useRouteMatch} from 'react-router';
 
 import {Alert, Flex, Link} from '@gravity-ui/uikit';
@@ -174,8 +174,8 @@ export default function JobGeneral() {
                                             url={UIFactory.makeUrlForMonitoringDescriptor(
                                                 cluster,
                                                 {
-                                                    from: startTime,
-                                                    to: finishTime,
+                                                    from: startTime || '',
+                                                    to: finishTime || '',
                                                 },
                                                 monitoring_descriptor,
                                             )}
@@ -220,7 +220,10 @@ export default function JobGeneral() {
                                 value: (
                                     <ClickableText
                                         onClick={() =>
-                                            window.open(job.prepareCommandURL('get_job_input'))
+                                            window.open(
+                                                job?.prepareCommandURL?.('get_job_input') ||
+                                                    window.location.href,
+                                            )
                                         }
                                     >
                                         get_job_input
@@ -232,7 +235,10 @@ export default function JobGeneral() {
                                 value: (
                                     <ClickableText
                                         onClick={() =>
-                                            window.open(job.prepareCommandURL('get_job_stderr'))
+                                            window.open(
+                                                job?.prepareCommandURL?.('get_job_stderr') ||
+                                                    window.location.href,
+                                            )
                                         }
                                     >
                                         get_job_stderr
@@ -248,9 +254,9 @@ export default function JobGeneral() {
                                               <ClickableText
                                                   onClick={() =>
                                                       window.open(
-                                                          job.prepareCommandURL(
+                                                          job?.prepareCommandURL?.(
                                                               'get_job_fail_context',
-                                                          ),
+                                                          ) || window.location.href,
                                                       )
                                                   }
                                               >

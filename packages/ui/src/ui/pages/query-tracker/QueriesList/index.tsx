@@ -7,7 +7,7 @@ import {
     getQueriesListMode,
     getQueriesListTabs,
 } from '../../../store/selectors/query-tracker/queriesList';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {DefaultQueriesListFilter, QueriesListMode} from '../../../types/query-tracker/queryList';
 import {applyListMode, requestQueriesList} from '../../../store/actions/query-tracker/queriesList';
 

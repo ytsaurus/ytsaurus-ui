@@ -1,6 +1,6 @@
 import {Flex, Icon, Link, Loader, Text} from '@gravity-ui/uikit';
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import block from 'bem-cn-lite';
 
 import ArrowUpRightFromSquareIcon from '@gravity-ui/icons/svgs/arrow-up-right-from-square.svg';

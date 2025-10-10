@@ -8,7 +8,7 @@ import {Redirect, Route, Switch} from 'react-router';
 import {SystemTabs} from '../../../constants/system/tabs';
 import {getSystemTabItems} from './helpers/getSystemTabItems';
 import {getCluster} from '../../../store/selectors/global';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 
 const Wrap: FC<PropsWithChildren> = ({children}) => {
     return (

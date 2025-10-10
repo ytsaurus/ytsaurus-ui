@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 
 import sortedIndexOf_ from 'lodash/sortedIndexOf';
 import isEmpty_ from 'lodash/isEmpty';

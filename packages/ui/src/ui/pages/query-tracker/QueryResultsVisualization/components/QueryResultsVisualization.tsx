@@ -7,7 +7,7 @@ import useResizeObserver from '../../../../hooks/useResizeObserver';
 import './QueryResultsVisualization.scss';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 import {ChartLeftMenu} from './ChartLeftMenu';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {changeVisualizationResultIndex} from '../../../../store/actions/query-tracker/queryChart';
 import {selectChartLoading} from '../../../../store/selectors/query-tracker/queryChart';
 import {Flex, Loader} from '@gravity-ui/uikit';

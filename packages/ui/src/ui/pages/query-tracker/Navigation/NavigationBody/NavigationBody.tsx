@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {NavigationEmpty} from './NavigationEmpty';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 import {selectNavigationNodeType} from '../../../../store/selectors/query-tracker/queryNavigation';
 import {BodyType} from '../../../../store/reducers/query-tracker/queryNavigationSlice';
 import {ClusterList} from '../ClusterList';

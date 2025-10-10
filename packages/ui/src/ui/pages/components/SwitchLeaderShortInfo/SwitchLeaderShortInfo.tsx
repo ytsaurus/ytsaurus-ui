@@ -5,7 +5,7 @@ import MetaTable from '../../../components/MetaTable/MetaTable';
 // @ts-ignore
 import format from '../../../common/hammer/format';
 import {getStateForHost, loadMasters} from '../../../store/actions/system/masters';
-import {useDispatch} from 'react-redux';
+import {useDispatch} from '../../../store/redux-hooks';
 import moment from 'moment';
 import './SwitchLeaderShortInfo.scss';
 import {useUpdater} from '../../../hooks/use-updater';

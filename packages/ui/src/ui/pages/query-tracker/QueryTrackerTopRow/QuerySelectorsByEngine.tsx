@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useMemo} from 'react';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {QueryCliqueSelector} from './QueryCliqueSelector';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {
     getCliqueLoading,
     getCliqueMap,

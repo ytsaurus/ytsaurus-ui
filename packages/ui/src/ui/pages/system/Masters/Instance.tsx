@@ -3,7 +3,7 @@ import hammer from '../../../common/hammer';
 import NodeQuad, {NodeQuadTheme} from '../NodeQuad/NodeQuad';
 import {Tooltip} from '../../../components/Tooltip/Tooltip';
 import Icon from '../../../components/Icon/Icon';
-import {useDispatch} from 'react-redux';
+import {useDispatch} from '../../../store/redux-hooks';
 import ReadOnlyIcon from '../../../assets/img/svg/read-only-icon.svg';
 import WarmUpIcon from '../../../assets/img/svg/warmup-icon.svg';
 import {makeShortSystemAddress} from '../helpers/makeShortSystemAddress';

@@ -45,6 +45,7 @@ import {getMainLocations} from '../../store/location.main';
 import {flow} from '../../store/reducers/flow';
 import {rootApi} from '../../store/api';
 import {prometheusDashboardSlice} from './prometheusDashboard/prometheusDashboard';
+import odin from '../../pages/odin/_reducers';
 
 export const appReducers = {
     acl,
@@ -74,6 +75,7 @@ export const appReducers = {
     users,
     groups,
     scheduling,
+    odin,
     //    schedulingOperations,
     //    schedulingCreatePoolDialog,
 

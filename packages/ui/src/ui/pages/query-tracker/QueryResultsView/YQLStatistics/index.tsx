@@ -1,4 +1,4 @@
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 import React from 'react';
 
 import {getProgressYQLStatistics} from '../../../../store/selectors/query-tracker/query';

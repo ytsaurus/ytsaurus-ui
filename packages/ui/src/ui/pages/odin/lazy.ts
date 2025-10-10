@@ -4,7 +4,6 @@ import {withDisableMaxContentWidth} from '../../containers/MaxContentWidth';
 import withLazyLoading from '../../hocs/withLazyLoading';
 import {UIFactoryClusterPageInfo, UIFactoryRootPageInfo} from '../../UIFactory';
 import {PageOdin} from '../../icons/PageOdin';
-import reducers from './_reducers';
 import {
     getOdinOverviewPreparedState,
     getOdinPreparedState,
@@ -43,7 +42,6 @@ export const odinPageInfo: UIFactoryClusterPageInfo = {
     title: 'Odin',
     pageId: ODIN_PAGE_ID,
     svgIcon: PageOdin,
-    reducers,
     reactComponent: OdinLazy,
     topRowComponent: OdinTopRowLazy,
     urlMapping: {

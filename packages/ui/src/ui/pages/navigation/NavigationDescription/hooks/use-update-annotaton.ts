@@ -1,4 +1,4 @@
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 
 import {YTApiId} from '../../../../rum/rum-wrap-api';
 

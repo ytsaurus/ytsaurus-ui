@@ -7,7 +7,7 @@ import format from '../../../common/hammer/format';
 import ypath from '../../../common/thor/ypath';
 
 import MetaTable from '../../../components/MetaTable/MetaTable';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 import {getCurrentPool, getIsRoot} from '../../../store/selectors/scheduling/scheduling';
 import UIFactory from '../../../UIFactory';
 import {getClusterUiConfig} from '../../../store/selectors/global';

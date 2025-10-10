@@ -1,7 +1,7 @@
 import React, {useRef} from 'react';
 import cn from 'bem-cn-lite';
 import {Button, Flex} from '@gravity-ui/uikit';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import Icon from '../../../components/Icon/Icon';
 import {getCluster} from '../../../store/selectors/global';
 import {getPath} from '../../../store/selectors/navigation';

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../store/redux-hooks';
 import block from 'bem-cn-lite';
 
 import {SegmentedRadioGroup, SegmentedRadioGroupProps} from '@gravity-ui/uikit';

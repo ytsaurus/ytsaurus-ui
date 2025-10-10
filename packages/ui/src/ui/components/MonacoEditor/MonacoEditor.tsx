@@ -4,7 +4,7 @@ import key from 'hotkeys-js';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 // @ts-ignore
 import {initVimMode} from 'monaco-vim/src';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../store/redux-hooks';
 import {getTheme} from '../../store/selectors/global';
 import {
     YT_DARK_HC_MONACO_THEME,

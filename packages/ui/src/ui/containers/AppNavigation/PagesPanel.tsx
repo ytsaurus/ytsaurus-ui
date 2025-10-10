@@ -4,7 +4,7 @@ import findIndex_ from 'lodash/findIndex';
 import sortBy_ from 'lodash/sortBy';
 
 import cn from 'bem-cn-lite';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../store/redux-hooks';
 import {PageInfo, getRecentPagesInfo} from '../../store/selectors/slideoutMenu';
 
 import Link from '../../components/Link/Link';

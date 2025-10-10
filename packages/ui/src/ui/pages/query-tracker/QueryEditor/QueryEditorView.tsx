@@ -1,7 +1,7 @@
 import React, {memo, useCallback, useEffect, useRef} from 'react';
 import * as monaco from 'monaco-editor';
 import {useMonaco} from '../hooks/useMonaco';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {getQueryEngine, getQueryId} from '../../../store/selectors/query-tracker/query';
 import {isSupportedQtACO} from '../../../store/selectors/query-tracker/queryAco';
 import {runQuery} from '../../../store/actions/query-tracker/query';

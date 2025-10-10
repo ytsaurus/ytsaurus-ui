@@ -1,5 +1,5 @@
 import React, {FC, useMemo} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch} from '../../../../store/redux-hooks';
 import {
     NavigationTable,
     NavigationTableSchema,

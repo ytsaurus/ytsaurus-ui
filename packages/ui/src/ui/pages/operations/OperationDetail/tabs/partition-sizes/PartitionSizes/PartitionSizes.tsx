@@ -1,6 +1,6 @@
 import React from 'react';
-import {ConnectedProps, connect, useSelector} from 'react-redux';
-import PropTypes from 'prop-types';
+import {ConnectedProps, connect} from 'react-redux';
+import {useSelector} from '../../../../../../store/redux-hooks';
 import ypath from '../../../../../../common/thor/ypath';
 import cn from 'bem-cn-lite';
 
@@ -34,11 +34,6 @@ interface State {
 }
 
 class PartitionSizes extends React.Component<ReduxProps, State> {
-    static propTypes = {
-        operation: PropTypes.object.isRequired,
-        chartKitTheme: PropTypes.string.isRequired,
-    };
-
     static getDerivedStateFromProps(props: ReduxProps) {
         const progress = ypath.getValue(props.operation, '/@progress');
         const data = progress && ypath.getValue(progress, '/partition_size_histogram');

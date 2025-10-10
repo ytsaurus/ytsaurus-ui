@@ -5,7 +5,7 @@ import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
 import {isFinalLoadingStatus} from '../../../../utils/utils';
 import {getNavigationDocumentLoadingStatus} from '../../../../store/selectors/navigation/content/document';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 import {useDisableMaxContentWidth} from '../../../../containers/MaxContentWidth';
 
 const DocumentWithRum: FC = () => {

@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 import {
     selectNavigationCluster,
     selectNavigationError,

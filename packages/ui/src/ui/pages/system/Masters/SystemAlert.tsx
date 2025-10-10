@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 import {selectMasterAlerts} from '../../../store/selectors/system/masters';
 import {YTAlertBlock} from '../../../components/Alert/Alert';
 

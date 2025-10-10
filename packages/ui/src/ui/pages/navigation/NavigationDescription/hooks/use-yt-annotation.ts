@@ -1,4 +1,4 @@
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 
 import ypath from '../../../../common/thor/ypath';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch} from '../store/redux-hooks';
 
 import {loadPoolTreesIfNotLoaded} from '../store/actions/global';
 import {loadDefaultPoolTree} from '../utils/poolTrees';

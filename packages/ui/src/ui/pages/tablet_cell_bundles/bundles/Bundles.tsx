@@ -1,5 +1,5 @@
 import React from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch} from '../../../store/redux-hooks';
 
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import WithStickyToolbar from '../../../components/WithStickyToolbar/WithStickyToolbar';

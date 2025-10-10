@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 
-import {useDispatch} from 'react-redux';
+import {useDispatch} from '../../../store/redux-hooks';
 
 import ClickableAttributesButton from '../../../components/AttributesButton/ClickableAttributesButton';
 

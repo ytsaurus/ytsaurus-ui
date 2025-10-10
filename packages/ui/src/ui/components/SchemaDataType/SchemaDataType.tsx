@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {getPrimitiveTypesMap} from '../../store/selectors/global/supported-features';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../store/redux-hooks';
 import {getType} from './dataTypes';
 import DataType from './DataType/DataType';
 import {parseV3Type} from './dateTypesV3';

@@ -8,7 +8,7 @@ import {
     getCurrentQueryACO,
 } from '../../../../store/selectors/query-tracker/query';
 import {toggleShareQuery} from '../../../../store/actions/query-tracker/query';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {isSupportedShareQuery} from '../../../../store/selectors/query-tracker/queryAco';
 import {useToggle} from 'react-use';
 import {toaster} from '../../../../utils/toaster';

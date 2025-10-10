@@ -1,6 +1,6 @@
 import React from 'react';
 import {getSchedulingOperationsLoadingStatus} from '../../../../../store/selectors/scheduling/expanded-pools';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../../store/redux-hooks';
 import Loader from '../../../../../components/Loader/Loader';
 
 function SchedulingOperationsLoader() {

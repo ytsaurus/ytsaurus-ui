@@ -1,6 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import {Redirect, Route, Switch, useLocation} from 'react-router';
-import {connect, useSelector} from 'react-redux';
+import {connect} from 'react-redux';
+import {useSelector} from '../../store/redux-hooks';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 

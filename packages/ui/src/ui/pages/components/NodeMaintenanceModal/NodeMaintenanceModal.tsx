@@ -1,5 +1,5 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
@@ -21,7 +21,6 @@ import {
     applyMaintenance,
     closeNodeMaintenanceModal,
 } from '../../../store/actions/components/node-maintenance-modal';
-import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {YTError} from '../../../../@types/types';
 import {Host} from '../../../containers/Host/Host';
 
@@ -35,7 +34,7 @@ type FormValues = NodeMaintenanceState['maintenance'] & {
 };
 
 export function NodeMaintenanceModal() {
-    const dispatch = useThunkDispatch();
+    const dispatch = useDispatch();
     const [error, setError] = React.useState<YTError | undefined>();
 
     const initialValues = useSelector(getNodeMaintenanceModalInitialValues);

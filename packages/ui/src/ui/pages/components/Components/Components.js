@@ -1,7 +1,7 @@
 import React from 'react';
 import block from 'bem-cn-lite';
-import PropTypes from 'prop-types';
-import {connect, useSelector} from 'react-redux';
+import {connect} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 import {Redirect, Route, Switch, matchPath} from 'react-router';
 
 import VersionsV2 from '../tabs/Versions/VersionsV2';
@@ -87,15 +87,15 @@ function RedirectToTabletCells() {
     return <Redirect to={tabletActiveBundleLink(cluster, '')} />;
 }
 
-Components.propTypes = {
-    // from react-router
-    match: PropTypes.shape({
-        path: PropTypes.string.isRequired,
-        url: PropTypes.string.isRequired,
-    }).isRequired,
-    // from connect
-    lastVisitedTab: PropTypes.string,
-};
+// Components.propTypes = {
+//     // from react-router
+//     match: PropTypes.shape({
+//         path: PropTypes.string.isRequired,
+//         url: PropTypes.string.isRequired,
+//     }).isRequired,
+//     // from connect
+//     lastVisitedTab: PropTypes.string,
+// };
 
 const mapStateToProps = (state) => {
     const lastVisitedTabs = getLastVisitedTabs(state);
