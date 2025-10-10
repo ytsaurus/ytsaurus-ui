@@ -209,31 +209,17 @@ const getSchedulingOverviewFilteredTree = createSelector(
     [getCurrentPool, getSchedulingFilteredPoolNames, getCurrentTreeExpandedPools],
     (treeRoot, visiblePools, expandedPools) => {
         if (treeRoot) {
+//            const chyt = treeRoot.children.find(({name}) => name === 'chyt');
+//            treeRoot = {...treeRoot, children: [chyt]};
             const res = treeList.filterTreeEachChild(
                 treeRoot,
                 (pool: {name: string; parent?: string}) => {
-                    const {name, parent} = pool;
-                    const isVisible = visiblePools === undefined || visiblePools.has(name);
-
-                    if (!isVisible) {
-                        return false;
-                    }
-
-                    if (!parent || parent === ROOT_POOL_NAME) {
-                        return true;
-                    }
-
-                    return Boolean(expandedPools?.has(parent));
+                    const {name} = pool;
+                    return visiblePools === undefined || visiblePools.has(name);
                 },
-                (leaf) => {
-                    const {pool} = leaf;
-                    const isVisible = visiblePools === undefined || visiblePools.has(pool!);
-
-                    if (!isVisible) {
-                        return false;
-                    }
-
-                    return pool === ROOT_POOL_NAME || Boolean(expandedPools?.has(pool!));
+                undefined,
+                function isCollapsed({name}) {
+                    return name !== ROOT_POOL_NAME && !expandedPools?.has(name);
                 },
             );
             return res;
