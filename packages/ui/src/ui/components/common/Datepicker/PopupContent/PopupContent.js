@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
-import {Button, Tabs} from '@gravity-ui/uikit';
+import {Button} from '@gravity-ui/uikit';
+import {Tabs} from '@gravity-ui/uikit/legacy';
 
 import i18n from '../i18n';
 import {Presets} from '../Presets/Presets';
