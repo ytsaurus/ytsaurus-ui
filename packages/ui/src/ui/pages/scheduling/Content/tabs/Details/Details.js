@@ -46,7 +46,7 @@ import {Bold, Secondary} from '../../../../../components/Text/Text';
 import SchedulingOperationsError from '../SchedulingOperationsError/SchedulingOperationsError';
 import {getPoolPathsByName} from '../../../../../store/actions/scheduling/expanded-pools';
 
-import PoolTags from '../OverviewOld/PoolTags';
+import PoolTags from '../Overview/SchedulingTable/PoolTags';
 
 import './Details.scss';
 
