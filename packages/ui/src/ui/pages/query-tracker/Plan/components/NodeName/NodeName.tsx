@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Icon, Link, Popover, Text} from '@gravity-ui/uikit';
+import {Icon, Link, Text, Tooltip} from '@gravity-ui/uikit';
 
 import {ProcessedNode, nodeHasInfo} from '../../utils';
 
@@ -29,7 +29,7 @@ export function NodeName({node, className}: {node: ProcessedNode; className?: st
         <span className={block('name', className)}>
             {name}
             {nodeHasInfo(node) && (
-                <Popover
+                <Tooltip
                     className={block('operation-node-info')}
                     content={
                         <OperationNodeInfo
@@ -37,13 +37,12 @@ export function NodeName({node, className}: {node: ProcessedNode; className?: st
                             className={block('operation-node-info-popup')}
                         />
                     }
-                    hasArrow={false}
                     placement={['right', 'left']}
                     openDelay={300}
                     closeDelay={300}
                 >
                     <Icon className={block('icon')} data={infoIcon} size={12} />
-                </Popover>
+                </Tooltip>
             )}
         </span>
     );
