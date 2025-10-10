@@ -94,9 +94,7 @@ export const QueryResults = React.memo<Props>(function QueryResults({
             );
         }
         if (tabId === 'progress') {
-            return (
-                <PlanContainer isActive={true} operationIdToCluster={operationIdToCluster} />
-            );
+            return <PlanContainer isActive={true} operationIdToCluster={operationIdToCluster} />;
         }
         return null;
     };
@@ -125,7 +123,10 @@ export const QueryResults = React.memo<Props>(function QueryResults({
                             </TabList>
                             {activeTabId?.includes('result') && Number.isInteger(resultIndex) && (
                                 <div className={b('tab_actions')}>
-                                    <QueryResultActions query={query} resultIndex={resultIndex ?? 0} />
+                                    <QueryResultActions
+                                        query={query}
+                                        resultIndex={resultIndex ?? 0}
+                                    />
                                 </div>
                             )}
                             {activeTabId === 'progress' && <PlanActions />}

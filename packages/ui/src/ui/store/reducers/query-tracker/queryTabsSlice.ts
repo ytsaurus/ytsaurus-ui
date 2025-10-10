@@ -9,7 +9,7 @@ export type QueryResultTab =
     | `result/${Index}`
     | `chart-tab/${Index}`;
 
-export type QueryTab = {id: QueryResultTab, title: string};
+export type QueryTab = {id: QueryResultTab; title: string};
 
 type QueryResultTabsState = {
     activeTabId: QueryResultTab | undefined;
