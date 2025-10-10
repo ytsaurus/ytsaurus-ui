@@ -65,6 +65,42 @@ export const QueryResults = React.memo<Props>(function QueryResults({
         dispatch(setActiveTab(id as QueryResultTab));
     };
 
+    const getTabContent = (tabId: string) => {
+        if (tabId?.includes('result')) {
+            return (
+                <NotRenderUntilFirstVisible className={b('result-wrap')}>
+                    <QueryResultContainer query={query} activeResultParams={activeResultParams} />
+                </NotRenderUntilFirstVisible>
+            );
+        }
+        if (tabId?.includes('chart-tab')) {
+            return (
+                <NotRenderUntilFirstVisible className={b('result-wrap')}>
+                    <QueryChartTab query={query} resultIndex={parseResultTabIndex(tabId) || 0} />
+                </NotRenderUntilFirstVisible>
+            );
+        }
+        if (tabId === 'error') {
+            return <ErrorTree rootError={query.error} />;
+        }
+        if (tabId === 'meta') {
+            return <QueryMetaTable query={query} />;
+        }
+        if (tabId === 'statistic') {
+            return (
+                <NotRenderUntilFirstVisible>
+                    <YQLStatisticsTable />
+                </NotRenderUntilFirstVisible>
+            );
+        }
+        if (tabId === 'progress') {
+            return (
+                <PlanContainer isActive={true} operationIdToCluster={operationIdToCluster} />
+            );
+        }
+        return null;
+    };
+
     return (
         <div className={b(null, className)}>
             <div className={b('meta')}>
@@ -78,10 +114,7 @@ export const QueryResults = React.memo<Props>(function QueryResults({
                     progress={progress?.yql_progress}
                     defaultView="graph"
                 >
-                    <TabProvider
-                        value={activeTabId}
-                        onUpdate={(tabId: string) => setTab(tabId, query?.id)}
-                    >
+                    <TabProvider value={activeTabId || ''} onUpdate={onTabChange}>
                         <div className={b('header')}>
                             <TabList className={b('tabs')}>
                                 {tabs.map((tab) => (
@@ -90,61 +123,19 @@ export const QueryResults = React.memo<Props>(function QueryResults({
                                     </Tab>
                                 ))}
                             </TabList>
-                            {tabs.map((tab) => (
-                                <TabPanel key={tab.id} value={tab.id}>
-                                    {tab.id.startsWith(QueryResultTab.RESULT) &&
-                                        category === QueryResultTab.RESULT &&
-                                        Number.isInteger(resultIndex) && (
-                                            <div className={b('tab_actions')}>
-                                                <QueryResultActions
-                                                    query={query}
-                                                    resultIndex={resultIndex ?? 0}
-                                                />
-                                            </div>
-                                        )}
-                                    {tab.id === QueryResultTab.PROGRESS &&
-                                        category === QueryResultTab.PROGRESS && <PlanActions />}
-                                </TabPanel>
-                            ))}
+                            {activeTabId?.includes('result') && Number.isInteger(resultIndex) && (
+                                <div className={b('tab_actions')}>
+                                    <QueryResultActions query={query} resultIndex={resultIndex ?? 0} />
+                                </div>
+                            )}
+                            {activeTabId === 'progress' && <PlanActions />}
                         </div>
                         <div className={b('content')}>
-                            <NotRenderUntilFirstVisible
-                                hide={
-                                    category !== QueryResultTab.RESULT &&
-                                    !Number.isInteger(resultIndex)
-                                }
-                                className={b('result-wrap')}
-                            >
-                                <QueryResultContainer
-                                    query={query}
-                                    activeResultParams={activeResultParams}
-                                />
-                            </NotRenderUntilFirstVisible>
-                            <NotRenderUntilFirstVisible
-                                hide={!category.includes(QueryResultTab.CHART_TAB)}
-                                className={b('result-wrap')}
-                            >
-                                <QueryChartTab
-                                    query={query}
-                                    resultIndex={parseResultTabIndex(category) || 0}
-                                />
-                            </NotRenderUntilFirstVisible>
-                            {category === QueryResultTab.ERROR && (
-                                <ErrorTree rootError={query.error} />
-                            )}
-                            {category === QueryResultTab.META && <QueryMetaTable query={query} />}
-
-                            <NotRenderUntilFirstVisible
-                                hide={category !== QueryResultTab.STATISTIC}
-                            >
-                                <YQLStatisticsTable />
-                            </NotRenderUntilFirstVisible>
-                            {category === QueryResultTab.PROGRESS && (
-                                <PlanContainer
-                                    isActive={true}
-                                    operationIdToCluster={operationIdToCluster}
-                                />
-                            )}
+                            {tabs.map((tab) => (
+                                <TabPanel key={tab.id} value={tab.id}>
+                                    {getTabContent(tab.id)}
+                                </TabPanel>
+                            ))}
                         </div>
                     </TabProvider>
                 </PlanProvider>

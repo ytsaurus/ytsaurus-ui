@@ -3,7 +3,7 @@ import {
     QueriesListAuthorFilter,
     QueriesListFilter,
 } from '../../../../types/query-tracker/queryList';
-import {ControlGroupOption, RadioButton} from '@gravity-ui/uikit';
+import {ControlGroupOption, SegmentedRadioGroup} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from 'react-redux';
 import {getQueriesFilters} from '../../../../store/selectors/query-tracker/queriesList';
 import {applyFilter} from '../../../../store/actions/query-tracker/queriesList';

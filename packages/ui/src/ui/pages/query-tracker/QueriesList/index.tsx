@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import block from 'bem-cn-lite';
 import {Tab, TabList, TabPanel, TabProvider} from '@gravity-ui/uikit';
 import {QueriesHistoryList} from './QueriesHistoryList';
@@ -48,6 +48,7 @@ export function QueriesList() {
     const dispatch = useDispatch();
     const activeTab = useSelector(getQueriesListMode);
     const tabsList = useSelector(getQueriesListTabs);
+    const isInitializedRef = useRef(false);
 
     useEffect(() => {
         if (!isInitializedRef.current) {
