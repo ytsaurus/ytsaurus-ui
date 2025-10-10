@@ -1,5 +1,5 @@
 import React, {FC, useCallback, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import {Page} from '../../../../shared/constants/settings';
 import {getQueryDraft} from '../../../store/selectors/query-tracker/query';

@@ -1,5 +1,5 @@
-import React from 'react';
-import {useSelector} from 'react-redux';
+import React, {useMemo} from 'react';
+import {useSelector} from '../../../../../store/redux-hooks';
 
 import {YTErrorBlock} from '../../../../../components/Error/Error';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
@@ -13,11 +13,11 @@ import {
     getJobsMonitoringItemsWithDescriptor,
 } from '../../../../../store/selectors/operations/jobs-monitor';
 import {getCluster} from '../../../../../store/selectors/global';
+import {getOperation} from '../../../../../store/selectors/operations/operation';
 import UIFactory from '../../../../../UIFactory';
 import {Flex} from '@gravity-ui/uikit';
 
 import i18n from './i18n';
-import {getOperation} from '../../../../../store/selectors/operations/operation';
 
 function JobsMonitor() {
     const cluster = useSelector(getCluster);

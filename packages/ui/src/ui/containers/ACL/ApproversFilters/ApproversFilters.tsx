@@ -1,5 +1,5 @@
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 import {changeApproversSubjectFilter} from '../../../store/actions/acl-filters';
 import {getApproversSubjectFilter} from '../../../store/selectors/acl-filters';

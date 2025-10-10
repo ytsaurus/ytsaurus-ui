@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {RootState} from '../../../store/reducers';
 import {Text} from '@gravity-ui/uikit';
 import {closeUserDeleteModal, deleteUser} from '../../../store/actions/users-typed';

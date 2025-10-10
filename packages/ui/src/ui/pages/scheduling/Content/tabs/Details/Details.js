@@ -1,5 +1,6 @@
 import React, {Component, Fragment} from 'react';
-import {connect, useSelector} from 'react-redux';
+import {connect} from 'react-redux';
+import {useSelector} from '../../../../../store/redux-hooks';
 import PropTypes from 'prop-types';
 import hammer from '../../../../../common/hammer';
 import cn from 'bem-cn-lite';

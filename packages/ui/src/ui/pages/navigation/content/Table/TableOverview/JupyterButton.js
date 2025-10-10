@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../../store/redux-hooks';
 
 import Button from '../../../../../components/Button/Button';
 import Logo from '../../../../../assets/img/svg/jupyter-logo.svg';

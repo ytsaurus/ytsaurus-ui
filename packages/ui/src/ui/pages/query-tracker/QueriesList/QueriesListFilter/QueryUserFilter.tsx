@@ -1,5 +1,5 @@
 import React, {FC, useCallback, useMemo} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {getAllUserNames, getCurrentUserName} from '../../../../store/selectors/global';
 import {useAllUserNamesFiltered} from '../../../../hooks/global';
 import {Select, SelectOption} from '@gravity-ui/uikit';

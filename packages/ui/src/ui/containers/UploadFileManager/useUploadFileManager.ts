@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../store/redux-hooks';
 import {getPath} from '../../store/selectors/navigation';
 import {getCluster} from '../../store/selectors/global';
 import {AxiosError, AxiosProgressEvent, isCancel} from 'axios';

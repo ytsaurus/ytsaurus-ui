@@ -7,7 +7,7 @@ import {
     getNavigationIsWritable,
     getNavigationPathAccount,
 } from '../../../store/selectors/navigation/navigation';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 import {YTErrorBlock} from '../../../components/Block/Block';
 import {getPath} from '../../../store/selectors/navigation';
 import {genAccountsAclLink} from '../../../utils/accounts/accounts';

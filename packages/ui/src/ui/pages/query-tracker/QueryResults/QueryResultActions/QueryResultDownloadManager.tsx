@@ -1,13 +1,12 @@
 import {QueryResultColumn} from '../../../../types/query-tracker/queryResult';
 import qs from 'qs';
 import React, {useMemo, useState} from 'react';
-import {useSelector} from 'react-redux';
 import {getCluster} from '../../../../store/selectors/global';
 import {DownloadManager} from '../../../navigation/content/Table/DownloadManager/DownloadManager';
 import {getDownloadQueryResultURL} from '../../../../store/actions/query-tracker/api';
 import {getQueryResult} from '../../../../store/selectors/query-tracker/queryResult';
 import {RootState} from '../../../../store/reducers';
-import {useThunkDispatch} from '../../../../store/thunkDispatch';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {FIX_MY_TYPE} from '../../../../../@types/types';
 import {getExportTableBaseUrl} from '../../../../config';
 import {downloadFile} from '../../../../store/actions/navigation/content/table/download-manager';
@@ -89,7 +88,7 @@ export const QueryResultDownloadManager = React.memo(function QueryResultDownloa
 }: Props) {
     const cluster = useSelector(getCluster);
     const result = useSelector((state: RootState) => getQueryResult(state, queryId, resultIndex));
-    const dispatch = useThunkDispatch();
+    const dispatch = useDispatch();
     const startRow = result?.resultReady ? result?.page * result?.settings?.pageSize || 0 : 0;
     const allItems = useMemo(() => {
         return allColumns.map((item) => ({

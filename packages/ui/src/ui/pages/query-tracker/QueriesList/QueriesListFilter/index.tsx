@@ -11,7 +11,7 @@ import Dropdown from '../../../../components/Dropdown/Dropdown';
 import Button from '../../../../components/Button/Button';
 import GearIcon from '@gravity-ui/icons/svgs/gear.svg';
 import ColumnSelector from '../../../../components/ColumnSelector/ColumnSelector';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
     getQueriesFilters,
     getQueriesListMode,

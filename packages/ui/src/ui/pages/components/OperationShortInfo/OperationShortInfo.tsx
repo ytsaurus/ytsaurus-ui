@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import moment from 'moment';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';

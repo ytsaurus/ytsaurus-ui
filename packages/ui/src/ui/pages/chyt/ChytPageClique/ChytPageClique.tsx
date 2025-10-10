@@ -1,5 +1,5 @@
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {RouteComponentProps, useHistory} from 'react-router';
 import moment from 'moment';
 import cn from 'bem-cn-lite';

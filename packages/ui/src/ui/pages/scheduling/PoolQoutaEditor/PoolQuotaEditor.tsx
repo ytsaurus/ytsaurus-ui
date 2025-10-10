@@ -6,7 +6,8 @@ import map_ from 'lodash/map';
 import QuotaEditor, {QuotaEditorProps} from '../../../components/QuotaEditor/QuotaEditor';
 import isEmpty_ from 'lodash/isEmpty';
 import {RootState} from '../../../store/reducers';
-import {ConnectedProps, connect, useSelector} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 import {getSchedulingPoolsMapByName} from '../../../store/selectors/scheduling/scheduling-pools';
 import {
     getSchedulingSourcesOfEditItem,

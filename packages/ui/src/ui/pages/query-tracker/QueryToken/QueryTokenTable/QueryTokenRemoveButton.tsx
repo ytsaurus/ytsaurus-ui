@@ -1,7 +1,7 @@
 import React, {FC, useState} from 'react';
 import {Button, Icon} from '@gravity-ui/uikit';
 import TrashBinIcon from '@gravity-ui/icons/svgs/trash-bin.svg';
-import {useDispatch} from 'react-redux';
+import {useDispatch} from '../../../../store/redux-hooks';
 import {removeQueryToken} from '../../../../store/actions/settings/settings';
 import {YTDFDialog} from '../../../../components/Dialog';
 import i18n from './i18n';

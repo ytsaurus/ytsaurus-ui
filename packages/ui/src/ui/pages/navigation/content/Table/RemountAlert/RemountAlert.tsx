@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import b from 'bem-cn-lite';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {Alert, Button} from '@gravity-ui/uikit';
 import ypath from '../../../../../common/thor/ypath';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../store/redux-hooks';
 import {getFontFamilies} from '../../store/selectors/global/fonts';
 import {waitForFontFamily} from '../../store/actions/global/fonts';
 

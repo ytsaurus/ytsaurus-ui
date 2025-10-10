@@ -5,7 +5,7 @@ import Icon from '../../../../components/Icon/Icon';
 
 import type {QueryItem} from '../../../../types/query-tracker/api';
 import {setQueryName} from '../../../../store/actions/query-tracker/api';
-import {useThunkDispatch} from '../../../../store/thunkDispatch';
+import {useDispatch} from '../../../../store/redux-hooks';
 
 export interface Props {
     query: QueryItem;
@@ -17,7 +17,7 @@ interface FormValues {
 }
 
 export default function EditQueryNameModal({query: {state, annotations, id}, className}: Props) {
-    const dispatch = useThunkDispatch();
+    const dispatch = useDispatch();
     const [error, setError] = useState<Error | undefined>(undefined);
     const [visible, setVisible] = useState(false);
 

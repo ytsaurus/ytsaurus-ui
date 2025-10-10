@@ -1,6 +1,5 @@
 import React, {useCallback, useState} from 'react';
 import axios, {AxiosError} from 'axios';
-import {useDispatch, useSelector} from 'react-redux';
 import {Button, Text, TextInput} from '@gravity-ui/uikit';
 import {onSuccessLogin} from '../../../store/actions/global';
 import ytLocalStorage from '../../../utils/yt-local-storage';
@@ -10,6 +9,7 @@ import {
     getOAuthButtonLabel,
     getOAuthEnabled,
 } from '../../../store/selectors/global';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import LoginPageWrapper from '../LoginPageWrapper/LoginPageWrapper';
 import isEmpty_ from 'lodash/isEmpty';
 

@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 import {makeRoutedURL} from '../../store/location';
 import Link from '../../components/Link/Link';
 
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../store/redux-hooks';
 import {Button, Icon} from '@gravity-ui/uikit';
 
 import PagesPanel from './PagesPanel';

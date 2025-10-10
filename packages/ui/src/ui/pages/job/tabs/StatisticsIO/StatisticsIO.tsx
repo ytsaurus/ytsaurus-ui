@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 import {createSelector} from 'reselect';
 import cn from 'bem-cn-lite';
 

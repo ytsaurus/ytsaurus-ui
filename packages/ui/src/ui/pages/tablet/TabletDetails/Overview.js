@@ -1,4 +1,4 @@
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import React, {useCallback, useState} from 'react';
 import hammer from '../../../common/hammer';
 import PropTypes from 'prop-types';

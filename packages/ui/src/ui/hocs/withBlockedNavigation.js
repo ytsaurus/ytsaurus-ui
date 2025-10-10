@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {connect, useDispatch} from 'react-redux';
+import {connect} from 'react-redux';
+import {useDispatch} from '../store/redux-hooks';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
 import {addNavigationBlocker, removeNavigationBlocker} from '../store/actions/global';

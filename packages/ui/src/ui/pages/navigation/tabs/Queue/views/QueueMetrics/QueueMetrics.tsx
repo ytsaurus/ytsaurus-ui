@@ -2,7 +2,7 @@ import React from 'react';
 
 import {getCluster} from '../../../../../../store/selectors/global';
 import {getPath} from '../../../../../../store/selectors/navigation';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../../../store/redux-hooks';
 import ErrorBoundary from '../../../../../../components/ErrorBoundary/ErrorBoundary';
 import UIFactory from '../../../../../../UIFactory';
 

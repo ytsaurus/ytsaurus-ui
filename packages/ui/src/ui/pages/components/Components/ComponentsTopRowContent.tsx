@@ -1,5 +1,5 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 import {Route, RouteComponentProps, Switch, useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
 import {Breadcrumbs} from '@gravity-ui/uikit';

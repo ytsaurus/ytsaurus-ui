@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import {getTabletsActiveBundleData} from '../../../store/selectors/tablet_cell_bundles';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 import MetaTable, {MetaTableItem} from '../../../components/MetaTable/MetaTable';
 import {Progress} from '@gravity-ui/uikit';
 

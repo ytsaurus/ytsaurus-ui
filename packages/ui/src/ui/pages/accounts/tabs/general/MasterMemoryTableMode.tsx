@@ -7,7 +7,7 @@ import {
     getAccountsContentMode,
     getAccountsMasterMemoryContentMode,
 } from '../../../../store/selectors/accounts/accounts-ts';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
     AccountsStateDataFields,
     setAccountsStateDataFields,

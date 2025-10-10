@@ -5,7 +5,7 @@ import map_ from 'lodash/map';
 import cn from 'bem-cn-lite';
 
 import {getNodeAlerts} from '../../../../../store/selectors/components/node/node';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../../store/redux-hooks';
 import {YTAlertBlock} from '../../../../../components/Alert/Alert';
 
 import './NodeAlerts.scss';

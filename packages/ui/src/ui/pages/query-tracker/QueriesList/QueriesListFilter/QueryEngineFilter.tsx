@@ -2,7 +2,7 @@ import React, {FC, useCallback} from 'react';
 import {Select} from '@gravity-ui/uikit';
 import {Engines} from '../../../../types/query-tracker/api';
 import {QueryEngine, QueryEnginesNames} from '../../../../../shared/constants/engines';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {getQueriesFilters} from '../../../../store/selectors/query-tracker/queriesList';
 import {applyFilter} from '../../../../store/actions/query-tracker/queriesList';
 

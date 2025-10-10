@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch} from '../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
 import Filter from '../Filter/Filter';

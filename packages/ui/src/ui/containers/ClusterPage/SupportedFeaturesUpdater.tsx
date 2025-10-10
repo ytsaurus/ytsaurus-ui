@@ -1,6 +1,6 @@
 import React from 'react';
 import {useUpdater} from '../../hooks/use-updater';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../store/redux-hooks';
 import {getCluster} from '../../store/selectors/global';
 import {fetchSupportedFeatures} from '../../store/actions/global/supported-features';
 

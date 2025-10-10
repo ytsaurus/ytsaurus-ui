@@ -1,6 +1,7 @@
 import {DropdownMenu} from '@gravity-ui/uikit';
 import React, {Component} from 'react';
-import {connect, useDispatch, useSelector} from 'react-redux';
+import {connect} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 

@@ -3,29 +3,28 @@ import sortBy_ from 'lodash/sortBy';
 
 import {createSelector} from 'reselect';
 import {getSettingOdinOverviewVisiblePresets} from './index';
-import {OdinRootState} from '../_reducers';
+import {RootState} from '../../../store/reducers';
 import {makeGetSetting} from '../../../store/selectors/settings';
 import {OdinTab} from '../odin-constants';
 import {ODIN_LAST_VISITED_TAB} from '../odin-settings';
 import {NAMESPACES} from '../../../../shared/constants/settings';
 
-export const getOdinOverviewTimeFromFilter = (state: OdinRootState) =>
+export const getOdinOverviewTimeFromFilter = (state: RootState) =>
     state.odin.overview.timeFromFilter;
-export const getOdinOverviewTimeFrom = (state: OdinRootState) => state.odin.overview.timeFrom;
-export const getOdinOverviewTimeTo = (state: OdinRootState) => state.odin.overview.timeTo;
-export const getOdinOverviewLoading = (state: OdinRootState) => state.odin.overview.loading;
-export const getOdinOverviewData = (state: OdinRootState) => state.odin.overview.data;
-export const getOdinOverviewDataCluster = (state: OdinRootState) => state.odin.overview.dataCluster;
-const getOdinOverviewHiddenMetricsRaw = (state: OdinRootState) => state.odin.overview.hiddenMetrics;
-export const getOdinOverviewShowCreatePresetDialog = (state: OdinRootState) =>
+export const getOdinOverviewTimeFrom = (state: RootState) => state.odin.overview.timeFrom;
+export const getOdinOverviewTimeTo = (state: RootState) => state.odin.overview.timeTo;
+export const getOdinOverviewLoading = (state: RootState) => state.odin.overview.loading;
+export const getOdinOverviewData = (state: RootState) => state.odin.overview.data;
+export const getOdinOverviewDataCluster = (state: RootState) => state.odin.overview.dataCluster;
+const getOdinOverviewHiddenMetricsRaw = (state: RootState) => state.odin.overview.hiddenMetrics;
+export const getOdinOverviewShowCreatePresetDialog = (state: RootState) =>
     state.odin.overview.showCreatePresetDialog;
-export const getOdinOverviewUseDefaultPreset = (state: OdinRootState) =>
+export const getOdinOverviewUseDefaultPreset = (state: RootState) =>
     state.odin.overview.useDefaultPreset;
-export const getOdinOverviewPresetToRemove = (state: OdinRootState) =>
+export const getOdinOverviewPresetToRemove = (state: RootState) =>
     state.odin.overview.presetToRemove;
 
-const getOdinOverviewClusterMetricsRaw = (state: OdinRootState) =>
-    state.odin.overview.clusterMetrics;
+const getOdinOverviewClusterMetricsRaw = (state: RootState) => state.odin.overview.clusterMetrics;
 
 export const getOdinOverviewVisiblePresets = createSelector(
     [getSettingOdinOverviewVisiblePresets],

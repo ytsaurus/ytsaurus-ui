@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../../../store/redux-hooks';
 
 import map_ from 'lodash/map';
 import zipObject_ from 'lodash/zipObject';

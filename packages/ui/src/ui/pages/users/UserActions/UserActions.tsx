@@ -9,7 +9,7 @@ import {showUserEditorModal} from '../../../store/actions/users';
 import {showUserDeleteModal} from '../../../store/actions/users-typed';
 import {getUserManagementEnabled} from '../../../store/selectors/global';
 import block from 'bem-cn-lite';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 
 import './UserActions.scss';
 

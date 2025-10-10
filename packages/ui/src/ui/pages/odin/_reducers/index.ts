@@ -6,4 +6,4 @@ const odin = combineReducers({details, overview});
 
 export type OdinRootState = {odin: ReturnType<typeof odin>};
 
-export default {odin};
+export default odin;

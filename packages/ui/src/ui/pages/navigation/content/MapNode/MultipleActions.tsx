@@ -4,7 +4,7 @@ import isEmpty_ from 'lodash/isEmpty';
 import map_ from 'lodash/map';
 import some_ from 'lodash/some';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import block from 'bem-cn-lite';
 
 import Icon from '../../../../components/Icon/Icon';

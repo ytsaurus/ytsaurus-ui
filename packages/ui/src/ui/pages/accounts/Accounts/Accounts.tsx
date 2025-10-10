@@ -1,6 +1,7 @@
 import React from 'react';
 import block from 'bem-cn-lite';
-import {ConnectedProps, connect, useSelector} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 
 import reduce_ from 'lodash/reduce';
 

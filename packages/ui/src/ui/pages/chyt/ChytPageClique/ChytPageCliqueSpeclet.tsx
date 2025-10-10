@@ -1,5 +1,5 @@
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import reduce_ from 'lodash/reduce';
 import cn from 'bem-cn-lite';
 
@@ -32,7 +32,6 @@ import {
     getChytSpecletError,
     getChytSpecletLoaded,
 } from '../../../store/selectors/chyt/speclet';
-import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {YTError} from '../../../../@types/types';
 import {WaitForDefaultPoolTree} from '../../../hooks/global-pool-trees';
 
@@ -181,7 +180,7 @@ function ChytSpecletEditDialog({
     onClose: () => void;
     defaultPoolTree: string;
 }) {
-    const dispatch = useThunkDispatch();
+    const dispatch = useDispatch();
     const [error, setError] = React.useState<YTError | undefined>();
 
     const {fields, initialValues, fieldTypeByName} = React.useMemo(() => {

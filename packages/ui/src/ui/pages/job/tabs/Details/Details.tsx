@@ -13,7 +13,7 @@ import CollapsibleSection from '../../../../components/CollapsibleSection/Collap
 
 import ypath from '../../../../common/thor/ypath';
 import {RootState} from '../../../../store/reducers';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 import {JobError, JobEvents, JobStatistic} from '../../../../types/operations/job';
 
 import './Details.scss';

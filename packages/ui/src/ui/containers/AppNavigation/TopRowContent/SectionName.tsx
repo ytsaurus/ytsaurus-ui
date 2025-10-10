@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 import {useRouteMatch} from 'react-router';
 import {getPagesInfoMapById} from '../../../store/selectors/slideoutMenu';
 

@@ -4,7 +4,7 @@ import {Button, Icon} from '@gravity-ui/uikit';
 import {QueryTokenDropdown} from './QueryTokenDropdown';
 import {useToggle} from 'react-use';
 import {PopupWithCloseButton} from '../../QuerySettingsButton/PopupWithCloseButton';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 import {getQuerySecrets} from '../../../../store/selectors/query-tracker/query';
 
 export const QueryTokenButton: FC = () => {

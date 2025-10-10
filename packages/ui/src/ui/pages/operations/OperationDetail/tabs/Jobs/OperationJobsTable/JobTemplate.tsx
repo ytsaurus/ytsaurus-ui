@@ -4,7 +4,7 @@ import Link from '../../../../../../components/Link/Link';
 import {Template} from '../../../../../../components/MetaTable/templates/Template';
 import {showErrorModal} from '../../../../../../store/actions/actions';
 import {showInputPaths} from '../../../../../../store/actions/operations/jobs';
-import {useDispatch} from 'react-redux';
+import {useDispatch} from '../../../../../../store/redux-hooks';
 import {Job} from '../job-selector';
 
 /* ----------------------------------------------------------------------------------------------------------------- */

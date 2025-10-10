@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import b from 'bem-cn-lite';
 import moment, {Moment} from 'moment';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../../../store/redux-hooks';
 
 import format from '../../../../../../common/hammer/format';
 import MetaTable from '../../../../../../components/MetaTable/MetaTable';

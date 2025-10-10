@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
 import Yson from '../../components/Yson/Yson';

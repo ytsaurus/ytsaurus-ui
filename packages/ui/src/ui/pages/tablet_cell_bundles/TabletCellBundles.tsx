@@ -9,7 +9,7 @@ import {Redirect, Route, Switch, useRouteMatch} from 'react-router';
 import {BundleCells} from './cells/Cells';
 import {TabSettings, makeTabProps} from '../../utils';
 import {useUpdater} from '../../hooks/use-updater';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../store/redux-hooks';
 import {fetchChaosBundles as fetchChaosBundles} from '../../store/actions/chaos_cell_bundles';
 import {fetchTabletsBundles} from '../../store/actions/tablet_cell_bundles';
 import {

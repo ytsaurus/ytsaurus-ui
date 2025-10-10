@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch} from '../../../store/redux-hooks';
 import {Text} from '@gravity-ui/uikit';
 import {deleteGroup, fetchGroups} from '../../../store/actions/groups';
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';

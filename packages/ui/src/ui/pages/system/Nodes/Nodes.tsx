@@ -1,7 +1,8 @@
 import cn from 'bem-cn-lite';
 import map_ from 'lodash/map';
 import React, {useState} from 'react';
-import {ConnectedProps, connect, useSelector} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 
 import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
 
@@ -28,7 +29,7 @@ import {
     getSettingsSystemNodesCollapsed,
 } from '../../../store/selectors/settings/settings-ts';
 import {getSystemNodesNodeTypesToLoad} from '../../../store/selectors/system/nodes';
-import {useThunkDispatch} from '../../../store/thunkDispatch';
+import {useDispatch} from '../../../store/redux-hooks';
 import {
     ComponentsNodesLinkParams,
     makeComponentsNodesLink,
@@ -265,7 +266,7 @@ const mapDispatchToProps = {
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 function NodesUpdater() {
-    const dispatch = useThunkDispatch();
+    const dispatch = useDispatch();
 
     const nodeTypes = useSelector(getSystemNodesNodeTypesToLoad);
     const params = useMemoizedIfEqual(nodeTypes);

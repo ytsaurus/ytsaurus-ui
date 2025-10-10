@@ -2,7 +2,7 @@ import React from 'react';
 import Link from '../../components/Link/Link';
 import {AccountsTab} from '../../constants/accounts/accounts';
 import {Page} from '../../constants';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../store/redux-hooks';
 import {getCluster} from '../../store/selectors/global';
 import hammer from '../../common/hammer';
 import {Tooltip} from '../../components/Tooltip/Tooltip';

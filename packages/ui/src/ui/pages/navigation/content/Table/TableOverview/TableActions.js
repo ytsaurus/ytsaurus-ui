@@ -1,5 +1,6 @@
 import React, {Fragment} from 'react';
-import {connect, useDispatch, useSelector} from 'react-redux';
+import {connect} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import PropTypes from 'prop-types';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import hammer from '../../../../../common/hammer';

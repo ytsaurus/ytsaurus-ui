@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 import {Flex, Icon} from '@gravity-ui/uikit';
 import ArrowRightIcon from '@gravity-ui/icons/svgs/arrow-right.svg';

@@ -1,5 +1,5 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 import map_ from 'lodash/map';
 import isEmpty_ from 'lodash/isEmpty';

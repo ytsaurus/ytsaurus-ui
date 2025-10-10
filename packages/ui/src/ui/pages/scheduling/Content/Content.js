@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 import {Redirect, Route, Switch, withRouter} from 'react-router';
 import cn from 'bem-cn-lite';
 

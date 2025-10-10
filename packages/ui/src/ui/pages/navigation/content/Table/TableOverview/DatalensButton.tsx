@@ -1,5 +1,5 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../../store/redux-hooks';
 
 import {getPath} from '../../../../../store/selectors/navigation';
 import {getCluster} from '../../../../../store/selectors/global';

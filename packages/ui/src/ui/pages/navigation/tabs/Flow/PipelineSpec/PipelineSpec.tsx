@@ -1,5 +1,4 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import {Alert, Button, Link} from '@gravity-ui/uikit';
@@ -8,7 +7,7 @@ import {YTError} from '../../../../../../@types/types';
 
 import {useUpdater} from '../../../../../hooks/use-updater';
 
-import {useThunkDispatch} from '../../../../../store/thunkDispatch';
+import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {
     loadFlowDynamicSpec,
     loadFlowStaticSpec,
@@ -211,7 +210,7 @@ function EditSpecDialog({
 }
 
 export function FlowStaticSpec({pipeline_path: path}: {pipeline_path: string}) {
-    const dispatch = useThunkDispatch();
+    const dispatch = useDispatch();
 
     const data = useSelector(getFlowStaticSpecData);
     const error = useSelector(getFlowStaticSpecError);
@@ -244,7 +243,7 @@ export function FlowStaticSpec({pipeline_path: path}: {pipeline_path: string}) {
 }
 
 export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) {
-    const dispatch = useThunkDispatch();
+    const dispatch = useDispatch();
 
     const data = useSelector(getFlowDynamicSpecData);
     const error = useSelector(getFlowStaticSpecError);

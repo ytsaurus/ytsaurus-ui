@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
-import {ConnectedProps, connect, useSelector} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
+import {useSelector} from '../../../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 import {createSelector} from 'reselect';
 import type {Column, Settings} from '@gravity-ui/react-data-table';
