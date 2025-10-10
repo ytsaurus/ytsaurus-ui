@@ -1,5 +1,6 @@
 import React from 'react';
-import {Text, Tooltip} from '@gravity-ui/uikit';
+import {Text} from '@gravity-ui/uikit';
+import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
 import Icon from '../../../../../components/Icon/Icon';
 import MetaTable from '../../../../../components/MetaTable/MetaTable';
 import {MarkdownLinePreview} from '../../../../../components/MarkdownLinePreview/MarkdownLinePreview';
@@ -49,6 +50,7 @@ export function ExternalDescription({type, data, column}: Props) {
             />
         </>
     );
+
     return (
         <div className={block()}>
             {hasWarning ? (
