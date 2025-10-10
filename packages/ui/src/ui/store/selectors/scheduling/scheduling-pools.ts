@@ -160,10 +160,15 @@ export interface OperationInfo {
     maxOperationCount?: number;
     maxRunningOperationCount?: number;
 
+    fifoIndex?: number;
+
     pool: string;
 
-    title?: never;
+    title?: string;
     user?: never;
+
+    child_pool_count?: number;
+    pool_operation_count?: number;
 }
 
 export interface PoolInfo extends Omit<OperationInfo, 'type' | 'pool'> {
@@ -173,7 +178,6 @@ export interface PoolInfo extends Omit<OperationInfo, 'type' | 'pool'> {
     leaves: Array<OperationInfo>;
     isEphemeral?: boolean;
     resources?: PoolResources;
-    fifoIndex?: number;
     weight?: number;
     minShareRatio?: number;
     maxShareRatio?: number;
