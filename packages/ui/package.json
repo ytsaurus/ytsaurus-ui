@@ -139,7 +139,6 @@
     "@types/react-dom": "^18.2.7",
     "@types/react-helmet": "^6.1.5",
     "@types/react-list": "^0.8.7",
-    "@types/react-redux": "^9.2.0",
     "@types/react-router": "^5.1.18",
     "@types/react-router-dom": "^5.3.3",
     "@types/type-is": "^1.6.3",
