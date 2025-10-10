@@ -19,7 +19,6 @@ interface Props extends BreadcrumbsProps, Omit<EditableAsTextProps, 'onChange'> 
 export function EditableBreadcrumbs(props: Props) {
     const {
         className,
-        editorClassName,
         text,
         disableEdit,
         withControls,
@@ -40,7 +39,6 @@ export function EditableBreadcrumbs(props: Props) {
     return (
         <EditableAsText
             className={block(null, className)}
-            editorClassName={block('editor')}
             text={text}
             onChange={() => {}}
             disableEdit={disableEdit}
@@ -72,7 +70,8 @@ export function EditableBreadcrumbs(props: Props) {
                     </Breadcrumbs>
                 </Box>
             )}
-            children={<></>}
-        />
+        >
+            <></>
+        </EditableAsText>
     );
 }

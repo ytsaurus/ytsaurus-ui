@@ -50,7 +50,6 @@ export function EditableAsText(props: EditableAsTextProps) {
         renderEditor,
         renderContent,
         onModeChange,
-        editorClassName,
         saveButtonView = 'normal',
         cancelButtonView = 'normal',
     } = props;
@@ -111,7 +110,7 @@ export function EditableAsText(props: EditableAsTextProps) {
     );
 
     const controlSize = size ? size : 'm';
-    console.log(editorClassName);
+
     return (
         <>
             {editMode ? (
