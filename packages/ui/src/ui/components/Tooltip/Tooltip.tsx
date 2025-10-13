@@ -40,7 +40,7 @@ export function Tooltip(props: TooltipProps) {
     return (
         <GravityTooltip
             {...rest}
-            content={content}
+            content={<div className={block('popup')}>{content}</div>}
             openDelay={openDelay ?? SHOW_HIDE_DELAY}
             closeDelay={closeDelay ?? SHOW_HIDE_DELAY}
             placement={placement ?? 'right'}

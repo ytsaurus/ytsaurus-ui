@@ -5,4 +5,11 @@
     .gt-styled-table__header-cell {
         --g-text-subheader-1-font-size: 14px;
     }
+
+    .gt-table__header-cell_pinned-right,
+    .gt-table__cell_pinned-right,
+    .gt-table__header-cell_pinned-left,
+    .gt-table__cell_pinned-left {
+        background-color: var(--g-color-base-float);
+    }
 }

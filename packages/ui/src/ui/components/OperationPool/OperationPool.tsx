@@ -56,6 +56,8 @@ export type OperationPoolProps = {
     hideTree?: boolean;
 
     routed?: boolean;
+
+    theme?: 'primary';
 };
 
 export function OperationPool({
@@ -71,6 +73,7 @@ export function OperationPool({
     hideIcon,
     hideTree,
     routed,
+    theme,
 }: OperationPoolProps) {
     const url =
         `/${cluster}/${Page.SCHEDULING}/${Tab.OVERVIEW}?pool=${pool.pool}&tree=${pool.tree}` +
@@ -82,7 +85,7 @@ export function OperationPool({
     return (
         <li className={block(null, className)} key={pool.tree}>
             <span className="elements-ellipsis">
-                <Link url={url} title={title} theme="primary" routed={routed}>
+                <Link url={url} title={title} theme={theme} routed={routed}>
                     {!hideIcon && <Icon awesome="tasks" size={14} />}
                     <span className={block('pool-link', {'no-icon': hideIcon})}>{pool.pool}</span>
                 </Link>
