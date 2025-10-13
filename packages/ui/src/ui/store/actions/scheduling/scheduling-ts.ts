@@ -48,13 +48,14 @@ import {getCluster} from '../../../store/selectors/global';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 import type {RootState} from '../../../store/reducers';
 import type {SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
-import type {PoolInfo} from '../../../store/selectors/scheduling/scheduling-pools';
 import {
     getSchedulingAttributesToFilterParams,
     schedulingOverviewHasFilter,
 } from '../../../store/selectors/scheduling/attributes-to-filter';
 import {USE_CACHE} from '../../../../shared/constants/yt-api';
 import {toaster} from '../../../utils/toaster';
+
+import {PoolTreeNode} from '../../../utils/scheduling/pool-child';
 
 type SchedulingThunkAction<T = unknown> = ThunkAction<T, RootState, unknown, SchedulingAction>;
 
@@ -172,7 +173,7 @@ export function loadSchedulingData(): SchedulingThunkAction {
     };
 }
 
-export function deletePool(item?: PoolInfo): SchedulingThunkAction {
+export function deletePool(item?: {name: string; parent?: string}): SchedulingThunkAction {
     return (dispatch, getState) => {
         if (!item) {
             return;
@@ -216,7 +217,7 @@ export function deletePool(item?: PoolInfo): SchedulingThunkAction {
     };
 }
 
-export function openPoolDeleteModal(item: PoolInfo): SchedulingAction {
+export function openPoolDeleteModal(item: PoolTreeNode): SchedulingAction {
     return {
         type: POOL_TOGGLE_DELETE_VISIBILITY,
         data: {

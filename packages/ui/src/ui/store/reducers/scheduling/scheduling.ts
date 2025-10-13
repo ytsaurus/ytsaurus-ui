@@ -1,3 +1,5 @@
+import {Action} from 'redux';
+
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 import {
     CHANGE_CONTENT_MODE,
@@ -23,8 +25,6 @@ import {
     TOGGLE_EDIT_VISIBILITY,
 } from '../../../constants/scheduling';
 import {ActionD, YTError} from '../../../types';
-import {Action} from 'redux';
-import {PoolInfo} from '../../../store/selectors/scheduling/scheduling-pools';
 import {SchedulingContentMode} from '../../../store/selectors/scheduling/scheduling';
 import {PoolTreeNode} from '../../../utils/scheduling/pool-child';
 
@@ -49,7 +49,7 @@ export interface SchedulingEphemeralState {
     editItem?: PoolTreeNode;
 
     deleteVisibility: boolean;
-    deleteItem?: PoolInfo;
+    deleteItem?: PoolTreeNode;
 
     attributesToFilter: undefined | Record<string, {parent?: string; abc: {id: number}}>;
     attributesToFilterParams: {lastTime: number; lastTree: string};

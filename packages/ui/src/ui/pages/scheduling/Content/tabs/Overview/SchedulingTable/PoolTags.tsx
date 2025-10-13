@@ -1,47 +1,48 @@
 import React from 'react';
-import {useSelector} from '../../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
 import capitalize_ from 'lodash/capitalize';
 
 import Label from '../../../../../../components/Label/Label';
-import UIFactory from '../../../../../../UIFactory';
-import {getCluster, getClusterUiConfig} from '../../../../../../store/selectors/global';
 import type {PoolLeafNode, PoolTreeNode} from '../../../../../../utils/scheduling/pool-child';
+import {YTText} from '../../../../../../components/Text/Text';
 
 import './PoolTags.scss';
 
 const block = cn('scheduling-pool-tags');
 
 function PoolTags({pool}: {pool: PoolTreeNode | PoolLeafNode}) {
-    const cluster = useSelector(getCluster);
-    const clusterUiConfig = useSelector(getClusterUiConfig);
-
     const {integralType} = pool;
     const showGuaranteeType = integralType === 'burst' || integralType === 'relaxed';
     const hasFlow = Number(pool.flowCPU) > 0 || Number(pool.flowGPU) > 0;
-    return (
-        <span className={block()}>
-            {showGuaranteeType && (
-                <Label
-                    className={block('tag')}
-                    text={capitalize_(integralType)}
-                    theme={'complementary'}
-                />
-            )}
-            {!showGuaranteeType && hasFlow && (
-                <Label className={block('tag')} text={'Integral'} theme={'complementary'} />
-            )}
-            {pool.mode === 'fifo' && (
-                <Label className={block('tag')} text={'FIFO'} theme={'misc'} />
-            )}
-            {UIFactory.renderSchedulingTableItemExtraControls({
-                cluster,
-                pool,
-                clusterUiConfig,
-            })}
-        </span>
-    );
+
+    const content = [
+        showGuaranteeType && (
+            <Label
+                key={'guarantee-type'}
+                className={block('tag')}
+                text={capitalize_(integralType)}
+                theme={'complementary'}
+            />
+        ),
+        !showGuaranteeType && hasFlow && (
+            <Label
+                key="integral"
+                className={block('tag')}
+                text={'Integral'}
+                theme={'complementary'}
+            />
+        ),
+        pool.mode === 'fifo' && (
+            <Label key="fifo" className={block('tag')} text={'FIFO'} theme={'misc'} />
+        ),
+    ].filter(Boolean);
+
+    if (content.length === 0) {
+        content.push(<YTText color="secondary">Fair share</YTText>);
+    }
+
+    return <span className={block()}>{content}</span>;
 }
 
 export default React.memo(PoolTags);

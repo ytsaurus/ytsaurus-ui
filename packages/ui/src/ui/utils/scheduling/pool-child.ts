@@ -110,6 +110,10 @@ export type PoolData<T extends 'pool' | 'operation'> = {
     dominantResource?: 'cpu' | 'gpu';
 
     resources?: Partial<Record<'cpu' | 'gpu' | 'user_memory' | 'user_slots', PoolResources>>;
+
+    operationType?: string;
+    user?: string;
+    startTime?: string;
 };
 
 export type PoolResources = {
@@ -233,6 +237,12 @@ export function updatePoolChild<T extends 'pool' | 'operation'>(
                 cypressAttributes,
                 '/max_running_operation_count',
             );
+        }
+
+        if (type === 'operation') {
+            data.operationType = ypath.getValue(attributes, '/type');
+            data.user = ypath.getValue(attributes, '/user');
+            data.startTime = ypath.getValue(attributes, '/start_time');
         }
 
         data.id = data.name;

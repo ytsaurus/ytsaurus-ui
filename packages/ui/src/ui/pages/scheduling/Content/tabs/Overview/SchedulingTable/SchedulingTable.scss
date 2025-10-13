@@ -4,4 +4,10 @@
     tr {
         height: 48px;
     }
+
+    &__edited-number {
+        &_autocalculated {
+            color: var(--g-color-text-secondary);
+        }
+    }
 }
