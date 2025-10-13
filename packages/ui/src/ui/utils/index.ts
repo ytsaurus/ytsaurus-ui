@@ -1,4 +1,3 @@
-import findIndex_ from 'lodash/findIndex';
 import fromPairs_ from 'lodash/fromPairs';
 import map_ from 'lodash/map';
 import mapValues_ from 'lodash/mapValues';
@@ -6,7 +5,8 @@ import reduce_ from 'lodash/reduce';
 
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import hammer from '../common/hammer';
+import {utils as hammerUtils} from '../common/hammer/utils';
+import format from '../common/hammer/format';
 import unipika from '../common/thor/unipika';
 import qs from 'qs';
 import Cookies from 'js-cookie';
@@ -102,12 +102,12 @@ export function formatCounterName(name: string): string {
             decommissioned: 'dec',
             full: 'full',
         }[name] || name;
-    return hammer.format['Readable'](caption, {delimiter: '-'});
+    return format['Readable'](caption, {delimiter: '-'});
 }
 
 // @ts-expect-error
 export function sortStateProgress(progress): unknown {
-    return hammer.utils.sortInPredefinedOrder(
+    return hammerUtils.sortInPredefinedOrder(
         ['success', 'warning', 'danger', 'default'],
         progress,
         'theme',
@@ -176,7 +176,7 @@ export function makeTabProps<TabName extends string>(
 
             return {
                 value: key,
-                text: titleDict[key] || title || hammer.format['ReadableField'](key),
+                text: titleDict[key] || title || format['ReadableField'](key),
                 show,
                 url,
                 counter,
@@ -193,7 +193,7 @@ export function makeRadioButtonProps(items: string[], allItemValue?: string) {
     const res = map_(items, (value) => {
         return {
             value,
-            text: hammer.format['ReadableField'](value),
+            text: format['ReadableField'](value),
         };
     });
 
@@ -205,7 +205,7 @@ export function makeRadioButtonProps(items: string[], allItemValue?: string) {
 
 export function makeRadioButtonPropsByKey(items: {[k: string]: string}) {
     return Object.entries(items).map(([k, value]) => {
-        const text = hammer.format['ReadableField'](k.toLowerCase());
+        const text = format['ReadableField'](k.toLowerCase());
         return {
             value,
             text,
@@ -232,25 +232,6 @@ export function prepareTableColumns<T extends {caption?: string}>(columns: Recor
         },
         {} as Record<string, T & {name: string}>,
     );
-}
-
-export function parseBytes(input: string): number {
-    const names = ['B', 'K', 'M', 'G', 'T', 'P', 'E'];
-    const formatRegex = new RegExp('^((\\d*[.])?\\d+)( *[' + names.join('') + '])(iB)?(/s)?$', 'i');
-
-    if (formatRegex.test(input)) {
-        const match = input.match(formatRegex)!;
-        const value = match[1];
-        const dimension = match[3].trim();
-        const dimensionIndex = findIndex_(
-            names,
-            (name) => name.toUpperCase() === dimension.toUpperCase(),
-        );
-
-        return Math.floor(Number(value) * Math.pow(2, 10 * dimensionIndex));
-    } else {
-        return Math.floor(Number(input));
-    }
 }
 
 export function parseSortState(stringSortState: string) {

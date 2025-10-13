@@ -20,7 +20,6 @@ import {
     getPools,
     getTree,
 } from '../../../store/selectors/scheduling/scheduling';
-import {PoolInfo} from '../../../store/selectors/scheduling/scheduling-pools';
 import {SchedulingAction, SchedulingState} from '../../../store/reducers/scheduling/scheduling';
 import {
     POOL_GENERAL_TYPE_TO_ATTRIBUTE,
@@ -281,7 +280,7 @@ export function editPool(
     };
 }
 
-export function openEditModal(item: PoolInfo) {
+export function openEditModal(item: PoolTreeNode) {
     return {
         type: TOGGLE_EDIT_VISIBILITY,
         data: {

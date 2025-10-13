@@ -21,6 +21,13 @@ export const Number: Story = {
     },
 };
 
+export const Number2000: Story = {
+    args: {
+        value: 2000,
+        type: 'NumberSmart',
+    },
+};
+
 export const NumberWithoutTooltip: Story = {
     args: {
         value: 1.2345,
