@@ -30,6 +30,8 @@ import type {PreloadErrorType} from '../constants';
 import type {RootState} from '../store/reducers';
 import {YTError} from '../types';
 import {AnalyticsService} from '../common/utils/metrics';
+import type {DetailedOperationSelector} from '../pages/operations/selectors';
+import {JobItem} from '../store/reducers/operations/jobs/jobs-monitor';
 
 type HeaderItemOrPage =
     | {
@@ -230,9 +232,9 @@ export interface UIFactory {
     getMonitorComponentForJob():
         | undefined
         | React.ComponentType<{
+              operation: DetailedOperationSelector;
+              jobs: JobItem[];
               cluster: string;
-              job_descriptor: string;
-              alerts?: React.ReactNode;
               from?: number;
               to?: number;
           }>;

@@ -44,27 +44,10 @@ export const getJobsMonitorFromTo = createSelector(
     },
 );
 
-export const MAX_DESCRIPTORS_COUNT = 200;
 export const getUniqueJobsMonitorDescriptors = createSelector(
     [getJobsMonitoringItemsWithDescriptor],
     (jobs) => {
         const descriptors = new Set(map_(jobs, 'monitoring_descriptor'));
-        return [...descriptors];
-    },
-);
-
-export const getLimitedJobsMonitorDescriptors = createSelector(
-    [getJobsMonitoringItemsWithDescriptor],
-    (jobs) => {
-        const descriptors = new Set<string>();
-        for (const job of jobs) {
-            if (job.monitoring_descriptor && descriptors.size < MAX_DESCRIPTORS_COUNT) {
-                descriptors.add(job.monitoring_descriptor);
-            }
-            if (descriptors.size >= MAX_DESCRIPTORS_COUNT) {
-                break;
-            }
-        }
         return [...descriptors];
     },
 );
