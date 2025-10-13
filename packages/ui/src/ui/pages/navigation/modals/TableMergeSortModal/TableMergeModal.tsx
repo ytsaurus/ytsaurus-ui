@@ -20,7 +20,7 @@ import {
 } from '../../../../store/actions/navigation/modals/table-merge-sort-modal';
 import {getCurrentUserName} from '../../../../store/selectors/global';
 import {makeLink} from '../CreateTableModal/CreateTableModal';
-import {parseBytes} from '../../../../utils';
+import {parseBytes} from '../../../../utils/parse/parse-bytes';
 import {docsUrl} from '../../../../config';
 import UIFactory from '../../../../UIFactory';
 import {WaitForDefaultPoolTree} from '../../../../hooks/global-pool-trees';

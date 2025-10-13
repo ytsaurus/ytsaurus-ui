@@ -19,9 +19,8 @@ import {getTree} from '../../../../../../store/selectors/scheduling/scheduling-p
 
 import {PoolLeafNode} from '../../../../../../utils/scheduling/pool-child';
 
-import PoolTags from './PoolTags';
-
 import type {RowData} from './SchedulingTable';
+import {PoolAbc} from './PoolAbc';
 
 //const block = cn('yt-scheduling-name-cell');
 
@@ -58,16 +57,23 @@ export function NameCell({row}: {row: RowData}) {
             {row.type === 'pool' ? (
                 <>
                     <OperationPool
-                        cluster={cluster}
-                        pool={{pool: incomplete ? '' : row.name, tree}}
                         hideTree
                         routed
+                        cluster={cluster}
+                        pool={{
+                            pool: incomplete ? '' : row.name,
+                            tree,
+                            isLightweight: row.isEffectiveLightweight,
+                            isEphemeral: row.isEphemeral,
+                        }}
+                        theme="primary"
                     />
+                    <span style={{flex: '1 1 0px'}} />
+                    <PoolAbc pool={row} />
                 </>
             ) : (
                 renderOperationName({cluster, row})
             )}
-            <PoolTags pool={row} />
         </ExpandableCell>
     );
 }
