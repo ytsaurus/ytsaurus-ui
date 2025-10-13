@@ -2,7 +2,7 @@ import React, {FC, useEffect, useMemo, useState} from 'react';
 import {Item, SelectSingle} from '../../../../components/Select/Select';
 import {Button, TextInput} from '@gravity-ui/uikit';
 import {getVcsTokensAvailability, saveToken} from '../../../../store/actions/query-tracker/vcs';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 import './AddVcsTokenForm.scss';
 import {selectVcsConfig} from '../../../../store/selectors/query-tracker/vcs';

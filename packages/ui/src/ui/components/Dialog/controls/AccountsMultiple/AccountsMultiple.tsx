@@ -1,5 +1,5 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 import {Button, Flex, Label, Select} from '@gravity-ui/uikit';
 
 import map_ from 'lodash/map';

@@ -11,7 +11,7 @@ import NodeQuad from '../../NodeQuad/NodeQuad';
 import '../Schedulers.scss';
 import {ChangeMaintenanceButton} from '../../Masters/ChangeMaintenanceButton';
 import {makeShortSystemAddress} from '../../helpers/makeShortSystemAddress';
-import {useDispatch} from 'react-redux';
+import {useDispatch} from '../../../../store/redux-hooks';
 import {changeSchedulerMaintenance} from '../../../../store/actions/system/schedulers';
 
 const b = block('system');

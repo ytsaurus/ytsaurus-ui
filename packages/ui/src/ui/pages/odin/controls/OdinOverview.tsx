@@ -18,7 +18,7 @@ import hammer from '../../../common/hammer';
 
 import {dateTime} from '@gravity-ui/date-utils';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {
     ODIN_OVERVIEW_TIME_RANGE,
     odinOverviewRemovePreset,

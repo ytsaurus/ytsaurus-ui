@@ -28,13 +28,12 @@ import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import type {RootState} from '../../../../store/reducers';
 import type {Dispatch} from 'redux';
 import type {
-    DeleteObjectAction,
     DeleteObjectItem,
     MulipleInfoItem,
 } from '../../../../store/reducers/navigation/modals/delete-object';
 import {BatchSubRequest} from '../../../../../shared/yt-types';
 import type {YTError} from '../../../../types';
-import type {AppThunkDispatch} from '../../../../store/thunkDispatch';
+import type {AppDispatch} from '../../../store.main';
 import {toaster} from '../../../../utils/toaster';
 
 function prepareRestorePath(path: string, type: string) {
@@ -272,7 +271,7 @@ function deleteCurrentObject(path: string, restorePath: string) {
 }
 
 export function deleteObject() {
-    return (dispatch: AppThunkDispatch<DeleteObjectAction>, getState: () => RootState) => {
+    return (dispatch: AppDispatch, getState: () => RootState) => {
         const {navigation} = getState();
         const {realPath, item} = navigation.modals.deleteObject;
         const {transaction} = navigation.navigation;
@@ -428,7 +427,7 @@ function moveObjectsIntoTrash(multipleInfo: MulipleInfoItem[], transaction: stri
 }
 
 export function deleteObjects() {
-    return (dispatch: AppThunkDispatch<DeleteObjectAction>, getState: () => RootState) => {
+    return (dispatch: AppDispatch, getState: () => RootState) => {
         const {navigation, global} = getState();
         const {transaction} = navigation.navigation;
         const {permanently, multipleInfo} = navigation.modals.deleteObject;

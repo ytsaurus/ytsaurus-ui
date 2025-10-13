@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import copy from 'copy-to-clipboard';
 import cn from 'bem-cn-lite';
 
@@ -26,6 +26,7 @@ import {showErrorPopup} from '../../../utils/utils';
 import hammer from '../../../common/hammer';
 import {YTError} from '../../../types';
 import {toaster} from '../../../utils/toaster';
+import {Job} from '../../../pages/operations/OperationDetail/tabs/Jobs/job-selector';
 
 import './JobActions.scss';
 
@@ -61,20 +62,20 @@ const block = cn('job-actions');
 const codeBlock = cn('elements-code');
 
 const getAdditionalActions = (
-    job: PreparedJob,
+    job: Partial<Job>,
     openJobShellModal: () => void,
     openDumpContextModal: () => void,
 ) => {
     const infoActions = [
         {
             action: () => {
-                window.open(job.prepareCommandURL('get_job_input'));
+                window.open(job?.prepareCommandURL?.('get_job_input') || window.location.href);
             },
             text: 'get_job_input',
         },
         {
             action: () => {
-                window.open(job.prepareCommandURL('get_job_stderr'));
+                window.open(job?.prepareCommandURL?.('get_job_stderr') || window.location.href);
             },
             text: 'get_job_stderr',
         },
@@ -83,7 +84,9 @@ const getAdditionalActions = (
     if (job.state === 'failed') {
         infoActions.push({
             action: () => {
-                window.open(job.prepareCommandURL('get_job_fail_context'));
+                window.open(
+                    job?.prepareCommandURL?.('get_job_fail_context') || window.location.href,
+                );
             },
             text: 'get_job_fail_context',
         });

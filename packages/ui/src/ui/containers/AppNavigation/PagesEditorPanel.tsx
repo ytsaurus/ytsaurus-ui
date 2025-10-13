@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../store/redux-hooks';
 import {PageInfo, getPagesOrderedByUser} from '../../store/selectors/slideoutMenu';
 import {Icon, List} from '@gravity-ui/uikit';
 import {PAGE_ICONS_BY_ID} from '../../constants/slideoutMenu';

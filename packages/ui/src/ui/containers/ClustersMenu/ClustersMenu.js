@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../store/redux-hooks';
 
 import PageHead from '../../components/PageHead/PageHead';
 

@@ -1,6 +1,6 @@
 import Button from '../../../components/Button/Button';
 import React, {useCallback} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {showUserEditorModal} from '../../../store/actions/users';
 import {getUserManagementEnabled} from '../../../store/selectors/global';
 

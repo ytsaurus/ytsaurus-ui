@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import {connect, useDispatch, useSelector} from 'react-redux';
+import {connect} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import block from 'bem-cn-lite';
 import {Redirect, Route, Switch, useRouteMatch} from 'react-router';
 

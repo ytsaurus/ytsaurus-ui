@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {ConnectedProps, connect, useSelector} from 'react-redux';
-import PropTypes from 'prop-types';
+import {ConnectedProps, connect} from 'react-redux';
+import {useSelector} from '../../../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
 import AlertEvents from '../../../../../../components/AlertEvents/AlertEvents';
@@ -27,10 +27,10 @@ import {useAppRumMeasureStart} from '../../../../../../rum/rum-app-measures';
 
 import {UI_COLLAPSIBLE_SIZE} from '../../../../../../constants/global';
 
-import DataFlow, {intermediateResourcesProps, resourcesProps} from '../DataFlow/DataFlow';
-import Specification, {specificationProps} from '../Specification/Specification';
+import DataFlow from '../DataFlow/DataFlow';
+import Specification from '../Specification/Specification';
 import Runtime from '../Runtime/Runtime';
-import Events, {eventsProps} from '../Events/Events';
+import Events from '../Events/Events';
 import Tasks from '../Tasks/Tasks';
 
 import './Details.scss';
@@ -40,22 +40,6 @@ const block = cn('operation-details');
 type ReduxProps = ConnectedProps<typeof connector>;
 
 class Details extends Component<ReduxProps> {
-    static propTypes = {
-        error: PropTypes.object,
-        specification: specificationProps.isRequired,
-        operation: PropTypes.object.isRequired,
-        treeConfigs: PropTypes.array,
-        cluster: PropTypes.string.isRequired,
-        result: PropTypes.shape({
-            error: PropTypes.object.isRequired,
-        }),
-        runtime: PropTypes.object,
-        events: eventsProps,
-        resources: resourcesProps,
-        intermediateResources: intermediateResourcesProps,
-        showEditPoolsWeightsModal: PropTypes.func.isRequired,
-    };
-
     state = {
         isAbsoluteValue: true,
     };
@@ -278,7 +262,7 @@ const mapDispatchToProps = {
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-const DetailsConnected = connector(Details) as unknown as React.ComponentType<{}>;
+const DetailsConnected = connector(Details);
 
 export default function DetailsWithRum() {
     const loadState = useSelector(getOperationDetailsLoadingStatus);

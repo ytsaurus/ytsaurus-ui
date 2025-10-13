@@ -5,7 +5,7 @@ import isEmpty_ from 'lodash/isEmpty';
 
 import ellipsisIcon from '../../assets/img/svg/ellipsis.svg';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../store/redux-hooks';
 
 import {PagesSettingsEditor, usePagesMenuItems} from './PagesSettingsEditor';
 import {

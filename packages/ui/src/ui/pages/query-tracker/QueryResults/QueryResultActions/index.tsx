@@ -2,7 +2,7 @@ import {Button, ControlGroupOption, Icon, SegmentedRadioGroup} from '@gravity-ui
 import {getQueryResult} from '../../../../store/selectors/query-tracker/queryResult';
 import block from 'bem-cn-lite';
 import React, {useCallback} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {RootState} from '../../../../store/reducers';
 import transposeIcon from '../../../../assets/img/svg/transpose.svg';
 import {SET_QUERY_RESULTS_SETTINGS} from '../../../../store/reducers/query-tracker/query-tracker-contants';

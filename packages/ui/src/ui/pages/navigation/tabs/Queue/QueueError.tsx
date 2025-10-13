@@ -1,5 +1,5 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 import moment from 'moment';
 
 import {YTErrorBlock, YTErrorBlockProps} from '../../../../components/Block/Block';

@@ -629,4 +629,9 @@ const mapDispatchToProps = {
     toggleColumnSortOrder,
 };
 
+/** @type {React.ComponentType<React.ComponentProps<typeof ElementsTable>>}
+@typedef {React.ComponentProps<typeof ElementsTable>} ElementsTableProps
+@typedef {React.ComponentType<ElementsTableProps>} ElementsTableType
+@type {ElementsTableType}
+*/
 export default connect(mapStateToProps, mapDispatchToProps)(ElementsTable);

@@ -1,5 +1,6 @@
 import React, {ComponentType} from 'react';
-import {ConnectedProps, connect, useDispatch} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
+import {useDispatch} from '../../../../../store/redux-hooks';
 import {Button} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 

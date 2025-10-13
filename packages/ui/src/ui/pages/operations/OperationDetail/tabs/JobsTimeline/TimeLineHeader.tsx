@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {Button, Flex, Icon, TextInput} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import './TimeLineHeader.scss';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {
     selectFilter,
     selectInterval,

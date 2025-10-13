@@ -1,6 +1,6 @@
 import React from 'react';
 import {getPool, getTree} from '../../../store/selectors/scheduling/scheduling';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {loadExpandedPools} from '../../../store/actions/scheduling/expanded-pools';
 
 function SchedulingExpandedPoolsUpdater() {

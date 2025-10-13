@@ -1,5 +1,5 @@
 import {useCallback} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 
 import {setSettingAnnotationVisibility} from '../../../../store/actions/settings/settings';
 import {getSettingAnnotationVisibility} from '../../../../store/selectors/settings';

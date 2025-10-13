@@ -1,6 +1,6 @@
 import React from 'react';
 import {AxiosError} from 'axios';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../../store/redux-hooks';
 import b from 'bem-cn-lite';
 import {Alert, Card, Disclosure, Flex, Loader} from '@gravity-ui/uikit';
 

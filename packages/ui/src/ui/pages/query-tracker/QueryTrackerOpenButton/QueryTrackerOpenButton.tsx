@@ -8,7 +8,7 @@ import {
     getQueryEngine,
     isQueryDraftEditted,
 } from '../../../store/selectors/query-tracker/query';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 
 interface Props {
     className?: string;

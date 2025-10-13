@@ -1,4 +1,4 @@
-import {useDispatch} from 'react-redux';
+import {useDispatch} from '../../../store/redux-hooks';
 import {DashKitProps} from '@gravity-ui/dashkit';
 
 import {

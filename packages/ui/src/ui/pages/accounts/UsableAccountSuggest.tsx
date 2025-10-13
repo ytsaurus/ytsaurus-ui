@@ -2,7 +2,7 @@ import React from 'react';
 import {DialogControlProps} from '../../components/Dialog/Dialog.types';
 import {AccountSuggestImpl} from './AccountsSuggest';
 import {getCurrentUserName} from '../../store/selectors/global';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../store/redux-hooks';
 import {showErrorPopup} from '../../utils/utils';
 import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
 import {toaster} from '../../utils/toaster';

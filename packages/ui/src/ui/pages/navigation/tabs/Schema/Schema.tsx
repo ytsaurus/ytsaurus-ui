@@ -1,5 +1,6 @@
 import React, {Component, Fragment} from 'react';
-import {connect, useSelector} from 'react-redux';
+import {connect} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
 import omit_ from 'lodash/omit';

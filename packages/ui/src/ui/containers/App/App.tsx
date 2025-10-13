@@ -1,6 +1,6 @@
 import React from 'react';
 import {Route, Switch} from 'react-router';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../store/redux-hooks';
 
 import {
     ThemeProvider,
@@ -109,7 +109,7 @@ function AppWithRum() {
 
 function AppWithRumContext() {
     const {theme, systemLightTheme, systemDarkTheme} = useThemeProviderProperties();
-    console.log('AppWithRumContext', toaster);
+
     return (
         <RumUiProvider>
             <ToasterProvider toaster={toaster}>

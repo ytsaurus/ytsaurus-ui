@@ -28,12 +28,11 @@ import {reloadSetting, setSetting} from '../../../store/actions/settings';
 import {showErrorPopup} from '../../../utils/utils';
 import {NAMESPACES} from '../../../../shared/constants/settings';
 import {ODIN_LAST_VISITED_TAB, ODIN_VISIBLE_METRIC_PRESETS, YA_NAMESPACES} from '../odin-settings';
-import {OdinRootState} from '../_reducers';
 import {toaster} from '../../../utils/toaster';
 
-type OdinOverviewThunkAction = ThunkAction<any, OdinRootState & RootState, any, OdinOverviewAction>;
+type OdinOverviewThunkAction = ThunkAction<any, RootState, any, OdinOverviewAction>;
 
-function getClusterHelper(gs: () => OdinRootState) {
+function getClusterHelper(gs: () => RootState) {
     return getOdinOverviewDataCluster(gs());
 }
 

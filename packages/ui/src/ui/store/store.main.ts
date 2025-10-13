@@ -1,10 +1,10 @@
-import {Store, configureStore} from '@reduxjs/toolkit';
+import {configureStore} from '@reduxjs/toolkit';
 import {setupListeners} from '@reduxjs/toolkit/query';
 // @ts-ignore
 import {listenForHistoryChange} from 'redux-location-state';
 import {createBrowserHistory} from 'history';
 import getLocationMiddleware from '../state-url-mapping';
-import {RootState, makeRootReducer} from './reducers/index.main';
+import {makeRootReducer} from './reducers/index.main';
 import {rootApi} from './api';
 
 export const createMainEntryStore = () => {
@@ -12,7 +12,7 @@ export const createMainEntryStore = () => {
     const rootReducer = makeRootReducer();
     const {locationMiddleware, reducersWithLocation} = getLocationMiddleware(history, rootReducer);
 
-    const store: Store<RootState, any> = configureStore({
+    const store = configureStore({
         reducer: reducersWithLocation as ReturnType<typeof makeRootReducer>,
         middleware: (getDefaultMiddleware) =>
             getDefaultMiddleware({serializableCheck: false})
@@ -31,3 +31,4 @@ export const createMainEntryStore = () => {
 
 export type AppBrowserHistory = ReturnType<typeof createMainEntryStore>['history'];
 export type StoreType = ReturnType<typeof createMainEntryStore>['store'];
+export type AppDispatch = StoreType['dispatch'];

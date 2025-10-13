@@ -34,7 +34,7 @@ import {
     getNavigationAttributesEditorStaticTables,
     getNavigationAttributesEditorVisible,
 } from '../../../store/selectors/navigation/modals/attributes-editor';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {
     hideNavigationAttributesEditor,
     navigationSetNodeAttributes,

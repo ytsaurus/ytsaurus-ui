@@ -1,7 +1,6 @@
 import {FormApi, YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import React from 'react';
 import cn from 'bem-cn-lite';
-import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
 import filter_ from 'lodash/filter';
@@ -98,24 +97,6 @@ type Level2Keys =
     | keyof FormValues['password'];
 
 class UsersPageEditor extends React.Component<Props, State> {
-    static propTypes = {
-        className: PropTypes.string,
-        showModal: PropTypes.bool,
-        username: PropTypes.string.isRequired,
-        ban_message: PropTypes.string,
-        banned: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-        member_of: PropTypes.arrayOf(PropTypes.string),
-        read_request_rate_limit: PropTypes.number,
-        request_queue_size_limit: PropTypes.number,
-        write_request_rate_limit: PropTypes.number,
-        groupAttributesMap: PropTypes.object,
-        idm: PropTypes.bool,
-        comment: PropTypes.string,
-
-        closeUserEditorModal: PropTypes.func,
-        saveUserData: PropTypes.func,
-    };
-
     static prepareGroups(groups: Array<string> = [], groupAttributes: GroupAttributes = {}) {
         return groups.map((title) => {
             const {[title]: group} = groupAttributes;

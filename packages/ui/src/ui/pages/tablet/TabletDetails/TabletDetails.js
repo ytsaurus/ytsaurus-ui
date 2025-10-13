@@ -1,4 +1,4 @@
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';

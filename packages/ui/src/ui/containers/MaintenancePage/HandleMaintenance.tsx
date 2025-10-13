@@ -1,5 +1,5 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../store/redux-hooks';
 
 import {MaintenancePage} from '../../containers/MaintenancePage/MaintenancePage';
 import {isMaintenanceIgnored, setMaintenanceIgnored} from '../../utils/maintenance';

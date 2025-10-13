@@ -4,7 +4,7 @@ import {updateEnableReplicatedTableTracker} from '../../../../store/actions/navi
 
 import './ReplicatedTable.scss';
 import TableMeta from '../Table/TableMeta/TableMeta';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {getPath} from '../../../../store/selectors/navigation';
 
 const block = cn('navigation-replicated-table');

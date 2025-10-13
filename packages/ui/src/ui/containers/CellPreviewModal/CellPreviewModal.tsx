@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../store/redux-hooks';
 import {Flex, Text} from '@gravity-ui/uikit';
 
 import SimpleModal from '../../components/Modal/SimpleModal';

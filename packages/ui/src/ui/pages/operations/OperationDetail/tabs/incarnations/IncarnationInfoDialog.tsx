@@ -1,5 +1,5 @@
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import b from 'bem-cn-lite';
 
 import {DialogWrapper} from '../../../../../components/DialogWrapper/DialogWrapper';

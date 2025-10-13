@@ -23,7 +23,7 @@ import {
 import './index.scss';
 import {ErrorTree} from './ErrorTree';
 import {QueryProgress} from './QueryResultActions/QueryProgress';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {
     selectActiveQueryResultTab,
     selectActiveResultParams,

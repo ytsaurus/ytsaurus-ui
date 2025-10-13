@@ -1,5 +1,5 @@
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
 import {Button, Flex, Link, SegmentedRadioGroup, Text} from '@gravity-ui/uikit';
@@ -11,7 +11,6 @@ import Icon from '../../../../components/Icon/Icon';
 import MetaTable from '../../../../components/MetaTable/MetaTable';
 import StatusLabel from '../../../../components/StatusLabel/StatusLabel';
 import {useUpdater} from '../../../../hooks/use-updater';
-import {useThunkDispatch} from '../../../../store/thunkDispatch';
 import {loadFlowStatus, updateFlowState} from '../../../../store/actions/flow/status';
 import {getFlowViewMode} from '../../../../store/selectors/flow/filters';
 import {getFlowStatusData} from '../../../../store/selectors/flow/status';
@@ -27,8 +26,8 @@ import {formatByParams} from '../../../../utils/format';
 
 import {FlowLayout} from './FlowLayout/FlowLayout';
 import {FlowDynamicSpec, FlowStaticSpec} from './PipelineSpec/PipelineSpec';
-import './Flow.scss';
 import {FlowGraph} from './FlowGraph/FlowGraph';
+import './Flow.scss';
 
 const block = cn('yt-navigation-flow');
 
@@ -102,7 +101,7 @@ function FlowContent({viewMode}: {viewMode: FlowViewMode}) {
 }
 
 function FlowStatusToolbar() {
-    const dispatch = useThunkDispatch();
+    const dispatch = useDispatch();
 
     const pipeline_path = useSelector(getPath);
 

@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import cn from 'bem-cn-lite';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {RootState} from '../../../../store/reducers';
 import {showArchiveOperations, showCurrentOperations} from '../../../../store/actions/operations';
 import {OPERATIONS_DATA_MODE} from '../../../../constants/operations';

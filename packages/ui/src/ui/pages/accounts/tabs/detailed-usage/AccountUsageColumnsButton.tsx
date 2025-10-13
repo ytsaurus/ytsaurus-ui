@@ -9,7 +9,7 @@ import {
     getAccountUsageVisibleDataColumns,
     readableAccountUsageColumnName,
 } from '../../../../store/selectors/accounts/account-usage';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import ColumnSelectorModal from '../../../../components/ColumnSelectorModal/ColumnSelectorModal';
 import {setAccountUsageColumns} from '../../../../store/actions/accounts/account-usage';
 import {Secondary} from '../../../../components/Text/Text';

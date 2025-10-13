@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {DialogWrapper as Dialog} from '../../components/DialogWrapper/DialogWrapper';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../store/redux-hooks';
 import {isManageTokensModalOpened} from '../../store/selectors/manage-tokens';
 import withLazyLoading from '../../hocs/withLazyLoading';
 import {importManageTokens} from './index';

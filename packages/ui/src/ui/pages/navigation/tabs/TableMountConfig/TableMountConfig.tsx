@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 import {getNavigationTableMountConfig} from '../../../../store/selectors/navigation/content/table-mount-config';
 import {YTErrorBlock} from '../../../../components/Error/Error';
 import Yson from '../../../../components/Yson/Yson';

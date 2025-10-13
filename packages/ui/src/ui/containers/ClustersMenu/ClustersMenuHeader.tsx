@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 import {ConnectedProps, connect} from 'react-redux';
 import {LayoutCellsLarge, ListUl} from '@gravity-ui/icons';
@@ -14,14 +13,6 @@ import {RootState} from '../../store/reducers';
 import './ClusterMenuHeader.scss';
 
 const b = block('cluster-menu');
-
-ClustersMenuHeader.propTypes = {
-    clusterFilter: PropTypes.string,
-    viewMode: PropTypes.oneOf(['dashboard', 'table']).isRequired,
-    updateFilter: PropTypes.func.isRequired,
-    updateViewMode: PropTypes.func.isRequired,
-    login: PropTypes.string,
-};
 
 type Props = ConnectedProps<typeof connector>;
 

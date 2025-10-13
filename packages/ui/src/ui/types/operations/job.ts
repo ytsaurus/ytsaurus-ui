@@ -11,7 +11,7 @@ export interface RawJob {
     address: string;
     archive_state: string;
     finish_time?: string;
-    start_time: string;
+    start_time?: string;
     has_competitors: boolean;
     has_spec: boolean;
     job_competition_id: string;
@@ -68,7 +68,6 @@ export type JobError = YTError | undefined;
 export interface PreparedJob extends Partial<RawJob> {
     attributes: RawJob;
     id: string;
-    isSupported: () => boolean;
     operationId: string;
     startTime: string;
     finishTime?: string;

@@ -3,21 +3,20 @@ import map_ from 'lodash/map';
 import moment from 'moment';
 import {createSelector} from 'reselect';
 
+import {RootState} from '../../../store/reducers';
 import Utils, {currentDate} from '../odin-utils';
 import {COLS_NUMBER} from '../odin-constants';
 import {makeGetSetting} from '../../../store/selectors/settings';
 import {ODIN_VISIBLE_METRIC_PRESETS, YA_NAMESPACES} from '../odin-settings';
-import {OdinRootState} from '../_reducers';
 import {YT} from '../../../config/yt-config';
 
-export const getMetric = (state: OdinRootState) => state.odin.details.metric;
-export const getUseCurrentDate = (state: OdinRootState) => state.odin.details.useCurrentDate;
-export const getHours = (state: OdinRootState) => state.odin.details.hours;
-export const getMinutes = (state: OdinRootState) => state.odin.details.minutes;
-export const getMetricAvailability = (state: OdinRootState) =>
-    state.odin.details.metricAvailability;
+export const getMetric = (state: RootState) => state.odin.details.metric;
+export const getUseCurrentDate = (state: RootState) => state.odin.details.useCurrentDate;
+export const getHours = (state: RootState) => state.odin.details.hours;
+export const getMinutes = (state: RootState) => state.odin.details.minutes;
+export const getMetricAvailability = (state: RootState) => state.odin.details.metricAvailability;
 
-export const getDate = (state: OdinRootState) => {
+export const getDate = (state: RootState) => {
     if (getUseCurrentDate(state)) {
         return currentDate();
     }
@@ -50,7 +49,7 @@ export const getExtendedInfo = createSelector(
     },
 );
 
-export const getOdinCluster = (state: OdinRootState) => state.odin.details.odinCluster;
+export const getOdinCluster = (state: RootState) => state.odin.details.odinCluster;
 function makeClusterNameItems() {
     const names = map_(YT.clusters, 'id').sort();
     return map_(names, (name) => {

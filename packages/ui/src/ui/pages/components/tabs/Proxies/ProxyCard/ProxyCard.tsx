@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../../store/redux-hooks';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import isEmpty_ from 'lodash/isEmpty';

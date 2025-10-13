@@ -1,5 +1,5 @@
 import React, {FC, MouseEvent, useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 import {Button, Icon} from '@gravity-ui/uikit';
 import Modal from '../../../components/Modal/Modal';
 import {isQueryDraftEditted} from '../../../store/selectors/query-tracker/query';

@@ -4,7 +4,7 @@ import './NavigationHeader.scss';
 import {NavigationBreadcrumbs} from './NavigationBreadcrumbs';
 import {HeaderActions} from './HeaderActions';
 import {TextInput} from '@gravity-ui/uikit';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
     selectFavouritePaths,
     selectNavigationCluster,

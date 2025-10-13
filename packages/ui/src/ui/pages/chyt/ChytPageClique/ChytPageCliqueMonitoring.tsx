@@ -1,5 +1,5 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 
 import UIFactory from '../../../UIFactory';
 import {getCluster} from '../../../store/selectors/global';

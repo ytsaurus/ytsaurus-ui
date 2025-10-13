@@ -1,6 +1,6 @@
 import React, {FC, useEffect} from 'react';
 import {Select} from '@gravity-ui/uikit';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {setVisualizationType} from '../../../../store/reducers/query-tracker/queryChartSlice';
 import {selectCurrentChartVisualization} from '../../../../store/selectors/query-tracker/queryChart';
 import './ChartLeftMenu.scss';

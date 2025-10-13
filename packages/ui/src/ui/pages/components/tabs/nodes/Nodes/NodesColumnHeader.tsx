@@ -1,5 +1,5 @@
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 
 import {COMPONENTS_NODES_TABLE_ID} from '../../../../../constants/components/nodes/nodes';
 import ColumnHeader, {

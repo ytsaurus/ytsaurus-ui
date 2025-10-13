@@ -1,5 +1,5 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 
 import AccountsNoContent from '../../../../pages/accounts/AccountsNoContent';
 import {getCluster, getTheme} from '../../../../store/selectors/global';

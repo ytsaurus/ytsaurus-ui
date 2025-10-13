@@ -11,7 +11,7 @@ import {YTErrorBlock} from '../../../components/Block/Block';
 import hammer from '../../../common/hammer';
 import {getMediumList} from '../../../store/selectors/thor';
 import {loadSystemResources} from '../../../store/actions/system/resources';
-import {useThunkDispatch} from '../../../store/thunkDispatch';
+import {useDispatch} from '../../../store/redux-hooks';
 import {useUpdater} from '../../../hooks/use-updater';
 
 import './Resources.scss';
@@ -179,7 +179,7 @@ function mapStateToProps(state) {
 }
 
 function ResourcesUpdater() {
-    const dispatch = useThunkDispatch();
+    const dispatch = useDispatch();
 
     const updateFn = React.useMemo(() => {
         let allowUpdate = true;

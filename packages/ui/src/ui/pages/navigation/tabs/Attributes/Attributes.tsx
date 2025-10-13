@@ -1,7 +1,7 @@
 import React, {Fragment, useEffect} from 'react';
 import b from 'bem-cn-lite';
 import unipika from '../../../../common/thor/unipika';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {Loader} from '@gravity-ui/uikit';
 
 import Yson from '../../../../components/Yson/Yson';

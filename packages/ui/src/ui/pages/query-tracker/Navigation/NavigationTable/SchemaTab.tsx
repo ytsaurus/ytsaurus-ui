@@ -7,7 +7,7 @@ import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
 import {Column} from '@gravity-ui/react-data-table';
 import {Text, TextInput} from '@gravity-ui/uikit';
 import Icon from '../../../../components/Icon/Icon';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {selectNavigationFilter} from '../../../../store/selectors/query-tracker/queryNavigation';
 import unipika from '../../../../common/thor/unipika';
 

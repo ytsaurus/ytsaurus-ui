@@ -1,6 +1,6 @@
 import React, {ChangeEvent, FC} from 'react';
 import {Checkbox, Text, TextInput} from '@gravity-ui/uikit';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {selectChartConfig} from '../../../../../store/selectors/query-tracker/queryChart';
 import cn from 'bem-cn-lite';
 import {changeConfig} from '../../../../../store/actions/query-tracker/queryChart';

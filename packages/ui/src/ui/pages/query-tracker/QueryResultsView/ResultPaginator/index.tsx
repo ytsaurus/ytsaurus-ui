@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import block from 'bem-cn-lite';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {RootState} from '../../../../store/reducers';
 import {Select, SelectOption} from '@gravity-ui/uikit';
 import {getQueryResult} from '../../../../store/selectors/query-tracker/queryResult';
