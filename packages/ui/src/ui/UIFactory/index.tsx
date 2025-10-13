@@ -229,13 +229,14 @@ export interface UIFactory {
         | {urlTemplate: string; title?: string; component?: undefined};
     getMonitorComponentForJob():
         | undefined
-        | React.ComponentType<{
-              cluster: string;
-              job_descriptor: string;
-              alerts?: React.ReactNode;
-              from?: number;
-              to?: number;
-          }>;
+        | React.ComponentType<
+              {
+                  cluster: string;
+                  alerts?: React.ReactNode;
+                  from?: number;
+                  to?: number;
+              } & ({job_descriptor: string} | {operationId: string})
+          >;
 
     getMonitoringComponentForChyt():
         | undefined

@@ -8,7 +8,8 @@ import min_ from 'lodash/min';
 import moment from 'moment';
 import {createSelector} from 'reselect';
 import {RootState} from '../../../store/reducers';
-import {getOperationId} from './operation';
+import {getOperation, getOperationId} from './operation';
+import ypath from '../../../common/thor/ypath';
 
 export const getJobsMonitorError = (state: RootState) => state.operations.jobsMonitor.error;
 export const getJobsMonitorOperationId = (state: RootState) =>
@@ -52,6 +53,16 @@ export const getUniqueJobsMonitorDescriptors = createSelector(
         return [...descriptors];
     },
 );
+
+export const isIdBasedMonitoring = createSelector([getOperation], (operation) => {
+    if (!operation) {
+        return false;
+    }
+    const {spec} = ypath.getAttributes(operation);
+    return Boolean(
+        spec?.tasks?.task?.monitoring?.use_operation_id_based_descriptors_for_gangs_jobs,
+    );
+});
 
 export const getLimitedJobsMonitorDescriptors = createSelector(
     [getJobsMonitoringItemsWithDescriptor],

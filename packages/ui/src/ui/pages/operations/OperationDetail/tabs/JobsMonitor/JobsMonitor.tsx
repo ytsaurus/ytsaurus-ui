@@ -13,17 +13,21 @@ import {
     getJobsMonitorItemsLoading,
     getLimitedJobsMonitorDescriptors,
     getUniqueJobsMonitorDescriptors,
+    isIdBasedMonitoring,
 } from '../../../../../store/selectors/operations/jobs-monitor';
 import {getCluster} from '../../../../../store/selectors/global';
 import UIFactory from '../../../../../UIFactory';
 import {Alert, Flex} from '@gravity-ui/uikit';
 
 import i18n from './i18n';
+import {getOperationId} from '../../../../../store/selectors/operations/operation';
 
 function JobsMonitor() {
     const cluster = useSelector(getCluster);
     const allJobDescriptors = useSelector(getUniqueJobsMonitorDescriptors);
     const limitedJobDescriptors = useSelector(getLimitedJobsMonitorDescriptors);
+    const monitoringByOperationId = useSelector(isIdBasedMonitoring);
+    const operationId = useSelector(getOperationId);
     const {from, to} = useSelector(getJobsMonitorFromTo);
     const error = useSelector(getJobsMonitorError);
     const loaded = useSelector(getJobsMonitorItemsLoaded);
@@ -32,13 +36,13 @@ function JobsMonitor() {
     const job_descriptor = useMemo(() => limitedJobDescriptors.join('|'), [limitedJobDescriptors]);
 
     const alert = useMemo(() => {
-        return allJobDescriptors.length > MAX_DESCRIPTORS_COUNT ? (
+        return allJobDescriptors.length > MAX_DESCRIPTORS_COUNT && !monitoringByOperationId ? (
             <Alert
                 message={i18n('alert_descriptors-limited', {limit: MAX_DESCRIPTORS_COUNT})}
                 theme="warning"
             />
         ) : undefined;
-    }, [allJobDescriptors]);
+    }, [allJobDescriptors, monitoringByOperationId]);
 
     if (!loaded && loading) {
         return <Loader visible centered />;
@@ -54,7 +58,11 @@ function JobsMonitor() {
         <ErrorBoundary>
             <Flex direction="column" gap={1}>
                 {error && <YTErrorBlock error={error} />}
-                <JobMonitorComponent {...{cluster, job_descriptor, from, to}} alerts={alert} />
+                <JobMonitorComponent
+                    {...{cluster, from, to}}
+                    {...(monitoringByOperationId ? {operationId} : {job_descriptor})}
+                    alerts={alert}
+                />
             </Flex>
         </ErrorBoundary>
     );
