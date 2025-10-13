@@ -43,6 +43,8 @@ import {
     getAccountsUsageState,
 } from './reducers/accounts/accounts/url-mapping';
 
+import {prometheusDashboardParams} from './reducers/prometheusDashboard/url-mapping';
+
 import {dashboardParams, getDashboardPreparedState} from './reducers/dashboard/url-mapping';
 
 import {getGlobalPreparedState, globalParams} from './reducers/url-mapping';
@@ -118,6 +120,7 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
         [statisticsParams, getStatisticsPreparedState],
     ],
     [`/*/${Page.OPERATIONS}/*/${OperationTab.JOBS}`, [jobsParams, getJobsPreparedState]],
+    [`/*/${Page.OPERATIONS}/*/${OperationTab.JOBS_MONITOR}`, [prometheusDashboardParams]],
 
     [`/*/${Page.ACCOUNTS}/${AccountsTab.GENERAL}`, [accountsParams, getAccountsPreparedState]],
     [`/*/${Page.ACCOUNTS}/${AccountsTab.USAGE}`, [accountUsageParams, getAccountsUsageState]],

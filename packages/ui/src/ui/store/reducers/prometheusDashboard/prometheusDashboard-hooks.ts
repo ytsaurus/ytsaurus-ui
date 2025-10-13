@@ -30,6 +30,7 @@ export function usePrometheusDashboardParams<ParamsT extends Record<string, unkn
 
 export function usePrometheusDashboardType<T extends string = PrometheusDashboardType>(
     allowedValues?: Array<T>,
+    defaultValue?: T,
 ) {
     const dispatch = useDispatch();
     const type = useSelector(prometheusDashboardSelectors.getType) as T;
@@ -46,11 +47,11 @@ export function usePrometheusDashboardType<T extends string = PrometheusDashboar
     const effectiveType = React.useMemo(() => {
         let res = type;
         if (allowedValues && -1 === allowedValues.indexOf(type)) {
-            res = allowedValues[0];
+            res = defaultValue ?? allowedValues[0];
             setType(res);
         }
         return res;
-    }, [type, setType, allowedValues]);
+    }, [type, allowedValues, defaultValue, setType]);
 
     return {
         type: effectiveType,
@@ -87,7 +88,7 @@ export function usePrometheusDashbordTimeRange(initialTimeRange?: {from?: number
             initialRef.current = initialTimeRange;
             setTimeRange({...timeRange, from, to});
         }
-    }, [timeRange, dispatch]);
+    }, [timeRange, initialTimeRange, setTimeRange]);
 
     return {
         timeRange,
