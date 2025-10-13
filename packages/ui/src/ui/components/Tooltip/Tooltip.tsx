@@ -81,6 +81,7 @@ export function Tooltip(props: TooltipProps) {
                     {...rest}
                     theme={theme as FIX_MY_TYPE}
                     className={className}
+                    tooltipClassName={block('popup')}
                     content={content}
                     anchorRef={anchorRef}
                     ref={popoverRef}
