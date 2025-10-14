@@ -3,7 +3,14 @@ import {E2E_DIR, makeClusterUrl} from '../../../utils';
 import {table} from '../../../widgets/TablePage';
 import {replaceInnerHtml} from '../../../utils/dom';
 
+test.use({
+    contextOptions: {
+      reducedMotion: 'reduce'
+    }
+});
+
 test('Navigation: truncated table - Content', async ({page}) => {
+
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/truncated-table`), {
         waitUntil: 'networkidle',
     });

@@ -6,7 +6,7 @@ import {EditableAsText, EditableAsTextProps} from '../EditableAsText/EditableAsT
 
 import './EditableBreadcrumbs.scss';
 
-const block = cn('editable-breadcrumbs');
+const block = cn('yt-editable-breadcrumbs');
 
 interface Props extends BreadcrumbsProps, Omit<EditableAsTextProps, 'onChange'> {
     view?: 'top-row';
@@ -52,17 +52,23 @@ export function EditableBreadcrumbs(props: Props) {
             onModeChange={onModeChange}
             renderContent={(contentProps) => (
                 <Box
-                    style={{flexGrow: 1, flexShrink: 1}}
-                    className={block({view: view}, contentProps.className)}
+                    className={block(
+                        {view: view},
+                        `${block('breadcrumbs-container')} ${contentProps.className}`,
+                    )}
                 >
                     <Breadcrumbs
                         {...breadcrumbsProps}
                         showRoot
                         endContent={
                             <>
-                                {beforeEditorContent}
+                                {beforeEditorContent ? (
+                                    <div style={{marginLeft: '8px'}}>{beforeEditorContent}</div>
+                                ) : null}
                                 {contentProps.renderEditButton()}
-                                {afterEditorContent}
+                                {afterEditorContent ? (
+                                    <div style={{marginRight: '8px'}}>{afterEditorContent}</div>
+                                ) : null}
                             </>
                         }
                     >

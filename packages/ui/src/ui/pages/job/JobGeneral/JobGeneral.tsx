@@ -78,7 +78,7 @@ export default function JobGeneral() {
         pool_tree,
         is_stale,
         interruption_info,
-    } = job;
+    } = job || {};
     const operationUrl = `/${cluster}/${Page.OPERATIONS}/${operationID}/jobs?jobId=${jobID}`;
     const path = `/${cluster}/${Page.JOB}/${operationID}/${jobID}`;
 
@@ -220,10 +220,7 @@ export default function JobGeneral() {
                                 value: (
                                     <ClickableText
                                         onClick={() =>
-                                            window.open(
-                                                job?.prepareCommandURL?.('get_job_input') ||
-                                                    window.location.href,
-                                            )
+                                            window.open(job?.prepareCommandURL('get_job_input'))
                                         }
                                     >
                                         get_job_input
@@ -235,10 +232,7 @@ export default function JobGeneral() {
                                 value: (
                                     <ClickableText
                                         onClick={() =>
-                                            window.open(
-                                                job?.prepareCommandURL?.('get_job_stderr') ||
-                                                    window.location.href,
-                                            )
+                                            window.open(job?.prepareCommandURL('get_job_stderr'))
                                         }
                                     >
                                         get_job_stderr
@@ -254,9 +248,9 @@ export default function JobGeneral() {
                                               <ClickableText
                                                   onClick={() =>
                                                       window.open(
-                                                          job?.prepareCommandURL?.(
+                                                          job?.prepareCommandURL(
                                                               'get_job_fail_context',
-                                                          ) || window.location.href,
+                                                          ),
                                                       )
                                                   }
                                               >

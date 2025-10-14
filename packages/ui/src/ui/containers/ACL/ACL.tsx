@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 
 import compact_ from 'lodash/compact';
 
-import {Button, ClipboardButton, Flex, Icon, Loader, Tooltip} from '@gravity-ui/uikit';
+import {Button, ClipboardButton, Flex, Icon, Loader} from '@gravity-ui/uikit';
 import {Column} from '@gravity-ui/react-data-table';
 
 import {AclMode, IdmObjectType} from '../../constants/acl';
@@ -23,6 +23,7 @@ import {SubjectCard} from '../../components/SubjectLink/SubjectLink';
 import withVisible, {WithVisibleProps} from '../../hocs/withVisible';
 import {renderText} from '../../components/templates/utils';
 import Label from '../../components/Label/Label';
+import {Tooltip} from '../../components/Tooltip/Tooltip';
 import {isIdmAclAvailable} from '../../config';
 import ApproversFilters from './ApproversFilters/ApproversFilters';
 import ObjectPermissionsFilters from './ObjectPermissionsFilters/ObjectPermissionsFilters';
@@ -220,7 +221,10 @@ class ACL extends Component<Props> {
                     return (
                         <Flex className={block('subject', {level: String(level)})} wrap gap={1}>
                             {Boolean(hasInherited) && (
-                                <Tooltip content={<InheritanceMessage data={inheritedFrom} />}>
+                                <Tooltip
+                                    content={<InheritanceMessage data={inheritedFrom} />}
+                                    placement={['top-start']}
+                                >
                                     <div className={block('inherited', {hidden: !row.inherited})}>
                                         <Icon
                                             className={block('inherited-icon')}

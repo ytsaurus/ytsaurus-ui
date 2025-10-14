@@ -1,11 +1,12 @@
 import React, {useCallback, useState} from 'react';
 import cn from 'bem-cn-lite';
+import {DatePicker} from '@gravity-ui/date-components';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {RootState} from '../../../../store/reducers';
+import {dateTimeParse} from '@gravity-ui/date-utils';
 import {showArchiveOperations, showCurrentOperations} from '../../../../store/actions/operations';
 import {OPERATIONS_DATA_MODE} from '../../../../constants/operations';
 
-import mapValues_ from 'lodash/mapValues';
 import values_ from 'lodash/values';
 
 import moment from 'moment';
@@ -13,11 +14,8 @@ import moment from 'moment';
 import {Button} from '@gravity-ui/uikit';
 import Icon from '../../../../components/Icon/Icon';
 import Modal from '../../../../components/Modal/Modal';
-import TimePicker from '../../../../components/TimePicker/TimePicker';
 import CustomRadioButton from '../../../../components/RadioButton/RadioButton';
 import {SelectButton} from '../../../../components/Button/Button';
-import {Datepicker} from '../../../../components/common/Datepicker';
-
 import './OperationsArchiveFilter.scss';
 import {ValueOf} from '../../../../../@types/types';
 
@@ -28,7 +26,7 @@ const formBlock = cn('elements-form');
 const datePickerProps = {
     range: false,
     controlSize: 's',
-    format: 'dd-MM-yyyy',
+    format: 'DD-MM-YYYY HH:mm',
     outputFormat: 'datetime',
     className: 'operations-datepicker-control',
     popupClassName: 'operations-datepicker-popup',
@@ -121,25 +119,6 @@ export default function OperationsArchiveFilter() {
         }
     }, [dataMode, from, to]);
 
-    const updateDate = useCallback(
-        (date: Pick<State, 'from' | 'to'>) => {
-            const dateWithHours = mapValues_(date, (field, key) => {
-                if (field) {
-                    const {hours, minutes} = moment(state[key as 'from' | 'to']).toObject();
-                    return moment(field).add({hours, minutes}).toISOString();
-                }
-                return field;
-            });
-            setState({...state, ...dateWithHours});
-        },
-        [state],
-    );
-
-    const updateTime = useCallback(
-        (date: {from?: string; to?: string}) => setState({...state, ...date}),
-        [state],
-    );
-
     const handleActiveTypeChange = useCallback(
         (ev: React.ChangeEvent<HTMLInputElement>) => {
             const activeTypeValue = ev.target.value as ValueOf<typeof radioButtonTypes>['value'];
@@ -184,49 +163,27 @@ export default function OperationsArchiveFilter() {
                             <div className={formBlock('label')}>From</div>
                             <div className={formBlock('field-group')}>
                                 <span className={formBlock('field')}>
-                                    <Datepicker
+                                    <DatePicker
                                         {...datePickerProps}
                                         disabled={disabled}
-                                        from={state.from}
-                                        onUpdate={({from: newFrom}) =>
-                                            newFrom && updateDate({from: newFrom})
+                                        value={dateTimeParse(state.from)}
+                                        onUpdate={(time) =>
+                                            setState({...state, from: time?.toISOString()})
                                         }
                                     />
-                                </span>
-                                <span className={formBlock('field')}>
-                                    {state.from && (
-                                        <TimePicker
-                                            disabled={disabled}
-                                            date={state.from}
-                                            onChange={(newDate: string) =>
-                                                updateTime({from: newDate})
-                                            }
-                                        />
-                                    )}
                                 </span>
                             </div>
                             <div className={formBlock('label')}>To</div>
                             <div className={formBlock('field-group')}>
                                 <span className={formBlock('field')}>
-                                    <Datepicker
+                                    <DatePicker
                                         {...datePickerProps}
                                         disabled={disabled}
-                                        to={state.to}
-                                        onUpdate={({from: newTo}) =>
-                                            newTo && updateDate({to: newTo})
+                                        value={dateTimeParse(state.to)}
+                                        onUpdate={(time) =>
+                                            setState({...state, to: time?.toISOString()})
                                         }
                                     />
-                                </span>
-                                <span className={formBlock('field')}>
-                                    {state.to && (
-                                        <TimePicker
-                                            disabled={disabled}
-                                            date={state.to}
-                                            onChange={(newDate: string) =>
-                                                updateTime({to: newDate})
-                                            }
-                                        />
-                                    )}
                                 </span>
                             </div>
                         </div>

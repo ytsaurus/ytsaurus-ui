@@ -122,24 +122,14 @@ function NavigationPathToClipboard() {
     );
 }
 
-function NavigationTargetPathButton() {
-    const path = useSelector(getPath);
-    const {path: target_path} = useSelector(getNavigationPathAttributes);
-    const loading = !useSelector(isNavigationFinalLoadState);
-
-    const decodedTargetPath = target_path ? decodeEscapedAbsPath(target_path) : undefined;
-
-    if (loading || !decodedTargetPath || path === decodedTargetPath || path === '/') {
-        return null;
-    }
-
+function NavigationTargetPathButton({decodedTargetPath}: {decodedTargetPath: string}) {
     return (
         <Link url={makeNavigationLink({path: decodedTargetPath})} routed>
             <Tooltip
                 content={
                     <Flex gap={1}>
                         <MetaTable items={[{key: 'target_path', value: decodedTargetPath}]} />
-                        <ClipboardButton text={target_path} inlineMargins view="flat" />
+                        <ClipboardButton text={decodedTargetPath} inlineMargins view="flat" />
                     </Flex>
                 }
                 placement={'bottom'}
@@ -216,6 +206,15 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
         });
     }, [bcItems, mode, onEdit, window.location.pathname]);
 
+    const loading = !useSelector(isNavigationFinalLoadState);
+
+    const path = useSelector(getPath);
+    const {path: target_path} = useSelector(getNavigationPathAttributes);
+    const decodedTargetPath = target_path ? decodeEscapedAbsPath(target_path) : undefined;
+
+    const showBeforeEditorContent =
+        !loading && decodedTargetPath && path !== decodedTargetPath && path !== '/';
+
     return (
         <EditableBreadcrumbs
             onAction={(key: Key) => {
@@ -232,7 +231,11 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
             }}
             showRoot
             view={'top-row'}
-            beforeEditorContent={<NavigationTargetPathButton />}
+            beforeEditorContent={
+                showBeforeEditorContent ? (
+                    <NavigationTargetPathButton decodedTargetPath={decodedTargetPath} />
+                ) : null
+            }
             afterEditorContent={<NavigationPathToClipboard />}
             renderEditor={(props) => <NavigationPathEditor hideEditor={props.onBlur} />}
         >

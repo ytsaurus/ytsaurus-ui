@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import split from 'split.js';
 
@@ -19,6 +18,7 @@ interface FlexSplitPaneProps {
     onSplit?: () => void;
     onUnSplit?: () => void;
     id?: string;
+    forceSplit?: boolean;
 }
 
 interface FlexSplitPaneState {
@@ -26,20 +26,6 @@ interface FlexSplitPaneState {
 }
 
 class FlexSplitPane extends React.Component<FlexSplitPaneProps, FlexSplitPaneState> {
-    static propTypes = {
-        className: PropTypes.string,
-        paneClassNames: PropTypes.arrayOf(PropTypes.string),
-        direction: PropTypes.string.isRequired,
-        minSize: PropTypes.number,
-        children: PropTypes.node.isRequired,
-        getInitialSizes: PropTypes.func,
-        onResize: PropTypes.func,
-        onResizeEnd: PropTypes.func,
-        onSplit: PropTypes.func,
-        onUnSplit: PropTypes.func,
-        id: PropTypes.string,
-    };
-
     static defaultProps = {
         onSplit: null,
         onUnSplit: null,
@@ -84,11 +70,13 @@ class FlexSplitPane extends React.Component<FlexSplitPaneProps, FlexSplitPaneSta
     };
 
     checkSplit() {
+        const {forceSplit} = this.props;
         if (
-            this.paneFirst &&
-            this.paneSecond &&
-            this.paneFirst.children.length &&
-            this.paneSecond.children.length
+            (this.paneFirst &&
+                this.paneSecond &&
+                this.paneFirst.children.length &&
+                this.paneSecond.children.length) ||
+            forceSplit
         ) {
             this.split();
         } else {

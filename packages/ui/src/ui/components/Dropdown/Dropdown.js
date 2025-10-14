@@ -72,7 +72,7 @@ class Dropdown extends Component {
 
         return (
             <Popup
-                placement={directions && directions.length > 0 ? directions[0] : 'bottom'}
+                placement={directions?.[0] || 'bottom'}
                 onOpenChange={(open) => {
                     if (!open) {
                         this.close();

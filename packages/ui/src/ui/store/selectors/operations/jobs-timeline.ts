@@ -37,7 +37,9 @@ export const selectSortedJobs = createSelector([selectJobs], (jobs) => {
 });
 
 export const getSelectedJob = createSelector([selectJobs, selectActiveJob], (jobs, activeJob) => {
-    return jobs.find(({id}) => activeJob === id) || null;
+    const result = jobs.find(({id}) => activeJob === id) || null;
+
+    return result;
 });
 
 export const selectIntervalsIsSame = createSelector(

@@ -98,7 +98,7 @@ export default function Specification({className, jobID}: SpecificationProps) {
     const {loading, loaded, error, errorData, specification} = useSelector(
         (state: RootState) => state.job.specification,
     );
-    const {id} = useSelector(getJob);
+    const job = useSelector(getJob);
 
     useEffect(() => {
         dispatch(loadJobSpecification(jobID));
@@ -128,7 +128,7 @@ export default function Specification({className, jobID}: SpecificationProps) {
                                         <YsonDownloadButton
                                             value={specification}
                                             settings={settings}
-                                            name={`specification_job_${id}`}
+                                            name={`specification_job_${job?.id}`}
                                         />
                                         <Toolbar jobID={jobID} />
                                     </Flex>

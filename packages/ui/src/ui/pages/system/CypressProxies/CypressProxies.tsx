@@ -8,7 +8,7 @@ import {setSettingsSystemCypressProxiesCollapsed} from '../../../store/actions/s
 import {loadSystemCypressProxies} from '../../../store/actions/system/cypress-proxies';
 import {getCluster} from '../../../store/selectors/global';
 import {getSettingsSystemCypressProxiesCollapsed} from '../../../store/selectors/settings/settings-ts';
-import {useThunkDispatch} from '../../../store/thunkDispatch';
+import {useDispatch} from '../../../store/redux-hooks';
 import {MakeUrlParams} from '../ProxiesImpl/RoleGroup';
 import {ProxiesImpl} from '../ProxiesImpl/ProxiesImpl';
 import {
@@ -26,7 +26,7 @@ function CypressProxies() {
     const collapsed = useSelector(getSettingsSystemCypressProxiesCollapsed);
     const roleGroups = useSelector(getCypressProxiesRoleGroups);
     const counters = useSelector(getCypressProxiesCounters);
-    const dispatch = useThunkDispatch();
+    const dispatch = useDispatch();
 
     const updateFn = React.useMemo(() => {
         let allowUpdate = true;

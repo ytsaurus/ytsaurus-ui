@@ -123,8 +123,8 @@ export default function Competitors() {
         (state: RootState) => state.job.competitors,
     );
 
-    const {operationId} = job;
-    const job_competition_id = job.attributes?.job_competition_id;
+    const operationId = job?.operationId;
+    const job_competition_id = job?.attributes?.job_competition_id;
     if (!job_competition_id || !operationId) {
         throw new Error('Unexpected behavior: job_competition_id or operationId is not defined');
     }

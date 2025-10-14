@@ -55,7 +55,7 @@ export const ClusterPicker: FC<Props> = ({clusterConfig}) => {
             <Icon awesome={'chevron-down'} size="l" />
             <Popup
                 className={block('popup')}
-                placement="bottom"
+                placement={['bottom-start']}
                 anchorElement={iconRef.current}
                 open={visible}
                 onOpenChange={(open) => {
