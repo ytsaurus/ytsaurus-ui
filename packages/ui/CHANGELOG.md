@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.4.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v2.3.0...ui-v2.4.0) (2025-10-14)
+
+
+### Features
+
+* **Queries:** add yql versions [YTFRONT-5098] ([1762ef8](https://github.com/ytsaurus/ytsaurus-ui/commit/1762ef8234c7f84c602201f8ac62796a1e95ffb9))
+
+
+### Bug Fixes
+
+* **Navigation/Description:** use '&' to suppress links resolution [YTFRONT-5232] ([7c72895](https://github.com/ytsaurus/ytsaurus-ui/commit/7c72895e0d947bfa68852bf77ef7d18c26b58616))
+* **Navigation/NavigationError/RequestPermission:** allow requests for 'portal_exit' [YTFRONT-5233] ([0e54e1a](https://github.com/ytsaurus/ytsaurus-ui/commit/0e54e1ac69f24f7e96624d3248d972a8ae6ce5aa))
+* **Navigation/Table:** use 'Allow raw string' when 'YQL V3 Types' [YTFRONT-5226] ([481aed0](https://github.com/ytsaurus/ytsaurus-ui/commit/481aed0c55a3cb8f018ebbb94df510fb10045691))
+* **Operations/JobsMonitoring:** display of limit exceeding [YTFRONT-5231] ([6d6a597](https://github.com/ytsaurus/ytsaurus-ui/commit/6d6a5972ebb9568ef576a0343276e7412213a722))
+* **Queries/Chart:** date in axis [YTFRONT-5105] ([52378f1](https://github.com/ytsaurus/ytsaurus-ui/commit/52378f1bc7f09c4591faefc92d1e00fb688d649d))
+* **Queries:** tutorials tab [YTFRONT-5240] ([02ad5e2](https://github.com/ytsaurus/ytsaurus-ui/commit/02ad5e26ca88745b61bbb44b93f00fcab6ab1a95))
+* **Queries:** wrong clique selector size [YTFRONT-5227] ([db610ec](https://github.com/ytsaurus/ytsaurus-ui/commit/db610ec8fcd8a22296a4cb864a11412e2465b7ac))
+
 ## [2.3.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v2.2.0...ui-v2.3.0) (2025-09-30)
 
 
