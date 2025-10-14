@@ -44,7 +44,7 @@ export type JobsState = {
         address: WithDefaultValue<string> & {data: Array<unknown>};
         taskName: WithDefaultValue<string>;
         state: WithDefaultValue<string>;
-        type: WithDefaultValue<string>;
+        type: WithDefaultValue<string> & {counters?: Record<string, number>};
         withStderr: WithDefaultValue<boolean>;
         withFailContext: WithDefaultValue<boolean>;
         withSpec: WithDefaultValue<boolean>;
