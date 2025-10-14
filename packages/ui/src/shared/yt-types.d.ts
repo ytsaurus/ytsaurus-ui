@@ -276,11 +276,13 @@ export interface ListJobsParameters {
     state?: JobState;
     type?: string;
     address?: string;
+    monitoring_descriptor?: string;
     with_stderr?: boolean;
     with_monitoring_descriptor?: boolean;
     with_fail_context?: boolean;
     with_spec?: boolean;
     with_competitors?: boolean;
+    with_interruption_info?: boolean;
     sort_field?: 'none' | string;
     sort_order?: 'ascending' | 'descending';
     task_name?: string;
