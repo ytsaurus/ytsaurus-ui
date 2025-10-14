@@ -296,7 +296,7 @@ export function setOngoingClusterEvents(cluster: string, events: Array<unknown>)
 
 export function splitScreen(type: string, paneClassNames: Array<string> = []) {
     document.body.style.overflow = 'hidden';
-
+    console.log('splitScreen', type, paneClassNames);
     return {
         type: SPLIT_SCREEN,
         data: {paneClassNames, type},
