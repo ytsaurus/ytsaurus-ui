@@ -9,13 +9,13 @@ test('Settings: checking the functionality of the menu', async ({page}) => {
     await basePage(page).settingsToggleVisibility();
 
     await test.step('General', async () => {
-        await page.waitForSelector('.gn-settings__section-heading:text("General")');
+        await page.getByTestId('/General');
         await expect(page).toHaveScreenshot();
     });
 
     await test.step('Table', async () => {
         await basePage(page).settingsShowSection('Table');
-        await page.waitForSelector('.gn-settings__section-heading:text("Table")');
+        await page.getByTestId('/Table');
         await expect(page).toHaveScreenshot();
     });
 });

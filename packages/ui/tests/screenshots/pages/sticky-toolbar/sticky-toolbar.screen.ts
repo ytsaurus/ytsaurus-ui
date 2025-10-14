@@ -21,6 +21,7 @@ test('StickyToolbar: navigation', async ({page}) => {
 
     await test.step('table + QT-sidepanel', async () => {
         await page.getByTitle('Open Queries widget').click();
+        await page.getByRole('presentation').click();
         await page.click(`:text('\`${E2E_DIR}/static-table\`')`, {force: true});
         await page.keyboard.press('ControlOrMeta+A');
         await page.keyboard.press('Backspace');
