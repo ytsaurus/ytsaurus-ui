@@ -42,7 +42,7 @@ function PoolTags({pool}: {pool: PoolTreeNode | PoolLeafNode}) {
         content.push(<YTText color="secondary">Fair share</YTText>);
     }
 
-    return <span className={block()}>{content}</span>;
+    return content;
 }
 
 export default React.memo(PoolTags);
