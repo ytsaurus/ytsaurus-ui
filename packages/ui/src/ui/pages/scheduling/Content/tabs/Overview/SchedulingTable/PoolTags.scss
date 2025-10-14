@@ -1,10 +1,6 @@
 .scheduling-pool-tags {
-    justify-content: flex-end;
-
-    overflow: hidden;
-
     &__tag {
-        margin-right: 1ex;
+        margin-right: 4px;
         flex-shrink: 1;
 
         overflow: hidden;

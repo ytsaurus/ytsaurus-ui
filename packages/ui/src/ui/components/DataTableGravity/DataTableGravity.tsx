@@ -17,7 +17,7 @@ export function DataTableGravity<TData, TScrollElement extends Element | Window>
 
 export function TableCell({children}: {children: React.ReactNode}) {
     return (
-        <Flex style={{height: '100%'}} alignItems="center">
+        <Flex style={{height: '100%'}} alignItems="center" wrap="nowrap">
             {children}
         </Flex>
     );

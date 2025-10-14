@@ -3,7 +3,9 @@ import {useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import moment from 'moment';
 
-import {DropdownMenu, Flex, Text} from '@gravity-ui/uikit';
+import compact_ from 'lodash/compact';
+
+import {DropdownMenu, Flex, Progress, Text} from '@gravity-ui/uikit';
 
 import format from '../../../../../../common/hammer/format';
 
@@ -23,7 +25,10 @@ import {OperationType} from '../../../../../../components/OperationType/Operatio
 import {SubjectCard} from '../../../../../../components/SubjectLink/SubjectLink';
 import {Tooltip} from '../../../../../../components/Tooltip/Tooltip';
 import {getSchedulingOperationsLoading} from '../../../../../../store/selectors/scheduling/expanded-pools';
-import {getSchedulingOverviewTableItems} from '../../../../../../store/selectors/scheduling/scheduling';
+import {
+    getSchedulingContentMode,
+    getSchedulingOverviewTableItems,
+} from '../../../../../../store/selectors/scheduling/scheduling';
 import {getPoolPathsByName} from '../../../../../../store/actions/scheduling/expanded-pools';
 import {openAttributesModal} from '../../../../../../store/actions/modals/attributes-modal';
 import {useThunkDispatch} from '../../../../../../store/thunkDispatch';
@@ -32,8 +37,12 @@ import {NameCell} from './NameCell';
 import PoolTags from './PoolTags';
 import i18n from './i18n';
 import './SchedulingTable.scss';
+import {getSchedulingOverivewColumns} from '../../../../../../store/selectors/scheduling/overview-columns';
+import {childTableItems} from '../../../../../../utils/scheduling/detailsTable';
+import {KeysByType} from '../../../../../../../@types/types';
 import {openEditModal} from '../../../../../../store/actions/scheduling/scheduling';
 import {openPoolDeleteModal} from '../../../../../../store/actions/scheduling/scheduling-ts';
+import {getProgressTheme} from '../../../../../../utils/progress';
 
 const block = cn('yt-scheduling-table');
 
@@ -59,9 +68,151 @@ export function SchedulingTable() {
     return <DataTableGravity className={block()} table={table} />;
 }
 
-export function useSchedulingTableColumns() {
+type SchedulintTableMode = ReturnType<typeof getSchedulingContentMode>;
+type SchedulingColumn = string;
+
+const COLUMNS_BY_MODE: Record<SchedulintTableMode, Array<SchedulingColumn>> = {
+    summary: [
+        'weight',
+        'type',
+        'user',
+        'dominant_resource',
+        'usage',
+        'demand',
+        'guarantee',
+        'operation_overview',
+        'duration',
+    ],
+    cpu: [
+        'FI',
+        'weight',
+        'min_resources_cpu',
+        'abs_guaranteed_cpu',
+        'abs_demand_cpu',
+        'resource_detailed_cpu',
+        'abs_usage_cpu',
+        'resource_limit_cpu',
+    ],
+    memory: [
+        'FI',
+        'weight',
+        'min_resources_memory',
+        'abs_guaranteed_memory',
+        'abs_demand_memory',
+        'resource_detailed_memory',
+        'abs_usage_memory',
+        'resource_limit_memory',
+    ],
+
+    gpu: [
+        'FI',
+        'weight',
+        'min_resources_gpu',
+        'abs_guaranteed_gpu',
+        'abs_demand_gpu',
+        'resource_detailed_gpu',
+        'abs_usage_gpu',
+        'resource_limit_gpu',
+    ],
+
+    user_slots: [
+        'FI',
+        'weight',
+        'min_resources_user_slots',
+        'abs_guaranteed_user_slots',
+        'abs_demand_user_slots',
+        'resource_detailed_user_slots',
+        'abs_usage_user_slots',
+        'resource_limit_user_slots',
+    ],
+
+    operations: [
+        'FI',
+        'running_operation_count',
+        'max_running_operation_count',
+        'running_operation_progress',
+        'operation_count',
+        'max_operation_count',
+        'operation_progress',
+    ],
+
+    integral_guarantees: [
+        'FI',
+        'integral_type',
+        'burst_cpu',
+        'children_burst_cpu',
+        'flow_cpu',
+        'children_flow_cpu',
+        'accumulated',
+        'burst_duration',
+    ],
+    custom: [],
+};
+
+function useSchedulingVisibleColumns() {
+    const mode = useSelector(getSchedulingContentMode);
+    const customColumns = useSelector(getSchedulingOverivewColumns);
+
+    return mode === 'custom' ? customColumns : (COLUMNS_BY_MODE[mode] ?? []);
+}
+
+type KeyByGetterReturnType<T> =
+    | KeysByType<typeof childTableItems, {sort: (...args: any) => T}>
+    | KeysByType<typeof childTableItems, {get: (...args: any) => T}>;
+
+function makeNumberColumn(
+    id: KeyByGetterReturnType<number | undefined>,
+    type: 'NumberSmart' | 'Bytes' = 'NumberSmart',
+) {
+    const info = childTableItems[id];
+    const {caption} = {caption: undefined, ...info};
+    return {
+        id,
+        header: () => <ColumnHeader column={id} title={caption} />,
+        cell: ({row: {original: item}}: tanstack.CellContext<RowData, unknown>) => {
+            let value: number | undefined;
+            if ('sort' in info && 'function' === typeof info.sort) {
+                value = info.sort(item);
+            } else if ('get' in info && 'function' === typeof info.get) {
+                value = info.get(item);
+            }
+
+            return (
+                <TableCell>
+                    <FormatNumber value={value} type={type} />
+                </TableCell>
+            );
+        },
+    };
+}
+
+function makeReadableFieldColumn(id: KeyByGetterReturnType<string | undefined>) {
+    const info = childTableItems[id];
+    const {caption} = {caption: undefined, ...info};
+    return {
+        id,
+        header: () => <ColumnHeader column={id} title={caption} />,
+        cell: ({row: {original: item}}: tanstack.CellContext<RowData, unknown>) => {
+            let value: string | undefined;
+            if ('sort' in info && 'function' === typeof info.sort) {
+                value = info.sort(item);
+            } else if ('get' in info && 'function' === typeof info.get) {
+                value = info.get(item);
+            }
+
+            return (
+                <TableCell>
+                    {value === undefined ? format.NO_VALUE : format.ReadableField(value)}
+                </TableCell>
+            );
+        },
+    };
+}
+
+function useSchedulingTableColumns() {
+    const visibleColumns = useSchedulingVisibleColumns();
     const columns = React.useMemo(() => {
-        const res: Array<tanstack.ColumnDef<RowData>> = [
+        const availableColumns: Array<tanstack.ColumnDef<RowData>> = [
             {
                 id: 'name',
                 header: () => <NameHeader />,
@@ -126,14 +277,7 @@ export function useSchedulingTableColumns() {
                     );
                 },
             },
-            {
-                id: 'dominantResource',
-                header: () => <ColumnHeader column="dominantResource" title="Dom.res" />,
-                cell: ({row: {original: item}}) => {
-                    const {dominantResource} = item;
-                    return <TableCell>{dominantResource?.toUpperCase()}</TableCell>;
-                },
-            },
+            makeReadableFieldColumn('dominant_resource'),
             {
                 id: 'usage',
                 header: () => <ColumnHeader column="usage" />,
@@ -173,7 +317,7 @@ export function useSchedulingTableColumns() {
                 size: 140,
             },
             {
-                id: 'running',
+                id: 'operation_overview',
                 header: () => <ColumnHeader column="running" />,
                 cell: ({row: {original: item}}) => {
                     const {maxOperationCount, maxOperationCountEdited, runningOperationCount} =
@@ -194,7 +338,7 @@ export function useSchedulingTableColumns() {
                 },
             },
             {
-                id: 'duaration',
+                id: 'duration',
                 header: () => <ColumnHeader column="duration" />,
                 cell: ({row: {original: item}}) => {
                     const {startTime} = item;
@@ -206,16 +350,105 @@ export function useSchedulingTableColumns() {
                 },
             },
             {
-                id: 'actions',
-                header: () => null,
-                size: 50,
+                id: 'FI',
+                header: () => <ColumnHeader column="FI" />,
                 cell: ({row: {original: item}}) => {
-                    return <RowActions item={item} />;
+                    if (item.fifoIndex === undefined || item.type !== 'operation') {
+                        return '';
+                    } else {
+                        return item.fifoIndex;
+                    }
                 },
             },
+            {
+                id: 'operation_progress',
+                header: () => (
+                    <ColumnHeader
+                        column="operation_progress"
+                        title={childTableItems.operation_progress.caption}
+                    />
+                ),
+                cell: ({row: {original: item}}) => {
+                    const info = childTableItems.operation_progress;
+                    const value = info.get(item);
+                    const theme = getProgressTheme(value);
+                    const text = info.text(item);
+                    return isNaN(value) ? (
+                        format.NO_VALUE
+                    ) : (
+                        <Progress value={value * 100} theme={theme} text={text} />
+                    );
+                },
+            },
+            {
+                id: 'running_operation_progress',
+                header: () => (
+                    <ColumnHeader
+                        column="running_operation_progress"
+                        title={childTableItems.running_operation_progress.caption}
+                    />
+                ),
+                cell: ({row: {original: item}}) => {
+                    const info = childTableItems.running_operation_progress;
+                    const value = info.get(item);
+                    const theme = getProgressTheme(value);
+                    const text = info.text(item);
+                    return isNaN(value) ? (
+                        format.NO_VALUE
+                    ) : (
+                        <Progress value={value * 100} theme={theme} text={text} />
+                    );
+                },
+            },
+            makeNumberColumn('abs_demand_cpu'),
+            makeNumberColumn('abs_demand_cpu'),
+            makeNumberColumn('abs_demand_gpu'),
+            makeNumberColumn('abs_demand_memory', 'Bytes'),
+            makeNumberColumn('abs_demand_user_slots'),
+            makeNumberColumn('abs_guaranteed_cpu'),
+            makeNumberColumn('abs_guaranteed_gpu'),
+            makeNumberColumn('abs_guaranteed_memory', 'Bytes'),
+            makeNumberColumn('abs_guaranteed_user_slots'),
+            makeNumberColumn('abs_usage_cpu'),
+            makeNumberColumn('abs_usage_gpu'),
+            makeNumberColumn('abs_usage_memory', 'Bytes'),
+            makeNumberColumn('abs_usage_user_slots'),
+            makeNumberColumn('accumulated'),
+            makeNumberColumn('burst_cpu'),
+            makeNumberColumn('burst_duration'),
+            makeNumberColumn('children_burst_cpu'),
+            makeNumberColumn('children_flow_cpu'),
+            makeNumberColumn('flow_cpu'),
+            makeReadableFieldColumn('integral_type'),
+            makeNumberColumn('max_operation_count'),
+            makeNumberColumn('max_running_operation_count'),
+            makeNumberColumn('min_resources_cpu'),
+            makeNumberColumn('min_resources_gpu'),
+            makeNumberColumn('min_resources_memory', 'Bytes'),
+            makeNumberColumn('min_resources_user_slots'),
+            makeNumberColumn('operation_count'),
+            makeNumberColumn('resource_detailed_cpu'),
+            makeNumberColumn('resource_detailed_gpu'),
+            makeNumberColumn('resource_detailed_memory', 'Bytes'),
+            makeNumberColumn('resource_detailed_user_slots'),
+            makeNumberColumn('resource_limit_cpu'),
+            makeNumberColumn('resource_limit_gpu'),
+            makeNumberColumn('resource_limit_memory', 'Bytes'),
+            makeNumberColumn('resource_limit_user_slots'),
+            makeNumberColumn('running_operation_count'),
         ];
-        return res;
-    }, []);
+
+        const map = availableColumns.reduce((acc, item) => {
+            acc.set(item.id!, item);
+            return acc;
+        }, new Map<SchedulingColumn, (typeof availableColumns)[number]>());
+
+        return compact_(
+            ['name', ...visibleColumns, 'actions'].map((column) => {
+                return map.get(column);
+            }),
+        );
+    }, [visibleColumns]);
     return columns;
 }
 
