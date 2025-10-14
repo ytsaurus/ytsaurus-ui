@@ -106,7 +106,7 @@ const ephemeralState: SchedulingEphemeralState = {
 const persistedState: SchedulingPersistentState = {
     treeState: 'collapsed',
     poolChildrenFilter: '',
-    contentMode: 'cpu',
+    contentMode: 'summary',
     tree: '',
     pool: ROOT_POOL_NAME,
     abcServiceFilter: {
