@@ -1,13 +1,18 @@
 import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import Select from '../../../../../../components/Select/Select';
+import Select, {YTSelectProps} from '../../../../../../components/Select/Select';
 
-import {getFilteredAttributes} from '../../../../../../pages/operations/selectors';
+import {getFilteredAttributes} from '../../../../selectors';
 import {updateFilteredAttributes} from '../../../../../../store/actions/operations/jobs';
 import {ATTRIBUTE_ITEMS, ATTRIBUTE_ITEM_NAMES} from '../../../../../../store/selectors/operations';
 
-function JobsAttributesFilter(props: {disabled: boolean}) {
+type Props = Omit<
+    YTSelectProps,
+    'multiple' | 'value' | 'label' | 'filterable' | 'items' | 'onUpdate'
+>;
+
+function JobsAttributesFilter(props: Props) {
     const attributes = useSelector(getFilteredAttributes(ATTRIBUTE_ITEM_NAMES));
     const dispatch = useDispatch();
     const handleChange = useCallback((value: Array<string>) => {
