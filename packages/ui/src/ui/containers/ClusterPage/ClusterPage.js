@@ -293,6 +293,7 @@ class ClusterPage extends Component {
                     onUnSplit={this.handleSplit}
                     getInitialSizes={this.getInitialSizes}
                     id={SPLIT_PANE_ID}
+                    forceSplit={splitScreen.isSplit}
                 >
                     <div
                         ref={this.contentPaneRef}
@@ -314,8 +315,6 @@ class ClusterPage extends Component {
                             </HandleMaintenance>
                         </ScrollableElementContext.Provider>
                     </div>
-
-                    {null}
                 </FlexSplitPane>
             </Fragment>
         );

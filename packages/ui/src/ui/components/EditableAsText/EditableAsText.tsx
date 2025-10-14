@@ -114,7 +114,12 @@ export function EditableAsText(props: EditableAsTextProps) {
     return (
         <>
             {editMode ? (
-                <div className={block({edit: !disableEdit}, className)}>
+                <div
+                    className={block(
+                        {edit: !disableEdit, controls: Boolean(withControls)},
+                        className,
+                    )}
+                >
                     {renderEditor ? (
                         renderEditor({
                             value: input,
@@ -165,6 +170,7 @@ export function EditableAsText(props: EditableAsTextProps) {
                                     view="outlined"
                                     onClick={startTextEdit}
                                     size={controlSize}
+                                    qa="edit-text-button"
                                 >
                                     <Icon awesome={'pencil'} size={controlSize} />
                                 </Button>
@@ -182,6 +188,7 @@ export function EditableAsText(props: EditableAsTextProps) {
                             view="outlined"
                             onClick={startTextEdit}
                             size={controlSize}
+                            qa="edit-text-button"
                         >
                             <Icon awesome={'pencil'} size={controlSize} />
                         </Button>
@@ -189,24 +196,5 @@ export function EditableAsText(props: EditableAsTextProps) {
                 </div>
             )}
         </>
-    );
-}
-
-export function EditButton({
-    onClick,
-    size = 'm',
-}: {
-    onClick: () => void;
-    size?: ButtonProps['size'];
-}) {
-    return (
-        <Button
-            className={block('edit-btn')}
-            onClick={onClick}
-            size={size}
-            qa="qa:navigation:edit-path"
-        >
-            <Icon awesome={'pencil'} />
-        </Button>
     );
 }

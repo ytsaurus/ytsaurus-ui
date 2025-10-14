@@ -127,7 +127,7 @@ export const getJobPivotKeysData = createSelector([getJobSpecification], (specif
 
 export const getJobActions = createSelector(getJob, (job) => {
     const actions: JobAction[] = [];
-    const state = job.state;
+    const state = job?.state;
 
     if (state !== 'completed' && state !== 'failed' && state !== 'aborted') {
         actions.push({

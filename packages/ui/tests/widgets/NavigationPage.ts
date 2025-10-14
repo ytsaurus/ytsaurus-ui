@@ -53,7 +53,7 @@ export class NavigationPage extends BasePage {
     }
 
     async gotToPath(path: string) {
-        await this.page.getByTestId('qa:navigation:edit-path').click();
+        await this.page.getByTestId('edit-text-button').click();
         await this.page.fill('.path-editor input', path);
         await this.page.keyboard.press('Enter');
     }

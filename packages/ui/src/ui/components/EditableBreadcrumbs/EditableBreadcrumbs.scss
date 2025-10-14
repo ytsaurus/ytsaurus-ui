@@ -1,9 +1,14 @@
 @import '../../styles/redefinitions/common/Breadcrumbs.scss';
 @import '../../styles/mixins.scss';
 
-.editable-breadcrumbs {
+.yt-editable-breadcrumbs {
     &_view_top-row {
         @include top-row-breadcrumbs();
+    }
+
+    &__breadcrumbs-container {
+        flex-grow: 1;
+        flex-shrink: 1;
     }
 }
 

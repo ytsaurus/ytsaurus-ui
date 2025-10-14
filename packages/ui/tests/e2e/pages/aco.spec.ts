@@ -29,7 +29,6 @@ test('@ACO: the permissions request button should be visible', async ({page}) =>
         window.__DATA__.uiSettings.reUseEffectiveAclForPath = undefined;
     });
 
-    await acoPage.clickOnACLTab();
     await acoPage.waitForACLTableLoad();
 
     await expect(page.getByText('Edit ACL')).toBeVisible();

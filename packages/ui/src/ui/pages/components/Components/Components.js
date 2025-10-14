@@ -87,16 +87,6 @@ function RedirectToTabletCells() {
     return <Redirect to={tabletActiveBundleLink(cluster, '')} />;
 }
 
-// Components.propTypes = {
-//     // from react-router
-//     match: PropTypes.shape({
-//         path: PropTypes.string.isRequired,
-//         url: PropTypes.string.isRequired,
-//     }).isRequired,
-//     // from connect
-//     lastVisitedTab: PropTypes.string,
-// };
-
 const mapStateToProps = (state) => {
     const lastVisitedTabs = getLastVisitedTabs(state);
     return {

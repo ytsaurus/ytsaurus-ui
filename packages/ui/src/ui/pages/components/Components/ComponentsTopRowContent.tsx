@@ -38,12 +38,13 @@ function ComponentsBreadcrumbs() {
     const nodeHost = useSelector(nodeHostSelector);
     const history = useHistory();
     const items = React.useMemo(() => {
+        const nodesPageUrl = `/${cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}`;
         const result = [
             <Breadcrumbs.Item
-                href={`/${cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}`}
+                href={nodesPageUrl}
                 onClick={(e) => {
                     e.preventDefault();
-                    history.push(`/${cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}`);
+                    history.push(nodesPageUrl);
                 }}
                 key="<Root>"
             >
@@ -51,15 +52,14 @@ function ComponentsBreadcrumbs() {
             </Breadcrumbs.Item>,
         ];
         if (nodeHost) {
+            const nodePageUrl = `/${cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}/${nodeHost}`;
             result.push(
                 <Breadcrumbs.Item
                     key={nodeHost}
-                    href={`/${cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}/${nodeHost}`}
+                    href={nodePageUrl}
                     onClick={(e) => {
                         e.preventDefault();
-                        history.push(
-                            `/${cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}/${nodeHost}`,
-                        );
+                        history.push(nodePageUrl);
                     }}
                 >
                     {nodeHost}

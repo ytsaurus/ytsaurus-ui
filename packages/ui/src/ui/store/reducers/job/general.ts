@@ -13,7 +13,7 @@ export interface GeneralState {
     error: boolean;
     errorData?: YTError;
 
-    job: Partial<Job>;
+    job?: Job;
     details: {
         events: JobEvents;
         statistics: JobStatistics;
@@ -30,7 +30,7 @@ export const initialState: GeneralState = {
     loaded: false,
     error: false,
     errorData: undefined,
-    job: {},
+    job: undefined,
     details: {
         events: undefined,
         statistics: undefined,

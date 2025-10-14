@@ -3,14 +3,14 @@
 
     .table-widget-container {
         height: 100%;
-        overflow: hidden scroll;
+        overflow: hidden auto;
         position: relative;
         width: 100%;
         max-width: 100%;
 
         .widget-table {
             width: 100%;
-            overflow: hidden scroll;
+            overflow: hidden auto;
             max-width: 100%;
         }
 

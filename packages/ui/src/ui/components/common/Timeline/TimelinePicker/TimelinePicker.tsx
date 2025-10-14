@@ -303,7 +303,7 @@ export class TimelinePicker extends React.Component<TimelinePickerProps, State> 
                         <Popup
                             anchorElement={this._datepickerRef.current}
                             open={opened}
-                            placement="bottom"
+                            placement="bottom-start"
                             onOpenChange={(open, event) => {
                                 if (!open) {
                                     this.onPopupClose(event as MouseEvent | KeyboardEvent);

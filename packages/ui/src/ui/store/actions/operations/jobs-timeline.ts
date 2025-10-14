@@ -111,8 +111,8 @@ export const getJobsWithEvents =
                         allocationId: job.allocation_id,
                         groupName: job.task_name || '',
                         events: [],
-                        start_time: job?.start_time || format.NO_VALUE,
-                        finish_time: job?.finish_time || format.NO_VALUE,
+                        start_time: job.start_time || format.NO_VALUE,
+                        finish_time: job.finish_time || format.NO_VALUE,
                         address: job.address,
                     };
 

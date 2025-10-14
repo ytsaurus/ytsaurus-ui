@@ -68,10 +68,8 @@ export const OperationTimeline: FC = () => {
                 dispatch(setSelectedJob(''));
                 return;
             }
-
             const job = events.find((event) => event.renderer instanceof JobLineRenderer);
             if (!job) return;
-
             dispatch(setSelectedJob(job.id));
         },
         [dispatch],

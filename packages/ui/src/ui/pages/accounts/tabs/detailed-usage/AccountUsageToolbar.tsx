@@ -490,11 +490,10 @@ export function UsageBreadcrumbs() {
 
     const handleBreadcrumbClick = useCallback(
         (key: Key) => {
-            history.push(
-                makeRoutedURL(
-                    `${window.location.pathname}?path=${pathArr.find((i) => i.item === key)?.value}`,
-                ),
-            );
+            const path = pathArr.find((i) => i.item === key)?.value;
+            if (path) {
+                history.push(makeRoutedURL(`${window.location.pathname}?path=${path}`));
+            }
             setTimeout(() => {
                 dispatch(fetchAccountUsage());
             }, 0);

@@ -63,9 +63,9 @@ export function EditTextWithPreview({
         setShowPreview(!showPreview);
     }, [setShowPreview, showPreview]);
 
-    const showHideAction = {
+    const showHideAction: DropdownMenuItem = {
         text: !showPreview ? 'Show preview' : 'Hide',
-        icon: <Icon awesome={!showPreview ? 'eye' : 'eye-slash'} />,
+        iconStart: <Icon awesome={!showPreview ? 'eye' : 'eye-slash'} />,
         action: togglePreview,
     };
 

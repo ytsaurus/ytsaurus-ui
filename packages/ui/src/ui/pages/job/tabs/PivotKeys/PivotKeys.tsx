@@ -86,12 +86,14 @@ export default function PivotKeys() {
     const pivotKeysItems = useSelector(getJobPivotKeysData);
 
     useEffect(() => {
-        dispatch(loadJobSpecification(job.id as string));
+        if (job?.id) {
+            dispatch(loadJobSpecification(job.id));
+        }
 
         return () => {
             dispatch(abortAndReset());
         };
-    }, [dispatch, job.id]);
+    }, [dispatch, job?.id]);
 
     const columns = useMemo(getTableColumns, []);
     const templates = useMemo(getTableTemplates, []);

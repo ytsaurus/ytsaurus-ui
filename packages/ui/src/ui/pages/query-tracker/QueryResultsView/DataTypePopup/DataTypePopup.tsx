@@ -1,11 +1,12 @@
 import React from 'react';
-import {Icon, Tooltip} from '@gravity-ui/uikit';
+import {Icon} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import {StrictReactNode} from '../YQLTable/utils';
 import infoIcon from '../../../../assets/img/svg/icons/exclamation-circle.svg';
 
 import './DataTypePopup.scss';
 import DataType from '../../../../components/SchemaDataType/DataType/DataType';
+import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 import type {DataType as DataTypeProps} from '../../../../components/SchemaDataType/dataTypes';
 
 const block = cn('data-type-popup');
@@ -30,7 +31,6 @@ export default function DataTypePopup({children, type, hideIcon, className}: Pro
                     </div>
                 ) : null
             }
-            openDelay={400}
         >
             <span className={block('container')}>
                 {children}

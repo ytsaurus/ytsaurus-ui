@@ -389,9 +389,9 @@ export class Datepicker extends React.PureComponent {
 
     onClose = () => {
         // Ловим клик по крестику для очистки инпута, который вызывает ложное срабатывание текущего метода
-        if (document.activeElement === this.ControlNodeRef.current) {
-            return;
-        }
+        // if (document.activeElement === this.ControlNodeRef.current) {
+        //     return;
+        // }
 
         const {format, emptyValueText, range} = this.props;
         const {from, to, lastValidHash} = this.state;
@@ -575,16 +575,10 @@ export class Datepicker extends React.PureComponent {
                                 open={active && !disabled}
                                 anchorElement={this.ControlNodeRef.current}
                                 placement="bottom"
-                                onOpenChange={(open) => {
-                                    if (!open) {
-                                        this.onClose();
-                                    }
-                                }}
+                                onClose={this.onClose}
                             >
-                                <div className={b('popup', popupClassName)}>
-                                    <div className={b('popup-content')}>
-                                        {this.renderContent(mobile)}
-                                    </div>
+                                <div className={b('popup-content', popupClassName)}>
+                                    {this.renderContent(mobile)}
                                 </div>
                             </Popup>
                         )}

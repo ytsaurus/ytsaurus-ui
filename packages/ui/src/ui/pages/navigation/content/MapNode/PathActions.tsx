@@ -28,7 +28,7 @@ import {getSelectedNodes} from '../../../../store/selectors/navigation/content/m
 import {showDynTablesStateModalByPaths} from '../../../../store/actions/navigation/modals/dyn-tables-state-modal';
 import {DYN_TABLES_ALLOWED_ACTIONS_BY_STATE} from '../../../../store/selectors/navigation/content/map-node-ts';
 import {TabletStateType} from '../../../../store/reducers/navigation/modals/dyn-tables-state-modal';
-import {ButtonProps, DropdownMenu} from '@gravity-ui/uikit';
+import {ButtonProps, DropdownMenu, DropdownMenuItem} from '@gravity-ui/uikit';
 import {showLinkToModal} from '../../../../store/actions/navigation/modals/link-to-modal';
 import {showRemoteCopyModal} from '../../../../store/actions/navigation/modals/remote-copy-modal';
 
@@ -80,15 +80,15 @@ function PathActions(props: Props) {
         const handleUpdateView = (...args: any) => dispatch(updateView(...args));
 
         return {
-            onMove(evt: React.MouseEvent) {
+            onMove(evt: React.MouseEvent<HTMLElement, MouseEvent> | KeyboardEvent) {
                 dispatch(openEditingPopup(objectPath, objectPath, OPEN_MOVE_OBJECT_POPUP));
                 evt.stopPropagation();
             },
-            onCopy(evt: React.MouseEvent) {
+            onCopy(evt: React.MouseEvent<HTMLElement, MouseEvent> | KeyboardEvent) {
                 dispatch(openEditingPopup(objectPath, objectPath, OPEN_COPY_OBJECT_POPUP));
                 evt.stopPropagation();
             },
-            onShowAttributes(evt: React.MouseEvent) {
+            onShowAttributes(evt: React.MouseEvent<HTMLElement, MouseEvent> | KeyboardEvent) {
                 getMetrics().countEvent('navigation_map-node_attributes');
 
                 dispatch(
@@ -99,59 +99,59 @@ function PathActions(props: Props) {
                 );
                 evt.stopPropagation();
             },
-            onEditAttributes(evt: React.MouseEvent) {
+            onEditAttributes(evt: React.MouseEvent<HTMLElement, MouseEvent> | KeyboardEvent) {
                 getMetrics().countEvent('navigation_map-node_edit_attributes');
 
                 dispatch(showNavigationAttributesEditor([item.path]));
                 evt.stopPropagation();
             },
-            onRestoreClick(evt: React.MouseEvent) {
+            onRestoreClick(evt: React.MouseEvent<HTMLElement, MouseEvent> | KeyboardEvent) {
                 dispatch(restoreObject(objectPath, restorePath, handleUpdateView));
                 evt.stopPropagation();
             },
 
-            onDeleteClick(evt: React.MouseEvent) {
+            onDeleteClick(evt: React.MouseEvent<HTMLElement, MouseEvent> | KeyboardEvent) {
                 getMetrics().countEvent('navigation_map-node_delete');
                 dispatch(openDeleteModal(item));
                 evt.stopPropagation();
             },
-            onCopyPathClick(evt: React.MouseEvent) {
+            onCopyPathClick(evt: React.MouseEvent<HTMLElement, MouseEvent> | KeyboardEvent) {
                 getMetrics().countEvent('navigation_map-node_copy-path');
                 evt.stopPropagation();
             },
-            onSort(e: React.MouseEvent) {
+            onSort(e: React.MouseEvent<HTMLElement, MouseEvent> | KeyboardEvent) {
                 dispatch(showTableSortModal([item.path]));
                 e.stopPropagation();
             },
-            onErase(evt: React.MouseEvent) {
+            onErase(evt: React.MouseEvent<HTMLElement, MouseEvent> | KeyboardEvent) {
                 dispatch(showTableEraseModal(item.path));
                 evt.stopPropagation();
             },
-            onMerge(evt: React.MouseEvent) {
+            onMerge(evt: React.MouseEvent<HTMLElement, MouseEvent> | KeyboardEvent) {
                 dispatch(showTableMergeModal([item.path]));
                 evt.stopPropagation();
             },
-            onMount(evt: React.MouseEvent) {
+            onMount(evt: React.MouseEvent<HTMLElement, MouseEvent> | KeyboardEvent) {
                 dispatch(showDynTablesStateModalByPaths([item.path], 'mount'));
                 evt.stopPropagation();
             },
-            onUnmount(evt: React.MouseEvent) {
+            onUnmount(evt: React.MouseEvent<HTMLElement, MouseEvent> | KeyboardEvent) {
                 dispatch(showDynTablesStateModalByPaths([item.path], 'unmount'));
                 evt.stopPropagation();
             },
-            onFreeze(evt: React.MouseEvent) {
+            onFreeze(evt: React.MouseEvent<HTMLElement, MouseEvent> | KeyboardEvent) {
                 dispatch(showDynTablesStateModalByPaths([item.path], 'freeze'));
                 evt.stopPropagation();
             },
-            onUnfreeze(evt: React.MouseEvent) {
+            onUnfreeze(evt: React.MouseEvent<HTMLElement, MouseEvent> | KeyboardEvent) {
                 dispatch(showDynTablesStateModalByPaths([item.path], 'unfreeze'));
                 evt.stopPropagation();
             },
-            onLink(evt: React.MouseEvent) {
+            onLink(evt: React.MouseEvent<HTMLElement, MouseEvent> | KeyboardEvent) {
                 dispatch(showLinkToModal({target: item.path}));
                 evt.stopPropagation();
             },
-            onTransfer(evt: React.MouseEvent) {
+            onTransfer(evt: React.MouseEvent<HTMLElement, MouseEvent> | KeyboardEvent) {
                 dispatch(showRemoteCopyModal([item.path]));
                 evt.stopPropagation();
             },
@@ -166,39 +166,35 @@ function PathActions(props: Props) {
     const secondGroup = [
         {
             text: 'Move',
-            icon: <Icon awesome="file-export" face="solid" />,
+            iconStart: <Icon awesome="file-export" face="solid" />,
             action: onMove,
         },
         {
             text: 'Copy',
-            icon: <Icon awesome="copy" face="solid" />,
+            iconStart: <Icon awesome="copy" face="solid" />,
             action: onCopy,
         },
         {
             text: 'Link',
-            icon: <Icon awesome="link" face="solid" />,
+            iconStart: <Icon awesome="link" face="solid" />,
             action: onLink,
         },
         {
             text: 'Delete',
-            icon: <Icon awesome="trash-alt" />,
+            iconStart: <Icon awesome="trash-alt" />,
             action: onDeleteClick,
         },
     ];
 
-    const firstGroup: Array<{
-        text: string;
-        icon?: React.ReactNode;
-        action: (evt: any) => void;
-    }> = [
+    const firstGroup: DropdownMenuItem[] = [
         {
             text: 'Attributes',
-            icon: <Icon awesome="at" />,
+            iconStart: <Icon awesome="at" />,
             action: onShowAttributes,
         },
         {
             text: 'Edit',
-            icon: <Icon awesome="pencil-alt" />,
+            iconStart: <Icon awesome="pencil-alt" />,
             action: onEditAttributes,
         },
     ];
@@ -206,7 +202,7 @@ function PathActions(props: Props) {
     if (hasRestoreButton) {
         firstGroup.unshift({
             text: 'Restore',
-            icon: <Icon awesome="undo" />,
+            iconStart: <Icon awesome="undo" />,
             action: onRestoreClick,
         });
     }
@@ -223,7 +219,7 @@ function PathActions(props: Props) {
                     ? [
                           {
                               text: 'Mount',
-                              icon: <Icon awesome={'link'} />,
+                              iconStart: <Icon awesome={'link'} />,
                               action: onMount,
                           },
                       ]
@@ -232,7 +228,7 @@ function PathActions(props: Props) {
                     ? [
                           {
                               text: 'Unmount',
-                              icon: <Icon awesome={'unlink'} />,
+                              iconStart: <Icon awesome={'unlink'} />,
                               action: onUnmount,
                           },
                       ]
@@ -241,7 +237,7 @@ function PathActions(props: Props) {
                     ? [
                           {
                               text: 'Freeze',
-                              icon: <Icon awesome={'snowflake'} />,
+                              iconStart: <Icon awesome={'snowflake'} />,
                               action: onFreeze,
                           },
                       ]
@@ -250,7 +246,7 @@ function PathActions(props: Props) {
                     ? [
                           {
                               text: 'Unfreeze',
-                              icon: <Icon awesome={'flame'} />,
+                              iconStart: <Icon awesome={'flame'} />,
                               action: onUnfreeze,
                           },
                       ]
@@ -263,21 +259,21 @@ function PathActions(props: Props) {
         menuItems.push([
             {
                 text: 'Sort',
-                icon: <Icon awesome={'sort'} />,
+                iconStart: <Icon awesome={'sort'} />,
                 action: onSort,
             },
             ...(!isDynamic
                 ? [
                       {
                           text: 'Erase',
-                          icon: <Icon awesome={'eraser'} />,
+                          iconStart: <Icon awesome={'eraser'} />,
                           action: onErase,
                       },
                   ]
                 : []),
             {
                 text: 'Merge',
-                icon: <Icon awesome={'code-merge'} />,
+                iconStart: <Icon awesome={'code-merge'} />,
                 action: onMerge,
             },
         ]);
@@ -286,7 +282,7 @@ function PathActions(props: Props) {
         menuItems.push([
             {
                 text: 'Remote copy',
-                icon: <Icon awesome={'clone'} />,
+                iconStart: <Icon awesome={'clone'} />,
                 action: onTransfer,
             },
         ]);
@@ -329,16 +325,18 @@ function PathActions(props: Props) {
             )}
 
             <DropdownMenu
-                switcher={
+                renderSwitcher={(props) => (
                     <Button
+                        {...props}
                         size={dropDownBtnSize}
                         className={dropDownBtnClassName}
                         view={dropDownBtnTheme}
                     >
                         <Icon awesome="ellipsis-h" />
                     </Button>
-                }
+                )}
                 items={menuItems}
+                popupProps={{qa: 'path-actions-dropdown'}}
             />
         </React.Fragment>
     );

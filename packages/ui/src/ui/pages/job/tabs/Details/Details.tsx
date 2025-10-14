@@ -94,14 +94,14 @@ export default function Details() {
                 )}
 
                 <div className={block('section')}>
-                    {renderError(job.attributes?.error)}
+                    {renderError(job?.attributes?.error)}
                     {renderStatistics(
-                        job.attributes?.statistics as JobStatistic,
+                        job?.attributes?.statistics as JobStatistic,
                         UI_COLLAPSIBLE_SIZE,
                     )}
-                    {renderPivotKeys(job.attributes?.type, UI_COLLAPSIBLE_SIZE)}
+                    {renderPivotKeys(job?.attributes?.type, UI_COLLAPSIBLE_SIZE)}
                     {renderCompetitors(
-                        Boolean(job.attributes?.has_competitors),
+                        Boolean(job?.attributes?.has_competitors),
                         UI_COLLAPSIBLE_SIZE,
                     )}
                 </div>

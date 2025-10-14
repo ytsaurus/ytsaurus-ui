@@ -2,6 +2,12 @@
     display: flex;
     align-items: center;
 
+    &__warning {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     &__meta {
         margin-top: 10px;
     }

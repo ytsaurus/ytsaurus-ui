@@ -14,7 +14,7 @@ test('Navigation - symlinks', async ({page}) => {
             `.meta-table-item__value_key_target_path:text("${E2E_DIR}/tmp/папка")`,
         );
         await replaceInnerHtml(page, {
-            '.g-popup .meta-table-item__value_key_target_path':
+            '.g-tooltip .meta-table-item__value_key_target_path':
                 '//tmp/e2e.1970-01-01.00:00:00.xxxxxx/tmp/папка',
         });
         await link.click();

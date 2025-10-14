@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import cn from 'bem-cn-lite';
 import unipika from '../../common/thor/unipika';
 
 import FormattedText from '../../components/formatters/FormattedText';
@@ -11,6 +12,10 @@ import Yson from '../Yson/Yson';
 import {closeAttributesModal} from '../../store/actions/modals/attributes-modal';
 import {DownloadFileButton} from '../DownloadAttributesButton';
 import {attributesToString} from '../DownloadAttributesButton/helpers/attributesToString';
+
+import './AttributesModal.scss';
+
+const block = cn('yt-attributes-modal');
 
 export class AttributesModal extends Component {
     static propTypes = {
@@ -35,7 +40,7 @@ export class AttributesModal extends Component {
         return error ? (
             <YTErrorBlock error={errorData} />
         ) : (
-            <Yson value={attributes} settings={ysonSettings} />
+            <Yson className={block('content')} value={attributes} settings={ysonSettings} />
         );
     }
 

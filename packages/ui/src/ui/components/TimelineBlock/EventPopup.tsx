@@ -18,6 +18,7 @@ export const EventPopup = <
 >({
     timeline,
     content,
+    parentRef,
     delay = 400,
 }: Props<TEvent, TMarker>) => {
     const anchorRef = useRef<HTMLDivElement>(null);
@@ -54,19 +55,37 @@ export const EventPopup = <
         [delay, timeline.api],
     );
 
-    const handleOpenChange = useCallback((open: boolean) => {
-        if (!open) {
-            if (hoverTimeout.current) {
-                clearTimeout(hoverTimeout.current);
-            }
-            setShowPopup(false);
-            setEventData(undefined);
+    const handleEventLeave = useCallback(() => {
+        if (hoverTimeout.current) {
+            clearTimeout(hoverTimeout.current);
         }
+        setShowPopup(false);
+        setEventData(undefined);
     }, []);
+
+    const handleParentLeave = useCallback(
+        (e: MouseEvent) => {
+            if (parentRef && parentRef.current && parentRef.current.contains(e.target as Node)) {
+                return;
+            }
+            handleEventLeave();
+        },
+        [handleEventLeave, parentRef],
+    );
+
+    useEffect(() => {
+        document.addEventListener('mouseleave', handleParentLeave);
+
+        return () => {
+            document.removeEventListener('mouseleave', handleParentLeave);
+        };
+    }, [handleParentLeave, parentRef]);
 
     useTimelineEvent(timeline, 'on-hover', handleEventsHover);
 
-    useTimelineEvent(timeline, 'on-leave', () => handleOpenChange(false));
+    useTimelineEvent(timeline, 'on-leave', handleEventLeave);
+
+    useTimelineEvent(timeline, 'on-camera-change', handleEventLeave);
 
     if (!eventData) return null;
 
@@ -88,10 +107,9 @@ export const EventPopup = <
                 key={eventData.event.id}
                 anchorElement={anchorRef.current}
                 open={showPopup}
-                onOpenChange={handleOpenChange}
-                placement={['bottom-start']}
+                onOpenChange={handleEventLeave}
             >
-                {content(eventData.event)}
+                <div onMouseLeave={handleEventLeave}>{content(eventData.event)}</div>
             </Popup>
         </>
     );

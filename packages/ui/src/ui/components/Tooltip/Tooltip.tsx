@@ -52,7 +52,7 @@ export function Tooltip(props: TooltipProps) {
                 )}
                 data-qa={qa}
             >
-                <>{children}</>
+                {children}
             </div>
         </GravityTooltip>
     );

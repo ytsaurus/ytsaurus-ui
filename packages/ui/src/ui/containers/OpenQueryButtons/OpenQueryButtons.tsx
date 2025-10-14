@@ -52,7 +52,7 @@ export function OpenQueryButtonsContent() {
         setPanelMode(undefined);
     }, [setPanelMode]);
 
-    const {openWidget, closeWidget, widgetContent} = useSidePanel(panelMode + '_widget', {
+    const {openWidget, closeWidget, widgetContent} = useSidePanel(panelMode + '_query_widget', {
         renderContent({visible}) {
             return panelMode === 'qt' ? (
                 <QueryWidgetLazy onClose={onClose} />

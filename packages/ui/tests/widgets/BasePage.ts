@@ -99,13 +99,15 @@ export class BasePage extends HasPage {
     }
 
     async replaceACLInputPath() {
-        await this.page.waitForSelector('.g-dialog');
-        await this.page.evaluate(() => {
-            const input: HTMLInputElement | null = document.querySelector('input#path');
-            if (input) {
-                input.value = 'e2e.1970-01-01.00:00:00.xxxxxxxxxxx';
+        await this.page.locator('.g-dialog').waitFor({state: 'visible'});
+        await this.page.locator(`input#path[value="//tmp/${E2E_DIR_NAME}"]`).waitFor({state: 'visible'});
+        await this.page.locator('input#path').evaluate((el: HTMLInputElement, value: string) => {
+            if (el) {
+                el.value = value;
+                el.dispatchEvent(new Event('input', {bubbles: true}));
+                el.dispatchEvent(new Event('change', {bubbles: true}));
             }
-        });
+        }, 'e2e.1970-01-01.00:00:00.xxxxxxxxxxx');
     }
 
     async waitForACL() {

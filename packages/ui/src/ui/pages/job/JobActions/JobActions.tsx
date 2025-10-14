@@ -62,7 +62,7 @@ const block = cn('job-actions');
 const codeBlock = cn('elements-code');
 
 const getAdditionalActions = (
-    job: Partial<Job>,
+    job: Job | undefined,
     openJobShellModal: () => void,
     openDumpContextModal: () => void,
 ) => {
@@ -81,7 +81,7 @@ const getAdditionalActions = (
         },
     ];
 
-    if (job.state === 'failed') {
+    if (job?.state === 'failed') {
         infoActions.push({
             action: () => {
                 window.open(

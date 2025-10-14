@@ -26,7 +26,7 @@ test('Navigation: table - Content', async ({page}) => {
     await test.step('Merge dialog', async () => {
         const tablePath = '//tmp/e2e.1970-01-01.00:00:00.xxxxxxxxxxx.static-table';
         await page.click('button.edit-table-actions__button');
-        await page.waitForSelector('.g-popup__content');
+        await page.getByTestId('path-actions-dropdown').waitFor();
         await page.click('.g-menu__list-item :text("Merge")');
         await page.evaluate(() => {
             window.scrollTo(0, 0);
