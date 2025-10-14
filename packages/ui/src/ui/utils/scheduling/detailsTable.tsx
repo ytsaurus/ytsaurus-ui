@@ -1,8 +1,12 @@
 import React from 'react';
+import moment from 'moment';
 
 import format from '../../common/hammer/format';
 import SchedulingOperationsLoader from '../../pages/scheduling/Content/tabs/ScherdulingOperataionsLoader/SchedulingOperationsLoader';
-import type {PoolInfo, PoolResourceType} from '../../store/selectors/scheduling/scheduling-pools';
+import type {PoolResourceType} from '../../store/selectors/scheduling/scheduling-pools';
+import {getSchedulingOverviewTableItems} from '../../store/selectors/scheduling/scheduling';
+
+type PoolInfo = ReturnType<typeof getSchedulingOverviewTableItems>[number];
 
 function prepareDetailedColumn(resource: PoolResourceType) {
     return {
@@ -51,20 +55,6 @@ function prepareAbsGuaranteedColumn(resource: PoolResourceType) {
     };
 }
 
-function prepareRelGuaranteedColumn(resource: PoolResourceType) {
-    return {
-        get(item: PoolInfo, currentPool: PoolInfo) {
-            return (
-                prepareAbsGuaranteedColumn(resource).get(item)! /
-                prepareAbsGuaranteedColumn(resource).get(currentPool)!
-            );
-        },
-        sort: true,
-        caption: 'Rel guaranteed',
-        align: 'right',
-    };
-}
-
 function prepareAbsDemandColumn(resource: PoolResourceType) {
     return {
         get(item: PoolInfo) {
@@ -84,33 +74,6 @@ function prepareAbsUsageColumn(resource: PoolResourceType) {
         sort: true,
         caption: 'Abs usage',
         align: 'right',
-    };
-}
-
-function prepareRelUsageColumn(resource: PoolResourceType) {
-    return {
-        get(item: PoolInfo, currentPool: PoolInfo) {
-            return (
-                prepareAbsUsageColumn(resource).get(item)! /
-                prepareAbsUsageColumn(resource).get(currentPool)!
-            );
-        },
-        sort: true,
-        caption: 'Rel usage',
-        align: 'right',
-    };
-}
-
-function prepareGuaranteedUsageColumn(resource: PoolResourceType) {
-    return {
-        get(item: PoolInfo, currentPool: PoolInfo) {
-            return {
-                guaranteed: prepareRelGuaranteedColumn(resource).get(item, currentPool),
-                usage: prepareRelUsageColumn(resource).get(item, currentPool),
-            };
-        },
-        caption: 'Usage / Guaranteed',
-        align: 'center',
     };
 }
 
@@ -161,17 +124,15 @@ export const childTableItems = {
         align: 'right',
     },
     usage: {
-        get(item: PoolInfo) {
+        sort(item: PoolInfo) {
             return item.usageRatio;
         },
-        sort: true,
         align: 'right',
     },
     demand: {
-        get(item: PoolInfo) {
+        sort(item: PoolInfo) {
             return item.demandRatio;
         },
-        sort: true,
         align: 'right',
     },
     fair_share_usage: {
@@ -207,11 +168,6 @@ export const childTableItems = {
     abs_guaranteed_gpu: prepareAbsGuaranteedColumn('gpu'),
     abs_guaranteed_user_slots: prepareAbsGuaranteedColumn('user_slots'),
 
-    rel_guaranteed_cpu: prepareRelGuaranteedColumn('cpu'),
-    rel_guaranteed_memory: prepareRelGuaranteedColumn('user_memory'),
-    rel_guaranteed_gpu: prepareRelGuaranteedColumn('gpu'),
-    rel_guaranteed_user_slots: prepareRelGuaranteedColumn('user_slots'),
-
     abs_usage_cpu: prepareAbsUsageColumn('cpu'),
     abs_usage_memory: prepareAbsUsageColumn('user_memory'),
     abs_usage_gpu: prepareAbsUsageColumn('gpu'),
@@ -221,16 +177,6 @@ export const childTableItems = {
     abs_demand_memory: prepareAbsDemandColumn('user_memory'),
     abs_demand_gpu: prepareAbsDemandColumn('gpu'),
     abs_demand_user_slots: prepareAbsDemandColumn('user_slots'),
-
-    rel_usage_cpu: prepareRelUsageColumn('cpu'),
-    rel_usage_memory: prepareRelUsageColumn('user_memory'),
-    rel_usage_gpu: prepareRelUsageColumn('gpu'),
-    rel_usage_user_slots: prepareRelUsageColumn('user_slots'),
-
-    guaranteed_usage_cpu: prepareGuaranteedUsageColumn('cpu'),
-    guaranteed_usage_memory: prepareGuaranteedUsageColumn('user_memory'),
-    guaranteed_usage_gpu: prepareGuaranteedUsageColumn('gpu'),
-    guaranteed_usage_user_slots: prepareGuaranteedUsageColumn('user_slots'),
 
     operation_overview: {
         get(item: PoolInfo) {
@@ -311,7 +257,7 @@ export const childTableItems = {
         },
         sort(item: PoolInfo) {
             const res = item.burstCPU;
-            return isNaN(res) ? undefined : res;
+            return isNaN(res!) ? undefined : res;
         },
         caption: 'Burst CPU',
         sortWithUndefined: true,
@@ -323,7 +269,7 @@ export const childTableItems = {
         },
         sort(item: PoolInfo) {
             const res = item.flowCPU;
-            return isNaN(res) ? undefined : res;
+            return isNaN(res!) ? undefined : res;
         },
         caption: 'Flow CPU',
         sortWithUndefined: true,
@@ -379,5 +325,15 @@ export const childTableItems = {
     actions: {
         caption: '',
         align: 'left',
+    },
+
+    duration: {
+        sort(item: PoolInfo) {
+            if (!item.startTime) {
+                return undefined;
+            }
+            const startTime = moment(item.startTime).valueOf();
+            return Date.now() - startTime;
+        },
     },
 };

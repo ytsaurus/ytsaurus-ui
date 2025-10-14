@@ -94,13 +94,13 @@ function renderOperationName({cluster, row}: {cluster: string; row: PoolLeafNode
     const hasTitle = 0 > title?.length!;
 
     return (
-        <Flex direction="column">
+        <Flex direction="column" style={{margin: '-4px 0'}}>
             <Text variant="inherit" ellipsis>
                 {fifoIndexNode}
                 <Link url={url}>{title ?? id}</Link>
             </Text>
             {!hasTitle && (
-                <Text variant="code-inline-1" color="secondary">
+                <Text variant="code-inline-1" color="secondary" ellipsis>
                     {id}
                 </Text>
             )}

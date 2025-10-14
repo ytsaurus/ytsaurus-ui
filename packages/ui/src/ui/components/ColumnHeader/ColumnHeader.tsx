@@ -1,9 +1,10 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import capitalize_ from 'lodash/capitalize';
 
 import barsDescendingSvg from '@gravity-ui/icons/svgs/bars-descending-align-left.svg';
 import {Button, DropdownMenu, Icon, Text} from '@gravity-ui/uikit';
+
+import format from '../../common/hammer/format';
 
 import SortIcon from '../../components/SortIcon/SortIcon';
 
@@ -66,7 +67,7 @@ function getNameTitle<T extends string>({
     title,
     shortTitle,
 }: Pick<ColumnInfo<T>, 'column' | 'title' | 'shortTitle'>): NameTitleContent {
-    const t = title ?? capitalize_(column);
+    const t = title ?? format.ReadableField(column);
     const nameContent = !shortTitle ? t : shortTitle;
     return {nameContent, titleContent: t};
 }

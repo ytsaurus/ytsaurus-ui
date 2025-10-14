@@ -114,6 +114,9 @@ export type PoolData<T extends 'pool' | 'operation'> = {
     operationType?: string;
     user?: string;
     startTime?: string;
+
+    childrenFlowCPU?: number;
+    childrenBurstCPU?: number;
 };
 
 export type PoolResources = {
