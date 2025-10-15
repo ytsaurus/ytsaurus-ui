@@ -1,6 +1,11 @@
 {
   "title_queries": "Запросы",
   "field_default-aco": "ACO по умолчанию",
+  "field_query-tracker-stage": "Стейдж Query Tracker",
+  "context_query-tracker-stage-description": "По умолчанию стейдж Query Tracker — 'production'. Но вы можете переназначить его в этой настройке.",
+  "context_query-tracker-stage-placeholder": "Введите стейдж...",
+  "field_yql-agent-stage": "Стейдж YQL агента",
+  "context_yql-agent-stage-placeholder": "Введите стейдж YQL агента...",
   "field_new-graph-progress": "Использовать новый граф прогресса",
   "context_new-graph-progress-description": "Включить экспериментальный вид графа для вкладки Прогресс запроса",
   "field_query-assistant": "Помощник по запросам",
