@@ -325,18 +325,16 @@ function PathActions(props: Props) {
             )}
 
             <DropdownMenu
-                renderSwitcher={
-                    (props) => (
-                        <Button
-                            {...props}
-                            size={dropDownBtnSize}
-                            className={dropDownBtnClassName}
-                            view={dropDownBtnTheme}
-                        >
-                            <Icon awesome="ellipsis-h" />
-                        </Button>
-                    )
-                }
+                renderSwitcher={(props) => (
+                    <Button
+                        {...props}
+                        size={dropDownBtnSize}
+                        className={dropDownBtnClassName}
+                        view={dropDownBtnTheme}
+                    >
+                        <Icon awesome="ellipsis-h" />
+                    </Button>
+                )}
                 items={menuItems}
                 popupProps={{qa: 'path-actions-dropdown'}}
             />

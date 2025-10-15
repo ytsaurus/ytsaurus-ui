@@ -109,9 +109,7 @@ export const EventPopup = <
                 open={showPopup}
                 onOpenChange={handleEventLeave}
             >
-                <div onMouseLeave={handleEventLeave}>
-                    {content(eventData.event)}
-                </div>
+                <div onMouseLeave={handleEventLeave}>{content(eventData.event)}</div>
             </Popup>
         </>
     );

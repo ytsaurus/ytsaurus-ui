@@ -123,7 +123,6 @@ function NavigationPathToClipboard() {
 }
 
 function NavigationTargetPathButton({decodedTargetPath}: {decodedTargetPath: string}) {
-
     return (
         <Link url={makeNavigationLink({path: decodedTargetPath})} routed>
             <Tooltip
@@ -213,7 +212,8 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
     const {path: target_path} = useSelector(getNavigationPathAttributes);
     const decodedTargetPath = target_path ? decodeEscapedAbsPath(target_path) : undefined;
 
-    const showBeforeEditorContent = !loading && decodedTargetPath && path !== decodedTargetPath && path !== '/';
+    const showBeforeEditorContent =
+        !loading && decodedTargetPath && path !== decodedTargetPath && path !== '/';
 
     return (
         <EditableBreadcrumbs
@@ -231,7 +231,11 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
             }}
             showRoot
             view={'top-row'}
-            beforeEditorContent={showBeforeEditorContent ? <NavigationTargetPathButton decodedTargetPath={decodedTargetPath} /> : null}
+            beforeEditorContent={
+                showBeforeEditorContent ? (
+                    <NavigationTargetPathButton decodedTargetPath={decodedTargetPath} />
+                ) : null
+            }
             afterEditorContent={<NavigationPathToClipboard />}
             renderEditor={(props) => <NavigationPathEditor hideEditor={props.onBlur} />}
         >

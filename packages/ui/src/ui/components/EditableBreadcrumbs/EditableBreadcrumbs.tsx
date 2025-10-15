@@ -60,9 +60,13 @@ export function EditableBreadcrumbs(props: Props) {
                         showRoot
                         endContent={
                             <>
-                                {beforeEditorContent ? <div style={{marginLeft: '8px'}}>{beforeEditorContent}</div> : null}
+                                {beforeEditorContent ? (
+                                    <div style={{marginLeft: '8px'}}>{beforeEditorContent}</div>
+                                ) : null}
                                 {contentProps.renderEditButton()}
-                                {afterEditorContent ? <div style={{marginRight: '8px'}}>{afterEditorContent}</div> : null}
+                                {afterEditorContent ? (
+                                    <div style={{marginRight: '8px'}}>{afterEditorContent}</div>
+                                ) : null}
                             </>
                         }
                     >

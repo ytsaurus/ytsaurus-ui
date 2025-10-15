@@ -100,6 +100,7 @@ export class BasePage extends HasPage {
 
     async replaceACLInputPath() {
         await this.page.locator('.g-dialog').waitFor({state: 'visible'});
+        await this.page.locator(`input#path[value="//tmp/${E2E_DIR_NAME}"]`).waitFor({state: 'visible'});
         await this.page.locator('input#path').evaluate((el: HTMLInputElement, value: string) => {
             if (el) {
                 el.value = value;

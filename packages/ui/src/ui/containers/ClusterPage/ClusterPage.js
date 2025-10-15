@@ -294,7 +294,6 @@ class ClusterPage extends Component {
                     getInitialSizes={this.getInitialSizes}
                     id={SPLIT_PANE_ID}
                     forceSplit={splitScreen.isSplit}
-
                 >
                     <div
                         ref={this.contentPaneRef}

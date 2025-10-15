@@ -73,9 +73,10 @@ class FlexSplitPane extends React.Component<FlexSplitPaneProps, FlexSplitPaneSta
         const {forceSplit} = this.props;
         if (
             (this.paneFirst &&
-            this.paneSecond &&
-            this.paneFirst.children.length &&
-            this.paneSecond.children.length) || forceSplit
+                this.paneSecond &&
+                this.paneFirst.children.length &&
+                this.paneSecond.children.length) ||
+            forceSplit
         ) {
             this.split();
         } else {
