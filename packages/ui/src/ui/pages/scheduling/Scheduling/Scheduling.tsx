@@ -27,10 +27,13 @@ import {getSchedulingIsFinalLoadingState} from '../../../store/selectors/schedul
 import SchedulingResources from '../Content/SchedulingResources';
 import {PoolEditorDialog} from './PoolEditorDialog/PoolEditorDialog';
 import {RootState} from '../../../store/reducers';
+import {ResizeObserverContainer} from '../../../components/ResizeObserverContainer/ResizeObserverContainer';
 
 const block = cn('scheduling');
 
 const SchedulingDialogsMemo = React.memo(SchedulingDialogs);
+
+const ELEMENTS_MAIN_SECTINO_PADDING = 20;
 
 function Scheduling() {
     const error = useSelector((state: RootState) => {
@@ -48,11 +51,25 @@ function Scheduling() {
     return (
         <div className={block(null, 'elements-main-section')}>
             <ErrorBoundary>
-                {error && <YTErrorBlock error={error} />}
-                <div className={block('wrapper')}>
-                    <SchedulingResources />
-                    <Content {...{className: block('content')}} />
-                </div>
+                <ResizeObserverContainer
+                    observeContent={
+                        <>
+                            {error && <YTErrorBlock error={error} />}
+                            <SchedulingResources />
+                        </>
+                    }
+                >
+                    {({height = 0}) => {
+                        return (
+                            <Content
+                                {...{
+                                    className: block('content'),
+                                    aboveContentHeight: height + ELEMENTS_MAIN_SECTINO_PADDING,
+                                }}
+                            />
+                        );
+                    }}
+                </ResizeObserverContainer>
                 <SchedulingDialogsMemo />
             </ErrorBoundary>
         </div>

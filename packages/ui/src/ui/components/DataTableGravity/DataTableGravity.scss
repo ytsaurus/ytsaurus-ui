@@ -1,4 +1,18 @@
 .yt-gravity-table {
+    min-height: 400px;
+    max-height: calc(
+        100vh - var(--app-header-height, 0px) - var(--app-footer-height, 0px) - var(
+                --yt-data-table-graivity-above-content-height,
+                0px
+            )
+    );
+    width: 100%;
+    overflow: auto;
+
+    .gt-table__header_sticky {
+        z-index: 2;
+    }
+
     .gt-styled-table__cell {
         --g-text-body-1-font-size: 14px;
     }
@@ -11,5 +25,6 @@
     .gt-table__header-cell_pinned-left,
     .gt-table__cell_pinned-left {
         background-color: var(--g-color-base-float);
+        opacity: 0.9;
     }
 }
