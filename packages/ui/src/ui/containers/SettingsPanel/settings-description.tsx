@@ -220,27 +220,6 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                             ]}
                         />,
                     ),
-                makeItem(
-                    SettingName.QUERY_TRACKER.STAGE,
-                    'Query Tracker Stage',
-                    'top',
-                    <SettingsMenuInput
-                        placeholder="Enter stage..."
-                        description="Default Query Tracker stage is 'production'. But you can reassign it with this setting."
-                        settingName={SettingName.QUERY_TRACKER.STAGE}
-                        settingNS={NAMESPACES.QUERY_TRACKER}
-                    />,
-                ),
-                makeItem(
-                    SettingName.QUERY_TRACKER.YQL_AGENT_STAGE,
-                    'YQL agent stage',
-                    'top',
-                    <SettingsMenuInput
-                        placeholder="Enter YQL agent stage..."
-                        settingName={SettingName.QUERY_TRACKER.YQL_AGENT_STAGE}
-                        settingNS={NAMESPACES.QUERY_TRACKER}
-                    />,
-                ),
             ]),
         ),
 

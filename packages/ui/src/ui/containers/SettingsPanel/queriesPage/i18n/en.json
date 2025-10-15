@@ -1,6 +1,11 @@
 {
   "title_queries": "Queries",
   "field_default-aco": "Default ACO",
+  "field_query-tracker-stage": "Query Tracker Stage",
+  "context_query-tracker-stage-description": "Default Query Tracker stage is 'production'. But you can reassign it with this setting.",
+  "context_query-tracker-stage-placeholder": "Enter stage...",
+  "field_yql-agent-stage": "YQL agent stage",
+  "context_yql-agent-stage-placeholder": "Enter YQL agent stage...",
   "field_new-graph-progress": "Use new graph progress",
   "context_new-graph-progress-description": "Enable experimental graph view for Progress tab of a query",
   "field_query-assistant": "Query assistant",
