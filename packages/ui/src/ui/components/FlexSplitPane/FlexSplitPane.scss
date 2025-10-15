@@ -33,7 +33,6 @@ $pad: 4px;
         background-color: var(--dark-background);
         color: var(--secondary-text);
         z-index: var(--draggable-splitter-z-index);
-        z-index: 100000;
 
         &:before {
             content: '';

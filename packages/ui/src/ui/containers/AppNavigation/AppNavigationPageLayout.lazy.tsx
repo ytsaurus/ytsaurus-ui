@@ -3,7 +3,13 @@ import withLazyLoading from '../../hocs/withLazyLoading';
 
 export const AppNavigationPageLayoutLazy = withLazyLoading(
     React.lazy(async () => {
-        return {default: (await import('./AppNavigationPageLayout')).AppNavigationPageLayout};
+        return {
+            default: (
+                await import(
+                    /* webpackChunkName: 'app-navigation-page-layout' */ './AppNavigationPageLayout'
+                )
+            ).AppNavigationPageLayout,
+        };
     }),
     '',
 );

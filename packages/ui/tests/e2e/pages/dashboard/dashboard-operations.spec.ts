@@ -106,11 +106,7 @@ test('Dashboard - Operations widget running', async ({page}) => {
 
     await page.locator('[data-qa="operations-state-filter"]').click();
 
-    const stateSelect = page.locator('#operations .g-select-control__button:has-text("State:")');
-    await stateSelect.click();
-    await page.locator('#operations .g-select-popup').waitFor({state: 'visible'});
-
-    const runningOption = page.locator('#operations .g-select-list__option:has-text("Running")');
+    const runningOption = page.getByRole('option', {name: 'Running'});
     await runningOption.waitFor({state: 'visible'});
     await runningOption.click();
 
