@@ -1,5 +1,4 @@
 import React from 'react';
-import AppNavigationPageLayout from '../containers/AppNavigation/AppNavigationPageLayout';
 import {defaultAclApi} from '../utils/acl/external-acl-api';
 import {SupportComponentLazy} from '../containers/SupportComponent/lazy';
 import {YTUserSuggestLazy} from '../containers/UserSuggest/YTUserSuggestLazy';
@@ -14,6 +13,7 @@ import {DefaultSubjectLinkLazy} from '../components/SubjectLink/lazy';
 import type {SubjectCardProps} from '../components/SubjectLink/SubjectLink';
 import {QUERY_RESULT_CHART_TAB} from '../pages/query-tracker/QueryResultsVisualization';
 import {IncarnationsLazy} from '../pages/operations/OperationDetail/tabs/incarnations/IncarnationsLazy';
+import {AppNavigationPageLayoutLazy} from '../containers/AppNavigation/AppNavigationPageLayout.lazy';
 
 import {UIFactory} from './index';
 
@@ -237,7 +237,7 @@ export const defaultUIFactory: UIFactory = {
     },
 
     renderAppNavigation(props) {
-        return <AppNavigationPageLayout {...props} />;
+        return <AppNavigationPageLayoutLazy {...props} />;
     },
 
     createNotificationUrl() {
