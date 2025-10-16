@@ -73,6 +73,7 @@ import {UI_TAB_SIZE} from '../../../constants/global';
 import {OperationPool, OperationStates} from '../selectors';
 import {JobsTimeline} from './tabs/JobsTimeline';
 import {getOperationEvents, listOperationEventsApi} from '../../../store/api/yt';
+import {getYsonSettingsDisableDecode} from '../../../store/selectors/thor/unipika';
 
 const detailBlock = cn('operation-detail');
 
@@ -221,7 +222,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                     {isWaitingForResources && <SpecialWaitingStatus type={'resources'} />}
                 </div>
                 <div className={detailBlock('header-title')}>
-                    <Yson value={title || $value} inline />
+                    <Yson value={title || $value} settings={this.props.ysonSettings} inline />
                 </div>
 
                 <div className={detailBlock('actions')}>{actions.map(this.renderAction)}</div>
@@ -548,6 +549,7 @@ const mapStateToProps = (state: RootState, routerProps: RouteProps) => {
         isGpuOperation: selectIsOperationInGpuTree(state),
         operationPerformanceUrlTemplate: getOperationPerformanceUrlTemplate(state),
         operationEvents,
+        ysonSettings: getYsonSettingsDisableDecode(state),
     };
 };
 
