@@ -31,13 +31,9 @@ export const CHANGE_POOL_CHILDREN_FILTER = 'SCHEDULING_CHANGE_POOL_CHILDREN_FILT
 export const TOGGLE_EDIT_VISIBILITY = 'SCHEDULING_TOGGLE_EDIT_VISIBILITY';
 export const POOL_TOGGLE_DELETE_VISIBILITY = 'SCHEDULING_TOGGLE_DELETE_VISIBILITY';
 
-export const SCHEDULING_POOL_TREE_TABLE_ID = 'scheduling/pool-tree';
-export const SCHEDULING_POOL_CHILDREN_TABLE_ID = 'scheduling/pool-children';
 export const ROOT_POOL_NAME = '<Root>';
 export const Tab = {
     OVERVIEW: 'overview',
-    OVERVIEW_OLD: 'overview_old',
-    DETAILS: 'details',
     ACL: 'acl',
 } as const;
 
@@ -56,6 +52,4 @@ export const SCHEDULING_MONITOR_CHART_STATUS = 'SCHEDULING_MONITOR_CHART_STATUS'
 
 export const SCHEDULING_ALLOWED_ROOT_TABS: Partial<Record<SchedulingTab, boolean>> = {
     [Tab.OVERVIEW]: true,
-    [Tab.OVERVIEW_OLD]: true,
-    [Tab.DETAILS]: true,
 };
