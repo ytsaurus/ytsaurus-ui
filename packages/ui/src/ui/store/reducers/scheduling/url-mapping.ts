@@ -1,14 +1,11 @@
 import {initialState as schedulingInitialState} from './scheduling';
-import {initialState as tableSortState} from '../../../store/reducers/tables';
-
-import {SCHEDULING_POOL_TREE_TABLE_ID} from '../../../constants/scheduling';
-import {parseSortState} from '../../../utils';
 import {aclFiltersParams} from '../acl/url-mapping';
 import {
     makeObjectParseSerialize,
     parseSerializeNumber,
     parseSerializeString,
 } from '../../../utils/parse-serialize';
+import {parseSortStateArray, serializeSortStateArray} from '../../../utils/url-mapping';
 
 export const schedulingParams = {
     pool: {
