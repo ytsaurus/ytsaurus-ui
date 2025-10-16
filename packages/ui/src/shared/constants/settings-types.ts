@@ -191,6 +191,7 @@ export type QueryTrackerLastYqlVersion = {
 type SchedulingSettings = {
     'global::scheduling::expandStaticConfiguration': boolean;
     'global::scheduling::overviewColumns': Array<string>;
+    'global::scheduling::overviewColumnSizes': Record<string, number>;
 };
 
 export interface DefaultSettings {
