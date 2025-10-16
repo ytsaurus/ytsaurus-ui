@@ -253,6 +253,7 @@ yt create --attributes '{"schema"=[{"name"="Тест1"; "type"="string"};{"name"
 if [ "${SKIP_QUERIES}" != "true" ]; then
     # create an operation with problematic symbols
     yt start-query yql 'SELECT count + 1, type || "ã ã" || "this is ÂÅ!" FROM ui.`'${E2E_DIR}'/locked`;' --settings '{"symbols"="ãÂÅỞã";"test_cyr"="Привет";"smyle"="😅"}'
+    yt vanilla --spec '{"title" = "YQL operation (501 - 🚧 - 5 - try to join ozon, 68f0b53b787fdd313c1e780c by mied) тест";"tasks" = {"main" = {"job_count" = 1;"command" = "sleep 10";}}}' --async
 fi
 
 $(dirname $0)/init-cluster-e2e/table.truncated.image-audio.sh
