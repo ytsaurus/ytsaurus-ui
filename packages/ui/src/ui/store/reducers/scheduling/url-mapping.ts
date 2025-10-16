@@ -20,11 +20,13 @@ export const schedulingParams = {
 
 export const schedulingOverviewParams = {
     ...schedulingParams,
-    sortState: {
-        stateKey: `tables.${SCHEDULING_POOL_TREE_TABLE_ID}`,
-        initialState: {...tableSortState[SCHEDULING_POOL_TREE_TABLE_ID]},
-        options: {parse: parseSortState},
-        type: 'object',
+    sort: {
+        stateKey: 'scheduling.sortState',
+        initialState: schedulingInitialState.sortState,
+        options: {
+            parse: parseSortStateArray,
+            serialize: serializeSortStateArray,
+        },
     },
     contentMode: {
         stateKey: 'scheduling.scheduling.contentMode',

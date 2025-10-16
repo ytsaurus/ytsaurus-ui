@@ -1,5 +1,5 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import moment from 'moment';
 
@@ -9,7 +9,9 @@ import {DropdownMenu, Flex, Progress, Text} from '@gravity-ui/uikit';
 
 import format from '../../../../../../common/hammer/format';
 
-import ColumnHeader from '../../../../../../components/ColumnHeader/ColumnHeader';
+import ColumnHeader, {
+    ColumnHeaderProps,
+} from '../../../../../../components/ColumnHeader/ColumnHeader';
 import {
     DataTableGravity,
     TableCell,
@@ -25,9 +27,11 @@ import {OperationType} from '../../../../../../components/OperationType/Operatio
 import {SubjectCard} from '../../../../../../components/SubjectLink/SubjectLink';
 import {Tooltip} from '../../../../../../components/Tooltip/Tooltip';
 import {getSchedulingOperationsLoading} from '../../../../../../store/selectors/scheduling/expanded-pools';
+import Label from '../../../../../../components/Label/Label';
 import {
     getSchedulingContentMode,
     getSchedulingOverviewTableItems,
+    getSchedulingSortState,
 } from '../../../../../../store/selectors/scheduling/scheduling';
 import {getPoolPathsByName} from '../../../../../../store/actions/scheduling/expanded-pools';
 import {openAttributesModal} from '../../../../../../store/actions/modals/attributes-modal';
@@ -40,9 +44,13 @@ import './SchedulingTable.scss';
 import {getSchedulingOverivewColumns} from '../../../../../../store/selectors/scheduling/overview-columns';
 import {childTableItems, SchedulingColumn} from '../../../../../../utils/scheduling/detailsTable';
 import {KeysByType} from '../../../../../../../@types/types';
-import {openEditModal} from '../../../../../../store/actions/scheduling/scheduling';
+import {
+    openEditModal,
+    schedulingSetSortState,
+} from '../../../../../../store/actions/scheduling/scheduling';
 import {openPoolDeleteModal} from '../../../../../../store/actions/scheduling/scheduling-ts';
 import {getProgressTheme} from '../../../../../../utils/progress';
+import ShareUsageBar from '../../../../../../pages/scheduling/Content/controls/ShareUsageBar';
 
 const block = cn('yt-scheduling-table');
 
@@ -82,6 +90,7 @@ const COLUMNS_BY_MODE: Record<SchedulintTableMode, Array<SchedulingColumn>> = {
         'type',
         'user',
         'dominant_resource',
+        'fair_share_usage',
         'usage',
         'demand',
         'guaranteed',
@@ -173,7 +182,7 @@ function makeNumberColumn(
     const {caption} = {caption: undefined, ...info};
     return {
         id,
-        header: () => <ColumnHeader column={id} title={caption} />,
+        header: () => <SchedulingColumnHeader column={id} title={caption} />,
         cell: ({row: {original: item}}: tanstack.CellContext<RowData, unknown>) => {
             let value: number | undefined;
             if ('sort' in info && 'function' === typeof info.sort) {
@@ -196,7 +205,7 @@ function makeReadableFieldColumn(id: KeyByGetterReturnType<string | undefined>) 
     const {caption} = {caption: undefined, ...info};
     return {
         id,
-        header: () => <ColumnHeader column={id} title={caption} />,
+        header: () => <SchedulingColumnHeader column={id} title={caption} />,
         cell: ({row: {original: item}}: tanstack.CellContext<RowData, unknown>) => {
             let value: string | undefined;
             if ('sort' in info && 'function' === typeof info.sort) {
@@ -243,7 +252,7 @@ function useSchedulingTableColumns() {
             },
             {
                 id: 'weight',
-                header: () => <ColumnHeader column={'weight'} />,
+                header: () => <SchedulingColumnHeader column={'weight'} allowUnordered />,
                 cell: ({row: {original: item}}) => {
                     const {weightEdited = NaN, type, weight} = item;
                     return (
@@ -263,7 +272,7 @@ function useSchedulingTableColumns() {
             },
             {
                 id: 'type',
-                header: () => <ColumnHeader column={'type'} />,
+                header: () => <SchedulingColumnHeader column={'type'} allowUnordered />,
                 cell: ({row: {original: item}}) => {
                     const {type} = item;
                     return (
@@ -279,7 +288,7 @@ function useSchedulingTableColumns() {
             },
             {
                 id: 'user',
-                header: () => <ColumnHeader column="user" title="Owner" />,
+                header: () => <SchedulingColumnHeader column="user" title="Owner" allowUnordered />,
                 cell: ({row: {original: item}}) => {
                     const {user} = item;
                     return (
@@ -291,8 +300,39 @@ function useSchedulingTableColumns() {
             },
             makeReadableFieldColumn('dominant_resource'),
             {
+                id: 'fair_share_usage',
+                header: () => (
+                    <SchedulingColumnHeader
+                        column="fair_share_usage"
+                        title="Usage / Fair share"
+                        allowUnordered
+                    />
+                ),
+                cell: ({row: {original: item}}) => {
+                    return (
+                        <TableCell>
+                            <FairShareUsage item={item} />
+                        </TableCell>
+                    );
+                },
+            },
+            {
                 id: 'usage',
-                header: () => <ColumnHeader column="usage" />,
+                header: () => (
+                    <SchedulingColumnHeader
+                        column="abs_usage_cpu"
+                        title="Usage"
+                        options={[
+                            {column: 'abs_usage_cpu' as const, title: 'CPU', allowUnordered: true},
+                            {column: 'abs_usage_gpu' as const, title: 'GPU', allowUnordered: true},
+                            {
+                                column: 'abs_usage_memory' as const,
+                                title: 'RAM',
+                                allowUnordered: true,
+                            },
+                        ]}
+                    />
+                ),
                 cell: ({row: {original: item}}) => {
                     const {} = item;
                     return (
@@ -305,7 +345,21 @@ function useSchedulingTableColumns() {
             },
             {
                 id: 'demand',
-                header: () => <ColumnHeader column="demand" />,
+                header: () => (
+                    <SchedulingColumnHeader
+                        column="abs_demand_cpu"
+                        title="Demand"
+                        options={[
+                            {column: 'abs_demand_cpu' as const, title: 'CPU', allowUnordered: true},
+                            {column: 'abs_demand_gpu' as const, title: 'GPU', allowUnordered: true},
+                            {
+                                column: 'abs_demand_memory' as const,
+                                title: 'RAM',
+                                allowUnordered: true,
+                            },
+                        ]}
+                    />
+                ),
                 cell: ({row: {original: item}}) => {
                     const {} = item;
                     return (
@@ -318,7 +372,29 @@ function useSchedulingTableColumns() {
             },
             {
                 id: 'guaranteed',
-                header: () => <ColumnHeader column="guaranteed" title="Guarantee" />,
+                header: () => (
+                    <SchedulingColumnHeader
+                        column="abs_guaranteed_cpu"
+                        title="Guarantee"
+                        options={[
+                            {
+                                column: 'abs_guaranteed_cpu' as const,
+                                title: 'CPU',
+                                allowUnordered: true,
+                            },
+                            {
+                                column: 'abs_guaranteed_gpu' as const,
+                                title: 'GPU',
+                                allowUnordered: true,
+                            },
+                            {
+                                column: 'abs_guaranteed_memory' as const,
+                                title: 'RAM',
+                                allowUnordered: true,
+                            },
+                        ]}
+                    />
+                ),
                 cell: ({row: {original: item}}) => {
                     return (
                         <TableCell>
@@ -330,7 +406,24 @@ function useSchedulingTableColumns() {
             },
             {
                 id: 'operation_overview',
-                header: () => <ColumnHeader column="running" />,
+                header: () => (
+                    <SchedulingColumnHeader
+                        column="running_operation_count"
+                        title="Operations"
+                        options={[
+                            {
+                                column: 'running_operation_count' as const,
+                                title: 'Running',
+                                allowUnordered: true,
+                            },
+                            {
+                                column: 'max_operation_count' as const,
+                                title: 'Max count',
+                                allowUnordered: true,
+                            },
+                        ]}
+                    />
+                ),
                 cell: ({row: {original: item}}) => {
                     const {maxOperationCount, maxOperationCountEdited, runningOperationCount} =
                         item;
@@ -351,7 +444,7 @@ function useSchedulingTableColumns() {
             },
             {
                 id: 'duration',
-                header: () => <ColumnHeader column="duration" />,
+                header: () => <SchedulingColumnHeader column="duration" />,
                 cell: ({row: {original: item}}) => {
                     const {startTime} = item;
                     return (
@@ -363,7 +456,7 @@ function useSchedulingTableColumns() {
             },
             {
                 id: 'FI',
-                header: () => <ColumnHeader column="FI" />,
+                header: () => <SchedulingColumnHeader column="FI" />,
                 cell: ({row: {original: item}}) => {
                     if (item.fifoIndex === undefined || item.type !== 'operation') {
                         return '';
@@ -375,9 +468,18 @@ function useSchedulingTableColumns() {
             {
                 id: 'operation_progress',
                 header: () => (
-                    <ColumnHeader
-                        column="operation_progress"
+                    <SchedulingColumnHeader
+                        column="operation_count"
                         title={childTableItems.operation_progress.caption}
+                        options={[
+                            {column: 'operation_progress', title: 'Progress', allowUnordered: true},
+                            {column: 'operation_count', title: 'Count', allowUnordered: true},
+                            {
+                                column: 'max_operation_count',
+                                title: 'Max count',
+                                allowUnordered: true,
+                            },
+                        ]}
                     />
                 ),
                 cell: ({row: {original: item}}) => {
@@ -395,9 +497,26 @@ function useSchedulingTableColumns() {
             {
                 id: 'running_operation_progress',
                 header: () => (
-                    <ColumnHeader
+                    <SchedulingColumnHeader
                         column="running_operation_progress"
                         title={childTableItems.running_operation_progress.caption}
+                        options={[
+                            {
+                                column: 'running_operation_progress',
+                                title: 'Progress',
+                                allowUnordered: true,
+                            },
+                            {
+                                column: 'running_operation_count',
+                                title: 'Count',
+                                allowUnordered: true,
+                            },
+                            {
+                                column: 'max_running_operation_count',
+                                title: 'Max running',
+                                allowUnordered: true,
+                            },
+                        ]}
                     />
                 ),
                 cell: ({row: {original: item}}) => {
@@ -456,7 +575,7 @@ function useSchedulingTableColumns() {
         }, new Map<SchedulingColumn, (typeof availableColumns)[number]>());
 
         return compact_(
-            ['name', ...visibleColumns, 'actions'].map((column) => {
+            ['name' as const, ...visibleColumns, 'actions' as const].map((column) => {
                 return map.get(column);
             }),
         );
@@ -466,7 +585,14 @@ function useSchedulingTableColumns() {
 
 function NameHeader() {
     const loading = useSelector(getSchedulingOperationsLoading);
-    return <ColumnHeader title={i18n('pool-operation')} column="name" loading={loading} />;
+    return (
+        <SchedulingColumnHeader
+            title={i18n('pool-operation')}
+            column="name"
+            loading={loading}
+            allowUnordered
+        />
+    );
 }
 
 type ResourceSummaryProps = {
@@ -579,6 +705,68 @@ function RowActions({item}: {item: RowData}) {
                       ]
                     : []),
             ])}
+        />
+    );
+}
+
+function FairShareUsage({item}: {item: RowData}) {
+    const {starvation_status, fairShareRatio, usageRatio} = item;
+
+    const forceTheme = (
+        {
+            starving: 'warning',
+            aggressively_starving: 'danger',
+        } as Record<string, 'warning' | 'danger' | undefined>
+    )[starvation_status!];
+
+    const title = !forceTheme ? null : (
+        <div className={block('starvation-status')}>
+            <Label theme={forceTheme} text={format.Readable(starvation_status)} />
+        </div>
+    );
+
+    return (
+        <ShareUsageBar
+            className={block('share-usage')}
+            shareValue={fairShareRatio}
+            shareTitle={'Fair share'}
+            usageValue={usageRatio}
+            usageTitle={'Usage'}
+            forceTheme={forceTheme}
+            title={title}
+        />
+    );
+}
+
+function SchedulingColumnHeader(props: ColumnHeaderProps<SchedulingColumn>) {
+    const dispatch = useDispatch();
+
+    const [sortState] = useSelector(getSchedulingSortState);
+
+    const order = props.column === sortState?.column ? sortState.order : undefined;
+
+    const lastColumnRef = React.useRef(props.column);
+
+    const byOptions: Pick<typeof props, 'column' | 'order'> = {column: lastColumnRef.current};
+
+    if (sortState?.column && props.options) {
+        const item = props.options.find((x) => x.column === sortState.column);
+        if (item) {
+            Object.assign(byOptions, {column: item.column, order: sortState.order});
+        }
+    }
+
+    return (
+        <ColumnHeader
+            {...props}
+            order={order}
+            {...byOptions}
+            onSort={(column, order) => {
+                dispatch(schedulingSetSortState(column && order ? [{column, order}] : []));
+                if (column && order) {
+                    lastColumnRef.current = column;
+                }
+            }}
         />
     );
 }
