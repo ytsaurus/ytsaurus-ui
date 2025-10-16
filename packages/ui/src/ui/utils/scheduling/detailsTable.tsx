@@ -4,13 +4,11 @@ import moment from 'moment';
 import format from '../../common/hammer/format';
 import SchedulingOperationsLoader from '../../pages/scheduling/Content/tabs/ScherdulingOperataionsLoader/SchedulingOperationsLoader';
 import type {PoolResourceType} from '../../store/selectors/scheduling/scheduling-pools';
-import {getSchedulingOverviewTableItems} from '../../store/selectors/scheduling/scheduling';
-
-type PoolInfo = ReturnType<typeof getSchedulingOverviewTableItems>[number];
+import {SchedulingRowData} from './pool-child';
 
 function prepareDetailedColumn(resource: PoolResourceType) {
     return {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.resources?.[resource]?.detailed;
         },
         sort: true,
@@ -21,7 +19,7 @@ function prepareDetailedColumn(resource: PoolResourceType) {
 
 function prepareLimitColumn(resource: PoolResourceType) {
     return {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.resources?.[resource]?.limit;
         },
         sort: true,
@@ -33,7 +31,7 @@ function prepareLimitColumn(resource: PoolResourceType) {
 
 function prepareMinResourcesColumn(resource: PoolResourceType) {
     return {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.resources?.[resource]?.min;
         },
         sort: true,
@@ -45,7 +43,7 @@ function prepareMinResourcesColumn(resource: PoolResourceType) {
 
 function prepareAbsGuaranteedColumn(resource: PoolResourceType) {
     return {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.resources?.[resource]?.guaranteed;
         },
         sort: true,
@@ -57,7 +55,7 @@ function prepareAbsGuaranteedColumn(resource: PoolResourceType) {
 
 function prepareAbsDemandColumn(resource: PoolResourceType) {
     return {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.resources?.[resource]?.demand;
         },
         sort: true,
@@ -68,7 +66,7 @@ function prepareAbsDemandColumn(resource: PoolResourceType) {
 
 function prepareAbsUsageColumn(resource: PoolResourceType) {
     return {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.resources?.[resource]?.usage;
         },
         sort: true,
@@ -79,7 +77,13 @@ function prepareAbsUsageColumn(resource: PoolResourceType) {
 
 export const childTableItems = {
     name: {
-        sort(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
+            if (item.type === 'operation') {
+                if (item.fifoIndex !== undefined) {
+                    return '#0_' + item.fifoIndex;
+                }
+                return item.name ? '#1_' + item.name : '#2_' + item.id;
+            }
             return item.name;
         },
         caption: 'Pool / Operation',
@@ -87,77 +91,86 @@ export const childTableItems = {
         align: 'left',
     },
     type: {
-        sort(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             const {type, integralType, operationType} = item;
             return type === 'pool' ? integralType : operationType;
         },
         caption: 'Type',
     },
     user: {
-        sort(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             return item.user;
         },
     },
     mode: {
-        sort(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             return item.mode;
         },
         align: 'center',
     },
     guaranteed: {
-        sort(_item: PoolInfo) {
+        sort(_item: SchedulingRowData) {
             return undefined;
         },
     },
     FI: {
-        sort(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             return item.fifoIndex;
         },
         align: 'center',
     },
     weight: {
-        sort(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             return item.weight;
         },
         align: 'right',
     },
     min_share: {
-        sort(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             return item.minShareRatio;
         },
         align: 'right',
     },
     max_share: {
-        sort(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             return item.maxShareRatio;
         },
         align: 'right',
     },
     fair_share: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.fairShareRatio;
         },
         sort: true,
         align: 'right',
     },
     usage: {
-        sort(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             return item.usageRatio;
         },
         align: 'right',
     },
     demand: {
-        sort(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             return item.demandRatio;
         },
         align: 'right',
     },
     fair_share_usage: {
+        sort(item: SchedulingRowData) {
+            const {fairShareRatio, usageRatio} = item;
+            try {
+                const res = usageRatio! / fairShareRatio!;
+                return isNaN(res) ? undefined : res;
+            } catch {
+                return undefined;
+            }
+        },
         caption: 'Usage / Fair share',
         align: 'left',
     },
     dominant_resource: {
-        sort(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             return item.dominantResource;
         },
         caption: 'Dom. res.',
@@ -196,7 +209,7 @@ export const childTableItems = {
     abs_demand_user_slots: prepareAbsDemandColumn('user_slots'),
 
     operation_overview: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return [item.operationCount, item.runningOperationCount];
         },
         caption: 'Operations',
@@ -204,24 +217,24 @@ export const childTableItems = {
         align: 'right',
     },
     operation_count: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.operationCount;
         },
         sort: true,
         align: 'right',
     },
     max_operation_count: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.maxOperationCount;
         },
         sort: true,
         align: 'right',
     },
     operation_progress: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.operationCount! / item.maxOperationCount!;
         },
-        text(item: PoolInfo) {
+        text(item: SchedulingRowData) {
             return `${format.Number(item.operationCount)} / ${format.Number(
                 item.maxOperationCount,
             )}`;
@@ -231,24 +244,24 @@ export const childTableItems = {
         align: 'center',
     },
     running_operation_count: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.runningOperationCount;
         },
         sort: true,
         align: 'right',
     },
     max_running_operation_count: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.maxRunningOperationCount;
         },
         sort: true,
         align: 'right',
     },
     running_operation_progress: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.runningOperationCount! / item.maxRunningOperationCount!;
         },
-        text(item: PoolInfo) {
+        text(item: SchedulingRowData) {
             return `${format.Number(item.runningOperationCount)} / ${format.Number(
                 item.maxRunningOperationCount,
             )}`;
@@ -259,7 +272,7 @@ export const childTableItems = {
     },
 
     integral_type: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             const res = item.integralType;
             return res === 'none' ? undefined : res;
         },
@@ -269,10 +282,10 @@ export const childTableItems = {
         sortWithUndefined: true,
     },
     burst_cpu: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.burstCPU;
         },
-        sort(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             const res = item.burstCPU;
             return isNaN(res!) ? undefined : res;
         },
@@ -281,10 +294,10 @@ export const childTableItems = {
         align: 'right',
     },
     flow_cpu: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.flowCPU;
         },
-        sort(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             const res = item.flowCPU;
             return isNaN(res!) ? undefined : res;
         },
@@ -293,7 +306,7 @@ export const childTableItems = {
         align: 'right',
     },
     children_burst_cpu: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             const res = item.childrenBurstCPU;
             return !res ? undefined : res;
         },
@@ -303,7 +316,7 @@ export const childTableItems = {
         align: 'right',
     },
     children_flow_cpu: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             const res = item.childrenFlowCPU;
             return !res ? undefined : res;
         },
@@ -313,7 +326,7 @@ export const childTableItems = {
         align: 'right',
     },
     accumulated: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.accumulated;
         },
         caption: 'Acc ratio volume',
@@ -322,7 +335,7 @@ export const childTableItems = {
         align: 'right',
     },
     accumulated_cpu: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.accumulatedCpu;
         },
         caption: 'Acc CPU volume',
@@ -330,7 +343,7 @@ export const childTableItems = {
         align: 'right',
     },
     burst_duration: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.burstDuration;
         },
         caption: 'Est burst usage duration ',
@@ -342,10 +355,13 @@ export const childTableItems = {
     actions: {
         caption: '',
         align: 'left',
+        sort(_item: SchedulingRowData) {
+            return undefined;
+        },
     },
 
     duration: {
-        sort(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             if (!item.startTime) {
                 return undefined;
             }
@@ -353,7 +369,7 @@ export const childTableItems = {
             return Date.now() - startTime;
         },
     },
-};
+} as const;
 
 export type SchedulingColumn = keyof typeof childTableItems;
 
