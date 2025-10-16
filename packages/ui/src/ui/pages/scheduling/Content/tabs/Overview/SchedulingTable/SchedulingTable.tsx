@@ -38,7 +38,7 @@ import PoolTags from './PoolTags';
 import i18n from './i18n';
 import './SchedulingTable.scss';
 import {getSchedulingOverivewColumns} from '../../../../../../store/selectors/scheduling/overview-columns';
-import {childTableItems} from '../../../../../../utils/scheduling/detailsTable';
+import {childTableItems, SchedulingColumn} from '../../../../../../utils/scheduling/detailsTable';
 import {KeysByType} from '../../../../../../../@types/types';
 import {openEditModal} from '../../../../../../store/actions/scheduling/scheduling';
 import {openPoolDeleteModal} from '../../../../../../store/actions/scheduling/scheduling-ts';
@@ -75,7 +75,6 @@ export function SchedulingTable() {
 }
 
 type SchedulintTableMode = ReturnType<typeof getSchedulingContentMode>;
-type SchedulingColumn = string;
 
 const COLUMNS_BY_MODE: Record<SchedulintTableMode, Array<SchedulingColumn>> = {
     summary: [
@@ -85,7 +84,7 @@ const COLUMNS_BY_MODE: Record<SchedulintTableMode, Array<SchedulingColumn>> = {
         'dominant_resource',
         'usage',
         'demand',
-        'guarantee',
+        'guaranteed',
         'operation_overview',
         'duration',
     ],
@@ -215,10 +214,13 @@ function makeReadableFieldColumn(id: KeyByGetterReturnType<string | undefined>) 
     };
 }
 
+type SchedulingColumnDef = Omit<tanstack.ColumnDef<RowData>, 'id'> & {id: SchedulingColumn};
+
 function useSchedulingTableColumns() {
     const visibleColumns = useSchedulingVisibleColumns();
+
     const columns = React.useMemo(() => {
-        const availableColumns: Array<tanstack.ColumnDef<RowData>> = [
+        const availableColumns: Array<SchedulingColumnDef> = [
             {
                 id: 'name',
                 header: () => <NameHeader />,
