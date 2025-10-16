@@ -277,7 +277,7 @@ export function oldSortStateToOrderType<T = string>(
           : 'undefined-desc';
 }
 
-export function orderTypeToOldSortState(field: string, orderType?: OrderType): OldSortState {
+export function orderTypeToOldSortState(field?: string, orderType?: OrderType): OldSortState {
     if (!orderType || !field) {
         return {};
     }
