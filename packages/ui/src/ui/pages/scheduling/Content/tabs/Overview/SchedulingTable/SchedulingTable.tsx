@@ -51,26 +51,33 @@ import {
 import {openPoolDeleteModal} from '../../../../../../store/actions/scheduling/scheduling-ts';
 import {getProgressTheme} from '../../../../../../utils/progress';
 import ShareUsageBar from '../../../../../../pages/scheduling/Content/controls/ShareUsageBar';
+import {useSettingsColumnSizes} from '../../../../../../hooks/settings/use-settings-column-sizes';
 
 const block = cn('yt-scheduling-table');
 
 export type RowData = ReturnType<typeof getSchedulingOverviewTableItems>[number];
 
 export function SchedulingTable({aboveContentHeight = 0}: {aboveContentHeight?: number}) {
-    const items = useSelector(getSchedulingOverviewTableItems);
+    const {columnSizes, setColumnSizes} = useSettingsColumnSizes(
+        'global::scheduling::overviewColumnSizes',
+    );
+
     const columns = useSchedulingTableColumns();
+    const items = useSelector(getSchedulingOverviewTableItems);
 
     const table = useTable({
         columns,
         data: items,
         enableColumnPinning: true,
+        enableColumnResizing: true,
         state: {
             columnPinning: {
                 left: ['name'],
                 right: ['actions'],
             },
-            columnSizing: {startOffset: 100},
+            columnSizing: columnSizes,
         },
+        onColumnSizingChange: setColumnSizes,
     });
 
     return (
@@ -234,7 +241,7 @@ function useSchedulingTableColumns() {
             {
                 id: 'name',
                 header: () => <NameHeader />,
-                size: 300,
+                size: 400,
                 cell: ({row: {original: item}}) => {
                     return (
                         <TableCell>
@@ -342,7 +349,6 @@ function useSchedulingTableColumns() {
                         </TableCell>
                     );
                 },
-                size: 140,
             },
             {
                 id: 'demand',
@@ -369,7 +375,6 @@ function useSchedulingTableColumns() {
                         </TableCell>
                     );
                 },
-                size: 140,
             },
             {
                 id: 'guaranteed',
@@ -403,7 +408,6 @@ function useSchedulingTableColumns() {
                         </TableCell>
                     );
                 },
-                size: 140,
             },
             {
                 id: 'operation_overview',
