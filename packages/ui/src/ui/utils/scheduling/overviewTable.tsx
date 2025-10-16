@@ -1,7 +1,5 @@
 import React from 'react';
 
-import {SchedulingOverviewColumnNames} from '../../../shared/constants/settings-types';
-
 import SchedulingOperationsLoader from '../../pages/scheduling/Content/tabs/ScherdulingOperataionsLoader/SchedulingOperationsLoader';
 import {PoolOrOperation} from '../../utils/scheduling/pool-child';
 
@@ -10,7 +8,7 @@ import {ColumnInfo} from '../../components/ElementsTable/ElementsTableHeader';
 type ItemType = PoolOrOperation<'pool' | 'operation'>;
 
 export const poolsTableItems: Record<
-    SchedulingOverviewColumnNames,
+    string,
     Omit<ColumnInfo, 'caption'> & {
         get(item: ItemType): React.ReactNode;
         caption?: string;
@@ -135,11 +133,9 @@ export const poolsTableItems: Record<
     },
 };
 
-export function getOverviewColumnTitle(name: SchedulingOverviewColumnNames) {
+export function getOverviewColumnTitle(name: string) {
     const {title, caption} = poolsTableItems[name] ?? {};
     return title ?? caption ?? `##${name}##`;
 }
 
-export const OVERVIEW_AVAILABLE_COLUMNS = Object.keys(
-    poolsTableItems,
-) as Array<SchedulingOverviewColumnNames>;
+export const OVERVIEW_AVAILABLE_COLUMNS = Object.keys(poolsTableItems) as Array<string>;

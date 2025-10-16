@@ -188,24 +188,9 @@ export type QueryTrackerLastYqlVersion = {
     [key in `local::${Cluster}::queryTracker::lastYqlVersion`]: string;
 };
 
-export type SchedulingOverviewColumnNames =
-    | 'name'
-    | 'actions'
-    | 'FI'
-    | 'weight'
-    | 'operation_overview'
-    | 'dominant_resource'
-    | 'min_share'
-    | 'fair_share'
-    | 'usage'
-    | 'demand'
-    | 'fair_share_usage'
-    | 'user'
-    | 'operation_type';
-
 type SchedulingSettings = {
     'global::scheduling::expandStaticConfiguration': boolean;
-    'global::scheduling::overviewColumns': Array<SchedulingOverviewColumnNames>;
+    'global::scheduling::overviewColumns': Array<string>;
 };
 
 export interface DefaultSettings {
