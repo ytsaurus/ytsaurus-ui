@@ -86,11 +86,28 @@ export const childTableItems = {
         captionTail: <SchedulingOperationsLoader />,
         align: 'left',
     },
+    type: {
+        sort(item: PoolInfo) {
+            const {type, integralType, operationType} = item;
+            return type === 'pool' ? integralType : operationType;
+        },
+        caption: 'Type',
+    },
+    user: {
+        sort(item: PoolInfo) {
+            return item.user;
+        },
+    },
     mode: {
         sort(item: PoolInfo) {
             return item.mode;
         },
         align: 'center',
+    },
+    guaranteed: {
+        sort(_item: PoolInfo) {
+            return undefined;
+        },
     },
     FI: {
         sort(item: PoolInfo) {
@@ -337,3 +354,9 @@ export const childTableItems = {
         },
     },
 };
+
+export type SchedulingColumn = keyof typeof childTableItems;
+
+export function isSchedulingColumnName(column: string): column is SchedulingColumn {
+    return childTableItems[column as unknown as SchedulingColumn] !== undefined;
+}
