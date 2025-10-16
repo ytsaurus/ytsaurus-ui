@@ -7,8 +7,6 @@ import reduce_ from 'lodash/reduce';
 
 import Tabs from '../../../components/Tabs/Tabs';
 import Placeholder from '../../../pages/components/Placeholder';
-import {OverviewWithRum} from '../../../pages/scheduling/Content/tabs/OverviewOld/Overview';
-import Details from '../../../pages/scheduling/Content/tabs/Details/Details';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 
 import {DEFAULT_TAB, SCHEDULING_ALLOWED_ROOT_TABS, Tab} from '../../../constants/scheduling';
@@ -38,7 +36,7 @@ type ContentProps = {
     location: {search: string};
 };
 
-function Content({className, match, location}: ContentProps) {
+function Content({match, location}: ContentProps) {
     const cluster = useSelector(getCluster);
     const pool = useSelector(getPool);
     const tree = useSelector(getTree);
@@ -104,28 +102,24 @@ function Content({className, match, location}: ContentProps) {
     return (
         <ErrorBoundary>
             <SchedulingExpandedPoolsUpdater />
-            <div className={block(null, className)}>
-                <Tabs
-                    {...props}
-                    active={DEFAULT_TAB}
-                    className={block('tabs')}
-                    routed
-                    size={UI_TAB_SIZE}
-                />
+            <Tabs
+                {...props}
+                active={DEFAULT_TAB}
+                className={block('tabs')}
+                routed
+                size={UI_TAB_SIZE}
+            />
 
-                <Switch>
-                    <Route path={`${match.path}/${Tab.OVERVIEW}`} component={Overview} />
-                    <Route path={`${match.path}/${Tab.OVERVIEW_OLD}`} component={OverviewWithRum} />
-                    <Route path={`${match.path}/${Tab.DETAILS}`} component={Details} />
-                    {extraRoutes}
-                    {aclTab.show && <Route path={`${match.path}/${Tab.ACL}`} component={PoolAcl} />}
-                    <Route path={`${match.path}/:tab`} component={Placeholder} />
-                    <Redirect
-                        from={match.url}
-                        to={{pathname: `${match.url}/${DEFAULT_TAB}`, search: location.search}}
-                    />
-                </Switch>
-            </div>
+            <Switch>
+                <Route path={`${match.path}/${Tab.OVERVIEW}`} component={Overview} />
+                {extraRoutes}
+                {aclTab.show && <Route path={`${match.path}/${Tab.ACL}`} component={PoolAcl} />}
+                <Route path={`${match.path}/:tab`} component={Placeholder} />
+                <Redirect
+                    from={match.url}
+                    to={{pathname: `${match.url}/${DEFAULT_TAB}`, search: location.search}}
+                />
+            </Switch>
         </ErrorBoundary>
     );
 }

@@ -1,6 +1,5 @@
 import {
     CLUSTER_MENU_TABLE_ID,
-    FIELD_AUTO,
     SYSTEM_CHUNKS_TABLE_ID,
     TOGGLE_COLUMN_SORT_ORDER,
 } from '../../constants/tables';
@@ -16,10 +15,6 @@ import {NAVIGATION_MAP_NODE_TABLE_ID} from '../../constants/navigation';
 import {NAVIGATION_TABLETS_TABLE_ID} from '../../constants/navigation/tabs/tablets';
 import {NAVIGATION_TRANSACTION_MAP_TABLE_ID} from '../../constants/navigation/content/transaction-map';
 import {TABLET_PARTITIONS_TABLE_ID, TABLET_PARTITION_STORES_TABLE_ID} from '../../constants/tablet';
-import {
-    SCHEDULING_POOL_CHILDREN_TABLE_ID,
-    SCHEDULING_POOL_TREE_TABLE_ID,
-} from '../../constants/scheduling';
 import {ActionD, OldSortState} from '../../types';
 import type {NodesTableColumnNames} from '../../pages/components/tabs/nodes/tables';
 
@@ -37,9 +32,7 @@ export type TablesSortOrderState = Record<
     | typeof OPERATION_JOBS_TABLE_ID
     | typeof COMPONENTS_VERSIONS_DETAILED_TABLE_ID
     | typeof COMPONENTS_NODES_NODE_TABLE_ID
-    | typeof COMPONENTS_PROXIES_TABLE_ID
-    | typeof SCHEDULING_POOL_TREE_TABLE_ID
-    | typeof SCHEDULING_POOL_CHILDREN_TABLE_ID,
+    | typeof COMPONENTS_PROXIES_TABLE_ID,
     OldSortState
 > & {
     [COMPONENTS_NODES_TABLE_ID]: OldSortState<NodesTableColumnNames>;
@@ -67,9 +60,6 @@ export const initialState: TablesSortOrderState = {
     [COMPONENTS_NODES_NODE_TABLE_ID]: {field: 'cell_id', asc: true},
 
     [COMPONENTS_PROXIES_TABLE_ID]: {field: 'host', asc: true},
-
-    [SCHEDULING_POOL_TREE_TABLE_ID]: {field: FIELD_AUTO, asc: true},
-    [SCHEDULING_POOL_CHILDREN_TABLE_ID]: {field: FIELD_AUTO, asc: true},
 };
 
 export default (state = initialState, action: TablesSortOrderAction) => {

@@ -1,7 +1,6 @@
 import filter_ from 'lodash/filter';
 import find_ from 'lodash/find';
 import map_ from 'lodash/map';
-import reduce_ from 'lodash/reduce';
 
 import hammer from '../../../common/hammer';
 import * as treeList from '../../../common/hammer/tree-list';
@@ -162,42 +161,6 @@ export const getResources = createSelector(
     },
 );
 
-const getFilteredTree = createSelector(
-    [getCurrentPool, getSchedulingFilteredPoolNames],
-    (treeRoot, visiblePools) => {
-        if (treeRoot) {
-            const res = treeList.filterTree(treeRoot, (pool: {name: string}) => {
-                return visiblePools === undefined || visiblePools.has(pool.name);
-            });
-            return res;
-        }
-        return undefined;
-    },
-);
-
-export const getSchedulingTableItems = createSelector(
-    [getFilteredTree, getSortState],
-    (filteredTree, sortState) => {
-        if (filteredTree) {
-            const isRoot = filteredTree && filteredTree.name === ROOT_POOL_NAME;
-            const tree = isRoot
-                ? filteredTree
-                : ({
-                      name: '',
-                      children: [filteredTree],
-                      leaves: [],
-                      attributes: {},
-                      type: 'pool',
-                  } as PoolTreeNode);
-            const sortedTree = treeList.sortTree(tree, sortState, poolsTableItems);
-
-            return treeList.flattenTree(sortedTree);
-        }
-
-        return [];
-    },
-);
-
 export const getCurrentTreeExpandedPools = createSelector(
     [getTree, getSchedulingOperationsExpandedPools],
     (tree, expandedPools) => {
@@ -248,93 +211,6 @@ export const getSchedulingOverviewTableItems = createSelector(
         }
 
         return [];
-    },
-);
-
-export const getSchedulingOverviewMaxDepth = createSelector(
-    [getSchedulingTableItems, getExpandedPoolsLoadAll, getCurrentTreeExpandedPools],
-    (items: Array<{level?: number; name?: string}>, allExpanded, expandedPools) => {
-        if (allExpanded) {
-            return reduce_(
-                items,
-                (acc, item) => {
-                    const {level = 0} = item || {};
-                    return acc < level ? level : acc;
-                },
-                0,
-            );
-        }
-
-        if (!expandedPools?.size) {
-            return 0;
-        }
-
-        return reduce_(
-            items,
-            (acc, item) => {
-                const {level = 0, name = ''} = item;
-                if (expandedPools.has(name)) {
-                    return acc < level + 1 ? level + 1 : acc;
-                }
-                return acc;
-            },
-            0,
-        );
-    },
-);
-
-const getPoolChildrenData = createSelector(
-    [getCurrentPool, getCurrentPoolChildren, getCurrentPoolOperations],
-    (pool, pools, operations = []): undefined | Array<PoolOrOperation<'pool' | 'operation'>> => {
-        if (pool && pools) {
-            return [...pools, ...operations];
-        }
-
-        return undefined;
-    },
-);
-
-const getFilteredPoolChildren = createSelector(
-    [getPoolChildrenData, getPoolChildrenFilter],
-    (poolChildrenData, poolChildrenFilter): typeof poolChildrenData => {
-        return hammer.filter.filter({
-            data: poolChildrenData,
-            input: poolChildrenFilter,
-            factors: ['name'],
-        });
-    },
-);
-
-export const getSortedPoolChildren = createSelector(
-    [getFilteredPoolChildren, getPoolChildrenSortState, getCurrentPool],
-    (filteredPoolChildren, poolChildrenSortState, currentPool): typeof filteredPoolChildren => {
-        return hammer.utils.sort(filteredPoolChildren, poolChildrenSortState, childTableItems, {
-            addGetParams: [currentPool],
-            groupBy: {
-                asc: true,
-                get(item: Partial<PoolInfo> | Partial<OperationInfo>) {
-                    return item.type === 'operation' ? 0 : 1;
-                },
-            },
-        }) as typeof filteredPoolChildren;
-    },
-);
-
-export const getPollChildrenTableItems = createSelector(
-    [getCurrentPool, getSortedPoolChildren],
-    (currentPool, sortedPoolChildren) => {
-        const extras = [] as Exclude<typeof sortedPoolChildren, undefined>;
-        let isChildPool = false;
-        if (currentPool && currentPool.name !== ROOT_POOL_NAME) {
-            extras.push(currentPool);
-            isChildPool = true;
-        }
-
-        return extras.concat(
-            map_(sortedPoolChildren, (item) => {
-                return Object.assign({}, item, {isChildPool});
-            }),
-        );
     },
 );
 
