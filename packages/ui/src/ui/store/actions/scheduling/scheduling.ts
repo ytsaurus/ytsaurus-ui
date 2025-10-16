@@ -31,6 +31,7 @@ import {
     CHANGE_POOL_CHILDREN_FILTER,
     CHANGE_TABLE_TREE_STATE,
     CHANGE_TREE,
+    SCHEDULING_DATA_PARTITION,
     SCHEDULING_EDIT_POOL_CANCELLED,
     SCHEDULING_EDIT_POOL_FAILURE,
     SCHEDULING_EDIT_POOL_REQUEST,
@@ -43,6 +44,7 @@ import {splitBatchResults} from '../../../utils/utils';
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {YTErrors} from '../../../rum/constants';
 import {PoolTreeNode} from '../../../utils/scheduling/pool-child';
+import {SortState} from '../../../types';
 
 import {toaster} from '../../../utils/toaster';
 
@@ -346,5 +348,12 @@ export function togglePoolFavourites(pool: string, tree: string): SchedulingThun
         const value = `${pool}[${tree}]`;
         const parentNS = getSchedulingNS(getState());
         return dispatch(toggleFavourite(value, parentNS));
+    };
+}
+
+export function schedulingSetSortState(sortState: Array<SortState>): SchedulingAction {
+    return {
+        type: SCHEDULING_DATA_PARTITION,
+        data: {sortState},
     };
 }

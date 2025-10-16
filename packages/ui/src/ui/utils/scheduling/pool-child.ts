@@ -137,6 +137,8 @@ export type PoolTreeNode = TreeNode<
 
 export type PoolLeafNode = PoolTreeNode['leaves'][number];
 
+export type SchedulingRowData = PoolTreeNode | PoolLeafNode;
+
 function isPoolItem(item: PoolTreeNode | PoolLeafNode): item is PoolTreeNode {
     return item.type === 'pool';
 }

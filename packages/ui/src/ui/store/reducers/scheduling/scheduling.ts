@@ -24,7 +24,7 @@ import {
     SCHEDULING_EDIT_POOL_SUCCESS,
     TOGGLE_EDIT_VISIBILITY,
 } from '../../../constants/scheduling';
-import {ActionD, YTError} from '../../../types';
+import {ActionD, SortState, YTError} from '../../../types';
 import {SchedulingContentMode} from '../../../store/selectors/scheduling/scheduling';
 import {PoolTreeNode} from '../../../utils/scheduling/pool-child';
 
@@ -66,6 +66,8 @@ export interface SchedulingPersistentState {
     treeState: 'collapsed' | 'expanded';
     poolChildrenFilter: '';
     contentMode: SchedulingContentMode;
+
+    sortState: Array<SortState>;
 
     tree: string;
     pool: string;
@@ -113,6 +115,7 @@ const persistedState: SchedulingPersistentState = {
         slug: undefined,
     },
     monitorChartStatus: {},
+    sortState: [{column: 'name', order: 'asc'}],
 };
 
 export const initialState = {
