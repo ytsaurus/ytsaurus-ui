@@ -10,27 +10,18 @@ import {getCluster} from '../../../store/selectors/global';
 
 import {prepareResources} from '../../../utils/scheduling/overview';
 import {childTableItems} from '../../../utils/scheduling/detailsTable';
-import {poolsTableItems} from '../../../utils/scheduling/overviewTable';
-import {FIELD_AUTO} from '../../../constants/tables';
-import {
-    ROOT_POOL_NAME,
-    SCHEDULING_POOL_CHILDREN_TABLE_ID,
-    SCHEDULING_POOL_TREE_TABLE_ID,
-} from '../../../constants/scheduling';
+
+import {ROOT_POOL_NAME} from '../../../constants/scheduling';
 
 import {OldSortState} from '../../../types';
 
-import {
-    OperationInfo,
-    PoolInfo,
-    getPools as getPoolsImpl,
-    getSchedulingPoolsMapByName,
-} from './scheduling-pools';
+import {getPools as getPoolsImpl, getSchedulingPoolsMapByName} from './scheduling-pools';
 import {RootState} from '../../../store/reducers';
 import {isAbcPoolName, isTopLevelPool} from '../../../utils/scheduling/pool';
-import {PoolOrOperation, PoolTreeNode} from '../../../utils/scheduling/pool-child';
+import {PoolTreeNode} from '../../../utils/scheduling/pool-child';
+import {orderTypeToOldSortState} from '../../../utils/sort-helpers';
 import {visitTreeItems} from '../../../utils/utils';
-import {getExpandedPoolsLoadAll, getSchedulingOperationsExpandedPools} from './expanded-pools';
+import {getSchedulingOperationsExpandedPools} from './expanded-pools';
 import {
     getSchedulingAttributesToFilter,
     getSchedulingFilteredPoolNames,
@@ -66,25 +57,20 @@ export const getCurrentPool = createSelector([getPool, getPools], (pool, pools) 
     return res;
 });
 
-const getSortStateRaw = (state: RootState) => state.tables[SCHEDULING_POOL_TREE_TABLE_ID];
-export const getSortState = createSelector([getSortStateRaw, getCurrentPool], schedulingSortState);
+export const getSchedulingSortState = (state: RootState) => state.scheduling.scheduling.sortState;
 
-const getPoolChildrenSortStateRaw = (state: RootState) =>
-    state.tables[SCHEDULING_POOL_CHILDREN_TABLE_ID];
+export const getSchedulingEffectiveSortState = createSelector(
+    [getSchedulingSortState, getCurrentPool],
+    (sortState, pool): OldSortState => {
+        if (!sortState?.length) {
+            return pool?.mode === 'fifo' ? {field: 'FI', asc: true} : {field: 'name', asc: true};
+        }
 
-export const getPoolChildrenSortState = createSelector(
-    [getPoolChildrenSortStateRaw, getCurrentPool],
-    schedulingSortState,
+        const [{column, order} = {}] = sortState;
+
+        return orderTypeToOldSortState(column, order);
+    },
 );
-
-function schedulingSortState(sortState: OldSortState, pool?: {mode?: 'fifo' | string}) {
-    const {field, asc} = sortState;
-    if (field !== FIELD_AUTO) {
-        return sortState;
-    }
-
-    return pool?.mode === 'fifo' ? {field: 'FI', asc} : {field: 'name', asc};
-}
 
 export const getPoolsNames = createSelector(
     getSchedulingAttributesToFilter,
@@ -192,7 +178,7 @@ const getSchedulingOverviewFilteredTree = createSelector(
 );
 
 export const getSchedulingOverviewTableItems = createSelector(
-    [getSchedulingOverviewFilteredTree, getSortState],
+    [getSchedulingOverviewFilteredTree, getSchedulingEffectiveSortState],
     (filteredTree, sortState) => {
         if (filteredTree) {
             const isRoot = filteredTree && filteredTree.name === ROOT_POOL_NAME;
@@ -205,7 +191,9 @@ export const getSchedulingOverviewTableItems = createSelector(
                       attributes: {},
                       type: 'pool',
                   } as PoolTreeNode);
-            const sortedTree = treeList.sortTree(tree, sortState, poolsTableItems);
+            const sortedTree = sortState.field
+                ? treeList.sortTree(tree, sortState, childTableItems)
+                : tree;
 
             return treeList.flattenTree(sortedTree);
         }
