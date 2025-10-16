@@ -50,7 +50,10 @@ export default React.memo(function Plan({isActive, className, prepareNode}: Plan
                     ) : (
                         <>
                             {newGraphType ? (
-                                <QueriesGraphLazy processedGraph={graph} />
+                                <QueriesGraphLazy
+                                    key={planView === 'graph' ? 'visible' : 'hidden'}
+                                    processedGraph={graph}
+                                />
                             ) : (
                                 <Graph
                                     isActive={isActive && planView === 'graph'}
