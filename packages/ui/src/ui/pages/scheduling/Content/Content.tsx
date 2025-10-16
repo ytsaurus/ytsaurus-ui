@@ -7,8 +7,6 @@ import reduce_ from 'lodash/reduce';
 
 import Tabs from '../../../components/Tabs/Tabs';
 import Placeholder from '../../../pages/components/Placeholder';
-import {OverviewWithRum} from '../../../pages/scheduling/Content/tabs/OverviewOld/Overview';
-import Details from '../../../pages/scheduling/Content/tabs/Details/Details';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import {ResizeObserverContainer} from '../../../components/ResizeObserverContainer/ResizeObserverContainer';
 
@@ -132,11 +130,6 @@ function Content({className, match, location, aboveContentHeight = 0}: ContentPr
                                 />
                             )}
                         />
-                        <Route
-                            path={`${match.path}/${Tab.OVERVIEW_OLD}`}
-                            component={OverviewWithRum}
-                        />
-                        <Route path={`${match.path}/${Tab.DETAILS}`} component={Details} />
                         {extraRoutes}
                         {aclTab.show && (
                             <Route path={`${match.path}/${Tab.ACL}`} component={PoolAcl} />
