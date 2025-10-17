@@ -144,7 +144,9 @@ export function setSettingsSystemRpcProxiesCollapsed(value: boolean): SettingThu
 
 export function setSettingsSystemCypressProxiesCollapsed(value: boolean): SettingThunkAction {
     return (dispatch) => {
-        dispatch(setSetting(SettingName.SYSTEM.CYPRESS_PROXIES_COLLAPSED, NAMESPACES.SYSTEM, value));
+        dispatch(
+            setSetting(SettingName.SYSTEM.CYPRESS_PROXIES_COLLAPSED, NAMESPACES.SYSTEM, value),
+        );
     };
 }
 

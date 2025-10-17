@@ -113,7 +113,10 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
         `/*/${Page.COMPONENTS}/${ComponentsTab.RPC_PROXIES}`,
         [proxiesParams, getProxiesPreparedState],
     ],
-
+    [
+        `/*/${Page.COMPONENTS}/${ComponentsTab.CYPRESS_PROXIES}`,
+        [proxiesParams, getProxiesPreparedState],
+    ],
     [`/*/${Page.OPERATIONS}`, [listParams, getListPreparedState]],
     [
         `/*/${Page.OPERATIONS}/*/${OperationTab.STATISTICS}`,
