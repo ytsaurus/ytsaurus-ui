@@ -6,6 +6,7 @@ import Chunks from '../Chunks/Chunks';
 import Proxies from '../HttpProxies/HttpProxies';
 import RpcProxies from '../RpcProxies/RpcProxies';
 import Nodes from '../Nodes/Nodes';
+import CypressProxies from '../CypressProxies/CypressProxies';
 
 export const SystemGeneralTab: FC = () => {
     return (
@@ -16,6 +17,7 @@ export const SystemGeneralTab: FC = () => {
             <Chunks />
             <Proxies />
             <RpcProxies />
+            <CypressProxies />
             <Nodes />
         </>
     );

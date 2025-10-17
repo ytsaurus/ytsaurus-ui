@@ -142,6 +142,12 @@ export function setSettingsSystemRpcProxiesCollapsed(value: boolean): SettingThu
     };
 }
 
+export function setSettingsSystemCypressProxiesCollapsed(value: boolean): SettingThunkAction {
+    return (dispatch) => {
+        dispatch(setSetting(SettingName.SYSTEM.CYPRESS_PROXIES_COLLAPSED, NAMESPACES.SYSTEM, value));
+    };
+}
+
 export function setSettingsSystemHttpProxiesCollapsed(value: boolean): SettingThunkAction {
     return (dispatch) => {
         dispatch(setSetting(SettingName.SYSTEM.HTTP_PROXIES_COLLAPSED, NAMESPACES.SYSTEM, value));
