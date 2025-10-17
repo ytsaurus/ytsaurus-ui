@@ -11,16 +11,17 @@ import {getSettingsSystemCypressProxiesCollapsed} from '../../../store/selectors
 import {useThunkDispatch} from '../../../store/thunkDispatch';
 import {MakeUrlParams} from '../ProxiesImpl/RoleGroup';
 import {ProxiesImpl} from '../ProxiesImpl/ProxiesImpl';
-import {getCypressProxiesRoleGroups, getCypressProxiesCounters} from '../../../store/reducers/system/cypress-proxies';
+import {
+    getCypressProxiesCounters,
+    getCypressProxiesRoleGroups,
+} from '../../../store/reducers/system/cypress-proxies';
 import {SystemNodeCounters} from '../../../store/reducers/system/proxies';
 
 function CypressProxiesOverview({counters}: {counters: SystemNodeCounters}) {
-    return (
-        <SystemStateOverview tab="cypress_proxies" counters={counters} />
-    );
+    return <SystemStateOverview tab="cypress_proxies" counters={counters} />;
 }
 
-function CypressProxies () {
+function CypressProxies() {
     const cluster = useSelector(getCluster);
     const collapsed = useSelector(getSettingsSystemCypressProxiesCollapsed);
     const roleGroups = useSelector(getCypressProxiesRoleGroups);
@@ -41,8 +42,8 @@ function CypressProxies () {
                     roleGroups={roleGroups}
                     collapsed={collapsed}
                     makeUrl={(params) => makeRoleGroupUrl(params, cluster)}
-                />)
-            }
+                />
+            )}
         </React.Fragment>
     );
 }
@@ -68,11 +69,9 @@ function CypressProxiesUpdater() {
     return null;
 }
 
-function makeRoleGroupUrl({name, state}: MakeUrlParams = {}, cluster: string) {
-    const params = new URLSearchParams({role: name!});
-    if (state === 'banned') {
-        params.append('banned', 'true');
-    } else if (state) {
+function makeRoleGroupUrl({state}: MakeUrlParams = {}, cluster: string) {
+    const params = new URLSearchParams();
+    if (state) {
         params.append('state', state);
     }
     return `/${cluster}/components/cypress_proxies?${params}`;

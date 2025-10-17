@@ -38,7 +38,7 @@ export type RoleGroupItemInfo = {
     name: string;
     state: NodeState;
     effectiveState: NodeEffectiveState;
-    role: string;
+    role?: string;
     banned: boolean;
     decommissioned?: boolean;
     alerts?: boolean;

@@ -60,7 +60,9 @@ export function Components({match, lastVisitedTab = DEFAULT_TAB, tabSize, locati
                         />
                         <Route
                             path={`${match.path}/${Tab.CYPRESS_PROXIES}`}
-                            render={() => <Proxies key={PROXY_TYPE.CYPRESS} type={PROXY_TYPE.CYPRESS} />}
+                            render={() => (
+                                <Proxies key={PROXY_TYPE.CYPRESS} type={PROXY_TYPE.CYPRESS} />
+                            )}
                         />
                         <Route
                             path={`${match.path}/${Tab.RPC_PROXIES}`}

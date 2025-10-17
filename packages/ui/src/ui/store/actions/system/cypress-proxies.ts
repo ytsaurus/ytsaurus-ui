@@ -10,7 +10,11 @@ import {RoleGroupItemInfo} from '../../../store/reducers/system/proxies';
 import {isRetryFutile} from '../../../utils/index';
 import {extractProxyCounters, extractRoleGroups} from '../../../utils/system/proxies';
 import {showErrorPopup} from '../../../utils/utils';
-import {fetchCypressProxiesRequest, fetchCypressProxiesSuccess, fetchCypressProxiesFailure} from '../../../store/reducers/system/cypress-proxies';
+import {
+    fetchCypressProxiesFailure,
+    fetchCypressProxiesRequest,
+    fetchCypressProxiesSuccess,
+} from '../../../store/reducers/system/cypress-proxies';
 
 type CypressProxiesThunkAction<T = void> = ThunkAction<
     Promise<T>,
@@ -23,17 +27,18 @@ function extractCypressProxy(data: object): Array<RoleGroupItemInfo> {
     const cypressProxies = ypath.getValue(data);
     const result = [];
     for (const proxy in cypressProxies) {
-        const proxyData = ypath.getAttributes(cypressProxies[proxy]);
-        const state = ypath.getValue(proxyData, '/state');
-        const effectiveState = state ? 'online' as const : 'offline' as const;
-        const banned = ypath.getValue(proxyData, '/@banned');
-        result.push({
-            name: proxy,
-            role: ypath.getValue(proxyData, '/@role'),
-            state,
-            effectiveState,
-            banned,
-        }); 
+        if (cypressProxies[proxy]) {
+            const proxyData = ypath.getAttributes(cypressProxies[proxy]);
+            const state = ypath.getValue(proxyData, '/state');
+            const effectiveState = state ? ('online' as const) : ('offline' as const);
+            const banned = ypath.getValue(proxyData, '/@banned');
+            result.push({
+                name: proxy,
+                state,
+                effectiveState,
+                banned,
+            });
+        }
     }
     return result;
 }
@@ -47,16 +52,18 @@ export function loadSystemCypressProxies(): CypressProxiesThunkAction<
         return ytApiV3Id
             .get(YTApiId.systemCypressProxies, {
                 path: '//sys/cypress_proxies',
-                attributes: ['role', 'banned', 'state'],
+                attributes: ['banned', 'state'],
                 ...USE_SUPRESS_SYNC,
             })
             .then((data = []) => {
                 const cypressProxies = extractCypressProxy(data);
 
-                dispatch(fetchCypressProxiesSuccess({
-                    roleGroups: extractRoleGroups(cypressProxies),
-                    counters: extractProxyCounters(cypressProxies),
-                }));
+                dispatch(
+                    fetchCypressProxiesSuccess({
+                        roleGroups: extractRoleGroups(cypressProxies),
+                        counters: extractProxyCounters(cypressProxies),
+                    }),
+                );
                 return undefined;
             })
             .catch((error) => {
