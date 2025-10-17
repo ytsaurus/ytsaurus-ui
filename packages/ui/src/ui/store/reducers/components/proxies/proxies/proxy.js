@@ -11,7 +11,7 @@ export default class Proxy {
         this.banned = ypath.getBoolean(data, '/banned') || false;
         this.banMessage = ypath.getValue(data, '/ban_message') || '';
         this.role = ypath.getValue(data, '/role');
-        this.version = ypath.getValue(data, '/version');
+        this.version = ypath.getValue(data, '/version') || data?.version;
         this.physicalHost = ypath.getValue(data, '/annotations/physical_host');
         this.liveness = ypath.getValue(data, '/liveness');
 
@@ -28,6 +28,7 @@ export default class Proxy {
         'liveness',
         'role',
         'version',
+        'state',
         'annotations',
         'maintenance_requests',
     ];

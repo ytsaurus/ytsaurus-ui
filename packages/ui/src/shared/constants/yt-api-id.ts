@@ -42,6 +42,8 @@ export const enum YTApiId {
 
     componentsClusterNodes = 'componentsClusterNodes',
     componentGetRpcProxies = 'componentGetRpcProxies',
+    componentExistsCypressProxies = 'componentExistsCypressProxies',
+    componentGetCypressProxies = 'componentGetCypressProxies',
     componentsRpcProxies = 'componentsRpcProxies',
     componentsShards = 'componentsShards',
     componentsUpdateNodeData = 'componentsUpdateNodeData',
