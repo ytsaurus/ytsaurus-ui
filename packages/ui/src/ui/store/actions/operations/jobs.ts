@@ -153,6 +153,10 @@ function getJobFilterParameters(filters: JobsState['filters'], sortState: OldSor
         state: getValueIfNotDefault(filters, 'state'),
         type: getValueIfNotDefault(filters, 'type'),
         address: filterBy === 'address' ? getValueIfNotDefault(filters, 'address') : undefined,
+        monitoring_descriptor:
+            filterBy === 'monitoring descriptor'
+                ? getValueIfNotDefault(filters, 'monitoringDescriptor')
+                : undefined,
         with_stderr: getValueIfNotDefault(filters, 'withStderr'),
         with_monitoring_descriptor: getValueIfNotDefault(filters, 'withMonitoringDescriptor'),
         with_interruption_info: getValueIfNotDefault(filters, 'withInterruptionInfo'),

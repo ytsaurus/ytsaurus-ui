@@ -15,12 +15,13 @@ import {getOperationTasksNames} from '../../../../../../store/selectors/operatio
 
 import {JobsOperationIncarnationsFilter} from './JobsOperationsIncarnationsFilter';
 import './OperationJobsToolbar.scss';
+import type {RootState} from '../../../../../../store/reducers';
 
 const block = cn('operation-detail-jobs');
 const tbBlock = cn('elements-toolbar');
 
 // TODO: make this a selector inside a specific <JobsTypeFilter> component once we start using reselect library
-function extractJobTypes(operations) {
+function extractJobTypes(operations: RootState['operations']): string[] {
     const initialTypes = ['all'];
 
     const typeCounters = operations.jobs.filters.type.counters;

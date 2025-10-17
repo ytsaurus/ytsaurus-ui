@@ -42,9 +42,10 @@ export type JobsState = {
         filterBy: WithDefaultValue<string>;
         jobId: WithDefaultValue<string>;
         address: WithDefaultValue<string> & {data: Array<unknown>};
+        monitoringDescriptor: WithDefaultValue<string>;
         taskName: WithDefaultValue<string>;
-        state: WithDefaultValue<string>;
-        type: WithDefaultValue<string>;
+        state: WithDefaultValue<string> & {counters?: Record<string, number>};
+        type: WithDefaultValue<string> & {counters?: Record<string, number>};
         withStderr: WithDefaultValue<boolean>;
         withFailContext: WithDefaultValue<boolean>;
         withSpec: WithDefaultValue<boolean>;
@@ -88,6 +89,10 @@ export const initialState: JobsState = {
             value: '',
             defaultValue: '',
             data: [],
+        },
+        monitoringDescriptor: {
+            value: '',
+            defaultValue: '',
         },
         taskName: {
             value: '',

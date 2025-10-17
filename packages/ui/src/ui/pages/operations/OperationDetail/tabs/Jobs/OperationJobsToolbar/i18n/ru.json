@@ -1,0 +1,8 @@
+{
+  "value_address": "Адрес",
+  "value_id": "Id",
+  "value_monitoring-descriptor": "Дескриптор мониторинга",
+  "placeholder_filter-id": "Фильтр по id...",
+  "placeholder_filter-monitoring-descriptor": "Фильтр по дескриптору мониторинга..."
+}
+

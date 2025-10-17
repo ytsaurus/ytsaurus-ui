@@ -12,6 +12,7 @@ const {
     filterBy,
     address,
     jobId,
+    monitoringDescriptor,
     type,
     state,
     withStderr,
@@ -23,6 +24,7 @@ const {
 const initialFilterBy = filterBy.value;
 const initialAddressFilter = address.value;
 const initialJobIdFilter = jobId.value;
+const initialMonitoringDescriptorFilter = monitoringDescriptor.value;
 const initialTypeFilter = type.value;
 const initialStateFilter = state.value;
 const initialWithStderrFilter = withStderr.value;
@@ -48,6 +50,10 @@ export const jobsParams: LocationParameters = {
     jobId: {
         stateKey: 'operations.jobs.filters.jobId.value',
         initialState: initialJobIdFilter,
+    },
+    monitoringDescriptor: {
+        stateKey: 'operations.jobs.filters.monitoringDescriptor.value',
+        initialState: initialMonitoringDescriptorFilter,
     },
     taskName: {
         stateKey: 'operations.jobs.filters.taskName.value',
