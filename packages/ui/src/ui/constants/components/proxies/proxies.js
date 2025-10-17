@@ -13,4 +13,5 @@ export const SPLIT_TYPE = 'proxy-card';
 export const PROXY_TYPE = {
     HTTP: 'http',
     RPC: 'rpc',
+    CYPRESS: 'cypress',
 };

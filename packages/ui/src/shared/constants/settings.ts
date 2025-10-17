@@ -70,6 +70,7 @@ export const SettingName = {
         CHUNKS_COLLAPSED: 'chunksCollapsed',
         HTTP_PROXIES_COLLAPSED: 'httpProxiesCollapsed',
         RPC_PROXIES_COLLAPSED: 'rpcProxiesCollapsed',
+        CYPRESS_PROXIES_COLLAPSED: 'cypressProxiesCollapsed',
         NODES_COLLAPSED: 'nodesCollapsed',
         NODES_NODE_TYPE: 'nodesNodeType',
     },

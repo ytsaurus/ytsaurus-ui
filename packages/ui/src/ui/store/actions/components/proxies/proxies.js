@@ -2,6 +2,7 @@ import map_ from 'lodash/map';
 
 import axios from 'axios';
 import ypath from '../../../../common/thor/ypath';
+import format from '../../../../common/hammer/format';
 
 import Proxy from '../../../../store/reducers/components/proxies/proxies/proxy';
 import {
@@ -79,6 +80,36 @@ function getHttpProxies() {
     };
 }
 
+function getCypressProxies() {
+    return (dispatch) => {
+        return ytApiV3Id
+            .list(YTApiId.componentGetCypressProxies, {
+                path: '//sys/cypress_proxies',
+                attributes: ['state', 'version', 'host'],
+            })
+            .then((cypressData) => {
+                const proxies = map_(cypressData, (proxyData) => {
+                    const name = ypath.getValue(proxyData);
+                    const state = ypath.getAttributes(proxyData)?.state || format.NO_VALUE;
+                    const version = ypath.getAttributes(proxyData)?.version || format.NO_VALUE;
+
+                    return new Proxy({...proxyData, ...{name, state, version}});
+                });
+
+                dispatch({
+                    type: GET_PROXIES.SUCCESS,
+                    data: {proxies},
+                });
+            })
+            .catch((error) => {
+                dispatch({
+                    type: GET_PROXIES.FAILURE,
+                    data: {error},
+                });
+            });
+    };
+}
+
 /**
  *
  * @param {'http' | 'rpc'} type
@@ -88,7 +119,14 @@ export function getProxies(type) {
     return (dispatch) => {
         dispatch({type: GET_PROXIES.REQUEST});
 
-        return dispatch(type === PROXY_TYPE.HTTP ? getHttpProxies() : getRpcProxies());
+        switch (type) {
+            case PROXY_TYPE.HTTP:
+                return dispatch(getHttpProxies());
+            case PROXY_TYPE.RPC:
+                return dispatch(getRpcProxies());
+            case PROXY_TYPE.CYPRESS:
+                return dispatch(getCypressProxies());
+        }
     };
 }
 
