@@ -71,7 +71,7 @@ export class Proxies extends Component {
 
     static propTypes = {
         // from parent
-        type: PropTypes.oneOf([PROXY_TYPE.HTTP, PROXY_TYPE.RPC]).isRequired,
+        type: PropTypes.oneOf([PROXY_TYPE.HTTP, PROXY_TYPE.RPC, PROXY_TYPE.CYPRESS]).isRequired,
         // from connect
         loading: PropTypes.bool.isRequired,
         loaded: PropTypes.bool.isRequired,
@@ -171,6 +171,9 @@ export class Proxies extends Component {
             [PROXY_TYPE.RPC]: {
                 items: ['host', 'state', 'banned', 'role', 'version', 'actions'],
             },
+            [PROXY_TYPE.CYPRESS]: {
+                items: ['host', 'state', 'version'],
+            },
         };
     }
 
@@ -236,6 +239,7 @@ export class Proxies extends Component {
             bannedFilter,
             changeBannedFilter,
             roles,
+            type,
         } = this.props;
 
         return (
@@ -264,7 +268,8 @@ export class Proxies extends Component {
                     />
                 </div>
 
-                <div className={block('filter', {role: true})}>
+                {type !== PROXY_TYPE.CYPRESS && (
+                    <div className={block('filter', {role: true})}>
                     <Select
                         items={roles}
                         value={[roleFilter]}
@@ -273,26 +278,29 @@ export class Proxies extends Component {
                         label="Role:"
                         width="max"
                         hideFilter
-                    />
-                </div>
+                        />
+                    </div>
+                )}
 
-                <div className={block('filter')}>
-                    <Select
-                        label="Banned:"
-                        items={[
-                            {value: 'all', title: 'All'},
-                            {value: 'true', title: 'True'},
-                            {value: 'false', title: 'False'},
-                        ]}
-                        value={[String(bannedFilter ?? 'all')]}
-                        disabled={initialLoading}
-                        onUpdate={([value]) => {
-                            changeBannedFilter(value);
-                        }}
-                        width="max"
-                        hideFilter
-                    />
-                </div>
+                {type !== PROXY_TYPE.CYPRESS && 
+                    <div className={block('filter')}>
+                        <Select
+                            label="Banned:"
+                            items={[
+                                {value: 'all', title: 'All'},
+                                {value: 'true', title: 'True'},
+                                {value: 'false', title: 'False'},
+                            ]}
+                            value={[String(bannedFilter ?? 'all')]}
+                            disabled={initialLoading}
+                            onUpdate={([value]) => {
+                                changeBannedFilter(value);
+                            }}
+                            width="max"
+                            hideFilter
+                        />
+                    </div>
+                }
             </div>
         );
     }
