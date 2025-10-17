@@ -35,8 +35,7 @@ export function SchedulingToolbar() {
                 {node: <SchedulingContentMode />},
                 {
                     node: <PoolsSuggest className={block('filter')} />,
-                    growable: true,
-                    shrinkable: true,
+                    width: 200,
                 },
                 {node: <SchedulingAbc />},
                 {node: <SchedulingExpandAll />},
