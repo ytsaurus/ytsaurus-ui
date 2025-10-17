@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {Flex} from '@gravity-ui/uikit';
+import {Flex, FlexProps} from '@gravity-ui/uikit';
 import {Table, TableProps, useRowVirtualizer} from '@gravity-ui/table';
 
 import './DataTableGravity.scss';
@@ -38,9 +38,13 @@ export function DataTableGravity<TData, TScrollElement extends Element | Window>
     );
 }
 
-export function TableCell({children}: {children: React.ReactNode}) {
+export function TableCell({
+    children,
+    ...rest
+}: {children: React.ReactNode} & Pick<Omit<FlexProps, 'style'>, 'justifyContent'>) {
     return (
         <Flex
+            {...rest}
             style={{height: '100%', width: '100%', overflow: 'hidden'}}
             alignItems="center"
             wrap="nowrap"
