@@ -503,7 +503,7 @@ export function abortCurrentQuery(): ThunkAction<any, RootState, any, SetQueryAc
                 errorTitle: 'Failed to abort query',
             });
             dispatch(loadQuery(currentQuery?.id, {dontReplaceQueryText: true}));
-            dispatch(requestQueriesList());
+            dispatch(requestQueriesList({refresh: true}));
         }
     };
 }
@@ -591,5 +591,5 @@ export const toggleShareQuery =
             type: UPDATE_ACO_QUERY,
             data: {access_control_objects: aco},
         });
-        dispatch(requestQueriesList());
+        dispatch(requestQueriesList({refresh: true}));
     };

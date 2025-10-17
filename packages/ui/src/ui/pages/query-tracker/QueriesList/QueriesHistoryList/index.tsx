@@ -43,7 +43,7 @@ function QueriesHistoryListUpdater() {
     const dispatch = useDispatch();
 
     const updateFn = React.useCallback(() => {
-        dispatch(requestQueriesList());
+        dispatch(requestQueriesList({refresh: true}));
     }, [dispatch]);
 
     useUpdater(updateFn, {timeout: 5000});
