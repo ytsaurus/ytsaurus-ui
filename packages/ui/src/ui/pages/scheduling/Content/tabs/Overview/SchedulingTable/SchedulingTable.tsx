@@ -315,7 +315,7 @@ function useSchedulingTableColumns() {
                 ),
                 cell: ({row: {original: item}}) => {
                     return (
-                        <TableCell>
+                        <TableCell justifyContent="center">
                             <FairShareUsage item={item} />
                         </TableCell>
                     );
