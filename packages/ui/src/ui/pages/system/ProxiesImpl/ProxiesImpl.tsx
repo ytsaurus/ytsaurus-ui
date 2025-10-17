@@ -17,7 +17,7 @@ export function ProxiesImpl({
     overview,
     makeUrl,
 }: {
-    name: 'HTTP Proxies' | 'RPC Proxies';
+    name: 'HTTP Proxies' | 'RPC Proxies' | 'Cypress Proxies';
     roleGroups: Array<RoleGroupInfo>;
     collapsed: boolean;
     onToggleCollapsed: () => void;

@@ -136,6 +136,7 @@ export const enum YTApiId {
     systemProxies = 'systemProxies',
     systemResources = 'systemResources',
     systemRpcProxies = 'systemRpcProxies',
+    systemCypressProxies = 'systemCypressProxies',
     systemSchedulers = 'systemSchedulers',
     systemSchedulersState = 'systemSchedulersState',
 
