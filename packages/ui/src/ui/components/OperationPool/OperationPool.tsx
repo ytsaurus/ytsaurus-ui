@@ -85,7 +85,13 @@ export function OperationPool({
     return (
         <li className={block(null, className)} key={pool.tree}>
             <span className="elements-ellipsis">
-                <Link url={url} title={title} theme={theme} routed={routed}>
+                <Link
+                    url={url}
+                    title={title}
+                    theme={theme}
+                    routed={routed}
+                    routedPreserveLocation={routed}
+                >
                     {!hideIcon && <Icon awesome="tasks" size={14} />}
                     <span className={block('pool-link', {'no-icon': hideIcon})}>{pool.pool}</span>
                 </Link>
