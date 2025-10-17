@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 
 import {getGlobalLoadState} from '../../../store/selectors/global';
 import {getSettingNewDashboardPage} from '../../../store/selectors/dashboard2/dashboard';

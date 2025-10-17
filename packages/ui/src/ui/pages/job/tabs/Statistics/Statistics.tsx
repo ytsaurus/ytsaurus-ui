@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
 import {getRawStatistic} from '../../../../store/selectors/job/statistics';

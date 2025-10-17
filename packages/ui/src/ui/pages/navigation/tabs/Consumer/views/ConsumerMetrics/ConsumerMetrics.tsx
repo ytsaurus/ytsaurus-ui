@@ -3,7 +3,7 @@ import React from 'react';
 import {getCluster} from '../../../../../../store/selectors/global';
 import {getPath} from '../../../../../../store/selectors/navigation';
 import {getTargetQueue} from '../../../../../../store/selectors/navigation/tabs/consumer';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../../../store/redux-hooks';
 import ErrorBoundary from '../../../../../../components/ErrorBoundary/ErrorBoundary';
 import {NoContent} from '../../../../../../components/NoContent/NoContent';
 import UIFactory from '../../../../../../UIFactory';

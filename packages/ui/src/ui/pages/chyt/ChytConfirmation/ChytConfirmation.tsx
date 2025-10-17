@@ -9,7 +9,7 @@ import format from '../../../common/hammer/format';
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import {Bold} from '../../../components/Text/Text';
 import {YTError} from '../../../types';
-import {useThunkDispatch} from '../../../store/thunkDispatch';
+import {useDispatch} from '../../../store/redux-hooks';
 import {chytListAction} from '../../../store/actions/chyt/list';
 
 import './ChytConfirmation.scss';
@@ -54,7 +54,7 @@ function ChytSimpleConfirmation({
     onClose,
     onConfirm,
 }: ConfirmationProps & {action: 'remove' | 'stop'}) {
-    const dispatch = useThunkDispatch();
+    const dispatch = useDispatch();
 
     const [error, setError] = React.useState<YTError | undefined>();
 
@@ -121,7 +121,7 @@ function ChytStartConfirmation({
     pool,
     onConfirm,
 }: Omit<ConfirmationProps, 'action'>) {
-    const dispatch = useThunkDispatch();
+    const dispatch = useDispatch();
     const [error, setError] = React.useState();
 
     return (

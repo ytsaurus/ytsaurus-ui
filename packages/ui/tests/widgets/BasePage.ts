@@ -76,7 +76,7 @@ export class BasePage extends HasPage {
         await this.page.evaluate(
             (data) => {
                 const elements = document.querySelectorAll<HTMLSpanElement>(
-                    '.yt-u-breadcrumbs .string',
+                    '.g-breadcrumbs .string',
                 );
                 const element = Array.from(elements).find((i) => i.innerText === data.title);
                 if (element) {
@@ -88,24 +88,26 @@ export class BasePage extends HasPage {
     }
 
     async replaceBreadcrumbsTestDir() {
-        await this.page.waitForSelector('.g-breadcrumbs2');
+        await this.page.waitForSelector('.g-breadcrumbs');
         await this.replaceBreadcrumbsByTitle(E2E_DIR_NAME, 'e2e.1970-01-01.00:00:00.xxxxxxxxxxx');
     }
 
     async replaceBreadrumbsLastItem() {
         await replaceInnerHtml(this.page, {
-            '.g-breadcrumbs2 .g-breadcrumbs2__item:last-child a': 'localhost:XXXXX',
+            '.g-breadcrumbs .g-breadcrumbs__item:last-child a': 'localhost:XXXXX',
         });
     }
 
     async replaceACLInputPath() {
-        await this.page.waitForSelector('.g-dialog');
-        await this.page.evaluate(() => {
-            const input: HTMLInputElement | null = document.querySelector('input#path');
-            if (input) {
-                input.value = 'e2e.1970-01-01.00:00:00.xxxxxxxxxxx';
+        await this.page.locator('.g-dialog').waitFor({state: 'visible'});
+        await this.page.locator(`input#path[value="//tmp/${E2E_DIR_NAME}"]`).waitFor({state: 'visible'});
+        await this.page.locator('input#path').evaluate((el: HTMLInputElement, value: string) => {
+            if (el) {
+                el.value = value;
+                el.dispatchEvent(new Event('input', {bubbles: true}));
+                el.dispatchEvent(new Event('change', {bubbles: true}));
             }
-        });
+        }, 'e2e.1970-01-01.00:00:00.xxxxxxxxxxx');
     }
 
     async waitForACL() {

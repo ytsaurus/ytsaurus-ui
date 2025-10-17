@@ -1,5 +1,5 @@
 import React, {forwardRef, useMemo} from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 
 import {ChartKitRef, YTChartKitLazy} from '../../../../components/YTChartKit';
 
@@ -28,7 +28,7 @@ export const BaseChart = forwardRef<ChartKitRef | null>(function BaseChartCompon
         return <EmptyPlaceholdersMessage />;
     }
 
-    return <YTChartKitLazy type="d3" data={widgetData} chartRef={ref} key={axisKey} />;
+    return <YTChartKitLazy type="gravity-charts" data={widgetData} chartRef={ref} key={axisKey} />;
 });
 
 export const Chart = React.memo(BaseChart);

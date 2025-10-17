@@ -4,7 +4,7 @@ import {useCallback} from 'react';
 import {useQueryACO} from '../useQueryACO';
 import './QueryACOSelect.scss';
 import {selectIsMultipleAco} from '../../../../store/selectors/query-tracker/queryAco';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 import {hideSharedAco} from './hideSharedAco';
 
 export const QueryACOSelect: React.FunctionComponent<{}> = () => {

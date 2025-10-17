@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {batch, connect, useSelector} from 'react-redux';
+import {batch, connect} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 

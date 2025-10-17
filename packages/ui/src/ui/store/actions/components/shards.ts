@@ -8,13 +8,12 @@ import {
     SET_SHARD_NAME,
 } from '../../../constants/components/shards';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import type {AppThunkDispatch} from '../../../store/thunkDispatch';
-import type {ShardsAction} from '../../../store/reducers/components/shards';
+import type {AppDispatch} from '../../store.main';
 
 const requests = new CancelHelper();
 
 export function getShards() {
-    return (dispatch: AppThunkDispatch<ShardsAction>) => {
+    return (dispatch: AppDispatch) => {
         dispatch({type: GET_SHARDS.REQUEST});
 
         requests.removeAllRequests();
@@ -46,7 +45,7 @@ export function getShards() {
 }
 
 export function setShardName(id: string, name: string) {
-    return (dispatch: AppThunkDispatch<ShardsAction>) => {
+    return (dispatch: AppDispatch) => {
         dispatch({type: SET_SHARD_NAME.REQUEST});
 
         return yt.v3
@@ -79,7 +78,7 @@ export function closeNameEditor() {
 }
 
 export function abortAllRequests() {
-    return (dispatch: AppThunkDispatch<ShardsAction>) => {
+    return (dispatch: AppDispatch) => {
         requests.removeAllRequests();
         dispatch({type: GET_SHARDS.CANCELLED});
     };

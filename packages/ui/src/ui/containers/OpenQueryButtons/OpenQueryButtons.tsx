@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import {Button} from '@gravity-ui/uikit';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../store/redux-hooks';
 
 import Icon from '../../components/Icon/Icon';
 import {YQLKitButton} from '../YQLKitButton/YQLKitButton';
@@ -52,7 +52,7 @@ export function OpenQueryButtonsContent() {
         setPanelMode(undefined);
     }, [setPanelMode]);
 
-    const {openWidget, closeWidget, widgetContent} = useSidePanel(panelMode + '_widget', {
+    const {openWidget, closeWidget, widgetContent} = useSidePanel(panelMode + '_query_widget', {
         renderContent({visible}) {
             return panelMode === 'qt' ? (
                 <QueryWidgetLazy onClose={onClose} />

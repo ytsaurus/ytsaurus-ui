@@ -1,7 +1,5 @@
 import type {ThunkAction} from 'redux-thunk';
 
-import {Toaster} from '@gravity-ui/uikit';
-
 import {USE_CACHE} from '../../../../shared/constants/yt-api';
 
 import ypath from '../../../common/thor/ypath';
@@ -37,8 +35,8 @@ import {getCluster} from '../../../store/selectors/global';
 import type {RootState} from './../../../store/reducers';
 import type {OperationDetailActionType} from '../../reducers/operations/detail';
 import {JSONSerializer} from '../../../common/yt-api';
+import {toaster} from '../../../utils/toaster';
 
-const toaster = new Toaster();
 const operationDetailsRequests = new CancelHelper();
 
 function loadIntermediateResourceUsage(

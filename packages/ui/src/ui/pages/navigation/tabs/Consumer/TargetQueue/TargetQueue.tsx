@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 
 import {
     getConsumerRegisteredQueues,

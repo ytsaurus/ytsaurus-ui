@@ -11,8 +11,6 @@ import union_ from 'lodash/union';
 
 import {createSelector} from 'reselect';
 
-import {Toaster} from '@gravity-ui/uikit';
-
 import {UNAWARE} from '../../../../../constants';
 import {
     FlagState,
@@ -25,7 +23,7 @@ import {getMediumListNoCache} from '../../../../../store/selectors/thor';
 import type {ValueOf} from '../../../../../types';
 import {Node} from '../../../../reducers/components/nodes/nodes/node';
 import {isRangeFilterDefined} from '../../../../../utils/components/nodes/setup';
-
+import {toaster} from '../../../../../utils/toaster';
 import {RootState} from '../../../../reducers';
 
 export const getSetupFiltersRaw = (state: RootState) => state.components.nodes.setup;
@@ -51,7 +49,7 @@ export const getComponentNodesFilterStatePredicate = createSelector(
 
         if (excludes.size) {
             if (excludes.size !== state.length) {
-                new Toaster().add({
+                toaster.add({
                     name: 'component-nodes-excludes',
                     theme: 'danger',
                     autoHiding: false,

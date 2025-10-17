@@ -17,7 +17,6 @@ import {
     shouldUsePreserveState,
 } from '../../store/selectors/settings';
 import {rumLogError} from '../../rum/rum-counter';
-import {Toaster} from '@gravity-ui/uikit';
 import {RumWrapper, YTApiId} from '../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../rum/rum-measure-types';
 import {getBatchError, wrapApiPromiseByToaster} from '../../utils/utils';
@@ -32,6 +31,7 @@ import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
 import {updateTitle} from './global';
 import {reloadUserSettings, setSetting} from './settings';
 import {joinMenuItemsAction, splitMenuItemsAction, trackVisit} from './menu';
+import {toaster} from '../../utils/toaster';
 
 function handleUiConfigError(path: string, error: any, type?: string) {
     rumLogError(
@@ -45,12 +45,10 @@ function handleUiConfigError(path: string, error: any, type?: string) {
     );
 }
 
-const toast = new Toaster();
-
 export function prepareClusterUiConfig(uiConfig: BatchResultsItem, uiDevConfig: BatchResultsItem) {
     if (uiConfig.error && uiConfig.error.code !== yt.codes.NODE_DOES_NOT_EXIST) {
         handleUiConfigError('//sys/@ui_config', uiConfig.error);
-        toast.add({
+        toaster.add({
             name: 'get-ui_config',
             theme: 'danger',
             autoHiding: false,

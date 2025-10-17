@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Redirect, Route, Switch, useRouteMatch} from 'react-router';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 
 import {ChytCliquePageTab} from '../../../constants/chyt-page';
 import Tabs from '../../../components/Tabs/Tabs';

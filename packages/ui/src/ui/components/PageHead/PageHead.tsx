@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Helmet} from 'react-helmet';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../store/redux-hooks';
 import {RootState} from '../../store/reducers';
 import {getClusterAppearance} from '../../appearance';
 

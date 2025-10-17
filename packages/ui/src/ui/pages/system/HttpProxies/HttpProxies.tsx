@@ -9,7 +9,7 @@ import {getCluster} from '../../../store/selectors/global';
 import {getSettingsSystemHttpProxiesCollapsed} from '../../../store/selectors/settings/settings-ts';
 import {setSettingsSystemHttpProxiesCollapsed} from '../../../store/actions/settings/settings';
 import type {RootState} from '../../../store/reducers';
-import {useThunkDispatch} from '../../../store/thunkDispatch';
+import {useDispatch} from '../../../store/redux-hooks';
 import {useUpdater} from '../../../hooks/use-updater';
 
 import {MakeUrlParams} from '../ProxiesImpl/RoleGroup';
@@ -88,7 +88,7 @@ const mapDispatchToProps = {
 };
 
 function ProxiesUpdater() {
-    const dispatch = useThunkDispatch();
+    const dispatch = useDispatch();
 
     const updateFn = React.useMemo(() => {
         let allowUpdate = true;

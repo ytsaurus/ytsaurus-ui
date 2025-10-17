@@ -1,5 +1,7 @@
 import React from 'react';
-import {ConnectedProps, connect, useDispatch} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
+import {useDispatch} from '../../../../store/redux-hooks';
+
 import cn from 'bem-cn-lite';
 
 import CollapsibleSection from '../../../../components/CollapsibleSection/CollapsibleSection';

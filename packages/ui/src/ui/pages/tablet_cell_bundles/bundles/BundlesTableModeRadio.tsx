@@ -1,5 +1,5 @@
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 
 import CustomRadioButton from '../../../components/RadioButton/RadioButton';
 import type {setTabletsPartial} from '../../../store/actions/tablet_cell_bundles';

@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useState} from 'react';
 import block from 'bem-cn-lite';
 import {Loader} from '@gravity-ui/uikit';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {isQueryExecuted, isQueryLoading} from '../../../store/selectors/query-tracker/query';
 import FlexSplitPane from '../../../components/FlexSplitPane/FlexSplitPane';
 import './QueryEditor.scss';

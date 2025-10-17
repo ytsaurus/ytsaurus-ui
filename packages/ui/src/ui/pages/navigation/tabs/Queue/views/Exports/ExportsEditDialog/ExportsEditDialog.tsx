@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../../../../store/redux-hooks';
 import {Text} from '@gravity-ui/uikit';
 
 import {useFetchBatchQuery} from '../../../../../../../store/api/yt';

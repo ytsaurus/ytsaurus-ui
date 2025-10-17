@@ -4,7 +4,9 @@ import './common/hammer';
 
 import React from 'react';
 import {createRoot} from 'react-dom/client';
-import {Provider, useSelector} from 'react-redux';
+import {Provider} from 'react-redux';
+import {useSelector} from './store/redux-hooks';
+
 import {Router} from 'react-router';
 
 import {getSettingsData} from './store/selectors/settings/settings-base';

@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import * as monaco from 'monaco-editor';
 import {useMonaco} from '../hooks/useMonaco';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {
     getQueryDraftCluster,
     getQueryEditorErrors,

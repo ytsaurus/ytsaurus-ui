@@ -1,6 +1,5 @@
 import React from 'react';
 import {ConnectedProps, connect} from 'react-redux';
-import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 
 import {setAccountAbc} from '../../../../../../utils/accounts/editor';
@@ -34,13 +33,12 @@ export function WithHeader({
     );
 }
 
-WithHeader.propTypes = {
-    header: PropTypes.string.isRequired,
-    children: PropTypes.object.isRequired,
-};
-
 interface ParentProps {
     account: AccountParsedData;
+    loadEditedAccount: (name: string) => void;
+    setAccountParent: (name: string, parentName: string) => void;
+    cluster: string;
+    isDeveloper: boolean;
 }
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -48,16 +46,6 @@ type ReduxProps = ConnectedProps<typeof connector>;
 type Props = ParentProps & ReduxProps;
 
 class GeneralContent extends React.Component<Props> {
-    static propTypes = {
-        //from parent
-        account: PropTypes.object.isRequired,
-        //from connect
-        loadEditedAccount: PropTypes.func.isRequired,
-        setAccountParent: PropTypes.func.isRequired,
-        cluster: PropTypes.string.isRequired,
-        isDeveloper: PropTypes.bool,
-    };
-
     state = {
         abcId: undefined,
         abcTitle: '',

@@ -1,5 +1,5 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 import {Button, Flex, Select, Text} from '@gravity-ui/uikit';
 import {Plus} from '@gravity-ui/icons';
 

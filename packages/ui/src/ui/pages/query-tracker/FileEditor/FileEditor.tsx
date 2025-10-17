@@ -2,7 +2,7 @@ import React, {FC, useRef} from 'react';
 import {setFileEditor} from '../../../store/reducers/query-tracker/queryFilesFormSlice';
 import {selectFileEditorConfig} from '../../../store/selectors/query-tracker/queryFilesForm';
 import {changeQueryFile} from '../../../store/actions/query-tracker/queryFilesForm';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import FileIcon from '@gravity-ui/icons/svgs/file.svg';
 import XmarkIcon from '@gravity-ui/icons/svgs/xmark.svg';
 import SquareIcon from '@gravity-ui/icons/svgs/square.svg';

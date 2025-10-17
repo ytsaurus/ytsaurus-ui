@@ -1,5 +1,5 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../../store/redux-hooks';
 import {Flex} from '@gravity-ui/uikit';
 
 import {getOperationStatisticsDescription} from '../../../../../store/selectors/global/supported-features';

@@ -7,7 +7,7 @@ import {DATE_FORMAT} from '../odin-constants';
 import {updateIfChanged} from '../../../utils/utils';
 import {LocationParameters} from '../../../store/location';
 import {FIX_MY_TYPE} from '../../../types';
-import {OdinRootState} from '.';
+import {RootState} from '../../../store/reducers';
 
 export const odinParams: LocationParameters = {
     metric: {
@@ -66,7 +66,7 @@ export const odinOverviewParams = {
     },
 };
 
-export function getOdinPreparedState(state: OdinRootState, {query}: {query: OdinRootState}) {
+export function getOdinPreparedState(state: RootState, {query}: {query: RootState}) {
     return produce(state, (draft) => {
         const dst = draft.odin.details;
         const src = query.odin.details;
@@ -79,10 +79,7 @@ export function getOdinPreparedState(state: OdinRootState, {query}: {query: Odin
     });
 }
 
-export function getOdinOverviewPreparedState(
-    state: OdinRootState,
-    {query}: {query: OdinRootState},
-) {
+export function getOdinOverviewPreparedState(state: RootState, {query}: {query: RootState}) {
     return produce(state, (draft) => {
         updateIfChanged(draft.odin.overview, 'timeFromFilter', query.odin.overview.timeFromFilter);
         updateIfChanged(draft.odin.details, 'odinCluster', query.odin.details.odinCluster);

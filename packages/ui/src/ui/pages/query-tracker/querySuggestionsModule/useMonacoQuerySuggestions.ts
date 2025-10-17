@@ -1,6 +1,6 @@
 import {useCallback, useEffect} from 'react';
 import * as monaco from 'monaco-editor';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 import {getQuerySuggestionsEnabled} from '../../../store/selectors/settings/settings-queries';
 import UIFactory from '../../../UIFactory';
 

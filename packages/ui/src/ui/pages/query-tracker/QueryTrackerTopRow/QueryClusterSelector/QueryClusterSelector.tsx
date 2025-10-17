@@ -1,5 +1,5 @@
 import React, {FC, ReactElement} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {Select} from '@gravity-ui/uikit';
 
 import {ClusterConfig} from '../../../../../shared/yt-types';

@@ -105,12 +105,11 @@ export const EventPopup = <
             ></div>
             <Popup
                 key={eventData.event.id}
-                anchorRef={anchorRef}
+                anchorElement={anchorRef.current}
                 open={showPopup}
-                onMouseLeave={handleEventLeave}
-                onOutsideClick={handleEventLeave}
+                onOpenChange={handleEventLeave}
             >
-                {content(eventData.event)}
+                <div onMouseLeave={handleEventLeave}>{content(eventData.event)}</div>
             </Popup>
         </>
     );

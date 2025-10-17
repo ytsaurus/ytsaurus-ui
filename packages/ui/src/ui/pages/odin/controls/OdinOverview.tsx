@@ -18,7 +18,7 @@ import hammer from '../../../common/hammer';
 
 import {dateTime} from '@gravity-ui/date-utils';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {
     ODIN_OVERVIEW_TIME_RANGE,
     odinOverviewRemovePreset,
@@ -404,11 +404,7 @@ function OdinOverviewTooltip(props: TooltipState & {from: Date}) {
         return null;
     }
     return (
-        <Popup
-            anchorRef={{current: anchor as HTMLElement}}
-            placement={['top', 'top-end', 'top-start', 'bottom', 'bottom-end', 'bottom-start']}
-            open={true}
-        >
+        <Popup anchorElement={anchor as HTMLElement} placement="bottom" open={true}>
             <div>
                 <div>
                     {dateByIndex(from, metricDataIndex)}

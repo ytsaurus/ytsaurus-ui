@@ -9,7 +9,7 @@ import {PopupWithCloseButton} from '../QuerySettingsButton/PopupWithCloseButton'
 import {ActionsWithAddForm} from './ActionsWithAddForm';
 import {FilesTabs} from './FilesTabs';
 import {FileValidator, ValidatorError} from './FileItemForm';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {
     QueryFileAddForm,
     QueryFileEditor,

@@ -1,5 +1,5 @@
 import {useContext, useEffect, useMemo} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {QueriesPoolingContext} from '../../hooks/QueriesPooling/context';
 
 import {getCurrentQuery} from '../../../../store/selectors/query-tracker/query';

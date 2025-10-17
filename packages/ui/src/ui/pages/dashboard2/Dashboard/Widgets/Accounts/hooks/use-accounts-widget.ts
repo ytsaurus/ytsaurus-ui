@@ -1,4 +1,4 @@
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../../../store/redux-hooks';
 
 import {RootState} from '../../../../../../store/reducers';
 import {useAccountsQuery} from '../../../../../../store/api/dashboard2/accounts';

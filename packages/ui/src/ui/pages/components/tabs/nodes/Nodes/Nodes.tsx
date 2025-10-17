@@ -1,5 +1,6 @@
 import React from 'react';
-import {ConnectedProps, connect, useDispatch, useSelector} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import hammer from '../../../../../common/hammer';
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';

@@ -381,11 +381,15 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
         return (
             <Popup
                 className={b('popup')}
-                placement={['bottom-start', 'top-start']}
-                onClose={this.hideSuggestions}
-                anchorRef={this.input}
+                placement="bottom-start"
+                onOpenChange={(open) => {
+                    if (!open) {
+                        this.hideSuggestions();
+                    }
+                }}
+                anchorElement={this.input.current}
                 open={isVisible}
-                offset={[0, 0]}
+                offset={{mainAxis: 0, crossAxis: 0}}
             >
                 <div className={b('items')} style={{width}} ref={this.suggestionsList}>
                     {content}

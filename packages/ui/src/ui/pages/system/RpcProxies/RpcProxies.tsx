@@ -9,7 +9,7 @@ import {loadSystemRPCProxies} from '../../../store/actions/system/rpc-proxies';
 import {getCluster} from '../../../store/selectors/global';
 import {RootState} from '../../../store/reducers';
 import {getSettingsSystemRpcProxiesCollapsed} from '../../../store/selectors/settings/settings-ts';
-import {useThunkDispatch} from '../../../store/thunkDispatch';
+import {useDispatch} from '../../../store/redux-hooks';
 import {MakeUrlParams} from '../ProxiesImpl/RoleGroup';
 import {ProxiesImpl} from '../ProxiesImpl/ProxiesImpl';
 
@@ -81,7 +81,7 @@ const mapDispatchToProps = {
 };
 
 function RpcProxiesUpdater() {
-    const dispatch = useThunkDispatch();
+    const dispatch = useDispatch();
 
     const updateFn = React.useMemo(() => {
         let allowUpdate = true;

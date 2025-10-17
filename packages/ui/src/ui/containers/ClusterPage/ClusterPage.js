@@ -1,6 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import {Redirect, Route, Switch, useLocation} from 'react-router';
-import {connect, useSelector} from 'react-redux';
+import {connect} from 'react-redux';
+import {useSelector} from '../../store/redux-hooks';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
@@ -292,6 +293,7 @@ class ClusterPage extends Component {
                     onUnSplit={this.handleSplit}
                     getInitialSizes={this.getInitialSizes}
                     id={SPLIT_PANE_ID}
+                    forceSplit={splitScreen.isSplit}
                 >
                     <div
                         ref={this.contentPaneRef}
@@ -313,8 +315,6 @@ class ClusterPage extends Component {
                             </HandleMaintenance>
                         </ScrollableElementContext.Provider>
                     </div>
-
-                    {null}
                 </FlexSplitPane>
             </Fragment>
         );

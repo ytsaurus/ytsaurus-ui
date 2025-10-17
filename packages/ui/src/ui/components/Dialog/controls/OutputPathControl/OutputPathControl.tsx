@@ -4,7 +4,6 @@ import {TextInput} from '@gravity-ui/uikit';
 import './OutputPathControl.scss';
 import cn from 'bem-cn-lite';
 import {AddOptionForm} from './AddOptionForm';
-import {useDispatch, useSelector} from 'react-redux';
 import {getNavigationTableOutputPathAttributes} from '../../../../store/selectors/navigation/modals/table-merge-sort-modal';
 import {loadStorageAttributes} from '../../../../store/actions/navigation/modals/table-merge-sort-modal';
 import {
@@ -20,6 +19,7 @@ import {
     getCompressionCodecs,
     getErasureCodecs,
 } from '../../../../store/selectors/global/supported-features';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {ErasureCodecAttribute} from './ErasureCodecAttribute';
 
 const block = cn('output-path-control');

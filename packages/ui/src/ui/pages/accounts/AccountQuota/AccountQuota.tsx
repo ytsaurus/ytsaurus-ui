@@ -11,7 +11,7 @@ import {SelectSingle} from '../../../components/Select/Select';
 import ypath from '../../../common/thor/ypath';
 
 import {getActiveAccount} from '../../../store/selectors/accounts/accounts';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 
 import {
     ALLOW_CHILDREN_LIMIT_OVERCOMMIT,

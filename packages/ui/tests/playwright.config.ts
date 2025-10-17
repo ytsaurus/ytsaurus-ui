@@ -39,7 +39,6 @@ export default defineConfig({
         testIdAttribute: 'data-qa',
 
         screenshot: 'on',
-        trace: 'on-first-retry',
         video: 'retain-on-failure',
     },
     expect: {

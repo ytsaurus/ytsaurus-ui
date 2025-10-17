@@ -2,7 +2,7 @@ import React from 'react';
 import map_ from 'lodash/map';
 import cn from 'bem-cn-lite';
 
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../../../store/redux-hooks';
 import {getJobsErrors} from '../../../../../../store/selectors/operations/jobs';
 import {YTErrorBlock} from '../../../../../../components/Error/Error';
 

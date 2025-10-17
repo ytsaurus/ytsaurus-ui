@@ -1,5 +1,5 @@
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
 import {Button, DropdownMenu, DropdownMenuItem} from '@gravity-ui/uikit';
@@ -148,11 +148,14 @@ export function ChytCliqueActions({
                 <React.Fragment>
                     {sqlButton}
                     <DropdownMenu
-                        switcher={
-                            <Button view={color === 'secondary' ? 'flat-secondary' : 'flat'}>
+                        renderSwitcher={(props) => (
+                            <Button
+                                {...props}
+                                view={color === 'secondary' ? 'flat-secondary' : 'flat'}
+                            >
                                 <Icon awesome="ellipsis-h" />
                             </Button>
-                        }
+                        )}
                         items={menuItems}
                     />
                 </React.Fragment>

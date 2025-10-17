@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import {connect, useSelector} from 'react-redux';
+import {connect} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 import {setActiveAccount} from '../../../store/actions/accounts/accounts';
 
 import Operations from '../../../pages/operations/Operations/Operations';

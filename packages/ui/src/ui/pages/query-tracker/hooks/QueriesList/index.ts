@@ -1,4 +1,4 @@
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {setSettingByKey} from '../../../../store/actions/settings';
 import {getSettingQueryTrackerQueriesListSidebarVisibilityMode} from '../../../../store/selectors/query-tracker/settings';
 

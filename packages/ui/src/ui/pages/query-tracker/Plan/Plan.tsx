@@ -16,7 +16,7 @@ import Timeline from './Timeline/Timeline';
 
 import './Plan.scss';
 import {QueriesGraphLazy} from './GraphEditor';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 import {getSettingsQueryTrackerNewGraphType} from '../../../store/selectors/settings/settings-ts';
 
 const block = cn('plan');

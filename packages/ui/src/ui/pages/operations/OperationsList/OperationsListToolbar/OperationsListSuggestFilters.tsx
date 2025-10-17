@@ -1,5 +1,6 @@
 import React from 'react';
-import {connect, useDispatch, useSelector} from 'react-redux';
+import {connect} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 
 import OperationSuggestFilter from '../../../../pages/operations/OperationSuggestFilter/OperationSuggestFilter';
 import {updateFilter} from '../../../../store/actions/operations/list';

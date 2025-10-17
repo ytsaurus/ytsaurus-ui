@@ -13,8 +13,7 @@ import {
     manageTokensGetList,
     manageTokensRevokeToken,
 } from '../../../store/actions/manage-tokens';
-import {useThunkDispatch} from '../../../store/thunkDispatch';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {AuthenticationToken, manageTokensSelector} from '../../../store/selectors/manage-tokens';
 import {getCurrentUserName} from '../../../store/selectors/global';
 import Icon from '../../../components/Icon/Icon';
@@ -36,7 +35,7 @@ const AuthenticationGenerateTokenFormSection: FC<{onClose: () => void}> = ({onCl
     type FormData = {description: string};
     const {getPassword} = useManageTokensPasswordModalContext();
     const user = useSelector(getCurrentUserName);
-    const dispatch = useThunkDispatch();
+    const dispatch = useDispatch();
     const [error, setError] = useState<YTError>();
     const [token, setToken] = useState<string>();
 
@@ -176,7 +175,7 @@ const AuthenticationTokensSection: FC<{
     passwordSha256?: string;
 }> = ({onSuccessRemove, onClickGenerateTokenButton, passwordSha256}) => {
     const {getPassword} = useManageTokensPasswordModalContext();
-    const dispatch = useThunkDispatch();
+    const dispatch = useDispatch();
     const tokens = useSelector(manageTokensSelector);
     const user = useSelector(getCurrentUserName);
 

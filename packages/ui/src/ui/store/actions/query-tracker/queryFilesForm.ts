@@ -6,9 +6,7 @@ import {getQueryFiles} from '../../selectors/query-tracker/query';
 import {updateQueryDraft} from './query';
 import {setDeletedFiles} from '../../reducers/query-tracker/queryFilesFormSlice';
 import {selectDeletedFiles} from '../../selectors/query-tracker/queryFilesForm';
-import {Toaster} from '@gravity-ui/uikit';
-
-const toaster = new Toaster();
+import {toaster} from '../../../utils/toaster';
 
 const findObjectByTitle = <T>(arr: T[], callback: (i: T) => boolean): [T, T[]] | null => {
     const index = arr.findIndex(callback);

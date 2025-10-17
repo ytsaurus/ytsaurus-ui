@@ -1,6 +1,11 @@
+@import '../../styles/mixins.scss';
+@import '../../styles/redefinitions/common/Breadcrumbs.scss';
 @import '../../styles/fonts.scss';
 
 .tablet-top-row-content {
+    &__breadcrumbs {
+        @include top-row-breadcrumbs();
+    }
 
     &__editable {
         @include font-body2;

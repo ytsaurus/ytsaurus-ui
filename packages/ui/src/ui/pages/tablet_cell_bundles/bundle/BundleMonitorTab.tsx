@@ -1,5 +1,5 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 import {getCluster} from '../../../store/selectors/global';
 import ypath from '../../../common/thor/ypath';
 import {getTabletsActiveBundleData} from '../../../store/selectors/tablet_cell_bundles';

@@ -6,7 +6,7 @@ import {Page} from '../../../constants';
 import Button from '../../../components/Button/Button';
 
 import {getCurrentClusterConfig} from '../../../store/selectors/global';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../store/redux-hooks';
 import {ClusterConfig} from '../../../../shared/yt-types';
 import UIFactory from '../../../UIFactory';
 

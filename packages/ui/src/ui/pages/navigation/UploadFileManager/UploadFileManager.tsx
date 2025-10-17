@@ -1,7 +1,7 @@
 import * as React from 'react';
 import cn from 'bem-cn-lite';
 
-import {Button, Toaster} from '@gravity-ui/uikit';
+import {Button} from '@gravity-ui/uikit';
 
 import Link from '../../../components/Link/Link';
 import Modal from '../../../components/Modal/Modal';
@@ -11,6 +11,8 @@ import FileUploadProgress from '../../../components/FileUploadProgress/FileUploa
 
 import UploadFileManagerFileSettingsForm from './UploadFileManagerFileSettingsForm';
 import {useUploadFileManager} from '../../../containers/UploadFileManager';
+
+import {toaster} from '../../../utils/toaster';
 
 import './UploadFileManager.scss';
 
@@ -24,8 +26,6 @@ export const UploadFileManager: React.FC<UploadFileManagerProps> = (props) => {
     const uploadSettings = useUploadFileManager({
         onSuccess: ({filePath}) => {
             props.handleClose();
-
-            const toaster = new Toaster();
 
             toaster.add({
                 name: 'upload_file_manager',

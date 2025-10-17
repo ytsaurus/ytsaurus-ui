@@ -1,4 +1,3 @@
-import {Toaster} from '@gravity-ui/uikit';
 import {ThunkAction} from 'redux-thunk';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
@@ -9,9 +8,9 @@ import CancelHelper from '../../../utils/cancel-helper';
 import * as JOB from '../../../constants/job';
 import {YTError} from '../../../types';
 import {Action} from 'redux';
+import {toaster} from '../../../utils/toaster';
 
 const requests = new CancelHelper();
-const toaster = new Toaster();
 
 interface LoadJobCompetitionRequestAction {
     type: typeof JOB.LOAD_JOB_COMPETITORS_REQUEST;

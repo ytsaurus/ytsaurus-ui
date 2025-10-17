@@ -10,7 +10,7 @@ import reduce_ from 'lodash/reduce';
 import set_ from 'lodash/set';
 
 import {TypedKeys, YTError} from '../types';
-import {Link, ProgressProps, Toaster} from '@gravity-ui/uikit';
+import {Link, ProgressProps} from '@gravity-ui/uikit';
 import {
     ThemeThreshold,
     computeProgress,
@@ -28,6 +28,7 @@ import {UIBatchError} from './errors/ui-error';
 import {isCancelled} from './cancel-helper';
 import {YTErrors} from '../rum/constants';
 import {getWindowStore} from '../store/window-store';
+import {toaster} from './toaster';
 
 export function getBatchError<T = unknown>(
     batchResults: Array<BatchResultsItem<T>>,
@@ -171,8 +172,6 @@ export type BatchResultsOrT<BatchType> = BatchType extends 'v3'
     : BatchType extends 'v4'
       ? {results: Array<BatchResultsItem>}
       : unknown;
-
-const toaster = new Toaster();
 
 export function wrapBatchPromise<T>(p: Promise<T>, errorTitle: string): Promise<T> {
     return p.then((res) => {

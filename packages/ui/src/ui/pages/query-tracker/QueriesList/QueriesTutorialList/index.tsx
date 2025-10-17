@@ -5,7 +5,7 @@ import {QueryItem} from '../../../../types/query-tracker/api';
 import {useQueryNavigation} from '../../hooks/Query';
 import tutorialIcon from '../../../../assets/img/svg/learn.svg';
 import './index.scss';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 import {
     getQueriesList,
     isQueriesListLoading,

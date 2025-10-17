@@ -14,7 +14,7 @@ import {getClusterAppearance} from '../../appearance';
 import ClusterIcon from '../../components/ClusterIcon/ClusterIcon';
 import {CLUSTER_GROUPS, CLUSTER_GROUPS_ORDER, DEFAULT_GROUP} from '../../constants/cluster-menu';
 
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../store/redux-hooks';
 import {getRecentClustersInfo} from '../../store/selectors/slideoutMenu';
 import {isRecentClustersFirst} from '../../store/selectors/settings';
 import {useClusterColorClassName} from './ClusterColor';

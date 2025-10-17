@@ -1,12 +1,15 @@
 import React, {useEffect, useState} from 'react';
+import b from 'bem-cn-lite';
 import moment, {Moment} from 'moment';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../../../store/redux-hooks';
 
 import format from '../../../../../../common/hammer/format';
 import MetaTable from '../../../../../../components/MetaTable/MetaTable';
 
 import {RootState} from '../../../../../../store/reducers';
 import {getDownloadTableInfo} from '../../../../../../store/selectors/navigation/content/download-manager';
+
+const block = b('download-short-info');
 
 interface Props {
     id: string;
@@ -31,6 +34,7 @@ export function DownloadShortInfo({id, filename}: Props) {
 
     return (
         <MetaTable
+            className={block()}
             items={[
                 {
                     key: 'Filename',

@@ -2,7 +2,7 @@ import React, {FC, useCallback, useMemo} from 'react';
 import {VcsListItem} from './VcsListItem';
 import cn from 'bem-cn-lite';
 import './VcsList.scss';
-import {useDispatch} from 'react-redux';
+import {useDispatch} from '../../../../store/redux-hooks';
 import {removeToken} from '../../../../store/actions/query-tracker/vcs';
 import {VcsConfig} from '../../../../../shared/vcs';
 

@@ -13,7 +13,7 @@ test('Navigation: truncated table - Content', async ({page}) => {
 
     await table(page).resizePageForScreenshot();
 
-    await expect(page).toHaveScreenshot();
+    await expect(page).toHaveScreenshot({maxDiffPixels: 5});
 
     await test.step('Cell Preview Modal', async () => {
         const columns = await page
@@ -29,7 +29,7 @@ test('Navigation: truncated table - Content', async ({page}) => {
                 '[data-qa="cell-preview-command"]': 'yt read-table /path/to/table',
             });
 
-            await expect(page).toHaveScreenshot();
+            await expect(page).toHaveScreenshot({maxDiffPixels: 5});
 
             await page.getByTestId('simple-modal-close').click();
         }

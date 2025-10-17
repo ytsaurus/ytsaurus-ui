@@ -1,6 +1,7 @@
 import {match as MatchType, Redirect, Route, Switch} from 'react-router';
 import React, {Fragment} from 'react';
-import {ConnectedProps, connect, useDispatch, useSelector} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import hammer from '../../../common/hammer';
 import unipika from '../../../common/thor/unipika';
 import cn from 'bem-cn-lite';

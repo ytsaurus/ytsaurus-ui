@@ -1,5 +1,5 @@
 import {useCallback} from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 import {useHistory} from 'react-router';
 import {createQueryUrl} from '../../utils/navigation';
 import {QueryItem} from '../../../../types/query-tracker/api';

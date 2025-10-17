@@ -1,5 +1,5 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../store/redux-hooks';
 import {IconProps} from '@gravity-ui/uikit';
 
 import compact_ from 'lodash/compact';

@@ -1,7 +1,6 @@
 import Cookies from 'js-cookie';
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import {Toaster} from '@gravity-ui/uikit';
 
 import {getWindowStore} from '../store/window-store';
 import {getClusterConfig, getXsrfCookieName} from '../utils';
@@ -10,6 +9,7 @@ import {YT} from '../config/yt-config';
 import {getClusterProxy} from '../store/selectors/global';
 import {getConfigData} from '../config/ui-settings';
 import unipika from '../common/thor/unipika';
+import {toaster} from '../utils/toaster';
 
 export function initYTApiClusterParams(cluster: string) {
     const {clusters} = YT;
@@ -52,7 +52,7 @@ function onError(error: any) {
         const content = `Your CSRF-token '${getToken()}' has expired. Please reaload the page`;
         console.log(content);
 
-        new Toaster().add({
+        toaster.add({
             name: 'xsrf-expired',
             theme: 'info',
             autoHiding: false,

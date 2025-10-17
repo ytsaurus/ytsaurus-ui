@@ -8,13 +8,13 @@ import moment from 'moment';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
 import {makeDirectDownloadPath} from '../../../../../utils/navigation';
-import {ClusterConfig, ListJobsItem} from '../../../../../../shared/yt-types';
+import {ClusterConfig, ListJobsItem, OperationType} from '../../../../../../shared/yt-types';
 import {YTError} from '../../../../../types';
-import {RawJob} from '../../../../../types/operations/job';
+import {JobState, JobStatistics, RawJob, RawJobEvent} from '../../../../../types/operations/job';
 
 type JobsData = ListJobsItem | RawJob;
 
-export class Job {
+export class Job implements RawJob {
     static USER_ERROR_CODE = 10000;
     static USER_ERROR = 'user_error';
     static SYSTEM_ERROR = 'system_error';
@@ -45,6 +45,31 @@ export class Job {
     finish_time?: string;
     finishTime?: string;
     inputPaths?: ListJobsItem['input_paths'];
+
+    address!: string;
+    archive_state!: string;
+    has_competitors!: boolean;
+    has_spec!: boolean;
+    job_competition_id!: string;
+    operation_id!: string;
+    state!: JobState;
+    type!: OperationType;
+    events!: RawJobEvent[];
+    exec_attributes!: object;
+    statistics!: JobStatistics;
+    monitoring_descriptor?: string | undefined;
+    pool_tree?: string | undefined;
+    is_stale?: boolean | undefined;
+    archive_features?: {has_trace?: boolean} | undefined;
+    interruption_info?:
+        | {
+              interruption_reason: string;
+              interruption_timeout?: number;
+              preempted_for?: {allocation_id?: string; operation_id?: string};
+              preemption_reason?: string;
+          }
+        | undefined;
+    error?: YTError | undefined;
 
     duration?: number;
 

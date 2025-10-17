@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {compose} from 'redux';
-import {connect, useDispatch} from 'react-redux';
+import {connect} from 'react-redux';
+import {useDispatch} from '../../../store/redux-hooks';
 import hammer from '../../../common/hammer';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';

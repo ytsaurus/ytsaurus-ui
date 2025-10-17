@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {Table, useTable} from '@gravity-ui/table';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 import {getQueryTokens} from '../../../../store/selectors/settings/settings-queries';
 import {QueryTokenRemoveButton} from './QueryTokenRemoveButton';
 import type {ColumnDef} from '@gravity-ui/table/tanstack';

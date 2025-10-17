@@ -1,5 +1,6 @@
 import React, {ComponentType, useEffect} from 'react';
-import {ConnectedProps, connect, useSelector} from 'react-redux';
+import {ConnectedProps, connect} from 'react-redux';
+import {useSelector} from '../../../../store/redux-hooks';
 
 import {Alerts} from '../../../../components/Alerts/Alerts';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';

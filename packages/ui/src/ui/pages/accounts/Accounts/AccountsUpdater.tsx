@@ -1,5 +1,5 @@
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 
 import {fetchAccounts} from '../../../store/actions/accounts/accounts';
 import {getAccountsEditCounter} from '../../../store/selectors/accounts/accounts-ts';

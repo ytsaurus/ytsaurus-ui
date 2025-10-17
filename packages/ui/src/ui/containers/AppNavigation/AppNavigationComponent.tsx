@@ -3,7 +3,7 @@ import {useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
 import {FooterItem, PageLayoutAside} from '@gravity-ui/navigation';
 import {Menu} from '@gravity-ui/uikit';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../store/redux-hooks';
 
 import Logo from '../../assets/img/svg/appLogo.svg';
 import GearIcon from '@gravity-ui/icons/svgs/gear.svg';

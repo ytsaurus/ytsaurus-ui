@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import unipika from '../../../../common/thor/unipika';
 import cn from 'bem-cn-lite';
 import {Loader} from '@gravity-ui/uikit';

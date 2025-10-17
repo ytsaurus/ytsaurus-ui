@@ -108,7 +108,6 @@ export function setBunndleAttributes(
     attrs: Partial<EditBundleParams>,
 ): ChaosCellBundleEditorThunkAction {
     return (dispatch) => {
-        console.log(attrs);
         const {attributes, options} = attrs;
 
         const bundlePath = `//sys/chaos_cell_bundles/${bundle}`;
