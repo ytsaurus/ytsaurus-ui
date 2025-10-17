@@ -14,7 +14,7 @@ export const defaultDashboardItems = {
             x: 0,
             y: 0,
         },
-        data: {name: 'Navigation'},
+        data: {name: 'Navigation', show_navigation_input: true},
     },
     operations: {
         layout: {
