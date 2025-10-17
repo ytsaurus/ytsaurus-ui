@@ -81,12 +81,13 @@ function getHttpProxies() {
 }
 
 function getCypressProxies() {
-    return (dispatch, getState) => {
-        const cluster = getCluster(getState());
-        return ytApiV3Id.list(YTApiId.componentGetCypressProxies, {
+    return (dispatch) => {
+        return ytApiV3Id
+            .list(YTApiId.componentGetCypressProxies, {
                 path: '//sys/cypress_proxies',
                 attributes: ['state', 'version', 'host'],
-            }).then((cypressData) => {
+            })
+            .then((cypressData) => {
                 const proxies = map_(cypressData, (proxyData) => {
                     const name = ypath.getValue(proxyData);
                     const state = ypath.getAttributes(proxyData)?.state || format.NO_VALUE;
@@ -99,7 +100,8 @@ function getCypressProxies() {
                     type: GET_PROXIES.SUCCESS,
                     data: {proxies},
                 });
-            }).catch((error) => {
+            })
+            .catch((error) => {
                 dispatch({
                     type: GET_PROXIES.FAILURE,
                     data: {error},

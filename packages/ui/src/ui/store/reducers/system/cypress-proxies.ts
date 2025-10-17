@@ -1,4 +1,4 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 
 import {RootState} from '../../../store/reducers';
 import {RoleGroupInfo, SystemNodeCounters} from './proxies';
@@ -28,7 +28,10 @@ const cypressProxiesSlice = createSlice({
         fetchCypressProxiesRequest: (state) => {
             state.fetching = true;
         },
-        fetchCypressProxiesSuccess: (state, action: PayloadAction<{roleGroups: Array<RoleGroupInfo>; counters: SystemNodeCounters}>) => {
+        fetchCypressProxiesSuccess: (
+            state,
+            action: PayloadAction<{roleGroups: Array<RoleGroupInfo>; counters: SystemNodeCounters}>,
+        ) => {
             state.fetching = false;
             state.loaded = true;
             state.roleGroups = action.payload.roleGroups;
@@ -49,18 +52,15 @@ const cypressProxiesSlice = createSlice({
     },
 });
 
-export const {
-    fetchCypressProxiesRequest,
-    fetchCypressProxiesSuccess,
-    fetchCypressProxiesFailure,
-} = cypressProxiesSlice.actions;
+export const {fetchCypressProxiesRequest, fetchCypressProxiesSuccess, fetchCypressProxiesFailure} =
+    cypressProxiesSlice.actions;
 
 export const {
-    getCypressProxiesFetching, 
-    getCypressProxiesLoaded, 
-    getCypressProxiesError, 
-    getCypressProxiesRoleGroups, 
-    getCypressProxiesCounters
+    getCypressProxiesFetching,
+    getCypressProxiesLoaded,
+    getCypressProxiesError,
+    getCypressProxiesRoleGroups,
+    getCypressProxiesCounters,
 } = cypressProxiesSlice.getSelectors((state: RootState) => state.system.cypressProxies);
 
 export default mergeStateOnClusterChange(initialState, {}, cypressProxiesSlice.reducer);

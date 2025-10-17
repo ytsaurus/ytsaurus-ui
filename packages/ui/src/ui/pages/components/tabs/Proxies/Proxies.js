@@ -270,19 +270,19 @@ export class Proxies extends Component {
 
                 {type !== PROXY_TYPE.CYPRESS && (
                     <div className={block('filter', {role: true})}>
-                    <Select
-                        items={roles}
-                        value={[roleFilter]}
-                        disabled={initialLoading}
-                        onUpdate={(vals) => changeRoleFilter(vals[0])}
-                        label="Role:"
-                        width="max"
-                        hideFilter
+                        <Select
+                            items={roles}
+                            value={[roleFilter]}
+                            disabled={initialLoading}
+                            onUpdate={(vals) => changeRoleFilter(vals[0])}
+                            label="Role:"
+                            width="max"
+                            hideFilter
                         />
                     </div>
                 )}
 
-                {type !== PROXY_TYPE.CYPRESS && 
+                {type !== PROXY_TYPE.CYPRESS && (
                     <div className={block('filter')}>
                         <Select
                             label="Banned:"
@@ -300,7 +300,7 @@ export class Proxies extends Component {
                             hideFilter
                         />
                     </div>
-                }
+                )}
             </div>
         );
     }
