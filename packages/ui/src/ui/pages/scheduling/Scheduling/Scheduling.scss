@@ -1,13 +1,4 @@
 .scheduling {
-    &__wrapper {
-        &_loading {
-            height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    }
-
     &__instruments,
     &__alerts {
         margin-bottom: 20px;

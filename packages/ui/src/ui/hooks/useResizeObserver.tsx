@@ -39,5 +39,5 @@ export function useElementSize({
 
     useResizeObserver({element, onResize: setEntries, debounceMs});
 
-    return entries?.[0];
+    return element ? entries?.[0] : undefined;
 }

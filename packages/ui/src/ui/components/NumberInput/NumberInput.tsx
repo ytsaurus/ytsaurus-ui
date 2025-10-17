@@ -6,7 +6,7 @@ import {Tooltip} from '../../components/Tooltip/Tooltip';
 
 import hammer from '../../common/hammer';
 
-import {parseBytes} from '../../utils';
+import {parseBytes} from '../../utils/parse/parse-bytes';
 import {KeyCode} from '../../constants';
 import './NumberInput.scss';
 

@@ -41,7 +41,6 @@ export type OperationPoolProps = {
     className?: string;
     cluster: string;
     allowDetachEditBtn?: boolean;
-    compact?: boolean;
     onEdit?: () => void;
     editBtnVisibility?: 'always' | 'by-hover';
     state?: 'completed' | 'failed' | 'aborted' | string;
@@ -53,6 +52,12 @@ export type OperationPoolProps = {
         weight?: number;
     };
     erased?: boolean;
+    hideIcon?: boolean;
+    hideTree?: boolean;
+
+    routed?: boolean;
+
+    theme?: 'primary';
 };
 
 export function OperationPool({
@@ -60,12 +65,15 @@ export function OperationPool({
     className,
     cluster,
     allowDetachEditBtn,
-    compact = false,
     onEdit,
     editBtnVisibility = 'by-hover',
     pool,
     state,
     erased,
+    hideIcon,
+    hideTree,
+    routed,
+    theme,
 }: OperationPoolProps) {
     const url =
         `/${cluster}/${Page.SCHEDULING}/${Tab.OVERVIEW}?pool=${pool.pool}&tree=${pool.tree}` +
@@ -77,12 +85,18 @@ export function OperationPool({
     return (
         <li className={block(null, className)} key={pool.tree}>
             <span className="elements-ellipsis">
-                <Link url={url} title={title}>
-                    {!compact && <Icon awesome="tasks" />}
-                    <span className={block('pool-link', {compact})}>{pool.pool}</span>
+                <Link
+                    url={url}
+                    title={title}
+                    theme={theme}
+                    routed={routed}
+                    routedPreserveLocation={routed}
+                >
+                    {!hideIcon && <Icon awesome="tasks" size={14} />}
+                    <span className={block('pool-link', {'no-icon': hideIcon})}>{pool.pool}</span>
                 </Link>
 
-                {!compact && (
+                {!hideTree && (
                     <span className={block('pool-tree')}>
                         [
                         <span
@@ -97,12 +111,12 @@ export function OperationPool({
                 )}
             </span>
 
-            {!compact && isEphemeral && (
+            {!hideIcon && isEphemeral && (
                 <Tooltip content="Ephemeral pool">
                     <Icon awesome="ghost" />
                 </Tooltip>
             )}
-            {!compact && isLightweight && <LightWeightIcon />}
+            {!hideIcon && isLightweight && <LightWeightIcon />}
             {isCorrectState &&
                 renderButton(onEdit, {
                     detachable: allowDetachEditBtn,

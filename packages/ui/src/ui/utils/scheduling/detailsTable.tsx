@@ -1,39 +1,39 @@
-import React from 'react';
+import moment from 'moment';
 
 import format from '../../common/hammer/format';
-import SchedulingOperationsLoader from '../../pages/scheduling/Content/tabs/ScherdulingOperataionsLoader/SchedulingOperationsLoader';
-import type {PoolInfo, PoolResourceType} from '../../store/selectors/scheduling/scheduling-pools';
+import type {PoolResourceType} from '../../store/selectors/scheduling/scheduling-pools';
+import {SchedulingRowData} from './pool-child';
 
 function prepareDetailedColumn(resource: PoolResourceType) {
     return {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.resources?.[resource]?.detailed;
         },
         sort: true,
-        caption: 'Abs fair share',
+        caption: 'Abs fair share' + ReadableResource(resource),
         align: 'right',
     };
 }
 
 function prepareLimitColumn(resource: PoolResourceType) {
     return {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.resources?.[resource]?.limit;
         },
         sort: true,
         sortWithUndefined: true,
-        caption: 'Limit',
+        caption: 'Limit' + ReadableResource(resource),
         align: 'right',
     };
 }
 
 function prepareMinResourcesColumn(resource: PoolResourceType) {
     return {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.resources?.[resource]?.min;
         },
         sort: true,
-        caption: 'Strong guar.',
+        caption: 'Strong guar.' + ReadableResource(resource),
         title: 'Strong guarantee',
         align: 'right',
     };
@@ -41,145 +41,138 @@ function prepareMinResourcesColumn(resource: PoolResourceType) {
 
 function prepareAbsGuaranteedColumn(resource: PoolResourceType) {
     return {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.resources?.[resource]?.guaranteed;
         },
         sort: true,
-        caption: 'Estimated guar.',
+        caption: 'Estimated guar.' + ReadableResource(resource),
         title: 'Estimated guarantee',
         align: 'right',
     };
 }
 
-function prepareRelGuaranteedColumn(resource: PoolResourceType) {
-    return {
-        get(item: PoolInfo, currentPool: PoolInfo) {
-            return (
-                prepareAbsGuaranteedColumn(resource).get(item)! /
-                prepareAbsGuaranteedColumn(resource).get(currentPool)!
-            );
-        },
-        sort: true,
-        caption: 'Rel guaranteed',
-        align: 'right',
-    };
+function ReadableResource(resource: PoolResourceType) {
+    switch (resource) {
+        case 'user_memory':
+            return ' RAM';
+        case 'user_slots':
+            return ' Slots';
+        default:
+            return ' ' + format.ReadableField(resource);
+    }
 }
 
 function prepareAbsDemandColumn(resource: PoolResourceType) {
     return {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.resources?.[resource]?.demand;
         },
         sort: true,
-        caption: 'Abs demand',
+        caption: 'Abs demand' + ReadableResource(resource),
         align: 'right',
     };
 }
 
 function prepareAbsUsageColumn(resource: PoolResourceType) {
     return {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.resources?.[resource]?.usage;
         },
         sort: true,
-        caption: 'Abs usage',
+        caption: 'Abs usage' + ReadableResource(resource),
         align: 'right',
-    };
-}
-
-function prepareRelUsageColumn(resource: PoolResourceType) {
-    return {
-        get(item: PoolInfo, currentPool: PoolInfo) {
-            return (
-                prepareAbsUsageColumn(resource).get(item)! /
-                prepareAbsUsageColumn(resource).get(currentPool)!
-            );
-        },
-        sort: true,
-        caption: 'Rel usage',
-        align: 'right',
-    };
-}
-
-function prepareGuaranteedUsageColumn(resource: PoolResourceType) {
-    return {
-        get(item: PoolInfo, currentPool: PoolInfo) {
-            return {
-                guaranteed: prepareRelGuaranteedColumn(resource).get(item, currentPool),
-                usage: prepareRelUsageColumn(resource).get(item, currentPool),
-            };
-        },
-        caption: 'Usage / Guaranteed',
-        align: 'center',
     };
 }
 
 export const childTableItems = {
     name: {
-        sort(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             return item.name;
         },
         caption: 'Pool / Operation',
-        captionTail: <SchedulingOperationsLoader />,
         align: 'left',
     },
+    type: {
+        sort(item: SchedulingRowData) {
+            const {type, integralType, operationType} = item;
+            return type === 'pool' ? integralType : operationType;
+        },
+        caption: 'Type',
+    },
+    user: {
+        sort(item: SchedulingRowData) {
+            return item.user;
+        },
+    },
     mode: {
-        sort(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             return item.mode;
         },
         align: 'center',
     },
+    guaranteed: {
+        sort(_item: SchedulingRowData) {
+            return undefined;
+        },
+    },
     FI: {
-        sort(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             return item.fifoIndex;
         },
         align: 'center',
     },
     weight: {
-        sort(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             return item.weight;
         },
         align: 'right',
     },
     min_share: {
-        sort(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             return item.minShareRatio;
         },
         align: 'right',
     },
     max_share: {
-        sort(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             return item.maxShareRatio;
         },
         align: 'right',
     },
     fair_share: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.fairShareRatio;
         },
         sort: true,
         align: 'right',
     },
     usage: {
-        get(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             return item.usageRatio;
         },
-        sort: true,
         align: 'right',
     },
     demand: {
-        get(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             return item.demandRatio;
         },
-        sort: true,
         align: 'right',
     },
     fair_share_usage: {
+        sort(item: SchedulingRowData) {
+            const {fairShareRatio, usageRatio} = item;
+            try {
+                const res = usageRatio! / fairShareRatio!;
+                return isNaN(res) ? undefined : res;
+            } catch {
+                return undefined;
+            }
+        },
         caption: 'Usage / Fair share',
         align: 'left',
     },
     dominant_resource: {
-        sort(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             return item.dominantResource;
         },
         caption: 'Dom. res.',
@@ -207,11 +200,6 @@ export const childTableItems = {
     abs_guaranteed_gpu: prepareAbsGuaranteedColumn('gpu'),
     abs_guaranteed_user_slots: prepareAbsGuaranteedColumn('user_slots'),
 
-    rel_guaranteed_cpu: prepareRelGuaranteedColumn('cpu'),
-    rel_guaranteed_memory: prepareRelGuaranteedColumn('user_memory'),
-    rel_guaranteed_gpu: prepareRelGuaranteedColumn('gpu'),
-    rel_guaranteed_user_slots: prepareRelGuaranteedColumn('user_slots'),
-
     abs_usage_cpu: prepareAbsUsageColumn('cpu'),
     abs_usage_memory: prepareAbsUsageColumn('user_memory'),
     abs_usage_gpu: prepareAbsUsageColumn('gpu'),
@@ -222,18 +210,8 @@ export const childTableItems = {
     abs_demand_gpu: prepareAbsDemandColumn('gpu'),
     abs_demand_user_slots: prepareAbsDemandColumn('user_slots'),
 
-    rel_usage_cpu: prepareRelUsageColumn('cpu'),
-    rel_usage_memory: prepareRelUsageColumn('user_memory'),
-    rel_usage_gpu: prepareRelUsageColumn('gpu'),
-    rel_usage_user_slots: prepareRelUsageColumn('user_slots'),
-
-    guaranteed_usage_cpu: prepareGuaranteedUsageColumn('cpu'),
-    guaranteed_usage_memory: prepareGuaranteedUsageColumn('user_memory'),
-    guaranteed_usage_gpu: prepareGuaranteedUsageColumn('gpu'),
-    guaranteed_usage_user_slots: prepareGuaranteedUsageColumn('user_slots'),
-
     operation_overview: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return [item.operationCount, item.runningOperationCount];
         },
         caption: 'Operations',
@@ -241,24 +219,24 @@ export const childTableItems = {
         align: 'right',
     },
     operation_count: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.operationCount;
         },
         sort: true,
         align: 'right',
     },
     max_operation_count: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.maxOperationCount;
         },
         sort: true,
         align: 'right',
     },
     operation_progress: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.operationCount! / item.maxOperationCount!;
         },
-        text(item: PoolInfo) {
+        text(item: SchedulingRowData) {
             return `${format.Number(item.operationCount)} / ${format.Number(
                 item.maxOperationCount,
             )}`;
@@ -268,24 +246,24 @@ export const childTableItems = {
         align: 'center',
     },
     running_operation_count: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.runningOperationCount;
         },
         sort: true,
         align: 'right',
     },
     max_running_operation_count: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.maxRunningOperationCount;
         },
         sort: true,
         align: 'right',
     },
     running_operation_progress: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.runningOperationCount! / item.maxRunningOperationCount!;
         },
-        text(item: PoolInfo) {
+        text(item: SchedulingRowData) {
             return `${format.Number(item.runningOperationCount)} / ${format.Number(
                 item.maxRunningOperationCount,
             )}`;
@@ -296,7 +274,7 @@ export const childTableItems = {
     },
 
     integral_type: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             const res = item.integralType;
             return res === 'none' ? undefined : res;
         },
@@ -306,31 +284,31 @@ export const childTableItems = {
         sortWithUndefined: true,
     },
     burst_cpu: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.burstCPU;
         },
-        sort(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             const res = item.burstCPU;
-            return isNaN(res) ? undefined : res;
+            return isNaN(res!) ? undefined : res;
         },
         caption: 'Burst CPU',
         sortWithUndefined: true,
         align: 'right',
     },
     flow_cpu: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.flowCPU;
         },
-        sort(item: PoolInfo) {
+        sort(item: SchedulingRowData) {
             const res = item.flowCPU;
-            return isNaN(res) ? undefined : res;
+            return isNaN(res!) ? undefined : res;
         },
         caption: 'Flow CPU',
         sortWithUndefined: true,
         align: 'right',
     },
     children_burst_cpu: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             const res = item.childrenBurstCPU;
             return !res ? undefined : res;
         },
@@ -340,7 +318,7 @@ export const childTableItems = {
         align: 'right',
     },
     children_flow_cpu: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             const res = item.childrenFlowCPU;
             return !res ? undefined : res;
         },
@@ -350,7 +328,7 @@ export const childTableItems = {
         align: 'right',
     },
     accumulated: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.accumulated;
         },
         caption: 'Acc ratio volume',
@@ -359,7 +337,7 @@ export const childTableItems = {
         align: 'right',
     },
     accumulated_cpu: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.accumulatedCpu;
         },
         caption: 'Acc CPU volume',
@@ -367,7 +345,7 @@ export const childTableItems = {
         align: 'right',
     },
     burst_duration: {
-        get(item: PoolInfo) {
+        get(item: SchedulingRowData) {
             return item.burstDuration;
         },
         caption: 'Est burst usage duration ',
@@ -379,5 +357,24 @@ export const childTableItems = {
     actions: {
         caption: '',
         align: 'left',
+        sort(_item: SchedulingRowData) {
+            return undefined;
+        },
     },
-};
+
+    duration: {
+        sort(item: SchedulingRowData) {
+            if (!item.startTime) {
+                return undefined;
+            }
+            const startTime = moment(item.startTime).valueOf();
+            return Date.now() - startTime;
+        },
+    },
+} as const;
+
+export type SchedulingColumn = keyof typeof childTableItems;
+
+export function isSchedulingColumnName(column: string): column is SchedulingColumn {
+    return childTableItems[column as unknown as SchedulingColumn] !== undefined;
+}

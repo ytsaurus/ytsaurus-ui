@@ -1,0 +1,111 @@
+import React from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import cn from 'bem-cn-lite';
+
+import {Flex, Text} from '@gravity-ui/uikit';
+
+import {setExpandedPools} from '../../../../../../store/actions/scheduling/expanded-pools';
+import {
+    getCurrentPool,
+    getCurrentTreeExpandedPools,
+} from '../../../../../../store/selectors/scheduling/scheduling';
+
+import {ExpandableCell} from '../../../../../../components/DataTableGravity/ExpandableCell';
+import Link from '../../../../../../components/Link/Link';
+import {OperationPool} from '../../../../../../components/OperationPool/OperationPool';
+import {Tooltip} from '../../../../../../components/Tooltip/Tooltip';
+import {getCluster} from '../../../../../../store/selectors/global/cluster';
+import {getTree} from '../../../../../../store/selectors/scheduling/scheduling-pools';
+
+import {PoolLeafNode} from '../../../../../../utils/scheduling/pool-child';
+
+import type {RowData} from './SchedulingTable';
+import {PoolAbc} from './PoolAbc';
+import './NameCell.scss';
+
+const block = cn('yt-scheduling-name-cell');
+
+export function NameCell({row}: {row: RowData}) {
+    const cluster = useSelector(getCluster);
+    const tree = useSelector(getTree);
+    const currentPool = useSelector(getCurrentPool);
+
+    const dispatch = useDispatch();
+    const expandedPools = useSelector(getCurrentTreeExpandedPools);
+
+    const handlePoolExpand = React.useCallback(
+        (poolName: string, value: boolean) => {
+            dispatch(setExpandedPools({[poolName]: value}));
+        },
+        [dispatch],
+    );
+
+    const {name, type, level = 0, incomplete} = row;
+    const isCurrentPool = currentPool?.name === name;
+    const {child_pool_count = 0, pool_operation_count = 0} = row.attributes;
+    const allowExpand = child_pool_count > 0 || pool_operation_count > 0;
+
+    const expanded = type === 'pool' ? Boolean(expandedPools?.get(name)) : undefined;
+
+    return (
+        <ExpandableCell
+            level={level}
+            expanded={expanded}
+            onExpand={
+                !isCurrentPool && allowExpand ? () => handlePoolExpand(name, !expanded) : undefined
+            }
+        >
+            {row.type === 'pool' ? (
+                <>
+                    <OperationPool
+                        hideTree
+                        routed
+                        className={block('pool')}
+                        cluster={cluster}
+                        pool={{
+                            pool: incomplete ? '' : row.name,
+                            tree,
+                            isLightweight: row.isEffectiveLightweight,
+                            isEphemeral: row.isEphemeral,
+                        }}
+                        theme="primary"
+                    />
+                    <span style={{flex: '1 1 0px'}} />
+                    <PoolAbc pool={row} />
+                </>
+            ) : (
+                renderOperationName({cluster, row})
+            )}
+        </ExpandableCell>
+    );
+}
+
+function renderOperationName({cluster, row}: {cluster: string; row: PoolLeafNode}) {
+    const {
+        id,
+        attributes: {title},
+        fifoIndex,
+    } = row;
+    const url = `/${cluster}/operations/${id}`;
+
+    const fifoIndexNode =
+        fifoIndex !== undefined ? (
+            <Tooltip content={`Fifo index: ${fifoIndex}`}>#{fifoIndex}&nbsp;</Tooltip>
+        ) : null;
+
+    const hasTitle = 0 > title?.length!;
+
+    return (
+        <Flex direction="column" style={{margin: '-4px 0'}} overflow="hidden">
+            <Text variant="inherit" ellipsis>
+                {fifoIndexNode}
+                <Link url={url}>{title ?? id}</Link>
+            </Text>
+            {!hasTitle && (
+                <Text variant="code-inline-1" color="secondary" ellipsis>
+                    {id}
+                </Text>
+            )}
+        </Flex>
+    );
+}

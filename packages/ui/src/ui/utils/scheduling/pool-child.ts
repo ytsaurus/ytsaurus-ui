@@ -2,13 +2,27 @@ import map_ from 'lodash/map';
 
 import ypath from '../../common/thor/ypath';
 import {ROOT_POOL_NAME} from '../../constants/scheduling';
-import {appendInnerErrors} from '../errors';
+import {TreeNode} from '../../common/hammer/tree-list';
+import {TreeResources} from '../../store/reducers/scheduling/scheduling';
+import {OperationInfo, PoolInfo} from '../../store/selectors/scheduling/scheduling-pools';
 
-const RESOURCE_LIMIT_MAPPER = {
+import {appendInnerErrors} from '../../utils/errors';
+
+const RESOURCE_LIMIT_MAPPER: Partial<
+    Record<keyof Required<PoolData<'pool'>>['resources'], 'memory'>
+> = {
     user_memory: 'memory',
 };
 
-function preparePoolChildResource(data, type, treeResources, resource) {
+function preparePoolChildResource<T extends 'pool' | 'operation'>(
+    data: PoolOrOperation<T>,
+    _type: T,
+    treeResources: TreeResources,
+    resource: keyof Required<PoolData<'pool'>>['resources'],
+) {
+    if (!data.resources) {
+        return;
+    }
     const attributes = data.attributes;
 
     if (data.name === ROOT_POOL_NAME) {
@@ -48,11 +62,97 @@ function preparePoolChildResource(data, type, treeResources, resource) {
             detailed,
         };
     }
-
-    return data;
 }
 
-export function updatePoolChild(data, cypressData, type, treeResources) {
+export type PoolData<T extends 'pool' | 'operation'> = {
+    type: T;
+    pool?: string;
+    cypressAttributes?: unknown;
+    mode?: 'fair_share' | 'fifo';
+    pool_operation_count?: number;
+    incomplete?: boolean;
+    operationCount?: number;
+    maxOperationCount?: number;
+    maxOperationCountEdited?: number;
+
+    runningOperationCount?: number;
+    maxRunningOperationCount?: number;
+    maxRunningOperationCountEdited?: number;
+
+    id?: string;
+    starvation_status?: string;
+    weight?: number;
+    weightEdited?: number;
+    minShareRatio?: number;
+    maxShareRatio?: number;
+    fairShareRatio?: number;
+    fifoIndex?: number;
+    usageRatio?: number;
+    demandRatio?: number;
+    isEphemeral?: boolean;
+    isEffectiveLightweight?: boolean;
+
+    integralType?: string;
+    burstCPU?: number;
+    flowCPU?: number;
+    flowGPU?: number;
+
+    accumulated?: number;
+    accumulatedCpu?: number;
+    burstDuration?: number;
+
+    fifoSortParams?: Array<'start_time' | 'weight' | 'pending_job_count'>;
+
+    abc?: unknown;
+    forbidImmediateOperations?: boolean;
+    createEphemeralSubpools?: boolean;
+
+    dominantResource?: 'cpu' | 'gpu';
+
+    resources?: Partial<Record<'cpu' | 'gpu' | 'user_memory' | 'user_slots', PoolResources>>;
+
+    operationType?: string;
+    user?: string;
+    startTime?: string;
+
+    childrenFlowCPU?: number;
+    childrenBurstCPU?: number;
+};
+
+export type PoolResources = {
+    min?: number;
+    guaranteed?: number;
+    usage?: number;
+    demand?: number;
+    limit?: number;
+    detailed?: number;
+};
+
+export type PoolTreeNode = TreeNode<
+    Partial<PoolInfo>,
+    Partial<OperationInfo>,
+    PoolData<'pool'>,
+    PoolData<'operation'>
+>;
+
+export type PoolLeafNode = PoolTreeNode['leaves'][number];
+
+export type SchedulingRowData = PoolTreeNode | PoolLeafNode;
+
+function isPoolItem(item: PoolTreeNode | PoolLeafNode): item is PoolTreeNode {
+    return item.type === 'pool';
+}
+
+export type PoolOrOperation<T extends 'pool' | 'operation'> = T extends 'pool'
+    ? PoolTreeNode
+    : PoolLeafNode;
+
+export function updatePoolChild<T extends 'pool' | 'operation'>(
+    data: PoolOrOperation<T>,
+    cypressData: unknown,
+    type: T,
+    treeResources: TreeResources,
+): PoolOrOperation<T> {
     try {
         const attributes = data.attributes;
         const cypressAttributes = ypath.getAttributes(cypressData);
@@ -60,7 +160,7 @@ export function updatePoolChild(data, cypressData, type, treeResources) {
         data.cypressAttributes = cypressAttributes;
         data.type = type;
 
-        if (data.type === 'pool') {
+        if (isPoolItem(data)) {
             if (typeof attributes === 'undefined' && data.parent) {
                 console.error(
                     'Pool "%s" without attributes inited by "%s"',
@@ -72,7 +172,13 @@ export function updatePoolChild(data, cypressData, type, treeResources) {
             data.mode = ypath.getValue(attributes, '/mode');
 
             data.leaves = map_(data.leaves, (leaf) => {
-                return updatePoolChild(leaf, {}, 'operation', treeResources);
+                const res = updatePoolChild(
+                    Object.assign(leaf, {pool: data.name}),
+                    {},
+                    'operation',
+                    treeResources,
+                );
+                return res;
             });
 
             const child_pool_count = ypath.getNumber(attributes, '/child_pool_count');
@@ -85,6 +191,7 @@ export function updatePoolChild(data, cypressData, type, treeResources) {
                         attributes: {},
                         leaves: [],
                         incomplete: true,
+                        children: [],
                     });
                 }
             }
@@ -95,18 +202,25 @@ export function updatePoolChild(data, cypressData, type, treeResources) {
                     '/pool_operation_count',
                     NaN,
                 );
-                if (data.pool_operation_count > 0) {
+                if (data.pool_operation_count! > 0) {
                     const emptyOp = updatePoolChild(
-                        {attributes: {}},
+                        {
+                            attributes: {},
+                            isLeafNode: true,
+                            name: '',
+                            type: 'operation',
+                            pool: data.name,
+                        },
                         {},
                         'operation',
                         treeResources,
                     );
                     data.leaves = [];
-                    for (let i = 0; i < data.pool_operation_count; ++i) {
+                    for (let i = 0; i < data.pool_operation_count!; ++i) {
                         data.leaves.push({
                             ...emptyOp,
                             name: `##fake_operation_${data.name}_${i}`,
+                            pool: data.name,
                         });
                     }
                 }
@@ -128,6 +242,12 @@ export function updatePoolChild(data, cypressData, type, treeResources) {
                 cypressAttributes,
                 '/max_running_operation_count',
             );
+        }
+
+        if (type === 'operation') {
+            data.operationType = ypath.getValue(attributes, '/type');
+            data.user = ypath.getValue(attributes, '/user');
+            data.startTime = ypath.getValue(attributes, '/start_time');
         }
 
         data.id = data.name;
