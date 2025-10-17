@@ -26,7 +26,7 @@ export const EditQueryACOModal: FC<Props> = ({query_id}) => {
     const handleSubmit = async (values: FormValues) => {
         try {
             await changeCurrentQueryACO({aco: values.aco, query_id});
-            await dispatch(requestQueriesList());
+            await dispatch(requestQueriesList({refresh: true}));
         } catch (err) {
             setError(err as Error);
             throw err;

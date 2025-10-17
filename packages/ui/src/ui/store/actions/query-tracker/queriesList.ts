@@ -21,6 +21,7 @@ import {
     setLoading,
     updateListState,
 } from '../../reducers/query-tracker/queryListSlice';
+import {QueryItem} from '../../../types/query-tracker/api';
 
 type AsyncAction = ThunkAction<any, RootState, any, any>;
 
@@ -37,7 +38,7 @@ export function requestQueriesList(params?: {refresh?: boolean}): AsyncAction {
                 dispatch(
                     loadQueriesList({
                         params: getQueriesListFilterParams(state),
-                        cursor: getQueriesListCursorParams(state),
+                        cursor: params?.refresh ? undefined : getQueriesListCursorParams(state),
                         limit: QUERIES_LIST_LIMIT,
                     }),
                 ),
@@ -48,16 +49,35 @@ export function requestQueriesList(params?: {refresh?: boolean}): AsyncAction {
                 },
             );
 
-            const rawItems = params?.refresh ? result.queries : [...list, ...result.queries];
-            const items = [...new Map(rawItems.map((item) => [item.id, item])).values()];
-
-            dispatch(
-                updateListState({
-                    items,
-                    hasMore: result.incomplete,
-                    timestamp: params?.refresh ? undefined : result.timestamp,
-                }),
-            );
+            let items: QueryItem[];
+            if (params?.refresh) {
+                items = result.queries;
+                dispatch(
+                    updateListState({
+                        items,
+                        hasMore: result.incomplete,
+                        timestamp: result.timestamp,
+                        cursor: {direction: QueriesHistoryCursorDirection.PAST},
+                    }),
+                );
+            } else {
+                const itemsMap = new Map<string, QueryItem>();
+                list.forEach((item) => itemsMap.set(item.id, item));
+                result.queries.forEach((item) => itemsMap.set(item.id, item));
+                items = Array.from(itemsMap.values());
+                items.sort((a, b) => {
+                    const timeA = new Date(a.start_time).getTime();
+                    const timeB = new Date(b.start_time).getTime();
+                    return timeB - timeA;
+                });
+                dispatch(
+                    updateListState({
+                        items,
+                        hasMore: result.incomplete,
+                        timestamp: result.timestamp,
+                    }),
+                );
+            }
         } finally {
             dispatch(setLoading(false));
         }

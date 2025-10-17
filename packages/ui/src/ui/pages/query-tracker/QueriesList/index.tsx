@@ -37,8 +37,8 @@ export function QueriesList() {
         if (!isInitializedRef.current) {
             isInitializedRef.current = true;
             dispatch(setFilter(DefaultQueriesListFilter[activeTab]));
+            dispatch(requestQueriesList({refresh: true}));
         }
-        dispatch(requestQueriesList());
     }, [dispatch, activeTab]);
 
     const handleTabSelect = (tabId: string) => {
