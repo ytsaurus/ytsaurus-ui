@@ -17,6 +17,7 @@ import {
     TableCell,
     useTable,
     tanstack,
+    TableSettings,
 } from '../../../../../../components/DataTableGravity';
 import {
     FormatNumber,
@@ -52,6 +53,7 @@ import {openPoolDeleteModal} from '../../../../../../store/actions/scheduling/sc
 import {getProgressTheme} from '../../../../../../utils/progress';
 import ShareUsageBar from '../../../../../../pages/scheduling/Content/controls/ShareUsageBar';
 import {useSettingsColumnSizes} from '../../../../../../hooks/settings/use-settings-column-sizes';
+import {useSettingsVisibleColumns} from '../../../../../../hooks/settings/use-settings-column-visibility';
 
 const block = cn('yt-scheduling-table');
 
@@ -62,7 +64,11 @@ export function SchedulingTable() {
         'global::scheduling::overviewColumnSizes',
     );
 
-    const columns = useSchedulingTableColumns();
+    const {onColumnVisibilityChange, onColumnOrderChange} = useSettingsVisibleColumns(
+        'global::scheduling::overviewColumns',
+    );
+
+    const {columns, columnVisibility, columnOrder} = useSchedulingTableColumns();
     const items = useSelector(getSchedulingOverviewTableItems);
 
     const table = useTable({
@@ -76,8 +82,12 @@ export function SchedulingTable() {
                 right: ['actions'],
             },
             columnSizing: columnSizes,
+            columnVisibility,
+            columnOrder,
         },
         onColumnSizingChange: setColumnSizes,
+        onColumnVisibilityChange,
+        onColumnOrderChange,
     });
 
     return <DataTableGravity table={table} virtualized rowHeight={49} />;
@@ -242,14 +252,8 @@ function useSchedulingTableColumns() {
                         </TableCell>
                     );
                 },
-            },
-            {
-                id: 'actions',
-                header: () => null,
-                size: 50,
-                cell: ({row: {original: item}}) => {
-                    return <RowActions item={item} />;
-                },
+                enableColumnFilter: false,
+                enableHiding: false,
             },
             {
                 id: 'weight',
@@ -530,7 +534,6 @@ function useSchedulingTableColumns() {
                 },
             },
             makeNumberColumn('abs_demand_cpu'),
-            makeNumberColumn('abs_demand_cpu'),
             makeNumberColumn('abs_demand_gpu'),
             makeNumberColumn('abs_demand_memory', 'Bytes'),
             makeNumberColumn('abs_demand_user_slots'),
@@ -565,20 +568,43 @@ function useSchedulingTableColumns() {
             makeNumberColumn('resource_limit_memory', 'Bytes'),
             makeNumberColumn('resource_limit_user_slots'),
             makeNumberColumn('running_operation_count'),
+            {
+                id: 'actions',
+                header: (ctx) => {
+                    return <SchedulingTableSettings table={ctx.table} />;
+                },
+                size: 50,
+                cell: ({row: {original: item}}) => {
+                    return <RowActions item={item} />;
+                },
+                enableColumnFilter: false,
+                enableHiding: false,
+                enableResizing: false,
+            },
         ];
 
-        const map = availableColumns.reduce((acc, item) => {
-            acc.set(item.id!, item);
-            return acc;
-        }, new Map<SchedulingColumn, (typeof availableColumns)[number]>());
+        return availableColumns;
+    }, []);
 
-        return compact_(
-            ['name' as const, ...visibleColumns, 'actions' as const].map((column) => {
-                return map.get(column);
-            }),
+    const {columnVisibility, columnOrder} = React.useMemo(() => {
+        const visible = new Set(visibleColumns);
+        const columnVisibility = columns.reduce(
+            (acc, {id}) => {
+                acc[id] = id === 'name' || id === 'actions' || visible.has(id);
+                return acc;
+            },
+            {} as Record<SchedulingColumn, boolean>,
         );
-    }, [visibleColumns]);
-    return columns;
+        const columnOrder = [
+            ...visibleColumns.filter((col) => columnVisibility[col]),
+            ...Object.keys(columnVisibility).filter(
+                (col) => !columnVisibility[col as SchedulingColumn],
+            ),
+        ];
+        return {columnVisibility, columnOrder};
+    }, [visibleColumns, columns]);
+
+    return {columns, columnVisibility, columnOrder};
 }
 
 function NameHeader() {
@@ -767,4 +793,10 @@ function SchedulingColumnHeader(props: ColumnHeaderProps<SchedulingColumn>) {
             }}
         />
     );
+}
+
+function SchedulingTableSettings<T extends tanstack.Table<any>>({table}: {table: T}) {
+    const mode = useSelector(getSchedulingContentMode);
+
+    return mode === 'custom' ? <TableSettings table={table} /> : null;
 }

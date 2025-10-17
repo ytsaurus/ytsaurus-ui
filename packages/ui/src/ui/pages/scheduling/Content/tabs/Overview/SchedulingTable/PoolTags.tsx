@@ -39,7 +39,11 @@ function PoolTags({pool}: {pool: PoolTreeNode | PoolLeafNode}) {
     ].filter(Boolean);
 
     if (content.length === 0) {
-        content.push(<YTText color="secondary">Fair share</YTText>);
+        content.push(
+            <YTText key="fair-share" color="secondary">
+                Fair share
+            </YTText>,
+        );
     }
 
     return content;

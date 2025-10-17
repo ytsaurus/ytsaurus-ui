@@ -1,8 +1,6 @@
-import React from 'react';
 import moment from 'moment';
 
 import format from '../../common/hammer/format';
-import SchedulingOperationsLoader from '../../pages/scheduling/Content/tabs/ScherdulingOperataionsLoader/SchedulingOperationsLoader';
 import type {PoolResourceType} from '../../store/selectors/scheduling/scheduling-pools';
 import {SchedulingRowData} from './pool-child';
 
@@ -12,7 +10,7 @@ function prepareDetailedColumn(resource: PoolResourceType) {
             return item.resources?.[resource]?.detailed;
         },
         sort: true,
-        caption: 'Abs fair share',
+        caption: 'Abs fair share' + ReadableResource(resource),
         align: 'right',
     };
 }
@@ -24,7 +22,7 @@ function prepareLimitColumn(resource: PoolResourceType) {
         },
         sort: true,
         sortWithUndefined: true,
-        caption: 'Limit',
+        caption: 'Limit' + ReadableResource(resource),
         align: 'right',
     };
 }
@@ -35,7 +33,7 @@ function prepareMinResourcesColumn(resource: PoolResourceType) {
             return item.resources?.[resource]?.min;
         },
         sort: true,
-        caption: 'Strong guar.',
+        caption: 'Strong guar.' + ReadableResource(resource),
         title: 'Strong guarantee',
         align: 'right',
     };
@@ -47,10 +45,21 @@ function prepareAbsGuaranteedColumn(resource: PoolResourceType) {
             return item.resources?.[resource]?.guaranteed;
         },
         sort: true,
-        caption: 'Estimated guar.',
+        caption: 'Estimated guar.' + ReadableResource(resource),
         title: 'Estimated guarantee',
         align: 'right',
     };
+}
+
+function ReadableResource(resource: PoolResourceType) {
+    switch (resource) {
+        case 'user_memory':
+            return ' RAM';
+        case 'user_slots':
+            return ' Slots';
+        default:
+            return ' ' + format.ReadableField(resource);
+    }
 }
 
 function prepareAbsDemandColumn(resource: PoolResourceType) {
@@ -59,7 +68,7 @@ function prepareAbsDemandColumn(resource: PoolResourceType) {
             return item.resources?.[resource]?.demand;
         },
         sort: true,
-        caption: 'Abs demand',
+        caption: 'Abs demand' + ReadableResource(resource),
         align: 'right',
     };
 }
@@ -70,7 +79,7 @@ function prepareAbsUsageColumn(resource: PoolResourceType) {
             return item.resources?.[resource]?.usage;
         },
         sort: true,
-        caption: 'Abs usage',
+        caption: 'Abs usage' + ReadableResource(resource),
         align: 'right',
     };
 }
@@ -87,7 +96,6 @@ export const childTableItems = {
             return item.name;
         },
         caption: 'Pool / Operation',
-        captionTail: <SchedulingOperationsLoader />,
         align: 'left',
     },
     type: {

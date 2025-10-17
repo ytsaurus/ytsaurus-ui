@@ -21,7 +21,7 @@ export const schedulingParams = {
 export const schedulingOverviewParams = {
     ...schedulingParams,
     sort: {
-        stateKey: 'scheduling.sortState',
+        stateKey: 'scheduling.scheduling.sortState',
         initialState: schedulingInitialState.sortState,
         options: {
             parse: parseSortStateArray,
