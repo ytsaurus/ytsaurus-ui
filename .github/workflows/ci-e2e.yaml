@@ -48,6 +48,7 @@ jobs:
           STABLE_IMAGE_NAME=$(echo $IMAGE_NAME | sed s/-nightly$//g)
 
           docker tag $IMAGE_NAME:local $STABLE_IMAGE_NAME:local
+          pip install ytsaurus-client==0.13.40
 
   run-local-cluster-sh:
     name: Install run_local_cluster.sh
