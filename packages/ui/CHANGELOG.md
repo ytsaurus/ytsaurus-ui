@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.5.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v2.4.0...ui-v2.5.0) (2025-10-17)
+
+
+### Features
+
+* **Settings:** stage setting is available for users [YTFRONT-5261] ([3ad3eda](https://github.com/ytsaurus/ytsaurus-ui/commit/3ad3eda4c444c0ba67eae3e303966de3f337c903))
+
+
+### Bug Fixes
+
+* **Queries:** graph when switching tabs [YTFRONT-5263] ([0d649e4](https://github.com/ytsaurus/ytsaurus-ui/commit/0d649e48d555cada46be9d4b62d7d1530dc584c1))
+
 ## [2.4.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v2.3.0...ui-v2.4.0) (2025-10-14)
 
 
