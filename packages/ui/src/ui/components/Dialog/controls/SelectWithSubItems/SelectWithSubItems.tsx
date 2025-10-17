@@ -16,6 +16,7 @@ export interface Props {
     labels?: Array<React.ReactNode>;
     labelClassName?: string;
     placeholder?: string;
+    disablePortal?: boolean;
 }
 
 export type SelectWithSubItemsProps = Props;
@@ -63,7 +64,7 @@ export default class SelectWithSubItems extends Component<Props> {
             return null;
         }
 
-        const {labelClassName} = this.props;
+        const {labelClassName, disablePortal = true} = this.props;
 
         return (
             <div className={block('control')}>
@@ -74,7 +75,7 @@ export default class SelectWithSubItems extends Component<Props> {
                     onUpdate={(vals) => onChange(vals[0])}
                     placeholder={placeholder}
                     width="max"
-                    disablePortal
+                    disablePortal={disablePortal}
                 />
             </div>
         );

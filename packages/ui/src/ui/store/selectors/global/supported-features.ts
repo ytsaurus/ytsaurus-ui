@@ -124,11 +124,6 @@ function prepareItemsSubitems(arr: Array<string> = []): CompressionCodecs {
         if (recommended) {
             const subItems2 = subItemsMap[key];
             if (subItems2) {
-                const first = subItems2[0];
-                const last = subItems2[subItems2.length - 1];
-                first.content = first.value + ' (faster)';
-                last.content = last.value + ' (slower & smaller)';
-
                 const item = subItems2.find(({value}) => value === recommended);
                 if (item) {
                     item.content = item.value + RECOMMENDED;
