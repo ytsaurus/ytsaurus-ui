@@ -357,3 +357,10 @@ export function schedulingSetSortState(sortState: Array<SortState>): SchedulingA
         data: {sortState},
     };
 }
+
+export function schedulingSetShowAbsResources(showAbsResources: boolean): SchedulingAction {
+    return {
+        type: SCHEDULING_DATA_PARTITION,
+        data: {showAbsResources},
+    };
+}
