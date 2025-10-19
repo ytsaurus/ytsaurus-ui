@@ -32,6 +32,7 @@ import Label from '../../../../../../components/Label/Label';
 import {
     getSchedulingContentMode,
     getSchedulingOverviewTableItems,
+    getSchedulingShowAbsResources,
     getSchedulingSortState,
 } from '../../../../../../store/selectors/scheduling/scheduling';
 import {getPoolPathsByName} from '../../../../../../store/actions/scheduling/expanded-pools';
@@ -335,6 +336,7 @@ function useSchedulingTableColumns() {
                                 title: 'RAM',
                                 allowUnordered: true,
                             },
+                            {column: 'fair_share' as const, title: 'Ratio', allowUnordered: true},
                         ]}
                     />
                 ),
@@ -361,6 +363,7 @@ function useSchedulingTableColumns() {
                                 title: 'RAM',
                                 allowUnordered: true,
                             },
+                            {column: 'fair_share' as const, title: 'Ratio', allowUnordered: true},
                         ]}
                     />
                 ),
@@ -395,6 +398,7 @@ function useSchedulingTableColumns() {
                                 title: 'RAM',
                                 allowUnordered: true,
                             },
+                            {column: 'fair_share' as const, title: 'Ratio', allowUnordered: true},
                         ]}
                     />
                 ),
@@ -625,7 +629,16 @@ type ResourceSummaryProps = {
 };
 
 function ResourceSummary({item, type}: ResourceSummaryProps) {
-    const {dominantResource = 'cpu'} = item;
+    const showAbsResources = useSelector(getSchedulingShowAbsResources);
+    const {fairShareRatio, dominantResource = 'cpu'} = item;
+
+    if (showAbsResources) {
+        return (
+            <TableCell>
+                <FormatNumber value={fairShareRatio} type="NumberSmart" />
+            </TableCell>
+        );
+    }
 
     const {cpu, gpu, user_memory} = item.resources ?? {};
 

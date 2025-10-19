@@ -77,6 +77,8 @@ export interface SchedulingPersistentState {
     };
     monitorChartStatus: {};
     operationRefId?: string;
+
+    showAbsResources: boolean;
 }
 
 const ephemeralState: SchedulingEphemeralState = {
@@ -116,6 +118,7 @@ const persistedState: SchedulingPersistentState = {
     },
     monitorChartStatus: {},
     sortState: [{column: 'name', order: 'asc'}],
+    showAbsResources: false,
 };
 
 export const initialState = {

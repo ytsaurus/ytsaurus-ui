@@ -28,6 +28,10 @@ export const schedulingOverviewParams = {
             serialize: serializeSortStateArray,
         },
     },
+    showAbs: {
+        stateKey: 'scheduling.scheduling.showAbsResources',
+        initialState: schedulingInitialState.showAbsResources,
+    },
     contentMode: {
         stateKey: 'scheduling.scheduling.contentMode',
         initialState: schedulingInitialState.contentMode,

@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
-import {RadioButton} from '@gravity-ui/uikit';
+import {RadioButton, Switch} from '@gravity-ui/uikit';
 
 import format from '../../../../../common/hammer/format';
 
@@ -10,11 +10,15 @@ import {DialogWrapper} from '../../../../../components/DialogWrapper/DialogWrapp
 import {ExpandButton} from '../../../../../components/ExpandButton';
 import {Toolbar} from '../../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {setLoadAllOperations} from '../../../../../store/actions/scheduling/expanded-pools';
-import {schedulingChangeContentMode} from '../../../../../store/actions/scheduling/scheduling';
+import {
+    schedulingChangeContentMode,
+    schedulingSetShowAbsResources,
+} from '../../../../../store/actions/scheduling/scheduling';
 import {schedulingSetAbcFilter} from '../../../../../store/actions/scheduling/scheduling-ts';
 import {
     SCHEDULING_CONTENT_MODES,
     getSchedulingContentMode,
+    getSchedulingShowAbsResources,
 } from '../../../../../store/selectors/scheduling/scheduling';
 import {getSchedulingAbcFilter} from '../../../../../store/selectors/scheduling/attributes-to-filter';
 import {getExpandedPoolsLoadAll} from '../../../../../store/selectors/scheduling/expanded-pools';
@@ -28,6 +32,8 @@ import './SchedulingToolbar.scss';
 const block = cn('yt-scheduling-toolbar');
 
 export function SchedulingToolbar() {
+    const mode = useSelector(getSchedulingContentMode);
+
     return (
         <Toolbar
             className={block()}
@@ -38,7 +44,7 @@ export function SchedulingToolbar() {
                     width: 200,
                 },
                 {node: <SchedulingAbc />},
-                {node: <SchedulingExpandAll />},
+                ...(mode === 'summary' ? [{node: <SchedulingShowAbsResources />}] : []),
             ]}
         />
     );
@@ -74,7 +80,7 @@ function SchedulingAbc() {
     });
 }
 
-function SchedulingExpandAll() {
+export function SchedulingExpandAll() {
     const [showConfirmation, setShowConfirmation] = React.useState(false);
 
     const dispatch = useDispatch();
@@ -116,5 +122,21 @@ function SchedulingExpandAll() {
             />
             {confirmation}
         </>
+    );
+}
+
+function SchedulingShowAbsResources() {
+    const dispatch = useDispatch();
+    const value = useSelector(getSchedulingShowAbsResources);
+
+    return (
+        <Switch
+            checked={value}
+            onUpdate={(v) => {
+                dispatch(schedulingSetShowAbsResources(v));
+            }}
+        >
+            Show abs. resources
+        </Switch>
     );
 }
