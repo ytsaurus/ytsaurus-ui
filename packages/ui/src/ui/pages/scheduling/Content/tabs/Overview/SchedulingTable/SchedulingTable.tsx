@@ -34,6 +34,7 @@ import {
     getSchedulingOverviewTableItems,
     getSchedulingShowAbsResources,
     getSchedulingSortState,
+    getSchedulingTreeMainResource,
 } from '../../../../../../store/selectors/scheduling/scheduling';
 import {getPoolPathsByName} from '../../../../../../store/actions/scheduling/expanded-pools';
 import {openAttributesModal} from '../../../../../../store/actions/modals/attributes-modal';
@@ -646,9 +647,11 @@ type ResourceSummaryProps = {
 
 function ResourceSummary({item, type}: ResourceSummaryProps) {
     const showAbsResources = useSelector(getSchedulingShowAbsResources);
-    const {fairShareRatio, dominantResource = 'cpu'} = item;
+    const dominantResource = useSelector(getSchedulingTreeMainResource) ?? 'CPU';
 
-    if (showAbsResources) {
+    const {fairShareRatio} = item;
+
+    if (!showAbsResources) {
         return (
             <TableCell>
                 <FormatNumber value={fairShareRatio} type="NumberSmart" />
@@ -665,8 +668,9 @@ function ResourceSummary({item, type}: ResourceSummaryProps) {
     const l1 = dominantResource === 'cpu' ? cpuContent : gpuContent;
     const l2 =
         dominantResource === 'cpu'
-            ? `${gpuContent}, ${memContent}`
-            : `${cpuContent}, ${memContent}`;
+            ? [gpu?.[type] && gpuContent, memContent].filter(Boolean).join(', ')
+            : [cpu?.[type] && cpuContent, memContent].filter(Boolean).join(', ');
+
     return (
         <Flex direction="column" style={{margin: '-8px 0'}} overflow="hidden">
             <Text variant="subheader-1" style={{fontWeight: 'var(--yt-font-weight-bold)'}} ellipsis>
