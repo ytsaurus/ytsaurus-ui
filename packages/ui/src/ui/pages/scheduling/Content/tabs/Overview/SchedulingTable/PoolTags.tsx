@@ -5,7 +5,6 @@ import capitalize_ from 'lodash/capitalize';
 
 import Label from '../../../../../../components/Label/Label';
 import type {PoolLeafNode, PoolTreeNode} from '../../../../../../utils/scheduling/pool-child';
-import {YTText} from '../../../../../../components/Text/Text';
 
 import './PoolTags.scss';
 
@@ -33,18 +32,7 @@ function PoolTags({pool}: {pool: PoolTreeNode | PoolLeafNode}) {
                 theme={'complementary'}
             />
         ),
-        pool.mode === 'fifo' && (
-            <Label key="fifo" className={block('tag')} text={'FIFO'} theme={'misc'} />
-        ),
     ].filter(Boolean);
-
-    if (content.length === 0) {
-        content.push(
-            <YTText key="fair-share" color="secondary">
-                Fair share
-            </YTText>,
-        );
-    }
 
     return content;
 }

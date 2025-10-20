@@ -21,6 +21,7 @@ import {PoolLeafNode} from '../../../../../../utils/scheduling/pool-child';
 
 import type {RowData} from './SchedulingTable';
 import './NameCell.scss';
+import PoolTags from './PoolTags';
 
 const block = cn('yt-scheduling-name-cell');
 
@@ -70,6 +71,7 @@ export function NameCell({row}: {row: RowData}) {
                         theme="primary"
                     />
                     <span style={{flex: '1 1 0px'}} />
+                    <PoolTags pool={row} />
                 </>
             ) : (
                 renderOperationName({cluster, row})
