@@ -122,6 +122,12 @@ export const childTableItems = {
         },
         align: 'center',
     },
+    view_mode: {
+        sort(item: SchedulingRowData) {
+            const {type, mode, operationType} = item;
+            return type === 'pool' ? mode : operationType;
+        },
+    },
     guaranteed: {
         sort(_item: SchedulingRowData) {
             return undefined;

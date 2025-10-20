@@ -100,7 +100,7 @@ type SchedulintTableMode = ReturnType<typeof getSchedulingContentMode>;
 const COLUMNS_BY_MODE: Record<SchedulintTableMode, Array<SchedulingColumn>> = {
     summary: [
         'weight',
-        'type',
+        'view_mode',
         'owner',
         'dominant_resource',
         'fair_share_usage',
@@ -278,20 +278,25 @@ function useSchedulingTableColumns() {
                 },
             },
             {
-                id: 'type',
-                header: () => <SchedulingColumnHeader column={'type'} allowUnordered />,
+                id: 'view_mode',
+                header: () => (
+                    <SchedulingColumnHeader column={'view_mode'} title="Mode" allowUnordered />
+                ),
                 cell: ({row: {original: item}}) => {
-                    const {type} = item;
+                    const {type, mode} = item;
                     return (
                         <TableCell>
                             {type === 'pool' ? (
-                                <PoolTags pool={item} />
+                                <Text variant="inherit" color="secondary">
+                                    {format.ReadableField(mode)}
+                                </Text>
                             ) : (
                                 <OperationType value={item.operationType} />
                             )}
                         </TableCell>
                     );
                 },
+                size: 100,
             },
             {
                 id: 'owner',
