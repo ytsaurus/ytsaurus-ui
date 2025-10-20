@@ -57,6 +57,7 @@ import ShareUsageBar from '../../../../../../pages/scheduling/Content/controls/S
 import {useSettingsColumnSizes} from '../../../../../../hooks/settings/use-settings-column-sizes';
 import {useSettingsVisibleColumns} from '../../../../../../hooks/settings/use-settings-column-visibility';
 import {PoolAbc} from './PoolAbc';
+import {formatTimeDuration} from '../../../../../../components/TimeDuration/TimeDuration';
 
 const block = cn('yt-scheduling-table');
 
@@ -234,10 +235,13 @@ function makeReadableFieldColumn(id: KeyByGetterReturnType<string | undefined>) 
                 </TableCell>
             );
         },
+        ...options,
     };
 }
 
 type SchedulingColumnDef = Omit<tanstack.ColumnDef<RowData>, 'id'> & {id: SchedulingColumn};
+
+const DurationMemo = React.memo(Duration);
 
 function useSchedulingTableColumns() {
     const visibleColumns = useSchedulingVisibleColumns();
@@ -472,7 +476,7 @@ function useSchedulingTableColumns() {
                     const {startTime} = item;
                     return (
                         <TableCell>
-                            <Duration start={startTime} />
+                            <DurationMemo start={startTime} />
                         </TableCell>
                     );
                 },
@@ -705,6 +709,13 @@ function EditedNumber({value, edited, type}: EditedNumberProps) {
 }
 
 function Duration({start}: {start?: string}) {
+    const [now, setNow] = React.useState(Date.now());
+
+    React.useEffect(() => {
+        const id = setInterval(() => setNow(Date.now()), 1000);
+        return () => clearInterval(id);
+    }, []);
+
     if (!start) {
         return null;
     }
@@ -712,6 +723,8 @@ function Duration({start}: {start?: string}) {
     const from = moment(start).valueOf();
     return (
         <Tooltip
+            className={block('duration')}
+            ellipsis
             content={
                 <MetaTable
                     items={[
@@ -723,7 +736,7 @@ function Duration({start}: {start?: string}) {
                 />
             }
         >
-            {format.TimeDuration(Date.now() - from)}
+            {formatTimeDuration(Math.round((now - from) / 1000) * 1000)}
         </Tooltip>
     );
 }
