@@ -59,7 +59,9 @@ export interface TreeResources {
     resource_usage?: unknown;
     resource_limits?: unknown;
     resource_distribution_info?: Record<string, unknown>;
-    config?: unknown;
+    config?: {
+        main_resource?: 'cpu' | 'gpu' | 'user_slots' | 'memory';
+    };
 }
 
 export interface SchedulingPersistentState {
