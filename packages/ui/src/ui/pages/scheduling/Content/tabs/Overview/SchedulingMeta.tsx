@@ -38,7 +38,7 @@ export function SchedulingMeta() {
             integralType,
             weight,
         } = pool ?? {};
-        const {cpu, gpu, user_memory, user_slots} = resources ?? {};
+        const {cpu, gpu, user_memory} = resources ?? {};
         const hasStrong = cpu?.min! > 0 || gpu?.min! > 0 || user_memory?.min! > 0;
 
         const hasIntegralType = integralType && integralType !== 'none';
@@ -77,10 +77,6 @@ export function SchedulingMeta() {
                     key: 'RAM',
                     value: renderProgress(user_memory?.usage, user_memory?.min, 'Bytes'),
                 },
-                {
-                    key: i18n('user-slots'),
-                    value: renderProgress(user_slots?.usage, user_slots?.min),
-                },
             ],
             [
                 {key: i18n('guarantee-type'), value: guaranteeType},
@@ -110,7 +106,15 @@ export function SchedulingMeta() {
 }
 
 function renderProgress(usage?: number, limit?: number, format?: 'Bytes') {
-    return <Progress className={block('progress')} {...calcProgressProps(usage, limit, format)} />;
+    return (
+        <Progress
+            className={block('progress')}
+            {...Object.assign(
+                calcProgressProps(usage, limit, format),
+                !limit ? {theme: 'success'} : {},
+            )}
+        />
+    );
 }
 
 function formatUnits(item?: PoolStaticConfigurationItem) {
