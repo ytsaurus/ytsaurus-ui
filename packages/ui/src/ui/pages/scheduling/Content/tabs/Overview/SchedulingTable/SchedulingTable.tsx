@@ -41,7 +41,6 @@ import {openAttributesModal} from '../../../../../../store/actions/modals/attrib
 import {useThunkDispatch} from '../../../../../../store/thunkDispatch';
 
 import {NameCell} from './NameCell';
-import PoolTags from './PoolTags';
 import i18n from './i18n';
 import './SchedulingTable.scss';
 import {getSchedulingOverivewColumns} from '../../../../../../store/selectors/scheduling/overview-columns';
@@ -215,7 +214,10 @@ function makeNumberColumn(
     };
 }
 
-function makeReadableFieldColumn(id: KeyByGetterReturnType<string | undefined>) {
+function makeReadableFieldColumn(
+    id: KeyByGetterReturnType<string | undefined>,
+    options?: {size?: number},
+) {
     const info = childTableItems[id];
     const {caption} = {caption: undefined, ...info};
     return {
@@ -281,6 +283,7 @@ function useSchedulingTableColumns() {
                         </TableCell>
                     );
                 },
+                size: 100,
             },
             {
                 id: 'view_mode',
@@ -325,7 +328,7 @@ function useSchedulingTableColumns() {
                     return <TableCell>{content}</TableCell>;
                 },
             },
-            makeReadableFieldColumn('dominant_resource'),
+            makeReadableFieldColumn('dominant_resource', {size: 100}),
             {
                 id: 'fair_share_usage',
                 header: () => (
@@ -369,6 +372,7 @@ function useSchedulingTableColumns() {
                         </TableCell>
                     );
                 },
+                size: 100,
             },
             {
                 id: 'demand',
@@ -396,6 +400,7 @@ function useSchedulingTableColumns() {
                         </TableCell>
                     );
                 },
+                size: 100,
             },
             {
                 id: 'guaranteed',
@@ -430,6 +435,7 @@ function useSchedulingTableColumns() {
                         </TableCell>
                     );
                 },
+                size: 100,
             },
             {
                 id: 'operation_overview',
@@ -468,6 +474,7 @@ function useSchedulingTableColumns() {
                         </TableCell>
                     );
                 },
+                size: 120,
             },
             {
                 id: 'duration',
@@ -491,6 +498,7 @@ function useSchedulingTableColumns() {
                         return item.fifoIndex;
                     }
                 },
+                size: 50,
             },
             {
                 id: 'operation_progress',
