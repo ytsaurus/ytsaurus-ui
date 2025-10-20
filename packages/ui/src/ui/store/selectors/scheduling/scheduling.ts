@@ -40,6 +40,9 @@ export const getSchedulingIsInitialLoading = (state: RootState) => {
 };
 
 export const getTreeResources = (state: RootState) => state.scheduling.scheduling.treeResources;
+export const getSchedulingTreeMainResource = (state: RootState) =>
+    state.scheduling.scheduling.treeResources.config?.main_resource;
+
 export const getPoolChildrenFilter = (state: RootState) =>
     state.scheduling.scheduling.poolChildrenFilter;
 export const getSchedulingTreeState = (state: RootState) => state.scheduling.scheduling.treeState;
