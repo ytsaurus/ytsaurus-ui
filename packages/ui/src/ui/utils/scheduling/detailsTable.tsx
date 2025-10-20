@@ -110,6 +110,12 @@ export const childTableItems = {
             return item.user;
         },
     },
+    owner: {
+        sort(item: SchedulingRowData) {
+            const {type, abc, user} = item;
+            return type === 'pool' ? abc?.slug : user;
+        },
+    },
     mode: {
         sort(item: SchedulingRowData) {
             return item.mode;
