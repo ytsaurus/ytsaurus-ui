@@ -55,6 +55,7 @@ import {getProgressTheme} from '../../../../../../utils/progress';
 import ShareUsageBar from '../../../../../../pages/scheduling/Content/controls/ShareUsageBar';
 import {useSettingsColumnSizes} from '../../../../../../hooks/settings/use-settings-column-sizes';
 import {useSettingsVisibleColumns} from '../../../../../../hooks/settings/use-settings-column-visibility';
+import {PoolAbc} from './PoolAbc';
 
 const block = cn('yt-scheduling-table');
 
@@ -100,7 +101,7 @@ const COLUMNS_BY_MODE: Record<SchedulintTableMode, Array<SchedulingColumn>> = {
     summary: [
         'weight',
         'type',
-        'user',
+        'owner',
         'dominant_resource',
         'fair_share_usage',
         'usage',
@@ -293,15 +294,25 @@ function useSchedulingTableColumns() {
                 },
             },
             {
-                id: 'user',
-                header: () => <SchedulingColumnHeader column="user" title="Owner" allowUnordered />,
+                id: 'owner',
+                header: () => (
+                    <SchedulingColumnHeader column="owner" title="Owner" allowUnordered />
+                ),
                 cell: ({row: {original: item}}) => {
                     const {user} = item;
-                    return (
-                        <TableCell>
-                            {user ? <SubjectCard name={user} type="user" /> : format.NO_VALUE}
-                        </TableCell>
-                    );
+
+                    const content =
+                        item.type === 'operation' ? (
+                            user ? (
+                                <SubjectCard name={user} type="user" />
+                            ) : (
+                                format.NO_VALUE
+                            )
+                        ) : (
+                            <PoolAbc pool={item} />
+                        );
+
+                    return <TableCell>{content}</TableCell>;
                 },
             },
             makeReadableFieldColumn('dominant_resource'),

@@ -28,6 +28,7 @@ import type {BaseMapNode} from '../utils/navigation/content/map-nodes/node';
 import type {PreloadErrorType} from '../constants';
 import type {RootState} from '../store/reducers';
 import type {YTError} from '../types';
+
 import type {AnalyticsService} from '../common/utils/metrics';
 import type {DetailedOperationSelector} from '../pages/operations/selectors';
 import type {ChatMessage} from '../types/ai-chat';
@@ -161,6 +162,12 @@ export interface InlineSuggestionsApi {
     onQueryLoad(): void;
     onQueryCreate(): void;
 }
+
+export type RenderSchedulingTableItemExtraProps = {
+    itemClassName?: string;
+    pool: PoolTreeNode;
+    clusterUiConfig: ClusterUiConfig;
+};
 
 export interface UIFactory {
     getClusterAppearance(cluster?: string): undefined | ClusterAppearance;
@@ -358,12 +365,9 @@ export interface UIFactory {
         clusterUiConfig?: ClusterUiConfig;
     }): React.ReactNode;
 
-    renderSchedulingTableItemExtraControls(props: {
-        itemClassName?: string;
-        cluster: string;
-        pool: unknown;
-        clusterUiConfig: ClusterUiConfig;
-    }): React.ReactNode;
+    renderSchedulingTableItemExtraControls(
+        props: RenderSchedulingTableItemExtraProps,
+    ): React.ReactNode;
 
     renderBundlesTableItemExtraControls(props: {
         itemClassName?: string;
