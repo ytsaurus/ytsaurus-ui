@@ -24,6 +24,7 @@ export function ExpandableCell({level = 0, expanded, onExpand, children}: Expand
             className={block({child: level > 0})}
             overflow="hidden"
             shrink={1}
+            grow={1}
         >
             <LeftPadding level={level} />
             <ExpandButton

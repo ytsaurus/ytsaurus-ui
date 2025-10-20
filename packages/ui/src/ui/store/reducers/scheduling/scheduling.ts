@@ -120,7 +120,7 @@ const persistedState: SchedulingPersistentState = {
     },
     monitorChartStatus: {},
     sortState: [{column: 'name', order: 'asc'}],
-    showAbsResources: false,
+    showAbsResources: true,
 };
 
 export const initialState = {
