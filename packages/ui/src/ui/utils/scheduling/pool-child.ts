@@ -103,7 +103,7 @@ export type PoolData<T extends 'pool' | 'operation'> = {
 
     fifoSortParams?: Array<'start_time' | 'weight' | 'pending_job_count'>;
 
-    abc?: unknown;
+    abc?: {id?: number; slug?: string};
     forbidImmediateOperations?: boolean;
     createEphemeralSubpools?: boolean;
 

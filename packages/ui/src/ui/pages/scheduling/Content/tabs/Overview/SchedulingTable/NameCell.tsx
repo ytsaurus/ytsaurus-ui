@@ -20,7 +20,6 @@ import {getTree} from '../../../../../../store/selectors/scheduling/scheduling-p
 import {PoolLeafNode} from '../../../../../../utils/scheduling/pool-child';
 
 import type {RowData} from './SchedulingTable';
-import {PoolAbc} from './PoolAbc';
 import './NameCell.scss';
 
 const block = cn('yt-scheduling-name-cell');
@@ -71,7 +70,6 @@ export function NameCell({row}: {row: RowData}) {
                         theme="primary"
                     />
                     <span style={{flex: '1 1 0px'}} />
-                    <PoolAbc pool={row} />
                 </>
             ) : (
                 renderOperationName({cluster, row})
