@@ -7,10 +7,23 @@ export {PrometheusDashboardType};
 
 export type DashboardInfo = {
     templating: {
-        list: Array<{name: string; default_for_ui?: unknown}>;
+        list: Array<TemplatingListItem>;
         permissions?: Array<PermissionTemplate>;
     };
     panels: Array<DashboardPanel>;
+    uid: string;
+};
+
+export type TemplatingListItem = {
+    label: string;
+    name: string;
+    default_for_ui?: string;
+    discover_values?: DiscoverValues;
+};
+
+export type DiscoverValues = {
+    match: string;
+    label: string;
 };
 
 export type DashboardPanel = {
@@ -88,7 +101,7 @@ export type PluginRenderProps<K extends PanelType> = Omit<PluginWidgetProps, 'da
 };
 
 export type PluginRendererDataParams = Record<string, string | number> & {
-    __ytDashboardType: PrometheusDashboardType;
+    __ytDashboardType?: PrometheusDashboardType;
 };
 
 export type QueryRangePostData = {
@@ -111,6 +124,25 @@ export type QueryRangeData = {
         result: Array<MetricValues>;
     };
 };
+
+export type DiscoverValuesPostData = {
+    dashboardType: PrometheusDashboardType;
+    params?: Record<string, string | number>;
+};
+
+export type DiscoverValuesResponse = {
+    results: Array<DiscoverValuesResponseResultsItem>;
+};
+
+export type DiscoverValuesResponseResultsItem = {
+    key: string;
+    expr: string;
+    result: DiscoverValuesItemData;
+};
+
+export type DiscoverValuesItemData =
+    | {status: 'success'; data: Array<string>}
+    | {status: 'error'; error: {message: string} | string; data?: never};
 
 export type MetricValues = {
     metric: Record<string, string>;

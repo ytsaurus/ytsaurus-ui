@@ -2,6 +2,9 @@ import axios, {AxiosResponse} from 'axios';
 
 import type {
     ChartDataResponse,
+    DiscoverValuesPostData,
+    DiscoverValuesResponse,
+    DiscoverValuesResponseResultsItem,
     PluginRendererDataParams,
     PrometheusDashboardType,
     QueryRangePostData,
@@ -9,7 +12,7 @@ import type {
 
 export type PrometheusChartParams = {
     cluster: string;
-    dashboardType: PrometheusDashboardType;
+    dashboardType?: PrometheusDashboardType;
     id: string;
 
     from?: number;
@@ -20,9 +23,16 @@ export type PrometheusChartParams = {
 };
 
 export function fetchPrometheusChartData(args: PrometheusChartParams) {
-    const {cluster, id, from, to, pointCount, ...rest} = args;
+    const {cluster, id, from, to, pointCount, dashboardType, ...rest} = args;
     try {
-        if (from === undefined || isNaN(from) || to === undefined || isNaN(to) || !pointCount) {
+        if (
+            !dashboardType ||
+            from === undefined ||
+            isNaN(from) ||
+            to === undefined ||
+            isNaN(to) ||
+            !pointCount
+        ) {
             return {data: undefined, error: undefined};
         }
 
@@ -37,10 +47,53 @@ export function fetchPrometheusChartData(args: PrometheusChartParams) {
                 ChartDataResponse,
                 AxiosResponse<ChartDataResponse>,
                 QueryRangePostData
-            >(`/api/${cluster}/prometheus/chart-data`, {id, start, end, step, ...rest}, {params: {id}})
+            >(`/api/${cluster}/prometheus/chart-data`, {id, start, end, step, dashboardType, ...rest}, {params: {id}})
             .then(
                 ({data}) => {
                     return {data: {responseData: data, ...rangeParams}, error: undefined};
+                },
+                (error: any) => {
+                    return {error};
+                },
+            );
+    } catch (error) {
+        return {error};
+    }
+}
+
+export type DiscoverValuesArgs = DiscoverValuesPostData & {
+    cluster: string;
+    hasValuesToDiscover?: boolean;
+};
+
+export function fetchPrometheusDiscoverValues({
+    cluster,
+    dashboardType,
+    params,
+    hasValuesToDiscover,
+}: DiscoverValuesArgs) {
+    if (!hasValuesToDiscover || !dashboardType) {
+        return {data: undefined};
+    }
+
+    try {
+        return axios
+            .post<
+                DiscoverValuesResponse,
+                AxiosResponse<DiscoverValuesResponse>,
+                DiscoverValuesPostData
+            >(`/api/${cluster}/prometheus/discover-values`, {dashboardType, params})
+            .then(
+                ({data}) => {
+                    return {
+                        data: data?.results?.reduce(
+                            (acc, item) => {
+                                acc[item.key] = item;
+                                return acc;
+                            },
+                            {} as Record<string, DiscoverValuesResponseResultsItem>,
+                        ),
+                    };
                 },
                 (error: any) => {
                     return {error};

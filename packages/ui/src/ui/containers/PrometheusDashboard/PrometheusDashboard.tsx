@@ -1,5 +1,9 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
+import {useSelector} from 'react-redux';
+import uniq_ from 'lodash/uniq';
+
+import {Select} from '@gravity-ui/uikit';
 
 import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
 
@@ -7,49 +11,75 @@ import {YTError} from '../../../@types/types';
 
 import {YTErrorBlock} from '../../components/Block/Block';
 import {YTTimeline} from '../../components/Timeline';
-import {Toolbar} from '../../components/WithStickyToolbar/Toolbar/Toolbar';
+import {Toolbar, ToolbarItemToWrap} from '../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {StickyContainer} from '../../components/StickyContainer/StickyContainer';
 import {YTErrors} from '../../rum/constants';
+import {getCluster} from '../../store/selectors/global/cluster';
 
 import {
     PrometheusDashboardProvider,
     usePrometheusDashboardContext,
 } from './PrometheusDashboardContext/PrometheusDashboardContext';
 import {PrometheusDashKit} from './PrometheusDashKit';
-import {DashboardInfo, PrometheusDashboardType} from '../../../shared/prometheus/types';
+import {
+    DashboardInfo,
+    PluginRendererDataParams,
+    PrometheusDashboardType,
+} from '../../../shared/prometheus/types';
 
 import './PrometheusDashboard.scss';
-import {getDashboardPath} from '../../../shared/prometheus/utils';
+import {getDashboardPath, makeDiscoverValuesKey} from '../../../shared/prometheus/utils';
+import {usePrometheusDiscoverValuesQuery} from '../../store/api/prometheus';
+import {usePrometheusDashboardParams} from '../../store/reducers/prometheusDashboard/prometheusDashboard-hooks';
 
 const block = cn('yt-prometheus-dashboard');
 
 export type PrometheusDashboardProps = {
     toolbarStickyTop?: number;
     type: PrometheusDashboardType;
-    params?: Record<string, {toString(): string}>;
+    params?: PluginRendererDataParams;
     timeRange?: {from: number; to?: number};
+    toolbarItems?: Array<ToolbarItemToWrap>;
 };
 
-export const PrometheusDashboard = React.memo(function ({
-    type,
-    params,
-    toolbarStickyTop,
-}: PrometheusDashboardProps) {
+export const PrometheusDashboard = React.memo(function (props: PrometheusDashboardProps) {
+    const {type, params, toolbarStickyTop} = props;
     const {layout, error} = useLoadedLayout({type, params});
-    return !params ? null : (
+
+    const {toolbarItems, effectiveParams} = useDashboardToolbar({
+        type,
+        layout,
+        params,
+        toolbarItems: props.toolbarItems,
+    });
+
+    const hasToolbar = Boolean(toolbarItems?.length);
+
+    return !effectiveParams ? null : (
         <PrometheusDashboardProvider type={type}>
-            <StickyContainer topOffset={toolbarStickyTop}>
+            <StickyContainer
+                className={block({'has-toolbar': hasToolbar})}
+                topOffset={toolbarStickyTop}
+            >
                 {({stickyTopClassName}) => (
                     <React.Fragment>
-                        <PrometheusTimeline className={stickyTopClassName} />
+                        <div className={block('toolbar', stickyTopClassName)}>
+                            <PrometheusTimeline />
+                            {hasToolbar && (
+                                <Toolbar itemsToWrap={toolbarItems ?? []} marginTopSkip />
+                            )}
+                        </div>
                         {error && <YTErrorBlock error={error} />}
-                        <MissingParametersWarning templating={layout?.templating} params={params} />
+                        <MissingParametersWarning
+                            templating={layout?.templating}
+                            params={effectiveParams}
+                        />
                         {layout?.panels === undefined ? null : (
                             <PrometheusDashKit
                                 key={type}
                                 type={type}
                                 panels={layout.panels}
-                                params={params}
+                                params={effectiveParams}
                             />
                         )}
                     </React.Fragment>
@@ -76,7 +106,7 @@ function useLoadedLayout({type, params}: PrometheusDashboardProps) {
             })
             .catch((error) => {
                 if (error.code === YTErrors.NODE_DOES_NOT_EXIST) {
-                    setData({layout: makeNotImplementedLayout({type, params})});
+                    setData({layout: makeNotImplementedLayout({type, params, uid: ''})});
                 } else {
                     setData({error});
                 }
@@ -85,7 +115,7 @@ function useLoadedLayout({type, params}: PrometheusDashboardProps) {
     return result;
 }
 
-function makeNotImplementedLayout({type, params}: PrometheusDashboardProps) {
+function makeNotImplementedLayout({type, params, uid}: PrometheusDashboardProps & {uid: string}) {
     return {
         templating: {list: []},
         panels: [
@@ -104,10 +134,11 @@ function makeNotImplementedLayout({type, params}: PrometheusDashboardProps) {
                 gridPos: {x: 0, y: 0, w: 24, h: 27},
             },
         ],
+        uid,
     };
 }
 
-function PrometheusTimeline({className}: {className?: string}) {
+function PrometheusTimeline() {
     const {
         timeRangeFilter: {from, to, shortcutValue},
         setTimeRangeFilter,
@@ -115,7 +146,6 @@ function PrometheusTimeline({className}: {className?: string}) {
 
     return (
         <Toolbar
-            className={block('toolbar', className)}
             itemsToWrap={[
                 {
                     node: (
@@ -160,4 +190,81 @@ function MissingParametersWarning({
     }, [templating, params]);
 
     return details ? <YTErrorBlock error={details} type="alert" bottomMargin /> : null;
+}
+
+function useDashboardToolbar({
+    toolbarItems,
+    layout,
+    params,
+    type,
+}: {
+    type: PrometheusDashboardType;
+    params?: PluginRendererDataParams;
+    layout?: DashboardInfo;
+    toolbarItems?: Array<ToolbarItemToWrap>;
+}) {
+    const cluster = useSelector(getCluster);
+
+    const {templating} = layout ?? {};
+    const {list} = templating ?? {};
+
+    const withDiscoverValues = React.useMemo(() => {
+        if (!layout) {
+            return [];
+        }
+
+        return list?.filter((item) => item.discover_values);
+    }, [list, layout]);
+
+    const {params: extraParams, setParams: setExtraParams} =
+        usePrometheusDashboardParams<Record<string, string>>(type);
+
+    const {data} = usePrometheusDiscoverValuesQuery({
+        cluster,
+        dashboardType: type,
+        params,
+        hasValuesToDiscover: Boolean(withDiscoverValues?.length),
+    });
+
+    const items = React.useMemo(() => {
+        const res = [...(toolbarItems ?? [])];
+
+        withDiscoverValues?.forEach(({label, name, default_for_ui, discover_values}) => {
+            if (!discover_values || !data) {
+                return;
+            }
+            const key = makeDiscoverValuesKey(discover_values);
+            const dataItem = data[key];
+
+            const value = extraParams?.[name] ?? default_for_ui;
+
+            const availableOptions = uniq_([
+                ...(default_for_ui ? [default_for_ui] : []),
+                ...(dataItem.result?.data ?? []),
+            ]);
+
+            res.push({
+                node: (
+                    <Select
+                        label={label}
+                        value={value ? [value] : []}
+                        options={availableOptions.map((v) => {
+                            return {content: v, value: v};
+                        })}
+                        onUpdate={([v]) => {
+                            setExtraParams({[name]: v});
+                        }}
+                    />
+                ),
+            });
+        });
+
+        return res;
+    }, [withDiscoverValues, data, extraParams, setExtraParams, toolbarItems]);
+
+    const effectiveParams = React.useMemo(() => {
+        return !params ? undefined : {...params, ...extraParams};
+    }, [params, extraParams]);
+
+    return {toolbarItems: items, effectiveParams: effectiveParams};
 }

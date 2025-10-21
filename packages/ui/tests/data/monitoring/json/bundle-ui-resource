@@ -63,50 +63,8 @@
             },
             "title": "CPU Total",
             "gridPos": {
-                "x": 0,
+                "x": 6,
                 "y": 6,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "type": "text",
-            "options": {
-                "content": "",
-                "mode": "markdown"
-            },
-            "title": "",
-            "gridPos": {
-                "x": 12,
-                "y": 6,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "type": "text",
-            "options": {
-                "content": "",
-                "mode": "markdown"
-            },
-            "title": "",
-            "gridPos": {
-                "x": 0,
-                "y": 12,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "type": "text",
-            "options": {
-                "content": "",
-                "mode": "markdown"
-            },
-            "title": "",
-            "gridPos": {
-                "x": 12,
-                "y": 12,
                 "w": 12,
                 "h": 6
             }
@@ -150,21 +108,7 @@
             },
             "title": "Memory Total",
             "gridPos": {
-                "x": 0,
-                "y": 18,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "type": "text",
-            "options": {
-                "content": "",
-                "mode": "markdown"
-            },
-            "title": "",
-            "gridPos": {
-                "x": 12,
+                "x": 6,
                 "y": 18,
                 "w": 12,
                 "h": 6
@@ -251,21 +195,7 @@
             },
             "title": "Net TX total",
             "gridPos": {
-                "x": 0,
-                "y": 24,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "type": "text",
-            "options": {
-                "content": "",
-                "mode": "markdown"
-            },
-            "title": "",
-            "gridPos": {
-                "x": 12,
+                "x": 6,
                 "y": 24,
                 "w": 12,
                 "h": 6
@@ -352,21 +282,7 @@
             },
             "title": "Net RX total",
             "gridPos": {
-                "x": 0,
-                "y": 30,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "type": "text",
-            "options": {
-                "content": "",
-                "mode": "markdown"
-            },
-            "title": "",
-            "gridPos": {
-                "x": 12,
+                "x": 6,
                 "y": 30,
                 "w": 12,
                 "h": 6

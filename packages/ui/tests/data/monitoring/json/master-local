@@ -22,7 +22,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"$pod\", thread=~\"Automaton\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -53,7 +54,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_rpc_server_request_time_execution_max\", user=~\"\", yt_service=~\".+\", method=~\"IncrementalHeartbeat\", pod=~\"$pod\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -84,7 +86,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_resource_tracker_memory_usage_rss\", pod=~\"$pod\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -115,7 +118,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_resource_tracker_utilization\", pod=~\"$pod\", thread=~\"RpcLight\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -146,7 +150,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_resource_tracker_utilization\", pod=~\"$pod\", thread=~\"RpcHeavy\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -177,7 +182,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_blob_refresh_queue_size\", cell_tag=~\"\", pod=~\"$pod\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -208,7 +214,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_blob_requisition_update_queue_size\", cell_tag=~\"\", pod=~\"$pod\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -239,7 +246,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_underreplicated_chunk_count\", cell_tag=~\"\", pod=~\"$pod\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -270,7 +278,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_overreplicated_chunk_count\", cell_tag=~\"\", pod=~\"$pod\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -301,7 +310,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_data_missing_chunk_count\", cell_tag=~\"\", pod=~\"$pod\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -332,7 +342,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_parity_missing_chunk_count\", cell_tag=~\"\", pod=~\"$pod\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -363,7 +374,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_unsafely_placed_chunk_count\", cell_tag=~\"\", pod=~\"$pod\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -394,7 +406,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_lost_vital_chunk_count\", cell_tag=~\"\", pod=~\"$pod\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -425,7 +438,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_hydra_leader_sync_time_max\", cell_id=~\"\", pod=~\"$pod\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -456,7 +470,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunks_created\", cell_tag=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -487,7 +502,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunks_destroyed\", cell_tag=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -518,7 +534,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_lists_created\", cell_tag=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -549,7 +566,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_lists_destroyed\", cell_tag=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -580,7 +598,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_hydra_restart_count\", cell_id=~\"\", pod=~\"$pod\", reason=~\".+\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -611,7 +630,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_hydra_fork_executor_fork_duration_max\", cell_id=~\"\", pod=~\"$pod\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -642,7 +662,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_ref_counted_tracker_total_objects_alive\", pod=~\"$pod\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -673,7 +694,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_ref_counted_tracker_total_bytes_alive\", pod=~\"$pod\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -704,7 +726,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_tablet_server_update_tablet_stores_store_count\", tablet_cell_bundle=~\"\", pod=~\"$pod\", table_type=~\"\", update_reason=~\"\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -735,7 +758,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_tablet_server_update_tablet_stores_cumulative_time\", tablet_cell_bundle=~\"\", pod=~\"$pod\", table_type=~\"\", update_reason=~\"\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -766,7 +790,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_action_queue_time_cumulative\", bucket=~\".+\", pod=~\"$pod\", queue=~\".+\", thread=~\"Automaton\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -803,7 +828,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_hydra_cumulative_mutation_time\", cell_id=~\".+\", pod=~\"$pod\", type=~\".+\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -840,7 +866,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_security_user_read_request_count\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -871,7 +898,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_security_user_write_request_count\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -902,7 +930,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_security_user_read_time\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -933,7 +962,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_security_user_write_time\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -964,7 +994,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_service_weight_throttler_value\", user=~\".+\", method=~\".+\", cell_tag=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -995,7 +1026,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_jobs_.*\", cell_tag=~\".+\", job_type=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 },
                 {
                     "datasource": {
@@ -1003,7 +1035,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_misscheduled_jobs\", cell_tag=~\".+\", job_type=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "B"
+                    "refId": "B",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -1034,7 +1067,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_running_job_count\", cell_tag=~\"\", job_type=~\".+\", pod=~\"$pod\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -1065,7 +1099,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_rpc_server_request_count\", user=~\"\", yt_service=~\"ObjectService\", method=~\"Execute\", pod=~\"$pod\", queue=~\".+\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -1096,7 +1131,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_rpc_server_request_count\", user=~\"\", yt_service=~\"ChunkService\", method=~\"ExecuteBatch\", pod=~\"$pod\", queue=~\".+\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -1144,6 +1180,11 @@
                 "allFormat": "glob"
             },
             {
+                "discover_values": {
+                    "match": "{service=~\"yt-master\"}",
+                    "label": "pod"
+                },
+                "default_for_ui": ".*",
                 "name": "pod",
                 "label": "Pod",
                 "type": "textbox",
