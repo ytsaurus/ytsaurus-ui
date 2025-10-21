@@ -367,27 +367,6 @@ export function openInNewTab(href: string) {
     }).click();
 }
 
-const previousProps: Record<string, any> = {};
-
-export function showChangedProps(key: string, props: object, verbose?: boolean) {
-    const prevProps = previousProps[key];
-    if (prevProps === undefined) {
-        console.log(key, Date.now(), Object.keys(props));
-    } else {
-        const changed: Array<string> = [];
-        forEach_(props, (v, k) => {
-            if (v !== prevProps[k]) {
-                changed.push(k);
-                if (verbose) {
-                    console.log(key, k, {prev: prevProps[k], v});
-                }
-            }
-        });
-        console.log(key, Date.now(), changed);
-    }
-    previousProps[key] = props;
-}
-
 export function updateIfChanged<T, K extends keyof T>(
     obj: T,
     key: K,
