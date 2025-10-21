@@ -29,11 +29,7 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {
-                        "hideForm": {
-                            "legend": true
-                        }
-                    }
+                    "custom": {}
                 },
                 "overrides": []
             },
@@ -90,7 +86,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_resource_tracker_cpu_wait\", thread=~\"\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -121,7 +118,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-controller-agent\", __name__=~\"yt_resource_tracker_cpu_wait\", thread=~\"\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{pod}}"
                 }
             ],
             "fieldConfig": {

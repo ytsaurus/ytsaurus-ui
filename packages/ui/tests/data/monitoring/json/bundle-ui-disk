@@ -1459,7 +1459,8 @@
                 "query": ".*",
                 "hide": 0,
                 "skipUrlSync": false,
-                "allFormat": "glob"
+                "allFormat": "glob",
+                "default_for_ui": ".*"
             }
         ]
     },

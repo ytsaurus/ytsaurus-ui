@@ -10,20 +10,6 @@
             "type": "row"
         },
         {
-            "type": "text",
-            "options": {
-                "content": "",
-                "mode": "markdown"
-            },
-            "title": "",
-            "gridPos": {
-                "x": 0,
-                "y": 1,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
             "datasource": {
                 "type": "prometheus",
                 "uid": "${PROMETHEUS_DS_UID}"
@@ -61,9 +47,9 @@
             },
             "title": "Node CPU usage (all threads)",
             "gridPos": {
-                "x": 12,
+                "x": 0,
                 "y": 1,
-                "w": 12,
+                "w": 24,
                 "h": 6
             }
         },
@@ -107,21 +93,7 @@
             "gridPos": {
                 "x": 0,
                 "y": 7,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "type": "text",
-            "options": {
-                "content": "",
-                "mode": "markdown"
-            },
-            "title": "",
-            "gridPos": {
-                "x": 12,
-                "y": 7,
-                "w": 12,
+                "w": 24,
                 "h": 6
             }
         },
@@ -768,7 +740,6 @@
                 "name": "pod",
                 "label": "Pod",
                 "type": "textbox",
-                "default_for_ui": ".*",
                 "options": [
                     {
                         "selected": true,
@@ -784,7 +755,8 @@
                 "query": ".*",
                 "hide": 0,
                 "skipUrlSync": false,
-                "allFormat": "glob"
+                "allFormat": "glob",
+                "default_for_ui": ".*"
             }
         ]
     },

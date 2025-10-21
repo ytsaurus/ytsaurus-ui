@@ -503,6 +503,10 @@
                 "allFormat": "glob"
             },
             {
+                "discover_values": {
+                    "match": "{service=~\"yt-master\", account=~\"$account\"}",
+                    "label": "medium"
+                },
                 "name": "left_medium",
                 "label": "Left medium",
                 "type": "textbox",
@@ -524,6 +528,10 @@
                 "allFormat": "glob"
             },
             {
+                "discover_values": {
+                    "match": "{service=~\"yt-master\", account=~\"$account\"}",
+                    "label": "medium"
+                },
                 "name": "right_medium",
                 "label": "Right medium",
                 "type": "textbox",

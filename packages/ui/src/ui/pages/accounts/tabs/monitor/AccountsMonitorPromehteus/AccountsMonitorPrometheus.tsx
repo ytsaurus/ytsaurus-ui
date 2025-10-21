@@ -7,13 +7,9 @@ import uniq_ from 'lodash/uniq';
 import ypath from '../../../../../common/thor/ypath';
 
 import {PrometheusDashboardLazy} from '../../../../../containers/PrometheusDashboard/lazy';
-import Select from '../../../../../components/Select/Select';
-import {Toolbar} from '../../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {getAccountsMapByName} from '../../../../../store/selectors/accounts/accounts-ts';
 import {getMediumList} from '../../../../../store/selectors/thor';
 import {usePrometheusDashboardParams} from '../../../../../store/reducers/prometheusDashboard/prometheusDashboard-hooks';
-
-import i18n from '../i18n';
 
 type LeftRightMedium = {
     left_medium?: string;
@@ -23,54 +19,13 @@ type LeftRightMedium = {
 const ACCOUNTS_DASHBOARD_TYPE = 'master-accounts';
 
 export function AccountsMonitorPrometheus({cluster, account}: {cluster: string; account: string}) {
-    const {accountData, options, params, selection, setSelection} = useAccountMonitoringParams({
+    const {accountData, params} = useAccountMonitoringParams({
         cluster,
         account,
     });
 
     return !accountData ? null : (
-        <>
-            <Toolbar
-                marginTopSkip
-                itemsToWrap={[
-                    {
-                        node: (
-                            <Select
-                                value={
-                                    selection?.left_medium !== undefined
-                                        ? [selection.left_medium]
-                                        : []
-                                }
-                                items={options}
-                                label={i18n('left-medium') + ':'}
-                                onUpdate={([left_medium]) => {
-                                    setSelection({left_medium});
-                                }}
-                            />
-                        ),
-                        width: 300,
-                    },
-                    {
-                        node: (
-                            <Select
-                                value={
-                                    selection?.right_medium !== undefined
-                                        ? [selection.right_medium]
-                                        : []
-                                }
-                                items={options}
-                                label={i18n('right-medium') + ':'}
-                                onUpdate={([right_medium]) => {
-                                    setSelection({right_medium});
-                                }}
-                            />
-                        ),
-                        width: 300,
-                    },
-                ]}
-            />
-            <PrometheusDashboardLazy type={ACCOUNTS_DASHBOARD_TYPE} params={params} />
-        </>
+        <PrometheusDashboardLazy type={ACCOUNTS_DASHBOARD_TYPE} params={params} />
     );
 }
 
@@ -119,14 +74,8 @@ function useAccountMonitoringParams({cluster, account}: {cluster: string; accoun
     }, [accountData, selection, mediumList, setSelection]);
 
     const params = React.useMemo(() => {
-        return !cluster || !account
-            ? undefined
-            : {
-                  cluster,
-                  account,
-                  ...selection,
-              };
-    }, [cluster, account, selection]);
+        return !cluster || !account ? undefined : {cluster, account};
+    }, [cluster, account]);
 
     const options = mediumList.map((value) => {
         return {value, text: value};

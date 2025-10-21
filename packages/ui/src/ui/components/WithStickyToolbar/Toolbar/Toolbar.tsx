@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
 
-const block = cn('toolbar');
+const block = cn('yt-toolbar');
 
 export const TOOLBAR_COMPONENT_HEIGHT = 48;
 
@@ -17,19 +17,21 @@ const ToolbarItemPropTypes = {
 
 interface Props {
     className?: string;
-    itemsToWrap: Array<{
-        name?: string;
-        node?: React.ReactNode;
-        wrapperClassName?: string;
-        growable?: boolean;
-        shrinkable?: boolean;
-        marginRight?: 'half';
-        overflow?: 'hidden';
-        width?: number;
-    }>;
+    itemsToWrap: Array<ToolbarItemToWrap>;
     children?: React.ReactNode;
     marginTopSkip?: boolean;
 }
+
+export type ToolbarItemToWrap = {
+    name?: string;
+    node?: React.ReactNode;
+    wrapperClassName?: string;
+    growable?: boolean;
+    shrinkable?: boolean;
+    marginRight?: 'half';
+    overflow?: 'hidden';
+    width?: number;
+};
 
 export class Toolbar extends React.Component<Props> {
     static propTypes = {
