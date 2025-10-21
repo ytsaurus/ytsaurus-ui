@@ -30,7 +30,7 @@ function extractCypressProxy(data: object): Array<RoleGroupItemInfo> {
         if (cypressProxies[proxy]) {
             const proxyData = ypath.getAttributes(cypressProxies[proxy]);
             const state = ypath.getValue(proxyData, '/state');
-            const effectiveState = state ? ('online' as const) : ('offline' as const);
+            const effectiveState = !state || state === 'unknown' ? 'other' : state;
             const banned = ypath.getValue(proxyData, '/@banned');
             result.push({
                 name: proxy,
