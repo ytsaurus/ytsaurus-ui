@@ -214,7 +214,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_specified_resource_limits_user_memory\", pool=~\"$pool\", tree=~\"$tree\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_specified_resource_limits_memory\", pool=~\"$pool\", tree=~\"$tree\"}",
                     "refId": "E",
                     "legendFormat": "Configured limit"
                 }

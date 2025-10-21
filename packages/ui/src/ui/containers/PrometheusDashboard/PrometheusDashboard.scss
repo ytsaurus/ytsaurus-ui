@@ -1,7 +1,14 @@
+@use '../../components/WithStickyToolbar/Toolbar/Toolbar.scss' as toolbar;
+
 .yt-prometheus-dashboard {
+    &_has-toolbar {
+        --yt-second-toolbar-height: #{toolbar.$TOOLBAR_COMPONENT_HEIGHT};
+    }
+
     &__toolbar {
         margin-bottom: 10px;
     }
+
     &__timeline {
         width: 100%;
     }
