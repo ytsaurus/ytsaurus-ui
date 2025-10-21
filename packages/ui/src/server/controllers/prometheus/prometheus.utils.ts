@@ -1,124 +1,102 @@
-import axios from 'axios';
-import type {Request, Response} from 'express';
+import type {Request} from 'express';
 
 // @ts-ignore
 import ytLib from '@ytsaurus/javascript-wrapper';
 const yt = ytLib();
 
-import {parseXYFromPanelId, replaceExprParams} from '../../shared/prometheus/utils';
 import {
     DashboardInfo,
     PluginRendererDataParams,
-    QueryRangeData,
-    QueryRangePostData,
-} from '../../shared/prometheus/types';
+    PrometheusDashboardType,
+} from '../../../shared/prometheus/types';
 import {
     CheckPermissionResult,
     makeCheckPermissionBatchSubRequest,
-} from '../../shared/utils/check-permission';
+} from '../../../shared/utils/check-permission';
 
-import {getPreloadedPrometheusDashboard} from '../components/prometheus-dashboards';
-import {BatchResultsItem, BatchSubRequest} from '../../shared/yt-types';
-import {YTError} from '../../@types/types';
-import {getXSRFToken} from '../components/cluster-queries';
-import {formatByParams} from '../../shared/utils/format';
-import {getUserYTApiSetup} from '../components/requestsSetup';
-import {ErrorWithCode, sendAndLogError} from '../utils';
+import {BatchResultsItem, BatchSubRequest} from '../../../shared/yt-types';
+import {YTError} from '../../../@types/types';
+import {getXSRFToken} from '../../components/cluster-queries';
+import {formatByParams} from '../../../shared/utils/format';
+import {getUserYTApiSetup} from '../../components/requestsSetup';
+import {getPreloadedPrometheusDashboard} from '../../components/prometheus-dashboards';
+import {ErrorWithCode} from '../../utils';
 
-export async function prometheusQueryRange(req: Request, res: Response) {
-    const BASE_URL = req.ctx.config.prometheusBaseUrl;
+import {parseXYFromPanelId} from '../../../shared/prometheus/utils';
 
-    try {
-        const {ytAuthCluster} = req.params;
-
-        const {id} = req.query;
-        const {x, y} = parseXYFromPanelId(typeof id === 'string' ? (id as any) : '');
-        if (isNaN(x) || isNaN(y)) {
+export async function fetchDashbaordDetails(
+    req: Request,
+    {
+        cluster,
+        dashboardType,
+        chartId,
+        params,
+    }: {
+        cluster: string;
+        dashboardType: PrometheusDashboardType;
+        params: PluginRendererDataParams;
+        chartId?: string;
+    },
+) {
+    let pos: undefined | {x: number; y: number};
+    if (chartId) {
+        pos = parseXYFromPanelId(typeof chartId === 'string' ? (chartId as any) : '');
+        if (isNaN(pos.x) || isNaN(pos.y)) {
             throw new ErrorWithCode(400, {
-                message: 'Failed to parse x,y from id query parameter',
-                attributes: {id},
+                message: 'Failed to parse x,y from chartId query parameter',
+                attributes: {chartId},
             });
         }
+    }
 
-        const {dashboardType, start, end, step, params: rawParmas} = req.body as QueryRangePostData;
+    const res = await req.ctx.call('Fetch dashboard details', async () => {
+        const dashboard = await getPreloadedPrometheusDashboard({
+            cluster,
+            dashboardType,
+        });
 
-        const {panel, templating} = await req.ctx.call('Fetch dashboard details', async () => {
-            const dashboard = await getPreloadedPrometheusDashboard({
-                cluster: ytAuthCluster,
-                dashboardType,
-            });
+        let panel;
+        if (chartId && pos) {
+            const {x, y} = pos;
 
-            const panel = dashboard.panels.find((item) => {
+            panel = dashboard.panels.find((item) => {
                 return item.gridPos.x === x && item.gridPos.y === y;
             });
             if (!panel || panel.type !== 'timeseries') {
                 throw new ErrorWithCode(400, {
                     message: `Failed to find details of a corresponding pannel`,
-                    attributes: {
-                        cluster: ytAuthCluster,
-                        dashboardType,
-                        x,
-                        y,
-                    },
+                    attributes: {cluster, dashboardType, x, y},
                 });
             }
-            return {panel, templating: dashboard.templating};
-        });
+        }
+        return {panel, templating: dashboard.templating};
+    });
 
-        const {permissions, list} = templating;
+    const {permissions, list} = res.templating;
 
-        const chartParams = list.reduce(
-            (acc, {name, default_for_ui}) => {
-                const value = rawParmas[name] ?? default_for_ui;
-                if (value !== undefined) {
-                    acc[name] = value;
-                }
-                return acc;
-            },
-            {} as typeof rawParmas,
-        );
+    const chartParams = list.reduce(
+        (acc, {name, default_for_ui}) => {
+            const value = params[name] ?? default_for_ui;
+            if (value !== undefined) {
+                acc[name] = value;
+            }
+            return acc;
+        },
+        {} as typeof params,
+    );
 
-        await req.ctx.call('Check dashboard permissions', () =>
-            checkDashboardPermissions(req, {
-                ytAuthCluster,
-                permissions,
-                chartParams,
-            }),
-        );
+    await req.ctx.call('Check dashboard permissions', () =>
+        checkDashboardPermissions(req, {
+            ytAuthCluster: cluster,
+            permissions,
+            chartParams,
+        }),
+    );
 
-        const {targets} = panel;
-
-        const results = await req.ctx.call('Fetch prometheus data', () => {
-            const queries = targets.map(({expr}) => {
-                const query = replaceExprParams(expr, chartParams, step);
-                return {query, start, end, step};
-            });
-
-            return Promise.all(
-                queries.map((params) => {
-                    return axios
-                        .get<QueryRangeData>(`${BASE_URL}/api/v1/query_range?`, {
-                            params,
-                        })
-                        .then(async (response) => {
-                            return response.data;
-                        });
-                }),
-            ).finally(() => {
-                res.appendHeader(
-                    'X-UI-Prometheus-Params',
-                    queries.map((item) => JSON.stringify(item)),
-                );
-            });
-        });
-
-        res.send({results});
-    } catch (e: any) {
-        sendAndLogError(req.ctx, res, null, e);
-    }
+    return Object.assign(res, {chartParams});
 }
 
-async function checkDashboardPermissions(
+export async function checkDashboardPermissions(
     req: Request,
     {
         ytAuthCluster,
