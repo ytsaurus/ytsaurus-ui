@@ -1,6 +1,6 @@
 import {escapeChars, formatByParamsQuotedEnv} from '../utils/format';
 
-import {PanelType, PrometheusDashboardType, PrometheusWidgetId} from './types';
+import {DiscoverValues, PanelType, PrometheusDashboardType, PrometheusWidgetId} from './types';
 
 export function getDashboardPath(type: PrometheusDashboardType) {
     return `//sys/interface-monitoring/${type}`;
@@ -89,3 +89,7 @@ export const humanizeInterval = (from: number, to: number) => {
     const minutes = Math.round(duration / minute);
     return `${minutes}m`;
 };
+
+export function makeDiscoverValuesKey({label, match}: DiscoverValues) {
+    return `_${label}_${match}_`;
+}
