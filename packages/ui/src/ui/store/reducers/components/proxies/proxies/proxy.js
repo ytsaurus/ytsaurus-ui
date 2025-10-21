@@ -5,11 +5,7 @@ export default class Proxy {
         // data comes in format like in /hosts/all, not like //sys/http_proxies
         this.name = data.name;
         this.host = data.name;
-<<<<<<< Updated upstream
-        this.state = data.dead ? 'offline' : 'online';
-=======
         this.state = data?.state ? data.state : data.dead ? 'offline' : 'online';
->>>>>>> Stashed changes
         this.effectiveState = this.banned ? 'banned' : this.state;
 
         this.banned = ypath.getBoolean(data, '/banned') || false;
