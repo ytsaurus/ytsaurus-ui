@@ -10,6 +10,9 @@ export const CLUSTER_GROUPS: Record<string, {caption: string; size?: 'l'}> = {
     'auxiliary-mrs': {
         caption: 'Auxiliary MRs',
     },
+    GPU: {
+        caption: 'GPU',
+    },
     'dynamic-tables': {
         caption: 'Dynamic Tables',
     },
