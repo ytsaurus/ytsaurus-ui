@@ -37,6 +37,11 @@ export interface UISettings {
     fontTypes?: Record<string, {regular: string; monospace: string}>;
 
     /**
+     * The options is used on browser side to generate url for links to Prometheus-based dashbords
+     */
+    grafanaBaseUrl?: string;
+
+    /**
      *  The option denies to create pools with `<Root>` parent from UI.
      */
     schedulingDenyRootAsParent?: boolean;

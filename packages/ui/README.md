@@ -74,7 +74,8 @@ All application files in a resulting docker-image will be placed in /opt/app, so
 
 - `YT_AUTH_ALLOW_INSECURE` - if defined allows insecure (over http) authentication, do not use it for production
 - `ALLOW_PASSWORD_AUTH` - If defined, the app requires a password for cluster access
-- `PROMETHEUS_BASE_URL` - If defined enables monitoring dashboards with prometheus data, see `Prometheus dashboards` below
+- `PROMETHEUS_BASE_URL` - If defined enables monitoring dashboards with prometheus data, see `Prometheus dashboards` below (the value is forwarded to `YTCoreConfig.prometheusBaseUrl`)
+- `GRAFANA_BASE_URL` - If defined enables links to specific dashbords when `YTCoreConfig.prometheusBaseUrl` is provided (the value is forwarded to `YTCoreConfig.uiSettings.grafanaBaseUrl`). By default the link is visible for all users, to control the visibility create `//sys/interface-monitoring/allow_grafana_url` node and add `use` permission for specific users/groups.
 
 ### Prometheus dashboards
 
