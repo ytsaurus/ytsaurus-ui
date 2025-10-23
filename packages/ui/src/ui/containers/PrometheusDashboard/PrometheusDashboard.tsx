@@ -3,34 +3,40 @@ import cn from 'bem-cn-lite';
 import {useSelector} from 'react-redux';
 import uniq_ from 'lodash/uniq';
 
-import {Select} from '@gravity-ui/uikit';
-
-import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
-
-import {YTError} from '../../../@types/types';
-
-import {YTErrorBlock} from '../../components/Block/Block';
-import {YTTimeline} from '../../components/Timeline';
-import {Toolbar, ToolbarItemToWrap} from '../../components/WithStickyToolbar/Toolbar/Toolbar';
-import {StickyContainer} from '../../components/StickyContainer/StickyContainer';
-import {YTErrors} from '../../rum/constants';
-import {getCluster} from '../../store/selectors/global/cluster';
+import {Select, Link} from '@gravity-ui/uikit';
 
 import {
-    PrometheusDashboardProvider,
-    usePrometheusDashboardContext,
-} from './PrometheusDashboardContext/PrometheusDashboardContext';
-import {PrometheusDashKit} from './PrometheusDashKit';
+    CheckPermissionResult,
+    makeCheckPermissionBatchSubRequest,
+} from '../../../shared/utils/check-permission';
 import {
     DashboardInfo,
     PluginRendererDataParams,
     PrometheusDashboardType,
 } from '../../../shared/prometheus/types';
+import {getDashboardPath, makeDiscoverValuesKey} from '../../../shared/prometheus/utils';
+import {YTError} from '../../../@types/types';
+
+import {getConfigData} from '../../config/ui-settings';
+import {YTErrorBlock} from '../../components/Block/Block';
+import {StickyContainer} from '../../components/StickyContainer/StickyContainer';
+import {YTTimeline} from '../../components/Timeline';
+import {Toolbar, ToolbarItemToWrap} from '../../components/WithStickyToolbar/Toolbar/Toolbar';
+import {YTErrors} from '../../rum/constants';
+import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
+import {usePrometheusDiscoverValuesQuery} from '../../store/api/prometheus';
+import {useFetchBatchQuery} from '../../store/api/yt/executeBatch';
+import {usePrometheusDashboardParams} from '../../store/reducers/prometheusDashboard/prometheusDashboard-hooks';
+import {getCluster} from '../../store/selectors/global/cluster';
+import {getCurrentUserName} from '../../store/selectors/global';
+
+import {PrometheusDashKit} from './PrometheusDashKit';
+import {
+    PrometheusDashboardProvider,
+    usePrometheusDashboardContext,
+} from './PrometheusDashboardContext/PrometheusDashboardContext';
 
 import './PrometheusDashboard.scss';
-import {getDashboardPath, makeDiscoverValuesKey} from '../../../shared/prometheus/utils';
-import {usePrometheusDiscoverValuesQuery} from '../../store/api/prometheus';
-import {usePrometheusDashboardParams} from '../../store/reducers/prometheusDashboard/prometheusDashboard-hooks';
 
 const block = cn('yt-prometheus-dashboard');
 
@@ -64,7 +70,10 @@ export const PrometheusDashboard = React.memo(function (props: PrometheusDashboa
                 {({stickyTopClassName}) => (
                     <React.Fragment>
                         <div className={block('toolbar', stickyTopClassName)}>
-                            <PrometheusTimeline />
+                            <PrometheusTimelineToolbar
+                                uid={layout?.uid}
+                                effectiveParams={effectiveParams}
+                            />
                             {hasToolbar && (
                                 <Toolbar itemsToWrap={toolbarItems ?? []} marginTopSkip />
                             )}
@@ -138,11 +147,19 @@ function makeNotImplementedLayout({type, params, uid}: PrometheusDashboardProps 
     };
 }
 
-function PrometheusTimeline() {
+function PrometheusTimelineToolbar({
+    uid,
+    effectiveParams,
+}: {
+    uid?: string;
+    effectiveParams: Record<string, string | number>;
+}) {
     const {
         timeRangeFilter: {from, to, shortcutValue},
         setTimeRangeFilter,
     } = usePrometheusDashboardContext();
+
+    const grafanaUrl = useGrafanaUrl({uid, effectiveParams, from, to});
 
     return (
         <Toolbar
@@ -159,9 +176,77 @@ function PrometheusTimeline() {
                         />
                     ),
                     growable: true,
+                    marginRight: 'none',
+                },
+                {
+                    node: grafanaUrl ? (
+                        <Link href={grafanaUrl} target="_blank">
+                            Grafana
+                        </Link>
+                    ) : null,
                 },
             ]}
         />
+    );
+}
+
+const {grafanaBaseUrl} = getConfigData().uiSettings ?? {};
+
+function useGrafanaUrl({
+    uid,
+    effectiveParams,
+    from,
+    to,
+}: {
+    uid?: string;
+    effectiveParams: Record<string, string | number>;
+    from?: number;
+    to?: number;
+}) {
+    const allowGrafanaUrl = useGrafanaUrlVisibility();
+    const grafanaUrl = React.useMemo(() => {
+        if (!uid || !grafanaBaseUrl || !allowGrafanaUrl || from === undefined || to === undefined) {
+            return undefined;
+        }
+
+        const params = Object.keys(effectiveParams).reduce((acc, key) => {
+            const value = effectiveParams[key];
+            acc.append(`var-${key}`, String(value));
+            return acc;
+        }, new URLSearchParams());
+
+        params.append('from', String(from));
+        params.append('to', String(to));
+
+        return `${grafanaBaseUrl}/d/${uid}?${params}`;
+    }, [uid, effectiveParams, allowGrafanaUrl, from, to]);
+
+    return grafanaUrl;
+}
+
+function useGrafanaUrlVisibility() {
+    const cluster = useSelector(getCluster);
+    const user = useSelector(getCurrentUserName);
+
+    const {data, error} = useFetchBatchQuery<CheckPermissionResult>({
+        cluster,
+        id: YTApiId.checkPermissions,
+        parameters: {
+            requests: [
+                makeCheckPermissionBatchSubRequest({
+                    path: '//sys/interface-monitoring/allow_grafana_url',
+                    user,
+                    permission: 'use',
+                }),
+            ],
+        },
+        errorTitle: 'Check `use` permission for //sys/interface-monitoring/allow_grafana_url',
+    });
+
+    const {output} = data?.[0] ?? {};
+
+    return (
+        error?.inner_errors?.[0].code === YTErrors.NODE_DOES_NOT_EXIST || output?.action === 'allow'
     );
 }
 

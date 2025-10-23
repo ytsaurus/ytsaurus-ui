@@ -28,7 +28,7 @@ export type ToolbarItemToWrap = {
     wrapperClassName?: string;
     growable?: boolean;
     shrinkable?: boolean;
-    marginRight?: 'half';
+    marginRight?: 'half' | 'none';
     overflow?: 'hidden';
     width?: number;
 };
