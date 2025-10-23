@@ -1,6 +1,6 @@
 import {AppConfig, AppContext} from '@gravity-ui/nodekit';
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-import {Request, Response} from '@gravity-ui/expresskit';
+import {AppConfig, Request, Response} from '@gravity-ui/expresskit';
 import {MetrikaCounter} from '@gravity-ui/app-layout';
 import type {NodeKit} from '@gravity-ui/nodekit';
 
