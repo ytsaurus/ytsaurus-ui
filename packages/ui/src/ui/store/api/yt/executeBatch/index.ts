@@ -34,7 +34,6 @@ export const batchApi = ytApi.injectEndpoints({
 });
 
 type BatchQueryResult = typeof batchApi.endpoints.fetchBatch.Types.ResultType;
-type BatchQueryArgs = typeof batchApi.endpoints.fetchBatch.Types.QueryArg;
 
 /**
  * Custom hook for fetching batch query data with automatic type conversion.
@@ -61,10 +60,8 @@ type BatchQueryArgs = typeof batchApi.endpoints.fetchBatch.Types.QueryArg;
  * });
  */
 export function useFetchBatchQuery<T>(
-    args: BatchQueryArgs extends {setup: unknown}
-        ? BatchQueryArgs
-        : Omit<BatchQueryArgs, 'cluster'>,
-    options?: UseQueryOptions<BatchQueryResult, BatchQueryArgs>,
+    args: BatchApiArgs,
+    options?: UseQueryOptions<BatchQueryResult, BatchApiArgs>,
 ) {
     const useAutoRefresh = useSelector(getUseAutoRefresh);
     const cluster = useSelector(getCluster);
