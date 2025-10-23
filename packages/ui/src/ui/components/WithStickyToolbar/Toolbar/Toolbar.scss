@@ -32,6 +32,10 @@ $TOOLBAR_COMPONENT_HEIGHT: 48px;
         &_margin-right_half {
             margin-right: 12px;
         }
+
+        &_margin-right_none {
+            margin-right: unset;
+        }
     }
 
     &_margin-top-skip {
