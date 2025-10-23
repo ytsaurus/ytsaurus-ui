@@ -1,13 +1,9 @@
 import typeis from 'type-is';
 
-import {AuthPolicy} from '@gravity-ui/expresskit';
 import {AppConfig} from '@gravity-ui/nodekit';
-import {ytAuthConfigFromEnv} from '../utils/configs/auth-config-from-env';
 
 const localModeConfig: Partial<AppConfig> = {
-    ...ytAuthConfigFromEnv,
     ytAuthAllowInsecure: true,
-    appAuthPolicy: ytAuthConfigFromEnv ? AuthPolicy.required : AuthPolicy.disabled,
 
     ytInterfaceSecret: undefined,
 
