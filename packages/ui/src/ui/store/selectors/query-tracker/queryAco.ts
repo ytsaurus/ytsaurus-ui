@@ -46,7 +46,7 @@ export const getAvailableYql = createSelector([selectQueryTrackerInfo], (qtInfo)
 });
 
 export const getDefaultYqlVersion = createSelector([selectQueryTrackerInfo], (qtInfo) => {
-    return qtInfo?.engines_info?.yql.default_yql_ui_version;
+    return qtInfo?.engines_info?.yql?.default_yql_ui_version;
 });
 
 export const isSupportedShareQuery = createSelector(

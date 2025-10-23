@@ -538,7 +538,7 @@ export type GetQueryTrackerInfoResponse = {
     supported_features: {access_control: boolean; multiple_aco?: boolean};
     clusters?: Array<string>;
     engines_info?: {
-        yql: YqlEnginesInfo;
+        yql?: YqlEnginesInfo;
     };
 };
 

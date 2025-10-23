@@ -19,4 +19,5 @@ export const QueryTrackerTopRowLazy = withLazyLoading(
         return {default: (await importQT()).QueryTrackerTopRow};
     }),
     '',
+    {inline: true},
 );

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 
 import {YTErrorBlock} from '../../components/Block/Block';
 import CompactError from '../CompactError/CompactError';
+import {YTErrorInline} from '../../containers/YTErrorInline/YTErrorInline';
 
 import {rumLogError} from '../../rum/rum-counter';
 import {YTError} from '../../../@types/types';
@@ -14,6 +15,7 @@ export type ErrorBoundaryProps = {
 
     compact?: true;
     maxCompactMessageLength?: number;
+    inline?: boolean;
 
     children: React.ReactNode;
 
@@ -57,7 +59,12 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, State> 
 
     render() {
         const {hasError, error} = this.state;
-        const {children, compact, maxCompactMessageLength} = this.props;
+        const {children, compact, maxCompactMessageLength, inline} = this.props;
+
+        if (inline) {
+            return hasError ? <YTErrorInline error={error} /> : children;
+        }
+
         if (compact || maxCompactMessageLength) {
             return hasError ? (
                 <CompactError error={error} maxMessageLength={maxCompactMessageLength} />
@@ -65,6 +72,7 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, State> 
                 children
             );
         }
+
         return hasError ? <YTErrorBlock error={error} /> : children;
     }
 }
