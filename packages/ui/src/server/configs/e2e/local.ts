@@ -9,7 +9,6 @@ const e2eConfig: Partial<AppConfig> = {
         uploadTableUseLocalmode: true,
         queryTrackerStage: 'testing',
         directDownload: false,
-        docsBaseUrl: process.env.YT_DOCS_BASE_URL || 'https://ytsaurus.tech/docs/en',
         schedulingMonitoring: {
             title: 'My monitoring',
             urlTemplate:
