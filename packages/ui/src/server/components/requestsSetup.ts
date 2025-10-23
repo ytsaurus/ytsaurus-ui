@@ -5,24 +5,30 @@ import {ClusterConfig} from '../../shared/yt-types';
 import {getClusterConfig} from '../components/utils';
 import {getApp} from '../ServerFactory';
 
-function getRobotSecret(cluster: string, type: 'oauthToken' | 'prometheusAuthorizationHeader') {
+function getRobotSecret<T>(
+    cluster: string,
+    type: 'oauthToken' | 'prometheusAuthHeaders',
+    defaultValue: T,
+): T {
     const {ytInterfaceSecret} = getApp().config as YTCoreConfig;
 
-    let res = '';
+    let res;
 
     if (ytInterfaceSecret) {
-        res =
-            // eslint-disable-next-line security/detect-non-literal-require
-            require(ytInterfaceSecret)?.[cluster]?.[type] ||
-            // eslint-disable-next-line security/detect-non-literal-require
-            require(ytInterfaceSecret)?.[type]; // Backward compatibility
+        // eslint-disable-next-line security/detect-non-literal-require
+        const content = require(ytInterfaceSecret);
+        res = content?.[cluster]?.[type] || content?.[type];
     }
 
-    return res || process.env.YT_TOKEN;
+    return res ?? defaultValue;
 }
 
 function getRobotOAuthToken(cluster: string) {
-    return getRobotSecret(cluster, 'oauthToken');
+    return getRobotSecret(cluster, 'oauthToken', process.env.YT_TOKEN ?? '');
+}
+
+export function getPrometheusAuthHeaders(cluster: string) {
+    return getRobotSecret<Record<string, string>>(cluster, 'prometheusAuthHeaders', {});
 }
 
 export interface YTApiSetup {

@@ -6,6 +6,7 @@ import {QueryRangeData, QueryRangePostData} from '../../../shared/prometheus/typ
 
 import {sendAndLogError} from '../../utils';
 import {fetchDashbaordDetails} from './prometheus.utils';
+import {getPrometheusAuthHeaders} from '../../components/requestsSetup';
 
 export async function prometheusQueryRange(req: Request, res: Response) {
     const BASE_URL = req.ctx.config.prometheusBaseUrl;
@@ -37,19 +38,18 @@ export async function prometheusQueryRange(req: Request, res: Response) {
                     return axios
                         .get<QueryRangeData>(`${BASE_URL}/api/v1/query_range?`, {
                             params,
+                            headers: getPrometheusAuthHeaders(ytAuthCluster),
                         })
                         .then(async (response) => {
                             return response.data;
                         });
                 }),
-            )
-
-                .finally(() => {
-                    res.appendHeader(
-                        'X-UI-Prometheus-Params',
-                        queries.map((item) => JSON.stringify(item)),
-                    );
-                });
+            ).finally(() => {
+                res.appendHeader(
+                    'X-UI-Prometheus-Params',
+                    queries.map((item) => JSON.stringify(item)),
+                );
+            });
         });
 
         res.send({results});

@@ -12,6 +12,7 @@ import {
 
 import {sendAndLogError} from '../../utils';
 import {fetchDashbaordDetails} from './prometheus.utils';
+import {getPrometheusAuthHeaders} from '../../components/requestsSetup';
 
 export async function prometheusDiscoverValues(req: Request, res: Response) {
     const BASE_URL = req.ctx.config.prometheusBaseUrl;
@@ -41,6 +42,7 @@ export async function prometheusDiscoverValues(req: Request, res: Response) {
                                 data: Array<string>;
                             }>(
                                 `${BASE_URL}/api/v1/label/${encodeURIComponent(label)}/values?match[]=${encodeURIComponent(expr)}`,
+                                {headers: getPrometheusAuthHeaders(ytAuthCluster)},
                             )
                             .then(({data}) => {
                                 return {key, expr, result: data};

@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import {useSelector} from 'react-redux';
 import uniq_ from 'lodash/uniq';
 
-import {Select, Link} from '@gravity-ui/uikit';
+import {Link, Select} from '@gravity-ui/uikit';
 
 import {
     CheckPermissionResult,
