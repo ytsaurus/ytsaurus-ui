@@ -592,6 +592,7 @@ class ACL extends Component<Props> {
     renderMeta() {
         const {
             idmKind,
+            path,
             disableAclInheritance,
             bossApproval,
             disableInheritanceResponsible,
@@ -656,6 +657,8 @@ class ACL extends Component<Props> {
                     <MyPermissions
                         className={block('meta-item', {'with-buttons': !hasColumns})}
                         userPermissions={userPermissions}
+                        path={path}
+                        idmKind={idmKind}
                     />
                 )}
             </Flex>

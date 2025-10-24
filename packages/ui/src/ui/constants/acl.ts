@@ -66,9 +66,13 @@ export type PermissionSettings = {
     allowInheritResponsibles: boolean;
     allowDeleteWithoutRevisionCheck?: boolean;
     skipResponsible?: boolean;
-    getAvailablePermissions?: (params: {
-        path: string;
-    }) => Promise<undefined | PermissionSettings['permissionsToRequest']>;
+    getAvailablePermissions?: (params: {path: string}) => Promise<
+        | undefined
+        | {
+              permissionsToRequest: PermissionSettings['permissionsToRequest'];
+              permissionsToCheck: PermissionSettings['permissionTypes'];
+          }
+    >;
 };
 
 export const PERMISSIONS_SETTINGS: Record<IdmKindType, PermissionSettings> = {

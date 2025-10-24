@@ -21,6 +21,7 @@ import {makeLink} from '../../../utils/utils';
 import {AclColumnGroup, IdmKindType} from '../../../utils/acl/acl-types';
 import {YTPermissionTypeUI} from '../../../utils/acl/acl-api';
 import {PermissionToRequest} from '../../../store/actions/acl';
+import {useAvailablePermissions} from '../hooks/use-available-permissions';
 
 const block = cn('acl-request-permissions');
 
@@ -128,27 +129,11 @@ function RequestPermissions(props: Props) {
     );
 
     const currentCaption = `Current ${SHORT_TITLE[idmKind] ?? idmKind}`;
-    const {permissionsToRequest, getAvailablePermissions} =
-        UIFactory.getAclPermissionsSettings()[idmKind];
 
-    const [availablePermissions, setAvailablePermissions] = React.useState<
-        typeof permissionsToRequest | undefined
-    >(undefined);
-
-    const onShow = useCallback(async () => {
-        try {
-            const value = await getAvailablePermissions?.({path});
-            setAvailablePermissions(value);
-        } catch {
-            setAvailablePermissions(undefined);
-        } finally {
-            handleShow();
-        }
-    }, [path, handleShow, getAvailablePermissions]);
+    const {permissionsToRequest: choices} = useAvailablePermissions({idmKind, path});
 
     const firstItemDisabled = idmKind === IdmObjectType.ACCOUNT;
 
-    const choices = availablePermissions ?? permissionsToRequest;
     const permissions = firstItemDisabled ? valueWithCheckedFirstChoice(choices) : null;
 
     const availableFields: Record<
@@ -302,7 +287,12 @@ function RequestPermissions(props: Props) {
     return !choices?.length ? null : (
         <ErrorBoundary>
             <div className={block(null, className)}>
-                <Button className={buttonClassName} view="action" {...buttonProps} onClick={onShow}>
+                <Button
+                    className={buttonClassName}
+                    view="action"
+                    {...buttonProps}
+                    onClick={handleShow}
+                >
                     {title}
                 </Button>
 
