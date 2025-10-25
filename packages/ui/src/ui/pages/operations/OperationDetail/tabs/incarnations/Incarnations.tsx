@@ -76,13 +76,13 @@ export function IncarnationsTemplate(props: IncarnationProps) {
                         {' '}
                         {incarnationsAlert}
                         {incarnations?.length ? (
-                            incarnations.map((incarnation) => (
+                            incarnations.map((incarnation, index) => (
                                 <Card
                                     key={incarnation.id}
                                     view={'outlined'}
                                     className={block('incarnation')}
                                 >
-                                    <Disclosure keepMounted={false}>
+                                    <Disclosure keepMounted={false} defaultExpanded={index === 0}>
                                         <Disclosure.Summary>
                                             {(summaryProps) => (
                                                 <IncarnationCardHeader
