@@ -32,8 +32,9 @@ export function useDescriptionActions() {
     }, [data, dispatch]);
 
     const save = useCallback(() => {
-        updateFn(edittingAnnotation || '');
-        dispatch(toggleEditMode());
+        updateFn(edittingAnnotation || '').then(() => {
+            dispatch(toggleEditMode());
+        });
     }, [updateFn, edittingAnnotation, dispatch]);
 
     return {edit, cancel, save, isLoading};

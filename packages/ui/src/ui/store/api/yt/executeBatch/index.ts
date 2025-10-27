@@ -12,6 +12,14 @@ import type {MutationOptions, OverrideDataType, UseQueryOptions} from '../types'
 import {executeBatchV3} from './endpoint';
 import type {BatchApiArgs, BatchApiResults} from './endpoint';
 
+const updateExecuteBatch: typeof executeBatchV3 = async (...args) => {
+    const res = await executeBatchV3(...args);
+    if ('error' in res) {
+        throw res.error;
+    }
+    return res;
+};
+
 export const batchApi = ytApi.injectEndpoints({
     endpoints: (build) => ({
         fetchBatch: build.query<BatchApiResults, BatchApiArgs>({
@@ -19,7 +27,7 @@ export const batchApi = ytApi.injectEndpoints({
             providesTags: (_result, _error, arg) => [arg.id],
         }),
         updateBatch: build.mutation<BatchApiResults, BatchApiArgs>({
-            queryFn: executeBatchV3,
+            queryFn: updateExecuteBatch,
             invalidatesTags: (_result, _error, arg) => [arg.id],
         }),
     }),
@@ -137,6 +145,10 @@ export function useUpdateBatchMutation<T>(
             return {
                 data: response.data as BatchApiResults<T> | undefined,
             };
+        }
+
+        if (response.error) {
+            throw response.error;
         }
 
         return response;
