@@ -179,6 +179,15 @@ test('Navigation: yql-v3-types', async ({page}) => {
         await expect(page).toHaveScreenshot();
     });
 
+    await test.step('Allow raw string', async () => {
+        await page.mouse.wheel(500, 0);
+        await page.locator('.navigation-table').getByTitle('settings').click();
+        await expect(page).toHaveScreenshot();
+        await page.getByText('Allow raw strings').click();
+        await expect(page).toHaveScreenshot();
+        await page.getByText('Allow raw strings').click();
+    });
+
     await test.step('Diable yql-v3-types', async () => {
         await table(page).settingsToggleVisibility();
         await table(page).settingsShowByName('YQL V3 types');
@@ -190,5 +199,14 @@ test('Navigation: yql-v3-types', async ({page}) => {
         await table(page).waitForHidden('.data-table__row .yql_datetime64');
         await table(page).waitForTableContent('.navigation-table', 5);
         await expect(page).toHaveScreenshot();
+    });
+
+    await test.step('Allow raw string', async () => {
+        await page.mouse.wheel(500, 0);
+        await page.locator('.navigation-table').getByTitle('settings').click();
+        await expect(page).toHaveScreenshot();
+        await page.getByText('Allow raw strings').click();
+        await expect(page).toHaveScreenshot();
+        await page.getByText('Allow raw strings').click();
     });
 });

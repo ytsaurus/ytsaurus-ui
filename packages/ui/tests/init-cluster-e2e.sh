@@ -229,7 +229,10 @@ yt create -r --attributes "{schema=[
   {name=double;type_v3=double};
   {name=int64;type_v3=int64};
   {name=timestamp;type_v3=timestamp64};
-  {name=uint64;type_v3=uint64}
+  {name=uint64;type_v3=uint64};
+  {name=string;type_v3=string};
+  {name=json;type_v3=json};
+  {name=utf8;type_v3=utf8};
 ]}" table ${YQLV3_TABLE}
 (
     set +x
@@ -237,10 +240,20 @@ yt create -r --attributes "{schema=[
         d=$i$i$i$i$i$i$i$i$i$i$i
         date32=$i$i$i$i
         b=$([ $(expr $i % 2) = "0" ] && echo false || echo true)
-        echo '{"bool":'${b}',"date32":'${date32}',"datetime64":'${d}',"double":'${i}'.'${d}',"int64":'${d}',"timestamp":'${d}',"uint64":'${d}'}'
+        echo '{ "bool":'${b}',
+            "date32":'${date32}',
+            "datetime64":'${d}',
+            "double":'${i}'.'${d}',
+            "int64":'${d}',
+            "timestamp":'${d}',
+            "uint64":'${d}',
+            "string": "With\nnew\nlines",
+            "json": "{\"foo\":\"bar\"}",
+            "utf8": "Некоторый текст"
+        }'
     done
     set -x
-) | yt write-table --format json ${YQLV3_TABLE}
+) | yt write-table --format '<encode_utf8=%false>json' ${YQLV3_TABLE}
 
 CYRILLIC_TRUNCATED_TABLE=${E2E_DIR}/tmp/cyrillic-truncated-table
 CYRILLIC_TRUNCATED_TABLE_SCHEMA=$(cat $(dirname $0)/data/cyrillic-truncated-table/table.schema)
