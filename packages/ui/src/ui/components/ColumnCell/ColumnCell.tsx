@@ -13,6 +13,7 @@ import Label from '../../components/Label/Label';
 import {TypeArray} from '../../components/SchemaDataType/dataTypes';
 import {Tooltip} from '../../components/Tooltip/Tooltip';
 import {UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
+import {rumLogError} from '../../rum/rum-counter';
 
 import i18n from './i18n';
 
@@ -98,9 +99,10 @@ export function ColumnCell({
         return {tag, isIncompleteTagged, isIncompleteValue};
     }, [value, formatType, ysonSettings]);
 
+    const valueType = useYqlTypes ? formatType : value?.$type;
     const rawValue = useYqlTypes ? value?.[0] : value?.$value;
 
-    const allowRawCopy = typeof rawValue === 'string';
+    const allowRawCopy = typeof rawValue === 'string' && isStringType(valueType);
     const useRawString = allowRawCopy && allowRawStrings;
     let copyTooltip = i18n('hold-shift-raw');
     if (useRawString) {
@@ -182,4 +184,24 @@ export function ColumnCell({
             )}
         </div>
     );
+}
+
+function isStringType(type?: string | TypeArray) {
+    if (!type) {
+        return false;
+    }
+    if (typeof type === 'string') {
+        return type === 'string';
+    }
+
+    try {
+        if (type[0] !== 'DataType') {
+            return false;
+        }
+        const lower = type[1].toLowerCase();
+        return lower === 'string' || lower === 'json' || lower === 'utf8';
+    } catch (error: any) {
+        rumLogError({message: `ColumnCell: unexpected type: '${JSON.stringify(type)}'`}, error);
+        return false;
+    }
 }
