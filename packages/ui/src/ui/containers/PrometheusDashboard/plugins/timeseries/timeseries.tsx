@@ -14,7 +14,7 @@ import {YT} from '../../../../config/yt-config';
 import {IntersectionObserverContainer} from '../../../../components/IntersectionObserverContainer/IntersectionObserverContainer';
 
 import {YTChartKitLazy, getSerieColor} from '../../../../components/YTChartKit';
-import {YagrWidgetData} from '@gravity-ui/chartkit/yagr';
+import {Yagr, YagrWidgetData} from '@gravity-ui/chartkit/yagr';
 import {InlineError} from '../../../../components/InlineError/InlineError';
 import Loader from '../../../../components/Loader/Loader';
 import {useElementSize} from '../../../../hooks/useResizeObserver';
@@ -78,11 +78,25 @@ function PrometheusChart({
         isLoading,
     } = useLoadQueriesData({id, data, pointCount, from, to});
 
+    const [yagr, setYagr] = React.useState<Yagr | null>();
+    React.useEffect(() => {
+        yagr?.subscribe();
+        return () => {
+            yagr?.unsubscribe();
+        };
+    }, [yagr]);
+
     return (
         <React.Fragment>
             <Flex ref={setElement} className={block('widget')} direction="column" id={id}>
                 {chartData ? (
-                    <YTChartKitLazy type="yagr" data={chartData} />
+                    <YTChartKitLazy
+                        type="yagr"
+                        data={chartData}
+                        onChartLoad={(d) => {
+                            setYagr(d.widget);
+                        }}
+                    />
                 ) : (
                     <>
                         <div className={block('widget-title')}>{title}</div>
@@ -198,6 +212,7 @@ function makeYagrWidgetData(
             title: {text: title},
             legend: {show: showLegend},
             tooltip: {
+                show: (y) => y.state.isMouseOver,
                 title: {
                     y: ({x}) => {
                         return format.DateTime(x / 1000);
@@ -220,6 +235,7 @@ function makeYagrWidgetData(
                     label: axisLabel,
                 },
             },
+            cursor: {sync: 'yt-timeseries-cursor'},
         },
     };
 
