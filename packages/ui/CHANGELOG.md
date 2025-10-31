@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.6.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v2.5.0...ui-v2.6.0) (2025-10-31)
+
+
+### Features
+
+* **Operation/Jobs:** add monitoring descriptor filter [YTFRONT-5254] ([5b7bc64](https://github.com/ytsaurus/ytsaurus-ui/commit/5b7bc6456494bff6e0a5451123d8a17a07c80b43))
+* **Operation/JobsMonitoring:** new jobs monitor [YTFRONT-5053] ([c9d5051](https://github.com/ytsaurus/ytsaurus-ui/commit/c9d5051d755c681a96c1ee1c2e7c8b52efe164ce))
+
+
+### Bug Fixes
+
+* **Chyt/ACL:** display specific set of permissions [YTFRONT-5275] ([1022307](https://github.com/ytsaurus/ytsaurus-ui/commit/1022307a0804eaa979c21c78067926f63b16e548))
+* **ClustersMenu:** place GPU group after 'Auxiliary MRs' [YTFRONT-5282] ([d7f387a](https://github.com/ytsaurus/ytsaurus-ui/commit/d7f387ab3f0ca93c09138c13e44b7be85b6d1674))
+* **Navigation/Attributes:** compression codec [YTFRONT-5200] ([1062551](https://github.com/ytsaurus/ytsaurus-ui/commit/1062551b150fcb2baf3923ac1c967f581ac34512))
+* **Navigation/Description:** do not close edit mode in case of saving error [YTFRONT-5273] ([a3b06cf](https://github.com/ytsaurus/ytsaurus-ui/commit/a3b06cf13d438aad436babdcbf88a19986fb9677))
+* **Navigation/Table:** apply 'Allow raw strings' only for string-types [YTFRONT-5226] ([4358b69](https://github.com/ytsaurus/ytsaurus-ui/commit/4358b69a04ea901e5569e0e84a549569ab52a0b4))
+* **Operation/Incarnations:** expand by default first incarnation [YTFRONT-5278] ([e55f832](https://github.com/ytsaurus/ytsaurus-ui/commit/e55f8321b7c159aa6de7f9624f8a1b191e78d88c))
+* **Queries:** queries list update problem [YTFRONT-5260] ([1a8708f](https://github.com/ytsaurus/ytsaurus-ui/commit/1a8708fe6bc6f5025cf998ceefead8d37f6d6791))
+* **UTF8:** operation title encoding problem [YTFRONT-5269] ([0a7ebb2](https://github.com/ytsaurus/ytsaurus-ui/commit/0a7ebb2f43b39bba062986d4a16aff4cda4234bd))
+
 ## [2.5.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v2.4.0...ui-v2.5.0) (2025-10-17)
 
 
