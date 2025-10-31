@@ -120,6 +120,13 @@ test('Components - RPC-Proxies', async ({page}) => {
     await expect(page).toHaveScreenshot();
 });
 
+test('Components - Cypress-Proxies', async ({page}) => {
+    await page.goto(makeClusterUrl(`components/cypress_proxies`));
+    await page.waitForSelector('.elements-page__content');
+
+    await expect(page).toHaveScreenshot();
+});
+
 test('Components - Versions', async ({page}) => {
     await page.goto(makeClusterUrl(`components/versions?detailsSort=asc-true,field-type`));
     await page.waitForSelector('.versions-summary');
