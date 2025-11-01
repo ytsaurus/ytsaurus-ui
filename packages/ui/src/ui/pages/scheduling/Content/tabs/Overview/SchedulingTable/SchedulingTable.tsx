@@ -1,7 +1,7 @@
-import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 import moment from 'moment';
+import React from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 
 import compact_ from 'lodash/compact';
 
@@ -15,20 +15,22 @@ import ColumnHeader, {
 import {
     DataTableGravity,
     TableCell,
-    useTable,
-    tanstack,
     TableSettings,
+    tanstack,
+    useTable,
 } from '../../../../../../components/DataTableGravity';
 import {
     FormatNumber,
     FormatNumberProps,
 } from '../../../../../../components/FormatNumber/FormatNumber';
+import Label from '../../../../../../components/Label/Label';
 import MetaTable from '../../../../../../components/MetaTable/MetaTable';
 import {OperationType} from '../../../../../../components/OperationType/OperationType';
 import {SubjectCard} from '../../../../../../components/SubjectLink/SubjectLink';
 import {Tooltip} from '../../../../../../components/Tooltip/Tooltip';
+import {openAttributesModal} from '../../../../../../store/actions/modals/attributes-modal';
+import {getPoolPathsByName} from '../../../../../../store/actions/scheduling/expanded-pools';
 import {getSchedulingOperationsLoading} from '../../../../../../store/selectors/scheduling/expanded-pools';
-import Label from '../../../../../../components/Label/Label';
 import {
     getSchedulingContentMode,
     getSchedulingOverviewTableItems,
@@ -36,27 +38,25 @@ import {
     getSchedulingSortState,
     getSchedulingTreeMainResource,
 } from '../../../../../../store/selectors/scheduling/scheduling';
-import {getPoolPathsByName} from '../../../../../../store/actions/scheduling/expanded-pools';
-import {openAttributesModal} from '../../../../../../store/actions/modals/attributes-modal';
 import {useThunkDispatch} from '../../../../../../store/thunkDispatch';
 
-import {NameCell} from './NameCell';
-import i18n from './i18n';
-import './SchedulingTable.scss';
-import {getSchedulingOverivewColumns} from '../../../../../../store/selectors/scheduling/overview-columns';
-import {childTableItems, SchedulingColumn} from '../../../../../../utils/scheduling/detailsTable';
 import {KeysByType} from '../../../../../../../@types/types';
+import {formatTimeDuration} from '../../../../../../components/TimeDuration/TimeDuration';
+import {useSettingsColumnSizes} from '../../../../../../hooks/settings/use-settings-column-sizes';
+import {useSettingsVisibleColumns} from '../../../../../../hooks/settings/use-settings-column-visibility';
+import ShareUsageBar from '../../../../../../pages/scheduling/Content/controls/ShareUsageBar';
 import {
     openEditModal,
     schedulingSetSortState,
 } from '../../../../../../store/actions/scheduling/scheduling';
 import {openPoolDeleteModal} from '../../../../../../store/actions/scheduling/scheduling-ts';
+import {getSchedulingOverivewColumns} from '../../../../../../store/selectors/scheduling/overview-columns';
 import {getProgressTheme} from '../../../../../../utils/progress';
-import ShareUsageBar from '../../../../../../pages/scheduling/Content/controls/ShareUsageBar';
-import {useSettingsColumnSizes} from '../../../../../../hooks/settings/use-settings-column-sizes';
-import {useSettingsVisibleColumns} from '../../../../../../hooks/settings/use-settings-column-visibility';
+import {SchedulingColumn, childTableItems} from '../../../../../../utils/scheduling/detailsTable';
+import i18n from './i18n';
+import {NameCell} from './NameCell';
 import {PoolAbc} from './PoolAbc';
-import {formatTimeDuration} from '../../../../../../components/TimeDuration/TimeDuration';
+import './SchedulingTable.scss';
 
 const block = cn('yt-scheduling-table');
 
@@ -65,6 +65,7 @@ export type RowData = ReturnType<typeof getSchedulingOverviewTableItems>[number]
 export function SchedulingTable() {
     const {columnSizes, setColumnSizes} = useSettingsColumnSizes(
         'global::scheduling::overviewColumnSizes',
+        {minWidth: 80},
     );
 
     const {onColumnVisibilityChange, onColumnOrderChange} = useSettingsVisibleColumns(
@@ -365,7 +366,6 @@ function useSchedulingTableColumns() {
                     />
                 ),
                 cell: ({row: {original: item}}) => {
-                    const {} = item;
                     return (
                         <TableCell>
                             <ResourceSummary item={item} type="usage" />
@@ -393,7 +393,6 @@ function useSchedulingTableColumns() {
                     />
                 ),
                 cell: ({row: {original: item}}) => {
-                    const {} = item;
                     return (
                         <TableCell>
                             <ResourceSummary item={item} type="demand" />
@@ -675,7 +674,7 @@ function ResourceSummary({item, type}: ResourceSummaryProps) {
 
     const cpuContent = format.NumberSmart(cpu?.[type]) + ' CPU';
     const gpuContent = format.NumberSmart(gpu?.[type]) + ' GPU';
-    const memContent = format.Bytes(user_memory?.[type]);
+    const memContent = format.Bytes(user_memory?.[type]) + ' RAM';
 
     const l1 = dominantResource === 'cpu' ? cpuContent : gpuContent;
     const l2 =
