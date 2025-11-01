@@ -11,30 +11,31 @@ import './PoolTags.scss';
 const block = cn('scheduling-pool-tags');
 
 function PoolTags({pool}: {pool: PoolTreeNode | PoolLeafNode}) {
-    const {integralType} = pool;
-    const showGuaranteeType = integralType === 'burst' || integralType === 'relaxed';
-    const hasFlow = Number(pool.flowCPU) > 0 || Number(pool.flowGPU) > 0;
+    const {integralType, flowCPU, flowGPU} = pool;
 
-    const content = [
-        showGuaranteeType && (
+    if (integralType === 'burst' || integralType === 'relaxed') {
+        return (
             <Label
                 key={'guarantee-type'}
                 className={block('tag')}
                 text={capitalize_(integralType)}
                 theme={'complementary'}
             />
-        ),
-        !showGuaranteeType && hasFlow && (
+        );
+    }
+
+    if (Number(flowCPU) > 0 || Number(flowGPU) > 0) {
+        return (
             <Label
                 key="integral"
                 className={block('tag')}
                 text={'Integral'}
                 theme={'complementary'}
             />
-        ),
-    ].filter(Boolean);
+        );
+    }
 
-    return content;
+    return null;
 }
 
 export default React.memo(PoolTags);
