@@ -183,7 +183,7 @@ export const childTableItems = {
                 const res = usageRatio! / fairShareRatio!;
                 return isNaN(res) ? undefined : res;
             } catch {
-                return undefined;
+                return format.NO_VALUE;
             }
         },
         caption: 'Usage / Fair share',
@@ -191,7 +191,12 @@ export const childTableItems = {
     },
     dominant_resource: {
         sort(item: SchedulingRowData) {
-            return item.dominantResource;
+            const {dominantResource, fairShareRatio, usageRatio} = item;
+            if (!fairShareRatio && !usageRatio) {
+                return format.NO_VALUE;
+            }
+
+            return dominantResource;
         },
         caption: 'Dom. res.',
         title: 'Dominant Resource',
