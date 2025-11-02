@@ -307,6 +307,7 @@ type QueriesListRequestParams = {
     engine?: string;
     filter?: string;
     state?: string;
+    tutorial_filter?: boolean;
 };
 
 export type ListQueriesParams = ApiMethodParams<QueriesListRequestParams> & {
