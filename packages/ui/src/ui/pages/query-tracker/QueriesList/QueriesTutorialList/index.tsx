@@ -7,7 +7,7 @@ import tutorialIcon from '../../../../assets/img/svg/learn.svg';
 import './index.scss';
 import {useSelector} from '../../../../store/redux-hooks';
 import {
-    getQueriesList,
+    getTutorialQueriesList,
     isQueriesListLoading,
 } from '../../../../store/selectors/query-tracker/queriesList';
 
@@ -26,7 +26,7 @@ function renderItem(item: QueryItem) {
 }
 
 export function QueriesTutorialList({className}: {className: string}) {
-    const items = useSelector(getQueriesList);
+    const items = useSelector(getTutorialQueriesList);
     const isLoading = useSelector(isQueriesListLoading);
 
     const [selectedId, goToQuery] = useQueryNavigation();

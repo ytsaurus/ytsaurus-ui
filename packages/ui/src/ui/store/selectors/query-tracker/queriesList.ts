@@ -34,6 +34,10 @@ export const getQueriesFilters = (state: RootState) => getQueriesListState(state
 export const getQueriesListMode = (state: RootState) => getQueriesListState(state).listMode;
 export const getQueriesListCursor = (state: RootState) => getQueriesListState(state).cursor;
 
+export const getTutorialQueriesList = createSelector([getQueriesList], (listItems) => {
+    return listItems.filter((item) => item?.is_tutorial);
+});
+
 export const getQueryListByDate = createSelector([getQueriesList], (listItems) => {
     return Object.entries(
         groupBy_(listItems, (item) => moment(item.start_time).format('DD MMMM YYYY')),
@@ -130,11 +134,9 @@ export function getQueriesListFilterParams(state: RootState): QueriesListParams 
         to_time: to,
         state: queryState,
         user,
+        tutorial_filter: is_tutorial,
     };
 
-    if (is_tutorial) {
-        params.filter = `is_tutorial`;
-    }
     return params;
 }
 

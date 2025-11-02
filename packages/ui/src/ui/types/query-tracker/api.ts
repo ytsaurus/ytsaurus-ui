@@ -112,6 +112,7 @@ export interface QueryItem extends DraftQuery {
     result_count: number;
     progress?: SingleProgress | CHYTMultiProgress;
     error?: QueryError;
+    is_tutorial?: boolean;
     annotations?: {
         title?: string;
         chartConfig?: VisualizationState;
