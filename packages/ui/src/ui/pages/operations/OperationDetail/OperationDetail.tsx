@@ -336,6 +336,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             [Tab.MONITOR]: {show: monitorTabVisible},
             [Tab.JOBS_TIMELINE]: {show: timelineTabVisible},
             [Tab.INCARNATIONS]: {show: Boolean(operationEvents?.length)},
+            [Tab.LOGS]: {show: Boolean(UIFactory.renderOperationLogsTab())},
             [Tab.PERFORMANCE]: {
                 show: Boolean(operationPerformanceUrlTemplate),
                 external: true,
@@ -437,6 +438,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                         path={`${path}/${Tab.INCARNATIONS}`}
                         render={UIFactory.renderIncarnationsTab}
                     />
+                    <Route path={`${path}/${Tab.LOGS}`} render={UIFactory.renderOperationLogsTab} />
                     <Route path={`${path}/:tab`} component={Placeholder} />
                     <Redirect from={url} to={`${path}/${DEFAULT_TAB}`} />
                 </Switch>

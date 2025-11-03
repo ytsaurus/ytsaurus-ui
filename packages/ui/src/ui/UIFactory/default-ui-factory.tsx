@@ -329,4 +329,10 @@ export const defaultUIFactory: UIFactory = {
     renderIncarnationsTab() {
         return <IncarnationsLazy />;
     },
+    renderOperationLogsTab() {
+        return undefined;
+    },
+    renderJobLogsTab() {
+        return undefined;
+    },
 };

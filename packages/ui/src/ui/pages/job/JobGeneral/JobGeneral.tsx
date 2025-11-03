@@ -22,7 +22,7 @@ import {getJobGeneralYsonSettings} from '../../../store/selectors/thor/unipika';
 import {DEFAULT_TAB, Tab} from '../../../constants/job';
 import {RootState} from '../../../store/reducers';
 import {Page} from '../../../constants/index';
-import {makeTabProps} from '../../../utils';
+import {TabSettings, makeTabProps} from '../../../utils';
 import {formatByParams} from '../../../utils/format';
 import hammer from '../../../common/hammer';
 import {RouteInfo} from '../Job';
@@ -81,7 +81,17 @@ export default function JobGeneral() {
     } = job;
     const operationUrl = `/${cluster}/${Page.OPERATIONS}/${operationID}/jobs?jobId=${jobID}`;
     const path = `/${cluster}/${Page.JOB}/${operationID}/${jobID}`;
-    const tabsProps = makeTabProps(path, Tab);
+
+    const logsTab = UIFactory.renderJobLogsTab();
+
+    const showSettings: Record<string, TabSettings> = {
+        [Tab.DETAILS]: {show: true},
+        [Tab.ATTRIBUTES]: {show: true},
+        [Tab.STATISTICS]: {show: true},
+        [Tab.SPECIFICATION]: {show: true},
+        [Tab.LOGS]: {show: Boolean(logsTab)},
+    };
+    const tabsProps = makeTabProps(path, Tab, showSettings);
 
     const isSpeculativeJob = job_competition_id && job_competition_id !== id;
 
@@ -330,6 +340,7 @@ export default function JobGeneral() {
                     <Route path={`${path}/${Tab.SPECIFICATION}`}>
                         <Specification className={block('specification')} jobID={jobID} />
                     </Route>
+                    {logsTab ? <Route path={`${path}/${Tab?.LOGS}`}>{logsTab}</Route> : null}
                     <Route path={`${path}/:tab`}>
                         <Placeholder />
                     </Route>

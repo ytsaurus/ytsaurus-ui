@@ -7,6 +7,11 @@
 }
 
 .operation-detail {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
     &_loading {
         height: 200px;
         display: flex;
@@ -16,6 +21,10 @@
 
     .elements-error {
         margin-top: 20px;
+    }
+
+    &__main {
+        flex-grow: 1;
     }
 
     &__header {
