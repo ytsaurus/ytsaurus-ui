@@ -7,7 +7,7 @@ import {connect, useSelector} from 'react-redux';
 import {main} from '../../../../components/MetaTable/presets';
 import MetaTable from '../../../../components/MetaTable/MetaTable';
 
-import {getAttributesWithTypes, getLoadState} from '../../../../store/selectors/navigation';
+import {getAttributes, getLoadState} from '../../../../store/selectors/navigation';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {isFinalLoadingStatus} from '../../../../utils/utils';
@@ -39,7 +39,7 @@ Link.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-    const attributes = getAttributesWithTypes(state);
+    const attributes = getAttributes(state);
 
     return {attributes};
 };
