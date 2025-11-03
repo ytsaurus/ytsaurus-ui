@@ -20,6 +20,7 @@ export const Tab = {
     MONITOR: 'monitor',
     PERFORMANCE: 'performance',
     INCARNATIONS: 'incarnations',
+    LOGS: 'logs',
 } as const;
 
 export type OperationTabType = ValueOf<typeof Tab>;

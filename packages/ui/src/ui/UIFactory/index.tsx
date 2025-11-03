@@ -496,6 +496,10 @@ export interface UIFactory {
     getAnalyticsService(): AnalyticsService[];
 
     renderIncarnationsTab(): React.ReactNode;
+
+    renderOperationLogsTab: () => React.ReactNode;
+
+    renderJobLogsTab: () => React.ReactNode;
 }
 
 // All methods comes from `configureUIFactory` method

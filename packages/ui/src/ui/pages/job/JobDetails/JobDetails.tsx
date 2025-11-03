@@ -6,7 +6,7 @@ import cn from 'bem-cn-lite';
 import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import JobGeneral from '../../../pages/job/JobGeneral/JobGeneral';
-import {Loader} from '@gravity-ui/uikit';
+import {Flex, Loader} from '@gravity-ui/uikit';
 
 import {abortAndReset, loadJobData} from '../../../store/actions/job/general';
 import {useUpdater} from '../../../hooks/use-updater';
@@ -39,7 +39,7 @@ export default function JobDetails() {
     return (
         <ErrorBoundary>
             <div className={block()}>
-                <div className={block('content', {loading: initialLoading})}>
+                <Flex grow={1} className={block('content', {loading: initialLoading})}>
                     {initialLoading ? (
                         <Loader />
                     ) : (
@@ -47,7 +47,7 @@ export default function JobDetails() {
                             <JobGeneral />
                         </LoadDataHandler>
                     )}
-                </div>
+                </Flex>
             </div>
         </ErrorBoundary>
     );
