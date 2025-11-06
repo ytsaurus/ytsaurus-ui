@@ -12,6 +12,7 @@ import {
 } from '../../../../constants/components/proxies/proxies';
 import {getCluster} from '../../../../store/selectors/global';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
+import {YTErrors} from '../../../../rum/constants';
 
 function getRpcProxies() {
     return (dispatch) => {
@@ -83,24 +84,9 @@ function getHttpProxies() {
 function getCypressProxies() {
     return async (dispatch) => {
         try {
-            const cypressProxiesExists = await ytApiV3Id.exists(
-                YTApiId.componentExistsCypressProxies,
-                {
-                    path: '//sys/cypress_proxies',
-                },
-            );
-
-            if (!cypressProxiesExists) {
-                dispatch({
-                    type: GET_PROXIES.SUCCESS,
-                    data: {proxies: []},
-                });
-                return;
-            }
-
             const cypressData = await ytApiV3Id.list(YTApiId.componentGetCypressProxies, {
                 path: '//sys/cypress_proxies',
-                attributes: ['state', 'version', 'host'],
+                attributes: ['state', 'version'],
             });
 
             const proxies = map_(cypressData, (proxyData) => {
@@ -116,6 +102,13 @@ function getCypressProxies() {
                 data: {proxies},
             });
         } catch (error) {
+            if (error?.code === YTErrors.NODE_DOES_NOT_EXIST) {
+                dispatch({
+                    type: GET_PROXIES.SUCCESS,
+                    data: {proxies: []},
+                });
+                return;
+            }
             dispatch({
                 type: GET_PROXIES.FAILURE,
                 data: {error},
@@ -126,7 +119,7 @@ function getCypressProxies() {
 
 /**
  *
- * @param {'http' | 'rpc'} type
+ * @param {'http' | 'rpc' | 'cypress'} type
  * @returns
  */
 export function getProxies(type) {
