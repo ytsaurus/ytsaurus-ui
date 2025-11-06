@@ -17,4 +17,15 @@
         background-color: var(--g-color-base-float);
         opacity: 0.9;
     }
+
+    &__row_highlighted {
+        background-color: var(--hover-background);
+
+        .gt-table__header-cell_pinned-right,
+        .gt-table__cell_pinned-right,
+        .gt-table__header-cell_pinned-left,
+        .gt-table__cell_pinned-left {
+            background-color: var(--light-background);
+        }
+    }
 }
