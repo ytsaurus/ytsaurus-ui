@@ -5,6 +5,10 @@
         height: 48px;
     }
 
+    &__row_highlighted {
+        background-color: var(--g-color-base-generic);
+    }
+
     &__edited-number {
         &_autocalculated {
             color: var(--g-color-text-secondary);
