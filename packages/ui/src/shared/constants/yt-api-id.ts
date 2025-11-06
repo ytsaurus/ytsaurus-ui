@@ -124,6 +124,7 @@ export const enum YTApiId {
     schedulingLoadChildrenPerPool = 'schedulingLoadChildrenPerPool',
     schedulingLoadCypressDataPerPool = 'schedulingLoadCypressDataPerPool',
     schedulingFilterAttributes = 'schedulingFilterAttributes',
+    schedulingPoolAttributes = 'schedulingPoolAttributes',
 
     systemCAInstances = 'systemCAInstances',
     systemCAStates = 'systemCAStates',

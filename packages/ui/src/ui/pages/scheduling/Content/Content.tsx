@@ -1,13 +1,14 @@
+import cn from 'bem-cn-lite';
 import React from 'react';
 import {useSelector} from '../../../store/redux-hooks';
 import {Redirect, Route, Switch, withRouter} from 'react-router';
-import cn from 'bem-cn-lite';
 
 import reduce_ from 'lodash/reduce';
 
+import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+
 import Tabs from '../../../components/Tabs/Tabs';
 import Placeholder from '../../../pages/components/Placeholder';
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 
 import {DEFAULT_TAB, SCHEDULING_ALLOWED_ROOT_TABS, Tab} from '../../../constants/scheduling';
 import PoolAcl from '../../../pages/scheduling/Content/tabs/PoolAcl/PoolAcl';
@@ -21,12 +22,14 @@ import {
 import {TabSettings, makeTabProps} from '../../../utils';
 import {formatByParams} from '../../../utils/format';
 
-import './Content.scss';
-import {getCluster} from '../../../store/selectors/global';
-import UIFactory from '../../../UIFactory';
 import {UI_TAB_SIZE} from '../../../constants/global';
 import {Overview} from '../../../pages/scheduling/Content/tabs/Overview/Overview';
+import {getCluster} from '../../../store/selectors/global';
+import UIFactory from '../../../UIFactory';
 import SchedulingExpandedPoolsUpdater from './SchedulingExpandedPoolsUpdater';
+import {PoolAttributes} from './tabs/PoolAttributes/PoolAttributes';
+
+import './Content.scss';
 
 const block = cn('scheduling-content');
 
@@ -109,9 +112,12 @@ function Content({match, location}: ContentProps) {
                 routed
                 size={UI_TAB_SIZE}
             />
-
             <Switch>
                 <Route path={`${match.path}/${Tab.OVERVIEW}`} component={Overview} />
+                <Route
+                    path={`${match.path}/${Tab.ATTRIBUTES}`}
+                    render={() => <PoolAttributes className={block('attributes')} />}
+                />
                 {extraRoutes}
                 {aclTab.show && <Route path={`${match.path}/${Tab.ACL}`} component={PoolAcl} />}
                 <Route path={`${match.path}/:tab`} component={Placeholder} />

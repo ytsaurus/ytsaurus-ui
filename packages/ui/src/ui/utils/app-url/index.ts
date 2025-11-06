@@ -18,12 +18,15 @@ export function makeSchedulingUrl({
     pool,
     poolTree,
     cluster,
+    tab,
 }: {
     pool: string;
     poolTree: string;
     cluster?: string;
+    tab?: 'attributes';
 }) {
-    return `/${cluster || YT.cluster}/${Page.SCHEDULING}?pool=${pool}&poolTree=${poolTree}`;
+    const path = [cluster || YT.cluster, Page.SCHEDULING, tab].filter(Boolean).join('/');
+    return `/${path}?pool=${pool}&poolTree=${poolTree}`;
 }
 
 export function makeAccountsUrl(account: string, cluster?: string) {
