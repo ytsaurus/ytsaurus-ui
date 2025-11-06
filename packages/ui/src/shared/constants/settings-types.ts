@@ -93,6 +93,7 @@ interface SystemSettings {
     'global::system::chunksCollapsed': boolean | undefined;
     'global::system::httpProxiesCollapsed': boolean | undefined;
     'global::system::rpcProxiesCollapsed': boolean | undefined;
+    'global::system::cypressProxiesCollapsed': boolean | undefined;
     'global::system::nodesCollapsed': boolean | undefined;
     'global::system::nodesNodeType': Array<NodeType> | undefined;
 }

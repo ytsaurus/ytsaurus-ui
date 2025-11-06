@@ -42,6 +42,7 @@ const defaultUserSettings: Partial<DescribedSettings> = {
     'global::system::chunksCollapsed': true,
     'global::system::httpProxiesCollapsed': true,
     'global::system::rpcProxiesCollapsed': true,
+    'global::system::cypressProxiesCollapsed': true,
     'global::system::nodesCollapsed': false,
     'global::system::nodesNodeType': undefined,
 

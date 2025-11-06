@@ -68,12 +68,9 @@ export const getSettingsSystemRpcProxiesCollapsed = createSelector(makeGetSettin
     return getSetting(SettingName.SYSTEM.RPC_PROXIES_COLLAPSED, NAMESPACES.SYSTEM);
 });
 
-export const getSettingsSystemCypressProxiesCollapsed = createSelector(
-    makeGetSetting,
-    (getSetting) => {
-        return getSetting(SettingName.SYSTEM.CYPRESS_PROXIES_COLLAPSED, NAMESPACES.SYSTEM);
-    },
-);
+export const getSettingsSystemCypressProxiesCollapsed = createSelector(getSettingsData, (data) => {
+    return data['global::system::cypressProxiesCollapsed'] ?? true;
+});
 export const getSettingsSystemHttpProxiesCollapsed = createSelector(
     makeGetSetting,
     (getSetting) => {

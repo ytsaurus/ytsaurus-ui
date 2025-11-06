@@ -27,29 +27,6 @@ function CypressProxies() {
     const roleGroups = useSelector(getCypressProxiesRoleGroups);
     const counters = useSelector(getCypressProxiesCounters);
     const dispatch = useThunkDispatch();
-    const onToggle = () => {
-        dispatch(setSettingsSystemCypressProxiesCollapsed(!collapsed));
-    };
-
-    return (
-        <React.Fragment>
-            <CypressProxiesUpdater />
-            {counters.total > 0 && (
-                <ProxiesImpl
-                    name={'Cypress Proxies'}
-                    overview={<CypressProxiesOverview counters={counters} />}
-                    onToggleCollapsed={onToggle}
-                    roleGroups={roleGroups}
-                    collapsed={collapsed}
-                    makeUrl={(params) => makeRoleGroupUrl(params, cluster)}
-                />
-            )}
-        </React.Fragment>
-    );
-}
-
-function CypressProxiesUpdater() {
-    const dispatch = useThunkDispatch();
 
     const updateFn = React.useMemo(() => {
         let allowUpdate = true;
@@ -66,7 +43,24 @@ function CypressProxiesUpdater() {
 
     useUpdater(updateFn);
 
-    return null;
+    const onToggle = () => {
+        dispatch(setSettingsSystemCypressProxiesCollapsed(!collapsed));
+    };
+
+    return (
+        <React.Fragment>
+            {counters.total > 0 && (
+                <ProxiesImpl
+                    name={'Cypress Proxies'}
+                    overview={<CypressProxiesOverview counters={counters} />}
+                    onToggleCollapsed={onToggle}
+                    roleGroups={roleGroups}
+                    collapsed={collapsed}
+                    makeUrl={(params) => makeRoleGroupUrl(params, cluster)}
+                />
+            )}
+        </React.Fragment>
+    );
 }
 
 function makeRoleGroupUrl({state}: MakeUrlParams = {}, cluster: string) {

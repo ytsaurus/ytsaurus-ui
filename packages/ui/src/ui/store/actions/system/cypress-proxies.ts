@@ -9,7 +9,7 @@ import {RootState} from '../../../store/reducers';
 import {RoleGroupItemInfo} from '../../../store/reducers/system/proxies';
 import {isRetryFutile} from '../../../utils/index';
 import {extractProxyCounters, extractRoleGroups} from '../../../utils/system/proxies';
-import {showErrorPopup} from '../../../utils/utils';
+import {getBatchError, showErrorPopup} from '../../../utils/utils';
 import {
     fetchCypressProxiesFailure,
     fetchCypressProxiesRequest,
@@ -50,12 +50,25 @@ export function loadSystemCypressProxies(): CypressProxiesThunkAction<
         dispatch(fetchCypressProxiesRequest());
 
         return ytApiV3Id
-            .get(YTApiId.systemCypressProxies, {
-                path: '//sys/cypress_proxies',
-                attributes: ['banned', 'state'],
-                ...USE_SUPRESS_SYNC,
+            .executeBatch(YTApiId.systemCypressProxies, {
+                requests: [
+                    {
+                        command: 'get',
+                        parameters: {
+                            path: '//sys/cypress_proxies',
+                            attributes: ['banned', 'state'],
+                            ...USE_SUPRESS_SYNC,
+                        },
+                    },
+                ],
             })
-            .then((data = []) => {
+            .then((result) => {
+                const error = getBatchError(result, 'Failed to load CypressProxies');
+                if (error) {
+                    throw error;
+                }
+
+                const data = result?.[0]?.output;
                 const cypressProxies = extractCypressProxy(data);
 
                 dispatch(

@@ -1,11 +1,22 @@
 import ypath from '../../../../../common/thor/ypath';
+import format from '../../../../../common/hammer/format';
 
 export default class Proxy {
     constructor(data) {
         // data comes in format like in /hosts/all, not like //sys/http_proxies
         this.name = data.name;
         this.host = data.name;
-        this.state = data?.state ? data.state : data.dead ? 'offline' : 'online';
+
+        let state = format.NO_VALUE;
+        if (data?.state) {
+            state = data.state;
+        } else if (data.dead) {
+            state = 'offline';
+        } else {
+            state = 'online';
+        }
+
+        this.state = state;
         this.effectiveState = this.banned ? 'banned' : this.state;
 
         this.banned = ypath.getBoolean(data, '/banned') || false;
@@ -28,7 +39,6 @@ export default class Proxy {
         'liveness',
         'role',
         'version',
-        'state',
         'annotations',
         'maintenance_requests',
     ];

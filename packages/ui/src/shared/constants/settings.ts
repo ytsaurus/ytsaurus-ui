@@ -1,5 +1,6 @@
 import {createNS, createNestedNS} from '../utils/settings';
 
+// @depricated Please use `settings-types.ts` to add new options
 export const Page = {
     BAN: 'ban',
     JOB: 'job',
@@ -22,6 +23,7 @@ export const Page = {
     CHYT: 'chyt',
 } as const;
 
+// @depricated Please use `settings-types.ts` to add new options
 export const SettingName = {
     LOCAL: {
         FAVOURITES: 'favourites',
@@ -70,7 +72,6 @@ export const SettingName = {
         CHUNKS_COLLAPSED: 'chunksCollapsed',
         HTTP_PROXIES_COLLAPSED: 'httpProxiesCollapsed',
         RPC_PROXIES_COLLAPSED: 'rpcProxiesCollapsed',
-        CYPRESS_PROXIES_COLLAPSED: 'cypressProxiesCollapsed',
         NODES_COLLAPSED: 'nodesCollapsed',
         NODES_NODE_TYPE: 'nodesNodeType',
     },
@@ -139,6 +140,7 @@ const SCHEDULING = createNestedNS('scheduling', GLOBAL);
 const QUERY_TRACKER = createNestedNS('queryTracker', GLOBAL);
 const CHYT = createNestedNS('chyt', GLOBAL);
 
+// @depricated Please use `settings-types.ts` to add new options
 export const NAMESPACES = {
     GLOBAL,
     LOCAL,
