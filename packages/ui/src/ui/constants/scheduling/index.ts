@@ -34,6 +34,7 @@ export const POOL_TOGGLE_DELETE_VISIBILITY = 'SCHEDULING_TOGGLE_DELETE_VISIBILIT
 export const ROOT_POOL_NAME = '<Root>';
 export const Tab = {
     OVERVIEW: 'overview',
+    ATTRIBUTES: 'attributes',
     ACL: 'acl',
 } as const;
 
@@ -52,4 +53,5 @@ export const SCHEDULING_MONITOR_CHART_STATUS = 'SCHEDULING_MONITOR_CHART_STATUS'
 
 export const SCHEDULING_ALLOWED_ROOT_TABS: Partial<Record<SchedulingTab, boolean>> = {
     [Tab.OVERVIEW]: true,
+    [Tab.ATTRIBUTES]: true,
 };
