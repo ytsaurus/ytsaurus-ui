@@ -54,6 +54,7 @@ const config: StorybookConfig = {
             ...config.module,
             rules: uiCoreConfig.module.rules,
         };
+        config.devtool = 'source-map';
 
         return config;
     },
