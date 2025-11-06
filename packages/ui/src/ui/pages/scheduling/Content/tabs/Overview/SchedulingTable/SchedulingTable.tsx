@@ -3,8 +3,6 @@ import moment from 'moment';
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import compact_ from 'lodash/compact';
-
 import {DropdownMenu, Flex, Progress, Text} from '@gravity-ui/uikit';
 
 import format from '../../../../../../common/hammer/format';
@@ -28,8 +26,6 @@ import MetaTable from '../../../../../../components/MetaTable/MetaTable';
 import {OperationType} from '../../../../../../components/OperationType/OperationType';
 import {SubjectCard} from '../../../../../../components/SubjectLink/SubjectLink';
 import {Tooltip} from '../../../../../../components/Tooltip/Tooltip';
-import {openAttributesModal} from '../../../../../../store/actions/modals/attributes-modal';
-import {getPoolPathsByName} from '../../../../../../store/actions/scheduling/expanded-pools';
 import {getSchedulingOperationsLoading} from '../../../../../../store/selectors/scheduling/expanded-pools';
 import {
     getSchedulingContentMode,
@@ -45,6 +41,8 @@ import {formatTimeDuration} from '../../../../../../components/TimeDuration/Time
 import {useSettingsColumnSizes} from '../../../../../../hooks/settings/use-settings-column-sizes';
 import {useSettingsVisibleColumns} from '../../../../../../hooks/settings/use-settings-column-visibility';
 import ShareUsageBar from '../../../../../../pages/scheduling/Content/controls/ShareUsageBar';
+import {openAttributesModal} from '../../../../../../store/actions/modals/attributes-modal';
+import {getPoolPathsByName} from '../../../../../../store/actions/scheduling/expanded-pools';
 import {
     openEditModal,
     schedulingSetSortState,
@@ -775,38 +773,34 @@ function Duration({start}: {start?: string}) {
 function RowActions({item}: {item: RowData}) {
     const dispatch = useThunkDispatch();
 
-    const {name, type, isEphemeral, attributes} = item;
+    const {type, isEphemeral} = item;
     const editable = !isEphemeral && type === 'pool';
 
     return (
-        <DropdownMenu
-            items={compact_([
-                {
-                    action: () => {
-                        const exactPath = dispatch(getPoolPathsByName(name))?.orchidPath;
-                        if (type === 'pool') {
-                            dispatch(openAttributesModal({title: item.name, exactPath}));
-                        } else {
-                            dispatch(openAttributesModal({title: item.name, attributes}));
-                        }
+        editable && (
+            <DropdownMenu
+                items={[
+                    {
+                        text: 'Attributes',
+                        action: () => {
+                            const exactPath = dispatch(getPoolPathsByName(item.name))?.orchidPath;
+                            if (type === 'pool') {
+                                dispatch(openAttributesModal({title: item.name, exactPath}));
+                            }
+                        },
                     },
-                    text: 'Show attributes',
-                },
-                ...(editable
-                    ? [
-                          {
-                              action: () => dispatch(openEditModal(item)),
-                              text: 'Edit',
-                          },
-                          {
-                              action: () => dispatch(openPoolDeleteModal(item)),
-                              text: 'Delete',
-                              theme: 'danger' as const,
-                          },
-                      ]
-                    : []),
-            ])}
-        />
+                    {
+                        action: () => dispatch(openEditModal(item)),
+                        text: 'Edit',
+                    },
+                    {
+                        action: () => dispatch(openPoolDeleteModal(item)),
+                        text: 'Delete',
+                        theme: 'danger' as const,
+                    },
+                ]}
+            />
+        )
     );
 }
 
