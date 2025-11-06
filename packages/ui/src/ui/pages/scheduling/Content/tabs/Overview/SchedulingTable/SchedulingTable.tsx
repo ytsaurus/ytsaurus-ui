@@ -50,6 +50,7 @@ import {
     schedulingSetSortState,
 } from '../../../../../../store/actions/scheduling/scheduling';
 import {openPoolDeleteModal} from '../../../../../../store/actions/scheduling/scheduling-ts';
+import {getSchedulingOperationRefId} from '../../../../../../store/selectors/scheduling/attributes-to-filter';
 import {getSchedulingOverivewColumns} from '../../../../../../store/selectors/scheduling/overview-columns';
 import {getProgressTheme} from '../../../../../../utils/progress';
 import {SchedulingColumn, childTableItems} from '../../../../../../utils/scheduling/detailsTable';
@@ -75,6 +76,8 @@ export function SchedulingTable() {
     const {columns, columnVisibility, columnOrder} = useSchedulingTableColumns();
     const items = useSelector(getSchedulingOverviewTableItems);
 
+    const operationRefId = useSelector(getSchedulingOperationRefId);
+
     const table = useTable({
         columns,
         data: items,
@@ -94,7 +97,28 @@ export function SchedulingTable() {
         onColumnOrderChange,
     });
 
-    return <DataTableGravity table={table} virtualized rowHeight={49} />;
+    const {scrollToIndex, isHighlightedRow} = React.useMemo(() => {
+        if (!operationRefId) {
+            return {};
+        }
+
+        return {
+            scrollToIndex: items.findIndex(({id}) => operationRefId === id),
+            isHighlightedRow: (item?: (typeof items)[number]) => {
+                return item?.id === operationRefId;
+            },
+        };
+    }, [operationRefId, items]);
+
+    return (
+        <DataTableGravity
+            table={table}
+            virtualized
+            rowHeight={49}
+            scrollToIndex={scrollToIndex}
+            isHighlightedRow={isHighlightedRow}
+        />
+    );
 }
 
 type SchedulintTableMode = ReturnType<typeof getSchedulingContentMode>;
