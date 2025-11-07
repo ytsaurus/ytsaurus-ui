@@ -39,6 +39,11 @@ function preparePoolChildResource<T extends 'pool' | 'operation'>(
             '/estimated_guarantee_resources/' + resource,
         );
 
+        const effectiveGuaranteed = ypath.getNumber(
+            attributes,
+            '/effective_strong_guarantee_resources/' + resource,
+        );
+
         const limitResource = RESOURCE_LIMIT_MAPPER[resource] || resource;
         const resourceLimit = ypath.getNumber(
             data.cypressAttributes,
@@ -56,6 +61,7 @@ function preparePoolChildResource<T extends 'pool' | 'operation'>(
         data.resources[resource] = {
             min,
             guaranteed,
+            effectiveGuaranteed,
             usage,
             demand,
             limit: resourceLimit || specifiedResourceLimit,
@@ -123,6 +129,7 @@ export type PoolData<T extends 'pool' | 'operation'> = {
 export type PoolResources = {
     min?: number;
     guaranteed?: number;
+    effectiveGuaranteed?: number;
     usage?: number;
     demand?: number;
     limit?: number;

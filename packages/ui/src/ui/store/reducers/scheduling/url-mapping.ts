@@ -31,6 +31,7 @@ export const schedulingOverviewParams = {
     showAbs: {
         stateKey: 'scheduling.scheduling.showAbsResources',
         initialState: schedulingInitialState.showAbsResources,
+        type: 'bool',
     },
     contentMode: {
         stateKey: 'scheduling.scheduling.contentMode',
