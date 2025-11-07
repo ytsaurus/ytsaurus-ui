@@ -39,10 +39,13 @@ function prepareMinResourcesColumn(resource: PoolResourceType) {
     };
 }
 
-function prepareAbsGuaranteedColumn(resource: PoolResourceType) {
+function prepareAbsGuaranteedColumn(
+    resource: PoolResourceType,
+    guaranteeType: 'guaranteed' | 'effectiveGuaranteed',
+) {
     return {
         get(item: SchedulingRowData) {
-            return item.resources?.[resource]?.guaranteed;
+            return item.resources?.[resource]?.[guaranteeType];
         },
         sort: true,
         caption: 'Estimated guar.' + ReadableResource(resource),
@@ -218,10 +221,21 @@ export const childTableItems = {
     min_resources_gpu: prepareMinResourcesColumn('gpu'),
     min_resources_user_slots: prepareMinResourcesColumn('user_slots'),
 
-    abs_guaranteed_cpu: prepareAbsGuaranteedColumn('cpu'),
-    abs_guaranteed_memory: prepareAbsGuaranteedColumn('user_memory'),
-    abs_guaranteed_gpu: prepareAbsGuaranteedColumn('gpu'),
-    abs_guaranteed_user_slots: prepareAbsGuaranteedColumn('user_slots'),
+    abs_guaranteed_cpu: prepareAbsGuaranteedColumn('cpu', 'guaranteed'),
+    abs_guaranteed_memory: prepareAbsGuaranteedColumn('user_memory', 'guaranteed'),
+    abs_guaranteed_gpu: prepareAbsGuaranteedColumn('gpu', 'guaranteed'),
+    abs_guaranteed_user_slots: prepareAbsGuaranteedColumn('user_slots', 'guaranteed'),
+
+    abs_effective_guaranteed_cpu: prepareAbsGuaranteedColumn('cpu', 'effectiveGuaranteed'),
+    abs_effective_guaranteed_memory: prepareAbsGuaranteedColumn(
+        'user_memory',
+        'effectiveGuaranteed',
+    ),
+    abs_effective_guaranteed_gpu: prepareAbsGuaranteedColumn('gpu', 'effectiveGuaranteed'),
+    abs_effective_guaranteed_user_slots: prepareAbsGuaranteedColumn(
+        'user_slots',
+        'effectiveGuaranteed',
+    ),
 
     abs_usage_cpu: prepareAbsUsageColumn('cpu'),
     abs_usage_memory: prepareAbsUsageColumn('user_memory'),

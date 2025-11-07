@@ -427,32 +427,36 @@ function useSchedulingTableColumns() {
                 id: 'guaranteed',
                 header: () => (
                     <SchedulingColumnHeader
-                        column="abs_guaranteed_cpu"
+                        column="abs_effective_guaranteed_cpu"
                         title="Guarantee"
                         options={[
                             {
-                                column: 'abs_guaranteed_cpu' as const,
+                                column: 'abs_effective_guaranteed_cpu' as const,
                                 title: 'CPU',
                                 allowUnordered: true,
                             },
                             {
-                                column: 'abs_guaranteed_gpu' as const,
+                                column: 'abs_effective_guaranteed_gpu' as const,
                                 title: 'GPU',
                                 allowUnordered: true,
                             },
                             {
-                                column: 'abs_guaranteed_memory' as const,
+                                column: 'abs_effective_guaranteed_memory' as const,
                                 title: 'RAM',
                                 allowUnordered: true,
                             },
-                            {column: 'fair_share' as const, title: 'Ratio', allowUnordered: true},
+                            {
+                                column: 'fair_share' as const,
+                                title: 'Ratio',
+                                allowUnordered: true,
+                            },
                         ]}
                     />
                 ),
                 cell: ({row: {original: item}}) => {
                     return (
                         <TableCell>
-                            <ResourceSummary item={item} type="guaranteed" />
+                            <ResourceSummary item={item} type="effectiveGuaranteed" />
                         </TableCell>
                     );
                 },
@@ -479,8 +483,17 @@ function useSchedulingTableColumns() {
                     />
                 ),
                 cell: ({row: {original: item}}) => {
-                    const {maxOperationCount, maxOperationCountEdited, runningOperationCount} =
-                        item;
+                    const {
+                        maxOperationCount,
+                        maxOperationCountEdited,
+                        runningOperationCount,
+                        type,
+                    } = item;
+
+                    if (type === 'operation') {
+                        return <TableCell>{format.NO_VALUE}</TableCell>;
+                    }
+
                     return (
                         <TableCell>
                             <Text variant="inherit" ellipsis>
@@ -675,7 +688,7 @@ function NameHeader() {
 
 type ResourceSummaryProps = {
     item: RowData;
-    type: 'usage' | 'demand' | 'guaranteed';
+    type: 'usage' | 'demand' | 'effectiveGuaranteed';
 };
 
 function ResourceSummary({item, type}: ResourceSummaryProps) {
@@ -683,6 +696,10 @@ function ResourceSummary({item, type}: ResourceSummaryProps) {
     const dominantResource = useSelector(getSchedulingTreeMainResource) ?? 'CPU';
 
     const {fairShareRatio} = item;
+
+    if (!showAbsResources && !fairShareRatio) {
+        return <TableCell>{format.Number(undefined)}</TableCell>;
+    }
 
     if (!showAbsResources) {
         return (
@@ -692,17 +709,24 @@ function ResourceSummary({item, type}: ResourceSummaryProps) {
         );
     }
 
-    const {cpu, gpu, user_memory} = item.resources ?? {};
+    const {resources} = item ?? {};
+    const cpu = resources?.cpu?.[type];
+    const gpu = resources?.gpu?.[type];
+    const user_memory = resources?.user_memory?.[type];
 
-    const cpuContent = format.NumberSmart(cpu?.[type]) + ' CPU';
-    const gpuContent = format.NumberSmart(gpu?.[type]) + ' GPU';
-    const memContent = format.Bytes(user_memory?.[type]) + ' RAM';
+    if (showAbsResources && !cpu && !gpu && !user_memory) {
+        return <TableCell>{format.Number(undefined)}</TableCell>;
+    }
+
+    const cpuContent = format.NumberSmart(cpu) + ' CPU';
+    const gpuContent = format.NumberSmart(gpu) + ' GPU';
+    const memContent = format.Bytes(user_memory) + ' RAM';
 
     const l1 = dominantResource === 'cpu' ? cpuContent : gpuContent;
     const l2 =
         dominantResource === 'cpu'
-            ? [gpu?.[type] && gpuContent, memContent].filter(Boolean).join(', ')
-            : [cpu?.[type] && cpuContent, memContent].filter(Boolean).join(', ');
+            ? [gpu && gpuContent, memContent].filter(Boolean).join(', ')
+            : [cpu && cpuContent, memContent].filter(Boolean).join(', ');
 
     return (
         <Flex direction="column" style={{margin: '-8px 0'}} overflow="hidden">
@@ -856,9 +880,22 @@ function SchedulingColumnHeader(props: ColumnHeaderProps<SchedulingColumn>) {
             {...props}
             order={order}
             {...byOptions}
-            onSort={(column, order) => {
-                dispatch(schedulingSetSortState(column && order ? [{column, order}] : []));
-                if (column && order) {
+            onSort={(column, order, {currentOrder}) => {
+                dispatch(
+                    schedulingSetSortState(
+                        column && order
+                            ? [
+                                  {
+                                      column: currentOrder
+                                          ? column
+                                          : (lastColumnRef.current ?? column),
+                                      order,
+                                  },
+                              ]
+                            : [],
+                    ),
+                );
+                if (column) {
                     lastColumnRef.current = column;
                 }
             }}
