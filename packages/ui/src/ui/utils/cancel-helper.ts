@@ -1,4 +1,4 @@
-import axios, {CancelTokenSource} from 'axios';
+import axios, {AxiosError, CancelTokenSource} from 'axios';
 
 export default class CancelHelper {
     private tokens: Array<CancelTokenSource> = [];
@@ -31,5 +31,5 @@ export default class CancelHelper {
 }
 
 export function isCancelled(e: any) {
-    return axios.isCancel(e) || e.code === 'cancelled';
+    return axios.isCancel(e) || e.code === 'cancelled' || e.code === AxiosError.ERR_CANCELED;
 }
