@@ -14,6 +14,8 @@ export type FormatNumberProps = FormatSettings & {
 
     value?: number;
     tooltip?: string;
+
+    hideApproximateChar?: boolean;
 };
 
 export type FormatSettings =
@@ -53,7 +55,7 @@ export function FormatNumber({className, tooltip, ...rest}: FormatNumberProps) {
 
 export const APROXIMATEDLY_EQUAL_TO = '\u2248';
 
-function getFormattedValue({value, ...params}: FormatNumberProps): {
+function getFormattedValue({value, hideApproximateChar, ...params}: FormatNumberProps): {
     content: string;
     title?: string;
     prefix?: string;
@@ -71,6 +73,6 @@ function getFormattedValue({value, ...params}: FormatNumberProps): {
     return {
         content,
         title: fullValue,
-        prefix: value !== parsed ? APROXIMATEDLY_EQUAL_TO : undefined,
+        prefix: !hideApproximateChar && value !== parsed ? APROXIMATEDLY_EQUAL_TO : undefined,
     };
 }
