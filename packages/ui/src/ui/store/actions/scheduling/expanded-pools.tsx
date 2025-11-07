@@ -73,6 +73,7 @@ const POOL_FIELDS_TO_LOAD = [
     'specified_resource_limits',
     'resource_usage',
     'estimated_guarantee_resources',
+    'effective_strong_guarantee_resources',
     'running_operation_count',
     'specified_burst_guarantee_resources',
     'specified_resource_flow',
