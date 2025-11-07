@@ -135,7 +135,6 @@ const COLUMNS_BY_MODE: Record<SchedulintTableMode, Array<SchedulingColumn>> = {
         'duration',
     ],
     cpu: [
-        'FI',
         'weight',
         'min_resources_cpu',
         'abs_guaranteed_cpu',
@@ -145,7 +144,6 @@ const COLUMNS_BY_MODE: Record<SchedulintTableMode, Array<SchedulingColumn>> = {
         'resource_limit_cpu',
     ],
     memory: [
-        'FI',
         'weight',
         'min_resources_memory',
         'abs_guaranteed_memory',
@@ -156,7 +154,6 @@ const COLUMNS_BY_MODE: Record<SchedulintTableMode, Array<SchedulingColumn>> = {
     ],
 
     gpu: [
-        'FI',
         'weight',
         'min_resources_gpu',
         'abs_guaranteed_gpu',
@@ -167,7 +164,6 @@ const COLUMNS_BY_MODE: Record<SchedulintTableMode, Array<SchedulingColumn>> = {
     ],
 
     user_slots: [
-        'FI',
         'weight',
         'min_resources_user_slots',
         'abs_guaranteed_user_slots',
@@ -178,7 +174,6 @@ const COLUMNS_BY_MODE: Record<SchedulintTableMode, Array<SchedulingColumn>> = {
     ],
 
     operations: [
-        'FI',
         'running_operation_count',
         'max_running_operation_count',
         'running_operation_progress',
@@ -188,7 +183,6 @@ const COLUMNS_BY_MODE: Record<SchedulintTableMode, Array<SchedulingColumn>> = {
     ],
 
     integral_guarantees: [
-        'FI',
         'integral_type',
         'burst_cpu',
         'children_burst_cpu',
