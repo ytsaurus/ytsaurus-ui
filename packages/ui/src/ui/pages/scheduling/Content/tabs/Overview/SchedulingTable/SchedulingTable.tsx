@@ -213,7 +213,10 @@ type KeyByGetterReturnType<T> =
 
 function makeNumberColumn(
     id: KeyByGetterReturnType<number | undefined>,
-    type: 'NumberSmart' | 'Bytes' = 'NumberSmart',
+    {
+        type = 'NumberSmart',
+        ...rest
+    }: Partial<Pick<FormatNumberProps, 'type' | 'hideApproximateChar'>> = {},
 ) {
     const info = childTableItems[id];
     const {caption} = {caption: undefined, ...info};
@@ -230,7 +233,7 @@ function makeNumberColumn(
 
             return (
                 <TableCell>
-                    <FormatNumber value={value} type={type} />
+                    <FormatNumber value={value} type={type} {...rest} />
                 </TableCell>
             );
         },
@@ -600,17 +603,17 @@ function useSchedulingTableColumns() {
                     );
                 },
             },
-            makeNumberColumn('abs_demand_cpu'),
-            makeNumberColumn('abs_demand_gpu'),
-            makeNumberColumn('abs_demand_memory', 'Bytes'),
+            makeNumberColumn('abs_demand_cpu', {hideApproximateChar: true}),
+            makeNumberColumn('abs_demand_gpu', {hideApproximateChar: true}),
+            makeNumberColumn('abs_demand_memory', {type: 'Bytes', hideApproximateChar: true}),
             makeNumberColumn('abs_demand_user_slots'),
-            makeNumberColumn('abs_guaranteed_cpu'),
-            makeNumberColumn('abs_guaranteed_gpu'),
-            makeNumberColumn('abs_guaranteed_memory', 'Bytes'),
+            makeNumberColumn('abs_guaranteed_cpu', {hideApproximateChar: true}),
+            makeNumberColumn('abs_guaranteed_gpu', {hideApproximateChar: true}),
+            makeNumberColumn('abs_guaranteed_memory', {type: 'Bytes', hideApproximateChar: true}),
             makeNumberColumn('abs_guaranteed_user_slots'),
-            makeNumberColumn('abs_usage_cpu'),
-            makeNumberColumn('abs_usage_gpu'),
-            makeNumberColumn('abs_usage_memory', 'Bytes'),
+            makeNumberColumn('abs_usage_cpu', {hideApproximateChar: true}),
+            makeNumberColumn('abs_usage_gpu', {hideApproximateChar: true}),
+            makeNumberColumn('abs_usage_memory', {type: 'Bytes', hideApproximateChar: true}),
             makeNumberColumn('abs_usage_user_slots'),
             makeNumberColumn('accumulated'),
             makeNumberColumn('burst_cpu'),
@@ -623,16 +626,16 @@ function useSchedulingTableColumns() {
             makeNumberColumn('max_running_operation_count'),
             makeNumberColumn('min_resources_cpu'),
             makeNumberColumn('min_resources_gpu'),
-            makeNumberColumn('min_resources_memory', 'Bytes'),
+            makeNumberColumn('min_resources_memory', {type: 'Bytes'}),
             makeNumberColumn('min_resources_user_slots'),
             makeNumberColumn('operation_count'),
             makeNumberColumn('resource_detailed_cpu'),
             makeNumberColumn('resource_detailed_gpu'),
-            makeNumberColumn('resource_detailed_memory', 'Bytes'),
+            makeNumberColumn('resource_detailed_memory', {type: 'Bytes'}),
             makeNumberColumn('resource_detailed_user_slots'),
             makeNumberColumn('resource_limit_cpu'),
             makeNumberColumn('resource_limit_gpu'),
-            makeNumberColumn('resource_limit_memory', 'Bytes'),
+            makeNumberColumn('resource_limit_memory', {type: 'Bytes'}),
             makeNumberColumn('resource_limit_user_slots'),
             makeNumberColumn('running_operation_count'),
             {
