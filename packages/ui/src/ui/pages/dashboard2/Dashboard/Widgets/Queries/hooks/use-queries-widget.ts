@@ -12,6 +12,7 @@ import {
 import {getCluster} from '../../../../../../store/selectors/global';
 
 import {defaultDashboardItems} from '../../../../../../constants/dashboard2';
+import {QUERY_POLLING_INTERVAL} from '../../../../../../constants/queries';
 
 import {QueryEngine} from '../../../../../../../shared/constants/engines';
 import {ListQueriesParams} from '../../../../../../../shared/yt-types';
@@ -84,7 +85,7 @@ export function useQueriesWidget(props: QueriesWidgetProps) {
         error,
         isLoading,
         isFetching,
-    } = useListQueries({id: widgetId, requests, cluster}, {refetchOnMountOrArgChange: true});
+    } = useListQueries({id: widgetId, requests, cluster}, {refetchOnMountOrArgChange: true, pollingInterval: QUERY_POLLING_INTERVAL});
 
     return {
         queries: queriesResponse?.queries,

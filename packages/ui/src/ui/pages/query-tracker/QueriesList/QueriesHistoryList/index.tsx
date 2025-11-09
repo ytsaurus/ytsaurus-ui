@@ -21,6 +21,7 @@ import {
 } from '../../../../store/actions/query-tracker/queriesList';
 import {InfiniteScrollLoader} from '../../../../components/InfiniteScrollLoader';
 import {QueriesHistoryCursorDirection} from '../../../../store/reducers/query-tracker/query-tracker-contants';
+import {QUERY_POLLING_INTERVAL} from '../../../../constants/queries';
 
 const b = block('queries-history-list');
 const itemBlock = block('query-history-item');
@@ -46,7 +47,7 @@ function QueriesHistoryListUpdater() {
         dispatch(requestQueriesList({refresh: true}));
     }, [dispatch]);
 
-    useUpdater(updateFn, {timeout: 5000});
+    useUpdater(updateFn, {timeout: QUERY_POLLING_INTERVAL});
 
     return null;
 }
