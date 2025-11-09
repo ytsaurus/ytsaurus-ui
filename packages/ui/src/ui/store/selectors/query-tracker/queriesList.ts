@@ -128,7 +128,7 @@ export function getQueriesListFilterParams(state: RootState): QueriesListParams 
         ...filter,
         from_time: from,
         to_time: to,
-        state: queryState ? queryState[0].toUpperCase() + queryState.slice(1) : undefined,
+        state: queryState,
         user,
     };
 
