@@ -1,0 +1,1 @@
+export const QUERY_POLLING_INTERVAL = 5000;
