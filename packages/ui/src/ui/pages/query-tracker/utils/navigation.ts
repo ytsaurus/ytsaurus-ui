@@ -2,8 +2,13 @@ import {makeRoutedURL} from '../../../store/location';
 import {Page} from '../../../../shared/constants/settings';
 import {QueryEngine} from '../../../../shared/constants/engines';
 
-export function createQueryUrl(cluster: string, query_id: string) {
-    return `/${cluster}/${Page.QUERIES}${query_id ? `/${query_id}` : ''}`;
+export function createQueryUrl(
+    cluster: string,
+    query_id: string,
+    settings?: {withSearch?: boolean},
+) {
+    const baseUrl = `/${cluster}/${Page.QUERIES}${query_id ? `/${query_id}` : ''}`;
+    return settings?.withSearch ? `${baseUrl}${window.location.search}` : baseUrl;
 }
 
 export function createNewQueryUrl(

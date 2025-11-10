@@ -23,7 +23,7 @@ export function QueryTrackerOpenButton({className, cluster, path}: Props) {
     let url = '';
     let buttonView: ButtonProps['view'];
     if (queryId && !isEdited) {
-        url = createQueryUrl(cluster, queryId);
+        url = createQueryUrl(cluster, queryId, {withSearch: true});
         buttonView = 'action';
     } else {
         url = createNewQueryUrl(cluster, engine, {

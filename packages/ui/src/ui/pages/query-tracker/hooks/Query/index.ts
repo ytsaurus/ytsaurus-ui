@@ -13,7 +13,7 @@ export const useQueryNavigation = (): [QueryItem['id'] | undefined, (id: QueryIt
 
     const goToQuery = useCallback(
         (item: QueryItem) => {
-            history.push(createQueryUrl(cluster, item.id));
+            history.push(createQueryUrl(cluster, item.id, {withSearch: true}));
         },
         [cluster, history],
     );
