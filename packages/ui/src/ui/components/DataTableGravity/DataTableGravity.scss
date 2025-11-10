@@ -1,4 +1,10 @@
 .yt-gravity-table {
+    .gt-table__header {
+        top: calc(
+            var(--yt-sticky-container-top-offset) + var(--yt-with-sticky-toolbar-toolbar-height)
+        );
+    }
+
     .gt-table__header_sticky {
         z-index: 2;
     }
