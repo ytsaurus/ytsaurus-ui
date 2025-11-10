@@ -164,8 +164,6 @@ const getSchedulingOverviewFilteredTree = createSelector(
     [getCurrentPool, getSchedulingFilteredPoolNames, getCurrentTreeExpandedPools],
     (treeRoot, visiblePools, expandedPools) => {
         if (treeRoot) {
-//            const chyt = treeRoot.children.find(({name}) => name === 'chyt');
-//            treeRoot = {...treeRoot, children: [chyt]};
             const res = treeList.filterTreeEachChild(
                 treeRoot,
                 (pool: {name: string; parent?: string}) => {
