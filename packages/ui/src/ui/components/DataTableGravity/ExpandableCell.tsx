@@ -19,7 +19,12 @@ type ExpandedCellProps = {
 
 export function ExpandableCell({level = 0, expanded, onExpand, children}: ExpandedCellProps) {
     return (
-        <Flex alignItems="center" className={block({child: level > 0})}>
+        <Flex
+            alignItems="center"
+            className={block({child: level > 0})}
+            overflow="hidden"
+            shrink={1}
+        >
             <LeftPadding level={level} />
             <ExpandButton
                 className={block('expand', {hidden: !onExpand})}

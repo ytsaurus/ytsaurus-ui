@@ -65,7 +65,13 @@ export function SchedulingTable() {
         },
     });
 
-    return <DataTableGravity className={block()} table={table} />;
+    return (
+        <DataTableGravity
+            table={table}
+            virtualized
+            rowHeight={49}
+        />
+    );
 }
 
 type SchedulintTableMode = ReturnType<typeof getSchedulingContentMode>;
@@ -216,9 +222,13 @@ function useSchedulingTableColumns() {
             {
                 id: 'name',
                 header: () => <NameHeader />,
-                size: 100,
+                size: 300,
                 cell: ({row: {original: item}}) => {
-                    return <NameCell row={item} />;
+                    return (
+                        <TableCell>
+                            <NameCell row={item} />
+                        </TableCell>
+                    );
                 },
             },
             {
