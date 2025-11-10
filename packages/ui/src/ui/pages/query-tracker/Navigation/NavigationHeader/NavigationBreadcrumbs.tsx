@@ -1,26 +1,36 @@
 import React, {FC, useCallback, useMemo} from 'react';
 import {Breadcrumbs, Button, Icon} from '@gravity-ui/uikit';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import FolderTreeIcon from '@gravity-ui/icons/svgs/folder-tree.svg';
 import {BreadcrumbsItem as BreadcrumbsItemComponent} from './BreadcrumbsItem';
+import {
+    selectNavigationCluster,
+    selectNavigationPath,
+} from '../../../../store/selectors/query-tracker/queryNavigation';
+import {
+    BodyType,
+    setCluster,
+    setNodeType,
+    setPath,
+} from '../../../../store/reducers/query-tracker/queryNavigationSlice';
+import {loadNodeByPath} from '../../../../store/actions/query-tracker/queryNavigation';
 
-type Props = {
-    path: string;
-    cluster: string | undefined;
-    onClusterChangeClick: () => void;
-    onItemClick: (path: string) => void;
-};
+export const NavigationBreadcrumbs: FC = () => {
+    const dispatch = useDispatch();
+    const path = useSelector(selectNavigationPath);
+    const cluster = useSelector(selectNavigationCluster);
 
-export const NavigationBreadcrumbs: FC<Props> = ({
-    path,
-    cluster,
-    onClusterChangeClick,
-    onItemClick,
-}) => {
+    const handleClusterChangeClick = useCallback(() => {
+        dispatch(setNodeType(BodyType.Cluster));
+        dispatch(setCluster(undefined));
+        dispatch(setPath(''));
+    }, [dispatch]);
+
     const handleBreadcrumbsClick = useCallback(
         (newPath: string) => {
-            onItemClick(newPath);
+            dispatch(loadNodeByPath(newPath));
         },
-        [onItemClick],
+        [dispatch],
     );
 
     const items = useMemo(() => {
@@ -54,7 +64,7 @@ export const NavigationBreadcrumbs: FC<Props> = ({
 
     return (
         <>
-            <Button size="s" view="flat" onClick={onClusterChangeClick}>
+            <Button size="s" view="flat" onClick={handleClusterChangeClick}>
                 <Icon data={FolderTreeIcon} size={16} />
             </Button>
             <Breadcrumbs showRoot>{items}</Breadcrumbs>
