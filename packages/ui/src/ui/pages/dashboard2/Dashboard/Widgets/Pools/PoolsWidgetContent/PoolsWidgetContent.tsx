@@ -18,32 +18,39 @@ import i18n from '../i18n';
 
 const columnHelper = createColumnHelper<Pool>();
 
+const CELL_MIN_SIZE = 150;
+
 const columns = [
     columnHelper.accessor('general', {
         id: 'general',
         cell: (pool) => <PoolCell {...pool.getValue()} />,
         header: () => <Text variant={'subheader-1'}>{i18n('field_pool')}</Text>,
+        minSize: CELL_MIN_SIZE,
         maxSize: 150,
     }),
     columnHelper.accessor('gpu', {
         id: 'gpu',
         cell: (gpu) => <ResourceCell {...gpu.getValue()} type={'gpu'} />,
         header: () => <Text variant={'subheader-1'}>{i18n('field_gpu')}</Text>,
+        minSize: CELL_MIN_SIZE,
     }),
     columnHelper.accessor('cpu', {
         id: 'cpu',
         cell: (cpu) => <ResourceCell {...cpu.getValue()} type={'cpu'} />,
         header: () => <Text variant={'subheader-1'}>{i18n('field_cpu')}</Text>,
+        minSize: CELL_MIN_SIZE,
     }),
     columnHelper.accessor('memory', {
         id: 'memory',
         cell: (memory) => <ResourceCell {...memory.getValue()} type={'memory'} />,
         header: () => <Text variant={'subheader-1'}>{i18n('field_ram')}</Text>,
+        minSize: CELL_MIN_SIZE,
     }),
     columnHelper.accessor('operations', {
         id: 'operations',
         cell: (operations) => <ResourceCell {...operations.getValue()} type={'operations'} />,
         header: () => <Text variant={'subheader-1'}>{i18n('field_operations')}</Text>,
+        minSize: CELL_MIN_SIZE,
     }),
 ];
 

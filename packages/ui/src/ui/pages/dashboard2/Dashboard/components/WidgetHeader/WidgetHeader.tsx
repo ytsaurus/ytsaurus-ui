@@ -1,11 +1,11 @@
 import React from 'react';
-import {useDispatch} from 'react-redux';
 import {Button, Flex, Text} from '@gravity-ui/uikit';
 import {CircleExclamation} from '@gravity-ui/icons';
 
 import Link from '../../../../../components/Link/Link';
 import {YTError} from '../../../../../types';
 import {showErrorModal} from '../../../../../store/actions/modals/errors';
+import {useDispatch} from '../../../../../store/redux-hooks';
 
 import {Page} from '../../../../../../shared/constants/settings';
 

@@ -9,5 +9,7 @@
   "fallback-item_favourite": "favourite accounts",
   "fallback-item_usable": "usable accounts",
   "fallback-item_custom": "custom accounts",
-  "placeholder_accounts": "Accounts"
+  "placeholder_accounts": "Accounts",
+  "error_some-mediums-not-exist": "Some mediums do not exist on current cluster",
+  "error_medium-not-exist": "Medium {{medium}} does not exist on current cluster"
 }

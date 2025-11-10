@@ -28,9 +28,17 @@ export function CopyConfigDialog() {
 
     const onClose = () => dispatch(toggleCopyConfigDialogVisibility());
 
-    const copyConfigOptions = Object.entries(YT.clusters)
-        .filter(([configCluster, _]) => configCluster !== cluster)
-        .map(([cluster]) => ({value: cluster, content: format.ReadableField(cluster)}));
+    const copyConfigOptions = Object.keys(YT.clusters)
+        .reduce(
+            (acc, configCluster) => {
+                if (configCluster !== cluster) {
+                    acc.push({value: configCluster, content: format.ReadableField(configCluster)});
+                }
+                return acc;
+            },
+            [] as Array<{value: string; content: string}>,
+        )
+        .sort((a, b) => a.content.localeCompare(b.content));
 
     return (
         <YTDFDialog<FormValues>

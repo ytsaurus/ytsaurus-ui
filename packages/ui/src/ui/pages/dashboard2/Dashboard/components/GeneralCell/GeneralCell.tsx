@@ -1,5 +1,4 @@
 import React from 'react';
-import {useDispatch} from 'react-redux';
 import {Button, ClipboardButton, Flex, Text} from '@gravity-ui/uikit';
 import {CircleExclamation} from '@gravity-ui/icons';
 
@@ -8,6 +7,7 @@ import format from '../../../../../common/hammer/format';
 import Link from '../../../../../components/Link/Link';
 import {YTError} from '../../../../../types';
 import {showErrorModal} from '../../../../../store/actions/modals/errors';
+import {useDispatch} from '../../../../../store/redux-hooks';
 
 type Props = {
     name?: string;
@@ -23,7 +23,17 @@ export function GeneralCell(props: Props) {
     const dispatch = useDispatch();
 
     return (
-        <Flex style={{marginLeft: '-5px'}} direction={'row'} alignItems={'center'} gap={1}>
+        <Flex
+            style={{
+                marginLeft: '-5px',
+                width: '100%',
+                zIndex: 3,
+                backgroundColor: 'var(--main-background)',
+            }}
+            direction={'row'}
+            alignItems={'center'}
+            gap={1}
+        >
             {copy && <ClipboardButton text={name || format.NO_VALUE} />}
             {startIcon && <span style={{flexShrink: 0}}>{startIcon}</span>}
             <Text whiteSpace={'nowrap'} ellipsis>

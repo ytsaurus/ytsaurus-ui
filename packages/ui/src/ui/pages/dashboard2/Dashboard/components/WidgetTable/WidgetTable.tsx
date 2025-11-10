@@ -45,7 +45,11 @@ export function WidgetTable<T>({
     const table = useTable({
         data,
         columns,
+        enableColumnPinning: true,
         state: {
+            columnPinning: {
+                left: ['general'],
+            },
             columnVisibility: columnsVisibility,
         },
     });
