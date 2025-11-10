@@ -522,7 +522,6 @@ export function resetQueryTracker(): ThunkAction<any, RootState, any, never> {
         const state = getState();
         const cluster = getCluster(state);
         const history = getAppBrowserHistory();
-
         history.push(createQueryUrl(cluster, ''));
 
         dispatch(createEmptyQuery());
