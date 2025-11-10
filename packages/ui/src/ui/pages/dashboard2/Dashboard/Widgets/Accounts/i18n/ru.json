@@ -9,5 +9,7 @@
   "fallback-item_favourite": "Избранных аккаунтов",
   "fallback-item_usable": "Доступных аккаунтов",
   "fallback-item_custom": "Пользовательских аккаунтов",
-  "placeholder_accounts": "Аккаунты"
+  "placeholder_accounts": "Аккаунты",
+  "error_some-mediums-not-exist": "Некоторые медиумы не существуют в текущем кластере",
+  "error_medium-not-exist": "Медиум {{medium}} не существует в текущем кластере"
 }

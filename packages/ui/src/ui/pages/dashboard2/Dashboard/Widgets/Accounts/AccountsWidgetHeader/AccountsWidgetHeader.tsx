@@ -34,9 +34,9 @@ export function AccountsWidgetHeader(props: AccountsWidgetProps) {
         }
 
         return {
-            message: 'Some mediums do not exist on current cluster',
+            message: i18n('error_some-mediums-not-exist'),
             inner_errors: invalidMediums.map((medium) => ({
-                message: `Medium ${medium} does not exist on current cluster`,
+                message: i18n('error_medium-not-exist', {medium}),
             })),
         };
     }, [userColumns, mediumList]);

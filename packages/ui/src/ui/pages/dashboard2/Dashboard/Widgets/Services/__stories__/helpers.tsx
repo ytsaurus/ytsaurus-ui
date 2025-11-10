@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import {WidgetBase} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetBase/WidgetBase';
 import {baseWidgetProps} from '../../../../../../pages/dashboard2/Dashboard/utils/mocks';
@@ -10,8 +10,12 @@ import {ServicesWidgetProps} from '../types';
 
 export function ServicesEmptyWidgetStory() {
     const dispatch = useDispatch();
-    // @ts-ignore
-    dispatch(setSettingByKey('local::test-cluster::chyt::favourites' as const, null));
+
+    useEffect(() => {
+        // @ts-ignore
+        dispatch(setSettingByKey('local::test-cluster::chyt::favourites' as const, null));
+    }, []);
+
     return (
         <div style={{height: 300, width: 550}}>
             <WidgetBase

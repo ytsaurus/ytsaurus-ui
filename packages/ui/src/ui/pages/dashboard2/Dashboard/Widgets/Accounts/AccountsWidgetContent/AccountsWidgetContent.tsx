@@ -21,6 +21,8 @@ import './AccountsWidgetContent.scss';
 
 const columnHelper = createColumnHelper<AccountInfo>();
 
+const CELL_MIN_SIZE = 150;
+
 export function AccountsWidgetContent(props: AccountsWidgetProps) {
     const {accounts, userColumns, isLoading, error, type} = useAccountsWidget(props);
 
@@ -29,7 +31,8 @@ export function AccountsWidgetContent(props: AccountsWidgetProps) {
             columnHelper.accessor('general', {
                 cell: (general) => <AccountsNameCell {...general.getValue()} />,
                 header: () => <Text variant={'subheader-1'}>{i18n('field_name')}</Text>,
-                maxSize: 200,
+                minSize: CELL_MIN_SIZE,
+                maxSize: 150,
             }),
         ];
 
@@ -54,7 +57,7 @@ export function AccountsWidgetContent(props: AccountsWidgetProps) {
                                 header: () => (
                                     <WidgetText variant={'subheader-1'}>{column.name}</WidgetText>
                                 ),
-                                maxSize: 200,
+                                minSize: CELL_MIN_SIZE,
                             },
                         );
                     }
@@ -73,7 +76,7 @@ export function AccountsWidgetContent(props: AccountsWidgetProps) {
                                 {format.ReadableField(header.column.id)}
                             </WidgetText>
                         ),
-                        maxSize: 200,
+                        minSize: CELL_MIN_SIZE,
                     });
                 }),
             );

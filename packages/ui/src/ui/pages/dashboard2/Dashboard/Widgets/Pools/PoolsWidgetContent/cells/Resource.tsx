@@ -13,7 +13,7 @@ import './Resource.scss';
 const block = b('pool-resource');
 
 type Props = Partial<PoolResource> & {
-    type?: Partial<Omit<keyof PoolResource, 'name'>>;
+    type?: Omit<keyof PoolResource, 'name'>;
 };
 
 export function ResourceCell(props: Props) {

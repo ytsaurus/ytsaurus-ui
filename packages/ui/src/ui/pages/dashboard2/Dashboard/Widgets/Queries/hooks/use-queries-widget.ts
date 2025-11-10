@@ -84,13 +84,15 @@ export function useQueriesWidget(props: QueriesWidgetProps) {
         data: queriesResponse,
         error,
         isLoading,
-        isFetching,
-    } = useListQueries({id: widgetId, requests, cluster}, {refetchOnMountOrArgChange: true, pollingInterval: QUERY_POLLING_INTERVAL});
+    } = useListQueries(
+        {id: widgetId, requests, cluster},
+        {refetchOnMountOrArgChange: true, pollingInterval: QUERY_POLLING_INTERVAL},
+    );
 
     return {
         queries: queriesResponse?.queries,
         error,
-        isLoading: isLoading || isFetching,
+        isLoading,
         requestedQueriesErrors: queriesResponse?.requestedQueriesErrors,
     };
 }

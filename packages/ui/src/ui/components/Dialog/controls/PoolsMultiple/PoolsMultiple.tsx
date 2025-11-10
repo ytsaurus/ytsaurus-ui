@@ -52,7 +52,7 @@ export function PoolsMultiple(props: Props) {
                     />
                     <Select
                         onUpdate={(newValue) => updatePool(index, newValue[0])}
-                        options={pair.tree ? poolOptionsMap[pair.tree] || [] : []}
+                        options={pair.tree ? poolOptionsMap[pair.tree] : []}
                         popupWidth={'fit'}
                         value={[pair.pool]}
                         filterable
