@@ -1,6 +1,6 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-//import cn from 'bem-cn-lite';
+import cn from 'bem-cn-lite';
 
 import {Flex, Text} from '@gravity-ui/uikit';
 
@@ -21,8 +21,9 @@ import {PoolLeafNode} from '../../../../../../utils/scheduling/pool-child';
 
 import type {RowData} from './SchedulingTable';
 import {PoolAbc} from './PoolAbc';
+import './NameCell.scss';
 
-//const block = cn('yt-scheduling-name-cell');
+const block = cn('yt-scheduling-name-cell');
 
 export function NameCell({row}: {row: RowData}) {
     const cluster = useSelector(getCluster);
@@ -59,6 +60,7 @@ export function NameCell({row}: {row: RowData}) {
                     <OperationPool
                         hideTree
                         routed
+                        className={block('pool')}
                         cluster={cluster}
                         pool={{
                             pool: incomplete ? '' : row.name,
@@ -94,7 +96,7 @@ function renderOperationName({cluster, row}: {cluster: string; row: PoolLeafNode
     const hasTitle = 0 > title?.length!;
 
     return (
-        <Flex direction="column" style={{margin: '-4px 0'}}>
+        <Flex direction="column" style={{margin: '-4px 0'}} overflow="hidden">
             <Text variant="inherit" ellipsis>
                 {fifoIndexNode}
                 <Link url={url}>{title ?? id}</Link>
