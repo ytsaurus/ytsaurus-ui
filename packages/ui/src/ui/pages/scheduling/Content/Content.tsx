@@ -25,10 +25,10 @@ import {formatByParams} from '../../../utils/format';
 
 import './Content.scss';
 import {getCluster} from '../../../store/selectors/global';
-import SchedulingExpandedPoolsUpdater from './SchedulingExpandedPoolsUpdater';
 import UIFactory from '../../../UIFactory';
 import {UI_TAB_SIZE} from '../../../constants/global';
 import {Overview} from '../../../pages/scheduling/Content/tabs/Overview/Overview';
+import SchedulingExpandedPoolsUpdater from './SchedulingExpandedPoolsUpdater';
 
 const block = cn('scheduling-content');
 
