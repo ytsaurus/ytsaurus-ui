@@ -22,7 +22,7 @@ import {
     filterVisibleItems,
     prepareVisibleItems,
 } from '../../../../../../utils/operations/tabs/details/specification/specification';
-import hammer from '../../../../../../common/hammer';
+import format from '../../../../../../common/hammer/format';
 
 import './Specification.scss';
 
@@ -136,17 +136,44 @@ export default class Specification extends Component {
         );
     }
 
-    renderScript({type, caption, className, jobCount, environment, files, command, layerPaths}) {
+    renderScript({
+        type,
+        caption,
+        className,
+        jobCount,
+        environment,
+        files,
+        command,
+        layerPaths,
+        cpu_limit,
+        gpu_limit,
+        memory_limit,
+    }) {
         const {cluster} = this.props;
 
         return (
             <div className={specificationBlock('mapper')} key={`${type}/${caption}/${className}`}>
                 <div className={headingBlock({size: 's'})}>
-                    {hammer.format['ReadableField'](caption || type)}
+                    {format['ReadableField'](caption || type)}
                 </div>
 
                 <MetaTable
                     items={[
+                        {
+                            key: 'CPU limit',
+                            value: `${format.Number(cpu_limit)} CPU`,
+                            visible: Boolean(cpu_limit),
+                        },
+                        {
+                            key: 'GPU limit',
+                            value: `${format.Number(gpu_limit)} GPU`,
+                            visible: Boolean(gpu_limit),
+                        },
+                        {
+                            key: 'Memory limit',
+                            value: `${format.Bytes(memory_limit)} RAM`,
+                            visible: Boolean(memory_limit),
+                        },
                         {
                             key: 'class name',
                             value: className,
