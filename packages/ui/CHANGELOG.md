@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.7.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v2.6.0...ui-v2.7.0) (2025-11-11)
+
+
+### Features
+
+* **Components/CypressProxies:** add cypress proxies tab [YTFRONT-5036] ([4e91046](https://github.com/ytsaurus/ytsaurus-ui/commit/4e91046d5ab84ade0511b7c4426c9060728098e8))
+* **Operation/Logs:** support logs tabs for operations and logs [YTFRONT-5191] ([b088313](https://github.com/ytsaurus/ytsaurus-ui/commit/b0883136a4fc649b0c478d6b8dee0dc0b38e26c4))
+* **System/CypressProxies:** add cypress proxies section [YTFRONT-5036] ([249dba8](https://github.com/ytsaurus/ytsaurus-ui/commit/249dba86ab4d92bba40dbe762c8215cea401df18))
+
+
+### Bug Fixes
+
+* **Queries:** engines info problem [YTFRONT-5286] ([5253699](https://github.com/ytsaurus/ytsaurus-ui/commit/525369988fbd3c60e08bda2b1d62e4318f94e6bb))
+
 ## [2.6.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v2.5.0...ui-v2.6.0) (2025-10-31)
 
 
