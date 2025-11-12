@@ -513,7 +513,7 @@ export function goToQuery(query_id: string): ThunkAction<any, RootState, any, ne
         const state = getState();
         const cluster = getCluster(state);
         const history = getAppBrowserHistory();
-        history.push(createQueryUrl(cluster, query_id));
+        history.push(createQueryUrl(cluster, query_id, {withSearch: true}));
     };
 }
 
@@ -522,8 +522,7 @@ export function resetQueryTracker(): ThunkAction<any, RootState, any, never> {
         const state = getState();
         const cluster = getCluster(state);
         const history = getAppBrowserHistory();
-
-        history.push(createQueryUrl(cluster, ''));
+        history.push(createQueryUrl(cluster, '', {withSearch: true}));
 
         dispatch(createEmptyQuery());
     };
