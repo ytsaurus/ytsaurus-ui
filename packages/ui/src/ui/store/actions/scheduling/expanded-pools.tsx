@@ -60,6 +60,7 @@ const POOL_FIELDS_TO_LOAD = [
     'is_ephemeral',
     'max_operation_count',
     'max_running_operation_count',
+    'lightweight_running_operation_count',
     'max_share_ratio',
     'min_share_ratio',
     'mode',
