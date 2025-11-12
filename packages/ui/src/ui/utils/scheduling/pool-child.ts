@@ -75,6 +75,7 @@ export type PoolData<T extends 'pool' | 'operation'> = {
     maxOperationCount?: number;
     maxOperationCountEdited?: number;
 
+    lightweightRunningOperationCount?: number;
     runningOperationCount?: number;
     maxRunningOperationCount?: number;
     maxRunningOperationCountEdited?: number;
@@ -232,6 +233,10 @@ export function updatePoolChild<T extends 'pool' | 'operation'>(
             data.maxOperationCountEdited = ypath.getNumber(
                 cypressAttributes,
                 '/max_operation_count',
+            );
+            data.lightweightRunningOperationCount = ypath.getNumber(
+                attributes,
+                '/lightweight_running_operation_count',
             );
             data.runningOperationCount = ypath.getNumber(attributes, '/running_operation_count');
             data.maxRunningOperationCount = ypath.getNumber(

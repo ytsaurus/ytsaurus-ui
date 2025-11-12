@@ -1,5 +1,24 @@
 .yt-scheduling-meta {
     &__progress {
         min-width: 200px;
+        width: 100%;
+    }
+
+    &__progress-control {
+        flex: 1 0 calc(50% - 1px);
+
+        &_left {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        &_right {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+    }
+
+    &__progress-meta-subitem {
+        padding-left: 20px;
     }
 }
