@@ -57,6 +57,7 @@ const POOL_FIELDS_TO_LOAD = [
     'fifo_index',
     'fifo_sort_parameters',
     'integral_guarantee_type',
+    'integral_pool_capacity',
     'is_ephemeral',
     'max_operation_count',
     'max_running_operation_count',

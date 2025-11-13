@@ -6,12 +6,16 @@ import {Progress} from '@gravity-ui/uikit';
 
 import format from '../../../../../common/hammer/format';
 
+import {ChargeLevel} from '../../../../../components/ChargeLevel/ChargeLevel';
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
 import {ColorCircle} from '../../../../../components/ColorCircle/ColorCircle';
 import MetaTable, {MetaTableItem} from '../../../../../components/MetaTable/MetaTable';
 import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
 import {ROOT_POOL_NAME} from '../../../../../constants/scheduling';
-import {getCurrentPool} from '../../../../../store/selectors/scheduling/scheduling';
+import {
+    getCurrentPool,
+    getSchedulingTreeMainResource,
+} from '../../../../../store/selectors/scheduling/scheduling';
 import {
     PoolStaticConfigurationItem,
     getCurrentPoolGuarantees,
@@ -21,7 +25,6 @@ import {PoolData} from '../../../../../utils/scheduling/pool-child';
 import {calcProgressProps} from '../../../../../utils/utils';
 
 import i18n from './i18n';
-
 import './SchedulingMeta.scss';
 
 const block = cn('yt-scheduling-meta');
@@ -30,6 +33,7 @@ export function SchedulingMeta() {
     const pool = useSelector(getCurrentPool);
 
     const guarantees = useSelector(getCurrentPoolGuarantees);
+    const mainResource = useSelector(getSchedulingTreeMainResource);
 
     const {items, subTitles} = React.useMemo(() => {
         const {mode, resources, integralType, flowCPU = 0, flowGPU = 0, weight} = pool ?? {};
@@ -80,16 +84,26 @@ export function SchedulingMeta() {
         };
 
         if (hasIntegralType) {
+            const {accumulated_resource_volume, integral_pool_capacity} = pool?.attributes ?? {};
+
+            const type = mainResource === 'memory' ? 'user_memory' : (mainResource ?? 'cpu');
+            const {[type]: accumulated = NaN} = accumulated_resource_volume ?? {};
+            const {[type]: capacity = NaN} = integral_pool_capacity ?? {};
+
             res.items.push([
                 {key: i18n('guarantee-type'), value: guaranteeType},
-                {key: i18n('integral-guarantee'), value: '??? ОТКУДА БРАТЬ ЗНАЧЕНИЯ ???'},
+                {
+                    key: i18n('integral-guarantee'),
+                    value: <ChargeLevel value={(accumulated / capacity) * 100} />,
+                    visible: capacity >= 0,
+                },
                 {key: i18n('burst-unit'), value: burstUnit, visible: burstUnit.length > 0},
                 {key: i18n('flow-unit'), value: flowUnit, visible: flowUnit.length > 0},
             ]);
             res.subTitles.push(i18n('integral-guarantees'));
         }
         return res;
-    }, [pool, guarantees]);
+    }, [pool, guarantees, mainResource]);
 
     if (!pool?.name || pool?.name === ROOT_POOL_NAME) {
         return null;
