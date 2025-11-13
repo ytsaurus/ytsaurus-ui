@@ -69,20 +69,34 @@ export function getProgressTheme(
 
 export function addProgressStackSpacers(
     items: Array<{value: number; color?: string; theme?: ProgressProps['theme']}>,
-    spaceSize = 1,
+    {
+        spaceSize = 1,
+        startSpace,
+        endSpace,
+    }: {spaceSize?: number; startSpace?: boolean; endSpace?: boolean} = {},
 ) {
     const res: typeof items = [];
     let sum = 100;
+
+    function addSpacer() {
+        res.push({value: spaceSize, color: 'rgba(0,0,0,0)'});
+        sum += spaceSize;
+    }
+
     for (let i = 0; i < items.length; ++i) {
         const item = items[i];
         if (item.value > 0) {
-            if (res.length) {
-                res.push({value: spaceSize, color: 'var(--main-background)'});
-                sum += spaceSize;
+            if (startSpace || res.length) {
+                addSpacer();
             }
             res.push(item);
         }
     }
+
+    if (endSpace) {
+        addSpacer();
+    }
+
     return res.map((item) => {
         return {...item, value: (item.value / sum) * 100};
     });

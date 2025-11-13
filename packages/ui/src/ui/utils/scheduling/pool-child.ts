@@ -4,7 +4,11 @@ import ypath from '../../common/thor/ypath';
 import {ROOT_POOL_NAME} from '../../constants/scheduling';
 import {TreeNode} from '../../common/hammer/tree-list';
 import {TreeResources} from '../../store/reducers/scheduling/scheduling';
-import {OperationInfo, PoolInfo} from '../../store/selectors/scheduling/scheduling-pools';
+import {
+    OperationInfo,
+    PoolInfo,
+    PoolResourceType,
+} from '../../store/selectors/scheduling/scheduling-pools';
 
 import {appendInnerErrors} from '../../utils/errors';
 
@@ -73,6 +77,10 @@ function preparePoolChildResource<T extends 'pool' | 'operation'>(
 export type PoolData<T extends 'pool' | 'operation'> = {
     type: T;
     pool?: string;
+    attributes?: {
+        accumulated_resource_volume?: Record<PoolResourceType, number | undefined>;
+        integral_pool_capacity?: Record<PoolResourceType, number | undefined>;
+    };
     cypressAttributes?: unknown;
     mode?: 'fair_share' | 'fifo';
     pool_operation_count?: number;
