@@ -148,7 +148,14 @@ export interface OperationInfo {
     name: string;
     type: 'operation';
     parent: string;
-    attributes: {title?: string; user?: string; type?: string};
+    attributes: {
+        title?: string;
+        user?: string;
+        type?: string;
+        accumulated_resource_volume?: Record<PoolResourceType, number | undefined>;
+        integral_pool_capacity?: Record<PoolResourceType, number | undefined>;
+        dominant_resource?: PoolResourceType;
+    };
     cypressAttributes: object;
     flowCPU: number;
     burstCPU: number;
@@ -184,7 +191,7 @@ export interface PoolInfo extends Omit<OperationInfo, 'type' | 'pool'> {
     fairShareRatio?: number;
     usageRatio?: number;
     demandRatio?: number;
-    dominantResource?: number;
+    dominantResource?: PoolResourceType;
     runningOperationCount?: number;
     operationCount?: number;
     maxOperationCount?: number;
