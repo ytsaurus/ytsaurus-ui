@@ -95,12 +95,13 @@ export const sendMessage = async (req: Request, res: Response) => {
 
     try {
         const aiChat = getAiChatInstance(req);
-        const {message, metadata, model, conversationId, contextMessages} = req.body as {
+        const {message, metadata, model, conversationId, contextMessages, files} = req.body as {
             model: string;
             message: string;
             conversationId: string;
             metadata?: Record<string, unknown>;
             contextMessages?: string[];
+            files?: {name: string; content: string; type: string}[];
         };
 
         const requestData: SendMessageRequest = {
@@ -109,6 +110,7 @@ export const sendMessage = async (req: Request, res: Response) => {
             message,
             metadata,
             contextMessages: contextMessages,
+            files,
         };
 
         res.setHeader('Content-Type', 'text/event-stream');

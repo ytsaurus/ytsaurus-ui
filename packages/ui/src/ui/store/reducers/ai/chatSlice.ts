@@ -13,6 +13,7 @@ type CodeAssistantChatState = {
     loading: boolean;
     isOpen: boolean;
     error: Error | undefined;
+    attachedFiles: File[];
 };
 
 const initialState: CodeAssistantChatState = {
@@ -26,6 +27,7 @@ const initialState: CodeAssistantChatState = {
     loading: false,
     isOpen: false,
     error: undefined,
+    attachedFiles: [],
 };
 
 const chatSlice = createSlice({
@@ -71,6 +73,15 @@ const chatSlice = createSlice({
         setError: (state, {payload}: PayloadAction<Error | undefined>) => {
             state.error = payload;
         },
+        addAttachedFile: (state, {payload}: PayloadAction<File>) => {
+            state.attachedFiles.push(payload);
+        },
+        removeAttachedFile: (state, {payload}: PayloadAction<number>) => {
+            state.attachedFiles.splice(payload, 1);
+        },
+        clearAttachedFiles: (state) => {
+            state.attachedFiles = [];
+        },
     },
 });
 
@@ -88,6 +99,9 @@ export const {
     setConversationId,
     resetChart,
     setError,
+    addAttachedFile,
+    removeAttachedFile,
+    clearAttachedFiles,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

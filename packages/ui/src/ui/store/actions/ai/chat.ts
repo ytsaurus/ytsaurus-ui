@@ -3,6 +3,7 @@ import {Action} from 'redux';
 import {RootState} from '../../reducers';
 import {
     selectAiChatModel,
+    selectAttachedFiles,
     selectChatMode,
     selectChatOpen,
     selectChatQuestion,
@@ -13,6 +14,7 @@ import {
 import {getQueryDraft} from '../../selectors/query-tracker/query';
 import {
     addItem,
+    clearAttachedFiles,
     clearCurrentAnswer,
     resetChart,
     setConversationId,
@@ -36,6 +38,22 @@ type AsyncAction = ThunkAction<void, RootState, undefined, Action>;
 
 const META = {
     agent: 'qt',
+};
+
+const readFileAsText = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const result = e.target?.result;
+            if (typeof result === 'string') {
+                resolve(result);
+            } else {
+                reject(new Error('Failed to read file as text'));
+            }
+        };
+        reader.onerror = () => reject(reader.error);
+        reader.readAsText(file);
+    });
 };
 
 const ERROR_MESSAGE = {
@@ -144,6 +162,7 @@ export const sendQuestion = (): AsyncAction => async (dispatch, getState) => {
     const question = selectChatQuestion(state);
     const conversationId = selectConversationId(state);
     const conversations = selectConversations(state);
+    const attachedFiles = selectAttachedFiles(state);
     const model = selectAiChatModel();
     let summarize = false;
 
@@ -176,6 +195,15 @@ export const sendQuestion = (): AsyncAction => async (dispatch, getState) => {
             summarize = true;
         }
 
+        // Read file contents
+        const files = await Promise.all(
+            attachedFiles.map(async (file) => ({
+                name: file.name,
+                type: file.type,
+                content: await readFileAsText(file),
+            })),
+        );
+
         if (currentAbortController) {
             currentAbortController.abort();
         }
@@ -191,6 +219,7 @@ export const sendQuestion = (): AsyncAction => async (dispatch, getState) => {
                 metadata: META,
                 conversationId: currentConversationId,
                 contextMessages: contextMessages.length > 0 ? contextMessages : undefined,
+                files: files.length > 0 ? files : undefined,
             }),
             signal: currentAbortController.signal,
         });
@@ -231,6 +260,8 @@ export const sendQuestion = (): AsyncAction => async (dispatch, getState) => {
         if (summarize) {
             dispatch(summarizeConversationTitle(currentConversationId));
         }
+
+        dispatch(clearAttachedFiles());
     } catch (e) {
         if (e instanceof Error && e.name === 'AbortError') {
             dispatch(setSending(false));

@@ -8,6 +8,7 @@ const block = cn('popup-with-close-button');
 
 type Props = Pick<PopupProps, 'anchorRef' | 'open'> & {
     className?: string;
+    placement?: PopupProps['placement'];
     onClose: () => void;
 };
 
@@ -17,6 +18,7 @@ export const PopupWithCloseButton: FC<PropsWithChildren<Props>> = ({
     onClose,
     children,
     className,
+    placement = 'bottom',
 }) => {
     return (
         <Popup
@@ -24,7 +26,7 @@ export const PopupWithCloseButton: FC<PropsWithChildren<Props>> = ({
             open={open}
             className={block(null, className)}
             onOutsideClick={onClose}
-            placement="bottom"
+            placement={placement}
             hasArrow
         >
             <Button view="flat" className={block('close-button')} onClick={onClose}>

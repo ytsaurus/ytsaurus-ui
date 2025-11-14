@@ -17,6 +17,7 @@ export const selectConversationId = (state: RootState) => state.aiChat.conversat
 export const selectConversations = (state: RootState) => state.aiChat.conversations;
 export const selectConversationItems = (state: RootState) => state.aiChat.items;
 export const selectChatError = (state: RootState) => state.aiChat.error;
+export const selectAttachedFiles = (state: RootState) => state.aiChat.attachedFiles;
 
 export const selectChatIsVisible = createSelector(
     [selectChatMode, selectConversationItems, selectCurrentAnswer],

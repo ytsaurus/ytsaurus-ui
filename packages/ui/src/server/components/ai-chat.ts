@@ -94,13 +94,24 @@ export class AiChat {
             });
         }
 
-        inputMessages.push({
-            content: [
-                {
-                    text: request.message,
+        const messageContent: any[] = [
+            {
+                text: request.message,
+                type: 'input_text',
+            },
+        ];
+
+        if (request.files && request.files.length > 0) {
+            request.files.forEach((file) => {
+                messageContent.push({
+                    text: `File: ${file.name}\n\`\`\`\n${file.content}\n\`\`\``,
                     type: 'input_text',
-                },
-            ],
+                });
+            });
+        }
+
+        inputMessages.push({
+            content: messageContent,
             id: `msg_${Date.now()}`,
             role: 'user',
             status: 'completed',

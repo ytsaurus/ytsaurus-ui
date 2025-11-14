@@ -1,0 +1,9 @@
+{
+  "title_attach-files": "Прикрепить файлы",
+  "alert_file-too-large": "Файл слишком большой. Максимальный размер 0.5 МБ",
+  "alert_invalid-extension": "Недопустимое расширение файла. Разрешены: .txt, .csv, .json, .xml, .md, .js, .ts, .html, .css",
+  "alert_invalid-mime-type": "Недопустимый тип файла",
+  "alert_binary-data": "Файл содержит бинарные данные",
+  "alert_invalid-text-file": "Файл не является валидным текстовым файлом"
+}
+

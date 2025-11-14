@@ -1,0 +1,9 @@
+{
+  "title_attach-files": "Attach files",
+  "alert_file-too-large": "File is too large. Maximum size is 0.5 MB",
+  "alert_invalid-extension": "Invalid file extension. Allowed: .txt, .csv, .json, .xml, .md, .js, .ts, .html, .css",
+  "alert_invalid-mime-type": "Invalid file type",
+  "alert_binary-data": "File contains binary data",
+  "alert_invalid-text-file": "File is not a valid text file"
+}
+
