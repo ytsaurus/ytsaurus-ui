@@ -1,15 +1,6 @@
 {
     "panels": [
         {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 0
-            },
-            "type": "row"
-        },
-        {
             "datasource": {
                 "type": "prometheus",
                 "uid": "${PROMETHEUS_DS_UID}"
@@ -50,7 +41,7 @@
             "title": "CPU distributed vs total",
             "gridPos": {
                 "x": 0,
-                "y": 1,
+                "y": 0,
                 "w": 12,
                 "h": 6
             }
@@ -100,7 +91,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     },
@@ -112,7 +103,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -121,7 +112,7 @@
             "title": "Memory distributed vs total",
             "gridPos": {
                 "x": 12,
-                "y": 1,
+                "y": 0,
                 "w": 12,
                 "h": 6
             }
@@ -191,7 +182,7 @@
                             },
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             },
                             {
                                 "id": "min",
@@ -212,7 +203,7 @@
             "title": "Undistributed resources",
             "gridPos": {
                 "x": 6,
-                "y": 7,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
@@ -265,7 +256,12 @@
                 "query": "default",
                 "hide": 0,
                 "skipUrlSync": false,
-                "allFormat": "glob"
+                "allFormat": "glob",
+                "default_for_ui": "default",
+                "discover_values": {
+                    "label": "tree",
+                    "match": "{cluster=~\"$cluster\"}"
+                }
             }
         ]
     },

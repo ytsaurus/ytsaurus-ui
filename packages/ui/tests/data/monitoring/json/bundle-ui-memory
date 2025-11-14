@@ -1,15 +1,6 @@
 {
     "panels": [
         {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 0
-            },
-            "type": "row"
-        },
-        {
             "datasource": {
                 "type": "prometheus",
                 "uid": "${PROMETHEUS_DS_UID}"
@@ -30,9 +21,27 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_porto_memory_anon_usage\", tablet_cell_bundle=~\"$tablet_cell_bundle\", container_category=~\"pod\", pod=~\"$pod\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_porto_memory_anon_limit\", tablet_cell_bundle=~\"$tablet_cell_bundle\", container_category=~\"pod\", pod=~\"$pod\"}",
                     "refId": "B",
-                    "legendFormat": "\"Container Memory Usage\""
+                    "legendFormat": "\"Anon Memory Limit\""
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_memory_tcmalloc_desired_usage_limit_bytes\", tablet_cell_bundle=~\"$tablet_cell_bundle\", pod=~\"$pod\"}",
+                    "refId": "C",
+                    "legendFormat": "\"OOM tracker threshold\""
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_porto_memory_anon_usage\", tablet_cell_bundle=~\"$tablet_cell_bundle\", container_category=~\"pod\", pod=~\"$pod\"}",
+                    "refId": "D",
+                    "legendFormat": "\"Anon Memory Usage\""
                 },
                 {
                     "datasource": {
@@ -40,14 +49,19 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_used\", tablet_cell_bundle=~\"$tablet_cell_bundle\", category=~\".+\", pod=~\"$pod\"}",
-                    "refId": "C",
+                    "refId": "E",
                     "legendFormat": "\"{{category}}\""
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "axisLabel": "Bytes",
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -56,6 +70,10 @@
                             "options": "A"
                         },
                         "properties": [
+                            {
+                                "id": "unit",
+                                "value": "decbytes"
+                            },
                             {
                                 "id": "min",
                                 "value": 0
@@ -69,6 +87,10 @@
                         },
                         "properties": [
                             {
+                                "id": "unit",
+                                "value": "decbytes"
+                            },
+                            {
                                 "id": "min",
                                 "value": 0
                             }
@@ -81,8 +103,50 @@
                         },
                         "properties": [
                             {
+                                "id": "unit",
+                                "value": "decbytes"
+                            },
+                            {
                                 "id": "min",
                                 "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "D"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "decbytes"
+                            },
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "E"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "decbytes"
+                            },
+                            {
+                                "id": "min",
+                                "value": 0
+                            },
+                            {
+                                "id": "custom.stacking",
+                                "value": {
+                                    "mode": "normal"
+                                }
                             }
                         ]
                     }
@@ -90,22 +154,8 @@
             },
             "title": "Memory usage per category (not shown per-host)",
             "gridPos": {
-                "x": 0,
-                "y": 1,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "type": "text",
-            "options": {
-                "content": "",
-                "mode": "markdown"
-            },
-            "title": "",
-            "gridPos": {
-                "x": 12,
-                "y": 1,
+                "x": 6,
+                "y": 0,
                 "w": 12,
                 "h": 6
             }
@@ -123,7 +173,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_used\", tablet_cell_bundle=~\"$tablet_cell_bundle\", category=~\"tablet_dynamic\", pod=~\"$pod\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 },
                 {
                     "datasource": {
@@ -138,7 +189,12 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "axisLabel": "Bytes",
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -147,6 +203,10 @@
                             "options": "A"
                         },
                         "properties": [
+                            {
+                                "id": "unit",
+                                "value": "decbytes"
+                            },
                             {
                                 "id": "min",
                                 "value": 0
@@ -160,6 +220,10 @@
                         },
                         "properties": [
                             {
+                                "id": "unit",
+                                "value": "decbytes"
+                            },
+                            {
                                 "id": "min",
                                 "value": 0
                             }
@@ -170,7 +234,7 @@
             "title": "Tablet dynamic memory",
             "gridPos": {
                 "x": 0,
-                "y": 7,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
@@ -188,7 +252,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_used\", tablet_cell_bundle=~\"$tablet_cell_bundle\", category=~\"tablet_static\", pod=~\"$pod\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 },
                 {
                     "datasource": {
@@ -203,7 +268,12 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "axisLabel": "Bytes",
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -212,6 +282,10 @@
                             "options": "A"
                         },
                         "properties": [
+                            {
+                                "id": "unit",
+                                "value": "decbytes"
+                            },
                             {
                                 "id": "min",
                                 "value": 0
@@ -225,6 +299,10 @@
                         },
                         "properties": [
                             {
+                                "id": "unit",
+                                "value": "decbytes"
+                            },
+                            {
                                 "id": "min",
                                 "value": 0
                             }
@@ -235,7 +313,7 @@
             "title": "Tablet static memory",
             "gridPos": {
                 "x": 12,
-                "y": 7,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
@@ -253,7 +331,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_used\", tablet_cell_bundle=~\"$tablet_cell_bundle\", category=~\"query\", pod=~\"$pod\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 },
                 {
                     "datasource": {
@@ -268,7 +347,12 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "axisLabel": "Bytes",
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -277,6 +361,10 @@
                             "options": "A"
                         },
                         "properties": [
+                            {
+                                "id": "unit",
+                                "value": "decbytes"
+                            },
                             {
                                 "id": "min",
                                 "value": 0
@@ -290,6 +378,10 @@
                         },
                         "properties": [
                             {
+                                "id": "unit",
+                                "value": "decbytes"
+                            },
+                            {
                                 "id": "min",
                                 "value": 0
                             }
@@ -300,7 +392,7 @@
             "title": "Query memory usage",
             "gridPos": {
                 "x": 0,
-                "y": 13,
+                "y": 12,
                 "w": 12,
                 "h": 6
             }
@@ -318,13 +410,19 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_total_used\", tablet_cell_bundle=~\"$tablet_cell_bundle\", pod=~\"$pod\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "axisLabel": "Bytes",
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -333,6 +431,10 @@
                             "options": "A"
                         },
                         "properties": [
+                            {
+                                "id": "unit",
+                                "value": "decbytes"
+                            },
                             {
                                 "id": "min",
                                 "value": 0
@@ -344,7 +446,7 @@
             "title": "Tracked memory usage",
             "gridPos": {
                 "x": 12,
-                "y": 13,
+                "y": 12,
                 "w": 12,
                 "h": 6
             }
@@ -362,13 +464,19 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_memory_usage_rss\", tablet_cell_bundle=~\"$tablet_cell_bundle\", pod=~\"$pod\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "axisLabel": "Bytes",
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -377,6 +485,10 @@
                             "options": "A"
                         },
                         "properties": [
+                            {
+                                "id": "unit",
+                                "value": "decbytes"
+                            },
                             {
                                 "id": "min",
                                 "value": 0
@@ -387,73 +499,8 @@
             },
             "title": "Process memory usage (rss)",
             "gridPos": {
-                "x": 0,
-                "y": 19,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${PROMETHEUS_DS_UID}"
-            },
-            "type": "timeseries",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${PROMETHEUS_DS_UID}"
-                    },
-                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_memory_cgroup_rss\", tablet_cell_bundle=~\"$tablet_cell_bundle\", pod=~\"$pod\"}",
-                    "refId": "A"
-                },
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${PROMETHEUS_DS_UID}"
-                    },
-                    "expr": "max by() ({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_memory_cgroup_memory_limit\", tablet_cell_bundle=~\"$tablet_cell_bundle\", pod=~\"$pod\"})",
-                    "refId": "B",
-                    "legendFormat": "\"limit\""
-                }
-            ],
-            "fieldConfig": {
-                "defaults": {
-                    "unit": "short",
-                    "custom": {}
-                },
-                "overrides": [
-                    {
-                        "matcher": {
-                            "id": "byFrameRefID",
-                            "options": "A"
-                        },
-                        "properties": [
-                            {
-                                "id": "min",
-                                "value": 0
-                            }
-                        ]
-                    },
-                    {
-                        "matcher": {
-                            "id": "byFrameRefID",
-                            "options": "B"
-                        },
-                        "properties": [
-                            {
-                                "id": "min",
-                                "value": 0
-                            }
-                        ]
-                    }
-                ]
-            },
-            "title": "Container (cgroup) memory usage",
-            "gridPos": {
-                "x": 12,
-                "y": 19,
+                "x": 6,
+                "y": 18,
                 "w": 12,
                 "h": 6
             }
@@ -471,7 +518,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_used\", tablet_cell_bundle=~\"$tablet_cell_bundle\", category=~\"lookup_rows_cache\", pod=~\"$pod\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 },
                 {
                     "datasource": {
@@ -486,7 +534,12 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "axisLabel": "Bytes",
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -495,6 +548,10 @@
                             "options": "A"
                         },
                         "properties": [
+                            {
+                                "id": "unit",
+                                "value": "decbytes"
+                            },
                             {
                                 "id": "min",
                                 "value": 0
@@ -508,6 +565,10 @@
                         },
                         "properties": [
                             {
+                                "id": "unit",
+                                "value": "decbytes"
+                            },
+                            {
                                 "id": "min",
                                 "value": 0
                             }
@@ -517,34 +578,11 @@
             },
             "title": "Row cache size",
             "gridPos": {
-                "x": 0,
-                "y": 25,
+                "x": 6,
+                "y": 24,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "type": "text",
-            "options": {
-                "content": "",
-                "mode": "markdown"
-            },
-            "title": "",
-            "gridPos": {
-                "x": 12,
-                "y": 25,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 31
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -575,7 +613,12 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "axisLabel": "Bytes",
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -584,6 +627,10 @@
                             "options": "A"
                         },
                         "properties": [
+                            {
+                                "id": "unit",
+                                "value": "decbytes"
+                            },
                             {
                                 "id": "min",
                                 "value": 0
@@ -597,6 +644,10 @@
                         },
                         "properties": [
                             {
+                                "id": "unit",
+                                "value": "decbytes"
+                            },
+                            {
                                 "id": "min",
                                 "value": 0
                             }
@@ -607,7 +658,7 @@
             "title": "Reserved memory usage",
             "gridPos": {
                 "x": 0,
-                "y": 32,
+                "y": 30,
                 "w": 12,
                 "h": 6
             }
@@ -646,7 +697,11 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "axisLabel": "Bytes",
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -656,6 +711,10 @@
                             "options": "A"
                         },
                         "properties": [
+                            {
+                                "id": "unit",
+                                "value": "decbytes"
+                            },
                             {
                                 "id": "min",
                                 "value": 0
@@ -669,6 +728,10 @@
                         },
                         "properties": [
                             {
+                                "id": "unit",
+                                "value": "decbytes"
+                            },
+                            {
                                 "id": "min",
                                 "value": 0
                             }
@@ -679,7 +742,7 @@
             "title": "Footprint and Fragmentation",
             "gridPos": {
                 "x": 12,
-                "y": 32,
+                "y": 30,
                 "w": 12,
                 "h": 6
             }

@@ -7,9 +7,7 @@
     "outDir": "../../dist",
     "resolveJsonModule": true,
     "declaration": true,
-    "target": "es2021",
-    "module": "NodeNext",
-    "moduleResolution": "nodenext"
+    "target": "es2021"
   },
   "include": ["**/*", "../@types"],
   "exclude": ["node_modules"],

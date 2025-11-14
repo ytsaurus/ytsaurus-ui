@@ -1,15 +1,6 @@
 {
     "panels": [
         {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 0
-            },
-            "type": "row"
-        },
-        {
             "datasource": {
                 "type": "prometheus",
                 "uid": "${PROMETHEUS_DS_UID}"
@@ -29,14 +20,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Scheduler Memory",
             "gridPos": {
                 "x": 0,
-                "y": 1,
+                "y": 0,
                 "w": 12,
                 "h": 6
             }
@@ -61,14 +56,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Controller Agent Memory",
             "gridPos": {
                 "x": 12,
-                "y": 1,
+                "y": 0,
                 "w": 12,
                 "h": 6
             }
@@ -93,14 +92,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Scheduler CPU Wait",
             "gridPos": {
                 "x": 0,
-                "y": 7,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
@@ -125,14 +128,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Controller Agent CPU Wait",
             "gridPos": {
                 "x": 12,
-                "y": 7,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
@@ -157,14 +164,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Scheduler Control CPU",
             "gridPos": {
                 "x": 0,
-                "y": 13,
+                "y": 12,
                 "w": 12,
                 "h": 6
             }
@@ -189,14 +200,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Controller Agent Control CPU",
             "gridPos": {
                 "x": 12,
-                "y": 13,
+                "y": 12,
                 "w": 12,
                 "h": 6
             }
@@ -221,14 +236,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Scheduler Node Shards CPU",
             "gridPos": {
                 "x": 0,
-                "y": 19,
+                "y": 18,
                 "w": 12,
                 "h": 6
             }
@@ -253,14 +272,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Controller Agent Controllers CPU",
             "gridPos": {
                 "x": 12,
-                "y": 19,
+                "y": 18,
                 "w": 12,
                 "h": 6
             }
@@ -285,14 +308,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Scheduler Thread Pools CPU",
             "gridPos": {
                 "x": 0,
-                "y": 25,
+                "y": 24,
                 "w": 12,
                 "h": 6
             }
@@ -317,14 +344,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Controller Agent JobTracker CPU",
             "gridPos": {
                 "x": 12,
-                "y": 25,
+                "y": 24,
                 "w": 12,
                 "h": 6
             }
@@ -349,14 +380,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Scheduler RPC Heavy CPU",
             "gridPos": {
                 "x": 0,
-                "y": 31,
+                "y": 30,
                 "w": 12,
                 "h": 6
             }
@@ -381,14 +416,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Controller Agent RPC Heavy CPU",
             "gridPos": {
                 "x": 12,
-                "y": 31,
+                "y": 30,
                 "w": 12,
                 "h": 6
             }
@@ -413,26 +452,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Control Thread Buckets",
             "gridPos": {
                 "x": 6,
-                "y": 37,
+                "y": 36,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 43
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -454,7 +488,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -474,7 +512,7 @@
             "title": "Operation Count",
             "gridPos": {
                 "x": 0,
-                "y": 44,
+                "y": 42,
                 "w": 12,
                 "h": 6
             }
@@ -499,7 +537,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -519,7 +561,7 @@
             "title": "Schedulable Element Count",
             "gridPos": {
                 "x": 12,
-                "y": 44,
+                "y": 42,
                 "w": 12,
                 "h": 6
             }
@@ -549,7 +591,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -557,7 +602,7 @@
             "title": "Preschedule job count rate",
             "gridPos": {
                 "x": 0,
-                "y": 50,
+                "y": 48,
                 "w": 12,
                 "h": 6
             }
@@ -587,7 +632,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -595,7 +643,7 @@
             "title": "Schedule job attempts",
             "gridPos": {
                 "x": 12,
-                "y": 50,
+                "y": 48,
                 "w": 12,
                 "h": 6
             }
@@ -612,7 +660,7 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_preschedule_job_count\", scheduling_stage!~\"non_preemptive|regular.*\", tree=~\"default\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_preschedule_job_count\", scheduling_stage!~\"non_preemptive|regular.*|\", tree=~\"default\"}[$__rate_interval])",
                     "refId": "A",
                     "legendFormat": "{{scheduling_stage}}"
                 }
@@ -625,7 +673,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -633,7 +684,7 @@
             "title": "Preemptive preschedule job attempts",
             "gridPos": {
                 "x": 0,
-                "y": 56,
+                "y": 54,
                 "w": 12,
                 "h": 6
             }
@@ -658,26 +709,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Operation satisfaction distribution",
             "gridPos": {
                 "x": 12,
-                "y": 56,
+                "y": 54,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 62
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -691,22 +737,35 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_logging_enqueued_events_rate|yt_logging_dropped_events\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_logging_enqueued_events\"}[$__rate_interval])",
                     "refId": "A",
-                    "legendFormat": "{{pod}}, {{__name__}}"
+                    "legendFormat": "{{pod}}, yt.logging.enqueued_events.rate"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_logging_dropped_events\"}[$__rate_interval])",
+                    "refId": "B",
+                    "legendFormat": "{{pod}}, yt.logging.dropped_events.rate"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Scheduler Logging",
             "gridPos": {
                 "x": 0,
-                "y": 63,
+                "y": 60,
                 "w": 12,
                 "h": 6
             }
@@ -731,26 +790,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Controller Agent Logging",
             "gridPos": {
                 "x": 12,
-                "y": 63,
+                "y": 60,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 69
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -777,7 +831,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -785,7 +842,7 @@
             "title": "Aborted jobs rate",
             "gridPos": {
                 "x": 0,
-                "y": 70,
+                "y": 66,
                 "w": 12,
                 "h": 6
             }
@@ -802,9 +859,18 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_metrics_total_time_aborted_rate|yt_scheduler_pools_metrics_total_time_completed\", pool=~\"<Root>\", tree=~\"default\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_metrics_total_time_aborted\", pool=~\"<Root>\", tree=~\"default\"}[$__rate_interval])",
                     "refId": "A",
-                    "legendFormat": "{{__name__}}"
+                    "legendFormat": "aborted"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-scheduler\", __name__=~\"yt_scheduler_pools_metrics_total_time_completed\", pool=~\"<Root>\", tree=~\"default\"}[$__rate_interval])",
+                    "refId": "B",
+                    "legendFormat": "completed"
                 }
             ],
             "fieldConfig": {
@@ -815,7 +881,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -823,19 +892,10 @@
             "title": "Aborted vs completed job time",
             "gridPos": {
                 "x": 12,
-                "y": 70,
+                "y": 66,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 76
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -857,7 +917,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -877,7 +941,7 @@
             "title": "AllocationTrackerService: Heartbeat rate",
             "gridPos": {
                 "x": 0,
-                "y": 77,
+                "y": 72,
                 "w": 12,
                 "h": 6
             }
@@ -902,7 +966,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -922,7 +990,7 @@
             "title": "AllocationTrackerService: Heartbeat queue size",
             "gridPos": {
                 "x": 12,
-                "y": 77,
+                "y": 72,
                 "w": 12,
                 "h": 6
             }
@@ -947,7 +1015,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -967,7 +1039,7 @@
             "title": "AllocationTrackerService: Heartbeat time max",
             "gridPos": {
                 "x": 0,
-                "y": 83,
+                "y": 78,
                 "w": 12,
                 "h": 6
             }
@@ -992,7 +1064,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -1012,7 +1088,7 @@
             "title": "AllocationTrackerService: Heartbeat concurrency",
             "gridPos": {
                 "x": 12,
-                "y": 83,
+                "y": 78,
                 "w": 12,
                 "h": 6
             }
@@ -1036,7 +1112,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -1056,7 +1136,7 @@
             "title": "Scheduler heartbeat throttling",
             "gridPos": {
                 "x": 6,
-                "y": 89,
+                "y": 84,
                 "w": 12,
                 "h": 6
             }
@@ -1081,7 +1161,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -1101,7 +1185,7 @@
             "title": "ControllerAgentTrackerService: Heartbeat rate",
             "gridPos": {
                 "x": 0,
-                "y": 95,
+                "y": 90,
                 "w": 12,
                 "h": 6
             }
@@ -1126,7 +1210,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -1146,19 +1234,10 @@
             "title": "ControllerAgentTrackerService: Heartbeat time max",
             "gridPos": {
                 "x": 12,
-                "y": 95,
+                "y": 90,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 101
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -1180,14 +1259,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "JobTrackerService: Heartbeat rate",
             "gridPos": {
                 "x": 0,
-                "y": 102,
+                "y": 96,
                 "w": 12,
                 "h": 6
             }
@@ -1212,14 +1295,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "JobSpecService: SettleJob rate",
             "gridPos": {
                 "x": 12,
-                "y": 102,
+                "y": 96,
                 "w": 12,
                 "h": 6
             }
@@ -1244,14 +1331,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "JobTrackerService: Heartbeat time max",
             "gridPos": {
                 "x": 0,
-                "y": 108,
+                "y": 102,
                 "w": 12,
                 "h": 6
             }
@@ -1276,14 +1367,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "JobSpecService: SettleJob time max",
             "gridPos": {
                 "x": 12,
-                "y": 108,
+                "y": 102,
                 "w": 12,
                 "h": 6
             }
@@ -1308,14 +1403,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "JobTrackerService: Heartbeat queue size",
             "gridPos": {
                 "x": 0,
-                "y": 114,
+                "y": 108,
                 "w": 12,
                 "h": 6
             }
@@ -1340,14 +1439,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "JobSpecService: SettleJob queue size",
             "gridPos": {
                 "x": 12,
-                "y": 114,
+                "y": 108,
                 "w": 12,
                 "h": 6
             }

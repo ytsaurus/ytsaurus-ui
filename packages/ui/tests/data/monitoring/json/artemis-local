@@ -1,15 +1,6 @@
 {
     "panels": [
         {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 0
-            },
-            "type": "row"
-        },
-        {
             "datasource": {
                 "type": "prometheus",
                 "uid": "${PROMETHEUS_DS_UID}"
@@ -33,7 +24,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -45,7 +39,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -54,7 +48,7 @@
             "title": "Table write data weight rate",
             "gridPos": {
                 "x": 0,
-                "y": 1,
+                "y": 0,
                 "w": 12,
                 "h": 6
             }
@@ -83,7 +77,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -91,7 +88,7 @@
             "title": "Table write row count rate",
             "gridPos": {
                 "x": 12,
-                "y": 1,
+                "y": 0,
                 "w": 12,
                 "h": 6
             }
@@ -120,7 +117,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -132,7 +132,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -141,7 +141,7 @@
             "title": "Table commit data weight rate",
             "gridPos": {
                 "x": 0,
-                "y": 7,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
@@ -170,7 +170,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -178,7 +181,7 @@
             "title": "Table commit row count rate",
             "gridPos": {
                 "x": 12,
-                "y": 7,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
@@ -207,7 +210,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -219,7 +225,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -228,7 +234,7 @@
             "title": "Table lookup data weight rate",
             "gridPos": {
                 "x": 0,
-                "y": 13,
+                "y": 12,
                 "w": 12,
                 "h": 6
             }
@@ -257,7 +263,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -269,7 +278,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -278,7 +287,7 @@
             "title": "Table select data weight rate",
             "gridPos": {
                 "x": 12,
-                "y": 13,
+                "y": 12,
                 "w": 12,
                 "h": 6
             }
@@ -307,7 +316,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -319,7 +331,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -328,7 +340,7 @@
             "title": "Table lookup unmerged data weight rate",
             "gridPos": {
                 "x": 0,
-                "y": 19,
+                "y": 18,
                 "w": 12,
                 "h": 6
             }
@@ -357,7 +369,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -369,7 +384,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -378,7 +393,7 @@
             "title": "Table select unmerged data weight rate",
             "gridPos": {
                 "x": 12,
-                "y": 19,
+                "y": 18,
                 "w": 12,
                 "h": 6
             }
@@ -407,7 +422,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -419,7 +437,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -428,7 +446,7 @@
             "title": "Table lookup data bytes read from disk",
             "gridPos": {
                 "x": 0,
-                "y": 25,
+                "y": 24,
                 "w": 12,
                 "h": 6
             }
@@ -457,7 +475,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -469,7 +490,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -478,7 +499,7 @@
             "title": "Table select data bytes read from disk",
             "gridPos": {
                 "x": 12,
-                "y": 25,
+                "y": 24,
                 "w": 12,
                 "h": 6
             }
@@ -507,7 +528,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -519,7 +543,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -528,7 +552,7 @@
             "title": "Table lookup data bytes transmitted",
             "gridPos": {
                 "x": 0,
-                "y": 31,
+                "y": 30,
                 "w": 12,
                 "h": 6
             }
@@ -557,7 +581,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -569,7 +596,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -578,7 +605,7 @@
             "title": "Table select data bytes transmitted",
             "gridPos": {
                 "x": 12,
-                "y": 31,
+                "y": 30,
                 "w": 12,
                 "h": 6
             }
@@ -607,7 +634,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -619,7 +649,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -628,7 +658,7 @@
             "title": "Table lookup chunk meta bytes read from disk",
             "gridPos": {
                 "x": 0,
-                "y": 37,
+                "y": 36,
                 "w": 12,
                 "h": 6
             }
@@ -657,7 +687,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -669,7 +702,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -678,7 +711,7 @@
             "title": "Table select chunk meta bytes read from disk",
             "gridPos": {
                 "x": 12,
-                "y": 37,
+                "y": 36,
                 "w": 12,
                 "h": 6
             }
@@ -707,7 +740,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -715,7 +751,7 @@
             "title": "Table lookup row count rate",
             "gridPos": {
                 "x": 0,
-                "y": 43,
+                "y": 42,
                 "w": 12,
                 "h": 6
             }
@@ -744,7 +780,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -752,7 +791,7 @@
             "title": "Table select row count rate",
             "gridPos": {
                 "x": 12,
-                "y": 43,
+                "y": 42,
                 "w": 12,
                 "h": 6
             }
@@ -781,7 +820,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -789,7 +831,7 @@
             "title": "Table lookup unmerged row count rate",
             "gridPos": {
                 "x": 0,
-                "y": 49,
+                "y": 48,
                 "w": 12,
                 "h": 6
             }
@@ -818,7 +860,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -826,7 +871,7 @@
             "title": "Table select unmerged row count rate",
             "gridPos": {
                 "x": 12,
-                "y": 49,
+                "y": 48,
                 "w": 12,
                 "h": 6
             }
@@ -855,7 +900,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -863,7 +911,7 @@
             "title": "Table lookup CPU usage",
             "gridPos": {
                 "x": 0,
-                "y": 55,
+                "y": 54,
                 "w": 12,
                 "h": 6
             }
@@ -892,7 +940,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -900,7 +951,7 @@
             "title": "Table select CPU usage",
             "gridPos": {
                 "x": 12,
-                "y": 55,
+                "y": 54,
                 "w": 12,
                 "h": 6
             }
@@ -929,7 +980,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -937,7 +991,7 @@
             "title": "Table lookup decompression cpu time rate",
             "gridPos": {
                 "x": 0,
-                "y": 61,
+                "y": 60,
                 "w": 12,
                 "h": 6
             }
@@ -966,7 +1020,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -974,7 +1031,7 @@
             "title": "Table select decompression cpu time rate",
             "gridPos": {
                 "x": 12,
-                "y": 61,
+                "y": 60,
                 "w": 12,
                 "h": 6
             }
@@ -1003,7 +1060,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -1011,7 +1071,7 @@
             "title": "Table lookup request count",
             "gridPos": {
                 "x": 0,
-                "y": 67,
+                "y": 66,
                 "w": 12,
                 "h": 6
             }
@@ -1040,7 +1100,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -1048,7 +1111,7 @@
             "title": "Table select request count",
             "gridPos": {
                 "x": 12,
-                "y": 67,
+                "y": 66,
                 "w": 12,
                 "h": 6
             }
@@ -1077,7 +1140,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -1089,7 +1155,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -1098,7 +1164,7 @@
             "title": "Fetch table rows data weight rate",
             "gridPos": {
                 "x": 0,
-                "y": 73,
+                "y": 72,
                 "w": 12,
                 "h": 6
             }
@@ -1127,7 +1193,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -1135,19 +1204,10 @@
             "title": "Fetch table rows row count rate",
             "gridPos": {
                 "x": 12,
-                "y": 73,
+                "y": 72,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 79
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -1168,14 +1228,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Table lookup max duration",
             "gridPos": {
                 "x": 0,
-                "y": 80,
+                "y": 78,
                 "w": 12,
                 "h": 6
             }
@@ -1199,26 +1263,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Table select max duration",
             "gridPos": {
                 "x": 12,
-                "y": 80,
+                "y": 78,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 86
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -1239,14 +1298,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Table lookup (QueryService::Multiread) RPC acknowledge time",
             "gridPos": {
                 "x": 0,
-                "y": 87,
+                "y": 84,
                 "w": 12,
                 "h": 6
             }
@@ -1270,26 +1333,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Table select (QueryService::Execute) RPC acknowledge time",
             "gridPos": {
                 "x": 12,
-                "y": 87,
+                "y": 84,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 93
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -1315,7 +1373,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -1327,7 +1388,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -1336,7 +1397,7 @@
             "title": "Tablet background data bytes read from disk",
             "gridPos": {
                 "x": 0,
-                "y": 94,
+                "y": 90,
                 "w": 12,
                 "h": 6
             }
@@ -1365,7 +1426,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -1377,7 +1441,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -1386,7 +1450,7 @@
             "title": "Tablet background chunk meta bytes read from disk",
             "gridPos": {
                 "x": 12,
-                "y": 94,
+                "y": 90,
                 "w": 12,
                 "h": 6
             }
@@ -1415,7 +1479,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -1427,7 +1494,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -1436,7 +1503,7 @@
             "title": "Tablet background data bytes read from cache",
             "gridPos": {
                 "x": 0,
-                "y": 100,
+                "y": 96,
                 "w": 12,
                 "h": 6
             }
@@ -1465,7 +1532,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -1477,7 +1547,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -1486,7 +1556,7 @@
             "title": "Tablet background unmerged data weight read rate",
             "gridPos": {
                 "x": 12,
-                "y": 100,
+                "y": 96,
                 "w": 12,
                 "h": 6
             }
@@ -1515,7 +1585,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -1523,7 +1596,7 @@
             "title": "Tablet background decompression cpu time",
             "gridPos": {
                 "x": 0,
-                "y": 106,
+                "y": 102,
                 "w": 12,
                 "h": 6
             }
@@ -1552,7 +1625,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -1560,7 +1636,7 @@
             "title": "Tablet background compression cpu time",
             "gridPos": {
                 "x": 12,
-                "y": 106,
+                "y": 102,
                 "w": 12,
                 "h": 6
             }
@@ -1589,7 +1665,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -1601,7 +1680,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -1610,7 +1689,7 @@
             "title": "Tablet background disk bytes written (with replication)",
             "gridPos": {
                 "x": 0,
-                "y": 112,
+                "y": 108,
                 "w": 12,
                 "h": 6
             }
@@ -1639,7 +1718,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -1651,7 +1733,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -1660,19 +1742,10 @@
             "title": "Tablet background data weight written (without replication)",
             "gridPos": {
                 "x": 12,
-                "y": 112,
+                "y": 108,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 118
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -1693,14 +1766,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Scheduled compactions rate",
             "gridPos": {
                 "x": 0,
-                "y": 119,
+                "y": 114,
                 "w": 12,
                 "h": 6
             }
@@ -1724,14 +1801,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Scheduled partitionings rate",
             "gridPos": {
                 "x": 12,
-                "y": 119,
+                "y": 114,
                 "w": 12,
                 "h": 6
             }
@@ -1755,14 +1836,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Running compactions",
             "gridPos": {
                 "x": 0,
-                "y": 125,
+                "y": 120,
                 "w": 12,
                 "h": 6
             }
@@ -1786,14 +1871,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Running partitionings",
             "gridPos": {
                 "x": 12,
-                "y": 125,
+                "y": 120,
                 "w": 12,
                 "h": 6
             }
@@ -1817,14 +1906,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Compaction queue size",
             "gridPos": {
                 "x": 0,
-                "y": 131,
+                "y": 126,
                 "w": 12,
                 "h": 6
             }
@@ -1848,14 +1941,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Partitioning queue size",
             "gridPos": {
                 "x": 12,
-                "y": 131,
+                "y": 126,
                 "w": 12,
                 "h": 6
             }
@@ -1879,14 +1976,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Running flushes",
             "gridPos": {
                 "x": 0,
-                "y": 137,
+                "y": 132,
                 "w": 12,
                 "h": 6
             }
@@ -1910,26 +2011,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Max overlapping store count",
             "gridPos": {
                 "x": 12,
-                "y": 137,
+                "y": 132,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 143
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -1950,7 +2046,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -1961,7 +2061,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -1970,7 +2070,7 @@
             "title": "Tablet dynamic memory",
             "gridPos": {
                 "x": 0,
-                "y": 144,
+                "y": 138,
                 "w": 12,
                 "h": 6
             }
@@ -1994,7 +2094,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -2005,7 +2109,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -2014,7 +2118,7 @@
             "title": "Tablet static memory",
             "gridPos": {
                 "x": 12,
-                "y": 144,
+                "y": 138,
                 "w": 12,
                 "h": 6
             }
@@ -2038,7 +2142,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -2049,7 +2157,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -2058,7 +2166,7 @@
             "title": "Query memory usage",
             "gridPos": {
                 "x": 0,
-                "y": 150,
+                "y": 144,
                 "w": 12,
                 "h": 6
             }
@@ -2082,7 +2190,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -2093,7 +2205,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -2102,7 +2214,7 @@
             "title": "Tracked memory usage",
             "gridPos": {
                 "x": 12,
-                "y": 150,
+                "y": 144,
                 "w": 12,
                 "h": 6
             }
@@ -2126,7 +2238,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -2137,7 +2253,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -2146,7 +2262,7 @@
             "title": "Allocated memory",
             "gridPos": {
                 "x": 0,
-                "y": 156,
+                "y": 150,
                 "w": 12,
                 "h": 6
             }
@@ -2170,7 +2286,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -2181,7 +2301,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -2190,19 +2310,10 @@
             "title": "Process memory usage (rss)",
             "gridPos": {
                 "x": 12,
-                "y": 156,
+                "y": 150,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 162
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -2228,7 +2339,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -2240,7 +2354,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -2249,7 +2363,7 @@
             "title": "Node memory categories",
             "gridPos": {
                 "x": 0,
-                "y": 163,
+                "y": 156,
                 "w": 12,
                 "h": 6
             }
@@ -2263,19 +2377,10 @@
             "title": "",
             "gridPos": {
                 "x": 12,
-                "y": 163,
+                "y": 156,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 169
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -2296,14 +2401,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "TabletLookup thread CPU",
             "gridPos": {
                 "x": 0,
-                "y": 170,
+                "y": 162,
                 "w": 12,
                 "h": 6
             }
@@ -2327,14 +2436,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Query thread CPU",
             "gridPos": {
                 "x": 12,
-                "y": 170,
+                "y": 162,
                 "w": 12,
                 "h": 6
             }
@@ -2358,14 +2471,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "TabletSlot threads CPU",
             "gridPos": {
                 "x": 0,
-                "y": 176,
+                "y": 168,
                 "w": 12,
                 "h": 6
             }
@@ -2389,14 +2506,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Compression thread pool CPU",
             "gridPos": {
                 "x": 12,
-                "y": 176,
+                "y": 168,
                 "w": 12,
                 "h": 6
             }
@@ -2420,14 +2541,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "ChunkReader thread CPU",
             "gridPos": {
                 "x": 0,
-                "y": 182,
+                "y": 174,
                 "w": 12,
                 "h": 6
             }
@@ -2451,14 +2576,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "ChunkWriter thread CPU",
             "gridPos": {
                 "x": 12,
-                "y": 182,
+                "y": 174,
                 "w": 12,
                 "h": 6
             }
@@ -2482,14 +2611,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Control thread CPU",
             "gridPos": {
                 "x": 0,
-                "y": 188,
+                "y": 180,
                 "w": 12,
                 "h": 6
             }
@@ -2513,14 +2646,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Control thread action total time",
             "gridPos": {
                 "x": 12,
-                "y": 188,
+                "y": 180,
                 "w": 12,
                 "h": 6
             }
@@ -2544,26 +2681,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "CPU wait (all threads)",
             "gridPos": {
                 "x": 6,
-                "y": 194,
+                "y": 186,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 200
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -2584,14 +2716,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "RPC request rate",
             "gridPos": {
                 "x": 0,
-                "y": 201,
+                "y": 192,
                 "w": 12,
                 "h": 6
             }
@@ -2615,26 +2751,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "RPC failed request rate",
             "gridPos": {
                 "x": 12,
-                "y": 201,
+                "y": 192,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 207
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -2655,14 +2786,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "PingTransaction acknowledge time",
             "gridPos": {
                 "x": 0,
-                "y": 208,
+                "y": 198,
                 "w": 12,
                 "h": 6
             }
@@ -2686,14 +2821,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "PingTransaction total time",
             "gridPos": {
                 "x": 12,
-                "y": 208,
+                "y": 198,
                 "w": 12,
                 "h": 6
             }
@@ -2717,14 +2856,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "TransactionParticipantService RPC acknowledge time",
             "gridPos": {
                 "x": 0,
-                "y": 214,
+                "y": 204,
                 "w": 12,
                 "h": 6
             }
@@ -2748,26 +2891,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "TransactionSupervisorService RPC acknowledge time",
             "gridPos": {
                 "x": 12,
-                "y": 214,
+                "y": 204,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 220
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -2788,14 +2926,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Hydra remote changelog replica quorum lag time",
             "gridPos": {
                 "x": 0,
-                "y": 221,
+                "y": 210,
                 "w": 12,
                 "h": 6
             }
@@ -2819,14 +2961,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Hydra restart rate",
             "gridPos": {
                 "x": 12,
-                "y": 221,
+                "y": 210,
                 "w": 12,
                 "h": 6
             }
@@ -2850,26 +2996,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Hydra mutation wait time",
             "gridPos": {
                 "x": 6,
-                "y": 227,
+                "y": 216,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 233
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -2890,14 +3031,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Data Node put blocks RPC acknowledge time",
             "gridPos": {
                 "x": 0,
-                "y": 234,
+                "y": 222,
                 "w": 12,
                 "h": 6
             }
@@ -2921,14 +3066,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Data Node changelogs put blocks wall time max",
             "gridPos": {
                 "x": 12,
-                "y": 234,
+                "y": 222,
                 "w": 12,
                 "h": 6
             }
@@ -2952,14 +3101,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Data Node Multiplexed changelogs flush time",
             "gridPos": {
                 "x": 0,
-                "y": 240,
+                "y": 228,
                 "w": 12,
                 "h": 6
             }
@@ -2983,14 +3136,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Data Node Split changelogs flush time",
             "gridPos": {
                 "x": 12,
-                "y": 240,
+                "y": 228,
                 "w": 12,
                 "h": 6
             }
@@ -3014,7 +3171,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -3025,7 +3186,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -3034,7 +3195,7 @@
             "title": "Data node Multiplexed changelogs bytes rate",
             "gridPos": {
                 "x": 0,
-                "y": 246,
+                "y": 234,
                 "w": 12,
                 "h": 6
             }
@@ -3058,7 +3219,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -3069,7 +3234,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -3078,7 +3243,7 @@
             "title": "Data node Split changelogs bytes rate",
             "gridPos": {
                 "x": 12,
-                "y": 246,
+                "y": 234,
                 "w": 12,
                 "h": 6
             }
@@ -3102,14 +3267,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Data node Multiplexed changelogs records rate",
             "gridPos": {
                 "x": 0,
-                "y": 252,
+                "y": 240,
                 "w": 12,
                 "h": 6
             }
@@ -3133,26 +3302,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Data node Split changelogs records rate",
             "gridPos": {
                 "x": 12,
-                "y": 252,
+                "y": 240,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 258
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -3173,7 +3337,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -3184,7 +3352,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             },
                             {
                                 "id": "min",
@@ -3197,7 +3365,7 @@
             "title": "Versioned chunk meta cache usage",
             "gridPos": {
                 "x": 0,
-                "y": 259,
+                "y": 246,
                 "w": 12,
                 "h": 6
             }
@@ -3221,7 +3389,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -3241,7 +3413,7 @@
             "title": "Versioned chunk meta cache miss rate",
             "gridPos": {
                 "x": 12,
-                "y": 259,
+                "y": 246,
                 "w": 12,
                 "h": 6
             }
@@ -3265,7 +3437,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -3276,7 +3452,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             },
                             {
                                 "id": "min",
@@ -3289,7 +3465,7 @@
             "title": "Block cache usage",
             "gridPos": {
                 "x": 0,
-                "y": 265,
+                "y": 252,
                 "w": 12,
                 "h": 6
             }
@@ -3313,7 +3489,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -3333,7 +3513,7 @@
             "title": "Block cache miss rate",
             "gridPos": {
                 "x": 12,
-                "y": 265,
+                "y": 252,
                 "w": 12,
                 "h": 6
             }
@@ -3357,7 +3537,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -3368,7 +3552,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             },
                             {
                                 "id": "min",
@@ -3381,7 +3565,7 @@
             "title": "Chunk meta cache usage",
             "gridPos": {
                 "x": 0,
-                "y": 271,
+                "y": 258,
                 "w": 12,
                 "h": 6
             }
@@ -3405,7 +3589,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -3425,7 +3613,7 @@
             "title": "Chunk meta cache miss rate",
             "gridPos": {
                 "x": 12,
-                "y": 271,
+                "y": 258,
                 "w": 12,
                 "h": 6
             }
@@ -3449,7 +3637,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -3460,7 +3652,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             },
                             {
                                 "id": "min",
@@ -3473,7 +3665,7 @@
             "title": "Block ext cache usage",
             "gridPos": {
                 "x": 0,
-                "y": 277,
+                "y": 264,
                 "w": 12,
                 "h": 6
             }
@@ -3497,7 +3689,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -3517,7 +3713,7 @@
             "title": "Block ext cache miss rate",
             "gridPos": {
                 "x": 12,
-                "y": 277,
+                "y": 264,
                 "w": 12,
                 "h": 6
             }
@@ -3541,7 +3737,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -3552,7 +3752,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             },
                             {
                                 "id": "min",
@@ -3565,19 +3765,10 @@
             "title": "Cached versioned chunk meta memory",
             "gridPos": {
                 "x": 6,
-                "y": 283,
+                "y": 270,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 289
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -3598,7 +3789,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -3609,7 +3804,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -3618,7 +3813,7 @@
             "title": "Disk bytes written per medium",
             "gridPos": {
                 "x": 0,
-                "y": 290,
+                "y": 276,
                 "w": 12,
                 "h": 6
             }
@@ -3642,7 +3837,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -3653,7 +3852,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -3662,7 +3861,7 @@
             "title": "Disk bytes read per medium",
             "gridPos": {
                 "x": 12,
-                "y": 290,
+                "y": 276,
                 "w": 12,
                 "h": 6
             }
@@ -3686,7 +3885,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -3697,7 +3900,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -3706,7 +3909,7 @@
             "title": "Data node disk throttlers",
             "gridPos": {
                 "x": 0,
-                "y": 296,
+                "y": 282,
                 "w": 12,
                 "h": 6
             }
@@ -3730,7 +3933,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -3741,7 +3948,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -3750,19 +3957,10 @@
             "title": "Tablet node preload throttler",
             "gridPos": {
                 "x": 12,
-                "y": 296,
+                "y": 282,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 302
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -3783,7 +3981,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -3794,7 +3996,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -3803,7 +4005,7 @@
             "title": "Rpc client (yt_node) request message body size",
             "gridPos": {
                 "x": 0,
-                "y": 303,
+                "y": 288,
                 "w": 12,
                 "h": 6
             }
@@ -3827,7 +4029,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -3838,7 +4044,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -3847,7 +4053,7 @@
             "title": "Rpc client (yt_node) request message attachment size",
             "gridPos": {
                 "x": 12,
-                "y": 303,
+                "y": 288,
                 "w": 12,
                 "h": 6
             }
@@ -3871,7 +4077,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -3882,7 +4092,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -3891,7 +4101,7 @@
             "title": "Rpc client (yt_node) response message body size",
             "gridPos": {
                 "x": 0,
-                "y": 309,
+                "y": 294,
                 "w": 12,
                 "h": 6
             }
@@ -3915,7 +4125,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -3926,7 +4140,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -3935,19 +4149,10 @@
             "title": "Rpc client (yt_node) response message attachment size",
             "gridPos": {
                 "x": 12,
-                "y": 309,
+                "y": 294,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 315
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -3968,7 +4173,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -3979,7 +4188,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -3988,7 +4197,7 @@
             "title": "Rpc server (yt_node) request message body size",
             "gridPos": {
                 "x": 0,
-                "y": 316,
+                "y": 300,
                 "w": 12,
                 "h": 6
             }
@@ -4012,7 +4221,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -4023,7 +4236,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -4032,7 +4245,7 @@
             "title": "Rpc server (yt_node) request message attachment size",
             "gridPos": {
                 "x": 12,
-                "y": 316,
+                "y": 300,
                 "w": 12,
                 "h": 6
             }
@@ -4056,7 +4269,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -4067,7 +4284,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -4076,7 +4293,7 @@
             "title": "Rpc server (yt_node) response message body size",
             "gridPos": {
                 "x": 0,
-                "y": 322,
+                "y": 306,
                 "w": 12,
                 "h": 6
             }
@@ -4100,7 +4317,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -4111,7 +4332,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -4120,19 +4341,10 @@
             "title": "Rpc server (yt_node) response message attachment size",
             "gridPos": {
                 "x": 12,
-                "y": 322,
+                "y": 306,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 328
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -4158,7 +4370,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -4170,7 +4385,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -4179,7 +4394,7 @@
             "title": "Rpc server (yt_node) request message body size (per method)",
             "gridPos": {
                 "x": 0,
-                "y": 329,
+                "y": 312,
                 "w": 12,
                 "h": 6
             }
@@ -4208,7 +4423,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -4220,7 +4438,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -4229,7 +4447,7 @@
             "title": "Rpc server (yt_node) request message attachment size (per method)",
             "gridPos": {
                 "x": 12,
-                "y": 329,
+                "y": 312,
                 "w": 12,
                 "h": 6
             }
@@ -4258,7 +4476,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -4270,7 +4491,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -4279,7 +4500,7 @@
             "title": "Rpc server (yt_node) response message body size (per method)",
             "gridPos": {
                 "x": 0,
-                "y": 335,
+                "y": 318,
                 "w": 12,
                 "h": 6
             }
@@ -4308,7 +4529,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": [
@@ -4320,7 +4544,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -4329,19 +4553,10 @@
             "title": "Rpc server (yt_node) response message attachment size (per method)",
             "gridPos": {
                 "x": 12,
-                "y": 335,
+                "y": 318,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 341
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -4362,7 +4577,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -4373,7 +4592,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -4382,7 +4601,7 @@
             "title": "Network received bytes",
             "gridPos": {
                 "x": 0,
-                "y": 342,
+                "y": 324,
                 "w": 12,
                 "h": 6
             }
@@ -4406,7 +4625,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -4417,7 +4640,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             }
                         ]
                     }
@@ -4426,7 +4649,7 @@
             "title": "Network transmitted bytes",
             "gridPos": {
                 "x": 12,
-                "y": 342,
+                "y": 324,
                 "w": 12,
                 "h": 6
             }
@@ -4450,26 +4673,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Pending out bytes",
             "gridPos": {
                 "x": 6,
-                "y": 348,
+                "y": 330,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 354
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -4490,26 +4708,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Job CPU usage",
             "gridPos": {
                 "x": 0,
-                "y": 355,
+                "y": 336,
                 "w": 24,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 361
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -4530,14 +4743,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Total in throttler queue size",
             "gridPos": {
                 "x": 0,
-                "y": 362,
+                "y": 342,
                 "w": 12,
                 "h": 6
             }
@@ -4561,26 +4778,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Total out throttler queue size",
             "gridPos": {
                 "x": 12,
-                "y": 362,
+                "y": 342,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 368
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -4601,14 +4813,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Data node in-throttlers queue size",
             "gridPos": {
                 "x": 0,
-                "y": 369,
+                "y": 348,
                 "w": 12,
                 "h": 6
             }
@@ -4632,26 +4848,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Data node out-throttlers queue size",
             "gridPos": {
                 "x": 12,
-                "y": 369,
+                "y": 348,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 375
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -4672,14 +4883,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Tablet node in-throttlers queue size",
             "gridPos": {
                 "x": 0,
-                "y": 376,
+                "y": 354,
                 "w": 12,
                 "h": 6
             }
@@ -4703,14 +4918,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Tablet node out-throttlers queue size",
             "gridPos": {
                 "x": 12,
-                "y": 376,
+                "y": 354,
                 "w": 12,
                 "h": 6
             }

@@ -1,7 +1,7 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 
-import {RadioButton} from '@gravity-ui/uikit';
+import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 
 import {PrometheusDashboardType} from '../../../../shared/prometheus/types';
 
@@ -32,7 +32,7 @@ export function SystemMonitoringPrometheus() {
                 toolbarItems={[
                     {
                         node: (
-                            <RadioButton
+                            <SegmentedRadioGroup
                                 value={type}
                                 onUpdate={setType}
                                 options={SYSTEM_DASHBOARDS.map((item) => ({

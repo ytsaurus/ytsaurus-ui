@@ -3,18 +3,19 @@ import {ThunkAction, UnknownAction} from '@reduxjs/toolkit';
 import {Toaster} from '@gravity-ui/uikit';
 
 import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
+import {getBatchError} from '../../../../shared/utils/error';
 import ypath from '../../../common/thor/ypath';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {RootState} from '../../../store/reducers';
-import {RoleGroupItemInfo} from '../../../store/reducers/system/proxies';
-import {isRetryFutile} from '../../../utils/index';
-import {extractProxyCounters, extractRoleGroups} from '../../../utils/system/proxies';
-import {getBatchError, showErrorPopup} from '../../../utils/utils';
 import {
     fetchCypressProxiesFailure,
     fetchCypressProxiesRequest,
     fetchCypressProxiesSuccess,
 } from '../../../store/reducers/system/cypress-proxies';
+import {RoleGroupItemInfo} from '../../../store/reducers/system/proxies';
+import {isRetryFutile} from '../../../utils/index';
+import {extractProxyCounters, extractRoleGroups} from '../../../utils/system/proxies';
+import {showErrorPopup} from '../../../utils/utils';
 
 type CypressProxiesThunkAction<T = void> = ThunkAction<
     Promise<T>,

@@ -1,15 +1,6 @@
 {
     "panels": [
         {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 0
-            },
-            "type": "row"
-        },
-        {
             "datasource": {
                 "type": "prometheus",
                 "uid": "${PROMETHEUS_DS_UID}"
@@ -22,20 +13,25 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_compactor_running_compactions\", tablet_cell_bundle=~\"$tablet_cell_bundle\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Running compactions",
             "gridPos": {
                 "x": 0,
-                "y": 1,
+                "y": 0,
                 "w": 12,
                 "h": 6
             }
@@ -53,20 +49,25 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_compactor_running_partitionings\", tablet_cell_bundle=~\"$tablet_cell_bundle\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Running partitionings",
             "gridPos": {
                 "x": 12,
-                "y": 1,
+                "y": 0,
                 "w": 12,
                 "h": 6
             }
@@ -84,20 +85,25 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_compactor_feasible_compactions\", tablet_cell_bundle=~\"$tablet_cell_bundle\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Compaction queue size",
             "gridPos": {
                 "x": 0,
-                "y": 7,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
@@ -115,20 +121,25 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_compactor_feasible_partitionings\", tablet_cell_bundle=~\"$tablet_cell_bundle\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Partitioning queue size",
             "gridPos": {
                 "x": 12,
-                "y": 7,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
@@ -146,20 +157,25 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_store_flusher_running_store_flushes\", tablet_cell_bundle=~\"$tablet_cell_bundle\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Running flushes",
             "gridPos": {
                 "x": 0,
-                "y": 13,
+                "y": 12,
                 "w": 12,
                 "h": 6
             }
@@ -183,14 +199,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "LSM write amplification",
             "gridPos": {
                 "x": 12,
-                "y": 13,
+                "y": 12,
                 "w": 12,
                 "h": 6
             }
@@ -208,20 +228,25 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_tablet_overlapping_store_count_max\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Max overlapping store count (per node)",
             "gridPos": {
                 "x": 0,
-                "y": 19,
+                "y": 18,
                 "w": 12,
                 "h": 6
             }
@@ -253,14 +278,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Max overlapping store count (per table)",
             "gridPos": {
                 "x": 12,
-                "y": 19,
+                "y": 18,
                 "w": 12,
                 "h": 6
             }
@@ -287,20 +316,25 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", tablet_cell_bundle=~\"$tablet_cell_bundle\", thread=~\"StoreCompact\"}) / (100)",
-                    "refId": "B"
+                    "refId": "B",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "StoreCompact thread pool CPU usage",
             "gridPos": {
                 "x": 0,
-                "y": 25,
+                "y": 24,
                 "w": 12,
                 "h": 6
             }
@@ -327,20 +361,25 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", tablet_cell_bundle=~\"$tablet_cell_bundle\", thread=~\"Compression\"}) / (100)",
-                    "refId": "B"
+                    "refId": "B",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Compression thread pool CPU usage",
             "gridPos": {
                 "x": 12,
-                "y": 25,
+                "y": 24,
                 "w": 12,
                 "h": 6
             }
