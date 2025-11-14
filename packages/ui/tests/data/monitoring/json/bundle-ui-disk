@@ -1,15 +1,6 @@
 {
     "panels": [
         {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 0
-            },
-            "type": "row"
-        },
-        {
             "datasource": {
                 "type": "prometheus",
                 "uid": "${PROMETHEUS_DS_UID}"
@@ -22,7 +13,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_chunk_reader_statistics_data_bytes_transmitted\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 },
                 {
                     "datasource": {
@@ -30,13 +22,18 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_hunks_chunk_reader_statistics_data_bytes_transmitted\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "B"
+                    "refId": "B",
+                    "legendFormat": "hunks {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -68,7 +65,7 @@
             "title": "Table lookup data bytes read from disk",
             "gridPos": {
                 "x": 0,
-                "y": 1,
+                "y": 0,
                 "w": 12,
                 "h": 6
             }
@@ -86,7 +83,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_chunk_reader_statistics_data_bytes_transmitted\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 },
                 {
                     "datasource": {
@@ -94,13 +92,18 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_hunks_chunk_reader_statistics_data_bytes_transmitted\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "B"
+                    "refId": "B",
+                    "legendFormat": "hunks {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -132,7 +135,7 @@
             "title": "Table select data bytes read from disk",
             "gridPos": {
                 "x": 12,
-                "y": 1,
+                "y": 0,
                 "w": 12,
                 "h": 6
             }
@@ -150,7 +153,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_chunk_reader_statistics_meta_bytes_read_from_disk\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 },
                 {
                     "datasource": {
@@ -158,13 +162,18 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_hunks_chunk_reader_statistics_meta_bytes_read_from_disk\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "B"
+                    "refId": "B",
+                    "legendFormat": "hunks {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -196,7 +205,7 @@
             "title": "Table lookup chunk meta bytes read from disk",
             "gridPos": {
                 "x": 0,
-                "y": 7,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
@@ -214,7 +223,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_chunk_reader_statistics_meta_bytes_read_from_disk\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 },
                 {
                     "datasource": {
@@ -222,13 +232,18 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_hunks_chunk_reader_statistics_meta_bytes_read_from_disk\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "B"
+                    "refId": "B",
+                    "legendFormat": "hunks {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -260,7 +275,7 @@
             "title": "Table select chunk meta bytes read from disk",
             "gridPos": {
                 "x": 12,
-                "y": 7,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
@@ -278,7 +293,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_chunk_reader_statistics_data_wait_time\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 },
                 {
                     "datasource": {
@@ -286,13 +302,18 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_hunks_chunk_reader_statistics_data_wait_time\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "B"
+                    "refId": "B",
+                    "legendFormat": "hunks {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -324,7 +345,7 @@
             "title": "Table lookup data wait time",
             "gridPos": {
                 "x": 0,
-                "y": 13,
+                "y": 12,
                 "w": 12,
                 "h": 6
             }
@@ -342,7 +363,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_chunk_reader_statistics_data_wait_time\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 },
                 {
                     "datasource": {
@@ -350,13 +372,18 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_hunks_chunk_reader_statistics_data_wait_time\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "B"
+                    "refId": "B",
+                    "legendFormat": "hunks {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -388,7 +415,7 @@
             "title": "Table select data wait time",
             "gridPos": {
                 "x": 12,
-                "y": 13,
+                "y": 12,
                 "w": 12,
                 "h": 6
             }
@@ -406,7 +433,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_chunk_reader_statistics_meta_wait_time\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 },
                 {
                     "datasource": {
@@ -414,13 +442,18 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_hunks_chunk_reader_statistics_meta_wait_time\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "B"
+                    "refId": "B",
+                    "legendFormat": "hunks {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -452,7 +485,7 @@
             "title": "Table lookup meta wait time",
             "gridPos": {
                 "x": 0,
-                "y": 19,
+                "y": 18,
                 "w": 12,
                 "h": 6
             }
@@ -470,7 +503,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_chunk_reader_statistics_meta_wait_time\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 },
                 {
                     "datasource": {
@@ -478,13 +512,18 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_hunks_chunk_reader_statistics_meta_wait_time\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "B"
+                    "refId": "B",
+                    "legendFormat": "hunks {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -516,7 +555,7 @@
             "title": "Table select meta wait time",
             "gridPos": {
                 "x": 12,
-                "y": 19,
+                "y": 18,
                 "w": 12,
                 "h": 6
             }
@@ -534,7 +573,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_chunk_reader_statistics_pick_peer_wait_time\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 },
                 {
                     "datasource": {
@@ -542,13 +582,18 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_hunks_chunk_reader_statistics_pick_peer_wait_time\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "B"
+                    "refId": "B",
+                    "legendFormat": "hunks {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -580,7 +625,7 @@
             "title": "Table lookup pick peer time",
             "gridPos": {
                 "x": 0,
-                "y": 25,
+                "y": 24,
                 "w": 12,
                 "h": 6
             }
@@ -598,7 +643,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_chunk_reader_statistics_pick_peer_wait_time\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 },
                 {
                     "datasource": {
@@ -606,13 +652,18 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_hunks_chunk_reader_statistics_pick_peer_wait_time\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "B"
+                    "refId": "B",
+                    "legendFormat": "hunks {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -644,7 +695,7 @@
             "title": "Table select pick peer time",
             "gridPos": {
                 "x": 12,
-                "y": 25,
+                "y": 24,
                 "w": 12,
                 "h": 6
             }
@@ -662,7 +713,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_chunk_reader_statistics_meta_read_from_disk_time\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 },
                 {
                     "datasource": {
@@ -670,13 +722,18 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_hunks_chunk_reader_statistics_meta_read_from_disk_time\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "B"
+                    "refId": "B",
+                    "legendFormat": "hunks {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -708,7 +765,7 @@
             "title": "Table lookup meta disk read time",
             "gridPos": {
                 "x": 0,
-                "y": 31,
+                "y": 30,
                 "w": 12,
                 "h": 6
             }
@@ -726,7 +783,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_chunk_reader_statistics_meta_read_from_disk_time\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 },
                 {
                     "datasource": {
@@ -734,13 +792,18 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_hunks_chunk_reader_statistics_meta_read_from_disk_time\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "B"
+                    "refId": "B",
+                    "legendFormat": "hunks {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -772,19 +835,10 @@
             "title": "Table select meta disk read time",
             "gridPos": {
                 "x": 12,
-                "y": 31,
+                "y": 30,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 37
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -799,7 +853,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_reader_statistics_data_bytes_read_from_disk\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{account}} {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -810,7 +865,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -818,7 +876,7 @@
             "title": "Tablet background data bytes read from disk",
             "gridPos": {
                 "x": 0,
-                "y": 38,
+                "y": 36,
                 "w": 12,
                 "h": 6
             }
@@ -836,7 +894,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_reader_statistics_meta_bytes_read_from_disk\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{account}} {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -847,7 +906,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -855,7 +917,7 @@
             "title": "Tablet background chunk meta bytes read from disk",
             "gridPos": {
                 "x": 12,
-                "y": 38,
+                "y": 36,
                 "w": 12,
                 "h": 6
             }
@@ -873,7 +935,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_writer_disk_space\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{account}} {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -884,7 +947,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -892,7 +958,7 @@
             "title": "Tablet background disk bytes written (with replication)",
             "gridPos": {
                 "x": 0,
-                "y": 44,
+                "y": 42,
                 "w": 12,
                 "h": 6
             }
@@ -910,7 +976,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_writer_data_weight\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", account=~\".+\", medium=~\".+\", method=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{account}} {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -921,7 +988,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -929,19 +999,10 @@
             "title": "Tablet background data weight written (without replication)",
             "gridPos": {
                 "x": 12,
-                "y": 44,
+                "y": 42,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 50
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -956,13 +1017,18 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_versioned_chunk_meta_cache_hit_weight\", tablet_cell_bundle=~\"$tablet_cell_bundle\", hit_type=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -982,7 +1048,7 @@
             "title": "Versioned chunk meta cache hit weight rate",
             "gridPos": {
                 "x": 0,
-                "y": 51,
+                "y": 48,
                 "w": 12,
                 "h": 6
             }
@@ -1000,13 +1066,18 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_versioned_chunk_meta_cache_missed_weight\", tablet_cell_bundle=~\"$tablet_cell_bundle\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -1026,7 +1097,7 @@
             "title": "Versioned chunk meta cache miss weight rate",
             "gridPos": {
                 "x": 12,
-                "y": 51,
+                "y": 48,
                 "w": 12,
                 "h": 6
             }
@@ -1043,20 +1114,46 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_block_cache_.*compressed_data_hit_weight\", tablet_cell_bundle=~\"$tablet_cell_bundle\", hit_type=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_block_cache_compressed_data_hit_weight\", tablet_cell_bundle=~\"$tablet_cell_bundle\", hit_type=~\"\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "compressed {{host}} {{pod}}"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_block_cache_uncompressed_data_hit_weight\", tablet_cell_bundle=~\"$tablet_cell_bundle\", hit_type=~\"\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "B",
+                    "legendFormat": "uncompressed {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
                         "matcher": {
                             "id": "byFrameRefID",
                             "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
                         },
                         "properties": [
                             {
@@ -1070,7 +1167,7 @@
             "title": "Block cache hit weight rate",
             "gridPos": {
                 "x": 0,
-                "y": 57,
+                "y": 54,
                 "w": 12,
                 "h": 6
             }
@@ -1087,14 +1184,28 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_block_cache_.*compressed_data_missed_weight\", tablet_cell_bundle=~\"$tablet_cell_bundle\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_block_cache_compressed_data_missed_weight\", tablet_cell_bundle=~\"$tablet_cell_bundle\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "compressed {{host}} {{pod}}"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_data_node_block_cache_uncompressed_data_missed_weight\", tablet_cell_bundle=~\"$tablet_cell_bundle\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "B",
+                    "legendFormat": "uncompressed {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -1108,13 +1219,25 @@
                                 "value": 0
                             }
                         ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            }
+                        ]
                     }
                 ]
             },
             "title": "Block cache miss weight rate",
             "gridPos": {
                 "x": 12,
-                "y": 57,
+                "y": 54,
                 "w": 12,
                 "h": 6
             }
@@ -1138,7 +1261,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -1158,7 +1285,7 @@
             "title": "Block cache memory",
             "gridPos": {
                 "x": 0,
-                "y": 63,
+                "y": 60,
                 "w": 12,
                 "h": 6
             }
@@ -1182,7 +1309,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -1202,19 +1333,10 @@
             "title": "Cached versioned chunk meta memory",
             "gridPos": {
                 "x": 12,
-                "y": 63,
+                "y": 60,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 69
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -1254,7 +1376,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -1298,7 +1424,7 @@
             "title": "Compressed block cache size planning",
             "gridPos": {
                 "x": 0,
-                "y": 70,
+                "y": 66,
                 "w": 12,
                 "h": 6
             }
@@ -1341,7 +1467,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -1385,7 +1515,7 @@
             "title": "Uncompressed block cache size planning",
             "gridPos": {
                 "x": 12,
-                "y": 70,
+                "y": 66,
                 "w": 12,
                 "h": 6
             }

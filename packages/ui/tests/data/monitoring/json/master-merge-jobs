@@ -1,15 +1,6 @@
 {
     "panels": [
         {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 0
-            },
-            "type": "row"
-        },
-        {
             "datasource": {
                 "type": "prometheus",
                 "uid": "${PROMETHEUS_DS_UID}"
@@ -33,7 +24,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -41,7 +35,7 @@
             "title": "Nodes being merged",
             "gridPos": {
                 "x": 0,
-                "y": 1,
+                "y": 0,
                 "w": 12,
                 "h": 6
             }
@@ -65,26 +59,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Account queue size",
             "gridPos": {
                 "x": 12,
-                "y": 1,
+                "y": 0,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 7
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -110,7 +99,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -118,7 +110,7 @@
             "title": "Chunk server jobs info",
             "gridPos": {
                 "x": 0,
-                "y": 8,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
@@ -147,7 +139,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -155,7 +150,7 @@
             "title": "Jobs awaiting chunk creation",
             "gridPos": {
                 "x": 12,
-                "y": 8,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
@@ -184,7 +179,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -192,7 +190,7 @@
             "title": "Jobs undergoing chunk creation",
             "gridPos": {
                 "x": 0,
-                "y": 14,
+                "y": 12,
                 "w": 12,
                 "h": 6
             }
@@ -221,7 +219,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -229,7 +230,7 @@
             "title": "Jobs awaiting node heartbeat",
             "gridPos": {
                 "x": 12,
-                "y": 14,
+                "y": 12,
                 "w": 12,
                 "h": 6
             }
@@ -258,7 +259,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -266,7 +270,7 @@
             "title": "Sessions awaiting finalization",
             "gridPos": {
                 "x": 0,
-                "y": 20,
+                "y": 18,
                 "w": 12,
                 "h": 6
             }
@@ -295,7 +299,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -303,7 +310,7 @@
             "title": "Completed job count",
             "gridPos": {
                 "x": 12,
-                "y": 20,
+                "y": 18,
                 "w": 12,
                 "h": 6
             }
@@ -332,7 +339,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -340,7 +350,7 @@
             "title": "Chunk count saving",
             "gridPos": {
                 "x": 0,
-                "y": 26,
+                "y": 24,
                 "w": 12,
                 "h": 6
             }
@@ -377,7 +387,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -385,7 +398,7 @@
             "title": "Chunk replacement rate",
             "gridPos": {
                 "x": 12,
-                "y": 26,
+                "y": 24,
                 "w": 12,
                 "h": 6
             }
@@ -414,7 +427,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -422,7 +438,7 @@
             "title": "Auto merge fallback count",
             "gridPos": {
                 "x": 0,
-                "y": 32,
+                "y": 30,
                 "w": 12,
                 "h": 6
             }
@@ -451,7 +467,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -459,19 +478,10 @@
             "title": "Max chunk count violated criteria",
             "gridPos": {
                 "x": 12,
-                "y": 32,
+                "y": 30,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 38
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -497,7 +507,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -505,7 +518,7 @@
             "title": "Max row count violated criteria",
             "gridPos": {
                 "x": 0,
-                "y": 39,
+                "y": 36,
                 "w": 12,
                 "h": 6
             }
@@ -534,7 +547,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -542,7 +558,7 @@
             "title": "Max data weight violated criteria",
             "gridPos": {
                 "x": 12,
-                "y": 39,
+                "y": 36,
                 "w": 12,
                 "h": 6
             }
@@ -571,7 +587,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -579,7 +598,7 @@
             "title": "Max uncompressed data violated criteria",
             "gridPos": {
                 "x": 0,
-                "y": 45,
+                "y": 42,
                 "w": 12,
                 "h": 6
             }
@@ -608,7 +627,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -616,7 +638,7 @@
             "title": "Max compressed data violated criteria",
             "gridPos": {
                 "x": 12,
-                "y": 45,
+                "y": 42,
                 "w": 12,
                 "h": 6
             }
@@ -645,7 +667,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -653,7 +678,7 @@
             "title": "Max input chunk data weight violated criteria",
             "gridPos": {
                 "x": 0,
-                "y": 51,
+                "y": 48,
                 "w": 12,
                 "h": 6
             }
@@ -682,7 +707,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -690,7 +718,7 @@
             "title": "Max chunk meta size violated criteria",
             "gridPos": {
                 "x": 12,
-                "y": 51,
+                "y": 48,
                 "w": 12,
                 "h": 6
             }
@@ -719,7 +747,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -727,7 +758,7 @@
             "title": "Stuck nodes count",
             "gridPos": {
                 "x": 0,
-                "y": 57,
+                "y": 54,
                 "w": 12,
                 "h": 6
             }
@@ -756,7 +787,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -764,7 +798,7 @@
             "title": "Average merge duration",
             "gridPos": {
                 "x": 12,
-                "y": 57,
+                "y": 54,
                 "w": 12,
                 "h": 6
             }
