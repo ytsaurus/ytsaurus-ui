@@ -1,4 +1,5 @@
 {
     "error": "error",
-    "alert": "alert"
+    "alert": "alert",
+    "info": "info"
 }

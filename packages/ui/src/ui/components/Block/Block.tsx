@@ -49,7 +49,7 @@ export type YTErrorBlockProps = {
     message?: React.ReactNode;
 
     helpURL?: string;
-    type?: 'alert' | 'error';
+    type?: 'alert' | 'error' | 'info';
     maxCollapsedDepth?: number; // max depth of collapsed inner errors
     defaultExpandedCount?: number;
     disableLogger?: boolean;

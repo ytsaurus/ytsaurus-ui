@@ -10,7 +10,7 @@ export interface ErrorsState {
 export interface ErrorInfo {
     error: YTError<{attributes?: object}> | AxiosError;
     hideOopsMsg?: boolean;
-    type?: 'error' | 'alert';
+    type?: 'error' | 'alert' | 'info';
     helpURL?: string;
     disableLogger?: boolean;
     defaultExpandedCount?: number;
