@@ -54,9 +54,9 @@ export const getConversations = async (req: Request, res: Response) => {
     try {
         const aiChat = getAiChatInstance(req);
         const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : undefined;
-        const offset = req.query.offset ? parseInt(req.query.offset as string, 10) : undefined;
+        const after = req.query.after as string | undefined;
 
-        const data = await aiChat.getConversations(limit, offset, req);
+        const data = await aiChat.getConversations(limit, after, req);
         res.status(200).json(data);
     } catch (e) {
         req.ctx.logError(ERROR_MESSAGE.FAILED_GET_CONVERSATIONS, e);
@@ -69,10 +69,10 @@ export const getConversationItems = async (req: Request, res: Response) => {
         const aiChat = getAiChatInstance(req);
         const {conversationId} = req.params;
         const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : undefined;
-        const offset = req.query.offset ? parseInt(req.query.offset as string, 10) : undefined;
+        const after = req.query.after as string | undefined;
         const order = (req.query.order as 'asc' | 'desc') || 'desc';
 
-        const data = await aiChat.getConversationItems(conversationId, limit, offset, order, req);
+        const data = await aiChat.getConversationItems(conversationId, limit, after, order, req);
         res.status(200).json(data);
     } catch (e) {
         req.ctx.logError(ERROR_MESSAGE.FAILED_GET_CONVERSATION_ITEMS, e);
@@ -95,12 +95,13 @@ export const sendMessage = async (req: Request, res: Response) => {
 
     try {
         const aiChat = getAiChatInstance(req);
-        const {message, metadata, model, conversationId, contextMessages} = req.body as {
+        const {message, metadata, model, conversationId, contextMessages, files} = req.body as {
             model: string;
             message: string;
             conversationId: string;
             metadata?: Record<string, unknown>;
             contextMessages?: string[];
+            files?: {name: string; content: string; type: string}[];
         };
 
         const requestData: SendMessageRequest = {
@@ -109,6 +110,7 @@ export const sendMessage = async (req: Request, res: Response) => {
             message,
             metadata,
             contextMessages: contextMessages,
+            files,
         };
 
         res.setHeader('Content-Type', 'text/event-stream');

@@ -1,10 +1,19 @@
-import React, {FC} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, {FC, useCallback} from 'react';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import block from 'bem-cn-lite';
-import {deleteConversation, loadConversation} from '../../../store/actions/ai/chat';
+import {
+    deleteConversation,
+    loadConversation,
+    loadMoreConversations,
+} from '../../../store/actions/ai/chat';
 import {Flex, List, Text} from '@gravity-ui/uikit';
-import {selectConversationsGroupedByDate} from '../../../store/selectors/ai/chat';
+import {
+    selectConversationsGroupedByDate,
+    selectConversationsHasMore,
+    selectConversationsLoading,
+} from '../../../store/selectors/ai/chat';
 import {NoContent} from '../../NoContent/NoContent';
+import {InfiniteScrollLoader} from '../../InfiniteScrollLoader';
 import i18n from './i18n';
 import './ChatHistory.scss';
 import {Conversation} from '../../../../shared/ai-chat';
@@ -16,6 +25,8 @@ const b = block('yt-chart-history');
 export const ChatHistory: FC = () => {
     const dispatch = useDispatch();
     const groupedConversations = useSelector(selectConversationsGroupedByDate);
+    const hasMore = useSelector(selectConversationsHasMore);
+    const loading = useSelector(selectConversationsLoading);
 
     const handleConversationClick = (conversationId: string) => {
         dispatch(loadConversation(conversationId));
@@ -24,6 +35,10 @@ export const ChatHistory: FC = () => {
     const handleConversationDelete = (conversationId: string) => {
         dispatch(deleteConversation(conversationId));
     };
+
+    const handleLoadMore = useCallback(() => {
+        dispatch(loadMoreConversations());
+    }, [dispatch]);
 
     if (!groupedConversations.length) {
         return (
@@ -61,6 +76,13 @@ export const ChatHistory: FC = () => {
                     />
                 </div>
             ))}
+            {hasMore && (
+                <InfiniteScrollLoader
+                    className={b('pagination')}
+                    loading={loading}
+                    onLoadMore={handleLoadMore}
+                />
+            )}
         </div>
     );
 };

@@ -4,8 +4,8 @@ import PlusIcon from '@gravity-ui/icons/svgs/plus.svg';
 import ListUlIcon from '@gravity-ui/icons/svgs/list-ul.svg';
 import XmarkIcon from '@gravity-ui/icons/svgs/xmark.svg';
 import {toggleChatHistory, toggleChatSidePanel} from '../../../store/actions/ai/chat';
-import {useDispatch} from 'react-redux';
-import {resetChart} from '../../../store/reducers/ai/chatSlice';
+import {useDispatch} from '../../../store/redux-hooks';
+import {resetChat} from '../../../store/reducers/ai/chatSlice';
 import i18n from './i18n';
 
 type Props = {
@@ -16,7 +16,7 @@ export const ChatHeader: FC<Props> = ({className}) => {
     const dispatch = useDispatch();
 
     const handleNewChat = () => {
-        dispatch(resetChart());
+        dispatch(resetChat());
     };
 
     const handleToggleHistory = () => {

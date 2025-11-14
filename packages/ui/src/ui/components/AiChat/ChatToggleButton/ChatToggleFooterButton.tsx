@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {FooterItem} from '@gravity-ui/navigation';
-import AiIcon from '../../../assets/img/svg/icons/ai-assistant.svg';
+import AiIcon from '../../../assets/img/svg/icons/ai-chat-icon.svg';
 import i18n from './i18n';
 import {useChatToggle} from './useChatToggle';
 

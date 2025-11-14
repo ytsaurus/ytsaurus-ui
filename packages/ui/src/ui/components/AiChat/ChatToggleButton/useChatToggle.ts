@@ -1,4 +1,4 @@
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {selectAiChatConfigured} from '../../../store/selectors/ai/chat';
 import {toggleChatSidePanel} from '../../../store/actions/ai/chat';
 

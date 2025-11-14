@@ -30,7 +30,7 @@ export const McpMessage: FC<PropsWithChildren<Props>> = ({
                 <Text color="secondary">{title}</Text>
                 <ArrowToggle direction={isOpen ? 'top' : 'bottom'} />
                 <div onClick={handleClipboardClick}>
-                    <ClipboardButton size="s" text={JSON.stringify(clipboardValue)} />
+                    <ClipboardButton size="s" text={clipboardValue} />
                 </div>
             </Flex>
             {isOpen && children}

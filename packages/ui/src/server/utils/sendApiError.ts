@@ -18,7 +18,7 @@ export const sendApiError = (res: Response, error: unknown) => {
 
     if (status === 401) {
         status = 500;
-        message = 'The service cannot authorize you';
+        message = 'Authorization failed';
     }
 
     sendError(res, message, status || 500);

@@ -6,7 +6,7 @@ import {
     selectChatLoading,
     selectChatSending,
 } from '../../store/selectors/ai/chat';
-import {useSelector} from 'react-redux';
+import {useSelector} from '../../store/redux-hooks';
 import {EmptyChat} from './EmptyChat';
 import {Messages} from './Messages';
 import {CurrentAnswer} from './CurrentAnswer';

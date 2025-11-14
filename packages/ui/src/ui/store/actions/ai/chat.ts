@@ -3,39 +3,64 @@ import {Action} from 'redux';
 import {RootState} from '../../reducers';
 import {
     selectAiChatModel,
+    selectAttachedFiles,
     selectChatMode,
     selectChatOpen,
     selectChatQuestion,
+    selectConversation,
     selectConversationId,
-    selectConversationItems,
     selectConversations,
 } from '../../selectors/ai/chat';
 import {getQueryDraft} from '../../selectors/query-tracker/query';
 import {
-    addItem,
+    addAttachedFile,
+    addConversationItem,
+    clearAttachedFiles,
     clearCurrentAnswer,
-    resetChart,
+    resetChat,
+    setConversation,
     setConversationId,
     setConversations,
     setCurrentAnswer,
     setError,
     setIsOpen,
-    setItems,
     setLoading,
     setMode,
     setQuestion,
     setSending,
 } from '../../reducers/ai/chatSlice';
-import {ChatError, ChatMessage, SearchMcpResponse} from '../../../types/ai-chat';
+import {ChatError} from '../../../types/ai-chat';
 import axios from 'axios';
 import {type Conversation, GetConversationItemsResponse} from '../../../../shared/ai-chat';
-import {createMcpItem, createMessageItem, getTextDelta, parseStreamLine} from './helpers';
+import {
+    createMcpItem,
+    createMessageItem,
+    getTextDelta,
+    parseConversationItems,
+    parseStreamLine,
+} from './helpers';
 
 const BASE_PATH = '/api/code-assistant';
 type AsyncAction = ThunkAction<void, RootState, undefined, Action>;
 
 const META = {
     agent: 'qt',
+};
+
+const readFileAsText = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const result = e.target?.result;
+            if (typeof result === 'string') {
+                resolve(result);
+            } else {
+                reject(new Error('Failed to read file as text'));
+            }
+        };
+        reader.onerror = () => reject(reader.error);
+        reader.readAsText(file);
+    });
 };
 
 const ERROR_MESSAGE = {
@@ -85,13 +110,14 @@ const prepareQueryContext = (state: RootState): string[] => {
 export const summarizeConversationTitle =
     (conversationId: string): AsyncAction =>
     async (dispatch, getState) => {
-        const conversations = selectConversations(getState());
+        const state = getState();
+        const conversations = selectConversations(state);
 
         try {
             const response = await axios.post<{title: string}>(
                 `${BASE_PATH}/conversations/${conversationId}/summarize-title`,
             );
-            const newConversations = conversations.map((conversation) => {
+            const newConversations = conversations.items.map((conversation) => {
                 if (conversation.id === conversationId) {
                     return {
                         ...conversation,
@@ -104,7 +130,7 @@ export const summarizeConversationTitle =
                 return conversation;
             });
 
-            dispatch(setConversations(newConversations));
+            dispatch(setConversations({items: newConversations}));
         } catch (e) {}
     };
 
@@ -126,14 +152,14 @@ export const sendQuestion = (): AsyncAction => async (dispatch, getState) => {
         if ('type' in event && event.type === 'response.output_item.done' && event.item) {
             const messageItem = createMessageItem(event.item, fullText);
             if (messageItem) {
-                dispatch(addItem(messageItem));
+                dispatch(addConversationItem(messageItem));
                 dispatch(clearCurrentAnswer());
                 return '';
             }
 
             const mcpItem = createMcpItem(event.item);
             if (mcpItem) {
-                dispatch(addItem(mcpItem));
+                dispatch(addConversationItem(mcpItem));
             }
         }
 
@@ -143,7 +169,8 @@ export const sendQuestion = (): AsyncAction => async (dispatch, getState) => {
     const state = getState();
     const question = selectChatQuestion(state);
     const conversationId = selectConversationId(state);
-    const conversations = selectConversations(state);
+    const {items, hasMore, lastId} = selectConversations(state);
+    const attachedFiles = selectAttachedFiles(state);
     const model = selectAiChatModel();
     let summarize = false;
 
@@ -153,7 +180,7 @@ export const sendQuestion = (): AsyncAction => async (dispatch, getState) => {
 
     dispatch(setMode('chat'));
     dispatch(
-        addItem({
+        addConversationItem({
             id: '',
             type: 'question',
             value: question,
@@ -172,9 +199,17 @@ export const sendQuestion = (): AsyncAction => async (dispatch, getState) => {
                 metadata: {...META, topic: DEFAULT_CONVERSATION_TITLE},
             });
             currentConversationId = data.id;
-            dispatch(setConversations([...conversations, data]));
+            dispatch(setConversations({items: [data, ...items], hasMore, lastId, loading: false}));
             summarize = true;
         }
+
+        const files = await Promise.all(
+            attachedFiles.map(async (file) => ({
+                name: file.name,
+                type: file.type,
+                content: await readFileAsText(file),
+            })),
+        );
 
         if (currentAbortController) {
             currentAbortController.abort();
@@ -191,6 +226,7 @@ export const sendQuestion = (): AsyncAction => async (dispatch, getState) => {
                 metadata: META,
                 conversationId: currentConversationId,
                 contextMessages: contextMessages.length > 0 ? contextMessages : undefined,
+                files: files.length > 0 ? files : undefined,
             }),
             signal: currentAbortController.signal,
         });
@@ -222,7 +258,7 @@ export const sendQuestion = (): AsyncAction => async (dispatch, getState) => {
             buffer = lines[lines.length - 1];
         }
 
-        const itemsCount = selectConversationItems(getState()).length;
+        const itemsCount = selectConversation(getState()).items.length;
         if (itemsCount > 0 && !(itemsCount % TITLE_GENERATION_FREQUENCY)) {
             summarize = true;
         }
@@ -231,9 +267,13 @@ export const sendQuestion = (): AsyncAction => async (dispatch, getState) => {
         if (summarize) {
             dispatch(summarizeConversationTitle(currentConversationId));
         }
+
+        dispatch(clearAttachedFiles());
     } catch (e) {
         if (e instanceof Error && e.name === 'AbortError') {
             dispatch(setSending(false));
+            dispatch(clearCurrentAnswer());
+            dispatch(setError(undefined));
             return;
         }
 
@@ -241,7 +281,7 @@ export const sendQuestion = (): AsyncAction => async (dispatch, getState) => {
             type: 'error',
             error: e as Error,
         };
-        dispatch(addItem(error));
+        dispatch(addConversationItem(error));
     } finally {
         dispatch(setSending(false));
         currentAbortController = null;
@@ -251,22 +291,67 @@ export const sendQuestion = (): AsyncAction => async (dispatch, getState) => {
 export const createConversationWithPrompt =
     (prompt: string): AsyncAction =>
     (dispatch) => {
-        dispatch(resetChart());
+        dispatch(resetChat());
         dispatch(setQuestion(prompt));
         dispatch(setIsOpen(true));
         dispatch(sendQuestion());
     };
 
+const CONVERSATIONS_LIMIT = 20;
+
 export const getConversations = (): AsyncAction => async (dispatch) => {
     dispatch(setLoading(true));
     try {
-        const response = await axios.get(`${BASE_PATH}/conversations`);
+        const response = await axios.get(`${BASE_PATH}/conversations`, {
+            params: {
+                limit: CONVERSATIONS_LIMIT,
+            },
+        });
 
-        dispatch(setConversations(response.data.data));
+        dispatch(
+            setConversations({
+                items: response.data.data,
+                hasMore: response.data.has_more,
+                lastId: response.data.last_id,
+                loading: false,
+            }),
+        );
     } catch (e) {
         dispatch(setError(e as Error));
     } finally {
         dispatch(setLoading(false));
+    }
+};
+
+export const loadMoreConversations = (): AsyncAction => async (dispatch, getState) => {
+    const state = getState();
+    const conversations = selectConversations(state);
+    const {items, hasMore, loading, lastId} = conversations;
+
+    if (!hasMore || loading) {
+        return;
+    }
+
+    dispatch(setConversations({loading: true}));
+    try {
+        const response = await axios.get(`${BASE_PATH}/conversations`, {
+            params: {
+                limit: CONVERSATIONS_LIMIT,
+                after: lastId,
+            },
+        });
+
+        dispatch(
+            setConversations({
+                items: [...items, ...response.data.data],
+                hasMore: response.data.has_more,
+                lastId: response.data.last_id,
+                loading: false,
+            }),
+        );
+    } catch (e) {
+        dispatch(setConversations({loading: false}));
+        dispatch(setError(e as Error));
     }
 };
 
@@ -285,28 +370,33 @@ export const deleteConversation =
     (conversationId: string): AsyncAction =>
     async (dispatch, getState) => {
         try {
-            const conversations = selectConversations(getState());
+            const state = getState();
+            const {items, hasMore, lastId, loading} = selectConversations(state);
             await axios.delete(`${BASE_PATH}/conversations/${conversationId}`);
 
+            const filteredConversations = items.filter(
+                (conversation) => conversation.id !== conversationId,
+            );
+
+            const newLastId =
+                lastId === conversationId
+                    ? filteredConversations[filteredConversations.length - 1]?.id || undefined
+                    : lastId;
+
             dispatch(
-                setConversations(
-                    conversations.filter((conversation) => conversation.id !== conversationId),
-                ),
+                setConversations({
+                    items: filteredConversations,
+                    hasMore,
+                    lastId: newLastId,
+                    loading,
+                }),
             );
         } catch (e) {
             dispatch(setError(e as Error));
         }
     };
 
-const SPECIAL_TAGS = [
-    '<user_message>',
-    '<query>',
-    '<error>',
-    '<warning>',
-    '<info>',
-    '<library>',
-    '<rag_context>',
-];
+const ITEMS_PER_PAGE = 50;
 
 export const loadConversation =
     (conversationId: string): AsyncAction =>
@@ -319,7 +409,11 @@ export const loadConversation =
         }
 
         dispatch(setConversationId(conversationId));
-        dispatch(setItems([]));
+        dispatch(
+            setConversation({
+                items: [],
+            }),
+        );
         dispatch(setLoading(true));
         dispatch(setMode('chat'));
 
@@ -328,68 +422,21 @@ export const loadConversation =
                 `${BASE_PATH}/conversations/${conversationId}/items`,
                 {
                     params: {
-                        order: 'asc',
-                        limit: 100,
+                        order: 'desc',
+                        limit: ITEMS_PER_PAGE,
                     },
                 },
             );
 
-            const items = response.data.data.reduce<ChatMessage[]>((acc, item) => {
-                if (item.type === 'mcp_call') {
-                    if (item.name === 'search_docs') {
-                        try {
-                            const output: SearchMcpResponse = JSON.parse(item.output);
-                            const result = output.response?.result;
-                            if (result && Array.isArray(result)) {
-                                acc.push({
-                                    id: item.id,
-                                    type: 'mcp_search_answer',
-                                    value: result,
-                                });
-                                return acc;
-                            }
-                        } catch (e) {}
-                    }
-
-                    if (item.name === 'get_table_schema') {
-                        acc.push({
-                            id: item.id,
-                            type: 'mcp_table_schema_answer',
-                            value: item.output,
-                        });
-                        return acc;
-                    }
-
-                    acc.push({
-                        id: item.id,
-                        type: 'mcp_unknown_answer',
-                        name: item.name,
-                        value: item,
-                    });
-
-                    return acc;
-                }
-
-                if (SPECIAL_TAGS.some((tag) => item.content[0].text.startsWith(tag))) return acc;
-
-                if (item.role === 'user') {
-                    acc.push({
-                        id: item.id,
-                        type: 'question',
-                        value: item.content[0].text,
-                    });
-                } else {
-                    acc.push({
-                        id: item.id,
-                        type: 'answer',
-                        state: 'done',
-                        value: item.content[0].text,
-                    });
-                }
-                return acc;
-            }, []);
-
-            dispatch(setItems(items));
+            // API returns items in desc order (newest first), but we want to display oldest first
+            const items = parseConversationItems(response.data.data).reverse();
+            dispatch(
+                setConversation({
+                    items,
+                    hasMore: response.data.has_more,
+                    lastId: response.data.last_id,
+                }),
+            );
         } catch (e) {
             dispatch(setError(e as Error));
         } finally {
@@ -397,7 +444,66 @@ export const loadConversation =
         }
     };
 
+export const loadMoreConversationItems = (): AsyncAction => async (dispatch, getState) => {
+    const state = getState();
+    const conversationId = selectConversationId(state);
+    const {items, lastId, hasMore, loading} = selectConversation(state);
+
+    if (!conversationId) {
+        return;
+    }
+
+    if (!hasMore || loading || !lastId) {
+        return;
+    }
+
+    dispatch(setConversation({loading: true}));
+    dispatch(setError(undefined));
+
+    try {
+        const response = await axios.get<GetConversationItemsResponse>(
+            `${BASE_PATH}/conversations/${conversationId}/items`,
+            {
+                params: {
+                    order: 'desc',
+                    limit: ITEMS_PER_PAGE,
+                    after: lastId,
+                },
+            },
+        );
+
+        // API returns items in desc order (newest first), but we want to display oldest first
+        const newItems = parseConversationItems(response.data.data).reverse();
+
+        dispatch(
+            setConversation({
+                items: [...newItems, ...items],
+                hasMore: response.data.has_more,
+                lastId: response.data.last_id,
+            }),
+        );
+    } catch (e) {
+        dispatch(setError(e as Error));
+    } finally {
+        dispatch(setConversation({loading: false}));
+    }
+};
+
 export const toggleChatSidePanel = (): AsyncAction => (dispatch, getState) => {
     const open = selectChatOpen(getState());
     dispatch(setIsOpen(!open));
 };
+
+export const attachFiles =
+    (files: File[]): AsyncAction =>
+    async (dispatch, getState) => {
+        const currentFiles = selectAttachedFiles(getState());
+
+        for (const file of files) {
+            if (currentFiles.some((f) => f.name === file.name && f.size === file.size)) {
+                continue;
+            }
+
+            dispatch(addAttachedFile(file));
+        }
+    };

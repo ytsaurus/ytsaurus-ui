@@ -1,0 +1,25 @@
+.yt-chat-file-popup {
+    width: 300px;
+    overflow-x: hidden;
+
+    &__dropdown {
+        min-height: 100px;
+    }
+
+    &__files-list {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    &__file-item {
+        max-width: 300px;
+        padding: 4px 8px;
+        border-radius: var(--g-border-radius-s);
+        background-color: var(--g-color-base-generic-hover);
+    }
+
+    .file-drop-zone__drag-area {
+        min-height: 100px;
+    }
+}
+

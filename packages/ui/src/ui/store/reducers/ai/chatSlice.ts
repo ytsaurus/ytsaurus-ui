@@ -2,10 +2,24 @@ import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {ChatMessage} from '../../../types/ai-chat';
 import {Conversation} from '../../../../shared/ai-chat';
 
+type Pagination = {
+    lastId: string | undefined;
+    loading: boolean;
+    hasMore: boolean;
+};
+
+type Conversations = {
+    items: Conversation[];
+} & Pagination;
+
+type ConversationItems = {
+    items: ChatMessage[];
+} & Pagination;
+
 type CodeAssistantChatState = {
     mode: 'chat' | 'history';
-    items: ChatMessage[];
-    conversations: Conversation[];
+    conversation: ConversationItems;
+    conversations: Conversations;
     currentQuestion?: string;
     currentAnswer?: string;
     conversationId?: string;
@@ -13,12 +27,23 @@ type CodeAssistantChatState = {
     loading: boolean;
     isOpen: boolean;
     error: Error | undefined;
+    attachedFiles: File[];
 };
 
 const initialState: CodeAssistantChatState = {
     mode: 'chat',
-    items: [],
-    conversations: [],
+    conversation: {
+        items: [],
+        hasMore: false,
+        lastId: undefined,
+        loading: false,
+    },
+    conversations: {
+        items: [],
+        hasMore: false,
+        lastId: undefined,
+        loading: false,
+    },
     currentQuestion: undefined,
     currentAnswer: undefined,
     conversationId: undefined,
@@ -26,6 +51,7 @@ const initialState: CodeAssistantChatState = {
     loading: false,
     isOpen: false,
     error: undefined,
+    attachedFiles: [],
 };
 
 const chatSlice = createSlice({
@@ -56,20 +82,29 @@ const chatSlice = createSlice({
         setConversationId: (state, {payload}: PayloadAction<string | undefined>) => {
             state.conversationId = payload;
         },
-        setConversations: (state, {payload}: PayloadAction<Conversation[]>) => {
-            state.conversations = payload;
+        setConversations: (state, {payload}: PayloadAction<Partial<Conversations>>) => {
+            state.conversations = {...state.conversations, ...payload};
         },
-        setItems: (state, {payload}: PayloadAction<ChatMessage[]>) => {
-            state.items = payload;
+        setConversation: (state, {payload}: PayloadAction<Partial<ConversationItems>>) => {
+            state.conversation = {...state.conversation, ...payload};
         },
-        addItem: (state, {payload}: PayloadAction<ChatMessage>) => {
-            state.items.push(payload);
+        addConversationItem: (state, {payload}: PayloadAction<ChatMessage>) => {
+            state.conversation.items.push(payload);
         },
-        resetChart: (state) => {
+        resetChat: (state) => {
             return {...initialState, isOpen: state.isOpen};
         },
         setError: (state, {payload}: PayloadAction<Error | undefined>) => {
             state.error = payload;
+        },
+        addAttachedFile: (state, {payload}: PayloadAction<File>) => {
+            state.attachedFiles.push(payload);
+        },
+        removeAttachedFile: (state, {payload}: PayloadAction<number>) => {
+            state.attachedFiles.splice(payload, 1);
+        },
+        clearAttachedFiles: (state) => {
+            state.attachedFiles = [];
         },
     },
 });
@@ -81,13 +116,16 @@ export const {
     setLoading,
     setSending,
     setIsOpen,
-    setItems,
-    addItem,
+    setConversation,
+    addConversationItem,
     clearCurrentAnswer,
     setConversations,
     setConversationId,
-    resetChart,
+    resetChat,
     setError,
+    addAttachedFile,
+    removeAttachedFile,
+    clearAttachedFiles,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

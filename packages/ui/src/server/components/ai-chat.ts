@@ -34,12 +34,12 @@ export class AiChat {
 
     async getConversations(
         limit: number | undefined,
-        offset: number | undefined,
+        after: string | undefined,
         req: Request,
     ): Promise<GetConversationsResponse> {
         const params = new URLSearchParams();
         if (limit) params.append('limit', limit.toString());
-        if (offset) params.append('offset', offset.toString());
+        if (after) params.append('after', after);
 
         const response = await axios.request({
             url: `/v1/conversations?${params.toString()}`,
@@ -54,13 +54,13 @@ export class AiChat {
     async getConversationItems(
         conversationId: string,
         limit: number | undefined,
-        offset: number | undefined,
+        after: string | undefined,
         order: 'asc' | 'desc' | undefined,
         req: Request,
     ): Promise<GetConversationItemsResponse> {
         const params = new URLSearchParams();
         if (limit) params.append('limit', limit.toString());
-        if (offset) params.append('offset', offset.toString());
+        if (after) params.append('after', after);
         if (order) params.append('order', order);
 
         const response = await axios.request({
@@ -94,13 +94,24 @@ export class AiChat {
             });
         }
 
-        inputMessages.push({
-            content: [
-                {
-                    text: request.message,
+        const messageContent: any[] = [
+            {
+                text: request.message,
+                type: 'input_text',
+            },
+        ];
+
+        if (request.files && request.files.length > 0) {
+            request.files.forEach((file) => {
+                messageContent.push({
+                    text: `File: ${file.name}\n\`\`\`\n${file.content}\n\`\`\``,
                     type: 'input_text',
-                },
-            ],
+                });
+            });
+        }
+
+        inputMessages.push({
+            content: messageContent,
             id: `msg_${Date.now()}`,
             role: 'user',
             status: 'completed',
@@ -230,18 +241,17 @@ assistant: Static vs Dynamic tables`;
             throw new Error('Failed to generate title. Empty response');
         }
 
-        // TODO: update conversation metadata with generated title
-        // await axios.request({
-        //     url: `/v1/conversations/${conversationId}`,
-        //     baseURL: this.config.baseUrl,
-        //     method: 'POST',
-        //     data: {
-        //         metadata: {
-        //             topic: generatedTitle,
-        //         },
-        //     },
-        //     headers: this.getRequestHeaders(req),
-        // });
+        await axios.request({
+            url: `/v1/conversations/${conversationId}`,
+            baseURL: this.config.baseUrl,
+            method: 'POST',
+            data: {
+                metadata: {
+                    topic: generatedTitle,
+                },
+            },
+            headers: this.getRequestHeaders(req),
+        });
 
         return generatedTitle;
     }

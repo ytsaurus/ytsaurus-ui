@@ -3,11 +3,12 @@ import {Button, Flex, Icon, TextArea} from '@gravity-ui/uikit';
 import ArrowUpIcon from '@gravity-ui/icons/svgs/arrow-up.svg';
 import './ChatInput.scss';
 import cn from 'bem-cn-lite';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from '../../store/redux-hooks';
 import {setQuestion} from '../../store/reducers/ai/chatSlice';
 import {selectChatQuestion, selectChatSending} from '../../store/selectors/ai/chat';
 import {sendQuestion} from '../../store/actions/ai/chat';
 import ChevronDownIcon from '@gravity-ui/icons/svgs/chevron-down.svg';
+import {ChatFileButton} from './ChatFile';
 
 const block = cn('yt-ai-chat-input');
 
@@ -51,14 +52,17 @@ export const ChatInput: FC<Props> = ({showScrollButton, onScrollClick}) => {
                     onUpdate={handleQuestionChange}
                     onKeyDown={handleKeyDown}
                 />
-                <Button
-                    view="action"
-                    onClick={handleQuestionSubmit}
-                    disabled={!question}
-                    loading={isSending}
-                >
-                    <Icon data={ArrowUpIcon} size={16} />
-                </Button>
+                <Flex gap={1}>
+                    <ChatFileButton />
+                    <Button
+                        view="action"
+                        onClick={handleQuestionSubmit}
+                        disabled={!question}
+                        loading={isSending}
+                    >
+                        <Icon data={ArrowUpIcon} size={16} />
+                    </Button>
+                </Flex>
             </Flex>
         </div>
     );

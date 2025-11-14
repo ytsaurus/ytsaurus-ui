@@ -1,0 +1,8 @@
+{
+  "title_attach-files": "Attach files",
+  "context_text-files-only": "You can attach text files in any format (source code, configs, etc.). Maximum size is 0.5 MB",
+  "alert_file-too-large": "File is too large. Maximum size is 0.5 MB",
+  "alert_binary-data": "File contains binary data",
+  "alert_invalid-text-file": "File is not a valid text file"
+}
+

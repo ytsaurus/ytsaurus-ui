@@ -15,12 +15,18 @@ export const selectChatSending = (state: RootState) => state.aiChat.sending;
 export const selectChatOpen = (state: RootState) => state.aiChat.isOpen;
 export const selectConversationId = (state: RootState) => state.aiChat.conversationId;
 export const selectConversations = (state: RootState) => state.aiChat.conversations;
-export const selectConversationItems = (state: RootState) => state.aiChat.items;
+export const selectConversation = (state: RootState) => state.aiChat.conversation;
+
 export const selectChatError = (state: RootState) => state.aiChat.error;
+export const selectAttachedFiles = (state: RootState) => state.aiChat.attachedFiles;
+
+export const selectConversationsItems = (state: RootState) => state.aiChat.conversations.items;
+export const selectConversationsLoading = (state: RootState) => state.aiChat.conversations.loading;
+export const selectConversationsHasMore = (state: RootState) => state.aiChat.conversations.hasMore;
 
 export const selectChatIsVisible = createSelector(
-    [selectChatMode, selectConversationItems, selectCurrentAnswer],
-    (mode, items, currentAnswer) => {
+    [selectChatMode, selectConversation, selectCurrentAnswer],
+    (mode, {items}, currentAnswer) => {
         return mode === 'chat' && (items.length > 0 || Boolean(currentAnswer));
     },
 );
@@ -35,11 +41,11 @@ export type ConversationGroup = {
 };
 
 export const selectConversationsGroupedByDate = createSelector(
-    [selectConversations],
-    (conversations): ConversationGroup[] => {
+    [selectConversationsItems],
+    (items): ConversationGroup[] => {
         const groupMap = new Map<string, Conversation[]>();
 
-        conversations.forEach((conversation) => {
+        items.forEach((conversation) => {
             const dateKey = moment(conversation.created_at * 1000)
                 .startOf('day')
                 .format('YYYY-MM-DD');
