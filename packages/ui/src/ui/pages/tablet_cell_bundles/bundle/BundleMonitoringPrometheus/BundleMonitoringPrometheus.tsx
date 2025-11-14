@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {RadioButton} from '@gravity-ui/uikit';
+import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 
 import {HEADER_HEIGHT} from '../../../../constants';
 import {StickyContainer} from '../../../../components/StickyContainer/StickyContainer';
@@ -46,7 +46,7 @@ export function BundleMonitoringPrometheus(props: BundleMonitoringProps) {
                             itemsToWrap={[
                                 {
                                     node: (
-                                        <RadioButton
+                                        <SegmentedRadioGroup
                                             value={type}
                                             onUpdate={setType}
                                             options={Object.keys(BUNDLE_DASHBOARDS).map((k) => {
