@@ -35,6 +35,7 @@ import {SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {flattenAttributes} from '../../../utils/scheduling/scheduling';
 import {UIBatchError} from '../../../utils/errors/ui-error';
+import {PoolTreeNode} from '../../../utils/scheduling/pool-child';
 
 type ExpandedPoolsThunkAction = ThunkAction<
     any,
@@ -57,9 +58,11 @@ const POOL_FIELDS_TO_LOAD = [
     'fifo_index',
     'fifo_sort_parameters',
     'integral_guarantee_type',
+    'integral_pool_capacity',
     'is_ephemeral',
     'max_operation_count',
     'max_running_operation_count',
+    'lightweight_running_operation_count',
     'max_share_ratio',
     'min_share_ratio',
     'mode',
@@ -72,6 +75,7 @@ const POOL_FIELDS_TO_LOAD = [
     'specified_resource_limits',
     'resource_usage',
     'estimated_guarantee_resources',
+    'effective_strong_guarantee_resources',
     'running_operation_count',
     'specified_burst_guarantee_resources',
     'specified_resource_flow',
@@ -511,7 +515,7 @@ export function setLoadAllOperations(loadAll: boolean): ExpandedPoolsThunkAction
 
 function calcExpandedPoolInfo(
     poolName: string,
-    poolsByName: Record<string, PoolInfo>,
+    poolsByName: Record<string, PoolTreeNode>,
 ): ExpandedPoolInfo {
     let data = poolsByName[poolName];
     const isEphemeral = data?.isEphemeral;

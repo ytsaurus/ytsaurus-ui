@@ -10,10 +10,7 @@ test('Scheduliing - Overview', async ({page}) => {
     await expect(page).toHaveTitle(makeClusterTille({page: 'Scheduling'}));
     await expect(page).toHaveURL(makeClusterUrl('scheduling/overview?tree=default'));
 
-    const rowCount = await page.$eval(
-        '.scheduling-overview__table tbody',
-        (node) => node.childElementCount,
-    );
+    const rowCount = await page.$eval(`.yt-scheduling-table td`, (node) => node.childElementCount);
     expect(rowCount).toBeGreaterThan(1);
 
     await page.click('text="yt-e2e-pool-1"');

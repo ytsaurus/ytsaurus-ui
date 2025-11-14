@@ -4,6 +4,8 @@ import {connect, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
+import {ClusterMaintenanceContext} from '../../hooks/use-maintenance';
+
 import {BanPageLazy} from '../BanPage/lazy';
 import {ComponentsLazy} from '../../pages/components/lazy';
 import {OperationsLazy} from '../../pages/operations/lazy';
@@ -274,7 +276,7 @@ class ClusterPage extends Component {
 
         // FIXME: handle case when clusterConfig is undefined due to wrong cluster name
         return (
-            <Fragment>
+            <ClusterMaintenanceContext cluster={cluster}>
                 <ClusterPageStopRumMeasure />
                 <PageHeadByCluster cluster={cluster} />
 
@@ -316,7 +318,7 @@ class ClusterPage extends Component {
 
                     {null}
                 </FlexSplitPane>
-            </Fragment>
+            </ClusterMaintenanceContext>
         );
     }
 }

@@ -1,11 +1,11 @@
 import {createSelector} from 'reselect';
 import uniq_ from 'lodash/uniq';
+import compact_ from 'lodash/compact';
 
-import {OVERVIEW_AVAILABLE_COLUMNS} from '../../../utils/scheduling/overviewTable';
 import {getSettingsData} from '../../../store/selectors/settings/settings-base';
-import {SchedulingOverviewColumnNames} from '../../../../shared/constants/settings-types';
+import {SchedulingColumn, isSchedulingColumnName} from '../../../utils/scheduling/detailsTable';
 
-const DEFAULT_COLUMNS: Array<SchedulingOverviewColumnNames> = [
+const DEFAULT_COLUMNS: Array<SchedulingColumn> = [
     'name',
     'FI',
     'weight',
@@ -25,12 +25,12 @@ export const getSchedulingOverivewColumns = createSelector([getSettingsData], (d
         return [...DEFAULT_COLUMNS];
     }
 
-    const availableColumns = new Set(OVERVIEW_AVAILABLE_COLUMNS);
-
-    const resColumns: typeof columns = [
-        'name',
-        ...columns.filter((item) => availableColumns.has(item)),
-        'actions',
-    ];
+    const resColumns: Array<SchedulingColumn> = compact_([
+        'name' as const,
+        ...columns.map((item) => {
+            return isSchedulingColumnName(item) ? item : undefined;
+        }),
+        'actions' as const,
+    ]);
     return uniq_(resColumns);
 });

@@ -1,0 +1,9 @@
+.yt-charge-level {
+    width: 242px;
+
+    .g-progress__item {
+        border-radius: 2px;
+        height: calc(100% - 8px);
+        top: 4px;
+    }
+}

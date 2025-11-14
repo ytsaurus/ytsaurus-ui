@@ -273,3 +273,180 @@ describe('format.DateTime', () => {
         });
     });
 });
+
+describe('format.NumberSmart', () => {
+    describe('when value is not a valid number', () => {
+        it('should return NO_VALUE for undefined', () => {
+            const result = format.NumberSmart(undefined);
+            expect(result).toBe(format.NO_VALUE);
+        });
+
+        it('should return NO_VALUE for null', () => {
+            const result = format.NumberSmart(null);
+            expect(result).toBe(format.NO_VALUE);
+        });
+
+        it('should return NO_VALUE for NaN', () => {
+            const result = format.NumberSmart(NaN);
+            expect(result).toBe(format.NO_VALUE);
+        });
+
+        it('should return NO_VALUE for non-numeric string', () => {
+            const result = format.NumberSmart('abc');
+            expect(result).toBe(format.NO_VALUE);
+        });
+    });
+
+    describe('when value is zero', () => {
+        it('should return "0" for zero', () => {
+            const result = format.NumberSmart(0);
+            expect(result).toBe('0');
+        });
+
+        it('should return "0" for zero with custom significantDigits', () => {
+            const result = format.NumberSmart(0, {significantDigits: 5});
+            expect(result).toBe('0');
+        });
+    });
+
+    describe('with default significantDigits (3)', () => {
+        describe('integer values', () => {
+            it('should format small integers without decimals', () => {
+                expect(format.NumberSmart(1)).toBe('1');
+                expect(format.NumberSmart(12)).toBe('12');
+                expect(format.NumberSmart(123)).toBe('123');
+            });
+
+            it('should format large integers without decimals when they have enough significant digits', () => {
+                expect(format.NumberSmart(1234)).toBe('1 234');
+                expect(format.NumberSmart(12345)).toBe('12 345');
+                expect(format.NumberSmart(123456)).toBe('123 456');
+            });
+        });
+
+        describe('decimal values', () => {
+            it('should format decimals with leading zeros correctly', () => {
+                expect(format.NumberSmart(0.1)).toBe('0.1');
+                expect(format.NumberSmart(0.01)).toBe('0.01');
+                expect(format.NumberSmart(0.001)).toBe('0.001');
+                expect(format.NumberSmart(0.0001)).toBe('0.0001');
+            });
+
+            it('should format decimals with multiple significant digits', () => {
+                expect(format.NumberSmart(0.123)).toBe('0.123');
+                expect(format.NumberSmart(0.0123)).toBe('0.0123');
+                expect(format.NumberSmart(0.00123)).toBe('0.00123');
+            });
+
+            it('should limit to 3 significant digits for decimals', () => {
+                expect(format.NumberSmart(0.12345)).toBe('0.123');
+                expect(format.NumberSmart(0.012345)).toBe('0.0123');
+                expect(format.NumberSmart(0.0012345)).toBe('0.00123');
+            });
+
+            it('should format mixed integer and decimal parts', () => {
+                expect(format.NumberSmart(1.23)).toBe('1.23');
+                expect(format.NumberSmart(12.3)).toBe('12.3');
+                expect(format.NumberSmart(1.234)).toBe('1.23');
+                expect(format.NumberSmart(12.34)).toBe('12.3');
+            });
+
+            it('should handle very small numbers', () => {
+                expect(format.NumberSmart(0.000123)).toBe('0.000123');
+                expect(format.NumberSmart(0.0000123)).toBe('0.0000123');
+            });
+        });
+
+        describe('edge cases', () => {
+            it('should handle numbers with trailing zeros', () => {
+                expect(format.NumberSmart(1.0)).toBe('1');
+                expect(format.NumberSmart(1.2)).toBe('1.2');
+                expect(format.NumberSmart(1.23)).toBe('1.23');
+            });
+
+            it('should handle negative numbers', () => {
+                expect(format.NumberSmart(-1.23)).toBe('-1.23');
+                expect(format.NumberSmart(-123)).toBe('-123');
+                expect(format.NumberSmart(-0.123)).toBe('-0.123');
+            });
+
+            it('should handle very large numbers', () => {
+                expect(format.NumberSmart(1234567)).toBe('1 234 567');
+                expect(format.NumberSmart(1234567.89)).toBe('1 234 568');
+            });
+        });
+    });
+
+    describe('with custom significantDigits', () => {
+        it('should respect custom significantDigits = 1', () => {
+            expect(format.NumberSmart(1.23456, {significantDigits: 1})).toBe('1');
+            expect(format.NumberSmart(0.123456, {significantDigits: 1})).toBe('0.1');
+            expect(format.NumberSmart(0.0123456, {significantDigits: 1})).toBe('0.01');
+        });
+
+        it('should respect custom significantDigits = 2', () => {
+            expect(format.NumberSmart(1.23456, {significantDigits: 2})).toBe('1.2');
+            expect(format.NumberSmart(0.123456, {significantDigits: 2})).toBe('0.12');
+            expect(format.NumberSmart(0.0123456, {significantDigits: 2})).toBe('0.012');
+        });
+
+        it('should respect custom significantDigits = 5', () => {
+            expect(format.NumberSmart(1.23456789, {significantDigits: 5})).toBe('1.2346');
+            expect(format.NumberSmart(0.123456789, {significantDigits: 5})).toBe('0.12346');
+            expect(format.NumberSmart(0.0123456789, {significantDigits: 5})).toBe('0.012346');
+        });
+
+        it('should handle significantDigits larger than available digits', () => {
+            expect(format.NumberSmart(1.2, {significantDigits: 5})).toBe('1.2');
+            expect(format.NumberSmart(123, {significantDigits: 5})).toBe('123');
+        });
+
+        it('should handle significantDigits = 0', () => {
+            expect(format.NumberSmart(1.23456, {significantDigits: 0})).toBe('1');
+            expect(format.NumberSmart(0.123456, {significantDigits: 0})).toBe('0');
+        });
+    });
+
+    describe('integer part handling', () => {
+        it('should return only integer part when it has enough significant digits', () => {
+            expect(format.NumberSmart(123.456, {significantDigits: 3})).toBe('123');
+            expect(format.NumberSmart(1234.567, {significantDigits: 3})).toBe('1 235');
+            expect(format.NumberSmart(12345.678, {significantDigits: 4})).toBe('12 346');
+        });
+
+        it('should include decimal part when integer part has fewer significant digits', () => {
+            expect(format.NumberSmart(1.23456, {significantDigits: 3})).toBe('1.23');
+            expect(format.NumberSmart(12.3456, {significantDigits: 3})).toBe('12.3');
+            expect(format.NumberSmart(12.3456, {significantDigits: 4})).toBe('12.35');
+        });
+    });
+
+    describe('decimal part handling', () => {
+        it('should handle numbers with only decimal part', () => {
+            expect(format.NumberSmart(0.123456, {significantDigits: 3})).toBe('0.123');
+            expect(format.NumberSmart(0.0123456, {significantDigits: 3})).toBe('0.0123');
+            expect(format.NumberSmart(0.00123456, {significantDigits: 3})).toBe('0.00123');
+        });
+
+        it('should not include decimal part if it has no significant digits', () => {
+            expect(format.NumberSmart(1.0, {significantDigits: 3})).toBe('1');
+            expect(format.NumberSmart(123.0, {significantDigits: 3})).toBe('123');
+        });
+    });
+
+    describe('number formatting integration', () => {
+        it('should use format.Number for integer part formatting', () => {
+            // This tests that large numbers get comma separators
+            expect(format.NumberSmart(1234567.89, {significantDigits: 7})).toBe('1 234 568');
+            expect(format.NumberSmart(1000000, {significantDigits: 7})).toBe('1 000 000');
+        });
+    });
+
+    describe('precision edge cases', () => {
+        it('should handle maximum precision correctly', () => {
+            const veryPreciseNumber = 1.123456789012345;
+            const result = format.NumberSmart(veryPreciseNumber, {significantDigits: 10});
+            expect(result).toBe('1.123456789');
+        });
+    });
+});

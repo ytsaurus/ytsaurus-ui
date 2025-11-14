@@ -1,3 +1,5 @@
+import {Action} from 'redux';
+
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 import {
     CHANGE_CONTENT_MODE,
@@ -22,9 +24,9 @@ import {
     SCHEDULING_EDIT_POOL_SUCCESS,
     TOGGLE_EDIT_VISIBILITY,
 } from '../../../constants/scheduling';
-import {ActionD, YTError} from '../../../types';
-import {Action} from 'redux';
-import {PoolInfo} from '../../../store/selectors/scheduling/scheduling-pools';
+import {ActionD, SortState, YTError} from '../../../types';
+import {SchedulingContentMode} from '../../../store/selectors/scheduling/scheduling';
+import {PoolTreeNode} from '../../../utils/scheduling/pool-child';
 
 export interface SchedulingEphemeralState {
     loading: boolean;
@@ -44,10 +46,10 @@ export interface SchedulingEphemeralState {
     trees: Array<string>;
 
     editVisibility: boolean;
-    editItem?: PoolInfo;
+    editItem?: PoolTreeNode;
 
     deleteVisibility: boolean;
-    deleteItem?: PoolInfo;
+    deleteItem?: PoolTreeNode;
 
     attributesToFilter: undefined | Record<string, {parent?: string; abc: {id: number}}>;
     attributesToFilterParams: {lastTime: number; lastTree: string};
@@ -57,13 +59,17 @@ export interface TreeResources {
     resource_usage?: unknown;
     resource_limits?: unknown;
     resource_distribution_info?: Record<string, unknown>;
-    config?: unknown;
+    config?: {
+        main_resource?: 'cpu' | 'gpu' | 'user_slots' | 'memory';
+    };
 }
 
 export interface SchedulingPersistentState {
     treeState: 'collapsed' | 'expanded';
     poolChildrenFilter: '';
-    contentMode: 'cpu' | 'memory' | 'gpu' | 'user_slots' | 'operations' | 'integral';
+    contentMode: SchedulingContentMode;
+
+    sortState: Array<SortState>;
 
     tree: string;
     pool: string;
@@ -73,6 +79,8 @@ export interface SchedulingPersistentState {
     };
     monitorChartStatus: {};
     operationRefId?: string;
+
+    showAbsResources: boolean;
 }
 
 const ephemeralState: SchedulingEphemeralState = {
@@ -104,13 +112,15 @@ const ephemeralState: SchedulingEphemeralState = {
 const persistedState: SchedulingPersistentState = {
     treeState: 'collapsed',
     poolChildrenFilter: '',
-    contentMode: 'cpu',
+    contentMode: 'summary',
     tree: '',
     pool: ROOT_POOL_NAME,
     abcServiceFilter: {
         slug: undefined,
     },
     monitorChartStatus: {},
+    sortState: [{column: 'name', order: 'asc'}],
+    showAbsResources: true,
 };
 
 export const initialState = {
@@ -118,7 +128,7 @@ export const initialState = {
     ...persistedState,
 };
 
-type SchedulingState = typeof initialState;
+export type SchedulingState = typeof initialState;
 
 const reducer = (state = initialState, action: SchedulingAction) => {
     switch (action.type) {

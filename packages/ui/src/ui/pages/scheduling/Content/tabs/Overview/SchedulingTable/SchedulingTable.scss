@@ -1,0 +1,27 @@
+.yt-scheduling-table {
+    tr {
+        height: 48px;
+    }
+
+    &__row_highlighted {
+        background-color: var(--g-color-base-generic);
+    }
+
+    &__edited-number {
+        &_autocalculated {
+            color: var(--g-color-text-secondary);
+        }
+    }
+
+    &__name-content {
+        margin: -10px 0;
+    }
+
+    &__share-usage {
+        width: 100%;
+    }
+
+    &__duration {
+        white-space: nowrap;
+    }
+}

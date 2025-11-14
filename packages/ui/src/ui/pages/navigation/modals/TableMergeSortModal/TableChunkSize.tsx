@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import {DialogControlProps} from '../../../../components/Dialog/Dialog.types';
 import Suggest from '../../../../components/Suggest/Suggest';
 import format from '../../../../common/hammer/format';
-import {parseBytes} from '../../../../utils';
+import {parseBytes} from '../../../../utils/parse/parse-bytes';
 
 import './TableChunkSize.scss';
 

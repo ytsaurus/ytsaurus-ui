@@ -1,5 +1,5 @@
 import sortedIndexBy_ from 'lodash/sortedIndexBy';
-import type {ProgressTheme} from '@gravity-ui/uikit';
+import type {ProgressProps, ProgressTheme} from '@gravity-ui/uikit';
 
 import format from '../common/hammer/format';
 
@@ -68,22 +68,35 @@ export function getProgressTheme(
 }
 
 export function addProgressStackSpacers(
-    items: Array<{value: number; color?: string}>,
-    spaceSize = 1,
+    items: Array<{value: number; color?: string; theme?: ProgressProps['theme']}>,
+    {
+        spaceSize = 1,
+        startSpace,
+        endSpace,
+    }: {spaceSize?: number; startSpace?: boolean; endSpace?: boolean} = {},
 ) {
     const res: typeof items = [];
-    let sum = 0;
+    let sum = 100;
+
+    function addSpacer() {
+        res.push({value: spaceSize, color: 'rgba(0,0,0,0)'});
+        sum += spaceSize;
+    }
+
     for (let i = 0; i < items.length; ++i) {
         const item = items[i];
         if (item.value > 0) {
-            if (res.length) {
-                res.push({value: spaceSize, color: 'var(--main-background)'});
-                sum += spaceSize;
+            if (startSpace || res.length) {
+                addSpacer();
             }
             res.push(item);
-            sum += item.value;
         }
     }
+
+    if (endSpace) {
+        addSpacer();
+    }
+
     return res.map((item) => {
         return {...item, value: (item.value / sum) * 100};
     });
