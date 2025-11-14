@@ -1,15 +1,6 @@
 {
     "panels": [
         {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 0
-            },
-            "type": "row"
-        },
-        {
             "datasource": {
                 "type": "prometheus",
                 "uid": "${PROMETHEUS_DS_UID}"
@@ -36,14 +27,51 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
-                "overrides": []
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.stacking",
+                                "value": {
+                                    "mode": "none"
+                                }
+                            },
+                            {
+                                "id": "custom.fillOpacity",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.stacking",
+                                "value": {
+                                    "mode": "normal"
+                                }
+                            }
+                        ]
+                    }
+                ]
             },
             "title": "Network received bytes (bus)",
             "gridPos": {
                 "x": 0,
-                "y": 1,
+                "y": 0,
                 "w": 12,
                 "h": 6
             }
@@ -75,14 +103,51 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
-                "overrides": []
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.stacking",
+                                "value": {
+                                    "mode": "none"
+                                }
+                            },
+                            {
+                                "id": "custom.fillOpacity",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.stacking",
+                                "value": {
+                                    "mode": "normal"
+                                }
+                            }
+                        ]
+                    }
+                ]
             },
             "title": "Network transmitted bytes (bus)",
             "gridPos": {
                 "x": 12,
-                "y": 1,
+                "y": 0,
                 "w": 12,
                 "h": 6
             }
@@ -114,14 +179,51 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
-                "overrides": []
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.stacking",
+                                "value": {
+                                    "mode": "none"
+                                }
+                            },
+                            {
+                                "id": "custom.fillOpacity",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.stacking",
+                                "value": {
+                                    "mode": "normal"
+                                }
+                            }
+                        ]
+                    }
+                ]
             },
             "title": "Pending out bytes",
             "gridPos": {
                 "x": 0,
-                "y": 7,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
@@ -153,26 +255,54 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
-                "overrides": []
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.stacking",
+                                "value": {
+                                    "mode": "none"
+                                }
+                            },
+                            {
+                                "id": "custom.fillOpacity",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.stacking",
+                                "value": {
+                                    "mode": "normal"
+                                }
+                            }
+                        ]
+                    }
+                ]
             },
             "title": "TCP retransmits rate",
             "gridPos": {
                 "x": 12,
-                "y": 7,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 13
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -210,14 +340,51 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
-                "overrides": []
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.stacking",
+                                "value": {
+                                    "mode": "none"
+                                }
+                            },
+                            {
+                                "id": "custom.fillOpacity",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.stacking",
+                                "value": {
+                                    "mode": "normal"
+                                }
+                            }
+                        ]
+                    }
+                ]
             },
             "title": "Receive network throttler bytes rate",
             "gridPos": {
                 "x": 0,
-                "y": 14,
+                "y": 12,
                 "w": 12,
                 "h": 6
             }
@@ -258,14 +425,51 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
-                "overrides": []
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.stacking",
+                                "value": {
+                                    "mode": "none"
+                                }
+                            },
+                            {
+                                "id": "custom.fillOpacity",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.stacking",
+                                "value": {
+                                    "mode": "normal"
+                                }
+                            }
+                        ]
+                    }
+                ]
             },
             "title": "Transmit network throttler bytes rate",
             "gridPos": {
                 "x": 12,
-                "y": 14,
+                "y": 12,
                 "w": 12,
                 "h": 6
             }
@@ -289,14 +493,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Receive network throttled",
             "gridPos": {
                 "x": 0,
-                "y": 20,
+                "y": 18,
                 "w": 12,
                 "h": 6
             }
@@ -320,26 +528,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Transmit network throttled",
             "gridPos": {
                 "x": 12,
-                "y": 20,
+                "y": 18,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 26
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -360,14 +563,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "RPC request rate",
             "gridPos": {
                 "x": 0,
-                "y": 27,
+                "y": 24,
                 "w": 12,
                 "h": 6
             }
@@ -391,14 +598,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "RPC rejected due to queue overflow",
             "gridPos": {
                 "x": 12,
-                "y": 27,
+                "y": 24,
                 "w": 12,
                 "h": 6
             }
@@ -422,14 +633,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "RPC failed request rate",
             "gridPos": {
                 "x": 0,
-                "y": 33,
+                "y": 30,
                 "w": 12,
                 "h": 6
             }
@@ -453,26 +668,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "RPC timed out request rate",
             "gridPos": {
                 "x": 12,
-                "y": 33,
+                "y": 30,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 39
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -487,7 +697,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_chunk_reader_statistics_data_bytes_transmitted\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\".+\", medium=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -498,7 +709,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -506,7 +720,7 @@
             "title": "Table lookup bytes received",
             "gridPos": {
                 "x": 0,
-                "y": 40,
+                "y": 36,
                 "w": 12,
                 "h": 6
             }
@@ -524,7 +738,8 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_chunk_reader_statistics_data_bytes_transmitted\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\".+\", medium=~\"\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -535,7 +750,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -543,19 +761,10 @@
             "title": "Table select bytes received",
             "gridPos": {
                 "x": 12,
-                "y": 40,
+                "y": 36,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 46
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -570,20 +779,25 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_time_remote_wait_max\", tablet_cell_bundle=~\"$tablet_cell_bundle\", user=~\"\", yt_service=~\"QueryService\", method=~\"Multiread\", pod=~\"$pod\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Table lookup (QueryService::Multiread) RPC acknowledge time",
             "gridPos": {
                 "x": 0,
-                "y": 47,
+                "y": 42,
                 "w": 12,
                 "h": 6
             }
@@ -601,32 +815,28 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_time_remote_wait_max\", tablet_cell_bundle=~\"$tablet_cell_bundle\", user=~\"\", yt_service=~\"QueryService\", method=~\"Execute\", pod=~\"$pod\"}",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Table select (QueryService::Execute) RPC acknowledge time",
             "gridPos": {
                 "x": 12,
-                "y": 47,
+                "y": 42,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 53
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -641,20 +851,25 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_request_message_body_bytes\", tablet_cell_bundle=~\"$tablet_cell_bundle\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\", recognized=~\"\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Rpc client (yt_node) request message body size",
             "gridPos": {
                 "x": 0,
-                "y": 54,
+                "y": 48,
                 "w": 12,
                 "h": 6
             }
@@ -672,17 +887,94 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_request_message_attachment_bytes\", tablet_cell_bundle=~\"$tablet_cell_bundle\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\", recognized=~\"\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Rpc client (yt_node) request message attachment size",
+            "gridPos": {
+                "x": 12,
+                "y": 48,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_response_message_body_bytes\", tablet_cell_bundle=~\"$tablet_cell_bundle\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\", recognized=~\"\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Rpc client (yt_node) response message body size",
+            "gridPos": {
+                "x": 0,
+                "y": 54,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_response_message_attachment_bytes\", tablet_cell_bundle=~\"$tablet_cell_bundle\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\", recognized=~\"\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Rpc client (yt_node) response message attachment size",
             "gridPos": {
                 "x": 12,
                 "y": 54,
@@ -702,92 +994,26 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_response_message_body_bytes\", tablet_cell_bundle=~\"$tablet_cell_bundle\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\", recognized=~\"\"}[$__rate_interval])",
-                    "refId": "A"
-                }
-            ],
-            "fieldConfig": {
-                "defaults": {
-                    "unit": "short",
-                    "custom": {}
-                },
-                "overrides": []
-            },
-            "title": "Rpc client (yt_node) response message body size",
-            "gridPos": {
-                "x": 0,
-                "y": 60,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${PROMETHEUS_DS_UID}"
-            },
-            "type": "timeseries",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${PROMETHEUS_DS_UID}"
-                    },
-                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_client_response_message_attachment_bytes\", tablet_cell_bundle=~\"$tablet_cell_bundle\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\", recognized=~\"\"}[$__rate_interval])",
-                    "refId": "A"
-                }
-            ],
-            "fieldConfig": {
-                "defaults": {
-                    "unit": "short",
-                    "custom": {}
-                },
-                "overrides": []
-            },
-            "title": "Rpc client (yt_node) response message attachment size",
-            "gridPos": {
-                "x": 12,
-                "y": 60,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 66
-            },
-            "type": "row"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${PROMETHEUS_DS_UID}"
-            },
-            "type": "timeseries",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${PROMETHEUS_DS_UID}"
-                    },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_message_body_bytes\", tablet_cell_bundle=~\"$tablet_cell_bundle\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\", recognized=~\"\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Rpc server (yt_node) request message body size",
             "gridPos": {
                 "x": 0,
-                "y": 67,
+                "y": 60,
                 "w": 12,
                 "h": 6
             }
@@ -805,20 +1031,25 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_request_message_attachment_bytes\", tablet_cell_bundle=~\"$tablet_cell_bundle\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\", recognized=~\"\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Rpc server (yt_node) request message attachment size",
             "gridPos": {
                 "x": 12,
-                "y": 67,
+                "y": 60,
                 "w": 12,
                 "h": 6
             }
@@ -836,20 +1067,25 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_response_message_body_bytes\", tablet_cell_bundle=~\"$tablet_cell_bundle\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\", recognized=~\"\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Rpc server (yt_node) response message body size",
             "gridPos": {
                 "x": 0,
-                "y": 73,
+                "y": 66,
                 "w": 12,
                 "h": 6
             }
@@ -867,20 +1103,25 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_rpc_server_response_message_attachment_bytes\", tablet_cell_bundle=~\"$tablet_cell_bundle\", user=~\"\", yt_service=~\"\", method=~\"\", pod=~\"$pod\", queue=~\"\", recognized=~\"\"}[$__rate_interval])",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Rpc server (yt_node) response message attachment size",
             "gridPos": {
                 "x": 12,
-                "y": 73,
+                "y": 66,
                 "w": 12,
                 "h": 6
             }

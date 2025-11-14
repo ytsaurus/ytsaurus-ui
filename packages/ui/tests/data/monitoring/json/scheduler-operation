@@ -1,15 +1,6 @@
 {
     "panels": [
         {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 0
-            },
-            "type": "row"
-        },
-        {
             "type": "text",
             "options": {
                 "content": "<h2>Resources</h2>",
@@ -18,19 +9,10 @@
             "title": "",
             "gridPos": {
                 "x": 0,
-                "y": 1,
+                "y": 0,
                 "w": 24,
-                "h": 2
+                "h": 3
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 3
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -119,7 +101,7 @@
             "title": "CPU",
             "gridPos": {
                 "x": 0,
-                "y": 4,
+                "y": 3,
                 "w": 8,
                 "h": 6
             }
@@ -178,7 +160,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             },
                             {
                                 "id": "min",
@@ -194,7 +176,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             },
                             {
                                 "id": "min",
@@ -210,7 +192,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "bytes"
+                                "value": "decbytes"
                             },
                             {
                                 "id": "min",
@@ -223,7 +205,7 @@
             "title": "Memory",
             "gridPos": {
                 "x": 8,
-                "y": 4,
+                "y": 3,
                 "w": 8,
                 "h": 6
             }
@@ -315,19 +297,10 @@
             "title": "GPU",
             "gridPos": {
                 "x": 16,
-                "y": 4,
+                "y": 3,
                 "w": 8,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 10
-            },
-            "type": "row"
         },
         {
             "type": "text",
@@ -338,19 +311,10 @@
             "title": "",
             "gridPos": {
                 "x": 0,
-                "y": 11,
+                "y": 9,
                 "w": 24,
-                "h": 4
+                "h": 5
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 15
-            },
-            "type": "row"
         },
         {
             "type": "text",
@@ -361,19 +325,10 @@
             "title": "",
             "gridPos": {
                 "x": 0,
-                "y": 16,
+                "y": 14,
                 "w": 24,
-                "h": 2
+                "h": 3
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 18
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -462,7 +417,7 @@
             "title": "Dominant Shares",
             "gridPos": {
                 "x": 0,
-                "y": 19,
+                "y": 17,
                 "w": 8,
                 "h": 6
             }
@@ -554,7 +509,7 @@
             "title": "Fair Share per Resource",
             "gridPos": {
                 "x": 8,
-                "y": 19,
+                "y": 17,
                 "w": 8,
                 "h": 6
             }
@@ -651,19 +606,10 @@
             "title": "Dominant Fair Share per Type",
             "gridPos": {
                 "x": 16,
-                "y": 19,
+                "y": 17,
                 "w": 8,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 25
-            },
-            "type": "row"
         },
         {
             "type": "text",
@@ -674,9 +620,9 @@
             "title": "",
             "gridPos": {
                 "x": 0,
-                "y": 26,
+                "y": 23,
                 "w": 24,
-                "h": 3
+                "h": 4
             }
         }
     ],

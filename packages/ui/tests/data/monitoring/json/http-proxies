@@ -1,15 +1,6 @@
 {
     "panels": [
         {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 0
-            },
-            "type": "row"
-        },
-        {
             "type": "text",
             "options": {
                 "content": "<h2>Memory</h2>",
@@ -18,19 +9,10 @@
             "title": "",
             "gridPos": {
                 "x": 0,
-                "y": 1,
+                "y": 0,
                 "w": 24,
                 "h": 2
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 3
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -51,14 +33,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Memory By User (tracker)",
             "gridPos": {
                 "x": 0,
-                "y": 4,
+                "y": 2,
                 "w": 12,
                 "h": 12
             }
@@ -82,14 +68,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Memory By User (allocator)",
             "gridPos": {
                 "x": 12,
-                "y": 4,
+                "y": 2,
                 "w": 12,
                 "h": 12
             }
@@ -113,14 +103,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Memory By Category",
             "gridPos": {
                 "x": 0,
-                "y": 16,
+                "y": 14,
                 "w": 12,
                 "h": 12
             }
@@ -144,14 +138,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Memory By Command (allocator)",
             "gridPos": {
                 "x": 12,
-                "y": 16,
+                "y": 14,
                 "w": 12,
                 "h": 12
             }
@@ -183,26 +181,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Memory Total (tracker)",
             "gridPos": {
                 "x": 6,
-                "y": 28,
+                "y": 26,
                 "w": 12,
                 "h": 12
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 40
-            },
-            "type": "row"
         },
         {
             "type": "text",
@@ -213,19 +206,10 @@
             "title": "",
             "gridPos": {
                 "x": 0,
-                "y": 41,
+                "y": 38,
                 "w": 24,
                 "h": 2
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 43
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -262,14 +246,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "CPU Resource Tracker",
             "gridPos": {
                 "x": 0,
-                "y": 44,
+                "y": 40,
                 "w": 12,
                 "h": 12
             }
@@ -293,26 +281,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "CPU By Threads",
             "gridPos": {
                 "x": 12,
-                "y": 44,
+                "y": 40,
                 "w": 12,
                 "h": 12
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 56
-            },
-            "type": "row"
         },
         {
             "type": "text",
@@ -323,19 +306,10 @@
             "title": "",
             "gridPos": {
                 "x": 0,
-                "y": 57,
+                "y": 52,
                 "w": 24,
                 "h": 2
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 59
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -356,14 +330,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Top Users By Request Rate",
             "gridPos": {
                 "x": 0,
-                "y": 60,
+                "y": 54,
                 "w": 12,
                 "h": 12
             }
@@ -387,14 +365,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Top Commands By Request Rate",
             "gridPos": {
                 "x": 12,
-                "y": 60,
+                "y": 54,
                 "w": 12,
                 "h": 12
             }
@@ -418,14 +400,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Top Users By Error Count",
             "gridPos": {
                 "x": 0,
-                "y": 72,
+                "y": 66,
                 "w": 12,
                 "h": 12
             }
@@ -449,14 +435,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Top Commands By Error Count",
             "gridPos": {
                 "x": 12,
-                "y": 72,
+                "y": 66,
                 "w": 12,
                 "h": 12
             }
@@ -480,14 +470,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Top Users By Concurrency Semaphore",
             "gridPos": {
                 "x": 0,
-                "y": 84,
+                "y": 78,
                 "w": 12,
                 "h": 12
             }
@@ -511,14 +505,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Top Users By Request Cpu Time",
             "gridPos": {
                 "x": 12,
-                "y": 84,
+                "y": 78,
                 "w": 12,
                 "h": 12
             }
@@ -542,14 +540,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Top Users By Bytes In Rate",
             "gridPos": {
                 "x": 0,
-                "y": 96,
+                "y": 90,
                 "w": 12,
                 "h": 12
             }
@@ -573,26 +575,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Top Users By Bytes Out Rate",
             "gridPos": {
                 "x": 12,
-                "y": 96,
+                "y": 90,
                 "w": 12,
                 "h": 12
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 108
-            },
-            "type": "row"
         },
         {
             "type": "text",
@@ -603,19 +600,10 @@
             "title": "",
             "gridPos": {
                 "x": 0,
-                "y": 109,
+                "y": 102,
                 "w": 24,
                 "h": 2
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 111
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -636,14 +624,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "RPC Client Request Count",
             "gridPos": {
                 "x": 0,
-                "y": 112,
+                "y": 104,
                 "w": 12,
                 "h": 12
             }
@@ -667,14 +659,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "RPC Client Failed Request Count",
             "gridPos": {
                 "x": 12,
-                "y": 112,
+                "y": 104,
                 "w": 12,
                 "h": 12
             }
@@ -698,14 +694,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "RPC Client Timed Out Request Count",
             "gridPos": {
                 "x": 6,
-                "y": 124,
+                "y": 116,
                 "w": 12,
                 "h": 12
             }

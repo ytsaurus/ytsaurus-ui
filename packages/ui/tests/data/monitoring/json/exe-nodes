@@ -1,15 +1,6 @@
 {
     "panels": [
         {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 0
-            },
-            "type": "row"
-        },
-        {
             "datasource": {
                 "type": "prometheus",
                 "uid": "${PROMETHEUS_DS_UID}"
@@ -33,7 +24,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -41,19 +35,10 @@
             "title": "Versions",
             "gridPos": {
                 "x": 0,
-                "y": 1,
+                "y": 0,
                 "w": 24,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 7
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -74,7 +59,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -94,7 +83,7 @@
             "title": "Job CPU Wait",
             "gridPos": {
                 "x": 0,
-                "y": 8,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
@@ -118,7 +107,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -138,7 +131,7 @@
             "title": "Control",
             "gridPos": {
                 "x": 12,
-                "y": 8,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
@@ -162,7 +155,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -182,19 +179,10 @@
             "title": "JobEnvironment CPU Wait",
             "gridPos": {
                 "x": 6,
-                "y": 14,
+                "y": 12,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 20
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -215,7 +203,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -235,7 +227,7 @@
             "title": "Nodes Used Memory",
             "gridPos": {
                 "x": 0,
-                "y": 21,
+                "y": 18,
                 "w": 12,
                 "h": 6
             }
@@ -259,7 +251,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -279,19 +275,10 @@
             "title": "Total Nodes User Job Memory Limit",
             "gridPos": {
                 "x": 12,
-                "y": 21,
+                "y": 18,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 27
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -312,7 +299,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -332,7 +323,7 @@
             "title": "Controller Started And Completed Jobs",
             "gridPos": {
                 "x": 0,
-                "y": 28,
+                "y": 24,
                 "w": 12,
                 "h": 6
             }
@@ -356,7 +347,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -376,7 +371,7 @@
             "title": "Node Completed Jobs",
             "gridPos": {
                 "x": 12,
-                "y": 28,
+                "y": 24,
                 "w": 12,
                 "h": 6
             }
@@ -400,7 +395,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -420,7 +419,7 @@
             "title": "Controller Failed Jobs",
             "gridPos": {
                 "x": 0,
-                "y": 34,
+                "y": 30,
                 "w": 12,
                 "h": 6
             }
@@ -444,7 +443,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -464,7 +467,7 @@
             "title": "Node Failed Jobs",
             "gridPos": {
                 "x": 12,
-                "y": 34,
+                "y": 30,
                 "w": 12,
                 "h": 6
             }
@@ -488,7 +491,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -508,7 +515,7 @@
             "title": "Controller Aborted Jobs",
             "gridPos": {
                 "x": 0,
-                "y": 40,
+                "y": 36,
                 "w": 12,
                 "h": 6
             }
@@ -532,7 +539,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -552,7 +563,7 @@
             "title": "Node Aborted Jobs",
             "gridPos": {
                 "x": 12,
-                "y": 40,
+                "y": 36,
                 "w": 12,
                 "h": 6
             }
@@ -576,7 +587,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -596,7 +611,7 @@
             "title": "Job Proxy Aborts",
             "gridPos": {
                 "x": 6,
-                "y": 46,
+                "y": 42,
                 "w": 12,
                 "h": 6
             }
@@ -620,7 +635,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -640,19 +659,10 @@
             "title": "Active Job Count",
             "gridPos": {
                 "x": 6,
-                "y": 52,
+                "y": 48,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 58
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -673,14 +683,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Nodes Network RX",
             "gridPos": {
                 "x": 0,
-                "y": 59,
+                "y": 54,
                 "w": 12,
                 "h": 6
             }
@@ -704,14 +718,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Nodes Network TX",
             "gridPos": {
                 "x": 12,
-                "y": 59,
+                "y": 54,
                 "w": 12,
                 "h": 6
             }
@@ -735,14 +753,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Controller Agent Network RX",
             "gridPos": {
                 "x": 0,
-                "y": 65,
+                "y": 60,
                 "w": 12,
                 "h": 6
             }
@@ -766,26 +788,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Controller Agent Network TX",
             "gridPos": {
                 "x": 12,
-                "y": 65,
+                "y": 60,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 71
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -806,26 +823,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Controller Agent Heartbeats Throttled",
             "gridPos": {
                 "x": 0,
-                "y": 72,
+                "y": 66,
                 "w": 24,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 78
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -851,7 +863,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -859,7 +874,7 @@
             "title": "Node Alerts",
             "gridPos": {
                 "x": 0,
-                "y": 79,
+                "y": 72,
                 "w": 12,
                 "h": 6
             }
@@ -873,19 +888,10 @@
             "title": "Node Disabled Slots",
             "gridPos": {
                 "x": 12,
-                "y": 79,
+                "y": 72,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 85
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -906,14 +912,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Volume Surplus",
             "gridPos": {
                 "x": 0,
-                "y": 86,
+                "y": 78,
                 "w": 12,
                 "h": 6
             }
@@ -937,14 +947,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Layer Surplus",
             "gridPos": {
                 "x": 12,
-                "y": 86,
+                "y": 78,
                 "w": 12,
                 "h": 6
             }
@@ -968,14 +982,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Porto Volume Count",
             "gridPos": {
                 "x": 6,
-                "y": 92,
+                "y": 84,
                 "w": 12,
                 "h": 6
             }
@@ -999,26 +1017,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Porto Commands",
             "gridPos": {
                 "x": 6,
-                "y": 98,
+                "y": 90,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 104
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -1039,14 +1052,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Volume Creation Errors",
             "gridPos": {
                 "x": 0,
-                "y": 105,
+                "y": 96,
                 "w": 12,
                 "h": 6
             }
@@ -1070,26 +1087,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Volume Removal Errors",
             "gridPos": {
                 "x": 12,
-                "y": 105,
+                "y": 96,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 111
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -1110,26 +1122,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Cache Miss Artifacts Size",
             "gridPos": {
                 "x": 0,
-                "y": 112,
+                "y": 102,
                 "w": 24,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 118
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -1150,14 +1157,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Page Faults",
             "gridPos": {
                 "x": 0,
-                "y": 119,
+                "y": 108,
                 "w": 24,
                 "h": 6
             }

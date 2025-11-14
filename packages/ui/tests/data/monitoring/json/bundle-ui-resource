@@ -1,15 +1,6 @@
 {
     "panels": [
         {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 0
-            },
-            "type": "row"
-        },
-        {
             "type": "text",
             "options": {
                 "content": "About the difference between CPU and vCPU:\n- CPU: actual physical cores of the instances. Thread pool sizes are measured     in terms of the CPU. Instances may have different CPU limits due to different hardware.\n- vCPU: virtual cores of the instances scaled in order that all instances have     similar actual performance. CPU quotas correspond to vCPU.\n\nCurrently vCPU is not available in this dashboard.",
@@ -17,22 +8,8 @@
             },
             "title": "",
             "gridPos": {
-                "x": 0,
-                "y": 1,
-                "w": 12,
-                "h": 5
-            }
-        },
-        {
-            "type": "text",
-            "options": {
-                "content": "",
-                "mode": "markdown"
-            },
-            "title": "",
-            "gridPos": {
-                "x": 12,
-                "y": 1,
+                "x": 6,
+                "y": 0,
                 "w": 12,
                 "h": 5
             }
@@ -57,14 +34,33 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
-                "overrides": []
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "A"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.stacking",
+                                "value": {
+                                    "mode": "normal"
+                                }
+                            }
+                        ]
+                    }
+                ]
             },
             "title": "CPU Total",
             "gridPos": {
                 "x": 6,
-                "y": 6,
+                "y": 5,
                 "w": 12,
                 "h": 6
             }
@@ -81,15 +77,28 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_used\", tablet_cell_bundle=~\"$tablet_cell_bundle\", category=~\".+\"}",
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_memory_tcmalloc_desired_usage_limit_bytes\", tablet_cell_bundle=~\"$tablet_cell_bundle\"}",
                     "refId": "A",
+                    "legendFormat": "\"OOM tracker threshold\""
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_cluster_node_memory_usage_used\", tablet_cell_bundle=~\"$tablet_cell_bundle\", category=~\".+\"}",
+                    "refId": "B",
                     "legendFormat": "\"{{category}}\""
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -103,13 +112,31 @@
                                 "value": 0
                             }
                         ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "B"
+                        },
+                        "properties": [
+                            {
+                                "id": "min",
+                                "value": 0
+                            },
+                            {
+                                "id": "custom.stacking",
+                                "value": {
+                                    "mode": "normal"
+                                }
+                            }
+                        ]
                     }
                 ]
             },
             "title": "Memory Total",
             "gridPos": {
                 "x": 6,
-                "y": 18,
+                "y": 17,
                 "w": 12,
                 "h": 6
             }
@@ -152,7 +179,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -196,7 +227,7 @@
             "title": "Net TX total",
             "gridPos": {
                 "x": 6,
-                "y": 24,
+                "y": 23,
                 "w": 12,
                 "h": 6
             }
@@ -239,7 +270,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -283,7 +318,7 @@
             "title": "Net RX total",
             "gridPos": {
                 "x": 6,
-                "y": 30,
+                "y": 29,
                 "w": 12,
                 "h": 6
             }
@@ -313,7 +348,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -321,7 +359,7 @@
             "title": "Disk Write Total",
             "gridPos": {
                 "x": 0,
-                "y": 36,
+                "y": 35,
                 "w": 12,
                 "h": 6
             }
@@ -340,20 +378,24 @@
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_writer_disk_space\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", account=~\"\", medium=~\"\", method=~\"\"}[$__rate_interval])",
                     "refId": "A",
-                    "legendFormat": "\"{{exported_pod}}\""
+                    "legendFormat": "\"{{container}}\""
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Disk Write per pod",
             "gridPos": {
                 "x": 12,
-                "y": 36,
+                "y": 35,
                 "w": 12,
                 "h": 6
             }
@@ -401,7 +443,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -409,7 +454,7 @@
             "title": "Disk Read Total",
             "gridPos": {
                 "x": 0,
-                "y": 42,
+                "y": 41,
                 "w": 12,
                 "h": 6
             }
@@ -428,20 +473,24 @@
                     },
                     "expr": "(topk(10, ((rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_chunk_reader_statistics_data_bytes_read_from_disk\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", account=~\"\", medium=~\"\", method=~\"\"}[$__rate_interval])) + (rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_lookup_chunk_reader_statistics_data_bytes_read_from_disk\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", account=~\"\", medium=~\"\", method=~\"\"}[$__rate_interval]))) + (rate({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_tablet_node_select_chunk_reader_statistics_data_bytes_read_from_disk\", tablet_cell_bundle=~\"$tablet_cell_bundle\", table_path=~\"\", table_tag=~\"\", user=~\"\", account=~\"\", medium=~\"\", method=~\"\"}[$__rate_interval]))))",
                     "refId": "A",
-                    "legendFormat": "\"{{exported_pod}}\""
+                    "legendFormat": "\"{{container}}\""
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Disk Read per pod",
             "gridPos": {
                 "x": 12,
-                "y": 42,
+                "y": 41,
                 "w": 12,
                 "h": 6
             }

@@ -1,15 +1,6 @@
 {
     "panels": [
         {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 0
-            },
-            "type": "row"
-        },
-        {
             "datasource": {
                 "type": "prometheus",
                 "uid": "${PROMETHEUS_DS_UID}"
@@ -29,7 +20,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -49,7 +44,7 @@
             "title": "Rows consumed",
             "gridPos": {
                 "x": 0,
-                "y": 1,
+                "y": 0,
                 "w": 12,
                 "h": 6
             }
@@ -74,7 +69,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -94,7 +93,7 @@
             "title": "Data weight consumed",
             "gridPos": {
                 "x": 12,
-                "y": 1,
+                "y": 0,
                 "w": 12,
                 "h": 6
             }
@@ -119,7 +118,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -139,7 +142,7 @@
             "title": "Total row lag",
             "gridPos": {
                 "x": 0,
-                "y": 7,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
@@ -164,7 +167,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -184,7 +191,7 @@
             "title": "Max time lag",
             "gridPos": {
                 "x": 12,
-                "y": 7,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }

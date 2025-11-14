@@ -1,15 +1,6 @@
 {
     "panels": [
         {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 0
-            },
-            "type": "row"
-        },
-        {
             "datasource": {
                 "type": "prometheus",
                 "uid": "${PROMETHEUS_DS_UID}"
@@ -68,7 +59,17 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "gibytes"
+                                "value": "gbytes"
+                            },
+                            {
+                                "id": "custom.stacking",
+                                "value": {
+                                    "mode": "none"
+                                }
+                            },
+                            {
+                                "id": "custom.fillOpacity",
+                                "value": 0
                             }
                         ]
                     },
@@ -80,7 +81,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "gibytes"
+                                "value": "gbytes"
                             }
                         ]
                     },
@@ -92,7 +93,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "gibytes"
+                                "value": "gbytes"
                             }
                         ]
                     }
@@ -101,7 +102,7 @@
             "title": "Disk usage/limit",
             "gridPos": {
                 "x": 0,
-                "y": 1,
+                "y": 0,
                 "w": 12,
                 "h": 10
             }
@@ -165,7 +166,17 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "gibytes"
+                                "value": "gbytes"
+                            },
+                            {
+                                "id": "custom.stacking",
+                                "value": {
+                                    "mode": "none"
+                                }
+                            },
+                            {
+                                "id": "custom.fillOpacity",
+                                "value": 0
                             }
                         ]
                     },
@@ -177,7 +188,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "gibytes"
+                                "value": "gbytes"
                             }
                         ]
                     },
@@ -189,7 +200,7 @@
                         "properties": [
                             {
                                 "id": "unit",
-                                "value": "gibytes"
+                                "value": "gbytes"
                             }
                         ]
                     }
@@ -198,19 +209,10 @@
             "title": "Disk usage/limit",
             "gridPos": {
                 "x": 12,
-                "y": 1,
+                "y": 0,
                 "w": 12,
                 "h": 10
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 11
-            },
-            "type": "row"
         },
         {
             "type": "text",
@@ -221,19 +223,10 @@
             "title": "",
             "gridPos": {
                 "x": 0,
-                "y": 12,
+                "y": 10,
                 "w": 24,
                 "h": 2
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 14
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -295,6 +288,16 @@
                             {
                                 "id": "unit",
                                 "value": "count"
+                            },
+                            {
+                                "id": "custom.stacking",
+                                "value": {
+                                    "mode": "none"
+                                }
+                            },
+                            {
+                                "id": "custom.fillOpacity",
+                                "value": 0
                             }
                         ]
                     },
@@ -327,7 +330,7 @@
             "title": "Chunk usage/limit",
             "gridPos": {
                 "x": 0,
-                "y": 15,
+                "y": 12,
                 "w": 12,
                 "h": 10
             }
@@ -392,6 +395,16 @@
                             {
                                 "id": "unit",
                                 "value": "count"
+                            },
+                            {
+                                "id": "custom.stacking",
+                                "value": {
+                                    "mode": "none"
+                                }
+                            },
+                            {
+                                "id": "custom.fillOpacity",
+                                "value": 0
                             }
                         ]
                     },
@@ -424,19 +437,10 @@
             "title": "Nodes usage/limit",
             "gridPos": {
                 "x": 12,
-                "y": 15,
+                "y": 12,
                 "w": 12,
                 "h": 10
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 25
-            },
-            "type": "row"
         },
         {
             "type": "text",
@@ -447,7 +451,7 @@
             "title": "",
             "gridPos": {
                 "x": 0,
-                "y": 26,
+                "y": 22,
                 "w": 24,
                 "h": 2
             }
@@ -503,10 +507,6 @@
                 "allFormat": "glob"
             },
             {
-                "discover_values": {
-                    "match": "{service=~\"yt-master\", account=~\"$account\"}",
-                    "label": "medium"
-                },
                 "name": "left_medium",
                 "label": "Left medium",
                 "type": "textbox",
@@ -525,13 +525,13 @@
                 "query": "default",
                 "hide": 0,
                 "skipUrlSync": false,
-                "allFormat": "glob"
+                "allFormat": "glob",
+                "discover_values": {
+                    "label": "medium",
+                    "match": "{cluster=~\"$cluster\", service=~\"yt-master\", account=~\"$account\"}"
+                }
             },
             {
-                "discover_values": {
-                    "match": "{service=~\"yt-master\", account=~\"$account\"}",
-                    "label": "medium"
-                },
                 "name": "right_medium",
                 "label": "Right medium",
                 "type": "textbox",
@@ -550,7 +550,11 @@
                 "query": "ssd_blobs",
                 "hide": 0,
                 "skipUrlSync": false,
-                "allFormat": "glob"
+                "allFormat": "glob",
+                "discover_values": {
+                    "label": "medium",
+                    "match": "{cluster=~\"$cluster\", service=~\"yt-master\", account=~\"$account\"}"
+                }
             }
         ],
         "permissions": [

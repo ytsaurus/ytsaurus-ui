@@ -92,7 +92,6 @@ import {chytListParams, getGhytListPreparedState} from './reducers/chyt/url-mapp
 
 import type {PathParameters} from '../store/location';
 import {ChytCliquePageTab} from '../constants/chyt-page';
-import {prometheusDashboardParams} from './reducers/prometheusDashboard/url-mapping';
 
 // prettier-ignore
 export const getMainLocations = (): Array<[string, PathParameters]> => [

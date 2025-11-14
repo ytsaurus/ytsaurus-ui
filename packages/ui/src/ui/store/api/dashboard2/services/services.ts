@@ -5,8 +5,6 @@ import map_ from 'lodash/map';
 import filter_ from 'lodash/filter';
 import find_ from 'lodash/find';
 
-import {getBatchError} from '../../../../../shared/utils/error';
-
 import format from '../../../../common/hammer/format';
 import ypath from '../../../../common/thor/ypath';
 

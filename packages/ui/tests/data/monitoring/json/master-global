@@ -1,15 +1,6 @@
 {
     "panels": [
         {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 0
-            },
-            "type": "row"
-        },
-        {
             "datasource": {
                 "type": "prometheus",
                 "uid": "${PROMETHEUS_DS_UID}"
@@ -29,14 +20,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Automaton CPU (Primary Cell)",
             "gridPos": {
                 "x": 0,
-                "y": 1,
+                "y": 0,
                 "w": 8,
                 "h": 6
             }
@@ -61,14 +56,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Incremental HB duration (Primary Cell)",
             "gridPos": {
                 "x": 8,
-                "y": 1,
+                "y": 0,
                 "w": 8,
                 "h": 6
             }
@@ -93,14 +92,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Memory (Primary Cell)",
             "gridPos": {
                 "x": 16,
-                "y": 1,
+                "y": 0,
                 "w": 8,
                 "h": 6
             }
@@ -125,14 +128,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "RpcLight Utilization (Primary Cell)",
             "gridPos": {
                 "x": 0,
-                "y": 7,
+                "y": 6,
                 "w": 8,
                 "h": 6
             }
@@ -157,14 +164,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "RpcHeavy Utilization (Primary Cell)",
             "gridPos": {
                 "x": 8,
-                "y": 7,
+                "y": 6,
                 "w": 8,
                 "h": 6
             }
@@ -189,14 +200,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Blob Refresh Queue Size (Primary Cell)",
             "gridPos": {
                 "x": 16,
-                "y": 7,
+                "y": 6,
                 "w": 8,
                 "h": 6
             }
@@ -221,14 +236,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Blob Requisition Update Queue Size (Primary Cell)",
             "gridPos": {
                 "x": 0,
-                "y": 13,
+                "y": 12,
                 "w": 8,
                 "h": 6
             }
@@ -253,14 +272,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "URC Count (Primary Cell)",
             "gridPos": {
                 "x": 8,
-                "y": 13,
+                "y": 12,
                 "w": 8,
                 "h": 6
             }
@@ -285,14 +308,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "ORC Count (Primary Cell)",
             "gridPos": {
                 "x": 16,
-                "y": 13,
+                "y": 12,
                 "w": 8,
                 "h": 6
             }
@@ -317,14 +344,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "DMC Count (Primary Cell)",
             "gridPos": {
                 "x": 0,
-                "y": 19,
+                "y": 18,
                 "w": 8,
                 "h": 6
             }
@@ -349,14 +380,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "PMC Count (Primary Cell)",
             "gridPos": {
                 "x": 8,
-                "y": 19,
+                "y": 18,
                 "w": 8,
                 "h": 6
             }
@@ -381,14 +416,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Unsafely Placed Count (Primary Cell)",
             "gridPos": {
                 "x": 16,
-                "y": 19,
+                "y": 18,
                 "w": 8,
                 "h": 6
             }
@@ -413,14 +452,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "LVC Count (Primary Cell)",
             "gridPos": {
                 "x": 0,
-                "y": 25,
+                "y": 24,
                 "w": 8,
                 "h": 6
             }
@@ -445,14 +488,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Leader Sync Time (Primary Cell)",
             "gridPos": {
                 "x": 8,
-                "y": 25,
+                "y": 24,
                 "w": 8,
                 "h": 6
             }
@@ -477,14 +524,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Chunks Created (Primary Cell)",
             "gridPos": {
                 "x": 16,
-                "y": 25,
+                "y": 24,
                 "w": 8,
                 "h": 6
             }
@@ -509,14 +560,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Chunks Destroyed (Primary Cell)",
             "gridPos": {
                 "x": 0,
-                "y": 31,
+                "y": 30,
                 "w": 8,
                 "h": 6
             }
@@ -541,14 +596,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Chunk Lists Created (Primary Cell)",
             "gridPos": {
                 "x": 8,
-                "y": 31,
+                "y": 30,
                 "w": 8,
                 "h": 6
             }
@@ -573,14 +632,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Chunks Lists Destroyed (Primary Cell)",
             "gridPos": {
                 "x": 16,
-                "y": 31,
+                "y": 30,
                 "w": 8,
                 "h": 6
             }
@@ -605,14 +668,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Hydra Restarts (Primary Cell)",
             "gridPos": {
                 "x": 0,
-                "y": 37,
+                "y": 36,
                 "w": 8,
                 "h": 6
             }
@@ -637,14 +704,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Fork Duration (Primary Cell)",
             "gridPos": {
                 "x": 8,
-                "y": 37,
+                "y": 36,
                 "w": 8,
                 "h": 6
             }
@@ -669,14 +740,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "RCT Objects Alive (Primary Cell)",
             "gridPos": {
                 "x": 16,
-                "y": 37,
+                "y": 36,
                 "w": 8,
                 "h": 6
             }
@@ -701,14 +776,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "RCT Bytes Alive (Primary Cell)",
             "gridPos": {
                 "x": 0,
-                "y": 43,
+                "y": 42,
                 "w": 8,
                 "h": 6
             }
@@ -733,14 +812,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Tablet Store Updates: Store Count (Primary Cell)",
             "gridPos": {
                 "x": 8,
-                "y": 43,
+                "y": 42,
                 "w": 8,
                 "h": 6
             }
@@ -765,14 +848,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Tablet Store Updates: Cumulative Time (Primary Cell)",
             "gridPos": {
                 "x": 16,
-                "y": 43,
+                "y": 42,
                 "w": 8,
                 "h": 6
             }
@@ -797,14 +884,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Decommissioned Node Count",
             "gridPos": {
                 "x": 0,
-                "y": 49,
+                "y": 48,
                 "w": 8,
                 "h": 6
             }
@@ -829,14 +920,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Banned Node Count",
             "gridPos": {
                 "x": 8,
-                "y": 49,
+                "y": 48,
                 "w": 8,
                 "h": 6
             }
@@ -861,14 +956,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Offline Node Count",
             "gridPos": {
                 "x": 16,
-                "y": 49,
+                "y": 48,
                 "w": 8,
                 "h": 6
             }
@@ -893,14 +992,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Chunk Locations Being Disposed",
             "gridPos": {
                 "x": 0,
-                "y": 55,
+                "y": 54,
                 "w": 8,
                 "h": 6
             }
@@ -925,14 +1028,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Chunk Locations Awaiting Disposal",
             "gridPos": {
                 "x": 8,
-                "y": 55,
+                "y": 54,
                 "w": 8,
                 "h": 6
             }
@@ -946,7 +1053,7 @@
             "title": "",
             "gridPos": {
                 "x": 16,
-                "y": 55,
+                "y": 54,
                 "w": 8,
                 "h": 6
             }
@@ -971,14 +1078,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Data Nodes Being Disposed",
             "gridPos": {
                 "x": 0,
-                "y": 61,
+                "y": 60,
                 "w": 8,
                 "h": 6
             }
@@ -1003,14 +1114,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Data Nodes Awaiting For Being Disposed",
             "gridPos": {
                 "x": 8,
-                "y": 61,
+                "y": 60,
                 "w": 8,
                 "h": 6
             }
@@ -1035,14 +1150,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Full Node Count",
             "gridPos": {
                 "x": 16,
-                "y": 61,
+                "y": 60,
                 "w": 8,
                 "h": 6
             }
@@ -1067,14 +1186,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "With Alerts Node Count",
             "gridPos": {
                 "x": 0,
-                "y": 67,
+                "y": 66,
                 "w": 8,
                 "h": 6
             }
@@ -1093,7 +1216,7 @@
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_jobs_aborted\", cell_tag=~\"\", job_type=~\"\"}[$__rate_interval])",
                     "refId": "A",
-                    "legendFormat": "{{host}} {{pod}} aborted"
+                    "legendFormat": "aborted {{host}} {{pod}}"
                 },
                 {
                     "datasource": {
@@ -1102,7 +1225,7 @@
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_jobs_completed\", cell_tag=~\"\", job_type=~\"\"}[$__rate_interval])",
                     "refId": "B",
-                    "legendFormat": "{{host}} {{pod}} completed"
+                    "legendFormat": "completed {{host}} {{pod}}"
                 },
                 {
                     "datasource": {
@@ -1111,7 +1234,7 @@
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_jobs_failed\", cell_tag=~\"\", job_type=~\"\"}[$__rate_interval])",
                     "refId": "C",
-                    "legendFormat": "{{host}} {{pod}} failed"
+                    "legendFormat": "failed {{host}} {{pod}}"
                 },
                 {
                     "datasource": {
@@ -1120,7 +1243,7 @@
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_jobs_started\", cell_tag=~\"\", job_type=~\"\"}[$__rate_interval])",
                     "refId": "D",
-                    "legendFormat": "{{host}} {{pod}} started"
+                    "legendFormat": "started {{host}} {{pod}}"
                 },
                 {
                     "datasource": {
@@ -1129,20 +1252,24 @@
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_misscheduled_jobs\", cell_tag=~\"\", job_type=~\"\"}[$__rate_interval])",
                     "refId": "E",
-                    "legendFormat": "{{host}} {{pod}} misscheduled"
+                    "legendFormat": "misscheduled {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Job Rates",
             "gridPos": {
                 "x": 8,
-                "y": 67,
+                "y": 66,
                 "w": 8,
                 "h": 6
             }
@@ -1161,20 +1288,24 @@
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_running_job_count\", cell_tag=~\"\", job_type=~\".+\"}",
                     "refId": "A",
-                    "legendFormat": "{{host}} {{pod}} {{job_type}}"
+                    "legendFormat": "{{job_type}} {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Running Jobs",
             "gridPos": {
                 "x": 16,
-                "y": 67,
+                "y": 66,
                 "w": 8,
                 "h": 6
             }

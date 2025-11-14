@@ -1,15 +1,6 @@
 {
     "panels": [
         {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 0
-            },
-            "type": "row"
-        },
-        {
             "datasource": {
                 "type": "prometheus",
                 "uid": "${PROMETHEUS_DS_UID}"
@@ -47,14 +38,33 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
-                "overrides": []
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byFrameRefID",
+                            "options": "C"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.stacking",
+                                "value": {
+                                    "mode": "normal"
+                                }
+                            }
+                        ]
+                    }
+                ]
             },
             "title": "CPU Total",
             "gridPos": {
                 "x": 0,
-                "y": 1,
+                "y": 0,
                 "w": 12,
                 "h": 6
             }
@@ -97,14 +107,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "CPU per container",
             "gridPos": {
                 "x": 12,
-                "y": 1,
+                "y": 0,
                 "w": 12,
                 "h": 6
             }
@@ -138,14 +152,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Memory Total",
             "gridPos": {
                 "x": 0,
-                "y": 7,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
@@ -188,14 +206,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Memory per container",
             "gridPos": {
                 "x": 12,
-                "y": 7,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
@@ -238,14 +260,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Net TX total",
             "gridPos": {
                 "x": 0,
-                "y": 13,
+                "y": 12,
                 "w": 12,
                 "h": 6
             }
@@ -288,14 +314,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Net TX per container",
             "gridPos": {
                 "x": 12,
-                "y": 13,
+                "y": 12,
                 "w": 12,
                 "h": 6
             }
@@ -338,14 +368,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Net RX Total",
             "gridPos": {
                 "x": 0,
-                "y": 19,
+                "y": 18,
                 "w": 12,
                 "h": 6
             }
@@ -388,14 +422,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Net RX per container",
             "gridPos": {
                 "x": 12,
-                "y": 19,
+                "y": 18,
                 "w": 12,
                 "h": 6
             }
@@ -419,14 +457,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Memory per user",
             "gridPos": {
                 "x": 0,
-                "y": 25,
+                "y": 24,
                 "w": 12,
                 "h": 6
             }
@@ -440,7 +482,7 @@
             "title": "",
             "gridPos": {
                 "x": 12,
-                "y": 25,
+                "y": 24,
                 "w": 12,
                 "h": 6
             }

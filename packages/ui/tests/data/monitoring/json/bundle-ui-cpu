@@ -1,15 +1,6 @@
 {
     "panels": [
         {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 0
-            },
-            "type": "row"
-        },
-        {
             "datasource": {
                 "type": "prometheus",
                 "uid": "${PROMETHEUS_DS_UID}"
@@ -22,13 +13,18 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", tablet_cell_bundle=~\"$tablet_cell_bundle\", pod=~\"$pod\", thread=~\"\"}) / (100)",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -48,7 +44,7 @@
             "title": "Node CPU usage (all threads)",
             "gridPos": {
                 "x": 0,
-                "y": 1,
+                "y": 0,
                 "w": 24,
                 "h": 6
             }
@@ -66,13 +62,18 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_cpu_wait\", tablet_cell_bundle=~\"$tablet_cell_bundle\", pod=~\"$pod\", thread=~\"\"}) / (100)",
-                    "refId": "A"
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -92,19 +93,10 @@
             "title": "CPU wait (all threads)",
             "gridPos": {
                 "x": 0,
-                "y": 7,
+                "y": 6,
                 "w": 24,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 13
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -128,13 +120,18 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", tablet_cell_bundle=~\"$tablet_cell_bundle\", pod=~\"$pod\", thread=~\"TabletLookup\"}) / (100)",
-                    "refId": "B"
+                    "refId": "B",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -166,7 +163,7 @@
             "title": "TabletLookup thread pool CPU usage",
             "gridPos": {
                 "x": 0,
-                "y": 14,
+                "y": 12,
                 "w": 12,
                 "h": 6
             }
@@ -193,13 +190,18 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", tablet_cell_bundle=~\"$tablet_cell_bundle\", pod=~\"$pod\", thread=~\"Query\"}) / (100)",
-                    "refId": "B"
+                    "refId": "B",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -231,7 +233,7 @@
             "title": "Query thread pool CPU usage",
             "gridPos": {
                 "x": 12,
-                "y": 14,
+                "y": 12,
                 "w": 12,
                 "h": 6
             }
@@ -258,13 +260,18 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", tablet_cell_bundle=~\"$tablet_cell_bundle\", pod=~\"$pod\", thread=~\"TabletSlot.*\"}) / (100)",
-                    "refId": "B"
+                    "refId": "B",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -296,7 +303,7 @@
             "title": "TabletSlot thread pool CPU usage",
             "gridPos": {
                 "x": 0,
-                "y": 20,
+                "y": 18,
                 "w": 12,
                 "h": 6
             }
@@ -323,13 +330,18 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", tablet_cell_bundle=~\"$tablet_cell_bundle\", pod=~\"$pod\", thread=~\"Compression\"}) / (100)",
-                    "refId": "B"
+                    "refId": "B",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -361,7 +373,7 @@
             "title": "Compression thread pool CPU usage",
             "gridPos": {
                 "x": 12,
-                "y": 20,
+                "y": 18,
                 "w": 12,
                 "h": 6
             }
@@ -388,13 +400,18 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", tablet_cell_bundle=~\"$tablet_cell_bundle\", pod=~\"$pod\", thread=~\"StoreCompact\"}) / (100)",
-                    "refId": "B"
+                    "refId": "B",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -426,7 +443,7 @@
             "title": "StoreCompact thread pool CPU usage",
             "gridPos": {
                 "x": 0,
-                "y": 26,
+                "y": 24,
                 "w": 12,
                 "h": 6
             }
@@ -453,13 +470,18 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", tablet_cell_bundle=~\"$tablet_cell_bundle\", pod=~\"$pod\", thread=~\"ChunkReader\"}) / (100)",
-                    "refId": "B"
+                    "refId": "B",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -491,7 +513,7 @@
             "title": "ChunkReader thread pool CPU usage",
             "gridPos": {
                 "x": 12,
-                "y": 26,
+                "y": 24,
                 "w": 12,
                 "h": 6
             }
@@ -518,13 +540,18 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "({cluster=~\"$cluster\", service=~\"yt-tablet-node.*\", __name__=~\"yt_resource_tracker_total_cpu\", tablet_cell_bundle=~\"$tablet_cell_bundle\", pod=~\"$pod\", thread=~\"BusXfer|BusXferFS\"}) / (100)",
-                    "refId": "B"
+                    "refId": "B",
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -556,7 +583,7 @@
             "title": "BusXfer thread pool CPU usage",
             "gridPos": {
                 "x": 0,
-                "y": 32,
+                "y": 30,
                 "w": 12,
                 "h": 6
             }
@@ -570,7 +597,7 @@
             "title": "",
             "gridPos": {
                 "x": 12,
-                "y": 32,
+                "y": 30,
                 "w": 12,
                 "h": 6
             }
@@ -604,7 +631,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -636,7 +667,7 @@
             "title": "Threads utilization",
             "gridPos": {
                 "x": 0,
-                "y": 38,
+                "y": 36,
                 "w": 12,
                 "h": 6
             }
@@ -661,7 +692,11 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": [
                     {
@@ -681,7 +716,7 @@
             "title": "Action queue utilization",
             "gridPos": {
                 "x": 12,
-                "y": 38,
+                "y": 36,
                 "w": 12,
                 "h": 6
             }
