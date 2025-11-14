@@ -10,5 +10,10 @@ export function useNavigationSettings() {
                 placeholder: i18n('placeholder_navigation'),
             },
         },
+        {
+            type: 'tumbler' as const,
+            name: 'show_navigation_input',
+            caption: 'Show navigation input',
+        },
     ];
 }

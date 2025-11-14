@@ -22,6 +22,7 @@ import {
     SET_TEXT_FILTER,
     UPDATE_RESOURCE_USAGE,
 } from '../../../../constants/navigation';
+import {attributesForNodeIcon} from '../../../../constants/navigation/map-node';
 import {
     getFilteredNodes,
     getLastSelected,
@@ -72,6 +73,7 @@ function getList(path, transaction, cluster) {
                     'treat_as_queue_consumer',
                     'treat_as_queue_producer',
                     'path',
+                    ...attributesForNodeIcon,
                     ...(UIFactory.getNavigationMapNodeSettings()?.additionalAttributes || []),
                 ],
                 path,

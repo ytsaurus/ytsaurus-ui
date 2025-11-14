@@ -7,17 +7,17 @@ import debounce_ from 'lodash/debounce';
 import find_ from 'lodash/find';
 import isEmpty_ from 'lodash/isEmpty';
 
-import {Popup, TextInput} from '@gravity-ui/uikit';
+import {Button, Flex, Icon, Popup, TextInput} from '@gravity-ui/uikit';
+import {ArrowRight} from '@gravity-ui/icons';
 
 import thorYPath from '../../common/thor/ypath';
 
-import Icon from '../../components/Icon/Icon';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
+import {MapNodeIcon} from '../../components/MapNodeIcon/MapNodeIcon';
 
 import {
     filterByCurrentPath,
     getCompletedPath,
-    getIconNameForType,
     getNextSelectedIndex,
     getPrevSelectedIndex,
 } from '../../utils/navigation/path-editor';
@@ -38,6 +38,7 @@ interface Suggestion {
     targetPathBroken?: boolean;
     type?: string;
     dynamic?: unknown;
+    attributes?: Record<string, unknown>;
 }
 
 type SuggestionFilter = (suggestions: Suggestion[]) => Suggestion[];
@@ -65,6 +66,7 @@ export interface PathEditorProps {
     disabled?: boolean;
     autoFocus?: boolean;
     hasClear?: boolean;
+    hasConfirmButton?: boolean;
     showErrors?: boolean;
     customFilter?: SuggestionFilter;
     cluster?: string;
@@ -96,6 +98,7 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
         defaultPath: undefined,
         disabled: false,
         hasClear: false,
+        hasConfirmButton: false,
     };
 
     static getDerivedStateFromProps(props: PathEditorProps, state: PathEditorState) {
@@ -289,7 +292,7 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
         }
     };
 
-    renderInput() {
+    renderBaseInput() {
         const {placeholder, autoFocus, hasClear, disabled} = this.props;
         const {path} = this.state;
 
@@ -309,15 +312,39 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
         );
     }
 
+    renderInput() {
+        const {hasConfirmButton, onApply} = this.props;
+        const {path} = this.state;
+
+        if (!hasConfirmButton) {
+            return this.renderBaseInput();
+        }
+
+        return (
+            <Flex gap={2} height={'100%'} alignItems={'center'}>
+                {this.renderBaseInput()}
+                <Button
+                    size={'s'}
+                    view={'outlined'}
+                    style={{height: '100%'}}
+                    onClick={() => onApply?.(path)}
+                >
+                    <Flex height={'100%'} alignItems={'center'}>
+                        <Icon data={ArrowRight} size={'14'} />
+                    </Flex>
+                </Button>
+            </Flex>
+        );
+    }
+
     renderItem = (index: number, key: Key) => {
         const {selectedIndex, actualSuggestions} = this.state;
 
         const item = actualSuggestions[index];
-        const {type, dynamic} = item;
-        const iconType = type === 'table' && dynamic ? 'table_dynamic' : type;
+
+        const {attributes} = item;
         const completedPath = getCompletedPath(item);
         const isSelected = index === selectedIndex ? 'yes' : 'no';
-        const iconName = getIconNameForType(iconType, item.targetPathBroken);
 
         const mouseDownHandler = (event: MouseEvent<HTMLDivElement>) => {
             this.handleInputChange(completedPath);
@@ -336,7 +363,7 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
                 onMouseDown={mouseDownHandler}
                 className={b('item', {selected: isSelected})}
             >
-                <Icon awesome={iconName} />
+                <MapNodeIcon node={{$attributes: attributes}} />
 
                 <span className={b('item-path')}>
                     {lastFragment ? `\u2026/${lastFragment}` : item.path}
