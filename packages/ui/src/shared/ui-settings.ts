@@ -1,3 +1,5 @@
+import type {AIChatConfig} from './ai-chat';
+
 export interface UISettings {
     accessLogBasePath?: string;
     accountsUsageBasePath?: string;
@@ -203,6 +205,18 @@ export interface UISettings {
      *         ],
      */
     vcsSettings?: VCSSettings[];
+
+    /**
+     * Configuration for AI chat assistant integration.
+     * baseUrl - Base URL of the AI chat API endpoint
+     * model - Name of the AI model to use
+     * @example
+     * aiChatConfig: {
+     *   baseUrl: 'https://api.openai.com/v1',
+     *   model: 'gpt-4'
+     * }
+     */
+    aiChatConfig?: AIChatConfig;
 
     /**
      * Allows to override idm object type to Effective ACL for objects that match the regex.
