@@ -1,15 +1,6 @@
 {
     "panels": [
         {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 0
-            },
-            "type": "row"
-        },
-        {
             "datasource": {
                 "type": "prometheus",
                 "uid": "${PROMETHEUS_DS_UID}"
@@ -28,14 +19,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Memory usage per method",
             "gridPos": {
                 "x": 0,
-                "y": 7,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
@@ -59,14 +54,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Memory usage per user",
             "gridPos": {
                 "x": 12,
-                "y": 7,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
@@ -98,14 +97,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Worker thread pool CPU usage",
             "gridPos": {
                 "x": 0,
-                "y": 13,
+                "y": 12,
                 "w": 12,
                 "h": 6
             }
@@ -137,14 +140,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "BusXfer thread pool CPU usage",
             "gridPos": {
                 "x": 12,
-                "y": 13,
+                "y": 12,
                 "w": 12,
                 "h": 6
             }
@@ -168,14 +175,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "CPU wait (all threads)",
             "gridPos": {
                 "x": 0,
-                "y": 19,
+                "y": 18,
                 "w": 12,
                 "h": 6
             }
@@ -189,7 +200,7 @@
             "title": "",
             "gridPos": {
                 "x": 12,
-                "y": 19,
+                "y": 18,
                 "w": 12,
                 "h": 6
             }
@@ -214,14 +225,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Threads utilization",
             "gridPos": {
                 "x": 0,
-                "y": 25,
+                "y": 24,
                 "w": 12,
                 "h": 6
             }
@@ -246,26 +261,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Action queue utilization",
             "gridPos": {
                 "x": 12,
-                "y": 25,
+                "y": 24,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 31
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -305,14 +315,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Net TX total",
             "gridPos": {
                 "x": 0,
-                "y": 32,
+                "y": 30,
                 "w": 12,
                 "h": 6
             }
@@ -355,14 +369,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Net RX Total",
             "gridPos": {
                 "x": 12,
-                "y": 32,
+                "y": 30,
                 "w": 12,
                 "h": 6
             }
@@ -392,7 +410,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -400,7 +421,7 @@
             "title": "Pending out bytes",
             "gridPos": {
                 "x": 0,
-                "y": 38,
+                "y": 36,
                 "w": 12,
                 "h": 6
             }
@@ -425,26 +446,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "TCP retransmits rate",
             "gridPos": {
                 "x": 12,
-                "y": 38,
+                "y": 36,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 44
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -465,14 +481,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "RPC request rate",
             "gridPos": {
                 "x": 0,
-                "y": 45,
+                "y": 42,
                 "w": 12,
                 "h": 6
             }
@@ -496,14 +516,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "RPC inflight",
             "gridPos": {
                 "x": 12,
-                "y": 45,
+                "y": 42,
                 "w": 12,
                 "h": 6
             }
@@ -527,14 +551,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "RPC failed request rate",
             "gridPos": {
                 "x": 0,
-                "y": 51,
+                "y": 48,
                 "w": 12,
                 "h": 6
             }
@@ -558,26 +586,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "RPC timed out request rate",
             "gridPos": {
                 "x": 12,
-                "y": 51,
+                "y": 48,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 57
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -598,14 +621,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "RPC local wait max",
             "gridPos": {
                 "x": 0,
-                "y": 58,
+                "y": 54,
                 "w": 12,
                 "h": 6
             }
@@ -629,26 +656,21 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "RPC remote wait max",
             "gridPos": {
                 "x": 12,
-                "y": 58,
+                "y": 54,
                 "w": 12,
                 "h": 6
             }
-        },
-        {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 64
-            },
-            "type": "row"
         },
         {
             "datasource": {
@@ -664,7 +686,7 @@
                     },
                     "expr": "{cluster=~\"$cluster\", service=~\"yt-rpc-proxy.*\", __name__=~\"yt_server_restarted\", proxy_role=~\"$proxy_role\", pod=~\"$pod\", window=~\"5min\"}",
                     "refId": "A",
-                    "legendFormat": "\"{{container}}\""
+                    "legendFormat": "{{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -675,7 +697,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -683,22 +708,8 @@
             "title": "Rpc Proxy restarts",
             "gridPos": {
                 "x": 0,
-                "y": 65,
-                "w": 12,
-                "h": 6
-            }
-        },
-        {
-            "type": "text",
-            "options": {
-                "content": "<h2>Not Supported</h2>",
-                "mode": "markdown"
-            },
-            "title": "Rpc Proxy OOMs",
-            "gridPos": {
-                "x": 12,
-                "y": 65,
-                "w": 12,
+                "y": 60,
+                "w": 24,
                 "h": 6
             }
         }

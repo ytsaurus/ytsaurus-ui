@@ -2,7 +2,7 @@ import React from 'react';
 import reduce_ from 'lodash/reduce';
 import map_ from 'lodash/map';
 
-import {RadioButton} from '@gravity-ui/uikit';
+import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 
 import {PrometheusDashboardLazy} from '../../../../../containers/PrometheusDashboard/lazy';
 import {Toolbar} from '../../../../../components/WithStickyToolbar/Toolbar/Toolbar';
@@ -40,7 +40,7 @@ export function OperationMonitoringPrometheus({cluster, operation}: OperationMon
                     itemsToWrap={[
                         {
                             node: (
-                                <RadioButton
+                                <SegmentedRadioGroup
                                     value={currentTree}
                                     options={map_(pools, ({tree}) => {
                                         return {value: tree, content: tree};

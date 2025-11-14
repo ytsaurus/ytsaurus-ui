@@ -1,15 +1,6 @@
 {
     "panels": [
         {
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 0
-            },
-            "type": "row"
-        },
-        {
             "datasource": {
                 "type": "prometheus",
                 "uid": "${PROMETHEUS_DS_UID}"
@@ -29,14 +20,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Automaton CPU",
             "gridPos": {
                 "x": 0,
-                "y": 1,
+                "y": 0,
                 "w": 12,
                 "h": 6
             }
@@ -61,14 +56,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Incremental HB duration",
             "gridPos": {
                 "x": 12,
-                "y": 1,
+                "y": 0,
                 "w": 12,
                 "h": 6
             }
@@ -93,14 +92,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Memory",
             "gridPos": {
                 "x": 0,
-                "y": 7,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
@@ -125,14 +128,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "RpcLight Utilization",
             "gridPos": {
                 "x": 12,
-                "y": 7,
+                "y": 6,
                 "w": 12,
                 "h": 6
             }
@@ -157,14 +164,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "RpcHeavy Utilization",
             "gridPos": {
                 "x": 0,
-                "y": 13,
+                "y": 12,
                 "w": 12,
                 "h": 6
             }
@@ -189,14 +200,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Blob Refresh Queue Size",
             "gridPos": {
                 "x": 12,
-                "y": 13,
+                "y": 12,
                 "w": 12,
                 "h": 6
             }
@@ -221,14 +236,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Blob Requisition Update Queue Size",
             "gridPos": {
                 "x": 0,
-                "y": 19,
+                "y": 18,
                 "w": 12,
                 "h": 6
             }
@@ -253,14 +272,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "URC Count",
             "gridPos": {
                 "x": 12,
-                "y": 19,
+                "y": 18,
                 "w": 12,
                 "h": 6
             }
@@ -285,14 +308,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "ORC Count",
             "gridPos": {
                 "x": 0,
-                "y": 25,
+                "y": 24,
                 "w": 12,
                 "h": 6
             }
@@ -317,14 +344,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "DMC Count",
             "gridPos": {
                 "x": 12,
-                "y": 25,
+                "y": 24,
                 "w": 12,
                 "h": 6
             }
@@ -349,14 +380,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "PMC Count",
             "gridPos": {
                 "x": 0,
-                "y": 31,
+                "y": 30,
                 "w": 12,
                 "h": 6
             }
@@ -381,14 +416,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Unsafely Placed Count",
             "gridPos": {
                 "x": 12,
-                "y": 31,
+                "y": 30,
                 "w": 12,
                 "h": 6
             }
@@ -413,14 +452,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "LVC Count",
             "gridPos": {
                 "x": 0,
-                "y": 37,
+                "y": 36,
                 "w": 12,
                 "h": 6
             }
@@ -445,14 +488,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Leader Sync Time",
             "gridPos": {
                 "x": 12,
-                "y": 37,
+                "y": 36,
                 "w": 12,
                 "h": 6
             }
@@ -477,14 +524,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Chunks Created",
             "gridPos": {
                 "x": 0,
-                "y": 43,
+                "y": 42,
                 "w": 12,
                 "h": 6
             }
@@ -509,14 +560,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Chunks Destroyed",
             "gridPos": {
                 "x": 12,
-                "y": 43,
+                "y": 42,
                 "w": 12,
                 "h": 6
             }
@@ -541,14 +596,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Chunk Lists Created",
             "gridPos": {
                 "x": 0,
-                "y": 49,
+                "y": 48,
                 "w": 12,
                 "h": 6
             }
@@ -573,14 +632,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Chunks Lists Destroyed",
             "gridPos": {
                 "x": 12,
-                "y": 49,
+                "y": 48,
                 "w": 12,
                 "h": 6
             }
@@ -605,14 +668,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Hydra Restarts",
             "gridPos": {
                 "x": 0,
-                "y": 55,
+                "y": 54,
                 "w": 12,
                 "h": 6
             }
@@ -637,14 +704,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Fork Duration",
             "gridPos": {
                 "x": 12,
-                "y": 55,
+                "y": 54,
                 "w": 12,
                 "h": 6
             }
@@ -669,14 +740,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "RCT Objects Alive",
             "gridPos": {
                 "x": 0,
-                "y": 61,
+                "y": 60,
                 "w": 12,
                 "h": 6
             }
@@ -701,14 +776,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "RCT Bytes Alive",
             "gridPos": {
                 "x": 12,
-                "y": 61,
+                "y": 60,
                 "w": 12,
                 "h": 6
             }
@@ -733,14 +812,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Tablet Store Updates: Store Count",
             "gridPos": {
                 "x": 0,
-                "y": 67,
+                "y": 66,
                 "w": 12,
                 "h": 6
             }
@@ -765,14 +848,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Tablet Store Updates: Cumulative Time",
             "gridPos": {
                 "x": 12,
-                "y": 67,
+                "y": 66,
                 "w": 12,
                 "h": 6
             }
@@ -791,7 +878,7 @@
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_action_queue_time_cumulative\", bucket=~\".+\", pod=~\"$pod\", queue=~\".+\", thread=~\"Automaton\"}[$__rate_interval])",
                     "refId": "A",
-                    "legendFormat": "{{host}} {{pod}}"
+                    "legendFormat": "{{bucket}} {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -802,7 +889,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -810,7 +900,7 @@
             "title": "Automaton Action Queue Cumulative Time",
             "gridPos": {
                 "x": 0,
-                "y": 73,
+                "y": 72,
                 "w": 12,
                 "h": 6
             }
@@ -829,7 +919,7 @@
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_hydra_cumulative_mutation_time\", cell_id=~\".+\", pod=~\"$pod\", type=~\".+\"}[$__rate_interval])",
                     "refId": "A",
-                    "legendFormat": "{{host}} {{pod}}"
+                    "legendFormat": "{{type}} {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
@@ -840,7 +930,10 @@
                             "group": "A",
                             "mode": "normal"
                         },
-                        "fillOpacity": 100
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
                     }
                 },
                 "overrides": []
@@ -848,7 +941,7 @@
             "title": "Hydra Cumulative Mutation Time",
             "gridPos": {
                 "x": 12,
-                "y": 73,
+                "y": 72,
                 "w": 12,
                 "h": 6
             }
@@ -867,20 +960,24 @@
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_security_user_read_request_count\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A",
-                    "legendFormat": "{{host}} {{pod}}"
+                    "legendFormat": "{{user}} {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "User Read Request Rate",
             "gridPos": {
                 "x": 0,
-                "y": 79,
+                "y": 78,
                 "w": 12,
                 "h": 6
             }
@@ -899,20 +996,24 @@
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_security_user_write_request_count\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A",
-                    "legendFormat": "{{host}} {{pod}}"
+                    "legendFormat": "{{user}} {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "User Write Request Rate",
             "gridPos": {
                 "x": 12,
-                "y": 79,
+                "y": 78,
                 "w": 12,
                 "h": 6
             }
@@ -931,20 +1032,24 @@
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_security_user_read_time\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A",
-                    "legendFormat": "{{host}} {{pod}}"
+                    "legendFormat": "{{user}} {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "User Read Time",
             "gridPos": {
                 "x": 0,
-                "y": 85,
+                "y": 84,
                 "w": 12,
                 "h": 6
             }
@@ -963,20 +1068,24 @@
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_security_user_write_time\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A",
-                    "legendFormat": "{{host}} {{pod}}"
+                    "legendFormat": "{{user}} {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "User Write Time",
             "gridPos": {
                 "x": 12,
-                "y": 85,
+                "y": 84,
                 "w": 12,
                 "h": 6
             }
@@ -1001,14 +1110,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "User Chunk Service Weight Throttler",
             "gridPos": {
                 "x": 0,
-                "y": 91,
+                "y": 90,
                 "w": 12,
                 "h": 6
             }
@@ -1025,9 +1138,36 @@
                         "type": "prometheus",
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
-                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_jobs_.*\", cell_tag=~\".+\", job_type=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_jobs_aborted\", cell_tag=~\".+\", job_type=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
                     "refId": "A",
-                    "legendFormat": "{{host}} {{pod}}"
+                    "legendFormat": "aborted {{job_type}} {{host}} {{pod}}"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_jobs_completed\", cell_tag=~\".+\", job_type=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "B",
+                    "legendFormat": "completed {{job_type}} {{host}} {{pod}}"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_jobs_failed\", cell_tag=~\".+\", job_type=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "C",
+                    "legendFormat": "failed {{job_type}} {{host}} {{pod}}"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_jobs_started\", cell_tag=~\".+\", job_type=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "D",
+                    "legendFormat": "started {{job_type}} {{host}} {{pod}}"
                 },
                 {
                     "datasource": {
@@ -1035,21 +1175,25 @@
                         "uid": "${PROMETHEUS_DS_UID}"
                     },
                     "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_misscheduled_jobs\", cell_tag=~\".+\", job_type=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
-                    "refId": "B",
-                    "legendFormat": "{{host}} {{pod}}"
+                    "refId": "E",
+                    "legendFormat": "misscheduled {{job_type}} {{host}} {{pod}}"
                 }
             ],
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Job Rates",
             "gridPos": {
                 "x": 12,
-                "y": 91,
+                "y": 90,
                 "w": 12,
                 "h": 6
             }
@@ -1074,14 +1218,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "Running Jobs",
             "gridPos": {
                 "x": 0,
-                "y": 97,
+                "y": 96,
                 "w": 12,
                 "h": 6
             }
@@ -1106,14 +1254,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "ObjectService.Execute request rate",
             "gridPos": {
                 "x": 12,
-                "y": 97,
+                "y": 96,
                 "w": 12,
                 "h": 6
             }
@@ -1138,14 +1290,18 @@
             "fieldConfig": {
                 "defaults": {
                     "unit": "short",
-                    "custom": {}
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
                 },
                 "overrides": []
             },
             "title": "ChunkService.ExecuteBatch request rate",
             "gridPos": {
                 "x": 6,
-                "y": 103,
+                "y": 102,
                 "w": 12,
                 "h": 6
             }
@@ -1180,11 +1336,6 @@
                 "allFormat": "glob"
             },
             {
-                "discover_values": {
-                    "match": "{service=~\"yt-master\"}",
-                    "label": "pod"
-                },
-                "default_for_ui": ".*",
                 "name": "pod",
                 "label": "Pod",
                 "type": "textbox",
@@ -1203,7 +1354,12 @@
                 "query": "ms-.*",
                 "hide": 0,
                 "skipUrlSync": false,
-                "allFormat": "glob"
+                "allFormat": "glob",
+                "default_for_ui": "ms-.*",
+                "discover_values": {
+                    "label": "pod",
+                    "match": "{cluster=~\"$cluster\", service=~\"yt-master\"}"
+                }
             }
         ]
     },
