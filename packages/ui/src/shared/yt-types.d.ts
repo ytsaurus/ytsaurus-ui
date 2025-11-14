@@ -137,6 +137,8 @@ export interface ClusterConfig {
         disableOptimizationForYTFRONT2838: boolean;
     };
 
+    disableHeavyProxies?: boolean;
+
     uiSettings?: Partial<Pick<UISettings, 'uploadTableExcelBaseUrl' | 'exportTableBaseurl'>>;
 }
 
