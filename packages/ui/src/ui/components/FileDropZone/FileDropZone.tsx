@@ -3,6 +3,7 @@ import cn from 'bem-cn-lite';
 
 import FilePicker from '../FilePicker/FilePicker';
 import useFileDragDrop from './useFileDragDrop';
+import i18n from './i18n';
 
 import './FileDropZone.scss';
 
@@ -29,10 +30,10 @@ export const FileDropZone: React.FC<React.PropsWithChildren<FileDropZoneProps>> 
 
         return (
             <div className={block('info')}>
-                <div>{isDragging ? 'Drop file here' : 'Drag a file here'}</div>
-                or
+                <div>{isDragging ? i18n('context_drop-file') : i18n('context_drag-file')}</div>
+                {i18n('or')}
                 <div>
-                    <FilePicker onChange={onFile}>Pick a file</FilePicker>
+                    <FilePicker onChange={onFile}>{i18n('action_pick-file')}</FilePicker>
                 </div>
             </div>
         );
