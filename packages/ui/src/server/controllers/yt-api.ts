@@ -89,13 +89,14 @@ export async function ytTvmApiHandler(req: Request, res: Response) {
         const {proxy, secure} = setup;
         const proto = secure ? 'https' : 'http';
         let requestProxy = proxy;
-        if (commandInfo?.heavy && !isLocalCluster) {
+        if (commandInfo?.heavy && !isLocalCluster && !setup.disableHeavyProxies) {
             ctx.log(`Request heavy proxy for command '${params.command}'`);
             const res = await axios.request({
                 method: 'GET',
                 url: `${proto}://${proxy}/hosts`,
                 headers: ctx.getMetadata(),
             });
+
             requestProxy = res.data[0];
         }
 

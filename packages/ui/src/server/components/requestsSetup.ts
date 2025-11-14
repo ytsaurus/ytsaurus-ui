@@ -29,6 +29,7 @@ export interface YTApiSetup {
     useEncodedParameters: boolean;
     useHeavyProxy: boolean;
     timeout: number;
+    disableHeavyProxies: boolean;
 }
 
 function getClusterSetup(clusterConfig: ClusterConfig): {
@@ -47,6 +48,7 @@ function getClusterSetup(clusterConfig: ClusterConfig): {
             useEncodedParameters: true,
             useHeavyProxy: false,
             timeout: 5000,
+            disableHeavyProxies: clusterConfig?.disableHeavyProxies || false,
         },
         proxyBaseUrl: secure ? `https://${proxy}` : `http://${proxy}`,
     };
