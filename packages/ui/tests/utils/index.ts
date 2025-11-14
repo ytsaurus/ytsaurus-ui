@@ -9,6 +9,8 @@ export const {
     E2E_OPERATION_2_ID,
     CLUSTER_TITLE,
     CLUSTERS_MENU_EXPECT,
+    PASSWORD,
+    LOGIN,
 } = process.env;
 
 const parts = E2E_DIR?.split('/') ?? [];
@@ -24,6 +26,7 @@ console.log({
     E2E_OPERATION_ID,
     E2E_OPERATION_2_ID,
     CLUSTERS_MENU_EXPECT,
+    LOGIN,
 });
 
 if (!CLUSTER || !E2E_DIR) {

@@ -1,6 +1,6 @@
 $TOOLBAR_COMPONENT_HEIGHT: 48px;
 
-.toolbar {
+.yt-toolbar {
     &__container {
         display: flex;
         flex-wrap: nowrap;
@@ -31,6 +31,10 @@ $TOOLBAR_COMPONENT_HEIGHT: 48px;
 
         &_margin-right_half {
             margin-right: 12px;
+        }
+
+        &_margin-right_none {
+            margin-right: unset;
         }
     }
 

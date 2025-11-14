@@ -26,28 +26,19 @@ import Consumers from './views/Consumers/Consumers';
 import ConsumersExtraControls from './views/Consumers/ConsumersExtraControls';
 import Partitions from './views/Partitions/Partitions';
 import PartitionsExtraControls from './views/Partitions/PartitionsExtraControls';
-import UIFactory from '../../../../UIFactory';
+
 import {Exports} from './views/Exports/Exports';
 import {ExportsExtraControls} from './views/Exports/ExportsExtraControls';
 import {QueueError} from './QueueError';
 
 const emptyView = {ExtraControls: () => null, View: () => null};
 
-const views: Record<QUEUE_MODE, {ExtraControls: ComponentType; View: ComponentType}> = {
-    [QUEUE_MODE.METRICS]: {ExtraControls: () => null, View: () => null},
+const VIEWS: Record<QUEUE_MODE, {ExtraControls: ComponentType; View: ComponentType}> = {
+    [QUEUE_MODE.METRICS]: {ExtraControls: () => null, View: QueueMetrics},
     [QUEUE_MODE.PARTITIONS]: {ExtraControls: PartitionsExtraControls, View: Partitions},
     [QUEUE_MODE.CONSUMERS]: {ExtraControls: ConsumersExtraControls, View: Consumers},
     [QUEUE_MODE.EXPORTS]: {ExtraControls: ExportsExtraControls, View: Exports},
 };
-
-function useViewByMode(mode: QUEUE_MODE) {
-    const component = UIFactory.getComonentForQueueMetrics();
-    if (component && mode === QUEUE_MODE.METRICS) {
-        return {ExtraControls: () => null, View: QueueMetrics};
-    }
-
-    return views[mode] || emptyView;
-}
 
 const Queue: React.VFC<PropsFromRedux> = ({
     loadQueueStatus,
@@ -62,7 +53,7 @@ const Queue: React.VFC<PropsFromRedux> = ({
         loadQueueStatus();
     }, []);
 
-    const {ExtraControls, View} = useViewByMode(queueMode);
+    const {ExtraControls, View} = VIEWS[queueMode] ?? emptyView;
 
     const items = useSelector(getQueueStatusDataAlerts);
 

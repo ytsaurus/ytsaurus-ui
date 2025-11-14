@@ -9,6 +9,8 @@ import pickBy_ from 'lodash/pickBy';
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
+import {splitBatchResults} from '../../../../shared/utils/error';
+
 import {getSchedulingNS} from '../../../store/selectors/settings';
 import {toggleFavourite} from '../../../store/actions/favourites';
 import {getPools, getTree} from '../../../store/selectors/scheduling/scheduling';
@@ -30,7 +32,6 @@ import {
     TOGGLE_EDIT_VISIBILITY,
 } from '../../../constants/scheduling';
 import {loadSchedulingData, setPoolAttributes} from './scheduling-ts';
-import {splitBatchResults} from '../../../utils/utils';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {toaster} from '../../../utils/toaster';
 

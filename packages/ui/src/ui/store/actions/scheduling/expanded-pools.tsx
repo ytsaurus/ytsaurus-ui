@@ -4,6 +4,8 @@ import {RootState} from '../../reducers';
 import forEach_ from 'lodash/forEach';
 import reduce_ from 'lodash/reduce';
 
+import {UIBatchError, splitBatchResults} from '../../../../shared/utils/error';
+
 import {
     ExpandedPoolInfo,
     ExpandedPoolsAction,
@@ -11,7 +13,7 @@ import {
 } from '../../reducers/scheduling/expanded-pools';
 
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {USE_IGNORE_NODE_DOES_NOT_EXIST, splitBatchResults} from '../../../utils/utils';
+import {USE_IGNORE_NODE_DOES_NOT_EXIST} from '../../../utils/utils';
 import {makeGet, makeList} from '../../../utils/batch';
 import {
     CHANGE_POOL,
@@ -32,7 +34,7 @@ import {BatchSubRequest} from '../../../../shared/yt-types';
 import {SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {flattenAttributes} from '../../../utils/scheduling/scheduling';
-import {UIBatchError} from '../../../utils/errors/ui-error';
+
 import {toaster} from '../../../utils/toaster';
 
 type ExpandedPoolsThunkAction = ThunkAction<
