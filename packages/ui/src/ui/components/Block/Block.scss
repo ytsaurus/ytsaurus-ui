@@ -11,6 +11,11 @@
     padding: 20px;
     overflow: auto;
 
+    &_type_info{
+        color: var(--info-text);
+        background-color: var(--info-background);
+    }
+
     &_type_alert {
         color: var(--alert-text);
         background-color: var(--alert-background);
