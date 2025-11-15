@@ -371,6 +371,12 @@ function prepareScript(operation: DetailedOperationSelector, type: string) {
         const files = map_(ypath.getValue(script, '/file_paths'), prepareFile);
         const layerPaths = ypath.getValue(script, '/layer_paths');
 
+        const [cpu_limit, gpu_limit, memory_limit] = ypath.getValues(script, [
+            '/cpu_limit',
+            '/gpu_limit',
+            '/memory_limit',
+        ]);
+
         if (command || className || jobCount || files?.length || environment?.length) {
             return {
                 type: type,
@@ -381,6 +387,9 @@ function prepareScript(operation: DetailedOperationSelector, type: string) {
                 files,
                 environment,
                 layerPaths,
+                cpu_limit,
+                gpu_limit,
+                memory_limit,
             };
         }
     } catch (err) {
