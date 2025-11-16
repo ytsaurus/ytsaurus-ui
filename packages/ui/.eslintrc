@@ -31,6 +31,10 @@
                     "name": "@gravity-ui/dialog-fields",
                     "importNames": ["DFDialog"],
                     "message": "Please use src/components/Dialog instead."
+                },
+                {
+                    "name": "@gravity-ui/date-utils",
+                    "message": "Please use utils/date-utils instead."
                 }
             ]
         }]

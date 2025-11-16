@@ -1,18 +1,18 @@
 import moment from 'moment';
 
-import {configure} from '@gravity-ui/uikit';
 import {I18N, KeyData, KeysData} from '@gravity-ui/i18n';
 
 import type {AppLang} from '../../shared/constants/settings-types';
+import {Lang, configure} from './configure';
 
 export const i18n = new I18N({lang: 'en', fallbackLang: 'en'});
 
-configure({lang: 'en'});
+configure({lang: Lang.En});
 ytSetLang('en');
 
 export function ytSetLang(lang: AppLang) {
     i18n.setLang(lang);
-    configure({lang});
+    configure({lang: lang === 'en' ? Lang.En : Lang.Ru});
 
     moment.updateLocale(lang, {
         week: {

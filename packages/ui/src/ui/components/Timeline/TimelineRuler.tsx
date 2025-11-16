@@ -3,11 +3,10 @@ import React, {FC} from 'react';
 import {Button} from '@gravity-ui/uikit';
 
 import cn from 'bem-cn-lite';
-import {dateTimeParse} from '@gravity-ui/date-utils';
 import {RangeDateSelection, RangeDateSelectionProps} from '@gravity-ui/date-components';
+import {DateTime, dateTimeParse} from '../../utils/date-utils';
 
 import './TimelineRuler.scss';
-import {DateTime} from '@gravity-ui/date-utils/build/typings/dateTime';
 
 const b = cn('yc-timeline-ruler');
 

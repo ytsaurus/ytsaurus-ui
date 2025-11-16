@@ -2,7 +2,7 @@ import React, {FC, useMemo} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {getQueriesFilters} from '../../../../store/selectors/query-tracker/queriesList';
 import {DatePicker} from '@gravity-ui/date-components';
-import {DateTime, dateTime} from '@gravity-ui/date-utils';
+import {DateTime, dateTimeParse} from '../../../../utils/date-utils';
 import {Flex} from '@gravity-ui/uikit';
 import {applyFilter} from '../../../../store/actions/query-tracker/queriesList';
 
@@ -27,7 +27,7 @@ export const QueryDateFilter: FC = () => {
             <DatePicker
                 placeholder="Start date"
                 format="DD.MM.YYYY"
-                value={from ? dateTime({input: from}) : null}
+                value={from ? dateTimeParse({input: from}) : null}
                 onUpdate={setFilter.from}
                 hasClear
             />{' '}
@@ -35,7 +35,7 @@ export const QueryDateFilter: FC = () => {
             <DatePicker
                 placeholder="End date"
                 format="DD.MM.YYYY"
-                value={to ? dateTime({input: to}) : null}
+                value={to ? dateTimeParse({input: to}) : null}
                 onUpdate={setFilter.to}
                 hasClear
             />

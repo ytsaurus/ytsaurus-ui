@@ -1,4 +1,3 @@
-import {dateTimeParse} from '@gravity-ui/date-utils';
 import map_ from 'lodash/map';
 
 import format from '../../../../common/hammer/format';
@@ -10,6 +9,7 @@ import {QueryStatus} from '../../../../types/query-tracker';
 import {QueriesListResponse} from '../../../../types/query-tracker/api';
 import {YTError} from '../../../../types';
 import {UNKNOWN_ITEM_NAME} from '../../../../constants/dashboard2';
+import {dateTimeParse} from '../../../../utils/date-utils';
 
 type FetchQueriesArgs = {
     cluster: string;
