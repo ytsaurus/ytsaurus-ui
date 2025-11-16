@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import {DatePicker} from '@gravity-ui/date-components';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {RootState} from '../../../../store/reducers';
-import {dateTimeParse} from '@gravity-ui/date-utils';
+import {dateTimeParse} from '../../../../utils/date-utils';
 import {showArchiveOperations, showCurrentOperations} from '../../../../store/actions/operations';
 import {OPERATIONS_DATA_MODE} from '../../../../constants/operations';
 

@@ -1,4 +1,3 @@
-import {dateTimeParse} from '@gravity-ui/date-utils';
 import {createSelector} from '@reduxjs/toolkit';
 
 import {YTError} from '../../../../@types/types';
@@ -12,6 +11,7 @@ import {getIncarnations} from '../../../store/api/yt';
 import {OperationSelector, OperationStates} from '../../../pages/operations/selectors';
 import {ViewState} from '../../../components/StatusLabel/StatusLabel';
 import {formatInterval} from '../../../components/common/Timeline';
+import {dateTimeParse} from '../../../utils/date-utils';
 
 import {getOperation} from './operation';
 

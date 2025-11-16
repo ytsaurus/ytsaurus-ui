@@ -16,7 +16,7 @@ import {absolute} from '../../../common/utils/url';
 
 import hammer from '../../../common/hammer';
 
-import {dateTime} from '@gravity-ui/date-utils';
+import {dateTime} from '../../../utils/date-utils';
 
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {

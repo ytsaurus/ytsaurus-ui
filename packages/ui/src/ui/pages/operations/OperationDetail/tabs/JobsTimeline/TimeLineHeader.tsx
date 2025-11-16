@@ -11,9 +11,8 @@ import {
     setFilter,
     setInterval,
 } from '../../../../../store/reducers/operations/jobs/jobs-timeline-slice';
-import {dateTimeParse} from '@gravity-ui/date-utils';
+import {DateTime, dateTimeParse} from '../../../../../utils/date-utils';
 import {RangeDateSelection} from '@gravity-ui/date-components';
-import {DateTime} from '@gravity-ui/date-utils/build/typings/dateTime';
 import ChevronsExpandToLinesIcon from '@gravity-ui/icons/svgs/chevrons-expand-to-lines.svg';
 import {resetInterval} from '../../../../../store/actions/operations/jobs-timeline';
 
