@@ -1,5 +1,29 @@
 # Changelog
 
+## [3.0.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v2.7.0...ui-v3.0.0) (2025-11-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* upgrade @gravity-ui/uikit to version 7 [YTFRONT-4917]
+
+### Features
+
+* add disableHeavyProxies option to clusters-config [YTFRONT-5176] ([df70d88](https://github.com/ytsaurus/ytsaurus-ui/commit/df70d883cc053696523829ef509d7748e6688cb8))
+* **Operation/Details/Specification:** add cpu_limit/gpu_limit/memory_limit for tasks [YTFRONT-5145] ([939fead](https://github.com/ytsaurus/ytsaurus-ui/commit/939fead0fdf534a8530f365e8220a1c1efb1e798))
+* upgrade @gravity-ui/uikit to version 7 [YTFRONT-4917] ([29c4362](https://github.com/ytsaurus/ytsaurus-ui/commit/29c4362ed5ae9ce10d9b7a964784c804f6de3b0b))
+* upgrade react-redux 7-&gt;9 ([76ca6fe](https://github.com/ytsaurus/ytsaurus-ui/commit/76ca6fefccd64186c1bfb01baa8503ea8d2d8638))
+
+
+### Bug Fixes
+
+* **Dashboard2/WidgetSettings:** key should rely on a data [YTFRONT-5154] ([d6a2fa9](https://github.com/ytsaurus/ytsaurus-ui/commit/d6a2fa991edcf11a4af761824d5d10ef80ba2ca3))
+* **Dashboard2:** operation and queries widgets limits [YTFRONT-5154] ([662662d](https://github.com/ytsaurus/ytsaurus-ui/commit/662662d6f8552bb3e0ef5e0d45e252faab8e3911))
+* **Dashboard2:** provide better errors per item in Accounts/Pools/Services widgets [YTFRONT-5154] ([d6d4b4b](https://github.com/ytsaurus/ytsaurus-ui/commit/d6d4b4bb6e949b78f69dffbe9645c92d063ba510))
+* **Dashboards2:** caching while copying cluster settings from previous cluster[YTFRONT-5154] ([d9fb327](https://github.com/ytsaurus/ytsaurus-ui/commit/d9fb327b6341d0bd4c7d4e5fafc3cacfb03a648c))
+* **Navigation/Link:** render error [YTFRONT-5293] ([f976a39](https://github.com/ytsaurus/ytsaurus-ui/commit/f976a39c3f3861bea10b6551e578cf06f1750bcb))
+* **Queries/List:** state filter error [YTFRONT-5310] ([6a5c876](https://github.com/ytsaurus/ytsaurus-ui/commit/6a5c8765937e53a9edb32c3bae0cb7f297880ea1))
+
 ## [2.7.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v2.6.0...ui-v2.7.0) (2025-11-11)
 
 
