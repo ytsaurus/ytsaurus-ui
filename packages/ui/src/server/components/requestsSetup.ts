@@ -5,20 +5,30 @@ import {ClusterConfig} from '../../shared/yt-types';
 import {getClusterConfig} from '../components/utils';
 import {getApp} from '../ServerFactory';
 
-function getRobotOAuthToken(cluster: string) {
+function getRobotSecret<T>(
+    cluster: string,
+    type: 'oauthToken' | 'prometheusAuthHeaders',
+    defaultValue: T,
+): T {
     const {ytInterfaceSecret} = getApp().config as YTCoreConfig;
 
-    let oauthToken = '';
+    let res;
 
     if (ytInterfaceSecret) {
-        oauthToken =
-            // eslint-disable-next-line security/detect-non-literal-require
-            require(ytInterfaceSecret)?.[cluster]?.oauthToken ||
-            // eslint-disable-next-line security/detect-non-literal-require
-            require(ytInterfaceSecret)?.oauthToken; // Backward compatibility
+        // eslint-disable-next-line security/detect-non-literal-require
+        const content = require(ytInterfaceSecret);
+        res = content?.[cluster]?.[type] || content?.[type];
     }
 
-    return oauthToken;
+    return res ?? defaultValue;
+}
+
+function getRobotOAuthToken(cluster: string) {
+    return getRobotSecret(cluster, 'oauthToken', process.env.YT_TOKEN ?? '');
+}
+
+export function getPrometheusAuthHeaders(cluster: string) {
+    return getRobotSecret<Record<string, string>>(cluster, 'prometheusAuthHeaders', {});
 }
 
 export interface YTApiSetup {
@@ -29,6 +39,7 @@ export interface YTApiSetup {
     useEncodedParameters: boolean;
     useHeavyProxy: boolean;
     timeout: number;
+    requestHeaders?: Record<string, string>;
 }
 
 function getClusterSetup(clusterConfig: ClusterConfig): {

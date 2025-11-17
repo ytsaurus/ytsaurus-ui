@@ -3,6 +3,8 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import map_ from 'lodash/map';
 import slice_ from 'lodash/slice';
 
+import {splitBatchResults} from '../../../../../shared/utils/error';
+
 import CancelHelper from '../../../../utils/cancel-helper';
 import {prepareRequest} from '../../../../utils/navigation';
 import {getPath, getTransaction} from '../../../../store/selectors/navigation';
@@ -12,7 +14,6 @@ import {
     MAX_TRANSACTIONS_REQUESTS,
 } from '../../../../constants/navigation/tabs/locks';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
-import {splitBatchResults} from '../../../../utils/utils';
 
 const requests = new CancelHelper();
 

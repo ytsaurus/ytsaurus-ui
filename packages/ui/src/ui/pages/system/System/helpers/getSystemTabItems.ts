@@ -1,7 +1,7 @@
+import {formatByParams} from '../../../../../shared/utils/format';
 import {TabItem} from '../../../../components/Tabs/Tabs';
 import {SystemTabs} from '../../../../constants/system/tabs';
 import {UIFactory} from '../../../../UIFactory';
-import {formatByParams} from '../../../../utils/format';
 
 type Props = (data: {
     url: string;

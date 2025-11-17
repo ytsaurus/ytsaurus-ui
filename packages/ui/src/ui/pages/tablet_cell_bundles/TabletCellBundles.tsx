@@ -44,7 +44,7 @@ import ChaosBundleEditorDialog from '../../pages/chaos_cell_bundles/bundles/Chao
 import {ChaosCells} from '../../pages/chaos_cell_bundles/cells/Cells';
 import UIFactory from '../../UIFactory';
 import {TabletBundle} from '../../store/reducers/tablet_cell_bundles';
-import {formatByParams} from '../../utils/format';
+import {formatByParams} from '../../../shared/utils/format';
 import {UI_TAB_SIZE} from '../../constants/global';
 import {TabletErrorsLazy} from '../../pages/tablet-errors-by-bundle/lazy';
 import {getConfigData} from '../../config/ui-settings';

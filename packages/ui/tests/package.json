@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "playwright test ${PW_OPTIONS}",
+    "auth": "rm -rf ./.auth && playwright test -c ./playwright.auth.config.ts ${PW_AUTH_OPTIONS}",
     "screenshots": "E2E_MATCH=${E2E_MATCH:-.screen.} E2E_TEST_DIR=./screenshots playwright test ${PW_OPTIONS}"
   },
   "keywords": [],

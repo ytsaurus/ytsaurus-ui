@@ -49,6 +49,10 @@ import {
 } from './tabs/tablet-errors/url-mapping';
 
 import UIFactory from '../../../UIFactory';
+import {
+    getPrometheusDashbaordPreparedState,
+    prometheusDashboardParams,
+} from '../../../store/reducers/prometheusDashboard/url-mapping';
 
 export const getNavigationParams = (): LocationParameters => {
     const params: LocationParameters = {
@@ -65,6 +69,8 @@ export const getNavigationParams = (): LocationParameters => {
 
         ...navigationAccessLogParams,
         ...navigationTabletErrorsParams,
+
+        ...prometheusDashboardParams,
 
         navmode: {
             stateKey: 'navigation.navigation.mode',
@@ -114,6 +120,7 @@ const GET_PREPARED_STATE = [
     getNavigationSchemaPreparedState,
     getNavigationTabletsPreparedState,
     getNavigationTabletErrorsPreparedState,
+    getPrometheusDashbaordPreparedState,
 ];
 
 function getNavigationNodeTypesPreparedState(state: RootState, location: {query: RootState}) {
