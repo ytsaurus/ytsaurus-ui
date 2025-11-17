@@ -1,7 +1,6 @@
 import cn from 'bem-cn-lite';
 import moment from 'moment';
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 
 import {DropdownMenu, Flex, Progress, Text} from '@gravity-ui/uikit';
 
@@ -34,7 +33,6 @@ import {
     getSchedulingSortState,
     getSchedulingTreeMainResource,
 } from '../../../../../../store/selectors/scheduling/scheduling';
-import {useThunkDispatch} from '../../../../../../store/thunkDispatch';
 
 import {KeysByType} from '../../../../../../../@types/types';
 import {formatTimeDuration} from '../../../../../../components/TimeDuration/TimeDuration';
@@ -48,6 +46,7 @@ import {
     schedulingSetSortState,
 } from '../../../../../../store/actions/scheduling/scheduling';
 import {openPoolDeleteModal} from '../../../../../../store/actions/scheduling/scheduling-ts';
+import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
 import {getSchedulingOperationRefId} from '../../../../../../store/selectors/scheduling/attributes-to-filter';
 import {getSchedulingOverivewColumns} from '../../../../../../store/selectors/scheduling/overview-columns';
 import {getProgressTheme} from '../../../../../../utils/progress';
@@ -795,7 +794,7 @@ function Duration({start}: {start?: string}) {
 }
 
 function RowActions({item}: {item: RowData}) {
-    const dispatch = useThunkDispatch();
+    const dispatch = useDispatch();
 
     const {type, isEphemeral} = item;
     const editable = !isEphemeral && type === 'pool';

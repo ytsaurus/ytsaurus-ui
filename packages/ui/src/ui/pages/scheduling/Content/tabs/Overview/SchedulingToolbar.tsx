@@ -1,8 +1,7 @@
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
-import {RadioButton, Switch} from '@gravity-ui/uikit';
+import {SegmentedRadioGroup, Switch} from '@gravity-ui/uikit';
 
 import format from '../../../../../common/hammer/format';
 
@@ -22,9 +21,9 @@ import {
 } from '../../../../../store/selectors/scheduling/scheduling';
 import {getSchedulingAbcFilter} from '../../../../../store/selectors/scheduling/attributes-to-filter';
 import {getExpandedPoolsLoadAll} from '../../../../../store/selectors/scheduling/expanded-pools';
+import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 
 import {PoolsSuggest} from '../../../../../pages/scheduling/PoolsSuggest/PoolsSuggest';
-
 import UIFactory from '../../../../../UIFactory';
 
 import './SchedulingToolbar.scss';
@@ -55,7 +54,7 @@ function SchedulingContentMode() {
     const mode = useSelector(getSchedulingContentMode);
 
     return (
-        <RadioButton
+        <SegmentedRadioGroup
             size="m"
             value={mode}
             onUpdate={(v) => dispatch(schedulingChangeContentMode(v))}
