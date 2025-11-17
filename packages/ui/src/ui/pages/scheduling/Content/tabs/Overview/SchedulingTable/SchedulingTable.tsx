@@ -109,6 +109,7 @@ export function SchedulingTable() {
 
     return (
         <DataTableGravity
+            className={block()}
             table={table}
             virtualized
             rowHeight={49}
