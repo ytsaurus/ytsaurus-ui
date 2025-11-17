@@ -1,5 +1,4 @@
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import {Flex, Text} from '@gravity-ui/uikit';
@@ -18,6 +17,7 @@ import {getCluster} from '../../../../../../store/selectors/global/cluster';
 import {getTree} from '../../../../../../store/selectors/scheduling/scheduling-pools';
 
 import {PoolLeafNode} from '../../../../../../utils/scheduling/pool-child';
+import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
 
 import type {RowData} from './SchedulingTable';
 import './NameCell.scss';
