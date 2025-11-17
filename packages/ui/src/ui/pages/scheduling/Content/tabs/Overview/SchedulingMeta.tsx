@@ -83,17 +83,17 @@ export function SchedulingMeta() {
             subTitles: [i18n('general'), i18n('strong-guarantees')],
         };
 
-        if (hasIntegralType) {
-            const {accumulated_resource_volume, integral_pool_capacity} = pool?.attributes ?? {};
+        const type = mainResource === 'memory' ? 'user_memory' : (mainResource ?? 'cpu');
+        const {accumulated_resource_volume, integral_pool_capacity} = pool?.attributes ?? {};
+        const {[type]: capacity = NaN} = integral_pool_capacity ?? {};
 
-            const type = mainResource === 'memory' ? 'user_memory' : (mainResource ?? 'cpu');
+        if (capacity >= 0 || burstUnit.length || flowUnit.length) {
             const {[type]: accumulated = NaN} = accumulated_resource_volume ?? {};
-            const {[type]: capacity = NaN} = integral_pool_capacity ?? {};
 
             res.items.push([
                 {key: i18n('guarantee-type'), value: guaranteeType},
                 {
-                    key: i18n('integral-guarantee'),
+                    key: i18n('capacity'),
                     value: <ChargeLevel value={(accumulated / capacity) * 100} />,
                     visible: capacity >= 0,
                 },
