@@ -1,8 +1,8 @@
 import React from 'react';
+import {useHistory} from 'react-router';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 import {Breadcrumbs, Flex, Key, Select} from '@gravity-ui/uikit';
-import {useHistory} from 'react-router';
 import some_ from 'lodash/some';
 
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
@@ -31,6 +31,7 @@ import {EditableBreadcrumbs} from '../../../components/EditableBreadcrumbs/Edita
 import CreatePoolButton from '../Instruments/CreatePoolDialog/CreatePoolDialog';
 
 import {getCluster, getClusterUiConfig} from '../../../store/selectors/global';
+import {makeRoutedURL} from '../../../store/location';
 import UIFactory from '../../../UIFactory';
 
 import './SchedulingTopRowContent.scss';
@@ -112,21 +113,23 @@ function CurrentPoolToClipboardButton() {
 function SchedulingBreadcrumbs() {
     const bcItems = useSelector(getSchedulingBreadcrumbItems);
     const dispatch = useDispatch();
+    const history = useHistory();
     const tree = useSelector(getTree);
     const cluster = useSelector(getCluster);
-    const history = useHistory();
     const handleChangePool = (name: string | number) => {
         setTimeout(() => {
             dispatch(changePool(name.toString()));
-            history.push(calcRootPathname(window.location.pathname, cluster));
+            const pathname = calcPathname(window.location.pathname, cluster, name.toString());
+            history.push(makeRoutedURL(pathname, {tree, filter: ''}));
         }, 0);
     };
 
     const items = React.useMemo(() => {
         return ['<Root>', ...bcItems.slice(1)].map((text, index) => {
+            const pathname = calcPathname(window.location.pathname, cluster, text);
             return (
                 <Breadcrumbs.Item
-                    href={calcRootPathname(window.location.pathname, cluster)}
+                    href={makeRoutedURL(pathname, {tree, text, filter: ''})}
                     key={`${JSON.stringify({text, index})}`}
                     onClick={(e) => e.preventDefault()}
                 >
@@ -159,12 +162,16 @@ function SchedulingBreadcrumbs() {
     );
 }
 
-function calcRootPathname(pathname: string, cluster: string) {
+function calcPathname(pathname: string, cluster: string, pool?: string) {
     // it is not allowed to stay on ACL and Monitor tabs for <Root> link
-    const isAllowedTab = some_(SCHEDULING_ALLOWED_ROOT_TABS, (_v, tab) =>
-        pathname.endsWith('/' + tab),
-    );
-    return isAllowedTab ? pathname : `/${cluster}/${Page.SCHEDULING}/${Tab.OVERVIEW}`;
+    if (pool === '<Root>') {
+        const isAllowedTab = some_(SCHEDULING_ALLOWED_ROOT_TABS, (_v, tab) =>
+            pathname.endsWith('/' + tab),
+        );
+        return isAllowedTab ? pathname : `/${cluster}/${Page.SCHEDULING}/${Tab.OVERVIEW}`;
+    }
+
+    return pathname;
 }
 
 function SchedulingPhysicalTree() {
