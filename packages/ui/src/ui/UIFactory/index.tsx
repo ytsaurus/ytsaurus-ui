@@ -92,6 +92,7 @@ export interface SchedulingExtraTab {
      * Example: https://grafana.mydomain.com?var-pool={ytPool}&var-tree={ytPoolTree}&var-cluster={ytCluster}
      */
     urlTemplate?: string;
+    hidden?: boolean;
 }
 
 export interface OperationMonitoringTabProps {
