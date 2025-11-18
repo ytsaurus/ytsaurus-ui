@@ -73,8 +73,10 @@ function Content({match, location}: ContentProps) {
     const extraRoutes: Array<React.ReactElement> = [];
 
     extraTabs.forEach((tab) => {
-        const {name, title, component, urlTemplate} = tab;
-        const tabSettings: TabSettings = {show: true};
+        const {name, title, component, urlTemplate, hidden} = tab;
+
+        const tabSettings: TabSettings = {show: !hidden};
+
         showSettings[name] = tabSettings;
 
         if (urlTemplate) {
