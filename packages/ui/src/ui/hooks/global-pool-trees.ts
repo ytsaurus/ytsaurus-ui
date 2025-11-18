@@ -1,7 +1,8 @@
 import React from 'react';
-import {useDispatch} from '../store/redux-hooks';
+import {useDispatch, useSelector} from '../store/redux-hooks';
 
 import {loadPoolTreesIfNotLoaded} from '../store/actions/global';
+import {getTree} from '../store/selectors/scheduling/scheduling';
 import {loadDefaultPoolTree} from '../utils/poolTrees';
 
 export function usePoolTreesLoaded() {
@@ -27,6 +28,12 @@ export function useDefaultPoolTree() {
     }, []);
 
     return defaultPoolTree;
+}
+
+export function usePoolTreeOrDefaultPoolTree() {
+    const tree = useSelector(getTree);
+    const defaultTree = useDefaultPoolTree();
+    return tree || defaultTree;
 }
 
 export function WaitForDefaultPoolTree({
