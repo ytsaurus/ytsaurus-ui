@@ -27,6 +27,12 @@ type AsyncAction = ThunkAction<any, RootState, any, any>;
 
 const QUERIES_LIST_LIMIT = 20;
 
+function compareQueriesByStartTime(a: QueryItem, b: QueryItem): number {
+    const timeA = new Date(a.start_time).getTime();
+    const timeB = new Date(b.start_time).getTime();
+    return timeB - timeA;
+}
+
 export function requestQueriesList(params?: {refresh?: boolean}): AsyncAction {
     return async (dispatch, getState) => {
         const state = getState();
@@ -51,7 +57,11 @@ export function requestQueriesList(params?: {refresh?: boolean}): AsyncAction {
 
             let items: QueryItem[];
             if (params?.refresh) {
-                items = result.queries;
+                const rawItems = [...list, ...result.queries];
+                items = [...new Map(rawItems.map((item) => [item.id, item])).values()].sort(
+                    compareQueriesByStartTime,
+                );
+
                 dispatch(
                     updateListState({
                         items,
@@ -65,11 +75,7 @@ export function requestQueriesList(params?: {refresh?: boolean}): AsyncAction {
                 list.forEach((item) => itemsMap.set(item.id, item));
                 result.queries.forEach((item) => itemsMap.set(item.id, item));
                 items = Array.from(itemsMap.values());
-                items.sort((a, b) => {
-                    const timeA = new Date(a.start_time).getTime();
-                    const timeB = new Date(b.start_time).getTime();
-                    return timeB - timeA;
-                });
+                items.sort(compareQueriesByStartTime);
                 dispatch(
                     updateListState({
                         items,
