@@ -1,8 +1,6 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
+import React from 'react';
 
-import {YTErrorBlock} from '../../../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../../../components/Block/Block';
 import {Button} from '@gravity-ui/uikit';
 import ConfirmMessage from './../ConfirmMessage';
 
@@ -10,29 +8,27 @@ import {deleteAccount} from '../../../../../../utils/accounts/editor';
 import {closeEditorModal} from '../../../../../../store/actions/accounts/accounts';
 import {toaster} from '../../../../../../utils/toaster';
 
-class DeleteContent extends Component {
-    static propTypes = {
-        //from parent
-        account: PropTypes.object.isRequired,
-        //from connect
-        deleteModalVisible: PropTypes.bool.isRequired,
-        closeEditorModal: PropTypes.func.isRequired,
-    };
+type Props = {
+    account: {
+        name: string;
+    } & CypressNode<{recoursive_resource_usage: Record<string, number | Record<string, number>>}>;
+};
 
-    state = {
+export function DeleteContent({account}: Props) {
+    const dispatch = useDispatch();
+
+    const [state, setState] = React.useState({
         showConfirmMessage: false,
-        error: undefined,
-    };
+        error: undefined as undefined | YTError,
+    });
 
-    handleDelete = () => {
-        const {account, closeEditorModal} = this.props;
-
+    const handleDelete = () => {
         deleteAccount(account.name)
             .then(() => {
-                this.setState({
+                setState({
                     activeValue: '',
                 });
-                closeEditorModal();
+                dispatch(closeEditorModal());
                 toaster.add({
                     name: 'delete account',
                     timeout: 10000,
@@ -41,53 +37,50 @@ class DeleteContent extends Component {
                 });
             })
             .catch((error) => {
-                this.setState({
-                    error,
+                setState((prevState) => {
+                    return {
+                        ...prevState,
+                        error,
+                    };
                 });
             });
 
-        this.setState({
-            error: undefined,
+        setState((prevState) => {
+            return {
+                ...prevState,
+                error: undefined,
+            };
         });
     };
 
-    handleCancel = () => this.setState({showConfirmMessage: false});
-    handleButtonClick = () => this.setState({showConfirmMessage: true, showErrorMessage: false});
+    const handleCancel = () => {
+        setState((prevState) => {
+            return {...prevState, showConfirmMessage: false};
+        });
+    };
+    const handleButtonClick = () => setState({showConfirmMessage: true, showErrorMessage: false});
 
-    render() {
-        const {account} = this.props;
-        const {showConfirmMessage, error} = this.state;
+    const {showConfirmMessage, error} = state;
 
-        return (
-            <div className="elements-section">
-                {error && (
-                    <YTErrorBlock
-                        message={'Failed to delete account: ' + account.name}
-                        error={error}
-                    />
-                )}
-                {showConfirmMessage && (
-                    <ConfirmMessage
-                        text={
-                            <div className="elements-message__paragraph">
-                                Delete account {account.name}
-                            </div>
-                        }
-                        onApply={this.handleDelete}
-                        onCancel={this.handleCancel}
-                    />
-                )}
-                <Button
-                    size="m"
-                    view="outlined-danger"
-                    title={'Delete'}
-                    onClick={this.handleButtonClick}
-                >
-                    Delete
-                </Button>
-            </div>
-        );
-    }
+    return (
+        <div className="elements-section">
+            {error && (
+                <YTErrorBlock message={'Failed to delete account: ' + account.name} error={error} />
+            )}
+            {showConfirmMessage && (
+                <ConfirmMessage
+                    text={
+                        <div className="elements-message__paragraph">
+                            Delete account {account.name}
+                        </div>
+                    }
+                    onApply={handleDelete}
+                    onCancel={handleCancel}
+                />
+            )}
+            <Button size="m" view="outlined-danger" title={'Delete'} onClick={handleButtonClick}>
+                Delete
+            </Button>
+        </div>
+    );
 }
-
-export default connect(null, {closeEditorModal})(DeleteContent);
