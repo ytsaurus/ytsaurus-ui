@@ -41,6 +41,7 @@ const supportedContentTypes = {
     nested_transaction: Transaction,
     topmost_transaction_map: TransactionMap,
     transaction_map: TransactionMap,
+    hunk_storage: MapNode,
 };
 
 export default (type: string) => supportedContentTypes[type as keyof typeof supportedContentTypes];

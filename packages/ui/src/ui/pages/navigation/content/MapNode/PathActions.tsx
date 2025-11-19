@@ -287,6 +287,20 @@ function PathActions(props: Props) {
             },
         ]);
     }
+    if (item.type === 'hunk_storage') {
+        menuItems.push([
+            {
+                text: 'Mount',
+                iconStart: <Icon awesome={'link'} />,
+                action: onMount,
+            },
+            {
+                text: 'Unmount',
+                iconStart: <Icon awesome={'unlink'} />,
+                action: onUnmount,
+            },
+        ]);
+    }
 
     menuItems.push(secondGroup);
 
