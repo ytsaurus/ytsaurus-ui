@@ -4,7 +4,7 @@ import block from 'bem-cn-lite';
 import Tabs from '../../../../../components/Tabs/Tabs';
 import {contentTabs} from '../../../../../utils/accounts/editor';
 import GeneralContent from './content/GeneralContent';
-import DeleteContent from './content/DeleteContent';
+import {DeleteContent} from './content/DeleteContent';
 import NodesContent from './content/NodesContent';
 import ChunksContent from './content/ChunksContent';
 import MediumContent from './content/MediumContent';
