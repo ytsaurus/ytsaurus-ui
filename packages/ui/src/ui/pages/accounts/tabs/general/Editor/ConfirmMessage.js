@@ -7,8 +7,8 @@ export default class ConfirmMessage extends Component {
     static propTypes = {
         text: PropTypes.object.isRequired,
         confirmQuestion: PropTypes.string,
-        onApply: PropTypes.func.isRequired,
-        onCancel: PropTypes.func.isRequired,
+        onApply: PropTypes.func,
+        onCancel: PropTypes.func,
     };
 
     static defaultProps = {
@@ -23,14 +23,22 @@ export default class ConfirmMessage extends Component {
                 theme="info"
                 content={[text, confirmQuestion]}
                 buttons={[
-                    {
-                        text: 'Yes',
-                        callback: onApply,
-                    },
-                    {
-                        text: 'Cancel',
-                        callback: onCancel,
-                    },
+                    ...(onApply
+                        ? [
+                              {
+                                  text: 'Yes',
+                                  callback: onApply,
+                              },
+                          ]
+                        : []),
+                    ...(onCancel
+                        ? [
+                              {
+                                  text: 'Cancel',
+                                  callback: onCancel,
+                              },
+                          ]
+                        : []),
                 ]}
             />
         );
