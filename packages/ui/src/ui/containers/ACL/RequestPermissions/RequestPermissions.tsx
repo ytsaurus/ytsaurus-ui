@@ -281,7 +281,7 @@ function RequestPermissions(props: Props) {
         return res;
     }, [availableFields, requestPermissionsFields, useColumns]);
 
-    const {editAcl = 'Edit ACL', editColumnsAcl = 'Edit columns ACL'} = buttonsTitle ?? {};
+    const {editAcl = 'Add ACL', editColumnsAcl = 'Edit columns ACL'} = buttonsTitle ?? {};
     const title = useColumns ? editColumnsAcl : editAcl;
 
     return !choices?.length ? null : (
