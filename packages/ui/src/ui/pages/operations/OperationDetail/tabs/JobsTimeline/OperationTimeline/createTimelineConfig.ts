@@ -5,12 +5,14 @@ import {
     TimeLineConfig,
     TimelineEvent,
     TimelineMarker,
+    TimelineSection,
 } from '@gravity-ui/timeline';
 
 export const createTimelineConfig = <
     TEvent extends TimelineEvent,
     TMarker extends TimelineMarker,
->(): TimeLineConfig<TEvent, TMarker> => ({
+    TSection extends TimelineSection,
+>(): TimeLineConfig<TEvent, TMarker, TSection> => ({
     settings: {
         start: 0,
         end: 0,
