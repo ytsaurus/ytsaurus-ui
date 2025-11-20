@@ -9,24 +9,30 @@ import {Flex, Icon, Label, Link} from '@gravity-ui/uikit';
 import AbbrSqlIcon from '@gravity-ui/icons/svgs/abbr-sql.svg';
 
 export default function metaTablePresetMain(attributes) {
-    const [id, owner, account, creationTime, modificationTime, accessTime, yql_op_id, yql_op_url] =
-        ypath.getValues(attributes, [
-            '/id',
-            '/owner',
-            '/account',
-            '/creation_time',
-            '/modification_time',
-            '/access_time',
-            '/_yql_op_id',
-            '/_yql_op_url',
-        ]);
+    const [
+        id,
+        owner,
+        account,
+        creationTime,
+        modificationTime,
+        accessTime,
+        yql_op_id,
+        operationUrl,
+        yql_runner,
+    ] = ypath.getValues(attributes, [
+        '/id',
+        '/owner',
+        '/account',
+        '/creation_time',
+        '/modification_time',
+        '/access_time',
+        '/_yql_op_id',
+        '/_yql_op_url',
+        '/_yql_runner',
+    ]);
 
-    const qtUrl = yql_op_url;
-
-    const yqlLink =
-        yql_op_id && !yql_op_url
-            ? UIFactory.yqlWidgetSetup?.renderYqlOperationLink(yql_op_id)
-            : null;
+    const isYqlOperation = yql_runner === 'yql-service';
+    const yqlLink = yql_op_id ? UIFactory.yqlWidgetSetup?.renderYqlOperationLink(yql_op_id) : null;
 
     return [
         {
@@ -61,12 +67,12 @@ export default function metaTablePresetMain(attributes) {
         {
             key: 'YQL operation',
             value: yqlLink,
-            visible: Boolean(yqlLink),
+            visible: Boolean(yqlLink) && isYqlOperation,
         },
         {
             key: 'QT operation',
             value: (
-                <Link href={qtUrl} target="_blank">
+                <Link href={operationUrl} target="_blank">
                     <Flex alignItems="center" gap={1}>
                         <Label theme="info">
                             <Flex alignItems="center" justifyContent="center">
@@ -77,7 +83,7 @@ export default function metaTablePresetMain(attributes) {
                     </Flex>
                 </Link>
             ),
-            visible: Boolean(qtUrl),
+            visible: !isYqlOperation && Boolean(operationUrl),
         },
     ];
 }
