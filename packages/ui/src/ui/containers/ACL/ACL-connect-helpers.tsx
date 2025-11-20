@@ -46,6 +46,7 @@ import ACL from './ACL';
 
 export type ACLOwnProps = {
     path: string;
+    poolTree?: string;
 };
 
 const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
@@ -184,7 +185,9 @@ function createACLConnector(idmKind: IdmKindType) {
 }
 
 function createACLComponent(idmKind: IdmKindType) {
-    return createACLConnector(idmKind)(ACL) as unknown as React.ComponentType<{path: string}>;
+    return createACLConnector(idmKind)(ACL) as unknown as React.ComponentType<
+        Pick<React.ComponentProps<typeof ACL>, 'path' | 'poolTree'>
+    >;
 }
 
 type ConnectorType = ReturnType<typeof createACLConnector>;

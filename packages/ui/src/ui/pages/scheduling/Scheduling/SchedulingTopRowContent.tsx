@@ -179,7 +179,7 @@ function SchedulingPhysicalTree() {
     const treeItems = useSelector(getTreesSelectItems);
     const dispatch = useDispatch();
 
-    const onChange = React.useCallback((tree: unknown) => dispatch(changeTree(tree)), [dispatch]);
+    const onChange = React.useCallback((tree: string) => dispatch(changeTree(tree)), [dispatch]);
 
     return (
         <div className={block('tree')}>

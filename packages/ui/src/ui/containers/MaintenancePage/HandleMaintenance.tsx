@@ -2,8 +2,8 @@ import React from 'react';
 import {useSelector} from '../../store/redux-hooks';
 
 import {MaintenancePage} from '../../containers/MaintenancePage/MaintenancePage';
-import {isMaintenanceIgnored, setMaintenanceIgnored} from '../../utils/maintenance';
 import {getMaintenanceEvent} from '../../store/selectors/global/maintenance';
+import {useMaintenanceContext} from '../../hooks/use-maintenance';
 
 type Props = {
     cluster: string;
@@ -12,26 +12,20 @@ type Props = {
 };
 
 export function HandleMaintenance({cluster, children, emptyMaintenance}: Props) {
-    const [c, forceUpdate] = React.useState(0);
-
+    const {proceedToCluster, setProceedToCluster} = useMaintenanceContext();
     const maintenancePageEvent = useSelector(getMaintenanceEvent);
 
-    if (maintenancePageEvent) {
-        const isIgnored = isMaintenanceIgnored(cluster);
-
-        if (!isIgnored) {
-            return emptyMaintenance ? null : (
-                <MaintenancePage
-                    cluster={cluster}
-                    maintenancePageEvent={maintenancePageEvent}
-                    onProceed={() => {
-                        setMaintenanceIgnored(cluster);
-                        forceUpdate(c + 1);
-                    }}
-                />
-            );
-        }
+    if (!maintenancePageEvent || proceedToCluster) {
+        return children;
     }
 
-    return children;
+    return emptyMaintenance ? null : (
+        <MaintenancePage
+            cluster={cluster}
+            maintenancePageEvent={maintenancePageEvent}
+            onProceed={() => {
+                setProceedToCluster(true);
+            }}
+        />
+    );
 }

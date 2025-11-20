@@ -1,0 +1,20 @@
+{
+  "burst-unit": "Burst unit",
+  "flow-unit": "Flow unit",
+  "general": "Основные",
+  "guarantee-type": "Тип гарантии",
+  "integral-guarantees": "Интегральные гарантии",
+  "integral-guarantee": "Интегральная гарантия",
+  "mode": "Режим",
+  "operation-count": "Число операций",
+  "operation-count-max": "Максимальное число операций",
+  "operations": "Операции",
+  "operations-pending": "Ожидающие операции",
+  "operations-running": "Бегущие операции",
+  "operations-running-lightweigh": "Бегущие легковесные операции",
+  "operations-running-max": "Максимальое число бегущих операций",
+  "pool-configuration": "{{pool_name}} конфигурация",
+  "strong-guarantees": "Строгие гарантии",
+  "weight": "Вес",
+  "user-slots": "Пользовательские слоты"
+}
