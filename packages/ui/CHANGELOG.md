@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.0.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.0.0...ui-v3.0.1) (2025-11-21)
+
+
+### Bug Fixes
+
+* **Account/Editor:** do not allow to remove accounts with not empty resource usage [YTFRONT-5320] ([e2ca472](https://github.com/ytsaurus/ytsaurus-ui/commit/e2ca472c4c24acf20dad64c7ffe34a6b101ff9ec))
+* **ACL:** renamd 'Edit ACL' to 'Add ACL' [YTFRONT-5314] ([14f7ba7](https://github.com/ytsaurus/ytsaurus-ui/commit/14f7ba7914bd6417d149d4e5924ba25cde743df5))
+* **Navigation:** correct operation reference in metadata [YTFRONT-5193] ([a09f5ae](https://github.com/ytsaurus/ytsaurus-ui/commit/a09f5aea16e9d1921727ab6f43f201bd3dbf5c3b))
+* **Operation/Jobs:** description filter [YTFRONT-5254] ([d14b6e1](https://github.com/ytsaurus/ytsaurus-ui/commit/d14b6e1490f93fe735b8891faa49ad5dfe3167ed))
+* **Queries/Navigation:** loss of state when executing request [YTFRONT-5252] ([dfa972c](https://github.com/ytsaurus/ytsaurus-ui/commit/dfa972ca2d3107eaf0c39349a19ed7190590a1d6))
+* **Queries/Navigation:** rerender when running query [YTFRONT-5252] ([d2585bf](https://github.com/ytsaurus/ytsaurus-ui/commit/d2585bfe3166271fb4d0482372887d072cb549f7))
+* **Queries/Tutorials:** wrong items in list [YTFRONT-5302] ([dc4a980](https://github.com/ytsaurus/ytsaurus-ui/commit/dc4a980b41ba59eeef2f1b9eec0b36c118da5399))
+
 ## [3.0.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v2.7.0...ui-v3.0.0) (2025-11-17)
 
 
