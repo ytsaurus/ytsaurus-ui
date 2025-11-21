@@ -29,6 +29,11 @@ import {
 
 export const getPools = getPoolsImpl;
 
+export const getSchedulingLoading = (state: RootState) => {
+    const {loading, poolLoading} = state.scheduling.scheduling;
+    return loading || poolLoading;
+};
+
 const getExpandedPoolsIsInitialLoading = (state: RootState) => {
     const {loaded, loading} = state.scheduling.expandedPools;
     return !loaded && loading;

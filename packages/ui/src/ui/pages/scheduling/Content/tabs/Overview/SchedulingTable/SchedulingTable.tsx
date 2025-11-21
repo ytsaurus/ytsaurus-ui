@@ -28,6 +28,7 @@ import {Tooltip} from '../../../../../../components/Tooltip/Tooltip';
 import {getSchedulingOperationsLoading} from '../../../../../../store/selectors/scheduling/expanded-pools';
 import {
     getSchedulingContentMode,
+    getSchedulingLoading,
     getSchedulingOverviewTableItems,
     getSchedulingShowAbsResources,
     getSchedulingSortState,
@@ -674,12 +675,13 @@ function useSchedulingTableColumns() {
 }
 
 function NameHeader() {
-    const loading = useSelector(getSchedulingOperationsLoading);
+    const expandedeLoading = useSelector(getSchedulingOperationsLoading);
+    const loading = useSelector(getSchedulingLoading);
     return (
         <SchedulingColumnHeader
             title={i18n('pool-operation')}
             column="name"
-            loading={loading}
+            loading={loading || expandedeLoading}
             allowUnordered
         />
     );
