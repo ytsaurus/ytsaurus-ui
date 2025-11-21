@@ -38,6 +38,7 @@ import {registerExtraPage} from '../../pages';
 import {registerLocationParameters} from '../../store/location';
 import {registerHeaderLink} from '../../containers/ClustersMenu/header-links-items';
 import {queryTracker} from './query-tracker';
+import aiChat from './ai/chatSlice';
 import {odinPageInfo, odinRootPageInfo} from '../../pages/odin/lazy';
 import {hasOdinPage} from '../../config';
 import {chyt} from './chyt';
@@ -84,6 +85,7 @@ export const appReducers = {
 
     executeBatch,
     queryTracker,
+    aiChat,
 
     chyt,
     manageTokens,
