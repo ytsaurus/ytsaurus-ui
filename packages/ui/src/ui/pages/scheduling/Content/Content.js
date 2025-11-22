@@ -79,8 +79,9 @@ function Content({className, match, location}) {
     const extraRoutes = [];
 
     extraTabs.forEach((tab) => {
-        const {name, title, component, urlTemplate} = tab;
-        const tabSettings = {show: true};
+        const {name, title, component, urlTemplate, hidden} = tab;
+
+        const tabSettings = {show: !hidden};
         showSettings[name] = tabSettings;
 
         if (urlTemplate) {
