@@ -10,7 +10,6 @@ import {
 } from '../../../../store/selectors/query-tracker/queriesList';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
 import {useQueryNavigation} from '../../hooks/Query';
-import {useUpdater} from '../../../../hooks/use-updater';
 import block from 'bem-cn-lite';
 
 import './QueriesHistoryList.scss';
@@ -22,6 +21,7 @@ import {
 import {InfiniteScrollLoader} from '../../../../components/InfiniteScrollLoader';
 import {QueriesHistoryCursorDirection} from '../../../../store/reducers/query-tracker/query-tracker-contants';
 import {QUERY_POLLING_INTERVAL} from '../../../../constants/queries';
+import {useIntersection} from '../../../../hooks/use-intersection';
 
 const b = block('queries-history-list');
 const itemBlock = block('query-history-item');
@@ -40,14 +40,39 @@ const tableSettings: Settings = {
     syncHeadOnResize: true,
 };
 
-function QueriesHistoryListUpdater() {
+function useQueriesHistoryListUpdater(ref: React.RefObject<Element>) {
+    const timoutId = React.useRef<ReturnType<typeof setInterval>>();
     const dispatch = useDispatch();
 
     const updateFn = React.useCallback(() => {
         dispatch(requestQueriesList({refresh: true}));
     }, [dispatch]);
 
-    useUpdater(updateFn, {timeout: QUERY_POLLING_INTERVAL});
+    useIntersection({
+        element: ref.current,
+        options: {
+            threshold: [1],
+        },
+        onIntersection: (params) => {
+            if (params.isIntersecting) {
+                if (!timoutId.current) {
+                    timoutId.current = setInterval(() => {
+                        updateFn();
+                    }, QUERY_POLLING_INTERVAL);
+                }
+            } else {
+                clearInterval(timoutId.current);
+                timoutId.current = undefined;
+            }
+        },
+    });
+
+    React.useEffect(() => {
+        return () => {
+            clearTimeout(timoutId.current);
+            timoutId.current = undefined;
+        };
+    }, []);
 
     return null;
 }
@@ -59,6 +84,9 @@ export function QueriesHistoryList() {
     const {columns} = useSelector(getQueryListColumns);
     const hasMore = useSelector(hasQueriesListMore);
     const [selectedId, goToQuery] = useQueryNavigation();
+    const listContainer = React.useRef<HTMLDivElement>(null);
+
+    useQueriesHistoryListUpdater(listContainer);
 
     const showPagination = hasMore && itemsByDate.length > 0;
 
@@ -79,7 +107,7 @@ export function QueriesHistoryList() {
 
     return (
         <div className={b()}>
-            <QueriesHistoryListUpdater />
+            <div ref={listContainer} />
             <div className={b('list-wrapper')}>
                 <DataTableYT
                     className={b('list')}

@@ -57,10 +57,7 @@ export function requestQueriesList(params?: {refresh?: boolean}): AsyncAction {
 
             let items: QueryItem[];
             if (params?.refresh) {
-                const rawItems = [...list, ...result.queries];
-                items = [...new Map(rawItems.map((item) => [item.id, item])).values()].sort(
-                    compareQueriesByStartTime,
-                );
+                items = [...result.queries].sort(compareQueriesByStartTime);
 
                 dispatch(
                     updateListState({
