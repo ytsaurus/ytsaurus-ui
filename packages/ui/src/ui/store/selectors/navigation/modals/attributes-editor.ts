@@ -30,7 +30,7 @@ const getNavigationAttributesEidtorNodesByTypes = createSelector(
             const type = ypath.getValue(attrs || {}, '/@type');
             if (type === 'map_node') {
                 mapNodes.push(path);
-            } else if (type === 'table') {
+            } else if (['table', 'replicated_table'].includes(type)) {
                 if (ypath.getValue(attrs, '/@dynamic')) {
                     dynamicTables.push(path);
                 } else {
