@@ -24,6 +24,7 @@ import {CancelTokenSource} from 'axios';
 import {JSONSerializer} from '../../../common/yt-api';
 import {createTablePrompt} from '../../../pages/query-tracker/Navigation/helpers/createTableSelect';
 import {getQueryResultGlobalSettings} from '../../selectors/query-tracker/queryResult';
+import {convertSettingsTypes} from '../../../utils/query-tracker/convertSettingsTypes';
 import type {
     DraftQuery,
     QueriesListRequestParams,
@@ -195,6 +196,8 @@ export function startQuery(
             access_control_object,
         } = queryInstance;
 
+        const processedSettings = engine === 'spyt' ? convertSettingsTypes(settings) : settings;
+
         return ytApiV4Id.startQuery(YTApiId.startQuery, {
             parameters: {
                 stage,
@@ -206,7 +209,7 @@ export function startQuery(
                 ...(isMultipleAco ? {access_control_objects} : {access_control_object}),
                 settings: {
                     stage: engine === 'yql' ? yqlAgentStage : undefined,
-                    ...settings,
+                    ...processedSettings,
                     execution_mode: options?.execution_mode,
                 },
                 output_format: 'json',
