@@ -133,7 +133,7 @@ export const setUserLastChoice =
             newSettings.clique = lastClique;
         }
 
-        if (engine === QueryEngine.YQL && lastVersion) {
+        if (engine === QueryEngine.YQL && lastVersion && !settings?.yql_version) {
             newSettings.yql_version = lastVersion;
         }
 
