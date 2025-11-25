@@ -22,6 +22,7 @@ import {
     updateListState,
 } from '../../reducers/query-tracker/queryListSlice';
 import {QueryItem} from '../../../types/query-tracker/api';
+import CancelHelper from '../../../utils/cancel-helper';
 
 type AsyncAction = ThunkAction<any, RootState, any, any>;
 
@@ -33,7 +34,10 @@ function compareQueriesByStartTime(a: QueryItem, b: QueryItem): number {
     return timeB - timeA;
 }
 
-export function requestQueriesList(params?: {refresh?: boolean}): AsyncAction {
+export function requestQueriesList(params?: {
+    refresh?: boolean;
+    cancelToken?: CancelHelper;
+}): AsyncAction {
     return async (dispatch, getState) => {
         const state = getState();
         const list = getQueriesList(state);
@@ -42,11 +46,14 @@ export function requestQueriesList(params?: {refresh?: boolean}): AsyncAction {
         try {
             const result = await wrapApiPromiseByToaster(
                 dispatch(
-                    loadQueriesList({
-                        params: getQueriesListFilterParams(state),
-                        cursor: params?.refresh ? undefined : getQueriesListCursorParams(state),
-                        limit: QUERIES_LIST_LIMIT,
-                    }),
+                    loadQueriesList(
+                        {
+                            params: getQueriesListFilterParams(state),
+                            cursor: params?.refresh ? undefined : getQueriesListCursorParams(state),
+                            limit: QUERIES_LIST_LIMIT,
+                        },
+                        params?.cancelToken,
+                    ),
                 ),
                 {
                     toasterName: 'load_history_list',

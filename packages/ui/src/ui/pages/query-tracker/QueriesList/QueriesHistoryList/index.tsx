@@ -22,6 +22,7 @@ import {InfiniteScrollLoader} from '../../../../components/InfiniteScrollLoader'
 import {QueriesHistoryCursorDirection} from '../../../../store/reducers/query-tracker/query-tracker-contants';
 import {QUERY_POLLING_INTERVAL} from '../../../../constants/queries';
 import {useIntersection} from '../../../../hooks/use-intersection';
+import CancelHelper from '../../../../utils/cancel-helper';
 
 const b = block('queries-history-list');
 const itemBlock = block('query-history-item');
@@ -42,10 +43,13 @@ const tableSettings: Settings = {
 
 function useQueriesHistoryListUpdater(ref: React.RefObject<Element>) {
     const timoutId = React.useRef<ReturnType<typeof setInterval>>();
+    const cancelHelper = React.useRef(new CancelHelper());
     const dispatch = useDispatch();
 
     const updateFn = React.useCallback(() => {
-        dispatch(requestQueriesList({refresh: true}));
+        cancelHelper.current.removeAllRequests();
+
+        return dispatch(requestQueriesList({refresh: true, cancelToken: cancelHelper.current}));
     }, [dispatch]);
 
     useIntersection({
@@ -61,6 +65,8 @@ function useQueriesHistoryListUpdater(ref: React.RefObject<Element>) {
                     }, QUERY_POLLING_INTERVAL);
                 }
             } else {
+                cancelHelper.current.removeAllRequests();
+
                 clearInterval(timoutId.current);
                 timoutId.current = undefined;
             }

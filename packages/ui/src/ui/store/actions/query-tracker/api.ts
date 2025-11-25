@@ -33,6 +33,7 @@ import type {
     QueryResult,
     QueryResultMeta,
 } from '../../../types/query-tracker/api';
+import CancelHelper from '../../../utils/cancel-helper';
 
 function getQTApiSetup(): {proxy?: string} {
     const QT_CLUSTER = getQueryTrackerCluster();
@@ -141,14 +142,14 @@ export async function generateQueryFromTable(
     return undefined;
 }
 
-export function loadQueriesList({
-    params,
-    cursor,
-    limit,
-}: QueriesListRequestParams): ThunkAction<Promise<QueriesListResponse>, RootState, any, any> {
+export function loadQueriesList(
+    {params, cursor, limit}: QueriesListRequestParams,
+    cancelToken?: CancelHelper,
+): ThunkAction<Promise<QueriesListResponse>, RootState, any, any> {
     return async (_dispatch, getState) => {
         const state = getState();
         const {stage} = getQueryTrackerRequestOptions(state);
+
         return ytApiV4Id.listQueries(YTApiId.listQueries, {
             parameters: {
                 stage,
@@ -158,6 +159,7 @@ export function loadQueriesList({
                 output_format: 'json',
             },
             setup: getQTApiSetup(),
+            cancellation: cancelToken?.saveCancelToken,
         });
     };
 }
