@@ -321,11 +321,17 @@ export const loadCliqueByCluster =
 export function loadQuery(
     queryId: string,
     config?: {dontReplaceQueryText?: boolean},
-): ThunkAction<any, RootState, any, SetQueryAction | RequestQueryAction | SetQueryErrorLoadAction> {
+): ThunkAction<
+    any,
+    RootState,
+    any,
+    SetQueryAction | RequestQueryAction | ResetQueryTabsAction | SetQueryErrorLoadAction
+> {
     return async (dispatch, getState) => {
         const state = getState();
         const stage = getSettingQueryTrackerStage(state);
         dispatch({type: REQUEST_QUERY});
+        dispatch(resetQueryTabs());
         try {
             const query = await wrapApiPromiseByToaster(dispatch(getQuery(queryId)), {
                 toasterName: 'load_query',

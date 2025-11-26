@@ -18,7 +18,8 @@ export const useQueryNavigation = (): [QueryItem['id'] | undefined, (id: QueryIt
             const url = createQueryUrl(cluster, item.id);
             const searchParams = new URLSearchParams(history.location.search);
             searchParams.set('listMode', listMode);
-            history.push(`${url}?${searchParams.toString()}`);
+            const separator = url.includes('?') ? '&' : '?';
+            history.push(`${url}${separator}${searchParams.toString()}`);
         },
         [cluster, history, listMode],
     );
