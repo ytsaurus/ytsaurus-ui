@@ -5,11 +5,15 @@ import {QueryItem} from '../../../../types/query-tracker/api';
 import {useQueryNavigation} from '../../hooks/Query';
 import tutorialIcon from '../../../../assets/img/svg/learn.svg';
 import './index.scss';
-import {useSelector} from '../../../../store/redux-hooks';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
     getTutorialQueriesList,
+    hasQueriesListMore,
     isQueriesListLoading,
 } from '../../../../store/selectors/query-tracker/queriesList';
+import {loadNextQueriesList} from '../../../../store/actions/query-tracker/queriesList';
+import {InfiniteScrollLoader} from '../../../../components/InfiniteScrollLoader';
+import {QueriesHistoryCursorDirection} from '../../../../store/reducers/query-tracker/query-tracker-contants';
 
 const itemCn = cn('query-tutorial-item');
 const block = cn('queries-tutorial-list');
@@ -26,10 +30,18 @@ function renderItem(item: QueryItem) {
 }
 
 export function QueriesTutorialList({className}: {className: string}) {
+    const dispatch = useDispatch();
     const items = useSelector(getTutorialQueriesList);
     const isLoading = useSelector(isQueriesListLoading);
+    const hasMore = useSelector(hasQueriesListMore);
 
     const [selectedId, goToQuery] = useQueryNavigation();
+
+    const showPagination = hasMore && items.length > 0;
+
+    const handleLoadMore = () => {
+        dispatch(loadNextQueriesList(QueriesHistoryCursorDirection.PAST));
+    };
 
     const selectedIndex = useMemo(() => {
         return items.findIndex((query) => query.id === selectedId);
@@ -68,6 +80,13 @@ export function QueriesTutorialList({className}: {className: string}) {
                 <div className={block('loader')}>
                     <Loader size="l" />
                 </div>
+            )}
+            {showPagination && (
+                <InfiniteScrollLoader
+                    className={block('pagination')}
+                    loading={isLoading}
+                    onLoadMore={handleLoadMore}
+                />
             )}
         </div>
     );
