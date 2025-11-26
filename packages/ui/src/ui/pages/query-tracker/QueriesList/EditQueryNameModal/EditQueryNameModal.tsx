@@ -5,7 +5,10 @@ import Icon from '../../../../components/Icon/Icon';
 
 import type {QueryItem} from '../../../../types/query-tracker/api';
 import {setQueryName} from '../../../../store/actions/query-tracker/api';
-import {useDispatch} from '../../../../store/redux-hooks';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
+import {updateQueryInList} from '../../../../store/actions/query-tracker/queriesList';
+import {getQueryDraft} from '../../../../store/selectors/query-tracker/query';
+import {updateQueryDraft} from '../../../../store/actions/query-tracker/query';
 
 export interface Props {
     query: QueryItem;
@@ -18,16 +21,33 @@ interface FormValues {
 
 export default function EditQueryNameModal({query: {state, annotations, id}, className}: Props) {
     const dispatch = useDispatch();
+    const currentDraft = useSelector(getQueryDraft);
     const [error, setError] = useState<Error | undefined>(undefined);
     const [visible, setVisible] = useState(false);
 
-    const handleSubmit = (form: FormApi<FormValues>) => {
+    const handleSubmit = async (form: FormApi<FormValues>) => {
         const {name} = form.getState().values;
         setError(undefined);
-        return dispatch(setQueryName(id, {...annotations, title: name})).catch((err) => {
-            setError(err);
+        try {
+            const updatedAnnotations = {...annotations, title: name};
+            await dispatch(setQueryName(id, updatedAnnotations));
+            dispatch(
+                updateQueryInList(id, {
+                    annotations: updatedAnnotations,
+                }),
+            );
+
+            if (currentDraft.id === id) {
+                dispatch(
+                    updateQueryDraft({
+                        annotations: {...currentDraft.annotations, title: name},
+                    }),
+                );
+            }
+        } catch (err) {
+            setError(err as Error);
             throw err;
-        });
+        }
     };
 
     const initialValues = useMemo(() => {
@@ -36,7 +56,10 @@ export default function EditQueryNameModal({query: {state, annotations, id}, cla
         };
     }, [annotations?.title]);
 
-    return state === 'completed' || state === 'failed' || state === 'draft' ? (
+    return state === 'completed' ||
+        state === 'aborted' ||
+        state === 'failed' ||
+        state === 'draft' ? (
         <div className={className}>
             <Button
                 onClick={(event) => {

@@ -9,7 +9,7 @@ import {
 } from '../../../store/selectors/query-tracker/queriesList';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {DefaultQueriesListFilter, QueriesListMode} from '../../../types/query-tracker/queryList';
-import {applyListMode, requestQueriesList} from '../../../store/actions/query-tracker/queriesList';
+import {applyListMode, resetQueryList} from '../../../store/actions/query-tracker/queriesList';
 
 import './index.scss';
 import {QueriesTutorialList} from './QueriesTutorialList';
@@ -54,7 +54,7 @@ export function QueriesList() {
         if (!isInitializedRef.current) {
             isInitializedRef.current = true;
             dispatch(setFilter(DefaultQueriesListFilter[activeTab]));
-            dispatch(requestQueriesList({refresh: true}));
+            dispatch(resetQueryList());
         }
     }, [dispatch, activeTab]);
 

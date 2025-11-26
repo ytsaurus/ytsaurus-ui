@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
 import cn from 'bem-cn-lite';
-import {Icon, List, ListItemData, Loader, Text} from '@gravity-ui/uikit';
+import {Icon, List, ListItemData, Text} from '@gravity-ui/uikit';
 import {QueryItem} from '../../../../types/query-tracker/api';
 import {useQueryNavigation} from '../../hooks/Query';
 import tutorialIcon from '../../../../assets/img/svg/learn.svg';
@@ -76,11 +76,6 @@ export function QueriesTutorialList({className}: {className: string}) {
                 renderItem={renderItem}
                 onItemClick={goToQuery}
             />
-            {isLoading && (
-                <div className={block('loader')}>
-                    <Loader size="l" />
-                </div>
-            )}
             {showPagination && (
                 <InfiniteScrollLoader
                     className={block('pagination')}

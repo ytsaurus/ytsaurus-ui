@@ -43,7 +43,7 @@ export const FilterDropdown: FC = () => {
             {changed && (
                 <Flex justifyContent="flex-end">
                     <Button view="outlined" onClick={handleResetFilter}>
-                        <Icon data={TrashBinIcon} size={16} /> Reset filters
+                        <Icon data={TrashBinIcon} size={16} /> Reset additional filters
                     </Button>
                 </Flex>
             )}

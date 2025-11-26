@@ -24,6 +24,8 @@ import {setSettingByKey} from '../../../store/actions/settings';
 import {useIsDesktop} from '../../../hooks/useIsDesktop';
 import {QueryClusterSelector} from './QueryClusterSelector';
 import {LazyQueryTokenButton} from '../QueryToken/lazy';
+import {setQueryName} from '../../../store/actions/query-tracker/api';
+import {updateQueryInList} from '../../../store/actions/query-tracker/queriesList';
 
 const NAME_PLACEHOLDER = 'No name';
 const block = cn('query-tracker-top-row');
@@ -31,7 +33,7 @@ const block = cn('query-tracker-top-row');
 const QueryTrackerTopRow: FC = () => {
     const dispatch = useDispatch();
     const isDesktop = useIsDesktop();
-    const {annotations, settings} = useSelector(getQueryDraft);
+    const {id, annotations, settings} = useSelector(getQueryDraft);
     const [nameEdit, setNameEdit] = useState(false);
 
     const handleChangeEngine = useCallback(
@@ -48,10 +50,21 @@ const QueryTrackerTopRow: FC = () => {
     }, [dispatch]);
 
     const handleNameChange = useCallback(
-        (title: string | undefined) => {
-            dispatch(updateQueryDraft({annotations: {title}}));
+        async (title: string | undefined) => {
+            dispatch(updateQueryDraft({annotations: {...annotations, title}}));
+
+            if (id && annotations) {
+                try {
+                    await dispatch(setQueryName(id, {...annotations, title}));
+                    dispatch(
+                        updateQueryInList(id, {
+                            annotations: {...annotations, title},
+                        }),
+                    );
+                } catch (err) {}
+            }
         },
-        [dispatch],
+        [dispatch, id, annotations],
     );
 
     const handleSettingsChange = useCallback(
