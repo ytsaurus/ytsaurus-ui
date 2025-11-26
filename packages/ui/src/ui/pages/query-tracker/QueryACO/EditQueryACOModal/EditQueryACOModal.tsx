@@ -6,7 +6,7 @@ import {useToggle} from 'react-use';
 import PencilIcon from '@gravity-ui/icons/svgs/pencil.svg';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {selectIsMultipleAco} from '../../../../store/selectors/query-tracker/queryAco';
-import {requestQueriesList} from '../../../../store/actions/query-tracker/queriesList';
+import {resetQueryList} from '../../../../store/actions/query-tracker/queriesList';
 
 type Props = {
     query_id: string;
@@ -26,7 +26,7 @@ export const EditQueryACOModal: FC<Props> = ({query_id}) => {
     const handleSubmit = async (values: FormValues) => {
         try {
             await changeCurrentQueryACO({aco: values.aco, query_id});
-            await dispatch(requestQueriesList({refresh: true}));
+            await dispatch(resetQueryList());
         } catch (err) {
             setError(err as Error);
             throw err;

@@ -494,7 +494,7 @@ export function runQuery(
             dispatch(loadQuery(query_id));
         }
 
-        dispatch(requestQueriesList({refresh: true}));
+        dispatch(requestQueriesList(true));
     };
 }
 
@@ -509,7 +509,7 @@ export function abortCurrentQuery(): ThunkAction<any, RootState, any, SetQueryAc
                 errorTitle: 'Failed to abort query',
             });
             dispatch(loadQuery(currentQuery?.id, {dontReplaceQueryText: true}));
-            dispatch(requestQueriesList({refresh: true}));
+            dispatch(requestQueriesList(true));
         }
     };
 }
@@ -596,5 +596,5 @@ export const toggleShareQuery =
             type: UPDATE_ACO_QUERY,
             data: {access_control_objects: aco},
         });
-        dispatch(requestQueriesList({refresh: true}));
+        dispatch(requestQueriesList(true));
     };
