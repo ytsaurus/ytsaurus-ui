@@ -16,7 +16,7 @@ export const QueryDateFilter: FC = () => {
                 dispatch(applyFilter({from: value ? value.valueOf() : undefined}));
             },
             to: (value?: DateTime | null) => {
-                dispatch(applyFilter({to: value ? value.valueOf() : undefined}));
+                dispatch(applyFilter({to: value ? value.endOf('day').valueOf() : undefined}));
             },
         }),
         [dispatch],
@@ -27,7 +27,7 @@ export const QueryDateFilter: FC = () => {
             <DatePicker
                 placeholder="Start date"
                 format="DD.MM.YYYY"
-                value={from ? dateTimeParse({input: from}) : null}
+                value={from ? dateTimeParse(from) : null}
                 onUpdate={setFilter.from}
                 hasClear
             />{' '}
@@ -35,7 +35,7 @@ export const QueryDateFilter: FC = () => {
             <DatePicker
                 placeholder="End date"
                 format="DD.MM.YYYY"
-                value={to ? dateTimeParse({input: to}) : null}
+                value={to ? dateTimeParse(to)?.startOf('day') : null}
                 onUpdate={setFilter.to}
                 hasClear
             />
