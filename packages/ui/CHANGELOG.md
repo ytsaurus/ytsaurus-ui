@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.2.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.1.0...ui-v3.2.0) (2025-11-27)
+
+
+### Features
+
+* **Queries/Tutorials:** add tutorials pagination [YTFRONT-5344] ([29dcc79](https://github.com/ytsaurus/ytsaurus-ui/commit/29dcc7956e6fac3c6781b422b0d8d1d77e1c990c))
+
+
+### Bug Fixes
+
+* **JobLogs:** use cluster config [YTFRONT-5348] ([df75e2d](https://github.com/ytsaurus/ytsaurus-ui/commit/df75e2d35d619a31fb2151e0466f29f8dead1b15))
+* **Queries/History:** date filter wrong format [YTFRONT-5344] ([72eb7a2](https://github.com/ytsaurus/ytsaurus-ui/commit/72eb7a271b9725e07a80410a6a91c4dfa11d9cc7))
+* **Queries/History:** refresh list problem [YTFRONT-5344] ([9a0450b](https://github.com/ytsaurus/ytsaurus-ui/commit/9a0450b5ee559b5551120a3d33d5a7e46bbd7709))
+* **Queries/Tutorials:** problem with URL when clicking on element [YTFRONT-5344] ([f485257](https://github.com/ytsaurus/ytsaurus-ui/commit/f4852576b96320d90d6a2bfe12f997dce92f4753))
+* **Scheduling:** returned filtering when selecting a pool tree [YTFRONT-5363] ([67a7c4d](https://github.com/ytsaurus/ytsaurus-ui/commit/67a7c4d0165f2b3ebe6e3bb82258cbf34ab81f64))
+
 ## [3.1.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.0.0...ui-v3.1.0) (2025-11-25)
 
 
