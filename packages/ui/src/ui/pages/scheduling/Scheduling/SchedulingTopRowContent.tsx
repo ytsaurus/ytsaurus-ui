@@ -185,7 +185,7 @@ function SchedulingPhysicalTree() {
         <div className={block('tree')}>
             <Select
                 value={[tree]}
-                filterable={treeItems?.length <= 5}
+                filterable={treeItems?.length >= 5}
                 options={treeItems}
                 onUpdate={(vals) => onChange(vals[0])}
                 className={block('path-tree')}
