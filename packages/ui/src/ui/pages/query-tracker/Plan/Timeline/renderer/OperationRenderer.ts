@@ -1,10 +1,8 @@
-import {TimelineEvent, yaTimelineConfig} from '../../../../packages/ya-timeline';
-import {AbstractEventRenderer} from '../../../../packages/ya-timeline/components/Events';
-import {Hitbox} from '../../../../packages/ya-timeline/components/Events/AbstractEventRenderer';
-
-import {duration as calcDuration} from '../utils';
-
-import {OperationType} from './utils';
+import {yaTimelineConfig} from '../../../../../packages/ya-timeline';
+import {Hitbox} from '../../../../../packages/ya-timeline/components/Events/AbstractEventRenderer';
+import {duration as calcDuration} from '../../utils';
+import {AbstractEventRenderer, TimelineEvent} from '@gravity-ui/timeline';
+import {OperationTimeline} from '../utils';
 
 const GROUP_HEIGHT = 16;
 const MIN_EVENT_WIDTH = 4;
@@ -72,11 +70,12 @@ function renderTriangles({ctx, x0, y0, width, height, color}: RenderTriangleProp
 export class OperationRenderer extends AbstractEventRenderer {
     render(
         ctx: CanvasRenderingContext2D,
-        event: OperationType,
+        event: OperationTimeline,
         isSelected: boolean,
         x0: number,
         x1: number,
         y: number,
+        _: number,
     ) {
         const y0 = y - GROUP_HEIGHT / 2;
         const width = Math.max(x1 - x0, MIN_EVENT_WIDTH);
@@ -111,7 +110,7 @@ export class OperationRenderer extends AbstractEventRenderer {
                 ctx.lineWidth = GROUP_BORDER_THICKNESS;
                 ctx.strokeRect(x0, y0, totalWidth || width, height);
 
-                if (event.backgroundColor) {
+                if (event.backgroundColor && event.isExpanded) {
                     const backgroundMargin = (yaTimelineConfig.TRACK_HEIGHT - height) / 3;
                     ctx.fillStyle = yaTimelineConfig.resolveCssValue(event.backgroundColor);
                     ctx.fillRect(
@@ -124,7 +123,7 @@ export class OperationRenderer extends AbstractEventRenderer {
                 }
             }
         } else {
-            const color = event.colors[event.trackIndex].color;
+            const color = event.colors[event.trackIndex]?.color;
             ctx.fillStyle = yaTimelineConfig.resolveCssValue(color);
 
             ctx.fillRect(x0, y0, width, height);

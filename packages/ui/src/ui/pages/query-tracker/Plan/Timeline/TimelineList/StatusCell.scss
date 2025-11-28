@@ -1,0 +1,34 @@
+.yt-timeline-status-cell {
+    &__icon {
+        width: 13px;
+        aspect-ratio: 1;
+        margin-right: 6px;
+        border-radius: 3px;
+
+        &_state {
+            &_not_started {
+                background: var(--yql-graph-color-operation-new);
+            }
+
+            &_started {
+                background: var(--yql-graph-color-operation-pending);
+            }
+
+            &_in_progress {
+                background: var(--yql-graph-color-operation-running);
+            }
+
+            &_finished {
+                background: var(--yql-graph-color-operation-completed);
+            }
+
+            &_failed {
+                background: var(--yql-graph-color-operation-failed);
+            }
+
+            &_aborted {
+                background: var(--yql-graph-color-operation-aborted);
+            }
+        }
+    }
+}
