@@ -1,0 +1,29 @@
+.yt-timeline-name-cell {
+    text-align: right;
+    float: right;
+
+    &_expanded {
+        font-weight: 600;
+    }
+    .node-name__name {
+        overflow: hidden;
+
+        white-space: nowrap;
+
+        *:not(:last-child) {
+            margin-right: 4px;
+        }
+
+        .g-link {
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+        }
+    }
+    .node-name__operation-node-info {
+        height: 16px;
+        span {
+            display: flex;
+        }
+    }
+}
