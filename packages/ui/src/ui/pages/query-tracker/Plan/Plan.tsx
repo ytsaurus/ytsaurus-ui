@@ -6,7 +6,7 @@ import Graph from './Graph';
 import {GraphColorsProvider} from './GraphColors';
 import {ProcessedNode} from './utils';
 
-import Timeline from './Timeline/Timeline';
+import {Timeline} from './Timeline';
 import {LargeGraphInfo} from './LargeGraphInfo';
 
 import './Plan.scss';
@@ -65,7 +65,7 @@ export default React.memo(function Plan({planView, isActive, className, prepareN
                     hide={planView !== 'timeline'}
                     className={block('table')}
                 >
-                    <Timeline graph={graph} prepareNode={prepareNode} />
+                    <Timeline />
                 </NotRenderUntilFirstVisible>
             </GraphColorsProvider>
         </div>
