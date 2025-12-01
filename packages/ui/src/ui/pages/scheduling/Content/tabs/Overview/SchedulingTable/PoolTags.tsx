@@ -11,7 +11,7 @@ import './PoolTags.scss';
 const block = cn('scheduling-pool-tags');
 
 function PoolTags({pool}: {pool: PoolTreeNode | PoolLeafNode}) {
-    const {integralType, flowCPU, flowGPU} = pool;
+    const {integralType} = pool;
 
     if (integralType === 'burst' || integralType === 'relaxed') {
         return (
@@ -19,17 +19,6 @@ function PoolTags({pool}: {pool: PoolTreeNode | PoolLeafNode}) {
                 key={'guarantee-type'}
                 className={block('tag')}
                 text={capitalize_(integralType)}
-                theme={'complementary'}
-            />
-        );
-    }
-
-    if (Number(flowCPU) > 0 || Number(flowGPU) > 0) {
-        return (
-            <Label
-                key="integral"
-                className={block('tag')}
-                text={'Integral'}
                 theme={'complementary'}
             />
         );
