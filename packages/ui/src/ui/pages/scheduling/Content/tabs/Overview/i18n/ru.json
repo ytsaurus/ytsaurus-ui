@@ -14,7 +14,6 @@
   "operations-running": "Бегущие операции",
   "operations-running-lightweigh": "Бегущие легковесные операции",
   "operations-running-max": "Максимальое число бегущих операций",
-  "pool-configuration": "{{pool_name}} конфигурация",
   "strong-guarantees": "Строгие гарантии",
   "weight": "Вес",
   "user-slots": "Пользовательские слоты"
