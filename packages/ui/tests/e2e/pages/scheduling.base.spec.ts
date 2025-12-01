@@ -1,8 +1,7 @@
 import {expect, test} from '@playwright/test';
 import {CLUSTER, makeClusterTille, makeClusterUrl} from '../../utils';
-import page from '../../../src/ui/store/reducers/operations/page';
 
-test('Scheduliing - Overview', async ({page}) => {
+test('Scheduliing - Summary', async ({page}) => {
     await page.goto(makeClusterUrl('scheduling'));
 
     await page.waitForSelector('text="yt-e2e-pool-1"');
@@ -11,13 +10,17 @@ test('Scheduliing - Overview', async ({page}) => {
     await expect(page).toHaveURL(makeClusterUrl('scheduling/overview?tree=default'));
 
     const rowCount = await page.$eval(
-        '.scheduling-overview__table tbody',
+        `.yt-scheduling-table tbody`,
         (node) => node.childElementCount,
     );
+
     expect(rowCount).toBeGreaterThan(1);
 
     await page.click('text="yt-e2e-pool-1"');
-    await page.waitForSelector('text="Guarantee type"');
+    await page
+        .locator('.collapsible-section')
+        .getByText('yt-e2e-pool-1')
+        .waitFor({state: 'visible'});
 
     await expect(page).toHaveTitle(makeClusterTille({page: 'Scheduling'}));
     await expect(page).toHaveURL(
@@ -25,36 +28,7 @@ test('Scheduliing - Overview', async ({page}) => {
     );
 
     const rowCount2 = await page.$eval(
-        '.scheduling-overview__table tbody',
-        (node) => node.childElementCount,
-    );
-    expect(rowCount2).toBe(1);
-});
-
-test('Scheduliing - Details', async ({page}) => {
-    await page.goto(makeClusterUrl('scheduling/details'));
-
-    await page.waitForSelector('text="yt-e2e-pool-1"');
-
-    await expect(page).toHaveTitle(makeClusterTille({page: 'Scheduling'}));
-    await expect(page).toHaveURL(makeClusterUrl('scheduling/details?tree=default'));
-
-    const rowCount = await page.$eval(
-        '.scheduling-details__table tbody',
-        (node) => node.childElementCount,
-    );
-    expect(rowCount).toBeGreaterThan(1);
-
-    await page.click('text="yt-e2e-pool-1"');
-    await page.waitForSelector('.scheduling-details__table-row_current_yes');
-
-    await expect(page).toHaveTitle(makeClusterTille({page: 'Scheduling'}));
-    await expect(page).toHaveURL(
-        makeClusterUrl('scheduling/details?pool=yt-e2e-pool-1&tree=default'),
-    );
-
-    const rowCount2 = await page.$eval(
-        '.scheduling-details__table tbody',
+        `.yt-scheduling-table tbody`,
         (node) => node.childElementCount,
     );
     expect(rowCount2).toBe(1);
@@ -62,8 +36,11 @@ test('Scheduliing - Details', async ({page}) => {
 
 test('Scheduling - Pool - Edit Dialog - Change Weight', async ({page}) => {
     await page.goto(makeClusterUrl('scheduling/overview?pool=yt-e2e-pool-1&tree=default'));
-    const editBtn = await page.getByTitle('edit pool yt-e2e-pool-1');
-    await editBtn.click();
+
+    await test.step('Open editor', async () => {
+        await page.locator('tr:nth-child(1) .yt-scheduling-table__actions').click();
+        await page.getByRole('menuitem').getByText('Edit').click();
+    });
     // pool edit dialog is open
     const dialogCaption = await page.waitForSelector('.df-dialog__caption');
     expect(await dialogCaption.innerText()).toBe('yt-e2e-pool-1');
@@ -74,9 +51,7 @@ test('Scheduling - Pool - Edit Dialog - Change Weight', async ({page}) => {
     await weightInput.type(newValue);
     const confirmBtn = await page.getByText('Confirm');
     await confirmBtn.click();
-    await page.waitForSelector(
-        `td.scheduling-overview__table-item_type_weight :text("${newValue}")`,
-    );
+    await page.waitForSelector(`td.gt-table__cell_id_weight :text("${newValue}")`);
 });
 
 test('Scheduling: Should display pools from Navigation', async ({page}) => {
@@ -100,10 +75,10 @@ test('Scheduling: Should display ephemeral pool for empty pool tree', async ({pa
     await expect(page).toHaveTitle(makeClusterTille({page: 'Scheduling'}));
     await expect(page).toHaveURL(makeClusterUrl('scheduling/overview?tree=e2e'));
 
-    const operationLinkSelector = `.scheduling-overview__name-content-name [href^="/${CLUSTER}/operations/"]`;
+    const operationLinkSelector = `.yt-expandable-cell [href^="/${CLUSTER}/operations/"]`;
     const length = await page.$$eval(operationLinkSelector, (nodes) => nodes.length);
     expect(length).toBe(0);
 
-    await page.click('.scheduling-overview__table-row-expander');
+    await page.click('.yt-expandable-cell__expand');
     await page.waitForSelector(operationLinkSelector);
 });

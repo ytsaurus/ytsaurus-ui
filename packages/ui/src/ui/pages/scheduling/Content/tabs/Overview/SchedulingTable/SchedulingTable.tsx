@@ -110,6 +110,7 @@ export function SchedulingTable() {
 
     return (
         <DataTableGravity
+            className={block()}
             table={table}
             virtualized
             rowHeight={49}
@@ -804,6 +805,7 @@ function RowActions({item}: {item: RowData}) {
     return (
         editable && (
             <DropdownMenu
+                switcherWrapperClassName={block('actions')}
                 items={[
                     {
                         text: 'Attributes',

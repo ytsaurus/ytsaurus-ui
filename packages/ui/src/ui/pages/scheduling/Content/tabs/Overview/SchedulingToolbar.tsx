@@ -56,6 +56,7 @@ function SchedulingContentMode() {
     return (
         <SegmentedRadioGroup
             size="m"
+            qa="scheduling:conftent:mode"
             value={mode}
             onUpdate={(v) => dispatch(schedulingChangeContentMode(v))}
             name="navigation-tablets-mode"

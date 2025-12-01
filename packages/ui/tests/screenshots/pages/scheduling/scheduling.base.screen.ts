@@ -5,37 +5,32 @@ import {replaceInnerHtml} from '../../../utils/dom';
 
 class Scheduling extends BasePage {
     async waitForLoadedPool() {
-        await this.page.waitForSelector('.elements-table__row :text("yt-e2e-pool-1")');
+        await this.page.waitForSelector('.yt-scheduling-table tr :text("yt-e2e-pool-1")');
     }
 
     async setDetailsMode(
         mode: 'CPU' | 'Memory' | 'GPU' | 'User slots' | 'Operations' | 'Integral guarantees',
     ) {
-        await this.page.click(`.scheduling-details__toolbar :text("${mode}")`, {force: true});
+        await this.page
+            .locator('.yt-scheduling-toolbar')
+            .getByRole('radiogroup')
+            .getByText(`${mode}`)
+            .click({force: true});
     }
 
     async replaceEstimatedGuarantee(type: 'cpu' | 'memory') {
         await replaceInnerHtml(this.page, {
-            [`tbody .scheduling-details__table-item_type_abs-guaranteed-${type}`]: '0.00',
+            [`tbody .gt-table__cell_id_abs_guaranteed_${type}`]: '0.00',
         });
     }
 
-    async showPoolEditor(pool: string) {
-        const editBtn = await this.page.getByTitle(`edit pool ${pool}`);
-        await editBtn.scrollIntoViewIfNeeded();
-        await editBtn.click();
+    async showPoolEditor(rowNumber: number) {
+        await this.page.locator(`tr:nth-child(${rowNumber}) .yt-scheduling-table__actions`).click();
+        await this.page.getByRole('menuitem').getByText('Edit').click();
     }
 }
 
 const scheduling = (page: Page) => new Scheduling({page});
-
-test('Scheduling - Overview', async ({page}) => {
-    await page.goto(makeClusterUrl(`scheduling/overview?pool=yt-e2e-pool-1&tree=default`));
-
-    await scheduling(page).waitForLoadedPool();
-
-    await expect(page).toHaveScreenshot();
-});
 
 test('Scheduling - ACL', async ({page}) => {
     await page.goto(makeClusterUrl(`scheduling/acl?pool=yt-e2e-pool-1&tree=default`));
@@ -54,9 +49,9 @@ test('Scheduling - ACL', async ({page}) => {
     await expect(page).toHaveScreenshot();
 });
 
-test('Scheduling - Details', async ({page}) => {
+test('Scheduling - Summary', async ({page}) => {
     await page.goto(
-        makeClusterUrl(`scheduling/details?pool=yt-e2e-pool-1&tree=default&contentMode=cpu`),
+        makeClusterUrl(`scheduling/overview?pool=yt-e2e-pool-1&tree=default&contentMode=cpu`),
     );
 
     await scheduling(page).waitForLoadedPool();
@@ -95,10 +90,10 @@ test('Scheduling - Details', async ({page}) => {
 
 test('Scheduling - Editor', async ({page}) => {
     await page.goto(
-        makeClusterUrl(`scheduling/details?pool=yt-e2e-pool-1&tree=default&contentMode=cpu`),
+        makeClusterUrl(`scheduling/overview?pool=yt-e2e-pool-1&tree=default&contentMode=cpu`),
     );
 
-    await scheduling(page).showPoolEditor('yt-e2e-pool-1');
+    await scheduling(page).showPoolEditor(1);
 
     await test.step('General', async () => {
         await scheduling(page).dfDialog.waitForField('Max running operation count');
