@@ -35,20 +35,15 @@ export function SchedulingMeta() {
     const guarantees = useSelector(getCurrentPoolGuarantees);
     const mainResource = useSelector(getSchedulingTreeMainResource);
 
+    // eslint-disable-next-line complexity
     const {items, subTitles} = React.useMemo(() => {
         const {mode, resources, integralType, flowCPU = 0, flowGPU = 0, weight} = pool ?? {};
         const {cpu, gpu, user_memory} = resources ?? {};
-        const hasStrong = cpu?.min! > 0 || gpu?.min! > 0 || user_memory?.min! > 0;
 
         const hasIntegralType =
             (integralType && integralType !== 'none') || flowCPU > 0 || flowGPU > 0;
 
-        const guaranteeType = [
-            hasStrong && 'Strong',
-            hasIntegralType && format.ReadableField(integralType),
-        ]
-            .filter(Boolean)
-            .join(' / ');
+        const guaranteeType = hasIntegralType ? format.ReadableField(integralType) : '';
 
         const burstUnit = formatUnits(guarantees.burst);
         const flowUnit = formatUnits(guarantees.flow);
@@ -83,22 +78,53 @@ export function SchedulingMeta() {
             subTitles: [i18n('general'), i18n('strong-guarantees')],
         };
 
-        const type = mainResource === 'memory' ? 'user_memory' : (mainResource ?? 'cpu');
+        const type = mainResource === 'memory' ? 'user_memory' : mainResource ?? 'cpu';
         const {accumulated_resource_volume, integral_pool_capacity} = pool?.attributes ?? {};
         const {[type]: capacity = NaN} = integral_pool_capacity ?? {};
 
         if (capacity >= 0 || burstUnit.length || flowUnit.length) {
             const {[type]: accumulated = NaN} = accumulated_resource_volume ?? {};
 
+            const formatFn = (v: number) => {
+                switch (type) {
+                    case 'user_memory':
+                        return format.Bytes(v) + '*hours';
+                    case 'cpu':
+                    case 'gpu':
+                        return format.NumberSmart(v) + ' CPU*hours';
+                    case 'user_slots':
+                        return format.NumberSmart(v) + ' Slot*hours';
+                }
+            };
+
             res.items.push([
                 {key: i18n('guarantee-type'), value: guaranteeType},
                 {
                     key: i18n('capacity'),
-                    value: <ChargeLevel value={(accumulated / capacity) * 100} />,
+                    value: (
+                        <Tooltip
+                            content={
+                                <MetaTable
+                                    items={[
+                                        {
+                                            key: 'accumulated_resource_volume',
+                                            value: formatFn(accumulated / 3600),
+                                        },
+                                        {
+                                            key: 'integral_pool_capacity',
+                                            value: formatFn(capacity / 3600),
+                                        },
+                                    ]}
+                                />
+                            }
+                        >
+                            <ChargeLevel value={(accumulated / capacity) * 100} />
+                        </Tooltip>
+                    ),
                     visible: capacity >= 0,
                 },
-                {key: i18n('burst-unit'), value: burstUnit, visible: burstUnit.length > 0},
-                {key: i18n('flow-unit'), value: flowUnit, visible: flowUnit.length > 0},
+                {key: i18n('burst'), value: burstUnit, visible: burstUnit.length > 0},
+                {key: i18n('flow'), value: flowUnit, visible: flowUnit.length > 0},
             ]);
             res.subTitles.push(i18n('integral-guarantees'));
         }

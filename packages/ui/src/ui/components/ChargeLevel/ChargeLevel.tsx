@@ -3,6 +3,7 @@ import cn from 'bem-cn-lite';
 
 import {Progress} from '@gravity-ui/uikit';
 
+import format from '../../common/hammer/format';
 import {addProgressStackSpacers} from '../../utils/progress';
 
 import './ChargeLevel.scss';
@@ -29,7 +30,7 @@ export function ChargeLevel({className, value = 0}: {value?: number; className?:
                 startSpace: true,
                 endSpace: true,
             })}
-            text={`${effectiveValue}%`}
+            text={`${format.NumberSmart(effectiveValue)}%`}
         />
     );
 }

@@ -1,7 +1,11 @@
 {
-  "burst-unit": "Burst unit",
+  "burst": "Burst",
+  "balanced": "Balanced",
   "capacity": "Capacity",
-  "flow-unit": "Flow unit",
+  "charging": "Charging",
+  "charged": "Charged",
+  "discharging": "Discharging",
+  "flow": "Flow",
   "general": "General",
   "guarantee-type": "Guarantee type",
   "integral-guarantees": "Integral guarantees",

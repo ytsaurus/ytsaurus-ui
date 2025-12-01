@@ -1,7 +1,11 @@
 {
-  "burst-unit": "Burst unit",
+  "burst": "Burst",
+  "balanced": "Сбалансированный",
   "capacity": "Емкость",
-  "flow-unit": "Flow unit",
+  "charging": "Заряжается",
+  "charged": "Заряжено",
+  "discharging": "Разряжается",
+  "flow": "Flow",
   "general": "Основные",
   "guarantee-type": "Тип гарантии",
   "integral-guarantees": "Интегральные гарантии",
