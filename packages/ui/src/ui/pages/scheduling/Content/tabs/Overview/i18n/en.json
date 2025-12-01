@@ -14,7 +14,6 @@
   "operations-running": "Running operations",
   "operations-running-lightweigh": "Running lightweigh operations",
   "operations-running-max": "Max running operations",
-  "pool-configuration": "{{pool_name}} configuration",
   "strong-guarantees": "Strong guarantees",
   "weight": "Weight",
   "user-slots": "User slots"
