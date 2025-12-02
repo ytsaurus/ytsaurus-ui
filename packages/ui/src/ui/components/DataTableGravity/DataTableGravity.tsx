@@ -52,7 +52,6 @@ export function DataTableGravity<TData, TScrollElement extends Element | Window>
         count: props.table.getRowModel().rows.length,
         estimateSize: () => rowHeight,
         overscan: 5,
-        //getScrollElement: () => containerRef.current,
     });
 
     const virtualizerProps = virtualized ? {rowVirtualizer} : ({} as {});
