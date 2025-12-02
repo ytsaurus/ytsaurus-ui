@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: titles
         run: |
-          curl ${{ github.event.pull_request.commits_url }} > commits.txt
+          curl ${{ github.event.pull_request.commits_url }}?per_page=100 > commits.txt
           cat commits.txt | jq '.[].commit.message' | sed -E 's/\\n.*/"/g' | jq -r > titles.txt
 
           grep -vE '^(build|chore|ci|docs|feat|fix|refactor|revert|test)(\(\S+\))?!?: [a-z]+' titles.txt > bad_titles.txt || true
