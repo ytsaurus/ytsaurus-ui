@@ -165,7 +165,7 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
         const loadAll = getExpandedPoolsLoadAll(state);
         const expandedPools: Map<string, ExpandedPoolInfo> = loadAll
             ? new Map()
-            : (getSchedulingOperationsExpandedPools(state)[tree] ?? new Map());
+            : getSchedulingOperationsExpandedPools(state)[tree] ?? new Map();
         const expandedPoolNames: Array<string> = [...expandedPools.keys()];
 
         const operationsExpandedPools: Array<string> = [...expandedPoolNames];
@@ -351,6 +351,8 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
                     setExpandedPools(poolsToCollapse);
                 }
 
+                const poolNames = Object.keys(rawPools).sort();
+
                 dispatch({
                     type: SCHEDULING_EXPANDED_POOLS_SUCCESS,
                     data: {
@@ -358,7 +360,15 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
                         rawOperations: Object.keys(rawOperations).length
                             ? rawOperations
                             : EMPTY_OBJECT,
-                        rawPools: Object.keys(rawPools).length ? rawPools : EMPTY_OBJECT,
+                        rawPools: poolNames.length
+                            ? poolNames.reduce(
+                                  (acc, key) => {
+                                      acc[key] = rawPools[key];
+                                      return acc;
+                                  },
+                                  {} as typeof rawPools,
+                              )
+                            : EMPTY_OBJECT,
                         flattenCypressData: Object.keys(cypressData).length
                             ? cypressData
                             : EMPTY_OBJECT,
