@@ -11,7 +11,6 @@ import type {DataSetEdges, Network, Options, Position} from 'vis-network';
 
 import {GraphColors, useGraphColors} from './GraphColors';
 import OperationNodeInfo from './OperationNodeInfo';
-import {useResultProgress} from './PlanContext';
 import {LegendInfo} from './components/Legend/Legend';
 import {Minimap} from './components/Minimap/Minimap';
 import VisNetwork from './components/VisNetwork/VisNetwork';
@@ -39,6 +38,8 @@ import plusIcon from '@gravity-ui/icons/svgs/plus.svg';
 import fitIcon from '@gravity-ui/icons/svgs/target.svg';
 
 import './Graph.scss';
+import {useSelector} from '../../../store/redux-hooks';
+import {getQuerySingleProgress} from '../../../store/selectors/query-tracker/query';
 
 const block = cn('graph');
 const showTooltipClass = `${block()}_show-tooltip`;
@@ -78,7 +79,7 @@ export default function Graph({isActive, className, graph, showMinimap, prepareN
     const [graphContainer, setGraphContainer] = React.useState<HTMLDivElement | null>(null);
     const colors = useGraphColors();
     const options = useConfig(colors);
-    const progress = useResultProgress();
+    const {yql_progress: progress} = useSelector(getQuerySingleProgress);
     const [nodes] = React.useState<DataSet<ProcessedNode>>(() => new DataSet());
     const [edges] = React.useState<DataSetEdges>(() => new DataSet());
 

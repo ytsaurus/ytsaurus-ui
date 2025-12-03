@@ -10,7 +10,7 @@ import {TMultipointConnection} from '@gravity-ui/graph/build/react-components/el
 
 export const createBlocks = (
     graph: ProcessedGraph,
-    progress: Progress | null,
+    progress: Progress | undefined,
     level: ECameraScaleLevel,
 ): {blocks: QueriesNodeBlock[]; connections: TMultipointConnection[]} => {
     const isMinimalisticView = level === ECameraScaleLevel.Minimalistic;
