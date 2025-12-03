@@ -45,3 +45,5 @@ src/ui/playwright-components/test-results
 src/ui/playwright-components/report-docker
 public/mockServiceWorker.js
 core.*
+python.venv
+tests/init-cluster-e2e.sh.env
