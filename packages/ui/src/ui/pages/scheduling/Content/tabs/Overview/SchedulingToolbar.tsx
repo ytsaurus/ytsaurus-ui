@@ -43,7 +43,9 @@ export function SchedulingToolbar() {
                     width: 200,
                 },
                 {node: <SchedulingAbc />},
-                ...(mode === 'summary' ? [{node: <SchedulingShowAbsResources />}] : []),
+                ...(mode === 'summary' || mode === 'custom'
+                    ? [{node: <SchedulingShowAbsResources />}]
+                    : []),
             ]}
         />
     );
