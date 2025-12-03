@@ -58,6 +58,11 @@ run_command() {
         useEnvFile=
         echo "Use the file to provide environment variables:"
         echo "    $envFile"
+        envFile=$(mktemp)
+        trap "rm -f $envFile" EXIT
+
+        env | grep -P "$(cat $(dirname $0)/../tests/env.names.txt | tr '\n' '|')" > $envFile || true
+        useEnvFile="--env-file $envFile"
     fi
 
     $CONTAINER_TOOL run --rm --network host \

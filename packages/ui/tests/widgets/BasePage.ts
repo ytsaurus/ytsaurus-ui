@@ -75,9 +75,8 @@ export class BasePage extends HasPage {
     async replaceBreadcrumbsByTitle(title: string, replacement: string) {
         await this.page.evaluate(
             (data) => {
-                const elements = document.querySelectorAll<HTMLSpanElement>(
-                    '.g-breadcrumbs .string',
-                );
+                const elements =
+                    document.querySelectorAll<HTMLSpanElement>('.g-breadcrumbs .string');
                 const element = Array.from(elements).find((i) => i.innerText === data.title);
                 if (element) {
                     element.innerText = data.replacement;
@@ -100,8 +99,10 @@ export class BasePage extends HasPage {
 
     async replaceACLInputPath() {
         await this.page.locator('.g-dialog').waitFor({state: 'visible'});
-        await this.page.locator(`input#path[value="//tmp/${E2E_DIR_NAME}"]`).waitFor({state: 'visible'});
-        await this.page.locator('input#path').evaluate((el: HTMLInputElement, value: string) => {
+        const pathInput = this.page.locator(`input#path[value="//tmp/${E2E_DIR_NAME}"]`);
+        await pathInput.waitFor({state: 'visible'});
+        await pathInput.fill('e2e.1970-01-01.00:00:00.xxxxxxxxxxx', {force: true});
+        await pathInput.evaluate((el: HTMLInputElement, value: string) => {
             if (el) {
                 el.value = value;
                 el.dispatchEvent(new Event('input', {bubbles: true}));

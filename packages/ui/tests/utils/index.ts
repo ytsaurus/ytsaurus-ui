@@ -1,5 +1,8 @@
 import './afterEach';
 
+/**
+ * Do not forget to update `../env.names.txt`
+ */
 export const {
     BASE_URL,
     CLUSTER,
