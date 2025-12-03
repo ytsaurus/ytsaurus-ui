@@ -78,7 +78,7 @@ export function SchedulingMeta() {
             subTitles: [i18n('general'), i18n('strong-guarantees')],
         };
 
-        const type = mainResource === 'memory' ? 'user_memory' : mainResource ?? 'cpu';
+        const type = mainResource === 'memory' ? 'user_memory' : (mainResource ?? 'cpu');
         const {accumulated_resource_volume, integral_pool_capacity} = pool?.attributes ?? {};
         const {[type]: capacity = NaN} = integral_pool_capacity ?? {};
 
