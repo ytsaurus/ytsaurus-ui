@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 
 import Graph from './Graph';
 import {GraphColorsProvider} from './GraphColors';
-import {ProcessedNode, preprocess} from './utils';
+import {ProcessedNode} from './utils';
 
 import Timeline from './Timeline/Timeline';
 import {LargeGraphInfo} from './LargeGraphInfo';
@@ -13,7 +13,7 @@ import './Plan.scss';
 import {QueriesGraphLazy} from './GraphEditor';
 import {useSelector} from '../../../store/redux-hooks';
 import {getSettingsQueryTrackerNewGraphType} from '../../../store/selectors/settings/settings-ts';
-import {getQuerySingleProgress} from '../../../store/selectors/query-tracker/query';
+import {getProcessedGraph} from '../../../store/selectors/query-tracker/queryPlan';
 import type {PlanView} from './PlanActions';
 
 const block = cn('plan');
@@ -26,13 +26,11 @@ interface PlanProps {
 }
 
 export default React.memo(function Plan({planView, isActive, className, prepareNode}: PlanProps) {
-    const {yql_plan: plan} = useSelector(getQuerySingleProgress);
+    const graph = useSelector(getProcessedGraph);
     const newGraphType = useSelector(getSettingsQueryTrackerNewGraphType);
 
     const [showLargeGraph, setShowLargeGraph] = React.useState(false);
     const resultProgressShowMinimap = true; // can be set as user setting in the future
-
-    const graph = React.useMemo(() => (plan ? preprocess(plan) : undefined), [plan]);
 
     if (!graph) {
         return null;
