@@ -1,4 +1,4 @@
-import React, {ReactNode, useState} from 'react';
+import React, {ReactNode, memo, useCallback, useState} from 'react';
 import block from 'bem-cn-lite';
 import {QueryItem, isSingleProgress} from '../../../types/query-tracker/api';
 import {Tab, TabList, TabPanel, TabProvider} from '@gravity-ui/uikit';
@@ -11,7 +11,6 @@ import NotRenderUntilFirstVisible from '../NotRenderUntilFirstVisible/NotRenderU
 import {PlanActions, PlanView} from '../Plan/PlanActions';
 import {QueryResultContainer} from './QueryResultContainer';
 import {QueryChartTab} from './QueryChartTab';
-import {PlanContainer} from './PlanContainer';
 import {extractOperationIdToCluster} from './helpers/extractOperationIdToCluster';
 import {
     QueryResultTab,
@@ -28,6 +27,9 @@ import {
     selectActiveResultParams,
     selectQueryResultTabs,
 } from '../../../store/selectors/query-tracker/queryTabs';
+import Plan from '../Plan/Plan';
+import {preparePlanNode} from '../Plan/services/preparePlanNode';
+import {ProcessedNode} from '../Plan/utils';
 const b = block('query-results');
 
 type Props = {
@@ -37,7 +39,7 @@ type Props = {
     minimized: boolean;
 };
 
-export const QueryResults = React.memo<Props>(function QueryResults({
+export const QueryResults = memo<Props>(function QueryResults({
     query,
     className,
     toolbar,
@@ -55,6 +57,11 @@ export const QueryResults = React.memo<Props>(function QueryResults({
             isSingleProgress(query?.progress) ? query?.progress?.yql_statistics : undefined,
         );
     }, [query?.progress]);
+
+    const handlePrepareNode = useCallback(
+        (node: ProcessedNode) => preparePlanNode(node, operationIdToCluster),
+        [operationIdToCluster],
+    );
 
     if (!query) return null;
 
@@ -94,13 +101,7 @@ export const QueryResults = React.memo<Props>(function QueryResults({
             );
         }
         if (tabId === 'progress') {
-            return (
-                <PlanContainer
-                    planView={planView}
-                    isActive={true}
-                    operationIdToCluster={operationIdToCluster}
-                />
-            );
+            return <Plan planView={planView} isActive prepareNode={handlePrepareNode} />;
         }
         return null;
     };
