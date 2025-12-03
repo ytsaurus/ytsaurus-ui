@@ -74,11 +74,11 @@ export default app;
  * The solution is taken from https://stackoverflow.com/questions/40182121/whats-the-cause-of-the-error-getaddrinfo-eai-again
  */
 
-import http from 'http';
-import https from 'https';
-import CacheableLookup from 'cacheable-lookup';
+// import http from 'http';
+// import https from 'https';
+// import CacheableLookup from 'cacheable-lookup';
 
-const cacheable = new CacheableLookup();
+// const cacheable = new CacheableLookup();
 
-cacheable.install(http.globalAgent);
-cacheable.install(https.globalAgent);
+// cacheable.install(http.globalAgent);
+// cacheable.install(https.globalAgent);
