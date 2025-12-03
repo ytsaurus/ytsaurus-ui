@@ -26,6 +26,8 @@ class Scheduling extends BasePage {
 
     async showPoolEditor(rowNumber: number) {
         await this.page.locator(`tr:nth-child(${rowNumber}) .yt-scheduling-table__actions`).click();
+        // without the timeout the page might be horizontally scrolled
+        await this.page.waitForTimeout(400);
         await this.page.getByRole('menuitem').getByText('Edit').click();
     }
 }
