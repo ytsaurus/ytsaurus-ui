@@ -33,6 +33,7 @@ import {SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {flattenAttributes} from '../../../utils/scheduling/scheduling';
 import {UIBatchError} from '../../../utils/errors/ui-error';
+import {PoolTreeNode} from '../../../utils/scheduling/pool-child';
 import {toaster} from '../../../utils/toaster';
 
 type ExpandedPoolsThunkAction = ThunkAction<
@@ -56,9 +57,11 @@ const POOL_FIELDS_TO_LOAD = [
     'fifo_index',
     'fifo_sort_parameters',
     'integral_guarantee_type',
+    'integral_pool_capacity',
     'is_ephemeral',
     'max_operation_count',
     'max_running_operation_count',
+    'lightweight_running_operation_count',
     'max_share_ratio',
     'min_share_ratio',
     'mode',
@@ -71,6 +74,7 @@ const POOL_FIELDS_TO_LOAD = [
     'specified_resource_limits',
     'resource_usage',
     'estimated_guarantee_resources',
+    'effective_strong_guarantee_resources',
     'running_operation_count',
     'specified_burst_guarantee_resources',
     'specified_resource_flow',
@@ -347,6 +351,8 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
                     setExpandedPools(poolsToCollapse);
                 }
 
+                const poolNames = Object.keys(rawPools).sort();
+
                 dispatch({
                     type: SCHEDULING_EXPANDED_POOLS_SUCCESS,
                     data: {
@@ -354,7 +360,15 @@ function loadExpandedOperationsAndPools(tree: string): ExpandedPoolsThunkAction 
                         rawOperations: Object.keys(rawOperations).length
                             ? rawOperations
                             : EMPTY_OBJECT,
-                        rawPools: Object.keys(rawPools).length ? rawPools : EMPTY_OBJECT,
+                        rawPools: poolNames.length
+                            ? poolNames.reduce(
+                                  (acc, key) => {
+                                      acc[key] = rawPools[key];
+                                      return acc;
+                                  },
+                                  {} as typeof rawPools,
+                              )
+                            : EMPTY_OBJECT,
                         flattenCypressData: Object.keys(cypressData).length
                             ? cypressData
                             : EMPTY_OBJECT,
@@ -510,7 +524,7 @@ export function setLoadAllOperations(loadAll: boolean): ExpandedPoolsThunkAction
 
 function calcExpandedPoolInfo(
     poolName: string,
-    poolsByName: Record<string, PoolInfo>,
+    poolsByName: Record<string, PoolTreeNode>,
 ): ExpandedPoolInfo {
     let data = poolsByName[poolName];
     const isEphemeral = data?.isEphemeral;

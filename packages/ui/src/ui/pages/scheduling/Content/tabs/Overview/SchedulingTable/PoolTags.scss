@@ -1,0 +1,12 @@
+.scheduling-pool-tags {
+    &__tag {
+        margin-right: 4px;
+        flex-shrink: 1;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}

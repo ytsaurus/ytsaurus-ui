@@ -8,11 +8,11 @@ import {getCurrentPool, getIsRoot, getPool, getTree, getTreeResources} from './s
 import ypath from '../../../common/thor/ypath';
 import {ROOT_POOL_NAME} from '../../../constants/scheduling';
 import {getCluster} from '../global';
-import {PoolInfo, getPools} from './scheduling-pools';
+import {getPools} from './scheduling-pools';
 
 export const getSchedulingBreadcrumbItems = createSelector(
     [getPool, getPools],
-    (pool: string, pools: Array<PoolInfo>) => {
+    (pool: string, pools) => {
         let current: string | undefined = pool;
         const path = [];
         while (current) {
@@ -25,7 +25,7 @@ export const getSchedulingBreadcrumbItems = createSelector(
     },
 );
 
-interface PoolStaticConfigurationItem {
+export interface PoolStaticConfigurationItem {
     name: string;
     cpu?: number;
     cpuLabel?: string;
@@ -46,11 +46,11 @@ function makeStaticConfigurationItem(name: string, attrs: object): PoolStaticCon
     };
 }
 
-export const getCurrentPoolStaticConfiguration = createSelector(
+export const getCurrentPoolGuarantees = createSelector(
     [getIsRoot, getCurrentPool],
-    (isRoot, data): Array<PoolStaticConfigurationItem> => {
+    (isRoot, data) => {
         if (isRoot || !data?.attributes) {
-            return [];
+            return {};
         }
 
         const burst_guarantee_resources = ypath.getValue(
@@ -59,15 +59,23 @@ export const getCurrentPoolStaticConfiguration = createSelector(
         );
         const resource_flow = ypath.getValue(data.attributes, '/specified_resource_flow');
 
-        return [
-            makeStaticConfigurationItem(
+        return {
+            strong: makeStaticConfigurationItem(
                 'Strong guarantee',
                 ypath.getValue(data.attributes, '/strong_guarantee_resources'),
             ),
-            burst_guarantee_resources &&
-                makeStaticConfigurationItem('Burst', burst_guarantee_resources),
-            resource_flow && makeStaticConfigurationItem('Flow', resource_flow),
-        ].filter(Boolean);
+            burst: burst_guarantee_resources
+                ? makeStaticConfigurationItem('Burst', burst_guarantee_resources)
+                : undefined,
+            flow: resource_flow ? makeStaticConfigurationItem('Flow', resource_flow) : undefined,
+        };
+    },
+);
+
+export const getCurrentPoolStaticConfiguration = createSelector(
+    [getCurrentPoolGuarantees],
+    ({strong, burst, flow}): Array<PoolStaticConfigurationItem> => {
+        return [strong, burst, flow].filter(Boolean) as Array<PoolStaticConfigurationItem>;
     },
 );
 

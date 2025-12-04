@@ -1,0 +1,37 @@
+.yt-gravity-table {
+    .gt-table__header {
+        top: calc(
+            var(--yt-sticky-container-top-offset) + var(--yt-with-sticky-toolbar-toolbar-height)
+        );
+    }
+
+    .gt-table__header_sticky {
+        z-index: 2;
+    }
+
+    .gt-styled-table__cell {
+        --g-text-body-1-font-size: 14px;
+    }
+    .gt-styled-table__header-cell {
+        --g-text-subheader-1-font-size: 14px;
+    }
+
+    .gt-table__header-cell_pinned-right,
+    .gt-table__cell_pinned-right,
+    .gt-table__header-cell_pinned-left,
+    .gt-table__cell_pinned-left {
+        background-color: var(--main-background);
+        opacity: 0.9;
+    }
+
+    &__row_highlighted {
+        background-color: var(--hover-background);
+
+        .gt-table__header-cell_pinned-right,
+        .gt-table__cell_pinned-right,
+        .gt-table__header-cell_pinned-left,
+        .gt-table__cell_pinned-left {
+            background-color: var(--light-background);
+        }
+    }
+}

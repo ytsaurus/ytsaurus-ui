@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
-import {findDOMNode} from 'react-dom';
 import PropTypes from 'prop-types';
-import {CopyToClipboard} from '@gravity-ui/uikit';
 import copyToClipboard from 'copy-to-clipboard';
 import cn from 'bem-cn-lite';
 
-import Button from '../Button/Button';
+import {Button, CopyToClipboard} from '@gravity-ui/uikit';
 
 import Icon from '../../components/Icon/Icon';
 import Hotkey from '../../components/Hotkey/Hotkey';
@@ -44,6 +42,7 @@ export default class ClipboardButton extends Component {
         face: 'regular',
         buttonText: null,
         timeout: 500,
+        view: 'outlined',
     };
 
     iconByState = {
@@ -52,11 +51,12 @@ export default class ClipboardButton extends Component {
         error: 'times',
     };
 
-    handleHotkey = () => {
-        const button = findDOMNode(this.islandsButton); // eslint-disable-line react/no-find-dom-node
+    buttonRef = React.createRef();
 
-        if (button) {
-            button.click();
+    handleHotkey = () => {
+        const {current} = this.buttonRef;
+        if (current?.click) {
+            current.click();
         }
     };
 
@@ -76,15 +76,19 @@ export default class ClipboardButton extends Component {
         );
     }
 
-    onCopy = (text, result) => {
-        const {shiftText, onCopy} = this.props;
-        if (window.event.shiftKey && shiftText) {
-            text = shiftText;
-            copyToClipboard(shiftText);
+    onClick = (event) => {
+        const {text, shiftText, onCopy} = this.props;
+        let resText = text;
+        if (event?.shiftKey && shiftText) {
+            resText = shiftText;
+            copyToClipboard(resText);
         }
         if ('function' === typeof onCopy) {
-            onCopy(text, result);
+            onCopy(resText);
         }
+
+        event.preventDefault();
+        event.stopPropagation();
     };
 
     render() {
@@ -113,18 +117,13 @@ export default class ClipboardButton extends Component {
                 )}
             >
                 <Tooltip content={hoverContent}>
-                    <CopyToClipboard text={text} onCopy={this.onCopy} timeout={timeout}>
+                    <CopyToClipboard text={text} timeout={timeout}>
                         {(state) =>
                             buttonText ? (
                                 <Button
                                     {...buttonProps}
-                                    ref={(ref) => {
-                                        this.islandsButton = ref;
-                                    }}
-                                    onClick={function (evt) {
-                                        evt.preventDefault();
-                                        evt.stopPropagation();
-                                    }}
+                                    buttonRef={this.buttonRef}
+                                    onClick={this.onClick}
                                 >
                                     <Icon awesome={this.iconByState[state]} face={face} />
                                     {buttonText}
@@ -132,13 +131,8 @@ export default class ClipboardButton extends Component {
                             ) : (
                                 <Button
                                     {...buttonProps}
-                                    ref={(ref) => {
-                                        this.islandsButton = ref;
-                                    }}
-                                    onClick={function (evt) {
-                                        evt.preventDefault();
-                                        evt.stopPropagation();
-                                    }}
+                                    ref={this.buttonRef}
+                                    onClick={this.onClick}
                                 >
                                     <Icon awesome={this.iconByState[state]} face={face} />
                                 </Button>

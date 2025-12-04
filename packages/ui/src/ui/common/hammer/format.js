@@ -229,4 +229,67 @@ format['RowsPerSecond'] = function (value, settings = {digits: 2}) {
     return `${format.Number(value, settings)} rows/s`;
 };
 
+format['NumberSmart'] = function NumberSmart(value, settings) {
+    let significantDigits = parseSetting(settings, 'significantDigits', 3);
+    const MAX_PRECISION = 20;
+    const DECIMAL_DELIMETER = '.';
+    const ZERO = '0';
+
+    if (format.validNumber(value)) {
+        if (value === 0) {
+            return '0';
+        }
+
+        const [integerPart, decimalPart] = value.toFixed(MAX_PRECISION).split(DECIMAL_DELIMETER);
+        let siginificantDigitEncountered = false;
+
+        if (integerPart !== ZERO && integerPart !== `-${ZERO}`) {
+            if (integerPart.length >= significantDigits) {
+                return format.Number(value, {digits: 0});
+            }
+
+            siginificantDigitEncountered = true;
+            significantDigits -= value > 0 ? integerPart.length : integerPart.length - 1;
+        }
+
+        let decimalResult = '';
+        let hasSignificantDecimalPart = false;
+
+        for (let i = 0; i < decimalPart.length && significantDigits > 0; i++) {
+            const digit = decimalPart[i];
+
+            if (digit !== ZERO) {
+                siginificantDigitEncountered = true;
+                hasSignificantDecimalPart = true;
+            }
+
+            if (siginificantDigitEncountered) {
+                significantDigits--;
+            }
+
+            decimalResult += digit;
+        }
+
+        if (!hasSignificantDecimalPart) {
+            return format.Number(value, {digits: 0});
+        }
+
+        const res = format.Number(value, {digits: decimalResult.length});
+        const dotIndex = -1 !== res.indexOf(DECIMAL_DELIMETER);
+        if (dotIndex === -1) {
+            return res;
+        }
+
+        for (let i = res.length - 1; i >= 0; --i) {
+            if (res[i] !== ZERO) {
+                return res.substring(0, i + 1);
+            }
+        }
+
+        return res;
+    } else {
+        return format.NO_VALUE;
+    }
+};
+
 export default format;

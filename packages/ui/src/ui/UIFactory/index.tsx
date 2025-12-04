@@ -7,7 +7,6 @@ import type {SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/type
 import type {MetaTableItem} from '../components/MetaTable/MetaTable';
 import type {LocationParameters, PathParameters} from '../store/location';
 import type {TabletBundle} from '../store/reducers/tablet_cell_bundles';
-import type {PoolInfo} from '../store/selectors/scheduling/scheduling-pools';
 import type {ClusterConfig, ClusterUiConfig} from '../../shared/yt-types';
 import type {ClusterAppearance} from '../appearance';
 import type {AppNavigationProps} from '../containers/AppNavigation/AppNavigationPageLayout';
@@ -28,11 +27,13 @@ import type {QueryItem} from '../types/query-tracker/api';
 import type {BaseMapNode} from '../utils/navigation/content/map-nodes/node';
 import type {PreloadErrorType} from '../constants';
 import type {RootState} from '../store/reducers';
-import {YTError} from '../types';
-import {AnalyticsService} from '../common/utils/metrics';
+import type {YTError} from '../types';
+
+import type {AnalyticsService} from '../common/utils/metrics';
 import type {DetailedOperationSelector} from '../pages/operations/selectors';
-import {JobItem} from '../store/reducers/operations/jobs/jobs-monitor';
 import type {ChatMessage} from '../types/ai-chat';
+import type {JobItem} from '../store/reducers/operations/jobs/jobs-monitor';
+import type {PoolTreeNode} from '../utils/scheduling/pool-child';
 
 type HeaderItemOrPage =
     | {
@@ -161,6 +162,12 @@ export interface InlineSuggestionsApi {
     onQueryLoad(): void;
     onQueryCreate(): void;
 }
+
+export type RenderSchedulingTableItemExtraProps = {
+    itemClassName?: string;
+    pool: PoolTreeNode;
+    clusterUiConfig: ClusterUiConfig;
+};
 
 export interface UIFactory {
     getClusterAppearance(cluster?: string): undefined | ClusterAppearance;
@@ -303,8 +310,8 @@ export interface UIFactory {
 
     renderTransferQuotaNoticeForPool(props: {
         className?: string;
-        pool?: PoolInfo;
-        parentPool?: PoolInfo;
+        pool?: PoolTreeNode;
+        parentPool?: PoolTreeNode;
         clusterUiConfig?: ClusterUiConfig;
         isTopLevel?: boolean;
     }): React.ReactNode;
@@ -341,7 +348,7 @@ export interface UIFactory {
     }): undefined | Array<MetaTableItem>;
 
     getExtraMetaTableItemsForPool(props: {
-        pool: PoolInfo;
+        pool: PoolTreeNode;
         clusterUiConfig?: ClusterUiConfig;
     }): undefined | Array<MetaTableItem>;
 
@@ -358,12 +365,9 @@ export interface UIFactory {
         clusterUiConfig?: ClusterUiConfig;
     }): React.ReactNode;
 
-    renderSchedulingTableItemExtraControls(props: {
-        itemClassName?: string;
-        cluster: string;
-        pool: unknown;
-        clusterUiConfig: ClusterUiConfig;
-    }): React.ReactNode;
+    renderSchedulingTableItemExtraControls(
+        props: RenderSchedulingTableItemExtraProps,
+    ): React.ReactNode;
 
     renderBundlesTableItemExtraControls(props: {
         itemClassName?: string;

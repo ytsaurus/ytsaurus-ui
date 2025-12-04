@@ -1,6 +1,16 @@
 #!/bin/bash
 set -xe
 
+if [ -f $0.env ]; then
+    (
+        echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        echo "Trying to apply environment from $0.env"
+        cat $0.env
+        echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    ) 1>&2
+    . $0.env
+fi
+
 EXPIRATION_TIMEOUT=${EXPIRATION_TIMEOUT:-3600000}
 
 if ! which yt >/dev/null; then

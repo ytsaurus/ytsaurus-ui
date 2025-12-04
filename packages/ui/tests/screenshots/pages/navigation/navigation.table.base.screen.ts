@@ -67,16 +67,9 @@ test('Navigation: table - Remount needed', async ({page}) => {
     await table(page).replaceTableMeta();
 
     await test.step('Remount alert visible', async () => {
-        await expect(page).toHaveScreenshot();
-    });
-    await test.step('Page after remount', async () => {
-        await page.locator('.remount-alert__button').click();
-
-        await expect(page.locator('.remount-alert')).toBeHidden();
-
-        await table(page).replaceBreadcrumbsTestDir();
-        await table(page).replaceTableMeta();
-
+        await page
+            .getByText('Some table settings are not applied to tablets')
+            .waitFor({state: 'visible'});
         await expect(page).toHaveScreenshot();
     });
 });

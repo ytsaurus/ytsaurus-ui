@@ -63,25 +63,27 @@ const getPoolsPrepared = createSelector(
             const preparedPools = preparePools(rawPools!, rawOperations);
             return map_(preparedPools, (pool) => {
                 const cypressAttributes = ypath.getValue(attributes)[pool.name];
-                return updatePoolChild(pool, cypressAttributes, 'pool', treeResources);
+                return updatePoolChild(
+                    Object.assign(pool, {type: 'pool' as const}),
+                    cypressAttributes,
+                    'pool',
+                    treeResources,
+                );
             });
         });
     },
 );
 
-export const getSchedulingPoolsMapByName = createSelector(
-    [getPoolsPrepared],
-    (pools: Array<PoolInfo>) => {
-        return reduce_(
-            pools,
-            (acc, item) => {
-                acc[item.name] = item;
-                return acc;
-            },
-            {} as Record<string, PoolInfo>,
-        );
-    },
-);
+export const getSchedulingPoolsMapByName = createSelector([getPoolsPrepared], (pools) => {
+    return reduce_(
+        pools,
+        (acc, item) => {
+            acc[item.name] = item;
+            return acc;
+        },
+        {} as Record<string, (typeof pools)[number]>,
+    );
+});
 
 export const getSchedulingPoolsExtraInfo = createSelector(
     [getSchedulingPoolsMapByName],
@@ -99,7 +101,17 @@ export const getSchedulingPoolsExtraInfo = createSelector(
 
 type PoolName = string;
 
-function calcChildrenIntegrals(pool: PoolInfo, dst: Record<PoolName, PoolExtraInfo>) {
+function calcChildrenIntegrals(
+    pool: {
+        children: Array<typeof pool>;
+        name: string;
+        flowCPU?: number;
+        burstCPU?: number;
+        childrenFlowCPU?: number;
+        childrenBurstCPU?: number;
+    },
+    dst: Record<PoolName, PoolExtraInfo>,
+) {
     const {children, name} = pool;
     if (!children?.length) {
         const res = (dst[name] = {
@@ -136,19 +148,34 @@ export interface OperationInfo {
     name: string;
     type: 'operation';
     parent: string;
-    attributes: {title?: string; user?: string; type?: string};
+    attributes: {
+        title?: string;
+        user?: string;
+        type?: string;
+        accumulated_resource_volume?: Record<PoolResourceType, number | undefined>;
+        integral_pool_capacity?: Record<PoolResourceType, number | undefined>;
+        dominant_resource?: PoolResourceType;
+    };
     cypressAttributes: object;
     flowCPU: number;
     burstCPU: number;
     flowGPU: number;
     integralType?: string;
-    mode?: string;
+    mode?: 'fifo' | 'fair_share';
 
     operationCount?: number;
     maxOperationCount?: number;
     maxRunningOperationCount?: number;
 
+    fifoIndex?: number;
+
     pool: string;
+
+    title?: string;
+    user?: never;
+
+    child_pool_count?: number;
+    pool_operation_count?: number;
 }
 
 export interface PoolInfo extends Omit<OperationInfo, 'type' | 'pool'> {
@@ -158,14 +185,13 @@ export interface PoolInfo extends Omit<OperationInfo, 'type' | 'pool'> {
     leaves: Array<OperationInfo>;
     isEphemeral?: boolean;
     resources?: PoolResources;
-    fifoIndex?: number;
     weight?: number;
     minShareRatio?: number;
     maxShareRatio?: number;
     fairShareRatio?: number;
     usageRatio?: number;
     demandRatio?: number;
-    dominantResource?: number;
+    dominantResource?: PoolResourceType;
     runningOperationCount?: number;
     operationCount?: number;
     maxOperationCount?: number;

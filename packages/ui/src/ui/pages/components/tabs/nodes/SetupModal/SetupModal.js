@@ -24,7 +24,8 @@ import {
     savePreset,
 } from '../../../../../store/actions/components/nodes/nodes';
 import {FLAG_STATE, MEDIUM_COLS_PREFIX} from '../../../../../constants/components/nodes/nodes';
-import {parseBytes, updateListWithAll} from '../../../../../utils';
+import {updateListWithAll} from '../../../../../utils';
+import {parseBytes} from '../../../../../utils/parse/parse-bytes';
 
 import {getMediumListNoCache} from '../../../../../store/selectors/thor';
 import TagsFilter from './TagsFilter/TagsFilter';
