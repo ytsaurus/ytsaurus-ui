@@ -11,7 +11,7 @@ import {
     selectConversationId,
     selectConversations,
 } from '../../selectors/ai/chat';
-import {getQueryDraft} from '../../selectors/query-tracker/query';
+import {getQueryDraft, getQueryEngine} from '../../selectors/query-tracker/query';
 import {
     addAttachedFile,
     addConversationItem,
@@ -39,12 +39,24 @@ import {
     parseConversationItems,
     parseStreamLine,
 } from './helpers';
+import {AGENT_MAP} from '../../../containers/AiChat/constants';
 
 const BASE_PATH = '/api/code-assistant';
+const DEFAULT_AGENT = 'qt';
+
 type AsyncAction = ThunkAction<void, RootState, undefined, Action>;
 
-const META = {
-    agent: 'qt',
+const isQueriesPage = () => window.location.pathname.includes('/queries');
+
+const getMeta = (state: RootState) => {
+    if (!isQueriesPage()) {
+        return {agent: DEFAULT_AGENT};
+    }
+
+    const engine = getQueryEngine(state);
+    const agent = engine ? AGENT_MAP[engine] : DEFAULT_AGENT;
+
+    return {agent};
 };
 
 const readFileAsText = (file: File): Promise<string> => {
@@ -85,9 +97,7 @@ async function* streamAsyncIterator(
 }
 
 const prepareQueryContext = (state: RootState): string[] => {
-    const isQueriesPage = window.location.pathname.includes('/queries');
-
-    if (!isQueriesPage) {
+    if (!isQueriesPage()) {
         return [];
     }
 
@@ -193,10 +203,11 @@ export const sendQuestion = (): AsyncAction => async (dispatch, getState) => {
 
     try {
         let currentConversationId = conversationId;
+        const meta = getMeta(state);
         if (!currentConversationId) {
             const {data} = await axios.post<Conversation>(`${BASE_PATH}/create-conversation`, {
                 model,
-                metadata: {...META, topic: DEFAULT_CONVERSATION_TITLE},
+                metadata: {...meta, topic: DEFAULT_CONVERSATION_TITLE},
             });
             currentConversationId = data.id;
             dispatch(setConversations({items: [data, ...items], hasMore, lastId, loading: false}));
@@ -223,7 +234,7 @@ export const sendQuestion = (): AsyncAction => async (dispatch, getState) => {
             body: JSON.stringify({
                 message: question,
                 model,
-                metadata: META,
+                metadata: meta,
                 conversationId: currentConversationId,
                 contextMessages: contextMessages.length > 0 ? contextMessages : undefined,
                 files: files.length > 0 ? files : undefined,
