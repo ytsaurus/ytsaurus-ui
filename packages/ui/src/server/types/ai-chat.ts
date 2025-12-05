@@ -15,6 +15,9 @@ export interface SendMessageRequest {
     conversationId: string;
     message: string;
     model: string;
+    prompt?: {
+        id: string;
+    };
     metadata?: Record<string, any>;
     contextMessages?: string[];
     files?: AttachedFile[];

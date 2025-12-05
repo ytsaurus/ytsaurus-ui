@@ -147,165 +147,170 @@ export const summarizeConversationTitle =
 const TITLE_GENERATION_FREQUENCY = 5;
 const DEFAULT_CONVERSATION_TITLE = 'новый чат';
 
-export const sendQuestion = (): AsyncAction => async (dispatch, getState) => {
-    const processStreamLine = (line: string, fullText: string): string => {
-        const event = parseStreamLine(line);
-        if (!event) return fullText;
+export const sendQuestion =
+    (promptId?: string): AsyncAction =>
+    async (dispatch, getState) => {
+        const processStreamLine = (line: string, fullText: string): string => {
+            const event = parseStreamLine(line);
+            if (!event) return fullText;
 
-        const delta = getTextDelta(event);
-        if (delta) {
-            const newFullText = fullText + delta;
-            dispatch(setCurrentAnswer(newFullText));
-            return newFullText;
+            const delta = getTextDelta(event);
+            if (delta) {
+                const newFullText = fullText + delta;
+                dispatch(setCurrentAnswer(newFullText));
+                return newFullText;
+            }
+
+            if ('type' in event && event.type === 'response.output_item.done' && event.item) {
+                const messageItem = createMessageItem(event.item, fullText);
+                if (messageItem) {
+                    dispatch(addConversationItem(messageItem));
+                    dispatch(clearCurrentAnswer());
+                    return '';
+                }
+
+                const mcpItem = createMcpItem(event.item);
+                if (mcpItem) {
+                    dispatch(addConversationItem(mcpItem));
+                }
+            }
+
+            return fullText;
+        };
+
+        const state = getState();
+        const question = selectChatQuestion(state) || '';
+        const conversationId = selectConversationId(state);
+        const {items, hasMore, lastId} = selectConversations(state);
+        const attachedFiles = selectAttachedFiles(state);
+        const model = selectAiChatModel();
+        let summarize = false;
+
+        if (!question && !promptId) return;
+
+        const contextMessages = prepareQueryContext(state);
+
+        dispatch(setMode('chat'));
+        if (question) {
+            dispatch(
+                addConversationItem({
+                    id: '',
+                    type: 'question',
+                    value: question,
+                }),
+            );
         }
+        dispatch(setQuestion(undefined));
+        dispatch(setSending(true));
 
-        if ('type' in event && event.type === 'response.output_item.done' && event.item) {
-            const messageItem = createMessageItem(event.item, fullText);
-            if (messageItem) {
-                dispatch(addConversationItem(messageItem));
+        let reader: ReadableStreamDefaultReader<Uint8Array> | undefined;
+        try {
+            let currentConversationId = conversationId;
+            const meta = getMeta(state);
+            if (!currentConversationId) {
+                const {data} = await axios.post<Conversation>(`${BASE_PATH}/create-conversation`, {
+                    model,
+                    metadata: {...meta, topic: DEFAULT_CONVERSATION_TITLE},
+                });
+                currentConversationId = data.id;
+                dispatch(
+                    setConversations({items: [data, ...items], hasMore, lastId, loading: false}),
+                );
+                summarize = true;
+            }
+
+            const files = await Promise.all(
+                attachedFiles.map(async (file) => ({
+                    name: file.name,
+                    type: file.type,
+                    content: await readFileAsText(file),
+                })),
+            );
+
+            if (currentAbortController) {
+                currentAbortController.abort();
+            }
+            currentAbortController = new AbortController();
+            const response = await fetch(`${BASE_PATH}/send-message`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: question,
+                    model,
+                    metadata: meta,
+                    conversationId: currentConversationId,
+                    promptId: promptId,
+                    contextMessages: contextMessages.length > 0 ? contextMessages : undefined,
+                    files: files.length > 0 ? files : undefined,
+                }),
+                signal: currentAbortController.signal,
+            });
+
+            if (!response.ok) {
+                throw new Error(`${ERROR_MESSAGE.HTTP_ERROR} ${response.status}`);
+            }
+
+            reader = response.body?.getReader();
+            const decoder = new TextDecoder();
+
+            if (!reader) {
+                throw new Error(ERROR_MESSAGE.RESPONSE_NOT_READABLE);
+            }
+
+            let buffer = '';
+            let fullText = '';
+
+            for await (const chunk of streamAsyncIterator(reader)) {
+                const decodedChunk = decoder.decode(chunk, {stream: true});
+                buffer += decodedChunk;
+                const lines = buffer.split('\n');
+
+                for (let i = 0; i < lines.length - 1; i++) {
+                    const line = lines[i].trim();
+                    fullText = processStreamLine(line, fullText);
+                }
+
+                buffer = lines[lines.length - 1];
+            }
+
+            const itemsCount = selectConversation(getState()).items.length;
+            if (itemsCount > 0 && !(itemsCount % TITLE_GENERATION_FREQUENCY)) {
+                summarize = true;
+            }
+
+            dispatch(setConversationId(currentConversationId));
+            if (summarize) {
+                dispatch(summarizeConversationTitle(currentConversationId));
+            }
+
+            dispatch(clearAttachedFiles());
+        } catch (e) {
+            if (e instanceof Error && e.name === 'AbortError') {
+                dispatch(setSending(false));
                 dispatch(clearCurrentAnswer());
-                return '';
+                dispatch(setError(undefined));
+                return;
             }
 
-            const mcpItem = createMcpItem(event.item);
-            if (mcpItem) {
-                dispatch(addConversationItem(mcpItem));
-            }
+            const error: ChatError = {
+                type: 'error',
+                error: e as Error,
+            };
+            dispatch(addConversationItem(error));
+        } finally {
+            dispatch(setSending(false));
+            currentAbortController = null;
         }
-
-        return fullText;
     };
 
-    const state = getState();
-    const question = selectChatQuestion(state);
-    const conversationId = selectConversationId(state);
-    const {items, hasMore, lastId} = selectConversations(state);
-    const attachedFiles = selectAttachedFiles(state);
-    const model = selectAiChatModel();
-    let summarize = false;
-
-    if (!question) return;
-
-    const contextMessages = prepareQueryContext(state);
-
-    dispatch(setMode('chat'));
-    dispatch(
-        addConversationItem({
-            id: '',
-            type: 'question',
-            value: question,
-        }),
-    );
-    dispatch(setQuestion(undefined));
-    dispatch(setSending(true));
-
-    let reader: ReadableStreamDefaultReader<Uint8Array> | undefined;
-
-    try {
-        let currentConversationId = conversationId;
-        const meta = getMeta(state);
-        if (!currentConversationId) {
-            const {data} = await axios.post<Conversation>(`${BASE_PATH}/create-conversation`, {
-                model,
-                metadata: {...meta, topic: DEFAULT_CONVERSATION_TITLE},
-            });
-            currentConversationId = data.id;
-            dispatch(setConversations({items: [data, ...items], hasMore, lastId, loading: false}));
-            summarize = true;
-        }
-
-        const files = await Promise.all(
-            attachedFiles.map(async (file) => ({
-                name: file.name,
-                type: file.type,
-                content: await readFileAsText(file),
-            })),
-        );
-
-        if (currentAbortController) {
-            currentAbortController.abort();
-        }
-        currentAbortController = new AbortController();
-        const response = await fetch(`${BASE_PATH}/send-message`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                message: question,
-                model,
-                metadata: meta,
-                conversationId: currentConversationId,
-                contextMessages: contextMessages.length > 0 ? contextMessages : undefined,
-                files: files.length > 0 ? files : undefined,
-            }),
-            signal: currentAbortController.signal,
-        });
-
-        if (!response.ok) {
-            throw new Error(`${ERROR_MESSAGE.HTTP_ERROR} ${response.status}`);
-        }
-
-        reader = response.body?.getReader();
-        const decoder = new TextDecoder();
-
-        if (!reader) {
-            throw new Error(ERROR_MESSAGE.RESPONSE_NOT_READABLE);
-        }
-
-        let buffer = '';
-        let fullText = '';
-
-        for await (const chunk of streamAsyncIterator(reader)) {
-            const decodedChunk = decoder.decode(chunk, {stream: true});
-            buffer += decodedChunk;
-            const lines = buffer.split('\n');
-
-            for (let i = 0; i < lines.length - 1; i++) {
-                const line = lines[i].trim();
-                fullText = processStreamLine(line, fullText);
-            }
-
-            buffer = lines[lines.length - 1];
-        }
-
-        const itemsCount = selectConversation(getState()).items.length;
-        if (itemsCount > 0 && !(itemsCount % TITLE_GENERATION_FREQUENCY)) {
-            summarize = true;
-        }
-
-        dispatch(setConversationId(currentConversationId));
-        if (summarize) {
-            dispatch(summarizeConversationTitle(currentConversationId));
-        }
-
-        dispatch(clearAttachedFiles());
-    } catch (e) {
-        if (e instanceof Error && e.name === 'AbortError') {
-            dispatch(setSending(false));
-            dispatch(clearCurrentAnswer());
-            dispatch(setError(undefined));
-            return;
-        }
-
-        const error: ChatError = {
-            type: 'error',
-            error: e as Error,
-        };
-        dispatch(addConversationItem(error));
-    } finally {
-        dispatch(setSending(false));
-        currentAbortController = null;
-    }
-};
-
 export const createConversationWithPrompt =
-    (prompt: string): AsyncAction =>
+    (promptId: string): AsyncAction =>
     (dispatch) => {
         dispatch(resetChat());
-        dispatch(setQuestion(prompt));
         dispatch(setIsOpen(true));
-        dispatch(sendQuestion());
+        dispatch(sendQuestion(promptId));
     };
 
 const CONVERSATIONS_LIMIT = 20;
