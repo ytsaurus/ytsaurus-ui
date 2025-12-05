@@ -1,6 +1,5 @@
 {
   "context_tooltip": "Ask AI chat why the query failed",
-  "action_button": "AI help",
-  "question_default": "How to solve the problem?"
+  "action_button": "AI help"
 }
 
