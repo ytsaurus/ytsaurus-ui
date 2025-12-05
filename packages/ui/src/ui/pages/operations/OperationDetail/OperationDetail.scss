@@ -95,6 +95,7 @@
     @include redefinition('mediumgray', var(--mediumgray-color));
     @include redefinition('dornyellow', var(--dornyellow-color));
     @include redefinition('rubber', var(--rubber-color));
+    @include redefinition('electricviolet', var(--electricviolet-color));
 
     &__attributes,
     &__statistics,

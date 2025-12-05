@@ -40,18 +40,3 @@ export const CLUSTER_GROUPS: Record<string, {caption: string; size?: 'l'}> = {
 };
 
 export const CLUSTER_GROUPS_ORDER = Object.keys(CLUSTER_GROUPS);
-
-export const CLUSTER_THEMES = [
-    'grapefruit',
-    'bittersweet',
-    'sunflower',
-    'grass',
-    'mint',
-    'aqua',
-    'bluejeans',
-    'lavander',
-    'pinkrose',
-    'lightgray',
-    'mediumgray',
-    'darkgray',
-];

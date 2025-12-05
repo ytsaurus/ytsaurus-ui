@@ -90,7 +90,8 @@ export type ClusterTheme =
     | 'mediumgray'
     | 'darkgray'
     | 'dornyellow'
-    | 'rubber';
+    | 'rubber'
+    | 'electricviolet';
 
 export interface ClusterConfig {
     id: string;

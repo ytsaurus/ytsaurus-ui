@@ -19,6 +19,7 @@ export const favicons: Record<ClusterTheme, string> = {
     darkgray: require('./assets/img/favicon-darkgray.png'),
     dornyellow: require('./assets/img/favicon-dorn-yellow.png'),
     rubber: require('./assets/img/favicon-rubber.png'),
+    electricviolet: require('./assets/img/favicon-electricviolet.png'),
 };
 
 export interface ClusterAppearance {
