@@ -470,6 +470,7 @@ export interface ConfigData {
     allowUserColumnPresets?: boolean;
     odinPageEnabled: boolean;
     allowTabletErrorsAPI: boolean;
+    allowPrometheusDashboards: boolean;
 }
 
 export type PipelineParams = {

@@ -1,4 +1,4 @@
-import {combineReducers} from 'redux';
+import {combineReducers, combineSlices} from '@reduxjs/toolkit';
 
 import forEach_ from 'lodash/forEach';
 
@@ -162,6 +162,6 @@ export function makeRootReducer() {
         registerReducersAndUrlMapping(item);
     });
 
-    const rootReducer = combineReducers({...appReducers});
-    return rootReducer;
+    const rootReducer = combineSlices({...appReducers} as any);
+    return rootReducer as unknown as ReturnType<typeof combineReducers<typeof appReducers>>;
 }

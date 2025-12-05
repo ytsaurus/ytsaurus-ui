@@ -1,0 +1,1367 @@
+{
+    "panels": [
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_resource_tracker_total_cpu\", pod=~\"$pod\", thread=~\"Automaton\"}",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Automaton CPU",
+            "gridPos": {
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_rpc_server_request_time_execution_max\", user=~\"\", yt_service=~\".+\", method=~\"IncrementalHeartbeat\", pod=~\"$pod\"}",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Incremental HB duration",
+            "gridPos": {
+                "x": 12,
+                "y": 0,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_resource_tracker_memory_usage_rss\", pod=~\"$pod\"}",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Memory",
+            "gridPos": {
+                "x": 0,
+                "y": 6,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_resource_tracker_utilization\", pod=~\"$pod\", thread=~\"RpcLight\"}",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "RpcLight Utilization",
+            "gridPos": {
+                "x": 12,
+                "y": 6,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_resource_tracker_utilization\", pod=~\"$pod\", thread=~\"RpcHeavy\"}",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "RpcHeavy Utilization",
+            "gridPos": {
+                "x": 0,
+                "y": 12,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_blob_refresh_queue_size\", cell_tag=~\"\", pod=~\"$pod\"}",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Blob Refresh Queue Size",
+            "gridPos": {
+                "x": 12,
+                "y": 12,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_blob_requisition_update_queue_size\", cell_tag=~\"\", pod=~\"$pod\"}",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Blob Requisition Update Queue Size",
+            "gridPos": {
+                "x": 0,
+                "y": 18,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_underreplicated_chunk_count\", cell_tag=~\"\", pod=~\"$pod\"}",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "URC Count",
+            "gridPos": {
+                "x": 12,
+                "y": 18,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_overreplicated_chunk_count\", cell_tag=~\"\", pod=~\"$pod\"}",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "ORC Count",
+            "gridPos": {
+                "x": 0,
+                "y": 24,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_data_missing_chunk_count\", cell_tag=~\"\", pod=~\"$pod\"}",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "DMC Count",
+            "gridPos": {
+                "x": 12,
+                "y": 24,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_parity_missing_chunk_count\", cell_tag=~\"\", pod=~\"$pod\"}",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "PMC Count",
+            "gridPos": {
+                "x": 0,
+                "y": 30,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_unsafely_placed_chunk_count\", cell_tag=~\"\", pod=~\"$pod\"}",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Unsafely Placed Count",
+            "gridPos": {
+                "x": 12,
+                "y": 30,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_lost_vital_chunk_count\", cell_tag=~\"\", pod=~\"$pod\"}",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "LVC Count",
+            "gridPos": {
+                "x": 0,
+                "y": 36,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_hydra_leader_sync_time_max\", cell_id=~\"\", pod=~\"$pod\"}",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Leader Sync Time",
+            "gridPos": {
+                "x": 12,
+                "y": 36,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunks_created\", cell_tag=~\"\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Chunks Created",
+            "gridPos": {
+                "x": 0,
+                "y": 42,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunks_destroyed\", cell_tag=~\"\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Chunks Destroyed",
+            "gridPos": {
+                "x": 12,
+                "y": 42,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_lists_created\", cell_tag=~\"\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Chunk Lists Created",
+            "gridPos": {
+                "x": 0,
+                "y": 48,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_chunk_lists_destroyed\", cell_tag=~\"\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Chunks Lists Destroyed",
+            "gridPos": {
+                "x": 12,
+                "y": 48,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_hydra_restart_count\", cell_id=~\"\", pod=~\"$pod\", reason=~\".+\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Hydra Restarts",
+            "gridPos": {
+                "x": 0,
+                "y": 54,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_hydra_fork_executor_fork_duration_max\", cell_id=~\"\", pod=~\"$pod\"}",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Fork Duration",
+            "gridPos": {
+                "x": 12,
+                "y": 54,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_ref_counted_tracker_total_objects_alive\", pod=~\"$pod\"}",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "RCT Objects Alive",
+            "gridPos": {
+                "x": 0,
+                "y": 60,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_ref_counted_tracker_total_bytes_alive\", pod=~\"$pod\"}",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "RCT Bytes Alive",
+            "gridPos": {
+                "x": 12,
+                "y": 60,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_tablet_server_update_tablet_stores_store_count\", tablet_cell_bundle=~\"\", pod=~\"$pod\", table_type=~\"\", update_reason=~\"\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Tablet Store Updates: Store Count",
+            "gridPos": {
+                "x": 0,
+                "y": 66,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_tablet_server_update_tablet_stores_cumulative_time\", tablet_cell_bundle=~\"\", pod=~\"$pod\", table_type=~\"\", update_reason=~\"\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Tablet Store Updates: Cumulative Time",
+            "gridPos": {
+                "x": 12,
+                "y": 66,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_action_queue_time_cumulative\", bucket=~\".+\", pod=~\"$pod\", queue=~\".+\", thread=~\"Automaton\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{bucket}} {{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Automaton Action Queue Cumulative Time",
+            "gridPos": {
+                "x": 0,
+                "y": 72,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_hydra_cumulative_mutation_time\", cell_id=~\".+\", pod=~\"$pod\", type=~\".+\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{type}} {{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "fillOpacity": 100,
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Hydra Cumulative Mutation Time",
+            "gridPos": {
+                "x": 12,
+                "y": 72,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_security_user_read_request_count\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{user}} {{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "User Read Request Rate",
+            "gridPos": {
+                "x": 0,
+                "y": 78,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_security_user_write_request_count\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{user}} {{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "User Write Request Rate",
+            "gridPos": {
+                "x": 12,
+                "y": 78,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_security_user_read_time\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{user}} {{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "User Read Time",
+            "gridPos": {
+                "x": 0,
+                "y": 84,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_security_user_write_time\", user=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{user}} {{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "User Write Time",
+            "gridPos": {
+                "x": 12,
+                "y": 84,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_service_weight_throttler_value\", user=~\".+\", method=~\".+\", cell_tag=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "User Chunk Service Weight Throttler",
+            "gridPos": {
+                "x": 0,
+                "y": 90,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_jobs_aborted\", cell_tag=~\".+\", job_type=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "aborted {{job_type}} {{host}} {{pod}}"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_jobs_completed\", cell_tag=~\".+\", job_type=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "B",
+                    "legendFormat": "completed {{job_type}} {{host}} {{pod}}"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_jobs_failed\", cell_tag=~\".+\", job_type=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "C",
+                    "legendFormat": "failed {{job_type}} {{host}} {{pod}}"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_jobs_started\", cell_tag=~\".+\", job_type=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "D",
+                    "legendFormat": "started {{job_type}} {{host}} {{pod}}"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_misscheduled_jobs\", cell_tag=~\".+\", job_type=~\".+\", pod=~\"$pod\"}[$__rate_interval])",
+                    "refId": "E",
+                    "legendFormat": "misscheduled {{job_type}} {{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Job Rates",
+            "gridPos": {
+                "x": 12,
+                "y": 90,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "{cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_chunk_server_running_job_count\", cell_tag=~\"\", job_type=~\".+\", pod=~\"$pod\"}",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "Running Jobs",
+            "gridPos": {
+                "x": 0,
+                "y": 96,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_rpc_server_request_count\", user=~\"\", yt_service=~\"ObjectService\", method=~\"Execute\", pod=~\"$pod\", queue=~\".+\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "ObjectService.Execute request rate",
+            "gridPos": {
+                "x": 12,
+                "y": 96,
+                "w": 12,
+                "h": 6
+            }
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${PROMETHEUS_DS_UID}"
+            },
+            "type": "timeseries",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${PROMETHEUS_DS_UID}"
+                    },
+                    "expr": "rate({cluster=~\"$cluster\", service=~\"yt-master\", __name__=~\"yt_rpc_server_request_count\", user=~\"\", yt_service=~\"ChunkService\", method=~\"ExecuteBatch\", pod=~\"$pod\", queue=~\".+\"}[$__rate_interval])",
+                    "refId": "A",
+                    "legendFormat": "{{host}} {{pod}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "custom": {
+                        "hideFrom": {
+                            "legend": true
+                        }
+                    }
+                },
+                "overrides": []
+            },
+            "title": "ChunkService.ExecuteBatch request rate",
+            "gridPos": {
+                "x": 6,
+                "y": 102,
+                "w": 12,
+                "h": 6
+            }
+        }
+    ],
+    "title": "Master Local [Autogenerated]",
+    "tags": [
+        "YT",
+        "autogen"
+    ],
+    "templating": {
+        "list": [
+            {
+                "name": "cluster",
+                "label": "Cluster",
+                "type": "textbox",
+                "options": [
+                    {
+                        "selected": true,
+                        "text": ".*",
+                        "value": ".*"
+                    }
+                ],
+                "current": {
+                    "selected": true,
+                    "text": ".*",
+                    "value": ".*"
+                },
+                "query": ".*",
+                "hide": 0,
+                "skipUrlSync": false,
+                "allFormat": "glob"
+            },
+            {
+                "name": "pod",
+                "label": "Pod",
+                "type": "textbox",
+                "options": [
+                    {
+                        "selected": true,
+                        "text": "ms-.*",
+                        "value": "ms-.*"
+                    }
+                ],
+                "current": {
+                    "selected": true,
+                    "text": "ms-.*",
+                    "value": "ms-.*"
+                },
+                "query": "ms-.*",
+                "hide": 0,
+                "skipUrlSync": false,
+                "allFormat": "glob",
+                "default_for_ui": "ms-.*",
+                "discover_values": {
+                    "label": "pod",
+                    "match": "{cluster=~\"$cluster\", service=~\"yt-master\"}"
+                }
+            }
+        ]
+    },
+    "uid": "ytsaurus-master-local"
+}

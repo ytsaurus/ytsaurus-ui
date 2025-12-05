@@ -37,6 +37,11 @@ export interface UISettings {
     fontTypes?: Record<string, {regular: string; monospace: string}>;
 
     /**
+     * The options is used on browser side to generate url for links to Prometheus-based dashbords
+     */
+    grafanaBaseUrl?: string;
+
+    /**
      *  The option denies to create pools with `<Root>` parent from UI.
      */
     schedulingDenyRootAsParent?: boolean;
@@ -240,9 +245,3 @@ export interface UISettingsMonitoring {
     urlTemplate: string;
     title?: string;
 }
-
-export const uiSettingFromEnv: Partial<UISettings> = {
-    uploadTableExcelBaseUrl: process.env.YTFRONT_UPLOAD_EXCEL_BASE_URL,
-    exportTableBaseUrl: process.env.YTFRONT_EXPORT_EXCEL_BASE_URL,
-    jupyterBasePath: process.env.YTFRONT_JUPYTER_BASE_URL,
-};

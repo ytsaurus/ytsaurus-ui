@@ -2,28 +2,14 @@ import typeis from 'type-is';
 
 import {AuthPolicy} from '@gravity-ui/expresskit';
 import {AppConfig} from '@gravity-ui/nodekit';
+import {applyAppEnvToConfig} from '../utils/configs/apply-app-env-to-config';
 
 const path = require('path');
 
-const {ALLOW_PASSWORD_AUTH, YT_AUTH_CLUSTER_ID, YT_AUTH_ALLOW_INSECURE} = process.env;
-
-const ytAuthConfig: Partial<AppConfig> = {
-    allowPasswordAuth: Boolean(ALLOW_PASSWORD_AUTH || YT_AUTH_CLUSTER_ID),
-    ytAuthAllowInsecure: Boolean(YT_AUTH_ALLOW_INSECURE),
-    appAuthPolicy: AuthPolicy.required,
-};
-
-const config: Partial<AppConfig> = {
+export const sharedConfig: Partial<AppConfig> = {
     appName: 'YTSaurus',
     appSocket: 'dist/run/server.sock',
-    appAuthPolicy: (process.env.AUTH_POLICY as AuthPolicy) || 'redirect',
 
-    ...ytAuthConfig,
-    // TODO: fix me
-    // csp: 'disabled',
-
-    ytInterfaceSecret: path.resolve(__dirname, '../../../secrets/yt-interface-secret.json'),
-    clustersConfigPath: path.resolve(__dirname, '../../../clusters-config.json'),
     expressBodyParserJSONConfig: {
         strict: false,
         type(req: any) {
@@ -53,12 +39,22 @@ const config: Partial<AppConfig> = {
             return Boolean(typeis(req, 'multipart/form-data'));
         },
     },
+};
+
+const config: Partial<AppConfig> = applyAppEnvToConfig({
+    ...sharedConfig,
+    appAuthPolicy: AuthPolicy.required,
+
+    // TODO: fix me
+    // csp: 'disabled',
+
+    ytInterfaceSecret: path.resolve(__dirname, '../../../secrets/yt-interface-secret.json'),
+    clustersConfigPath: path.resolve(__dirname, '../../../clusters-config.json'),
 
     uiSettings: {
         reHashFromNodeVersion: '[^~]+~(?<hash>[^+]+)',
         directDownload: true,
-        docsBaseUrl: process.env.YT_DOCS_BASE_URL || 'https://ytsaurus.tech/docs/en',
     },
-};
+});
 
 export default config;
