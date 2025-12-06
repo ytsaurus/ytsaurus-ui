@@ -146,6 +146,10 @@ export async function pipeReadableToWriteable(
 ) {
     let firstChunk = true;
     let pipedDataSize = 0;
+    let settled = false;
+
+    let onError: ((e: Error) => void) | null = null;
+    let onClose: (() => void) | null = null;
 
     const onData = (chunk: Buffer) => {
         if (firstChunk) {
@@ -157,19 +161,19 @@ export async function pipeReadableToWriteable(
 
     const cleanup = () => {
         src.removeListener('data', onData);
+        if (onError) src.removeListener('error', onError);
+        if (onClose) src.removeListener('close', onClose);
     };
 
     const closePromise = new Promise<void>((resolve, reject) => {
-        let settled = false;
-
-        const onError = (e: Error) => {
+        onError = (e: Error) => {
             if (settled) return;
             settled = true;
             cleanup();
             reject(e);
         };
 
-        const onClose = () => {
+        onClose = () => {
             if (settled) return;
             settled = true;
             cleanup();

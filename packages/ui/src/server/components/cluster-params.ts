@@ -23,8 +23,9 @@ class BatchSubrequestError extends Error {
     }
 }
 
-function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
+function fetchClusterParams(cluster: string, options?: {ctx?: AppContext}) {
     const app = getApp();
+    const ctx = options?.ctx;
     return (ctx ?? app.nodekit.ctx).call('fetchClusterParams', async (cx) => {
         if (!cx.get('requestId')) {
             const requestId = crypto.randomUUID();
@@ -250,22 +251,14 @@ const CACHE_TIME = 2 * 60 * 1000;
 const getCached = createAutoUpdatedCache(fetchClusterParams, CACHE_TIME);
 
 export async function getPreloadedClusterParams(cluster: string, ctx: AppContext) {
-    const ctxObject: Parameters<typeof fetchClusterParams>[1] = {ctx};
-    let response: Awaited<ReturnType<typeof fetchClusterParams>>;
-
     try {
-        response = await getCached(cluster, ctxObject);
+        return await getCached(cluster, {ctx});
     } catch (error) {
         if (error instanceof BatchSubrequestError) {
-            response = error.response;
-        } else {
-            throw error;
+            return error.response;
         }
-    } finally {
-        delete ctxObject.ctx;
+        throw error;
     }
-
-    return response;
 }
 
 export async function getPreloadedClusterUiConfig(
