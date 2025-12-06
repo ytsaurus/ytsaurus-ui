@@ -12,6 +12,16 @@ function defer<T>() {
 
 const CACHE_TIME = 2 * 0.5 * 1000;
 
+function createLargeObject(id: number) {
+    return {
+        id,
+        data: new Array(1000).fill(`data-${id}`),
+        nested: {
+            timestamp: Date.now(),
+        },
+    };
+}
+
 describe('createAutoUpdatedCache', () => {
     beforeEach(() => {
         jest.useFakeTimers();
@@ -365,5 +375,96 @@ describe('createAutoUpdatedCache', () => {
         await expect(result2).resolves.toEqual('result1');
 
         expect(getter).toBeCalledTimes(1);
+    });
+});
+
+describe('createAutoUpdatedCache memory leaks', () => {
+    beforeEach(() => {
+        jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+        jest.useRealTimers();
+    });
+
+    it('should not retain rest parameters in background updates', async () => {
+        const getter = jest.fn().mockResolvedValue('result');
+
+        const getPreloadedValue = createAutoUpdatedCache(getter, CACHE_TIME);
+
+        const largeContext = createLargeObject(1);
+        await getPreloadedValue('key', largeContext);
+
+        expect(getter).toBeCalledTimes(1);
+        expect(getter).toHaveBeenLastCalledWith('key', largeContext);
+
+        await jest.advanceTimersByTimeAsync(CACHE_TIME);
+
+        expect(getter).toBeCalledTimes(2);
+        expect(getter).toHaveBeenLastCalledWith('key');
+    });
+
+    it('should evict old entries when cache is full', async () => {
+        const getter = jest.fn().mockImplementation((key: string) => {
+            return Promise.resolve(`result-${key}`);
+        });
+
+        const getPreloadedValue = createAutoUpdatedCache(getter, CACHE_TIME);
+
+        for (let i = 0; i < 150; i++) {
+            await getPreloadedValue(`key-${i}`);
+        }
+
+        expect(getter).toBeCalledTimes(150);
+        getter.mockClear();
+
+        await getPreloadedValue('key-0');
+        await getPreloadedValue('key-1');
+
+        expect(getter.mock.calls.length).toBeGreaterThan(0);
+    });
+
+    it('should clean up idle entries after MAX_IDLE_TIME', async () => {
+        const MAX_IDLE_TIME = 10 * 60 * 1000;
+        const LONG_CACHE_TIME = MAX_IDLE_TIME / 2; // 5 minutes
+
+        const getter = jest.fn().mockResolvedValue('result');
+        const getPreloadedValue = createAutoUpdatedCache(getter, LONG_CACHE_TIME);
+
+        await getPreloadedValue('key');
+        expect(getter).toBeCalledTimes(1);
+
+        await jest.advanceTimersByTimeAsync(LONG_CACHE_TIME);
+        expect(getter).toBeCalledTimes(2);
+
+        await jest.advanceTimersByTimeAsync(LONG_CACHE_TIME);
+        expect(getter).toBeCalledTimes(3);
+
+        await jest.advanceTimersByTimeAsync(LONG_CACHE_TIME);
+        expect(getter).toBeCalledTimes(3);
+
+        getter.mockClear();
+
+        await getPreloadedValue('key');
+        expect(getter).toBeCalledTimes(1);
+    });
+
+    it('should clear timeouts when entries are cleaned up', async () => {
+        const clearTimeoutSpy = jest.spyOn(global, 'clearTimeout');
+
+        const getter = jest.fn().mockResolvedValue('result');
+        const getPreloadedValue = createAutoUpdatedCache(getter, CACHE_TIME);
+
+        await getPreloadedValue('key');
+
+        await jest.advanceTimersByTimeAsync(CACHE_TIME);
+
+        for (let i = 0; i < 110; i++) {
+            await getPreloadedValue(`new-key-${i}`);
+        }
+
+        expect(clearTimeoutSpy).toHaveBeenCalled();
+
+        clearTimeoutSpy.mockRestore();
     });
 });

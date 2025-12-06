@@ -146,25 +146,48 @@ export async function pipeReadableToWriteable(
 ) {
     let firstChunk = true;
     let pipedDataSize = 0;
+    let settled = false;
+
+    let onError: ((e: Error) => void) | null = null;
+    let onClose: (() => void) | null = null;
+
+    const onData = (chunk: Buffer) => {
+        if (firstChunk) {
+            ctx.log(logMsgPrefix + ' TTFB');
+            firstChunk = false;
+        }
+        pipedDataSize += chunk?.length;
+    };
+
+    const cleanup = () => {
+        src.removeListener('data', onData);
+        if (onError) src.removeListener('error', onError);
+        if (onClose) src.removeListener('close', onClose);
+    };
+
     const closePromise = new Promise<void>((resolve, reject) => {
-        src.on('data', (chunk) => {
-            if (firstChunk) {
-                ctx.log(logMsgPrefix + ' TTFB');
-                firstChunk = false;
-            }
-            pipedDataSize += chunk?.length;
-        });
-        src.on('error', (e: any) => {
-            resolve = () => {};
+        onError = (e: Error) => {
+            if (settled) return;
+            settled = true;
+            cleanup();
             reject(e);
-        });
-        src.on('close', () => {
+        };
+
+        onClose = () => {
+            if (settled) return;
+            settled = true;
+            cleanup();
             ctx.log(logMsgPrefix + ' Response stream closed', {
                 pipedDataSize,
             });
             resolve();
-        });
+        };
+
+        src.on('data', onData);
+        src.once('error', onError);
+        src.once('close', onClose);
     });
+
     src.pipe(dst);
     await closePromise;
 

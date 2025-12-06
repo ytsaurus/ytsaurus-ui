@@ -89,10 +89,26 @@ export const getConversationItems = async (req: Request, res: Response) => {
 export const sendMessage = async (req: Request, res: Response) => {
     let streamClosed = false;
     let headersAlreadySent = false;
+    let response: NodeJS.ReadableStream | null = null;
+
+    let onData: ((chunk: Buffer) => void) | null = null;
+    let onEnd: (() => void) | null = null;
+    let onError: ((e: Error) => void) | null = null;
+    let onReqClose: (() => void) | null = null;
+
+    const cleanup = () => {
+        if (response) {
+            if (onData) response.removeListener('data', onData);
+            if (onEnd) response.removeListener('end', onEnd);
+            if (onError) response.removeListener('error', onError);
+        }
+        if (onReqClose) req.removeListener('close', onReqClose);
+    };
 
     const closeStream = () => {
         if (!streamClosed) {
             streamClosed = true;
+            cleanup();
             if (!res.writableEnded) {
                 res.end();
             }
@@ -126,11 +142,11 @@ export const sendMessage = async (req: Request, res: Response) => {
         res.flushHeaders();
         headersAlreadySent = true;
 
-        const response = await aiChat.sendMessage(requestData, req);
+        response = await aiChat.sendMessage(requestData, req);
 
         let lastTail = '';
 
-        response.on('data', (chunk: Buffer) => {
+        onData = (chunk: Buffer) => {
             if (streamClosed) {
                 return;
             }
@@ -173,16 +189,16 @@ export const sendMessage = async (req: Request, res: Response) => {
                     }
                 }
             }
-        });
+        };
 
-        response.on('end', () => {
+        onEnd = () => {
             if (!streamClosed) {
                 res.write('data: [DONE]\n\n');
             }
             closeStream();
-        });
+        };
 
-        response.on('error', (e: Error) => {
+        onError = (e: Error) => {
             if (!streamClosed) {
                 req.ctx.logError(ERROR_MESSAGE.STREAM_ERROR, e);
 
@@ -194,15 +210,22 @@ export const sendMessage = async (req: Request, res: Response) => {
                 }
             }
             closeStream();
-        });
+        };
 
-        req.on('close', () => {
+        onReqClose = () => {
             if (!streamClosed) {
                 req.ctx.logError('Client disconnected');
-                response.destroy();
+                if (response && 'destroy' in response) {
+                    (response as NodeJS.ReadableStream & {destroy: () => void}).destroy();
+                }
                 closeStream();
             }
-        });
+        };
+
+        response?.on('data', onData);
+        response?.on('end', onEnd);
+        response?.on('error', onError);
+        req.on('close', onReqClose);
     } catch (e) {
         req.ctx.logError(ERROR_MESSAGE.FAILED_SEND_MESSAGE, e);
 

@@ -139,20 +139,41 @@ export class GithubApi implements VcsApi {
         const fileStream = response.data;
         const streamData = await new Promise<string>((resolve, reject) => {
             let temp = '';
-            fileStream.on('data', (chunk: string) => {
+            let settled = false;
+
+            const onData = (chunk: string) => {
                 temp += chunk.toString();
 
-                if (Buffer.byteLength(temp) > this.maxFileSize)
+                if (Buffer.byteLength(temp) > this.maxFileSize) {
+                    settled = true;
+                    cleanup();
                     reject(new Error(`File is too big. Max size ${this.maxFileSize}Mb`));
-            });
+                }
+            };
 
-            fileStream.on('end', () => {
+            const onEnd = () => {
+                if (settled) return;
+                settled = true;
+                cleanup();
                 resolve(temp);
-            });
+            };
 
-            fileStream.on('error', (err: Error) => {
+            const onError = (err: Error) => {
+                if (settled) return;
+                settled = true;
+                cleanup();
                 reject(err);
-            });
+            };
+
+            function cleanup() {
+                fileStream.removeListener('data', onData);
+                fileStream.removeListener('end', onEnd);
+                fileStream.removeListener('error', onError);
+            }
+
+            fileStream.on('data', onData);
+            fileStream.on('end', onEnd);
+            fileStream.on('error', onError);
         });
 
         return Buffer.from(JSON.parse(streamData).content, 'base64').toString();
