@@ -1,9 +1,8 @@
-import {YTApiId, ytApiV4Id} from '../../../rum/rum-wrap-api';
 import debounce_ from 'lodash/debounce';
 import {RootState} from '../../reducers';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {ThunkAction} from 'redux-thunk';
-import {Action, Dispatch} from 'redux';
+import {Action} from 'redux';
 import {
     getCurrentQueryACO,
     getQueryAnnotations,
@@ -33,45 +32,41 @@ import {
 } from '../../selectors/query-tracker/queryChart';
 import {getPointValue} from '../../../pages/query-tracker/QueryResultsVisualization/preparers/getPointData';
 import type {ChartAxisType} from '@gravity-ui/chartkit/gravity-charts';
-import {selectIsMultipleAco} from '../../selectors/query-tracker/queryAco';
 import cloneDeep_ from 'lodash/cloneDeep';
 import {loadQueryResult} from './queryResult';
+import {alterQueryChartConfig} from './api';
+import {AppDispatch} from '../../store.main';
 
 const DELAY = 2 * 1000;
 
 type AsyncAction = ThunkAction<void, RootState, undefined, Action>;
 
-const saveChartConfig = (dispatch: Dispatch, getState: () => RootState) => {
+const saveChartConfig = (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
 
     const currentUser = getCurrentUserName(state);
     const queryItem = getQueryItem(state);
+    const {id} = getQueryDraft(state);
 
-    if (!queryItem || currentUser !== queryItem.user) {
+    if (!queryItem || currentUser !== queryItem.user || !id) {
         return;
     }
 
     dispatch(setSaved(false));
 
     const annotations = getQueryAnnotations(state);
-    const isMultipleAco = selectIsMultipleAco(state);
     const aco = getCurrentQueryACO(state);
-    const {id} = getQueryDraft(state);
-    const config = selectChartVisualization(state);
+    const chartConfig = selectChartVisualization(state);
 
     wrapApiPromiseByToaster(
-        ytApiV4Id.alterQuery(YTApiId.alterQuery, {
-            parameters: {
+        dispatch(
+            alterQueryChartConfig({
                 query_id: id,
-                ...(isMultipleAco
-                    ? {access_control_objects: aco}
-                    : {access_control_object: aco[0]}),
-                annotations: {
-                    ...annotations,
-                    chartConfig: config,
-                },
-            },
-        }),
+                aco,
+                annotations,
+                chartConfig,
+            }),
+        ),
         {
             toasterName: 'saveQueryChartConfig',
             skipSuccessToast: true,

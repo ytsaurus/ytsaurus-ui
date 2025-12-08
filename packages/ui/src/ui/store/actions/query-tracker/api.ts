@@ -35,7 +35,7 @@ import type {
     QueryResultMeta,
 } from '../../../types/query-tracker/api';
 
-function getQTApiSetup(): {proxy?: string} {
+export function getQTApiSetup(): {proxy?: string} {
     const QT_CLUSTER = getQueryTrackerCluster();
     if (QT_CLUSTER) {
         const cluster = getClusterConfigByName(QT_CLUSTER);
@@ -473,5 +473,38 @@ export function updateACOQuery({
             .then(() => {
                 return dispatch(addACOToLastSelected(aco));
             });
+    };
+}
+
+export function alterQueryChartConfig({
+    query_id,
+    aco,
+    annotations,
+    chartConfig,
+}: {
+    query_id: string;
+    aco: string[];
+    annotations: QueryItem['annotations'];
+    chartConfig: unknown;
+}): ThunkAction<Promise<any>, RootState, any, AnyAction> {
+    return async (_dispatch, getState) => {
+        const state = getState();
+        const isMultipleAco = selectIsMultipleAco(state);
+        const {stage} = getQueryTrackerRequestOptions(state);
+
+        return ytApiV4Id.alterQuery(YTApiId.alterQuery, {
+            parameters: {
+                stage,
+                query_id,
+                ...(isMultipleAco
+                    ? {access_control_objects: aco}
+                    : {access_control_object: aco[0]}),
+                annotations: {
+                    ...annotations,
+                    chartConfig,
+                },
+            },
+            setup: getQTApiSetup(),
+        });
     };
 }
