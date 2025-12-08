@@ -1,0 +1,6 @@
+{
+  "context_rows-info": "Строки {{start}}-{{end}} из {{total}}",
+  "context_rows-truncated": "(обрезано)",
+  "action_view-full-result": "Посмотреть полный результат"
+}
+

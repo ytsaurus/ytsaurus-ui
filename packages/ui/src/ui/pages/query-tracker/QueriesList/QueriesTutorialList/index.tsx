@@ -14,6 +14,7 @@ import {
 import {loadNextQueriesList} from '../../../../store/actions/query-tracker/queriesList';
 import {InfiniteScrollLoader} from '../../../../components/InfiniteScrollLoader';
 import {QueriesHistoryCursorDirection} from '../../../../store/reducers/query-tracker/query-tracker-contants';
+import i18n from './i18n';
 
 const itemCn = cn('query-tutorial-item');
 const block = cn('queries-tutorial-list');
@@ -23,7 +24,7 @@ function renderItem(item: QueryItem) {
         <>
             <Icon className={itemCn('icon')} data={tutorialIcon} />
             <Text className={itemCn('text')} ellipsis title={item?.annotations?.title}>
-                {item?.annotations?.title || 'No name'}
+                {item?.annotations?.title || i18n('field_no-name')}
             </Text>
         </>
     );
@@ -65,7 +66,7 @@ export function QueriesTutorialList({className}: {className: string}) {
                 className={block('list', {loading: isLoading})}
                 filterable={true}
                 filterClassName={block('filter')}
-                filterPlaceholder={'Filter by name'}
+                filterPlaceholder={i18n('context_filter-by-name')}
                 filterItem={tutorialFilter}
                 virtualized={false}
                 selectedItemIndex={selectedIndex}

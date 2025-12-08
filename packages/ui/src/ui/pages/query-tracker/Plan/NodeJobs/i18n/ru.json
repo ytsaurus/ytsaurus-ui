@@ -1,0 +1,11 @@
+{
+  "field_status": "Статус",
+  "field_quantity": "Количество",
+  "value_pending": "Ожидание",
+  "value_running": "Выполняется",
+  "value_completed": "Завершен",
+  "value_failed": "Ошибка",
+  "value_aborted": "Прерван",
+  "value_total": "Всего"
+}
+

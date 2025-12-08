@@ -1,0 +1,11 @@
+{
+  "field_status": "Status",
+  "field_quantity": "Quantity",
+  "value_pending": "Pending",
+  "value_running": "Running",
+  "value_completed": "Completed",
+  "value_failed": "Failed",
+  "value_aborted": "Aborted",
+  "value_total": "Total"
+}
+

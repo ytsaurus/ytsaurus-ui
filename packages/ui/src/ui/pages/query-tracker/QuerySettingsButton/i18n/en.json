@@ -1,0 +1,5 @@
+{
+  "alert_name-required": "Name is required field",
+  "alert_name-already-exist": "This name is already in use, please type some another",
+  "alert_value-required": "Values is required field"
+}

@@ -10,6 +10,7 @@ import {
     selectNavigationNodeType,
 } from '../../../../store/selectors/query-tracker/queryNavigation';
 import {BodyType, setFilter} from '../../../../store/reducers/query-tracker/queryNavigationSlice';
+import i18n from './i18n';
 
 const b = cn('navigation-header');
 
@@ -33,7 +34,7 @@ export const NavigationHeader: FC = () => {
             {showFilter && (
                 <TextInput
                     value={filter}
-                    placeholder="Filter by name"
+                    placeholder={i18n('field_filter-by-name')}
                     onUpdate={handleFilterChange}
                     hasClear
                 />

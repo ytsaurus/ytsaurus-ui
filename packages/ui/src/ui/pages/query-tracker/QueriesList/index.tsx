@@ -17,15 +17,20 @@ import {QueriesHistoryListFilter} from './QueriesListFilter';
 import {Vcs} from '../Vcs';
 import {Navigation} from '../Navigation';
 import {setFilter} from '../../../store/reducers/query-tracker/queryListSlice';
+import i18n from './i18n';
 
 const b = block('queries-list');
 
-const TabNames: Record<QueriesListMode, string> = {
-    [QueriesListMode.History]: 'History',
-    [QueriesListMode.Tutorials]: 'Tutorials',
-    [QueriesListMode.VCS]: 'VCS',
-    [QueriesListMode.Navigation]: 'Navigation',
-};
+function getTabName(mode: QueriesListMode): string {
+    const TabNames: Record<QueriesListMode, string> = {
+        [QueriesListMode.History]: i18n('tab_history'),
+        [QueriesListMode.Tutorials]: i18n('tab_tutorials'),
+        [QueriesListMode.VCS]: i18n('tab_vcs'),
+        [QueriesListMode.Navigation]: i18n('tab_navigation'),
+    };
+
+    return TabNames[mode];
+}
 
 const TabContent: Record<QueriesListMode, React.ReactNode> = {
     [QueriesListMode.History]: (
@@ -68,7 +73,7 @@ export function QueriesList() {
                 <TabList className={b('tabs')}>
                     {tabsList.map((tab) => (
                         <Tab key={tab} value={tab}>
-                            {TabNames[tab]}
+                            {getTabName(tab)}
                         </Tab>
                     ))}
                 </TabList>

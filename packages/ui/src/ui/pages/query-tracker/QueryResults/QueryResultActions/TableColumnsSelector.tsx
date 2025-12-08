@@ -3,6 +3,7 @@ import React, {useCallback, useMemo} from 'react';
 import {Button, Icon, Text} from '@gravity-ui/uikit';
 import filterIcon from '../../../../assets/img/svg/icons/filter.svg';
 import {ColumnSelector} from '../../../../components/common/ColumnSelector/ColumnSelector';
+import i18n from './i18n';
 type Props = {
     allColumns: QueryResultColumn[];
     columns?: string[];
@@ -42,9 +43,9 @@ export const TableColumnsSelector = React.memo(function TableColumnsSelector({
                 value={value}
                 items={allColumns}
                 switcher={
-                    <Button size="m" title="Choose result columns" view={view}>
+                    <Button size="m" title={i18n('action_choose-columns')} view={view}>
                         <Icon data={filterIcon} />
-                        Columns&nbsp;
+                        {i18n('action_columns')}&nbsp;
                         <Text color="secondary">{value?.length + '/' + allColumns.length}</Text>
                     </Button>
                 }

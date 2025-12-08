@@ -16,6 +16,7 @@ import {changeAxisType, changeField} from '../../../../../store/actions/query-tr
 import type {ChartAxisType} from '@gravity-ui/chartkit/gravity-charts';
 import {getAxisNameByType} from '../../helpers/getAxisNameByType';
 import './Wizard.scss';
+import i18n from './i18n';
 
 const axisTypes: ChartAxisType[] = ['category', 'datetime', 'linear', 'logarithmic'];
 
@@ -68,7 +69,7 @@ export const Wizard: FC = () => {
             />
             <Select
                 width="max"
-                label="Axis type:"
+                label={i18n('field_axis-type')}
                 value={[axisType!]}
                 filterable
                 options={axisTypes.map((item) => ({
@@ -102,7 +103,7 @@ export const Wizard: FC = () => {
                     ) : (
                         <Button onClick={toggleForm}>
                             <Icon data={PlusIcon} />
-                            Add item
+                            {i18n('action_add-item')}
                         </Button>
                     )}
                 </>

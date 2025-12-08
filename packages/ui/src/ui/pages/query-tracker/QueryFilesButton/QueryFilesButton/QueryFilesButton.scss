@@ -1,0 +1,15 @@
+.query-files-popup {
+    width: 600px;
+
+    &__header {
+        padding-bottom: 12px;
+    }
+
+    &__body {
+        .file-item:last-of-type,
+        .deleted-file-item:last-of-type {
+            border-bottom: none;
+        }
+    }
+}
+

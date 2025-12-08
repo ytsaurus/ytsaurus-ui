@@ -6,6 +6,7 @@ import './QueryACOSelect.scss';
 import {selectIsMultipleAco} from '../../../../store/selectors/query-tracker/queryAco';
 import {useSelector} from '../../../../store/redux-hooks';
 import {hideSharedAco} from './hideSharedAco';
+import i18n from './i18n';
 
 export const QueryACOSelect: React.FunctionComponent<{}> = () => {
     const isMultipleAco = useSelector(selectIsMultipleAco);
@@ -24,7 +25,7 @@ export const QueryACOSelect: React.FunctionComponent<{}> = () => {
                 filterable
                 disabled={isFlight}
                 width={'auto'}
-                label="Access:"
+                label={i18n('field_access')}
                 className={'query-aco-select'}
                 options={hideSharedAco(selectACOOptions)}
                 value={hideSharedAco(currentDraftQueryACO)}

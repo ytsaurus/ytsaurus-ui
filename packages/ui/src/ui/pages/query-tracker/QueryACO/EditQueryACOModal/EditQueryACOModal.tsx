@@ -7,6 +7,7 @@ import PencilIcon from '@gravity-ui/icons/svgs/pencil.svg';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {selectIsMultipleAco} from '../../../../store/selectors/query-tracker/queryAco';
 import {resetQueryList} from '../../../../store/actions/query-tracker/queriesList';
+import i18n from './i18n';
 
 type Props = {
     query_id: string;
@@ -36,15 +37,15 @@ export const EditQueryACOModal: FC<Props> = ({query_id}) => {
     return (
         <>
             <Button view="flat" onClick={toggleVisible}>
-                <Icon data={PencilIcon} size={16} /> Edit ACO
+                <Icon data={PencilIcon} size={16} /> {i18n('action_edit-aco')}
             </Button>
             {visible && (
                 <YTDFDialog<FormValues>
                     pristineSubmittable
                     visible={visible}
                     modal={true}
-                    headerProps={{title: 'Edit query ACO'}}
-                    footerProps={{textApply: 'Update'}}
+                    headerProps={{title: i18n('title_edit-query-aco')}}
+                    footerProps={{textApply: i18n('action_update')}}
                     onClose={() => {
                         setError(undefined);
                         toggleVisible();

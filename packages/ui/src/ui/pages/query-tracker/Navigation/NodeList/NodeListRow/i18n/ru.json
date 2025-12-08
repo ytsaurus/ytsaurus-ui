@@ -1,0 +1,14 @@
+{
+  "action_copy-to-clipboard": "Копировать в буфер",
+  "action_insert-into-editor": "Вставить в редактор",
+  "action_create-new-query": "Создать новый запрос",
+  "action_copy-link": "Копировать ссылку",
+  "action_open-in-cluster": "Открыть в кластере",
+  "value_path": "Путь",
+  "value_select": "SELECT",
+  "value_select-yt-ql": "SELECT (YT QL)",
+  "value_select-yql": "SELECT (YQL)",
+  "value_select-chyt": "SELECT (CHYT)",
+  "value_select-spyt": "SELECT (SPYT)"
+}
+

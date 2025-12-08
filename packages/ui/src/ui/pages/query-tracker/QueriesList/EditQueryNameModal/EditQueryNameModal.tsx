@@ -9,6 +9,7 @@ import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {updateQueryInList} from '../../../../store/actions/query-tracker/queriesList';
 import {getQueryDraft} from '../../../../store/selectors/query-tracker/query';
 import {updateQueryDraft} from '../../../../store/actions/query-tracker/query';
+import i18n from './i18n';
 
 export interface Props {
     query: QueryItem;
@@ -77,8 +78,8 @@ export default function EditQueryNameModal({query: {state, annotations, id}, cla
                     pristineSubmittable
                     visible={visible}
                     modal={true}
-                    headerProps={{title: 'Edit query name'}}
-                    footerProps={{textApply: 'Save'}}
+                    headerProps={{title: i18n('title_edit-query-name')}}
+                    footerProps={{textApply: i18n('action_save')}}
                     onClose={() => {
                         setError(undefined);
                         setVisible(false);
@@ -90,9 +91,9 @@ export default function EditQueryNameModal({query: {state, annotations, id}, cla
                             name: 'name',
                             type: 'text',
                             required: true,
-                            caption: 'Name',
+                            caption: i18n('field_name'),
                             extras: {
-                                placeholder: 'Enter query name',
+                                placeholder: i18n('field_enter-query-name'),
                             },
                         },
                         ...makeErrorFields([error]),

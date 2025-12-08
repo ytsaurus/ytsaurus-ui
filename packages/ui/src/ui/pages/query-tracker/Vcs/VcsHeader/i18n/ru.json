@@ -1,0 +1,9 @@
+{
+  "value_no-api-token": "[нет API токена]",
+  "context_select-vcs-type": "Выберите тип VCS",
+  "context_vcs-token-hint": "Вы можете добавить VCS токены в разделе Настройки -> VCS",
+  "context_select-repository": "Выберите репозиторий",
+  "context_select-branch": "Выберите ветку",
+  "context_filter": "Фильтр"
+}
+

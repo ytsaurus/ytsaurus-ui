@@ -26,8 +26,9 @@ import {QueryClusterSelector} from './QueryClusterSelector';
 import {LazyQueryTokenButton} from '../QueryToken/lazy';
 import {setQueryName} from '../../../store/actions/query-tracker/api';
 import {updateQueryInList} from '../../../store/actions/query-tracker/queriesList';
+import i18n from './i18n';
 
-const NAME_PLACEHOLDER = 'No name';
+const getNamePlaceholder = () => i18n('field_no-name');
 const block = cn('query-tracker-top-row');
 
 const QueryTrackerTopRow: FC = () => {
@@ -73,7 +74,7 @@ const QueryTrackerTopRow: FC = () => {
         [dispatch],
     );
 
-    const name = annotations?.title || NAME_PLACEHOLDER;
+    const name = annotations?.title || getNamePlaceholder();
 
     return (
         <RowWithName page={Page.QUERIES} className={block()}>

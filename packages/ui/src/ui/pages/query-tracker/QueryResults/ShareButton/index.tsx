@@ -14,6 +14,7 @@ import {useToggle} from 'react-use';
 import {toaster} from '../../../../utils/toaster';
 import './index.scss';
 import cn from 'bem-cn-lite';
+import i18n from './i18n';
 
 const b = cn('query-share-button');
 
@@ -44,11 +45,11 @@ export const ShareButton: FC = () => {
             name: '',
             autoHiding: 5000,
             theme: 'success',
-            title: 'Query successful shared',
-            content: 'The link to your Query is published and copied to the clipboard',
+            title: i18n('alert_query-shared'),
+            content: i18n('alert_query-shared-content'),
             actions: [
                 {
-                    label: 'Unpublish',
+                    label: i18n('action_unpublish'),
                     onClick: handleToggleQuery,
                 },
             ],
@@ -66,7 +67,8 @@ export const ShareButton: FC = () => {
                 selected={isShared}
                 loading={sending}
             >
-                <Icon data={ArrowShapeTurnUpRightIcon} width={16} /> {isShared ? 'Shared' : 'Share'}
+                <Icon data={ArrowShapeTurnUpRightIcon} width={16} />{' '}
+                {isShared ? i18n('value_shared') : i18n('action_share')}
             </Button>
             {isShared && (
                 <DropdownMenu
@@ -79,7 +81,7 @@ export const ShareButton: FC = () => {
                     items={[
                         {
                             action: handleToggleQuery,
-                            text: 'Unpublish query',
+                            text: i18n('action_unpublish-query'),
                         },
                     ]}
                 />

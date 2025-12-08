@@ -15,6 +15,7 @@ import {TableColumnsSelector} from './TableColumnsSelector';
 import {QueryResultDownloadManager} from './QueryResultDownloadManager';
 
 import './index.scss';
+import i18n from './i18n';
 
 type Props = {
     query: QueryItem;
@@ -23,14 +24,14 @@ type Props = {
 
 const b = block('query-result-actions');
 
-const ModeVariants: ControlGroupOption[] = [
+const getModeVariants = (): ControlGroupOption[] => [
     {
         value: 'table',
-        content: 'Full result',
+        content: i18n('value_full-result'),
     },
     {
         value: 'scheme',
-        content: 'Scheme',
+        content: i18n('value_scheme'),
     },
 ];
 
@@ -115,7 +116,7 @@ export function QueryResultActions({query, resultIndex}: Props) {
 
             <SegmentedRadioGroup
                 className={b('item')}
-                options={ModeVariants}
+                options={getModeVariants()}
                 value={queryResult?.settings?.viewMode}
                 onUpdate={handleModeChange}
             />

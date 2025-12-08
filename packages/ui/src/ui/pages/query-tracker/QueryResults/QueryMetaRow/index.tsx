@@ -12,6 +12,7 @@ import {QueryStatusView} from '../../../../components/QueryStatus';
 import './index.scss';
 import {isAbortable} from '../../utils/query';
 import {abortCurrentQuery} from '../../../../store/actions/query-tracker/query';
+import i18n from './i18n';
 
 const b = block('query-meta-info');
 
@@ -39,13 +40,13 @@ export const QueryMetaInfo = React.memo(function QueryMetaInfo({
                 {format['DateTime'](query.start_time, {format: 'short'})}
             </Text>
             <Text className={b('item')} color={'secondary'}>
-                by {query.user}
+                {i18n('context_by-user', {user: query.user})}
             </Text>
 
             {isQueryExecuting && (
                 <Button size="s" onClick={abortQuery}>
                     <Icon data={stopIcon} />
-                    Stop
+                    {i18n('action_stop')}
                 </Button>
             )}
         </div>

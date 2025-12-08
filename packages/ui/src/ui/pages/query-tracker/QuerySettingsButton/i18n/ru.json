@@ -1,0 +1,5 @@
+{
+  "alert_name-required": "Название обязательно",
+  "alert_name-already-exist": "Это название уже используется, введите другое",
+  "alert_value-required": "Значение обязательно"
+}

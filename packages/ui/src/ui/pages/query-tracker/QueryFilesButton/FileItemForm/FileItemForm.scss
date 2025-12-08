@@ -1,0 +1,22 @@
+.file-item-form {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    &__form {
+        width: 440px;
+    }
+
+    &__link-form {
+        display: grid;
+        grid-template-columns: repeat(2, 214px);
+        grid-gap: 0 12px;
+    }
+
+    &__actions {
+        display: flex;
+        gap: 0 4px;
+    }
+}
+

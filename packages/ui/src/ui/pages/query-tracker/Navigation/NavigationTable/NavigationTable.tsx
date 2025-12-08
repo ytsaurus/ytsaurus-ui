@@ -10,13 +10,14 @@ import {
     selectTableWithFilter,
 } from '../../../../store/selectors/query-tracker/queryNavigation';
 import MetaTable from '../../../../components/MetaTable/MetaTable';
-import {PreviewTab} from './PreviewTab';
+import {PreviewTab} from './PreviewTab/PreviewTab';
 import {insertTextWhereCursor} from '../helpers/insertTextWhereCursor';
 import {createTableSelect} from '../helpers/createTableSelect';
 import {useMonaco} from '../../hooks/useMonaco';
 import {getQueryEngine} from '../../../../store/selectors/query-tracker/query';
 import {getPageSize} from '../../../../store/selectors/navigation/content/table-ts';
 import {getYsonSettingsDisableDecode} from '../../../../store/selectors/thor/unipika';
+import i18n from './i18n';
 
 const enum TableTab {
     Schema = 'schema',
@@ -47,7 +48,7 @@ export const NavigationTable: FC = () => {
         insertTextWhereCursor(text, editor);
     };
 
-    if (!table) return <div>Empty data</div>;
+    if (!table) return <div>{i18n('context_empty-data')}</div>;
 
     return (
         <div className={b()}>
@@ -55,9 +56,9 @@ export const NavigationTable: FC = () => {
                 defaultValue={activeTab}
                 onUpdate={handleChangeTab}
                 options={[
-                    {value: TableTab.Schema, content: 'Schema'},
-                    {value: TableTab.Preview, content: 'Preview'},
-                    {value: TableTab.Meta, content: 'Meta'},
+                    {value: TableTab.Schema, content: i18n('title_schema')},
+                    {value: TableTab.Preview, content: i18n('title_preview')},
+                    {value: TableTab.Meta, content: i18n('title_meta')},
                 ]}
             />
             <div className={b('content')}>

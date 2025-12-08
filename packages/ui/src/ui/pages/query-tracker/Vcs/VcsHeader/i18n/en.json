@@ -1,0 +1,9 @@
+{
+  "value_no-api-token": "[no api token]",
+  "context_select-vcs-type": "Select VCS type",
+  "context_vcs-token-hint": "You can add VCS tokens in the section Settings -> VCS",
+  "context_select-repository": "Select repository",
+  "context_select-branch": "Select branch",
+  "context_filter": "Filter"
+}
+

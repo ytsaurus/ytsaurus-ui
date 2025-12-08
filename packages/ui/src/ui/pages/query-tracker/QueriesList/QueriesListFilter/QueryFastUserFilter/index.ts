@@ -1,0 +1,1 @@
+export {QueryFastUserFilter} from './QueryFastUserFilter';
