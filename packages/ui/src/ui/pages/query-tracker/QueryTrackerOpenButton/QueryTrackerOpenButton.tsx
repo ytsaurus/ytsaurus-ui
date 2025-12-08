@@ -9,6 +9,7 @@ import {
     isQueryDraftEditted,
 } from '../../../store/selectors/query-tracker/query';
 import {useSelector} from '../../../store/redux-hooks';
+import i18n from './i18n';
 
 interface Props {
     className?: string;
@@ -34,7 +35,12 @@ export function QueryTrackerOpenButton({className, cluster, path}: Props) {
     }
     return (
         <Link routed url={url}>
-            <Button className={className} view={buttonView} size="l" title="Open Queries page">
+            <Button
+                className={className}
+                view={buttonView}
+                size="l"
+                title={i18n('action_open-queries-page')}
+            >
                 <Icon awesome="external-link" size={16} />
             </Button>
         </Link>

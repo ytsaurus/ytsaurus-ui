@@ -24,6 +24,7 @@ import {setPreview} from '../../../../store/reducers/query-tracker/vcsSlice';
 import {NoContent} from '../../../../components/NoContent/NoContent';
 import {VcsPath} from '../VcsPath';
 import {Alert} from '@gravity-ui/uikit';
+import i18n from './i18n';
 
 const block = cn('vcs-items-list');
 
@@ -123,15 +124,18 @@ export const VcsItemsList: FC = () => {
                 <Alert
                     className={block('error')}
                     theme="danger"
-                    title="Error"
-                    message="Error when retrieving repository content"
+                    title={i18n('alert_error')}
+                    message={i18n('alert_repository-content-error')}
                 />
             ) : (
                 <>
                     {itemsList.length ? (
                         itemsList
                     ) : (
-                        <NoContent className={block('empty-block')} warning="Empty list" />
+                        <NoContent
+                            className={block('empty-block')}
+                            warning={i18n('context_empty-list')}
+                        />
                     )}
                 </>
             )}

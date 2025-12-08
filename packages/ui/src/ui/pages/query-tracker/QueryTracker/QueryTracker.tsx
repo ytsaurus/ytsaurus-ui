@@ -32,6 +32,7 @@ import {CellPreviewModal} from '../../../containers/CellPreviewModal/CellPreview
 import {SET_QUERY_PARAMS} from '../../../store/reducers/query-tracker/query-tracker-contants';
 import {RedirectConfirmModal} from '../../../components/RedirectConfirmModal';
 import {getLastUserChoiceQueryEngine} from '../../../store/selectors/settings/settings-queries';
+import i18n from './i18n';
 
 const b = cn('query-tracker-page');
 
@@ -165,8 +166,8 @@ export default function QueryTracker({match}: Props) {
             <CellPreviewModal />
             {isQueryStateDirty && (
                 <RedirectConfirmModal
-                    title="Unsaved changes"
-                    message="You have unsaved changes in this query. Do you want to continue and lose them?"
+                    title={i18n('title_unsaved-changes')}
+                    message={i18n('confirm_unsaved-changes')}
                 />
             )}
         </>

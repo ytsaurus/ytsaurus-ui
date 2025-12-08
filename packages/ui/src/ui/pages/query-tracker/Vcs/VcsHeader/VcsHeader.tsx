@@ -23,6 +23,7 @@ import cn from 'bem-cn-lite';
 import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 import {Flex, Icon, TextInput, Tooltip} from '@gravity-ui/uikit';
 import {setListFilter} from '../../../../store/reducers/query-tracker/vcsSlice';
+import i18n from './i18n';
 
 const block = cn('vcs-header');
 
@@ -72,7 +73,7 @@ export const VcsHeader: FC = () => {
 
             return {
                 value: id,
-                text: `${name}${showNoToken ? ' [no api token]' : ''}`,
+                text: `${name}${showNoToken ? ` ${i18n('value_no-api-token')}` : ''}`,
             };
         });
     }, [config]);
@@ -102,10 +103,10 @@ export const VcsHeader: FC = () => {
                     items={selectVcsItems}
                     value={currentVcs}
                     onChange={handleChangeVcs}
-                    placeholder="Select VCS type"
+                    placeholder={i18n('context_select-vcs-type')}
                     hideClear
                 />
-                <Tooltip content="You can add VCS tokens in the section Settings -> VCS">
+                <Tooltip content={i18n('context_vcs-token-hint')}>
                     <Icon data={CircleQuestionIcon} size={16} />
                 </Tooltip>
             </Flex>
@@ -116,7 +117,7 @@ export const VcsHeader: FC = () => {
                         value={repository}
                         onChange={handleChangeRepository}
                         disabled={!selectRepoItems.length}
-                        placeholder="Select repository"
+                        placeholder={i18n('context_select-repository')}
                         hideClear
                     />
                 )}
@@ -125,7 +126,7 @@ export const VcsHeader: FC = () => {
                     value={branch}
                     onChange={handleChangeBranch}
                     disabled={!repository}
-                    placeholder="Select branch"
+                    placeholder={i18n('context_select-branch')}
                     hideClear
                 />
             </div>
@@ -133,7 +134,7 @@ export const VcsHeader: FC = () => {
                 <TextInput
                     onUpdate={handleUpdateFilter}
                     value={filter}
-                    placeholder="Filter"
+                    placeholder={i18n('context_filter')}
                     hasClear
                 />
             )}

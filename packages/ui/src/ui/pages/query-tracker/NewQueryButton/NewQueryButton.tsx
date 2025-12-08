@@ -6,6 +6,7 @@ import {isQueryDraftEditted} from '../../../store/selectors/query-tracker/query'
 import FilePlusIcon from '@gravity-ui/icons/svgs/file-plus.svg';
 import {Page} from '../../../../shared/constants/settings';
 import {getCluster} from '../../../store/selectors/global';
+import i18n from './i18n';
 
 export const NewQueryPromt = (props: {
     cancel: () => void;
@@ -14,8 +15,8 @@ export const NewQueryPromt = (props: {
 }) => {
     return (
         <Modal
-            title="New query"
-            content="All the changes will be lost. Are you sure you want to reset query?"
+            title={i18n('title_new-query')}
+            content={i18n('confirm_new-query')}
             onCancel={props.cancel}
             onConfirm={props.confirm}
             onOutsideClick={props.cancel}
@@ -60,12 +61,12 @@ export const NewQueryButton: FC<Props> = ({onClick, hideText}) => {
                 qa="new-query-btn"
                 view="action"
                 size="l"
-                title="New query"
+                title={i18n('title_new-query')}
                 href={`/${cluster}/${Page.QUERIES}`}
                 onClick={handleClick}
             >
                 <Icon data={FilePlusIcon} size={16} />
-                {!hideText && 'New'}
+                {!hideText && i18n('action_new')}
             </Button>
             <NewQueryPromt confirm={handleConfirm} cancel={handleCancel} visible={visible} />
         </React.Fragment>

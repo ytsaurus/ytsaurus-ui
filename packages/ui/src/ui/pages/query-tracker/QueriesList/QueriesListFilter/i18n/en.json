@@ -1,0 +1,9 @@
+{
+  "context_additional-filters": "Additional filters",
+  "context_table-column-settings": "Table column settings",
+  "context_search-placeholder": "Search in query name, body and access control",
+  "context_search-hint-title": "Search in query text, annotations and access control",
+  "context_search-hint-name": "Use `\"title\"=\"test_name\"` to search in query name",
+  "context_search-hint-aco": "Use `aco:nobody` to search in query access control"
+}
+

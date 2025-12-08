@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 import './AddVcsTokenForm.scss';
 import {selectVcsConfig} from '../../../../store/selectors/query-tracker/vcs';
+import i18n from './i18n';
 
 const block = cn('add-token-form');
 
@@ -45,10 +46,21 @@ export const AddVcsTokenForm: FC = () => {
 
     return (
         <div className={block()}>
-            <SelectSingle items={items} value={vcs} onChange={setVcs} hasClear placeholder="VCS" />
-            <TextInput placeholder="token" value={token} onUpdate={setToken} hasClear />
+            <SelectSingle
+                items={items}
+                value={vcs}
+                onChange={setVcs}
+                hasClear
+                placeholder={i18n('context_vcs')}
+            />
+            <TextInput
+                placeholder={i18n('context_token')}
+                value={token}
+                onUpdate={setToken}
+                hasClear
+            />
             <Button view="action" onClick={handleSave} loading={isSaving}>
-                Save
+                {i18n('action_save')}
             </Button>
         </div>
     );

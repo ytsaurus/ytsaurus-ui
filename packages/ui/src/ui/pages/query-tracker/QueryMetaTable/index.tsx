@@ -8,6 +8,7 @@ import {Button} from '@gravity-ui/uikit';
 import Yson from '../../../components/Yson/Yson';
 import SimpleModal from '../../../components/Modal/SimpleModal';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
+import i18n from './i18n';
 
 interface MetaTableProps {
     query: QueryItem;
@@ -54,7 +55,7 @@ export default function QueryMetaTable({query, className}: MetaTableProps) {
                                 setModalOpened(true);
                             }}
                         >
-                            View details
+                            {i18n('action_view-details')}
                         </Button>
                     );
                 }

@@ -1,0 +1,9 @@
+{
+  "context_additional-filters": "Дополнительные фильтры",
+  "context_table-column-settings": "Настройки колонок таблицы",
+  "context_search-placeholder": "Поиск по названию запроса, телу и контролю доступа",
+  "context_search-hint-title": "Поиск по тексту запроса, аннотациям и контролю доступа",
+  "context_search-hint-name": "Используйте `\"title\"=\"test_name\"` для поиска по названию запроса",
+  "context_search-hint-aco": "Используйте `aco:nobody` для поиска по контролю доступа"
+}
+

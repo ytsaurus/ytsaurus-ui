@@ -1,9 +1,10 @@
 import {ValidatorError} from './SettingsItemForm';
+import i18n from './helpers/i18n';
 
 export const VALIDATOR_ERRORS_TEXT = {
-    NAME_REQUIRED: 'Name is required field',
-    NAME_ALREADY_EXIST: 'This name is already in use, please type some another',
-    VALUE_REQUIRED: 'Values is required field',
+    NAME_REQUIRED: i18n('alert_name-required'),
+    NAME_ALREADY_EXIST: i18n('alert_name-already-exist'),
+    VALUE_REQUIRED: i18n('alert_value-required'),
 };
 
 export const formValidator = (name: string, value: string): ValidatorError => {

@@ -31,6 +31,7 @@ import {onCellPreviewQueryResults} from '../../../store/actions/query-tracker/ce
 import {ShowPreviewCallback} from './YQLTable/YQLTable';
 import CancelHelper from '../../../utils/cancel-helper';
 import {injectQueryResults} from '../../../store/actions/query-tracker/queryResult';
+import i18n from './i18n';
 
 const b = block('query-result-table');
 
@@ -61,8 +62,12 @@ function QueryReadyResultView({
             <NotRenderUntilFirstVisible hide={mode !== QueryResultsViewMode.Table}>
                 <Flex alignItems="center" gap={2} className={b('result-info')}>
                     <Text>
-                        Rows {start}-{end} of {total}
-                        {`${truncated ? ' (truncated)' : ''}`}
+                        {i18n('context_rows-info', {
+                            start: String(start),
+                            end: String(end),
+                            total: String(total),
+                        })}
+                        {truncated ? ` ${i18n('context_rows-truncated')}` : ''}
                     </Text>
 
                     {fullResult && (
@@ -71,8 +76,8 @@ function QueryReadyResultView({
                             target="_blank"
                         >
                             <Flex alignItems="center" gap={1}>
-                                <Icon data={ArrowUpRightFromSquareIcon} size={16} /> View full
-                                result
+                                <Icon data={ArrowUpRightFromSquareIcon} size={16} />{' '}
+                                {i18n('action_view-full-result')}
                             </Flex>
                         </Link>
                     )}

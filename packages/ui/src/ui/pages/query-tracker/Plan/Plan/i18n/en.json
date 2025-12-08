@@ -1,0 +1,9 @@
+{
+  "context_plan-too-large": "The plan of this operation is way too large to be visualized in browser.",
+  "context_plan-large": "The operation's plan is quite large, it has {{nodes}} nodes and {{edges}} edges.",
+  "context_plan-large-time": "It could take a lot of time to draw.",
+  "context_plan-nodes-edges": "It has {{nodes}} nodes and {{edges}} edges.",
+  "action_draw-plan": "Draw the plan anyway",
+  "action_draw-plan-freeze": "I understand it might freeze my browser, draw the plan anyway"
+}
+

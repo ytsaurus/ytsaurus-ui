@@ -1,0 +1,5 @@
+{
+  "alert_vcs-not-configured": "UISettings.vcsSettings is empty.",
+  "context_vcs-not-configured": "The installation of UI is not configured to work with any VCS"
+}
+

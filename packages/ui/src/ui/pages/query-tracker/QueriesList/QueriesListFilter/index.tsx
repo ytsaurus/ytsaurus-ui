@@ -23,6 +23,7 @@ import {setSettingByKey} from '../../../../store/actions/settings';
 import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';
 import {FilterDropdown} from './FilterDropdown';
 import {QueryFastUserFilter} from './QueryFastUserFilter';
+import i18n from './i18n';
 
 const b = block('queries-history-filter');
 
@@ -76,7 +77,7 @@ export function QueriesHistoryListFilter({className}: QueriesHistoryListFilterPr
                     button={
                         <Button
                             view={customFilterChanged ? 'outlined-info' : 'outlined'}
-                            tooltipProps={{content: 'Additional filters'}}
+                            tooltipProps={{content: i18n('context_additional-filters')}}
                             withTooltip
                         >
                             <Icon data={FunnelIcon} size={16} />
@@ -88,7 +89,10 @@ export function QueriesHistoryListFilter({className}: QueriesHistoryListFilterPr
                     trigger="click"
                     directions={['bottom']}
                     button={
-                        <Button tooltipProps={{content: 'Table column settings'}} withTooltip>
+                        <Button
+                            tooltipProps={{content: i18n('context_table-column-settings')}}
+                            withTooltip
+                        >
                             <Icon data={GearIcon} size={16} />
                         </Button>
                     }
@@ -100,18 +104,18 @@ export function QueriesHistoryListFilter({className}: QueriesHistoryListFilterPr
 
             <div className={b('row')}>
                 <TextInputWithDebounce
-                    placeholder="Search in query name, body and access control"
+                    placeholder={i18n('context_search-placeholder')}
                     value={filter?.filter}
                     onUpdate={handleFilterChange}
                 />
                 <Tooltip
                     content={
                         <>
-                            Search in query text, annotations and access control
+                            {i18n('context_search-hint-title')}
                             <br />
-                            Use `&quot;title&quot;=&quot;test_name&quot;` to search in query name
+                            {i18n('context_search-hint-name')}
                             <br />
-                            Use `aco:nobody` to search in query access control
+                            {i18n('context_search-hint-aco')}
                         </>
                     }
                 >

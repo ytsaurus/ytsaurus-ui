@@ -1,0 +1,19 @@
+.deleted-file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--g-color-line-generic);
+
+    &__info {
+        display: flex;
+        align-items: center;
+        gap: 0 8px;
+        overflow: hidden;
+    }
+
+    &__actions {
+        display: flex;
+        gap: 0 4px;
+    }
+}
+

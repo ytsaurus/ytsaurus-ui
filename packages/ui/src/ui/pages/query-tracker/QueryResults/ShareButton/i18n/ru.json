@@ -1,0 +1,9 @@
+{
+  "action_share": "Поделиться",
+  "value_shared": "Опубликован",
+  "action_unpublish": "Отменить публикацию",
+  "action_unpublish-query": "Отменить публикацию запроса",
+  "alert_query-shared": "Запрос успешно опубликован",
+  "alert_query-shared-content": "Ссылка на ваш запрос опубликована и скопирована в буфер обмена"
+}
+

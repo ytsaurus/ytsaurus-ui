@@ -1,0 +1,14 @@
+{
+  "action_copy-to-clipboard": "Copy to clipboard",
+  "action_insert-into-editor": "Insert into editor",
+  "action_create-new-query": "Create new query",
+  "action_copy-link": "Copy link",
+  "action_open-in-cluster": "Open in cluster",
+  "value_path": "Path",
+  "value_select": "SELECT",
+  "value_select-yt-ql": "SELECT (YT QL)",
+  "value_select-yql": "SELECT (YQL)",
+  "value_select-chyt": "SELECT (CHYT)",
+  "value_select-spyt": "SELECT (SPYT)"
+}
+
