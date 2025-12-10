@@ -53,7 +53,7 @@ export class FlowGroupBlock implements YTGraphBlock<'computation-group', FlowCom
         const {stream, computation} = this.sizes;
 
         const res = {
-            width: computation.width + PADDING * 2,
+            width: Math.max(600, computation.width + PADDING * 2),
             height: computation.height + PADDING * 2,
         };
 
