@@ -381,6 +381,7 @@ export class YTGraphCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canv
         value,
         fontSize,
         padding,
+        skipLabel,
     }: {
         maxWidth: number;
         xPos: number;
@@ -389,23 +390,29 @@ export class YTGraphCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canv
         value: string;
         fontSize: YTGraphFontSize;
         padding?: number;
+        skipLabel?: boolean;
     }) {
-        const l = this.fitText(maxWidth, label, fontSize);
+        let labelHeight = 0;
 
-        this.drawInnerText({
-            xPos,
-            yPos,
-            text: l.fitText,
-            color: 'secondary',
-            fontSize,
-            padding,
-        });
+        if (!skipLabel) {
+            const l = this.fitText(maxWidth, label, fontSize);
+
+            this.drawInnerText({
+                xPos,
+                yPos,
+                text: l.fitText,
+                color: 'secondary',
+                fontSize,
+                padding,
+            });
+            labelHeight = l.height;
+        }
 
         const v = this.fitText(maxWidth, value, fontSize);
 
         this.drawInnerText({
             xPos,
-            yPos: yPos + l.height,
+            yPos: yPos + labelHeight,
             text: v.fitText,
             fontSize,
             padding,
