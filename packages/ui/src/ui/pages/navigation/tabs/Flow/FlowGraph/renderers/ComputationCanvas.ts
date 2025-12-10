@@ -62,31 +62,39 @@ export class ComputationCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockIte
     renderMeta() {
         const {height, width} = this.state;
         const {
-            metrics: {cpu_usage_current, memory_usage_current},
+            metrics: {cpu_usage_10m, memory_usage_10m},
         } = this.state.meta;
 
         const maxWidth = Math.round((width - this.PADDING * 3) / 2);
-        const yPos = Math.round(height / 2.1);
+        let yPos = Math.round(height / 2.1);
+
+        const fontSize = this.getComputationFontSize();
+        const fontHeight = this.getFontHeight(fontSize);
+        const skipLabel = fontHeight * 2 >= height - yPos - this.PADDING;
+
+        yPos = skipLabel ? height - this.PADDING - fontHeight : yPos;
 
         this.drawMetaItem({
             xPos: this.PADDING,
             yPos,
             maxWidth,
             label: 'CPU',
-            value: format.Number(cpu_usage_current, {digits: 1}),
-            fontSize: this.getComputationFontSize(),
+            value: format.Number(cpu_usage_10m, {digits: 1}),
+            fontSize,
             padding: this.PADDING,
+            skipLabel,
         });
 
-        const value = format.Bytes(memory_usage_current, {digits: 1});
+        const value = format.Bytes(memory_usage_10m, {digits: 1});
         this.drawMetaItem({
             xPos: this.PADDING * 1.5 + maxWidth,
             yPos,
             maxWidth,
             label: 'RAM',
             value,
-            fontSize: this.getComputationFontSize(),
+            fontSize,
             padding: this.PADDING,
+            skipLabel,
         });
     }
 

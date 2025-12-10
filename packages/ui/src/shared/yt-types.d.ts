@@ -601,7 +601,7 @@ export type FlowComputation = FlowNodeBase &
             cpu_usage_10m: number;
             memory_usage_current: number;
             memory_usage_30s: number;
-            memory_usage_current: number;
+            memory_usage_10m: number;
         };
         partitions_stats?: {
             count: number;
