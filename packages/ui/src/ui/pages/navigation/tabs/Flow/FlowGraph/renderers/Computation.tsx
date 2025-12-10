@@ -27,7 +27,7 @@ type ComputationProps = {
 };
 
 export function Computation({detailed, item, className}: ComputationProps) {
-    const {cpu_usage_current, memory_usage_current} = item.meta?.metrics ?? {};
+    const {cpu_usage_10m, memory_usage_10m} = item.meta?.metrics ?? {};
 
     return (
         <div className={block(null, className)}>
@@ -44,13 +44,13 @@ export function Computation({detailed, item, className}: ComputationProps) {
                 items={[
                     {
                         label: 'CPU Usage',
-                        value: format.Number(cpu_usage_current, {
-                            digits: cpu_usage_current! > 1 ? 1 : 2,
+                        value: format.Number(cpu_usage_10m, {
+                            digits: cpu_usage_10m! > 1 ? 1 : 2,
                         }),
                     },
                     {
                         label: 'RAM Usage',
-                        value: format.Bytes(memory_usage_current),
+                        value: format.Bytes(memory_usage_10m),
                     },
                     {
                         label: 'Epoch, pcs/s',
