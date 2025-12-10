@@ -36,3 +36,7 @@ export function makeAccountsUrl(account: string, cluster?: string) {
 export function makeBundleUrl({bundle, cluster}: {bundle: string; cluster?: string}) {
     return `/${cluster || YT.cluster}/${Page.TABLET_CELL_BUNDLES}/instances?activeBundle=${bundle}`;
 }
+
+export function makeFlowLink({path, cluster}: {path: string; cluster?: string}) {
+    return `/${cluster || YT.cluster}/${Page.FLOW}?path=${path}`;
+}

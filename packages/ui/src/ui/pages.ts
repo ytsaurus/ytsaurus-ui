@@ -18,6 +18,11 @@ const pages: Array<HeaderItem> = [
         header: true,
     },
     {
+        id: Page.FLOW,
+        name: 'Flow',
+        header: true,
+    },
+    {
         id: Page.OPERATIONS,
         name: 'Operations',
         header: true,

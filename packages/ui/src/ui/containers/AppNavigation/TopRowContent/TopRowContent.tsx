@@ -28,6 +28,7 @@ import withLazyLoading from '../../../hocs/withLazyLoading';
 
 import {ChytPageTopRowLazy} from '../../../pages/chyt/lazy';
 import {QueryTrackerTopRowLazy} from '../../../pages/query-tracker/lazy';
+import {FlowPageTopRowLazy} from '../../../pages/flow/lazy';
 
 export default function TopRowContent() {
     const loadState = useSelector(getGlobalLoadState);
@@ -37,6 +38,7 @@ export default function TopRowContent() {
         <Switch>
             <Route path={`/:cluster/${Page.SYSTEM}`} component={SystemTopRowLazy} />
             <Route path={`/:cluster/${Page.NAVIGATION}`} component={NavigationTopRowLazy} />
+            <Route path={`/:cluster/${Page.FLOW}`} component={FlowPageTopRowLazy} />
             <Route path={`/:cluster/${Page.SCHEDULING}`} component={SchedulingTopRowLazy} />
             <Route path={`/:cluster/${Page.ACCOUNTS}`} component={AccountsTopRowLazy} />
             <Route path={`/:cluster/${Page.TABLET}/:id`} component={TabletTopRowLazy} />

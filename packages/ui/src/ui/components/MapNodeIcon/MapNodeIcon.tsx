@@ -15,7 +15,10 @@ import {isLinkToTrashNode} from '../../utils/navigation/isLinkToTrashNode';
 import QueueConsumerIcon from '../../assets/img/svg/icons/queue-consumer.svg';
 import QueueProducerIcon from '../../assets/img/svg/icons/queue-producer.svg';
 
+import NodePipelineIcon from '../../assets/img/svg/icons/node-pipeline.svg';
+
 import type {BaseMapNode} from '../../utils/navigation/content/map-nodes/node';
+import {isPipelineNode} from '../../utils/navigation/isPipelineNode';
 
 import './MapNodeIcon.scss';
 
@@ -54,6 +57,11 @@ export function MapNodeIcon({node}: {node: BaseMapNode}) {
     if (item?.treat_as_queue_producer) {
         title = 'Queue producer';
         icon = <GravityIcon data={QueueProducerIcon} />;
+    }
+
+    if (isPipelineNode(node.$attributes)) {
+        title = 'Flow';
+        icon = <GravityIcon data={NodePipelineIcon} />;
     }
 
     return (
