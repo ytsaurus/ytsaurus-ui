@@ -11,7 +11,12 @@ import {addProgressStackSpacers} from '../../../../../utils/progress';
 
 import {FlowGraphBlockItem} from '../FlowGraph';
 
-import {FlowCaption1, FlowCaption2, FlowMessages} from './FlowGraphRenderer';
+import {
+    FlowCaption1,
+    FlowCaption2,
+    FlowMessages,
+    TextWithHighConsumption,
+} from './FlowGraphRenderer';
 import {FlowMeta} from './FlowMeta';
 
 import './Computation.scss';
@@ -28,6 +33,7 @@ type ComputationProps = {
 
 export function Computation({detailed, item, className}: ComputationProps) {
     const {cpu_usage_10m, memory_usage_10m} = item.meta?.metrics ?? {};
+    const {highlight_cpu_usage, hightlight_memory_usage} = item.meta ?? {};
 
     return (
         <div className={block(null, className)}>
@@ -44,13 +50,27 @@ export function Computation({detailed, item, className}: ComputationProps) {
                 items={[
                     {
                         label: 'CPU Usage',
-                        value: format.Number(cpu_usage_10m, {
-                            digits: cpu_usage_10m! > 1 ? 1 : 2,
-                        }),
+                        value: (
+                            <TextWithHighConsumption
+                                highConsumption={highlight_cpu_usage}
+                                detailed={detailed}
+                            >
+                                {format.Number(cpu_usage_10m, {
+                                    digits: cpu_usage_10m! > 1 ? 1 : 2,
+                                })}
+                            </TextWithHighConsumption>
+                        ),
                     },
                     {
                         label: 'RAM Usage',
-                        value: format.Bytes(memory_usage_10m),
+                        value: (
+                            <TextWithHighConsumption
+                                highConsumption={hightlight_memory_usage}
+                                detailed={detailed}
+                            >
+                                {format.Bytes(memory_usage_10m)}
+                            </TextWithHighConsumption>
+                        ),
                     },
                     {
                         label: 'Epoch, pcs/s',
