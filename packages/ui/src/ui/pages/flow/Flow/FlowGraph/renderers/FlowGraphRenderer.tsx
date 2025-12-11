@@ -107,11 +107,11 @@ function FlowMessagesDialog({data, onClose}: FlowMessagesProps & {onClose(): voi
 }
 
 function FlowMessageItem({item, initialExpanded}: {item: FlowMessage; initialExpanded: boolean}) {
-    const {level, yson, error} = item;
+    const {level, yson, error, markdown_text} = item;
     const theme = STATUS_TO_BG_THEME[level];
     return (
         <div className={block('message', {theme})}>
-            {!error && !yson ? (
+            {!error && !yson && !markdown_text ? (
                 item.text
             ) : (
                 <FlowMessageItemExpandable
@@ -149,7 +149,7 @@ function FlowMessageItemExpandable({
                     <React.Fragment>
                         {Boolean(yson) && <Yson value={yson} />}
                         {Boolean(error) && <YTErrorBlock error={error} type={errorType} />}
-                        {Boolean(markdown_text) && <Markdown text={markdown_text} />}
+                        {Boolean(markdown_text) && <Markdown text={markdown_text ?? ''} />}
                     </React.Fragment>
                 )}
             </div>
