@@ -241,7 +241,7 @@ export class YTGraphCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canv
         xPos?: number;
         padding?: number;
         fontSize?: YTGraphFontSize;
-        color?: 'secondary';
+        color?: 'secondary' | 'warning';
         align?: 'left' | 'right' | 'center';
         oneLine?: boolean;
     }) {
@@ -262,8 +262,8 @@ export class YTGraphCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canv
         };
 
         this.context.ctx.fillStyle =
-            color === 'secondary'
-                ? GRAPH_COLORS.secondary
+            color === 'secondary' || color === 'warning'
+                ? GRAPH_COLORS[color]
                 : this.context.colors.block?.text || GRAPH_COLORS.text;
         this.context.ctx.textAlign = align ?? (xPos ? 'left' : 'center');
         this.renderText(name, this.context.ctx, {
@@ -382,6 +382,7 @@ export class YTGraphCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canv
         fontSize,
         padding,
         skipLabel,
+        color,
     }: {
         maxWidth: number;
         xPos: number;
@@ -391,6 +392,7 @@ export class YTGraphCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canv
         fontSize: YTGraphFontSize;
         padding?: number;
         skipLabel?: boolean;
+        color?: 'warning';
     }) {
         let labelHeight = 0;
 
@@ -416,6 +418,7 @@ export class YTGraphCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canv
             text: v.fitText,
             fontSize,
             padding,
+            color,
         });
     }
 
