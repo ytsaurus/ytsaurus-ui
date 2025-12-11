@@ -12,10 +12,11 @@ import {
     ClickableTextProps,
 } from '../../../../../components/ClickableText/ClickableText';
 import {ExpandButton} from '../../../../../components/ExpandButton';
+import YTIcon from '../../../../../components/Icon/Icon';
+import {Markdown} from '../../../../../components/Markdown/Markdown';
 import {YTText} from '../../../../../components/Text/Text';
 import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
 import Yson from '../../../../../components/Yson/Yson';
-import YTIcon from '../../../../../components/Icon/Icon';
 import './FlowGraphRenderer.scss';
 
 const block = cn('yt-flow-graph-renderer');
@@ -136,7 +137,7 @@ function FlowMessageItemExpandable({
 
     const toggleExpand = () => setExpanded(!expanded);
 
-    const {yson, error, text} = item;
+    const {yson, markdown_text, error, text} = item;
     return (
         <Flex gap={1} alignItems="baseline">
             <ExpandButton expanded={expanded} toggleExpanded={toggleExpand} />
@@ -148,6 +149,7 @@ function FlowMessageItemExpandable({
                     <React.Fragment>
                         {Boolean(yson) && <Yson value={yson} />}
                         {Boolean(error) && <YTErrorBlock error={error} type={errorType} />}
+                        {Boolean(markdown_text) && <Markdown text={markdown_text} />}
                     </React.Fragment>
                 )}
             </div>
