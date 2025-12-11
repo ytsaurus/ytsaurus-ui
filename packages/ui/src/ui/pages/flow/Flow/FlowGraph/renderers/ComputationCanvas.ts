@@ -62,6 +62,8 @@ export class ComputationCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockIte
     renderMeta() {
         const {height, width} = this.state;
         const {
+            highlight_cpu_usage,
+            hightlight_memory_usage,
             metrics: {cpu_usage_10m, memory_usage_10m},
         } = this.state.meta;
 
@@ -83,6 +85,7 @@ export class ComputationCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockIte
             fontSize,
             padding: this.PADDING,
             skipLabel,
+            color: highlight_cpu_usage ? 'warning' : undefined,
         });
 
         const value = format.Bytes(memory_usage_10m, {digits: 1});
@@ -95,6 +98,7 @@ export class ComputationCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockIte
             fontSize,
             padding: this.PADDING,
             skipLabel,
+            color: hightlight_memory_usage ? 'warning' : undefined,
         });
     }
 

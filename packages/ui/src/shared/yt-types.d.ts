@@ -595,6 +595,9 @@ export type FlowNodeBase = {
 
     description?: string;
     messages?: Array<FlowMessage>;
+
+    highlight_cpu_usage?: boolean;
+    hightlight_memory_usage?: boolean;
 };
 
 export type FlowMessage = {level: FlowNodeStatus} & (
