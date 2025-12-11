@@ -1,31 +1,27 @@
+import {Button, Flex, Link, Text} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
-
-import {Button, Flex, Link, SegmentedRadioGroup, Text} from '@gravity-ui/uikit';
+import {Redirect, Route, Switch} from 'react-router';
 import {formatByParams} from '../../../../../shared/utils/format';
-import format from '../../../../common/hammer/format';
-import {YTAlertBlock} from '../../../../components/Alert/Alert';
 import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
 import Icon from '../../../../components/Icon/Icon';
 import MetaTable from '../../../../components/MetaTable/MetaTable';
 import StatusLabel from '../../../../components/StatusLabel/StatusLabel';
 import {useUpdater} from '../../../../hooks/use-updater';
+import {Page} from '../../../../shared/constants/settings';
 import {YTApiId} from '../../../../shared/constants/yt-api-id';
 import {loadFlowStatus, updateFlowState} from '../../../../store/actions/flow/status';
-import {
-    FLOW_VIEW_MODES,
-    FlowViewMode,
-    setFlowViewMode,
-} from '../../../../store/reducers/flow/filters';
-import {getFlowViewMode} from '../../../../store/selectors/flow/filters';
 import {getFlowStatusData} from '../../../../store/selectors/flow/status';
 import {getCluster} from '../../../../store/selectors/global';
 import UIFactory from '../../../../UIFactory';
+import Tabs from '../../../components/Tabs/Tabs';
 import {YTErrorInline} from '../../../containers/YTErrorInline/YTErrorInline';
 import {useFlowExecuteQuery} from '../../../store/api/yt/flow';
 import {useGetQuery} from '../../../store/api/yt/get';
+import {FlowTab} from '../../../store/reducers/flow/filters';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {getPipelinePath} from '../../../store/selectors/flow/filters';
+import {makeTabProps} from '../../../utils';
 import './Flow.scss';
 import {FlowGraph} from './FlowGraph/FlowGraph';
 import {FlowMessages} from './FlowGraph/renderers/FlowGraphRenderer';
@@ -34,73 +30,74 @@ import {FlowDynamicSpec, FlowStaticSpec} from './PipelineSpec/PipelineSpec';
 
 const block = cn('yt-flow');
 
-function useViewModeOptions() {
-    const res = React.useMemo(() => {
-        const {urlTemplate, component} = UIFactory.getMonitoringComponentForNavigationFlow() ?? {};
-        const options =
-            component || urlTemplate
-                ? FLOW_VIEW_MODES
-                : FLOW_VIEW_MODES.filter((item) => item !== 'monitoring');
-
-        return options.map((value) => {
-            return {value, content: format.ReadableField(value)};
-        });
-    }, []);
-    return res;
-}
-
 export function Flow() {
-    const dispatch = useDispatch();
-    const viewMode = useSelector(getFlowViewMode);
-
-    const options = useViewModeOptions();
-
     return (
         <div className={block()}>
             <FlowState />
-            <Flex className={block('toolbar')}>
-                <SegmentedRadioGroup<FlowViewMode>
-                    options={options}
-                    value={viewMode}
-                    onUpdate={(value) => dispatch(setFlowViewMode(value))}
-                />
-            </Flex>
-            <div className={block('content', {view: viewMode})}>
-                <FlowContent viewMode={viewMode} />
+            <FlowTabs />
+            <div className={block('content')}>
+                <FlowContent />
             </div>
         </div>
     );
 }
 
-function FlowContent({viewMode}: {viewMode: FlowViewMode}) {
+export function FlowTabs() {
+    const cluster = useSelector(getCluster);
+
+    const tabsProps = React.useMemo(() => {
+        const {urlTemplate, component} = UIFactory.getMonitoringComponentForNavigationFlow() ?? {};
+        const showSettings = {
+            [FlowTab.MONITORING]: {show: Boolean(component || urlTemplate)},
+        };
+
+        return makeTabProps(`/${cluster}/${Page.FLOW}`, FlowTab, showSettings);
+    }, [cluster]);
+
+    return <Tabs className={block('tabs')} routed routedPreserveLocation {...tabsProps} />;
+}
+
+function FlowContent() {
     const path = useSelector(getPipelinePath);
+    const cluster = useSelector(getCluster);
 
     if (!path) {
         return null;
     }
 
-    switch (viewMode) {
-        case 'static_spec':
-            return <FlowStaticSpec pipeline_path={path} />;
-        case 'dynamic_spec':
-            return <FlowDynamicSpec pipeline_path={path} />;
-        case 'monitoring':
-            return <FlowMonitoring pipeline_path={path} />;
-        case 'workers':
-        case 'computations':
-            return <FlowLayout path={path} viewMode={viewMode} />;
-        case 'graph':
-        case 'graph_data':
-            return <FlowGraph pipeline_path={path} yson={viewMode === 'graph_data'} />;
-
-        default:
-            return (
-                <YTAlertBlock
-                    header="Unexpected behaviour"
-                    error={new Error(`'${viewMode}' view mode is not implemented`)}
-                />
-            );
-    }
+    return (
+        <Switch>
+            <Route
+                path={`/${cluster}/${Page.FLOW}/${FlowTab.GRAPH}`}
+                render={() => <FlowGraph pipeline_path={path} yson={false} />}
+            />
+            <Route
+                path={`/${cluster}/${Page.FLOW}/${FlowTab.GRAPH_DATA}`}
+                render={() => <FlowGraph pipeline_path={path} yson={true} />}
+            />
+            <Route
+                path={`/${cluster}/${Page.FLOW}/${FlowTab.COMPUTATIONS}`}
+                render={() => <FlowLayout path={path} viewMode="computations" />}
+            />
+            <Route
+                path={`/${cluster}/${Page.FLOW}/${FlowTab.WORKERS}`}
+                render={() => <FlowLayout path={path} viewMode="workers" />}
+            />
+            <Route
+                path={`/${cluster}/${Page.FLOW}/${FlowTab.DYNAMIC_SPEC}`}
+                render={() => <FlowDynamicSpec pipeline_path={path} />}
+            />
+            <Route
+                path={`/${cluster}/${Page.FLOW}/${FlowTab.STATIC_SPEC}`}
+                render={() => <FlowStaticSpec pipeline_path={path} />}
+            />
+            <Route
+                path={`/${cluster}/${Page.FLOW}/${FlowTab.MONITORING}`}
+                render={() => <FlowMonitoring pipeline_path={path} />}
+            />
+            <Redirect to={`/${cluster}/${Page.FLOW}/${FlowTab.GRAPH}`} />
+        </Switch>
+    );
 }
 
 function FlowStatusToolbar() {
