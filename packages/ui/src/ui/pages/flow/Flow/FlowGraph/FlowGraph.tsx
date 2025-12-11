@@ -1,5 +1,5 @@
 import React from 'react';
-import {useSelector} from '../../../../../store/redux-hooks';
+import {useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
 import partition_ from 'lodash/partition';
@@ -13,13 +13,13 @@ import {
     FlowComputationStreamType,
     FlowSink,
     FlowStream,
-} from '../../../../../../shared/yt-types';
+} from '../../../../../shared/yt-types';
 
 import ClockIcon from '@gravity-ui/icons/svgs/clock.svg';
 import FileCodeIcon from '@gravity-ui/icons/svgs/file-code.svg';
 import ReceiptIcon from '@gravity-ui/icons/svgs/receipt.svg';
 
-import Yson from '../../../../../components/Yson/Yson';
+import Yson from '../../../../components/Yson/Yson';
 import {
     YTGraph,
     YTGraphBlock,
@@ -27,14 +27,14 @@ import {
     useConfig,
     useElkLayout,
     useGraphScale,
-} from '../../../../../components/YTGraph';
-import Loader from '../../../../../components/Loader/Loader';
-import {NoContent} from '../../../../../components/NoContent/NoContent';
-import {YTErrorBlock} from '../../../../../components/Error/Error';
+} from '../../../../components/YTGraph';
+import Loader from '../../../../components/Loader/Loader';
+import {NoContent} from '../../../../components/NoContent/NoContent';
+import {YTErrorBlock} from '../../../../components/Error/Error';
 
-import {getCluster} from '../../../../../store/selectors/global/cluster';
+import {getCluster} from '../../../../store/selectors/global/cluster';
 
-import {useFlowExecuteQuery} from '../../../../../store/api/yt';
+import {useFlowExecuteQuery} from '../../../../store/api/yt';
 
 import {Computation} from './renderers/Computation';
 import {Stream} from './renderers/Stream';

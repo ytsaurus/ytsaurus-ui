@@ -1,10 +1,12 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 
 export type FlowFiltersState = {
+    pipelinePath: string;
     flowViewMode: FlowViewMode;
 };
 
 export const initialState: FlowFiltersState = {
+    pipelinePath: '',
     flowViewMode: 'graph',
 };
 

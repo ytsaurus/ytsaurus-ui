@@ -2,7 +2,7 @@ import React from 'react';
 
 import {Flex, Text} from '@gravity-ui/uikit';
 
-import format from '../../../../../../common/hammer/format';
+import format from '../../../../../common/hammer/format';
 
 import {FlowGraphBlockItem} from '../FlowGraph';
 

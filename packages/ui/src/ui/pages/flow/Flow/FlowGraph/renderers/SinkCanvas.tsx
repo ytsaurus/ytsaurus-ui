@@ -1,4 +1,4 @@
-import {YTGraphCanvasBlock} from '../../../../../../components/YTGraph';
+import {YTGraphCanvasBlock} from '../../../../../components/YTGraph';
 import {FlowGraphBlockItem} from '../FlowGraph';
 
 const PADDING = 10;

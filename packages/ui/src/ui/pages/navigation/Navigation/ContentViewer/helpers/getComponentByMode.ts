@@ -1,17 +1,17 @@
 import React from 'react';
 
-import Consumer from '../../../../../pages/navigation/tabs/Consumer/Consumer';
-import Queue from '../../../../../pages/navigation/tabs/Queue/Queue';
-import ACL from '../../../../../pages/navigation/tabs/ACL/ACL';
-import Locks from '../../../../../pages/navigation/tabs/Locks/Locks';
-import Schema from '../../../../../pages/navigation/tabs/Schema/Schema';
-import Tablets from '../../../../../pages/navigation/tabs/Tablets/Tablets';
-import Attributes from '../../../../../pages/navigation/tabs/Attributes/Attributes';
 import AccessLog from '../../../../../pages/navigation/tabs/AccessLog/AccessLog';
-import TabletErrors from '../../../../../pages/navigation/tabs/TabletErrors/TabletErrors';
-import UserAttributes from '../../../../../pages/navigation/tabs/UserAttributes/UserAttributes';
+import ACL from '../../../../../pages/navigation/tabs/ACL/ACL';
+import Attributes from '../../../../../pages/navigation/tabs/Attributes/Attributes';
+import Consumer from '../../../../../pages/navigation/tabs/Consumer/Consumer';
+import {FlowRedirect} from '../../../../../pages/navigation/tabs/FlowRedirect/FlowRedirect';
+import Locks from '../../../../../pages/navigation/tabs/Locks/Locks';
+import Queue from '../../../../../pages/navigation/tabs/Queue/Queue';
+import Schema from '../../../../../pages/navigation/tabs/Schema/Schema';
 import TableMountConfig from '../../../../../pages/navigation/tabs/TableMountConfig/TableMountConfig';
-import {Flow} from '../../../../../pages/navigation/tabs/Flow';
+import TabletErrors from '../../../../../pages/navigation/tabs/TabletErrors/TabletErrors';
+import Tablets from '../../../../../pages/navigation/tabs/Tablets/Tablets';
+import UserAttributes from '../../../../../pages/navigation/tabs/UserAttributes/UserAttributes';
 
 import {Tab} from '../../../../../constants/navigation';
 import UIFactory from '../../../../../UIFactory';
@@ -30,7 +30,7 @@ const getSupportedAttributeTypes = () => {
         [Tab.CONSUMER]: Consumer,
         [Tab.MOUNT_CONFIG]: TableMountConfig,
         [Tab.QUEUE]: Queue,
-        [Tab.FLOW]: Flow,
+        [Tab.FLOW]: FlowRedirect,
     };
 
     UIFactory.getNavigationExtraTabs().forEach((tab) => {

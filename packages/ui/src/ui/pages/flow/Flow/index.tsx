@@ -1,5 +1,5 @@
 import React from 'react';
-import withLazyLoading from '../../../../hocs/withLazyLoading';
+import withLazyLoading from '../../../hocs/withLazyLoading';
 
 function importFlow() {
     return import(/* webpackChunkName: "navigation-flow" */ './Flow');

@@ -1,8 +1,8 @@
 import {TAnchor} from '@gravity-ui/graph';
 
-import format from '../../../../../../common/hammer/format';
+import format from '../../../../../common/hammer/format';
 
-import {NoopComponent, YTGraphCanvasBlock} from '../../../../../../components/YTGraph';
+import {NoopComponent, YTGraphCanvasBlock} from '../../../../../components/YTGraph';
 import {FlowGraphBlockItem} from '../FlowGraph';
 
 const PADDING = 10;
