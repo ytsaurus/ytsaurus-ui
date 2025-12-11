@@ -21,11 +21,14 @@ import {getFlowViewMode} from '../../../../store/selectors/flow/filters';
 import {getFlowStatusData} from '../../../../store/selectors/flow/status';
 import {getCluster} from '../../../../store/selectors/global';
 import UIFactory from '../../../../UIFactory';
+import {YTErrorInline} from '../../../containers/YTErrorInline/YTErrorInline';
+import {useFlowExecuteQuery} from '../../../store/api/yt/flow';
 import {useGetQuery} from '../../../store/api/yt/get';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {getPipelinePath} from '../../../store/selectors/flow/filters';
 import './Flow.scss';
 import {FlowGraph} from './FlowGraph/FlowGraph';
+import {FlowMessages} from './FlowGraph/renderers/FlowGraphRenderer';
 import {FlowLayout} from './FlowLayout/FlowLayout';
 import {FlowDynamicSpec, FlowStaticSpec} from './PipelineSpec/PipelineSpec';
 
@@ -144,28 +147,51 @@ function FlowState() {
                 <Text variant="header-1">Processing catalog </Text>
                 <FlowStatusToolbar />
             </Flex>
-            <MetaTable
-                items={[
-                    [{key: 'status', value: <StatusLabel label={value} />}],
-                    [
-                        {
-                            key: 'leader_controller_address',
-                            value: (
-                                <>
-                                    {leader_controller_address}
-                                    <ClipboardButton
-                                        view="flat-secondary"
-                                        text={leader_controller_address}
-                                        inlineMargins
-                                    />
-                                </>
-                            ),
-                            className: block('meta-item'),
-                        },
-                    ],
-                ]}
-            />
+            <Flex>
+                <MetaTable
+                    items={[
+                        [{key: 'status', value: <StatusLabel label={value} />}],
+                        [
+                            {
+                                key: 'leader_controller_address',
+                                value: (
+                                    <>
+                                        {leader_controller_address}
+                                        <ClipboardButton
+                                            view="flat-secondary"
+                                            text={leader_controller_address}
+                                            inlineMargins
+                                        />
+                                    </>
+                                ),
+                                className: block('meta-item'),
+                            },
+                        ],
+                    ]}
+                />
+                <Flex grow={1} justifyContent={'end'}>
+                    <FlowMessagesLoaded />
+                </Flex>
+            </Flex>
         </React.Fragment>
+    );
+}
+
+export function FlowMessagesLoaded() {
+    const pipeline_path = useSelector(getPipelinePath);
+
+    const cluster = useSelector(getCluster);
+    const {data, error} =
+        useFlowExecuteQuery<'describe-pipeline'>({
+            cluster,
+            parameters: {pipeline_path, flow_command: 'describe-pipeline'},
+            body: {status_only: true},
+        }) ?? {};
+
+    return error ? (
+        <YTErrorInline message="Failded to load messages" error={error} />
+    ) : (
+        <FlowMessages data={data?.messages ?? []} paddingTop="none" />
     );
 }
 

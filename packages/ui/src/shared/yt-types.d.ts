@@ -554,9 +554,17 @@ export type GetQueryTrackerInfoResponse = {
 export type FlowExecuteCommand = 'describe-pipeline';
 
 export type FlowExecuteParams<Command extends FlowExecuteCommand> = {
-    flow_command: Command;
+    flow_command: 'describe-pipeline';
     pipeline_path: string;
 };
+
+export type FlowExecuteCommandBody<Command extends FlowExecuteCommand> = {
+    'describe-pipeline': {
+        body?: {
+            status_only?: boolean;
+        };
+    };
+}[Command];
 
 export type FlowExecuteData = {
     'describe-pipeline': FlowDescribePipelineData;
