@@ -3,37 +3,37 @@ import cn from 'bem-cn-lite';
 
 import {Alert, Button, Link} from '@gravity-ui/uikit';
 
-import {YTError} from '../../../../../../@types/types';
+import {YTError} from '../../../../../@types/types';
 
-import {useUpdater} from '../../../../../hooks/use-updater';
+import {useUpdater} from '../../../../hooks/use-updater';
 
-import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
     loadFlowDynamicSpec,
     loadFlowStaticSpec,
     updateFlowDynamicSpec,
     updateFlowStaticSpec,
-} from '../../../../../store/actions/flow/specs';
+} from '../../../../store/actions/flow/specs';
 import {
     getFlowDynamicSpecData,
     getFlowDynamicSpecFirstLoading,
     getFlowStaticSpecData,
     getFlowStaticSpecError,
     getFlowStaticSpecFirstLoading,
-} from '../../../../../store/selectors/flow/specs';
-import {getFlowSpecYsonSettings} from '../../../../../store/selectors/thor/unipika';
-import {FlowSpecState} from '../../../../../store/reducers/flow/specs';
+} from '../../../../store/selectors/flow/specs';
+import {getFlowSpecYsonSettings} from '../../../../store/selectors/thor/unipika';
+import {FlowSpecState} from '../../../../store/reducers/flow/specs';
 
-import {YsonDownloadButton} from '../../../../../components/DownloadAttributesButton';
-import Yson from '../../../../../components/Yson/Yson';
-import Icon from '../../../../../components/Icon/Icon';
-import {YTDFDialog, makeErrorFields} from '../../../../../components/Dialog';
-import {YTErrorBlock} from '../../../../../components/Block/Block';
-import Loader from '../../../../../components/Loader/Loader';
-import {UnipikaSettings} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
-import UIFactory from '../../../../../UIFactory';
+import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
+import Yson from '../../../../components/Yson/Yson';
+import Icon from '../../../../components/Icon/Icon';
+import {YTDFDialog, makeErrorFields} from '../../../../components/Dialog';
+import {YTErrorBlock} from '../../../../components/Block/Block';
+import Loader from '../../../../components/Loader/Loader';
+import {UnipikaSettings} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
+import UIFactory from '../../../../UIFactory';
 
-import {pathToFileName} from '../../../helpers/pathToFileName';
+import {pathToFileName} from '../../../navigation/helpers/pathToFileName';
 
 import './PipelineSpec.scss';
 import i18n from './i18n';

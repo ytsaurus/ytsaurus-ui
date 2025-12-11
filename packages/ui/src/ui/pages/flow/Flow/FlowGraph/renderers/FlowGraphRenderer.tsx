@@ -4,16 +4,16 @@ import cn from 'bem-cn-lite';
 import {Dialog, Flex, Icon, Text} from '@gravity-ui/uikit';
 import {SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 
-import {FlowMessage, FlowNodeStatus} from '../../../../../../../shared/yt-types';
+import {FlowMessage, FlowNodeStatus} from '../../../../../../shared/yt-types';
 
-import format from '../../../../../../common/hammer/format';
-import {ExpandButton} from '../../../../../../components/ExpandButton';
-import {YTErrorBlock} from '../../../../../../components/Block/Block';
-import Yson from '../../../../../../components/Yson/Yson';
+import format from '../../../../../common/hammer/format';
+import {ExpandButton} from '../../../../../components/ExpandButton';
+import {YTErrorBlock} from '../../../../../components/Block/Block';
+import Yson from '../../../../../components/Yson/Yson';
 import {
     ClickableText,
     ClickableTextProps,
-} from '../../../../../../components/ClickableText/ClickableText';
+} from '../../../../../components/ClickableText/ClickableText';
 
 import './FlowGraphRenderer.scss';
 

@@ -1,35 +1,35 @@
 import React from 'react';
-import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
 import {Column} from '@gravity-ui/react-data-table';
 
-import format from '../../../../../common/hammer/format';
+import format from '../../../../common/hammer/format';
 
-import ClickableAttributesButton from '../../../../../components/AttributesButton/ClickableAttributesButton';
-import ClipboardButton from '../../../../../components/ClipboardButton/ClipboardButton';
+import ClickableAttributesButton from '../../../../components/AttributesButton/ClickableAttributesButton';
+import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
 import DataTableYT, {
     DATA_TABLE_YT_SETTINGS,
-} from '../../../../../components/DataTableYT/DataTableYT';
-import {YTErrorBlock} from '../../../../../components/Error/Error';
-import {ExpandButton} from '../../../../../components/ExpandButton';
+} from '../../../../components/DataTableYT/DataTableYT';
+import {YTErrorBlock} from '../../../../components/Error/Error';
+import {ExpandButton} from '../../../../components/ExpandButton';
 
-import {useUpdater} from '../../../../../hooks/use-updater';
+import {useUpdater} from '../../../../hooks/use-updater';
 import {
     expandFlowLayoutComputation,
     expandFlowLayoutWorker,
     loadFlowLayout,
-} from '../../../../../store/actions/flow/layout';
+} from '../../../../store/actions/flow/layout';
 import {
     FlowLayoutDataItem,
     getFlowLayoutData,
     getFlowLayoutError,
     getFlowLayoutPipelinePath,
-} from '../../../../../store/selectors/flow/layout';
+} from '../../../../store/selectors/flow/layout';
 
 import './FlowLayout.scss';
 
-const block = cn('yt-navigation-flow-layout');
+const block = cn('yt-flow-layout');
 
 export function FlowLayout({path, viewMode}: {path: string; viewMode: 'computations' | 'workers'}) {
     const dispatch = useDispatch();

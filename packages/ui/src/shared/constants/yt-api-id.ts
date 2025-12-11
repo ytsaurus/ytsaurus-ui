@@ -203,4 +203,5 @@ export const enum YTApiId {
 
     //pipeline/flow
     flowExecuteDescribePipeline = 'flowExecuteDescribePipeline',
+    flowAttributes = 'flowAttributes',
 }

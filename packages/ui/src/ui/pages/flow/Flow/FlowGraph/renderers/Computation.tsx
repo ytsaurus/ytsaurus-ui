@@ -3,11 +3,11 @@ import cn from 'bem-cn-lite';
 
 import {Flex, Progress, ProgressTheme, Text} from '@gravity-ui/uikit';
 
-import {FlowComputation} from '../../../../../../../shared/yt-types';
+import {FlowComputation} from '../../../../../../shared/yt-types';
 
-import format from '../../../../../../common/hammer/format';
-import MetaTable from '../../../../../../components/MetaTable/MetaTable';
-import {addProgressStackSpacers} from '../../../../../../utils/progress';
+import format from '../../../../../common/hammer/format';
+import MetaTable from '../../../../../components/MetaTable/MetaTable';
+import {addProgressStackSpacers} from '../../../../../utils/progress';
 
 import {FlowGraphBlockItem} from '../FlowGraph';
 
