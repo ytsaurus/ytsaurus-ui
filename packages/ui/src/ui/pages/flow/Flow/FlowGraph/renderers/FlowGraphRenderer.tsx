@@ -97,14 +97,14 @@ function FlowMessagesDialog({data, onClose}: FlowMessagesProps & {onClose(): voi
             <Dialog.Header caption="Messages" />
             <Dialog.Body className={block('messages-body')}>
                 {data?.map((item, index) => (
-                    <FlowMessageItem item={item} key={index} />
+                    <FlowMessageItem item={item} key={index} initialExpanded={data?.length === 1} />
                 ))}
             </Dialog.Body>
         </Dialog>
     );
 }
 
-function FlowMessageItem({item}: {item: FlowMessage}) {
+function FlowMessageItem({item, initialExpanded}: {item: FlowMessage; initialExpanded: boolean}) {
     const {level, yson, error} = item;
     const theme = STATUS_TO_BG_THEME[level];
     return (
@@ -114,6 +114,7 @@ function FlowMessageItem({item}: {item: FlowMessage}) {
             ) : (
                 <FlowMessageItemExpandable
                     item={item}
+                    initialExpanded={initialExpanded}
                     errorType={theme === 'warning' ? 'alert' : undefined}
                 />
             )}
@@ -121,8 +122,16 @@ function FlowMessageItem({item}: {item: FlowMessage}) {
     );
 }
 
-function FlowMessageItemExpandable({item, errorType}: {item: FlowMessage; errorType?: 'alert'}) {
-    const [expanded, setExpanded] = React.useState(false);
+function FlowMessageItemExpandable({
+    item,
+    errorType,
+    initialExpanded,
+}: {
+    item: FlowMessage;
+    errorType?: 'alert';
+    initialExpanded: boolean;
+}) {
+    const [expanded, setExpanded] = React.useState(initialExpanded);
 
     const toggleExpand = () => setExpanded(!expanded);
 
