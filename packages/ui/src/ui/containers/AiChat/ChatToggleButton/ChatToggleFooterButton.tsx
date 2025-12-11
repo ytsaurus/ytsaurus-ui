@@ -3,6 +3,8 @@ import {FooterItem} from '@gravity-ui/navigation';
 import AiIcon from '../../../assets/img/svg/icons/ai-chat-icon.svg';
 import i18n from './i18n';
 import {useChatToggle} from './useChatToggle';
+import {useSelector} from '../../../store/redux-hooks';
+import {selectShowAiChat} from '../../../store/selectors/settings/settings-development';
 
 type Props = {
     compact: boolean;
@@ -10,8 +12,9 @@ type Props = {
 
 export const ChatToggleFooterButton: FC<Props> = ({compact}) => {
     const {isConfigured, toggle} = useChatToggle();
+    const showAiChat = useSelector(selectShowAiChat);
 
-    if (!isConfigured) return null;
+    if (!isConfigured || !showAiChat) return null;
 
     return (
         <FooterItem

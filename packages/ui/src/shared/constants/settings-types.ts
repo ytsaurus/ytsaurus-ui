@@ -51,6 +51,7 @@ interface DevelopmentSettings {
     'global::development::redirectToBetaSwitched': boolean;
     'global::development::yqlTypes': boolean;
     'global::development::regularUserUI': boolean;
+    'global::development::showAiChat': boolean;
 }
 
 interface MenuSettings {
