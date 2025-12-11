@@ -1,4 +1,4 @@
-import {YTGraphFontSize} from '../../../../../../components/YTGraph';
+import {YTGraphFontSize} from '../../../../../components/YTGraph';
 import {ComputationCanvasBlock} from './ComputationCanvas';
 
 export class ComputationGroupCanvasBlock extends ComputationCanvasBlock {
