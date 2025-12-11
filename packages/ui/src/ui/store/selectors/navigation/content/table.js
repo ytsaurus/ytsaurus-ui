@@ -8,7 +8,7 @@ import unipika from '../../../../common/thor/unipika';
 import {createSelector} from 'reselect';
 
 import {getAttributes} from '../../../../store/selectors/navigation';
-import {shouldUseYqlTypes} from '../../../../store/selectors/settings';
+import {shouldUseYqlTypes} from '../../../../store/selectors/settings/settings-development';
 
 import Columns from '../../../../utils/navigation/content/table/columns';
 import Query from '../../../../utils/navigation/content/table/query';

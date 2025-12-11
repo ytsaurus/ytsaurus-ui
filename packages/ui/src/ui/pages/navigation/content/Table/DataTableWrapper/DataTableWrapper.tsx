@@ -10,10 +10,8 @@ import {TypeArray} from '../../../../../components/SchemaDataType/dataTypes';
 import {injectTableCellData} from '../../../../../store/actions/navigation/content/table/table-ts';
 import {getOffsetValue} from '../../../../../store/selectors/navigation/content/table';
 import {getSchemaByName} from '../../../../../store/selectors/navigation/tabs/schema';
-import {
-    getSettingTableDisplayRawStrings,
-    shouldUseYqlTypes,
-} from '../../../../../store/selectors/settings';
+import {getSettingTableDisplayRawStrings} from '../../../../../store/selectors/settings';
+import {shouldUseYqlTypes} from '../../../../../store/selectors/settings/settings-development';
 import {YsonSettings} from '../../../../../store/selectors/thor/unipika';
 import {onCellPreview} from '../../../../../store/actions/navigation/modals/cell-preview';
 import {NameWithSortOrder, prepareColumns} from '../../../../../utils/navigation/prepareColumns';

@@ -13,9 +13,9 @@ import {RESET_STORE_BEFORE_CLUSTER_CHANGE} from '../../constants/utils';
 import {
     isRecentClustersFirst,
     isRecentPagesFirst,
-    isRedirectToBetaSwitched,
     shouldUsePreserveState,
 } from '../../store/selectors/settings';
+import {isRedirectToBetaSwitched} from '../../store/selectors/settings/settings-development';
 import {rumLogError} from '../../rum/rum-counter';
 import {RumWrapper, YTApiId} from '../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../rum/rum-measure-types';

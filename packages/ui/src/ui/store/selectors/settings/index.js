@@ -77,14 +77,6 @@ export const isPathAutoCorrectionSettingEnabled = createSelector(makeGetSetting,
     getSetting(SettingName.NAVIGATION.ENABLE_PATH_AUTO_CORRECTION, NAMESPACES.NAVIGATION),
 );
 
-export const isRedirectToBetaSwitched = createSelector(makeGetSetting, (getSetting) =>
-    getSetting(SettingName.DEVELOPMENT.REDIRECT_TO_BETA_SWITCHED, NAMESPACES.DEVELOPMENT),
-);
-
-export const shouldUseYqlTypes = createSelector(makeGetSetting, (getSetting) =>
-    getSetting(SettingName.DEVELOPMENT.YQL_TYPES, NAMESPACES.DEVELOPMENT),
-);
-
 export const isRecentClustersFirst = createSelector(makeGetSetting, (getSetting) =>
     getSetting(SettingName.MENU.RECENT_CLUSTER_FIRST, NAMESPACES.MENU),
 );
