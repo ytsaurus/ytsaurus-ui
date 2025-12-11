@@ -107,6 +107,7 @@ export interface OperationMonitoringTabProps {
 
 export type NavigationFlowMonitoringProps = {
     cluster: string;
+    pipeline_path: string;
     monitoring_cluster?: string;
     monitoring_project?: string;
     attributes: unknown;

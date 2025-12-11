@@ -227,6 +227,7 @@ function FlowMonitoring({pipeline_path}: {pipeline_path: string}) {
                 cluster={cluster}
                 monitoring_cluster={monitoring_cluster}
                 monitoring_project={monitoring_project}
+                pipeline_path={pipeline_path}
                 attributes={attributes}
             />
         );
