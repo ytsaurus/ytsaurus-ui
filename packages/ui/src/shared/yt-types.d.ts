@@ -601,8 +601,9 @@ export type FlowNodeBase = {
 };
 
 export type FlowMessage = {level: FlowNodeStatus} & (
-    | {yson?: unknown; text?: string; error?: never}
-    | {error?: YTError; yson?: never; text?: never}
+    | {text?: string; yson?: unknown; error?: never; markdown_text?: never}
+    | {text?: string; yson?: never; error?: YTError; markdown_text?: never}
+    | {text?: string; yson?: never; error?: never; markdown_text?: string}
 );
 
 export type FlowComputation = FlowNodeBase &
