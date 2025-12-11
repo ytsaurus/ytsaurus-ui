@@ -1,6 +1,6 @@
+import cn from 'bem-cn-lite';
 import React from 'react';
 import {useSelector} from '../../../../store/redux-hooks';
-import cn from 'bem-cn-lite';
 
 import partition_ from 'lodash/partition';
 
@@ -19,6 +19,9 @@ import ClockIcon from '@gravity-ui/icons/svgs/clock.svg';
 import FileCodeIcon from '@gravity-ui/icons/svgs/file-code.svg';
 import ReceiptIcon from '@gravity-ui/icons/svgs/receipt.svg';
 
+import {YTErrorBlock} from '../../../../components/Error/Error';
+import Loader from '../../../../components/Loader/Loader';
+import {NoContent} from '../../../../components/NoContent/NoContent';
 import Yson from '../../../../components/Yson/Yson';
 import {
     YTGraph,
@@ -28,25 +31,19 @@ import {
     useElkLayout,
     useGraphScale,
 } from '../../../../components/YTGraph';
-import Loader from '../../../../components/Loader/Loader';
-import {NoContent} from '../../../../components/NoContent/NoContent';
-import {YTErrorBlock} from '../../../../components/Error/Error';
-
+import {useFlowExecuteQuery} from '../../../../store/api/yt';
 import {getCluster} from '../../../../store/selectors/global/cluster';
 
-import {useFlowExecuteQuery} from '../../../../store/api/yt';
-
-import {Computation} from './renderers/Computation';
-import {Stream} from './renderers/Stream';
-import {ComputationCanvasBlock} from './renderers/ComputationCanvas';
-import {StreamCanvasBlock} from './renderers/StreamCanvas';
-
 import './FlowGraph.scss';
-import {FlowGroupBlock} from './utils/FlowGroupBlock';
+import {Computation} from './renderers/Computation';
+import {ComputationCanvasBlock} from './renderers/ComputationCanvas';
 import {ComputationGroupCanvasBlock} from './renderers/ComputationGroupCanvas';
+import {STATUS_TO_BG_THEME} from './renderers/FlowGraphRenderer';
 import {Sink} from './renderers/Sink';
-import {FlowMessages, STATUS_TO_BG_THEME} from './renderers/FlowGraphRenderer';
 import {SinkCanvasBlock} from './renderers/SinkCanvas';
+import {Stream} from './renderers/Stream';
+import {StreamCanvasBlock} from './renderers/StreamCanvas';
+import {FlowGroupBlock} from './utils/FlowGroupBlock';
 
 const block = cn('yt-flow-graph');
 
@@ -97,7 +94,7 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
         {useDefaultConnection: !useGroups},
     );
 
-    const {isEmpty, isLoading, data, groups, groupBlocks, messages} = useFlowGraphData({
+    const {isEmpty, isLoading, data, groups, groupBlocks} = useFlowGraphData({
         pipeline_path,
     });
 
@@ -111,9 +108,6 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
 
     return (
         <div className={block()}>
-            <div className={block('graph-messages')}>
-                <FlowMessages data={messages} />
-            </div>
             <YTGraph
                 className={block('graph')}
                 setScale={setScale}
@@ -168,7 +162,7 @@ const SINK_SIZE = {width: 200, height: 80};
 
 function useFlowGraphLoadedData({pipeline_path}: {pipeline_path: string}) {
     const cluster = useSelector(getCluster);
-    return useFlowExecuteQuery({
+    return useFlowExecuteQuery<'describe-pipeline'>({
         cluster,
         parameters: {pipeline_path, flow_command: 'describe-pipeline'},
     });
