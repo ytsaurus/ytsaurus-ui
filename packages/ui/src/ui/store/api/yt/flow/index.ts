@@ -17,7 +17,7 @@ export const flowApi = ytApi.injectEndpoints({
 });
 
 export function useFlowExecuteQuery<T extends FlowExecuteCommand>(
-    ...args: Parameters<typeof flowExecute>
+    ...args: Parameters<typeof flowExecute<T>>
 ) {
     const res = flowApi.useFlowExecuteQuery(...args);
     return res as OverrideDataType<typeof res, FlowExecuteData[T]>;

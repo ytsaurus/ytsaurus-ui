@@ -60,9 +60,9 @@ export function FlowCaption1({text}: {text: React.ReactNode}) {
     );
 }
 
-type FlowMessagesProps = {data?: Array<FlowMessage>};
+type FlowMessagesProps = {data?: Array<FlowMessage>; paddingTop?: 'none'};
 
-export function FlowMessages({data}: FlowMessagesProps) {
+export function FlowMessages({data, paddingTop}: FlowMessagesProps) {
     const [visible, setVisible] = React.useState(false);
 
     const color = React.useMemo(() => {
@@ -82,7 +82,7 @@ export function FlowMessages({data}: FlowMessagesProps) {
     }, [data]);
 
     return !data?.length ? null : (
-        <div className={block('messages')}>
+        <div className={block('messages', {'padding-top': paddingTop})}>
             <ClickableText color={color} onClick={() => setVisible(true)}>
                 Messages ({data.length})
             </ClickableText>

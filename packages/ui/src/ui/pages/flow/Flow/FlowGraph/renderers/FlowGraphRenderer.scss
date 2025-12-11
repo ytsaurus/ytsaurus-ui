@@ -5,6 +5,9 @@
 
     &__messages {
         padding-top: 16px;
+        &_padding-top_none {
+            padding-top: unset;
+        }
     }
 
     &__messages-header {
