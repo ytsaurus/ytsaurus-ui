@@ -2,12 +2,12 @@ import CpuIcon from '@gravity-ui/icons/svgs/cpu.svg';
 
 import {TAnchor} from '@gravity-ui/graph/build';
 
-import format from '../../../../../../common/hammer/format';
+import format from '../../../../../common/hammer/format';
 import {
     NoopComponent,
     YTGraphCanvasBlock,
     YTGraphFontSize,
-} from '../../../../../../components/YTGraph';
+} from '../../../../../components/YTGraph';
 
 import {FlowGraphBlockItem} from '../FlowGraph';
 

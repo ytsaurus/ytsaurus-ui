@@ -1,35 +1,35 @@
-import React from 'react';
-import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
+import React from 'react';
 
 import {Button, Flex, Link, SegmentedRadioGroup, Text} from '@gravity-ui/uikit';
-
+import {formatByParams} from '../../../../../shared/utils/format';
+import format from '../../../../common/hammer/format';
 import {YTAlertBlock} from '../../../../components/Alert/Alert';
 import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
-import format from '../../../../common/hammer/format';
 import Icon from '../../../../components/Icon/Icon';
 import MetaTable from '../../../../components/MetaTable/MetaTable';
 import StatusLabel from '../../../../components/StatusLabel/StatusLabel';
 import {useUpdater} from '../../../../hooks/use-updater';
+import {YTApiId} from '../../../../shared/constants/yt-api-id';
 import {loadFlowStatus, updateFlowState} from '../../../../store/actions/flow/status';
-import {getFlowViewMode} from '../../../../store/selectors/flow/filters';
-import {getFlowStatusData} from '../../../../store/selectors/flow/status';
-import {getCluster} from '../../../../store/selectors/global';
-import {getAttributes, getPath} from '../../../../store/selectors/navigation';
 import {
     FLOW_VIEW_MODES,
     FlowViewMode,
     setFlowViewMode,
 } from '../../../../store/reducers/flow/filters';
+import {getFlowViewMode} from '../../../../store/selectors/flow/filters';
+import {getFlowStatusData} from '../../../../store/selectors/flow/status';
+import {getCluster} from '../../../../store/selectors/global';
 import UIFactory from '../../../../UIFactory';
-import {formatByParams} from '../../../../../shared/utils/format';
-
+import {useGetQuery} from '../../../store/api/yt/get';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
+import {getPipelinePath} from '../../../store/selectors/flow/filters';
+import './Flow.scss';
+import {FlowGraph} from './FlowGraph/FlowGraph';
 import {FlowLayout} from './FlowLayout/FlowLayout';
 import {FlowDynamicSpec, FlowStaticSpec} from './PipelineSpec/PipelineSpec';
-import {FlowGraph} from './FlowGraph/FlowGraph';
-import './Flow.scss';
 
-const block = cn('yt-navigation-flow');
+const block = cn('yt-flow');
 
 function useViewModeOptions() {
     const res = React.useMemo(() => {
@@ -70,7 +70,7 @@ export function Flow() {
 }
 
 function FlowContent({viewMode}: {viewMode: FlowViewMode}) {
-    const path = useSelector(getPath);
+    const path = useSelector(getPipelinePath);
 
     if (!path) {
         return null;
@@ -82,7 +82,7 @@ function FlowContent({viewMode}: {viewMode: FlowViewMode}) {
         case 'dynamic_spec':
             return <FlowDynamicSpec pipeline_path={path} />;
         case 'monitoring':
-            return <FlowMonitoring />;
+            return <FlowMonitoring pipeline_path={path} />;
         case 'workers':
         case 'computations':
             return <FlowLayout path={path} viewMode={viewMode} />;
@@ -103,7 +103,7 @@ function FlowContent({viewMode}: {viewMode: FlowViewMode}) {
 function FlowStatusToolbar() {
     const dispatch = useDispatch();
 
-    const pipeline_path = useSelector(getPath);
+    const pipeline_path = useSelector(getPipelinePath);
 
     const updateFn = React.useCallback(() => {
         return dispatch(loadFlowStatus(pipeline_path));
@@ -135,8 +135,9 @@ function FlowStatusToolbar() {
 }
 
 function FlowState() {
+    const pipeline_path = useSelector(getPipelinePath);
     const value = useSelector(getFlowStatusData);
-    const {leader_controller_address} = useSelector(getAttributes);
+    const {leader_controller_address} = useFlowAttributes(pipeline_path).data ?? {};
     return (
         <React.Fragment>
             <Flex className={block('state')} alignItems="center" gap={2}>
@@ -168,14 +169,30 @@ function FlowState() {
     );
 }
 
-function FlowMonitoring() {
+type FlowAttributes = {
+    monitoring_cluster: string;
+    monitoring_project: string;
+    leader_controller_address: string;
+};
+
+function useFlowAttributes(path: string) {
+    return useGetQuery<Partial<FlowAttributes>>({
+        id: YTApiId.flowAttributes,
+        parameters: {
+            path: `${path}/@`,
+            attributes: ['monitoring_cluster', 'monitoring_project', 'leader_controller_address'],
+        },
+    });
+}
+
+function FlowMonitoring({pipeline_path}: {pipeline_path: string}) {
     const {
         component: Component,
         title,
         urlTemplate,
     } = UIFactory.getMonitoringComponentForNavigationFlow() ?? {};
-    const attributes = useSelector(getAttributes);
-    const {monitoring_cluster, monitoring_project} = attributes;
+    const attributes = useFlowAttributes(pipeline_path).data;
+    const {monitoring_cluster, monitoring_project} = attributes ?? {};
     const cluster = useSelector(getCluster);
 
     if (Component) {

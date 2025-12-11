@@ -1,7 +1,7 @@
-import {FlowComputation, FlowComputationStreamType} from '../../../../../../../shared/yt-types';
+import {FlowComputation, FlowComputationStreamType} from '../../../../../../shared/yt-types';
 
-import {YTGraphBlock} from '../../../../../../components/YTGraph';
-import {rumLogError} from '../../../../../../rum/rum-counter';
+import {YTGraphBlock} from '../../../../../components/YTGraph';
+import {rumLogError} from '../../../../../rum/rum-counter';
 
 import {FlowGraphBlockItem} from '../FlowGraph';
 
