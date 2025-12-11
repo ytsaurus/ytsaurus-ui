@@ -1,5 +1,4 @@
 .yt-flow {
-    &__toolbar,
     &__state {
         margin-bottom: 20px;
     }
@@ -17,5 +16,9 @@
 
     &__meta-item {
         overflow: unset;
+    }
+
+    &__tabs {
+        margin-top: -10px;
     }
 }
