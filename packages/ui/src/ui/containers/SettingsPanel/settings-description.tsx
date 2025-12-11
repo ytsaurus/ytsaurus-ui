@@ -220,6 +220,17 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                             ]}
                         />,
                     ),
+                isAdmin &&
+                    makeItem(
+                        'global::development::showAiChat',
+                        'Show AI chat',
+                        'top',
+                        <BooleanSettingItem
+                            settingKey="global::development::showAiChat"
+                            description={'Show AI chat button on all pages'}
+                            oneLine
+                        />,
+                    ),
             ]),
         ),
 
