@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.3.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.2.0...ui-v3.3.0) (2025-12-11)
+
+
+### Features
+
+* add new cluster theme 'electricviolet' [YTFRONT-5318] ([4d30f9e](https://github.com/ytsaurus/ytsaurus-ui/commit/4d30f9e15dec0dd2ec1ca73c7d033cd4b4157ecc))
+* **Queries:** ru locale [YTFRONT-5069] ([1aa195c](https://github.com/ytsaurus/ytsaurus-ui/commit/1aa195c9d832afa39e0c3e8cc9930197c7f680a5))
+* **Scheduling:** rework the page [YTFRONT-5134] ([e289ac4](https://github.com/ytsaurus/ytsaurus-ui/commit/e289ac4e28a754c0f9695327fdfe0a487df5c80d))
+
+
+### Bug Fixes
+
+* **Maintenance:** top-row should be visible after click on 'Proceed to cluster anyway' [YTFRONT-5320] ([98d5ebe](https://github.com/ytsaurus/ytsaurus-ui/commit/98d5ebe5ce863c764a863a3fa9d8798c0f5f8d0e))
+* **Navigation/Flow:** better z-index for dialogs [YTFRONT-5401] ([61add6c](https://github.com/ytsaurus/ytsaurus-ui/commit/61add6c107607b393601ea819e13c63605dca28d))
+* **Queries:** take stage into alterQuery [YTFRONT-5394] ([cfee11f](https://github.com/ytsaurus/ytsaurus-ui/commit/cfee11f4d1e80a63c47fcbf0da1df74c190f4407))
+* **UIFactory:** add 'hidden' fields for results of UIFactory.getSchedulingExtraTabs(...) [YTFRONT-5271] ([f9c9c67](https://github.com/ytsaurus/ytsaurus-ui/commit/f9c9c670803a509507b513a329a6c13bbd01f085))
+
 ## [3.2.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.1.0...ui-v3.2.0) (2025-11-27)
 
 
