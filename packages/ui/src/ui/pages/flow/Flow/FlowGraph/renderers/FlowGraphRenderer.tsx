@@ -1,20 +1,21 @@
-import React from 'react';
 import cn from 'bem-cn-lite';
+import React from 'react';
 
 import {Dialog, Flex, Icon, Text} from '@gravity-ui/uikit';
 import {SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 
 import {FlowMessage, FlowNodeStatus} from '../../../../../../shared/yt-types';
-
 import format from '../../../../../common/hammer/format';
-import {ExpandButton} from '../../../../../components/ExpandButton';
 import {YTErrorBlock} from '../../../../../components/Block/Block';
-import Yson from '../../../../../components/Yson/Yson';
 import {
     ClickableText,
     ClickableTextProps,
 } from '../../../../../components/ClickableText/ClickableText';
-
+import {ExpandButton} from '../../../../../components/ExpandButton';
+import {YTText} from '../../../../../components/Text/Text';
+import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
+import Yson from '../../../../../components/Yson/Yson';
+import YTIcon from '../../../../../components/Icon/Icon';
 import './FlowGraphRenderer.scss';
 
 const block = cn('yt-flow-graph-renderer');
@@ -151,5 +152,27 @@ function FlowMessageItemExpandable({
                 )}
             </div>
         </Flex>
+    );
+}
+
+export function TextWithHighConsumption({
+    children,
+    highConsumption,
+    detailed,
+}: {
+    children: string;
+    highConsumption?: boolean;
+    detailed?: boolean;
+}) {
+    if (!highConsumption) {
+        return children;
+    }
+
+    return (
+        <Tooltip content="High consumption">
+            <YTText color="warning">{children}</YTText>
+            &nbsp;
+            {detailed ? <YTIcon awesome="question-circle" color="secondary" /> : null}
+        </Tooltip>
     );
 }
