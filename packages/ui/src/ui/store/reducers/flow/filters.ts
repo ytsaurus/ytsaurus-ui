@@ -1,11 +1,15 @@
-import {createSlice} from '@reduxjs/toolkit';
+import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 
 export type FlowFiltersState = {
     pipelinePath: string;
+
+    computationsNameFilter: string;
 };
 
 export const initialState: FlowFiltersState = {
     pipelinePath: '',
+
+    computationsNameFilter: '',
 };
 
 export const FlowTab = {
@@ -23,7 +27,11 @@ export type FlowTabType = (typeof FlowTab)[keyof typeof FlowTab];
 export const filtersSlice = createSlice({
     name: 'flow.filters',
     initialState,
-    reducers: {},
+    reducers: {
+        updateFlowFilters: (state, action: PayloadAction<Partial<FlowFiltersState>>) => {
+            Object.assign(state, action.payload);
+        },
+    },
 });
 
 export const filters = filtersSlice.reducer;

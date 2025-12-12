@@ -551,24 +551,34 @@ export type GetQueryTrackerInfoResponse = {
     };
 };
 
-export type FlowExecuteCommand = 'describe-pipeline';
-
-export type FlowExecuteParams<Command extends FlowExecuteCommand> = {
-    flow_command: 'describe-pipeline';
-    pipeline_path: string;
-};
-
-export type FlowExecuteCommandBody<Command extends FlowExecuteCommand> = {
-    'describe-pipeline': {
-        body?: {
-            status_only?: boolean;
+export type FlowExecuteTypes = {
+    'describe-computations': {
+        ParamsType: {
+            flow_command: 'describe-computations';
+            pipeline_path: string;
         };
+        BodyType: {body?: undefined};
+        ResponseType: FlowDescribeComputationsData;
     };
-}[Command];
-
-export type FlowExecuteData = {
-    'describe-pipeline': FlowDescribePipelineData;
+    'describe-pipeline': {
+        ParamsType: {
+            flow_command: 'describe-pipeline';
+            pipeline_path: string;
+        };
+        BodyType: {
+            body?: {
+                status_only?: boolean;
+            };
+        };
+        ResponseType: FlowDescribePipelineData;
+    };
 };
+
+export type FlowDescribeComputationsData = {
+    computations: Array<FlowComputation>;
+};
+
+export type FlowExecuteCommand = keyof FlowExecuteTypes;
 
 type ComputationId = string;
 type StreamId = string;
@@ -595,9 +605,6 @@ export type FlowNodeBase = {
 
     description?: string;
     messages?: Array<FlowMessage>;
-
-    highlight_cpu_usage?: boolean;
-    hightlight_memory_usage?: boolean;
 };
 
 export type FlowMessage = {level: FlowNodeStatus} & (
@@ -608,6 +615,10 @@ export type FlowMessage = {level: FlowNodeStatus} & (
 
 export type FlowComputation = FlowNodeBase &
     FlowComputationStreams & {
+        class_name: string;
+        highlight_cpu_usage?: boolean;
+        hightlight_memory_usage?: boolean;
+
         metrics: {
             cpu_usage_current: number;
             cpu_usage_30s: number;
@@ -637,6 +648,8 @@ export type FlowNodeStatus =
     | 'alert'
     | 'fatal'
     | 'maximum';
+
+export type FlowComputationstatus = 'info' | 'warning' | 'error';
 
 export type FlowComputationStreams = Record<FlowComputationStreamType, Array<StreamId>>;
 

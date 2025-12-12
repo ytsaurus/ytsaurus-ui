@@ -10,8 +10,7 @@ import {
     BatchSubRequest,
     ExpectedVersion,
     FlowExecuteCommand,
-    FlowExecuteData,
-    FlowExecuteParams,
+    FlowExecuteTypes,
     GetFlowViewData,
     GetParams,
     GetPipelineStateData,
@@ -115,8 +114,8 @@ type YTApiV4 = {
     getFlowView(...args: ApiMethodParameters<PipelineParams>): Promise<GetFlowViewData>;
     listJobs(...args: ApiMethodParameters<ListJobsParameters>): Promise<ListJobsResponse>;
     flowExecute<Command extends FlowExecuteCommand>(
-        ...args: ApiMethodParameters<FlowExecuteParams<Command>>
-    ): Promise<FlowExecuteData[Command]>;
+        ...args: ApiMethodParameters<FlowExecuteTypes[Command]['ParamsType']>
+    ): Promise<FlowExecuteTypes[Command]['ResponseType']>;
 
     remountTable(...args: ApiMethodParameters<TableParams>): Promise<void>;
 

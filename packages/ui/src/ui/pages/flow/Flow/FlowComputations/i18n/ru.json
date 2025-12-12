@@ -1,0 +1,9 @@
+{
+  "class": "Класс",
+  "cpu-usage": "Потребление CPU",
+  "health": "Состояние",
+  "name": "Имя",
+  "memory-usage": "Потребление памяти",
+  "partitions-count": "Количество партиций",
+  "search-by-name": "Поиск по имени..."
+}
