@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.3.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.3.0...ui-v3.3.1) (2025-12-12)
+
+
+### Bug Fixes
+
+* **Settings:** hide the developer tab for users [YTFRONT-5393] ([8402b68](https://github.com/ytsaurus/ytsaurus-ui/commit/8402b68a2a7808f4302462e868c06082da55ee2e))
+
 ## [3.3.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.2.0...ui-v3.3.0) (2025-12-11)
 
 
