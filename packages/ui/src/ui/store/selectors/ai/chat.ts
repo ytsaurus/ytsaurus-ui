@@ -25,9 +25,9 @@ export const selectConversationsLoading = (state: RootState) => state.aiChat.con
 export const selectConversationsHasMore = (state: RootState) => state.aiChat.conversations.hasMore;
 
 export const selectChatIsVisible = createSelector(
-    [selectChatMode, selectConversation, selectCurrentAnswer],
-    (mode, {items}, currentAnswer) => {
-        return mode === 'chat' && (items.length > 0 || Boolean(currentAnswer));
+    [selectChatMode, selectConversation, selectCurrentAnswer, selectChatSending],
+    (mode, {items}, currentAnswer, isSending) => {
+        return mode === 'chat' && (items.length > 0 || Boolean(currentAnswer) || isSending);
     },
 );
 

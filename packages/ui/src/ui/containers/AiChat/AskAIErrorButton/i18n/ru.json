@@ -1,6 +1,5 @@
 {
   "context_tooltip": "Спросить AI чат почему запрос упал",
-  "action_button": "AI помощь",
-  "question_default": "Как решить проблему?"
+  "action_button": "AI помощь"
 }
 
