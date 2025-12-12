@@ -1,0 +1,9 @@
+{
+  "class": "Class",
+  "cpu-usage": "CPU usage",
+  "health": "Health",
+  "name": "Name",
+  "memory-usage": "Memory usage",
+  "partitions-count": "Partitions count",
+  "search-by-name": "Search by name..."
+}
