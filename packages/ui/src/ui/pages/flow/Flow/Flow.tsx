@@ -18,7 +18,7 @@ import {useFlowExecuteQuery} from '../../../store/api/yt/flow';
 import {useGetQuery} from '../../../store/api/yt/get';
 import {FlowTab} from '../../../store/reducers/flow/filters';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
-import {getPipelinePath} from '../../../store/selectors/flow/filters';
+import {getFlowPipelinePath} from '../../../store/selectors/flow/filters';
 import {getFlowStatusData} from '../../../store/selectors/flow/status';
 import {getCluster} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
@@ -29,6 +29,7 @@ import {FlowGraph} from './FlowGraph/FlowGraph';
 import {FlowMessages} from './FlowGraph/renderers/FlowGraphRenderer';
 import {FlowLayout} from './FlowLayout/FlowLayout';
 import {FlowDynamicSpec, FlowStaticSpec} from './PipelineSpec/PipelineSpec';
+import {FlowComputations} from './FlowComputations/FlowComputations';
 
 const block = cn('yt-flow');
 
@@ -60,7 +61,7 @@ export function FlowTabs() {
 }
 
 function FlowContent() {
-    const path = useSelector(getPipelinePath);
+    const path = useSelector(getFlowPipelinePath);
     const cluster = useSelector(getCluster);
 
     if (!path) {
@@ -79,7 +80,7 @@ function FlowContent() {
             />
             <Route
                 path={`/${cluster}/${Page.FLOW}/${FlowTab.COMPUTATIONS}`}
-                render={() => <FlowLayout path={path} viewMode="computations" />}
+                render={() => <FlowComputations pipeline_path={path} />}
             />
             <Route
                 path={`/${cluster}/${Page.FLOW}/${FlowTab.WORKERS}`}
@@ -105,7 +106,7 @@ function FlowContent() {
 function FlowStatusToolbar() {
     const dispatch = useDispatch();
 
-    const pipeline_path = useSelector(getPipelinePath);
+    const pipeline_path = useSelector(getFlowPipelinePath);
 
     const updateFn = React.useCallback(() => {
         return dispatch(loadFlowStatus(pipeline_path));
@@ -137,7 +138,7 @@ function FlowStatusToolbar() {
 }
 
 function FlowState() {
-    const pipeline_path = useSelector(getPipelinePath);
+    const pipeline_path = useSelector(getFlowPipelinePath);
     const value = useSelector(getFlowStatusData);
     const {leader_controller_address} = useFlowAttributes(pipeline_path).data ?? {};
     return (
@@ -177,7 +178,7 @@ function FlowState() {
 }
 
 export function FlowMessagesLoaded() {
-    const pipeline_path = useSelector(getPipelinePath);
+    const pipeline_path = useSelector(getFlowPipelinePath);
 
     const cluster = useSelector(getCluster);
     const {data, error} =

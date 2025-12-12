@@ -8,3 +8,11 @@ export const flowParams: LocationParameters = {
         initialState: filtersInitialState.pipelinePath,
     },
 };
+
+export const flowComputationsParams: typeof flowParams = {
+    ...flowParams,
+    name: {
+        stateKey: 'flow.filters.computationsNameFilter',
+        initialState: filtersInitialState.computationsNameFilter,
+    },
+};
