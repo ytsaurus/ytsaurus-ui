@@ -78,6 +78,9 @@ function MD({text}: Props) {
 }
 
 export const Markdown = memo(function Markdown({text}: Props) {
+    if (!text) {
+        return null;
+    }
     const customMarkdown = UIFactory.renderMarkdown({text});
     return customMarkdown ?? <MD text={text} />;
 });

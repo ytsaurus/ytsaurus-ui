@@ -1,34 +1,37 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 
 export type FlowFiltersState = {
-    flowViewMode: FlowViewMode;
+    pipelinePath: string;
+
+    computationsNameFilter: string;
 };
 
 export const initialState: FlowFiltersState = {
-    flowViewMode: 'graph',
+    pipelinePath: '',
+
+    computationsNameFilter: '',
 };
 
-export const FLOW_VIEW_MODES = [
-    'graph',
-    'graph_data',
-    'computations',
-    'workers',
-    'monitoring',
-    'static_spec',
-    'dynamic_spec',
-] as const;
+export const FlowTab = {
+    GRAPH: 'graph',
+    GRAPH_DATA: 'graph_data',
+    COMPUTATIONS: 'computations',
+    WORKERS: 'workers',
+    MONITORING: 'monitoring',
+    STATIC_SPEC: 'static_spec',
+    DYNAMIC_SPEC: 'dynamic_spec',
+} as const;
 
-export type FlowViewMode = (typeof FLOW_VIEW_MODES)[number];
+export type FlowTabType = (typeof FlowTab)[keyof typeof FlowTab];
 
 export const filtersSlice = createSlice({
     name: 'flow.filters',
     initialState,
     reducers: {
-        setFlowViewMode(state, {payload}: PayloadAction<FlowViewMode>) {
-            state.flowViewMode = payload;
+        updateFlowFilters: (state, action: PayloadAction<Partial<FlowFiltersState>>) => {
+            Object.assign(state, action.payload);
         },
     },
 });
 
-export const {setFlowViewMode} = filtersSlice.actions;
 export const filters = filtersSlice.reducer;

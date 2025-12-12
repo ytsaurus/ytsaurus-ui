@@ -1,3 +1,5 @@
 import {RootState} from '../../../store/reducers';
 
-export const getFlowViewMode = (state: RootState) => state.flow.filters.flowViewMode;
+export const getFlowPipelinePath = (state: RootState) => state.flow.filters.pipelinePath;
+export const getFlowComputationsNameFilter = (state: RootState) =>
+    state.flow.filters.computationsNameFilter;

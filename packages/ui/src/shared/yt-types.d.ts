@@ -550,16 +550,34 @@ export type GetQueryTrackerInfoResponse = {
     };
 };
 
-export type FlowExecuteCommand = 'describe-pipeline';
-
-export type FlowExecuteParams<Command extends FlowExecuteCommand> = {
-    flow_command: Command;
-    pipeline_path: string;
+export type FlowExecuteTypes = {
+    'describe-computations': {
+        ParamsType: {
+            flow_command: 'describe-computations';
+            pipeline_path: string;
+        };
+        BodyType: {body?: undefined};
+        ResponseType: FlowDescribeComputationsData;
+    };
+    'describe-pipeline': {
+        ParamsType: {
+            flow_command: 'describe-pipeline';
+            pipeline_path: string;
+        };
+        BodyType: {
+            body?: {
+                status_only?: boolean;
+            };
+        };
+        ResponseType: FlowDescribePipelineData;
+    };
 };
 
-export type FlowExecuteData = {
-    'describe-pipeline': FlowDescribePipelineData;
+export type FlowDescribeComputationsData = {
+    computations: Array<FlowComputation>;
 };
+
+export type FlowExecuteCommand = keyof FlowExecuteTypes;
 
 type ComputationId = string;
 type StreamId = string;
@@ -589,19 +607,24 @@ export type FlowNodeBase = {
 };
 
 export type FlowMessage = {level: FlowNodeStatus} & (
-    | {yson?: unknown; text?: string; error?: never}
-    | {error?: YTError; yson?: never; text?: never}
+    | {text?: string; yson?: unknown; error?: never; markdown_text?: never}
+    | {text?: string; yson?: never; error?: YTError; markdown_text?: never}
+    | {text?: string; yson?: never; error?: never; markdown_text?: string}
 );
 
 export type FlowComputation = FlowNodeBase &
     FlowComputationStreams & {
+        class_name: string;
+        highlight_cpu_usage?: boolean;
+        hightlight_memory_usage?: boolean;
+
         metrics: {
             cpu_usage_current: number;
             cpu_usage_30s: number;
             cpu_usage_10m: number;
             memory_usage_current: number;
             memory_usage_30s: number;
-            memory_usage_current: number;
+            memory_usage_10m: number;
         };
         partitions_stats?: {
             count: number;
@@ -624,6 +647,8 @@ export type FlowNodeStatus =
     | 'alert'
     | 'fatal'
     | 'maximum';
+
+export type FlowComputationstatus = 'info' | 'warning' | 'error';
 
 export type FlowComputationStreams = Record<FlowComputationStreamType, Array<StreamId>>;
 
