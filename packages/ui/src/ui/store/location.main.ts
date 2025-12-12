@@ -1,8 +1,8 @@
 import {AccountsTab} from '../constants/accounts/accounts';
 import {Tab as ComponentsTab} from '../constants/components/main';
+import {Page} from '../constants/index';
 import {Tab as OperationTab} from '../constants/operations/detail';
 import {SchedulingExtraTabs, SchedulingTab} from '../constants/scheduling';
-import {Page} from '../constants/index';
 
 import {
     clustersMenuParams,
@@ -14,22 +14,22 @@ import {
     getNavigationPreparedState,
 } from '../store/reducers/navigation/url-mapping';
 
-import {
-    getVersionsV2PreparedState,
-    versionsV2Params,
-} from './reducers/components/versions/url-mapping_v2';
+import {getNodesPreparedState, nodesParams} from './reducers/components/nodes/url-mapping';
 import {
     getProxiesPreparedState,
     proxiesParams,
 } from './reducers/components/proxies/proxies/url-mapping';
-import {getNodesPreparedState, nodesParams} from './reducers/components/nodes/url-mapping';
+import {
+    getVersionsV2PreparedState,
+    versionsV2Params,
+} from './reducers/components/versions/url-mapping_v2';
 
+import {getJobsPreparedState, jobsParams} from './reducers/operations/jobs/url-mapping';
+import {getListPreparedState, listParams} from './reducers/operations/list/url-mapping';
 import {
     getStatisticsPreparedState,
     statisticsParams,
 } from './reducers/operations/statistics/url-mapping';
-import {getListPreparedState, listParams} from './reducers/operations/list/url-mapping';
-import {getJobsPreparedState, jobsParams} from './reducers/operations/jobs/url-mapping';
 
 import {
     accountAclParams,
@@ -66,6 +66,7 @@ import {
     schedulingOverviewParams,
     schedulingParams,
 } from '../store/reducers/scheduling/url-mapping';
+import {getSystemPreparedState, systemParams} from '../store/reducers/system/url-mapping';
 import {
     bundlesPrometheusParams,
     getTabletsBundlesAclPreparedState,
@@ -76,7 +77,6 @@ import {
     tabletsBundlesParams,
     tabletsTabletCellsParams,
 } from './reducers/tablet_cell_bundles/url-mapping';
-import {getSystemPreparedState, systemParams} from '../store/reducers/system/url-mapping';
 
 import {TabletsTab} from '../constants/tablets';
 import {
@@ -93,8 +93,8 @@ import {chytListParams, getGhytListPreparedState} from './reducers/chyt/url-mapp
 import type {PathParameters} from '../store/location';
 
 import {ChytCliquePageTab} from '../constants/chyt-page';
-
-import {flowParams} from './reducers/flow/url-mapping';
+import {FlowTab} from './reducers/flow/filters';
+import {flowComputationsParams, flowParams} from './reducers/flow/url-mapping';
 
 // prettier-ignore
 export const getMainLocations = (): Array<[string, PathParameters]> => [
@@ -178,6 +178,7 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     [`/*/${Page.CHAOS_CELL_BUNDLES}/*`, [chaosBundlesParams, getChaosBundlesPreparedState]],
     [`/*/${Page.QUERIES}/*`, [draftQueryParameters, getDraftQueryParameters]],
 
+    [`/*/${Page.FLOW}/${FlowTab.COMPUTATIONS}`, [flowComputationsParams]],
     [`/*/${Page.FLOW}/*`, [flowParams]],
 
     ['global', [globalParams, getGlobalPreparedState]],
