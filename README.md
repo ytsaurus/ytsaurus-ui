@@ -9,7 +9,7 @@ The repository contains code related to UI for [YTsaurus platform](https://ytsau
 - [packages/interface-helpers](https://github.com/ytsaurus/ytsaurus-ui/tree/main/packages/interface-helpers) - library contains some helpers for UI [CHANGELOG](https://github.com/ytsaurus/ytsaurus-ui/tree/main/packages/interface-helpers/CHANGELOG.md)
 - [packages/javascript-wrapper](https://github.com/ytsaurus/ytsaurus-ui/tree/main/packages/javascript-wrapper) - API library to communicate with YTsaurus platform backends [CHANGELOG](https://github.com/ytsaurus/ytsaurus-ui/tree/main/packages/javascript-wrapper/CHANGELOG.md)
 
-### How to contribute (some notices) 
+### How to contribute (some notices)
 
 - we prefer `rebases` instead of `squashes` each commit should represent a small logically finished change of code
 - use interactive rebase to add changes to your PRs
