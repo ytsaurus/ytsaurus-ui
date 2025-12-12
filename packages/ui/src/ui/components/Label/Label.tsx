@@ -22,6 +22,7 @@ export type LabelTheme =
     | 'success'
     | 'warning'
     | 'danger'
+    | 'error'
     | 'info'
     | 'complementary'
     | 'misc';
