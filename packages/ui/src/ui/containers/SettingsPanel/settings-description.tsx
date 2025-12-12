@@ -188,11 +188,11 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 ),
             },
         ]),
-        makePage(
-            'Development',
-            closeTagIcon,
-            compact_([
-                isAdmin &&
+        isAdmin &&
+            makePage(
+                'Development',
+                closeTagIcon,
+                compact_([
                     makeItem(
                         SettingName.DEVELOPMENT.REGULAR_USER_UI,
                         "Show regular user's UI",
@@ -207,7 +207,6 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                             }
                         />,
                     ),
-                isAdmin &&
                     makeItem(
                         'global::lang',
                         i18n('Language'),
@@ -220,7 +219,6 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                             ]}
                         />,
                     ),
-                isAdmin &&
                     makeItem(
                         'global::development::showAiChat',
                         'Show AI chat',
@@ -231,8 +229,8 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                             oneLine
                         />,
                     ),
-            ]),
-        ),
+                ]),
+            ),
 
         makePage('Data', dataIcon, [
             makeItem(
@@ -675,7 +673,7 @@ export function makeItem(
 }
 
 export function useSettingsDescription(): Array<SettingsPage> {
-    const isAdmin = useSelector(isDeveloperOrWatchMen) || true;
+    const isAdmin = useSelector(isDeveloperOrWatchMen);
     const cluster = useClusterFromLocation();
     const login = useSelector(getCurrentUserName);
 
