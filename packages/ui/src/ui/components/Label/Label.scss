@@ -30,6 +30,7 @@
         @include label-theme-block(var(--warning-text), var(--warning-background));
     }
 
+    &_theme_error,
     &_theme_danger {
         @include label-theme-block(var(--danger-text), var(--danger-background));
     }
@@ -51,7 +52,6 @@
         padding: 0;
         background: none;
         border: none;
-
 
         &#{$label}_theme_default {
             color: var(--default-color);

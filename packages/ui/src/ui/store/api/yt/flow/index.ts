@@ -1,4 +1,4 @@
-import {FlowExecuteCommand, FlowExecuteData} from '../../../../../shared/yt-types';
+import {FlowExecuteCommand, FlowExecuteTypes} from '../../../../../shared/yt-types';
 
 import {ytApi} from '../ytApi';
 import {OverrideDataType} from '../types';
@@ -20,5 +20,5 @@ export function useFlowExecuteQuery<T extends FlowExecuteCommand>(
     ...args: Parameters<typeof flowExecute<T>>
 ) {
     const res = flowApi.useFlowExecuteQuery(...args);
-    return res as OverrideDataType<typeof res, FlowExecuteData[T]>;
+    return res as OverrideDataType<typeof res, FlowExecuteTypes[T]['ResponseType']>;
 }
