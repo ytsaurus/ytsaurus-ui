@@ -24,7 +24,7 @@ export const PAGES_WITH_ICONS = [
     {id: Page.DASHBOARD, icon: dashboardIcon},
     {id: Page.GROUPS, icon: groupsIcon},
     {id: Page.NAVIGATION, icon: navigationIcon},
-    {id: Page.FLOW, icon: pipelineIcon},
+    {id: Page.FLOWS, icon: pipelineIcon},
     {id: Page.OPERATIONS, icon: operationsIcon},
     {id: Page.PATH_VIEWER, icon: pathViewerIcon},
     {id: Page.SCHEDULING, icon: schedulingIcon},

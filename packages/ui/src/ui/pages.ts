@@ -18,9 +18,9 @@ const pages: Array<HeaderItem> = [
         header: true,
     },
     {
-        id: Page.FLOW,
-        name: 'Flow',
-        header: true,
+        id: Page.FLOWS,
+        name: 'Flows',
+        hidden: true,
     },
     {
         id: Page.OPERATIONS,

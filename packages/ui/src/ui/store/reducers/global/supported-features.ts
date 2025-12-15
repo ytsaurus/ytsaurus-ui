@@ -22,6 +22,10 @@ export interface SupportedFeaturesState {
         require_password_in_authentication_commands?: boolean;
         query_memory_limit_in_tablet_nodes?: boolean;
     };
+
+    flow_pipelines?: {
+        pipeline_list_enabled: boolean;
+    };
 }
 
 export type OperationStatisticInfo = StatisticInfo;

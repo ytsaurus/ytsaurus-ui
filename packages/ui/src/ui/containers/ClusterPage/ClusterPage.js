@@ -226,7 +226,7 @@ class ClusterPage extends Component {
                         component={TabletCellBundlesLazy}
                     />
                     <Route path={`/:cluster/${Page.NAVIGATION}`} component={NavigationLazy} />
-                    <Route path={`/:cluster/${Page.FLOW}`} component={FlowPageLazy} />
+                    <Route path={`/:cluster/${Page.FLOWS}`} component={FlowPageLazy} />
                     <Route path={`/:cluster/${Page.PATH_VIEWER}`} component={PathViewerLazy} />
                     <Route path={`/:cluster/${Page.TABLET}`} component={TabletLazy} />
                     <Route path={`/:cluster/${Page.USERS}`} component={UsersPageLazy} />

@@ -38,7 +38,7 @@ export default function TopRowContent() {
         <Switch>
             <Route path={`/:cluster/${Page.SYSTEM}`} component={SystemTopRowLazy} />
             <Route path={`/:cluster/${Page.NAVIGATION}`} component={NavigationTopRowLazy} />
-            <Route path={`/:cluster/${Page.FLOW}`} component={FlowPageTopRowLazy} />
+            <Route path={`/:cluster/${Page.FLOWS}`} component={FlowPageTopRowLazy} />
             <Route path={`/:cluster/${Page.SCHEDULING}`} component={SchedulingTopRowLazy} />
             <Route path={`/:cluster/${Page.ACCOUNTS}`} component={AccountsTopRowLazy} />
             <Route path={`/:cluster/${Page.TABLET}/:id`} component={TabletTopRowLazy} />
