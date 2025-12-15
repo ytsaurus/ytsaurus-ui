@@ -16,3 +16,11 @@ export const flowComputationsParams: typeof flowParams = {
         initialState: filtersInitialState.computationsNameFilter,
     },
 };
+
+export const flowWorkersParams: typeof flowParams = {
+    ...flowParams,
+    name: {
+        stateKey: 'flow.filters.workersNameFilter',
+        initialState: filtersInitialState.workersNameFilter,
+    },
+};
