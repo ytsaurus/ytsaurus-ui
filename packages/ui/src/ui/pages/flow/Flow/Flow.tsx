@@ -52,7 +52,7 @@ export function FlowTabs() {
             [FlowTab.MONITORING]: {show: Boolean(component || urlTemplate)},
         };
 
-        return makeTabProps(`/${cluster}/${Page.FLOW}`, FlowTab, showSettings);
+        return makeTabProps(`/${cluster}/${Page.FLOWS}`, FlowTab, showSettings);
     }, [cluster]);
 
     return <Tabs className={block('tabs')} routed routedPreserveLocation {...tabsProps} />;
@@ -69,34 +69,34 @@ function FlowContent() {
     return (
         <Switch>
             <Route
-                path={`/${cluster}/${Page.FLOW}/${FlowTab.GRAPH}`}
+                path={`/${cluster}/${Page.FLOWS}/${FlowTab.GRAPH}`}
                 render={() => <FlowGraph pipeline_path={path} yson={false} />}
             />
             <Route
-                path={`/${cluster}/${Page.FLOW}/${FlowTab.GRAPH_DATA}`}
+                path={`/${cluster}/${Page.FLOWS}/${FlowTab.GRAPH_DATA}`}
                 render={() => <FlowGraph pipeline_path={path} yson={true} />}
             />
             <Route
-                path={`/${cluster}/${Page.FLOW}/${FlowTab.COMPUTATIONS}`}
+                path={`/${cluster}/${Page.FLOWS}/${FlowTab.COMPUTATIONS}`}
                 render={() => <FlowComputations pipeline_path={path} />}
             />
             <Route
-                path={`/${cluster}/${Page.FLOW}/${FlowTab.WORKERS}`}
+                path={`/${cluster}/${Page.FLOWS}/${FlowTab.WORKERS}`}
                 render={() => <FlowWorkers pipeline_path={path} />}
             />
             <Route
-                path={`/${cluster}/${Page.FLOW}/${FlowTab.DYNAMIC_SPEC}`}
+                path={`/${cluster}/${Page.FLOWS}/${FlowTab.DYNAMIC_SPEC}`}
                 render={() => <FlowDynamicSpec pipeline_path={path} />}
             />
             <Route
-                path={`/${cluster}/${Page.FLOW}/${FlowTab.STATIC_SPEC}`}
+                path={`/${cluster}/${Page.FLOWS}/${FlowTab.STATIC_SPEC}`}
                 render={() => <FlowStaticSpec pipeline_path={path} />}
             />
             <Route
-                path={`/${cluster}/${Page.FLOW}/${FlowTab.MONITORING}`}
+                path={`/${cluster}/${Page.FLOWS}/${FlowTab.MONITORING}`}
                 render={() => <FlowMonitoring pipeline_path={path} />}
             />
-            <Redirect to={`/${cluster}/${Page.FLOW}/${FlowTab.GRAPH}`} />
+            <Redirect to={`/${cluster}/${Page.FLOWS}/${FlowTab.GRAPH}`} />
         </Switch>
     );
 }

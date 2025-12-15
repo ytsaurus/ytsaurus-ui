@@ -47,5 +47,5 @@ export function makeFlowLink({
     cluster?: string;
     tab?: FlowTabType;
 }) {
-    return `/${cluster || YT.cluster}/${Page.FLOW}/${tab}?path=${path}`;
+    return `/${cluster || YT.cluster}/${Page.FLOWS}/${tab}?path=${path}`;
 }

@@ -179,9 +179,9 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     [`/*/${Page.CHAOS_CELL_BUNDLES}/*`, [chaosBundlesParams, getChaosBundlesPreparedState]],
     [`/*/${Page.QUERIES}/*`, [draftQueryParameters, getDraftQueryParameters]],
 
-    [`/*/${Page.FLOW}/${FlowTab.COMPUTATIONS}`, [flowComputationsParams]],
-    [`/*/${Page.FLOW}/${FlowTab.WORKERS}`, [flowWorkdersParams]],
-    [`/*/${Page.FLOW}/*`, [flowParams]],
+    [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}`, [flowComputationsParams]],
+    [`/*/${Page.FLOWS}/${FlowTab.WORKERS}`, [flowWorkdersParams]],
+    [`/*/${Page.FLOWS}/*`, [flowParams]],
 
     ['global', [globalParams, getGlobalPreparedState]],
 ]
