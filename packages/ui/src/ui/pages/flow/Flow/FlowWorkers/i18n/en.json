@@ -1,0 +1,9 @@
+{
+  "address": "Address",
+  "cpu-usage": "CPU usage",
+  "health": "Health",
+  "incarnation-id": "Incarnation Id",
+  "memory-usage": "Memory usage",
+  "search_placeholder": "Search by address...",
+  "uptime": "Uptime"
+}
