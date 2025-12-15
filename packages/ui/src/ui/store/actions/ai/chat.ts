@@ -11,7 +11,6 @@ import {
     selectConversationId,
     selectConversations,
 } from '../../selectors/ai/chat';
-import {getQueryDraft, getQueryEngine} from '../../selectors/query-tracker/query';
 import {
     addAttachedFile,
     addConversationItem,
@@ -39,25 +38,11 @@ import {
     parseConversationItems,
     parseStreamLine,
 } from './helpers';
-import {AGENT_MAP} from '../../../containers/AiChat/constants';
+import {getContextByPage} from './pageСontexts';
 
 const BASE_PATH = '/api/code-assistant';
-const DEFAULT_AGENT = 'qt';
 
 type AsyncAction = ThunkAction<void, RootState, undefined, Action>;
-
-const isQueriesPage = () => window.location.pathname.includes('/queries');
-
-const getMeta = (state: RootState) => {
-    if (!isQueriesPage()) {
-        return {agent: DEFAULT_AGENT};
-    }
-
-    const engine = getQueryEngine(state);
-    const agent = engine ? AGENT_MAP[engine] : DEFAULT_AGENT;
-
-    return {agent};
-};
 
 const readFileAsText = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -95,27 +80,6 @@ async function* streamAsyncIterator(
         reader.releaseLock();
     }
 }
-
-const prepareQueryContext = (state: RootState): string[] => {
-    if (!isQueriesPage()) {
-        return [];
-    }
-
-    const draft = getQueryDraft(state);
-    const contextMessages: string[] = [];
-
-    if (draft.query && draft.query.trim()) {
-        contextMessages.push(`<query>\n${draft.query}\n</query>`);
-    }
-
-    if (draft.error) {
-        const errorText =
-            typeof draft.error === 'string' ? draft.error : JSON.stringify(draft.error, null, 2);
-        contextMessages.push(`<error>\n${errorText}\n</error>`);
-    }
-
-    return contextMessages;
-};
 
 export const summarizeConversationTitle =
     (conversationId: string): AsyncAction =>
@@ -188,7 +152,7 @@ export const sendQuestion =
 
         if (!question && !promptId) return;
 
-        const contextMessages = prepareQueryContext(state);
+        const {meta, contextMessages} = getContextByPage(state);
 
         dispatch(setMode('chat'));
         if (question) {
@@ -206,7 +170,6 @@ export const sendQuestion =
         let reader: ReadableStreamDefaultReader<Uint8Array> | undefined;
         try {
             let currentConversationId = conversationId;
-            const meta = getMeta(state);
             if (!currentConversationId) {
                 const {data} = await axios.post<Conversation>(`${BASE_PATH}/create-conversation`, {
                     model,
