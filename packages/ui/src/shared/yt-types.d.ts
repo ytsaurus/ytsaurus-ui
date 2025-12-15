@@ -572,6 +572,31 @@ export type FlowExecuteTypes = {
         };
         ResponseType: FlowDescribePipelineData;
     };
+    'describe-workers': {
+        ParamsType: {
+            flow_command: 'describe-workers';
+            pipeline_path: string;
+        };
+        BodyType: {body?: undefined};
+        ResponseType: FlowDescribeWorkersData;
+    };
+};
+
+export type FlowDescribeWorkersData = {
+    workers: Array<FlowWorkderData>;
+};
+
+export type FlowWorkerData = {
+    address: string;
+    bytes_per_second: number;
+    cpu_usage: number;
+    groups: Array<unknown>;
+    incarnation_id: string;
+    memory_usage: number;
+    messages_per_second: number;
+    monitoring_address: string;
+    register_time: string;
+    status: FlowNodeStatus;
 };
 
 export type FlowDescribeComputationsData = {
