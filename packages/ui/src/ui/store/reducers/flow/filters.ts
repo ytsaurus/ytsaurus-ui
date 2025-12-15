@@ -4,12 +4,14 @@ export type FlowFiltersState = {
     pipelinePath: string;
 
     computationsNameFilter: string;
+    workersNameFilter: string;
 };
 
 export const initialState: FlowFiltersState = {
     pipelinePath: '',
 
     computationsNameFilter: '',
+    workersNameFilter: '',
 };
 
 export const FlowTab = {

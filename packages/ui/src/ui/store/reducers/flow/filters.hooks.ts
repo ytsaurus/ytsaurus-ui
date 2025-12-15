@@ -14,3 +14,15 @@ export function useFlowComputationsNameFilter() {
         },
     };
 }
+
+export function useFlowWorkersNameFilter() {
+    const dispatch = useDispatch();
+    const workdersNameFilter = useSelector((state) => state.flow.filters.workersNameFilter);
+
+    return {
+        workdersNameFilter,
+        setWorkersNameFilter: (value: string) => {
+            dispatch(filtersSlice.actions.updateFlowFilters({workersNameFilter: value}));
+        },
+    };
+}

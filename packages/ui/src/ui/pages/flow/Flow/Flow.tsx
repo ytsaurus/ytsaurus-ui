@@ -26,7 +26,7 @@ import './Flow.scss';
 import {FlowComputations} from './FlowComputations/FlowComputations';
 import {FlowGraph} from './FlowGraph/FlowGraph';
 import {FlowMessages} from './FlowGraph/renderers/FlowGraphRenderer';
-import {FlowLayout} from './FlowLayout/FlowLayout';
+import {FlowWorkers} from './FlowWorkers/FlowWorkers';
 import {FlowDynamicSpec, FlowStaticSpec} from './PipelineSpec/PipelineSpec';
 
 const block = cn('yt-flow');
@@ -82,7 +82,7 @@ function FlowContent() {
             />
             <Route
                 path={`/${cluster}/${Page.FLOW}/${FlowTab.WORKERS}`}
-                render={() => <FlowLayout path={path} viewMode="workers" />}
+                render={() => <FlowWorkers pipeline_path={path} />}
             />
             <Route
                 path={`/${cluster}/${Page.FLOW}/${FlowTab.DYNAMIC_SPEC}`}
