@@ -11,6 +11,7 @@ import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {getFlowPipelinePath} from '../../../../store/selectors/flow/filters';
 import {FlowMessagesContent, FlowNodeStatus} from '../FlowGraph/renderers/FlowGraphRenderer';
 import './FlowComputation.scss';
+import {FlowComputationPartitions} from './FlowComputationPartitions';
 import i18n from './i18n';
 
 const block = cn('yt-flow-computation');
@@ -46,7 +47,10 @@ function FlowComputationDetails({computation}: {computation: string}) {
                 ) : null}
             </Flex>
             {Boolean(error) && <YTErrorBlock error={error} />}
-            <FlowComputationMessages messages={data?.messages} />
+            <div className={block('messages')}>
+                <FlowComputationMessages messages={data?.messages} />
+            </div>
+            <FlowComputationPartitions data={data} />
         </div>
     );
 }
