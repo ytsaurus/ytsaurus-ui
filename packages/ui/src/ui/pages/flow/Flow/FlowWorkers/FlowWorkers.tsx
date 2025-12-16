@@ -13,7 +13,6 @@ import {
     useTable,
 } from '../../../../components/DataTableGravity';
 import {YTErrorBlock} from '../../../../components/Error/Error';
-import Label from '../../../../components/Label/Label';
 import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';
 import {formatTimeDuration} from '../../../../components/TimeDuration/TimeDuration';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
@@ -22,7 +21,7 @@ import {useFlowExecuteQuery} from '../../../../store/api/yt';
 import {useFlowWorkersNameFilter} from '../../../../store/reducers/flow/filters.hooks';
 import {useSelector} from '../../../../store/redux-hooks';
 import {getCluster} from '../../../../store/selectors/global/cluster';
-import {STATUS_TO_BG_THEME} from '../FlowGraph/renderers/FlowGraphRenderer';
+import {FlowNodeStatus} from '../FlowGraph/renderers/FlowGraphRenderer';
 import './FlowWorkers.scss';
 import i18n from './i18n';
 
@@ -178,11 +177,7 @@ function useFlowWorkersColumns() {
                 cell: ({row: {original: item}}) => {
                     return (
                         <TableCell>
-                            <Label
-                                theme={STATUS_TO_BG_THEME[item.status] ?? 'success'}
-                                text={item.status === 'info' ? 'ok' : item.status}
-                                capitalize
-                            />
+                            <FlowNodeStatus status={item.status} />
                         </TableCell>
                     );
                 },

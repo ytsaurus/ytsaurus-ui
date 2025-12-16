@@ -178,3 +178,23 @@ export function TextWithHighConsumption({
         </Tooltip>
     );
 }
+
+export const STATUS_TO_BG_THEME: Partial<
+    Record<FlowNodeStatusType, 'success' | 'info' | 'warning' | 'danger'>
+> = {
+    warning: 'warning',
+    alert: 'warning',
+    error: 'danger',
+    fatal: 'danger',
+    maximum: 'danger',
+};
+
+export function FlowNodeStatus({status}: {status: FlowNodeStatusType}) {
+    return (
+        <Label
+            theme={STATUS_TO_BG_THEME[status] ?? 'success'}
+            text={status === 'info' ? 'ok' : status}
+            capitalize
+        />
+    );
+}
