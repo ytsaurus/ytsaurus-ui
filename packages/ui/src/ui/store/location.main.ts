@@ -94,8 +94,14 @@ import type {PathParameters} from '../store/location';
 
 import {ChytCliquePageTab} from '../constants/chyt-page';
 
+import {
+    flowComputationParams,
+    flowComputationsParams,
+    flowParams,
+    flowWorkdersParams,
+} from './reducers/flow/url-mapping';
+
 import {FlowTab} from './reducers/flow/filters';
-import {flowComputationsParams, flowParams, flowWorkdersParams} from './reducers/flow/url-mapping';
 
 // prettier-ignore
 export const getMainLocations = (): Array<[string, PathParameters]> => [
@@ -180,7 +186,7 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     [`/*/${Page.QUERIES}/*`, [draftQueryParameters, getDraftQueryParameters]],
 
     [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}`, [flowComputationsParams]],
-    [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*`, [flowComputationsParams]],
+    [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*`, [flowComputationParams]],
     [`/*/${Page.FLOWS}/${FlowTab.WORKERS}`, [flowWorkdersParams]],
     [`/*/${Page.FLOWS}/*`, [flowParams]],
 

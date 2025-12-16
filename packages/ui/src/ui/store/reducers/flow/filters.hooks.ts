@@ -26,3 +26,15 @@ export function useFlowWorkersNameFilter() {
         },
     };
 }
+
+export function useFlowPartitionIdFilter() {
+    const dispatch = useDispatch();
+    const partitionIdFilter = useSelector((state) => state.flow.filters.partitionIdFilter);
+
+    return {
+        partitionIdFilter,
+        setPartitionIdFilter: (value: string) => {
+            dispatch(filtersSlice.actions.updateFlowFilters({partitionIdFilter: value}));
+        },
+    };
+}
