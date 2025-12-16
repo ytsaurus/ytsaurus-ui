@@ -25,11 +25,12 @@ import UIFactory from '../../../UIFactory';
 import {makeTabProps} from '../../../utils';
 import {formatByParams} from '../../../utils/format';
 import './Flow.scss';
+import {FlowComputation} from './FlowComputation/FlowComputation';
+import {FlowComputations} from './FlowComputations/FlowComputations';
 import {FlowGraph} from './FlowGraph/FlowGraph';
 import {FlowMessages} from './FlowGraph/renderers/FlowGraphRenderer';
-import {FlowDynamicSpec, FlowStaticSpec} from './PipelineSpec/PipelineSpec';
-import {FlowComputations} from './FlowComputations/FlowComputations';
 import {FlowWorkers} from './FlowWorkers/FlowWorkers';
+import {FlowDynamicSpec, FlowStaticSpec} from './PipelineSpec/PipelineSpec';
 
 const block = cn('yt-flow');
 
@@ -62,7 +63,6 @@ export function FlowTabs() {
 
 function FlowContent() {
     const path = useSelector(getFlowPipelinePath);
-    const cluster = useSelector(getCluster);
 
     if (!path) {
         return null;
@@ -71,34 +71,41 @@ function FlowContent() {
     return (
         <Switch>
             <Route
-                path={`/${cluster}/${Page.FLOWS}/${FlowTab.GRAPH}`}
+                path={`/:cluster/${Page.FLOWS}/${FlowTab.GRAPH}`}
                 render={() => <FlowGraph pipeline_path={path} yson={false} />}
             />
             <Route
-                path={`/${cluster}/${Page.FLOWS}/${FlowTab.GRAPH_DATA}`}
+                path={`/:cluster/${Page.FLOWS}/${FlowTab.GRAPH_DATA}`}
                 render={() => <FlowGraph pipeline_path={path} yson={true} />}
             />
             <Route
-                path={`/${cluster}/${Page.FLOWS}/${FlowTab.COMPUTATIONS}`}
+                path={`/:cluster/${Page.FLOWS}/${FlowTab.COMPUTATIONS}`}
                 render={() => <FlowComputations pipeline_path={path} />}
+                exact
             />
             <Route
-                path={`/${cluster}/${Page.FLOWS}/${FlowTab.WORKERS}`}
+                path={`/:cluster/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/:computation?`}
+                render={() => {
+                    return <FlowComputation />;
+                }}
+            />
+            <Route
+                path={`/:cluster/${Page.FLOWS}/${FlowTab.WORKERS}`}
                 render={() => <FlowWorkers pipeline_path={path} />}
             />
             <Route
-                path={`/${cluster}/${Page.FLOWS}/${FlowTab.DYNAMIC_SPEC}`}
+                path={`/:cluster/${Page.FLOWS}/${FlowTab.DYNAMIC_SPEC}`}
                 render={() => <FlowDynamicSpec pipeline_path={path} />}
             />
             <Route
-                path={`/${cluster}/${Page.FLOWS}/${FlowTab.STATIC_SPEC}`}
+                path={`/:cluster/${Page.FLOWS}/${FlowTab.STATIC_SPEC}`}
                 render={() => <FlowStaticSpec pipeline_path={path} />}
             />
             <Route
-                path={`/${cluster}/${Page.FLOWS}/${FlowTab.MONITORING}`}
+                path={`/:cluster/${Page.FLOWS}/${FlowTab.MONITORING}`}
                 render={() => <FlowMonitoring pipeline_path={path} />}
             />
-            <Redirect to={`/${cluster}/${Page.FLOWS}/${FlowTab.GRAPH}`} />
+            <Redirect to={`/:cluster/${Page.FLOWS}/${FlowTab.GRAPH}`} />
         </Switch>
     );
 }
