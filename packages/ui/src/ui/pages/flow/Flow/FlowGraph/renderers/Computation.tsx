@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import {Flex, Progress, ProgressTheme, Text} from '@gravity-ui/uikit';
 
-import {FlowComputation} from '../../../../../../shared/yt-types';
+import {FlowComputationType} from '../../../../../../shared/yt-types';
 
 import format from '../../../../../common/hammer/format';
 import MetaTable from '../../../../../components/MetaTable/MetaTable';
@@ -86,11 +86,11 @@ export function Computation({detailed, item, className}: ComputationProps) {
 }
 
 type ComputationProgressProps = {
-    stats?: FlowComputation['partitions_stats'];
+    stats?: FlowComputationType['partitions_stats'];
 };
 
 type FlowComputationPartitionStates = keyof Required<
-    Required<FlowComputation>['partitions_stats']
+    Required<FlowComputationType>['partitions_stats']
 >['count_by_state'];
 const STATE_TO_THEME: Record<FlowComputationPartitionStates, ProgressTheme> = {
     completed: 'info',
