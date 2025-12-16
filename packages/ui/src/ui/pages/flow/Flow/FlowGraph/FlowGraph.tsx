@@ -9,7 +9,7 @@ import {Flex} from '@gravity-ui/uikit';
 import {SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 
 import {
-    FlowComputation,
+    FlowComputationType,
     FlowComputationStreamType,
     FlowSink,
     FlowStream,
@@ -70,8 +70,8 @@ export function FlowGraph({yson, pipeline_path}: {pipeline_path: string; yson: b
 }
 
 export type FlowGraphBlock =
-    | (YTGraphBlock<'computation-group', FlowComputation> & {stream_type?: never})
-    | (YTGraphBlock<'computation', FlowComputation> & {stream_type?: never})
+    | (YTGraphBlock<'computation-group', FlowComputationType> & {stream_type?: never})
+    | (YTGraphBlock<'computation', FlowComputationType> & {stream_type?: never})
     | (YTGraphBlock<'stream', FlowStream> & {
           icon?: SVGIconSvgrData;
           stream_type?: FlowComputationStreamType;
