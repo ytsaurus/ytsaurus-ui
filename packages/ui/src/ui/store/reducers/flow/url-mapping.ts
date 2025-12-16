@@ -17,6 +17,14 @@ export const flowComputationsParams: typeof flowParams = {
     },
 };
 
+export const flowComputationParams: typeof flowParams = {
+    ...flowParams,
+    partition: {
+        stateKey: 'flow.filters.partitionIdFilter',
+        initialState: filtersInitialState.partitionIdFilter,
+    },
+};
+
 export const flowWorkdersParams: typeof flowParams = {
     ...flowParams,
     name: {
