@@ -1,7 +1,7 @@
 import cn from 'bem-cn-lite';
 import React from 'react';
 
-import {FlowComputation} from '../../../../../shared/yt-types';
+import {FlowComputationType} from '../../../../../shared/yt-types';
 import format from '../../../../common/hammer/format';
 import ClickableAttributesButton from '../../../../components/AttributesButton/ClickableAttributesButton';
 import {
@@ -112,7 +112,7 @@ function useFlowComputationsTableData(pipeline_path: string) {
     };
 }
 
-type FlowComputationsColumnDef = tanstack.ColumnDef<FlowComputation>;
+type FlowComputationsColumnDef = tanstack.ColumnDef<FlowComputationType>;
 
 function useFlowComputationsColumn() {
     const res = React.useMemo(() => {
