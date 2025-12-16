@@ -180,6 +180,7 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     [`/*/${Page.QUERIES}/*`, [draftQueryParameters, getDraftQueryParameters]],
 
     [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}`, [flowComputationsParams]],
+    [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*`, [flowComputationsParams]],
     [`/*/${Page.FLOWS}/${FlowTab.WORKERS}`, [flowWorkdersParams]],
     [`/*/${Page.FLOWS}/*`, [flowParams]],
 

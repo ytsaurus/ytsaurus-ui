@@ -552,6 +552,16 @@ export type GetQueryTrackerInfoResponse = {
 };
 
 export type FlowExecuteTypes = {
+    'describe-computation': {
+        ParamsType: {
+            flow_command: 'describe-computation';
+            pipeline_path: string;
+        };
+        BodyType: {
+            body?: {computation_id: string};
+        };
+        ResponseType: FlowComputationDetails;
+    };
     'describe-computations': {
         ParamsType: {
             flow_command: 'describe-computations';
@@ -566,9 +576,7 @@ export type FlowExecuteTypes = {
             pipeline_path: string;
         };
         BodyType: {
-            body?: {
-                status_only?: boolean;
-            };
+            body?: {status_only?: boolean};
         };
         ResponseType: FlowDescribePipelineData;
     };
@@ -580,6 +588,22 @@ export type FlowExecuteTypes = {
         BodyType: {body?: undefined};
         ResponseType: FlowDescribeWorkersData;
     };
+};
+
+export type FlowComputationDetails = FlowComputationType & {
+    partitions: Array<FlowPartition>;
+    performance_metrics: Record<string, FlowComputationPerformanceMetrics>;
+};
+
+export type FlowComputationPerformanceMetrics = {
+    bytes_per_second: number;
+    bytes_per_second_example_partition: string;
+    cpu_usage: number;
+    cpu_usage_example_partition: string;
+    memory_usage: number;
+    memory_usage_example_partition: string;
+    messages_per_second: 0;
+    messages_per_second_example_partition: string;
 };
 
 export type FlowDescribeWorkersData = {

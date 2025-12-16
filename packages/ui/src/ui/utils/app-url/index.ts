@@ -42,10 +42,18 @@ export function makeFlowLink({
     path,
     cluster,
     tab = FlowTab.GRAPH,
+    computation,
 }: {
     path: string;
     cluster?: string;
     tab?: FlowTabType;
+    computation?: string;
 }) {
-    return `/${cluster || YT.cluster}/${Page.FLOWS}/${tab}?path=${path}`;
+    let pathname = `/${cluster || YT.cluster}/${Page.FLOWS}/${tab}`;
+
+    if (tab === FlowTab.COMPUTATIONS && computation) {
+        pathname += `/${encodeURIComponent(computation)}`;
+    }
+
+    return `${pathname}?path=${path}`;
 }

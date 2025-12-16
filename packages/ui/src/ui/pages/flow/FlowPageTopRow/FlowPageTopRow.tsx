@@ -31,7 +31,7 @@ function FlowBreadcrumbs() {
 function BCName() {
     const path = useSelector(getFlowPipelinePath);
     const name = React.useMemo(() => {
-        const parsedPath = ypath.YPath.create(path, 'absolute');
+        const parsedPath = path ? ypath.YPath.create(path, 'absolute') : undefined;
         return parsedPath?.fragments?.pop()?.name;
     }, [path]);
 

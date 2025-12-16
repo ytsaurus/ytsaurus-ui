@@ -3,4 +3,4 @@ import {addI18Keysets} from '../../../../../i18n';
 import en from './en.json';
 import ru from './ru.json';
 
-export default addI18Keysets('yt:yt-flow-computation', {en, ru});
+export default addI18Keysets('yt:yt-flow-computations', {en, ru});

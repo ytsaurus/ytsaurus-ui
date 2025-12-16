@@ -13,6 +13,7 @@ import {
 } from '../../../../../components/ClickableText/ClickableText';
 import {ExpandButton} from '../../../../../components/ExpandButton';
 import YTIcon from '../../../../../components/Icon/Icon';
+import Label from '../../../../../components/Label/Label';
 import {Markdown} from '../../../../../components/Markdown/Markdown';
 import {YTText} from '../../../../../components/Text/Text';
 import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
@@ -20,16 +21,6 @@ import Yson from '../../../../../components/Yson/Yson';
 import './FlowGraphRenderer.scss';
 
 const block = cn('yt-flow-graph-renderer');
-
-export const STATUS_TO_BG_THEME: Partial<
-    Record<FlowNodeStatus, 'success' | 'info' | 'warning' | 'danger'>
-> = {
-    warning: 'warning',
-    alert: 'warning',
-    error: 'danger',
-    fatal: 'danger',
-    maximum: 'danger',
-};
 
 export function FlowIcon({data}: {data?: SVGIconSvgrData}) {
     return !data ? null : (
@@ -62,12 +53,25 @@ export function FlowCaption1({text}: {text: React.ReactNode}) {
     );
 }
 
-type FlowMessagesProps = {data?: Array<FlowMessage>; paddingTop?: 'none'};
+type FlowMessagesProps = {data?: Array<FlowMessageType>; paddingTop?: 'none'};
 
 export function FlowMessages({data, paddingTop}: FlowMessagesProps) {
     const [visible, setVisible] = React.useState(false);
 
-    const color = React.useMemo(() => {
+    const color = useFlowMessagesColor(data);
+
+    return !data?.length ? null : (
+        <div className={block('messages', {'padding-top': paddingTop})}>
+            <ClickableText color={color} onClick={() => setVisible(true)}>
+                Messages ({data.length})
+            </ClickableText>
+            {visible && <FlowMessagesDialog data={data} onClose={() => setVisible(false)} />}
+        </div>
+    );
+}
+
+export function useFlowMessagesColor(data: FlowMessagesProps['data']) {
+    return React.useMemo(() => {
         return data?.reduce(
             (acc, {level}) => {
                 const theme = STATUS_TO_BG_THEME[level];
@@ -82,15 +86,6 @@ export function FlowMessages({data, paddingTop}: FlowMessagesProps) {
             undefined as ClickableTextProps['color'],
         );
     }, [data]);
-
-    return !data?.length ? null : (
-        <div className={block('messages', {'padding-top': paddingTop})}>
-            <ClickableText color={color} onClick={() => setVisible(true)}>
-                Messages ({data.length})
-            </ClickableText>
-            {visible && <FlowMessagesDialog data={data} onClose={() => setVisible(false)} />}
-        </div>
-    );
 }
 
 function FlowMessagesDialog({data, onClose}: FlowMessagesProps & {onClose(): void}) {
@@ -98,15 +93,25 @@ function FlowMessagesDialog({data, onClose}: FlowMessagesProps & {onClose(): voi
         <Dialog open={true} onClose={onClose}>
             <Dialog.Header caption="Messages" />
             <Dialog.Body className={block('messages-body')}>
-                {data?.map((item, index) => (
-                    <FlowMessageItem item={item} key={index} initialExpanded={data?.length === 1} />
-                ))}
+                <FlowMessagesContent data={data} />
             </Dialog.Body>
         </Dialog>
     );
 }
 
-function FlowMessageItem({item, initialExpanded}: {item: FlowMessage; initialExpanded: boolean}) {
+export function FlowMessagesContent({data}: FlowMessagesProps) {
+    return data?.map((item, index) => (
+        <FlowMessageItem item={item} key={index} initialExpanded={data?.length === 1} />
+    ));
+}
+
+function FlowMessageItem({
+    item,
+    initialExpanded,
+}: {
+    item: FlowMessageType;
+    initialExpanded: boolean;
+}) {
     const {level, yson, error, markdown_text} = item;
     const theme = STATUS_TO_BG_THEME[level];
     return (
