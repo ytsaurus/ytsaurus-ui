@@ -596,11 +596,11 @@ export type FlowWorkerData = {
     messages_per_second: number;
     monitoring_address: string;
     register_time: string;
-    status: FlowNodeStatus;
+    status: FlowNodeStatusType;
 };
 
 export type FlowDescribeComputationsData = {
-    computations: Array<FlowComputation>;
+    computations: Array<FlowComputationType>;
 };
 
 export type FlowExecuteCommand = keyof FlowExecuteTypes;
@@ -611,7 +611,7 @@ type SinkId = string;
 type SourceId = string;
 
 export type FlowDescribePipelineData = {
-    computations: Record<ComputationId, FlowComputation>;
+    computations: Record<ComputationId, FlowComputationType>;
     // All elements are always linked with computation, every stream belong to a computaion
     streams: Record<StreamId, FlowStream>;
 
@@ -620,25 +620,25 @@ export type FlowDescribePipelineData = {
     // A sources has outgouing connection to a computation or to a computation.input_streams
     sources: Record<SourceId, FlowSink>;
 
-    messages?: Array<FlowMessage>;
+    messages?: Array<FlowMessageType>;
 };
 
 export type FlowNodeBase = {
     id: string;
     name: string;
-    status: FlowNodeStatus;
+    status: FlowNodeStatusType;
 
     description?: string;
-    messages?: Array<FlowMessage>;
+    messages?: Array<FlowMessageType>;
 };
 
-export type FlowMessage = {level: FlowNodeStatus} & (
+export type FlowMessageType = {level: FlowNodeStatusType} & (
     | {text?: string; yson?: unknown; error?: never; markdown_text?: never}
     | {text?: string; yson?: never; error?: YTError; markdown_text?: never}
     | {text?: string; yson?: never; error?: never; markdown_text?: string}
 );
 
-export type FlowComputation = FlowNodeBase &
+export type FlowComputationType = FlowNodeBase &
     FlowComputationStreams & {
         class_name: string;
         highlight_cpu_usage?: boolean;
@@ -663,7 +663,7 @@ export type FlowComputation = FlowNodeBase &
         epoch_per_second: number;
     };
 
-export type FlowNodeStatus =
+export type FlowNodeStatusType =
     | 'minimum'
     | 'trace'
     | 'debug'
