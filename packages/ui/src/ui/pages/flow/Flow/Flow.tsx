@@ -18,7 +18,10 @@ import {useFlowExecuteQuery} from '../../../store/api/yt/flow';
 import {useGetQuery} from '../../../store/api/yt/get';
 import {FlowTab} from '../../../store/reducers/flow/filters';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
-import {getFlowPipelinePath} from '../../../store/selectors/flow/filters';
+import {
+    getFlowCurrentComputation,
+    getFlowPipelinePath,
+} from '../../../store/selectors/flow/filters';
 import {getFlowStatusData} from '../../../store/selectors/flow/status';
 import {getCluster} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
@@ -35,10 +38,11 @@ import {FlowDynamicSpec, FlowStaticSpec} from './PipelineSpec/PipelineSpec';
 const block = cn('yt-flow');
 
 export function Flow() {
+    const currentComputation = useSelector(getFlowCurrentComputation);
     return (
         <div className={block()}>
-            <FlowState />
-            <FlowTabs />
+            {!currentComputation ? <FlowState /> : null}
+            {!currentComputation ? <FlowTabs /> : null}
             <div className={block('content')}>
                 <FlowContent />
             </div>

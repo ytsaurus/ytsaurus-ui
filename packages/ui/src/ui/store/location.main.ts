@@ -89,7 +89,12 @@ import {draftQueryParameters, getDraftQueryParameters} from './reducers/query-tr
 import {chytListParams, getGhytListPreparedState} from './reducers/chyt/url-mapping';
 
 import type {PathParameters} from '../store/location';
-import {flowComputationsParams, flowParams, flowWorkdersParams} from './reducers/flow/url-mapping';
+import {
+    flowComputationParams,
+    flowComputationsParams,
+    flowParams,
+    flowWorkdersParams,
+} from './reducers/flow/url-mapping';
 import {FlowTab} from './reducers/flow/filters';
 
 // prettier-ignore
@@ -170,7 +175,7 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     [`/*/${Page.QUERIES}/*`, [draftQueryParameters, getDraftQueryParameters]],
 
     [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}`, [flowComputationsParams]],
-    [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*`, [flowComputationsParams]],
+    [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*`, [flowComputationParams]],
     [`/*/${Page.FLOWS}/${FlowTab.WORKERS}`, [flowWorkdersParams]],
     [`/*/${Page.FLOWS}/*`, [flowParams]],
 

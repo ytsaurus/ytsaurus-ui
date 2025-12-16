@@ -559,7 +559,7 @@ export type FlowExecuteTypes = {
         BodyType: {
             body?: {computation_id: string};
         };
-        ResponseType: FlowComputationDetails;
+        ResponseType: FlowComputationDetailsType;
     };
     'describe-computations': {
         ParamsType: {
@@ -589,9 +589,25 @@ export type FlowExecuteTypes = {
     };
 };
 
-export type FlowComputationDetails = FlowComputationType & {
-    partitions: Array<FlowPartition>;
+export type FlowComputationDetailsType = FlowComputationType & {
+    partitions: Array<FlowComputationPartitionType>;
     performance_metrics: Record<string, FlowComputationPerformanceMetrics>;
+};
+
+export type FlowComputationPartitionType = {
+    bytes_per_second: number;
+    computation_id: string;
+    cpu_usage: number;
+    current_job_id: string;
+    current_worker_address: string;
+    current_worker_incarnation_id: stringF;
+    memory_usage: number;
+    messages_per_second: number;
+    partition_id: string;
+    state: FlowPartitionStateType;
+    status: FlowNodeStatusType;
+    lower_key: Array<number>;
+    upper_key: Array<number>;
 };
 
 export type FlowComputationPerformanceMetrics = {
@@ -677,14 +693,13 @@ export type FlowComputationType = FlowNodeBase &
         };
         partitions_stats?: {
             count: number;
-            count_by_state?: Record<
-                'completed' | 'executing' | 'transient' | 'interrupted',
-                number | undefined
-            >;
+            count_by_state?: Record<FlowPartitionStateType, number | undefined>;
         };
         group_by_schema_str: string;
         epoch_per_second: number;
     };
+
+export type FlowPartitionStateType = 'completed' | 'executing' | 'transient' | 'interrupted';
 
 export type FlowNodeStatusType =
     | 'minimum'
