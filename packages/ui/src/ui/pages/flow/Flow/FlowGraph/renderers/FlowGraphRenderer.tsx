@@ -4,7 +4,7 @@ import React from 'react';
 import {Dialog, Flex, Icon, Text} from '@gravity-ui/uikit';
 import {SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 
-import {FlowMessage, FlowNodeStatus} from '../../../../../../shared/yt-types';
+import {FlowMessageType, FlowNodeStatusType} from '../../../../../../shared/yt-types';
 import format from '../../../../../common/hammer/format';
 import {YTErrorBlock} from '../../../../../components/Block/Block';
 import {
@@ -129,7 +129,7 @@ function FlowMessageItemExpandable({
     errorType,
     initialExpanded,
 }: {
-    item: FlowMessage;
+    item: FlowMessageType;
     errorType?: 'alert';
     initialExpanded: boolean;
 }) {
