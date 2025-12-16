@@ -12,13 +12,17 @@ import {
     useTable,
 } from '../../../../components/DataTableGravity';
 import {YTErrorBlock} from '../../../../components/Error/Error';
+import Link from '../../../../components/Link/Link';
 import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {useFlowExecuteQuery} from '../../../../store/api/yt';
+import {FlowTab} from '../../../../store/reducers/flow/filters';
 import {useFlowComputationsNameFilter} from '../../../../store/reducers/flow/filters.hooks';
 import {useSelector} from '../../../../store/redux-hooks';
+import {getFlowPipelinePath} from '../../../../store/selectors/flow/filters';
 import {getCluster} from '../../../../store/selectors/global/cluster';
+import {makeFlowLink} from '../../../../utils/app-url';
 import {FlowNodeStatus} from '../FlowGraph/renderers/FlowGraphRenderer';
 import './FlowComputations.scss';
 import i18n from './i18n';
@@ -114,6 +118,7 @@ function useFlowComputationsTableData(pipeline_path: string) {
 type FlowComputationsColumnDef = tanstack.ColumnDef<FlowComputationType>;
 
 function useFlowComputationsColumn() {
+    const path = useSelector(getFlowPipelinePath);
     const res = React.useMemo(() => {
         const columns: Array<FlowComputationsColumnDef> = [
             {
@@ -121,7 +126,21 @@ function useFlowComputationsColumn() {
                 header: () => i18n('name'),
                 size: 400,
                 cell: ({row: {original: item}}) => {
-                    return <TableCell>{item.name}</TableCell>;
+                    return (
+                        <TableCell>
+                            <Link
+                                url={makeFlowLink({
+                                    path,
+                                    tab: FlowTab.COMPUTATIONS,
+                                    computation: item.name,
+                                })}
+                                routed
+                                routedPreserveLocation
+                            >
+                                {item.name}
+                            </Link>
+                        </TableCell>
+                    );
                 },
                 enableColumnFilter: false,
                 enableHiding: false,
@@ -209,6 +228,6 @@ function useFlowComputationsColumn() {
         ];
 
         return {columns};
-    }, []);
+    }, [path]);
     return res;
 }
