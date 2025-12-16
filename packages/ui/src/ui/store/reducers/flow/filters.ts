@@ -5,6 +5,8 @@ export type FlowFiltersState = {
 
     computationsNameFilter: string;
     workersNameFilter: string;
+
+    currentComputation: string;
 };
 
 export const initialState: FlowFiltersState = {
@@ -12,6 +14,8 @@ export const initialState: FlowFiltersState = {
 
     computationsNameFilter: '',
     workersNameFilter: '',
+
+    currentComputation: '',
 };
 
 export const FlowTab = {

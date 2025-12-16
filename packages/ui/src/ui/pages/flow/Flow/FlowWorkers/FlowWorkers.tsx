@@ -1,6 +1,6 @@
-import React from 'react';
 import cn from 'bem-cn-lite';
 import moment from 'moment';
+import React from 'react';
 
 import {FlowWorkerData} from '../../../../../shared/yt-types';
 import format from '../../../../common/hammer/format';
