@@ -127,10 +127,23 @@ format['NumberPerSecond'] = function (value, settings) {
     }
 };
 
+
+format['NumberWithSuffix'] = function (value, settings) {
+    const digits = parseSetting(settings, 'digits', 2);
+    const NAMES = ['', ' K', ' M', ' G', ' T', ' P', ' E'];
+ 
+    return formatWithSuffixes({value, digits, NAMES, DIVIDER: 1000});
+};
+
 format['Bytes'] = function (value, settings) {
-    let digits = parseSetting(settings, 'digits', 2);
-    const defaultPostfix = parseSetting(settings, 'defaultPostfix', 'B');
-    const NAMES = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB'];
+    const digits = parseSetting(settings, 'digits', 2);
+    const NAMES = [' B', ' KiB', ' MiB', ' GiB', ' TiB', ' PiB', ' EiB'];
+ 
+    return formatWithSuffixes({value, digits, NAMES, DIVIDER: 1024});
+};
+
+function formatWithSuffixes({value, digits, NAMES, DIVIDER}) {
+    const firstSuffix = NAMES[0];
     let len;
     let i;
 
@@ -139,18 +152,19 @@ format['Bytes'] = function (value, settings) {
         value = isNegative ? Math.abs(value) : value;
 
         // Divide bytes by 1024 until remainder is smaller than 1024 or list of names has ended
-        for (i = 0, len = NAMES.length; i < len - 1 && value >= 1024; i++, value /= 1024) {
+        for (i = 0, len = NAMES.length; i < len - 1 && value >= DIVIDER; i++, value /= DIVIDER) {
             continue;
         }
 
         digits = i === 0 ? 0 : digits;
 
         if (value === 0) {
-            return value.toFixed(digits) + ' ' + defaultPostfix;
+            return value.toFixed(digits) + firstSuffix;
         }
 
+
         const sign = isNegative ? '-' : '';
-        return sign + value.toFixed(digits) + ' ' + NAMES[i];
+        return sign + value.toFixed(digits) + NAMES[i];
     } else if (format.validString(value)) {
         try {
             value = new BigNumber(value);
@@ -163,8 +177,8 @@ format['Bytes'] = function (value, settings) {
             // Divide bytes by 1024 until remainder is smaller than 1024 or list of names has ended
             for (
                 i = 0, len = NAMES.length;
-                i < len - 1 && value.gte(1024);
-                i++, value = value.dividedBy(1024)
+                i < len - 1 && value.gte(DIVIDER);
+                i++, value = value.dividedBy(DIVIDER)
             ) {
                 continue;
             }
@@ -172,19 +186,19 @@ format['Bytes'] = function (value, settings) {
             digits = i === 0 ? 0 : digits;
 
             if (value === 0) {
-                return value.toFixed(digits) + ' ' + defaultPostfix;
+                return value.toFixed(digits) + firstSuffix;
             }
 
             const sign = isNegative ? '-' : '';
 
-            return sign + value.toFixed(digits) + ' ' + NAMES[i];
+            return sign + value.toFixed(digits) + NAMES[i];
         } catch (ex) {
             return format.NO_VALUE;
         }
     } else {
         return format.NO_VALUE;
     }
-};
+}
 
 format['BytesPerSecond'] = function (value, settings) {
     if (format.validNumber(value)) {

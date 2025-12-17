@@ -1,12 +1,80 @@
 const format = require('./format');
 
-function checkBytes(value, expected) {
-    expect(format.Bytes(value)).toEqual(expected);
-    expect(format.Bytes(String(value))).toEqual(expected);
-}
-
 describe('format', () => {
+    describe('NumberWithSuffix', () => {
+        function checkNumberWithSuffix(value, expected) {
+            expect(format.NumberWithSuffix(value)).toEqual(expected);
+            expect(format.NumberWithSuffix(String(value))).toEqual(expected);
+        }
+
+        it('<1000', () => {
+            checkNumberWithSuffix(999, '999');
+        });
+
+        it('K', () => {
+            checkNumberWithSuffix(2000, '2.00 K');
+            checkNumberWithSuffix(1000 * 999, '999.00 K');
+        });
+
+        it('M', () => {
+            checkNumberWithSuffix(1000 * 1000, '1.00 M');
+            checkNumberWithSuffix(1000 * 1000 * 999, '999.00 M');
+        });
+
+        it('G', () => {
+            checkNumberWithSuffix(1000 * 1000 * 1000, '1.00 G');
+            checkNumberWithSuffix(1000 * 1000 * 1000 * 999, '999.00 G');
+        });
+
+        it('T', () => {
+            checkNumberWithSuffix(1000 * 1000 * 1000 * 1000, '1.00 T');
+            checkNumberWithSuffix(1000 * 1000 * 1000 * 1000 * 999, '999.00 T');
+        });
+
+        it('P', () => {
+            checkNumberWithSuffix(1000 * 1000 * 1000 * 1000 * 1000, '1.00 P');
+            checkNumberWithSuffix(1000 * 1000 * 1000 * 1000 * 1000 * 999, '999.00 P');
+        });
+
+        it('E', () => {
+            checkNumberWithSuffix(1000 * 1000 * 1000 * 1000 * 1000 * 1000, '1.00 E');
+            checkNumberWithSuffix(1000 * 1000 * 1000 * 1000 * 1000 * 1000 * 999, '999.00 E');
+            checkNumberWithSuffix(1000 * 1000 * 1000 * 1000 * 1000 * 1000 * 1000 * 999, '999000.00 E');
+        });
+
+        describe('Negative', () => {
+            it('-999', () => {
+                checkNumberWithSuffix(-999, '-999');
+            });
+
+            it('-K', () => {
+                checkNumberWithSuffix(-2000, '-2.00 K');
+                checkNumberWithSuffix(-1000 * 999, '-999.00 K');
+            });
+
+            it('-M', () => {
+                checkNumberWithSuffix(-1000 * 1000, '-1.00 M');
+                checkNumberWithSuffix(-1000 * 1000 * 999, '-999.00 M');
+            });
+        });
+
+        describe('NaN', () => {
+            it('test', () => {
+                expect(format.NumberWithSuffix(null)).toBe(format.NO_VALUE);
+                expect(format.NumberWithSuffix(undefined)).toBe(format.NO_VALUE);
+                expect(format.NumberWithSuffix('abc')).toBe(format.NO_VALUE);
+                expect(format.NumberWithSuffix(NaN)).toBe(format.NO_VALUE);
+                expect(format.NumberWithSuffix('')).toBe(format.NO_VALUE);
+            });
+        });
+    });
+
     describe('Bytes', () => {
+        function checkBytes(value, expected) {
+            expect(format.Bytes(value)).toEqual(expected);
+            expect(format.Bytes(String(value))).toEqual(expected);
+        }
+
         it('bytes', () => {
             checkBytes(1000, '1000 B');
             checkBytes(1000, '1000 B');
