@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/ytsaurus/ytsaurus-ui/compare/interface-helpers-v1.0.2...interface-helpers-v1.1.0) (2025-12-17)
+
+
+### Features
+
+* **interface-helpers:** add format.NumberWithSuffix ([c254883](https://github.com/ytsaurus/ytsaurus-ui/commit/c254883b2f8d5baa8df6c1cf03d03483ae7251e7))
+* **interface-helpers:** add format.NumberWithSuffix ([0080c7d](https://github.com/ytsaurus/ytsaurus-ui/commit/0080c7d5caa0a3345233e20eb0d8cdac10481a54))
+
 ## [1.0.2](https://github.com/ytsaurus/ytsaurus-ui/compare/interface-helpers-v1.0.1...interface-helpers-v1.0.2) (2025-09-18)
 
 
