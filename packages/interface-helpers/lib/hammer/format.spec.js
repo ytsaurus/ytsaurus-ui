@@ -47,12 +47,12 @@ describe('format', () => {
                 checkNumberWithSuffix(-999, '-999');
             });
 
-            it('-K', () => {
+            it('-K ', () => {
                 checkNumberWithSuffix(-2000, '-2.00 K');
                 checkNumberWithSuffix(-1000 * 999, '-999.00 K');
             });
 
-            it('-M', () => {
+            it('-M ', () => {
                 checkNumberWithSuffix(-1000 * 1000, '-1.00 M');
                 checkNumberWithSuffix(-1000 * 1000 * 999, '-999.00 M');
             });
