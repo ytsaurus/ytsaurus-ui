@@ -1,17 +1,18 @@
-import {Flex, Text} from '@gravity-ui/uikit';
+import { Flex, Text } from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
-import {useRouteMatch} from 'react-router';
-import {FlowComputationType} from '../../../../../shared/yt-types';
+import { useRouteMatch } from 'react-router';
+import { FlowComputationType } from '../../../../../shared/yt-types';
 import CollapsibleSection from '../../../../components/CollapsibleSection/CollapsibleSection';
-import {YTErrorBlock} from '../../../../components/Error/Error';
-import {useFlowExecuteQuery} from '../../../../store/api/yt';
-import {filtersSlice} from '../../../../store/reducers/flow/filters';
-import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-import {getFlowPipelinePath} from '../../../../store/selectors/flow/filters';
-import {FlowMessagesContent, FlowNodeStatus} from '../FlowGraph/renderers/FlowGraphRenderer';
+import { YTErrorBlock } from '../../../../components/Error/Error';
+import { useFlowExecuteQuery } from '../../../../store/api/yt';
+import { filtersSlice } from '../../../../store/reducers/flow/filters';
+import { useDispatch, useSelector } from '../../../../store/redux-hooks';
+import { getFlowPipelinePath } from '../../../../store/selectors/flow/filters';
+import { FlowMessagesContent, FlowNodeStatus } from '../FlowGraph/renderers/FlowGraphRenderer';
 import './FlowComputation.scss';
-import {FlowComputationPartitions} from './FlowComputationPartitions';
+import { FlowComputationPartitions } from './FlowComputationPartitions';
+import { FlowComputationPerformance } from './FlowComputationPerformance/FlowComputationPerformance';
 import i18n from './i18n';
 
 const block = cn('yt-flow-computation');
@@ -38,7 +39,7 @@ function FlowComputationDetails({computation}: {computation: string}) {
     const {data, error} = useFlowComputationData({computation, pipeline_path});
     return (
         <div className={block()}>
-            <Flex gap={1} alignItems="baseline">
+            <Flex className={block('header')} gap={1} alignItems="baseline">
                 <Text variant="header-2">{computation}</Text>
                 {data?.status ? (
                     <span>
@@ -47,6 +48,7 @@ function FlowComputationDetails({computation}: {computation: string}) {
                 ) : null}
             </Flex>
             {Boolean(error) && <YTErrorBlock error={error} />}
+            <FlowComputationPerformance data={data} />
             <div className={block('messages')}>
                 <FlowComputationMessages messages={data?.messages} />
             </div>
