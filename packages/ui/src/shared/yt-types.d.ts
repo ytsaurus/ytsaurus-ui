@@ -607,19 +607,19 @@ export type FlowComputationPartitionType = {
     partition_id: string;
     state: FlowPartitionStateType;
     status: FlowNodeStatusType;
-    lower_key: Array<number>;
-    upper_key: Array<number>;
+    lower_key: string;
+    upper_key: string;
 };
 
 export type FlowComputationPerformanceMetrics = {
     bytes_per_second: number;
-    bytes_per_second_example_partition: string;
     cpu_usage: number;
-    cpu_usage_example_partition: string;
     memory_usage: number;
-    memory_usage_example_partition: string;
     messages_per_second: 0;
-    messages_per_second_example_partition: string;
+    bytes_per_second_example_partition?: string;
+    cpu_usage_example_partition?: string;
+    memory_usage_example_partition?: string;
+    messages_per_second_example_partition?: string;
 };
 
 export type FlowDescribeWorkersData = {

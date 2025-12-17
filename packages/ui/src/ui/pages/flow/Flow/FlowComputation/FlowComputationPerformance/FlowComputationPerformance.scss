@@ -1,0 +1,11 @@
+.yt-flow-computation-performance {
+    &__block {
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid var(--g-color-line-generic);
+    }
+
+    &__header {
+        font-weight: var(--yt-font-weight-bold);
+    }
+}
