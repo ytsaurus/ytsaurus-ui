@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.15.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.14.0...javascript-wrapper-v0.15.0) (2025-12-17)
+
+
+### Features
+
+* **interface-helpers:** add format.NumberWithSuffix ([0080c7d](https://github.com/ytsaurus/ytsaurus-ui/commit/0080c7d5caa0a3345233e20eb0d8cdac10481a54))
+
 ## [0.14.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.13.0...javascript-wrapper-v0.14.0) (2025-08-08)
 
 
