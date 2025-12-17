@@ -43,17 +43,24 @@ export function makeFlowLink({
     cluster,
     tab = FlowTab.GRAPH,
     computation,
+    partitionIdFilter,
 }: {
     path: string;
     cluster?: string;
     tab?: FlowTabType;
     computation?: string;
+    partitionIdFilter?: string;
 }) {
     let pathname = `/${cluster || YT.cluster}/${Page.FLOWS}/${tab}`;
 
+    const params = new URLSearchParams({path});
+
     if (tab === FlowTab.COMPUTATIONS && computation) {
         pathname += `/${encodeURIComponent(computation)}`;
+        if (partitionIdFilter) {
+            params.append('partition', partitionIdFilter);
+        }
     }
 
-    return `${pathname}?path=${path}`;
+    return `${pathname}?${params}`;
 }
