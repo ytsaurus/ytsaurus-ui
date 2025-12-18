@@ -39,14 +39,7 @@ function FlowComputationDetails({computation}: {computation: string}) {
     const {data, error} = useFlowComputationData({computation, pipeline_path});
     return (
         <div className={block()}>
-            <Flex className={block('header')} gap={1} alignItems="baseline">
-                <Text variant="header-2">{computation}</Text>
-                {data?.status ? (
-                    <span>
-                        <FlowNodeStatus status={data.status} />{' '}
-                    </span>
-                ) : null}
-            </Flex>
+            <FlowEntityTitle title={computation} status={data?.status} />
             {Boolean(error) && <YTErrorBlock error={error} />}
             <FlowComputationPerformance data={data} />
             <div className={block('messages')}>
