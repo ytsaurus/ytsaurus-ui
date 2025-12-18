@@ -49,6 +49,7 @@ export default class Button extends Component<ButtonProps> {
             tooltipProps,
             className,
             inlineMargins,
+            withTooltip: _withTooltip,
             ...buttonProps
         } = this.props;
 
