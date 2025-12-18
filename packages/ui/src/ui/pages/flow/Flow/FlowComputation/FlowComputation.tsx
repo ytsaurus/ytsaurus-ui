@@ -1,4 +1,3 @@
-import {Flex, Text} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {Route, Switch, useRouteMatch} from 'react-router';
