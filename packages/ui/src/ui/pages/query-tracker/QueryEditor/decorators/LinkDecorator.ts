@@ -2,7 +2,7 @@ import * as monaco from 'monaco-editor';
 import {getClustersAndPaths} from '../../../../libs/monaco-yql-languages/helpers/getClusterAndPath';
 import {QueryEngine} from '../../../../../shared/constants/engines';
 import {BaseDecorator} from './BaseDecorator';
-import {CommandKey} from '../../../../packages/ya-timeline/lib/utils';
+import {CommandKey} from '../../../../utils/keyboard';
 import isEqual_ from 'lodash/isEqual';
 
 type Link = {

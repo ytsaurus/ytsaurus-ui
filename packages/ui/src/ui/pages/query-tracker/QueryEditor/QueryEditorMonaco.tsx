@@ -22,10 +22,7 @@ import {LinkDecorator} from './decorators/LinkDecorator';
 import {LineDecoration} from './decorators/LineDecoration';
 import {ErrorDecorator} from './decorators/ErrorDecorator';
 import {getMonacoConfig} from './getMonacoConfig';
-import {
-    checkControlCommandKey,
-    getControlCommandKey,
-} from '../../../packages/ya-timeline/lib/utils';
+import {checkControlCommandKey, getControlCommandKey} from '../../../utils/keyboard';
 import {openPath} from '../../../store/actions/query-tracker/queryNavigation';
 
 const b = cn('yq-query-editor-monaco');
