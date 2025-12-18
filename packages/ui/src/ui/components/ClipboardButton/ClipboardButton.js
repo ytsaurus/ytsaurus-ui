@@ -102,6 +102,7 @@ export default class ClipboardButton extends Component {
             className,
             visibleOnRowHover,
             inlineMargins,
+            hotkeyScope: _x,
             ...buttonProps
         } = this.props;
 
