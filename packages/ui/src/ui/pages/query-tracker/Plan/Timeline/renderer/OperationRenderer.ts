@@ -1,8 +1,7 @@
-import {yaTimelineConfig} from '../../../../../packages/ya-timeline';
-import {Hitbox} from '../../../../../packages/ya-timeline/components/Events/AbstractEventRenderer';
 import {duration as calcDuration} from '../../utils';
-import {AbstractEventRenderer, TimelineEvent} from '@gravity-ui/timeline';
+import {AbstractEventRenderer, Hitbox, TimelineEvent} from '@gravity-ui/timeline';
 import {OperationTimeline} from '../utils';
+import {getCSSPropertyValue} from '../../../../../utils/get-css-color';
 
 const GROUP_HEIGHT = 16;
 const MIN_EVENT_WIDTH = 4;
@@ -10,18 +9,32 @@ const GROUP_BORDER_THICKNESS = 2;
 const TRIANGLE_HEIGHT = 5;
 const TRIANGLE_WIDTH = 10;
 
+const COUNTER_FONT_COLOR = '#111';
+const COUNTER_PADDING = 5;
+const COUNTER_FONT_CENTER_OFFSET = 4;
+const TRACK_HEIGHT = 25;
+const SELECTION_OUTLINE_COLOR = '#08F';
+const SELECTION_OUTLINE_THICKNESS = 5;
+
+function resolveCssValue(value: string): string {
+    if (!value) return value;
+
+    if (value.startsWith('var(') && value.endsWith(')')) {
+        const name = value.substring('var('.length, value.length - ')'.length);
+        return getCSSPropertyValue(name) || name;
+    }
+
+    return value;
+}
+
 function renderEventDuration(
     ctx: CanvasRenderingContext2D,
     duration: string,
     x: number,
     y: number,
 ): void {
-    ctx.fillStyle = yaTimelineConfig.resolveCssValue(yaTimelineConfig.COUNTER_FONT_COLOR);
-    ctx.fillText(
-        duration,
-        x + yaTimelineConfig.COUNTER_PADDING,
-        y + yaTimelineConfig.COUNTER_FONT_CENTER_OFFSET,
-    );
+    ctx.fillStyle = resolveCssValue(COUNTER_FONT_COLOR);
+    ctx.fillText(duration, x + COUNTER_PADDING, y + COUNTER_FONT_CENTER_OFFSET);
 }
 
 function calcDurationFormat(from?: number, to?: number) {
@@ -91,7 +104,7 @@ export class OperationRenderer extends AbstractEventRenderer {
                 if (i === Object.keys(event.colors).length - 1) {
                     eventWidth = Math.max(width * event.colors[i].percentage, MIN_EVENT_WIDTH);
                 }
-                ctx.fillStyle = yaTimelineConfig.resolveCssValue(event.colors[i].color);
+                ctx.fillStyle = resolveCssValue(event.colors[i].color);
                 ctx.fillRect(progress, y0, eventWidth, height);
                 progress += eventWidth;
                 totalWidth += eventWidth;
@@ -103,36 +116,33 @@ export class OperationRenderer extends AbstractEventRenderer {
                     y0,
                     width: totalWidth || width,
                     height,
-                    color: yaTimelineConfig.resolveCssValue(event.borderColor),
+                    color: resolveCssValue(event.borderColor),
                 });
 
-                ctx.strokeStyle = yaTimelineConfig.resolveCssValue(event.borderColor);
+                ctx.strokeStyle = resolveCssValue(event.borderColor);
                 ctx.lineWidth = GROUP_BORDER_THICKNESS;
                 ctx.strokeRect(x0, y0, totalWidth || width, height);
 
                 if (event.backgroundColor && event.isExpanded) {
-                    const backgroundMargin = (yaTimelineConfig.TRACK_HEIGHT - height) / 3;
-                    ctx.fillStyle = yaTimelineConfig.resolveCssValue(event.backgroundColor);
+                    const backgroundMargin = (TRACK_HEIGHT - height) / 3;
+                    ctx.fillStyle = resolveCssValue(event.backgroundColor);
                     ctx.fillRect(
                         x0 - backgroundMargin,
                         y0 - backgroundMargin,
                         (totalWidth || width) + backgroundMargin * 2,
-                        yaTimelineConfig.TRACK_HEIGHT * Object.keys(event.colors).length -
-                            backgroundMargin,
+                        TRACK_HEIGHT * Object.keys(event.colors).length - backgroundMargin,
                     );
                 }
             }
         } else {
             const color = event.colors[event.trackIndex]?.color;
-            ctx.fillStyle = yaTimelineConfig.resolveCssValue(color);
+            ctx.fillStyle = resolveCssValue(color);
 
             ctx.fillRect(x0, y0, width, height);
         }
         if (isSelected) {
-            ctx.strokeStyle = yaTimelineConfig.resolveCssValue(
-                yaTimelineConfig.SELECTION_OUTLINE_COLOR,
-            );
-            ctx.lineWidth = yaTimelineConfig.SELECTION_OUTLINE_THICKNESS;
+            ctx.strokeStyle = resolveCssValue(SELECTION_OUTLINE_COLOR);
+            ctx.lineWidth = SELECTION_OUTLINE_THICKNESS;
             ctx.strokeRect(x0, y0, totalWidth || width, height);
         }
         if (duration) {
