@@ -1,8 +1,10 @@
 import {Flex, Text} from '@gravity-ui/uikit';
-import React from 'react';
-import {FlowNodeStatus} from '../Flow/FlowGraph/renderers/FlowGraphRenderer';
-import {FlowNodeStatusType} from '../../../../shared/yt-types';
 import cn from 'bem-cn-lite';
+import React from 'react';
+import {FlowNodeStatusType, FlowPartitionStateType} from '../../../../shared/yt-types';
+import {FlowPartitionState} from '../../../pages/flow/flow-components/FlowPartitionState/FlowPartitionState';
+import {FlowNodeStatus} from '../../../pages/flow/Flow/FlowGraph/renderers/FlowGraphRenderer';
+import './FlowEntityHeader.scss';
 
 const block = cn('yt-flow-entity-header');
 
@@ -10,10 +12,12 @@ export function FlowEntityTitle({
     className,
     title,
     status,
+    state,
 }: {
     className?: string;
     title: string;
-    status?: FlowNodeStatusType;
+    status: FlowNodeStatusType;
+    state?: FlowPartitionStateType;
 }) {
     return (
         <Flex className={block(null, className)} gap={1} alignItems="baseline">
@@ -23,6 +27,7 @@ export function FlowEntityTitle({
                     <FlowNodeStatus status={status} />{' '}
                 </span>
             ) : null}
+            {state ? <FlowPartitionState state={state} /> : null}
         </Flex>
     );
 }
