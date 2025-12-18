@@ -1,4 +1,3 @@
-import {Flex} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {
@@ -18,16 +17,10 @@ import {YTText} from '../../../../components/Text/Text';
 import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
+import {FlowPartitionState} from '../../../../pages/flow/flow-components/FlowPartitionState/FlowPartitionState';
 import {useFlowPartitionIdFilter} from '../../../../store/reducers/flow/filters.hooks';
 import {FlowNodeStatus} from '../FlowGraph/renderers/FlowGraphRenderer';
 import './FlowComputationPartitions.scss';
-import {
-    CircleCheck,
-    CirclePlay,
-    CircleXmark,
-    CircleArrowRight,
-    CircleQuestion,
-} from '@gravity-ui/icons';
 import i18n from './i18n';
 
 const block = cn('yt-flow-computation-partitions');
@@ -257,25 +250,3 @@ function useFlowWorkersColumns() {
     return res;
 }
 
-const STATE_ICON = {
-    completed: {icon: <CircleCheck />, color: 'success'},
-    executing: {icon: <CirclePlay />, color: 'info'},
-    transient: {icon: <CircleArrowRight />, color: 'secondary'},
-    interrupted: {icon: <CircleXmark />, color: 'danger'},
-} as const;
-
-function FlowPartitionState({state}: Pick<FlowComputationPartitionType, 'state'>) {
-    const {icon, color} = STATE_ICON[state] ?? {
-        icon: <CircleQuestion />,
-        color: 'warning' as const,
-    };
-
-    return (
-        <Flex alignItems="center" gap={1}>
-            <YTText color={color}>
-                <div className={block('state-icon')}>{icon}</div>
-            </YTText>
-            <YTText className={block('state-text')}>{state}</YTText>
-        </Flex>
-    );
-}
