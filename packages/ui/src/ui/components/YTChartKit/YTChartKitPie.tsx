@@ -34,7 +34,7 @@ export function YTChartKitPie({format: fmt = 'Number', ...rest}: YTChartKitPiePr
                             return {
                                 value,
                                 name,
-                                label: `${format.Percent(value / sum)}`,
+                                label: `${format.Percent((100 * value) / sum)}`,
                             };
                         }),
                     },
@@ -49,7 +49,7 @@ export function YTChartKitPie({format: fmt = 'Number', ...rest}: YTChartKitPiePr
                     const {value} = data as PieSeriesData;
                     return (
                         <>
-                            <b>{format.Percent(value / sum)}</b>&nbsp;&nbsp;&nbsp;
+                            <b>{format.Percent((100 * value!) / sum)}</b>&nbsp;&nbsp;&nbsp;
                             {format[fmt](value)}
                         </>
                     );
