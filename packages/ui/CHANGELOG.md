@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.4.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.3.1...ui-v3.4.0) (2025-12-18)
+
+
+### Features
+
+* **AiChat:** add agents by engine [YTFRONT-5381] ([32b26ff](https://github.com/ytsaurus/ytsaurus-ui/commit/32b26ff1e3cce2860f889a1c2a67743d4aabaabc))
+* **interface-helpers:** add format.NumberWithSuffix ([0080c7d](https://github.com/ytsaurus/ytsaurus-ui/commit/0080c7d5caa0a3345233e20eb0d8cdac10481a54))
+
+
+### Bug Fixes
+
+* **Statistics:** better value formatting for YTChartKitPie [YTFRONT-5304] ([a7ca6cf](https://github.com/ytsaurus/ytsaurus-ui/commit/a7ca6cfc5d93956cdbf33ba393f4f894622e6dcf))
+
 ## [3.3.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.3.0...ui-v3.3.1) (2025-12-12)
 
 
