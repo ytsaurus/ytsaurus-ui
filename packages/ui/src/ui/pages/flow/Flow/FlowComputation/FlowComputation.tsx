@@ -1,19 +1,18 @@
-import { Flex, Text } from '@gravity-ui/uikit';
+import {Flex, Text} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
-import { useRouteMatch } from 'react-router';
-import { FlowComputationType } from '../../../../../shared/yt-types';
-import CollapsibleSection from '../../../../components/CollapsibleSection/CollapsibleSection';
-import { YTErrorBlock } from '../../../../components/Error/Error';
-import { useFlowExecuteQuery } from '../../../../store/api/yt';
-import { filtersSlice } from '../../../../store/reducers/flow/filters';
-import { useDispatch, useSelector } from '../../../../store/redux-hooks';
-import { getFlowPipelinePath } from '../../../../store/selectors/flow/filters';
-import { FlowMessagesContent, FlowNodeStatus } from '../FlowGraph/renderers/FlowGraphRenderer';
+import {Route, Switch, useRouteMatch} from 'react-router';
+import {YTErrorBlock} from '../../../../components/Error/Error';
+import {FlowEntityTitle} from '../../../../pages/flow/flow-components/FlowEntityHeader';
+import {FlowMessagesCollapsible} from '../../../../pages/flow/flow-components/FlowMessagesCollapsible/FlowMessagesCollapsible';
+import {useFlowExecuteQuery} from '../../../../store/api/yt';
+import {filtersSlice} from '../../../../store/reducers/flow/filters';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
+import {getFlowPipelinePath} from '../../../../store/selectors/flow/filters';
 import './FlowComputation.scss';
-import { FlowComputationPartitions } from './FlowComputationPartitions';
-import { FlowComputationPerformance } from './FlowComputationPerformance/FlowComputationPerformance';
-import i18n from './i18n';
+import {FlowComputationPartitions} from './FlowComputationPartitions';
+import {FlowComputationPerformance} from './FlowComputationPerformance/FlowComputationPerformance';
+import {FlowPartition} from './FlowPartition/FlowPartition';
 
 const block = cn('yt-flow-computation');
 
@@ -43,7 +42,7 @@ function FlowComputationDetails({computation}: {computation: string}) {
             {Boolean(error) && <YTErrorBlock error={error} />}
             <FlowComputationPerformance data={data} />
             <div className={block('messages')}>
-                <FlowComputationMessages messages={data?.messages} />
+                <FlowMessagesCollapsible messages={data?.messages} />
             </div>
             <FlowComputationPartitions data={data} />
         </div>
@@ -66,12 +65,4 @@ function useFlowComputationData({
             computation_id: computation,
         },
     });
-}
-
-function FlowComputationMessages({messages}: {messages?: FlowComputationType['messages']}) {
-    return messages?.length ? (
-        <CollapsibleSection name={i18n('messages')}>
-            <FlowMessagesContent data={messages} />
-        </CollapsibleSection>
-    ) : null;
 }
