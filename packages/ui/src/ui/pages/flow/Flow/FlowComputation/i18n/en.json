@@ -5,7 +5,6 @@
   "key-range": "Key/Range",
   "memory-usage": "Memory usage",
   "message-per-second": "Message per second",
-  "messages": "Messages",
   "partition": "Partition",
   "search-partition-by-id": "Search partition by Id...",
   "state": "State",
