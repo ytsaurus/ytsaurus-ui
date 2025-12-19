@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.15.1](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.15.0...javascript-wrapper-v0.15.1) (2025-12-19)
+
+
+### Bug Fixes
+
+* **javascript-wrapper:** eslint fixes ([420a384](https://github.com/ytsaurus/ytsaurus-ui/commit/420a38412dfee10f4ca5f0997eceba35d1073017))
+
 ## [0.15.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.14.0...javascript-wrapper-v0.15.0) (2025-12-17)
 
 
