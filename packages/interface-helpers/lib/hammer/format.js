@@ -127,18 +127,17 @@ format['NumberPerSecond'] = function (value, settings) {
     }
 };
 
-
 format['NumberWithSuffix'] = function (value, settings) {
     const digits = parseSetting(settings, 'digits', 2);
     const NAMES = ['', ' K', ' M', ' G', ' T', ' P', ' E'];
- 
+
     return formatWithSuffixes({value, digits, NAMES, DIVIDER: 1000});
 };
 
 format['Bytes'] = function (value, settings) {
     const digits = parseSetting(settings, 'digits', 2);
     const NAMES = [' B', ' KiB', ' MiB', ' GiB', ' TiB', ' PiB', ' EiB'];
- 
+
     return formatWithSuffixes({value, digits, NAMES, DIVIDER: 1024});
 };
 
@@ -161,7 +160,6 @@ function formatWithSuffixes({value, digits, NAMES, DIVIDER}) {
         if (value === 0) {
             return value.toFixed(digits) + firstSuffix;
         }
-
 
         const sign = isNegative ? '-' : '';
         return sign + value.toFixed(digits) + NAMES[i];
