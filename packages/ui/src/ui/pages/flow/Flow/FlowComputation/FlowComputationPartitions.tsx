@@ -13,12 +13,20 @@ import {
     tanstack,
     useTable,
 } from '../../../../components/DataTableGravity';
+import Link from '../../../../components/Link/Link';
 import {YTText} from '../../../../components/Text/Text';
 import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {FlowPartitionState} from '../../../../pages/flow/flow-components/FlowPartitionState/FlowPartitionState';
+import {FlowTab} from '../../../../store/reducers/flow/filters';
 import {useFlowPartitionIdFilter} from '../../../../store/reducers/flow/filters.hooks';
+import {useSelector} from '../../../../store/redux-hooks';
+import {
+    getFlowCurrentComputation,
+    getFlowPipelinePath,
+} from '../../../../store/selectors/flow/filters';
+import {makeFlowLink} from '../../../../utils/app-url';
 import {FlowNodeStatus} from '../FlowGraph/renderers/FlowGraphRenderer';
 import './FlowComputationPartitions.scss';
 import i18n from './i18n';
@@ -108,7 +116,11 @@ function useFlowWorkersColumns() {
                 header: () => i18n('partition'),
                 size: 400,
                 cell: ({row: {original: item}}) => {
-                    return <TableCell>{item.partition_id}</TableCell>;
+                    return (
+                        <TableCell>
+                            <PartitionIdCell id={item.partition_id} />
+                        </TableCell>
+                    );
                 },
                 enableColumnFilter: false,
                 enableHiding: false,
@@ -250,3 +262,16 @@ function useFlowWorkersColumns() {
     return res;
 }
 
+function PartitionIdCell({id}: {id: string}) {
+    const path = useSelector(getFlowPipelinePath);
+    const computation = useSelector(getFlowCurrentComputation);
+
+    return (
+        <Link
+            url={makeFlowLink({path, computation, partition: id, tab: FlowTab.COMPUTATIONS})}
+            routed
+        >
+            {id}
+        </Link>
+    );
+}
