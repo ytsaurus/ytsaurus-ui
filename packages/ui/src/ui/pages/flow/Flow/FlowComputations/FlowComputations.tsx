@@ -1,6 +1,6 @@
 import cn from 'bem-cn-lite';
 import React from 'react';
-
+import {Route, Switch, useRouteMatch} from 'react-router';
 import {FlowComputationType} from '../../../../../shared/yt-types';
 import format from '../../../../common/hammer/format';
 import ClickableAttributesButton from '../../../../components/AttributesButton/ClickableAttributesButton';
@@ -23,6 +23,7 @@ import {useSelector} from '../../../../store/redux-hooks';
 import {getFlowPipelinePath} from '../../../../store/selectors/flow/filters';
 import {getCluster} from '../../../../store/selectors/global/cluster';
 import {makeFlowLink} from '../../../../utils/app-url';
+import {FlowComputation} from '../FlowComputation/FlowComputation';
 import {FlowNodeStatus} from '../FlowGraph/renderers/FlowGraphRenderer';
 import './FlowComputations.scss';
 import i18n from './i18n';
@@ -30,6 +31,26 @@ import i18n from './i18n';
 const block = cn('yt-flow-computations');
 
 export function FlowComputations({pipeline_path}: {pipeline_path: string}) {
+    const {path} = useRouteMatch();
+
+    return (
+        <Switch>
+            <Route
+                path={`${path}`}
+                exact
+                render={() => <FlowComputationsList pipeline_path={pipeline_path} />}
+            />
+            <Route
+                path={`${path}/:computation?`}
+                render={() => {
+                    return <FlowComputation />;
+                }}
+            />
+        </Switch>
+    );
+}
+
+export function FlowComputationsList({pipeline_path}: {pipeline_path: string}) {
     const {computationsNameFilter, setComputationsNameFilter} = useFlowComputationsNameFilter();
     return (
         <WithStickyToolbar
