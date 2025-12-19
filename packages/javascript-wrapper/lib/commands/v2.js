@@ -1,15 +1,15 @@
-var error = require('../utils/error.js');
-var utils = require('./utils.js');
+const error = require('../utils/error.js');
+const utils = require('./utils.js');
 
 // Operations
-var _operation = {};
+const _operation = {};
 
 _operation.configureStartedBy = function (commandSettings, parameters) {
     parameters.spec = parameters.spec || {};
 
     parameters.spec.started_by = {
         wrapper_version: 'JavaScript Wrapper',
-        command: ['yt.' + commandSettings.version + '.' + commandSettings.command]
+        command: ['yt.' + commandSettings.version + '.' + commandSettings.command],
     };
 };
 
@@ -18,79 +18,79 @@ module.exports = {
     startTransaction: {
         name: 'start_tx',
         method: 'POST',
-        dataType: 'json'
+        dataType: 'json',
     },
     pingTransaction: {
         name: 'ping_tx',
         method: 'POST',
-        dataType: 'text'
+        dataType: 'text',
     },
     abortTransaction: {
         name: 'abort_tx',
         method: 'POST',
-        dataType: 'text'
+        dataType: 'text',
     },
     commitTransaction: {
         name: 'commit_tx',
         method: 'POST',
-        dataType: 'text'
+        dataType: 'text',
     },
 
     // Cypress
     move: {
         name: 'move',
         method: 'POST',
-        dataType: 'text'
+        dataType: 'text',
     },
     create: {
         name: 'create',
         method: 'POST',
-        dataType: 'text'
+        dataType: 'text',
     },
     set: {
         name: 'set',
         method: 'PUT',
-        dataType: 'text'
+        dataType: 'text',
     },
     get: {
         name: 'get',
         method: 'GET',
-        dataType: 'json'
+        dataType: 'json',
     },
     list: {
         name: 'list',
         method: 'GET',
-        dataType: 'json'
+        dataType: 'json',
     },
     exists: {
         name: 'exists',
         method: 'GET',
-        dataType: 'json'
+        dataType: 'json',
     },
     remove: {
         name: 'remove',
         method: 'POST',
-        dataType: 'text'
+        dataType: 'text',
     },
     copy: {
         name: 'copy',
         method: 'POST',
-        dataType: 'text'
+        dataType: 'text',
     },
     link: {
         name: 'link',
         method: 'POST',
-        dataType: 'text'
+        dataType: 'text',
     },
     lock: {
         name: 'lock',
-        notImplemented: true
+        notImplemented: true,
     },
 
     // Files
     upload: {
         name: 'upload',
-        notImplemented: true
+        notImplemented: true,
     },
     download: {
         name: 'download',
@@ -98,17 +98,17 @@ module.exports = {
         dataType: 'text',
         heavy: true,
         headers: {
-            Accept: 'text/plain'
+            Accept: 'text/plain',
         },
         prepareParameters: function (parameters) {
             parameters['suppress_access_tracking'] = 'true';
 
             return parameters;
-        }
+        },
     },
     concatenate: {
         name: 'concatenate',
-        notImplemented: true
+        notImplemented: true,
     },
 
     // Tables
@@ -124,14 +124,14 @@ module.exports = {
             parameters['output_format'] = parameters['output_format'] || 'json';
 
             return parameters;
-        }
+        },
     },
-    write:  {
+    write: {
         name: 'write',
         method: 'PUT',
         dataType: 'text',
         headers: {
-            'Content-Type': 'application/octet-stream'
+            'Content-Type': 'application/octet-stream',
         },
         heavy: true,
         prepareData: utils.prepareInputRows,
@@ -139,41 +139,41 @@ module.exports = {
             parameters['input_format'] = parameters['input_format'] || 'json';
 
             return parameters;
-        }
+        },
     },
 
     // Groups, User, ACL
     addMember: {
         name: 'add_member',
         method: 'POST',
-        dataType: 'text'
+        dataType: 'text',
     },
     checkPermission: {
         name: 'check_permission',
         method: 'GET',
-        dataType: 'json'
+        dataType: 'json',
     },
     removeMember: {
         name: 'remove_member',
         method: 'POST',
-        dataType: 'text'
+        dataType: 'text',
     },
 
     // Operations
     abortOperation: {
         name: 'abort_op',
         method: 'POST',
-        dataType: 'text'
+        dataType: 'text',
     },
     resumeOperation: {
         name: 'resume_op',
         method: 'POST',
-        dataType: 'text'
+        dataType: 'text',
     },
     suspendOperation: {
         name: 'suspend_op',
         method: 'POST',
-        dataType: 'text'
+        dataType: 'text',
     },
     map: {
         name: 'map',
@@ -199,16 +199,16 @@ module.exports = {
             _operation.configureStartedBy(this, parameters);
 
             return parameters;
-        }
+        },
     },
     erase: {
         name: 'erase',
         method: 'POST',
-        dataType: 'text'
+        dataType: 'text',
     },
     mapReduce: {
         name: 'map_reduce',
-        notImplemented: true
+        notImplemented: true,
     },
     merge: {
         name: 'merge',
@@ -230,11 +230,11 @@ module.exports = {
             _operation.configureStartedBy(this, parameters);
 
             return parameters;
-        }
+        },
     },
     reduce: {
         name: 'reduce',
-        notImplemented: true
+        notImplemented: true,
     },
     remoteCopy: {
         name: 'remote_copy',
@@ -260,16 +260,16 @@ module.exports = {
             _operation.configureStartedBy(this, parameters);
 
             return parameters;
-        }
+        },
     },
     sort: {
         name: 'sort',
-        notImplemented: true
+        notImplemented: true,
     },
 
     // Other
     parseYPath: {
         name: 'parse_ypath',
-        notImplemented: true
-    }
+        notImplemented: true,
+    },
 };

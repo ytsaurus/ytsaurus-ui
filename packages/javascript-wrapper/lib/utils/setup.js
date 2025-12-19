@@ -1,63 +1,65 @@
 'use strict';
 
-var error = require('./error.js');
+const error = require('./error.js');
 
-var _options = {};
-var _globalSetup = {};
+const _options = {};
+const _globalSetup = {};
 
-var setup = {};
+const setup = {};
 
 setup.createOption = function (name, type, defaultValue) {
     _options[name] = {
         type: type,
-        defaultValue: defaultValue
+        defaultValue: defaultValue,
     };
 };
 
 setup.setGlobalOption = function (name, value) {
-    var option = _options[name];
+    const option = _options[name];
 
     if (typeof option === 'undefined') {
         throw new Error(error.prepare('unknown option "' + name + '"'));
     }
 
     if (typeof value !== option.type) {
-        throw new Error(error.prepare('"' + name + '" setup failed - expected type ' + option.type + '.'));
+        throw new Error(
+            error.prepare('"' + name + '" setup failed - expected type ' + option.type + '.'),
+        );
     }
 
     _globalSetup[name] = value;
 };
 
 setup.getLocalOption = function (localSetup, name) {
-    var option = _options[name];
+    const option = _options[name];
 
     if (typeof option === 'undefined') {
         throw new Error(error.prepare('unknown option "' + name + '"'));
     }
 
-    if (localSetup && typeof localSetup[name] === option.type ) {
-        return option.type === 'object' ?
-            Object.assign({}, option.defaultValue, localSetup[name]) :
-            localSetup[name];
+    if (localSetup && typeof localSetup[name] === option.type) {
+        return option.type === 'object'
+            ? Object.assign({}, option.defaultValue, localSetup[name])
+            : localSetup[name];
     }
 };
 
 setup.getGlobalOption = function (name) {
-    var option = _options[name];
+    const option = _options[name];
 
     if (typeof option === 'undefined') {
         throw new Error(error.prepare('unknown option "' + name + '"'));
     }
 
-    if (typeof _globalSetup[name] === option.type ) {
-        return option.type === 'object' ?
-            Object.assign({}, option.defaultValue, _globalSetup[name]) :
-            _globalSetup[name];
+    if (typeof _globalSetup[name] === option.type) {
+        return option.type === 'object'
+            ? Object.assign({}, option.defaultValue, _globalSetup[name])
+            : _globalSetup[name];
     }
 };
 
 setup.getDefaultOption = function (name) {
-    var option = _options[name];
+    const option = _options[name];
 
     if (typeof option === 'undefined') {
         throw new Error(error.prepare('unknown option "' + name + '"'));
@@ -67,29 +69,29 @@ setup.getDefaultOption = function (name) {
 };
 
 setup.getOption = function (localSetup, name) {
-    var option = _options[name];
+    const option = _options[name];
 
     if (typeof option === 'undefined') {
         throw new Error(error.prepare('unknown option "' + name + '"'));
     }
 
-    if (localSetup && typeof localSetup[name] === option.type ) {
-        return option.type === 'object' ?
-            Object.assign({}, option.defaultValue, localSetup[name]) :
-            localSetup[name];
+    if (localSetup && typeof localSetup[name] === option.type) {
+        return option.type === 'object'
+            ? Object.assign({}, option.defaultValue, localSetup[name])
+            : localSetup[name];
     }
 
-    if (typeof _globalSetup[name] === option.type ) {
-        return option.type === 'object' ?
-            Object.assign({}, option.defaultValue, _globalSetup[name]) :
-            _globalSetup[name];
+    if (typeof _globalSetup[name] === option.type) {
+        return option.type === 'object'
+            ? Object.assign({}, option.defaultValue, _globalSetup[name])
+            : _globalSetup[name];
     }
 
     return option.defaultValue;
 };
 
 setup.unsetGlobalOption = function (name) {
-    var option = _options[name];
+    const option = _options[name];
 
     if (typeof option === 'undefined') {
         throw new Error(error.prepare('unknown option "' + name + '"'));
@@ -131,7 +133,7 @@ setup.createOption('requestHeaders', 'object', {});
 
 setup.createOption('suppressAccessTracking', 'boolean', false);
 
-var btoa = function (string) {
+let btoa = function (string) {
     return Buffer(string).toString('base64');
 };
 
@@ -153,7 +155,7 @@ setup.createOption('encodedParametersSettings', 'object', {
 });
 
 setup.createOption('authentication', 'object', {
-    type: 'none'
+    type: 'none',
 });
 
 setup.createOption('dataType', 'string', '');

@@ -1,4 +1,4 @@
-var v3 = require('./v3');
+const v3 = require('./v3');
 
 module.exports = {
     // Transactions

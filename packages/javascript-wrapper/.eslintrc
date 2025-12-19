@@ -3,9 +3,16 @@
     "root": true,
     "rules": {
         "new-cap": 0,
-        "import/order": 0
+        "import/order": 0,
+        "import/dynamic-import-chunkname": [2, {
+            "importFunctions": ["dynamicImport"],
+            "webpackChunknameFormat": "[a-zA-Z-]+",
+            "allowEmpty": false
+        }],
     },
     "env": {
-        "jest": true
+        "jest": true,
+        "node": true,
+        "browser": true
     }
 }

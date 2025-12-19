@@ -15,9 +15,9 @@ function getSupportedCommands() {
 module.exports = function (settings) {
     'use strict';
 
-    var core = require('./core');
+    const core = require('./core');
 
-    var yt = {
+    const yt = {
         setup: require('./utils/setup.js'),
         codes: require('./commands/codes.js'),
         core: core,
@@ -34,18 +34,18 @@ module.exports = function (settings) {
 
     if (settings.exportBrowserModule && typeof window !== 'undefined') {
         // MODULES FOR BROWSERS
-        var define,
-            requirejsSupported = typeof window.define === 'function' && window.define.amd,
-            ymodulesSupported = typeof window.modules === 'object';
+        let define;
+        const requirejsSupported = typeof window.define === 'function' && window.define.amd;
+        const ymodulesSupported = typeof window.modules === 'object';
 
-        var provide = function (value) {
+        const provide = function (value) {
             return value;
         };
 
-        var unify = function (code) {
+        const unify = function (code) {
             if (ymodulesSupported) {
                 return code;
-            } else/* if (requirejsSupported) or global */ {
+            } /* else if (requirejsSupported) or global */ else {
                 return code.bind(null, provide);
             }
         };
@@ -63,11 +63,14 @@ module.exports = function (settings) {
         // For correct optimization RequereJS requires dependencies to be arrays of string literals,
         // also using named modules for compatibility
         // See docs http://requirejs.org/docs/optimization.html
-        define('yt', unify(function (provide) {
-            'use strict';
+        define(
+            'yt',
+            unify(function (provide) {
+                'use strict';
 
-            return provide(yt);
-        }));
+                return provide(yt);
+            }),
+        );
     }
 
     return yt;

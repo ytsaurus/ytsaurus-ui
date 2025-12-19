@@ -1,22 +1,22 @@
-var axios = require('axios');
+const axios = require('axios');
 
-var useInterceptors = require('./utils/interceptors.js');
-var meta = require('./utils/meta.js');
-var setup = require('./utils/setup.js');
-var error = require('./utils/error.js');
-var commands = require('./commands/index.js');
-var codes = require('./commands/codes.js');
+const useInterceptors = require('./utils/interceptors.js');
+const meta = require('./utils/meta.js');
+const setup = require('./utils/setup.js');
+const error = require('./utils/error.js');
+const commands = require('./commands/index.js');
+const codes = require('./commands/codes.js');
 
-var axiosInstance = useInterceptors(axios.create());
+const axiosInstance = useInterceptors(axios.create());
 
-var core = {};
+const core = {};
 
-var subsriptions = {};
+const subsriptions = {};
 
 core.subscribe = function (name, callback) {
     subsriptions[name] = subsriptions[name] || [];
 
-    var subscriptionIndex = subsriptions[name].indexOf(callback);
+    const subscriptionIndex = subsriptions[name].indexOf(callback);
 
     if (subscriptionIndex === -1) {
         subsriptions[name].push(callback);
@@ -24,7 +24,7 @@ core.subscribe = function (name, callback) {
 };
 
 core.unsubscribe = function (name, callback) {
-    var subscriptionIndex = subsriptions[name].indexOf(callback);
+    const subscriptionIndex = subsriptions[name].indexOf(callback);
 
     if (subscriptionIndex !== -1) {
         subsriptions[name].splice(subscriptionIndex, 1);
@@ -46,19 +46,19 @@ core._makeSubscribable = function (yt) {
 };
 
 function appendEncodedParameters(headers, localSetup, parameters) {
-    var settings = setup.getOption(localSetup, 'encodedParametersSettings');
-    var serializer = setup.getOption(localSetup, 'JSONSerializer');
+    const settings = setup.getOption(localSetup, 'encodedParametersSettings');
+    const serializer = setup.getOption(localSetup, 'JSONSerializer');
 
-    var encodedParameters = settings.encoder(serializer.stringify(parameters));
+    const encodedParameters = settings.encoder(serializer.stringify(parameters));
 
     if (encodedParameters.length > settings.maxCount * settings.maxSize) {
         throw new Error(error.prepare('Encoded parameters string is over size limit'));
     }
 
-    var from = 0;
-    var to = settings.maxSize;
-    var index = 0;
-    var chunk;
+    let from = 0;
+    let to = settings.maxSize;
+    let index = 0;
+    let chunk;
 
     while ((chunk = encodedParameters.slice(from, to)) !== '') {
         headers['X-YT-Parameters-' + index++] = chunk;
@@ -68,8 +68,8 @@ function appendEncodedParameters(headers, localSetup, parameters) {
 }
 
 function appendParametersHeaders(headers, localSetup, parameters) {
-    var encode = setup.getOption(localSetup, 'useEncodedParameters');
-    var serializer = setup.getOption(localSetup, 'JSONSerializer');
+    const encode = setup.getOption(localSetup, 'useEncodedParameters');
+    const serializer = setup.getOption(localSetup, 'JSONSerializer');
 
     if (encode) {
         appendEncodedParameters(headers, localSetup, parameters);
@@ -85,7 +85,7 @@ function prepareProtocol(localSetup) {
 }
 
 core._parseResponse = function (localSetup, data) {
-    var serializer = setup.getOption(localSetup, 'JSONSerializer');
+    const serializer = setup.getOption(localSetup, 'JSONSerializer');
 
     if (typeof data === 'string') {
         try {
@@ -101,12 +101,12 @@ core._makeSuccessHandler = function (localSetup) {
     return function (response) {
         core.notify('requestEnd', response.config);
 
-        var data =
+        const data =
             response.config.responseType === 'json'
                 ? core._parseResponse(localSetup, response.data)
                 : response.data;
 
-        var transformResponse =
+        const transformResponse =
             setup.getLocalOption(localSetup, 'transformResponse') ||
             (({parsedData}) => {
                 return parsedData;
@@ -152,13 +152,13 @@ core._makeErrorHandler = function (localSetup) {
 };
 
 core._prepareHeaders = function (localSetup, command, parameters) {
-    var config = command.config;
+    const config = command.config;
 
-    var headers = Object.assign({}, setup.getOption(localSetup, 'requestHeaders'), {
+    const headers = Object.assign({}, setup.getOption(localSetup, 'requestHeaders'), {
         Accept: 'application/json',
     });
 
-    var authentication = setup.getOption(localSetup, 'authentication');
+    const authentication = setup.getOption(localSetup, 'authentication');
 
     if (authentication.type === 'oauth' && authentication.token) {
         headers['Authorization'] = 'OAuth ' + authentication.token;
@@ -172,13 +172,13 @@ core._prepareHeaders = function (localSetup, command, parameters) {
         headers['Content-Type'] = 'application/json';
     }
 
-    var useHeavyProxy = config.heavy && setup.getOption(localSetup, 'useHeavyProxy');
+    const useHeavyProxy = config.heavy && setup.getOption(localSetup, 'useHeavyProxy');
 
     if (!useHeavyProxy) {
         headers['X-YT-Suppress-Redirect'] = 1;
     }
 
-    var remoteLocalProxy = setup.getOption(localSetup, 'remoteLocalProxy');
+    const remoteLocalProxy = setup.getOption(localSetup, 'remoteLocalProxy');
     if (remoteLocalProxy) {
         headers['X-YT-Remote-Local-Proxy'] = remoteLocalProxy;
     }
@@ -187,7 +187,7 @@ core._prepareHeaders = function (localSetup, command, parameters) {
 };
 
 core._prepareParameters = function (localSetup, command) {
-    var config = command.config;
+    const config = command.config;
 
     return typeof config.prepareParameters === 'function'
         ? config.prepareParameters(command.parameters, localSetup)
@@ -195,11 +195,11 @@ core._prepareParameters = function (localSetup, command) {
 };
 
 core._prepareURL = function (localSetup, command) {
-    var proxy;
-    var config = command.config;
-    var protocol = prepareProtocol(localSetup);
-    var apiVersion = config.version;
-    var useHeavyProxy = config.heavy && setup.getOption(localSetup, 'useHeavyProxy');
+    let proxy;
+    const config = command.config;
+    const protocol = prepareProtocol(localSetup);
+    const apiVersion = config.version;
+    const useHeavyProxy = config.heavy && setup.getOption(localSetup, 'useHeavyProxy');
 
     if (useHeavyProxy) {
         proxy = setup.getOption(localSetup, 'heavyProxy');
@@ -211,9 +211,9 @@ core._prepareURL = function (localSetup, command) {
 };
 
 core._prepareData = function (localSetup, command) {
-    var config = command.config;
-    var data = command.data;
-    var serializer = setup.getOption(localSetup, 'JSONSerializer');
+    const config = command.config;
+    const data = command.data;
+    const serializer = setup.getOption(localSetup, 'JSONSerializer');
 
     if (config.method === 'POST' || config.method === 'PUT') {
         if (config.prepareData) return config.prepareData(localSetup, data);
@@ -228,24 +228,24 @@ core._identity = function (data) {
 };
 
 core._prepareRequestSettings = function (localSetup, command) {
-    var proxy = setup.getOption(localSetup, 'proxy');
+    const proxy = setup.getOption(localSetup, 'proxy');
 
     if (typeof proxy === 'undefined') {
         throw new Error(error.prepare('cannot execute command - proxy was not configured.'));
     }
 
-    var authentication = setup.getOption(localSetup, 'authentication');
-    var timeout = setup.getOption(localSetup, 'timeout');
-    var xsrfEnabled = setup.getOption(localSetup, 'xsrf');
-    var xsrfCookieName = setup.getOption(localSetup, 'xsrfCookieName');
-    var responseType = setup.getLocalOption(localSetup, 'dataType') || command.config.dataType;
+    const authentication = setup.getOption(localSetup, 'authentication');
+    const timeout = setup.getOption(localSetup, 'timeout');
+    const xsrfEnabled = setup.getOption(localSetup, 'xsrf');
+    const xsrfCookieName = setup.getOption(localSetup, 'xsrfCookieName');
+    const responseType = setup.getLocalOption(localSetup, 'dataType') || command.config.dataType;
 
     const preparedParameters = core._prepareParameters(localSetup, command);
     const {useBodyForParameters} = command.config;
 
     const withCredentials = Boolean(authentication.type) && authentication.type !== 'none';
 
-    var requestParameters = Object.assign(
+    const requestParameters = Object.assign(
         {
             url: core._prepareURL(localSetup, command),
             headers: core._prepareHeaders(
@@ -283,7 +283,7 @@ core._prepareRequestSettings = function (localSetup, command) {
         if (requestParameters.data) {
             throw new Error('Unexpected behavior: Request body already defined');
         }
-        var serializer = setup.getOption(localSetup, 'JSONSerializer');
+        const serializer = setup.getOption(localSetup, 'JSONSerializer');
         requestParameters.data = setup.encodeForYt(serializer.stringify(preparedParameters));
     }
 
@@ -292,7 +292,7 @@ core._prepareRequestSettings = function (localSetup, command) {
 
 core._createRequestWithCancellation = function (localSetup, requestSettings, callback) {
     if (typeof callback === 'function') {
-        var cancellation = axios.CancelToken.source();
+        const cancellation = axios.CancelToken.source();
 
         callback(cancellation);
 
@@ -319,8 +319,8 @@ core._createRequestWithCancellation = function (localSetup, requestSettings, cal
 };
 
 core._getHeavyProxies = function (localSetup) {
-    var proxy = setup.getOption(localSetup, 'proxy');
-    var protocol = prepareProtocol(localSetup);
+    const proxy = setup.getOption(localSetup, 'proxy');
+    const protocol = prepareProtocol(localSetup);
 
     return core._createRequestWithCancellation(localSetup, {
         url: protocol + proxy + '/hosts',
@@ -329,8 +329,8 @@ core._getHeavyProxies = function (localSetup) {
 };
 
 core._request = function (localSetup, command) {
-    var config = command.config;
-    var proxy = setup.getOption(localSetup, 'proxy');
+    const config = command.config;
+    const proxy = setup.getOption(localSetup, 'proxy');
 
     if (typeof proxy === 'undefined') {
         throw new Error(error.prepare('cannot execute command - proxy was not configured.'));
@@ -338,7 +338,7 @@ core._request = function (localSetup, command) {
 
     // REQUESTING HEAVY PROXY FOR HEAVY REQUEST
     // XXX New proxy is requested every time, local parameters are ignored at the moment
-    var useHeavyProxy = config.heavy && setup.getOption(localSetup, 'useHeavyProxy');
+    const useHeavyProxy = config.heavy && setup.getOption(localSetup, 'useHeavyProxy');
     if (useHeavyProxy) {
         return core._getHeavyProxies(localSetup).then(function (proxies) {
             setup.setGlobalOption('heavyProxy', proxies[0]);
@@ -372,8 +372,8 @@ core._initCommand = function (version, configuration, name) {
      * @param {Object} parameters - command parameters
      * @param {*} [data] - command data
      */
-    return function (/*settings|(parameters[, data[, cancellation]])*/) {
-        var config = Object.assign({version: version, command: name}, configuration);
+    return function (...args /*settings|(parameters[, data[, cancellation]])*/) {
+        const config = Object.assign({version: version, command: name}, configuration);
 
         if (config.notImplemented) {
             throw new Error(
@@ -389,30 +389,30 @@ core._initCommand = function (version, configuration, name) {
             );
         }
 
-        var localSetup, parameters, data, cancellation;
+        let localSetup, parameters, data, cancellation;
 
         if (
-            typeof arguments[0] === 'object' &&
-            Object.prototype.hasOwnProperty.call(arguments[0], 'parameters')
+            typeof args[0] === 'object' &&
+            Object.prototype.hasOwnProperty.call(args[0], 'parameters')
         ) {
-            localSetup = arguments[0].setup || {};
-            parameters = arguments[0].parameters;
-            data = arguments[0].data;
-            cancellation = arguments[0].cancellation;
+            localSetup = args[0].setup || {};
+            parameters = args[0].parameters;
+            data = args[0].data;
+            cancellation = args[0].cancellation;
 
             if (typeof parameters !== 'object') {
                 throw new Error(
                     error.prepare('bad command arguments - parameters must be an object.'),
                 );
             }
-        } else if (typeof arguments[0] === 'object') {
-            parameters = arguments[0];
+        } else if (typeof args[0] === 'object') {
+            parameters = args[0];
 
-            if (typeof arguments[1] === 'function') {
-                cancellation = arguments[1];
+            if (typeof args[1] === 'function') {
+                cancellation = args[1];
             } else {
-                data = arguments[1];
-                cancellation = arguments[2];
+                data = args[1];
+                cancellation = args[2];
             }
         } else {
             throw new Error(error.prepare('bad command arguments - parameters must be an object.'));
@@ -428,8 +428,8 @@ core._initCommand = function (version, configuration, name) {
 };
 
 core._initApiVersion = function (yt, version) {
-    var currentVersion = (yt[version] = {});
-    var apiVersion = commands[version];
+    const currentVersion = (yt[version] = {});
+    const apiVersion = commands[version];
 
     Object.keys(apiVersion).reduce(function (inited, commandName) {
         inited[commandName] = core._initCommand(version, apiVersion[commandName], commandName);

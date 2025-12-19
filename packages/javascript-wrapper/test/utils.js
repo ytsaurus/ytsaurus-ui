@@ -15,6 +15,6 @@
             settings.asHTML = true;
 
             return _serialize(input, settings);
-        }
+        },
     };
 })();

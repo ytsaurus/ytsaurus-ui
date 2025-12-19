@@ -1,1 +1,1 @@
-module.exports = require('../lib')({ exportBrowserModule: true });
+module.exports = require('../lib')({exportBrowserModule: true});

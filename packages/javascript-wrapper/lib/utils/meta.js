@@ -10,19 +10,19 @@ function getMeta(config) {
 
 function setTimingsOnRequestStart(config) {
     setMeta(config, {
-        requestStartTime: Date.now()
+        requestStartTime: Date.now(),
     });
 }
 
 function setTimingsOnRequestEnd(config, response) {
-    var meta = getMeta(config);
-    var headers = response && response.headers || {};
+    const meta = getMeta(config);
+    const headers = (response && response.headers) || {};
 
     setMeta(config, {
         requestTime: Date.now() - meta.requestStartTime,
         requestId: headers['x-yt-request-id'],
         proxy: headers['x-yt-proxy'],
-        contentLength: headers['content-length']
+        contentLength: headers['content-length'],
     });
 }
 
@@ -30,5 +30,5 @@ module.exports = {
     set: setMeta,
     get: getMeta,
     setTimingsOnRequestStart: setTimingsOnRequestStart,
-    setTimingsOnRequestEnd: setTimingsOnRequestEnd
+    setTimingsOnRequestEnd: setTimingsOnRequestEnd,
 };

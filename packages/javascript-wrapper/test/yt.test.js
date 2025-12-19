@@ -4,8 +4,8 @@ const yt = require('../lib')({exportBrowserModule: false});
 /*eslint-disable no-console*/
 
 describe('yt', function () {
-    var _yt;
-    var _request;
+    let _yt;
+    let _request;
 
     beforeEach(function (done) {
         _yt = yt;
@@ -15,7 +15,7 @@ describe('yt', function () {
     });
 
     describe('API', function () {
-        var PROXY = 'kant.yt.my-domain.com',
+        const PROXY = 'kant.yt.my-domain.com',
             OVERRIDEN_PROXY = 'plato.yt.my-domain.com',
             TIMEOUT = 42,
             OVERRIDEN_TIMEOUT = 314,
@@ -32,14 +32,14 @@ describe('yt', function () {
             POST_METHOD = 'POST',
             PATH = '//tmp/foo';
 
-        var API_VERSION = 'v3';
+        const API_VERSION = 'v3';
 
-        var DEFAULT_HEADERS = {
+        const DEFAULT_HEADERS = {
             Accept: 'application/json',
-            'Content-Type': "application/json",
+            'Content-Type': 'application/json',
             'X-YT-Suppress-Redirect': 1,
         };
-        var DATA = JSON.stringify({ path: '//tmp/foo' });
+        const DATA = JSON.stringify({path: '//tmp/foo'});
 
         beforeEach(function (done) {
             _yt.core._request = _yt.core._prepareRequestSettings;
@@ -47,7 +47,7 @@ describe('yt', function () {
             done();
         });
 
-        var debugMode = false;
+        const debugMode = false;
 
         function deeplyCompareAjaxParameters(actualParameters, expectedParameters) {
             if (debugMode) {
@@ -236,7 +236,7 @@ describe('yt', function () {
         it('supports no authentication', function () {
             _yt.setup.setGlobalOption('proxy', PROXY);
 
-            var EXPECTED_PARAMETERS = {
+            const EXPECTED_PARAMETERS = {
                 url: 'https://' + PROXY + '/api/' + API_VERSION + '/get',
                 headers: Object.assign({}, DEFAULT_HEADERS),
                 timeout: _yt.setup.getDefaultOption('timeout'),

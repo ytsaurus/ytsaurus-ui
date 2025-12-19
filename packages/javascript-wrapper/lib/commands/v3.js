@@ -1,9 +1,9 @@
-var error = require('../utils/error.js');
-var setup = require('../utils/setup.js');
-var utils = require('./utils.js');
-var v2 = require('./v2');
+const error = require('../utils/error.js');
+const setup = require('../utils/setup.js');
+const utils = require('./utils.js');
+const v2 = require('./v2');
 
-var prepareSuppressAccessTracking = function (parameters, localSetup) {
+const prepareSuppressAccessTracking = function (parameters, localSetup) {
     parameters = parameters || {};
 
     if (setup.getOption(localSetup, 'suppressAccessTracking')) {
