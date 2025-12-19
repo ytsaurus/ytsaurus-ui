@@ -98,7 +98,9 @@ import {
     flowComputationParams,
     flowComputationsParams,
     flowParams,
+    flowPartitionParams,
     flowWorkdersParams,
+    flowWorkerParams,
 } from './reducers/flow/url-mapping';
 
 import {FlowTab} from './reducers/flow/filters';
@@ -187,7 +189,9 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
 
     [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}`, [flowComputationsParams]],
     [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*`, [flowComputationParams]],
+    [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*/partition/*`, [flowPartitionParams]],
     [`/*/${Page.FLOWS}/${FlowTab.WORKERS}`, [flowWorkdersParams]],
+    [`/*/${Page.FLOWS}/${FlowTab.WORKERS}/worker/*`, [flowWorkerParams]],
     [`/*/${Page.FLOWS}/*`, [flowParams]],
 
     ['global', [globalParams, getGlobalPreparedState]],

@@ -32,3 +32,11 @@ export const flowWorkdersParams: typeof flowParams = {
         initialState: filtersInitialState.workersNameFilter,
     },
 };
+
+export const flowPartitionParams: typeof flowParams = {
+    ...flowParams,
+};
+
+export const flowWorkerParams: typeof flowParams = {
+    ...flowParams,
+};

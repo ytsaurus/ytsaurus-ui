@@ -1,6 +1,6 @@
 import {Page} from '../../../shared/constants/settings';
-import {Tab as ComponentsTab} from '../../constants/components/main';
 import {YT} from '../../config/yt-config';
+import {Tab as ComponentsTab} from '../../constants/components/main';
 import {FlowTab, FlowTabType} from '../../store/reducers/flow/filters';
 
 export * from './navigation';
@@ -43,13 +43,17 @@ export function makeFlowLink({
     cluster,
     tab = FlowTab.GRAPH,
     computation,
+    partition,
     partitionIdFilter,
+    worker,
 }: {
     path: string;
     cluster?: string;
     tab?: FlowTabType;
     computation?: string;
+    partition?: string;
     partitionIdFilter?: string;
+    worker?: string;
 }) {
     let pathname = `/${cluster || YT.cluster}/${Page.FLOWS}/${tab}`;
 
@@ -59,6 +63,15 @@ export function makeFlowLink({
         pathname += `/${encodeURIComponent(computation)}`;
         if (partitionIdFilter) {
             params.append('partition', partitionIdFilter);
+        }
+        if (partition) {
+            pathname += `/partition/${encodeURIComponent(partition)}`;
+        }
+    }
+
+    if (tab === FlowTab.WORKERS) {
+        if (worker) {
+            pathname += `/worker/${worker}`;
         }
     }
 
