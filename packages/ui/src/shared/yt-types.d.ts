@@ -569,6 +569,16 @@ export type FlowExecuteTypes = {
         BodyType: {body?: undefined};
         ResponseType: FlowDescribeComputationsData;
     };
+    'describe-partition': {
+        ParamsType: {
+            flow_command: 'describe-partition';
+            pipeline_path: string;
+        };
+        BodyType: {
+            body?: {partition_id: string};
+        };
+        ResponseType: FlowPartitionDetailsType;
+    };
     'describe-pipeline': {
         ParamsType: {
             flow_command: 'describe-pipeline';
@@ -579,6 +589,14 @@ export type FlowExecuteTypes = {
         };
         ResponseType: FlowDescribePipelineData;
     };
+    'describe-worker': {
+        ParamsType: {
+            flow_command: 'describe-worker';
+            pipeline_path: string;
+        };
+        BodyType: {body?: {worker_incarnation_id: string}};
+        ResponseType: FlowWorkerDetailsType;
+    };
     'describe-workers': {
         ParamsType: {
             flow_command: 'describe-workers';
@@ -587,6 +605,17 @@ export type FlowExecuteTypes = {
         BodyType: {body?: undefined};
         ResponseType: FlowDescribeWorkersData;
     };
+};
+
+export type FlowPartitionDetailsType = FlowComputationPartitionType & {
+    previous_rebalancing_instant: string;
+
+    state: FlowPartitionStateType;
+    status: FlowNodeStatusType;
+
+    previous_job_fail_instant: string;
+    messages?: Array<FlowMessageType>;
+    last_retryable_error_instant: string;
 };
 
 export type FlowComputationDetailsType = FlowComputationType & {
@@ -624,6 +653,8 @@ export type FlowComputationPerformanceMetrics = {
 export type FlowDescribeWorkersData = {
     workers: Array<FlowWorkderData>;
 };
+
+export type FlowWorkerDetailsType = FlowWorkerData & {};
 
 export type FlowWorkerData = {
     address: string;

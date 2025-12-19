@@ -6,3 +6,5 @@ export const getFlowComputationsNameFilter = (state: RootState) =>
 
 export const getFlowCurrentComputation = (state: RootState) =>
     state.flow.filters.currentComputation;
+
+export const getFlowCurrentWorker = (state: RootState) => state.flow.filters.currentWorker;

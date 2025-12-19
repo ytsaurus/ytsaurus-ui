@@ -8,6 +8,8 @@ export type FlowFiltersState = {
 
     currentComputation: string;
     partitionIdFilter: string;
+
+    currentWorker: string;
 };
 
 export const initialState: FlowFiltersState = {
@@ -19,6 +21,8 @@ export const initialState: FlowFiltersState = {
     currentComputation: '',
 
     partitionIdFilter: '',
+
+    currentWorker: '',
 };
 
 export const FlowTab = {

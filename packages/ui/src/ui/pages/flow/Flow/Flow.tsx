@@ -28,7 +28,6 @@ import UIFactory from '../../../UIFactory';
 import {makeTabProps} from '../../../utils';
 import {formatByParams} from '../../../utils/format';
 import './Flow.scss';
-import {FlowComputation} from './FlowComputation/FlowComputation';
 import {FlowComputations} from './FlowComputations/FlowComputations';
 import {FlowGraph} from './FlowGraph/FlowGraph';
 import {FlowMessages} from './FlowGraph/renderers/FlowGraphRenderer';
@@ -85,13 +84,6 @@ function FlowContent() {
             <Route
                 path={`/:cluster/${Page.FLOWS}/${FlowTab.COMPUTATIONS}`}
                 render={() => <FlowComputations pipeline_path={path} />}
-                exact
-            />
-            <Route
-                path={`/:cluster/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/:computation?`}
-                render={() => {
-                    return <FlowComputation />;
-                }}
             />
             <Route
                 path={`/:cluster/${Page.FLOWS}/${FlowTab.WORKERS}`}

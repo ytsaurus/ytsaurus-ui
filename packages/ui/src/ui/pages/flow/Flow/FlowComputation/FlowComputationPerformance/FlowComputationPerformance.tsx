@@ -171,8 +171,8 @@ function PerformancePerPartitionsTable({items}: {items: Array<PerformanceRow>}) 
                 },
             },
             {
-                id: 'min',
-                header: () => i18n('total'),
+                id: 'max',
+                header: () => i18n('max'),
                 size: 100,
                 cell: ({row: {original: item}}) => {
                     const {max, max_example_partition} = item;

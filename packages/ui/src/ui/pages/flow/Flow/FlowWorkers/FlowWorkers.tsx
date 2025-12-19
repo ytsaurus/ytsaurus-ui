@@ -2,6 +2,7 @@ import cn from 'bem-cn-lite';
 import moment from 'moment';
 import React from 'react';
 
+import {Route, Switch, useRouteMatch} from 'react-router';
 import {FlowWorkerData} from '../../../../../shared/yt-types';
 import format from '../../../../common/hammer/format';
 import ClickableAttributesButton from '../../../../components/AttributesButton/ClickableAttributesButton';
@@ -13,21 +14,40 @@ import {
     useTable,
 } from '../../../../components/DataTableGravity';
 import {YTErrorBlock} from '../../../../components/Error/Error';
+import Link from '../../../../components/Link/Link';
+import {NoWrap} from '../../../../components/Text/Text';
 import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';
 import {formatTimeDuration} from '../../../../components/TimeDuration/TimeDuration';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
+import {FlowNodeStatus} from '../../../../pages/flow/Flow/FlowGraph/renderers/FlowGraphRenderer';
+import {FlowWorker} from '../../../../pages/flow/Flow/FlowWorker/FlowWorker';
 import {useFlowExecuteQuery} from '../../../../store/api/yt';
+import {FlowTab} from '../../../../store/reducers/flow/filters';
 import {useFlowWorkersNameFilter} from '../../../../store/reducers/flow/filters.hooks';
 import {useSelector} from '../../../../store/redux-hooks';
-import {getCluster} from '../../../../store/selectors/global/cluster';
-import {FlowNodeStatus} from '../FlowGraph/renderers/FlowGraphRenderer';
+import {getFlowPipelinePath} from '../../../../store/selectors/flow/filters';
+import {makeFlowLink} from '../../../../utils/app-url';
 import './FlowWorkers.scss';
 import i18n from './i18n';
 
 const block = cn('yt-flow-workers');
 
 export function FlowWorkers({pipeline_path}: {pipeline_path: string}) {
+    const {path} = useRouteMatch();
+    return (
+        <Switch>
+            <Route path={`${path}/worker/:worker`} component={FlowWorker} />
+            <Route
+                exact
+                path={`${path}`}
+                render={() => <FlowWorkersList pipeline_path={pipeline_path} />}
+            />
+        </Switch>
+    );
+}
+
+function FlowWorkersList({pipeline_path}: {pipeline_path: string}) {
     const {setWorkersNameFilter, workdersNameFilter} = useFlowWorkersNameFilter();
     return (
         <WithStickyToolbar
@@ -91,9 +111,7 @@ function FlowWorkersTable({pipeline_path}: {pipeline_path: string}) {
 }
 
 function useFlowWorkerssTableData(pipeline_path: string) {
-    const cluster = useSelector(getCluster);
     const res = useFlowExecuteQuery<'describe-workers'>({
-        cluster,
         parameters: {
             flow_command: 'describe-workers',
             pipeline_path,
@@ -123,7 +141,13 @@ function useFlowWorkersColumns() {
                 header: () => i18n('address'),
                 size: 400,
                 cell: ({row: {original: item}}) => {
-                    return <TableCell>{item.address}</TableCell>;
+                    return (
+                        <TableCell>
+                            <NoWrap>
+                                <FlowWorkerAddress item={item} />
+                            </NoWrap>
+                        </TableCell>
+                    );
                 },
                 enableColumnFilter: false,
                 enableHiding: false,
@@ -204,4 +228,13 @@ function useFlowWorkersColumns() {
         return {columns};
     }, []);
     return res;
+}
+
+function FlowWorkerAddress({item}: {item: FlowWorkerData}) {
+    const path = useSelector(getFlowPipelinePath);
+    return (
+        <Link url={makeFlowLink({path, tab: FlowTab.WORKERS, worker: item.incarnation_id})}>
+            {item.address}
+        </Link>
+    );
 }
