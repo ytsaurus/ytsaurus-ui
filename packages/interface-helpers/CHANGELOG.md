@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/ytsaurus/ytsaurus-ui/compare/interface-helpers-v1.1.0...interface-helpers-v1.1.1) (2025-12-19)
+
+
+### Bug Fixes
+
+* **interface-helpers:** use local eslint ([e8d27f1](https://github.com/ytsaurus/ytsaurus-ui/commit/e8d27f1f2b7fb37b5eaf84dda3fdd0746d002adb))
+
 ## [1.1.0](https://github.com/ytsaurus/ytsaurus-ui/compare/interface-helpers-v1.0.2...interface-helpers-v1.1.0) (2025-12-17)
 
 
