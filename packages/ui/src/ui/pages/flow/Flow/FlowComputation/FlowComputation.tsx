@@ -18,6 +18,7 @@ const block = cn('yt-flow-computation');
 export function FlowComputation() {
     const dispatch = useDispatch();
     const {
+        path,
         params: {computation},
     } = useRouteMatch<{computation: string}>();
 
@@ -28,7 +29,16 @@ export function FlowComputation() {
         };
     }, [computation, dispatch]);
 
-    return <FlowComputationDetails computation={computation} />;
+    return (
+        <Switch>
+            <Route
+                exact
+                path={`${path}`}
+                render={() => <FlowComputationDetails computation={computation} />}
+            />
+            <Route exact path={`${path}/partition/:partition?`} component={FlowPartition} />
+        </Switch>
+    );
 }
 
 function FlowComputationDetails({computation}: {computation: string}) {
