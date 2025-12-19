@@ -39,7 +39,10 @@ describe('format', () => {
         it('E', () => {
             checkNumberWithSuffix(1000 * 1000 * 1000 * 1000 * 1000 * 1000, '1.00 E');
             checkNumberWithSuffix(1000 * 1000 * 1000 * 1000 * 1000 * 1000 * 999, '999.00 E');
-            checkNumberWithSuffix(1000 * 1000 * 1000 * 1000 * 1000 * 1000 * 1000 * 999, '999000.00 E');
+            checkNumberWithSuffix(
+                1000 * 1000 * 1000 * 1000 * 1000 * 1000 * 1000 * 999,
+                '999000.00 E',
+            );
         });
 
         describe('Negative', () => {
