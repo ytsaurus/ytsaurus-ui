@@ -6,10 +6,7 @@ import {Column} from '@gravity-ui/react-data-table';
 
 import CollapsibleSection from '../../../components/CollapsibleSection/CollapsibleSection';
 import {getIsRoot, getTree} from '../../../store/selectors/scheduling/scheduling';
-import {
-    getCurrentPoolStaticConfiguration,
-    getCurrentPoolTreeStaticConfiguration,
-} from '../../../store/selectors/scheduling/scheduling-ts';
+import {getCurrentPoolTreeStaticConfiguration} from '../../../store/selectors/scheduling/scheduling-ts';
 
 import DataTableYT from '../../../components/DataTableYT/DataTableYT';
 import format from '../../../common/hammer/format';
@@ -17,33 +14,25 @@ import format from '../../../common/hammer/format';
 import './SchedulingStaticConfiguration.scss';
 import {getSettingsSchedulingExpandStaticConfiguration} from '../../../store/selectors/settings/settings-ts';
 import {setSettingsSchedulingExpandStaticConfiguration} from '../../../store/actions/settings/settings';
-import Label from '../../../components/Label/Label';
 import UIFactory from '../../../UIFactory';
-import PoolMetaData from '../Content/PoolMetaData';
 import {getCluster} from '../../../store/selectors/global';
 import {ArrayElement} from '../../../types';
 
 const block = cn('scheduling-static-configuration');
 
-interface Props {
-    onToggleCollapsedState: (value: boolean) => void;
-}
-
-function SchedulingStaticConfiguration(props: Props) {
-    const {onToggleCollapsedState} = props;
+function SchedulingStaticConfiguration() {
     const dispatch = useDispatch();
     const isRoot = useSelector(getIsRoot);
 
     const collapsed = useSelector(getSettingsSchedulingExpandStaticConfiguration);
     const onToggle = React.useCallback(
         (value: boolean) => {
-            onToggleCollapsedState(value);
             dispatch(setSettingsSchedulingExpandStaticConfiguration(value));
         },
-        [onToggleCollapsedState, dispatch],
+        [dispatch],
     );
 
-    return (
+    return isRoot ? (
         <CollapsibleSection
             name={'Static configuration'}
             className={block()}
@@ -51,94 +40,13 @@ function SchedulingStaticConfiguration(props: Props) {
             collapsed={collapsed}
         >
             <div className={block('container')}>
-                <PoolMetaData className={block('pool-meta')} />
-                {isRoot ? <PoolTreeStaticConfiguration /> : <PoolStaticConfiguration />}
+                <PoolTreeStaticConfiguration />
             </div>
         </CollapsibleSection>
-    );
+    ) : null;
 }
 
 export default React.memo(SchedulingStaticConfiguration);
-
-function PoolStaticConfiguration() {
-    const staticConfigurationItems = useSelector(getCurrentPoolStaticConfiguration);
-
-    const columns: Array<Column<ArrayElement<typeof staticConfigurationItems>>> = [
-        {
-            name: 'name',
-            header: 'Guarantees',
-            sortable: false,
-            width: 200,
-        },
-        {
-            name: 'cpu',
-            header: 'CPU',
-            sortable: false,
-            width: 100,
-            render: ({row}) => {
-                const {cpu, cpuLabel} = row;
-                if (cpuLabel) {
-                    return <Label capitalize text={cpuLabel} />;
-                }
-                return format['Number'](cpu);
-            },
-            align: 'right',
-        },
-        {
-            name: 'gpu',
-            header: 'GPU',
-            sortable: false,
-            width: 100,
-            render: ({row}) => {
-                return format['Number'](row.gpu);
-            },
-            align: 'right',
-        },
-        {
-            name: 'memory',
-            header: 'Memory',
-            sortable: false,
-            width: 120,
-            render: ({row}) => {
-                return format['Bytes'](row.memory);
-            },
-            align: 'right',
-        },
-        {
-            name: 'user_slots',
-            header: 'User slots',
-            sortable: false,
-            width: 100,
-            render: ({row}) => {
-                return format['Number'](row.user_slots);
-            },
-            align: 'right',
-        },
-        {
-            name: 'network',
-            header: 'Network',
-            sortable: false,
-            width: 100,
-            render: ({row}) => {
-                const res = format['Number'](row.network);
-                return res === format.NO_VALUE ? res : res + ' %';
-            },
-            align: 'right',
-        },
-    ];
-
-    return (
-        <DataTableYT
-            className={block('table')}
-            columns={columns}
-            data={staticConfigurationItems}
-            useThemeYT={true}
-            settings={{
-                displayIndices: false,
-            }}
-        />
-    );
-}
 
 function PoolTreeStaticConfiguration() {
     const items = useSelector(getCurrentPoolTreeStaticConfiguration);
