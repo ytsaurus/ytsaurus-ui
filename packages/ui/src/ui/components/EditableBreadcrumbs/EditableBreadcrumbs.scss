@@ -2,6 +2,10 @@
 @import '../../styles/mixins.scss';
 
 .yt-editable-breadcrumbs {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    overflow: hidden;
+
     &_view_top-row {
         @include top-row-breadcrumbs();
     }
