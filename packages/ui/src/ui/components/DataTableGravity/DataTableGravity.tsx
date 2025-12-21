@@ -1,10 +1,9 @@
-import React from 'react';
-import cn from 'bem-cn-lite';
-
-import {Flex, FlexProps} from '@gravity-ui/uikit';
 import {Table, TableProps, useWindowRowVirtualizer} from '@gravity-ui/table';
 import {Cell, Header} from '@gravity-ui/table/tanstack';
-
+import {Flex, FlexProps} from '@gravity-ui/uikit';
+import cn from 'bem-cn-lite';
+import React from 'react';
+import {useScrollMargin} from '../../hooks/use-scroll-margin';
 import './DataTableGravity.scss';
 
 const block = cn('yt-gravity-table');
@@ -46,12 +45,14 @@ export function DataTableGravity<TData, TScrollElement extends Element | Window>
     scrollToIndex?: number;
     isHighlightedRow?: (row?: TData) => boolean;
 } & VirtuallizerProps) {
-    const containerRef = React.useRef<HTMLTableSectionElement>(null);
+    const [element, setElement] = React.useState<HTMLDivElement | null>(null);
+    const scrollMargin = useScrollMargin({element});
 
     const rowVirtualizer = useWindowRowVirtualizer({
         count: props.table.getRowModel().rows.length,
         estimateSize: () => rowHeight,
         overscan: 5,
+        scrollMargin,
     });
 
     const virtualizerProps = virtualized ? {rowVirtualizer} : ({} as {});
@@ -129,7 +130,7 @@ export function DataTableGravity<TData, TScrollElement extends Element | Window>
     );
 
     return (
-        <div className={block({virtualized}, className)} ref={containerRef}>
+        <div className={block({virtualized}, className)} ref={setElement}>
             <Table
                 className={block('table')}
                 stickyHeader
