@@ -69,7 +69,13 @@ function NavigationTopRowContent() {
     return (
         <RowWithName page={Page.NAVIGATION} className={block()} urlParams={{path: defaultPath}}>
             <NavigationFavourites />
-            <Flex justifyContent={'space-between'} alignItems={'center'} grow={1} shrink={1}>
+            <Flex
+                justifyContent={'space-between'}
+                alignItems={'center'}
+                grow={1}
+                shrink={1}
+                overflow="hidden"
+            >
                 <NavigationBreadcrumbs onEdit={toggleEditMode} />
                 <NavigationTools />
             </Flex>
