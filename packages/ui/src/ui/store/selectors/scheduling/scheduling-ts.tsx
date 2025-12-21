@@ -72,13 +72,6 @@ export const getCurrentPoolGuarantees = createSelector(
     },
 );
 
-export const getCurrentPoolStaticConfiguration = createSelector(
-    [getCurrentPoolGuarantees],
-    ({strong, burst, flow}): Array<PoolStaticConfigurationItem> => {
-        return [strong, burst, flow].filter(Boolean) as Array<PoolStaticConfigurationItem>;
-    },
-);
-
 interface PoolTreeStaticConfigurationItem {
     name: string;
     total?: number;
