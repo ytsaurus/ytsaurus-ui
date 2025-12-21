@@ -139,7 +139,8 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
 
     [`/*/${Page.GROUPS}/*`, [groupsPageParams, getGroupsPreparedState]],
 
-    [ `/*/${Page.SCHEDULING}/${SchedulingTab.OVERVIEW}`, [schedulingOverviewParams]],
+    [`/*/${Page.SCHEDULING}/${SchedulingTab.OVERVIEW}`, [schedulingOverviewParams]],
+    [`/*/${Page.SCHEDULING}/details`, [schedulingOverviewParams]],
     [`/*/${Page.SCHEDULING}/${SchedulingTab.ACL}`, [schedulingAclParams]],
     [`/*/${Page.SCHEDULING}`, [schedulingParams]],
 
