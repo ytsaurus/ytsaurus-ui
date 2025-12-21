@@ -1,17 +1,16 @@
 import cn from 'bem-cn-lite';
-import React from 'react';
-import {useSelector} from '../../../store/redux-hooks';
-import {Redirect, Route, Switch, withRouter} from 'react-router';
-
 import reduce_ from 'lodash/reduce';
-
+import React from 'react';
+import {Redirect, Route, Switch, withRouter} from 'react-router';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
-
 import Tabs from '../../../components/Tabs/Tabs';
-import Placeholder from '../../../pages/components/Placeholder';
-
+import {UI_TAB_SIZE} from '../../../constants/global';
 import {DEFAULT_TAB, SCHEDULING_ALLOWED_ROOT_TABS, Tab} from '../../../constants/scheduling';
+import Placeholder from '../../../pages/components/Placeholder';
+import {Overview} from '../../../pages/scheduling/Content/tabs/Overview/Overview';
 import PoolAcl from '../../../pages/scheduling/Content/tabs/PoolAcl/PoolAcl';
+import {useSelector} from '../../../store/redux-hooks';
+import {getCluster} from '../../../store/selectors/global';
 import {
     getIsRoot,
     getPool,
@@ -19,17 +18,13 @@ import {
     getTree,
     isPoolAclAllowed,
 } from '../../../store/selectors/scheduling/scheduling';
-import {TabSettings, makeTabProps} from '../../../utils';
-import {formatByParams} from '../../../utils/format';
-
-import {UI_TAB_SIZE} from '../../../constants/global';
-import {Overview} from '../../../pages/scheduling/Content/tabs/Overview/Overview';
-import {getCluster} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
+import {TabSettings, makeTabProps} from '../../../utils';
+import {makeSchedulingUrl} from '../../../utils/app-url';
+import {formatByParams} from '../../../utils/format';
+import './Content.scss';
 import SchedulingExpandedPoolsUpdater from './SchedulingExpandedPoolsUpdater';
 import {PoolAttributes} from './tabs/PoolAttributes/PoolAttributes';
-
-import './Content.scss';
 
 const block = cn('scheduling-content');
 
@@ -122,6 +117,12 @@ function Content({match, location}: ContentProps) {
                 />
                 {extraRoutes}
                 {aclTab.show && <Route path={`${match.path}/${Tab.ACL}`} component={PoolAcl} />}
+                <Route
+                    path={`${match.path}/details`}
+                    render={() => {
+                        return <Redirect to={makeSchedulingUrl({pool, poolTree: tree})} />;
+                    }}
+                />
                 <Route path={`${match.path}/:tab`} component={Placeholder} />
                 <Redirect
                     from={match.url}
