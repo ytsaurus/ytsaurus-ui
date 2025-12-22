@@ -15,13 +15,14 @@ import {YTText} from '../../../../components/Text/Text';
 import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
+import {useSettingsColumnSizes} from '../../../../hooks/settings/use-settings-column-sizes';
 import {FlowPartitionState} from '../../../../pages/flow/flow-components/FlowPartitionState/FlowPartitionState';
 import {FlowTab} from '../../../../store/reducers/flow/filters';
 import {useFlowPartitionIdFilter} from '../../../../store/reducers/flow/filters.hooks';
 import {useSelector} from '../../../../store/redux-hooks';
 import {getFlowPipelinePath} from '../../../../store/selectors/flow/filters';
 import {makeFlowLink} from '../../../../utils/app-url';
-import {FlowNodeStatus} from '../FlowGraph/renderers/FlowGraphRenderer';
+import {FlowNodeStatus} from '../../../../pages/flow/Flow/FlowGraph/renderers/FlowGraphRenderer';
 import './FlowComputationPartitions.scss';
 import i18n from './i18n';
 
@@ -80,6 +81,11 @@ function FlowComputationPartitionsTable({
 
     const [sorting, setSorting] = React.useState<tanstack.SortingState>([]);
 
+    const {columnSizes, setColumnSizes} = useSettingsColumnSizes(
+        'global::flow::partitionsColumnSizes',
+        {minWidth: 80},
+    );
+
     const table = useTable({
         columns,
         data: items ?? [],
@@ -91,7 +97,9 @@ function FlowComputationPartitionsTable({
                 right: ['actions'],
             },
             sorting,
+            columnSizing: columnSizes,
         },
+        onColumnSizingChange: setColumnSizes,
         onSortingChange: setSorting,
         enableSorting: true,
     });
