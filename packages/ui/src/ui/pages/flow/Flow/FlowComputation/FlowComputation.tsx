@@ -53,7 +53,7 @@ function FlowComputationDetails({computation}: {computation: string}) {
             <div className={block('messages')}>
                 <FlowMessagesCollapsible messages={data?.messages} />
             </div>
-            <FlowComputationPartitions data={data} />
+            <FlowComputationPartitions partitions={data?.partitions} />
         </div>
     );
 }
