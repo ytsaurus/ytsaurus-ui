@@ -16,6 +16,9 @@ import Link from '../../../../components/Link/Link';
 import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
+import {useSettingsColumnSizes} from '../../../../hooks/settings/use-settings-column-sizes';
+import {FlowComputation} from '../../../../pages/flow/Flow/FlowComputation/FlowComputation';
+import {FlowNodeStatus} from '../../../../pages/flow/Flow/FlowGraph/renderers/FlowGraphRenderer';
 import {useFlowExecuteQuery} from '../../../../store/api/yt';
 import {FlowTab} from '../../../../store/reducers/flow/filters';
 import {useFlowComputationsNameFilter} from '../../../../store/reducers/flow/filters.hooks';
@@ -23,8 +26,6 @@ import {useSelector} from '../../../../store/redux-hooks';
 import {getFlowPipelinePath} from '../../../../store/selectors/flow/filters';
 import {getCluster} from '../../../../store/selectors/global/cluster';
 import {makeFlowLink} from '../../../../utils/app-url';
-import {FlowComputation} from '../FlowComputation/FlowComputation';
-import {FlowNodeStatus} from '../FlowGraph/renderers/FlowGraphRenderer';
 import './FlowComputations.scss';
 import i18n from './i18n';
 
@@ -82,6 +83,11 @@ function FlowComputationsTable({pipeline_path}: {pipeline_path: string}) {
 
     const [sorting, setSorting] = React.useState<tanstack.SortingState>([]);
 
+    const {columnSizes, setColumnSizes} = useSettingsColumnSizes(
+        'global::flow::computationsColumnSizes',
+        {minWidth: 80},
+    );
+
     const table = useTable({
         columns,
         data: items ?? [],
@@ -93,7 +99,9 @@ function FlowComputationsTable({pipeline_path}: {pipeline_path: string}) {
                 right: ['actions'],
             },
             sorting,
+            columnSizing: columnSizes,
         },
+        onColumnSizingChange: setColumnSizes,
         onSortingChange: setSorting,
         enableSorting: true,
     });

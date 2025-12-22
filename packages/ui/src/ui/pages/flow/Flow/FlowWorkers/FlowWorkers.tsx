@@ -1,7 +1,6 @@
 import cn from 'bem-cn-lite';
 import moment from 'moment';
 import React from 'react';
-
 import {Route, Switch, useRouteMatch} from 'react-router';
 import {FlowWorkerData} from '../../../../../shared/yt-types';
 import format from '../../../../common/hammer/format';
@@ -20,6 +19,7 @@ import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/
 import {formatTimeDuration} from '../../../../components/TimeDuration/TimeDuration';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
+import {useSettingsColumnSizes} from '../../../../hooks/settings/use-settings-column-sizes';
 import {FlowNodeStatus} from '../../../../pages/flow/Flow/FlowGraph/renderers/FlowGraphRenderer';
 import {FlowWorker} from '../../../../pages/flow/Flow/FlowWorker/FlowWorker';
 import {useFlowExecuteQuery} from '../../../../store/api/yt';
@@ -79,6 +79,11 @@ function FlowWorkersTable({pipeline_path}: {pipeline_path: string}) {
 
     const [sorting, setSorting] = React.useState<tanstack.SortingState>([]);
 
+    const {columnSizes, setColumnSizes} = useSettingsColumnSizes(
+        'global::flow::workersColumnSizes',
+        {minWidth: 80},
+    );
+
     const table = useTable({
         columns,
         data: items ?? [],
@@ -90,7 +95,9 @@ function FlowWorkersTable({pipeline_path}: {pipeline_path: string}) {
                 right: ['actions'],
             },
             sorting,
+            columnSizing: columnSizes,
         },
+        onColumnSizingChange: setColumnSizes,
         onSortingChange: setSorting,
         enableSorting: true,
     });
