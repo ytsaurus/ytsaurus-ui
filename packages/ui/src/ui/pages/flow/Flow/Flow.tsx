@@ -22,6 +22,7 @@ import {FlowTab} from '../../../store/reducers/flow/filters';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {
     getFlowCurrentComputation,
+    getFlowCurrentWorker,
     getFlowPipelinePath,
 } from '../../../store/selectors/flow/filters';
 import {makeTabProps} from '../../../utils';
@@ -36,10 +37,14 @@ const block = cn('yt-flow');
 
 export function Flow() {
     const currentComputation = useSelector(getFlowCurrentComputation);
+    const worker = useSelector(getFlowCurrentWorker);
+
+    const allowTabs = !worker && !currentComputation;
+
     return (
         <div className={block()}>
-            {!currentComputation ? <FlowState /> : null}
-            {!currentComputation ? <FlowTabs /> : null}
+            {allowTabs ? <FlowState /> : null}
+            {allowTabs ? <FlowTabs /> : null}
             <div className={block('content')}>
                 <FlowContent />
             </div>

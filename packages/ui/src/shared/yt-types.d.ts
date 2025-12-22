@@ -595,7 +595,9 @@ export type FlowExecuteTypes = {
             flow_command: 'describe-worker';
             pipeline_path: string;
         };
-        BodyType: {body?: {worker_incarnation_id: string}};
+        BodyType: {
+            body?: {worker_incarnation_id: string};
+        };
         ResponseType: FlowWorkerDetailsType;
     };
     'describe-workers': {
@@ -659,6 +661,7 @@ export type FlowWorkerDetailsType = FlowWorkerData & {};
 
 export type FlowWorkerData = {
     address: string;
+    banned: boolean;
     bytes_per_second: number;
     cpu_usage: number;
     groups: Array<unknown>;
@@ -668,6 +671,9 @@ export type FlowWorkerData = {
     monitoring_address: string;
     register_time: string;
     status: FlowNodeStatusType;
+    messages: Array<FlowMessageType>;
+    deploy_address: string;
+    partitions: Array<FlowComputationPartitionType>;
 };
 
 export type FlowDescribeComputationsData = {

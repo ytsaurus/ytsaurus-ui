@@ -233,7 +233,11 @@ function useFlowWorkersColumns() {
 function FlowWorkerAddress({item}: {item: FlowWorkerData}) {
     const path = useSelector(getFlowPipelinePath);
     return (
-        <Link url={makeFlowLink({path, tab: FlowTab.WORKERS, worker: item.incarnation_id})}>
+        <Link
+            url={makeFlowLink({path, tab: FlowTab.WORKERS, worker: item.incarnation_id})}
+            routed
+            routedPreserveLocation
+        >
             {item.address}
         </Link>
     );

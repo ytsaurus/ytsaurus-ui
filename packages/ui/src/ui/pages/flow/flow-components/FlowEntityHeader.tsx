@@ -16,7 +16,7 @@ export function FlowEntityTitle({
 }: {
     className?: string;
     title: string;
-    status: FlowNodeStatusType;
+    status?: FlowNodeStatusType;
     state?: FlowPartitionStateType;
 }) {
     return (
