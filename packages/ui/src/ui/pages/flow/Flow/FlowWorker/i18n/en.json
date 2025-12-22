@@ -1,0 +1,12 @@
+{
+  "address": "address",
+  "backtraces": "Backtraces",
+  "cpu-usage": "CPU usage",
+  "memory-usage": "Memory usage",
+  "message-per-second": "Message per second",
+  "bytes-per-second": "Bytes per second",
+  "deploy-link": "Deploy link",
+  "worker": "Worker",
+  "worker-groups": "Worker groups",
+  "worker-incarnation-id": "Workder incarnation Id"
+}

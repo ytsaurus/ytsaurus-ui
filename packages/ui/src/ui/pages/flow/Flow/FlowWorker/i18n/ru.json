@@ -1,0 +1,12 @@
+{
+  "address": "Адрес",
+  "backtraces": "Бэктрейсы",
+  "cpu-usage": "Использование CPU",
+  "memory-usage": "Использование памяти",
+  "message-per-second": "Сообщений в секунду",
+  "bytes-per-second": "Байт в секунду",
+  "deploy-link": "Ссылка на деплой",
+  "worker": "Worker",
+  "worker-groups": "Группы воркера",
+  "worker-incarnation-id": "Идентификатор инкарнации воркера"
+}
