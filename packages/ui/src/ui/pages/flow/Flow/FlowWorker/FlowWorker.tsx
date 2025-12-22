@@ -5,6 +5,7 @@ import {useRouteMatch} from 'react-router';
 import {FlowWorkerData} from '../../../../../shared/yt-types';
 import format from '../../../../common/hammer/format';
 import {YTErrorBlock} from '../../../../components/Error/Error';
+import Label from '../../../../components/Label/Label';
 import Link from '../../../../components/Link/Link';
 import Loader from '../../../../components/Loader/Loader';
 import MetaTable, {MetaTableProps} from '../../../../components/MetaTable/MetaTable';
@@ -65,8 +66,10 @@ function FlowWorkerDetails({worker}: {worker: string}) {
 
 function FlowWorkerHeader({data}: {data?: FlowWorkerData}) {
     return (
-        <Flex className={block('header')}>
-            <FlowEntityTitle title={i18n('worker')} status={data?.status} />
+        <Flex className={block('header')} gap={1}>
+            <FlowEntityTitle title={i18n('worker')} status={data?.status}>
+                {data?.banned && <Label text="Banned" theme="warning" />}
+            </FlowEntityTitle>
         </Flex>
     );
 }
