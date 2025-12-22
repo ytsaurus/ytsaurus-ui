@@ -10,11 +10,13 @@ const block = cn('yt-flow-entity-header');
 
 export function FlowEntityTitle({
     className,
+    children,
     title,
     status,
     state,
 }: {
     className?: string;
+    children?: React.ReactNode;
     title: string;
     status?: FlowNodeStatusType;
     state?: FlowPartitionStateType;
@@ -28,6 +30,7 @@ export function FlowEntityTitle({
                 </span>
             ) : null}
             {state ? <FlowPartitionState state={state} /> : null}
+            {children}
         </Flex>
     );
 }

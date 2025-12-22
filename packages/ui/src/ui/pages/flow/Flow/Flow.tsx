@@ -2,7 +2,7 @@ import cn from 'bem-cn-lite';
 import React from 'react';
 import {Redirect, Route, Switch} from 'react-router';
 
-import {Button, Flex, Link, Text} from '@gravity-ui/uikit';
+import {Button, Flex, Link} from '@gravity-ui/uikit';
 
 import {Page} from '../../../../shared/constants/settings';
 import {YTApiId} from '../../../../shared/constants/yt-api-id';
@@ -28,6 +28,7 @@ import {getCluster} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
 import {makeTabProps} from '../../../utils';
 import {formatByParams} from '../../../utils/format';
+import {FlowEntityTitle} from '../flow-components/FlowEntityHeader';
 import './Flow.scss';
 import {FlowComputations} from './FlowComputations/FlowComputations';
 import {FlowGraph} from './FlowGraph/FlowGraph';
@@ -131,7 +132,8 @@ function FlowStatusToolbar() {
     }, [dispatch, pipeline_path]);
 
     return (
-        <Flex className={block('status-toolbar')} alignItems="center" gap={2}>
+        <Flex className={block('status-toolbar')} alignItems="baseline" gap={2}>
+            <FlowMessagesLoaded />
             <Button view="outlined" onClick={onStart}>
                 <Icon awesome="play-circle" /> Start
             </Button>
@@ -151,14 +153,16 @@ function FlowState() {
     const {leader_controller_address} = useFlowAttributes(pipeline_path).data ?? {};
     return (
         <React.Fragment>
-            <Flex className={block('state')} alignItems="center" gap={2}>
-                <Text variant="header-1">Processing catalog </Text>
+            <Flex alignItems="baseline" justifyContent="space-between" gap={2}>
+                <FlowEntityTitle title="Processing catalog">
+                    <StatusLabel label={value} />
+                </FlowEntityTitle>
                 <FlowStatusToolbar />
             </Flex>
             <Flex>
                 <MetaTable
+                    className={block('meta')}
                     items={[
-                        [{key: 'status', value: <StatusLabel label={value} />}],
                         [
                             {
                                 key: 'leader_controller_address',
@@ -175,11 +179,9 @@ function FlowState() {
                                 className: block('meta-item'),
                             },
                         ],
+                        [],
                     ]}
                 />
-                <Flex grow={1} justifyContent={'end'}>
-                    <FlowMessagesLoaded />
-                </Flex>
             </Flex>
         </React.Fragment>
     );
