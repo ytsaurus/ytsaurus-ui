@@ -1,8 +1,4 @@
 .yt-flow {
-    &__state {
-        margin-bottom: 20px;
-    }
-
     &__content {
         &_view_dynamic_spec,
         &_view_static_spec {
@@ -14,12 +10,15 @@
         padding-left: 2px;
     }
 
+    &__meta {
+        margin-bottom: 10px;
+    }
+
     &__meta-item {
         overflow: unset;
     }
 
     &__tabs {
-        margin-top: -10px;
         margin-bottom: 10px;
     }
 }
