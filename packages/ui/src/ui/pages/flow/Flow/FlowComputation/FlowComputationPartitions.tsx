@@ -1,9 +1,6 @@
 import cn from 'bem-cn-lite';
 import React from 'react';
-import {
-    FlowComputationDetailsType,
-    FlowComputationPartitionType,
-} from '../../../../../shared/yt-types';
+import {FlowComputationPartitionType} from '../../../../../shared/yt-types';
 import format from '../../../../common/hammer/format';
 import ClickableAttributesButton from '../../../../components/AttributesButton/ClickableAttributesButton';
 import {
@@ -22,10 +19,7 @@ import {FlowPartitionState} from '../../../../pages/flow/flow-components/FlowPar
 import {FlowTab} from '../../../../store/reducers/flow/filters';
 import {useFlowPartitionIdFilter} from '../../../../store/reducers/flow/filters.hooks';
 import {useSelector} from '../../../../store/redux-hooks';
-import {
-    getFlowCurrentComputation,
-    getFlowPipelinePath,
-} from '../../../../store/selectors/flow/filters';
+import {getFlowPipelinePath} from '../../../../store/selectors/flow/filters';
 import {makeFlowLink} from '../../../../utils/app-url';
 import {FlowNodeStatus} from '../FlowGraph/renderers/FlowGraphRenderer';
 import './FlowComputationPartitions.scss';
@@ -33,7 +27,11 @@ import i18n from './i18n';
 
 const block = cn('yt-flow-computation-partitions');
 
-export function FlowComputationPartitions({data}: {data?: FlowComputationDetailsType}) {
+export function FlowComputationPartitions({
+    partitions,
+}: {
+    partitions?: Array<FlowComputationPartitionType>;
+}) {
     const {partitionIdFilter, setPartitionIdFilter} = useFlowPartitionIdFilter();
     return (
         <WithStickyToolbar
@@ -54,27 +52,31 @@ export function FlowComputationPartitions({data}: {data?: FlowComputationDetails
                     ]}
                 />
             }
-            content={<FlowComputationPartitionsTable data={data} />}
+            content={<FlowComputationPartitionsTable partitions={partitions} />}
         />
     );
 }
 
-function useFlowComputationPartitionsTableData(data?: FlowComputationDetailsType) {
+function useFlowComputationPartitionsTableData(partitions?: Array<FlowComputationPartitionType>) {
     const {partitionIdFilter} = useFlowPartitionIdFilter();
     return {
         items: React.useMemo(() => {
             const lowerId = partitionIdFilter.toLowerCase();
-            return data?.partitions.filter((item) => {
+            return partitions?.filter((item) => {
                 return -1 !== item.partition_id.indexOf(lowerId);
             });
-        }, [partitionIdFilter, data]),
+        }, [partitionIdFilter, partitions]),
     };
 }
 
-function FlowComputationPartitionsTable({data}: {data?: FlowComputationDetailsType}) {
+function FlowComputationPartitionsTable({
+    partitions,
+}: {
+    partitions?: Array<FlowComputationPartitionType>;
+}) {
     const {columns} = useFlowWorkersColumns();
 
-    const {items} = useFlowComputationPartitionsTableData(data);
+    const {items} = useFlowComputationPartitionsTableData(partitions);
 
     const [sorting, setSorting] = React.useState<tanstack.SortingState>([]);
 
@@ -118,7 +120,10 @@ function useFlowWorkersColumns() {
                 cell: ({row: {original: item}}) => {
                     return (
                         <TableCell>
-                            <PartitionIdCell id={item.partition_id} />
+                            <PartitionIdCell
+                                id={item.partition_id}
+                                computation_id={item.computation_id}
+                            />
                         </TableCell>
                     );
                 },
@@ -262,13 +267,17 @@ function useFlowWorkersColumns() {
     return res;
 }
 
-function PartitionIdCell({id}: {id: string}) {
+function PartitionIdCell({id, computation_id}: {id: string; computation_id: string}) {
     const path = useSelector(getFlowPipelinePath);
-    const computation = useSelector(getFlowCurrentComputation);
 
     return (
         <Link
-            url={makeFlowLink({path, computation, partition: id, tab: FlowTab.COMPUTATIONS})}
+            url={makeFlowLink({
+                path,
+                computation: computation_id,
+                partition: id,
+                tab: FlowTab.COMPUTATIONS,
+            })}
             routed
         >
             {id}
