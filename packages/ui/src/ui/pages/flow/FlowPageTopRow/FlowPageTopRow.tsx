@@ -8,6 +8,7 @@ import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/Secti
 import {useSelector} from '../../../store/redux-hooks';
 import {
     getFlowCurrentComputation,
+    getFlowCurrentWorker,
     getFlowPipelinePath,
 } from '../../../store/selectors/flow/filters';
 import {makeFlowLink} from '../../../utils/app-url';
@@ -27,6 +28,7 @@ export function FlowPageTopRow() {
 
 function FlowBreadcrumbs() {
     const computation = useSelector(getFlowCurrentComputation);
+    const worker = useSelector(getFlowCurrentWorker);
     const path = useSelector(getFlowPipelinePath);
 
     return (
@@ -34,19 +36,36 @@ function FlowBreadcrumbs() {
             <Breadcrumbs.Item>
                 <BCName path={path} />
             </Breadcrumbs.Item>
-            {computation ? (
-                <Breadcrumbs.Item>
-                    <Link
-                        theme="secondary"
-                        url={makeFlowLink({path, tab: FlowTab.COMPUTATIONS})}
-                        routed
-                        routedPreserveLocation
-                    >
-                        {i18n('computations')}
-                    </Link>
-                </Breadcrumbs.Item>
-            ) : null}
-            {computation ? <Breadcrumbs.Item>{computation}</Breadcrumbs.Item> : null}
+            {computation
+                ? [
+                      <Breadcrumbs.Item key="computations">
+                          <Link
+                              theme="secondary"
+                              url={makeFlowLink({path, tab: FlowTab.COMPUTATIONS})}
+                              routed
+                              routedPreserveLocation
+                          >
+                              {i18n('computations')}
+                          </Link>
+                      </Breadcrumbs.Item>,
+                      <Breadcrumbs.Item key="item">{computation}</Breadcrumbs.Item>,
+                  ]
+                : null}
+            {worker
+                ? [
+                      <Breadcrumbs.Item key="workers">
+                          <Link
+                              theme="secondary"
+                              url={makeFlowLink({path, tab: FlowTab.WORKERS})}
+                              routed
+                              routedPreserveLocation
+                          >
+                              {i18n('workers')}
+                          </Link>
+                      </Breadcrumbs.Item>,
+                      <Breadcrumbs.Item key="item">{worker}</Breadcrumbs.Item>,
+                  ]
+                : null}
         </Breadcrumbs>
     );
 }
