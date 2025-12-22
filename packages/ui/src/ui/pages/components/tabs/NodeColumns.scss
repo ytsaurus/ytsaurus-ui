@@ -1,5 +1,6 @@
 .yt-node-columns {
-    &__state {
+    &__state,
+    &__role {
         display: inline-block;
         max-width: 100%;
         overflow: hidden;

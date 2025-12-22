@@ -38,7 +38,7 @@ export function NodeColumnRole({role}: {role: 'default' | 'control' | 'data'}) {
     const theme = ROLE_THEME[role] || 'info';
     const text = format.Address(role);
 
-    return <Label theme={theme} type="text" text={text} />;
+    return <Label theme={theme} className={block('role')} type="text" text={text} />;
 }
 
 export function NodeColumnText({text}: {text: string}) {
