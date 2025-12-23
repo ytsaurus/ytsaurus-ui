@@ -5,7 +5,6 @@ import {FlowPartitionDetailsType} from '../../../../../../shared/yt-types';
 import format from '../../../../../common/hammer/format';
 import {YTErrorBlock} from '../../../../../components/Error/Error';
 import Link from '../../../../../components/Link/Link';
-import Loader from '../../../../../components/Loader/Loader';
 import MetaTable from '../../../../../components/MetaTable/MetaTable';
 import {FlowEntityTitle} from '../../../../../pages/flow/flow-components/FlowEntityHeader';
 import {FlowMessagesCollapsible} from '../../../../../pages/flow/flow-components/FlowMessagesCollapsible/FlowMessagesCollapsible';
@@ -44,9 +43,12 @@ export function FlowPartition() {
 
     return (
         <div className={block()}>
-            <FlowEntityTitle title={i18n('partition')} status={data?.status} />
+            <FlowEntityTitle
+                title={i18n('partition')}
+                status={data?.status}
+                loading={isLoading && !data}
+            />
             <FlowPartitionMeta data={data} partition={partition} />
-            {isLoading && !data && <Loader visible={true} />}
             {Boolean(error) && <YTErrorBlock error={error} />}
             <FlowMessagesCollapsible messages={data?.messages} />
         </div>
