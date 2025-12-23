@@ -49,3 +49,8 @@ export const flowWorkerParams: typeof flowParams = {
         initialState: filtersInitialState.partitionIdFilter,
     },
 };
+
+export const flowWorkerMonitorParams: typeof flowParams = {
+    ...flowParams,
+    ...prometheusDashboardParams,
+};
