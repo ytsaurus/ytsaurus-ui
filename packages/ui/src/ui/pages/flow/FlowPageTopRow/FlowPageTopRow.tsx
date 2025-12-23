@@ -8,6 +8,7 @@ import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/Secti
 import {useSelector} from '../../../store/redux-hooks';
 import {
     getFlowCurrentComputation,
+    getFlowCurrentPartition,
     getFlowCurrentWorker,
     getFlowPipelinePath,
 } from '../../../store/selectors/flow/filters';
@@ -29,6 +30,7 @@ export function FlowPageTopRow() {
 function FlowBreadcrumbs() {
     const computation = useSelector(getFlowCurrentComputation);
     const worker = useSelector(getFlowCurrentWorker);
+    const partition = useSelector(getFlowCurrentPartition);
     const path = useSelector(getFlowPipelinePath);
 
     return (
@@ -48,7 +50,23 @@ function FlowBreadcrumbs() {
                               {i18n('computations')}
                           </Link>
                       </Breadcrumbs.Item>,
-                      <Breadcrumbs.Item key="item">{computation}</Breadcrumbs.Item>,
+                      <Breadcrumbs.Item key="item">
+                          <Link
+                              theme="secondary"
+                              url={makeFlowLink({path, tab: FlowTab.COMPUTATIONS, computation})}
+                              routed
+                              routedPreserveLocation
+                          >
+                              {computation}
+                          </Link>
+                      </Breadcrumbs.Item>,
+                  ]
+                : null}
+            {partition
+                ? [
+                      <Breadcrumbs.Item disabled key="partition">
+                          {i18n('partition')}
+                      </Breadcrumbs.Item>,
                   ]
                 : null}
             {worker
