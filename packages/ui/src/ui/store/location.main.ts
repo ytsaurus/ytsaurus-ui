@@ -95,6 +95,7 @@ import type {PathParameters} from '../store/location';
 import {ChytCliquePageTab} from '../constants/chyt-page';
 
 import {
+    flowComputationMonitorParams,
     flowComputationParams,
     flowComputationsParams,
     flowParams,
@@ -189,6 +190,8 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
 
     [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}`, [flowComputationsParams]],
     [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*`, [flowComputationParams]],
+    [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*/details`, [flowComputationParams]],
+    [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*/monitor`, [flowComputationMonitorParams]],
     [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*/partition/*`, [flowPartitionParams]],
     [`/*/${Page.FLOWS}/${FlowTab.WORKERS}`, [flowWorkdersParams]],
     [`/*/${Page.FLOWS}/${FlowTab.WORKERS}/worker/*`, [flowWorkerParams]],

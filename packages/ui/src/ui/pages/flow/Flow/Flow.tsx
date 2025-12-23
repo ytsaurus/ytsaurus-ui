@@ -10,15 +10,14 @@ import MetaTable from '../../../../components/MetaTable/MetaTable';
 import StatusLabel from '../../../../components/StatusLabel/StatusLabel';
 import {useUpdater} from '../../../../hooks/use-updater';
 import {Page} from '../../../../shared/constants/settings';
-import {YTApiId} from '../../../../shared/constants/yt-api-id';
 import {loadFlowStatus, updateFlowState} from '../../../../store/actions/flow/status';
 import {getFlowStatusData} from '../../../../store/selectors/flow/status';
 import {getCluster} from '../../../../store/selectors/global';
 import UIFactory from '../../../../UIFactory';
 import Tabs from '../../../components/Tabs/Tabs';
 import {YTErrorInline} from '../../../containers/YTErrorInline/YTErrorInline';
+import {useFlowAttributes} from '../../../pages/flow/flow-hooks/use-flow-attributes';
 import {useFlowExecuteQuery} from '../../../store/api/yt/flow';
-import {useGetQuery} from '../../../store/api/yt/get';
 import {FlowTab} from '../../../store/reducers/flow/filters';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {
@@ -202,22 +201,6 @@ export function FlowMessagesLoaded() {
     ) : (
         <FlowMessages data={data?.messages ?? []} paddingTop="none" />
     );
-}
-
-type FlowAttributes = {
-    monitoring_cluster: string;
-    monitoring_project: string;
-    leader_controller_address: string;
-};
-
-function useFlowAttributes(path: string) {
-    return useGetQuery<Partial<FlowAttributes>>({
-        id: YTApiId.flowAttributes,
-        parameters: {
-            path: `${path}/@`,
-            attributes: ['monitoring_cluster', 'monitoring_project', 'leader_controller_address'],
-        },
-    });
 }
 
 function FlowMonitoring({pipeline_path}: {pipeline_path: string}) {

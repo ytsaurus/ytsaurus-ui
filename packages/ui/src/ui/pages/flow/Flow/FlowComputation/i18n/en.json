@@ -1,10 +1,12 @@
 {
   "bytes-per-second": "Bytes per second",
   "cpu-usage": "CPU usage",
+  "details": "Details",
   "health": "Health",
   "key-range": "Key/Range",
   "memory-usage": "Memory usage",
   "message-per-second": "Message per second",
+  "monitoring": "Monitoring",
   "partition": "Partition",
   "search-partition-by-id": "Search partition by Id...",
   "state": "State",

@@ -1,5 +1,5 @@
 import {LocationParameters} from '../../../store/location';
-
+import {prometheusDashboardParams} from '../../../store/reducers/prometheusDashboard/url-mapping';
 import {initialState as filtersInitialState} from './filters';
 
 export const flowParams: LocationParameters = {
@@ -15,6 +15,11 @@ export const flowComputationsParams: typeof flowParams = {
         stateKey: 'flow.filters.computationsNameFilter',
         initialState: filtersInitialState.computationsNameFilter,
     },
+};
+
+export const flowComputationMonitorParams: typeof flowParams = {
+    ...flowParams,
+    ...prometheusDashboardParams,
 };
 
 export const flowComputationParams: typeof flowParams = {
