@@ -54,7 +54,7 @@ function FlowWorkerDetails({worker}: {worker: string}) {
     const {data, error, isLoading} = useFlowWorkerData(worker);
     return (
         <div className={block()}>
-            <FlowWorkerHeader data={data} />
+            <FlowWorkerHeader data={data} loading={!data && isLoading} />
             <FlowWorkerMeta data={data} />
             {isLoading && !data && <Loader visible />}
             {Boolean(error) && <YTErrorBlock error={error} />}
@@ -64,10 +64,10 @@ function FlowWorkerDetails({worker}: {worker: string}) {
     );
 }
 
-function FlowWorkerHeader({data}: {data?: FlowWorkerData}) {
+function FlowWorkerHeader({data, loading}: {data?: FlowWorkerData; loading?: boolean}) {
     return (
         <Flex className={block('header')} gap={1}>
-            <FlowEntityTitle title={i18n('worker')} status={data?.status}>
+            <FlowEntityTitle title={i18n('worker')} status={data?.status} loading={loading}>
                 {data?.banned && <Label text="Banned" theme="warning" />}
             </FlowEntityTitle>
         </Flex>

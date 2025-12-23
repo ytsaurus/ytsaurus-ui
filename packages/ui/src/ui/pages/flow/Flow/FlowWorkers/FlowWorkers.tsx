@@ -14,6 +14,7 @@ import {
 } from '../../../../components/DataTableGravity';
 import {YTErrorBlock} from '../../../../components/Error/Error';
 import Link from '../../../../components/Link/Link';
+import Loader from '../../../../components/Loader/Loader';
 import {NoWrap} from '../../../../components/Text/Text';
 import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';
 import {formatTimeDuration} from '../../../../components/TimeDuration/TimeDuration';
@@ -75,7 +76,7 @@ function FlowWorkersList({pipeline_path}: {pipeline_path: string}) {
 function FlowWorkersTable({pipeline_path}: {pipeline_path: string}) {
     const {columns} = useFlowWorkersColumns();
 
-    const {error, items} = useFlowWorkerssTableData(pipeline_path);
+    const {error, items, isLoading} = useFlowWorkerssTableData(pipeline_path);
 
     const [sorting, setSorting] = React.useState<tanstack.SortingState>([]);
 
@@ -104,6 +105,7 @@ function FlowWorkersTable({pipeline_path}: {pipeline_path: string}) {
 
     return (
         <div className={block()}>
+            {isLoading && !items && <Loader visible />}
             {Boolean(error) && <YTErrorBlock error={error} />}
             <DataTableGravity
                 table={table}
