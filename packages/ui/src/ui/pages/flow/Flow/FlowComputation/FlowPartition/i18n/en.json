@@ -5,7 +5,7 @@
   "current-job-id": "Current job Id",
   "current-worker-address": "Current worker address",
   "incarnation-id": "Incarnation Id",
-  "tracing": "Tracing",
+  "tracing": "tracing",
   "cpu-usage": "CPU usage",
   "memory-usage": "Memory usage",
   "message-per-second": "Message per second",
