@@ -1,4 +1,5 @@
 {
   "computations": "Computations",
-  "workers": "Workers"
+  "workers": "Workers",
+  "partition": "Partition"
 }
