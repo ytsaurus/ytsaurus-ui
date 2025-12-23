@@ -38,7 +38,7 @@ export function FlowWorkers({pipeline_path}: {pipeline_path: string}) {
     const {path} = useRouteMatch();
     return (
         <Switch>
-            <Route path={`${path}/worker/:worker`} component={FlowWorker} />
+            <Route path={`${path}/:worker`} component={FlowWorker} />
             <Route
                 exact
                 path={`${path}`}

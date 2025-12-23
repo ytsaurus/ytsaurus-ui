@@ -181,6 +181,9 @@ export const defaultUIFactory: UIFactory = {
     getMonitoringComponentForFlowComputation() {
         return undefined;
     },
+    getMonitoringComponentForFlowWorker() {
+        return undefined;
+    },
 
     getStatisticsComponentForAccount() {
         return undefined;
