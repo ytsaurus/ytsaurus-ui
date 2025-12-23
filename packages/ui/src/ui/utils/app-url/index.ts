@@ -73,7 +73,7 @@ export function makeFlowLink({
 
     if (tab === FlowTab.WORKERS) {
         if (worker) {
-            pathname += `/worker/${worker}`;
+            pathname += `/${worker}/details`;
         }
     }
 
