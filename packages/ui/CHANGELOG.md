@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.4.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.4.0...ui-v3.4.1) (2025-12-23)
+
+
+### Bug Fixes
+
+* **Components:** long role name [YTFRONT-5390] ([aad281b](https://github.com/ytsaurus/ytsaurus-ui/commit/aad281b17634285ebf9e22afac448a68a0515ec9))
+* **Navigation/Breadcrumbs:** breadcrumbs should be truncated by view-port [YTFRONT-5421] ([d005496](https://github.com/ytsaurus/ytsaurus-ui/commit/d005496874a9dbe0b7b598bdbde80bb04a030d64))
+* **Scheduling/Table:** minor fix for scrolling [YTFRONT-5134] ([b4857f6](https://github.com/ytsaurus/ytsaurus-ui/commit/b4857f638c41b01edcf8fbce56901143ccf5f6c1))
+* **Scheduling:** add redirect for removed 'Details' tab [YTFRONT-5134] ([84282c1](https://github.com/ytsaurus/ytsaurus-ui/commit/84282c1e2e63707909f88caba1bb79b47f7cdb0e))
+* **Scheduling:** bring back 'Static configuration' block [YTFRONT-5423] ([5bfa023](https://github.com/ytsaurus/ytsaurus-ui/commit/5bfa02392181193f119418931a0a33255f3893c0))
+
 ## [3.4.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.3.1...ui-v3.4.0) (2025-12-18)
 
 
