@@ -8,3 +8,5 @@ export const getFlowCurrentComputation = (state: RootState) =>
     state.flow.filters.currentComputation;
 
 export const getFlowCurrentWorker = (state: RootState) => state.flow.filters.currentWorker;
+
+export const getFlowCurrentPartition = (state: RootState) => state.flow.filters.currentPartition;
