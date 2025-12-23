@@ -161,16 +161,14 @@ function useFlowWorkersColumns() {
                 cell: ({row: {original: item}}) => {
                     return (
                         <TableCell>
-                            <YTText ellipsis>
-                                {item.lower_key} - {item.upper_key}
-                            </YTText>
+                            <YTText ellipsis>{item.key_or_range}</YTText>
                         </TableCell>
                     );
                 },
                 enableColumnFilter: false,
                 enableHiding: false,
                 accessorFn(d) {
-                    return d.lower_key + d.upper_key;
+                    return d.lexicographically_serialized_key_or_range;
                 },
             },
             {
