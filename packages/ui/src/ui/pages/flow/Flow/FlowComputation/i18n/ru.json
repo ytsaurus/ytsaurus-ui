@@ -1,10 +1,12 @@
 {
   "bytes-per-second": "Байт в секунду",
   "cpu-usage": "Использование CPU",
+  "details": "Детали",
   "health": "Здоровье",
   "key-range": "Ключ/Диапазон",
   "memory-usage": "Использование памяти",
   "message-per-second": "Сообщений в секунду",
+  "monitoring": "Мониторинг",
   "partition": "Партиция",
   "search-partition-by-id": "Поиск партиции по идентификатору...",
   "state": "Состояние",

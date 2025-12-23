@@ -171,6 +171,11 @@ export type RenderSchedulingTableItemExtraProps = {
     clusterUiConfig: ClusterUiConfig;
 };
 
+export type FlowComputationMonitorProps = {
+    path: string;
+    computation: string;
+};
+
 export interface UIFactory {
     getClusterAppearance(cluster?: string): undefined | ClusterAppearance;
 
@@ -264,6 +269,10 @@ export interface UIFactory {
               urlTemplate?: string;
               title?: string;
           };
+
+    getMonitoringComponentForFlowComputation():
+        | undefined
+        | React.ComponentType<FlowComputationMonitorProps>;
 
     getStatisticsComponentForAccount():
         | undefined

@@ -61,11 +61,13 @@ export function makeFlowLink({
 
     if (tab === FlowTab.COMPUTATIONS && computation) {
         pathname += `/${encodeURIComponent(computation)}`;
-        if (partitionIdFilter) {
-            params.append('partition', partitionIdFilter);
-        }
         if (partition) {
             pathname += `/partition/${encodeURIComponent(partition)}`;
+        } else {
+            pathname += '/details';
+            if (partitionIdFilter) {
+                params.append('partition', partitionIdFilter);
+            }
         }
     }
 

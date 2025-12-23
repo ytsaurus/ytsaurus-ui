@@ -5,7 +5,6 @@ import {Redirect, Route, Switch} from 'react-router';
 import {Button, Flex, Link} from '@gravity-ui/uikit';
 
 import {Page} from '../../../../shared/constants/settings';
-import {YTApiId} from '../../../../shared/constants/yt-api-id';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
 import Icon from '../../../components/Icon/Icon';
 import MetaTable from '../../../components/MetaTable/MetaTable';
@@ -13,9 +12,9 @@ import StatusLabel from '../../../components/StatusLabel/StatusLabel';
 import Tabs from '../../../components/Tabs/Tabs';
 import {YTErrorInline} from '../../../containers/YTErrorInline/YTErrorInline';
 import {useUpdater} from '../../../hooks/use-updater';
+import {useFlowAttributes} from '../../../pages/flow/flow-hooks/use-flow-attributes';
 import {loadFlowStatus, updateFlowState} from '../../../store/actions/flow/status';
 import {useFlowExecuteQuery} from '../../../store/api/yt/flow';
-import {useGetQuery} from '../../../store/api/yt/get';
 import {FlowTab} from '../../../store/reducers/flow/filters';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {
@@ -203,22 +202,6 @@ export function FlowMessagesLoaded() {
     ) : (
         <FlowMessages data={data?.messages ?? []} paddingTop="none" />
     );
-}
-
-type FlowAttributes = {
-    monitoring_cluster: string;
-    monitoring_project: string;
-    leader_controller_address: string;
-};
-
-function useFlowAttributes(path: string) {
-    return useGetQuery<Partial<FlowAttributes>>({
-        id: YTApiId.flowAttributes,
-        parameters: {
-            path: `${path}/@`,
-            attributes: ['monitoring_cluster', 'monitoring_project', 'leader_controller_address'],
-        },
-    });
 }
 
 function FlowMonitoring({pipeline_path}: {pipeline_path: string}) {
