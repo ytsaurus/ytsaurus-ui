@@ -641,6 +641,8 @@ export type FlowComputationPartitionType = {
     lower_key: string;
     upper_key: string;
     tracing_address: string;
+    key_or_range: string;
+    lexicographically_serialized_key_or_range: string;
 };
 
 export type FlowComputationPerformanceMetrics = {
