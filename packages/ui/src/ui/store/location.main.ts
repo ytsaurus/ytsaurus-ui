@@ -101,6 +101,7 @@ import {
     flowParams,
     flowPartitionParams,
     flowWorkdersParams,
+    flowWorkerMonitorParams,
     flowWorkerParams,
 } from './reducers/flow/url-mapping';
 
@@ -194,7 +195,8 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*/monitor`, [flowComputationMonitorParams]],
     [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*/partition/*`, [flowPartitionParams]],
     [`/*/${Page.FLOWS}/${FlowTab.WORKERS}`, [flowWorkdersParams]],
-    [`/*/${Page.FLOWS}/${FlowTab.WORKERS}/worker/*`, [flowWorkerParams]],
+    [`/*/${Page.FLOWS}/${FlowTab.WORKERS}/*/details`, [flowWorkerParams]],
+    [`/*/${Page.FLOWS}/${FlowTab.WORKERS}/*/monitor`, [flowWorkerMonitorParams]],
     [`/*/${Page.FLOWS}/*`, [flowParams]],
 
     ['global', [globalParams, getGlobalPreparedState]],
