@@ -44,10 +44,14 @@ export function FlowComputation() {
 function FlowComputationDetails({computation}: {computation: string}) {
     const pipeline_path = useSelector(getFlowPipelinePath);
 
-    const {data, error} = useFlowComputationData({computation, pipeline_path});
+    const {data, error, isLoading} = useFlowComputationData({computation, pipeline_path});
     return (
         <div className={block()}>
-            <FlowEntityTitle title={computation} status={data?.status} />
+            <FlowEntityTitle
+                title={computation}
+                status={data?.status}
+                loading={!data && isLoading}
+            />
             {Boolean(error) && <YTErrorBlock error={error} />}
             <FlowComputationPerformance data={data} />
             <div className={block('messages')}>
