@@ -640,6 +640,7 @@ export type FlowComputationPartitionType = {
     status: FlowNodeStatusType;
     lower_key: string;
     upper_key: string;
+    tracing_address: string;
 };
 
 export type FlowComputationPerformanceMetrics = {
