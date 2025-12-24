@@ -673,6 +673,7 @@ export type FlowWorkerData = {
     status: FlowNodeStatusType;
     messages: Array<FlowMessageType>;
     deploy_address: string;
+    backtrace_address: string;
     partitions: Array<FlowComputationPartitionType>;
 };
 

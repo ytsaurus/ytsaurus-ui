@@ -3,6 +3,7 @@
   "backtraces": "Backtraces",
   "cpu-usage": "CPU usage",
   "details": "Details",
+  "link": "link",
   "memory-usage": "Memory usage",
   "message-per-second": "Message per second",
   "monitoring": "Monitoring",

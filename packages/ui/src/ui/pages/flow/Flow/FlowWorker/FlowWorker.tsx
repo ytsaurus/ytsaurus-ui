@@ -166,7 +166,12 @@ function FlowWorkerMeta({data}: {data?: FlowWorkerData}) {
                 },
                 {
                     key: i18n('deploy-link'),
-                    value: <Link>{data?.deploy_address}</Link>,
+                    value: <Link url={data?.deploy_address}>{i18n('link')}</Link>,
+                    visible,
+                },
+                {
+                    key: i18n('backtraces'),
+                    value: <Link url={data?.backtrace_address}>{i18n('link')}</Link>,
                     visible,
                 },
             ],
