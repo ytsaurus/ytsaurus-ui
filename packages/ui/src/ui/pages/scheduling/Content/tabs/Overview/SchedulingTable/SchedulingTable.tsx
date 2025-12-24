@@ -776,6 +776,10 @@ function Duration({start}: {start?: string}) {
     }
 
     const from = moment(start).valueOf();
+    if (!from) {
+        return null;
+    }
+
     return (
         <Tooltip
             className={block('duration')}
