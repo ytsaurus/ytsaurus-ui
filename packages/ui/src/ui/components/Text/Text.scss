@@ -76,4 +76,8 @@
             }
         }
     }
+
+    &_capitalize {
+        text-transform: capitalize;
+    }
 }

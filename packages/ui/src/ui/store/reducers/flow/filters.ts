@@ -1,4 +1,5 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {FlowPartitionJobStateType, FlowPartitionStateType} from '../../../../shared/yt-types';
 
 export type FlowFiltersState = {
     pipelinePath: string;
@@ -12,6 +13,9 @@ export type FlowFiltersState = {
     currentWorker: string;
 
     currentPartition: string;
+
+    partitionsJobStateFilter: Array<FlowPartitionJobStateType>;
+    partitionsStateFilter: Array<FlowPartitionStateType>;
 };
 
 export const initialState: FlowFiltersState = {
@@ -26,6 +30,9 @@ export const initialState: FlowFiltersState = {
     currentWorker: '',
 
     currentPartition: '',
+
+    partitionsJobStateFilter: [],
+    partitionsStateFilter: [],
 };
 
 export const FlowTab = {
