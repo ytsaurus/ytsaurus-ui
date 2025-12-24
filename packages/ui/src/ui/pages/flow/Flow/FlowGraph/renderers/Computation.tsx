@@ -55,7 +55,7 @@ export function Computation({detailed, item, className}: ComputationProps) {
                                 highConsumption={highlight_cpu_usage}
                                 detailed={detailed}
                             >
-                                {format.Number(cpu_usage_10m, {
+                                {format.NumberSmart(cpu_usage_10m, {
                                     digits: cpu_usage_10m! > 1 ? 1 : 2,
                                 })}
                             </TextWithHighConsumption>

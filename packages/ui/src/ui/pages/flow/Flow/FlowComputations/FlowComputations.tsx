@@ -206,7 +206,7 @@ function useFlowComputationsColumn() {
                 header: () => i18n('cpu-usage'),
                 size: 200,
                 cell: ({row: {original: item}}) => {
-                    return <TableCell>{format.Number(item.metrics.cpu_usage_10m)}</TableCell>;
+                    return <TableCell>{format.NumberSmart(item.metrics.cpu_usage_10m)}</TableCell>;
                 },
                 enableSorting: true,
                 accessorFn(d) {
