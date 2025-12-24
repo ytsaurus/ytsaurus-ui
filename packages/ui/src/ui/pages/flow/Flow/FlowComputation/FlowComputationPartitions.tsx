@@ -271,7 +271,7 @@ function useFlowWorkersColumns() {
                 header: () => i18n('cpu-usage'),
                 size: 200,
                 cell: ({row: {original: item}}) => {
-                    return <TableCell>{format.Number(item.cpu_usage)}</TableCell>;
+                    return <TableCell>{format.NumberSmart(item.cpu_usage)}</TableCell>;
                 },
                 enableSorting: true,
                 accessorFn(d) {
