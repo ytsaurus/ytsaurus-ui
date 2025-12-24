@@ -155,7 +155,7 @@ export const makeMetaItems = ({
         case CypressNodeTypes.REPLICATED_TABLE:
         case CypressNodeTypes.REPLICATION_LOG_TABLE:
             return [
-                main(attributes),
+                main(attributes, cluster),
                 tableSize(attributes, isDynamic, mediumList),
                 tableStorage(attributes, attributes.type),
                 [
@@ -167,7 +167,7 @@ export const makeMetaItems = ({
 
         case CypressNodeTypes.CHAOS_REPLICATED_TABLE:
             return [
-                main(attributes),
+                main(attributes, cluster),
                 tableSize(attributes, isDynamic, mediumList),
                 [
                     cf.tableType,
@@ -180,7 +180,7 @@ export const makeMetaItems = ({
 
         default:
             return [
-                main(attributes),
+                main(attributes, cluster),
                 tableSize(attributes, isDynamic, mediumList),
                 tableStorage(attributes, tableType),
                 [
