@@ -7,31 +7,21 @@ import UIFactory from '../../../UIFactory';
 import {makeTTLItems} from './ttl';
 import {Flex, Icon, Label, Link} from '@gravity-ui/uikit';
 import AbbrSqlIcon from '@gravity-ui/icons/svgs/abbr-sql.svg';
+import {isQueryTrackerId} from './helpers/isQueryTrackerId';
 
-export default function metaTablePresetMain(attributes) {
-    const [
-        id,
-        owner,
-        account,
-        creationTime,
-        modificationTime,
-        accessTime,
-        yql_op_id,
-        operationUrl,
-        yql_runner,
-    ] = ypath.getValues(attributes, [
-        '/id',
-        '/owner',
-        '/account',
-        '/creation_time',
-        '/modification_time',
-        '/access_time',
-        '/_yql_op_id',
-        '/_yql_op_url',
-        '/_yql_runner',
-    ]);
+export default function metaTablePresetMain(attributes, cluster) {
+    const [id, owner, account, creationTime, modificationTime, accessTime, yql_op_id] =
+        ypath.getValues(attributes, [
+            '/id',
+            '/owner',
+            '/account',
+            '/creation_time',
+            '/modification_time',
+            '/access_time',
+            '/_yql_op_id',
+        ]);
 
-    const isYqlOperation = yql_runner === 'yql-service';
+    const isQtOperation = isQueryTrackerId(yql_op_id);
     const yqlLink = yql_op_id ? UIFactory.yqlWidgetSetup?.renderYqlOperationLink(yql_op_id) : null;
 
     return [
@@ -67,12 +57,12 @@ export default function metaTablePresetMain(attributes) {
         {
             key: 'YQL operation',
             value: yqlLink,
-            visible: Boolean(yqlLink) && isYqlOperation,
+            visible: Boolean(yqlLink) && !isQtOperation,
         },
         {
             key: 'QT operation',
             value: (
-                <Link href={operationUrl} target="_blank">
+                <Link href={`/${cluster}/queries/${yql_op_id}`} target="_blank">
                     <Flex alignItems="center" gap={1}>
                         <Label theme="info">
                             <Flex alignItems="center" justifyContent="center">
@@ -83,7 +73,7 @@ export default function metaTablePresetMain(attributes) {
                     </Flex>
                 </Link>
             ),
-            visible: !isYqlOperation && Boolean(operationUrl),
+            visible: isQtOperation,
         },
     ];
 }
