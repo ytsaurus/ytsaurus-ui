@@ -613,9 +613,6 @@ export type FlowExecuteTypes = {
 export type FlowPartitionDetailsType = FlowComputationPartitionType & {
     previous_rebalancing_instant: string;
 
-    state: FlowPartitionStateType;
-    status: FlowNodeStatusType;
-
     previous_job_fail_instant: string;
     messages?: Array<FlowMessageType>;
     last_retryable_error_instant: string;
@@ -637,6 +634,7 @@ export type FlowComputationPartitionType = {
     messages_per_second: number;
     partition_id: string;
     state: FlowPartitionStateType;
+    job_state: FlowPartitionJobStateType;
     status: FlowNodeStatusType;
     lower_key: string;
     upper_key: string;
@@ -741,6 +739,7 @@ export type FlowComputationType = FlowNodeBase &
     };
 
 export type FlowPartitionStateType = 'completed' | 'executing' | 'transient' | 'interrupted';
+export type FlowPartitionJobStateType = 'unknown' | 'recovering' | 'working' | 'stopped';
 
 export type FlowNodeStatusType =
     | 'minimum'

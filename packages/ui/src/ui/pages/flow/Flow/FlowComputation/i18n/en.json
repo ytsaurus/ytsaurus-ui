@@ -3,6 +3,7 @@
   "cpu-usage": "CPU usage",
   "details": "Details",
   "health": "Health",
+  "job-state": "Job state",
   "key-range": "Key/Range",
   "memory-usage": "Memory usage",
   "message-per-second": "Message per second",
