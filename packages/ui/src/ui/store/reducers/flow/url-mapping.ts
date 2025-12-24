@@ -22,12 +22,26 @@ export const flowComputationMonitorParams: typeof flowParams = {
     ...prometheusDashboardParams,
 };
 
-export const flowComputationParams: typeof flowParams = {
-    ...flowParams,
+const flowPartitionsFilters: typeof flowParams = {
     partition: {
         stateKey: 'flow.filters.partitionIdFilter',
         initialState: filtersInitialState.partitionIdFilter,
     },
+    jobState: {
+        stateKey: 'flow.filters.partitionsJobStateFilter',
+        initialState: filtersInitialState.partitionsJobStateFilter,
+        type: 'array',
+    },
+    state: {
+        stateKey: 'flow.filters.partitionsStateFilter',
+        initialState: filtersInitialState.partitionsStateFilter,
+        type: 'array',
+    },
+};
+
+export const flowComputationParams: typeof flowParams = {
+    ...flowParams,
+    ...flowPartitionsFilters,
 };
 
 export const flowWorkdersParams: typeof flowParams = {
@@ -44,10 +58,7 @@ export const flowPartitionParams: typeof flowParams = {
 
 export const flowWorkerParams: typeof flowParams = {
     ...flowParams,
-    partition: {
-        stateKey: 'flow.filters.partitionIdFilter',
-        initialState: filtersInitialState.partitionIdFilter,
-    },
+    ...flowPartitionsFilters,
 };
 
 export const flowWorkerMonitorParams: typeof flowParams = {

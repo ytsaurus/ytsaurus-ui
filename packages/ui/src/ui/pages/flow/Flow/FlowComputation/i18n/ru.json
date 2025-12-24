@@ -3,6 +3,7 @@
   "cpu-usage": "Использование CPU",
   "details": "Детали",
   "health": "Здоровье",
+  "job-state": "Состояние джоба",
   "key-range": "Ключ/Диапазон",
   "memory-usage": "Использование памяти",
   "message-per-second": "Сообщений в секунду",
