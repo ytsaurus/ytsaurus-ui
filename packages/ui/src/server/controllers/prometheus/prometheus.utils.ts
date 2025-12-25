@@ -24,7 +24,7 @@ import {ErrorWithCode} from '../../utils';
 
 import {parseXYFromPanelId} from '../../../shared/prometheus/utils';
 
-export async function fetchDashbaordDetails(
+export async function fetchDashboardDetails(
     req: Request,
     {
         cluster,

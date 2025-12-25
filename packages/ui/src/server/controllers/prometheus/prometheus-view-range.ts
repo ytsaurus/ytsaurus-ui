@@ -5,7 +5,7 @@ import {replaceExprParams} from '../../../shared/prometheus/utils';
 import {QueryRangeData, QueryRangePostData} from '../../../shared/prometheus/types';
 
 import {sendAndLogError} from '../../utils';
-import {fetchDashbaordDetails} from './prometheus.utils';
+import {fetchDashboardDetails} from './prometheus.utils';
 import {getPrometheusAuthHeaders} from '../../components/requestsSetup';
 
 export async function prometheusQueryRange(req: Request, res: Response) {
@@ -17,7 +17,7 @@ export async function prometheusQueryRange(req: Request, res: Response) {
 
         const {dashboardType, start, end, step, params: rawParmas} = req.body as QueryRangePostData;
 
-        const {panel, chartParams} = await fetchDashbaordDetails(req, {
+        const {panel, chartParams} = await fetchDashboardDetails(req, {
             cluster: ytAuthCluster,
             dashboardType,
             params: rawParmas,

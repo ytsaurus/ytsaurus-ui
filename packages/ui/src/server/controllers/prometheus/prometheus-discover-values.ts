@@ -11,7 +11,7 @@ import {
 } from '../../../shared/prometheus/types';
 
 import {sendAndLogError} from '../../utils';
-import {fetchDashbaordDetails} from './prometheus.utils';
+import {fetchDashboardDetails} from './prometheus.utils';
 import {getPrometheusAuthHeaders} from '../../components/requestsSetup';
 
 export async function prometheusDiscoverValues(req: Request, res: Response) {
@@ -21,7 +21,7 @@ export async function prometheusDiscoverValues(req: Request, res: Response) {
         const {ytAuthCluster} = req.params;
         const {dashboardType, params: rawParmas = {}} = req.body as DiscoverValuesPostData;
 
-        const {templating, chartParams} = await fetchDashbaordDetails(req, {
+        const {templating, chartParams} = await fetchDashboardDetails(req, {
             cluster: ytAuthCluster,
             dashboardType,
             params: rawParmas,
