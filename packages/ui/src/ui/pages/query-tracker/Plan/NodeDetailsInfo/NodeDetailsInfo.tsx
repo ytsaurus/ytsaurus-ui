@@ -7,6 +7,7 @@ import cn from 'bem-cn-lite';
 
 import '../NodeDetailsInfo.scss';
 import i18n from './i18n';
+import {secureDecoding} from '../../../../common/yt-api';
 
 const block = cn('node-details-info');
 
@@ -97,9 +98,9 @@ function OperationInputColumns({
                     }
                     let columns: string[];
                     if (Array.isArray(columnsData)) {
-                        columns = columnsData;
+                        columns = columnsData.map(secureDecoding);
                     } else {
-                        columns = [columnsData];
+                        columns = [secureDecoding(columnsData)];
                     }
                     return (
                         <Collapse key={index} name={`${title} #${index + 1}`} size="ns">
@@ -113,9 +114,9 @@ function OperationInputColumns({
 
     let columns: string[];
     if (Array.isArray(data)) {
-        columns = data;
+        columns = data.map(secureDecoding);
     } else {
-        columns = [data];
+        columns = [secureDecoding(data)];
     }
 
     return (
