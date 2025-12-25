@@ -1,8 +1,14 @@
 import React from 'react';
 import type {MountFixture, PlaywrightFixture} from './types';
 
-export const mountFixture: PlaywrightFixture<MountFixture> = async ({mount: baseMount}, use) => {
+export const MOCK_DATE = '2025-07-20T10:00:00';
+
+export const mountFixture: PlaywrightFixture<MountFixture> = async (
+    {mount: baseMount, page},
+    use,
+) => {
     const mount: MountFixture = async (component, options) => {
+        await page.clock.setFixedTime(MOCK_DATE);
         return baseMount(
             <div
                 style={{
