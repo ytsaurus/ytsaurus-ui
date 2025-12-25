@@ -17,7 +17,6 @@ export const expectScreenshotFixture: PlaywrightFixture<ExpectScreenshotFixture>
         themes: paramsThemes,
         ...pageScreenshotOptions
     } = defaultParams) => {
-        await page.clock.setFixedTime('2025-07-20T10:00:00');
         const captureScreenshot = async () => {
             return (component || page.locator('.playwright-wrapper-test')).screenshot({
                 animations: 'disabled',
