@@ -68,7 +68,7 @@ function getToken() {
     return tokenName && Cookies.get(tokenName);
 }
 
-const secureDecoding = (value: string) => {
+export const secureDecoding = (value: string) => {
     try {
         return unipika.decode(value);
     } catch (e) {
