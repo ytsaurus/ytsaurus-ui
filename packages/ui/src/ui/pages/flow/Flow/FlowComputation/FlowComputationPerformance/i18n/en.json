@@ -1,13 +1,4 @@
 {
-  "parameter": "Параметр",
   "performance-per-partition": "Performance per partition",
-  "cpu_usage": "CPU usage",
-  "memory_usage": "Memory usage",
-  "bytes_per_second": "Bytes per second",
-  "messages_per_second": "Messages per secont",
-  "partition": "Partition",
-  "total": "Total",
-  "average": "Avg",
-  "min": "Min",
-  "max": "Max"
+  "partition": "Partition"
 }
