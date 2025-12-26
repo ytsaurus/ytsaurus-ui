@@ -1,13 +1,5 @@
 {
   "parameter": "Параметр",
   "performance-per-partition": "Производительность партиций",
-  "cpu_usage": "Использование CPU",
-  "memory_usage": "Использование памяти",
-  "bytes_per_second": "Байт в секунду",
-  "messages_per_second": "Сообщений в секунду",
-  "partition": "Партиция",
-  "total": "Всего",
-  "average": "Среднее",
-  "min": "Минимум",
-  "max": "Максимум"
+  "partition": "Партиция"
 }
