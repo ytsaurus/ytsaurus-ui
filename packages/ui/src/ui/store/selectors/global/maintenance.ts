@@ -16,6 +16,7 @@ export const getMaintenanceEvent = createSelector(
                 const meta = JSON.parse(item.meta!);
                 return meta && meta.show_maintenance_page;
             } catch (err) {
+                // eslint-disable-next-line no-console
                 console.error('Failed to parse notification meta', err);
                 return null;
             }

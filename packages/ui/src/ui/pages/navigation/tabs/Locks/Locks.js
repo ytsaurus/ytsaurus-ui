@@ -146,6 +146,7 @@ class Locks extends Component {
         const operationId = transaction.operation_id;
         const {id: clusterId} = findClusterConfigByOperationId(operationId) || {};
         if (operationId && !clusterId) {
+            // eslint-disable-next-line no-console
             console.error(new Error(`Cannot find cluster by operation id ${operationId}`));
         }
         const operationIdUrl = `/${clusterId}/operations/${operationId}`;

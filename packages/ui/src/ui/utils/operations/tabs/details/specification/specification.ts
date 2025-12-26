@@ -220,6 +220,7 @@ function groupTables<T extends {path: string; transaction?: string; cluster?: st
 
             group.push(Object.assign(table, {name: name}));
         } catch (err) {
+            // eslint-disable-next-line no-console
             console.error('groupTables error', err);
         }
     });
@@ -393,6 +394,7 @@ function prepareScript(operation: DetailedOperationSelector, type: string) {
             };
         }
     } catch (err) {
+        // eslint-disable-next-line no-console
         console.error('prepareScript error:', err);
     }
 

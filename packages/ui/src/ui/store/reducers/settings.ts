@@ -30,6 +30,7 @@ function getInitialState() {
     } = settings;
 
     if (errorMessage) {
+        // eslint-disable-next-line no-console
         console.error(errorMessage);
     }
 

@@ -61,6 +61,7 @@ const getMiddleDate = ({zone, from, min, max}) => {
     }
 
     if (warningMessage) {
+        // eslint-disable-next-line no-console
         console.warn(warningMessage);
     }
 

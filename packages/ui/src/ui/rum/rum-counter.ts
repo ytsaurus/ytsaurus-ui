@@ -82,15 +82,19 @@ export function rumLogError(params: LogErrorParams, error?: Error, silent = fals
     if (!silent) {
         switch (level) {
             case 'warn':
+                // eslint-disable-next-line no-console
                 console.warn(params, error);
                 break;
             case 'info':
+                // eslint-disable-next-line no-console
                 console.info(params, error);
                 break;
             case 'debug':
+                // eslint-disable-next-line no-console
                 console.info(params, error);
                 break;
             default:
+                // eslint-disable-next-line no-console
                 console.error(params, error);
         }
     }
@@ -146,12 +150,14 @@ rumDebugLog('Start time', startTime);
 
 export function rumDebugLog(...args: any) {
     if (ENABLE_RUM_DEBUG) {
+        // eslint-disable-next-line no-console
         console.log('RUM:', Date.now() - startTime, ...args);
     }
 }
 
 export function rumDebugLog2(...args: any) {
     if (ENABLE_RUM_DEBUG_2) {
+        // eslint-disable-next-line no-console
         console.log('RUM:', Date.now() - startTime, ...args);
     }
 }

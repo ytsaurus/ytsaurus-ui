@@ -161,6 +161,7 @@ export class YTGraphCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canv
                 this.icon = await this.loadImage(src);
                 this.context.ctx.drawImage(this.icon, iconX, iconY, iconWidth, iconHeight);
             } catch (error) {
+                // eslint-disable-next-line no-console
                 console.error('Failed to load image:', error);
             }
         }

@@ -127,6 +127,7 @@ function ProgressStackImpl({
             </Tooltip>
         );
     } catch (err) {
+        // eslint-disable-next-line no-console
         console.error(err);
         return hammer.format.NO_VALUE;
     }

@@ -665,6 +665,7 @@ export function mountUnmountTable(action) {
                 return dispatch(updateView());
             })
             .catch((err) => {
+                // eslint-disable-next-line no-console
                 console.error(err);
                 toaster.add({
                     name: `${action} table`,
