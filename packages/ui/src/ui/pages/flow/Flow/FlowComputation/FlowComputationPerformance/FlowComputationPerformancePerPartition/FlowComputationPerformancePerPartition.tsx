@@ -7,14 +7,7 @@ import {
     tanstack,
     useTable,
 } from '../../../../../../components/DataTableGravity';
-import Link from '../../../../../../components/Link/Link';
-import {FlowTab} from '../../../../../../store/reducers/flow/filters';
-import {useSelector} from '../../../../../../store/redux-hooks';
-import {
-    getFlowCurrentComputation,
-    getFlowPipelinePath,
-} from '../../../../../../store/selectors/flow/filters';
-import {makeFlowLink} from '../../../../../../utils/app-url';
+import {FlowComputationPartitionFilter} from '../../../../../../pages/flow/Flow/FlowComputation/FlowComputationPartitionFilter/FlowComputationPartitionFilter';
 import i18n from './i18n';
 
 const ROW_NAMES = ['cpu_usage', 'memory_usage', 'messages_per_second', 'bytes_per_second'] as const;
@@ -99,9 +92,9 @@ function PerformancePerPartitionsTable({items}: {items: Array<PerformanceRow>}) 
                     const {total, total_example_partition} = item;
                     return (
                         <TableCell>
-                            <PerformancePerPartitionValue partition={total_example_partition}>
+                            <FlowComputationPartitionFilter partition={total_example_partition}>
                                 {formatByName(item.name, total)}{' '}
-                            </PerformancePerPartitionValue>
+                            </FlowComputationPartitionFilter>
                         </TableCell>
                     );
                 },
@@ -114,9 +107,9 @@ function PerformancePerPartitionsTable({items}: {items: Array<PerformanceRow>}) 
                     const {average, average_example_partition} = item;
                     return (
                         <TableCell>
-                            <PerformancePerPartitionValue partition={average_example_partition}>
+                            <FlowComputationPartitionFilter partition={average_example_partition}>
                                 {formatByName(item.name, average)}
-                            </PerformancePerPartitionValue>
+                            </FlowComputationPartitionFilter>
                         </TableCell>
                     );
                 },
@@ -129,9 +122,9 @@ function PerformancePerPartitionsTable({items}: {items: Array<PerformanceRow>}) 
                     const {min, min_example_partition} = item;
                     return (
                         <TableCell>
-                            <PerformancePerPartitionValue partition={min_example_partition}>
+                            <FlowComputationPartitionFilter partition={min_example_partition}>
                                 {formatByName(item.name, min)}
-                            </PerformancePerPartitionValue>
+                            </FlowComputationPartitionFilter>
                         </TableCell>
                     );
                 },
@@ -144,9 +137,9 @@ function PerformancePerPartitionsTable({items}: {items: Array<PerformanceRow>}) 
                     const {max, max_example_partition} = item;
                     return (
                         <TableCell>
-                            <PerformancePerPartitionValue partition={max_example_partition}>
+                            <FlowComputationPartitionFilter partition={max_example_partition}>
                                 {formatByName(item.name, max)}
-                            </PerformancePerPartitionValue>
+                            </FlowComputationPartitionFilter>
                         </TableCell>
                     );
                 },
@@ -161,31 +154,4 @@ function PerformancePerPartitionsTable({items}: {items: Array<PerformanceRow>}) 
     });
 
     return <DataTableGravity table={table} virtualized rowHeight={40} />;
-}
-
-function PerformancePerPartitionValue({
-    partition,
-    children,
-}: {
-    partition?: string;
-    children: React.ReactNode;
-}) {
-    const path = useSelector(getFlowPipelinePath);
-    const computation = useSelector(getFlowCurrentComputation);
-
-    return !partition ? (
-        children
-    ) : (
-        <Link
-            url={makeFlowLink({
-                path,
-                tab: FlowTab.COMPUTATIONS,
-                computation,
-                partitionIdFilter: partition,
-            })}
-            routed
-        >
-            {children}
-        </Link>
-    );
 }
