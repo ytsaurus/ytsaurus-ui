@@ -1,7 +1,9 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 
-type PrometheusWidgetId = string;
-export type PrometheusDashboardType = 'scheduler-pool';
+import type {
+    PrometheusDashboardType,
+    PrometheusWidgetId,
+} from '../../../../shared/prometheus/types';
 
 import {EMPTY_OBJECT} from '../../../constants/empty';
 import {RootState} from '../../../store/reducers/index.main';

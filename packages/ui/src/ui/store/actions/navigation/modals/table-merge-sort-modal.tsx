@@ -1,4 +1,5 @@
 import React from 'react';
+import {Action} from 'redux';
 
 import forEach_ from 'lodash/forEach';
 import map_ from 'lodash/map';
@@ -6,18 +7,20 @@ import sortBy_ from 'lodash/sortBy';
 import toLower_ from 'lodash/toLower';
 
 import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../../../store/reducers';
 import axios, {CancelTokenSource} from 'axios';
+
+import {getBatchError} from '../../../../../shared/utils/error';
 
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import ypath from '../../../../common/thor/ypath';
 import {
     USE_SKIP_ERROR_FN_NODE_DOES_NOT_EXIST,
-    getBatchError,
     wrapApiPromiseByToaster,
 } from '../../../../utils/utils';
 import {loadPoolTreesIfNotLoaded} from '../../../../store/actions/global';
+import {RootState} from '../../../../store/reducers';
+
 import {OperationShortInfo} from '../../../../pages/components/OperationShortInfo/OperationShortInfo';
 import {AppStoreProvider} from '../../../../containers/App/AppStoreProvider';
 import {CypressNodeTypes, makeUiMarker} from '../../../../utils/cypress-attributes';
@@ -28,7 +31,6 @@ import {
     changeAttribute,
     setModalPartial,
 } from '../../../reducers/navigation/modals/tableMergeSortModalSlice';
-import {Action} from 'redux';
 import {getNavigationTableOutputPathAttributes} from '../../../selectors/navigation/modals/table-merge-sort-modal';
 
 type TableMergeSortThunkAction<T = void> = ThunkAction<T, RootState, any, Action>;

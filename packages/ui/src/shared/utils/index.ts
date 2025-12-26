@@ -40,8 +40,11 @@ interface PageId {
 }
 
 export function isYTError(error: unknown): error is YTError {
-    const {yt_javascript_wrapper} = (error as YTError) ?? {};
-    return Boolean(yt_javascript_wrapper?.xYTTraceId && yt_javascript_wrapper?.xYTRequestId);
+    const {yt_javascript_wrapper, inner_errors} = (error as YTError) ?? {};
+    return (
+        Array.isArray(inner_errors) ||
+        Boolean(yt_javascript_wrapper?.xYTTraceId && yt_javascript_wrapper?.xYTRequestId)
+    );
 }
 
 export function makeRegexpFromSettings(value?: string) {

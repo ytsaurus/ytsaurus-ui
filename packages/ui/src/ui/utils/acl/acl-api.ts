@@ -9,6 +9,7 @@ import some_ from 'lodash/some';
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {YTApiIdType} from '../../../shared/constants/yt-api-id';
+import {getBatchError, splitBatchResults} from '../../../shared/utils/error';
 
 import UIFactory from '../../UIFactory';
 import {
@@ -23,7 +24,6 @@ import {
     UpdateResponse,
 } from './acl-types';
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../rum/rum-wrap-api';
-import {getBatchError, splitBatchResults} from '../../utils/utils';
 import {convertFromUIPermission, convertToUIPermissions} from '.';
 import {
     BatchResultsItem,

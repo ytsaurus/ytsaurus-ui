@@ -1,0 +1,34 @@
+.yt-prometheus-timeseries {
+    overflow: hidden;
+
+    $tabsWithMarginHeight: 42px + 20px;
+
+    &_expanded {
+        min-height: calc(
+            100vh -
+            var(--app-header-height, 0px) -
+            var(--app-footer-height, 0px) -
+            var(--yt-sticky-container-top-offset, 0px) -
+            var(--yt-second-toolbar-height, 0px) -
+            $tabsWithMarginHeight
+        );
+    }
+
+    &__widget {
+        height: 100%;
+    }
+
+    &__widget-title {
+        text-align: center;
+    }
+
+    .yt-prometheus-widget-toolbar {
+        visibility: hidden;
+    }
+
+    &:hover {
+        .yt-prometheus-widget-toolbar {
+            visibility: unset;
+        }
+    }
+}

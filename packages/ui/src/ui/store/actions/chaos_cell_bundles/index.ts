@@ -1,6 +1,8 @@
 import copy from 'copy-to-clipboard';
 import type {ThunkAction} from 'redux-thunk';
 
+import {getBatchError} from '../../../../shared/utils/error';
+
 import {
     CHAOS_BUNDLES_ACTIVE_ACCOUNT,
     CHAOS_BUNDLES_LOAD_FAILURE,
@@ -29,7 +31,6 @@ import {
     prepareTabletCells,
     tabletActiveBundleLink,
 } from '../../../utils/components/tablet-cells';
-import {getBatchError} from '../../../utils/utils';
 import {getAppBrowserHistory} from '../../../store/window-store';
 import {USE_MAX_SIZE} from '../../../../shared/constants/yt-api';
 import {BatchSubRequest} from '../../../../shared/yt-types';
