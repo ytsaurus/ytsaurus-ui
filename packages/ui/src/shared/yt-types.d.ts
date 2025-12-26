@@ -621,7 +621,19 @@ export type FlowPartitionDetailsType = FlowComputationPartitionType & {
 export type FlowComputationDetailsType = FlowComputationType & {
     partitions: Array<FlowComputationPartitionType>;
     performance_metrics: Record<string, FlowComputationPerformanceMetrics>;
+    partition_with_error_by_time_and_type?: Record<
+        '1m' | '5m' | '30m',
+        FlowComputationPartitionErrorsStats
+    >;
 };
+
+export type FlowComputationPartitionErrorsStats = {
+    restart_because_fail: FlowComputationPartitionErrorsStatsItem;
+    restart_because_rebalancing: FlowComputationPartitionErrorsStatsItem;
+    has_retryable_errors: FlowComputationPartitionErrorsStatsItem;
+    total_with_problems: FlowComputationPartitionErrorsStatsItem;
+};
+export type FlowComputationPartitionErrorsStatsItem = {count: number; example_partition?: string};
 
 export type FlowComputationPartitionType = {
     bytes_per_second: number;

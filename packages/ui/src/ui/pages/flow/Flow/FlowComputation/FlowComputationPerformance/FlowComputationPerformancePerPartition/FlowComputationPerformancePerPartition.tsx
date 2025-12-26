@@ -19,10 +19,6 @@ type PerformanceColumn = (typeof COLUMN_NAMES)[number];
 type PerformanceRow = {name: PerformanceRowName} & Partial<Record<PerformanceColumn, number>> &
     Partial<Record<`${PerformanceColumn}_example_partition`, string>>;
 
-export function FlowComputationPartitionStatsTable({items}: {items: Array<PerformanceRow>}) {
-    return <PerformancePerPartitionsTable items={items} />;
-}
-
 export function useFlowComputationPartitionStatsTableData(
     performance_metrics?: FlowComputationDetailsType['performance_metrics'],
 ) {
@@ -61,7 +57,7 @@ export function useFlowComputationPartitionStatsTableData(
 
 type PerformancePerPartitionsColumnDef = tanstack.ColumnDef<PerformanceRow>;
 
-function PerformancePerPartitionsTable({items}: {items: Array<PerformanceRow>}) {
+export function FlowComputationPartitionStatsTable({items}: {items: Array<PerformanceRow>}) {
     const columns = React.useMemo(() => {
         function formatByName(name: PerformanceRowName, v?: number) {
             switch (name) {
