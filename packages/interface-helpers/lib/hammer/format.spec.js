@@ -179,7 +179,7 @@ describe('format', () => {
                 expect(format.Number('123.456', {digits: 3})).toBe('123.456');
                 expect(format.Number('123.456', {digits: 4})).toBe('123.4560');
                 expect(format.Number('123.456', {digits: 5})).toBe('123.45600');
-                expect(format.Number('' + 0.6 / 3, {digits: 5})).toBe('0.20000');
+                expect(format.Number(String(0.6 / 3), {digits: 5})).toBe('0.20000');
             });
             it('groups', () => {
                 expect(format.Number('1234567.890123456', {digits: 9})).toBe('1 234 567.890123456');

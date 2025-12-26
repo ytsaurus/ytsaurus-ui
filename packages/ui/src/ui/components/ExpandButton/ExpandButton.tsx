@@ -14,6 +14,7 @@ type Props = {
     inline?: boolean;
     all?: boolean;
     showText?: boolean;
+    size?: ButtonProps['size'];
     qa?: ButtonProps['qa'];
 };
 
@@ -24,6 +25,7 @@ export const ExpandButton: FC<Props> = ({
     toggleExpanded,
     all,
     showText,
+    size,
     qa,
 }) => {
     const titleExpanded = all ? 'Collapse All' : 'Collapse';
@@ -34,6 +36,7 @@ export const ExpandButton: FC<Props> = ({
             view="flat-secondary"
             title={expanded ? titleExpanded : titleCollapsed}
             onClick={toggleExpanded}
+            size={size}
             qa={qa}
         >
             {showText && (expanded ? titleExpanded : titleCollapsed) + ' '}

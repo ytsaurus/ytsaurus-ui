@@ -502,6 +502,7 @@ export function nodeHasInfo(node: ProcessedNode) {
 
 export function useOperationNodesStates(nodes: DataSet<ProcessedNode>) {
     const [states, setStates] = React.useState(() => calculateOperationStates(nodes));
+
     React.useEffect(() => {
         let didUnmount = false;
         const updateState = () => {
@@ -515,12 +516,14 @@ export function useOperationNodesStates(nodes: DataSet<ProcessedNode>) {
             nodes.off('*', updateState);
         };
     }, [nodes]);
+
     return states;
 }
 
 const states = Object.keys(operationsStateConfig) as NodeState[];
 function calculateOperationStates(nodes: DataSet<ProcessedNode>) {
     const counts: Partial<Record<NodeState | 'NotStarted', number>> = {};
+
     nodes.forEach((node) => {
         if (node.type === 'in' || node.type === 'out') {
             return;
@@ -531,6 +534,7 @@ function calculateOperationStates(nodes: DataSet<ProcessedNode>) {
         }
         counts[state]! += 1;
     });
+
     return states.map((state) => {
         return {
             state,

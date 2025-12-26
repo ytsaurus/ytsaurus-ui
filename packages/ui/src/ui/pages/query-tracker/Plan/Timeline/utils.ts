@@ -1,25 +1,12 @@
-import * as React from 'react';
-
 import {colord, extend} from 'colord';
 import mixPlugin from 'colord/plugins/mix';
-
-import minBy_ from 'lodash/minBy';
-import maxBy_ from 'lodash/maxBy';
 import sortBy_ from 'lodash/sortBy';
-
-import {DataSet} from 'vis-data';
-import {TimelineEvent} from '../../../../packages/ya-timeline';
 import {Progress} from '../models/plan';
 
 import {GraphColors} from '../GraphColors';
 import {ProcessedNode} from '../utils';
-
-import {AxisProps} from './Timeline';
-import {EventGroup} from './TimelineCanvas';
-
-export const MIN_RANGE = 60_000;
-
-const RESERVE_TO_EVENT = 1_000;
+import {TimelineEvent} from '@gravity-ui/timeline';
+import {OperationRenderer} from './renderer/OperationRenderer';
 
 const eventStatusToColorName = {
     NotStarted: 'new',
@@ -32,17 +19,17 @@ const eventStatusToColorName = {
 
 export type OperationColorsType = Record<string, {percentage: number; color: string}>;
 
-export type OperationType = TimelineEvent & {
+export type OperationTimeline = TimelineEvent & {
     eventsCount: number;
     colors: OperationColorsType;
     borderColor?: string;
     backgroundColor?: string;
-    id?: number;
     name?: string;
     to: number;
+    isExpanded: boolean;
 };
 
-type OperationTypeRaw = Omit<OperationType, 'colors'>;
+type OperationTypeRaw = Omit<OperationTimeline, 'colors'>;
 
 extend([mixPlugin]);
 interface CalcOperationColorsArgs {
@@ -113,6 +100,7 @@ function prepareEvents({
         renderType: 'operation',
         axisId,
         eventsCount: 1,
+        isExpanded: false,
     };
 
     let currentStageIndex = 0;
@@ -122,7 +110,8 @@ function prepareEvents({
         trackIndex: currentStageIndex++,
         from: dataProgressStartedAtMillis,
         to: dataProgressFinishedAtMillis,
-        id: eventIndex++,
+        id: `${axisId}_${eventIndex++}`,
+        renderer: new OperationRenderer(),
     });
 
     if (stages) {
@@ -138,7 +127,7 @@ function prepareEvents({
                     from: dataProgressStartedAtMillis,
                     to: new Date(stageStartedAt).getTime(),
                     name: 'init',
-                    id: eventIndex++,
+                    id: `${axisId}_${eventIndex++}`,
                 });
             }
             events.push({
@@ -147,7 +136,7 @@ function prepareEvents({
                 from: new Date(stageStartedAt).getTime(),
                 to: new Date(stageFinishedAt).getTime(),
                 name: stageName,
-                id: eventIndex++,
+                id: `${axisId}_${eventIndex++}`,
             });
         });
     }
@@ -155,8 +144,42 @@ function prepareEvents({
     return events;
 }
 
+export type RawAxis = {
+    id: string;
+    label: string;
+    events: OperationTimeline[];
+    from: number;
+    to: number;
+    notStarted?: boolean;
+    status: string;
+    level: number;
+    node: ProcessedNode;
+    isExpandable: boolean;
+    link?: {cluster: string; path: string};
+};
+
+export type RowType = Partial<RawAxis> & {
+    isExpanded?: boolean;
+    isEvent?: boolean;
+    name?: string;
+    tracksCount?: number;
+    axisId?: string;
+    node: ProcessedNode;
+};
+
+const getNodeLink = (data?: string) => {
+    if (!data) return undefined;
+
+    const cluster = data.match(/^(\w+)(?=\.)/)?.[0];
+    const path = data.match(/`([^`]+)`/)?.[1];
+
+    if (!cluster || !path) return undefined;
+
+    return {cluster, path};
+};
+
 export function parseGraph(data: {
-    nodes: DataSet<ProcessedNode, 'id'>;
+    nodes: ProcessedNode[];
     colors: GraphColors;
     theme: string;
     queryStartedAtMillis: number;
@@ -165,10 +188,11 @@ export function parseGraph(data: {
 
     let preparationFinishedAtMillis = Infinity;
 
-    const axes: AxisProps[] = [];
+    const axes: RawAxis[] = [];
 
     nodes.forEach((node) => {
         const dataProgress = node.progress;
+        const link = getNodeLink(node.title);
 
         const axisDraft = {
             id: node.id,
@@ -176,6 +200,7 @@ export function parseGraph(data: {
             events: [],
             level: Number(node.level),
             node,
+            link,
             isExpandable: false,
         };
 
@@ -213,7 +238,7 @@ export function parseGraph(data: {
             preparationFinishedAtMillis,
         );
 
-        const current: AxisProps = {
+        const current: RawAxis = {
             ...axisDraft,
             from: dataProgressStartedAtMillis,
             to: dataProgressFinishedAtMillis,
@@ -263,9 +288,9 @@ export function parseGraph(data: {
             to: preparationFinishedAtMillis,
             events: [
                 {
+                    id: 'preparation',
                     eventsCount: 1,
                     axisId: 'preparation',
-                    renderType: 'operation',
                     trackIndex: 0,
                     from: queryStartedAtMillis,
                     to: preparationFinishedAtMillis,
@@ -277,6 +302,7 @@ export function parseGraph(data: {
                             color: colors.operation[eventStatusToColorName['Finished']],
                         },
                     },
+                    isExpanded: false,
                 },
             ],
             node: {
@@ -289,88 +315,9 @@ export function parseGraph(data: {
             level: 0,
             status: 'Finished',
             label: 'Preparation',
-        } as AxisProps;
+        } as RawAxis;
         sortedAxes.unshift(preparation);
     }
 
     return sortedAxes;
-}
-
-interface CalculateTimelineIntervalProps {
-    from?: number;
-    to?: number;
-    queryStart?: number;
-    queryEnd: number;
-}
-
-function calculateIntervalDuration({from, to}: {from: number; to: number}) {
-    return Math.max(to - from, MIN_RANGE);
-}
-
-function calculateTimelineInterval({
-    queryStart,
-    queryEnd,
-    from,
-    to,
-}: CalculateTimelineIntervalProps) {
-    if (!queryStart) {
-        return {};
-    }
-    const queryDuration = calculateIntervalDuration({from: queryStart, to: queryEnd});
-
-    if (!from || !to) {
-        return {start: queryStart, end: queryStart + queryDuration};
-    }
-
-    const duration = Math.min(calculateIntervalDuration({from, to}), queryDuration);
-
-    const startNotInBounds = (queryStart && from < queryStart) || from > queryEnd;
-    const endNotInBounds = queryEnd < to || (queryStart && queryStart > to);
-
-    if (startNotInBounds) {
-        return {start: queryStart, end: queryStart + duration};
-    }
-
-    if (endNotInBounds) {
-        return {start: queryEnd - duration, end: queryEnd};
-    }
-    return {start: from, end: from + duration};
-}
-
-export function useTimelineInterval(axes: AxisProps[]) {
-    const [{start, end}, setUserInterval] = React.useState<{start?: number; end?: number}>({});
-
-    const rulerId = React.useRef(false);
-    const intervalWasSetByUser = React.useRef(false);
-
-    const {queryStart, queryEnd} = React.useMemo(() => {
-        const firstEvent = minBy_(axes, 'from');
-        const lastEvent: EventGroup = maxBy_(axes, 'to') ?? Object.create(null);
-
-        const queryStart = firstEvent ? firstEvent.from - RESERVE_TO_EVENT : undefined;
-
-        const queryEnd =
-            lastEvent.to && queryStart
-                ? lastEvent.to + (lastEvent.to - queryStart) * 0.08
-                : new Date().getTime();
-
-        return {queryStart, queryEnd};
-    }, [axes]);
-
-    const {start: timelineStart, end: timelineEnd} = calculateTimelineInterval({
-        from: start,
-        to: end,
-        queryStart,
-        queryEnd,
-    });
-
-    if (intervalWasSetByUser.current && !start && !end) {
-        rulerId.current = !rulerId.current;
-    }
-
-    intervalWasSetByUser.current = Boolean(start || end);
-
-    const timelineRulerKey = `ruler-${rulerId.current}`;
-
-    return [{timelineStart, timelineEnd, timelineRulerKey}, setUserInterval] as const;
 }
