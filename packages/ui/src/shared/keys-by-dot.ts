@@ -82,6 +82,7 @@ export function keyByDotDemo() {
     const b4: KeysByDot<State> = 'f2.f3.f4.f5';
     const b5: KeysByDot<State> = 'f2.f3.f4_2.f5';
     const b6: KeysByDot<State> = 'f2.f3.f4_2.f5_2.f6_2';
+    // eslint-disable-next-line no-console
     console.log(a1, a2, a3, a4, a5, b1, b2, b3, b4, b5, b5, b6);
 
     // Missing keys should generate compile error
@@ -107,5 +108,6 @@ export function keyByDotDemo() {
     const eb4: KeysByDot<State> = 'f2.f3.f4_2.f5_missing';
     // @ts-expect-error
     const eb5: KeysByDot<State> = 'f2.f3.f4_2.f5_2.f6_2_missing';
+    // eslint-disable-next-line no-console
     console.log(e0, ea1, ea2, ea3, ea4, ea5, eb1, eb2, eb3, eb4, eb5);
 }

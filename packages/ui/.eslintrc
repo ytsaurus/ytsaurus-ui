@@ -3,6 +3,7 @@
     "plugins": ["react", "lodash"],
     "root": true,
     "rules": {
+        "no-console": "error",
         "new-cap": 0,
         "import/order": 0,
         "import/dynamic-import-chunkname": [2, {

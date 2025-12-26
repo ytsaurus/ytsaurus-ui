@@ -42,9 +42,11 @@ class BoundedArray {
             if (isArray_(parsedData)) {
                 this.data = parsedData;
             } else {
+                // eslint-disable-next-line no-console
                 console.error(`Got ${typeof parsedData}, while expecting an Array`);
             }
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.warn(error);
         }
     }
@@ -255,6 +257,7 @@ function saveData(storageKey) {
             if (error instanceof StorageBoundExceededError) {
                 columnSets.repackData();
                 window.localStorage.setItem(storageKey, columnSets.serialize());
+                // eslint-disable-next-line no-console
                 console.warn(`Repacking due to '${storageKey}' limit exceeded`);
             } else {
                 // global localStorage limit is exceeded, repack both stores
@@ -266,6 +269,7 @@ function saveData(storageKey) {
                 columnSets.repackData();
                 window.localStorage.setItem(STORAGE_KEY, columnSets.serialize());
 
+                // eslint-disable-next-line no-console
                 console.warn('Repacking due to global localStorage limit exceeded');
             }
         }

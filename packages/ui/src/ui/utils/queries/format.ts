@@ -22,6 +22,7 @@ export function convert(
     try {
         return unipika.converters.yql([value, dataType], settings, flags);
     } catch (error) {
+        // eslint-disable-next-line no-console
         console.log(error);
         let valueStr: string;
         try {

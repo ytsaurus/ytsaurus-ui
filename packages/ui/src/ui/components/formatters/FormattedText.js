@@ -19,6 +19,7 @@ function prepareTextProps(text, asHTML) {
             try {
                 props.children = unipika.decode(String(text));
             } catch (e) {
+                // eslint-disable-next-line no-console
                 console.error('Text cannot be decoded:', text, e);
                 props.children = (
                     <span>

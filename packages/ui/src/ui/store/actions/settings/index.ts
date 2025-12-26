@@ -16,6 +16,7 @@ import {setSettingByKey} from './settings-base';
 export * from './settings-base';
 
 function logError(action: string, name: string) {
+    // eslint-disable-next-line no-console
     console.error('Failed to "%s" setting "%s", settings provider is disabled.', action, name);
 }
 
