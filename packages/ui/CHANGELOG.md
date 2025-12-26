@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.4.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.4.1...ui-v3.4.2) (2025-12-26)
+
+
+### Bug Fixes
+
+* **Navigation/Metadata:** operation link [YTFRONT-4994] ([33a1d26](https://github.com/ytsaurus/ytsaurus-ui/commit/33a1d26d095221c1fa47964a3ce8866fa831e1a6))
+* **Scheduling:** wrong pending time [YTFRONT-5439] ([8959c61](https://github.com/ytsaurus/ytsaurus-ui/commit/8959c611822821ba49d7bcd855d90c5475ae0e78))
+* **UTF8:** graph node details info [YTFRONT-5246] ([d83815d](https://github.com/ytsaurus/ytsaurus-ui/commit/d83815d16397988fd5c4dace4c26416e3bc3ff00))
+
 ## [3.4.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.4.0...ui-v3.4.1) (2025-12-23)
 
 
