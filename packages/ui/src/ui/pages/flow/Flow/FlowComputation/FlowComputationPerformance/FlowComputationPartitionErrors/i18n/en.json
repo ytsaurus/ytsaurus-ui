@@ -1,0 +1,11 @@
+{
+  "type-of-error": "Type of error",
+  "1m": "Last 1 min",
+  "5m": "Last 5 min",
+  "30m": "Last 30 min",
+
+  "restart_because_fail": "Restart because fail",
+  "restart_because_rebalancing": "Restart because rebalancing",
+  "has_retryable_errors": "Retryable errors",
+  "total_with_problems": "Total"
+}

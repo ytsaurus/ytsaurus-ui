@@ -147,7 +147,7 @@ export function DataTableGravity<TData, TScrollElement extends Element | Window>
 export function TableCell({
     children,
     ...rest
-}: {children: React.ReactNode} & Pick<Omit<FlexProps, 'style'>, 'justifyContent'>) {
+}: {children: React.ReactNode} & Partial<Pick<Omit<FlexProps, 'style'>, 'justifyContent'>>) {
     return (
         <Flex
             {...rest}

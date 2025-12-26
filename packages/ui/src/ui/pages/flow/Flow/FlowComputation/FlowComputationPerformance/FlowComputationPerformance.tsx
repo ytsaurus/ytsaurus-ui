@@ -8,13 +8,20 @@ import {
     useFlowComputationPartitionStatsTableData,
 } from './FlowComputationPerformancePerPartition/FlowComputationPerformancePerPartition';
 import i18n from './i18n';
+import {
+    FlowComputationPartitionErrors,
+    useFlowComputationPartitionErrorsData,
+} from './FlowComputationPartitionErrors/FlowComputationPartitionErrors';
 
 const block = cn('yt-flow-computation-performance');
 
 export function FlowComputationPerformance({data}: {data?: FlowComputationDetailsType}) {
     return (
-        <Flex className={block()} gap={5}>
+        <Flex className={block()} gap={5} wrap>
             <FlowComputationPartitionStats performance_metrics={data?.performance_metrics} />
+            <FlowComputationErrorStats
+                partition_with_error_by_time_and_type={data?.partition_with_error_by_time_and_type}
+            />
         </Flex>
     );
 }
@@ -40,6 +47,18 @@ function FlowComputationPartitionStats({
     return !items.length ? null : (
         <PerformanceBlock header={i18n('performance-per-partition')}>
             <FlowComputationPartitionStatsTable items={items} />
+        </PerformanceBlock>
+    );
+}
+
+function FlowComputationErrorStats({
+    partition_with_error_by_time_and_type,
+}: Partial<Pick<FlowComputationDetailsType, 'partition_with_error_by_time_and_type'>>) {
+    const items = useFlowComputationPartitionErrorsData(partition_with_error_by_time_and_type);
+
+    return !items.length ? null : (
+        <PerformanceBlock header={i18n('performance-per-partition')}>
+            <FlowComputationPartitionErrors items={items} />
         </PerformanceBlock>
     );
 }
