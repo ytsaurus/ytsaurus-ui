@@ -5,8 +5,8 @@
  * @param params
  * @example formatByParamas('hello {user}', {user: 'world'}); // returns 'hello world'
  */
-export function formatByParams(template: string, params: Record<string, {toString(): string}>) {
+export function formatByParams(template: string, params: Record<string, unknown>) {
     return Object.keys(params).reduce((acc, key) => {
-        return acc.replace(new RegExp(`{${key}}`, 'g'), params[key].toString());
+        return acc.replace(new RegExp(`{${key}}`, 'g'), String(params[key]));
     }, template);
 }

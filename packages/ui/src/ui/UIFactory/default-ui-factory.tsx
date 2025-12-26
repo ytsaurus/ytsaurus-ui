@@ -127,6 +127,12 @@ export const defaultUIFactory: UIFactory = {
 
         return {urlTemplate, title};
     },
+    getMonitoringComponentForFlowComputation() {
+        return undefined;
+    },
+    getMonitoringComponentForFlowWorker() {
+        return undefined;
+    },
 
     getStatisticsComponentForAccount() {
         return undefined;
