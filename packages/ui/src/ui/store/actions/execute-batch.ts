@@ -55,6 +55,7 @@ export async function executeBatchWithRetries<T>(
             const e = err as any;
             if (!options?.allowRetries) {
                 const error = isBatchError(e) ? e.error : e;
+                // eslint-disable-next-line no-console
                 console.error(error);
                 throw error;
             }

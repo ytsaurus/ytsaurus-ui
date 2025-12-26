@@ -382,6 +382,7 @@ describe('hammer.tree-list', () => {
                                 (item) => item.parent,
                             );
 
+                            // eslint-disable-next-line no-console
                             console.log(JSON.stringify(treeNodes));
 
                             const res = treeList.filterTreeEachChild(

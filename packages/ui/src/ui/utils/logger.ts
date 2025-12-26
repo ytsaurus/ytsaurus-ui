@@ -24,12 +24,14 @@ export class Logger {
 
     warn<Args extends Array<any>>(...args: Args) {
         const now = Date.now();
+        // eslint-disable-next-line no-console
         console.warn(this.name, now - this.startTime, now - this.lastTime, ...args);
         this.lastTime = now;
     }
 
     log<Args extends Array<any>>(...args: Args) {
         const now = Date.now();
+        // eslint-disable-next-line no-console
         console.log(this.name, now - this.startTime, now - this.lastTime, ...args);
         this.lastTime = now;
     }

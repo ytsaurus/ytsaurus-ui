@@ -117,6 +117,7 @@ export function getRealPath({path, type}: {path: string; type: string}) {
                 });
             })
             .catch((error) => {
+                // eslint-disable-next-line no-console
                 console.error(error);
                 toaster.add({
                     theme: 'danger',
@@ -188,6 +189,7 @@ export function getRealPaths(items: {path: string}[]) {
                 });
             })
             .catch((error) => {
+                // eslint-disable-next-line no-console
                 console.error(error);
                 toaster.add({
                     theme: 'danger',
@@ -307,6 +309,7 @@ export function deleteObject() {
                 }
             })
             .catch((error) => {
+                // eslint-disable-next-line no-console
                 console.error(error);
                 dispatch({
                     type: DELETE_OBJECT.FAILURE,
@@ -461,6 +464,7 @@ export function deleteObjects() {
                 dispatch(updateView());
             })
             .catch((error: YTError) => {
+                // eslint-disable-next-line no-console
                 console.error(error);
                 dispatch({
                     type: DELETE_OBJECT.FAILURE,

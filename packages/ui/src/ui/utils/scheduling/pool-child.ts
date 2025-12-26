@@ -178,6 +178,7 @@ export function updatePoolChild<T extends 'pool' | 'operation'>(
 
         if (isPoolItem(data)) {
             if (typeof attributes === 'undefined' && data.parent) {
+                // eslint-disable-next-line no-console
                 console.error(
                     'Pool "%s" without attributes inited by "%s"',
                     data.name,

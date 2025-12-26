@@ -77,6 +77,7 @@ export function fetchAccessLog(): AccessLogThunkAction {
                     cancelToken: accesLogCancelHelper.removeAllAndGenerateNextToken(),
                 })
                 .catch((e) => {
+                    // eslint-disable-next-line no-console
                     console.log(e);
                     return {data: {latest: undefined, erliest: undefined}};
                 }),

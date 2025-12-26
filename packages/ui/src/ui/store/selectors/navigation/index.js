@@ -34,6 +34,7 @@ export const getParsedPath = createSelector(getPath, (path) => {
     try {
         return ypath.YPath.create(path, 'absolute');
     } catch (ex) {
+        // eslint-disable-next-line no-console
         console.error(ex);
     }
 });

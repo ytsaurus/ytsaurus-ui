@@ -435,6 +435,7 @@ const previousProps: Record<string, any> = {};
 export function showChangedProps(key: string, props: object, verbose?: boolean) {
     const prevProps = previousProps[key];
     if (prevProps === undefined) {
+        // eslint-disable-next-line no-console
         console.log(key, Date.now(), Object.keys(props));
     } else {
         const changed: Array<string> = [];
@@ -442,10 +443,12 @@ export function showChangedProps(key: string, props: object, verbose?: boolean) 
             if (v !== prevProps[k]) {
                 changed.push(k);
                 if (verbose) {
+                    // eslint-disable-next-line no-console
                     console.log(key, k, {prev: prevProps[k], v});
                 }
             }
         });
+        // eslint-disable-next-line no-console
         console.log(key, Date.now(), changed);
     }
     previousProps[key] = props;

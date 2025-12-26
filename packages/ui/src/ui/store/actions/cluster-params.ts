@@ -136,6 +136,7 @@ export function initClusterParams(cluster: string): GlobalThunkAction<Promise<vo
                         }
                     })
                     .catch((e) => {
+                        // eslint-disable-next-line no-console
                         console.error('Failed to check if current user is admin', e);
                     });
             })
@@ -204,6 +205,7 @@ export function updateCluster(cluster: string): GlobalThunkAction {
     return (dispatch, getState) => {
         const dispatchError = (error: any) => {
             if (error instanceof Error) {
+                // eslint-disable-next-line no-console
                 console.error(error);
             }
             dispatch({

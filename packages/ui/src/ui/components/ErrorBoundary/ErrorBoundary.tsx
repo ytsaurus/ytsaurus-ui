@@ -41,6 +41,7 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, State> 
         const {hasError, error} = this.state;
 
         if (hasError && !this.props.disableRum) {
+            // eslint-disable-next-line no-console
             console.error(error);
         }
     }

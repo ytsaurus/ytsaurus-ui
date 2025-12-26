@@ -63,6 +63,7 @@ export class QueriesPollingService {
                 }
             });
         } catch (e) {
+            // eslint-disable-next-line no-console
             console.error(e);
         } finally {
             this.loading = false;

@@ -134,6 +134,7 @@ export function navigationSetNodeAttributes(
         const paths = getNavigationAttributesEditorPath(getState());
 
         if (isEmpty_({...generalAttrs, ...storageAttrs})) {
+            // eslint-disable-next-line no-console
             console.warn(
                 `Please check your parameters: ${JSON.stringify({
                     path: paths,

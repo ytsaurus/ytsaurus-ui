@@ -40,6 +40,7 @@ export function expose(functions: ExposedFunctions): void {
     // Ensure we are running in a worker
     // @ts-ignore
     if (typeof WorkerGlobalScope === 'undefined') {
+        // eslint-disable-next-line no-console
         console.error('Expose not called in worker thread');
         return;
     }
@@ -122,7 +123,9 @@ export async function promisifyWorker<T extends ExposedFunctions>(
         const jobIndex = activeJobs.findIndex((job) => job.request.id === response.id);
 
         if (jobIndex < 0) {
+            // eslint-disable-next-line no-console
             console.error('Worker responded to nonexistent job');
+            // eslint-disable-next-line no-console
             console.warn("Worker's response:", response);
             return;
         } else {
@@ -138,6 +141,7 @@ export async function promisifyWorker<T extends ExposedFunctions>(
     worker.onerror = function (error) {
         // We don't actually know what job the error occured in, so reject them all just to be safe.
         // This event should never fire since we have a try catch within the worker's onmessage
+        // eslint-disable-next-line no-console
         console.error('Uncaught error in worker:', error);
 
         const jobs = activeJobs.splice(0, activeJobs.length);

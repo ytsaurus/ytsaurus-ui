@@ -112,6 +112,7 @@ export function attachTreeLeaves<T, L>(
         if (treeNode) {
             treeNode.leaves.push(getTreeLeafNode(leaf, leafName));
         } else {
+            // eslint-disable-next-line no-console
             console.error(
                 'Tree leaf with name "%s" has an unknown parent "%s"',
                 leafName,

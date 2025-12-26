@@ -36,8 +36,6 @@ function TableColumnsPresetNotice() {
         );
     }
 
-    console.log(columns);
-
     return (
         <Warning className={block()}>
             <CollapsibleSection
