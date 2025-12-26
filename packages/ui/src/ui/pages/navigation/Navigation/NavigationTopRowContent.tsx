@@ -224,8 +224,8 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
     return (
         <EditableBreadcrumbs
             onAction={(key: Key) => {
-                const {text: keyText} = JSON.parse(key as string);
-                const item = bcItems.find(({text}) => text === keyText);
+                const {index} = JSON.parse(key as string);
+                const item = bcItems[index];
                 if (item) {
                     const url = makeRoutedURL(window.location.pathname, {
                         path: item.state.path,
