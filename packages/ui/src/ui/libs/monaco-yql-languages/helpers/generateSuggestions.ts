@@ -17,6 +17,7 @@ export const SuggestionsWeight: Record<SuggestionType, number> = {
     suggestPragmas: 2,
     binding: 3,
     connection: 4,
+    suggestVariables: 4,
     suggestColumns: 5,
     suggestColumnAliases: 6,
     suggestKeywords: 7,

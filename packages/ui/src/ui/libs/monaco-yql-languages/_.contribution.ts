@@ -1,3 +1,4 @@
+import {MonacoLanguage} from '../../constants/monaco';
 import {CancellationToken, Emitter, IEvent, Position, editor, languages} from 'monaco-editor';
 
 interface ILang extends languages.ILanguageExtensionPoint {
@@ -72,15 +73,19 @@ export function registerLanguage(def: ILang): void {
     languages.register(def);
 
     const lazyLanguageLoader = LazyLanguageLoader.getOrCreate(languageId);
-    languages.setMonarchTokensProvider(
-        languageId,
-        lazyLanguageLoader.whenLoaded().then((mod) => mod.language),
-    );
-    languages.onLanguage(languageId, () => {
-        lazyLanguageLoader.load().then((mod) => {
-            languages.setLanguageConfiguration(languageId, mod.conf);
+
+    if (languageId !== MonacoLanguage.YQL) {
+        languages.setMonarchTokensProvider(
+            languageId,
+            lazyLanguageLoader.whenLoaded().then((mod) => mod.language),
+        );
+        languages.onLanguage(languageId, () => {
+            lazyLanguageLoader.load().then((mod) => {
+                languages.setLanguageConfiguration(languageId, mod.conf);
+            });
         });
-    });
+    }
+
     lazyLanguageLoader.whenLoaded().then((mod) => {
         if (mod.provideSuggestionsFunction) {
             languages.registerCompletionItemProvider(languageId, {
