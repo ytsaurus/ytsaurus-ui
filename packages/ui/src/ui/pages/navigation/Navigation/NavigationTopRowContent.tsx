@@ -188,6 +188,8 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
     const mode = useSelector(getMode);
     const history = useHistory();
 
+    const lastClickWasModified = React.useRef(false);
+
     const items = React.useMemo(() => {
         return bcItems.map(({text, state}, index) => {
             const isLastItem = index === bcItems.length - 1;
@@ -199,7 +201,13 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
                         navmode: mode === Tab.ACL ? mode : Tab.CONTENT,
                         filter: '',
                     })}
-                    onClick={(e) => e.preventDefault()}
+                    onClick={(e) => {
+                        const isModifiedClick = e.ctrlKey || e.metaKey || e.shiftKey;
+                        lastClickWasModified.current = isModifiedClick;
+                        if (!isModifiedClick) {
+                            e.preventDefault();
+                        }
+                    }}
                     key={`${JSON.stringify({text, index})}`}
                 >
                     {index ? (
@@ -210,7 +218,7 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
                 </Breadcrumbs.Item>
             );
         });
-    }, [bcItems, mode, onEdit, window.location.pathname]);
+    }, [bcItems, mode, onEdit]);
 
     const loading = !useSelector(isNavigationFinalLoadState);
 
@@ -224,6 +232,10 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
     return (
         <EditableBreadcrumbs
             onAction={(key: Key) => {
+                if (lastClickWasModified.current) {
+                    lastClickWasModified.current = false;
+                    return;
+                }
                 const {index} = JSON.parse(key as string);
                 const item = bcItems[index];
                 if (item) {
