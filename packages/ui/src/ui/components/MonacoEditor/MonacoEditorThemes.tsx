@@ -1,6 +1,15 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
 const lightRules = [
+    // Copy-pasted from `ydb-platform/monaco-yql-languages`.
+    {token: 'string.tablepath', foreground: '338186'},
+    {token: 'constant.yql', foreground: '608b4e'},
+    {token: 'keyword.type', foreground: '4d932d'},
+    {token: 'string.sql', foreground: 'a31515'},
+    {token: 'support.function', foreground: '7a3e9d'},
+    {token: 'constant.other.color', foreground: '7a3e9d'},
+    {token: 'comment', foreground: '969896'},
+
     {token: 'tablepath', foreground: '3e999f'},
     {token: 'path', foreground: '3e999f', fontStyle: 'underline'},
     {token: 'string.sql', foreground: 'a31515'},
@@ -27,6 +36,15 @@ monaco.editor.defineTheme(YT_LIGHT_HC_MONACO_THEME, {
 });
 
 const darkRules = [
+    // Copy-pasted from `ydb-platform/monaco-yql-languages`.
+    {token: 'string.tablepath', foreground: '338186'},
+    {token: 'constant.yql', foreground: '608b4e'},
+    {token: 'storage.type', foreground: '6A8759'},
+    {token: 'string.sql', foreground: 'ce9178'},
+    {token: 'support.function', foreground: '9e7bb0'},
+    {token: 'constant.other.color', foreground: '9e7bb0'},
+    {token: 'comment', foreground: '969896'},
+
     {token: 'tablepath', foreground: '3e999f'},
     {token: 'path', foreground: '3e999f', fontStyle: 'underline'},
     {token: 'string.sql', foreground: 'ce9178'},
