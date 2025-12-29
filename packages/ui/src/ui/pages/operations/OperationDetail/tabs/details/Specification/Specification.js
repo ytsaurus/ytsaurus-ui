@@ -161,12 +161,12 @@ export default class Specification extends Component {
                     items={[
                         {
                             key: 'CPU limit',
-                            value: `${format.Number(cpu_limit)} CPU`,
+                            value: `${format.NumberSmart(cpu_limit)} CPU`,
                             visible: Boolean(cpu_limit),
                         },
                         {
                             key: 'GPU limit',
-                            value: `${format.Number(gpu_limit)} GPU`,
+                            value: `${format.NumberSmart(gpu_limit)} GPU`,
                             visible: Boolean(gpu_limit),
                         },
                         {
