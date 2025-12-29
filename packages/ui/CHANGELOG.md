@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.4.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.4.1...ui-v3.4.2) (2025-12-29)
+
+
+### Bug Fixes
+
+* **Navigation/Metadata:** operation link [YTFRONT-4994] ([33a1d26](https://github.com/ytsaurus/ytsaurus-ui/commit/33a1d26d095221c1fa47964a3ce8866fa831e1a6))
+* **Navigation:** duplicate names [YTFRONT-5458] ([7bec172](https://github.com/ytsaurus/ytsaurus-ui/commit/7bec172450a2789a52602f4c8681351852c97b24))
+* **Navigation:** support Ctrl in breadcrumbs [YTFRONT-5465] ([8600951](https://github.com/ytsaurus/ytsaurus-ui/commit/8600951431332c8028bc3d642fc3b699375c264d))
+* **Scheduling:** wrong pending time [YTFRONT-5439] ([8959c61](https://github.com/ytsaurus/ytsaurus-ui/commit/8959c611822821ba49d7bcd855d90c5475ae0e78))
+* **UTF8:** graph node details info [YTFRONT-5246] ([d83815d](https://github.com/ytsaurus/ytsaurus-ui/commit/d83815d16397988fd5c4dace4c26416e3bc3ff00))
+
 ## [3.4.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.4.0...ui-v3.4.1) (2025-12-23)
 
 
