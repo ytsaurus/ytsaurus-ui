@@ -30,6 +30,7 @@ export const getQuery = (state: RootState) => getState(state).queryItem;
 export const getQueryId = (state: RootState) => getState(state).queryItem?.id;
 export const getQueryAnnotations = (state: RootState) => getState(state).queryItem?.annotations;
 export const getQueryGetParams = (state: RootState) => getState(state).params;
+export const getQueryProgress = (state: RootState) => getQuery(state)?.progress;
 
 export const getQueryDraft = (state: RootState) => getState(state).draft;
 export const getQueryDraftSettings = (state: RootState) => getState(state).draft.settings || {};
@@ -157,8 +158,13 @@ export const getCurrentDraftQueryACO = (state: RootState) => {
     return getAco(defaultACO, selectIsMultipleAco(state), state.queryTracker.query?.draft);
 };
 
+export const getQuerySingleProgress = createSelector([getQueryProgress], (progress) => {
+    if (!isSingleProgress(progress)) return {};
+    return progress;
+});
+
 export const getProgressYQLStatistics = (state: RootState) => {
-    const progress = state.queryTracker?.query?.queryItem?.progress;
+    const progress = getQueryProgress(state);
 
     if (!isSingleProgress(progress)) return undefined;
 

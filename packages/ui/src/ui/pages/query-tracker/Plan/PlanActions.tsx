@@ -1,20 +1,24 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 
-import {PlanView, usePlanView, usePlanViews, useSetPlanView} from './PlanContext';
+export type PlanView = 'graph' | 'table' | 'timeline';
 
-export default function PlanActions() {
-    const currentView = usePlanView();
-    const planViews = usePlanViews();
-    const setPlanView = useSetPlanView();
+const planViews: {value: PlanView; content: string}[] = [
+    {
+        value: 'graph',
+        content: 'Graph',
+    },
+    {
+        value: 'timeline',
+        content: 'Timeline',
+    },
+];
 
-    return (
-        <SegmentedRadioGroup
-            options={planViews}
-            value={currentView}
-            onUpdate={(value) => {
-                setPlanView(value as PlanView);
-            }}
-        />
-    );
-}
+type Props = {
+    value: PlanView;
+    onUpdate: (view: PlanView) => void;
+};
+
+export const PlanActions: FC<Props> = ({value, onUpdate}) => {
+    return <SegmentedRadioGroup options={planViews} value={value} onUpdate={onUpdate} />;
+};
