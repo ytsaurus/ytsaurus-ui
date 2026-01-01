@@ -42,7 +42,6 @@ import {Tab} from '../../../constants/navigation';
 import {RootState} from '../../../store/reducers';
 import {updateIfChanged} from '../../../utils/utils';
 import {LocationParameters} from '../../../store/location';
-import {getNavigationMapNodeFlowPreparedState, mapNodeFlowParams} from '../flow/url-mapping';
 import {
     getNavigationTabletErrorsPreparedState,
     navigationTabletErrorsParams,
@@ -54,7 +53,6 @@ export const getNavigationParams = (): LocationParameters => {
     const params: LocationParameters = {
         ...tableParams,
         ...mapNodeParams,
-        ...mapNodeFlowParams,
         ...transactionMapParams,
 
         ...consumerParams,
@@ -105,7 +103,6 @@ export const getNavigationParams = (): LocationParameters => {
 
 const GET_PREPARED_STATE = [
     getNavigationMapNodePreparedState,
-    getNavigationMapNodeFlowPreparedState,
     getNavigationTablePreparedState,
     getNavigationTransactionMapPreparedState,
     getNavigationConsumerPreparedState,

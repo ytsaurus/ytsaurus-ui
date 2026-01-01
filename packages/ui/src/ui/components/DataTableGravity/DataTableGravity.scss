@@ -5,6 +5,10 @@
         );
     }
 
+    .gt-table__header-cell {
+        font-weight: var(--yt-font-weight-bold);
+    }
+
     .gt-table__header_sticky {
         z-index: 2;
     }
