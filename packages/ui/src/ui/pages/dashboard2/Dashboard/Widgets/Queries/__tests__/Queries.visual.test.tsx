@@ -7,7 +7,11 @@ import {test} from '../../../../../../playwright-components/core';
 import {Default, Empty, Error} from '../__stories__/Queries.stories';
 import {queriesHandler, queriesHandlerEmpty, queriesHandlerError} from './mocks';
 
-test('Queries: story <Default>', async ({mount, expectScreenshot, router}) => {
+export const MOCK_DATE = '2025-07-19T10:00:00';
+
+test('Queries: story <Default>', async ({mount, expectScreenshot, router, page}) => {
+    await page.clock.install({time: new Date(MOCK_DATE)});
+
     yt.setup.setGlobalOption('proxy', 'test-cluster.yt.my-domain.com');
     await router.use(queriesHandler);
 
@@ -21,6 +25,8 @@ test('Queries: story <Default> with error modal', async ({
     router,
     page,
 }) => {
+    await page.clock.install({time: new Date(MOCK_DATE)});
+
     yt.setup.setGlobalOption('proxy', 'test-cluster.yt.my-domain.com');
     await router.use(queriesHandler);
 

@@ -18,7 +18,11 @@ import {
     operationsHandlerWithLoading,
 } from './mocks';
 
-test('Operations: story <Default>', async ({mount, expectScreenshot, router}) => {
+export const MOCK_DATE = '2025-07-19T10:00:00';
+
+test('Operations: story <Default>', async ({mount, expectScreenshot, router, page}) => {
+    await page.clock.install({time: new Date(MOCK_DATE)});
+
     yt.setup.setGlobalOption('proxy', 'test-cluster.yt.my-domain.com');
     await router.use(operationsHandler);
 
@@ -50,7 +54,14 @@ test('Operations: story <Error>', async ({mount, expectScreenshot, router}) => {
     await expectScreenshot();
 });
 
-test('Operations: story <LongNamesShortWidget>', async ({mount, expectScreenshot, router}) => {
+test('Operations: story <LongNamesShortWidget>', async ({
+    mount,
+    expectScreenshot,
+    router,
+    page,
+}) => {
+    await page.clock.install({time: new Date(MOCK_DATE)});
+
     yt.setup.setGlobalOption('proxy', 'test-cluster.yt.my-domain.com');
     await router.use(operationsHandlerLongNames);
 

@@ -1,4 +1,5 @@
 import './afterEach';
+import './beforeEach';
 
 /**
  * Do not forget to update `../env.names.txt`
