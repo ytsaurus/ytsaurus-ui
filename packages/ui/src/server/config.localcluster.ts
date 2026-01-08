@@ -10,13 +10,14 @@ const localThemes: Record<string, ClusterConfig['theme']> = {
 };
 
 function makeClusterConfig(id: string, name: string, proxy: string): ClusterConfig {
+    const {localmodeClusterConfig, allowPasswordAuth} = getApp().config ?? {};
     return {
-        ...getApp().config?.localmodeClusterConfig,
+        ...localmodeClusterConfig,
 
         id,
         name,
         proxy,
-        authentication: 'none',
+        authentication: allowPasswordAuth ? 'basic' : 'none',
         secure: false,
         theme: localThemes[id] ?? 'mint',
         description: 'Local',

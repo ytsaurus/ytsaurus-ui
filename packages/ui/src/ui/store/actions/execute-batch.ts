@@ -2,8 +2,9 @@ import concat_ from 'lodash/concat';
 import filter_ from 'lodash/filter';
 
 import {YTApiIdType} from '../../../shared/constants/yt-api-id';
+import {getBatchError} from '../../../shared/utils/error';
 
-import {getBatchError, getBatchErrorIndices} from '../../utils/utils';
+import {getBatchErrorIndices} from '../../utils/utils';
 import {YTError} from '../../types';
 import {ExecuteBatchAction, HandleExecuteBatchRetryParams} from '../reducers/execute-batch';
 import {ThunkAction} from 'redux-thunk';

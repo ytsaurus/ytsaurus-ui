@@ -1,10 +1,11 @@
 import {BaseQueryApi} from '@reduxjs/toolkit/query';
 
+import {getBatchError} from '../../../../shared/utils/error';
+
 import {RootState} from '../../../store/reducers';
 import {getCurrentUserName} from '../../../store/selectors/global';
 
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {getBatchError} from '../../../utils/utils';
 
 export async function fetchUsable(_args: {cluster: string}, api: BaseQueryApi) {
     try {

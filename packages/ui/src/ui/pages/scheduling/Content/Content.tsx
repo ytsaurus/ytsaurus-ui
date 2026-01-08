@@ -1,12 +1,19 @@
 import cn from 'bem-cn-lite';
 import reduce_ from 'lodash/reduce';
+
 import React from 'react';
 import {Redirect, Route, Switch, withRouter} from 'react-router';
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+
+import {formatByParams} from '../../../../shared/utils/format';
 import Tabs from '../../../components/Tabs/Tabs';
-import {UI_TAB_SIZE} from '../../../constants/global';
-import {DEFAULT_TAB, SCHEDULING_ALLOWED_ROOT_TABS, Tab} from '../../../constants/scheduling';
 import Placeholder from '../../../pages/components/Placeholder';
+import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+import {UI_TAB_SIZE} from '../../../constants/global';
+import {
+    DEFAULT_TAB,
+    SCHEDULING_ALLOWED_ROOT_TABS,
+    SchedulingTab,
+} from '../../../constants/scheduling';
 import {Overview} from '../../../pages/scheduling/Content/tabs/Overview/Overview';
 import PoolAcl from '../../../pages/scheduling/Content/tabs/PoolAcl/PoolAcl';
 import {useSelector} from '../../../store/redux-hooks';
@@ -18,13 +25,12 @@ import {
     getTree,
     isPoolAclAllowed,
 } from '../../../store/selectors/scheduling/scheduling';
-import UIFactory from '../../../UIFactory';
 import {TabSettings, makeTabProps} from '../../../utils';
 import {makeSchedulingUrl} from '../../../utils/app-url';
-import {formatByParams} from '../../../utils/format';
 import './Content.scss';
 import SchedulingExpandedPoolsUpdater from './SchedulingExpandedPoolsUpdater';
 import {PoolAttributes} from './tabs/PoolAttributes/PoolAttributes';
+import UIFactory from '../../../UIFactory';
 
 const block = cn('scheduling-content');
 
@@ -42,10 +48,10 @@ function Content({match, location}: ContentProps) {
     const isRoot = useSelector(getIsRoot);
     const allowAcl = useSelector(isPoolAclAllowed);
 
-    const localTab: Record<string, string> = {...Tab};
+    const localTab: Record<string, string> = {...SchedulingTab};
 
     const showSettings = reduce_(
-        Tab,
+        SchedulingTab,
         (acc, tab) => {
             acc[tab] = {show: SCHEDULING_ALLOWED_ROOT_TABS[tab] || !isRoot};
             return acc;
@@ -55,15 +61,17 @@ function Content({match, location}: ContentProps) {
 
     const titleDict: Record<string, string> = {};
 
-    const aclTab = showSettings[Tab.ACL];
+    const aclTab = showSettings[SchedulingTab.ACL];
     aclTab.show = aclTab.show && allowAcl;
 
-    const extraTabs = UIFactory.getSchedulingExtraTabs({
-        cluster,
-        pool,
-        tree,
-        extraOptions: {isRoot, isEphemeral},
-    });
+    const extraTabs = [
+        ...UIFactory.getSchedulingExtraTabs({
+            cluster,
+            pool,
+            tree,
+            extraOptions: {isRoot, isEphemeral},
+        }),
+    ];
 
     const extraRoutes: Array<React.ReactElement> = [];
 
@@ -95,7 +103,7 @@ function Content({match, location}: ContentProps) {
     });
 
     delete localTab.ACL;
-    localTab[Tab.ACL] = Tab.ACL;
+    localTab[SchedulingTab.ACL] = SchedulingTab.ACL;
 
     const props = makeTabProps(match.url, localTab, showSettings, {pool, tree}, titleDict);
 
@@ -110,13 +118,15 @@ function Content({match, location}: ContentProps) {
                 size={UI_TAB_SIZE}
             />
             <Switch>
-                <Route path={`${match.path}/${Tab.OVERVIEW}`} component={Overview} />
+                <Route path={`${match.path}/${SchedulingTab.OVERVIEW}`} component={Overview} />
                 <Route
-                    path={`${match.path}/${Tab.ATTRIBUTES}`}
+                    path={`${match.path}/${SchedulingTab.ATTRIBUTES}`}
                     render={() => <PoolAttributes className={block('attributes')} />}
                 />
                 {extraRoutes}
-                {aclTab.show && <Route path={`${match.path}/${Tab.ACL}`} component={PoolAcl} />}
+                {aclTab.show && (
+                    <Route path={`${match.path}/${SchedulingTab.ACL}`} component={PoolAcl} />
+                )}
                 <Route
                     path={`${match.path}/details`}
                     render={() => {

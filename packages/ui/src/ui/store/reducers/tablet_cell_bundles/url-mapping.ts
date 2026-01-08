@@ -8,6 +8,7 @@ import {
     getTabletErrorsByBundlereparedState,
     tabletErrorsByBundleParams,
 } from '../tablet-errors/url-mapping';
+import {prometheusDashboardParams} from '../../../store/reducers/prometheusDashboard/url-mapping';
 
 export const tabletsBundlesParams = {
     activeBundle: {
@@ -120,3 +121,8 @@ export function getTabletsBundlesAclPreparedState(
         updateIfChanged(draftTcb, 'activeBundle', queryTcb.activeBundle);
     });
 }
+
+export const bundlesPrometheusParams = {
+    ...tabletsBundlesParams,
+    ...prometheusDashboardParams,
+};

@@ -26,7 +26,7 @@ import ConsumerMetrics from './views/ConsumerMetrics/ConsumerMetrics';
 import Partitions from './views/Partitions/Partitions';
 import PartitionsExtraControls from './views/Partitions/PartitionsExtraControls';
 
-const views: Record<CONSUMER_MODE, {ExtraControls: ComponentType; View: ComponentType}> = {
+const VIEWS: Record<CONSUMER_MODE, {ExtraControls: ComponentType; View: ComponentType}> = {
     [CONSUMER_MODE.METRICS]: {ExtraControls: () => null, View: ConsumerMetrics},
     [CONSUMER_MODE.PARTITIONS]: {ExtraControls: PartitionsExtraControls, View: Partitions},
 };
@@ -35,10 +35,6 @@ const emptyView: {ExtraControls: ComponentType; View: ComponentType} = {
     ExtraControls: () => null,
     View: () => null,
 };
-
-function useViewByMode(mode: CONSUMER_MODE): {ExtraControls: ComponentType; View: ComponentType} {
-    return views[mode] || emptyView;
-}
 
 const Consumer: React.VFC<PropsFromRedux> = ({
     loadConsumerStatus,
@@ -53,7 +49,7 @@ const Consumer: React.VFC<PropsFromRedux> = ({
         loadConsumerStatus();
     }, []);
 
-    const {ExtraControls, View} = useViewByMode(consumerMode);
+    const {ExtraControls, View} = VIEWS[consumerMode] ?? emptyView;
 
     if (statusError) {
         return <QueueError error={statusError} topMargin="none" />;

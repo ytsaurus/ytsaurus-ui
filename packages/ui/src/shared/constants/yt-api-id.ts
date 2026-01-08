@@ -128,6 +128,7 @@ export const enum YTApiId {
 
     systemCAInstances = 'systemCAInstances',
     systemCAStates = 'systemCAStates',
+    systemClusterMasters = 'systemClusterMasters',
     systemChunks = 'systemChunks',
     systemMasters = 'systemMasters',
     systemMastersConfig = 'systemMastersConfig',
@@ -203,4 +204,6 @@ export const enum YTApiId {
 
     //pipeline/flow
     flowExecuteDescribePipeline = 'flowExecuteDescribePipeline',
+
+    prometheusMonitoringLayout = 'prometheusMonitoringLayout',
 }

@@ -1,10 +1,10 @@
 import typeis from 'type-is';
 
-import {AuthPolicy} from '@gravity-ui/expresskit';
 import {AppConfig} from '@gravity-ui/nodekit';
 
 const localModeConfig: Partial<AppConfig> = {
-    appAuthPolicy: AuthPolicy.disabled,
+    ytAuthAllowInsecure: true,
+
     ytInterfaceSecret: undefined,
 
     expressBodyParserJSONConfig: {

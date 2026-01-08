@@ -42,7 +42,7 @@ export const expectScreenshotFixture: PlaywrightFixture<ExpectScreenshotFixture>
         );
 
         // Wait for loading fonts
-        await page.evaluate(() => document.fonts.ready);
+        await page.waitForFunction(() => document.fonts.ready);
 
         if (themes?.includes('light')) {
             await page.evaluate(() => document.body.classList.add('theme-light'));

@@ -2,12 +2,13 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import map_ from 'lodash/map';
 
+import {splitBatchResults} from '../../../../shared/utils/error';
+
 import CancelHelper from '../../../utils/cancel-helper';
 import {TYPED_OUTPUT_FORMAT} from '../../../constants/index';
 import {LOAD_STORES} from '../../../constants/tablet';
 import {preparePath, prepareStores} from '../../../utils/tablet/stores';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {splitBatchResults} from '../../../utils/utils';
 
 const requests = new CancelHelper();
 

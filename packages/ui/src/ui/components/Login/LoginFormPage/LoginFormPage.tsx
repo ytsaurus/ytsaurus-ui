@@ -118,6 +118,7 @@ function LoginForm({theme}: Props) {
                     value={username}
                     onUpdate={setUsername}
                     error={errors.username}
+                    qa="login-form:user"
                 />
                 <TextInput
                     className={block('field', {password: true})}
@@ -128,6 +129,7 @@ function LoginForm({theme}: Props) {
                     value={password}
                     onUpdate={setPassword}
                     error={errors.password}
+                    qa="login-form:password"
                 />
 
                 <Button
@@ -138,6 +140,7 @@ function LoginForm({theme}: Props) {
                     pin="circle-circle"
                     view={theme === 'light' ? 'action' : 'normal-contrast'}
                     loading={loading}
+                    qa="login-form:submit"
                 >
                     Login
                 </Button>

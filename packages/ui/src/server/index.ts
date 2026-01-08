@@ -9,9 +9,11 @@ import routes from './routes';
 import {createOAuthAuthorizationResolver} from './middlewares/oauth';
 import {createAuthMiddleware} from './middlewares/authorization';
 import {authorizationResolver} from './utils/authorization';
+import {applyAppEnvToConfig} from './utils/configs/apply-app-env-to-config';
 import {createConfigurationErrorsMidleware} from './middlewares/check-configuration';
 
 const nodekit = new NodeKit({configsPath: path.resolve(__dirname, './configs')});
+applyAppEnvToConfig(nodekit.config);
 
 const {appName, appEnv, appInstallation, appDevMode} = nodekit.config;
 nodekit.ctx.log('AppConfig details', {

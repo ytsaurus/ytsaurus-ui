@@ -8,6 +8,13 @@
 
     &__ruler {
         flex-grow: 1;
-        flex-shrink: 0;
+        flex-shrink: 1;
+    }
+}
+
+.with-sticky-toolbar__toolbar_sticky {
+    .yt-timeline {
+        position: relative;
+        top: 4px;
     }
 }

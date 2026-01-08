@@ -24,6 +24,7 @@ export async function getLayoutConfig(req: Request, params: Params): Promise<App
         metrikaCounter,
         allowPasswordAuth,
         odinBaseUrl,
+        prometheusBaseUrl,
         userSettingsConfig,
         tabletErrorsBaseUrl,
     } = req.ctx.config as YTCoreConfig;
@@ -70,6 +71,7 @@ export async function getLayoutConfig(req: Request, params: Params): Promise<App
             allowUserColumnPresets: isUserColumnPresetsEnabled(req),
             odinPageEnabled: Boolean(odinBaseUrl),
             allowTabletErrorsAPI: Boolean(tabletErrorsBaseUrl),
+            allowPrometheusDashboards: Boolean(prometheusBaseUrl),
         },
         pluginsOptions: {
             yandexMetrika: {
