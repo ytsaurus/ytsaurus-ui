@@ -21,7 +21,7 @@ import TTLInfo from '../../../../components/TTLInfo/TTLInfo';
 import WarningIcon from '../../../../components/WarningIcon/WarningIcon';
 import {LOADING_STATUS, Page} from '../../../../constants/index';
 import {NAVIGATION_MAP_NODE_TABLE_ID} from '../../../../constants/navigation';
-import {ROOT_POOL_NAME, Tab as SchedulingTab} from '../../../../constants/scheduling';
+import {ROOT_POOL_NAME, SchedulingTab} from '../../../../constants/scheduling';
 import {itemNavigationAllowed} from '../../../../pages/navigation/Navigation/ContentViewer/helpers';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';

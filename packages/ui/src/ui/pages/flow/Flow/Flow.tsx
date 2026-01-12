@@ -3,17 +3,17 @@ import cn from 'bem-cn-lite';
 import React from 'react';
 import {Redirect, Route, Switch} from 'react-router';
 
-import {formatByParams} from '../../../../../shared/utils/format';
-import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
-import Icon from '../../../../components/Icon/Icon';
-import MetaTable from '../../../../components/MetaTable/MetaTable';
-import StatusLabel from '../../../../components/StatusLabel/StatusLabel';
-import {useUpdater} from '../../../../hooks/use-updater';
+import {formatByParams} from '../../../../shared/utils/format';
+import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
+import Icon from '../../../components/Icon/Icon';
+import MetaTable from '../../../components/MetaTable/MetaTable';
+import StatusLabel from '../../../components/StatusLabel/StatusLabel';
+import {useUpdater} from '../../../hooks/use-updater';
 import {Page} from '../../../../shared/constants/settings';
-import {loadFlowStatus, updateFlowState} from '../../../../store/actions/flow/status';
-import {getFlowStatusData} from '../../../../store/selectors/flow/status';
-import {getCluster} from '../../../../store/selectors/global';
-import UIFactory from '../../../../UIFactory';
+import {loadFlowStatus, updateFlowState} from '../../../store/actions/flow/status';
+import {getFlowStatusData} from '../../../store/selectors/flow/status';
+import {getCluster} from '../../../store/selectors/global';
+import UIFactory from '../../../UIFactory';
 import Tabs from '../../../components/Tabs/Tabs';
 import {YTErrorInline} from '../../../containers/YTErrorInline/YTErrorInline';
 import {useFlowAttributes} from '../../../pages/flow/flow-hooks/use-flow-attributes';
@@ -210,7 +210,7 @@ function FlowMonitoring({pipeline_path}: {pipeline_path: string}) {
         urlTemplate,
     } = UIFactory.getMonitoringComponentForNavigationFlow() ?? {};
     const attributes = useFlowAttributes(pipeline_path).data;
-    const {monitoring_cluster, monitoring_project} = attributes ?? {};
+    const {monitoring_cluster = '', monitoring_project = ''} = attributes ?? {};
     const cluster = useSelector(getCluster);
 
     if (Component) {
