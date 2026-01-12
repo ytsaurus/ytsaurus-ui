@@ -12,7 +12,6 @@ import {BoundsChangedEvent, yaTimelineConfig} from '../../../../packages/ya-time
 import {NodeState} from '../models/plan';
 
 import {useGraphColors} from '../GraphColors';
-import {useResultProgress} from '../PlanContext';
 import {
     ProcessedGraph,
     ProcessedNode,
@@ -26,6 +25,8 @@ import {RowType, TimelineTable} from './TimelineTable';
 import {OperationColorsType, parseGraph, useTimelineInterval} from './utils';
 
 import './Timeline.scss';
+import {useSelector} from '../../../../store/redux-hooks';
+import {getQuerySingleProgress} from '../../../../store/selectors/query-tracker/query';
 
 const block = cn('timeline');
 
@@ -58,7 +59,7 @@ interface TimelineWithSidebarProps {
 }
 
 function TimelineWithSidebar({graph, prepareNode}: TimelineWithSidebarProps) {
-    const progress = useResultProgress();
+    const {yql_progress: progress} = useSelector(getQuerySingleProgress);
     const theme = useThemeValue();
 
     const colors = useGraphColors();

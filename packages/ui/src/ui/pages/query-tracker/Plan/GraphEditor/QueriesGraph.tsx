@@ -6,10 +6,11 @@ import {Loader} from '@gravity-ui/uikit';
 import {YTGraph, useConfig, useElkLayout, useGraphScale} from '../../../../components/YTGraph';
 
 import {ProcessedGraph} from '../utils';
-import {useResultProgress} from '../PlanContext';
 import {createBlocks} from './helpers/createBlocks';
 import {QueriesCanvasBlock, QueriesNodeBlock} from './QueriesNodeBlock';
 import {DetailBlock} from './DetailBlock';
+import {useSelector} from '../../../../store/redux-hooks';
+import {getQuerySingleProgress} from '../../../../store/selectors/query-tracker/query';
 
 type Props = {
     processedGraph: ProcessedGraph;
@@ -45,7 +46,7 @@ const Graph: FC<Props> = ({processedGraph}) => {
 };
 
 function useQueriesGraphData(progressGraph: ProcessedGraph, scale: ECameraScaleLevel) {
-    const progress = useResultProgress();
+    const {yql_progress: progress} = useSelector(getQuerySingleProgress);
 
     const data = React.useMemo(() => {
         return createBlocks(progressGraph, progress, scale);
