@@ -14,6 +14,7 @@ import {copyFileToClipboard} from '../../../../../utils/copy-file-to-clipboard';
 import {showErrorPopup} from '../../../../../utils/utils';
 import {YTError} from '../../../../../types';
 import {toaster} from '../../../../../utils/toaster';
+import guid from '../../../../../common/hammer/guid';
 
 const requestDownloadFile = async (url: string) =>
     axios({
@@ -34,7 +35,7 @@ export const downloadFile = (
     filename: string,
     copy?: boolean,
 ): ThunkAction<Promise<void>, RootState, any, UnknownAction> => {
-    const id = crypto.randomUUID();
+    const id = guid();
 
     return async (dispatch, _getState) => {
         try {
