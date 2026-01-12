@@ -97,7 +97,7 @@ export const SwitchLeaderButton = ({cellId, hosts, className}: SwitchLeaderButto
         const switchLeader = () => {
             return ytApiV4Id.switchLeader(YTApiId.switchLeader, {
                 cell_id: cellId,
-                new_leader_address: leaderAddress,
+                new_leader_address: leaderAddress!,
             });
         };
 
