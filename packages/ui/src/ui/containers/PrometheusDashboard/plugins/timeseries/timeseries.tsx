@@ -100,7 +100,11 @@ function PrometheusChart({
                 ) : (
                     <>
                         <div className={block('widget-title')}>{title}</div>
-                        {error && <InlineError error={error} />}
+                        {error && (
+                            <div className={block('error')}>
+                                <InlineError error={error} />
+                            </div>
+                        )}
                         {!chartData && isLoading && <Loader visible centered />}
                     </>
                 )}
@@ -164,12 +168,12 @@ function useLoadQueriesData({
 
     const chartData: {data?: YagrWidgetData; error?: YTError; isLoading?: boolean} =
         React.useMemo(() => {
-            if (!data || !data?.responseData) {
-                return {isLoading};
-            }
-
             if (error) {
                 return {error: error as YTError};
+            }
+
+            if (!data || !data?.responseData) {
+                return {isLoading};
             }
 
             const {responseData: rawData, start, end, step} = data;

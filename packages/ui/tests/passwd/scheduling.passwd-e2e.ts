@@ -8,7 +8,7 @@ test('Prometheus - Scheduling <Root>', async ({page}) => {
     await prometheus(page).waitForChart();
 });
 
-test('Prometheus - Scheduling no-accwess', async ({page}) => {
+test('Prometheus - Scheduling no-access', async ({page}) => {
     await page.goto(makeClusterUrl(`scheduling/dashboard?pool=no-access`));
 
     await prometheus(page).waitForError403();

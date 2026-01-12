@@ -20,7 +20,7 @@ export YT_CYPRESS_COOKIE=$(
         | awk -F ":|;" '{print $2}'
 )
 
-export X_CSRF_TOKEN=$(curl -H "Cookie: $YT_CYPRESS_COOKIE" http://localhost:8000/auth/whoami | jq -r .csrf_token)
+export X_CSRF_TOKEN=$(curl -H "Cookie: $YT_CYPRESS_COOKIE" http://localhost:8000/auth/whoami | json_pp | grep csrf_token | awk -F '"' '{print $4}')
 
 function yt_set_user_password {
 

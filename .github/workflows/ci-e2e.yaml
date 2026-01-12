@@ -185,7 +185,7 @@ jobs:
           path: packages/ui/tests/playwright-report/
           retention-days: 7
 
-  e2e-with-passw-auth:
+  e2e-with-passwd-auth:
     name: E2E with password auth
     runs-on: ${{ needs.start-vm.outputs.label }}
     needs:
@@ -220,7 +220,7 @@ jobs:
       - name: Init YT local
         run: |
           cd packages/ui
-          YT_TOKEN=password YT_PROXY=`hostname`:8000 npm run e2e:localmode:monitoring:init
+          WITH_AUTH=true YT_TOKEN=password YT_PROXY=`hostname`:8000 npm run e2e:localmode:monitoring:init
       - name: YT auth
         run: |
           cd packages/ui
