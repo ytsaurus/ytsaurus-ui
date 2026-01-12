@@ -45,7 +45,7 @@ const AuthenticationGenerateTokenFormSection: FC<{onClose: () => void}> = ({onCl
         setError(undefined);
 
         return getPassword()
-            .then((password_sha256) => {
+            .then((password_sha256 = '') => {
                 return dispatch(
                     manageTokensCreateToken({
                         description,
@@ -173,7 +173,7 @@ const AuthenticationTokensSection: FC<{
     onClickGenerateTokenButton: () => void;
     onSuccessRemove: () => void;
     passwordSha256?: string;
-}> = ({onSuccessRemove, onClickGenerateTokenButton, passwordSha256}) => {
+}> = ({onSuccessRemove, onClickGenerateTokenButton, passwordSha256 = ''}) => {
     const {getPassword} = useManageTokensPasswordModalContext();
     const dispatch = useDispatch();
     const tokens = useSelector(manageTokensSelector);
@@ -181,7 +181,7 @@ const AuthenticationTokensSection: FC<{
 
     const handleClickRemoveToken = React.useCallback(
         (index: number) => {
-            return getPassword().then((password_sha256) => {
+            return getPassword().then((password_sha256 = '') => {
                 return dispatch(
                     manageTokensRevokeToken({
                         credentials: {
