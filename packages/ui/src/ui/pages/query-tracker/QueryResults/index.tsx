@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import React, {ReactNode, useState} from 'react';
 import block from 'bem-cn-lite';
 import {QueryItem, isSingleProgress} from '../../../types/query-tracker/api';
 import {Tab, TabList, TabPanel, TabProvider} from '@gravity-ui/uikit';
@@ -8,8 +8,7 @@ import {QueryResultActions} from './QueryResultActions';
 import {parseResultTabIndex} from './helpers/parseResultTabIndex';
 import {YQLStatisticsTable} from '../QueryResultsView/YQLStatistics';
 import NotRenderUntilFirstVisible from '../NotRenderUntilFirstVisible/NotRenderUntilFirstVisible';
-import {PlanProvider} from '../Plan/PlanContext';
-import PlanActions from '../Plan/PlanActions';
+import {PlanActions, PlanView} from '../Plan/PlanActions';
 import {QueryResultContainer} from './QueryResultContainer';
 import {QueryChartTab} from './QueryChartTab';
 import {PlanContainer} from './PlanContainer';
@@ -49,6 +48,8 @@ export const QueryResults = React.memo<Props>(function QueryResults({
     const activeTabId = useSelector(selectActiveQueryResultTab);
     const activeResultParams = useSelector(selectActiveResultParams);
 
+    const [planView, setPlanView] = useState<PlanView>('graph');
+
     const operationIdToCluster = React.useMemo(() => {
         return extractOperationIdToCluster(
             isSingleProgress(query?.progress) ? query?.progress?.yql_statistics : undefined,
@@ -57,7 +58,6 @@ export const QueryResults = React.memo<Props>(function QueryResults({
 
     if (!query) return null;
 
-    const progress = isSingleProgress(query?.progress) ? query.progress : {};
     const resultIndex = activeResultParams?.resultIndex;
 
     const onTabChange = (id: string) => {
@@ -94,7 +94,13 @@ export const QueryResults = React.memo<Props>(function QueryResults({
             );
         }
         if (tabId === 'progress') {
-            return <PlanContainer isActive={true} operationIdToCluster={operationIdToCluster} />;
+            return (
+                <PlanContainer
+                    planView={planView}
+                    isActive={true}
+                    operationIdToCluster={operationIdToCluster}
+                />
+            );
         }
         return null;
     };
@@ -107,39 +113,32 @@ export const QueryResults = React.memo<Props>(function QueryResults({
             </div>
             <QueryProgress query={query} />
             <NotRenderUntilFirstVisible className={b('result', {minimized})} hide={minimized}>
-                <PlanProvider
-                    plan={progress.yql_plan}
-                    progress={progress?.yql_progress}
-                    defaultView="graph"
-                >
-                    <TabProvider value={activeTabId || ''} onUpdate={onTabChange}>
-                        <div className={b('header')}>
-                            <TabList className={b('tabs')}>
-                                {tabs.map((tab) => (
-                                    <Tab key={tab.id} value={tab.id}>
-                                        {tab.title}
-                                    </Tab>
-                                ))}
-                            </TabList>
-                            {activeTabId?.includes('result') && Number.isInteger(resultIndex) && (
-                                <div className={b('tab_actions')}>
-                                    <QueryResultActions
-                                        query={query}
-                                        resultIndex={resultIndex ?? 0}
-                                    />
-                                </div>
-                            )}
-                            {activeTabId === 'progress' && <PlanActions />}
-                        </div>
-                        <div className={b('content')}>
+                <TabProvider value={activeTabId || ''} onUpdate={onTabChange}>
+                    <div className={b('header')}>
+                        <TabList className={b('tabs')}>
                             {tabs.map((tab) => (
-                                <TabPanel key={tab.id} value={tab.id}>
-                                    {getTabContent(tab.id)}
-                                </TabPanel>
+                                <Tab key={tab.id} value={tab.id}>
+                                    {tab.title}
+                                </Tab>
                             ))}
-                        </div>
-                    </TabProvider>
-                </PlanProvider>
+                        </TabList>
+                        {activeTabId?.includes('result') && Number.isInteger(resultIndex) && (
+                            <div className={b('tab_actions')}>
+                                <QueryResultActions query={query} resultIndex={resultIndex ?? 0} />
+                            </div>
+                        )}
+                        {activeTabId === 'progress' && (
+                            <PlanActions value={planView} onUpdate={setPlanView} />
+                        )}
+                    </div>
+                    <div className={b('content')}>
+                        {tabs.map((tab) => (
+                            <TabPanel key={tab.id} value={tab.id}>
+                                {getTabContent(tab.id)}
+                            </TabPanel>
+                        ))}
+                    </div>
+                </TabProvider>
             </NotRenderUntilFirstVisible>
             <div></div>
         </div>

@@ -5,13 +5,15 @@ import {parseTablePath} from '../Plan/services/tables';
 import {genNavigationUrl} from '../../../utils/navigation/navigation';
 import {buildOperationUrl} from './helpers/buildOperationUrl';
 import {getOperationUrl} from './helpers/getOperationUrl';
+import {PlanView} from '../Plan/PlanActions';
 
 type Props = {
+    planView: PlanView;
     isActive: boolean;
     operationIdToCluster: Map<string, string>;
 };
 
-export const PlanContainer: FC<Props> = ({isActive, operationIdToCluster}) => {
+export const PlanContainer: FC<Props> = ({planView, isActive, operationIdToCluster}) => {
     const handlePrepareNode = useCallback(
         (node: ProcessedNode) => {
             if (node.type === 'in' || node.type === 'out') {
@@ -44,5 +46,5 @@ export const PlanContainer: FC<Props> = ({isActive, operationIdToCluster}) => {
         [operationIdToCluster],
     );
 
-    return <Plan isActive={isActive} prepareNode={handlePrepareNode} />;
+    return <Plan planView={planView} isActive={isActive} prepareNode={handlePrepareNode} />;
 };
