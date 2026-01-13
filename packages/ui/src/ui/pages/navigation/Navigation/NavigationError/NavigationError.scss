@@ -14,6 +14,7 @@
         line-height: 24px;
         font-weight: 500;
         color: var(--g-color-text-primary);
+        overflow-wrap: break-word;
     }
 
     &__unexpected-error {
