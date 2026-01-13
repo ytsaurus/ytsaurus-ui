@@ -1,4 +1,5 @@
 export const isCryptoSubtleAvailable = () => {
+    // eslint-disable-next-line no-restricted-globals
     return Boolean(crypto?.subtle?.digest);
 };
 
@@ -11,6 +12,7 @@ export async function sha256(str: string) {
         );
     }
 
+    // eslint-disable-next-line no-restricted-globals
     const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
 
     return [...new Uint8Array(buf)].map((x) => ('00' + x.toString(16)).slice(-2)).join('');
