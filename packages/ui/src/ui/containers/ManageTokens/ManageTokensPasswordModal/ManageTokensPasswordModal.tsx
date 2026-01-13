@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useSelector} from '../../../store/redux-hooks';
-import {Alert, Link} from '@gravity-ui/uikit';
+import {Alert} from '@gravity-ui/uikit';
 import {DialogWrapper as Dialog} from '../../../components/DialogWrapper/DialogWrapper';
 import {isCryptoSubtleAvailable} from '../../../utils/sha256';
 import {createPasswordStrategy} from './password-strategies';
@@ -8,6 +8,7 @@ import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import {getCurrentUserName, getSettingsCluster} from '../../../store/selectors/global';
 import {YTError} from '../../../../@types/types';
 import {isManageTokensInOAuthMode} from '../../../store/selectors/manage-tokens';
+import {CryptoSubtleAlert} from './CryptoSubtleAlert';
 
 interface ManageTokensPasswordModalContextValue {
     getPassword: () => Promise<string | undefined>;
@@ -65,21 +66,7 @@ const PasswordModal = (props: PasswordModalProps) => {
                                 children: isCryptoSubtleAvailable() ? (
                                     <Alert message="To access tokens management, you need enter your password" />
                                 ) : (
-                                    <Alert
-                                        message={
-                                            <span>
-                                                <Link
-                                                    target="_blank"
-                                                    href="https://developer.mozilla.org/en-US/docs/Web/API/Crypto/subtle"
-                                                >
-                                                    crypto.subtle
-                                                </Link>{' '}
-                                                is not available from your browser, so SHA-256 hash
-                                                cannot be generated. Please generate the hash of
-                                                your password by self.
-                                            </span>
-                                        }
-                                    />
+                                    <CryptoSubtleAlert />
                                 ),
                             },
                         },

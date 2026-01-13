@@ -9,6 +9,8 @@ import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
 import {closeUserEditorModal, fetchUsers, saveUserData} from '../../../store/actions/users';
+import {isCryptoSubtleAvailable, sha256} from '../../../utils/sha256';
+import {CryptoSubtleAlert} from '../../../containers/ManageTokens/ManageTokensPasswordModal/CryptoSubtleAlert';
 import {
     getGlobalGroupAttributesMap,
     getUserManagementEnabled,
@@ -45,14 +47,20 @@ interface Props {
     fetchUsers: () => void;
     saveUserData: (payload: {
         username: string;
-        password: string;
+        sha256Password?: string;
         newName: string;
         attributes: Partial<
             Pick<
                 Props,
                 Exclude<
                     Level2Keys,
-                    'idm' | 'name' | 'groups' | 'newGroups' | 'password' | 'passwordConfirm'
+                    | 'idm'
+                    | 'name'
+                    | 'groups'
+                    | 'newGroups'
+                    | 'password'
+                    | 'passwordConfirm'
+                    | 'sha256_password'
                 >
             >
         >;
@@ -87,6 +95,7 @@ interface FormValues {
     password: {
         password: string;
         passwordConfirm: string;
+        sha256_password: string;
     };
 }
 
@@ -126,17 +135,24 @@ class UsersPageEditor extends React.Component<Props, State> {
         const {
             values: {general: generalTab, groups: groupsTab, ban: banTab, password: passwordTab},
         } = form.getState();
+
+        let sha256Password: string | undefined;
+        if (isCryptoSubtleAvailable()) {
+            sha256Password = passwordTab.password ? await sha256(passwordTab.password) : undefined;
+        } else {
+            sha256Password = passwordTab.sha256_password || undefined;
+        }
+
         const fields = {
             idm: generalTab.idm,
             read_request_rate_limit: generalTab.read_request_rate_limit.value,
             request_queue_size_limit: generalTab.request_queue_size_limit.value,
             write_request_rate_limit: generalTab.write_request_rate_limit.value,
-            password: passwordTab.password,
             ...groupsTab,
             ...banTab,
         };
 
-        const {idm: _idm, groups, newGroups, password: newPassword, ...rest} = fields;
+        const {idm: _idm, groups, newGroups, ...rest} = fields;
         const [current] = groups;
         const groupsToRemove = map_(filter_(current?.data, 'removed'), 'title');
 
@@ -181,7 +197,7 @@ class UsersPageEditor extends React.Component<Props, State> {
                 attributes: changedFields,
                 groupsToAdd: newGroups,
                 groupsToRemove: groupsToRemove,
-                password: newPassword,
+                sha256Password,
             })
             .then(() => {
                 // we don't need to wait for the end of the action
@@ -249,6 +265,7 @@ class UsersPageEditor extends React.Component<Props, State> {
                         password: {
                             password: '',
                             passwordConfirm: '',
+                            sha256_password: '',
                         },
                     }}
                     onAdd={this.onAdd}
@@ -375,16 +392,42 @@ class UsersPageEditor extends React.Component<Props, State> {
                                       title: 'Password',
                                       fields: [
                                           {
+                                              name: 'crypto-alert',
+                                              type: 'block' as const,
+                                              extras: {
+                                                  children: isCryptoSubtleAvailable() ? null : (
+                                                      <CryptoSubtleAlert />
+                                                  ),
+                                              },
+                                          },
+                                          {
                                               name: 'password',
                                               type: 'text' as const,
                                               caption: 'New password',
                                               extras: () => ({type: 'password' as const}),
+                                              visibilityCondition: {
+                                                  when: '',
+                                                  isActive: () => isCryptoSubtleAvailable(),
+                                              },
                                           },
                                           {
                                               name: 'passwordConfirm',
                                               type: 'text' as const,
                                               caption: 'Confirm password',
                                               extras: () => ({type: 'password' as const}),
+                                              visibilityCondition: {
+                                                  when: '',
+                                                  isActive: () => isCryptoSubtleAvailable(),
+                                              },
+                                          },
+                                          {
+                                              name: 'sha256_password',
+                                              type: 'text' as const,
+                                              caption: 'Password Hash (SHA-256)',
+                                              visibilityCondition: {
+                                                  when: '',
+                                                  isActive: () => !isCryptoSubtleAvailable(),
+                                              },
                                           },
                                           ...errors,
                                       ],
@@ -397,7 +440,10 @@ class UsersPageEditor extends React.Component<Props, State> {
                             Record<keyof typeof password, string | undefined>
                         > = {};
 
-                        if (password.password !== password.passwordConfirm) {
+                        if (
+                            isCryptoSubtleAvailable() &&
+                            password.password !== password.passwordConfirm
+                        ) {
                             passwordErrors.password = 'New and confirm password must be equal';
                         }
 

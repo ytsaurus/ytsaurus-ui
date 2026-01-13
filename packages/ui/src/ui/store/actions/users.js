@@ -15,7 +15,6 @@ import {listAllUsers} from '../../utils/users-groups';
 import {flags} from '../../utils/index';
 import {YTApiId, ytApiV3Id, ytApiV4Id} from '../../rum/rum-wrap-api';
 import UIFactory from '../../UIFactory';
-import {sha256} from '../../utils/sha256';
 import {getExternalSystem} from '../../utils/getExternalSystem';
 
 const USER_ATTRIBUTES = [
@@ -146,15 +145,13 @@ function addUserToGroups(cluster, username, groups, comment) {
     );
 }
 
-function changeUserPassword({username, password}) {
-    if (password) {
-        return sha256(password).then((new_password_sha256) => {
-            return ytApiV4Id.setUserPassword(YTApiId.setUserPassword, {
-                parameters: {
-                    user: username,
-                    new_password_sha256,
-                },
-            });
+function changeUserPassword({username, sha256Password}) {
+    if (sha256Password) {
+        return ytApiV4Id.setUserPassword(YTApiId.setUserPassword, {
+            parameters: {
+                user: username,
+                new_password_sha256: sha256Password,
+            },
         });
     }
 
@@ -167,7 +164,7 @@ export function saveUserData({
     attributes,
     groupsToAdd,
     groupsToRemove,
-    password,
+    sha256Password,
 }) {
     return (dispatch, getState) => {
         dispatch({type: USERS_EDIT_USER.REQUEST});
@@ -203,7 +200,7 @@ export function saveUserData({
                 [
                     addUserToGroups(cluster, username, groupsToAdd, comment),
                     removeUserFromGroups(cluster, username, groupsToRemove),
-                    changeUserPassword({username, password}),
+                    changeUserPassword({username, sha256Password}),
                     requests.length && ytApiV3Id.executeBatch(YTApiId.usersSaveData, {requests}),
                 ].filter(Boolean),
             )
