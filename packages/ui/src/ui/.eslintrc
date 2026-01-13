@@ -2,6 +2,26 @@
     "extends": "@gravity-ui/eslint-config/client",
     "rules": {
         "import/order": 0,
-        "react/sort-comp": 0
+        "react/sort-comp": 0,
+        "no-restricted-globals": [
+            "error",
+            {
+                "name": "crypto",
+                "message": "Web Crypto API is not available in insecure contexts (HTTP)"
+            }
+        ],
+        "no-restricted-properties": [
+            "error",
+            {
+                "object": "window",
+                "property": "crypto",
+                "message": "Web Crypto API is not available in insecure contexts (HTTP)"
+            },
+            {
+                "object": "globalThis",
+                "property": "crypto",
+                "message": "Web Crypto API is not available in insecure contexts (HTTP)"
+            }
+        ]
     }
 }
