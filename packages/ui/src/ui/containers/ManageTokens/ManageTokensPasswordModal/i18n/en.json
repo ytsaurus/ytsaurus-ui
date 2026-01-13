@@ -1,0 +1,3 @@
+{
+  "alert_crypto-subtle-unavailable": "is not available from your browser, so SHA-256 hash cannot be generated. Please generate the hash of your password by yourself."
+}
