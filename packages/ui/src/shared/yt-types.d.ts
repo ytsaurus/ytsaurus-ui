@@ -608,6 +608,26 @@ export type FlowExecuteTypes = {
         BodyType: {body?: undefined};
         ResponseType: FlowDescribeWorkersData;
     };
+    'update-worker': {
+        ParamsType: {
+            flow_command: 'update-worker';
+            pipeline_path: string;
+        };
+        BodyType: {
+            body: {worker: string; banned: boolean};
+        };
+        ResponseType: unknown;
+    };
+    'kill-worker': {
+        ParamsType: {
+            flow_command: 'kill-worker';
+            pipeline_path: string;
+        };
+        BodyType: {
+            body: {worker: string};
+        };
+        ResponseType: unknown;
+    };
 };
 
 export type FlowPartitionDetailsType = FlowComputationPartitionType & {
@@ -688,6 +708,7 @@ export type FlowWorkerData = {
     deploy_address: string;
     backtrace_address: string;
     partitions: Array<FlowComputationPartitionType>;
+    flamegraph_address: string;
 };
 
 export type FlowDescribeComputationsData = {
