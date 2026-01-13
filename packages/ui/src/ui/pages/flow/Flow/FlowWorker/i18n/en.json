@@ -1,4 +1,10 @@
 {
+  "action_ban": "Ban",
+  "action_unban": "Unban",
+  "action_failed-to-get-flamegraph": "Failed to get flamegraph",
+  "action_failed-to-update": "Failed to update worker",
+  "action_flamegraph": "Flamegraph",
+  "action_kill": "Kill",
   "address": "address",
   "backtraces": "Backtraces",
   "cpu-usage": "CPU usage",

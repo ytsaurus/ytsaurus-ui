@@ -1,4 +1,4 @@
-import {Flex} from '@gravity-ui/uikit';
+import {Button, Flex} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {Route, Switch, useRouteMatch} from 'react-router';
@@ -14,14 +14,17 @@ import Tabs from '../../../../components/Tabs/Tabs';
 import {FlowEntityTitle} from '../../../../pages/flow/flow-components/FlowEntityHeader';
 import {FlowMessagesCollapsible} from '../../../../pages/flow/flow-components/FlowMessagesCollapsible/FlowMessagesCollapsible';
 import {FlowComputationPartitions} from '../../../../pages/flow/Flow/FlowComputation/FlowComputationPartitions';
+import {YTApiId, ytApiV4Id} from '../../../../rum/rum-wrap-api';
 import {useFlowExecuteQuery} from '../../../../store/api/yt/flow';
 import {filtersSlice} from '../../../../store/reducers/flow/filters';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {getFlowPipelinePath} from '../../../../store/selectors/flow/filters';
 import {getCluster} from '../../../../store/selectors/global/cluster';
+import UIFactory from '../../../../UIFactory';
+import {openInNewTab, wrapApiPromiseByToaster} from '../../../../utils/utils';
 import './FlowWorker.scss';
 import i18n from './i18n';
-import UIFactory from '../../../../UIFactory';
+import axios from 'axios';
 
 const block = cn('yt-flow-worker');
 
@@ -141,11 +144,132 @@ function FlowWorkderTabs({worker}: {worker: string}) {
 
 function FlowWorkerHeader({data, loading}: {data?: FlowWorkerData; loading?: boolean}) {
     return (
-        <Flex className={block('header')} gap={1}>
+        <Flex className={block('header')} gap={1} justifyContent="space-between">
             <FlowEntityTitle title={i18n('worker')} status={data?.status} loading={loading}>
                 {data?.banned && <Label text="Banned" theme="warning" />}
             </FlowEntityTitle>
+            <FlowWorkerActions data={data} />
         </Flex>
+    );
+}
+
+function FlowWorkerActions({data}: {data?: FlowWorkerData}) {
+    const pipeline_path = useSelector(getFlowPipelinePath);
+    if (!data) {
+        return null;
+    }
+    return (
+        <Flex gap={2}>
+            <FlowWorkerBanAction data={data} pipeline_path={pipeline_path} />
+            <FlowWorkerFlamegraphAction data={data} />
+            <FlowWorkerKillAction data={data} pipeline_path={pipeline_path} />
+        </Flex>
+    );
+}
+
+function FlowWorkerBanAction({
+    data: {address: worker, banned},
+    pipeline_path,
+}: {
+    data: FlowWorkerData;
+    pipeline_path: string;
+}) {
+    const [loading, setLoading] = React.useState(false);
+
+    return (
+        <Button
+            loading={loading}
+            onClick={async () => {
+                try {
+                    setLoading(true);
+                    await wrapApiPromiseByToaster(
+                        ytApiV4Id.flowExecute(YTApiId.flowExecute, {
+                            parameters: {flow_command: 'update-worker', pipeline_path},
+                            data: {worker},
+                        }),
+                        {
+                            toasterName: 'update_worker',
+                            skipSuccessToast: true,
+                            errorContent: i18n('action_failed-to-update'),
+                        },
+                    );
+                } finally {
+                    setLoading(false);
+                }
+            }}
+        >
+            {banned ? i18n('action_ban') : i18n('action_unban')}
+        </Button>
+    );
+}
+
+function FlowWorkerFlamegraphAction({data: {flamegraph_address}}: {data: FlowWorkerData}) {
+    const [loading, setLoading] = React.useState(false);
+
+    if (!flamegraph_address) {
+        return null;
+    }
+
+    return (
+        <Button
+            loading={loading}
+            onClick={async () => {
+                try {
+                    setLoading(true);
+                    const {
+                        data: {link},
+                    } = await wrapApiPromiseByToaster(
+                        axios.get<{link: string}>(flamegraph_address),
+                        {
+                            toasterName: 'worker-flamegraph',
+                            skipSuccessToast: true,
+                            errorContent: i18n('action_failed-to-get-flamegraph'),
+                        },
+                    );
+                    if (link) {
+                        openInNewTab(link);
+                    }
+                } finally {
+                    setLoading(false);
+                }
+            }}
+        >
+            {i18n('action_flamegraph')}
+        </Button>
+    );
+}
+
+function FlowWorkerKillAction({
+    data: {address: worker},
+    pipeline_path,
+}: {
+    data: FlowWorkerData;
+    pipeline_path: string;
+}) {
+    const [loading, setLoading] = React.useState(false);
+
+    return (
+        <Button
+            loading={loading}
+            onClick={async () => {
+                try {
+                    setLoading(true);
+                    await wrapApiPromiseByToaster(
+                        ytApiV4Id.flowExecute(YTApiId.flowExecute, {
+                            parameters: {flow_command: 'kill-worker', pipeline_path},
+                            data: {worker},
+                        }),
+                        {
+                            toasterName: 'kill-worker',
+                        },
+                    );
+                } finally {
+                    setLoading(false);
+                }
+            }}
+        >
+            {i18n('action_kill')}
+        </Button>
     );
 }
 

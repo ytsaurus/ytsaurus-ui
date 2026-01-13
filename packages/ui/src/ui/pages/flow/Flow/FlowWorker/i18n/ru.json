@@ -1,4 +1,10 @@
 {
+  "action_ban": "Заблокировать",
+  "action_unban": "Разблокировать",
+  "action_failed-to-get-flamegraph": "Не удалось получить flamegraph",
+  "action_failed-to-update": "Не удалось обновить воркер",
+  "action_flamegraph": "Flamegraph",
+  "action_kill": "Остановить",
   "address": "Адрес",
   "backtraces": "Бэктрейсы",
   "cpu-usage": "Использование CPU",
