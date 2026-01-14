@@ -98,6 +98,7 @@ import {
     flowComputationMonitorParams,
     flowComputationParams,
     flowComputationsParams,
+    flowGraphParams,
     flowParams,
     flowPartitionParams,
     flowWorkdersParams,
@@ -189,6 +190,7 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
     [`/*/${Page.CHAOS_CELL_BUNDLES}/*`, [chaosBundlesParams, getChaosBundlesPreparedState]],
     [`/*/${Page.QUERIES}/*`, [draftQueryParameters, getDraftQueryParameters]],
 
+    [`/*/${Page.FLOWS}/${FlowTab.GRAPH}`, [flowGraphParams]],
     [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}`, [flowComputationsParams]],
     [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*`, [flowComputationParams]],
     [`/*/${Page.FLOWS}/${FlowTab.COMPUTATIONS}/*/details`, [flowComputationParams]],
