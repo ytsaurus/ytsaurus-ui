@@ -16,3 +16,5 @@ export const getFlowPartitionsJobStateFilter = (state: RootState) =>
 
 export const getFlowPartitionsStateFilter = (state: RootState) =>
     state.flow.filters.partitionsStateFilter;
+
+export const getFlowZoomToNode = (state: RootState) => state.flow.filters.zoomToNode;
