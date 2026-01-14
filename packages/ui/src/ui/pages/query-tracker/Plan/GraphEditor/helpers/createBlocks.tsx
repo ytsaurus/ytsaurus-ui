@@ -6,13 +6,13 @@ import {OperationType} from '../enums';
 import {iconToBase} from '../../../../../components/YTGraph/utils/iconToBase';
 import {getOperationType} from './getOperationType';
 import {getBlockIcon} from './getBlockIcon';
-import {TMultipointConnection} from '@gravity-ui/graph/build/react-components/elk/types';
+import {MultipointConnection} from '../types';
 
 export const createBlocks = (
     graph: ProcessedGraph,
     progress: Progress | undefined,
     level: ECameraScaleLevel,
-): {blocks: QueriesNodeBlock[]; connections: TMultipointConnection[]} => {
+): {blocks: QueriesNodeBlock[]; connections: MultipointConnection[]} => {
     const isMinimalisticView = level === ECameraScaleLevel.Minimalistic;
 
     const blocks = graph.nodes.map((node) => {
