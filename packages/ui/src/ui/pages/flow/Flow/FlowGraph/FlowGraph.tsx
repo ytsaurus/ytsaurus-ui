@@ -1,27 +1,23 @@
-import cn from 'bem-cn-lite';
-import React from 'react';
-import {useSelector} from '../../../../store/redux-hooks';
-
-import partition_ from 'lodash/partition';
-
 import {ECameraScaleLevel, TAnchor, TBlock, TBlockId, TConnection} from '@gravity-ui/graph';
-import {Flex} from '@gravity-ui/uikit';
-import {SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
-
-import {
-    FlowComputationType,
-    FlowComputationStreamType,
-    FlowSink,
-    FlowStream,
-} from '../../../../../shared/yt-types';
-
 import ClockIcon from '@gravity-ui/icons/svgs/clock.svg';
 import FileCodeIcon from '@gravity-ui/icons/svgs/file-code.svg';
 import ReceiptIcon from '@gravity-ui/icons/svgs/receipt.svg';
-
+import {Flex} from '@gravity-ui/uikit';
+import {SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
+import cn from 'bem-cn-lite';
+import partition_ from 'lodash/partition';
+import React from 'react';
+import {
+    FlowComputationStreamType,
+    FlowComputationType,
+    FlowSink,
+    FlowStream,
+} from '../../../../../shared/yt-types';
 import {YTErrorBlock} from '../../../../components/Error/Error';
 import Loader from '../../../../components/Loader/Loader';
 import {NoContent} from '../../../../components/NoContent/NoContent';
+import Select from '../../../../components/Select/Select';
+import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import Yson from '../../../../components/Yson/Yson';
 import {
     YTGraph,
@@ -32,8 +28,10 @@ import {
     useGraphScale,
 } from '../../../../components/YTGraph';
 import {useFlowExecuteQuery} from '../../../../store/api/yt';
+import {filtersSlice} from '../../../../store/reducers/flow/filters';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
+import {getFlowZoomToNode} from '../../../../store/selectors/flow/filters';
 import {getCluster} from '../../../../store/selectors/global/cluster';
-
 import './FlowGraph.scss';
 import {Computation} from './renderers/Computation';
 import {ComputationCanvasBlock} from './renderers/ComputationCanvas';
@@ -84,6 +82,12 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
     const {scale, setScale} = useGraphScale();
     const useGroups = scale === ECameraScaleLevel.Minimalistic;
 
+    const zoomTo = useSelector(getFlowZoomToNode);
+    const [zoomToState, setZoomToState] = React.useState<string>();
+    React.useEffect(() => {
+        setZoomToState(zoomTo);
+    }, [zoomTo]);
+
     const config = useConfig<FlowGraphBlock>(
         {
             computation: ComputationCanvasBlock,
@@ -108,11 +112,12 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
 
     return (
         <div className={block()}>
+            <FlowGraphToolbar blocks={data.blocks} zoomToNode={zoomTo} />
             <YTGraph
                 className={block('graph')}
                 setScale={setScale}
                 {...config}
-                data={useGroups ? groups : data}
+                data={useGroups && !zoomToState ? groups : data}
                 renderBlock={({className, style, data}) => {
                     return (
                         <Flex className={block('item-container', className)} style={style}>
@@ -128,8 +133,52 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
                     );
                 }}
                 customGroups={groupBlocks}
+                zoomToNode={zoomToState}
+                onZoomToFinished={() => setZoomToState(undefined)}
             />
         </div>
+    );
+}
+
+function FlowGraphToolbar({
+    blocks,
+    zoomToNode,
+}: {
+    blocks?: Array<FlowGraphBlock>;
+    zoomToNode?: string;
+}) {
+    const dispatch = useDispatch();
+
+    const items = React.useMemo(() => {
+        return (
+            blocks?.map((item) => {
+                return {
+                    value: item.id,
+                    text: item.name,
+                };
+            }) ?? []
+        );
+    }, [blocks]);
+
+    return (
+        <Toolbar
+            itemsToWrap={[
+                {
+                    node: (
+                        <Select
+                            value={zoomToNode ? [zoomToNode] : []}
+                            label="Zoom to:"
+                            placeholder="Select a node..."
+                            onUpdate={([zoomToNode = '']) => {
+                                dispatch(filtersSlice.actions.updateFlowFilters({zoomToNode}));
+                            }}
+                            items={items}
+                            hasClear
+                        />
+                    ),
+                },
+            ]}
+        />
     );
 }
 

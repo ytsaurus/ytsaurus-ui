@@ -31,6 +31,9 @@ export type YTGraphProps<B extends TBlock, C extends TConnection> = {
     isBlock: (v: unknown) => v is CanvasBlock<B>;
     renderPopup?: ({data}: {data: B}) => React.ReactNode;
     renderBlock?: (props: RenderContentProps<B>) => React.ReactNode;
+
+    zoomToNode?: string;
+    onZoomToFinished?: () => void;
 } & YTGraphGroupProps;
 
 export type RenderContentProps<B extends TBlock> = {
@@ -66,6 +69,8 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     renderBlock,
     allowAutoGroups,
     customGroups,
+    zoomToNode,
+    onZoomToFinished,
 }: YTGraphProps<B, C>) {
     const theme = useThemeValue();
     const {graph, setEntities, start} = useGraph(config);
@@ -96,6 +101,20 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
             graph.updateSettings(config.settings);
         }
     }, [graph, config.settings]);
+
+    React.useEffect(() => {
+        if (!zoomToNode) {
+            return undefined;
+        }
+
+        const id = setInterval(() => {
+            if (graph.zoomTo([zoomToNode], {})) {
+                onZoomToFinished?.();
+                clearInterval(id);
+            }
+        }, 400);
+        return () => clearInterval(id);
+    }, [zoomToNode, onZoomToFinished, graph]);
 
     useGraphEvent(graph, 'camera-change', (data) => {
         const cameraScale = graph.cameraService.getCameraBlockScaleLevel(data.scale);
