@@ -1,5 +1,6 @@
+@use '../../../../components/WithStickyToolbar/Toolbar/Toolbar.scss' as *;
+
 .yt-flow-graph {
-    position: relative;
     &__graph-messages {
         position: absolute;
         top: -60px;
@@ -10,7 +11,10 @@
         position: relative;
 
         width: calc(100vw - var(--gn-aside-header-size) - 40px);
-        height: calc(100vh - var(--app-header-height) * 4 - var(--app-footer-height));
+        height: calc(
+            100vh - var(--app-header-height) * 4 - var(--app-footer-height) -
+                $TOOLBAR_COMPONENT_HEIGHT
+        );
     }
 
     &__item-container {

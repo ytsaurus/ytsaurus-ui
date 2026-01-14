@@ -16,6 +16,8 @@ export type FlowFiltersState = {
 
     partitionsJobStateFilter: Array<FlowPartitionJobStateType>;
     partitionsStateFilter: Array<FlowPartitionStateType>;
+
+    zoomToNode: string;
 };
 
 export const initialState: FlowFiltersState = {
@@ -33,6 +35,8 @@ export const initialState: FlowFiltersState = {
 
     partitionsJobStateFilter: [],
     partitionsStateFilter: [],
+
+    zoomToNode: '',
 };
 
 export const FlowTab = {

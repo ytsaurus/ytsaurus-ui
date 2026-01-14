@@ -9,6 +9,14 @@ export const flowParams: LocationParameters = {
     },
 };
 
+export const flowGraphParams: typeof flowParams = {
+    ...flowParams,
+    name: {
+        stateKey: 'flow.filters.zoomToNode',
+        initialState: filtersInitialState.zoomToNode,
+    },
+};
+
 export const flowComputationsParams: typeof flowParams = {
     ...flowParams,
     name: {
