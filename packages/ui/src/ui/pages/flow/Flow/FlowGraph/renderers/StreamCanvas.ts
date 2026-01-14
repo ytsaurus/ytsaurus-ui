@@ -51,7 +51,7 @@ export class StreamCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockItem<'st
     }
 
     getAnchorPosition({index = 0}: TAnchor) {
-        const {length = 0} = this.state.anchors;
+        const {length = 0} = this.state.anchors ?? {};
 
         const {width} = this.getGeometry();
         const step = width / (length + 1);

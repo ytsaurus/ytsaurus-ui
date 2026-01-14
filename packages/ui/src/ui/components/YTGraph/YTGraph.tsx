@@ -81,8 +81,8 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
             ? data.connections
             : data?.connections?.map((item) => {
                   if (
-                      selectionIds.has(item.sourceBlockId) ||
-                      selectionIds.has(item.targetBlockId)
+                      selectionIds.has(item.sourceBlockId!) ||
+                      selectionIds.has(item.targetBlockId!)
                   ) {
                       return {...item, selected: true};
                   }

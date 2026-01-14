@@ -300,8 +300,8 @@ function useFlowGraphData(params: {pipeline_path: string}) {
             const connectionIds = new Set<string>();
             res.data.connections.forEach((item) => {
                 const {sourceBlockId, targetBlockId} = item;
-                const src = blockById.get(sourceBlockId)!;
-                const dst = blockById.get(targetBlockId)!;
+                const src = blockById.get(sourceBlockId!)!;
+                const dst = blockById.get(targetBlockId!)!;
 
                 let source: string | undefined;
                 let target: string | undefined;
@@ -413,8 +413,8 @@ function makeTimerAnchors<T extends string>(type: T, src: TBlock, dst: TBlock, c
         type,
     };
 
-    src.anchors.push({...srcAnchor, index: src.anchors.length});
-    dst.anchors.push({...dstAnchor, index: dst.anchors.length});
+    src.anchors?.push({...srcAnchor, index: src.anchors.length});
+    dst.anchors?.push({...dstAnchor, index: dst.anchors.length});
 
     c.targetAnchorId = dstAnchor.id;
     c.sourceAnchorId = srcAnchor.id;
