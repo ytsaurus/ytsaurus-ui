@@ -73,7 +73,7 @@ function useFlowWorkerData(worker: string) {
             pipeline_path,
         },
         body: {
-            worker_incarnation_id: worker,
+            worker,
         },
     });
 }

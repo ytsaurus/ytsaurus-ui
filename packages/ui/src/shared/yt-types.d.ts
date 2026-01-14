@@ -596,7 +596,7 @@ export type FlowExecuteTypes = {
             pipeline_path: string;
         };
         BodyType: {
-            body?: {worker_incarnation_id: string};
+            body?: {worker: string};
         };
         ResponseType: FlowWorkerDetailsType;
     };
