@@ -103,7 +103,7 @@ export class ComputationCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockIte
     }
 
     getAnchorPosition({index = 0}: TAnchor) {
-        const {length = 0} = this.state.anchors;
+        const {length = 0} = this.state.anchors ?? [];
 
         const {width, height} = this.getGeometry();
         const step = width / (length + 1);

@@ -292,7 +292,7 @@ export class YTGraphCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canv
             width,
             height,
             radius: 8,
-            selected: this.state.selected,
+            selected: Boolean(this.state.selected),
             background: {
                 default:
                     bgColorByTheme ??
