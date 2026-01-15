@@ -1,4 +1,5 @@
 {
   "performance-per-partition": "Performance per partition",
+  "count-of-partitions-with-errors": "Count of partitions with errors",
   "partition": "Partition"
 }

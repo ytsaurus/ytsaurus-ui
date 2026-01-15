@@ -57,7 +57,7 @@ function FlowComputationErrorStats({
     const items = useFlowComputationPartitionErrorsData(partition_with_error_by_time_and_type);
 
     return !items.length ? null : (
-        <PerformanceBlock header={i18n('performance-per-partition')}>
+        <PerformanceBlock header={i18n('count-of-partitions-with-errors')}>
             <FlowComputationPartitionErrors items={items} />
         </PerformanceBlock>
     );
