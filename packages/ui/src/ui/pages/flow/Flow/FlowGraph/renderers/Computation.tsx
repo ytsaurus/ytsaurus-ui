@@ -91,7 +91,6 @@ export function Computation({detailed, item, className}: ComputationProps) {
                 ]}
             />
             <ComputaionProgress stats={item.meta?.partitions_stats} />
-            {detailed && <ComputationDetails item={item} />}
             {detailed && <FlowMessages data={item.meta.messages} />}
         </div>
     );
@@ -174,23 +173,5 @@ function ComputationProgressHistoryItem({
             </div>
             <FlowCaption2>{value}</FlowCaption2>
         </Flex>
-    );
-}
-
-function ComputationDetails({item}: Pick<ComputationProps, 'item'>) {
-    const {cpu_usage_current: _cpu, memory_usage_current: _mem, ...rest} = item.meta?.metrics ?? {};
-    return (
-        <MetaTable
-            className={block('details')}
-            items={[
-                Object.entries(rest).map(([key, value]) => {
-                    const fmt = key.startsWith('memory_') ? format.Bytes : format.Number;
-                    return {
-                        key,
-                        value: fmt(value, {digits: 2}),
-                    };
-                }),
-            ]}
-        />
     );
 }
