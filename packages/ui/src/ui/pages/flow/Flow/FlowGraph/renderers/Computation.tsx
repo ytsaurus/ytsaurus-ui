@@ -1,16 +1,16 @@
-import React from 'react';
-import cn from 'bem-cn-lite';
-
 import {Flex, Progress, ProgressTheme, Text} from '@gravity-ui/uikit';
-
+import cn from 'bem-cn-lite';
+import React from 'react';
 import {FlowComputationType} from '../../../../../../shared/yt-types';
-
 import format from '../../../../../common/hammer/format';
-import MetaTable from '../../../../../components/MetaTable/MetaTable';
+import Link from '../../../../../components/Link/Link';
+import {FlowTab} from '../../../../../store/reducers/flow/filters';
+import {useSelector} from '../../../../../store/redux-hooks';
+import {getFlowPipelinePath} from '../../../../../store/selectors/flow/filters';
+import {makeFlowLink} from '../../../../../utils/app-url';
 import {addProgressStackSpacers} from '../../../../../utils/progress';
-
 import {FlowGraphBlockItem} from '../FlowGraph';
-
+import './Computation.scss';
 import {
     FlowCaption1,
     FlowCaption2,
@@ -18,8 +18,6 @@ import {
     TextWithHighConsumption,
 } from './FlowGraphRenderer';
 import {FlowMeta} from './FlowMeta';
-
-import './Computation.scss';
 
 const block = cn('yt-flow-computation');
 
@@ -32,6 +30,8 @@ type ComputationProps = {
 };
 
 export function Computation({detailed, item, className}: ComputationProps) {
+    const path = useSelector(getFlowPipelinePath);
+
     const {cpu_usage_10m, memory_usage_10m} = item.meta?.metrics ?? {};
     const {highlight_cpu_usage, hightlight_memory_usage} = item.meta ?? {};
 
@@ -39,7 +39,19 @@ export function Computation({detailed, item, className}: ComputationProps) {
         <div className={block(null, className)}>
             <Flex className={block('name')} gap={4} alignItems="baseline">
                 <Flex grow={1} overflow="hidden">
-                    <FlowCaption2 text={item.name} />
+                    <FlowCaption2>
+                        <Link
+                            routed
+                            routedPreserveLocation
+                            url={makeFlowLink({
+                                path,
+                                tab: FlowTab.COMPUTATIONS,
+                                computation: item.name,
+                            })}
+                        >
+                            {item.name}
+                        </Link>
+                    </FlowCaption2>
                 </Flex>
                 <Flex grow={1} overflow="hidden">
                     <FlowCaption1 text={item.meta?.group_by_schema_str} />
