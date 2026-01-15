@@ -1,4 +1,5 @@
 import React from 'react';
+import isEmpty_ from 'lodash/isEmpty';
 
 import {
     CanvasBlock,
@@ -83,15 +84,15 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     React.useEffect(() => {
         const selectionIds = new Set(selectedBlocks);
         const connections = !selectedBlocks?.length
-            ? data.connections
+            ? data.connections?.map((item) => ({selected: false, ...item}))
             : data?.connections?.map((item) => {
                   if (
                       selectionIds.has(item.sourceBlockId!) ||
                       selectionIds.has(item.targetBlockId!)
                   ) {
-                      return {...item, selected: true};
+                      return {selected: true, ...item};
                   }
-                  return item;
+                  return {selected: false, ...item};
               });
         setEntities({...data, connections});
     }, [data, selectedBlocks, setEntities]);
@@ -188,6 +189,12 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
                 className={block('graph')}
                 onBlockSelectionChange={({list}) => {
                     setSelectedBlocks(list);
+                }}
+                click={({target}) => {
+                    const isEmptyAreaClick = isEmpty_(target?.state);
+                    if (isEmptyAreaClick) {
+                        setSelectedBlocks([]);
+                    }
                 }}
             />
             {renderPopup !== undefined && (
