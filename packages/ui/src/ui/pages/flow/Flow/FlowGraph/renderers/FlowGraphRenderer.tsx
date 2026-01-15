@@ -90,7 +90,7 @@ export function useFlowMessagesColor(data: FlowMessagesProps['data']) {
 
 function FlowMessagesDialog({data, onClose}: FlowMessagesProps & {onClose(): void}) {
     return (
-        <Dialog open={true} onClose={onClose}>
+        <Dialog className={block('messages-dialog')} open={true} onClose={onClose}>
             <Dialog.Header caption="Messages" />
             <Dialog.Body className={block('messages-body')}>
                 <FlowMessagesContent data={data} />
