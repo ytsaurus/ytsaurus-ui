@@ -1,4 +1,4 @@
-import {Breadcrumbs} from '@gravity-ui/uikit';
+import {Breadcrumbs, Button} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {Page} from '../../../../shared/constants/settings';
@@ -12,17 +12,31 @@ import {
     getFlowCurrentWorker,
     getFlowPipelinePath,
 } from '../../../store/selectors/flow/filters';
-import {makeFlowLink} from '../../../utils/app-url';
+import {makeFlowLink, makeNavigationLink} from '../../../utils/app-url';
 import i18n from '../i18n';
 import './FlowPageTopRow.scss';
 import {FlowTab} from '../../../store/reducers/flow/filters';
+import {getAppBrowserHistory} from '../../../store/window-store';
 
 const block = cn('yt-flow-page-top-row');
 
 export function FlowPageTopRow() {
+    const path = useSelector(getFlowPipelinePath);
+    const navigationUrl = makeNavigationLink({path});
     return (
         <RowWithName page={Page.FLOWS}>
             <FlowBreadcrumbs />
+            <Button
+                href={navigationUrl}
+                view="outlined"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    getAppBrowserHistory().push(navigationUrl);
+                }}
+            >
+                {i18n('open-in-navigation')}
+            </Button>
         </RowWithName>
     );
 }
