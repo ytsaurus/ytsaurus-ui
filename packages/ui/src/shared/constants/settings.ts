@@ -8,6 +8,7 @@ export const Page = {
     COMPONENTS: 'components',
     SYSTEM: 'system',
     NAVIGATION: 'navigation',
+    FLOWS: 'flows',
     ACCOUNTS: 'accounts',
     OPERATIONS: 'operations',
     DASHBOARD: 'dashboard',

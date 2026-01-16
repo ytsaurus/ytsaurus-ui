@@ -4,21 +4,20 @@ import map_ from 'lodash/map';
 
 import {createSelector} from 'reselect';
 
-import ypath from '../../../common/thor/ypath';
 import unipika from '../../../common/thor/unipika';
-
-import type {RootState} from '../../../store/reducers';
-import type {ValueOf, YTError} from '../../../types';
-import {getAttributes, getParsedPath, getPath, getTransaction} from './index';
-import {ParsedPath, prepareNavigationState} from '../../../utils/navigation';
-import {Tab} from '../../../constants/navigation/index';
-
-import {getTableMountConfigHasData} from '../../../store/selectors/navigation/content/table-mount-config';
+import ypath from '../../../common/thor/ypath';
 import {getAccessLogBasePath} from '../../../config';
-import {getTabletErrorsBackgroundCount} from '../../../store/selectors/navigation/tabs/tablet-errors-background';
-import UIFactory from '../../../UIFactory';
 import {getConfigData} from '../../../config/ui-settings';
-import {getCluster} from '../global';
+import {Tab} from '../../../constants/navigation/index';
+import type {RootState} from '../../../store/reducers';
+import {getCluster} from '../../../store/selectors/global';
+import {getTableMountConfigHasData} from '../../../store/selectors/navigation/content/table-mount-config';
+import {getTabletErrorsBackgroundCount} from '../../../store/selectors/navigation/tabs/tablet-errors-background';
+import type {ValueOf, YTError} from '../../../types';
+import UIFactory from '../../../UIFactory';
+import {ParsedPath, prepareNavigationState} from '../../../utils/navigation';
+import {isPipelineNode} from '../../../utils/navigation/isPipelineNode';
+import {getAttributes, getParsedPath, getPath, getTransaction} from './index';
 
 export function getNavigationPathAttributesLoadState(state: RootState) {
     return state.navigation.navigation.loadState;
@@ -84,7 +83,7 @@ export const getSupportedTabs = createSelector(
     ],
     (attributes, mountConfigHasData, tabletErrorsCount, originatingQueuePath) => {
         const isDynamic = attributes.dynamic === true;
-        const isPipeline = attributes.pipeline_format_version !== undefined;
+        const isPipeline = isPipelineNode(attributes);
         const mountConfigVisible = mountConfigHasData || isDynamic;
         const alwaysSupportedTabs = compact_([
             Tab.CONTENT,
