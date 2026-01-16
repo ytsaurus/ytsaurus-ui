@@ -1,11 +1,14 @@
 import React from 'react';
 import {Link as RouterLink} from 'react-router-dom';
 import {Link as CommonLink} from '@gravity-ui/uikit';
-import block from 'bem-cn-lite';
+import cn from 'bem-cn-lite';
 import {makeRoutedURL} from '../../store/window-store';
 import {ClickableText, ClickableTextProps} from '../../components/ClickableText/ClickableText';
+import {ArrowUpRightFromSquare} from '@gravity-ui/icons';
+import './Link.scss';
 
-const b = block('g-link');
+const gBlock = cn('g-link');
+const block = cn('yt-link');
 
 const THEME_TO_COLOR: Record<
     Exclude<LinkProps['theme'], ClickableTextProps['color']>,
@@ -27,6 +30,7 @@ export interface LinkProps {
     className?: string;
     title?: string;
     routedPreserveLocation?: boolean;
+    hasExternalIcon?: boolean;
 }
 
 class Link extends React.Component<LinkProps> {
@@ -47,7 +51,19 @@ class Link extends React.Component<LinkProps> {
             theme,
             title,
             routedPreserveLocation,
+            hasExternalIcon,
         } = this.props;
+
+        const content = (
+            <>
+                {children}
+                {hasExternalIcon && (
+                    <span style={{paddingLeft: '2px'}}>
+                        <ArrowUpRightFromSquare className={block('external-icon')} />
+                    </span>
+                )}
+            </>
+        );
 
         const to =
             !routed || !routedPreserveLocation
@@ -58,15 +74,19 @@ class Link extends React.Component<LinkProps> {
 
         if (routed) {
             return (
-                <RouterLink className={b({view: theme}, className)} onClick={onClick} to={to || ''}>
-                    {children}
+                <RouterLink
+                    className={gBlock({view: theme}, className)}
+                    onClick={onClick}
+                    to={to || ''}
+                >
+                    {content}
                 </RouterLink>
             );
         }
 
         return !url ? (
             <ClickableText className={className} onClick={onClick} color={textColor(theme)}>
-                {children}
+                {content}
             </ClickableText>
         ) : (
             <CommonLink
@@ -77,7 +97,7 @@ class Link extends React.Component<LinkProps> {
                 title={title}
                 href={url}
             >
-                {children}
+                {content}
             </CommonLink>
         );
     }
