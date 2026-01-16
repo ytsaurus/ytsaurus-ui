@@ -21,6 +21,7 @@ import cn from 'bem-cn-lite';
 import './YTGraph.scss';
 import {YTGraphGroupProps, useAutoGroups, useCustomGroups} from './hooks/useGroups';
 import {Toolbox} from './Toolbox';
+import {ZOOM_PADDING} from './constants';
 
 const block = cn('yt-graph');
 const ZOOM_SPEED = 0.5;
@@ -140,7 +141,7 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     });
 
     React.useEffect(() => {
-        graph.api.zoomToViewPort({padding: 100});
+        graph.api.zoomToViewPort({padding: ZOOM_PADDING});
     }, [graph]);
 
     const [element, setElement] = React.useState<HTMLDivElement | null>(null);
@@ -152,7 +153,7 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
         const resizeObserver = new ResizeObserver(() => {
             if (fitGraphRef.current) {
                 setTimeout(() => {
-                    graph.api.zoomToViewPort({padding: 100});
+                    graph.api.zoomToViewPort({padding: ZOOM_PADDING});
                 }, 100);
             }
         });

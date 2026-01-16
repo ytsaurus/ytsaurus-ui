@@ -1,15 +1,13 @@
 import React, {FC, useState} from 'react';
 import {Loader} from '@gravity-ui/uikit';
-import {
-    BezierMultipointConnection,
-    YTGraph,
-    useConfig,
-    useGraphScale,
-} from '../../../../components/YTGraph';
+import {YTGraph, useConfig, useGraphScale} from '../../../../components/YTGraph';
 import {ProcessedGraph} from '../utils';
 import {QueriesCanvasBlock, QueriesNodeBlock} from './QueriesNodeBlock';
 import {DetailBlock} from './DetailBlock';
 import {useQueriesGraphLayout} from './helpers/useQueriesGraphLayout';
+import {QueriesNodeConnection} from './QueriesNodeConnection';
+import {PathPopup} from './DetailBlock/PathPopup';
+import {OperationType} from './enums';
 
 type Props = {
     processedGraph: ProcessedGraph;
@@ -21,7 +19,7 @@ const Graph: FC<Props> = ({processedGraph}) => {
         {
             block: QueriesCanvasBlock,
         },
-        {connection: BezierMultipointConnection},
+        {connection: QueriesNodeConnection},
     );
 
     const [loading, setLoading] = useState(true);
@@ -50,6 +48,16 @@ const Graph: FC<Props> = ({processedGraph}) => {
 };
 
 function renderPopup(props: {data: QueriesNodeBlock}) {
+    const type = props.data.meta.operationType;
+
+    if (type === OperationType.Table) {
+        return <PathPopup tablePath={props.data.meta.tablePath} />;
+    }
+
+    if (type === OperationType.Read) {
+        return null;
+    }
+
     return <DetailBlock {...props} />;
 }
 

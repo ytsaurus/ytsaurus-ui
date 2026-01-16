@@ -7,6 +7,7 @@ export const buildConnectionsFromEdges = (
     nodePositions: Map<string, TPoint>,
     dotNodeIds: Set<string>,
     blockSizes: Map<string, {width: number; height: number}>,
+    virtualNodeSize?: number,
 ): MultipointConnection[] => {
     // Build adjacency map: from -> [{to, arrows}]
     const adjacency = new Map<string, Array<{to: string; arrows?: Edge<string>['arrows']}>>();
@@ -22,18 +23,42 @@ export const buildConnectionsFromEdges = (
     const connections: MultipointConnection[] = [];
     const visitedEdges = new Set<string>();
 
-    const getBlockCenter = (id: string): TPoint | undefined => {
+    const getBlockRightEdge = (id: string): TPoint | undefined => {
         const pos = nodePositions.get(id);
         if (!pos) return undefined;
 
         const size = blockSizes.get(id);
         if (size) {
             return {
-                x: pos.x + size.width / 2,
+                x: pos.x + size.width,
                 y: pos.y + size.height / 2,
             };
         }
         return pos;
+    };
+
+    const getBlockLeftEdge = (id: string): TPoint | undefined => {
+        const pos = nodePositions.get(id);
+        if (!pos) return undefined;
+
+        const size = blockSizes.get(id);
+        if (size) {
+            return {
+                x: pos.x,
+                y: pos.y + size.height / 2,
+            };
+        }
+        return pos;
+    };
+
+    const getVirtualNodeCenter = (id: string): TPoint | undefined => {
+        const pos = nodePositions.get(id);
+        if (!pos) return undefined;
+
+        return {
+            x: pos.x + (virtualNodeSize || DEFAULT_NODE_WIDTH) / 2,
+            y: pos.y + (virtualNodeSize || DEFAULT_NODE_WIDTH) / 2,
+        };
     };
 
     // Find chains starting from non-dot nodes
@@ -77,39 +102,28 @@ export const buildConnectionsFromEdges = (
             targetBlockId: targetId,
         };
 
-        // If there are intermediate points, build full points array
-        // points must include: source center, all intermediate points, target center
+        const points: TPoint[] = [];
+        const sourceEdge = getBlockRightEdge(sourceId);
+        if (sourceEdge) {
+            points.push(sourceEdge);
+        }
+
         if (hasIntermediatePoints) {
-            const points: TPoint[] = [];
-
-            // Add source block center
-            const sourceCenter = getBlockCenter(sourceId);
-            if (sourceCenter) {
-                points.push(sourceCenter);
-            }
-
-            // Add intermediate points (dot nodes)
-            // Treat virtual nodes as if they have DEFAULT_NODE_WIDTH size and take their center
             for (let i = 1; i < chain.length - 1; i++) {
-                const pos = nodePositions.get(chain[i]);
-                if (pos) {
-                    points.push({
-                        x: pos.x + DEFAULT_NODE_WIDTH / 2,
-                        y: pos.y + DEFAULT_NODE_WIDTH / 2,
-                    });
+                const center = getVirtualNodeCenter(chain[i]);
+                if (center) {
+                    points.push(center);
                 }
             }
+        }
 
-            // Add target block center
-            const targetCenter = getBlockCenter(targetId);
-            if (targetCenter) {
-                points.push(targetCenter);
-            }
+        const targetEdge = getBlockLeftEdge(targetId);
+        if (targetEdge) {
+            points.push(targetEdge);
+        }
 
-            // Only set points if we have at least 2 points
-            if (points.length >= 2) {
-                connection.points = points;
-            }
+        if (points.length >= 2) {
+            connection.points = points;
         }
 
         connections.push(connection);
