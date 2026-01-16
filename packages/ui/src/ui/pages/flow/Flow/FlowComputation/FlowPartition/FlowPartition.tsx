@@ -95,7 +95,11 @@ export function FlowPartitionMeta({
                 [
                     {
                         key: i18n('tracing'),
-                        value: <Link url={data?.tracing_address}>{i18n('tracing')}</Link>,
+                        value: (
+                            <Link url={data?.tracing_address} hasExternalIcon>
+                                {i18n('tracing')}
+                            </Link>
+                        ),
                     },
                     {
                         key: i18n('cpu-usage'),
