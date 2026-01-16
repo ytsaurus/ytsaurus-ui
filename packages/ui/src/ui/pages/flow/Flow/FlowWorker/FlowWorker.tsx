@@ -290,13 +290,21 @@ function FlowWorkerMeta({data}: {data?: FlowWorkerData}) {
                 },
                 {
                     key: i18n('deploy-link'),
-                    value: <Link url={data?.deploy_address}>{i18n('link')}</Link>,
-                    visible,
+                    value: (
+                        <Link url={data?.deploy_address} hasExternalIcon>
+                            {i18n('link')}
+                        </Link>
+                    ),
+                    visible: visible && Boolean(data?.deploy_address),
                 },
                 {
                     key: i18n('backtraces'),
-                    value: <Link url={data?.backtrace_address}>{i18n('link')}</Link>,
-                    visible,
+                    value: (
+                        <Link url={data?.backtrace_address} hasExternalIcon>
+                            {i18n('link')}
+                        </Link>
+                    ),
+                    visible: visible && Boolean(data?.backtrace_address),
                 },
             ],
             [
