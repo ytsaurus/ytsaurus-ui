@@ -33,7 +33,12 @@ export function useConfig<T extends TBlock>(
     {
         useDefaultConnection,
         connection,
-    }: {useDefaultConnection?: boolean; connection?: typeof MultipointConnection} = {},
+        showConnectionArrows = false,
+    }: {
+        useDefaultConnection?: boolean;
+        connection?: typeof MultipointConnection;
+        showConnectionArrows?: boolean;
+    } = {},
 ): {
     config: HookGraphParams;
     isBlock: (v: unknown) => v is CanvasBlock<T>;
@@ -51,6 +56,7 @@ export function useConfig<T extends TBlock>(
                 canDuplicateBlocks: false,
                 canCreateNewConnections: false,
                 canZoomCamera: true,
+                showConnectionArrows,
                 blockComponents,
                 // @ts-expect-error
                 background: NoopComponent,
@@ -68,7 +74,7 @@ export function useConfig<T extends TBlock>(
                 return knownTypes.has((v as Partial<CanvasBlock<T>>).state?.is!);
             },
         };
-    }, [blockComponentsCached, useDefaultConnection, connection]);
+    }, [blockComponentsCached, useDefaultConnection, connection, showConnectionArrows]);
 
     return {...config};
 }

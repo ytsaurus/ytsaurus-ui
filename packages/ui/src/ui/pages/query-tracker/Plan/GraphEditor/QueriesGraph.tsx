@@ -21,7 +21,7 @@ const Graph: FC<Props> = ({processedGraph}) => {
         {
             block: QueriesCanvasBlock,
         },
-        {connection: BezierMultipointConnection},
+        {connection: BezierMultipointConnection, showConnectionArrows: true},
     );
 
     const [loading, setLoading] = useState(true);

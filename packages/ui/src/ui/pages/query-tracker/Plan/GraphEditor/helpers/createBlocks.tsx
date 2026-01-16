@@ -8,6 +8,8 @@ import {getOperationType} from './getOperationType';
 import {getBlockIcon} from './getBlockIcon';
 import {MultipointConnection} from '../types';
 
+export const BLOCK_SIDE = 180;
+
 export const createBlocks = (
     graph: ProcessedGraph,
     progress: Progress | undefined,
@@ -23,15 +25,21 @@ export const createBlocks = (
         let bottomText = isMinimalisticView ? name : undefined;
         if (isTable) {
             name = 'Table';
-            bottomText = node.label;
+
+            const newPath = node.label?.match(/(\w+)/g)?.splice(-2).join('/');
+            if (newPath) {
+                bottomText = '.../' + newPath;
+            } else {
+                bottomText = node.label;
+            }
         }
 
         return {
             x: NaN,
             y: NaN,
             ...{level: node.level},
-            width: 100,
-            height: 100,
+            width: BLOCK_SIDE,
+            height: BLOCK_SIDE,
             id: node.id as string,
             is: 'block',
             selected: false,
