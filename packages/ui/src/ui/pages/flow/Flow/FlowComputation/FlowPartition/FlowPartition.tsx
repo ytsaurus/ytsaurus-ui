@@ -5,7 +5,7 @@ import {FlowPartitionDetailsType} from '../../../../../../shared/yt-types';
 import format from '../../../../../common/hammer/format';
 import {YTErrorBlock} from '../../../../../components/Error/Error';
 import Link from '../../../../../components/Link/Link';
-import MetaTable from '../../../../../components/MetaTable/MetaTable';
+import MetaTable, {TemplateId} from '../../../../../components/MetaTable/MetaTable';
 import {FlowEntityTitle} from '../../../../../pages/flow/flow-components/FlowEntityHeader';
 import {FlowMessagesCollapsible} from '../../../../../pages/flow/flow-components/FlowMessagesCollapsible/FlowMessagesCollapsible';
 import {useFlowExecuteQuery} from '../../../../../store/api/yt/flow/index';
@@ -69,7 +69,7 @@ export function FlowPartitionMeta({
                 [
                     {
                         key: i18n('partition-id'),
-                        value: data?.partition_id ?? partition,
+                        value: <TemplateId id={data?.partition_id ?? partition} />,
                     },
                     {
                         key: i18n('computation-id'),
@@ -78,7 +78,7 @@ export function FlowPartitionMeta({
                     },
                     {
                         key: i18n('current-job-id'),
-                        value: data?.current_job_id,
+                        value: <TemplateId id={data?.current_job_id} />,
                         visible: hasData,
                     },
                     {
@@ -88,7 +88,7 @@ export function FlowPartitionMeta({
                     },
                     {
                         key: i18n('incarnation-id'),
-                        value: data?.current_worker_incarnation_id,
+                        value: <TemplateId id={data?.current_worker_incarnation_id} />,
                         visible: hasData,
                     },
                 ],
