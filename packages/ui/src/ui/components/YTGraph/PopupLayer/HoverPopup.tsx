@@ -21,7 +21,11 @@ export function HoverPopup<B extends TBlock>({
     isBlockNode,
 }: HoverPopupProps<B>) {
     const [element, setElement] = React.useState<HTMLDivElement | null>(null);
-    const {block: hoverBlock, handleClearTimeout} = useHoverBlock(graph, element, isBlockNode);
+    const {
+        block: hoverBlock,
+        handleClearTimeout,
+        handleClosePopup,
+    } = useHoverBlock(graph, element, isBlockNode);
     const [popupBlock, setPopupBlock] = React.useState<typeof hoverBlock>();
 
     const stopPropagation = (e: MouseEvent<HTMLDivElement>) => {
@@ -62,6 +66,7 @@ export function HoverPopup<B extends TBlock>({
                     }}
                     onMouseLeave={() => {
                         setPopupBlock(undefined);
+                        handleClosePopup();
                     }}
                 >
                     {content}

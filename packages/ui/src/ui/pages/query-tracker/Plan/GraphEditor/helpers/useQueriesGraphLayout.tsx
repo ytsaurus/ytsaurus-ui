@@ -2,12 +2,13 @@ import {useEffect, useMemo, useState} from 'react';
 import {ProcessedGraph} from '../../utils';
 import {ECameraScaleLevel, TPoint} from '@gravity-ui/graph';
 import {QueriesNodeBlock} from '../QueriesNodeBlock';
-import {useResultProgress} from '../../PlanContext';
-import {createBlocks} from './createBlocks';
+import {BLOCK_SIDE, createBlocks} from './createBlocks';
 import {Node, layoutGraph} from '../../services/layout';
 import {buildConnectionsFromEdges} from './buildConnectionsFromEdges';
 import {toaster} from '../../../../../utils/toaster';
 import {MultipointConnection} from '../types';
+import {useSelector} from '../../../../../store/redux-hooks';
+import {getQuerySingleProgress} from '../../../../../store/selectors/query-tracker/query';
 
 export const useQueriesGraphLayout = (
     progressGraph: ProcessedGraph,
@@ -16,7 +17,7 @@ export const useQueriesGraphLayout = (
     data: {blocks: QueriesNodeBlock[]; connections: MultipointConnection[]};
     isLoading: boolean;
 } => {
-    const progress = useResultProgress();
+    const {yql_progress: progress} = useSelector(getQuerySingleProgress);
 
     const {blocks, connections: initialConnections} = useMemo(
         () => createBlocks(progressGraph, progress, scale),
@@ -92,6 +93,7 @@ export const useQueriesGraphLayout = (
                     nodePositions,
                     dotNodeIds,
                     blockSizes,
+                    BLOCK_SIDE,
                 );
 
                 setPositionedBlocks(newPositionedBlocks);
@@ -113,7 +115,7 @@ export const useQueriesGraphLayout = (
         return () => {
             cancelled = true;
         };
-    }, [blocks, layoutNodes, layoutEdges]);
+    }, [layoutNodes, layoutEdges]);
 
     return {data: {blocks: positionedBlocks, connections}, isLoading};
 };

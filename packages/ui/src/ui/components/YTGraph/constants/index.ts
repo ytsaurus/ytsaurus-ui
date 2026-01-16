@@ -13,7 +13,7 @@ const GRAPH_COLORS_ = {
     aborted: () => getCssColor('--default-background'),
     failed: () => getCssColor('--g-color-base-danger-heavy'),
     jobBlockBackground: () => 'rgba(88, 106, 122, 1)',
-    jobBlockColor: () => getCssColor('--g-color-text-brand'),
+    jobBlockColor: () => getCssColor('--g-color-private-white-850'),
     icon: () => getCssColor('--yql-graph-icon-color'),
 };
 
@@ -30,6 +30,8 @@ const STATE_COLOR_MAP_ = {
     aborted: () => getCssColor('--yellow-color'),
     failed: () => getCssColor('--danger-color'),
 };
+
+export const ZOOM_PADDING = 200;
 
 export const GRAPH_COLORS = makeObjectWithDelayedInit(GRAPH_COLORS_, {
     skipUndefined: true,

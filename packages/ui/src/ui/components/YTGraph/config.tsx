@@ -33,7 +33,10 @@ export function useConfig<T extends TBlock>(
     {
         useDefaultConnection,
         connection,
-    }: {useDefaultConnection?: boolean; connection?: typeof MultipointConnection} = {},
+    }: {
+        useDefaultConnection?: boolean;
+        connection?: typeof MultipointConnection;
+    } = {},
 ): {
     config: HookGraphParams;
     isBlock: (v: unknown) => v is CanvasBlock<T>;

@@ -583,7 +583,7 @@ function findSmallestHeightAlignment(graph: Graph, xss: Record<string, Record<st
 
 export const DEFAULT_NODE_WIDTH = 100;
 export const DEFAULT_NODE_HEIGHT = 100;
-const NODE_HORIZONTAL_GAP = 100;
+const NODE_HORIZONTAL_GAP = DEFAULT_NODE_WIDTH * 2;
 const NODE_VERTICAL_GAP = 200;
 
 function nodeWidth(graph?: Graph, v?: ID) {
