@@ -1,4 +1,5 @@
 import {Button, Flex} from '@gravity-ui/uikit';
+import axios from 'axios';
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {Route, Switch, useRouteMatch} from 'react-router';
@@ -9,7 +10,7 @@ import {YTErrorBlock} from '../../../../components/Error/Error';
 import Label from '../../../../components/Label/Label';
 import Link from '../../../../components/Link/Link';
 import Loader from '../../../../components/Loader/Loader';
-import MetaTable, {MetaTableProps} from '../../../../components/MetaTable/MetaTable';
+import MetaTable, {MetaTableProps, TemplateId} from '../../../../components/MetaTable/MetaTable';
 import Tabs from '../../../../components/Tabs/Tabs';
 import {FlowEntityTitle} from '../../../../pages/flow/flow-components/FlowEntityHeader';
 import {FlowMessagesCollapsible} from '../../../../pages/flow/flow-components/FlowMessagesCollapsible/FlowMessagesCollapsible';
@@ -24,7 +25,6 @@ import UIFactory from '../../../../UIFactory';
 import {openInNewTab, wrapApiPromiseByToaster} from '../../../../utils/utils';
 import './FlowWorker.scss';
 import i18n from './i18n';
-import axios from 'axios';
 
 const block = cn('yt-flow-worker');
 
@@ -281,7 +281,7 @@ function FlowWorkerMeta({data}: {data?: FlowWorkerData}) {
                 {key: i18n('address'), value: data?.address, visible},
                 {
                     key: i18n('worker-incarnation-id'),
-                    value: data?.incarnation_id,
+                    value: <TemplateId id={data?.incarnation_id} />,
                 },
                 {
                     key: i18n('worker-groups'),
