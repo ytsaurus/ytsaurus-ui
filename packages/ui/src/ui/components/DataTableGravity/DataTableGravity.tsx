@@ -5,6 +5,7 @@ import cn from 'bem-cn-lite';
 import React from 'react';
 import {useScrollMargin} from '../../hooks/use-scroll-margin';
 import './DataTableGravity.scss';
+import {YTSortIndicator} from './YTSortIndicator';
 
 const block = cn('yt-gravity-table');
 
@@ -39,6 +40,7 @@ export function DataTableGravity<TData, TScrollElement extends Element | Window>
     scrollToIndex,
     rowClassName,
     isHighlightedRow,
+    renderSortIndicator,
     ...props
 }: TableProps<TData, TScrollElement> & {
     style?: React.CSSProperties;
@@ -139,6 +141,12 @@ export function DataTableGravity<TData, TScrollElement extends Element | Window>
                 {...props}
                 cellAttributes={cellAttributes}
                 headerCellAttributes={headerCellAttributes}
+                renderSortIndicator={(sortProps) => {
+                    if (renderSortIndicator) {
+                        return renderSortIndicator(sortProps);
+                    }
+                    return <YTSortIndicator {...sortProps} />;
+                }}
             />
         </div>
     );

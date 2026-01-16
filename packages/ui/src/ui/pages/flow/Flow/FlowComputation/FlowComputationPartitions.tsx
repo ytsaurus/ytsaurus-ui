@@ -6,7 +6,6 @@ import {concatByAnd} from '../../../../common/hammer/predicate';
 import ClickableAttributesButton from '../../../../components/AttributesButton/ClickableAttributesButton';
 import {
     DataTableGravity,
-    SortIndicator,
     TableCell,
     tanstack,
     useTable,
@@ -194,16 +193,7 @@ function FlowComputationPartitionsTable({
         enableSorting: true,
     });
 
-    return (
-        <DataTableGravity
-            table={table}
-            virtualized
-            rowHeight={40}
-            renderSortIndicator={(props) => {
-                return <SortIndicator {...props} />;
-            }}
-        />
-    );
+    return <DataTableGravity table={table} virtualized rowHeight={40} />;
 }
 
 type FlowPartitionsColumnDef = tanstack.ColumnDef<FlowComputationPartitionType>;

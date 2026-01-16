@@ -7,7 +7,6 @@ import format from '../../../../common/hammer/format';
 import ClickableAttributesButton from '../../../../components/AttributesButton/ClickableAttributesButton';
 import {
     DataTableGravity,
-    SortIndicator,
     TableCell,
     tanstack,
     useTable,
@@ -108,14 +107,7 @@ function FlowWorkersTable({pipeline_path}: {pipeline_path: string}) {
         <div className={block()}>
             {isLoading && !items && <Loader visible />}
             {Boolean(error) && <YTErrorBlock error={error} />}
-            <DataTableGravity
-                table={table}
-                virtualized
-                rowHeight={40}
-                renderSortIndicator={(props) => {
-                    return <SortIndicator {...props} />;
-                }}
-            />
+            <DataTableGravity table={table} virtualized rowHeight={40} />
         </div>
     );
 }
