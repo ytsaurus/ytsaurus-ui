@@ -55,6 +55,7 @@ export function FlowComputationPartitions({
                                     placeholder={i18n('search-partition-by-id')}
                                     value={partitionIdFilter}
                                     onUpdate={setPartitionIdFilter}
+                                    hasClear
                                 />
                             ),
                         },

@@ -65,6 +65,7 @@ export function FlowComputationsList({pipeline_path}: {pipeline_path: string}) {
                                     placeholder={i18n('search-by-name')}
                                     value={computationsNameFilter}
                                     onUpdate={setComputationsNameFilter}
+                                    hasClear
                                 />
                             ),
                         },

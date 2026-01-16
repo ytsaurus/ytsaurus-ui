@@ -62,6 +62,7 @@ function FlowWorkersList({pipeline_path}: {pipeline_path: string}) {
                                     placeholder={i18n('search_placeholder')}
                                     value={workdersNameFilter}
                                     onUpdate={setWorkersNameFilter}
+                                    hasClear
                                 />
                             ),
                         },
