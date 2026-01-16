@@ -11,12 +11,11 @@ type Props = {
 
 export const DetailBlockHeader: FC<Props> = ({
     block: {
-        meta: {icon, bottomText, nodeProgress},
+        meta: {icon, bottomText, nodeProgress, operationType},
         name,
-        is,
     },
 }) => {
-    const isTable = is === OperationType.Table;
+    const isTable = operationType === OperationType.Table;
 
     const showContent = useMemo(() => {
         if (isTable) return Boolean(bottomText);

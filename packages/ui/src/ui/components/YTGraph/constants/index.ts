@@ -32,6 +32,8 @@ const STATE_COLOR_MAP_ = {
     failed: () => getCssColor('--danger-color'),
 };
 
+export const ZOOM_PADDING = 200;
+
 export const GRAPH_COLORS = makeObjectWithDelayedInit(GRAPH_COLORS_, {
     skipUndefined: true,
     defaultValue: '',

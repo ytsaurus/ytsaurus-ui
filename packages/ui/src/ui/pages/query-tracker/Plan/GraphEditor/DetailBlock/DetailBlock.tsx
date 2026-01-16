@@ -5,6 +5,7 @@ import {QueriesNodeBlock} from '../QueriesNodeBlock';
 import OperationNodeInfo from '../../OperationNodeInfo';
 import {hasDetailsInfo, hasJobsInfo, hasStagesInfo} from '../../utils';
 import {DetailBlockHeader} from './DetailBlockHeader';
+
 const b = cn('yt-detail-block');
 
 type Props = {

@@ -8,6 +8,8 @@ import {getOperationType} from './getOperationType';
 import {getBlockIcon} from './getBlockIcon';
 import {MultipointConnection} from '../types';
 
+export const BLOCK_SIDE = 180;
+
 export const createBlocks = (
     graph: ProcessedGraph,
     progress: Progress | undefined,
@@ -21,17 +23,19 @@ export const createBlocks = (
         const icon = getBlockIcon(type);
         const isTable = type === OperationType.Table;
         let bottomText = isMinimalisticView ? name : undefined;
+        let tablePath: string | undefined;
         if (isTable) {
             name = 'Table';
-            bottomText = node.label;
+            tablePath = node.title || undefined;
+            bottomText = tablePath || node.label;
         }
 
         return {
             x: NaN,
             y: NaN,
             ...{level: node.level},
-            width: 100,
-            height: 100,
+            width: BLOCK_SIDE,
+            height: BLOCK_SIDE,
             id: node.id as string,
             is: 'block',
             selected: false,
@@ -39,10 +43,12 @@ export const createBlocks = (
             anchors: [],
             meta: {
                 level,
+                operationType: type,
                 icon: {
                     src: iconToBase(icon),
                 },
                 bottomText,
+                tablePath,
                 padding: 10,
                 nodeProgress: progress ? progress[node.id] : undefined,
                 schemas: node.schemas,

@@ -1,77 +1,47 @@
 import {MultipointConnection} from '@gravity-ui/graph/react';
-
-const MIN_BEZIER_OFFSET = 25;
-
-export function generateBezierParams(
-    startPos: {x: number; y: number},
-    endPos: {x: number; y: number},
-) {
-    const distance = Math.abs(endPos.x - startPos.x);
-    const coef = Math.max(distance / 2, MIN_BEZIER_OFFSET);
-    return [
-        startPos,
-        {
-            x: startPos.x + coef,
-            y: startPos.y,
-        },
-        {
-            x: endPos.x - coef,
-            y: endPos.y,
-        },
-        endPos,
-    ];
-}
-
-export function bezierCurveLine(startPos: {x: number; y: number}, endPos: {x: number; y: number}) {
-    const path = new Path2D();
-    const [start, firstPoint, secondPoint, end] = generateBezierParams(startPos, endPos);
-    path.moveTo(start.x, start.y);
-    path.bezierCurveTo(firstPoint.x, firstPoint.y, secondPoint.x, secondPoint.y, end.x, end.y);
-
-    return path;
-}
+import {TPoint} from '@gravity-ui/graph';
+import {generateBezierParams} from './helpers/generateBezierParams';
+import {createArrowPath} from './helpers/createArrowPath';
+import {addBezierSegmentToPath} from './helpers/addBezierSegmentToPath';
 
 export class BezierMultipointConnection extends MultipointConnection {
     override createPath(): Path2D {
         const points = this.getPoints();
-        if (!points.length) {
+        if (points.length < 2) {
             return super.createPath();
         }
 
         const path = new Path2D();
 
-        if (points.length === 0 || points.length === 1) {
-            return path;
-        }
-
-        if (points.length === 2) {
-            return bezierCurveLine(points[0], points[1]);
-        }
-
         for (let i = 1; i < points.length; i++) {
-            const startPoint = points[i - 1];
-            const endPoint = points[i];
-
-            if (startPoint.y === endPoint.y) {
-                path.moveTo(startPoint.x, startPoint.y);
-                path.lineTo(endPoint.x, endPoint.y);
-            } else {
-                const [start, firstPoint, secondPoint, end] = generateBezierParams(
-                    startPoint,
-                    endPoint,
-                );
-                path.moveTo(start.x, start.y);
-                path.bezierCurveTo(
-                    firstPoint.x,
-                    firstPoint.y,
-                    secondPoint.x,
-                    secondPoint.y,
-                    end.x,
-                    end.y,
-                );
-            }
+            addBezierSegmentToPath(path, points[i - 1], points[i]);
         }
 
         return path;
+    }
+
+    override createArrowPath(): Path2D {
+        const lastTwoPoints = this.getLastTwoPoints();
+        if (!lastTwoPoints) {
+            return new Path2D();
+        }
+
+        const [startPoint, endPoint] = lastTwoPoints;
+
+        if (startPoint.y === endPoint.y) {
+            return createArrowPath(startPoint, endPoint, 16, 10);
+        }
+
+        // For bezier curves
+        const [, , secondControlPoint, end] = generateBezierParams(startPoint, endPoint);
+        return createArrowPath(secondControlPoint, end, 16, 10);
+    }
+
+    private getLastTwoPoints(): [TPoint, TPoint] | null {
+        const points = this.getPoints();
+        if (points.length < 2) {
+            return null;
+        }
+        return [points[points.length - 2], points[points.length - 1]];
     }
 }
