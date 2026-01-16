@@ -15,7 +15,7 @@ const FONT_SIZE = {
     detailed_header: 18,
     detailed_header2: 24,
     schematic_normal: 18,
-    schematic_header: 24,
+    schematic_header: 22,
     schematic_header2: 32,
     minimalistic_normal: 28,
     minimalistic_header: 44,
