@@ -1,10 +1,10 @@
-import {Breadcrumbs, Button} from '@gravity-ui/uikit';
+import {Breadcrumbs} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {Page} from '../../../../shared/constants/settings';
-import ypath from '../../../common/thor/ypath';
 import Link from '../../../components/Link/Link';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
+import {FlowTab} from '../../../store/reducers/flow/filters';
 import {useSelector} from '../../../store/redux-hooks';
 import {
     getFlowCurrentComputation,
@@ -12,31 +12,16 @@ import {
     getFlowCurrentWorker,
     getFlowPipelinePath,
 } from '../../../store/selectors/flow/filters';
-import {makeFlowLink, makeNavigationLink} from '../../../utils/app-url';
+import {makeFlowLink} from '../../../utils/app-url';
 import i18n from '../i18n';
 import './FlowPageTopRow.scss';
-import {FlowTab} from '../../../store/reducers/flow/filters';
-import {getAppBrowserHistory} from '../../../store/window-store';
 
 const block = cn('yt-flow-page-top-row');
 
 export function FlowPageTopRow() {
-    const path = useSelector(getFlowPipelinePath);
-    const navigationUrl = makeNavigationLink({path});
     return (
         <RowWithName page={Page.FLOWS}>
             <FlowBreadcrumbs />
-            <Button
-                href={navigationUrl}
-                view="outlined"
-                onClick={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    getAppBrowserHistory().push(navigationUrl);
-                }}
-            >
-                {i18n('open-in-navigation')}
-            </Button>
         </RowWithName>
     );
 }
@@ -103,14 +88,9 @@ function FlowBreadcrumbs() {
 }
 
 function BCName({path}: {path: string}) {
-    const name = React.useMemo(() => {
-        const parsedPath = path ? ypath.YPath.create(path, 'absolute') : undefined;
-        return parsedPath?.fragments?.pop()?.name;
-    }, [path]);
-
     return (
         <Link theme="secondary" url={makeFlowLink({path})} routed routedPreserveLocation>
-            {name}
+            {'<Root>'}
         </Link>
     );
 }

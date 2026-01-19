@@ -1,10 +1,12 @@
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {Route, Switch, useRouteMatch} from 'react-router';
+import {Page} from '../../../../../shared/constants/settings';
 import {YTErrorBlock} from '../../../../components/Error/Error';
 import Tabs from '../../../../components/Tabs/Tabs';
 import {FlowEntityTitle} from '../../../../pages/flow/flow-components/FlowEntityHeader';
 import {FlowMessagesCollapsible} from '../../../../pages/flow/flow-components/FlowMessagesCollapsible/FlowMessagesCollapsible';
+import {FlowPathMeta} from '../../../../pages/flow/flow-components/FlowMeta/FlowMeta';
 import {useFlowExecuteQuery} from '../../../../store/api/yt';
 import {filtersSlice} from '../../../../store/reducers/flow/filters';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
@@ -16,7 +18,6 @@ import {FlowComputationPartitions} from './FlowComputationPartitions';
 import {FlowComputationPerformance} from './FlowComputationPerformance/FlowComputationPerformance';
 import {FlowPartition} from './FlowPartition/FlowPartition';
 import i18n from './i18n';
-import {Page} from '../../../../../shared/constants/settings';
 
 const block = cn('yt-flow-computation');
 
@@ -99,6 +100,7 @@ function FlowComputationDetails({computation}: {computation: string}) {
                 status={data?.status}
                 loading={!data && isLoading}
             />
+            <FlowPathMeta />
             <FlowComputationTabs computation={computation} />
             {Boolean(error) && <YTErrorBlock error={error} />}
             <FlowComputationPerformance data={data} />

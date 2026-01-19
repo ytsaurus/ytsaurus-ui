@@ -14,6 +14,7 @@ import MetaTable, {MetaTableProps, TemplateId} from '../../../../components/Meta
 import Tabs from '../../../../components/Tabs/Tabs';
 import {FlowEntityTitle} from '../../../../pages/flow/flow-components/FlowEntityHeader';
 import {FlowMessagesCollapsible} from '../../../../pages/flow/flow-components/FlowMessagesCollapsible/FlowMessagesCollapsible';
+import {getFlowPathMetaItems} from '../../../../pages/flow/flow-components/FlowMeta/FlowMeta';
 import {FlowComputationPartitions} from '../../../../pages/flow/Flow/FlowComputation/FlowComputationPartitions';
 import {YTApiId, ytApiV4Id} from '../../../../rum/rum-wrap-api';
 import {useFlowExecuteQuery} from '../../../../store/api/yt/flow';
@@ -274,10 +275,12 @@ function FlowWorkerKillAction({
 }
 
 function FlowWorkerMeta({data}: {data?: FlowWorkerData}) {
+    const path = useSelector(getFlowPipelinePath);
     const items = React.useMemo(() => {
         const visible = Boolean(data);
         const res: MetaTableProps['items'] = [
             [
+                ...getFlowPathMetaItems(path),
                 {key: i18n('address'), value: data?.address, visible},
                 {
                     key: i18n('worker-incarnation-id'),
