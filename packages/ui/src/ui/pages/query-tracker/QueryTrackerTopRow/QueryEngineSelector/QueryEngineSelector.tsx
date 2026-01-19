@@ -16,7 +16,7 @@ import {QueryEngine} from '../../../../../shared/constants/engines';
 import {ModalWithoutHandledScrollBar as Modal} from '../../../../components/Modal/Modal';
 import RadioButton from '../../../../components/RadioButton/RadioButton';
 import {Select} from '@gravity-ui/uikit';
-import '../QueryEngineSelector.scss';
+import './QueryEngineSelector.scss';
 import cn from 'bem-cn-lite';
 import i18n from './i18n';
 
