@@ -134,7 +134,7 @@ export const QueryResults = memo<Props>(function QueryResults({
                     </div>
                     <div className={b('content')}>
                         {tabs.map((tab) => (
-                            <TabPanel key={tab.id} value={tab.id}>
+                            <TabPanel key={tab.id} value={tab.id} className={b('tab-panel')}>
                                 {getTabContent(tab.id)}
                             </TabPanel>
                         ))}
