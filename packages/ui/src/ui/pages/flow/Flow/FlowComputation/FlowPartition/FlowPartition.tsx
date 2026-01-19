@@ -8,6 +8,7 @@ import Link from '../../../../../components/Link/Link';
 import MetaTable, {TemplateId} from '../../../../../components/MetaTable/MetaTable';
 import {FlowEntityTitle} from '../../../../../pages/flow/flow-components/FlowEntityHeader';
 import {FlowMessagesCollapsible} from '../../../../../pages/flow/flow-components/FlowMessagesCollapsible/FlowMessagesCollapsible';
+import {getFlowPathMetaItems} from '../../../../../pages/flow/flow-components/FlowMeta/FlowMeta';
 import {useFlowExecuteQuery} from '../../../../../store/api/yt/flow/index';
 import {filtersSlice} from '../../../../../store/reducers/flow/filters';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
@@ -62,11 +63,13 @@ export function FlowPartitionMeta({
     partition: string;
     data?: FlowPartitionDetailsType;
 }) {
+    const path = useSelector(getFlowPipelinePath);
     const hasData = Boolean(data);
     return (
         <MetaTable
             items={[
                 [
+                    ...getFlowPathMetaItems(path),
                     {
                         key: i18n('partition-id'),
                         value: <TemplateId id={data?.partition_id ?? partition} />,

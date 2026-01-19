@@ -2,21 +2,17 @@ import {Button, Flex, Link} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {Redirect, Route, Switch} from 'react-router';
-
+import {Page} from '../../../../shared/constants/settings';
 import {formatByParams} from '../../../../shared/utils/format';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
 import Icon from '../../../components/Icon/Icon';
 import MetaTable from '../../../components/MetaTable/MetaTable';
 import StatusLabel from '../../../components/StatusLabel/StatusLabel';
-import {useUpdater} from '../../../hooks/use-updater';
-import {Page} from '../../../../shared/constants/settings';
-import {loadFlowStatus, updateFlowState} from '../../../store/actions/flow/status';
-import {getFlowStatusData} from '../../../store/selectors/flow/status';
-import {getCluster} from '../../../store/selectors/global';
-import UIFactory from '../../../UIFactory';
 import Tabs from '../../../components/Tabs/Tabs';
 import {YTErrorInline} from '../../../containers/YTErrorInline/YTErrorInline';
+import {useUpdater} from '../../../hooks/use-updater';
 import {useFlowAttributes} from '../../../pages/flow/flow-hooks/use-flow-attributes';
+import {loadFlowStatus, updateFlowState} from '../../../store/actions/flow/status';
 import {useFlowExecuteQuery} from '../../../store/api/yt/flow';
 import {FlowTab} from '../../../store/reducers/flow/filters';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
@@ -25,14 +21,19 @@ import {
     getFlowCurrentWorker,
     getFlowPipelinePath,
 } from '../../../store/selectors/flow/filters';
+import {getFlowStatusData} from '../../../store/selectors/flow/status';
+import {getCluster} from '../../../store/selectors/global';
+import UIFactory from '../../../UIFactory';
 import {makeTabProps} from '../../../utils';
 import {FlowEntityTitle} from '../flow-components/FlowEntityHeader';
+import i18n from '../i18n';
 import './Flow.scss';
 import {FlowComputations} from './FlowComputations/FlowComputations';
 import {FlowGraph} from './FlowGraph/FlowGraph';
 import {FlowMessages} from './FlowGraph/renderers/FlowGraphRenderer';
 import {FlowWorkers} from './FlowWorkers/FlowWorkers';
 import {FlowDynamicSpec, FlowStaticSpec} from './PipelineSpec/PipelineSpec';
+import {getFlowPathMetaItems} from '../flow-components/FlowMeta/FlowMeta';
 
 const block = cn('yt-flow');
 
@@ -162,8 +163,10 @@ function FlowState() {
                     className={block('meta')}
                     items={[
                         [
+                            ...getFlowPathMetaItems(pipeline_path),
                             {
                                 key: 'leader_controller_address',
+                                label: i18n('leader-controller-address'),
                                 value: (
                                     <>
                                         {leader_controller_address}
