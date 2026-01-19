@@ -1,4 +1,4 @@
-import {FlowComputationType, FlowComputationStreamType} from '../../../../../../shared/yt-types';
+import {FlowComputationStreamType, FlowComputationType} from '../../../../../../shared/yt-types';
 
 import {YTGraphBlock} from '../../../../../components/YTGraph';
 import {rumLogError} from '../../../../../rum/rum-counter';
