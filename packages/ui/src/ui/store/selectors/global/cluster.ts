@@ -7,6 +7,7 @@ import {getConfigData} from '../../../config/ui-settings';
 
 import {RootState} from '../../../store/reducers';
 import {getClusterConfig} from '../../../utils';
+import {QueryEngine} from '../../../../shared/constants/engines';
 
 export const getCluster = (state: RootState): string => state.global.cluster || '';
 export const getClusterUiConfig = (state: RootState) => state.global.clusterUiConfig;
@@ -22,6 +23,16 @@ export function getClusterProxy(clusterConfig: ClusterConfig): string {
     }
     return clusterConfig.proxy;
 }
+
+export const getClusterSupportedEngines = (state: RootState): Record<QueryEngine, boolean> => {
+    const {chyt_controller_base_url, livy_controller_base_url} = state.global.clusterUiConfig;
+    return {
+        yql: true,
+        chyt: Boolean(chyt_controller_base_url),
+        spyt: Boolean(livy_controller_base_url),
+        ql: true,
+    };
+};
 
 export const getClusterUiConfigEnablePerAccountTabletAccounting = (state: RootState) => {
     return state.global.clusterUiConfig.enable_per_account_tablet_accounting ?? false;
