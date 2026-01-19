@@ -1,6 +1,6 @@
 {
   "computations": "Computations",
   "workers": "Workers",
-  "open-in-navigation": "Open in Navigation",
-  "partition": "Partition"
+  "partition": "Partition",
+  "leader-controller-address": "Leader controller address"
 }
