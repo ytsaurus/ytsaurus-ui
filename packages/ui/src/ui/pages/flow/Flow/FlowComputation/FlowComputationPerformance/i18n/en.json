@@ -1,4 +1,5 @@
 {
+  "click-to-show-example": "Click a value to display a corresponding partition example",
   "performance-per-partition": "Performance per partition",
   "count-of-partitions-with-errors": "Count of partitions with errors",
   "partition": "Partition"
