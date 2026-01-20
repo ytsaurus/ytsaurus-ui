@@ -57,6 +57,7 @@ export const getJobsWithEvents =
             const listResponse = await ytApiV3Id.listJobs(YTApiId.operationGetJobs, {
                 operation_id: operationId,
                 cancellation: cancelHelper.removeAllAndSave,
+                limit: MAX_JOBS_COUNT,
                 attributes: [
                     'events',
                     'state',
@@ -71,10 +72,7 @@ export const getJobsWithEvents =
             });
 
             const jobs = listResponse.jobs as OperationJob[];
-            if (jobs.length > MAX_JOBS_COUNT) {
-                dispatch(setJobsCountError(true));
-                return;
-            }
+            dispatch(setJobsCountError(jobs.length >= MAX_JOBS_COUNT));
 
             const result = jobs.reduce<Pick<JobsTimelineState, 'jobs' | 'eventsInterval'>>(
                 (acc, job) => {

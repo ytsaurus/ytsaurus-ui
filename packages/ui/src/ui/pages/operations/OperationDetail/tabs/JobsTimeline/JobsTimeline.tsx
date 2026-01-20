@@ -18,6 +18,7 @@ import {useUpdater} from '../../../../../hooks/use-updater';
 import WithStickyToolbar from '../../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {MAX_JOBS_COUNT} from './constants';
 import {YTErrorBlock} from '../../../../../components/Error/Error';
+import i18n from './i18n';
 
 const block = cn('yt-jobs-timeline');
 
@@ -42,17 +43,8 @@ export const JobsTimeline: FC = () => {
         return <YTErrorBlock error={error} />;
     }
 
-    if (overloadError) {
-        return (
-            <Alert
-                theme="info"
-                message={`Too many jobs to display. Max number ${MAX_JOBS_COUNT}`}
-            />
-        );
-    }
-
     if (emptyError) {
-        return <Alert theme="info" message={`No jobs to display`} />;
+        return <Alert theme="info" message={i18n('alert_no-jobs-to-display')} />;
     }
 
     if (isLoading) {
@@ -68,7 +60,18 @@ export const JobsTimeline: FC = () => {
     return (
         <WithStickyToolbar
             toolbar={<TimeLineHeader />}
-            content={<OperationTimeline />}
+            content={
+                <>
+                    {overloadError && (
+                        <Alert
+                            theme="warning"
+                            message={i18n('alert_data-incomplete', {count: MAX_JOBS_COUNT})}
+                            className={block('overload-alert')}
+                        />
+                    )}
+                    <OperationTimeline />
+                </>
+            }
             className={block()}
             padding="skip-horizontal"
         />

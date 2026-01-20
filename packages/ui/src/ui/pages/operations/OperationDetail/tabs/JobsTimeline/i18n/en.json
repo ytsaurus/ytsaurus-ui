@@ -1,0 +1,4 @@
+{
+  "alert_no-jobs-to-display": "No jobs to display",
+  "alert_data-incomplete": "The data is incomplete. Only the first {{count}} jobs are shown."
+}
