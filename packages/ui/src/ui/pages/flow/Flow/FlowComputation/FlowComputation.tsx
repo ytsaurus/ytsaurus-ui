@@ -93,6 +93,12 @@ function FlowComputationDetails({computation}: {computation: string}) {
     const pipeline_path = useSelector(getFlowPipelinePath);
 
     const {data, error, isLoading} = useFlowComputationData({computation, pipeline_path});
+
+    const scrollToRef = React.useRef<HTMLDivElement>(null);
+    const onClick = React.useCallback(() => {
+        scrollToRef.current?.scrollIntoView();
+    }, []);
+
     return (
         <>
             <FlowEntityTitle
@@ -103,11 +109,12 @@ function FlowComputationDetails({computation}: {computation: string}) {
             <FlowPathMeta />
             <FlowComputationTabs computation={computation} />
             {Boolean(error) && <YTErrorBlock error={error} />}
-            <FlowComputationPerformance data={data} />
+            <FlowComputationPerformance data={data} onClick={onClick} />
             <div className={block('messages')}>
                 <FlowMessagesCollapsible messages={data?.messages} />
             </div>
             <FlowComputationPartitions partitions={data?.partitions} />
+            <div ref={scrollToRef} />
         </>
     );
 }

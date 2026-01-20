@@ -1,4 +1,5 @@
 {
+  "click-to-show-example": "Кликните по значения для показа соответсвующего примера партиции",
   "performance-per-partition": "Производительность партиций",
   "count-of-partitions-with-errors": "Количество партиций с ошибками",
   "partition": "Партиция"

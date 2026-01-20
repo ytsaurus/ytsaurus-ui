@@ -16,6 +16,8 @@ export type FormatNumberProps = FormatSettings & {
     tooltip?: string;
 
     hideApproximateChar?: boolean;
+
+    ellipsis?: boolean;
 };
 
 export type FormatSettings =
@@ -23,16 +25,17 @@ export type FormatSettings =
           type: 'Number';
           settings?: {digits?: number; digitsOnlyForFloat?: boolean};
       }
+    | {type: 'NumberWithSuffix'; settings?: {digits?: number}}
     | {
           type: 'NumberSmart';
           settings?: {significantDigits?: number};
       }
     | {
-          type: 'Bytes';
+          type: 'Bytes' | 'BytesPerSecond';
           settings?: {digits?: number};
       };
 
-export function FormatNumber({className, tooltip, ...rest}: FormatNumberProps) {
+export function FormatNumber({className, ellipsis, tooltip, ...rest}: FormatNumberProps) {
     const {content, title, prefix} = getFormattedValue(rest);
 
     const tooltipContent = tooltip ? <YTText color="secondary">{tooltip}</YTText> : null;
@@ -40,11 +43,12 @@ export function FormatNumber({className, tooltip, ...rest}: FormatNumberProps) {
     return (
         <Tooltip
             className={block(null, className)}
+            ellipsis={ellipsis}
             content={
-                <>
+                <div onClick={(e) => e.stopPropagation()}>
                     {tooltipContent} <span>{title} </span>
                     <ClipboardButton view="clear" text={title} inlineMargins />
-                </>
+                </div>
             }
         >
             {prefix}
