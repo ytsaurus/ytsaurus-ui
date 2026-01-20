@@ -1,5 +1,37 @@
 # Changelog
 
+## [3.5.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.4.1...ui-v3.5.0) (2026-01-20)
+
+
+### Features
+
+* **Accounts:** add Prometheus dashboard inegration [YTFRONT-4388] ([a3c85e0](https://github.com/ytsaurus/ytsaurus-ui/commit/a3c85e024be4f4726f64377bf4e0c6ef65d2856d))
+* **Bundles:** add Prometheus dashboard integration [YTFRONT-4388] ([2ce6c39](https://github.com/ytsaurus/ytsaurus-ui/commit/2ce6c39409b46d265fc2c3eb1fcedce85734dfa9))
+* **CHYT:** add Prometheus dashboard integration [YTFRONT-4388] ([2019484](https://github.com/ytsaurus/ytsaurus-ui/commit/201948411996d07db5155c0f2ad30f7c5ac8446d))
+* **Job:** add Prometheus dashboard integration [YTFRONT-4388] ([d905243](https://github.com/ytsaurus/ytsaurus-ui/commit/d905243d4446fa7b79dd1f2cfb60f8e2fec80790))
+* **Monitoring:** add Prometheus dashboards integration [YTFRONT-4388] ([7a1ce2a](https://github.com/ytsaurus/ytsaurus-ui/commit/7a1ce2a6285ee33ec32fe6c74f689f1a3f8b33d4))
+* **Navigation/Consumer:** add Prometheus dashboard integration [YTFRONT-4388] ([873c644](https://github.com/ytsaurus/ytsaurus-ui/commit/873c644daa6d7f732ae92bef52d5ca4637e09951))
+* **Navigation/Flow:** add Prometheus integration [YTFOTN-4388] ([eace5ae](https://github.com/ytsaurus/ytsaurus-ui/commit/eace5aecc96a9210036cf60b2bd20bfe6e5f10f3))
+* **Navigation/Queue:** add Prometheus dashboard integration [YTFRONT-4388] ([c10369d](https://github.com/ytsaurus/ytsaurus-ui/commit/c10369dd2a2a8d4ff26d7ce77661e3cd8cdcabb7))
+* **Operation:** add Prometheus dashboard integration [YTFRONT-4388] ([c615ccb](https://github.com/ytsaurus/ytsaurus-ui/commit/c615ccb37248c84c260bea5a99e8de7b647bed4f))
+* **Plan:** migrate to gravity timeline [YTFRONT-5215] ([57cb5f4](https://github.com/ytsaurus/ytsaurus-ui/commit/57cb5f4dfe5301c96d854b2a3ad316d487d9e239))
+* **System:** add Prometheus dashboard integration [YTFRONT-4388] ([66da56d](https://github.com/ytsaurus/ytsaurus-ui/commit/66da56d9d0d0ef864f9493eaa271386180f26c2e))
+
+
+### Bug Fixes
+
+* **DownloadManager:** crypto problem [YTFRONT-5474] ([418a4b2](https://github.com/ytsaurus/ytsaurus-ui/commit/418a4b27554c69cb24cbdee86b370ac300dafe08))
+* **Navigation/Metadata:** operation link [YTFRONT-4994] ([33a1d26](https://github.com/ytsaurus/ytsaurus-ui/commit/33a1d26d095221c1fa47964a3ce8866fa831e1a6))
+* **Navigation:** duplicate names [YTFRONT-5458] ([7bec172](https://github.com/ytsaurus/ytsaurus-ui/commit/7bec172450a2789a52602f4c8681351852c97b24))
+* **Navigation:** long text in error [YTFRONT-5477] ([3341ef7](https://github.com/ytsaurus/ytsaurus-ui/commit/3341ef77390bffef156802e9be5f0469dcb53477))
+* **Navigation:** support Ctrl in breadcrumbs [YTFRONT-5465] ([8600951](https://github.com/ytsaurus/ytsaurus-ui/commit/8600951431332c8028bc3d642fc3b699375c264d))
+* **Operations:** limit format [YTFRONT-5386] ([7e3940a](https://github.com/ytsaurus/ytsaurus-ui/commit/7e3940a5a7dd8d07537acf431e77f8c0ffe7b084))
+* **Queries/Progress:** old graph height [YTFRONT-5500] ([3283db8](https://github.com/ytsaurus/ytsaurus-ui/commit/3283db81b52693df0f03439def60011931647c30))
+* **Queries:** display only supported engines [YTFRONT-5502] ([a2d9e16](https://github.com/ytsaurus/ytsaurus-ui/commit/a2d9e16339131b3a8a933c3d055d311c1adbd560))
+* **Scheduling:** wrong pending time [YTFRONT-5439] ([8959c61](https://github.com/ytsaurus/ytsaurus-ui/commit/8959c611822821ba49d7bcd855d90c5475ae0e78))
+* **Users/EditModal:** another form if crypto not supported [YTFRONT-5474] ([6c9eee8](https://github.com/ytsaurus/ytsaurus-ui/commit/6c9eee83a677ffe9b26fb5fb08e39068070ec984))
+* **UTF8:** graph node details info [YTFRONT-5246] ([d83815d](https://github.com/ytsaurus/ytsaurus-ui/commit/d83815d16397988fd5c4dace4c26416e3bc3ff00))
+
 ## [3.4.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.4.0...ui-v3.4.1) (2025-12-23)
 
 
