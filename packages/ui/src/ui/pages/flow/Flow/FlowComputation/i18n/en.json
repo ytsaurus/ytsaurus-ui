@@ -1,6 +1,7 @@
 {
   "bytes-per-second": "Bytes per second",
   "cpu-usage": "CPU usage",
+  "computation": "Computation",
   "details": "Details",
   "health": "Health",
   "job-state": "Job state",

@@ -224,6 +224,25 @@ function useFlowWorkersColumns() {
                 },
             },
             {
+                id: 'computation',
+                header: () => i18n('computation'),
+                size: 400,
+                cell: ({row: {original: item}}) => {
+                    return (
+                        <TableCell>
+                            <YTText ellipsis>
+                                <ComputationIdCell computation={item.computation_id} />
+                            </YTText>
+                        </TableCell>
+                    );
+                },
+                enableColumnFilter: false,
+                enableHiding: false,
+                accessorFn(d) {
+                    return d.computation_id;
+                },
+            },
+            {
                 id: 'worker',
                 header: () => i18n('worker'),
                 size: 400,
@@ -388,6 +407,23 @@ function PartitionIdCell({id, computation_id}: {id: string; computation_id: stri
             routed
         >
             {id}
+        </Link>
+    );
+}
+
+function ComputationIdCell({computation}: {computation: string}) {
+    const path = useSelector(getFlowPipelinePath);
+
+    return (
+        <Link
+            url={makeFlowLink({
+                path,
+                computation,
+                tab: FlowTab.COMPUTATIONS,
+            })}
+            routed
+        >
+            {computation}
         </Link>
     );
 }
