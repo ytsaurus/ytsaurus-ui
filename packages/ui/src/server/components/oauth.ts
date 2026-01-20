@@ -72,7 +72,7 @@ export function saveOAuthTokensInCookies(res: Response, tokens: OAuthAuthorizati
 
     if (tokens.refresh_token) {
         res.cookie(YT_OAUTH_REFRESH_TOKEN_NAME, tokens.refresh_token, {
-            maxAge: tokens.refresh_expires_in,
+            maxAge: tokens.refresh_expires_in * 1000,
             httpOnly: true,
             secure: true,
         });
