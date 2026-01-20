@@ -65,7 +65,13 @@ export function useFlowComputationPartitionErrorsData(
 
 type ErrorStatsColumnDef = tanstack.ColumnDef<ErrorStatsRow>;
 
-export function FlowComputationPartitionErrors({items}: {items: Array<ErrorStatsRow>}) {
+export function FlowComputationPartitionErrors({
+    items,
+    onClick,
+}: {
+    items: Array<ErrorStatsRow>;
+    onClick: () => void;
+}) {
     const columns = React.useMemo(() => {
         const res: Array<ErrorStatsColumnDef> = [
             {
@@ -84,7 +90,10 @@ export function FlowComputationPartitionErrors({items}: {items: Array<ErrorStats
                     const {['1m']: colData} = item;
                     return (
                         <TableCell>
-                            <FlowComputationPartitionFilter partition={colData?.example_partition}>
+                            <FlowComputationPartitionFilter
+                                partition={colData?.example_partition}
+                                onClick={onClick}
+                            >
                                 {format.Number(colData?.count)}
                             </FlowComputationPartitionFilter>
                         </TableCell>
@@ -99,7 +108,10 @@ export function FlowComputationPartitionErrors({items}: {items: Array<ErrorStats
                     const {['5m']: colData} = item;
                     return (
                         <TableCell>
-                            <FlowComputationPartitionFilter partition={colData?.example_partition}>
+                            <FlowComputationPartitionFilter
+                                partition={colData?.example_partition}
+                                onClick={onClick}
+                            >
                                 {format.Number(colData?.count)}
                             </FlowComputationPartitionFilter>
                         </TableCell>
@@ -114,7 +126,10 @@ export function FlowComputationPartitionErrors({items}: {items: Array<ErrorStats
                     const {['30m']: colData} = item;
                     return (
                         <TableCell>
-                            <FlowComputationPartitionFilter partition={colData?.example_partition}>
+                            <FlowComputationPartitionFilter
+                                partition={colData?.example_partition}
+                                onClick={onClick}
+                            >
                                 {format.Number(colData?.count)}
                             </FlowComputationPartitionFilter>
                         </TableCell>
@@ -123,7 +138,7 @@ export function FlowComputationPartitionErrors({items}: {items: Array<ErrorStats
             },
         ];
         return res;
-    }, []);
+    }, [onClick]);
 
     const table = useTable({
         columns,

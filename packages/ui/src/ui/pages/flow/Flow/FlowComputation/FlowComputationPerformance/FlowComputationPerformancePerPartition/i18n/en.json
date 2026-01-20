@@ -3,7 +3,7 @@
   "cpu_usage": "CPU usage",
   "memory_usage": "Memory usage",
   "bytes_per_second": "Bytes per second",
-  "messages_per_second": "Messages per secont",
+  "messages_per_second": "Messages per second",
   "total": "Total",
   "average": "Avg",
   "min": "Min",
