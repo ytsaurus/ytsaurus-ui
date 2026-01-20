@@ -12,9 +12,11 @@ import {makeFlowLink} from '../../../../../utils/app-url';
 export function FlowComputationPartitionFilter({
     partition,
     children,
+    onClick,
 }: {
     partition?: string;
     children: React.ReactNode;
+    onClick: () => void;
 }) {
     const path = useSelector(getFlowPipelinePath);
     const computation = useSelector(getFlowCurrentComputation);
@@ -29,6 +31,7 @@ export function FlowComputationPartitionFilter({
                 computation,
                 partitionIdFilter: partition,
             })}
+            onClick={onClick}
             routed
         >
             {children}
