@@ -1,6 +1,7 @@
 {
   "bytes-per-second": "Байт в секунду",
   "cpu-usage": "Использование CPU",
+  "computation": "Компьютейшн",
   "details": "Детали",
   "health": "Здоровье",
   "job-state": "Состояние джоба",
