@@ -2,9 +2,9 @@ import cn from 'bem-cn-lite';
 import React from 'react';
 import {Route, Switch, useRouteMatch} from 'react-router';
 import {Page} from '../../../../../shared/constants/settings';
-import {YTErrorBlock} from '../../../../components/Error/Error';
 import Tabs from '../../../../components/Tabs/Tabs';
 import {FlowEntityTitle} from '../../../../pages/flow/flow-components/FlowEntityHeader';
+import {FlowError} from '../../../../pages/flow/flow-components/FlowError/FlowError';
 import {FlowMessagesCollapsible} from '../../../../pages/flow/flow-components/FlowMessagesCollapsible/FlowMessagesCollapsible';
 import {
     FlowPathMeta,
@@ -111,7 +111,7 @@ function FlowComputationDetails({computation}: {computation: string}) {
             />
             <FlowComputationMeta computation={computation} pipeline_path={pipeline_path} />
             <FlowComputationTabs computation={computation} />
-            {Boolean(error) && <YTErrorBlock error={error} />}
+            {Boolean(error) && <FlowError error={error} />}
             <FlowComputationPerformance data={data} onClick={onClick} />
             <div className={block('messages')}>
                 <FlowMessagesCollapsible messages={data?.messages} />
@@ -168,7 +168,7 @@ function FlowComputationMonitor({computation}: {computation: string}) {
         <div className={block()}>
             <FlowEntityTitle title={computation} status={data?.status} />
             <FlowComputationTabs computation={computation} />
-            {Boolean(error) && <YTErrorBlock error={error} />}
+            {Boolean(error) && <FlowError error={error} />}
             <ComputationMonitoring path={pipeline_path} computation={computation} />
         </div>
     );
