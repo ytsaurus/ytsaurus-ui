@@ -57,30 +57,32 @@ export function getErrorTitle(
     return title ?? 'An unexpected error occurred';
 }
 
-/**
- * returns first non-undefined error code,
- * from root error to inner errors
- */
-export function getLeadingErrorCode(error: YTError): number | undefined {
-    const errorCode = getYtErrorCode(error);
-    if (!isNaN(errorCode)) {
-        return errorCode;
-    }
+function collectErrorCodes(error: YTError, dst = new Set<number>()) {
+    const saveErrorCode = (v?: number) => {
+        if (v !== undefined && !isNaN(v)) {
+            dst.add(v);
+        }
+    };
 
-    if (!error?.inner_errors) return;
+    saveErrorCode(getYtErrorCode(error));
+
+    if (!error?.inner_errors) {
+        return dst;
+    }
 
     const errors = error.inner_errors;
 
     for (const inner_error of errors) {
-        const innerErrorCode = getYtErrorCode(inner_error);
-        if (!isNaN(innerErrorCode)) {
-            return innerErrorCode;
-        }
-
-        if (inner_error.inner_errors) {
-            errors.concat(inner_error.inner_errors);
-        }
+        collectErrorCodes(inner_error, dst);
     }
 
-    return;
+    return dst;
+}
+
+export function checkErrorForPrettyCodes(error: YTError) {
+    const codes = collectErrorCodes(error);
+    return {
+        has500: codes.has(500),
+        has901: codes.has(901),
+    };
 }

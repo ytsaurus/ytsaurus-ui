@@ -10,12 +10,12 @@ import {
     tanstack,
     useTable,
 } from '../../../../components/DataTableGravity';
-import {YTErrorBlock} from '../../../../components/Error/Error';
 import Link from '../../../../components/Link/Link';
 import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {useSettingsColumnSizes} from '../../../../hooks/settings/use-settings-column-sizes';
+import {FlowError} from '../../../../pages/flow/flow-components/FlowError/FlowError';
 import {ShowDataButton} from '../../../../pages/flow/flow-components/FlowMeta/FlowMeta';
 import {FlowComputation} from '../../../../pages/flow/Flow/FlowComputation/FlowComputation';
 import {FlowNodeStatus} from '../../../../pages/flow/Flow/FlowGraph/renderers/FlowGraphRenderer';
@@ -118,7 +118,7 @@ function FlowComputationsTable({pipeline_path}: {pipeline_path: string}) {
 
     return (
         <div className={block()}>
-            {Boolean(error) && <YTErrorBlock error={error} />}
+            {Boolean(error) && <FlowError error={error} />}
             <DataTableGravity table={table} virtualized rowHeight={40} />
         </div>
     );
