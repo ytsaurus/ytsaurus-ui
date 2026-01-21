@@ -6,7 +6,10 @@ import {YTErrorBlock} from '../../../../components/Error/Error';
 import Tabs from '../../../../components/Tabs/Tabs';
 import {FlowEntityTitle} from '../../../../pages/flow/flow-components/FlowEntityHeader';
 import {FlowMessagesCollapsible} from '../../../../pages/flow/flow-components/FlowMessagesCollapsible/FlowMessagesCollapsible';
-import {FlowPathMeta} from '../../../../pages/flow/flow-components/FlowMeta/FlowMeta';
+import {
+    FlowPathMeta,
+    getLoadedDataMetaItems,
+} from '../../../../pages/flow/flow-components/FlowMeta/FlowMeta';
 import {useFlowExecuteQuery} from '../../../../store/api/yt';
 import {filtersSlice} from '../../../../store/reducers/flow/filters';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
@@ -106,7 +109,7 @@ function FlowComputationDetails({computation}: {computation: string}) {
                 status={data?.status}
                 loading={!data && isLoading}
             />
-            <FlowPathMeta />
+            <FlowComputationMeta computation={computation} pipeline_path={pipeline_path} />
             <FlowComputationTabs computation={computation} />
             {Boolean(error) && <YTErrorBlock error={error} />}
             <FlowComputationPerformance data={data} onClick={onClick} />
@@ -117,6 +120,20 @@ function FlowComputationDetails({computation}: {computation: string}) {
             <div ref={scrollToRef} />
         </>
     );
+}
+
+function FlowComputationMeta({
+    computation,
+    pipeline_path,
+}: {
+    computation: string;
+    pipeline_path: string;
+}) {
+    const {data} = useFlowComputationData({computation, pipeline_path});
+
+    return data ? (
+        <FlowPathMeta items={getLoadedDataMetaItems({label: i18n('computation-data'), data})} />
+    ) : null;
 }
 
 function useFlowComputationData({

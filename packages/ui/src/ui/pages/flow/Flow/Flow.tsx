@@ -80,11 +80,7 @@ function FlowContent() {
         <Switch>
             <Route
                 path={`/:cluster/${Page.FLOWS}/${FlowTab.GRAPH}`}
-                render={() => <FlowGraph pipeline_path={path} yson={false} />}
-            />
-            <Route
-                path={`/:cluster/${Page.FLOWS}/${FlowTab.GRAPH_DATA}`}
-                render={() => <FlowGraph pipeline_path={path} yson={true} />}
+                render={() => <FlowGraph pipeline_path={path} />}
             />
             <Route
                 path={`/:cluster/${Page.FLOWS}/${FlowTab.COMPUTATIONS}`}
