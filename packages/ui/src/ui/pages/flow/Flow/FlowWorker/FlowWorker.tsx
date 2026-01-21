@@ -13,6 +13,7 @@ import Loader from '../../../../components/Loader/Loader';
 import MetaTable, {MetaTableProps, TemplateId} from '../../../../components/MetaTable/MetaTable';
 import Tabs from '../../../../components/Tabs/Tabs';
 import {FlowEntityTitle} from '../../../../pages/flow/flow-components/FlowEntityHeader';
+import {FlowError} from '../../../../pages/flow/flow-components/FlowError/FlowError';
 import {FlowMessagesCollapsible} from '../../../../pages/flow/flow-components/FlowMessagesCollapsible/FlowMessagesCollapsible';
 import {
     getFlowPathMetaItems,
@@ -90,7 +91,7 @@ function FlowWorkerDetails({worker}: {worker: string}) {
             <FlowWorkderTabs worker={worker} />
             <FlowWorkerMeta data={data} />
             {isLoading && !data && <Loader visible />}
-            {Boolean(error) && <YTErrorBlock error={error} />}
+            {Boolean(error) && <FlowError error={error} />}
             <FlowMessagesCollapsible messages={data?.messages} marginDirection="bottom" />
             <FlowComputationPartitions partitions={data?.partitions} />
         </>
@@ -110,7 +111,7 @@ function FlowWorkderMonitor({worker}: {worker: string}) {
         <>
             <FlowWorkerHeader data={data} loading={!data && isLoading} />
             {isLoading && !data && <Loader visible />}
-            {Boolean(error) && <YTErrorBlock error={error} />}
+            {Boolean(error) && <FlowError error={error} />}
             <FlowWorkderTabs worker={worker} />
             {data ? <MonitorComponent path={path} data={data} /> : null}
         </>
