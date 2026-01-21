@@ -74,13 +74,13 @@ export function FlowPartitionMeta({
                 [
                     ...getFlowPathMetaItems(path),
                     {
-                        key: i18n('partition-id'),
-                        value: <TemplateId id={data?.partition_id ?? partition} />,
-                    },
-                    {
                         key: i18n('computation-id'),
                         value: data?.computation_id,
                         visible: hasData,
+                    },
+                    {
+                        key: i18n('partition-id'),
+                        value: <TemplateId id={data?.partition_id ?? partition} />,
                     },
                     {
                         key: i18n('current-job-id'),
