@@ -50,7 +50,13 @@ function SchedulingTopRowContent() {
         <RowWithName page={Page.SCHEDULING} className={block()} urlParams={{pool: ''}}>
             <SchedulingFavourites />
             <SchedulingPhysicalTree />
-            <Flex grow={1} shrink={1} justifyContent={'space-between'} alignItems={'center'}>
+            <Flex
+                grow={1}
+                shrink={1}
+                justifyContent={'space-between'}
+                alignItems={'center'}
+                overflow="hidden"
+            >
                 <SchedulingBreadcrumbs />
                 <span className={block('actions')}>
                     {UIFactory.renderTopRowExtraControlsForPool({
