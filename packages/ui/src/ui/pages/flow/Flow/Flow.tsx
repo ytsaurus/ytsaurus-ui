@@ -149,7 +149,7 @@ function FlowState() {
     return (
         <React.Fragment>
             <Flex alignItems="baseline" justifyContent="space-between" gap={2}>
-                <FlowEntityTitle title="Processing catalog">
+                <FlowEntityTitle title={i18n('pipeline')}>
                     <StatusLabel label={value} />
                 </FlowEntityTitle>
                 <FlowStatusToolbar />
@@ -158,8 +158,8 @@ function FlowState() {
                 <MetaTable
                     className={block('meta')}
                     items={[
+                        getFlowPathMetaItems(pipeline_path),
                         [
-                            ...getFlowPathMetaItems(pipeline_path),
                             {
                                 key: 'leader_controller_address',
                                 label: i18n('leader-controller-address'),
@@ -176,7 +176,6 @@ function FlowState() {
                                 className: block('meta-item'),
                             },
                         ],
-                        [],
                     ]}
                 />
             </Flex>

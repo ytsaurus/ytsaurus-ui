@@ -189,7 +189,7 @@ class MapNodesTable extends Component {
                 <span>
                     {name}&nbsp;{arrow}&nbsp;
                     <Link url={makeFlowLink({path: item.path})} routed>
-                        got to flow
+                        go to flow
                     </Link>
                 </span>
             );
