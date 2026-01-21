@@ -14,7 +14,10 @@ import MetaTable, {MetaTableProps, TemplateId} from '../../../../components/Meta
 import Tabs from '../../../../components/Tabs/Tabs';
 import {FlowEntityTitle} from '../../../../pages/flow/flow-components/FlowEntityHeader';
 import {FlowMessagesCollapsible} from '../../../../pages/flow/flow-components/FlowMessagesCollapsible/FlowMessagesCollapsible';
-import {getFlowPathMetaItems} from '../../../../pages/flow/flow-components/FlowMeta/FlowMeta';
+import {
+    getFlowPathMetaItems,
+    getLoadedDataMetaItems,
+} from '../../../../pages/flow/flow-components/FlowMeta/FlowMeta';
 import {FlowComputationPartitions} from '../../../../pages/flow/Flow/FlowComputation/FlowComputationPartitions';
 import {YTApiId, ytApiV4Id} from '../../../../rum/rum-wrap-api';
 import {useFlowExecuteQuery} from '../../../../store/api/yt/flow';
@@ -332,6 +335,7 @@ function FlowWorkerMeta({data}: {data?: FlowWorkerData}) {
                     visible,
                 },
             ],
+            getLoadedDataMetaItems({label: i18n('worker-data'), data}),
         ];
         return res;
     }, [data]);

@@ -18,7 +18,6 @@ import Loader from '../../../../components/Loader/Loader';
 import {NoContent} from '../../../../components/NoContent/NoContent';
 import Select from '../../../../components/Select/Select';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
-import Yson from '../../../../components/Yson/Yson';
 import {
     YTGraph,
     YTGraphBlock,
@@ -27,12 +26,14 @@ import {
     useElkLayout,
     useGraphScale,
 } from '../../../../components/YTGraph';
+import {ShowDataButton} from '../../../../pages/flow/flow-components/FlowMeta/FlowMeta';
 import {useFlowExecuteQuery} from '../../../../store/api/yt';
 import {filtersSlice} from '../../../../store/reducers/flow/filters';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-import {getFlowZoomToNode} from '../../../../store/selectors/flow/filters';
+import {getFlowPipelinePath, getFlowZoomToNode} from '../../../../store/selectors/flow/filters';
 import {getCluster} from '../../../../store/selectors/global/cluster';
 import './FlowGraph.scss';
+import i18n from './i18n';
 import {Computation} from './renderers/Computation';
 import {ComputationCanvasBlock} from './renderers/ComputationCanvas';
 import {ComputationGroupCanvasBlock} from './renderers/ComputationGroupCanvas';
@@ -45,8 +46,8 @@ import {FlowGroupBlock} from './utils/FlowGroupBlock';
 
 const block = cn('yt-flow-graph');
 
-export function FlowGraph({yson, pipeline_path}: {pipeline_path: string; yson: boolean}) {
-    const {error, data, isLoading} = useFlowGraphLoadedData({pipeline_path});
+export function FlowGraph({pipeline_path}: {pipeline_path: string}) {
+    const {error, isLoading} = useFlowGraphLoadedData({pipeline_path});
 
     if (isLoading) {
         return <Loader visible centered />;
@@ -58,11 +59,7 @@ export function FlowGraph({yson, pipeline_path}: {pipeline_path: string; yson: b
 
     return (
         <div className={block()}>
-            {yson ? (
-                <Yson value={data} folding virtualized />
-            ) : (
-                <FlowGraphImpl pipeline_path={pipeline_path} />
-            )}
+            <FlowGraphImpl pipeline_path={pipeline_path} />
         </div>
     );
 }
@@ -177,9 +174,16 @@ function FlowGraphToolbar({
                         />
                     ),
                 },
+                {node: <FlowGraphDataButton />},
             ]}
         />
     );
+}
+
+function FlowGraphDataButton() {
+    const pipeline_path = useSelector(getFlowPipelinePath);
+    const {data} = useFlowGraphLoadedData({pipeline_path});
+    return <ShowDataButton data={data} label={i18n('graph-data')} />;
 }
 
 function renderContent({item, ...rest}: {item: FlowGraphBlock; detailed?: boolean}) {

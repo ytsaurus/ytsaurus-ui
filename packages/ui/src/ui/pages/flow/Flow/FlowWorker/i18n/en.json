@@ -16,6 +16,7 @@
   "bytes-per-second": "Bytes per second",
   "deploy-link": "Deploy link",
   "worker": "Worker",
+  "worker-data": "Worker data",
   "worker-groups": "Worker groups",
   "worker-incarnation-id": "Workder incarnation Id"
 }
