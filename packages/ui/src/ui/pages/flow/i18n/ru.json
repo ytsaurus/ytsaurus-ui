@@ -2,5 +2,6 @@
   "computations": "Компьютейшены",
   "workers": "Воркеры",
   "partition": "Партиция",
+  "pipeline": "Пайплайн",
   "leader-controller-address": "Адресс контроллера-лидера"
 }

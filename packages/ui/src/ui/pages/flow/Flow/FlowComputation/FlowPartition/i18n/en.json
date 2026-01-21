@@ -4,7 +4,7 @@
   "computation-id": "Computation Id",
   "current-job-id": "Current job Id",
   "current-worker-address": "Current worker address",
-  "incarnation-id": "Incarnation Id",
+  "incarnation-id": "Current worker incarnation Id",
   "tracing": "tracing",
   "cpu-usage": "CPU usage",
   "memory-usage": "Memory usage",

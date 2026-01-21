@@ -15,6 +15,8 @@ import {
 import {makeFlowLink} from '../../../utils/app-url';
 import i18n from '../i18n';
 import './FlowPageTopRow.scss';
+import {useFlowAttributes} from '../flow-hooks/use-flow-attributes';
+import thorYPath from '../../../common/thor/ypath';
 
 const block = cn('yt-flow-page-top-row');
 
@@ -32,10 +34,13 @@ function FlowBreadcrumbs() {
     const partition = useSelector(getFlowCurrentPartition);
     const path = useSelector(getFlowPipelinePath);
 
+    const {data} = useFlowAttributes(path);
+    const {pipeline_name} = data ?? {};
+
     return (
         <Breadcrumbs className={block('breadcrumbs')} showRoot>
             <Breadcrumbs.Item>
-                <BCName path={path} />
+                <BCName {...{path, pipeline_name}} />
             </Breadcrumbs.Item>
             {computation
                 ? [
@@ -87,10 +92,16 @@ function FlowBreadcrumbs() {
     );
 }
 
-function BCName({path}: {path: string}) {
+function BCName({path, pipeline_name}: {path: string; pipeline_name?: string}) {
+    const name = React.useMemo(() => {
+        const {fragments} = new thorYPath.YPath(path);
+        const last = fragments[fragments.length - 1];
+        return pipeline_name ?? last?.name;
+    }, [pipeline_name]);
+
     return (
         <Link theme="secondary" url={makeFlowLink({path})} routed routedPreserveLocation>
-            {'<Root>'}
+            {name}
         </Link>
     );
 }

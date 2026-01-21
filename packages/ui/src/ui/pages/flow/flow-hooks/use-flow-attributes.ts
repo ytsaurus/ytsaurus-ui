@@ -5,6 +5,7 @@ type FlowAttributes = {
     monitoring_cluster: string;
     monitoring_project: string;
     leader_controller_address: string;
+    pipeline_name?: string;
 };
 
 export function useFlowAttributes(path: string) {
@@ -12,7 +13,12 @@ export function useFlowAttributes(path: string) {
         id: YTApiId.flowAttributes,
         parameters: {
             path: `${path}/@`,
-            attributes: ['monitoring_cluster', 'monitoring_project', 'leader_controller_address'],
+            attributes: [
+                'monitoring_cluster',
+                'monitoring_project',
+                'leader_controller_address',
+                'pipeline_name',
+            ],
         },
     });
 }

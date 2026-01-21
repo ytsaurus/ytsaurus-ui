@@ -6,7 +6,6 @@ import {Route, Switch, useRouteMatch} from 'react-router';
 import {Page} from '../../../../../shared/constants/settings';
 import {FlowWorkerData} from '../../../../../shared/yt-types';
 import format from '../../../../common/hammer/format';
-import {YTErrorBlock} from '../../../../components/Error/Error';
 import Label from '../../../../components/Label/Label';
 import Link from '../../../../components/Link/Link';
 import Loader from '../../../../components/Loader/Loader';

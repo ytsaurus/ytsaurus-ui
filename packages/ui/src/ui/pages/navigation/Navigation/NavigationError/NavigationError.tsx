@@ -7,7 +7,7 @@ import ErrorDetails from '../../../../components/ErrorDetails/ErrorDetails';
 import {ErrorToClipboardButton} from '../../../../components/ErrorToClipboardButton/ErrorToClipboardButton';
 import NavigationDescription from '../../../../pages/navigation/NavigationDescription/NavigationDescription';
 import {getPermissionDeniedError} from '../../../../utils/errors';
-import {checkErrorForPrettyCodes, ErrorCode, getErrorTitle} from './helpers';
+import {ErrorCode, checkErrorForPrettyCodes, getErrorTitle} from './helpers';
 import {NavigationErrorImage} from './NavigationErrorImage';
 import {RequestPermission} from './RequestPermission';
 
