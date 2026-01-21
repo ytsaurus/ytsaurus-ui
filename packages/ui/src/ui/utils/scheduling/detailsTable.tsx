@@ -92,7 +92,7 @@ export const childTableItems = {
         sort(item: SchedulingRowData) {
             if (item.type === 'operation') {
                 if (item.fifoIndex !== undefined) {
-                    return '#0_' + item.fifoIndex;
+                    return '#0_' + String(item.fifoIndex).padStart(6, '0');
                 }
                 return item.name ? '#1_' + item.name : '#2_' + item.id;
             }
