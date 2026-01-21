@@ -3,10 +3,10 @@ import React from 'react';
 import {useRouteMatch} from 'react-router';
 import {FlowPartitionDetailsType} from '../../../../../../shared/yt-types';
 import format from '../../../../../common/hammer/format';
-import {YTErrorBlock} from '../../../../../components/Error/Error';
 import Link from '../../../../../components/Link/Link';
 import MetaTable, {TemplateId} from '../../../../../components/MetaTable/MetaTable';
 import {FlowEntityTitle} from '../../../../../pages/flow/flow-components/FlowEntityHeader';
+import {FlowError} from '../../../../../pages/flow/flow-components/FlowError/FlowError';
 import {FlowMessagesCollapsible} from '../../../../../pages/flow/flow-components/FlowMessagesCollapsible/FlowMessagesCollapsible';
 import {
     getFlowPathMetaItems,
@@ -53,7 +53,7 @@ export function FlowPartition() {
                 loading={isLoading && !data}
             />
             <FlowPartitionMeta data={data} partition={partition} />
-            {Boolean(error) && <YTErrorBlock error={error} />}
+            {Boolean(error) && <FlowError error={error} />}
             <FlowMessagesCollapsible messages={data?.messages} />
         </div>
     );

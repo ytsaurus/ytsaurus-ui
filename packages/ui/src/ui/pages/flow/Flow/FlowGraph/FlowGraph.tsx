@@ -13,7 +13,6 @@ import {
     FlowSink,
     FlowStream,
 } from '../../../../../shared/yt-types';
-import {YTErrorBlock} from '../../../../components/Error/Error';
 import Loader from '../../../../components/Loader/Loader';
 import {NoContent} from '../../../../components/NoContent/NoContent';
 import Select from '../../../../components/Select/Select';
@@ -26,6 +25,7 @@ import {
     useElkLayout,
     useGraphScale,
 } from '../../../../components/YTGraph';
+import {FlowError} from '../../../../pages/flow/flow-components/FlowError/FlowError';
 import {ShowDataButton} from '../../../../pages/flow/flow-components/FlowMeta/FlowMeta';
 import {useFlowExecuteQuery} from '../../../../store/api/yt';
 import {filtersSlice} from '../../../../store/reducers/flow/filters';
@@ -54,7 +54,7 @@ export function FlowGraph({pipeline_path}: {pipeline_path: string}) {
     }
 
     if (error) {
-        return <YTErrorBlock error={error} />;
+        return <FlowError error={error} />;
     }
 
     return (

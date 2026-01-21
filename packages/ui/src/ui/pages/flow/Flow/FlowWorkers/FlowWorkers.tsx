@@ -11,7 +11,6 @@ import {
     tanstack,
     useTable,
 } from '../../../../components/DataTableGravity';
-import {YTErrorBlock} from '../../../../components/Error/Error';
 import Link from '../../../../components/Link/Link';
 import Loader from '../../../../components/Loader/Loader';
 import {NoWrap} from '../../../../components/Text/Text';
@@ -20,6 +19,7 @@ import {formatTimeDuration} from '../../../../components/TimeDuration/TimeDurati
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {useSettingsColumnSizes} from '../../../../hooks/settings/use-settings-column-sizes';
+import {FlowError} from '../../../../pages/flow/flow-components/FlowError/FlowError';
 import {ShowDataButton} from '../../../../pages/flow/flow-components/FlowMeta/FlowMeta';
 import {FlowNodeStatus} from '../../../../pages/flow/Flow/FlowGraph/renderers/FlowGraphRenderer';
 import {FlowWorker} from '../../../../pages/flow/Flow/FlowWorker/FlowWorker';
@@ -115,7 +115,7 @@ function FlowWorkersTable({pipeline_path}: {pipeline_path: string}) {
     return (
         <div className={block()}>
             {isLoading && !items && <Loader visible />}
-            {Boolean(error) && <YTErrorBlock error={error} />}
+            {Boolean(error) && <FlowError error={error} />}
             <DataTableGravity table={table} virtualized rowHeight={40} />
         </div>
     );

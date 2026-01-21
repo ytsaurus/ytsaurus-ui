@@ -1,18 +1,15 @@
-import React from 'react';
-import cn from 'bem-cn-lite';
 import {Flex, FlexProps, Text} from '@gravity-ui/uikit';
-
+import cn from 'bem-cn-lite';
+import React from 'react';
+import {YTError} from '../../../../../@types/types';
 import {YTErrorBlock} from '../../../../components/Error/Error';
 import ErrorDetails from '../../../../components/ErrorDetails/ErrorDetails';
 import {ErrorToClipboardButton} from '../../../../components/ErrorToClipboardButton/ErrorToClipboardButton';
-
 import NavigationDescription from '../../../../pages/navigation/NavigationDescription/NavigationDescription';
-
+import {getPermissionDeniedError} from '../../../../utils/errors';
+import {checkErrorForPrettyCodes, ErrorCode, getErrorTitle} from './helpers';
 import {NavigationErrorImage} from './NavigationErrorImage';
 import {RequestPermission} from './RequestPermission';
-import {getPermissionDeniedError} from '../../../../utils/errors';
-import {YTError} from '../../../../../@types/types';
-import {ErrorCode, getErrorTitle, getLeadingErrorCode} from './helpers';
 
 import './NavigationError.scss';
 
@@ -80,7 +77,9 @@ function UnexpectedError(props: Props) {
 export function NavigationError(props: Props) {
     const {details} = props;
 
-    const code = getLeadingErrorCode(details);
+    const {has500, has901} = checkErrorForPrettyCodes(details);
+
+    const code = has901 ? 901 : has500 ? 500 : undefined;
 
     return (
         <>
