@@ -16,6 +16,7 @@ import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {useSettingsColumnSizes} from '../../../../hooks/settings/use-settings-column-sizes';
+import {ShowDataButton} from '../../../../pages/flow/flow-components/FlowMeta/FlowMeta';
 import {FlowComputation} from '../../../../pages/flow/Flow/FlowComputation/FlowComputation';
 import {FlowNodeStatus} from '../../../../pages/flow/Flow/FlowGraph/renderers/FlowGraphRenderer';
 import {useFlowExecuteQuery} from '../../../../store/api/yt';
@@ -68,12 +69,21 @@ export function FlowComputationsList({pipeline_path}: {pipeline_path: string}) {
                                 />
                             ),
                         },
+                        {
+                            node: <FlowComputationsDataButton />,
+                        },
                     ]}
                 />
             }
             content={<FlowComputationsTable pipeline_path={pipeline_path} />}
         />
     );
+}
+
+function FlowComputationsDataButton() {
+    const path = useSelector(getFlowPipelinePath);
+    const {data} = useFlowComputationsTableData(path);
+    return <ShowDataButton label={i18n('computations-data')} data={data} />;
 }
 
 function FlowComputationsTable({pipeline_path}: {pipeline_path: string}) {

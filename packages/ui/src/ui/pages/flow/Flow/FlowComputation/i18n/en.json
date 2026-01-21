@@ -6,6 +6,7 @@
   "health": "Health",
   "job-state": "Job state",
   "key-range": "Key/Range",
+  "computation-data": "Computation data",
   "memory-usage": "Memory usage",
   "message-per-second": "Message per second",
   "monitoring": "Monitoring",
