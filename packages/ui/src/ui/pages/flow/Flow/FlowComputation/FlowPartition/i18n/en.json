@@ -9,5 +9,6 @@
   "cpu-usage": "CPU usage",
   "memory-usage": "Memory usage",
   "message-per-second": "Message per second",
-  "bytes-per-second": "Bytes per second"
+  "bytes-per-second": "Bytes per second",
+  "partition-data": "Partition data"
 }

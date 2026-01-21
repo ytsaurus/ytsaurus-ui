@@ -8,7 +8,10 @@ import Link from '../../../../../components/Link/Link';
 import MetaTable, {TemplateId} from '../../../../../components/MetaTable/MetaTable';
 import {FlowEntityTitle} from '../../../../../pages/flow/flow-components/FlowEntityHeader';
 import {FlowMessagesCollapsible} from '../../../../../pages/flow/flow-components/FlowMessagesCollapsible/FlowMessagesCollapsible';
-import {getFlowPathMetaItems} from '../../../../../pages/flow/flow-components/FlowMeta/FlowMeta';
+import {
+    getFlowPathMetaItems,
+    getLoadedDataMetaItems,
+} from '../../../../../pages/flow/flow-components/FlowMeta/FlowMeta';
 import {useFlowExecuteQuery} from '../../../../../store/api/yt/flow/index';
 import {filtersSlice} from '../../../../../store/reducers/flow/filters';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
@@ -125,6 +128,7 @@ export function FlowPartitionMeta({
                         visible: hasData,
                     },
                 ],
+                getLoadedDataMetaItems({label: i18n('partition-data'), data}),
             ]}
         />
     );

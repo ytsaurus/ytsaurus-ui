@@ -16,6 +16,7 @@
   "bytes-per-second": "Байт в секунду",
   "deploy-link": "Ссылка на деплой",
   "worker": "Worker",
+  "worker-data": "Данные воркера",
   "worker-groups": "Группы воркера",
   "worker-incarnation-id": "Идентификатор инкарнации воркера"
 }

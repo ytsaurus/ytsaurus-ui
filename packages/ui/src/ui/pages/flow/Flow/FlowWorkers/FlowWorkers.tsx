@@ -20,6 +20,7 @@ import {formatTimeDuration} from '../../../../components/TimeDuration/TimeDurati
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {useSettingsColumnSizes} from '../../../../hooks/settings/use-settings-column-sizes';
+import {ShowDataButton} from '../../../../pages/flow/flow-components/FlowMeta/FlowMeta';
 import {FlowNodeStatus} from '../../../../pages/flow/Flow/FlowGraph/renderers/FlowGraphRenderer';
 import {FlowWorker} from '../../../../pages/flow/Flow/FlowWorker/FlowWorker';
 import {useFlowExecuteQuery} from '../../../../store/api/yt';
@@ -65,12 +66,20 @@ function FlowWorkersList({pipeline_path}: {pipeline_path: string}) {
                                 />
                             ),
                         },
+                        {
+                            node: <FlowWorkersDataButton pipeline_path={pipeline_path} />,
+                        },
                     ]}
                 />
             }
             content={<FlowWorkersTable pipeline_path={pipeline_path} />}
         />
     );
+}
+
+function FlowWorkersDataButton({pipeline_path}: {pipeline_path: string}) {
+    const {data} = useFlowWorkerssTableData(pipeline_path);
+    return <ShowDataButton label={i18n('workers-data')} data={data} />;
 }
 
 function FlowWorkersTable({pipeline_path}: {pipeline_path: string}) {

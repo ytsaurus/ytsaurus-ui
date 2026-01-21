@@ -1,5 +1,6 @@
 {
   "class": "Class",
+  "computations-data": "Computations data",
   "cpu-usage": "CPU usage",
   "health": "Health",
   "name": "Name",

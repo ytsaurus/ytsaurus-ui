@@ -1,6 +1,7 @@
 {
   "class": "Класс",
   "cpu-usage": "Потребление CPU",
+  "computations-data": "Данные компьютешна",
   "health": "Состояние",
   "name": "Имя",
   "memory-usage": "Потребление памяти",

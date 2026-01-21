@@ -41,7 +41,6 @@ export const initialState: FlowFiltersState = {
 
 export const FlowTab = {
     GRAPH: 'graph',
-    GRAPH_DATA: 'graph_data',
     COMPUTATIONS: 'computations',
     WORKERS: 'workers',
     MONITORING: 'monitoring',

@@ -6,6 +6,7 @@
   "health": "Здоровье",
   "job-state": "Состояние джоба",
   "key-range": "Ключ/Диапазон",
+  "computation-data": "Загруженные данные",
   "memory-usage": "Использование памяти",
   "message-per-second": "Сообщений в секунду",
   "monitoring": "Мониторинг",
