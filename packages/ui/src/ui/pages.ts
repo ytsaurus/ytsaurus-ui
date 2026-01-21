@@ -19,7 +19,7 @@ const pages: Array<HeaderItem> = [
     },
     {
         id: Page.FLOWS,
-        name: 'Flows',
+        name: 'Flow pipelines',
         hidden: true,
     },
     {
