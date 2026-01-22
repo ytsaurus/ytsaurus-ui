@@ -116,6 +116,7 @@ export interface QueryItem extends DraftQuery {
     annotations?: {
         title?: string;
         chartConfig?: VisualizationState;
+        is_tutorial?: boolean;
     };
 }
 
@@ -129,6 +130,10 @@ export type QueriesListParams = {
     user?: string;
     engine?: string;
     filter?: string;
+    from_time?: number;
+    to_time?: number;
+    state?: QueryStatus;
+    tutorial_filter?: boolean;
 };
 
 export type QueriesListRequestParams = {
