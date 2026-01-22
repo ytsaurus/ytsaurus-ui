@@ -89,6 +89,7 @@ class VersionsV2 extends React.Component<ReduxProps> {
                 <div className={b('filter', {address: true})}>
                     <Filter
                         hasClear
+                        autofocus={false}
                         size="m"
                         type="text"
                         key={hostFilter}
