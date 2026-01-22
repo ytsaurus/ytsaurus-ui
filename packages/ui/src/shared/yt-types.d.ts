@@ -544,7 +544,7 @@ export type GetQueryTrackerInfoResponse = {
     cluster_name: string;
     access_control_objects: string[];
     query_tracker_stage: string;
-    supported_features: {access_control: boolean; multiple_aco?: boolean};
+    supported_features: {access_control: boolean; multiple_aco?: boolean; tutorials?: boolean};
     clusters?: Array<string>;
     engines_info?: {
         yql?: YqlEnginesInfo;
