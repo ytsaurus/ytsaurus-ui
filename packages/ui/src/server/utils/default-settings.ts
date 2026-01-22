@@ -3,6 +3,7 @@ import {Page} from '../../shared/constants/settings';
 import {DescribedSettings} from '../../shared/constants/settings-types';
 
 const defaultUserSettings: Partial<DescribedSettings> = {
+    'global::newDashboardPage': true,
     'global::theme': 'system',
     'global::fontType': '',
     'global::autoRefresh': true,
