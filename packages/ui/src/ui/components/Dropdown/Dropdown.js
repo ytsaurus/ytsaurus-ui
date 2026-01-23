@@ -1,12 +1,11 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import cn from 'bem-cn-lite';
-
-import templates from '../templates/templates';
-
 import {Popup} from '@gravity-ui/uikit';
+import cn from 'bem-cn-lite';
+import PropTypes from 'prop-types';
+import React, {Component} from 'react';
+import templates from '../templates/templates';
+import './Dropdown.scss';
 
-const block = cn('elements-dropdown');
+const block = cn('yt-dropdown');
 
 class Dropdown extends Component {
     static propTypes = {
@@ -82,7 +81,7 @@ class Dropdown extends Component {
                 anchorElement={this.anchor.current}
                 {...popup}
             >
-                {this.renderTemplate()}
+                <div className={block('popup-content')}>{this.renderTemplate()}</div>
             </Popup>
         );
     }

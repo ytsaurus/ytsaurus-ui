@@ -65,6 +65,7 @@ import {getCluster} from '../../../../store/selectors/global';
 import {UploadFileManagerWithClose} from '../../UploadFileManager';
 
 import './MapNode.scss';
+import {MapNodeUserSettings} from './MapNodeUserSettings';
 
 const block = cn('map-node');
 const tbBlock = cn('elements-toolbar');
@@ -300,6 +301,10 @@ class MapNodeToolbar extends React.PureComponent {
                     </div>
 
                     <TTLInfo attributes={attributes} size={'m'} className={tbBlock('component')} />
+
+                    <div className={tbBlock('component')}>
+                        <MapNodeUserSettings />
+                    </div>
 
                     <div className={block('content-mode', tbBlock('component'))}>
                         <RadioButton
