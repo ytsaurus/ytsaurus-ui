@@ -19,6 +19,7 @@ import {getGraphColors} from './config';
 import cn from 'bem-cn-lite';
 import './YTGraph.scss';
 import {YTGraphGroupProps, useAutoGroups, useCustomGroups} from './hooks/useGroups';
+import {Toolbox} from './Toolbox';
 
 const block = cn('yt-graph');
 
@@ -31,6 +32,9 @@ export type YTGraphProps<B extends TBlock, C extends TConnection> = {
     isBlock: (v: unknown) => v is CanvasBlock<B>;
     renderPopup?: ({data}: {data: B}) => React.ReactNode;
     renderBlock?: (props: RenderContentProps<B>) => React.ReactNode;
+
+    toolbox?: boolean;
+    toolboxClassName?: string;
 } & YTGraphGroupProps;
 
 export type RenderContentProps<B extends TBlock> = {
@@ -66,6 +70,8 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     renderBlock,
     allowAutoGroups,
     customGroups,
+    toolbox,
+    toolboxClassName,
 }: YTGraphProps<B, C>) {
     const theme = useThemeValue();
     const {graph, setEntities, start} = useGraph(config);
@@ -171,6 +177,7 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
                     setSelectedBlocks(list);
                 }}
             />
+            {toolbox && <Toolbox className={block('toolbox', toolboxClassName)} graph={graph} />}
             {renderPopup !== undefined && (
                 <PopupPortal graph={graph} renderContent={renderPopup} isBlockNode={isBlock} />
             )}

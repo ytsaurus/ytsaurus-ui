@@ -1,0 +1,23 @@
+.yt-graph-toolbox {
+    width: 28px;
+
+    .g-button {
+        &:not(:last-child) {
+            border-bottom: 1px solid var(--g-color-base-misc-light);
+        }
+
+        &:first-child,
+        &:first-child:before,
+        &:first-child:after {
+            border-bottom-right-radius: 0 !important;
+            border-bottom-left-radius: 0 !important;
+        }
+
+        &:last-child,
+        &:last-child:before,
+        &:last-child:after {
+            border-top-right-radius: 0 !important;
+            border-top-left-radius: 0 !important;
+        }
+    }
+}
