@@ -12,12 +12,12 @@ Additionally you have to provide `secrets/yt-interface-secret.json` file with [a
 {
   // common oauth token, the token is used if there is no cluster-specific token in the file
   "oauthToken": "special-user-secret-tocken",
-  "cluster_id1": {
-    // cluster_id1 specific oauth token
+  "cluster_name1": {
+    // cluster_name1 specific oauth token
     "oauthToken": "cluster1-special-user-secret-token"
   },
-  "cluster_id2": {
-    // cluster_id2 specific oauth token
+  "cluster_name2": {
+    // cluster_name2 specific oauth token
     "oauthToken": "cluster2-special-user-secret-token"
   }
 }
