@@ -42,6 +42,7 @@ const Graph: FC<Props> = ({processedGraph}) => {
             config={config}
             setScale={setScale}
             renderPopup={renderPopup}
+            toolbox
             data={data}
         />
     );
