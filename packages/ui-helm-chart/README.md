@@ -30,7 +30,7 @@ kubectl create secret generic yt-ui-secret --from-literal="yt-interface-secret.j
 Also, you have to provide a description of your cluster:
 
 ```bash
-read -p "Cluster id: " id_; \
+read -p "Cluster name: " id_; \
     read -p "http_proxy hostname: " proxy_; \
     read -p "Use https [true/false]: " secure_; \
     read -p "NODE_TLS_REJECT_UNAUTHORIZED [1/0]: " tlsrej_; (
