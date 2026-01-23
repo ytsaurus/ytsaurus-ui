@@ -41,7 +41,7 @@ export function docsUrl<T, K = string>(url: T, alt?: K) {
 }
 
 export function getDocsBaseUrl() {
-    return uiSettings.docsBaseUrl;
+    return uiSettings.docsBaseUrl || 'https://ytsaurus.tech/docs/en';
 }
 
 export function getNewTableReplicasCount() {
