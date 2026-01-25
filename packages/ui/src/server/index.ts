@@ -76,6 +76,11 @@ export default app;
  * The solution is taken from https://stackoverflow.com/questions/40182121/whats-the-cause-of-the-error-getaddrinfo-eai-again
  */
 
+/**
+ * In specific cases it may bring unneccessary exceptions with ESERVFAIL
+ * see https://github.com/szmarczak/cacheable-lookup/issues/68
+ * see also https://nda.ya.ru/t/GzZa7MD97SrcUW
+ 
 import http from 'http';
 import https from 'https';
 import CacheableLookup from 'cacheable-lookup';
@@ -84,3 +89,4 @@ const cacheable = new CacheableLookup();
 
 cacheable.install(http.globalAgent);
 cacheable.install(https.globalAgent);
+*/
