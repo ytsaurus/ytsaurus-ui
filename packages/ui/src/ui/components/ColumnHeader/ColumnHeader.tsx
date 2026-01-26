@@ -46,6 +46,7 @@ export type ColumnHeaderProps<T extends string = string> = PageCounterProps &
         className?: string;
         order?: OrderType;
         multisortIndex?: number;
+        sortIconSize?: number;
         onSort?: (
             column: T,
             nextOrder: OrderType,
@@ -102,7 +103,17 @@ function useColumnInfo<T extends string = string>(
 }
 
 export default function ColumnHeader<T extends string = string>(props: ColumnHeaderProps<T>) {
-    const {className, align, order, onSort, multisortIndex, loading, pageIndex, pageCount} = props;
+    const {
+        className,
+        align,
+        order,
+        onSort,
+        multisortIndex,
+        loading,
+        pageIndex,
+        pageCount,
+        sortIconSize,
+    } = props;
     const {
         column,
         allowUnordered,
@@ -139,7 +150,7 @@ export default function ColumnHeader<T extends string = string>(props: ColumnHea
                 </span>
                 {sortable && (
                     <span className={block('icon')}>
-                        <SortIcon order={order} />
+                        <SortIcon order={order} size={sortIconSize} />
                     </span>
                 )}
                 {multisortIndex !== undefined && (
