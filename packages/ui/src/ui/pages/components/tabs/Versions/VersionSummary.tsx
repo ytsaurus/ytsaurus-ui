@@ -137,6 +137,7 @@ class VersionsSummary extends React.Component<Props, State> {
                 shortTitle={name.split('-')[0]}
                 onSort={this.handleOnSort}
                 order={key === column ? order : ''}
+                sortIconSize={14}
             />
         );
     }
@@ -295,7 +296,8 @@ class VersionsSummary extends React.Component<Props, State> {
                             target="_blank"
                             className={block('monitoring-link')}
                         >
-                            {monitoringLink.title || 'Monitoring'} <Icon awesome="external-link" />
+                            {monitoringLink.title || 'Monitoring'}{' '}
+                            <Icon awesome="external-link" size={14} />
                         </Link>
                     )}
                 </div>

@@ -1,5 +1,5 @@
 import {Page, expect, test} from '@playwright/test';
-import {makeClusterUrl} from '../../../utils';
+import {MOCK_DATE, makeClusterUrl} from '../../../utils';
 import {BasePage} from '../../../widgets/BasePage';
 import {replaceInnerHtml} from '../../../utils/dom';
 
@@ -59,6 +59,7 @@ class OperationsPage extends BasePage {
 const operationsPage = (page: Page) => new OperationsPage({page});
 
 test('Operations - List', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`operations`));
 
     await operationsPage(page).waitForRunningOperation();
@@ -68,6 +69,7 @@ test('Operations - List', async ({page}) => {
 });
 
 test('Operation - Details', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`operations/*long-operation`));
 
     await operationsPage(page).replaceMetaData();
@@ -77,15 +79,21 @@ test('Operation - Details', async ({page}) => {
 });
 
 test('Operation - Statistics', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`operations/*long-operation/statistics`));
 
     await operationsPage(page).replaceMetaData();
     await operationsPage(page).waitForStatisticsRows();
 
+    await page.waitForLoadState('networkidle');
+    await page.mouse.wheel(0, -1000); // scroll back for autofocused offset
+    await operationsPage(page).waitForTableSyncedWidth('.operation-statistics__table');
+
     await expect(page).toHaveScreenshot();
 });
 
 test('Operation - Jobs', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`operations/*long-operation/jobs`));
 
     await operationsPage(page).replaceMetaData();

@@ -58,6 +58,7 @@ export class CollapsibleSectionStateLess extends Component<PropsStateLess> {
                                 <Icon
                                     className={b('toggler', {'right-padding': togglerRightPadding})}
                                     awesome={collapsed ? 'angle-down' : 'angle-up'}
+                                    size={size === 'ss' ? 17 : undefined}
                                 />
                             </a>
                         </span>

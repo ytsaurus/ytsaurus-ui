@@ -244,7 +244,7 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
                     onClick={toggleVisible}
                     selected={isFiltered}
                 >
-                    <Icon awesome="filter" /> Filter {filterCount}
+                    <Icon awesome="filter" size={13} /> Filter {filterCount}
                 </Button>
 
                 <Dropdown
@@ -253,7 +253,7 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
                     directions={['bottom']}
                     button={
                         <Button disabled={contentMode !== CONTENT_MODE.CUSTOM} pin={'round-round'}>
-                            <Icon awesome="table" face="light" />
+                            <Icon awesome="table" face="light" size={13} />
                             Columns
                         </Button>
                     }

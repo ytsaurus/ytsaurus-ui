@@ -1,8 +1,9 @@
 import {expect, test} from '@playwright/test';
-import {CLUSTER_TITLE, makeUrl} from '../../../utils';
+import {CLUSTER_TITLE, MOCK_DATE, makeUrl} from '../../../utils';
 import {replaceInnerHtml} from '../../../utils/dom';
 
 test('ClustersMenu', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeUrl());
 
     // Expect a title "to contain" a substring.

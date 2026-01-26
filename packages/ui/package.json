@@ -29,7 +29,6 @@
     "dev:oss": "APP_INSTALLATION=oss npm run dev",
     "docker:build": "docker build . -t ${npm_package_config_docker_image}:${npm_config_dockertag}",
     "docker:push": "docker push ${npm_package_config_docker_image}:${npm_config_dockertag}",
-    "docker-run:e2e:localmode:screenshots": "scripts/docker-run.sh npm run e2e:localmode:screenshots",
     "e2e:ci": "cd tests; npm ci",
     "e2e:localmode:init": "YT_PROXY=${YT_PROXY:-$(hostname):8000} tests/init-cluster-e2e.sh",
     "e2e:localmode:remote": "CLUSTER=`hostname`:8000 CLUSTER_TITLE='Local as remote' npm run e2e:start",

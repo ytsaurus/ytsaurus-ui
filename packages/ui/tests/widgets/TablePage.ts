@@ -4,6 +4,7 @@ import {Page} from '@playwright/test';
 
 export class TablePage extends NavigationPage {
     async waitForTableContent(selector: string, rowCount: number) {
+        await this.page.waitForLoadState('networkidle');
         await this.waitForTable(selector, rowCount);
         await this.page.waitForSelector(':text("Data weight")');
         await this.waitForTableSyncedWidth(selector);

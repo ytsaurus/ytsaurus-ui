@@ -253,6 +253,9 @@ class VersionsV2 extends React.Component<ReduxProps> {
                             className={b('summary')}
                             collapsed={false}
                             size={UI_COLLAPSIBLE_SIZE}
+                            onToggle={() => {
+                                setTimeout(() => window.dispatchEvent(new Event('resize')), 300);
+                            }}
                         >
                             <VersionsSummary />
                         </CollapsibleSection>

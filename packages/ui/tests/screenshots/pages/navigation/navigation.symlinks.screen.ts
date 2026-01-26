@@ -1,9 +1,10 @@
 import {expect, test} from '@playwright/test';
-import {E2E_DIR, makeClusterUrl} from '../../../utils';
+import {E2E_DIR, MOCK_DATE, makeClusterUrl} from '../../../utils';
 import {replaceInnerHtml} from '../../../utils/dom';
 import {navigationPage} from '../../../widgets/NavigationPage';
 
 test('Navigation - symlinks', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await test.step('Render link-button', async () => {
         await page.goto(makeClusterUrl(`navigation?navmode=content&path=${E2E_DIR}/tmp/ссылка`));
         await page.waitForLoadState('networkidle');

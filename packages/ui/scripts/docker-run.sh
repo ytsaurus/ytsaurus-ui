@@ -21,7 +21,7 @@ IMAGE_TAG="v"${VERSION}"-noble"
 PW_VERSION=$(echo $IMAGE_TAG | awk -F "-" '{print $1}' | sed -e 's/^v//')
 
 NAME=$(node -e 'console.log(require("./package.json").name)')
-NODE_MODULES_CACHE_DIR="$HOME/.cache/$(dirname $(readlink -f $0) | sed -E s/[^a-zA-Z0-9.-]/_/g)"
+NODE_MODULES_CACHE_DIR="$HOME/.cache/$(dirname $(readlink -f ./package.json) | sed -E s/[^a-zA-Z0-9.-]/_/g)"
 
 echo Using cache directory: ${NODE_MODULES_CACHE_DIR}
 
@@ -65,7 +65,9 @@ run_command() {
         useEnvFile="--env-file $envFile"
     fi
 
-    $CONTAINER_TOOL run --rm --network host \
+    $CONTAINER_TOOL run --name yt.frontend.tests \
+        --rm \
+        --network host \
         -e DOCKER_CI=1 \
         -w /work \
         -v $(pwd):/work \
