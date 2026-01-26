@@ -22,6 +22,7 @@ import {YTGraphGroupProps, useAutoGroups, useCustomGroups} from './hooks/useGrou
 import {Toolbox} from './Toolbox';
 
 const block = cn('yt-graph');
+const ZOOM_SPEED = 0.5;
 
 export type YTGraphProps<B extends TBlock, C extends TConnection> = {
     className?: string;
@@ -35,6 +36,8 @@ export type YTGraphProps<B extends TBlock, C extends TConnection> = {
 
     toolbox?: boolean;
     toolboxClassName?: string;
+    /** When true, zoom on mouse wheel scroll (like vis-network). Default: false */
+    zoomOnScroll?: boolean;
 } & YTGraphGroupProps;
 
 export type RenderContentProps<B extends TBlock> = {
@@ -72,9 +75,11 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     customGroups,
     toolbox,
     toolboxClassName,
+    zoomOnScroll,
 }: YTGraphProps<B, C>) {
     const theme = useThemeValue();
     const {graph, setEntities, start} = useGraph(config);
+    const fitGraphRef = React.useRef(true);
 
     useAutoGroups({allowAutoGroups, graph});
     useCustomGroups({customGroups, graph});
@@ -127,9 +132,11 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
             return undefined;
         }
         const resizeObserver = new ResizeObserver(() => {
-            setTimeout(() => {
-                graph.api.zoomToViewPort({padding: 100});
-            }, 100);
+            if (fitGraphRef.current) {
+                setTimeout(() => {
+                    graph.api.zoomToViewPort({padding: 100});
+                }, 100);
+            }
         });
         resizeObserver.observe(element);
         return () => {
@@ -140,6 +147,34 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     React.useEffect(() => {
         graph.setColors(getGraphColors());
     }, [graph, theme]);
+
+    React.useEffect(() => {
+        if (!zoomOnScroll || !element) {
+            return undefined;
+        }
+
+        const handleWheel = (event: WheelEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            fitGraphRef.current = false;
+
+            const rect = element.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            const currentScale = graph.cameraService.getCameraScale();
+            const direction = event.deltaY < 0 ? 1 : -1;
+            const newScale = currentScale * (1 + direction * (ZOOM_SPEED * 0.1));
+
+            graph.cameraService.zoom(x, y, newScale);
+        };
+
+        element.addEventListener('wheel', handleWheel, {passive: false, capture: true});
+        return () => {
+            element.removeEventListener('wheel', handleWheel, {capture: true});
+        };
+    }, [element, graph, zoomOnScroll]);
 
     const renderBlockCallback = React.useCallback(
         (graph: Graph, data: B) => {

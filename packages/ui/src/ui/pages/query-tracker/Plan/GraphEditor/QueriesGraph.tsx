@@ -43,6 +43,7 @@ const Graph: FC<Props> = ({processedGraph}) => {
             setScale={setScale}
             renderPopup={renderPopup}
             toolbox
+            zoomOnScroll
             data={data}
         />
     );
