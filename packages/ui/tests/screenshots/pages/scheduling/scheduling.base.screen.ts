@@ -1,5 +1,5 @@
 import {Page, expect, test} from '@playwright/test';
-import {makeClusterUrl} from '../../../utils';
+import {MOCK_DATE, makeClusterUrl} from '../../../utils';
 import {BasePage} from '../../../widgets/BasePage';
 import {replaceInnerHtml} from '../../../utils/dom';
 
@@ -35,6 +35,7 @@ class Scheduling extends BasePage {
 const scheduling = (page: Page) => new Scheduling({page});
 
 test('Scheduling - ACL', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`scheduling/acl?pool=yt-e2e-pool-1&tree=default`));
 
     await scheduling(page).waitForACL();
@@ -52,6 +53,7 @@ test('Scheduling - ACL', async ({page}) => {
 });
 
 test('Scheduling - Summary', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(
         makeClusterUrl(`scheduling/overview?pool=yt-e2e-pool-1&tree=default&contentMode=cpu`),
     );
@@ -91,11 +93,13 @@ test('Scheduling - Summary', async ({page}) => {
 });
 
 test('Scheduling - Editor', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(
         makeClusterUrl(`scheduling/overview?pool=yt-e2e-pool-1&tree=default&contentMode=cpu`),
     );
 
     await scheduling(page).showPoolEditor(1);
+    await page.waitForLoadState('networkidle');
 
     await test.step('General', async () => {
         await scheduling(page).dfDialog.waitForField('Max running operation count');

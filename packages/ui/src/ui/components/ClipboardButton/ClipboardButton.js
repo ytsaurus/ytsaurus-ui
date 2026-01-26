@@ -105,6 +105,8 @@ export default class ClipboardButton extends Component {
             ...buttonProps
         } = this.props;
 
+        const iconSize = buttonProps.size === 'm' ? 13 : undefined;
+
         return (
             <span
                 className={block(
@@ -125,7 +127,11 @@ export default class ClipboardButton extends Component {
                                     buttonRef={this.buttonRef}
                                     onClick={this.onClick}
                                 >
-                                    <Icon awesome={this.iconByState[state]} face={face} />
+                                    <Icon
+                                        awesome={this.iconByState[state]}
+                                        face={face}
+                                        size={iconSize}
+                                    />
                                     {buttonText}
                                 </Button>
                             ) : (
@@ -134,7 +140,11 @@ export default class ClipboardButton extends Component {
                                     ref={this.buttonRef}
                                     onClick={this.onClick}
                                 >
-                                    <Icon awesome={this.iconByState[state]} face={face} />
+                                    <Icon
+                                        awesome={this.iconByState[state]}
+                                        face={face}
+                                        size={iconSize}
+                                    />
                                 </Button>
                             )
                         }

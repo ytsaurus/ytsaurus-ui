@@ -90,7 +90,7 @@ export default class Favourites extends Component<Props, State> {
             size: 'm',
             pin: 'brick-round',
             title: 'View favourites',
-            children: <Icon awesome="angle-down" />,
+            children: <Icon awesome="angle-down" size={13} />,
         });
 
         return (
@@ -129,7 +129,7 @@ export default class Favourites extends Component<Props, State> {
                         title: 'Add to favourites [F]',
                         onClick: this.toggleActive,
                         disabled: toggleDisabled,
-                        children: <Icon awesome={isActive ? 'star-alt' : 'star'} />,
+                        children: <Icon awesome={isActive ? 'star-alt' : 'star'} size={13} />,
                     })}
                 </div>
                 {this.renderDropDownMenu()}

@@ -176,7 +176,7 @@ jobs:
       - name: Screenshot tests for 'Local'
         run: |
           cd packages/ui
-          npm run docker-run:e2e:localmode:screenshots
+          npm run e2e:localmode:screenshots
       - name: Upload local test-results
         uses: actions/upload-artifact@v4
         if: always()

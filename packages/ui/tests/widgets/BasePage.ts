@@ -1,4 +1,4 @@
-import {Page} from '@playwright/test';
+import {Page, expect} from '@playwright/test';
 import {E2E_DIR_NAME} from '../utils';
 import {replaceInnerHtml} from '../utils/dom';
 
@@ -10,13 +10,28 @@ export class HasPage {
 }
 
 class DFDialogComponent extends HasPage {
+    private isLazyLoaded = false;
+
     async showTab(name: string) {
+        this.waitForLazyLoad();
+
         await this.page.click(`.df-dialog-tab__name :text("${name}")`);
         await this.page.mouse.move(0, 0);
     }
 
     async waitForField(title: string) {
+        this.waitForLazyLoad();
+
         await this.page.waitForSelector(`.df-dialog__label :text("${title}")`);
+    }
+
+    private async waitForLazyLoad() {
+        if (this.isLazyLoaded) {
+            return;
+        }
+        await this.page.waitForSelector('.df-dialog');
+        await this.page.waitForLoadState('networkidle');
+        this.isLazyLoaded = true;
     }
 }
 

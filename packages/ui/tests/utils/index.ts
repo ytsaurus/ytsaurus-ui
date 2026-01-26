@@ -19,6 +19,8 @@ export const {
 
 const parts = E2E_DIR?.split('/') ?? [];
 
+export const MOCK_DATE = '2025-12-01';
+
 export const E2E_DIR_NAME = parts[parts.length - 1];
 
 console.log({

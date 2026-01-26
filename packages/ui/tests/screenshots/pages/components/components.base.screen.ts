@@ -1,5 +1,5 @@
 import {Page, expect, test} from '@playwright/test';
-import {makeClusterUrl} from '../../../utils';
+import {MOCK_DATE, makeClusterUrl} from '../../../utils';
 import {BasePage} from '../../../widgets/BasePage';
 import {replaceInnerHtml, replaceInnerHtmlForDateTime} from '../../../utils/dom';
 
@@ -32,6 +32,7 @@ class ComponentsPage extends BasePage {
 const components = (page: Page) => new ComponentsPage({page});
 
 test('Components - Nodes - Flavor', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(
         makeClusterUrl(
             `components/nodes?nodeType=data_nodes,exec_nodes,tablet_nodes&nodeSort=asc-false,field-user_tags`,
@@ -52,7 +53,9 @@ test('Components - Nodes - Flavor', async ({page}) => {
 });
 
 test('Components - Node - Memory popup', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`components/nodes?nodeSort=asc-false,field-user_tags`));
+    await page.waitForLoadState('networkidle');
 
     await components(page).openSecondNode();
 
@@ -84,6 +87,7 @@ test('Components - Node - Memory popup', async ({page}) => {
 });
 
 test('Components - Tablets', async ({page}) => {
+    await page.clock.install({time: new Date(MOCK_DATE)});
     await page.goto(makeClusterUrl(`components/nodes?contentMode=tablets`));
     await page.waitForSelector('.elements-table');
     await replaceInnerHtml(page, {
@@ -100,6 +104,7 @@ test('Components - Tablets', async ({page}) => {
 });
 
 test('Components - HTTP-Proxies', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`components/http_proxies`));
     await page.waitForSelector('.elements-table');
 
@@ -114,6 +119,7 @@ test('Components - HTTP-Proxies', async ({page}) => {
 });
 
 test('Components - RPC-Proxies', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`components/rpc_proxies`));
     await page.waitForSelector('.elements-page__content');
 
@@ -121,6 +127,7 @@ test('Components - RPC-Proxies', async ({page}) => {
 });
 
 test('Components - Cypress-Proxies', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`components/cypress_proxies`));
     await page.waitForSelector('.elements-page__content');
 
@@ -128,11 +135,12 @@ test('Components - Cypress-Proxies', async ({page}) => {
 });
 
 test('Components - Versions', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`components/versions?detailsSort=asc-true,field-type`));
     await page.waitForSelector('.versions-summary');
+    await page.waitForLoadState('networkidle');
 
     await replaceInnerHtml(page, {
-        '.yt-host__tooltip': 'local:XXX',
         '.data-table__head-row th[data-index="1"]': 'XX.X.X-local-os~XXXXXXXXXXXXXXXX+distbuild',
         '.versions-summary__value[data-qa="component-amount"]': 'XXX',
         '.versions-summary__versions-select .g-select-control__option-text':
@@ -144,15 +152,15 @@ test('Components - Versions', async ({page}) => {
 
     await expect(page).toHaveScreenshot();
 
+    await page.locator('.collapsible-section').getByText('Summary').click();
+
     await page
         .locator('.components-versions__details .elements-table-wrapper')
         .waitFor({state: 'visible'});
 
-    await components(page).scrollIntoVeiwIfNeededPassingByToolbar(
-        '.components-versions__details .elements-table-wrapper',
-    );
-
     await page.waitForSelector('tr:nth-child(15) .yt-host');
+
+    await page.mouse.wheel(0, 150);
 
     await replaceInnerHtml(page, {
         '.yt-host__tooltip': 'local:XXX',
@@ -166,6 +174,7 @@ test('Components - Versions', async ({page}) => {
 });
 
 test('Components - Shards', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`components/shards`));
     await page.waitForSelector('.elements-table');
 

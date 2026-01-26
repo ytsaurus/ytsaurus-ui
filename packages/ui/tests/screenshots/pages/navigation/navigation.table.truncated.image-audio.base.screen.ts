@@ -1,8 +1,9 @@
 import {expect, test} from '@playwright/test';
-import {E2E_DIR, makeClusterUrl} from '../../../utils';
+import {E2E_DIR, MOCK_DATE, makeClusterUrl} from '../../../utils';
 import {table} from '../../../widgets/TablePage';
 
 test('Navigation/Table: truncated image-audio', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/tmp/table.truncated.image-audio`), {
         waitUntil: 'networkidle',
     });

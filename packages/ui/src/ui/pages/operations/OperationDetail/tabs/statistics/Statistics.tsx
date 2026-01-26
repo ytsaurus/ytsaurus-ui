@@ -12,6 +12,7 @@ import HelpLink from '../../../../../components/HelpLink/HelpLink';
 import Button from '../../../../../components/Button/Button';
 import Filter from '../../../../../components/Filter/Filter';
 import Icon from '../../../../../components/Icon/Icon';
+import {UseResizeEventForTable} from '../../../../../components/UseResizeEventForTable/UseResizeEventForTable';
 
 import {
     AGGREGATOR_RADIO_ITEMS,
@@ -236,6 +237,7 @@ export class Statistics extends Component<Props> {
                 <div className={statisticsBlock(null, className)}>
                     {this.renderToolbar()}
                     <WaitForFont>
+                        <UseResizeEventForTable length={items.length} />
                         <ElementsTable
                             {...statisticsTableProps}
                             templates={this.template}

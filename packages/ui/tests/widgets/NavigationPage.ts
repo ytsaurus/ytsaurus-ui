@@ -48,7 +48,12 @@ export class NavigationPage extends BasePage {
     }
 
     async mapNodeCreateObject(hasText: 'Table' | 'Directory' | 'Link') {
+        await this.page.waitForLoadState('networkidle');
+        await this.page.waitForTimeout(500);
+
         await this.page.getByText('Create object').click();
+
+        await this.page.waitForTimeout(500);
         await this.page.getByRole('menuitem').filter({hasText}).click();
     }
 

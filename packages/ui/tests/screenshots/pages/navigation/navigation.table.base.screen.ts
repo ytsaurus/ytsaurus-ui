@@ -1,10 +1,12 @@
 import {expect, test} from '@playwright/test';
-import {E2E_DIR, makeClusterUrl} from '../../../utils';
+import {E2E_DIR, MOCK_DATE, makeClusterUrl} from '../../../utils';
 import {replaceInnerHtml} from '../../../utils/dom';
 import {table} from '../../../widgets/TablePage';
 
 test('Navigation: table - Content', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/static-table`));
+    await page.waitForLoadState('networkidle');
 
     await table(page).waitForTableContent('.navigation-table', 10);
     await table(page).replaceTableMeta();
@@ -42,14 +44,16 @@ test('Navigation: table - Content', async ({page}) => {
             );
             if (input) input.value = tablePath;
         }, tablePath);
-        await page.click('.df-dialog__field-group_type_pool-tree button.g-select-control__button');
 
+        await page.waitForLoadState('networkidle');     
         await expect(page).toHaveScreenshot();
     });
 });
 
 test('Navigation: table - Schema', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/dynamic-table&navmode=schema`));
+    await page.waitForLoadState('networkidle');
 
     await table(page).waitForTable('.navigation-schema', 3);
     await table(page).replaceBreadcrumbsTestDir();
@@ -59,7 +63,9 @@ test('Navigation: table - Schema', async ({page}) => {
 });
 
 test('Navigation: table - Remount needed', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/dynamic-table`));
+    await page.waitForLoadState('networkidle');
 
     page.locator('.data-table_theme_yt-internal').waitFor();
 
@@ -75,7 +81,9 @@ test('Navigation: table - Remount needed', async ({page}) => {
 });
 
 test('Navigation: table - Tablets', async ({page}) => {
+    await page.clock.install({time: new Date(MOCK_DATE)});
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/dynamic-table&navmode=tablets`));
+    await page.waitForLoadState('networkidle');
 
     await table(page).waitForTable('.navigation-tablets', 2);
     await table(page).replaceBreadcrumbsTestDir();
@@ -90,7 +98,9 @@ test('Navigation: table - Tablets', async ({page}) => {
 });
 
 test('Navigation: static-table - rowselector', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/static-table`));
+    await page.waitForLoadState('networkidle');
 
     await table(page).replaceTableMeta();
     await table(page).waitForTableContent('.navigation-table', 10);
@@ -117,7 +127,9 @@ test('Navigation: static-table - rowselector', async ({page}) => {
 test('Navigation: table - userColumnPresets', async ({page, context}) => {
     test.slow();
 
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/static-table`));
+    await page.waitForLoadState('networkidle');
 
     await table(page).waitForTableContent('.navigation-table', 10);
     await table(page).replaceTableMeta();
@@ -163,7 +175,9 @@ test('Navigation: table - userColumnPresets', async ({page, context}) => {
 });
 
 test('Navigation: yql-v3-types', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/tmp/yql-v3-types-table`));
+    await page.waitForLoadState('networkidle');
 
     await table(page).replaceTableMeta();
     await table(page).waitForTableContent('.navigation-table', 5);

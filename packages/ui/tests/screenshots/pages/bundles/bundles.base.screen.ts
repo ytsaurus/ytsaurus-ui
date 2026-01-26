@@ -1,5 +1,5 @@
 import {Page, expect, test} from '@playwright/test';
-import {makeClusterUrl} from '../../../utils';
+import {MOCK_DATE, makeClusterUrl} from '../../../utils';
 import {BasePage} from '../../../widgets/BasePage';
 import {replaceInnerHtml} from '../../../utils/dom';
 
@@ -103,6 +103,7 @@ class Bundles extends BasePage {
 const bundles = (page: Page) => new Bundles({page});
 
 test('Bundles - List - Default', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`tablet_cell_bundles?name=e2e-bundle`));
 
     await bundles(page).waitForTable('.bundles-table', 1, {text: 'e2e-bundle'});
@@ -111,6 +112,7 @@ test('Bundles - List - Default', async ({page}) => {
 });
 
 test('Bundles - List - Tablets', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`tablet_cell_bundles?name=e2e-bundle&mode=tablets`));
 
     await bundles(page).waitForTable('.bundles-table', 1, {text: 'e2e-bundle'});
@@ -119,6 +121,7 @@ test('Bundles - List - Tablets', async ({page}) => {
 });
 
 test('Bundles - List - Tablets memory', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`tablet_cell_bundles?name=e2e-bundle&mode=tablets_memory`));
 
     await bundles(page).waitForTable('.bundles-table', 1, {text: 'e2e-bundle'});
@@ -127,11 +130,13 @@ test('Bundles - List - Tablets memory', async ({page}) => {
 });
 
 test('Bundles - List - Tablet cells', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(
         makeClusterUrl(`tablet_cell_bundles/tablet_cells?sortBy=column-bundle,order-undefined-asc`),
     );
     await page.waitForSelector('.cells-table');
     await bundles(page).replaceTabletCells();
+    await bundles(page).waitForTableSyncedWidth('.cells-table');
 
     await expect(page).toHaveScreenshot();
 
@@ -161,13 +166,17 @@ test('Bundles - List - Tablet cells', async ({page}) => {
 });
 
 test('Bundles - Active bundle', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`tablet_cell_bundles/tablet_cells?activeBundle=e2e-bundle`));
+    await page.waitForLoadState('networkidle');
 
     await bundles(page).replaceBundleCells();
+    await bundles(page).waitForTableSyncedWidth('.cells-table');
     await expect(page).toHaveScreenshot();
 
     await test.step('Editor', async () => {
         await page.click(':text("Edit bundle")');
+        await page.waitForLoadState('networkidle');
         await bundles(page).dfDialog.waitForField('Changelog account');
         await page.waitForTimeout(1000);
         await expect(page).toHaveScreenshot();
@@ -179,6 +188,7 @@ test('Bundles - Active bundle', async ({page}) => {
 });
 
 test('Bundles - ACL', async ({page}) => {
+    await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`tablet_cell_bundles/acl?activeBundle=e2e-bundle`));
     await bundles(page).waitForACL();
 

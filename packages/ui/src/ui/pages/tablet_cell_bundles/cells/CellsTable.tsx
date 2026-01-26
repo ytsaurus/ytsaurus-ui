@@ -85,6 +85,7 @@ class CellsTable extends React.Component<Props & ReduxProps> {
                 order={isSorted ? order : undefined}
                 onSort={this.onColumnSort}
                 withUndefined
+                sortIconSize={14}
             />
         );
     };

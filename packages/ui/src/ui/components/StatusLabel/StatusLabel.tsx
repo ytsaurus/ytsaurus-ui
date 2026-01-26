@@ -94,7 +94,7 @@ export default function StatusLabel({
         <span />
     ) : (
         <span className={b(null, renderPlaque ? b('plaque', mods, className) : b(mods, className))}>
-            {!hideIcon && <Icon awesome={icon} />}
+            {!hideIcon && <Icon awesome={icon} size={13} />}
             <span>{text ?? hammer.format['ReadableField'](label)}</span>
         </span>
     );
