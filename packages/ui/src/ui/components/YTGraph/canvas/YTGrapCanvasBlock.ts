@@ -7,7 +7,6 @@ import {SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types
 export const DEFAULT_PADDING = 10;
 
 const COUNTER_PADDING = 10;
-const COUNTER_BLOCK_HEIGHT = 30;
 const COUNTER_RADIUS = 4;
 
 const FONT_SIZE = {
@@ -25,8 +24,6 @@ const FONT_SIZE = {
 const ELLIPSIS_CHAR = '\u2026';
 
 export type YTGraphFontSize = 'normal' | 'header' | 'header2' | number;
-
-export type BaseMeta = {};
 
 type IconSrc =
     | {src: string; currentColor?: undefined}
@@ -58,6 +55,7 @@ type ZoomMode = 'minimalistic' | 'schematic' | 'detailed';
 
 export class YTGraphCanvasBlock<T extends YTGraphBlock<string, {}>> extends CanvasBlock<T> {
     icon: null | HTMLImageElement = null;
+    iconSrc: null | string = null;
 
     zoomLevel: ZoomMode = 'detailed';
 
@@ -154,11 +152,12 @@ export class YTGraphCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canv
             return;
         }
 
-        if (this.icon) {
+        if (this.icon && this.iconSrc === src) {
             this.context.ctx.drawImage(this.icon, iconX, iconY, iconWidth, iconHeight);
         } else {
             try {
                 this.icon = await this.loadImage(src);
+                this.iconSrc = src;
                 this.context.ctx.drawImage(this.icon, iconX, iconY, iconWidth, iconHeight);
             } catch (error) {
                 // eslint-disable-next-line no-console
@@ -317,18 +316,14 @@ export class YTGraphCanvasBlock<T extends YTGraphBlock<string, {}>> extends Canv
         const textMetrics = this.measureText(total.toString(), 'header');
         const textHeight =
             textMetrics.actualBoundingBoxAscent + textMetrics.actualBoundingBoxDescent;
+
+        const blockHeight = textHeight + COUNTER_PADDING * 2;
         const blockWidth = textMetrics.width + COUNTER_PADDING * 2;
         const blockX = x - blockWidth / 2;
-        const blockY = y - COUNTER_BLOCK_HEIGHT / 2;
+        const blockY = y - blockHeight / 2;
 
         this.context.ctx.beginPath();
-        this.context.ctx.roundRect(
-            blockX,
-            blockY,
-            blockWidth,
-            COUNTER_BLOCK_HEIGHT,
-            COUNTER_RADIUS,
-        );
+        this.context.ctx.roundRect(blockX, blockY, blockWidth, blockHeight, COUNTER_RADIUS);
         this.context.ctx.closePath();
         this.context.ctx.fillStyle = GRAPH_COLORS.jobBlockBackground;
         this.context.ctx.fill();
