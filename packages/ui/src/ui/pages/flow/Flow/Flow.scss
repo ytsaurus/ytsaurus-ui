@@ -1,0 +1,24 @@
+.yt-flow {
+    &__content {
+        &_view_dynamic_spec,
+        &_view_static_spec {
+            margin-top: -10px;
+        }
+    }
+
+    &__status-toolbar {
+        padding-left: 2px;
+    }
+
+    &__meta {
+        margin-bottom: -10px;
+    }
+
+    &__meta-item {
+        overflow: unset;
+    }
+
+    &__tabs {
+        margin-bottom: 10px;
+    }
+}

@@ -1,0 +1,14 @@
+{
+  "partition": "Partition",
+  "partition-id": "Partition Id",
+  "computation-id": "Computation Id",
+  "current-job-id": "Current job Id",
+  "current-worker-address": "Current worker address",
+  "incarnation-id": "Current worker incarnation Id",
+  "tracing": "tracing",
+  "cpu-usage": "CPU usage",
+  "memory-usage": "Memory usage",
+  "message-per-second": "Message per second",
+  "bytes-per-second": "Bytes per second",
+  "partition-data": "Partition data"
+}

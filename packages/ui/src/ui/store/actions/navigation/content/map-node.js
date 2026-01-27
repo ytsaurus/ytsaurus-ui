@@ -73,6 +73,7 @@ function getList(path, transaction, cluster) {
                     'treat_as_queue_consumer',
                     'treat_as_queue_producer',
                     'path',
+                    'pipeline_format_version',
                     ...(UIFactory.getNavigationMapNodeSettings()?.additionalAttributes || []),
                 ],
                 path,

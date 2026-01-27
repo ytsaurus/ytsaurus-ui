@@ -1,27 +1,44 @@
+import {Checkbox} from '@gravity-ui/uikit';
+import cn from 'bem-cn-lite';
+import findIndex_ from 'lodash/findIndex';
+import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import {batch, connect} from 'react-redux';
-import {useSelector} from '../../../../store/redux-hooks';
-import PropTypes from 'prop-types';
-import cn from 'bem-cn-lite';
-
-import findIndex_ from 'lodash/findIndex';
-
+import hammer from '../../../../common/hammer';
+import ElementsTableBase from '../../../../components/ElementsTable/ElementsTable';
+import withKeyboardNavigation from '../../../../components/ElementsTable/hocs/withKeyboardNavigation';
 import {
     FormattedLink,
     FormattedTextOrLink,
     printColumnAsBytes,
     printColumnAsNumber,
 } from '../../../../components/formatters';
-import {Checkbox} from '@gravity-ui/uikit';
-
-import withKeyboardNavigation from '../../../../components/ElementsTable/hocs/withKeyboardNavigation';
-import ElementsTableBase from '../../../../components/ElementsTable/ElementsTable';
-import Link from '../../../../components/Link/Link';
 import Icon from '../../../../components/Icon/Icon';
-import AccountLink from '../../../accounts/AccountLink';
-
+import Link from '../../../../components/Link/Link';
+import {MapNodeIcon} from '../../../../components/MapNodeIcon/MapNodeIcon';
+import {Tooltip} from '../../../../components/Tooltip/Tooltip';
+import TTLInfo from '../../../../components/TTLInfo/TTLInfo';
+import WarningIcon from '../../../../components/WarningIcon/WarningIcon';
+import {LOADING_STATUS, Page} from '../../../../constants/index';
+import {NAVIGATION_MAP_NODE_TABLE_ID} from '../../../../constants/navigation';
+import {ROOT_POOL_NAME, SchedulingTab} from '../../../../constants/scheduling';
 import {itemNavigationAllowed} from '../../../../pages/navigation/Navigation/ContentViewer/helpers';
-
+import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
+import {useRumMeasureStop} from '../../../../rum/RumUiContext';
+import {
+    navigateParent,
+    setMode,
+    updatePath,
+    updateView,
+} from '../../../../store/actions/navigation';
+import {setSelectedItem} from '../../../../store/actions/navigation/content/map-node';
+import {showTableEraseModal} from '../../../../store/actions/navigation/modals/table-erase-modal';
+import {
+    showTableMergeModal,
+    showTableSortModal,
+} from '../../../../store/actions/navigation/modals/table-merge-sort-modal';
+import {useSelector} from '../../../../store/redux-hooks';
+import {getTransaction} from '../../../../store/selectors/navigation';
 import {
     getContentMode,
     getLoadState,
@@ -30,39 +47,14 @@ import {
     getSelectedIndex,
     getSortedNodes,
 } from '../../../../store/selectors/navigation/content/map-node';
-import {getTransaction} from '../../../../store/selectors/navigation';
-
-import {
-    navigateParent,
-    setMode,
-    updatePath,
-    updateView,
-} from '../../../../store/actions/navigation';
-import {setSelectedItem} from '../../../../store/actions/navigation/content/map-node';
-
-import {ROOT_POOL_NAME, SchedulingTab} from '../../../../constants/scheduling';
-import {NAVIGATION_MAP_NODE_TABLE_ID} from '../../../../constants/navigation';
-import {LOADING_STATUS, Page} from '../../../../constants/index';
-import hammer from '../../../../common/hammer';
-import {showTableEraseModal} from '../../../../store/actions/navigation/modals/table-erase-modal';
-import {
-    showTableMergeModal,
-    showTableSortModal,
-} from '../../../../store/actions/navigation/modals/table-merge-sort-modal';
-
-import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
-import {useRumMeasureStop} from '../../../../rum/RumUiContext';
-import {isFinalLoadingStatus, showErrorPopup} from '../../../../utils/utils';
-import PathActions from './PathActions';
-import {Tooltip} from '../../../../components/Tooltip/Tooltip';
-import WarningIcon from '../../../../components/WarningIcon/WarningIcon';
-import TTLInfo from '../../../../components/TTLInfo/TTLInfo';
-import {MapNodeIcon} from '../../../../components/MapNodeIcon/MapNodeIcon';
-
-import {isTrashNode} from '../../../../utils/navigation/isTrashNode';
+import {makeFlowLink} from '../../../../utils/app-url';
 import {isLinkToTrashNode} from '../../../../utils/navigation/isLinkToTrashNode';
-
+import {isPipelineNode} from '../../../../utils/navigation/isPipelineNode';
+import {isTrashNode} from '../../../../utils/navigation/isTrashNode';
+import {isFinalLoadingStatus, showErrorPopup} from '../../../../utils/utils';
+import AccountLink from '../../../accounts/AccountLink';
 import './MapNodesTable.scss';
+import PathActions from './PathActions';
 
 const block = cn('map-nodes-table');
 const ElementsTable = withKeyboardNavigation(ElementsTableBase);
@@ -169,6 +161,8 @@ class MapNodesTable extends Component {
             );
         }
 
+        const arrow = <span>&#10142;</span>;
+
         if (type === 'link') {
             const target = (
                 <FormattedTextOrLink
@@ -183,11 +177,20 @@ class MapNodesTable extends Component {
                 <FormattedLink text="view link" state={item.linkPathState} theme="ghost" />
             );
 
-            const arrow = <span>&#10142;</span>;
-
             return (
                 <span>
                     {name}&nbsp;{viewLink}&nbsp;{arrow}&nbsp;{target}
+                </span>
+            );
+        }
+
+        if (isPipelineNode(item.$attributes)) {
+            return (
+                <span>
+                    {name}&nbsp;{arrow}&nbsp;
+                    <Link url={makeFlowLink({path: item.path})} routed>
+                        go to flow
+                    </Link>
                 </span>
             );
         }

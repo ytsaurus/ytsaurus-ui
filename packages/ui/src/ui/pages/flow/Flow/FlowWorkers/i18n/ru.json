@@ -1,0 +1,10 @@
+{
+  "address": "Адрес",
+  "cpu-usage": "Потребление CPU",
+  "health": "Состояние",
+  "incarnation-id": "Инкарнация",
+  "workers-data": "Загруженные данные",
+  "memory-usage": "Потребление памяти",
+  "search_placeholder": "Поиск по адресу...",
+  "uptime": "Время работы"
+}

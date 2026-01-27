@@ -21,7 +21,7 @@ export function formatByParams(
     {keyToRegex = defaultKeyToRegex}: {keyToRegex?: (k: string) => RegExp} = {},
 ) {
     return Object.keys(params).reduce((acc, key) => {
-        return acc.replace(keyToRegex(key), params[key].toString());
+        return acc.replace(keyToRegex(key), String(params[key]));
     }, template);
 }
 

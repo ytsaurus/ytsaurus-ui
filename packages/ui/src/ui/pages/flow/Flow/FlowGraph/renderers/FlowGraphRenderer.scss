@@ -1,0 +1,45 @@
+.yt-flow-graph-renderer {
+    &__icon {
+        color: var(--yql-graph-icon-color);
+    }
+
+    &__messages {
+        padding-top: 16px;
+        &_padding-top_none {
+            padding-top: unset;
+        }
+    }
+
+    &__messages-dialog {
+        max-height: 90vh;
+    }
+
+    &__messages-header {
+        margin-bottom: 8px;
+    }
+
+    &__message {
+        background-color: var(--g-color-base-generic);
+
+        margin-bottom: 2px;
+        &_theme_info {
+            background-color: var(--info-background);
+        }
+        &_theme_success {
+            background-color: var(--success-background);
+        }
+        &_theme_warning {
+            background-color: var(--alert-background);
+        }
+        &_theme_danger {
+            background-color: var(--danger-background);
+        }
+        &_theme_default {
+            background-color: var(--default-background);
+        }
+    }
+
+    &__messages-body {
+        min-width: 50vw;
+    }
+}
