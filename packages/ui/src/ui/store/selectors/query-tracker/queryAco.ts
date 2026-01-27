@@ -33,6 +33,9 @@ export const isSupportedQtACO = (state: RootState) =>
 export const selectIsMultipleAco = (state: RootState) =>
     Boolean(selectAcoState(state).data.supported_features?.multiple_aco);
 
+export const isSupportedTutorials = (state: RootState) =>
+    Boolean(selectAcoState(state).data.supported_features?.tutorials);
+
 export const selectAvailableAco = (state: RootState) =>
     selectAcoState(state).data.access_control_objects;
 

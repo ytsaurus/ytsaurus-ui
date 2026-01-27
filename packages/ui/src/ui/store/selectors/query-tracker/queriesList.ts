@@ -21,6 +21,7 @@ import {
     MyColumns,
     NameColumns,
 } from '../../../pages/query-tracker/QueriesList/QueriesHistoryList/columns';
+import {isSupportedTutorials} from './queryAco';
 
 export const getQueriesListState = (state: RootState) => state.queryTracker.list;
 
@@ -34,9 +35,14 @@ export const getQueriesFilters = (state: RootState) => getQueriesListState(state
 export const getQueriesListMode = (state: RootState) => getQueriesListState(state).listMode;
 export const getQueriesListCursor = (state: RootState) => getQueriesListState(state).cursor;
 
-export const getTutorialQueriesList = createSelector([getQueriesList], (listItems) => {
-    return listItems.filter((item) => item?.is_tutorial);
-});
+export const getTutorialQueriesList = createSelector(
+    [getQueriesList, isSupportedTutorials],
+    (listItems, supportsTutorials) => {
+        return listItems.filter((item) =>
+            supportsTutorials ? item?.is_tutorial : item?.annotations?.is_tutorial,
+        );
+    },
+);
 
 export const getQueryListByDate = createSelector([getQueriesList], (listItems) => {
     return Object.entries(
@@ -128,14 +134,23 @@ export function getQueriesListFilterParams(state: RootState): QueriesListParams 
         user = undefined;
     }
 
-    const params = {
+    const supportsTutorials = isSupportedTutorials(state);
+
+    const params: QueriesListParams = {
         ...filter,
         from_time: from,
         to_time: to,
         state: queryState,
         user,
-        tutorial_filter: is_tutorial,
     };
+
+    if (is_tutorial) {
+        if (supportsTutorials) {
+            params.tutorial_filter = true;
+        } else {
+            params.filter = 'is_tutorial';
+        }
+    }
 
     return params;
 }
