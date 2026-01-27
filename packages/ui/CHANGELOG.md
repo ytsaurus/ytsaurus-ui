@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.5.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.5.0...ui-v3.5.1) (2026-01-27)
+
+
+### Bug Fixes
+
+* **oatuh:** fix maxAge of YT_OAUTH_REFRESH_TOEKEN_NAME [YTFRONT-5504] ([d289da8](https://github.com/ytsaurus/ytsaurus-ui/commit/d289da8396e5949389b2ece6d3ddb25ff1bc172e))
+* **Operation/JobsTimeline:** increase jobs count [YTFRONT-5484] ([6553fc6](https://github.com/ytsaurus/ytsaurus-ui/commit/6553fc6acecf9abb0e43fdf23685b09dd1be5613))
+
 ## [3.5.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.4.1...ui-v3.5.0) (2026-01-20)
 
 
