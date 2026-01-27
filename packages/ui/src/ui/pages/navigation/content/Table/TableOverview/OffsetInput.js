@@ -37,7 +37,7 @@ const renderInput = (props, {onEndEditing, onUpdate}) => {
 
     return isDynamic ? (
         <Filter
-            iconLeft={<Icon awesome="key" />}
+            iconLeft={<Icon awesome="key" size={13} />}
             onBlur={(v) => {
                 onEndEditing();
                 onUpdate(v);
@@ -50,7 +50,7 @@ const renderInput = (props, {onEndEditing, onUpdate}) => {
         />
     ) : (
         <RangeInputPicker
-            iconLeft={<Icon awesome="hashtag" />}
+            iconLeft={<Icon awesome="hashtag" size={13} />}
             onOutsideClick={onEndEditing}
             onAfterUpdate={onUpdate}
             onSubmit={onUpdate}
@@ -68,7 +68,7 @@ const renderPlaceholder = (props, handleStartEditing) => {
 
     return (
         <div className={block('query-current')} onClick={handleStartEditing}>
-            <Icon awesome={isDynamic ? 'key' : 'hashtag'} />
+            <Icon awesome={isDynamic ? 'key' : 'hashtag'} size={13} />
             {offsetValue || 'No offset'}
             {!isDynamic && <div className={block('query-progress')} style={{width}} />}
         </div>

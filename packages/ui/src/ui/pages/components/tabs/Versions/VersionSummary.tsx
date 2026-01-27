@@ -137,6 +137,7 @@ class VersionsSummary extends React.Component<Props, State> {
                 shortTitle={name.split('-')[0]}
                 onSort={this.handleOnSort}
                 order={key === column ? order : ''}
+                sortIconSize={14}
             />
         );
     }

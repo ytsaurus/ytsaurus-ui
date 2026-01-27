@@ -28,6 +28,7 @@ interface Props {
     hidden?: boolean;
     allowUnordered?: boolean;
     withUndefined?: boolean;
+    size?: number;
 }
 
 export default class SortIcon extends React.Component<Props> {
@@ -42,7 +43,7 @@ export default class SortIcon extends React.Component<Props> {
     };
 
     render() {
-        const {className, label, order, hidden} = this.props;
+        const {className, label, order, hidden, size = 13} = this.props;
         const icon = ICON_BY_TYPE[order || ''];
 
         return (
@@ -52,7 +53,7 @@ export default class SortIcon extends React.Component<Props> {
                     className={block('icon')}
                     content={order ? format.ReadableField(order) : 'Unordered'}
                 >
-                    <Icon awesome={icon} face="solid" />
+                    <Icon awesome={icon} face="solid" size={size} />
                 </Tooltip>
             </span>
         );

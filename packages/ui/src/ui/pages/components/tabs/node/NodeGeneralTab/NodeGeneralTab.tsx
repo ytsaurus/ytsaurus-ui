@@ -27,7 +27,7 @@ function NodeGeneralTab(): ReturnType<React.VFC> {
     }
 
     if (node.state === 'offline') {
-        return <YTAlertBlock message="Node is Offline" />;
+        return <YTAlertBlock message="Node is offline" />;
     }
 
     return (

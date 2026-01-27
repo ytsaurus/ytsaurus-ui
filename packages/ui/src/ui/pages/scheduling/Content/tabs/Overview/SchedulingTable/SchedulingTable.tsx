@@ -906,6 +906,7 @@ function SchedulingColumnHeader(props: ColumnHeaderProps<SchedulingColumn>) {
                     lastColumnRef.current = column;
                 }
             }}
+            sortIconSize={14}
         />
     );
 }

@@ -101,6 +101,7 @@ class BundlesTable extends React.Component<ReduxProps> {
                 order={isSorted ? order : undefined}
                 onSort={sortable ? this.onColumnSort : undefined}
                 withUndefined
+                sortIconSize={14}
             />
         );
     };

@@ -65,7 +65,9 @@ run_command() {
         useEnvFile="--env-file $envFile"
     fi
 
-    $CONTAINER_TOOL run --rm --network host \
+    $CONTAINER_TOOL run --name yt.frontend.tests \
+        --rm \
+        --network host \
         -e DOCKER_CI=1 \
         -w /work \
         -v $(pwd):/work \

@@ -12,6 +12,8 @@ function tablePage(page: Page) {
 
 test('StickyToolbar: navigation', async ({page}) => {
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/static-table`));
+    await page.waitForLoadState('networkidle');
+
     await test.step('toolbar + table', async () => {
         await tablePage(page).waitForTableContent('.navigation-table', 10);
         await page.mouse.wheel(0, 720);
@@ -36,6 +38,7 @@ test('StickyToolbar: navigation', async ({page}) => {
             `,
         });
 
+        await page.waitForLoadState('networkidle');
         await expect(page).toHaveScreenshot();
     });
 
@@ -46,6 +49,8 @@ test('StickyToolbar: navigation', async ({page}) => {
         await page.mouse.wheel(0, 720);
         await page.waitForSelector(':text("shard_id")');
         await replaceInnerHtml(page, {'.structured-yson-virtualized__value': '###'});
+
+        await page.waitForLoadState('networkidle');
         await expect(page).toHaveScreenshot();
     });
 
@@ -54,12 +59,15 @@ test('StickyToolbar: navigation', async ({page}) => {
         await page.waitForSelector('.map-nodes-table tr:nth-child(8)');
         await page.mouse.move(100, 100);
         await page.mouse.wheel(0, 720);
+
+        await page.waitForLoadState('networkidle');
         await expect(page).toHaveScreenshot();
     });
 });
 
 test('StickyToolbar: components', async ({page}) => {
     await page.goto(makeClusterUrl(`components/nodes`));
+    await page.waitForLoadState('networkidle');
 
     await page.waitForFunction(() => {
         const el = document.querySelector('.components-nodes__content') as HTMLElement;
@@ -89,6 +97,7 @@ test('StickyToolbar: components', async ({page}) => {
 
 test('StickyToolbar: operations', async ({page}) => {
     await page.goto(makeClusterUrl(`operations`));
+    await page.waitForLoadState('networkidle');
 
     await test.step('sticky toolbar', async () => {
         await page.waitForSelector('.operations-list__table tr:nth-child(1)');
