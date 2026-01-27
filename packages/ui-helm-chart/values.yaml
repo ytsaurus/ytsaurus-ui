@@ -75,6 +75,7 @@ settings:
   directDownload: true
   uploadTableExcelBaseUrl: ""
   exportTableBaseUrl: ""
+  accessLogBasePath: ""
 
   # see https://github.com/ytsaurus/ytsaurus-ui/blob/main/packages/ui/docs/configuration.md#oauth
   oauth: 
@@ -87,7 +88,7 @@ settings:
     clientSecretEnvName: ""
     scope: ""
     buttonLabel: ""
-  
+
 securityContext: {}
 
 resources: {}
