@@ -78,10 +78,11 @@ class Resources extends Component {
 
                 if (available > 0 || used > 0) {
                     const total = available + used;
+                    const displayUsed = Math.max(0, used);
                     const caption = hammer.format['ReadableField'](medium);
                     const progressText =
-                        hammer.format['Bytes'](used) + ' / ' + hammer.format['Bytes'](total);
-                    const progressValue = (used / total) * 100;
+                        hammer.format['Bytes'](displayUsed) + ' / ' + hammer.format['Bytes'](total);
+                    const progressValue = (displayUsed / total) * 100;
 
                     diskResourcesPerMedium.push({
                         caption: caption,
