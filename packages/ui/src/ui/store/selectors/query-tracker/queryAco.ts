@@ -49,6 +49,14 @@ export const getDefaultYqlVersion = createSelector([selectQueryTrackerInfo], (qt
     return qtInfo?.engines_info?.yql?.default_yql_ui_version;
 });
 
+const getQueryDraftYqlVersion = (state: RootState) =>
+    state.queryTracker.query.draft.settings?.yql_version;
+
+export const getEffectiveYqlVersion = createSelector(
+    [getQueryDraftYqlVersion, getDefaultYqlVersion],
+    (draftVersion, defaultVersion) => draftVersion || defaultVersion,
+);
+
 export const isSupportedShareQuery = createSelector(
     [selectIsMultipleAco, selectAvailableAco],
     (isMultipleAco, aco) => {

@@ -16,7 +16,7 @@ import {
 import {Select} from '@gravity-ui/uikit';
 import {
     getAvailableYql,
-    getDefaultYqlVersion,
+    getEffectiveYqlVersion,
 } from '../../../store/selectors/query-tracker/queryAco';
 import cn from 'bem-cn-lite';
 import './QuerySelectorsByEngine.scss';
@@ -29,7 +29,7 @@ export const QuerySelectorsByEngine: FC = () => {
     const cliqueLoading = useSelector(getCliqueLoading);
     const {settings = {}, engine} = useSelector(getQueryDraft);
     const availableYql = useSelector(getAvailableYql);
-    const defaultYqlVersion = useSelector(getDefaultYqlVersion);
+    const effectiveYqlVersion = useSelector(getEffectiveYqlVersion);
     const currentCluster = settings?.cluster;
 
     const options = useMemo(() => {
@@ -61,13 +61,12 @@ export const QuerySelectorsByEngine: FC = () => {
     const cliqueList = engine in clusterCliqueList ? clusterCliqueList[engine] : [];
 
     if (engine === QueryEngine.YQL && availableYql.length) {
-        const value = settings?.yql_version || defaultYqlVersion;
         return (
             <Select
                 className={block('version')}
                 size="l"
                 options={options}
-                value={value ? [value] : undefined}
+                value={effectiveYqlVersion ? [effectiveYqlVersion] : undefined}
                 onUpdate={handleYqlVersionChange}
             />
         );
