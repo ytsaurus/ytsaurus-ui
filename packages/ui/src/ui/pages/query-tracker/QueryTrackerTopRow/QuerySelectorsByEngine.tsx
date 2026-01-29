@@ -44,6 +44,12 @@ export const QuerySelectorsByEngine: FC = () => {
         }
     }, [engine, currentCluster, dispatch]);
 
+    useEffect(() => {
+        if (engine === QueryEngine.YQL && !settings?.yql_version && defaultYqlVersion) {
+            dispatch(setQueryYqlVersion(defaultYqlVersion));
+        }
+    }, [engine, settings?.yql_version, defaultYqlVersion, dispatch]);
+
     const handleCliqueChange = (alias: string) => {
         dispatch(setQueryClique(alias));
     };

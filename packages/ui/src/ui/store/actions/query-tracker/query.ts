@@ -43,7 +43,11 @@ import {prepareQueryPlanIds} from '../../../types/query-tracker/query';
 import {chytApiAction, spytApiAction} from '../../../utils/strawberryControllerApi';
 import guid from '../../../common/hammer/guid';
 import {getSettingQueryTrackerStage} from '../../selectors/settings/settings-ts';
-import {getDefaultQueryACO, selectIsMultipleAco} from '../../selectors/query-tracker/queryAco';
+import {
+    getDefaultQueryACO,
+    getDefaultYqlVersion,
+    selectIsMultipleAco,
+} from '../../selectors/query-tracker/queryAco';
 import UIFactory from '../../../UIFactory';
 
 import {
@@ -67,6 +71,7 @@ import {
     getLastUserChoiceQueryEngine,
     getLastUserChoiceYqlVersion,
 } from '../../selectors/settings/settings-queries';
+
 import {getClusterParams, prepareClusterUiConfig} from '../cluster-params';
 import {RumWrapper} from '../../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
@@ -118,6 +123,7 @@ export const setUserLastChoice =
         const lastPath = getLastUserChoiceQueryDiscoveryPath(state);
         const lastClique = getLastUserChoiceQueryChytClique(state);
         const lastVersion = getLastUserChoiceYqlVersion(state);
+        const defaultYqlVersion = getDefaultYqlVersion(state);
 
         const newSettings = {...settings};
         if (clearProps) {
@@ -133,8 +139,11 @@ export const setUserLastChoice =
             newSettings.clique = lastClique;
         }
 
-        if (engine === QueryEngine.YQL && lastVersion && !settings?.yql_version) {
-            newSettings.yql_version = lastVersion;
+        if (engine === QueryEngine.YQL && !settings?.yql_version) {
+            const yqlVersion = lastVersion || defaultYqlVersion;
+            if (yqlVersion) {
+                newSettings.yql_version = yqlVersion;
+            }
         }
 
         dispatch(updateQueryDraft({settings: newSettings}));
