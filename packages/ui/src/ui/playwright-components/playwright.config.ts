@@ -51,6 +51,7 @@ const config: PlaywrightTestConfig = {
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {
         testIdAttribute: 'data-qa',
+        video: 'retain-on-failure',
         headless: true,
         screenshot: 'only-on-failure',
         timezoneId: 'UTC',

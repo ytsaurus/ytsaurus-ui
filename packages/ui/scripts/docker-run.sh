@@ -65,9 +65,10 @@ run_command() {
         useEnvFile="--env-file $envFile"
     fi
 
-    $CONTAINER_TOOL run --name yt.frontend.tests \
+    $CONTAINER_TOOL run --name ytsaurus-ui.tests \
         --rm \
         --network host \
+        -e PW_OPTIONS="${PW_OPTIONS:- }" \
         -e DOCKER_CI=1 \
         -w /work \
         -v $(pwd):/work \

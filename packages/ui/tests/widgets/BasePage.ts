@@ -13,14 +13,14 @@ class DFDialogComponent extends HasPage {
     private isLazyLoaded = false;
 
     async showTab(name: string) {
-        this.waitForLazyLoad();
+        await this.waitForLazyLoad();
 
         await this.page.click(`.df-dialog-tab__name :text("${name}")`);
         await this.page.mouse.move(0, 0);
     }
 
     async waitForField(title: string) {
-        this.waitForLazyLoad();
+        await this.waitForLazyLoad();
 
         await this.page.waitForSelector(`.df-dialog__label :text("${title}")`);
     }
