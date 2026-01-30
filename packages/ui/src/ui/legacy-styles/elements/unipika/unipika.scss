@@ -1,5 +1,5 @@
-@import '../globals';
-@import '../mixins';
+@use '../globals';
+@use '../mixins';
 
 .unipika {
     font-family: var(--g-font-family-monospace);
@@ -11,7 +11,7 @@
     }
 
     &-wrapper_inline_yes & {
-        @include ellipsis();
+        @include mixins.ellipsis();
         display: inline-block;
         vertical-align: bottom;
         max-width: 100%;

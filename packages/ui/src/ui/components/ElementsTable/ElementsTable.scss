@@ -1,6 +1,6 @@
-@import '../../styles/common';
-@import '../../styles/mixins';
-@import './constants';
+@use '../../styles/common';
+@use '../../styles/mixins';
+@use './constants';
 
 $thick-border: 1px solid var(--dark-divider);
 $thin-border: 1px solid var(--light-divider);
@@ -27,6 +27,11 @@ $thin-border: 1px solid var(--light-divider);
     $elements-table: &;
     overflow: auto;
 
+    width: 100%;
+
+    border-collapse: collapse;
+    border-spacing: 0;
+
     &-wrapper {
         &_sticky_top {
             position: sticky;
@@ -49,11 +54,6 @@ $thin-border: 1px solid var(--light-divider);
             }
         }
     }
-
-    width: 100%;
-
-    border-collapse: collapse;
-    border-spacing: 0;
 
     .hover-tooltip {
         display: inline-block;
@@ -216,11 +216,11 @@ $thin-border: 1px solid var(--light-divider);
         }
 
         #{$elements-table}_size_s &_stickyFirst tr:first-child td {
-            top: calc(var(--app-header-height) + #{$row-height_size_s} - 1px);
+            top: calc(var(--app-header-height) + #{constants.$row-height_size_s} - 1px);
         }
 
         #{$elements-table}_size_m &_stickyFirst tr:first-child td {
-            top: calc(var(--app-header-height) + #{$row-height_size_m} - 1px);
+            top: calc(var(--app-header-height) + #{constants.$row-height_size_m} - 1px);
         }
 
         &_stickyLast tr:last-child td {
@@ -262,11 +262,11 @@ $thin-border: 1px solid var(--light-divider);
     }
 
     &_size_s {
-        @include set-size($row-height_size_s);
+        @include set-size(constants.$row-height_size_s);
     }
 
     &_size_m {
-        @include set-size($row-height_size_m);
+        @include set-size(constants.$row-height_size_m);
     }
 
     &_theme_bordered {

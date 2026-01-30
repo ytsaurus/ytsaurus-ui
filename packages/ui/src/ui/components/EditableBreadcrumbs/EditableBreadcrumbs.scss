@@ -1,5 +1,5 @@
-@import '../../styles/redefinitions/common/Breadcrumbs.scss';
-@import '../../styles/mixins.scss';
+@use '../../styles/redefinitions/common/Breadcrumbs.scss';
+@use '../../styles/mixins.scss';
 
 .yt-editable-breadcrumbs {
     padding-top: 2px;
@@ -7,7 +7,7 @@
     overflow: hidden;
 
     &_view_top-row {
-        @include top-row-breadcrumbs();
+        @include mixins.top-row-breadcrumbs();
     }
 
     &__breadcrumbs-container {

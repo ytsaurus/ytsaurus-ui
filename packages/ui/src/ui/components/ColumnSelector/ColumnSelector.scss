@@ -1,12 +1,12 @@
-@import '../../styles/mixins';
-@import './constants';
+@use '../../styles/mixins';
+@use './constants';
 
 $item-vertical-padding: 10px;
 $item-horizontal-padding: 8px;
 
 .column-selector {
     $block: &;
-    padding: $column-selector-offset-vertical $column-selector-offset-horizontal;
+    padding: constants.$column-selector-offset-vertical constants.$column-selector-offset-horizontal;
     display: flex;
     flex-direction: column;
     overflow: auto;
@@ -15,7 +15,7 @@ $item-horizontal-padding: 8px;
         flex-grow: 0;
         flex-shrink: 0;
         display: flex;
-        margin-bottom: $column-selector-offset-vertical;
+        margin-bottom: constants.$column-selector-offset-vertical;
 
         &-item {
             margin-left: 10px;
@@ -107,7 +107,7 @@ $item-horizontal-padding: 8px;
                 }
 
                 &:hover #{$checkbox}:before {
-                    @include yt-fonts();
+                    @include mixins.yt-fonts();
                     content: 'Add';
                     margin-right: 8px;
                     line-height: 1;
@@ -125,7 +125,7 @@ $item-horizontal-padding: 8px;
                     }
 
                     #{$checkbox}:before {
-                        @include yt-fonts();
+                        @include mixins.yt-fonts();
                         content: 'Remove';
                         margin-right: 8px;
                         line-height: 1;
@@ -163,7 +163,7 @@ $item-horizontal-padding: 8px;
 
                 &:hover {
                     #{$lockicon}:before {
-                        @include yt-fonts();
+                        @include mixins.yt-fonts();
                         content: 'Access denied';
                         line-height: 1;
                     }

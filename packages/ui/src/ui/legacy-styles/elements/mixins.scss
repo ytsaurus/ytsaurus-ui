@@ -1,5 +1,5 @@
-@import 'globals';
-@import '../../styles/mixins';
+@forward '../../styles/mixins';
+
 
 @mixin invalid-field() {
     .textinput_theme_normal .textinput__box,

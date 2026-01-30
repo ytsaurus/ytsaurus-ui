@@ -1,4 +1,4 @@
-@import '../globals';
+@use '../globals';
 
 .elements-toolbar {
     &__container {
@@ -34,7 +34,7 @@
             padding-right: var(--section-main-padding-horizontal);
 
             .table__fullscreen:fullscreen & {
-                padding-right: $section-main-padding-horizontal-fullscreen;
+                padding-right: globals.$section-main-padding-horizontal-fullscreen;
             }
 
             .table__controls {

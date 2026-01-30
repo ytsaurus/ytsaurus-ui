@@ -1,4 +1,4 @@
-@import '../../../styles/mixins';
+@use '../../../styles/mixins';
 
 .elements-secondary-text {
     font-size: 13px;
@@ -12,7 +12,7 @@
     letter-spacing: 0em;
 
     &_size_s {
-        @include heading-size(s);
+        @include mixins.heading-size(s);
     }
 
     // In some time the project should use only variables from common-lib, as the block below
@@ -23,19 +23,19 @@
     }
 
     &_size_xs {
-        @include heading-size(xs);
+        @include mixins.heading-size(xs);
     }
 
     &_size_m {
-        @include heading-size(m);
+        @include mixins.heading-size(m);
     }
 
     &_size_l {
-        @include heading-size(l);
+        @include mixins.heading-size(l);
     }
 
     &_size_xl {
-        @include heading-size(xl);
+        @include mixins.heading-size(xl);
     }
 
     &_overview_yes {

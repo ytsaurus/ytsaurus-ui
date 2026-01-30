@@ -1,9 +1,9 @@
-@import '../../styles/mixins.scss';
-@import '../../styles/redefinitions/common/Breadcrumbs.scss';
+@use '../../styles/mixins.scss';
+@use '../../styles/redefinitions/common/Breadcrumbs.scss';
 
 .tablet-cell-bundles-top-row-content {
     &__breadcrumbs {
-        @include top-row-breadcrumbs();
+        @include mixins.top-row-breadcrumbs();
     }
 
     &__extra-control {

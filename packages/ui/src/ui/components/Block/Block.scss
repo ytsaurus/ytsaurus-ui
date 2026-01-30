@@ -11,6 +11,9 @@
     padding: 20px;
     overflow: auto;
 
+    border: 1px solid transparent;
+    border-radius: 3px;
+
     &_type_info{
         color: var(--info-text);
         background-color: var(--info-background);
@@ -38,9 +41,6 @@
     &_bottom-margin {
         margin-bottom: 20px;
     }
-
-    border: 1px solid transparent;
-    border-radius: 3px;
 
     &__icon {
         grid-area: a;

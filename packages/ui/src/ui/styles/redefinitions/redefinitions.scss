@@ -1,13 +1,13 @@
-@import './common/common';
-@import './common/link';
-@import './common/icon';
-@import './common/progress';
-@import './common/illustrations';
-@import './chartkit';
-@import './DataTable';
-@import './common/Breadcrumbs';
-@import '../fonts/manrope.scss';
-@import '../fonts/roboto-mono.scss';
+@use './common/common';
+@use './common/link';
+@use './common/icon';
+@use './common/progress';
+@use './common/illustrations';
+@use './chartkit';
+@use './DataTable';
+@use './common/Breadcrumbs';
+@use '../fonts/manrope.scss';
+@use '../fonts/roboto-mono.scss';
 
 .data-table {
     &__table {

@@ -1,5 +1,5 @@
-@import '../../../../../../styles/common.scss';
-@import '../../../../../../styles/mixins.scss';
+@use '../../../../../../styles/common.scss';
+@use '../../../../../../styles/mixins.scss';
 
 .operation-detail-jobs {
     &__table {
@@ -69,7 +69,7 @@
 
     &__host {
         font-size: 14px;
-        @include ellipsis();
+        @include mixins.ellipsis();
     }
 
     &__id {
@@ -81,7 +81,7 @@
 
     &__id-job-link {
         flex-shrink: 1;
-        @include ellipsis();
+        @include mixins.ellipsis();
     }
 
     &__host {
@@ -92,7 +92,7 @@
 
         &-name {
             flex-shrink: 1;
-            @include ellipsis();
+            @include mixins.ellipsis();
         }
         &-chart-link {
             padding-left: 1ex;

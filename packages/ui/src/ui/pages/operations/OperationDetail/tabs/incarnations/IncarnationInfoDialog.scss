@@ -1,7 +1,7 @@
-@import '../../../../../components/ErrorDetails/ErrorDetails.scss';
+@use '../../../../../components/ErrorDetails/ErrorDetails.scss' as error;
 
 .incarnation-info-dialog {
     &__details {
-        @include error-details;
+        @include error.error-details;
     }
 }

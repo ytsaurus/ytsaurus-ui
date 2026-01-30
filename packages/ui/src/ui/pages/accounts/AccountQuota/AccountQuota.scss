@@ -1,4 +1,4 @@
-@import '../../../styles/mixins.scss';
+@use '../../../styles/mixins.scss';
 
 .account-quota {
     padding: 16px 0;
@@ -11,7 +11,7 @@
         font-weight: var(--yt-font-weight-bold);
         flex: 0 0 150px;
 
-        @include ellipsis();
+        @include mixins.ellipsis();
     }
     &__progress {
         flex-grow: 1.5;

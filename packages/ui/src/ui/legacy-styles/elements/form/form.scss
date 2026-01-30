@@ -1,5 +1,5 @@
-@import '../globals';
-@import '../mixins';
+@use '../globals';
+@use '../mixins';
 
 .elements-form-section {
     margin-bottom: 30px;
@@ -52,7 +52,7 @@ $field-offset: 10px;
     }
 
     &_inline_yes &__label {
-        @include ellipsis();
+        @include mixins.ellipsis();
 
         flex: 0 0 220px;
         padding-right: 20px;
@@ -61,7 +61,7 @@ $field-offset: 10px;
     }
 
     &_invalid_yes &__control {
-        @include invalid-field();
+        @include mixins.invalid-field();
     }
 }
 
@@ -85,7 +85,7 @@ $field-offset: 10px;
         }
 
         &_theme_invalid {
-            @include invalid-field();
+            @include mixins.invalid-field();
         }
     }
 

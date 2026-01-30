@@ -1,5 +1,5 @@
-@import '../../../styles/common';
-@import '../../../styles/mixins';
+@use '../../../styles/common';
+@use '../../../styles/mixins';
 
 .master-group {
     &__availability {
@@ -56,7 +56,7 @@
 
         &-name {
             flex: 0 1 auto;
-            @include ellipsis();
+            @include mixins.ellipsis();
         }
 
         $host: &;

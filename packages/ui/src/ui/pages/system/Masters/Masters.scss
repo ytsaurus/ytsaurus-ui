@@ -1,5 +1,5 @@
-@import '../../../styles/common';
-@import '../../../styles/mixins';
+@use '../../../styles/common';
+@use '../../../styles/mixins';
 
 @mixin three-column-grid($row-gap) {
     display: grid;

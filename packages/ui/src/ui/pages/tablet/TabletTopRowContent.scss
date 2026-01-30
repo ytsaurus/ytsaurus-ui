@@ -1,14 +1,14 @@
-@import '../../styles/mixins.scss';
-@import '../../styles/redefinitions/common/Breadcrumbs.scss';
-@import '../../styles/fonts.scss';
+@use '../../styles/mixins.scss';
+@use '../../styles/redefinitions/common/Breadcrumbs.scss';
+@use '../../styles/fonts.scss';
 
 .tablet-top-row-content {
     &__breadcrumbs {
-        @include top-row-breadcrumbs();
+        @include mixins.top-row-breadcrumbs();
     }
 
     &__editable {
-        @include font-body2;
+        @include fonts.font-body2;
 
         min-width: 40ex;
         color: var(--secondary-text);

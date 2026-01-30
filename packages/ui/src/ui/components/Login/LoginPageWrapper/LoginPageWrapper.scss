@@ -1,14 +1,14 @@
-@import './login-page-theme-light.scss';
-@import './login-page-theme-dark.scss';
+@use './login-page-theme-light.scss' as light;
+@use './login-page-theme-dark.scss' as dark;
 
 .g-root_theme_light,
 .g-root_theme_light-hc {
-    @include yt-login-page-light;
+    @include light.yt-login-page-light;
 }
 
 .g-root_theme_dark,
 .g-root_theme_dark-hc {
-    @include yt-login-page-dark;
+    @include dark.yt-login-page-dark;
 }
 
 @mixin login-page-font-settings {

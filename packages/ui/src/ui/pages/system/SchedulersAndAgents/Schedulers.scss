@@ -1,4 +1,4 @@
-@import '../../../styles/mixins';
+@use '../../../styles/mixins';
 
 .system {
     &__schedulers-agents {
@@ -29,7 +29,7 @@
 
         &-address {
             flex: 0 1 auto;
-            @include ellipsis();
+            @include mixins.ellipsis();
         }
 
         &-btn {

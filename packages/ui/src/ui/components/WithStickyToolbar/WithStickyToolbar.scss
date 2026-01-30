@@ -1,9 +1,15 @@
-@import '../../styles/mixins.scss';
-@import './Toolbar/Toolbar.scss';
+@use '../../styles/mixins.scss';
+@use './Toolbar/Toolbar.scss' as toolbar;
 
 $stickySpacerHeight: 6px;
 
 .with-sticky-toolbar {
+    --yt-with-sticky-toolbar-toolbar-height: #{toolbar.$TOOLBAR_COMPONENT_HEIGHT};
+
+    &_x2 {
+        --yt-with-sticky-toolbar-toolbar-height: #{toolbar.$TOOLBAR_COMPONENT_HEIGHT * 2};
+    }
+
     &_bottom-margin_regular {
         margin-bottom: 20px;
     }
@@ -12,21 +18,15 @@ $stickySpacerHeight: 6px;
         margin-top: -10px;
     }
 
-    --yt-with-sticky-toolbar-toolbar-height: #{$TOOLBAR_COMPONENT_HEIGHT};
-
-    &_x2 {
-        --yt-with-sticky-toolbar-toolbar-height: #{$TOOLBAR_COMPONENT_HEIGHT * 2};
-    }
-
     & &__toolbar {
         z-index: var(--fixed-toolbar-z-index);
+
+        height: var(--yt-with-sticky-toolbar-toolbar-height);
 
         &_padding_skip-horizontal {
             padding-left: unset;
             padding-right: unset;
         }
-
-        height: var(--yt-with-sticky-toolbar-toolbar-height);
 
         &_sticky {
             position: fixed;

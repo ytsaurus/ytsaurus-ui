@@ -1,16 +1,16 @@
-@import '../../styles/mixins';
+@use '../../styles/mixins';
 
 .collapsible-list {
     &__list {
+        @include mixins.reset-ul();
+
         &_use-flex {
             display: flex;
             flex-wrap: wrap;
         }
 
-        @include reset-ul();
-
         li {
-            @include reset-li();
+            @include mixins.reset-li();
         }
     }
 }

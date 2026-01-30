@@ -5,11 +5,11 @@
     border-radius: 6px;
     padding: 20px 32px;
 
+    background-color: var(--yt-segment-background-color);
+
     &_background_neutral-light {
         --yt-segment-background-color: var(--g-color-base-neutral-light);
     }
-
-    background-color: var(--yt-segment-background-color);
 
     &__item {
         &:not(:first-child) {

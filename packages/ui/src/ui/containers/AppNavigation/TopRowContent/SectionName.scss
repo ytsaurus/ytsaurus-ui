@@ -1,4 +1,4 @@
-@import '../../../styles/fonts.scss';
+@use '../../../styles/fonts.scss';
 
 .top-row-section {
     display: flex;
@@ -10,7 +10,7 @@
 
     color: var(--secondary-text);
     padding-left: 16px;
-    @include font-body2;
+    @include fonts.font-body2;
 
     &__name {
         padding-right: 16px;
@@ -22,7 +22,7 @@
         min-width: 6ex;
 
         color: var(--primary-text);
-        @include font-body3;
+        @include fonts.font-body3;
         font-size: 15px;
     }
 

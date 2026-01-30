@@ -1,6 +1,6 @@
-@import '../elements/globals';
-@import '../../styles/common.scss';
-@import '../../containers/ClusterPageHeader/ClusterColor.scss';
+@use '../elements/globals';
+@use '../../styles/common.scss';
+@use '../../containers/ClusterPageHeader/ClusterColor.scss' as color;
 
 /* PLACEHOLDERS */
 %item-image {
@@ -16,7 +16,7 @@
 
 .cluster-menu {
     padding-top: var(--app-header-height);
-    padding-bottom: $section-offset;
+    padding-bottom: common.$section-offset;
 
     /* HEADER */
     &__header {
@@ -302,7 +302,7 @@
 
             border-radius: 50%;
             background-size: $edge;
-            @include cluster-styled;
+            @include color.cluster-styled;
         }
     }
 }

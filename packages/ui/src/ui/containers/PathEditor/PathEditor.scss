@@ -1,4 +1,4 @@
-@import '../../styles/mixins';
+@use '../../styles/mixins';
 
 .path-editor {
     position: relative;
@@ -6,7 +6,7 @@
     display: block;
 
     &__items {
-        @include reset-ul();
+        @include mixins.reset-ul();
 
         max-height: 300px;
 
@@ -19,8 +19,8 @@
     }
 
     &__item {
-        @include reset-li();
-        @include ellipsis();
+        @include mixins.reset-li();
+        @include mixins.ellipsis();
 
         line-height: 30px;
 
