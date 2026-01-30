@@ -3,5 +3,6 @@
   "workers": "Воркеры",
   "partition": "Партиция",
   "pipeline": "Пайплайн",
-  "leader-controller-address": "Адресс контроллера-лидера"
+  "leader-controller-address": "Адресс контроллера-лидера",
+  "open-in-navigation": "Открыть в Навигации"
 }
