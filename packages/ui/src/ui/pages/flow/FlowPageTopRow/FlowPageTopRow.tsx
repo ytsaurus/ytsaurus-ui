@@ -2,6 +2,8 @@ import {Breadcrumbs} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {Page} from '../../../../shared/constants/settings';
+import format from '../../../common/hammer/format';
+import thorYPath from '../../../common/thor/ypath';
 import Link from '../../../components/Link/Link';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import {FlowTab} from '../../../store/reducers/flow/filters';
@@ -13,10 +15,9 @@ import {
     getFlowPipelinePath,
 } from '../../../store/selectors/flow/filters';
 import {makeFlowLink} from '../../../utils/app-url';
+import {useFlowAttributes} from '../flow-hooks/use-flow-attributes';
 import i18n from '../i18n';
 import './FlowPageTopRow.scss';
-import {useFlowAttributes} from '../flow-hooks/use-flow-attributes';
-import thorYPath from '../../../common/thor/ypath';
 
 const block = cn('yt-flow-page-top-row');
 
@@ -94,9 +95,16 @@ function FlowBreadcrumbs() {
 
 function BCName({path, pipeline_name}: {path: string; pipeline_name?: string}) {
     const name = React.useMemo(() => {
-        const {fragments} = new thorYPath.YPath(path);
-        const last = fragments[fragments.length - 1];
-        return pipeline_name ?? last?.name;
+        function calcNameFromPath() {
+            const {fragments} = new thorYPath.YPath(path, 'absolute');
+            fragments.splice(0, fragments.length > 2 && fragments[1].name === 'home' ? 2 : 1); // remove '/home' or '/'
+            if (fragments.length > 1 && fragments[fragments.length - 1].name === 'pipeline') {
+                fragments.splice(fragments.length - 1, 1);
+            }
+            return fragments.map((item: {name: string}) => item.name).join(' ') || 'pipeline';
+        }
+
+        return pipeline_name ?? format.ReadableField(calcNameFromPath());
     }, [pipeline_name]);
 
     return (
