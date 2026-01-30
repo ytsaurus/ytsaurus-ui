@@ -1,5 +1,5 @@
-@import '../../styles/mixins.scss';
-@import 'constants';
+@use '../../styles/mixins.scss';
+@use 'constants';
 
 .yt-tabbed-content {
     display: flex;
@@ -13,7 +13,7 @@
         align-items: center;
         flex-wrap: nowrap;
         flex-shrink: 0;
-        height: $tabbed-content-header-height;
+        height: constants.$tabbed-content-header-height;
         overflow: hidden;
         border-bottom: 1px solid var(--dark-divider);
 
@@ -34,7 +34,7 @@
         font-weight: var(--yt-font-weight-bold);
         color: var(--primary-text);
 
-        @include ellipsis();
+        @include mixins.ellipsis();
 
         &_growable {
             flex-grow: 1;
@@ -46,7 +46,7 @@
         color: var(--secondary-text);
         padding-right: 1ex;
 
-        @include ellipsis();
+        @include mixins.ellipsis();
     }
 
     &__actions {

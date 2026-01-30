@@ -1,7 +1,7 @@
-@import '~@gravity-ui/uikit/styles/mixins';
+@use '~@gravity-ui/uikit/styles/mixins';
 
 .yc-datepicker-year-switcher {
-    @include text-subheader-2;
+    @include mixins.text-subheader-2;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);

@@ -1,6 +1,6 @@
-@import '../../styles/fonts';
-@import '../../styles/mixins';
-@import '../../styles/common';
+@use '../../styles/fonts';
+@use '../../styles/mixins';
+@use '../../styles/common';
 
 .maintenance {
     width: 100%;
@@ -9,17 +9,17 @@
     color: var(--primary-text);
 
     &__content {
-        max-width: $width-large-screen;
+        max-width: common.$width-large-screen;
         margin: 0 auto;
         padding: 0 80px;
         display: flex;
         align-items: center;
 
-        @media (min-width: $width-medium-screen) {
+        @media (min-width: common.$width-medium-screen) {
             padding: 0 120px;
         }
 
-        @media (min-width: $width-large-screen) {
+        @media (min-width: common.$width-large-screen) {
             padding: 0 240px;
         }
     }
@@ -29,7 +29,7 @@
     }
 
     &__title {
-        @include heading-size(l);
+        @include mixins.heading-size(l);
         font-weight: var(--yt-font-weight-bold);
         max-width: 350px;
         margin-bottom: 8px;
@@ -54,7 +54,7 @@
     }
 
     &__user-title {
-        @include heading-size(s);
+        @include mixins.heading-size(s);
         font-weight: var(--yt-font-weight-bold);
         margin: 0;
         margin-bottom: 8px;
@@ -77,12 +77,12 @@
     }
 
     &__links {
-        @include reset-ul();
+        @include mixins.reset-ul();
         display: flex;
     }
 
     &__link {
-        @include reset-li();
+        @include mixins.reset-li();
         margin-right: 24px;
 
         &:last-child {

@@ -1,6 +1,5 @@
 @use 'sass:math';
-
-@import '../../styles/mixins.scss';
+@use '../../styles/mixins.scss';
 
 $item-margin: 30px;
 
@@ -8,7 +7,7 @@ $item-margin: 30px;
     min-width: 1100px;
 
     &__list {
-        @include reset-ul();
+        @include mixins.reset-ul();
         padding: 12px 16px;
         background-color: var(--light-background);
         border-radius: 5px;
@@ -19,7 +18,7 @@ $item-margin: 30px;
     }
 
     &__item {
-        @include reset-li();
+        @include mixins.reset-li();
         margin-right: $item-margin;
         position: relative;
 

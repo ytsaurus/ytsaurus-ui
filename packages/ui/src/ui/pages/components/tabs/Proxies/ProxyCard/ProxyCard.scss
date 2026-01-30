@@ -1,4 +1,4 @@
-@import '../../../../../styles/common';
+@use '../../../../../styles/common';
 
 .proxy-card {
     height: calc(100vh - var(--app-header-height) - var(--app-footer-height));

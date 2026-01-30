@@ -1,12 +1,11 @@
 .operation-details {
     display: grid;
     grid-template-columns: minmax(600px, 1fr);
+    grid-column-gap: 30px;
 
     @media (min-width: 1300px) {
         grid-template-columns: minmax(600px, 1fr) minmax(600px, 1fr);
     }
-
-    grid-column-gap: 30px;
 
     &__alerts,
     &__result {

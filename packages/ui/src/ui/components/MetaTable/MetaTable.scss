@@ -1,4 +1,4 @@
-@import '../../styles/mixins';
+@use '../../styles/mixins';
 
 .meta-table {
     display: flex;
@@ -45,7 +45,7 @@
 
     &__key,
     &__value {
-        @include ellipsis();
+        @include mixins.ellipsis();
         flex: 0 0 auto;
     }
 
@@ -66,7 +66,7 @@
     }
 
     &__file {
-        @include reset-li();
+        @include mixins.reset-li();
     }
 
     &__help-icon {

@@ -1,4 +1,4 @@
-@import '../../styles/mixins.scss';
+@use '../../styles/mixins.scss';
 
 .yql-schema-table {
     $schema: &;
@@ -44,7 +44,7 @@
 
     .data-table {
         &__th {
-            @include sticky-data-table-head();
+            @include mixins.sticky-data-table-head();
         }
     }
 }
