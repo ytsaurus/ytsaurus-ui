@@ -1,12 +1,12 @@
-@import '~@gravity-ui/unipika/dist/unipika';
+@use '~@gravity-ui/unipika/dist/unipika';
 
 // elements import should come first, since specific pages may override some elements styles
 
-@import 'elements/elements';
+@use 'elements/elements';
 
 // Keep legacy styles for old pages in place for a while, but no longer used. This will allow to copy missing styles
 // to the new pages once we found that something has been forgotten. Remove these old accounts/dashboard/operation
 // styles in April, 2019
 
-@import 'cluster-menu/cluster-menu';
-@import 'cluster-page/cluster-page';
+@use 'cluster-menu/cluster-menu';
+@use 'cluster-page/cluster-page';

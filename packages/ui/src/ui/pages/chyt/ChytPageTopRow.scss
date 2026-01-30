@@ -1,4 +1,4 @@
-@import '../../styles/mixins.scss';
+@use '../../styles/mixins.scss';
 
 .chyt-page-top-row {
     &__create-clique {
@@ -10,7 +10,7 @@
     }
 
     &__breadcrumbs {
-        @include top-row-breadcrumbs();
+        @include mixins.top-row-breadcrumbs();
     }
 
     &__create-dialog {

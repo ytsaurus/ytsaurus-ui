@@ -1,5 +1,9 @@
-@import './fonts';
-@import './common';
+@forward './fonts';
+@forward './common';
+
+@use 'sass:list';
+@use 'sass:map';
+@use './common';
 
 @mixin ellipsis() {
     white-space: nowrap;
@@ -39,35 +43,35 @@
         s: (
             16px,
             20px,
-            $offset-heading-small,
+            common.$offset-heading-small,
         ),
         xs: (
             18px,
             20px,
-            $offset-heading-small-x,
+            common.$offset-heading-small-x,
         ),
         m: (
             20px,
             24px,
-            $offset-heading-medium,
+            common.$offset-heading-medium,
         ),
         l: (
             24px,
             28px,
-            $offset-heading-large,
+            common.$offset-heading-large,
         ),
         xl: (
             24px,
             28px,
-            $offset-heading-large,
+            common.$offset-heading-large,
         ),
     );
-    $size: map-get($sizes, $key);
+    $size: map.get($sizes, $key);
 
-    font-size: nth($size, 1);
-    line-height: nth($size, 2);
+    font-size: list.nth($size, 1);
+    line-height: list.nth($size, 2);
     margin: 0;
-    margin-bottom: nth($size, 3);
+    margin-bottom: list.nth($size, 3);
 }
 
 @mixin top-row-breadcrumbs() {

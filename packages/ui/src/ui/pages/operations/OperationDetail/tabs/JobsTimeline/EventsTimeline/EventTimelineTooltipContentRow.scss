@@ -1,4 +1,4 @@
-@import "../mixin/stateMixin";
+@use "../mixin/stateMixin" as mixins;
 
 .yt-event-timeline-tooltip-content-row {
     &__title {
@@ -16,6 +16,6 @@
             width: 4px;
         }
 
-        @include status-border;
+        @include mixins.status-border;
     }
 }

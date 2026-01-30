@@ -1,9 +1,9 @@
-@import 'mixins';
+@use 'mixins';
 
 // Source https://codepen.io/martinwolf/pen/qlFdp
 
 .elements-multiline-ellipsis {
-    @include ellipsis();
+    @include mixins.ellipsis();
     display: block;
 
     line-height: 1.4em;
@@ -20,7 +20,7 @@
 }
 
 .elements-ellipsis {
-    @include ellipsis();
+    @include mixins.ellipsis();
 
     display: inline-block;
 

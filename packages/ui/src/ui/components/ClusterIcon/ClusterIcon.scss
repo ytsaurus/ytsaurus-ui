@@ -1,4 +1,4 @@
-@import '../../containers/ClusterPageHeader/ClusterColor.scss';
+@use '../../containers/ClusterPageHeader/ClusterColor.scss' as color;
 
 .cluster-icon {
     &__wrapper {
@@ -8,7 +8,7 @@
         overflow: hidden;
         position: relative;
         border-radius: 4px;
-        @include cluster-styled;
+        @include color.cluster-styled;
 
         img {
             position: relative;

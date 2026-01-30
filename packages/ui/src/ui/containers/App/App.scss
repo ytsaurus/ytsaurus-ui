@@ -1,38 +1,38 @@
-@import '../../styles/themes/light-theme';
-@import '../../styles/themes/dark-theme';
-@import '../../styles/fonts';
+@use '../../styles/themes/light-theme';
+@use '../../styles/themes/dark-theme';
+@use '../../styles/fonts';
 
 // unipika
 
-@import '~@gravity-ui/unipika/styles/themes';
+@use '~@gravity-ui/unipika/styles/themes';
 
 body {
     margin: 0px;
 
     &.g-root {
-        @include yt-fonts-variables;
+        @include fonts.yt-fonts-variables;
     }
 
     &.theme-light {
-        @include yt-theme-light;
-        @include unipika-default;
+        @include light-theme.yt-theme-light;
+        @include themes.unipika-default;
     }
 
     &.theme-dark {
-        @include yt-theme-dark;
-        @include unipika-dark;
+        @include dark-theme.yt-theme-dark;
+        @include themes.unipika-dark;
     }
 
     &.theme-light-hc {
-        @include yt-theme-light;
-        @include yt-theme-light-a11y;
-        @include unipika-default;
+        @include light-theme.yt-theme-light;
+        @include light-theme.yt-theme-light-a11y;
+        @include themes.unipika-default;
     }
 
     &.theme-dark-hc {
-        @include yt-theme-dark;
-        @include yt-theme-dark-a11y;
-        @include unipika-dark;
+        @include dark-theme.yt-theme-dark;
+        @include dark-theme.yt-theme-dark-a11y;
+        @include themes.unipika-dark;
     }
 
     color: var(--primary-text);

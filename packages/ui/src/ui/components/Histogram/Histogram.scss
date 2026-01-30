@@ -1,4 +1,4 @@
-@import '../../styles/mixins';
+@use '../../styles/mixins';
 
 .histogram {
     $graph-height: 400px;
@@ -21,14 +21,14 @@
         min-width: 200px;
     }
     &__quartiles {
-        @include reset-ul();
+        @include mixins.reset-ul();
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
     }
 
     &__quartiles-item {
-        @include reset-li();
+        @include mixins.reset-li();
         margin-right: 10px;
     }
 

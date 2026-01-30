@@ -1,8 +1,8 @@
-@import '../../../styles/mixins.scss';
+@use '../../../styles/mixins.scss';
 
 .components-top-row-content {
     &__breadcrumbs {
-        @include top-row-breadcrumbs();
+        @include mixins.top-row-breadcrumbs();
         min-width: 160px;
     }
 }

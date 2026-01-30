@@ -1,4 +1,4 @@
-@import '../globals';
+@use '../globals';
 
 /**
   .elements-main-section Should be used only as top level section of pages
@@ -6,7 +6,7 @@
  */
 
 .elements-section {
-    margin-bottom: $section-offset;
+    margin-bottom: globals.$section-offset;
 
     &:last-child {
         margin-bottom: 0;

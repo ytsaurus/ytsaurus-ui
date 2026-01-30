@@ -1,4 +1,4 @@
-@import '../ColumnSelector/constants';
+@use '../ColumnSelector/constants';
 
 .column-selector-modal-content {
     display: flex;
@@ -14,8 +14,8 @@
     flex-grow: 1;
 
     &__header {
-        $horizontal: $column-selector-offset-horizontal;
-        $vertical: $column-selector-offset-vertical;
+        $horizontal: constants.$column-selector-offset-horizontal;
+        $vertical: constants.$column-selector-offset-vertical;
         padding: $vertical $horizontal 0 $horizontal;
     }
 

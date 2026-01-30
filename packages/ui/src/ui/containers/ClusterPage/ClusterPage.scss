@@ -1,6 +1,10 @@
-@import '../../styles/common';
+@use '../../styles/common';
 
 .cluster-page {
+    $self: &;
+
+    margin-bottom: var(--app-footer-height);
+
     &__panes-wrapper {
         margin-top: var(--app-header-height);
         overflow: visible;
@@ -9,10 +13,6 @@
             overflow: visible;
         }
     }
-
-    margin-bottom: var(--app-footer-height);
-
-    $self: &;
 
     &__panes-wrapper_with-pane {
         overflow: auto;

@@ -1,4 +1,4 @@
-@import '../../styles/mixins';
+@use '../../styles/mixins';
 
 .yt-preload-error {
     &__loading {
@@ -10,17 +10,17 @@
         padding-top: 80px;
         margin-left: 80px;
 
-        @media (min-width: $width-medium-screen) {
+        @media (min-width: mixins.$width-medium-screen) {
             margin-left: 120px;
         }
 
-        @media (min-width: $width-large-screen) {
+        @media (min-width: mixins.$width-large-screen) {
             margin-left: 240px;
         }
     }
 
     &__title {
-        @include heading-size(l);
+        @include mixins.heading-size(l);
         margin-bottom: 20px;
         font-weight: var(--yt-font-weight-bold);
     }

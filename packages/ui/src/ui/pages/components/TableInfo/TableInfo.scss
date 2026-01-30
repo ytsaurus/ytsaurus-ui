@@ -1,8 +1,8 @@
-@import '../../../styles/mixins';
+@use '../../../styles/mixins';
 
 .table-info {
     &__info {
-        @include yt-fonts();
+        @include mixins.yt-fonts();
 
         display: flex;
         align-items: center;

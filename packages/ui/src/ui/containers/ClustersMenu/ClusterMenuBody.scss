@@ -1,9 +1,9 @@
-@import '../ClusterPageHeader/ClusterColor.scss';
+@use '../ClusterPageHeader/ClusterColor.scss' as color;
 
 .cluster-menu {
     flex-grow: 1;
 
     &__item-image {
-        @include cluster-styled;
+        @include color.cluster-styled;
     }
 }

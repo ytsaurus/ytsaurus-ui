@@ -1,4 +1,4 @@
-@import '@gravity-ui/illustrations/styles/theme.scss';
+@use '@gravity-ui/illustrations/styles/theme.scss';
 
 .g-root {
     --gil-color-object-base: rgb(232 172 73);
@@ -11,18 +11,18 @@
     --gil-color-object-danger: rgb(255, 4, 1);
 
     &_theme_light {
-        @include g-illustrations-colors-light;
+        @include theme.g-illustrations-colors-light;
     }
 
     &_theme_light-hc {
-        @include g-illustrations-colors-light-hc;
+        @include theme.g-illustrations-colors-light-hc;
     }
 
     &_theme_dark {
-        @include g-illustrations-colors-dark;
+        @include theme.g-illustrations-colors-dark;
     }
 
     &_theme_dark-hc {
-        @include g-illustrations-colors-dark-hc;
+        @include theme.g-illustrations-colors-dark-hc;
     }
 }

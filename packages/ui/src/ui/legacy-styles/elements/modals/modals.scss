@@ -1,4 +1,4 @@
-@import '../mixins';
+@use '../mixins';
 
 $animation-duration: 0.2s;
 
@@ -72,7 +72,7 @@ $animation-duration: 0.2s;
     }
 
     &__header {
-        @include ellipsis();
+        @include mixins.ellipsis();
 
         font-size: 16px;
         font-weight: var(--yt-font-weight-bold);

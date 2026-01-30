@@ -6,6 +6,12 @@
     margin-left: 8px;
     opacity: 0;
 
+    --left: calc(
+        var(--yt-graph--hover-popup-geometry-x, 0) + var(--yt-graph--hover-popup-geometry-width, 0)
+    );
+    transform: translate3d(var(--left, 0), var(--yt-graph--hover-popup-geometry-y, 0), 0)
+        scale(var(--scale));
+
     &_visible {
         opacity: 1;
     }
@@ -18,10 +24,4 @@
         max-height: 16px;
         max-width: 16px;
     }
-
-    --left: calc(
-        var(--yt-graph--hover-popup-geometry-x, 0) + var(--yt-graph--hover-popup-geometry-width, 0)
-    );
-    transform: translate3d(var(--left, 0), var(--yt-graph--hover-popup-geometry-y, 0), 0)
-        scale(var(--scale));
 }

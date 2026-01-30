@@ -1,10 +1,10 @@
-@import '../../styles/mixins';
+@use '../../styles/mixins';
 
 .labels-group {
-    @include reset-ul();
+    @include mixins.reset-ul();
 
     &__label {
-        @include reset-li();
+        @include mixins.reset-li();
 
         font-size: 13px;
         line-height: 24px;

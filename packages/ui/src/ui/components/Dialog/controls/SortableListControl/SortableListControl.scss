@@ -1,13 +1,13 @@
-@import '../../../../styles/mixins';
+@use '../../../../styles/mixins';
 
 .ic-sortable-list-control {
-    @include reset-ul();
+    @include mixins.reset-ul();
 
     display: flex;
     position: relative;
 
     &__item {
-        @include reset-li();
+        @include mixins.reset-li();
 
         border-radius: 4px;
         background-color: var(--light-background);
