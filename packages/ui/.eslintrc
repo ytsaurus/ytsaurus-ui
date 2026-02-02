@@ -3,7 +3,7 @@
     "plugins": ["react", "lodash"],
     "root": true,
     "rules": {
-        "import/no-cycle": ["warn", { "maxDepth": 2, "ignoreExternal": true }],
+        "import/no-cycle": ["warn", { "maxDepth": 5, "ignoreExternal": true }],
         "no-console": "error",
         "new-cap": 0,
         "import/order": 0,

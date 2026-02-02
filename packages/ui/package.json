@@ -44,7 +44,7 @@
     "lint": "npm run lint:lodash-imports && npm run lint:file-names && npm run lint:js && npm run lint:styles",
     "lint:file-names": "./scripts/check-file-names-for-js-duplicates.sh",
     "lint:fix": "npm run lint:js -- --fix && npm run lint:styles -- --fix",
-    "lint:js": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --ignore-pattern src/ui/vendor --quiet ",
+    "lint:js": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --ignore-pattern src/ui/vendor",
     "lint:styles": "stylelint 'src/ui/**/*.scss' --customSyntax postcss-scss",
     "lint:lodash-imports": "scripts/check-lodash-imports.sh ./src",
     "notify:mail": "node scripts/notify.js",

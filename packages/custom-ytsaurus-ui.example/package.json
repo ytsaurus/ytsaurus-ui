@@ -11,7 +11,7 @@
     "dev:app": "USE_RSPACK=1 APP_ENV=${APP_ENV:-development} NODE_OPTIONS=\"--max-http-header-size=204800 ${NODE_OPTIONS}\" app-builder dev --config ./app-builder.config.ts",
     "lint": "npm run lint:js && npm run lint:styles",
     "lint:fix": "npm run lint:js -- --fix && npm run lint:styles -- --fix",
-    "lint:js": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --ignore-pattern src/ui/vendor --quiet",
+    "lint:js": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --ignore-pattern src/ui/vendor",
     "lint:styles": "stylelint 'src/ui/**/*.scss' --customSyntax postcss-scss",
     "start": "APP_INSTALLATION=custom NODE_OPTIONS=\"--max-http-header-size=204800 ${NODE_OPTIONS}\" node dist/server"
   },
