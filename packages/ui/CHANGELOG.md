@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.5.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.5.0...ui-v3.5.1) (2026-02-02)
+
+
+### Bug Fixes
+
+* better default docsBaseurl [YTSAURUSSUP-2262] ([d0bcc3e](https://github.com/ytsaurus/ytsaurus-ui/commit/d0bcc3e75ddb7ec9ac611854db6bf3c071b482b2))
+* **Components/Node:** fix a mispring [YTFRONT-5511] ([cb3390f](https://github.com/ytsaurus/ytsaurus-ui/commit/cb3390fb61ecc6c571a3d0a843a298bc5bdd39e4))
+* **Components/Versions:** do not use autofocus for 'Host' filter [YTSAURUSSUP-2262] ([306338c](https://github.com/ytsaurus/ytsaurus-ui/commit/306338c3f0cf536f19d8b8b018bbc8747625282a))
+* **Dashboard:** enabled new dashbaord by default [YTSAURUSSUP-2262] ([b09cec1](https://github.com/ytsaurus/ytsaurus-ui/commit/b09cec1fe138caef82685d475952d5eee8b0704e))
+* **Navigation/MapNode:** add 'Settings' button with 'Group nodes by type' [YTSAURUSSUP-2262] ([0e5c599](https://github.com/ytsaurus/ytsaurus-ui/commit/0e5c599df27fc04e25cf8e930c4e8e913b9a7d7a))
+* **oatuh:** fix maxAge of YT_OAUTH_REFRESH_TOEKEN_NAME [YTFRONT-5504] ([d289da8](https://github.com/ytsaurus/ytsaurus-ui/commit/d289da8396e5949389b2ece6d3ddb25ff1bc172e))
+* **Operation/JobsTimeline:** increase jobs count [YTFRONT-5484] ([6553fc6](https://github.com/ytsaurus/ytsaurus-ui/commit/6553fc6acecf9abb0e43fdf23685b09dd1be5613))
+* **Scheduling:** better sorting for 'Pool/Operation' [YTFRONT-5469] ([02d9800](https://github.com/ytsaurus/ytsaurus-ui/commit/02d9800fabddb50497f1dc4481c3d5be635fc11b))
+* **Scheduling:** fit breadcrums to visible area [YTFRONT-5506] ([5f47b66](https://github.com/ytsaurus/ytsaurus-ui/commit/5f47b663bb8738ce6c860bf2c4240e0892c99a1b))
+* **server:** do not use cacheable-lookup [YTSAURUSSUP-2262] ([03f0751](https://github.com/ytsaurus/ytsaurus-ui/commit/03f07512b7a97fa924f3223b951fb4ab24180dd4))
+* **styles:** resolve SASS deprecation warnings ([448e6f2](https://github.com/ytsaurus/ytsaurus-ui/commit/448e6f2acb9d648b1f4b5c56b67efa539d045d77))
+
 ## [3.5.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.4.1...ui-v3.5.0) (2026-01-20)
 
 
