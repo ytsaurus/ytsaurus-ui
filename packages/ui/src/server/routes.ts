@@ -44,6 +44,7 @@ import {
 } from './controllers/ai-chat';
 import {prometheusQueryRange} from './controllers/prometheus/prometheus-view-range';
 import {prometheusDiscoverValues} from './controllers/prometheus/prometheus-discover-values';
+import {ytAccesLogCheckAvailable, ytAccessLogApi} from './controllers/yt-access-log-api';
 
 const HOME_INDEX_TARGET: AppRouteDescription = {handler: homeIndexFactory(), ui: true};
 
@@ -112,6 +113,10 @@ const routes: AppRoutes = {
     'POST /api/code-assistant/conversations/:conversationId/summarize-title': {
         handler: summarizeConversationTitle,
     },
+
+    'GET /api/access-log/:ytAuthCluster/check-available': {handler: ytAccesLogCheckAvailable},
+    'GET /api/access-log/:ytAuthCluster/:action': {handler: ytAccessLogApi},
+    'POST /api/access-log/:ytAuthCluster/:action': {handler: ytAccessLogApi},
 
     'GET /:ytAuthCluster/': HOME_INDEX_TARGET,
     'GET /:ytAuthCluster/:page': HOME_INDEX_TARGET,
