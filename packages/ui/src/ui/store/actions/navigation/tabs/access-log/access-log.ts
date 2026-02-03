@@ -26,9 +26,7 @@ import {
     AccessLogFiltersState,
 } from '../../../../../store/reducers/navigation/tabs/access-log/access-log-filters';
 import CancelHelper, {isCancelled} from '../../../../../utils/cancel-helper';
-import {getAccessLogBasePath} from '../../../../../config';
 import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
-import {getCluster} from '../../../../selectors/global';
 
 type AccessLogThunkAction<Res = any> = ThunkAction<Res, RootState, any, AccessLogAction>;
 type AccessLogFiltersThunkAction<Res = any> = ThunkAction<
@@ -64,14 +62,15 @@ export function fetchAccessLog(): AccessLogThunkAction {
 
         const state = getState();
         const params = getAccessLogRequestParams(state);
+        const {cluster} = params;
 
         dispatch({type: ACCESS_LOG_PARTIAL, data: {params}});
         return Promise.all([
-            axios.get(`${getAccessLogBasePath()}/ready`),
+            axios.get(`/api/access-log/${cluster}/ready`),
             axios
                 .request<AccessLogAvailableTimeRange>({
                     method: 'POST',
-                    url: `${getAccessLogBasePath()}/visible-time-range`,
+                    url: `/api/access-log/${cluster}/visible-time-range`,
                     withCredentials: true,
                     data: {cluster: params.cluster},
                     cancelToken: accesLogCancelHelper.removeAllAndGenerateNextToken(),
@@ -83,7 +82,7 @@ export function fetchAccessLog(): AccessLogThunkAction {
                 }),
             axios.request<AccessLogData>({
                 method: 'POST',
-                url: `${getAccessLogBasePath()}/access_log`,
+                url: `/api/access-log/${cluster}/access_log`,
                 data: params,
                 withCredentials: true,
                 cancelToken: accesLogCancelHelper.generateNextToken(),
@@ -106,8 +105,8 @@ export function fetchAccessLog(): AccessLogThunkAction {
 
 export const fetchAccessLogQtId = (): AccessLogThunkAction => async (_, getState) => {
     const state = getState();
-    const cluster = getCluster(state);
     const params = getAccessLogRequestParams(state);
+    const {cluster} = params;
 
     const newParams = {...params} as Partial<typeof params>;
     delete newParams.pagination;
@@ -115,7 +114,7 @@ export const fetchAccessLogQtId = (): AccessLogThunkAction => async (_, getState
     const {data} = await wrapApiPromiseByToaster(
         axios.request({
             method: 'POST',
-            url: `${getAccessLogBasePath()}/qt_access_log`,
+            url: `/api/access-log/${cluster}/qt_access_log`,
             withCredentials: true,
             data: newParams,
         }),

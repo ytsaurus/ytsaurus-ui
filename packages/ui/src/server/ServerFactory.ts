@@ -18,7 +18,10 @@ export interface ServerFactory {
         vcs: Omit<VCSSettings, 'type'>,
         token?: string,
     ): VcsApi | undefined;
-    getAuthHeaders(type: 'ai-chat', req: Request): Record<string, string | undefined> | undefined;
+    getAuthHeaders(
+        type: 'aiChat' | 'accessLogProd' | 'accessLogTest',
+        req: Request,
+    ): Record<string, string | undefined> | undefined;
 }
 
 let app: ExpressKit;
@@ -53,7 +56,10 @@ const serverFactory: ServerFactory = {
     createCustomVcsApi() {
         return undefined;
     },
-    getAuthHeaders(_type, _req) {
+    getAuthHeaders(type, req) {
+        if (type === 'accessLogProd' || type === 'accessLogTest') {
+            return req.yt.ytApiAuthHeaders;
+        }
         return undefined;
     },
 };
