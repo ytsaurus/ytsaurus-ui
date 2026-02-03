@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import {useSelector} from '../../../store/redux-hooks';
 import {Redirect, Route, Switch, useRouteMatch} from 'react-router';
 
-import {Alert, Flex, Link} from '@gravity-ui/uikit';
+import {Alert, Button, Flex, Link} from '@gravity-ui/uikit';
 
 import Specification from '../../../pages/job/tabs/Specification/Specification';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
@@ -22,6 +22,7 @@ import {getJobGeneralYsonSettings} from '../../../store/selectors/thor/unipika';
 import {DEFAULT_TAB, Tab} from '../../../constants/job';
 import {RootState} from '../../../store/reducers';
 import {Page} from '../../../constants/index';
+import {getCluster, getClusterUiConfig} from '../../../store/selectors/global';
 
 import {TabSettings, makeTabProps} from '../../../utils';
 
@@ -32,7 +33,6 @@ import {ClickableText} from '../../../components/ClickableText/ClickableText';
 import ChartLink from '../../../components/ChartLink/ChartLink';
 import {getJob} from '../../../store/selectors/job/detail';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
-import {getCluster} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
 import {StaleJobIcon} from '../../../pages/operations/OperationDetail/tabs/Jobs/StaleJobIcon';
 import {Host} from '../../../containers/Host/Host';
@@ -41,6 +41,8 @@ import './JobGeneral.scss';
 import {UI_TAB_SIZE} from '../../../constants/global';
 import {YsonDownloadButton} from '../../../components/DownloadAttributesButton';
 import {useJobProfilingUrl} from './hooks/useJobProfilingUrl';
+import {useIsGpuProfilerAvailable} from './hooks/useIsGpuProfilerAvailable';
+import {useRunJobShellCommand} from './hooks/useRunJobShellCommand';
 
 const block = cn('job-general');
 
@@ -50,6 +52,7 @@ export default function JobGeneral() {
     const settings = useSelector(getJobGeneralYsonSettings);
     const job = useSelector(getJob);
     const {loaded} = useSelector((state: RootState) => state.job.general);
+    const {gpu_profiler_command} = useSelector(getClusterUiConfig);
 
     const {url: traceUrl, title: traceTitle} = useJobProfilingUrl({
         operationId: job?.operationId,
@@ -58,6 +61,12 @@ export default function JobGeneral() {
         pool_tree: job?.pool_tree,
         cluster,
     });
+
+    const hasGpuPerforator = useIsGpuProfilerAvailable({
+        operationId: job?.operationId,
+        jobState: job?.state,
+    });
+    const {run, loading} = useRunJobShellCommand({jobId: job?.id, command: gpu_profiler_command});
 
     if (!loaded) {
         return null;
@@ -292,6 +301,15 @@ export default function JobGeneral() {
                                     </Link>
                                 ),
                                 visible: Boolean(traceUrl),
+                            },
+                            {
+                                key: 'Profiler',
+                                value: (
+                                    <Button onClick={run} loading={loading}>
+                                        GPU perforator
+                                    </Button>
+                                ),
+                                visible: hasGpuPerforator,
                             },
                         ],
                     ]}
