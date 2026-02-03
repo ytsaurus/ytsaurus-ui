@@ -551,16 +551,171 @@ export type GetQueryTrackerInfoResponse = {
     };
 };
 
-export type FlowExecuteCommand = 'describe-pipeline';
-
-export type FlowExecuteParams<Command extends FlowExecuteCommand> = {
-    flow_command: Command;
-    pipeline_path: string;
+export type FlowExecuteTypes = {
+    'describe-computation': {
+        ParamsType: {
+            flow_command: 'describe-computation';
+            pipeline_path: string;
+        };
+        BodyType: {
+            body?: {computation_id: string};
+        };
+        ResponseType: FlowComputationDetailsType;
+    };
+    'describe-computations': {
+        ParamsType: {
+            flow_command: 'describe-computations';
+            pipeline_path: string;
+        };
+        BodyType: {body?: undefined};
+        ResponseType: FlowDescribeComputationsData;
+    };
+    'describe-partition': {
+        ParamsType: {
+            flow_command: 'describe-partition';
+            pipeline_path: string;
+        };
+        BodyType: {
+            body?: {partition_id: string};
+        };
+        ResponseType: FlowPartitionDetailsType;
+    };
+    'describe-pipeline': {
+        ParamsType: {
+            flow_command: 'describe-pipeline';
+            pipeline_path: string;
+        };
+        BodyType: {
+            body?: {status_only?: boolean};
+        };
+        ResponseType: FlowDescribePipelineData;
+    };
+    'describe-worker': {
+        ParamsType: {
+            flow_command: 'describe-worker';
+            pipeline_path: string;
+        };
+        BodyType: {
+            body?: {worker: string};
+        };
+        ResponseType: FlowWorkerDetailsType;
+    };
+    'describe-workers': {
+        ParamsType: {
+            flow_command: 'describe-workers';
+            pipeline_path: string;
+        };
+        BodyType: {body?: undefined};
+        ResponseType: FlowDescribeWorkersData;
+    };
+    'update-worker': {
+        ParamsType: {
+            flow_command: 'update-worker';
+            pipeline_path: string;
+        };
+        BodyType: {
+            body: {worker: string; banned: boolean};
+        };
+        ResponseType: unknown;
+    };
+    'kill-worker': {
+        ParamsType: {
+            flow_command: 'kill-worker';
+            pipeline_path: string;
+        };
+        BodyType: {
+            body: {worker: string};
+        };
+        ResponseType: unknown;
+    };
 };
 
-export type FlowExecuteData = {
-    'describe-pipeline': FlowDescribePipelineData;
+export type FlowPartitionDetailsType = FlowComputationPartitionType & {
+    previous_rebalancing_instant: string;
+
+    previous_job_fail_instant: string;
+    messages?: Array<FlowMessageType>;
+    last_retryable_error_instant: string;
 };
+
+export type FlowComputationDetailsType = FlowComputationType & {
+    partitions: Array<FlowComputationPartitionType>;
+    performance_metrics: Record<string, FlowComputationPerformanceMetrics>;
+    partition_with_error_by_time_and_type?: Record<
+        '1m' | '5m' | '30m',
+        FlowComputationPartitionErrorsStats
+    >;
+};
+
+export type FlowComputationPartitionErrorsStats = {
+    restart_because_fail: FlowComputationPartitionErrorsStatsItem;
+    restart_because_rebalancing: FlowComputationPartitionErrorsStatsItem;
+    has_retryable_errors: FlowComputationPartitionErrorsStatsItem;
+    total_with_problems: FlowComputationPartitionErrorsStatsItem;
+};
+export type FlowComputationPartitionErrorsStatsItem = {count: number; example_partition?: string};
+
+export type FlowComputationPartitionType = {
+    bytes_per_second: number;
+    computation_id: string;
+    cpu_usage: number;
+    current_job_id: string;
+    current_worker_address: string;
+    current_worker_incarnation_id: stringF;
+    memory_usage: number;
+    messages_per_second: number;
+    partition_id: string;
+    state: FlowPartitionStateType;
+    job_state: FlowPartitionJobStateType;
+    status: FlowNodeStatusType;
+    lower_key: string;
+    upper_key: string;
+    tracing_address: string;
+    key_or_range: string;
+    lexicographically_serialized_key_or_range: string;
+};
+
+export type FlowComputationPerformanceMetrics = {
+    bytes_per_second: number;
+    cpu_usage: number;
+    memory_usage: number;
+    messages_per_second: 0;
+    bytes_per_second_example_partition?: string;
+    cpu_usage_example_partition?: string;
+    memory_usage_example_partition?: string;
+    messages_per_second_example_partition?: string;
+};
+
+export type FlowDescribeWorkersData = {
+    workers: Array<FlowWorkderData>;
+};
+
+export type FlowWorkerDetailsType = FlowWorkerData & {};
+
+export type FlowWorkerData = {
+    address: string;
+    banned: boolean;
+    bytes_per_second: number;
+    cpu_usage: number;
+    groups: Array<unknown>;
+    incarnation_id: string;
+    memory_usage: number;
+    messages_per_second: number;
+    monitoring_address: string;
+    register_time: string;
+    status: FlowNodeStatusType;
+    messages: Array<FlowMessageType>;
+    deploy_address: string;
+    backtrace_address: string;
+    partitions: Array<FlowComputationPartitionType>;
+    flamegraph_address: string;
+};
+
+export type FlowDescribeComputationsData = {
+    computations: Array<FlowComputationType>;
+};
+
+export type FlowExecuteCommand = keyof FlowExecuteTypes;
 
 type ComputationId = string;
 type StreamId = string;
@@ -568,7 +723,7 @@ type SinkId = string;
 type SourceId = string;
 
 export type FlowDescribePipelineData = {
-    computations: Record<ComputationId, FlowComputation>;
+    computations: Record<ComputationId, FlowComputationType>;
     // All elements are always linked with computation, every stream belong to a computaion
     streams: Record<StreamId, FlowStream>;
 
@@ -577,45 +732,50 @@ export type FlowDescribePipelineData = {
     // A sources has outgouing connection to a computation or to a computation.input_streams
     sources: Record<SourceId, FlowSink>;
 
-    messages?: Array<FlowMessage>;
+    messages?: Array<FlowMessageType>;
 };
 
 export type FlowNodeBase = {
     id: string;
     name: string;
-    status: FlowNodeStatus;
+    status: FlowNodeStatusType;
 
     description?: string;
-    messages?: Array<FlowMessage>;
+    messages?: Array<FlowMessageType>;
 };
 
-export type FlowMessage = {level: FlowNodeStatus} & (
-    | {yson?: unknown; text?: string; error?: never}
-    | {error?: YTError; yson?: never; text?: never}
+export type FlowMessageType = {level: FlowNodeStatusType} & (
+    | {text?: string; yson?: unknown; error?: never; markdown_text?: never}
+    | {text?: string; yson?: never; error?: YTError; markdown_text?: never}
+    | {text?: string; yson?: never; error?: never; markdown_text?: string}
 );
 
-export type FlowComputation = FlowNodeBase &
+export type FlowComputationType = FlowNodeBase &
     FlowComputationStreams & {
+        class_name: string;
+        highlight_cpu_usage?: boolean;
+        hightlight_memory_usage?: boolean;
+
         metrics: {
             cpu_usage_current: number;
             cpu_usage_30s: number;
             cpu_usage_10m: number;
             memory_usage_current: number;
             memory_usage_30s: number;
-            memory_usage_current: number;
+            memory_usage_10m: number;
         };
         partitions_stats?: {
             count: number;
-            count_by_state?: Record<
-                'completed' | 'executing' | 'transient' | 'interrupted',
-                number | undefined
-            >;
+            count_by_state?: Record<FlowPartitionStateType, number | undefined>;
         };
         group_by_schema_str: string;
         epoch_per_second: number;
     };
 
-export type FlowNodeStatus =
+export type FlowPartitionStateType = 'completed' | 'executing' | 'transient' | 'interrupted';
+export type FlowPartitionJobStateType = 'unknown' | 'recovering' | 'working' | 'stopped';
+
+export type FlowNodeStatusType =
     | 'minimum'
     | 'trace'
     | 'debug'
@@ -625,6 +785,8 @@ export type FlowNodeStatus =
     | 'alert'
     | 'fatal'
     | 'maximum';
+
+export type FlowComputationstatus = 'info' | 'warning' | 'error';
 
 export type FlowComputationStreams = Record<FlowComputationStreamType, Array<StreamId>>;
 

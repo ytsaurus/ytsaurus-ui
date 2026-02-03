@@ -34,6 +34,7 @@ export interface MetaTableProps {
 export interface MetaTableItem {
     key: string;
     label?: React.ReactChild;
+    labelTopPadding?: string;
     value: boolean | React.ReactNode;
     icon?: React.ReactNode;
     visible?: boolean;
@@ -62,9 +63,14 @@ function splitItems(items: MetaTableProps['items'], subTitles?: Array<string>) {
 }
 
 export default class MetaTable extends Component<MetaTableProps> {
-    renderKey(key: string, icon: React.ReactNode, label?: React.ReactChild) {
+    renderKey(item: MetaTableItem) {
+        const {key, icon, label, labelTopPadding} = item;
         return (
-            <div className={itemBlock('key', {key: toClassName(key)})} key={key + '-key'}>
+            <div
+                className={itemBlock('key', {key: toClassName(key)})}
+                style={{paddingTop: labelTopPadding}}
+                key={key + '-key'}
+            >
                 {icon}
                 {label !== undefined ? label : hammer.format['ReadableField'](key)}
             </div>
@@ -104,7 +110,7 @@ export default class MetaTable extends Component<MetaTableProps> {
             <Fragment>
                 {map_(visibleItems, (item) => (
                     <Fragment key={item.key + '-fragment'}>
-                        {this.renderKey(item.key, item.icon, item.label)}
+                        {this.renderKey(item)}
                         {this.renderValue(item)}
                     </Fragment>
                 ))}

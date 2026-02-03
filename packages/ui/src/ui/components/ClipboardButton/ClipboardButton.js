@@ -102,6 +102,8 @@ export default class ClipboardButton extends Component {
             className,
             visibleOnRowHover,
             inlineMargins,
+            // eslint-disable-next-line no-unused-vars
+            hotkeyScope,
             ...buttonProps
         } = this.props;
 

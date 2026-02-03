@@ -70,6 +70,7 @@ export type TextProps = Pick<
     bold?: boolean;
     noWrap?: boolean;
     escaped?: boolean;
+    capitalize?: boolean;
 };
 
 export function YTText({
@@ -80,6 +81,7 @@ export function YTText({
     bold,
     noWrap,
     escaped,
+    capitalize,
     children,
     ...rest
 }: TextProps) {
@@ -94,6 +96,7 @@ export function YTText({
                     'no-wrap': noWrap,
                     escaped,
                     clickable: Boolean(rest.onClick),
+                    capitalize,
                 },
                 className,
             )}

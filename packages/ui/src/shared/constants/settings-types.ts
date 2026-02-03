@@ -195,6 +195,12 @@ type SchedulingSettings = {
     'global::scheduling::overviewColumnSizes': Record<string, number>;
 };
 
+type FlowSettings = {
+    'global::flow::computationsColumnSizes': Record<string, number>;
+    'global::flow::partitionsColumnSizes': Record<string, number>;
+    'global::flow::workersColumnSizes': Record<string, number>;
+};
+
 export interface DefaultSettings {
     GLOBAL: GlobalSettings;
     YSON: YsonSettings;
@@ -210,6 +216,7 @@ export interface DefaultSettings {
 }
 
 export type DescribedSettings = GlobalSettings &
+    FlowSettings &
     EditorSettings &
     YsonSettings &
     DevelopmentSettings &

@@ -1,0 +1,8 @@
+{
+  "computations": "Computations",
+  "workers": "Workers",
+  "partition": "Partition",
+  "pipeline": "Pipeline",
+  "leader-controller-address": "Leader controller address",
+  "open-in-navigation": "Open in Navigation"
+}

@@ -3,6 +3,7 @@ import componentIcon from '../assets/img/svg/page-components.svg';
 import dashboardIcon from '../assets/img/svg/page-dashboard.svg';
 import groupsIcon from '../assets/img/svg/page-groups.svg';
 import navigationIcon from '../assets/img/svg/page-navigation.svg';
+import pipelineIcon from '../assets/img/svg/icons/node-pipeline.svg';
 import operationsIcon from '../assets/img/svg/page-operations.svg';
 import pathViewerIcon from '../assets/img/svg/page-path-viewer.svg';
 import schedulingIcon from '../assets/img/svg/page-scheduling.svg';
@@ -23,6 +24,7 @@ export const PAGES_WITH_ICONS = [
     {id: Page.DASHBOARD, icon: dashboardIcon},
     {id: Page.GROUPS, icon: groupsIcon},
     {id: Page.NAVIGATION, icon: navigationIcon},
+    {id: Page.FLOWS, icon: pipelineIcon},
     {id: Page.OPERATIONS, icon: operationsIcon},
     {id: Page.PATH_VIEWER, icon: pathViewerIcon},
     {id: Page.SCHEDULING, icon: schedulingIcon},

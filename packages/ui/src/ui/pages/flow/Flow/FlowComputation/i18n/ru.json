@@ -1,0 +1,17 @@
+{
+  "bytes-per-second": "Байт в секунду",
+  "cpu-usage": "Использование CPU",
+  "computation": "Компьютейшн",
+  "details": "Детали",
+  "health": "Здоровье",
+  "job-state": "Состояние джоба",
+  "key-range": "Ключ/Диапазон",
+  "computation-data": "Загруженные данные",
+  "memory-usage": "Использование памяти",
+  "message-per-second": "Сообщений в секунду",
+  "monitoring": "Мониторинг",
+  "partition": "Партиция",
+  "search-partition-by-id": "Поиск партиции по идентификатору...",
+  "state": "Состояние",
+  "worker": "Воркер"
+}

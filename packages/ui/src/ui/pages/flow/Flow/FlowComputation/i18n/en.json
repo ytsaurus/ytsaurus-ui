@@ -1,0 +1,17 @@
+{
+  "bytes-per-second": "Bytes per second",
+  "cpu-usage": "CPU usage",
+  "computation": "Computation",
+  "details": "Details",
+  "health": "Health",
+  "job-state": "Job state",
+  "key-range": "Key/Range",
+  "computation-data": "Computation data",
+  "memory-usage": "Memory usage",
+  "message-per-second": "Message per second",
+  "monitoring": "Monitoring",
+  "partition": "Partition",
+  "search-partition-by-id": "Search partition by Id...",
+  "state": "State",
+  "worker": "Worker"
+}

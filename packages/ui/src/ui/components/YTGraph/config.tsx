@@ -1,7 +1,7 @@
 import React from 'react';
 
 import ELK, {ElkExtendedEdge, ElkNode} from 'elkjs';
-import {CanvasBlock, ECameraScaleLevel, TBlock, TConnection} from '@gravity-ui/graph';
+import {CanvasBlock, ECameraScaleLevel, ECanDrag, TBlock, TConnection} from '@gravity-ui/graph';
 
 import {HookGraphParams, MultipointConnection, useElk} from '@gravity-ui/graph/react';
 
@@ -30,7 +30,10 @@ export const getGraphColors = (): RecursivePartial<TGraphColors> => {
 
 export function useConfig<T extends TBlock>(
     blockComponents: Record<T['is'], typeof CanvasBlock<T>>,
-    {useDefaultConnection}: {useDefaultConnection?: boolean} = {},
+    {
+        useDefaultConnection,
+        canDrag = ECanDrag.NONE,
+    }: {useDefaultConnection?: boolean; canDrag?: ECanDrag} = {},
 ): {
     config: HookGraphParams;
     isBlock: (v: unknown) => v is CanvasBlock<T>;
@@ -45,6 +48,7 @@ export function useConfig<T extends TBlock>(
                 canCreateNewConnections: false,
                 canZoomCamera: true,
                 blockComponents,
+                canDrag,
                 // @ts-expect-error
                 background: NoopComponent,
             },

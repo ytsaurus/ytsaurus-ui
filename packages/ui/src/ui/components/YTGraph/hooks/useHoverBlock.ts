@@ -13,8 +13,7 @@ export function useHoverBlock<B extends TBlock>(
     const [block, setBlock] = useState<CanvasBlock<B> | undefined>(undefined);
 
     const handleOnGraphMouseEnter = useCallback(({detail}: GraphMouseEvent) => {
-        const targetBlock =
-            isBlockNode(detail.target) && !detail.target.state.selected ? detail.target : undefined;
+        const targetBlock = isBlockNode(detail.target) ? detail.target : undefined;
 
         timerId.current = window.setTimeout(() => {
             setBlock(targetBlock);

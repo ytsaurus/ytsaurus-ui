@@ -118,6 +118,7 @@ const routes: AppRoutes = {
     'GET /:ytAuthCluster/:page/:tab': HOME_INDEX_TARGET,
     'GET /:ytAuthCluster/:page/:operation/:tab': HOME_INDEX_TARGET,
     'GET /:ytAuthCluster/:page/:operation/:job/:tab': HOME_INDEX_TARGET,
+    'GET /:ytAuthCluster/:page/:computations/:computation/:partition/:id': HOME_INDEX_TARGET,
 };
 
 export default routes;

@@ -27,7 +27,7 @@ function getQTApiSetup(): {proxy?: string} {
 
 type Credentials = {
     user: string;
-    password_sha256?: string;
+    password_sha256: string;
 };
 export const manageTokensGetList = (
     credentials: Credentials,

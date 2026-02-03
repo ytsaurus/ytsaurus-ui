@@ -10,12 +10,11 @@ import {
     BatchSubRequest,
     ExpectedVersion,
     FlowExecuteCommand,
-    FlowExecuteData,
-    FlowExecuteParams,
+    FlowExecuteTypes,
     GetFlowViewData,
     GetParams,
     GetPipelineStateData,
-    GetQueryTrackerInfoResponse,
+    /* GetQueryTrackerInfoResponse, */
     ListJobsParameters,
     ListJobsResponse,
     ListOperationEventsParameters,
@@ -30,7 +29,7 @@ import {YTApiId, YTApiIdType} from '../../shared/constants/yt-api-id';
 
 import {rumDebugLog2, rumGetTime, rumSendDelta} from './rum-counter';
 import {RumMeasureTypes} from './rum-measure-types';
-import type {ValueOf} from '../types';
+import type {FIX_MY_TYPE, ValueOf} from '../types';
 
 export {YTApiId};
 
@@ -79,9 +78,17 @@ type YTApiV4 = {
     list<Value = any>(...args: ApiMethodParameters<GetParams>): Promise<{value: Value}>;
     exists(...args: ApiMethodParameters<PathParams>): Promise<{value: boolean}>;
 
+    startQuery(...args: ApiMethodParameters<FIX_MY_TYPE>): Promise<FIX_MY_TYPE>;
+    listQueries(...args: ApiMethodParameters<FIX_MY_TYPE>): Promise<FIX_MY_TYPE>;
+    getQuery(...args: ApiMethodParameters<FIX_MY_TYPE>): Promise<FIX_MY_TYPE>;
+    abortQuery(...args: ApiMethodParameters<FIX_MY_TYPE>): Promise<FIX_MY_TYPE>;
+    readQueryResults(...args: ApiMethodParameters<FIX_MY_TYPE>): Promise<FIX_MY_TYPE>;
+    getQueryResults(...args: ApiMethodParameters<FIX_MY_TYPE>): Promise<FIX_MY_TYPE>;
+    alterQuery(...args: ApiMethodParameters<FIX_MY_TYPE>): Promise<FIX_MY_TYPE>;
     getQueryTrackerInfo(
         ...args: ApiMethodParameters<{stage?: string}>
-    ): Promise<GetQueryTrackerInfoResponse>;
+    ): Promise<FIX_MY_TYPE /* GetQueryTrackerInfoResponse */>;
+
     switchLeader(
         ...args: ApiMethodParameters<{cell_id: string; new_leader_address: string}>
     ): Promise<any>;
@@ -115,8 +122,8 @@ type YTApiV4 = {
     getFlowView(...args: ApiMethodParameters<PipelineParams>): Promise<GetFlowViewData>;
     listJobs(...args: ApiMethodParameters<ListJobsParameters>): Promise<ListJobsResponse>;
     flowExecute<Command extends FlowExecuteCommand>(
-        ...args: ApiMethodParameters<FlowExecuteParams<Command>>
-    ): Promise<FlowExecuteData[Command]>;
+        ...args: ApiMethodParameters<FlowExecuteTypes[Command]['ParamsType']>
+    ): Promise<FlowExecuteTypes[Command]['ResponseType']>;
 
     remountTable(...args: ApiMethodParameters<TableParams>): Promise<void>;
 
@@ -124,7 +131,7 @@ type YTApiV4 = {
         ...args: ApiMethodParameters<ListOperationEventsParameters>
     ): Promise<ListOperationEventsResponse>;
 
-    [method: string]: (...args: ApiMethodParameters<any>) => Promise<any>;
+    getTabletErrors(...args: ApiMethodParameters<FIX_MY_TYPE>): Promise<FIX_MY_TYPE>;
 };
 
 type YTApiV4OmitT = Omit<YTApiV4, 'get' | 'list' | 'executeBatch'>;

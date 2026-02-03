@@ -45,16 +45,16 @@ export interface Item<T extends string = string> {
 
 const emptyValue: Array<string> = [];
 
-export default function SelectFacade(props: YTSelectProps) {
+export default function SelectFacade<T extends string = string>(props: YTSelectProps<T>) {
     const {items, onUpdate, onChange, value, ...rest} = props;
     const {options, hashByValue} = React.useMemo(() => {
         return prepareItems(items);
     }, [items]);
 
     const handleChange = React.useCallback(
-        (value: Required<YTSelectProps>['value']) => {
-            onChange?.(value);
-            onUpdate?.(value);
+        (newValue: Required<YTSelectProps<T>>['value']) => {
+            onChange?.(newValue);
+            onUpdate?.(newValue);
         },
         [onChange, onUpdate],
     );
@@ -66,7 +66,7 @@ export default function SelectFacade(props: YTSelectProps) {
 
     return (
         <CustomSelect
-            onUpdate={handleChange}
+            onUpdate={handleChange as any}
             {...rest}
             {...{value: filteredValue, options, hashByValue}}
         />

@@ -1,4 +1,4 @@
-export type YTApiIdType = YTApiId | `customApi${string}`;
+export type YTApiIdType = YTApiId | `customApi${string}` | `flowExecute_${string}`;
 
 export const enum YTApiId {
     // Names of ids for node-controllers should be started with 'ui_'-prefix
@@ -204,6 +204,7 @@ export const enum YTApiId {
 
     //pipeline/flow
     flowExecuteDescribePipeline = 'flowExecuteDescribePipeline',
-
     prometheusMonitoringLayout = 'prometheusMonitoringLayout',
+    flowExecute = 'flowExecute',
+    flowAttributes = 'flowAttributes',
 }

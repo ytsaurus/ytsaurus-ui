@@ -1,0 +1,44 @@
+@use '../../../../components/WithStickyToolbar/Toolbar/Toolbar.scss' as *;
+
+.yt-flow-graph {
+    &__graph-messages {
+        position: absolute;
+        top: -60px;
+        right: 0;
+    }
+
+    &__graph {
+        position: relative;
+
+        width: calc(100vw - var(--gn-aside-header-size) - 40px);
+        height: calc(
+            100vh - var(--app-header-height) * 4 - var(--app-footer-height) -
+                $TOOLBAR_COMPONENT_HEIGHT
+        );
+    }
+
+    &__item-container {
+        display: flex;
+        overflow: hidden;
+    }
+
+    &__item {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        overflow: hidden;
+    }
+
+    &__item-popup {
+        padding: 10px 12px;
+
+        &_type_computation-group,
+        &_type_computation {
+            min-width: 360px;
+        }
+
+        &_type_stream {
+            min-width: 260px;
+        }
+    }
+}

@@ -1,6 +1,7 @@
 import {Page} from '../../../shared/constants/settings';
-import {Tab as ComponentsTab} from '../../constants/components/main';
 import {YT} from '../../config/yt-config';
+import {Tab as ComponentsTab} from '../../constants/components/main';
+import {FlowTab, FlowTabType} from '../../store/reducers/flow/filters';
 
 export * from './navigation';
 
@@ -35,4 +36,46 @@ export function makeAccountsUrl(account: string, cluster?: string) {
 
 export function makeBundleUrl({bundle, cluster}: {bundle: string; cluster?: string}) {
     return `/${cluster || YT.cluster}/${Page.TABLET_CELL_BUNDLES}/instances?activeBundle=${bundle}`;
+}
+
+export function makeFlowLink({
+    path,
+    cluster,
+    tab = FlowTab.GRAPH,
+    computation,
+    partition,
+    partitionIdFilter,
+    worker,
+}: {
+    path: string;
+    cluster?: string;
+    tab?: FlowTabType;
+    computation?: string;
+    partition?: string;
+    partitionIdFilter?: string;
+    worker?: string;
+}) {
+    let pathname = `/${cluster || YT.cluster}/${Page.FLOWS}/${tab}`;
+
+    const params = new URLSearchParams({path});
+
+    if (tab === FlowTab.COMPUTATIONS && computation) {
+        pathname += `/${encodeURIComponent(computation)}`;
+        if (partition) {
+            pathname += `/partition/${encodeURIComponent(partition)}`;
+        } else {
+            pathname += '/details';
+            if (partitionIdFilter) {
+                params.append('partition', partitionIdFilter);
+            }
+        }
+    }
+
+    if (tab === FlowTab.WORKERS) {
+        if (worker) {
+            pathname += `/${encodeURIComponent(worker)}/details`;
+        }
+    }
+
+    return `${pathname}?${params}`;
 }

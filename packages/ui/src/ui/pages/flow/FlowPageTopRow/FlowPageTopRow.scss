@@ -1,0 +1,11 @@
+.yt-flow-page-top-row {
+    &__breadcrumbs {
+        flex-grow: 1;
+        flex-shrink: 1;
+    }
+
+    &__spacer {
+        width: 20px;
+        flex-shrink: 0;
+    }
+}

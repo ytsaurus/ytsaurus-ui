@@ -7,7 +7,7 @@ import type {SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/type
 import type {MetaTableItem} from '../components/MetaTable/MetaTable';
 import type {LocationParameters, PathParameters} from '../store/location';
 import type {TabletBundle} from '../store/reducers/tablet_cell_bundles';
-import type {ClusterConfig, ClusterUiConfig} from '../../shared/yt-types';
+import type {ClusterConfig, ClusterUiConfig, FlowWorkerData} from '../../shared/yt-types';
 import type {ClusterAppearance} from '../appearance';
 import type {AppNavigationProps} from '../containers/AppNavigation/AppNavigationPageLayout';
 import type {ExternalSchemaDescription} from '../pages/navigation/tabs/Schema/ExternalDescription/ExternalDescription';
@@ -107,6 +107,7 @@ export interface OperationMonitoringTabProps {
 
 export type NavigationFlowMonitoringProps = {
     cluster: string;
+    pipeline_path: string;
     monitoring_cluster?: string;
     monitoring_project?: string;
     attributes: unknown;
@@ -182,6 +183,16 @@ export type JobMonitoringProps = {
     jobs: JobItem[];
     from?: number;
     to?: number;
+};
+
+export type FlowComputationMonitorProps = {
+    path: string;
+    computation: string;
+};
+
+export type FlowWorkerMonitorProps = {
+    path: string;
+    data: FlowWorkerData;
 };
 
 export interface UIFactory {
@@ -266,6 +277,12 @@ export interface UIFactory {
               urlTemplate?: string;
               title?: string;
           };
+
+    getMonitoringComponentForFlowComputation():
+        | undefined
+        | React.ComponentType<FlowComputationMonitorProps>;
+
+    getMonitoringComponentForFlowWorker(): undefined | React.ComponentType<FlowWorkerMonitorProps>;
 
     getStatisticsComponentForAccount():
         | undefined
