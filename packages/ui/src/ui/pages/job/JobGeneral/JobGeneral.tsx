@@ -24,7 +24,6 @@ import {RootState} from '../../../store/reducers';
 import {Page} from '../../../constants/index';
 
 import {TabSettings, makeTabProps} from '../../../utils';
-import {formatByParams} from '../../../../shared/utils/format';
 
 import hammer from '../../../common/hammer';
 import {RouteInfo} from '../Job';
@@ -33,7 +32,7 @@ import {ClickableText} from '../../../components/ClickableText/ClickableText';
 import ChartLink from '../../../components/ChartLink/ChartLink';
 import {getJob} from '../../../store/selectors/job/detail';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
-import {getCluster, getClusterUiConfig} from '../../../store/selectors/global';
+import {getCluster} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
 import {StaleJobIcon} from '../../../pages/operations/OperationDetail/tabs/Jobs/StaleJobIcon';
 import {Host} from '../../../containers/Host/Host';
@@ -41,6 +40,7 @@ import {Host} from '../../../containers/Host/Host';
 import './JobGeneral.scss';
 import {UI_TAB_SIZE} from '../../../constants/global';
 import {YsonDownloadButton} from '../../../components/DownloadAttributesButton';
+import {useJobProfilingUrl} from './hooks/useJobProfilingUrl';
 
 const block = cn('job-general');
 
@@ -286,6 +286,7 @@ export default function JobGeneral() {
                             {
                                 key: 'Job trace',
                                 value: (
+                                    //
                                     <Link target="_blank" href={traceUrl!}>
                                         {traceTitle}
                                     </Link>
@@ -351,36 +352,4 @@ export default function JobGeneral() {
             </div>
         </ErrorBoundary>
     );
-}
-
-function useJobProfilingUrl({
-    operationId,
-    jobId,
-    pool_tree,
-    has_trace,
-    cluster,
-}: {
-    operationId?: string;
-    jobId?: string;
-    cluster: string;
-    has_trace?: boolean;
-    pool_tree?: string;
-}) {
-    const {job_trace_url_template: {url_template, title = 'Open trace', enforce_for_trees} = {}} =
-        useSelector(getClusterUiConfig);
-    return React.useMemo(() => {
-        const allowTrace = has_trace || 0 <= enforce_for_trees?.indexOf(pool_tree!)!;
-
-        if (!allowTrace || !cluster || !operationId || !jobId || !url_template) {
-            return {};
-        }
-        return {
-            url: formatByParams(url_template, {
-                operationId,
-                jobId,
-                cluster,
-            }),
-            title,
-        };
-    }, [cluster, operationId, jobId, url_template, title, enforce_for_trees, pool_tree, has_trace]);
 }
