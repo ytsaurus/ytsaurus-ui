@@ -255,4 +255,9 @@ module.exports = {
         method: 'POST',
         dataType: 'json',
     },
+    runJobShellCommand: {
+        name: 'run_job_shell_command',
+        method: 'POST',
+        dataType: 'json',
+    },
 };
