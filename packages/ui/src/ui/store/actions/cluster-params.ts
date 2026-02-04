@@ -17,7 +17,6 @@ import {
     isRecentPagesFirst,
     shouldUsePreserveState,
 } from '../../store/selectors/settings';
-import {isRedirectToBetaSwitched} from '../../store/selectors/settings/settings-development';
 import {rumLogError} from '../../rum/rum-counter';
 import {RumWrapper, YTApiId} from '../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../rum/rum-measure-types';
@@ -29,9 +28,8 @@ import {YT} from '../../config/yt-config';
 import {GLOBAL_PARTIAL} from '../../constants/global';
 import {FIX_MY_TYPE, YTError} from '../../../@types/types';
 import {initYTApiClusterParams} from '../../common/yt-api';
-import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
 import {updateTitle} from './global';
-import {reloadUserSettings, setSetting} from './settings';
+import {reloadUserSettings} from './settings';
 import {joinMenuItemsAction, splitMenuItemsAction, trackVisit} from './menu';
 import {toaster} from '../../utils/toaster';
 
@@ -161,21 +159,6 @@ function initClusterAndUserSettingsAfterClusterChanging(params: {
         await dispatch(reloadUserSettings(params.login));
 
         const state = getState();
-        // todo: get rid of redirectToBetaSwitched setting.
-        // It`s exist for set default value of redirectToBeta setting, when settings document is empty yet.
-        // Set redirectToBeta on server after get all user settings (home.js). Or get rid of this logic at all.
-        if (!isRedirectToBetaSwitched(state)) {
-            dispatch(
-                setSetting(
-                    SettingName.DEVELOPMENT.REDIRECT_TO_BETA_SWITCHED,
-                    NAMESPACES.DEVELOPMENT,
-                    true,
-                ),
-            );
-            dispatch(
-                setSetting(SettingName.DEVELOPMENT.REDIRECT_TO_BETA, NAMESPACES.DEVELOPMENT, true),
-            );
-        }
 
         if (isRecentClustersFirst(state)) {
             dispatch(splitMenuItemsAction('cluster'));
