@@ -32,8 +32,7 @@ const defaultUserSettings: Partial<DescribedSettings> = {
     'global::yson::binaryAsHex': true,
     'global::yson::showDecoded': true,
 
-    'global::development::redirectToBeta': false,
-    'global::development::redirectToBetaSwitched': false,
+    'global::development::redirectToBetaV2': false,
     'global::development::yqlTypes': true,
     'global::development::regularUserUI': false,
 

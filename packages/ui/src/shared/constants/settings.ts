@@ -49,8 +49,7 @@ export const SettingName = {
         BINARY_AS_HEX: 'binaryAsHex',
     },
     DEVELOPMENT: {
-        REDIRECT_TO_BETA: 'redirectToBeta',
-        REDIRECT_TO_BETA_SWITCHED: 'redirectToBetaSwitched',
+        REDIRECT_TO_BETA: 'redirectToBetaV2',
         YQL_TYPES: 'yqlTypes',
         REGULAR_USER_UI: 'regularUserUI',
     },
