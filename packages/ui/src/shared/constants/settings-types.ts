@@ -47,8 +47,7 @@ interface YsonSettings {
 }
 
 interface DevelopmentSettings {
-    'global::development::redirectToBeta': boolean;
-    'global::development::redirectToBetaSwitched': boolean;
+    'global::development::redirectToBetaV2': boolean;
     'global::development::yqlTypes': boolean;
     'global::development::regularUserUI': boolean;
     'global::development::showAiChat': boolean;

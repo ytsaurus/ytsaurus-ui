@@ -8,7 +8,3 @@ export const selectShowAiChat = createSelector([getSettingsData], (data) => {
 export const shouldUseYqlTypes = createSelector([getSettingsData], (data) => {
     return data['global::development::yqlTypes'];
 });
-
-export const isRedirectToBetaSwitched = createSelector([getSettingsData], (data) => {
-    return data['global::development::redirectToBetaSwitched'];
-});
