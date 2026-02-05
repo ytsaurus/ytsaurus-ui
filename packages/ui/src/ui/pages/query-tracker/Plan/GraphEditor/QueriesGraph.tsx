@@ -8,6 +8,8 @@ import {useQueriesGraphLayout} from './helpers/useQueriesGraphLayout';
 import {QueriesNodeConnection} from './QueriesNodeConnection';
 import {PathPopup} from './DetailBlock/PathPopup';
 import {OperationType} from './enums';
+import {useSelector} from '../../../../store/redux-hooks';
+import {getSettingsQueryTrackerGraphAutoCenter} from '../../../../store/selectors/settings/settings-ts';
 
 type Props = {
     processedGraph: ProcessedGraph;
@@ -23,6 +25,7 @@ const Graph: FC<Props> = ({processedGraph}) => {
     );
 
     const [loading, setLoading] = useState(true);
+    const autoCenter = useSelector(getSettingsQueryTrackerGraphAutoCenter);
 
     const {data, isLoading} = useQueriesGraphLayout(processedGraph, scale);
 
@@ -42,6 +45,7 @@ const Graph: FC<Props> = ({processedGraph}) => {
             renderPopup={renderPopup}
             toolbox
             zoomOnScroll
+            autoCenter={autoCenter}
             data={data}
         />
     );

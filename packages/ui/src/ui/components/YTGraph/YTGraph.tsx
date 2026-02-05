@@ -11,6 +11,7 @@ import './YTGraph.scss';
 import {useAutoGroups, useCustomGroups} from './hooks/useGroups';
 import {Toolbox} from './Toolbox';
 import {ZOOM_PADDING} from './constants';
+import {getGraphStructureKey} from './helpers/getGraphStructureKey';
 import {YTGraphBlock, YTGraphProps} from './types';
 
 const block = cn('yt-graph');
@@ -29,6 +30,7 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     toolbox,
     toolboxClassName,
     zoomOnScroll,
+    autoCenter,
 }: YTGraphProps<B, C>) {
     const theme = useThemeValue();
     const {graph, setEntities, start} = useGraph(config);
@@ -77,6 +79,31 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     React.useEffect(() => {
         graph.api.zoomToViewPort({padding: ZOOM_PADDING});
     }, [graph]);
+
+    const structureKey = getGraphStructureKey(data);
+    const prevStructureKeyRef = React.useRef<string | null>(null);
+
+    React.useEffect(() => {
+        let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+        const isInitialRender = prevStructureKeyRef.current === null;
+        const structureChanged = prevStructureKeyRef.current !== structureKey;
+        const shouldZoom = autoCenter && !isInitialRender && structureChanged;
+
+        if (shouldZoom) {
+            timeoutId = setTimeout(() => {
+                graph.api.zoomToViewPort({padding: ZOOM_PADDING});
+            }, 100);
+        }
+
+        prevStructureKeyRef.current = structureKey;
+
+        return () => {
+            if (timeoutId !== undefined) {
+                clearTimeout(timeoutId);
+            }
+        };
+    }, [autoCenter, graph, structureKey]);
 
     const [element, setElement] = React.useState<HTMLDivElement | null>(null);
 
