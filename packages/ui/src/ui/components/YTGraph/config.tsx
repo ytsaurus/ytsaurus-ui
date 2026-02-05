@@ -10,7 +10,7 @@ import {TGraphColors} from '@gravity-ui/graph/build/graphConfig';
 
 import {getCssColor} from '../../utils/get-css-color';
 import {useMemoizedIfEqual} from '../../hooks';
-import {YTGraphBlock, YTGraphData} from './YTGraph';
+import {YTGraphBlock, YTGraphData} from './types';
 import {NoopComponent} from './canvas/NoopComponent';
 
 export const getGraphColors = (): RecursivePartial<TGraphColors> => {
@@ -34,7 +34,11 @@ export function useConfig<T extends TBlock>(
         useDefaultConnection,
         canDrag = ECanDrag.NONE,
         connection,
-    }: {useDefaultConnection?: boolean; canDrag?: ECanDrag; connection?: typeof MultipointConnection} = {},
+    }: {
+        useDefaultConnection?: boolean;
+        canDrag?: ECanDrag;
+        connection?: typeof MultipointConnection;
+    } = {},
 ): {
     config: HookGraphParams;
     isBlock: (v: unknown) => v is CanvasBlock<T>;

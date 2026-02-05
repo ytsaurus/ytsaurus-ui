@@ -3,15 +3,7 @@ import React from 'react';
 import {BlockGroups, BlockState, Graph, Group, TBlock, TRect} from '@gravity-ui/graph';
 
 import {getCssColor} from '../../../utils/get-css-color';
-import {YTGraphBlock} from '../YTGraph';
-
-export type YTGraphGroupProps = {
-    /**
-     * Use block.groupId to highlight groups
-     */
-    allowAutoGroups?: boolean;
-    customGroups?: Array<TRect & {id: string}>;
-};
+import {YTGraphBlock, YTGraphGroupProps} from '../types';
 
 export function useCustomGroups({
     graph,
