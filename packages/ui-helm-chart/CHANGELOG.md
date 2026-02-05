@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ytsaurus-ui-chart-v0.5.0...ytsaurus-ui-chart-v0.6.0) (2026-02-05)
+
+
+### Features
+
+* **interface-helpers:** add format.NumberWithSuffix ([0080c7d](https://github.com/ytsaurus/ytsaurus-ui/commit/0080c7d5caa0a3345233e20eb0d8cdac10481a54))
+
 ## [0.5.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ytsaurus-ui-chart-v0.4.0...ytsaurus-ui-chart-v0.5.0) (2025-08-04)
 
 
