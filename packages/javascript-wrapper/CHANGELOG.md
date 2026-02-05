@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.16.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.15.1...javascript-wrapper-v0.16.0) (2026-02-05)
+
+
+### Features
+
+* **javascript-wrapper:** add run job shell command in v4 [YTFRONT-5201] ([97c3daf](https://github.com/ytsaurus/ytsaurus-ui/commit/97c3daf7175b189046f0727c09a309de7e139104))
+
 ## [0.15.1](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.15.0...javascript-wrapper-v0.15.1) (2025-12-19)
 
 
