@@ -24,7 +24,12 @@ interface CommandConfig {
 
 const YT_API_REQUEST_ID_HEADER_LOWER = YT_API_REQUEST_ID_HEADER.toLowerCase();
 
-const YT_KNOWN_COMMANDS = new Set(['get_job_stderr', 'get_job_input', 'get_job_fail_context']);
+const YT_KNOWN_COMMANDS = new Set([
+    'get_job_stderr',
+    'get_job_input',
+    'get_job_fail_context',
+    'run_job_shell_command',
+]);
 
 const supportedCommands: Record<string, Map<string, CommandConfig>> = yt.getSupportedCommands();
 

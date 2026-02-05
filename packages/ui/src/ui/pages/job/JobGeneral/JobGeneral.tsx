@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import {useSelector} from '../../../store/redux-hooks';
 import {Redirect, Route, Switch, useRouteMatch} from 'react-router';
 
-import {Alert, Flex, Link} from '@gravity-ui/uikit';
+import {Alert, Button, Flex, Link} from '@gravity-ui/uikit';
 
 import Specification from '../../../pages/job/tabs/Specification/Specification';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
@@ -22,9 +22,9 @@ import {getJobGeneralYsonSettings} from '../../../store/selectors/thor/unipika';
 import {DEFAULT_TAB, Tab} from '../../../constants/job';
 import {RootState} from '../../../store/reducers';
 import {Page} from '../../../constants/index';
+import {getCluster, getClusterUiConfig} from '../../../store/selectors/global';
 
 import {TabSettings, makeTabProps} from '../../../utils';
-import {formatByParams} from '../../../../shared/utils/format';
 
 import hammer from '../../../common/hammer';
 import {RouteInfo} from '../Job';
@@ -33,7 +33,6 @@ import {ClickableText} from '../../../components/ClickableText/ClickableText';
 import ChartLink from '../../../components/ChartLink/ChartLink';
 import {getJob} from '../../../store/selectors/job/detail';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
-import {getCluster, getClusterUiConfig} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
 import {StaleJobIcon} from '../../../pages/operations/OperationDetail/tabs/Jobs/StaleJobIcon';
 import {Host} from '../../../containers/Host/Host';
@@ -41,6 +40,9 @@ import {Host} from '../../../containers/Host/Host';
 import './JobGeneral.scss';
 import {UI_TAB_SIZE} from '../../../constants/global';
 import {YsonDownloadButton} from '../../../components/DownloadAttributesButton';
+import {useJobProfilingUrl} from './hooks/useJobProfilingUrl';
+import {useIsGpuProfilerAvailable} from './hooks/useIsGpuProfilerAvailable';
+import {useRunJobShellCommand} from './hooks/useRunJobShellCommand';
 
 const block = cn('job-general');
 
@@ -50,6 +52,7 @@ export default function JobGeneral() {
     const settings = useSelector(getJobGeneralYsonSettings);
     const job = useSelector(getJob);
     const {loaded} = useSelector((state: RootState) => state.job.general);
+    const {gpu_profiler_command} = useSelector(getClusterUiConfig);
 
     const {url: traceUrl, title: traceTitle} = useJobProfilingUrl({
         operationId: job?.operationId,
@@ -58,6 +61,12 @@ export default function JobGeneral() {
         pool_tree: job?.pool_tree,
         cluster,
     });
+
+    const hasGpuPerforator = useIsGpuProfilerAvailable({
+        operationId: job?.operationId,
+        jobState: job?.state,
+    });
+    const {run, loading} = useRunJobShellCommand({jobId: job?.id, command: gpu_profiler_command});
 
     if (!loaded) {
         return null;
@@ -286,11 +295,21 @@ export default function JobGeneral() {
                             {
                                 key: 'Job trace',
                                 value: (
+                                    //
                                     <Link target="_blank" href={traceUrl!}>
                                         {traceTitle}
                                     </Link>
                                 ),
                                 visible: Boolean(traceUrl),
+                            },
+                            {
+                                key: 'Profiler',
+                                value: (
+                                    <Button onClick={run} loading={loading}>
+                                        GPU perforator
+                                    </Button>
+                                ),
+                                visible: hasGpuPerforator,
                             },
                         ],
                     ]}
@@ -351,36 +370,4 @@ export default function JobGeneral() {
             </div>
         </ErrorBoundary>
     );
-}
-
-function useJobProfilingUrl({
-    operationId,
-    jobId,
-    pool_tree,
-    has_trace,
-    cluster,
-}: {
-    operationId?: string;
-    jobId?: string;
-    cluster: string;
-    has_trace?: boolean;
-    pool_tree?: string;
-}) {
-    const {job_trace_url_template: {url_template, title = 'Open trace', enforce_for_trees} = {}} =
-        useSelector(getClusterUiConfig);
-    return React.useMemo(() => {
-        const allowTrace = has_trace || 0 <= enforce_for_trees?.indexOf(pool_tree!)!;
-
-        if (!allowTrace || !cluster || !operationId || !jobId || !url_template) {
-            return {};
-        }
-        return {
-            url: formatByParams(url_template, {
-                operationId,
-                jobId,
-                cluster,
-            }),
-            title,
-        };
-    }, [cluster, operationId, jobId, url_template, title, enforce_for_trees, pool_tree, has_trace]);
 }
