@@ -8,6 +8,8 @@
   "context_yql-agent-stage-placeholder": "Введите стейдж YQL агента...",
   "field_new-graph-progress": "Использовать новый граф прогресса",
   "context_new-graph-progress-description": "Включить экспериментальный вид графа для вкладки Прогресс запроса",
+  "field_graph-auto-center": "Автоцентрирование графа",
+  "context_graph-auto-center-description": "Автоматически центрировать граф при изменении данных",
   "field_query-assistant": "Помощник по запросам",
   "context_query-assistant-description": "Использовать помощника по запросам для автозаполнения",
   "context_tab-accept-suggestion": "[Tab] - принять предложение",

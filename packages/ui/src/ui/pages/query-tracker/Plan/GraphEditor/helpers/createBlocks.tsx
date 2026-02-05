@@ -6,13 +6,16 @@ import {OperationType} from '../enums';
 import {iconToBase} from '../../../../../components/YTGraph/utils/iconToBase';
 import {getOperationType} from './getOperationType';
 import {getBlockIcon} from './getBlockIcon';
-import {TMultipointConnection} from '@gravity-ui/graph/build/react-components/elk/types';
+import {MultipointConnection} from '../types';
+import {parseTablePath} from '../../services/tables';
+
+export const BLOCK_SIDE = 180;
 
 export const createBlocks = (
     graph: ProcessedGraph,
     progress: Progress | undefined,
     level: ECameraScaleLevel,
-): {blocks: QueriesNodeBlock[]; connections: TMultipointConnection[]} => {
+): {blocks: QueriesNodeBlock[]; connections: MultipointConnection[]} => {
     const isMinimalisticView = level === ECameraScaleLevel.Minimalistic;
 
     const blocks = graph.nodes.map((node) => {
@@ -21,17 +24,19 @@ export const createBlocks = (
         const icon = getBlockIcon(type);
         const isTable = type === OperationType.Table;
         let bottomText = isMinimalisticView ? name : undefined;
+        let tablePath: string | undefined;
         if (isTable) {
             name = 'Table';
-            bottomText = node.label;
+            tablePath = node.title ? parseTablePath(node.title)?.path : undefined;
+            bottomText = tablePath || node.label;
         }
 
         return {
             x: NaN,
             y: NaN,
             ...{level: node.level},
-            width: 100,
-            height: 100,
+            width: BLOCK_SIDE,
+            height: BLOCK_SIDE,
             id: node.id as string,
             is: 'block',
             selected: false,
@@ -39,10 +44,12 @@ export const createBlocks = (
             anchors: [],
             meta: {
                 level,
+                operationType: type,
                 icon: {
                     src: iconToBase(icon),
                 },
                 bottomText,
+                tablePath,
                 padding: 10,
                 nodeProgress: progress ? progress[node.id] : undefined,
                 schemas: node.schemas,

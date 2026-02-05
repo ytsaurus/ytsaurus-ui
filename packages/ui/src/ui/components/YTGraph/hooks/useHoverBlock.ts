@@ -16,9 +16,15 @@ export function useHoverBlock<B extends TBlock>(
         const targetBlock =
             isBlockNode(detail.target) && !detail.target.state.selected ? detail.target : undefined;
 
-        timerId.current = window.setTimeout(() => {
-            setBlock(targetBlock);
-        }, TIMEOUT);
+        clearTimeout(timerId.current);
+
+        if (targetBlock) {
+            timerId.current = window.setTimeout(() => {
+                setBlock(targetBlock);
+            }, TIMEOUT);
+        } else {
+            setBlock(undefined);
+        }
     }, []);
 
     const handleClearTimeout = useCallback(() => {
@@ -44,13 +50,13 @@ export function useHoverBlock<B extends TBlock>(
 
     useEffect(() => {
         graph.on('mouseenter', handleOnGraphMouseEnter);
-        graph.on('mouseleave', handleClearTimeout);
+        graph.on('mouseleave', handleClosePopup);
 
         return () => {
             graph.off('mouseenter', handleOnGraphMouseEnter);
-            graph.off('mouseleave', handleClearTimeout);
+            graph.off('mouseleave', handleClosePopup);
         };
-    }, [graph, handleClearTimeout, handleOnGraphMouseEnter]);
+    }, [graph, handleClosePopup, handleOnGraphMouseEnter]);
 
-    return {block, handleClearTimeout};
+    return {block, handleClearTimeout, handleClosePopup};
 }

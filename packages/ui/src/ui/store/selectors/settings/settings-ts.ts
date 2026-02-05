@@ -28,6 +28,10 @@ export const getSettingsQueryTrackerNewGraphType = createSelector(getSettingsDat
     return data['global::queryTracker::useNewGraphView'] || false;
 });
 
+export const getSettingsQueryTrackerGraphAutoCenter = createSelector(getSettingsData, (data) => {
+    return data['global::queryTracker::graphAutoCenter'] || false;
+});
+
 export const getSettingsEditorVimMode = createSelector(getSettingsData, (data) => {
     return data['global::editor::vimMode'] || false;
 });

@@ -1,60 +1,21 @@
 import React from 'react';
 
-import {
-    CanvasBlock,
-    ECameraScaleLevel,
-    Graph,
-    GraphState,
-    TBlock,
-    TBlockId,
-    TConnection,
-} from '@gravity-ui/graph';
-
-import {GraphCanvas, HookGraphParams, useGraph, useGraphEvent} from '@gravity-ui/graph/react';
-
+import {ECameraScaleLevel, Graph, GraphState, TBlockId, TConnection} from '@gravity-ui/graph';
+import {GraphCanvas, useGraph, useGraphEvent} from '@gravity-ui/graph/react';
 import {useThemeValue} from '@gravity-ui/uikit';
 
 import {PopupPortal} from './PopupLayer';
 import {getGraphColors} from './config';
 import cn from 'bem-cn-lite';
 import './YTGraph.scss';
-import {YTGraphGroupProps, useAutoGroups, useCustomGroups} from './hooks/useGroups';
+import {useAutoGroups, useCustomGroups} from './hooks/useGroups';
+import {Toolbox} from './Toolbox';
+import {ZOOM_PADDING} from './constants';
+import {getGraphStructureKey} from './helpers/getGraphStructureKey';
+import {YTGraphBlock, YTGraphProps} from './types';
 
 const block = cn('yt-graph');
-
-export type YTGraphProps<B extends TBlock, C extends TConnection> = {
-    className?: string;
-
-    data: YTGraphData<B, C>;
-    setScale: (v: ECameraScaleLevel) => void;
-    config: HookGraphParams;
-    isBlock: (v: unknown) => v is CanvasBlock<B>;
-    renderPopup?: ({data}: {data: B}) => React.ReactNode;
-    renderBlock?: (props: RenderContentProps<B>) => React.ReactNode;
-} & YTGraphGroupProps;
-
-export type RenderContentProps<B extends TBlock> = {
-    graph: Graph;
-    data: B;
-    className: string;
-    style: React.CSSProperties;
-};
-
-export type YTGraphData<B extends TBlock, C extends TConnection> = {
-    blocks: Array<B>;
-    connections: Array<C>;
-};
-
-export type YTGraphBlock<IS, Meta extends Record<string, unknown>> = Omit<
-    TBlock<Meta>,
-    'id' | 'is' | 'meta' | 'group'
-> & {
-    id: string;
-    is: IS;
-    meta: Meta;
-    groupId?: string;
-    backgroundTheme?: 'info' | 'warning' | 'success' | 'danger';
-};
+const ZOOM_SPEED = 0.5;
 
 export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnection>({
     config,
@@ -66,9 +27,14 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     renderBlock,
     allowAutoGroups,
     customGroups,
+    toolbox,
+    toolboxClassName,
+    zoomOnScroll,
+    autoCenter,
 }: YTGraphProps<B, C>) {
     const theme = useThemeValue();
     const {graph, setEntities, start} = useGraph(config);
+    const fitGraphRef = React.useRef(true);
 
     useAutoGroups({allowAutoGroups, graph});
     useCustomGroups({customGroups, graph});
@@ -111,8 +77,33 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     });
 
     React.useEffect(() => {
-        graph.api.zoomToViewPort({padding: 100});
+        graph.api.zoomToViewPort({padding: ZOOM_PADDING});
     }, [graph]);
+
+    const structureKey = getGraphStructureKey(data);
+    const prevStructureKeyRef = React.useRef<string | null>(null);
+
+    React.useEffect(() => {
+        let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+        const isInitialRender = prevStructureKeyRef.current === null;
+        const structureChanged = prevStructureKeyRef.current !== structureKey;
+        const shouldZoom = autoCenter && !isInitialRender && structureChanged;
+
+        if (shouldZoom) {
+            timeoutId = setTimeout(() => {
+                graph.api.zoomToViewPort({padding: ZOOM_PADDING});
+            }, 100);
+        }
+
+        prevStructureKeyRef.current = structureKey;
+
+        return () => {
+            if (timeoutId !== undefined) {
+                clearTimeout(timeoutId);
+            }
+        };
+    }, [autoCenter, graph, structureKey]);
 
     const [element, setElement] = React.useState<HTMLDivElement | null>(null);
 
@@ -121,9 +112,11 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
             return undefined;
         }
         const resizeObserver = new ResizeObserver(() => {
-            setTimeout(() => {
-                graph.api.zoomToViewPort({padding: 100});
-            }, 100);
+            if (fitGraphRef.current) {
+                setTimeout(() => {
+                    graph.api.zoomToViewPort({padding: ZOOM_PADDING});
+                }, 100);
+            }
         });
         resizeObserver.observe(element);
         return () => {
@@ -134,6 +127,34 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     React.useEffect(() => {
         graph.setColors(getGraphColors());
     }, [graph, theme]);
+
+    React.useEffect(() => {
+        if (!zoomOnScroll || !element) {
+            return undefined;
+        }
+
+        const handleWheel = (event: WheelEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            fitGraphRef.current = false;
+
+            const rect = element.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            const currentScale = graph.cameraService.getCameraScale();
+            const direction = event.deltaY < 0 ? 1 : -1;
+            const newScale = currentScale * (1 + direction * (ZOOM_SPEED * 0.1));
+
+            graph.cameraService.zoom(x, y, newScale);
+        };
+
+        element.addEventListener('wheel', handleWheel, {passive: false, capture: true});
+        return () => {
+            element.removeEventListener('wheel', handleWheel, {capture: true});
+        };
+    }, [element, graph, zoomOnScroll]);
 
     const renderBlockCallback = React.useCallback(
         (graph: Graph, data: B) => {
@@ -171,6 +192,7 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
                     setSelectedBlocks(list);
                 }}
             />
+            {toolbox && <Toolbox className={block('toolbox', toolboxClassName)} graph={graph} />}
             {renderPopup !== undefined && (
                 <PopupPortal graph={graph} renderContent={renderPopup} isBlockNode={isBlock} />
             )}

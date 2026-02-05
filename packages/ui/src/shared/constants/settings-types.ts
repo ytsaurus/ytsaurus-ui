@@ -150,6 +150,7 @@ interface QueryTrackerSettings {
     'global::queryTracker::queriesListSidebarVisibilityMode': boolean;
     'global::queryTracker::history::Columns': string[];
     'global::queryTracker::useNewGraphView': boolean;
+    'global::queryTracker::graphAutoCenter': boolean;
     'global::queryTracker::suggestions': boolean;
     'global::queryTracker::lastEngine': QueryEngine;
     'global::queryTracker::tokens': QueryToken[];

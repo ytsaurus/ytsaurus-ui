@@ -1,15 +1,18 @@
 type ID = string & {__brand: 'NodeId'};
 
-type Edge<NodeId> = {
+export type Edge<NodeId> = {
     from: NodeId;
     to: NodeId;
     arrows?: any;
 };
-type Node<NodeId> = {
+
+export type Node<NodeId> = {
     id: NodeId;
     level: number;
     x?: number;
     y?: number;
+    width?: number;
+    height?: number;
 };
 
 type Graph<NodeId = any, T extends Node<NodeId> = Node<NodeId>> = Record<
@@ -523,11 +526,11 @@ function horizontalCompaction(
                         sink[v] = sink[u];
                     }
                     if (sink[v] === sink[u]) {
-                        xs[v] = Math.max(xs[v], xs[u] + nodeWidth(graph, v));
+                        xs[v] = Math.max(xs[v], xs[u] + nodeHeight(graph, v));
                     } else {
                         shift[sink[u]] = Math.min(
                             shift[sink[u]],
-                            xs[v] - xs[u] - nodeWidth(graph, v),
+                            xs[v] - xs[u] - nodeHeight(graph, v),
                         );
                     }
                 }
@@ -550,25 +553,25 @@ function horizontalCompaction(
 }
 
 /*
- * Returns the alignment that has the smallest width of the given alignments.
+ * Returns the alignment that has the smallest height of the given alignments.
  */
-function findSmallestWidthAlignment(graph: Graph, xss: Record<string, Record<string, number>>) {
+function findSmallestHeightAlignment(graph: Graph, xss: Record<string, Record<string, number>>) {
     return Object.values(xss).reduce(
         (res, xs) => {
             let max = Number.NEGATIVE_INFINITY;
             let min = Number.POSITIVE_INFINITY;
 
             Object.entries(xs).forEach(([v, x]) => {
-                const halfWidth = nodeWidth(graph, v as ID) / 2;
+                const halfHeight = nodeHeight(graph, v as ID) / 2;
 
-                max = Math.max(x + halfWidth, max);
-                min = Math.min(x - halfWidth, min);
+                max = Math.max(x + halfHeight, max);
+                min = Math.min(x - halfHeight, min);
             });
 
-            const width = max - min;
-            if (res.min > width) {
+            const height = max - min;
+            if (res.min > height) {
                 return {
-                    min: width,
+                    min: height,
                     align: xs,
                 };
             }
@@ -578,8 +581,25 @@ function findSmallestWidthAlignment(graph: Graph, xss: Record<string, Record<str
     ).align;
 }
 
-function nodeWidth(_graph?: Graph, _v?: ID) {
-    return 100;
+export const DEFAULT_NODE_WIDTH = 100;
+export const DEFAULT_NODE_HEIGHT = 100;
+const NODE_HORIZONTAL_GAP = DEFAULT_NODE_WIDTH * 2;
+const NODE_VERTICAL_GAP = 200;
+
+function nodeWidth(graph?: Graph, v?: ID) {
+    if (graph && v && graph[v]) {
+        const width = graph[v].node.width ?? DEFAULT_NODE_WIDTH;
+        return width + NODE_HORIZONTAL_GAP;
+    }
+    return DEFAULT_NODE_WIDTH + NODE_HORIZONTAL_GAP;
+}
+
+function nodeHeight(graph?: Graph, v?: ID) {
+    if (graph && v && graph[v]) {
+        const height = graph[v].node.height ?? DEFAULT_NODE_HEIGHT;
+        return height + NODE_VERTICAL_GAP;
+    }
+    return DEFAULT_NODE_HEIGHT + NODE_VERTICAL_GAP;
 }
 /*
  * Align the coordinates of each of the layout alignments such that
@@ -679,8 +699,8 @@ function positionY(graph: Graph, layering: ID[][]) {
             xss[vert + horiz] = xs;
         });
     });
-    const smallestWidth = findSmallestWidthAlignment(graph, xss);
-    alignCoordinates(xss, smallestWidth);
+    const smallestHeight = findSmallestHeightAlignment(graph, xss);
+    alignCoordinates(xss, smallestHeight);
     return balance(xss);
 }
 

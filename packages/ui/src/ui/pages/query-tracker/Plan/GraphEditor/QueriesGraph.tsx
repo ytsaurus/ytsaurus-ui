@@ -1,16 +1,15 @@
 import React, {FC, useState} from 'react';
-
-import {ECameraScaleLevel} from '@gravity-ui/graph';
 import {Loader} from '@gravity-ui/uikit';
-
-import {YTGraph, useConfig, useElkLayout, useGraphScale} from '../../../../components/YTGraph';
-
+import {YTGraph, useConfig, useGraphScale} from '../../../../components/YTGraph';
 import {ProcessedGraph} from '../utils';
-import {createBlocks} from './helpers/createBlocks';
 import {QueriesCanvasBlock, QueriesNodeBlock} from './QueriesNodeBlock';
 import {DetailBlock} from './DetailBlock';
+import {useQueriesGraphLayout} from './helpers/useQueriesGraphLayout';
+import {QueriesNodeConnection} from './QueriesNodeConnection';
+import {PathPopup} from './DetailBlock/PathPopup';
+import {OperationType} from './enums';
 import {useSelector} from '../../../../store/redux-hooks';
-import {getQuerySingleProgress} from '../../../../store/selectors/query-tracker/query';
+import {getSettingsQueryTrackerGraphAutoCenter} from '../../../../store/selectors/settings/settings-ts';
 
 type Props = {
     processedGraph: ProcessedGraph;
@@ -18,13 +17,17 @@ type Props = {
 
 const Graph: FC<Props> = ({processedGraph}) => {
     const {scale, setScale} = useGraphScale();
-    const {config, isBlock} = useConfig<QueriesNodeBlock>({
-        block: QueriesCanvasBlock,
-    });
+    const {config, isBlock} = useConfig<QueriesNodeBlock>(
+        {
+            block: QueriesCanvasBlock,
+        },
+        {connection: QueriesNodeConnection},
+    );
 
     const [loading, setLoading] = useState(true);
+    const autoCenter = useSelector(getSettingsQueryTrackerGraphAutoCenter);
 
-    const {data, isLoading} = useQueriesGraphData(processedGraph, scale);
+    const {data, isLoading} = useQueriesGraphLayout(processedGraph, scale);
 
     React.useEffect(() => {
         if (!isLoading) {
@@ -40,22 +43,25 @@ const Graph: FC<Props> = ({processedGraph}) => {
             config={config}
             setScale={setScale}
             renderPopup={renderPopup}
+            toolbox
+            zoomOnScroll
+            autoCenter={autoCenter}
             data={data}
         />
     );
 };
 
-function useQueriesGraphData(progressGraph: ProcessedGraph, scale: ECameraScaleLevel) {
-    const {yql_progress: progress} = useSelector(getQuerySingleProgress);
-
-    const data = React.useMemo(() => {
-        return createBlocks(progressGraph, progress, scale);
-    }, [progressGraph, scale, progress]);
-
-    return useElkLayout(data);
-}
-
 function renderPopup(props: {data: QueriesNodeBlock}) {
+    const type = props.data.meta.operationType;
+
+    if (type === OperationType.Table) {
+        return <PathPopup tablePath={props.data.meta.tablePath} />;
+    }
+
+    if (type === OperationType.Read) {
+        return null;
+    }
+
     return <DetailBlock {...props} />;
 }
 

@@ -10,7 +10,7 @@ import {TGraphColors} from '@gravity-ui/graph/build/graphConfig';
 
 import {getCssColor} from '../../utils/get-css-color';
 import {useMemoizedIfEqual} from '../../hooks';
-import {YTGraphBlock, YTGraphData} from './YTGraph';
+import {YTGraphBlock, YTGraphData} from './types';
 import {NoopComponent} from './canvas/NoopComponent';
 
 export const getGraphColors = (): RecursivePartial<TGraphColors> => {
@@ -30,7 +30,13 @@ export const getGraphColors = (): RecursivePartial<TGraphColors> => {
 
 export function useConfig<T extends TBlock>(
     blockComponents: Record<T['is'], typeof CanvasBlock<T>>,
-    {useDefaultConnection}: {useDefaultConnection?: boolean} = {},
+    {
+        useDefaultConnection,
+        connection,
+    }: {
+        useDefaultConnection?: boolean;
+        connection?: typeof MultipointConnection;
+    } = {},
 ): {
     config: HookGraphParams;
     isBlock: (v: unknown) => v is CanvasBlock<T>;
@@ -38,9 +44,13 @@ export function useConfig<T extends TBlock>(
     const [blockComponentsCached] = useMemoizedIfEqual(blockComponents);
 
     const config = React.useMemo(() => {
+        const resolvedConnection = useDefaultConnection
+            ? undefined
+            : (connection ?? MultipointConnection);
+
         const config: HookGraphParams = {
             settings: {
-                connection: useDefaultConnection ? undefined : MultipointConnection,
+                connection: resolvedConnection,
                 canDuplicateBlocks: false,
                 canCreateNewConnections: false,
                 canZoomCamera: true,
@@ -61,7 +71,7 @@ export function useConfig<T extends TBlock>(
                 return knownTypes.has((v as Partial<CanvasBlock<T>>).state?.is!);
             },
         };
-    }, [blockComponentsCached, useDefaultConnection]);
+    }, [blockComponentsCached, useDefaultConnection, connection]);
 
     return {...config};
 }

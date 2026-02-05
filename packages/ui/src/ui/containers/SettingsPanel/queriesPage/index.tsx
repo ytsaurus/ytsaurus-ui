@@ -9,6 +9,7 @@ import {
 import {makeItem, makePage} from '../settings-description';
 import i18n from './i18n';
 import {DefaultAcoSelect} from './DefaultAcoSelect';
+import {GraphAutoCenterSetting} from './GraphAutoCenterSetting';
 import SettingsMenuInput from '../../SettingsMenu/SettingsMenuInput';
 import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
 
@@ -54,6 +55,12 @@ export const queriesPage = ({cluster, hasQuerySuggestions}: Props) => {
                     description={i18n('context_new-graph-progress-description')}
                     oneLine
                 />,
+            ),
+            makeItem(
+                'global::queryTracker::graphAutoCenter',
+                i18n('field_graph-auto-center'),
+                'top',
+                <GraphAutoCenterSetting />,
             ),
             ...(hasQuerySuggestions
                 ? [
