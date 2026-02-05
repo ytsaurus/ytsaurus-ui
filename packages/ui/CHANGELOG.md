@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.5.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.5.1...ui-v3.5.2) (2026-02-05)
+
+
+### Bug Fixes
+
+* **Queries/Tutorials:** support old qt tutorials [YTFRONT-5509] ([25de4f7](https://github.com/ytsaurus/ytsaurus-ui/commit/25de4f733bbb10fec4380579895a66a6d80af18c))
+* **Queries:** yql version in new query [YTFRONT-5522] ([ff5c03a](https://github.com/ytsaurus/ytsaurus-ui/commit/ff5c03aa4b8670f69e632dff5d11ac053acc2379))
+
 ## [3.5.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.5.0...ui-v3.5.1) (2026-02-02)
 
 
