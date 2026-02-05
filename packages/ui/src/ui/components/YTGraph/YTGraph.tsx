@@ -1,68 +1,20 @@
 import React from 'react';
 
-import {
-    CanvasBlock,
-    ECameraScaleLevel,
-    Graph,
-    GraphState,
-    TBlock,
-    TBlockId,
-    TConnection,
-} from '@gravity-ui/graph';
-
-import {GraphCanvas, HookGraphParams, useGraph, useGraphEvent} from '@gravity-ui/graph/react';
-
+import {ECameraScaleLevel, Graph, GraphState, TBlockId, TConnection} from '@gravity-ui/graph';
+import {GraphCanvas, useGraph, useGraphEvent} from '@gravity-ui/graph/react';
 import {useThemeValue} from '@gravity-ui/uikit';
 
 import {PopupPortal} from './PopupLayer';
 import {getGraphColors} from './config';
 import cn from 'bem-cn-lite';
 import './YTGraph.scss';
-import {YTGraphGroupProps, useAutoGroups, useCustomGroups} from './hooks/useGroups';
+import {useAutoGroups, useCustomGroups} from './hooks/useGroups';
 import {Toolbox} from './Toolbox';
 import {ZOOM_PADDING} from './constants';
+import {YTGraphBlock, YTGraphProps} from './types';
 
 const block = cn('yt-graph');
 const ZOOM_SPEED = 0.5;
-
-export type YTGraphProps<B extends TBlock, C extends TConnection> = {
-    className?: string;
-
-    data: YTGraphData<B, C>;
-    setScale: (v: ECameraScaleLevel) => void;
-    config: HookGraphParams;
-    isBlock: (v: unknown) => v is CanvasBlock<B>;
-    renderPopup?: ({data}: {data: B}) => React.ReactNode;
-    renderBlock?: (props: RenderContentProps<B>) => React.ReactNode;
-
-    toolbox?: boolean;
-    toolboxClassName?: string;
-    /** When true, zoom on mouse wheel scroll (like vis-network). Default: false */
-    zoomOnScroll?: boolean;
-} & YTGraphGroupProps;
-
-export type RenderContentProps<B extends TBlock> = {
-    graph: Graph;
-    data: B;
-    className: string;
-    style: React.CSSProperties;
-};
-
-export type YTGraphData<B extends TBlock, C extends TConnection> = {
-    blocks: Array<B>;
-    connections: Array<C>;
-};
-
-export type YTGraphBlock<IS, Meta extends Record<string, unknown>> = Omit<
-    TBlock<Meta>,
-    'id' | 'is' | 'meta' | 'group'
-> & {
-    id: string;
-    is: IS;
-    meta: Meta;
-    groupId?: string;
-    backgroundTheme?: 'info' | 'warning' | 'success' | 'danger';
-};
 
 export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnection>({
     config,

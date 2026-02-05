@@ -10,7 +10,7 @@ import {TGraphColors} from '@gravity-ui/graph/build/graphConfig';
 
 import {getCssColor} from '../../utils/get-css-color';
 import {useMemoizedIfEqual} from '../../hooks';
-import {YTGraphBlock, YTGraphData} from './YTGraph';
+import {YTGraphBlock, YTGraphData} from './types';
 import {NoopComponent} from './canvas/NoopComponent';
 
 export const getGraphColors = (): RecursivePartial<TGraphColors> => {

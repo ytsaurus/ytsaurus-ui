@@ -1,6 +1,6 @@
 import {CanvasBlock} from '@gravity-ui/graph';
 import {GRAPH_BACKGROUND_COLORS, GRAPH_COLORS} from '../constants';
-import {YTGraphBlock} from '../YTGraph';
+import {YTGraphBlock} from '../types';
 import {svgDataToBase} from '../utils/iconToBase';
 import {SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 
