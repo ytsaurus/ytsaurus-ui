@@ -34,6 +34,7 @@ import type {DetailedOperationSelector} from '../pages/operations/selectors';
 import type {ChatMessage} from '../types/ai-chat';
 import type {JobItem} from '../store/reducers/operations/jobs/jobs-monitor';
 import type {PoolTreeNode} from '../utils/scheduling/pool-child';
+import type {QueryEngine} from '../../shared/constants/engines';
 
 type HeaderItemOrPage =
     | {
@@ -186,6 +187,10 @@ export type JobMonitoringProps = {
 
 export interface UIFactory {
     getClusterAppearance(cluster?: string): undefined | ClusterAppearance;
+
+    getClusterSupportedEnginesOverrides?(
+        clusterUiConfig: ClusterUiConfig,
+    ): Partial<Record<QueryEngine, boolean>> | undefined;
 
     isWatchMen(login: string): boolean;
 
