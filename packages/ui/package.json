@@ -47,7 +47,6 @@
     "lint:js": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --ignore-pattern src/ui/vendor",
     "lint:styles": "stylelint 'src/ui/**/*.scss' --customSyntax postcss-scss",
     "lint:lodash-imports": "scripts/check-lodash-imports.sh ./src",
-    "notify:mail": "node scripts/notify.js",
     "platform-tools": "platform-tools",
     "prepublishOnly": "npm run build",
     "show:docker-image-name": "echo ${npm_package_config_docker_image}",
