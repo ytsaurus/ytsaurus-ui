@@ -29,11 +29,13 @@ import {setTheme} from '../../store/actions/global';
 import {loadAllowedExperimentalPages} from '../../store/actions/global/experimental-pages';
 import {getAuthPagesEnabled, getGlobalShowLoginDialog} from '../../store/selectors/global';
 import {getFontType} from '../../store/selectors/global/fonts';
+import {isDeveloper} from '../../store/selectors/global/is-developer';
 import UIFactory from '../../UIFactory';
 
 import {AppThemeFont, AppThemeFontProps} from './AppThemeFont';
 
 import {toaster} from '../../utils/toaster';
+import {updateUiConfigModeCookie} from '../../utils/cookies/ui-config-mode';
 
 import './App.scss';
 
@@ -43,6 +45,15 @@ function LoadAllowedExperimentalUrls() {
     React.useMemo(() => {
         dispatch(loadAllowedExperimentalPages());
     }, [dispatch]);
+    return null;
+}
+
+function UpdateUiConfigModeCookie() {
+    const isAdmin = useSelector(isDeveloper);
+    React.useEffect(() => {
+        updateUiConfigModeCookie(isAdmin);
+    }, [isAdmin]);
+
     return null;
 }
 
@@ -73,6 +84,7 @@ function AppWithRum() {
             <Route
                 render={() => (
                     <AppThemeFont theme={theme} fontType={fontType}>
+                        <UpdateUiConfigModeCookie />
                         <AppNavigation>
                             <LoadAllowedExperimentalUrls />
                             <div
