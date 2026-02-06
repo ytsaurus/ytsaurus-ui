@@ -20,10 +20,6 @@ export function isIdmAclAvailable() {
     return UIFactory.getAclApi().isAllowed;
 }
 
-export function getAccessLogBasePath() {
-    return uiSettings.accessLogBasePath;
-}
-
 export function getAccountsUsageBasePath() {
     return uiSettings.accountsUsageBasePath;
 }

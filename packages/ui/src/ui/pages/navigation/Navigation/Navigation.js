@@ -57,6 +57,7 @@ import {showNavigationAttributesEditor} from '../../../store/actions/navigation/
 import {UI_TAB_SIZE} from '../../../constants/global';
 import {CellPreviewModal} from '../../../containers/CellPreviewModal/CellPreviewModal';
 import {OpenQueryButtonsContent} from '../../../containers/OpenQueryButtons/OpenQueryButtons';
+import {UpdateAccessLogAvailability} from '../../../pages/navigation/tabs/AccessLog/UpdateAccessLogAvailability/UpdateAccessLogAvailability';
 
 import './Navigation.scss';
 
@@ -262,6 +263,7 @@ class Navigation extends Component {
 
         return (
             <ErrorBoundary>
+                <UpdateAccessLogAvailability />
                 <div className={block({error: hasError}, 'elements-main-section')}>
                     <div className={block('header')}>
                         <NavigationPermissionsNotice />
