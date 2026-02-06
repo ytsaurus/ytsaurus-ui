@@ -32,6 +32,8 @@ export const getNavigationIsAccountUsable = (state: RootState) =>
 export const getNavigationCheckPermissionsError = (state: RootState) =>
     state.navigation.navigation.checkPermissionsError as YTError | undefined;
 export const getMode = (state: RootState) => state.navigation.navigation.mode;
+export const getNaviagationAccessLogAvailable = (state: RootState) =>
+    state.navigation.navigation.is_access_log_available;
 
 export const getNavigationPathAccount = createSelector(
     [getNavigationPathAttributes],
@@ -80,8 +82,15 @@ export const getSupportedTabs = createSelector(
         getTableMountConfigHasData,
         getTabletErrorsBackgroundCount,
         getNavigationOriginatingQueuePath,
+        getNaviagationAccessLogAvailable,
     ],
-    (attributes, mountConfigHasData, tabletErrorsCount, originatingQueuePath) => {
+    (
+        attributes,
+        mountConfigHasData,
+        tabletErrorsCount,
+        originatingQueuePath,
+        is_access_log_available,
+    ) => {
         const isDynamic = attributes.dynamic === true;
         const isPipeline = isPipelineNode(attributes);
         const mountConfigVisible = mountConfigHasData || isDynamic;
@@ -92,7 +101,7 @@ export const getSupportedTabs = createSelector(
             Tab.USER_ATTRIBUTES,
             mountConfigVisible && Tab.MOUNT_CONFIG,
             Tab.ACL,
-            Boolean(getAccessLogBasePath()) && Tab.ACCESS_LOG,
+            Boolean(is_access_log_available) && Tab.ACCESS_LOG,
         ]);
         const supportedByAttribute = filter_<ValueOf<typeof Tab>>(
             [Tab.SCHEMA, Tab.LOCKS],
