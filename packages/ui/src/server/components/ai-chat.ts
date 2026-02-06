@@ -252,7 +252,7 @@ assistant: Static vs Dynamic tables`;
     }
 
     private getRequestHeaders(req: Request): Record<string, string> {
-        const authHeaders = serverFactory.getAuthHeaders('ai-chat', req) || {};
+        const authHeaders = serverFactory.getAuthHeaders('aiChat', req) || {};
         return {
             ...authHeaders,
             'Content-Type': 'application/json',
