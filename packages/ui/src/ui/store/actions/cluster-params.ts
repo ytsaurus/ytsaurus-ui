@@ -17,6 +17,8 @@ import {
     isRecentPagesFirst,
     shouldUsePreserveState,
 } from '../../store/selectors/settings';
+import {isRedirectToBetaSwitched} from '../../store/selectors/settings/settings-development';
+import {isDeveloper as selectIsDeveloper} from '../../store/selectors/global/is-developer';
 import {rumLogError} from '../../rum/rum-counter';
 import {RumWrapper, YTApiId} from '../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../rum/rum-measure-types';
@@ -32,6 +34,7 @@ import {updateTitle} from './global';
 import {reloadUserSettings} from './settings';
 import {joinMenuItemsAction, splitMenuItemsAction, trackVisit} from './menu';
 import {toaster} from '../../utils/toaster';
+import {updateUiConfigModeCookie} from '../../utils/cookies/ui-config-mode';
 
 function handleUiConfigError(path: string, error: any, type?: string) {
     rumLogError(
@@ -134,6 +137,7 @@ export function initClusterParams(cluster: string): GlobalThunkAction<Promise<vo
                                 : uiConfigOutput;
                             dispatch({type: GLOBAL_PARTIAL, data: {isDeveloper, clusterUiConfig}});
                         }
+                        updateUiConfigModeCookie(selectIsDeveloper(getState()));
                     })
                     .catch((e) => {
                         // eslint-disable-next-line no-console

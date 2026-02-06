@@ -25,11 +25,16 @@ export async function ytAccessLogApi(req: Request, res: Response) {
     }
 }
 
+function getAccessLogParams(req: Request) {
+    const {ytAuthCluster: cluster} = req.params;
+    const isDeveloper = req.cookies.ui_config_mode === 'developer';
+    return {cluster, isDeveloper};
+}
+
 export async function ytAccesLogCheckAvailable(req: Request, res: Response) {
     try {
-        const {ytAuthCluster: cluster} = req.params;
-        const isDeveloper = req.query.isDeveloper === 'true';
-        const {baseUrl} = await ytAccessLogGetBaseUrl(req, {cluster, isDeveloper});
+        const accessLogParams = getAccessLogParams(req);
+        const {baseUrl} = await ytAccessLogGetBaseUrl(req, accessLogParams);
         res.send({is_access_log_available: Boolean(baseUrl)});
     } catch (e: any) {
         await sendAndLogError(req.ctx, res, 500, e, {
@@ -68,12 +73,13 @@ async function ytAccessLogGetBaseUrl(
 const ALLOWED_ACTIONS = new Set(['ready', 'visible-time-range', 'access_log', 'qt_access_log']);
 
 async function ytAccessLogApiImpl(req: Request, res: Response) {
-    const {ytAuthCluster: cluster, action} = req.params;
+    const {action} = req.params;
+
     if (!ALLOWED_ACTIONS.has(action)) {
         throw new ErrorWithCode(404, 'Action is not allowed');
     }
 
-    const isDeveloper = req.query.isDeveloper === 'true';
+    const {cluster, isDeveloper} = getAccessLogParams(req);
     const {baseUrl, testing} = await ytAccessLogGetBaseUrl(req, {cluster, isDeveloper});
 
     if (!baseUrl) {
