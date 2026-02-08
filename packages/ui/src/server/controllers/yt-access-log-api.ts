@@ -1,10 +1,7 @@
-// @ts-expect-error
-import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import axios from 'axios';
 import isEmpty_ from 'lodash/isEmpty';
 import qs from 'qs';
 import type {Request, Response} from '../../@types/core';
-import {getPreloadedClusterUiConfig} from '../components/cluster-params';
 import ServerFactory from '../ServerFactory';
 import {
     ErrorWithCode,
@@ -12,6 +9,7 @@ import {
     pipeAxiosResponse,
     sendAndLogError,
 } from '../utils';
+import {getBaseUrlFromConfiguration} from '../utils/config-utils';
 
 export async function ytAccessLogApi(req: Request, res: Response) {
     try {
@@ -25,16 +23,9 @@ export async function ytAccessLogApi(req: Request, res: Response) {
     }
 }
 
-function getAccessLogParams(req: Request) {
-    const {ytAuthCluster: cluster} = req.params;
-    const isDeveloper = req.cookies.ui_config_mode === 'developer';
-    return {cluster, isDeveloper};
-}
-
 export async function ytAccesLogCheckAvailable(req: Request, res: Response) {
     try {
-        const accessLogParams = getAccessLogParams(req);
-        const {baseUrl} = await ytAccessLogGetBaseUrl(req, accessLogParams);
+        const {baseUrl} = await getAccessLogBaseUrl(req);
         res.send({is_access_log_available: Boolean(baseUrl)});
     } catch (e: any) {
         await sendAndLogError(req.ctx, res, 500, e, {
@@ -45,29 +36,16 @@ export async function ytAccesLogCheckAvailable(req: Request, res: Response) {
     }
 }
 
-async function ytAccessLogGetBaseUrl(
-    req: Request,
-    {cluster, isDeveloper}: {cluster: string; isDeveloper: boolean},
-): Promise<{baseUrl?: string; testing?: boolean}> {
-    let {access_log_base_url: baseUrl} = await getPreloadedClusterUiConfig(
+function getAccessLogBaseUrl(req: Request) {
+    const {ytAuthCluster: cluster} = req.params;
+    const isDeveloper = req.cookies.ui_config_mode === 'developer';
+
+    return getBaseUrlFromConfiguration(req, {
         cluster,
-        req.ctx,
         isDeveloper,
-    );
-
-    if (!baseUrl) {
-        baseUrl = req.ctx.config.uiSettings.accessLogBasePath;
-    }
-
-    if (!baseUrl) {
-        return {};
-    }
-
-    const testing = ypath.get(baseUrl, '/@testing');
-    return {
-        baseUrl: typeof baseUrl === 'string' ? baseUrl : baseUrl?.$value,
-        testing,
-    };
+        uiConfigFieldName: 'access_log_base_url',
+        uiSettingsFieldName: 'accessLogBasePath',
+    });
 }
 
 const ALLOWED_ACTIONS = new Set(['ready', 'visible-time-range', 'access_log', 'qt_access_log']);
@@ -76,16 +54,15 @@ async function ytAccessLogApiImpl(req: Request, res: Response) {
     const {action} = req.params;
 
     if (!ALLOWED_ACTIONS.has(action)) {
-        throw new ErrorWithCode(404, 'Action is not allowed');
+        throw new ErrorWithCode(404, 'Unexpected action for Navigation/Access log');
     }
 
-    const {cluster, isDeveloper} = getAccessLogParams(req);
-    const {baseUrl, testing} = await ytAccessLogGetBaseUrl(req, {cluster, isDeveloper});
+    const {baseUrl, testing} = await getAccessLogBaseUrl(req);
 
     if (!baseUrl) {
         throw new ErrorWithCode(
             404,
-            'The installation of UI is not configured for access log viewer, check your config.uiSettings.accessLogBasePath',
+            'The UI installation is not configured to display "Navigation/Access log" tab on current cluster. Please check your configuration: config.uiSettings.accessLogBasePath, //sys/@ui_config/access_log_base_url',
         );
     }
 
