@@ -67,4 +67,7 @@ export type Pick2<
           : R;
 };
 
-export type KeysByType<T, V> = {[K in keyof T]: T[K] extends V ? K : never}[keyof T];
+export type KeysByType<T, V> = Exclude<
+    {[K in keyof T]: T[K] extends V ? K : never}[keyof T],
+    undefined
+>;
