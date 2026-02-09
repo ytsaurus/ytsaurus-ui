@@ -43,6 +43,7 @@ export interface ClusterUiConfig {
     tablet_errors_base_url?: string;
     job_log_viewer_base_url?: string;
     job_log_viewer_tvm_key?: 'jobLog' | 'jobLogTest';
+    gpu_profiler_command?: string;
 }
 
 export type CypressNodeRaw<AttributesT extends Record<string, unknown>, ValueT> =
