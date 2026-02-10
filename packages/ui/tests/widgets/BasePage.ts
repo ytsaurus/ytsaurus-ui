@@ -1,6 +1,7 @@
 import {Page, expect} from '@playwright/test';
 import {E2E_DIR_NAME} from '../utils';
 import {replaceInnerHtml} from '../utils/dom';
+import type {ConfigData} from '../../src/shared/yt-types';
 
 export class HasPage {
     readonly page;
@@ -198,6 +199,38 @@ export class BasePage extends HasPage {
         await this.page.mouse.wheel(0, -200);
 
         await this.page.locator(selector).scrollIntoViewIfNeeded({timeout: 1000});
+    }
+
+    async override_window__DATA__(
+        uiSettings: ConfigData['uiSettings'],
+        userSettings: ConfigData['settings']['data'],
+    ) {
+        await this.page.addInitScript(
+            (arg) => {
+                let original: Record<string, unknown> | null = null;
+                Object.defineProperty(window, '__DATA__', {
+                    get() {
+                        const base = original ?? {};
+                        const currentUiSettings =
+                            (base.uiSettings as ConfigData['uiSettings']) ?? {};
+                        const currentSettings = (base.settings as ConfigData['settings']) ?? {};
+                        const data = (base.settings as ConfigData['settings']).data ?? {};
+                        return {
+                            ...base,
+                            uiSettings: {...currentUiSettings, ...arg.uiSettings},
+                            settings: {
+                                ...currentSettings,
+                                data: {...data, ...arg.userSettings},
+                            },
+                        };
+                    },
+                    set(value) {
+                        original = value;
+                    },
+                });
+            },
+            {uiSettings, userSettings},
+        );
     }
 }
 
