@@ -64,6 +64,7 @@ import {fetchAccountUsageListDiff, fetchAccountUsageTreeDiff} from './account-us
 import {updateSortStateArray} from '../../../utils/sort-helpers';
 import {Action} from 'redux';
 import {openModal} from '../modals/attributes-modal';
+import {calcBaseUrl} from './accounts-usage-base-url';
 
 type SnapshotsThunkAction = ThunkAction<any, RootState, any, AccountsSnapshotsAction>;
 
@@ -89,7 +90,7 @@ export function syncAccountsUsageViewTypeWithSettings(): FiltersThunkAction {
 }
 
 export function fetchAccountsUsageSnapshots(cluster: string): SnapshotsThunkAction {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         dispatch({type: ACCOUNTS_USAGE_SNAPSHOTS_REQUEST});
 
         return axios
@@ -97,7 +98,7 @@ export function fetchAccountsUsageSnapshots(cluster: string): SnapshotsThunkActi
                 snapshot_timestamps: Array<number>;
             }>({
                 method: 'POST',
-                url: `/api/accounts-usage/${cluster}/list-timestamps`,
+                url: calcBaseUrl(`/api/accounts-usage/${cluster}/list-timestamps`, getState()),
                 data: {cluster},
                 withCredentials: true,
             })
@@ -177,7 +178,7 @@ export function fetchAccountUsageList(): UsageListThunkAction {
         return axios
             .request<AccountsUsageDataResponse>({
                 method: 'POST',
-                url: `/api/accounts-usage/${params.cluster}/get-resource-usage`,
+                url: calcBaseUrl(`/api/accounts-usage/${params.cluster}/get-resource-usage`, state),
                 data: requestParams,
                 withCredentials: true,
             })
@@ -232,7 +233,10 @@ export function fetchAccountUsageTree(): UsageTreeThunkAction {
         return axios
             .request<AccountsUsageDataResponse>({
                 method: 'POST',
-                url: `/api/accounts-usage/${params.cluster}/get-children-and-resource-usage`,
+                url: calcBaseUrl(
+                    `/api/accounts-usage/${params.cluster}/get-children-and-resource-usage`,
+                    state,
+                ),
                 data: requestParams,
                 withCredentials: true,
             })
@@ -381,14 +385,17 @@ export const openAccountAttributesModal =
         cluster: string;
         row: AccountUsageDataItem;
     }): ThunkAction<void, RootState, null, Action> =>
-    (dispatch) => {
+    (dispatch, getState) => {
         return dispatch(
             openModal({
                 title: row.path,
                 promise: axios
                     .request({
                         method: 'POST',
-                        url: `/api/accounts-usage/${cluster}/get-versioned-resource-usage`,
+                        url: calcBaseUrl(
+                            `/api/accounts-usage/${cluster}/get-versioned-resource-usage`,
+                            getState(),
+                        ),
                         data: {
                             ...row,
                             cluster,

@@ -2,7 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import {NAVIGATION_PARTIAL} from '../../../../../constants/navigation';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
-import {getCluster, getClusterUiConfig} from '../../../../../store/selectors/global/cluster';
+import {getCluster} from '../../../../../store/selectors/global/cluster';
 import {isDeveloper} from '../../../../../store/selectors/global/is-developer';
 import {updateUiConfigModeCookie} from '../../../../../utils/cookies/ui-config-mode';
 import {wrapApiPromiseByToaster} from '../../../../../utils/utils';

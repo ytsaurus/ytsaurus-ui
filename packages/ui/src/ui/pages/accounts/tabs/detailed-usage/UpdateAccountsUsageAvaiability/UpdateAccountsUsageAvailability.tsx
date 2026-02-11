@@ -32,7 +32,7 @@ export function UpdateAccountsUsageAvailability() {
                 errorContent: i18n('fail-content'),
             },
         );
-    }, [isAdmin, dispatch]);
+    }, [isAdmin, cluster, dispatch]);
 
     return null;
 }

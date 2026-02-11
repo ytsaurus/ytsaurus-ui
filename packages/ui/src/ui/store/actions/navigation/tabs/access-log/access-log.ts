@@ -29,7 +29,7 @@ import CancelHelper, {isCancelled} from '../../../../../utils/cancel-helper';
 import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
 import {getClusterUiConfig} from '../../../../../store/selectors/global';
 import thorYPath from '../../../../../common/thor/ypath';
-import {ClusterUiConfig, UiConfigBaseUrl} from '../../../../../../shared/yt-types';
+import {ClusterUiConfig} from '../../../../../../shared/yt-types';
 
 type AccessLogThunkAction<Res = any> = ThunkAction<Res, RootState, any, AccessLogAction>;
 type AccessLogFiltersThunkAction<Res = any> = ThunkAction<
