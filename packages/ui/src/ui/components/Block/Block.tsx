@@ -38,7 +38,7 @@ function ErrorLogger({error, type}: Pick<YTErrorBlockProps, 'error' | 'type'>) {
     return null;
 }
 
-export type YTErrorBlockProps = {
+type YTErrorBlockInternalProps = {
     className?: string;
     topMargin?: 'none' | 'half';
     bottomMargin?: boolean;
@@ -57,8 +57,20 @@ export type YTErrorBlockProps = {
     disableLogger?: boolean;
 };
 
+export type YTErrorBlockProps = Omit<YTErrorBlockInternalProps, 'error'> & {
+    error?: YTErrorBlockInternalProps['error'] | {error: string};
+};
+
 export function YTErrorBlock({error, ...props}: YTErrorBlockProps) {
     const e = React.useMemo(() => {
+        if (typeof error === 'string') {
+            return {message: error};
+        }
+
+        if (isThereOnlyErrorFieldString(error)) {
+            return {message: error.error};
+        }
+
         return cloneDeepWith_(error, (value) => {
             // Some UI-side errors might contain fields with `undefined`,
             // such values might not be rendered as yson, so we have to replace them with null
@@ -69,7 +81,21 @@ export function YTErrorBlock({error, ...props}: YTErrorBlockProps) {
     return <YTErrorBlockImpl {...props} error={e} />;
 }
 
-class YTErrorBlockImpl extends React.Component<YTErrorBlockProps> {
+function isThereOnlyErrorFieldString(error: YTErrorBlockProps['error']): error is {error: string} {
+    if (!error) {
+        return false;
+    }
+
+    if ('error' in error && typeof error.error === 'string') {
+        const keys = Object.keys(error);
+        if (keys.length === 1) {
+            return true;
+        }
+    }
+    return false;
+}
+
+class YTErrorBlockImpl extends React.Component<YTErrorBlockInternalProps> {
     static defaultProps = {
         type: 'error',
     };
