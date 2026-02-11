@@ -27,6 +27,9 @@ import {
 } from '../../../../../store/reducers/navigation/tabs/access-log/access-log-filters';
 import CancelHelper, {isCancelled} from '../../../../../utils/cancel-helper';
 import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
+import {getClusterUiConfig} from '../../../../../store/selectors/global';
+import thorYPath from '../../../../../common/thor/ypath';
+import {ClusterUiConfig, UiConfigBaseUrl} from '../../../../../../shared/yt-types';
 
 type AccessLogThunkAction<Res = any> = ThunkAction<Res, RootState, any, AccessLogAction>;
 type AccessLogFiltersThunkAction<Res = any> = ThunkAction<
@@ -55,6 +58,17 @@ export function resetPaginationIfNeededAndCheckIfPathChanged(): AccessLogFilters
 
 const accesLogCancelHelper = new CancelHelper();
 
+function calcBaseUrl(url: string, state: RootState) {
+    const uiConfig = getClusterUiConfig(state);
+    return calcAccessLogBaseUrl(uiConfig, url);
+}
+
+export function calcAccessLogBaseUrl(uiConfig: ClusterUiConfig, url: string) {
+    const {access_log_base_url} = uiConfig;
+    const use_cors = thorYPath.getValue(access_log_base_url, '/@use_cors');
+    return use_cors ? thorYPath.getValue(access_log_base_url) + `/${url.split('/').pop()}` : url;
+}
+
 export function fetchAccessLog(): AccessLogThunkAction {
     return (dispatch, getState) => {
         const pathChanged = dispatch(resetPaginationIfNeededAndCheckIfPathChanged());
@@ -65,12 +79,13 @@ export function fetchAccessLog(): AccessLogThunkAction {
         const {cluster} = params;
 
         dispatch({type: ACCESS_LOG_PARTIAL, data: {params}});
+
         return Promise.all([
-            axios.get(`/api/access-log/${cluster}/ready`),
+            axios.get(calcBaseUrl(`/api/access-log/${cluster}/ready`, state)),
             axios
                 .request<AccessLogAvailableTimeRange>({
                     method: 'POST',
-                    url: `/api/access-log/${cluster}/visible-time-range`,
+                    url: calcBaseUrl(`/api/access-log/${cluster}/visible-time-range`, state),
                     withCredentials: true,
                     data: {cluster: params.cluster},
                     cancelToken: accesLogCancelHelper.removeAllAndGenerateNextToken(),
@@ -82,7 +97,7 @@ export function fetchAccessLog(): AccessLogThunkAction {
                 }),
             axios.request<AccessLogData>({
                 method: 'POST',
-                url: `/api/access-log/${cluster}/access_log`,
+                url: calcBaseUrl(`/api/access-log/${cluster}/access_log`, state),
                 data: params,
                 withCredentials: true,
                 cancelToken: accesLogCancelHelper.generateNextToken(),
@@ -114,7 +129,7 @@ export const fetchAccessLogQtId = (): AccessLogThunkAction => async (_, getState
     const {data} = await wrapApiPromiseByToaster(
         axios.request({
             method: 'POST',
-            url: `/api/access-log/${cluster}/qt_access_log`,
+            url: calcBaseUrl(`/api/access-log/${cluster}/qt_access_log`, state),
             withCredentials: true,
             data: newParams,
         }),
