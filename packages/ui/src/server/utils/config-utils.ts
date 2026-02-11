@@ -2,13 +2,13 @@
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import type {Request} from '../../@types/core';
 import {UISettings} from '../../shared/ui-settings';
-import {ClusterUiConfig, CypressNodeRaw} from '../../shared/yt-types';
+import {ClusterUiConfig, UiConfigBaseUrl} from '../../shared/yt-types';
 import {getPreloadedClusterUiConfig} from '../components/cluster-params';
 import {KeysByType} from '../../@types/types';
 
 type UIConfigKeys = KeysByType<
     ClusterUiConfig,
-    CypressNodeRaw<{testing: boolean}, string> | undefined
+    UiConfigBaseUrl | undefined
 >;
 type UISettingsKeys = KeysByType<UISettings, string | undefined>;
 

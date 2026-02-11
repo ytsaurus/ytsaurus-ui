@@ -21,8 +21,10 @@ export interface YTConfig {
     environment?: 'development' | 'production' | 'farm' | 'localmode';
 }
 
+export type UiConfigBaseUrl = CypressNodeRaw<{testing: boolean; use_cors: boolean}, string>;
+
 export interface ClusterUiConfig {
-    access_log_base_url?: CypressNodeRaw<{testing: boolean}, string>;
+    access_log_base_url?: UiConfigBaseUrl;
     enable_per_bundle_tablet_accounting?: boolean;
     enable_per_account_tablet_accounting?: boolean;
     per_bundle_accounting_help_link?: string;
@@ -30,7 +32,7 @@ export interface ClusterUiConfig {
     enable_maintenance_api_proxies?: boolean;
     chyt_controller_base_url?: string;
     livy_controller_base_url?: string;
-    resource_usage_base_url?: CypressNodeRaw<{testing: boolean}, string>;
+    resource_usage_base_url?: UiConfigBaseUrl;
     query_tracker_default_aco?: Record<Stage, string>;
     job_trace_url_template?: {
         title: string;

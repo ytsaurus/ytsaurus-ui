@@ -2,7 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import {NAVIGATION_PARTIAL} from '../../../../../constants/navigation';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
-import {getCluster} from '../../../../../store/selectors/global/cluster';
+import {getCluster, getClusterUiConfig} from '../../../../../store/selectors/global/cluster';
 import {isDeveloper} from '../../../../../store/selectors/global/is-developer';
 import {updateUiConfigModeCookie} from '../../../../../utils/cookies/ui-config-mode';
 import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
@@ -29,7 +29,7 @@ export function UpdateAccessLogAvailability() {
                 errorContent: i18n('fail-content'),
             },
         );
-    }, [isAdmin, dispatch]);
+    }, [isAdmin, cluster, dispatch]);
 
     return null;
 }
