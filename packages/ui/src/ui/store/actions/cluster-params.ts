@@ -17,7 +17,6 @@ import {
     isRecentPagesFirst,
     shouldUsePreserveState,
 } from '../../store/selectors/settings';
-import {isRedirectToBetaSwitched} from '../../store/selectors/settings/settings-development';
 import {isDeveloper as selectIsDeveloper} from '../../store/selectors/global/is-developer';
 import {rumLogError} from '../../rum/rum-counter';
 import {RumWrapper, YTApiId} from '../../rum/rum-wrap-api';

@@ -6,7 +6,6 @@ import {createSelector} from 'reselect';
 
 import unipika from '../../../common/thor/unipika';
 import ypath from '../../../common/thor/ypath';
-import {getAccessLogBasePath} from '../../../config';
 import {getConfigData} from '../../../config/ui-settings';
 import {Tab} from '../../../constants/navigation/index';
 import type {RootState} from '../../../store/reducers';

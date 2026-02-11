@@ -6,10 +6,7 @@ import {ClusterUiConfig, UiConfigBaseUrl} from '../../shared/yt-types';
 import {getPreloadedClusterUiConfig} from '../components/cluster-params';
 import {KeysByType} from '../../@types/types';
 
-type UIConfigKeys = KeysByType<
-    ClusterUiConfig,
-    UiConfigBaseUrl | undefined
->;
+type UIConfigKeys = KeysByType<ClusterUiConfig, UiConfigBaseUrl | undefined>;
 type UISettingsKeys = KeysByType<UISettings, string | undefined>;
 
 export async function getBaseUrlFromConfiguration(
