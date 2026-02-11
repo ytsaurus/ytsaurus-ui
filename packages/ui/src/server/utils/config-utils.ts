@@ -39,8 +39,9 @@ export async function getBaseUrlFromConfiguration(
     }
 
     const testing = ypath.get(baseUrl, '/@testing');
+    const res = typeof baseUrl === 'string' ? baseUrl : baseUrl?.$value;
     return {
-        baseUrl: typeof baseUrl === 'string' ? baseUrl : baseUrl?.$value,
+        baseUrl: res.endsWith('/') ? res.slice(0, -1) : res,
         testing,
     };
 }

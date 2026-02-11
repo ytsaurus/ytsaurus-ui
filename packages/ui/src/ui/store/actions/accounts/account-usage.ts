@@ -18,7 +18,7 @@ import {
     ACCOUNTS_USAGE_TREE_SUCCESS,
 } from '../../../constants/accounts/accounts';
 import axios from 'axios';
-import {getAccountsUsageBaseUrl, getCluster} from '../../selectors/global';
+import {getCluster} from '../../selectors/global/cluster';
 import {
     AccountUsageListAction,
     AccountUsageListDataParams,
@@ -89,8 +89,7 @@ export function syncAccountsUsageViewTypeWithSettings(): FiltersThunkAction {
 }
 
 export function fetchAccountsUsageSnapshots(cluster: string): SnapshotsThunkAction {
-    return (dispatch, getState) => {
-        const accountsUsageBaseUrl = getAccountsUsageBaseUrl(getState());
+    return (dispatch) => {
         dispatch({type: ACCOUNTS_USAGE_SNAPSHOTS_REQUEST});
 
         return axios
@@ -98,7 +97,7 @@ export function fetchAccountsUsageSnapshots(cluster: string): SnapshotsThunkActi
                 snapshot_timestamps: Array<number>;
             }>({
                 method: 'POST',
-                url: accountsUsageBaseUrl + 'list-timestamps',
+                url: `/api/accounts-usage/${cluster}/list-timestamps`,
                 data: {cluster},
                 withCredentials: true,
             })
@@ -163,7 +162,6 @@ export function fetchAccountUsageList(): UsageListThunkAction {
         const state = getState();
 
         const timestamp = getAccountUsageCurrentSnapshot(state);
-        const accountsUsageBaseUrl = getAccountsUsageBaseUrl(state);
 
         const params = getFilterParameters(state);
         const requestParams: AccountUsageListDataParams = {
@@ -179,7 +177,7 @@ export function fetchAccountUsageList(): UsageListThunkAction {
         return axios
             .request<AccountsUsageDataResponse>({
                 method: 'POST',
-                url: accountsUsageBaseUrl + 'get-resource-usage',
+                url: `/api/accounts-usage/${params.cluster}/get-resource-usage`,
                 data: requestParams,
                 withCredentials: true,
             })
@@ -215,7 +213,6 @@ export function fetchAccountUsageTree(): UsageTreeThunkAction {
         const state = getState();
 
         const timestamp = getAccountUsageCurrentSnapshot(state);
-        const accountsUsageBaseUrl = getAccountsUsageBaseUrl(state);
 
         const params = getFilterParameters(state);
         const requestParams: AccountUsageTreeData['requestParams'] = {
@@ -235,7 +232,7 @@ export function fetchAccountUsageTree(): UsageTreeThunkAction {
         return axios
             .request<AccountsUsageDataResponse>({
                 method: 'POST',
-                url: accountsUsageBaseUrl + 'get-children-and-resource-usage',
+                url: `/api/accounts-usage/${params.cluster}/get-children-and-resource-usage`,
                 data: requestParams,
                 withCredentials: true,
             })
@@ -384,15 +381,14 @@ export const openAccountAttributesModal =
         cluster: string;
         row: AccountUsageDataItem;
     }): ThunkAction<void, RootState, null, Action> =>
-    (dispatch, getState) => {
-        const accountsUsageBaseUrl = getAccountsUsageBaseUrl(getState());
+    (dispatch) => {
         return dispatch(
             openModal({
                 title: row.path,
                 promise: axios
                     .request({
                         method: 'POST',
-                        url: accountsUsageBaseUrl + 'get-versioned-resource-usage',
+                        url: `/api/accounts-usage/${cluster}/get-versioned-resource-usage`,
                         data: {
                             ...row,
                             cluster,

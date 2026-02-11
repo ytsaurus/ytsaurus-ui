@@ -20,10 +20,6 @@ export function isIdmAclAvailable() {
     return UIFactory.getAclApi().isAllowed;
 }
 
-export function getAccountsUsageBasePath() {
-    return uiSettings.accountsUsageBasePath;
-}
-
 export function getJupyterBasePath() {
     return uiSettings.jupyterBasePath;
 }

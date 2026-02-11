@@ -29,7 +29,6 @@ import {
     AccountUsageTreeDiffData,
 } from '../../reducers/accounts/usage/accounts-usage-tree-diff';
 import {AccountUsageData} from '../../reducers/accounts/usage/account-usage-types';
-import {getAccountsUsageBaseUrl} from '../../selectors/global';
 
 type UsageListThunkAction = ThunkAction<any, RootState, any, AccountUsageListDiffAction>;
 
@@ -51,7 +50,6 @@ export function fetchAccountUsageListDiff(): UsageListThunkAction {
         const state = getState();
 
         const timestamps = getFilterFromToTimestamps(state);
-        const accountsUsageBaseUrl = getAccountsUsageBaseUrl(state);
 
         if (!timestamps) {
             return;
@@ -71,7 +69,7 @@ export function fetchAccountUsageListDiff(): UsageListThunkAction {
         return axios
             .request<AccountsUsageDiffDataResponse>({
                 method: 'POST',
-                url: accountsUsageBaseUrl + 'get-resource-usage-diff',
+                url: `/api/accounts-usage/${params.cluster}/get-resource-usage-diff`,
                 data: requestParams,
                 withCredentials: true,
             })
@@ -107,7 +105,6 @@ export function fetchAccountUsageTreeDiff(): UsageTreeThunkAction {
         const state = getState();
 
         const timestamps = getFilterFromToTimestamps(state);
-        const accountsUsageBaseUrl = getAccountsUsageBaseUrl(state);
 
         if (!timestamps) {
             return;
@@ -131,7 +128,7 @@ export function fetchAccountUsageTreeDiff(): UsageTreeThunkAction {
         return axios
             .request<AccountUsageData>({
                 method: 'POST',
-                url: accountsUsageBaseUrl + 'get-children-and-resource-usage-diff',
+                url: `/api/accounts-usage/${params.cluster}/get-children-and-resource-usage-diff`,
                 data: requestParams,
                 withCredentials: true,
             })
