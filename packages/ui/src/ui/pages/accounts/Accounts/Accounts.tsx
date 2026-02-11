@@ -32,13 +32,14 @@ import AccountsUsageTab from '../tabs/detailed-usage/AccountUsageTab';
 import {useAppRumMeasureStart} from '../../../rum/rum-app-measures';
 import {useRumMeasureStop} from '../../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
-import {getAccountsUsageBaseUrl, getCluster} from '../../../store/selectors/global';
+import {getCluster} from '../../../store/selectors/global';
 import AccountsUpdater from './AccountsUpdater';
 import {RootState} from '../../../store/reducers';
 
 import './Accounts.scss';
 import UIFactory from '../../../UIFactory';
 import {UI_TAB_SIZE} from '../../../constants/global';
+import {UpdateAccountsUsageAvailability} from '../tabs/detailed-usage/UpdateAccountsUsageAvaiability/UpdateAccountsUsageAvailability';
 
 const b = block('accounts');
 
@@ -95,6 +96,7 @@ export class Accounts extends React.Component<
 
         return (
             <div className="elements-page__content">
+                <UpdateAccountsUsageAvailability />
                 <AccountsRumMeasure />
                 <AccountsUpdater />
                 <section className={b(null, 'elements-main-section')}>
@@ -155,7 +157,7 @@ const mapStateToProps = (state: RootState) => {
     return {
         lastVisitedTab: lastVisitedTabs[Page.ACCOUNTS],
         activeAccount: getActiveAccount(state),
-        allowUsageTab: Boolean(getAccountsUsageBaseUrl(state)),
+        allowUsageTab: state.accounts.accounts.is_accounts_usage_available,
         cluster: getCluster(state),
     };
 };

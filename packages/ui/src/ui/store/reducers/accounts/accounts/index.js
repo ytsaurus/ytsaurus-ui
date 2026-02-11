@@ -57,6 +57,8 @@ const ephemeralState = {
      */
     editCounter: 0,
     disableCacheForNextFetch: false,
+
+    is_accounts_usage_available: false,
 };
 
 export const initialState = {

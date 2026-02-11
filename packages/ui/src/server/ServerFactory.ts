@@ -19,7 +19,12 @@ export interface ServerFactory {
         token?: string,
     ): VcsApi | undefined;
     getAuthHeaders(
-        type: 'aiChat' | 'accessLogProd' | 'accessLogTest',
+        type:
+            | 'aiChat'
+            | 'accessLogProd'
+            | 'accessLogTest'
+            | 'accountsUsageProd'
+            | 'accountsUsageTest',
         req: Request,
     ): Record<string, string | undefined> | undefined;
 }
@@ -57,10 +62,15 @@ const serverFactory: ServerFactory = {
         return undefined;
     },
     getAuthHeaders(type, req) {
-        if (type === 'accessLogProd' || type === 'accessLogTest') {
-            return req.yt.ytApiAuthHeaders;
+        switch (type) {
+            case 'aiChat':
+                return undefined;
+            case 'accountsUsageTest':
+            case 'accountsUsageProd':
+            case 'accessLogTest':
+            case 'accessLogProd':
+                return req.yt.ytApiAuthHeaders;
         }
-        return undefined;
     },
 };
 

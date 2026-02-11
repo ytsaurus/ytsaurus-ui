@@ -30,7 +30,7 @@ export interface ClusterUiConfig {
     enable_maintenance_api_proxies?: boolean;
     chyt_controller_base_url?: string;
     livy_controller_base_url?: string;
-    resource_usage_base_url?: string;
+    resource_usage_base_url?: CypressNodeRaw<{testing: boolean}, string>;
     query_tracker_default_aco?: Record<Stage, string>;
     job_trace_url_template?: {
         title: string;
@@ -54,6 +54,8 @@ export type CypressNode<AttributesT extends Record<string, unknown>, ValueT> = {
     $attributes: AttributesT;
     $value: ValueT;
 };
+
+export type CypresNodeValue<T> = T extends {$value: unknown} ? T['$value'] : T;
 
 export type AnnotateWithTypes<T extends Object> = T extends undefined
     ? undefined

@@ -23,9 +23,8 @@ import {getConfigData, userSettingsCluster} from '../../../config/ui-settings';
 export * from './cluster';
 export * from './username';
 
-import {getCluster, getClusterUiConfig} from './cluster';
+import {getCluster} from './cluster';
 import {isDeveloper} from './is-developer';
-import {getAccountsUsageBasePath} from '../../../config';
 
 export const getGlobalError = (state: RootState) => state.global.error?.error;
 export const getGlobalErrorType = (state: RootState) => state.global.error?.errorType;
@@ -151,8 +150,4 @@ export const getGlobalYTAuthCluster = (state: RootState) => state.global.ytAuthC
 
 export const getSettingsCluster = createSelector([getCluster], (cluster) => {
     return userSettingsCluster ?? cluster;
-});
-
-export const getAccountsUsageBaseUrl = createSelector([getClusterUiConfig], (uiConfig) => {
-    return uiConfig.resource_usage_base_url || getAccountsUsageBasePath();
 });
