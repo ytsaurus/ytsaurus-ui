@@ -101,9 +101,9 @@ import {
     flowGraphParams,
     flowParams,
     flowPartitionParams,
-    flowWorkersParams,
     flowWorkerMonitorParams,
     flowWorkerParams,
+    flowWorkersParams,
 } from './reducers/flow/url-mapping';
 
 import {FlowTab} from './reducers/flow/filters';
