@@ -4,5 +4,9 @@
   "partition": "Партиция",
   "pipeline": "Пайплайн",
   "leader-controller-address": "Адресс контроллера-лидера",
-  "open-in-navigation": "Открыть в Навигации"
+  "open-in-navigation": "Открыть в Навигации",
+  "failed-to-load-messages": "Не удалось загрузить сообщения",
+  "start": "Запустить",
+  "stop": "Останосить",
+  "pause": "Приостаносить"
 }
