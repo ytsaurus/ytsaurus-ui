@@ -4,5 +4,9 @@
   "partition": "Partition",
   "pipeline": "Pipeline",
   "leader-controller-address": "Leader controller address",
-  "open-in-navigation": "Open in Navigation"
+  "open-in-navigation": "Open in Navigation",
+  "failed-to-load-messages": "Failed to load messages",
+  "start": "Start",
+  "stop": "Stop",
+  "pause": "Pause"
 }

@@ -130,13 +130,13 @@ function FlowStatusToolbar() {
         <Flex className={block('status-toolbar')} alignItems="baseline" gap={2}>
             <FlowMessagesLoaded />
             <Button view="outlined" onClick={onStart}>
-                <Icon awesome="play-circle" /> Start
+                <Icon awesome="play-circle" /> {i18n('start')}
             </Button>
             <Button view="outlined" onClick={onPause}>
-                <Icon awesome="pause-circle" /> Pause
+                <Icon awesome="pause-circle" /> {i18n('pause')}
             </Button>
             <Button view="outlined" onClick={onStop}>
-                <Icon awesome="stop-circle" /> Stop
+                <Icon awesome="stop-circle" /> {i18n('stop')}
             </Button>
         </Flex>
     );
@@ -195,7 +195,7 @@ export function FlowMessagesLoaded() {
         }) ?? {};
 
     return error ? (
-        <YTErrorInline message="Failded to load messages" error={error} />
+        <YTErrorInline message={i18n('failed-to-load-messages')} error={error} />
     ) : (
         <FlowMessages data={data?.messages ?? []} paddingTop="none" />
     );
