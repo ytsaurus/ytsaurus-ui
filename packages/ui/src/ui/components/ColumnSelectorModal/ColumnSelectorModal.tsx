@@ -34,25 +34,33 @@ export type ColumnSelectorItem<DataT> = {
 
 type Props<T> = ColumnSelectorModalProps<T>;
 
-type State<T> = Pick<Props<T>, 'items' | 'srcItems'> & {itemsOrder: Array<string>};
+type State<T> = Pick<Props<T>, 'items' | 'srcItems'> & {
+    itemsOrder: Array<string>;
+    isContentVisible: boolean;
+};
 
 export default class ColumnSelectorModal<T = never> extends React.Component<Props<T>, State<T>> {
     state: State<T> = {
         srcItems: this.props.srcItems || this.props.items,
         items: makeItemsCopy(this.props.items),
         itemsOrder: this._getItemsOrder(this.props.items),
+        isContentVisible: false,
     };
 
     // in React 16.3 there is another way to do it: getDerivedStateFromProps;
     // revise this place once received data is managed by Redux
     componentDidUpdate(prevProps: Props<T>) {
-        const {items, srcItems} = this.props;
+        const {items, srcItems, isVisible} = this.props;
         if (prevProps.items !== items || prevProps.srcItems !== srcItems) {
             // don't update itemsOrder
             this.setState({
                 srcItems: srcItems || this.props.items,
                 items: this._getOrderedItems(makeItemsCopy(items)),
             });
+        }
+
+        if (prevProps.isVisible !== isVisible) {
+            this.setState({isContentVisible: false});
         }
     }
 
@@ -68,8 +76,15 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
         this.setState({
             items: this._getOrderedItems(makeItemsCopy(items)),
             itemsOrder: order,
+            isContentVisible: false,
         });
         this.props.onCancel();
+    };
+
+    _handleTransitionInComplete = () => {
+        if (this.props.isVisible) {
+            this.setState({isContentVisible: true});
+        }
     };
 
     _getItemsOrder(items: Props<T>['items']) {
@@ -190,7 +205,11 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
 
     renderContent() {
         const {isVisible, ...rest} = this.props; // eslint-disable-line
-        const {items, srcItems} = this.state;
+        const {items, srcItems, isContentVisible} = this.state;
+
+        if (!isContentVisible) {
+            return null;
+        }
 
         const headingCN = block('elements-heading')({size: 's'}, b('header'));
 
@@ -203,35 +222,33 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
         );
 
         return (
-            isVisible && (
-                <div className={b()}>
-                    <div className={b('panel', {left: 'yes'})}>
-                        <div className={headingCN}>
-                            {i18n('all')} &nbsp;
-                            <span className="elements-secondary-text">{srcItems?.length}</span>
-                        </div>
-
-                        {this.renderColumnSelector({
-                            props: selectorProps,
-                            title: i18n('no-available-columns'),
-                            description: i18n('no-columns-matching'),
-                        })}
+            <div className={b()}>
+                <div className={b('panel', {left: 'yes'})}>
+                    <div className={headingCN}>
+                        {i18n('all')} &nbsp;
+                        <span className="elements-secondary-text">{srcItems?.length}</span>
                     </div>
 
-                    <div className={b('panel')}>
-                        <div className={headingCN}>
-                            Selected &nbsp;
-                            <span className="elements-secondary-text">{selectedItemsCount}</span>
-                        </div>
-
-                        {this.renderColumnSelector({
-                            props: sortableSelectorProps,
-                            title: i18n('no-selected-columns'),
-                            description: i18n('add-columns-you-need'),
-                        })}
-                    </div>
+                    {this.renderColumnSelector({
+                        props: selectorProps,
+                        title: i18n('no-available-columns'),
+                        description: i18n('no-columns-matching'),
+                    })}
                 </div>
-            )
+
+                <div className={b('panel')}>
+                    <div className={headingCN}>
+                        Selected &nbsp;
+                        <span className="elements-secondary-text">{selectedItemsCount}</span>
+                    </div>
+
+                    {this.renderColumnSelector({
+                        props: sortableSelectorProps,
+                        title: i18n('no-selected-columns'),
+                        description: i18n('add-columns-you-need'),
+                    })}
+                </div>
+            </div>
         );
     }
 
@@ -248,6 +265,7 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
                 confirmText={i18n('apply')}
                 onConfirm={this._handleCONFIRMButtonClick}
                 onCancel={this._handleCANCELButtonClick}
+                onTransitionInComplete={this._handleTransitionInComplete}
                 content={this.renderContent()}
                 contentClassName="column-selector-modal-content"
             />
