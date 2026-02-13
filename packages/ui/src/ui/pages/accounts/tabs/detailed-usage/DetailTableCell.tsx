@@ -1,10 +1,12 @@
-import React, {FC} from 'react';
-import {Flex, Icon, Tooltip} from '@gravity-ui/uikit';
-import {AccountUsageViewType} from '../../../../store/reducers/accounts/usage/accounts-usage-filters';
-import cn from 'bem-cn-lite';
-import format from '../../../../common/hammer/format';
 import CircleInfoIcon from '@gravity-ui/icons/svgs/circle-info.svg';
+import {Flex, Icon, Text, Tooltip} from '@gravity-ui/uikit';
+import cn from 'bem-cn-lite';
+import React, {FC} from 'react';
+import format from '../../../../common/hammer/format';
+import MetaTable from '../../../../components/MetaTable/MetaTable';
+import {AccountUsageViewType} from '../../../../store/reducers/accounts/usage/accounts-usage-filters';
 import './DetailTableCell.scss';
+import i18n from './i18n';
 
 const block = cn('detail-table-cell');
 
@@ -27,22 +29,43 @@ export const DetailTableCell: FC<Props> = ({value, additionalValue, viewType, fo
     const sign = Math.sign(totalValue);
 
     const formatFn = formatType === 'bytes' ? format.Bytes : format.Number;
+    const commited = formatFn(value);
+    const uncommited = formatFn(additionalValue);
 
     return (
-        <Flex justifyContent="center" alignItems="center" gap={1} className={block()}>
-            <span className={block('value', {diff: getDiffClass(Boolean(showDiff), sign)})}>
-                {showDiff && getRenderSign(sign)}
-                {formatFn(totalValue)}
-            </span>
+        <Flex className={block({versioned: Boolean(additionalValue)})} direction="column">
+            <Flex alignItems="center" gap={1} className={block()}>
+                <span className={block('value', {diff: getDiffClass(Boolean(showDiff), sign)})}>
+                    {showDiff && getRenderSign(sign)}
+                    {formatFn(totalValue)}
+                </span>
+                {Boolean(additionalValue) && (
+                    <Tooltip
+                        content={
+                            additionalValue ? (
+                                <MetaTable
+                                    items={[
+                                        {key: i18n('commited'), value: commited},
+                                        {
+                                            key: i18n('versioned'),
+                                            value: uncommited,
+                                        },
+                                    ]}
+                                />
+                            ) : null
+                        }
+                        placement="top"
+                    >
+                        <span tabIndex={0} className={block('alert-icon')}>
+                            <Icon data={CircleInfoIcon} size={14} />
+                        </span>
+                    </Tooltip>
+                )}
+            </Flex>
             {Boolean(additionalValue) && (
-                <Tooltip
-                    content={`${formatFn(value)} + ${formatFn(additionalValue)} (versioned)`}
-                    placement="top"
-                >
-                    <div tabIndex={0} className={block('alert-icon')}>
-                        <Icon data={CircleInfoIcon} size={14} />
-                    </div>
-                </Tooltip>
+                <Text variant="caption-2" color="secondary">
+                    {commited}, {uncommited}
+                </Text>
             )}
         </Flex>
     );

@@ -1,4 +1,9 @@
 .detail-table-cell {
+    &_versioned {
+        margin-top: -7px;
+        margin-bottom: -6px;
+    }
+
     &__value {
         &_diff_plus {
             color: var(--danger-color);

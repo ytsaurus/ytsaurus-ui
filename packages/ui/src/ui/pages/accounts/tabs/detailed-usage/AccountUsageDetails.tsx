@@ -251,7 +251,7 @@ function useColumnsByPreset(mediums: Array<string>) {
                     />
                 );
             },
-            align: 'right',
+            align: 'left',
             width: 120,
         });
         res.set('master_memory', {
@@ -268,7 +268,7 @@ function useColumnsByPreset(mediums: Array<string>) {
                     />
                 );
             },
-            align: 'right',
+            align: 'left',
             width: 120,
         });
         res.set('owner', {
@@ -301,7 +301,7 @@ function useColumnsByPreset(mediums: Array<string>) {
                         />
                     );
                 },
-                align: 'right',
+                align: 'left',
                 width: 120,
             });
         });
@@ -340,7 +340,7 @@ function useColumnsByPreset(mediums: Array<string>) {
                         );
                     }
                 },
-                align: 'right',
+                align: 'left',
                 width: 150,
             });
         });
