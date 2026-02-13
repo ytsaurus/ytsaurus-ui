@@ -41,7 +41,7 @@ export type NavigationState = {
 
     originatingQueuePath: string | undefined;
 
-    is_access_log_available: false;
+    is_access_log_available: boolean;
 };
 
 const persistedState: Pick<NavigationState, 'path' | 'mode'> = {

@@ -31,7 +31,7 @@ export const getNavigationIsAccountUsable = (state: RootState) =>
 export const getNavigationCheckPermissionsError = (state: RootState) =>
     state.navigation.navigation.checkPermissionsError as YTError | undefined;
 export const getMode = (state: RootState) => state.navigation.navigation.mode;
-export const getNaviagationAccessLogAvailable = (state: RootState) =>
+export const getNavigationAccessLogAvailable = (state: RootState) =>
     state.navigation.navigation.is_access_log_available;
 
 export const getNavigationPathAccount = createSelector(
@@ -81,7 +81,7 @@ export const getSupportedTabs = createSelector(
         getTableMountConfigHasData,
         getTabletErrorsBackgroundCount,
         getNavigationOriginatingQueuePath,
-        getNaviagationAccessLogAvailable,
+        getNavigationAccessLogAvailable,
     ],
     (
         attributes,

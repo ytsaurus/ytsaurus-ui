@@ -62,7 +62,7 @@ async function ytAccessLogApiImpl(req: Request, res: Response) {
     if (!baseUrl) {
         throw new ErrorWithCode(
             404,
-            'The UI installation is not configured to display "Navigation/Access log" tab on current cluster. Please check your configuration: config.uiSettings.accessLogBasePath, //sys/@ui_config/access_log_base_url',
+            'The UI installation is not configured to display "Navigation/Access log" tab for the current cluster. Please check your configuration: config.uiSettings.accessLogBasePath, //sys/@ui_config/access_log_base_url',
         );
     }
 
