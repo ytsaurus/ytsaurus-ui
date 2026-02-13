@@ -39,7 +39,7 @@ import {RootState} from '../../../store/reducers';
 import './Accounts.scss';
 import UIFactory from '../../../UIFactory';
 import {UI_TAB_SIZE} from '../../../constants/global';
-import {UpdateAccountsUsageAvailability} from '../tabs/detailed-usage/UpdateAccountsUsageAvaiability/UpdateAccountsUsageAvailability';
+import {UpdateAccountsUsageAvailability} from '../tabs/detailed-usage/UpdateAccountsUsageAvailability/UpdateAccountsUsageAvailability';
 
 const b = block('accounts');
 

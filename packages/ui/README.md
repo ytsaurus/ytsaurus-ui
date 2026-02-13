@@ -99,7 +99,7 @@ To activate monitoring ddashboards you have to provide PROMETHEUS_BASE_URL. Addi
 ### Cluster specific features
 
 There is yt-api command get_supported_feature and it is a good place to describe API features.
-But some cases require ability to turn on/off a feature manually on a specific cluster. Such cluster specific optinos are placed placed in:
+But some cases require the ability to turn on/off a feature manually on a specific cluster. Such cluster specific optinos are placed in:
 
 - `//sys/@ui_config` (values affects all users)
 - `//sys/@ui_config_dev_overrides` (values affects only admins)
@@ -108,7 +108,7 @@ But some cases require ability to turn on/off a feature manually on a specific c
 
 UI determines a user as an admin on the cluster if he has `write` access to `admins` group.
 
-Available optaions (**default values** are highlighted in bold):
+Available options (**default values** are highlighted in bold):
 
 | Option name                         | Allowed values  | Description                                                                                                          |
 | :---------------------------------- | :-------------- | :------------------------------------------------------------------------------------------------------------------- |
@@ -118,14 +118,14 @@ Available optaions (**default values** are highlighted in bold):
 
 | per_bundle_accounting_help_link | **null**, url as string | Help link for resources of tablets to display from AccountEditorDialog about moving the resources to bundles [YTFRONT-2851](https://nda.ya.ru/t/xnLq-3Dm6fPYPo) |
 
-| enable_maintenance_api_nodes | **null**, boolean | Allows to use `add_maintenance`/`remove_maintenance` commands from `Comopnents/Nodes` page [YTFRONT-3792](https://nda.ya.ru/t/RvueJLzN6fWx3h) |
+| enable_maintenance_api_nodes | **null**, boolean | Allows to use `add_maintenance`/`remove_maintenance` commands from `Components/Nodes` page [YTFRONT-3792](https://nda.ya.ru/t/RvueJLzN6fWx3h) |
 
 | enable_maintenance_api_proxies | **null**, boolean | Allows to use `add_maintenance`/`remove_maintenance` commands from `Components/HTTP Proxies` and `Components/RPC Proxies` pages [YTFRONT-3792](https://nda.ya.ru/t/RvueJLzN6fWx3h) |
 
 | chyt_controller_base_url | **null**, url as string | Base url for chyt-controller |
 
 | livy_controller_base_url | **null**, url as string | Base url for spyt-controller |
-| job_trace_url_template | **null**, `{title: string; url_template: string; enforce_for_trees?: Array<string>}` | If defined adds `Job trace` item to meta-table on `Job/Details` page for a job with `archive_features/has_trace == true` and for jobs from a tree in `enforce_for_trees`, example: `{title: 'Open im MyProfiling', url_template: 'https://my.profiling.service/{cluster}/{operationId}/{jobId}', enforce_for_trees: ['tree-with-traces'] }` |
+| job_trace_url_template | **null**, `{title: string; url_template: string; enforce_for_trees?: Array<string>}` | If defined adds `Job trace` item to meta-table on `Job/Details` page for a job with `archive_features/has_trace == true` and for jobs from a tree in `enforce_for_trees`, example: `{title: 'Open in MyProfiling', url_template: 'https://my.profiling.service/{cluster}/{operationId}/{jobId}', enforce_for_trees: ['tree-with-traces'] }` |
 
 | query_tracker_default_aco | **null**, `{stage1: string; stage2: string; }` | Sets the default ACO in Query Tracker requests for each stage |
 
@@ -135,7 +135,7 @@ Available optaions (**default values** are highlighted in bold):
 
 | tablet_errors_base_url | **null**, url as string | Base URL for tablet errors service to override `uiSettings.tabletErrorsBaseUrl` |
 
-| access_log_base_url | **null**, url as string | Base URL for `Navigation/Access Log` API endpoint, the option overrides `uiSettings/acccess_log_base_path` |
+| access_log_base_url | **null**, url as string | Base URL for `Navigation/Access Log` API endpoint, the option overrides `uiSettings/access_log_base_path` |
 
 ### Configuration
 
