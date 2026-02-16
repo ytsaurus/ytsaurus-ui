@@ -8,6 +8,7 @@ import {getConfigData} from '../../../config/ui-settings';
 import {RootState} from '../../../store/reducers';
 import {getClusterConfig} from '../../../utils';
 import {QueryEngine} from '../../../../shared/constants/engines';
+import UIFactory from '../../../UIFactory';
 
 export const getCluster = (state: RootState): string => state.global.cluster || '';
 export const getClusterUiConfig = (state: RootState) => state.global.clusterUiConfig;
@@ -25,12 +26,17 @@ export function getClusterProxy(clusterConfig: ClusterConfig): string {
 }
 
 export const getClusterSupportedEngines = (state: RootState): Record<QueryEngine, boolean> => {
-    const {chyt_controller_base_url, livy_controller_base_url} = state.global.clusterUiConfig;
+    const clusterUiConfig = state.global.clusterUiConfig;
+    const {chyt_controller_base_url} = clusterUiConfig;
+
+    const overrides = UIFactory.getClusterSupportedEnginesOverrides?.(clusterUiConfig);
+
     return {
         yql: true,
         chyt: Boolean(chyt_controller_base_url),
-        spyt: Boolean(livy_controller_base_url),
+        spyt: true,
         ql: true,
+        ...overrides,
     };
 };
 
