@@ -10,6 +10,10 @@ import {PathPopup} from './DetailBlock/PathPopup';
 import {OperationType} from './enums';
 import {useSelector} from '../../../../store/redux-hooks';
 import {getSettingsQueryTrackerGraphAutoCenter} from '../../../../store/selectors/settings/settings-ts';
+import cn from 'bem-cn-lite';
+import './QueriesGraph.scss';
+
+const block = cn('yq-queries-graph');
 
 type Props = {
     processedGraph: ProcessedGraph;
@@ -39,6 +43,7 @@ const Graph: FC<Props> = ({processedGraph}) => {
         <Loader />
     ) : (
         <YTGraph
+            className={block()}
             isBlock={isBlock}
             config={config}
             setScale={setScale}
