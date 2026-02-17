@@ -64,7 +64,7 @@ import {fetchAccountUsageListDiff, fetchAccountUsageTreeDiff} from './account-us
 import {updateSortStateArray} from '../../../utils/sort-helpers';
 import {Action} from 'redux';
 import {openModal} from '../modals/attributes-modal';
-import {calcBaseUrl} from './accounts-usage-base-url';
+import {calcAccountsUsageBaseUrl} from './accounts-usage-base-url';
 
 type SnapshotsThunkAction = ThunkAction<any, RootState, any, AccountsSnapshotsAction>;
 
@@ -98,7 +98,10 @@ export function fetchAccountsUsageSnapshots(cluster: string): SnapshotsThunkActi
                 snapshot_timestamps: Array<number>;
             }>({
                 method: 'POST',
-                url: calcBaseUrl(`/api/accounts-usage/${cluster}/list-timestamps`, getState()),
+                url: calcAccountsUsageBaseUrl(
+                    `/api/accounts-usage/${cluster}/list-timestamps`,
+                    getState(),
+                ),
                 data: {cluster},
                 withCredentials: true,
             })
@@ -178,7 +181,10 @@ export function fetchAccountUsageList(): UsageListThunkAction {
         return axios
             .request<AccountsUsageDataResponse>({
                 method: 'POST',
-                url: calcBaseUrl(`/api/accounts-usage/${params.cluster}/get-resource-usage`, state),
+                url: calcAccountsUsageBaseUrl(
+                    `/api/accounts-usage/${params.cluster}/get-resource-usage`,
+                    state,
+                ),
                 data: requestParams,
                 withCredentials: true,
             })
@@ -233,7 +239,7 @@ export function fetchAccountUsageTree(): UsageTreeThunkAction {
         return axios
             .request<AccountsUsageDataResponse>({
                 method: 'POST',
-                url: calcBaseUrl(
+                url: calcAccountsUsageBaseUrl(
                     `/api/accounts-usage/${params.cluster}/get-children-and-resource-usage`,
                     state,
                 ),
@@ -392,7 +398,7 @@ export const openAccountAttributesModal =
                 promise: axios
                     .request({
                         method: 'POST',
-                        url: calcBaseUrl(
+                        url: calcAccountsUsageBaseUrl(
                             `/api/accounts-usage/${cluster}/get-versioned-resource-usage`,
                             getState(),
                         ),

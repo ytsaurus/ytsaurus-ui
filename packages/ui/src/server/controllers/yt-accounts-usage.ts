@@ -43,7 +43,6 @@ function getAccountsUsageBaseUrl(req: Request) {
     return getBaseUrlFromConfiguration(req, {
         cluster,
         isDeveloper,
-        uiConfigFieldName: 'resource_usage_base_url',
         uiSettingsFieldName: 'accountsUsageBasePath',
     });
 }

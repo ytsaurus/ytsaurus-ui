@@ -1,44 +1,33 @@
-// @ts-expect-error
-import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import type {Request} from '../../@types/core';
-import {UISettings} from '../../shared/ui-settings';
-import {ClusterUiConfig, UiConfigBaseUrl} from '../../shared/yt-types';
+import {mergeUiSettings} from '../../shared/utils/merge-ui-settings';
 import {getPreloadedClusterUiConfig} from '../components/cluster-params';
-import {KeysByType} from '../../@types/types';
-
-type UIConfigKeys = KeysByType<ClusterUiConfig, UiConfigBaseUrl | undefined>;
-type UISettingsKeys = KeysByType<UISettings, string | undefined>;
+import {type UISettingsBaseUrlKeys, getBaseUrlDetails} from '../../shared/utils/base-url';
 
 export async function getBaseUrlFromConfiguration(
     req: Request,
     {
         cluster,
         isDeveloper,
-        uiConfigFieldName,
         uiSettingsFieldName,
     }: {
         cluster: string;
         isDeveloper: boolean;
-        uiConfigFieldName: UIConfigKeys;
-        uiSettingsFieldName: UISettingsKeys;
+        uiSettingsFieldName: UISettingsBaseUrlKeys;
     },
-): Promise<{baseUrl?: string; testing?: boolean}> {
-    let baseUrl = (await getPreloadedClusterUiConfig(cluster, req.ctx, isDeveloper))[
-        uiConfigFieldName
-    ];
+) {
+    const uiSettings = await getClusterSpecificUiSettings(req, {
+        cluster,
+        isDeveloper,
+    });
 
-    if (!baseUrl) {
-        baseUrl = req.ctx.config.uiSettings[uiSettingsFieldName];
-    }
+    return getBaseUrlDetails(uiSettings, uiSettingsFieldName);
+}
 
-    if (!baseUrl) {
-        return {};
-    }
-
-    const testing = ypath.get(baseUrl, '/@testing');
-    const res = typeof baseUrl === 'string' ? baseUrl : baseUrl?.$value;
-    return {
-        baseUrl: res.endsWith('/') ? res.slice(0, -1) : res,
-        testing,
-    };
+export async function getClusterSpecificUiSettings(
+    req: Request,
+    {cluster, isDeveloper}: {cluster: string; isDeveloper: boolean},
+) {
+    const {uiSettings} = req.ctx.config;
+    const uiConfig = await getPreloadedClusterUiConfig(cluster, req.ctx, isDeveloper);
+    return mergeUiSettings({uiSettings, uiConfig});
 }

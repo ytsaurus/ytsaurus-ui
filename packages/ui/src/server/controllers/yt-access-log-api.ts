@@ -43,7 +43,6 @@ function getAccessLogBaseUrl(req: Request) {
     return getBaseUrlFromConfiguration(req, {
         cluster,
         isDeveloper,
-        uiConfigFieldName: 'access_log_base_url',
         uiSettingsFieldName: 'accessLogBasePath',
     });
 }

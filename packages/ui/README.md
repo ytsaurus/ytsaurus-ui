@@ -96,13 +96,13 @@ To activate monitoring ddashboards you have to provide PROMETHEUS_BASE_URL. Addi
 - Operations: `scheduler-operation`, `job`,
 - Scheduling pool: `scheduler-pool`
 
-### Cluster specific features
+### Cluster-specific features
 
 There is yt-api command get_supported_feature and it is a good place to describe API features.
 But some cases require the ability to turn on/off a feature manually on a specific cluster. Such cluster specific optinos are placed in:
 
-- `//sys/@ui_config` (values affects all users)
-- `//sys/@ui_config_dev_overrides` (values affects only admins)
+- `//sys/@ui_config` (values affect all users)
+- `//sys/@ui_config_dev_overrides` (values affect only admins)
 
 (see more detail in [YTFRONT-2804](https://nda.ya.ru/t/bgh9NWJ16fPRp4))
 
@@ -131,11 +131,9 @@ Available options (**default values** are highlighted in bold):
 
 | operation_performance_url_template | **null**, `{title: string; url_template: string}` | Configuration for operation performance analysis system integration. Template must contain {operation_id} placeholder which will be replaced with actual operationId |
 
-| resource_usage_base_url | **null**, url as string | Base URL for accounts usage service to override uiSettings.accountsUsageBasePath |
-
 | tablet_errors_base_url | **null**, url as string | Base URL for tablet errors service to override `uiSettings.tabletErrorsBaseUrl` |
 
-| access_log_base_url | **null**, url as string | Base URL for `Navigation/Access Log` API endpoint, the option overrides `uiSettings/access_log_base_path` |
+| ui_settings | **null**, `Partial<UISettings \| SnakeCase<UISettings>>` | Overrides for `uiSettings` |
 
 ### Configuration
 
