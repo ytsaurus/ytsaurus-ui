@@ -1,8 +1,15 @@
 import type {AIChatConfig} from './ai-chat';
+import {CypressNodeRaw} from './yt-types';
 
+export type UiConfigBaseUrl = CypressNodeRaw<{testing: boolean; use_cors: boolean}, string>;
+
+/**
+ * It is possible to provide cluster-specific overrides through `//sys/@ui_config/ui_settings`.
+ * All `snake_case` field names in `//sys/@ui_config/ui_settings` will be converted to `camelCase`.
+ */
 export interface UISettings {
-    accessLogBasePath?: string;
-    accountsUsageBasePath?: string;
+    accessLogBasePath?: UiConfigBaseUrl;
+    accountsUsageBasePath?: UiConfigBaseUrl;
     docsBaseUrl?: string;
     jupyterBasePath?: string;
 

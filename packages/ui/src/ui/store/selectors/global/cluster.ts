@@ -3,14 +3,19 @@ import {createSelector} from 'reselect';
 import type {ClusterConfig} from '../../../../shared/yt-types';
 
 import {YT} from '../../../config/yt-config';
-import {getConfigData} from '../../../config/ui-settings';
+import {getConfigData, uiSettings} from '../../../config/ui-settings';
 
 import {RootState} from '../../../store/reducers';
 import {getClusterConfig} from '../../../utils';
 import {QueryEngine} from '../../../../shared/constants/engines';
+import {mergeUiSettings} from '../../../../shared/utils/merge-ui-settings';
 
 export const getCluster = (state: RootState): string => state.global.cluster || '';
 export const getClusterUiConfig = (state: RootState) => state.global.clusterUiConfig;
+
+export const getMergedUiSettings = createSelector([getClusterUiConfig], (uiConfig) => {
+    return mergeUiSettings({uiSettings, uiConfig});
+});
 
 export const getCurrentClusterConfig = createSelector([getCluster], (cluster): ClusterConfig => {
     return getClusterConfig(YT.clusters, cluster);

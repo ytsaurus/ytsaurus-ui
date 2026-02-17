@@ -1,12 +1,7 @@
 import axios from 'axios';
 import {ThunkAction} from 'redux-thunk';
 
-import {RootState} from '../../../../../store/reducers';
-import {
-    AccessLogAction,
-    AccessLogAvailableTimeRange,
-    AccessLogData,
-} from '../../../../../store/reducers/navigation/tabs/access-log/access-log';
+import {getBaseUrlDetails} from '../../../../../../shared/utils/base-url';
 import {
     ACCESS_LOG_FAILURE,
     ACCESS_LOG_FILTERS,
@@ -16,20 +11,24 @@ import {
     ACCESS_LOG_RESET_FILTERS,
     ACCESS_LOG_SUCCESS,
 } from '../../../../../constants/navigation/tabs/access-log';
+import {RootState} from '../../../../../store/reducers';
+import {
+    AccessLogAction,
+    AccessLogAvailableTimeRange,
+    AccessLogData,
+} from '../../../../../store/reducers/navigation/tabs/access-log/access-log';
+import {
+    AccessLogFilterAction,
+    AccessLogFiltersState,
+} from '../../../../../store/reducers/navigation/tabs/access-log/access-log-filters';
+import {getMergedUiSettings} from '../../../../../store/selectors/global';
 import {
     getAccessLogFilterPagination,
     getAccessLogLastLoadedParams,
     getAccessLogRequestParams,
 } from '../../../../../store/selectors/navigation/tabs/access-log';
-import {
-    AccessLogFilterAction,
-    AccessLogFiltersState,
-} from '../../../../../store/reducers/navigation/tabs/access-log/access-log-filters';
 import CancelHelper, {isCancelled} from '../../../../../utils/cancel-helper';
 import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
-import {getClusterUiConfig} from '../../../../../store/selectors/global';
-import thorYPath from '../../../../../common/thor/ypath';
-import {ClusterUiConfig} from '../../../../../../shared/yt-types';
 
 type AccessLogThunkAction<Res = any> = ThunkAction<Res, RootState, any, AccessLogAction>;
 type AccessLogFiltersThunkAction<Res = any> = ThunkAction<
@@ -59,14 +58,9 @@ export function resetPaginationIfNeededAndCheckIfPathChanged(): AccessLogFilters
 const accesLogCancelHelper = new CancelHelper();
 
 function calcBaseUrl(url: string, state: RootState) {
-    const uiConfig = getClusterUiConfig(state);
-    return calcAccessLogBaseUrl(uiConfig, url);
-}
-
-export function calcAccessLogBaseUrl(uiConfig: ClusterUiConfig, url: string) {
-    const {access_log_base_url} = uiConfig;
-    const use_cors = thorYPath.getValue(access_log_base_url, '/@use_cors');
-    return use_cors ? thorYPath.getValue(access_log_base_url) + `/${url.split('/').pop()}` : url;
+    const uiSettings = getMergedUiSettings(state);
+    const {baseUrl, use_cors} = getBaseUrlDetails(uiSettings, 'accessLogBasePath');
+    return use_cors ? `${baseUrl}/${url.split('/').pop()}` : url;
 }
 
 export function fetchAccessLog(): AccessLogThunkAction {

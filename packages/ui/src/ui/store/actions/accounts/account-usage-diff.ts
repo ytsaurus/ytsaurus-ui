@@ -29,7 +29,7 @@ import {
     AccountUsageTreeDiffData,
 } from '../../reducers/accounts/usage/accounts-usage-tree-diff';
 import {AccountUsageData} from '../../reducers/accounts/usage/account-usage-types';
-import {calcBaseUrl} from './accounts-usage-base-url';
+import {calcAccountsUsageBaseUrl} from './accounts-usage-base-url';
 
 type UsageListThunkAction = ThunkAction<any, RootState, any, AccountUsageListDiffAction>;
 
@@ -70,7 +70,7 @@ export function fetchAccountUsageListDiff(): UsageListThunkAction {
         return axios
             .request<AccountsUsageDiffDataResponse>({
                 method: 'POST',
-                url: calcBaseUrl(
+                url: calcAccountsUsageBaseUrl(
                     `/api/accounts-usage/${params.cluster}/get-resource-usage-diff`,
                     state,
                 ),
@@ -132,7 +132,7 @@ export function fetchAccountUsageTreeDiff(): UsageTreeThunkAction {
         return axios
             .request<AccountUsageData>({
                 method: 'POST',
-                url: calcBaseUrl(
+                url: calcAccountsUsageBaseUrl(
                     `/api/accounts-usage/${params.cluster}/get-children-and-resource-usage-diff`,
                     state,
                 ),

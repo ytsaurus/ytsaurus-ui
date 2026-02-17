@@ -1,15 +1,16 @@
+import type {AppContext} from '@gravity-ui/nodekit';
 import crypto from 'crypto';
 import * as os from 'os';
-import type {AppContext} from '@gravity-ui/nodekit';
 // @ts-ignore
 import ytLib from '@ytsaurus/javascript-wrapper';
 
-import {createAutoUpdatedCache} from '../utils/auto-updated-cache';
-import {getRobotYTApiSetup} from './requestsSetup';
-import {getApp} from '../ServerFactory';
 import {FIX_MY_TYPE} from '../../@types/types';
 import {USE_SUPRESS_SYNC} from '../../shared/constants';
+import {snakeToCamelObject} from '../../shared/utils/snake-to-camel';
 import {ClusterUiConfig} from '../../shared/yt-types';
+import {getApp} from '../ServerFactory';
+import {createAutoUpdatedCache} from '../utils/auto-updated-cache';
+import {getRobotYTApiSetup} from './requestsSetup';
 
 const yt = ytLib();
 
@@ -216,8 +217,8 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
         const response = {
             mediumList,
             schedulerVersion,
-            uiConfig,
-            uiDevConfig,
+            uiConfig: outputUiSettingsToCamelCase(uiConfig),
+            uiDevConfig: outputUiSettingsToCamelCase(uiDevConfig),
             masterVersion: masterVersion ?? mastersList,
         };
 
@@ -243,6 +244,21 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
 
         return response;
     });
+}
+
+function outputUiSettingsToCamelCase<T extends {output?: {ui_settings: Record<string, unknown>}}>(
+    obj: T,
+) {
+    if (!obj?.output?.ui_settings) {
+        return obj;
+    }
+    return {
+        ...obj,
+        output: {
+            ...obj.output,
+            ui_settings: snakeToCamelObject(obj.output.ui_settings),
+        },
+    };
 }
 
 const getCached = createAutoUpdatedCache(fetchClusterParams);
