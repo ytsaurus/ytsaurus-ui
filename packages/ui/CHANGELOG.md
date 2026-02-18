@@ -1,5 +1,29 @@
 # Changelog
 
+## [3.6.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.5.1...ui-v3.6.0) (2026-02-18)
+
+
+### Features
+
+* **Accounts/DetailedUsage:** requests should  be sent through nodejs BFF [YTFRONT-5366] ([b240437](https://github.com/ytsaurus/ytsaurus-ui/commit/b24043752ea0c2abd983de23574c11e72805449c))
+* **Flow:** add flows as a separate page [YTFRONT-5241] ([74ae966](https://github.com/ytsaurus/ytsaurus-ui/commit/74ae96625e06a16283934898792ab49ae17533ff))
+* **Flow:** show messages for all tabs [YTFRONT-5244] ([3552691](https://github.com/ytsaurus/ytsaurus-ui/commit/35526919d1834dbd04216e4f06ce7a663fb4dfbd))
+* **Navigation/AccessLog:** requests should be sent through nodejs BFF [YTFRONT-5300] ([15e6e39](https://github.com/ytsaurus/ytsaurus-ui/commit/15e6e3924f551d6e4eabf6cff4a9e7db7d1ab3fc))
+* **Queries/Progress:** new graph design [YTFRONT-5468] ([1daca1f](https://github.com/ytsaurus/ytsaurus-ui/commit/1daca1fed95a6ae0445ba8bf88a46a4f3251a661))
+
+
+### Bug Fixes
+
+* **Flow/Computation:** use highlight_cpu_usage, highlight_memory_usage [YTFRONT-5115] ([129c231](https://github.com/ytsaurus/ytsaurus-ui/commit/129c231daa03faf638384ef4bc180ada90d72b5d))
+* **Flow/Messages:** add 'markdown_text' support [YTFRONT-5255] ([0f0a96f](https://github.com/ytsaurus/ytsaurus-ui/commit/0f0a96fc2de1045e35f03668051789b880ac58e1))
+* **Flow/Messages:** expand first message when messages.length == 1 [YTFRONT-5237] ([36de213](https://github.com/ytsaurus/ytsaurus-ui/commit/36de2130a929a794f0cb3feaf437fb6b98cdba3f))
+* **Flow/Monitoring:** forward pipeline_path [YTFRONT-4488] ([f84673a](https://github.com/ytsaurus/ytsaurus-ui/commit/f84673a30d596c1fa8723e854c7a3a314631c046))
+* **FlowMessages:** add 'markdown_text' support [YTFRONT-5255] ([757df50](https://github.com/ytsaurus/ytsaurus-ui/commit/757df50e8886df26ee1c83cd56f38074c7859297))
+* **Navigation/Flow:** better computation [YTFRONT-5115] ([3f413ec](https://github.com/ytsaurus/ytsaurus-ui/commit/3f413ec710c1f5545254c2ca679ac3d80b918dae))
+* **Queries/Tutorials:** support old qt tutorials [YTFRONT-5509] ([25de4f7](https://github.com/ytsaurus/ytsaurus-ui/commit/25de4f733bbb10fec4380579895a66a6d80af18c))
+* **Queries:** yql version in new query [YTFRONT-5522] ([ff5c03a](https://github.com/ytsaurus/ytsaurus-ui/commit/ff5c03aa4b8670f69e632dff5d11ac053acc2379))
+* **Redirect:** corrected the useBeta value check [YTFRONT-5543] ([199b0d3](https://github.com/ytsaurus/ytsaurus-ui/commit/199b0d3c0550bca9f1c7bd9e4033bed2587c5113))
+
 ## [3.5.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.5.0...ui-v3.5.1) (2026-02-02)
 
 
