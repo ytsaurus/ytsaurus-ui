@@ -279,7 +279,6 @@ export class Proxies extends Component {
                             onUpdate={(vals) => changeRoleFilter(vals[0])}
                             label="Role:"
                             width="max"
-                            hideFilter
                         />
                     </div>
                 )}
