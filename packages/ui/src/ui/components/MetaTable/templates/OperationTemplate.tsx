@@ -15,9 +15,12 @@ import hammer from '../../../common/hammer';
 import {Page} from '../../../constants/index';
 import CollapsableText from '../../../components/CollapsableText/CollapsableText';
 import {genNavigationUrl} from '../../../utils/navigation/navigation';
+import './OperationTemplate.scss';
 
 const itemBlock = cn('meta-table-item');
 const detailBlock = cn('operation-detail');
+
+const block = cn('yt-operation-template');
 
 export interface Pool {
     pool: string;
@@ -273,12 +276,14 @@ interface TemplateLayerPathProps {
     path: string;
 }
 
-function TemplateLayerPath({cluster, path}: TemplateLayerPathProps) {
+function TemplateLayerPath({cluster, path: rawPath}: TemplateLayerPathProps) {
     const getQuery = (p: string) => paramsToQuery({path: p});
     const getUrl = (p: string) => `/${cluster}/${Page.NAVIGATION}?${getQuery(p)}`;
 
+    const path = ypath.getValue(rawPath);
+
     return (
-        <li>
+        <li className={block('list-item')}>
             <Link url={getUrl(path)} title={path}>
                 {path}
             </Link>
