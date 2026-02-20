@@ -144,7 +144,6 @@ function ManageInheritance(props: Props) {
     const renderDialog = () => {
         return (
             <YTDFDialog<FormValues>
-                pristineSubmittable
                 modal={false}
                 visible={Boolean(visible)}
                 onClose={handleUpdateAclClose}
