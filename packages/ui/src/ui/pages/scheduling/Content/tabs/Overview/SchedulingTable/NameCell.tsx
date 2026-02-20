@@ -1,27 +1,24 @@
-import React from 'react';
-import cn from 'bem-cn-lite';
-
 import {Flex, Text} from '@gravity-ui/uikit';
-
-import {setExpandedPools} from '../../../../../../store/actions/scheduling/expanded-pools';
-import {
-    getCurrentPool,
-    getCurrentTreeExpandedPools,
-} from '../../../../../../store/selectors/scheduling/scheduling';
-
+import cn from 'bem-cn-lite';
+import React from 'react';
 import {ExpandableCell} from '../../../../../../components/DataTableGravity/ExpandableCell';
 import Link from '../../../../../../components/Link/Link';
 import {OperationPool} from '../../../../../../components/OperationPool/OperationPool';
 import {Tooltip} from '../../../../../../components/Tooltip/Tooltip';
-import {getCluster} from '../../../../../../store/selectors/global/cluster';
-import {getTree} from '../../../../../../store/selectors/scheduling/scheduling-pools';
-
-import {PoolLeafNode} from '../../../../../../utils/scheduling/pool-child';
+import {setExpandedPools} from '../../../../../../store/actions/scheduling/expanded-pools';
 import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
-
-import type {RowData} from './SchedulingTable';
+import {getCluster} from '../../../../../../store/selectors/global/cluster';
+import {
+    getCurrentPool,
+    getCurrentTreeExpandedPools,
+} from '../../../../../../store/selectors/scheduling/scheduling';
+import {getTree} from '../../../../../../store/selectors/scheduling/scheduling-pools';
+import {PoolLeafNode} from '../../../../../../utils/scheduling/pool-child';
+import {unquote} from '../../../../../../utils/string';
+import {YSON_AS_TEXT, prettyPrintSafe} from '../../../../../../utils/unipika';
 import './NameCell.scss';
 import PoolTags from './PoolTags';
+import type {RowData} from './SchedulingTable';
 
 const block = cn('yt-scheduling-name-cell');
 
@@ -93,15 +90,17 @@ function renderOperationName({cluster, row}: {cluster: string; row: PoolLeafNode
             <Tooltip content={`Fifo index: ${fifoIndex}`}>#{fifoIndex}&nbsp;</Tooltip>
         ) : null;
 
-    const hasTitle = 0 > title?.length!;
+    const hasTitle = Boolean(title);
 
     return (
         <Flex direction="column" style={{margin: '-4px 0'}} overflow="hidden">
             <Text variant="inherit" ellipsis>
                 {fifoIndexNode}
-                <Link url={url}>{title ?? id}</Link>
+                <Link url={url}>
+                    {hasTitle ? unquote(prettyPrintSafe(title, YSON_AS_TEXT())) : id}
+                </Link>
             </Text>
-            {!hasTitle && (
+            {hasTitle && (
                 <Text variant="code-inline-1" color="secondary" ellipsis>
                     {id}
                 </Text>

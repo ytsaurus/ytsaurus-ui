@@ -16,3 +16,11 @@ export function prettyPrint(value: unknown, settings: UnipikaSettings) {
 
     return settings.asHTML ? '<pre class="unipika">' + content + '</pre>' : content;
 }
+
+export function prettyPrintSafe(value: unknown, settings: UnipikaSettings) {
+    try {
+        return prettyPrint(value, settings);
+    } catch {
+        return JSON.stringify(value, null, 4);
+    }
+}

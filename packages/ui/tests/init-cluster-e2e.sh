@@ -33,6 +33,10 @@ function createAndMountDynamicTable {
 # userColumnPresets
 createAndMountDynamicTable "//tmp/userColumnPresets" "[{name=hash;sort_order=ascending;type=string};{name=columns_json;type=string}]"
 
+if [ -f ./e2e-env.tmp ]; then
+    mv -f ./e2e-env.tmp ./e2e-env.tmp.bak
+fi
+
 suffix=E=$(mktemp -u XXXXXX)
 # to lower case
 export E2E_SUFFIX=$(mktemp -u XXXXXX | tr '[:upper:]' '[:lower:]')
@@ -69,9 +73,12 @@ if [ "false" = "$(yt exists //sys/pool_trees/e2e)" ]; then
     yt set //sys/cluster_nodes/${e2eNode}/@user_tags/end e2e
     yt set //sys/pool_trees/default/@config/nodes_filter '"!e2e"'
 
+    echo -n E2E_OPERATION_1_ID= >> ./e2e-env.tmp
     yt vanilla \
         --tasks '{main2={job_count=10;command="sleep 28800"};}' \
-        --spec '{alias="*long-operation";pool_trees=[e2e];scheduling_options_per_pool_tree={e2e={pool=test-e2e}};}' --async
+        --spec '{alias="*long-operation";pool_trees=[e2e];scheduling_options_per_pool_tree={e2e={pool=test-e2e}};}' --async >> ./e2e-env.tmp
+elif [ -f ./e2e-env.tmp.bak ]; then
+    grep E2E_OPERATION_1_ID ./e2e-env.tmp.bak >> ./e2e-env.tmp
 fi
 
 echo -n E2E_OPERATION_ID= >>./e2e-env.tmp

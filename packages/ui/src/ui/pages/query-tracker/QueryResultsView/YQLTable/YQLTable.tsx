@@ -12,6 +12,7 @@ import {MOVING} from '@gravity-ui/react-data-table/build/esm/lib/constants';
 import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
 import {ClickableText} from '../../../../components/ClickableText/ClickableText';
 import Label from '../../../../components/Label/Label';
+import {unquote} from '../../../../utils/string';
 
 import './YQLTable.scss';
 
@@ -434,13 +435,6 @@ function ShowMoreInline({formattedValue, strippedDown, onClick}: ShowMoreInlineP
             </ClickableText>
         </React.Fragment>
     );
-}
-
-function unquote(value?: string) {
-    if (typeof value === 'string' && value.startsWith('"') && value.endsWith('"')) {
-        return value.slice(1, -1);
-    }
-    return value;
 }
 
 const cellActionClassName = block('cell-action');

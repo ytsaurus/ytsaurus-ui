@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {CLUSTER, makeClusterTille, makeClusterUrl} from '../../utils';
+import {CLUSTER, E2E_OPERATION_1_ID, makeClusterTille, makeClusterUrl} from '../../utils';
 
 test('Scheduliing - Summary', async ({page}) => {
     await page.goto(makeClusterUrl('scheduling'));
@@ -75,7 +75,7 @@ test('Scheduling: Should display ephemeral pool for empty pool tree', async ({pa
     await expect(page).toHaveTitle(makeClusterTille({page: 'Scheduling'}));
     await expect(page).toHaveURL(makeClusterUrl('scheduling/overview?tree=e2e'));
 
-    const operationLinkSelector = `.yt-expandable-cell [href^="/${CLUSTER}/operations/"]`;
+    const operationLinkSelector = `.yt-expandable-cell [href^="/${CLUSTER}/operations/${E2E_OPERATION_1_ID}"]`;
     const length = await page.$$eval(operationLinkSelector, (nodes) => nodes.length);
     expect(length).toBe(0);
 
