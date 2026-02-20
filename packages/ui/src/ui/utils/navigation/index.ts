@@ -137,7 +137,9 @@ export function decodeEscapedAbsPath(path: string) {
         fragments
             .slice(1)
             .map(({name}) => {
-                return unipika.utils.utf8.decode(ypath.YPath.fragmentToYSON(name));
+                return ypath.YPath.escapeSpecialCharacters(
+                    unipika.utils.utf8.decode(ypath.YPath.fragmentToYSON(name)),
+                );
             })
             .join('/')
     );
