@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {Flex, Text} from '@gravity-ui/uikit';
+import {Flex, Text as GravityText} from '@gravity-ui/uikit';
 import {NotFound} from '@gravity-ui/illustrations';
 
 import './NoContent.scss';
@@ -27,10 +27,10 @@ export function NoContent({warning, hint, className, padding, imageSize, vertica
         >
             <NotFound height={imageSize || 140} width={imageSize || 140} />
             <Flex className={block('text')} direction={'column'} gap={2}>
-                <Text variant={'subheader-3'}>{warning}</Text>
-                <Text variant={'inherit'} color={'secondary'}>
+                <GravityText variant={'subheader-3'}>{warning}</GravityText>
+                <GravityText variant={'inherit'} color={'secondary'}>
                     {hint}
-                </Text>
+                </GravityText>
             </Flex>
         </Flex>
     );

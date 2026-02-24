@@ -1,9 +1,8 @@
-import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {Flex, Text} from '@gravity-ui/uikit';
+import {Flex, Text as GravityText} from '@gravity-ui/uikit';
 
-import format from '../../../common/hammer/format';
+import format from '../../../utils/hammer/format';
 
 const itemBlock = cn('meta-table-item');
 
@@ -44,12 +43,12 @@ export function TemplateTime<T extends ValueFormat = 'DateTime'>({
 
         return (
             <Flex className={className} title={title} direction={'column'}>
-                <Text variant="inherit" ellipsis>
+                <GravityText variant="inherit" ellipsis>
                     {format.DateTime(time, {format: 'day'})}
-                </Text>
-                <Text variant="inherit" ellipsis>
+                </GravityText>
+                <GravityText variant="inherit" ellipsis>
                     {format.DateTime(time, {format: 'time'})}
-                </Text>
+                </GravityText>
             </Flex>
         );
     }

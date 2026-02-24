@@ -1,69 +1,70 @@
-import React, {FC} from 'react';
-import {
-    NavigationTableSchema,
-    setFilter,
-} from '../../../../store/reducers/query-tracker/queryNavigationSlice';
-import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
+import {FC, useMemo} from 'react';
+import {Text as GravityText, Icon, TextInput} from '@gravity-ui/uikit';
+import BarsAscendingAlignLeftArrowUpIcon from '@gravity-ui/icons/svgs/bars-ascending-align-left-arrow-up.svg';
+import BarsAscendingAlignLeftArrowDownIcon from '@gravity-ui/icons/svgs/bars-ascending-align-left-arrow-down.svg';
+import type {NavigationTableSchema} from '../../types';
 import {Column} from '@gravity-ui/react-data-table';
-import {Text, TextInput} from '@gravity-ui/uikit';
-import Icon from '../../../../components/Icon/Icon';
-import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-import {selectNavigationFilter} from '../../../../store/selectors/query-tracker/queryNavigation';
-import unipika from '../../../../common/thor/unipika';
+import unipika from '../../utils/unipika';
+import {DataTableYT} from '../../components';
+import {useUnipikaSettings} from '../../context';
+import i18n from './i18n';
 
-type Props = {
+type SchemaTabProps = {
     schema: NavigationTableSchema[];
+    filter: string;
+    onFilterChange: (value: string) => void;
 };
 
-const columns: Column<NavigationTableSchema>[] = [
-    {
-        name: 'name',
-        header: 'Name',
-        render: ({row}) => {
-            return (
-                <>
-                    {Boolean(row.sort_order) && (
-                        <Icon
-                            awesome={
-                                row.sort_order === 'descending'
-                                    ? 'sort-amount-up'
-                                    : 'sort-amount-down-alt'
-                            }
-                            size={16}
-                        />
-                    )}{' '}
-                    {unipika.prettyprint(row.name, {asHTML: false})}
-                </>
-            );
-        },
-    },
-    {
-        name: 'type',
-        header: 'Type v3',
-        render: ({row}) => {
-            return (
-                <>
-                    {row.type} {!row.required && <Text variant="caption-1">optional</Text>}
-                </>
-            );
-        },
-    },
-];
+export const SchemaTab: FC<SchemaTabProps> = ({schema, filter, onFilterChange}) => {
+    const unipikaSettings = useUnipikaSettings();
 
-export const SchemaTab: FC<Props> = ({schema}) => {
-    const dispatch = useDispatch();
-    const filter = useSelector(selectNavigationFilter);
-
-    const handleFilterChange = (value: string) => {
-        dispatch(setFilter(value));
-    };
+    const columns: Column<NavigationTableSchema>[] = useMemo(
+        () => [
+            {
+                name: 'name',
+                header: 'Name',
+                render: ({row}) => {
+                    return (
+                        <>
+                            {Boolean(row.sort_order) && (
+                                <Icon
+                                    data={
+                                        row.sort_order === 'descending'
+                                            ? BarsAscendingAlignLeftArrowUpIcon
+                                            : BarsAscendingAlignLeftArrowDownIcon
+                                    }
+                                    size={16}
+                                />
+                            )}{' '}
+                            {unipika.prettyprint(row.name, {asHTML: false, ...unipikaSettings})}
+                        </>
+                    );
+                },
+            },
+            {
+                name: 'type',
+                header: 'Type v3',
+                render: ({row}) => {
+                    return (
+                        <>
+                            {row.type}{' '}
+                            {!row.required && (
+                                <GravityText variant="caption-1">optional</GravityText>
+                            )}
+                        </>
+                    );
+                },
+            },
+        ],
+        [unipikaSettings],
+    );
 
     return (
         <>
             <TextInput
                 value={filter}
-                placeholder="Filter by name"
-                onUpdate={handleFilterChange}
+                placeholder={i18n('field_filter-by-name')}
+                onUpdate={onFilterChange}
                 hasClear
             />
             <DataTableYT data={schema} columns={columns} useThemeYT />

@@ -1,7 +1,6 @@
-import ypath from '@ytsaurus/interface-helpers/lib/ypath';
-import hammer from '@ytsaurus/interface-helpers/lib/hammer';
+import {format, ypath} from '../../../utils';
 
-export default (attributes) => {
+export const compression = (attributes) => {
     const [compressionRatio, compressionCodec] = ypath.getValues(attributes, [
         '/compression_ratio',
         '/compression_codec',
@@ -10,7 +9,7 @@ export default (attributes) => {
     return [
         {
             key: 'compression_ratio',
-            value: hammer.format['Number'](compressionRatio, {digits: 5}),
+            value: format['Number'](compressionRatio, {digits: 5}),
         },
         {
             key: 'compression_codec',

@@ -1,9 +1,16 @@
 import React, {HTMLAttributes} from 'react';
 import cn from 'bem-cn-lite';
-
+import unipika from '../../utils/unipika';
 import './Text.scss';
-import unipika from '../../common/thor/unipika';
-import {UNIPIKA_ESCAPED_SETTINGS} from '../../utils';
+
+export const UNIPIKA_ESCAPED_SETTINGS = {
+    asHTML: false,
+    indent: 0,
+    break: false,
+    showDecoded: true,
+    escapeWhitespace: true,
+    format: 'raw-json',
+};
 
 const block = cn('yt-text');
 

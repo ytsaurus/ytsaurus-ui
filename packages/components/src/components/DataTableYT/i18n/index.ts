@@ -1,6 +1,6 @@
-import {addI18Keysets} from '../../../i18n/index';
+import {addI18Keysets} from '../../../i18n';
 
 import en from './en.json';
 import ru from './ru.json';
 
-export default addI18Keysets('yt:data-table', {en, ru});
+export default addI18Keysets('yt:DataTableYT', {en, ru});

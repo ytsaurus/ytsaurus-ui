@@ -26,7 +26,7 @@ interface PreparedHokeyItem {
     preventDefault: HotkeyItem['preventDefault'];
 }
 
-export default class Hotkey extends Component<HotkeyProps> {
+export class Hotkey extends Component<HotkeyProps> {
     preparedSettings: Array<PreparedHokeyItem> = [];
 
     componentDidMount() {

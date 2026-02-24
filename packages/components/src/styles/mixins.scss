@@ -1,0 +1,11 @@
+@mixin ellipsis() {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+// reset
+
+@mixin reset-li() {
+    list-style-type: none;
+}

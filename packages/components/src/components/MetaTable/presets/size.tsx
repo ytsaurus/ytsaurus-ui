@@ -1,16 +1,12 @@
 import map_ from 'lodash/map';
 
-import React from 'react';
-
-// @ts-expect-error
-import ypath from '@ytsaurus/interface-helpers/lib/ypath';
-
-import format from '../../../common/hammer/format';
-import {Template} from '../../../components/MetaTable/templates/Template';
+import {ypath} from '../../../utils/ypath';
+import format from '../../../utils/hammer/format';
+import {Template} from '../templates/Template';
 
 import i18n from './i18n';
 
-export default function metaTablePresetSize(attributes: unknown, mediumList: Array<string>) {
+export function metaTablePresetSize(attributes: unknown, mediumList: Array<string>) {
     const [uncompressedDataSize, compressedDataSize, primaryMedium] = ypath.getValues(attributes, [
         '/uncompressed_data_size',
         '/compressed_data_size',
