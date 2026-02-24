@@ -1,16 +1,28 @@
-import React from 'react';
-import ypath from '@ytsaurus/interface-helpers/lib/ypath';
-import {Template} from '../../../components/MetaTable/templates/Template';
-import {SubjectCard} from '../../SubjectLink/SubjectLink';
-import AccountLink from '../../../pages/accounts/AccountLink';
-import UIFactory from '../../../UIFactory';
+import {ypath} from '../../../utils';
+import {Template} from '../templates/Template';
 import {makeTTLItems} from './ttl';
-import {Flex, Icon, Label, Link} from '@gravity-ui/uikit';
-import AbbrSqlIcon from '@gravity-ui/icons/svgs/abbr-sql.svg';
-import {isQueryTrackerId} from './helpers/isQueryTrackerId';
+import {YtComponentsConfig} from '../../../context';
+import {MetaTableItem} from '../MetaTable';
 
-export default function metaTablePresetMain(attributes, cluster) {
-    const [id, owner, account, creationTime, modificationTime, accessTime, yql_op_id] =
+const normalizeMetaOperationLinkItems = (
+    result: MetaTableItem | MetaTableItem[] | null | undefined,
+): MetaTableItem[] => {
+    if (!result) return [];
+
+    return Array.isArray(result) ? result : [result];
+};
+
+type Props = (
+    attributes: any,
+    cluster: string,
+    config?: Partial<YtComponentsConfig>,
+) => MetaTableItem[];
+
+export const metaTablePresetMain: Props = (attributes, cluster, config = {}) => {
+    const SubjectCard = config.SubjectCard;
+    const AccountLink = config.AccountLink;
+    const renderMetaOperationLink = config.renderMetaOperationLink ?? null;
+    const [id, owner, account, creationTime, modificationTime, accessTime, yqlOpId] =
         ypath.getValues(attributes, [
             '/id',
             '/owner',
@@ -21,8 +33,15 @@ export default function metaTablePresetMain(attributes, cluster) {
             '/_yql_op_id',
         ]);
 
-    const isQtOperation = isQueryTrackerId(yql_op_id);
-    const yqlLink = yql_op_id ? UIFactory.yqlWidgetSetup?.renderYqlOperationLink(yql_op_id) : null;
+    const operationLinkItems =
+        yqlOpId && renderMetaOperationLink
+            ? normalizeMetaOperationLinkItems(
+                  renderMetaOperationLink({
+                      operationId: yqlOpId,
+                      cluster,
+                  }),
+              )
+            : [];
 
     return [
         {
@@ -31,11 +50,12 @@ export default function metaTablePresetMain(attributes, cluster) {
         },
         {
             key: 'owner',
-            value: <SubjectCard name={owner} />,
+            value: SubjectCard ? <SubjectCard name={owner} /> : owner,
+            visible: Boolean(owner),
         },
         {
             key: 'account',
-            value: <AccountLink account={account} />,
+            value: AccountLink ? <AccountLink account={account} cluster={cluster} /> : account,
             visible: Boolean(account),
         },
         {
@@ -43,7 +63,12 @@ export default function metaTablePresetMain(attributes, cluster) {
             value: <Template.Time time={creationTime} valueFormat="DateTime" />,
             visible: Boolean(creationTime),
         },
-        ...makeTTLItems(attributes, {showTTLLabel: true}),
+        ...makeTTLItems(attributes, {
+            showTTLLabel: true,
+            docsUrls: config.docsUrls,
+            cluster,
+            config,
+        }),
         {
             key: 'modification_time',
             value: <Template.Time time={modificationTime} valueFormat="DateTime" />,
@@ -54,26 +79,6 @@ export default function metaTablePresetMain(attributes, cluster) {
             value: <Template.Time time={accessTime} valueFormat="DateTime" />,
             visible: Boolean(accessTime),
         },
-        {
-            key: 'YQL operation',
-            value: yqlLink,
-            visible: Boolean(yqlLink) && !isQtOperation,
-        },
-        {
-            key: 'QT operation',
-            value: (
-                <Link href={`/${cluster}/queries/${yql_op_id}`} target="_blank">
-                    <Flex alignItems="center" gap={1}>
-                        <Label theme="info">
-                            <Flex alignItems="center" justifyContent="center">
-                                <Icon data={AbbrSqlIcon} size={16} />
-                            </Flex>
-                        </Label>
-                        {yql_op_id}
-                    </Flex>
-                </Link>
-            ),
-            visible: isQtOperation,
-        },
+        ...operationLinkItems,
     ];
-}
+};

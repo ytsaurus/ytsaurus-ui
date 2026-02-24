@@ -1,25 +1,30 @@
 import React from 'react';
 
-import {selectPrimitiveTypesMap} from '../../store/selectors/global/supported-features';
-import {useSelector} from '../../store/redux-hooks';
-import {getType} from './dataTypes';
-import DataType from './DataType/DataType';
-import {parseV3Type} from './dateTypesV3';
+import {getSchemaDateType} from './dataTypes';
+import {DataType} from './DataType/DataType';
+import {type Type, parseV3Type} from './dateTypesV3';
+import {toPrimitiveTypesSet} from './primitiveTypes';
 
-interface Props {
-    type_v3: any;
+export type SchemaDataTypePrimitiveTypes = Set<string>;
+
+export interface SchemaDataTypeProps {
+    typeV3: unknown;
+    primitiveTypes?: SchemaDataTypePrimitiveTypes;
 }
 
-function SchemaDataType({type_v3}: Props) {
-    const primitiveTypes = useSelector(selectPrimitiveTypesMap);
+function SchemaDataType({typeV3, primitiveTypes}: SchemaDataTypeProps) {
+    const primitiveTypesSet = React.useMemo(
+        () => toPrimitiveTypesSet(primitiveTypes),
+        [primitiveTypes],
+    );
 
     const dataTypeProps = React.useMemo(() => {
         try {
-            return getType(parseV3Type(type_v3, primitiveTypes));
+            return getSchemaDateType(parseV3Type(typeV3 as Type, primitiveTypesSet));
         } catch {
             return undefined;
         }
-    }, [type_v3, primitiveTypes]);
+    }, [typeV3, primitiveTypesSet]);
 
     return dataTypeProps ? (
         <DataType {...dataTypeProps} />

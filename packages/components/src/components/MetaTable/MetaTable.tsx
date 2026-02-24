@@ -6,21 +6,18 @@ import reduce_ from 'lodash/reduce';
 
 import cn from 'bem-cn-lite';
 
-import hammer from '../../common/hammer';
-import {toClassName} from '../../utils/utils';
+import {format} from '../../utils';
+import {Icon, Link} from '@gravity-ui/uikit';
+import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 
-import Link from '../Link/Link';
-import Icon from '../Icon/Icon';
-import {Secondary} from '../Text/Text';
-import {Tooltip} from '../Tooltip/Tooltip';
+import {Secondary} from '../Text';
+import {Tooltip} from '../Tooltip';
 
 import './MetaTable.scss';
+import {toClassName} from './helpers/toClassName';
 
 const block = cn('meta-table');
 const itemBlock = cn('meta-table-item');
-
-export * from './templates/Template';
-export * from './templates/OperationTemplate';
 
 export interface MetaTableProps {
     className?: string;
@@ -44,25 +41,24 @@ export interface MetaTableItem {
     qa?: string;
 }
 
-function splitItems(items: MetaTableProps['items'], subTitles?: Array<string>) {
+const splitItems = (items: MetaTableProps['items'], subTitles?: Array<string>) => {
     if (Array.isArray(items[0])) {
-        const groupTitles = !subTitles?.length
-            ? undefined
-            : reduce_(
+        const groupTitles = subTitles?.length
+            ? reduce_(
                   items,
                   (acc, _item, index) => {
                       acc.push(subTitles[Number(index)]);
                       return acc;
                   },
                   [] as Array<string>,
-              );
+              )
+            : undefined;
         return {withInnerGroups: items as Array<Array<MetaTableItem>>, groupTitles};
-    } else {
-        return {groups: items as Array<MetaTableItem>};
     }
-}
+    return {groups: items as Array<MetaTableItem>};
+};
 
-export default class MetaTable extends Component<MetaTableProps> {
+export class MetaTable extends Component<MetaTableProps> {
     renderKey(item: MetaTableItem) {
         const {key, icon, label, labelTopPadding} = item;
         return (
@@ -72,7 +68,7 @@ export default class MetaTable extends Component<MetaTableProps> {
                 key={key + '-key'}
             >
                 {icon}
-                {label !== undefined ? label : hammer.format['ReadableField'](key)}
+                {label === undefined ? format['ReadableField'](key) : label}
             </div>
         );
     }
@@ -83,7 +79,7 @@ export default class MetaTable extends Component<MetaTableProps> {
         const questionIcon = (
             <React.Fragment>
                 {' '}
-                <Icon className={itemBlock('help-icon')} awesome={'question-circle'} />
+                <Icon className={itemBlock('help-icon')} data={CircleQuestionIcon} size={14} />
             </React.Fragment>
         );
         return (
@@ -95,7 +91,7 @@ export default class MetaTable extends Component<MetaTableProps> {
             >
                 {typeof value === 'boolean' ? String(value) : value}
                 {helpUrl ? (
-                    <Link theme={'ghost'} url={helpUrl}>
+                    <Link view="secondary" href={helpUrl}>
                         {questionIcon}
                     </Link>
                 ) : (
@@ -120,7 +116,10 @@ export default class MetaTable extends Component<MetaTableProps> {
 
     renderGroup(group: Array<MetaTableItem>, index: number, groupTitles?: Array<string>) {
         const {rowGap} = this.props;
-        const title = !groupTitles?.length ? null : (groupTitles[index!] ?? <>&nbsp;</>);
+        let title: React.ReactNode = null;
+        if (groupTitles?.length) {
+            title = groupTitles[index] ?? <>&nbsp;</>;
+        }
         const visibleItems = filter_(group, (item) => item.visible !== false);
 
         return !visibleItems?.length ? null : (

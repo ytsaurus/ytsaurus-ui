@@ -1,12 +1,29 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
 import './DataType.scss';
 
 const b = cn('data-type');
 
-const DataTypeStructKey = ({entry, level}) => [
+export type DataTypeProps = {
+    name?: string;
+    complex?: boolean;
+    optional?: boolean;
+    optionalLevel?: number;
+    tagged?: boolean;
+    tags?: string[];
+    level?: number;
+    type?: object | object[];
+    struct?: Array<{key: string | number; type: DataTypeProps}>;
+    params?: unknown[];
+};
+
+type DataTypeStructKeyProps = {
+    entry: {key: string | number; type: DataTypeProps};
+    level: number;
+};
+
+const DataTypeStructKey = ({entry, level}: DataTypeStructKeyProps) => [
     <span key="key" className={b('struct-key')}>
         {entry.key}
     </span>,
@@ -14,33 +31,29 @@ const DataTypeStructKey = ({entry, level}) => [
     <DataType key="type" level={level} {...entry.type} />,
 ];
 
-class DataType extends React.Component {
-    static propTypes = {
-        name: PropTypes.string,
-        complex: PropTypes.bool,
-        optional: PropTypes.bool,
-        optionalLevel: PropTypes.number,
-        tagged: PropTypes.bool,
-        tags: PropTypes.array,
-        level: PropTypes.number,
-        type: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-        struct: PropTypes.array,
-        params: PropTypes.array,
-    };
+type DataTypeState = {
+    expanded: boolean;
+};
+
+export class DataType extends React.Component<DataTypeProps, DataTypeState> {
     static defaultProps = {
         level: 0,
     };
-    state = {
-        expanded: this.props.level < 2,
+
+    state: DataTypeState = {
+        expanded: (this.props.level ?? 0) < 2,
     };
+
     onToggleClick = () => {
         this.setState({expanded: !this.state.expanded});
     };
-    renderComplexTypeEntry = (entry, index) => {
-        return <DataType key={index} level={this.props.level + 1} {...entry} />;
+
+    renderComplexTypeEntry = (entry: DataTypeProps, index: number) => {
+        return <DataType key={index} level={(this.props.level ?? 0) + 1} {...entry} />;
     };
-    renderStructTypeEntry = (entry, index) => {
-        return <DataTypeStructKey key={index} level={this.props.level + 1} entry={entry} />;
+
+    renderStructTypeEntry = (entry: {key: string | number; type: DataTypeProps}, index: number) => {
+        return <DataTypeStructKey key={index} level={(this.props.level ?? 0) + 1} entry={entry} />;
     };
     render() {
         const {optional, optionalLevel, complex, name, tagged, tags, type, struct, params} =
@@ -50,14 +63,14 @@ class DataType extends React.Component {
         return [
             <span
                 key="name"
-                className={b({optional, complex, 'optional-multilevel': optionalLevel > 0})}
+                className={b({optional, complex, 'optional-multilevel': Boolean(optionalLevel)})}
                 data-optional={optionalLevel ? `optional × ${optionalLevel}` : undefined}
                 onClick={this.onToggleClick}
             >
                 {name}
-                {Array.isArray(params) && params.length > 0 && `(${params.join(', ')})`}
+                {Array.isArray(params) && params.length > 0 && `(${params.map(String).join(', ')})`}
                 {tagged &&
-                    tags.map((tag) => (
+                    tags?.map((tag) => (
                         <span key={tag} className={b('tag')}>
                             {tag}
                         </span>
@@ -69,7 +82,7 @@ class DataType extends React.Component {
                     {expanded ? (
                         <div className={b('content', {expanded})}>
                             {complexType && complexType.map(this.renderComplexTypeEntry)}
-                            {Boolean(struct) && struct.map(this.renderStructTypeEntry)}
+                            {Boolean(struct) && struct?.map(this.renderStructTypeEntry)}
                         </div>
                     ) : null}
                 </div>
@@ -79,5 +92,3 @@ class DataType extends React.Component {
         ];
     }
 }
-
-export default DataType;

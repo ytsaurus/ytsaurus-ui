@@ -1,42 +1,24 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
-import unipika from '../../common/thor/unipika';
+import unipika from '../../utils/unipika';
 
-import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
-import Yson from '../../components/Yson/Yson';
-import {UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
+import {ConfigurableErrorBoundary, useUnipikaSettings} from '../../context';
+import {UnipikaSettings} from '../../internal/Yson/StructuredYson/StructuredYsonTypes';
 
-/**
- * See unipika for more details
- */
 export type UnipikaValueType = Array<string | UnipikaValueType>;
 
 export type YqlValueProps = {
     value?: unknown;
     type: UnipikaValueType;
-    settings: UnipikaSettings;
+    settings?: UnipikaSettings;
     inline?: boolean;
 };
 
-export default class YqlValue extends React.Component<YqlValueProps> {
-    static propTypes = {
-        settings: PropTypes.object,
-        value: PropTypes.any,
-        type: PropTypes.array,
-        inline: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        inline: false,
-        folding: false,
-        settings: Yson.defaultUnipikaSettings,
-    };
-
-    static getFormattedValue(value: unknown, type: UnipikaValueType, settings: UnipikaSettings) {
+class YqlValueImpl extends React.Component<YqlValueProps> {
+    static getFormattedValue(value: unknown, type: UnipikaValueType, settings?: UnipikaSettings) {
         const yqlValue = [value, type];
 
-        return settings.format === 'raw-json'
+        return settings?.format === 'raw-json'
             ? unipika.formatRaw(yqlValue, settings)
             : unipika.formatFromYQL(yqlValue, settings);
     }
@@ -44,7 +26,7 @@ export default class YqlValue extends React.Component<YqlValueProps> {
     render() {
         const {value, type, inline, settings} = this.props;
 
-        const formattedValue = YqlValue.getFormattedValue(value, type, settings);
+        const formattedValue = YqlValueImpl.getFormattedValue(value, type, settings);
 
         let title;
 
@@ -54,7 +36,7 @@ export default class YqlValue extends React.Component<YqlValueProps> {
             });
 
             title =
-                settings.format === 'raw-json'
+                settings?.format === 'raw-json'
                     ? unipika.formatRaw(value, titleSettings)
                     : unipika.formatFromYQL(value, titleSettings);
         }
@@ -64,8 +46,8 @@ export default class YqlValue extends React.Component<YqlValueProps> {
         });
 
         return (
-            <ErrorBoundary>
-                {settings.asHTML ? (
+            <ConfigurableErrorBoundary>
+                {settings?.asHTML ? (
                     <div className={classes} title={title} dir="auto">
                         <pre
                             className="unipika"
@@ -76,11 +58,24 @@ export default class YqlValue extends React.Component<YqlValueProps> {
                     <div
                         className={classes}
                         title={title}
-                        dir="auto"
                         dangerouslySetInnerHTML={{__html: formattedValue}}
                     />
                 )}
-            </ErrorBoundary>
+            </ConfigurableErrorBoundary>
         );
     }
 }
+
+function YqlValueComponent(props: YqlValueProps) {
+    const fromContext = useUnipikaSettings();
+    const settings = props.settings !== undefined ? props.settings : fromContext;
+    return <YqlValueImpl {...props} settings={settings} />;
+}
+
+type YqlValueWithStatic = React.FC<YqlValueProps> & {
+    getFormattedValue: typeof YqlValueImpl.getFormattedValue;
+};
+
+export const YqlValue: YqlValueWithStatic = Object.assign(YqlValueComponent, {
+    getFormattedValue: YqlValueImpl.getFormattedValue,
+});

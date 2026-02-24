@@ -1,19 +1,18 @@
 import React, {useState} from 'react';
 import cn from 'bem-cn-lite';
-import copyToClipboard from 'copy-to-clipboard';
 
 import {Button, Flex, Icon as UIKitIcon} from '@gravity-ui/uikit';
 import {Eye} from '@gravity-ui/icons';
 
-import unipika from '../../common/thor/unipika';
-import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
-import YqlValue from '../../components/YqlValue/YqlValue';
-import Yson from '../../components/Yson/Yson';
-import Label from '../../components/Label/Label';
-import {TypeArray} from '../../components/SchemaDataType/dataTypes';
-import {Tooltip} from '../../components/Tooltip/Tooltip';
-import {UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
-import {rumLogError} from '../../rum/rum-counter';
+import unipika from '../../utils/unipika';
+import {ClipboardButton} from '../ClipboardButton';
+import {YqlValue} from '../YqlValue';
+import {Yson} from '../../internal/Yson';
+import {Label} from '../Label';
+import {type TypeArray} from '../SchemaDataType/dataTypes';
+import {Tooltip} from '../Tooltip';
+import {UnipikaSettings} from '../../internal/Yson/StructuredYson/StructuredYsonTypes';
+import {type LogErrorFn, useUnipikaSettings, useYtComponentsConfig} from '../../context';
 
 import i18n from './i18n';
 
@@ -40,7 +39,7 @@ type ColumnCellProps = {
 
     value?: CellValueType | null;
     yqlTypes: Array<TypeArray> | null;
-    ysonSettings: UnipikaSettings;
+    ysonSettings?: UnipikaSettings;
     allowRawStrings?: boolean | null;
     rowIndex: number;
     columnName: string;
@@ -59,6 +58,9 @@ export function ColumnCell({
     onShowPreview,
     useYqlTypes,
 }: ColumnCellProps) {
+    const {logError} = useYtComponentsConfig();
+    const contextUnipika = useUnipikaSettings();
+    const effectiveYsonSettings = ysonSettings || contextUnipika;
     const [hovered, setHovered] = useState(false);
     const handleMouseEnter = () => setHovered(true);
     const handleMouseLeave = () => setHovered(false);
@@ -68,10 +70,10 @@ export function ColumnCell({
     const escapedValue =
         formatType && value
             ? YqlValue.getFormattedValue(value[0], formatType, {
-                  ...ysonSettings,
+                  ...effectiveYsonSettings,
                   asHTML: false,
               })
-            : unipika.prettyprint(value, {...ysonSettings, asHTML: false});
+            : unipika.prettyprint(value, {...effectiveYsonSettings, asHTML: false});
     const formattedValue =
         formatType && value ? (
             <YqlValue value={value[0]} type={formatType} settings={ysonSettings} />
@@ -87,7 +89,11 @@ export function ColumnCell({
         if (value && formatType) {
             const flags: {incomplete: boolean} = {incomplete: false};
 
-            const {$tag} = unipika.converters.yql([value[0], formatType], ysonSettings, flags);
+            const {$tag} = unipika.converters.yql(
+                [value[0], formatType],
+                effectiveYsonSettings,
+                flags,
+            );
 
             isIncompleteValue = flags.incomplete;
             isIncompleteTagged = flags.incomplete && $tag;
@@ -97,13 +103,17 @@ export function ColumnCell({
         }
 
         return {tag, isIncompleteTagged, isIncompleteValue};
-    }, [value, formatType, ysonSettings]);
+    }, [value, formatType, effectiveYsonSettings]);
 
     const valueType = useYqlTypes ? formatType : value?.$type;
     const rawValue = useYqlTypes ? value?.[0] : value?.$value;
 
-    const allowRawCopy = typeof rawValue === 'string' && isStringType(valueType);
+    const allowRawCopy = typeof rawValue === 'string' && isStringType(valueType, logError);
     const useRawString = allowRawCopy && allowRawStrings;
+    let shiftCopyValue;
+    if (allowRawCopy) {
+        shiftCopyValue = useRawString ? unquote(escapedValue) : rawValue;
+    }
     let copyTooltip = i18n('hold-shift-raw');
     if (useRawString) {
         copyTooltip = i18n('hold-shift-escaped');
@@ -149,13 +159,7 @@ export function ColumnCell({
                                     view="flat-secondary"
                                     size="m"
                                     text={useRawString ? rawValue : unquote(escapedValue)}
-                                    onCopy={(event: React.MouseEvent) => {
-                                        if (event?.shiftKey && allowRawCopy) {
-                                            copyToClipboard(
-                                                useRawString ? unquote(escapedValue) : rawValue,
-                                            );
-                                        }
-                                    }}
+                                    shiftText={shiftCopyValue}
                                 />
                             </Tooltip>
                         )}
@@ -186,7 +190,7 @@ export function ColumnCell({
     );
 }
 
-function isStringType(type?: string | TypeArray) {
+function isStringType(type?: string | TypeArray, logError?: LogErrorFn) {
     if (!type) {
         return false;
     }
@@ -201,7 +205,7 @@ function isStringType(type?: string | TypeArray) {
         const lower = type[1].toLowerCase();
         return lower === 'string' || lower === 'json' || lower === 'utf8';
     } catch (error: any) {
-        rumLogError({message: `ColumnCell: unexpected type: '${JSON.stringify(type)}'`}, error);
+        logError?.({message: `ColumnCell: unexpected type: '${JSON.stringify(type)}'`}, error);
         return false;
     }
 }

@@ -1,57 +1,59 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import copyToClipboard from 'copy-to-clipboard';
 import cn from 'bem-cn-lite';
 
-import {Button, CopyToClipboard} from '@gravity-ui/uikit';
+import {
+    Button,
+    ButtonButtonProps,
+    ButtonProps,
+    CopyToClipboard,
+    Icon,
+    IconProps,
+    copyTextToClipboard,
+} from '@gravity-ui/uikit';
+import FilesIcon from '@gravity-ui/icons/svgs/files.svg';
+import CheckIcon from '@gravity-ui/icons/svgs/check.svg';
+import XmarkIcon from '@gravity-ui/icons/svgs/xmark.svg';
 
-import Icon from '../../components/Icon/Icon';
-import Hotkey from '../../components/Hotkey/Hotkey';
-import {Tooltip} from '../Tooltip/Tooltip';
+import {Hotkey} from '../Hotkey';
+import {Tooltip} from '../Tooltip';
 
 import './ClipboardButton.scss';
 
 const block = cn('yt-clipboard-button');
 
-export default class ClipboardButton extends Component {
-    static propTypes = {
-        className: PropTypes.string,
-        text: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        shiftText: PropTypes.string,
-        buttonText: PropTypes.string,
-        view: PropTypes.string,
-        size: PropTypes.oneOf(['xs', 's', 'm', 'l']),
-        title: PropTypes.string,
-        // do not use this property with title
-        hoverContent: PropTypes.node,
-        mix: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-        hotkey: PropTypes.string,
-        hotkeyScope: PropTypes.string,
-        onCopy: PropTypes.func,
-        awesome: PropTypes.string,
-        face: PropTypes.string,
-        timeout: PropTypes.number,
-        visibleOnRowHover: PropTypes.bool,
-        inlineMargins: PropTypes.bool,
-    };
+type ClipboardButtonProps = Omit<ButtonProps, 'onCopy' | 'view'> & {
+    view?: ButtonProps['view'] | 'clear';
+    className?: string;
+    text?: string | number;
+    shiftText?: string;
+    buttonText?: string | null;
+    title?: string;
+    hoverContent?: React.ReactNode;
+    hotkey?: string;
+    hotkeyScope?: string;
+    onCopy?: (text: string) => void;
+    timeout?: number;
+    visibleOnRowHover?: boolean;
+    inlineMargins?: boolean;
+    icon?: IconProps['data'];
+    iconSize?: IconProps['size'];
+};
 
-    static defaultProps = {
+export class ClipboardButton extends Component<ClipboardButtonProps> {
+    static defaultProps: Partial<ClipboardButtonProps> = {
         size: 'm',
         hotkeyScope: 'all',
-        awesome: 'copy',
-        face: 'regular',
-        buttonText: null,
         timeout: 500,
         view: 'outlined',
     };
 
     iconByState = {
-        pending: this.props.awesome,
-        success: 'check',
-        error: 'times',
+        pending: this.props.icon || FilesIcon,
+        success: CheckIcon,
+        error: XmarkIcon,
     };
 
-    buttonRef = React.createRef();
+    buttonRef = React.createRef<HTMLButtonElement>();
 
     handleHotkey = () => {
         const {current} = this.buttonRef;
@@ -62,6 +64,9 @@ export default class ClipboardButton extends Component {
 
     renderHotkey() {
         const {hotkey, hotkeyScope} = this.props;
+        if (!hotkey || !hotkeyScope) {
+            return null;
+        }
 
         return (
             <Hotkey
@@ -76,12 +81,12 @@ export default class ClipboardButton extends Component {
         );
     }
 
-    onClick = (event) => {
+    onClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
         const {text, shiftText, onCopy} = this.props;
-        let resText = text;
+        let resText = text?.toString() || '';
         if (event?.shiftKey && shiftText) {
             resText = shiftText;
-            copyToClipboard(resText);
+            copyTextToClipboard(resText);
         }
         if ('function' === typeof onCopy) {
             onCopy(resText);
@@ -94,7 +99,6 @@ export default class ClipboardButton extends Component {
     render() {
         const {
             text,
-            face,
             buttonText,
             hotkey,
             timeout,
@@ -102,12 +106,13 @@ export default class ClipboardButton extends Component {
             className,
             visibleOnRowHover,
             inlineMargins,
-            // eslint-disable-next-line no-unused-vars
-            hotkeyScope,
+            iconSize,
             ...buttonProps
         } = this.props;
 
-        const iconSize = buttonProps.size === 'm' ? 13 : undefined;
+        const resultIconSize = iconSize || 13;
+        const buttonView =
+            this.props.view === 'clear' ? 'flat' : (this.props.view as ButtonProps['view']);
 
         return (
             <span
@@ -121,32 +126,26 @@ export default class ClipboardButton extends Component {
                 )}
             >
                 <Tooltip content={hoverContent}>
-                    <CopyToClipboard text={text} timeout={timeout}>
+                    <CopyToClipboard text={text?.toString() || ''} timeout={timeout}>
                         {(state) =>
                             buttonText ? (
                                 <Button
-                                    {...buttonProps}
+                                    {...(buttonProps as ButtonButtonProps)}
+                                    view={buttonView}
                                     ref={this.buttonRef}
                                     onClick={this.onClick}
                                 >
-                                    <Icon
-                                        awesome={this.iconByState[state]}
-                                        face={face}
-                                        size={iconSize}
-                                    />
+                                    <Icon data={this.iconByState[state]} size={resultIconSize} />
                                     {buttonText}
                                 </Button>
                             ) : (
                                 <Button
-                                    {...buttonProps}
+                                    {...(buttonProps as ButtonButtonProps)}
+                                    view={buttonView}
                                     ref={this.buttonRef}
                                     onClick={this.onClick}
                                 >
-                                    <Icon
-                                        awesome={this.iconByState[state]}
-                                        face={face}
-                                        size={iconSize}
-                                    />
+                                    <Icon data={this.iconByState[state]} size={resultIconSize} />
                                 </Button>
                             )
                         }

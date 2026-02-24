@@ -1,21 +1,8 @@
-import React from 'react';
 import block from 'bem-cn-lite';
-
-import hammer from '../../common/hammer';
 
 import './Label.scss';
 
-const b = block('elements-label');
-
-interface Props {
-    className?: string;
-    theme?: LabelTheme;
-    type?: 'block' | 'text';
-    text?: string | number;
-    capitalize?: boolean;
-    children?: React.ReactNode;
-    hideTitle?: boolean;
-}
+const b = block('yt-label');
 
 export type LabelTheme =
     | 'default'
@@ -27,7 +14,17 @@ export type LabelTheme =
     | 'complementary'
     | 'misc';
 
-function Label({
+interface Props {
+    className?: string;
+    theme?: LabelTheme;
+    type?: 'block' | 'text';
+    text?: string | number;
+    capitalize?: boolean;
+    children?: React.ReactNode;
+    hideTitle?: boolean;
+}
+
+export const Label = ({
     theme = 'default',
     type = 'block',
     text,
@@ -35,7 +32,7 @@ function Label({
     className,
     children,
     capitalize,
-}: Props) {
+}: Props) => {
     return (
         <span
             className={b({theme, type, capitalize}, className)}
@@ -44,15 +41,4 @@ function Label({
             {text || children}
         </span>
     );
-}
-
-export function LabelOnOff({value, className}: {value?: boolean; className?: string}) {
-    if (value === undefined) {
-        return hammer.format.NO_VALUE;
-    }
-    const theme = value ? 'success' : 'danger';
-    const text = value ? 'On' : 'Off';
-    return <Label theme={theme} text={text} className={className} />;
-}
-
-export default Label;
+};

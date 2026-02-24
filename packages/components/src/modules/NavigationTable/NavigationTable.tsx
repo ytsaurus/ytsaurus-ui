@@ -1,0 +1,109 @@
+import React, {FC, useState} from 'react';
+import cn from 'bem-cn-lite';
+import {SegmentedRadioGroup} from '@gravity-ui/uikit';
+import {NavigationTableData, NavigationTableMeta, NavigationTableSchema} from '../../types';
+import type {UnipikaSettings} from '../../internal/Yson/StructuredYson/StructuredYsonTypes';
+import type {SchemaDataTypeProps} from '../../components';
+import {MetaTable} from '../../components';
+import i18n from './i18n';
+import {SchemaTab} from './SchemaTab';
+import {PreviewTab} from './PreviewTab';
+import './NavigationTable.scss';
+
+const b = cn('navigation-table');
+
+const enum TableTab {
+    Schema = 'schema',
+    Preview = 'preview',
+    Meta = 'meta',
+}
+
+export type NavigationTableProps = {
+    table: NavigationTableData | null;
+    filter?: string;
+    onFilterChange?: (value: string) => void;
+    onInsertTableSelect?: () => void | Promise<void>;
+    ysonSettings?: UnipikaSettings;
+    emptyMessage?: React.ReactNode;
+    primitiveTypes?: SchemaDataTypeProps['primitiveTypes'];
+    renderSchemaTab?: (props: {
+        schema: NavigationTableSchema[];
+        filter: string;
+        onFilterChange: (value: string) => void;
+    }) => React.ReactNode;
+    renderPreviewTab?: (props: {
+        table: NavigationTableData;
+        onEditorInsert: () => void | Promise<void>;
+        ysonSettings?: UnipikaSettings;
+        primitiveTypes?: SchemaDataTypeProps['primitiveTypes'];
+    }) => React.ReactNode;
+    renderMetaTab?: (props: {items: NavigationTableMeta[][]}) => React.ReactNode;
+    className?: string;
+};
+
+export const NavigationTable: FC<NavigationTableProps> = ({
+    table,
+    filter: controlledFilter,
+    onFilterChange: controlledOnFilterChange,
+    onInsertTableSelect,
+    ysonSettings,
+    emptyMessage,
+    primitiveTypes,
+    renderSchemaTab,
+    renderPreviewTab,
+    renderMetaTab,
+    className,
+}) => {
+    const [activeTab, setActiveTab] = useState(TableTab.Schema);
+    const [internalFilter, setInternalFilter] = useState('');
+    const filter = controlledFilter ?? internalFilter;
+    const setFilter = controlledOnFilterChange ?? setInternalFilter;
+
+    const handleChangeTab = (id: string) => {
+        setActiveTab(id as TableTab);
+    };
+
+    if (!table) {
+        return (
+            <div className={b(null, className)}>{emptyMessage ?? i18n('context_empty-data')}</div>
+        );
+    }
+
+    const schemaData = {schema: table.schema, filter, onFilterChange: setFilter};
+    const schemaContent =
+        activeTab === TableTab.Schema &&
+        (renderSchemaTab ? renderSchemaTab(schemaData) : <SchemaTab {...schemaData} />);
+
+    const previewData = {
+        table,
+        onEditorInsert: onInsertTableSelect ?? (() => {}),
+        ysonSettings,
+        primitiveTypes,
+    };
+    const previewContent =
+        activeTab === TableTab.Preview &&
+        (renderPreviewTab ? renderPreviewTab(previewData) : <PreviewTab {...previewData} />);
+
+    const metaContent =
+        activeTab === TableTab.Meta &&
+        (renderMetaTab ? renderMetaTab({items: table.meta}) : <MetaTable items={table.meta} />);
+
+    return (
+        <div className={b(null, className)}>
+            <SegmentedRadioGroup
+                defaultValue={activeTab}
+                onUpdate={handleChangeTab}
+                options={[
+                    {value: TableTab.Schema, content: i18n('title_schema')},
+                    {value: TableTab.Preview, content: i18n('title_preview')},
+                    {value: TableTab.Meta, content: i18n('title_meta')},
+                ]}
+            />
+            <div className={b('content')}>
+                {schemaContent}
+                {previewContent}
+                {metaContent}
+            </div>
+        </div>
+    );
+};

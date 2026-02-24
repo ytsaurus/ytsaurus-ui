@@ -1,20 +1,23 @@
-import React from 'react';
-import hammer from '../../../common/hammer';
-import ypath from '../../../common/thor/ypath';
-import {RowsCount} from '../../../pages/navigation/content/Table/TableMeta/RowsCount/RowsCount';
-import {tabletActiveBundleLink} from '../../../utils/components/tablet-cells';
-import Label, {LabelOnOff} from '../../Label/Label';
-import Link from '../../Link/Link';
+import {format, ypath} from '../../../utils';
+import {Label, LabelOnOff} from '../../Label';
 import {Template} from '../templates/Template';
-import compression from './compression';
-import erasureReplication from './erasure-replication';
-import size from './size';
-import {CypressNodeTypes} from '../../../utils/cypress-attributes';
-import {main} from './index';
-import {getCommonFields} from '../../../pages/navigation/content/Table/TableMeta/commonFields';
-import {Props as AutomaticModeSwitchProps} from '../../../pages/navigation/content/Table/TableMeta/AutomaticModeSwitch';
+import {compression} from './compression';
+import {erasureReplication} from './erasure-replication';
+import {metaTablePresetSize} from './size';
+import {metaTablePresetMain} from './main';
+import {getCommonFields} from './helpers/commonFields';
+import type {YtComponentsConfig} from '../../../context';
 
 import i18n from './i18n';
+import {RowsCount} from '../templates/RowsCount/RowsCount';
+
+export const CypressNodeTypes = {
+    REPLICATED_TABLE: 'replicated_table',
+    REPLICATION_LOG_TABLE: 'replication_log_table',
+    CHAOS_REPLICATED_TABLE: 'chaos_replicated_table',
+    MAP_NODE: 'map_node',
+    TABLE: 'table',
+};
 
 export function replicatedTableTracker(attributes: any) {
     const value = ypath.getValue(
@@ -45,10 +48,10 @@ export function tableSize(attributes: any, isDynamic: boolean, mediumList: strin
         {
             key: 'chunkCount',
             label: 'Chunks',
-            value: hammer.format['Number'](chunkCount),
+            value: format['Number'](chunkCount),
             visible: chunkCount !== undefined,
         },
-        ...size(attributes, mediumList),
+        ...metaTablePresetSize(attributes, mediumList),
         {
             key: 'dataWeight',
             label: 'Data weight',
@@ -59,7 +62,11 @@ export function tableSize(attributes: any, isDynamic: boolean, mediumList: strin
     ];
 }
 
-export function tableStorage(attributes: any, tableType: string) {
+export function tableStorage(
+    attributes: any,
+    tableType: string,
+    options: {docsUrls?: Record<string, string>} = {},
+) {
     const optimizeFor = ypath.getValue(attributes, '/optimize_for');
     return [
         {
@@ -70,31 +77,41 @@ export function tableStorage(attributes: any, tableType: string) {
         {
             key: 'optimizeFor',
             label: 'Optimize for',
-            value: <Label text={hammer.format['ReadableField'](optimizeFor)} theme="info" />,
+            value: <Label text={format['ReadableField'](optimizeFor)} theme="info" />,
             visible: optimizeFor !== 'undefined',
         },
         ...compression(attributes),
-        ...erasureReplication(attributes),
+        ...erasureReplication(attributes, options),
         replicatedTableTracker(attributes),
     ];
 }
 
-export function dynTableInfo(attributes: any, cluster: string, tabletErrorCount: number) {
+export function dynTableInfo(
+    attributes: any,
+    cluster: string,
+    tabletErrorCount: number,
+    config?: Partial<YtComponentsConfig>,
+) {
     const [tabletCellBundle, tabletState, inMemoryMode] = ypath.getValues(attributes, [
         '/tablet_cell_bundle',
         '/tablet_state',
         '/in_memory_mode',
     ]);
 
-    const tabletUrl = tabletActiveBundleLink(cluster, tabletCellBundle);
+    const TabletCellBundleLink = config?.TabletCellBundleLink;
+
     return [
         {
             key: 'tabletCellBundle',
             label: 'Tablet cell bundle',
-            value: (
-                <Link theme={'primary'} routed url={tabletUrl}>
-                    {tabletCellBundle}
-                </Link>
+            value: tabletCellBundle ? (
+                TabletCellBundleLink ? (
+                    <TabletCellBundleLink cluster={cluster} tabletCellBundle={tabletCellBundle} />
+                ) : (
+                    tabletCellBundle
+                )
+            ) : (
+                format.NO_VALUE
             ),
         },
         {
@@ -103,7 +120,7 @@ export function dynTableInfo(attributes: any, cluster: string, tabletErrorCount:
             value: (
                 <Label
                     theme={tabletState === 'mounted' ? 'info' : 'default'}
-                    text={hammer.format['ReadableField'](tabletState)}
+                    text={format['ReadableField'](tabletState)}
                 />
             ),
         },
@@ -113,14 +130,14 @@ export function dynTableInfo(attributes: any, cluster: string, tabletErrorCount:
             value: (
                 <Label
                     theme={inMemoryMode && inMemoryMode !== 'none' ? 'info' : 'default'}
-                    text={hammer.format['ReadableField'](inMemoryMode || 'none')}
+                    text={format['ReadableField'](inMemoryMode || 'none')}
                 />
             ),
         },
         {
             key: 'tabletErrorCount',
             label: 'Tablet error count',
-            value: hammer.format['Number'](tabletErrorCount),
+            value: format['Number'](tabletErrorCount),
         },
     ];
 }
@@ -133,6 +150,8 @@ export const makeMetaItems = ({
     mediumList = [],
     tabletErrorCount = 0,
     onEditEnableReplicatedTableTracker,
+    docsUrls,
+    navigationTableConfig,
 }: {
     cluster: string;
     attributes: any;
@@ -140,8 +159,14 @@ export const makeMetaItems = ({
     isDynamic: boolean;
     tableType: string;
     tabletErrorCount?: number;
-    onEditEnableReplicatedTableTracker?: AutomaticModeSwitchProps['onEdit'];
+    onEditEnableReplicatedTableTracker?: (currentValue?: boolean) => Promise<void>;
+    docsUrls?: Record<string, string>;
+    navigationTableConfig?: Partial<YtComponentsConfig>;
 }) => {
+    const config = navigationTableConfig
+        ? {...navigationTableConfig, docsUrls: docsUrls ?? navigationTableConfig.docsUrls}
+        : undefined;
+
     const cf = getCommonFields({
         cluster,
         attributes,
@@ -149,25 +174,26 @@ export const makeMetaItems = ({
         tableType: attributes.type,
         tabletErrorCount,
         onEditEnableReplicatedTableTracker,
+        config,
     });
 
     switch (attributes.type) {
         case CypressNodeTypes.REPLICATED_TABLE:
         case CypressNodeTypes.REPLICATION_LOG_TABLE:
             return [
-                main(attributes, cluster),
+                metaTablePresetMain(attributes, cluster, config),
                 tableSize(attributes, isDynamic, mediumList),
-                tableStorage(attributes, attributes.type),
+                tableStorage(attributes, attributes.type, {docsUrls}),
                 [
                     cf.sorted,
-                    ...dynTableInfo(attributes, cluster, tabletErrorCount),
+                    ...dynTableInfo(attributes, cluster, tabletErrorCount, config),
                     cf.automaticModeSwitch,
                 ],
             ];
 
         case CypressNodeTypes.CHAOS_REPLICATED_TABLE:
             return [
-                main(attributes, cluster),
+                metaTablePresetMain(attributes, cluster, config),
                 tableSize(attributes, isDynamic, mediumList),
                 [
                     cf.tableType,
@@ -180,12 +206,14 @@ export const makeMetaItems = ({
 
         default:
             return [
-                main(attributes, cluster),
+                metaTablePresetMain(attributes, cluster, config),
                 tableSize(attributes, isDynamic, mediumList),
-                tableStorage(attributes, tableType),
+                tableStorage(attributes, tableType, {docsUrls}),
                 [
                     cf.sorted,
-                    ...(isDynamic ? dynTableInfo(attributes, cluster, tabletErrorCount) : []),
+                    ...(isDynamic
+                        ? dynTableInfo(attributes, cluster, tabletErrorCount, config)
+                        : []),
                 ],
             ];
     }

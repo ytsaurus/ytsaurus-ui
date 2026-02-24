@@ -1,8 +1,8 @@
-import ypath from '@ytsaurus/interface-helpers/lib/ypath';
-import {docsUrl} from '../../../config';
-import UIFactory from '../../../UIFactory';
+import {ypath} from '../../../utils/ypath';
+const ERASURE_DOCS_KEY = 'storage:replication#erasure';
 
-export default (attributes) => {
+export const erasureReplication = (attributes, options = {}) => {
+    const {docsUrls} = options;
     const [erasureCodec, replicationFactor] = ypath.getValues(attributes, [
         '/erasure_codec',
         '/replication_factor',
@@ -13,7 +13,7 @@ export default (attributes) => {
         {
             key: 'erasure codec',
             value: erasureCodec,
-            helpUrl: docsUrl(UIFactory.docsUrls['storage:replication#erasure']),
+            helpUrl: docsUrls?.[ERASURE_DOCS_KEY],
             visible: erasureCodec !== 'none',
         },
         {

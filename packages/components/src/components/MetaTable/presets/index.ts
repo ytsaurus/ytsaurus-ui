@@ -1,4 +1,7 @@
-export {default as main} from './main';
-export {default as size} from './size';
-export {default as compression} from './compression';
-export {default as erasureReplication} from './erasure-replication';
+export {metaTablePresetMain} from './main';
+export {metaTablePresetSize} from './size';
+export {erasureReplication} from './erasure-replication';
+export {compression} from './compression';
+
+export {makeMetaItems} from './presets';
+export {makeTTLItems, TTLLabel} from './ttl';

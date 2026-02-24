@@ -1,0 +1,26 @@
+.yt-error-boundary-fallback {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+    overflow: auto;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    color: var(--error-text, #b90909);
+    background-color: var(--error-background, #fff5f5);
+
+    &__heading {
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    &__message {
+        font-size: 13px;
+        word-break: break-word;
+        white-space: pre-wrap;
+    }
+
+    &__copy {
+        margin-top: 4px;
+    }
+}

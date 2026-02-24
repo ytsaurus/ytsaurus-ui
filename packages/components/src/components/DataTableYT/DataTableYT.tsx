@@ -4,15 +4,9 @@ import cn from 'bem-cn-lite';
 import map_ from 'lodash/map';
 import range_ from 'lodash/range';
 
-import DataTable, {Column, DataTableProps, Settings} from '@gravity-ui/react-data-table';
+import DataTable, {Column, DataTableProps} from '@gravity-ui/react-data-table';
 export type {Column};
-import {NoContent} from '../../components/NoContent/NoContent';
-import {
-    STICKY_DOUBLE_TOOLBAR_BOTTOM,
-    STICKY_TOOLBAR_BOTTOM,
-} from '../../components/WithStickyToolbar/WithStickyToolbar';
-import {HEADER_HEIGHT} from '../../constants';
-import {useScrollableElementContenxt} from '../../hooks/use-scrollable-element';
+import {NoContent} from '../NoContent';
 
 import i18n from './i18n';
 
@@ -35,30 +29,7 @@ interface WithThemeYT {
     useThemeYT: true;
 }
 
-export const DATA_TABLE_YT_SETTINGS: Settings = {
-    displayIndices: false,
-    stickyHead: DataTable.MOVING,
-    stickyFooter: DataTable.MOVING,
-    stickyTop: HEADER_HEIGHT,
-    stickyBottom: 0,
-    syncHeadOnResize: true,
-    dynamicRender: true,
-    sortable: false,
-    externalSort: true,
-    dynamicRenderScrollParentGetter: () => window as any,
-};
-
-export const DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR: Settings = {
-    ...DATA_TABLE_YT_SETTINGS,
-    stickyTop: STICKY_TOOLBAR_BOTTOM,
-};
-
-export const DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR_DOUBLE_HEIGHT: Settings = {
-    ...DATA_TABLE_YT_SETTINGS,
-    stickyTop: STICKY_DOUBLE_TOOLBAR_BOTTOM,
-};
-
-class DataTableYT<T> extends React.Component<DataTableYtProps<T>> {
+export class DataTableYT<T> extends React.Component<DataTableYtProps<T>> {
     private dataTable = React.createRef<DataTable<T>>();
 
     isEmpty() {
@@ -131,20 +102,4 @@ class DataTableYT<T> extends React.Component<DataTableYtProps<T>> {
             </div>
         );
     }
-}
-
-export default function DataTableYTWithScroll<T>({settings, ...props}: DataTableYtProps<T>) {
-    const scrollableElement = useScrollableElementContenxt();
-
-    const settingsWithScrollableElement = React.useMemo(() => {
-        return Boolean(scrollableElement) && settings?.dynamicRender
-            ? ({
-                  ...settings,
-                  dynamicRenderScrollParentGetter: () =>
-                      scrollableElement ?? (document.body as any),
-              } as typeof settings)
-            : settings;
-    }, [settings, scrollableElement]);
-
-    return <DataTableYT<T> {...props} settings={settingsWithScrollableElement} />;
 }
