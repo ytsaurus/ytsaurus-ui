@@ -1,0 +1,34 @@
+.g-root {
+    --yt-sticky-container-top-offset: var(--app-header-height, '0px');
+    --yt-sticky-container-top-offset-sticky-diff: 0px;
+}
+
+.yt-sticky-container {
+    &__sticky {
+        position: sticky;
+        top: calc(
+            var(--yt-sticky-container-top-offset) +
+                var(--yt-sticky-container-top-offset-sticky-diff)
+        );
+        z-index: 1;
+
+        background-color: var(--main-background);
+
+        &_fixed {
+            position: fixed;
+            width: calc(100vw - var(--gn-aside-header-size));
+            margin-left: -20px;
+            padding-left: 20px;
+            padding-right: 20px;
+            top: var(--yt-sticky-container-top-offset);
+        }
+
+        &_top {
+            top: var(--yt-sticky-container-top-offset);
+        }
+
+        &_shadow {
+            box-shadow: 0 4px 4px -4px var(--opacity-background);
+        }
+    }
+}

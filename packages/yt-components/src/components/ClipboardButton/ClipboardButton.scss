@@ -1,0 +1,28 @@
+.yt-clipboard-button {
+    color: var(--g-color-text-secondary);
+
+    &_view_clear {
+        svg {
+            color: var(--g-color-text-secondary);
+        }
+    }
+
+    &_inline-margin {
+        & .yt-tooltip {
+            margin-top: -5px;
+            margin-bottom: -5px;
+        }
+    }
+}
+
+.data-table__row {
+    .yt-clipboard-button_visbile-on-row-hover {
+        visibility: hidden;
+    }
+
+    &:hover {
+        .yt-clipboard-button_visbile-on-row-hover {
+            visibility: visible;
+        }
+    }
+}

@@ -1,0 +1,20 @@
+.navigation-table-meta {
+    &__group {
+        margin-bottom: 12px;
+    }
+
+    &__row {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 4px;
+    }
+
+    &__key {
+        font-weight: 500;
+        min-width: 120px;
+    }
+
+    &__value {
+        word-break: break-word;
+    }
+}

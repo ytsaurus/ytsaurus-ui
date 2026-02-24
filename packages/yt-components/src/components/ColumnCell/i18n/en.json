@@ -1,0 +1,5 @@
+{
+    "hold-shift-escaped": "Hold SHIFT-key to copy escaped value",
+    "hold-shift-raw": "Hold SHIFT-key to copy raw value",
+    "incomplete-type": "Incomplete '{{tag}}' type"
+}

@@ -1,0 +1,83 @@
+.yt-text {
+    &_clickable {
+        &:hover {
+            color: var(--g-color-text-danger);
+            cursor: pointer;
+        }
+    }
+
+    &_ellipsis {
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &_color {
+        &_secondary {
+            color: var(--secondary-text);
+        }
+
+        &_success {
+            color: var(--success-text);
+        }
+
+        &_info {
+            color: var(--g-color-text-info);
+        }
+
+        &_warning {
+            color: var(--warning-text);
+        }
+
+        &_warning-light {
+            color: var(--warning-color);
+        }
+
+        &_danger {
+            color: var(--danger-text);
+        }
+    }
+
+    &_disabled {
+        color: var(--disabled-link);
+        cursor: unset;
+    }
+
+    &_bold {
+        font-weight: var(--yt-font-weight-bold);
+    }
+
+    &_no-wrap {
+        white-space: nowrap;
+    }
+
+    &_escaped {
+        & .unipika {
+            display: inline;
+            white-space: nowrap;
+            font-family: var(--g-font-family-sans);
+            color: inherit;
+
+            .quote {
+                display: none;
+            }
+
+            .escape {
+                word-spacing: 5px;
+                white-space: pre-wrap;
+                background-color: var(--error-background);
+            }
+
+            & .string {
+                position: relative;
+                color: inherit;
+                vertical-align: bottom;
+            }
+        }
+    }
+
+    &_capitalize {
+        text-transform: capitalize;
+    }
+}

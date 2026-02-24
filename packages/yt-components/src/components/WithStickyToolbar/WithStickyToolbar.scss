@@ -1,0 +1,42 @@
+@use './Toolbar/Toolbar.scss' as toolbar;
+
+$stickySpacerHeight: 6px;
+
+.with-sticky-toolbar {
+    --yt-with-sticky-toolbar-toolbar-height: #{toolbar.$TOOLBAR_COMPONENT_HEIGHT};
+
+    &_x2 {
+        --yt-with-sticky-toolbar-toolbar-height: #{toolbar.$TOOLBAR_COMPONENT_HEIGHT * 2};
+    }
+
+    &_bottom-margin_regular {
+        margin-bottom: 20px;
+    }
+
+    &_top-margin_none {
+        margin-top: -10px;
+    }
+
+    & &__toolbar {
+        z-index: var(--fixed-toolbar-z-index);
+
+        height: var(--yt-with-sticky-toolbar-toolbar-height);
+
+        &_padding_skip-horizontal {
+            padding-left: unset;
+            padding-right: unset;
+        }
+
+        &_sticky {
+            position: fixed;
+            max-width: var(--yt-with-sticky-toolbar-fixed-max-width, unset);
+            overflow: hidden;
+        }
+    }
+
+    &__toolbar-spacer {
+        &_sticky {
+            height: var(--yt-with-sticky-toolbar-toolbar-height);
+        }
+    }
+}
