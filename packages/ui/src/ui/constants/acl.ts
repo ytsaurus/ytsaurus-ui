@@ -23,6 +23,7 @@ export const REGISTER_QUEUE_CONSUMER = 'register_queue_consumer';
 export const REGISTER_QUEUE_CONSUMER_VITAL = 'register_queue_consumer_vital';
 
 const PERMISSION_TYPES: Array<YTPermissionTypeUI> = [
+    'full_read',
     'read',
     'write',
     'remove',
