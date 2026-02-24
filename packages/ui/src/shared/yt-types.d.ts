@@ -244,6 +244,7 @@ export type YTPermissionType =
     | 'administer'
     | 'create'
     | 'read'
+    | 'full_read'
     | 'write'
     | 'use'
     | 'manage'
