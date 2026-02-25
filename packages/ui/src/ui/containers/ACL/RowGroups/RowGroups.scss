@@ -1,0 +1,62 @@
+.acl-row-groups {
+    .data-table__th,
+    .data-table__td {
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+
+    grid-column: 1 / -2;
+
+    &__button {
+        &_add {
+            margin-left: 16px;
+        }
+    }
+
+    &__active-icon {
+        margin-bottom: -3px;
+        color: var(--g-color-text-hint);
+        &_enabled {
+            color: var(--g-color-text-positive);
+        }
+    }
+
+    &__icon {
+        margin-left: 1ex;
+        color: var(--secondary-text);
+
+        &_delete {
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        &_edit {
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    &__empty {
+        width: 25px;
+    }
+
+    & &__name {
+        width: 270px;
+        max-width: 320px;
+    }
+
+    & &__columns {
+        width: 410px;
+        white-space: normal;
+    }
+
+    & &__actions {
+        width: 85px;
+    }
+
+    &__filter {
+        width: 250px;
+    }
+}

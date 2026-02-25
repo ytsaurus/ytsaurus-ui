@@ -10,7 +10,12 @@ import {
 } from '../../../constants/acl';
 import {RESET_STORE_BEFORE_CLUSTER_CHANGE} from '../../../constants/utils';
 import {YTPermissionTypeUI} from '../../../utils/acl/acl-api';
-import {AclColumnGroup, IdmKindType, PreparedAclSubject} from '../../../utils/acl/acl-types';
+import {
+    AclColumnGroup,
+    AclRowGroup,
+    IdmKindType,
+    PreparedAclSubject,
+} from '../../../utils/acl/acl-types';
 import {ActionD} from '../../../types';
 import {PreparedRole} from '../../../utils/acl';
 
@@ -24,6 +29,7 @@ export type AclKindState = {
     userPermissions: Array<{type: YTPermissionTypeUI} & CheckPermissionResult>;
     objectPermissions: Array<PreparedAclSubject>;
     columnGroups: Array<AclColumnGroup>;
+    rowGroups: Array<AclRowGroup> | undefined;
     inheritAcl?: boolean;
 
     bossApproval: PreparedRole | undefined;
@@ -52,6 +58,7 @@ const ephemeralState: AclKindState = {
     userPermissions: [],
     objectPermissions: [],
     columnGroups: [],
+    rowGroups: undefined,
     inheritAcl: undefined,
     bossApproval: undefined,
     disableAclInheritance: false,

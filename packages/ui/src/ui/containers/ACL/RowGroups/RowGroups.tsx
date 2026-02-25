@@ -6,49 +6,39 @@ import Button from '../../../components/Button/Button';
 import DataTableYT from '../../../components/DataTableYT/DataTableYT';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import Icon from '../../../components/Icon/Icon';
-import Select from '../../../components/Select/Select';
-import {renderText} from '../../../components/templates/utils';
 import TextInputWithDebounce from '../../../components/TextInputWithDebounce/TextInputWithDebounce';
 import {Tooltip} from '../../../components/Tooltip/Tooltip';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import WithStickyToolbar from '../../../components/WithStickyToolbar/WithStickyToolbar';
 import UIFactory from '../../../UIFactory';
-import {AclColumnGroup} from '../../../utils/acl/acl-types';
+import {AclRowGroup} from '../../../utils/acl/acl-types';
 import {ACLReduxProps} from '../ACL-connect-helpers';
-import './ColumnGroups.scss';
-import EditColumnGroupModal, {Props as ModalProps} from './EditColumnGroupModal';
+import {EditRowGroupModal, Props as ModalProps} from './EditRowGroupModal';
+import './RowGroups.scss';
 
-const block = cn('column-groups');
+const block = cn('acl-row-groups');
 
-type Props = ColumnGropsToolbarProps &
-    Pick<
-        ACLReduxProps,
-        | 'loaded'
-        | 'columnGroups'
-        | 'columnsFilter'
-        | 'columnGroupNameFilter'
-        | 'updateAclFilters'
-        | 'userPermissionsAccessColumns'
-    > & {
-        path: string;
-        loadAclDataFn: () => void;
-        cluster: string;
-        allowEdit?: boolean;
-        allowEditNotice?: string;
-    };
+type Props = Pick<
+    ACLReduxProps,
+    'loaded' | 'rowGroups' | 'rowGroupNameFilter' | 'updateAclFilters'
+> & {
+    path: string;
+    loadAclDataFn: () => void;
+    cluster: string;
+    allowEdit?: boolean;
+    allowEditNotice?: string;
+};
 
-export default function ColumnGroups({
+export function RowGroups({
     loaded,
-    columnGroups,
+    rowGroups,
     path,
     loadAclDataFn,
     cluster,
     allowEdit = false,
     allowEditNotice,
+    rowGroupNameFilter,
     updateAclFilters,
-    columnsFilter,
-    columnGroupNameFilter,
-    userPermissionsAccessColumns,
 }: Props) {
     const [modalProps, setModalProps] = useState({
         title: '',
@@ -62,24 +52,24 @@ export default function ColumnGroups({
                 visible: false,
             }));
         },
-        handleSubmit: (_value: Partial<AclColumnGroup>) => Promise.resolve(),
+        handleSubmit: (_value: Partial<AclRowGroup>) => Promise.resolve(),
     } as ModalProps);
 
     const handleAddClick = () => {
         setModalProps((prevProps) => ({
             ...prevProps,
-            title: 'Add new column group',
+            title: 'Add new row group',
             confirmText: 'Add',
             disabledFields: ['enabled'],
             visible: true,
             initialData: {
                 name: '',
-                columns: [],
+                predicate: '',
                 enabled: false,
             },
-            handleSubmit: (value: Partial<AclColumnGroup>) => {
+            handleSubmit: (value: Partial<AclRowGroup>) => {
                 return UIFactory.getAclApi()
-                    .createColumnGroup(cluster, path, value)
+                    .createRowGroup(cluster, path, value)
                     .then(() => {
                         loadAclDataFn();
                     });
@@ -87,17 +77,17 @@ export default function ColumnGroups({
         }));
     };
 
-    const handleEditClick = (item: AclColumnGroup) => {
+    const handleEditClick = (item: AclRowGroup) => {
         setModalProps((prevProps) => ({
             ...prevProps,
-            title: 'Edit column group',
+            title: 'Edit row group',
             confirmText: 'Save',
             initialData: {...item},
             disabledFields: [],
             visible: true,
-            handleSubmit: (value: Partial<AclColumnGroup>) => {
+            handleSubmit: (value: Partial<AclRowGroup>) => {
                 return UIFactory.getAclApi()
-                    .editColumnGroup(cluster, {...value, id: item.id})
+                    .editRowGroup(cluster, {...value, id: item.id})
                     .then(() => {
                         loadAclDataFn();
                     });
@@ -105,26 +95,27 @@ export default function ColumnGroups({
         }));
     };
 
-    const handleDeleteClick = (item: AclColumnGroup) => {
+    const handleDeleteClick = (item: AclRowGroup) => {
         setModalProps((prevProps) => ({
             ...prevProps,
-            title: 'Delete column group',
+            title: 'Delete row group',
             confirmText: 'Delete',
             initialData: {...item},
-            disabledFields: ['name', 'columns', 'enabled'],
+            disabledFields: ['name', 'predicate', 'enabled'],
             visible: true,
             handleSubmit: () => {
                 const {id} = item;
                 return UIFactory.getAclApi()
-                    .deleteColumnGroup(cluster, id)
+                    .deleteRowGroup(cluster, id)
                     .then(() => {
                         loadAclDataFn();
                     });
             },
+            mode: 'delete',
         }));
     };
 
-    const columns: Array<Column<AclColumnGroup>> = [
+    const columns: Array<Column<AclRowGroup>> = [
         {
             name: 'Empty',
             className: block('empty'),
@@ -142,9 +133,9 @@ export default function ColumnGroups({
             className: block('name'),
         },
         {
-            name: 'Columns',
+            name: 'Predicate',
             render({row}) {
-                return renderText(row.columns?.map((column) => `"${column}"`).join(', '));
+                return row.predicate;
             },
             className: block('columns'),
             align: 'left',
@@ -178,7 +169,7 @@ export default function ColumnGroups({
         <ErrorBoundary>
             <div>
                 <div className="elements-heading elements-heading_size_xs">
-                    Column groups
+                    Row groups
                     {allowEdit && (
                         <Button className={block('button', {add: true})} onClick={handleAddClick}>
                             <Icon awesome={'plus'} />
@@ -203,33 +194,21 @@ export default function ColumnGroups({
                                         <TextInputWithDebounce
                                             placeholder="Filter by name"
                                             className={block('filter')}
-                                            value={columnGroupNameFilter}
-                                            onUpdate={(columnGroupNameFilter) =>
-                                                updateAclFilters({columnGroupNameFilter})
+                                            value={rowGroupNameFilter}
+                                            onUpdate={(rowGroupNameFilter) =>
+                                                updateAclFilters({rowGroupNameFilter})
                                             }
                                         />
                                     ),
-                                },
-                                {
-                                    node: (
-                                        <ColumnGroupsFilter
-                                            {...{
-                                                columnsFilter,
-                                                updateAclFilters,
-                                                userPermissionsAccessColumns,
-                                            }}
-                                        />
-                                    ),
-                                    shrinkable: true,
                                 },
                             ]}
                         />
                     }
                     content={
-                        <DataTableYT<AclColumnGroup>
+                        <DataTableYT<AclRowGroup>
                             loaded={loaded}
-                            noItemsText="There are not any column groups"
-                            data={columnGroups}
+                            noItemsText="There are no any row groups"
+                            data={rowGroups ?? []}
                             columns={columns}
                             theme={'yt-borderless'}
                             settings={{
@@ -240,40 +219,7 @@ export default function ColumnGroups({
                     }
                 />
             </div>
-            {modalProps.visible ? <EditColumnGroupModal {...modalProps} /> : null}
+            {modalProps.visible ? <EditRowGroupModal {...modalProps} /> : null}
         </ErrorBoundary>
-    );
-}
-
-interface ColumnGropsToolbarProps
-    extends Pick<
-        ACLReduxProps,
-        'updateAclFilters' | 'columnsFilter' | 'userPermissionsAccessColumns'
-    > {}
-
-export function ColumnGroupsFilter({
-    columnsFilter: value,
-    userPermissionsAccessColumns,
-    updateAclFilters,
-}: ColumnGropsToolbarProps) {
-    const options = React.useMemo(() => {
-        return userPermissionsAccessColumns?.map((value) => {
-            return {value, title: value};
-        });
-    }, [userPermissionsAccessColumns]);
-    return (
-        <Select
-            className={block('columns-filter')}
-            multiple
-            hasClear
-            filterable
-            label="Columns"
-            placeholder="filter"
-            items={options}
-            value={value}
-            onUpdate={(columnsFilter) => updateAclFilters({columnsFilter})}
-            maxVisibleValuesTextLength={60}
-            width="max"
-        />
     );
 }

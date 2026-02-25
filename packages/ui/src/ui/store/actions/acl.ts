@@ -117,6 +117,7 @@ export function loadAclData(
                         auditors: responsible.auditors,
                         objectPermissions: acl.permissions,
                         columnGroups: acl.column_groups,
+                        rowGroups: acl.row_groups,
                         inheritAcl: acl.inheritAcl,
                         responsible: responsible.responsible,
                         userPermissions: prepareUserPermissions(userPermissions, idmKind),
@@ -216,6 +217,7 @@ export type PermissionToRequest = {
     permissionFlags?: Record<string, boolean>;
     readColumnGroup?: string;
     readColumns?: Array<string>;
+    readRowGroup?: string;
 };
 
 export function requestPermissions(
@@ -238,7 +240,8 @@ export function requestPermissions(
         const daysAfter = dateToDaysAfterNow(values.duration);
         const roles: Array<Role> = [];
         const rolesGroupedBySubject = [];
-        const {inheritance_mode, permissionFlags, readColumnGroup, readColumns} = values;
+        const {inheritance_mode, permissionFlags, readColumnGroup, readColumns, readRowGroup} =
+            values;
         for (const item of values.subjects) {
             const subject = prepareAclSubject(item);
             const commonPart = {
@@ -274,6 +277,13 @@ export function requestPermissions(
                 roles.push({
                     role_type: 'column_read',
                     column_group_id: readColumnGroup,
+                    ...commonPart,
+                });
+            }
+            if (readRowGroup) {
+                roles.push({
+                    role_type: 'row_read',
+                    row_group_id: readRowGroup,
                     ...commonPart,
                 });
             }

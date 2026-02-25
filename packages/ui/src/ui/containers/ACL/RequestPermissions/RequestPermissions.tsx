@@ -18,7 +18,7 @@ import map_ from 'lodash/map';
 
 import {docsUrl} from '../../../config';
 import {makeLink} from '../../../utils/utils';
-import {AclColumnGroup, IdmKindType} from '../../../utils/acl/acl-types';
+import {AclColumnGroup, AclRowGroup, IdmKindType} from '../../../utils/acl/acl-types';
 import {YTPermissionTypeUI} from '../../../utils/acl/acl-api';
 import {PermissionToRequest} from '../../../store/actions/acl';
 import {useAvailablePermissions} from '../hooks/use-available-permissions';
@@ -38,7 +38,8 @@ export type RequestPermissionsFieldsNames =
     | 'inheritance_mode'
     | 'permissionFlags'
     | 'readColumns'
-    | 'readColumnGroup';
+    | 'readColumnGroup'
+    | 'readRowGroup';
 
 export interface Props extends WithVisibleProps {
     className?: string;
@@ -56,6 +57,7 @@ export interface Props extends WithVisibleProps {
     error?: YTError;
     onSuccess?: () => void;
     columnGroups?: Array<AclColumnGroup>;
+    rowGroups?: Array<AclRowGroup>;
     aclMode?: AclMode;
 }
 
@@ -72,6 +74,7 @@ type FormValues = {
     duration?: Date;
     comment?: string;
     readColumnGroup?: string;
+    readRowGroup?: string;
 } & Record<`${typeof FLAG_NAME_PREFIX}${string}`, boolean>;
 
 const SHORT_TITLE: Partial<Record<IdmKindType, string>> = {
@@ -79,6 +82,7 @@ const SHORT_TITLE: Partial<Record<IdmKindType, string>> = {
 };
 
 const COLUMNS_FELDS = new Set<RequestPermissionsFieldsNames>(['readColumns', 'readColumnGroup']);
+const ROWS_FIELDS = new Set<RequestPermissionsFieldsNames>(['readRowGroup']);
 
 function RequestPermissions(props: Props) {
     const {
@@ -95,6 +99,7 @@ function RequestPermissions(props: Props) {
         error,
         cluster,
         columnGroups,
+        rowGroups,
         buttonProps,
         /*denyColumns,*/
     } = props;
@@ -179,11 +184,19 @@ function RequestPermissions(props: Props) {
                 required: true,
             },
             readColumnGroup: {
-                type: 'acl-column-group',
+                type: 'acl-group',
                 caption: 'Read column group',
                 required: true,
                 extras: {
-                    columnGroups,
+                    options: columnGroups,
+                },
+            },
+            readRowGroup: {
+                type: 'acl-group',
+                caption: 'Read row group',
+                required: true,
+                extras: {
+                    options: rowGroups,
                 },
             },
             subjects: {
@@ -240,13 +253,21 @@ function RequestPermissions(props: Props) {
         };
     }, [choices, currentCaption, error, idmKind]);
 
-    const useColumns = aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS;
-
     const dialogFields = useMemo(() => {
         let flagsIndex = -1;
         const res = requestPermissionsFields.reduce(
             (acc, field) => {
-                const allowField = useColumns ? field !== 'permissions' : !COLUMNS_FELDS.has(field);
+                let allowField;
+                switch (aclMode) {
+                    case AclMode.COLUMN_GROUPS_PERMISSISONS:
+                        allowField = field !== 'permissions' && !ROWS_FIELDS.has(field);
+                        break;
+                    case AclMode.ROW_GROUPS_PERMISSIONS:
+                        allowField = field !== 'permissions' && !COLUMNS_FELDS.has(field);
+                        break;
+                    default:
+                        allowField = !COLUMNS_FELDS.has(field) && !ROWS_FIELDS.has(field);
+                }
                 if (!allowField) {
                     return acc;
                 }
@@ -278,11 +299,23 @@ function RequestPermissions(props: Props) {
             });
             res.splice(flagsIndex, 1, ...flags);
         }
-        return res;
-    }, [availableFields, requestPermissionsFields, useColumns]);
 
-    const {editAcl = 'Add ACL', editColumnsAcl = 'Edit columns ACL'} = buttonsTitle ?? {};
-    const title = useColumns ? editColumnsAcl : editAcl;
+        return res;
+    }, [availableFields, requestPermissionsFields, aclMode]);
+
+    const {
+        editAcl = 'Add ACL',
+        editColumnsAcl = 'Edit columns ACL',
+        editRowsAcl = 'Edit rows ACL',
+    } = buttonsTitle ?? {};
+    let title = editAcl;
+    switch (aclMode) {
+        case AclMode.ROW_GROUPS_PERMISSIONS:
+            title = editRowsAcl;
+            break;
+        case AclMode.COLUMN_GROUPS_PERMISSISONS:
+            title = editColumnsAcl;
+    }
 
     return !choices?.length ? null : (
         <ErrorBoundary>
