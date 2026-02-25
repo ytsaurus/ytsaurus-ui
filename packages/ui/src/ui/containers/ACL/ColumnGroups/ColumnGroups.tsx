@@ -39,6 +39,7 @@ type Props = ColumnGropsToolbarProps &
         loadAclDataFn: () => void;
         cluster: string;
         allowEdit?: boolean;
+        allowEditNotice?: string;
     };
 
 export default function ColumnGroups({
@@ -48,6 +49,7 @@ export default function ColumnGroups({
     loadAclDataFn,
     cluster,
     allowEdit = false,
+    allowEditNotice,
     updateAclFilters,
     columnsFilter,
     columnGroupNameFilter,
@@ -187,6 +189,12 @@ export default function ColumnGroups({
                             <Icon awesome={'plus'} />
                             Add
                         </Button>
+                    )}
+                    {Boolean(allowEditNotice) && (
+                        <Tooltip content={allowEditNotice}>
+                            &nbsp;
+                            <Icon awesome="question-circle" color="secondary" />
+                        </Tooltip>
                     )}
                 </div>
                 <WithStickyToolbar

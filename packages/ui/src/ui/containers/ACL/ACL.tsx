@@ -475,12 +475,22 @@ class ACL extends Component<Props> {
             columnGroupNameFilter,
             userPermissionsAccessColumns,
         } = this.props;
+
+        const allowEditColumnGroups = UIFactory.getAclApi().isAllowedToEditColumnGroups({
+            nodeType,
+        });
+        const {allowEdit, allowEditNotice} =
+            typeof allowEditColumnGroups === 'boolean'
+                ? {allowEdit: allowEditColumnGroups}
+                : allowEditColumnGroups;
+
         const props = {
             path,
             loadAclDataFn: () => loadAclData({path, idmKind}),
             columnGroups,
             cluster,
-            allowEdit: UIFactory.getAclApi().isAllowedToEditColumnGroups({nodeType}),
+            allowEdit,
+            allowEditNotice,
             updateAclFilters,
             columnsFilter,
             columnGroupNameFilter,
