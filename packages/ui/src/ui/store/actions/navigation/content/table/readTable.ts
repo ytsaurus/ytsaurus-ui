@@ -21,6 +21,7 @@ export const tableReadSetup = {
 export const tableReadParameters = {
     dump_error_into_response: true,
     omit_inaccessible_columns: true,
+    omit_inaccessible_rows: true,
 };
 
 export type ReadTableDataParameters = {path: string} | {query: string};
