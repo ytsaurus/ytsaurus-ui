@@ -13,6 +13,7 @@ import {
 import {
     ACLResponsible,
     AclColumnGroup,
+    AclRowGroup,
     Group,
     GroupACL,
     IdmKindType,
@@ -20,6 +21,7 @@ import {
     PreparedAclSubject,
     Role,
     SuccessColumnGroupCreate,
+    SuccessRowGroupCreate,
     UpdateAclParams,
     UpdateResponse,
 } from './acl-types';
@@ -67,6 +69,14 @@ export interface AclApi {
         idmKind: IdmKindType;
     }): Promise<UpdateResponse>;
 
+    createRowGroup(
+        cluster: string,
+        path: string,
+        data: Partial<AclRowGroup>,
+    ): Promise<SuccessRowGroupCreate>;
+    editRowGroup(cluster: string, rowGroup: Partial<AclRowGroup>): Promise<void>;
+    deleteRowGroup(cluster: string, id: string): Promise<void>;
+
     createColumnGroup(
         cluster: string,
         path: string,
@@ -79,6 +89,7 @@ export interface AclApi {
         editAcl?: string;
         editInheritance?: string;
         editColumnsAcl?: string;
+        editRowsAcl?: string;
     };
 
     isAllowedToEditColumnGroups(params: {nodeType?: string}):
@@ -87,6 +98,10 @@ export interface AclApi {
               allowEdit: boolean;
               allowEditNotice?: string;
           };
+    isAllowedToEditRowGroups(params: {nodeType?: string}): {
+        allowEdit: boolean;
+        allowEditNotice?: string;
+    };
 }
 
 export interface GetAclParams {
@@ -167,7 +182,15 @@ export const defaultAclApi: AclApi = {
     editColumnGroup: () => methodNotSupported('editColumnGroup'),
     deleteColumnGroup: () => methodNotSupported('deleteColumnGroup'),
 
+    createRowGroup: () => methodNotSupported('createRowGroup'),
+    editRowGroup: () => methodNotSupported('editRowGroup'),
+    deleteRowGroup: () => methodNotSupported('deleteRowGroup'),
+
     isAllowedToEditColumnGroups({nodeType}) {
+        return {allowEdit: nodeType === 'map_node' || nodeType === 'table'};
+    },
+
+    isAllowedToEditRowGroups({nodeType}) {
         return {allowEdit: nodeType === 'map_node' || nodeType === 'table'};
     },
 };

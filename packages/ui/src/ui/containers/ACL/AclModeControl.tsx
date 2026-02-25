@@ -7,11 +7,13 @@ import format from '../../common/hammer/format';
 
 import {ACLReduxProps} from './ACL-connect-helpers';
 
-const ACL_MODE_OPTIONS = [AclMode.MAIN_PERMISSIONS, AclMode.COLUMN_GROUPS_PERMISSISONS].map(
-    (value) => {
-        return {value, content: format.ReadableField(value)};
-    },
-);
+const ACL_MODE_OPTIONS = [
+    AclMode.MAIN_PERMISSIONS,
+    AclMode.COLUMN_GROUPS_PERMISSISONS,
+    AclMode.ROW_GROUPS_PERMISSIONS,
+].map((value) => {
+    return {value, content: format.ReadableField(value)};
+});
 
 export function AclModeControl({
     updateAclFilters,
