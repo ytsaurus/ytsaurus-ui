@@ -177,6 +177,7 @@ export const getCombinedAcl = ({
                 const res: PreparedAclData = {
                     permissions: data.map(convertToUIPermissions),
                     column_groups: [],
+                    row_groups: [],
                 };
                 return res;
             });

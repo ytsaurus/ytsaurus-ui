@@ -389,6 +389,12 @@ export const getAllColumnGroupsActual = createSelector(
     },
 );
 
+export const getAllRowGroups = (state: RootState, idmKind: IdmKindType) =>
+    state.acl[idmKind].rowGroups;
+export const getAllRowGroupsActual = createSelector([getAllRowGroups], (rowGroups) => {
+    return rowGroups;
+});
+
 function OrderByRoleStatus<
     T extends {
         isDepriving?: boolean;

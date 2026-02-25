@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import SubjectsControl from '../../containers/ACL/SubjectsControl/SubjectsControl';
 import PermissionsControl from '../../containers/ACL/RequestPermissions/PermissionsControl/PermissionsControl';
-import {AclColumnGroupControl} from '../../containers/ACL/RequestPermissions/AclColumnGroupControl/AclColumnGroupControl';
+import {AclGroupControl} from '../../containers/ACL/RequestPermissions/AclGroupControl/AclGroupControl';
 import AccountsSuggest, {AccountsSuggestWithLoading} from '../../pages/accounts/AccountsSuggest';
 import GroupSuggest from '../../pages/components/GroupSuggest/GroupSuggest';
 
@@ -71,7 +71,7 @@ registerDialogControl('cluster', ClusterSelectControl);
 
 registerDialogControl('acl-subjects', SubjectsControl);
 registerDialogControl('acl-roles', RoleListControl);
-registerDialogControl('acl-column-group', AclColumnGroupControl);
+registerDialogControl('acl-group', AclGroupControl);
 registerDialogControl('acl-columns', AclColumnsControl);
 registerDialogControl('permissions', PermissionsControl);
 
@@ -144,11 +144,7 @@ export type DialogField<FormValues = unknown> =
     | RegisteredDialogField<'cluster', ComponentProps<typeof ClusterSelectControl>, FormValues>
     | RegisteredDialogField<'acl-subjects', ComponentProps<typeof SubjectsControl>, FormValues>
     | RegisteredDialogField<'acl-roles', ComponentProps<typeof RoleListControl>, FormValues>
-    | RegisteredDialogField<
-          'acl-column-group',
-          ComponentProps<typeof AclColumnGroupControl>,
-          FormValues
-      >
+    | RegisteredDialogField<'acl-group', ComponentProps<typeof AclGroupControl>, FormValues>
     | RegisteredDialogField<'acl-columns', ComponentProps<typeof AclColumnsControl>, FormValues>
     | RegisteredDialogField<'permissions', ComponentProps<typeof PermissionsControl>, FormValues>
     | RegisteredDialogField<'yt-group', ComponentProps<typeof GroupSuggest>, FormValues>

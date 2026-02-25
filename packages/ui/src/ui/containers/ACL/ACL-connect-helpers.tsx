@@ -3,6 +3,7 @@ import {ConnectedProps, connect} from 'react-redux';
 import {
     getAllAccessColumnsNames,
     getAllColumnGroupsActual,
+    getAllRowGroupsActual,
     getAllUserPermissions,
     getApproversFilteredAndOrdered,
     getHasApprovers,
@@ -24,6 +25,7 @@ import {
     getAclCurrentTab,
     getAclFilterColumnGroupName,
     getAclFilterColumns,
+    getAclFilterRowGroupName,
 } from '../../store/selectors/acl-filters';
 
 import {
@@ -81,6 +83,7 @@ const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
             idmKind,
         );
         const columnGroups = getAllColumnGroupsActual(state, idmKind);
+        const rowGroups = getAllRowGroupsActual(state, idmKind);
         const userPermissions = getAllUserPermissions(state, idmKind);
 
         const columnsFilter = getAclFilterColumns(state);
@@ -107,7 +110,6 @@ const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
             inheritAcl,
             bossApproval,
             disableInheritanceResponsible,
-            columnGroups,
             mainPermissions,
             columnsPermissions,
             hasApprovers,
@@ -125,8 +127,12 @@ const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
             deletePermissionsLastItemKey: getLastDeletedPermissionKey(state, idmKind),
             deletePermissionsError: permissionDeletionError(state, idmKind),
 
+            columnGroups,
             columnsFilter,
             columnGroupNameFilter: getAclFilterColumnGroupName(state),
+
+            rowGroups,
+            rowGroupNameFilter: getAclFilterRowGroupName(state),
 
             normalizedPoolTree,
             aclRequestOptions,

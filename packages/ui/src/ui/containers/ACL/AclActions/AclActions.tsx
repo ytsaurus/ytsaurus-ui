@@ -29,6 +29,7 @@ type Props = Pick<
     | 'bossApproval'
     | 'disableInheritanceResponsible'
     | 'columnGroups'
+    | 'rowGroups'
     | 'aclMode'
 > & {
     className?: string;
@@ -88,7 +89,10 @@ export class AclActions extends Component<Props> {
             cluster,
 
             columnGroups,
+            rowGroups,
         } = this.props;
+
+        const isMainPermissionsMode = !aclMode || aclMode === AclMode.MAIN_PERMISSIONS;
 
         return (
             <ErrorBoundary>
@@ -104,8 +108,9 @@ export class AclActions extends Component<Props> {
                                 cancelRequestPermissions={cancelRequestPermissions}
                                 cluster={cluster}
                                 columnGroups={columnGroups}
+                                rowGroups={rowGroups}
                             />
-                            {aclMode !== AclMode.COLUMN_GROUPS_PERMISSISONS && (
+                            {isMainPermissionsMode && (
                                 <ManageInheritance
                                     loadAclData={loadAclData}
                                     loading={loading}
@@ -120,7 +125,7 @@ export class AclActions extends Component<Props> {
                                     cancelUpdateAcl={cancelUpdateAcl}
                                 />
                             )}
-                            {aclMode !== AclMode.COLUMN_GROUPS_PERMISSISONS && (
+                            {isMainPermissionsMode && (
                                 <ManageAcl
                                     loadAclData={loadAclData}
                                     loading={loading}
