@@ -218,6 +218,7 @@ export type PermissionToRequest = {
     readColumnGroup?: string;
     readColumns?: Array<string>;
     readRowGroup?: string;
+    read_row_access_predicate?: string;
 };
 
 export function requestPermissions(
@@ -240,8 +241,14 @@ export function requestPermissions(
         const daysAfter = dateToDaysAfterNow(values.duration);
         const roles: Array<Role> = [];
         const rolesGroupedBySubject = [];
-        const {inheritance_mode, permissionFlags, readColumnGroup, readColumns, readRowGroup} =
-            values;
+        const {
+            inheritance_mode,
+            permissionFlags,
+            readColumnGroup,
+            readColumns,
+            read_row_access_predicate,
+            readRowGroup,
+        } = values;
         for (const item of values.subjects) {
             const subject = prepareAclSubject(item);
             const commonPart = {
@@ -264,6 +271,14 @@ export function requestPermissions(
                     ...rolesGroupedBySubject[rolesGroupedBySubject.length - 1],
                     ...commonPart,
                     columns: readColumns,
+                    permissions: ['read' as const],
+                });
+            }
+            if (read_row_access_predicate) {
+                rolesGroupedBySubject.push({
+                    ...rolesGroupedBySubject[rolesGroupedBySubject.length - 1],
+                    ...commonPart,
+                    row_access_predicate: read_row_access_predicate,
                     permissions: ['read' as const],
                 });
             }

@@ -170,6 +170,7 @@ export const defaultAclApi: AclApi = {
         'path',
         'permissions',
         'readColumns',
+        'read_row_access_predicate',
         'inheritance_mode',
         'subjects',
     ],
