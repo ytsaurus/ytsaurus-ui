@@ -4,14 +4,26 @@ import isEqual_ from 'lodash/isEqual';
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 import some_ from 'lodash/some';
-
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-
 import {YTApiIdType} from '../../../shared/constants/yt-api-id';
+import {
+    CheckPermissionItem,
+    CheckPermissionResult,
+    makeCheckPermissionBatchSubRequest,
+} from '../../../shared/utils/check-permission';
 import {getBatchError, splitBatchResults} from '../../../shared/utils/error';
-
+import {
+    BatchResultsItem,
+    BatchSubRequest,
+    ExecuteBatchParams,
+    YTPermissionType,
+} from '../../../shared/yt-types';
+import {IdmObjectType, REGISTER_QUEUE_CONSUMER_VITAL} from '../../constants/acl';
+import {YTApiId, ytApiV3, ytApiV3Id} from '../../rum/rum-wrap-api';
 import UIFactory from '../../UIFactory';
+import {unquote} from '../../utils/string';
+import {YSON_AS_TEXT, prettyPrintSafe} from '../../utils/unipika';
 import {
     ACE,
     ACLResponsible,
@@ -23,21 +35,8 @@ import {
     UpdateAclParams,
     UpdateResponse,
 } from './acl-types';
-import {YTApiId, ytApiV3, ytApiV3Id} from '../../rum/rum-wrap-api';
-import {convertFromUIPermission, convertToUIPermissions} from '.';
-import {
-    BatchResultsItem,
-    BatchSubRequest,
-    ExecuteBatchParams,
-    YTPermissionType,
-} from '../../../shared/yt-types';
-import {
-    CheckPermissionItem,
-    CheckPermissionResult,
-    makeCheckPermissionBatchSubRequest,
-} from '../../../shared/utils/check-permission';
 import {RequestPermissionParams} from './external-acl-api';
-import {IdmObjectType, REGISTER_QUEUE_CONSUMER_VITAL} from '../../constants/acl';
+import {convertFromUIPermission, convertToUIPermissions} from './index';
 
 function getInheritAcl(path: string): Promise<ACLResponsible> {
     return yt.v3.get({path: path + '/@inherit_acl'}).then((inherit_acl: boolean) => {
@@ -110,6 +109,10 @@ export function internalAclWithTypes(items: Array<ACE>) {
         return map_(items, (item) => {
             return {
                 ...item,
+                columns: item.columns?.map((x) => unquote(prettyPrintSafe(x, YSON_AS_TEXT()))),
+                row_access_predicate: item.row_access_predicate
+                    ? unquote(prettyPrintSafe(item.row_access_predicate, YSON_AS_TEXT()))
+                    : undefined,
                 inherited: Boolean(item.inherited),
                 internal: true,
                 types: map_(item.subjects, (subject) => (groups.has(subject) ? 'group' : 'user')),
