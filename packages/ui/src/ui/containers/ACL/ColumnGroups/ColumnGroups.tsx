@@ -7,7 +7,6 @@ import DataTableYT from '../../../components/DataTableYT/DataTableYT';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import Icon from '../../../components/Icon/Icon';
 import Select from '../../../components/Select/Select';
-import {renderText} from '../../../components/templates/utils';
 import TextInputWithDebounce from '../../../components/TextInputWithDebounce/TextInputWithDebounce';
 import {Tooltip} from '../../../components/Tooltip/Tooltip';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
@@ -144,7 +143,7 @@ export default function ColumnGroups({
         {
             name: 'Columns',
             render({row}) {
-                return renderText(row.columns?.map((column) => `"${column}"`).join(', '));
+                return row.columns?.map((column) => `"${column}"`).join(', ');
             },
             className: block('columns'),
             align: 'left',
@@ -179,12 +178,14 @@ export default function ColumnGroups({
             <div>
                 <div className="elements-heading elements-heading_size_xs">
                     Column groups
-                    {allowEdit && (
-                        <Button className={block('button', {add: true})} onClick={handleAddClick}>
-                            <Icon awesome={'plus'} />
-                            Add
-                        </Button>
-                    )}
+                    <Button
+                        className={block('button', {add: true})}
+                        onClick={handleAddClick}
+                        disabled={!allowEdit}
+                    >
+                        <Icon awesome={'plus'} />
+                        Add
+                    </Button>
                     {Boolean(allowEditNotice) && (
                         <Tooltip content={allowEditNotice}>
                             &nbsp;

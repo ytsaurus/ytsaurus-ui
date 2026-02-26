@@ -1,8 +1,6 @@
 import React from 'react';
 import format from '../../common/hammer/format';
 import {VisibleValues} from '../../components/VisibleValues/VisibleValues';
-import {renderText} from '../../components/templates/utils';
-import unipika from '../../common/thor/unipika';
 
 export type AclColumnsCellProps = {
     items?: Array<string>;
@@ -20,13 +18,13 @@ export function AclColumnsCell({expanadable, items}: AclColumnsCellProps) {
             counter="missing-values"
             value={
                 items?.map((v) => {
-                    return `"${unipika.decode(v)}"`;
+                    return `"${v}"`;
                 }) ?? []
             }
             maxVisibleValues={5}
             maxTextLength={40}
         />
     ) : (
-        renderText(items?.map((item) => `"${item}"`).join(', '))
+        items?.map((item) => `"${item}"`).join(', ')
     );
 }

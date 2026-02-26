@@ -11,6 +11,7 @@ export interface AclFiltersState {
     columnsFilter: Array<string>;
     columnGroupNameFilter: string;
     rowGroupNameFilter: string;
+    rowAccessPredicateFilter: string;
 
     aclCurrentTab: AclMode;
     expandedSubjects: Set<string | number>;
@@ -23,6 +24,7 @@ export const initialState: AclFiltersState = {
     columnsFilter: EMPTY_ARRAY,
     columnGroupNameFilter: '',
     rowGroupNameFilter: '',
+    rowAccessPredicateFilter: '',
 
     expandedSubjects: new Set<string>(),
 
