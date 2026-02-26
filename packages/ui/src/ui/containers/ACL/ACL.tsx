@@ -39,8 +39,14 @@ const block = cn('navigation-acl');
 
 type Props = ACLReduxProps & WithVisibleProps & {className?: string};
 
-type ApproverRow = PreparedApprover;
-type PermissionsRow = ObjectPermissionRowWithExpand;
+type ApproverRow = PreparedApprover & {
+    aggregated_row_access_predicates?: Array<string>;
+    expanded?: boolean;
+};
+type PermissionsRow = ObjectPermissionRowWithExpand & {
+    aggregated_row_access_predicates?: Array<string>;
+    expanded?: boolean;
+};
 
 class ACL extends Component<Props> {
     static tableColumns = {
@@ -306,6 +312,27 @@ class ACL extends Component<Props> {
                     return <AclColumnsCell items={row.columns} expanadable={'expanded' in row} />;
                 },
             } as Column<T>,
+            row_access_predicate: {
+                name: 'Row access predicate',
+                align: 'left',
+                className: block('table-item', {type: 'row-access-predicate'}),
+                render({row}) {
+                    const expandable = 'expanded' in row;
+                    const {row_access_predicate, aggregated_row_access_predicates} = row;
+                    return (
+                        <AclColumnsCell
+                            items={
+                                expandable
+                                    ? aggregated_row_access_predicates
+                                    : row_access_predicate
+                                      ? [row_access_predicate]
+                                      : []
+                            }
+                            expanadable={expandable}
+                        />
+                    );
+                },
+            } as Column<T>,
         };
     }
 
@@ -376,29 +403,46 @@ class ACL extends Component<Props> {
     }
 
     getObjectPermissionsDetails() {
-        const {aclMode, mainPermissions, columnsPermissions} = this.props;
-        const useColumns = aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS;
+        const {
+            aclMode = AclMode.MAIN_PERMISSIONS,
+            mainPermissions,
+            columnsPermissions,
+            rowPermissions,
+        } = this.props;
 
-        const data = useColumns ? columnsPermissions : mainPermissions;
-
-        const extraColumns = useColumns
-            ? ([...(data.hasDenyAction ? ['permissions' as const] : []), 'columns'] as const)
-            : (['permissions'] as const);
+        const {data, title, noItemsText, extraColumns} = {
+            [AclMode.MAIN_PERMISSIONS]: {
+                data: mainPermissions,
+                title: 'Object permissions',
+                noItemsText: 'There are no column permissions',
+                extraColumns: ['permissions'] as const,
+            },
+            [AclMode.COLUMN_GROUPS_PERMISSISONS]: {
+                data: columnsPermissions,
+                title: 'Private columns permissions',
+                noItemsText: 'There are no object permissions',
+                extraColumns: ['columns'] as const,
+            },
+            [AclMode.ROW_GROUPS_PERMISSIONS]: {
+                data: rowPermissions,
+                title: 'Private row permissions',
+                noItemsText: 'There are no row permissions',
+                extraColumns: ['row_access_predicate'] as const,
+            },
+        }[aclMode];
 
         return {
             data,
             columns: [
                 ...(data.hasExpandable ? ['expand' as const] : []),
                 'subjects',
+                ...(data.hasDenyAction ? ['permissions' as const] : []),
                 ...extraColumns,
                 'inheritance_mode',
                 'actions',
             ] as const,
-            title: useColumns ? 'Private columns permissions' : 'Object permissions',
-            noItemsText:
-                aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS
-                    ? 'There are no any column group permissions'
-                    : 'There are no any object permissions',
+            title,
+            noItemsText,
         };
     }
 
@@ -697,20 +741,30 @@ class ACL extends Component<Props> {
                 }),
         ]);
 
-        const {mainPermissions, columnsPermissions, approversFiltered, columnGroups, aclMode} =
-            this.props;
+        const {
+            mainPermissions,
+            columnsPermissions,
+            rowPermissions,
+            approversFiltered,
+            columnGroups,
+            rowGroups,
+            aclMode = AclMode.MAIN_PERMISSIONS,
+        } = this.props;
 
-        const counters: Array<SegmentControlItem> =
-            aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS
-                ? [
-                      {name: 'Column groups', value: columnGroups.length},
-                      {name: 'Column permissions', value: columnsPermissions.count},
-                  ]
-                : [
-                      {name: 'Responsibles', value: approversFiltered.length},
-                      {name: 'Object permissions', value: mainPermissions.count},
-                  ];
-
+        const counters: Array<SegmentControlItem> = {
+            [AclMode.MAIN_PERMISSIONS]: [
+                {name: 'Responsibles', value: approversFiltered.length},
+                {name: 'Object permissions', value: mainPermissions.count},
+            ],
+            [AclMode.COLUMN_GROUPS_PERMISSISONS]: [
+                {name: 'Column groups', value: columnGroups.length},
+                {name: 'Column permissions', value: columnsPermissions.count},
+            ],
+            [AclMode.ROW_GROUPS_PERMISSIONS]: [
+                {name: 'Row groups', value: rowGroups?.length ?? 0},
+                {name: 'Row permissions', value: rowPermissions.count},
+            ],
+        }[aclMode];
         const hasColumns = Boolean(aclMode);
         return (
             <Flex className={block('meta')} wrap alignItems="center">
@@ -719,7 +773,7 @@ class ACL extends Component<Props> {
                     background="neutral-light"
                     groups={[segments, counters].filter(({length}) => length > 0)}
                 />
-                {aclMode !== AclMode.COLUMN_GROUPS_PERMISSISONS && (
+                {aclMode === AclMode.MAIN_PERMISSIONS && (
                     <MyPermissions
                         className={block('meta-item', {'with-buttons': !hasColumns})}
                         userPermissions={userPermissions}

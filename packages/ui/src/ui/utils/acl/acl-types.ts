@@ -237,6 +237,7 @@ export type PreparedAclSubject = TypedAclSubject & {
     action?: string;
     group?: string;
     columns?: Role['columns'];
+    row_access_predicate?: string;
     state?: string;
     idmLink?: string;
     depriveDate?: string;

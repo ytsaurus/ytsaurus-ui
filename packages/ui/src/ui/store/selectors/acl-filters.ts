@@ -13,3 +13,5 @@ export const getAclFilterColumnGroupName = (state: RootState) =>
 export const getAclFilterRowGroupName = (state: RootState) => state.aclFilters.rowGroupNameFilter;
 export const getAclFilterExpandedSubjects = (state: RootState) => state.aclFilters.expandedSubjects;
 export const getAclCurrentTab = (state: RootState) => state.aclFilters.aclCurrentTab;
+export const getAclRowAccessPredicateFilter = (state: RootState) =>
+    state.aclFilters.rowAccessPredicateFilter;
