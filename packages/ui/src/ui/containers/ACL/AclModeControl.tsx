@@ -9,7 +9,7 @@ import {ACLReduxProps} from './ACL-connect-helpers';
 
 const ACL_MODE_OPTIONS = [
     AclMode.MAIN_PERMISSIONS,
-    AclMode.COLUMN_GROUPS_PERMISSISONS,
+    AclMode.COLUMN_GROUPS_PERMISSIONS,
     AclMode.ROW_GROUPS_PERMISSIONS,
 ].map((value) => {
     return {value, content: format.ReadableField(value)};
