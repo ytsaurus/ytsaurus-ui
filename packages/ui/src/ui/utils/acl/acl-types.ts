@@ -151,6 +151,7 @@ export interface ACE {
     subjects: Array<string>;
     inheritance_mode?: string;
     columns?: Array<string>;
+    row_access_predicate?: string;
     inherited?: boolean;
 }
 
