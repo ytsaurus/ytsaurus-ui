@@ -1,26 +1,27 @@
-import {compose} from 'redux';
+import {Button, ButtonProps} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React, {useCallback, useMemo} from 'react';
+import {compose} from 'redux';
 import {DialogField, FormApi, YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
-import {Button, ButtonProps} from '@gravity-ui/uikit';
 import PermissionsControl from '../RequestPermissions/PermissionsControl/PermissionsControl';
 
 import withVisible, {WithVisibleProps} from '../../../hocs/withVisible';
 
-import './RequestPermissions.scss';
-import {YTError} from '../../../types';
 import {AclMode, INHERITANCE_MODE_TYPES, IdmObjectType} from '../../../constants/acl';
+import {YTError} from '../../../types';
+import './RequestPermissions.scss';
 
+import map_ from 'lodash/map';
 import UIFactory from '../../../UIFactory';
 import hammer from '../../../common/hammer';
-import map_ from 'lodash/map';
 
+import HelpLink from '../../../components/HelpLink/HelpLink';
 import {docsUrl} from '../../../config';
-import {makeLink} from '../../../utils/utils';
-import {AclColumnGroup, AclRowGroup, IdmKindType} from '../../../utils/acl/acl-types';
-import {YTPermissionTypeUI} from '../../../utils/acl/acl-api';
 import {PermissionToRequest} from '../../../store/actions/acl';
+import {YTPermissionTypeUI} from '../../../utils/acl/acl-api';
+import {AclColumnGroup, AclRowGroup, IdmKindType} from '../../../utils/acl/acl-types';
+import {makeLink} from '../../../utils/utils';
 import {useAvailablePermissions} from '../hooks/use-available-permissions';
 
 const block = cn('acl-request-permissions');
@@ -39,7 +40,8 @@ export type RequestPermissionsFieldsNames =
     | 'permissionFlags'
     | 'readColumns'
     | 'readColumnGroup'
-    | 'readRowGroup';
+    | 'readRowGroup'
+    | 'read_row_access_predicate';
 
 export interface Props extends WithVisibleProps {
     className?: string;
@@ -82,7 +84,10 @@ const SHORT_TITLE: Partial<Record<IdmKindType, string>> = {
 };
 
 const COLUMNS_FELDS = new Set<RequestPermissionsFieldsNames>(['readColumns', 'readColumnGroup']);
-const ROWS_FIELDS = new Set<RequestPermissionsFieldsNames>(['readRowGroup']);
+const ROWS_FIELDS = new Set<RequestPermissionsFieldsNames>([
+    'readRowGroup',
+    'read_row_access_predicate',
+]);
 
 function RequestPermissions(props: Props) {
     const {
@@ -199,6 +204,12 @@ function RequestPermissions(props: Props) {
                     options: rowGroups,
                 },
             },
+            read_row_access_predicate: {
+                type: 'textarea',
+                caption: 'RLS predicate',
+                required: true,
+                tooltip: <HelpLink url={UIFactory.docsUrls['acl:row-level-security']} />,
+            },
             subjects: {
                 type: 'acl-subjects',
                 caption: 'Subjects',
@@ -305,8 +316,8 @@ function RequestPermissions(props: Props) {
 
     const {
         editAcl = 'Add ACL',
-        editColumnsAcl = 'Edit columns ACL',
-        editRowsAcl = 'Edit rows ACL',
+        editColumnsAcl = 'Add columns ACL',
+        editRowsAcl = 'Add rows ACL',
     } = buttonsTitle ?? {};
     let title = editAcl;
     switch (aclMode) {
