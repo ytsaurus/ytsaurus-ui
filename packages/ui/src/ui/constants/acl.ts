@@ -133,6 +133,6 @@ export const PERMISSIONS_SETTINGS: Record<IdmKindType, PermissionSettings> = {
 
 export const enum AclMode {
     MAIN_PERMISSIONS = 'main_permissions',
-    COLUMN_GROUPS_PERMISSISONS = 'column_groups_permissions',
+    COLUMN_GROUPS_PERMISSIONS = 'column_groups_permissions',
     ROW_GROUPS_PERMISSIONS = 'row_groups_permissions',
 }

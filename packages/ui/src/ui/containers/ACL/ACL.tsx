@@ -417,7 +417,7 @@ class ACL extends Component<Props> {
                 noItemsText: 'There are no column permissions',
                 extraColumns: ['permissions'] as const,
             },
-            [AclMode.COLUMN_GROUPS_PERMISSISONS]: {
+            [AclMode.COLUMN_GROUPS_PERMISSIONS]: {
                 data: columnsPermissions,
                 title: 'Private columns permissions',
                 noItemsText: 'There are no object permissions',
@@ -690,7 +690,7 @@ class ACL extends Component<Props> {
     renderContentByMode() {
         const {aclMode} = this.props;
         switch (aclMode) {
-            case AclMode.COLUMN_GROUPS_PERMISSISONS:
+            case AclMode.COLUMN_GROUPS_PERMISSIONS:
                 return this.renderColumnGroups();
             case AclMode.ROW_GROUPS_PERMISSIONS:
                 return this.renderRowGroups();
@@ -756,7 +756,7 @@ class ACL extends Component<Props> {
                 {name: 'Responsibles', value: approversFiltered.length},
                 {name: 'Object permissions', value: mainPermissions.count},
             ],
-            [AclMode.COLUMN_GROUPS_PERMISSISONS]: [
+            [AclMode.COLUMN_GROUPS_PERMISSIONS]: [
                 {name: 'Column groups', value: columnGroups.length},
                 {name: 'Column permissions', value: columnsPermissions.count},
             ],
