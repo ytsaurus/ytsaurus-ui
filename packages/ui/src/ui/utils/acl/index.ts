@@ -100,6 +100,7 @@ export interface PreparedRole {
     permissions?: Array<YTPermissionTypeUI>;
     inheritance_mode?: string;
     columns?: Array<string>;
+    row_access_predicate?: string;
     member?: boolean;
     deprive_date?: string;
 

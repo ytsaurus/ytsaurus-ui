@@ -78,10 +78,8 @@ const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
 
         const hasApprovers = getHasApprovers(state, idmKind);
         const approversFiltered = getApproversFilteredAndOrdered(state, idmKind);
-        const {mainPermissions, columnsPermissions} = getObjectPermissionsAggregated(
-            state,
-            idmKind,
-        );
+        const {mainPermissions, columnsPermissions, rowPermissions} =
+            getObjectPermissionsAggregated(state, idmKind);
         const columnGroups = getAllColumnGroupsActual(state, idmKind);
         const rowGroups = getAllRowGroupsActual(state, idmKind);
         const userPermissions = getAllUserPermissions(state, idmKind);
@@ -112,6 +110,7 @@ const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
             disableInheritanceResponsible,
             mainPermissions,
             columnsPermissions,
+            rowPermissions,
             hasApprovers,
             approversFiltered,
             auditors,
