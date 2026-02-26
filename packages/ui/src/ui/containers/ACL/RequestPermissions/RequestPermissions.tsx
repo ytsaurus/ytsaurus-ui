@@ -259,7 +259,7 @@ function RequestPermissions(props: Props) {
             (acc, field) => {
                 let allowField;
                 switch (aclMode) {
-                    case AclMode.COLUMN_GROUPS_PERMISSISONS:
+                    case AclMode.COLUMN_GROUPS_PERMISSIONS:
                         allowField = field !== 'permissions' && !ROWS_FIELDS.has(field);
                         break;
                     case AclMode.ROW_GROUPS_PERMISSIONS:
@@ -313,7 +313,7 @@ function RequestPermissions(props: Props) {
         case AclMode.ROW_GROUPS_PERMISSIONS:
             title = editRowsAcl;
             break;
-        case AclMode.COLUMN_GROUPS_PERMISSISONS:
+        case AclMode.COLUMN_GROUPS_PERMISSIONS:
             title = editColumnsAcl;
     }
 
