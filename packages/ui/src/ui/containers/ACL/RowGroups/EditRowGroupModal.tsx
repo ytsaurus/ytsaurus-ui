@@ -1,7 +1,9 @@
+import includes_ from 'lodash/includes';
 import React, {useMemo, useState} from 'react';
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
+import HelpLink from '../../../components/HelpLink/HelpLink';
+import UIFactory from '../../../UIFactory';
 import {AclRowGroup} from '../../../utils/acl/acl-types';
-import includes_ from 'lodash/includes';
 
 export interface Props {
     title: string;
@@ -80,6 +82,7 @@ export function EditRowGroupModal({
                     type: 'textarea',
                     required: true,
                     caption: 'Rows',
+                    tooltip: <HelpLink url={UIFactory.docsUrls['acl:row-level-security']} />,
                     extras: {
                         disabled: includes_(disabledFields, 'predicate'),
                     },
