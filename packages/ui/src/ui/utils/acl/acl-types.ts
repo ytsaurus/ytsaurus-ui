@@ -59,6 +59,7 @@ export interface Role {
     permissions?: Array<YTPermissionType>;
     inheritance_mode?: string;
     columns?: Array<string>;
+    row_access_predicate?: string;
     inherited?: boolean;
     member?: boolean;
     idm_link?: string;

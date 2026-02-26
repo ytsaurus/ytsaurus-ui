@@ -236,20 +236,23 @@ export function requestPermissions(params: RequestPermissionParams): Promise<Upd
     const {roles_grouped, sysPath, kind} = params;
     const aclAttr = getAclAttr(kind);
     const batchParams: ExecuteBatchParams = {
-        requests: roles_grouped.map(({permissions, subject, inheritance_mode, columns, vital}) => {
-            return {
-                command: 'set',
-                parameters: {path: `${sysPath}/@${aclAttr}/end`},
-                input: {
-                    action: 'allow',
-                    inheritance_mode: inheritance_mode,
-                    permissions: permissions,
-                    subjects: Object.values(subject),
-                    columns,
-                    vital,
-                },
-            };
-        }),
+        requests: roles_grouped.map(
+            ({permissions, subject, inheritance_mode, row_access_predicate, columns, vital}) => {
+                return {
+                    command: 'set',
+                    parameters: {path: `${sysPath}/@${aclAttr}/end`},
+                    input: {
+                        action: 'allow',
+                        inheritance_mode: inheritance_mode,
+                        permissions: permissions,
+                        subjects: Object.values(subject),
+                        columns,
+                        row_access_predicate,
+                        vital,
+                    },
+                };
+            },
+        ),
     };
     return yt.v3.executeBatch(batchParams).then((results: BatchResultsItem<unknown>[]) => {
         const error = getBatchError(results, 'Failed to request permissions');
