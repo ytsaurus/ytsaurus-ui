@@ -170,12 +170,15 @@ export function RowGroups({
             <div>
                 <div className="elements-heading elements-heading_size_xs">
                     Row groups
-                    {allowEdit && (
-                        <Button className={block('button', {add: true})} onClick={handleAddClick}>
-                            <Icon awesome={'plus'} />
-                            Add
-                        </Button>
-                    )}
+                    <Button
+                        className={block('button', {add: true})}
+                        onClick={handleAddClick}
+                        disabled={!allowEdit}
+                        qa="acl:add-row-group"
+                    >
+                        <Icon awesome={'plus'} />
+                        Add
+                    </Button>
                     {Boolean(allowEditNotice) && (
                         <Tooltip content={allowEditNotice}>
                             &nbsp;

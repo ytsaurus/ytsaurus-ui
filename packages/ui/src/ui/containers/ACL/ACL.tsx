@@ -181,7 +181,11 @@ class ACL extends Component<Props> {
 
     getColumnsTemplates<T extends ApproverRow | PermissionsRow>({
         hasInherited,
-    }: {hasInherited?: boolean} = {}) {
+        mode,
+    }: {
+        hasInherited?: boolean;
+        mode: 'responsible' | 'permissions';
+    }) {
         const openDeleteModal = this.handleDeletePermissionClick;
         const {idmKind, toggleExpandAclSubject} = this.props;
         return {
@@ -289,6 +293,7 @@ class ACL extends Component<Props> {
                         ? null
                         : RoleActions !== undefined && (
                               <RoleActions
+                                  mode={mode}
                                   role={row}
                                   idmKind={idmKind}
                                   onDelete={openDeleteModal}
@@ -365,7 +370,10 @@ class ACL extends Component<Props> {
     renderApprovers() {
         const {hasApprovers, approversFiltered, loaded} = this.props;
         const tableColumns = (['subjects', 'approve_type', 'actions'] as const).map(
-            (name) => this.getColumnsTemplates<ApproverRow>({hasInherited: true})[name],
+            (name) =>
+                this.getColumnsTemplates<ApproverRow>({hasInherited: true, mode: 'responsible'})[
+                    name
+                ],
         );
         return (
             hasApprovers && (
@@ -425,7 +433,7 @@ class ACL extends Component<Props> {
             },
             [AclMode.ROW_GROUPS_PERMISSIONS]: {
                 data: rowPermissions,
-                title: 'Private row permissions',
+                title: 'Private rows permissions',
                 noItemsText: 'There are no row permissions',
                 extraColumns: ['row_access_predicate'] as const,
             },
@@ -465,7 +473,8 @@ class ACL extends Component<Props> {
         } = this.getObjectPermissionsDetails();
 
         const tableColumns: Array<Column<PermissionsRow>> = columns.map(
-            (name) => this.getColumnsTemplates<PermissionsRow>({hasInherited})[name],
+            (name) =>
+                this.getColumnsTemplates<PermissionsRow>({hasInherited, mode: 'permissions'})[name],
         );
 
         return (

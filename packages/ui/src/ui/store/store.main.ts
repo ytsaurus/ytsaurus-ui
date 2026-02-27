@@ -15,7 +15,7 @@ export const createMainEntryStore = () => {
     const store = configureStore({
         reducer: reducersWithLocation as ReturnType<typeof makeRootReducer>,
         middleware: (getDefaultMiddleware) =>
-            getDefaultMiddleware({serializableCheck: false})
+            getDefaultMiddleware({serializableCheck: false, immutableCheck: false})
                 .concat(locationMiddleware)
                 .concat(rootApi.middleware),
         devTools: process.env.NODE_ENV !== 'production',

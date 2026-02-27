@@ -182,6 +182,7 @@ export default function ColumnGroups({
                         className={block('button', {add: true})}
                         onClick={handleAddClick}
                         disabled={!allowEdit}
+                        qa="acl:add-column-group"
                     >
                         <Icon awesome={'plus'} />
                         Add
