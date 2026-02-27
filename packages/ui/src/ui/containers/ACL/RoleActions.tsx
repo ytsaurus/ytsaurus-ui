@@ -12,6 +12,7 @@ import './RoleActions.scss';
 const block = cn('navigation-acl');
 
 export interface Props {
+    mode: 'responsible' | 'permissions';
     idmKind?: IdmKindType;
     role: AclRoleActionsType;
     onDelete?: (role: AclRoleActionsType) => void;
