@@ -387,12 +387,15 @@ export function updateAcl(
 
         const poolTree =
             idmKind === IdmObjectType.POOL ? normalizedPoolTree || getTree(state) : undefined;
-        return UIFactory.getAclApi()
-            .updateAcl(cluster, path, {
-                ...values,
-                version,
-                idmKind,
-                poolTree,
+
+        return getPathToCheckPermissions(idmKind, path, poolTree)
+            .then((sysPath) => {
+                return UIFactory.getAclApi().updateAcl(cluster, sysPath, {
+                    ...values,
+                    version,
+                    idmKind,
+                    poolTree,
+                });
             })
             .then(() => {
                 dispatch({
