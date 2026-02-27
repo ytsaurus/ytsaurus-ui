@@ -28,7 +28,11 @@ export default function RoleActions(props: Props) {
     return (
         <React.Fragment>
             {!inherited && onDelete !== undefined && (
-                <Button className={block('button')} onClick={() => handleDelete()}>
+                <Button
+                    className={block('button')}
+                    onClick={() => handleDelete()}
+                    qa="acl:delete-role"
+                >
                     <Icon awesome="trash-alt" />
                 </Button>
             )}
