@@ -56,28 +56,6 @@ test('Navigation: map_node - Attributes', async ({page}) => {
     await expect(page).toHaveScreenshot();
 });
 
-test('Navigation: map_node - ACL', async ({page}) => {
-    await page.clock.install({time: MOCK_DATE});
-    await page.goto(makeClusterUrl(`navigation?navmode=acl&path=${E2E_DIR}`));
-
-    await navigationPage(page).waitForACL();
-    await navigationPage(page).replaceBreadcrumbsTestDir();
-
-    await expect(page).toHaveScreenshot();
-
-    await page.click('.acl-request-permissions button');
-    await navigationPage(page).replaceACLInputPath();
-    await expect(page).toHaveScreenshot();
-    await page.click('button[aria-label="Close dialog"]');
-
-    await page.click('input[value="column_groups_permissions"]');
-    await expect(page).toHaveScreenshot();
-
-    await page.click('.acl-request-permissions button');
-    await navigationPage(page).replaceACLInputPath();
-    await expect(page).toHaveScreenshot();
-});
-
 test('Navigation - Locks', async ({page}) => {
     await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`navigation?navmode=locks&path=${E2E_DIR}/locked`));

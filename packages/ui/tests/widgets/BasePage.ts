@@ -115,7 +115,7 @@ export class BasePage extends HasPage {
 
     async replaceACLInputPath() {
         await this.page.locator('.g-dialog').waitFor({state: 'visible'});
-        const pathInput = this.page.locator(`input#path[value="//tmp/${E2E_DIR_NAME}"]`);
+        const pathInput = this.page.locator(`input#path[value^="//tmp/${E2E_DIR_NAME}"]`);
         await pathInput.waitFor({state: 'visible'});
         await pathInput.fill('e2e.1970-01-01.00:00:00.xxxxxxxxxxx', {force: true});
         await pathInput.evaluate((el: HTMLInputElement, value: string) => {
