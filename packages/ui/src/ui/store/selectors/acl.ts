@@ -290,9 +290,9 @@ class AggregateBySubject {
             );
         }
 
-        if (item.subjects.length !== 1) {
+        if (item.subjects.length > 1) {
             throw new Error(
-                `Unexpected behavior: item.subjects.length !== 1: ${JSON.stringify(item)}`,
+                `Unexpected behavior: item.subjects.length > 1: ${JSON.stringify(item)}`,
             );
         }
 
