@@ -38,7 +38,7 @@ function NavigationDescription({className}: Props) {
 
     const {expanded, toggleExpanded} = useDescriptionCollapse();
 
-    const {description, descriptionType, visible} = useDescription();
+    const {description, visible} = useDescription();
     const {ytAnnotationPath} = useYTAnnotation();
 
     const handleResize = useCallback(() => {
@@ -63,7 +63,7 @@ function NavigationDescription({className}: Props) {
                 overview={<NavigationDescriptionOverview />}
             >
                 <div className={block('content')}>
-                    {editMode && descriptionType === 'yt' ? (
+                    {editMode ? (
                         <EditAnnotationWithPreview
                             valuePath={ytAnnotationPath}
                             value={{value: edittingAnnotation || ''}}

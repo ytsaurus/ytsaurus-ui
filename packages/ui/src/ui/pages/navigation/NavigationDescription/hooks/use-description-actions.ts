@@ -2,11 +2,17 @@ import {useCallback} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 
 import {
+    getDescriptionType,
     getEdittingAnnotation,
+    getIsSaving,
     setEdittingAnnotation,
+    setSaving,
     toggleEditMode,
 } from '../../../../store/reducers/navigation/description';
-import {useAnnotationQuery} from '../../../../store/api/navigation/tabs/description';
+import {
+    udpateAnnotaionExternal,
+    useAnnotationQuery,
+} from '../../../../store/api/navigation/tabs/description';
 import {getCluster} from '../../../../store/selectors/global';
 import {getPath} from '../../../../store/selectors/navigation';
 
@@ -18,24 +24,33 @@ export function useDescriptionActions() {
     const path = useSelector(getPath);
     const cluster = useSelector(getCluster);
     const edittingAnnotation = useSelector(getEdittingAnnotation);
+    const type = useSelector(getDescriptionType);
+    const isSaving = useSelector(getIsSaving);
 
     const [updateFn, {isLoading}] = useUpdateAnnotation();
     const {data} = useAnnotationQuery({path, cluster});
 
     const edit = useCallback(() => {
         dispatch(toggleEditMode());
-    }, [dispatch]);
+    }, [type, dispatch]);
 
     const cancel = useCallback(() => {
         dispatch(setEdittingAnnotation({edittingAnnotation: data}));
         dispatch(toggleEditMode());
     }, [data, dispatch]);
 
-    const save = useCallback(() => {
-        updateFn(edittingAnnotation || '').then(() => {
-            dispatch(toggleEditMode());
-        });
-    }, [updateFn, edittingAnnotation, dispatch]);
+    const save = useCallback(async () => {
+        dispatch(setSaving({isSaving: true}));
+        if (type === 'yt') {
+            await updateFn(edittingAnnotation || '');
+        } else {
+            await dispatch(
+                udpateAnnotaionExternal({cluster, path, value: edittingAnnotation ?? ''}),
+            );
+        }
+        dispatch(setSaving({isSaving: false}));
+        dispatch(toggleEditMode());
+    }, [updateFn, edittingAnnotation, type, dispatch]);
 
-    return {edit, cancel, save, isLoading};
+    return {edit, cancel, save, isLoading, isSaving};
 }

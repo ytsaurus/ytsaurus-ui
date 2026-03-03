@@ -11,14 +11,14 @@ import {useDescriptionActions} from './hooks/use-description-actions';
 export function EditButtons() {
     const editMode = useSelector(getEditMode);
 
-    const {edit, save, cancel, isLoading} = useDescriptionActions();
+    const {edit, save, cancel, isLoading, isSaving} = useDescriptionActions();
 
     return editMode ? (
         <Flex gap={1}>
-            <Button view={'action'} onClick={save} loading={isLoading}>
+            <Button view={'action'} onClick={save} loading={isLoading || isSaving}>
                 Save
             </Button>
-            <Button view={'flat'} onClick={cancel}>
+            <Button view={'flat'} onClick={cancel} disabled={isSaving}>
                 Cancel
             </Button>
         </Flex>

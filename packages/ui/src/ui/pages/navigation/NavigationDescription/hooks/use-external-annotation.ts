@@ -16,8 +16,7 @@ export function useExternalAnnotation() {
     );
 
     return {
-        externalAnnotation: externalAnnotaionData?.externalAnnotation,
-        externalAnnotationLink: externalAnnotaionData?.externalAnnotationLink,
+        ...externalAnnotaionData,
         isExternalAnnotatonLoadedWithData,
     };
 }
