@@ -69,7 +69,7 @@ export function sendError(res: Response, error: unknown, errCode = 500) {
     return res.set('content-type', 'application/json').status(errCode).send(errData);
 }
 
-function asAxiosError<T>(e: Error | AxiosError<T>): AxiosError<T> | undefined {
+function asAxiosError<T>(e: Error | AxiosError<T> | unknown): AxiosError<T> | undefined {
     return (e as AxiosError).isAxiosError ? (e as AxiosError<T>) : undefined;
 }
 
@@ -190,7 +190,7 @@ export async function sendAndLogError(
     ctx: AppContext,
     res: Response,
     status: number | null,
-    e: Error | AxiosError,
+    e: Error | AxiosError | unknown,
     extra: any = {},
 ) {
     const ae = asAxiosError(e);

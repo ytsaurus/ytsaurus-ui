@@ -1,31 +1,31 @@
+import {Button, Flex, Icon, Link, Tooltip} from '@gravity-ui/uikit';
+import {ArrowUpRightFromSquare} from '@gravity-ui/icons';
 import React from 'react';
-import {useSelector} from '../../../store/redux-hooks';
-import {Button, Flex, Link, Tooltip} from '@gravity-ui/uikit';
-
 import {getDescriptionType} from '../../../store/reducers/navigation/description';
-
-import Icon from '../../../components/Icon/Icon';
-
+import {useSelector} from '../../../store/redux-hooks';
 import UIFactory from '../../../UIFactory';
-
-import {useExternalAnnotation} from './hooks/use-external-annotation';
-
 import {EditButtons} from './EditButtons';
+import {useExternalAnnotation} from './hooks/use-external-annotation';
 import {SwitchDescription} from './SwitchDescription';
 
 export function NavigationDescriptionOverview() {
-    const {externalAnnotationLink} = useExternalAnnotation();
+    const {externalAnnotationLink, editable} = useExternalAnnotation();
     const descriptionType = useSelector(getDescriptionType);
+
+    const {externalServiceName, edit, load} = UIFactory?.externalAnnotationSetup ?? {};
+
+    const hasExternal = Boolean(load);
+    const allowEdit = descriptionType === 'yt' || Boolean(edit && editable);
 
     return (
         <Flex direction={'row'} gap={2} alignItems={'center'}>
-            {UIFactory?.externalAnnotationSetup && <SwitchDescription />}
-            {descriptionType === 'yt' && <EditButtons />}
+            {hasExternal && <SwitchDescription />}
+            {allowEdit && <EditButtons />}
             {descriptionType === 'external' && (
-                <Tooltip content={UIFactory?.externalAnnotationSetup?.externalServiceName || ''}>
+                <Tooltip content={externalServiceName || ''}>
                     <Link href={externalAnnotationLink || ''} target="_blank">
                         <Button view="outlined">
-                            <Icon awesome="external-link" />
+                            <Icon data={ArrowUpRightFromSquare} size={13} />
                         </Button>
                     </Link>
                 </Tooltip>
