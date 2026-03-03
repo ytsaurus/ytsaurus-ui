@@ -4,6 +4,7 @@ import {Flex, SegmentedRadioGroup} from '@gravity-ui/uikit';
 
 import {
     getDescriptionType,
+    getEditMode,
     setDescriptionType,
 } from '../../../store/reducers/navigation/description';
 
@@ -11,6 +12,7 @@ import UIFactory from '../../../UIFactory';
 
 export function SwitchDescription() {
     const dispatch = useDispatch();
+    const editMode = useSelector(getEditMode);
 
     const descriptionType = useSelector(getDescriptionType);
 
@@ -20,6 +22,7 @@ export function SwitchDescription() {
     return (
         <Flex direction={'row'} gap={1}>
             <SegmentedRadioGroup
+                disabled={editMode}
                 options={[
                     {value: 'yt', content: 'YT'},
                     {
