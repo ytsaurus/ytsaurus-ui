@@ -34,6 +34,7 @@ export default function Scheduler({
     type,
 }: SchedulerProps) {
     const dispatch = useDispatch();
+
     const theme = (
         {
             active: 'online',
@@ -57,7 +58,9 @@ export default function Scheduler({
     return (
         <div className={b('scheduler')}>
             <NodeQuad theme={theme} />
+
             <div className={b('scheduler-status')}>{hammer.format['ReadableField'](state)}</div>
+
             <div className={b('maintenance')}>
                 {maintenanceMessage && (
                     <Tooltip content={maintenanceMessage}>
@@ -65,15 +68,18 @@ export default function Scheduler({
                     </Tooltip>
                 )}
             </div>
+
             <div title={formatedAddress} className={b('scheduler-host')}>
                 <Tooltip content={formatedAddress} ellipsis>
                     <div className={b('scheduler-host-address')}>
                         {makeShortSystemAddress(formatedAddress) || formatedAddress}
                     </div>
                 </Tooltip>
+
                 <div className={b('scheduler-host-btn')}>
-                    {host && <ClipboardButton view="flat-secondary" text={host} />}
+                    {address && <ClipboardButton view="flat-secondary" text={address} />}
                 </div>
+
                 <ChangeMaintenanceButton
                     className={b('scheduler-host-btn')}
                     path={path}
