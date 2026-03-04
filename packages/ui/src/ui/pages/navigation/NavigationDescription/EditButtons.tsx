@@ -8,7 +8,7 @@ import Icon from '../../../components/Icon/Icon';
 
 import {useDescriptionActions} from './hooks/use-description-actions';
 
-export function EditButtons() {
+export function EditButtons({readonly}: {readonly?: boolean}) {
     const editMode = useSelector(getEditMode);
 
     const {edit, save, cancel, isLoading, isSaving} = useDescriptionActions();
@@ -22,7 +22,7 @@ export function EditButtons() {
                 Cancel
             </Button>
         </Flex>
-    ) : (
+    ) : readonly ? null : (
         <Button view={'outlined'} onClick={edit}>
             <Icon awesome={'pencil'} />
         </Button>

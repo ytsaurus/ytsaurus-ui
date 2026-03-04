@@ -8,7 +8,7 @@ export type EditAnnotationProps = DialogControlProps<
     EditTextWithPreviewProps['value'],
     {
         initialValue: EditAnnotationProps['value'];
-        valuePath: string;
+        valuePath?: string;
         hideReset?: boolean;
         className: string;
     }

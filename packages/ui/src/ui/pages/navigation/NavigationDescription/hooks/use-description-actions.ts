@@ -35,7 +35,7 @@ export function useDescriptionActions() {
     }, [type, dispatch]);
 
     const cancel = useCallback(() => {
-        dispatch(setEdittingAnnotation({edittingAnnotation: data}));
+        dispatch(setEdittingAnnotation({edittingAnnotation: data?.annotation}));
         dispatch(toggleEditMode());
     }, [data, dispatch]);
 

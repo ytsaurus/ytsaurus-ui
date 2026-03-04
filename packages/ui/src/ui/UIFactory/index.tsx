@@ -460,6 +460,7 @@ export interface UIFactory {
             item: ExternalAnnotationResponse,
             {newDescription}: {newDescription: string},
         ) => Promise<void>;
+        makeCreateUrl?: (params: {cluster: string; path: string}) => string;
     };
 
     getAclApi(): AclApi;
