@@ -121,6 +121,7 @@ export class MetaTable extends Component<MetaTableProps> {
         if (groupTitles?.length) {
             title = groupTitles[index] ?? <>&nbsp;</>;
         }
+
         const visibleItems = filter_(group, (item) => item.visible !== false);
 
         return !visibleItems?.length ? null : (

@@ -1,7 +1,7 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 
 import type {RootState} from '..';
-import {descriptionApi} from '../../api/navigation/tabs/description';
+import {type GetAnnotationResponse, descriptionApi} from '../../api/navigation/tabs/description';
 import type {ExternalAnnotationResponse} from '../../../UIFactory';
 
 type DescriptionState = {
@@ -11,7 +11,7 @@ type DescriptionState = {
     descriptionType: 'yt' | 'external';
     isSaving: boolean;
 
-    annotation: string;
+    annotation: Partial<GetAnnotationResponse>;
     externalDescription: ExternalAnnotationResponse;
 };
 
@@ -20,9 +20,9 @@ const initialState: DescriptionState = {
     edittingAnnotation: undefined,
     modifiedByUser: false,
     descriptionType: 'yt',
-    annotation: '',
     isSaving: false,
 
+    annotation: {},
     externalDescription: {},
 };
 
@@ -35,7 +35,7 @@ const descriptionSlice = createSlice({
             if (state.editMode) {
                 state.edittingAnnotation =
                     state.descriptionType === 'yt'
-                        ? state.annotation
+                        ? (state.annotation.annotation ?? '')
                         : state.externalDescription.externalAnnotation;
             }
         },

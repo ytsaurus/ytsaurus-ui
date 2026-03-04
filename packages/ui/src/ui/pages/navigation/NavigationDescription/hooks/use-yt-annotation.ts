@@ -1,15 +1,13 @@
 import {useSelector} from '../../../../store/redux-hooks';
 
-import ypath from '../../../../common/thor/ypath';
-
-import {getAttributes, getPath} from '../../../../store/selectors/navigation';
+import {getPath} from '../../../../store/selectors/navigation';
 import {useAnnotationQuery} from '../../../../store/api/navigation/tabs/description';
 import {selectCluster} from '../../../../store/selectors/global';
 
 export function useYTAnnotation() {
     const path: string = useSelector(getPath);
+
     const cluster = useSelector(selectCluster);
-    const attributes = useSelector(getAttributes);
 
     const {
         data: annotationData,
@@ -17,12 +15,12 @@ export function useYTAnnotation() {
         isLoading,
     } = useAnnotationQuery({path, cluster});
 
-    const ytAnnotationPath = ypath.getValue(attributes, '/annotation_path');
+    const {annotation_path, annotation} = annotationData ?? {};
 
     return {
         ytAnnotation: annotationData,
-        ytAnnotationPath,
-        isAnnotationLoadedWithData: Boolean(isAnnotationSuccess && annotationData?.length),
+        ytAnnotationPath: annotation_path,
+        isAnnotationLoadedWithData: Boolean(isAnnotationSuccess && annotation?.length),
         isAnnotationLoading: isLoading,
     };
 }

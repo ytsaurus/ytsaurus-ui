@@ -1,10 +1,9 @@
 import {Action, ThunkAction} from '@reduxjs/toolkit';
-import {YTApiId, ytApiV3} from '../../../../rum/rum-wrap-api';
 import {rootApi} from '../../../../store/api';
+import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import type {RootState} from '../../../../store/reducers';
-import {getExternalDescription} from '../../../../store/selectors/navigation/description';
+import {selectExternalDescription} from '../../../../store/selectors/navigation/description';
 import UIFactory, {ExternalAnnotationResponse} from '../../../../UIFactory';
-import {prepareRequest} from '../../../../utils/navigation';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 
 const descriptionQuery = async (args: {cluster: string; path: string}) => {
@@ -17,23 +16,32 @@ const descriptionQuery = async (args: {cluster: string; path: string}) => {
     }
 };
 
+export interface GetAnnotationResponse {
+    annotation?: string;
+    annotation_path?: string;
+}
+
 const annotationQuery = async (args: {cluster: string; path: string}) => {
     const {path} = args;
     try {
-        const response = await ytApiV3.executeBatch({
-            parameters: {
-                requests: [
-                    {
-                        command: 'get' as const,
-                        parameters: prepareRequest('/@annotation', {
-                            path,
-                        }),
-                    },
-                ],
+        const response = await ytApiV3Id.executeBatch<GetAnnotationResponse>(
+            YTApiId.navigationGetAnnotationExternal,
+            {
+                parameters: {
+                    requests: [
+                        {
+                            command: 'get' as const,
+                            parameters: {
+                                path: path + '/@',
+                                attributes: ['annotation', 'annotation_path'],
+                            },
+                        },
+                    ],
+                },
             },
-        });
+        );
 
-        const data = response?.[0]?.output || '';
+        const data = response?.[0]?.output ?? {};
 
         return {data};
     } catch (error) {
@@ -50,14 +58,14 @@ export const descriptionApi = rootApi.injectEndpoints({
             queryFn: descriptionQuery,
             providesTags: [YTApiId.navigationGetAnnotationExternal],
         }),
-        annotation: build.query<string, {cluster: string; path: string}>({
+        annotation: build.query<GetAnnotationResponse, {cluster: string; path: string}>({
             queryFn: annotationQuery,
             providesTags: [YTApiId.navigationGetAnnotation],
         }),
     }),
 });
 
-export function udpateAnnotaionExternal(params: {
+export function udpateAnnotationExternal(params: {
     cluster: string;
     path: string;
     value: string;
@@ -65,7 +73,7 @@ export function udpateAnnotaionExternal(params: {
     return (dispatch, getState) => {
         const {edit} = UIFactory.externalAnnotationSetup ?? {};
         if (edit) {
-            const item = getExternalDescription(getState());
+            const item = selectExternalDescription(getState());
             const {value} = params;
             return wrapApiPromiseByToaster(edit(item, {newDescription: value}), {
                 toasterName: 'updateAnnotationExternal',
