@@ -71,6 +71,13 @@ export function usePrometheusDashbordTimeRange(initialTimeRange?: {from?: number
         [dispatch],
     );
 
+    const moveTimeRangeTo = React.useCallback(
+        (timestamp: number) => {
+            dispatch(prometheusDashboardSlice.actions.moveTimeRangeFilterTo({timestamp}));
+        },
+        [dispatch],
+    );
+
     React.useEffect(() => {
         if (
             timeRange.from === undefined ||
@@ -90,5 +97,6 @@ export function usePrometheusDashbordTimeRange(initialTimeRange?: {from?: number
     return {
         timeRange,
         setTimeRange,
+        moveTimeRangeTo,
     };
 }

@@ -82,6 +82,15 @@ export const prometheusDashboardSlice = createSlice({
         setTimeRangeFilter(state, {payload}: PayloadAction<Pick<typeof state, 'timeRangeFilter'>>) {
             return {...state, ...payload};
         },
+        moveTimeRangeFilterTo(state, {payload}: PayloadAction<{timestamp: number}>) {
+            const {to = 0, from = 0} = state.timeRangeFilter;
+            const {timestamp} = payload;
+
+            state.timeRangeFilter = {
+                from: timestamp - (to - from),
+                to: timestamp,
+            };
+        },
     },
 });
 
