@@ -10,16 +10,22 @@ export function useDescription() {
     const editMode = useSelector(getEditMode);
     const descriptionType = useSelector(getDescriptionType);
 
-    const {ytAnnotation, isAnnotationLoadedWithData, isAnnotationLoading} = useYTAnnotation();
+    const {ytAnnotation, ytAnnotationPath, isAnnotationLoadedWithData, isAnnotationLoading} =
+        useYTAnnotation();
 
-    const {externalAnnotation, isExternalAnnotatonLoadedWithData} = useExternalAnnotation();
+    const {
+        externalAnnotation,
+        path: externalAnnotationPath,
+        isExternalAnnotatonLoadedWithData,
+    } = useExternalAnnotation();
 
     const isLoadedWithData =
         // use isAnnotationLoading to ensure that internal annotation loading process completed
         // before making any rendering decision
         !isAnnotationLoading && (isAnnotationLoadedWithData || isExternalAnnotatonLoadedWithData);
 
-    const description = descriptionType === 'yt' ? ytAnnotation : externalAnnotation;
+    const description: string | undefined =
+        descriptionType === 'yt' ? ytAnnotation?.annotation : externalAnnotation;
 
     useUpdateDescriptionTypeOnLoad(isAnnotationLoadedWithData, isExternalAnnotatonLoadedWithData);
 
@@ -27,5 +33,6 @@ export function useDescription() {
         visible: isLoadedWithData || editMode,
         descriptionType,
         description,
+        path: descriptionType === 'yt' ? ytAnnotationPath : externalAnnotationPath,
     };
 }

@@ -12,7 +12,7 @@ import {
 
 import {selectCluster} from '../../../../store/selectors/global';
 import {
-    udpateAnnotaionExternal,
+    udpateAnnotationExternal,
     useAnnotationQuery,
 } from '../../../../store/api/navigation/tabs/description';
 import {getPath} from '../../../../store/selectors/navigation';
@@ -36,7 +36,7 @@ export function useDescriptionActions() {
     }, [type, dispatch]);
 
     const cancel = useCallback(() => {
-        dispatch(setEdittingAnnotation({edittingAnnotation: data}));
+        dispatch(setEdittingAnnotation({edittingAnnotation: data?.annotation}));
         dispatch(toggleEditMode());
     }, [data, dispatch]);
 
@@ -46,7 +46,7 @@ export function useDescriptionActions() {
             await updateFn(edittingAnnotation || '');
         } else {
             await dispatch(
-                udpateAnnotaionExternal({cluster, path, value: edittingAnnotation ?? ''}),
+                udpateAnnotationExternal({cluster, path, value: edittingAnnotation ?? ''}),
             );
         }
         dispatch(setSaving({isSaving: false}));

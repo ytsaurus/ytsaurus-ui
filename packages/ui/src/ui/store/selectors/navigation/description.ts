@@ -1,4 +1,4 @@
 import {RootState} from '../../../store/reducers';
 
-export const getExternalDescription = (state: RootState) =>
+export const selectExternalDescription = (state: RootState) =>
     state.navigation.description.externalDescription;
