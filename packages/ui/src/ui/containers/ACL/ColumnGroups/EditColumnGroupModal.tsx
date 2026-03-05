@@ -11,6 +11,7 @@ export interface Props {
     initialData?: Partial<AclColumnGroup>;
     disabledFields?: Array<keyof FormValues>;
     visible: boolean;
+    mode?: 'delete';
 }
 
 interface FormValues {
@@ -27,6 +28,7 @@ export default function EditColumnGroupModal({
     handleSubmit,
     initialData,
     disabledFields = [],
+    mode,
 }: Props) {
     const [error, setError] = useState(undefined);
 
@@ -40,7 +42,7 @@ export default function EditColumnGroupModal({
 
     return (
         <YTDFDialog<FormValues>
-            pristineSubmittable
+            pristineSubmittable={mode === 'delete'}
             visible={visible}
             modal={true}
             headerProps={{title}}

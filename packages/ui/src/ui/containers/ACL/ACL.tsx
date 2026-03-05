@@ -263,6 +263,7 @@ class ACL extends Component<Props> {
                                 {action}
                             </Label>
                             <AclColumnsCell
+                                withQoutes
                                 items={row.permissions?.map(hammer.format.Readable)}
                                 expanadable={'expanded' in row}
                             />
@@ -569,7 +570,7 @@ class ACL extends Component<Props> {
             path,
         } = this.props;
 
-        const allowEditColumnGroups = UIFactory.getAclApi().isAllowedToEditColumnGroups({
+        const allowEditColumnGroups = UIFactory.getAclApi().isAllowedToEditRowGroups({
             nodeType,
         });
         const {allowEdit, allowEditNotice} =
