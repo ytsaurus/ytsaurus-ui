@@ -13,7 +13,7 @@ test('Navigation/ACL: main_permissions', async ({page}) => {
             .getByText('Register queue consumer vital')
             .click({force: true});
         await page.getByText('Enter user name or login...').click({force: true});
-        await page.getByText('scheduler').click({force: true});
+        await page.getByRole('option').getByText('scheduler').click({force: true});
         await page.getByText('Current path').click({force: true});
 
         await navigationPage(page).replaceACLInputPath();
@@ -54,7 +54,7 @@ test('Navigation/ACL: column_permissions', async ({page}) => {
         await page.locator('.df-dialog textarea').fill('column1\nКолонка1');
 
         await page.getByText('Enter user name or login...').click({force: true});
-        await page.getByText('scheduler').click({force: true});
+        await page.getByRole('option').getByText('scheduler').click({force: true});
         await page.getByText('Current path').click({force: true});
 
         await navigationPage(page).replaceBreadcrumbsTestDir();
@@ -94,7 +94,7 @@ test.skip('Navigation/ACL: row_permissions', async ({page}) => {
         await page.locator('.df-dialog textarea').fill('column1\nКолонка1');
 
         await page.getByText('Enter user name or login...').click({force: true});
-        await page.getByText('scheduler').click({force: true});
+        await page.getByRole('option').getByText('scheduler').click({force: true});
         await page.getByText('Current path').click({force: true});
 
         await navigationPage(page).replaceBreadcrumbsTestDir();
