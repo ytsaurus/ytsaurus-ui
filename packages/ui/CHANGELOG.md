@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.6.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.6.0...ui-v3.6.1) (2026-03-05)
+
+
+### Bug Fixes
+
+* **ACL/EditInheritance:** disable 'Confirm' button until a field is changed [YTFRONT-5562] ([e9a3c20](https://github.com/ytsaurus/ytsaurus-ui/commit/e9a3c208caedb27f05fc09a6c25edaf3dc82996d))
+* **Components/Proxies:** add filtering of 'Role' choices [YTFRONT-] ([54c2f78](https://github.com/ytsaurus/ytsaurus-ui/commit/54c2f783107d82b8bbc60a8f5bab73cf0cec1c92))
+* **Monitoring:** fix dashboard autoupdate [YTFRONT-5614] ([5414ee4](https://github.com/ytsaurus/ytsaurus-ui/commit/5414ee418dee9d456a25d1a86cab93b69dde1d98))
+* **Navigation/TopRow:** a path with '\/' should not be marked as a symlink [YTFRONT-5182] ([b302c3b](https://github.com/ytsaurus/ytsaurus-ui/commit/b302c3b046c3c9e60c8210147c644c26f9bb00f3))
+* **Operation/Details:** layer paths with attributes should be properly displayed [YTFRONT-5268] ([2e76f34](https://github.com/ytsaurus/ytsaurus-ui/commit/2e76f345296ce4772282da363fc38f1c7e0de0b3))
+* **Scheduling:** use utf8.decode for title of operations [YTFRONT-5597] ([dbb222c](https://github.com/ytsaurus/ytsaurus-ui/commit/dbb222cbdeba9a96f28470e19b7ab9adf84f34df))
+* **System:** 'nvme' word should be in UPPERCASE [YTFRONT-5534] ([dac156c](https://github.com/ytsaurus/ytsaurus-ui/commit/dac156c67387192986dbc6d76785ae034783db4d))
+* **System:** copy address to clipboard [YTFRONT-5129] ([0182d77](https://github.com/ytsaurus/ytsaurus-ui/commit/0182d7774600e32a59e1c3ac8d55ab8d5142056c))
+
 ## [3.6.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.5.1...ui-v3.6.0) (2026-02-18)
 
 
