@@ -312,7 +312,7 @@ function Transaction() {
                     title="Clear transaction"
                     onClick={handleClearTransaction}
                 >
-                    <Icon awesome="times" />
+                    <Icon awesome="times" size={13} />
                 </Button>
             </div>
         );
@@ -330,7 +330,7 @@ function Transaction() {
             />
         ) : (
             <Button view="flat-secondary" size="m" title="Set transaction" onClick={toggleEditMode}>
-                <Icon awesome="code-branch" />
+                <Icon awesome="code-branch" size={13} />
             </Button>
         );
     }
@@ -352,7 +352,7 @@ function RefreshButton() {
             hotkey={[{keys: 'shift+r', handler: handleClick, scope: 'all'}]}
             onClick={handleClick}
         >
-            <Icon awesome={'sync-alt'} />
+            <Icon awesome={'sync-alt'} size={13} />
         </Button>
     );
 }
@@ -369,7 +369,7 @@ function RestoreButton() {
     return !restorePath || !inTrash(path) ? null : (
         <span className={block('restore')}>
             <Button view="action" size="s" onClick={handleRestore}>
-                <Icon awesome="undo" />
+                <Icon awesome="undo" size={13} />
                 &nbsp;Restore
             </Button>
         </span>
