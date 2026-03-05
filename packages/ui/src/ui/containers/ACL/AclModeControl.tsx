@@ -11,18 +11,28 @@ const ACL_MODE_OPTIONS = [
     AclMode.MAIN_PERMISSIONS,
     AclMode.COLUMN_GROUPS_PERMISSIONS,
     AclMode.ROW_GROUPS_PERMISSIONS,
-].map((value) => {
-    return {value, content: format.ReadableField(value)};
-});
+];
 
 export function AclModeControl({
     updateAclFilters,
     aclMode,
-}: Pick<ACLReduxProps, 'aclMode' | 'updateAclFilters'>) {
+    permissionCounters,
+}: Pick<ACLReduxProps, 'aclMode' | 'updateAclFilters'> & {
+    permissionCounters: Record<AclMode, number>;
+}) {
+    const options = React.useMemo(() => {
+        return ACL_MODE_OPTIONS.map((value) => {
+            const {[value]: counter} = permissionCounters;
+            const counterStr = counter >= 0 ? ` ${counter}` : '';
+
+            return {value, content: format.ReadableField(value) + counterStr};
+        });
+    }, [permissionCounters]);
+
     return (
         <SegmentedRadioGroup
             value={aclMode}
-            options={ACL_MODE_OPTIONS}
+            options={options}
             onUpdate={(value) => {
                 updateAclFilters({aclCurrentTab: value as AclMode});
             }}
