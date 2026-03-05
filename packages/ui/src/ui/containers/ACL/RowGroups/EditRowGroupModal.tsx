@@ -4,6 +4,7 @@ import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import HelpLink from '../../../components/HelpLink/HelpLink';
 import UIFactory from '../../../UIFactory';
 import {AclRowGroup} from '../../../utils/acl/acl-types';
+import i18n from './i18n';
 
 export interface Props {
     title: string;
@@ -82,9 +83,15 @@ export function EditRowGroupModal({
                     type: 'textarea',
                     required: true,
                     caption: 'Rows',
-                    tooltip: <HelpLink url={UIFactory.docsUrls['acl:row-level-security']} />,
+                    tooltip: (
+                        <HelpLink
+                            url={UIFactory.docsUrls['acl:row-level-security']}
+                            text={i18n('managing-row-level-access')}
+                        />
+                    ),
                     extras: {
                         disabled: includes_(disabledFields, 'predicate'),
+                        placeholder: 'column1 = "Value1"',
                     },
                 },
                 {

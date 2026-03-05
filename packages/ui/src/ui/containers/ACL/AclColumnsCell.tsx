@@ -5,9 +5,14 @@ import {VisibleValues} from '../../components/VisibleValues/VisibleValues';
 export type AclColumnsCellProps = {
     items?: Array<string>;
     expanadable?: boolean;
+    withQoutes?: boolean;
 };
 
-export function AclColumnsCell({expanadable, items}: AclColumnsCellProps) {
+function formatValue(value: string, {withQoutes}: {withQoutes?: boolean}) {
+    return withQoutes ? `"${value}"` : value;
+}
+
+export function AclColumnsCell({expanadable, items, withQoutes}: AclColumnsCellProps) {
     if (!items) {
         return format.NO_VALUE;
     }
@@ -18,7 +23,7 @@ export function AclColumnsCell({expanadable, items}: AclColumnsCellProps) {
             counter="missing-values"
             value={
                 items?.map((v) => {
-                    return `"${v}"`;
+                    return formatValue(v, {withQoutes});
                 }) ?? []
             }
             maxVisibleValues={5}

@@ -120,6 +120,7 @@ export default function ColumnGroups({
                         loadAclDataFn();
                     });
             },
+            mode: 'delete',
         }));
     };
 
