@@ -3,6 +3,7 @@ import {CanvasBlock, Graph, TBlock} from '@gravity-ui/graph';
 import {GraphMouseEvent} from '@gravity-ui/graph/build/graphEvents';
 
 const TIMEOUT = 300;
+const CLOSE_DELAY = 300;
 
 export function useHoverBlock<B extends TBlock>(
     graph: Graph,
@@ -12,28 +13,32 @@ export function useHoverBlock<B extends TBlock>(
     const timerId = useRef<number | undefined>(undefined);
     const [block, setBlock] = useState<CanvasBlock<B> | undefined>(undefined);
 
-    const handleOnGraphMouseEnter = useCallback(({detail}: GraphMouseEvent) => {
-        const targetBlock = isBlockNode(detail.target) ? detail.target : undefined;
-
-        clearTimeout(timerId.current);
-
-        if (targetBlock) {
-            timerId.current = window.setTimeout(() => {
-                setBlock(targetBlock);
-            }, TIMEOUT);
-        } else {
+    const handleClosePopup = useCallback(() => {
+        if (timerId.current) clearTimeout(timerId.current);
+        timerId.current = window.setTimeout(() => {
             setBlock(undefined);
-        }
+        }, CLOSE_DELAY);
     }, []);
+
+    const handleOnGraphMouseEnter = useCallback(
+        ({detail}: GraphMouseEvent) => {
+            const targetBlock = isBlockNode(detail.target) ? detail.target : undefined;
+
+            clearTimeout(timerId.current);
+
+            if (targetBlock) {
+                timerId.current = window.setTimeout(() => {
+                    setBlock(targetBlock);
+                }, TIMEOUT);
+            } else {
+                handleClosePopup();
+            }
+        },
+        [handleClosePopup, isBlockNode],
+    );
 
     const handleClearTimeout = useCallback(() => {
         clearTimeout(timerId.current);
-    }, []);
-
-    const handleClosePopup = useCallback(() => {
-        timerId.current = window.setTimeout(() => {
-            setBlock(undefined);
-        }, TIMEOUT);
     }, []);
 
     useEffect(() => {
