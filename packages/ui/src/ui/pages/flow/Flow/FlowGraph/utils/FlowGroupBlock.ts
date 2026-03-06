@@ -41,7 +41,7 @@ export class FlowGroupBlock implements YTGraphBlock<'computation-group', FlowCom
     }) {
         this.id = id;
         this.meta = computation;
-        this.name = computation.id;
+        this.name = computation.name;
         this.backgroundTheme = backgroundTheme;
 
         this.sizes = {stream: streamSize, computation: computationSize};
