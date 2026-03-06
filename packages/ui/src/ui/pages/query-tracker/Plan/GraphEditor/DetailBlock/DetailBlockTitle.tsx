@@ -4,6 +4,7 @@ import cn from 'bem-cn-lite';
 import './DetailBlockTitle.scss';
 import {Button, Icon} from '@gravity-ui/uikit';
 import {ArrowUpRightFromSquare} from '@gravity-ui/icons';
+import {openInNewTab} from '../../../../../utils/utils';
 
 const block = cn('yt-detailed-block-title');
 
@@ -17,11 +18,12 @@ export const DetailBlockTitle: FC<Props> = ({icon, name, id}) => {
     let url = '';
     if (id) {
         const [cluster, operationId] = id.split('/');
-        url = `/${cluster}/operations/${operationId}`;
+        const clusterName = cluster?.split('.')[0] ?? cluster;
+        url = `/${clusterName}/operations/${encodeURIComponent(operationId ?? '')}`;
     }
 
     const handleClick = () => {
-        window.open(url, '_blank');
+        openInNewTab(url);
     };
 
     return (
