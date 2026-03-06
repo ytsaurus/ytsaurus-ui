@@ -75,6 +75,7 @@ import {OperationPool, OperationStates} from '../selectors';
 import {JobsTimeline} from './tabs/JobsTimeline';
 import {getOperationEvents, listOperationEventsApi} from '../../../store/api/yt';
 import {getYsonSettingsDisableDecode} from '../../../store/selectors/thor/unipika';
+import {selectIsIncarnationNextFeatureEnabled} from '../../../store/selectors/settings/settings-development';
 
 const detailBlock = cn('operation-detail');
 
@@ -327,6 +328,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             timelineTabVisible,
             operationPerformanceUrlTemplate,
             operationEvents,
+            isIncarnationNextFeatureEnabled,
         } = this.props;
         const path = `/${cluster}/${Page.OPERATIONS}/${operationId}`;
 
@@ -337,6 +339,11 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             [Tab.MONITOR]: {show: monitorTabVisible},
             [Tab.JOBS_TIMELINE]: {show: timelineTabVisible},
             [Tab.INCARNATIONS]: {show: Boolean(operationEvents?.length)},
+            [Tab.INCARNATIONS_NEXT]: {
+                show:
+                    isIncarnationNextFeatureEnabled &&
+                    Boolean(UIFactory.renderIncarnationsNextTab()),
+            },
             [Tab.LOGS]: {show: Boolean(UIFactory.renderOperationLogsTab())},
             [Tab.PERFORMANCE]: {
                 show: Boolean(operationPerformanceUrlTemplate),
@@ -438,6 +445,10 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                     <Route
                         path={`${path}/${Tab.INCARNATIONS}`}
                         render={UIFactory.renderIncarnationsTab}
+                    />
+                    <Route
+                        path={`${path}/${Tab.INCARNATIONS_NEXT}`}
+                        render={UIFactory.renderIncarnationsNextTab}
                     />
                     <Route path={`${path}/${Tab.LOGS}`} render={UIFactory.renderOperationLogsTab} />
                     <Route path={`${path}/:tab`} component={Placeholder} />
@@ -553,6 +564,7 @@ const mapStateToProps = (state: RootState, routerProps: RouteProps) => {
         operationPerformanceUrlTemplate: getOperationPerformanceUrlTemplate(state),
         operationEvents,
         ysonSettings: getYsonSettingsDisableDecode(state),
+        isIncarnationNextFeatureEnabled: selectIsIncarnationNextFeatureEnabled(state),
     };
 };
 
