@@ -51,6 +51,7 @@ interface DevelopmentSettings {
     'global::development::yqlTypes': boolean;
     'global::development::regularUserUI': boolean;
     'global::development::showAiChat': boolean;
+    'global::development::feature::incarnationNext': boolean;
 }
 
 interface MenuSettings {
