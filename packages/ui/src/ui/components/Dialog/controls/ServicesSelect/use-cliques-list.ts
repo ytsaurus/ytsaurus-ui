@@ -6,13 +6,13 @@ import ypath from '../../../../common/thor/ypath';
 
 import {useChytFetchQuery} from '../../../../store/api/chyt';
 import {getCluster} from '../../../../store/selectors/global';
-import {isDeveloper} from '../../../../store/selectors/global/is-developer';
+import {selectIsAdmin} from '../../../../store/selectors/global/is-developer';
 
 import {defaultColumns} from '../../../../constants/chyt';
 
 export function useCliquesList() {
     const cluster = useSelector(getCluster);
-    const isAdmin = useSelector(isDeveloper);
+    const isAdmin = useSelector(selectIsAdmin);
     const attributesSet = new Set([
         'yt_operation_id' as const,
         'creator' as const,

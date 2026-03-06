@@ -18,7 +18,7 @@ import {WaitForDefaultPoolTree} from '../../hooks/global-pool-trees';
 import {getFavouriteChyt, isActiveCliqueInFavourites} from '../../store/selectors/favourites';
 import {getChytCurrentAlias} from '../../store/selectors/chyt';
 import {getCluster} from '../../store/selectors/global';
-import {isDeveloper} from '../../store/selectors/global/is-developer';
+import {selectIsAdmin} from '../../store/selectors/global/is-developer';
 import {chytApiAction} from '../../utils/strawberryControllerApi';
 import {chytCliqueCreate} from '../../store/actions/chyt/list';
 import {chytToggleFavourite} from '../../store/actions/favourites';
@@ -148,7 +148,7 @@ function ChytAliasSuggest({
 }) {
     const [items, setItems] = React.useState<Array<string>>([]);
 
-    const isAdmin = useSelector(isDeveloper);
+    const isAdmin = useSelector(selectIsAdmin);
 
     React.useEffect(() => {
         chytApiAction('list', cluster, {}, {isAdmin}).then((data) => {

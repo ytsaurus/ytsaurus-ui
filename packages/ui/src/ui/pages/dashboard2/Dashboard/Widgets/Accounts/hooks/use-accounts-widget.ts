@@ -7,7 +7,7 @@ import {
     getAccountsTypeFilter,
 } from '../../../../../../store/selectors/dashboard2/accounts';
 import {getCluster} from '../../../../../../store/selectors/global';
-import {isDeveloper} from '../../../../../../store/selectors/global/is-developer';
+import {selectIsAdmin} from '../../../../../../store/selectors/global/is-developer';
 import {useUsableAccountsQuery} from '../../../../../../store/api/accounts';
 
 import {AccountsWidgetProps} from '../types';
@@ -17,7 +17,7 @@ export function useAccountsWidget(props: AccountsWidgetProps) {
 
     const cluster = useSelector(getCluster);
     const type = useSelector((state: RootState) => getAccountsTypeFilter(state, props.id));
-    const isAdmin = useSelector(isDeveloper);
+    const isAdmin = useSelector(selectIsAdmin);
 
     const {isLoading: isUsableLoading, isFetching: isUsableFetching} = useUsableAccountsQuery(
         {cluster},

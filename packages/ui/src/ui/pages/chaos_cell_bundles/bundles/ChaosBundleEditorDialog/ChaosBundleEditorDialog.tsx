@@ -24,7 +24,7 @@ import type {
     setBunndleAttributes,
 } from '../../../../store/actions/tablet_cell_bundles/tablet-cell-bundle-editor';
 import {ChaosCellBundleEditorState} from '../../../../store/reducers/chaos_cell_bundles/tablet-cell-bundle-editor';
-import {isDeveloper} from '../../../../store/selectors/global/is-developer';
+import {selectIsAdmin} from '../../../../store/selectors/global/is-developer';
 import {calcProgressProps} from '../../../../utils/utils';
 
 import './ChaosBundleEditorDialog.scss';
@@ -242,7 +242,7 @@ function ChaosBundleAbcServiceEditor({
 }: ChaosBundleAbcServiceEditorProps) {
     const {bundleName, data} = bundleEditorData;
     const slug = ypath.getValue(data, '/@abc/slug');
-    const allowEdit = useSelector(isDeveloper);
+    const allowEdit = useSelector(selectIsAdmin);
 
     const dispatch = useDispatch();
     const onAbcChange = React.useCallback(({id, slug}: {id?: number; slug?: string} = {}) => {
@@ -282,7 +282,7 @@ function ChaosBundleAccountEditor(props: ChaosBundleAccountEditorProps) {
     const {attributeName, bundleEditorData, setBunndleAttributes} = props;
     const {bundleName, data} = bundleEditorData;
     const account = ypath.getValue(data, `/@options/${attributeName}`);
-    const allowEdit = useSelector(isDeveloper);
+    const allowEdit = useSelector(selectIsAdmin);
 
     const dispatch = useDispatch();
     const onChange = React.useCallback((value?: string) => {

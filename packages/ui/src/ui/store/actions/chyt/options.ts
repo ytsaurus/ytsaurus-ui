@@ -5,7 +5,7 @@ import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {ChytCliqueOptionsAction} from '../../reducers/chyt/options';
 import {RootState} from '../../reducers';
 import {getCluster} from '../../selectors/global';
-import {isDeveloper} from '../../selectors/global/is-developer';
+import {selectIsAdmin} from '../../selectors/global/is-developer';
 import {
     StrawberryListAttributes,
     StrawberryListResponseItem,
@@ -26,7 +26,7 @@ export function chytLoadCliqueOptions(
     return (dispatch, getState) => {
         const state = getState();
         const cluster = getCluster(state);
-        const isAdmin = isDeveloper(state);
+        const isAdmin = selectIsAdmin(state);
         dispatch({type: CHYT_OPTIONS.REQUEST, data: {dataAlias: alias}});
 
         return wrapApiPromiseByToaster(
@@ -64,7 +64,7 @@ export function chytEditOptions(
     return (dispatch, getState) => {
         const state = getState();
         const cluster = getCluster(state);
-        const isAdmin = isDeveloper(state);
+        const isAdmin = selectIsAdmin(state);
 
         const options_to_remove: Array<StrawberryListAttributes> = [];
         const options_to_set: typeof options = {};

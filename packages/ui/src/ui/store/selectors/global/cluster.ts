@@ -1,6 +1,6 @@
 import {createSelector} from 'reselect';
 
-import type {ClusterConfig} from '../../../../shared/yt-types';
+import type {ClusterConfig, ClusterUiConfig} from '../../../../shared/yt-types';
 
 import {YT} from '../../../config/yt-config';
 import {getConfigData, uiSettings} from '../../../config/ui-settings';
@@ -9,16 +9,31 @@ import {RootState} from '../../../store/reducers';
 import {getClusterConfig} from '../../../utils';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {mergeUiSettings} from '../../../../shared/utils/merge-ui-settings';
+import {selectIsDeveloper} from './is-developer';
 
 export const getCluster = (state: RootState): string => state.global.cluster || '';
-export const getClusterUiConfig = (state: RootState) => state.global.clusterUiConfig;
+
+const getClusterUiConfigRaw = (state: RootState) => state.global.clusterUiConfig;
+
+const getClusterUiDevConfigRaw = (state: RootState) => state.global.clusterUiDevConfig;
+
+export const getClusterUiConfig = createSelector(
+    [getClusterUiConfigRaw, getClusterUiDevConfigRaw, selectIsDeveloper],
+    (clusterUiConfig, clusterUiDevConfig, isDeveloper): Partial<ClusterUiConfig> => {
+        return isDeveloper ? {...clusterUiConfig, ...clusterUiDevConfig} : clusterUiConfig;
+    },
+);
 
 export const getMergedUiSettings = createSelector([getClusterUiConfig], (uiConfig) => {
     return mergeUiSettings({uiSettings, uiConfig});
 });
 
-export const getCurrentClusterConfig = createSelector([getCluster], (cluster): ClusterConfig => {
+export const getClusterConfigByName = (cluster: string): ClusterConfig => {
     return getClusterConfig(YT.clusters, cluster);
+};
+
+export const getCurrentClusterConfig = createSelector([getCluster], (cluster): ClusterConfig => {
+    return getClusterConfigByName(cluster);
 });
 
 export function getClusterProxy(clusterConfig: ClusterConfig): string {
@@ -30,7 +45,7 @@ export function getClusterProxy(clusterConfig: ClusterConfig): string {
 }
 
 export const getClusterSupportedEngines = (state: RootState): Record<QueryEngine, boolean> => {
-    const {chyt_controller_base_url, livy_controller_base_url} = state.global.clusterUiConfig;
+    const {chyt_controller_base_url, livy_controller_base_url} = getClusterUiConfig(state);
     return {
         yql: true,
         chyt: Boolean(chyt_controller_base_url),
@@ -40,16 +55,16 @@ export const getClusterSupportedEngines = (state: RootState): Record<QueryEngine
 };
 
 export const getClusterUiConfigEnablePerAccountTabletAccounting = (state: RootState) => {
-    return state.global.clusterUiConfig.enable_per_account_tablet_accounting ?? false;
+    return getClusterUiConfig(state).enable_per_account_tablet_accounting ?? false;
 };
-export const getClusterUiConfigEnablePerBundleTabletAccounting = (state: RootState) =>
-    state.global.clusterUiConfig.enable_per_bundle_tablet_accounting ?? true;
-export const getClusterUiConfigBundleAccountingHelpLink = (state: RootState) =>
-    state.global.clusterUiConfig.per_bundle_accounting_help_link;
 
-export function getClusterConfigByName(clusterName: string): ClusterConfig {
-    return getClusterConfig(YT.clusters, clusterName);
-}
+export const getClusterUiConfigEnablePerBundleTabletAccounting = (state: RootState) => {
+    return getClusterUiConfig(state).enable_per_bundle_tablet_accounting ?? true;
+};
+
+export const getClusterUiConfigBundleAccountingHelpLink = (state: RootState) => {
+    return getClusterUiConfig(state).per_bundle_accounting_help_link;
+};
 
 export const getHttpProxyVersion = createSelector(
     [getCluster, (state: RootState) => state.global.version],

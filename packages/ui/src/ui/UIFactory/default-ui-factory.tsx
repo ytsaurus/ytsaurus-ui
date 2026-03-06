@@ -42,9 +42,6 @@ export const defaultUIFactory: UIFactory = {
     getClusterAppearance(cluster) {
         return YT.clusters[cluster!]?.urls;
     },
-    isWatchMen() {
-        return false;
-    },
     makeUrlForTransferTask() {
         return undefined;
     },

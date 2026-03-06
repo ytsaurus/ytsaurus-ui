@@ -75,6 +75,7 @@ export type GlobalState = {
     paramsError: YTError | undefined;
 
     isDeveloper: boolean; // groups of current user
+    isWatchmen: boolean;
     mediumList: Array<string>;
     groups?: Array<CypressNode<{upravlyator_managed: boolean}, string>>;
     users?: Array<CypressNode<{upravlyator_managed: boolean}, string>>;
@@ -83,6 +84,7 @@ export type GlobalState = {
     defaultPoolTree?: string;
     poolTrees?: PoolTree;
     clusterUiConfig: Partial<ClusterUiConfig>;
+    clusterUiDevConfig: Partial<ClusterUiConfig>;
 
     showLoginDialog: boolean;
 
@@ -137,6 +139,7 @@ const initialState: GlobalState = {
     paramsError: undefined,
 
     isDeveloper: false, // groups of current user
+    isWatchmen: false,
     mediumList: [],
     groups: [],
     users: undefined,
@@ -145,6 +148,7 @@ const initialState: GlobalState = {
     defaultPoolTree: undefined,
     poolTrees: undefined,
     clusterUiConfig: defaultClusterUiConfig,
+    clusterUiDevConfig: {},
 
     showLoginDialog: false,
 
@@ -224,8 +228,8 @@ export default (state = initialState, action: GloablStateAction): GlobalState =>
                 schedulerVersion,
                 masterVersion,
                 accounts,
-                isDeveloper,
                 clusterUiConfig,
+                clusterUiDevConfig,
                 cluster,
             } = action.data;
 
@@ -233,8 +237,8 @@ export default (state = initialState, action: GloablStateAction): GlobalState =>
                 ...state,
                 accounts: sortBy_(accounts),
                 mediumList,
-                isDeveloper,
                 clusterUiConfig,
+                clusterUiDevConfig,
                 paramsCluster: cluster,
                 paramsLoaded: true,
                 paramsLoading: false,
@@ -330,8 +334,8 @@ export type GloablStateAction =
               | 'schedulerVersion'
               | 'masterVersion'
               | 'accounts'
-              | 'isDeveloper'
               | 'clusterUiConfig'
+              | 'clusterUiDevConfig'
               | 'cluster'
           >
       >

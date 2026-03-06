@@ -8,7 +8,7 @@ import {
     setParentAccountAction,
 } from '../../../../../../store/actions/accounts/accounts';
 import {getCluster} from '../../../../../../store/selectors/global';
-import {isDeveloper} from '../../../../../../store/selectors/global/is-developer';
+import {selectIsAdmin} from '../../../../../../store/selectors/global/is-developer';
 import {SuggestParentsForEditableAccount} from '../../../../AccountsSuggest';
 
 import './../Editor.scss';
@@ -38,7 +38,7 @@ interface ParentProps {
     loadEditedAccount: (name: string) => void;
     setAccountParent: (name: string, parentName: string) => void;
     cluster: string;
-    isDeveloper: boolean;
+    isAdmin: boolean;
 }
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -71,13 +71,13 @@ class GeneralContent extends React.Component<Props> {
     };
 
     renderParentAccount(value = '') {
-        const {isDeveloper} = this.props;
+        const {isAdmin} = this.props;
         return (
             <WithHeader header="Parent">
                 <SuggestParentsForEditableAccount
                     value={value}
                     onChange={this.onParentChange}
-                    disabled={!isDeveloper}
+                    disabled={!isAdmin}
                     allowRootAccount={true}
                 />
             </WithHeader>
@@ -89,14 +89,14 @@ class GeneralContent extends React.Component<Props> {
             account: {
                 abc: {id, slug},
             },
-            isDeveloper,
+            isAdmin,
         } = this.props;
 
         const control = UIFactory.renderControlAbcService({
             value: {id, slug},
             onChange: this.onAbcServiceChanged,
             placeholder: 'Select ABC service...',
-            disabled: !isDeveloper,
+            disabled: !isAdmin,
         });
 
         return !control ? null : <WithHeader header="ABC Service">{control}</WithHeader>;
@@ -140,7 +140,7 @@ class GeneralContent extends React.Component<Props> {
 const mapStateToProps = (state: RootState) => {
     return {
         cluster: getCluster(state),
-        isDeveloper: isDeveloper(state),
+        isAdmin: selectIsAdmin(state),
     };
 };
 

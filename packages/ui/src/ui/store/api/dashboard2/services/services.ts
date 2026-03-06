@@ -9,7 +9,7 @@ import format from '../../../../common/hammer/format';
 import ypath from '../../../../common/thor/ypath';
 
 import {RootState} from '../../../../store/reducers';
-import {isDeveloper} from '../../../../store/selectors/global/is-developer';
+import {selectIsAdmin} from '../../../../store/selectors/global/is-developer';
 
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {StrawberryCliqueHealthType, chytApiAction} from '../../../../utils/strawberryControllerApi';
@@ -231,7 +231,7 @@ export async function fetchServices(args: FetchServicesArgs, api: BaseQueryApi) 
         const {type, cluster, customItems, favouriteCliques, favouriteBundles} = args;
 
         const state = api.getState() as RootState;
-        const isAdmin = isDeveloper(state);
+        const isAdmin = selectIsAdmin(state);
 
         let items: ServicesItem[] = [];
 
