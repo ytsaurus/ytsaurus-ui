@@ -76,7 +76,7 @@ export default function replicatedTable(
     }
 }
 
-type ReplicatedTableAction =
+export type ReplicatedTableAction =
     | Action<typeof LOAD_REPLICAS_REQUEST>
     | ActionD<typeof LOAD_REPLICAS_SUCCESS, Pick<ReplicatedTableState, 'replicas'>>
     | ActionD<typeof LOAD_REPLICAS_FAILURE, {error: ReplicatedTableState['errorData']}>
