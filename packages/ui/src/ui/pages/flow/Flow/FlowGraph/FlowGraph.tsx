@@ -266,7 +266,7 @@ function useFlowGraphData(params: {pipeline_path: string}) {
             });
 
             // Collect computations and their groups
-            Object.entries(computations).forEach(([name, computation]) => {
+            Object.entries(computations).forEach(([_name, computation]) => {
                 const groupId = `\n\n__group(${computation.id})__\n\n`;
 
                 const groupBlock = new FlowGroupBlock({
@@ -284,7 +284,7 @@ function useFlowGraphData(params: {pipeline_path: string}) {
                     'computation',
                     computation,
                     {
-                        name,
+                        name: computation.name ?? computation.id,
                         groupId,
                         backgroundTheme: STATUS_TO_BG_THEME[computation.status],
                         ...COMPUTATION_SIZE,
@@ -443,7 +443,7 @@ function makeBlock<
     return {
         id: item.id,
         is: type,
-        name: item.id,
+        name: item.name ?? item.id,
         selected: false,
         anchors: [],
         ...options,
