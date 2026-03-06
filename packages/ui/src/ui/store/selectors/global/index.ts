@@ -24,7 +24,7 @@ export * from './cluster';
 export * from './username';
 
 import {getCluster} from './cluster';
-import {isDeveloper} from './is-developer';
+import {selectIsAdmin} from './is-developer';
 
 export const getGlobalError = (state: RootState) => state.global.error?.error;
 export const getGlobalErrorType = (state: RootState) => state.global.error?.errorType;
@@ -132,7 +132,7 @@ export const getAuthPagesEnabled = () => {
     return getConfigData().allowPasswordAuth;
 };
 
-export const getUserManagementEnabled = createSelector([isDeveloper], (isAdmin) => {
+export const getUserManagementEnabled = createSelector([selectIsAdmin], (isAdmin) => {
     return isAdmin && getConfigData().allowPasswordAuth;
 });
 

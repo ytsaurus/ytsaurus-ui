@@ -16,7 +16,7 @@ import {
     getSettingsPagesPinned,
 } from '../../store/selectors/settings/settings-ts';
 import {getClusterUiConfig} from '../../store/selectors/global';
-import {isDeveloper} from '../../store/selectors/global/is-developer';
+import {selectIsAdmin} from '../../store/selectors/global/is-developer';
 import {getAllowedExperimentalPages} from '../../store/selectors/global/experimental-pages';
 
 import UIFactory from '../../UIFactory';
@@ -45,7 +45,7 @@ export function getRecentClustersInfo(state: RootState): RecentClustersInfo {
 const getRecentPagesInfoRaw = createSelector(
     [
         (state: RootState) => state.slideoutMenu.pages,
-        isDeveloper,
+        selectIsAdmin,
         getAllowedExperimentalPages,
         getClusterUiConfig,
     ],

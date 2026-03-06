@@ -5,7 +5,7 @@ import type {ChytListAction} from '../../reducers/chyt/list';
 import {CHYT_LIST} from '../../../constants/chyt-page';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {getCluster} from '../../../store/selectors/global';
-import {isDeveloper} from '../../../store/selectors/global/is-developer';
+import {selectIsAdmin} from '../../../store/selectors/global/is-developer';
 import {getChytListVisibleColumns} from '../../../store/selectors/chyt';
 
 import {StrawberryApi, chytApiAction} from '../../../utils/strawberryControllerApi';
@@ -19,7 +19,7 @@ export function chytLoadList(): ChytListThunkAction<void> {
     return (dispatch, getState) => {
         const state = getState();
         const cluster = getCluster(state);
-        const isAdmin = isDeveloper(state);
+        const isAdmin = selectIsAdmin(state);
         const columns = getChytListVisibleColumns(state);
 
         dispatch({type: CHYT_LIST.REQUEST});
@@ -71,7 +71,7 @@ export function chytListAction<
     return (dispatch, getState) => {
         const state = getState();
         const cluster = getCluster(state);
-        const isAdmin = isDeveloper(state);
+        const isAdmin = selectIsAdmin(state);
 
         return chytApiAction(action, cluster, params, {isAdmin}).then((d) => {
             if (!skipLoadList) {
@@ -91,7 +91,7 @@ export function chytCliqueCreate(params: {
     return (dispatch, getState) => {
         const state = getState();
         const cluster = getCluster(state);
-        const isAdmin = isDeveloper(state);
+        const isAdmin = selectIsAdmin(state);
 
         const {alias, runAfterCreation, pool, instance_count} = params;
         return chytApiAction(

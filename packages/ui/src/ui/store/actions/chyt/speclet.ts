@@ -4,7 +4,7 @@ import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {ChytCliqueSpecletAction} from '../../reducers/chyt/speclet';
 import {RootState} from '../../reducers';
 import {getCluster} from '../../selectors/global';
-import {isDeveloper} from '../../selectors/global/is-developer';
+import {selectIsAdmin} from '../../selectors/global/is-developer';
 import {chytApiAction} from '../../../utils/strawberryControllerApi';
 import {CHYT_SPECLET} from '../../../constants/chyt-page';
 
@@ -16,7 +16,7 @@ export function chytLoadCliqueSpeclet(alias: string): OptionsThunkAction {
     return (dispatch, getState) => {
         const state = getState();
         const cluster = getCluster(state);
-        const isAdmin = isDeveloper(state);
+        const isAdmin = selectIsAdmin(state);
 
         return chytApiAction(
             'get_speclet',

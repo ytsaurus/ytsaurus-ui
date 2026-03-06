@@ -198,8 +198,6 @@ export type FlowWorkerMonitorProps = {
 export interface UIFactory {
     getClusterAppearance(cluster?: string): undefined | ClusterAppearance;
 
-    isWatchMen(login: string): boolean;
-
     makeUrlForTransferTask(operation: unknown): string | undefined;
     makeUrlForNodeIO(cluster: string, host?: string): string | undefined;
     makeUrlForTabletCellBundleDashboard(cluster: string, bundle: string): string | undefined;

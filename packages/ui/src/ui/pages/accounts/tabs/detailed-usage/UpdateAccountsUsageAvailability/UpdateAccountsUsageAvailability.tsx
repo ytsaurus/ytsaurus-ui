@@ -3,14 +3,14 @@ import React from 'react';
 import {ACCOUNTS_DATA_FIELDS_ACTION} from '../../../../../constants/accounts';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {getCluster} from '../../../../../store/selectors/global/cluster';
-import {isDeveloper} from '../../../../../store/selectors/global/is-developer';
+import {selectIsAdmin} from '../../../../../store/selectors/global/is-developer';
 import {updateUiConfigModeCookie} from '../../../../../utils/cookies/ui-config-mode';
 import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
 import i18n from './i18n';
 
 export function UpdateAccountsUsageAvailability() {
     const dispatch = useDispatch();
-    const isAdmin = useSelector(isDeveloper);
+    const isAdmin = useSelector(selectIsAdmin);
     const cluster = useSelector(getCluster);
 
     React.useEffect(() => {

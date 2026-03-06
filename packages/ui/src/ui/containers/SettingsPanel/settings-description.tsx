@@ -44,7 +44,7 @@ import {
     getGlobalSchedulerVersion,
     getHttpProxyVersion,
 } from '../../store/selectors/global';
-import {isDeveloperOrWatchMen} from '../../store/selectors/global/is-developer';
+import {selectIsDeveloperOrWatchmen} from '../../store/selectors/global/is-developer';
 import {
     cellSizeRadioButtonItems,
     pageSizeRadioButtonItems,
@@ -673,7 +673,7 @@ export function makeItem(
 }
 
 export function useSettingsDescription(): Array<SettingsPage> {
-    const isAdmin = useSelector(isDeveloperOrWatchMen);
+    const isAdmin = useSelector(selectIsDeveloperOrWatchmen);
     const cluster = useClusterFromLocation();
     const login = useSelector(getCurrentUserName);
 

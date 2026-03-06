@@ -9,7 +9,6 @@ import {getBatchError} from '../../../shared/utils/error';
 import ypath from '../../common/thor/ypath';
 import {checkIsDeveloper} from '../../../shared/utils/check-permission';
 import {INIT_CLUSTER_PARAMS, PRELOAD_ERROR, UPDATE_CLUSTER} from '../../constants/index';
-import {getCurrentUserName} from '../../store/selectors/global';
 import {getXsrfCookieName} from '../../utils';
 import {RESET_STORE_BEFORE_CLUSTER_CHANGE} from '../../constants/utils';
 import {
@@ -17,7 +16,6 @@ import {
     isRecentPagesFirst,
     shouldUsePreserveState,
 } from '../../store/selectors/settings';
-import {isDeveloper as selectIsDeveloper} from '../../store/selectors/global/is-developer';
 import {rumLogError} from '../../rum/rum-counter';
 import {RumWrapper, YTApiId} from '../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../rum/rum-measure-types';
@@ -33,7 +31,6 @@ import {updateTitle} from './global';
 import {reloadUserSettings} from './settings';
 import {joinMenuItemsAction, splitMenuItemsAction, trackVisit} from './menu';
 import {toaster} from '../../utils/toaster';
-import {updateUiConfigModeCookie} from '../../utils/cookies/ui-config-mode';
 
 function handleUiConfigError(path: string, error: any, type?: string) {
     rumLogError(
@@ -91,14 +88,11 @@ export function getClusterParams(
 }
 
 export function initClusterParams(cluster: string): GlobalThunkAction<Promise<void>> {
-    return (dispatch, getState) => {
-        initYTApiClusterParams(cluster);
-
+    return (dispatch) => {
         dispatch({
             type: INIT_CLUSTER_PARAMS.REQUEST,
         });
 
-        const login = getCurrentUserName(getState());
         const rumId = new RumWrapper(cluster, RumMeasureTypes.CLUSTER_PARAMS);
 
         return getClusterParams(rumId, cluster)
@@ -108,7 +102,7 @@ export function initClusterParams(cluster: string): GlobalThunkAction<Promise<vo
                 if (error) {
                     throw error;
                 }
-                const [uiConfigOutput, uiDevConfigOutput] = prepareClusterUiConfig(
+                const [clusterUiConfig, clusterUiDevConfig] = prepareClusterUiConfig(
                     uiConfig,
                     uiDevConfig,
                 );
@@ -117,31 +111,12 @@ export function initClusterParams(cluster: string): GlobalThunkAction<Promise<vo
                     data: {
                         cluster,
                         mediumList: ypath.getValue(mediumList.output),
-                        isDeveloper: false,
-                        clusterUiConfig: uiConfigOutput,
+                        clusterUiConfig,
+                        clusterUiDevConfig,
                         schedulerVersion: schedulerVersion.output,
                         masterVersion: masterVersion.output,
                     },
                 });
-
-                return rumId
-                    .fetch(
-                        YTApiId.clusterParamsIsDeveloper,
-                        checkIsDeveloper(login, undefined, YTApiId.clusterParamsIsDeveloper),
-                    )
-                    .then((isDeveloper) => {
-                        if (isDeveloper) {
-                            const clusterUiConfig = isDeveloper
-                                ? Object.assign({}, uiConfigOutput, uiDevConfigOutput)
-                                : uiConfigOutput;
-                            dispatch({type: GLOBAL_PARTIAL, data: {isDeveloper, clusterUiConfig}});
-                        }
-                        updateUiConfigModeCookie(selectIsDeveloper(getState()));
-                    })
-                    .catch((e) => {
-                        // eslint-disable-next-line no-console
-                        console.error('Failed to check if current user is admin', e);
-                    });
             })
             .catch((e) => {
                 dispatch({
@@ -152,14 +127,44 @@ export function initClusterParams(cluster: string): GlobalThunkAction<Promise<vo
     };
 }
 
+function initIsDeveloper(params: {
+    cluster: string;
+    login: string;
+}): GlobalThunkAction<Promise<void>> {
+    return async (dispatch) => {
+        dispatch({type: GLOBAL_PARTIAL, data: {isDeveloper: false}});
+
+        const rumId = new RumWrapper(params.cluster, RumMeasureTypes.CLUSTER_PARAMS);
+
+        const isDeveloper = await rumId
+            .fetch(
+                YTApiId.clusterParamsIsDeveloper,
+                checkIsDeveloper(params.login, undefined, YTApiId.clusterParamsIsDeveloper),
+            )
+            .catch((e) => {
+                // eslint-disable-next-line no-console
+                console.error('Failed to check if current user is admin', e);
+                return false;
+            });
+
+        dispatch({type: GLOBAL_PARTIAL, data: {isDeveloper}});
+    };
+}
+
 function initClusterAndUserSettingsAfterClusterChanging(params: {
     cluster: string;
     login: string;
 }): GlobalThunkAction<Promise<void>> {
     return async (dispatch, getState) => {
-        await dispatch(initClusterParams(params.cluster));
-        await dispatch(updateTitle({cluster: params.cluster, path: '', page: ''}));
-        await dispatch(reloadUserSettings(params.login));
+        const {cluster, login} = params;
+
+        initYTApiClusterParams(cluster);
+
+        dispatch(initIsDeveloper({cluster, login}));
+
+        await dispatch(initClusterParams(cluster));
+        await dispatch(updateTitle({cluster, path: '', page: ''}));
+        await dispatch(reloadUserSettings(login));
 
         const state = getState();
 
@@ -175,7 +180,7 @@ function initClusterAndUserSettingsAfterClusterChanging(params: {
             dispatch(joinMenuItemsAction('pages'));
         }
 
-        dispatch(trackVisit('cluster', params.cluster));
+        dispatch(trackVisit('cluster', cluster));
     };
 }
 interface ClusterInfoData {

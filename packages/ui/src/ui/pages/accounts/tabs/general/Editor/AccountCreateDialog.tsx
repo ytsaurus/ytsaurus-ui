@@ -7,7 +7,7 @@ import {closeCreateModal} from '../../../../../store/actions/accounts/editor';
 import {loadEditedAccount} from '../../../../../store/actions/accounts/accounts';
 import {createAccountFromInfo} from '../../../../../utils/accounts/editor';
 import {getCluster, getCurrentUserName} from '../../../../../store/selectors/global';
-import {isDeveloper} from '../../../../../store/selectors/global/is-developer';
+import {selectIsAdmin} from '../../../../../store/selectors/global/is-developer';
 import {getActiveAccount} from '../../../../../store/selectors/accounts/accounts';
 import {ROOT_ACCOUNT_NAME} from '../../../../../constants/accounts/accounts';
 
@@ -147,7 +147,7 @@ const mapStateToProps = (state: RootState) => {
         visible: editor.createModalVisible,
         newAccountInfo: editor.newAccountInfo as FormValues,
         cluster: getCluster(state),
-        isAdmin: isDeveloper(state),
+        isAdmin: selectIsAdmin(state),
     };
 };
 

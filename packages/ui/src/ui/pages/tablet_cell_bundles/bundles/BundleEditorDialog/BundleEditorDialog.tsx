@@ -15,7 +15,7 @@ import {
 import hammer from '../../../../common/hammer';
 
 import {getClusterUiConfig} from '../../../../store/selectors/global';
-import {isDeveloper} from '../../../../store/selectors/global/is-developer';
+import {selectIsAdmin} from '../../../../store/selectors/global/is-developer';
 import {
     hideTabletCellBundleEditor,
     setBundleEditorController,
@@ -109,7 +109,7 @@ export function BundleEditorDialog() {
 
     const writeableByName = useSelector(getTabletBundlesWriteableByName);
     const allowTabletCount = writeableByName.get(bundleName ?? '');
-    const allowEdit = useSelector(isDeveloper);
+    const allowEdit = useSelector(selectIsAdmin);
 
     const initialValues: Partial<BundleEditorDialogFormValues> = (() => {
         if (!enableBundleController) {

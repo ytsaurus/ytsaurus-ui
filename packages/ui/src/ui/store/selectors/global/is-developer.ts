@@ -1,29 +1,25 @@
-import {createSelector} from 'reselect';
-
 import {YT} from '../../../config/yt-config';
 import {RootState} from '../../../store/reducers';
 import {getSettingsData} from '../../../store/selectors/settings/settings-base';
 
-import {getCurrentUserName} from './username';
+export const selectIsDeveloper = (state: RootState): boolean => state?.global?.isDeveloper;
 
-import UIFactory from '../../../UIFactory';
+export const selectIsWatchmen = (state: RootState): boolean => state?.global?.isWatchmen;
 
-const isDeveloperRaw = (state: RootState): boolean => state?.global?.isDeveloper;
+export const selectIsDeveloperOrWatchmen = (state: RootState): boolean => {
+    const isDeveloper = selectIsDeveloper(state);
+    const isWatchmen = selectIsWatchmen(state);
 
-export const isDeveloperOrWatchMen = createSelector(
-    [isDeveloperRaw, getCurrentUserName],
-    (isDeveloper, login) => {
-        return YT.isLocalCluster || UIFactory.isWatchMen(login) || isDeveloper;
-    },
-);
+    return YT.isLocalCluster || isWatchmen || isDeveloper;
+};
 
-export const getSettingsRegularUserUI = (state: RootState) => {
+export const selectSettingsRegularUserUI = (state: RootState) => {
     return getSettingsData(state)['global::development::regularUserUI'];
 };
 
-export const isDeveloper = createSelector(
-    [isDeveloperOrWatchMen, getSettingsRegularUserUI],
-    (isDeveloperStatus, regularUserUI) => {
-        return !regularUserUI && isDeveloperStatus;
-    },
-);
+export const selectIsAdmin = (state: RootState): boolean => {
+    const isDeveloperOrWatchmen = selectIsDeveloperOrWatchmen(state);
+    const regularUserUI = selectSettingsRegularUserUI(state);
+
+    return !regularUserUI && isDeveloperOrWatchmen;
+};
