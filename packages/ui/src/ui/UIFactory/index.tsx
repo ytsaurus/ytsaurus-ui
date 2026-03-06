@@ -513,6 +513,8 @@ export interface UIFactory {
 
     renderIncarnationsTab(): React.ReactNode;
 
+    renderIncarnationsNextTab(): React.ReactNode;
+
     getAiChatMessageComponent(
         message: ChatMessage,
         className?: string,
