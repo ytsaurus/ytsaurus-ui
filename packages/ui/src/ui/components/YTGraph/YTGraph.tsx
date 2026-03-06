@@ -36,6 +36,7 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     zoomOnScroll,
     autoCenter,
     highlightConnectionsOnHover = false,
+    onBlockClick,
 }: YTGraphProps<B, C>) {
     const theme = useThemeValue();
     const {graph, setEntities, start} = useGraph(config);
@@ -240,10 +241,14 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
                 onBlockSelectionChange={({list}) => {
                     setSelectedBlocks(list);
                 }}
-                click={({target}) => {
+                click={({target, sourceEvent}) => {
                     const isEmptyAreaClick = isEmpty_(target?.state);
                     if (isEmptyAreaClick) {
                         setSelectedBlocks([]);
+                    }
+
+                    if (target && isBlock(target)) {
+                        onBlockClick?.(target.state as B, sourceEvent);
                     }
                 }}
             />

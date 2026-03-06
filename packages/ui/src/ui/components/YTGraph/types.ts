@@ -26,6 +26,7 @@ export type YTGraphProps<B extends TBlock, C extends TConnection> = {
     zoomOnScroll?: boolean;
     autoCenter?: boolean;
     highlightConnectionsOnHover?: boolean;
+    onBlockClick?: (data: B, event: Event) => void;
 } & YTGraphGroupProps;
 
 export type RenderContentProps<B extends TBlock> = {
