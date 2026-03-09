@@ -336,8 +336,8 @@ class ReplicatedTable extends Component {
     };
 
     updateEnableReplicatedTableTracker = (value) => {
-        const {updateEnableReplicatedTableTracker, path} = this.props;
-        return updateEnableReplicatedTableTracker(path, value);
+        const {updateEnableReplicatedTableTracker, path, type} = this.props;
+        return updateEnableReplicatedTableTracker({path, value, type});
     };
 
     render() {

@@ -1,6 +1,4 @@
 import {ThunkAction} from 'redux-thunk';
-// @ts-expect-error
-import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {getMetrics} from '../../../../common/utils/metrics';
 // @ts-expect-error
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
@@ -14,10 +12,10 @@ import {
     LOAD_REPLICAS_REQUEST,
     LOAD_REPLICAS_SUCCESS,
 } from '../../../../constants/navigation/content/replicated-table';
-import {YTApiId, ytApiV3, ytApiV3Id} from '../../../../rum/rum-wrap-api';
+import {YTApiId, ytApiV3, ytApiV3Id, ytApiV4Id} from '../../../../rum/rum-wrap-api';
 import {getPath, getTransaction} from '../../../../store/selectors/navigation';
 import type {YTError} from '../../../../types';
-import CancelHelper from '../../../../utils/cancel-helper';
+import CancelHelper, {isCancelled} from '../../../../utils/cancel-helper';
 import {prepareRequest} from '../../../../utils/navigation';
 import type {RootState} from '../../../reducers';
 import type {
@@ -45,11 +43,13 @@ export function loadReplicas(): ReplicatedTableThunkAction<Promise<void>> {
 
         return ytApiV3Id
             .get(YTApiId.navigationRTReplicas, {
-                parameters: prepareRequest('/@replicas', {
-                    path,
-                    transaction,
+                parameters: {
+                    ...prepareRequest('/@replicas', {
+                        path,
+                        transaction,
+                    }),
                     output_format: TYPED_OUTPUT_FORMAT,
-                }),
+                },
                 cancellation: requests.saveCancelToken,
             })
             .then((data) => {
@@ -62,7 +62,7 @@ export function loadReplicas(): ReplicatedTableThunkAction<Promise<void>> {
                 });
             })
             .catch((error: YTError) => {
-                if (error.code === yt.codes.CANCELLED) {
+                if (isCancelled(error)) {
                     dispatch({type: LOAD_REPLICAS_CANCELLED});
                 } else {
                     dispatch({
@@ -125,13 +125,44 @@ export function abortAndReset(): ReplicatedTableThunkAction {
     };
 }
 
-export function updateEnableReplicatedTableTracker(
-    path: string,
-    value: boolean,
-): ReplicatedTableThunkAction<Promise<void>> {
+export function updateEnableReplicatedTableTracker({
+    path,
+    type,
+    value,
+}: {
+    path: string;
+    type: string;
+    value?: boolean;
+}): ReplicatedTableThunkAction<Promise<void>> {
     return (dispatch) => {
-        return yt.v3
-            .set({path: path + '/@replicated_table_options/enable_replicated_table_tracker'}, value)
+        if (type === 'chaos_replicated_table') {
+            const attrPath = path + '/@replication_card_id';
+            return ytApiV3Id
+                .get<string>(YTApiId.getReplicationCardId, {path: attrPath})
+                .then((replication_card_id) => {
+                    if (!replication_card_id) {
+                        return Promise.reject({
+                            message: `/@replication_card_id is empty`,
+                            attributes: {path: attrPath},
+                        });
+                    }
+                    return ytApiV4Id
+                        .alterReplicationCard(YTApiId.alterReplicationCard, {
+                            replication_card_id,
+                            enable_replicated_table_tracker: Boolean(value),
+                        })
+                        .then(() => {
+                            dispatch(updateView());
+                        });
+                });
+        }
+
+        return ytApiV3Id
+            .set(
+                YTApiId.setEnableReplicatedTableTracker,
+                {path: path + '/@replicated_table_options/enable_replicated_table_tracker'},
+                value,
+            )
             .then(() => {
                 dispatch(updateView());
             });

@@ -407,6 +407,11 @@ export interface ListOperationsParams extends BaseBatchParams {
 
 export type UnregisterQueueConsumerParams = Omit<RegisterQueueConsumerParams, 'vital'>;
 
+export interface AlterReplicationCardParams {
+    replication_card_id: string;
+    enable_replicated_table_tracker: boolean;
+}
+
 export type BatchSubRequest =
     | SubRequest<'transfer_pool_resources', TransferPoolQuotaParams>
     | SubRequest<'mount_table' | 'unmount_table' | 'freeze_table' | 'unfreeze_table', PathParams>

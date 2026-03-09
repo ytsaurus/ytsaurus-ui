@@ -6,6 +6,7 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {YT_API_REQUEST_ID_HEADER} from '../../shared/constants';
 import {
+    AlterReplicationCardParams,
     BatchResultsItem,
     BatchSubRequest,
     ExpectedVersion,
@@ -132,6 +133,10 @@ type YTApiV4 = {
     ): Promise<ListOperationEventsResponse>;
 
     getTabletErrors(...args: ApiMethodParameters<FIX_MY_TYPE>): Promise<FIX_MY_TYPE>;
+
+    alterReplicationCard(
+        ...args: ApiMethodParameters<AlterReplicationCardParams>
+    ): Promise<unknown>;
 };
 
 type YTApiV4OmitT = Omit<YTApiV4, 'get' | 'list' | 'executeBatch'>;
