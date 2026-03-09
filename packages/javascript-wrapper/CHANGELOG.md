@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.17.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.16.0...javascript-wrapper-v0.17.0) (2026-03-09)
+
+
+### Features
+
+* **javascript-wrapper:** add new command 'alter_replication_card' [YTFRONT-5287] ([6ecd575](https://github.com/ytsaurus/ytsaurus-ui/commit/6ecd575a9e7958409f748634eb0328d081b770dc))
+
 ## [0.16.0](https://github.com/ytsaurus/ytsaurus-ui/compare/javascript-wrapper-v0.15.1...javascript-wrapper-v0.16.0) (2026-02-05)
 
 
