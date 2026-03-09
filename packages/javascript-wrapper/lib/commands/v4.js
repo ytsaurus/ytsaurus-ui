@@ -155,6 +155,7 @@ module.exports = {
         method: 'GET',
         dataType: 'json',
     },
+
     listUserTokens: {
         name: 'list_user_tokens',
         method: 'GET',
@@ -170,6 +171,7 @@ module.exports = {
         method: 'GET',
         dataType: 'json',
     },
+
     switchLeader: {
         name: 'switch_leader',
         method: 'POST',
@@ -191,7 +193,6 @@ module.exports = {
         method: 'POST',
         dataType: 'json',
     },
-
     getPipelineDynamicSpec: {
         name: 'get_pipeline_dynamic_spec',
         method: 'GET',
@@ -207,7 +208,6 @@ module.exports = {
         method: 'POST',
         dataType: 'json',
     },
-
     startPipeline: {
         name: 'start_pipeline',
         method: 'POST',
@@ -223,7 +223,6 @@ module.exports = {
         method: 'POST',
         dataType: 'json',
     },
-
     getPipelineState: {
         name: 'get_pipeline_state',
         method: 'GET',
@@ -257,6 +256,12 @@ module.exports = {
     },
     runJobShellCommand: {
         name: 'run_job_shell_command',
+        method: 'POST',
+        dataType: 'json',
+    },
+
+    alterReplicationCard: {
+        name: 'alter_replication_card',
         method: 'POST',
         dataType: 'json',
     },
