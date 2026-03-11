@@ -88,7 +88,10 @@ function SelectedCount({
 
     const value = mode === 'missing-values' ? count - visibleCount : count;
 
-    return value! >= 2 ? (
+    const showCounter =
+        (mode === 'missing-values' && value > 0) || (mode === 'all-values' && value > 1);
+
+    return showCounter ? (
         <div className={block('counter')}>
             <span className={block('counter-value')}>
                 {mode === 'missing-values' ? '+' : null}

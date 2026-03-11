@@ -634,6 +634,9 @@ class ACL extends Component<Props> {
             rowGroups,
             aclMode,
             updateAclFilters,
+            mainPermissions,
+            columnsPermissions,
+            rowPermissions,
         } = this.props;
         const {deleteItem} = this.state;
 
@@ -644,7 +647,14 @@ class ACL extends Component<Props> {
                 <Flex className={block('toolbar', {'has-columns': hasColumns})}>
                     {hasColumns && (
                         <Flex grow>
-                            <AclModeControl {...{aclMode, updateAclFilters}} />
+                            <AclModeControl
+                                {...{aclMode, updateAclFilters}}
+                                permissionCounters={{
+                                    [AclMode.MAIN_PERMISSIONS]: mainPermissions.count,
+                                    [AclMode.COLUMN_GROUPS_PERMISSIONS]: columnsPermissions.count,
+                                    [AclMode.ROW_GROUPS_PERMISSIONS]: rowPermissions.count,
+                                }}
+                            />
                         </Flex>
                     )}
                     {loaded && (
