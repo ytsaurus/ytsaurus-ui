@@ -19,6 +19,10 @@ test('Navigation: table - Content', async ({page}) => {
         await page.waitForSelector('.table-download-manager__settings :text("Number of rows")');
         await page.click('.table-download-manager__settings :text("Custom")', {force: true});
         await page.waitForSelector('.table-download-manager__settings .column-selector');
+        await page
+            .locator('.table-download-manager__settings .column-selector__list-item')
+            .first()
+            .waitFor({state: 'visible'});
 
         await expect(page).toHaveScreenshot();
     });
@@ -45,7 +49,7 @@ test('Navigation: table - Content', async ({page}) => {
             if (input) input.value = tablePath;
         }, tablePath);
 
-        await page.waitForLoadState('networkidle');     
+        await page.waitForLoadState('networkidle');
         await expect(page).toHaveScreenshot();
     });
 });
@@ -137,12 +141,9 @@ test('Navigation: table - userColumnPresets', async ({page, context}) => {
     await test.step('select only the "key" column', async () => {
         await page.getByTestId('table-columns-button').click();
         await page.getByText('Remove all').click();
-        await page.click(
-            '.column-selector__list-item:nth-child(1) .column-selector__list-item-check',
-            {
-                force: true,
-            },
-        );
+        await page.click('.column-selector__list-item-check[data-item="key"]', {
+            force: true,
+        });
         await page.mouse.move(0, 0);
         await expect(page).toHaveScreenshot();
         await page.click('button :text("Apply")');
