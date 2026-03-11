@@ -5,9 +5,9 @@ import {
     getDescriptionType,
     getEdittingAnnotation,
     getIsSaving,
-    setEdittingAnnotation,
     setSaving,
-    toggleEditMode,
+    startEdit,
+    stopEdit,
 } from '../../../../store/reducers/navigation/description';
 
 import {selectCluster} from '../../../../store/selectors/global';
@@ -18,26 +18,32 @@ import {
 import {getPath} from '../../../../store/selectors/navigation';
 
 import {useUpdateAnnotation} from './use-update-annotaton';
+import {useExternalAnnotation} from './use-external-annotation';
+import {useYTAnnotation} from './use-yt-annotation';
 
 export function useDescriptionActions() {
     const dispatch = useDispatch();
 
     const path = useSelector(getPath);
+
     const cluster = useSelector(selectCluster);
     const edittingAnnotation = useSelector(getEdittingAnnotation);
+
     const type = useSelector(getDescriptionType);
     const isSaving = useSelector(getIsSaving);
 
     const [updateFn, {isLoading}] = useUpdateAnnotation();
     const {data} = useAnnotationQuery({path, cluster});
 
+    const externalDescription = useExternalAnnotation();
+    const {ytAnnotation} = useYTAnnotation();
+
     const edit = useCallback(() => {
-        dispatch(toggleEditMode());
-    }, [type, dispatch]);
+        dispatch(startEdit({externalDescription, annotation: ytAnnotation}));
+    }, [type, externalDescription, ytAnnotation, dispatch]);
 
     const cancel = useCallback(() => {
-        dispatch(setEdittingAnnotation({edittingAnnotation: data?.annotation}));
-        dispatch(toggleEditMode());
+        dispatch(stopEdit());
     }, [data, dispatch]);
 
     const save = useCallback(async () => {
@@ -50,7 +56,7 @@ export function useDescriptionActions() {
             );
         }
         dispatch(setSaving({isSaving: false}));
-        dispatch(toggleEditMode());
+        dispatch(stopEdit());
     }, [updateFn, edittingAnnotation, type, dispatch]);
 
     return {edit, cancel, save, isLoading, isSaving};
