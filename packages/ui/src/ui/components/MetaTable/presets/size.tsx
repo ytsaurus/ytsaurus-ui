@@ -36,7 +36,7 @@ export default function metaTablePresetSize(attributes: unknown, mediumList: Arr
                     format="Bytes"
                 />
             ),
-            visible: Boolean(usageMediumDiskSpace || mediumDiskSpace),
+            visible: usageMediumDiskSpace !== undefined || mediumDiskSpace !== undefined,
             tooltip: i18n('medium_disk_space:tooltip', {
                 name: format.ReadableField(medium),
                 medium,
@@ -50,25 +50,25 @@ export default function metaTablePresetSize(attributes: unknown, mediumList: Arr
         {
             key: 'uncompressed_data_size',
             value: <Template.FormattedValue value={uncompressedDataSize} format="Bytes" />,
-            visible: Boolean(uncompressedDataSize),
+            visible: uncompressedDataSize !== undefined,
             tooltip: i18n('uncompressed_size:tooltip'),
         },
         {
             key: 'compressed_data_size',
             value: <Template.FormattedValue value={compressedDataSize} format="Bytes" />,
-            visible: Boolean(compressedDataSize),
+            visible: compressedDataSize !== undefined,
             tooltip: i18n('compressed_size:tooltip'),
         },
         {
             key: 'primary_medium',
             value: <Template.Readable value={primaryMedium} />,
-            visible: Boolean(primaryMedium),
+            visible: primaryMedium !== undefined,
         },
         {
             key: 'disk_space',
             label: 'Total disk space',
-            value: <Template.FormattedValue value={usageDiskSpace || diskSpace} format="Bytes" />,
-            visible: Boolean(usageDiskSpace || diskSpace),
+            value: <Template.FormattedValue value={usageDiskSpace ?? diskSpace} format="Bytes" />,
+            visible: usageDiskSpace !== undefined || diskSpace !== undefined,
             tooltip: i18n('disk_space:tooltip'),
         },
         ...(showMediums ? mediumsTemplates : []),
