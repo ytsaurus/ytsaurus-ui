@@ -1,7 +1,7 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 
 import type {RootState} from '..';
-import {type GetAnnotationResponse, descriptionApi} from '../../api/navigation/tabs/description';
+import {type GetAnnotationResponse} from '../../api/navigation/tabs/description';
 import type {ExternalAnnotationResponse} from '../../../UIFactory';
 
 type DescriptionState = {
@@ -30,14 +30,23 @@ const descriptionSlice = createSlice({
     name: 'description',
     initialState,
     reducers: {
-        toggleEditMode: (state) => {
-            state.editMode = !state.editMode;
-            if (state.editMode) {
-                state.edittingAnnotation =
-                    state.descriptionType === 'yt'
-                        ? (state.annotation.annotation ?? '')
-                        : state.externalDescription.externalAnnotation;
+        startEdit: (
+            state,
+            {
+                payload,
+            }: PayloadAction<Partial<Pick<DescriptionState, 'annotation' | 'externalDescription'>>>,
+        ) => {
+            state.editMode = true;
+            state.annotation = payload.annotation ?? {};
+            state.externalDescription = payload.externalDescription ?? {};
+            if (state.descriptionType === 'yt') {
+                state.edittingAnnotation = state.annotation.annotation;
+            } else {
+                state.edittingAnnotation = state.externalDescription.externalAnnotation;
             }
+        },
+        stopEdit: (state) => {
+            state.editMode = false;
         },
         setEdittingAnnotation: (
             state,
@@ -55,20 +64,6 @@ const descriptionSlice = createSlice({
             state.isSaving = payload.isSaving;
         },
     },
-    extraReducers: (builder) => {
-        builder.addMatcher(
-            descriptionApi.endpoints.annotation.matchFulfilled,
-            (state, {payload}) => {
-                state.annotation = payload;
-            },
-        );
-        builder.addMatcher(
-            descriptionApi.endpoints.externalDescription.matchFulfilled,
-            (state, {payload}) => {
-                state.externalDescription = payload ?? {};
-            },
-        );
-    },
     selectors: {
         getEditMode: (state) => state.editMode,
         getDescriptionType: (state) => state.descriptionType,
@@ -79,6 +74,6 @@ const descriptionSlice = createSlice({
 
 export const {getEditMode, getDescriptionType, getEdittingAnnotation, getIsSaving} =
     descriptionSlice.getSelectors((state: RootState) => state.navigation.description);
-export const {toggleEditMode, setEdittingAnnotation, setDescriptionType, setSaving} =
+export const {startEdit, stopEdit, setEdittingAnnotation, setDescriptionType, setSaving} =
     descriptionSlice.actions;
 export const description = descriptionSlice.reducer;
