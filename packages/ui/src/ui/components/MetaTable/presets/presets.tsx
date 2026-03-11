@@ -40,13 +40,13 @@ export function tableSize(attributes: any, isDynamic: boolean, mediumList: strin
             key: 'rowCount',
             label: 'Rows',
             value: <RowsCount isDynamic={isDynamic} count={rowCount} />,
-            visible: Boolean(rowCount),
+            visible: rowCount !== undefined,
         },
         {
             key: 'chunkCount',
             label: 'Chunks',
             value: hammer.format['Number'](chunkCount),
-            visible: Boolean(dataWeight),
+            visible: chunkCount !== undefined,
         },
         ...size(attributes, mediumList),
         {
@@ -54,7 +54,7 @@ export function tableSize(attributes: any, isDynamic: boolean, mediumList: strin
             label: 'Data weight',
             value: <Template.FormattedValue value={dataWeight} format="Bytes" />,
             tooltip: i18n('data_weight:tooltip'),
-            visible: Boolean(chunkCount),
+            visible: dataWeight !== undefined,
         },
     ];
 }
