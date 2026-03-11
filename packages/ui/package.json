@@ -70,7 +70,7 @@
     "docker_image": "ghcr.io/ytsaurus/ui-nightly"
   },
   "dependencies": {
-    "@diplodoc/transform": "^4.19.1",
+    "@diplodoc/transform": "^4.70.1",
     "@gravity-ui/app-layout": "^1.8.0",
     "@gravity-ui/expresskit": "^2.11.1",
     "@gravity-ui/i18n": "^1.8.0",
@@ -83,7 +83,7 @@
     "dayjs": "^1.11.10",
     "highlight.js": "^11.10.0",
     "js-cookie": "^2.2.0",
-    "lodash": "4.17.21",
+    "lodash": "^4.17.23",
     "object-hash": "^3.0.0",
     "opentracing": "^0.14.7",
     "qs": "^6.11.2",
