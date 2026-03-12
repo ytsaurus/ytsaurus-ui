@@ -1,0 +1,8 @@
+{
+  "title_account-to-distribution": "Аккаунт для распределения",
+  "label_free-to-distribute": "Доступно для распределения",
+  "title_new-quota-limit": "Новый лимит квоты",
+  "error_wrong-format": "неверный формат!",
+  "error_same-source-account": "Тот же исходный аккаунт",
+  "error_value-too-big": "Новое значение слишком большое"
+}

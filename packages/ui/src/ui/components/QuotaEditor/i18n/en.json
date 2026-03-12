@@ -1,0 +1,8 @@
+{
+  "title_account-to-distribution": "Account to distribution",
+  "label_free-to-distribute": "Free to distribute",
+  "title_new-quota-limit": "New quota limit",
+  "error_wrong-format": "wrong format!",
+  "error_same-source-account": "The same source account",
+  "error_value-too-big": "New value is too big"
+}
