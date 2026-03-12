@@ -1,6 +1,6 @@
+import cn from 'bem-cn-lite';
 import React, {useCallback, useRef} from 'react';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
-import cn from 'bem-cn-lite';
 
 import {
     getEditMode,
@@ -17,11 +17,11 @@ import {useDescription} from './hooks/use-description';
 import {useDescriptionCollapse} from './hooks/use-description-collapse';
 import {useYTAnnotation} from './hooks/use-yt-annotation';
 
-import {NavigationDescriptionOverview} from './NavigationDescriptionOverview';
 import {AnnotationWithPartial} from './AnnotationWithPartial';
+import {NavigationDescriptionOverview} from './NavigationDescriptionOverview/NavigationDescriptionOverview';
 
-import './NavigationDescription.scss';
 import useResizeObserver from '../../../hooks/useResizeObserver';
+import './NavigationDescription.scss';
 
 const block = cn('navigation-description');
 
@@ -38,7 +38,7 @@ function NavigationDescription({className}: Props) {
 
     const {expanded, toggleExpanded} = useDescriptionCollapse();
 
-    const {description, descriptionType, visible} = useDescription();
+    const {description, visible} = useDescription();
     const {ytAnnotationPath} = useYTAnnotation();
 
     const handleResize = useCallback(() => {
@@ -63,7 +63,7 @@ function NavigationDescription({className}: Props) {
                 overview={<NavigationDescriptionOverview />}
             >
                 <div className={block('content')}>
-                    {editMode && descriptionType === 'yt' ? (
+                    {editMode ? (
                         <EditAnnotationWithPreview
                             valuePath={ytAnnotationPath}
                             value={{value: edittingAnnotation || ''}}

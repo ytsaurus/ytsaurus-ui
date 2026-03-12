@@ -74,8 +74,12 @@ export interface ExternalSchemaDescriptionResponse {
 }
 
 export interface ExternalAnnotationResponse {
+    id?: number;
+    path?: string;
     externalAnnotation?: string;
     externalAnnotationLink?: string;
+    removable?: boolean;
+    editable?: boolean;
 }
 
 export interface ReducersAndUrlMapping {
@@ -451,7 +455,12 @@ export interface UIFactory {
 
     externalAnnotationSetup?: {
         externalServiceName?: string;
-        load(cluster: string, path: string): Promise<ExternalAnnotationResponse>;
+        load: (cluster: string, path: string) => Promise<ExternalAnnotationResponse>;
+        edit?: (
+            item: ExternalAnnotationResponse,
+            {newDescription}: {newDescription: string},
+        ) => Promise<void>;
+        makeCreateUrl?: (params: {cluster: string; path: string}) => string;
     };
 
     getAclApi(): AclApi;

@@ -1,17 +1,14 @@
-import React, {FC} from 'react';
-import {useSelector} from '../../../store/redux-hooks';
-import {Button, Flex, Link, Text} from '@gravity-ui/uikit';
 import {NotFound} from '@gravity-ui/illustrations';
-
-import {getDescriptionType} from '../../../store/reducers/navigation/description';
-
-import {Markdown} from '../../../components/Markdown/Markdown';
+import {Button, Flex, Link, Text} from '@gravity-ui/uikit';
+import React, {FC} from 'react';
 import {ClickableText} from '../../../components/ClickableText/ClickableText';
 import Icon from '../../../components/Icon/Icon';
-
+import {Markdown} from '../../../components/Markdown/Markdown';
+import {getDescriptionType} from '../../../store/reducers/navigation/description';
+import {useSelector} from '../../../store/redux-hooks';
+import {getCluster} from '../../../store/selectors/global';
+import {getPath} from '../../../store/selectors/navigation';
 import UIFactory from '../../../UIFactory';
-
-import {useExternalAnnotation} from './hooks/use-external-annotation';
 
 type Props = {
     annotation?: string;
@@ -24,8 +21,6 @@ export const AnnotationWithPartial: FC<Props> = ({annotation, expanded, onToggle
 
     const descriptionType = useSelector(getDescriptionType);
 
-    const {externalAnnotationLink} = useExternalAnnotation();
-
     const {isFullText, text} = React.useMemo(() => {
         const rows = value.split(/\n+/);
         return {
@@ -35,7 +30,7 @@ export const AnnotationWithPartial: FC<Props> = ({annotation, expanded, onToggle
     }, [value]);
 
     if (!value.length && descriptionType === 'external') {
-        return <ExternalAnnotationFallback externalAnnotationLink={externalAnnotationLink} />;
+        return <ExternalAnnotationFallback />;
     }
 
     return (
@@ -50,7 +45,11 @@ export const AnnotationWithPartial: FC<Props> = ({annotation, expanded, onToggle
     );
 };
 
-function ExternalAnnotationFallback({externalAnnotationLink}: {externalAnnotationLink?: string}) {
+function ExternalAnnotationFallback() {
+    const cluster = useSelector(getCluster);
+    const path = useSelector(getPath);
+
+    const createUrl = UIFactory?.externalAnnotationSetup?.makeCreateUrl?.({cluster, path});
     return (
         <Flex direction={'row'} gap={5} width={'max'} justifyContent={'center'}>
             <NotFound height={85} width={85} />
@@ -59,16 +58,18 @@ function ExternalAnnotationFallback({externalAnnotationLink}: {externalAnnotatio
                     No {UIFactory?.externalAnnotationSetup?.externalServiceName || 'external'}{' '}
                     description found
                 </Text>
-                <Link href={externalAnnotationLink || ''} target={'_blank'}>
-                    <Button view={'action'} size={'l'} disabled={!externalAnnotationLink}>
-                        <Text>
-                            Create with{' '}
-                            {UIFactory?.externalAnnotationSetup?.externalServiceName ||
-                                'external service'}
-                        </Text>
-                        <Icon awesome={'external-link'} size={16} />
-                    </Button>
-                </Link>
+                {createUrl ? (
+                    <Link href={createUrl} target={'_blank'}>
+                        <Button view={'action'} size={'l'}>
+                            <Text>
+                                Create with{' '}
+                                {UIFactory?.externalAnnotationSetup?.externalServiceName ||
+                                    'external service'}
+                            </Text>
+                            <Icon awesome={'external-link'} size={16} />
+                        </Button>
+                    </Link>
+                ) : null}
             </Flex>
         </Flex>
     );

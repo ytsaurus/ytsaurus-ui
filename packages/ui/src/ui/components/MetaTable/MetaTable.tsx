@@ -29,6 +29,7 @@ export interface MetaTableProps {
     subTitles?: Array<string>;
     qa?: string;
     rowGap?: 4;
+    alignItems?: 'baseline';
 }
 
 export interface MetaTableItem {
@@ -119,12 +120,21 @@ export default class MetaTable extends Component<MetaTableProps> {
     }
 
     renderGroup(group: Array<MetaTableItem>, index: number, groupTitles?: Array<string>) {
-        const {rowGap} = this.props;
+        const {rowGap, alignItems} = this.props;
         const title = !groupTitles?.length ? null : (groupTitles[index!] ?? <>&nbsp;</>);
         const visibleItems = filter_(group, (item) => item.visible !== false);
 
         return !visibleItems?.length ? null : (
-            <div className={block('group', itemBlock({'row-gap': String(rowGap)}))} key={index}>
+            <div
+                className={block(
+                    'group',
+                    itemBlock({
+                        'row-gap': rowGap ? String(rowGap) : undefined,
+                        'align-items': alignItems,
+                    }),
+                )}
+                key={index}
+            >
                 {title && (
                     <>
                         <h2 className={block('sub-title')}>{title}</h2>

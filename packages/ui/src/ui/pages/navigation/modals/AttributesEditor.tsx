@@ -570,16 +570,21 @@ function CreateExternalDescriptionButton() {
     const cluster = useSelector(getCluster);
 
     const {data: externalDescription} = useExternalDescriptionQuery({cluster, path});
+    const {path: externalAnnotaionPath, externalAnnotationLink} = externalDescription ?? {};
+
+    const createUrl = UIFactory.externalAnnotationSetup?.makeCreateUrl?.({cluster, path});
+
+    const url = path !== externalAnnotaionPath ? createUrl : externalAnnotationLink;
 
     return (
         <>
-            {externalDescription?.externalAnnotationLink && (
-                <Link href={externalDescription?.externalAnnotationLink} target={'_blank'}>
+            {url && (
+                <Link href={url} target={'_blank'}>
                     <Button view={'outlined'} size={'l'}>
                         <Flex alignItems={'center'} gap={1}>
                             {UIFactory?.externalAnnotationSetup?.externalServiceName ||
                                 'Create external description'}{' '}
-                            (Recomended)
+                            (Recommended)
                             <ArrowUpRightFromSquare />
                         </Flex>
                     </Button>

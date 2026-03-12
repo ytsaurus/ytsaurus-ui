@@ -67,6 +67,7 @@ export const enum YTApiId {
     navigationDelete = 'navigationDelete',
     navigationDynTableState = 'navigationDynTableState',
     navigationGetAnnotation = 'navigationGetAnnotation',
+    navigationGetAnnotationExternal = 'navigationGetAnnotationExternal',
     navigationGetDocument = 'navigationGetDocument',
     navigationSaveDocument = 'navigationSaveDocument',
     navigationGetPath = 'navigationGetPath',
