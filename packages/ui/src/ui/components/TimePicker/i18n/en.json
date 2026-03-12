@@ -1,0 +1,4 @@
+{
+  "error_invalid-time": "Time should be specified as HH:MM.\nEstimated start time should be less than estimated finish time.",
+  "placeholder_time": "HH:mm"
+}
