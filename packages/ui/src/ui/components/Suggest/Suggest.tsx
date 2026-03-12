@@ -13,6 +13,8 @@ import templates from '../../components/templates/utils';
 
 import './Suggest.scss';
 
+import i18n from './i18n';
+
 const b = block('suggest');
 
 // TODO add is scrolled into view logic
@@ -411,7 +413,8 @@ export default class Suggest extends Component<SuggestProps, State> {
         return (
             items && (
                 <div className={className}>
-                    {showNoItemsMsg && this.renderItem('No items', -1, 'no_items', b('no-items'))}
+                    {showNoItemsMsg &&
+                        this.renderItem(i18n('alert_no-results'), -1, 'no_items', b('no-items'))}
                     <ul className={listClassName} style={{minWidth: this.getInputWidth()}}>
                         <ReactList
                             itemRenderer={itemRenderer}
