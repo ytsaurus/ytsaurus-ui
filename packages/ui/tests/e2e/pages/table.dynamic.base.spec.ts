@@ -72,7 +72,7 @@ test('Dynamic table: column selector work properly', async ({page}) => {
 
     await page.click('text="Columns"');
 
-    await page.click('.column-selector__list-item:nth-child(2) .column-selector__list-item-check');
+    await page.click('.column-selector__list-item-check[data-item="empty"]');
     await page.click("text='Apply'");
 
     await expect(page).toHaveTitle(makeClusterTille({page: 'Navigation', path: 'dynamic-table'}));

@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import {sortableContainer, sortableElement, sortableHandle} from 'react-sortable-hoc';
-import ReactList from 'react-list';
 
 import each_ from 'lodash/each';
 import escapeRegExp_ from 'lodash/escapeRegExp';
@@ -11,7 +10,7 @@ import map_ from 'lodash/map';
 import partition_ from 'lodash/partition';
 import reduce_ from 'lodash/reduce';
 
-import {TextInput} from '@gravity-ui/uikit';
+import {List, TextInput} from '@gravity-ui/uikit';
 import Icon from '../../components/Icon/Icon';
 
 import {renderText} from '../../components/templates/utils';
@@ -81,29 +80,31 @@ const SortableList = sortableContainer(
         isSelectable,
         useStaticSize,
     }) => {
-        const renderer = (index, key) => {
-            const item = items[index];
-            return (
-                <SortableItem
-                    key={key}
-                    index={index}
-                    item={item}
-                    disabled={!isSortable}
-                    isSortable={isSortable}
-                    isDisabled={isDisabled}
-                    isSelectable={isSelectable}
-                    itemRenderer={itemRenderer}
-                    onCheckBoxChange={onCheckBoxChange}
-                />
-            );
-        };
-        // Use 'simple' placement for draggable items because 'uniform' produces bugs when items are dragged outside the viewport
-        const type = isSortable ? 'simple' : 'uniform';
+        const renderItem = (item, isItemActive, itemIndex) => (
+            <SortableItem
+                key={item.name}
+                index={itemIndex}
+                item={item}
+                disabled={!isSortable}
+                isSortable={isSortable}
+                isDisabled={isDisabled}
+                isSelectable={isSelectable}
+                itemRenderer={itemRenderer}
+                onCheckBoxChange={onCheckBoxChange}
+            />
+        );
         const mods = {'static-size': useStaticSize};
 
         return (
             <div className={b('list', mods)}>
-                <ReactList itemRenderer={renderer} length={items.length} type={type} />
+                <List
+                    items={items}
+                    renderItem={renderItem}
+                    itemHeight={40}
+                    itemsHeight={360}
+                    filterable={false}
+                    virtualized={true}
+                />
             </div>
         );
     },
