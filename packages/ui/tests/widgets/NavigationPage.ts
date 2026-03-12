@@ -47,7 +47,7 @@ export class NavigationPage extends BasePage {
         await this.replaceBreadcrumbsTestDir();
     }
 
-    async mapNodeCreateObject(hasText: 'Table' | 'Directory' | 'Link') {
+    async mapNodeCreateObject(hasText: 'Table' | 'Directory' | 'Link', path?: string) {
         await this.page.waitForLoadState('networkidle');
         await this.page.waitForTimeout(500);
 
@@ -55,6 +55,12 @@ export class NavigationPage extends BasePage {
 
         await this.page.waitForTimeout(500);
         await this.page.getByRole('menuitem').filter({hasText}).click();
+
+        if (path) {
+            await this.page.locator('.path-editor-modal .g-text-input input').fill(path);
+            await this.page.getByTestId('modal-confirm').click();
+            await this.page.getByText(path).waitFor({state: 'visible'});
+        }
     }
 
     async gotToPath(path: string) {

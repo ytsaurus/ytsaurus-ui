@@ -10,6 +10,8 @@ export interface AclFiltersState {
     objectPermissions: Array<YTPermissionTypeUI>;
     columnsFilter: Array<string>;
     columnGroupNameFilter: string;
+    rowGroupNameFilter: string;
+    rowAccessPredicateFilter: string;
 
     aclCurrentTab: AclMode;
     expandedSubjects: Set<string | number>;
@@ -21,6 +23,8 @@ export const initialState: AclFiltersState = {
     objectPermissions: [],
     columnsFilter: EMPTY_ARRAY,
     columnGroupNameFilter: '',
+    rowGroupNameFilter: '',
+    rowAccessPredicateFilter: '',
 
     expandedSubjects: new Set<string>(),
 

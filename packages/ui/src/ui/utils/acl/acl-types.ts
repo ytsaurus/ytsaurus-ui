@@ -55,9 +55,11 @@ export interface Role {
     state?: string;
     role_type?: string;
     column_group_id?: string;
+    row_group_id?: string;
     permissions?: Array<YTPermissionType>;
     inheritance_mode?: string;
     columns?: Array<string>;
+    row_access_predicate?: string;
     inherited?: boolean;
     member?: boolean;
     idm_link?: string;
@@ -115,6 +117,7 @@ export interface GetACLResponse {
     acl: ACL;
     roles: Array<Role>;
     column_groups: Array<AclColumnGroup>;
+    row_groups: Array<AclRowGroup>;
 }
 
 export interface ACL {
@@ -130,9 +133,18 @@ export interface AclColumnGroup {
     removed?: boolean;
 }
 
+export interface AclRowGroup {
+    id: string;
+    name: string;
+    predicate: string;
+    enabled?: boolean;
+}
+
 export interface SuccessColumnGroupCreate {
     guid: string;
 }
+
+export type SuccessRowGroupCreate = SuccessColumnGroupCreate;
 
 export interface ACE {
     permissions: Array<YTPermissionType>;
@@ -140,6 +152,7 @@ export interface ACE {
     subjects: Array<string>;
     inheritance_mode?: string;
     columns?: Array<string>;
+    row_access_predicate?: string;
     inherited?: boolean;
 }
 
@@ -171,6 +184,7 @@ export interface ACLResponsible {
 export interface PreparedAclData {
     permissions: Array<PreparedAclSubject>;
     column_groups: Array<AclColumnGroup>;
+    row_groups: Array<AclRowGroup>;
     inheritAcl?: boolean;
 }
 
@@ -225,6 +239,7 @@ export type PreparedAclSubject = TypedAclSubject & {
     action?: string;
     group?: string;
     columns?: Role['columns'];
+    row_access_predicate?: string;
     state?: string;
     idmLink?: string;
     depriveDate?: string;

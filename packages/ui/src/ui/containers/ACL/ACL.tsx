@@ -1,56 +1,52 @@
-import React, {Component, Fragment} from 'react';
-import hammer from '../../common/hammer';
-import cn from 'bem-cn-lite';
-
-import compact_ from 'lodash/compact';
-
-import {Button, ClipboardButton, Flex, Icon, Loader} from '@gravity-ui/uikit';
 import {Column} from '@gravity-ui/react-data-table';
-
-import {AclMode, IdmObjectType} from '../../constants/acl';
-
-import ColumnGroups from './ColumnGroups/ColumnGroups';
-
-import DeletePermissionModal from './DeletePermissionModal/DeletePermissionModal';
-import {AclActions} from './AclActions/AclActions';
-import {MyPermissions} from './MyPermissinos/MyPermissions';
-
-import LoadDataHandler from '../../components/LoadDataHandler/LoadDataHandler';
-import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
-import DataTableYT from '../../components/DataTableYT/DataTableYT';
-import {SubjectCard} from '../../components/SubjectLink/SubjectLink';
-
-import withVisible, {WithVisibleProps} from '../../hocs/withVisible';
-import {renderText} from '../../components/templates/utils';
-import Label from '../../components/Label/Label';
-import {Tooltip} from '../../components/Tooltip/Tooltip';
-import {isIdmAclAvailable} from '../../config';
-import ApproversFilters from './ApproversFilters/ApproversFilters';
-import ObjectPermissionsFilters from './ObjectPermissionsFilters/ObjectPermissionsFilters';
-import UIFactory, {AclRoleActionsType} from '../../UIFactory';
-
-import {ACLReduxProps} from './ACL-connect-helpers';
-import {PreparedAclSubject} from '../../utils/acl/acl-types';
-import {ObjectPermissionRowWithExpand, PreparedApprover} from '../../store/selectors/acl';
-
-import {SegmentControl, SegmentControlItem} from '../../components/SegmentControl/SegmentControl';
-import WithStickyToolbar from '../../components/WithStickyToolbar/WithStickyToolbar';
-import {PreparedRole, isGranted} from '../../utils/acl';
-import {AclModeControl} from './AclModeControl';
-import {ExpandButton} from '../../components/ExpandButton';
-import {AclColumnsCell} from './AclColumnsCell';
-
+import {Button, ClipboardButton, Flex, Icon, Loader} from '@gravity-ui/uikit';
+import cn from 'bem-cn-lite';
+import compact_ from 'lodash/compact';
+import React, {Component, Fragment} from 'react';
 import aclInheritedSvg from '../../assets/img/svg/acl-inherited.svg';
-
+import hammer from '../../common/hammer';
+import DataTableYT from '../../components/DataTableYT/DataTableYT';
+import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
+import {ExpandButton} from '../../components/ExpandButton';
+import Label from '../../components/Label/Label';
+import LoadDataHandler from '../../components/LoadDataHandler/LoadDataHandler';
+import {SegmentControl, SegmentControlItem} from '../../components/SegmentControl/SegmentControl';
+import {SubjectCard} from '../../components/SubjectLink/SubjectLink';
+import {renderText} from '../../components/templates/utils';
+import {Tooltip} from '../../components/Tooltip/Tooltip';
+import WithStickyToolbar from '../../components/WithStickyToolbar/WithStickyToolbar';
+import {isIdmAclAvailable} from '../../config';
+import {AclMode, IdmObjectType} from '../../constants/acl';
+import withVisible, {WithVisibleProps} from '../../hocs/withVisible';
+import {ObjectPermissionRowWithExpand, PreparedApprover} from '../../store/selectors/acl';
+import UIFactory, {AclRoleActionsType} from '../../UIFactory';
+import {PreparedRole, isGranted} from '../../utils/acl';
+import {PreparedAclSubject} from '../../utils/acl/acl-types';
+import {ACLReduxProps} from './ACL-connect-helpers';
 import './ACL.scss';
+import {AclActions} from './AclActions/AclActions';
+import {AclColumnsCell} from './AclColumnsCell';
+import {AclModeControl} from './AclModeControl';
+import ApproversFilters from './ApproversFilters/ApproversFilters';
+import ColumnGroups from './ColumnGroups/ColumnGroups';
+import DeletePermissionModal from './DeletePermissionModal/DeletePermissionModal';
 import {InheritanceMessage} from './InheritanceMessage/InheritanceMessage';
+import {MyPermissions} from './MyPermissinos/MyPermissions';
+import ObjectPermissionsFilters from './ObjectPermissionsFilters/ObjectPermissionsFilters';
+import {RowGroups} from './RowGroups/RowGroups';
 
 const block = cn('navigation-acl');
 
 type Props = ACLReduxProps & WithVisibleProps & {className?: string};
 
-type ApproverRow = PreparedApprover;
-type PermissionsRow = ObjectPermissionRowWithExpand;
+type ApproverRow = PreparedApprover & {
+    aggregated_row_access_predicates?: Array<string>;
+    expanded?: boolean;
+};
+type PermissionsRow = ObjectPermissionRowWithExpand & {
+    aggregated_row_access_predicates?: Array<string>;
+    expanded?: boolean;
+};
 
 class ACL extends Component<Props> {
     static tableColumns = {
@@ -185,7 +181,11 @@ class ACL extends Component<Props> {
 
     getColumnsTemplates<T extends ApproverRow | PermissionsRow>({
         hasInherited,
-    }: {hasInherited?: boolean} = {}) {
+        mode,
+    }: {
+        hasInherited?: boolean;
+        mode: 'responsible' | 'permissions';
+    }) {
         const openDeleteModal = this.handleDeletePermissionClick;
         const {idmKind, toggleExpandAclSubject} = this.props;
         return {
@@ -263,6 +263,7 @@ class ACL extends Component<Props> {
                                 {action}
                             </Label>
                             <AclColumnsCell
+                                withQoutes
                                 items={row.permissions?.map(hammer.format.Readable)}
                                 expanadable={'expanded' in row}
                             />
@@ -293,6 +294,7 @@ class ACL extends Component<Props> {
                         ? null
                         : RoleActions !== undefined && (
                               <RoleActions
+                                  mode={mode}
                                   role={row}
                                   idmKind={idmKind}
                                   onDelete={openDeleteModal}
@@ -314,6 +316,27 @@ class ACL extends Component<Props> {
                 className: block('table-item', {type: 'columns'}),
                 render({row}) {
                     return <AclColumnsCell items={row.columns} expanadable={'expanded' in row} />;
+                },
+            } as Column<T>,
+            row_access_predicate: {
+                name: 'Row access predicate',
+                align: 'left',
+                className: block('table-item', {type: 'row-access-predicate'}),
+                render({row}) {
+                    const expandable = 'expanded' in row;
+                    const {row_access_predicate, aggregated_row_access_predicates} = row;
+                    return (
+                        <AclColumnsCell
+                            items={
+                                expandable
+                                    ? aggregated_row_access_predicates
+                                    : row_access_predicate
+                                      ? [row_access_predicate]
+                                      : []
+                            }
+                            expanadable={expandable}
+                        />
+                    );
                 },
             } as Column<T>,
         };
@@ -348,7 +371,10 @@ class ACL extends Component<Props> {
     renderApprovers() {
         const {hasApprovers, approversFiltered, loaded} = this.props;
         const tableColumns = (['subjects', 'approve_type', 'actions'] as const).map(
-            (name) => this.getColumnsTemplates<ApproverRow>({hasInherited: true})[name],
+            (name) =>
+                this.getColumnsTemplates<ApproverRow>({hasInherited: true, mode: 'responsible'})[
+                    name
+                ],
         );
         return (
             hasApprovers && (
@@ -385,43 +411,77 @@ class ACL extends Component<Props> {
         );
     }
 
+    getObjectPermissionsDetails() {
+        const {
+            aclMode = AclMode.MAIN_PERMISSIONS,
+            mainPermissions,
+            columnsPermissions,
+            rowPermissions,
+        } = this.props;
+
+        const {data, title, noItemsText, extraColumns} = {
+            [AclMode.MAIN_PERMISSIONS]: {
+                data: mainPermissions,
+                title: 'Object permissions',
+                noItemsText: 'There are no column permissions',
+                extraColumns: ['permissions'] as const,
+            },
+            [AclMode.COLUMN_GROUPS_PERMISSIONS]: {
+                data: columnsPermissions,
+                title: 'Private columns permissions',
+                noItemsText: 'There are no object permissions',
+                extraColumns: ['columns'] as const,
+            },
+            [AclMode.ROW_GROUPS_PERMISSIONS]: {
+                data: rowPermissions,
+                title: 'Private rows permissions',
+                noItemsText: 'There are no row permissions',
+                extraColumns: ['row_access_predicate'] as const,
+            },
+        }[aclMode];
+
+        return {
+            data,
+            columns: [
+                ...(data.hasExpandable ? ['expand' as const] : []),
+                'subjects',
+                ...(data.hasDenyAction ? ['permissions' as const] : []),
+                ...extraColumns,
+                'inheritance_mode',
+                'actions',
+            ] as const,
+            title,
+            noItemsText,
+        };
+    }
+
     renderObjectPermissions() {
         const {
             aclMode,
             loaded,
             loading,
-            mainPermissions,
-            columnsPermissions,
             idmKind,
             columnsFilter,
             updateAclFilters,
             userPermissionsAccessColumns,
         } = this.props;
-        const useColumns = aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS;
 
-        const {items, hasDenyAction, hasExpandable, hasInherited} = useColumns
-            ? columnsPermissions
-            : mainPermissions;
-        const extraColumns = useColumns
-            ? ([...(hasDenyAction ? ['permissions' as const] : []), 'columns'] as const)
-            : (['permissions'] as const);
+        const {
+            title,
+            columns,
+            data: {hasInherited, items},
+            noItemsText,
+        } = this.getObjectPermissionsDetails();
 
-        const tableColumns: Array<Column<PermissionsRow>> = (
-            [
-                ...(hasExpandable ? ['expand' as const] : []),
-                'subjects',
-                ...extraColumns,
-                'inheritance_mode',
-                'actions',
-            ] as const
-        ).map((name) => this.getColumnsTemplates<PermissionsRow>({hasInherited})[name]);
+        const tableColumns: Array<Column<PermissionsRow>> = columns.map(
+            (name) =>
+                this.getColumnsTemplates<PermissionsRow>({hasInherited, mode: 'permissions'})[name],
+        );
 
         return (
             <ErrorBoundary>
                 <div className={block('object-permissions')}>
-                    <div className="elements-heading elements-heading_size_xs">
-                        {useColumns ? 'Private columns permissions' : 'Object permissions'}
-                    </div>
+                    <div className="elements-heading elements-heading_size_xs">{title}</div>
                     <WithStickyToolbar
                         topMargin="none"
                         bottomMargin="regular"
@@ -438,11 +498,7 @@ class ACL extends Component<Props> {
                         }
                         content={
                             <DataTableYT
-                                noItemsText={
-                                    aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS
-                                        ? 'There are no any column group permissions'
-                                        : 'There are no any object permissions'
-                                }
+                                noItemsText={noItemsText}
                                 data={items}
                                 loading={loading}
                                 loaded={loaded}
@@ -475,12 +531,22 @@ class ACL extends Component<Props> {
             columnGroupNameFilter,
             userPermissionsAccessColumns,
         } = this.props;
+
+        const allowEditColumnGroups = UIFactory.getAclApi().isAllowedToEditColumnGroups({
+            nodeType,
+        });
+        const {allowEdit, allowEditNotice} =
+            typeof allowEditColumnGroups === 'boolean'
+                ? {allowEdit: allowEditColumnGroups}
+                : allowEditColumnGroups;
+
         const props = {
             path,
             loadAclDataFn: () => loadAclData({path, idmKind}),
             columnGroups,
             cluster,
-            allowEdit: UIFactory.getAclApi().isAllowedToEditColumnGroups({nodeType}),
+            allowEdit,
+            allowEditNotice,
             updateAclFilters,
             columnsFilter,
             columnGroupNameFilter,
@@ -488,6 +554,45 @@ class ACL extends Component<Props> {
         };
         return isIdmAclAvailable() && idmKind === IdmObjectType.PATH ? (
             <ColumnGroups loaded={loaded} {...props} />
+        ) : null;
+    }
+
+    renderRowGroups() {
+        const {
+            cluster,
+            loaded,
+            rowGroups,
+            idmKind,
+            nodeType,
+            updateAclFilters,
+            rowGroupNameFilter,
+            loadAclData,
+            path,
+        } = this.props;
+
+        const allowEditColumnGroups = UIFactory.getAclApi().isAllowedToEditRowGroups({
+            nodeType,
+        });
+        const {allowEdit, allowEditNotice} =
+            typeof allowEditColumnGroups === 'boolean'
+                ? {allowEdit: allowEditColumnGroups}
+                : allowEditColumnGroups;
+
+        return isIdmAclAvailable() && idmKind === IdmObjectType.PATH ? (
+            <RowGroups
+                loaded={loaded}
+                {...{
+                    cluster,
+                    idmKind,
+                    path,
+                    allowEdit,
+                    allowEditNotice,
+                    rowGroups,
+                    rowGroupNameFilter,
+                    updateAclFilters,
+                    loadAclDataFn: () => loadAclData({path, idmKind}),
+                }}
+            />
         ) : null;
     }
 
@@ -526,20 +631,30 @@ class ACL extends Component<Props> {
             userPermissionsCancelUpdateAcl,
             cluster,
             columnGroups,
+            rowGroups,
             aclMode,
             updateAclFilters,
+            mainPermissions,
+            columnsPermissions,
+            rowPermissions,
         } = this.props;
         const {deleteItem} = this.state;
 
         const hasColumns = Boolean(aclMode);
-        const useColumns = aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS;
 
         return (
             <Fragment>
                 <Flex className={block('toolbar', {'has-columns': hasColumns})}>
                     {hasColumns && (
                         <Flex grow>
-                            <AclModeControl {...{aclMode, updateAclFilters}} />
+                            <AclModeControl
+                                {...{aclMode, updateAclFilters}}
+                                permissionCounters={{
+                                    [AclMode.MAIN_PERMISSIONS]: mainPermissions.count,
+                                    [AclMode.COLUMN_GROUPS_PERMISSIONS]: columnsPermissions.count,
+                                    [AclMode.ROW_GROUPS_PERMISSIONS]: rowPermissions.count,
+                                }}
+                            />
                         </Flex>
                     )}
                     {loaded && (
@@ -566,13 +681,14 @@ class ACL extends Component<Props> {
                             updateAclError={userPermissionsUpdateAclError}
                             cancelUpdateAcl={userPermissionsCancelUpdateAcl}
                             columnGroups={columnGroups}
+                            rowGroups={rowGroups}
                             aclMode={aclMode}
                         />
                     )}
                 </Flex>
                 {this.renderMeta()}
 
-                {useColumns ? this.renderColumnGroups() : this.renderApprovers()}
+                {this.renderContentByMode()}
                 {this.renderObjectPermissions()}
 
                 <DeletePermissionModal
@@ -589,6 +705,18 @@ class ACL extends Component<Props> {
                 />
             </Fragment>
         );
+    }
+
+    renderContentByMode() {
+        const {aclMode} = this.props;
+        switch (aclMode) {
+            case AclMode.COLUMN_GROUPS_PERMISSIONS:
+                return this.renderColumnGroups();
+            case AclMode.ROW_GROUPS_PERMISSIONS:
+                return this.renderRowGroups();
+            default:
+                return this.renderApprovers();
+        }
     }
 
     renderMeta() {
@@ -633,20 +761,30 @@ class ACL extends Component<Props> {
                 }),
         ]);
 
-        const {mainPermissions, columnsPermissions, approversFiltered, columnGroups, aclMode} =
-            this.props;
+        const {
+            mainPermissions,
+            columnsPermissions,
+            rowPermissions,
+            approversFiltered,
+            columnGroups,
+            rowGroups,
+            aclMode = AclMode.MAIN_PERMISSIONS,
+        } = this.props;
 
-        const counters: Array<SegmentControlItem> =
-            aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS
-                ? [
-                      {name: 'Column groups', value: columnGroups.length},
-                      {name: 'Column permissions', value: columnsPermissions.count},
-                  ]
-                : [
-                      {name: 'Responsibles', value: approversFiltered.length},
-                      {name: 'Object permissions', value: mainPermissions.count},
-                  ];
-
+        const counters: Array<SegmentControlItem> = {
+            [AclMode.MAIN_PERMISSIONS]: [
+                {name: 'Responsibles', value: approversFiltered.length},
+                {name: 'Object permissions', value: mainPermissions.count},
+            ],
+            [AclMode.COLUMN_GROUPS_PERMISSIONS]: [
+                {name: 'Column groups', value: columnGroups.length},
+                {name: 'Column permissions', value: columnsPermissions.count},
+            ],
+            [AclMode.ROW_GROUPS_PERMISSIONS]: [
+                {name: 'Row groups', value: rowGroups?.length ?? 0},
+                {name: 'Row permissions', value: rowPermissions.count},
+            ],
+        }[aclMode];
         const hasColumns = Boolean(aclMode);
         return (
             <Flex className={block('meta')} wrap alignItems="center">
@@ -655,7 +793,7 @@ class ACL extends Component<Props> {
                     background="neutral-light"
                     groups={[segments, counters].filter(({length}) => length > 0)}
                 />
-                {aclMode !== AclMode.COLUMN_GROUPS_PERMISSISONS && (
+                {aclMode === AclMode.MAIN_PERMISSIONS && (
                     <MyPermissions
                         className={block('meta-item', {'with-buttons': !hasColumns})}
                         userPermissions={userPermissions}

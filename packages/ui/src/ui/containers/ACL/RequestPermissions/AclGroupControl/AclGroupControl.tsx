@@ -1,18 +1,23 @@
 import React from 'react';
 
-import {AclColumnGroup} from '../../../../utils/acl/acl-types';
 import {Select, SelectOption} from '@gravity-ui/uikit';
 
+export type AclGroupItem = {
+    id: string;
+    name: string;
+    removed?: boolean;
+};
+
 export type Props = {
-    value?: AclColumnGroup['id'];
+    value?: AclGroupItem['id'];
     onChange: (value?: Props['value']) => void;
-    columnGroups?: Array<AclColumnGroup>;
+    options?: Array<AclGroupItem>;
     disabled?: boolean;
 };
 
-export function AclColumnGroupControl({value, onChange, columnGroups, disabled}: Props) {
-    const options = React.useMemo(() => {
-        return columnGroups?.reduce(
+export function AclGroupControl({value, onChange, options, disabled}: Props) {
+    const items = React.useMemo(() => {
+        return options?.reduce(
             (acc, data) => {
                 if (!data.removed) {
                     acc.push({
@@ -23,26 +28,26 @@ export function AclColumnGroupControl({value, onChange, columnGroups, disabled}:
                 }
                 return acc;
             },
-            [] as Array<SelectOption<AclColumnGroup>>,
+            [] as Array<SelectOption<AclGroupItem>>,
         );
-    }, [columnGroups]);
+    }, [options]);
 
     return (
         <Select
-            placeholder="Select column group"
+            placeholder="Select group"
             value={value ? [value] : []}
             disabled={disabled}
-            options={options}
+            options={items}
             onUpdate={(values) => onChange(values[0])}
             width="max"
         />
     );
 }
 
-AclColumnGroupControl.isEmpty = (value?: Props['value']) => {
+AclGroupControl.isEmpty = (value?: Props['value']) => {
     return !value?.length;
 };
 
-AclColumnGroupControl.getDefaultValue = () => {
+AclGroupControl.getDefaultValue = () => {
     return undefined;
 };

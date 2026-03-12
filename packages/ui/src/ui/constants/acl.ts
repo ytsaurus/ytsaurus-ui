@@ -23,6 +23,7 @@ export const REGISTER_QUEUE_CONSUMER = 'register_queue_consumer';
 export const REGISTER_QUEUE_CONSUMER_VITAL = 'register_queue_consumer_vital';
 
 const PERMISSION_TYPES: Array<YTPermissionTypeUI> = [
+    'full_read',
     'read',
     'write',
     'remove',
@@ -132,5 +133,6 @@ export const PERMISSIONS_SETTINGS: Record<IdmKindType, PermissionSettings> = {
 
 export const enum AclMode {
     MAIN_PERMISSIONS = 'main_permissions',
-    COLUMN_GROUPS_PERMISSISONS = 'column_groups_permissions',
+    COLUMN_GROUPS_PERMISSIONS = 'column_permissions',
+    ROW_GROUPS_PERMISSIONS = 'row_permissions',
 }

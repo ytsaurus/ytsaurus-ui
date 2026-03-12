@@ -1,26 +1,23 @@
-import React from 'react';
-import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 import map_ from 'lodash/map';
+import React from 'react';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 
 import format from '../../../common/hammer/format';
 
-import {
-    changeObjectPermissionsFilter,
-    changeObjectSubjectFilter,
-} from '../../../store/actions/acl-filters';
-import {
-    getObjectPermissionsFilter,
-    getObjectSubjectFilter,
-} from '../../../store/selectors/acl-filters';
-import {getObjectPermissionsTypesList} from '../../../store/selectors/acl';
 import Filter from '../../../components/Filter/Filter';
 import Select from '../../../components/Select/Select';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
-import './ObjectPermissionsFilters.scss';
-import {ACLReduxProps} from '../ACL-connect-helpers';
 import {AclMode} from '../../../constants/acl';
+import {getObjectPermissionsTypesList} from '../../../store/selectors/acl';
+import {
+    getAclRowAccessPredicateFilter,
+    getObjectPermissionsFilter,
+    getObjectSubjectFilter,
+} from '../../../store/selectors/acl-filters';
+import {ACLReduxProps} from '../ACL-connect-helpers';
 import {ColumnGroupsFilter} from '../ColumnGroups/ColumnGroups';
+import './ObjectPermissionsFilters.scss';
 
 const block = cn('object-permissions-filters');
 
@@ -30,7 +27,7 @@ type Props = Pick<
 >;
 
 export default function ObjectPermissionsFilters({
-    aclMode,
+    aclMode = AclMode.MAIN_PERMISSIONS,
     idmKind,
     columnsFilter,
     updateAclFilters,
@@ -40,6 +37,8 @@ export default function ObjectPermissionsFilters({
     const subjectFilter = useSelector(getObjectSubjectFilter);
     const selectedPermissons = useSelector(getObjectPermissionsFilter);
     const permissionList = useSelector(getObjectPermissionsTypesList(idmKind));
+
+    const rowAccessPredicateFilter = useSelector(getAclRowAccessPredicateFilter);
 
     return (
         <Toolbar
@@ -51,7 +50,7 @@ export default function ObjectPermissionsFilters({
                             placeholder="Filter by subject"
                             onChange={(value: string) => {
                                 dispatch(
-                                    changeObjectSubjectFilter({
+                                    updateAclFilters({
                                         objectSubject: value,
                                     }),
                                 );
@@ -64,12 +63,13 @@ export default function ObjectPermissionsFilters({
                 },
                 {
                     shrinkable: true,
-                    node:
-                        aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS ? (
+                    node: {
+                        [AclMode.COLUMN_GROUPS_PERMISSIONS]: (
                             <ColumnGroupsFilter
                                 {...{columnsFilter, updateAclFilters, userPermissionsAccessColumns}}
                             />
-                        ) : (
+                        ),
+                        [AclMode.MAIN_PERMISSIONS]: (
                             <Select
                                 className={block('filter')}
                                 multiple
@@ -81,7 +81,7 @@ export default function ObjectPermissionsFilters({
                                 }))}
                                 onUpdate={(value: string[]) => {
                                     dispatch(
-                                        changeObjectPermissionsFilter({
+                                        updateAclFilters({
                                             objectPermissions: value as typeof selectedPermissons,
                                         }),
                                     );
@@ -91,6 +91,23 @@ export default function ObjectPermissionsFilters({
                                 width="auto"
                             />
                         ),
+                        [AclMode.ROW_GROUPS_PERMISSIONS]: (
+                            <Filter
+                                className={block('filter')}
+                                placeholder={'Filter by predicate'}
+                                onChange={(value) => {
+                                    dispatch(
+                                        updateAclFilters({
+                                            rowAccessPredicateFilter: value,
+                                        }),
+                                    );
+                                }}
+                                value={rowAccessPredicateFilter}
+                                size="m"
+                                autofocus={false}
+                            />
+                        ),
+                    }[aclMode],
                 },
             ]}
         />

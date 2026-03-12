@@ -13,6 +13,14 @@ export class HasPage {
 class DFDialogComponent extends HasPage {
     private isLazyLoaded = false;
 
+    async confirm() {
+        await this.page.locator('.g-dialog-footer__button-apply').click();
+    }
+
+    async fillText({name, text}: {name: string; text: string}) {
+        await this.page.getByTestId(`df-field:text:${name}`).locator('input').fill(text);
+    }
+
     async showTab(name: string) {
         await this.waitForLazyLoad();
 
@@ -102,9 +110,9 @@ export class BasePage extends HasPage {
         );
     }
 
-    async replaceBreadcrumbsTestDir() {
+    async replaceBreadcrumbsTestDir(text = E2E_DIR_NAME) {
         await this.page.waitForSelector('.g-breadcrumbs');
-        await this.replaceBreadcrumbsByTitle(E2E_DIR_NAME, 'e2e.1970-01-01.00:00:00.xxxxxxxxxxx');
+        await this.replaceBreadcrumbsByTitle(text, 'e2e.1970-01-01.00:00:00.xxxxxxxxxxx');
     }
 
     async replaceBreadrumbsLastItem() {
@@ -113,9 +121,9 @@ export class BasePage extends HasPage {
         });
     }
 
-    async replaceACLInputPath() {
+    async replaceACLInputPath(path = `//tmp/${E2E_DIR_NAME}`) {
         await this.page.locator('.g-dialog').waitFor({state: 'visible'});
-        const pathInput = this.page.locator(`input#path[value="//tmp/${E2E_DIR_NAME}"]`);
+        const pathInput = this.page.locator(`input#path[value^="${path}"]`);
         await pathInput.waitFor({state: 'visible'});
         await pathInput.fill('e2e.1970-01-01.00:00:00.xxxxxxxxxxx', {force: true});
         await pathInput.evaluate((el: HTMLInputElement, value: string) => {

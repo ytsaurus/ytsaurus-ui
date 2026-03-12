@@ -1,26 +1,27 @@
-import {compose} from 'redux';
+import {Button, ButtonProps} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React, {useCallback, useMemo} from 'react';
+import {compose} from 'redux';
 import {DialogField, FormApi, YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
-import {Button, ButtonProps} from '@gravity-ui/uikit';
 import PermissionsControl from '../RequestPermissions/PermissionsControl/PermissionsControl';
 
 import withVisible, {WithVisibleProps} from '../../../hocs/withVisible';
 
-import './RequestPermissions.scss';
-import {YTError} from '../../../types';
 import {AclMode, INHERITANCE_MODE_TYPES, IdmObjectType} from '../../../constants/acl';
+import {YTError} from '../../../types';
+import './RequestPermissions.scss';
 
+import map_ from 'lodash/map';
 import UIFactory from '../../../UIFactory';
 import hammer from '../../../common/hammer';
-import map_ from 'lodash/map';
 
+import HelpLink from '../../../components/HelpLink/HelpLink';
 import {docsUrl} from '../../../config';
-import {makeLink} from '../../../utils/utils';
-import {AclColumnGroup, IdmKindType} from '../../../utils/acl/acl-types';
-import {YTPermissionTypeUI} from '../../../utils/acl/acl-api';
 import {PermissionToRequest} from '../../../store/actions/acl';
+import {YTPermissionTypeUI} from '../../../utils/acl/acl-api';
+import {AclColumnGroup, AclRowGroup, IdmKindType} from '../../../utils/acl/acl-types';
+import {makeLink} from '../../../utils/utils';
 import {useAvailablePermissions} from '../hooks/use-available-permissions';
 
 const block = cn('acl-request-permissions');
@@ -38,7 +39,9 @@ export type RequestPermissionsFieldsNames =
     | 'inheritance_mode'
     | 'permissionFlags'
     | 'readColumns'
-    | 'readColumnGroup';
+    | 'readColumnGroup'
+    | 'readRowGroup'
+    | 'read_row_access_predicate';
 
 export interface Props extends WithVisibleProps {
     className?: string;
@@ -56,6 +59,7 @@ export interface Props extends WithVisibleProps {
     error?: YTError;
     onSuccess?: () => void;
     columnGroups?: Array<AclColumnGroup>;
+    rowGroups?: Array<AclRowGroup>;
     aclMode?: AclMode;
 }
 
@@ -72,6 +76,7 @@ type FormValues = {
     duration?: Date;
     comment?: string;
     readColumnGroup?: string;
+    readRowGroup?: string;
 } & Record<`${typeof FLAG_NAME_PREFIX}${string}`, boolean>;
 
 const SHORT_TITLE: Partial<Record<IdmKindType, string>> = {
@@ -79,6 +84,10 @@ const SHORT_TITLE: Partial<Record<IdmKindType, string>> = {
 };
 
 const COLUMNS_FELDS = new Set<RequestPermissionsFieldsNames>(['readColumns', 'readColumnGroup']);
+const ROWS_FIELDS = new Set<RequestPermissionsFieldsNames>([
+    'readRowGroup',
+    'read_row_access_predicate',
+]);
 
 function RequestPermissions(props: Props) {
     const {
@@ -95,6 +104,7 @@ function RequestPermissions(props: Props) {
         error,
         cluster,
         columnGroups,
+        rowGroups,
         buttonProps,
         /*denyColumns,*/
     } = props;
@@ -179,12 +189,26 @@ function RequestPermissions(props: Props) {
                 required: true,
             },
             readColumnGroup: {
-                type: 'acl-column-group',
+                type: 'acl-group',
                 caption: 'Read column group',
                 required: true,
                 extras: {
-                    columnGroups,
+                    options: columnGroups,
                 },
+            },
+            readRowGroup: {
+                type: 'acl-group',
+                caption: 'Read row group',
+                required: true,
+                extras: {
+                    options: rowGroups,
+                },
+            },
+            read_row_access_predicate: {
+                type: 'textarea',
+                caption: 'RLS predicate',
+                required: true,
+                tooltip: <HelpLink url={UIFactory.docsUrls['acl:row-level-security']} />,
             },
             subjects: {
                 type: 'acl-subjects',
@@ -240,13 +264,21 @@ function RequestPermissions(props: Props) {
         };
     }, [choices, currentCaption, error, idmKind]);
 
-    const useColumns = aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS;
-
     const dialogFields = useMemo(() => {
         let flagsIndex = -1;
         const res = requestPermissionsFields.reduce(
             (acc, field) => {
-                const allowField = useColumns ? field !== 'permissions' : !COLUMNS_FELDS.has(field);
+                let allowField;
+                switch (aclMode) {
+                    case AclMode.COLUMN_GROUPS_PERMISSIONS:
+                        allowField = field !== 'permissions' && !ROWS_FIELDS.has(field);
+                        break;
+                    case AclMode.ROW_GROUPS_PERMISSIONS:
+                        allowField = field !== 'permissions' && !COLUMNS_FELDS.has(field);
+                        break;
+                    default:
+                        allowField = !COLUMNS_FELDS.has(field) && !ROWS_FIELDS.has(field);
+                }
                 if (!allowField) {
                     return acc;
                 }
@@ -278,11 +310,23 @@ function RequestPermissions(props: Props) {
             });
             res.splice(flagsIndex, 1, ...flags);
         }
-        return res;
-    }, [availableFields, requestPermissionsFields, useColumns]);
 
-    const {editAcl = 'Add ACL', editColumnsAcl = 'Edit columns ACL'} = buttonsTitle ?? {};
-    const title = useColumns ? editColumnsAcl : editAcl;
+        return res;
+    }, [availableFields, requestPermissionsFields, aclMode]);
+
+    const {
+        editAcl = 'Add ACL',
+        editColumnsAcl = 'Add columns ACL',
+        editRowsAcl = 'Add rows ACL',
+    } = buttonsTitle ?? {};
+    let title = editAcl;
+    switch (aclMode) {
+        case AclMode.ROW_GROUPS_PERMISSIONS:
+            title = editRowsAcl;
+            break;
+        case AclMode.COLUMN_GROUPS_PERMISSIONS:
+            title = editColumnsAcl;
+    }
 
     return !choices?.length ? null : (
         <ErrorBoundary>

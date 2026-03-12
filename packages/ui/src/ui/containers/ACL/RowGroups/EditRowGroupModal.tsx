@@ -1,14 +1,17 @@
+import includes_ from 'lodash/includes';
 import React, {useMemo, useState} from 'react';
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
-import {AclColumnGroup} from '../../../utils/acl/acl-types';
-import includes_ from 'lodash/includes';
+import HelpLink from '../../../components/HelpLink/HelpLink';
+import UIFactory from '../../../UIFactory';
+import {AclRowGroup} from '../../../utils/acl/acl-types';
+import i18n from './i18n';
 
 export interface Props {
     title: string;
     confirmText: string;
     handleClose: () => void;
-    handleSubmit: (value: Partial<AclColumnGroup>) => Promise<void>;
-    initialData?: Partial<AclColumnGroup>;
+    handleSubmit: (value: Partial<AclRowGroup>) => Promise<void>;
+    initialData?: Partial<AclRowGroup>;
     disabledFields?: Array<keyof FormValues>;
     visible: boolean;
     mode?: 'delete';
@@ -16,11 +19,11 @@ export interface Props {
 
 interface FormValues {
     name: string;
-    columns: Array<string>;
+    predicate: string;
     enabled: boolean;
 }
 
-export default function EditColumnGroupModal({
+export function EditRowGroupModal({
     visible,
     title,
     confirmText,
@@ -35,7 +38,7 @@ export default function EditColumnGroupModal({
     const initialValues = useMemo(() => {
         return {
             name: String(initialData?.name),
-            columns: initialData?.columns,
+            predicate: initialData?.predicate,
             enabled: Boolean(initialData?.enabled),
         };
     }, [initialData]);
@@ -52,10 +55,10 @@ export default function EditColumnGroupModal({
                 handleClose();
             }}
             onAdd={(form) => {
-                const {name, columns, enabled} = form.getState().values;
-                const submitResult: Partial<AclColumnGroup> = {
+                const {name, predicate, enabled} = form.getState().values;
+                const submitResult: Partial<AclRowGroup> = {
                     name: name,
-                    columns,
+                    predicate,
                     enabled: enabled,
                 };
                 return handleSubmit(submitResult).catch((err) => {
@@ -71,18 +74,24 @@ export default function EditColumnGroupModal({
                     required: true,
                     caption: 'Name',
                     extras: {
-                        placeholder: 'column group name',
+                        placeholder: 'Row group name',
                         disabled: includes_(disabledFields, 'name'),
                     },
                 },
                 {
-                    name: 'columns',
-                    type: 'acl-columns',
+                    name: 'predicate',
+                    type: 'textarea',
                     required: true,
-                    caption: 'Columns',
-                    tooltip: 'One column name per line',
+                    caption: 'Rows',
+                    tooltip: (
+                        <HelpLink
+                            url={UIFactory.docsUrls['acl:row-level-security']}
+                            text={i18n('managing-row-level-access')}
+                        />
+                    ),
                     extras: {
-                        disabled: includes_(disabledFields, 'columns'),
+                        disabled: includes_(disabledFields, 'predicate'),
+                        placeholder: 'column1 = "Value1"',
                     },
                 },
                 {

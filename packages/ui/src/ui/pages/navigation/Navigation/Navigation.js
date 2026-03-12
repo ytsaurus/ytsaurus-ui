@@ -202,7 +202,7 @@ class Navigation extends Component {
                     title={'Edit metadata'}
                     onClick={this.onEditButtonClick}
                 >
-                    <Icon awesome={'pencil'} />
+                    <Icon awesome={'pencil'} size={13} />
                     Edit metadata
                 </Button>
             </div>

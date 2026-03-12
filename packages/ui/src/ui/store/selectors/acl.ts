@@ -17,6 +17,7 @@ import {
     getAclFilterColumnGroupName,
     getAclFilterColumns,
     getAclFilterExpandedSubjects,
+    getAclRowAccessPredicateFilter,
     getApproversSubjectFilter,
     getObjectPermissionsFilter,
     getObjectSubjectFilter,
@@ -155,11 +156,29 @@ export const getAllObjectPermissionsFiltered = createSelector(
         getObjectSubjectFilter,
         getObjectPermissionsFilter,
         getAclFilterColumns,
+        getAclRowAccessPredicateFilter,
     ],
-    (items, subjectFilter, permissionsFilter, columns) => {
-        const [mainPermissions, columnPermissions] = partition_(
-            items,
-            (item) => !item.columns?.length,
+    (items, subjectFilter, permissionsFilter, columns, rowAccessPredicateFilter) => {
+        const {mainPermissions, columnPermissions, rowPermissions} = items.reduce(
+            (acc, item) => {
+                if (!item.columns?.length && !item.row_access_predicate) {
+                    acc.mainPermissions.push(item);
+                }
+
+                if (item.row_access_predicate) {
+                    acc.rowPermissions.push(item);
+                }
+
+                if (item.columns?.length) {
+                    acc.columnPermissions.push(item);
+                }
+
+                return acc;
+            },
+            {mainPermissions: [], columnPermissions: [], rowPermissions: []} as Record<
+                'mainPermissions' | 'columnPermissions' | 'rowPermissions',
+                typeof items
+            >,
         );
 
         const withColumns = columnPermissions.map((item) => {
@@ -186,6 +205,15 @@ export const getAllObjectPermissionsFiltered = createSelector(
 
         const mainPredicates = compact_([filterBySubject, filterByPermissions]);
         const columnsPredicates = compact_([filterBySubject, filterByColumns]);
+        const rowsPredicate = compact_([
+            filterBySubject,
+            rowAccessPredicateFilter
+                ? ({row_access_predicate}: ObjectPermissionsRow) => {
+                      return 0 <= (row_access_predicate?.indexOf(rowAccessPredicateFilter) ?? -1);
+                  }
+                : undefined,
+        ]);
+
         return {
             mainPermissions: mainPredicates.length
                 ? mainPermissions.filter(concatByAnd(...mainPredicates))
@@ -193,25 +221,41 @@ export const getAllObjectPermissionsFiltered = createSelector(
             columnsPermissions: columnsPredicates.length
                 ? withColumns.filter(concatByAnd(...columnsPredicates))
                 : withColumns,
+            rowPermissions: rowsPredicate.length
+                ? rowPermissions.filter(concatByAnd(...rowsPredicate))
+                : rowPermissions,
         };
     },
 );
 
 export const getObjectPermissionsAggregated = createSelector(
     [getAllObjectPermissionsFiltered, getAclFilterExpandedSubjects],
-    ({mainPermissions, columnsPermissions}, expandedSubjects) => {
-        return {
-            mainPermissions: {
-                ...aggregateBySubject(mainPermissions, expandedSubjects),
-                count: mainPermissions.length,
+    (data, expandedSubjects) => {
+        const keys = Object.keys(data) as Array<keyof typeof data>;
+        return keys.reduce(
+            (acc, k) => {
+                const key = k as (typeof keys)[number];
+                const item = data[key];
+                acc[key] = {
+                    ...aggregateBySubject(item, expandedSubjects),
+                    count: item.length,
+                };
+                return acc;
             },
-            columnsPermissions: {
-                ...aggregateBySubject(columnsPermissions, expandedSubjects),
-                count: columnsPermissions.length,
-            },
-        };
+            {} as Record<
+                (typeof keys)[number],
+                ReturnType<typeof aggregateBySubject> & {count: number}
+            >,
+        );
     },
 );
+
+type ObjectPermissionsRowAggregated = ObjectPermissionsRow & {
+    expanded?: boolean;
+    level?: number;
+    expandable?: boolean;
+    aggregated_row_access_predicates?: Array<string>;
+};
 
 class AggregateBySubject {
     aggrKey: string;
@@ -220,8 +264,9 @@ class AggregateBySubject {
 
     allPermissions = new Set<YTPermissionTypeUI>();
     columns = new Set<string>();
-    first: ObjectPermissionsRow;
-    children = new Array<ObjectPermissionsRow & {expanded?: boolean; level?: number}>();
+    rowAccessPredicates = new Set<string>();
+    first: ObjectPermissionsRowAggregated;
+    children = new Array<ObjectPermissionsRowAggregated>();
 
     constructor(first: AggregateBySubject['first']) {
         if (first.subjects.length > 1) {
@@ -245,9 +290,9 @@ class AggregateBySubject {
             );
         }
 
-        if (item.subjects.length !== 1) {
+        if (item.subjects.length > 1) {
             throw new Error(
-                `Unexpected behavior: item.subjects.length !== 1: ${JSON.stringify(item)}`,
+                `Unexpected behavior: item.subjects.length > 1: ${JSON.stringify(item)}`,
             );
         }
 
@@ -259,6 +304,10 @@ class AggregateBySubject {
             this.allPermissions.add(p);
         });
         item.columns?.forEach((column) => this.columns.add(column));
+
+        if (item.row_access_predicate) {
+            this.rowAccessPredicates.add(item.row_access_predicate);
+        }
 
         this.first.isMissing ||= Boolean(item.isMissing);
         this.first.isUnrecognized ||= Boolean(item.isUnrecognized);
@@ -277,8 +326,9 @@ class AggregateBySubject {
             return {items: this.children, hasInherited};
         }
 
-        const first: typeof this.first & {level?: number; expanded?: boolean} = {
+        const first: typeof this.first = {
             ...this.first,
+            aggregated_row_access_predicates: [...this.rowAccessPredicates].sort(),
             level: 0,
             expanded,
         };
@@ -388,6 +438,12 @@ export const getAllColumnGroupsActual = createSelector(
         return sortBy_(filtered, ['name']);
     },
 );
+
+export const getAllRowGroups = (state: RootState, idmKind: IdmKindType) =>
+    state.acl[idmKind].rowGroups;
+export const getAllRowGroupsActual = createSelector([getAllRowGroups], (rowGroups) => {
+    return rowGroups;
+});
 
 function OrderByRoleStatus<
     T extends {
