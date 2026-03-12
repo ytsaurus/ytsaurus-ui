@@ -1,0 +1,8 @@
+{
+  "error_wrong-format": "неверный формат",
+  "error_must-be-integer": "Значение должно быть целым числом",
+  "error_must-be-gte": "Значение должно быть ≥ {{min}}",
+  "error_must-be-lte": "Значение должно быть ≤ {{max}}",
+  "label_min": "мин:",
+  "label_max": "макс:"
+}
