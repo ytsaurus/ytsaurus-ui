@@ -4,6 +4,8 @@ import {DialogControlProps} from '../Dialog/Dialog.types';
 import {EditTextWithPreview, EditTextWithPreviewProps} from '../EditTextWithPreview';
 import {Markdown} from '../Markdown/Markdown';
 
+import i18n from './i18n';
+
 export type EditAnnotationProps = DialogControlProps<
     EditTextWithPreviewProps['value'],
     {
@@ -51,7 +53,7 @@ export function EditAnnotationWithPreview(props: EditAnnotationProps) {
     const valuePath = value === undefined ? undefined : valuePathProp;
     const changed = initialValue !== value;
 
-    let editorSubTitle = value === undefined ? '(reset to inheritance)' : '';
+    let editorSubTitle = value === undefined ? i18n('context_reset-to-inheritance') : '';
     if (valuePath) editorSubTitle = `(from ${valuePath})`;
 
     /**
@@ -61,13 +63,13 @@ export function EditAnnotationWithPreview(props: EditAnnotationProps) {
     if (value === undefined || value === null) {
         if (changed) {
             resetActions.push({
-                text: 'Restore',
+                text: i18n('action_restore'),
                 action: () => onChangeProp(initialValueProp),
             });
         }
     } else if (!valuePath || changed) {
         resetActions.push({
-            text: 'Reset to inheritance',
+            text: i18n('action_reset-to-inheritance'),
             action: () => {
                 if (valuePath) {
                     onChangeProp(initialValueProp);
@@ -83,7 +85,7 @@ export function EditAnnotationWithPreview(props: EditAnnotationProps) {
             className={className}
             value={valueProp}
             onChange={onChange}
-            editorTitle={'Description'}
+            editorTitle={i18n('title_description')}
             editorSubTitle={editorSubTitle}
             editorActions={hideReset ? undefined : resetActions}
             editorLang={'markdown'}
