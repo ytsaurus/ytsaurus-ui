@@ -1,0 +1,1 @@
+export {QueryFullResultList} from './QueryFullResultList';

@@ -1,9 +1,7 @@
-import {Flex, Icon, Link, Loader, Text} from '@gravity-ui/uikit';
 import React from 'react';
+import {Flex, Loader, Text} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import block from 'bem-cn-lite';
-
-import ArrowUpRightFromSquareIcon from '@gravity-ui/icons/svgs/arrow-up-right-from-square.svg';
 
 import {RootState} from '../../../store/reducers';
 import {
@@ -32,6 +30,9 @@ import {ShowPreviewCallback} from './YQLTable/YQLTable';
 import CancelHelper from '../../../utils/cancel-helper';
 import {injectQueryResults} from '../../../store/actions/query-tracker/queryResult';
 import i18n from './i18n';
+import {QueryFullResultList} from './QueryFullResultList';
+import {getQueryEngine} from '../../../store/selectors/query-tracker/query';
+import {QueryEngine} from '../../../../shared/constants/engines';
 
 const b = block('query-result-table');
 
@@ -46,9 +47,11 @@ const getResultRowsInfo = (result: QueryResultReadyState) => {
 
 function QueryReadyResultView({
     result,
+    engine,
     onShowPreview,
 }: {
     result: QueryResultReadyState;
+    engine: QueryEngine;
     onShowPreview: ShowPreviewCallback;
 }) {
     const mode = result?.settings?.viewMode;
@@ -60,7 +63,14 @@ function QueryReadyResultView({
                 <YQLSchemeTable result={result} />
             </NotRenderUntilFirstVisible>
             <NotRenderUntilFirstVisible hide={mode !== QueryResultsViewMode.Table}>
-                <Flex alignItems="center" gap={2} className={b('result-info')}>
+                {fullResult && (
+                    <QueryFullResultList
+                        fullResult={fullResult}
+                        engine={engine}
+                        className={b('full-result')}
+                    />
+                )}
+                <Flex alignItems="center" className={b('result-info')}>
                     <Text>
                         {i18n('context_rows-info', {
                             start: String(start),
@@ -69,18 +79,6 @@ function QueryReadyResultView({
                         })}
                         {truncated ? ` ${i18n('context_rows-truncated')}` : ''}
                     </Text>
-
-                    {fullResult && (
-                        <Link
-                            href={`/${fullResult.cluster}/navigation?path=//${fullResult.table_path}`}
-                            target="_blank"
-                        >
-                            <Flex alignItems="center" gap={1}>
-                                <Icon data={ArrowUpRightFromSquareIcon} size={16} />{' '}
-                                {i18n('action_view-full-result')}
-                            </Flex>
-                        </Link>
-                    )}
                 </Flex>
                 <ResultsTable result={result} onShowPreview={onShowPreview} />
             </NotRenderUntilFirstVisible>
@@ -95,6 +93,7 @@ export const QueryResultsView = React.memo(
         const {pageSize} = useSelector((state: RootState) =>
             getQueryResultSettings(state, query.id, index),
         );
+        const engine = useSelector(getQueryEngine);
 
         const {onShowPreview} = useShowPreviewHandler({
             queryId: query.id,
@@ -113,7 +112,11 @@ export const QueryResultsView = React.memo(
                 )}
                 {result?.resultReady && (
                     <>
-                        <QueryReadyResultView result={result} onShowPreview={onShowPreview} />
+                        <QueryReadyResultView
+                            result={result}
+                            engine={engine}
+                            onShowPreview={onShowPreview}
+                        />
                         {result.settings.viewMode === QueryResultsViewMode.Table && (
                             <ResultPaginator
                                 className={b('pagination')}

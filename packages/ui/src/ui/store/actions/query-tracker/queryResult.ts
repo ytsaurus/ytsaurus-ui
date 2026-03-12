@@ -3,6 +3,7 @@ import {RootState} from '../../reducers';
 import {
     QueryItem,
     QueryResult,
+    QueryResultMeta,
     QueryResultMetaScheme,
     getQueryResultMeta,
     getQueryResultMetaList,
@@ -14,6 +15,7 @@ import {
     getQueryResultSettings,
     hasQueryResult,
 } from '../../selectors/query-tracker/queryResult';
+import {getClusterConfigByName, getClusterProxy} from '../../selectors/global';
 import {
     QueryResultErrorState,
     QueryResultReadyState,
@@ -37,6 +39,7 @@ import {
     SET_QUERY_RESULTS_PAGE,
     SET_QUERY_RESULTS_SETTINGS,
 } from '../../reducers/query-tracker/query-tracker-contants';
+import {ytApiV3} from '../../../rum/rum-wrap-api';
 
 export function applySettings(
     queryId: QueryItem['id'],
@@ -56,6 +59,36 @@ export function applySettings(
     };
 }
 
+async function attachExistenceToFullResult(fullResult: QueryResultMeta['full_result']) {
+    if (!fullResult) return undefined;
+
+    const items = Array.isArray(fullResult) ? fullResult : [fullResult];
+    const existence = await Promise.all(
+        items.map(async ({cluster, table_path}) => {
+            try {
+                const proxy = getClusterProxy(getClusterConfigByName(cluster));
+                return await ytApiV3.exists({
+                    setup: {proxy},
+                    parameters: {
+                        path: `//${table_path}`,
+                    },
+                });
+            } catch {
+                return false;
+            }
+        }),
+    );
+
+    return Array.isArray(fullResult)
+        ? fullResult.map((item, i) => {
+              return {
+                  ...item,
+                  exist: existence[i],
+              };
+          })
+        : {...fullResult, exist: existence[0]};
+}
+
 export function loadQueryResult(
     queryId: QueryItem['id'],
     resultIndex = 0,
@@ -72,6 +105,10 @@ export function loadQueryResult(
             });
             const meta = await dispatch(getQueryResultMeta(queryId, resultIndex));
             if (meta?.error) throw meta.error;
+
+            if (meta.full_result) {
+                meta.full_result = await attachExistenceToFullResult(meta.full_result);
+            }
 
             await dispatch(waitForFontFamilies(null));
             const typeMap = getPrimitiveTypesMap(getState());
