@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useCallback, useState} from 'react';
 import {Loader} from '@gravity-ui/uikit';
 import {YTGraph, useConfig, useGraphScale} from '../../../../components/YTGraph';
 import {ProcessedGraph} from '../utils';
@@ -10,6 +10,8 @@ import {PathPopup} from './DetailBlock/PathPopup';
 import {OperationType} from './enums';
 import {useSelector} from '../../../../store/redux-hooks';
 import {getSettingsQueryTrackerGraphAutoCenter} from '../../../../store/selectors/settings/settings-ts';
+import {checkControlCommandKey} from '../../../../utils/keyboard';
+import {openInNewTab} from '../../../../utils/utils';
 import cn from 'bem-cn-lite';
 import './QueriesGraph.scss';
 
@@ -33,6 +35,21 @@ const Graph: FC<Props> = ({processedGraph}) => {
 
     const {data, isLoading} = useQueriesGraphLayout(processedGraph, scale);
 
+    const handleBlockClick = useCallback((node: QueriesNodeBlock, event: Event) => {
+        const remoteId = node.meta.nodeProgress?.remoteId;
+        if (!remoteId) return;
+
+        const [cluster, operationId] = remoteId.split('/');
+        const clusterName = cluster?.split('.')[0] ?? cluster;
+        const url = `/${clusterName}/operations/${encodeURIComponent(operationId ?? '')}`;
+
+        if (checkControlCommandKey(event as MouseEvent)) {
+            openInNewTab(url);
+        } else {
+            window.location.href = url;
+        }
+    }, []);
+
     React.useEffect(() => {
         if (!isLoading) {
             setLoading(false);
@@ -51,6 +68,8 @@ const Graph: FC<Props> = ({processedGraph}) => {
             toolbox
             zoomOnScroll
             autoCenter={autoCenter}
+            highlightConnectionsOnHover
+            onBlockClick={handleBlockClick}
             data={data}
         />
     );

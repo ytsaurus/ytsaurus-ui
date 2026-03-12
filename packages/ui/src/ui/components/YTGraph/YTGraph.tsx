@@ -2,6 +2,7 @@ import React from 'react';
 import isEmpty_ from 'lodash/isEmpty';
 
 import {ECameraScaleLevel, Graph, GraphState, TBlockId, TConnection} from '@gravity-ui/graph';
+import {GraphMouseEvent} from '@gravity-ui/graph/build/graphEvents';
 import {GraphCanvas, useGraph, useGraphEvent} from '@gravity-ui/graph/react';
 import {useThemeValue} from '@gravity-ui/uikit';
 
@@ -34,6 +35,8 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     toolboxClassName,
     zoomOnScroll,
     autoCenter,
+    highlightConnectionsOnHover = false,
+    onBlockClick,
 }: YTGraphProps<B, C>) {
     const theme = useThemeValue();
     const {graph, setEntities, start} = useGraph(config);
@@ -43,22 +46,52 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
     useCustomGroups({customGroups, graph});
 
     const [selectedBlocks, setSelectedBlocks] = React.useState<Array<TBlockId>>([]);
+    const [hoveredBlockId, setHoveredBlockId] = React.useState<TBlockId | null>(null);
 
     React.useEffect(() => {
-        const selectionIds = new Set(selectedBlocks);
-        const connections = !selectedBlocks?.length
+        const highlightIds = new Set(selectedBlocks);
+        if (highlightConnectionsOnHover && hoveredBlockId) {
+            highlightIds.add(hoveredBlockId);
+        }
+        const connections = !highlightIds.size
             ? data.connections?.map((item) => ({selected: false, ...item}))
             : data?.connections?.map((item) => {
                   if (
-                      selectionIds.has(item.sourceBlockId!) ||
-                      selectionIds.has(item.targetBlockId!)
+                      highlightIds.has(item.sourceBlockId!) ||
+                      highlightIds.has(item.targetBlockId!)
                   ) {
                       return {selected: true, ...item};
                   }
                   return {selected: false, ...item};
               });
         setEntities({...data, connections});
-    }, [data, selectedBlocks, setEntities]);
+    }, [data, selectedBlocks, hoveredBlockId, highlightConnectionsOnHover, setEntities]);
+
+    React.useEffect(() => {
+        if (!highlightConnectionsOnHover) {
+            return;
+        }
+
+        const handleMouseEnter = ({detail}: GraphMouseEvent) => {
+            const block = isBlock(detail.target) ? detail.target : undefined;
+            setHoveredBlockId(block ? (block.state as {id: TBlockId}).id : null);
+        };
+        const handleMouseLeave = () => {
+            setHoveredBlockId(null);
+        };
+        graph.on('mouseenter', handleMouseEnter);
+        graph.on('mouseleave', handleMouseLeave);
+        return () => {
+            graph.off('mouseenter', handleMouseEnter);
+            graph.off('mouseleave', handleMouseLeave);
+        };
+    }, [graph, isBlock, highlightConnectionsOnHover]);
+
+    React.useEffect(() => {
+        if (!highlightConnectionsOnHover) {
+            setHoveredBlockId(null);
+        }
+    }, [highlightConnectionsOnHover]);
 
     React.useEffect(() => {
         if (config.settings) {
@@ -208,10 +241,14 @@ export function YTGraph<B extends YTGraphBlock<string, {}>, C extends TConnectio
                 onBlockSelectionChange={({list}) => {
                     setSelectedBlocks(list);
                 }}
-                click={({target}) => {
+                click={({target, sourceEvent}) => {
                     const isEmptyAreaClick = isEmpty_(target?.state);
                     if (isEmptyAreaClick) {
                         setSelectedBlocks([]);
+                    }
+
+                    if (target && isBlock(target)) {
+                        onBlockClick?.(target.state as B, sourceEvent);
                     }
                 }}
             />

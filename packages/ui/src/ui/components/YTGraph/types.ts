@@ -25,6 +25,8 @@ export type YTGraphProps<B extends TBlock, C extends TConnection> = {
     /** When true, zoom on mouse wheel scroll (like vis-network). Default: false */
     zoomOnScroll?: boolean;
     autoCenter?: boolean;
+    highlightConnectionsOnHover?: boolean;
+    onBlockClick?: (data: B, event: Event) => void;
 } & YTGraphGroupProps;
 
 export type RenderContentProps<B extends TBlock> = {
