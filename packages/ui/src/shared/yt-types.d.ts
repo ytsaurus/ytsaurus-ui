@@ -547,6 +547,11 @@ export type FlowViewWorkerInfo = {
 export type YqlEnginesInfo = {
     available_yql_versions: string[];
     default_yql_ui_version: string;
+    supported_features?: {
+        declare_params?: boolean;
+        multiple_full_results?: boolean;
+        yql_runner?: boolean;
+    };
 };
 
 export type GetQueryTrackerInfoResponse = {
