@@ -1,0 +1,8 @@
+{
+  "action_details": "Details",
+  "title_connection-error": "couldn't be reached",
+  "alert_connection-failed": "Failed to fetch version of the cluster. Usually it means UI cannot establish connection to the cluster's proxy.",
+  "title_error": "Error",
+  "alert_authentication-failed": "Could not fetch the XSRF token, therefore preventing further operations. Sometimes token fetching fails due to the network issues. If the problem persists, please report it.",
+  "alert_general-error": "An error occurred while fetching the necessary information about the cluster."
+}
