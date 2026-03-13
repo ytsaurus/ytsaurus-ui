@@ -16,6 +16,7 @@ import settingsIcon from '../../assets/img/svg/settings-2.svg';
 import './PagesSettingsEditor.scss';
 import {getAppBrowserHistory} from '../../store/window-store';
 import {AppNavigationProps} from './AppNavigationPageLayout';
+import i18n from './i18n';
 
 const block = cn('pages-settings-editor');
 
@@ -34,7 +35,7 @@ export function PagesSettingsEditor(props: {
     return (
         <div className={block(null, className)}>
             <div className={block('top')}>
-                <div className={block('top-title')}>All pages</div>
+                <div className={block('top-title')}>{i18n('title_all-pages')}</div>
                 <Button
                     className={block('top-btn', {active: isEditMode})}
                     view="flat"

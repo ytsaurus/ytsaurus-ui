@@ -19,6 +19,7 @@ import {ChatToggleFooterButton} from '../AiChat/ChatToggleButton';
 
 import './AppNavigationComponent.scss';
 import {getAllowManageTokens} from '../../store/selectors/manage-tokens';
+import i18n from './i18n';
 
 const block = cn('yt-app-navigation');
 
@@ -102,7 +103,7 @@ function AppNavigationComponent({
                                     compact={compact}
                                     item={{
                                         id: 'support',
-                                        title: 'Report a bug',
+                                        title: i18n('action_report-bug'),
                                         icon: BugIcon,
                                         onItemClick: onSupportClick,
                                     }}
@@ -121,7 +122,7 @@ function AppNavigationComponent({
                             compact={compact}
                             item={{
                                 id: 'settings',
-                                title: 'Settings',
+                                title: i18n('action_settings'),
                                 onItemClick: toggleSettingsVisible,
                                 icon: GearIcon,
                             }}
@@ -169,7 +170,7 @@ function AppNavigationComponent({
                                                         )
                                                     }
                                                 >
-                                                    Change password
+                                                    {i18n('action_change-password')}
                                                 </Menu.Item>
                                             )}
                                             {isManageTokensMenuVisible && (
@@ -183,10 +184,12 @@ function AppNavigationComponent({
                                                         })
                                                     }
                                                 >
-                                                    Manage tokens
+                                                    {i18n('action_manage-tokens')}
                                                 </Menu.Item>
                                             )}
-                                            <Menu.Item href={'/api/yt/logout'}>Logout</Menu.Item>
+                                            <Menu.Item href={'/api/yt/logout'}>
+                                                {i18n('action_logout')}
+                                            </Menu.Item>
                                         </Menu>
                                     </div>
                                 );

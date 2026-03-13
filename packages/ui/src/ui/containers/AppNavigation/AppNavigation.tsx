@@ -24,6 +24,7 @@ import {getSettingNavigationPanelExpanded} from '../../store/selectors/settings'
 import {setSettingNavigationPanelExpanded} from '../../store/actions/settings/settings';
 import {setAsideHeaderWidth} from '../../store/actions/global';
 import {SettingsPanelLazy} from '../SettingsPanel/lazy';
+import i18n from './i18n';
 
 const block = cn('app-navigation');
 
@@ -74,7 +75,7 @@ export default function AppNavigation({children}: ExtProps) {
             ...items,
             {
                 id: 'all_pages',
-                title: 'All pages',
+                title: i18n('title_all-pages'),
                 icon: ellipsisIcon,
                 current: false,
                 onItemClick: togglePanelVisibility,
