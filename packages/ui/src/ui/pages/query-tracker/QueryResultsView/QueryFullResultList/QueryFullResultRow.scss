@@ -1,0 +1,11 @@
+.yt-query-full-result-row {
+    display: grid;
+    width: 100%;
+    height: 40px;
+    gap: 10px;
+    white-space: nowrap;
+    grid-template-columns: minmax(max-content, 1fr);
+    grid-auto-flow: column;
+    align-items: center;
+    border-bottom: 1px solid var(--g-color-line-generic);
+}

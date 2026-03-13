@@ -166,6 +166,12 @@ export type QueryResultMetaScheme = {
     };
 };
 
+export type QueryFullResult = {
+    cluster: string;
+    table_path: string;
+    exist?: boolean;
+};
+
 export type QueryResultMeta = {
     id: string;
     result_index: number;
@@ -188,10 +194,7 @@ export type QueryResultMeta = {
         unmerged_row_count: number;
         unmerged_data_weight: number;
     };
-    full_result?: {
-        cluster: string;
-        table_path: string;
-    };
+    full_result?: QueryFullResult | QueryFullResult[];
     error?: unknown;
 };
 
