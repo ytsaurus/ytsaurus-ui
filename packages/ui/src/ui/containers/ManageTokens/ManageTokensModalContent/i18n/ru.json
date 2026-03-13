@@ -1,0 +1,15 @@
+{
+  "title_copy-token-value": "Скопировать значение токена",
+  "alert_save-token-warning": "Пожалуйста, сохраните значение токена. Невозможно получить значение токена после закрытия диалога",
+  "action_close": "Закрыть",
+  "title_generate-token": "Сгенерировать токен",
+  "field_description": "Описание",
+  "confirm_revoke-token": "Вы уверены, что хотите отозвать токен? Это действие НЕЛЬЗЯ отменить.",
+  "title_authentication-tokens": "Токены аутентификации",
+  "action_generate-token": "Сгенерировать токен",
+  "value_no-tokens-found": "Токены не найдены",
+  "field_token": "Токен",
+  "field_token-hash": "Хеш токена",
+  "field_issued-at": "Выдан",
+  "title_copy-error": "Скопировать ошибку"
+}

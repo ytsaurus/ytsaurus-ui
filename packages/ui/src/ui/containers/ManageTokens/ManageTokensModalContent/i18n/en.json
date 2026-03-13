@@ -1,0 +1,15 @@
+{
+  "title_copy-token-value": "Copy token value",
+  "alert_save-token-warning": "Please save the token value. It is impossible to get the token value after closing the dialog",
+  "action_close": "Close",
+  "title_generate-token": "Generate token",
+  "field_description": "Description",
+  "confirm_revoke-token": "Are you sure you want to revoke the token? This action CANNOT be undone.",
+  "title_authentication-tokens": "Authentication Tokens",
+  "action_generate-token": "Generate token",
+  "value_no-tokens-found": "No tokens found",
+  "field_token": "Token",
+  "field_token-hash": "Token Hash",
+  "field_issued-at": "Issued At",
+  "title_copy-error": "Copy error"
+}

@@ -26,6 +26,7 @@ import {
 } from '../ManageTokensPasswordModal/ManageTokensPasswordModal';
 import {CollapsedString} from '../../../components/CollapsedString';
 import format from '../../../common/hammer/format';
+import i18n from './i18n';
 
 import './ManageTokensModalContent.scss';
 
@@ -81,11 +82,8 @@ const AuthenticationGenerateTokenFormSection: FC<{onClose: () => void}> = ({onCl
     if (token) {
         return (
             <div className={block('new-token')}>
-                <h2>Copy token value</h2>
-                <Alert
-                    theme="warning"
-                    message="Please save the token value. It is impossible to get the token value after closing the dialog"
-                />
+                <h2>{i18n('title_copy-token-value')}</h2>
+                <Alert theme="warning" message={i18n('alert_save-token-warning')} />
                 <br />
                 <Alert
                     message={token}
@@ -100,7 +98,7 @@ const AuthenticationGenerateTokenFormSection: FC<{onClose: () => void}> = ({onCl
                             onClose();
                         }}
                     >
-                        Close
+                        {i18n('action_close')}
                     </Button>
                 </div>
             </div>
@@ -110,7 +108,7 @@ const AuthenticationGenerateTokenFormSection: FC<{onClose: () => void}> = ({onCl
     return (
         <YTDFDialog<FormData>
             headerProps={{
-                title: 'Generate token',
+                title: i18n('title_generate-token'),
             }}
             pristineSubmittable
             modal={false}
@@ -121,7 +119,7 @@ const AuthenticationGenerateTokenFormSection: FC<{onClose: () => void}> = ({onCl
                 {
                     name: 'description',
                     type: 'textarea',
-                    caption: 'Description',
+                    caption: i18n('field_description'),
                 },
                 ...makeErrorFields([error]),
             ]}
@@ -159,7 +157,7 @@ const RevokeToken = (props: {handleClickRemoveToken: (index: number) => void; in
                 <Icon awesome={'trash-bin'} />
             </Button>
             <Modal
-                content="Are you sure you want to revoke the token? This action CANNOT be undone."
+                content={i18n('confirm_revoke-token')}
                 onCancel={handleCancel}
                 onConfirm={handleConfirm}
                 onOutsideClick={handleCancel}
@@ -214,10 +212,10 @@ const AuthenticationTokensSection: FC<{
 
     return (
         <div className={block('tokens')}>
-            <h2>Authentication Tokens</h2>
+            <h2>{i18n('title_authentication-tokens')}</h2>
             <div className={block('generate-token-button')}>
                 <Button size="l" view="action" onClick={() => onClickGenerateTokenButton()}>
-                    Generate token
+                    {i18n('action_generate-token')}
                 </Button>
             </div>
             <div className={block('tokens-table')}>
@@ -225,12 +223,12 @@ const AuthenticationTokensSection: FC<{
                     loaded
                     useThemeYT
                     data={tokens}
-                    noItemsText="No tokens found"
+                    noItemsText={i18n('value_no-tokens-found')}
                     rowClassName={() => block('table-row')}
                     columns={[
                         {
                             name: 'tokenPrefix',
-                            header: 'Token',
+                            header: i18n('field_token'),
                             width: 110,
                             className: block('table-cell'),
                             render: ({value}) => {
@@ -239,7 +237,7 @@ const AuthenticationTokensSection: FC<{
                         },
                         {
                             name: 'tokenHash',
-                            header: 'Token Hash',
+                            header: i18n('field_token-hash'),
                             width: 110,
                             className: block('table-cell', {name: 'hash'}),
                             render: ({value}) => {
@@ -247,7 +245,7 @@ const AuthenticationTokensSection: FC<{
                                     <>
                                         {truncate_(String(value), {length: 12})}
                                         <ClipboardButton
-                                            title="Copy error"
+                                            title={i18n('title_copy-error')}
                                             view="flat-secondary"
                                             text={value}
                                             size="xs"
@@ -258,7 +256,7 @@ const AuthenticationTokensSection: FC<{
                         },
                         {
                             name: 'description',
-                            header: 'Description',
+                            header: i18n('field_description'),
                             width: 320,
                             className: block('table-cell', {name: 'description'}),
                             render(value) {
@@ -276,7 +274,7 @@ const AuthenticationTokensSection: FC<{
                         },
                         {
                             name: 'creationTime',
-                            header: 'Issued At',
+                            header: i18n('field_issued-at'),
                             width: 160,
                             className: block('table-cell'),
                             render: (value) => {
