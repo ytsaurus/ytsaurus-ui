@@ -27,6 +27,7 @@ import './ClusterMenuBody.scss';
 import {RootState} from '../../store/reducers';
 import {ClusterConfigWithStatus} from '../../store/reducers/clusters-menu/clusters-menu';
 import {getAppBrowserHistory} from '../../store/window-store';
+import i18n from './i18n';
 
 const b = block('cluster-menu');
 
@@ -71,16 +72,16 @@ class ClustersMenuBody extends React.Component<Props> {
         let text: typeof version = '—';
         if (loadState === 'loaded') {
             if (access === 'granted') {
-                title = `Current cluster version: ${version}`;
+                title = i18n('context_current-cluster-version', {version});
                 text = version;
             } else if (access === 'none' && status === 'available') {
-                title = 'Please refer to Getting Started for more details';
-                text = 'No access';
+                title = i18n('context_getting-started-details');
+                text = i18n('value_no-access');
             } else if (access === 'none' && status !== 'available') {
-                title = 'Could not load version, cluster is unavailable';
+                title = i18n('context_cluster-unavailable');
             }
         } else {
-            title = 'Please wait, loading cluster version';
+            title = i18n('context_loading-version');
         }
         return (
             <div className={b('item-version')} title={title}>
@@ -260,7 +261,7 @@ class ClustersMenuBody extends React.Component<Props> {
         const className = b('heading', {position: 'center', size: 'l'});
         return (
             <main key="body" className={b(null, 'elements-page__content')}>
-                <div className={b('message', className)}>No clusters matching your selection</div>
+                <div className={b('message', className)}>{i18n('alert_no-clusters-matching')}</div>
             </main>
         );
     }

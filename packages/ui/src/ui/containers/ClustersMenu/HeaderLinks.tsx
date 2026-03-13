@@ -15,6 +15,7 @@ import Icon from '../../components/Icon/Icon';
 import {ALL_LINKS_ITEMS, HeaderLinkItem} from './header-links-items';
 import {wrapApiPromiseByToaster} from '../../utils/utils';
 import {ActionD} from '../../types';
+import i18n from './i18n';
 
 const b = block('cluster-menu');
 
@@ -132,7 +133,7 @@ export function HeaderLinks({currentUrl, showTitle}: Props) {
                     popupProps={{className: b('popup')}}
                     renderSwitcher={(props) => (
                         <Button {...props}>
-                            Links&nbsp;
+                            {i18n('action_links')}&nbsp;
                             <Icon awesome={'chevron-down'} />
                         </Button>
                     )}

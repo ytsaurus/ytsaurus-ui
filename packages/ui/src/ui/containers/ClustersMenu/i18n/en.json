@@ -1,0 +1,10 @@
+{
+    "field_filter-clusters": "Filter clusters",
+    "context_current-cluster-version": "Current cluster version: {{version}}",
+    "context_getting-started-details": "Please refer to Getting Started for more details",
+    "value_no-access": "No access",
+    "context_cluster-unavailable": "Could not load version, cluster is unavailable",
+    "context_loading-version": "Please wait, loading cluster version",
+    "alert_no-clusters-matching": "No clusters matching your selection",
+    "action_links": "Links"
+}

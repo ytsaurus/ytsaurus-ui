@@ -1,0 +1,10 @@
+{
+    "field_filter-clusters": "Фильтр кластеров",
+    "context_current-cluster-version": "Текущая версия кластера: {{version}}",
+    "context_getting-started-details": "Пожалуйста, обратитесь к разделу «Начало работы» для получения дополнительной информации",
+    "value_no-access": "Нет доступа",
+    "context_cluster-unavailable": "Не удалось загрузить версию, кластер недоступен",
+    "context_loading-version": "Пожалуйста, подождите, загружается версия кластера",
+    "alert_no-clusters-matching": "Нет кластеров, соответствующих вашему выбору",
+    "action_links": "Ссылки"
+}
