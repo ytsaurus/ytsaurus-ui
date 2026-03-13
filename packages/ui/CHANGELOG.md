@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.6.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.6.1...ui-v3.6.2) (2026-03-13)
+
+
+### Bug Fixes
+
+* **Flows:** use 'name' field for computations [YTFRONT-5604] ([a5c2bc3](https://github.com/ytsaurus/ytsaurus-ui/commit/a5c2bc390f22b55ebea1d3324498fdb4fe07c25e))
+* **Navigation/ChaosReplicatedTable:** use 'alter_replication_card' command to switch automatic replication [YTFRONT-5287] ([b911633](https://github.com/ytsaurus/ytsaurus-ui/commit/b91163362a0b8d28c0b5951bcf0b5a443f733b0b))
+* **Navigation:** metadata in empty tables [YTFRONT-5638] ([4c15602](https://github.com/ytsaurus/ytsaurus-ui/commit/4c15602d12b4442f9b7e89a38666d8e3798ade5c))
+
 ## [3.6.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.6.0...ui-v3.6.1) (2026-03-05)
 
 
