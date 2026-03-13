@@ -3,10 +3,6 @@
 @use '../../styles/fonts.scss';
 
 .tablet-top-row-content {
-    &__breadcrumbs {
-        @include mixins.top-row-breadcrumbs();
-    }
-
     &__editable {
         @include fonts.font-body2;
 
