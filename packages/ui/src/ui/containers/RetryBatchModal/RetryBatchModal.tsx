@@ -16,6 +16,7 @@ import {
     retryExecuteBatch,
     skipExecuteBatch,
 } from '../../store/actions/execute-batch';
+import i18n from './i18n';
 
 const BUTTON_WIDTH_STYLE = {width: 128};
 
@@ -44,23 +45,23 @@ function RetryBatchImpl(props: ExecuteBatchStateItem) {
 
     return (
         <Dialog open={showModal} hasCloseButton={false} onClose={handleClose}>
-            <Dialog.Header caption={'Error'} />
+            <Dialog.Header caption={i18n('title_error')} />
             <Dialog.Body>
-                <div>Some sub-requests have been failed. Would you like to try again?</div>
+                <div>{i18n('alert_sub-requests-failed')}</div>
                 <YTErrorBlock error={error} />
             </Dialog.Body>
             <Dialog.Footer
                 preset={'default'}
                 showError={false}
-                textButtonCancel={disableSkip ? 'Abort' : 'Skip'}
-                textButtonApply={'Retry'}
+                textButtonCancel={disableSkip ? i18n('action_abort') : i18n('action_skip')}
+                textButtonApply={i18n('action_retry')}
                 onClickButtonApply={handleRetry}
                 onClickButtonCancel={disableSkip ? handleAbort : handleSkip}
             >
                 {!disableSkip && (
                     <div style={BUTTON_WIDTH_STYLE}>
                         <Button onClick={handleAbort} size={'l'} width={'max'}>
-                            Abort
+                            {i18n('action_abort')}
                         </Button>
                     </div>
                 )}
