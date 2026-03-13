@@ -56,7 +56,7 @@ export interface Role {
     role_type?: string;
     column_group_id?: string;
     permissions?: Array<YTPermissionType>;
-    inheritance_mode?: string;
+    inheritance_mode?: InheritanceModeType;
     columns?: Array<string>;
     inherited?: boolean;
     member?: boolean;
@@ -138,7 +138,7 @@ export interface ACE {
     permissions: Array<YTPermissionType>;
     action: string;
     subjects: Array<string>;
-    inheritance_mode?: string;
+    inheritance_mode?: InheritanceModeType;
     columns?: Array<string>;
     inherited?: boolean;
 }
@@ -215,8 +215,14 @@ export type TypedAclSubject =
 
 export type InheritedFrom = {kind: IdmKindType; name: string; poolTree?: string};
 
+export type InheritanceModeType =
+    | 'object_and_descendants'
+    | 'object_only'
+    | 'descendants_only'
+    | 'immediate_descendants_only';
+
 export type PreparedAclSubject = TypedAclSubject & {
-    inheritance_mode?: string;
+    inheritance_mode?: InheritanceModeType;
     inherited?: boolean;
     inheritedFrom?: InheritedFrom;
     key?: string;

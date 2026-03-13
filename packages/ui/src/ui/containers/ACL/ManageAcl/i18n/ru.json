@@ -1,0 +1,14 @@
+{
+  "action_manage-responsibles": "Управление ответственными",
+  "title_manage-responsibles": "Управление ответственными",
+  "field_responsible": "Ответственный",
+  "field_inherit-responsible": "Наследовать ответственного",
+  "field_read-approvers": "Утверждающие чтение",
+  "field_auditors": "Аудиторы",
+  "field_boss-approval": "Одобрение руководителя",
+  "field_comment": "Комментарий для IDM",
+  "placeholder_who-should-approve": "Кто должен утверждать...",
+  "placeholder_who-should-approve-read": "Кто должен утверждать запросы на чтение...",
+  "placeholder_who-should-audit": "Кто должен проводить аудит изменений ACL...",
+  "alert_acl-update-failure": "Ошибка обновления ACL"
+}

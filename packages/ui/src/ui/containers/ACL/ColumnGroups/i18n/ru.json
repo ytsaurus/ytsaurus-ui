@@ -1,0 +1,15 @@
+{
+  "title_add-column-group": "Добавить новую группу колонок",
+  "action_add": "Добавить",
+  "title_edit-column-group": "Редактировать группу колонок",
+  "action_save": "Сохранить",
+  "title_delete-column-group": "Удалить группу колонок",
+  "action_delete": "Удалить",
+  "field_status": "Статус",
+  "field_name": "Имя",
+  "field_columns": "Колонки",
+  "title_column-groups": "Группы колонок",
+  "placeholder_filter-by-name": "Фильтр по имени",
+  "alert_no-column-groups": "Нет групп колонок",
+  "placeholder_filter": "фильтр"
+}

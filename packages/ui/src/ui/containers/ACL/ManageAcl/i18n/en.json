@@ -1,0 +1,14 @@
+{
+  "action_manage-responsibles": "Manage responsibles",
+  "title_manage-responsibles": "Manage responsibles",
+  "field_responsible": "Responsible",
+  "field_inherit-responsible": "Inherit responsible",
+  "field_read-approvers": "Read approvers",
+  "field_auditors": "Auditors",
+  "field_boss-approval": "Boss approval",
+  "field_comment": "Comment for IDM",
+  "placeholder_who-should-approve": "Who should approve...",
+  "placeholder_who-should-approve-read": "Who should approve read requests...",
+  "placeholder_who-should-audit": "Who should audit ACL change...",
+  "alert_acl-update-failure": "Acl update failure"
+}

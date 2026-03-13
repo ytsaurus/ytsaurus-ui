@@ -1,0 +1,16 @@
+{
+  "field_cluster": "Cluster",
+  "field_current": "Current",
+  "field_permissions": "Permissions",
+  "field_read-columns": "Read columns",
+  "field_read-column-group": "Read column group",
+  "field_subjects": "Subjects",
+  "field_duration": "Duration",
+  "field_comment": "Comment",
+  "field_inheritance-mode": "Inheritance mode",
+  "field_permission-flags": "Permission flags",
+  "placeholder_enter-group-user": "Enter group name, user name or login...",
+  "tooltip_permissions-types": "Permissions types",
+  "alert_teams-people-request": "Teams and people can be requested through the IDM after the access group is created. If you have a more complex case please describe it in the comments.",
+  "value_not-implemented": "Not implemented"
+}

@@ -1,49 +1,50 @@
+import cn from 'bem-cn-lite';
 import React, {Component, Fragment} from 'react';
 import hammer from '../../common/hammer';
-import cn from 'bem-cn-lite';
 
 import compact_ from 'lodash/compact';
 
-import {Button, ClipboardButton, Flex, Icon, Loader} from '@gravity-ui/uikit';
 import {Column} from '@gravity-ui/react-data-table';
+import {Button, ClipboardButton, Flex, Icon, Loader} from '@gravity-ui/uikit';
 
 import {AclMode, IdmObjectType} from '../../constants/acl';
 
 import ColumnGroups from './ColumnGroups/ColumnGroups';
 
-import DeletePermissionModal from './DeletePermissionModal/DeletePermissionModal';
 import {AclActions} from './AclActions/AclActions';
+import DeletePermissionModal from './DeletePermissionModal/DeletePermissionModal';
 import {MyPermissions} from './MyPermissinos/MyPermissions';
 
-import LoadDataHandler from '../../components/LoadDataHandler/LoadDataHandler';
-import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import DataTableYT from '../../components/DataTableYT/DataTableYT';
+import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
+import LoadDataHandler from '../../components/LoadDataHandler/LoadDataHandler';
 import {SubjectCard} from '../../components/SubjectLink/SubjectLink';
 
-import withVisible, {WithVisibleProps} from '../../hocs/withVisible';
-import {renderText} from '../../components/templates/utils';
+import UIFactory, {AclRoleActionsType} from '../../UIFactory';
 import Label from '../../components/Label/Label';
 import {Tooltip} from '../../components/Tooltip/Tooltip';
 import {isIdmAclAvailable} from '../../config';
+import withVisible, {WithVisibleProps} from '../../hocs/withVisible';
 import ApproversFilters from './ApproversFilters/ApproversFilters';
 import ObjectPermissionsFilters from './ObjectPermissionsFilters/ObjectPermissionsFilters';
-import UIFactory, {AclRoleActionsType} from '../../UIFactory';
 
-import {ACLReduxProps} from './ACL-connect-helpers';
-import {PreparedAclSubject} from '../../utils/acl/acl-types';
 import {ObjectPermissionRowWithExpand, PreparedApprover} from '../../store/selectors/acl';
+import {PreparedAclSubject} from '../../utils/acl/acl-types';
+import {ACLReduxProps} from './ACL-connect-helpers';
 
+import {ExpandButton} from '../../components/ExpandButton';
 import {SegmentControl, SegmentControlItem} from '../../components/SegmentControl/SegmentControl';
 import WithStickyToolbar from '../../components/WithStickyToolbar/WithStickyToolbar';
 import {PreparedRole, isGranted} from '../../utils/acl';
-import {AclModeControl} from './AclModeControl';
-import {ExpandButton} from '../../components/ExpandButton';
 import {AclColumnsCell} from './AclColumnsCell';
+import {AclModeControl} from './AclModeControl';
 
 import aclInheritedSvg from '../../assets/img/svg/acl-inherited.svg';
 
 import './ACL.scss';
 import {InheritanceMessage} from './InheritanceMessage/InheritanceMessage';
+import i18n from './i18n';
+import i18nPermissionValues from './i18n-permission-values';
 
 const block = cn('navigation-acl');
 
@@ -53,56 +54,6 @@ type ApproverRow = PreparedApprover;
 type PermissionsRow = ObjectPermissionRowWithExpand;
 
 class ACL extends Component<Props> {
-    static tableColumns = {
-        items: {
-            inherited: {
-                caption: '',
-                align: 'center',
-            },
-            subjects: {
-                align: 'left',
-            },
-            permissions: {
-                align: 'left',
-            },
-            columns: {
-                caption: 'Private columns',
-                align: 'left',
-            },
-            inheritance_mode: {
-                align: 'left',
-            },
-            actions: {
-                caption: '',
-                align: 'right',
-            },
-            responsibles: {
-                align: 'left',
-            },
-            read_approvers: {
-                align: 'left',
-            },
-            auditors: {
-                align: 'left',
-            },
-            approve_type: {
-                align: 'left',
-                caption: 'Type',
-            },
-        },
-        sets: {
-            objectDefault: {
-                items: ['inherited', 'subjects', 'permissions', 'inheritance_mode', 'actions'],
-            },
-            columns: {
-                items: ['inherited', 'subjects', 'columns'],
-            },
-            approvers: {
-                items: ['inherited', 'subjects', 'approve_type', 'actions'],
-            },
-        },
-    };
-
     // eslint-disable-next-line react/sort-comp
     static renderSubjectLink(item: PreparedAclSubject | PreparedApprover | PermissionsRow) {
         const {internal} = item;
@@ -209,7 +160,9 @@ class ACL extends Component<Props> {
                 width: 36,
             } as Column<T>,
             subjects: {
-                name: 'Subjects',
+                get name() {
+                    return i18n('field_subjects');
+                },
                 align: 'left',
                 className: block('table-item', {type: 'subjects'}),
                 render({row}) {
@@ -250,7 +203,9 @@ class ACL extends Component<Props> {
                 },
             } as Column<T>,
             permissions: {
-                name: 'Permissions',
+                get name() {
+                    return i18n('field_permissions');
+                },
                 align: 'left',
                 className: block('table-item', {type: 'permissions'}),
                 render({row}) {
@@ -260,10 +215,13 @@ class ACL extends Component<Props> {
                     return (
                         <div className={block('permissions', {type: row.action})}>
                             <Label className={block('action-label')} theme={theme}>
-                                {action}
+                                {i18nPermissionValues(`action_${action}`)}
                             </Label>
                             <AclColumnsCell
-                                items={row.permissions?.map(hammer.format.Readable)}
+                                skipDecode
+                                items={row.permissions?.map((item) =>
+                                    i18nPermissionValues(`value_${item}`),
+                                )}
                                 expanadable={'expanded' in row}
                             />
                         </div>
@@ -271,12 +229,14 @@ class ACL extends Component<Props> {
                 },
             } as Column<T>,
             inheritance_mode: {
-                name: 'Inheritance mode',
+                get name() {
+                    return i18n('field_inheritance-mode');
+                },
                 render({row}) {
                     const {inheritance_mode: mode} = row;
                     return mode === undefined
                         ? hammer.format.NO_VALUE
-                        : renderText(hammer.format['ReadableField'](mode));
+                        : i18nPermissionValues(`inheritance_${mode}`);
                 },
                 align: 'left',
                 className: block('table-item', {type: 'inheritance-mode'}),
@@ -301,7 +261,9 @@ class ACL extends Component<Props> {
                 },
             } as Column<T>,
             approve_type: {
-                name: 'Type',
+                get name() {
+                    return i18n('field_type');
+                },
                 align: 'left',
                 className: block('table-item', {type: 'approve-type'}),
                 render({row}) {
@@ -309,7 +271,9 @@ class ACL extends Component<Props> {
                 },
             } as Column<T>,
             columns: {
-                name: 'Private columns',
+                get name() {
+                    return i18n('field_private-columns');
+                },
                 align: 'left',
                 className: block('table-item', {type: 'columns'}),
                 render({row}) {
@@ -355,7 +319,7 @@ class ACL extends Component<Props> {
                 <ErrorBoundary>
                     <div className={block('approvers')}>
                         <div className="elements-heading elements-heading_size_xs">
-                            Responsibles
+                            {i18n('title_responsibles')}
                             <Button className={block('sync-with-col-groups')}>
                                 Hidden button to sync offsets with column groups
                             </Button>
@@ -368,7 +332,7 @@ class ACL extends Component<Props> {
                                 <DataTableYT
                                     data={approversFiltered}
                                     loaded={loaded}
-                                    noItemsText="Thre are no any responsibles"
+                                    noItemsText={i18n('alert_no-responsibles')}
                                     columns={tableColumns}
                                     theme={'yt-borderless'}
                                     rowClassName={this.rowClassNameByFlags}
@@ -420,7 +384,11 @@ class ACL extends Component<Props> {
             <ErrorBoundary>
                 <div className={block('object-permissions')}>
                     <div className="elements-heading elements-heading_size_xs">
-                        {useColumns ? 'Private columns permissions' : 'Object permissions'}
+                        {i18n(
+                            useColumns
+                                ? 'title_private-columns-permissions'
+                                : 'title_object-permissions',
+                        )}
                     </div>
                     <WithStickyToolbar
                         topMargin="none"
@@ -440,8 +408,8 @@ class ACL extends Component<Props> {
                             <DataTableYT
                                 noItemsText={
                                     aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS
-                                        ? 'There are no any column group permissions'
-                                        : 'There are no any object permissions'
+                                        ? i18n('alert_no-column-group-permissions')
+                                        : i18n('alert_no-object-permissions')
                                 }
                                 data={items}
                                 loading={loading}
@@ -619,16 +587,16 @@ class ACL extends Component<Props> {
 
         const segments: Array<SegmentControlItem> = compact_([
             allowInheritAcl &&
-                toSegmentItem('Inherit ACL', disableAclInheritance, {
+                toSegmentItem(i18n('value_inherit-acl'), disableAclInheritance, {
                     invertRole: true,
                     envforceValue: inheritAcl,
                 }),
             isIdmAclAvailable() &&
                 allowBossApprovals &&
-                toSegmentItem('Boss approval', bossApproval),
+                toSegmentItem(i18n('value_boss-approval'), bossApproval),
             isIdmAclAvailable() &&
                 allowInheritResponsibles &&
-                toSegmentItem('Inherit responsibles', disableInheritanceResponsible, {
+                toSegmentItem(i18n('value_inherit-responsibles'), disableInheritanceResponsible, {
                     invertRole: true,
                 }),
         ]);
@@ -639,12 +607,12 @@ class ACL extends Component<Props> {
         const counters: Array<SegmentControlItem> =
             aclMode === AclMode.COLUMN_GROUPS_PERMISSISONS
                 ? [
-                      {name: 'Column groups', value: columnGroups.length},
-                      {name: 'Column permissions', value: columnsPermissions.count},
+                      {name: i18n('title_column-groups'), value: columnGroups.length},
+                      {name: i18n('title_column-permissions'), value: columnsPermissions.count},
                   ]
                 : [
-                      {name: 'Responsibles', value: approversFiltered.length},
-                      {name: 'Object permissions', value: mainPermissions.count},
+                      {name: i18n('title_responsibles'), value: approversFiltered.length},
+                      {name: i18n('title_object-permissions'), value: mainPermissions.count},
                   ];
 
         const hasColumns = Boolean(aclMode);

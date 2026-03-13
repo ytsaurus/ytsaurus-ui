@@ -1,0 +1,19 @@
+{
+  "action_allow": "Разрешено",
+  "action_deny": "Запрещено",
+  "inheritance_descendants_only": "Только потомки",
+  "inheritance_immediate_descendants_only": "Только прямы потомки",
+  "inheritance_object_only": "Только объект",
+  "inheritance_object_and_descendants": "Объект и потомки",
+  "value_read": "Чтение",
+  "value_write": "Запись",
+  "value_remove": "Удаление",
+  "value_administer": "Администрирование",
+  "value_manage": "Управление",
+  "value_modify_children": "Изменение дочерних объектов",
+  "value_mount": "Монтирование",
+  "value_use": "Использование",
+  "value_create": "Создание",
+  "value_register_queue_consumer": "Регистрация потребителя очереди",
+  "value_register_queue_consumer_vital": "Регистрация важного потребителя очереди"
+}

@@ -1,0 +1,7 @@
+{
+  "field_inherit-acl": "Наследовать ACL",
+  "field_comment": "Комментарий для IDM",
+  "action_edit-inheritance": "Редактировать наследование",
+  "alert_acl-update-failure": "Ошибка обновления ACL",
+  "alert_inherit-acl-warning": "Установка флага inherit_acl в false может привести к потере разрешений, необходимых для отмены этой операции."
+}

@@ -4,6 +4,7 @@ import {IdmObjectType} from '../../../constants/acl';
 import Link from '../../../components/Link/Link';
 import {InheritedFrom} from '../../../utils/acl/acl-types';
 import {makeAccountsUrl, makeNavigationLink, makeSchedulingUrl} from '../../../utils/app-url';
+import i18n from './i18n';
 
 function urlFromData(data?: InheritedFrom) {
     switch (data?.kind) {
@@ -24,10 +25,10 @@ function urlFromData(data?: InheritedFrom) {
 export function InheritanceMessage({data}: {data?: InheritedFrom}) {
     const url = urlFromData(data);
     return !url ? (
-        'Role is inherited'
+        i18n('alert_role-inherited')
     ) : (
         <React.Fragment>
-            Role is inherited{' '}
+            {i18n('alert_role-inherited-from')}{' '}
             <Link routed url={url} routedPreserveLocation>
                 {data?.name}
             </Link>

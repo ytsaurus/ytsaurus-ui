@@ -1,0 +1,15 @@
+{
+  "title_add-column-group": "Add new column group",
+  "action_add": "Add",
+  "title_edit-column-group": "Edit column group",
+  "action_save": "Save",
+  "title_delete-column-group": "Delete column group",
+  "action_delete": "Delete",
+  "field_status": "Status",
+  "field_name": "Name",
+  "field_columns": "Columns",
+  "title_column-groups": "Column groups",
+  "placeholder_filter-by-name": "Filter by name",
+  "alert_no-column-groups": "No column groups",
+  "placeholder_filter": "filter"
+}

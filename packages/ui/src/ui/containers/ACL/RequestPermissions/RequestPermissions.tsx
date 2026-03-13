@@ -18,10 +18,12 @@ import map_ from 'lodash/map';
 
 import {docsUrl} from '../../../config';
 import {makeLink} from '../../../utils/utils';
-import {AclColumnGroup, IdmKindType} from '../../../utils/acl/acl-types';
+import {AclColumnGroup, IdmKindType, InheritanceModeType} from '../../../utils/acl/acl-types';
 import {YTPermissionTypeUI} from '../../../utils/acl/acl-api';
 import {PermissionToRequest} from '../../../store/actions/acl';
 import {useAvailablePermissions} from '../hooks/use-available-permissions';
+import i18n from './i18n';
+import i18nPermissionValues from '../i18n-permission-values';
 
 const block = cn('acl-request-permissions');
 
@@ -68,7 +70,7 @@ type FormValues = {
         type: 'users' | 'groups' | 'app';
         text?: string;
     }>;
-    inheritance_mode?: string;
+    inheritance_mode?: InheritanceModeType;
     duration?: Date;
     comment?: string;
     readColumnGroup?: string;
@@ -128,7 +130,7 @@ function RequestPermissions(props: Props) {
         [requestPermissions, idmKind],
     );
 
-    const currentCaption = `Current ${SHORT_TITLE[idmKind] ?? idmKind}`;
+    const currentCaption = `${i18n('field_current')} ${SHORT_TITLE[idmKind] ?? idmKind}`;
 
     const {permissionsToRequest: choices} = useAvailablePermissions({idmKind, path});
 
@@ -144,7 +146,7 @@ function RequestPermissions(props: Props) {
         return {
             cluster: {
                 type: 'plain',
-                caption: 'Cluster',
+                caption: i18n('field_cluster'),
                 extras: {
                     className: block('cluster'),
                 },
@@ -158,13 +160,16 @@ function RequestPermissions(props: Props) {
             },
             permissions: {
                 type: 'permissions',
-                caption: 'Permissions',
+                caption: i18n('field_permissions'),
                 required: true,
                 tooltip: (
                     <>
                         {docsUrl(
-                            makeLink(UIFactory.docsUrls['acl:permissions'], 'Permissions types'),
-                            'Permissions types',
+                            makeLink(
+                                UIFactory.docsUrls['acl:permissions'],
+                                i18n('tooltip_permissions-types'),
+                            ),
+                            i18n('tooltip_permissions-types'),
                         )}
                     </>
                 ),
@@ -175,12 +180,12 @@ function RequestPermissions(props: Props) {
             },
             readColumns: {
                 type: 'acl-columns',
-                caption: 'Read columns',
+                caption: i18n('field_read-columns'),
                 required: true,
             },
             readColumnGroup: {
                 type: 'acl-column-group',
-                caption: 'Read column group',
+                caption: i18n('field_read-column-group'),
                 required: true,
                 extras: {
                     columnGroups,
@@ -188,16 +193,16 @@ function RequestPermissions(props: Props) {
             },
             subjects: {
                 type: 'acl-subjects',
-                caption: 'Subjects',
+                caption: i18n('field_subjects'),
                 required: true,
                 extras: {
-                    placeholder: 'Enter group name, user name or login...',
+                    placeholder: i18n('placeholder_enter-group-user'),
                     allowedTypes: ['users', 'groups', 'app'],
                 },
             },
             duration: {
                 type: 'before-date',
-                caption: 'Duration',
+                caption: i18n('field_duration'),
             },
             commentHeader: {
                 type: 'block',
@@ -205,11 +210,9 @@ function RequestPermissions(props: Props) {
                 extras: {
                     children: (
                         <React.Fragment>
-                            <div className={'is-dialog__label'}>Comment</div>
+                            <div className={'is-dialog__label'}>{i18n('field_comment')}</div>
                             <div className={block('comment-notice')}>
-                                Teams and people can be requested through the IDM after the access
-                                group is created. If you have a more complex case please describe it
-                                in the comments.
+                                {i18n('alert_teams-people-request')}
                             </div>
                         </React.Fragment>
                     ),
@@ -221,11 +224,11 @@ function RequestPermissions(props: Props) {
             },
             inheritance_mode: {
                 type: 'yt-select-single',
-                caption: 'Inheritance mode',
+                caption: i18n('field_inheritance-mode'),
                 extras: {
                     items: map_(INHERITANCE_MODE_TYPES, (value) => ({
                         value: value,
-                        text: hammer.format['ReadableField'](value),
+                        text: i18nPermissionValues(`inheritance_${value}`),
                     })),
                     hideClear: true,
                     hideFilter: true,
@@ -234,8 +237,8 @@ function RequestPermissions(props: Props) {
             },
             permissionFlags: {
                 type: 'block',
-                caption: 'Permission flags',
-                extras: {children: 'Not implemented'},
+                caption: i18n('field_permission-flags'),
+                extras: {children: i18n('value_not-implemented')},
             },
         };
     }, [choices, currentCaption, error, idmKind]);

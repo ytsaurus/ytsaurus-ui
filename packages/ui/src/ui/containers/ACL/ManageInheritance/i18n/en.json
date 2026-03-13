@@ -1,0 +1,7 @@
+{
+  "field_inherit-acl": "Inherit ACL",
+  "field_comment": "Comment for IDM",
+  "action_edit-inheritance": "Edit inheritance",
+  "alert_acl-update-failure": "Acl update failure",
+  "alert_inherit-acl-warning": "Setting inherit_acl flag to false may result in the loss of permissions sufficient to undo this operation."
+}

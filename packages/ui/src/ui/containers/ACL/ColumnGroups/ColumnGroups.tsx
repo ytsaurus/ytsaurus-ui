@@ -18,6 +18,7 @@ import WithStickyToolbar from '../../../components/WithStickyToolbar/WithStickyT
 import EditColumnGroupModal, {Props as ModalProps} from './EditColumnGroupModal';
 import {AclColumnGroup} from '../../../utils/acl/acl-types';
 import UIFactory from '../../../UIFactory';
+import i18n from './i18n';
 
 import './ColumnGroups.scss';
 import TextInputWithDebounce from '../../../components/TextInputWithDebounce/TextInputWithDebounce';
@@ -71,8 +72,8 @@ export default function ColumnGroups({
     const handleAddClick = () => {
         setModalProps((prevProps) => ({
             ...prevProps,
-            title: 'Add new column group',
-            confirmText: 'Add',
+            title: i18n('title_add-column-group'),
+            confirmText: i18n('action_add'),
             disabledFields: ['enabled'],
             visible: true,
             initialData: {
@@ -93,8 +94,8 @@ export default function ColumnGroups({
     const handleEditClick = (item: AclColumnGroup) => {
         setModalProps((prevProps) => ({
             ...prevProps,
-            title: 'Edit column group',
-            confirmText: 'Save',
+            title: i18n('title_edit-column-group'),
+            confirmText: i18n('action_save'),
             initialData: {...item},
             disabledFields: [],
             visible: true,
@@ -111,8 +112,8 @@ export default function ColumnGroups({
     const handleDeleteClick = (item: AclColumnGroup) => {
         setModalProps((prevProps) => ({
             ...prevProps,
-            title: 'Delete column group',
-            confirmText: 'Delete',
+            title: i18n('title_delete-column-group'),
+            confirmText: i18n('action_delete'),
             initialData: {...item},
             disabledFields: ['name', 'columns', 'enabled'],
             visible: true,
@@ -129,7 +130,7 @@ export default function ColumnGroups({
 
     const columns: Array<Column<AclColumnGroup>> = [
         {
-            name: 'Empty',
+            name: i18n('field_status'),
             className: block('empty'),
             header: null,
             render({row}) {
@@ -137,7 +138,7 @@ export default function ColumnGroups({
             },
         },
         {
-            name: 'Name',
+            name: i18n('field_name'),
             render({row}) {
                 return <span title={row.name}>{row.name}</span>;
             },
@@ -145,7 +146,7 @@ export default function ColumnGroups({
             className: block('name'),
         },
         {
-            name: 'Columns',
+            name: i18n('field_columns'),
             render({row}) {
                 return renderText(row.columns?.map((column) => `"${column}"`).join(', '));
             },
@@ -181,11 +182,11 @@ export default function ColumnGroups({
         <ErrorBoundary>
             <div>
                 <div className="elements-heading elements-heading_size_xs">
-                    Column groups
+                    {i18n('title_column-groups')}
                     {allowEdit && (
                         <Button className={block('button', {add: true})} onClick={handleAddClick}>
                             <Icon awesome={'plus'} />
-                            Add
+                            {i18n('action_add')}
                         </Button>
                     )}
                 </div>
@@ -198,7 +199,7 @@ export default function ColumnGroups({
                                 {
                                     node: (
                                         <TextInputWithDebounce
-                                            placeholder="Filter by name"
+                                            placeholder={i18n('placeholder_filter-by-name')}
                                             className={block('filter')}
                                             value={columnGroupNameFilter}
                                             onUpdate={(columnGroupNameFilter) =>
@@ -225,7 +226,7 @@ export default function ColumnGroups({
                     content={
                         <DataTableYT<AclColumnGroup>
                             loaded={loaded}
-                            noItemsText="There are not any column groups"
+                            noItemsText={i18n('alert_no-column-groups')}
                             data={columnGroups}
                             columns={columns}
                             theme={'yt-borderless'}
@@ -264,8 +265,8 @@ export function ColumnGroupsFilter({
             multiple
             hasClear
             filterable
-            label="Columns"
-            placeholder="filter"
+            label={i18n('field_columns')}
+            placeholder={i18n('placeholder_filter')}
             items={options}
             value={value}
             onUpdate={(columnsFilter) => updateAclFilters({columnsFilter})}

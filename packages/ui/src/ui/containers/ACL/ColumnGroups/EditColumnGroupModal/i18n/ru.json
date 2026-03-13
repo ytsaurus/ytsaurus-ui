@@ -1,0 +1,7 @@
+{
+  "field_name": "Имя",
+  "field_columns": "Колонки",
+  "field_enabled": "Включено",
+  "placeholder_column-group-name": "имя группы колонок",
+  "tooltip_columns": "Одно имя колонки на строку"
+}

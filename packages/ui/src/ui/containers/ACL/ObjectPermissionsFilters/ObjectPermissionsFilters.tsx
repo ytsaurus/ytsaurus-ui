@@ -1,26 +1,26 @@
-import React from 'react';
-import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 import map_ from 'lodash/map';
+import React from 'react';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 
-import format from '../../../common/hammer/format';
-
+import Filter from '../../../components/Filter/Filter';
+import Select from '../../../components/Select/Select';
+import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
+import {AclMode} from '../../../constants/acl';
 import {
     changeObjectPermissionsFilter,
     changeObjectSubjectFilter,
 } from '../../../store/actions/acl-filters';
+import {getObjectPermissionsTypesList} from '../../../store/selectors/acl';
 import {
     getObjectPermissionsFilter,
     getObjectSubjectFilter,
 } from '../../../store/selectors/acl-filters';
-import {getObjectPermissionsTypesList} from '../../../store/selectors/acl';
-import Filter from '../../../components/Filter/Filter';
-import Select from '../../../components/Select/Select';
-import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
-import './ObjectPermissionsFilters.scss';
 import {ACLReduxProps} from '../ACL-connect-helpers';
-import {AclMode} from '../../../constants/acl';
 import {ColumnGroupsFilter} from '../ColumnGroups/ColumnGroups';
+import i18nPermissionValues from '../i18n-permission-values';
+import i18n from './i18n';
+import './ObjectPermissionsFilters.scss';
 
 const block = cn('object-permissions-filters');
 
@@ -48,7 +48,7 @@ export default function ObjectPermissionsFilters({
                     node: (
                         <Filter
                             className={block('filter')}
-                            placeholder="Filter by subject"
+                            placeholder={i18n('placeholder_filter-by-subject')}
                             onChange={(value: string) => {
                                 dispatch(
                                     changeObjectSubjectFilter({
@@ -73,11 +73,11 @@ export default function ObjectPermissionsFilters({
                             <Select
                                 className={block('filter')}
                                 multiple
-                                placeholder={'filter'}
+                                placeholder={i18n('placeholder_filter')}
                                 value={selectedPermissons}
                                 items={map_(permissionList, (p) => ({
                                     value: p,
-                                    text: format.ReadableField(p),
+                                    text: i18nPermissionValues(`value_${p}`),
                                 }))}
                                 onUpdate={(value: string[]) => {
                                     dispatch(
@@ -86,7 +86,7 @@ export default function ObjectPermissionsFilters({
                                         }),
                                     );
                                 }}
-                                label={'Permissions'}
+                                label={i18n('label_permissions')}
                                 maxVisibleValuesTextLength={60}
                                 width="auto"
                             />

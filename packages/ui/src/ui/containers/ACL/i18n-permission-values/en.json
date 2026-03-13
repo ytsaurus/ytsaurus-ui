@@ -1,0 +1,19 @@
+{
+  "action_allow": "Allow",
+  "action_deny": "Deny",
+  "inheritance_descendants_only": "Descendants only",
+  "inheritance_immediate_descendants_only": "Immediate descendants only",
+  "inheritance_object_only": "Object only",
+  "inheritance_object_and_descendants": "Object and descendants",
+  "value_read": "Read",
+  "value_write": "Write",
+  "value_remove": "Remove",
+  "value_administer": "Administer",
+  "value_manage": "Manage",
+  "value_modify_children": "Modify children",
+  "value_mount": "Mount",
+  "value_use": "Use",
+  "value_create": "Create",
+  "value_register_queue_consumer": "Register queue consumer",
+  "value_register_queue_consumer_vital": "Register queue consumer vital"
+}

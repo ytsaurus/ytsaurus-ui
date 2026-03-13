@@ -1,0 +1,16 @@
+{
+  "field_cluster": "Кластер",
+  "field_current": "Текущий",
+  "field_permissions": "Разрешения",
+  "field_read-columns": "Колонки для чтения",
+  "field_read-column-group": "Группа колонок для чтения",
+  "field_subjects": "Субъекты",
+  "field_duration": "Длительность",
+  "field_comment": "Комментарий",
+  "field_inheritance-mode": "Режим наследования",
+  "field_permission-flags": "Флаги разрешений",
+  "placeholder_enter-group-user": "Введите имя группы, имя пользователя или логин...",
+  "tooltip_permissions-types": "Типы разрешений",
+  "alert_teams-people-request": "Команды и люди могут быть запрошены через IDM после создания группы доступа. Если у вас более сложный случай, пожалуйста, опишите его в комментариях.",
+  "value_not-implemented": "Не реализовано"
+}

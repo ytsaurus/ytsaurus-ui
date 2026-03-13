@@ -5,6 +5,7 @@ import {changeApproversSubjectFilter} from '../../../store/actions/acl-filters';
 import {getApproversSubjectFilter} from '../../../store/selectors/acl-filters';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import Filter from '../../../components/Filter/Filter';
+import i18n from './i18n';
 import './ApproversFilters.scss';
 
 const block = cn('approvers-filters');
@@ -19,7 +20,7 @@ export default function ApproversFilters() {
                 {
                     node: (
                         <Filter
-                            placeholder="Filter by subject"
+                            placeholder={i18n('placeholder_subject-filter')}
                             onChange={(value: string) => {
                                 dispatch(changeApproversSubjectFilter({approversSubject: value}));
                             }}

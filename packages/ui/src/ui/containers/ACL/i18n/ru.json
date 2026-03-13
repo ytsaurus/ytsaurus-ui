@@ -1,0 +1,20 @@
+{
+  "field_private-columns": "Приватные колонки",
+  "field_type": "Тип",
+  "field_subjects": "Субъекты",
+  "field_permissions": "Права доступа",
+  "field_inheritance-mode": "Режим наследования",
+  "title_responsibles": "Ответственные",
+  "title_private-columns-permissions": "Разрешения на приватные колонки",
+  "title_object-permissions": "Разрешения на объект",
+  "alert_no-responsibles": "Нет ответственных",
+  "alert_no-column-group-permissions": "Нет разрешений на группы колонок",
+  "alert_no-object-permissions": "Нет разрешений на объект",
+  "value_inherit-acl": "Наследовать ACL",
+  "value_boss-approval": "Согласование руководителя",
+  "value_inherit-responsibles": "Наследовать ответственных",
+  "title_column-groups": "Группы колонок",
+  "title_column-permissions": "Разрешения на колонки",
+  "value_action-allow": "разрешить",
+  "value_action-deny": "запретить"
+}

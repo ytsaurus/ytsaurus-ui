@@ -1,0 +1,7 @@
+{
+  "field_name": "Name",
+  "field_columns": "Columns",
+  "field_enabled": "Enabled",
+  "placeholder_column-group-name": "column group name",
+  "tooltip_columns": "One column name per line"
+}

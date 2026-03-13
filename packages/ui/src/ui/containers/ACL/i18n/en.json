@@ -1,0 +1,20 @@
+{
+  "field_private-columns": "Private columns",
+  "field_type": "Type",
+  "field_subjects": "Subjects",
+  "field_permissions": "Permissions",
+  "field_inheritance-mode": "Inheritance mode",
+  "title_responsibles": "Responsibles",
+  "title_private-columns-permissions": "Private columns permissions",
+  "title_object-permissions": "Object permissions",
+  "alert_no-responsibles": "There are no any responsibles",
+  "alert_no-column-group-permissions": "There are no any column group permissions",
+  "alert_no-object-permissions": "There are no any object permissions",
+  "value_inherit-acl": "Inherit ACL",
+  "value_boss-approval": "Boss approval",
+  "value_inherit-responsibles": "Inherit responsibles",
+  "title_column-groups": "Column groups",
+  "title_column-permissions": "Column permissions",
+  "value_action-allow": "allow",
+  "value_action-deny": "deny"
+}

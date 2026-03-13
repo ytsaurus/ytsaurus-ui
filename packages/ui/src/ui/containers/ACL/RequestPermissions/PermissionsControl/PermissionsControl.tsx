@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
 import cn from 'bem-cn-lite';
+import React, {Component} from 'react';
 
 import indexOf_ from 'lodash/indexOf';
 import isEmpty_ from 'lodash/isEmpty';
@@ -7,9 +7,8 @@ import map_ from 'lodash/map';
 
 import {Checkbox} from '@gravity-ui/uikit';
 
-import format from '../../../../common/hammer/format';
 import {YTPermissionTypeUI} from '../../../../utils/acl/acl-api';
-
+import i18nPermissionValues from '../../../../containers/ACL/i18n-permission-values';
 import './PermissionsControl.scss';
 
 const block = cn('acl-permissions-control');
@@ -55,19 +54,22 @@ export default class PermissionsControl extends Component<Props, State> {
         onChange(updatedValue);
     };
 
-    renderPermissionCheckbox(
-        permissionName: string,
-        permissionsToSet: Array<YTPermissionTypeUI>,
-        index: number,
-    ) {
+    renderPermissionCheckbox(permissionsToSet: Array<YTPermissionTypeUI>, index: number) {
+        const permissionName = PermissionsControl.getChoiceName(permissionsToSet);
         const {value, disabled, disabledChoices} = this.props;
         const itemDisabled = disabled || indexOf_(disabledChoices, index) !== -1;
+
+        const content = permissionsToSet
+            .map((item) => {
+                return i18nPermissionValues(`value_${item}`);
+            })
+            .join('/');
 
         return (
             <Checkbox
                 checked={Boolean(value?.[permissionName])}
                 key={permissionName}
-                content={format.ReadableField(permissionName)}
+                content={content}
                 onChange={() => this.handleCheckboxChange(permissionName, permissionsToSet)}
                 disabled={itemDisabled}
                 className={block('item')}
@@ -77,10 +79,9 @@ export default class PermissionsControl extends Component<Props, State> {
 
     renderChoices(choices?: Required<Props>['choices']) {
         return map_(choices, (item, index) => {
-            const name = PermissionsControl.getChoiceName(item);
             return (
                 <React.Fragment key={index}>
-                    {this.renderPermissionCheckbox(name, item, index)}
+                    {this.renderPermissionCheckbox(item, index)}
                 </React.Fragment>
             );
         });
