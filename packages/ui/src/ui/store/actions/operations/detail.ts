@@ -79,10 +79,17 @@ export function getOperation(
 ): ThunkAction<Promise<void>, RootState, unknown, OperationDetailActionType> {
     return (dispatch, getState) => {
         const isAlias = !isOperationId(id);
+        const state = getState();
+        const {detail} = state.operations;
+        const isSameOperation = detail.loaded && detail.operation?.$value === id;
+        const includeScheduler =
+            isAlias ||
+            (isSameOperation &&
+                (detail.operation as DetailedOperationSelector).inIntermediateState());
 
         const params = Object.assign(
             {
-                include_scheduler: true,
+                include_scheduler: includeScheduler,
                 output_format: TYPED_OUTPUT_FORMAT,
             },
             isAlias ? {operation_alias: id} : {operation_id: id},
@@ -151,6 +158,10 @@ export function getOperation(
 
                     dispatch(getJobsMonitoringDescriptors(id));
                     dispatch(loadOperationPoolTreeConfigs(operation));
+
+                    if (!isSameOperation && operation.inIntermediateState()) {
+                        dispatch(getOperation(id));
+                    }
                 };
 
                 if (operation.inIntermediateState()) {
