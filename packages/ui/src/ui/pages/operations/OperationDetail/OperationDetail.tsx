@@ -77,6 +77,7 @@ import {OperationPool, OperationStates} from '../selectors';
 import './OperationDetail.scss';
 import {JobsTimeline} from './tabs/JobsTimeline';
 import OperationDetailsMonitor from './tabs/monitor/OperationDetailsMonitor';
+import {isFinalState} from './tabs/JobsTimeline/helpers/isFinalState';
 
 const detailBlock = cn('operation-detail');
 
@@ -86,11 +87,36 @@ type RouteProps = {match: MatchType<{operationId: string; tab: OperationTabType}
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-function OperationDetailUpdater({operationId}: {operationId: string}) {
+function OperationDetailUpdater({
+    operationId,
+    operation,
+}: {
+    operationId: string;
+    operation: ReduxProps['operation'];
+}) {
     const dispatch = useDispatch();
+    const operationRef = React.useRef<{
+        operationIdValue: string | undefined;
+        operationState: string | undefined;
+    }>({operationIdValue: undefined, operationState: undefined});
+
+    operationRef.current = {
+        operationIdValue: operation?.$value,
+        operationState: operation?.state,
+    };
 
     const updateFn = React.useCallback(() => {
-        dispatch(getOperation(operationId));
+        const {operationIdValue, operationState} = operationRef.current;
+        const isCurrentOperation = operationIdValue === operationId;
+        const isTerminal = Boolean(operationState && isFinalState(operationState));
+        const isAliasResolved = !isOperationId(operationId) && operationIdValue !== undefined;
+        const shouldLoad =
+            !isAliasResolved &&
+            (operationIdValue === undefined || !isCurrentOperation || !isTerminal);
+
+        if (shouldLoad) {
+            dispatch(getOperation(operationId));
+        }
     }, [dispatch, operationId]);
 
     useUpdater(updateFn, {timeout: 15 * 1000});
@@ -515,12 +541,13 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             match: {
                 params: {operationId},
             },
+            operation,
         } = this.props;
         const isFirstLoading = loading && !loaded;
 
         return (
             <ErrorBoundary>
-                <OperationDetailUpdater operationId={operationId} />
+                <OperationDetailUpdater operationId={operationId} operation={operation} />
                 <div className={detailBlock({loading: isFirstLoading})}>
                     {error && !loaded ? this.renderError() : this.renderContent(isFirstLoading)}
                 </div>

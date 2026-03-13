@@ -1,3 +1,4 @@
-const COMPLETED_STATES = ['completed', 'failed', 'aborted'];
+export const COMPLETED_STATES = ['completed', 'failed', 'aborted'] as const;
 
-export const isFinalState = (state: string) => COMPLETED_STATES.indexOf(state) !== -1;
+export const isFinalState = (state: string): boolean =>
+    (COMPLETED_STATES as readonly string[]).includes(state);

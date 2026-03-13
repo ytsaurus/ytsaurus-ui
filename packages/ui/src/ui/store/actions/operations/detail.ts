@@ -36,6 +36,7 @@ import type {RootState} from './../../../store/reducers';
 import type {OperationDetailActionType} from '../../reducers/operations/detail';
 import {JSONSerializer} from '../../../common/yt-api';
 import {toaster} from '../../../utils/toaster';
+import {isFinalState} from '../../../pages/operations/OperationDetail/tabs/JobsTimeline/helpers/isFinalState';
 
 const operationDetailsRequests = new CancelHelper();
 
@@ -74,24 +75,56 @@ function loadIntermediateResourceUsage(
     };
 }
 
+const makeOperationRequest = (parameters: unknown) => {
+    return ytApiV3.getOperation(
+        {
+            parameters,
+            setup: {JSONSerializer},
+        },
+        operationDetailsRequests,
+    );
+};
+
 export function getOperation(
     id: string,
 ): ThunkAction<Promise<void>, RootState, unknown, OperationDetailActionType> {
     return (dispatch, getState) => {
         const isAlias = !isOperationId(id);
-
-        const params = Object.assign(
-            {
-                include_scheduler: true,
-                output_format: TYPED_OUTPUT_FORMAT,
-            },
-            isAlias ? {operation_alias: id} : {operation_id: id},
-        );
+        const {detail} = getState().operations;
 
         dispatch({type: GET_OPERATION.REQUEST, data: {isAlias, id}});
 
-        return ytApiV3
-            .getOperation({parameters: params, setup: {JSONSerializer}}, operationDetailsRequests)
+        const commonOperationProps = {
+            output_format: TYPED_OUTPUT_FORMAT,
+            ...(isAlias ? {operation_alias: id, include_runtime: true} : {operation_id: id}),
+        };
+
+        const fullRequest = (withScheduler: boolean) =>
+            makeOperationRequest({
+                include_scheduler: withScheduler,
+                ...commonOperationProps,
+            });
+
+        const stateRequest = makeOperationRequest({
+            include_scheduler: false,
+            ...commonOperationProps,
+            attributes: ['state'],
+        });
+
+        const requestPromise = (() => {
+            if (!detail.loaded) {
+                return fullRequest(true);
+            }
+
+            return stateRequest.then((lightResponse) => {
+                const operationState = ypath.getValue(lightResponse, '/state');
+                const needScheduler =
+                    typeof operationState === 'string' && !isFinalState(operationState);
+                return fullRequest(needScheduler);
+            });
+        })();
+
+        return requestPromise
             .then(checkUserTransaction)
             .then(([operationAttributes, userTransactionAlive]) => {
                 const preparedAttributes = prepareAttributes(operationAttributes);
