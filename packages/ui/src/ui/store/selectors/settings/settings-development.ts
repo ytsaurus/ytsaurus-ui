@@ -8,3 +8,7 @@ export const selectShowAiChat = createSelector([getSettingsData], (data) => {
 export const shouldUseYqlTypes = createSelector([getSettingsData], (data) => {
     return data['global::development::yqlTypes'];
 });
+
+export const selectIsIncarnationNextFeature = createSelector([getSettingsData], (data) => {
+    return data['global::development::feature::incarnationNext'] === true;
+});
