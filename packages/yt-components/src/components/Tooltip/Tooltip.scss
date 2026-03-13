@@ -1,0 +1,24 @@
+.yt-tooltip {
+    position: relative;
+    display: inline-block;
+
+    &_flex {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    &_has-tooltip {
+        cursor: pointer;
+    }
+
+    &_block {
+        display: unset;
+    }
+
+    &_ellipsis {
+        max-width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}

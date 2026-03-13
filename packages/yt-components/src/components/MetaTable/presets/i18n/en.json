@@ -1,0 +1,7 @@
+{
+  "data_weight:tooltip": "Data weight - logical data size independent from serialization format (8 for int64, length for strings etc.).",
+  "disk_space:tooltip": "Disk space - compressed size multiplied by replication factor.",
+  "medium_disk_space:tooltip": "{{name}} disk space - disk space on \"{{medium}}\" medium.",
+  "compressed_size:tooltip": "Compressed size - sum total of all chunk sizes after compression, not taking replication factor into account.",
+  "uncompressed_size:tooltip": "Uncompressed size - sum total of all chunk sizes before compression, not taking replication factor into account."
+}

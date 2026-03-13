@@ -1,0 +1,26 @@
+{
+    "extends": ["@gravity-ui/eslint-config", "@gravity-ui/eslint-config/prettier"],
+    "root": true,
+    "rules": {
+        "new-cap": 0,
+        "import/order": 0
+    },
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "overrides": [
+        {
+            "files": ["jest.config.js"],
+            "env": { "node": true }
+        },
+        {
+            "files": ["scripts/**/*.js"],
+            "env": { "node": true }
+        },
+        {
+            "files": ["**/*.spec.js", "**/*.spec.ts"],
+            "env": { "jest": true }
+        }
+    ]
+}

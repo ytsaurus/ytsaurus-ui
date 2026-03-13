@@ -1,0 +1,155 @@
+import React, {Component} from 'react';
+import block from 'bem-cn-lite';
+
+import isEqual_ from 'lodash/isEqual';
+
+import unipika from '../../utils/unipika';
+
+import {ConfigurableErrorBoundary} from '../../context';
+import {UnipikaSettings, UnipikaValue} from './StructuredYson/StructuredYsonTypes';
+
+import {StructuredYsonVirtualized} from './StructuredYsonVirtualized/StructuredYsonVirtualized';
+import type {Settings} from '@gravity-ui/react-data-table';
+
+export interface YsonProps {
+    settings?: UnipikaSettings;
+    value: any;
+    inline?: boolean;
+    folding?: boolean;
+    children?: React.ReactNode;
+    extraTools?: React.ReactNode;
+    virtualized?: boolean;
+    className?: string;
+    tableSettings?: Settings;
+    customLayout?: (args: {toolbar: React.ReactNode; content: React.ReactNode}) => React.ReactNode;
+}
+
+interface State {
+    convertedValue: UnipikaValue;
+    value: YsonProps['value'];
+    settings: YsonProps['settings'];
+}
+
+const INITIAL = {};
+
+export class Yson extends Component<YsonProps, State> {
+    static defaultUnipikaSettings = {
+        asHTML: true,
+        format: 'json',
+        compact: false,
+        escapeWhitespace: true,
+        showDecoded: true,
+        binaryAsHex: true,
+    };
+
+    static defaultProps = {
+        inline: false,
+        folding: false,
+        settings: Yson.defaultUnipikaSettings,
+    };
+
+    static getDerivedStateFromProps(props: YsonProps, state: State) {
+        const {value: prevValue, settings: prevSettings} = state;
+        const {value, settings = {}} = props;
+
+        if (
+            prevValue === INITIAL ||
+            !isEqual_(prevValue, value) ||
+            !isEqual_(prevSettings, settings)
+        ) {
+            // TODO: fix me later
+            // The call is required because unipika.format() applies default values to a passed settings inplace.
+            // We have to leave this call without it the behaviour will be broken.
+            if (settings.format === 'raw-json') {
+                unipika.formatRaw(value, settings);
+            } else {
+                unipika.formatFromYSON(value, settings);
+            }
+
+            return {
+                convertedValue:
+                    value === undefined
+                        ? ''
+                        : settings!.format === 'raw-json'
+                          ? unipika.converters.raw(value, settings)
+                          : unipika.converters.yson(value, settings),
+                value: value,
+                settings: settings,
+            };
+        }
+        return null;
+    }
+
+    state: State = {
+        convertedValue: undefined as any, // getDerivedStateFromProps should provide correct vgitalue for this field
+        value: INITIAL,
+        settings: {format: ''},
+    };
+
+    getFormattedTitle() {
+        const {inline} = this.props;
+        if (!inline) {
+            return undefined;
+        }
+
+        const {convertedValue, settings} = this.state;
+        const titleSettings = Object.assign({}, settings, {asHTML: false});
+
+        return unipika.format(convertedValue, titleSettings);
+    }
+
+    getFormattedValue() {
+        const {convertedValue, settings} = this.state;
+        return unipika.format(convertedValue, settings);
+    }
+
+    render() {
+        const {inline, children, folding, extraTools, className, tableSettings, customLayout} =
+            this.props;
+        const {convertedValue, settings} = this.state;
+
+        const classes = block('unipika-wrapper')(
+            {
+                inline: inline && 'yes',
+            },
+            className,
+        );
+
+        return (
+            <ConfigurableErrorBoundary>
+                {settings!.asHTML ? (
+                    <div className={classes} title={this.getFormattedTitle()} dir="auto">
+                        {folding ? (
+                            <StructuredYsonVirtualized
+                                tableSettings={tableSettings}
+                                value={convertedValue}
+                                settings={settings!}
+                                extraTools={extraTools}
+                                customLayout={customLayout}
+                            />
+                        ) : (
+                            <pre
+                                className="unipika"
+                                dangerouslySetInnerHTML={{
+                                    __html: this.getFormattedValue(),
+                                }}
+                            />
+                        )}
+                        {children}
+                    </div>
+                ) : (
+                    <div
+                        className={classes}
+                        title={this.getFormattedTitle()}
+                        dangerouslySetInnerHTML={{
+                            __html: this.getFormattedValue(),
+                        }}
+                        dir="auto"
+                    >
+                        {children}
+                    </div>
+                )}
+            </ConfigurableErrorBoundary>
+        );
+    }
+}

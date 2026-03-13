@@ -1,0 +1,7 @@
+{
+  "data_weight:tooltip": "Data weight - логический объем несжатых данных: 8 байт для int64, длина строки для строковых типов и т.д.",
+  "disk_space:tooltip": "Disk space - это compressed size, помноженный на replication factor.",
+  "medium_disk_space:tooltip": "{{name}} disk space - это Disk space на медиуме \"{{medium}}\".",
+  "compressed_size:tooltip": "Compressed size - размер данных после сжатия (без учета репликации).",
+  "uncompressed_size:tooltip": "Uncompressed size - размер несжатых данных (без учета репликации)."
+}

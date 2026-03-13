@@ -1,0 +1,84 @@
+{
+  "name": "@ytsaurus/yt-components",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Navigation table component and hook for path-based table data (schema, preview, meta tabs)",
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/ytsaurus/ytsaurus-ui/tree/main/packages/yt-components"
+  },
+  "files": [
+    "build"
+  ],
+  "main": "./build/index.js",
+  "module": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "modules": [
+        "./build/modules/index.d.ts"
+      ]
+    }
+  },
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "default": "./build/index.js"
+    },
+    "./modules": {
+      "types": "./build/modules/index.d.ts",
+      "default": "./build/modules/index.js"
+    }
+  },
+  "scripts": {
+    "build": "npm run build:ts && node scripts/build-post.js",
+    "build:ts": "tsc -p tsconfig.json",
+    "pack:local": "npm run build && npm pack && mv ytsaurus-yt-components-0.1.0.tgz yt-components.tgz",
+    "deps:install": "npm ci",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "jest --config ./jest.config.js"
+  },
+  "peerDependencies": {
+    "@gravity-ui/icons": ">=2.0.0",
+    "@gravity-ui/table": ">=1.0.0",
+    "@gravity-ui/uikit": ">=7.0.0",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "devDependencies": {
+    "@gravity-ui/eslint-config": "^3.2.0",
+    "@gravity-ui/icons": "^2.0.0",
+    "@gravity-ui/prettier-config": "^1.1.0",
+    "@gravity-ui/table": "^1.15.2",
+    "@gravity-ui/tsconfig": "^1.0.0",
+    "@gravity-ui/uikit": "^7.0.0",
+    "@types/jest": "^29.5.5",
+    "@types/lodash": "^4.17.24",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "bem-cn-lite": "^4.1.0",
+    "eslint": "^8.57.1",
+    "jest": "^29.7.0",
+    "jest-extended": "^4.0.1",
+    "prettier": "^3.7.4",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "sass": "^1.69.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@gravity-ui/i18n": "^1.8.0",
+    "@gravity-ui/illustrations": "^2.1.0",
+    "@gravity-ui/react-data-table": "^2.2.1",
+    "@gravity-ui/unipika": "^5.1.0",
+    "@ytsaurus/interface-helpers": "^1.1.1",
+    "@ytsaurus/javascript-wrapper": "^0.16.0",
+    "axios": "^1.13.6",
+    "copy-to-clipboard": "^3.3.3",
+    "hotkeys-js": "^4.0.2",
+    "lodash": "^4.17.23",
+    "moment": "^2.30.1"
+  }
+}
