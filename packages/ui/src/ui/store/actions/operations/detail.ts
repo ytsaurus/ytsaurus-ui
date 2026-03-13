@@ -20,25 +20,22 @@ import {
     LOAD_RESOURCE_USAGE,
     OPERATION_DETAIL_PARTIAL,
 } from '../../../constants/operations/detail';
-import {TYPED_OUTPUT_FORMAT} from '../../../constants/index';
 import {DetailedOperationSelector} from '../../../pages/operations/selectors';
 import {checkUserTransaction, prepareActions} from '../../../utils/operations/detail';
 import {prepareAttributes} from '../../../utils';
 import {showErrorPopup, wrapApiPromiseByToaster} from '../../../utils/utils';
 import {isOperationId} from '../../../utils/operations/list';
-import CancelHelper from '../../../utils/cancel-helper';
 import {YTErrors} from '../../../rum/constants';
-import {YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';
+import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {getJobsMonitoringDescriptors} from '../../../store/actions/operations/jobs-monitor';
 
 import {selectCluster} from '../../../store/selectors/global';
 import {type RootState} from './../../../store/reducers';
 import {type OperationDetailActionType} from '../../reducers/operations/detail';
-import {JSONSerializer} from '../../../common/yt-api';
 import {toaster} from '../../../utils/toaster';
+import {isFinalState} from '../../../pages/operations/OperationDetail/tabs/JobsTimeline/helpers/isFinalState';
 import i18n from './i18n';
-
-const operationDetailsRequests = new CancelHelper();
+import {loadOperationAttributes} from './helpers/loadOperationAttributes';
 
 function loadIntermediateResourceUsage(
     operation: unknown,
@@ -75,24 +72,30 @@ function loadIntermediateResourceUsage(
     };
 }
 
+export function updateOperation(
+    id: string,
+): ThunkAction<Promise<void>, RootState, unknown, OperationDetailActionType> {
+    return (dispatch, getState) => {
+        const state = getState();
+        const {$value: operationId, state: operationState} = state.operations.detail.operation;
+
+        if (id === operationId && isFinalState(operationState)) {
+            return Promise.resolve();
+        }
+
+        return dispatch(getOperation(id));
+    };
+}
+
 export function getOperation(
     id: string,
 ): ThunkAction<Promise<void>, RootState, unknown, OperationDetailActionType> {
     return (dispatch, getState) => {
         const isAlias = !isOperationId(id);
 
-        const params = Object.assign(
-            {
-                include_scheduler: true,
-                output_format: TYPED_OUTPUT_FORMAT,
-            },
-            isAlias ? {operation_alias: id} : {operation_id: id},
-        );
-
         dispatch({type: GET_OPERATION.REQUEST, data: {isAlias, id}});
 
-        return ytApiV3
-            .getOperation({parameters: params, setup: {JSONSerializer}}, operationDetailsRequests)
+        return loadOperationAttributes(id, isAlias)
             .then(checkUserTransaction)
             .then(([operationAttributes, userTransactionAlive]) => {
                 const preparedAttributes = prepareAttributes(operationAttributes);
