@@ -28,6 +28,7 @@ import {
 import {RootState} from '../../store/reducers';
 import {KeyCode} from '../../constants/index';
 import {UseHotkeysScope} from '../../hooks/use-hotkeysjs-scope';
+import i18n from './i18n';
 
 import './PathEditor.scss';
 
@@ -88,8 +89,8 @@ const b = block('path-editor');
 
 export class PathEditor extends Component<PathEditorProps, PathEditorState> {
     static defaultProps: Partial<PathEditorProps> = {
-        errorMessage: 'Oops, something went wrong',
-        placeholder: 'Enter the path...',
+        errorMessage: i18n('message_error-default'),
+        placeholder: i18n('field_placeholder'),
         suggestionsError: false,
         autoFocus: false,
         showErrors: true,
