@@ -39,7 +39,7 @@ import {DEFAULT_TAB, type OperationTabType, Tab} from '../../../constants/operat
 import {useUpdater} from '../../../hooks/use-updater';
 import {promptAction} from '../../../store/actions/actions';
 import {showEditPoolsWeightsModal} from '../../../store/actions/operations';
-import {getOperation} from '../../../store/actions/operations/detail';
+import {getOperation, updateOperation} from '../../../store/actions/operations/detail';
 import {
     selectIsOperationInGpuTree,
     selectOperationDetailsLoadingStatus,
@@ -90,7 +90,7 @@ function OperationDetailUpdater({operationId}: {operationId: string}) {
     const dispatch = useDispatch();
 
     const updateFn = React.useCallback(() => {
-        dispatch(getOperation(operationId));
+        dispatch(updateOperation(operationId));
     }, [dispatch, operationId]);
 
     useUpdater(updateFn, {timeout: 15 * 1000});
