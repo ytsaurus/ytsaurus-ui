@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import {useSelector} from '../../store/redux-hooks';
 import {useRouteMatch} from 'react-router';
-import {Breadcrumbs} from '@gravity-ui/uikit';
+import {Link} from '@gravity-ui/uikit';
 
 import {RowWithName} from '../../containers/AppNavigation/TopRowContent/SectionName';
 import {Page} from '../../constants';
@@ -38,17 +38,10 @@ function TabletBreadcrumbs() {
     );
 
     return (
-        <>
-            <EditableAsText className={block('editable')} text={id} onChange={handleEdit}>
-                <Breadcrumbs showRoot className={block('breadcrumbs')}>
-                    <Breadcrumbs.Item
-                        href={`/${cluster}/${Page.TABLET}/${id}`}
-                        onClick={(e) => e.preventDefault()}
-                    >
-                        {id}
-                    </Breadcrumbs.Item>
-                </Breadcrumbs>
-            </EditableAsText>
-        </>
+        <EditableAsText className={block('editable')} text={id} onChange={handleEdit}>
+            <Link view="primary" href={`/${cluster}/${Page.TABLET}/${id}`}>
+                {id}
+            </Link>
+        </EditableAsText>
     );
 }
