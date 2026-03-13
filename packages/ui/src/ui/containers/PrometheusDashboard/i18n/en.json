@@ -1,0 +1,8 @@
+{
+    "message_missing-parameter": "Missing parameter \"{{name}}\".",
+    "message_provide-required-parameters": "You have to provide all required parameters",
+    "message_dashboard-not-exist": "is not exist",
+    "message_provide-correct-dashboard": "You have to provide correct dashboard description, see expected parameters below:",
+    "action_grafana": "Grafana",
+    "message_check-permission-error": "Check `use` permission for //sys/interface-monitoring/allow_grafana_url"
+}

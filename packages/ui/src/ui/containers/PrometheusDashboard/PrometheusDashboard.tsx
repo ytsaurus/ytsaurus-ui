@@ -35,6 +35,7 @@ import {
     PrometheusDashboardProvider,
     usePrometheusDashboardContext,
 } from './PrometheusDashboardContext/PrometheusDashboardContext';
+import i18n from './i18n';
 
 import './PrometheusDashboard.scss';
 
@@ -132,8 +133,8 @@ function makeNotImplementedLayout({type, params, uid}: PrometheusDashboardProps 
                 type: 'text' as const,
                 options: {
                     content: [
-                        `####   \`${getDashboardPath(type)}\` is not exist`,
-                        '  You have to provide correct dashboard description, see expected parameters below:',
+                        `####   \`${getDashboardPath(type)}\` ${i18n('message_dashboard-not-exist')}`,
+                        `  ${i18n('message_provide-correct-dashboard')}`,
                         '```json',
                         JSON.stringify(params, null, 4),
                         '```',
@@ -240,7 +241,7 @@ function useGrafanaUrlVisibility() {
                 }),
             ],
         },
-        errorTitle: 'Check `use` permission for //sys/interface-monitoring/allow_grafana_url',
+        errorTitle: i18n('message_check-permission-error'),
     });
 
     const {output} = data?.[0] ?? {};
@@ -259,7 +260,7 @@ function MissingParametersWarning({
         const inner_errors = templating?.list.reduce((acc, {name: n, default_for_ui}) => {
             const name = n as keyof typeof params;
             if (params[name] === undefined && default_for_ui === undefined) {
-                acc.push({message: `Missing parameter "${name}".`});
+                acc.push({message: i18n('message_missing-parameter', {name})});
             }
             return acc;
         }, [] as Array<YTError>);
@@ -268,7 +269,7 @@ function MissingParametersWarning({
             return undefined;
         }
         return {
-            message: 'You have to provide all required parameters',
+            message: i18n('message_provide-required-parameters'),
             attributes: {params} as any,
             inner_errors,
         };

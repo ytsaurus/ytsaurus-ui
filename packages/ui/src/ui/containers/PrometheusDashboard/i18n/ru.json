@@ -1,0 +1,8 @@
+{
+    "message_missing-parameter": "Отсутствует параметр \"{{name}}\".",
+    "message_provide-required-parameters": "Необходимо предоставить все обязательные параметры",
+    "message_dashboard-not-exist": "не существует",
+    "message_provide-correct-dashboard": "Необходимо предоставить корректное описание дашборда, см. ожидаемые параметры ниже:",
+    "action_grafana": "Grafana",
+    "message_check-permission-error": "Проверка разрешения `use` для //sys/interface-monitoring/allow_grafana_url"
+}
