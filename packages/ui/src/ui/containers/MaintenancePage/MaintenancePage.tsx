@@ -11,6 +11,7 @@ import Icon from '../../components/Icon/Icon';
 import Button from '../../components/Button/Button';
 import {Linkify} from '../../components/Linkify/Linkify';
 import {uiSettings} from '../../config/ui-settings';
+import i18n from './i18n';
 
 import './MaintenancePage.scss';
 
@@ -41,11 +42,11 @@ export class MaintenancePage extends React.Component<Props> {
 
         switch (type) {
             case 'maintenance':
-                return 'Maintenance is under way';
+                return i18n('title_maintenance-underway');
             case 'issue':
-                return 'Cluster experiences problems';
+                return i18n('title_cluster-problems');
             default:
-                return 'Oops! Something went wrong';
+                return i18n('title_something-wrong');
         }
     }
 
@@ -113,14 +114,14 @@ export class MaintenancePage extends React.Component<Props> {
                                         view="action"
                                         size="m"
                                     >
-                                        Subscribe to YT announces
+                                        {i18n('action_subscribe-announces')}
                                     </Button>
                                 </li>
                             )}
 
                             <li className={b('link')}>
                                 <Button size="m" onClick={onProceed}>
-                                    Proceed to cluster anyway
+                                    {i18n('action_proceed-anyway')}
                                 </Button>
                             </li>
                         </ul>
