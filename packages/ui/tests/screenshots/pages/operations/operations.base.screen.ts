@@ -79,13 +79,15 @@ test('Operation - Details', async ({page}) => {
 });
 
 test('Operation - Statistics', async ({page}) => {
+    test.setTimeout(25000);
     await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`operations/*long-operation/statistics`));
 
     await operationsPage(page).replaceMetaData();
     await operationsPage(page).waitForStatisticsRows();
 
-    await page.waitForLoadState('networkidle');
+    // Operation detail may perform multiple getOperation rounds (YTFRONT-5573)
+    await page.waitForLoadState('networkidle', {timeout: 20000});
     await page.mouse.wheel(0, -1000); // scroll back for autofocused offset
     await operationsPage(page).waitForTableSyncedWidth('.operation-statistics__table');
 
