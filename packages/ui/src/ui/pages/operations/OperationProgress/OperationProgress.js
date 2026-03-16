@@ -133,41 +133,47 @@ class OperationProgress extends Component {
 
     renderProgressBar() {
         const {operation} = this.props;
-        const {state, jobsProgress, completedJobsProgress, runningJobsProgress} = operation;
+        const {
+            state,
+            jobsProgress = 0,
+            completedJobsProgress = 0,
+            runningJobsProgress = 0,
+        } = operation;
 
         const RESOLVED_PROGRESS = 100;
         const PENDING_PROGRESS = 0;
 
         let progressBar;
 
-        switch (state) {
-            case 'running':
-                progressBar = operation.inIntermediateState() && (
-                    <Progress
-                        size="s"
-                        value={jobsProgress || 0}
-                        stack={[
-                            {
-                                value: completedJobsProgress || 0,
-                                theme: 'success',
-                            },
-                            {value: runningJobsProgress || 0, theme: 'info'},
-                        ]}
-                    />
-                );
-                break;
-            case 'completed':
-                progressBar = <Progress size="s" value={RESOLVED_PROGRESS} theme="success" />;
-                break;
-            case 'failed':
-                progressBar = <Progress size="s" value={RESOLVED_PROGRESS} theme="danger" />;
-                break;
-            case 'aborted':
-                progressBar = <Progress size="s" value={RESOLVED_PROGRESS} theme="default" />;
-                break;
-            default:
-                progressBar = <Progress size="s" value={PENDING_PROGRESS || 0} />;
-                break;
+        if (operation.inIntermediateState()) {
+            progressBar = (
+                <Progress
+                    size="s"
+                    value={jobsProgress}
+                    stack={[
+                        {
+                            value: completedJobsProgress,
+                            theme: 'success',
+                        },
+                        {value: runningJobsProgress, theme: 'info'},
+                    ]}
+                />
+            );
+        } else {
+            switch (state) {
+                case 'completed':
+                    progressBar = <Progress size="s" value={RESOLVED_PROGRESS} theme="success" />;
+                    break;
+                case 'failed':
+                    progressBar = <Progress size="s" value={RESOLVED_PROGRESS} theme="danger" />;
+                    break;
+                case 'aborted':
+                    progressBar = <Progress size="s" value={RESOLVED_PROGRESS} />;
+                    break;
+                default:
+                    progressBar = <Progress size="s" value={PENDING_PROGRESS} />;
+                    break;
+            }
         }
 
         const className = 'operation-progress__bar';
