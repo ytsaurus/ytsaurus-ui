@@ -2,10 +2,16 @@ import React, {memo, useCallback, useEffect, useRef} from 'react';
 import * as monaco from 'monaco-editor';
 import {useMonaco} from '../../hooks/useMonaco';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-import {getQueryEngine, getQueryId} from '../../../../store/selectors/query-tracker/query';
+import {
+    getQueryDraftCluster,
+    getQueryEngine,
+    getQueryId,
+    isQueryButtonActive,
+    shouldPollCliqueWhenInactive,
+} from '../../../../store/selectors/query-tracker/query';
 import {isSupportedQtACO} from '../../../../store/selectors/query-tracker/queryAco';
-import {runQuery} from '../../../../store/actions/query-tracker/query';
-import {Button, Icon} from '@gravity-ui/uikit';
+import {loadCliqueByCluster, runQuery} from '../../../../store/actions/query-tracker/query';
+import {Button, Flex, Icon, Text} from '@gravity-ui/uikit';
 import playIcon from '../../../../assets/img/svg/play.svg';
 import {QueryEngine} from '../../../../../shared/constants/engines';
 import {QueryACOSelect} from '../../QueryACO/QueryACOSelect';
@@ -13,6 +19,7 @@ import cn from 'bem-cn-lite';
 import '../QueryEditorView.scss';
 import {QueryEditorMonaco} from '../QueryEditorMonaco';
 import i18n from './i18n';
+import TriangleExclamationIcon from '@gravity-ui/icons/svgs/triangle-exclamation.svg';
 
 const b = cn('yt-qt-query-editor-view');
 
@@ -20,6 +27,8 @@ type Props = {
     onStartQuery?: (queryId: string) => boolean | void;
     pathNavigation?: boolean;
 };
+
+const INACTIVE_CLIQUE_REFRESH_INTERVAL = 5000;
 
 export const QueryEditorView = memo<Props>(function QueryEditorView({
     onStartQuery,
@@ -29,8 +38,21 @@ export const QueryEditorView = memo<Props>(function QueryEditorView({
     const {setEditor} = useMonaco();
     const id = useSelector(getQueryId);
     const engine = useSelector(getQueryEngine);
+    const queryCluster = useSelector(getQueryDraftCluster);
+    const shouldPollClique = useSelector(shouldPollCliqueWhenInactive);
     const isACOSupported = useSelector(isSupportedQtACO);
+    const isRunButtonActive = useSelector(isQueryButtonActive);
     const dispatch = useDispatch();
+
+    const runButtonDisabled = !isRunButtonActive;
+
+    useEffect(() => {
+        if (!shouldPollClique || !queryCluster) return;
+        const intervalId = setInterval(() => {
+            dispatch(loadCliqueByCluster(QueryEngine.CHYT, queryCluster));
+        }, INACTIVE_CLIQUE_REFRESH_INTERVAL);
+        return () => clearInterval(intervalId);
+    }, [dispatch, shouldPollClique, queryCluster]);
 
     const runQueryCallback = useCallback(() => {
         dispatch(runQuery(onStartQuery));
@@ -49,6 +71,7 @@ export const QueryEditorView = memo<Props>(function QueryEditorView({
 
     useEffect(() => {
         const runQueryByKey = (e: KeyboardEvent) => {
+            if (!isRunButtonActive) return;
             const isCtrlOrMetaPressed = e.ctrlKey || e.metaKey;
             const isEnterOrEKeyPressed = e.key === 'Enter' || e.key === 'e';
             const isF8KeyPressed = e.key === 'F8';
@@ -64,7 +87,7 @@ export const QueryEditorView = memo<Props>(function QueryEditorView({
         return () => {
             document.removeEventListener('keydown', runQueryByKey, true);
         };
-    }, [runQueryCallback]);
+    }, [isRunButtonActive, runQueryCallback]);
 
     const validateQueryCallback = useCallback(
         function () {
@@ -85,21 +108,42 @@ export const QueryEditorView = memo<Props>(function QueryEditorView({
             <QueryEditorMonaco pathNavigation={pathNavigation} />
             <div className={b('actions')}>
                 <div className="query-run-action">
-                    <Button qa="qt-run" view="action" onClick={runQueryCallback}>
-                        <Icon data={playIcon} />
-                        {i18n('action_run')}
-                    </Button>
-                    {engine === QueryEngine.YQL ? (
+                    <Flex gap={1} alignItems="center">
+                        <Button
+                            qa="qt-run"
+                            view="action"
+                            disabled={runButtonDisabled}
+                            onClick={runQueryCallback}
+                        >
+                            <Icon data={playIcon} />
+                            {i18n('action_run')}
+                        </Button>
+
+                        {runButtonDisabled && (
+                            <>
+                                <Text color="danger">
+                                    <Icon data={TriangleExclamationIcon} size={16} />
+                                </Text>
+                                <span>{i18n('tooltip_clique_inactive')}</span>
+                            </>
+                        )}
+                    </Flex>
+
+                    {isRunButtonActive && (
                         <>
-                            <Button qa="qt-validate" onClick={validateQueryCallback}>
-                                {i18n('action_validate')}
-                            </Button>
-                            <Button qa="qt-explain" onClick={explainQueryCallback}>
-                                {i18n('action_explain')}
-                            </Button>
+                            {engine === QueryEngine.YQL ? (
+                                <>
+                                    <Button qa="qt-validate" onClick={validateQueryCallback}>
+                                        {i18n('action_validate')}
+                                    </Button>
+                                    <Button qa="qt-explain" onClick={explainQueryCallback}>
+                                        {i18n('action_explain')}
+                                    </Button>
+                                </>
+                            ) : null}
+                            {isACOSupported && <QueryACOSelect />}
                         </>
-                    ) : null}
-                    {isACOSupported && <QueryACOSelect />}
+                    )}
                 </div>
             </div>
         </div>

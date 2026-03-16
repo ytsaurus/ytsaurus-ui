@@ -17,7 +17,6 @@ import {
 import {requestQueriesList} from './queriesList';
 import {
     SHARED_QUERY_ACO,
-    getCliqueMap,
     getCurrentQuery,
     getQueryDraft,
     getQueryDraftSettings,
@@ -286,12 +285,8 @@ export const loadCliqueByCluster =
         engine: QueryEngine.SPYT | QueryEngine.CHYT,
         cluster: string,
     ): ThunkAction<void, RootState, unknown, SetQueryClusterClique | SetQueryCliqueLoading> =>
-    async (dispatch, getState) => {
+    async (dispatch) => {
         const isSpyt = engine === QueryEngine.SPYT;
-        const cliqueMap = getCliqueMap(getState());
-
-        if (cluster in cliqueMap && cliqueMap[cluster][engine]) return;
-
         const supportedControllers = await getCliqueControllerSupportByCluster(cluster);
 
         if ((isSpyt && !supportedControllers.spyt) || (!isSpyt && !supportedControllers.chyt))

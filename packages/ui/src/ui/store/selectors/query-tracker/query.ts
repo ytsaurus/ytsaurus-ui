@@ -60,6 +60,37 @@ export const isQueryExecuted = (state: RootState): boolean => {
 
 export const getCurrentQuery = (state: RootState) => getState(state).queryItem;
 
+export const isQueryButtonActive = createSelector(
+    [getQueryEngine, getQueryDraftSettings, getCliqueMap],
+    (engine, settings, cliqueMap) => {
+        const isChyt = engine === QueryEngine.CHYT;
+        if (!isChyt) return true;
+
+        const {clique, cluster} = settings;
+        if (!clique || !cluster) return true;
+
+        if (cluster in cliqueMap) {
+            const currentClique = cliqueMap[cluster].chyt.find((i) => i.alias === clique);
+            if (!currentClique) return false;
+
+            return currentClique.state === 'active';
+        }
+
+        return false;
+    },
+);
+
+export const shouldPollCliqueWhenInactive = createSelector(
+    [getQueryEngine, getQueryDraftSettings, isQueryButtonActive],
+    (engine, settings, isRunButtonActive) => {
+        return (
+            engine === QueryEngine.CHYT &&
+            Boolean(settings?.clique && settings?.cluster) &&
+            !isRunButtonActive
+        );
+    },
+);
+
 export const isQueryDraftEditted = createSelector([getQuery, getQueryDraft], (query, draft) => {
     return query?.query !== draft.query;
 });
