@@ -1,6 +1,7 @@
 {
   "action_run": "Run",
   "action_validate": "Validate",
-  "action_explain": "Explain"
+  "action_explain": "Explain",
+  "tooltip_clique_inactive": "Clique is inactive"
 }
 
