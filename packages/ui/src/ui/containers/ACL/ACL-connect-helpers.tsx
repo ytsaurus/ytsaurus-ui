@@ -39,7 +39,7 @@ import {
 
 import {getCluster} from '../../store/selectors/global';
 import {normalizeIdmParams} from '../../utils/acl';
-import {IdmObjectType} from '../../constants/acl';
+import {AclMode, IdmObjectType} from '../../constants/acl';
 import {IdmKindType} from '../../utils/acl/acl-types';
 import {RootState} from '../../store/reducers';
 import {toggleExpandAclSubject, updateAclFilters} from '../../store/actions/acl-filters';
@@ -136,7 +136,8 @@ const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
             normalizedPoolTree,
             aclRequestOptions,
 
-            aclMode: idmKind !== 'path' ? undefined : getAclCurrentTab(state),
+            aclMode: idmKind !== 'path' ? AclMode.MAIN_PERMISSIONS : getAclCurrentTab(state),
+            allowSwitchMode: idmKind === 'path',
         };
     };
 };

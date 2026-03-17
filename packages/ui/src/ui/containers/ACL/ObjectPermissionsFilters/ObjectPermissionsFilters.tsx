@@ -27,7 +27,7 @@ type Props = Pick<
 >;
 
 export default function ObjectPermissionsFilters({
-    aclMode = AclMode.MAIN_PERMISSIONS,
+    aclMode,
     idmKind,
     columnsFilter,
     updateAclFilters,
@@ -66,7 +66,11 @@ export default function ObjectPermissionsFilters({
                     node: {
                         [AclMode.COLUMN_GROUPS_PERMISSIONS]: (
                             <ColumnGroupsFilter
-                                {...{columnsFilter, updateAclFilters, userPermissionsAccessColumns}}
+                                {...{
+                                    columnsFilter,
+                                    updateAclFilters,
+                                    userPermissionsAccessColumns,
+                                }}
                             />
                         ),
                         [AclMode.MAIN_PERMISSIONS]: (
