@@ -262,7 +262,7 @@ function RequestPermissions(props: Props) {
                 extras: {children: 'Not implemented'},
             },
         };
-    }, [choices, currentCaption, error, idmKind]);
+    }, [choices, currentCaption, error, idmKind, columnGroups, rowGroups]);
 
     const dialogFields = useMemo(() => {
         let flagsIndex = -1;
