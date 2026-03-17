@@ -136,3 +136,9 @@ export const enum AclMode {
     COLUMN_GROUPS_PERMISSIONS = 'column_permissions',
     ROW_GROUPS_PERMISSIONS = 'row_permissions',
 }
+
+export const ACL_MODES = [
+    AclMode.MAIN_PERMISSIONS,
+    AclMode.COLUMN_GROUPS_PERMISSIONS,
+    AclMode.ROW_GROUPS_PERMISSIONS,
+];

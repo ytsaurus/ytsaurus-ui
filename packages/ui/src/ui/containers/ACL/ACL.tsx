@@ -412,12 +412,7 @@ class ACL extends Component<Props> {
     }
 
     getObjectPermissionsDetails() {
-        const {
-            aclMode = AclMode.MAIN_PERMISSIONS,
-            mainPermissions,
-            columnsPermissions,
-            rowPermissions,
-        } = this.props;
+        const {aclMode, mainPermissions, columnsPermissions, rowPermissions} = this.props;
 
         const {data, title, noItemsText, extraColumns} = {
             [AclMode.MAIN_PERMISSIONS]: {
@@ -637,15 +632,14 @@ class ACL extends Component<Props> {
             mainPermissions,
             columnsPermissions,
             rowPermissions,
+            allowSwitchMode,
         } = this.props;
         const {deleteItem} = this.state;
 
-        const hasColumns = Boolean(aclMode);
-
         return (
             <Fragment>
-                <Flex className={block('toolbar', {'has-columns': hasColumns})}>
-                    {hasColumns && (
+                <Flex className={block('toolbar', {'has-columns': allowSwitchMode})}>
+                    {allowSwitchMode && (
                         <Flex grow>
                             <AclModeControl
                                 {...{aclMode, updateAclFilters}}
@@ -768,7 +762,8 @@ class ACL extends Component<Props> {
             approversFiltered,
             columnGroups,
             rowGroups,
-            aclMode = AclMode.MAIN_PERMISSIONS,
+            aclMode,
+            allowSwitchMode,
         } = this.props;
 
         const counters: Array<SegmentControlItem> = {
@@ -785,17 +780,16 @@ class ACL extends Component<Props> {
                 {name: 'Row permissions', value: rowPermissions.count},
             ],
         }[aclMode];
-        const hasColumns = Boolean(aclMode);
         return (
             <Flex className={block('meta')} wrap alignItems="center">
                 <SegmentControl
                     className={block('meta-item')}
                     background="neutral-light"
-                    groups={[segments, counters].filter(({length}) => length > 0)}
+                    groups={[segments, counters].filter((x) => x?.length > 0)}
                 />
                 {aclMode === AclMode.MAIN_PERMISSIONS && (
                     <MyPermissions
-                        className={block('meta-item', {'with-buttons': !hasColumns})}
+                        className={block('meta-item', {'with-buttons': !allowSwitchMode})}
                         userPermissions={userPermissions}
                         path={path}
                         idmKind={idmKind}
