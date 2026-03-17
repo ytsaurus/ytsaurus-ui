@@ -2,10 +2,13 @@ import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../reducers';
 import {Action} from 'redux';
 import {
+    loadFolderByPath,
+    loadTableAttributesByPath as loadTableAttributesByPathFromComponents,
+} from '@ytsaurus/components';
+import {
     BodyType,
     NavigationNode,
     NavigationTable,
-    NavigationTableSchema,
     setCluster,
     setError,
     setFilter,
@@ -24,27 +27,21 @@ import {
     selectNavigationPath,
 } from '../../selectors/query-tracker/queryNavigation';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
-import ypath from '../../../common/thor/ypath';
-import {makeMetaItems} from '../../../components/MetaTable/presets/presets';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {getTableTypeByAttributes} from '../../../utils/navigation/getTableTypeByAttributes';
-import {loadDynamicTableRequest} from '../../../pages/query-tracker/Navigation/api/loadDynamicTable';
-import {loadStaticTable} from '../../../pages/query-tracker/Navigation/api/loadStaticTable';
 import {JSONSerializer} from '../../../common/yt-api';
 import {toggleFavourite} from '../favourites';
 import {createNestedNS} from '../../../../shared/utils/settings';
 import {NAMESPACES} from '../../../../shared/constants/settings';
 import {isTableNode} from '../../../utils/navigation/isTableNode';
 import {isFolderNode} from '../../../utils/navigation/isFolderNode';
-import {loadTableAttributes} from '../../../pages/query-tracker/Navigation/api/loadTableAttributes';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {loadCliqueByCluster, loadTablePromptToQuery} from './query';
 import {getQueryDraft} from '../../selectors/query-tracker/query';
-import {getRequestOutputFormat} from '../../../utils/navigation/content/table/table';
 import {getDefaultTableColumnLimit} from '../../selectors/settings';
 import {isYqlTypesEnabled} from '../../selectors/navigation/content/table';
 import {getClusterProxy, selectCurrentUserName} from '../../selectors/global';
 import {getQueryResultGlobalSettings} from '../../selectors/query-tracker/queryResult';
+import {getYsonSettingsDisableDecode} from '../../selectors/thor/unipika';
 import {QueriesListMode} from '../../../types/query-tracker/queryList';
 import type {ClusterConfig} from '../../../../shared/yt-types';
 import {YTError} from '../../../../@types/types';
@@ -87,48 +84,26 @@ export const loadNodeByPath =
 
         if (!clusterConfig) return;
 
+        const setup = {
+            proxy: getClusterProxy(clusterConfig),
+            JSONSerializer,
+        };
+
         dispatch(setLoading(true));
-        const response = await wrapApiPromiseByToaster(
-            ytApiV3Id.list(YTApiId.navigationListNodes, {
-                setup: {
-                    proxy: getClusterProxy(clusterConfig),
-                    JSONSerializer,
-                },
-                parameters: {
-                    path,
-                    attributes: ['type', 'broken', 'dynamic', 'sorted', 'target_path'],
-                },
-            }),
-            {
-                skipSuccessToast: true,
-                toasterName: 'query_navigation_node',
-                errorTitle: 'Navigation node open failure',
-            },
-        ).finally(() => {
+        const nodes = await wrapApiPromiseByToaster(loadFolderByPath(path, setup, favorites), {
+            skipSuccessToast: true,
+            toasterName: 'query_navigation_node',
+            errorTitle: 'Navigation node open failure',
+        }).finally(() => {
             dispatch(setLoading(false));
         });
 
-        const nodes: NavigationNode[] = response
-            .map((item: unknown) => {
-                const name = ypath.getValue(item);
-                const newPath = path + '/' + name;
-                const attributes = ypath.getAttributes(item);
-                const {target_path, ...restAttributes} = attributes;
-
-                return {
-                    name,
-                    ...restAttributes,
-                    path: newPath,
-                    targetPath: target_path,
-                    isFavorite: favorites.includes(newPath),
-                };
-            })
-            .sort((a: NavigationNode, b: NavigationNode) => a.name.localeCompare(b.name));
+        if (!nodes) return;
 
         dispatch(setFilter(''));
         dispatch(setPath(path));
         dispatch(setNodeType(BodyType.Tree));
-        dispatch(setNodes(nodes));
+        dispatch(setNodes(nodes as NavigationNode[]));
     };
 
 // load table by path
@@ -141,48 +116,28 @@ export const loadTableAttributesByPath =
         const defaultTableColumnLimit = getDefaultTableColumnLimit(state);
         const useYqlTypes = isYqlTypesEnabled(state);
         const login = selectCurrentUserName(state);
+        const ysonSettings = getYsonSettingsDisableDecode(state);
 
         if (!clusterConfig) return;
 
-        const attributes = await loadTableAttributes(path, clusterConfig);
-        const schema: NavigationTableSchema[] = ypath.getValue(attributes.schema);
-        const output_format = getRequestOutputFormat(
-            schema.map((i) => i.name),
-            cellSize,
-            login,
-            defaultTableColumnLimit,
-            useYqlTypes,
-        );
-
-        const requestFunction = attributes.dynamic ? loadDynamicTableRequest : loadStaticTable;
+        const setup = {
+            proxy: getClusterProxy(clusterConfig),
+            JSONSerializer,
+        };
 
         try {
-            const {columns, rows, yqlTypes} = await requestFunction({
-                login: state.global.login,
-                path,
-                clusterConfig,
-                schema,
-                keyColumns: attributes.key_columns,
+            const tableData = await loadTableAttributesByPathFromComponents(path, setup, {
+                clusterId: clusterConfig.id,
+                login,
                 limit: pageSize,
-                output_format,
+                cellSize,
+                defaultTableColumnLimit,
+                useYqlTypes,
+                showDecoded: ysonSettings.showDecoded,
             });
 
-            const tableData: NavigationTable = {
-                name: attributes.key,
-                meta: makeMetaItems({
-                    cluster: clusterConfig.id,
-                    attributes,
-                    tableType: getTableTypeByAttributes(attributes.dynamic, attributes),
-                    isDynamic: attributes.dynamic,
-                }),
-                rows,
-                schema,
-                columns,
-                yqlTypes,
-            };
-
             dispatch(setPath(path));
-            dispatch(setTable(tableData));
+            dispatch(setTable(tableData as NavigationTable));
             dispatch(setNodeType(BodyType.Table));
         } catch (e) {
             toaster.add({

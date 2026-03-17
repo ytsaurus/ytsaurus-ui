@@ -2,7 +2,7 @@ import {ytSetLang} from './i18n';
 import './appearance';
 import './common/hammer';
 
-import React from 'react';
+import React, {Suspense} from 'react';
 import {createRoot} from 'react-dom/client';
 import {Provider} from 'react-redux';
 import {useSelector} from './store/redux-hooks';
@@ -23,6 +23,13 @@ import {ErrorYsonSettingsProvider} from './containers/ErrorYsonSettingsProvider/
 
 import UIFactory, {UIFactory as UIFactoryType, configureUIFactory} from './UIFactory';
 
+const YtComponentsConfigProviderLazy = React.lazy(() =>
+    import(
+        /* webpackChunkName: "yt-components-config" */
+        './containers/YtComponentsConfigProvider'
+    ).then((m) => ({default: m.YtComponentsConfigProvider})),
+);
+
 function AppWithStore({store, history}: ReturnType<typeof createMainEntryStore>) {
     return (
         <Provider store={store}>
@@ -40,7 +47,11 @@ function AppRoot({history}: Pick<ReturnType<typeof createMainEntryStore>, 'histo
 
     return (
         <ErrorYsonSettingsProvider key={lang}>
-            <Router history={history}>{UIFactory.wrapApp(<App />)}</Router>
+            <Suspense fallback={null}>
+                <YtComponentsConfigProviderLazy>
+                    <Router history={history}>{UIFactory.wrapApp(<App />)}</Router>
+                </YtComponentsConfigProviderLazy>
+            </Suspense>
         </ErrorYsonSettingsProvider>
     );
 }
