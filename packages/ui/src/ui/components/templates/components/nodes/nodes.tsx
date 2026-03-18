@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Label from '../../../../components/Label/Label';
+import Label from '../../../../components/Label';
 
 export function renderLabel(flag: boolean): React.ReactNode {
     return (

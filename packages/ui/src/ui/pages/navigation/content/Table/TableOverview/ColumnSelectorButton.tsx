@@ -11,7 +11,7 @@ import {
     getVisibleColumns,
 } from '../../../../../store/selectors/navigation/content/table';
 import {getSchemaStrict} from '../../../../../store/selectors/navigation/tabs/schema';
-import {Secondary} from '../../../../../components/Text/Text';
+import {Secondary} from '@ytsaurus/components';
 import ColumnsPresetButton from './ColumnsPresetButton';
 import {RootState} from '../../../../../store/reducers';
 import {getConfigData} from '../../../../../config/ui-settings';

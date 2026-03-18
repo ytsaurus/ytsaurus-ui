@@ -6,7 +6,7 @@ import cn from 'bem-cn-lite';
 
 import {useDisableMaxContentWidth} from '../../../../containers/MaxContentWidth';
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
-import MetaTable from '../../../../components/MetaTable/MetaTable';
+import {MetaTable} from '@ytsaurus/components';
 import {
     compression,
     erasureReplication,

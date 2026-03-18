@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
-import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton} from '@ytsaurus/components';
 
 import './FormattedId.scss';
 

@@ -5,12 +5,13 @@ import DataTable from '@gravity-ui/react-data-table';
 
 import {Loader} from '@gravity-ui/uikit';
 
-import {TypeArray} from '../../../../../components/SchemaDataType/dataTypes';
+import type {TypeArray} from '@ytsaurus/components';
 import {useResizeEventForTable} from '../../../../../components/UseResizeEventForTable/UseResizeEventForTable';
 
 import {injectTableCellData} from '../../../../../store/actions/navigation/content/table/table-ts';
 import {getOffsetValue} from '../../../../../store/selectors/navigation/content/table';
 import {getSchemaByName} from '../../../../../store/selectors/navigation/tabs/schema';
+import {selectPrimitiveTypesMap} from '../../../../../store/selectors/global/supported-features';
 import {getSettingTableDisplayRawStrings} from '../../../../../store/selectors/settings';
 import {shouldUseYqlTypes} from '../../../../../store/selectors/settings/settings-development';
 import {YsonSettings} from '../../../../../store/selectors/thor/unipika';
@@ -47,6 +48,7 @@ export default function DataTableWrapper(props: DataTableWrapperProps) {
     const useRawStrings = useSelector(getSettingTableDisplayRawStrings);
     const useYqlTypes = useSelector(shouldUseYqlTypes);
     const schemaByName = useSelector(getSchemaByName);
+    const primitiveTypes = useSelector(selectPrimitiveTypesMap);
 
     const {columns, keyColumns, ysonSettings, yqlTypes, loading, loaded, isFullScreen, ...rest} =
         props;
@@ -62,6 +64,7 @@ export default function DataTableWrapper(props: DataTableWrapperProps) {
         schemaByName,
         onShowPreview,
         useYqlTypes,
+        primitiveTypes,
     });
     const initialLoading = loading && !loaded;
     const updating = loading && loaded;

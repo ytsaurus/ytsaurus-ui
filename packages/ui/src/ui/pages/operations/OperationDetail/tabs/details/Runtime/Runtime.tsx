@@ -4,10 +4,9 @@ import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
 
-import MetaTable, {
-    Template,
-    TemplateWeight,
-} from '../../../../../../components/MetaTable/MetaTable';
+import {MetaTable} from '@ytsaurus/components';
+import {Template} from '../../../../../../components/MetaTable/templates/Template';
+import {TemplateWeight} from '../../../../../../components/MetaTable/templates/OperationTemplate';
 
 import {formatShare} from '../../../../../../utils/operations/tabs/details/runtime';
 import {showEditPoolsWeightsModal} from '../../../../../../store/actions/operations';

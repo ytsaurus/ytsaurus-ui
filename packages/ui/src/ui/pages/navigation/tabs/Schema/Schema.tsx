@@ -7,14 +7,13 @@ import omit_ from 'lodash/omit';
 
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import {ColumnInfo} from '../../../../components/ElementsTable/ElementsTableHeader';
-import MetaTable from '../../../../components/MetaTable/MetaTable';
+import {MetaTable, SchemaDataType} from '@ytsaurus/components';
 import HelpLink from '../../../../components/HelpLink/HelpLink';
 import Link from '../../../../components/Link/Link';
 import {FormattedText} from '../../../../components/formatters';
 import Filter from '../../../../components/Filter/Filter';
 import Icon from '../../../../components/Icon/Icon';
 import ErrorIcon from '../../../../components/ErrorIcon/ErrorIcon';
-import SchemaDataType from '../../../../components/SchemaDataType/SchemaDataType';
 import UIFactory from '../../../../UIFactory';
 import {
     ExternalDescription,
@@ -29,6 +28,7 @@ import {
 } from '../../../../store/selectors/navigation/tabs/schema';
 import {updateSchemaFilter} from '../../../../store/actions/navigation/tabs/schema';
 import {selectCluster} from '../../../../store/selectors/global';
+import {selectPrimitiveTypesMap} from '../../../../store/selectors/global/supported-features';
 import hammer from '../../../../common/hammer';
 
 import './Schema.scss';
@@ -60,6 +60,7 @@ export type SchemaProps = {
     filteredSchema?: Array<SchemaItem>;
     meta: Array<SchemaMetaItem>;
     computedColumns: SchemaComputedColumns<SchemaColumnNames>;
+    primitiveTypes: Set<string>;
 
     updateFilter: (filter: string) => void;
 };
@@ -105,6 +106,7 @@ class Schema extends Component<SchemaProps> {
     }
 
     get templates() {
+        const {primitiveTypes} = this.props;
         return {
             __default__(
                 item: SchemaItem,
@@ -140,7 +142,7 @@ class Schema extends Component<SchemaProps> {
             },
             type_v3(item: SchemaItem) {
                 const {type_v3} = item;
-                return <SchemaDataType type_v3={type_v3} />;
+                return <SchemaDataType typeV3={type_v3} primitiveTypes={primitiveTypes} />;
             },
             description: (item: SchemaItem) => {
                 return this.renderExternalColumn(item, 'description');
@@ -298,8 +300,9 @@ const mapStateToProps = (state: RootState) => {
     const meta = getSchemaMeta(state);
     const filteredSchema = getFilteredSchema(state);
     const computedColumns = getComputedColumns(state);
+    const primitiveTypes = selectPrimitiveTypesMap(state);
 
-    return {column, meta, schema, filteredSchema, computedColumns, cluster, path};
+    return {column, meta, schema, filteredSchema, computedColumns, cluster, path, primitiveTypes};
 };
 
 const mapDispatchToProps = {

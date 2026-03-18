@@ -6,7 +6,7 @@ import cn from 'bem-cn-lite';
 
 import format from '../../../../common/hammer/format';
 
-import MetaTable from '../../../../components/MetaTable/MetaTable';
+import {MetaTable} from '@ytsaurus/components';
 import {AccountParsedData, visitResourceFields} from '../../../../utils/accounts/accounts-selector';
 import './AccountAlerts.scss';
 

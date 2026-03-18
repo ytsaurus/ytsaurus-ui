@@ -56,7 +56,7 @@ import hammer from '../../../../common/hammer';
 import UploadManagerCreate from '../Table/UploadManager/UploadManagerCreate';
 import NodesTypes from './NodesTypes/NodesTypes';
 
-import {NoWrap} from '../../../../components/Text/Text';
+import {NoWrap} from '@ytsaurus/components';
 import {showLinkToModal} from '../../../../store/actions/navigation/modals/link-to-modal';
 import {openCreateACOModal} from '../../../../store/actions/navigation/modals/create-aco';
 import NavigationExtraActions from '../../../../containers/NavigationExtraActions/NavigationExtraActions';

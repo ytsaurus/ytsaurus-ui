@@ -6,18 +6,15 @@ import {Column} from '@gravity-ui/react-data-table';
 
 import format from '../../../common/hammer/format';
 
-import DataTableYT, {
-    DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR,
-} from '../../../components/DataTableYT/DataTableYT';
-import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
+import {DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR} from '../../../components/DataTableYT/constants';
+import {ClipboardButton, Secondary, Tooltip} from '@ytsaurus/components';
+import {DataTableYT} from '../../../components/DataTableYT';
 import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
 import Icon from '../../../components/Icon/Icon';
 import Link from '../../../components/Link/Link';
 import {OperationId} from '../../../components/OperationId/OperationId';
 import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
-import {Secondary} from '../../../components/Text/Text';
-import Label from '../../../components/Label/Label';
-import {Tooltip} from '../../../components/Tooltip/Tooltip';
+import Label from '../../../components/Label';
 
 import {chytToggleSortState} from '../../../store/actions/chyt/list-fitlers';
 import {selectCluster} from '../../../store/selectors/global';

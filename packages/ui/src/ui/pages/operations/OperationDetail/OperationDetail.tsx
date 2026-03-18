@@ -13,11 +13,12 @@ import Button from '../../../components/Button/Button';
 import {YTErrorBlock} from '../../../components/Error/Error';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import Icon from '../../../components/Icon/Icon';
-import MetaTable, {Template, TemplatePools} from '../../../components/MetaTable/MetaTable';
+import {Template} from '../../../components/MetaTable/templates/Template';
+import {TemplatePools} from '../../../components/MetaTable/templates/OperationTemplate';
 import StatusLabel from '../../../components/StatusLabel/StatusLabel';
 import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
 import Tabs from '../../../components/Tabs/Tabs';
-import {Tooltip} from '../../../components/Tooltip/Tooltip';
+import {MetaTable, Tooltip} from '@ytsaurus/components';
 import Yson from '../../../components/Yson/Yson';
 import OperationProgress from '../OperationProgress/OperationProgress';
 

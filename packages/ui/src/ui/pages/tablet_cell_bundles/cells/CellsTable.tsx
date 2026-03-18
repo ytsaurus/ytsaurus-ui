@@ -6,13 +6,12 @@ import capitalize_ from 'lodash/capitalize';
 import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
 
 import ClickableAttributesButton from '../../../components/AttributesButton/ClickableAttributesButton';
-import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton, Tooltip} from '@ytsaurus/components';
+import {DataTableYT} from '../../../components/DataTableYT';
 import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
-import DataTableYT from '../../../components/DataTableYT/DataTableYT';
 import Icon from '../../../components/Icon/Icon';
-import Label, {LabelTheme} from '../../../components/Label/Label';
+import Label, {LabelTheme} from '../../../components/Label';
 import Link from '../../../components/Link/Link';
-import {Tooltip} from '../../../components/Tooltip/Tooltip';
 import {STICKY_TOOLBAR_BOTTOM} from '../../../components/WithStickyToolbar/WithStickyToolbar';
 import {Health} from '../../../components/Health/Health';
 import {OrderType} from '../../../utils/sort-helpers';

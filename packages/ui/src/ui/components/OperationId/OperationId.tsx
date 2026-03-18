@@ -5,7 +5,7 @@ import {Text} from '@gravity-ui/uikit';
 import Link from '../../components/Link/Link';
 import format from '../../common/hammer/format';
 import {Page} from '../../../shared/constants/settings';
-import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton} from '@ytsaurus/components';
 
 export function OperationId({
     id,

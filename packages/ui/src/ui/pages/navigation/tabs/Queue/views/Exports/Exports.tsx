@@ -3,8 +3,8 @@ import {ClipboardButton, Flex, Text} from '@gravity-ui/uikit';
 
 import Link from '../../../../../../components/Link/Link';
 import Icon from '../../../../../../components/Icon/Icon';
-import DataTableYT, {Column} from '../../../../../../components/DataTableYT/DataTableYT';
-import {Tooltip} from '../../../../../../components/Tooltip/Tooltip';
+import {Column, Tooltip} from '@ytsaurus/components';
+import {DataTableYT} from '../../../../../../components/DataTableYT';
 import {formatTimeDuration} from '../../../../../../components/TimeDuration/TimeDuration';
 
 import hammer from '../../../../../../common/hammer';

@@ -7,7 +7,7 @@ import {QueryItem} from '../../../types/query-tracker/api';
 import {Button} from '@gravity-ui/uikit';
 import Yson from '../../../components/Yson/Yson';
 import SimpleModal from '../../../components/Modal/SimpleModal';
-import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton} from '@ytsaurus/components';
 import i18n from './i18n';
 
 interface MetaTableProps {

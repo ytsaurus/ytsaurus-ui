@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {NoContent} from '../../components/NoContent/NoContent';
+import {NoContent} from '../../components/NoContent';
 
 AccountsNoContent.propTypes = {
     hint: PropTypes.node.isRequired,

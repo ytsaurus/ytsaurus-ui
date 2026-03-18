@@ -6,7 +6,7 @@ import {genNavigationUrl} from '../../../../../utils/navigation/navigation';
 import {parseTablePath} from '../../services/tables';
 import format from '../../../../../common/hammer/format';
 import './PathPopup.scss';
-import MetaTable from '../../../../../components/MetaTable/MetaTable';
+import {MetaTable} from '@ytsaurus/components';
 
 const b = cn('yt-detail-path');
 

@@ -6,7 +6,7 @@ import format from '../../../../../../../common/hammer/format';
 
 import {Resource} from '../../../../../../../store/api/dashboard2/accounts/accounts';
 
-import {Tooltip} from '../../../../../../../components/Tooltip/Tooltip';
+import {Tooltip} from '@ytsaurus/components';
 
 import './AccountsProgressCell.scss';
 

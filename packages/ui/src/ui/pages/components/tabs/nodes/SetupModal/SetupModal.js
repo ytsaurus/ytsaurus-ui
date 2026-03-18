@@ -11,8 +11,7 @@ import reduce_ from 'lodash/reduce';
 
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
 import RadioButton from '../../../../../components/RadioButton/RadioButton';
-import MetaTable from '../../../../../components/MetaTable/MetaTable';
-import Hotkey from '../../../../../components/Hotkey/Hotkey';
+import {Hotkey, MetaTable} from '@ytsaurus/components';
 import Filter from '../../../../../components/Filter/Filter';
 import Modal from '../../../../../components/Modal/Modal';
 import Select from '../../../../../components/Select/Select';

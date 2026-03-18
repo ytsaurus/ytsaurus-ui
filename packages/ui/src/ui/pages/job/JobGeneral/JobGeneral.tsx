@@ -7,14 +7,14 @@ import {Alert, Flex, Link} from '@gravity-ui/uikit';
 
 import Specification from '../../../pages/job/tabs/Specification/Specification';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
-import MetaTable, {Template} from '../../../components/MetaTable/MetaTable';
+import {Template} from '../../../components/MetaTable/templates/Template';
 import Statistics from '../../../pages/job/tabs/Statistics/Statistics';
 import JobBreadcrumbs from '../JobBreadcrumbs/JobBreadcrumbs';
 import Statuslabel from '../../../components/StatusLabel/StatusLabel';
 import Placeholder from '../../../pages/components/Placeholder';
 import Details from '../../../pages/job/tabs/Details/Details';
 import JobActions from '../JobActions/JobActions';
-import Label from '../../../components/Label/Label';
+import Label from '../../../components/Label';
 import Yson from '../../../components/Yson/Yson';
 import Tabs from '../../../components/Tabs/Tabs';
 
@@ -32,7 +32,7 @@ import {RouteInfo} from '../Job';
 import {ClickableText} from '../../../components/ClickableText/ClickableText';
 import ChartLink from '../../../components/ChartLink/ChartLink';
 import {getJob} from '../../../store/selectors/job/detail';
-import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton, MetaTable} from '@ytsaurus/components';
 import {selectCluster, selectClusterUiConfig} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
 import {StaleJobIcon} from '../../../pages/operations/OperationDetail/tabs/Jobs/StaleJobIcon';

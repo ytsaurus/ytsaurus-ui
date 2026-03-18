@@ -18,8 +18,8 @@ import {AuthenticationToken, manageTokensSelector} from '../../../store/selector
 import {selectCurrentUserName} from '../../../store/selectors/global';
 import Icon from '../../../components/Icon/Icon';
 import {YTError} from '../../../../@types/types';
-import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
-import DataTableYT from '../../../components/DataTableYT/DataTableYT';
+import {ClipboardButton} from '@ytsaurus/components';
+import {DataTableYT} from '../../../components/DataTableYT';
 import {
     ManageTokensPasswordModalContextProvider,
     useManageTokensPasswordModalContext,
@@ -249,7 +249,7 @@ const AuthenticationTokensSection: FC<{
                                         <ClipboardButton
                                             title="Copy error"
                                             view="flat-secondary"
-                                            text={value}
+                                            text={value as string}
                                             size="xs"
                                         />
                                     </>

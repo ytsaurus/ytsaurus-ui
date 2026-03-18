@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 import {Text} from '@gravity-ui/uikit';
 
 import Icon from '../../components/Icon/Icon';
-import {Tooltip} from '../Tooltip/Tooltip';
+import {Tooltip} from '@ytsaurus/components';
 
 import './WarningIcon.scss';
 

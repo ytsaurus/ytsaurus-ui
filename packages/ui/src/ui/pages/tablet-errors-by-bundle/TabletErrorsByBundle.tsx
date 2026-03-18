@@ -8,10 +8,9 @@ import {TableMethodErrorsCount} from '../../../shared/tablet-errors-manager';
 import format from '../../common/hammer/format';
 
 import ColumnHeader from '../../components/ColumnHeader/ColumnHeader';
-import DataTableYT, {
-    Column,
-    DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR_DOUBLE_HEIGHT,
-} from '../../components/DataTableYT/DataTableYT';
+import {DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR_DOUBLE_HEIGHT} from '../../components/DataTableYT/constants';
+import {Column} from '@ytsaurus/components';
+import {DataTableYT} from '../../components/DataTableYT';
 import {YTErrorBlock} from '../../components/Error/Error';
 import {
     getTabletErrorsByBundleData,

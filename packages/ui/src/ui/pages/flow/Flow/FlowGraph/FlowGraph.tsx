@@ -14,7 +14,7 @@ import {
     FlowStream,
 } from '../../../../../shared/yt-types';
 import Loader from '../../../../components/Loader/Loader';
-import {NoContent} from '../../../../components/NoContent/NoContent';
+import {NoContent} from '../../../../components/NoContent';
 import Select from '../../../../components/Select/Select';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {

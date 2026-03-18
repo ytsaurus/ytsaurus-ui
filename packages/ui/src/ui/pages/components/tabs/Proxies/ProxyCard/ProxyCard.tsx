@@ -11,9 +11,9 @@ import hammer from '../../../../../common/hammer';
 import {SPLIT_TYPE} from '../../../../../constants/components/proxies/proxies';
 
 import {MaintenanceRequests} from '../../../../../components/MaintenanceRequests/MaintenanceRequests';
-import MetaTable from '../../../../../components/MetaTable/MetaTable';
+import {MetaTable} from '@ytsaurus/components';
 import Button from '../../../../../components/Button/Button';
-import Label from '../../../../../components/Label/Label';
+import Label from '../../../../../components/Label';
 import Icon from '../../../../../components/Icon/Icon';
 
 import {selectCluster, selectCurrentClusterConfig} from '../../../../../store/selectors/global';

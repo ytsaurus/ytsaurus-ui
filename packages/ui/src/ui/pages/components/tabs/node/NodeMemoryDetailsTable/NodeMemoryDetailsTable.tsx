@@ -10,9 +10,6 @@ import Link from '../../../../../components/Link/Link';
 import Icon from '../../../../../components/Icon/Icon';
 import Button from '../../../../../components/Button/Button';
 import ColumnHeader from '../../../../../components/ColumnHeader/ColumnHeader';
-import DataTableYT, {
-    DATA_TABLE_YT_SETTINGS,
-} from '../../../../../components/DataTableYT/DataTableYT';
 import {NodeMemoryInfo} from '../../../../../store/selectors/components/node/memory';
 
 import {
@@ -22,7 +19,8 @@ import {
 } from '../NodeBundlesTotal/NodeBundlesTotal';
 import {OrderType} from '../../../../../utils/sort-helpers';
 import {SortState} from '../../../../../types';
-import {SecondaryBold} from '../../../../../components/Text/Text';
+import {DATA_TABLE_YT_SETTINGS, DataTableYT} from '../../../../../components/DataTableYT';
+import {SecondaryBold} from '@ytsaurus/components';
 
 import './NodeMemoryDetailsTable.scss';
 

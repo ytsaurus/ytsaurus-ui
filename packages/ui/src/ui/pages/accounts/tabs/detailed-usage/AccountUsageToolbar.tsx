@@ -35,7 +35,7 @@ import {
     isAccountsUsageDiffView,
 } from '../../../../store/selectors/accounts/account-usage';
 import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';
-import {Secondary, SecondaryBold} from '../../../../components/Text/Text';
+import {Secondary, SecondaryBold} from '@ytsaurus/components';
 import SimplePagination from '../../../../components/Pagination/SimplePagination';
 import Icon from '../../../../components/Icon/Icon';
 import AccountUsageColumnsButton from './AccountUsageColumnsButton';

@@ -2,9 +2,9 @@ import React from 'react';
 import isEmpty_ from 'lodash/isEmpty';
 
 import hammer from '../../../common/hammer';
-import Label from '../../../components/Label/Label';
+import Label from '../../../components/Label';
 import {MaintenanceRequests} from '../../../components/MaintenanceRequests/MaintenanceRequests';
-import {MetaTableItem} from '../../../components/MetaTable/MetaTable';
+import type {MetaTableItem} from '@ytsaurus/components';
 import {renderLabel} from '../../../components/templates/components/nodes/nodes';
 import type {Node} from '../../../store/reducers/components/nodes/nodes/node';
 

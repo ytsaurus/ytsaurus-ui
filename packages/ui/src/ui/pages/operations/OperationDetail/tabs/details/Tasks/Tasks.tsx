@@ -6,7 +6,8 @@ import isEmpty_ from 'lodash/isEmpty';
 
 import CollapsibleSection from '../../../../../../components/CollapsibleSection/CollapsibleSection';
 import ElementsTable from '../../../../../../components/ElementsTable/ElementsTable';
-import MetaTable, {Template} from '../../../../../../components/MetaTable/MetaTable';
+import {MetaTable} from '@ytsaurus/components';
+import {Template} from '../../../../../../components/MetaTable/templates/Template';
 
 import hammer from '../../../../../../common/hammer';
 import ypath from '../../../../../../common/thor/ypath';
@@ -266,8 +267,8 @@ class Tasks extends React.Component<Props, State> {
             averageReadRowRate,
             items,
         } = this.props.jobs;
-        const rowRateFormat = (value: number) =>
-            hammer.format['NumberPerSecond'](value, {measure: 'rows'});
+        const rowRateFormat = (value: unknown) =>
+            hammer.format['NumberPerSecond'](value as number, {measure: 'rows'});
         const {allowActions, visibleItems} = this.state;
 
         return (

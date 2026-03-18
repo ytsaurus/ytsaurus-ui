@@ -1,8 +1,10 @@
 import React from 'react';
 
-import MetaTable from '../../components/MetaTable/MetaTable';
-import {TTLLabel, makeTTLItems} from '../../components/MetaTable/presets/ttl';
-import {Tooltip} from '../../components/Tooltip/Tooltip';
+import {MetaTable, TTLLabel, Tooltip, makeTTLItems} from '@ytsaurus/components';
+
+import {YT} from '../../config/yt-config';
+import UIFactory from '../../UIFactory';
+import {makeNavigationLink} from '../../utils/app-url';
 
 export default function TTLInfo({
     attributes,
@@ -13,7 +15,13 @@ export default function TTLInfo({
     size: React.ComponentProps<typeof TTLLabel>['size'];
     className?: string;
 }) {
-    const ttlItems = makeTTLItems(attributes);
+    const ttlItems = makeTTLItems(attributes, {
+        docsUrls: UIFactory.docsUrls,
+        cluster: YT.cluster,
+        config: {
+            navigationLinkTemplate: makeNavigationLink,
+        },
+    });
 
     if (!ttlItems.length) {
         return null;

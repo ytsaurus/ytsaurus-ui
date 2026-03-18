@@ -3,7 +3,7 @@ import {Redirect, Route, RouteComponentProps, Switch} from 'react-router';
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton} from '@ytsaurus/components';
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
 import Tabs from '../../../../components/Tabs/Tabs';
 import Loader from '../../../../components/Loader/Loader';

@@ -2,7 +2,7 @@ import React from 'react';
 
 import hammer from '../../common/hammer';
 
-import Label, {LabelTheme} from '../../components/Label/Label';
+import Label, {LabelTheme} from '../../components/Label';
 
 import {YTHealth} from '../../types';
 

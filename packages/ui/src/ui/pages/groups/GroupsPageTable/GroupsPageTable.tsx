@@ -6,12 +6,12 @@ import DataTable from '@gravity-ui/react-data-table';
 import {openAttributesModal} from '../../../store/actions/modals/attributes-modal';
 import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
 import CommaSeparatedListWithRestCounter from '../../../components/CommaSeparateListWithRestCounter/CommaSeparateListWithRestCounter';
-import DataTableYT from '../../../components/DataTableYT/DataTableYT';
 import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
 
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import ExpandIcon from '../../../components/ExpandIcon/ExpandIcon';
-import {Tooltip} from '../../../components/Tooltip/Tooltip';
+import {Tooltip} from '@ytsaurus/components';
+import {DataTableYT} from '../../../components/DataTableYT';
 
 import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
 

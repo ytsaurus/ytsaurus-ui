@@ -3,7 +3,7 @@ import {type Meta, type StoryObj} from '@storybook/react';
 
 import {Button} from '@gravity-ui/uikit';
 
-import {NoContent} from '../NoContent';
+import {NoContent} from '..';
 
 interface NoContentProps {
     className?: string;

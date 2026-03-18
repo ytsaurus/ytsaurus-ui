@@ -9,14 +9,12 @@ import compact_ from 'lodash/compact';
 import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
 
 import format from '../../../../common/hammer/format';
-import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
-import Label from '../../../../components/Label/Label';
+import Label from '../../../../components/Label';
 import Link from '../../../../components/Link/Link';
-import {Secondary, Warning} from '../../../../components/Text/Text';
+import {ClipboardButton, Secondary, Tooltip, Warning} from '@ytsaurus/components';
+import {DataTableYT} from '../../../../components/DataTableYT';
 import {SubjectCard} from '../../../../components/SubjectLink/SubjectLink';
-import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 import {STICKY_DOUBLE_TOOLBAR_BOTTOM} from '../../../../components/WithStickyToolbar/WithStickyToolbar';
-import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
 import ColumnHeader from '../../../../components/ColumnHeader/ColumnHeader';
 
 import {

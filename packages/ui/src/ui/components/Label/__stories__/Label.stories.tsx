@@ -2,7 +2,7 @@ import React from 'react';
 import {Flex, Text} from '@gravity-ui/uikit';
 import type {Meta, StoryObj} from '@storybook/react';
 
-import Label, {LabelTheme} from '../Label';
+import Label, {LabelTheme} from '..';
 
 const meta: Meta<typeof Label> = {
     title: 'Components/Label',

@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import hammer from '../../../common/hammer';
 
-import Label from '../../../components/Label/Label';
+import Label from '../../../components/Label';
 import {Loader} from '@gravity-ui/uikit';
 import {FormattedId} from '../../../components/formatters';
-import MetaTable from '../../../components/MetaTable/MetaTable';
+import {MetaTable} from '@ytsaurus/components';
 import ElementsTable from '../../../components/ElementsTable/ElementsTable';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';

@@ -8,12 +8,11 @@ import AccountLink from '../../../pages/accounts/AccountLink';
 import ClickableAttributesButton from '../../../components/AttributesButton/ClickableAttributesButton';
 import Button from '../../../components/Button/Button';
 import ChartLink from '../../../components/ChartLink/ChartLink';
-import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton, Tooltip} from '@ytsaurus/components';
+import {DataTableYT} from '../../../components/DataTableYT';
 import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
-import DataTableYT from '../../../components/DataTableYT/DataTableYT';
 import Icon from '../../../components/Icon/Icon';
 import Link from '../../../components/Link/Link';
-import {Tooltip} from '../../../components/Tooltip/Tooltip';
 import {Health} from '../../../components/Health/Health';
 import {STICKY_TOOLBAR_BOTTOM} from '../../../components/WithStickyToolbar/WithStickyToolbar';
 // @ts-ignore

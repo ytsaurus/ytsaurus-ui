@@ -6,7 +6,7 @@ import cn from 'bem-cn-lite';
 import compact_ from 'lodash/compact';
 import isFinite_ from 'lodash/isFinite';
 
-import MetaTable from '../../../../components/MetaTable/MetaTable';
+import {MetaTable} from '@ytsaurus/components';
 import ElementsTableRaw from '../../../../components/ElementsTable/ElementsTable';
 
 import hammer from '../../../../common/hammer';

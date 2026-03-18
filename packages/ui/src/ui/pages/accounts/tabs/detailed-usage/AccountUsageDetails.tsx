@@ -16,7 +16,6 @@ import {
     setAccountUsageSortState,
     syncAccountsUsageViewTypeWithSettings,
 } from '../../../../store/actions/accounts/account-usage';
-import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
 import {
     getAccountUsageAvailableColumns,
     getAccountUsageCurrentSnapshot,
@@ -65,10 +64,11 @@ import {selectCluster} from '../../../../store/selectors/global';
 import Loader from '../../../../components/Loader/Loader';
 
 import {SubjectCard} from '../../../../components/SubjectLink/SubjectLink';
-import {Secondary, Warning} from '../../../../components/Text/Text';
+import {Secondary, Warning} from '@ytsaurus/components';
+import {DataTableYT} from '../../../../components/DataTableYT';
 import {getIconNameForType} from '../../../../utils/navigation/path-editor';
 import {OrderType} from '../../../../utils/sort-helpers';
-import {NoContent} from '../../../../components/NoContent/NoContent';
+import {NoContent} from '../../../../components/NoContent';
 import {
     AccountUsageDataItem,
     MediumKeyTemplate,

@@ -1,7 +1,7 @@
 import React, {useRef, useState} from 'react';
 import cn from 'bem-cn-lite';
 
-import MetaTable from '../../../components/MetaTable/MetaTable';
+import {MetaTable} from '@ytsaurus/components';
 // @ts-ignore
 import format from '../../../common/hammer/format';
 import {getStateForHost, loadMasters} from '../../../store/actions/system/masters';

@@ -3,7 +3,7 @@ import moment from 'moment';
 import type {Column} from '@gravity-ui/react-data-table';
 
 import format from '../../../../../common/hammer/format';
-import Label from '../../../../../components/Label/Label';
+import Label from '../../../../../components/Label';
 import Link from '../../../../../components/Link/Link';
 import Multimeter from '../../../../../components/Multimeter/Multimeter';
 import {SubjectCard} from '../../../../../components/SubjectLink/SubjectLink';

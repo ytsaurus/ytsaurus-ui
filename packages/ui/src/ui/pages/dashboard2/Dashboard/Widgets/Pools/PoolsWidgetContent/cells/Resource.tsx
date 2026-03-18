@@ -2,7 +2,7 @@ import React from 'react';
 import b from 'bem-cn-lite';
 import {Flex, Progress, Text} from '@gravity-ui/uikit';
 
-import {Tooltip} from '../../../../../../../components/Tooltip/Tooltip';
+import {Tooltip} from '@ytsaurus/components';
 
 import format from '../../../../../../../common/hammer/format';
 

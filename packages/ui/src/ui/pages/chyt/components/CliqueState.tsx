@@ -1,7 +1,7 @@
 import React from 'react';
 
 import format from '../../../common/hammer/format';
-import Label from '../../../components/Label/Label';
+import Label from '../../../components/Label';
 import {
     StrawberryCliqueHealthType,
     StrawberryCliqueStateType,

@@ -4,15 +4,13 @@ import {
     StickyContainer,
     StickyContainerProps,
 } from '../../components/StickyContainer/StickyContainer';
-import {HEADER_HEIGHT} from '../../constants/index';
-import {TOOLBAR_COMPONENT_HEIGHT} from './Toolbar/Toolbar';
+import {STICKY_DOUBLE_TOOLBAR_BOTTOM, STICKY_TOOLBAR_BOTTOM} from '../DataTableYT/constants';
 
 import './WithStickyToolbar.scss';
 
 const block = cn('with-sticky-toolbar');
 
-export const STICKY_TOOLBAR_BOTTOM = HEADER_HEIGHT + TOOLBAR_COMPONENT_HEIGHT;
-export const STICKY_DOUBLE_TOOLBAR_BOTTOM = HEADER_HEIGHT + TOOLBAR_COMPONENT_HEIGHT * 2;
+export {STICKY_DOUBLE_TOOLBAR_BOTTOM, STICKY_TOOLBAR_BOTTOM};
 
 type Props = Omit<StickyContainerProps, 'children' | 'hideShadow' | 'keepWidth'> & {
     toolbar: React.ReactNode;

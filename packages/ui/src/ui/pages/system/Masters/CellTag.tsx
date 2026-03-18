@@ -3,10 +3,7 @@ import React from 'react';
 import format from '../../../common/hammer/format';
 
 import Icon from '../../../components/Icon/Icon';
-import {Secondary} from '../../../components/Text/Text';
-import {Tooltip} from '../../../components/Tooltip/Tooltip';
-import MetaTable from '../../../components/MetaTable/MetaTable';
-import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton, MetaTable, Secondary, Tooltip} from '@ytsaurus/components';
 
 export function CellTag({cellTag, className}: {cellTag: number; className: string}) {
     const hexCellTag = format.Hex(cellTag);
@@ -34,7 +31,7 @@ export function CellTag({cellTag, className}: {cellTag: number; className: strin
                             value: (
                                 <>
                                     {cellTag}{' '}
-                                    <ClipboardButton view="clear" theme="" size="xs" text={cellTag}>
+                                    <ClipboardButton view="clear" size="xs" text={cellTag}>
                                         {cellTag}
                                     </ClipboardButton>
                                 </>

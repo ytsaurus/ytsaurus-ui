@@ -9,9 +9,9 @@ import DataTable, {Column, OrderType, Settings, SortOrder} from '@gravity-ui/rea
 import DataTypePopup from '../DataTypePopup/DataTypePopup';
 import {StrictReactNode, hasKey} from './utils';
 import {MOVING} from '@gravity-ui/react-data-table/build/esm/lib/constants';
-import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
+import {DataTableYT} from '../../../../components/DataTableYT';
 import {ClickableText} from '../../../../components/ClickableText/ClickableText';
-import Label from '../../../../components/Label/Label';
+import Label from '../../../../components/Label';
 import {unquote} from '../../../../utils/string';
 
 import './YQLTable.scss';

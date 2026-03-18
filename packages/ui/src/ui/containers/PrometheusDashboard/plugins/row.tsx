@@ -1,7 +1,7 @@
 import React from 'react';
 import {PrometheusPlugins} from '../PrometheusDashKit';
 import {ExpandButton} from '../../../components/ExpandButton';
-import {Secondary} from '../../../components/Text/Text';
+import {Secondary} from '@ytsaurus/components';
 
 export const renderPluginRow: PrometheusPlugins['row']['renderer'] = (
     {data, ...props},

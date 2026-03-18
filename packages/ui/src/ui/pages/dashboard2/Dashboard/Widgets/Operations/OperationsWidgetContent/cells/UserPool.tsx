@@ -6,7 +6,7 @@ import {WidgetText} from '../../../../../../../pages/dashboard2/Dashboard/compon
 
 import {selectCluster} from '../../../../../../../store/selectors/global';
 
-import {TemplatePools} from '../../../../../../../components/MetaTable/MetaTable';
+import {TemplatePools} from '../../../../../../../components/MetaTable/templates/OperationTemplate';
 import Icon from '../../../../../../../components/Icon/Icon';
 
 type Props = {

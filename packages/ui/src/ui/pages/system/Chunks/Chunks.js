@@ -17,7 +17,7 @@ import {sortStateType} from '../../../components/ElementsTable/ElementsTableHead
 import withStickyHead from '../../../components/ElementsTable/hocs/withStickyHead';
 import ElementsTableBase from '../../../components/ElementsTable/ElementsTable';
 import SystemCounters from '../SystemCounters/SystemCounters';
-import Label from '../../../components/Label/Label';
+import Label from '../../../components/Label';
 import {StickyContainer} from '../../../components/StickyContainer/StickyContainer';
 
 import {SYSTEM_CHUNKS_TABLE_ID} from '../../../constants/tables';

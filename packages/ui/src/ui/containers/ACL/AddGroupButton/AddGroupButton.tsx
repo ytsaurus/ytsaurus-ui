@@ -2,7 +2,7 @@ import {Flex} from '@gravity-ui/uikit';
 import React from 'react';
 import Button from '../../../components/Button/Button';
 import Icon from '../../../components/Icon/Icon';
-import {Tooltip} from '../../../components/Tooltip/Tooltip';
+import {Tooltip} from '@ytsaurus/components';
 import {AclMode} from '../../../constants/acl';
 import UIFactory from '../../../UIFactory';
 import {useEditColumnRowGroupModal} from '../EditGroupModal/EditGroupModal';

@@ -6,7 +6,7 @@ import type {Column, Settings} from '@gravity-ui/react-data-table';
 import {Button} from '@gravity-ui/uikit';
 
 import format from '../../../../../../common/hammer/format';
-import DataTableYT from '../../../../../../components/DataTableYT/DataTableYT';
+import {DataTableYT} from '../../../../../../components/DataTableYT';
 import Icon from '../../../../../../components/Icon/Icon';
 
 import {QUEUE_RATE_MODE} from '../../../../../../constants/navigation/tabs/queue';

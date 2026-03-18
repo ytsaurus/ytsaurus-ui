@@ -5,10 +5,10 @@ import type {Column} from '@gravity-ui/react-data-table';
 import {Progress} from '@gravity-ui/uikit';
 
 import format from '../../../../../common/hammer/format';
-import DataTableYT from '../../../../../components/DataTableYT/DataTableYT';
+import {ClipboardButton} from '@ytsaurus/components';
+import {DataTableYT} from '../../../../../components/DataTableYT';
 import {nodeSelector} from '../../../../../store/selectors/components/node/node';
-import Label from '../../../../../components/Label/Label';
-import ClipboardButton from '../../../../../components/ClipboardButton/ClipboardButton';
+import Label from '../../../../../components/Label';
 
 interface LocationInfo {
     enabled?: boolean;

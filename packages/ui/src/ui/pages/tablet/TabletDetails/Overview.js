@@ -11,11 +11,12 @@ import {Button} from '@gravity-ui/uikit';
 import {DialogWrapper as Dialog} from '../../../components/DialogWrapper/DialogWrapper';
 
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
-import MetaTable, {Template} from '../../../components/MetaTable/MetaTable';
+import {MetaTable, Tooltip} from '@ytsaurus/components';
+import {Template} from '../../../components/MetaTable/templates/Template';
 import Histogram from '../../../components/Histogram/Histogram';
 import {size} from '../../../components/MetaTable/presets';
 import {YTErrorBlock} from '../../../components/Error/Error';
-import Label from '../../../components/Label/Label';
+import Label from '../../../components/Label';
 import Yson from '../../../components/Yson/Yson';
 
 import {histogramItems} from '../../../utils/tablet/tablet';
@@ -25,7 +26,6 @@ import {Tab as NavigationTab} from '../../../constants/navigation';
 import {Page} from '../../../constants/index';
 import {genTabletCellBundlesCellUrl} from '../../../utils/tablet_cell_bundles';
 import StoresDialog from './StoresDialog';
-import {Tooltip} from '../../../components/Tooltip/Tooltip';
 import {makeComponentsNodesUrl} from '../../../utils/app-url';
 
 function makeMetaItem(format, data, key, visible) {

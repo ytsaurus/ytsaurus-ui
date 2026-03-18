@@ -3,7 +3,7 @@ import ypath from '../../../../../common/thor/ypath';
 import Link from '../../../../../components/Link/Link';
 import AutomaticModeSwitch, {Props as AutomaticModeSwitchProps} from './AutomaticModeSwitch';
 import reduce_ from 'lodash/reduce';
-import {MetaTableItem} from '../../../../../components/MetaTable/MetaTable';
+import type {MetaTableItem} from '@ytsaurus/components';
 import {tabletActiveChaosBundleLink} from '../../../../../utils/components/tablet-cells';
 
 export const getCommonFields = ({

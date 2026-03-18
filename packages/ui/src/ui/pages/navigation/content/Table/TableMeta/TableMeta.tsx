@@ -4,9 +4,8 @@ import {connect} from 'react-redux';
 import {useSelector} from '../../../../../store/redux-hooks';
 import ypath from '../../../../../common/thor/ypath';
 
-import {makeMetaItems} from '../../../../../components/MetaTable/presets/presets';
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
-import MetaTable from '../../../../../components/MetaTable/MetaTable';
+import {MetaTable, makeMetaItems, useYtComponentsConfig} from '@ytsaurus/components';
 import {RemountAlert} from '../RemountAlert/RemountAlert';
 
 import {getTableType} from '../../../../../store/selectors/navigation/content/table';
@@ -43,6 +42,7 @@ function TableMeta({
 }: Props) {
     const tabletErrorCount = useSelector(getTabletErrorsBackgroundCount);
     const cluster = useSelector(selectCluster);
+    const navigationTableConfig = useYtComponentsConfig();
 
     const items = useMemo(() => {
         return makeMetaItems({
@@ -53,6 +53,7 @@ function TableMeta({
             mediumList,
             tabletErrorCount,
             onEditEnableReplicatedTableTracker,
+            navigationTableConfig,
         });
     }, [
         cluster,
@@ -62,6 +63,7 @@ function TableMeta({
         mediumList,
         tabletErrorCount,
         onEditEnableReplicatedTableTracker,
+        navigationTableConfig,
     ]);
 
     return (

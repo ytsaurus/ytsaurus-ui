@@ -12,7 +12,7 @@ import {Loader} from '@gravity-ui/uikit';
 import {YTErrorBlock} from '../../../../components/Error/Error';
 import Link from '../../../../components/Link/Link';
 import CollapsibleSection from '../../../../components/CollapsibleSection/CollapsibleSection';
-import {Secondary} from '../../../../components/Text/Text';
+import {Secondary} from '@ytsaurus/components';
 
 import {getTabletErrors} from '../../../../store/actions/navigation/tabs/tablet-errors/tablet-errors-background';
 import {getPath} from '../../../../store/selectors/navigation';

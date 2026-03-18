@@ -1,14 +1,12 @@
 import React from 'react';
-import {Tooltip} from '../../components/Tooltip/Tooltip';
-import SchemaDataType from '../../components/SchemaDataType/SchemaDataType';
 import Yson from '../../components/Yson/Yson';
 import unipika from '../../common/thor/unipika';
 import Icon from '../../components/Icon/Icon';
-import {ColumnCell} from '../../components/ColumnCell/ColumnCell';
+import {ColumnCell, SchemaDataType, Tooltip} from '@ytsaurus/components';
 
 import map_ from 'lodash/map';
 
-import {TypeArray} from '../../components/SchemaDataType/dataTypes';
+import type {TypeArray} from '@ytsaurus/components';
 import type {YsonSettings} from '../../store/selectors/thor/unipika';
 
 export type NameWithSortOrder = {name: string; sortOrder?: string};
@@ -22,6 +20,7 @@ export function prepareColumns({
     schemaByName,
     onShowPreview,
     useYqlTypes,
+    primitiveTypes,
 }: {
     columns: NameWithSortOrder[];
     keyColumns: string[];
@@ -31,6 +30,7 @@ export function prepareColumns({
     schemaByName: Record<string, any>;
     onShowPreview: (columnName: string, rowIndex: number, tag?: string) => void;
     useYqlTypes?: boolean;
+    primitiveTypes: Set<string>;
 }) {
     return map_(columns, (column) => {
         const render = ({value, index}: {value?: any; index: number; row: any}) => (
@@ -49,7 +49,13 @@ export function prepareColumns({
         const isKeyColumn = keyColumns.indexOf(column.name) > -1;
         const {type_v3} = schemaByName[column.name] || {};
         const header = (
-            <Tooltip content={Boolean(type_v3) && <SchemaDataType type_v3={type_v3} />}>
+            <Tooltip
+                content={
+                    Boolean(type_v3) && (
+                        <SchemaDataType typeV3={type_v3} primitiveTypes={primitiveTypes} />
+                    )
+                }
+            >
                 <Yson value={unipika.unescapeKeyValue(column.name)} settings={ysonSettings} inline>
                     {isKeyColumn && (
                         <Icon

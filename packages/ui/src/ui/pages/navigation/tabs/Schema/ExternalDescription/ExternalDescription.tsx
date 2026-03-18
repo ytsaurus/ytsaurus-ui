@@ -1,8 +1,7 @@
 import React from 'react';
 import {Text} from '@gravity-ui/uikit';
-import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
+import {MetaTable, Tooltip} from '@ytsaurus/components';
 import Icon from '../../../../../components/Icon/Icon';
-import MetaTable from '../../../../../components/MetaTable/MetaTable';
 import {MarkdownLinePreview} from '../../../../../components/MarkdownLinePreview/MarkdownLinePreview';
 import cn from 'bem-cn-lite';
 

@@ -3,7 +3,7 @@ import {Flex, Text} from '@gravity-ui/uikit';
 import {JobLineEvent} from '../../../../../../components/TimelineBlock/renderer/JobLineRenderer';
 import cn from 'bem-cn-lite';
 import './MetaData.scss';
-import ClipboardButton from '../../../../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton} from '@ytsaurus/components';
 import hammer from '../../../../../../common/hammer';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';

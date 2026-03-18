@@ -13,7 +13,7 @@ import {
 } from '../../../../components/DataTableGravity';
 import Link from '../../../../components/Link/Link';
 import Loader from '../../../../components/Loader/Loader';
-import {NoWrap} from '../../../../components/Text/Text';
+import {NoWrap} from '@ytsaurus/components';
 import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';
 import {formatTimeDuration} from '../../../../components/TimeDuration/TimeDuration';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';

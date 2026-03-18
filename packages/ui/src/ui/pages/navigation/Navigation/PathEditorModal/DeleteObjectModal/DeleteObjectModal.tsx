@@ -9,12 +9,12 @@ import map_ from 'lodash/map';
 
 import {MapNodeIcon} from '../../../../../components/MapNodeIcon/MapNodeIcon';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
-import MetaTable from '../../../../../components/MetaTable/MetaTable';
+import {MetaTable} from '@ytsaurus/components';
 import HelpLink from '../../../../../components/HelpLink/HelpLink';
 import {Checkbox, Loader} from '@gravity-ui/uikit';
 import {YTErrorBlock} from '../../../../../components/Error/Error';
 import Modal from '../../../../../components/Modal/Modal';
-import Label from '../../../../../components/Label/Label';
+import Label from '../../../../../components/Label';
 
 import {
     closeDeleteModal,

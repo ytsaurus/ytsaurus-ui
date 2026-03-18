@@ -15,7 +15,7 @@ import {DESC_ASC_UNORDERED, compareArraysBySizeThenByItems} from '../../../../ut
 
 import Version from '../../../../pages/components/tabs/nodes/Version';
 import StatusBlock, {StatusBlockTheme} from '../../../../components/StatusBlock/StatusBlock';
-import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton} from '@ytsaurus/components';
 import NodeActions from '../../../../pages/components/tabs/nodes/NodeActions/NodeActions';
 import MemoryProgress from '../../../../pages/components/tabs/nodes/MemoryProgress/MemoryProgress';
 import {Host} from '../../../../containers/Host/Host';

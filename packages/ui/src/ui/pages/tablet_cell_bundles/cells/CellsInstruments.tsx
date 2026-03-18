@@ -3,11 +3,12 @@ import cn from 'bem-cn-lite';
 
 import filter_ from 'lodash/filter';
 
-import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton} from '@ytsaurus/components';
 import Filter from '../../../components/Filter/Filter';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import Suggest from '../../../components/Suggest/Suggest';
 import type {TabletsPartialAction} from '../../../store/reducers/tablet_cell_bundles';
+import clipboardList from '../../../assets/img/svg/icons/clipboard-list.svg';
 
 import './CellsInstruments.scss';
 
@@ -134,9 +135,8 @@ class CellsTableInstruments extends React.Component<Props & ReduxProps> {
                                   name: 'copy-hosts',
                                   node: (
                                       <ClipboardButton
-                                          pin="round"
                                           text={activeBundleHosts}
-                                          awesome="clipboard-list"
+                                          icon={clipboardList}
                                           buttonText="Copy host list"
                                       />
                                   ),

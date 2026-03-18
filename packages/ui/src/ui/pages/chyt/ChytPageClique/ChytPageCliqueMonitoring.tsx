@@ -4,7 +4,7 @@ import {useSelector} from '../../../store/redux-hooks';
 import UIFactory from '../../../UIFactory';
 import {selectCluster} from '../../../store/selectors/global';
 import {getChytCurrentAlias} from '../../../store/selectors/chyt';
-import {NoContent} from '../../../components/NoContent/NoContent';
+import {NoContent} from '../../../components/NoContent';
 
 export function ChytPageCliqueMonitoring() {
     const cluster = useSelector(selectCluster);

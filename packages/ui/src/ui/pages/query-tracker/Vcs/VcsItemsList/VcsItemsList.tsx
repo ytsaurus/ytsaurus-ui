@@ -21,7 +21,7 @@ import {
 import {VcsListFile} from './VcsListFile';
 import {VcsListPreview} from './VcsListPreview';
 import {setPreview} from '../../../../store/reducers/query-tracker/vcsSlice';
-import {NoContent} from '../../../../components/NoContent/NoContent';
+import {NoContent} from '../../../../components/NoContent';
 import {VcsPath} from '../VcsPath';
 import {Alert} from '@gravity-ui/uikit';
 import i18n from './i18n';

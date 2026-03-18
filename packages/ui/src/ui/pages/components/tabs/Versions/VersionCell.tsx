@@ -6,12 +6,11 @@ import indexOf_ from 'lodash/indexOf';
 import {Text} from '@gravity-ui/uikit';
 
 import {ClickableText} from '../../../../components/ClickableText/ClickableText';
-import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 
 import './VersionCell.scss';
 import {useDispatch} from '../../../../store/redux-hooks';
 import {changeVersionStateTypeFilters} from '../../../../store/actions/components/versions/versions_v2';
-import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 import {uiSettings} from '../../../../config/ui-settings';
 
 const block = cn('version-cell');

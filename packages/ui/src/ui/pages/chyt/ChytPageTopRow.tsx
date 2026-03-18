@@ -7,7 +7,7 @@ import ypath from '../../common/thor/ypath';
 
 import {Breadcrumbs, Button, Flex, Text} from '@gravity-ui/uikit';
 
-import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton} from '@ytsaurus/components';
 import {YTDFDialog, makeErrorFields} from '../../components/Dialog';
 import Favourites, {FavouritesItem} from '../../components/Favourites/Favourites';
 import {EditableBreadcrumbs} from '../../components/EditableBreadcrumbs';

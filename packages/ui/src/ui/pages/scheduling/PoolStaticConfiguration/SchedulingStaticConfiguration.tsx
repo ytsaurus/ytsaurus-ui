@@ -8,7 +8,7 @@ import CollapsibleSection from '../../../components/CollapsibleSection/Collapsib
 import {getIsRoot, getTree} from '../../../store/selectors/scheduling/scheduling';
 import {getCurrentPoolTreeStaticConfiguration} from '../../../store/selectors/scheduling/scheduling-ts';
 
-import DataTableYT from '../../../components/DataTableYT/DataTableYT';
+import {DataTableYT} from '../../../components/DataTableYT';
 import format from '../../../common/hammer/format';
 
 import './SchedulingStaticConfiguration.scss';

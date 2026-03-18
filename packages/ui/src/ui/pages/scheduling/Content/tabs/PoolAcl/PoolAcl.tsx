@@ -5,7 +5,7 @@ import {useSelector} from '../../../../../store/redux-hooks';
 import isEmpty_ from 'lodash/isEmpty';
 
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
-import {NoContent} from '../../../../../components/NoContent/NoContent';
+import {NoContent} from '../../../../../components/NoContent';
 import {RootState} from '../../../../../store/reducers';
 import {
     getIsRoot,

@@ -11,12 +11,11 @@ import ClickableAttributesButton from '../../../../components/AttributesButton/C
 import TableActions from '../../../../pages/navigation/content/Table/TableOverview/TableActions';
 import TableMeta from '../../../../pages/navigation/content/Table/TableMeta/TableMeta';
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
-import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import StatusBulb from '../../../../components/StatusBulb/StatusBulb';
 import Icon from '../../../../components/Icon/Icon';
 import Link from '../../../../components/Link/Link';
-import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 import {StickyContainer} from '../../../../components/StickyContainer/StickyContainer';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 

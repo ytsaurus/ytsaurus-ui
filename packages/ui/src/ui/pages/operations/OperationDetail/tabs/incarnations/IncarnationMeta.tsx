@@ -12,7 +12,7 @@ import {getOperation} from '../../../../../store/selectors/operations/operation'
 import type {Incarnation} from '../../../../../store/selectors/operations/incarnations';
 import {showErrorModal} from '../../../../../store/actions/actions';
 
-import MetaTable from '../../../../../components/MetaTable/MetaTable';
+import {MetaTable} from '@ytsaurus/components';
 import YTLink from '../../../../../components/Link/Link';
 import {Template} from '../../../../../components/MetaTable/templates/Template';
 

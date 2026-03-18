@@ -20,11 +20,10 @@ import {
     FormatNumber,
     FormatNumberProps,
 } from '../../../../../../components/FormatNumber/FormatNumber';
-import Label from '../../../../../../components/Label/Label';
-import MetaTable from '../../../../../../components/MetaTable/MetaTable';
+import Label from '../../../../../../components/Label';
+import {MetaTable, Tooltip} from '@ytsaurus/components';
 import {OperationType} from '../../../../../../components/OperationType/OperationType';
 import {SubjectCard} from '../../../../../../components/SubjectLink/SubjectLink';
-import {Tooltip} from '../../../../../../components/Tooltip/Tooltip';
 import {getSchedulingOperationsLoading} from '../../../../../../store/selectors/scheduling/expanded-pools';
 import {
     getSchedulingContentMode,

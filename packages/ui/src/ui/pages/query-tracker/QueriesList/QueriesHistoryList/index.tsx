@@ -8,7 +8,7 @@ import {
     hasQueriesListMore,
     isQueriesListLoading,
 } from '../../../../store/selectors/query-tracker/queriesList';
-import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
+import {DataTableYT} from '../../../../components/DataTableYT';
 import {useQueryNavigation} from '../../hooks/Query';
 import {useUpdater} from '../../../../hooks/use-updater';
 import block from 'bem-cn-lite';

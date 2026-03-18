@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {Progress} from '@gravity-ui/uikit';
-import MetaTable from '../../../../../components/MetaTable/MetaTable';
+import {MetaTable} from '@ytsaurus/components';
 
 import type {Node} from '../../../../../store/reducers/components/nodes/nodes/node';
 import {calcProgressProps} from '../../../../../utils/utils';

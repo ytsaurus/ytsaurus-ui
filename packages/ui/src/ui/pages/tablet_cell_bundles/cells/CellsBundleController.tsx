@@ -6,25 +6,23 @@ import filter_ from 'lodash/filter';
 import format from '../../../common/hammer/format';
 
 import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
-import DataTableYT from '../../../components/DataTableYT/DataTableYT';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import Filter from '../../../components/Filter/Filter';
-import Label from '../../../components/Label/Label';
+import Label from '../../../components/Label';
 import Link from '../../../components/Link/Link';
 import WithStickyToolbar, {
     STICKY_TOOLBAR_BOTTOM,
 } from '../../../components/WithStickyToolbar/WithStickyToolbar';
 import ChartLink from '../../../components/ChartLink/ChartLink';
 import Icon from '../../../components/Icon/Icon';
-import {Tooltip} from '../../../components/Tooltip/Tooltip';
-
 import {AllocatedInstance, InProgressInstance} from '../../../store/reducers/tablet_cell_bundles';
 
 import './CellsBundleController.scss';
 import {lastWord, printUsageLimit} from '../../../utils';
 import ClickableAttributesButton from '../../../components/AttributesButton/ClickableAttributesButton';
 import {makeNavigationLink} from '../../../utils/app-url';
-import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton, Tooltip} from '@ytsaurus/components';
+import {DataTableYT} from '../../../components/DataTableYT';
 import {Progress} from '@gravity-ui/uikit';
 import {computeProgress, getProgressTheme} from '../../../utils/progress';
 

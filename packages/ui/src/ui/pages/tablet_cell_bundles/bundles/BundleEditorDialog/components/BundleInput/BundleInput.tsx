@@ -5,7 +5,7 @@ import {Progress, TextInput} from '@gravity-ui/uikit';
 
 import {DialogControlProps} from '../../../../../../components/Dialog/Dialog.types';
 import {formatValue, parseValue} from '../../../../../../components/NumberInput/NumberInput';
-import {Tooltip} from '../../../../../../components/Tooltip/Tooltip';
+import {Tooltip} from '@ytsaurus/components';
 
 import {calcProgressProps} from '../../../../../../utils/utils';
 import {ThemeThreshold} from '../../../../../../utils/progress';

@@ -13,7 +13,7 @@ import {
     selectErrorPreviewCellPath,
 } from '../../store/selectors/modals/cell-preview';
 
-import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton} from '@ytsaurus/components';
 import block from 'bem-cn-lite';
 
 import Yson from '../../components/Yson/Yson';

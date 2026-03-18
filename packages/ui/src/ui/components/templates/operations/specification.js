@@ -3,8 +3,8 @@ import cn from 'bem-cn-lite';
 import {Flex, Text} from '@gravity-ui/uikit';
 
 import FilterOverview from '../../../pages/operations/OperationDetail/tabs/details/FilterOverview/FilterOverview';
-import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
-import Label from '../../../components/Label/Label';
+import {ClipboardButton} from '@ytsaurus/components';
+import Label from '../../../components/Label';
 import Link from '../../../components/Link/Link';
 import Icon from '../../../components/Icon/Icon';
 

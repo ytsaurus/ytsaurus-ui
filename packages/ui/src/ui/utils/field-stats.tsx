@@ -1,5 +1,5 @@
 import React from 'react';
-import {YTText} from '../components/Text/Text';
+import {YTText} from '@ytsaurus/components';
 import type {Item} from '../components/Select/Select';
 
 export function getFieldStats<K extends string, T extends Record<K, string>>(

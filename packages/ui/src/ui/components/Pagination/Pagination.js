@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 import {TextInput} from '@gravity-ui/uikit';
 
 import Icon from '../Icon/Icon';
-import Hotkey from '../../components/Hotkey/Hotkey';
+import {Hotkey} from '@ytsaurus/components';
 
 import './Pagination.scss';
 import Button from '../Button/Button';

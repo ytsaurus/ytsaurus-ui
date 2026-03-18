@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
-import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton} from '@ytsaurus/components';
 import ElementsTableRaw from '../../../../components/ElementsTable/ElementsTable';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 import Statuslabel from '../../../../components/StatusLabel/StatusLabel';
@@ -43,7 +43,7 @@ function IdAddress({job, operationId}: IdAddressProps) {
     return (
         <div>
             <span className={block('id', 'elements-monospace elements-ellipsis')}>
-                <ClipboardButton text={id} theme="flat-secondary" size="s" title="Copy job id" />
+                <ClipboardButton text={id} view="flat-secondary" size="s" title="Copy job id" />
                 <Link routed url={`/${cluster}/job/${operationId}/${id}`} theme={'primary'}>
                     {id}
                 </Link>

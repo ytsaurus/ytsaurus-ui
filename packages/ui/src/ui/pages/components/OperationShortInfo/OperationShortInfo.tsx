@@ -8,7 +8,7 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {selectCluster} from '../../../store/selectors/global';
 
-import MetaTable from '../../../components/MetaTable/MetaTable';
+import {MetaTable} from '@ytsaurus/components';
 import {showErrorPopup} from '../../../utils/utils';
 import format from '../../../common/hammer/format';
 

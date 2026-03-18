@@ -16,7 +16,7 @@ import {
 import Icon from '../../../../components/Icon/Icon';
 import Link from '../../../../components/Link/Link';
 import {MapNodeIcon} from '../../../../components/MapNodeIcon/MapNodeIcon';
-import {Tooltip} from '../../../../components/Tooltip/Tooltip';
+import {Tooltip} from '@ytsaurus/components';
 import TTLInfo from '../../../../components/TTLInfo/TTLInfo';
 import WarningIcon from '../../../../components/WarningIcon/WarningIcon';
 import {LOADING_STATUS, Page} from '../../../../constants/index';

@@ -1,5 +1,5 @@
 import {ReadTableOutputFormat} from '../../../../../../shared/yt-types';
-import {TypeArray} from '../../../../../components/SchemaDataType/dataTypes';
+import type {TypeArray} from '@ytsaurus/components';
 import {UnipikaValue} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 import {SaveCancellationCb, YTApiSetup} from '../../../../../rum/rum-wrap-api';
 

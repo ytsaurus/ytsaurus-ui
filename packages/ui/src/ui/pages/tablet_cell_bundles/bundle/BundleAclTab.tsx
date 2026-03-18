@@ -3,7 +3,7 @@ import {useSelector} from '../../../store/redux-hooks';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import {getTabletsActiveBundle} from '../../../store/selectors/tablet_cell_bundles';
 import {isPoolAclAllowed} from '../../../store/selectors/scheduling/scheduling';
-import {NoContent} from '../../../components/NoContent/NoContent';
+import {NoContent} from '../../../components/NoContent';
 import {BundleAcl} from '../../../containers/ACL';
 
 export default function BundleAclTab({className}: {className: string}) {

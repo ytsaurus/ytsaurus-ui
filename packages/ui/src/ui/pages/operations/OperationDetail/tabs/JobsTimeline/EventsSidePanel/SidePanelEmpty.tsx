@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {Flex} from '@gravity-ui/uikit';
 import './SidePanelEmpty.scss';
 import cn from 'bem-cn-lite';
-import {NoContent} from '../../../../../../components/NoContent/NoContent';
+import {NoContent} from '../../../../../../components/NoContent';
 
 const block = cn('yt-side-panel-empty');
 

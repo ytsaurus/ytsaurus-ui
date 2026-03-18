@@ -9,7 +9,7 @@ import block from 'bem-cn-lite';
 
 import Icon from '../../../../components/Icon/Icon';
 import Button from '../../../../components/Button/Button';
-import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton} from '@ytsaurus/components';
 
 import {getPath} from '../../../../store/selectors/navigation';
 import {inTrash} from '../../../../utils/navigation/restore-object';

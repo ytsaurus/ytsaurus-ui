@@ -3,8 +3,8 @@ import React from 'react';
 import format from '../../common/hammer/format';
 import {MaintenanceRequestInfo} from '../../store/actions/components/node-maintenance-modal';
 import {SubjectCard} from '../../components/SubjectLink/SubjectLink';
-import {Bold, WarningLight} from '../../components/Text/Text';
-import Label from '../../components/Label/Label';
+import {Bold, WarningLight} from '@ytsaurus/components';
+import Label from '../../components/Label';
 
 export type MaintenanceRequestsProps = {
     requests?: Record<string, MaintenanceRequestInfo>;

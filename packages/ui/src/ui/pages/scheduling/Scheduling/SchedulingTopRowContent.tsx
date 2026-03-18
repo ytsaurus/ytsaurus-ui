@@ -28,7 +28,7 @@ import {
     SCHEDULING_ALLOWED_ROOT_TABS,
     SchedulingTab,
 } from '../../../constants/scheduling';
-import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton} from '@ytsaurus/components';
 import {getSchedulingBreadcrumbItems} from '../../../store/selectors/scheduling/scheduling-ts';
 import {Page} from '../../../constants';
 import {EditableBreadcrumbs} from '../../../components/EditableBreadcrumbs/EditableBreadcrumbs';

@@ -1,14 +1,13 @@
 import React, {FC, useCallback} from 'react';
 import hammer from '../../../common/hammer';
 import NodeQuad, {NodeQuadTheme} from '../NodeQuad/NodeQuad';
-import {Tooltip} from '../../../components/Tooltip/Tooltip';
 import Icon from '../../../components/Icon/Icon';
 import {useDispatch} from '../../../store/redux-hooks';
 import ReadOnlyIcon from '../../../assets/img/svg/read-only-icon.svg';
 import WarmUpIcon from '../../../assets/img/svg/warmup-icon.svg';
 import {makeShortSystemAddress} from '../helpers/makeShortSystemAddress';
 import {Flex, Text} from '@gravity-ui/uikit';
-import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 import {ChangeMaintenanceButton} from './ChangeMaintenanceButton';
 import block from 'bem-cn-lite';
 import {MasterInstance} from '../../../store/selectors/system/masters';

@@ -1,7 +1,7 @@
 import React from 'react';
 import block from 'bem-cn-lite';
 
-import Label from '../../components/Label/Label';
+import Label from '../../components/Label';
 import Icon from '../../components/Icon/Icon';
 
 import templates from './utils.js';

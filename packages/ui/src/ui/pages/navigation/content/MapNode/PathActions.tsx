@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 
 import {getMetrics} from '../../../../common/utils/metrics';
 
-import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton} from '@ytsaurus/components';
 import Button from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
 
@@ -115,9 +115,8 @@ function PathActions(props: Props) {
                 dispatch(openDeleteModal(item));
                 evt.stopPropagation();
             },
-            onCopyPathClick(evt: React.MouseEvent<HTMLElement, MouseEvent> | KeyboardEvent) {
+            onCopyPathClick(_text: string) {
                 getMetrics().countEvent('navigation_map-node_copy-path');
-                evt.stopPropagation();
             },
             onSort(e: React.MouseEvent<HTMLElement, MouseEvent> | KeyboardEvent) {
                 dispatch(showTableSortModal([item.path]));

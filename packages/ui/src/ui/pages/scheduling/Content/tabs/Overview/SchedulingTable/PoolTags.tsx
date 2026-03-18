@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import capitalize_ from 'lodash/capitalize';
 
-import Label from '../../../../../../components/Label/Label';
+import Label from '../../../../../../components/Label';
 import type {PoolLeafNode, PoolTreeNode} from '../../../../../../utils/scheduling/pool-child';
 
 import './PoolTags.scss';

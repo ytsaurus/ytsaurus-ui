@@ -4,8 +4,8 @@ import cn from 'bem-cn-lite';
 import {Checkbox} from '@gravity-ui/uikit';
 
 import {YTErrorBlock} from '../../../components/Error/Error';
-import Label from '../../../components/Label/Label';
-import MetaTable from '../../../components/MetaTable/MetaTable';
+import Label from '../../../components/Label';
+import {MetaTable} from '@ytsaurus/components';
 import Modal from '../../../components/Modal/Modal';
 import {renderText} from '../../../components/templates/utils';
 

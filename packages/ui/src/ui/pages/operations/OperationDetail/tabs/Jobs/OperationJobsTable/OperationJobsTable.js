@@ -14,13 +14,11 @@ import {OPERATION_JOBS_TABLE_ID} from '../../../../../../constants/operations/jo
 import SimpleModal from '../../../../../../components/Modal/SimpleModal';
 import {YTErrorBlock} from '../../../../../../components/Error/Error';
 
-import ClipboardButton from '../../../../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton, MetaTable, TemplateTime} from '@ytsaurus/components';
 import ChartLink from '../../../../../../components/ChartLink/ChartLink';
-import MetaTable from '../../../../../../components/MetaTable/MetaTable';
 import Yson from '../../../../../../components/Yson/Yson';
 import Link from '../../../../../../components/Link/Link';
 import CollapsibleSection from '../../../../../../components/CollapsibleSection/CollapsibleSection';
-import {TemplateTime} from '../../../../../../components/MetaTable/templates/TemplateTime';
 
 import {
     getCompetitiveJobs,
