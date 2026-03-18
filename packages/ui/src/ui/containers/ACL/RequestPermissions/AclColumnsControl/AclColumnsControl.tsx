@@ -1,6 +1,6 @@
 import React from 'react';
-
 import {TextArea} from '@gravity-ui/uikit';
+import debounce_ from 'lodash/debounce';
 
 export type Props = {
     value?: Array<string>;
@@ -23,6 +23,13 @@ function valueFromString(text?: string) {
 
 export function AclColumnsControl({value, onChange, disabled}: Props) {
     const [editText, setEditText] = React.useState<string | undefined>();
+
+    const onEdit = React.useMemo(() => {
+        return debounce_((v) => {
+            onChange(valueFromString(v));
+        }, 500);
+    }, []);
+
     const textValue = React.useMemo(() => {
         return valueToString(value);
     }, [value]);
@@ -34,12 +41,15 @@ export function AclColumnsControl({value, onChange, disabled}: Props) {
             disabled={disabled}
             onUpdate={(val) => {
                 setEditText(val);
+                onEdit(val);
             }}
             onFocus={() => {
                 setEditText(valueToString(value));
             }}
             onBlur={() => {
-                onChange(valueFromString(editText));
+                onEdit(editText);
+                onEdit.flush();
+
                 setEditText(undefined);
             }}
             minRows={5}

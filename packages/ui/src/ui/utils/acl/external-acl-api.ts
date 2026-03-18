@@ -92,12 +92,10 @@ export interface AclApi {
         editRowsAcl?: string;
     };
 
-    isAllowedToEditColumnGroups(params: {nodeType?: string}):
-        | boolean
-        | {
-              allowEdit: boolean;
-              allowEditNotice?: string;
-          };
+    isAllowedToEditColumnGroups(params: {nodeType?: string}): {
+        allowEdit: boolean;
+        allowEditNotice?: string;
+    };
     isAllowedToEditRowGroups(params: {nodeType?: string}): {
         allowEdit: boolean;
         allowEditNotice?: string;

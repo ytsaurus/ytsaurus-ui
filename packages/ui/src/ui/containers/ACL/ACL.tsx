@@ -1,5 +1,5 @@
 import {Column} from '@gravity-ui/react-data-table';
-import {Button, ClipboardButton, Flex, Icon, Loader} from '@gravity-ui/uikit';
+import {ClipboardButton, Flex, Icon, Loader} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import compact_ from 'lodash/compact';
 import React, {Component, Fragment} from 'react';
@@ -382,9 +382,6 @@ class ACL extends Component<Props> {
                     <div className={block('approvers')}>
                         <div className="elements-heading elements-heading_size_xs">
                             Responsibles
-                            <Button className={block('sync-with-col-groups')}>
-                                Hidden button to sync offsets with column groups
-                            </Button>
                         </div>
                         <WithStickyToolbar
                             topMargin="none"
@@ -424,13 +421,13 @@ class ACL extends Component<Props> {
             [AclMode.COLUMN_GROUPS_PERMISSIONS]: {
                 data: columnsPermissions,
                 title: 'Private columns permissions',
-                noItemsText: 'There are no object permissions',
+                noItemsText: 'No permissions',
                 extraColumns: ['columns'] as const,
             },
             [AclMode.ROW_GROUPS_PERMISSIONS]: {
                 data: rowPermissions,
                 title: 'Private rows permissions',
-                noItemsText: 'There are no row permissions',
+                noItemsText: 'No permissions',
                 extraColumns: ['row_access_predicate'] as const,
             },
         }[aclMode];
@@ -565,13 +562,7 @@ class ACL extends Component<Props> {
             path,
         } = this.props;
 
-        const allowEditColumnGroups = UIFactory.getAclApi().isAllowedToEditRowGroups({
-            nodeType,
-        });
-        const {allowEdit, allowEditNotice} =
-            typeof allowEditColumnGroups === 'boolean'
-                ? {allowEdit: allowEditColumnGroups}
-                : allowEditColumnGroups;
+        const {allowEdit} = UIFactory.getAclApi().isAllowedToEditRowGroups({nodeType});
 
         return isIdmAclAvailable() && idmKind === IdmObjectType.PATH ? (
             <RowGroups
@@ -581,7 +572,6 @@ class ACL extends Component<Props> {
                     idmKind,
                     path,
                     allowEdit,
-                    allowEditNotice,
                     rowGroups,
                     rowGroupNameFilter,
                     updateAclFilters,
@@ -633,6 +623,7 @@ class ACL extends Component<Props> {
             columnsPermissions,
             rowPermissions,
             allowSwitchMode,
+            nodeType,
         } = this.props;
         const {deleteItem} = this.state;
 
@@ -677,6 +668,7 @@ class ACL extends Component<Props> {
                             columnGroups={columnGroups}
                             rowGroups={rowGroups}
                             aclMode={aclMode}
+                            nodeType={nodeType}
                         />
                     )}
                 </Flex>
