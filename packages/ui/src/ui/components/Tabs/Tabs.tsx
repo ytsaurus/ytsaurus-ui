@@ -3,7 +3,7 @@ import {NavLink} from 'react-router-dom';
 import block from 'bem-cn-lite';
 import partition_ from 'lodash/partition';
 
-import Hotkey, {HotkeyProps} from '../Hotkey/Hotkey';
+import {Hotkey, HotkeyProps} from '@ytsaurus/components';
 import Link from '../Link/Link';
 import Icon from '../Icon/Icon';
 

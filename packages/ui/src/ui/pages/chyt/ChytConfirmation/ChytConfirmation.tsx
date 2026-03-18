@@ -7,7 +7,7 @@ import {Text} from '@gravity-ui/uikit';
 import format from '../../../common/hammer/format';
 
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
-import {Bold} from '../../../components/Text/Text';
+import {Bold} from '@ytsaurus/components';
 import {YTError} from '../../../types';
 import {useDispatch} from '../../../store/redux-hooks';
 import {chytListAction} from '../../../store/actions/chyt/list';

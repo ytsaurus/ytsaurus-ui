@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {YTText} from '../../components/Text/Text';
+import {YTText} from '@ytsaurus/components';
 
 const block = cn('yt-clickable-text');
 

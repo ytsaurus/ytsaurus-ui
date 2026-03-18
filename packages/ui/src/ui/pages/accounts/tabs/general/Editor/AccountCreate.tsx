@@ -2,7 +2,7 @@ import {CircleInfo} from '@gravity-ui/icons';
 import {Flex, Icon} from '@gravity-ui/uikit';
 import React from 'react';
 import Button from '../../../../../components/Button/Button';
-import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
+import {Tooltip} from '@ytsaurus/components';
 import AccountCreateDialog from '../../../../../pages/accounts/tabs/general/Editor/AccountCreateDialog';
 import {openCreateModal} from '../../../../../store/actions/accounts/editor';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';

@@ -12,7 +12,7 @@ import {
     AccountsStateDataFields,
     setAccountsStateDataFields,
 } from '../../../../store/actions/accounts/accounts-ts';
-import {Secondary} from '../../../../components/Text/Text';
+import {Secondary} from '@ytsaurus/components';
 import format from '../../../../common/hammer/format';
 import Select from '../../../../components/Select/Select';
 

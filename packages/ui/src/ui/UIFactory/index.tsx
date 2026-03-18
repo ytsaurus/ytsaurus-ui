@@ -4,7 +4,7 @@ import type {Reducer} from 'redux';
 import type {DropdownMenuItem} from '@gravity-ui/uikit';
 import type {SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 
-import type {MetaTableItem} from '../components/MetaTable/MetaTable';
+import type {MetaTableItem} from '@ytsaurus/components';
 import type {LocationParameters, PathParameters} from '../store/location';
 import type {TabletBundle} from '../store/reducers/tablet_cell_bundles';
 import type {ClusterConfig, ClusterUiConfig, FlowWorkerData} from '../../shared/yt-types';

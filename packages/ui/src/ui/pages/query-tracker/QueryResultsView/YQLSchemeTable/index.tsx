@@ -8,7 +8,7 @@ import {
 import block from 'bem-cn-lite';
 import './index.scss';
 import {MOVING} from '@gravity-ui/react-data-table/build/esm/lib/constants';
-import DataType from '../../../../components/SchemaDataType/DataType/DataType';
+import {DataTypeComponent as DataType} from '@ytsaurus/components';
 
 const b = block('query-result-scheme');
 

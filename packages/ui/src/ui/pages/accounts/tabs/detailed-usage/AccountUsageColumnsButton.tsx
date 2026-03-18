@@ -12,7 +12,7 @@ import {
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import ColumnSelectorModal from '../../../../components/ColumnSelectorModal/ColumnSelectorModal';
 import {setAccountUsageColumns} from '../../../../store/actions/accounts/account-usage';
-import {Secondary} from '../../../../components/Text/Text';
+import {Secondary} from '@ytsaurus/components';
 
 const AccountUsageColumnsDialogMemo = React.memo(AccountUsageColumnsDialog);
 

@@ -7,11 +7,10 @@ import reduce_ from 'lodash/reduce';
 import hammer from '../../common/hammer';
 
 import {Progress, ProgressProps} from '@gravity-ui/uikit';
-import {Tooltip} from '../../components/Tooltip/Tooltip';
+import {MetaTable, type MetaTableItem, Tooltip} from '@ytsaurus/components';
 import {ColorCircle} from '../../components/ColorCircle/ColorCircle';
 
 import {getProgressBarColorByIndex} from '../../constants/colors';
-import MetaTable, {MetaTableItem} from '../../components/MetaTable/MetaTable';
 
 import {CPULimits, MemoryLimits} from '../../store/reducers/tablet_cell_bundles';
 

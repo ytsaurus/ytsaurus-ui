@@ -2,10 +2,9 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import format from '../../../common/hammer/format';
-import Label, {LabelTheme} from '../../../components/Label/Label';
+import Label, {LabelTheme} from '../../../components/Label';
 import StatusBlock from '../../../components/StatusBlock/StatusBlock';
-import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
-import {Tooltip} from '../../../components/Tooltip/Tooltip';
+import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 import {ClickableText} from '../../../components/ClickableText/ClickableText';
 
 import './NodeColumns.scss';

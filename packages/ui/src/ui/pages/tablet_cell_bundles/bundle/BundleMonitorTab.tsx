@@ -4,7 +4,7 @@ import {selectCluster} from '../../../store/selectors/global';
 import ypath from '../../../common/thor/ypath';
 import {getTabletsActiveBundleData} from '../../../store/selectors/tablet_cell_bundles';
 
-import {NoContent} from '../../../components/NoContent/NoContent';
+import {NoContent} from '../../../components/NoContent';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 
 import './BundleMonitorTab.scss';

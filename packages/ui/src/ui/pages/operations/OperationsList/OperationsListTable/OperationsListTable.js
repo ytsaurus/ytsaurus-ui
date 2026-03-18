@@ -9,15 +9,17 @@ import trimEnd_ from 'lodash/trimEnd';
 import ypath from '../../../../common/thor/ypath';
 import unipika from '../../../../common/thor/unipika';
 import OperationProgress from '../../../../pages/operations/OperationProgress/OperationProgress';
-import {TemplatePools, TemplateWeight} from '../../../../components/MetaTable/MetaTable';
-import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton, Tooltip} from '@ytsaurus/components';
+import {
+    TemplatePools,
+    TemplateWeight,
+} from '../../../../components/MetaTable/templates/OperationTemplate';
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import {SubjectCard} from '../../../../components/SubjectLink/SubjectLink';
 import Button from '../../../../components/Button/Button';
 import Link from '../../../../components/Link/Link';
 import Icon from '../../../../components/Icon/Icon';
 import {OperationType} from '../../../../components/OperationType/OperationType';
-import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 
 import {
     showEditPoolsWeightsModal,

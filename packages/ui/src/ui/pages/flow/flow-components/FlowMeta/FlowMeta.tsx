@@ -1,7 +1,7 @@
 import cn from 'bem-cn-lite';
 import React from 'react';
 import ClickableAttributesButton from '../../../../components/AttributesButton/ClickableAttributesButton';
-import MetaTable, {MetaTableItem} from '../../../../components/MetaTable/MetaTable';
+import {MetaTable, type MetaTableItem} from '@ytsaurus/components';
 import {NavigationBreadcrumbs} from '../../../../containers/NavigationBreadcrumbs/NavigationBreadcrumbs';
 import {useSelector} from '../../../../store/redux-hooks';
 import {selectFlowPipelinePath} from '../../../../store/selectors/flow/filters';

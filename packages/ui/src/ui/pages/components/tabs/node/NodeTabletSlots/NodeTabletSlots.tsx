@@ -5,7 +5,7 @@ import type {Column} from '@gravity-ui/react-data-table';
 import type {YTConfig} from '../../../../../../shared/yt-types';
 import hammer from '../../../../../common/hammer';
 import {TABLET_SLOTS} from '../../../../../components/templates/components/nodes/nodes';
-import DataTableYT from '../../../../../components/DataTableYT/DataTableYT';
+import {DataTableYT} from '../../../../../components/DataTableYT';
 import Link from '../../../../../components/Link/Link';
 import StatusBlock from '../../../../../components/StatusBlock/StatusBlock';
 import {genTabletCellBundlesCellUrl} from '../../../../../utils/tablet_cell_bundles';

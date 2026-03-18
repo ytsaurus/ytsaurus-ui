@@ -17,7 +17,7 @@ import {
     getDynTablesStateModalVisible,
 } from '../../../store/selectors/navigation/modals/dyn-tables-state-modal';
 import {DynTablesStateModalState} from '../../../store/reducers/navigation/modals/dyn-tables-state-modal';
-import {Warning} from '../../../components/Text/Text';
+import {Warning} from '@ytsaurus/components';
 import {YTError} from '../../../types';
 
 import './DynTablesStateModal.scss';

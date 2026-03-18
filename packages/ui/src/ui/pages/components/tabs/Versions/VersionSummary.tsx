@@ -5,7 +5,7 @@ import cn from 'bem-cn-lite';
 import {Button, Checkbox, Flex, Select} from '@gravity-ui/uikit';
 
 import {RootState} from '../../../../store/reducers';
-import DataTableYT from '../../../../components/DataTableYT/DataTableYT';
+import {DataTableYT} from '../../../../components/DataTableYT';
 import * as DT100 from '@gravity-ui/react-data-table';
 import DataTable from '@gravity-ui/react-data-table';
 import {

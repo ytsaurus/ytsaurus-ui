@@ -8,7 +8,7 @@ import cn from 'bem-cn-lite';
 
 import ProxyActions from '../../../../pages/components/tabs/Proxies/ProxyActions/ProxyActions';
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
-import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton} from '@ytsaurus/components';
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 import TableInfo from '../../../../pages/components/TableInfo/TableInfo';

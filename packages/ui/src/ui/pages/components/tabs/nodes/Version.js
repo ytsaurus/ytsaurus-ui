@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
-import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton} from '@ytsaurus/components';
 import SimpleModal from '../../../../components/Modal/SimpleModal';
 import {YTErrorBlock} from '../../../../components/Error/Error';
 import Icon from '../../../../components/Icon/Icon';

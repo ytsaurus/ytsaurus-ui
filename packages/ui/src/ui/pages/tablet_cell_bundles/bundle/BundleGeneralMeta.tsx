@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import {getTabletsActiveBundleData} from '../../../store/selectors/tablet_cell_bundles';
 import {useSelector} from '../../../store/redux-hooks';
-import MetaTable, {MetaTableItem} from '../../../components/MetaTable/MetaTable';
+import {MetaTable, type MetaTableItem} from '@ytsaurus/components';
 import {Progress} from '@gravity-ui/uikit';
 
 // @ts-ignore

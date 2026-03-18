@@ -12,7 +12,7 @@ import {
 } from '../../../../components/DataTableGravity';
 import Link from '../../../../components/Link/Link';
 import Select from '../../../../components/Select/Select';
-import {YTText} from '../../../../components/Text/Text';
+import {YTText} from '@ytsaurus/components';
 import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';

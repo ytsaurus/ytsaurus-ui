@@ -5,8 +5,7 @@ import {Page} from '../../constants';
 import {useSelector} from '../../store/redux-hooks';
 import {selectCluster} from '../../store/selectors/global';
 import hammer from '../../common/hammer';
-import {Tooltip} from '../../components/Tooltip/Tooltip';
-import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 
 interface Props {
     className?: string;

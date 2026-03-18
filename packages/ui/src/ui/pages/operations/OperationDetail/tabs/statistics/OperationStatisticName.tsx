@@ -3,10 +3,9 @@ import {useSelector} from '../../../../../store/redux-hooks';
 import {Flex} from '@gravity-ui/uikit';
 
 import {selectOperationStatisticsDescription} from '../../../../../store/selectors/global/supported-features';
-import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
+import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 import format from '../../../../../common/hammer/format';
 import {StatisticName, formatByUnit} from '../../../../../components/StatisticTable';
-import ClipboardButton from '../../../../../components/ClipboardButton/ClipboardButton';
 
 function useStatisticInfo(name: string) {
     const {getStatisticInfo} = useSelector(selectOperationStatisticsDescription);
@@ -39,7 +38,7 @@ function OperationStatisticValueImpl({
                 <Flex gap={1}>
                     <span> {asNumber}</span>
                     {!isNaN(value!) && (
-                        <ClipboardButton text={`${value}`} inlineMargins view="flat-outlined" />
+                        <ClipboardButton text={`${value}`} inlineMargins view="outlined" />
                     )}
                 </Flex>
             }

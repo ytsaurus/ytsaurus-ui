@@ -1,7 +1,7 @@
 import React from 'react';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 
-import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
+import {Tooltip} from '@ytsaurus/components';
 import Button, {ButtonProps} from '../../../../../components/Button/Button';
 import {
     openTableWithPresetOfColumns,

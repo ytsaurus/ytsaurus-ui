@@ -16,10 +16,9 @@ import {
 import {fetchTabletCellBundleEditor} from '../../../store/actions/tablet_cell_bundles/tablet-cell-bundle-editor';
 import {OrchidBundlesData} from '../../../store/reducers/tablet_cell_bundles';
 import Icon from '../../../components/Icon/Icon';
-import MetaTable, {MetaTableItem} from '../../../components/MetaTable/MetaTable';
+import {MetaTable, type MetaTableItem, Tooltip} from '@ytsaurus/components';
 import {BundleMetaResourceProgress} from '../../../components/BundleMetaResourceProgress/BundleMetaResourceProgress';
 import {Health} from '../../../components/Health/Health';
-import {Tooltip} from '../../../components/Tooltip/Tooltip';
 import {printUsageLimit} from '../../../utils';
 import {useUpdater} from '../../../hooks/use-updater';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';

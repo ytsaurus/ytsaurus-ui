@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 import AccountUsageToolbar from './AccountUsageToolbar';
 import AccountUsageDetails from './AccountUsageDetails';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
-import {NoContent} from '../../../../components/NoContent/NoContent';
+import {NoContent} from '../../../../components/NoContent';
 import {getActiveAccount} from '../../../../store/selectors/accounts/accounts-ts';
 import {useSelector} from '../../../../store/redux-hooks';
 import {getAccountUsageViewType} from '../../../../store/selectors/accounts/account-usage';

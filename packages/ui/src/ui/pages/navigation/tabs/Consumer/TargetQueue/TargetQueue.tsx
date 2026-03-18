@@ -13,9 +13,8 @@ import {YTErrorBlock} from '../../../../../components/Block/Block';
 import Icon from '../../../../../components/Icon/Icon';
 import Link from '../../../../../components/Link/Link';
 import {findCommonPathParent, genNavigationUrl} from '../../../../../utils/navigation/navigation';
-import ClipboardButton from '../../../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 import {Item, SelectSingle} from '../../../../../components/Select/Select';
-import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
 import {changeConsumerFilters} from '../../../../../store/actions/navigation/tabs/consumer/filters';
 
 import './TargetQueue.scss';

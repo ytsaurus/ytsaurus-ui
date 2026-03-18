@@ -1,7 +1,7 @@
 import React from 'react';
 import {Flex, Text} from '@gravity-ui/uikit';
 import {NoSearchResults} from '@gravity-ui/illustrations';
-import {NoContent} from '../../../../../components/NoContent/NoContent';
+import {NoContent} from '../../../../../components/NoContent';
 
 import i18n from './i18n';
 

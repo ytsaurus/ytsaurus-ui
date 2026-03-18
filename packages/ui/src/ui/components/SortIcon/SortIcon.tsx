@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import format from '../../common/hammer/format';
 import Icon from '../../components/Icon/Icon';
-import {Tooltip} from '../../components/Tooltip/Tooltip';
+import {Tooltip} from '@ytsaurus/components';
 import {OrderType, nextSortOrderValue} from '../../utils/sort-helpers';
 
 import './SortIcon.scss';

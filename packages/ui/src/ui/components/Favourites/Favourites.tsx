@@ -7,7 +7,7 @@ import map_ from 'lodash/map';
 import {Button, ButtonProps, DropdownMenu} from '@gravity-ui/uikit';
 
 import Icon from '../Icon/Icon';
-import Hotkey from '../../components/Hotkey/Hotkey';
+import {Hotkey} from '@ytsaurus/components';
 
 import './Favourites.scss';
 

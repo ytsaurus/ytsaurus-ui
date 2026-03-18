@@ -3,8 +3,7 @@ import {Flex, Text} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {FlowComputationDetailsType} from '../../../../../../shared/yt-types';
-import {YTText} from '../../../../../components/Text/Text';
-import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
+import {Tooltip, YTText} from '@ytsaurus/components';
 import {
     FlowComputationPartitionErrors,
     useFlowComputationPartitionErrorsData,

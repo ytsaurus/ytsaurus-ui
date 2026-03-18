@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import format from '../../../../../common/hammer/format';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
-import MetaTable from '../../../../../components/MetaTable/MetaTable';
+import {MetaTable} from '@ytsaurus/components';
 import Multimeter from '../../../../../components/Multimeter/Multimeter';
 import type {TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
 import {isNull} from '../../../../../utils';

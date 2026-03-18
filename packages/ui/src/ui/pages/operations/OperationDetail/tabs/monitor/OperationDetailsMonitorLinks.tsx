@@ -5,7 +5,7 @@ import {uiSettings} from '../../../../../config/ui-settings';
 import Icon from '../../../../../components/Icon/Icon';
 import Link from '../../../../../components/Link/Link';
 import {YTErrorBlock} from '../../../../../components/Error/Error';
-import MetaTable, {MetaTableItem} from '../../../../../components/MetaTable/MetaTable';
+import {MetaTable, type MetaTableItem} from '@ytsaurus/components';
 import {OperationPool} from '../../../../../components/OperationPool/OperationPool';
 import {operationMonitoringUrl} from '../../../../../utils/operations/detail';
 

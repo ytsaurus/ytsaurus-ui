@@ -12,7 +12,7 @@ import {
     selectConversationsHasMore,
     selectConversationsLoading,
 } from '../../../store/selectors/ai/chat';
-import {NoContent} from '../../../components/NoContent/NoContent';
+import {NoContent} from '../../../components/NoContent';
 import {InfiniteScrollLoader} from '../../../components/InfiniteScrollLoader';
 import i18n from './i18n';
 import './ChatHistory.scss';

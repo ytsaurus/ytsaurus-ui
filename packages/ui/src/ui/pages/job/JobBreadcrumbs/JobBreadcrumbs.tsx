@@ -3,7 +3,7 @@ import {useHistory, useRouteMatch} from 'react-router';
 import {useSelector} from '../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
-import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton} from '@ytsaurus/components';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import {TextInput} from '@gravity-ui/uikit';
 import Button from '../../../components/Button/Button';

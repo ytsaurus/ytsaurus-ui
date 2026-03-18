@@ -4,7 +4,7 @@ import React from 'react';
 import {ExpandableCell} from '../../../../../../components/DataTableGravity/ExpandableCell';
 import Link from '../../../../../../components/Link/Link';
 import {OperationPool} from '../../../../../../components/OperationPool/OperationPool';
-import {Tooltip} from '../../../../../../components/Tooltip/Tooltip';
+import {Tooltip} from '@ytsaurus/components';
 import {setExpandedPools} from '../../../../../../store/actions/scheduling/expanded-pools';
 import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
 import {selectCluster} from '../../../../../../store/selectors/global/cluster';

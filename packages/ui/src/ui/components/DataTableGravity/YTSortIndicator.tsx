@@ -3,7 +3,7 @@ import {SortIndicatorProps} from '@gravity-ui/table';
 import {Icon} from '@gravity-ui/uikit';
 import React from 'react';
 import format from '../../common/hammer/format';
-import {Tooltip} from '../../components/Tooltip/Tooltip';
+import {Tooltip} from '@ytsaurus/components';
 
 function getIcon(order?: 'asc' | 'desc' | boolean) {
     switch (order) {

@@ -14,7 +14,7 @@ import ElementsTable from '../../../components/ElementsTable/ElementsTable';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import RadioButton from '../../../components/RadioButton/RadioButton';
 import {FormattedText} from '../../../components/formatters';
-import Label from '../../../components/Label/Label';
+import Label from '../../../components/Label';
 import {StickyContainer} from '../../../components/StickyContainer/StickyContainer';
 
 import {TABLET_PARTITIONS_TABLE_ID} from '../../../constants/tablet';

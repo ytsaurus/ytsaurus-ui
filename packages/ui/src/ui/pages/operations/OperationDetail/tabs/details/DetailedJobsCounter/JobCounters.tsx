@@ -4,10 +4,7 @@ import cn from 'bem-cn-lite';
 import {Checkbox} from '@gravity-ui/uikit';
 
 import {docsUrl} from '../../../../../../config';
-import MetaTable, {
-    MetaTableItem,
-    MetaTableProps,
-} from '../../../../../../components/MetaTable/MetaTable';
+import {MetaTable, type MetaTableItem, type MetaTableProps} from '@ytsaurus/components';
 import Link from '../../../../../../components/Link/Link';
 import Icon from '../../../../../../components/Icon/Icon';
 

@@ -5,7 +5,7 @@ import isEqual_ from 'lodash/isEqual';
 import throttle_ from 'lodash/throttle';
 
 import SimpleModal from '../../components/Modal/SimpleModal';
-import {Tooltip} from '../Tooltip/Tooltip';
+import {Tooltip} from '@ytsaurus/components';
 
 import i18n from './i18n';
 

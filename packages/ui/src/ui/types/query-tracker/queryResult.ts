@@ -1,5 +1,5 @@
 import {QueryResultMeta} from './api';
-import {DataType} from '../../components/SchemaDataType/dataTypes';
+import type {DataType} from '@ytsaurus/components';
 
 export enum QueryResultState {
     Init = 'init',

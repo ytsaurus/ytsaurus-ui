@@ -11,9 +11,9 @@ import format from '../../../common/hammer/format';
 import {useUpdater} from '../../../hooks/use-updater';
 import {YTAlertBlock} from '../../../components/Alert/Alert';
 import {YTErrorBlock} from '../../../components/Error/Error';
-import Label from '../../../components/Label/Label';
+import Label from '../../../components/Label';
 import {OperationPool} from '../../../components/OperationPool/OperationPool';
-import MetaTable, {MetaTableItem} from '../../../components/MetaTable/MetaTable';
+import {MetaTable, type MetaTableItem} from '@ytsaurus/components';
 import {OperationId} from '../../../components/OperationId/OperationId';
 import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
 

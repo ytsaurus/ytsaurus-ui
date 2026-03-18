@@ -11,7 +11,7 @@ import format from '../../../common/hammer/format';
 import {ExpandButton} from '../../../components/ExpandButton';
 import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSection/CollapsibleSection';
 import Link from '../../../components/Link/Link';
-import {NoContent} from '../../../components/NoContent/NoContent';
+import {NoContent} from '../../../components/NoContent';
 import {StickyContainer} from '../../../components/StickyContainer/StickyContainer';
 
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';

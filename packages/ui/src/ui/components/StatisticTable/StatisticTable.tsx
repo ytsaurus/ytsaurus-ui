@@ -8,9 +8,7 @@ import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import ElementsTableRow from '../ElementsTable/ElementsTable';
 import {ExpandButton} from '../ExpandButton';
 import {selectFontFamilies} from '../../store/selectors/global/fonts';
-import {Tooltip} from '../../components/Tooltip/Tooltip';
-import MetaTable from '../../components/MetaTable/MetaTable';
-import {Secondary} from '../../components/Text/Text';
+import {MetaTable, Secondary, Tooltip} from '@ytsaurus/components';
 
 import Toolbar from './Toolbar';
 import {getMinWidth} from './get-min-width';

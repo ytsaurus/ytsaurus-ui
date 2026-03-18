@@ -4,8 +4,8 @@ import {useSelector} from '../../../../../store/redux-hooks';
 
 import format from '../../../../../common/hammer/format';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
-import Label from '../../../../../components/Label/Label';
-import MetaTable from '../../../../../components/MetaTable/MetaTable';
+import Label from '../../../../../components/Label';
+import {MetaTable} from '@ytsaurus/components';
 import Multimeter from '../../../../../components/Multimeter/Multimeter';
 import {SubjectCard} from '../../../../../components/SubjectLink/SubjectLink';
 

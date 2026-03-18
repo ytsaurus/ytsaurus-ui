@@ -9,7 +9,7 @@ import {
     getQueryResultMetaList,
     readQueryResults,
 } from './api';
-import {getType} from '../../../components/SchemaDataType/dataTypes';
+import {Type, getSchemaDateType, parseV3Type} from '@ytsaurus/components';
 import {
     getQueryResultGlobalSettings,
     getQueryResultSettings,
@@ -25,7 +25,6 @@ import {
 import {prepareFormattedValue} from '../../../utils/queries/format';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {selectPrimitiveTypesMap} from '../../selectors/global/supported-features';
-import {Type, parseV3Type} from '../../../components/SchemaDataType/dateTypesV3';
 import ypath from '../../../common/thor/ypath';
 import forEach_ from 'lodash/forEach';
 import {waitForFontFamilies} from '../global/fonts';
@@ -117,7 +116,7 @@ export function loadQueryResult(
                 scheme.map(({name, type_v3}) => {
                     return {
                         name,
-                        type: getType(parseV3Type(type_v3 as Type, typeMap)),
+                        type: getSchemaDateType(parseV3Type(type_v3 as Type, typeMap)),
                         displayName: name,
                     };
                 }) || [];

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
 import unipika from '../../common/thor/unipika';
-import Label from '../Label/Label';
+import Label from '../Label';
 import {showErrorPopup} from '../../utils/utils';
 
 const block = cn('elements-text');

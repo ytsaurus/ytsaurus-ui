@@ -3,7 +3,7 @@ import {ErrorPosition, QueryError} from '../../../../types/query-tracker/api';
 import {ErrorTreeNode} from './ErrorTreeNode';
 import {useMonaco} from '../../hooks/useMonaco';
 import {Position} from 'monaco-editor';
-import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton} from '@ytsaurus/components';
 import {Flex, Text} from '@gravity-ui/uikit';
 import {AskAIErrorButton} from '../../../../containers/AiChat/AskAIErrorButton';
 

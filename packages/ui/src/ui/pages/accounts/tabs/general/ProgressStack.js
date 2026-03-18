@@ -19,7 +19,7 @@ import {
     ACCOUNT_RESOURCE_TYPES_DESCRIPTION,
     AccountResourceName,
 } from '../../../../constants/accounts/accounts';
-import {Tooltip} from '../../../../components/Tooltip/Tooltip';
+import {Tooltip} from '@ytsaurus/components';
 
 const colors = STACKED_PROGRESS_BAR_COLORS;
 

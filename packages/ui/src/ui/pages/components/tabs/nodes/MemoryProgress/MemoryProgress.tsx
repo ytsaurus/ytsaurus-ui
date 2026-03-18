@@ -7,7 +7,7 @@ import map_ from 'lodash/map';
 import {Progress} from '@gravity-ui/uikit';
 
 import hammer from '../../../../../common/hammer';
-import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
+import {Tooltip} from '@ytsaurus/components';
 import {getSettingsData} from '../../../../../store/selectors/settings/settings-base';
 import {RootState} from '../../../../../store/reducers';
 

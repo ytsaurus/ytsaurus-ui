@@ -4,7 +4,7 @@ import block from 'bem-cn-lite';
 import {TextInput} from '@gravity-ui/uikit';
 import key from 'hotkeys-js';
 
-import Hotkey from '../../components/Hotkey/Hotkey';
+import {Hotkey} from '@ytsaurus/components';
 
 const supportedSizes = ['xs', 's', 'm'];
 

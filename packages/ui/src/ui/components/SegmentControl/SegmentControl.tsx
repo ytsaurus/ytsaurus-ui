@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 import {Flex, Link} from '@gravity-ui/uikit';
 
 import Icon from '../../components/Icon/Icon';
-import MetaTable from '../../components/MetaTable/MetaTable';
+import {MetaTable} from '@ytsaurus/components';
 import {PreparedRole} from '../../utils/acl';
 
 import './SegmentControl.scss';

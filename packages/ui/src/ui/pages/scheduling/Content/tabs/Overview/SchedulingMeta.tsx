@@ -10,9 +10,7 @@ import format from '../../../../../common/hammer/format';
 import {ChargeLevel} from '../../../../../components/ChargeLevel/ChargeLevel';
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
 import {ColorCircle} from '../../../../../components/ColorCircle/ColorCircle';
-import MetaTable, {MetaTableItem} from '../../../../../components/MetaTable/MetaTable';
-import {YTText} from '../../../../../components/Text/Text';
-import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
+import {MetaTable, type MetaTableItem, Tooltip, YTText} from '@ytsaurus/components';
 import {ROOT_POOL_NAME} from '../../../../../constants/scheduling';
 import {
     getCurrentPool,

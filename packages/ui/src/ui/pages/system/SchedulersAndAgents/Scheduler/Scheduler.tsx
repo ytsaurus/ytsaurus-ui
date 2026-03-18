@@ -3,9 +3,8 @@ import React, {useCallback} from 'react';
 import hammer from '../../../../common/hammer';
 import block from 'bem-cn-lite';
 
-import ClipboardButton from '../../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 import Icon from '../../../../components/Icon/Icon';
-import {Tooltip} from '../../../../components/Tooltip/Tooltip';
 import NodeQuad from '../../NodeQuad/NodeQuad';
 
 import '../Schedulers.scss';

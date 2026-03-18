@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import {useSelector} from '../../../../store/redux-hooks';
 
 import {main} from '../../../../components/MetaTable/presets';
-import MetaTable from '../../../../components/MetaTable/MetaTable';
+import {MetaTable} from '@ytsaurus/components';
 
 import {getAttributes, getLoadState} from '../../../../store/selectors/navigation';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';

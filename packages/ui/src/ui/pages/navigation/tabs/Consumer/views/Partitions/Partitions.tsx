@@ -6,9 +6,9 @@ import {createSelector} from 'reselect';
 import type {Column, Settings} from '@gravity-ui/react-data-table';
 
 import format from '../../../../../../common/hammer/format';
-import DataTableYT from '../../../../../../components/DataTableYT/DataTableYT';
+import {DataTableYT} from '../../../../../../components/DataTableYT';
 import {YTErrorBlock} from '../../../../../../components/Block/Block';
-import {NoContent} from '../../../../../../components/NoContent/NoContent';
+import {NoContent} from '../../../../../../components/NoContent';
 import {CONSUMER_RATE_MODE} from '../../../../../../constants/navigation/tabs/consumer';
 import {
     datetime,

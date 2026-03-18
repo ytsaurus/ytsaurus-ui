@@ -4,8 +4,7 @@ import cn from 'bem-cn-lite';
 import hummerFormat from '../../common/hammer/format';
 import type {TPerformanceCounters} from '../../store/reducers/navigation/tabs/queue/types';
 import BarChart from './BarChart';
-import {Tooltip} from '../Tooltip/Tooltip';
-import MetaTable from '../MetaTable/MetaTable';
+import {MetaTable, Tooltip} from '@ytsaurus/components';
 
 import './Multimeter.scss';
 

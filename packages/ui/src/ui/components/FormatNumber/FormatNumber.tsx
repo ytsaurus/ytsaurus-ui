@@ -2,9 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import format from '../../common/hammer/format';
 
-import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
-import {YTText} from '../../components/Text/Text';
-import {Tooltip} from '../../components/Tooltip/Tooltip';
+import {ClipboardButton, Tooltip, YTText} from '@ytsaurus/components';
 import {parseBytes} from '../../utils/parse/parse-bytes';
 
 const block = cn('yt-format-number');

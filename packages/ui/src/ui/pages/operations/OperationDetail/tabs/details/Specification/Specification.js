@@ -2,14 +2,15 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
-import MetaTable, {
+import {MetaTable} from '@ytsaurus/components';
+import {
     TemplateCommand,
     TemplateEnvironment,
     TemplateFiles,
     TemplateLayerPaths,
     TemplateLivePreivew,
     TemplateTransferTask,
-} from '../../../../../../components/MetaTable/MetaTable';
+} from '../../../../../../components/MetaTable/templates/OperationTemplate';
 import CollapsibleTable from '../../../../../../components/CollapsibleTable/CollapsibleTable';
 import Yson from '../../../../../../components/Yson/Yson';
 

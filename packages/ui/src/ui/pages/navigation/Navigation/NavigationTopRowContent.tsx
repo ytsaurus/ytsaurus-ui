@@ -33,14 +33,11 @@ import {
 } from '../../../store/actions/navigation';
 
 import Favourites from '../../../components/Favourites/Favourites';
-import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton, Escaped, MetaTable, Tooltip} from '@ytsaurus/components';
 import Link from '../../../components/Link/Link';
 import Editor from '../../../components/Editor/Editor';
 import Button from '../../../components/Button/Button';
 import Icon from '../../../components/Icon/Icon';
-import MetaTable from '../../../components/MetaTable/MetaTable';
-import {Escaped} from '../../../components/Text/Text';
-import {Tooltip} from '../../../components/Tooltip/Tooltip';
 import {EditableBreadcrumbs} from '../../../components/EditableBreadcrumbs/EditableBreadcrumbs';
 
 import PathEditor from '../../../containers/PathEditor/PathEditor';

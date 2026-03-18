@@ -1,7 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import PropTypes from 'prop-types';
 
-import Hotkey from '../../../components/Hotkey/Hotkey';
+import {Hotkey} from '@ytsaurus/components';
 
 import {getDisplayName} from '../../../utils';
 

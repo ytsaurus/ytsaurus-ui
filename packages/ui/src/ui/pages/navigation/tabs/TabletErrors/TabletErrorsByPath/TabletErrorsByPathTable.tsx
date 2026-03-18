@@ -18,13 +18,11 @@ import {
 } from '../../../../../store/selectors/navigation/tabs/tablet-errors-by-path';
 import {selectCluster} from '../../../../../store/selectors/global';
 import ColumnHeader from '../../../../../components/ColumnHeader/ColumnHeader';
-import DataTableYT, {
-    Column,
-    DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR_DOUBLE_HEIGHT,
-} from '../../../../../components/DataTableYT/DataTableYT';
 import {YTErrorBlock} from '../../../../../components/Error/Error';
 import {Host} from '../../../../../containers/Host/Host';
-import ClipboardButton from '../../../../../components/ClipboardButton/ClipboardButton';
+import {DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR_DOUBLE_HEIGHT} from '../../../../../components/DataTableYT/constants';
+import {ClipboardButton, Column} from '@ytsaurus/components';
+import {DataTableYT} from '../../../../../components/DataTableYT';
 import AttributesButton from '../../../../../components/AttributesButton/AttributesButton';
 import {showErrorPopup} from '../../../../../utils/utils';
 

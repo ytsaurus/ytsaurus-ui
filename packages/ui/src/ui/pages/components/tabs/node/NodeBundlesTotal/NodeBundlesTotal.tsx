@@ -8,8 +8,7 @@ import {Progress} from '@gravity-ui/uikit';
 
 import format from '../../../../../common/hammer/format';
 
-import MetaTable from '../../../../../components/MetaTable/MetaTable';
-import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
+import {MetaTable, Tooltip} from '@ytsaurus/components';
 
 import {
     getNodeMemoryUsageTotalRowCache,

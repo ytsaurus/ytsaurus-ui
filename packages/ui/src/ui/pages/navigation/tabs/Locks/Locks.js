@@ -10,9 +10,7 @@ import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import {FormattedLink, FormattedText} from '../../../../components/formatters';
 
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
-import MetaTable from '../../../../components/MetaTable/MetaTable';
-import {TemplateTime} from '../../../../components/MetaTable/templates/TemplateTime';
-import {Tooltip} from '../../../../components/Tooltip/Tooltip';
+import {MetaTable, TemplateTime, Tooltip} from '@ytsaurus/components';
 import {Loader} from '@gravity-ui/uikit';
 import Link from '../../../../components/Link/Link';
 import {Linkify} from '../../../../components/Linkify/Linkify';

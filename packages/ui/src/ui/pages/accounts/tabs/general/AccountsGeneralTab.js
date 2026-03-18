@@ -36,7 +36,7 @@ import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import Modal from '../../../../components/Modal/Modal';
 import Editor from './Editor/Editor';
 import AccountAlerts from './AccountAlerts';
-import {Tooltip} from '../../../../components/Tooltip/Tooltip';
+import {Tooltip, Warning} from '@ytsaurus/components';
 
 import {loadUsers} from '../../../../store/actions/accounts/editor';
 import {accountsToggleFavourite} from '../../../../store/actions/favourites';
@@ -85,7 +85,6 @@ import {
 } from '../../../../store/selectors/global';
 import {TabletAccountingNotice} from './Editor/content/TabletsContent';
 import AccountStaticConfiguration from './AccountStaticConfiguration/AccountStaticConfiguration';
-import {Warning} from '../../../../components/Text/Text';
 import Button from '../../../../components/Button/Button';
 import MasterMemoryTableMode from './MasterMemoryTableMode';
 import UIFactory from '../../../../UIFactory';

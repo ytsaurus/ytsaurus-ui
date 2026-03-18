@@ -6,8 +6,7 @@ import {
     NumberInputWithError,
     NumberInputWithErrorProps,
 } from '../../components/NumberInput/NumberInput';
-import {Tooltip} from '../../components/Tooltip/Tooltip';
-import MetaTable from '../../components/MetaTable/MetaTable';
+import {MetaTable, Tooltip} from '@ytsaurus/components';
 import Icon from '../../components/Icon/Icon';
 
 import './TimeDuration.scss';

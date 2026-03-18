@@ -1,5 +1,5 @@
 import type {Plan, Progress} from '../../pages/query-tracker/Plan/models/plan';
-import {TypeArray} from '../../components/SchemaDataType/dataTypes';
+import type {TypeArray} from '@ytsaurus/components';
 import {QueriesHistoryCursorDirection} from '../../store/reducers/query-tracker/query-tracker-contants';
 import {VisualizationState} from '../../store/reducers/query-tracker/queryChartSlice';
 import {YTError} from '../index';

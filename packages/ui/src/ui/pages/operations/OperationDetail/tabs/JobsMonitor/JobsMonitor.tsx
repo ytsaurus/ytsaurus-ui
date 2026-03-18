@@ -4,7 +4,7 @@ import {useSelector} from '../../../../../store/redux-hooks';
 import {YTErrorBlock} from '../../../../../components/Error/Error';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
 import Loader from '../../../../../components/Loader/Loader';
-import {NoContent} from '../../../../../components/NoContent/NoContent';
+import {NoContent} from '../../../../../components/NoContent';
 import {
     getJobsMonitorError,
     getJobsMonitorFromTo,

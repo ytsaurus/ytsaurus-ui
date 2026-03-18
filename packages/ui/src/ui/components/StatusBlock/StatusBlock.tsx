@@ -1,8 +1,7 @@
 import React from 'react';
 import block from 'bem-cn-lite';
 
-import {Tooltip} from '../../components/Tooltip/Tooltip';
-import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 
 import './StatusBlock.scss';
 

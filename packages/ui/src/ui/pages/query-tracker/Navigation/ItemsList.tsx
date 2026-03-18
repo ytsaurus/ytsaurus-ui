@@ -1,6 +1,6 @@
 import React from 'react';
 import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
-import DataTableYT from '../../../components/DataTableYT/DataTableYT';
+import {DataTableYT} from '../../../components/DataTableYT';
 import './ItemsList.scss';
 import cn from 'bem-cn-lite';
 

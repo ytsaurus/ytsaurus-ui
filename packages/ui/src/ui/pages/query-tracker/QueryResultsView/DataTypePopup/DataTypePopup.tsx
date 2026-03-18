@@ -5,9 +5,8 @@ import {StrictReactNode} from '../YQLTable/utils';
 import infoIcon from '../../../../assets/img/svg/icons/exclamation-circle.svg';
 
 import './DataTypePopup.scss';
-import DataType from '../../../../components/SchemaDataType/DataType/DataType';
-import {Tooltip} from '../../../../components/Tooltip/Tooltip';
-import type {DataType as DataTypeProps} from '../../../../components/SchemaDataType/dataTypes';
+import {DataTypeComponent as DataType, Tooltip} from '@ytsaurus/components';
+import type {DataType as DataTypeProps} from '@ytsaurus/components';
 
 const block = cn('data-type-popup');
 

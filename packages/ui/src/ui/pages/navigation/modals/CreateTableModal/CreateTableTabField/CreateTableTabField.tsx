@@ -21,7 +21,7 @@ import {
     setCreateTableKeyColumns,
 } from '../../../../../store/actions/navigation/modals/create-table';
 import {ArrayElement} from '../../../../../types';
-import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
+import {Tooltip} from '@ytsaurus/components';
 
 import './CreateTableTabField.scss';
 

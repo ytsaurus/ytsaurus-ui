@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 import Icon from '../../components/Icon/Icon';
 import Link from '../../components/Link/Link';
 import Button from '../../components/Button/Button';
-import {Tooltip} from '../../components/Tooltip/Tooltip';
+import {Tooltip} from '@ytsaurus/components';
 
 import {Page} from '../../constants/index';
 import {SchedulingTab} from '../../constants/scheduling';

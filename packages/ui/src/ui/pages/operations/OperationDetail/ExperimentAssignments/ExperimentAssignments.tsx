@@ -12,7 +12,7 @@ import {
     getOperationId,
 } from '../../../../store/selectors/operations/operation';
 import {ClickableText} from '../../../../components/ClickableText/ClickableText';
-import MetaTable from '../../../../components/MetaTable/MetaTable';
+import {MetaTable} from '@ytsaurus/components';
 import StarTrackLink from '../../../../components/StarTrackLink/StarTrackLink';
 import Yson from '../../../../components/Yson/Yson';
 import {getOperationExperimentsYsonSettings} from '../../../../store/selectors/thor/unipika';

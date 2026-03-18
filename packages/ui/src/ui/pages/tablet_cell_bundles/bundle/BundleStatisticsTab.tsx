@@ -5,7 +5,7 @@ import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import {getTabletsActiveBundle} from '../../../store/selectors/tablet_cell_bundles';
 import {selectCluster, selectTheme} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
-import {NoContent} from '../../../components/NoContent/NoContent';
+import {NoContent} from '../../../components/NoContent';
 
 function BundleStatisticsTab() {
     const cluster = useSelector(selectCluster);

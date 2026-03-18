@@ -4,7 +4,7 @@ import moment, {Moment} from 'moment';
 import {useSelector} from '../../../../../../store/redux-hooks';
 
 import format from '../../../../../../common/hammer/format';
-import MetaTable from '../../../../../../components/MetaTable/MetaTable';
+import {MetaTable} from '@ytsaurus/components';
 
 import {RootState} from '../../../../../../store/reducers';
 import {getDownloadTableInfo} from '../../../../../../store/selectors/navigation/content/download-manager';

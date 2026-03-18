@@ -13,10 +13,9 @@ import {
 } from '../../../../../components/ClickableText/ClickableText';
 import {ExpandButton} from '../../../../../components/ExpandButton';
 import YTIcon from '../../../../../components/Icon/Icon';
-import Label from '../../../../../components/Label/Label';
+import Label from '../../../../../components/Label';
 import {Markdown} from '../../../../../components/Markdown/Markdown';
-import {YTText} from '../../../../../components/Text/Text';
-import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
+import {Tooltip, YTText} from '@ytsaurus/components';
 import Yson from '../../../../../components/Yson/Yson';
 import './FlowGraphRenderer.scss';
 

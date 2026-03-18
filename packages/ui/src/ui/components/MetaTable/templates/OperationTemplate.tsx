@@ -9,7 +9,7 @@ import CollapsibleList from '../../../components/CollapsibleList/CollapsibleList
 import Icon from '../../../components/Icon/Icon';
 import Link from '../../../components/Link/Link';
 
-import {Template} from '../../../components/MetaTable/MetaTable';
+import {Template} from './Template';
 import {paramsToQuery} from '../../../utils';
 import hammer from '../../../common/hammer';
 import {Page} from '../../../constants/index';

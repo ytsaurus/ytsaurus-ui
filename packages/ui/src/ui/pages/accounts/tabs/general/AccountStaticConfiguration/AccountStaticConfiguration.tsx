@@ -7,7 +7,7 @@ import {
     getActiveAccountStaticConfiguration,
 } from '../../../../../store/selectors/accounts/accounts-ts';
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
-import DataTableYT from '../../../../../components/DataTableYT/DataTableYT';
+import {DataTableYT} from '../../../../../components/DataTableYT';
 import {Column} from '@gravity-ui/react-data-table';
 import hammer from '../../../../../common/hammer';
 import {setSettingsAccountsExpandStaticConfiguration} from '../../../../../store/actions/settings/settings';

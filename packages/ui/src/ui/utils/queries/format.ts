@@ -1,5 +1,5 @@
 import unipika from '../../common/thor/unipika';
-import {TypeArray} from '../../components/SchemaDataType/dataTypes';
+import type {TypeArray} from '@ytsaurus/components';
 import {UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
 
 const defaultSettings: UnipikaSettings = {

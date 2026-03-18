@@ -5,7 +5,7 @@ import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import cn from 'bem-cn-lite';
 
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
-import MetaTable from '../../../../components/MetaTable/MetaTable';
+import {MetaTable} from '@ytsaurus/components';
 import {main} from '../../../../components/MetaTable/presets';
 import Button from '../../../../components/Button/Button';
 import Modal from '../../../../components/Modal/Modal';

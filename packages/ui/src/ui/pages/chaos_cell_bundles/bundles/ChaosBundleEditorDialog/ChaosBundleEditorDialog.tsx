@@ -14,7 +14,7 @@ import {YTErrorBlock} from '../../../../components/Error/Error';
 import Icon from '../../../../components/Icon/Icon';
 import QuotaEditorWithHide from '../../../../components/QuotaEditor/QuotaEditorWithHide';
 import Tabs from '../../../../components/Tabs/Tabs';
-import {Bold} from '../../../../components/Text/Text';
+import {Bold} from '@ytsaurus/components';
 import {AccountsSuggestWithLoading} from '../../../../pages/accounts/AccountsSuggest';
 import {WithHeader} from '../../../../pages/accounts/tabs/general/Editor/content/GeneralContent';
 import type {

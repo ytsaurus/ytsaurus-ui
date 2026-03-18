@@ -5,8 +5,8 @@ import cn from 'bem-cn-lite';
 import compact_ from 'lodash/compact';
 import map_ from 'lodash/map';
 
-import Label from '../../../../../components/Label/Label';
-import MetaTable from '../../../../../components/MetaTable/MetaTable';
+import Label from '../../../../../components/Label';
+import {MetaTable} from '@ytsaurus/components';
 import type {Node} from '../../../../../store/reducers/components/nodes/nodes/node';
 import {selectCurrentClusterConfig} from '../../../../../store/selectors/global';
 import UIFactory from '../../../../../UIFactory';

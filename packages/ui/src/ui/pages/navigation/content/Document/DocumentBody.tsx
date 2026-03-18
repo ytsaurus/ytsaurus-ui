@@ -5,7 +5,7 @@ import {Alert, Button, Flex} from '@gravity-ui/uikit';
 
 // @ts-ignore
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
-import MetaTable from '../../../../components/MetaTable/MetaTable';
+import {MetaTable} from '@ytsaurus/components';
 import {main} from '../../../../components/MetaTable/presets';
 import Yson from '../../../../components/Yson/Yson';
 import {UnipikaSettings} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';

@@ -11,11 +11,11 @@ import {Progress} from '@gravity-ui/uikit';
 
 import Icon from '../../../../../components/Icon/Icon';
 import Link from '../../../../../components/Link/Link';
-import Label from '../../../../../components/Label/Label';
+import Label from '../../../../../components/Label';
 import {YTAlertBlock} from '../../../../../components/Alert/Alert';
 import Button from '../../../../../components/Button/Button';
 import {YTErrorBlock} from '../../../../../components/Error/Error';
-import MetaTable, {Template} from '../../../../../components/MetaTable/MetaTable';
+import {Template} from '../../../../../components/MetaTable/templates/Template';
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
 
 import {loadNodeAttributes} from '../../../../../store/actions/components/node/node';
@@ -38,7 +38,7 @@ import {useUpdater} from '../../../../../hooks/use-updater';
 
 import withSplit from '../../../../../hocs/withSplit';
 import UIFactory from '../../../../../UIFactory';
-import ClipboardButton from '../../../../../components/ClipboardButton/ClipboardButton';
+import {ClipboardButton, MetaTable} from '@ytsaurus/components';
 import {makeComponentsNodesUrl} from '../../../../../utils/app-url';
 import {getNodeMetaItems} from '../../../../../utils/components/nodes/node-meta-items';
 

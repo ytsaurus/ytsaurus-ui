@@ -1,4 +1,4 @@
-export {Label, type LabelTheme} from './Label';
+export {Label, LabelOnOff, type LabelTheme} from './Label';
 export {
     YTText,
     Secondary,

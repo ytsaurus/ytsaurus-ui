@@ -14,7 +14,7 @@ import {
 import {OldSortState} from '../../types';
 import {OrderType, oldSortStateToOrderType} from '../../utils/sort-helpers';
 import SortIcon from '../../components/SortIcon/SortIcon';
-import {Tooltip} from '../../components/Tooltip/Tooltip';
+import {Tooltip} from '@ytsaurus/components';
 import {ToggleColumnSortOrderParams} from '../../store/actions/tables';
 import {RootState} from '../../store/reducers';
 

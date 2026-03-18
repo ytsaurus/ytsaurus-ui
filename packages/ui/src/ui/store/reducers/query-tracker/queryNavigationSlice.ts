@@ -1,6 +1,13 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {ReactNode} from 'react';
+import type {
+    NavigationNode,
+    NavigationTable,
+    NavigationTableMeta,
+    NavigationTableSchema,
+} from '@ytsaurus/components';
 import {YTError} from '../../../../@types/types';
+
+export type {NavigationNode, NavigationTable, NavigationTableMeta, NavigationTableSchema};
 
 export const enum BodyType {
     Tree = 'tree',
@@ -9,39 +16,6 @@ export const enum BodyType {
     Loading = 'loading',
     Error = 'error',
 }
-
-export type NavigationNode = {
-    name: string;
-    type?: string;
-    broken?: boolean;
-    dynamic?: boolean;
-    sorted?: boolean;
-    path: string;
-    targetPath?: string;
-    isFavorite: boolean;
-};
-
-export type NavigationTableSchema = {
-    name: string;
-    required: boolean;
-    sort_order?: string;
-    type: string;
-};
-
-export type NavigationTableMeta = {
-    key: string;
-    value: ReactNode;
-    visible?: boolean;
-};
-
-export type NavigationTable = {
-    name: string;
-    rows: any[];
-    columns: string[];
-    schema: NavigationTableSchema[];
-    meta: NavigationTableMeta[][];
-    yqlTypes: unknown[] | null;
-};
 
 export type RepoNavigationState = {
     loading: boolean;
