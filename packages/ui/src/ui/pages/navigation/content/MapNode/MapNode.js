@@ -93,7 +93,7 @@ class MapNode extends Component {
         openCreateTableModal: PropTypes.func.isRequired,
         openCreateACOModal: PropTypes.func.isRequired,
         showACOCreateButton: PropTypes.bool.isRequired,
-        cluster: PropTypes.bool.isRequired,
+        cluster: PropTypes.string.isRequired,
     };
 
     componentDidMount() {
