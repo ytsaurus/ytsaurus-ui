@@ -1,16 +1,17 @@
-import React, {Component} from 'react';
 import cn from 'bem-cn-lite';
+import React, {Component} from 'react';
 
 import {Flex} from '@gravity-ui/uikit';
 
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+import {isIdmAclAvailable} from '../../../config';
 import {AclMode, IdmObjectType} from '../../../constants/acl';
-
-import RequestPermissions from '../RequestPermissions/RequestPermissions';
-import ManageAcl from '../ManageAcl/ManageAcl';
-import {ACLReduxProps} from '../ACL-connect-helpers';
 import {IdmKindType} from '../../../utils/acl/acl-types';
+import {ACLReduxProps} from '../ACL-connect-helpers';
+import {AddGroupButton} from '../AddGroupButton/AddGroupButton';
+import ManageAcl from '../ManageAcl/ManageAcl';
 import ManageInheritance from '../ManageInheritance/ManageInheritance';
+import RequestPermissions from '../RequestPermissions/RequestPermissions';
 
 const block = cn('acl-user-permissions');
 
@@ -31,6 +32,7 @@ type Props = Pick<
     | 'columnGroups'
     | 'rowGroups'
     | 'aclMode'
+    | 'nodeType'
 > & {
     className?: string;
     idmKind: IdmKindType;
@@ -90,9 +92,14 @@ export class AclActions extends Component<Props> {
 
             columnGroups,
             rowGroups,
+
+            nodeType,
         } = this.props;
 
         const isMainPermissionsMode = !aclMode || aclMode === AclMode.MAIN_PERMISSIONS;
+        const allowAddGroup =
+            aclMode === AclMode.ROW_GROUPS_PERMISSIONS ||
+            aclMode === AclMode.COLUMN_GROUPS_PERMISSIONS;
 
         return (
             <ErrorBoundary>
@@ -142,6 +149,12 @@ export class AclActions extends Component<Props> {
                                     updateAcl={this.updateAcl}
                                     manageAclError={updateAclError}
                                     cancelUpdateAcl={cancelUpdateAcl}
+                                />
+                            )}
+                            {isIdmAclAvailable() && allowAddGroup && (
+                                <AddGroupButton
+                                    loadAclDataFn={() => loadAclData({path, idmKind})}
+                                    {...{cluster, path, nodeType, aclMode}}
                                 />
                             )}
                         </React.Fragment>

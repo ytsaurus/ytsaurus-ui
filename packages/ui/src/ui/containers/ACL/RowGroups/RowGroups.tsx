@@ -1,24 +1,22 @@
 import {Power} from '@gravity-ui/icons';
 import type {Column} from '@gravity-ui/react-data-table';
 import cn from 'bem-cn-lite';
-import React, {useState} from 'react';
-import Button from '../../../components/Button/Button';
+import React from 'react';
 import DataTableYT from '../../../components/DataTableYT/DataTableYT';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import Icon from '../../../components/Icon/Icon';
 import TextInputWithDebounce from '../../../components/TextInputWithDebounce/TextInputWithDebounce';
-import {Tooltip} from '../../../components/Tooltip/Tooltip';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import WithStickyToolbar from '../../../components/WithStickyToolbar/WithStickyToolbar';
 import UIFactory from '../../../UIFactory';
 import {AclRowGroup} from '../../../utils/acl/acl-types';
 import {ACLReduxProps} from '../ACL-connect-helpers';
-import {EditRowGroupModal, Props as ModalProps} from './EditRowGroupModal';
+import {useEditColumnRowGroupModal} from '../EditGroupModal/EditGroupModal';
 import './RowGroups.scss';
 
 const block = cn('acl-row-groups');
 
-type Props = Pick<
+export type Props = Pick<
     ACLReduxProps,
     'loaded' | 'rowGroups' | 'rowGroupNameFilter' | 'updateAclFilters'
 > & {
@@ -26,84 +24,38 @@ type Props = Pick<
     loadAclDataFn: () => void;
     cluster: string;
     allowEdit?: boolean;
-    allowEditNotice?: string;
 };
 
 export function RowGroups({
     loaded,
     rowGroups,
-    path,
     loadAclDataFn,
     cluster,
     allowEdit = false,
-    allowEditNotice,
     rowGroupNameFilter,
     updateAclFilters,
 }: Props) {
-    const [modalProps, setModalProps] = useState({
-        title: '',
-        confirmText: '',
-        disabledFields: [],
-        initialData: undefined,
-        visible: false,
-        handleClose: () => {
-            setModalProps((prevProps) => ({
-                ...prevProps,
-                visible: false,
-            }));
-        },
-        handleSubmit: (_value: Partial<AclRowGroup>) => Promise.resolve(),
-    } as ModalProps);
-
-    const handleAddClick = () => {
-        setModalProps((prevProps) => ({
-            ...prevProps,
-            title: 'Add new row group',
-            confirmText: 'Add',
-            disabledFields: ['enabled'],
-            visible: true,
-            initialData: {
-                name: '',
-                predicate: '',
-                enabled: false,
-            },
-            handleSubmit: (value: Partial<AclRowGroup>) => {
-                return UIFactory.getAclApi()
-                    .createRowGroup(cluster, path, value)
-                    .then(() => {
-                        loadAclDataFn();
-                    });
-            },
-        }));
-    };
+    const {editGroupModalNode, editGroup, deleteGroup} = useEditColumnRowGroupModal({
+        groupType: 'row',
+    });
 
     const handleEditClick = (item: AclRowGroup) => {
-        setModalProps((prevProps) => ({
-            ...prevProps,
-            title: 'Edit row group',
-            confirmText: 'Save',
-            initialData: {...item},
-            disabledFields: [],
-            visible: true,
-            handleSubmit: (value: Partial<AclRowGroup>) => {
+        editGroup({
+            item,
+            submit: (value) => {
                 return UIFactory.getAclApi()
                     .editRowGroup(cluster, {...value, id: item.id})
                     .then(() => {
                         loadAclDataFn();
                     });
             },
-        }));
+        });
     };
 
     const handleDeleteClick = (item: AclRowGroup) => {
-        setModalProps((prevProps) => ({
-            ...prevProps,
-            title: 'Delete row group',
-            confirmText: 'Delete',
-            initialData: {...item},
-            disabledFields: ['name', 'predicate', 'enabled'],
-            visible: true,
-            handleSubmit: () => {
+        deleteGroup({
+            item,
+            submit: () => {
                 const {id} = item;
                 return UIFactory.getAclApi()
                     .deleteRowGroup(cluster, id)
@@ -111,8 +63,7 @@ export function RowGroups({
                         loadAclDataFn();
                     });
             },
-            mode: 'delete',
-        }));
+        });
     };
 
     const columns: Array<Column<AclRowGroup>> = [
@@ -168,24 +119,7 @@ export function RowGroups({
     return (
         <ErrorBoundary>
             <div>
-                <div className="elements-heading elements-heading_size_xs">
-                    Row groups
-                    <Button
-                        className={block('button', {add: true})}
-                        onClick={handleAddClick}
-                        disabled={!allowEdit}
-                        qa="acl:add-row-group"
-                    >
-                        <Icon awesome={'plus'} />
-                        Add
-                    </Button>
-                    {Boolean(allowEditNotice) && (
-                        <Tooltip content={allowEditNotice}>
-                            &nbsp;
-                            <Icon awesome="question-circle" color="secondary" />
-                        </Tooltip>
-                    )}
-                </div>
+                <div className="elements-heading elements-heading_size_xs">Row groups</div>
                 <WithStickyToolbar
                     topMargin="none"
                     bottomMargin="regular"
@@ -210,7 +144,7 @@ export function RowGroups({
                     content={
                         <DataTableYT<AclRowGroup>
                             loaded={loaded}
-                            noItemsText="There are no any row groups"
+                            noItemsText="No groups"
                             data={rowGroups ?? []}
                             columns={columns}
                             theme={'yt-borderless'}
@@ -222,7 +156,7 @@ export function RowGroups({
                     }
                 />
             </div>
-            {modalProps.visible ? <EditRowGroupModal {...modalProps} /> : null}
+            {editGroupModalNode}
         </ErrorBoundary>
     );
 }

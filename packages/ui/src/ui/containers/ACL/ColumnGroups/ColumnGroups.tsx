@@ -1,21 +1,19 @@
 import {Power} from '@gravity-ui/icons';
 import type {Column} from '@gravity-ui/react-data-table';
 import cn from 'bem-cn-lite';
-import React, {useState} from 'react';
-import Button from '../../../components/Button/Button';
+import React from 'react';
 import DataTableYT from '../../../components/DataTableYT/DataTableYT';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import Icon from '../../../components/Icon/Icon';
 import Select from '../../../components/Select/Select';
 import TextInputWithDebounce from '../../../components/TextInputWithDebounce/TextInputWithDebounce';
-import {Tooltip} from '../../../components/Tooltip/Tooltip';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import WithStickyToolbar from '../../../components/WithStickyToolbar/WithStickyToolbar';
 import UIFactory from '../../../UIFactory';
 import {AclColumnGroup} from '../../../utils/acl/acl-types';
 import {ACLReduxProps} from '../ACL-connect-helpers';
+import {useEditColumnRowGroupModal} from '../EditGroupModal/EditGroupModal';
 import './ColumnGroups.scss';
-import EditColumnGroupModal, {Props as ModalProps} from './EditColumnGroupModal';
 
 const block = cn('column-groups');
 
@@ -29,90 +27,43 @@ type Props = ColumnGropsToolbarProps &
         | 'updateAclFilters'
         | 'userPermissionsAccessColumns'
     > & {
-        path: string;
         loadAclDataFn: () => void;
         cluster: string;
         allowEdit?: boolean;
-        allowEditNotice?: string;
     };
 
 export default function ColumnGroups({
     loaded,
     columnGroups,
-    path,
     loadAclDataFn,
     cluster,
     allowEdit = false,
-    allowEditNotice,
     updateAclFilters,
     columnsFilter,
     columnGroupNameFilter,
     userPermissionsAccessColumns,
 }: Props) {
-    const [modalProps, setModalProps] = useState({
-        title: '',
-        confirmText: '',
-        disabledFields: [],
-        initialData: undefined,
-        visible: false,
-        handleClose: () => {
-            setModalProps((prevProps) => ({
-                ...prevProps,
-                visible: false,
-            }));
-        },
-        handleSubmit: (_value: Partial<AclColumnGroup>) => Promise.resolve(),
-    } as ModalProps);
-
-    const handleAddClick = () => {
-        setModalProps((prevProps) => ({
-            ...prevProps,
-            title: 'Add new column group',
-            confirmText: 'Add',
-            disabledFields: ['enabled'],
-            visible: true,
-            initialData: {
-                name: '',
-                columns: [],
-                enabled: false,
-            },
-            handleSubmit: (value: Partial<AclColumnGroup>) => {
-                return UIFactory.getAclApi()
-                    .createColumnGroup(cluster, path, value)
-                    .then(() => {
-                        loadAclDataFn();
-                    });
-            },
-        }));
-    };
+    const {editGroupModalNode, editGroup, deleteGroup} = useEditColumnRowGroupModal({
+        groupType: 'column',
+    });
 
     const handleEditClick = (item: AclColumnGroup) => {
-        setModalProps((prevProps) => ({
-            ...prevProps,
-            title: 'Edit column group',
-            confirmText: 'Save',
-            initialData: {...item},
-            disabledFields: [],
-            visible: true,
-            handleSubmit: (value: Partial<AclColumnGroup>) => {
+        editGroup({
+            item,
+            submit: (value: Partial<AclColumnGroup>) => {
                 return UIFactory.getAclApi()
                     .editColumnGroup(cluster, {...value, id: item.id})
                     .then(() => {
                         loadAclDataFn();
                     });
             },
-        }));
+        });
     };
 
     const handleDeleteClick = (item: AclColumnGroup) => {
-        setModalProps((prevProps) => ({
-            ...prevProps,
-            title: 'Delete column group',
-            confirmText: 'Delete',
-            initialData: {...item},
-            disabledFields: ['name', 'columns', 'enabled'],
-            visible: true,
-            handleSubmit: () => {
+        deleteGroup({
+            item,
+            submit: () => {
                 const {id} = item;
                 return UIFactory.getAclApi()
                     .deleteColumnGroup(cluster, id)
@@ -120,8 +71,7 @@ export default function ColumnGroups({
                         loadAclDataFn();
                     });
             },
-            mode: 'delete',
-        }));
+        });
     };
 
     const columns: Array<Column<AclColumnGroup>> = [
@@ -177,24 +127,7 @@ export default function ColumnGroups({
     return (
         <ErrorBoundary>
             <div>
-                <div className="elements-heading elements-heading_size_xs">
-                    Column groups
-                    <Button
-                        className={block('button', {add: true})}
-                        onClick={handleAddClick}
-                        disabled={!allowEdit}
-                        qa="acl:add-column-group"
-                    >
-                        <Icon awesome={'plus'} />
-                        Add
-                    </Button>
-                    {Boolean(allowEditNotice) && (
-                        <Tooltip content={allowEditNotice}>
-                            &nbsp;
-                            <Icon awesome="question-circle" color="secondary" />
-                        </Tooltip>
-                    )}
-                </div>
+                <div className="elements-heading elements-heading_size_xs">Column groups</div>
                 <WithStickyToolbar
                     topMargin="none"
                     bottomMargin="regular"
@@ -231,7 +164,7 @@ export default function ColumnGroups({
                     content={
                         <DataTableYT<AclColumnGroup>
                             loaded={loaded}
-                            noItemsText="There are not any column groups"
+                            noItemsText="No groups"
                             data={columnGroups}
                             columns={columns}
                             theme={'yt-borderless'}
@@ -243,7 +176,7 @@ export default function ColumnGroups({
                     }
                 />
             </div>
-            {modalProps.visible ? <EditColumnGroupModal {...modalProps} /> : null}
+            {editGroupModalNode}
         </ErrorBoundary>
     );
 }
