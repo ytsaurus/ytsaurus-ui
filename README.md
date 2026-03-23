@@ -16,3 +16,4 @@ The repository contains code related to UI for [YTsaurus platform](https://ytsau
 - all the commits should have a title that corresponds to [convetional commits](https://www.conventionalcommits.org/en/v1.0.0/)
 - to release new version of a changed package your PR should contain at least one `fix`/`feat`/`BREAKING_CHANGES` commit
 - CHANGELOG.md files are automatically generated from titles of `fix`/`feat`/`BREAKING_CHANGES` commits, so they should have short clear descriptions
+

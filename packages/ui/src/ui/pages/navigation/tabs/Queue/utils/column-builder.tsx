@@ -14,6 +14,7 @@ import type {YTError} from '../../../../../types';
 import {genNavigationUrl} from '../../../../../utils/navigation/navigation';
 import {ClickableText} from '../../../../../components/ClickableText/ClickableText';
 import {showErrorPopup} from '../../../../../utils/utils';
+import {formatDateForTableSort} from '../../../../../utils/format-date-for-table-sort';
 
 const DISPLAY_FORMAT = 'DD-MM-YYYY HH:mm:ss';
 
@@ -31,10 +32,12 @@ export function datetime<T>(name: string, getter: (row: T) => string | null): Co
     return {
         name,
         render({row}) {
-            return moment(getter(row)).format(DISPLAY_FORMAT);
+            const rowDate = moment(getter(row));
+            if (!rowDate.isValid()) return format.NO_VALUE;
+            return rowDate.format(DISPLAY_FORMAT);
         },
         sortAccessor(row) {
-            return moment(getter(row)).valueOf();
+            return formatDateForTableSort(getter(row));
         },
     };
 }

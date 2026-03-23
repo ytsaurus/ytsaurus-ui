@@ -12,8 +12,6 @@ import reduce_ from 'lodash/reduce';
 import transform_ from 'lodash/transform';
 import values_ from 'lodash/values';
 
-import moment from 'moment';
-
 import ypath from '../../../../common/thor/ypath';
 import hammer from '../../../../common/hammer';
 import {getParsedPath, getTransaction} from '../../../../store/selectors/navigation';
@@ -25,6 +23,7 @@ import {MediumType} from '../../../../constants/index';
 import Chooser from '../../../../pages/navigation/content/MapNode/Chooser';
 import MultipleActions from '../../../../pages/navigation/content/MapNode/MultipleActions';
 import {DYN_TABLES_ALLOWED_ACTIONS_BY_STATE} from './map-node-ts';
+import {formatDateForTableSort} from '../../../../utils/format-date-for-table-sort';
 
 export const getFilterState = (state) => state.navigation.content.mapNode.filter;
 export const getMediumType = (state) => state.navigation.content.mapNode.mediumType;
@@ -59,11 +58,11 @@ const getTableColumns = createSelector(
             align: 'left',
         },
         modification_time: {
-            sort: (node) => moment(node.modified).unix(),
+            sort: (node) => formatDateForTableSort(node.modified),
             align: 'right',
         },
         creation_time: {
-            sort: (node) => moment(node.created).unix(),
+            sort: (node) => formatDateForTableSort(node.created),
             align: 'right',
         },
         disk_space: {
