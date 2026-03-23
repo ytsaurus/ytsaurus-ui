@@ -8,7 +8,7 @@ import map_ from 'lodash/map';
 
 import ypath from '../../../../../../common/thor/ypath';
 import unipika from '../../../../../../common/thor/unipika';
-import hammer from '../../../../../../common/hammer';
+import format from '../../../../../../common/hammer/format';
 import ElementsTable from '../../../../../../components/ElementsTable/ElementsTable';
 import {OPERATION_JOBS_TABLE_ID} from '../../../../../../constants/operations/jobs';
 import SimpleModal from '../../../../../../components/Modal/SimpleModal';
@@ -154,7 +154,7 @@ class OperationJobsTable extends React.Component {
     renderIdAddress = (item) => {
         const {cluster} = this.props;
         const {id, address, job_competition_id, operationId, is_stale, attributes} = item;
-        const host = hammer.format['Address'](address);
+        const host = format['Address'](address);
 
         const from = ypath.getValue(attributes, '/start_time');
         const to = ypath.getValue(attributes, '/finish_time');
@@ -395,9 +395,11 @@ class OperationJobsTable extends React.Component {
                 <div className={block('state-section', 'elements-ellipsis')}>
                     <StatusInfo info={interruption_info} state={state} />
                 </div>
-                <div className={block('state-section')}>
-                    <JobTemplate.Progress state={state} progress={progress} />
-                </div>
+                {type !== 'vanilla' ? (
+                    <div className={block('state-section')}>
+                        <JobTemplate.Progress state={state} progress={progress} />
+                    </div>
+                ) : null}
                 <JobDetails statistics={brief_statistics} type={type} />
             </div>
         );
@@ -428,15 +430,11 @@ class OperationJobsTable extends React.Component {
     }
 
     renderDuration(item) {
-        return (
-            <span className="elements-ellipsis">
-                {hammer.format['TimeDuration'](item.duration)}
-            </span>
-        );
+        return <span className="elements-ellipsis">{format['TimeDuration'](item.duration)}</span>;
     }
 
     renderType(item) {
-        return <span>{hammer.format['ReadableField'](item.type)}</span>;
+        return <span>{format['ReadableField'](item.type)}</span>;
     }
 
     renderInputPathsModal() {
