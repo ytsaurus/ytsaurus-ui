@@ -103,7 +103,7 @@ type State = {
 
 export class DownloadManager extends React.Component<Props, State> {
     static prepareValue(value: string): number | string {
-        const parsedValue = Number(value || undefined); // we need `|| undefined` cause Number('') === 0
+        const parsedValue = Number(String(value).replace(/\s/g, '') || undefined); // we need `|| undefined` cause Number('') === 0
         return isNaN(parsedValue) ? value : parsedValue;
     }
 
