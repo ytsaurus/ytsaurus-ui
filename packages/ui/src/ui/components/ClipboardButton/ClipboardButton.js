@@ -126,7 +126,7 @@ export default class ClipboardButton extends Component {
                             buttonText ? (
                                 <Button
                                     {...buttonProps}
-                                    buttonRef={this.buttonRef}
+                                    ref={this.buttonRef}
                                     onClick={this.onClick}
                                 >
                                     <Icon
