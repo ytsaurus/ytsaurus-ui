@@ -192,7 +192,7 @@ class Details extends Component<ReduxProps> {
     }
 
     renderEvents() {
-        const {events, collapsibleSize} = this.props;
+        const {events, collapsibleSize, isOperationInGpuTree} = this.props;
 
         return (
             events && (
@@ -201,6 +201,7 @@ class Details extends Component<ReduxProps> {
                     className={block('events')}
                     size={collapsibleSize}
                     marginDirection="bottom"
+                    collapsed={isOperationInGpuTree}
                 >
                     <Events events={events} />
                 </CollapsibleSection>
@@ -245,6 +246,8 @@ class Details extends Component<ReduxProps> {
 
 const mapStateToProps = (state: RootState) => {
     const operation = state.operations.detail.operation;
+    const isOperationInGpuTree = selectIsOperationInGpuTree(state);
+
     return {
         cluster: selectCluster(state),
         operation,
@@ -252,7 +255,8 @@ const mapStateToProps = (state: RootState) => {
         ...state.operations.detail.details,
         collapsibleSize: UI_COLLAPSIBLE_SIZE,
         alertEvents: getOperationAlertEvents(state),
-        isVanillaGpuOperation: operation.type === 'vanilla' && selectIsOperationInGpuTree(state),
+        isVanillaGpuOperation: operation.type === 'vanilla' && isOperationInGpuTree,
+        isOperationInGpuTree,
     };
 };
 
