@@ -13,6 +13,10 @@ export class HasPage {
 class DFDialogComponent extends HasPage {
     private isLazyLoaded = false;
 
+    locator() {
+        return this.page.locator('.df-dialog');
+    }
+
     async confirm() {
         await this.page.locator('.g-dialog-footer__button-apply').click();
     }
@@ -32,6 +36,42 @@ class DFDialogComponent extends HasPage {
         await this.waitForLazyLoad();
 
         await this.page.waitForSelector(`.df-dialog__label :text("${title}")`);
+    }
+
+    async waitForFixedPosition() {
+        const getRect = async () => {
+            return await this.page.evaluate(
+                (): Partial<Record<'x' | 'y' | 'width' | 'height', number>> => {
+                    const element = document.querySelector('.df-dialog');
+                    if (!element) {
+                        return {};
+                    }
+
+                    return element.getBoundingClientRect();
+                },
+            );
+        };
+
+        let rect;
+        let counter = 0;
+        while (counter < 3) {
+            await this.page.waitForTimeout(100);
+
+            if (!rect) {
+                rect = await getRect();
+                ++counter;
+                continue;
+            }
+
+            const {x, y, width, height} = rect ?? {};
+            const r = await getRect();
+            if (!r || r.x !== x || r.y !== y || r.width !== width || r.height !== height) {
+                counter = 1;
+            } else {
+                ++counter;
+            }
+            rect = r;
+        }
     }
 
     private async waitForLazyLoad() {
