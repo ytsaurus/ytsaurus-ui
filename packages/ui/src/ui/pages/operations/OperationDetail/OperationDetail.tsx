@@ -1,81 +1,81 @@
-import {match as MatchType, Redirect, Route, Switch} from 'react-router';
+import cn from 'bem-cn-lite';
 import React, {Fragment} from 'react';
 import {ConnectedProps, connect} from 'react-redux';
-import {useDispatch, useSelector} from '../../../store/redux-hooks';
+import {match as MatchType, Redirect, Route, Switch} from 'react-router';
 import hammer from '../../../common/hammer';
 import unipika from '../../../common/thor/unipika';
-import cn from 'bem-cn-lite';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 
 import ypath from '../../../common/thor/ypath';
 
-import MetaTable, {Template, TemplatePools} from '../../../components/MetaTable/MetaTable';
-import OperationProgress from '../OperationProgress/OperationProgress';
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
-import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
-import Button from '../../../components/Button/Button';
 import {Loader} from '@gravity-ui/uikit';
+import Button from '../../../components/Button/Button';
 import {YTErrorBlock} from '../../../components/Error/Error';
+import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import Icon from '../../../components/Icon/Icon';
-import {Tooltip} from '../../../components/Tooltip/Tooltip';
-import Tabs from '../../../components/Tabs/Tabs';
-import Yson from '../../../components/Yson/Yson';
+import MetaTable, {Template, TemplatePools} from '../../../components/MetaTable/MetaTable';
 import StatusLabel from '../../../components/StatusLabel/StatusLabel';
+import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
+import Tabs from '../../../components/Tabs/Tabs';
+import {Tooltip} from '../../../components/Tooltip/Tooltip';
+import Yson from '../../../components/Yson/Yson';
+import OperationProgress from '../OperationProgress/OperationProgress';
 
-import PartitionSizes from './tabs/partition-sizes/PartitionSizes/PartitionSizes';
-import Details from './tabs/details/Details/Details';
-import Specification from './tabs/specification/Specification';
-import JobSizes from './tabs/job-sizes/JobSizes/JobSizes';
-import Statistics from './tabs/statistics/Statistics';
 import Jobs from './tabs/Jobs/Jobs';
 import JobsMonitor from './tabs/JobsMonitor/JobsMonitor';
 import OperationAttributes from './tabs/attributes/OperationAttributes';
+import Details from './tabs/details/Details/Details';
+import JobSizes from './tabs/job-sizes/JobSizes/JobSizes';
+import PartitionSizes from './tabs/partition-sizes/PartitionSizes/PartitionSizes';
+import Specification from './tabs/specification/Specification';
+import Statistics from './tabs/statistics/Statistics';
 
 import Placeholder from '../../../pages/components/Placeholder';
 
-import {
-    getDetailsTabsShowSettings,
-    operationMonitoringUrl,
-    performAction,
-} from '../../../utils/operations/detail';
+import {Page} from '../../../constants/index';
 import {DEFAULT_TAB, OperationTabType, Tab} from '../../../constants/operations/detail';
+import {useUpdater} from '../../../hooks/use-updater';
+import {promptAction} from '../../../store/actions/actions';
 import {showEditPoolsWeightsModal} from '../../../store/actions/operations';
 import {getOperation} from '../../../store/actions/operations/detail';
-import {isOperationId} from '../../../utils/operations/list';
-import {promptAction} from '../../../store/actions/actions';
-import {useUpdater} from '../../../hooks/use-updater';
-import {TabSettings, makeTabProps} from '../../../utils';
-import {Page} from '../../../constants/index';
 import {
     getOperationDetailsLoadingStatus,
     getOperationErasedTrees,
     getOperationPerformanceUrlTemplate,
     selectIsOperationInGpuTree,
 } from '../../../store/selectors/operations/operation';
+import {TabSettings, makeTabProps} from '../../../utils';
+import {
+    getDetailsTabsShowSettings,
+    operationMonitoringUrl,
+    performAction,
+} from '../../../utils/operations/detail';
+import {isOperationId} from '../../../utils/operations/list';
 
 import {useAppRumMeasureStart} from '../../../rum/rum-app-measures';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 import {isFinalLoadingStatus} from '../../../utils/utils';
 
-import './OperationDetail.scss';
+import UIFactory from '../../../UIFactory';
+import {UI_TAB_SIZE} from '../../../constants/global';
 import {updateListJobsFilter} from '../../../store/actions/operations/jobs';
-import OperationDetailsMonitor from './tabs/monitor/OperationDetailsMonitor';
-import {getJobsMonitorTabVisible} from '../../../store/selectors/operations/jobs-monitor';
+import {getOperationEvents, listOperationEventsApi} from '../../../store/api/yt';
+import {RootState} from '../../../store/reducers';
 import {RuntimeItem} from '../../../store/reducers/operations/detail';
+import {getJobsMonitorTabVisible} from '../../../store/selectors/operations/jobs-monitor';
 import {
     JobState,
     getOperationStatiscsHasData,
     getTotalCpuTimeSpent,
     getTotalJobWallTime,
 } from '../../../store/selectors/operations/statistics-v2';
-import UIFactory from '../../../UIFactory';
-import {RootState} from '../../../store/reducers';
-import {getCurrentCluster} from '../../../store/selectors/thor';
-import {UI_TAB_SIZE} from '../../../constants/global';
-import {OperationPool, OperationStates} from '../selectors';
-import {JobsTimeline} from './tabs/JobsTimeline';
-import {getOperationEvents, listOperationEventsApi} from '../../../store/api/yt';
-import {getYsonSettingsDisableDecode} from '../../../store/selectors/thor/unipika';
 import {selectIsIncarnationNextFeatureEnabled} from '../../../store/selectors/settings/settings-development';
+import {getCurrentCluster} from '../../../store/selectors/thor';
+import {getYsonSettingsDisableDecode} from '../../../store/selectors/thor/unipika';
+import {OperationPool, OperationStates} from '../selectors';
+import './OperationDetail.scss';
+import {JobsTimeline} from './tabs/JobsTimeline';
+import OperationDetailsMonitor from './tabs/monitor/OperationDetailsMonitor';
 
 const detailBlock = cn('operation-detail');
 
@@ -104,26 +104,36 @@ function getSpecialWaitingStatuses(
     runtime: RuntimeItem[] | undefined,
     type: string | undefined,
     isGpuOperation: boolean | undefined,
-) {
+): {isWaitingForJobs?: boolean; isWaitingForResources?: boolean} {
     const fairShareRatio = runtime?.[0]?.progress?.fair_share_ratio as number | undefined;
     const usageRatio = runtime?.[0]?.progress?.usage_ratio as number | undefined;
     const demandRatio = runtime?.[0]?.progress?.demand_ratio as number | undefined;
 
     const isSingleTree = new Set(pools?.map((pool) => pool?.tree)).size === 1;
-    const isSpecialStatus =
-        type === 'vanilla' && isSingleTree && state === 'running' && isGpuOperation && !suspended;
 
-    const isWaitingForResources =
-        isSpecialStatus && fairShareRatio === usageRatio && fairShareRatio === 0;
+    switch (type) {
+        case 'vanilla': {
+            const isSpecialStatus = state === 'running' && isGpuOperation && !suspended;
+            if (!isSpecialStatus || !isSingleTree) {
+                return {};
+            }
+            const isWaitingForResources = fairShareRatio === usageRatio && fairShareRatio === 0;
 
-    const isWaitingForJobs =
-        isSpecialStatus &&
-        fairShareRatio === demandRatio &&
-        usageRatio !== undefined &&
-        fairShareRatio !== undefined &&
-        usageRatio < fairShareRatio;
+            const isWaitingForJobs =
+                fairShareRatio === demandRatio &&
+                usageRatio !== undefined &&
+                fairShareRatio !== undefined &&
+                usageRatio < fairShareRatio;
 
-    return {isWaitingForResources, isWaitingForJobs};
+            return {isWaitingForResources, isWaitingForJobs};
+        }
+        default: {
+            if (usageRatio || !isSingleTree) {
+                return {};
+            }
+            return fairShareRatio ? {isWaitingForJobs: true} : {isWaitingForResources: true};
+        }
+    }
 }
 
 const waitingForJobsTooltip =
