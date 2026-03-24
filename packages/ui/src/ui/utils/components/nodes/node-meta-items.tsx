@@ -35,6 +35,7 @@ export function getNodeMetaItems({
     maintenanceRequests,
     state,
     rack,
+    registerTime,
     version,
 }: Pick<
     Node,
@@ -50,6 +51,7 @@ export function getNodeMetaItems({
     | 'full'
     | 'jobProxyBuildVersion'
     | 'lastSeenTime'
+    | 'registerTime'
     | 'maintenanceRequests'
     | 'state'
     | 'rack'
@@ -57,7 +59,6 @@ export function getNodeMetaItems({
 >): Array<MetaTableItem> {
     const stateText = hammer.format['FirstUppercase'](state);
     const stateTheme = getStateTheme(state);
-
     return [
         {
             key: 'state',
@@ -125,6 +126,12 @@ export function getNodeMetaItems({
         {
             key: 'last_seen',
             value: hammer.format['DateTime'](lastSeenTime, {
+                format: 'full',
+            }),
+        },
+        {
+            key: 'register_time',
+            value: hammer.format['DateTime'](registerTime, {
                 format: 'full',
             }),
         },
