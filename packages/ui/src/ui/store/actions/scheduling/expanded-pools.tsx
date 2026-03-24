@@ -89,6 +89,7 @@ const POOL_FIELDS_TO_LOAD = [
 ];
 
 const POOL_TREE_GET_ATTRS = [
+    'abc_object_type',
     'integral_guarantees',
     'weight',
     'max_operation_count',
