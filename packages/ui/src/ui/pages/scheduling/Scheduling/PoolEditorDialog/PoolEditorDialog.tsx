@@ -1,6 +1,6 @@
+import cn from 'bem-cn-lite';
 import React, {useCallback, useMemo} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-import cn from 'bem-cn-lite';
 
 import isEmpty_ from 'lodash/isEmpty';
 import pick_ from 'lodash/pick';
@@ -9,6 +9,7 @@ import pickBy_ from 'lodash/pickBy';
 import {DialogField, FormApi, YTDFDialog} from '../../../../components/Dialog';
 import {YTErrorBlock} from '../../../../components/Error/Error';
 
+import {closeEditModal, editPool} from '../../../../store/actions/scheduling/scheduling';
 import {
     calculatePoolPath,
     getPools,
@@ -17,6 +18,7 @@ import {
     getSchedulingSourcesOfEditItem,
     getTree,
 } from '../../../../store/selectors/scheduling/scheduling';
+import {isAbcPoolName, isTopLevelPool} from '../../../../utils/scheduling/pool';
 import {
     POOL_GENERAL_TYPE_TO_ATTRIBUTE,
     POOL_INTEGRAL_GUARANTEE_FIELD_TO_ATTR,
@@ -24,26 +26,37 @@ import {
     PoolEditorFormValues,
     getInitialValues,
 } from '../../../../utils/scheduling/scheduling';
-import {isAbcPoolName, isTopLevelPool} from '../../../../utils/scheduling/pool';
-import {closeEditModal, editPool} from '../../../../store/actions/scheduling/scheduling';
 
 import {checkUserPermissionsUI} from '../../../../utils/acl/acl-api';
 import {selectCluster, selectCurrentUserName} from '../../../../store/selectors/global';
 import {getCurrentTreeGpuLimit} from '../../../../store/selectors/scheduling/scheduling-ts';
 
+import Link from '../../../../components/Link/Link';
 import {RootState} from '../../../../store/reducers';
 import {getSchedulingPoolsMapByName} from '../../../../store/selectors/scheduling/scheduling-pools';
-import Link from '../../../../components/Link/Link';
 
-import './PoolEditorDialog.scss';
 import UIFactory from '../../../../UIFactory';
+import ypath from '../../../../common/thor/ypath';
 import {createQuotaReqTicketUrl} from '../../../../config';
 import {PoolTreeNode} from '../../../../utils/scheduling/pool-child';
+import './PoolEditorDialog.scss';
 
 const block = cn('pool-editor-dialog');
 
-function makePermissionWarning(visible: boolean) {
-    return !visible ? null : (
+function makePermissionWarning(visible: boolean, poolType?: 'root' | 'service' | 'account') {
+    if (!visible) {
+        return null;
+    }
+
+    if (poolType === 'root' || poolType === 'service') {
+        return (
+            <div className={block('permissions-warning')}>
+                This pool is generated automatically and cannot be managed by users.
+            </div>
+        );
+    }
+
+    return (
         <div className={block('permissions-warning')}>
             You do not have sufficient permissions to modify pool settings. In order to be able to
             modify pool settings <span className={block('flag')}>inherit_acl</span> flag should be
@@ -177,7 +190,10 @@ export function PoolEditorDialog() {
         type: 'block',
         name: 'perm-warning',
         extras: {
-            children: makePermissionWarning(hasWarning),
+            children: makePermissionWarning(
+                hasWarning,
+                ypath.getValue(editItem?.cypressAttributes, '/abc_object_type'),
+            ),
         },
     };
 
