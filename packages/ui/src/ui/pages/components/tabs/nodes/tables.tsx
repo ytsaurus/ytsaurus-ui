@@ -74,6 +74,7 @@ export const PropertiesByColumn = {
     physical_host: ['physicalHost'],
     flavors: ['flavors'],
     rack: ['rack'],
+    register_time: ['registerTime'],
     removal_slots: ['removalSlots', 'removalSlotsProgress'],
     removal_slots_usage: ['removalSlots'],
     removal_slots_limit: ['removalSlots'],
@@ -320,6 +321,13 @@ const nodesTableProps = {
             last_seen: {
                 get(node) {
                     return node.lastSeenTime;
+                },
+                sort: true,
+                align: 'left',
+            },
+            register_time: {
+                get(node) {
+                    return node.registerTime;
                 },
                 sort: true,
                 align: 'left',
@@ -1126,6 +1134,7 @@ const nodesTableProps = {
                     'alert_count',
                     'version',
                     'last_seen',
+                    'register_time',
                     'actions',
                 ],
             },
@@ -1183,6 +1192,7 @@ const nodesTableProps = {
                     'full',
                     'alert_count',
                     'last_seen',
+                    'register_time',
                     'actions',
                 ],
             },
@@ -1326,6 +1336,15 @@ export const NODES_TABLE_TEMPLATES: Templates = {
         return (
             <span className="elements-ellipsis">
                 {hammer.format['DateTime'](item.lastSeenTime, {
+                    format: 'full',
+                })}
+            </span>
+        );
+    },
+    register_time(item) {
+        return (
+            <span className="elements-ellipsis">
+                {hammer.format['DateTime'](item.registerTime, {
                     format: 'full',
                 })}
             </span>

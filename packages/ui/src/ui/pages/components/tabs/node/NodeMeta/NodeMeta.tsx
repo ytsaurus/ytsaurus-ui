@@ -29,6 +29,7 @@ interface Props {
     alertCount?: Node['alertCount'];
     dataCenter: Node['dataCenter'];
     lastSeenTime: Node['lastSeenTime'];
+    registerTime: Node['registerTime'];
     disableJobs: Node['disableJobs'];
     disableTabletCells: Node['disableTabletCells'];
     disableWriteSession: Node['disableWriteSession'];
@@ -52,6 +53,7 @@ function NodeMeta({
     alertCount,
     dataCenter,
     lastSeenTime,
+    registerTime,
     disableJobs,
     disableTabletCells,
     disableWriteSession,
@@ -78,6 +80,7 @@ function NodeMeta({
             jobProxyBuildVersion,
             lastSeenTime,
             rack,
+            registerTime,
             state,
             maintenanceRequests,
             version,
@@ -96,6 +99,7 @@ function NodeMeta({
         jobProxyBuildVersion,
         lastSeenTime,
         rack,
+        registerTime,
         state,
         maintenanceRequests,
         version,
