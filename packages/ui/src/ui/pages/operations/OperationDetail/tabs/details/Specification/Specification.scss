@@ -19,6 +19,14 @@ $left-offset: 30px;
         }
     }
 
+    &__io-name {
+        padding-left: $left-offset - 8px;
+    }
+
+    &__io-link {
+        margin-right: 8px;
+    }
+
     &__io {
         &-folder {
             &-path {
@@ -26,14 +34,6 @@ $left-offset: 30px;
             }
             &-icon {
                 width: $left-offset - 8px;
-            }
-        }
-        &-name {
-
-            padding-left: $left-offset - 8px;
-
-            .g-link {
-                margin-right: 10px;
             }
         }
 
