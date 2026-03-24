@@ -1,6 +1,6 @@
-/* global YT */
 import React from 'react';
 import cn from 'bem-cn-lite';
+import {Flex, Text} from '@gravity-ui/uikit';
 
 import FilterOverview from '../../../pages/operations/OperationDetail/tabs/details/FilterOverview/FilterOverview';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
@@ -15,6 +15,7 @@ import {Page} from '../../../constants/index';
 import hammer from '../../../common/hammer';
 import {paramsToQuery} from '../../../utils';
 import OperationIOLink from '../../../pages/operations/OperationIOLink/OperationIOLink';
+import {YT} from '../../../config/yt-config';
 
 const block = cn('specification');
 const ellipsis = cn('elements-ellipsis');
@@ -33,17 +34,21 @@ templates.add('operations/detail/specification/io', {
                 <OperationIOLink {...item} className={block('io-folder-path')} />
             </div>
         ) : (
-            <div className={block('io-name', ellipsis())}>
-                <ClipboardButton text={path} view="flat-secondary" size="s" title="Copy path" />
-                &nbsp;
-                <OperationIOLink {...item} />
-                &nbsp;
+            <Flex gap={1} alignItems="center" maxWidth="100%" overflow="hidden">
+                <Text className={block('io-name')}>
+                    <ClipboardButton text={path} view="flat-secondary" size="s" title="Copy path" />
+                </Text>
+                <Text variant="inherit" className={block('io-link')} ellipsis>
+                    <OperationIOLink {...item} />
+                </Text>
                 {originalPath && (
-                    <Link title={path} url={url}>
-                        <Icon awesome="folders" />
-                    </Link>
+                    <Text variant="inherit">
+                        <Link title={path} url={url}>
+                            <Icon awesome="folders" />
+                        </Link>
+                    </Text>
                 )}
-            </div>
+            </Flex>
         );
     },
     filters(item) {
