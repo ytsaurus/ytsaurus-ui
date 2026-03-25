@@ -1,16 +1,13 @@
 import {createSelector} from 'reselect';
-
-import type {ClusterConfig, ClusterUiConfig} from '../../../../shared/yt-types';
-
-import {YT} from '../../../config/yt-config';
-import {getConfigData, uiSettings} from '../../../config/ui-settings';
-
-import {RootState} from '../../../store/reducers';
-import {getClusterConfig} from '../../../utils';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {mergeUiSettings} from '../../../../shared/utils/merge-ui-settings';
-import {selectIsDeveloper} from './is-developer';
+import type {ClusterConfig, ClusterUiConfig} from '../../../../shared/yt-types';
+import {getConfigData, uiSettings} from '../../../config/ui-settings';
+import {YT} from '../../../config/yt-config';
+import {RootState} from '../../../store/reducers';
+import {getClusterConfig} from '../../../utils';
 import {selectSpytEnginesInfo} from '../query-tracker/queryTrackerEnginesInfo';
+import {selectIsAdmin} from './is-developer';
 
 export const selectCluster = (state: RootState): string => state.global.cluster || '';
 
@@ -19,7 +16,7 @@ const selectClusterUiConfigRaw = (state: RootState) => state.global.clusterUiCon
 const selectClusterUiDevConfigRaw = (state: RootState) => state.global.clusterUiDevConfig;
 
 export const selectClusterUiConfig = createSelector(
-    [selectClusterUiConfigRaw, selectClusterUiDevConfigRaw, selectIsDeveloper],
+    [selectClusterUiConfigRaw, selectClusterUiDevConfigRaw, selectIsAdmin],
     (clusterUiConfig, clusterUiDevConfig, isDeveloper): Partial<ClusterUiConfig> => {
         return isDeveloper ? {...clusterUiConfig, ...clusterUiDevConfig} : clusterUiConfig;
     },

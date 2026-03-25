@@ -2,9 +2,9 @@ import {YT} from '../../../config/yt-config';
 import {RootState} from '../../../store/reducers';
 import {getSettingsData} from '../../../store/selectors/settings/settings-base';
 
-export const selectIsDeveloper = (state: RootState): boolean => state?.global?.isDeveloper;
+const selectIsDeveloper = (state: RootState): boolean => state?.global?.isDeveloper;
 
-export const selectIsWatchmen = (state: RootState): boolean => state?.global?.isWatchmen;
+const selectIsWatchmen = (state: RootState): boolean => state?.global?.isWatchmen;
 
 export const selectIsDeveloperOrWatchmen = (state: RootState): boolean => {
     const isDeveloper = selectIsDeveloper(state);
@@ -13,7 +13,7 @@ export const selectIsDeveloperOrWatchmen = (state: RootState): boolean => {
     return YT.isLocalCluster || isWatchmen || isDeveloper;
 };
 
-export const selectSettingsRegularUserUI = (state: RootState) => {
+const selectSettingsRegularUserUI = (state: RootState) => {
     return getSettingsData(state)['global::development::regularUserUI'];
 };
 
