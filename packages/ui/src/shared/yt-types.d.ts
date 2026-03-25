@@ -787,14 +787,9 @@ export type FlowComputationType = FlowNodeBase &
         highlight_cpu_usage?: boolean;
         hightlight_memory_usage?: boolean;
 
-        metrics: {
-            cpu_usage_current: number;
-            cpu_usage_30s: number;
-            cpu_usage_10m: number;
-            memory_usage_current: number;
-            memory_usage_30s: number;
-            memory_usage_10m: number;
-        };
+        cpu_usage: number;
+        memory_usage: number;
+
         partitions_stats?: {
             count: number;
             count_by_state?: Record<FlowPartitionStateType, number | undefined>;

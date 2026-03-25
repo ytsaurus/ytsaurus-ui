@@ -32,8 +32,7 @@ type ComputationProps = {
 export function Computation({detailed, item, className}: ComputationProps) {
     const path = useSelector(selectFlowPipelinePath);
 
-    const {cpu_usage_10m, memory_usage_10m} = item.meta?.metrics ?? {};
-    const {highlight_cpu_usage, hightlight_memory_usage} = item.meta ?? {};
+    const {cpu_usage, memory_usage, highlight_cpu_usage, hightlight_memory_usage} = item.meta ?? {};
 
     return (
         <div className={block(null, className)}>
@@ -67,9 +66,7 @@ export function Computation({detailed, item, className}: ComputationProps) {
                                 highConsumption={highlight_cpu_usage}
                                 detailed={detailed}
                             >
-                                {format.NumberSmart(cpu_usage_10m, {
-                                    digits: cpu_usage_10m! > 1 ? 1 : 2,
-                                })}
+                                {format.NumberSmart(cpu_usage, {digits: cpu_usage! > 1 ? 1 : 2})}
                             </TextWithHighConsumption>
                         ),
                     },
@@ -80,7 +77,7 @@ export function Computation({detailed, item, className}: ComputationProps) {
                                 highConsumption={hightlight_memory_usage}
                                 detailed={detailed}
                             >
-                                {format.Bytes(memory_usage_10m)}
+                                {format.Bytes(memory_usage)}
                             </TextWithHighConsumption>
                         ),
                     },

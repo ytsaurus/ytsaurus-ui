@@ -209,11 +209,11 @@ function useFlowComputationsColumn() {
                 header: () => i18n('cpu-usage'),
                 size: 200,
                 cell: ({row: {original: item}}) => {
-                    return <TableCell>{format.NumberSmart(item.metrics.cpu_usage_10m)}</TableCell>;
+                    return <TableCell>{format.NumberSmart(item.cpu_usage)}</TableCell>;
                 },
                 enableSorting: true,
                 accessorFn(d) {
-                    return d.metrics.cpu_usage_10m;
+                    return d.cpu_usage;
                 },
             },
             {
@@ -221,11 +221,11 @@ function useFlowComputationsColumn() {
                 header: () => i18n('memory-usage'),
                 size: 200,
                 cell: ({row: {original: item}}) => {
-                    return <TableCell>{format.Bytes(item.metrics.memory_usage_10m)}</TableCell>;
+                    return <TableCell>{format.Bytes(item.memory_usage)}</TableCell>;
                 },
                 enableSorting: true,
                 accessorFn(d) {
-                    return d.metrics.memory_usage_10m;
+                    return d.memory_usage;
                 },
             },
             {
