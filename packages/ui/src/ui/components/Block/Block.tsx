@@ -34,7 +34,7 @@ function ErrorLogger({error, type}: Pick<YTErrorBlockProps, 'error' | 'type'>) {
                 error as Error,
             );
         }
-    }, [error]);
+    }, [error, type]);
     return null;
 }
 
@@ -58,7 +58,7 @@ type YTErrorBlockInternalProps = {
 };
 
 export type YTErrorBlockProps = Omit<YTErrorBlockInternalProps, 'error'> & {
-    error?: YTErrorBlockInternalProps['error'] | {error: string};
+    error?: YTErrorBlockInternalProps['error'] | {error: string} | Error;
 };
 
 export function YTErrorBlock({error, ...props}: YTErrorBlockProps) {
@@ -69,6 +69,10 @@ export function YTErrorBlock({error, ...props}: YTErrorBlockProps) {
 
         if (isThereOnlyErrorFieldString(error)) {
             return {message: error.error};
+        }
+
+        if (error instanceof Error) {
+            return error;
         }
 
         return cloneDeepWith_(error, (value) => {
