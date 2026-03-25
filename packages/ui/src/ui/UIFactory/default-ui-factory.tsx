@@ -39,6 +39,9 @@ import {UIFactory} from './index';
 const experimentalPages: string[] = [];
 
 export const defaultUIFactory: UIFactory = {
+    isAccountCreateDisabled() {
+        return undefined;
+    },
     getClusterAppearance(cluster) {
         return YT.clusters[cluster!]?.urls;
     },

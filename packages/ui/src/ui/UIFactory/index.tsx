@@ -196,6 +196,17 @@ export type FlowWorkerMonitorProps = {
 };
 
 export interface UIFactory {
+    isAccountCreateDisabled(params: {
+        currentAccount: string;
+        clusterConfig: ClusterConfig;
+        isDeveloper: boolean;
+    }):
+        | undefined
+        | {
+              disableCreate?: boolean;
+              disableCreateNotice?: React.ReactNode;
+          };
+
     getClusterAppearance(cluster?: string): undefined | ClusterAppearance;
 
     makeUrlForTransferTask(operation: unknown): string | undefined;
