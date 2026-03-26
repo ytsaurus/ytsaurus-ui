@@ -1,17 +1,20 @@
 import {createSelector} from 'reselect';
 import {RootState} from '../../../store/reducers';
-import {selectCluster} from './cluster';
 
 const selectOngoingEvents = (state: RootState) => state.global.ongoingEvents;
 
 export const selectMaintenanceEvent = createSelector(
-    [selectCluster, selectOngoingEvents],
-    (cluster, ongoing) => {
-        if (!ongoing?.events?.length || cluster !== ongoing.cluster) {
-            return undefined;
-        }
+    [
+        selectOngoingEvents,
+        /**
+         * Do not use `selectCluster` here it may return an empty string when a cluster is unavailable.
+         * `selectCluster` returns empty string until initialization is finished, unavailable cluster cannot be initialized.
+         */
+    ],
+    (ongoing) => {
+        const {events, cluster} = ongoing ?? {};
 
-        return ongoing.events.find((item) => {
+        const event = events?.find((item) => {
             try {
                 const meta = JSON.parse(item.meta!);
                 return meta && meta.show_maintenance_page;
@@ -21,5 +24,7 @@ export const selectMaintenanceEvent = createSelector(
                 return null;
             }
         });
+
+        return {cluster, event};
     },
 );
