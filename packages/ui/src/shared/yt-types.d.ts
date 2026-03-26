@@ -554,6 +554,22 @@ export type YqlEnginesInfo = {
     };
 };
 
+export type SpytEnginesInfo = {
+    clusters: string[];
+    default_engine: string;
+    engines: ('livy' | 'connect')[];
+    default_settings?: {
+        connect?: {
+            executor_cores?: number;
+            executor_memory: string;
+            num_executors: number;
+            spark_conf?: {
+                'spark.ytsaurus.network.project'?: string;
+            };
+        };
+    };
+};
+
 export type GetQueryTrackerInfoResponse = {
     cluster_name: string;
     access_control_objects: string[];
@@ -562,6 +578,7 @@ export type GetQueryTrackerInfoResponse = {
     clusters?: Array<string>;
     engines_info?: {
         yql?: YqlEnginesInfo;
+        spyt?: SpytEnginesInfo;
     };
 };
 

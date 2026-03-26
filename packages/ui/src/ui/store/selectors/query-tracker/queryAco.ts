@@ -52,6 +52,10 @@ export const getDefaultYqlVersion = createSelector([selectQueryTrackerInfo], (qt
     return qtInfo?.engines_info?.yql?.default_yql_ui_version;
 });
 
+export const selectSpytEnginesInfo = (state: RootState) => {
+    return selectQueryTrackerInfo(state)?.engines_info?.spyt;
+};
+
 const getQueryDraftYqlVersion = (state: RootState) =>
     state.queryTracker.query.draft.settings?.yql_version;
 
