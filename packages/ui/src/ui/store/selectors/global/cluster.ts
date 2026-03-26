@@ -10,6 +10,7 @@ import {getClusterConfig} from '../../../utils';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {mergeUiSettings} from '../../../../shared/utils/merge-ui-settings';
 import {selectIsDeveloper} from './is-developer';
+import {selectSpytEnginesInfo} from '../query-tracker/queryAco';
 
 export const getCluster = (state: RootState): string => state.global.cluster || '';
 
@@ -44,15 +45,19 @@ export function getClusterProxy(clusterConfig: ClusterConfig): string {
     return clusterConfig.proxy;
 }
 
-export const getClusterSupportedEngines = (state: RootState): Record<QueryEngine, boolean> => {
-    const {chyt_controller_base_url, livy_controller_base_url} = getClusterUiConfig(state);
-    return {
-        yql: true,
-        chyt: Boolean(chyt_controller_base_url),
-        spyt: Boolean(livy_controller_base_url),
-        ql: true,
-    };
-};
+export const getClusterSupportedEngines = createSelector(
+    [selectSpytEnginesInfo, getClusterUiConfig, getCluster],
+    (spytEngine, {chyt_controller_base_url}, cluster): Record<QueryEngine, boolean> => {
+        const clusters = spytEngine?.clusters;
+
+        return {
+            yql: true,
+            chyt: Boolean(chyt_controller_base_url),
+            spyt: clusters ? clusters.includes(cluster) : true,
+            ql: true,
+        };
+    },
+);
 
 export const getClusterUiConfigEnablePerAccountTabletAccounting = (state: RootState) => {
     return getClusterUiConfig(state).enable_per_account_tablet_accounting ?? false;
