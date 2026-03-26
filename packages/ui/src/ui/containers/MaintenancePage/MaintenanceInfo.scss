@@ -1,0 +1,47 @@
+@use '../../styles/fonts';
+@use '../../styles/mixins';
+
+.maintenance-info {
+    &__title {
+        font-weight: var(--yt-font-weight-bold);
+        max-width: 350px;
+    }
+
+    &__severity {
+        font-weight: var(--yt-font-weight-bold);
+        margin: 0;
+        margin-top: 8px;
+        margin-bottom: 28px;
+
+        span:last-child {
+            margin-left: 4px;
+        }
+
+        &_type_minor {
+            color: var(--info-text);
+        }
+
+        &_type_major {
+            color: var(--danger-text);
+        }
+    }
+
+    &__user-title {
+        @include mixins.heading-size(s);
+        font-weight: var(--yt-font-weight-bold);
+        margin: 0;
+        margin-bottom: 8px;
+    }
+
+    &__user-description {
+        font-size: 16px;
+        margin: 0;
+        margin-bottom: 32px;
+    }
+
+    &__time-line {
+        font-weight: var(--yt-font-weight-bold);
+        margin: 0;
+        margin-bottom: 12px;
+    }
+}

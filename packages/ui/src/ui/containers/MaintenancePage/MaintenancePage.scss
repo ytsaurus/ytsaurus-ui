@@ -1,4 +1,3 @@
-@use '../../styles/fonts';
 @use '../../styles/mixins';
 @use '../../styles/common';
 
@@ -12,8 +11,6 @@
         max-width: common.$width-large-screen;
         margin: 0 auto;
         padding: 0 80px;
-        display: flex;
-        align-items: center;
 
         @media (min-width: common.$width-medium-screen) {
             padding: 0 120px;
@@ -26,53 +23,6 @@
 
     &__info {
         max-width: 504px;
-    }
-
-    &__title {
-        @include mixins.heading-size(l);
-        font-weight: var(--yt-font-weight-bold);
-        max-width: 350px;
-        margin-bottom: 8px;
-    }
-
-    &__severity {
-        font-weight: var(--yt-font-weight-bold);
-        margin: 0;
-        margin-bottom: 28px;
-
-        span:last-child {
-            margin-left: 4px;
-        }
-
-        &_type_minor {
-            color: var(--info-text);
-        }
-
-        &_type_major {
-            color: var(--danger-text);
-        }
-    }
-
-    &__user-title {
-        @include mixins.heading-size(s);
-        font-weight: var(--yt-font-weight-bold);
-        margin: 0;
-        margin-bottom: 8px;
-    }
-
-    &__user-description {
-        font-size: 16px;
-        margin: 0;
-        margin-bottom: 32px;
-    }
-
-    &__time-line {
-        font-weight: var(--yt-font-weight-bold);
-        margin: 0;
-        margin-bottom: 12px;
-    }
-
-    &__author {
         margin-bottom: 60px;
     }
 
