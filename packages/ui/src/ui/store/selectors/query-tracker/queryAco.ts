@@ -5,7 +5,16 @@ import {getSettingsData} from '../settings/settings-base';
 import {createSelector} from 'reselect';
 import {DEFAULT_QUERY_ACO, SHARED_QUERY_ACO, getEffectiveApiStage} from './query';
 import {getClusterUiConfig} from '../global';
+import {
+    getAvailableYql,
+    getDefaultYqlVersion,
+    selectQueryTrackerInfo,
+    selectSpytEnginesInfo,
+} from './queryTrackerEnginesInfo';
+
 const selectAcoState = (state: RootState) => state.queryTracker.aco;
+
+export {getAvailableYql, getDefaultYqlVersion, selectQueryTrackerInfo, selectSpytEnginesInfo};
 
 export const getQueryTrackerInfoClusters = (state: RootState) =>
     state.queryTracker.aco.data.clusters;
@@ -40,21 +49,6 @@ export const selectAvailableAco = (state: RootState) =>
     selectAcoState(state).data.access_control_objects;
 
 export const isQueryTrackerInfoLoading = (state: RootState) => selectAcoState(state).loading;
-
-export const selectQueryTrackerInfo = (state: RootState) => selectAcoState(state).data;
-
-export const getAvailableYql = createSelector([selectQueryTrackerInfo], (qtInfo) => {
-    const versions = qtInfo?.engines_info?.yql?.available_yql_versions;
-    return Array.isArray(versions) ? versions : [];
-});
-
-export const getDefaultYqlVersion = createSelector([selectQueryTrackerInfo], (qtInfo) => {
-    return qtInfo?.engines_info?.yql?.default_yql_ui_version;
-});
-
-export const selectSpytEnginesInfo = (state: RootState) => {
-    return selectQueryTrackerInfo(state)?.engines_info?.spyt;
-};
 
 const getQueryDraftYqlVersion = (state: RootState) =>
     state.queryTracker.query.draft.settings?.yql_version;
