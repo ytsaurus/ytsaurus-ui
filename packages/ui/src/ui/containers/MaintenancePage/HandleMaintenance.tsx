@@ -11,18 +11,28 @@ type Props = {
     emptyMaintenance?: boolean;
 };
 
+export function useMaintenanceEvent(cluster: string) {
+    const maintenance = useSelector(selectMaintenanceEvent);
+
+    if (!maintenance?.event || maintenance.cluster !== cluster) {
+        return undefined;
+    }
+
+    return maintenance.event;
+}
+
 export function HandleMaintenance({cluster, children, emptyMaintenance}: Props) {
     const {proceedToCluster, setProceedToCluster} = useMaintenanceContext();
-    const maintenancePageEvent = useSelector(selectMaintenanceEvent);
+    const event = useMaintenanceEvent(cluster);
 
-    if (!maintenancePageEvent || proceedToCluster) {
+    if (proceedToCluster || !event) {
         return children;
     }
 
     return emptyMaintenance ? null : (
         <MaintenancePage
             cluster={cluster}
-            maintenancePageEvent={maintenancePageEvent}
+            maintenancePageEvent={event}
             onProceed={() => {
                 setProceedToCluster(true);
             }}
