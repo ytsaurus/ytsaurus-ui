@@ -10,7 +10,7 @@ import {getClusterConfig} from '../../../utils';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {mergeUiSettings} from '../../../../shared/utils/merge-ui-settings';
 import {selectIsDeveloper} from './is-developer';
-import {selectSpytEnginesInfo} from '../query-tracker/queryAco';
+import {selectSpytEnginesInfo} from '../query-tracker/queryTrackerEnginesInfo';
 
 export const getCluster = (state: RootState): string => state.global.cluster || '';
 
