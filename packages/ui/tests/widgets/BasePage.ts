@@ -33,9 +33,8 @@ class DFDialogComponent extends HasPage {
     }
 
     async waitForField(title: string) {
-        await this.waitForLazyLoad();
-
         await this.page.waitForSelector(`.df-dialog__label :text("${title}")`);
+        await this.waitForLazyLoad();
     }
 
     async waitForFixedPosition() {

@@ -12,12 +12,14 @@ import set_ from 'lodash/set';
 import {getBatchError} from '../../shared/utils/error';
 
 import {TypedKeys, YTError} from '../types';
-import {Link, ProgressProps} from '@gravity-ui/uikit';
+import {Link, ProgressProps, ProgressTheme} from '@gravity-ui/uikit';
 import {
     ThemeThreshold,
+    addProgressStackSpacers,
     computeProgress,
     defaultThemeThresholds,
     getProgressTheme,
+    progressText,
 } from '../utils/progress';
 import hammer from '../common/hammer';
 import {LOADING_STATUS} from '../constants';
@@ -194,6 +196,36 @@ export function calcProgressProps(
         value: value ?? 0,
         theme: getProgressTheme(value, themeThresholds),
         text: `${formatNumber(usage, format)} / ${formatNumber(limit, format)}`,
+    };
+}
+
+export function calcProgressProps2({
+    usage,
+    limit,
+    format,
+    themeThresholds,
+    usageOverdraftTheme = 'danger',
+}: {
+    usage?: number;
+    limit?: number;
+    format?: 'Number' | 'Bytes';
+    themeThresholds?: ThemeThreshold[];
+    usageOverdraftTheme?: ProgressTheme;
+}) {
+    const l = limit ?? 0;
+
+    if (!usage || usage <= l) {
+        return calcProgressProps(usage, limit, format, themeThresholds);
+    }
+
+    const stack = addProgressStackSpacers([
+        {value: (l / usage) * 100, theme: 'success' as const},
+        {value: ((usage - l) / usage) * 100, theme: usageOverdraftTheme},
+    ]);
+
+    return {
+        stack,
+        text: progressText(usage, limit, {type: format === 'Bytes' ? 'bytes' : undefined}),
     };
 }
 

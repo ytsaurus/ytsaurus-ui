@@ -18,7 +18,13 @@
   "operations-running": "Running operations",
   "operations-running-lightweigh": "Running lightweigh operations",
   "operations-running-max": "Max running operations",
-  "strong-guarantees": "Strong guarantees",
+  "meta_configured-guarantee": "Configured guarantee",
+  "meta_effective-guarantee": "Effective guarantee",
+  "meta_effective-is-autocalculated": "Effective guarantee is automatically calculated",
+  "meta_effective-less-than-strong-warning": "Effective guarantees are lower than configured due to planned maintenance or an ongoing issue. Operations might be slower than expected.",
+  "meta_strong-guarantees": "Strong guarantees",
+  "meta_usage": "Usage",
+  "meta_usage-is-greater-than-effective": "Usage is greater than effective guarantee",
   "weight": "Weight",
   "user-slots": "User slots"
 }

@@ -125,12 +125,7 @@ export default class MetaTable extends Component<MetaTableProps> {
 
         return !visibleItems?.length ? null : (
             <div className={block('group', itemBlock({'row-gap': String(rowGap)}))} key={index}>
-                {title && (
-                    <>
-                        <h2 className={block('sub-title')}>{title}</h2>
-                        <span />
-                    </>
-                )}
+                {title && <h2 className={block('sub-title')}>{title}</h2>}
                 {this.renderItems(visibleItems)}
             </div>
         );
