@@ -103,6 +103,7 @@ test('Scheduling - Editor', async ({page}) => {
 
     await test.step('General', async () => {
         await scheduling(page).dfDialog.waitForField('Max running operation count');
+        await scheduling(page).dfDialog.waitForFixedPosition();
 
         await expect(page).toHaveScreenshot();
     });

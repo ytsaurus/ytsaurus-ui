@@ -21,4 +21,19 @@
     &__progress-meta-subitem {
         padding-left: 20px;
     }
+
+    &__tooltip-warning-bottom {
+        padding-top: 10px;
+    }
+    &__tooltip-warning-top {
+        padding-bottom: 10px;
+    }
+
+    &__secondary {
+        color: var(--secondary-text);
+    }
+
+    &__warning {
+        color: var(--warning-text);
+    }
 }

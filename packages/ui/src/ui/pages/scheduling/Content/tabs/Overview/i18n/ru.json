@@ -18,7 +18,13 @@
   "operations-running": "Бегущие операции",
   "operations-running-lightweigh": "Бегущие легковесные операции",
   "operations-running-max": "Максимальое число бегущих операций",
-  "strong-guarantees": "Строгие гарантии",
+  "meta_configured-guarantee": "Сконфигурированная гарантия",
+  "meta_effective-guarantee": "Эффективная гарантия",
+  "meta_effective-is-autocalculated": "Эффективная гарантия расчитана автоматически",
+  "meta_effective-less-than-strong-warning": "Эффективные гарантии ниже заданных из-за планового обслуживания или текущей проблемы. Операции могут выполняться медленнее чем ожидается.",
+  "meta_strong-guarantees": "Строгие гарантии",
+  "meta_usage": "Потребление",
+  "meta_usage-is-greater-than-effective": "Потребление больше чем эффективная гарантия.",
   "weight": "Вес",
   "user-slots": "Пользовательские слоты"
 }
