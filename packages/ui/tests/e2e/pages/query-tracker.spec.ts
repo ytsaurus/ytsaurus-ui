@@ -3,8 +3,8 @@ import {CLUSTER_TITLE, E2E_DIR, makeClusterUrl} from '../../utils';
 import {BasePage} from '../../widgets/BasePage';
 
 function replaceNbsps(str: string) {
-    var re = new RegExp(String.fromCharCode(160), "g");
-    return str.replace(re, " ");
+    var re = new RegExp(String.fromCharCode(160), 'g');
+    return str.replace(re, ' ');
 }
 
 class QueryTrackerPage extends BasePage {
@@ -14,7 +14,7 @@ class QueryTrackerPage extends BasePage {
 
     async fillQueryEditor(lines: string[]) {
         await this.queryEditor.click();
-        await this.page.keyboard.press('Meta+KeyA');
+        await this.page.keyboard.press('ControlOrMeta+KeyA');
 
         for (const line of lines) {
             await this.page.keyboard.type(line);
@@ -74,25 +74,28 @@ class QueryTrackerPage extends BasePage {
         await this.queryEditor.click();
 
         if (process.platform === 'darwin') {
-            await this.page.keyboard.press("Meta+ArrowLeft");
+            await this.page.keyboard.press('Meta+ArrowLeft');
         } else {
-            await this.page.keyboard.press("Home");
+            await this.page.keyboard.press('Home');
         }
 
         for (let i = 0; i < position; i++) {
-            await this.page.keyboard.press("ArrowRight");
+            await this.page.keyboard.press('ArrowRight');
         }
     }
 
-    async waitForText(text: string) {
+    async waitForText(text: string | RegExp) {
         const locator = this.page.locator('.view-lines.monaco-mouse-cursor-text');
-        
+
         await expect(locator).toHaveText(text);
     }
 
     async selectCluster(cluster: string) {
         await this.page.getByTestId('query-cluster-selector').click();
-        await this.page.getByTestId('query-cluster-item-name').getByText(cluster, {exact: true}).click();
+        await this.page
+            .getByTestId('query-cluster-item-name')
+            .getByText(cluster, {exact: true})
+            .click();
     }
 }
 
@@ -110,9 +113,10 @@ test('@QueryTracker: Click on a new query button should clear query', async ({pa
 test('@QueryTracker: Click on a new query button should reset current query', async ({page}) => {
     await page.goto(makeClusterUrl('queries'));
 
+    await page.waitForLoadState('networkidle');
+
     const queryTrackerPage = new QueryTrackerPage({page});
     await queryTrackerPage.fillQueryEditor(['SELECT * FROM "//tmp/static-table"\n', 'LIMIT 20;\n']);
-    await queryTrackerPage.clickOnRunQuery();
     await queryTrackerPage.clickOnNewQueryButton();
     await queryTrackerPage.confirmClickOnNewQueryButton();
     await queryTrackerPage.isQueryResultTableHide();
@@ -128,19 +132,18 @@ test('@QueryTracker: Click on the new query button in the queries widget should 
 
     const queryTrackerPage = new QueryTrackerPage({page});
 
+    await queryTrackerPage.waitForText(/\/static-table/);
     const queryText = await queryTrackerPage.getQueryText();
 
     await queryTrackerPage.fillQueryEditor(['SELECT * FROM "//tmp/test-table"\n']);
     await queryTrackerPage.clickOnNewQueryButton();
     await queryTrackerPage.confirmClickOnNewQueryButton();
 
-    await page.waitForSelector(`.view-line :text("static-table")`);
-
+    await queryTrackerPage.waitForText(/\/static-table/);
     const resetQueryText = await queryTrackerPage.getQueryText();
 
     await expect(resetQueryText).toBe(queryText);
 });
-
 
 test.describe('@QueryTracker: Suggest scenarios', () => {
     let queryTrackerPage: QueryTrackerPage;
@@ -185,9 +188,9 @@ test.describe('@QueryTracker: Suggest scenarios', () => {
 
             await queryTrackerPage.waitForText('SELECT * FROM `cursor_position`');
         });
-    })
+    });
 
-    test.describe('Directory content suggest', () => {    
+    test.describe('Directory content suggest', () => {
         test(`After typing \`//\` we expect next suggest: tmp`, async () => {
             await queryTrackerPage.fillQueryEditor(['SELECT * FROM `']);
 
@@ -199,7 +202,7 @@ test.describe('@QueryTracker: Suggest scenarios', () => {
 
             await queryTrackerPage.waitForText('SELECT * FROM `//tmp`');
         });
-    
+
         test(`After typing \`//tm\` we expect next suggest: tmp`, async () => {
             await queryTrackerPage.fillQueryEditor(['SELECT * FROM `']);
 
@@ -213,7 +216,7 @@ test.describe('@QueryTracker: Suggest scenarios', () => {
         });
     });
 
-    test.describe('Table columns suggest', () => { 
+    test.describe('Table columns suggest', () => {
         test(`When we make a select from table we can get columns suggest`, async () => {
             const query = `SELECT from \`${E2E_DIR}/static-table\``;
 
