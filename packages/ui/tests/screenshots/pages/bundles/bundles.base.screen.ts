@@ -84,7 +84,7 @@ class Bundles extends BasePage {
             '.yt-host .g-link': 'local:11',
         });
 
-        await this.waitForTableSyncedWidth('.cells-table', {useResizeEvent: true});
+        await this.waitForFixedTableColumnWidths('.cells-table', {useResizeEventUnsafe: true});
     }
 
     async replaceTabletCells() {
@@ -96,7 +96,7 @@ class Bundles extends BasePage {
             '.cells-table__td_col_compressed .cells-table__wrapped': '000 KiB',
             '.cells-table__td_col_peeraddress .g-link': 'local:00',
         });
-        await this.waitForTableSyncedWidth('.data-table', {useResizeEvent: true});
+        await this.waitForFixedTableColumnWidths('.data-table', {useResizeEventUnsafe: true});
     }
 }
 
@@ -136,7 +136,6 @@ test('Bundles - List - Tablet cells', async ({page}) => {
     );
     await page.waitForSelector('.cells-table');
     await bundles(page).replaceTabletCells();
-    await bundles(page).waitForTableSyncedWidth('.cells-table');
 
     await expect(page).toHaveScreenshot();
 
@@ -171,14 +170,14 @@ test('Bundles - Active bundle', async ({page}) => {
     await page.waitForLoadState('networkidle');
 
     await bundles(page).replaceBundleCells();
-    await bundles(page).waitForTableSyncedWidth('.cells-table');
+    await bundles(page).waitForTableSyncedWidth('.cells-table', {useResizeEvent: true});
     await expect(page).toHaveScreenshot();
 
     await test.step('Editor', async () => {
         await page.click(':text("Edit bundle")');
-        await page.waitForLoadState('networkidle');
         await bundles(page).dfDialog.waitForField('Changelog account');
-        await page.waitForTimeout(1000);
+        await page.waitForLoadState('networkidle');
+        await bundles(page).dfDialog.waitForFixedPosition();
         await expect(page).toHaveScreenshot();
 
         await bundles(page).dfDialog.showTab('Resources');

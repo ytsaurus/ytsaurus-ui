@@ -48,6 +48,9 @@ export default defineConfig({
 
         screenshot: 'only-on-failure',
         video: 'retain-on-failure',
+        contextOptions: {
+            reducedMotion: 'reduce',
+        },
     },
     expect: {
         toHaveScreenshot: {
