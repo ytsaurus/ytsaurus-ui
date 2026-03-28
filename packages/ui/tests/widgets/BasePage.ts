@@ -1,4 +1,4 @@
-import {Page, expect} from '@playwright/test';
+import {Page} from '@playwright/test';
 import {E2E_DIR_NAME} from '../utils';
 import {replaceInnerHtml} from '../utils/dom';
 import type {ConfigData} from '../../src/shared/yt-types';
@@ -7,6 +7,49 @@ export class HasPage {
     readonly page;
     constructor(page: Page) {
         this.page = page;
+    }
+
+    async waitForFixedBoundingClientRect(
+        selector: string,
+        {
+            iterationDelay = 100,
+            expectedIterationsCount = 3,
+        }: {iterationDelay?: number; expectedIterationsCount?: number} = {},
+    ) {
+        const getRect = async () => {
+            return await this.page.evaluate(
+                ({selector}): Partial<Record<'x' | 'y' | 'width' | 'height', number>> => {
+                    const element = document.querySelector(selector);
+                    if (!element) {
+                        return {};
+                    }
+
+                    return element.getBoundingClientRect();
+                },
+                {selector},
+            );
+        };
+
+        let rect;
+        let counter = 0;
+        while (counter < expectedIterationsCount) {
+            await this.page.waitForTimeout(iterationDelay);
+
+            if (!rect) {
+                rect = await getRect();
+                ++counter;
+                continue;
+            }
+
+            const {x, y, width, height} = rect ?? {};
+            const r = await getRect();
+            if (!r || r.x !== x || r.y !== y || r.width !== width || r.height !== height) {
+                counter = 1;
+            } else {
+                ++counter;
+            }
+            rect = r;
+        }
     }
 }
 
@@ -38,39 +81,7 @@ class DFDialogComponent extends HasPage {
     }
 
     async waitForFixedPosition() {
-        const getRect = async () => {
-            return await this.page.evaluate(
-                (): Partial<Record<'x' | 'y' | 'width' | 'height', number>> => {
-                    const element = document.querySelector('.df-dialog');
-                    if (!element) {
-                        return {};
-                    }
-
-                    return element.getBoundingClientRect();
-                },
-            );
-        };
-
-        let rect;
-        let counter = 0;
-        while (counter < 3) {
-            await this.page.waitForTimeout(100);
-
-            if (!rect) {
-                rect = await getRect();
-                ++counter;
-                continue;
-            }
-
-            const {x, y, width, height} = rect ?? {};
-            const r = await getRect();
-            if (!r || r.x !== x || r.y !== y || r.width !== width || r.height !== height) {
-                counter = 1;
-            } else {
-                ++counter;
-            }
-            rect = r;
-        }
+        await this.waitForFixedBoundingClientRect('.df-dialog');
     }
 
     private async waitForLazyLoad() {
@@ -133,6 +144,43 @@ export class BasePage extends HasPage {
             },
             {selector, useResizeEvent},
         );
+    }
+
+    async waitForFixedTableColumnWidths(
+        selector: string,
+        {
+            useResizeEventUnsafe,
+        }: {
+            /**
+             * The flag should be used only in case you have replaced some content in cells
+             */
+            useResizeEventUnsafe?: boolean;
+        } = {},
+    ) {
+        let counter = 0;
+        let lastSizes: Array<number> = [];
+        while (counter <= 3) {
+            const sizes = await this.page.evaluate(
+                ({selector, dispatchResizeEvent}) => {
+                    if (dispatchResizeEvent) {
+                        window.dispatchEvent(new Event('resize'));
+                    }
+
+                    const {children = []} =
+                        document.querySelector(`${selector} thead tr:nth-child(1)`) ?? {};
+                    return [...children].map((c) => (c as HTMLElement).offsetWidth);
+                    return [];
+                },
+                {selector, dispatchResizeEvent: useResizeEventUnsafe && counter <= 1},
+            );
+            if (sizes.length > 0 && sizes.every((v, i) => v === lastSizes[i])) {
+                ++counter;
+            } else {
+                counter = 1;
+            }
+            lastSizes = sizes;
+            await this.page.waitForTimeout(100);
+        }
     }
 
     async replaceBreadcrumbsByTitle(title: string, replacement: string) {
