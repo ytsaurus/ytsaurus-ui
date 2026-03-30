@@ -27,7 +27,7 @@ import RetryBatchModals from '../RetryBatchModal/RetryBatchModal';
 import {ManageTokensModal} from '../ManageTokens';
 import {setTheme} from '../../store/actions/global';
 import {loadAllowedExperimentalPages} from '../../store/actions/global/experimental-pages';
-import {getAuthPagesEnabled, getGlobalShowLoginDialog} from '../../store/selectors/global';
+import {getAuthPagesEnabled, selectGlobalShowLoginDialog} from '../../store/selectors/global';
 import {selectFontType} from '../../store/selectors/global/fonts';
 import {selectIsAdmin} from '../../store/selectors/global/is-developer';
 import UIFactory from '../../UIFactory';
@@ -61,7 +61,7 @@ function useUpdateUiConfigModeCookie() {
 function AppWithRum() {
     const theme = useThemeValue() as AppThemeFontProps['theme'];
     const themeType = useThemeType();
-    const showLogin = useSelector(getGlobalShowLoginDialog);
+    const showLogin = useSelector(selectGlobalShowLoginDialog);
     const hasAuthPages = useSelector(getAuthPagesEnabled);
     const fontType = useSelector(selectFontType);
 
