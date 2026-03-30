@@ -216,7 +216,7 @@ export const selectRequirePasswordInAuthenticationCommands = createSelector(
     (features) => features.require_password_in_authentication_commands,
 );
 
-export const getQueryMemoryLimitIsSupported = createSelector(
+export const selectIsQueryMemoryLimitSupported = createSelector(
     [selectSupportedFeatures],
     (features) => {
         return features.query_memory_limit_in_tablet_nodes || false;
