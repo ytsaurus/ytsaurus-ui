@@ -19,7 +19,7 @@ import {isYTError} from '../../../../shared/utils';
 import {getQueryResults} from './queryResult';
 import {getDefaultQueryACO, selectIsMultipleAco} from './queryAco';
 import {QueryEngine, QueryEnginesNames} from '../../../../shared/constants/engines';
-import {getClusterSupportedEngines} from '../global';
+import {selectClusterSupportedEngines} from '../global';
 
 const QT_STAGE = getQueryTrackerStage();
 const getState = (state: RootState) => state.queryTracker.query;
@@ -101,7 +101,7 @@ export const hasLoadedQueryItem = (state: RootState) => {
 };
 
 export const getSupportedEnginesOptions = createSelector(
-    [getClusterSupportedEngines],
+    [selectClusterSupportedEngines],
     (supportedEngines) => {
         const items = Object.entries(supportedEngines).filter(([_, supported]) => supported);
 
