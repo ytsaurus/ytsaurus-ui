@@ -1,20 +1,20 @@
 import {RootState} from '../../../store/reducers';
 
-export const getFlowPipelinePath = (state: RootState) => state.flow.filters.pipelinePath;
-export const getFlowComputationsNameFilter = (state: RootState) =>
+export const selectFlowPipelinePath = (state: RootState) => state.flow.filters.pipelinePath;
+export const selectFlowComputationsNameFilter = (state: RootState) =>
     state.flow.filters.computationsNameFilter;
 
-export const getFlowCurrentComputation = (state: RootState) =>
+export const selectFlowCurrentComputation = (state: RootState) =>
     state.flow.filters.currentComputation;
 
-export const getFlowCurrentWorker = (state: RootState) => state.flow.filters.currentWorker;
+export const selectFlowCurrentWorker = (state: RootState) => state.flow.filters.currentWorker;
 
-export const getFlowCurrentPartition = (state: RootState) => state.flow.filters.currentPartition;
+export const selectFlowCurrentPartition = (state: RootState) => state.flow.filters.currentPartition;
 
-export const getFlowPartitionsJobStateFilter = (state: RootState) =>
+export const selectFlowPartitionsJobStateFilter = (state: RootState) =>
     state.flow.filters.partitionsJobStateFilter;
 
-export const getFlowPartitionsStateFilter = (state: RootState) =>
+export const selectFlowPartitionsStateFilter = (state: RootState) =>
     state.flow.filters.partitionsStateFilter;
 
-export const getFlowZoomToNode = (state: RootState) => state.flow.filters.zoomToNode;
+export const selectFlowZoomToNode = (state: RootState) => state.flow.filters.zoomToNode;

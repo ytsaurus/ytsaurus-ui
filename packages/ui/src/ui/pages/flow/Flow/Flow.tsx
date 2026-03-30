@@ -17,9 +17,9 @@ import {useFlowExecuteQuery} from '../../../store/api/yt/flow';
 import {FlowTab} from '../../../store/reducers/flow/filters';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {
-    getFlowCurrentComputation,
-    getFlowCurrentWorker,
-    getFlowPipelinePath,
+    selectFlowCurrentComputation,
+    selectFlowCurrentWorker,
+    selectFlowPipelinePath,
 } from '../../../store/selectors/flow/filters';
 import {getFlowStatusData} from '../../../store/selectors/flow/status';
 import {getCluster} from '../../../store/selectors/global';
@@ -38,8 +38,8 @@ import {getFlowPathMetaItems} from '../flow-components/FlowMeta/FlowMeta';
 const block = cn('yt-flow');
 
 export function Flow() {
-    const currentComputation = useSelector(getFlowCurrentComputation);
-    const worker = useSelector(getFlowCurrentWorker);
+    const currentComputation = useSelector(selectFlowCurrentComputation);
+    const worker = useSelector(selectFlowCurrentWorker);
 
     const allowTabs = !worker && !currentComputation;
 
@@ -70,7 +70,7 @@ export function FlowTabs() {
 }
 
 function FlowContent() {
-    const path = useSelector(getFlowPipelinePath);
+    const path = useSelector(selectFlowPipelinePath);
 
     if (!path) {
         return null;
@@ -110,7 +110,7 @@ function FlowContent() {
 function FlowStatusToolbar() {
     const dispatch = useDispatch();
 
-    const pipeline_path = useSelector(getFlowPipelinePath);
+    const pipeline_path = useSelector(selectFlowPipelinePath);
 
     const updateFn = React.useCallback(() => {
         return dispatch(loadFlowStatus(pipeline_path));
@@ -143,7 +143,7 @@ function FlowStatusToolbar() {
 }
 
 function FlowState() {
-    const pipeline_path = useSelector(getFlowPipelinePath);
+    const pipeline_path = useSelector(selectFlowPipelinePath);
     const value = useSelector(getFlowStatusData);
     const {leader_controller_address} = useFlowAttributes(pipeline_path).data ?? {};
     return (
@@ -184,7 +184,7 @@ function FlowState() {
 }
 
 export function FlowMessagesLoaded() {
-    const pipeline_path = useSelector(getFlowPipelinePath);
+    const pipeline_path = useSelector(selectFlowPipelinePath);
 
     const cluster = useSelector(getCluster);
     const {data, error} =

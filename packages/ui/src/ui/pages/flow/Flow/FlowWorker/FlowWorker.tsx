@@ -23,7 +23,7 @@ import {YTApiId, ytApiV4Id} from '../../../../rum/rum-wrap-api';
 import {useFlowExecuteQuery} from '../../../../store/api/yt/flow';
 import {filtersSlice} from '../../../../store/reducers/flow/filters';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-import {getFlowPipelinePath} from '../../../../store/selectors/flow/filters';
+import {selectFlowPipelinePath} from '../../../../store/selectors/flow/filters';
 import {getCluster} from '../../../../store/selectors/global/cluster';
 import UIFactory from '../../../../UIFactory';
 import {openInNewTab, wrapApiPromiseByToaster} from '../../../../utils/utils';
@@ -70,7 +70,7 @@ export function FlowWorker() {
 }
 
 function useFlowWorkerData(worker: string) {
-    const pipeline_path = useSelector(getFlowPipelinePath);
+    const pipeline_path = useSelector(selectFlowPipelinePath);
     return useFlowExecuteQuery<'describe-worker'>({
         parameters: {
             flow_command: 'describe-worker',
@@ -98,7 +98,7 @@ function FlowWorkerDetails({worker}: {worker: string}) {
 }
 
 function FlowWorkderMonitor({worker}: {worker: string}) {
-    const path = useSelector(getFlowPipelinePath);
+    const path = useSelector(selectFlowPipelinePath);
     const {data, error, isLoading} = useFlowWorkerData(worker);
 
     const MonitorComponent = UIFactory.getMonitoringComponentForFlowWorker();
@@ -158,7 +158,7 @@ function FlowWorkerHeader({data, loading}: {data?: FlowWorkerData; loading?: boo
 }
 
 function FlowWorkerActions({data}: {data?: FlowWorkerData}) {
-    const pipeline_path = useSelector(getFlowPipelinePath);
+    const pipeline_path = useSelector(selectFlowPipelinePath);
     if (!data) {
         return null;
     }
@@ -278,7 +278,7 @@ function FlowWorkerKillAction({
 }
 
 function FlowWorkerMeta({data}: {data?: FlowWorkerData}) {
-    const path = useSelector(getFlowPipelinePath);
+    const path = useSelector(selectFlowPipelinePath);
     const items = React.useMemo(() => {
         const visible = Boolean(data);
         const res: MetaTableProps['items'] = [

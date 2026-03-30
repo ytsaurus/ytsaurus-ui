@@ -9,10 +9,10 @@ import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/Secti
 import {FlowTab} from '../../../store/reducers/flow/filters';
 import {useSelector} from '../../../store/redux-hooks';
 import {
-    getFlowCurrentComputation,
-    getFlowCurrentPartition,
-    getFlowCurrentWorker,
-    getFlowPipelinePath,
+    selectFlowCurrentComputation,
+    selectFlowCurrentPartition,
+    selectFlowCurrentWorker,
+    selectFlowPipelinePath,
 } from '../../../store/selectors/flow/filters';
 import {getAppBrowserHistory} from '../../../store/window-store';
 import {makeFlowLink, makeNavigationLink} from '../../../utils/app-url';
@@ -34,7 +34,7 @@ export function FlowPageTopRow() {
 }
 
 function FlowOpenInNavigation() {
-    const path = useSelector(getFlowPipelinePath);
+    const path = useSelector(selectFlowPipelinePath);
     const url = makeNavigationLink({path});
     return (
         <Button
@@ -55,10 +55,10 @@ function FlowOpenInNavigation() {
 }
 
 function FlowBreadcrumbs() {
-    const computation = useSelector(getFlowCurrentComputation);
-    const worker = useSelector(getFlowCurrentWorker);
-    const partition = useSelector(getFlowCurrentPartition);
-    const path = useSelector(getFlowPipelinePath);
+    const computation = useSelector(selectFlowCurrentComputation);
+    const worker = useSelector(selectFlowCurrentWorker);
+    const partition = useSelector(selectFlowCurrentPartition);
+    const path = useSelector(selectFlowPipelinePath);
 
     const {data} = useFlowAttributes(path);
     const {pipeline_name} = data ?? {};

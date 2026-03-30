@@ -6,7 +6,7 @@ import format from '../../../../../common/hammer/format';
 import Link from '../../../../../components/Link/Link';
 import {FlowTab} from '../../../../../store/reducers/flow/filters';
 import {useSelector} from '../../../../../store/redux-hooks';
-import {getFlowPipelinePath} from '../../../../../store/selectors/flow/filters';
+import {selectFlowPipelinePath} from '../../../../../store/selectors/flow/filters';
 import {makeFlowLink} from '../../../../../utils/app-url';
 import {addProgressStackSpacers} from '../../../../../utils/progress';
 import {FlowGraphBlockItem} from '../FlowGraph';
@@ -30,7 +30,7 @@ type ComputationProps = {
 };
 
 export function Computation({detailed, item, className}: ComputationProps) {
-    const path = useSelector(getFlowPipelinePath);
+    const path = useSelector(selectFlowPipelinePath);
 
     const {cpu_usage_10m, memory_usage_10m} = item.meta?.metrics ?? {};
     const {highlight_cpu_usage, hightlight_memory_usage} = item.meta ?? {};

@@ -13,7 +13,7 @@ import {
 import {useFlowExecuteQuery} from '../../../../store/api/yt';
 import {filtersSlice} from '../../../../store/reducers/flow/filters';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-import {getFlowPipelinePath} from '../../../../store/selectors/flow/filters';
+import {selectFlowPipelinePath} from '../../../../store/selectors/flow/filters';
 import {getCluster} from '../../../../store/selectors/global/cluster';
 import UIFactory from '../../../../UIFactory';
 import './FlowComputation.scss';
@@ -93,7 +93,7 @@ function FlowComputationTabs({computation}: {computation: string}) {
 }
 
 function FlowComputationDetails({computation}: {computation: string}) {
-    const pipeline_path = useSelector(getFlowPipelinePath);
+    const pipeline_path = useSelector(selectFlowPipelinePath);
 
     const {data, error, isLoading} = useFlowComputationData({computation, pipeline_path});
 
@@ -155,7 +155,7 @@ function useFlowComputationData({
 }
 
 function FlowComputationMonitor({computation}: {computation: string}) {
-    const pipeline_path = useSelector(getFlowPipelinePath);
+    const pipeline_path = useSelector(selectFlowPipelinePath);
     const ComputationMonitoring = UIFactory.getMonitoringComponentForFlowComputation();
 
     const {data, error} = useFlowComputationData({computation, pipeline_path});

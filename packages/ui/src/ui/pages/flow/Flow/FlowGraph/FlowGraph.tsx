@@ -30,7 +30,10 @@ import {ShowDataButton} from '../../../../pages/flow/flow-components/FlowMeta/Fl
 import {useFlowExecuteQuery} from '../../../../store/api/yt';
 import {filtersSlice} from '../../../../store/reducers/flow/filters';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-import {getFlowPipelinePath, getFlowZoomToNode} from '../../../../store/selectors/flow/filters';
+import {
+    selectFlowPipelinePath,
+    selectFlowZoomToNode,
+} from '../../../../store/selectors/flow/filters';
 import {getCluster} from '../../../../store/selectors/global/cluster';
 import './FlowGraph.scss';
 import i18n from './i18n';
@@ -79,7 +82,7 @@ export function FlowGraphImpl({pipeline_path}: {pipeline_path: string}) {
     const {scale, setScale} = useGraphScale();
     const useGroups = scale === ECameraScaleLevel.Minimalistic;
 
-    const zoomTo = useSelector(getFlowZoomToNode);
+    const zoomTo = useSelector(selectFlowZoomToNode);
     const [zoomToState, setZoomToState] = React.useState<string>();
     React.useEffect(() => {
         setZoomToState(zoomTo);
@@ -181,7 +184,7 @@ function FlowGraphToolbar({
 }
 
 function FlowGraphDataButton() {
-    const pipeline_path = useSelector(getFlowPipelinePath);
+    const pipeline_path = useSelector(selectFlowPipelinePath);
     const {data} = useFlowGraphLoadedData({pipeline_path});
     return <ShowDataButton data={data} label={i18n('graph-data')} />;
 }
