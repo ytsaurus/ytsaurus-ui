@@ -12,7 +12,7 @@ import {closeUserEditorModal, fetchUsers, saveUserData} from '../../../store/act
 import {isCryptoSubtleAvailable, sha256} from '../../../utils/sha256';
 import {CryptoSubtleAlert} from '../../../containers/ManageTokens/ManageTokensPasswordModal/CryptoSubtleAlert';
 import {
-    getGlobalGroupAttributesMap,
+    selectGlobalGroupAttributesMap,
     getUserManagementEnabled,
 } from '../../../store/selectors/global';
 import {getUsersPageEditableUser} from '../../../store/selectors/users';
@@ -462,7 +462,7 @@ const mapStateToProps = (state: RootState) => {
         showModal,
         username,
         ...data,
-        groupAttributesMap: getGlobalGroupAttributesMap(state),
+        groupAttributesMap: selectGlobalGroupAttributesMap(state),
         isUserManagementEnabled: getUserManagementEnabled(state),
     };
 };

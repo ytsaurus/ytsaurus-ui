@@ -56,7 +56,7 @@ export const selectAllGroupNames = createSelector([selectGlobalGroups], (groupsD
     return map_(groupsData, ({$value}) => $value as string);
 });
 
-export const getGlobalGroupAttributesMap = createSelector([selectGlobalGroups], (data) => {
+export const selectGlobalGroupAttributesMap = createSelector([selectGlobalGroups], (data) => {
     return reduce_(
         data,
         (acc, {$value, $attributes}) => {
@@ -106,7 +106,7 @@ export const getAllGroupNamesSorted = createSelector(
 );
 
 export const getAllIdmGroupNamesSorted = createSelector(
-    [getAllGroupNamesSorted, getGlobalGroupAttributesMap],
+    [getAllGroupNamesSorted, selectGlobalGroupAttributesMap],
     (names, attrs) => {
         return filter_(names, (name) =>
             flags.get(attrs[name]['upravlyator_managed'] as FIX_MY_TYPE),
