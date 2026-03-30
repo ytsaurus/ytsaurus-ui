@@ -81,7 +81,7 @@ import {
 import {
     selectCluster,
     selectClusterUiConfig,
-    getClusterUiConfigEnablePerAccountTabletAccounting,
+    selectClusterUiConfigEnablePerAccountTabletAccounting,
 } from '../../../../store/selectors/global';
 import {TabletAccountingNotice} from './Editor/content/TabletsContent';
 import AccountStaticConfiguration from './AccountStaticConfiguration/AccountStaticConfiguration';
@@ -828,7 +828,7 @@ const makeMapStateToProps = () => {
             columnFields: getAccountsColumnFields(state),
 
             enable_per_account_tablet_accounting:
-                getClusterUiConfigEnablePerAccountTabletAccounting(state),
+                selectClusterUiConfigEnablePerAccountTabletAccounting(state),
 
             collapsibleSize: UI_COLLAPSIBLE_SIZE,
 
