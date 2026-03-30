@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 import {changeApproversSubjectFilter} from '../../../store/actions/acl-filters';
-import {getApproversSubjectFilter} from '../../../store/selectors/acl-filters';
+import {getApproversSubjectFilter} from '../../../store/selectors/acl/acl-filters';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import Filter from '../../../components/Filter/Filter';
 import i18n from './i18n';

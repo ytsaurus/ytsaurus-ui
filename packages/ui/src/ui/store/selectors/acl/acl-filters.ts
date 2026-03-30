@@ -1,6 +1,6 @@
 import {createSelector} from 'reselect';
-import {type RootState} from '../reducers';
-import {ACL_MODES, AclMode} from '../../constants/acl';
+import {type RootState} from '../../../store/reducers';
+import {ACL_MODES, AclMode} from '../../../constants/acl';
 
 export function getExecuteBatchState(state: RootState) {
     return state.executeBatch;
