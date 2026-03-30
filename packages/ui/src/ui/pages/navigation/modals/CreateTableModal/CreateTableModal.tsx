@@ -40,7 +40,7 @@ import {StorageOptions} from '../../../../utils/cypress-attributes';
 
 import {RootState} from '../../../../store/reducers';
 import {
-    getCompressionCodecs,
+    selectCompressionCodecs,
     selectErasureCodecs,
     selectPrimitiveTypes,
 } from '../../../../store/selectors/global/supported-features';
@@ -944,7 +944,7 @@ const mapStateToProps = (state: RootState) => {
         keyColumns,
         columnsOrder,
 
-        compressionCodecs: getCompressionCodecs(state),
+        compressionCodecs: selectCompressionCodecs(state),
         erasureCodecs: selectErasureCodecs(state),
         primitiveTypes,
     };

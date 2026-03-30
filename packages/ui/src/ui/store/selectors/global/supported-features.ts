@@ -48,11 +48,11 @@ export const selectPrimitiveTypesMap = createSelector([selectPrimitiveTypes], (t
     return new Set(types.map(({value}) => value));
 });
 
-export const getCompressionCodecs = createSelector([selectSupportedFeatures], (features) => {
+export const selectCompressionCodecs = createSelector([selectSupportedFeatures], (features) => {
     return prepareItemsSubitems(features.compression_codecs);
 });
 
-export const makeCompressionCodecFinder = createSelector([getCompressionCodecs], ({items}) => {
+export const makeCompressionCodecFinder = createSelector([selectCompressionCodecs], ({items}) => {
     return (codec: string) => {
         if (!codec) {
             return undefined;
