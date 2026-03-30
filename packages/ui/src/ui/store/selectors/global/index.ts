@@ -89,7 +89,7 @@ export const selectAllPoolTreeNames = createSelector(selectPoolTrees, (poolTrees
     return keys_(poolTrees);
 });
 
-export const getAllBundlesNames = createSelector(selectBundles, (bundles) => {
+export const selectAllBundlesNames = createSelector(selectBundles, (bundles) => {
     const bundleNames = map_(bundles, (bundle) => ypath.getValue(bundle, ''));
 
     return sortBy_(bundleNames);
