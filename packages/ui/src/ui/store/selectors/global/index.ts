@@ -26,7 +26,7 @@ export * from './username';
 import {selectCluster} from './cluster';
 import {selectIsAdmin} from './is-developer';
 
-export const getGlobalError = (state: RootState) => state.global.error?.error;
+export const selectGlobalError = (state: RootState) => state.global.error?.error;
 export const getGlobalErrorType = (state: RootState) => state.global.error?.errorType;
 
 export const getRootPagesCluster = (state: RootState) => state?.global.rootPagesCluster;

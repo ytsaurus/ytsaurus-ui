@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux';
 import block from 'bem-cn-lite';
 
 import withBlockedNavigation from '../../hocs/withBlockedNavigation';
-import {getGlobalError, getGlobalErrorType} from '../../store/selectors/global';
+import {selectGlobalError, getGlobalErrorType} from '../../store/selectors/global';
 import {showErrorPopup} from '../../utils/utils';
 import UIFactory from '../../UIFactory';
 import {ClickableText} from '../../components/ClickableText/ClickableText';
@@ -16,7 +16,7 @@ const b = block('yt-preload-error');
 
 function PreloadError() {
     const cluster = useClusterFromLocation();
-    const error = useSelector(getGlobalError) ?? new Error('Unexpected error: error is undefined');
+    const error = useSelector(selectGlobalError) ?? new Error('Unexpected error: error is undefined');
     const errorType = useSelector(getGlobalErrorType) ?? PRELOAD_ERROR.GENERAL;
 
     const {title, message} = getErrorData({
