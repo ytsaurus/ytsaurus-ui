@@ -16,10 +16,10 @@ export const selectCluster = (state: RootState): string => state.global.cluster 
 
 const selectClusterUiConfigRaw = (state: RootState) => state.global.clusterUiConfig;
 
-const getClusterUiDevConfigRaw = (state: RootState) => state.global.clusterUiDevConfig;
+const selectClusterUiDevConfigRaw = (state: RootState) => state.global.clusterUiDevConfig;
 
 export const getClusterUiConfig = createSelector(
-    [selectClusterUiConfigRaw, getClusterUiDevConfigRaw, selectIsDeveloper],
+    [selectClusterUiConfigRaw, selectClusterUiDevConfigRaw, selectIsDeveloper],
     (clusterUiConfig, clusterUiDevConfig, isDeveloper): Partial<ClusterUiConfig> => {
         return isDeveloper ? {...clusterUiConfig, ...clusterUiDevConfig} : clusterUiConfig;
     },
