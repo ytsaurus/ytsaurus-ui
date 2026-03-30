@@ -6,7 +6,7 @@ import {useSelector} from '../../../store/redux-hooks';
 import {setActiveAccount} from '../../../store/actions/accounts/accounts';
 
 import Operations from '../../../pages/operations/Operations/Operations';
-import {getActiveAccount} from '../../../store/selectors/accounts/accounts';
+import {selectActiveAccount} from '../../../store/selectors/accounts/accounts';
 import Links from '../Links/Links';
 import AccountsGeneralTab from '../../../pages/accounts/tabs/general/AccountsGeneralTab';
 import {DASHBOARD_VIEW_CONTEXT} from '../../../constants/index';
@@ -78,7 +78,7 @@ function Dashboard({currentAccount, setActiveAccount}) {
 
 const mapStateToProps = (state) => {
     return {
-        currentAccount: getActiveAccount(state),
+        currentAccount: selectActiveAccount(state),
     };
 };
 

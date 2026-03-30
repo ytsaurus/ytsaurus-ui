@@ -8,7 +8,7 @@ import {loadEditedAccount} from '../../../../../store/actions/accounts/accounts'
 import {createAccountFromInfo} from '../../../../../utils/accounts/editor';
 import {selectCluster, selectCurrentUserName} from '../../../../../store/selectors/global';
 import {selectIsAdmin} from '../../../../../store/selectors/global/is-developer';
-import {getActiveAccount} from '../../../../../store/selectors/accounts/accounts';
+import {selectActiveAccount} from '../../../../../store/selectors/accounts/accounts';
 import {ROOT_ACCOUNT_NAME} from '../../../../../constants/accounts/accounts';
 
 import './AccountCreateDialog.scss';
@@ -143,7 +143,7 @@ const mapStateToProps = (state: RootState) => {
     } = state;
     return {
         currentUserName: selectCurrentUserName(state),
-        activeAccount: getActiveAccount(state),
+        activeAccount: selectActiveAccount(state),
         visible: editor.createModalVisible,
         newAccountInfo: editor.newAccountInfo as FormValues,
         cluster: selectCluster(state),

@@ -11,14 +11,15 @@ import {
 } from '../../store/selectors/settings';
 import {SettingName} from '../../../shared/constants/settings';
 import {reloadSetting, setSetting} from '../../store/actions/settings';
-import {getActiveAccount} from '../../store/selectors/accounts/accounts';
+
+import {selectActiveAccount} from '../../store/selectors/accounts/accounts';
 import {selectTabletsActiveBundle} from '../selectors/tablet_cell_bundles';
 
 const LAST_VISITED_BUFFER_SIZE = 15;
 
 export function accountsTrackVisit(account) {
     return (dispatch, getState) => {
-        const activeAccount = getActiveAccount(getState());
+        const activeAccount = selectActiveAccount(getState());
         if (account === activeAccount) {
             return;
         }

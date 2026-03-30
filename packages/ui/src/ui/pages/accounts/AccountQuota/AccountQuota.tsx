@@ -10,7 +10,7 @@ import {SelectSingle} from '../../../components/Select/Select';
 
 import ypath from '../../../common/thor/ypath';
 
-import {getActiveAccount} from '../../../store/selectors/accounts/accounts';
+import {selectActiveAccount} from '../../../store/selectors/accounts/accounts';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 
 import {
@@ -202,7 +202,7 @@ class AccountQuotaEditor extends React.Component<Props & ReduxProps, State> {
 
 function AccountQuota(props: Props) {
     const dispatch = useDispatch();
-    const activeAccount = useSelector(getActiveAccount);
+    const activeAccount = useSelector(selectActiveAccount);
     const accountsTree = useSelector(getAccountsTree);
 
     const handleSetQuota = React.useCallback(

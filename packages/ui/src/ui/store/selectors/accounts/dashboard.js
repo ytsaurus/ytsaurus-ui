@@ -1,8 +1,8 @@
 import map_ from 'lodash/map';
 import {createSelector} from 'reselect';
 import {
-    getUsableAccounts,
-    prepareAccountsFlattenTree,
+    selectAccountsFlattenTree,
+    selectUsableAccounts,
 } from '../../../store/selectors/accounts/accounts';
 import {selectFavouriteAccounts} from '../../../store/selectors/favourites';
 import {
@@ -12,7 +12,7 @@ import {
 import {filterFlattenTreeByViewContext} from '../../../utils/accounts';
 import {getActiveAccount} from './accounts-ts';
 
-export const selectUsableAccountsSet = createSelector([getUsableAccounts], (items) => {
+export const selectUsableAccountsSet = createSelector([selectUsableAccounts], (items) => {
     return new Set(items);
 });
 
@@ -26,7 +26,7 @@ export const selectFavouriteAccountsSet = createSelector([selectFavouriteAccount
 
 export const selectFilteredAccountsOfDashboard = createSelector(
     [
-        prepareAccountsFlattenTree,
+        selectAccountsFlattenTree,
         selectUsableAccountsSet,
         getAccountsVisibilityModeOfDashboard,
         selectFavouriteAccountsSet,
@@ -36,7 +36,7 @@ export const selectFilteredAccountsOfDashboard = createSelector(
 
 export const selectFilteredAccounts = createSelector(
     [
-        prepareAccountsFlattenTree,
+        selectAccountsFlattenTree,
         selectUsableAccountsSet,
         getAccountsVisibilityMode,
         selectFavouriteAccountsSet,

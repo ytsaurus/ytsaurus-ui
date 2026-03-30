@@ -16,7 +16,7 @@ import {
 } from '../../../store/selectors/accounts/accounts-ts';
 import {setActiveAccount} from '../../../store/actions/accounts/accounts';
 import {accountsToggleFavourite} from '../../../store/actions/favourites';
-import {getActiveAccountBreadcrumbs} from '../../../store/selectors/accounts/accounts';
+import {selectActiveAccountBreadcrumbs} from '../../../store/selectors/accounts/accounts';
 
 import AccountCreate from '../tabs/general/Editor/AccountCreate';
 import {useHistory} from 'react-router';
@@ -86,7 +86,7 @@ const ROOT_PLACEHOLDER = '<Root>';
 
 function AccountsBreadcrumbs() {
     // @ts-ignore
-    const bcItems = useSelector(getActiveAccountBreadcrumbs).slice(1);
+    const bcItems = useSelector(selectActiveAccountBreadcrumbs).slice(1);
     const dispatch = useDispatch();
     const cluster = useSelector(selectCluster);
     const history = useHistory();

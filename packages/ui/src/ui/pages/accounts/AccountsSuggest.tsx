@@ -10,7 +10,7 @@ import {type YTError} from '../../../@types/types';
 import {YTErrorBlock} from '../../components/Error/Error';
 
 import {ROOT_ACCOUNT_NAME} from '../../constants/accounts/accounts';
-import {getEditableAccountParentSuggests} from '../../store/selectors/accounts/accounts';
+import {selectEditableAccountParentSuggests} from '../../store/selectors/accounts/accounts';
 import {getAccountNames} from '../../store/selectors/accounts/accounts-ts';
 
 import './AccountsSuggest.scss';
@@ -101,7 +101,7 @@ export default AccountSuggestConnected;
 
 const mapStateToPropsForParents = (state: RootState) => {
     return {
-        items: getEditableAccountParentSuggests(state),
+        items: selectEditableAccountParentSuggests(state),
     };
 };
 
