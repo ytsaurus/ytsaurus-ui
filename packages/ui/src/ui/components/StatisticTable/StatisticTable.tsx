@@ -7,7 +7,7 @@ import format from '../../common/hammer/format';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import ElementsTableRow from '../ElementsTable/ElementsTable';
 import {ExpandButton} from '../ExpandButton';
-import {getFontFamilies} from '../../store/selectors/global/fonts';
+import {selectFontFamilies} from '../../store/selectors/global/fonts';
 import {Tooltip} from '../../components/Tooltip/Tooltip';
 import MetaTable from '../../components/MetaTable/MetaTable';
 import {Secondary} from '../../components/Text/Text';
@@ -266,7 +266,7 @@ export function StatisticTable({
     visibleColumns: Array<'avg' | 'min' | 'max' | 'sum' | 'count' | 'last'>;
     getStatisticInfo?: (name: string) => StatisticInfo | undefined;
 }) {
-    const fontFamilies = useSelector(getFontFamilies);
+    const fontFamilies = useSelector(selectFontFamilies);
     const {items, minWidth, treeState, setTreeState, onFilterChange} = useJobStatisticTable({
         statistic,
         fontFamilies,
