@@ -74,7 +74,7 @@ export const selectClusterUiConfigBundleAccountingHelpLink = (state: RootState) 
     return selectClusterUiConfig(state).per_bundle_accounting_help_link;
 };
 
-export const getHttpProxyVersion = createSelector(
+export const selectHttpProxyVersion = createSelector(
     [selectCluster, (state: RootState) => state.global.version],
     (cluster, version) => {
         return cluster ? version : '';

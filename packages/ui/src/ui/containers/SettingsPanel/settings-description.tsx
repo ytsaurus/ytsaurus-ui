@@ -42,7 +42,7 @@ import {
     getCurrentUserName,
     getGlobalMasterVersion,
     getGlobalSchedulerVersion,
-    getHttpProxyVersion,
+    selectHttpProxyVersion,
 } from '../../store/selectors/global';
 import {selectIsDeveloperOrWatchmen} from '../../store/selectors/global/is-developer';
 import {
@@ -89,7 +89,7 @@ function wrapEscapeText(text: string) {
 function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
     const clusterNS = useSelector(getCurrentClusterNS);
 
-    const httpProxyVersion = useSelector(getHttpProxyVersion);
+    const httpProxyVersion = useSelector(selectHttpProxyVersion);
     const schedulerVersion = useSelector(getGlobalSchedulerVersion);
     const masterVersion = useSelector(getGlobalMasterVersion);
     const vcsConfig = useSelector(selectVcsConfig);
