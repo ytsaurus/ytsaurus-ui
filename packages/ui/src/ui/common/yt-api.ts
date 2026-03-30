@@ -57,7 +57,7 @@ function onError(error: any) {
             name: 'xsrf-expired',
             theme: 'info',
             autoHiding: false,
-            title: 'CSRF-toke expired',
+            title: 'CSRF-token expired',
             content,
         });
     }
