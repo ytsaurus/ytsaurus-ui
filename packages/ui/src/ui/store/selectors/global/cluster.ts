@@ -48,7 +48,7 @@ export function getClusterProxy(clusterConfig: ClusterConfig): string {
     return clusterConfig.proxy;
 }
 
-export const getClusterSupportedEngines = createSelector(
+export const selectClusterSupportedEngines = createSelector(
     [selectSpytEnginesInfo, selectClusterUiConfig, selectCluster],
     (spytEngine, {chyt_controller_base_url}, cluster): Record<QueryEngine, boolean> => {
         const clusters = spytEngine?.clusters;
