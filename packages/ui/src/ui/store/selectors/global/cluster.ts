@@ -66,7 +66,7 @@ export const selectClusterUiConfigEnablePerAccountTabletAccounting = (state: Roo
     return selectClusterUiConfig(state).enable_per_account_tablet_accounting ?? false;
 };
 
-export const getClusterUiConfigEnablePerBundleTabletAccounting = (state: RootState) => {
+export const selectClusterUiConfigEnablePerBundleTabletAccounting = (state: RootState) => {
     return selectClusterUiConfig(state).enable_per_bundle_tablet_accounting ?? true;
 };
 

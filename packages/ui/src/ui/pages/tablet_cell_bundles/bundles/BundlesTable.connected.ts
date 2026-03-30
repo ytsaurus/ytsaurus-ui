@@ -12,7 +12,7 @@ import type {RootState} from '../../../store/reducers';
 import type {BundlesTableMode} from '../../../store/reducers/tablet_cell_bundles';
 import {
     selectCluster,
-    getClusterUiConfigEnablePerBundleTabletAccounting,
+    selectClusterUiConfigEnablePerBundleTabletAccounting,
 } from '../../../store/selectors/global';
 import {
     getTabletBundlesTableMode,
@@ -76,7 +76,7 @@ const mapStateToProps = (state: RootState) => {
         total: getTabletsBundlesTotal(state),
         sortState: getTabletsBundlesSortState(state),
         cluster: selectCluster(state),
-        allowPerBundleAccounting: getClusterUiConfigEnablePerBundleTabletAccounting(state),
+        allowPerBundleAccounting: selectClusterUiConfigEnablePerBundleTabletAccounting(state),
         pathPrefix: '//sys/tablet_cell_bundles/',
         columns: calcColumns(state),
         activeBundleLink: tabletActiveBundleLink,

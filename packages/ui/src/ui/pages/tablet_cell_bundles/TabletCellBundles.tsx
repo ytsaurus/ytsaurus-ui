@@ -35,7 +35,7 @@ import {showTabletCellBundleEditor} from '../../store/actions/tablet_cell_bundle
 import Button from '../../components/Button/Button';
 import {
     selectCluster,
-    getClusterUiConfigEnablePerBundleTabletAccounting,
+    selectClusterUiConfigEnablePerBundleTabletAccounting,
 } from '../../store/selectors/global';
 import ChartLink from '../../components/ChartLink/ChartLink';
 import {Page} from '../../constants/index';
@@ -218,7 +218,7 @@ function ActiveBundleDetails({
     cluster: string;
 }) {
     const dispatch = useDispatch();
-    const allowAccounting = useSelector(getClusterUiConfigEnablePerBundleTabletAccounting);
+    const allowAccounting = useSelector(selectClusterUiConfigEnablePerBundleTabletAccounting);
 
     const showEditor = React.useCallback(() => {
         if (activeBundle) {
