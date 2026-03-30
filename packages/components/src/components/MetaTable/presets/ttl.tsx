@@ -4,16 +4,16 @@ import cn from 'bem-cn-lite';
 
 import {Label, LabelProps} from '@gravity-ui/uikit';
 
-import ypath from '../../../common/thor/ypath';
+import ypath from '../../../../../ui/src/ui/common/thor/ypath';
 
-import {formatTimeDuration} from '../../../components/TimeDuration/TimeDuration';
-import Link from '../../../components/Link/Link';
-import Icon from '../../../components/Icon/Icon';
-import UIFactory from '../../../UIFactory';
+import {formatTimeDuration} from '../../../../../ui/src/ui/components/TimeDuration/TimeDuration';
+import Link from '../../../../../ui/src/ui/components/Link/Link';
+import Icon from '../../../../../ui/src/ui/components/Icon/Icon';
+import UIFactory from '../../../../../ui/src/ui/UIFactory';
 
-import {MetaTableItem} from '../MetaTable';
-import {Template} from '../templates/Template';
-import {makeNavigationLink} from '../../../utils/app-url';
+import {MetaTableItem} from '../../../../../ui/src/ui/components/MetaTable/MetaTable';
+import {Template} from '../../../../../ui/src/ui/components/MetaTable/templates/Template';
+import {makeNavigationLink} from '../../../../../ui/src/ui/utils/app-url';
 
 const block = cn('meta-table-ttl');
 
