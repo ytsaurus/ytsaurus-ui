@@ -11,7 +11,10 @@ import {SelectProps} from '@gravity-ui/uikit';
 
 import {EditableList, EditableListItemType} from '../../../components/Dialog';
 
-import {selectAllGroupNamesSorted, selectAllIdmGroupNamesSorted} from '../../../store/selectors/global';
+import {
+    selectAllGroupNamesSorted,
+    selectAllIdmGroupNamesSorted,
+} from '../../../store/selectors/global';
 import {RootState} from '../../../store/reducers';
 import Select from '../../../components/Select/Select';
 

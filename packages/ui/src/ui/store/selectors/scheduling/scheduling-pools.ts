@@ -51,7 +51,13 @@ const getOperationsFiltered = createSelector(
 );
 
 const getPoolsPrepared = createSelector(
-    [getPoolsRaw, getOperationsFiltered, getExpandedPoolCypressData, getTreeResources, selectCluster],
+    [
+        getPoolsRaw,
+        getOperationsFiltered,
+        getExpandedPoolCypressData,
+        getTreeResources,
+        selectCluster,
+    ],
     (rawPools, rawOperations, attributes, treeResources, cluster) => {
         if (isEmpty_(rawPools)) {
             return [];

@@ -1,10 +1,10 @@
 import {createSelector} from 'reselect';
 import {
+    getClusterConfigByName,
     selectAllPoolNames,
     selectAllPoolTreeNames,
     selectAllUserNames,
     selectCluster,
-    getClusterConfigByName,
     selectCurrentUserName,
 } from '../../../store/selectors/global';
 
@@ -167,7 +167,12 @@ export function getOperationsListTimeRange(state: RootState) {
 }
 
 export const getOperationsListFiltersParameters_FOR_YTFRONT_2838 = createSelector(
-    [getOperationsListFilterParameters, selectCurrentUserName, getOperationsListTimeRange, selectCluster],
+    [
+        getOperationsListFilterParameters,
+        selectCurrentUserName,
+        getOperationsListTimeRange,
+        selectCluster,
+    ],
     (filters, login, {from_time, to_time}, cluster) => {
         const clusterConfig = getClusterConfigByName(cluster);
 

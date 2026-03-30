@@ -9,8 +9,8 @@ import {useDispatch, useSelector} from '../../store/redux-hooks';
 
 import {PagesSettingsEditor, usePagesMenuItems} from './PagesSettingsEditor';
 import {
-    selectAuthWay,
     getClusterConfigByName,
+    selectAuthWay,
     selectCurrentUserName,
     selectRootPagesCluster,
 } from '../../store/selectors/global';
