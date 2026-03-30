@@ -13,7 +13,7 @@ import {isCryptoSubtleAvailable, sha256} from '../../../utils/sha256';
 import {CryptoSubtleAlert} from '../../../containers/ManageTokens/ManageTokensPasswordModal/CryptoSubtleAlert';
 import {
     selectGlobalGroupAttributesMap,
-    getUserManagementEnabled,
+    selectIsUserManagementEnabled,
 } from '../../../store/selectors/global';
 import {getUsersPageEditableUser} from '../../../store/selectors/users';
 import {flags} from '../../../utils';
@@ -463,7 +463,7 @@ const mapStateToProps = (state: RootState) => {
         username,
         ...data,
         groupAttributesMap: selectGlobalGroupAttributesMap(state),
-        isUserManagementEnabled: getUserManagementEnabled(state),
+        isUserManagementEnabled: selectIsUserManagementEnabled(state),
     };
 };
 
