@@ -85,7 +85,7 @@ export const selectAllPoolNames = createSelector(selectPoolTrees, (poolTrees) =>
     return orderBy_(uniq_(flatten_(map_(values_(poolTrees), getAllKeys))));
 });
 
-export const getAllPoolTreeNames = createSelector(selectPoolTrees, (poolTrees) => {
+export const selectAllPoolTreeNames = createSelector(selectPoolTrees, (poolTrees) => {
     return keys_(poolTrees);
 });
 
