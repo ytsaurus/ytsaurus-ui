@@ -42,7 +42,7 @@ export function isAllowYtTwmApi() {
 }
 
 export const selectPoolTrees = (state: RootState) => state?.global?.poolTrees;
-export const getAllAccounts = (state: RootState) => state.global.accounts;
+export const selectAllAccounts = (state: RootState) => state.global.accounts;
 export const getBundles = (state: RootState) => state?.global.bundles;
 export const getGlobalUsers = (state: RootState) => state.global.users;
 export const getGlobalGroups = (state: RootState) => state.global.groups;
