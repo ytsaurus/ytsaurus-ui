@@ -4,15 +4,15 @@ import {useSelector} from '../../../../store/redux-hooks';
 import AccountsNoContent from '../../../../pages/accounts/AccountsNoContent';
 import {selectCluster, selectTheme} from '../../../../store/selectors/global';
 import {
-    getActiveAccount,
-    getActiveAccountSubtreeNames,
+    selectActiveAccount,
+    selectActiveAccountSubtreeNames,
 } from '../../../../store/selectors/accounts/accounts';
 import UIFactory from '../../../../UIFactory';
 
 function AccountStatisticTab() {
     const cluster = useSelector(selectCluster);
-    const account = useSelector(getActiveAccount);
-    const accountSubtreeAllNames = useSelector(getActiveAccountSubtreeNames);
+    const account = useSelector(selectActiveAccount);
+    const accountSubtreeAllNames = useSelector(selectActiveAccountSubtreeNames);
     const theme = useSelector(selectTheme);
 
     if (!account) {

@@ -62,8 +62,8 @@ import {
     showEditorModal,
 } from '../../../../store/actions/accounts/accounts';
 import {
-    getAccountsAbcServiceIdSlugFilter,
-    getActiveAccountAggregationRow,
+    selectAccountsAbcServiceIdSlugFilter,
+    selectActiveAccountAggregationRow,
 } from '../../../../store/selectors/accounts/accounts';
 import {isNull} from '../../../../utils';
 import {DASHBOARD_VIEW_CONTEXT} from '../../../../constants/index';
@@ -818,12 +818,12 @@ const makeMapStateToProps = () => {
 
             cluster: selectCluster(state),
 
-            activeAccountAggregation: getActiveAccountAggregationRow(state),
+            activeAccountAggregation: selectActiveAccountAggregationRow(state),
             favouriteAccountsSet,
             dashboardVisibilityMode: isDashboard
                 ? getAccountsVisibilityModeOfDashboard(state)
                 : getAccountsVisibilityMode(state),
-            abcServiceFilter: getAccountsAbcServiceIdSlugFilter(state),
+            abcServiceFilter: selectAccountsAbcServiceIdSlugFilter(state),
             columnFields: getAccountsColumnFields(state),
 
             enable_per_account_tablet_accounting:

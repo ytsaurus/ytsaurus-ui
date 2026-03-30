@@ -13,7 +13,7 @@ import {
     selectChaosBundlesNS,
 } from '../../store/selectors/settings';
 import {SettingName} from '../../../shared/constants/settings';
-import {getActiveAccount} from '../../store/selectors/accounts/accounts';
+import {selectActiveAccount} from '../../store/selectors/accounts/accounts';
 import {getPath} from '../../store/selectors/navigation';
 import {getPool, getTree} from '../../store/selectors/scheduling/scheduling';
 import {selectTabletsActiveBundle} from './tablet_cell_bundles';
@@ -35,7 +35,7 @@ export const selectLastVisitedAccounts = createSelector(
 export const selectPopularAccounts = createSelector([selectLastVisitedAccounts], preparePopulars);
 
 export const selectIsActiveAccountInFavourites = createSelector(
-    [getActiveAccount, selectFavouriteAccounts],
+    [selectActiveAccount, selectFavouriteAccounts],
     prepareIsInFavourites,
 );
 
