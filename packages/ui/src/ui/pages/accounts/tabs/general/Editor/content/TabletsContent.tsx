@@ -7,7 +7,7 @@ import {RootState} from '../../../../../../store/reducers';
 import {
     selectCluster,
     getClusterUiConfigBundleAccountingHelpLink,
-    getClusterUiConfigEnablePerAccountTabletAccounting,
+    selectClusterUiConfigEnablePerAccountTabletAccounting,
     getClusterUiConfigEnablePerBundleTabletAccounting,
 } from '../../../../../../store/selectors/global';
 import {ConnectedProps, connect} from 'react-redux';
@@ -66,7 +66,7 @@ class TabletsContent extends Component<Props & ConnectedProps<typeof connector>>
 
 const mapStateToProps = (state: RootState) => {
     return {
-        allowTabletAccounting: getClusterUiConfigEnablePerAccountTabletAccounting(state),
+        allowTabletAccounting: selectClusterUiConfigEnablePerAccountTabletAccounting(state),
     };
 };
 

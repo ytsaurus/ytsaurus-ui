@@ -62,7 +62,7 @@ export const selectClusterSupportedEngines = createSelector(
     },
 );
 
-export const getClusterUiConfigEnablePerAccountTabletAccounting = (state: RootState) => {
+export const selectClusterUiConfigEnablePerAccountTabletAccounting = (state: RootState) => {
     return selectClusterUiConfig(state).enable_per_account_tablet_accounting ?? false;
 };
 
