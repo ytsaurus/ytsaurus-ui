@@ -48,7 +48,7 @@ export const selectGlobalUsers = (state: RootState) => state.global.users;
 export const selectGlobalGroups = (state: RootState) => state.global.groups;
 export const selectAuthWay = (state: RootState) => state?.global?.authWay;
 
-export const getAllUserNames = createSelector([selectGlobalUsers], (usersData) => {
+export const selectAllUserNames = createSelector([selectGlobalUsers], (usersData) => {
     return map_(usersData, ({$value}) => $value as string);
 });
 
@@ -96,7 +96,7 @@ export const getAllBundlesNames = createSelector(selectBundles, (bundles) => {
 });
 
 export const getAllUserNamesSorted = createSelector(
-    [getAllUserNames],
+    [selectAllUserNames],
     sortBy_ as (items: Array<unknown>) => Array<string>,
 );
 

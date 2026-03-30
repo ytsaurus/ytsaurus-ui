@@ -6,7 +6,7 @@ import {StickyContainer} from '../../../../components/StickyContainer/StickyCont
 
 import map_ from 'lodash/map';
 
-import {getAllUserNames} from '../../../../store/selectors/global';
+import {selectAllUserNames} from '../../../../store/selectors/global';
 import OperationsTextFilter from './OperationsTextFilter';
 import OperationsArchiveFilter from './OperationsArchiveFilter';
 import OperationsSelectFilter from './OperationsSelectFilter';
@@ -258,7 +258,7 @@ class OperationsListToolbar extends React.PureComponent {
 }
 
 function OperationsListToolbarHooked({children}) {
-    const subjects = useSelector(getAllUserNames);
+    const subjects = useSelector(selectAllUserNames);
     const {failedJobs} = useSelector((state) => state.operations.list.filters) || {};
     const fixedStartedByFilter = useSelector(
         getOperationsListFixedStartedByFilter_FOR_YTFRONT_2838,
