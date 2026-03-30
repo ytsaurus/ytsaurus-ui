@@ -11,7 +11,7 @@ import {SelectProps} from '@gravity-ui/uikit';
 
 import {EditableList, EditableListItemType} from '../../../components/Dialog';
 
-import {getAllGroupNamesSorted, getAllIdmGroupNamesSorted} from '../../../store/selectors/global';
+import {selectAllGroupNamesSorted, getAllIdmGroupNamesSorted} from '../../../store/selectors/global';
 import {RootState} from '../../../store/reducers';
 import Select from '../../../components/Select/Select';
 
@@ -95,7 +95,7 @@ const mapStateToProps = (state: RootState, ownProps: Props) => {
     const {idmOnly} = ownProps;
     const items: Array<string> = idmOnly
         ? (getAllIdmGroupNamesSorted(state) as Array<string>)
-        : getAllGroupNamesSorted(state);
+        : selectAllGroupNamesSorted(state);
     return {items};
 };
 

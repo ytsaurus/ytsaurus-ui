@@ -100,13 +100,13 @@ export const selectAllUserNamesSorted = createSelector(
     sortBy_ as (items: Array<unknown>) => Array<string>,
 );
 
-export const getAllGroupNamesSorted = createSelector(
+export const selectAllGroupNamesSorted = createSelector(
     [selectAllGroupNames],
     sortBy_ as (items: Array<unknown>) => Array<string>,
 );
 
 export const getAllIdmGroupNamesSorted = createSelector(
-    [getAllGroupNamesSorted, selectGlobalGroupAttributesMap],
+    [selectAllGroupNamesSorted, selectGlobalGroupAttributesMap],
     (names, attrs) => {
         return filter_(names, (name) =>
             flags.get(attrs[name]['upravlyator_managed'] as FIX_MY_TYPE),
