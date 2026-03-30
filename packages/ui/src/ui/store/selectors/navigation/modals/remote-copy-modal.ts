@@ -2,7 +2,7 @@ import ypath from '../../../../common/thor/ypath';
 
 import {RootState} from '../../../../store/reducers';
 import {createSelector} from 'reselect';
-import {makeCompressionCodecFinder} from '../../../../store/selectors/global/supported-features';
+import {selectCompressionCodecFinder} from '../../../../store/selectors/global/supported-features';
 
 export const getRemoteCopyModalVisible = (state: RootState) =>
     state.navigation.modals.remoteCopyModal.showModal;
@@ -12,7 +12,7 @@ export const getRemoteCopyAttributesMap = (state: RootState) =>
     state.navigation.modals.remoteCopyModal.attributesMap;
 
 export const getRemoteCopyCodecs = createSelector(
-    [getRemoteCopyModalPaths, getRemoteCopyAttributesMap, makeCompressionCodecFinder],
+    [getRemoteCopyModalPaths, getRemoteCopyAttributesMap, selectCompressionCodecFinder],
     (paths, attributesMap, findCompressionCodec) => {
         for (const path of paths) {
             const map = attributesMap[path];

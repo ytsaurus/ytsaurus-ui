@@ -52,7 +52,7 @@ export const selectCompressionCodecs = createSelector([selectSupportedFeatures],
     return prepareItemsSubitems(features.compression_codecs);
 });
 
-export const makeCompressionCodecFinder = createSelector([selectCompressionCodecs], ({items}) => {
+export const selectCompressionCodecFinder = createSelector([selectCompressionCodecs], ({items}) => {
     return (codec: string) => {
         if (!codec) {
             return undefined;
