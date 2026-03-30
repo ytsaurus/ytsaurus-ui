@@ -1,6 +1,6 @@
 import React, {FC, useCallback, useMemo} from 'react';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
-import {selectAllUserNames, getCurrentUserName} from '../../../../../store/selectors/global';
+import {selectAllUserNames, selectCurrentUserName} from '../../../../../store/selectors/global';
 import {useAllUserNamesFiltered} from '../../../../../hooks/global';
 import {Select, SelectOption} from '@gravity-ui/uikit';
 import {getQueriesFilters} from '../../../../../store/selectors/query-tracker/queriesList';
@@ -13,7 +13,7 @@ export const QueryUserFilter: FC = () => {
     useAllUserNamesFiltered();
     const dispatch = useDispatch();
     const userNames = useSelector(selectAllUserNames);
-    const login = useSelector(getCurrentUserName);
+    const login = useSelector(selectCurrentUserName);
     const {user} = useSelector(getQueriesFilters);
 
     const values = useMemo<SelectOption[]>(() => {

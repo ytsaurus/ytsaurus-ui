@@ -1,6 +1,6 @@
 import {createSelector} from 'reselect';
 import {RootState} from '../../reducers';
-import {getCurrentUserName} from '../global';
+import {selectCurrentUserName} from '../global';
 import {QueriesListParams, QueryItem} from '../../../types/query-tracker/api';
 import {isQueryProgress} from '../../../pages/query-tracker/utils/query';
 import {
@@ -128,7 +128,7 @@ export function getQueriesListFilterParams(state: RootState): QueriesListParams 
 
     let user = filter.user;
     if (filter.user === 'my') {
-        user = getCurrentUserName(state);
+        user = selectCurrentUserName(state);
     }
     if (filter.user === 'all') {
         user = undefined;

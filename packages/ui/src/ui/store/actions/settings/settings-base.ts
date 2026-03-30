@@ -6,7 +6,7 @@ import type {DescribedSettings, SettingKey} from '../../../../shared/constants/s
 
 import {SET_SETTING_VALUE} from '../../../constants/index';
 import {showToasterError} from '../../../utils/utils';
-import {getCurrentUserName, selectSettingsCluster} from '../../selectors/global';
+import {selectCurrentUserName, selectSettingsCluster} from '../../selectors/global';
 import {getSettingsData} from '../../../store/selectors/settings/settings-base';
 
 export type SettingsThunkAction<T = Promise<void>> = ThunkAction<
@@ -32,7 +32,7 @@ export function setSettingByKey<K extends SettingKey, T extends DescribedSetting
             settings: {provider},
         } = state;
         const data = getSettingsData(state);
-        const login = getCurrentUserName(state);
+        const login = selectCurrentUserName(state);
         const cluster = selectSettingsCluster(getState());
 
         const previousValue = data[path];

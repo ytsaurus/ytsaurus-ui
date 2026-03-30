@@ -39,7 +39,7 @@ import SettingsMenuItem from '../../containers/SettingsMenu/SettingsMenuItem';
 import SettingsMenuRadio from '../../containers/SettingsMenu/SettingsMenuRadio';
 import SettingsMenuInput from '../SettingsMenu/SettingsMenuInput';
 import {
-    getCurrentUserName,
+    selectCurrentUserName,
     selectGlobalMasterVersion,
     selectGlobalSchedulerVersion,
     selectHttpProxyVersion,
@@ -675,7 +675,7 @@ export function makeItem(
 export function useSettingsDescription(): Array<SettingsPage> {
     const isAdmin = useSelector(selectIsDeveloperOrWatchmen);
     const cluster = useClusterFromLocation();
-    const login = useSelector(getCurrentUserName);
+    const login = useSelector(selectCurrentUserName);
 
     const settings = useSettings(cluster, isAdmin);
     const externalSettings = UIFactory.getExternalSettings({cluster, isAdmin, login});

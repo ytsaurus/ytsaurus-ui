@@ -11,7 +11,7 @@ import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
 import {loadSchedulersAndAgents} from './index';
 import {changeMaintenance} from './masters';
-import {getCurrentUserName} from '../../selectors/global';
+import {selectCurrentUserName} from '../../selectors/global';
 
 export function getSchedulers() {
     return ytApiV3Id
@@ -130,7 +130,7 @@ export function getAgents() {
 export const changeSchedulerMaintenance =
     ({path, maintenance, message}) =>
     async (dispatch, getSate) => {
-        const login = getCurrentUserName(getSate());
+        const login = selectCurrentUserName(getSate());
         const result = await changeMaintenance({
             path,
             login,
