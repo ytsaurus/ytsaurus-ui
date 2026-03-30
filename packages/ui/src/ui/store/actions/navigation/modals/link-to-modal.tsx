@@ -7,7 +7,7 @@ import {
 import {RootState} from '../../../../store/reducers';
 import {LINK_TO_MODAL_PARTIAL} from '../../../../constants/navigation/modals';
 import {ytApiV3} from '../../../../rum/rum-wrap-api';
-import {getCluster} from '../../../../store/selectors/global';
+import {selectCluster} from '../../../../store/selectors/global';
 import Link from '../../../../components/Link/Link';
 import {toaster} from '../../../../utils/toaster';
 
@@ -37,7 +37,7 @@ export function hideLinkToModal(): LinkToModalThunkAction {
 export function createLink(params: Pick<LinkToState, 'path' | 'target'>): LinkToModalThunkAction {
     return (dispatch, getState) => {
         const {target, path} = params;
-        const cluster = getCluster(getState());
+        const cluster = selectCluster(getState());
 
         return ytApiV3
             .create({

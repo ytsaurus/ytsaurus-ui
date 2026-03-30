@@ -11,7 +11,7 @@ import {useSelector} from '../../../store/redux-hooks';
 import {YTErrorBlock} from '../../../components/Block/Block';
 import {getPath} from '../../../store/selectors/navigation';
 import {genAccountsAclLink} from '../../../utils/accounts/accounts';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import Link from '../../../components/Link/Link';
 
 import './NavigationPermissionsNotice.scss';
@@ -23,7 +23,7 @@ export function NavigationPermissionsNotice() {
     const isAccountUsable = useSelector(getNavigationIsAccountUsable);
     const checkPermissionsError = useSelector(getNavigationCheckPermissionsError);
     const account = useSelector(getNavigationPathAccount);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     if (checkPermissionsError) {
         return <YTErrorBlock error={checkPermissionsError} message={'Check permissions error'} />;

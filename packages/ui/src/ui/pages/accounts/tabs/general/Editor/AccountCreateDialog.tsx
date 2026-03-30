@@ -6,7 +6,7 @@ import {DialogField, FormApi, YTDFDialog} from '../../../../../components/Dialog
 import {closeCreateModal} from '../../../../../store/actions/accounts/editor';
 import {loadEditedAccount} from '../../../../../store/actions/accounts/accounts';
 import {createAccountFromInfo} from '../../../../../utils/accounts/editor';
-import {getCluster, getCurrentUserName} from '../../../../../store/selectors/global';
+import {selectCluster, getCurrentUserName} from '../../../../../store/selectors/global';
 import {selectIsAdmin} from '../../../../../store/selectors/global/is-developer';
 import {getActiveAccount} from '../../../../../store/selectors/accounts/accounts';
 import {ROOT_ACCOUNT_NAME} from '../../../../../constants/accounts/accounts';
@@ -146,7 +146,7 @@ const mapStateToProps = (state: RootState) => {
         activeAccount: getActiveAccount(state),
         visible: editor.createModalVisible,
         newAccountInfo: editor.newAccountInfo as FormValues,
-        cluster: getCluster(state),
+        cluster: selectCluster(state),
         isAdmin: selectIsAdmin(state),
     };
 };

@@ -9,7 +9,7 @@ import {concatByAnd} from '../../../../../common/hammer/predicate';
 import {COMPONENTS_NODES_TABLE_ID} from '../../../../../constants/components/nodes/nodes';
 import {RootState} from '../../../../../store/reducers';
 import {AttributesByProperty} from '../../../../../store/reducers/components/nodes/nodes/node';
-import {getCluster} from '../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../store/selectors/global';
 import {getSelectedColumns} from '../../../../../store/selectors/settings';
 import {getMediumListNoCache} from '../../../../../store/selectors/thor';
 import type {ValueOf} from '../../../../../types';
@@ -70,7 +70,7 @@ const getFilteredNodes = createSelector(
 );
 
 export const getVisibleNodes = createSelector(
-    [getFilteredNodes, getSortState, getMediumListNoCache, getCluster],
+    [getFilteredNodes, getSortState, getMediumListNoCache, selectCluster],
     (nodes, sortState, mediumList, cluster) => {
         return hammer.utils.sort(
             nodes.map((n) => ({...n, cluster})),

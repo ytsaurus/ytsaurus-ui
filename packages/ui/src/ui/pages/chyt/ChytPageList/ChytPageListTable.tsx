@@ -20,7 +20,7 @@ import Label from '../../../components/Label/Label';
 import {Tooltip} from '../../../components/Tooltip/Tooltip';
 
 import {chytToggleSortState} from '../../../store/actions/chyt/list-fitlers';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {
     getChytListTableItems,
     getChytListTableSortStateByName,
@@ -307,7 +307,7 @@ function DateTimeCell({value}: {value?: string}) {
 
 function ChytPageListTable() {
     const items = useSelector(getChytListTableItems);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     const {openWidget, widgetContent} = useQueryWidgetSidePanel();
     const onSqlClick = useCliqueOnSqlAction(openWidget);

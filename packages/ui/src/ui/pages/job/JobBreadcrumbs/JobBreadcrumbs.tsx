@@ -9,7 +9,7 @@ import {TextInput} from '@gravity-ui/uikit';
 import Button from '../../../components/Button/Button';
 import Icon from '../../../components/Icon/Icon';
 
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {KeyCode, Page} from '../../../constants/index';
 import {RouteInfo} from '../../../pages/job/Job';
 
@@ -24,7 +24,7 @@ interface JobBreadcrumbsProps {
 
 export default function JobBreadcrumbs({id, className}: JobBreadcrumbsProps) {
     const match = useRouteMatch<RouteInfo>();
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const history = useHistory();
 
     const [editMode, changeEditMode] = useState(false);

@@ -2,7 +2,7 @@ import React from 'react';
 import {useSelector} from '../../../../../store/redux-hooks';
 
 import {getOperation} from '../../../../../store/selectors/operations/operation';
-import {getCluster} from '../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../store/selectors/global';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
 import {OperationMonitoringTabProps} from '../../../../../UIFactory';
 
@@ -11,7 +11,7 @@ function OperationDetailsMonitor(props: {
 }) {
     const {component: OperationMonitor} = props;
     const operation = useSelector(getOperation);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     return (
         <ErrorBoundary>

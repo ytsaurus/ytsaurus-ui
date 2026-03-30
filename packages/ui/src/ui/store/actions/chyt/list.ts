@@ -4,7 +4,7 @@ import type {RootState} from '../../reducers';
 import type {ChytListAction} from '../../reducers/chyt/list';
 import {CHYT_LIST} from '../../../constants/chyt-page';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {selectIsAdmin} from '../../../store/selectors/global/is-developer';
 import {getChytListVisibleColumns} from '../../../store/selectors/chyt';
 
@@ -18,7 +18,7 @@ const cancelHelper = new CancelHelper();
 export function chytLoadList(): ChytListThunkAction<void> {
     return (dispatch, getState) => {
         const state = getState();
-        const cluster = getCluster(state);
+        const cluster = selectCluster(state);
         const isAdmin = selectIsAdmin(state);
         const columns = getChytListVisibleColumns(state);
 
@@ -70,7 +70,7 @@ export function chytListAction<
 ): ChytListThunkAction<ApiItem['response']> {
     return (dispatch, getState) => {
         const state = getState();
-        const cluster = getCluster(state);
+        const cluster = selectCluster(state);
         const isAdmin = selectIsAdmin(state);
 
         return chytApiAction(action, cluster, params, {isAdmin}).then((d) => {
@@ -90,7 +90,7 @@ export function chytCliqueCreate(params: {
 }): ChytListThunkAction<void> {
     return (dispatch, getState) => {
         const state = getState();
-        const cluster = getCluster(state);
+        const cluster = selectCluster(state);
         const isAdmin = selectIsAdmin(state);
 
         const {alias, runAfterCreation, pool, instance_count} = params;

@@ -2,7 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import {ACCOUNTS_DATA_FIELDS_ACTION} from '../../../../../constants/accounts';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
-import {getCluster} from '../../../../../store/selectors/global/cluster';
+import {selectCluster} from '../../../../../store/selectors/global/cluster';
 import {selectIsAdmin} from '../../../../../store/selectors/global/is-developer';
 import {updateUiConfigModeCookie} from '../../../../../utils/cookies/ui-config-mode';
 import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
@@ -11,7 +11,7 @@ import i18n from './i18n';
 export function UpdateAccountsUsageAvailability() {
     const dispatch = useDispatch();
     const isAdmin = useSelector(selectIsAdmin);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     React.useEffect(() => {
         updateUiConfigModeCookie(isAdmin);

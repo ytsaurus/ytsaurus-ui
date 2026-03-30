@@ -4,11 +4,11 @@ import ypath from '../../../../common/thor/ypath';
 
 import {getAttributes, getPath} from '../../../../store/selectors/navigation';
 import {useAnnotationQuery} from '../../../../store/api/navigation/tabs/description';
-import {getCluster} from '../../../../store/selectors/global';
+import {selectCluster} from '../../../../store/selectors/global';
 
 export function useYTAnnotation() {
     const path: string = useSelector(getPath);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const attributes = useSelector(getAttributes);
 
     const {

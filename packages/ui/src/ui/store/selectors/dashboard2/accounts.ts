@@ -3,7 +3,7 @@ import {createSelector} from '@reduxjs/toolkit';
 import {RootState} from '../../../store/reducers';
 import {accountsApi} from '../../../store/api/accounts';
 import {getFavouriteAccounts} from '../../../store/selectors/favourites';
-import {getCluster} from '../../../store/selectors/global/cluster';
+import {selectCluster} from '../../../store/selectors/global/cluster';
 
 import {createWidgetDataFieldSelector} from './utils';
 
@@ -17,7 +17,7 @@ const getUsableAccountsImpl = (state: RootState, cluster: string) =>
     accountsApi.endpoints.usableAccounts.select({cluster})(state)?.data;
 
 const getUsableAccounts = (state: RootState) => {
-    const cluster = getCluster(state);
+    const cluster = selectCluster(state);
     return getUsableAccountsImpl(state, cluster);
 };
 

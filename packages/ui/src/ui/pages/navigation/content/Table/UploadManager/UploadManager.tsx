@@ -25,7 +25,7 @@ import hammer from '../../../../../common/hammer';
 import './UploadManager.scss';
 import {updateView} from '../../../../../store/actions/navigation';
 import {getSchema} from '../../../../../store/selectors/navigation/tabs/schema';
-import {getCluster, getCurrentClusterConfig} from '../../../../../store/selectors/global';
+import {selectCluster, getCurrentClusterConfig} from '../../../../../store/selectors/global';
 import {RootState} from '../../../../../store/reducers';
 import {getXsrfCookieName} from '../../../../../utils';
 import {docsUrl, getConfigUploadTable} from '../../../../../config';
@@ -579,7 +579,7 @@ const mapStateToProps = (state: RootState) => {
     return {
         path,
         schema,
-        cluster: getCluster(state),
+        cluster: selectCluster(state),
         proxy,
         externalProxy,
     };

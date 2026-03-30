@@ -6,7 +6,7 @@ import {
     toggleRegisterDialog,
 } from '../../../../../store/reducers/navigation/tabs/consumer/register';
 import {useRegisterMutation} from '../../../../../store/api/navigation/tabs/consumer/consumer';
-import {getCluster} from '../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../store/selectors/global';
 
 import {FormApi, YTDFDialog, makeErrorFields} from '../../../../../components/Dialog';
 
@@ -22,7 +22,7 @@ type FormValues = {
 export function RegisterConsumerDialog() {
     const dispatch = useDispatch();
     const visible = useSelector(getRegisterDialogVisibility);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     const onClose = () => dispatch(toggleRegisterDialog());
 

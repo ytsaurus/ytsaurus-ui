@@ -26,7 +26,7 @@ import {
     setVersionsSummarySortState,
 } from '../../../../store/actions/components/versions/versions_v2';
 import {VersionSummaryRow} from '../../../../store/reducers/components/versions/versions_v2';
-import {getCluster} from '../../../../store/selectors/global';
+import {selectCluster} from '../../../../store/selectors/global';
 import {formatByParams} from '../../../../../shared/utils/format';
 import UIFactory from '../../../../UIFactory';
 
@@ -336,7 +336,7 @@ class VersionsSummary extends React.Component<Props, State> {
 
 const mapStateToProps = (state: RootState) => {
     const {loading, loaded} = state.components.versionsV2;
-    const cluster = getCluster(state);
+    const cluster = selectCluster(state);
 
     const sortState = getSummarySortState(state);
 

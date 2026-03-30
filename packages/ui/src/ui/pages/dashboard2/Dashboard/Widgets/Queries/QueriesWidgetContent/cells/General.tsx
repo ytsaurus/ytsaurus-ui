@@ -1,7 +1,7 @@
 import React from 'react';
 import {useSelector} from '../../../../../../../store/redux-hooks';
 
-import {getCluster} from '../../../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../../../store/selectors/global';
 
 import {QueryStatusIcon} from '../../../../../../../components/QueryStatus';
 
@@ -17,7 +17,7 @@ type Props = {
 };
 
 export function General({name, state, id}: Props) {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const url = `/${cluster}/${Page.QUERIES}/${id}`;
     return <GeneralCell url={url} name={name} startIcon={<QueryStatusIcon status={state} />} />;
 }

@@ -8,7 +8,7 @@ import {Flex, Text} from '@gravity-ui/uikit';
 import Link from '../../../../../../components/Link/Link';
 import cn from 'bem-cn-lite';
 import {EventsTable} from './EventsTable';
-import {getCluster} from '../../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../../store/selectors/global';
 import {getOperationId} from '../../../../../../store/selectors/operations/operation';
 import './EventsSidePanel.scss';
 import {MetaData} from '../EventsTimeline/MetaData';
@@ -20,7 +20,7 @@ export const EventsSidePanel: FC = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const id = useSelector(selectActiveJob);
     const job = useSelector(getSelectedJob);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const operationId = useSelector(getOperationId);
 
     if (!id || !job) return <SidePanelEmpty />;

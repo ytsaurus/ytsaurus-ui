@@ -7,7 +7,7 @@ import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
 
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {updateTitle} from '../../../store/actions/global';
 
 import {
@@ -300,7 +300,7 @@ function mapStateToProps(state) {
         loading: !isFinalState,
         parsedPath: getParsedPath(state),
         transaction: getTransaction(state),
-        cluster: getCluster(state),
+        cluster: selectCluster(state),
         tabSize: UI_TAB_SIZE,
         tabs: getTabs(state),
     };

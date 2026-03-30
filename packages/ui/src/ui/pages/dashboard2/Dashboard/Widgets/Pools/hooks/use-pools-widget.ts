@@ -10,7 +10,7 @@ import {PoolQueryParams} from '../../../../../../store/api/dashboard2/pools/pool
 import {usePoolsQuery} from '../../../../../../store/api/dashboard2/pools';
 import {getFavouritePools} from '../../../../../../store/selectors/favourites';
 import {getPoolsTypeFilter} from '../../../../../../store/selectors/dashboard2/pools';
-import {getCluster} from '../../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../../store/selectors/global';
 
 import type {PoolsWidgetProps} from '../types';
 
@@ -21,7 +21,7 @@ export function usePoolsWidget(props: PoolsWidgetProps) {
     const resourcesColumns = props.data?.columns as string[];
 
     const favouritePools = useSelector(getFavouritePools);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const type = useSelector((state: RootState) => getPoolsTypeFilter(state, props.id));
 
     const {data, isLoading, isFetching, error} = usePoolsQuery({

@@ -16,7 +16,7 @@ import Button from '../../../../../components/Button/Button';
 import Label from '../../../../../components/Label/Label';
 import Icon from '../../../../../components/Icon/Icon';
 
-import {getCluster, getCurrentClusterConfig} from '../../../../../store/selectors/global';
+import {selectCluster, getCurrentClusterConfig} from '../../../../../store/selectors/global';
 import {MaintenanceRequestInfo} from '../../../../../store/actions/components/node-maintenance-modal';
 import {useSidePanel} from '../../../../../hooks/use-side-panel';
 
@@ -174,7 +174,7 @@ export class ProxyCard extends Component<ProxyCardProps> {
 export default function ProxyCardConnected(
     props: Omit<ProxyCardProps, 'handleClose' | 'cluster' | 'clusterConfig'>,
 ) {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const clusterConfig = useSelector(getCurrentClusterConfig);
 
     const {openWidget, closeWidget, widgetContent} = useSidePanel(SPLIT_TYPE, {

@@ -12,7 +12,7 @@ import {
     getJobsMonitorItemsLoading,
     getJobsMonitoringItemsWithDescriptor,
 } from '../../../../../store/selectors/operations/jobs-monitor';
-import {getCluster} from '../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../store/selectors/global';
 import {getOperation} from '../../../../../store/selectors/operations/operation';
 import UIFactory from '../../../../../UIFactory';
 import {Flex} from '@gravity-ui/uikit';
@@ -20,7 +20,7 @@ import {Flex} from '@gravity-ui/uikit';
 import i18n from './i18n';
 
 function JobsMonitor() {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const allJobs = useSelector(getJobsMonitoringItemsWithDescriptor);
     const operation = useSelector(getOperation);
     const {from, to} = useSelector(getJobsMonitorFromTo);

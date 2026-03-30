@@ -14,7 +14,7 @@ import {useFlowExecuteQuery} from '../../../../store/api/yt';
 import {filtersSlice} from '../../../../store/reducers/flow/filters';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {selectFlowPipelinePath} from '../../../../store/selectors/flow/filters';
-import {getCluster} from '../../../../store/selectors/global/cluster';
+import {selectCluster} from '../../../../store/selectors/global/cluster';
 import UIFactory from '../../../../UIFactory';
 import './FlowComputation.scss';
 import {FlowComputationPartitions} from './FlowComputationPartitions';
@@ -64,7 +64,7 @@ export function FlowComputation() {
 }
 
 function FlowComputationTabs({computation}: {computation: string}) {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     return (
         <Tabs

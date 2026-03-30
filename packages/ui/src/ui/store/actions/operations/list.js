@@ -36,7 +36,7 @@ import CancelHelper from '../../../utils/cancel-helper';
 import {NAMESPACES} from '../../../../shared/constants/settings';
 import {RumWrapper, YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 
 const cancellableRequests = new CancelHelper();
 
@@ -85,7 +85,7 @@ export function updatePager(incomplete) {
 export function updateOperationsList() {
     return (dispatch, getState) => {
         const state = getState();
-        const cluster = getCluster(state);
+        const cluster = selectCluster(state);
         const parameters = getListRequestParameters(state);
 
         return dispatch(updateOperationsByParams(cluster, parameters));

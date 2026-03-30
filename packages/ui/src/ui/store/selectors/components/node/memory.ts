@@ -14,7 +14,7 @@ import {
     prepareTree,
     sortTree,
 } from '../../../../common/hammer/tree-list';
-import {getCluster} from '../../../../store/selectors/global';
+import {selectCluster} from '../../../../store/selectors/global';
 import {SortState} from '../../../../types';
 import {orderTypeToOldSortState} from '../../../../utils/sort-helpers';
 
@@ -105,7 +105,7 @@ export interface NodeMemoryInfo {
 }
 
 const getNodeMemoryUsageBundlesByName = createSelector(
-    [getNodeMemoryUsageBundles, getCluster],
+    [getNodeMemoryUsageBundles, selectCluster],
     (bundles, cluster) => {
         const itemsByName: Record<string, NodeMemoryInfo> = {};
 
@@ -142,7 +142,7 @@ const getNodeMemoryUsageBundlesByName = createSelector(
 );
 
 const getNodeMemoryUsageBundlesTreeRoot = createSelector(
-    [getNodeMemoryUsageBundles, getNodeMemoryUsageBundlesByName, getCluster],
+    [getNodeMemoryUsageBundles, getNodeMemoryUsageBundlesByName, selectCluster],
     (bundles, bundlesInfo, cluster) => {
         const itemsByName: Record<string, NodeMemoryInfo> = {...bundlesInfo};
 
@@ -260,7 +260,7 @@ const allowBundlesForTables = createSelector([getNodeMemoryUsageTables], (tables
 });
 
 const getNodeMemoryUsageTablesAndBundlesByName = createSelector(
-    [allowBundlesForTables, getNodeMemoryUsageTables, getCluster, getNodeMemoryUsageBundlesByName],
+    [allowBundlesForTables, getNodeMemoryUsageTables, selectCluster, getNodeMemoryUsageBundlesByName],
     (allowBundles, tables, cluster, bundles) => {
         let maxRowCache = 0;
         let maxStatic = 0;

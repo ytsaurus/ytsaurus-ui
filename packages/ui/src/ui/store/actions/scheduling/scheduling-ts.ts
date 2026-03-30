@@ -41,7 +41,7 @@ import {
 } from '../../../constants/scheduling';
 import {loadExpandedPools} from './expanded-pools';
 import {RumWrapper, YTApiId, ytApiV3Id, ytApiV4Id} from '../../../rum/rum-wrap-api';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 import type {RootState} from '../../../store/reducers';
 import type {SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
@@ -63,7 +63,7 @@ export function loadSchedulingData(): SchedulingThunkAction {
         const state = getState();
         const isInitialLoading = getSchedulingIsInitialLoading(state);
 
-        const cluster = getCluster(state);
+        const cluster = selectCluster(state);
         const rumId = new RumWrapper(cluster, RumMeasureTypes.SCHEDULING);
         return rumId
             .fetch(

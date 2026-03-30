@@ -12,7 +12,7 @@ import {mergeUiSettings} from '../../../../shared/utils/merge-ui-settings';
 import {selectIsDeveloper} from './is-developer';
 import {selectSpytEnginesInfo} from '../query-tracker/queryTrackerEnginesInfo';
 
-export const getCluster = (state: RootState): string => state.global.cluster || '';
+export const selectCluster = (state: RootState): string => state.global.cluster || '';
 
 const getClusterUiConfigRaw = (state: RootState) => state.global.clusterUiConfig;
 
@@ -33,7 +33,7 @@ export const getClusterConfigByName = (cluster: string): ClusterConfig => {
     return getClusterConfig(YT.clusters, cluster);
 };
 
-export const getCurrentClusterConfig = createSelector([getCluster], (cluster): ClusterConfig => {
+export const getCurrentClusterConfig = createSelector([selectCluster], (cluster): ClusterConfig => {
     return getClusterConfigByName(cluster);
 });
 
@@ -72,21 +72,21 @@ export const getClusterUiConfigBundleAccountingHelpLink = (state: RootState) => 
 };
 
 export const getHttpProxyVersion = createSelector(
-    [getCluster, (state: RootState) => state.global.version],
+    [selectCluster, (state: RootState) => state.global.version],
     (cluster, version) => {
         return cluster ? version : '';
     },
 );
 
 export const getGlobalSchedulerVersion = createSelector(
-    [getCluster, (state: RootState) => state.global.schedulerVersion],
+    [selectCluster, (state: RootState) => state.global.schedulerVersion],
     (cluster, version) => {
         return cluster ? version : '';
     },
 );
 
 export const getGlobalMasterVersion = createSelector(
-    [getCluster, (state: RootState) => state.global.masterVersion],
+    [selectCluster, (state: RootState) => state.global.masterVersion],
     (cluster, version) => {
         return cluster ? version : '';
     },

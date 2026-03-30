@@ -31,7 +31,7 @@ import {
     isRootNode,
     shouldApplyCustomSort,
 } from '../../../../store/selectors/navigation/content/map-node';
-import {getCluster} from '../../../../store/selectors/global';
+import {selectCluster} from '../../../../store/selectors/global';
 import {getPath, getTransaction} from '../../../../store/selectors/navigation';
 import {changeColumnSortOrder} from '../../../../store/actions/tables';
 import {RumWrapper, YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
@@ -89,7 +89,7 @@ export function fetchNodes() {
         const state = getState();
         const path = getPath(state);
         const transaction = getTransaction(state);
-        const cluster = getCluster(state);
+        const cluster = selectCluster(state);
 
         dispatch({type: FETCH_NODES.REQUEST});
         return dispatch(waitForFontFamilies(getList(path, transaction, cluster)))

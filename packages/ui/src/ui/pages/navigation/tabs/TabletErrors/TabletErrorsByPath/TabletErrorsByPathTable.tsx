@@ -16,7 +16,7 @@ import {
     getTabletErrorsByPathPageCount,
     getTabletErrorsByPathPageFilter,
 } from '../../../../../store/selectors/navigation/tabs/tablet-errors-by-path';
-import {getCluster} from '../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../store/selectors/global';
 import ColumnHeader from '../../../../../components/ColumnHeader/ColumnHeader';
 import DataTableYT, {
     Column,
@@ -60,7 +60,7 @@ export function TabletErrorsByPathTable({className}: {className?: string}) {
 type RowType = Exclude<ReturnType<typeof getTabletErrorsByPathData>, undefined>['errors'][number];
 
 function useTableColumnsAndData() {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const loading = useSelector(getTabletErrorsByPathLoading);
     const loaded = useSelector(getTabletErrorsByPathLoaded);
     const page = useSelector(getTabletErrorsByPathPageFilter);

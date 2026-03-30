@@ -10,7 +10,7 @@ import {
     PROXIES_CHANGE_FILTERS,
     PROXY_TYPE,
 } from '../../../../constants/components/proxies/proxies';
-import {getCluster} from '../../../../store/selectors/global';
+import {selectCluster} from '../../../../store/selectors/global';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {YTErrors} from '../../../../rum/constants';
 
@@ -50,7 +50,7 @@ function getRpcProxies() {
 
 function getHttpProxies() {
     return (dispatch, getState) => {
-        const cluster = getCluster(getState());
+        const cluster = selectCluster(getState());
         return Promise.all([
             axios.get(`/api/yt-proxy/${cluster}/hosts-all`),
             ytApiV3Id.get(YTApiId.systemProxies, {

@@ -32,7 +32,7 @@ import {OperationShortInfo} from '../../../../pages/components/OperationShortInf
 import {AppStoreProvider} from '../../../../containers/App/AppStoreProvider';
 import {updateView} from '../index';
 import Link from '../../../../components/Link/Link';
-import {getCluster} from '../../../selectors/global';
+import {selectCluster} from '../../../selectors/global';
 import {makeUiMarker, prepareSetCommandForBatch} from '../../../../utils/cypress-attributes';
 import {Page} from '../../../../constants';
 import {executeBatchWithRetries} from '../../execute-batch';
@@ -145,7 +145,7 @@ export function navigationSetNodeAttributes(
             return Promise.resolve();
         }
 
-        const cluster = getCluster(getState());
+        const cluster = selectCluster(getState());
 
         const attributesMap = getNavigationAttributesEditorAttributes(getState());
         const {in_memory_mode, tablet_cell_bundle, ...restGeneralAttrs} = generalAttrs;

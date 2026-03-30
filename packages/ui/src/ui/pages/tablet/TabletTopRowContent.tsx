@@ -7,7 +7,7 @@ import {Link} from '@gravity-ui/uikit';
 import {RowWithName} from '../../containers/AppNavigation/TopRowContent/SectionName';
 import {Page} from '../../constants';
 import {EditableAsText} from '../../components/EditableAsText/EditableAsText';
-import {getCluster} from '../../store/selectors/global';
+import {selectCluster} from '../../store/selectors/global';
 import {getAppBrowserHistory} from '../../store/window-store';
 
 import './TabletTopRowContent.scss';
@@ -28,7 +28,7 @@ function TabletBreadcrumbs() {
     const {
         params: {id},
     } = useRouteMatch<{id: string}>();
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     const handleEdit = React.useCallback(
         (tabletId?: string) => {

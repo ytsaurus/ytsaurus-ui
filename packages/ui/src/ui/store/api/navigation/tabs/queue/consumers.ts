@@ -2,7 +2,7 @@ import {BaseQueryApi} from '@reduxjs/toolkit/query';
 
 import {RootState} from '../../../../../store/reducers';
 import {getPath} from '../../../../../store/selectors/navigation';
-import {getCluster} from '../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../store/selectors/global';
 
 import {ytApiV3, ytApiV4} from '../../../../../rum/rum-wrap-api';
 import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
@@ -86,7 +86,7 @@ export async function registerConsumer(args: RegisterConsumersMutationArgs, api:
 
         const state = api.getState() as RootState;
         const queuePath = getPath(state);
-        const queueCluster = getCluster(state);
+        const queueCluster = selectCluster(state);
 
         const response = await wrapApiPromiseByToaster<
             {results: BatchResultsItem<unknown>[]},

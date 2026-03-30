@@ -10,7 +10,7 @@ import {
     USERS_TABLE,
     USERS_TABLE_DATA_FIELDS,
 } from '../../constants/users';
-import {getCluster} from '../../store/selectors/global';
+import {selectCluster} from '../../store/selectors/global';
 import {listAllUsers} from '../../utils/users-groups';
 import {flags} from '../../utils/index';
 import {YTApiId, ytApiV3Id, ytApiV4Id} from '../../rum/rum-wrap-api';
@@ -193,7 +193,7 @@ export function saveUserData({
         }
 
         const state = getState();
-        const cluster = getCluster(state);
+        const cluster = selectCluster(state);
 
         return (
             Promise.all(

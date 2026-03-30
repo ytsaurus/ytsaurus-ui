@@ -10,7 +10,7 @@ import hammer from '../../../common/hammer';
 import StatusLabel from '../../../components/StatusLabel/StatusLabel';
 
 import './OperationProgress.scss';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 
 const block = cn('operation-progress');
 
@@ -199,7 +199,7 @@ class OperationProgress extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        cluster: getCluster(state),
+        cluster: selectCluster(state),
     };
 };
 

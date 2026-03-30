@@ -16,7 +16,7 @@ import {getTabletErrorsBackgroundCount} from '../../../../../store/selectors/nav
 import {Props as AutomaticModeSwitchProps} from './AutomaticModeSwitch';
 
 import {RootState} from '../../../../../store/reducers';
-import {getCluster} from '../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../store/selectors/global';
 
 import {UI_COLLAPSIBLE_SIZE} from '../../../../../constants/global';
 
@@ -42,7 +42,7 @@ function TableMeta({
     onEditEnableReplicatedTableTracker,
 }: Props) {
     const tabletErrorCount = useSelector(getTabletErrorsBackgroundCount);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     const items = useMemo(() => {
         return makeMetaItems({

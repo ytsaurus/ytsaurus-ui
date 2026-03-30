@@ -22,7 +22,7 @@ import {
     selectFlowPipelinePath,
 } from '../../../store/selectors/flow/filters';
 import {selectFlowStatusData} from '../../../store/selectors/flow/status';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
 import {makeTabProps} from '../../../utils';
 import {FlowEntityTitle} from '../flow-components/FlowEntityHeader';
@@ -55,7 +55,7 @@ export function Flow() {
 }
 
 export function FlowTabs() {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     const tabsProps = React.useMemo(() => {
         const {urlTemplate, component} = UIFactory.getMonitoringComponentForNavigationFlow() ?? {};
@@ -186,7 +186,7 @@ function FlowState() {
 export function FlowMessagesLoaded() {
     const pipeline_path = useSelector(selectFlowPipelinePath);
 
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const {data, error} =
         useFlowExecuteQuery<'describe-pipeline'>({
             cluster,
@@ -209,7 +209,7 @@ function FlowMonitoring({pipeline_path}: {pipeline_path: string}) {
     } = UIFactory.getMonitoringComponentForNavigationFlow() ?? {};
     const attributes = useFlowAttributes(pipeline_path).data;
     const {monitoring_cluster = '', monitoring_project = ''} = attributes ?? {};
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     if (Component) {
         return (

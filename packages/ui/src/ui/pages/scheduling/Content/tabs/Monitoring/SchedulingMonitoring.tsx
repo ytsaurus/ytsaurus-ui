@@ -3,11 +3,11 @@ import {useSelector} from 'react-redux';
 
 import {PrometheusDashboardLazy} from '../../../../../containers/PrometheusDashboard/lazy';
 
-import {getCluster} from '../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../store/selectors/global';
 import {getPool, getTree} from '../../../../../store/selectors/scheduling/scheduling';
 
 export function SchedulingMonitoring() {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const pool = useSelector(getPool);
     const tree = useSelector(getTree);
 

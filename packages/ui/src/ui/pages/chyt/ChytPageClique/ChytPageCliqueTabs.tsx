@@ -6,7 +6,7 @@ import {formatByParams} from '../../../../shared/utils/format';
 
 import {ChytCliquePageTab} from '../../../constants/chyt-page';
 import Tabs from '../../../components/Tabs/Tabs';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {getChytCurrentAlias} from '../../../store/selectors/chyt';
 import {makeTabProps} from '../../../utils';
 import UIFactory from '../../../UIFactory';
@@ -19,7 +19,7 @@ import {ChytPageCliqueMonitoring} from './ChytPageCliqueMonitoring';
 export function ChytPageCliqueTabs({className}: {className?: string}) {
     const match = useRouteMatch();
 
-    const ytCluster = useSelector(getCluster);
+    const ytCluster = useSelector(selectCluster);
     const chytAlias = useSelector(getChytCurrentAlias);
     const [logsExist, setLogsExist] = useState(false);
 

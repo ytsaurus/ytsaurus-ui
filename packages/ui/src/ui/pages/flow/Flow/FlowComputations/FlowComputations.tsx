@@ -24,7 +24,7 @@ import {FlowTab} from '../../../../store/reducers/flow/filters';
 import {useFlowComputationsNameFilter} from '../../../../store/reducers/flow/filters.hooks';
 import {useSelector} from '../../../../store/redux-hooks';
 import {selectFlowPipelinePath} from '../../../../store/selectors/flow/filters';
-import {getCluster} from '../../../../store/selectors/global/cluster';
+import {selectCluster} from '../../../../store/selectors/global/cluster';
 import {makeFlowLink} from '../../../../utils/app-url';
 import './FlowComputations.scss';
 import i18n from './i18n';
@@ -125,7 +125,7 @@ function FlowComputationsTable({pipeline_path}: {pipeline_path: string}) {
 }
 
 function useFlowComputationsTableData(pipeline_path: string) {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const res = useFlowExecuteQuery<'describe-computations'>({
         cluster,
         parameters: {

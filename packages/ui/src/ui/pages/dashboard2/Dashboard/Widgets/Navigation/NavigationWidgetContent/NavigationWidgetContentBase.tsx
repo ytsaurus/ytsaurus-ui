@@ -4,7 +4,7 @@ import b from 'bem-cn-lite';
 import {AxiosError} from 'axios';
 import {Flex} from '@gravity-ui/uikit';
 
-import {getCluster} from '../../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../../store/selectors/global';
 
 import {WidgetText} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetText/WidgetText';
 import {WidgetNoItemsTextFallback} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetFallback/WidgetFallback';
@@ -75,7 +75,7 @@ export function NavigationWidgetContentBase(props: Props) {
 }
 
 function Item(item: NavigationItem) {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const url = `/${cluster}/${Page.NAVIGATION}?path=${item.path}`;
 
     return (

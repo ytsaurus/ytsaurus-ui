@@ -7,7 +7,7 @@ import {
     loadEditedAccount,
     setParentAccountAction,
 } from '../../../../../../store/actions/accounts/accounts';
-import {getCluster} from '../../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../../store/selectors/global';
 import {selectIsAdmin} from '../../../../../../store/selectors/global/is-developer';
 import {SuggestParentsForEditableAccount} from '../../../../AccountsSuggest';
 
@@ -139,7 +139,7 @@ class GeneralContent extends React.Component<Props> {
 
 const mapStateToProps = (state: RootState) => {
     return {
-        cluster: getCluster(state),
+        cluster: selectCluster(state),
         isAdmin: selectIsAdmin(state),
     };
 };

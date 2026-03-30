@@ -21,7 +21,7 @@ import {setSettingsSystemNodesCollapsed} from '../../../store/actions/settings/s
 import {loadSystemNodes} from '../../../store/actions/system/nodes';
 import {RoleGroupInfo} from '../../../store/reducers/system/proxies';
 
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import type {RootState} from '../../../store/reducers';
 
 import {
@@ -248,7 +248,7 @@ function mapStateToProps(state: RootState) {
     const {roleGroups, counters, loaded, overviewCounters} = state.system.nodes;
 
     return {
-        cluster: getCluster(state),
+        cluster: selectCluster(state),
         loaded,
         counters,
         overviewCounters,

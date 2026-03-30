@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {getCluster} from '../../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../../store/selectors/global';
 import {getPath} from '../../../../../../store/selectors/navigation';
 import {getTargetQueue} from '../../../../../../store/selectors/navigation/tabs/consumer';
 import {useSelector} from '../../../../../../store/redux-hooks';
@@ -10,7 +10,7 @@ import UIFactory from '../../../../../../UIFactory';
 
 export default function ConsumerMetrics() {
     const path = useSelector(getPath);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const {queue} = useSelector(getTargetQueue) ?? {};
 
     const MetricsComponent = UIFactory.getComponentForConsumerMetrics()!;

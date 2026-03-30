@@ -13,7 +13,7 @@ import {Flex, Switch} from '@gravity-ui/uikit';
 
 import {RootState} from '../../../../../../store/reducers';
 import {showEditPoolsWeightsModal} from '../../../../../../store/actions/operations';
-import {getCluster} from '../../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../../store/selectors/global';
 import {
     getOperationAlertEvents,
     getOperationDetailsLoadingStatus,
@@ -246,7 +246,7 @@ class Details extends Component<ReduxProps> {
 const mapStateToProps = (state: RootState) => {
     const operation = state.operations.detail.operation;
     return {
-        cluster: getCluster(state),
+        cluster: selectCluster(state),
         operation,
         treeConfigs: state.operations.detail.treeConfigs,
         ...state.operations.detail.details,

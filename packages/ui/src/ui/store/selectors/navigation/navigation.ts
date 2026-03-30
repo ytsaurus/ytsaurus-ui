@@ -9,7 +9,7 @@ import ypath from '../../../common/thor/ypath';
 import {getConfigData} from '../../../config/ui-settings';
 import {Tab} from '../../../constants/navigation/index';
 import type {RootState} from '../../../store/reducers';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {getTableMountConfigHasData} from '../../../store/selectors/navigation/content/table-mount-config';
 import {getTabletErrorsBackgroundCount} from '../../../store/selectors/navigation/tabs/tablet-errors-background';
 import type {ValueOf, YTError} from '../../../types';
@@ -170,7 +170,7 @@ export const getTabs = createSelector(
         getTabletErrorsBackgroundCount,
         getAttributes,
         getNavigationOriginatingQueuePath,
-        getCluster,
+        selectCluster,
     ],
     (supportedTabs, tabletErrorsCount, attributes, originatingQueuePath, cluster) => {
         const isACO = attributes?.type === 'access_control_object';

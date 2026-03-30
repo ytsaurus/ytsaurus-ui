@@ -15,7 +15,7 @@ import {prepareAbcService} from '../../../utils/scheduling';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {loadSchedulingData} from './scheduling-ts';
 import {FIX_MY_TYPE} from '../../../types';
-import {getCluster} from '../../selectors/global';
+import {selectCluster} from '../../selectors/global';
 import {updateAcl} from '../../../utils/acl/acl-api';
 import {IdmObjectType} from '../../../constants/acl';
 import Link from '../../../components/Link/Link';
@@ -45,7 +45,7 @@ export function fetchCreatePoolDialogTreeItems(currentTree: string): CreatePoolD
 export function createPool(values: FIX_MY_TYPE): CreatePoolDialogThunkAction {
     return (dispatch, getState) => {
         const {abcService} = values;
-        const cluster = getCluster(getState()) as string;
+        const cluster = selectCluster(getState()) as string;
 
         return wrapApiPromiseByToaster(
             yt.v3.create({

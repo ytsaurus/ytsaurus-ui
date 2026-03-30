@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import CellsTable from '../../../pages/tablet_cell_bundles/cells/CellsTable';
 import {setChaosActiveBundle, setChaosPartial} from '../../../store/actions/chaos_cell_bundles';
 import type {RootState} from '../../../store/reducers';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {
     getChaosCellsSortState,
     getChaosCellsSorted,
@@ -28,7 +28,7 @@ const columns: ComponentProps<typeof CellsTable>['columns'] = [
 
 const mapStateToProps = (state: RootState) => {
     return {
-        cluster: getCluster(state),
+        cluster: selectCluster(state),
         loading: getChaosIsLoading(state),
         loaded: getChaosIsLoaded(state),
         data: getChaosCellsSorted(state),

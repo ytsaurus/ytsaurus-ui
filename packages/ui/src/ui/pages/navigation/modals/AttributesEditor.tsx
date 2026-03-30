@@ -41,7 +41,7 @@ import {
 } from '../../../store/actions/navigation/modals/attributes-editor';
 import {getMediumListNoCache} from '../../../store/selectors/thor';
 
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {getPath} from '../../../store/selectors/navigation';
 
 import {
@@ -567,7 +567,7 @@ function AttributesEditorLoaded() {
 
 function CreateExternalDescriptionButton() {
     const path = useSelector(getPath);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     const {data: externalDescription} = useExternalDescriptionQuery({cluster, path});
 

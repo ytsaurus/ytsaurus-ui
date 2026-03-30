@@ -14,7 +14,7 @@ import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
 import {STICKY_TOOLBAR_BOTTOM} from '../../../components/WithStickyToolbar/WithStickyToolbar';
 import UsersPageEditor from '../../../pages/users/UsersPageEditor/UsersPageEditor';
 import {DeleteUserModal} from '../../../pages/users/DeleteUserModal/DeleteUserModal';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {
     getUsersFilteredAndSorted,
     getUsersPageEditableUser,
@@ -261,7 +261,7 @@ const mapStateToProps = (state) => {
         error,
         users: getUsersFilteredAndSorted(state),
         sort,
-        cluster: getCluster(state),
+        cluster: selectCluster(state),
         showModal,
     };
 };

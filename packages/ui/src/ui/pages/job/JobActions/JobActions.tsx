@@ -19,7 +19,7 @@ import Icon, {IconName} from '../../../components/Icon/Icon';
 import {getJob, getJobActions} from '../../../store/selectors/job/detail';
 import {loadJobData} from '../../../store/actions/job/general';
 import {promptAction} from '../../../store/actions/actions';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {RootState} from '../../../store/reducers';
 import {PreparedJob} from '../../../types/operations/job';
 import {showErrorPopup} from '../../../utils/utils';
@@ -218,7 +218,7 @@ function ActionBlock(action: Action) {
 export default function JobActions({className}: {className?: string}) {
     const job = useSelector(getJob);
     const {loaded} = useSelector((state: RootState) => state.job.general);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const jobId = (job as PreparedJob).id;
 
     const jobShellCommand = `yt run-job-shell ${jobId}`;

@@ -24,7 +24,7 @@ import {
     getChaosCells,
     prepareHostsFromCells,
 } from '../../../store/selectors/chaos_cell_bundles';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import type {SortState} from '../../../types';
 import {
     prepareBundles,
@@ -123,7 +123,7 @@ export function setChaosFirstBundleAsActive(): ChaosBundlesThunkAction {
             return;
         }
 
-        const cluster = getCluster(state);
+        const cluster = selectCluster(state);
         dispatch(setChaosActiveBundle(first.bundle));
         getAppBrowserHistory().push(tabletActiveBundleLink(cluster, first.bundle));
     };

@@ -7,7 +7,7 @@ import {OperationPool} from '../../../../../../components/OperationPool/Operatio
 import {Tooltip} from '../../../../../../components/Tooltip/Tooltip';
 import {setExpandedPools} from '../../../../../../store/actions/scheduling/expanded-pools';
 import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
-import {getCluster} from '../../../../../../store/selectors/global/cluster';
+import {selectCluster} from '../../../../../../store/selectors/global/cluster';
 import {
     getCurrentPool,
     getCurrentTreeExpandedPools,
@@ -23,7 +23,7 @@ import type {RowData} from './SchedulingTable';
 const block = cn('yt-scheduling-name-cell');
 
 export function NameCell({row}: {row: RowData}) {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const tree = useSelector(getTree);
     const currentPool = useSelector(getCurrentPool);
 

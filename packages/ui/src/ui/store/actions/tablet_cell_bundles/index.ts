@@ -37,7 +37,7 @@ import {
 
 import copy from 'copy-to-clipboard';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
-import {getCluster, getCurrentUserName} from '../../selectors/global';
+import {selectCluster, getCurrentUserName} from '../../selectors/global';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {getAppBrowserHistory} from '../../../store/window-store';
 import {BatchSubRequest} from '../../../../shared/yt-types';
@@ -265,7 +265,7 @@ export function setTabletsFirstBundleAsActive(): TabletsBundlesThunkAction {
             return;
         }
 
-        const cluster = getCluster(state);
+        const cluster = selectCluster(state);
         dispatch(setTabletsActiveBundle(first.bundle));
         getAppBrowserHistory().push(tabletActiveBundleLink(cluster, first.bundle));
     };

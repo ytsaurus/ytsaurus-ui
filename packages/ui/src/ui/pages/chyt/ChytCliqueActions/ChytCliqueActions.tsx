@@ -5,7 +5,7 @@ import cn from 'bem-cn-lite';
 import {Button, DropdownMenu, DropdownMenuItem} from '@gravity-ui/uikit';
 
 import Icon from '../../../components/Icon/Icon';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {updateQueryDraft} from '../../../store/actions/query-tracker/query';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import UIFactory from '../../../UIFactory';
@@ -17,7 +17,7 @@ import './ChytCliqueActions.scss';
 const block = cn('chyt-clique-actions');
 
 export function useCliqueOnSqlAction(openWidget: () => void) {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const dispatch = useDispatch();
 
     return React.useCallback(

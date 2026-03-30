@@ -61,7 +61,7 @@ import {showLinkToModal} from '../../../../store/actions/navigation/modals/link-
 import {openCreateACOModal} from '../../../../store/actions/navigation/modals/create-aco';
 import NavigationExtraActions from '../../../../containers/NavigationExtraActions/NavigationExtraActions';
 import UIFactory from '../../../../UIFactory';
-import {getCluster} from '../../../../store/selectors/global';
+import {selectCluster} from '../../../../store/selectors/global';
 import {UploadFileManagerWithClose} from '../../UploadFileManager';
 
 import './MapNode.scss';
@@ -165,7 +165,7 @@ function mapStateToProps(state) {
         mediumType: getMediumType(state),
         showCreateTableModal: isCreateTableModalVisible(state),
         attributes: getNavigationPathAttributes(state),
-        cluster: getCluster(state),
+        cluster: selectCluster(state),
     };
 }
 

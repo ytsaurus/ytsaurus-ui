@@ -13,7 +13,7 @@ import {
     hideRemoteCopyModal,
     remoteCopy,
 } from '../../../store/actions/navigation/modals/remote-copy-modal';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {makeLink} from './CreateTableModal/CreateTableModal';
 import {YTError} from '../../../types';
 import {RemoteCopyParams} from '../../../../@types/types';
@@ -29,7 +29,7 @@ function RemoteCopyModal() {
     const dispatch = useDispatch();
     const visible = useSelector(getRemoteCopyModalVisible);
     const paths = useSelector(getRemoteCopyModalPaths);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     const [error, setError] = React.useState<YTError | unknown>();
 

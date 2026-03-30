@@ -21,7 +21,7 @@ import {useClusterColorClassName} from './ClusterColor';
 import {ClusterConfig} from '../../../shared/yt-types';
 import Link from '../../components/Link/Link';
 import Icon from '../../components/Icon/Icon';
-import {getCluster} from '../../store/selectors/global';
+import {selectCluster} from '../../store/selectors/global';
 
 import './ClustersPanel.scss';
 
@@ -102,7 +102,7 @@ export default function ClustersPanel({className, onSelectCluster}: Props) {
         [groups, onClusterClick],
     );
 
-    const currentCluster = useSelector(getCluster);
+    const currentCluster = useSelector(selectCluster);
     const {pathname, search} = window.location;
     let clusterState = '';
     if (currentCluster && pathname.startsWith(`/${currentCluster}/`)) {

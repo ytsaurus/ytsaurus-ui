@@ -37,7 +37,7 @@ import {
     updateAcl,
 } from '../../store/actions/acl';
 
-import {getCluster} from '../../store/selectors/global';
+import {selectCluster} from '../../store/selectors/global';
 import {normalizeIdmParams} from '../../utils/acl';
 import {AclMode, IdmObjectType} from '../../constants/acl';
 import {IdmKindType} from '../../utils/acl/acl-types';
@@ -93,7 +93,7 @@ const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
         const nodeType = getType(state);
 
         return {
-            cluster: getCluster(state),
+            cluster: selectCluster(state),
 
             loading,
             loaded,

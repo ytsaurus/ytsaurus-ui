@@ -27,7 +27,7 @@ import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
 import {usePrometheusDiscoverValuesQuery} from '../../store/api/prometheus';
 import {useFetchBatchQuery} from '../../store/api/yt/executeBatch';
 import {usePrometheusDashboardParams} from '../../store/reducers/prometheusDashboard/prometheusDashboard-hooks';
-import {getCluster} from '../../store/selectors/global/cluster';
+import {selectCluster} from '../../store/selectors/global/cluster';
 import {getCurrentUserName} from '../../store/selectors/global';
 
 import {PrometheusDashKit} from './PrometheusDashKit';
@@ -225,7 +225,7 @@ function useGrafanaUrl({
 }
 
 function useGrafanaUrlVisibility() {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const user = useSelector(getCurrentUserName);
 
     const {data, error} = useFetchBatchQuery<CheckPermissionResult>({
@@ -288,7 +288,7 @@ function useDashboardToolbar({
     layout?: DashboardInfo;
     toolbarItems?: Array<ToolbarItemToWrap>;
 }) {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     const {templating} = layout ?? {};
     const {list} = templating ?? {};

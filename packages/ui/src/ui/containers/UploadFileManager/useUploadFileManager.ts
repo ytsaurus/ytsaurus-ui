@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {useDispatch, useSelector} from '../../store/redux-hooks';
 import {getPath} from '../../store/selectors/navigation';
-import {getCluster} from '../../store/selectors/global';
+import {selectCluster} from '../../store/selectors/global';
 import {AxiosError, AxiosProgressEvent, isCancel} from 'axios';
 import CancelHelper from '../../utils/cancel-helper';
 import {updateView} from '../../store/actions/navigation';
@@ -22,7 +22,7 @@ export type UseUploadFileManagerFileFormValues = {
 export const useUploadFileManager = (opts: UseUploadFileManagerProps) => {
     const dispatch = useDispatch();
     const path = useSelector(getPath);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     const [file, setFile] = React.useState<File>();
     const [isProgress, setProgress] = React.useState(false);

@@ -1,9 +1,9 @@
 import {RumMeasureStartProps, useRumMeasureStart} from './RumUiContext';
 import {useSelector} from 'react-redux';
-import {getCluster} from '../store/selectors/global';
+import {selectCluster} from '../store/selectors/global';
 
 export function useAppRumMeasureStart<T extends Array<any>>(params: RumMeasureStartProps<T>) {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     useRumMeasureStart({
         ...params,

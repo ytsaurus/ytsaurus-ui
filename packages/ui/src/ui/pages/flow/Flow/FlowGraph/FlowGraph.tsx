@@ -34,7 +34,7 @@ import {
     selectFlowPipelinePath,
     selectFlowZoomToNode,
 } from '../../../../store/selectors/flow/filters';
-import {getCluster} from '../../../../store/selectors/global/cluster';
+import {selectCluster} from '../../../../store/selectors/global/cluster';
 import './FlowGraph.scss';
 import i18n from './i18n';
 import {Computation} from './renderers/Computation';
@@ -217,7 +217,7 @@ const STREAM_SIZE = {width: 240, height: 100};
 const SINK_SIZE = {width: 200, height: 80};
 
 function useFlowGraphLoadedData({pipeline_path}: {pipeline_path: string}) {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     return useFlowExecuteQuery<'describe-pipeline'>({
         cluster,
         parameters: {pipeline_path, flow_command: 'describe-pipeline'},

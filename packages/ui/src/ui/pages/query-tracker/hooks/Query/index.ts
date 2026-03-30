@@ -3,13 +3,13 @@ import {useSelector} from '../../../../store/redux-hooks';
 import {useHistory} from 'react-router';
 import {createQueryUrl} from '../../utils/navigation';
 import {QueryItem} from '../../../../types/query-tracker/api';
-import {getCluster} from '../../../../store/selectors/global';
+import {selectCluster} from '../../../../store/selectors/global';
 import {getQuery} from '../../../../store/selectors/query-tracker/query';
 import {getQueriesListMode} from '../../../../store/selectors/query-tracker/queriesList';
 
 export const useQueryNavigation = (): [QueryItem['id'] | undefined, (id: QueryItem) => void] => {
     const selectedItem = useSelector(getQuery);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const listMode = useSelector(getQueriesListMode);
     const history = useHistory();
 

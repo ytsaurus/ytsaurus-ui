@@ -5,7 +5,7 @@ import Modal from '../../../components/Modal/Modal';
 import {isQueryDraftEditted} from '../../../store/selectors/query-tracker/query';
 import FilePlusIcon from '@gravity-ui/icons/svgs/file-plus.svg';
 import {Page} from '../../../../shared/constants/settings';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import i18n from './i18n';
 
 export const NewQueryPromt = (props: {
@@ -33,7 +33,7 @@ type Props = {
 export const NewQueryButton: FC<Props> = ({onClick, hideText}) => {
     const dirtyQuery = useSelector(isQueryDraftEditted);
     const [visible, setVisible] = useState(false);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();

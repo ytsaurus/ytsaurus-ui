@@ -16,7 +16,7 @@ import {
     setAccountUsageDataPageIndex,
     setAccountUsageViewType,
 } from '../../../../store/actions/accounts/account-usage';
-import {getCluster} from '../../../../store/selectors/global';
+import {selectCluster} from '../../../../store/selectors/global';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import Select from '../../../../components/Select/Select';
 import {
@@ -53,7 +53,7 @@ const block = cn('account-usage-toolbar');
 
 function useFetchSnapshots() {
     const dispatch = useDispatch();
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     const updateFn = React.useCallback(() => {
         dispatch(fetchAccountsUsageSnapshots(cluster));

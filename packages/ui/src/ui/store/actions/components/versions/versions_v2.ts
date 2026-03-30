@@ -7,7 +7,7 @@ import {
     CHANGE_VERSION_SUMMARY_PARTIAL,
     DISCOVER_VERSIONS,
 } from '../../../../constants/components/versions/versions_v2';
-import {getCluster} from '../../../../store/selectors/global';
+import {selectCluster} from '../../../../store/selectors/global';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../../store/reducers';
 import {
@@ -31,7 +31,7 @@ export function getVersions(): NodesThunkAction<DiscoverVersionsData> {
     return (dispatch, getState) => {
         dispatch({type: DISCOVER_VERSIONS.REQUEST});
 
-        const cluster = getCluster(getState());
+        const cluster = selectCluster(getState());
 
         return axios
             .get<DiscoverVersionsData>(`/api/yt-proxy/${cluster}/internal-discover_versions`)

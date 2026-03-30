@@ -18,7 +18,7 @@ import format from '../../../../../common/hammer/format';
 
 import './UploadManager.scss';
 import {updateView} from '../../../../../store/actions/navigation';
-import {getCluster} from '../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../store/selectors/global';
 import {RootState} from '../../../../../store/reducers';
 import {getXsrfCookieName} from '../../../../../utils';
 import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
@@ -447,7 +447,7 @@ const mapStateToProps = (state: RootState) => {
 
     return {
         path,
-        cluster: getCluster(state),
+        cluster: selectCluster(state),
         existingNodes: getSortedNodesNames(state),
     };
 };

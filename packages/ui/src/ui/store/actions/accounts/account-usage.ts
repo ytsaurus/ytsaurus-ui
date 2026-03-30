@@ -18,7 +18,7 @@ import {
     ACCOUNTS_USAGE_TREE_SUCCESS,
 } from '../../../constants/accounts/accounts';
 import axios from 'axios';
-import {getCluster} from '../../selectors/global/cluster';
+import {selectCluster} from '../../selectors/global/cluster';
 import {
     AccountUsageListAction,
     AccountUsageListDataParams,
@@ -123,7 +123,7 @@ type UsageListThunkAction = ThunkAction<any, RootState, any, AccountUsageListAct
 
 export function getFilterParameters(state: RootState): AccountUsageDataParams {
     const account = getActiveAccount(state);
-    const cluster = getCluster(state);
+    const cluster = selectCluster(state);
     const sortStates = getAccountUsageSortState(state);
     const path_regexp = getAccountUsagePathFilter(state);
     const owner = getAccountUsageOwnerFilter(state);
