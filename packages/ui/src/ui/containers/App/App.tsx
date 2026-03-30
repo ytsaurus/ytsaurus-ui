@@ -28,7 +28,7 @@ import {ManageTokensModal} from '../ManageTokens';
 import {setTheme} from '../../store/actions/global';
 import {loadAllowedExperimentalPages} from '../../store/actions/global/experimental-pages';
 import {getAuthPagesEnabled, getGlobalShowLoginDialog} from '../../store/selectors/global';
-import {getFontType} from '../../store/selectors/global/fonts';
+import {selectFontType} from '../../store/selectors/global/fonts';
 import {selectIsAdmin} from '../../store/selectors/global/is-developer';
 import UIFactory from '../../UIFactory';
 
@@ -63,7 +63,7 @@ function AppWithRum() {
     const themeType = useThemeType();
     const showLogin = useSelector(getGlobalShowLoginDialog);
     const hasAuthPages = useSelector(getAuthPagesEnabled);
-    const fontType = useSelector(getFontType);
+    const fontType = useSelector(selectFontType);
 
     const {footer, footerHeight} = UIFactory.renderAppFooter() ?? {};
 

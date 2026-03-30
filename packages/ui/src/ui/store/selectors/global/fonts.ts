@@ -7,7 +7,7 @@ const selectSettingSelectedFontType = createSelector(getSettingsData, (data) => 
     return data['global::fontType'];
 });
 
-export const getFontType = createSelector(
+export const selectFontType = createSelector(
     [selectSettingSelectedFontType],
     (selectedFontType: string) => {
         const {defaultFontType = ''} = uiSettings;
@@ -15,7 +15,7 @@ export const getFontType = createSelector(
     },
 );
 
-export const getFontFamilies = createSelector(getFontType, (fontType) => {
+export const getFontFamilies = createSelector(selectFontType, (fontType) => {
     const {fontTypes} = uiSettings;
     if (fontTypes?.[fontType]) {
         const {regular, monospace} = fontTypes?.[fontType] ?? {};
