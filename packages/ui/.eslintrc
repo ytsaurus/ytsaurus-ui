@@ -39,7 +39,8 @@
                     "message": "Please use utils/date-utils instead."
                 }
             ]
-        }]
+        }],
+        "object-shorthand": ["error", "always"]
     },
     "env": {
         "jest": true
