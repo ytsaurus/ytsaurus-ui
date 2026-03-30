@@ -4,7 +4,7 @@ import {RootState} from '../../../store/reducers';
 export const selectAllowedExperimentalPages = (state: RootState) =>
     state?.global.allowedExperimentalPages;
 
-export const isExperimentalPagesReady = (state: RootState) => {
+export const selectIsExperimentalPagesReady = (state: RootState) => {
     return (
         UIFactory.getExperimentalPages().length == 0 ||
         selectAllowedExperimentalPages(state) !== undefined
