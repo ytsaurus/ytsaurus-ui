@@ -132,7 +132,7 @@ export const getAuthPagesEnabled = () => {
     return getConfigData().allowPasswordAuth;
 };
 
-export const getUserManagementEnabled = createSelector([selectIsAdmin], (isAdmin) => {
+export const selectIsUserManagementEnabled = createSelector([selectIsAdmin], (isAdmin) => {
     return isAdmin && getConfigData().allowPasswordAuth;
 });
 

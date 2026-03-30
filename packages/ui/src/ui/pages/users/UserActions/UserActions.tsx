@@ -7,7 +7,7 @@ import Icon from '../../../components/Icon/Icon';
 import Button from '../../../components/Button/Button';
 import {showUserEditorModal} from '../../../store/actions/users';
 import {showUserDeleteModal} from '../../../store/actions/users-typed';
-import {getUserManagementEnabled} from '../../../store/selectors/global';
+import {selectIsUserManagementEnabled} from '../../../store/selectors/global';
 import block from 'bem-cn-lite';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 
@@ -32,7 +32,7 @@ export const UserActions: React.FC<UserActionsProps> = ({className, cluster, use
         dispatch(showUserDeleteModal(username));
     }, [username, dispatch]);
 
-    const isUserManagementEnabled = useSelector(getUserManagementEnabled);
+    const isUserManagementEnabled = useSelector(selectIsUserManagementEnabled);
 
     let deleteUserButton;
 
