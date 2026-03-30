@@ -27,7 +27,7 @@ const reducer = (state = initialState, action) => {
             const users = ypath.getValue(action.data);
             return {
                 ...state,
-                users: users,
+                users,
                 activeUserList: users,
             };
         }
@@ -48,7 +48,7 @@ const reducer = (state = initialState, action) => {
             );
             return {
                 ...state,
-                activeUserFilter: activeUserFilter,
+                activeUserFilter,
                 activeUserList: filtered,
             };
         }

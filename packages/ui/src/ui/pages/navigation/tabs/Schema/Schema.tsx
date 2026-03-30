@@ -235,7 +235,7 @@ class Schema extends Component<SchemaProps> {
 
             this.setState({
                 externalSchemaUrl: url,
-                externalSchema: externalSchema,
+                externalSchema,
             });
         } catch (err) {
             this.setState({

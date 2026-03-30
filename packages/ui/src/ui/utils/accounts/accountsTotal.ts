@@ -111,7 +111,7 @@ function getClusterTotal(
     }
 
     return {
-        perMedium: perMedium,
+        perMedium,
     };
 }
 
@@ -133,7 +133,7 @@ function getHardwareLimit(nodesData: NodesData, mediumList: string[]) {
     }
 
     return {
-        perMedium: perMedium,
+        perMedium,
     };
 }
 
@@ -154,7 +154,7 @@ function getReadThroughput(nodesData: NodesData, mediumList: string[]) {
     }
 
     return {
-        perMedium: perMedium,
+        perMedium,
     };
 }
 
@@ -175,7 +175,7 @@ function getWriteThroughput(nodesData: NodesData, mediumList: string[]) {
     }
 
     return {
-        perMedium: perMedium,
+        perMedium,
     };
 }
 
@@ -191,7 +191,7 @@ function getClusterExtendedTotal(clusterTotalsUsage: ClusterTotalsUsage) {
     }
 
     return {
-        settings: settings,
+        settings,
     };
 }
 
@@ -205,7 +205,7 @@ export function getNodesChunksTotals(clusterTotalsUsage: ClusterTotalsUsage) {
             const clusterLimit = clusterExtendedTotal[name].limit;
 
             return {
-                name: name,
+                name,
                 clusterUsage: {
                     text:
                         hammer.format['Number'](clusterUsage) +
@@ -251,7 +251,7 @@ export function getDiskSpace(
 
             return {
                 show: hardwareLimit !== 0,
-                mediumType: mediumType,
+                mediumType,
                 clusterUsage: {
                     text:
                         hammer.format['Bytes'](clusterUsage) +
@@ -277,7 +277,7 @@ export function getDiskSpace(
                     ),
                     show: diskWriteCapacity > 0,
                 },
-                hardwareLimit: hardwareLimit,
+                hardwareLimit,
                 overcommitted,
             };
         });

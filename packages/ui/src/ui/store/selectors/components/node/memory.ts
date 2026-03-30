@@ -272,7 +272,7 @@ const getNodeMemoryUsageTablesAndBundlesByName = createSelector(
             const parent = allowBundles ? item.tablet_cell_bundle : '<Root>';
             const bundle = bundles[parent] || {};
             const tmp = (tablesByName[name] = {
-                name: name,
+                name,
                 parent,
 
                 storePreload: calculateStorePreload(item),

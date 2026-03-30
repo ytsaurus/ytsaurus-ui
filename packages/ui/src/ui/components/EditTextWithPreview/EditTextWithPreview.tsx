@@ -105,7 +105,7 @@ export function EditTextWithPreview({
         return minHeight ? {minHeight} : undefined;
     }, [minHeight]);
 
-    const divProps = {className: block(null, className), style: style};
+    const divProps = {className: block(null, className), style};
 
     if (!showPreview) {
         return <div {...divProps}>{left}</div>;

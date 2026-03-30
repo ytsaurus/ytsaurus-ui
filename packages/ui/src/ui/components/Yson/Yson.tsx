@@ -97,8 +97,8 @@ export default class Yson extends Component<YsonProps, State> {
                         : settings!.format === 'raw-json'
                           ? unipika.converters.raw(value, settings)
                           : unipika.converters.yson(value, settings),
-                value: value,
-                settings: settings,
+                value,
+                settings,
             };
         }
         return null;

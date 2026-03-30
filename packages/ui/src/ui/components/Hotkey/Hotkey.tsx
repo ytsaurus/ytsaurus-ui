@@ -72,10 +72,10 @@ export default class Hotkey extends Component<HotkeyProps> {
             keyCombinations.forEach((combo) => {
                 scopes.forEach((scope) => {
                     preparedSettings.push({
-                        combo: combo,
-                        scope: scope,
+                        combo,
+                        scope,
                         handler: item.handler,
-                        preventDefault: preventDefault,
+                        preventDefault,
                     });
                 });
             });

@@ -21,32 +21,32 @@ const chunkTypes = [
     {name: 'underreplicated_chunks'},
     {
         name: 'quorum_missing_chunks',
-        label: function (count) {
+        label(count) {
             return count > 0 && 'danger';
         },
     },
     {
         name: 'data_missing_chunks',
-        label: function (count) {
+        label(count) {
             return count > 0 && 'warning';
         },
     },
     {
         name: 'parity_missing_chunks',
-        label: function (count) {
+        label(count) {
             return count > 0 && 'warning';
         },
     },
     {name: 'lost_chunks'},
     {
         name: 'lost_vital_chunks',
-        label: function (count) {
+        label(count) {
             return count > 0 && 'danger';
         },
     },
     {
         name: 'unsafely_placed_chunks',
-        label: function (count) {
+        label(count) {
             return count > 0 && 'warning';
         },
     },

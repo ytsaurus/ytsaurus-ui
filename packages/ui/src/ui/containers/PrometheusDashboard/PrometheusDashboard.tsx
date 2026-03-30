@@ -351,5 +351,5 @@ function useDashboardToolbar({
         return !params ? undefined : {...params, ...extraParams};
     }, [params, extraParams]);
 
-    return {toolbarItems: items, effectiveParams: effectiveParams};
+    return {toolbarItems: items, effectiveParams};
 }

@@ -204,7 +204,7 @@ export const sendQuestion =
                     model,
                     metadata: meta,
                     conversationId: currentConversationId,
-                    promptId: promptId,
+                    promptId,
                     contextMessages: contextMessages.length > 0 ? contextMessages : undefined,
                     files: files.length > 0 ? files : undefined,
                 }),

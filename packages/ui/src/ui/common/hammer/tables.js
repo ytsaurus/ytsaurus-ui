@@ -153,7 +153,7 @@ class InverseIndex extends BoundedArray {
     }
 
     add(factors, value) {
-        this.push({factors: factors, value: value});
+        this.push({factors, value});
         this._updateMappings(factors, this.data.length - 1);
     }
 

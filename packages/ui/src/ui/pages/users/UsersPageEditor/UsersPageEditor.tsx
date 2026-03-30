@@ -196,7 +196,7 @@ class UsersPageEditor extends React.Component<Props, State> {
                 newName,
                 attributes: changedFields,
                 groupsToAdd: newGroups,
-                groupsToRemove: groupsToRemove,
+                groupsToRemove,
                 sha256Password,
             })
             .then(() => {

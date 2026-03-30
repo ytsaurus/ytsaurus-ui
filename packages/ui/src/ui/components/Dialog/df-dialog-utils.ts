@@ -221,7 +221,7 @@ export function makeDialogFieldsFromDescription<
     > = {};
     return {
         fieldTypeByName: typeByName,
-        initialValues: initialValues,
+        initialValues,
         fields: data?.map((group) => {
             const sectionFields: Array<DialogField<FormValues>> = group.options.map((item) => {
                 return makeDialogField(item, initialValues, typeByName, options);
@@ -250,7 +250,7 @@ export function makeTabbedDialogFieldsFromDescription<
     > = {};
     return {
         fieldTypeByName: typeByName,
-        initialValues: initialValues,
+        initialValues,
         fields: data?.map((group, index) => {
             const group_name = `group_${index}`;
             const groupInitialValues = ((initialValues as any)[group_name] = {});

@@ -83,7 +83,7 @@ class ElementsTable extends Component {
         virtual: PropTypes.bool,
         virtualType: PropTypes.oneOf(['simple', 'variable', 'uniform']),
         header: PropTypes.bool,
-        body: function (props, propName, componentName) {
+        body(props, propName, componentName) {
             if (!props[propName] && props['virtual']) {
                 return new Error(
                     `The ${propName} flag set to false is not allowed in conjunction with virtual flag set to true in ${componentName}.`,

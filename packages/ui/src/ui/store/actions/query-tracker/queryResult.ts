@@ -160,8 +160,8 @@ export function loadQueryResult(
                     queryId,
                     index: resultIndex,
                     results: formattedResult,
-                    columns: columns,
-                    meta: meta,
+                    columns,
+                    meta,
                 },
             });
         } catch (e) {

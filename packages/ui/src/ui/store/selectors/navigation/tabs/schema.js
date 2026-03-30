@@ -78,7 +78,7 @@ export const getComputedColumns = createSelector([getSchema], (schema) => {
     set = hammer.utils.sortInPredefinedOrder(['index', 'type', 'name'], set);
 
     return {
-        set: set,
-        items: items,
+        set,
+        items,
     };
 });

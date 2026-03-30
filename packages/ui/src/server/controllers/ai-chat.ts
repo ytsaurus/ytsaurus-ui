@@ -115,10 +115,10 @@ export const sendMessage = async (req: Request, res: Response) => {
         const requestData: SendMessageRequest = {
             model,
             prompt: promptId ? {id: promptId} : undefined,
-            conversationId: conversationId,
+            conversationId,
             message,
             metadata,
-            contextMessages: contextMessages,
+            contextMessages,
             files,
         };
 

@@ -201,7 +201,7 @@ class Stores extends Component {
                 row_count: Stores.renderAsNumber,
                 attributes: Stores.renderAsAttributes,
             },
-            computeKey: function (store) {
+            computeKey(store) {
                 return store.$value;
             },
         };

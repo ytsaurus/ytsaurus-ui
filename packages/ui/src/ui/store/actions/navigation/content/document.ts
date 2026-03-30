@@ -63,7 +63,7 @@ export const saveDocument =
             dispatch({type: SET_DOCUMENT_EDIT_MODE, data: false});
             dispatch({
                 type: GET_DOCUMENT.SUCCESS,
-                data: {document: document},
+                data: {document},
             });
 
             return Promise.resolve();

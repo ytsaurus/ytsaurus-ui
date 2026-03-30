@@ -13,7 +13,7 @@ export function getPath<Name extends string, Value extends string>(
 export function createNS<Name extends string>(name: Name) {
     return {
         value: name,
-        name: name,
+        name,
         parent: undefined,
     };
 }

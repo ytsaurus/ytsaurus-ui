@@ -37,8 +37,8 @@ function prepareStartedBy(operation: DetailedOperationSelector) {
 
     if (fields.length || command.length) {
         return {
-            fields: fields,
-            command: command,
+            fields,
+            command,
         };
     }
 
@@ -218,7 +218,7 @@ function groupTables<T extends {path: string; transaction?: string; cluster?: st
                 });
             }
 
-            group.push(Object.assign(table, {name: name}));
+            group.push(Object.assign(table, {name}));
         } catch (err) {
             // eslint-disable-next-line no-console
             console.error('groupTables error', err);
@@ -380,7 +380,7 @@ function prepareScript(operation: DetailedOperationSelector, type: string) {
 
         if (command || className || jobCount || files?.length || environment?.length) {
             return {
-                type: type,
+                type,
                 caption: prepareScriptCaption(type),
                 command,
                 className,

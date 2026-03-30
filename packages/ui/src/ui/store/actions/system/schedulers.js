@@ -57,7 +57,7 @@ function getSchedulersState(hosts) {
         const alerts = outputs[0];
         const connectedHosts = map_(hosts, (host, index) => {
             return {
-                host: host,
+                host,
                 connected: outputs[index + 1],
             };
         });

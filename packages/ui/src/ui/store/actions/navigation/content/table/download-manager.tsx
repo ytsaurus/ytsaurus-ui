@@ -19,7 +19,7 @@ import guid from '../../../../../common/hammer/guid';
 const requestDownloadFile = async (url: string) =>
     axios({
         method: 'get',
-        url: url,
+        url,
         responseType: 'blob',
         withCredentials: true,
     });

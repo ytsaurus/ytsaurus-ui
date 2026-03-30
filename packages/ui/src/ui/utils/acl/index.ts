@@ -54,15 +54,15 @@ export function normalizeIdmParams(idmKind: IdmKindType, path = '') {
             // //sys/access_control_object_namespaces...
             res = {
                 idmKind: IdmObjectType.UI_EFFECTIVE_ACL,
-                path: path,
+                path,
             };
         }
     }
 
     if (idmKind === IdmObjectType.ACCESS_CONTROL_OBJECT) {
         res = {
-            idmKind: idmKind,
-            path: path,
+            idmKind,
+            path,
             userPermissionsPath: `${path}/principal`,
         };
     }

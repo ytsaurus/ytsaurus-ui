@@ -416,7 +416,7 @@ describe('hammer.tree-list', () => {
 
                 const FIELDS = {
                     name: {
-                        get: function (entry) {
+                        get(entry) {
                             return entry.name;
                         },
                     },

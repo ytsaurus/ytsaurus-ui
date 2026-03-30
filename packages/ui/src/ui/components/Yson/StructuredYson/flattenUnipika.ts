@@ -403,7 +403,7 @@ function handleUnipikaMapImpl(
 ) {
     for (let i = 0; i < items.length; ++i) {
         const [key, value] = items[i];
-        const keyItem: UnipikaFlattenTreeItem = {key, level: level};
+        const keyItem: UnipikaFlattenTreeItem = {key, level};
         ctx.dst.push(keyItem);
         pushPath(key.$value, ctx);
         flattenUnipikaImpl(value, level, ctx);
@@ -427,13 +427,13 @@ function handleUnipikaList(value: UnipikaList, level: number, ctx: FlatContext) 
 function fromUnipikaString(value: UnipikaString, level: number): UnipikaFlattenTreeItem {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {$attributes, ...rest} = value;
-    return {level: level, value: rest};
+    return {level, value: rest};
 }
 
 function fromUnipikaPrimitive(value: UnipikaPrimitive, level: number): UnipikaFlattenTreeItem {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {$attributes, ...rest} = value;
-    return {level: level, value: rest};
+    return {level, value: rest};
 }
 
 interface SearchParams {

@@ -92,7 +92,7 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 accounts: action.data.accounts,
-                responsibleUsers: responsibleUsers,
+                responsibleUsers,
                 filteredAccounts: action.data.accounts,
                 fetching: false,
                 error: false,
@@ -171,7 +171,7 @@ const reducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                editableAccount: editableAccount,
+                editableAccount,
                 showEditor: true,
             };
         }

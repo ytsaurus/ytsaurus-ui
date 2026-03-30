@@ -78,7 +78,7 @@ function prepareProgressStack(treeItem, useChildren, getTreeItemInfoFn) {
             ++colorIndex;
         }
     });
-    return {progressText, progressStack, tooltipInfo: tooltipInfo, limit};
+    return {progressText, progressStack, tooltipInfo, limit};
 }
 
 function ProgressStackImpl({

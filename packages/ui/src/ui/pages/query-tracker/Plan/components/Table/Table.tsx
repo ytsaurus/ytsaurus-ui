@@ -318,7 +318,7 @@ export default function Table<T>({
                 itemWrapper: rowWrapper,
                 items: data,
                 onItemClick: onRowClick,
-                itemClassName: itemClassName,
+                itemClassName,
                 itemHeight: rowHeight,
                 loaderHeight: rowHeight,
                 renderItem: renderRowIml,

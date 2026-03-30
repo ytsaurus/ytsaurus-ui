@@ -36,7 +36,7 @@ export function parseTablePath(text: string) {
             path = path.startsWith('/') ? '/' + path : '//' + path;
         }
         return {
-            cluster: cluster,
+            cluster,
             isPathAbsolute: Boolean(groups.openingSlash),
             path,
             view: groups.view,

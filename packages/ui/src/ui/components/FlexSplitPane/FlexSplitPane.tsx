@@ -182,12 +182,12 @@ class FlexSplitPane extends React.Component<FlexSplitPaneProps, FlexSplitPaneSta
                 sizes: this.getInitialSizes(),
                 minSize,
                 snapOffset: 0,
-                elementStyle: function (_, size, gutterSize) {
+                elementStyle(_, size, gutterSize) {
                     return {
                         'flex-basis': `calc(${size}% - ${gutterSize}px)`,
                     };
                 },
-                gutterStyle: function (_, gutterSize) {
+                gutterStyle(_, gutterSize) {
                     return {
                         'flex-basis': `${gutterSize}px`,
                     };

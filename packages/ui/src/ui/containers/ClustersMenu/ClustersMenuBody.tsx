@@ -179,10 +179,10 @@ class ClustersMenuBody extends React.Component<Props> {
             theme: 'light',
             striped: true,
             tableId: CLUSTER_MENU_TABLE_ID,
-            computeKey: function (item: {name: string}) {
+            computeKey(item: {name: string}) {
                 return item.name;
             },
-            onItemClick: function (item: {id: string}) {
+            onItemClick(item: {id: string}) {
                 getAppBrowserHistory().push(`/${item.id}`);
             },
             columns: {
@@ -193,35 +193,35 @@ class ClustersMenuBody extends React.Component<Props> {
                         sort: false,
                     },
                     name: {
-                        get: function (cluster: ClusterConfigWithStatus) {
+                        get(cluster: ClusterConfigWithStatus) {
                             return cluster.name;
                         },
                         sort: true,
                         align: 'left',
                     },
                     environment: {
-                        get: function (cluster: ClusterConfigWithStatus) {
+                        get(cluster: ClusterConfigWithStatus) {
                             return cluster.environment;
                         },
                         sort: true,
                         align: 'left',
                     },
                     version: {
-                        get: function (cluster: ClusterConfigWithStatus) {
+                        get(cluster: ClusterConfigWithStatus) {
                             return [cluster.version, cluster.id];
                         },
                         sort: true,
                         align: 'right',
                     },
                     status: {
-                        get: function (cluster: ClusterConfigWithStatus) {
+                        get(cluster: ClusterConfigWithStatus) {
                             return [cluster.status, cluster.id];
                         },
                         sort: true,
                         align: 'center',
                     },
                     access: {
-                        get: function (cluster: ClusterConfigWithStatus) {
+                        get(cluster: ClusterConfigWithStatus) {
                             return [cluster.access, cluster.id];
                         },
                         sort: true,

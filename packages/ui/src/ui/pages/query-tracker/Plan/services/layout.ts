@@ -487,7 +487,7 @@ function verticalAlignment(
         });
     });
 
-    return {root: root, align: align};
+    return {root, align};
 }
 
 function horizontalCompaction(

@@ -43,7 +43,7 @@ function RemoteCopyModal() {
                     remoteCopy({
                         ...rest,
                         input_table_paths: map_(input_table_paths, 'title'),
-                        pool: pool,
+                        pool,
                     }),
                 );
             } catch (e: unknown) {

@@ -78,7 +78,7 @@ class Chunks extends Component {
         forEach_(types, (type) => {
             columns[type.name] = {
                 ...type,
-                get: function (cellData) {
+                get(cellData) {
                     return cellData[type.name];
                 },
                 caption: Chunks._formatChunkName(type.name),
@@ -88,7 +88,7 @@ class Chunks extends Component {
         });
 
         columns.cell_tag = {
-            get: function (cellData) {
+            get(cellData) {
                 const cellTag = cellData.cell_tag;
                 return cellTag === 'total' ? cellTag : Number(cellTag);
             },
@@ -155,7 +155,7 @@ class Chunks extends Component {
             theme: 'embedded',
             striped: false,
             css: 'chunk-cells',
-            computeKey: function (item) {
+            computeKey(item) {
                 return item.cell_tag;
             },
             tableId: SYSTEM_CHUNKS_TABLE_ID,
@@ -169,7 +169,7 @@ class Chunks extends Component {
             },
             templates: {
                 key: 'system/chunk-cells',
-                data: {columns: columns},
+                data: {columns},
             },
             header: false,
         };

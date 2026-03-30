@@ -338,7 +338,7 @@ function permanentlyDeleteObjects(multipleInfo: MulipleInfoItem[], transaction: 
 
         return {
             command: 'remove',
-            parameters: {path: path, transaction_id: transaction},
+            parameters: {path, transaction_id: transaction},
         };
     });
 

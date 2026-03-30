@@ -113,9 +113,9 @@ export const getInitialFormValues = (
         resources: {
             info: '', // system
             tablet_count: tablet_count || 0,
-            rpc_proxy_count: rpc_proxy_count, // todo
+            rpc_proxy_count, // todo
             rpc_proxy_resource_guarantee: rpc_proxy_resource_guarantee || undefined,
-            tablet_node_count: tablet_node_count,
+            tablet_node_count,
             tablet_node_resource_guarantee: tablet_node_resource_guarantee || undefined,
         },
         memory_limits: {

@@ -74,7 +74,7 @@ function ChytSimpleConfirmation({
                 textApply: capitalize_(action),
             }}
             onAdd={() => {
-                return dispatch(chytListAction('stop', {alias: alias}))
+                return dispatch(chytListAction('stop', {alias}))
                     .then(() => {
                         if (action === 'remove') {
                             return dispatch(chytListAction('remove', {alias}));
@@ -140,7 +140,7 @@ function ChytStartConfirmation({
                 textApply: 'Start',
             }}
             onClose={onClose}
-            initialValues={{pool: pool}}
+            initialValues={{pool}}
             onAdd={(form) => {
                 const {untracked} = form.getState().values;
                 return dispatch(chytListAction('start', {alias, untracked}))

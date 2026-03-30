@@ -117,7 +117,7 @@ class VersionsSummary extends React.Component<Props, State> {
 
     makeColumnInfo({type, name}: {type: string; name: string}) {
         return {
-            name: name,
+            name,
             title: name,
             sortable: false,
             render: this.renderNumber.bind(this, type),
@@ -160,7 +160,7 @@ class VersionsSummary extends React.Component<Props, State> {
         const {currentVersions, sortOrder} = this.state;
         // unordered case
         if (sortOrder && !Array.isArray(sortOrder) && sortOrder.order === DataTable.DESCENDING) {
-            this.setState((state) => ({...state, sortOrder: [], currentVersions: currentVersions}));
+            this.setState((state) => ({...state, sortOrder: [], currentVersions}));
             setVersionsSummarySortState({});
         } else if (order === 'asc') {
             this.setState((state) => ({

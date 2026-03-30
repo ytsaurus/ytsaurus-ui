@@ -218,7 +218,7 @@ export function saveUserData({
                 })
                 .catch((error) => {
                     const data = error?.response?.data || error;
-                    dispatch({type: USERS_EDIT_USER.FAILURE, data: data});
+                    dispatch({type: USERS_EDIT_USER.FAILURE, data});
                     return Promise.reject(data);
                 })
         );

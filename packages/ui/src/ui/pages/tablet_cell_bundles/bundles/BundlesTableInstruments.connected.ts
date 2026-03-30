@@ -34,7 +34,7 @@ const mapDispatchToProps = {
     setTabletsBundlesAccountFilter,
     setTabletsBundlesTagNodeFilter,
     setTabletsFirstBundleAsActive,
-    setTabletsPartial: setTabletsPartial,
+    setTabletsPartial,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

@@ -54,7 +54,7 @@ const makeMapStateToProps = (idmKind) => {
 
         return {
             loadState: getAclLoadState(state, idmKind),
-            path: path,
+            path,
             idmKind: isPrincipalACLtab ? IdmObjectType.ACCESS_CONTROL_OBJECT : IdmObjectType.PATH,
         };
     };

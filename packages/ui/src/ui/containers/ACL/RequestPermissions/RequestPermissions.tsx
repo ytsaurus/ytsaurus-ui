@@ -179,7 +179,7 @@ function RequestPermissions(props: Props) {
                     </>
                 ),
                 extras: {
-                    choices: choices,
+                    choices,
                     disabledChoices,
                 },
             },
@@ -248,7 +248,7 @@ function RequestPermissions(props: Props) {
                 caption: 'Inheritance mode',
                 extras: {
                     items: map_(INHERITANCE_MODE_TYPES, (value) => ({
-                        value: value,
+                        value,
                         text: hammer.format['ReadableField'](value),
                     })),
                     hideClear: true,

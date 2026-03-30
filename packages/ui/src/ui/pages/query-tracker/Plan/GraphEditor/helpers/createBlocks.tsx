@@ -60,7 +60,7 @@ export const createBlocks = (
     const connections = graph.edges.map((edge) => {
         const id = edge.from + '/' + edge.to;
         return {
-            id: id,
+            id,
             sourceBlockId: edge.from,
             targetBlockId: edge.to,
         };

@@ -287,7 +287,7 @@ export function getType(typeArray: TypeArray): DataType {
             case 'Tuple':
                 return (variantType as DataTypeTuple).type.map((type, index) => ({
                     key: index,
-                    type: type,
+                    type,
                 }));
             case 'Struct':
                 return (variantType as DataTypeStruct).struct;

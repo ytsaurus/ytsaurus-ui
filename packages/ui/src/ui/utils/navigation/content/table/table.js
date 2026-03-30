@@ -28,7 +28,7 @@ export function prepareRows(rowData, reverseRows = false) {
     const data = JSON.parse(rowData);
     const rows = reverseRows ? reverse_(data.rows) : data.rows;
     return {
-        rows: rows,
+        rows,
         columns: data.all_column_names,
         yqlTypes: data.yql_type_registry || null,
     };

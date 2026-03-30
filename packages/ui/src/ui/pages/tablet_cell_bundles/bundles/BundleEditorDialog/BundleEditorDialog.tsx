@@ -276,7 +276,7 @@ export function BundleEditorDialog() {
                 name: 'tablet_node_resource_guarantee',
                 caption: 'Instance configuration',
                 fullWidth: true,
-                extras: function (values, {form}) {
+                extras(values, {form}) {
                     const onRadioClick = (value: BundleResourceGuarantee) => {
                         const nodeConfigurationType = value.type || '';
 

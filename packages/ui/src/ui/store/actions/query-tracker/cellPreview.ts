@@ -62,7 +62,7 @@ export const onCellPreviewQueryResults = (
 
             dispatch({
                 type: CELL_PREVIEW.SUCCESS,
-                data: {data: {$value: $tag ? $value.$value : $value, $type: $type, $tag}},
+                data: {data: {$value: $tag ? $value.$value : $value, $type, $tag}},
             });
         } catch (error: any) {
             if (!isCancelled(error)) {

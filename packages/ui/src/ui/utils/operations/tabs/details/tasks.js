@@ -23,7 +23,7 @@ function prepareCategoryCounters(counters, category) {
             (statistics, count, key) => {
                 statistics.counters.push({
                     value: count,
-                    key: key,
+                    key,
                 });
                 statistics.total += count;
 
@@ -110,7 +110,7 @@ export function prepareDataFromGraph(operation) {
             const type = jobTypeInfo.type;
             const counters = jobTypeInfo.counters;
             return {
-                type: type,
+                type,
                 caption: type,
                 jobType: jobTypeInfo.jobType,
                 ...prepareCounters(counters),
