@@ -5,7 +5,7 @@ import map_ from 'lodash/map';
 import {Select} from '@gravity-ui/uikit';
 
 import {DialogControlProps} from '../../../../components/Dialog/Dialog.types';
-import {getAllPoolTreeNames} from '../../../../store/selectors/global';
+import {selectAllPoolTreeNames} from '../../../../store/selectors/global';
 import {usePoolTreesLoaded} from '../../../../hooks/global-pool-trees';
 
 type Props = DialogControlProps<string[]> & {
@@ -15,7 +15,7 @@ type Props = DialogControlProps<string[]> & {
 
 export function PoolTreeSuggestControl(props: Props) {
     const {value, onChange, disabled, placeholder, multiple} = props;
-    const treeNames = useSelector(getAllPoolTreeNames);
+    const treeNames = useSelector(selectAllPoolTreeNames);
 
     usePoolTreesLoaded();
 
