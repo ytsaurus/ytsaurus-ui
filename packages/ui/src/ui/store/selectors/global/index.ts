@@ -45,18 +45,18 @@ export const selectPoolTrees = (state: RootState) => state?.global?.poolTrees;
 export const selectAllAccounts = (state: RootState) => state.global.accounts;
 export const selectBundles = (state: RootState) => state?.global.bundles;
 export const selectGlobalUsers = (state: RootState) => state.global.users;
-export const getGlobalGroups = (state: RootState) => state.global.groups;
+export const selectGlobalGroups = (state: RootState) => state.global.groups;
 export const getAuthWay = (state: RootState) => state?.global?.authWay;
 
 export const getAllUserNames = createSelector([selectGlobalUsers], (usersData) => {
     return map_(usersData, ({$value}) => $value as string);
 });
 
-export const getAllGroupNames = createSelector([getGlobalGroups], (groupsData) => {
+export const getAllGroupNames = createSelector([selectGlobalGroups], (groupsData) => {
     return map_(groupsData, ({$value}) => $value as string);
 });
 
-export const getGlobalGroupAttributesMap = createSelector([getGlobalGroups], (data) => {
+export const getGlobalGroupAttributesMap = createSelector([selectGlobalGroups], (data) => {
     return reduce_(
         data,
         (acc, {$value, $attributes}) => {

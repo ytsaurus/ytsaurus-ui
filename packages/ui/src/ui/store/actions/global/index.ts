@@ -10,7 +10,7 @@ import {RootState} from '../../../store/reducers';
 import {
     selectBundles,
     getGlobalAsideHeaderWidth,
-    getGlobalGroups,
+    selectGlobalGroups,
     selectGlobalUsers,
     selectPoolTrees,
 } from '../../../store/selectors/global';
@@ -93,7 +93,7 @@ export function loadGroupsIfNotLoaded(): ThunkAction<Promise<void>, RootState, a
             return Promise.resolve();
         }
 
-        const groups = getGlobalGroups(getState());
+        const groups = selectGlobalGroups(getState());
         if (groups?.length) {
             return Promise.resolve();
         }
@@ -130,7 +130,7 @@ export function loadAccountsIfNotLoaded(): ThunkAction<Promise<void>, RootState,
             return Promise.resolve();
         }
 
-        const groups = getGlobalGroups(getState());
+        const groups = selectGlobalGroups(getState());
         if (groups?.length) {
             return Promise.resolve();
         }
