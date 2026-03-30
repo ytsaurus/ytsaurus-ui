@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from '../store/redux-hooks';
 import sortedIndexBy_ from 'lodash/sortedIndexBy';
 import sortedLastIndexBy_ from 'lodash/sortedLastIndexBy';
 
-import {getAllUserNamesSorted} from '../store/selectors/global';
+import {selectAllUserNamesSorted} from '../store/selectors/global';
 import {
     loadAccountsIfNotLoaded,
     loadBundlesIfNotLoaded,
@@ -18,7 +18,7 @@ export function useAllUserNamesFiltered() {
         dispatch(loadUsersIfNotLoaded());
     }, []);
 
-    const namesSorted = useSelector(getAllUserNamesSorted);
+    const namesSorted = useSelector(selectAllUserNamesSorted);
 
     const getFiltered = React.useCallback(
         (text: string) => {
