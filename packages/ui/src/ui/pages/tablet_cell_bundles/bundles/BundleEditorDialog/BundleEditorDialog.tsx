@@ -47,7 +47,7 @@ import {docsUrl} from '../../../../config';
 
 import './BundleEditorDialog.scss';
 import {Pick2} from '../../../../../@types/types';
-import {getQueryMemoryLimitIsSupported} from '../../../../store/selectors/global/supported-features';
+import {selectIsQueryMemoryLimitSupported} from '../../../../store/selectors/global/supported-features';
 import {validateNumber} from '../../../../common/hammer/validate-number';
 
 const block = cn('bundle-editor');
@@ -97,7 +97,7 @@ export function BundleEditorDialog() {
     } = useSelector(getTabletCellBundleEditorState);
 
     const clusterUiConfig = useSelector(selectClusterUiConfig);
-    const queryMemoryLimitIsSupported = useSelector(getQueryMemoryLimitIsSupported);
+    const queryMemoryLimitIsSupported = useSelector(selectIsQueryMemoryLimitSupported);
 
     const {defaultConfig: bundleDefaultConfig} = useSelector(getBundleEditorData);
 
