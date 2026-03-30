@@ -17,7 +17,7 @@ import {
     getObjectPermissionsAggregated,
     isPermissionDeleted,
     permissionDeletionError,
-} from '../../store/selectors/acl';
+} from '../../store/selectors/acl/acl';
 
 import {getType} from '../../store/selectors/navigation';
 

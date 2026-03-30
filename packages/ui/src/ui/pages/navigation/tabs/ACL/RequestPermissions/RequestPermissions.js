@@ -4,7 +4,7 @@ import RequestPermissions from '../../../../../containers/ACL/RequestPermissions
 import {
     getDenyColumnsItems,
     getIdmPermissionsRequestError,
-} from '../../../../../store/selectors/acl';
+} from '../../../../../store/selectors/acl/acl';
 import {cancelRequestPermissions, requestPermissions} from '../../../../../store/actions/acl';
 import {IdmObjectType} from '../../../../../constants/acl';
 

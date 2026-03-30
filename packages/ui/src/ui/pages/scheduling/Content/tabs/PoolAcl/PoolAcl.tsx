@@ -17,7 +17,7 @@ import {PoolAclPanel} from '../../../../../containers/ACL';
 import {RumMeasureTypes} from '../../../../../rum/rum-measure-types';
 import {useRumMeasureStop} from '../../../../../rum/RumUiContext';
 import {isFinalLoadingStatus} from '../../../../../utils/utils';
-import {getAclLoadState} from '../../../../../store/selectors/acl';
+import {getAclLoadState} from '../../../../../store/selectors/acl/acl';
 import {type LoadingStatus} from '../../../../../constants';
 import {IdmObjectType} from '../../../../../constants/acl';
 import {useAppRumMeasureStart} from '../../../../../rum/rum-app-measures';
