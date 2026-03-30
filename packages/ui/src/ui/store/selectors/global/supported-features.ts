@@ -38,13 +38,13 @@ export const selectErasureCodecs = createSelector([selectSupportedFeatures], (fe
     }).sort(compareItems);
 });
 
-export const getPrimitiveTypes = createSelector([selectSupportedFeatures], (features) => {
+export const selectPrimitiveTypes = createSelector([selectSupportedFeatures], (features) => {
     return sortBy_(features.primitive_types).map((value) => {
         return {value, text: value};
     });
 });
 
-export const getPrimitiveTypesMap = createSelector([getPrimitiveTypes], (types) => {
+export const getPrimitiveTypesMap = createSelector([selectPrimitiveTypes], (types) => {
     return new Set(types.map(({value}) => value));
 });
 
