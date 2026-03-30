@@ -33,7 +33,7 @@ import {
     UPDATE_PATH,
     UPDATE_VIEW,
 } from '../../../constants/navigation/index';
-import {getCluster, getCurrentUserName} from '../../../store/selectors/global';
+import {selectCluster, getCurrentUserName} from '../../../store/selectors/global';
 import {fetchTableMountConfig} from '../../../store/actions/navigation/content/table/table-mount-config';
 import {checkPermissions} from '../../../utils/acl/acl-api';
 import {loadTabletErrorsCount} from './tabs/tablet-errors/tablet-errors-background';
@@ -63,7 +63,7 @@ export function updateView(settings: {trackVisit?: boolean} = {}): NavigationThu
             transaction,
         };
 
-        const cluster = getCluster(state);
+        const cluster = selectCluster(state);
 
         const id = new RumWrapper(cluster, RumMeasureTypes.NAVIGATION_PRELOAD);
 

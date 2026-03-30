@@ -4,7 +4,7 @@ import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {ChytCliqueOptionsAction} from '../../reducers/chyt/options';
 import {RootState} from '../../reducers';
-import {getCluster} from '../../selectors/global';
+import {selectCluster} from '../../selectors/global';
 import {selectIsAdmin} from '../../selectors/global/is-developer';
 import {
     StrawberryListAttributes,
@@ -25,7 +25,7 @@ export function chytLoadCliqueOptions(
 ): OptionsThunkAction {
     return (dispatch, getState) => {
         const state = getState();
-        const cluster = getCluster(state);
+        const cluster = selectCluster(state);
         const isAdmin = selectIsAdmin(state);
         dispatch({type: CHYT_OPTIONS.REQUEST, data: {dataAlias: alias}});
 
@@ -63,7 +63,7 @@ export function chytEditOptions(
 ): OptionsThunkAction {
     return (dispatch, getState) => {
         const state = getState();
-        const cluster = getCluster(state);
+        const cluster = selectCluster(state);
         const isAdmin = selectIsAdmin(state);
 
         const options_to_remove: Array<StrawberryListAttributes> = [];

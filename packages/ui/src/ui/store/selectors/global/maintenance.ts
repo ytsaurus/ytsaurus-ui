@@ -1,11 +1,11 @@
 import {createSelector} from 'reselect';
 import {RootState} from '../../../store/reducers';
-import {getCluster} from './cluster';
+import {selectCluster} from './cluster';
 
 const getOngoingEvents = (state: RootState) => state.global.ongoingEvents;
 
 export const getMaintenanceEvent = createSelector(
-    [getCluster, getOngoingEvents],
+    [selectCluster, getOngoingEvents],
     (cluster, ongoing) => {
         if (!ongoing?.events?.length || cluster !== ongoing.cluster) {
             return undefined;

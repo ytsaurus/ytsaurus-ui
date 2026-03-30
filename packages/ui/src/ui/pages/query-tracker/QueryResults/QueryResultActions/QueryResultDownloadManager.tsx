@@ -1,7 +1,7 @@
 import {QueryResultColumn} from '../../../../types/query-tracker/queryResult';
 import qs from 'qs';
 import React, {useMemo, useState} from 'react';
-import {getCluster} from '../../../../store/selectors/global';
+import {selectCluster} from '../../../../store/selectors/global';
 import {DownloadManager} from '../../../navigation/content/Table/DownloadManager/DownloadManager';
 import {getDownloadQueryResultURL} from '../../../../store/actions/query-tracker/api';
 import {getQueryResult} from '../../../../store/selectors/query-tracker/queryResult';
@@ -86,7 +86,7 @@ export const QueryResultDownloadManager = React.memo(function QueryResultDownloa
     visibleColumns,
     className,
 }: Props) {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const result = useSelector((state: RootState) => getQueryResult(state, queryId, resultIndex));
     const dispatch = useDispatch();
     const startRow = result?.resultReady ? result?.page * result?.settings?.pageSize || 0 : 0;

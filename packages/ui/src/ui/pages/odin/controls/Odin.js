@@ -9,7 +9,7 @@ import Message from '../../../components/Message/Message';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import ClusterSelectControl from '../../../components/Dialog/controls/ClusterSelectControl/ClusterSelectControl';
 import {setRootPagesCluster} from '../../../store/actions/global';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import Tabs from '../../../components/Tabs/Tabs';
 import {ODIN_PAGE_ID, OdinTab} from '../odin-constants';
 import {makeTabProps} from '../../../utils';
@@ -204,7 +204,7 @@ const mapIndependentOdinStateToProps = (state) => {
 export const IndependentOdin = connect(mapIndependentOdinStateToProps)(IndependentOdinImpl);
 
 function OdinWrapper() {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const dispatch = useDispatch();
 
     useEffect(() => {

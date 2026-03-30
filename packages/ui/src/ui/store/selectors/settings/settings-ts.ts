@@ -1,6 +1,6 @@
 import {createSelector} from 'reselect';
 
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {getSettingsData} from './settings-base';
 import {getClusterNS, makeGetSetting} from '../../../store/selectors/settings';
 import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
@@ -191,7 +191,7 @@ export const getSettingQueryTrackerYQLAgentStage = createSelector(
     },
 );
 
-export const getCurrentClusterNS = createSelector([getCluster, getClusterNS], (cluster, ns) => {
+export const getCurrentClusterNS = createSelector([selectCluster, getClusterNS], (cluster, ns) => {
     return cluster ? ns : undefined;
 });
 export const getUseAutoRefresh = (state: RootState) =>

@@ -34,7 +34,7 @@ import {Page} from '../../../constants';
 import {EditableBreadcrumbs} from '../../../components/EditableBreadcrumbs/EditableBreadcrumbs';
 import CreatePoolButton from '../Instruments/CreatePoolDialog/CreatePoolDialog';
 
-import {getCluster, getClusterUiConfig} from '../../../store/selectors/global';
+import {selectCluster, getClusterUiConfig} from '../../../store/selectors/global';
 import {makeRoutedURL} from '../../../store/location';
 import UIFactory from '../../../UIFactory';
 
@@ -125,7 +125,7 @@ function SchedulingBreadcrumbs() {
     const dispatch = useDispatch();
     const history = useHistory();
     const tree = useSelector(getTree);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const handleChangePool = (name: string | number) => {
         setTimeout(() => {
             dispatch(changePool(name.toString()));

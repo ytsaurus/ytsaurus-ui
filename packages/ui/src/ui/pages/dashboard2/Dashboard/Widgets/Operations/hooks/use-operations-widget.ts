@@ -6,13 +6,13 @@ import {
     getOperationsAuthorTypeFilter,
     getOperationsStateFilter,
 } from '../../../../../../store/selectors/dashboard2/operations';
-import {getCluster} from '../../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../../store/selectors/global';
 
 import {OperationsWidgetProps} from '../types';
 
 export function useOperationsWidget(props: OperationsWidgetProps) {
     const {id, data} = props;
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     const state = useSelector((state: RootState) => getOperationsStateFilter(state, id));
     const authorType = useSelector((state: RootState) => getOperationsAuthorTypeFilter(state, id));

@@ -2,7 +2,7 @@ import React from 'react';
 import {useSelector} from '../../../../store/redux-hooks';
 
 import AccountsNoContent from '../../../../pages/accounts/AccountsNoContent';
-import {getCluster, getTheme} from '../../../../store/selectors/global';
+import {selectCluster, getTheme} from '../../../../store/selectors/global';
 import {
     getActiveAccount,
     getActiveAccountSubtreeNames,
@@ -10,7 +10,7 @@ import {
 import UIFactory from '../../../../UIFactory';
 
 function AccountStatisticTab() {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const account = useSelector(getActiveAccount);
     const accountSubtreeAllNames = useSelector(getActiveAccountSubtreeNames);
     const theme = useSelector(getTheme);

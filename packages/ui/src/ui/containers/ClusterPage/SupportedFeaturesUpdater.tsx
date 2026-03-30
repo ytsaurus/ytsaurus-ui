@@ -1,12 +1,12 @@
 import React from 'react';
 import {useUpdater} from '../../hooks/use-updater';
 import {useDispatch, useSelector} from '../../store/redux-hooks';
-import {getCluster} from '../../store/selectors/global';
+import {selectCluster} from '../../store/selectors/global';
 import {fetchSupportedFeatures} from '../../store/actions/global/supported-features';
 
 function SupportedFeaturesUpdater() {
     const dispatch = useDispatch();
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     const updateFn = React.useCallback(() => {
         dispatch(fetchSupportedFeatures());

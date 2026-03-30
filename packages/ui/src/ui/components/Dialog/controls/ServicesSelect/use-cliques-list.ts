@@ -5,13 +5,13 @@ import map_ from 'lodash/map';
 import ypath from '../../../../common/thor/ypath';
 
 import {useChytFetchQuery} from '../../../../store/api/chyt';
-import {getCluster} from '../../../../store/selectors/global';
+import {selectCluster} from '../../../../store/selectors/global';
 import {selectIsAdmin} from '../../../../store/selectors/global/is-developer';
 
 import {defaultColumns} from '../../../../constants/chyt';
 
 export function useCliquesList() {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const isAdmin = useSelector(selectIsAdmin);
     const attributesSet = new Set([
         'yt_operation_id' as const,

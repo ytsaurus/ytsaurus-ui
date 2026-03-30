@@ -29,7 +29,7 @@ import {
     getAccessLogReady,
 } from '../../../../store/selectors/navigation/tabs/access-log';
 import {AccessLogItem} from '../../../../store/reducers/navigation/tabs/access-log/access-log';
-import {getCluster} from '../../../../store/selectors/global';
+import {selectCluster} from '../../../../store/selectors/global';
 
 import {genNavigationUrl} from '../../../../utils/navigation/navigation';
 
@@ -67,7 +67,7 @@ const PathItem: FC<{
 };
 
 function useColumns() {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const fieldSelector = useSelector(getAccessLogLastLoadedFieldSelector);
     const columns: Array<Column<AccessLogItem>> = React.useMemo(() => {
         const res: Array<Column<AccessLogItem>> = compact_([

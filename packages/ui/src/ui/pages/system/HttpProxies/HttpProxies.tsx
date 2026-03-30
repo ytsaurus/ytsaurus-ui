@@ -5,7 +5,7 @@ import isEmpty_ from 'lodash/isEmpty';
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 
 import {loadSystemProxies} from '../../../store/actions/system/proxies';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {getSettingsSystemHttpProxiesCollapsed} from '../../../store/selectors/settings/settings-ts';
 import {setSettingsSystemHttpProxiesCollapsed} from '../../../store/actions/settings/settings';
 import type {RootState} from '../../../store/reducers';
@@ -79,7 +79,7 @@ function mapStateToProps(state: RootState) {
         roleGroups,
         loaded,
         collapsed: getSettingsSystemHttpProxiesCollapsed(state),
-        cluster: getCluster(state),
+        cluster: selectCluster(state),
     };
 }
 

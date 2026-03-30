@@ -1,7 +1,7 @@
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../../store/reducers';
 import {TabletErrorsApi, fetchFromTabletErrorsApi} from '../../../../shared/tablet-errors-manager';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {tabletErrorsByBundleActions} from '../../../store/reducers/tablet-errors/tablet-errors-by-bundle';
 import CancelHelper from '../../../utils/cancel-helper';
 import {getTabletErrorsByBundleData} from '../../../store/selectors/tablet-errors/tablet-errors-by-bundle';
@@ -21,7 +21,7 @@ export function loadTabletErrorsByBundle(
         dispatch(tabletErrorsByBundleActions.onRequest({bundle: params.tablet_cell_bundle}));
 
         const state = getState();
-        const cluster = getCluster(state);
+        const cluster = selectCluster(state);
         const data = getTabletErrorsByBundleData(state);
 
         return fetchFromTabletErrorsApi(

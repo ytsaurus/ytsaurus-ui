@@ -13,7 +13,7 @@ import {getMetrics} from '../../common/utils/metrics';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
 import {getClusterNS, getLastVisitedTabs} from '../../store/selectors/settings';
 import {getPath} from '../../../shared/utils/settings';
-import {getCluster, getCurrentUserName} from '../../store/selectors/global';
+import {selectCluster, getCurrentUserName} from '../../store/selectors/global';
 
 function getNSName(itemName) {
     return {
@@ -69,7 +69,7 @@ export function trackVisit(itemName, id) {
 export function trackPageVisit(page) {
     return (dispatch, getState) => {
         const state = getState();
-        const cluster = getCluster(state);
+        const cluster = selectCluster(state);
         const login = getCurrentUserName(state);
         const known = getKnownPages(state);
         dispatch(trackVisit('page', page));

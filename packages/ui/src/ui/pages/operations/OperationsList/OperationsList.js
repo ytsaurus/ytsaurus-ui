@@ -15,7 +15,7 @@ import {useAppRumMeasureStart} from '../../../rum/rum-app-measures';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 import {useRumMeasureStop} from '../../../rum/RumUiContext';
 import {getOperationsListIsFinalState} from '../../../store/selectors/operations/operations-list';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {getListRequestParameters} from '../../../store/actions/operations/utils';
 
 const block = cn('operations-list');
@@ -23,7 +23,7 @@ const block = cn('operations-list');
 function OperationListUpdater({timeRange}) {
     const dispatch = useDispatch();
 
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const parameters = useSelector(getListRequestParameters);
 
     const params = useMemoizedIfEqual(cluster, parameters);

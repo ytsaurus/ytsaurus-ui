@@ -6,7 +6,7 @@ import {useRouteMatch} from 'react-router';
 import {getPagesInfoMapById} from '../../../store/selectors/slideoutMenu';
 
 import Link from '../../../components/Link/Link';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {makeRoutedURL} from '../../../store/location';
 import {Page} from '../../../../shared/constants/settings';
 
@@ -27,7 +27,7 @@ const other: Record<string, {name: string}> = {
 };
 
 export function RowWithName({page, name, className, children, showSplitter, urlParams}: Props) {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const info = useSelector(getPagesInfoMapById)[page] || other[page];
     const title = name || info?.name;
     const url = makeRoutedURL(`/${cluster}/${page}`, urlParams);

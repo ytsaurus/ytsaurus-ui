@@ -11,7 +11,7 @@ import AttributesButton from '../../../../../components/AttributesButton/Attribu
 
 import {toggleIncarnationInfoDialog} from '../../../../../store/reducers/operations/incarnations';
 import type {Incarnation} from '../../../../../store/selectors/operations/incarnations';
-import {getCluster} from '../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../store/selectors/global';
 import {getOperation} from '../../../../../store/selectors/operations/operation';
 
 import {IncarnationButton} from './IncarnationButton';
@@ -28,7 +28,7 @@ export function IncarnationCardHeader(props: Props) {
 
     const dispatch = useDispatch();
 
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const operation = useSelector(getOperation);
 
     return (

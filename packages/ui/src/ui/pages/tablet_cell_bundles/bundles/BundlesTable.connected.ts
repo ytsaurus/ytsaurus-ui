@@ -11,7 +11,7 @@ import {showTabletCellBundleEditor} from '../../../store/actions/tablet_cell_bun
 import type {RootState} from '../../../store/reducers';
 import type {BundlesTableMode} from '../../../store/reducers/tablet_cell_bundles';
 import {
-    getCluster,
+    selectCluster,
     getClusterUiConfigEnablePerBundleTabletAccounting,
 } from '../../../store/selectors/global';
 import {
@@ -75,7 +75,7 @@ const mapStateToProps = (state: RootState) => {
         data: getTabletsBundlesSorted(state),
         total: getTabletsBundlesTotal(state),
         sortState: getTabletsBundlesSortState(state),
-        cluster: getCluster(state),
+        cluster: selectCluster(state),
         allowPerBundleAccounting: getClusterUiConfigEnablePerBundleTabletAccounting(state),
         pathPrefix: '//sys/tablet_cell_bundles/',
         columns: calcColumns(state),

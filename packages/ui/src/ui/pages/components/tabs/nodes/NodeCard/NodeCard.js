@@ -22,7 +22,7 @@ import {loadNodeAttributes} from '../../../../../store/actions/components/node/n
 import {getSortedItems} from '../../../../../store/selectors/components/nodes/node-card';
 
 import {nodeSelector} from '../../../../../store/selectors/components/node/node';
-import {getCluster, getCurrentClusterConfig} from '../../../../../store/selectors/global';
+import {selectCluster, getCurrentClusterConfig} from '../../../../../store/selectors/global';
 import hammer from '../../../../../common/hammer';
 import NodeCpuAndMemory, {
     hasCpuAndMemoryMeta,
@@ -334,7 +334,7 @@ class NodeCard extends Component {
 
 const mapStateToProps = (state) => {
     const {node, loaded, error, errorData} = nodeSelector(state);
-    const cluster = getCluster(state);
+    const cluster = selectCluster(state);
 
     return {
         cluster,

@@ -3,7 +3,7 @@ import {ThunkAction} from 'redux-thunk';
 import {CHYT_CLIQUE} from '../../../constants/chyt-page';
 import {RootState} from '../../../store/reducers';
 import {ChytCliqueAction} from '../../../store/reducers/chyt/clique';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {selectIsAdmin} from '../../../store/selectors/global/is-developer';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {chytApiAction} from '../../../utils/strawberryControllerApi';
@@ -16,7 +16,7 @@ export function chytCliqueLoad(alias: string): ChytCliqueThunkAction {
     return (dispatch, getState) => {
         dispatch({type: CHYT_CLIQUE.REQUEST, data: {currentClique: alias}});
         const state = getState();
-        const cluster = getCluster(state);
+        const cluster = selectCluster(state);
         const isAdmin = selectIsAdmin(state);
         return chytApiAction(
             'get_brief_info',

@@ -11,7 +11,7 @@ import {initialState} from '../../../../store/reducers/navigation/modals/create-
 import {showErrorPopup} from '../../../../utils/utils';
 import Link from '../../../../components/Link/Link';
 import {genNavigationUrl} from '../../../../utils/navigation/navigation';
-import {getCluster} from '../../../selectors/global';
+import {selectCluster} from '../../../selectors/global';
 import {toaster} from '../../../../utils/toaster';
 
 export function openCreateTableModal(parentDirectory) {
@@ -41,7 +41,7 @@ export function createTable(path, attributes) {
         };
 
         const what = attributes.dynamic ? 'Dynamic table' : 'Static table';
-        const cluster = getCluster(getState());
+        const cluster = selectCluster(getState());
 
         return yt.v3
             .create(params)

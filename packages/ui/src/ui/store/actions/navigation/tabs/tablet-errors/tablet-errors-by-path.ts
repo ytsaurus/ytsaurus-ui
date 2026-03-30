@@ -8,7 +8,7 @@ import {
     fetchFromTabletErrorsApi,
 } from '../../../../../../shared/tablet-errors-manager';
 import {ROWS_PER_PAGE} from '../../../../../constants/pagination';
-import {getCluster} from '../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../store/selectors/global';
 import {tabletErrorsByPathActions} from '../../../../../store/reducers/navigation/tabs/tablet-errors/tablet-errors-by-path';
 import CancelHelper, {isCancelled} from '../../../../../utils/cancel-helper';
 import {
@@ -44,7 +44,7 @@ export function loadTabletErrorsByTablePath(
         );
 
         const state = getState();
-        const cluster = getCluster(state);
+        const cluster = selectCluster(state);
 
         const prevDataParams = getTabletErrorsByPathDataParams(state);
         if (

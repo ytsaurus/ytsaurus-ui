@@ -8,7 +8,7 @@ import {
     GROUP_EDITOR_ACTION,
     GROUP_EDITOR_ACTION_DATA_FIELDS,
 } from '../../constants/groups';
-import {getCluster} from '../../store/selectors/global';
+import {selectCluster} from '../../store/selectors/global';
 import {
     getGroupEditorIdmDataVersion,
     getGroupEditorSubjects,
@@ -112,7 +112,7 @@ export function openGroupEditorModal(groupName = '') {
         const {getGroupAcl} = UIFactory.getAclApi();
 
         if (getGroupAcl) {
-            idmDataPromise = getGroupAcl(getCluster(state), groupName);
+            idmDataPromise = getGroupAcl(selectCluster(state), groupName);
         } else {
             idmDataPromise = Promise.resolve();
         }
@@ -209,7 +209,7 @@ export function saveGroupData({
                 responsiblesToRemove,
             );
 
-            const cluster = getCluster(state);
+            const cluster = selectCluster(state);
             return updateGroup({
                 cluster,
                 groupName,

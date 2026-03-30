@@ -31,7 +31,7 @@ import {YTErrors} from '../../../rum/constants';
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {getJobsMonitoringDescriptors} from '../../../store/actions/operations/jobs-monitor';
 
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import type {RootState} from './../../../store/reducers';
 import type {OperationDetailActionType} from '../../reducers/operations/detail';
 import {JSONSerializer} from '../../../common/yt-api';
@@ -118,7 +118,7 @@ export function getOperation(
 
                             const dst = attributes.$value ?? attributes;
                             if ('string' === typeof job_id) {
-                                const cluster = getCluster(getState());
+                                const cluster = selectCluster(getState());
                                 Object.assign(dst, {
                                     job_id: {
                                         $attributes: {

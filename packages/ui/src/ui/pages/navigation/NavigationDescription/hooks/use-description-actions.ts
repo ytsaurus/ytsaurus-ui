@@ -7,7 +7,7 @@ import {
     toggleEditMode,
 } from '../../../../store/reducers/navigation/description';
 import {useAnnotationQuery} from '../../../../store/api/navigation/tabs/description';
-import {getCluster} from '../../../../store/selectors/global';
+import {selectCluster} from '../../../../store/selectors/global';
 import {getPath} from '../../../../store/selectors/navigation';
 
 import {useUpdateAnnotation} from './use-update-annotaton';
@@ -16,7 +16,7 @@ export function useDescriptionActions() {
     const dispatch = useDispatch();
 
     const path = useSelector(getPath);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const edittingAnnotation = useSelector(getEdittingAnnotation);
 
     const [updateFn, {isLoading}] = useUpdateAnnotation();

@@ -13,7 +13,7 @@ import {
     getNavigationPathAttributes,
     getNavigationRestorePath,
 } from '../../../store/selectors/navigation/navigation';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {makeRoutedURL} from '../../../store/location';
 import {restoreObject} from '../../../store/actions/navigation/modals/restore-object';
 import {getNavigationDefaultPath} from '../../../store/selectors/settings';
@@ -275,7 +275,7 @@ function NavigationTools() {
 function Transaction() {
     const dispatch = useDispatch();
 
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const transaction = useSelector(getTransaction);
     const [editMode, setEditMode] = React.useState(false);
 

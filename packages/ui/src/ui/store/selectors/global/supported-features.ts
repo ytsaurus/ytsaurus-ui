@@ -6,7 +6,7 @@ import map_ from 'lodash/map';
 import sortBy_ from 'lodash/sortBy';
 
 import {RootState} from '../../../store/reducers';
-import {getCluster} from './index';
+import {selectCluster} from './index';
 import {SelectWithSubItemsProps} from '../../../components/Dialog/controls/SelectWithSubItems/SelectWithSubItems';
 import {OperationStatisticInfo} from '../../../store/reducers/global/supported-features';
 
@@ -25,7 +25,7 @@ const RECOMMENDED_COMPRESSION_CODECS: Record<string, string> = {
 const RECOMMENDED = ' (recommended)';
 
 const getSupportedFeatures = createSelector(
-    [getCluster, getSupportedFeaturesCluster, getSupportedFeaturesRaw],
+    [selectCluster, getSupportedFeaturesCluster, getSupportedFeaturesRaw],
     (cluster, featuresCluster, features) => {
         return cluster === featuresCluster ? features : {};
     },

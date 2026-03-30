@@ -28,7 +28,7 @@ import Tabs from '../../../../../components/Tabs/Tabs';
 import {getRowsPerTablePage, getShowDecoded} from '../../../../../store/selectors/settings';
 import {getSchema} from '../../../../../store/selectors/navigation/tabs/schema';
 import {getPath, getTransaction} from '../../../../../store/selectors/navigation';
-import {getCluster, getCurrentClusterConfig} from '../../../../../store/selectors/global';
+import {selectCluster, getCurrentClusterConfig} from '../../../../../store/selectors/global';
 import withVisible, {WithVisibleProps} from '../../../../../hocs/withVisible';
 import {
     getAllColumns,
@@ -859,7 +859,7 @@ const mapStateToProps = (state: RootState) => {
     const allColumns: Array<{name: string; checked: boolean}> = getAllColumns(state);
     const srcColumns = getSrcColumns(state);
     const rowCount = getRowCount(state);
-    const cluster = getCluster(state);
+    const cluster = selectCluster(state);
     const columns: typeof allColumns = getColumns(state);
     const schema = getSchema(state);
     const path = getPath(state);

@@ -17,7 +17,7 @@ import {Secondary} from '../../../../components/Text/Text';
 import {getTabletErrors} from '../../../../store/actions/navigation/tabs/tablet-errors/tablet-errors-background';
 import {getPath} from '../../../../store/selectors/navigation';
 import {getEffectiveMode} from '../../../../store/selectors/navigation/navigation';
-import {getCluster} from '../../../../store/selectors/global';
+import {selectCluster} from '../../../../store/selectors/global';
 import {
     getTabletErrorsBackgroundCountNoticeVisbile,
     getTabletErrorsLoadingStatus,
@@ -78,7 +78,7 @@ const mapStateToProps = (state: RootState) => {
     const {loading, loaded, error, tabletErrors} = state.navigation.tabs.tabletErrorsBackground;
     const path = getPath(state);
     const mode = getEffectiveMode(state);
-    const cluster = getCluster(state);
+    const cluster = selectCluster(state);
 
     return {
         loading,

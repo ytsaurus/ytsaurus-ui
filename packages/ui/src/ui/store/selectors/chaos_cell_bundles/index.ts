@@ -8,7 +8,7 @@ import {createSelector} from 'reselect';
 import {concatByAnd} from '../../../common/hammer/predicate';
 import type {RootState} from '../../../store/reducers';
 import type {ChaosBundle, ChaosCell} from '../../../store/reducers/chaos_cell_bundles';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {
     aggregateTotal,
     tabletActiveChaosBundleLink,
@@ -223,7 +223,7 @@ export interface ChaosCellBundlesBreadcrumbsItem {
 }
 
 export const getChaosBreadcrumbItems = createSelector(
-    [getCluster, getChaosActiveBundle],
+    [selectCluster, getChaosActiveBundle],
     (cluster, activeBundle): Array<ChaosCellBundlesBreadcrumbsItem> => {
         const res: Array<ChaosCellBundlesBreadcrumbsItem> = [
             {

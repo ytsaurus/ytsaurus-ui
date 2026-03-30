@@ -6,7 +6,7 @@ import {
     getAccountsList,
     getAccountsTypeFilter,
 } from '../../../../../../store/selectors/dashboard2/accounts';
-import {getCluster} from '../../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../../store/selectors/global';
 import {selectIsAdmin} from '../../../../../../store/selectors/global/is-developer';
 import {useUsableAccountsQuery} from '../../../../../../store/api/accounts';
 
@@ -15,7 +15,7 @@ import {AccountsWidgetProps} from '../types';
 export function useAccountsWidget(props: AccountsWidgetProps) {
     const {data} = props;
 
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const type = useSelector((state: RootState) => getAccountsTypeFilter(state, props.id));
     const isAdmin = useSelector(selectIsAdmin);
 

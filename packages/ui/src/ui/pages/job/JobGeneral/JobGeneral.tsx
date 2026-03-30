@@ -33,7 +33,7 @@ import {ClickableText} from '../../../components/ClickableText/ClickableText';
 import ChartLink from '../../../components/ChartLink/ChartLink';
 import {getJob} from '../../../store/selectors/job/detail';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
-import {getCluster, getClusterUiConfig} from '../../../store/selectors/global';
+import {selectCluster, getClusterUiConfig} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
 import {StaleJobIcon} from '../../../pages/operations/OperationDetail/tabs/Jobs/StaleJobIcon';
 import {Host} from '../../../containers/Host/Host';
@@ -45,7 +45,7 @@ import {YsonDownloadButton} from '../../../components/DownloadAttributesButton';
 const block = cn('job-general');
 
 export default function JobGeneral() {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const match = useRouteMatch<RouteInfo>();
     const settings = useSelector(getJobGeneralYsonSettings);
     const job = useSelector(getJob);

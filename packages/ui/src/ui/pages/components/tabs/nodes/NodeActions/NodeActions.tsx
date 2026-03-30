@@ -6,7 +6,7 @@ import Button from '../../../../../components/Button/Button';
 import Icon from '../../../../../components/Icon/Icon';
 import ChartLink from '../../../../../components/ChartLink/ChartLink';
 
-import {getCluster} from '../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../store/selectors/global';
 import {showNodeMaintenance} from '../../../../../store/actions/components/node-maintenance-modal';
 
 import UIFactory from '../../../../../UIFactory';
@@ -63,7 +63,7 @@ class NodeActions extends React.Component<NodeActionsProps> {
 
 const mapStateToProps = (state: RootState) => {
     return {
-        cluster: getCluster(state),
+        cluster: selectCluster(state),
     };
 };
 

@@ -17,7 +17,7 @@ import {RowWithName} from '../../containers/AppNavigation/TopRowContent/SectionN
 import {WaitForDefaultPoolTree} from '../../hooks/global-pool-trees';
 import {getFavouriteChyt, isActiveCliqueInFavourites} from '../../store/selectors/favourites';
 import {getChytCurrentAlias} from '../../store/selectors/chyt';
-import {getCluster} from '../../store/selectors/global';
+import {selectCluster} from '../../store/selectors/global';
 import {selectIsAdmin} from '../../store/selectors/global/is-developer';
 import {chytApiAction} from '../../utils/strawberryControllerApi';
 import {chytCliqueCreate} from '../../store/actions/chyt/list';
@@ -43,7 +43,7 @@ export default function ChytPageTopRow() {
 
 function ChytFavourites() {
     const history = useHistory();
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const isActiveInFavourites = useSelector(isActiveCliqueInFavourites);
     const favourites = useSelector(getFavouriteChyt);
     const dispatch = useDispatch();
@@ -74,7 +74,7 @@ function ChytFavourites() {
 
 function ChytBreadcrumbs() {
     const history = useHistory();
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const alias = useSelector(getChytCurrentAlias);
 
     const handleBreadcrumbClick = React.useCallback(
@@ -195,7 +195,7 @@ type FormValues = {
 function CreateChytButton() {
     const dispatch = useDispatch();
     const history = useHistory();
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const [visible, setVisible] = React.useState(false);
 
     const [error, setError] = React.useState<YTError | undefined>();

@@ -34,7 +34,7 @@ import {BundleEditorDialog as TabletBundleEditorDialog} from '../../pages/tablet
 import {showTabletCellBundleEditor} from '../../store/actions/tablet_cell_bundles/tablet-cell-bundle-editor';
 import Button from '../../components/Button/Button';
 import {
-    getCluster,
+    selectCluster,
     getClusterUiConfigEnablePerBundleTabletAccounting,
 } from '../../store/selectors/global';
 import ChartLink from '../../components/ChartLink/ChartLink';
@@ -73,7 +73,7 @@ function useShowSettings(activeBundle: string | undefined, enableBundleControlle
 
 export default function TabletCellBundles() {
     const match = useRouteMatch();
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     const error = useSelector(getTabletsError);
     const activeBundle = useSelector(getTabletsActiveBundle);

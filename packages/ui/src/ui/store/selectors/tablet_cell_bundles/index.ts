@@ -18,7 +18,7 @@ import {
 import {createSelector} from 'reselect';
 import {concatByAnd} from '../../../common/hammer/predicate';
 import {prepareHost} from '../../../utils';
-import {getCluster} from '../global';
+import {selectCluster} from '../global';
 import {sortArrayBySortState} from '../../../utils/sort-helpers';
 import {sortTableBundles} from '../../../utils/tablet_cell_bundles';
 import {makeComponentsNodesUrl, makeProxyUrl} from '../../../utils/app-url';
@@ -126,7 +126,7 @@ export const getActiveBundleControllerData = createSelector(
 );
 
 export const getActiveBundleInstances = createSelector(
-    [getActiveBundleControllerData, getCluster, getTabletCellBundleControllerInstanceDetailsMap],
+    [getActiveBundleControllerData, selectCluster, getTabletCellBundleControllerInstanceDetailsMap],
     (bundleControllerData, cluster, instanceDetailsMap) => {
         if (!bundleControllerData) {
             return [];
@@ -143,7 +143,7 @@ export const getActiveBundleInstances = createSelector(
 );
 
 export const getActiveBundleProxies = createSelector(
-    [getActiveBundleControllerData, getCluster, getTabletCellBundleControllerInstanceDetailsMap],
+    [getActiveBundleControllerData, selectCluster, getTabletCellBundleControllerInstanceDetailsMap],
     (bundleControllerData, cluster, instanceDetailsMap) => {
         if (!bundleControllerData) {
             return [];
@@ -353,7 +353,7 @@ export interface TabletsCellBundlesBreadcrumbsItem {
 }
 
 export const getTabletsBreadcrumbItems = createSelector(
-    [getCluster, getTabletsActiveBundleData],
+    [selectCluster, getTabletsActiveBundleData],
     (cluster, activeBundleData): Array<TabletsCellBundlesBreadcrumbsItem> => {
         const res: Array<TabletsCellBundlesBreadcrumbsItem> = [
             {

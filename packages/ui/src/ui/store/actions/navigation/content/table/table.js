@@ -30,7 +30,7 @@ import {openInNewTab, showErrorPopup} from '../../../../../utils/utils';
 import {prepareRequest} from '../../../../../utils/navigation';
 import Query from '../../../../../utils/navigation/content/table/query';
 import Columns from '../../../../../utils/navigation/content/table/columns';
-import {getCluster} from '../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../store/selectors/global';
 import {
     getColumnsValues,
     getRequestOutputFormat,
@@ -108,7 +108,7 @@ function loadDynamicTable(requestOutputFormat, state, type, useZeroRangeForPrelo
             useYqlTypes,
         );
 
-    const cluster = getCluster(state);
+    const cluster = selectCluster(state);
     const isDynamic = getIsDynamic(state);
     const isSorted = ypath.getValue(attributes, '/sorted');
     const id = makeTableRumId({cluster, isDynamic});
@@ -316,7 +316,7 @@ async function loadStaticTable(requestOutputFormat, state, type, useZeroRangeFor
             : '[#' + offsetValue + ':#' + (offsetValue + requestedPageSize) + ']',
     });
 
-    const cluster = getCluster(state);
+    const cluster = selectCluster(state);
     const isDynamic = getIsDynamic(state);
     const id = makeTableRumId({cluster, isDynamic});
     const apiId = type === LOAD_TYPE.PRELOAD ? YTApiId.tableReadPreload : YTApiId.tableRead;
@@ -599,7 +599,7 @@ export function rememberPresetColumnsAsDefault() {
 export function openTableWithPresetOfColumns() {
     return (dispatch, getState) => {
         const visibleColumns = getVisibleColumns(getState());
-        const cluster = getCluster(getState());
+        const cluster = selectCluster(getState());
         saveColumnPreset(map_(visibleColumns, 'name'), cluster).then((hash) => {
             const {href} = window.location;
             const url = `${href}&columns=${hash}`;

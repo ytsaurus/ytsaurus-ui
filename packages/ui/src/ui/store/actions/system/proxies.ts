@@ -3,7 +3,7 @@ import map_ from 'lodash/map';
 
 import {isRetryFutile} from '../../../utils/index';
 import {showErrorPopup} from '../../../utils/utils';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {extractProxyCounters, extractRoleGroups} from '../../../utils/system/proxies';
 import type {HttpProxiesAction, RoleGroupItemInfo} from '../../../store/reducers/system/proxies';
 import {ThunkAction} from 'redux-thunk';
@@ -29,7 +29,7 @@ export function loadSystemProxies(): ProxiesThunkAction<
     Promise<undefined | {isRetryFutile: boolean}>
 > {
     return (dispatch, getState) => {
-        const cluster = getCluster(getState());
+        const cluster = selectCluster(getState());
 
         return axios
             .request({

@@ -1,6 +1,6 @@
 import React from 'react';
 import {useSelector} from '../../../store/redux-hooks';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import ypath from '../../../common/thor/ypath';
 import {getTabletsActiveBundleData} from '../../../store/selectors/tablet_cell_bundles';
 
@@ -14,7 +14,7 @@ function BundleMonitorTab(props: {
 }) {
     const {component: BundleMonitor} = props;
     const bundleData = useSelector(getTabletsActiveBundleData);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     const tablet_cell_bundle: undefined | string = React.useMemo(() => {
         return ypath.getValue(bundleData, '/bundle');

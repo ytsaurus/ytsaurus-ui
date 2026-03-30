@@ -6,7 +6,7 @@ import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 import {useUpdater} from '../../../hooks/use-updater';
 import {setSettingsSystemCypressProxiesCollapsed} from '../../../store/actions/settings/settings';
 import {loadSystemCypressProxies} from '../../../store/actions/system/cypress-proxies';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {getSettingsSystemCypressProxiesCollapsed} from '../../../store/selectors/settings/settings-ts';
 import {useDispatch} from '../../../store/redux-hooks';
 import {MakeUrlParams} from '../ProxiesImpl/RoleGroup';
@@ -22,7 +22,7 @@ function CypressProxiesOverview({counters}: {counters: SystemNodeCounters}) {
 }
 
 function CypressProxies() {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const collapsed = useSelector(getSettingsSystemCypressProxiesCollapsed);
     const roleGroups = useSelector(getCypressProxiesRoleGroups);
     const counters = useSelector(getCypressProxiesCounters);

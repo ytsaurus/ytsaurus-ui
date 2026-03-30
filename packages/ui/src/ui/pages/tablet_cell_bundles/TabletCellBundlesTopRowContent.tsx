@@ -8,7 +8,7 @@ import Favourites, {FavouritesItem} from '../../components/Favourites/Favourites
 import {Page} from '../../constants/index';
 import {TabletsTab} from '../../constants/tablets';
 import {RowWithName} from '../../containers/AppNavigation/TopRowContent/SectionName';
-import {getCluster, getClusterUiConfig} from '../../store/selectors/global';
+import {selectCluster, getClusterUiConfig} from '../../store/selectors/global';
 import type {TabletsCellBundlesBreadcrumbsItem} from '../../store/selectors/tablet_cell_bundles';
 import type {ValueOf} from '../../types';
 
@@ -83,7 +83,7 @@ function BundleFavourites({
     setActiveBundle,
     toggleFavourite,
 }: BundleFavouritesProps) {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     const handleFavouriteItemClick = React.useCallback(
         (item: FavouritesItem) => {
@@ -123,7 +123,7 @@ interface BundleBreadcrumbsProps {
 }
 
 function BundleBreadcrumbs({className, bcItems, setActiveBundle}: BundleBreadcrumbsProps) {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const history = useHistory();
 
     const handleItemClick = React.useCallback(

@@ -19,7 +19,7 @@ import {getLastVisitedTabs} from '../../../store/selectors/settings';
 import {makeTabProps} from '../../../utils';
 import {Page} from '../../../constants/index';
 
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {tabletActiveBundleLink} from '../../../utils/components/tablet-cells';
 
 import './Component.scss';
@@ -83,7 +83,7 @@ export function Components({match, lastVisitedTab = DEFAULT_TAB, tabSize, locati
 }
 
 function RedirectToTabletCells() {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     return <Redirect to={tabletActiveBundleLink(cluster, '')} />;
 }
 

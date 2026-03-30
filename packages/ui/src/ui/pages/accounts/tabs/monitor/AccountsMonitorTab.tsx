@@ -4,7 +4,7 @@ import {useSelector} from '../../../../store/redux-hooks';
 import AccountsNoContent from '../../AccountsNoContent';
 
 import {getActiveAccount} from '../../../../store/selectors/accounts/accounts';
-import {getCluster} from '../../../../store/selectors/global';
+import {selectCluster} from '../../../../store/selectors/global';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 
 import i18n from './i18n';
@@ -14,7 +14,7 @@ function AccountsMonitorTab(props: {
 }) {
     const {component: AccountMonitor} = props;
     const account = useSelector(getActiveAccount);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     if (!account) {
         return <AccountsNoContent hint={i18n('please-choose-one-to-display')} />;

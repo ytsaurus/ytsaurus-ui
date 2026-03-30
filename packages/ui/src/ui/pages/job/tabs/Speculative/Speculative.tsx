@@ -14,7 +14,7 @@ import ypath from '../../../../common/thor/ypath';
 import {PreparedJob, RawJob} from '../../../../types/operations/job';
 import hammer from '../../../../common/hammer';
 import {RootState} from '../../../../store/reducers';
-import {getCluster} from '../../../../store/selectors/global';
+import {selectCluster} from '../../../../store/selectors/global';
 import {loadCompetitors} from '../../../../store/actions/job/competitors';
 import {OPERATION_JOBS_TABLE_ID} from '../../../../constants/operations/jobs';
 
@@ -29,7 +29,7 @@ interface IdAddressProps {
 }
 
 function IdAddress({job, operationId}: IdAddressProps) {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     // @ts-ignore
     const [id, address, job_competition_id] = ypath.getValues(job, [

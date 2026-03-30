@@ -13,7 +13,7 @@ import {getNavigationSqlService} from '../../store/selectors/settings/navigation
 import {getPath} from '../../store/selectors/navigation';
 import UIFactory from '../../UIFactory';
 import {useSidePanel} from '../../hooks/use-side-panel';
-import {getCluster} from '../../store/selectors/global/cluster';
+import {selectCluster} from '../../store/selectors/global/cluster';
 import {RootState} from '../../store/reducers';
 import {NavigationState} from '../../store/reducers/navigation/navigation';
 import {setNavigationSidePanelMode} from '../../store/actions/navigation';
@@ -26,7 +26,7 @@ function useNavigationSidePanelMode() {
     const dispatch = useDispatch();
 
     const path: string = useSelector(getPath);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const panelMode = useSelector((state: RootState) => state.navigation.navigation.sidePanelMode);
 
     const setPanelMode = React.useCallback(

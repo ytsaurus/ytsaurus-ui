@@ -3,7 +3,7 @@ import Link from '../../components/Link/Link';
 import {AccountsTab} from '../../constants/accounts/accounts';
 import {Page} from '../../constants';
 import {useSelector} from '../../store/redux-hooks';
-import {getCluster} from '../../store/selectors/global';
+import {selectCluster} from '../../store/selectors/global';
 import hammer from '../../common/hammer';
 import {Tooltip} from '../../components/Tooltip/Tooltip';
 import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
@@ -22,7 +22,7 @@ export function genAccountsUrl(cluster: string, account: string) {
 
 export default function AccountLink(props: Props) {
     const {cluster: propsCluster, account, className, inline} = props;
-    const currentCluster = useSelector(getCluster);
+    const currentCluster = useSelector(selectCluster);
     const cluster = propsCluster || currentCluster;
 
     return (

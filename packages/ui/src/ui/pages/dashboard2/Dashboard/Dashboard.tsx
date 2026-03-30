@@ -12,7 +12,7 @@ import {
     openSettingsDialog,
 } from '../../../store/reducers/dashboard2/dashboard';
 import {getDashboardConfig} from '../../../store/selectors/dashboard2/dashboard';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {selectIsAdmin} from '../../../store/selectors/global/is-developer';
 
 import {useDisableMaxContentWidth} from '../../../containers/MaxContentWidth';
@@ -31,7 +31,7 @@ export function Dashboard() {
     const editMode = useSelector(getEditMode);
     const config = useSelector(getDashboardConfig);
     const edittingConfig = useSelector(getEdittingConfig);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const isAdmin = useSelector(selectIsAdmin);
 
     useEffect(() => {

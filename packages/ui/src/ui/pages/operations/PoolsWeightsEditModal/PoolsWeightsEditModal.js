@@ -18,7 +18,7 @@ import {hideEditPoolsWeightsModal, setPoolsAndWeights} from '../../../store/acti
 import {Page} from '../../../constants/index';
 
 import './PoolsWeightsEditModal.scss';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 
 PoolsWeightsEditModal.propTypes = {
     // from connect
@@ -195,7 +195,7 @@ function mapStateToProps(state) {
         visible,
         editable,
         operation,
-        cluster: getCluster(state),
+        cluster: selectCluster(state),
     };
 }
 

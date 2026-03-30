@@ -12,7 +12,7 @@ import {
     SUPPORTED_FEATURES_REQUEST,
     SUPPORTED_FEATURES_SUCCESS,
 } from '../../../constants/global';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 
 type SupportedFeaturesThunkAction = ThunkAction<any, RootState, any, SupportedFeaturesAction>;
 
@@ -20,7 +20,7 @@ const cancelHelper = new CancelHelper();
 
 export function fetchSupportedFeatures(): SupportedFeaturesThunkAction {
     return (dispatch, getState) => {
-        const featuresCluster = getCluster(getState());
+        const featuresCluster = selectCluster(getState());
         if (!featuresCluster) {
             return undefined;
         }

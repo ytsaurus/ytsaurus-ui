@@ -24,7 +24,7 @@ import {useFlowExecuteQuery} from '../../../../store/api/yt/flow';
 import {filtersSlice} from '../../../../store/reducers/flow/filters';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {selectFlowPipelinePath} from '../../../../store/selectors/flow/filters';
-import {getCluster} from '../../../../store/selectors/global/cluster';
+import {selectCluster} from '../../../../store/selectors/global/cluster';
 import UIFactory from '../../../../UIFactory';
 import {openInNewTab, wrapApiPromiseByToaster} from '../../../../utils/utils';
 import './FlowWorker.scss';
@@ -118,7 +118,7 @@ function FlowWorkderMonitor({worker}: {worker: string}) {
 }
 
 function FlowWorkderTabs({worker}: {worker: string}) {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     return (
         <Tabs

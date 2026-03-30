@@ -7,7 +7,7 @@ import ypath from '../../../../../common/thor/ypath';
 import {RootState} from '../../../../../store/reducers';
 import {batchApi} from '../../../yt';
 import {getAttributes, getPath} from '../../../../../store/selectors/navigation';
-import {getCluster} from '../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../store/selectors/global';
 
 import CancelHelper from '../../../../../utils/cancel-helper';
 import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
@@ -61,7 +61,7 @@ export async function exportsMutation(args: ExportsMutationArgs, api: BaseQueryA
         const state = api.getState() as RootState;
         const path = getPath(state);
         const attributes = getAttributes(state);
-        const cluster = getCluster(state);
+        const cluster = selectCluster(state);
 
         const {prevConfig, type, newConfig} = args;
 

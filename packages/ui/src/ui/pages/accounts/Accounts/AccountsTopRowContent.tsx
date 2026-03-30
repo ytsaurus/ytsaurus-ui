@@ -23,7 +23,7 @@ import {useHistory} from 'react-router';
 import {makeRoutedURL} from '../../../store/location';
 import {Page} from '../../../constants';
 
-import {getCluster, getClusterUiConfig} from '../../../store/selectors/global';
+import {selectCluster, getClusterUiConfig} from '../../../store/selectors/global';
 import {ACCOUNTS_ALLOWED_ROOT_TABS, AccountsTab} from '../../../constants/accounts/accounts';
 
 import './AccountsTopRowContent.scss';
@@ -88,7 +88,7 @@ function AccountsBreadcrumbs() {
     // @ts-ignore
     const bcItems = useSelector(getActiveAccountBreadcrumbs).slice(1);
     const dispatch = useDispatch();
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const history = useHistory();
 
     const handleBreadcrumbsClick = (key: string | number) => {

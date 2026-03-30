@@ -2,7 +2,7 @@ import React from 'react';
 import {useSelector} from '../../../../../store/redux-hooks';
 
 import {getPath} from '../../../../../store/selectors/navigation';
-import {getCluster} from '../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../store/selectors/global';
 import Icon from '../../../../../components/Icon/Icon';
 import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
 import {getNavigationTableDataLensButtonAlerts} from '../../../../../store/selectors/navigation/content/table-ts';
@@ -17,7 +17,7 @@ import UIFactory from '../../../../../UIFactory';
 
 export default function DataLensButton({className}: {className: string}) {
     const loaded = useSelector(getNavigationPathAttributesLoadState) === LOADING_STATUS.LOADED;
-    const cluster: string = useSelector(getCluster);
+    const cluster: string = useSelector(selectCluster);
     const path = useSelector(getPath);
     const {isEmptySchema, enableDynamicStoreRedRequired} = useSelector(
         getNavigationTableDataLensButtonAlerts,

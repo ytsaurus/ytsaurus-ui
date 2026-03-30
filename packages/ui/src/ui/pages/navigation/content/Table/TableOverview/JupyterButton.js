@@ -6,7 +6,7 @@ import Button from '../../../../../components/Button/Button';
 import Logo from '../../../../../assets/img/svg/jupyter-logo.svg';
 
 import {getPath} from '../../../../../store/selectors/navigation';
-import {getCluster} from '../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../store/selectors/global';
 import {getNavigationPathAttributesLoadState} from '../../../../../store/selectors/navigation/navigation';
 import {LOADING_STATUS} from '../../../../../constants';
 import {getJupyterBasePath} from '../../../../../config';
@@ -18,7 +18,7 @@ JupyterButton.propTypes = {
 
 function JupyterButton({block}) {
     const loaded = useSelector(getNavigationPathAttributesLoadState) === LOADING_STATUS.LOADED;
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const path = useSelector(getPath);
 
     const basePath = getJupyterBasePath();

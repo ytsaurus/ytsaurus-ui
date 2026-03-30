@@ -16,7 +16,7 @@ import {abortAllRequests, getShards} from '../../../../store/actions/components/
 import type {Shard} from '../../../../store/reducers/components/shards';
 
 import './Shards.scss';
-import {getCluster} from '../../../../store/selectors/global';
+import {selectCluster} from '../../../../store/selectors/global';
 import type {RootState} from '../../../../store/reducers';
 
 const block = cn('components-shards');
@@ -124,7 +124,7 @@ const mapStateToProps = (state: RootState) => {
         error,
         errorData,
         shards,
-        cluster: getCluster(state),
+        cluster: selectCluster(state),
     };
 };
 

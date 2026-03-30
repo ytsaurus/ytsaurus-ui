@@ -23,7 +23,7 @@ import {
 
 import './Links.scss';
 import {genAccountsUrl} from '../../accounts/AccountLink';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {UI_TAB_SIZE} from '../../../constants/global';
 
 const linksBlock = cn('dashboard-links');
@@ -174,7 +174,7 @@ const mapStateToProps = (state) => {
         popularAccounts: getPopularAccounts(state),
         favouriteAccounts: getFavouriteAccounts(state),
         tabSize: UI_TAB_SIZE,
-        cluster: getCluster(state),
+        cluster: selectCluster(state),
     };
 };
 

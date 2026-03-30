@@ -7,7 +7,7 @@ import {UI_TAB_SIZE} from '../../../constants/global';
 import {Redirect, Route, Switch} from 'react-router';
 import {SystemTabs} from '../../../constants/system/tabs';
 import {getSystemTabItems} from './helpers/getSystemTabItems';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {useSelector} from '../../../store/redux-hooks';
 
 const Wrap: FC<PropsWithChildren> = ({children}) => {
@@ -26,7 +26,7 @@ type Props = {
 };
 
 export const System: FC<Props> = ({match}) => {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const systemMonitoringTab = UIFactory.getSystemMonitoringTab();
 
     const items = useMemo(() => {

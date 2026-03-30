@@ -14,7 +14,7 @@ import {
     getExpandedPoolsTree,
     getSchedulingOperations,
 } from './expanded-pools';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {RumWrapper} from '../../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 import {EMPTY_OBJECT} from '../../../constants/empty';
@@ -51,7 +51,7 @@ const getOperationsFiltered = createSelector(
 );
 
 const getPoolsPrepared = createSelector(
-    [getPoolsRaw, getOperationsFiltered, getExpandedPoolCypressData, getTreeResources, getCluster],
+    [getPoolsRaw, getOperationsFiltered, getExpandedPoolCypressData, getTreeResources, selectCluster],
     (rawPools, rawOperations, attributes, treeResources, cluster) => {
         if (isEmpty_(rawPools)) {
             return [];

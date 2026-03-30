@@ -79,7 +79,7 @@ import {
     getAccountsMasterMemoryContentMode,
 } from '../../../../store/selectors/accounts/accounts-ts';
 import {
-    getCluster,
+    selectCluster,
     getClusterUiConfig,
     getClusterUiConfigEnablePerAccountTabletAccounting,
 } from '../../../../store/selectors/global';
@@ -817,7 +817,7 @@ const makeMapStateToProps = () => {
             contextViewTree,
             nameToAccountMap,
 
-            cluster: getCluster(state),
+            cluster: selectCluster(state),
 
             activeAccountAggregation: getActiveAccountAggregationRow(state),
             favouriteAccountsSet,

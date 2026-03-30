@@ -2,7 +2,7 @@ import {createQueryUrl} from '../../../pages/query-tracker/utils/navigation';
 import {AnyAction} from 'redux';
 import {ThunkAction} from 'redux-thunk';
 import {RootState} from '../../reducers';
-import {getCluster} from '../../selectors/global';
+import {selectCluster} from '../../selectors/global';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {
     DraftQuery,
@@ -104,7 +104,7 @@ const checkCliqueControllerIsSupported =
 
 export const setCurrentClusterToQuery = (): AsyncAction => async (dispatch, getState) => {
     const state = getState();
-    const cluster = getCluster(state);
+    const cluster = selectCluster(state);
     const {settings, engine} = getQueryDraft(state);
 
     if (settings && 'cluster' in settings) return;
@@ -521,7 +521,7 @@ export function abortCurrentQuery(): ThunkAction<any, RootState, any, SetQueryAc
 export function goToQuery(query_id: string): ThunkAction<any, RootState, any, never> {
     return (_, getState) => {
         const state = getState();
-        const cluster = getCluster(state);
+        const cluster = selectCluster(state);
         const history = getAppBrowserHistory();
         history.push(createQueryUrl(cluster, query_id));
     };
@@ -530,7 +530,7 @@ export function goToQuery(query_id: string): ThunkAction<any, RootState, any, ne
 export function resetQueryTracker(): ThunkAction<any, RootState, any, never> {
     return (dispatch, getState) => {
         const state = getState();
-        const cluster = getCluster(state);
+        const cluster = selectCluster(state);
         const history = getAppBrowserHistory();
         history.push(createQueryUrl(cluster, ''));
 

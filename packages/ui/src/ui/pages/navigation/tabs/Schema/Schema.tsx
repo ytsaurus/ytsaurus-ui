@@ -28,7 +28,7 @@ import {
     getSchemaMeta,
 } from '../../../../store/selectors/navigation/tabs/schema';
 import {updateSchemaFilter} from '../../../../store/actions/navigation/tabs/schema';
-import {getCluster} from '../../../../store/selectors/global';
+import {selectCluster} from '../../../../store/selectors/global';
 import hammer from '../../../../common/hammer';
 
 import './Schema.scss';
@@ -292,7 +292,7 @@ class Schema extends Component<SchemaProps> {
 const mapStateToProps = (state: RootState) => {
     const {column} = state.navigation.tabs.schema;
 
-    const cluster = getCluster(state);
+    const cluster = selectCluster(state);
     const path = getAttributesPath(state);
     const schema = getSchema(state);
     const meta = getSchemaMeta(state);

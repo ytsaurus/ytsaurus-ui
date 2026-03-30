@@ -6,7 +6,7 @@ import {useSelector} from '../../../store/redux-hooks';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 
 import MetaTable from '../../../components/MetaTable/MetaTable';
 import {showErrorPopup} from '../../../utils/utils';
@@ -52,7 +52,7 @@ export function OperationShortInfo(props: Props) {
         };
     }, [finishTimeRaw, setOperation]);
 
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const output = output_attribute_name
         ? ypath.getValue(operation, output_attribute_name) || '...'
         : '...';

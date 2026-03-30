@@ -28,7 +28,7 @@ import {isAbcPoolName, isTopLevelPool} from '../../../../utils/scheduling/pool';
 import {closeEditModal, editPool} from '../../../../store/actions/scheduling/scheduling';
 
 import {checkUserPermissionsUI} from '../../../../utils/acl/acl-api';
-import {getCluster, getCurrentUserName} from '../../../../store/selectors/global';
+import {selectCluster, getCurrentUserName} from '../../../../store/selectors/global';
 import {getCurrentTreeGpuLimit} from '../../../../store/selectors/scheduling/scheduling-ts';
 
 import {RootState} from '../../../../store/reducers';
@@ -537,7 +537,7 @@ function useChangeIntegralTypeNotice(
 ): [DialogField<PoolEditorFormValues>] | [] {
     const {name, parent} = editItem || {};
 
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     if (isAbcPoolName(name) || (!isAbcPoolName(parent) && !isTopLevelPool(editItem))) {
         return [];

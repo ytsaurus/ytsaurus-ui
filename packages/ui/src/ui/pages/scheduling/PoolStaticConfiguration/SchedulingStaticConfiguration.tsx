@@ -15,7 +15,7 @@ import './SchedulingStaticConfiguration.scss';
 import {getSettingsSchedulingExpandStaticConfiguration} from '../../../store/selectors/settings/settings-ts';
 import {setSettingsSchedulingExpandStaticConfiguration} from '../../../store/actions/settings/settings';
 import UIFactory from '../../../UIFactory';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {ArrayElement} from '../../../types';
 
 const block = cn('scheduling-static-configuration');
@@ -51,7 +51,7 @@ export default React.memo(SchedulingStaticConfiguration);
 function PoolTreeStaticConfiguration() {
     const items = useSelector(getCurrentPoolTreeStaticConfiguration);
     const poolTree = useSelector(getTree);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     const columns: Array<Column<ArrayElement<typeof items>>> = [
         {

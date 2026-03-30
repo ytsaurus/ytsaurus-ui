@@ -8,7 +8,7 @@ import {
 } from '../../../store/actions/chaos_cell_bundles';
 import {showChaosCellBundleEditor} from '../../../store/actions/chaos_cell_bundles/tablet-cell-bundle-editor';
 import type {RootState} from '../../../store/reducers';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {
     getChaosBundlesSortState,
     getChaosBundlesSorted,
@@ -34,7 +34,7 @@ const mapStateToProps = (state: RootState) => {
         data: getChaosBundlesSorted(state),
         total: getChaosBundlesTotal(state),
         sortState: getChaosBundlesSortState(state),
-        cluster: getCluster(state),
+        cluster: selectCluster(state),
         allowPerBundleAccounting: false,
         mode: getChaosBundlesTableMode(state),
         pathPrefix: '//sys/chaos_cell_bundles/',

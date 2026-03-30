@@ -6,7 +6,7 @@ import hammer from '../../../common/hammer';
 import * as treeList from '../../../common/hammer/tree-list';
 
 import {createSelector} from 'reselect';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 
 import {prepareResources} from '../../../utils/scheduling/overview';
 import {childTableItems} from '../../../utils/scheduling/detailsTable';
@@ -214,7 +214,7 @@ export const getSchedulingOverviewTableItems = createSelector(
 // The same cluster is ready for bundle's ACL
 const CLUSTERS_WITHOUT_POOL_ACL = ['locke'];
 
-export const isPoolAclAllowed = createSelector([getCluster], (cluster) => {
+export const isPoolAclAllowed = createSelector([selectCluster], (cluster) => {
     return CLUSTERS_WITHOUT_POOL_ACL.indexOf(cluster) === -1;
 });
 

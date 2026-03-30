@@ -3,7 +3,7 @@ import isEqual_ from 'lodash/isEqual';
 
 import {RootState} from '../../../../store/reducers';
 import {createSelector} from 'reselect';
-import {getCluster} from '../../../../store/selectors/global';
+import {selectCluster} from '../../../../store/selectors/global';
 import {getPath} from '../../../../store/selectors/navigation/index';
 import {convertTimeToRequestParams} from '../../../../components/common/Timeline';
 
@@ -79,7 +79,7 @@ function skipEmpty<T>(v: T) {
 }
 
 export const getAccessLogRequestParams = createSelector(
-    [getCluster, getPath, getAccessLogFiltersState],
+    [selectCluster, getPath, getAccessLogFiltersState],
     (cluster, path, filters) => {
         const {time, field_selector, method_group, user_type, scope, ...rest} = filters;
 

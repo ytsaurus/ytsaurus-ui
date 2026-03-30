@@ -23,7 +23,7 @@ import {getConfigData, userSettingsCluster} from '../../../config/ui-settings';
 export * from './cluster';
 export * from './username';
 
-import {getCluster} from './cluster';
+import {selectCluster} from './cluster';
 import {selectIsAdmin} from './is-developer';
 
 export const getGlobalError = (state: RootState) => state.global.error?.error;
@@ -148,6 +148,6 @@ export const getGlobalAsideHeaderWidth = (state: RootState) => state.global.asid
 
 export const getGlobalYTAuthCluster = (state: RootState) => state.global.ytAuthCluster;
 
-export const getSettingsCluster = createSelector([getCluster], (cluster) => {
+export const getSettingsCluster = createSelector([selectCluster], (cluster) => {
     return userSettingsCluster ?? cluster;
 });

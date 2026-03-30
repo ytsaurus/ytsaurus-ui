@@ -61,7 +61,7 @@ import {
 } from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 import ColumnHeader from '../../../../components/ColumnHeader/ColumnHeader';
 import Icon from '../../../../components/Icon/Icon';
-import {getCluster} from '../../../../store/selectors/global';
+import {selectCluster} from '../../../../store/selectors/global';
 import Loader from '../../../../components/Loader/Loader';
 
 import {SubjectCard} from '../../../../components/SubjectLink/SubjectLink';
@@ -158,7 +158,7 @@ function useColumnsByPreset(mediums: Array<string>) {
 
     const availableColumns = useSelector(getAccountUsageAvailableColumns);
     const visibleColumns = useSelector(getAccountUsageVisibleDataColumns);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const viewType = useSelector(getAccountUsageViewType);
     const treePath = useSelector(getAccountUsageTreeItemsBasePath);
 

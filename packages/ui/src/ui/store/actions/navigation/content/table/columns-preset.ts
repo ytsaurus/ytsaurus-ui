@@ -12,7 +12,7 @@ import {
     SET_TABLE_COLUMNS_PRESET_HASH,
 } from '../../../../../constants/navigation/content/table';
 import {showErrorPopup, wrapApiPromiseByToaster} from '../../../../../utils/utils';
-import {getCluster} from '../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../store/selectors/global';
 import {
     getColumnsPreset,
     getColumnsPresetHash,
@@ -42,7 +42,7 @@ export function loadColumnPresetIfDefined(): ColumnPresetThunkAction {
             return Promise.resolve();
         }
 
-        const cluster = getCluster(state);
+        const cluster = selectCluster(state);
         const isDynamic = getIsDynamic(state);
         const id = makeTableRumId({cluster, isDynamic});
 

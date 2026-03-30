@@ -8,7 +8,7 @@ import {
     toggleCopyConfigDialogVisibility,
 } from '../../../../../store/reducers/dashboard2/dashboard';
 import {copyConfig} from '../../../../../store/actions/dashboard2/dashboard';
-import {getCluster} from '../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../store/selectors/global';
 
 import {FormApi, YTDFDialog} from '../../../../../components/Dialog';
 
@@ -23,7 +23,7 @@ interface FormValues {
 export function CopyConfigDialog() {
     const dispatch = useDispatch();
 
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const copyConfigDialogVisibility = useSelector(getCopyConfigDialogVisibility);
 
     const onClose = () => dispatch(toggleCopyConfigDialogVisibility());

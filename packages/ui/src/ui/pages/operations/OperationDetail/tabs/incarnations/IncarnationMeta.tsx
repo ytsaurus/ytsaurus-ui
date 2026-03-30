@@ -7,7 +7,7 @@ import {Page} from '../../../../../../shared/constants/settings';
 
 import format from '../../../../../common/hammer/format';
 
-import {getCluster} from '../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../store/selectors/global';
 import {getOperation} from '../../../../../store/selectors/operations/operation';
 import type {Incarnation} from '../../../../../store/selectors/operations/incarnations';
 import {showErrorModal} from '../../../../../store/actions/actions';
@@ -27,7 +27,7 @@ export function IncarnationMeta(props: Props) {
 
     const dispatch = useDispatch();
 
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const operation = useSelector(getOperation);
 
     const {switch_info} = incarnation;

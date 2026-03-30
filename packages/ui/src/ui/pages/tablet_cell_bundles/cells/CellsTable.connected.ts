@@ -7,7 +7,7 @@ import {
     setTabletsPartial,
 } from '../../../store/actions/tablet_cell_bundles';
 import type {RootState} from '../../../store/reducers';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {
     getTabletsCellsSortState,
     getTabletsCellsSorted,
@@ -35,7 +35,7 @@ const columns: ComponentProps<typeof CellsTable>['columns'] = [
 
 const mapStateToProps = (state: RootState) => {
     return {
-        cluster: getCluster(state),
+        cluster: selectCluster(state),
         loading: getTabletsIsLoading(state),
         loaded: getTabletsIsLoaded(state),
         data: getTabletsCellsSorted(state),

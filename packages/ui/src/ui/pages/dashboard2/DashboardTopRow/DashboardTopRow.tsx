@@ -9,7 +9,7 @@ import {
     getEditMode,
     toggleCopyConfigDialogVisibility,
 } from '../../../store/reducers/dashboard2/dashboard';
-import {getCluster, getCurrentUserName} from '../../../store/selectors/global';
+import {selectCluster, getCurrentUserName} from '../../../store/selectors/global';
 
 import {Page} from '../../../../shared/constants/settings';
 
@@ -73,7 +73,7 @@ function CopyConfigButton() {
 
 function MyRolesLink() {
     const login = useSelector(getCurrentUserName);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     return (
         UIFactory.renderRolesLink({
             login,

@@ -6,7 +6,7 @@ import map_ from 'lodash/map';
 
 import Link from '../../../components/Link/Link';
 
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {RootState} from '../../../store/reducers';
 
 import {formatCounterName} from '../../../utils/index';
@@ -159,7 +159,7 @@ class SystemCounters<Flags extends string> extends React.Component<SystemCounter
 
 const mapStateToProps = (state: RootState) => {
     return {
-        cluster: getCluster(state),
+        cluster: selectCluster(state),
     };
 };
 

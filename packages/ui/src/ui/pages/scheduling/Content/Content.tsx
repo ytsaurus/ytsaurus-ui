@@ -17,7 +17,7 @@ import {
 import {Overview} from '../../../pages/scheduling/Content/tabs/Overview/Overview';
 import PoolAcl from '../../../pages/scheduling/Content/tabs/PoolAcl/PoolAcl';
 import {useSelector} from '../../../store/redux-hooks';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {
     getIsRoot,
     getPool,
@@ -41,7 +41,7 @@ type ContentProps = {
 };
 
 function Content({match, location}: ContentProps) {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
     const pool = useSelector(getPool);
     const tree = useSelector(getTree);
     const isEphemeral = useSelector(getPoolIsEphemeral);

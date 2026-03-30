@@ -4,7 +4,7 @@ import {Flex} from '@gravity-ui/uikit';
 
 import {WidgetText} from '../../../../../../../pages/dashboard2/Dashboard/components/WidgetText/WidgetText';
 
-import {getCluster} from '../../../../../../../store/selectors/global';
+import {selectCluster} from '../../../../../../../store/selectors/global';
 
 import {TemplatePools} from '../../../../../../../components/MetaTable/MetaTable';
 import Icon from '../../../../../../../components/Icon/Icon';
@@ -21,7 +21,7 @@ export function UserPool(props: Props) {
         userPool: {user, pools},
     } = props;
 
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     return (
         <Flex direction={'column'}>

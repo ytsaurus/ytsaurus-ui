@@ -27,7 +27,7 @@ import {
 } from '../../../constants/accounts/accounts';
 import {ACCOUNTS_DATA_FIELDS_ACTION} from '../../../constants/accounts';
 import {USE_CACHE, USE_MAX_SIZE} from '../../../../shared/constants/yt-api';
-import {getCluster, getCurrentUserName} from '../../../store/selectors/global';
+import {selectCluster, getCurrentUserName} from '../../../store/selectors/global';
 import {
     getAccountsDisabledCacheForNextFetch,
     getAccountsEditCounter,
@@ -61,7 +61,7 @@ export function fetchAccounts() {
         });
 
         const state = getState();
-        const cluster = getCluster(state);
+        const cluster = selectCluster(state);
         const userName = getCurrentUserName(state);
         const disableCacheForNextFetch = getAccountsDisabledCacheForNextFetch(state);
 
@@ -197,7 +197,7 @@ export function accountsIncreaseEditCounter() {
 export function loadEditedAccount(accountName) {
     return (dispatch, getState) => {
         const state = getState();
-        const cluster = getCluster(state);
+        const cluster = selectCluster(state);
         dispatch({
             type: UPDATE_EDITABLE_ACCOUNT.REQUEST,
         });

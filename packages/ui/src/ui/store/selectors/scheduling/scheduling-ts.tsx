@@ -7,7 +7,7 @@ import {getCurrentPool, getIsRoot, getPool, getTree, getTreeResources} from './s
 
 import ypath from '../../../common/thor/ypath';
 import {ROOT_POOL_NAME} from '../../../constants/scheduling';
-import {getCluster} from '../global';
+import {selectCluster} from '../global';
 import {getPools} from './scheduling-pools';
 
 export const getSchedulingBreadcrumbItems = createSelector(
@@ -132,7 +132,7 @@ export const getCurrentTreeGpuLimit = createSelector([getTreeResources], (resour
 });
 
 export const getOperationsStaticConfiguration = createSelector(
-    [getTreeResources, getPoolsAllocatedOperationsCount, getCluster, getTree],
+    [getTreeResources, getPoolsAllocatedOperationsCount, selectCluster, getTree],
     ({config}, allocated): Array<PoolTreeStaticConfigurationItem> => {
         const operationCount = ypath.getNumber(config, '/max_operation_count', 0);
         const runningOperationCount = ypath.getNumber(config, '/max_running_operation_count', 0);

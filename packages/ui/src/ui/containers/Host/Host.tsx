@@ -2,7 +2,7 @@ import React from 'react';
 import {useSelector} from '../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
-import {getCluster} from '../../store/selectors/global';
+import {selectCluster} from '../../store/selectors/global';
 import Link from '../../components/Link/Link';
 import ClipboardButton from '../../components/ClipboardButton/ClipboardButton';
 import {Tooltip} from '../../components/Tooltip/Tooltip';
@@ -52,7 +52,7 @@ export function Host({
         return calcShortNameByRegExp(address, asTabletNode) || address;
     }, [address, asTabletNode]);
 
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     return (
         <span

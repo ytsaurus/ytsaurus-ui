@@ -41,7 +41,7 @@ import {
     getNavigationTableLoadingState,
     getYqlTypes,
 } from '../../../../store/selectors/navigation/content/table-ts';
-import {getCluster} from '../../../../store/selectors/global';
+import {selectCluster} from '../../../../store/selectors/global';
 import {getTableYsonSettings} from '../../../../store/selectors/thor/unipika';
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
@@ -259,7 +259,7 @@ const TableConnected = compose(connect(mapStateToProps, mapDispatchToProps))(Tab
 export default function TableWithRum() {
     const loadState = useSelector(getNavigationTableLoadingState);
     const isDynamic = useSelector(getIsDynamic);
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     const measureId = makeTableRumId({cluster, isDynamic}).getMeasureId();
 

@@ -7,7 +7,7 @@ import {PrometheusDashboardType} from '../../../../shared/prometheus/types';
 
 import format from '../../../common/hammer/format';
 import {PrometheusDashboardLazy} from '../../../containers/PrometheusDashboard/lazy';
-import {getCluster} from '../../../store/selectors/global';
+import {selectCluster} from '../../../store/selectors/global';
 import {
     usePrometheusDashboardParams,
     usePrometheusDashboardType,
@@ -49,7 +49,7 @@ export function SystemMonitoringPrometheus() {
 }
 
 function useSystemDashboardParameters() {
-    const cluster = useSelector(getCluster);
+    const cluster = useSelector(selectCluster);
 
     const {type, setType} = usePrometheusDashboardType(SYSTEM_DASHBOARDS);
     const {params, setParams} = usePrometheusDashboardParams<{tree?: string}>(type);
