@@ -42,7 +42,7 @@ import {RootState} from '../../../../store/reducers';
 import {
     getCompressionCodecs,
     selectErasureCodecs,
-    getPrimitiveTypes,
+    selectPrimitiveTypes,
 } from '../../../../store/selectors/global/supported-features';
 import {SelectWithSubItemsProps} from '../../../../components/Dialog/controls/SelectWithSubItems/SelectWithSubItems';
 import {docsUrl, getNewTableReplicasCount} from '../../../../config';
@@ -932,7 +932,7 @@ const mapStateToProps = (state: RootState) => {
     const {showModal, parentDirectory, columnNameCounters, keyColumns, columnsOrder} =
         getCreateTableModalState(state);
 
-    const primitiveTypes = getPrimitiveTypes(state);
+    const primitiveTypes = selectPrimitiveTypes(state);
 
     return {
         showModal,
