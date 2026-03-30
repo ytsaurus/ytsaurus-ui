@@ -8,7 +8,7 @@ import {listAllGroups, listAllUsers} from '../../../utils/users-groups';
 import {normalizeResponseWithAttributes} from '../../../utils';
 import {RootState} from '../../../store/reducers';
 import {
-    getBundles,
+    selectBundles,
     getGlobalAsideHeaderWidth,
     getGlobalGroups,
     getGlobalUsers,
@@ -167,7 +167,7 @@ export function loadBundlesIfNotLoaded(): ThunkAction<any, RootState, any, any> 
             return Promise.resolve();
         }
 
-        const bundles = getBundles(getState());
+        const bundles = selectBundles(getState());
         if (bundles?.length) {
             return Promise.resolve();
         }

@@ -43,7 +43,7 @@ export function isAllowYtTwmApi() {
 
 export const selectPoolTrees = (state: RootState) => state?.global?.poolTrees;
 export const selectAllAccounts = (state: RootState) => state.global.accounts;
-export const getBundles = (state: RootState) => state?.global.bundles;
+export const selectBundles = (state: RootState) => state?.global.bundles;
 export const getGlobalUsers = (state: RootState) => state.global.users;
 export const getGlobalGroups = (state: RootState) => state.global.groups;
 export const getAuthWay = (state: RootState) => state?.global?.authWay;
@@ -89,7 +89,7 @@ export const getAllPoolTreeNames = createSelector(selectPoolTrees, (poolTrees) =
     return keys_(poolTrees);
 });
 
-export const getAllBundlesNames = createSelector(getBundles, (bundles) => {
+export const getAllBundlesNames = createSelector(selectBundles, (bundles) => {
     const bundleNames = map_(bundles, (bundle) => ypath.getValue(bundle, ''));
 
     return sortBy_(bundleNames);
