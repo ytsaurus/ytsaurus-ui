@@ -6,7 +6,7 @@ import {Provider} from 'react-redux';
 import {useSelector} from '../../store/redux-hooks';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import {getWindowStore} from '../../store/window-store';
-import {getTheme} from '../../store/selectors/global';
+import {selectTheme} from '../../store/selectors/global';
 
 export function AppStoreProvider({children}: {children: React.ReactNode}) {
     return (
@@ -19,6 +19,6 @@ export function AppStoreProvider({children}: {children: React.ReactNode}) {
 }
 
 export function AppThemeProvider({children}: {children: React.ReactNode}) {
-    const theme = useSelector(getTheme);
+    const theme = useSelector(selectTheme);
     return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
 }

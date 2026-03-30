@@ -8,7 +8,7 @@ import format from '../../../../../../common/hammer/format';
 
 import ErrorBoundary from '../../../../../../components/ErrorBoundary/ErrorBoundary';
 
-import {getTheme} from '../../../../../../store/selectors/global';
+import {selectTheme} from '../../../../../../store/selectors/global';
 
 import {getOperationDetailsLoadingStatus} from '../../../../../../store/selectors/operations/operation';
 import {useAppRumMeasureStart} from '../../../../../../rum/rum-app-measures';
@@ -82,7 +82,7 @@ class PartitionSizes extends React.Component<ReduxProps, State> {
 
 const mapStateToProps = (state: RootState) => {
     const operation = state.operations.detail.operation;
-    const chartKitTheme = getTheme(state);
+    const chartKitTheme = selectTheme(state);
 
     return {operation, chartKitTheme};
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import {useSelector} from '../../../../store/redux-hooks';
 
 import AccountsNoContent from '../../../../pages/accounts/AccountsNoContent';
-import {selectCluster, getTheme} from '../../../../store/selectors/global';
+import {selectCluster, selectTheme} from '../../../../store/selectors/global';
 import {
     getActiveAccount,
     getActiveAccountSubtreeNames,
@@ -13,7 +13,7 @@ function AccountStatisticTab() {
     const cluster = useSelector(selectCluster);
     const account = useSelector(getActiveAccount);
     const accountSubtreeAllNames = useSelector(getActiveAccountSubtreeNames);
-    const theme = useSelector(getTheme);
+    const theme = useSelector(selectTheme);
 
     if (!account) {
         return <AccountsNoContent hint="Choose an account to build a forecast" />;

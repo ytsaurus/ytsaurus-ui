@@ -12,7 +12,7 @@ import format from '../../../../../../common/hammer/format';
 
 import ErrorBoundary from '../../../../../../components/ErrorBoundary/ErrorBoundary';
 
-import {getTheme} from '../../../../../../store/selectors/global';
+import {selectTheme} from '../../../../../../store/selectors/global';
 
 import WithStickyToolbar from '../../../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {Toolbar} from '../../../../../../components/WithStickyToolbar/Toolbar/Toolbar';
@@ -187,7 +187,7 @@ class JobSizes extends React.Component<Props, State> {
 
 const mapStateToProps = (state: RootState) => {
     const operation = state.operations.detail.operation;
-    const chartKitTheme = getTheme(state);
+    const chartKitTheme = selectTheme(state);
 
     return {operation, chartKitTheme};
 };
