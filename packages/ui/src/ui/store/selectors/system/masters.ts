@@ -9,6 +9,8 @@ export class MasterInstance {
         voting?: boolean;
         warming_up?: boolean;
         state?: MasterAddress['state'] | MasterDataItem['state'];
+        automaton_version?: string;
+        committed_version?: string;
     };
 
     $rowAddress: MasterAddress;
@@ -71,7 +73,11 @@ export class MasterInstance {
     update(data: MasterInstance['$attributes'] = {}) {
         this.$attributes = data;
         this.state = ypath.getValue(this.$attributes, '/state') || 'unknown';
-        this.committedVersion = ypath.getValue(this.$attributes, '/committed_version');
+
+        const automatonVersion = ypath.getValue(this.$attributes, '/automaton_version');
+        const committedVersion = ypath.getValue(this.$attributes, '/committed_version');
+
+        this.committedVersion = automatonVersion || committedVersion;
         return this;
     }
 }
