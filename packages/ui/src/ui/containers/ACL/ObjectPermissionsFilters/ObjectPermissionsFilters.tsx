@@ -6,7 +6,7 @@ import Filter from '../../../components/Filter/Filter';
 import Select from '../../../components/Select/Select';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {AclMode} from '../../../constants/acl';
-import {getObjectPermissionsTypesList} from '../../../store/selectors/acl/acl';
+import {selectObjectPermissionsTypesList} from '../../../store/selectors/acl/acl';
 import {
     getAclRowAccessPredicateFilter,
     getObjectPermissionsFilter,
@@ -35,7 +35,7 @@ export default function ObjectPermissionsFilters({
     const dispatch = useDispatch();
     const subjectFilter = useSelector(getObjectSubjectFilter);
     const selectedPermissons = useSelector(getObjectPermissionsFilter);
-    const permissionList = useSelector(getObjectPermissionsTypesList(idmKind));
+    const permissionList = useSelector(selectObjectPermissionsTypesList(idmKind));
 
     const rowAccessPredicateFilter = useSelector(getAclRowAccessPredicateFilter);
 
