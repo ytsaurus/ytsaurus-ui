@@ -144,7 +144,7 @@ export const getOAuthButtonLabel = () => {
     return getConfigData().oauthButtonLabel;
 };
 
-export const getGlobalAsideHeaderWidth = (state: RootState) => state.global.asideHeaderWidth;
+export const selectGlobalAsideHeaderWidth = (state: RootState) => state.global.asideHeaderWidth;
 
 export const getGlobalYTAuthCluster = (state: RootState) => state.global.ytAuthCluster;
 
