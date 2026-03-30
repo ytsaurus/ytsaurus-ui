@@ -17,7 +17,7 @@ import {
 } from '../../store/selectors/settings/settings-ts';
 import {selectClusterUiConfig} from '../../store/selectors/global';
 import {selectIsAdmin} from '../../store/selectors/global/is-developer';
-import {getAllowedExperimentalPages} from '../../store/selectors/global/experimental-pages';
+import {selectAllowedExperimentalPages} from '../../store/selectors/global/experimental-pages';
 
 import UIFactory from '../../UIFactory';
 import {Page} from '../../../shared/constants/settings';
@@ -46,7 +46,7 @@ const getRecentPagesInfoRaw = createSelector(
     [
         (state: RootState) => state.slideoutMenu.pages,
         selectIsAdmin,
-        getAllowedExperimentalPages,
+        selectAllowedExperimentalPages,
         selectClusterUiConfig,
     ],
     (pageInfoRaw, isAdmin, allowExpPages, uiConfig) => {
