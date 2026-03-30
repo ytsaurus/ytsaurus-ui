@@ -41,7 +41,7 @@ export function isAllowYtTwmApi() {
     return !getConfigData().ytApiUseCORS;
 }
 
-export const getPoolTrees = (state: RootState) => state?.global?.poolTrees;
+export const selectPoolTrees = (state: RootState) => state?.global?.poolTrees;
 export const getAllAccounts = (state: RootState) => state.global.accounts;
 export const getBundles = (state: RootState) => state?.global.bundles;
 export const getGlobalUsers = (state: RootState) => state.global.users;
@@ -67,7 +67,7 @@ export const getGlobalGroupAttributesMap = createSelector([getGlobalGroups], (da
     );
 });
 
-export const getAllPoolNames = createSelector(getPoolTrees, (poolTrees) => {
+export const getAllPoolNames = createSelector(selectPoolTrees, (poolTrees) => {
     const getAllKeys = (obj: FIX_MY_TYPE): Array<string> => {
         return reduce_(
             keys_(obj),
@@ -85,7 +85,7 @@ export const getAllPoolNames = createSelector(getPoolTrees, (poolTrees) => {
     return orderBy_(uniq_(flatten_(map_(values_(poolTrees), getAllKeys))));
 });
 
-export const getAllPoolTreeNames = createSelector(getPoolTrees, (poolTrees) => {
+export const getAllPoolTreeNames = createSelector(selectPoolTrees, (poolTrees) => {
     return keys_(poolTrees);
 });
 

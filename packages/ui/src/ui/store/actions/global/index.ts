@@ -12,7 +12,7 @@ import {
     getGlobalAsideHeaderWidth,
     getGlobalGroups,
     getGlobalUsers,
-    getPoolTrees,
+    selectPoolTrees,
 } from '../../../store/selectors/global';
 import {showErrorPopup} from '../../../utils/utils';
 import {GLOBAL_PARTIAL} from '../../../constants/global';
@@ -208,7 +208,7 @@ export function loadPoolTreesIfNotLoaded(): ThunkAction<Promise<void>, RootState
             return Promise.resolve();
         }
 
-        const trees = getPoolTrees(getState());
+        const trees = selectPoolTrees(getState());
         if (!isEmpty_(trees)) {
             return Promise.resolve();
         }
