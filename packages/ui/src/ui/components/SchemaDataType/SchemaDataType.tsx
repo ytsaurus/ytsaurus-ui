@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {getPrimitiveTypesMap} from '../../store/selectors/global/supported-features';
+import {selectPrimitiveTypesMap} from '../../store/selectors/global/supported-features';
 import {useSelector} from '../../store/redux-hooks';
 import {getType} from './dataTypes';
 import DataType from './DataType/DataType';
@@ -11,7 +11,7 @@ interface Props {
 }
 
 function SchemaDataType({type_v3}: Props) {
-    const primitiveTypes = useSelector(getPrimitiveTypesMap);
+    const primitiveTypes = useSelector(selectPrimitiveTypesMap);
 
     const dataTypeProps = React.useMemo(() => {
         try {
