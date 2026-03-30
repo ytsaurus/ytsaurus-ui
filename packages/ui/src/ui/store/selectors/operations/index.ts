@@ -2,7 +2,7 @@ import {createSelector} from 'reselect';
 import {
     getAllPoolNames,
     getAllPoolTreeNames,
-    getAllUserNames,
+    selectAllUserNames,
     selectCluster,
     getClusterConfigByName,
     getCurrentUserName,
@@ -68,7 +68,7 @@ export const getOperationsUserCountersItems = createSelector(
 );
 
 export const getOperationsUserItemsWithoutCounter = createSelector(
-    [getAllUserNames, getOperationsUserRawCounter],
+    [selectAllUserNames, getOperationsUserRawCounter],
     calculateItemsWithoutCounter,
 );
 

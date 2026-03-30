@@ -1,14 +1,14 @@
 import React from 'react';
 import {useSelector} from '../../store/redux-hooks';
 
-import {getAllUserNames} from '../../store/selectors/global';
+import {selectAllUserNames} from '../../store/selectors/global';
 import Select from '../../components/Select/Select';
 import {SubjectNameLazy} from '../../components/SubjectLink/lazy';
 import {useAllUserNamesFiltered} from '../../hooks/global';
 import {UserSuggestProps} from './UserSuggest';
 
 export function YTUserSuggest({className, value, onUpdate, multiple, ...rest}: UserSuggestProps) {
-    const userNames = useSelector(getAllUserNames);
+    const userNames = useSelector(selectAllUserNames);
     const items = React.useMemo(() => {
         return userNames.sort().map((name) => {
             return {value: name, text: <SubjectNameLazy name={name} />};
