@@ -5,7 +5,7 @@ import {DialogWrapper as Dialog} from '../../../components/DialogWrapper/DialogW
 import {isCryptoSubtleAvailable} from '../../../utils/sha256';
 import {createPasswordStrategy} from './password-strategies';
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
-import {getCurrentUserName, getSettingsCluster} from '../../../store/selectors/global';
+import {getCurrentUserName, selectSettingsCluster} from '../../../store/selectors/global';
 import {YTError} from '../../../../@types/types';
 import {isManageTokensInOAuthMode} from '../../../store/selectors/manage-tokens';
 import {CryptoSubtleAlert} from './CryptoSubtleAlert';
@@ -26,7 +26,7 @@ interface PasswordModalProps {
 const PasswordModal = (props: PasswordModalProps) => {
     const [error, setError] = React.useState<YTError>();
     const username = useSelector(getCurrentUserName);
-    const ytAuthCluster = useSelector(getSettingsCluster) ?? '';
+    const ytAuthCluster = useSelector(selectSettingsCluster) ?? '';
 
     return (
         <>

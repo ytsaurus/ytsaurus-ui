@@ -148,6 +148,6 @@ export const selectGlobalAsideHeaderWidth = (state: RootState) => state.global.a
 
 export const selectGlobalYTAuthCluster = (state: RootState) => state.global.ytAuthCluster;
 
-export const getSettingsCluster = createSelector([selectCluster], (cluster) => {
+export const selectSettingsCluster = createSelector([selectCluster], (cluster) => {
     return userSettingsCluster ?? cluster;
 });

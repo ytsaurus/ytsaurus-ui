@@ -10,7 +10,7 @@ import {
     UPDATE_SETTING_DATA,
 } from '../../../constants/index';
 import {showToasterError, wrapApiPromiseByToaster} from '../../../utils/utils';
-import {getSettingsCluster} from '../../selectors/global';
+import {selectSettingsCluster} from '../../selectors/global';
 import {setSettingByKey} from './settings-base';
 
 export * from './settings-base';
@@ -52,7 +52,7 @@ export function removeSetting(settingName: string, settingNS: SettingNS): Settin
             global: {login},
         } = getState();
         const previousValue = data[path];
-        const cluster = getSettingsCluster(getState());
+        const cluster = selectSettingsCluster(getState());
 
         dispatch({
             type: UNSET_SETTING_VALUE,
@@ -88,7 +88,7 @@ export function reloadSetting(settingName: string, settingNS: SettingNS): Settin
             settings: {provider},
             global: {login},
         } = getState();
-        const cluster = getSettingsCluster(getState());
+        const cluster = selectSettingsCluster(getState());
 
         return provider
             .get(login, path, cluster!)
@@ -115,7 +115,7 @@ export function reloadUserSettings(login: string): SettingsThunkAction {
     return async (dispatch, getState) => {
         try {
             const state = getState();
-            const cluster = getSettingsCluster(state);
+            const cluster = selectSettingsCluster(state);
             const ytAuthCluster = state.global.ytAuthCluster || cluster;
             const {provider} = state.settings;
             await provider.create(login, ytAuthCluster);
