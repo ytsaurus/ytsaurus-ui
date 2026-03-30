@@ -12,7 +12,7 @@ import {
 import {filterFlattenTreeByViewContext} from '../../../utils/accounts';
 import {getActiveAccount} from './accounts-ts';
 
-export const getUsableAccountsSet = createSelector([getUsableAccounts], (items) => {
+export const selectUsableAccountsSet = createSelector([getUsableAccounts], (items) => {
     return new Set(items);
 });
 
@@ -20,26 +20,26 @@ export const getUsableAccountsSet = createSelector([getUsableAccounts], (items) 
  * This selector cannot be moved to 'store/selectors/accounts/accounts'
  * because of cyclic dependencies.
  */
-export const getFavouriteAccountsSet = createSelector([selectFavouriteAccounts], (items) => {
+export const selectFavouriteAccountsSet = createSelector([selectFavouriteAccounts], (items) => {
     return new Set(map_(items, 'path'));
 });
 
-export const getFilteredAccountsOfDashboard = createSelector(
+export const selectFilteredAccountsOfDashboard = createSelector(
     [
         prepareAccountsFlattenTree,
-        getUsableAccountsSet,
+        selectUsableAccountsSet,
         getAccountsVisibilityModeOfDashboard,
-        getFavouriteAccountsSet,
+        selectFavouriteAccountsSet,
     ],
     filterFlattenTreeByViewContext,
 );
 
-export const getFilteredAccounts = createSelector(
+export const selectFilteredAccounts = createSelector(
     [
         prepareAccountsFlattenTree,
-        getUsableAccountsSet,
+        selectUsableAccountsSet,
         getAccountsVisibilityMode,
-        getFavouriteAccountsSet,
+        selectFavouriteAccountsSet,
         getActiveAccount,
     ],
     filterFlattenTreeByViewContext,
