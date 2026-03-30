@@ -31,7 +31,7 @@ export const selectGlobalErrorType = (state: RootState) => state.global.error?.e
 
 export const selectRootPagesCluster = (state: RootState) => state?.global.rootPagesCluster;
 
-export const getGlobalLoadState = (state: RootState) => state.global.loadState;
+export const selectGlobalLoadState = (state: RootState) => state.global.loadState;
 
 export const getTheme = (state: RootState) => state.global.theme;
 

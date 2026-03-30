@@ -2,7 +2,7 @@ import React from 'react';
 
 import {useSelector} from '../../../store/redux-hooks';
 
-import {getGlobalLoadState} from '../../../store/selectors/global';
+import {selectGlobalLoadState} from '../../../store/selectors/global';
 import {getSettingNewDashboardPage} from '../../../store/selectors/dashboard2/dashboard';
 
 import {LOADING_STATUS, Page} from '../../../constants/index';
@@ -31,7 +31,7 @@ import {QueryTrackerTopRowLazy} from '../../../pages/query-tracker/lazy';
 import {FlowPageTopRowLazy} from '../../../pages/flow/lazy';
 
 export default function TopRowContent() {
-    const loadState = useSelector(getGlobalLoadState);
+    const loadState = useSelector(selectGlobalLoadState);
     const isNewDashboardPage = useSelector(getSettingNewDashboardPage);
 
     return loadState !== LOADING_STATUS.LOADED ? null : (
