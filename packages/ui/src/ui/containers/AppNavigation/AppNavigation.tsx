@@ -12,7 +12,7 @@ import {
     getAuthWay,
     getClusterConfigByName,
     getCurrentUserName,
-    getRootPagesCluster,
+    selectRootPagesCluster,
 } from '../../store/selectors/global';
 
 import {useClusterFromLocation} from '../../hooks/use-cluster';
@@ -40,7 +40,7 @@ function isRootPage(cluster = '') {
 export default function AppNavigation({children}: ExtProps) {
     const dispatch = useDispatch();
     const pageOrCluster = useClusterFromLocation();
-    const rootPageCluster = useSelector(getRootPagesCluster);
+    const rootPageCluster = useSelector(selectRootPagesCluster);
     const cluster = isRootPage(pageOrCluster) ? rootPageCluster : pageOrCluster;
     const clusterConfig = getClusterConfigByName(cluster || '');
 
