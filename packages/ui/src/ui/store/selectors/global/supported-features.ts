@@ -25,20 +25,20 @@ const RECOMMENDED_COMPRESSION_CODECS: Record<string, string> = {
 
 const RECOMMENDED = ' (recommended)';
 
-const getSupportedFeatures = createSelector(
+const selectSupportedFeatures = createSelector(
     [selectCluster, selectSupportedFeaturesCluster, selectSupportedFeaturesRaw],
     (cluster, featuresCluster, features) => {
         return cluster === featuresCluster ? features : {};
     },
 );
 
-export const getErasureCodecs = createSelector([getSupportedFeatures], (features) => {
+export const getErasureCodecs = createSelector([selectSupportedFeatures], (features) => {
     return map_(features.erasure_codecs, (value) => {
         return {value, text: value};
     }).sort(compareItems);
 });
 
-export const getPrimitiveTypes = createSelector([getSupportedFeatures], (features) => {
+export const getPrimitiveTypes = createSelector([selectSupportedFeatures], (features) => {
     return sortBy_(features.primitive_types).map((value) => {
         return {value, text: value};
     });
@@ -48,7 +48,7 @@ export const getPrimitiveTypesMap = createSelector([getPrimitiveTypes], (types) 
     return new Set(types.map(({value}) => value));
 });
 
-export const getCompressionCodecs = createSelector([getSupportedFeatures], (features) => {
+export const getCompressionCodecs = createSelector([selectSupportedFeatures], (features) => {
     return prepareItemsSubitems(features.compression_codecs);
 });
 
@@ -212,10 +212,13 @@ export const getOperationStatisticsDescription = createSelector(
 );
 
 export const getRequirePasswordInAuthenticationCommands = createSelector(
-    [getSupportedFeatures],
+    [selectSupportedFeatures],
     (features) => features.require_password_in_authentication_commands,
 );
 
-export const getQueryMemoryLimitIsSupported = createSelector([getSupportedFeatures], (features) => {
-    return features.query_memory_limit_in_tablet_nodes || false;
-});
+export const getQueryMemoryLimitIsSupported = createSelector(
+    [selectSupportedFeatures],
+    (features) => {
+        return features.query_memory_limit_in_tablet_nodes || false;
+    },
+);
