@@ -44,7 +44,7 @@ export const selectPrimitiveTypes = createSelector([selectSupportedFeatures], (f
     });
 });
 
-export const getPrimitiveTypesMap = createSelector([selectPrimitiveTypes], (types) => {
+export const selectPrimitiveTypesMap = createSelector([selectPrimitiveTypes], (types) => {
     return new Set(types.map(({value}) => value));
 });
 

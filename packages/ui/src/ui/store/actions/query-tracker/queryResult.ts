@@ -24,7 +24,7 @@ import {
 } from '../../../types/query-tracker/queryResult';
 import {prepareFormattedValue} from '../../../utils/queries/format';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
-import {getPrimitiveTypesMap} from '../../selectors/global/supported-features';
+import {selectPrimitiveTypesMap} from '../../selectors/global/supported-features';
 import {Type, parseV3Type} from '../../../components/SchemaDataType/dateTypesV3';
 import ypath from '../../../common/thor/ypath';
 import forEach_ from 'lodash/forEach';
@@ -111,7 +111,7 @@ export function loadQueryResult(
             }
 
             await dispatch(waitForFontFamilies(null));
-            const typeMap = getPrimitiveTypesMap(getState());
+            const typeMap = selectPrimitiveTypesMap(getState());
             const scheme = (ypath.getValue(meta?.schema) as QueryResultMetaScheme[]) || [];
             const columns =
                 scheme.map(({name, type_v3}) => {
