@@ -52,7 +52,7 @@ export const selectAllUserNames = createSelector([selectGlobalUsers], (usersData
     return map_(usersData, ({$value}) => $value as string);
 });
 
-export const getAllGroupNames = createSelector([selectGlobalGroups], (groupsData) => {
+export const selectAllGroupNames = createSelector([selectGlobalGroups], (groupsData) => {
     return map_(groupsData, ({$value}) => $value as string);
 });
 
@@ -101,7 +101,7 @@ export const getAllUserNamesSorted = createSelector(
 );
 
 export const getAllGroupNamesSorted = createSelector(
-    [getAllGroupNames],
+    [selectAllGroupNames],
     sortBy_ as (items: Array<unknown>) => Array<string>,
 );
 

@@ -2,7 +2,7 @@ import React from 'react';
 import {useSelector} from '../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
-import {getAllGroupNames, selectAllUserNames} from '../../../store/selectors/global';
+import {selectAllGroupNames, selectAllUserNames} from '../../../store/selectors/global';
 import Select from '../../../components/Select/Select';
 import {SubjectNameLazy} from '../../../components/SubjectLink/lazy';
 import {useAllUserNamesFiltered, useGroupsLoaded} from '../../../hooks/global';
@@ -28,7 +28,7 @@ export function YTSubjectSuggest({className, value, onChange, ...rest}: Subjects
         return value.filter(({type}) => type === 'users');
     }, [value]);
 
-    const groupNames = useSelector(getAllGroupNames);
+    const groupNames = useSelector(selectAllGroupNames);
     const groupItems = React.useMemo(() => {
         return groupNames.sort().map((name) => {
             return {value: name, text: name};
