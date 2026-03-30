@@ -146,7 +146,7 @@ export const getOAuthButtonLabel = () => {
 
 export const selectGlobalAsideHeaderWidth = (state: RootState) => state.global.asideHeaderWidth;
 
-export const getGlobalYTAuthCluster = (state: RootState) => state.global.ytAuthCluster;
+export const selectGlobalYTAuthCluster = (state: RootState) => state.global.ytAuthCluster;
 
 export const getSettingsCluster = createSelector([selectCluster], (cluster) => {
     return userSettingsCluster ?? cluster;

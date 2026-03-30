@@ -5,7 +5,7 @@ import {onSuccessLogin} from '../../../store/actions/global';
 import ytLocalStorage from '../../../utils/yt-local-storage';
 import {
     getClusterConfigByName,
-    getGlobalYTAuthCluster,
+    selectGlobalYTAuthCluster,
     getOAuthButtonLabel,
     getOAuthEnabled,
 } from '../../../store/selectors/global';
@@ -55,7 +55,7 @@ function LoginForm({theme}: Props) {
     const [username, setUsername] = useState(ytLocalStorage.get('loginDialog')?.username || '');
     const allowOAuth = useSelector(getOAuthEnabled);
     const buttonLabel = useSelector(getOAuthButtonLabel);
-    const ytAuthCluster = useSelector(getGlobalYTAuthCluster) ?? '';
+    const ytAuthCluster = useSelector(selectGlobalYTAuthCluster) ?? '';
     const ytAuthClusterConfig = useSelector(() => getClusterConfigByName(ytAuthCluster));
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState<boolean>(false);
