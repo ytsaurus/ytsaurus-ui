@@ -15,7 +15,7 @@ import {calcProgressProps} from '../../../utils/utils';
 import {
     selectCluster,
     selectClusterUiConfig,
-    getClusterUiConfigEnablePerBundleTabletAccounting,
+    selectClusterUiConfigEnablePerBundleTabletAccounting,
 } from '../../../store/selectors/global';
 
 import './BundleGeneralMeta.scss';
@@ -32,7 +32,7 @@ export default function BundleGeneralMeta() {
     const bundleData = useSelector(getTabletsActiveBundleData);
     const clusterUiConfig = useSelector(selectClusterUiConfig);
     const cluster = useSelector(selectCluster);
-    const allowTabletAccounting = useSelector(getClusterUiConfigEnablePerBundleTabletAccounting);
+    const allowTabletAccounting = useSelector(selectClusterUiConfigEnablePerBundleTabletAccounting);
 
     if (!bundleData) {
         return null;

@@ -8,7 +8,7 @@ import {
     selectCluster,
     getClusterUiConfigBundleAccountingHelpLink,
     selectClusterUiConfigEnablePerAccountTabletAccounting,
-    getClusterUiConfigEnablePerBundleTabletAccounting,
+    selectClusterUiConfigEnablePerBundleTabletAccounting,
 } from '../../../../../../store/selectors/global';
 import {ConnectedProps, connect} from 'react-redux';
 import {useSelector} from '../../../../../../store/redux-hooks';
@@ -75,7 +75,7 @@ const connector = connect(mapStateToProps);
 export default connector(TabletsContent);
 
 export function TabletAccountingNotice({className}: {className?: string}) {
-    const allowPerTablet = useSelector(getClusterUiConfigEnablePerBundleTabletAccounting);
+    const allowPerTablet = useSelector(selectClusterUiConfigEnablePerBundleTabletAccounting);
 
     const helpLink = useSelector(getClusterUiConfigBundleAccountingHelpLink);
     const cluster = useSelector(selectCluster);

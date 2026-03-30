@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import CustomRadioButton from '../../../components/RadioButton/RadioButton';
 import type {setTabletsPartial} from '../../../store/actions/tablet_cell_bundles';
 import type {BundlesTableMode} from '../../../store/reducers/tablet_cell_bundles';
-import {getClusterUiConfigEnablePerBundleTabletAccounting} from '../../../store/selectors/global';
+import {selectClusterUiConfigEnablePerBundleTabletAccounting} from '../../../store/selectors/global';
 
 interface Props {
     bundlesTableMode: BundlesTableMode;
@@ -15,7 +15,7 @@ interface Props {
 function BundlesTableModeRadio({bundlesTableMode: value, setTabletsPartial, modes}: Props) {
     const dispatch = useDispatch();
 
-    const allowTabs = useSelector(getClusterUiConfigEnablePerBundleTabletAccounting);
+    const allowTabs = useSelector(selectClusterUiConfigEnablePerBundleTabletAccounting);
 
     const handleChange = React.useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
