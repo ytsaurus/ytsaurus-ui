@@ -41,7 +41,7 @@ import SettingsMenuInput from '../SettingsMenu/SettingsMenuInput';
 import {
     getCurrentUserName,
     getGlobalMasterVersion,
-    getGlobalSchedulerVersion,
+    selectGlobalSchedulerVersion,
     selectHttpProxyVersion,
 } from '../../store/selectors/global';
 import {selectIsDeveloperOrWatchmen} from '../../store/selectors/global/is-developer';
@@ -90,7 +90,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
     const clusterNS = useSelector(getCurrentClusterNS);
 
     const httpProxyVersion = useSelector(selectHttpProxyVersion);
-    const schedulerVersion = useSelector(getGlobalSchedulerVersion);
+    const schedulerVersion = useSelector(selectGlobalSchedulerVersion);
     const masterVersion = useSelector(getGlobalMasterVersion);
     const vcsConfig = useSelector(selectVcsConfig);
     const isVcsVisible = useSelector(selectIsVcsVisible);

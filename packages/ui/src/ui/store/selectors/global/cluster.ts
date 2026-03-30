@@ -81,7 +81,7 @@ export const selectHttpProxyVersion = createSelector(
     },
 );
 
-export const getGlobalSchedulerVersion = createSelector(
+export const selectGlobalSchedulerVersion = createSelector(
     [selectCluster, (state: RootState) => state.global.schedulerVersion],
     (cluster, version) => {
         return cluster ? version : '';
