@@ -260,7 +260,12 @@ const allowBundlesForTables = createSelector([getNodeMemoryUsageTables], (tables
 });
 
 const getNodeMemoryUsageTablesAndBundlesByName = createSelector(
-    [allowBundlesForTables, getNodeMemoryUsageTables, selectCluster, getNodeMemoryUsageBundlesByName],
+    [
+        allowBundlesForTables,
+        getNodeMemoryUsageTables,
+        selectCluster,
+        getNodeMemoryUsageBundlesByName,
+    ],
     (allowBundles, tables, cluster, bundles) => {
         let maxRowCache = 0;
         let maxStatic = 0;

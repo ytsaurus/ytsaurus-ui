@@ -16,7 +16,8 @@ const b = block('yt-preload-error');
 
 function PreloadError() {
     const cluster = useClusterFromLocation();
-    const error = useSelector(selectGlobalError) ?? new Error('Unexpected error: error is undefined');
+    const error =
+        useSelector(selectGlobalError) ?? new Error('Unexpected error: error is undefined');
     const errorType = useSelector(selectGlobalErrorType) ?? PRELOAD_ERROR.GENERAL;
 
     const {title, message} = getErrorData({

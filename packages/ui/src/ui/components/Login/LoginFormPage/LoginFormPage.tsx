@@ -5,9 +5,9 @@ import {onSuccessLogin} from '../../../store/actions/global';
 import ytLocalStorage from '../../../utils/yt-local-storage';
 import {
     getClusterConfigByName,
-    selectGlobalYTAuthCluster,
     getOAuthButtonLabel,
     getOAuthEnabled,
+    selectGlobalYTAuthCluster,
 } from '../../../store/selectors/global';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import LoginPageWrapper from '../LoginPageWrapper/LoginPageWrapper';

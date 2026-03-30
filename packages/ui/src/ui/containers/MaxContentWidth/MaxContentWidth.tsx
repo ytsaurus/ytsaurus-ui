@@ -3,8 +3,8 @@ import cn from 'bem-cn-lite';
 import {useSelector} from 'react-redux';
 
 import {
-    selectMaxContentWidth,
     selectIsMaxContentWidthEnabled,
+    selectMaxContentWidth,
 } from '../../store/selectors/global/max-content-width';
 import {RootState} from '../../store/reducers/index';
 
