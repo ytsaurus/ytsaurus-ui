@@ -18,14 +18,14 @@ const selectClusterUiConfigRaw = (state: RootState) => state.global.clusterUiCon
 
 const selectClusterUiDevConfigRaw = (state: RootState) => state.global.clusterUiDevConfig;
 
-export const getClusterUiConfig = createSelector(
+export const selectClusterUiConfig = createSelector(
     [selectClusterUiConfigRaw, selectClusterUiDevConfigRaw, selectIsDeveloper],
     (clusterUiConfig, clusterUiDevConfig, isDeveloper): Partial<ClusterUiConfig> => {
         return isDeveloper ? {...clusterUiConfig, ...clusterUiDevConfig} : clusterUiConfig;
     },
 );
 
-export const getMergedUiSettings = createSelector([getClusterUiConfig], (uiConfig) => {
+export const getMergedUiSettings = createSelector([selectClusterUiConfig], (uiConfig) => {
     return mergeUiSettings({uiSettings, uiConfig});
 });
 
@@ -46,7 +46,7 @@ export function getClusterProxy(clusterConfig: ClusterConfig): string {
 }
 
 export const getClusterSupportedEngines = createSelector(
-    [selectSpytEnginesInfo, getClusterUiConfig, getCluster],
+    [selectSpytEnginesInfo, selectClusterUiConfig, selectCluster],
     (spytEngine, {chyt_controller_base_url}, cluster): Record<QueryEngine, boolean> => {
         const clusters = spytEngine?.clusters;
 
@@ -60,15 +60,15 @@ export const getClusterSupportedEngines = createSelector(
 );
 
 export const getClusterUiConfigEnablePerAccountTabletAccounting = (state: RootState) => {
-    return getClusterUiConfig(state).enable_per_account_tablet_accounting ?? false;
+    return selectClusterUiConfig(state).enable_per_account_tablet_accounting ?? false;
 };
 
 export const getClusterUiConfigEnablePerBundleTabletAccounting = (state: RootState) => {
-    return getClusterUiConfig(state).enable_per_bundle_tablet_accounting ?? true;
+    return selectClusterUiConfig(state).enable_per_bundle_tablet_accounting ?? true;
 };
 
 export const getClusterUiConfigBundleAccountingHelpLink = (state: RootState) => {
-    return getClusterUiConfig(state).per_bundle_accounting_help_link;
+    return selectClusterUiConfig(state).per_bundle_accounting_help_link;
 };
 
 export const getHttpProxyVersion = createSelector(

@@ -10,7 +10,7 @@ import {AlertInfo} from '../../../components/AlertEvents/AlertEvents';
 import {calculateLoadingStatus} from '../../../utils/utils';
 import {FIX_MY_TYPE} from '../../../types';
 import {prepareFaqUrl} from '../../../utils/operations/tabs/details/alerts';
-import {getClusterUiConfig} from '../global';
+import {selectClusterUiConfig} from '../global';
 
 const getOperationErasedTreesRaw = (state: RootState) => {
     return ypath.getValue(state.operations.detail, '/operation/@runtime_parameters/erased_trees');
@@ -168,7 +168,7 @@ export const selectIsOperationInGpuTree = createSelector(
 );
 
 export const getOperationPerformanceUrlTemplate = createSelector(
-    [getOperationId, getClusterUiConfig],
+    [getOperationId, selectClusterUiConfig],
     (operationId, uiConfig) => {
         const operationPerformanceUrlTemplate = uiConfig?.operation_performance_url_template;
 

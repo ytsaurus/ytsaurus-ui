@@ -8,7 +8,7 @@ import Favourites, {FavouritesItem} from '../../components/Favourites/Favourites
 import {Page} from '../../constants/index';
 import {TabletsTab} from '../../constants/tablets';
 import {RowWithName} from '../../containers/AppNavigation/TopRowContent/SectionName';
-import {selectCluster, getClusterUiConfig} from '../../store/selectors/global';
+import {selectCluster, selectClusterUiConfig} from '../../store/selectors/global';
 import type {TabletsCellBundlesBreadcrumbsItem} from '../../store/selectors/tablet_cell_bundles';
 import type {ValueOf} from '../../types';
 
@@ -40,7 +40,7 @@ function TabletCellBundlesTopRowContent({
     page,
     setActiveBundle,
 }: PropsFromRedux) {
-    const clusterUiConfig = useSelector(getClusterUiConfig);
+    const clusterUiConfig = useSelector(selectClusterUiConfig);
 
     return (
         <RowWithName page={page} urlParams={{activeBundle: ''}}>

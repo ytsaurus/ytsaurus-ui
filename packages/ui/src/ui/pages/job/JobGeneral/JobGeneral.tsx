@@ -33,7 +33,7 @@ import {ClickableText} from '../../../components/ClickableText/ClickableText';
 import ChartLink from '../../../components/ChartLink/ChartLink';
 import {getJob} from '../../../store/selectors/job/detail';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
-import {selectCluster, getClusterUiConfig} from '../../../store/selectors/global';
+import {selectCluster, selectClusterUiConfig} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
 import {StaleJobIcon} from '../../../pages/operations/OperationDetail/tabs/Jobs/StaleJobIcon';
 import {Host} from '../../../containers/Host/Host';
@@ -367,7 +367,7 @@ function useJobProfilingUrl({
     pool_tree?: string;
 }) {
     const {job_trace_url_template: {url_template, title = 'Open trace', enforce_for_trees} = {}} =
-        useSelector(getClusterUiConfig);
+        useSelector(selectClusterUiConfig);
     return React.useMemo(() => {
         const allowTrace = has_trace || 0 <= enforce_for_trees?.indexOf(pool_tree!)!;
 

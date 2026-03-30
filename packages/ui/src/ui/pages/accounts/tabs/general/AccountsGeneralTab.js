@@ -80,7 +80,7 @@ import {
 } from '../../../../store/selectors/accounts/accounts-ts';
 import {
     selectCluster,
-    getClusterUiConfig,
+    selectClusterUiConfig,
     getClusterUiConfigEnablePerAccountTabletAccounting,
 } from '../../../../store/selectors/global';
 import {TabletAccountingNotice} from './Editor/content/TabletsContent';
@@ -810,7 +810,7 @@ const makeMapStateToProps = () => {
             ...accounts,
             activeContentModeFilter: getAccountsContentMode(state),
 
-            clusterUiConfig: getClusterUiConfig(state),
+            clusterUiConfig: selectClusterUiConfig(state),
 
             mediumList: getMediumList(state),
             accounts: accounts.accounts,
