@@ -2,21 +2,29 @@ import {createSelector} from 'reselect';
 import {type RootState} from '../../../store/reducers';
 import {ACL_MODES, AclMode} from '../../../constants/acl';
 
-export function getExecuteBatchState(state: RootState) {
-    return state.executeBatch;
-}
+export const selectApproversSubjectFilter = (state: RootState) => state.aclFilters.approversSubject;
 
-export const getApproversSubjectFilter = (state: RootState) => state.aclFilters.approversSubject;
-export const getObjectSubjectFilter = (state: RootState) => state.aclFilters.objectSubject;
-export const getObjectPermissionsFilter = (state: RootState) => state.aclFilters.objectPermissions;
-export const getAclFilterColumns = (state: RootState) => state.aclFilters.columnsFilter;
-export const getAclFilterColumnGroupName = (state: RootState) =>
+export const selectObjectSubjectFilter = (state: RootState) => state.aclFilters.objectSubject;
+
+export const selectObjectPermissionsFilter = (state: RootState) =>
+    state.aclFilters.objectPermissions;
+
+export const selectAclFilterColumns = (state: RootState) => state.aclFilters.columnsFilter;
+
+export const selectAclFilterColumnGroupName = (state: RootState) =>
     state.aclFilters.columnGroupNameFilter;
-export const getAclFilterRowGroupName = (state: RootState) => state.aclFilters.rowGroupNameFilter;
-export const getAclFilterExpandedSubjects = (state: RootState) => state.aclFilters.expandedSubjects;
-const getAclCurrentTabRaw = (state: RootState) => state.aclFilters.aclCurrentTab;
-export const getAclCurrentTab = createSelector([getAclCurrentTabRaw], (value) => {
+
+export const selectAclFilterRowGroupName = (state: RootState) =>
+    state.aclFilters.rowGroupNameFilter;
+
+export const selectAclFilterExpandedSubjects = (state: RootState) =>
+    state.aclFilters.expandedSubjects;
+
+const selectAclCurrentTabRaw = (state: RootState) => state.aclFilters.aclCurrentTab;
+
+export const selectAclCurrentTab = createSelector([selectAclCurrentTabRaw], (value) => {
     return -1 !== ACL_MODES.indexOf(value) ? value : AclMode.MAIN_PERMISSIONS;
 });
-export const getAclRowAccessPredicateFilter = (state: RootState) =>
+
+export const selectAclRowAccessPredicateFilter = (state: RootState) =>
     state.aclFilters.rowAccessPredicateFilter;

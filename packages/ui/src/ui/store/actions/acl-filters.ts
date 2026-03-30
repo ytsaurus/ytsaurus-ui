@@ -1,5 +1,5 @@
 import {type ThunkAction} from 'redux-thunk';
-import {getAclFilterExpandedSubjects} from '../../store/selectors/acl/acl-filters';
+import {selectAclFilterExpandedSubjects} from '../../store/selectors/acl/acl-filters';
 import {ACL_CHANGE_FILTERS} from '../../constants/acl';
 
 import {type AclFiltersAction, type AclFiltersState} from '../reducers/acl/acl-filters';
@@ -26,7 +26,7 @@ export function toggleExpandAclSubject(subject?: string | number): AclFilterThun
             return;
         }
 
-        const expandedSubjects = new Set(getAclFilterExpandedSubjects(getState()));
+        const expandedSubjects = new Set(selectAclFilterExpandedSubjects(getState()));
         if (expandedSubjects.has(subject)) {
             expandedSubjects.delete(subject);
         } else {

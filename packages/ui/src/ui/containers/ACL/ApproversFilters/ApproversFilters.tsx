@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 import {changeApproversSubjectFilter} from '../../../store/actions/acl-filters';
-import {getApproversSubjectFilter} from '../../../store/selectors/acl/acl-filters';
+import {selectApproversSubjectFilter} from '../../../store/selectors/acl/acl-filters';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import Filter from '../../../components/Filter/Filter';
 import i18n from './i18n';
@@ -12,7 +12,7 @@ const block = cn('approvers-filters');
 
 export default function ApproversFilters() {
     const dispatch = useDispatch();
-    const subjectFilter = useSelector(getApproversSubjectFilter);
+    const subjectFilter = useSelector(selectApproversSubjectFilter);
 
     return (
         <Toolbar

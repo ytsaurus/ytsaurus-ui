@@ -22,10 +22,10 @@ import {
 import {getType} from '../../store/selectors/navigation';
 
 import {
-    getAclCurrentTab,
-    getAclFilterColumnGroupName,
-    getAclFilterColumns,
-    getAclFilterRowGroupName,
+    selectAclCurrentTab,
+    selectAclFilterColumnGroupName,
+    selectAclFilterColumns,
+    selectAclFilterRowGroupName,
 } from '../../store/selectors/acl/acl-filters';
 
 import {
@@ -84,7 +84,7 @@ const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
         const rowGroups = selectAllRowGroupsActual(state, idmKind);
         const userPermissions = selectAllUserPermissions(state, idmKind);
 
-        const columnsFilter = getAclFilterColumns(state);
+        const columnsFilter = selectAclFilterColumns(state);
 
         const auditors = selectNotInheritedAuditors(state, idmKind);
         const readApprovers = selectNotInheritedReadApprovers(state, idmKind);
@@ -128,15 +128,15 @@ const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
 
             columnGroups,
             columnsFilter,
-            columnGroupNameFilter: getAclFilterColumnGroupName(state),
+            columnGroupNameFilter: selectAclFilterColumnGroupName(state),
 
             rowGroups,
-            rowGroupNameFilter: getAclFilterRowGroupName(state),
+            rowGroupNameFilter: selectAclFilterRowGroupName(state),
 
             normalizedPoolTree,
             aclRequestOptions,
 
-            aclMode: idmKind !== 'path' ? AclMode.MAIN_PERMISSIONS : getAclCurrentTab(state),
+            aclMode: idmKind !== 'path' ? AclMode.MAIN_PERMISSIONS : selectAclCurrentTab(state),
             allowSwitchMode: idmKind === 'path',
         };
     };
