@@ -1,7 +1,7 @@
 import {RootState} from '../../reducers';
 import {getQueryDraft, getQueryEngine} from '../../selectors/query-tracker/query';
 import {AGENT_MAP} from '../../../containers/AiChat/constants';
-import {getPage} from '../../selectors/global';
+import {selectPage} from '../../selectors/global';
 
 const DEFAULT_AGENT = 'qt';
 
@@ -34,7 +34,7 @@ const getQueriesPageContext = (state: RootState): PageContext => {
 };
 
 export const getContextByPage = (state: RootState): PageContext => {
-    const page = getPage(state);
+    const page = selectPage(state);
 
     if (page === 'Queries') {
         return getQueriesPageContext(state);

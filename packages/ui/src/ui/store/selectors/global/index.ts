@@ -35,7 +35,7 @@ export const selectGlobalLoadState = (state: RootState) => state.global.loadStat
 
 export const selectTheme = (state: RootState) => state.global.theme;
 
-export const getPage = (state: RootState) => state.global.page;
+export const selectPage = (state: RootState) => state.global.page;
 
 export function isAllowYtTwmApi() {
     return !getConfigData().ytApiUseCORS;
