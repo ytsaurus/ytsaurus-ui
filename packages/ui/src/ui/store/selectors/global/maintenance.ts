@@ -2,10 +2,10 @@ import {createSelector} from 'reselect';
 import {RootState} from '../../../store/reducers';
 import {selectCluster} from './cluster';
 
-const getOngoingEvents = (state: RootState) => state.global.ongoingEvents;
+const selectOngoingEvents = (state: RootState) => state.global.ongoingEvents;
 
 export const getMaintenanceEvent = createSelector(
-    [selectCluster, getOngoingEvents],
+    [selectCluster, selectOngoingEvents],
     (cluster, ongoing) => {
         if (!ongoing?.events?.length || cluster !== ongoing.cluster) {
             return undefined;
