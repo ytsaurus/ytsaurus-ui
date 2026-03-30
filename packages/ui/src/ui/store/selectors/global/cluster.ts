@@ -70,7 +70,7 @@ export const selectClusterUiConfigEnablePerBundleTabletAccounting = (state: Root
     return selectClusterUiConfig(state).enable_per_bundle_tablet_accounting ?? true;
 };
 
-export const getClusterUiConfigBundleAccountingHelpLink = (state: RootState) => {
+export const selectClusterUiConfigBundleAccountingHelpLink = (state: RootState) => {
     return selectClusterUiConfig(state).per_bundle_accounting_help_link;
 };
 
