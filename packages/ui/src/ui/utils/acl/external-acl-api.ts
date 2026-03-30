@@ -25,7 +25,7 @@ import {
     type UpdateAclParams,
     type UpdateResponse,
 } from './acl-types';
-import {type PreparedApprover} from '../../store/selectors/acl';
+import {type PreparedApprover} from '../../store/selectors/acl/acl';
 
 export interface AclApi {
     isAllowed: boolean;

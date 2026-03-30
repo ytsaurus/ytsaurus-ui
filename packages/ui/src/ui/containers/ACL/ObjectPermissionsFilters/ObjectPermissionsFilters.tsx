@@ -6,7 +6,7 @@ import Filter from '../../../components/Filter/Filter';
 import Select from '../../../components/Select/Select';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {AclMode} from '../../../constants/acl';
-import {getObjectPermissionsTypesList} from '../../../store/selectors/acl';
+import {getObjectPermissionsTypesList} from '../../../store/selectors/acl/acl';
 import {
     getAclRowAccessPredicateFilter,
     getObjectPermissionsFilter,

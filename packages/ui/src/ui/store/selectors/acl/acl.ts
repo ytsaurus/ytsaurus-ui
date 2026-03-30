@@ -12,6 +12,7 @@ import sortBy_ from 'lodash/sortBy';
 import uniq_ from 'lodash/uniq';
 
 import {concatByAnd} from '../../../common/hammer/predicate';
+import {RootState} from '../../../store/reducers';
 import {
     getAclFilterColumnGroupName,
     getAclFilterColumns,
@@ -22,7 +23,6 @@ import {
     getObjectSubjectFilter,
 } from '../../../store/selectors/acl/acl-filters';
 import UIFactory from '../../../UIFactory';
-
 import {type RootState} from '../../../store/reducers';
 import {type IdmKindType, type PreparedAclSubject} from '../../../utils/acl/acl-types';
 import {type YTPermissionTypeUI} from '../../../utils/acl/acl-api';

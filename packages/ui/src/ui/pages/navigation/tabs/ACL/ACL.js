@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import {AccessContentAcl, NavigationAcl} from '../../../../containers/ACL';
-import {getAclLoadState} from '../../../../store/selectors/acl';
+import {getAclLoadState} from '../../../../store/selectors/acl/acl';
 import {getAttributes, getRawPath} from '../../../../store/selectors/navigation';
 import {IdmObjectType} from '../../../../constants/acl';
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
