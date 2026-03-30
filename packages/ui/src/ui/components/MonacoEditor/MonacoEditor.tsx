@@ -5,7 +5,7 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 // @ts-ignore
 import {initVimMode} from 'monaco-vim/src';
 import {useSelector} from '../../store/redux-hooks';
-import {getTheme} from '../../store/selectors/global';
+import {selectTheme} from '../../store/selectors/global';
 import {
     YT_DARK_HC_MONACO_THEME,
     YT_DARK_MONACO_THEME,
@@ -49,7 +49,7 @@ const MonacoEditor: FC<Props> = ({
     editorRef,
 }) => {
     const vimMode = useSelector(getSettingsEditorVimMode);
-    const theme = useSelector(getTheme);
+    const theme = useSelector(selectTheme);
     const modelRef = useRef(monaco.editor.createModel(value, language));
     const vimModeRef = useRef<any>();
 

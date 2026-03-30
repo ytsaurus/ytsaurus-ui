@@ -33,7 +33,7 @@ export const selectRootPagesCluster = (state: RootState) => state?.global.rootPa
 
 export const selectGlobalLoadState = (state: RootState) => state.global.loadState;
 
-export const getTheme = (state: RootState) => state.global.theme;
+export const selectTheme = (state: RootState) => state.global.theme;
 
 export const getPage = (state: RootState) => state.global.page;
 
