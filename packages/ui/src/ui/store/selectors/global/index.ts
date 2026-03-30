@@ -105,7 +105,7 @@ export const selectAllGroupNamesSorted = createSelector(
     sortBy_ as (items: Array<unknown>) => Array<string>,
 );
 
-export const getAllIdmGroupNamesSorted = createSelector(
+export const selectAllIdmGroupNamesSorted = createSelector(
     [selectAllGroupNamesSorted, selectGlobalGroupAttributesMap],
     (names, attrs) => {
         return filter_(names, (name) =>
