@@ -21,7 +21,7 @@ import {
     AccessLogFilterAction,
     AccessLogFiltersState,
 } from '../../../../../store/reducers/navigation/tabs/access-log/access-log-filters';
-import {getMergedUiSettings} from '../../../../../store/selectors/global';
+import {selectMergedUiSettings} from '../../../../../store/selectors/global';
 import {
     getAccessLogFilterPagination,
     getAccessLogLastLoadedParams,
@@ -58,7 +58,7 @@ export function resetPaginationIfNeededAndCheckIfPathChanged(): AccessLogFilters
 const accesLogCancelHelper = new CancelHelper();
 
 function calcBaseUrl(url: string, state: RootState) {
-    const uiSettings = getMergedUiSettings(state);
+    const uiSettings = selectMergedUiSettings(state);
     const {baseUrl, use_cors} = getBaseUrlDetails(uiSettings, 'accessLogBasePath');
     return use_cors ? `${baseUrl}/${url.split('/').pop()}` : url;
 }
