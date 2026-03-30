@@ -61,21 +61,21 @@ function prepareApprovers(
 
 export type PreparedApprover = ReturnType<typeof prepareApprovers>[number];
 
-export const getAllUserPermissions = (state: RootState, idmKind: IdmKindType) =>
+export const selectAllUserPermissions = (state: RootState, idmKind: IdmKindType) =>
     state.acl[idmKind].userPermissions;
-const getAllObjectPermissions = (state: RootState, idmKind: IdmKindType) =>
+const selectAllObjectPermissions = (state: RootState, idmKind: IdmKindType) =>
     state.acl[idmKind].objectPermissions;
 
-const getAllObjectPermissionsWithSplittedSubjects = createSelector(
-    [getAllObjectPermissions],
+const selectAllObjectPermissionsWithSplittedSubjects = createSelector(
+    [selectAllObjectPermissions],
     splitSubjects,
 );
 
-export const getObjectPermissionsTypesList = (idmKind: IdmKindType) => {
+export const selectObjectPermissionsTypesList = (idmKind: IdmKindType) => {
     return createSelector(
         [
             getObjectPermissionsFilter,
-            (state) => getAllObjectPermissionsWithSplittedSubjects(state, idmKind),
+            (state) => selectAllObjectPermissionsWithSplittedSubjects(state, idmKind),
         ],
         (permissionsFilter, items) => {
             const uniquePermisions = new Set<YTPermissionTypeUI>();
@@ -151,9 +151,9 @@ const permissionsFilterPredicate = (item: PreparedAclSubject, filter: Set<YTPerm
 
 type ObjectPermissionsRow = PreparedAclSubject & HasSplitted;
 
-export const getAllObjectPermissionsFiltered = createSelector(
+export const selectAllObjectPermissionsFiltered = createSelector(
     [
-        getAllObjectPermissionsWithSplittedSubjects,
+        selectAllObjectPermissionsWithSplittedSubjects,
         getObjectSubjectFilter,
         getObjectPermissionsFilter,
         getAclFilterColumns,
@@ -229,8 +229,8 @@ export const getAllObjectPermissionsFiltered = createSelector(
     },
 );
 
-export const getObjectPermissionsAggregated = createSelector(
-    [getAllObjectPermissionsFiltered, getAclFilterExpandedSubjects],
+export const selectObjectPermissionsAggregated = createSelector(
+    [selectAllObjectPermissionsFiltered, getAclFilterExpandedSubjects],
     (data, expandedSubjects) => {
         const keys = Object.keys(data) as Array<keyof typeof data>;
         return keys.reduce(
@@ -407,14 +407,14 @@ function aggregateBySubject(
     };
 }
 
-export const getAllObjectPermissionsOrderedByStatus = createSelector(
-    [getAllObjectPermissions],
+export const selectAllObjectPermissionsOrderedByStatus = createSelector(
+    [selectAllObjectPermissions],
     OrderByRoleStatus,
 );
-export const getAllColumnGroups = (state: RootState, idmKind: IdmKindType) =>
+export const selectAllColumnGroups = (state: RootState, idmKind: IdmKindType) =>
     state.acl[idmKind].columnGroups;
-export const getAllColumnGroupsActual = createSelector(
-    [getAllColumnGroups, getAclFilterColumns, getAclFilterColumnGroupName],
+export const selectAllColumnGroupsActual = createSelector(
+    [selectAllColumnGroups, getAclFilterColumns, getAclFilterColumnGroupName],
     (items, columnsFilter, nameFilter) => {
         const visibleColumns = new Set(columnsFilter);
         type ItemType = (typeof items)[number];
@@ -440,9 +440,9 @@ export const getAllColumnGroupsActual = createSelector(
     },
 );
 
-export const getAllRowGroups = (state: RootState, idmKind: IdmKindType) =>
+export const selectAllRowGroups = (state: RootState, idmKind: IdmKindType) =>
     state.acl[idmKind].rowGroups;
-export const getAllRowGroupsActual = createSelector([getAllRowGroups], (rowGroups) => {
+export const selectAllRowGroupsActual = createSelector([selectAllRowGroups], (rowGroups) => {
     return rowGroups;
 });
 
@@ -483,23 +483,25 @@ function OrderByInheritanceAndSubject<T extends {inherited?: boolean; subjects: 
     return res;
 }
 
-const getReadApprovers = (state: RootState, idmKind: IdmKindType) =>
+const selectReadApprovers = (state: RootState, idmKind: IdmKindType) =>
     state.acl[idmKind].readApprovers;
-const getResponsibles = (state: RootState, idmKind: IdmKindType) => state.acl[idmKind].responsible;
-const getAuditors = (state: RootState, idmKind: IdmKindType) => state.acl[idmKind].auditors;
+const selectResponsibles = (state: RootState, idmKind: IdmKindType) =>
+    state.acl[idmKind].responsible;
+const selectAuditors = (state: RootState, idmKind: IdmKindType) => state.acl[idmKind].auditors;
 
-export const getNotInheritedReadApprovers = createSelector([getReadApprovers], (readApprovers) =>
-    filter_(readApprovers, (readApprover) => !readApprover.inherited),
+export const selectNotInheritedReadApprovers = createSelector(
+    [selectReadApprovers],
+    (readApprovers) => filter_(readApprovers, (readApprover) => !readApprover.inherited),
 );
-export const getNotInheritedResponsibles = createSelector([getResponsibles], (responsibles) =>
+export const selectNotInheritedResponsibles = createSelector([selectResponsibles], (responsibles) =>
     filter_(responsibles, (responsible) => !responsible.inherited),
 );
-export const getNotInheritedAuditors = createSelector([getAuditors], (auditros) =>
+export const selectNotInheritedAuditors = createSelector([selectAuditors], (auditros) =>
     filter_(auditros, (auditro) => !auditro.inherited),
 );
 
-const getAllApprovers = createSelector(
-    [getReadApprovers, getResponsibles, getAuditors],
+const selectAllApprovers = createSelector(
+    [selectReadApprovers, selectResponsibles, selectAuditors],
     (readApprovers, responsibles, auditros) => {
         return [
             ...prepareApprovers(readApprovers, 'read_approver'),
@@ -509,22 +511,22 @@ const getAllApprovers = createSelector(
     },
 );
 
-export const getHasApprovers = createSelector([getAllApprovers], (items) => items.length > 0);
+export const selectHasApprovers = createSelector([selectAllApprovers], (items) => items.length > 0);
 
-export const getApproversFiltered = createSelector(
-    [getAllApprovers, getApproversSubjectFilter],
+export const selectApproversFiltered = createSelector(
+    [selectAllApprovers, getApproversSubjectFilter],
     FilterBySubject,
 );
 
-export const getApproversFilteredAndOrdered = createSelector(
-    [getApproversFiltered],
+export const selectApproversFilteredAndOrdered = createSelector(
+    [selectApproversFiltered],
     OrderByInheritanceAndSubject,
 );
 
-export const getApprovers = createSelector([getAllApprovers], OrderByRoleStatus);
+export const selectApprovers = createSelector([selectAllApprovers], OrderByRoleStatus);
 
-export const getAllAccessColumnsPermissions = createSelector(
-    [getAllObjectPermissions],
+export const selectAllAccessColumnsPermissions = createSelector(
+    [selectAllObjectPermissions],
     (objectPermissions) => {
         const filteredPermissions = filter_(
             objectPermissions,
@@ -539,8 +541,8 @@ export const getAllAccessColumnsPermissions = createSelector(
     },
 );
 
-const getAllDenyColumnsPermissions = createSelector(
-    [getAllObjectPermissions],
+const selectAllDenyColumnsPermissions = createSelector(
+    [selectAllObjectPermissions],
     (objectPermissions) => {
         const filteredPermissions = filter_(
             objectPermissions,
@@ -558,39 +560,39 @@ const getAllDenyColumnsPermissions = createSelector(
     },
 );
 
-export const getAllAccessColumnsNames = createSelector(
-    [getAllAccessColumnsPermissions],
+export const selectAllAccessColumnsNames = createSelector(
+    [selectAllAccessColumnsPermissions],
     prepareColumnsNames,
 );
 
-export const getAllDenyColumnsNames = createSelector(
-    [getAllDenyColumnsPermissions],
+export const selectAllDenyColumnsNames = createSelector(
+    [selectAllDenyColumnsPermissions],
     prepareColumnsNames,
 );
 
-export const getDenyColumnsItems = createSelector([getAllDenyColumnsNames], (names) =>
+export const selectDenyColumnsItems = createSelector([selectAllDenyColumnsNames], (names) =>
     map_(names, (name) => ({key: name, value: name, title: name})),
 );
 
-export const isPermissionDeleted = (state: RootState, idmKind: IdmKindType) =>
+export const selectIsPermissionDeleted = (state: RootState, idmKind: IdmKindType) =>
     state.acl[idmKind].isPermissionDeleted;
-export const permissionDeletionError = (state: RootState, idmKind: IdmKindType) =>
+export const selectPermissionDeletionError = (state: RootState, idmKind: IdmKindType) =>
     state.acl[idmKind].deletionError;
-export const getLastDeletedPermissionKey = (state: RootState, idmKind: IdmKindType) =>
+export const selectLastDeletedPermissionKey = (state: RootState, idmKind: IdmKindType) =>
     state.acl[idmKind].deletedItemKey;
-export const getIdmPermissionsRequestError = (state: RootState, idmKind: IdmKindType) =>
+export const selectIdmPermissionsRequestError = (state: RootState, idmKind: IdmKindType) =>
     state.acl[idmKind].idmPermissionsRequestError;
-export const getIdmManageAclRequestError = (state: RootState, idmKind: IdmKindType) =>
+export const selectIdmManageAclRequestError = (state: RootState, idmKind: IdmKindType) =>
     state.acl[idmKind].idmManageAclRequestError;
-export const getIdmPathVersion = (state: RootState, idmKind: IdmKindType) =>
+export const selectIdmPathVersion = (state: RootState, idmKind: IdmKindType) =>
     state.acl[idmKind].version;
 
-const getAclLoading = (state: RootState, idmKind: IdmKindType) => state.acl[idmKind].loading;
-const getAclLoaded = (state: RootState, idmKind: IdmKindType) => state.acl[idmKind].loaded;
-const getAclError = (state: RootState, idmKind: IdmKindType) => state.acl[idmKind].error;
+const selectAclLoading = (state: RootState, idmKind: IdmKindType) => state.acl[idmKind].loading;
+const selectAclLoaded = (state: RootState, idmKind: IdmKindType) => state.acl[idmKind].loaded;
+const selectAclError = (state: RootState, idmKind: IdmKindType) => state.acl[idmKind].error;
 
-export const getAclLoadState = createSelector(
-    [getAclLoading, getAclLoaded, getAclError],
+export const selectAclLoadState = createSelector(
+    [selectAclLoading, selectAclLoaded, selectAclError],
     (loading, loaded, error) => {
         return calculateLoadingStatus(loading, loaded, error);
     },

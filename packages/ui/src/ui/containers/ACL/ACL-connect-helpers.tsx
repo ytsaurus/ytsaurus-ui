@@ -1,22 +1,22 @@
 import {type ConnectedProps, connect} from 'react-redux';
 
 import {
-    getAllAccessColumnsNames,
-    getAllColumnGroupsActual,
-    getAllRowGroupsActual,
-    getAllUserPermissions,
-    getApproversFilteredAndOrdered,
-    getHasApprovers,
-    getIdmManageAclRequestError,
-    getIdmPathVersion,
-    getIdmPermissionsRequestError,
-    getLastDeletedPermissionKey,
-    getNotInheritedAuditors,
-    getNotInheritedReadApprovers,
-    getNotInheritedResponsibles,
-    getObjectPermissionsAggregated,
-    isPermissionDeleted,
-    permissionDeletionError,
+    selectAllAccessColumnsNames,
+    selectAllColumnGroupsActual,
+    selectAllRowGroupsActual,
+    selectAllUserPermissions,
+    selectApproversFilteredAndOrdered,
+    selectHasApprovers,
+    selectIdmManageAclRequestError,
+    selectIdmPathVersion,
+    selectIdmPermissionsRequestError,
+    selectIsPermissionDeleted,
+    selectLastDeletedPermissionKey,
+    selectNotInheritedAuditors,
+    selectNotInheritedReadApprovers,
+    selectNotInheritedResponsibles,
+    selectObjectPermissionsAggregated,
+    selectPermissionDeletionError,
 } from '../../store/selectors/acl/acl';
 
 import {getType} from '../../store/selectors/navigation';
@@ -76,19 +76,19 @@ const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
             inheritAcl,
         } = state.acl[idmKind];
 
-        const hasApprovers = getHasApprovers(state, idmKind);
-        const approversFiltered = getApproversFilteredAndOrdered(state, idmKind);
+        const hasApprovers = selectHasApprovers(state, idmKind);
+        const approversFiltered = selectApproversFilteredAndOrdered(state, idmKind);
         const {mainPermissions, columnsPermissions, rowPermissions} =
-            getObjectPermissionsAggregated(state, idmKind);
-        const columnGroups = getAllColumnGroupsActual(state, idmKind);
-        const rowGroups = getAllRowGroupsActual(state, idmKind);
-        const userPermissions = getAllUserPermissions(state, idmKind);
+            selectObjectPermissionsAggregated(state, idmKind);
+        const columnGroups = selectAllColumnGroupsActual(state, idmKind);
+        const rowGroups = selectAllRowGroupsActual(state, idmKind);
+        const userPermissions = selectAllUserPermissions(state, idmKind);
 
         const columnsFilter = getAclFilterColumns(state);
 
-        const auditors = getNotInheritedAuditors(state, idmKind);
-        const readApprovers = getNotInheritedReadApprovers(state, idmKind);
-        const responsible = getNotInheritedResponsibles(state, idmKind);
+        const auditors = selectNotInheritedAuditors(state, idmKind);
+        const readApprovers = selectNotInheritedReadApprovers(state, idmKind);
+        const responsible = selectNotInheritedResponsibles(state, idmKind);
 
         const nodeType = getType(state);
 
@@ -102,7 +102,7 @@ const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
 
             path,
             nodeType,
-            version: getIdmPathVersion(state, idmKind),
+            version: selectIdmPathVersion(state, idmKind),
             idmKind,
             disableAclInheritance,
             inheritAcl,
@@ -118,13 +118,13 @@ const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
             responsible,
 
             userPermissions,
-            userPermissionsRequestError: getIdmPermissionsRequestError(state, idmKind),
-            userPermissionsAccessColumns: getAllAccessColumnsNames(state, idmKind),
-            userPermissionsUpdateAclError: getIdmManageAclRequestError(state, idmKind),
+            userPermissionsRequestError: selectIdmPermissionsRequestError(state, idmKind),
+            userPermissionsAccessColumns: selectAllAccessColumnsNames(state, idmKind),
+            userPermissionsUpdateAclError: selectIdmManageAclRequestError(state, idmKind),
 
-            isPermissionDeleted: isPermissionDeleted(state, idmKind),
-            deletePermissionsLastItemKey: getLastDeletedPermissionKey(state, idmKind),
-            deletePermissionsError: permissionDeletionError(state, idmKind),
+            isPermissionDeleted: selectIsPermissionDeleted(state, idmKind),
+            deletePermissionsLastItemKey: selectLastDeletedPermissionKey(state, idmKind),
+            deletePermissionsError: selectPermissionDeletionError(state, idmKind),
 
             columnGroups,
             columnsFilter,

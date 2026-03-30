@@ -17,8 +17,8 @@ import {PoolAclPanel} from '../../../../../containers/ACL';
 import {RumMeasureTypes} from '../../../../../rum/rum-measure-types';
 import {useRumMeasureStop} from '../../../../../rum/RumUiContext';
 import {isFinalLoadingStatus} from '../../../../../utils/utils';
-import {getAclLoadState} from '../../../../../store/selectors/acl/acl';
 import {type LoadingStatus} from '../../../../../constants';
+import {selectAclLoadState} from '../../../../../store/selectors/acl/acl';
 import {IdmObjectType} from '../../../../../constants/acl';
 import {useAppRumMeasureStart} from '../../../../../rum/rum-app-measures';
 
@@ -66,7 +66,7 @@ function PoolAclWithRum({loadState}: {loadState: LoadingStatus}) {
 
 const mapStateToProps = (state: RootState) => {
     return {
-        loadState: getAclLoadState(state, IdmObjectType.POOL),
+        loadState: selectAclLoadState(state, IdmObjectType.POOL),
     };
 };
 
