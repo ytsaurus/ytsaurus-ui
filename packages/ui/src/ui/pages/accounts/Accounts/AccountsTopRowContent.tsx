@@ -11,8 +11,8 @@ import {
 } from '../../../store/selectors/favourites';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {
-    getAccountsMapByName,
-    getActiveAccount,
+    selectAccountsMapByName,
+    selectActiveAccount,
 } from '../../../store/selectors/accounts/accounts-ts';
 import {setActiveAccount} from '../../../store/actions/accounts/accounts';
 import {accountsToggleFavourite} from '../../../store/actions/favourites';
@@ -33,8 +33,8 @@ const block = cn('accounts-top-row-content');
 
 function AccountsTopRowContent() {
     const clusterUiConfig = useSelector(selectClusterUiConfig);
-    const account = useSelector(getActiveAccount);
-    const accountsByName = useSelector(getAccountsMapByName) as any;
+    const account = useSelector(selectActiveAccount);
+    const accountsByName = useSelector(selectAccountsMapByName);
 
     const current = accountsByName[account];
 
@@ -57,7 +57,7 @@ function AccountsFavourites() {
     const isActiveInFavourites = useSelector(selectIsActiveAccountInFavourites);
     const favourites = useSelector(selectFavouriteAccounts);
     const dispatch = useDispatch();
-    const activeAccount = useSelector(getActiveAccount);
+    const activeAccount = useSelector(selectActiveAccount);
 
     const handleFavouriteItemClick = React.useCallback(
         (item: FavouritesItem) => {

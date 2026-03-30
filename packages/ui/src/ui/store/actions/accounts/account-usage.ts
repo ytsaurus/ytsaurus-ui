@@ -37,7 +37,7 @@ import {
     getAccountUsageTreeRequestParams,
     getAccountUsageViewType,
 } from '../../selectors/accounts/account-usage';
-import {getActiveAccount} from '../../../store/selectors/accounts/accounts-ts';
+import {selectActiveAccount} from '../../../store/selectors/accounts/accounts-ts';
 import {getSettingsAccountUsageViewType} from '../../../store/selectors/settings/settings-ts';
 import {type SortState} from '../../../types';
 import {
@@ -122,7 +122,7 @@ export function fetchAccountsUsageSnapshots(cluster: string): SnapshotsThunkActi
 type UsageListThunkAction = ThunkAction<any, RootState, any, AccountUsageListAction>;
 
 export function getFilterParameters(state: RootState): AccountUsageDataParams {
-    const account = getActiveAccount(state);
+    const account = selectActiveAccount(state);
     const cluster = selectCluster(state);
     const sortStates = getAccountUsageSortState(state);
     const path_regexp = getAccountUsagePathFilter(state);

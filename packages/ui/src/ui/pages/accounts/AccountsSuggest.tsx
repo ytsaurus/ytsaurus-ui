@@ -11,7 +11,7 @@ import {YTErrorBlock} from '../../components/Error/Error';
 
 import {ROOT_ACCOUNT_NAME} from '../../constants/accounts/accounts';
 import {selectEditableAccountParentSuggests} from '../../store/selectors/accounts/accounts';
-import {getAccountNames} from '../../store/selectors/accounts/accounts-ts';
+import {selectAccountNames} from '../../store/selectors/accounts/accounts-ts';
 
 import './AccountsSuggest.scss';
 import {fetchFullList1M} from '../../utils/users-groups';
@@ -89,7 +89,7 @@ AccountSuggestImpl.hasErrorRenderer = true;
 
 const mapStateToProps = (state: RootState) => {
     return {
-        items: getAccountNames(state),
+        items: selectAccountNames(state),
     };
 };
 

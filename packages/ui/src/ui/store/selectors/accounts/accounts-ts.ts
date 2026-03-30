@@ -26,31 +26,31 @@ function isTopLevelAccount(account: AccountSelector) {
     return !parent || parent === ROOT_ACCOUNT_NAME;
 }
 
-const getAccountsLoading = (state: RootState) => state.accounts.accounts.fetching;
-const getAccountsLoaded = (state: RootState) => state.accounts.accounts.wasLoaded;
-const getAccountsError = (state: RootState) => state.accounts.accounts.error;
+const selectAccountsLoading = (state: RootState) => state.accounts.accounts.fetching;
+const selectAccountsLoaded = (state: RootState) => state.accounts.accounts.wasLoaded;
+const selectAccountsError = (state: RootState) => state.accounts.accounts.error;
 
-export const getAccountsIsFinalLoadingStatus = createSelector(
-    [getAccountsLoading, getAccountsLoaded, getAccountsError],
+export const selectAccountsIsFinalLoadingStatus = createSelector(
+    [selectAccountsLoading, selectAccountsLoaded, selectAccountsError],
     (loading, loaded, error) => {
         const status = calculateLoadingStatus(loading, loaded, error);
         return isFinalLoadingStatus(status);
     },
 );
 
-export const getActiveAccount = (state: RootState) => state.accounts.accounts.activeAccount;
-export const getActiveMediumFilter = (state: RootState) =>
+export const selectActiveAccount = (state: RootState) => state.accounts.accounts.activeAccount;
+export const selectActiveMediumFilter = (state: RootState) =>
     state.accounts.accounts.activeMediumFilter;
-export const getAccountsContentMode = (state: RootState) =>
+export const selectAccountsContentMode = (state: RootState) =>
     state.accounts.accounts.activeContentModeFilter;
-export const getAccountsMasterMemoryContentMode = (state: RootState) =>
+export const selectAccountsMasterMemoryContentMode = (state: RootState) =>
     state.accounts.accounts.masterMemoryContentMode;
-export const getEditableAccount = (state: RootState) =>
+export const selectEditableAccount = (state: RootState) =>
     state.accounts.accounts.editableAccount as AccountSelector;
 
-export const getAccountsDisabledCacheForNextFetch = (state: RootState) =>
+export const selectAccountsDisabledCacheForNextFetch = (state: RootState) =>
     state.accounts.accounts.disableCacheForNextFetch;
-export const getAccountsEditCounter = (state: RootState) => state.accounts.accounts.editCounter;
+export const selectAccountsEditCounter = (state: RootState) => state.accounts.accounts.editCounter;
 
 export interface AccountSelector {
     name: string;
@@ -120,14 +120,14 @@ export interface AccountStaticConfigurationItem {
     free?: number;
 }
 
-const getAccounts = (state: RootState) =>
+const selectAccounts = (state: RootState) =>
     state.accounts.accounts.accounts as Array<AccountSelector>;
 
-export const getAccountNames = createSelector(getAccounts, (items: Array<FIX_MY_TYPE>) =>
+export const selectAccountNames = createSelector(selectAccounts, (items: Array<FIX_MY_TYPE>) =>
     map_(items, (i) => i.$value).sort(),
 );
 
-export const getAccountsMapByName = createSelector(getAccounts, (accounts) => {
+export const selectAccountsMapByName = createSelector(selectAccounts, (accounts) => {
     const nameToAccountMap: Record<string, AccountSelector> = {};
     forEach_(accounts, (item) => {
         nameToAccountMap[item.name] = item;
@@ -135,7 +135,7 @@ export const getAccountsMapByName = createSelector(getAccounts, (accounts) => {
     return nameToAccountMap;
 });
 
-export const getAccountsTree = createSelector([getAccountsMapByName], prepareAccountsTree);
+export const selectAccountsTree = createSelector([selectAccountsMapByName], prepareAccountsTree);
 
 type Tree<T> = {
     attributes: T;
@@ -184,8 +184,8 @@ function makeStaticConfigurationItem(
     ];
 }
 
-export const getActiveAccountStaticConfiguration = createSelector(
-    [getActiveAccount, getAccountsTree, getMediumListNoCache],
+export const selectActiveAccountStaticConfiguration = createSelector(
+    [selectActiveAccount, selectAccountsTree, getMediumListNoCache],
     (activeAccount, tree = {}, mediums = []) => {
         const item = tree[activeAccount];
         if (!item) {
@@ -288,7 +288,7 @@ function getResourceInfo(
     return getInfo(entry.attributes, recursive, mediumType);
 }
 
-export const getAccountMasterMemoryMedia = createSelector([getAccounts], (items = []) => {
+export const selectAccountMasterMemoryMedia = createSelector([selectAccounts], (items = []) => {
     const [item] = items;
     if (!item) {
         return [];
@@ -302,8 +302,8 @@ export const getAccountMasterMemoryMedia = createSelector([getAccounts], (items 
     return ['total', 'chunk_host', ...mediums];
 });
 
-const getAccountsMasterMemoryColumns = createSelector(
-    [getActiveAccount, getAccountsMasterMemoryContentMode],
+const selectAccountsMasterMemoryColumns = createSelector(
+    [selectActiveAccount, selectAccountsMasterMemoryContentMode],
     (activeAccount, medium) => {
         return {
             master_memory_percentage: {
@@ -398,8 +398,8 @@ const getAccountsMasterMemoryColumns = createSelector(
     },
 );
 
-export const getAccountsColumnFields = createSelector(
-    [getActiveAccount, getActiveMediumFilter, getAccountsMasterMemoryColumns],
+export const selectAccountsColumnFields = createSelector(
+    [selectActiveAccount, selectActiveMediumFilter, selectAccountsMasterMemoryColumns],
     (activeAccount, mediumType, accountsColumns) => {
         const res = {
             name: {
@@ -590,8 +590,8 @@ export function getAccountName(treeItem?: {attributes: AccountSelector}) {
     return account && account.name;
 }
 
-export const getEditableAccountQuotaSources = createSelector(
-    [getAccountsTree, getEditableAccount],
+export const selectEditableAccountQuotaSources = createSelector(
+    [selectAccountsTree, selectEditableAccount],
     (tree, account) => {
         if (!account?.name || !tree) {
             return [];
@@ -632,8 +632,8 @@ function collectSubtreeItems(
     return res;
 }
 
-export const isEditableAccountOfTopLevel = createSelector(
-    [getAccountsMapByName, getEditableAccount],
+export const selectIsEditableAccountOfTopLevel = createSelector(
+    [selectAccountsMapByName, selectEditableAccount],
     (mapByName, account) => {
         return isTopLevelAccount(mapByName[account?.name]);
     },

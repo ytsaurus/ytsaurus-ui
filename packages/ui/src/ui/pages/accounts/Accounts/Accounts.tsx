@@ -18,8 +18,8 @@ import {
     AccountsTab,
 } from '../../../constants/accounts/accounts';
 import {
-    getAccountsIsFinalLoadingStatus,
-    getActiveAccount,
+    selectAccountsIsFinalLoadingStatus,
+    selectActiveAccount,
 } from '../../../store/selectors/accounts/accounts-ts';
 import {getLastVisitedTabs} from '../../../store/selectors/settings';
 import {type TabSettings, makeTabProps} from '../../../utils';
@@ -156,7 +156,7 @@ const mapStateToProps = (state: RootState) => {
 
     return {
         lastVisitedTab: lastVisitedTabs[Page.ACCOUNTS],
-        activeAccount: getActiveAccount(state),
+        activeAccount: selectActiveAccount(state),
         allowUsageTab: state.accounts.accounts.is_accounts_usage_available,
         cluster: selectCluster(state),
     };
@@ -166,7 +166,7 @@ const connector = connect(mapStateToProps);
 export default connector(Accounts);
 
 function AccountsRumMeasure() {
-    const isFinalStatus = useSelector(getAccountsIsFinalLoadingStatus);
+    const isFinalStatus = useSelector(selectAccountsIsFinalLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.ACCOUNTS,

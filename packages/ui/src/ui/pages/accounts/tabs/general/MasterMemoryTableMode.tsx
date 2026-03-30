@@ -3,9 +3,9 @@ import React from 'react';
 import map_ from 'lodash/map';
 
 import {
-    getAccountMasterMemoryMedia,
-    getAccountsContentMode,
-    getAccountsMasterMemoryContentMode,
+    selectAccountMasterMemoryMedia,
+    selectAccountsContentMode,
+    selectAccountsMasterMemoryContentMode,
 } from '../../../../store/selectors/accounts/accounts-ts';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
@@ -26,9 +26,9 @@ function Item({text}: {text: string}) {
 
 function MasterMemoryTableMode() {
     const dispatch = useDispatch();
-    const mode = useSelector(getAccountsContentMode);
-    const value = useSelector(getAccountsMasterMemoryContentMode);
-    const media = useSelector(getAccountMasterMemoryMedia);
+    const mode = useSelector(selectAccountsContentMode);
+    const value = useSelector(selectAccountsMasterMemoryContentMode);
+    const media = useSelector(selectAccountMasterMemoryMedia);
 
     const handleUpdate = React.useCallback(
         (vals: Array<string>) => {

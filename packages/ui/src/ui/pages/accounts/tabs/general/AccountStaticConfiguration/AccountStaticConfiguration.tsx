@@ -3,8 +3,8 @@ import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {
     type AccountStaticConfigurationItem,
-    getActiveAccount,
-    getActiveAccountStaticConfiguration,
+    selectActiveAccount,
+    selectActiveAccountStaticConfiguration,
 } from '../../../../../store/selectors/accounts/accounts-ts';
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
 import {DataTableYT} from '../../../../../components/DataTableYT';
@@ -67,8 +67,8 @@ const columns: Array<Column<AccountStaticConfigurationItem>> = [
 function AccountStaticConfiguration({className}: Props) {
     const dispatch = useDispatch();
 
-    const account = useSelector(getActiveAccount);
-    const items = useSelector(getActiveAccountStaticConfiguration);
+    const account = useSelector(selectActiveAccount);
+    const items = useSelector(selectActiveAccountStaticConfiguration);
     const expandState = useSelector(getSettingsAccountsExpandStaticConfiguration);
 
     const onToggle = React.useCallback(

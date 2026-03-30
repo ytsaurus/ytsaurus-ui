@@ -6,7 +6,7 @@ import format from '../../../../../../common/hammer/format';
 
 import AccountQuota from '../../../../AccountQuota/AccountQuota';
 import {AccountResourceName} from '../../../../../../constants/accounts/accounts';
-import {getAccountMasterMemoryMedia} from '../../../../../../store/selectors/accounts/accounts-ts';
+import {selectAccountMasterMemoryMedia} from '../../../../../../store/selectors/accounts/accounts-ts';
 import {useSelector} from '../../../../../../store/redux-hooks';
 import AccountTransferQuotaMessage from '../AccountTransferQuotaMessage';
 
@@ -17,7 +17,7 @@ interface Props {
 }
 
 export default function MasterMemoryContent(props: Props) {
-    const media = useSelector(getAccountMasterMemoryMedia);
+    const media = useSelector(selectAccountMasterMemoryMedia);
     const {account} = props;
 
     return (

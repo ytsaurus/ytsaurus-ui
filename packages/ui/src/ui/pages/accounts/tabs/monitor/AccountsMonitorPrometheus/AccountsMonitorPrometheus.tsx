@@ -7,7 +7,7 @@ import uniq_ from 'lodash/uniq';
 import ypath from '../../../../../common/thor/ypath';
 
 import {PrometheusDashboardLazy} from '../../../../../containers/PrometheusDashboard/lazy';
-import {getAccountsMapByName} from '../../../../../store/selectors/accounts/accounts-ts';
+import {selectAccountsMapByName} from '../../../../../store/selectors/accounts/accounts-ts';
 import {getMediumList} from '../../../../../store/selectors/thor';
 import {usePrometheusDashboardParams} from '../../../../../store/reducers/prometheusDashboard/prometheusDashboard-hooks';
 
@@ -31,7 +31,7 @@ export function AccountsMonitorPrometheus({cluster, account}: {cluster: string; 
 
 function useAccountMonitoringParams({cluster, account}: {cluster: string; account: string}) {
     const mediumList: Array<string> = useSelector(getMediumList);
-    const accountData = useSelector(getAccountsMapByName)[account];
+    const accountData = useSelector(selectAccountsMapByName)[account];
 
     const {params: selection, setParams: setSelection} =
         usePrometheusDashboardParams<LeftRightMedium>(ACCOUNTS_DASHBOARD_TYPE);

@@ -29,8 +29,8 @@ import {
 import {ProgressStackByTreeItem} from '../tabs/general/ProgressStack';
 import {
     type AccountsTree,
-    getAccountsTree,
-    getEditableAccountQuotaSources,
+    selectAccountsTree,
+    selectEditableAccountQuotaSources,
 } from '../../../store/selectors/accounts/accounts-ts';
 
 import './AccountQuota.scss';
@@ -203,7 +203,7 @@ class AccountQuotaEditor extends React.Component<Props & ReduxProps, State> {
 function AccountQuota(props: Props) {
     const dispatch = useDispatch();
     const activeAccount = useSelector(selectActiveAccount);
-    const accountsTree = useSelector(getAccountsTree);
+    const accountsTree = useSelector(selectAccountsTree);
 
     const handleSetQuota = React.useCallback(
         (params: AccountQuotaParams) => {
@@ -212,7 +212,7 @@ function AccountQuota(props: Props) {
         [dispatch],
     );
 
-    const sources = useSelector(getEditableAccountQuotaSources);
+    const sources = useSelector(selectEditableAccountQuotaSources);
 
     return (
         <AccountQuotaEditor
