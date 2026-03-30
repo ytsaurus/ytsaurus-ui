@@ -26,7 +26,7 @@ import {
     getAclFilterColumnGroupName,
     getAclFilterColumns,
     getAclFilterRowGroupName,
-} from '../../store/selectors/acl-filters';
+} from '../../store/selectors/acl/acl-filters';
 
 import {
     cancelRequestPermissions,

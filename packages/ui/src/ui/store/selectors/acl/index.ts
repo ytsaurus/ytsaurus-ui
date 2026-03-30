@@ -4,15 +4,14 @@ import compact_ from 'lodash/compact';
 import filter_ from 'lodash/filter';
 import flatten_ from 'lodash/flatten';
 import forEach_ from 'lodash/forEach';
+import isEqual_ from 'lodash/isEqual';
 import map_ from 'lodash/map';
+import partition_ from 'lodash/partition';
+import some_ from 'lodash/some';
 import sortBy_ from 'lodash/sortBy';
 import uniq_ from 'lodash/uniq';
-import partition_ from 'lodash/partition';
-import isEqual_ from 'lodash/isEqual';
-import some_ from 'lodash/some';
 
-import {calculateLoadingStatus} from '../../utils/utils';
-import {concatByAnd} from '../../common/hammer/predicate';
+import {concatByAnd} from '../../../common/hammer/predicate';
 import {
     getAclFilterColumnGroupName,
     getAclFilterColumns,
@@ -21,12 +20,14 @@ import {
     getApproversSubjectFilter,
     getObjectPermissionsFilter,
     getObjectSubjectFilter,
-} from './acl-filters';
-import UIFactory from '../../UIFactory';
-import {type RootState} from '../../store/reducers';
-import {type IdmKindType, type PreparedAclSubject} from '../../utils/acl/acl-types';
-import {type YTPermissionTypeUI} from '../../utils/acl/acl-api';
-import {type PreparedRole} from '../../utils/acl';
+} from '../../../store/selectors/acl/acl-filters';
+import UIFactory from '../../../UIFactory';
+
+import {type RootState} from '../../../store/reducers';
+import {type IdmKindType, type PreparedAclSubject} from '../../../utils/acl/acl-types';
+import {type YTPermissionTypeUI} from '../../../utils/acl/acl-api';
+import {type PreparedRole} from '../../../utils/acl';
+import {calculateLoadingStatus} from '../../../utils/utils';
 
 export type PreparedAclSubjectColumn = Omit<PreparedAclSubject, 'type'> & {type: 'columns'};
 

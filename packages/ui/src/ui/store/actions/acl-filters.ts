@@ -1,5 +1,5 @@
 import {type ThunkAction} from 'redux-thunk';
-import {getAclFilterExpandedSubjects} from '../../store/selectors/acl-filters';
+import {getAclFilterExpandedSubjects} from '../../store/selectors/acl/acl-filters';
 import {ACL_CHANGE_FILTERS} from '../../constants/acl';
 
 import {type AclFiltersAction, type AclFiltersState} from '../reducers/acl/acl-filters';
