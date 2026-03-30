@@ -7,7 +7,7 @@ import {
     SUGGEST_TABLET_CELL_BUNDLES_REQUEST,
     SUGGEST_TABLET_CELL_BUNDLES_SUCCESS,
 } from '../../../constants/suggests';
-import {getCurrentUserName} from '../../selectors/global';
+import {selectCurrentUserName} from '../../selectors/global';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 
 type TabletCellBundlesSuggestThunkAction = ThunkAction<
@@ -21,7 +21,7 @@ export function loadUsableTabletCellBundlesSuggests(): TabletCellBundlesSuggestT
     return (dispatch, getState) => {
         dispatch({type: SUGGEST_TABLET_CELL_BUNDLES_REQUEST});
 
-        const username = getCurrentUserName(getState());
+        const username = selectCurrentUserName(getState());
 
         return ytApiV3Id
             .get(YTApiId.getUsableBundles, {

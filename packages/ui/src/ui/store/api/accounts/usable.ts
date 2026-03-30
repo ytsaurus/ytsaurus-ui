@@ -3,14 +3,14 @@ import {BaseQueryApi} from '@reduxjs/toolkit/query';
 import {getBatchError} from '../../../../shared/utils/error';
 
 import {RootState} from '../../../store/reducers';
-import {getCurrentUserName} from '../../../store/selectors/global';
+import {selectCurrentUserName} from '../../../store/selectors/global';
 
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 
 export async function fetchUsable(_args: {cluster: string}, api: BaseQueryApi) {
     try {
         const state = api.getState() as RootState;
-        const username = getCurrentUserName(state);
+        const username = selectCurrentUserName(state);
         const response = await ytApiV3Id.executeBatch<string[]>(YTApiId.usableAccounts, {
             parameters: {
                 requests: [

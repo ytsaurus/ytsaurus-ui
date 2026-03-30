@@ -5,7 +5,7 @@ import {
     selectAllUserNames,
     selectCluster,
     getClusterConfigByName,
-    getCurrentUserName,
+    selectCurrentUserName,
 } from '../../../store/selectors/global';
 
 import concat_ from 'lodash/concat';
@@ -167,7 +167,7 @@ export function getOperationsListTimeRange(state: RootState) {
 }
 
 export const getOperationsListFiltersParameters_FOR_YTFRONT_2838 = createSelector(
-    [getOperationsListFilterParameters, getCurrentUserName, getOperationsListTimeRange, selectCluster],
+    [getOperationsListFilterParameters, selectCurrentUserName, getOperationsListTimeRange, selectCluster],
     (filters, login, {from_time, to_time}, cluster) => {
         const clusterConfig = getClusterConfigByName(cluster);
 

@@ -33,7 +33,7 @@ import {
     UPDATE_PATH,
     UPDATE_VIEW,
 } from '../../../constants/navigation/index';
-import {selectCluster, getCurrentUserName} from '../../../store/selectors/global';
+import {selectCluster, selectCurrentUserName} from '../../../store/selectors/global';
 import {fetchTableMountConfig} from '../../../store/actions/navigation/content/table/table-mount-config';
 import {checkPermissions} from '../../../utils/acl/acl-api';
 import {loadTabletErrorsCount} from './tabs/tablet-errors/tablet-errors-background';
@@ -108,7 +108,7 @@ export function updateView(settings: {trackVisit?: boolean} = {}): NavigationThu
 
                 getMetrics().countEvent('navigation_path', {type: preparedAttributes.type});
 
-                const user = getCurrentUserName(state);
+                const user = selectCurrentUserName(state);
                 const {account} = preparedAttributes;
 
                 dispatch({

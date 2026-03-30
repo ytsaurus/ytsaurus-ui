@@ -11,7 +11,7 @@ import {PagesSettingsEditor, usePagesMenuItems} from './PagesSettingsEditor';
 import {
     selectAuthWay,
     getClusterConfigByName,
-    getCurrentUserName,
+    selectCurrentUserName,
     selectRootPagesCluster,
 } from '../../store/selectors/global';
 
@@ -45,7 +45,7 @@ export default function AppNavigation({children}: ExtProps) {
     const clusterConfig = getClusterConfigByName(cluster || '');
 
     const items = usePagesMenuItems(cluster);
-    const currentUser = useSelector(getCurrentUserName);
+    const currentUser = useSelector(selectCurrentUserName);
     const authWay = useSelector(selectAuthWay);
 
     const [settingsVisible, setSettingsVisible] = React.useState(false);

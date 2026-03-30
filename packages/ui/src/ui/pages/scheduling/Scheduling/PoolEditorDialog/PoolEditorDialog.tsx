@@ -28,7 +28,7 @@ import {isAbcPoolName, isTopLevelPool} from '../../../../utils/scheduling/pool';
 import {closeEditModal, editPool} from '../../../../store/actions/scheduling/scheduling';
 
 import {checkUserPermissionsUI} from '../../../../utils/acl/acl-api';
-import {selectCluster, getCurrentUserName} from '../../../../store/selectors/global';
+import {selectCluster, selectCurrentUserName} from '../../../../store/selectors/global';
 import {getCurrentTreeGpuLimit} from '../../../../store/selectors/scheduling/scheduling-ts';
 
 import {RootState} from '../../../../store/reducers';
@@ -151,7 +151,7 @@ export function PoolEditorDialog() {
         [editItem, initialFormValues, dispatch],
     );
 
-    const user = useSelector(getCurrentUserName);
+    const user = useSelector(selectCurrentUserName);
     const [hasWarning, setHasWarning] = React.useState(false);
     const [checkPermError, setCheckPermError] = React.useState(null);
 

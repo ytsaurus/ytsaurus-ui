@@ -13,7 +13,7 @@ import {setSettingsPagesOrder, setSettingsPagesPinned} from '../../store/actions
 import {getPagesOrderedByUser} from '../../store/selectors/slideoutMenu';
 import {moveArrayElement, toggleBooleanInPlace} from '../../utils/utils';
 import {rumLogError} from '../../rum/rum-counter';
-import {getCurrentUserName} from '../selectors/global';
+import {selectCurrentUserName} from '../selectors/global';
 
 export function togglePinnedPage(id: string): ThunkAction<any, RootState, any, any> {
     return (dispatch, getState) => {
@@ -26,7 +26,7 @@ export function togglePinnedPage(id: string): ThunkAction<any, RootState, any, a
 
         const itemIndex = findIndex_(orderedPages, (item) => item.id === id);
         if (itemIndex === -1) {
-            const login = getCurrentUserName(state);
+            const login = selectCurrentUserName(state);
             rumLogError({
                 message: 'Previous index of pages element cannot be defined',
                 additional: {
@@ -73,7 +73,7 @@ export function setPagesItemPosition(params: {
 
         const [item] = moveArrayElement(orderedPages, oldIndex, newIndex);
         if (!item) {
-            const login = getCurrentUserName(state);
+            const login = selectCurrentUserName(state);
             rumLogError({
                 message: "Page's item position cannot be changed",
                 additional: {

@@ -1,3 +1,3 @@
 import {RootState} from '../../../store/reducers';
 
-export const getCurrentUserName = (state: RootState): string => state?.global?.login;
+export const selectCurrentUserName = (state: RootState): string => state?.global?.login;

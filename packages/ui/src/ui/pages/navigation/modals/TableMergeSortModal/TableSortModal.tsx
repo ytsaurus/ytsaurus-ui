@@ -18,7 +18,7 @@ import {
     runTableSort,
     tableSortModalLoadColumns,
 } from '../../../../store/actions/navigation/modals/table-merge-sort-modal';
-import {getCurrentUserName} from '../../../../store/selectors/global';
+import {selectCurrentUserName} from '../../../../store/selectors/global';
 import {makeLink} from '../CreateTableModal/CreateTableModal';
 import './TableSortModal.scss';
 import {ColumnSortByInfo} from './TableSortByControl';
@@ -29,7 +29,7 @@ import {WaitForDefaultPoolTree} from '../../../../hooks/global-pool-trees';
 const block = cn('table-sort-modal');
 
 export default function TableSortModal() {
-    const login = useSelector(getCurrentUserName);
+    const login = useSelector(selectCurrentUserName);
     const visible = useSelector(getNavigationTableSortVisible);
     const paths = useSelector(getNavigationTableSortPaths);
     const suggestError = useSelector(getNavigationTableSortError);

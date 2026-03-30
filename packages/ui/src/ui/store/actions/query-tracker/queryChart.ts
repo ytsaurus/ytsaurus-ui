@@ -9,7 +9,7 @@ import {
     getQueryDraft,
     getQueryItem,
 } from '../../selectors/query-tracker/query';
-import {getCurrentUserName} from '../../selectors/global/username';
+import {selectCurrentUserName} from '../../selectors/global/username';
 import {
     Config,
     FieldKey,
@@ -44,7 +44,7 @@ type AsyncAction = ThunkAction<void, RootState, undefined, Action>;
 const saveChartConfig = (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
 
-    const currentUser = getCurrentUserName(state);
+    const currentUser = selectCurrentUserName(state);
     const queryItem = getQueryItem(state);
     const {id} = getQueryDraft(state);
 

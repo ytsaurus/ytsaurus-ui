@@ -19,7 +19,7 @@ import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {YTApiId, ytApiV3Id, ytApiV4Id} from '../../../rum/rum-wrap-api';
 import {AddMaintenanceParams, BatchSubRequest} from '../../../../shared/yt-types';
 import {updateComponentsNode} from './nodes/nodes';
-import {getCurrentUserName} from '../../../store/selectors/global';
+import {selectCurrentUserName} from '../../../store/selectors/global';
 import {prepareSetCommandForBatch} from '../../../utils/cypress-attributes';
 import {getProxies} from './proxies/proxies';
 
@@ -218,7 +218,7 @@ export function loadNodeMaintenanceData({
 > {
     return (_dispatch, getState) => {
         const state = getState();
-        const user = getCurrentUserName(state);
+        const user = selectCurrentUserName(state);
         const path = makeNodePath(address, component) + '/@';
 
         const allowMaintenanceRequests = isMaintenanceApiAllowedForComponent(component, state);

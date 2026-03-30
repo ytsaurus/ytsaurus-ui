@@ -11,7 +11,7 @@ import Links from '../Links/Links';
 import AccountsGeneralTab from '../../../pages/accounts/tabs/general/AccountsGeneralTab';
 import {DASHBOARD_VIEW_CONTEXT} from '../../../constants/index';
 import AccountsUpdater from '../../accounts/Accounts/AccountsUpdater';
-import {selectCluster, getCurrentUserName} from '../../../store/selectors/global';
+import {selectCluster, selectCurrentUserName} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
 
 import './Dashboard.scss';
@@ -25,7 +25,7 @@ Dashboard.propTypes = {
 };
 
 function MyRolesLink() {
-    const login = useSelector(getCurrentUserName);
+    const login = useSelector(selectCurrentUserName);
     const cluster = useSelector(selectCluster);
 
     return (

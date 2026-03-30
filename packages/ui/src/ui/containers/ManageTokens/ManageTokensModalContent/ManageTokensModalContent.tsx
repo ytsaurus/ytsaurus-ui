@@ -15,7 +15,7 @@ import {
 } from '../../../store/actions/manage-tokens';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {AuthenticationToken, manageTokensSelector} from '../../../store/selectors/manage-tokens';
-import {getCurrentUserName} from '../../../store/selectors/global';
+import {selectCurrentUserName} from '../../../store/selectors/global';
 import Icon from '../../../components/Icon/Icon';
 import {YTError} from '../../../../@types/types';
 import ClipboardButton from '../../../components/ClipboardButton/ClipboardButton';
@@ -34,7 +34,7 @@ const block = cn('manage-tokens-modal-content');
 const AuthenticationGenerateTokenFormSection: FC<{onClose: () => void}> = ({onClose}) => {
     type FormData = {description: string};
     const {getPassword} = useManageTokensPasswordModalContext();
-    const user = useSelector(getCurrentUserName);
+    const user = useSelector(selectCurrentUserName);
     const dispatch = useDispatch();
     const [error, setError] = useState<YTError>();
     const [token, setToken] = useState<string>();
@@ -177,7 +177,7 @@ const AuthenticationTokensSection: FC<{
     const {getPassword} = useManageTokensPasswordModalContext();
     const dispatch = useDispatch();
     const tokens = useSelector(manageTokensSelector);
-    const user = useSelector(getCurrentUserName);
+    const user = useSelector(selectCurrentUserName);
 
     const handleClickRemoveToken = React.useCallback(
         (index: number) => {

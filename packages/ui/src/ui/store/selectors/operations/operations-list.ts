@@ -13,7 +13,7 @@ import {
     OPERATIONS_LIST_DEFAULT_FILTERS,
     OPERATIONS_LIST_RUNNING_PRESET,
 } from '../../../constants/operations/list';
-import {getCurrentUserName} from '../global';
+import {selectCurrentUserName} from '../global';
 import {getOperationsListFilters} from '.';
 import {
     OperationPresetsSettings,
@@ -68,7 +68,7 @@ function createPreconfiguredPresets(login: string) {
 }
 
 export const getOperationsListFilterPresets = createSelector(
-    [getSettingsDataRaw, getCurrentUserName],
+    [getSettingsDataRaw, selectCurrentUserName],
     (data, login): Record<string, OperationsListPreset> => {
         const collectionKeys: Array<keyof OperationPresetsSettings> = filter_(
             Object.keys(data) as Array<keyof OperationPresetsSettings>,

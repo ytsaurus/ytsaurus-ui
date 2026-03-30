@@ -28,7 +28,7 @@ import {usePrometheusDiscoverValuesQuery} from '../../store/api/prometheus';
 import {useFetchBatchQuery} from '../../store/api/yt/executeBatch';
 import {usePrometheusDashboardParams} from '../../store/reducers/prometheusDashboard/prometheusDashboard-hooks';
 import {selectCluster} from '../../store/selectors/global/cluster';
-import {getCurrentUserName} from '../../store/selectors/global';
+import {selectCurrentUserName} from '../../store/selectors/global';
 
 import {PrometheusDashKit} from './PrometheusDashKit';
 import {
@@ -226,7 +226,7 @@ function useGrafanaUrl({
 
 function useGrafanaUrlVisibility() {
     const cluster = useSelector(selectCluster);
-    const user = useSelector(getCurrentUserName);
+    const user = useSelector(selectCurrentUserName);
 
     const {data, error} = useFetchBatchQuery<CheckPermissionResult>({
         cluster,

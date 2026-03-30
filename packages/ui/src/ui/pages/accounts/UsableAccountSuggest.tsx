@@ -1,7 +1,7 @@
 import React from 'react';
 import {DialogControlProps} from '../../components/Dialog/Dialog.types';
 import {AccountSuggestImpl} from './AccountsSuggest';
-import {getCurrentUserName} from '../../store/selectors/global';
+import {selectCurrentUserName} from '../../store/selectors/global';
 import {useSelector} from '../../store/redux-hooks';
 import {showErrorPopup} from '../../utils/utils';
 import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
@@ -11,7 +11,7 @@ export function UsableAccountSuggest(props: DialogControlProps<string | undefine
     const {onChange, placeholder, value} = props;
     const [items, setItems] = React.useState<Array<string>>([]);
 
-    const login = useSelector(getCurrentUserName);
+    const login = useSelector(selectCurrentUserName);
     React.useEffect(() => {
         ytApiV3Id
             .get(YTApiId.listUsableAccounts, {path: `//sys/users/${login}/@usable_accounts`})

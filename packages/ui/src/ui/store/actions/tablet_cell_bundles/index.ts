@@ -37,7 +37,7 @@ import {
 
 import copy from 'copy-to-clipboard';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
-import {selectCluster, getCurrentUserName} from '../../selectors/global';
+import {selectCluster, selectCurrentUserName} from '../../selectors/global';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {getAppBrowserHistory} from '../../../store/window-store';
 import {BatchSubRequest} from '../../../../shared/yt-types';
@@ -180,7 +180,7 @@ export function fetchWritePermissions(
     bundles: Array<{bundle: string}> = [],
 ): TabletsBundlesThunkAction {
     return (dispatch, getState) => {
-        const user = getCurrentUserName(getState());
+        const user = selectCurrentUserName(getState());
         const requests: Array<BatchSubRequest> = map_(bundles, (item) => {
             return makeCheckPermissionBatchSubRequestUI({
                 path: `//sys/tablet_cell_bundles/${item.bundle}`,

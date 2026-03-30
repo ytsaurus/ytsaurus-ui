@@ -18,7 +18,7 @@ import {
     runTableMerge,
     tableSortModalLoadColumns,
 } from '../../../../store/actions/navigation/modals/table-merge-sort-modal';
-import {getCurrentUserName} from '../../../../store/selectors/global';
+import {selectCurrentUserName} from '../../../../store/selectors/global';
 import {makeLink} from '../CreateTableModal/CreateTableModal';
 import {parseBytes} from '../../../../utils/parse/parse-bytes';
 import {docsUrl} from '../../../../config';
@@ -26,7 +26,7 @@ import UIFactory from '../../../../UIFactory';
 import {WaitForDefaultPoolTree} from '../../../../hooks/global-pool-trees';
 
 export default function TableMergeModal() {
-    const login = useSelector(getCurrentUserName);
+    const login = useSelector(selectCurrentUserName);
     const visible = useSelector(getNavigationTableMergeVisible);
     const paths = useSelector(getNavigationTableSortPaths);
     const suggestError = useSelector(getNavigationTableSortError);

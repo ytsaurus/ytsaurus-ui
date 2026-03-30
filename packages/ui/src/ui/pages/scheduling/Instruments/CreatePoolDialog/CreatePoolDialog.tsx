@@ -9,7 +9,7 @@ import {YTErrorBlock} from '../../../../components/Error/Error';
 import {FormApi, YTDFDialog} from '../../../../components/Dialog';
 import Button from '../../../../components/Button/Button';
 
-import {getCurrentUserName} from '../../../../store/selectors/global';
+import {selectCurrentUserName} from '../../../../store/selectors/global';
 import {
     getIsRoot,
     getPool,
@@ -79,7 +79,7 @@ function CreatePoolDialog(props: {onClose: () => void}) {
 
     const error = useSelector(getCreatePoolDialogError);
 
-    const login = useSelector(getCurrentUserName);
+    const login = useSelector(selectCurrentUserName);
     const treeItems = useSelector(getTreesSelectItems);
     const pool = useSelector(getPool);
 

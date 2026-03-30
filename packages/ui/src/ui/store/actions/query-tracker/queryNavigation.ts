@@ -43,7 +43,7 @@ import {getQueryDraft} from '../../selectors/query-tracker/query';
 import {getRequestOutputFormat} from '../../../utils/navigation/content/table/table';
 import {getDefaultTableColumnLimit} from '../../selectors/settings';
 import {isYqlTypesEnabled} from '../../selectors/navigation/content/table';
-import {getClusterProxy, getCurrentUserName} from '../../selectors/global';
+import {getClusterProxy, selectCurrentUserName} from '../../selectors/global';
 import {getQueryResultGlobalSettings} from '../../selectors/query-tracker/queryResult';
 import {QueriesListMode} from '../../../types/query-tracker/queryList';
 import type {ClusterConfig} from '../../../../shared/yt-types';
@@ -140,7 +140,7 @@ export const loadTableAttributesByPath =
         const {cellSize, pageSize} = getQueryResultGlobalSettings();
         const defaultTableColumnLimit = getDefaultTableColumnLimit(state);
         const useYqlTypes = isYqlTypesEnabled(state);
-        const login = getCurrentUserName(state);
+        const login = selectCurrentUserName(state);
 
         if (!clusterConfig) return;
 
