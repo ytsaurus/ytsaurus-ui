@@ -3,12 +3,12 @@ import {createSelector} from 'reselect';
 import {uiSettings} from '../../../config/ui-settings';
 import {getSettingsData} from '../../../store/selectors/settings/settings-base';
 
-const getSettingSelectedFontType = createSelector(getSettingsData, (data) => {
+const selectSettingSelectedFontType = createSelector(getSettingsData, (data) => {
     return data['global::fontType'];
 });
 
 export const getFontType = createSelector(
-    [getSettingSelectedFontType],
+    [selectSettingSelectedFontType],
     (selectedFontType: string) => {
         const {defaultFontType = ''} = uiSettings;
         return selectedFontType && selectedFontType !== 'auto' ? selectedFontType : defaultFontType;
