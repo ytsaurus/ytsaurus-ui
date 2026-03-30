@@ -162,7 +162,7 @@ function compareItems(l: {value: string}, r: {value: string}) {
     return lValue < rValue ? -1 : 1;
 }
 
-export const getOperationStatisticsDescription = createSelector(
+export const selectOperationStatisticsDescription = createSelector(
     [selectSupportedFeaturesRaw],
     ({operation_statistics_descriptions}) => {
         const byName: Record<string, OperationStatisticInfo> = {};

@@ -2,14 +2,14 @@ import React from 'react';
 import {useSelector} from '../../../../../store/redux-hooks';
 import {Flex} from '@gravity-ui/uikit';
 
-import {getOperationStatisticsDescription} from '../../../../../store/selectors/global/supported-features';
+import {selectOperationStatisticsDescription} from '../../../../../store/selectors/global/supported-features';
 import {Tooltip} from '../../../../../components/Tooltip/Tooltip';
 import format from '../../../../../common/hammer/format';
 import {StatisticName, formatByUnit} from '../../../../../components/StatisticTable';
 import ClipboardButton from '../../../../../components/ClipboardButton/ClipboardButton';
 
 function useStatisticInfo(name: string) {
-    const {getStatisticInfo} = useSelector(getOperationStatisticsDescription);
+    const {getStatisticInfo} = useSelector(selectOperationStatisticsDescription);
     return getStatisticInfo(name);
 }
 
