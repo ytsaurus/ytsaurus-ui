@@ -12,9 +12,9 @@ import WithStickyToolbar, {
 
 import hammer from '../../../../common/hammer';
 import {
-    getFavouriteAccountsSet,
-    getFilteredAccounts,
-    getFilteredAccountsOfDashboard,
+    selectFavouriteAccountsSet,
+    selectFilteredAccounts,
+    selectFilteredAccountsOfDashboard,
 } from '../../../../store/selectors/accounts/dashboard';
 
 import {
@@ -792,7 +792,7 @@ class AccountsGeneralTab extends Component {
 const makeMapStateToProps = () => {
     return (state, ownProps) => {
         const nameToAccountMap = getAccountsMapByName(state);
-        const favouriteAccountsSet = getFavouriteAccountsSet(state);
+        const favouriteAccountsSet = selectFavouriteAccountsSet(state);
 
         const {
             accounts: {accounts},
@@ -802,8 +802,8 @@ const makeMapStateToProps = () => {
         const isDashboard = viewContext === DASHBOARD_VIEW_CONTEXT;
 
         const contextViewTree = isDashboard
-            ? getFilteredAccountsOfDashboard(state)
-            : getFilteredAccounts(state);
+            ? selectFilteredAccountsOfDashboard(state)
+            : selectFilteredAccounts(state);
 
         return {
             ...accounts,
