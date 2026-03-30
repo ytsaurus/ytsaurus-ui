@@ -22,7 +22,7 @@ import {loadNodeAttributes} from '../../../../../store/actions/components/node/n
 import {getSortedItems} from '../../../../../store/selectors/components/nodes/node-card';
 
 import {nodeSelector} from '../../../../../store/selectors/components/node/node';
-import {selectCluster, getCurrentClusterConfig} from '../../../../../store/selectors/global';
+import {selectCluster, selectCurrentClusterConfig} from '../../../../../store/selectors/global';
 import hammer from '../../../../../common/hammer';
 import NodeCpuAndMemory, {
     hasCpuAndMemoryMeta,
@@ -343,7 +343,7 @@ const mapStateToProps = (state) => {
         loaded,
         node,
         tabletSlots: node && getSortedItems(state, {node}),
-        clusterConfig: getCurrentClusterConfig(state),
+        clusterConfig: selectCurrentClusterConfig(state),
     };
 };
 

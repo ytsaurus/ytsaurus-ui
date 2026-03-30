@@ -25,7 +25,7 @@ import hammer from '../../../../../common/hammer';
 import './UploadManager.scss';
 import {updateView} from '../../../../../store/actions/navigation';
 import {getSchema} from '../../../../../store/selectors/navigation/tabs/schema';
-import {selectCluster, getCurrentClusterConfig} from '../../../../../store/selectors/global';
+import {selectCluster, selectCurrentClusterConfig} from '../../../../../store/selectors/global';
 import {RootState} from '../../../../../store/reducers';
 import {getXsrfCookieName} from '../../../../../utils';
 import {docsUrl, getConfigUploadTable} from '../../../../../config';
@@ -574,7 +574,7 @@ class UploadManager extends React.Component<Props, State> {
 const mapStateToProps = (state: RootState) => {
     const path: string = getPath(state);
     const schema = getSchema(state);
-    const {proxy, externalProxy} = getCurrentClusterConfig(state);
+    const {proxy, externalProxy} = selectCurrentClusterConfig(state);
 
     return {
         path,

@@ -33,9 +33,12 @@ export const getClusterConfigByName = (cluster: string): ClusterConfig => {
     return getClusterConfig(YT.clusters, cluster);
 };
 
-export const getCurrentClusterConfig = createSelector([selectCluster], (cluster): ClusterConfig => {
-    return getClusterConfigByName(cluster);
-});
+export const selectCurrentClusterConfig = createSelector(
+    [selectCluster],
+    (cluster): ClusterConfig => {
+        return getClusterConfigByName(cluster);
+    },
+);
 
 export function getClusterProxy(clusterConfig: ClusterConfig): string {
     const allowYtTvmApi = !getConfigData().ytApiUseCORS;

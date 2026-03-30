@@ -5,7 +5,7 @@ import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/Secti
 import {Page} from '../../../constants';
 import Button from '../../../components/Button/Button';
 
-import {getCurrentClusterConfig} from '../../../store/selectors/global';
+import {selectCurrentClusterConfig} from '../../../store/selectors/global';
 import {useSelector} from '../../../store/redux-hooks';
 import {ClusterConfig} from '../../../../shared/yt-types';
 import UIFactory from '../../../UIFactory';
@@ -23,7 +23,7 @@ function SystemTopRowContent() {
 }
 
 export function CreateClusterNotificationButton() {
-    const clusterConfig = useSelector(getCurrentClusterConfig);
+    const clusterConfig = useSelector(selectCurrentClusterConfig);
     return <CreateNotificationButton clusterConfig={clusterConfig} />;
 }
 
