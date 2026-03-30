@@ -15,11 +15,12 @@ import {
     updateFlowStaticSpec,
 } from '../../../../store/actions/flow/specs';
 import {
-    getFlowDynamicSpecData,
-    getFlowDynamicSpecFirstLoading,
-    getFlowStaticSpecData,
-    getFlowStaticSpecError,
-    getFlowStaticSpecFirstLoading,
+    selectFlowDynamicSpecData,
+    selectFlowDynamicSpecError,
+    selectFlowDynamicSpecFirstLoading,
+    selectFlowStaticSpecData,
+    selectFlowStaticSpecError,
+    selectFlowStaticSpecFirstLoading,
 } from '../../../../store/selectors/flow/specs';
 import {getFlowSpecYsonSettings} from '../../../../store/selectors/thor/unipika';
 import {FlowSpecState} from '../../../../store/reducers/flow/specs';
@@ -212,9 +213,9 @@ function EditSpecDialog({
 export function FlowStaticSpec({pipeline_path: path}: {pipeline_path: string}) {
     const dispatch = useDispatch();
 
-    const data = useSelector(getFlowStaticSpecData);
-    const error = useSelector(getFlowStaticSpecError);
-    const firstLoading = useSelector(getFlowStaticSpecFirstLoading);
+    const data = useSelector(selectFlowStaticSpecData);
+    const error = useSelector(selectFlowStaticSpecError);
+    const firstLoading = useSelector(selectFlowStaticSpecFirstLoading);
 
     const updateFn = React.useCallback(() => {
         dispatch(loadFlowStaticSpec(path));
@@ -245,9 +246,9 @@ export function FlowStaticSpec({pipeline_path: path}: {pipeline_path: string}) {
 export function FlowDynamicSpec({pipeline_path: path}: {pipeline_path: string}) {
     const dispatch = useDispatch();
 
-    const data = useSelector(getFlowDynamicSpecData);
-    const error = useSelector(getFlowStaticSpecError);
-    const firstLoading = useSelector(getFlowDynamicSpecFirstLoading);
+    const data = useSelector(selectFlowDynamicSpecData);
+    const error = useSelector(selectFlowDynamicSpecError);
+    const firstLoading = useSelector(selectFlowDynamicSpecFirstLoading);
 
     const updateFn = React.useCallback(() => {
         dispatch(loadFlowDynamicSpec(path));
