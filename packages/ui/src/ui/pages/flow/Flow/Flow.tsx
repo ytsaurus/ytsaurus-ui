@@ -21,7 +21,7 @@ import {
     selectFlowCurrentWorker,
     selectFlowPipelinePath,
 } from '../../../store/selectors/flow/filters';
-import {getFlowStatusData} from '../../../store/selectors/flow/status';
+import {selectFlowStatusData} from '../../../store/selectors/flow/status';
 import {getCluster} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
 import {makeTabProps} from '../../../utils';
@@ -144,7 +144,7 @@ function FlowStatusToolbar() {
 
 function FlowState() {
     const pipeline_path = useSelector(selectFlowPipelinePath);
-    const value = useSelector(getFlowStatusData);
+    const value = useSelector(selectFlowStatusData);
     const {leader_controller_address} = useFlowAttributes(pipeline_path).data ?? {};
     return (
         <React.Fragment>
