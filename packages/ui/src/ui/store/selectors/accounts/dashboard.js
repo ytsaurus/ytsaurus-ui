@@ -10,7 +10,7 @@ import {
     getAccountsVisibilityModeOfDashboard,
 } from '../../../store/selectors/settings';
 import {filterFlattenTreeByViewContext} from '../../../utils/accounts';
-import {getActiveAccount} from './accounts-ts';
+import {selectActiveAccount} from './accounts-ts';
 
 export const selectUsableAccountsSet = createSelector([selectUsableAccounts], (items) => {
     return new Set(items);
@@ -40,7 +40,7 @@ export const selectFilteredAccounts = createSelector(
         selectUsableAccountsSet,
         getAccountsVisibilityMode,
         selectFavouriteAccountsSet,
-        getActiveAccount,
+        selectActiveAccount,
     ],
     filterFlattenTreeByViewContext,
 );

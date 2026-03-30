@@ -2,15 +2,15 @@ import React from 'react';
 import {useSelector} from '../../../../../store/redux-hooks';
 
 import {
-    getEditableAccount,
-    isEditableAccountOfTopLevel,
+    selectEditableAccount,
+    selectIsEditableAccountOfTopLevel,
 } from '../../../../../store/selectors/accounts/accounts-ts';
 import UIFactory from '../../../../../UIFactory';
 import {selectClusterUiConfig} from '../../../../../store/selectors/global';
 
 function AccountTransferQuotaMessage() {
-    const isTopLevel = useSelector(isEditableAccountOfTopLevel);
-    const account = useSelector(getEditableAccount);
+    const isTopLevel = useSelector(selectIsEditableAccountOfTopLevel);
+    const account = useSelector(selectEditableAccount);
     const clusterUiConfig = useSelector(selectClusterUiConfig);
 
     return (

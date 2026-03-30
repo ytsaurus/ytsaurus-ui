@@ -73,10 +73,10 @@ import {ProgressStackByTreeItem} from './ProgressStack';
 
 import './AccountsGeneralTab.scss';
 import {
-    getAccountsColumnFields,
-    getAccountsContentMode,
-    getAccountsMapByName,
-    getAccountsMasterMemoryContentMode,
+    selectAccountsColumnFields,
+    selectAccountsContentMode,
+    selectAccountsMapByName,
+    selectAccountsMasterMemoryContentMode,
 } from '../../../../store/selectors/accounts/accounts-ts';
 import {
     selectCluster,
@@ -791,7 +791,7 @@ class AccountsGeneralTab extends Component {
 
 const makeMapStateToProps = () => {
     return (state, ownProps) => {
-        const nameToAccountMap = getAccountsMapByName(state);
+        const nameToAccountMap = selectAccountsMapByName(state);
         const favouriteAccountsSet = selectFavouriteAccountsSet(state);
 
         const {
@@ -807,7 +807,7 @@ const makeMapStateToProps = () => {
 
         return {
             ...accounts,
-            activeContentModeFilter: getAccountsContentMode(state),
+            activeContentModeFilter: selectAccountsContentMode(state),
 
             clusterUiConfig: selectClusterUiConfig(state),
 
@@ -824,14 +824,14 @@ const makeMapStateToProps = () => {
                 ? getAccountsVisibilityModeOfDashboard(state)
                 : getAccountsVisibilityMode(state),
             abcServiceFilter: selectAccountsAbcServiceIdSlugFilter(state),
-            columnFields: getAccountsColumnFields(state),
+            columnFields: selectAccountsColumnFields(state),
 
             enable_per_account_tablet_accounting:
                 selectClusterUiConfigEnablePerAccountTabletAccounting(state),
 
             collapsibleSize: UI_COLLAPSIBLE_SIZE,
 
-            masterMemoryContentMode: getAccountsMasterMemoryContentMode(state),
+            masterMemoryContentMode: selectAccountsMasterMemoryContentMode(state),
         };
     };
 };

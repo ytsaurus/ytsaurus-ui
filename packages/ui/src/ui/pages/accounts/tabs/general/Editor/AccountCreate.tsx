@@ -6,7 +6,7 @@ import {Tooltip} from '@ytsaurus/components';
 import AccountCreateDialog from '../../../../../pages/accounts/tabs/general/Editor/AccountCreateDialog';
 import {openCreateModal} from '../../../../../store/actions/accounts/editor';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
-import {getActiveAccount} from '../../../../../store/selectors/accounts/accounts-ts';
+import {selectActiveAccount} from '../../../../../store/selectors/accounts/accounts-ts';
 import {selectCurrentClusterConfig} from '../../../../../store/selectors/global/cluster';
 import {selectIsAdmin} from '../../../../../store/selectors/global/is-developer';
 import UIFactory from '../../../../../UIFactory';
@@ -16,7 +16,7 @@ interface Props {
 }
 
 function AccountCreate({className}: Props) {
-    const currentAccount = useSelector(getActiveAccount);
+    const currentAccount = useSelector(selectActiveAccount);
     const clusterConfig = useSelector(selectCurrentClusterConfig);
     const isDeveloper = useSelector(selectIsAdmin);
 

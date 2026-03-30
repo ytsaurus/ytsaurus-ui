@@ -29,8 +29,8 @@ import {ACCOUNTS_DATA_FIELDS_ACTION} from '../../../constants/accounts';
 import {USE_CACHE, USE_MAX_SIZE} from '../../../../shared/constants/yt-api';
 import {selectCluster, selectCurrentUserName} from '../../../store/selectors/global';
 import {
-    getAccountsDisabledCacheForNextFetch,
-    getAccountsEditCounter,
+    selectAccountsDisabledCacheForNextFetch,
+    selectAccountsEditCounter,
 } from '../../../store/selectors/accounts/accounts-ts';
 import {RumWrapper, YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {parseAccountsData} from './accounts-ts';
@@ -63,7 +63,7 @@ export function fetchAccounts() {
         const state = getState();
         const cluster = selectCluster(state);
         const userName = selectCurrentUserName(state);
-        const disableCacheForNextFetch = getAccountsDisabledCacheForNextFetch(state);
+        const disableCacheForNextFetch = selectAccountsDisabledCacheForNextFetch(state);
 
         const cacheParams = disableCacheForNextFetch ? {} : USE_CACHE;
 
@@ -186,7 +186,7 @@ export function fetchAccounts() {
 
 export function accountsIncreaseEditCounter() {
     return (dispatch, getState) => {
-        const editCounter = getAccountsEditCounter(getState());
+        const editCounter = selectAccountsEditCounter(getState());
         return {
             type: ACCOUNTS_DATA_FIELDS_ACTION,
             data: {editCounter: editCounter + 1, disableCacheForNextFetch: true},

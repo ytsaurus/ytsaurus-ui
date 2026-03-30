@@ -11,11 +11,11 @@ import {getTables} from '../../../store/selectors/tables';
 import hammer from '../../../common/hammer';
 import ypath from '../../../common/thor/ypath';
 import {
-    getAccountMasterMemoryMedia,
-    getAccountNames,
-    getAccountsColumnFields,
-    getAccountsMapByName,
-    getAccountsTree,
+    selectAccountMasterMemoryMedia,
+    selectAccountNames,
+    selectAccountsColumnFields,
+    selectAccountsMapByName,
+    selectAccountsTree,
 } from './accounts-ts';
 import {concatByAnd} from '../../../common/hammer/predicate';
 import {accountMemoryMediumToFieldName} from '../../../utils/accounts/accounts-selector';
@@ -31,13 +31,13 @@ export const selectAccountsSortInfo = (state) => getTables(state)[ACCOUNTS_TABLE
 
 export const selectEditableAccount = (state) => state.accounts.accounts.editableAccount;
 
-const getEditableAccountSubtreeNames = createSelector(
-    [getAccountsTree, selectEditableAccount],
+const selectEditableAccountSubtreeNames = createSelector(
+    [selectAccountsTree, selectEditableAccount],
     prepareSubtreeNames,
 );
 
 export const selectEditableAccountParentSuggests = createSelector(
-    [getAccountNames, getEditableAccountSubtreeNames],
+    [selectAccountNames, selectEditableAccountSubtreeNames],
     (allNames, excludeNames) => {
         const excludeNamesSet = new Set(excludeNames);
         return filter_(allNames, (name) => !excludeNamesSet.has(name));
@@ -46,7 +46,7 @@ export const selectEditableAccountParentSuggests = createSelector(
 
 const selectFlattenTree = createSelector(
     [
-        getAccountsTree,
+        selectAccountsTree,
         selectActiveAccount,
         selectAccountsNameFilter,
         selectAccountsAbcServiceIdSlugFilter,
@@ -61,7 +61,7 @@ export const selectActiveAccountSubtree = createSelector(
 );
 
 export const selectActiveAccountAggregationRow = createSelector(
-    [selectActiveAccountSubtree, getAccountMasterMemoryMedia],
+    [selectActiveAccountSubtree, selectAccountMasterMemoryMedia],
     ({activeTreeItem}, masterMemoryMedia) => calcAggregationRow(activeTreeItem, masterMemoryMedia),
 );
 
@@ -71,7 +71,7 @@ export const selectActiveAccountSubtreeNames = createSelector(
 );
 
 export const selectAccountsFlattenTree = createSelector(
-    [selectAccountsSortInfo, selectFlattenTree, getAccountsColumnFields],
+    [selectAccountsSortInfo, selectFlattenTree, selectAccountsColumnFields],
     sortFlattenTree,
 );
 
@@ -255,7 +255,7 @@ function getActiveAccountSubtreeNamesImpl({activeTreeItem}) {
 
 export const selectActiveAccountBreadcrumbs = createSelector(
     selectActiveAccount,
-    getAccountsMapByName,
+    selectAccountsMapByName,
     (activeAccount, nameToAccountMap) => {
         const parentNode = (name) => {
             const account = nameToAccountMap[name] || {attributes: {}};
