@@ -3,7 +3,7 @@ import {ThunkAction} from 'redux-thunk';
 import {ytApiV4} from '../../../rum/rum-wrap-api';
 import {RootState} from '../../../store/reducers';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
-import {getFlowStatusPipelinePath} from '../../../store/selectors/flow/status';
+import {selectFlowStatusPipelinePath} from '../../../store/selectors/flow/status';
 import {flowStatusActions} from '../../reducers/flow/status';
 
 type AsyncAction<R = void> = ThunkAction<R, RootState, unknown, any>;
@@ -42,7 +42,7 @@ export function updateFlowState({
     return (dispatch, getState) => {
         const method = `${state}Pipeline` as const;
         return ytApiV4[method]({pipeline_path}).then(() => {
-            const path = getFlowStatusPipelinePath(getState());
+            const path = selectFlowStatusPipelinePath(getState());
             if (path === pipeline_path) {
                 dispatch(loadFlowStatus(pipeline_path));
             }
