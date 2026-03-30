@@ -2,7 +2,7 @@ import React from 'react';
 import {useSelector} from '../../store/redux-hooks';
 
 import {MaintenancePage} from '../../containers/MaintenancePage/MaintenancePage';
-import {getMaintenanceEvent} from '../../store/selectors/global/maintenance';
+import {selectMaintenanceEvent} from '../../store/selectors/global/maintenance';
 import {useMaintenanceContext} from '../../hooks/use-maintenance';
 
 type Props = {
@@ -13,7 +13,7 @@ type Props = {
 
 export function HandleMaintenance({cluster, children, emptyMaintenance}: Props) {
     const {proceedToCluster, setProceedToCluster} = useMaintenanceContext();
-    const maintenancePageEvent = useSelector(getMaintenanceEvent);
+    const maintenancePageEvent = useSelector(selectMaintenanceEvent);
 
     if (!maintenancePageEvent || proceedToCluster) {
         return children;

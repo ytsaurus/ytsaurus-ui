@@ -4,7 +4,7 @@ import {selectCluster} from './cluster';
 
 const selectOngoingEvents = (state: RootState) => state.global.ongoingEvents;
 
-export const getMaintenanceEvent = createSelector(
+export const selectMaintenanceEvent = createSelector(
     [selectCluster, selectOngoingEvents],
     (cluster, ongoing) => {
         if (!ongoing?.events?.length || cluster !== ongoing.cluster) {
