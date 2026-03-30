@@ -11,7 +11,7 @@ import {
     selectBundles,
     getGlobalAsideHeaderWidth,
     getGlobalGroups,
-    getGlobalUsers,
+    selectGlobalUsers,
     selectPoolTrees,
 } from '../../../store/selectors/global';
 import {showErrorPopup} from '../../../utils/utils';
@@ -57,7 +57,7 @@ export function loadUsersIfNotLoaded(): ThunkAction<any, RootState, any, any> {
             return Promise.resolve();
         }
 
-        const users = getGlobalUsers(getState());
+        const users = selectGlobalUsers(getState());
         if (users?.length) {
             return Promise.resolve();
         }

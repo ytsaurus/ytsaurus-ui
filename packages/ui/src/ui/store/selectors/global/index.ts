@@ -44,11 +44,11 @@ export function isAllowYtTwmApi() {
 export const selectPoolTrees = (state: RootState) => state?.global?.poolTrees;
 export const selectAllAccounts = (state: RootState) => state.global.accounts;
 export const selectBundles = (state: RootState) => state?.global.bundles;
-export const getGlobalUsers = (state: RootState) => state.global.users;
+export const selectGlobalUsers = (state: RootState) => state.global.users;
 export const getGlobalGroups = (state: RootState) => state.global.groups;
 export const getAuthWay = (state: RootState) => state?.global?.authWay;
 
-export const getAllUserNames = createSelector([getGlobalUsers], (usersData) => {
+export const getAllUserNames = createSelector([selectGlobalUsers], (usersData) => {
     return map_(usersData, ({$value}) => $value as string);
 });
 
