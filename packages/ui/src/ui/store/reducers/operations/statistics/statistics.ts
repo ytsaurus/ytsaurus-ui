@@ -25,7 +25,7 @@ export interface OperationStatistics {
 
 export const initialState: OperationStatistics = {
     filterText: '',
-    activeAggregation: activeAggregation,
+    activeAggregation,
     jobTypeFilter: STATISTICS_FILTER_ALL_VALUE,
     poolTreeFilter: STATISTICS_FILTER_ALL_VALUE,
     treeState: TREE_STATE.EXPANDED,

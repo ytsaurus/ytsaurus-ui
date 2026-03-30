@@ -346,7 +346,7 @@ export const defaultUIFactory: UIFactory = {
         return Promise.resolve([]);
     },
 
-    docsUrls: docsUrls,
+    docsUrls,
 
     getComponentForAclRoleActions() {
         return RoleActionsLazy;

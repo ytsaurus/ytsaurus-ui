@@ -148,5 +148,5 @@ export function parseTimeDuration(rawValue: string) {
 }
 
 function makeItems(data: Record<string, string>) {
-    return Object.keys(data).map((key) => ({key: key, label: key, value: data[key]}));
+    return Object.keys(data).map((key) => ({key, label: key, value: data[key]}));
 }

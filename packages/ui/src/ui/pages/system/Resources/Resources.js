@@ -84,7 +84,7 @@ class Resources extends Component {
                     const progressValue = (used / total) * 100;
 
                     diskResourcesPerMedium.push({
-                        caption: caption,
+                        caption,
                         show: true,
                         usage: {
                             text: progressText,

@@ -31,7 +31,7 @@ export function createDirectory(
         return yt.v3
             .create({
                 parameters: {
-                    path: path,
+                    path,
                     recursive,
                     type: 'map_node',
                 },

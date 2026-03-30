@@ -106,7 +106,7 @@ async function fetchBundles(items: ServicesItem[], cluster: string) {
                 type: 'Bundle',
                 general: {
                     name: items?.[idx]?.item || UNKNOWN_ITEM_NAME,
-                    error: error,
+                    error,
                 },
             };
         }

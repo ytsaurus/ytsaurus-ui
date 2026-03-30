@@ -131,7 +131,7 @@ class UploadManagerCreate extends React.Component<Props, State> {
                 modal={false}
                 initialValues={{
                     path,
-                    name: name,
+                    name,
                     size: `${hammer.format['Bytes'](file.size)} / ${hammer.format['Number'](
                         file.size,
                     )} B`,

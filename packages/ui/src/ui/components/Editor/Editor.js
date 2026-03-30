@@ -80,8 +80,8 @@ export default class Editor extends React.Component {
                 />
                 <Hotkey
                     settings={[
-                        {keys: 'enter', scope: scope, handler: this.onApply},
-                        {keys: 'esc', scope: scope, handler: this.onCancel},
+                        {keys: 'enter', scope, handler: this.onApply},
+                        {keys: 'esc', scope, handler: this.onCancel},
                     ]}
                 />
             </div>

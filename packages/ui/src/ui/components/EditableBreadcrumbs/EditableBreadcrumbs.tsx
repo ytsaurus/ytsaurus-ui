@@ -53,7 +53,7 @@ export function EditableBreadcrumbs(props: Props) {
             renderContent={(contentProps) => (
                 <Box
                     className={block(
-                        {view: view},
+                        {view},
                         `${block('breadcrumbs-container')} ${contentProps.className}`,
                     )}
                 >

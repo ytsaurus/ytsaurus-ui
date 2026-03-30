@@ -131,7 +131,7 @@ class OperationJobsTable extends React.Component {
         );
 
         return {
-            text: text,
+            text,
             action: (params) =>
                 promptAction({
                     ...settings,

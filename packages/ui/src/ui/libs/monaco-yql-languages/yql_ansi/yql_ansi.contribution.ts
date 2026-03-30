@@ -11,7 +11,7 @@ registerLanguage({
             return {
                 conf: module.conf,
                 language: module.language,
-                provideSuggestionsFunction: provideSuggestionsFunction,
+                provideSuggestionsFunction,
             };
         }),
 });

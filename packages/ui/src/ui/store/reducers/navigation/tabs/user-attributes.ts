@@ -44,7 +44,7 @@ const reducers = {
         return {
             ...state,
             loading: false,
-            error: error,
+            error,
         };
     },
 };

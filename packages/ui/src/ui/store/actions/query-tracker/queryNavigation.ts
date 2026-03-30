@@ -171,7 +171,7 @@ export const loadTableAttributesByPath =
                 name: attributes.key,
                 meta: makeMetaItems({
                     cluster: clusterConfig.id,
-                    attributes: attributes,
+                    attributes,
                     tableType: getTableTypeByAttributes(attributes.dynamic, attributes),
                     isDynamic: attributes.dynamic,
                 }),

@@ -30,7 +30,7 @@ export default class CustomRadioButton<T extends string = string> extends React.
             throw new Error('CustomRadioButton: unexpected value');
         }
         return {
-            value: value,
+            value,
             text: hammer.format['ReadableField'](value),
         };
     }

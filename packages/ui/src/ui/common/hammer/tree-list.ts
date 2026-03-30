@@ -43,7 +43,7 @@ function getTreeNode<T, L>(
     initedBy: string,
 ): TreeNode<T, L> {
     treeNodes[name] = treeNodes[name] || {
-        name: name,
+        name,
         attributes: {},
         children: [],
         leaves: [],
@@ -55,7 +55,7 @@ function getTreeNode<T, L>(
 
 function getTreeLeafNode<L>(leafNode: L, name: string): LeafNode<L> {
     return {
-        name: name,
+        name,
         attributes: leafNode,
         isLeafNode: true,
     };
@@ -260,7 +260,7 @@ export function sortTree<T extends TreeNode<unknown, unknown>, FieldT extends st
 
 function augmentTreeNode<T extends {name: string}>(entry: T, level: number, basePath: string) {
     return Object.assign({}, entry, {
-        level: level,
+        level,
         key: basePath + entry.name,
     });
 }

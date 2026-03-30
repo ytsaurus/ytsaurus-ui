@@ -256,7 +256,7 @@ function insertNodeToRack(racks: Record<string, RackInfo>, node: SystemNodeInfo)
         $attributes: {
             ...node.$attributes,
             effectiveState: state,
-            effectiveFlag: effectiveFlag,
+            effectiveFlag,
             alerts,
             banned,
         },

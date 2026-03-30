@@ -114,11 +114,11 @@ function computeHistogramQuartiles(histogram) {
         q75 = findNextQuartile(3 / 4);
 
         return {
-            min: min,
-            q25: q25,
-            q50: q50,
-            q75: q75,
-            max: max,
+            min,
+            q25,
+            q50,
+            q75,
+            max,
         };
     } else {
         return {
@@ -236,14 +236,14 @@ stat.pdf = function (data, settings) {
     }
 
     return {
-        quartiles: quartiles,
+        quartiles,
         min: dataMin,
         max: dataMax,
         valueMin: min,
         valueMax: max,
-        bucketSize: bucketSize,
+        bucketSize,
         bucketNumber: numberOfBuckets,
-        buckets: buckets,
+        buckets,
     };
 };
 
@@ -278,7 +278,7 @@ stat.ecdf = function (data) {
     return {
         min: dataMin,
         max: dataMax,
-        steps: steps,
+        steps,
     };
 };
 

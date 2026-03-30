@@ -58,7 +58,7 @@ function onError(error: any) {
             theme: 'info',
             autoHiding: false,
             title: 'CSRF-toke expired',
-            content: content,
+            content,
         });
     }
 }

@@ -31,7 +31,7 @@ export function loadData() {
             requests.removeAllRequests();
 
             const outputFormatAttributes = {
-                stringify: stringify,
+                stringify,
                 encode_utf8: encodeUTF8,
                 annotate_with_types: annotateWithTypes,
             };

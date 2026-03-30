@@ -53,7 +53,7 @@ export default (state = initialState, action) => {
                 multipleMode,
                 movedPath: path,
                 popupVisible: true,
-                objectPath: objectPath,
+                objectPath,
             };
         }
 

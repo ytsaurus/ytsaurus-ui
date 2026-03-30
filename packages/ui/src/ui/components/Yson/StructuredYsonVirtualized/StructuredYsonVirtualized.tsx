@@ -68,9 +68,9 @@ function calculateState(
 ) {
     const flattenResult = flattenUnipika(value, {
         isJson: settings.format !== 'yson',
-        collapsedState: collapsedState,
+        collapsedState,
         filter,
-        settings: settings,
+        settings,
     });
 
     return Object.assign(

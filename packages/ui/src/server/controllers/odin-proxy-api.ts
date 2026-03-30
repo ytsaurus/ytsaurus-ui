@@ -50,7 +50,7 @@ async function odinProxyApiImpl(req: Request, res: Response) {
 
     return axios
         .request({
-            url: url,
+            url,
             method: req.method as any,
             headers: {...ctx.getMetadata(), 'accept-encoding': 'gzip'},
             data: req.body,

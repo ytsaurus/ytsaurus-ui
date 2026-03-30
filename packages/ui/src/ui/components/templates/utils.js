@@ -124,10 +124,10 @@ export function asNumber(item, columnName) {
 export default {
     __default__: defaultTemplate,
     _templates: {},
-    add: function (templateId, templates) {
+    add(templateId, templates) {
         this._templates[templateId] = wrapRenderMethods(templates);
     },
-    get: function (templateId) {
+    get(templateId) {
         return this._templates[templateId] || {};
     },
 };

@@ -243,7 +243,7 @@ export default (state = initialState, action: JobsListAction): JobsState => {
                 error: false,
                 loading: false,
                 jobs: prepareJobs({jobs, operationId, clusterConfig}),
-                jobsErrors: jobsErrors,
+                jobsErrors,
                 operationId,
                 pagination: {
                     ...state.pagination,

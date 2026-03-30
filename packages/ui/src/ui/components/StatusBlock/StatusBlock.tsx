@@ -22,7 +22,7 @@ export type StatusBlockTheme =
 function StatusBlock({text, theme = 'default'}: {text: string | number; theme?: StatusBlockTheme}) {
     return (
         <Tooltip
-            className={b({theme: theme})}
+            className={b({theme})}
             content={
                 <React.Fragment>
                     <ClipboardButton text={text} view="clear" /> {text}

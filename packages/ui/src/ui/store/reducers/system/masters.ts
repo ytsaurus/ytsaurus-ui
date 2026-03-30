@@ -69,8 +69,8 @@ function extractMasterCounters(
     const counters: MastersState['counters'] = {
         total: secondary.length + 1,
         flags: {
-            recovery: recovery,
-            unavailable: unavailable,
+            recovery,
+            unavailable,
             primary: 1,
             secondary: secondary.length,
         },

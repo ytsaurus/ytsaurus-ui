@@ -21,7 +21,7 @@ export const createTablePrompt = ({
 }: Omit<Props, 'clusterConfig'> & {cluster: string; schema: {name: string}[]}) => {
     return `SELECT
 ${schema.map((i) => '    `' + i.name + '`').join(',\r\n')}
-FROM ${makePathByQueryEngine({path, cluster: cluster, engine})}
+FROM ${makePathByQueryEngine({path, cluster, engine})}
 LIMIT ${limit}`;
 };
 

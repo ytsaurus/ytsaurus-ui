@@ -275,13 +275,13 @@ export default function Table({
                     break;
                 }
                 transposedRow[String(index)] = {
-                    column: column,
+                    column,
                     data: sortedRows[index][column.name],
                 };
             }
             totals.forEach((total, index) => {
                 transposedRow[`footer${index}`] = {
-                    column: column,
+                    column,
                     data: total[column.name],
                 };
             });

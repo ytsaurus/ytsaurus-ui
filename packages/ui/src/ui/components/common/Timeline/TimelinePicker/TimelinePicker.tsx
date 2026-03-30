@@ -114,8 +114,8 @@ export class TimelinePicker extends React.Component<TimelinePickerProps, State> 
             return state;
         } else {
             return {
-                from: from,
-                to: to,
+                from,
+                to,
                 prevFrom: from,
                 prevTo: to,
                 datetime: formatInputTime(from, to),

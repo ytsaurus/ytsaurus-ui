@@ -169,7 +169,7 @@ utils.getSortByFieldAction = function (sortInfo, fieldName) {
  * @param {Object} [parameters]
  */
 utils.getState = function (page, parameters) {
-    const state = {page: page};
+    const state = {page};
 
     extend_(state, parameters);
 
@@ -183,7 +183,7 @@ utils.getState = function (page, parameters) {
  * @returns {Object}
  */
 utils.getNavigationState = function (path, transaction) {
-    const parameters = {path: path};
+    const parameters = {path};
 
     if (transaction) {
         parameters.t = transaction;

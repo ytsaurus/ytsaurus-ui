@@ -36,7 +36,7 @@ export const versionsV2Params: LocationParameters = {
     state: {
         stateKey: 'components.versionsV2.stateFilter',
         options: {parse: (type: string) => decodeURIComponent(type)},
-        initialState: initialState,
+        initialState,
     },
     summarySort: {
         stateKey: 'components.versionsV2.summarySortState',

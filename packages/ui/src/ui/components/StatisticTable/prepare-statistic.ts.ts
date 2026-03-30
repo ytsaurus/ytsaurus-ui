@@ -15,8 +15,8 @@ const TREE_ROOT_NAME = '<Root>';
 
 function createMetricsEntry(prefix: string, name: string): MetricsEntry {
     return {
-        name: name,
-        prefix: prefix,
+        name,
+        prefix,
         path: prefix + '/' + name,
     };
 }
@@ -93,7 +93,7 @@ export function filterStatisticTree(tree?: StatisticTreeInner, currentFilter = '
         {field: 'name', asc: true},
         {
             name: {
-                get: function (entry: MetricsEntry) {
+                get(entry: MetricsEntry) {
                     return entry.name;
                 },
             },

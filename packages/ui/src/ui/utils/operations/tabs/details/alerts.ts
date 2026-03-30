@@ -11,7 +11,7 @@ export function prepareFaqUrl(type: string) {
 export function prepareAlerts(alerts?: Record<string, unknown>) {
     if (alerts) {
         return map_(alerts, (error, type) => ({
-            error: error,
+            error,
             helpURL: prepareFaqUrl(type),
         }));
     }

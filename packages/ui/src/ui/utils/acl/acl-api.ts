@@ -243,8 +243,8 @@ export function requestPermissions(params: RequestPermissionParams): Promise<Upd
                     parameters: {path: `${sysPath}/@${aclAttr}/end`},
                     input: {
                         action: 'allow',
-                        inheritance_mode: inheritance_mode,
-                        permissions: permissions,
+                        inheritance_mode,
+                        permissions,
                         subjects: Object.values(subject),
                         columns,
                         row_access_predicate,

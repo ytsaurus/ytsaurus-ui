@@ -347,7 +347,7 @@ export function requestQueries(
         }));
         const resp = (await ytApiV4Id.executeBatch(YTApiId.getQuery, {
             parameters: {
-                requests: requests,
+                requests,
                 output_format: 'json',
             },
             setup: getQTApiSetup(),
@@ -392,7 +392,7 @@ export function getQueryResultMetaList(
         }));
         const {results} = await ytApiV4Id.executeBatch<QueryResultMeta>(YTApiId.getQueryResults, {
             parameters: {
-                requests: requests,
+                requests,
                 output_format: 'json',
             },
             setup: getQTApiSetup(),

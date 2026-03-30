@@ -58,8 +58,8 @@ function prepareEvents(events, params) {
                 prepared.totalDuration += duration;
                 prepared.events.push(
                     new Event({
-                        duration: duration,
-                        finishTime: finishTime,
+                        duration,
+                        finishTime,
                         time: event.time,
                         state: event.state || lastState,
                         originalState: event.state,

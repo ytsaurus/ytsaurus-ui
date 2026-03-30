@@ -49,7 +49,7 @@ export class Years extends React.PureComponent {
                 year,
                 month: 1,
                 day: 1,
-                zone: zone,
+                zone,
             });
             const endYear = startYear.endOf('year');
 

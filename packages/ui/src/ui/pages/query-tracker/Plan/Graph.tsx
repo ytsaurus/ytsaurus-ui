@@ -69,7 +69,7 @@ const redrawNetwork = rafThrottle((network?: Network, fit?: boolean) => {
         const scale = network.getScale();
         network.redraw();
         network.moveTo({
-            scale: scale,
+            scale,
         });
     }
 });

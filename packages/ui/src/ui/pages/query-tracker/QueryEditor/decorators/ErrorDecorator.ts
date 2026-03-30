@@ -22,7 +22,7 @@ export class ErrorDecorator extends BaseDecorator {
             const {startLineNumber, startColumn, endLineNumber, endColumn} = range;
 
             const marker: monaco.editor.IMarkerData = {
-                message: message,
+                message,
                 severity: monaco.MarkerSeverity.Error,
                 startLineNumber,
                 startColumn,
@@ -33,7 +33,7 @@ export class ErrorDecorator extends BaseDecorator {
 
             if (!lineNumbersSet.has(range.startLineNumber)) {
                 decorations.push({
-                    range: range,
+                    range,
                     options: {
                         isWholeLine: true,
                         className: decorationClassName,
