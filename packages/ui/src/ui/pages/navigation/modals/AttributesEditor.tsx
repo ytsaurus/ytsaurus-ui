@@ -57,7 +57,7 @@ import {
 import {makeLink} from './CreateTableModal/CreateTableModal';
 import {
     getCompressionCodecs,
-    getErasureCodecs,
+    selectErasureCodecs,
 } from '../../../store/selectors/global/supported-features';
 import {docsUrl} from '../../../config';
 
@@ -367,7 +367,7 @@ function AttributesEditorLoaded() {
     };
 
     const compressionCodecs = useSelector(getCompressionCodecs);
-    const erasureCodecs = useSelector(getErasureCodecs);
+    const erasureCodecs = useSelector(selectErasureCodecs);
 
     return (
         <YTDFDialog
