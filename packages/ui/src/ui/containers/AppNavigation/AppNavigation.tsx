@@ -9,7 +9,7 @@ import {useDispatch, useSelector} from '../../store/redux-hooks';
 
 import {PagesSettingsEditor, usePagesMenuItems} from './PagesSettingsEditor';
 import {
-    getAuthWay,
+    selectAuthWay,
     getClusterConfigByName,
     getCurrentUserName,
     selectRootPagesCluster,
@@ -46,7 +46,7 @@ export default function AppNavigation({children}: ExtProps) {
 
     const items = usePagesMenuItems(cluster);
     const currentUser = useSelector(getCurrentUserName);
-    const authWay = useSelector(getAuthWay);
+    const authWay = useSelector(selectAuthWay);
 
     const [settingsVisible, setSettingsVisible] = React.useState(false);
     const [panelVisible, setPanelVisible] = React.useState(false);
