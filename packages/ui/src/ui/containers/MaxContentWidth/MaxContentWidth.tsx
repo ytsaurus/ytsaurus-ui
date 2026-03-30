@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux';
 
 import {
     getMaxContentWidth,
-    isMaxContentWidthEnabled,
+    selectIsMaxContentWidthEnabled,
 } from '../../store/selectors/global/max-content-width';
 import {RootState} from '../../store/reducers/index';
 
@@ -17,7 +17,7 @@ export type MaxContentWidthProps = {
 };
 
 export function MaxContentWidth({children}: MaxContentWidthProps) {
-    const enableMaxWidth = useSelector(isMaxContentWidthEnabled);
+    const enableMaxWidth = useSelector(selectIsMaxContentWidthEnabled);
     const size = useSelector(getMaxContentWidth);
     const isSplit = useSelector((state: RootState) => state.global.splitScreen.isSplit);
 
