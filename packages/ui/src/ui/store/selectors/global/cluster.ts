@@ -14,12 +14,12 @@ import {selectSpytEnginesInfo} from '../query-tracker/queryTrackerEnginesInfo';
 
 export const selectCluster = (state: RootState): string => state.global.cluster || '';
 
-const getClusterUiConfigRaw = (state: RootState) => state.global.clusterUiConfig;
+const selectClusterUiConfigRaw = (state: RootState) => state.global.clusterUiConfig;
 
 const getClusterUiDevConfigRaw = (state: RootState) => state.global.clusterUiDevConfig;
 
 export const getClusterUiConfig = createSelector(
-    [getClusterUiConfigRaw, getClusterUiDevConfigRaw, selectIsDeveloper],
+    [selectClusterUiConfigRaw, getClusterUiDevConfigRaw, selectIsDeveloper],
     (clusterUiConfig, clusterUiDevConfig, isDeveloper): Partial<ClusterUiConfig> => {
         return isDeveloper ? {...clusterUiConfig, ...clusterUiDevConfig} : clusterUiConfig;
     },
