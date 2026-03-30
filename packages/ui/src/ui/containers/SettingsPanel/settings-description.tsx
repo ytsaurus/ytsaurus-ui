@@ -40,7 +40,7 @@ import SettingsMenuRadio from '../../containers/SettingsMenu/SettingsMenuRadio';
 import SettingsMenuInput from '../SettingsMenu/SettingsMenuInput';
 import {
     getCurrentUserName,
-    getGlobalMasterVersion,
+    selectGlobalMasterVersion,
     selectGlobalSchedulerVersion,
     selectHttpProxyVersion,
 } from '../../store/selectors/global';
@@ -91,7 +91,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
 
     const httpProxyVersion = useSelector(selectHttpProxyVersion);
     const schedulerVersion = useSelector(selectGlobalSchedulerVersion);
-    const masterVersion = useSelector(getGlobalMasterVersion);
+    const masterVersion = useSelector(selectGlobalMasterVersion);
     const vcsConfig = useSelector(selectVcsConfig);
     const isVcsVisible = useSelector(selectIsVcsVisible);
     const hasQuerySuggestions = Boolean(UIFactory.getInlineSuggestionsApi());

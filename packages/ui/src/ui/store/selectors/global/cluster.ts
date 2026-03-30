@@ -88,7 +88,7 @@ export const selectGlobalSchedulerVersion = createSelector(
     },
 );
 
-export const getGlobalMasterVersion = createSelector(
+export const selectGlobalMasterVersion = createSelector(
     [selectCluster, (state: RootState) => state.global.masterVersion],
     (cluster, version) => {
         return cluster ? version : '';
