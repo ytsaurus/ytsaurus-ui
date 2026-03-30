@@ -8,7 +8,7 @@ import map_ from 'lodash/map';
 import Label from '../../../../../components/Label/Label';
 import MetaTable from '../../../../../components/MetaTable/MetaTable';
 import type {Node} from '../../../../../store/reducers/components/nodes/nodes/node';
-import {getCurrentClusterConfig} from '../../../../../store/selectors/global';
+import {selectCurrentClusterConfig} from '../../../../../store/selectors/global';
 import UIFactory from '../../../../../UIFactory';
 import {getNodeMetaItems} from '../../../../../utils/components/nodes/node-meta-items';
 
@@ -61,7 +61,7 @@ function NodeMeta({
     maintenanceRequests,
     version,
 }: Props): ReturnType<React.VFC> {
-    const clusterConfig = useSelector(getCurrentClusterConfig);
+    const clusterConfig = useSelector(selectCurrentClusterConfig);
 
     const metaTableItems = React.useMemo(() => {
         return getNodeMetaItems({

@@ -17,7 +17,7 @@ import {
 } from '../../../constants/operations/jobs';
 import {changeColumnSortOrder} from '../../../store/actions/tables';
 import {OPERATIONS_PAGE} from '../../../constants/operations/list';
-import {getCurrentClusterConfig} from '../../../store/selectors/global';
+import {selectCurrentClusterConfig} from '../../../store/selectors/global';
 import {TYPED_OUTPUT_FORMAT} from '../../../constants/index';
 
 import {getShowCompetitiveJobs} from '../../../pages/operations/selectors';
@@ -50,7 +50,7 @@ type JobsListThunkAction = ThunkAction<
 export function getJob(): JobsListThunkAction {
     return (dispatch, getState) => {
         const state = getState();
-        const clusterConfig = getCurrentClusterConfig(state);
+        const clusterConfig = selectCurrentClusterConfig(state);
 
         requests.removeAllRequests();
         return ytApiV3
@@ -94,7 +94,7 @@ function getJobRequestParameters(state: RootState) {
 export function getCompetitiveJobs(): JobsListThunkAction {
     return (dispatch, getState) => {
         const state = getState();
-        const clusterConfig = getCurrentClusterConfig(state);
+        const clusterConfig = selectCurrentClusterConfig(state);
 
         return ytApiV3
             .listJobs({
@@ -223,7 +223,7 @@ export function getJobs(): JobsListThunkAction {
             },
         ];
 
-        const clusterConfig = getCurrentClusterConfig(state);
+        const clusterConfig = selectCurrentClusterConfig(state);
 
         return ytApiV3Id
             .executeBatch(YTApiId.operationGetJobs, {

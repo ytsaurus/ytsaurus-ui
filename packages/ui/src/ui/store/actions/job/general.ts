@@ -3,7 +3,7 @@ import CancelHelper from '../../../utils/cancel-helper';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
-import {getCurrentClusterConfig} from '../../../store/selectors/global';
+import {selectCurrentClusterConfig} from '../../../store/selectors/global';
 import {RawJob} from '../../../types/operations/job';
 import {RootState} from '../../../store/reducers';
 import {ThunkAction} from 'redux-thunk';
@@ -44,7 +44,7 @@ export function loadJobData(
     return (dispatch, getState) => {
         dispatch({type: JOB.LOAD_JOB_DATA_REQUEST});
 
-        const clusterConfig = getCurrentClusterConfig(getState());
+        const clusterConfig = selectCurrentClusterConfig(getState());
 
         return yt.v3
             .getJob({
