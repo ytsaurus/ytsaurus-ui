@@ -4,7 +4,7 @@ import {RootState} from '../../reducers';
 import {getSettingsData} from '../settings/settings-base';
 import {createSelector} from 'reselect';
 import {DEFAULT_QUERY_ACO, SHARED_QUERY_ACO, getEffectiveApiStage} from './query';
-import {getClusterUiConfig} from '../global';
+import {selectClusterUiConfig} from '../global';
 import {
     getAvailableYql,
     getDefaultYqlVersion,
@@ -66,7 +66,7 @@ export const isSupportedShareQuery = createSelector(
 );
 
 export const getClusterDefaultQueryACO = (state: RootState) => {
-    const queryTrackerDefaultACO = getClusterUiConfig(state)?.query_tracker_default_aco;
+    const queryTrackerDefaultACO = selectClusterUiConfig(state)?.query_tracker_default_aco;
     const stage = getEffectiveApiStage(state);
 
     return (queryTrackerDefaultACO && queryTrackerDefaultACO[stage]) || DEFAULT_QUERY_ACO;

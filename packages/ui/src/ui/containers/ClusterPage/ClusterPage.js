@@ -44,7 +44,7 @@ import {joinMenuItemsAction, splitMenuItemsAction, trackVisit} from '../../store
 import {setSetting} from '../../store/actions/settings';
 import {unmountCluster, updateCluster} from '../../store/actions/cluster-params';
 import {updateTitle} from '../../store/actions/global';
-import {getClusterUiConfig} from '../../store/selectors/global';
+import {selectClusterUiConfig} from '../../store/selectors/global';
 import {isExperimentalPagesReady} from '../../store/selectors/global/experimental-pages';
 import {getClusterConfig} from '../../utils';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
@@ -342,7 +342,7 @@ function mapStateToProps(state) {
         clusterPagePaneSizes: getClusterPagePaneSizes(state),
         startingPage: getStartingPage(state),
         paramsCluster,
-        allowChyt: Boolean(getClusterUiConfig(state).chyt_controller_base_url),
+        allowChyt: Boolean(selectClusterUiConfig(state).chyt_controller_base_url),
         allowStartPageRedirect: isExperimentalPagesReady(state),
         isNewDashboardPage: getSettingNewDashboardPage(state),
     };

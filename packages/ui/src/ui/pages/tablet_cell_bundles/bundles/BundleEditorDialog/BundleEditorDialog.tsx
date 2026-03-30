@@ -14,7 +14,7 @@ import {
 } from '../../../../components/Dialog';
 import hammer from '../../../../common/hammer';
 
-import {getClusterUiConfig} from '../../../../store/selectors/global';
+import {selectClusterUiConfig} from '../../../../store/selectors/global';
 import {selectIsAdmin} from '../../../../store/selectors/global/is-developer';
 import {
     hideTabletCellBundleEditor,
@@ -96,7 +96,7 @@ export function BundleEditorDialog() {
         bundleControllerData: orchidData,
     } = useSelector(getTabletCellBundleEditorState);
 
-    const clusterUiConfig = useSelector(getClusterUiConfig);
+    const clusterUiConfig = useSelector(selectClusterUiConfig);
     const queryMemoryLimitIsSupported = useSelector(getQueryMemoryLimitIsSupported);
 
     const {defaultConfig: bundleDefaultConfig} = useSelector(getBundleEditorData);

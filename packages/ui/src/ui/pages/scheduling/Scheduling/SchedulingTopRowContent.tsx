@@ -34,7 +34,7 @@ import {Page} from '../../../constants';
 import {EditableBreadcrumbs} from '../../../components/EditableBreadcrumbs/EditableBreadcrumbs';
 import CreatePoolButton from '../Instruments/CreatePoolDialog/CreatePoolDialog';
 
-import {selectCluster, getClusterUiConfig} from '../../../store/selectors/global';
+import {selectCluster, selectClusterUiConfig} from '../../../store/selectors/global';
 import {makeRoutedURL} from '../../../store/location';
 import UIFactory from '../../../UIFactory';
 
@@ -44,7 +44,7 @@ const block = cn('scheduling-top-row-content');
 
 function SchedulingTopRowContent() {
     const pool = useSelector(getCurrentPool);
-    const clusterUiConfig = useSelector(getClusterUiConfig);
+    const clusterUiConfig = useSelector(selectClusterUiConfig);
 
     return (
         <RowWithName page={Page.SCHEDULING} className={block()} urlParams={{pool: ''}}>

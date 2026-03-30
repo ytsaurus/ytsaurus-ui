@@ -5,7 +5,7 @@ import {Plus} from '@gravity-ui/icons';
 
 import map_ from 'lodash/map';
 
-import {getClusterUiConfig} from '../../../../store/selectors/global';
+import {selectClusterUiConfig} from '../../../../store/selectors/global';
 
 import {DialogControlProps} from '../../Dialog.types';
 
@@ -27,7 +27,7 @@ type Props = DialogControlProps<ServicePair[]> & {
 export function ServicesSelect(props: Props) {
     const {value = [{service: '', item: ''}], onChange, disabled} = props;
 
-    const chytAllowed = useSelector(getClusterUiConfig).chyt_controller_base_url;
+    const chytAllowed = useSelector(selectClusterUiConfig).chyt_controller_base_url;
 
     const serviceTypeOptions: {value: 'chyt' | 'bundle'; content: 'CHYT' | 'Bundle'}[] = [
         {value: 'bundle', content: 'Bundle'},

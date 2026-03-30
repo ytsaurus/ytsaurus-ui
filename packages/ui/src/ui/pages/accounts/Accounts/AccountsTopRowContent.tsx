@@ -23,7 +23,7 @@ import {useHistory} from 'react-router';
 import {makeRoutedURL} from '../../../store/location';
 import {Page} from '../../../constants';
 
-import {selectCluster, getClusterUiConfig} from '../../../store/selectors/global';
+import {selectCluster, selectClusterUiConfig} from '../../../store/selectors/global';
 import {ACCOUNTS_ALLOWED_ROOT_TABS, AccountsTab} from '../../../constants/accounts/accounts';
 
 import './AccountsTopRowContent.scss';
@@ -32,7 +32,7 @@ import UIFactory from '../../../UIFactory';
 const block = cn('accounts-top-row-content');
 
 function AccountsTopRowContent() {
-    const clusterUiConfig = useSelector(getClusterUiConfig);
+    const clusterUiConfig = useSelector(selectClusterUiConfig);
     const account = useSelector(getActiveAccount);
     const accountsByName = useSelector(getAccountsMapByName) as any;
 

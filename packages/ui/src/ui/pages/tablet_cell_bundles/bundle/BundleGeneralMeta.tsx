@@ -14,7 +14,7 @@ import {Health} from '../../../components/Health/Health';
 import {calcProgressProps} from '../../../utils/utils';
 import {
     selectCluster,
-    getClusterUiConfig,
+    selectClusterUiConfig,
     getClusterUiConfigEnablePerBundleTabletAccounting,
 } from '../../../store/selectors/global';
 
@@ -30,7 +30,7 @@ export function BundleBalancerValue(props: {value?: boolean; blocking?: boolean}
 
 export default function BundleGeneralMeta() {
     const bundleData = useSelector(getTabletsActiveBundleData);
-    const clusterUiConfig = useSelector(getClusterUiConfig);
+    const clusterUiConfig = useSelector(selectClusterUiConfig);
     const cluster = useSelector(selectCluster);
     const allowTabletAccounting = useSelector(getClusterUiConfigEnablePerBundleTabletAccounting);
 

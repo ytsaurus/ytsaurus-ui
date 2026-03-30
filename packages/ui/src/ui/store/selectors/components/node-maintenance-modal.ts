@@ -2,7 +2,7 @@ import reduce_ from 'lodash/reduce';
 import {createSelector} from 'reselect';
 
 import {RootState} from '../../reducers';
-import {getClusterUiConfig} from '../global';
+import {selectClusterUiConfig} from '../global';
 import {NodeResourceLimits} from '../../../store/reducers/components/node-maintenance-modal';
 
 export const getNodeMaintenanceModalState = (state: RootState) =>
@@ -28,7 +28,7 @@ export const getNodeMaintenanceModalInitialValues = createSelector(
 );
 
 export const isAllowedMaintenanceApiNodes = (state: RootState) =>
-    getClusterUiConfig(state).enable_maintenance_api_nodes;
+    selectClusterUiConfig(state).enable_maintenance_api_nodes;
 
 export const isAllowedMaintenanceApiProxies = (state: RootState) =>
-    getClusterUiConfig(state).enable_maintenance_api_proxies;
+    selectClusterUiConfig(state).enable_maintenance_api_proxies;
