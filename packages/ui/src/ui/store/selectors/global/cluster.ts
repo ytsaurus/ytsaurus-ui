@@ -25,7 +25,7 @@ export const selectClusterUiConfig = createSelector(
     },
 );
 
-export const getMergedUiSettings = createSelector([selectClusterUiConfig], (uiConfig) => {
+export const selectMergedUiSettings = createSelector([selectClusterUiConfig], (uiConfig) => {
     return mergeUiSettings({uiSettings, uiConfig});
 });
 
