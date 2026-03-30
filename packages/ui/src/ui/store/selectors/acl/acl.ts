@@ -12,15 +12,14 @@ import sortBy_ from 'lodash/sortBy';
 import uniq_ from 'lodash/uniq';
 
 import {concatByAnd} from '../../../common/hammer/predicate';
-import {RootState} from '../../../store/reducers';
 import {
-    getAclFilterColumnGroupName,
-    getAclFilterColumns,
-    getAclFilterExpandedSubjects,
-    getAclRowAccessPredicateFilter,
-    getApproversSubjectFilter,
-    getObjectPermissionsFilter,
-    getObjectSubjectFilter,
+    selectAclFilterColumnGroupName,
+    selectAclFilterColumns,
+    selectAclFilterExpandedSubjects,
+    selectAclRowAccessPredicateFilter,
+    selectApproversSubjectFilter,
+    selectObjectPermissionsFilter,
+    selectObjectSubjectFilter,
 } from '../../../store/selectors/acl/acl-filters';
 import UIFactory from '../../../UIFactory';
 import {type RootState} from '../../../store/reducers';
@@ -74,7 +73,7 @@ const selectAllObjectPermissionsWithSplittedSubjects = createSelector(
 export const selectObjectPermissionsTypesList = (idmKind: IdmKindType) => {
     return createSelector(
         [
-            getObjectPermissionsFilter,
+            selectObjectPermissionsFilter,
             (state) => selectAllObjectPermissionsWithSplittedSubjects(state, idmKind),
         ],
         (permissionsFilter, items) => {
@@ -154,10 +153,10 @@ type ObjectPermissionsRow = PreparedAclSubject & HasSplitted;
 export const selectAllObjectPermissionsFiltered = createSelector(
     [
         selectAllObjectPermissionsWithSplittedSubjects,
-        getObjectSubjectFilter,
-        getObjectPermissionsFilter,
-        getAclFilterColumns,
-        getAclRowAccessPredicateFilter,
+        selectObjectSubjectFilter,
+        selectObjectPermissionsFilter,
+        selectAclFilterColumns,
+        selectAclRowAccessPredicateFilter,
     ],
     (items, subjectFilter, permissionsFilter, columns, rowAccessPredicateFilter) => {
         const {mainPermissions, columnPermissions, rowPermissions} = items.reduce(
@@ -230,7 +229,7 @@ export const selectAllObjectPermissionsFiltered = createSelector(
 );
 
 export const selectObjectPermissionsAggregated = createSelector(
-    [selectAllObjectPermissionsFiltered, getAclFilterExpandedSubjects],
+    [selectAllObjectPermissionsFiltered, selectAclFilterExpandedSubjects],
     (data, expandedSubjects) => {
         const keys = Object.keys(data) as Array<keyof typeof data>;
         return keys.reduce(
@@ -414,7 +413,7 @@ export const selectAllObjectPermissionsOrderedByStatus = createSelector(
 export const selectAllColumnGroups = (state: RootState, idmKind: IdmKindType) =>
     state.acl[idmKind].columnGroups;
 export const selectAllColumnGroupsActual = createSelector(
-    [selectAllColumnGroups, getAclFilterColumns, getAclFilterColumnGroupName],
+    [selectAllColumnGroups, selectAclFilterColumns, selectAclFilterColumnGroupName],
     (items, columnsFilter, nameFilter) => {
         const visibleColumns = new Set(columnsFilter);
         type ItemType = (typeof items)[number];
@@ -514,7 +513,7 @@ const selectAllApprovers = createSelector(
 export const selectHasApprovers = createSelector([selectAllApprovers], (items) => items.length > 0);
 
 export const selectApproversFiltered = createSelector(
-    [selectAllApprovers, getApproversSubjectFilter],
+    [selectAllApprovers, selectApproversSubjectFilter],
     FilterBySubject,
 );
 

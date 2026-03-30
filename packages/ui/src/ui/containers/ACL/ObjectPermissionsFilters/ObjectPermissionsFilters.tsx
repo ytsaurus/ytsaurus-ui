@@ -8,10 +8,10 @@ import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {AclMode} from '../../../constants/acl';
 import {selectObjectPermissionsTypesList} from '../../../store/selectors/acl/acl';
 import {
-    getAclRowAccessPredicateFilter,
-    getObjectPermissionsFilter,
-    getObjectSubjectFilter,
-} from '../../../store/selectors/acl-filters';
+    selectAclRowAccessPredicateFilter,
+    selectObjectPermissionsFilter,
+    selectObjectSubjectFilter,
+} from '../../../store/selectors/acl/acl-filters';
 import {type ACLReduxProps} from '../ACL-connect-helpers';
 import {ColumnGroupsFilter} from '../ColumnGroups/ColumnGroups';
 import i18nPermissionValues from '../i18n-permission-values';
@@ -33,11 +33,11 @@ export default function ObjectPermissionsFilters({
     userPermissionsAccessColumns,
 }: Props) {
     const dispatch = useDispatch();
-    const subjectFilter = useSelector(getObjectSubjectFilter);
-    const selectedPermissons = useSelector(getObjectPermissionsFilter);
+    const subjectFilter = useSelector(selectObjectSubjectFilter);
+    const selectedPermissons = useSelector(selectObjectPermissionsFilter);
     const permissionList = useSelector(selectObjectPermissionsTypesList(idmKind));
 
-    const rowAccessPredicateFilter = useSelector(getAclRowAccessPredicateFilter);
+    const rowAccessPredicateFilter = useSelector(selectAclRowAccessPredicateFilter);
 
     return (
         <Toolbar
