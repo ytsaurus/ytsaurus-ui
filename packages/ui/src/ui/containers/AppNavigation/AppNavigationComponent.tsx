@@ -13,7 +13,7 @@ import unknown from '../../assets/img/user-avatar.svg';
 import {AppNavigationProps} from './AppNavigationPageLayout';
 import {YT} from '../../config/yt-config';
 import UIFactory from '../../UIFactory';
-import {getSettingsCluster} from '../../store/selectors/global';
+import {selectSettingsCluster} from '../../store/selectors/global';
 import {importManageTokens} from '../ManageTokens';
 import {ChatToggleFooterButton} from '../AiChat/ChatToggleButton';
 
@@ -57,7 +57,7 @@ function AppNavigationComponent({
     }, [panelVisible, panelContent, settingsVisible, settingsContent]);
 
     const [popupVisible, setPopupVisible] = useState(false);
-    const settingsCluster = useSelector(getSettingsCluster);
+    const settingsCluster = useSelector(selectSettingsCluster);
     const isManageTokensMenuVisible = useSelector(getAllowManageTokens);
     const history = useHistory();
 
