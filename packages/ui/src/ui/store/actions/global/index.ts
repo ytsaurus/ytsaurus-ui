@@ -9,7 +9,7 @@ import {normalizeResponseWithAttributes} from '../../../utils';
 import {RootState} from '../../../store/reducers';
 import {
     selectBundles,
-    getGlobalAsideHeaderWidth,
+    selectGlobalAsideHeaderWidth,
     selectGlobalGroups,
     selectGlobalUsers,
     selectPoolTrees,
@@ -44,7 +44,7 @@ export type YTThunkAction<T = unknown> = ThunkAction<T, RootState, any, GloablSt
 
 export function setAsideHeaderWidth(asideHeaderWidth: number): YTThunkAction {
     return (dispatch, getState) => {
-        const oldWidth = getGlobalAsideHeaderWidth(getState());
+        const oldWidth = selectGlobalAsideHeaderWidth(getState());
         if (oldWidth !== asideHeaderWidth) {
             dispatch({type: GLOBAL_PARTIAL, data: {asideHeaderWidth}});
         }
