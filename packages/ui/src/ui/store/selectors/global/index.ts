@@ -114,7 +114,7 @@ export const selectAllIdmGroupNamesSorted = createSelector(
     },
 );
 
-export const getGlobalShowLoginDialog = (state: RootState) => {
+export const selectGlobalShowLoginDialog = (state: RootState) => {
     if (state.global.authWay) {
         return (
             getConfigData().allowPasswordAuth &&
