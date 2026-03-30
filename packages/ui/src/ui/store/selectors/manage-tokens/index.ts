@@ -1,6 +1,6 @@
 import {createSelector} from 'reselect';
 import {RootState} from '../../reducers';
-import {getAuthWay} from '../global';
+import {selectAuthWay} from '../global';
 import {getRequirePasswordInAuthenticationCommands} from '../global/supported-features';
 
 export type AuthenticationToken = {
@@ -33,14 +33,14 @@ export const manageTokensSelector = createSelector(
 export const isManageTokensModalOpened = (state: RootState) => state.manageTokens.modal.open;
 
 export const isManageTokensInOAuthMode = createSelector(
-    [getAuthWay, getRequirePasswordInAuthenticationCommands],
+    [selectAuthWay, getRequirePasswordInAuthenticationCommands],
     (authWay, requirePasswordInAuthenticationCommands) => {
         return authWay === 'oauth' && !requirePasswordInAuthenticationCommands;
     },
 );
 
 export const getAllowManageTokens = (state: RootState) => {
-    const authWay = getAuthWay(state);
+    const authWay = selectAuthWay(state);
 
     if (authWay === 'passwd') {
         return true;
