@@ -95,7 +95,7 @@ export const selectAllBundlesNames = createSelector(selectBundles, (bundles) => 
     return sortBy_(bundleNames);
 });
 
-export const getAllUserNamesSorted = createSelector(
+export const selectAllUserNamesSorted = createSelector(
     [selectAllUserNames],
     sortBy_ as (items: Array<unknown>) => Array<string>,
 );
