@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import {useSelector} from 'react-redux';
 
 import {
-    getMaxContentWidth,
+    selectMaxContentWidth,
     selectIsMaxContentWidthEnabled,
 } from '../../store/selectors/global/max-content-width';
 import {RootState} from '../../store/reducers/index';
@@ -18,7 +18,7 @@ export type MaxContentWidthProps = {
 
 export function MaxContentWidth({children}: MaxContentWidthProps) {
     const enableMaxWidth = useSelector(selectIsMaxContentWidthEnabled);
-    const size = useSelector(getMaxContentWidth);
+    const size = useSelector(selectMaxContentWidth);
     const isSplit = useSelector((state: RootState) => state.global.splitScreen.isSplit);
 
     return (

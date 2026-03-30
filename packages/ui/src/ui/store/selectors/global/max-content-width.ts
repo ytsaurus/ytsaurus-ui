@@ -4,6 +4,6 @@ import {getSettingsData} from '../../../store/selectors/settings/settings-base';
 export const selectIsMaxContentWidthEnabled = (state: RootState) =>
     state.global.enableMaxContentWidth;
 
-export const getMaxContentWidth = (state: RootState) => {
+export const selectMaxContentWidth = (state: RootState) => {
     return getSettingsData(state)['global::maxContentWidth'];
 };
