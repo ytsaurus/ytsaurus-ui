@@ -8,7 +8,10 @@ import {
     dynamicSpecActions,
     staticSpecActions,
 } from '../../../store/reducers/flow/specs';
-import {getFlowDynamicSpecPath, getFlowStaticSpecPath} from '../../../store/selectors/flow/specs';
+import {
+    selectFlowDynamicSpecPath,
+    selectFlowStaticSpecPath,
+} from '../../../store/selectors/flow/specs';
 
 const cancelHelper = new CancelHelper();
 
@@ -52,7 +55,7 @@ export function updateFlowStaticSpec(
                 data?.spec,
             )
             .then(() => {
-                const pipeline_path = getFlowStaticSpecPath(getState());
+                const pipeline_path = selectFlowStaticSpecPath(getState());
                 if (pipeline_path && pipeline_path === path) {
                     dispatch(loadFlowStaticSpec(path));
                 }
@@ -95,7 +98,7 @@ export function updateFlowDynamicSpec({
                 data?.spec,
             )
             .then(() => {
-                const pipline_path = getFlowDynamicSpecPath(getState());
+                const pipline_path = selectFlowDynamicSpecPath(getState());
                 if (path === pipline_path) {
                     dispatch(loadFlowDynamicSpec(path));
                 }
