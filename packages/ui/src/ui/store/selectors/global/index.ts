@@ -67,7 +67,7 @@ export const selectGlobalGroupAttributesMap = createSelector([selectGlobalGroups
     );
 });
 
-export const getAllPoolNames = createSelector(selectPoolTrees, (poolTrees) => {
+export const selectAllPoolNames = createSelector(selectPoolTrees, (poolTrees) => {
     const getAllKeys = (obj: FIX_MY_TYPE): Array<string> => {
         return reduce_(
             keys_(obj),
