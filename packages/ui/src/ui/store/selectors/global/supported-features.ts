@@ -211,7 +211,7 @@ export const selectOperationStatisticsDescription = createSelector(
     },
 );
 
-export const getRequirePasswordInAuthenticationCommands = createSelector(
+export const selectRequirePasswordInAuthenticationCommands = createSelector(
     [selectSupportedFeatures],
     (features) => features.require_password_in_authentication_commands,
 );
