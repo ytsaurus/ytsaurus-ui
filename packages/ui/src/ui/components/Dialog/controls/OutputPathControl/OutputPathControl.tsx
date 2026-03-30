@@ -17,7 +17,7 @@ import {OptimizeForAttribute} from './OptimizeForAttribute';
 import {CompressionCodecAttribute} from './CompressionCodecAttribute';
 import {
     getCompressionCodecs,
-    getErasureCodecs,
+    selectErasureCodecs,
 } from '../../../../store/selectors/global/supported-features';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {ErasureCodecAttribute} from './ErasureCodecAttribute';
@@ -40,7 +40,7 @@ export const OutputPathControl: FC<Props> & ControlStaticApi<any> = ({
     const dispatch = useDispatch();
     const outputPathAttributes = useSelector(getNavigationTableOutputPathAttributes);
     const compressionCodecs = useSelector(getCompressionCodecs);
-    const erasureCodecs = useSelector(getErasureCodecs);
+    const erasureCodecs = useSelector(selectErasureCodecs);
 
     useEffect(() => {
         if (value) {

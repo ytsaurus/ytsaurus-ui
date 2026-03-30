@@ -32,7 +32,7 @@ const selectSupportedFeatures = createSelector(
     },
 );
 
-export const getErasureCodecs = createSelector([selectSupportedFeatures], (features) => {
+export const selectErasureCodecs = createSelector([selectSupportedFeatures], (features) => {
     return map_(features.erasure_codecs, (value) => {
         return {value, text: value};
     }).sort(compareItems);
