@@ -10,7 +10,7 @@ import {selectCluster} from './index';
 import {SelectWithSubItemsProps} from '../../../components/Dialog/controls/SelectWithSubItems/SelectWithSubItems';
 import {OperationStatisticInfo} from '../../../store/reducers/global/supported-features';
 
-const getSupportedFeaturesRaw = (state: RootState) => state.supportedFeatures.features;
+const selectSupportedFeaturesRaw = (state: RootState) => state.supportedFeatures.features;
 const getSupportedFeaturesCluster = (state: RootState) => state.supportedFeatures.featuresCluster;
 
 //                                    Record<codec, level>
@@ -25,7 +25,7 @@ const RECOMMENDED_COMPRESSION_CODECS: Record<string, string> = {
 const RECOMMENDED = ' (recommended)';
 
 const getSupportedFeatures = createSelector(
-    [selectCluster, getSupportedFeaturesCluster, getSupportedFeaturesRaw],
+    [selectCluster, getSupportedFeaturesCluster, selectSupportedFeaturesRaw],
     (cluster, featuresCluster, features) => {
         return cluster === featuresCluster ? features : {};
     },
@@ -162,7 +162,7 @@ function compareItems(l: {value: string}, r: {value: string}) {
 }
 
 export const getOperationStatisticsDescription = createSelector(
-    [getSupportedFeaturesRaw],
+    [selectSupportedFeaturesRaw],
     ({operation_statistics_descriptions}) => {
         const byName: Record<string, OperationStatisticInfo> = {};
         const byRegexp: Array<OperationStatisticInfo & {regexp: RegExp}> = [];
