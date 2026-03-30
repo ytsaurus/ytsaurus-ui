@@ -27,7 +27,7 @@ import {useFlowExecuteQuery} from '../../../../store/api/yt';
 import {FlowTab} from '../../../../store/reducers/flow/filters';
 import {useFlowWorkersNameFilter} from '../../../../store/reducers/flow/filters.hooks';
 import {useSelector} from '../../../../store/redux-hooks';
-import {getFlowPipelinePath} from '../../../../store/selectors/flow/filters';
+import {selectFlowPipelinePath} from '../../../../store/selectors/flow/filters';
 import {makeFlowLink} from '../../../../utils/app-url';
 import './FlowWorkers.scss';
 import i18n from './i18n';
@@ -242,7 +242,7 @@ function useFlowWorkersColumns() {
 }
 
 function FlowWorkerAddress({item}: {item: FlowWorkerData}) {
-    const path = useSelector(getFlowPipelinePath);
+    const path = useSelector(selectFlowPipelinePath);
     return (
         <Link
             url={makeFlowLink({path, tab: FlowTab.WORKERS, worker: item.address})}

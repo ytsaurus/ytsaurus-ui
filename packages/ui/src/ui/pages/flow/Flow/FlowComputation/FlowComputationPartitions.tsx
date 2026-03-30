@@ -23,9 +23,9 @@ import {FlowTab, filtersSlice} from '../../../../store/reducers/flow/filters';
 import {useFlowPartitionIdFilter} from '../../../../store/reducers/flow/filters.hooks';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
-    getFlowPartitionsJobStateFilter,
-    getFlowPartitionsStateFilter,
-    getFlowPipelinePath,
+    selectFlowPartitionsJobStateFilter,
+    selectFlowPartitionsStateFilter,
+    selectFlowPipelinePath,
 } from '../../../../store/selectors/flow/filters';
 import {makeFlowLink} from '../../../../utils/app-url';
 import {getFieldStats, statsToSelectItems} from '../../../../utils/field-stats';
@@ -74,7 +74,7 @@ export function FlowComputationPartitions({
 
 function JobStateFilter({partitions}: {partitions?: Array<FlowComputationPartitionType>}) {
     const dispatch = useDispatch();
-    const value = useSelector(getFlowPartitionsJobStateFilter);
+    const value = useSelector(selectFlowPartitionsJobStateFilter);
 
     const items = React.useMemo(() => {
         const stats = getFieldStats(partitions ?? [], 'job_state');
@@ -100,7 +100,7 @@ function JobStateFilter({partitions}: {partitions?: Array<FlowComputationPartiti
 
 function StateFilter({partitions}: {partitions?: Array<FlowComputationPartitionType>}) {
     const dispatch = useDispatch();
-    const value = useSelector(getFlowPartitionsStateFilter);
+    const value = useSelector(selectFlowPartitionsStateFilter);
 
     const items = React.useMemo(() => {
         const stats = getFieldStats(partitions ?? [], 'state');
@@ -126,8 +126,8 @@ function StateFilter({partitions}: {partitions?: Array<FlowComputationPartitionT
 
 function useFlowComputationPartitionsTableData(partitions?: Array<FlowComputationPartitionType>) {
     const {partitionIdFilter} = useFlowPartitionIdFilter();
-    const jobStateFilter = useSelector(getFlowPartitionsJobStateFilter);
-    const stateFilter = useSelector(getFlowPartitionsStateFilter);
+    const jobStateFilter = useSelector(selectFlowPartitionsJobStateFilter);
+    const stateFilter = useSelector(selectFlowPartitionsStateFilter);
 
     return {
         items: React.useMemo(() => {
@@ -394,7 +394,7 @@ function useFlowWorkersColumns() {
 }
 
 function PartitionIdCell({id, computation_id}: {id: string; computation_id: string}) {
-    const path = useSelector(getFlowPipelinePath);
+    const path = useSelector(selectFlowPipelinePath);
 
     return (
         <Link
@@ -412,7 +412,7 @@ function PartitionIdCell({id, computation_id}: {id: string; computation_id: stri
 }
 
 function ComputationIdCell({computation}: {computation: string}) {
-    const path = useSelector(getFlowPipelinePath);
+    const path = useSelector(selectFlowPipelinePath);
 
     return (
         <Link

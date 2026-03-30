@@ -23,7 +23,7 @@ import {useFlowExecuteQuery} from '../../../../store/api/yt';
 import {FlowTab} from '../../../../store/reducers/flow/filters';
 import {useFlowComputationsNameFilter} from '../../../../store/reducers/flow/filters.hooks';
 import {useSelector} from '../../../../store/redux-hooks';
-import {getFlowPipelinePath} from '../../../../store/selectors/flow/filters';
+import {selectFlowPipelinePath} from '../../../../store/selectors/flow/filters';
 import {getCluster} from '../../../../store/selectors/global/cluster';
 import {makeFlowLink} from '../../../../utils/app-url';
 import './FlowComputations.scss';
@@ -81,7 +81,7 @@ export function FlowComputationsList({pipeline_path}: {pipeline_path: string}) {
 }
 
 function FlowComputationsDataButton() {
-    const path = useSelector(getFlowPipelinePath);
+    const path = useSelector(selectFlowPipelinePath);
     const {data} = useFlowComputationsTableData(path);
     return <ShowDataButton label={i18n('computations-data')} data={data} />;
 }
@@ -150,7 +150,7 @@ function useFlowComputationsTableData(pipeline_path: string) {
 type FlowComputationsColumnDef = tanstack.ColumnDef<FlowComputationType>;
 
 function useFlowComputationsColumn() {
-    const path = useSelector(getFlowPipelinePath);
+    const path = useSelector(selectFlowPipelinePath);
     const res = React.useMemo(() => {
         const columns: Array<FlowComputationsColumnDef> = [
             {

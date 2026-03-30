@@ -15,7 +15,7 @@ import {
 import {useFlowExecuteQuery} from '../../../../../store/api/yt/flow/index';
 import {filtersSlice} from '../../../../../store/reducers/flow/filters';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
-import {getFlowPipelinePath} from '../../../../../store/selectors/flow/filters';
+import {selectFlowPipelinePath} from '../../../../../store/selectors/flow/filters';
 import i18n from './i18n';
 
 const block = cn('yt-flow-partition');
@@ -26,7 +26,7 @@ export function FlowPartition() {
         params: {partition},
     } = useRouteMatch<{partition: string}>();
 
-    const pipeline_path = useSelector(getFlowPipelinePath);
+    const pipeline_path = useSelector(selectFlowPipelinePath);
 
     const {data, error, isLoading} = useFlowExecuteQuery<'describe-partition'>({
         parameters: {
@@ -66,7 +66,7 @@ export function FlowPartitionMeta({
     partition: string;
     data?: FlowPartitionDetailsType;
 }) {
-    const path = useSelector(getFlowPipelinePath);
+    const path = useSelector(selectFlowPipelinePath);
     const hasData = Boolean(data);
     return (
         <MetaTable

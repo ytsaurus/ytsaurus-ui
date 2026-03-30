@@ -4,7 +4,7 @@ import ClickableAttributesButton from '../../../../components/AttributesButton/C
 import MetaTable, {MetaTableItem} from '../../../../components/MetaTable/MetaTable';
 import {NavigationBreadcrumbs} from '../../../../containers/NavigationBreadcrumbs/NavigationBreadcrumbs';
 import {useSelector} from '../../../../store/redux-hooks';
-import {getFlowPipelinePath} from '../../../../store/selectors/flow/filters';
+import {selectFlowPipelinePath} from '../../../../store/selectors/flow/filters';
 import './FlowMeta.scss';
 import i18n from './i18n';
 
@@ -45,7 +45,7 @@ export function ShowDataButton({label, data}: {label: string; data?: object}) {
 }
 
 export function FlowPathMeta({items = []}: {items?: Array<MetaTableItem>}) {
-    const path = useSelector(getFlowPipelinePath);
+    const path = useSelector(selectFlowPipelinePath);
 
     return <MetaTable className={block()} items={[...getFlowPathMetaItems(path), ...items]} />;
 }
