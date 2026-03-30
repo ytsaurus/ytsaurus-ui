@@ -29,7 +29,7 @@ import {selectIsAdmin} from './is-developer';
 export const selectGlobalError = (state: RootState) => state.global.error?.error;
 export const selectGlobalErrorType = (state: RootState) => state.global.error?.errorType;
 
-export const getRootPagesCluster = (state: RootState) => state?.global.rootPagesCluster;
+export const selectRootPagesCluster = (state: RootState) => state?.global.rootPagesCluster;
 
 export const getGlobalLoadState = (state: RootState) => state.global.loadState;
 
