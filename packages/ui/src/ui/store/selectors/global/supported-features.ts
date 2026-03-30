@@ -11,7 +11,8 @@ import {SelectWithSubItemsProps} from '../../../components/Dialog/controls/Selec
 import {OperationStatisticInfo} from '../../../store/reducers/global/supported-features';
 
 const selectSupportedFeaturesRaw = (state: RootState) => state.supportedFeatures.features;
-const getSupportedFeaturesCluster = (state: RootState) => state.supportedFeatures.featuresCluster;
+const selectSupportedFeaturesCluster = (state: RootState) =>
+    state.supportedFeatures.featuresCluster;
 
 //                                    Record<codec, level>
 const RECOMMENDED_COMPRESSION_CODECS: Record<string, string> = {
@@ -25,7 +26,7 @@ const RECOMMENDED_COMPRESSION_CODECS: Record<string, string> = {
 const RECOMMENDED = ' (recommended)';
 
 const getSupportedFeatures = createSelector(
-    [selectCluster, getSupportedFeaturesCluster, selectSupportedFeaturesRaw],
+    [selectCluster, selectSupportedFeaturesCluster, selectSupportedFeaturesRaw],
     (cluster, featuresCluster, features) => {
         return cluster === featuresCluster ? features : {};
     },
