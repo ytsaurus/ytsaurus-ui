@@ -6,7 +6,7 @@ import {AccountResourceName} from '../../../../../../constants/accounts/accounts
 import {RootState} from '../../../../../../store/reducers';
 import {
     selectCluster,
-    getClusterUiConfigBundleAccountingHelpLink,
+    selectClusterUiConfigBundleAccountingHelpLink,
     selectClusterUiConfigEnablePerAccountTabletAccounting,
     selectClusterUiConfigEnablePerBundleTabletAccounting,
 } from '../../../../../../store/selectors/global';
@@ -77,7 +77,7 @@ export default connector(TabletsContent);
 export function TabletAccountingNotice({className}: {className?: string}) {
     const allowPerTablet = useSelector(selectClusterUiConfigEnablePerBundleTabletAccounting);
 
-    const helpLink = useSelector(getClusterUiConfigBundleAccountingHelpLink);
+    const helpLink = useSelector(selectClusterUiConfigBundleAccountingHelpLink);
     const cluster = useSelector(selectCluster);
 
     return !allowPerTablet ? null : (
