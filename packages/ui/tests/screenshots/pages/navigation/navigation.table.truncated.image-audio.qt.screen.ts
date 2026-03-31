@@ -27,6 +27,7 @@ test('Query/Result: truncated image-audio', async ({page}) => {
     await monaco(page).replace({regex: E2E_DIR!, replacement: `e2e.tmp.dir`});
     await queryPage(page).replaceResultMeta();
 
+    await page.locator('.query-widget__header').click();
     await expect(page).toHaveScreenshot();
 
     const imageLoc = await queryPage(page).showCellPreview(1, 2);
