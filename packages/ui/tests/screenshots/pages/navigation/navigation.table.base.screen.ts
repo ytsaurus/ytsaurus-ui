@@ -104,16 +104,15 @@ test('Navigation: table - Tablets', async ({page}) => {
 test('Navigation: static-table - rowselector', async ({page}) => {
     await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/static-table`));
+    await table(page).waitForTableContent('.navigation-table', 10);
     await page.waitForLoadState('networkidle');
 
     await table(page).replaceTableMeta();
-    await table(page).waitForTableContent('.navigation-table', 10);
 
-    await page.click('.navigation-table-overview__input', {force: true});
+    await page.locator('.navigation-table-overview__input').click();
     const slider = await page.waitForSelector('.rc-slider-handle');
-    const sliderBoundingBox = await slider.boundingBox();
+    const sliderBoundingBox = (await slider.boundingBox())!;
 
-    if (!sliderBoundingBox) return;
     const newX = sliderBoundingBox.x + 206;
     const newY = sliderBoundingBox.y + sliderBoundingBox.height / 2;
 
@@ -178,10 +177,10 @@ test('Navigation: table - userColumnPresets', async ({page, context}) => {
 test('Navigation: yql-v3-types', async ({page}) => {
     await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/tmp/yql-v3-types-table`));
+    await table(page).waitForTableContent('.navigation-table', 5);
     await page.waitForLoadState('networkidle');
 
     await table(page).replaceTableMeta();
-    await table(page).waitForTableContent('.navigation-table', 5);
 
     await test.step('yql-v3-types enabled', async () => {
         await expect(page).toHaveScreenshot();
