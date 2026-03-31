@@ -77,7 +77,7 @@ spec:
             {{- if .Values.ui.caCerts.useExtraCerts }}
             - mountPath: /opt/app/certs/extra_ca_certs.crt
               name: extra-ca-certs
-              subPath: {{.Values.ui.caCerts.configMapKey}}
+              subPath: "{{ .Values.ui.caCerts.configMapKey }}"
             {{- end }}
       initContainers:
         - command:
@@ -135,6 +135,6 @@ spec:
         {{- if .Values.ui.caCerts.useExtraCerts }}
         - configMap:
             defaultMode: 420
-            name: {{.Values.ui.caCerts.configMapName }}
+            name: "{{ .Values.ui.caCerts.configMapName }}"
           name: extra-ca-certs
         {{- end }}
