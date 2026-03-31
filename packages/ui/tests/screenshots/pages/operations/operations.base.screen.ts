@@ -20,7 +20,7 @@ class OperationsPage extends BasePage {
 
     async replaceMetaData() {
         await replaceInnerHtml(this.page, {
-            '.meta-table-item__value_key_id .meta-table-item__id .elements-ellipsis':
+            '.meta-table-item__value_key_id .meta-table-item__id .g-text':
                 '00000000-11111111-22222-33333333',
             '.meta-table-item__value_key_started .meta-table-item__time': '01 Jan 1970 00:00:00',
             '.meta-table-item__value_key_duration .meta-table-item__time': '00:00:00',
