@@ -381,7 +381,7 @@ class AccountsGeneralTab extends Component {
                         className={b('item-toggler', {hidden: !hasChildren})}
                         onClick={toggleStateFn}
                     >
-                        <Icon awesome={itemState.collapsed ? 'angle-down' : 'angle-up'} />
+                        <Icon awesome={itemState.collapsed ? 'angle-down' : 'angle-up'} size={13} />
                     </div>
                 );
 
@@ -405,7 +405,7 @@ class AccountsGeneralTab extends Component {
                             })}
                             onClick={onFavouriteClick}
                         >
-                            <Icon awesome={isInFavourites ? 'star-alt' : 'star'} />
+                            <Icon awesome={isInFavourites ? 'star-alt' : 'star'} size={13} />
                         </div>
                         {UIFactory.renderAccountsTableItemExtraControls({
                             itemClassName: b('name-extra-control'),
@@ -678,7 +678,7 @@ class AccountsGeneralTab extends Component {
                             onClick={handleClick}
                             qa={`edit-account-${item.name}`}
                         >
-                            <Icon awesome="pencil" />
+                            <Icon awesome="pencil" size={13} />
                         </Button>
                     </span>
                 );
