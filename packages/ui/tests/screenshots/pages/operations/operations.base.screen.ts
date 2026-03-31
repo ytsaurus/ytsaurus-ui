@@ -82,12 +82,15 @@ test('Operation - Statistics', async ({page}) => {
     await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`operations/*long-operation/statistics`));
 
-    await operationsPage(page).replaceMetaData();
+    await page.waitForTimeout(5000);
+
     await operationsPage(page).waitForStatisticsRows();
+    await operationsPage(page).waitForFixedBoundingClientRect('.operations', {iterationDelay: 500});
+    await operationsPage(page).replaceMetaData();
 
     await page.waitForLoadState('networkidle');
     await page.mouse.wheel(0, -1000); // scroll back for autofocused offset
-    await operationsPage(page).waitForTableSyncedWidth('.operation-statistics__table');
+    await operationsPage(page).waitForFixedTableColumnWidths('.operation-statistics__table');
 
     await expect(page).toHaveScreenshot();
 });
