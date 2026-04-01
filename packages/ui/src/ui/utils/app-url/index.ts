@@ -38,6 +38,35 @@ export function makeBundleUrl({bundle, cluster}: {bundle: string; cluster?: stri
     return `/${cluster || YT.cluster}/${Page.TABLET_CELL_BUNDLES}/instances?activeBundle=${bundle}`;
 }
 
+export function makeOperationJobsUrl(params: {
+    cluster?: string;
+    operationId: string;
+    incarnationId?: string;
+    state?: 'all' | 'running' | 'completed' | 'failed' | 'aborted';
+}): string {
+    const {cluster, operationId, incarnationId, state} = params;
+
+    const baseUrl = `/${cluster || YT.cluster}/${Page.OPERATIONS}/${operationId}/jobs`;
+
+    const searchParams = new URLSearchParams();
+
+    if (incarnationId) {
+        searchParams.set('incarnation', incarnationId);
+    }
+
+    if (state) {
+        searchParams.set('state', state);
+    }
+
+    return searchParams.size > 0 ? `${baseUrl}?${searchParams}` : baseUrl;
+}
+
+export function makeOperationLogsUrl(params: {cluster?: string; operationId: string}): string {
+    const {cluster, operationId} = params;
+
+    return `/${cluster || YT.cluster}/${Page.OPERATIONS}/${operationId}/logs`;
+}
+
 export function makeFlowLink({
     path,
     cluster,
