@@ -524,7 +524,7 @@ export interface UIFactory {
 
     renderIncarnationsTab(): React.ReactNode;
 
-    renderIncarnationsNextTab(): React.ReactNode;
+    renderIncarnationsNextTab(params: {cluster: string; operationId: string}): React.ReactNode;
 
     getAiChatMessageComponent(
         message: ChatMessage,
