@@ -1,5 +1,36 @@
 # Changelog
 
+## [3.8.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.7.0...ui-v3.8.0) (2026-04-01)
+
+
+### Features
+
+* **Components/Nodes:** show field register_time to node's info [YTFRONT-3578] ([732380b](https://github.com/ytsaurus/ytsaurus-ui/commit/732380bb0ac64d129b7806336d5d137262c18d96))
+* **Navigation/ACL:** add 'Row groups permissions' [YTFRONT-5385] ([a32e730](https://github.com/ytsaurus/ytsaurus-ui/commit/a32e730016fb0718e9b60a7fae36540eaa8fc6ac))
+* **Queries:** always show spyt engine [YTFRONT-5528] ([2a25e28](https://github.com/ytsaurus/ytsaurus-ui/commit/2a25e28eebc1d45bd34dbc1011a2fa031bb4ba81))
+* **Queries:** disable run button [YTFRONT-5598] ([ea59b04](https://github.com/ytsaurus/ytsaurus-ui/commit/ea59b042f84073a2fa8e41617e7e5cb259408903))
+
+
+### Bug Fixes
+
+* **ACL:** fix for empty subjects [[#1268](https://github.com/ytsaurus/ytsaurus-ui/issues/1268)] ([69167dc](https://github.com/ytsaurus/ytsaurus-ui/commit/69167dcb07ab2f1c92e01f1a84a6f33a2af8fb68))
+* **Flow/Graph:** usage cpu_usage,memory_usage instead of metrics.*_10m [YTFRONT-5644] ([abd0e50](https://github.com/ytsaurus/ytsaurus-ui/commit/abd0e50c6286e0ba6c2b7294caa4481adb942ab5))
+* **Navigation/ACL:** add 'full_read' permission to check [YTFRONT-5311] ([e3f464c](https://github.com/ytsaurus/ytsaurus-ui/commit/e3f464c676b2d5e1273f948cd331889845c88e7c))
+* **Navigation/DownloadManager:** downloading excel, processing a number divided by digits [YTFRONT-3613] ([cab8256](https://github.com/ytsaurus/ytsaurus-ui/commit/cab82562f6df02dd0504a4103f8a13653a5690ec))
+* **Navigation/MapNodesTable:** disable redicret on checkbox-click in table [YTFRONT-5493] ([a6befb1](https://github.com/ytsaurus/ytsaurus-ui/commit/a6befb1a60ec0434963b95156e1393c1fce2778f))
+* **Navigation/Table:** add 'omit_inaccessible_rows: true' for reader [YTFRONT-5297] ([fe99458](https://github.com/ytsaurus/ytsaurus-ui/commit/fe9945819de79ae798607ac567f1159d3a12477b))
+* **Navigation:** column selector list resize [YTFRONT-5527] ([cf0536a](https://github.com/ytsaurus/ytsaurus-ui/commit/cf0536acd3e4102c27d5ebe4db2cb8eecea334cb))
+* **Nginx:** increase timeout[YTFRONT-5607] ([ad2bfe7](https://github.com/ytsaurus/ytsaurus-ui/commit/ad2bfe71221c7d39e53885b5de72049ad3c5afdd))
+* **Operation/Details:** better operation status [YTFRONT-5659] ([885a8f7](https://github.com/ytsaurus/ytsaurus-ui/commit/885a8f732ca02304d4717ff15f2965c2487d980e))
+* **Operation/Details:** minor layout fix [YTFRONT-5529] ([ae30800](https://github.com/ytsaurus/ytsaurus-ui/commit/ae30800f3bee7655554fc52e1e1db3ab7276afc0))
+* **Operation/Jobs:** do not display 'Progress' for 'vanilla' [YTFRONT-5662] ([0240bb5](https://github.com/ytsaurus/ytsaurus-ui/commit/0240bb5dea4b21d0b1285ab824552278f1859cd5))
+* **Operation:** progress in intermediate state [YTFRONT-5634] ([51a44b9](https://github.com/ytsaurus/ytsaurus-ui/commit/51a44b98b6c4d7f2331a9d7263feddd99c60eff0))
+* **Scheduling/ACL:** allow to disable acl inheritance [YTFRONT-5616] ([bbb1177](https://github.com/ytsaurus/ytsaurus-ui/commit/bbb1177d01dae1e43120fe147ed2e95288c2ed64))
+* **Scheduling/Meta:** better strong guarantees progress [YTFRONT-5660] ([ccfec33](https://github.com/ytsaurus/ytsaurus-ui/commit/ccfec336c5d0b848f506b96930772c42dc431ea6))
+* **Scheduling/PoolEditor:** better message for missing write permission [YTFRONT-5656] ([7744329](https://github.com/ytsaurus/ytsaurus-ui/commit/774432925b1c4003fc1cc5e143caab22060d1bb9))
+* **System:** new version attribute [YTFRONT-5566] ([e277e83](https://github.com/ytsaurus/ytsaurus-ui/commit/e277e83823767d6aac13b4b798fb11b51fa97224))
+* **Tablet:** simplify tablet id display to single editable link [YTFRONT-5632] ([16ebc1f](https://github.com/ytsaurus/ytsaurus-ui/commit/16ebc1f157b039efa469f98f01ec84eac29cd10d))
+
 ## [3.7.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.6.1...ui-v3.7.0) (2026-03-19)
 
 
