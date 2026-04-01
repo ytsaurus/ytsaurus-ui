@@ -89,13 +89,25 @@ interface PipedResponseSize {
 
 const LOG_HEADERS = ['x-yt-proxy', 'x-yt-request-id', 'x-yt-trace-id', 'content-length'];
 
+export type ReadableStreamTyped<T> = stream.Readable & {__data: T};
+
+export function pipeAxiosResponseTyped<ResponseDataT>(
+    ctx: AppContext,
+    dst: Response<ResponseDataT>,
+    src: AxiosResponse<ReadableStreamTyped<NoInfer<ResponseDataT>>>,
+    logMsgPrefix?: string,
+    transformHeaders?: <T>(headers: T) => T,
+): Promise<PipedResponseSize | undefined> {
+    return pipeAxiosResponse(ctx, dst, src, logMsgPrefix, transformHeaders);
+}
+
 /**
- * pipeAciosResponse is a helper function to forward stream-content to browser
+ * pipeAxiosResponse is a helper function to forward stream-content to browser
  *
  * `ResponseDataT` just allows to declare response type, it affects nothing,
  * but allows link highlight connection between modules from src/ui and src/server
  */
-export async function pipeAxiosResponse<ResponseDataT = unknown>(
+export async function pipeAxiosResponse<ResponseDataT>(
     ctx: AppContext,
     dst: Response<ResponseDataT>,
     src?: AxiosResponse<stream.Readable | unknown>,
