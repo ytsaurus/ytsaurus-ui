@@ -353,7 +353,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             [Tab.INCARNATIONS_NEXT]: {
                 show:
                     isIncarnationNextFeatureEnabled &&
-                    Boolean(UIFactory.renderIncarnationsNextTab()),
+                    Boolean(UIFactory.renderIncarnationsNextTab({cluster, operationId})),
             },
             [Tab.LOGS]: {show: Boolean(UIFactory.renderOperationLogsTab())},
             [Tab.PERFORMANCE]: {
@@ -459,7 +459,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                     />
                     <Route
                         path={`${path}/${Tab.INCARNATIONS_NEXT}`}
-                        render={UIFactory.renderIncarnationsNextTab}
+                        render={() => UIFactory.renderIncarnationsNextTab({cluster, operationId})}
                     />
                     <Route path={`${path}/${Tab.LOGS}`} render={UIFactory.renderOperationLogsTab} />
                     <Route path={`${path}/:tab`} component={Placeholder} />
