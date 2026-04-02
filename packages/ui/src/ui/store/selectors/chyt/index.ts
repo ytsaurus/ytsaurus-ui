@@ -78,7 +78,7 @@ export const selectChytListVisibleColumns = createSelector(
     },
 );
 
-export const getChytListColumns = createSelector(
+export const selectChytListColumns = createSelector(
     [selectChytListVisibleColumns],
     (columns): Array<ChytColumnItem> => {
         const userColumns = new Set(columns);

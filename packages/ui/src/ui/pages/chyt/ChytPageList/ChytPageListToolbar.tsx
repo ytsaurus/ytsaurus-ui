@@ -15,7 +15,7 @@ import {
     selectChytListAvailableCreators,
     selectChytListAvailableHealths,
     selectChytListAvailableStates,
-    getChytListColumns,
+    selectChytListColumns,
     selectChytListFilterAlias,
     selectChytListFilterCreator,
     selectChytListFilterHealth,
@@ -165,7 +165,7 @@ function ChytListColumnsButton() {
     const dispatch = useDispatch();
 
     const [visible, setVisible] = React.useState(false);
-    const columns = useSelector(getChytListColumns);
+    const columns = useSelector(selectChytListColumns);
 
     const dialog = (
         <ColumnSelectorModal
