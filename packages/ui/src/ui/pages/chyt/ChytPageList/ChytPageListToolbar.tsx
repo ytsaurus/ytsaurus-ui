@@ -12,7 +12,7 @@ import ColumnSelectorModal from '../../../components/ColumnSelectorModal/ColumnS
 
 import {chytUpdateListFilters} from '../../../store/actions/chyt/list-fitlers';
 import {
-    getChytListAvailableCreators,
+    selectChytListAvailableCreators,
     getChytListAvailableHealths,
     getChytListAvailableStates,
     getChytListColumns,
@@ -86,7 +86,7 @@ function NameIdFilter({onUpdate}: {onUpdate: (value: {name: string}) => void}) {
 
 function CreatorFilter({onUpdate}: {onUpdate: (value: {creator?: string}) => void}) {
     const value = useSelector(getChytListFilterCreator);
-    const creators = useSelector(getChytListAvailableCreators);
+    const creators = useSelector(selectChytListAvailableCreators);
 
     const items = React.useMemo(() => {
         return creators.map((item) => {

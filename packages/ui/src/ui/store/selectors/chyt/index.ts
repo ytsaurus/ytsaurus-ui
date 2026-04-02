@@ -15,7 +15,7 @@ import {defaultColumns} from '../../../constants/chyt';
 
 export const selectChytListData = (state: RootState) => state.chyt.list.data;
 
-export const getChytListAvailableCreators = createSelector([selectChytListData], (data) => {
+export const selectChytListAvailableCreators = createSelector([selectChytListData], (data) => {
     const {items = []} = data;
     return uniq_(items.map((item) => item.creator!)).sort();
 });
