@@ -21,7 +21,7 @@ import {selectCluster} from '../../../store/selectors/global';
 import {
     getChytListTableItems,
     getChytListTableSortStateByName,
-    getChytListVisibleColumns,
+    selectChytListVisibleColumns,
 } from '../../../store/selectors/chyt';
 import {ChytInfo} from '../../../store/reducers/chyt/list';
 import {Page} from '../../../../shared/constants/settings';
@@ -37,7 +37,7 @@ import './ChytPageListTable.scss';
 const block = cn('chyt-page-list-table');
 
 function useChytListColumns(cluster: string, onSqlClick: (alias: string) => void) {
-    const checkedColumns = useSelector(getChytListVisibleColumns);
+    const checkedColumns = useSelector(selectChytListVisibleColumns);
 
     const columns: Array<Column<ChytInfo>> = React.useMemo(() => {
         const columnsByName = {
