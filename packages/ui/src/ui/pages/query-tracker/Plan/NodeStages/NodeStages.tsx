@@ -4,6 +4,10 @@ import DataTable, {Column} from '@gravity-ui/react-data-table';
 import {NodeState, NodeStages as Stages} from '../models/plan';
 import cn from 'bem-cn-lite';
 
+import {useSelector} from '../../../../store/redux-hooks';
+import {getQueryItem} from '../../../../store/selectors/query-tracker/query';
+import type {QueryItem} from '../../../../types/query-tracker/api';
+import {isQueryCompleted} from '../../utils/query';
 import {duration, isOperationFinished} from '../utils';
 
 import '../NodeStages.scss';
@@ -31,7 +35,8 @@ interface NodeStagesProps {
     finishedAt?: string;
 }
 export default function NodeStages({stages = {}, state, finishedAt}: NodeStagesProps) {
-    const data = prepareData(stages, state, finishedAt);
+    const query = useSelector(getQueryItem);
+    const data = prepareData(stages, state, finishedAt, query);
     return (
         <div className={block()}>
             <DataTable
@@ -62,7 +67,7 @@ function rowClassName(
     return block('row');
 }
 
-function prepareData(data: Stages, state?: NodeState, finishedAt?: string) {
+function prepareData(data: Stages, state?: NodeState, finishedAt?: string, query?: QueryItem) {
     const stages: StageRow[] = [];
     const length = Object.keys(data).length;
 
@@ -79,7 +84,13 @@ function prepareData(data: Stages, state?: NodeState, finishedAt?: string) {
         currentStage = nextStage;
         currentTime = nextTime;
     }
-    const finishTime = isOperationFinished(state) ? (finishedAt ?? currentTime) : undefined;
+
+    const queryCompleted = Boolean(query && isQueryCompleted(query));
+    const operationFinished = queryCompleted || isOperationFinished(state);
+    let finishTime;
+    if (operationFinished) {
+        finishTime = finishedAt ?? query?.finish_time ?? currentTime;
+    }
     stages.push({
         stage: currentStage,
         duration: duration(currentTime, finishTime),
