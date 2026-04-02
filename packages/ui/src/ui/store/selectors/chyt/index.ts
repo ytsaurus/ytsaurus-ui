@@ -99,7 +99,7 @@ export const selectChytListColumns = createSelector(
 
 export const selectChytListTableSortState = (state: RootState) => state.chyt.listFilters.sortState;
 
-export const getChytListTableSortStateByName = createSelector(
+export const selectChytListTableSortStateByName = createSelector(
     [selectChytListTableSortState],
     (sortState) => {
         return sortState.reduce(
