@@ -16,7 +16,7 @@ import {
     selectChytListAvailableHealths,
     selectChytListAvailableStates,
     getChytListColumns,
-    getChytListFilterAlias,
+    selectChytListFilterAlias,
     getChytListFilterCreator,
     getChytListFilterHealth,
     getChytListFilterState,
@@ -71,7 +71,7 @@ function ChytPageListToolbar() {
 }
 
 function NameIdFilter({onUpdate}: {onUpdate: (value: {name: string}) => void}) {
-    const value = useSelector(getChytListFilterAlias);
+    const value = useSelector(selectChytListFilterAlias);
 
     return (
         <TextInput
