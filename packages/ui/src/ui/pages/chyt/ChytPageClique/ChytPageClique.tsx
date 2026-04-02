@@ -21,7 +21,7 @@ import {useQueryWidgetSidePanel} from '../../../pages/query-tracker/QueryWidget/
 
 import {chytCliqueLoad, chytResetCurrentClique} from '../../../store/actions/chyt/clique';
 import {
-    getChytCliqueData,
+    selectChytCliqueData,
     getChytCliqueError,
     getChytCliqueInitialLoading,
     getChytCliqueStartError,
@@ -55,7 +55,7 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
         };
     }, [alias, dispatch]);
 
-    const {pool} = useSelector(getChytCliqueData) ?? {};
+    const {pool} = useSelector(selectChytCliqueData) ?? {};
     const initialLoading = useSelector(getChytCliqueInitialLoading);
 
     useUpdater(update);
@@ -103,7 +103,7 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
 function ChytCliqueErrors() {
     const error = useSelector(getChytCliqueError);
     const startError = useSelector(getChytCliqueStartError);
-    const {health_reason} = useSelector(getChytCliqueData) ?? {};
+    const {health_reason} = useSelector(selectChytCliqueData) ?? {};
 
     return (
         <React.Fragment>
@@ -130,7 +130,7 @@ function ChytCliqueErrors() {
 
 function ChytCliqueMetaTable() {
     const cluster = useSelector(selectCluster);
-    const data = useSelector(getChytCliqueData);
+    const data = useSelector(selectChytCliqueData);
 
     const items: Array<Array<MetaTableItem>> = React.useMemo(() => {
         const {
