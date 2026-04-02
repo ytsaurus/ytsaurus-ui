@@ -6,7 +6,7 @@ import {CHYT_LIST} from '../../../constants/chyt-page';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {selectCluster} from '../../../store/selectors/global';
 import {selectIsAdmin} from '../../../store/selectors/global/is-developer';
-import {getChytListVisibleColumns} from '../../../store/selectors/chyt';
+import {selectChytListVisibleColumns} from '../../../store/selectors/chyt';
 
 import {StrawberryApi, chytApiAction} from '../../../utils/strawberryControllerApi';
 import {SettingsThunkAction, setSettingByKey} from '../settings';
@@ -20,7 +20,7 @@ export function chytLoadList(): ChytListThunkAction<void> {
         const state = getState();
         const cluster = selectCluster(state);
         const isAdmin = selectIsAdmin(state);
-        const columns = getChytListVisibleColumns(state);
+        const columns = selectChytListVisibleColumns(state);
 
         dispatch({type: CHYT_LIST.REQUEST});
 

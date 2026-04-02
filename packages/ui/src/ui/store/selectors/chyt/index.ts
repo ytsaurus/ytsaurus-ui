@@ -62,7 +62,7 @@ export const selectChytListColumnsFromSettings = (state: RootState) => {
     return getSettingsData(state)['global::chyt::list_columns'] ?? defaultColumns;
 };
 
-export const getChytListVisibleColumns = createSelector(
+export const selectChytListVisibleColumns = createSelector(
     [selectChytListColumnsFromSettings],
     (columns): Array<ChytSelectableColumn> => {
         const userColumns = new Set(columns);
@@ -79,7 +79,7 @@ export const getChytListVisibleColumns = createSelector(
 );
 
 export const getChytListColumns = createSelector(
-    [getChytListVisibleColumns],
+    [selectChytListVisibleColumns],
     (columns): Array<ChytColumnItem> => {
         const userColumns = new Set(columns);
         const res = columns.map((column) => {
