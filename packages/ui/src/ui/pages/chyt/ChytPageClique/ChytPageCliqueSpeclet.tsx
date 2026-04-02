@@ -29,7 +29,7 @@ import {ChytCliqueOptionsState} from '../../../store/reducers/chyt/options';
 import {
     selectChytSpecletData,
     selectChytSpecletDataAlias,
-    getChytSpecletError,
+    selectChytSpecletError,
     selectChytSpecletLoaded,
 } from '../../../store/selectors/chyt/speclet';
 import {YTError} from '../../../../@types/types';
@@ -90,7 +90,7 @@ export function ChytPageCliqueSpeclet() {
 
 function ChytSpeclet({alias, unipikaSettings}: {alias?: string; unipikaSettings: UnipikaSettings}) {
     const data = useSelector(selectChytSpecletData);
-    const error = useSelector(getChytSpecletError);
+    const error = useSelector(selectChytSpecletError);
     const dataAlias = useSelector(selectChytSpecletDataAlias);
     const loaded = useSelector(selectChytSpecletLoaded);
 
