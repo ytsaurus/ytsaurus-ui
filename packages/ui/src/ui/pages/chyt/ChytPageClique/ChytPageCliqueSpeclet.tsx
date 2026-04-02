@@ -18,7 +18,7 @@ import {useUpdater} from '../../../hooks/use-updater';
 
 import {selectChytCurrentAlias} from '../../../store/selectors/chyt';
 import {
-    getChytOptionsData,
+    selectChytOptionsData,
     getChytOptionsDataAlias,
     getChytOptionsError,
 } from '../../../store/selectors/chyt/options';
@@ -53,7 +53,7 @@ function useSpecletData({
         }
     }, [alias, skipLoad, showTooltipError, dispatch]);
 
-    const specletData = useSelector(getChytOptionsData);
+    const specletData = useSelector(selectChytOptionsData);
     const dataAlias = useSelector(getChytOptionsDataAlias);
     const error = useSelector(getChytOptionsError);
     const unipikaSettings = useSelector(getEditJsonYsonSettings);
