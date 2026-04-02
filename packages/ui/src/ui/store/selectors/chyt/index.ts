@@ -97,10 +97,10 @@ export const selectChytListColumns = createSelector(
     },
 );
 
-export const getChytListTableSortState = (state: RootState) => state.chyt.listFilters.sortState;
+export const selectChytListTableSortState = (state: RootState) => state.chyt.listFilters.sortState;
 
 export const getChytListTableSortStateByName = createSelector(
-    [getChytListTableSortState],
+    [selectChytListTableSortState],
     (sortState) => {
         return sortState.reduce(
             (acc, item, index) => {
@@ -137,7 +137,7 @@ const getChytFilterPredicate = createSelector(
 );
 
 export const getChytListTableItems = createSelector(
-    [selectChytListData, getChytListTableSortState, getChytFilterPredicate],
+    [selectChytListData, selectChytListTableSortState, getChytFilterPredicate],
     (data, sortState, predicate) => {
         const {items = []} = data;
 
