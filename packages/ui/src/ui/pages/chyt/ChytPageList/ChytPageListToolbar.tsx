@@ -18,7 +18,7 @@ import {
     getChytListColumns,
     selectChytListFilterAlias,
     getChytListFilterCreator,
-    getChytListFilterHealth,
+    selectChytListFilterHealth,
     getChytListFilterState,
 } from '../../../store/selectors/chyt';
 import {ChytListFilters} from '../../../store/reducers/chyt/list-filters';
@@ -111,7 +111,7 @@ function CreatorFilter({onUpdate}: {onUpdate: (value: {creator?: string}) => voi
 }
 
 function HealthFilter({onUpdate}: {onUpdate: (value: {health?: string}) => void}) {
-    const value = useSelector(getChytListFilterHealth);
+    const value = useSelector(selectChytListFilterHealth);
     const choices = useSelector(selectChytListAvailableHealths);
 
     const items = React.useMemo(() => {
