@@ -3,12 +3,12 @@ import {useSelector} from '../../../store/redux-hooks';
 
 import UIFactory from '../../../UIFactory';
 import {selectCluster} from '../../../store/selectors/global';
-import {getChytCurrentAlias} from '../../../store/selectors/chyt';
+import {selectChytCurrentAlias} from '../../../store/selectors/chyt';
 import {NoContent} from '../../../components/NoContent';
 
 export function ChytPageCliqueMonitoring() {
     const cluster = useSelector(selectCluster);
-    const alias = useSelector(getChytCurrentAlias);
+    const alias = useSelector(selectChytCurrentAlias);
 
     const {component: MonitoginComponnet} = UIFactory.getMonitoringComponentForChyt() ?? {};
     if (!MonitoginComponnet) {
