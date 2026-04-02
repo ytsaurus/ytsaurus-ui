@@ -32,7 +32,7 @@ export const selectChytListAvailableStates = createSelector([selectChytListData]
 
 export const selectChytCurrentAlias = (state: RootState) => state.chyt.clique.currentClique;
 
-export const getChytListFilterAlias = (state: RootState) => state.chyt.listFilters.name;
+export const selectChytListFilterAlias = (state: RootState) => state.chyt.listFilters.name;
 export const getChytListFilterHealth = (state: RootState) => state.chyt.listFilters.health;
 export const getChytListFilterCreator = (state: RootState) => state.chyt.listFilters.creator;
 export const getChytListFilterState = (state: RootState) => state.chyt.listFilters.state;
@@ -119,7 +119,7 @@ export const getChytListTableSortStateByName = createSelector(
 
 const getChytFilterPredicate = createSelector(
     [
-        getChytListFilterAlias,
+        selectChytListFilterAlias,
         getChytListFilterCreator,
         getChytListFilterState,
         getChytListFilterHealth,
