@@ -25,7 +25,7 @@ export const selectChytListAvailableHealths = createSelector([selectChytListData
     return compact_(uniq_(items.map((item) => item.health)).sort());
 });
 
-export const getChytListAvailableStates = createSelector([selectChytListData], (data) => {
+export const selectChytListAvailableStates = createSelector([selectChytListData], (data) => {
     const {items = []} = data;
     return uniq_(items.map((item) => item.state!)).sort();
 });
