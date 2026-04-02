@@ -23,7 +23,7 @@ import {chytCliqueLoad, chytResetCurrentClique} from '../../../store/actions/chy
 import {
     selectChytCliqueData,
     selectChytCliqueError,
-    getChytCliqueInitialLoading,
+    selectChytCliqueInitialLoading,
     getChytCliqueStartError,
 } from '../../../store/selectors/chyt/clique';
 import {selectCluster} from '../../../store/selectors/global';
@@ -56,7 +56,7 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
     }, [alias, dispatch]);
 
     const {pool} = useSelector(selectChytCliqueData) ?? {};
-    const initialLoading = useSelector(getChytCliqueInitialLoading);
+    const initialLoading = useSelector(selectChytCliqueInitialLoading);
 
     useUpdater(update);
 
