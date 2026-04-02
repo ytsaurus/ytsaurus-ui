@@ -24,7 +24,7 @@ import {
     selectChytCliqueData,
     selectChytCliqueError,
     selectChytCliqueInitialLoading,
-    getChytCliqueStartError,
+    selectChytCliqueStartError,
 } from '../../../store/selectors/chyt/clique';
 import {selectCluster} from '../../../store/selectors/global';
 import {Page} from '../../../../shared/constants/settings';
@@ -102,7 +102,7 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
 
 function ChytCliqueErrors() {
     const error = useSelector(selectChytCliqueError);
-    const startError = useSelector(getChytCliqueStartError);
+    const startError = useSelector(selectChytCliqueStartError);
     const {health_reason} = useSelector(selectChytCliqueData) ?? {};
 
     return (
