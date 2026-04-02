@@ -42,7 +42,7 @@ class QueryTrackerPage extends BasePage {
     }
 
     async selectFirstQueryInHistory() {
-        await this.page.locator('.query-history-item').nth(0).click();
+        await this.page.locator('.yt-queries-history-list__item').nth(0).click();
     }
 
     async verifyQueryResultTable() {

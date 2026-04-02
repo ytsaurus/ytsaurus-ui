@@ -20,7 +20,7 @@ import {
     AuthorColumns,
     MyColumns,
     NameColumns,
-} from '../../../pages/query-tracker/QueriesList/QueriesHistoryList/columns';
+} from '../../../pages/query-tracker/QueriesList/QueriesHistoryList/Columns/columns';
 import {selectIsSupportedTutorials} from './queryAco';
 
 export const selectQueriesListState = (state: RootState) => state.queryTracker.list;
@@ -31,10 +31,26 @@ export const selectQueriesList = (state: RootState) => selectQueriesListState(st
 
 export const selectHasQueriesListMore = (state: RootState) => selectQueriesListState(state).hasMore;
 
+export const selectQueriesListSearchMode = (state: RootState) =>
+    selectQueriesListState(state).searchMode;
+
 export const selectQueriesFilters = (state: RootState) =>
     selectQueriesListState(state).filter || {};
+export const selectPaginationIsVisible = (state: RootState) => {
+    const hasMore = selectHasQueriesListMore(state);
+    const items = selectQueriesList(state);
+
+    return hasMore && items.length > 0;
+};
 export const selectQueriesListMode = (state: RootState) => selectQueriesListState(state).listMode;
 export const selectQueriesListCursor = (state: RootState) => selectQueriesListState(state).cursor;
+
+export const selectIsFullTextSearchMode = createSelector(
+    [selectQueriesFilters, selectQueriesListSearchMode],
+    (filter, mode) => {
+        return Boolean(filter.filter) && mode === 'text';
+    },
+);
 
 export const selectTutorialQueriesList = createSelector(
     [selectQueriesList, selectIsSupportedTutorials],
@@ -121,6 +137,7 @@ export const selectQueriesListCursorParams = (state: RootState) => {
 
 export function selectQueriesListFilterParams(state: RootState): QueriesListParams {
     const listMode = selectQueriesListMode(state);
+    const searchMode = selectQueriesListSearchMode(state);
     const filterParams = {
         ...selectQueriesFilters(state),
         ...(QueriesListFilterPresets[listMode] || {}),
@@ -142,6 +159,7 @@ export function selectQueriesListFilterParams(state: RootState): QueriesListPara
         from_time: from,
         to_time: to,
         state: queryState,
+        use_full_text_search: searchMode === 'text',
         user,
     };
 

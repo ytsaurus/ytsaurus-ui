@@ -1,6 +1,7 @@
 import React from 'react';
 import block from 'bem-cn-lite';
-import {Icon, Tooltip} from '@gravity-ui/uikit';
+import {Flex, Icon, Text} from '@gravity-ui/uikit';
+import {Tooltip} from '@ytsaurus/components';
 import {type QueriesListFilter, QueriesListMode} from '../../../../types/query-tracker/queryList';
 import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 import FunnelIcon from '@gravity-ui/icons/svgs/funnel.svg';
@@ -24,6 +25,8 @@ import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/
 import {FilterDropdown} from './FilterDropdown';
 import {QueryFastUserFilter} from './QueryFastUserFilter';
 import i18n from './i18n';
+import {QuerySearchMode} from './QuerySearchMode';
+import {selectFullTextSearchSupported} from '../../../../store/selectors/query-tracker/queryAco';
 
 const b = block('queries-history-filter');
 
@@ -37,6 +40,7 @@ export function QueriesHistoryListFilter({className}: QueriesHistoryListFilterPr
     const filterViewMode = useSelector(selectQueriesListMode);
     const {allowedColumns} = useSelector(selectQueryListColumns);
     const customFilterChanged = useSelector(selectHasCustomHistoryFilters);
+    const hasFullTextSearch = useSelector(selectFullTextSearchSupported);
 
     const handleColumnChange = (selectedColumns: {
         items: Array<{checked: boolean; name: string}>;
@@ -67,7 +71,7 @@ export function QueriesHistoryListFilter({className}: QueriesHistoryListFilterPr
 
     return (
         <div className={b(null, className)}>
-            <div className={b('row')}>
+            <Flex className={b('row')} alignItems="center" gap={2}>
                 <QueryFastUserFilter />
                 <QueryEngineFilter />
 
@@ -100,14 +104,16 @@ export function QueriesHistoryListFilter({className}: QueriesHistoryListFilterPr
                         <ColumnSelector items={allowedColumns} onChange={handleColumnChange} />
                     }
                 />
-            </div>
+            </Flex>
 
-            <div className={b('row')}>
+            <Flex className={b('row')} alignItems="center" gap={2}>
                 <TextInputWithDebounce
                     placeholder={i18n('context_search-placeholder')}
                     value={filter?.filter}
                     onUpdate={handleFilterChange}
+                    hasClear
                 />
+                {hasFullTextSearch && <QuerySearchMode className={b('search-mode')} />}
                 <Tooltip
                     content={
                         <>
@@ -119,9 +125,11 @@ export function QueriesHistoryListFilter({className}: QueriesHistoryListFilterPr
                         </>
                     }
                 >
-                    <Icon data={CircleQuestionIcon} size={16} />
+                    <Text color="secondary" className={b('icon')}>
+                        <Icon data={CircleQuestionIcon} size={16} />
+                    </Text>
                 </Tooltip>
-            </div>
+            </Flex>
         </div>
     );
 }

@@ -148,6 +148,7 @@ export function loadQueriesList({
     params,
     cursor,
     limit,
+    cancellation,
 }: QueriesListRequestParams): ThunkAction<Promise<QueriesListResponse>, RootState, any, any> {
     return async (_dispatch, getState) => {
         const state = getState();
@@ -161,6 +162,7 @@ export function loadQueriesList({
                 output_format: 'json',
             },
             setup: getQTApiSetup(),
+            cancellation,
         });
     };
 }

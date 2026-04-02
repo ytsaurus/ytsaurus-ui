@@ -315,6 +315,7 @@ type QueriesListRequestParams = {
     filter?: string;
     state?: string;
     tutorial_filter?: boolean;
+    use_full_text_search?: boolean;
 };
 
 export type ListQueriesParams = ApiMethodParams<QueriesListRequestParams> & {
@@ -574,7 +575,13 @@ export type GetQueryTrackerInfoResponse = {
     cluster_name: string;
     access_control_objects: string[];
     query_tracker_stage: string;
-    supported_features: {access_control: boolean; multiple_aco?: boolean; tutorials?: boolean};
+    supported_features: {
+        access_control: boolean;
+        multiple_aco?: boolean;
+        tutorials?: boolean;
+        new_search?: boolean;
+        new_search_on_proxies?: boolean;
+    };
     clusters?: Array<string>;
     engines_info?: {
         yql?: YqlEnginesInfo;

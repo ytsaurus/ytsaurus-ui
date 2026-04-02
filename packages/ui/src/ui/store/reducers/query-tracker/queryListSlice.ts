@@ -18,6 +18,7 @@ export type QueriesListState = {
     filter: QueriesListFilter;
     cursor: QueriesListCursor;
     listMode: QueriesListMode;
+    searchMode: 'name' | 'text';
 };
 
 export const initialState: QueriesListState = {
@@ -30,6 +31,7 @@ export const initialState: QueriesListState = {
         direction: QueriesHistoryCursorDirection.PAST,
     },
     listMode: QueriesListMode.History,
+    searchMode: 'name',
 };
 
 const queryListSlice = createSlice({
@@ -51,10 +53,13 @@ const queryListSlice = createSlice({
         updateListState: (state, action: PayloadAction<Partial<QueriesListState>>) => {
             return {...state, ...action.payload};
         },
+        setSearchMode: (state, action: PayloadAction<QueriesListState['searchMode']>) => {
+            state.searchMode = action.payload;
+        },
     },
 });
 
-export const {setLoading, setCursor, updateListState, setListMode, setFilter} =
+export const {setLoading, setCursor, updateListState, setListMode, setFilter, setSearchMode} =
     queryListSlice.actions;
 
 export default queryListSlice.reducer;

@@ -1,4 +1,5 @@
 import {type ThunkAction} from 'redux-thunk';
+import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {type RootState} from '../../reducers';
 import {loadQueriesList} from './api';
@@ -27,6 +28,9 @@ type AsyncAction = ThunkAction<any, RootState, any, any>;
 
 const QUERIES_LIST_LIMIT = 20;
 
+const queriesListCancelHelper = new CancelHelper();
+let queriesListRequestSeq = 0;
+
 export const resetQueryList =
     (silent = false): AsyncAction =>
     (dispatch) => {
@@ -43,6 +47,7 @@ export const resetQueryList =
 
 export function requestQueriesList(silent = false): AsyncAction {
     return async (dispatch, getState) => {
+        const requestId = ++queriesListRequestSeq;
         const state = getState();
         const list = selectQueriesList(state);
 
@@ -57,6 +62,7 @@ export function requestQueriesList(silent = false): AsyncAction {
                         params: selectQueriesListFilterParams(state),
                         cursor: selectQueriesListCursorParams(state),
                         limit: QUERIES_LIST_LIMIT,
+                        cancellation: queriesListCancelHelper.removeAllAndSave,
                     }),
                 ),
                 {
@@ -65,6 +71,10 @@ export function requestQueriesList(silent = false): AsyncAction {
                     errorTitle: 'Failed to load query-tracker list',
                 },
             );
+
+            if (requestId !== queriesListRequestSeq) {
+                return;
+            }
 
             const itemsMap = new Map<string, QueryItem>();
             list.forEach((item) => itemsMap.set(item.id, item));
@@ -82,8 +92,12 @@ export function requestQueriesList(silent = false): AsyncAction {
                     timestamp: result.timestamp,
                 }),
             );
+        } catch (error) {
+            if (!isCancelled(error)) {
+                throw error;
+            }
         } finally {
-            if (!silent) {
+            if (!silent && requestId === queriesListRequestSeq) {
                 dispatch(setLoading(false));
             }
         }
@@ -126,7 +140,8 @@ export function applyFilter(patch: QueriesListFilter): AsyncAction {
         const filter = selectQueriesFilters(getState());
 
         dispatch(setFilter({...filter, ...patch}));
-        dispatch(resetQueryList(true));
+        const silent = !('filter' in patch);
+        dispatch(resetQueryList(silent));
     };
 }
 
