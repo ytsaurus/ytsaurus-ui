@@ -13,19 +13,19 @@ import {getSettingsData} from '../../../store/selectors/settings/settings-base';
 
 import {defaultColumns} from '../../../constants/chyt';
 
-export const getChytListData = (state: RootState) => state.chyt.list.data;
+export const selectChytListData = (state: RootState) => state.chyt.list.data;
 
-export const getChytListAvailableCreators = createSelector([getChytListData], (data) => {
+export const getChytListAvailableCreators = createSelector([selectChytListData], (data) => {
     const {items = []} = data;
     return uniq_(items.map((item) => item.creator!)).sort();
 });
 
-export const getChytListAvailableHealths = createSelector([getChytListData], (data) => {
+export const getChytListAvailableHealths = createSelector([selectChytListData], (data) => {
     const {items = []} = data;
     return compact_(uniq_(items.map((item) => item.health)).sort());
 });
 
-export const getChytListAvailableStates = createSelector([getChytListData], (data) => {
+export const getChytListAvailableStates = createSelector([selectChytListData], (data) => {
     const {items = []} = data;
     return uniq_(items.map((item) => item.state!)).sort();
 });
@@ -137,7 +137,7 @@ const getChytFilterPredicate = createSelector(
 );
 
 export const getChytListTableItems = createSelector(
-    [getChytListData, getChytListTableSortState, getChytFilterPredicate],
+    [selectChytListData, getChytListTableSortState, getChytFilterPredicate],
     (data, sortState, predicate) => {
         const {items = []} = data;
 
