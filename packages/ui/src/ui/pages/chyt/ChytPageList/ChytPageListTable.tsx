@@ -20,7 +20,7 @@ import {chytToggleSortState} from '../../../store/actions/chyt/list-fitlers';
 import {selectCluster} from '../../../store/selectors/global';
 import {
     getChytListTableItems,
-    getChytListTableSortStateByName,
+    selectChytListTableSortStateByName,
     selectChytListVisibleColumns,
 } from '../../../store/selectors/chyt';
 import {ChytInfo} from '../../../store/reducers/chyt/list';
@@ -272,7 +272,7 @@ function ChytListHeader({
     withUndefined?: boolean;
 }) {
     const dispatch = useDispatch();
-    const sortState = useSelector(getChytListTableSortStateByName);
+    const sortState = useSelector(selectChytListTableSortStateByName);
     return (
         <ColumnHeader<typeof column>
             allowUnordered
