@@ -117,7 +117,7 @@ export const selectChytListTableSortStateByName = createSelector(
     },
 );
 
-const getChytFilterPredicate = createSelector(
+const selectChytFilterPredicate = createSelector(
     [
         selectChytListFilterAlias,
         selectChytListFilterCreator,
@@ -137,7 +137,7 @@ const getChytFilterPredicate = createSelector(
 );
 
 export const getChytListTableItems = createSelector(
-    [selectChytListData, selectChytListTableSortState, getChytFilterPredicate],
+    [selectChytListData, selectChytListTableSortState, selectChytFilterPredicate],
     (data, sortState, predicate) => {
         const {items = []} = data;
 
