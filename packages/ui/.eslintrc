@@ -40,7 +40,8 @@
                 }
             ]
         }],
-        "object-shorthand": ["error", "always"]
+        "object-shorthand": ["error", "always"],
+        "no-useless-rename": "error"
     },
     "env": {
         "jest": true
