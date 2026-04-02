@@ -13,7 +13,7 @@ import ColumnSelectorModal from '../../../components/ColumnSelectorModal/ColumnS
 import {chytUpdateListFilters} from '../../../store/actions/chyt/list-fitlers';
 import {
     selectChytListAvailableCreators,
-    getChytListAvailableHealths,
+    selectChytListAvailableHealths,
     getChytListAvailableStates,
     getChytListColumns,
     getChytListFilterAlias,
@@ -112,7 +112,7 @@ function CreatorFilter({onUpdate}: {onUpdate: (value: {creator?: string}) => voi
 
 function HealthFilter({onUpdate}: {onUpdate: (value: {health?: string}) => void}) {
     const value = useSelector(getChytListFilterHealth);
-    const choices = useSelector(getChytListAvailableHealths);
+    const choices = useSelector(selectChytListAvailableHealths);
 
     const items = React.useMemo(() => {
         return choices.map((item) => {
