@@ -4,7 +4,7 @@ import {CHYT_LIST_FILTERS} from '../../../constants/chyt-page';
 import {RootState} from '../../../store/reducers';
 import {ChytInfo} from '../../../store/reducers/chyt/list';
 import {ChytListFilters, ChytListFiltersAction} from '../../reducers/chyt/list-filters';
-import {getChytListTableSortState} from '../../../store/selectors/chyt';
+import {selectChytListTableSortState} from '../../../store/selectors/chyt';
 import {OrderType, updateSortStateArray} from '../../../utils/sort-helpers';
 
 type ChytFiltersThunkAction<T = unknown> = ThunkAction<
@@ -24,7 +24,7 @@ export function chytToggleSortState(
     options: {multisort?: boolean},
 ): ChytFiltersThunkAction {
     return (dispatch, getState) => {
-        const prevSortState = getChytListTableSortState(getState());
+        const prevSortState = selectChytListTableSortState(getState());
         const sortState = updateSortStateArray(prevSortState, {column, order}, options);
 
         dispatch({type: CHYT_LIST_FILTERS, data: {sortState}});
