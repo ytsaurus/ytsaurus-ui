@@ -20,7 +20,7 @@ import {selectChytCurrentAlias} from '../../../store/selectors/chyt';
 import {
     selectChytOptionsData,
     selectChytOptionsDataAlias,
-    getChytOptionsError,
+    selectChytOptionsError,
 } from '../../../store/selectors/chyt/options';
 import {getEditJsonYsonSettings} from '../../../store/selectors/thor/unipika';
 import {chytLoadCliqueSpeclet} from '../../../store/actions/chyt/speclet';
@@ -55,7 +55,7 @@ function useSpecletData({
 
     const specletData = useSelector(selectChytOptionsData);
     const dataAlias = useSelector(selectChytOptionsDataAlias);
-    const error = useSelector(getChytOptionsError);
+    const error = useSelector(selectChytOptionsError);
     const unipikaSettings = useSelector(getEditJsonYsonSettings);
 
     return {alias, specletData, dataAlias, error, unipikaSettings};
