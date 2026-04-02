@@ -58,12 +58,12 @@ export type ChytSelectableColumn = keyof typeof CHYT_LIST_SELECTABLE_COLUMNS;
 
 type ChytColumnItem = {checked: boolean; column: ChytListColumns};
 
-export const getChytListColumnsFromSettings = (state: RootState) => {
+export const selectChytListColumnsFromSettings = (state: RootState) => {
     return getSettingsData(state)['global::chyt::list_columns'] ?? defaultColumns;
 };
 
 export const getChytListVisibleColumns = createSelector(
-    [getChytListColumnsFromSettings],
+    [selectChytListColumnsFromSettings],
     (columns): Array<ChytSelectableColumn> => {
         const userColumns = new Set(columns);
         return compact_(
