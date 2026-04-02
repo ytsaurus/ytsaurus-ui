@@ -24,12 +24,24 @@ export type Props = {
     className?: string;
     value: string;
     language?: string;
-    onChange: (value: string) => void;
+    onChange?: (value: string) => void;
     onClick?: (e: monaco.editor.IEditorMouseEvent) => void;
     monacoConfig?: MonacoEditorConfig;
     editorRef?: MutableRefObject<monaco.editor.IStandaloneCodeEditor | undefined>;
     readOnly?: boolean;
 };
+
+function renderLineNumberGutterMarkup(
+    monacoConfig: MonacoEditorConfig | undefined,
+    lineNumber: number,
+): string {
+    const customLabelCallback = monacoConfig?.lineNumbers;
+    const label =
+        typeof customLabelCallback === 'function'
+            ? customLabelCallback(lineNumber)
+            : String(lineNumber);
+    return `<div class="${block('line-number')}" data-number="${label}">${label}</div>`;
+}
 
 const THEMES: Record<string, string> = {
     dark: YT_DARK_MONACO_THEME,
@@ -66,7 +78,7 @@ const MonacoEditor: FC<Props> = ({
 
     const onContentChanged = useCallback(() => {
         if (silentRef.current) return;
-        onChange(modelRef.current.getValue());
+        onChange?.(modelRef.current.getValue());
     }, [onChange]);
 
     // first init
@@ -89,9 +101,8 @@ const MonacoEditor: FC<Props> = ({
         });
 
         editorInstance.updateOptions({
-            lineNumbers: (number) => {
-                return `<div class="${block('line-number')}" data-number="${number}">${number}</div>`;
-            },
+            lineNumbers: (lineNumber: number) =>
+                renderLineNumberGutterMarkup(monacoConfig, lineNumber),
         });
 
         editorInstance.onMouseDown((e) => {
@@ -139,7 +150,12 @@ const MonacoEditor: FC<Props> = ({
         }
 
         if (!isEqual_(prevProps.current.monacoConfig, monacoConfig)) {
-            options = {...monacoConfig};
+            options = {
+                ...options,
+                ...monacoConfig,
+                lineNumbers: (lineNumber: number) =>
+                    renderLineNumberGutterMarkup(monacoConfig, lineNumber),
+            };
         }
 
         if (theme !== prevProps.current.theme) {

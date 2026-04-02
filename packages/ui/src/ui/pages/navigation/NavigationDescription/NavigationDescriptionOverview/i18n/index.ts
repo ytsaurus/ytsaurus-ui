@@ -1,6 +1,5 @@
 import {addI18Keysets} from '../../../../../i18n';
 
-import en from './en.json';
-import ru from './ru.json';
+import dicts from './dicts';
 
-export default addI18Keysets('yt:navigation:description-overview', {en, ru});
+export default addI18Keysets('yt:navigation:description-overview', dicts);

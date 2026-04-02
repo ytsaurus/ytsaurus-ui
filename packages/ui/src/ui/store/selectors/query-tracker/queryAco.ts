@@ -45,6 +45,11 @@ export const selectIsMultipleAco = (state: RootState) =>
 export const selectIsSupportedTutorials = (state: RootState) =>
     Boolean(selectAcoState(state).data.supported_features?.tutorials);
 
+export const selectFullTextSearchSupported = (state: RootState) => {
+    const {new_search, new_search_on_proxies} = selectAcoState(state).data.supported_features || {};
+    return Boolean(new_search) && Boolean(new_search_on_proxies);
+};
+
 export const selectAvailableAco = (state: RootState) =>
     selectAcoState(state).data.access_control_objects;
 

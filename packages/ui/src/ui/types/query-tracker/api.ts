@@ -1,3 +1,4 @@
+import {type SaveCancellationCb} from '../../rum/rum-wrap-api';
 import {type Plan, type Progress} from '../../pages/query-tracker/Plan/models/plan';
 import {type TypeArray} from '@ytsaurus/components';
 import {type QueriesHistoryCursorDirection} from '../../store/reducers/query-tracker/query-tracker-contants';
@@ -104,6 +105,7 @@ export type CHYTMultiProgress = {
 };
 
 export interface QueryItem extends DraftQuery {
+    queryPreviewLineNumberStart?: number;
     id: QueryItemId;
     start_time: string;
     finish_time: string;
@@ -134,12 +136,14 @@ export type QueriesListParams = {
     to_time?: number;
     state?: QueryStatus;
     tutorial_filter?: boolean;
+    use_full_text_search?: boolean;
 };
 
 export type QueriesListRequestParams = {
     params: QueriesListParams;
     cursor?: QueriesListCursorParams;
     limit?: number;
+    cancellation?: SaveCancellationCb;
 };
 
 export type QueriesListResponse = {

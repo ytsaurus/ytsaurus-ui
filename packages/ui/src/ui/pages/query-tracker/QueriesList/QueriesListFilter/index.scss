@@ -3,12 +3,16 @@
     justify-content: center;
     flex-direction: column;
 
+    &__search-mode {
+        flex-shrink: 0;
+    }
 
-    &__row {
+    &__icon {
         display: flex;
         align-items: center;
-        gap: 0 8px;
+    }
 
+    &__row {
         &:not(:last-child) {
             margin-bottom: 8px;
         }

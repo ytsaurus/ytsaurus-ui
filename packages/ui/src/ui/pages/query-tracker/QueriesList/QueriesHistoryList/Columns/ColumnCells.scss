@@ -1,17 +1,6 @@
-.query-history-item {
-    cursor: pointer;
-    position: relative;
-
-    &:hover {
-        background-color: var(--hover-background);
-    }
-
-    &_selected {
-        background-color: var(--dark-background);
-    }
-
-    &__action,
-    &__name {
+.yt-queries-column-cells {
+    &__name,
+    &__action {
         display: inline-flex;
         align-items: center;
         width: 100%;
@@ -40,20 +29,6 @@
         overflow: hidden;
         z-index: 1;
         margin: -14px 0;
-    }
-
-    &:hover &__name-edit {
-        visibility: visible;
-        overflow: visible;
-    }
-
-    &_header {
-        padding: 8px 0;
-
-        &:hover {
-            background: transparent;
-            cursor: auto;
-        }
     }
 
     &__separator {

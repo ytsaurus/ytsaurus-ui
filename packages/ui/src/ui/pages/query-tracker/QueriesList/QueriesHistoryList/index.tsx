@@ -1,44 +1,25 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-import DataTable, {type Settings} from '@gravity-ui/react-data-table';
-import {type QueryItem} from '../../../../types/query-tracker/api';
-import {
-    selectHasQueriesListMore,
-    selectIsQueriesListLoading,
-    selectQueryListByDate,
-    selectQueryListColumns,
-} from '../../../../store/selectors/query-tracker/queriesList';
-import {DataTableYT} from '../../../../components/DataTableYT';
-import {useQueryNavigation} from '../../hooks/Query';
 import {useUpdater} from '../../../../hooks/use-updater';
 import block from 'bem-cn-lite';
 
 import './QueriesHistoryList.scss';
-import './QueryHistoryItem.scss';
 import {
     loadNextQueriesList,
     requestQueriesList,
 } from '../../../../store/actions/query-tracker/queriesList';
+import {QUERY_POLLING_INTERVAL} from '../../../../constants/queries';
+import {HistoryList} from './HistoryList';
+import {
+    selectIsFullTextSearchMode,
+    selectIsQueriesListLoading,
+    selectPaginationIsVisible,
+} from '../../../../store/selectors/query-tracker/queriesList';
+import {FullTextSearch} from './FullTextSearch';
 import {InfiniteScrollLoader} from '../../../../components/InfiniteScrollLoader';
 import {QueriesHistoryCursorDirection} from '../../../../store/reducers/query-tracker/query-tracker-contants';
-import {QUERY_POLLING_INTERVAL} from '../../../../constants/queries';
 
 const b = block('queries-history-list');
-const itemBlock = block('query-history-item');
-
-type HeaderTableItem = {header: string};
-type TableItem = QueryItem | HeaderTableItem;
-
-const isHeaderTableItem = (item: TableItem): item is HeaderTableItem => {
-    return (item as HeaderTableItem).header !== undefined;
-};
-
-const tableSettings: Settings = {
-    displayIndices: false,
-    sortable: false,
-    stickyHead: DataTable.MOVING,
-    syncHeadOnResize: true,
-};
 
 function QueriesHistoryListUpdater() {
     const dispatch = useDispatch();
@@ -54,72 +35,25 @@ function QueriesHistoryListUpdater() {
 
 export function QueriesHistoryList() {
     const dispatch = useDispatch();
-    const itemsByDate = useSelector(selectQueryListByDate);
     const isLoading = useSelector(selectIsQueriesListLoading);
-    const {columns} = useSelector(selectQueryListColumns);
-    const hasMore = useSelector(selectHasQueriesListMore);
-    const [selectedId, goToQuery] = useQueryNavigation();
-
-    const showPagination = hasMore && itemsByDate.length > 0;
+    const isFullTextSearchMode = useSelector(selectIsFullTextSearchMode);
+    const showPagination = useSelector(selectPaginationIsVisible);
 
     const handleLoadMore = () => {
         dispatch(loadNextQueriesList(QueriesHistoryCursorDirection.PAST));
     };
 
-    const setClassName = useCallback(
-        (item: TableItem) => {
-            const isHeader = isHeaderTableItem(item);
-            return itemBlock({
-                header: isHeader ? Boolean(item.header) : undefined,
-                selected: isHeader ? undefined : item.id === selectedId,
-            });
-        },
-        [selectedId],
-    );
-
     return (
         <div className={b()}>
             <QueriesHistoryListUpdater />
-            <div className={b('list-wrapper')}>
-                <DataTableYT
-                    className={b('list')}
+            {isFullTextSearchMode ? <FullTextSearch /> : <HistoryList />}
+            {showPagination && (
+                <InfiniteScrollLoader
+                    className={b('pagination')}
                     loading={isLoading}
-                    columns={columns}
-                    data={itemsByDate}
-                    useThemeYT
-                    rowKey={(row) => {
-                        if (isHeaderTableItem(row)) {
-                            return row.header;
-                        }
-
-                        return row.id;
-                    }}
-                    onRowClick={(item) => {
-                        if (!isHeaderTableItem(item)) {
-                            goToQuery(item);
-                        }
-                    }}
-                    disableRightGap
-                    settings={tableSettings}
-                    rowClassName={setClassName}
-                    getColSpansOfRow={({row}) => {
-                        if (isHeaderTableItem(row)) {
-                            return {
-                                Name: columns.length,
-                            };
-                        }
-
-                        return undefined;
-                    }}
+                    onLoadMore={handleLoadMore}
                 />
-                {showPagination && (
-                    <InfiniteScrollLoader
-                        className={b('pagination')}
-                        loading={isLoading}
-                        onLoadMore={handleLoadMore}
-                    />
-                )}
-            </div>
+            )}
         </div>
     );
 }
