@@ -22,7 +22,7 @@ import {useQueryWidgetSidePanel} from '../../../pages/query-tracker/QueryWidget/
 import {chytCliqueLoad, chytResetCurrentClique} from '../../../store/actions/chyt/clique';
 import {
     selectChytCliqueData,
-    getChytCliqueError,
+    selectChytCliqueError,
     getChytCliqueInitialLoading,
     getChytCliqueStartError,
 } from '../../../store/selectors/chyt/clique';
@@ -101,7 +101,7 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
 }
 
 function ChytCliqueErrors() {
-    const error = useSelector(getChytCliqueError);
+    const error = useSelector(selectChytCliqueError);
     const startError = useSelector(getChytCliqueStartError);
     const {health_reason} = useSelector(selectChytCliqueData) ?? {};
 
