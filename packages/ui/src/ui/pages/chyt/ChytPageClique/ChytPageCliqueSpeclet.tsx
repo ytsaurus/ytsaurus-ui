@@ -30,7 +30,7 @@ import {
     getChytSpecletData,
     getChytSpecletDataAlias,
     getChytSpecletError,
-    getChytSpecletLoaded,
+    selectChytSpecletLoaded,
 } from '../../../store/selectors/chyt/speclet';
 import {YTError} from '../../../../@types/types';
 import {WaitForDefaultPoolTree} from '../../../hooks/global-pool-trees';
@@ -92,7 +92,7 @@ function ChytSpeclet({alias, unipikaSettings}: {alias?: string; unipikaSettings:
     const data = useSelector(getChytSpecletData);
     const error = useSelector(getChytSpecletError);
     const dataAlias = useSelector(getChytSpecletDataAlias);
-    const loaded = useSelector(getChytSpecletLoaded);
+    const loaded = useSelector(selectChytSpecletLoaded);
 
     return dataAlias !== alias ? null : (
         <div className={block()}>
