@@ -34,7 +34,7 @@ export const selectChytCurrentAlias = (state: RootState) => state.chyt.clique.cu
 
 export const selectChytListFilterAlias = (state: RootState) => state.chyt.listFilters.name;
 export const selectChytListFilterHealth = (state: RootState) => state.chyt.listFilters.health;
-export const getChytListFilterCreator = (state: RootState) => state.chyt.listFilters.creator;
+export const selectChytListFilterCreator = (state: RootState) => state.chyt.listFilters.creator;
 export const getChytListFilterState = (state: RootState) => state.chyt.listFilters.state;
 
 type ChytListColumns = Exclude<StrawberryListAttributes, 'yt_operation_id'>;
@@ -120,7 +120,7 @@ export const getChytListTableSortStateByName = createSelector(
 const getChytFilterPredicate = createSelector(
     [
         selectChytListFilterAlias,
-        getChytListFilterCreator,
+        selectChytListFilterCreator,
         getChytListFilterState,
         selectChytListFilterHealth,
     ],

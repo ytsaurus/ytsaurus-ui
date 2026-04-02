@@ -17,7 +17,7 @@ import {
     selectChytListAvailableStates,
     getChytListColumns,
     selectChytListFilterAlias,
-    getChytListFilterCreator,
+    selectChytListFilterCreator,
     selectChytListFilterHealth,
     getChytListFilterState,
 } from '../../../store/selectors/chyt';
@@ -85,7 +85,7 @@ function NameIdFilter({onUpdate}: {onUpdate: (value: {name: string}) => void}) {
 }
 
 function CreatorFilter({onUpdate}: {onUpdate: (value: {creator?: string}) => void}) {
-    const value = useSelector(getChytListFilterCreator);
+    const value = useSelector(selectChytListFilterCreator);
     const creators = useSelector(selectChytListAvailableCreators);
 
     const items = React.useMemo(() => {
