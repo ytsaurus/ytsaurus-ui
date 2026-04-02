@@ -16,7 +16,7 @@ import {Page} from '../../constants';
 import {RowWithName} from '../../containers/AppNavigation/TopRowContent/SectionName';
 import {WaitForDefaultPoolTree} from '../../hooks/global-pool-trees';
 import {getFavouriteChyt, isActiveCliqueInFavourites} from '../../store/selectors/favourites';
-import {getChytCurrentAlias} from '../../store/selectors/chyt';
+import {selectChytCurrentAlias} from '../../store/selectors/chyt';
 import {selectCluster} from '../../store/selectors/global';
 import {selectIsAdmin} from '../../store/selectors/global/is-developer';
 import {chytApiAction} from '../../utils/strawberryControllerApi';
@@ -47,7 +47,7 @@ function ChytFavourites() {
     const isActiveInFavourites = useSelector(isActiveCliqueInFavourites);
     const favourites = useSelector(getFavouriteChyt);
     const dispatch = useDispatch();
-    const currentClique = useSelector(getChytCurrentAlias);
+    const currentClique = useSelector(selectChytCurrentAlias);
 
     const handleFavouriteItemClick = React.useCallback(
         (item: FavouritesItem) => {
@@ -75,7 +75,7 @@ function ChytFavourites() {
 function ChytBreadcrumbs() {
     const history = useHistory();
     const cluster = useSelector(selectCluster);
-    const alias = useSelector(getChytCurrentAlias);
+    const alias = useSelector(selectChytCurrentAlias);
 
     const handleBreadcrumbClick = React.useCallback(
         (key: Key) => {

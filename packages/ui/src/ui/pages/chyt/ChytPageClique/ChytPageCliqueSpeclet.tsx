@@ -16,7 +16,7 @@ import {
 
 import {useUpdater} from '../../../hooks/use-updater';
 
-import {getChytCurrentAlias} from '../../../store/selectors/chyt';
+import {selectChytCurrentAlias} from '../../../store/selectors/chyt';
 import {
     getChytOptionsData,
     getChytOptionsDataAlias,
@@ -45,7 +45,7 @@ function useSpecletData({
     skipLoad,
 }: {showTooltipError?: boolean; skipLoad?: boolean} = {}) {
     const dispatch = useDispatch();
-    const alias = useSelector(getChytCurrentAlias);
+    const alias = useSelector(selectChytCurrentAlias);
 
     React.useMemo(() => {
         if (alias && !skipLoad) {

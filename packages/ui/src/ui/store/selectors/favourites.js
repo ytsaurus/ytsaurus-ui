@@ -18,7 +18,7 @@ import {getPath} from '../../store/selectors/navigation';
 import {getPool, getTree} from '../../store/selectors/scheduling/scheduling';
 import {getTabletsActiveBundle} from './tablet_cell_bundles';
 import {getChaosActiveBundle} from './chaos_cell_bundles';
-import {getChytCurrentAlias} from './chyt';
+import {selectChytCurrentAlias} from './chyt';
 
 //************* Selectors for Accounts *****************
 
@@ -46,7 +46,7 @@ export const getLastVisitedChyt = createSelector([makeGetSetting, getChytNS], pr
 export const getPopularChyt = createSelector([getLastVisitedChyt], preparePopulars);
 
 export const isActiveCliqueInFavourites = createSelector(
-    [getChytCurrentAlias, getFavouriteChyt],
+    [selectChytCurrentAlias, getFavouriteChyt],
     prepareIsInFavourites,
 );
 
