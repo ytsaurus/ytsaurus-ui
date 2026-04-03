@@ -1,6 +1,5 @@
 import {addI18Keysets} from '../../../../../i18n';
 
-import en from './en.json';
-import ru from './ru.json';
+import dicts from './dicts';
 
-export default addI18Keysets('yt:flow-components:flow-meta', {en, ru});
+export default addI18Keysets('yt:flow-components:flow-meta', dicts);

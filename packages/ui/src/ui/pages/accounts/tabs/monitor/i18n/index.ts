@@ -1,6 +1,5 @@
 import {addI18Keysets} from '../../../../../i18n/index';
 
-import en from './en.json';
-import ru from './ru.json';
+import dicts from './dicts';
 
-export default addI18Keysets('yt:accounts:prometheus', {en, ru});
+export default addI18Keysets('yt:accounts:prometheus', dicts);
