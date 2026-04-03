@@ -102,7 +102,7 @@ export function pipeAxiosResponseTyped<ResponseDataT>(
 }
 
 /**
- * pipeAxiosResponse is a helper function to forward stream-content to browser
+ * pipeAxiosResponse is a helper function to forward stream-content to the browser
  *
  * `ResponseDataT` just allows to declare response type, it affects nothing,
  * but allows link highlight connection between modules from src/ui and src/server
