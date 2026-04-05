@@ -45,6 +45,10 @@
         row-gap: 4px * 4;
     }
 
+    &_align-items_baseline {
+        align-items: baseline;
+    }
+
     &__key,
     &__value {
         @include mixins.ellipsis();

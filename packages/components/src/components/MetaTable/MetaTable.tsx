@@ -26,6 +26,7 @@ export interface MetaTableProps {
     subTitles?: Array<string>;
     qa?: string;
     rowGap?: 4;
+    alignItems?: 'baseline';
 }
 
 export interface MetaTableItem {
@@ -115,7 +116,7 @@ export class MetaTable extends Component<MetaTableProps> {
     }
 
     renderGroup(group: Array<MetaTableItem>, index: number, groupTitles?: Array<string>) {
-        const {rowGap} = this.props;
+        const {rowGap, alignItems} = this.props;
         let title: React.ReactNode = null;
         if (groupTitles?.length) {
             title = groupTitles[index] ?? <>&nbsp;</>;
@@ -123,7 +124,16 @@ export class MetaTable extends Component<MetaTableProps> {
         const visibleItems = filter_(group, (item) => item.visible !== false);
 
         return !visibleItems?.length ? null : (
-            <div className={block('group', itemBlock({'row-gap': String(rowGap)}))} key={index}>
+            <div
+                className={block(
+                    'group',
+                    itemBlock({
+                        'row-gap': rowGap ? String(rowGap) : undefined,
+                        'align-items': alignItems,
+                    }),
+                )}
+                key={index}
+            >
                 {title && <h2 className={block('sub-title')}>{title}</h2>}
                 {this.renderItems(visibleItems)}
             </div>
