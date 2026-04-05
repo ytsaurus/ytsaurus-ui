@@ -4,7 +4,7 @@
   "packages": {
     "packages/javascript-wrapper": {"release-type": "node"},
     "packages/interface-helpers": {"release-type": "node"},
-    "packages/yt-components": {"release-type": "node"},
+    "packages/components": {"release-type": "node"},
     "packages/ui": {"draft": true, "release-type": "node"},
     "packages/ui-helm-chart": {"draft": true, "release-type": "helm"},
     "packages/custom-ytsaurus-ui.example": {"release-type": "simple"}

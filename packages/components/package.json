@@ -5,7 +5,7 @@
   "description": "YTsaurus UI component library: navigation table, data display (Yson, Schema, DataTable), navigation API and shared config",
   "repository": {
     "type": "github",
-    "url": "https://github.com/ytsaurus/ytsaurus-ui/tree/main/packages/yt-components"
+    "url": "https://github.com/ytsaurus/ytsaurus-ui/tree/main/packages/components"
   },
   "files": [
     "build/esm"
