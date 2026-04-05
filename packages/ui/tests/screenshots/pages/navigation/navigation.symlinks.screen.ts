@@ -9,7 +9,7 @@ test('Navigation - symlinks', async ({page}) => {
         await page.goto(makeClusterUrl(`navigation?navmode=content&path=${E2E_DIR}/tmp/ссылка`));
         await page.waitForLoadState('networkidle');
         await navigationPage(page).replaceBreadcrumbsTestDir();
-        const link = page.getByTestId('qa:navitation:target-path');
+        const link = page.getByTestId('qa:navitation:target-path').first();
         await link.hover();
         await page.waitForSelector(
             `.meta-table-item__value_key_target_path:text("${E2E_DIR}/tmp/папка")`,

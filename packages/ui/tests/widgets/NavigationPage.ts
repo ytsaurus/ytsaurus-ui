@@ -64,7 +64,7 @@ export class NavigationPage extends BasePage {
     }
 
     async gotToPath(path: string) {
-        await this.page.getByTestId('edit-text-button').click();
+        await this.page.getByTestId('edit-text-button').first().click();
         await this.page.fill('.path-editor input', path);
         await this.page.keyboard.press('Enter');
     }

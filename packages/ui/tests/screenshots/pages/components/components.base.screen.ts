@@ -47,7 +47,7 @@ test('Components - Nodes - Flavor', async ({page}) => {
 
     await replaceInnerHtmlForDateTime(page, [
         '.components-nodes__table-item_type_last-seen .elements-ellipsis',
-        '.components-nodes__table-item_type_register-time .elements-ellipsis'
+        '.components-nodes__table-item_type_register-time .elements-ellipsis',
     ]);
 
     await expect(page).toHaveScreenshot();
@@ -67,12 +67,14 @@ test('Components - Node - Memory popup', async ({page}) => {
     await components(page).setCheckboxValue('global::components::memoryPopupShowAll', true);
     await components(page).settingsToggleVisibility({waitUntilClosed: true});
 
-    await replaceInnerHtmlForDateTime(page, ['.meta-table-item__value_key_last_seen', '.meta-table-item__value_key_register_time']);
-    await components(page).replaceBreadcrumbsTestDir();
+    await replaceInnerHtmlForDateTime(page, [
+        '.meta-table-item__value_key_last_seen',
+        '.meta-table-item__value_key_register_time',
+    ]);
+    await components(page).replaceBreadrumbsLastItem();
 
     await components(page).openMemoryPopup();
 
-    await components(page).replaceBreadrumbsLastItem();
     await replaceInnerHtml(page, {
         '.g-progress__text': 'some / progress',
         '.g-progress__item': '',

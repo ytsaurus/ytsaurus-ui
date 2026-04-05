@@ -204,7 +204,7 @@ export class BasePage extends HasPage {
 
     async replaceBreadrumbsLastItem() {
         await replaceInnerHtml(this.page, {
-            '.g-breadcrumbs .g-breadcrumbs__item:last-child a': 'localhost:XXXXX',
+            '.g-breadcrumbs > .g-breadcrumbs__item_current a': 'localhost:XXXXX',
         });
     }
 
