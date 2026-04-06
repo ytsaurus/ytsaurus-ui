@@ -21,6 +21,7 @@ const ephemeralState = {
     errorData: {},
 
     tablets: [],
+    replicationLagTimes: [],
 
     expandedHosts: [],
 };
@@ -36,11 +37,11 @@ const reducer = (state = initialState, action) => {
             return {...state, loading: true};
 
         case GET_TABLETS.SUCCESS: {
-            const {tablets} = action.data;
-
+            const {tablets, replication_lag_times} = action.data;
             return {
                 ...state,
                 tablets,
+                replicationLagTimes: replication_lag_times || [],
                 loaded: true,
                 loading: false,
                 error: false,

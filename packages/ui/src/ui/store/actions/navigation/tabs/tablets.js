@@ -26,17 +26,19 @@ export function loadTablets() {
 
         return ytApiV3Id
             .get(YTApiId.navigationTablets, {
-                parameters: prepareRequest('/@tablets', {
+                parameters: prepareRequest('/@', {
                     path,
                     transaction,
+                    attributes: ['tablets', 'replication_lag_times'],
                     output_format: TYPED_OUTPUT_FORMAT,
                 }),
                 cancellation: requests.saveCancelToken,
             })
-            .then((tablets) => {
+            .then((data) => {
+                const {tablets, replication_lag_times} = data;
                 dispatch({
                     type: GET_TABLETS.SUCCESS,
-                    data: {tablets},
+                    data: {tablets, replication_lag_times},
                 });
             })
             .catch((error) => {

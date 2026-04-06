@@ -65,6 +65,7 @@
             &_type_store-preload {
                 width: 250px;
             }
+
             &_type_name-tablet-id,
             &_type_name-cell-id {
                 width: 260px;
@@ -77,7 +78,9 @@
             &_type_chunks,
             &_type_partitions,
             &_type_stores,
-            &_type_overlapping-stores {
+            &_type_overlapping-stores,
+            &_type_replication-lag-time,
+            &_type_replication-mode {
                 width: 140px;
             }
 
@@ -95,6 +98,7 @@
             &_type_replication-errors,
             &_type_cell-leader-address {
                 width: 120px;
+
                 .yt-host {
                     overflow: visible;
                 }
@@ -150,6 +154,7 @@
     &__name {
         display: flex;
         white-space: nowrap;
+
         &_level_1 {
             padding-left: 40px;
             cursor: default;

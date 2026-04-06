@@ -27,6 +27,7 @@ import {
     getHistogram,
     getNavigationTabletsLoadingStatus,
     getTablets,
+    hasReplicationData,
 } from '../../../../store/selectors/navigation/tabs/tablets';
 
 import {NAVIGATION_TABLETS_TABLE_ID} from '../../../../constants/navigation/tabs/tablets';
@@ -85,6 +86,8 @@ class Tablets extends Component {
         statistics: PropTypes.object,
 
         pivot_key: PropTypes.arrayOf(Tablets.typedValueProps),
+        replication_lag_time: PropTypes.number,
+        replication_mode: PropTypes.string,
     });
 
     static propTypes = {
@@ -269,6 +272,15 @@ class Tablets extends Component {
         );
     }
 
+    static renderReplicationMode(item, columnName) {
+        const replicationMode = item[columnName];
+        return typeof replicationMode !== 'undefined' ? (
+            <Label theme="info" text={replicationMode} />
+        ) : (
+            hammer.format.NO_VALUE
+        );
+    }
+
     static renderActions(item) {
         if (item.index === 'aggregation' || Tablets.isTopLevel(item)) {
             return null;
@@ -307,7 +319,7 @@ class Tablets extends Component {
     }
 
     get defaultItems() {
-        const {type} = this.props;
+        const {type, hasReplication} = this.props;
 
         const newDefaultItemsForReplicatedTable = [
             'index',
@@ -330,6 +342,16 @@ class Tablets extends Component {
             'pivot_key',
             'actions',
         ];
+
+        if (hasReplication) {
+            newDefaultItemsForReplicatedTable.splice(
+                7,
+                0,
+                'replication_lag_time',
+                'replication_mode',
+            );
+            newDefaultItemsForTable.splice(6, 0, 'replication_lag_time', 'replication_mode');
+        }
 
         const newDefaultItems =
             type === 'replicated_table'
@@ -448,6 +470,8 @@ class Tablets extends Component {
                 dynamic_delete: asNumber,
                 unmerged_row_read_rate: asNumber,
                 merged_row_read_rate: asNumber,
+                replication_lag_time: asNumber,
+                replication_mode: this.renderReplicationMode,
             },
             computeKey(item) {
                 return item.name || item.tablet_id;
@@ -635,6 +659,7 @@ const mapStateToProps = (state) => {
     const histogram = getHistogram(state);
     const activeHistogram = getActiveHistogram(state);
     const type = getType(state);
+    const hasReplication = hasReplicationData(state);
 
     return {
         loading,
@@ -650,6 +675,7 @@ const mapStateToProps = (state) => {
         activeHistogram,
         histogram,
         type,
+        hasReplication,
         collapsibleSize: UI_COLLAPSIBLE_SIZE,
     };
 };
