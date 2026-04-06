@@ -11,6 +11,27 @@ import {calculateLoadingStatus} from '../../../../utils/utils';
 export const getTabletsMode = (state) => state.navigation.tabs.tablets.tabletsMode;
 
 const getRawTablets = (state) => state.navigation.tabs.tablets.tablets;
+const getRawReplicationLagTimes = (state) => state.navigation.tabs.tablets.replicationLagTimes;
+
+const getPreparedReplicationLagTimes = createSelector([getRawReplicationLagTimes], (items) => {
+    const res = prepareDataForColumns(items);
+    return res;
+});
+
+const getReplicationLagTimesMap = createSelector(
+    [getPreparedReplicationLagTimes],
+    (replicationLagTimes) => {
+        const map = new Map();
+        replicationLagTimes.forEach((item) => {
+            map.set(item.tablet_id, {
+                replication_lag_time: item.replication_lag_time,
+                replication_mode: item.replication_mode,
+            });
+        });
+        return map;
+    },
+);
+
 /** @returns { OldSortState } */
 export const getTabletsSortState = (state) => state.tables[NAVIGATION_TABLETS_TABLE_ID];
 const getTabletsFilter = (state) => state.navigation.tabs.tablets.tabletsFilter;
@@ -50,7 +71,33 @@ export const getPreparedDataForColumns = createSelector([getFilteredTablets], (i
     return res;
 });
 
-export const getTablets = createSelector(getPreparedDataForColumns, (filteredTablets) => {
+const getMergedPreparedTablets = createSelector(
+    [getPreparedDataForColumns, getReplicationLagTimesMap],
+    (tablets, replicationLagMap) => {
+        return tablets.map((tablet) => {
+            const replicationData = replicationLagMap.get(tablet.tablet_id);
+            if (replicationData) {
+                return {
+                    ...tablet,
+                    replication_lag_time: replicationData.replication_lag_time,
+                    replication_mode: replicationData.replication_mode,
+                };
+            }
+            return tablet;
+        });
+    },
+);
+
+export const hasReplicationData = createSelector([getMergedPreparedTablets], (tablets) => {
+    if (!tablets || tablets.length === 0) {
+        return false;
+    }
+    return tablets.some(
+        (tablet) => tablet && (tablet.replication_lag_time || Boolean(tablet.replication_mode)),
+    );
+});
+
+export const getTablets = createSelector(getMergedPreparedTablets, (filteredTablets) => {
     const aggregation = prepareAggregation(filteredTablets);
     return [aggregation, ...filteredTablets];
 });
