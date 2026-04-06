@@ -31,7 +31,7 @@ import {RouteInfo} from '../Job';
 
 import {ClickableText} from '../../../components/ClickableText/ClickableText';
 import ChartLink from '../../../components/ChartLink/ChartLink';
-import {getJob} from '../../../store/selectors/job/detail';
+import {selectJob} from '../../../store/selectors/job/detail';
 import {ClipboardButton, MetaTable} from '@ytsaurus/components';
 import {selectCluster, selectClusterUiConfig} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
@@ -48,7 +48,7 @@ export default function JobGeneral() {
     const cluster = useSelector(selectCluster);
     const match = useRouteMatch<RouteInfo>();
     const settings = useSelector(getJobGeneralYsonSettings);
-    const job = useSelector(getJob);
+    const job = useSelector(selectJob);
     const {loaded} = useSelector((state: RootState) => state.job.general);
 
     const {url: traceUrl, title: traceTitle} = useJobProfilingUrl({

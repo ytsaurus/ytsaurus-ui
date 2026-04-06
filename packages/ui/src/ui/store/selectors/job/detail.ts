@@ -19,22 +19,22 @@ const prepareStatisticsIO = (obj: PipesIO, type: string, index?: number): Statis
     };
 };
 
-export const getJob = (state: RootState) => state.job.general.job;
-const getJobSpecification = (state: RootState) => state.job.specification.specification;
+export const selectJob = (state: RootState) => state.job.general.job;
+const selectJobSpecification = (state: RootState) => state.job.specification.specification;
 
-const getPipesIO = createSelector(getJob, (job) => {
+const selectPipesIO = createSelector(selectJob, (job) => {
     return ypath.getValue(job, '/statistics/user_job/pipes') || {};
 });
 
-export const getTotalTimeIO = createSelector(getPipesIO, ({input, output}: JobPipes) => {
+export const selectTotalTimeIO = createSelector(selectPipesIO, ({input, output}: JobPipes) => {
     return {
         read: input?.['idle_time'].sum,
         write: sumBy_(values_(output), (statistics) => statistics['busy_time'].sum),
     };
 });
 
-export const getJobStatisticsIO = createSelector(
-    getPipesIO,
+export const selectJobStatisticsIO = createSelector(
+    selectPipesIO,
     ({input, output: {total, ...output}}: JobPipes) => {
         const res = {
             input: [prepareStatisticsIO(input, 'input', 0)],
@@ -51,53 +51,53 @@ export const getJobStatisticsIO = createSelector(
     },
 );
 
-const getUserCpuTimeSum = createSelector(getJob, (job): number =>
+const selectUserCpuTimeSum = createSelector(selectJob, (job): number =>
     ypath.getNumberDeprecated(job, '/statistics/user_job/cpu/user/sum'),
 );
-const getWaitCpuTimeSum = createSelector(getJob, (job): number =>
+const selectWaitCpuTimeSum = createSelector(selectJob, (job): number =>
     ypath.getNumberDeprecated(job, '/statistics/user_job/cpu/wait/sum'),
 );
 
-const getGpuUtilizationSum = createSelector(getJob, (job): number =>
+const selectGpuUtilizationSum = createSelector(selectJob, (job): number =>
     ypath.getNumberDeprecated(job, '/statistics/user_job/gpu/cumulative_utilization_gpu/sum'),
 );
-const getGpuPowerSum = createSelector(getJob, (job): number =>
+const selectGpuPowerSum = createSelector(selectJob, (job): number =>
     ypath.getNumberDeprecated(job, '/statistics/user_job/gpu/cumulative_power/sum'),
 );
-const getGpuMemorySum = createSelector(getJob, (job): number =>
+const selectGpuMemorySum = createSelector(selectJob, (job): number =>
     ypath.getNumberDeprecated(job, '/statistics/user_job/gpu/cumulative_memory/sum'),
 );
 
-const getTimeExec = createSelector(getJob, (job): number =>
+const selectTimeExec = createSelector(selectJob, (job): number =>
     ypath.getNumberDeprecated(job, '/statistics/time/exec/sum'),
 );
 
-export const getAverageUserCpuTime = createSelector(
-    [getUserCpuTimeSum, getTimeExec],
+export const selectAverageUserCpuTime = createSelector(
+    [selectUserCpuTimeSum, selectTimeExec],
     (userCpuTimeSum, timeExec) => userCpuTimeSum / timeExec,
 );
-export const getAverageWaitCpuTime = createSelector(
-    [getWaitCpuTimeSum, getTimeExec],
+export const selectAverageWaitCpuTime = createSelector(
+    [selectWaitCpuTimeSum, selectTimeExec],
     (waitCpuTimeSum, timeExec) => waitCpuTimeSum / timeExec,
 );
 
-export const getGpuDevices = createSelector(getJob, (job) =>
+export const selectGpuDevices = createSelector(selectJob, (job) =>
     ypath.getNumberDeprecated(job, '/exec_attributes/gpu_devices/length'),
 );
-export const getAverageGpuUtilization = createSelector(
-    [getGpuUtilizationSum, getTimeExec],
+export const selectAverageGpuUtilization = createSelector(
+    [selectGpuUtilizationSum, selectTimeExec],
     (gpuUtilizationSum, timeExec) => gpuUtilizationSum / timeExec,
 );
-export const getAverageGpuPower = createSelector(
-    [getGpuPowerSum, getTimeExec],
+export const selectAverageGpuPower = createSelector(
+    [selectGpuPowerSum, selectTimeExec],
     (gpuPowerSum, timeExec) => gpuPowerSum / timeExec,
 );
-export const getAverageGpuMemory = createSelector(
-    [getGpuMemorySum, getTimeExec],
+export const selectAverageGpuMemory = createSelector(
+    [selectGpuMemorySum, selectTimeExec],
     (gpuMemorySum, timeExec) => gpuMemorySum / timeExec,
 );
 
-export const getJobPivotKeysData = createSelector([getJobSpecification], (specification) => {
+export const selectJobPivotKeysData = createSelector([selectJobSpecification], (specification) => {
     const inputTableSpecs = ypath.getValue(specification, '/input_table_specs');
 
     return flatten_(
@@ -125,7 +125,7 @@ export const getJobPivotKeysData = createSelector([getJobSpecification], (specif
     );
 });
 
-export const getJobActions = createSelector(getJob, (job) => {
+export const selectJobActions = createSelector(selectJob, (job) => {
     const actions: JobAction[] = [];
     const state = job?.state;
 

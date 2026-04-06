@@ -6,7 +6,7 @@ import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHand
 import ElementsTableRaw from '../../../../components/ElementsTable/ElementsTable';
 
 import {abortAndReset, loadJobSpecification} from '../../../../store/actions/job/specification';
-import {getJobPivotKeysData} from '../../../../store/selectors/job/detail';
+import {selectJobPivotKeysData} from '../../../../store/selectors/job/detail';
 import {RootState} from '../../../../store/reducers';
 import unipika from '../../../../common/thor/unipika';
 
@@ -83,7 +83,7 @@ export default function PivotKeys() {
     const {loading, loaded, error, errorData} = useSelector(
         (state: RootState) => state.job.specification,
     );
-    const pivotKeysItems = useSelector(getJobPivotKeysData);
+    const pivotKeysItems = useSelector(selectJobPivotKeysData);
 
     useEffect(() => {
         if (job?.id) {

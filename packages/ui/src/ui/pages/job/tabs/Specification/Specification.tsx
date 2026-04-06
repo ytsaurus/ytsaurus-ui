@@ -19,7 +19,7 @@ import {
 import './Specification.scss';
 import {getJobSpecificationYsonSettings} from '../../../../store/selectors/thor/unipika';
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
-import {getJob} from '../../../../store/selectors/job/detail';
+import {selectJob} from '../../../../store/selectors/job/detail';
 
 interface SpecificationProps {
     className?: string;
@@ -98,7 +98,7 @@ export default function Specification({className, jobID}: SpecificationProps) {
     const {loading, loaded, error, errorData, specification} = useSelector(
         (state: RootState) => state.job.specification,
     );
-    const job = useSelector(getJob);
+    const job = useSelector(selectJob);
 
     useEffect(() => {
         dispatch(loadJobSpecification(jobID));
