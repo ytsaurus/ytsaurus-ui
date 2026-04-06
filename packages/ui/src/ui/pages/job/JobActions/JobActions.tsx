@@ -16,7 +16,7 @@ import Button from '../../../components/Button/Button';
 import Link from '../../../components/Link/Link';
 import Icon, {IconName} from '../../../components/Icon/Icon';
 
-import {getJob, getJobActions} from '../../../store/selectors/job/detail';
+import {selectJob, selectJobActions} from '../../../store/selectors/job/detail';
 import {loadJobData} from '../../../store/actions/job/general';
 import {promptAction} from '../../../store/actions/actions';
 import {selectCluster} from '../../../store/selectors/global';
@@ -216,7 +216,7 @@ function ActionBlock(action: Action) {
 }
 
 export default function JobActions({className}: {className?: string}) {
-    const job = useSelector(getJob);
+    const job = useSelector(selectJob);
     const {loaded} = useSelector((state: RootState) => state.job.general);
     const cluster = useSelector(selectCluster);
     const jobId = (job as PreparedJob).id;
@@ -250,7 +250,7 @@ export default function JobActions({className}: {className?: string}) {
         closeDumpContextModal();
     }, [jobId, dumpContextPath, cluster, closeDumpContextModal]);
 
-    const actions = useSelector(getJobActions);
+    const actions = useSelector(selectJobActions);
     const additionalActions = useMemo(
         () => getAdditionalActions(job, openJobShellModal, openDumpContextModal),
         [job, openJobShellModal, openDumpContextModal],

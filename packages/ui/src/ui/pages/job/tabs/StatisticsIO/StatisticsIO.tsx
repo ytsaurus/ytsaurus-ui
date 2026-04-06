@@ -12,14 +12,14 @@ import ElementsTableRaw from '../../../../components/ElementsTable/ElementsTable
 import hammer from '../../../../common/hammer';
 import {StatisticsIO as IStatisticsIO} from '../../../../types/operations/job';
 import {
-    getAverageGpuMemory,
-    getAverageGpuPower,
-    getAverageGpuUtilization,
-    getAverageUserCpuTime,
-    getAverageWaitCpuTime,
-    getGpuDevices,
-    getJobStatisticsIO,
-    getTotalTimeIO,
+    selectAverageGpuMemory,
+    selectAverageGpuPower,
+    selectAverageGpuUtilization,
+    selectAverageUserCpuTime,
+    selectAverageWaitCpuTime,
+    selectGpuDevices,
+    selectJobStatisticsIO,
+    selectTotalTimeIO,
 } from '../../../../store/selectors/job/detail';
 
 import './StatisticsIO.scss';
@@ -77,13 +77,13 @@ const getTableTemplates = () => {
 
 const selectItems = createSelector(
     [
-        getTotalTimeIO,
-        getAverageUserCpuTime,
-        getAverageWaitCpuTime,
-        getGpuDevices,
-        getAverageGpuUtilization,
-        getAverageGpuPower,
-        getAverageGpuMemory,
+        selectTotalTimeIO,
+        selectAverageUserCpuTime,
+        selectAverageWaitCpuTime,
+        selectGpuDevices,
+        selectAverageGpuUtilization,
+        selectAverageGpuPower,
+        selectAverageGpuMemory,
     ],
     (
         {read, write},
@@ -122,7 +122,7 @@ const selectItems = createSelector(
 );
 
 export default function StatisticsIO() {
-    const {input, output} = useSelector(getJobStatisticsIO);
+    const {input, output} = useSelector(selectJobStatisticsIO);
     const items = useSelector(selectItems);
 
     const columns = useMemo(getTableColumns, []);
