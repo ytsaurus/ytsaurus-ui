@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {Button} from '@gravity-ui/uikit';
 import Icon from '../../components/Icon/Icon';
+import i18n from './i18n';
 
 type Props = {
     content: string;
@@ -24,7 +25,7 @@ export const DownloadFileButton: FC<Props> = ({name, type, content}) => {
 
     return (
         <Button view="flat" onClick={handleClick}>
-            <Icon awesome="download" size={16} /> Download
+            <Icon awesome="download" size={16} /> {i18n('action_download')}
         </Button>
     );
 };
