@@ -17,6 +17,7 @@ import {selectCluster} from '../../store/selectors/global/cluster';
 import {RootState} from '../../store/reducers';
 import {NavigationState} from '../../store/reducers/navigation/navigation';
 import {setNavigationSidePanelMode} from '../../store/actions/navigation';
+import i18n from './i18n';
 
 import './OpenQueryButtons.scss';
 
@@ -105,10 +106,10 @@ export function OpenQueryButtons({className, autoOpen}: OpenQueryButtonProps) {
                         view="action"
                         className={b('btn')}
                         selected={panelMode === 'qt'}
-                        title="Open Queries widget"
+                        title={i18n('action_open-queries-widget')}
                         qa="qa:navigation:open-queries-widget"
                     >
-                        QT Kit
+                        {i18n('action_qt-kit')}
                     </Button>
                     <Button
                         className={b('btn')}
@@ -116,7 +117,7 @@ export function OpenQueryButtons({className, autoOpen}: OpenQueryButtonProps) {
                         view="action"
                         href={createNewQueryUrl(cluster, QueryEngine.YQL, {path})}
                         target="_blank"
-                        title="Open Queries page"
+                        title={i18n('action_open-queries-page')}
                     >
                         <Icon awesome="table" />
                     </Button>
