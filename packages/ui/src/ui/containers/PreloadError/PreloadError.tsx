@@ -9,6 +9,7 @@ import UIFactory from '../../UIFactory';
 import {ClickableText} from '../../components/ClickableText/ClickableText';
 import {PRELOAD_ERROR} from '../../constants';
 import {useClusterFromLocation} from '../../hooks/use-cluster';
+import i18n from './i18n';
 
 import './PreloadError.scss';
 
@@ -33,7 +34,7 @@ function PreloadError() {
                 {message}
                 <ClickableText className={b('details')} onClick={() => showErrorPopup(error)}>
                     {' '}
-                    Details
+                    {i18n('action_details')}
                 </ClickableText>
             </p>
 
@@ -49,25 +50,21 @@ function getErrorData({errorType, cluster}: {errorType?: string; cluster: string
     switch (errorType) {
         case PRELOAD_ERROR.CONNECTION: {
             return {
-                title: `${cluster.toUpperCase()} couldn’t be reached`,
-                message:
-                    'Failed to fetch version of the cluster. Usually it means UI cannot establish connection to the cluster’s proxy.',
+                title: `${cluster.toUpperCase()} ${i18n('title_connection-error')}`,
+                message: i18n('alert_connection-failed'),
             };
         }
         case PRELOAD_ERROR.AUTHENTICATION: {
             return {
-                title: 'Error',
-                message:
-                    'Could not fetch the XSRF token, therefore preventing further operations. Sometimes ' +
-                    'token fetching fails due to the network issues. If the  problem persists, please report it.',
+                title: i18n('title_error'),
+                message: i18n('alert_authentication-failed'),
             };
         }
         case PRELOAD_ERROR.GENERAL:
         default: {
             return {
-                title: 'Error',
-                message:
-                    'An error occurred while fetching the necessary information about the cluster.',
+                title: i18n('title_error'),
+                message: i18n('alert_general-error'),
             };
         }
     }
