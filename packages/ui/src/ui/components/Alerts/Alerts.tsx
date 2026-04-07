@@ -11,6 +11,7 @@ import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import {YTAlertBlock} from '../../components/Alert/Alert';
 import {UI_COLLAPSIBLE_SIZE} from '../../constants/global/index';
 import {YTError} from '../../types/index';
+import i18n from './i18n';
 
 const block = cn('yt-alerts');
 
@@ -29,7 +30,7 @@ export function Alerts({className, items, marginDirection = 'bottom'}: AlertsPro
         <ErrorBoundary>
             <div className={block(null, className)}>
                 <CollapsibleSection
-                    name="Alerts"
+                    name={i18n('title_alerts')}
                     size={UI_COLLAPSIBLE_SIZE}
                     marginDirection={marginDirection}
                 >
