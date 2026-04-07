@@ -8,6 +8,7 @@ import {YTAlertBlock} from '../../components/Alert/Alert';
 import {YTErrorBlock} from '../../components/Error/Error';
 import {RootState} from '../../store/reducers';
 import {ErrorInfo} from '../../store/reducers/modals/errors';
+import i18n from './i18n';
 
 interface MEProps {
     id: number | string;
@@ -28,15 +29,12 @@ export function ModalError({id, data, hide, children}: MEProps) {
 
     return (
         <Dialog open={true} onClose={close}>
-            <Dialog.Header caption={isAlert ? 'Alert' : 'Error'} />
+            <Dialog.Header caption={isAlert ? i18n('title_alert') : i18n('title_error')} />
             <Dialog.Divider />
             <Dialog.Body>
                 <ErrorComponent
                     type={isAlert ? 'alert' : 'error'}
-                    message={
-                        !hideOopsMsg &&
-                        'Oops! something went wrong. If the problem persists please report it via Bug Reporter.'
-                    }
+                    message={!hideOopsMsg && i18n('alert_something-went-wrong')}
                     error={error}
                     helpURL={helpURL}
                     disableLogger={disableLogger}
