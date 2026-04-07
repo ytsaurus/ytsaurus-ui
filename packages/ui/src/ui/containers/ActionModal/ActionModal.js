@@ -15,6 +15,7 @@ import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import {confirmAction, dismissAction} from '../../store/actions/actions';
 import {MODAL_STATES} from '../../constants/actions';
 import {Checkbox} from '@gravity-ui/uikit';
+import i18n from './i18n';
 
 const block = cn('elements-confirmation');
 
@@ -147,7 +148,7 @@ class ActionModal extends React.Component {
             return (
                 <SimpleModal
                     visible
-                    title="Failure"
+                    title={i18n('title_failure')}
                     onCancel={this.dismissAction}
                     onOutsideClick={this.dismissAction}
                 >
@@ -164,8 +165,8 @@ class ActionModal extends React.Component {
                 <Modal
                     isConfirmDisabled={() => isConfirmDisabled}
                     visible
-                    title="Confirmation"
-                    confirmText="Confirm"
+                    title={i18n('title_confirmation')}
+                    confirmText={i18n('button_confirm')}
                     onCancel={this.dismissAction}
                     onOutsideClick={this.dismissAction}
                     loading={status === MODAL_STATES.PENDING}
