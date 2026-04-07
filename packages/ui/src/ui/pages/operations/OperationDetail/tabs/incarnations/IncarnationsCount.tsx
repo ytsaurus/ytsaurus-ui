@@ -3,7 +3,7 @@ import {useSelector} from '../../../../../store/redux-hooks';
 
 import {CountsList} from '../../../../../components/CountsList/CountsList';
 
-import {getIncarnationsInfo} from '../../../../../store/selectors/operations/incarnations';
+import {selectIncarnationsInfo} from '../../../../../store/selectors/operations/incarnations';
 
 import i18n from './i18n';
 
@@ -15,7 +15,7 @@ export type IncarnationsCountProps = {
 };
 
 export function IncarnationsCount() {
-    const {count} = useSelector(getIncarnationsInfo);
+    const {count} = useSelector(selectIncarnationsInfo);
 
     return (
         <IncarnationsCountTemplate

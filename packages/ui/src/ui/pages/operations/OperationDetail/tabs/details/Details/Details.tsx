@@ -15,9 +15,9 @@ import {RootState} from '../../../../../../store/reducers';
 import {showEditPoolsWeightsModal} from '../../../../../../store/actions/operations';
 import {selectCluster} from '../../../../../../store/selectors/global';
 import {
-    getOperationAlertEvents,
-    getOperationDetailsLoadingStatus,
     selectIsOperationInGpuTree,
+    selectOperationAlertEvents,
+    selectOperationDetailsLoadingStatus,
 } from '../../../../../../store/selectors/operations/operation';
 
 import {useRumMeasureStop} from '../../../../../../rum/RumUiContext';
@@ -254,7 +254,7 @@ const mapStateToProps = (state: RootState) => {
         treeConfigs: state.operations.detail.treeConfigs,
         ...state.operations.detail.details,
         collapsibleSize: UI_COLLAPSIBLE_SIZE,
-        alertEvents: getOperationAlertEvents(state),
+        alertEvents: selectOperationAlertEvents(state),
         isVanillaGpuOperation: operation.type === 'vanilla' && isOperationInGpuTree,
         isOperationInGpuTree,
     };
@@ -269,7 +269,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 const DetailsConnected = connector(Details);
 
 export default function DetailsWithRum() {
-    const loadState = useSelector(getOperationDetailsLoadingStatus);
+    const loadState = useSelector(selectOperationDetailsLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.OPERATION_TAB_DETAILS,

@@ -6,7 +6,7 @@ import {Alert, Card, Disclosure, Flex, Loader} from '@gravity-ui/uikit';
 
 import type {YTError} from '../../../../../../@types/types';
 
-import {getIncarnationsInfo} from '../../../../../store/selectors/operations/incarnations';
+import {selectIncarnationsInfo} from '../../../../../store/selectors/operations/incarnations';
 import type {Incarnations as YTIncarnations} from '../../../../../store/selectors/operations/incarnations';
 
 import {YTErrorBlock} from '../../../../../components/Error/Error';
@@ -34,7 +34,7 @@ export type IncarnationProps = {
 };
 
 export default function Incarnations() {
-    const {incarnations, error, isLoading} = useSelector(getIncarnationsInfo);
+    const {incarnations, error, isLoading} = useSelector(selectIncarnationsInfo);
 
     return (
         <IncarnationsTemplate

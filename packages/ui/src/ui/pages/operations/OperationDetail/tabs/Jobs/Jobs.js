@@ -9,8 +9,8 @@ import OperationJobsToolbar from './OperationJobsToolbar/OperationJobsToolbar';
 
 import {useUpdater} from '../../../../../hooks/use-updater';
 import {
-    getOperationDetailsLoadingStatus,
-    getOperationJobsLoadingStatus,
+    selectOperationDetailsLoadingStatus,
+    selectOperationJobsLoadingStatus,
 } from '../../../../../store/selectors/operations/operation';
 import {useAppRumMeasureStart} from '../../../../../rum/rum-app-measures';
 import {RumMeasureTypes} from '../../../../../rum/rum-measure-types';
@@ -46,14 +46,14 @@ function Jobs({className}) {
 }
 
 export default function JobsWithRum(props) {
-    const loadState = useSelector(getOperationJobsLoadingStatus);
+    const loadState = useSelector(selectOperationJobsLoadingStatus);
     /**
      * Selection of this value involves additional rerenders of the component
      * but without it RUM-measures will be wrongly too big it.
      * OperationDetail cannot stop measure for RumMeasureTypes.OPERATION by self,
      * it must be done by nesting tab-content.
      */
-    const operationLoadState = useSelector(getOperationDetailsLoadingStatus);
+    const operationLoadState = useSelector(selectOperationDetailsLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.OPERATION_TAB_JOBS,

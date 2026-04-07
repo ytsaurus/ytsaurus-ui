@@ -1,15 +1,15 @@
 import React, {FC, useRef} from 'react';
 import {useSelector} from '../../../../../../store/redux-hooks';
 import {
-    getSelectedJob,
     selectActiveJob,
+    selectSelectedJob,
 } from '../../../../../../store/selectors/operations/jobs-timeline';
 import {Flex, Text} from '@gravity-ui/uikit';
 import Link from '../../../../../../components/Link/Link';
 import cn from 'bem-cn-lite';
 import {EventsTable} from './EventsTable';
 import {selectCluster} from '../../../../../../store/selectors/global';
-import {getOperationId} from '../../../../../../store/selectors/operations/operation';
+import {selectOperationId} from '../../../../../../store/selectors/operations/operation';
 import './EventsSidePanel.scss';
 import {MetaData} from '../EventsTimeline/MetaData';
 import {SidePanelEmpty} from './SidePanelEmpty';
@@ -19,9 +19,9 @@ const block = cn('yt-events-side-panel');
 export const EventsSidePanel: FC = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const id = useSelector(selectActiveJob);
-    const job = useSelector(getSelectedJob);
+    const job = useSelector(selectSelectedJob);
     const cluster = useSelector(selectCluster);
-    const operationId = useSelector(getOperationId);
+    const operationId = useSelector(selectOperationId);
 
     if (!id || !job) return <SidePanelEmpty />;
 

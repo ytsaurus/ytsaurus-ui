@@ -15,8 +15,8 @@ import HelpLink from '../../../../../components/HelpLink/HelpLink';
 import Yson from '../../../../../components/Yson/Yson';
 
 import {
-    getOperationDetailsLoadingStatus,
-    getOperationId,
+    selectOperationDetailsLoadingStatus,
+    selectOperationId,
 } from '../../../../../store/selectors/operations/operation';
 import {RumMeasureTypes} from '../../../../../rum/rum-measure-types';
 import {isFinalLoadingStatus} from '../../../../../utils/utils';
@@ -163,13 +163,13 @@ Specification.propTypes = {
 
 const mapStateToProps = (state) => ({
     operation: state.operations.detail.operation,
-    operationId: getOperationId(state),
+    operationId: selectOperationId(state),
 });
 
 const SpecificationConnected = connect(mapStateToProps)(Specification);
 
 export default function SpecificationWithRum() {
-    const loadState = useSelector(getOperationDetailsLoadingStatus);
+    const loadState = useSelector(selectOperationDetailsLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.OPERATION_TAB_SPECIFICATION,

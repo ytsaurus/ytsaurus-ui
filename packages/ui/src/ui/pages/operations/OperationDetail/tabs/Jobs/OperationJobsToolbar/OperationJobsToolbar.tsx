@@ -11,7 +11,7 @@ import JobsFilterBy from './JobsFilterBy';
 import JobsAttributesFilter from './JobsAttributesFilter';
 
 import {getShowCompetitiveJobs} from '../../../../../../pages/operations/selectors';
-import {getOperationTasksNames} from '../../../../../../store/selectors/operations/operation';
+import {selectOperationTasksNames} from '../../../../../../store/selectors/operations/operation';
 
 import {JobsOperationIncarnationsFilter} from './JobsOperationsIncarnationsFilter';
 import './OperationJobsToolbar.scss';
@@ -33,7 +33,7 @@ const tbComp = tbBlock('component');
 export default function OperationJobsToolbar() {
     const showCompetitiveJobs = useSelector(getShowCompetitiveJobs);
 
-    const taskNames = useSelector(getOperationTasksNames);
+    const taskNames = useSelector(selectOperationTasksNames);
     const allTaskNames = React.useMemo(() => {
         return [
             '',

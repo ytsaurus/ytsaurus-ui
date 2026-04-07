@@ -19,7 +19,7 @@ import {hasProgressTasks} from '../../../../../../utils/operations/tabs/details/
 import ClickableAttributesButton from '../../../../../../components/AttributesButton/ClickableAttributesButton';
 import ExpandIcon from '../../../../../../components/ExpandIcon/ExpandIcon';
 import {RootState} from '../../../../../../store/reducers';
-import {getOperationDetailTasksData} from '../../../../../../store/selectors/operations/statistics-v2';
+import {selectOperationDetailTasksData} from '../../../../../../store/selectors/operations/statistics-v2';
 
 const block = cn('jobs');
 
@@ -454,7 +454,7 @@ function TaskInfo(props: ItemTaskInfo) {
 }
 
 const connector = connect((state: RootState) => {
-    const taskData = getOperationDetailTasksData(state);
+    const taskData = selectOperationDetailTasksData(state);
     return {jobs: taskData, operation: state.operations.detail.operation};
 });
 

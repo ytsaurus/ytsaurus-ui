@@ -4,7 +4,7 @@ import {
     OPERATION_STATISTICS_PARTIAL,
     SET_TREE_STATE,
 } from '../../../constants/operations/statistics';
-import {getOperation} from '../../../store/selectors/operations/operation';
+import {selectOperation} from '../../../store/selectors/operations/operation';
 import {getSettingOperationStatisticsActiveJobTypes} from '../../../store/selectors/settings/settings-ts';
 import {setSettingsStatisticsActiveJobTypes} from '../../../store/actions/settings/settings';
 
@@ -37,7 +37,7 @@ export function changeJobType(jobType) {
         });
 
         const state = getState();
-        const operationType = getOperation(state).type;
+        const operationType = selectOperation(state).type;
         const settingsJobTypes = getSettingOperationStatisticsActiveJobTypes(state);
 
         if (settingsJobTypes && settingsJobTypes[operationType] !== jobType) {

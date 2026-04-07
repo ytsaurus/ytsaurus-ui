@@ -14,7 +14,7 @@ import {useMemoizedIfEqual, useUpdater} from '../../../hooks';
 import {useAppRumMeasureStart} from '../../../rum/rum-app-measures';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 import {useRumMeasureStop} from '../../../rum/RumUiContext';
-import {getOperationsListIsFinalState} from '../../../store/selectors/operations/operations-list';
+import {selectOperationsListIsFinalState} from '../../../store/selectors/operations/operations-list';
 import {selectCluster} from '../../../store/selectors/global';
 import {getListRequestParameters} from '../../../store/actions/operations/utils';
 
@@ -123,7 +123,7 @@ function mapStateToProps({operations}) {
 const OperationsListConnected = connect(mapStateToProps)(OperationsList);
 
 function OperationsListWithRum() {
-    const isFinalStatus = useSelector(getOperationsListIsFinalState);
+    const isFinalStatus = useSelector(selectOperationsListIsFinalState);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.OPERATIONS_LIST,

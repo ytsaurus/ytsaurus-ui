@@ -32,10 +32,10 @@ import {performJobAction} from '../utils';
 import {LOADING_STATUS} from '../../../../../../constants/index';
 import {PLEASE_PROCEED_TEXT} from '../../../../../../utils/actions';
 import {getShowCompetitiveJobs} from '../../../../../../pages/operations/selectors';
-import {getJobsOperationId} from '../../../../../../store/selectors/operations/jobs';
+import {selectJobsOperationId} from '../../../../../../store/selectors/operations/jobs';
 import {
-    getOperationId,
-    getOperationTasksNames,
+    selectOperationId,
+    selectOperationTasksNames,
 } from '../../../../../../store/selectors/operations/operation';
 import UIFactory from '../../../../../../UIFactory';
 import {StaleJobIcon} from '../StaleJobIcon';
@@ -515,9 +515,9 @@ function mapStateToProps(state, props) {
     const {operations, global} = state;
     const {cluster, login} = global;
     const showCompetitiveJobs = getShowCompetitiveJobs(state);
-    const taskNamesNumber = getOperationTasksNames(state)?.length;
-    const jobsOperationId = getJobsOperationId(state);
-    const operationId = getOperationId(state);
+    const taskNamesNumber = selectOperationTasksNames(state)?.length;
+    const jobsOperationId = selectJobsOperationId(state);
+    const operationId = selectOperationId(state);
     const {jobs, job, competitiveJobs, inputPaths} = operations.jobs;
     return {
         jobs: operationId !== jobsOperationId ? [] : jobs,

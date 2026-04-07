@@ -4,7 +4,7 @@ import {RootState} from '../../reducers';
 import {Action} from 'redux';
 
 import format from '../../../common/hammer/format';
-import {getOperationId} from '../../selectors/operations/operation';
+import {selectOperationId} from '../../selectors/operations/operation';
 import {RawJob} from '../../../types/operations/job';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {
@@ -46,7 +46,7 @@ export const getJobsWithEvents =
     (firstRequest?: boolean): AsyncAction =>
     async (dispatch, getState) => {
         const state = getState();
-        const operationId = getOperationId(state);
+        const operationId = selectOperationId(state);
         const sameIntervals = selectIntervalsIsSame(state);
 
         if (firstRequest) {

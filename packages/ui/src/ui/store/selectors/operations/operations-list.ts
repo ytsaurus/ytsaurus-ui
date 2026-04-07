@@ -14,13 +14,13 @@ import {
     OPERATIONS_LIST_RUNNING_PRESET,
 } from '../../../constants/operations/list';
 import {selectCurrentUserName} from '../global';
-import {getOperationsListFilters} from '.';
+import {selectOperationsListFilters} from '.';
 import {
     OperationPresetsSettings,
     OperationsListPreset,
 } from '../../../../shared/constants/settings-types';
 
-export const getOperationsListIsFinalState = createSelector(
+export const selectOperationsListIsFinalState = createSelector(
     [
         (state: RootState) => state.operations.list.isLoading,
         (state: RootState) => state.operations.list.hasLoaded,
@@ -33,15 +33,15 @@ export const getOperationsListIsFinalState = createSelector(
 );
 
 /**
- * 
- * 
-  
+ *
+ *
 
-    
 
- * 
- * @param login 
- * @returns 
+
+
+ *
+ * @param login
+ * @returns
  */
 
 function createPreconfiguredPresets(login: string) {
@@ -67,7 +67,7 @@ function createPreconfiguredPresets(login: string) {
     };
 }
 
-export const getOperationsListFilterPresets = createSelector(
+export const selectOperationsListFilterPresets = createSelector(
     [getSettingsDataRaw, selectCurrentUserName],
     (data, login): Record<string, OperationsListPreset> => {
         const collectionKeys: Array<keyof OperationPresetsSettings> = filter_(
@@ -91,8 +91,8 @@ export const getOperationsListFilterPresets = createSelector(
     },
 );
 
-export const getOperationsListActivePresets = createSelector(
-    [getOperationsListFilters, getOperationsListFilterPresets],
+export const selectOperationsListActivePresets = createSelector(
+    [selectOperationsListFilters, selectOperationsListFilterPresets],
     (selectedFilters, presets) => {
         return reduce_(
             presets,

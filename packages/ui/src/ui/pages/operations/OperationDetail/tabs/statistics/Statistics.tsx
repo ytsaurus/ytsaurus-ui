@@ -30,11 +30,11 @@ import {statisticsTableProps} from '../../../../../utils/operations/tabs/statist
 import {makeRadioButtonProps} from '../../../../../utils';
 
 import {RootState} from '../../../../../store/reducers';
-import {getOperationDetailsLoadingStatus} from '../../../../../store/selectors/operations/operation';
+import {selectOperationDetailsLoadingStatus} from '../../../../../store/selectors/operations/operation';
 import {
-    getOperationStatisticsActiveFilterValues,
-    getOperationStatisticsAvailableValues,
-    getOperationStatisticsFiltered,
+    selectOperationStatisticsActiveFilterValues,
+    selectOperationStatisticsAvailableValues,
+    selectOperationStatisticsFiltered,
 } from '../../../../../store/selectors/operations/statistics-v2';
 import {RumMeasureTypes} from '../../../../../rum/rum-measure-types';
 import {useRumMeasureStop} from '../../../../../rum/RumUiContext';
@@ -50,7 +50,7 @@ import './Statistics.scss';
 const statisticsBlock = cn('operation-statistics');
 const toolbarBlock = cn('elements-toolbar');
 
-type ItemType = ReturnType<typeof getOperationStatisticsFiltered>[0];
+type ItemType = ReturnType<typeof selectOperationStatisticsFiltered>[0];
 
 interface ItemState {
     collapsed?: boolean;
@@ -255,15 +255,16 @@ export class Statistics extends Component<Props> {
 const mapStateToProps = (state: RootState) => {
     const {treeState, activeAggregation} = state.operations.statistics;
 
-    const {job_type: jobTypes, pool_tree: poolTrees} = getOperationStatisticsAvailableValues(state);
+    const {job_type: jobTypes, pool_tree: poolTrees} =
+        selectOperationStatisticsAvailableValues(state);
 
     return {
-        items: getOperationStatisticsFiltered(state),
+        items: selectOperationStatisticsFiltered(state),
         treeState,
         activeAggregation,
         jobTypes,
         poolTrees,
-        ...getOperationStatisticsActiveFilterValues(state),
+        ...selectOperationStatisticsActiveFilterValues(state),
     };
 };
 
@@ -280,7 +281,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 const StatisticsConnected = connector(Statistics);
 
 export default function SpecificationWithRum(props: {className: string}) {
-    const loadState = useSelector(getOperationDetailsLoadingStatus);
+    const loadState = useSelector(selectOperationDetailsLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.OPERATION_TAB_STATISTICS,

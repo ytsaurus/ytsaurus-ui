@@ -18,62 +18,62 @@ import sortBy_ from 'lodash/sortBy';
 import {RootState} from '../../reducers';
 import {OperationsListFilterValue} from '../../reducers/operations/list/list';
 
-export const getOperationsListFilters = (state: RootState) => state.operations.list.filters;
-export const getOperationsPoolFilterData = (state: RootState) =>
-    getOperationsListFilters(state)['pool'];
-export const getOperationsUserFilterData = (state: RootState) =>
-    getOperationsListFilters(state)['user'];
-export const getOperationsPoolTreeRawCounters = (state: RootState) =>
+export const selectOperationsListFilters = (state: RootState) => state.operations.list.filters;
+export const selectOperationsPoolFilterData = (state: RootState) =>
+    selectOperationsListFilters(state)['pool'];
+export const selectOperationsUserFilterData = (state: RootState) =>
+    selectOperationsListFilters(state)['user'];
+export const selectOperationsPoolTreeRawCounters = (state: RootState) =>
     state.operations.list.filters.poolTree.counters?.pool_tree_counts || {};
-export const getOperationsPoolRawCounters = (state: RootState) =>
-    getOperationsPoolFilterData(state).counters?.pool_counts || {};
-export const getOperationsUserRawCounter = (state: RootState) =>
-    getOperationsUserFilterData(state).counters?.user_counts || {};
+export const selectOperationsPoolRawCounters = (state: RootState) =>
+    selectOperationsPoolFilterData(state).counters?.pool_counts || {};
+export const selectOperationsUserRawCounter = (state: RootState) =>
+    selectOperationsUserFilterData(state).counters?.user_counts || {};
 
-export const getOperationsPoolTreeCountersItems = createSelector(
-    [getOperationsPoolTreeRawCounters],
+export const selectOperationsPoolTreeCountersItems = createSelector(
+    [selectOperationsPoolTreeRawCounters],
     convertCountersToItems,
 );
 
-export const getOperationsPoolTreeItemsWithoutCounter = createSelector(
-    [selectAllPoolTreeNames, getOperationsPoolTreeRawCounters],
+export const selectOperationsPoolTreeItemsWithoutCounter = createSelector(
+    [selectAllPoolTreeNames, selectOperationsPoolTreeRawCounters],
     (f, s) => {
         return calculateItemsWithoutCounter(f, s);
     },
 );
 
-export const getOperationsPoolTreeSuggestions = createSelector(
-    [getOperationsPoolTreeCountersItems, getOperationsPoolTreeItemsWithoutCounter],
+export const selectOperationsPoolTreeSuggestions = createSelector(
+    [selectOperationsPoolTreeCountersItems, selectOperationsPoolTreeItemsWithoutCounter],
     concat_,
 );
 
-export const getOperationsPoolCountersItems = createSelector(
-    [getOperationsPoolRawCounters],
+export const selectOperationsPoolCountersItems = createSelector(
+    [selectOperationsPoolRawCounters],
     convertCountersToItems,
 );
 
-export const getOperationsPoolItemsWithoutCounter = createSelector(
-    [selectAllPoolNames, getOperationsPoolRawCounters],
+export const selectOperationsPoolItemsWithoutCounter = createSelector(
+    [selectAllPoolNames, selectOperationsPoolRawCounters],
     calculateItemsWithoutCounter,
 );
 
-export const getOperationsPoolSuggestions = createSelector(
-    [getOperationsPoolCountersItems, getOperationsPoolItemsWithoutCounter],
+export const selectOperationsPoolSuggestions = createSelector(
+    [selectOperationsPoolCountersItems, selectOperationsPoolItemsWithoutCounter],
     concat_,
 );
 
-export const getOperationsUserCountersItems = createSelector(
-    [getOperationsUserRawCounter],
+export const selectOperationsUserCountersItems = createSelector(
+    [selectOperationsUserRawCounter],
     convertCountersToItems,
 );
 
-export const getOperationsUserItemsWithoutCounter = createSelector(
-    [selectAllUserNames, getOperationsUserRawCounter],
+export const selectOperationsUserItemsWithoutCounter = createSelector(
+    [selectAllUserNames, selectOperationsUserRawCounter],
     calculateItemsWithoutCounter,
 );
 
-export const getOperationsUserSuggestions = createSelector(
-    [getOperationsUserCountersItems, getOperationsUserItemsWithoutCounter],
+export const selectOperationsUserSuggestions = createSelector(
+    [selectOperationsUserCountersItems, selectOperationsUserItemsWithoutCounter],
     concat_,
 );
 
@@ -129,35 +129,35 @@ export const ATTRIBUTE_ITEMS = [
 ];
 export const ATTRIBUTE_ITEM_NAMES = map_(ATTRIBUTE_ITEMS, ({value}) => value);
 
-export const getOperationsListFilterParameters = createSelector(
-    [getOperationsListFilters],
+export const selectOperationsListFilterParameters = createSelector(
+    [selectOperationsListFilters],
     (filters) => {
         const {text, user, subject, permissions, pool, poolTree, state, type, failedJobs} = filters;
 
-        const actualSubject = getValueIfNotDefault(subject);
-        const actualPermissions = getValueIfNotDefault(permissions) as string;
+        const actualSubject = selectValueIfNotDefault(subject);
+        const actualPermissions = selectValueIfNotDefault(permissions) as string;
         const access =
             actualSubject || actualPermissions?.length > 0
                 ? {subject: actualSubject, permissions: actualPermissions || []}
                 : undefined;
 
         const res = {
-            filter: getValueIfNotDefault(text),
-            user: getValueIfNotDefault(user),
-            pool: getValueIfNotDefault(pool),
-            pool_tree: getValueIfNotDefault(poolTree),
-            type: getValueIfNotDefault(type),
-            with_failed_jobs: getValueIfNotDefault(failedJobs),
+            filter: selectValueIfNotDefault(text),
+            user: selectValueIfNotDefault(user),
+            pool: selectValueIfNotDefault(pool),
+            pool_tree: selectValueIfNotDefault(poolTree),
+            type: selectValueIfNotDefault(type),
+            with_failed_jobs: selectValueIfNotDefault(failedJobs),
             access,
         };
         return {
-            state: getValueIfNotDefault(state),
+            state: selectValueIfNotDefault(state),
             ...res,
         };
     },
 );
 
-export function getOperationsListTimeRange(state: RootState) {
+export function selectOperationsListTimeRange(state: RootState) {
     const {from, to} = state.operations.list.timeRange;
 
     return {
@@ -166,11 +166,11 @@ export function getOperationsListTimeRange(state: RootState) {
     };
 }
 
-export const getOperationsListFiltersParameters_FOR_YTFRONT_2838 = createSelector(
+export const selectOperationsListFiltersParameters_FOR_YTFRONT_2838 = createSelector(
     [
-        getOperationsListFilterParameters,
+        selectOperationsListFilterParameters,
         selectCurrentUserName,
-        getOperationsListTimeRange,
+        selectOperationsListTimeRange,
         selectCluster,
     ],
     (filters, login, {from_time, to_time}, cluster) => {
@@ -191,8 +191,8 @@ export const getOperationsListFiltersParameters_FOR_YTFRONT_2838 = createSelecto
     },
 );
 
-export const getOperationsListFixedStartedByFilter_FOR_YTFRONT_2838 = createSelector(
-    [getOperationsListFilterParameters, getOperationsListFiltersParameters_FOR_YTFRONT_2838],
+export const selectOperationsListFixedStartedByFilter_FOR_YTFRONT_2838 = createSelector(
+    [selectOperationsListFilterParameters, selectOperationsListFiltersParameters_FOR_YTFRONT_2838],
     (filters, fixedFilters) => {
         if (isEqual_(filters, fixedFilters)) {
             return undefined;
@@ -201,6 +201,6 @@ export const getOperationsListFixedStartedByFilter_FOR_YTFRONT_2838 = createSele
     },
 );
 
-export function getValueIfNotDefault(filter: OperationsListFilterValue) {
+export function selectValueIfNotDefault(filter: OperationsListFilterValue) {
     return filter.value === filter.defaultValue ? undefined : filter.value;
 }

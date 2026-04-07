@@ -36,11 +36,14 @@ export const selectSortedJobs = createSelector([selectJobs], (jobs) => {
     });
 });
 
-export const getSelectedJob = createSelector([selectJobs, selectActiveJob], (jobs, activeJob) => {
-    const result = jobs.find(({id}) => activeJob === id) || null;
+export const selectSelectedJob = createSelector(
+    [selectJobs, selectActiveJob],
+    (jobs, activeJob) => {
+        const result = jobs.find(({id}) => activeJob === id) || null;
 
-    return result;
-});
+        return result;
+    },
+);
 
 export const selectIntervalsIsSame = createSelector(
     [selectInterval, selectEventsInterval],
