@@ -2,6 +2,7 @@ import React from 'react';
 import {PrometheusPlugins} from '../PrometheusDashKit';
 import {ExpandButton} from '../../../components/ExpandButton';
 import {Secondary} from '@ytsaurus/components';
+import i18n from './i18n';
 
 export const renderPluginRow: PrometheusPlugins['row']['renderer'] = (
     {data, ...props},
@@ -11,7 +12,11 @@ export const renderPluginRow: PrometheusPlugins['row']['renderer'] = (
     return (
         <div ref={elementRef} key={props.id}>
             <ExpandButton expanded={!collapsed} toggleExpanded={onToggleCollapsed} />
-            {collapsed && <Secondary>{childCount} panels</Secondary>}
+            {collapsed && (
+                <Secondary>
+                    {childCount} {i18n('value_panels')}
+                </Secondary>
+            )}
         </div>
     );
 };

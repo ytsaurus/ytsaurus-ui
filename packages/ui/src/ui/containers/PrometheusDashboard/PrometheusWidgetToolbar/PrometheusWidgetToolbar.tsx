@@ -10,6 +10,7 @@ import {PrometheusWidgetId} from '../../../../shared/prometheus/types';
 
 import {usePrometheusDashboardContext} from '../PrometheusDashboardContext/PrometheusDashboardContext';
 
+import i18n from './i18n';
 import './PrometheusWidgetToolbar.scss';
 
 const block = cn('yt-prometheus-widget-toolbar');
@@ -37,7 +38,12 @@ export function PrometheusWidgetToolbar({id}: PrometheusToolbarProps) {
     return (
         <React.Fragment>
             <div className={block()}>
-                <Button view="flat-secondary" onClick={() => toggleExpanded(id)} size="xs">
+                <Button
+                    view="flat-secondary"
+                    onClick={() => toggleExpanded(id)}
+                    size="xs"
+                    title={i18n(isMaximized ? 'action_minimize' : 'action_maximize')}
+                >
                     <Icon data={isMaximized ? minimizeSvg : maximizeSvg} />
                 </Button>
             </div>
