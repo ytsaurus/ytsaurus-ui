@@ -1,5 +1,7 @@
 import React from 'react';
 import {AxiosError, isAxiosError} from 'axios';
+
+import i18n from './i18n';
 import {Flex} from '@gravity-ui/uikit';
 import Link from '../../components/Link/Link';
 import block from 'bem-cn-lite';
@@ -79,17 +81,17 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
         return [
             {
                 value: 'details' as const,
-                text: 'Details',
+                text: i18n('title_tab-details'),
                 show: false,
             },
             {
                 value: 'stderrs' as const,
-                text: 'Stderrs',
+                text: i18n('title_tab-stderrs'),
                 show: false,
             },
             {
                 value: 'attributes' as const,
-                text: 'Attributes',
+                text: i18n('title_tab-attributes'),
                 show: true,
             },
         ];
