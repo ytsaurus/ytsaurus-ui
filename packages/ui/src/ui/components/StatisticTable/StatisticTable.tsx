@@ -10,6 +10,8 @@ import {ExpandButton} from '../ExpandButton';
 import {selectFontFamilies} from '../../store/selectors/global/fonts';
 import {MetaTable, Secondary, Tooltip} from '@ytsaurus/components';
 
+import i18n from './i18n';
+
 import Toolbar from './Toolbar';
 import {getMinWidth} from './get-min-width';
 import {filterStatisticTree, prepareStatisticTs} from './prepare-statistic.ts';
@@ -105,13 +107,13 @@ export function StatisticName({title, info}: {title: React.ReactNode; info?: Sta
                     <MetaTable
                         items={[
                             {
-                                key: 'Description',
+                                key: i18n('field_description'),
                                 value: info.description,
                                 visible: Boolean(info.description),
                                 className: block('description'),
                             },
                             {
-                                key: 'Unit',
+                                key: i18n('field_unit'),
                                 value: info.unit,
                                 visible: Boolean(info.unit),
                             },
