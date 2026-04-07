@@ -1,0 +1,7 @@
+{
+  "title_error": "Error",
+  "alert_sub-requests-failed": "Some sub-requests have been failed. Would you like to try again?",
+  "action_retry": "Retry",
+  "action_skip": "Skip",
+  "action_abort": "Abort"
+}
