@@ -9,6 +9,8 @@ import {
 import {MetaTable, Tooltip} from '@ytsaurus/components';
 import Icon from '../../components/Icon/Icon';
 
+import i18n from './i18n';
+
 import './TimeDuration.scss';
 
 const block = cn('yt-time-duration');
@@ -37,23 +39,23 @@ export function TimeDuration({value, onChange, error}: TimeDurationProps) {
                         <MetaTable
                             items={[
                                 makeItems({
-                                    y: 'years',
-                                    w: 'weeks',
-                                    M: 'months',
-                                    d: 'days',
+                                    y: i18n('value_years'),
+                                    w: i18n('value_weeks'),
+                                    M: i18n('value_months'),
+                                    d: i18n('value_days'),
                                 }),
                                 makeItems({
-                                    h: 'hours',
-                                    m: 'minutes',
-                                    s: 'seconds',
-                                    ms: 'milliseconds',
+                                    h: i18n('value_hours'),
+                                    m: i18n('value_minutes'),
+                                    s: i18n('value_seconds'),
+                                    ms: i18n('value_milliseconds'),
                                 }),
                             ]}
                         />
-                        1M=30d
+                        {i18n('context_month-note')}
                         <br />
                         <br />
-                        Examles: 1M2d3h, 4h15m
+                        {i18n('context_examples')}
                     </div>
                 }
             >
@@ -118,27 +120,27 @@ export function parseTimeDuration(rawValue: string) {
     }
 
     if (!/^[\d\sa-zA-Z]*$/.test(rawValue)) {
-        return {value: undefined, error: 'only digits and latin characters are allowed'};
+        return {value: undefined, error: i18n('alert_only-digits-and-latin')};
     }
 
     const skipSpaces = rawValue.replace(/\s+/g, '');
     const res = [...skipSpaces.matchAll(/\d+[a-zA-Z]*/g)];
     if (!res.length || res[0].index !== 0) {
-        return {value: undefined, error: 'wrong format'};
+        return {value: undefined, error: i18n('alert_wrong-format')};
     }
 
     let value = 0;
     for (const match of res) {
         const {[0]: digits, input} = match[0].match(/\d+/) || {};
         if (!digits) {
-            return {value: undefined, error: 'wring fromat 1'};
+            return {value: undefined, error: i18n('alert_wrong-format')};
         }
 
         const type = input?.substring(digits.length) ?? '';
         const d = Number(digits);
         const toAdd = moment.duration(d, type as any).valueOf() as number;
         if (toAdd === 0 && d !== 0) {
-            return {value: undefined, error: `wrong format of ${input}`};
+            return {value: undefined, error: i18n('alert_wrong-format')};
         }
 
         value += toAdd;
