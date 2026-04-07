@@ -1,0 +1,9 @@
+{
+  "alert_banned_1": "Unfortunately, you have been",
+  "alert_banned_word": "banned",
+  "alert_banned_2": "on this cluster.",
+  "alert_banned-report": "If the problem persists please report it via Bug Reporter.",
+  "alert_blocked": "Unfortunately, you have exceeded the limit for the number of concurrent requests.",
+  "alert_blocked-transient": "Usually this is a transient failure due to load spikes.",
+  "alert_blocked-reload": "Please, try reloading the page in a few minutes or reducing the load."
+}
