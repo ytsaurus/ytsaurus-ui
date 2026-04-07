@@ -1,0 +1,11 @@
+{
+  "field_detailed-line": "Detailed line",
+  "alert_bad-data": "Could not draw a chart with given data.",
+  "field_min": "Min",
+  "field_q25": "Q25%",
+  "field_q50": "Q50%",
+  "field_q75": "Q75%",
+  "field_max": "Max",
+  "tooltip_column": "<b>{{count}}</b> partitions contain in range from <b>{{x0}}</b> to <b>{{x1}}</b> - {{dataName}}",
+  "tooltip_line": "<b>{{prefix}}{{value}}</b> of tablets contains <b>{{prefix}}{{x}}</b> or less"
+}

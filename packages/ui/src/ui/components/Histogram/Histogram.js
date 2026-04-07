@@ -17,6 +17,7 @@ import HistogramChart from './HistogramChart';
 
 import './Histogram.scss';
 import {Checkbox, Select} from '@gravity-ui/uikit';
+import i18n from './i18n';
 
 const block = cn('histogram');
 
@@ -89,7 +90,7 @@ function Histogram(props) {
                     checked={isDatailedLine}
                     onUpdate={setDetailed}
                 >
-                    Detailed line
+                    {i18n('field_detailed-line')}
                 </Checkbox>
             </div>
 
@@ -97,39 +98,37 @@ function Histogram(props) {
                 <HistogramChart className={block('chart')} {...params} lineOnly={isDatailedLine} />
             ) : (
                 <div className={block('bad-data')}>
-                    <p className={block('bad-data-message')}>
-                        Could not draw a descriptive chart with given data.
-                    </p>
+                    <p className={block('bad-data-message')}>{i18n('alert_bad-data')}</p>
                 </div>
             )}
 
             <ul className={block('quartiles')}>
                 <li className={block('quartiles-item')}>
-                    Min –{' '}
+                    {i18n('field_min')} –{' '}
                     <span className={block('quartiles-count')}>
                         {hammer.format[histogram.format](quartiles.min)}
                     </span>
                 </li>
                 <li className={block('quartiles-item')}>
-                    Q25% –{' '}
+                    {i18n('field_q25')} –{' '}
                     <span className={block('quartiles-count')}>
                         {hammer.format[histogram.format](quartiles.q25)}
                     </span>
                 </li>
                 <li className={block('quartiles-item')}>
-                    Q50% –{' '}
+                    {i18n('field_q50')} –{' '}
                     <span className={block('quartiles-count')}>
                         {hammer.format[histogram.format](quartiles.q50)}
                     </span>
                 </li>
                 <li className={block('quartiles-item')}>
-                    Q75% –{' '}
+                    {i18n('field_q75')} –{' '}
                     <span className={block('quartiles-count')}>
                         {hammer.format[histogram.format](quartiles.q75)}
                     </span>
                 </li>
                 <li className={block('quartiles-item')}>
-                    Max –{' '}
+                    {i18n('field_max')} –{' '}
                     <span className={block('quartiles-count')}>
                         {hammer.format[histogram.format](quartiles.max)}
                     </span>
