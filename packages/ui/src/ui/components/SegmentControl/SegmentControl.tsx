@@ -6,6 +6,7 @@ import {Flex, Link} from '@gravity-ui/uikit';
 import Icon from '../../components/Icon/Icon';
 import {MetaTable} from '@ytsaurus/components';
 import {PreparedRole} from '../../utils/acl';
+import i18n from './i18n';
 
 import './SegmentControl.scss';
 
@@ -71,7 +72,7 @@ function Value({value}: Pick<SegmentControlItem, 'value'>) {
         case 'boolean':
             return (
                 <span className={block('value', {bool: Boolean(value)})}>
-                    {value ? 'True' : 'False'}
+                    {value ? i18n('value_true') : i18n('value_false')}
                 </span>
             );
         default:
