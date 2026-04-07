@@ -6,6 +6,7 @@ import map_ from 'lodash/map';
 
 import Button from '../../components/Button/Button';
 import Icon from '../../components/Icon/Icon';
+import i18n from './i18n';
 
 const block = cn('elements-message');
 
@@ -20,7 +21,12 @@ export default function Message({
         <div className={block({theme})}>
             {showClose && (
                 <div className={block('close')}>
-                    <Button size="m" view="flat-secondary" title="Close" onClick={dismissCallback}>
+                    <Button
+                        size="m"
+                        view="flat-secondary"
+                        title={i18n('action_close')}
+                        onClick={dismissCallback}
+                    >
                         <Icon type="close" />
                     </Button>
                 </div>
