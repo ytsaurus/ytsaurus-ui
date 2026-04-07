@@ -31,14 +31,14 @@ export default function CompactError({error, maxMessageLength}: Props) {
     const message = messageFromError(error, maxMessageLength);
     return (
         <Text variant="body-1" color="danger" className={block()}>
-            {message ?? i18n('an-error-occurred')}
+            {message ?? i18n('alert_error-occurred')}
             <ClickableText
                 className={block('link')}
                 onClick={() => {
                     showErrorPopup(error, {hideOopsMsg: true});
                 }}
             >
-                Details
+                {i18n('action_details')}
             </ClickableText>
         </Text>
     );
