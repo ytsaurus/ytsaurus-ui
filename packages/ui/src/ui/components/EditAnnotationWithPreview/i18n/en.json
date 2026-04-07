@@ -1,0 +1,7 @@
+{
+  "context_reset-to-inheritance": "(reset to inheritance)",
+  "context_from-path": "(from {{valuePath}})",
+  "action_restore": "Restore",
+  "action_reset-to-inheritance": "Reset to inheritance",
+  "title_description": "Description"
+}
