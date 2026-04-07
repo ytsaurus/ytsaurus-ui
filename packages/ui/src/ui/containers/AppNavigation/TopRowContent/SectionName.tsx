@@ -9,6 +9,7 @@ import Link from '../../../components/Link/Link';
 import {selectCluster} from '../../../store/selectors/global';
 import {makeRoutedURL} from '../../../store/location';
 import {Page} from '../../../../shared/constants/settings';
+import i18n from './i18n';
 
 import './SectionName.scss';
 const block = cn('top-row-section');
@@ -23,7 +24,7 @@ interface Props {
 }
 
 const other: Record<string, {name: string}> = {
-    [Page.CHAOS_CELL_BUNDLES]: {name: 'Bundles'},
+    [Page.CHAOS_CELL_BUNDLES]: {name: i18n('value_bundles')},
 };
 
 export function RowWithName({page, name, className, children, showSplitter, urlParams}: Props) {
