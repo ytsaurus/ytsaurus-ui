@@ -1,5 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
+import i18n from './i18n';
 
 import {
     RawSerieData,
@@ -139,7 +140,7 @@ function genYagrData({min, max, count}: YTHistorgramData) {
 }
 
 const renderDefaultTooltip: Required<YTHistogramProps>['renderTooltip'] = (y, x0, x1) => {
-    return `<b>${y}</b> for range from <b>${x0}</b> to <b>${x1}</b>`;
+    return i18n('context_tooltip-range', {y: y ?? '', x0: x0 ?? '', x1: x1 ?? ''});
 };
 
 export function calculateFormatSettings(
