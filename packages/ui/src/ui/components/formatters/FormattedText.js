@@ -5,6 +5,7 @@ import cn from 'bem-cn-lite';
 import unipika from '../../common/thor/unipika';
 import Label from '../Label';
 import {showErrorPopup} from '../../utils/utils';
+import i18n from './i18n';
 
 const block = cn('elements-text');
 
@@ -27,12 +28,12 @@ function prepareTextProps(text, asHTML) {
                         <span
                             onClick={() =>
                                 showErrorPopup({
-                                    message: `Text cannot be decoded so it is displayed as is`,
+                                    message: i18n('alert_text-cannot-be-decoded'),
                                     inner_errors: [e],
                                 })
                             }
                         >
-                            <Label theme={'warning'} text={'Decoding error'} />
+                            <Label theme={'warning'} text={i18n('alert_decoding-error')} />
                         </span>
                     </span>
                 );

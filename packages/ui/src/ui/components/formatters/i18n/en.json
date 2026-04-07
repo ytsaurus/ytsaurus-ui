@@ -1,0 +1,4 @@
+{
+    "alert_decoding-error": "Decoding error",
+    "alert_text-cannot-be-decoded": "Text cannot be decoded so it is displayed as is"
+}
