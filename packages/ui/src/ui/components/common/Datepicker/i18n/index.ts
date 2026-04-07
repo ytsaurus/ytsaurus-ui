@@ -1,5 +1,5 @@
 import {addI18Keysets} from '../../../../i18n';
 
-import en from './en.json';
+import dicts from './dicts';
 
-export default addI18Keysets('yt:yc-datepicker', {en});
+export default addI18Keysets('yt:yc-datepicker', dicts);
