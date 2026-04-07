@@ -4,6 +4,7 @@ import Link from '../../components/Link/Link';
 import cn from 'bem-cn-lite';
 
 import Icon from '../../components/Icon/Icon';
+import i18n from './i18n';
 
 import './HelpLink.scss';
 
@@ -19,9 +20,9 @@ interface Props {
     text?: string;
 }
 
-function HelpLink({url, text = 'Help'}: Props) {
+function HelpLink({url, text = i18n('value_help')}: Props) {
     return !url ? null : (
-        <Link url={url} target="_blank" title="View documentation">
+        <Link url={url} target="_blank" title={i18n('title_view-documentation')}>
             <Icon awesome="book" />
             {text && <span className={block('text')}>{text}</span>}
         </Link>
