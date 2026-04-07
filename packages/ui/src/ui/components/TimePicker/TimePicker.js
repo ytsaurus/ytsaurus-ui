@@ -6,14 +6,14 @@ import moment from 'moment';
 import {TextInput} from '@gravity-ui/uikit';
 
 import Icon from '../Icon/Icon';
+import i18n from './i18n';
 
 import './TimePicker.scss';
 
 const bForm = cn('elements-form');
 const block = cn('timepicker');
 const DISPLAY_FORMAT = 'HH:mm';
-const invalidTitle = `Time should be specified as HH:MM.
-Estimated start time should be less than estimated finish time.`;
+const invalidTitle = i18n('error_invalid-time');
 
 export const MomentObjectType = PropTypes.shape({
     _isAMomentObject: PropTypes.oneOf([true]),
@@ -116,7 +116,7 @@ export default class TimePicker extends Component {
                         title,
                     }}
                     className={block('control')}
-                    placeholder={'HH:mm'}
+                    placeholder={i18n('placeholder_time')}
                 />
             </div>
         );
