@@ -10,6 +10,7 @@ import {Page} from '../../constants/index';
 import {SchedulingTab} from '../../constants/scheduling';
 
 import {LightWeightIcon} from './LightWeightIcon';
+import i18n from './i18n';
 
 import './OperationPool.scss';
 
@@ -29,7 +30,12 @@ const renderButton = (
                 visibility,
             })}
         >
-            <Button size="s" view="flat-secondary" onClick={onEdit} title="Edit pool">
+            <Button
+                size="s"
+                view="flat-secondary"
+                onClick={onEdit}
+                title={i18n('action_edit-pool')}
+            >
                 <Icon awesome="pencil" />
             </Button>
         </span>
@@ -113,7 +119,7 @@ export function OperationPool({
             </span>
 
             {!hideIcon && isEphemeral && (
-                <Tooltip content="Ephemeral pool">
+                <Tooltip content={i18n('context_ephemeral-pool')}>
                     <Icon awesome="ghost" />
                 </Tooltip>
             )}
