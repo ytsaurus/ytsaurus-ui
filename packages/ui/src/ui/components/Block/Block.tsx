@@ -139,7 +139,7 @@ class YTErrorBlockImpl extends React.Component<YTErrorBlockInternalProps> {
                         showErrorPopup(error as YTError | AxiosError, {hideOopsMsg: true})
                     }
                 >
-                    <Text color={'secondary'}>Details</Text>
+                    <Text color={'secondary'}>{i18n('action_details')}</Text>
                 </Button>
             </>
         );
@@ -177,7 +177,10 @@ class YTErrorBlockImpl extends React.Component<YTErrorBlockInternalProps> {
 
         return (
             <div className={className}>
-                {header || hammer.format['ReadableField'](type ? i18n(type) : undefined)}
+                {header ||
+                hammer.format['ReadableField'](
+                    type ? i18n(`value_${type}` as `value_${typeof type}`) : undefined,
+                )}
             </div>
         );
     }
