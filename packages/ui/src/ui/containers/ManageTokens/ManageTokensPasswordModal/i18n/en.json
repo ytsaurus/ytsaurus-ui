@@ -1,3 +1,7 @@
 {
+  "title_authentication": "Authentication",
+  "alert_password-required": "To access tokens management, you need enter your password",
+  "field_password": "Password",
+  "field_password-hash-sha256": "Password Hash (SHA-256)",
   "alert_crypto-subtle-unavailable": "is not available from your browser, so SHA-256 hash cannot be generated. Please generate the hash of your password by yourself."
 }
