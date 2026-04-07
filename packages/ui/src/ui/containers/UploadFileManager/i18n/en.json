@@ -1,0 +1,4 @@
+{
+  "validation_file-name-required": "File name is required",
+  "validation_file-name-already-exists": "A file with this name already exists"
+}

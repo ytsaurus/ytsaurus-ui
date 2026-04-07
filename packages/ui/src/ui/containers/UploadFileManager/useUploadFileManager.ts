@@ -8,6 +8,7 @@ import {updateView} from '../../store/actions/navigation';
 import hammer from '../../common/hammer';
 import {uploadFile} from './uploadFile';
 import {ytApiV3} from '../../rum/rum-wrap-api';
+import i18n from './i18n';
 
 type UseUploadFileManagerProps = {
     onSuccess(params: {filePath: string}): void;
@@ -90,7 +91,7 @@ export const useUploadFileManager = (opts: UseUploadFileManagerProps) => {
 
     const onValidation = React.useCallback(async (values: UseUploadFileManagerFileFormValues) => {
         if (!values.name) {
-            return {name: 'File name is required'};
+            return {name: i18n('validation_file-name-required')};
         }
 
         if (values.path && values.name) {
@@ -99,7 +100,7 @@ export const useUploadFileManager = (opts: UseUploadFileManagerProps) => {
             });
 
             if (ok) {
-                return {name: 'A file with this name already exists'};
+                return {name: i18n('validation_file-name-already-exists')};
             }
         }
 
