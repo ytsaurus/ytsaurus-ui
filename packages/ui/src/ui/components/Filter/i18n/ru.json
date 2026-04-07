@@ -1,4 +1,0 @@
-{
-  "placeholder": "Фильтр...",
-  "error": "Некорректное свойство 'debounce' передано в '{{componentName}}'. Ожидается число или false."
-}
