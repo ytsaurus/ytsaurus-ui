@@ -4,6 +4,7 @@ import cn from 'bem-cn-lite';
 import {TextInput, TextInputProps} from '@gravity-ui/uikit';
 
 import hammer from '../../common/hammer';
+import i18n from './i18n';
 
 export interface TimeInputProps
     extends Omit<TextInputProps, 'value' | 'text' | 'onChange' | 'error'> {
@@ -46,7 +47,7 @@ export default function TimeInput(props: TimeInputProps) {
     );
 
     const error = useMemo(
-        () => (isNaN(parseValue(text)) ? 'Wrong format. Use hh:mm:ss' : undefined),
+        () => (isNaN(parseValue(text)) ? i18n('error_wrong-format') : undefined),
         [text],
     );
 
