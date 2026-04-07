@@ -6,6 +6,7 @@ import {Tooltip} from '@ytsaurus/components';
 import {AclMode} from '../../../constants/acl';
 import UIFactory from '../../../UIFactory';
 import {useEditColumnRowGroupModal} from '../EditGroupModal/EditGroupModal';
+import i18n from './i18n';
 
 export function AddGroupButton({
     cluster,
@@ -48,7 +49,7 @@ export function AddGroupButton({
         <Flex alignItems="center">
             <Button onClick={handleAddClick} disabled={!allowEdit} qa="acl:add-acl-group">
                 <Icon awesome={'plus'} />
-                {isRowGroup ? 'Add row group' : 'Add column group'}
+                {isRowGroup ? i18n('action_add-row-group') : i18n('action_add-column-group')}
             </Button>
 
             {Boolean(allowEditNotice) && (

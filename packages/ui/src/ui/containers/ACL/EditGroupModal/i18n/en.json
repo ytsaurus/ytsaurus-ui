@@ -1,3 +1,18 @@
 {
-  "managing-row-level-access": "Managing row-level access to tables"
+  "managing-row-level-access": "Managing row-level access to tables",
+  "title_add-column-group": "Add column group",
+  "title_add-row-group": "Add row group",
+  "title_edit-column-group": "Edit column group",
+  "title_edit-row-group": "Edit row group",
+  "title_delete-column-group": "Delete column group",
+  "title_delete-row-group": "Delete row group",
+  "action_add": "Add",
+  "action_save": "Save",
+  "action_delete": "Delete",
+  "field_name": "Name",
+  "context_name-placeholder": "Group name",
+  "field_columns": "Columns",
+  "context_columns-tooltip": "One column name per line",
+  "field_rows": "Rows",
+  "field_enabled": "Enabled"
 }

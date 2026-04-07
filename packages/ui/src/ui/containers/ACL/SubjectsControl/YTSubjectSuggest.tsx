@@ -11,6 +11,7 @@ import {SubjectsControlProps} from './SubjectsControl';
 import './YTSubjectSuggest.scss';
 import LabelsGroup from '../../../components/LabelsGroup/LabelsGroup';
 import {ResponsibleType} from '../../../utils/acl/acl-types';
+import i18n from './i18n';
 
 const block = cn('yt-subject-suggest');
 
@@ -77,7 +78,7 @@ export function YTSubjectSuggest({className, value, onChange, ...rest}: Subjects
         <div className={block()}>
             <Select
                 {...rest}
-                placeholder={'Enter user name or login...'}
+                placeholder={i18n('context_user-placeholder')}
                 className={className}
                 multiple
                 value={userValue.map((el) => el.value)}
@@ -94,7 +95,7 @@ export function YTSubjectSuggest({className, value, onChange, ...rest}: Subjects
             />
             <Select
                 {...rest}
-                placeholder={'Enter group name...'}
+                placeholder={i18n('context_group-placeholder')}
                 className={className}
                 multiple
                 value={groupValue.map((el) => el.value)}

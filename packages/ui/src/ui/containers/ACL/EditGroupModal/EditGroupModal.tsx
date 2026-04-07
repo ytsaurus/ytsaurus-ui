@@ -34,8 +34,10 @@ export function useEditColumnRowGroupModal({groupType}: {groupType: 'column' | '
         addGroup: ({submit}: {submit: (item: Partial<EditGroupFormValues>) => Promise<void>}) => {
             setModalProps({
                 mode: 'Add',
-                title: showColumns ? 'Add column group' : 'Add row group',
-                confirmText: 'Add',
+                title: showColumns
+                    ? i18n('title_add-column-group')
+                    : i18n('title_add-row-group'),
+                confirmText: i18n('action_add'),
                 disabledFields: ['enabled'],
                 visible: true,
                 initialData: {
@@ -59,8 +61,10 @@ export function useEditColumnRowGroupModal({groupType}: {groupType: 'column' | '
         }) => {
             setModalProps({
                 mode: 'Edit',
-                title: showColumns ? `Edit column group` : `Edit row group`,
-                confirmText: 'Save',
+                title: showColumns
+                    ? i18n('title_edit-column-group')
+                    : i18n('title_edit-row-group'),
+                confirmText: i18n('action_save'),
                 initialData: {...item},
                 disabledFields: [],
                 visible: true,
@@ -79,8 +83,10 @@ export function useEditColumnRowGroupModal({groupType}: {groupType: 'column' | '
         }) => {
             setModalProps({
                 mode: 'Delete',
-                title: showColumns ? `Delete column group` : `Delete row group`,
-                confirmText: 'Delete',
+                title: showColumns
+                    ? i18n('title_delete-column-group')
+                    : i18n('title_delete-row-group'),
+                confirmText: i18n('action_delete'),
                 initialData: {...item},
                 disabledFields: ['name', 'predicate', 'columns', 'enabled'],
                 visible: true,
@@ -155,9 +161,9 @@ function EditGroupModal({
                     name: 'name',
                     type: 'text',
                     required: true,
-                    caption: 'Name',
+                    caption: i18n('field_name'),
                     extras: {
-                        placeholder: 'Group name',
+                        placeholder: i18n('context_name-placeholder'),
                         disabled: includes_(disabledFields, 'name'),
                     },
                 },
@@ -167,8 +173,8 @@ function EditGroupModal({
                               name: 'columns',
                               type: 'acl-columns' as const,
                               required: true,
-                              caption: 'Columns',
-                              tooltip: 'One column name per line',
+                              caption: i18n('field_columns'),
+                              tooltip: i18n('context_columns-tooltip'),
                               extras: {
                                   disabled: includes_(disabledFields, 'columns'),
                               },
@@ -181,7 +187,7 @@ function EditGroupModal({
                               name: 'predicate',
                               type: 'textarea' as const,
                               required: true,
-                              caption: 'Rows',
+                              caption: i18n('field_rows'),
                               tooltip: (
                                   <HelpLink
                                       url={UIFactory.docsUrls['acl:row-level-security']}
@@ -198,7 +204,7 @@ function EditGroupModal({
                 {
                     name: 'enabled',
                     type: 'tumbler',
-                    caption: 'Enabled',
+                    caption: i18n('field_enabled'),
                     extras: {
                         disabled: includes_(disabledFields, 'enabled'),
                     },

@@ -14,6 +14,7 @@ import {AclColumnGroup} from '../../../utils/acl/acl-types';
 import {ACLReduxProps} from '../ACL-connect-helpers';
 import {useEditColumnRowGroupModal} from '../EditGroupModal/EditGroupModal';
 import './ColumnGroups.scss';
+import i18n from './i18n';
 
 const block = cn('column-groups');
 
@@ -84,7 +85,7 @@ export default function ColumnGroups({
             },
         },
         {
-            name: 'Name',
+            name: i18n('field_name'),
             render({row}) {
                 return <span title={row.name}>{row.name}</span>;
             },
@@ -92,7 +93,7 @@ export default function ColumnGroups({
             className: block('name'),
         },
         {
-            name: 'Columns',
+            name: i18n('field_columns'),
             render({row}) {
                 return row.columns?.map((column) => `"${column}"`).join(', ');
             },
@@ -127,7 +128,7 @@ export default function ColumnGroups({
     return (
         <ErrorBoundary>
             <div>
-                <div className="elements-heading elements-heading_size_xs">Column groups</div>
+                <div className="elements-heading elements-heading_size_xs">{i18n('title_column-groups')}</div>
                 <WithStickyToolbar
                     topMargin="none"
                     bottomMargin="regular"
@@ -137,7 +138,7 @@ export default function ColumnGroups({
                                 {
                                     node: (
                                         <TextInputWithDebounce
-                                            placeholder="Filter by name"
+                                            placeholder={i18n('context_filter-by-name')}
                                             className={block('filter')}
                                             value={columnGroupNameFilter}
                                             onUpdate={(columnGroupNameFilter) =>
@@ -164,7 +165,7 @@ export default function ColumnGroups({
                     content={
                         <DataTableYT<AclColumnGroup>
                             loaded={loaded}
-                            noItemsText="No groups"
+                            noItemsText={i18n('alert_no-groups')}
                             data={columnGroups}
                             columns={columns}
                             theme={'yt-borderless'}
@@ -203,8 +204,8 @@ export function ColumnGroupsFilter({
             multiple
             hasClear
             filterable
-            label="Columns"
-            placeholder="filter"
+            label={i18n('field_columns')}
+            placeholder={i18n('context_filter-placeholder')}
             items={options}
             value={value}
             onUpdate={(columnsFilter) => updateAclFilters({columnsFilter})}

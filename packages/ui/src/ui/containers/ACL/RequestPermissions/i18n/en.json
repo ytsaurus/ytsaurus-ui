@@ -1,0 +1,19 @@
+{
+  "field_cluster": "Cluster",
+  "field_current": "Current {item}",
+  "field_permissions": "Permissions",
+  "field_read-columns": "Read columns",
+  "field_read-column-group": "Read column group",
+  "field_read-row-group": "Read row group",
+  "field_rls-predicate": "RLS predicate",
+  "field_subjects": "Subjects",
+  "field_duration": "Duration",
+  "field_comment": "Comment",
+  "field_inheritance-mode": "Inheritance mode",
+  "field_permission-flags": "Permission flags",
+  "context_subjects-placeholder": "Enter group name, user name or login...",
+  "context_comment-notice": "Teams and people can be requested through the IDM after the access group is created. If you have a more complex case please describe it in the comments.",
+  "context_not-implemented": "Not implemented",
+  "alert_subjects-required": "At least one subject should be selected.",
+  "action_permissions-types": "Permissions types"
+}

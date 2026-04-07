@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {Select, SelectOption} from '@gravity-ui/uikit';
+import i18n from './i18n';
 
 export type AclGroupItem = {
     id: string;
@@ -34,7 +35,7 @@ export function AclGroupControl({value, onChange, options, disabled}: Props) {
 
     return (
         <Select
-            placeholder="Select group"
+            placeholder={i18n('context_select-group-placeholder')}
             value={value ? [value] : []}
             disabled={disabled}
             options={items}

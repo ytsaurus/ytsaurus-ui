@@ -29,6 +29,7 @@ import withVisible, {WithVisibleProps} from '../../../hocs/withVisible';
 
 import UIFactory from '../../../UIFactory';
 import {ACLReduxProps} from '../ACL-connect-helpers';
+import i18n from './i18n';
 
 import './ManageAcl.scss';
 
@@ -134,43 +135,43 @@ function ManageAcl(props: Props) {
                 responsible: {
                     name: 'responsible',
                     type: 'acl-roles',
-                    caption: 'Responsible',
+                    caption: i18n('field_responsible'),
                     extras: {
                         maxVisibleCount: 3,
-                        placeholder: 'Who should approve...',
+                        placeholder: i18n('context_responsible-placeholder'),
                     },
                 },
                 inheritanceResponsible: {
                     name: 'inheritanceResponsible',
                     type: 'tumbler',
-                    caption: 'Inherit responsible',
+                    caption: i18n('field_inherit-responsible'),
                 },
                 readApprovers: {
                     name: 'readApprovers',
                     type: 'acl-roles',
-                    caption: 'Read approvers',
+                    caption: i18n('field_read-approvers'),
                     extras: {
                         maxVisibleCount: 3,
-                        placeholder: 'Who should approve read requests...',
+                        placeholder: i18n('context_read-approvers-placeholder'),
                     },
                 },
                 auditors: {
                     name: 'auditors',
                     type: 'acl-roles',
-                    caption: 'Auditors',
+                    caption: i18n('field_auditors'),
                     extras: {
                         maxVisibleCount: 3,
-                        placeholder: 'Who should audit ACL change...',
+                        placeholder: i18n('context_auditors-placeholder'),
                     },
                 },
                 bossApproval: {
                     name: 'bossApproval',
                     type: 'tumbler',
-                    caption: 'Boss approval',
+                    caption: i18n('field_boss-approval'),
                 },
                 comment: {
                     name: 'comment',
-                    caption: 'Comment for IDM',
+                    caption: i18n('field_comment-idm'),
                     type: 'textarea',
                 },
             }) as Record<ManageAclFieldsNames, DialogField<FormValues>>,
@@ -217,7 +218,7 @@ function ManageAcl(props: Props) {
                         type: 'block',
                         extras: {
                             children: manageAclError && (
-                                <YTErrorBlock message="Acl update failure" error={manageAclError} />
+                                <YTErrorBlock message={i18n('alert_acl-update-failure')} error={manageAclError} />
                             ),
                         },
                     },
@@ -237,7 +238,7 @@ function ManageAcl(props: Props) {
     return !manageAclFields?.length ? null : (
         <ErrorBoundary>
             <div className={block(null, className)}>
-                <Button onClick={handleModalOpen}>Manage responsibles</Button>
+                <Button onClick={handleModalOpen}>{i18n('action_manage-responsibles')}</Button>
 
                 <CommonDialog
                     size="m"
@@ -245,7 +246,7 @@ function ManageAcl(props: Props) {
                     onClose={handleClose}
                     className={block('modal', {loading, error})}
                 >
-                    <CommonDialog.Header caption="Manage responsibles" />
+                    <CommonDialog.Header caption={i18n('action_manage-responsibles')} />
                     <CommonDialog.Body>{renderForm()}</CommonDialog.Body>
                 </CommonDialog>
             </div>

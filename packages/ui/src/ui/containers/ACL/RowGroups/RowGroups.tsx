@@ -13,6 +13,7 @@ import {AclRowGroup} from '../../../utils/acl/acl-types';
 import {ACLReduxProps} from '../ACL-connect-helpers';
 import {useEditColumnRowGroupModal} from '../EditGroupModal/EditGroupModal';
 import './RowGroups.scss';
+import i18n from './i18n';
 
 const block = cn('acl-row-groups');
 
@@ -76,7 +77,7 @@ export function RowGroups({
             },
         },
         {
-            name: 'Name',
+            name: i18n('field_name'),
             render({row}) {
                 return <span title={row.name}>{row.name}</span>;
             },
@@ -84,7 +85,7 @@ export function RowGroups({
             className: block('name'),
         },
         {
-            name: 'Predicate',
+            name: i18n('field_predicate'),
             render({row}) {
                 return row.predicate;
             },
@@ -119,7 +120,7 @@ export function RowGroups({
     return (
         <ErrorBoundary>
             <div>
-                <div className="elements-heading elements-heading_size_xs">Row groups</div>
+                <div className="elements-heading elements-heading_size_xs">{i18n('title_row-groups')}</div>
                 <WithStickyToolbar
                     topMargin="none"
                     bottomMargin="regular"
@@ -129,7 +130,7 @@ export function RowGroups({
                                 {
                                     node: (
                                         <TextInputWithDebounce
-                                            placeholder="Filter by name"
+                                            placeholder={i18n('context_filter-by-name')}
                                             className={block('filter')}
                                             value={rowGroupNameFilter}
                                             onUpdate={(rowGroupNameFilter) =>
@@ -144,7 +145,7 @@ export function RowGroups({
                     content={
                         <DataTableYT<AclRowGroup>
                             loaded={loaded}
-                            noItemsText="No groups"
+                            noItemsText={i18n('alert_no-groups')}
                             data={rowGroups ?? []}
                             columns={columns}
                             theme={'yt-borderless'}
