@@ -8,6 +8,7 @@ import hammer from '../../common/hammer';
 
 import {parseBytes} from '../../utils/parse/parse-bytes';
 import {KeyCode} from '../../constants';
+import i18n from './i18n';
 import './NumberInput.scss';
 
 const block = cn('yt-number-input');
@@ -129,7 +130,7 @@ export class NumberInputWithError extends React.Component<NumberInputWithErrorPr
 
         try {
             if (isNaN(value)) {
-                return 'wrong format';
+                return i18n('error_wrong-format');
             }
 
             const error = validator(value);
@@ -141,15 +142,15 @@ export class NumberInputWithError extends React.Component<NumberInputWithErrorPr
         }
 
         if (integerOnly && value % 1 !== 0) {
-            return `The value must be an integer`;
+            return i18n('error_must-be-integer');
         }
 
         if (min !== undefined && value < min) {
-            return `The value must be \u2265 ${min}`;
+            return i18n('error_must-be-gte', {min});
         }
 
         if (max !== undefined && value > max) {
-            return `The value must be \u2264 ${max}`;
+            return i18n('error_must-be-lte', {max});
         }
 
         return undefined;
@@ -219,13 +220,13 @@ export class NumberInputWithError extends React.Component<NumberInputWithErrorPr
             <div className={block('hint', {size})}>
                 {showMin && (
                     <Tooltip content={String(min)} placement={'bottom'}>
-                        min: <b>{this.format(min)}</b>
+                        {i18n('label_min')} <b>{this.format(min)}</b>
                     </Tooltip>
                 )}
                 {showMin && <> &nbsp; </>}
                 {showMax && (
                     <Tooltip content={String(max)} placement={'bottom'}>
-                        max: <b>{this.format(max)}</b>
+                        {i18n('label_max')} <b>{this.format(max)}</b>
                     </Tooltip>
                 )}
             </div>

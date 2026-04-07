@@ -1,0 +1,8 @@
+{
+  "error_wrong-format": "wrong format",
+  "error_must-be-integer": "The value must be an integer",
+  "error_must-be-gte": "The value must be ≥ {{min}}",
+  "error_must-be-lte": "The value must be ≤ {{max}}",
+  "label_min": "min:",
+  "label_max": "max:"
+}
