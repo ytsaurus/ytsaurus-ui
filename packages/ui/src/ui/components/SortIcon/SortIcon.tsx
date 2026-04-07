@@ -5,6 +5,7 @@ import format from '../../common/hammer/format';
 import Icon from '../../components/Icon/Icon';
 import {Tooltip} from '@ytsaurus/components';
 import {OrderType, nextSortOrderValue} from '../../utils/sort-helpers';
+import i18n from './i18n';
 
 import './SortIcon.scss';
 
@@ -51,7 +52,7 @@ export default class SortIcon extends React.Component<Props> {
                 {label && <span className={block('label')}>{label}</span>}
                 <Tooltip
                     className={block('icon')}
-                    content={order ? format.ReadableField(order) : 'Unordered'}
+                    content={order ? format.ReadableField(order) : i18n('context_unordered')}
                 >
                     <Icon awesome={icon} face="solid" size={size} />
                 </Tooltip>
