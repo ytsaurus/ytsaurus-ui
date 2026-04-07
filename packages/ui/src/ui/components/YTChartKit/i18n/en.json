@@ -1,0 +1,4 @@
+{
+    "field_observations": "Observations",
+    "context_observations-in-range": "{{count}} observations in range from {{from}} to {{to}}"
+}

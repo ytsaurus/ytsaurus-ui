@@ -7,6 +7,7 @@ import {ColorCircle} from '../../components/ColorCircle/ColorCircle';
 
 import {useMemoizedArgsWithIncarnaction} from './hack';
 import {YTChartKitLazy} from '.';
+import i18n from './i18n';
 
 export type YTChartKitHistogramProps = {
     data?: Array<number>;
@@ -88,7 +89,7 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
                 data: [
                     {
                         type: 'bar-x',
-                        name: 'Observations',
+                        name: i18n('field_observations'),
                         data: values.map((value, index) => {
                             return {
                                 x: min + step * index + step * 0.5,
@@ -122,8 +123,11 @@ export function YTChartKitHistogram(props: YTChartKitHistogramProps) {
                         <React.Fragment>
                             <div>
                                 <ColorCircle color={color ?? 'magenta'} />
-                                <b>{format.Number(y, {digits: 0})}</b> observations in range from{' '}
-                                <b>{fmt(l)}</b> to <b>{fmt(r)}</b>
+                                {i18n('context_observations-in-range', {
+                                    count: <b key="count">{format.Number(y, {digits: 0})}</b>,
+                                    from: <b key="from">{fmt(l)}</b>,
+                                    to: <b key="to">{fmt(r)}</b>,
+                                })}
                             </div>
                         </React.Fragment>
                     );
