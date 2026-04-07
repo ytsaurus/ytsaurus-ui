@@ -56,7 +56,7 @@ export function tableSize(attributes: any, isDynamic: boolean, mediumList: strin
             key: 'dataWeight',
             label: 'Data weight',
             value: <Template.FormattedValue value={dataWeight} format="Bytes" />,
-            tooltip: i18n('data_weight:tooltip'),
+            tooltip: i18n('context_data-weight'),
             visible: dataWeight !== undefined,
         },
     ];

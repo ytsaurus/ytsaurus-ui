@@ -33,7 +33,7 @@ export function metaTablePresetSize(attributes: unknown, mediumList: Array<strin
                 />
             ),
             visible: usageMediumDiskSpace !== undefined || mediumDiskSpace !== undefined,
-            tooltip: i18n('medium_disk_space:tooltip', {
+            tooltip: i18n('context_medium-disk-space', {
                 name: format.ReadableField(medium),
                 medium,
             }),
@@ -47,13 +47,13 @@ export function metaTablePresetSize(attributes: unknown, mediumList: Array<strin
             key: 'uncompressed_data_size',
             value: <Template.FormattedValue value={uncompressedDataSize} format="Bytes" />,
             visible: uncompressedDataSize !== undefined,
-            tooltip: i18n('uncompressed_size:tooltip'),
+            tooltip: i18n('context_uncompressed-size'),
         },
         {
             key: 'compressed_data_size',
             value: <Template.FormattedValue value={compressedDataSize} format="Bytes" />,
             visible: compressedDataSize !== undefined,
-            tooltip: i18n('compressed_size:tooltip'),
+            tooltip: i18n('context_compressed-size'),
         },
         {
             key: 'primary_medium',
@@ -65,7 +65,7 @@ export function metaTablePresetSize(attributes: unknown, mediumList: Array<strin
             label: 'Total disk space',
             value: <Template.FormattedValue value={usageDiskSpace ?? diskSpace} format="Bytes" />,
             visible: usageDiskSpace !== undefined || diskSpace !== undefined,
-            tooltip: i18n('disk_space:tooltip'),
+            tooltip: i18n('context_disk-space'),
         },
         ...(showMediums ? mediumsTemplates : []),
     ];

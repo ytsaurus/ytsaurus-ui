@@ -1,5 +1,5 @@
 import {addI18Keysets} from '../../../../i18n';
-import en from './en.json';
-import ru from './ru.json';
 
-export default addI18Keysets('yt:meta-table:presets', {en, ru});
+import dicts from './dicts';
+
+export default addI18Keysets('yt:meta-table:presets', dicts);
