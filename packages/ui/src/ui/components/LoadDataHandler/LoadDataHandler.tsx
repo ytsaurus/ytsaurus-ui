@@ -6,6 +6,7 @@ import hammer from '../../common/hammer';
 import {showErrorPopup} from '../../utils/utils';
 import {YTError} from '../../types';
 import {toaster} from '../../utils/toaster';
+import i18n from './i18n';
 
 interface LoadDataHandlerProps {
     alwaysShowError?: boolean;
@@ -24,11 +25,11 @@ export default class LoadDataHandler extends Component<LoadDataHandlerProps> {
                 theme: 'danger',
                 name: 'network',
                 autoHiding: 500000,
-                title: 'Oops! something went wrong.',
+                title: i18n('title_error'),
                 content: errorData ? (errorData as YTError).message : hammer.format.NO_VALUE,
                 actions: [
                     {
-                        label: ' view',
+                        label: i18n('action_view'),
                         onClick: () => showErrorPopup(errorData as YTError),
                     },
                 ],
