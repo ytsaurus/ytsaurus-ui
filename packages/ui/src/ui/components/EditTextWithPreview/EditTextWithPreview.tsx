@@ -12,6 +12,8 @@ import './EditTextWithPreview.scss';
 import {DropdownMenuItem} from '@gravity-ui/uikit';
 import type {editor} from 'monaco-editor';
 
+import i18n from './i18n';
+
 const DEFAULT_SIZE = 350;
 const block = cn('edit-text-with-preview');
 
@@ -47,7 +49,7 @@ export function EditTextWithPreview({
     editorLang,
     editorActions,
     className,
-    editorTitle = 'Text',
+    editorTitle = i18n('title_editor'),
     editorSubTitle,
     renderPreview,
     minHeight,
@@ -64,7 +66,7 @@ export function EditTextWithPreview({
     }, [setShowPreview, showPreview]);
 
     const showHideAction: DropdownMenuItem = {
-        text: !showPreview ? 'Show preview' : 'Hide',
+        text: !showPreview ? i18n('action_show-preview') : i18n('action_hide-preview'),
         iconStart: <Icon awesome={!showPreview ? 'eye' : 'eye-slash'} />,
         action: togglePreview,
     };
@@ -129,7 +131,7 @@ export function EditTextWithPreview({
                                 key="preview"
                                 className={block('panel')}
                                 contentClassName={block('markdown')}
-                                name={'Preview'}
+                                name={i18n('title_preview')}
                                 actions={[showHideAction]}
                             >
                                 {renderPreview ? renderPreview(value) : value}
