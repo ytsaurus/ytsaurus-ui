@@ -58,6 +58,8 @@ import {makeExtraPageRoutes} from './ExtraClusterPageRoutes';
 import {odinPageInfo} from '../../pages/odin/lazy';
 import {hasOdinPage} from '../../config';
 
+import i18n from './i18n';
+
 import './ClusterPage.scss';
 
 const b = cn('cluster-page');
@@ -261,7 +263,9 @@ class ClusterPage extends Component {
                     {hasError ? (
                         <PreloadError />
                     ) : (
-                        <p className={b('loading-text')}>Loading {clusterConfig?.id}...</p>
+                        <p className={b('loading-text')}>
+                            {i18n('loading-cluster', {id: clusterConfig?.id})}
+                        </p>
                     )}
                 </div>
                 <div className={b('error')}>
