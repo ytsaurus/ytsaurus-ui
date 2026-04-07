@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import ReactList from 'react-list';
 import block from 'bem-cn-lite';
 
+import i18n from './i18n';
+
 import difference_ from 'lodash/difference';
 import filter_ from 'lodash/filter';
 import forEach_ from 'lodash/forEach';
@@ -450,7 +452,7 @@ class ElementsTable extends Component {
     // render methods start
     renderEmptyTableContent = (
         <div>
-            <div className={block(ELEMENTS_TABLE)('empty-header')}>No items to show </div>
+            <div className={block(ELEMENTS_TABLE)('empty-header')}>{i18n('context_no-items')}</div>
             {this.props.emptyDataDescription && (
                 <div className={block(ELEMENTS_TABLE)('empty-content')}>
                     {this.props.emptyDataDescription}
