@@ -12,6 +12,7 @@ import withCollapsible from '../../hocs/withCollapsible';
 
 import './LabelsGroup.scss';
 import Button from '../../components/Button/Button';
+import i18n from './i18n';
 
 const block = cn('labels-group');
 
@@ -108,7 +109,7 @@ class LabelsGroup extends Component<LabelsGroupProps> {
 
                 {onRemoveAll && items.length > 0 && (
                     <Button size="s" view="flat-secondary" onClick={onRemoveAll}>
-                        Clear all
+                        {i18n('action_clear-all')}
                     </Button>
                 )}
             </ul>
