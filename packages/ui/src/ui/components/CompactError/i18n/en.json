@@ -1,3 +1,4 @@
 {
-  "an-error-occurred": "An error occurred"
+  "alert_error-occurred": "An error occurred",
+  "action_details": "Details"
 }
