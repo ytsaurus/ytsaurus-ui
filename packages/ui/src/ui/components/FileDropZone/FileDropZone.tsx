@@ -31,7 +31,7 @@ export const FileDropZone: React.FC<React.PropsWithChildren<FileDropZoneProps>> 
         return (
             <div className={block('info')}>
                 <div>{isDragging ? i18n('context_drop-file') : i18n('context_drag-file')}</div>
-                {i18n('or')}
+                {i18n('context_or')}
                 <div>
                     <FilePicker onChange={onFile}>{i18n('action_pick-file')}</FilePicker>
                 </div>
