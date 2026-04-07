@@ -6,18 +6,18 @@ import OperationSuggestFilter from '../../../../pages/operations/OperationSugges
 import {updateFilter} from '../../../../store/actions/operations/list';
 import {getActualValue} from '../../../../pages/operations/selectors';
 import {
-    getOperationsListFilters,
-    getOperationsListFixedStartedByFilter_FOR_YTFRONT_2838,
-    getOperationsPoolSuggestions,
-    getOperationsPoolTreeSuggestions,
-    getOperationsUserSuggestions,
+    selectOperationsListFilters,
+    selectOperationsListFixedStartedByFilter_FOR_YTFRONT_2838,
+    selectOperationsPoolSuggestions,
+    selectOperationsPoolTreeSuggestions,
+    selectOperationsUserSuggestions,
 } from '../../../../store/selectors/operations';
 import {RootState} from '../../../../store/reducers';
 import {OperationsListFilterName} from '../../../../store/reducers/operations/list/list';
 import UIFactory from '../../../../UIFactory';
 
 const mapStateToPropsByFilterName = (state: RootState, name: OperationsListFilterName) => {
-    const filters = getOperationsListFilters(state);
+    const filters = selectOperationsListFilters(state);
     const {defaultValue, value} = filters[name];
 
     return {
@@ -30,7 +30,7 @@ const mapStateToPropsByFilterName = (state: RootState, name: OperationsListFilte
 const mapPoolTreeStateToProps = (state: RootState) => {
     return {
         ...mapStateToPropsByFilterName(state, 'poolTree'),
-        states: getOperationsPoolTreeSuggestions(state),
+        states: selectOperationsPoolTreeSuggestions(state),
         placeholder: 'Pool tree...',
     };
 };
@@ -42,7 +42,7 @@ export const OperationsListPoolTreeSuggestFilter = connect(mapPoolTreeStateToPro
 const mapPoolStateToProps = (state: RootState) => {
     return {
         ...mapStateToPropsByFilterName(state, 'pool'),
-        states: getOperationsPoolSuggestions(state),
+        states: selectOperationsPoolSuggestions(state),
         placeholder: 'Filter pool...',
     };
 };
@@ -51,11 +51,11 @@ export const OperationsListPoolSuggestFilter = connect(mapPoolStateToProps, {
 })(OperationSuggestFilter);
 
 const mapUserStateToProps = (state: RootState) => {
-    const fixedStartedByFilter = getOperationsListFixedStartedByFilter_FOR_YTFRONT_2838(state);
+    const fixedStartedByFilter = selectOperationsListFixedStartedByFilter_FOR_YTFRONT_2838(state);
 
     return {
         ...mapStateToPropsByFilterName(state, 'user'),
-        states: getOperationsUserSuggestions(state),
+        states: selectOperationsUserSuggestions(state),
         placeholder: fixedStartedByFilter || 'Started by...',
     };
 };
@@ -67,7 +67,7 @@ function OperationsAccessibleForFilterImpl() {
     const dispatch = useDispatch();
     const {
         subject: {value},
-    } = useSelector(getOperationsListFilters);
+    } = useSelector(selectOperationsListFilters);
 
     return (
         <div>

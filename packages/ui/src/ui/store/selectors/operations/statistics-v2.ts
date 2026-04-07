@@ -24,14 +24,14 @@ import {RootState} from '../../../store/reducers';
 import {ValueOf} from '../../../../@types/types';
 import {prepareDataFromGraph} from '../../../utils/operations/tabs/details/tasks';
 
-const getJobTypeFilter = (state: RootState) => state.operations.statistics.jobTypeFilter;
-const getPoolTreeFilter = (state: RootState) => state.operations.statistics.poolTreeFilter;
-const getFilterText = (state: RootState) => state.operations.statistics.filterText;
+const selectJobTypeFilter = (state: RootState) => state.operations.statistics.jobTypeFilter;
+const selectPoolTreeFilter = (state: RootState) => state.operations.statistics.poolTreeFilter;
+const selectFilterText = (state: RootState) => state.operations.statistics.filterText;
 
-const getOperationDetailsOperation = (state: RootState) => state.operations.detail.operation;
+const selectOperationDetailsOperation = (state: RootState) => state.operations.detail.operation;
 
-export const getOperationStatisticsV2 = createSelector(
-    [getOperationDetailsOperation],
+export const selectOperationStatisticsV2 = createSelector(
+    [selectOperationDetailsOperation],
     (operation) => {
         return ypath.getValue(operation, '/@progress/job_statistics_v2') as
             | StatisticTreeRoot
@@ -75,8 +75,8 @@ export function isStatisticItem(v?: ValueOf<StatisticTree>): v is Array<Statisti
     return Array.isArray(v);
 }
 
-export const getOperationStatisticsAvailableValues = createSelector(
-    [getOperationStatisticsV2],
+export const selectOperationStatisticsAvailableValues = createSelector(
+    [selectOperationStatisticsV2],
     (stats) => {
         const total = stats?.time?.total ?? [];
         const tmp = reduce_(
@@ -107,8 +107,13 @@ export const getOperationStatisticsAvailableValues = createSelector(
     },
 );
 
-export const getOperationStatisticsActiveFilterValues = createSelector(
-    [getJobTypeFilter, getPoolTreeFilter, getFilterText, getOperationStatisticsAvailableValues],
+export const selectOperationStatisticsActiveFilterValues = createSelector(
+    [
+        selectJobTypeFilter,
+        selectPoolTreeFilter,
+        selectFilterText,
+        selectOperationStatisticsAvailableValues,
+    ],
     (jobTypeFilter, poolTreeFilter, filterText, {job_type, pool_tree}) => {
         return {
             activeJobType:
@@ -124,12 +129,12 @@ export const getOperationStatisticsActiveFilterValues = createSelector(
     },
 );
 
-export const getOperationStatiscsHasData = (state: RootState) => {
-    return !isEmpty_(getOperationStatisticsV2(state));
+export const selectOperationStatisticsHasData = (state: RootState) => {
+    return !isEmpty_(selectOperationStatisticsV2(state));
 };
 
-export const getOperationStatisticsFilteredTree = createSelector(
-    [getOperationStatisticsActiveFilterValues, getOperationStatisticsV2],
+export const selectOperationStatisticsFilteredTree = createSelector(
+    [selectOperationStatisticsActiveFilterValues, selectOperationStatisticsV2],
     ({activeJobType, activePoolTree, filterText}, tree) => {
         if (!activeJobType && !activePoolTree && !filterText) {
             return tree;
@@ -166,8 +171,8 @@ export const getOperationStatisticsFilteredTree = createSelector(
     },
 );
 
-export const getOperationStatisticsFiltered = createSelector(
-    [getOperationStatisticsFilteredTree],
+export const selectOperationStatisticsFiltered = createSelector(
+    [selectOperationStatisticsFilteredTree],
     (tree) => {
         const res: Array<{
             name: string;
@@ -213,7 +218,7 @@ function mergeSummary(summary: StatisticItemSummary, current?: StatisticItemSumm
     };
 }
 
-export const getTotalJobWallTime = createSelector(getOperationStatisticsV2, (tree) => {
+export const selectTotalJobWallTime = createSelector(selectOperationStatisticsV2, (tree) => {
     const item = tree?.time?.total;
     return excludeRunningAndCalcSum(item);
 });
@@ -231,7 +236,7 @@ const CPU_TIME_SPENT_PART_NAMES = [
     'user_job.cpu.system',
 ];
 
-export const getTotalCpuTimeSpent = createSelector([getOperationStatisticsV2], (tree) => {
+export const selectTotalCpuTimeSpent = createSelector([selectOperationStatisticsV2], (tree) => {
     const items = reduce_(
         CPU_TIME_SPENT_PART_NAMES,
         (acc, path) => {
@@ -249,8 +254,8 @@ export const getTotalCpuTimeSpent = createSelector([getOperationStatisticsV2], (
     return items.length ? sum_(items) : format.NO_VALUE;
 });
 
-export const getOperationDetailTasksData = createSelector(
-    [getOperationDetailsOperation, getOperationStatisticsV2],
+export const selectOperationDetailTasksData = createSelector(
+    [selectOperationDetailsOperation, selectOperationStatisticsV2],
     (operation, stats) => {
         const items = prepareDataFromGraph(operation);
 

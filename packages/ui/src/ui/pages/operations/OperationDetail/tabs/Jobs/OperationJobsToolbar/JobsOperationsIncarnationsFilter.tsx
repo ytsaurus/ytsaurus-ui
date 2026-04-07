@@ -5,8 +5,8 @@ import cn from 'bem-cn-lite';
 import {updateJobsOperationIncarnationFilter} from '../../../../../../store/actions/operations/jobs-operation-incarnations';
 import OperationSelectFilter from '../../../../../../pages/operations/OperationSelectFilter/OperationSelectFilter';
 import {
-    getJobsOperationIncarnationsFilter,
-    getJobsOperationIncarnationsValues,
+    selectJobsOperationIncarnationsFilter,
+    selectJobsOperationIncarnationsValues,
 } from '../../../../../../store/selectors/operations/jobs';
 
 import './JobsOperationsIncarnationsFilter.scss';
@@ -22,8 +22,8 @@ export function JobsOperationIncarnationsFilter({
 }) {
     const dispatch = useDispatch();
 
-    const filter = useSelector(getJobsOperationIncarnationsFilter);
-    const values = useSelector(getJobsOperationIncarnationsValues);
+    const filter = useSelector(selectJobsOperationIncarnationsFilter);
+    const values = useSelector(selectJobsOperationIncarnationsValues);
 
     return !values?.length
         ? null

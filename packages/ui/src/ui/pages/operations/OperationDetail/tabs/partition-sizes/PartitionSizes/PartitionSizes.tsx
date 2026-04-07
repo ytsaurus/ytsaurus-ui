@@ -10,7 +10,7 @@ import ErrorBoundary from '../../../../../../components/ErrorBoundary/ErrorBound
 
 import {selectTheme} from '../../../../../../store/selectors/global';
 
-import {getOperationDetailsLoadingStatus} from '../../../../../../store/selectors/operations/operation';
+import {selectOperationDetailsLoadingStatus} from '../../../../../../store/selectors/operations/operation';
 import {useAppRumMeasureStart} from '../../../../../../rum/rum-app-measures';
 import {RumMeasureTypes} from '../../../../../../rum/rum-measure-types';
 import {isFinalLoadingStatus} from '../../../../../../utils/utils';
@@ -92,7 +92,7 @@ const connector = connect(mapStateToProps);
 const PartitionSizesConnected = connector(PartitionSizes);
 
 export default function PartitionSizesWithRum() {
-    const loadState = useSelector(getOperationDetailsLoadingStatus);
+    const loadState = useSelector(selectOperationDetailsLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.OPERATION_TAB_PARTITION_SIZES,

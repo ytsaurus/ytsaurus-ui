@@ -24,7 +24,7 @@ import {
     OperationsListPoolTreeSuggestFilter,
     OperationsListUserSuggestFilter,
 } from '../../../../pages/operations/OperationsList/OperationsListToolbar/OperationsListSuggestFilters';
-import {getOperationsListFixedStartedByFilter_FOR_YTFRONT_2838} from '../../../../store/selectors/operations';
+import {selectOperationsListFixedStartedByFilter_FOR_YTFRONT_2838} from '../../../../store/selectors/operations';
 import Button, {SelectButton} from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
 import {PoolTreesLoader} from '../../../../hooks/global-pool-trees';
@@ -261,7 +261,7 @@ function OperationsListToolbarHooked({children}) {
     const subjects = useSelector(selectAllUserNames);
     const {failedJobs} = useSelector((state) => state.operations.list.filters) || {};
     const fixedStartedByFilter = useSelector(
-        getOperationsListFixedStartedByFilter_FOR_YTFRONT_2838,
+        selectOperationsListFixedStartedByFilter_FOR_YTFRONT_2838,
     );
 
     const dispatch = useDispatch();

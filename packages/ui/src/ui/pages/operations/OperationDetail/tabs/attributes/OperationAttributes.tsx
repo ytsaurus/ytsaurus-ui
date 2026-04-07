@@ -2,9 +2,9 @@ import React from 'react';
 import {useSelector} from '../../../../../store/redux-hooks';
 
 import {
-    getOperationDetailsLoadingStatus,
-    getOperationId,
-    getOperationTypedAttributes,
+    selectOperationDetailsLoadingStatus,
+    selectOperationId,
+    selectOperationTypedAttributes,
 } from '../../../../../store/selectors/operations/operation';
 import Yson from '../../../../../components/Yson/Yson';
 import {getYsonSettingsDisableDecode} from '../../../../../store/selectors/thor/unipika';
@@ -15,7 +15,7 @@ import {useAppRumMeasureStart} from '../../../../../rum/rum-app-measures';
 import {YsonDownloadButton} from '../../../../../components/DownloadAttributesButton';
 
 function useOperationAttributesRumMesures() {
-    const loadState = useSelector(getOperationDetailsLoadingStatus);
+    const loadState = useSelector(selectOperationDetailsLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.OPERATION_TAB_ATTRIBUTES,
@@ -36,9 +36,9 @@ function useOperationAttributesRumMesures() {
 }
 
 function OperationAttributes({className}: {className: string}) {
-    const typedAttributes = useSelector(getOperationTypedAttributes);
+    const typedAttributes = useSelector(selectOperationTypedAttributes);
     const settings = useSelector(getYsonSettingsDisableDecode);
-    const id = useSelector(getOperationId);
+    const id = useSelector(selectOperationId);
 
     useOperationAttributesRumMesures();
 

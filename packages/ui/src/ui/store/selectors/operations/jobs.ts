@@ -1,9 +1,9 @@
 import {RootState} from '../../reducers';
 
-export const getJobsErrors = (state: RootState) => state.operations.jobs.jobsErrors;
-export const getJobsOperationId = (state: RootState) => state.operations.jobs.operationId;
+export const selectJobsErrors = (state: RootState) => state.operations.jobs.jobsErrors;
+export const selectJobsOperationId = (state: RootState) => state.operations.jobs.operationId;
 
-export const getJobsOperationIncarnationsFilter = (state: RootState) =>
+export const selectJobsOperationIncarnationsFilter = (state: RootState) =>
     state.operations.jobsOperationIncarnations.filter;
-export const getJobsOperationIncarnationsValues = (state: RootState) =>
+export const selectJobsOperationIncarnationsValues = (state: RootState) =>
     state.operations.jobsOperationIncarnations.availableValues;

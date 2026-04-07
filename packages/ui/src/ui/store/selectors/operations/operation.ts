@@ -12,12 +12,12 @@ import {FIX_MY_TYPE} from '../../../types';
 import {prepareFaqUrl} from '../../../utils/operations/tabs/details/alerts';
 import {selectClusterUiConfig} from '../global';
 
-const getOperationErasedTreesRaw = (state: RootState) => {
+const selectOperationErasedTreesRaw = (state: RootState) => {
     return ypath.getValue(state.operations.detail, '/operation/@runtime_parameters/erased_trees');
 };
 
-export const getOperationErasedTrees = createSelector(
-    [getOperationErasedTreesRaw],
+export const selectOperationErasedTrees = createSelector(
+    [selectOperationErasedTreesRaw],
     (rawTrees: Array<unknown>) => {
         return reduce_(
             rawTrees,
@@ -35,61 +35,64 @@ interface OperationTask {
     task_name: string;
 }
 
-const getOperationAlertEventsImpl = (state: RootState) =>
+const selectOperationAlertEventsImpl = (state: RootState) =>
     state.operations.detail.details.alert_events;
 
-export const getOperationAlertEvents = createSelector([getOperationAlertEventsImpl], (items) => {
-    const appeared: Record<string, AlertInfo> = {};
-    return reduce_(
-        items,
-        (acc, item) => {
-            const type = ypath.getValue(item.alert_type);
-            const code = ypath.getNumberDeprecated(item, '/error/code', NaN);
-            if (!code && appeared[type]) {
-                const last = appeared[type];
-                last.to = ypath.getValue(item.time);
-                delete appeared[type];
-            } else if (code) {
-                acc.push({
-                    from: ypath.getValue(item.time),
-                    type,
-                    error: item.error,
-                    url: prepareFaqUrl(type),
-                });
-                appeared[type] = acc[acc.length - 1];
-            } else {
-                acc.push({
-                    to: ypath.getValue(item.time),
-                    type,
-                    error: item.error,
-                    url: prepareFaqUrl(type),
-                });
-            }
-            return acc;
-        },
-        [] as Array<AlertInfo>,
-    );
-});
+export const selectOperationAlertEvents = createSelector(
+    [selectOperationAlertEventsImpl],
+    (items) => {
+        const appeared: Record<string, AlertInfo> = {};
+        return reduce_(
+            items,
+            (acc, item) => {
+                const type = ypath.getValue(item.alert_type);
+                const code = ypath.getNumberDeprecated(item, '/error/code', NaN);
+                if (!code && appeared[type]) {
+                    const last = appeared[type];
+                    last.to = ypath.getValue(item.time);
+                    delete appeared[type];
+                } else if (code) {
+                    acc.push({
+                        from: ypath.getValue(item.time),
+                        type,
+                        error: item.error,
+                        url: prepareFaqUrl(type),
+                    });
+                    appeared[type] = acc[acc.length - 1];
+                } else {
+                    acc.push({
+                        to: ypath.getValue(item.time),
+                        type,
+                        error: item.error,
+                        url: prepareFaqUrl(type),
+                    });
+                }
+                return acc;
+            },
+            [] as Array<AlertInfo>,
+        );
+    },
+);
 
-export const getOperation = (state: RootState) => state.operations.detail.operation;
-export const getOperationId = (state: RootState) =>
+export const selectOperation = (state: RootState) => state.operations.detail.operation;
+export const selectOperationId = (state: RootState) =>
     ypath.getValue(state.operations.detail.operation);
-export const getOperationTasks = createSelector(
-    [getOperation],
+export const selectOperationTasks = createSelector(
+    [selectOperation],
     (operation): Array<OperationTask> | undefined => {
         return ypath.getValue(operation, '/@progress/tasks');
     },
 );
-export const getOperationTasksNames = createSelector(
-    [getOperationTasks],
+export const selectOperationTasksNames = createSelector(
+    [selectOperationTasks],
     (tasks?: Array<{task_name: string}>) => {
         return map_(tasks, 'task_name').sort();
     },
 );
 
-export const getOperationTreeConfigs = (state: RootState) => state.operations.detail.treeConfigs;
+export const selectOperationTreeConfigs = (state: RootState) => state.operations.detail.treeConfigs;
 
-export const getOperationDetailsLoadingStatus = createSelector(
+export const selectOperationDetailsLoadingStatus = createSelector(
     [
         (state: RootState) => (state.operations.detail as FIX_MY_TYPE).loading,
         (state: RootState) => (state.operations.detail as FIX_MY_TYPE).loaded,
@@ -100,21 +103,24 @@ export const getOperationDetailsLoadingStatus = createSelector(
     },
 );
 
-export const getOperationTypedAttributes = (state: RootState) =>
+export const selectOperationTypedAttributes = (state: RootState) =>
     (state.operations.detail.operation as FIX_MY_TYPE).$typedAttributes;
 
-export const getOperationMonitorChartStates = (state: RootState) =>
+export const selectOperationMonitorChartStates = (state: RootState) =>
     state.operations.detail.monitorChartStates;
 
-export const getOperationPools = (state: RootState) =>
+export const selectOperationPools = (state: RootState) =>
     (state.operations.detail.operation as FIX_MY_TYPE).pools;
 
-export const getOperationPoolNames = createSelector([getOperationPools], (pools): Array<string> => {
-    return map_(pools, 'pool');
-});
+export const selectOperationPoolNames = createSelector(
+    [selectOperationPools],
+    (pools): Array<string> => {
+        return map_(pools, 'pool');
+    },
+);
 
-export const getOperationsMonitorChartStatesFinishedCount = createSelector(
-    [getOperationMonitorChartStates],
+export const selectOperationsMonitorChartStatesFinishedCount = createSelector(
+    [selectOperationMonitorChartStates],
     (states) => {
         return reduce_(
             states,
@@ -126,7 +132,7 @@ export const getOperationsMonitorChartStatesFinishedCount = createSelector(
     },
 );
 
-export const getOperationJobsLoadingStatus = createSelector(
+export const selectOperationJobsLoadingStatus = createSelector(
     [
         (state: RootState) => (state.operations.jobs as FIX_MY_TYPE).loading,
         (state: RootState) => (state.operations.jobs as FIX_MY_TYPE).loaded,
@@ -145,14 +151,14 @@ export interface OperationExperimentItem {
     effect: unknown;
 }
 
-export const getOperationExperimentAssignments = createSelector(
-    [getOperation],
+export const selectOperationExperimentAssignments = createSelector(
+    [selectOperation],
     (operation): Array<OperationExperimentItem> => {
         return ypath.getValue(operation, '/@experiment_assignments');
     },
 );
 
-export const getOperationMonitoredJobCount = createSelector([getOperation], (operation) => {
+export const selectOperationMonitoredJobCount = createSelector([selectOperation], (operation) => {
     const res = ypath.getNumberDeprecated(
         operation,
         '/@brief_progress/registered_monitoring_descriptor_count',
@@ -161,14 +167,14 @@ export const getOperationMonitoredJobCount = createSelector([getOperation], (ope
 });
 
 export const selectIsOperationInGpuTree = createSelector(
-    [getOperationTreeConfigs],
+    [selectOperationTreeConfigs],
     (treeConfigs) => {
         return treeConfigs?.every((item) => item.config.main_resource === 'gpu');
     },
 );
 
-export const getOperationPerformanceUrlTemplate = createSelector(
-    [getOperationId, selectClusterUiConfig],
+export const selectOperationPerformanceUrlTemplate = createSelector(
+    [selectOperationId, selectClusterUiConfig],
     (operationId, uiConfig) => {
         const operationPerformanceUrlTemplate = uiConfig?.operation_performance_url_template;
 

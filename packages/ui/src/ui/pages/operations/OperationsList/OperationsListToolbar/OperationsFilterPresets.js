@@ -20,8 +20,8 @@ import {OPERATIONS_LIST_RUNNING_PRESET} from '../../../../constants/operations/l
 
 import {makeGetSetting} from '../../../../store/selectors/settings';
 import {
-    getOperationsListActivePresets,
-    getOperationsListFilterPresets,
+    selectOperationsListActivePresets,
+    selectOperationsListFilterPresets,
 } from '../../../../store/selectors/operations/operations-list';
 import Modal from '../../../../components/Modal/Modal';
 import Icon from '../../../../components/Icon/Icon';
@@ -186,7 +186,7 @@ function mapStateToProps(state) {
 
     const getSetting = makeGetSetting(state);
     let defaultPreset = getSetting(DEFAULT_PRESET_SETTING, NAMESPACES.OPERATION);
-    const presets = getOperationsListFilterPresets(state);
+    const presets = selectOperationsListFilterPresets(state);
 
     if (!presets[defaultPreset]) {
         defaultPreset = OPERATIONS_LIST_RUNNING_PRESET;
@@ -194,7 +194,7 @@ function mapStateToProps(state) {
 
     return {
         presets,
-        activePresets: getOperationsListActivePresets(state),
+        activePresets: selectOperationsListActivePresets(state),
         defaultPreset,
         dialog: operations.list.savePresetDialog,
     };

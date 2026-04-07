@@ -3,7 +3,7 @@ import {ThunkAction} from 'redux-thunk';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {RootState} from '../../../store/reducers';
 import {JobsMonitorAction} from '../../../store/reducers/operations/jobs/jobs-monitor';
-import {getOperationMonitoredJobCount} from '../../../store/selectors/operations/operation';
+import {selectOperationMonitoredJobCount} from '../../../store/selectors/operations/operation';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 
 type JobsMonitorThunkAction = ThunkAction<unknown, RootState, unknown, JobsMonitorAction>;
@@ -12,7 +12,7 @@ const cancelHelper = new CancelHelper();
 
 export function getJobsMonitoringDescriptors(operation_id: string): JobsMonitorThunkAction {
     return (dispatch, getState) => {
-        const jobsCount = getOperationMonitoredJobCount(getState());
+        const jobsCount = selectOperationMonitoredJobCount(getState());
         if (jobsCount === 0) {
             return undefined;
         }

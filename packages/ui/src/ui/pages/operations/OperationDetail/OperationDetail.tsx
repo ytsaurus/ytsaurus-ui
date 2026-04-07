@@ -40,10 +40,10 @@ import {promptAction} from '../../../store/actions/actions';
 import {showEditPoolsWeightsModal} from '../../../store/actions/operations';
 import {getOperation} from '../../../store/actions/operations/detail';
 import {
-    getOperationDetailsLoadingStatus,
-    getOperationErasedTrees,
-    getOperationPerformanceUrlTemplate,
     selectIsOperationInGpuTree,
+    selectOperationDetailsLoadingStatus,
+    selectOperationErasedTrees,
+    selectOperationPerformanceUrlTemplate,
 } from '../../../store/selectors/operations/operation';
 import {TabSettings, makeTabProps} from '../../../utils';
 import {
@@ -63,12 +63,12 @@ import {updateListJobsFilter} from '../../../store/actions/operations/jobs';
 import {getOperationEvents, listOperationEventsApi} from '../../../store/api/yt';
 import {RootState} from '../../../store/reducers';
 import {RuntimeItem} from '../../../store/reducers/operations/detail';
-import {getJobsMonitorTabVisible} from '../../../store/selectors/operations/jobs-monitor';
+import {selectJobsMonitorTabVisible} from '../../../store/selectors/operations/jobs-monitor';
 import {
     JobState,
-    getOperationStatiscsHasData,
-    getTotalCpuTimeSpent,
-    getTotalJobWallTime,
+    selectOperationStatisticsHasData,
+    selectTotalCpuTimeSpent,
+    selectTotalJobWallTime,
 } from '../../../store/selectors/operations/statistics-v2';
 import {selectIsIncarnationNextFeatureEnabled} from '../../../store/selectors/settings/settings-development';
 import {getCurrentCluster} from '../../../store/selectors/thor';
@@ -532,9 +532,9 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
 const mapStateToProps = (state: RootState, routerProps: RouteProps) => {
     const {operation, errorData, loading, loaded, error, actions, details} =
         state.operations.detail;
-    const totalJobWallTime = getTotalJobWallTime(state);
-    const cpuTimeSpent = getTotalCpuTimeSpent(state);
-    const erasedTrees = getOperationErasedTrees(state);
+    const totalJobWallTime = selectTotalJobWallTime(state);
+    const cpuTimeSpent = selectTotalCpuTimeSpent(state);
+    const erasedTrees = selectOperationErasedTrees(state);
     const {runtime} = details;
 
     const {operationId} = routerProps.match.params;
@@ -569,10 +569,10 @@ const mapStateToProps = (state: RootState, routerProps: RouteProps) => {
         monitoringComponent,
         timelineTabVisible: operation?.type === 'vanilla',
         jobsMonitorIsSupported: Boolean(UIFactory.getMonitorComponentForJob()),
-        jobsMonitorVisible: getJobsMonitorTabVisible(state),
-        hasStatististicsTab: getOperationStatiscsHasData(state),
+        jobsMonitorVisible: selectJobsMonitorTabVisible(state),
+        hasStatististicsTab: selectOperationStatisticsHasData(state),
         isGpuOperation: selectIsOperationInGpuTree(state),
-        operationPerformanceUrlTemplate: getOperationPerformanceUrlTemplate(state),
+        operationPerformanceUrlTemplate: selectOperationPerformanceUrlTemplate(state),
         operationEvents,
         ysonSettings: getYsonSettingsDisableDecode(state),
         isIncarnationNextFeatureEnabled: selectIsIncarnationNextFeatureEnabled(state),
@@ -596,7 +596,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 const OperationDetailConnected = connector(OperationDetail);
 
 export default function OperationDetailsWithRum(props: RouteProps) {
-    const loadState = useSelector(getOperationDetailsLoadingStatus);
+    const loadState = useSelector(selectOperationDetailsLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.OPERATION,

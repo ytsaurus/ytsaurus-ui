@@ -8,25 +8,26 @@ import min_ from 'lodash/min';
 import moment from 'moment';
 import {createSelector} from 'reselect';
 import {RootState} from '../../../store/reducers';
-import {getOperationId} from './operation';
+import {selectOperationId} from './operation';
 
-export const getJobsMonitorError = (state: RootState) => state.operations.jobsMonitor.error;
-export const getJobsMonitorOperationId = (state: RootState) =>
+export const selectJobsMonitorError = (state: RootState) => state.operations.jobsMonitor.error;
+export const selectJobsMonitorOperationId = (state: RootState) =>
     state.operations.jobsMonitor.operation_id;
-export const getJobsMonitorItems = (state: RootState) => state.operations.jobsMonitor.jobs;
-export const getJobsMonitorItemsLoading = (state: RootState) =>
+export const selectJobsMonitorItems = (state: RootState) => state.operations.jobsMonitor.jobs;
+export const selectJobsMonitorItemsLoading = (state: RootState) =>
     state.operations.jobsMonitor.loading;
-export const getJobsMonitorItemsLoaded = (state: RootState) => state.operations.jobsMonitor.loaded;
+export const selectJobsMonitorItemsLoaded = (state: RootState) =>
+    state.operations.jobsMonitor.loaded;
 
-export const getJobsMonitoringItemsWithDescriptor = createSelector(
-    [getJobsMonitorItems],
+export const selectJobsMonitoringItemsWithDescriptor = createSelector(
+    [selectJobsMonitorItems],
     (items) => {
         return filter_(items, ({monitoring_descriptor}) => Boolean(monitoring_descriptor));
     },
 );
 
-export const getJobsMonitorFromTo = createSelector(
-    [getJobsMonitoringItemsWithDescriptor],
+export const selectJobsMonitorFromTo = createSelector(
+    [selectJobsMonitoringItemsWithDescriptor],
     (items) => {
         let from: number | undefined;
         let to: number | undefined;
@@ -44,20 +45,20 @@ export const getJobsMonitorFromTo = createSelector(
     },
 );
 
-export const getUniqueJobsMonitorDescriptors = createSelector(
-    [getJobsMonitoringItemsWithDescriptor],
+export const selectUniqueJobsMonitorDescriptors = createSelector(
+    [selectJobsMonitoringItemsWithDescriptor],
     (jobs) => {
         const descriptors = new Set(map_(jobs, 'monitoring_descriptor'));
         return [...descriptors];
     },
 );
 
-export const getJobsMonitorTabVisible = createSelector(
+export const selectJobsMonitorTabVisible = createSelector(
     [
-        getOperationId,
-        getJobsMonitorOperationId,
-        getUniqueJobsMonitorDescriptors,
-        getJobsMonitorError,
+        selectOperationId,
+        selectJobsMonitorOperationId,
+        selectUniqueJobsMonitorDescriptors,
+        selectJobsMonitorError,
     ],
     (opId, jobMonId, jobsDescriptorArray, error) => {
         if (opId !== jobMonId) {

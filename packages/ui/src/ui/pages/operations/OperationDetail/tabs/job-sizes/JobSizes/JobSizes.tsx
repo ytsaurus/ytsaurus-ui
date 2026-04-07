@@ -17,7 +17,7 @@ import {selectTheme} from '../../../../../../store/selectors/global';
 import WithStickyToolbar from '../../../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {Toolbar} from '../../../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {hasTaskHistograms} from '../../../../../../utils/operations/jobs';
-import {getOperationDetailsLoadingStatus} from '../../../../../../store/selectors/operations/operation';
+import {selectOperationDetailsLoadingStatus} from '../../../../../../store/selectors/operations/operation';
 import {useAppRumMeasureStart} from '../../../../../../rum/rum-app-measures';
 import {RumMeasureTypes} from '../../../../../../rum/rum-measure-types';
 import {isFinalLoadingStatus} from '../../../../../../utils/utils';
@@ -197,7 +197,7 @@ const connector = connect(mapStateToProps);
 const JobSizesConnected = connector(JobSizes);
 
 export default function JobSizesWithRum(props: {className?: string}) {
-    const loadState = useSelector(getOperationDetailsLoadingStatus);
+    const loadState = useSelector(selectOperationDetailsLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.OPERATION_TAB_JOB_SIZES,

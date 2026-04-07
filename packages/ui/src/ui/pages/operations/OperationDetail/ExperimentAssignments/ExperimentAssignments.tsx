@@ -8,8 +8,8 @@ import ypath from '../../../../common/thor/ypath';
 import {CollapsibleSectionStateLess} from '../../../../components/CollapsibleSection/CollapsibleSection';
 import {
     OperationExperimentItem,
-    getOperationExperimentAssignments,
-    getOperationId,
+    selectOperationExperimentAssignments,
+    selectOperationId,
 } from '../../../../store/selectors/operations/operation';
 import {ClickableText} from '../../../../components/ClickableText/ClickableText';
 import {MetaTable} from '@ytsaurus/components';
@@ -26,8 +26,8 @@ export default React.memo(ExperimentAssignments);
 const ExperimentsItem = React.memo(ExperimentAssignmentsItem);
 
 function ExperimentAssignments({className}: {className: string}) {
-    const items = useSelector(getOperationExperimentAssignments);
-    const operationId = useSelector(getOperationId);
+    const items = useSelector(selectOperationExperimentAssignments);
+    const operationId = useSelector(selectOperationId);
     const [collapsed, setCollapsed] = React.useState(true);
 
     const onToggleCollapse = React.useCallback(() => {

@@ -13,7 +13,7 @@ import {ViewState} from '../../../components/StatusLabel/StatusLabel';
 import {formatInterval} from '../../../components/common/Timeline';
 import {dateTimeParse} from '../../../utils/date-utils';
 
-import {getOperation} from './operation';
+import {selectOperation} from './operation';
 
 export type IncarnationFinishReason =
     | IncarnationSwitchReason
@@ -81,8 +81,8 @@ function makeInterval(startDatetime: string, finishDatetime: string) {
     return format.NO_VALUE;
 }
 
-export const getIncarnationsInfo = createSelector(
-    [getOperation, getIncarnationsList, getIdFilter, getIncarnations],
+export const selectIncarnationsInfo = createSelector(
+    [selectOperation, getIncarnationsList, getIdFilter, getIncarnations],
     (operation, operationEvents, idFilter, incarnationsReqInfo) => {
         let incarnations: Incarnations = [];
 

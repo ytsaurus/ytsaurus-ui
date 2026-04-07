@@ -3,7 +3,7 @@ import map_ from 'lodash/map';
 import cn from 'bem-cn-lite';
 
 import {useSelector} from '../../../../../../store/redux-hooks';
-import {getJobsErrors} from '../../../../../../store/selectors/operations/jobs';
+import {selectJobsErrors} from '../../../../../../store/selectors/operations/jobs';
 import {YTErrorBlock} from '../../../../../../components/Error/Error';
 
 import './OperationJobsErrors.scss';
@@ -11,7 +11,7 @@ import './OperationJobsErrors.scss';
 const block = cn('operation-jobs-errors');
 
 function OperationJobsErrors() {
-    const errors = useSelector(getJobsErrors);
+    const errors = useSelector(selectJobsErrors);
 
     return (
         <div className={block()}>
