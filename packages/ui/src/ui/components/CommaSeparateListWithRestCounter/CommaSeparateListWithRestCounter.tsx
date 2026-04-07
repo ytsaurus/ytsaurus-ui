@@ -216,7 +216,7 @@ export default class CommaSeparatedListWithRestCounter extends React.Component<
         }
 
         const clickable = !this.allowItemsInTooltip();
-        const toolTip = !clickable ? this.renderTooltip() : i18n('click-to-show-all');
+        const toolTip = !clickable ? this.renderTooltip() : i18n('context_click-to-show-all');
 
         const {showDialog} = this.state;
         const key = showDialog; // the key is required to hide tooltip behind the dialog with all items
@@ -226,7 +226,7 @@ export default class CommaSeparatedListWithRestCounter extends React.Component<
                 <div className={block('row-counter', {clickable})} onClick={this.onCounterClick}>
                     +{restCounter}
                 </div>
-                <SimpleModal title={'All items'} visible={showDialog} onCancel={this.closeDialog}>
+                <SimpleModal title={i18n('title_all-items')} visible={showDialog} onCancel={this.closeDialog}>
                     {showDialog && this.renderTooltip()}
                 </SimpleModal>
             </Tooltip>
