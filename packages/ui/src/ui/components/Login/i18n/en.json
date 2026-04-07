@@ -1,0 +1,21 @@
+{
+  "title_welcome": "Welcome to YTsaurus!",
+  "context_welcome-text": "A unified scalable platform for storing and processing large volumes of data.<br /><br />Login under your credentials.",
+  "field_login": "Login",
+  "field_password": "Password",
+  "action_login": "Login",
+  "action_login-via-sso": "Login via SSO",
+  "alert_username-empty": "Username must not be empty",
+  "alert_password-empty": "Password must not be empty",
+  "title_create-new-password": "Create new password",
+  "context_new-password-text": "Your new password must be different from previous used passwords.",
+  "field_current-password": "Current password",
+  "field_new-password": "New password",
+  "field_confirm-password": "Confirm password",
+  "action_reset-password": "Reset Password",
+  "action_back": "Back",
+  "alert_current-password-empty": "Current password must not be empty",
+  "alert_new-password-empty": "New password must not be empty",
+  "alert_passwords-not-equal": "New and confirm password must be equal",
+  "alert_password-changed": "Password was changed."
+}

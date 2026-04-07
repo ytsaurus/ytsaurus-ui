@@ -14,6 +14,7 @@ import LoginPageWrapper from '../LoginPageWrapper/LoginPageWrapper';
 import isEmpty_ from 'lodash/isEmpty';
 
 import cn from 'bem-cn-lite';
+import i18n from '../i18n';
 
 const block = cn('login-page');
 
@@ -33,22 +34,24 @@ const validate = ({
 }: Record<keyof Omit<ErrorFields, 'response'>, string>): ErrorFields => {
     const result: ErrorFields = {};
     if (username === '') {
-        result.username = 'Username must not be empty';
+        result.username = i18n('alert_username-empty');
     }
 
     if (password === '') {
-        result.password = 'Password must not be empty';
+        result.password = i18n('alert_password-empty');
     }
 
     return result;
 };
 
-const DEFAULT_LOGIN_FORM_TITLE = 'Welcome to YTsaurus!';
-
-const DEFAULT_LOGIN_FORM_TEXT = `A unified scalable platform for storing and processing large volumes of data.
-<br />
-<br />
-Login under your credentials.`;
+const DEFAULT_LOGIN_FORM = {
+    get TITLE() {
+        return i18n('title_welcome');
+    },
+    get TEXT() {
+        return i18n('context_welcome-text');
+    },
+};
 
 function LoginForm({theme}: Props) {
     const dispatch = useDispatch();
@@ -99,13 +102,13 @@ function LoginForm({theme}: Props) {
             <h1
                 className={block('title')}
                 dangerouslySetInnerHTML={{
-                    __html: title === undefined ? DEFAULT_LOGIN_FORM_TITLE : title,
+                    __html: title === undefined ? DEFAULT_LOGIN_FORM.TITLE : title,
                 }}
             />
             <p
                 className={block('text')}
                 dangerouslySetInnerHTML={{
-                    __html: text === undefined ? DEFAULT_LOGIN_FORM_TEXT : text,
+                    __html: text === undefined ? DEFAULT_LOGIN_FORM.TEXT : text,
                 }}
             />
             <form onSubmit={handleFormSubmit}>
@@ -113,7 +116,7 @@ function LoginForm({theme}: Props) {
                     className={block('field')}
                     type="text"
                     size="l"
-                    placeholder="Login"
+                    placeholder={i18n('field_login')}
                     name="username"
                     value={username}
                     onUpdate={setUsername}
@@ -124,7 +127,7 @@ function LoginForm({theme}: Props) {
                     className={block('field', {password: true})}
                     type="password"
                     size="l"
-                    placeholder="Password"
+                    placeholder={i18n('field_password')}
                     name="password"
                     value={password}
                     onUpdate={setPassword}
@@ -142,7 +145,7 @@ function LoginForm({theme}: Props) {
                     loading={loading}
                     qa="login-form:submit"
                 >
-                    Login
+                    {i18n('action_login')}
                 </Button>
 
                 {allowOAuth && (
@@ -156,7 +159,7 @@ function LoginForm({theme}: Props) {
                         view={theme === 'light' ? 'action' : 'normal-contrast'}
                         loading={loading}
                     >
-                        {buttonLabel || 'Login via SSO'}
+                        {buttonLabel || i18n('action_login-via-sso')}
                     </Button>
                 )}
 
