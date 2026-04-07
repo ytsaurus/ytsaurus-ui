@@ -34,6 +34,11 @@
     }
 }
 
+.g-tooltip:has(.meta-table) {
+    display: block;
+    overflow: visible;
+}
+
 .meta-table-item {
     $item-height: 22px;
 
