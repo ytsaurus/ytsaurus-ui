@@ -15,6 +15,7 @@ import Icon from '../../components/Icon/Icon';
 import {ALL_LINKS_ITEMS, HeaderLinkItem} from './header-links-items';
 import {wrapApiPromiseByToaster} from '../../utils/utils';
 import {ActionD} from '../../types';
+import i18n from './i18n';
 
 const b = block('cluster-menu');
 
@@ -36,7 +37,7 @@ function getItemVisibilityOrFalse(item: HeaderLinkItem) {
     return wrapApiPromiseByToaster(item.getVisible(), {
         toasterName: 'link_item_visibility_' + item.href,
         skipSuccessToast: true,
-        errorContent: <span>Cannot get visibity for {item.href}. </span>,
+        errorContent: i18n('error_link-item-visibility', {href: item.href}),
     })
         .then((visible) => {
             return visible;
@@ -132,7 +133,7 @@ export function HeaderLinks({currentUrl, showTitle}: Props) {
                     popupProps={{className: b('popup')}}
                     renderSwitcher={(props) => (
                         <Button {...props}>
-                            Links&nbsp;
+                            {i18n('action_links')}&nbsp;
                             <Icon awesome={'chevron-down'} />
                         </Button>
                     )}

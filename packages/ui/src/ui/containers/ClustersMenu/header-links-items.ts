@@ -1,4 +1,5 @@
 import compact_ from 'lodash/compact';
+import i18n from './i18n';
 
 export interface HeaderLinkItem {
     href: string;
@@ -9,7 +10,9 @@ export interface HeaderLinkItem {
 
 export const LINKS_ITEM_CLUSTERS: HeaderLinkItem = {
     href: '/',
-    text: 'Clusters',
+    get text() {
+        return i18n('value_clusters');
+    },
     routed: true,
 };
 
