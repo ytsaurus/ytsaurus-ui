@@ -9,6 +9,8 @@ import {Hotkey} from '@ytsaurus/components';
 import './Pagination.scss';
 import Button from '../Button/Button';
 
+import i18n from './i18n';
+
 const paginationControlComponent = PropTypes.shape({
     handler: PropTypes.func,
     target: PropTypes.func,
@@ -62,10 +64,10 @@ export default class Pagination extends React.Component {
                     className={block('control', {name})}
                     title={
                         {
-                            first: 'First page',
-                            previous: 'Previous page',
-                            next: 'Next page',
-                            last: 'Last page',
+                            first: i18n('action_first-page'),
+                            previous: i18n('action_previous-page'),
+                            next: i18n('action_next-page'),
+                            last: i18n('action_last-page'),
                         }[name]
                     }
                     pin={
