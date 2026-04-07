@@ -225,27 +225,27 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
             <div className={b()}>
                 <div className={b('panel', {left: 'yes'})}>
                     <div className={headingCN}>
-                        {i18n('all')} &nbsp;
+                        {i18n('title_all')} &nbsp;
                         <span className="elements-secondary-text">{srcItems?.length}</span>
                     </div>
 
                     {this.renderColumnSelector({
                         props: selectorProps,
-                        title: i18n('no-available-columns'),
-                        description: i18n('no-columns-matching'),
+                        title: i18n('title_no-available-columns'),
+                        description: i18n('context_no-columns-matching'),
                     })}
                 </div>
 
                 <div className={b('panel')}>
                     <div className={headingCN}>
-                        Selected &nbsp;
+                        {i18n('title_selected')} &nbsp;
                         <span className="elements-secondary-text">{selectedItemsCount}</span>
                     </div>
 
                     {this.renderColumnSelector({
                         props: sortableSelectorProps,
-                        title: i18n('no-selected-columns'),
-                        description: i18n('add-columns-you-need'),
+                        title: i18n('title_no-selected-columns'),
+                        description: i18n('context_add-columns-you-need'),
                     })}
                 </div>
             </div>
@@ -254,7 +254,7 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
 
     render() {
         const {isVisible} = this.props;
-        const title = i18n('columns-setup');
+        const title = i18n('title_columns-setup');
 
         return (
             <Modal
@@ -262,7 +262,7 @@ export default class ColumnSelectorModal<T = never> extends React.Component<Prop
                 title={title}
                 borderless={true}
                 visible={isVisible}
-                confirmText={i18n('apply')}
+                confirmText={i18n('action_apply')}
                 onConfirm={this._handleCONFIRMButtonClick}
                 onCancel={this._handleCANCELButtonClick}
                 onTransitionInComplete={this._handleTransitionInComplete}
