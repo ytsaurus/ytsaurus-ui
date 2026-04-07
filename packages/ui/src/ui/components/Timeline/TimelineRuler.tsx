@@ -6,6 +6,8 @@ import cn from 'bem-cn-lite';
 import {RangeDateSelection, RangeDateSelectionProps} from '@gravity-ui/date-components';
 import {DateTime, dateTimeParse} from '../../utils/date-utils';
 
+import i18n from './i18n';
+
 import './TimelineRuler.scss';
 
 const b = cn('yc-timeline-ruler');
@@ -70,7 +72,7 @@ export const TimelineRuler: FC<Props> = ({
                     className={b('now-button')}
                     onClick={handeOnNowReset}
                 >
-                    Now
+                    {i18n('action_now')}
                 </Button>
             )}
         </div>
