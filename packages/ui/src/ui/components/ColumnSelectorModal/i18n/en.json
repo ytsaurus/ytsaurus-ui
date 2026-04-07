@@ -1,9 +1,10 @@
 {
-  "add-columns-you-need": "Add columns you need from the All section.",
-  "all": "All",
-  "apply": "Apply",
-  "columns-setup": "Columns setup",
-  "no-available-columns": "No available columns",
-  "no-columns-matching": "No columns matching your filtering criteria",
-  "no-selected-columns": "No selected columns"
+  "title_all": "All",
+  "title_selected": "Selected",
+  "title_columns-setup": "Columns setup",
+  "title_no-available-columns": "No available columns",
+  "title_no-selected-columns": "No selected columns",
+  "action_apply": "Apply",
+  "context_no-columns-matching": "No columns matching your filtering criteria",
+  "context_add-columns-you-need": "Add columns you need from the All section."
 }
