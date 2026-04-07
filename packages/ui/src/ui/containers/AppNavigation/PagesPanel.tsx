@@ -12,6 +12,7 @@ import {makeRoutedURL} from '../../store/location';
 import {Icon, List} from '@gravity-ui/uikit';
 import {PAGE_ICONS_BY_ID, emptyPageIcon} from '../../constants/slideoutMenu';
 import {isRecentPagesFirst} from '../../store/selectors/settings';
+import i18n from './i18n';
 
 import './PagesPanel.scss';
 
@@ -41,12 +42,17 @@ export default function PagesPanel({
     return isRecentFirst && (recent?.length || rest?.length) ? (
         <React.Fragment>
             <PagesList
-                title={'Recent'}
+                title={i18n('title_recent')}
                 items={recent}
                 cluster={cluster}
                 onItemClick={onItemClick}
             />
-            <PagesList title={'Other'} items={rest} cluster={cluster} onItemClick={onItemClick} />
+            <PagesList
+                title={i18n('title_other')}
+                items={rest}
+                cluster={cluster}
+                onItemClick={onItemClick}
+            />
         </React.Fragment>
     ) : (
         <React.Fragment>
