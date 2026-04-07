@@ -4,6 +4,7 @@ import {getMetrics} from '../../common/utils/metrics';
 import {openInNewTab} from '../../utils/utils';
 import {isDocsAllowed} from '../../config';
 import UIFactory from '../../UIFactory';
+import i18n from './i18n';
 
 interface Props {
     className?: string;
@@ -24,7 +25,7 @@ export function RequestQuotaButton(props: Props) {
                     openInNewTab(url);
                 }}
             >
-                Request quota
+                {i18n('action_request-quota')}
             </Button>
         </span>
     ) : null;
