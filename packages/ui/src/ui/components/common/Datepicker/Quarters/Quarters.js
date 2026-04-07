@@ -4,6 +4,7 @@ import block from 'bem-cn-lite';
 import {DateTime, Interval} from 'luxon';
 import range_ from 'lodash/range';
 
+import i18n from '../i18n';
 import {MONTHS} from '../constants';
 
 import './Quarters.scss';
@@ -121,7 +122,7 @@ export class Quarters extends React.PureComponent {
                                 }),
                             })}
                         >
-                            {`Q${quarter}`}
+                            {i18n('quarter_label', {quarter})}
                         </div>
                     );
                 })

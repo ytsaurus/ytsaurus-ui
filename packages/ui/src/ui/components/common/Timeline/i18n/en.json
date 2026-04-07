@@ -1,5 +1,9 @@
 {
   "label_now": "Now",
   "label_custom": "Custom",
-  "label_shortcut-list": "Show chart in"
+  "label_shortcut-list": "Show chart in",
+  "label_week": "Week",
+  "label_2-weeks": "2 Weeks",
+  "label_month": "Month",
+  "label_2-months": "2 Months"
 }

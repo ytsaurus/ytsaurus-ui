@@ -1,5 +1,5 @@
 import {addI18Keysets} from '../../../../i18n/index';
 
-import en from './en.json';
+import dicts from './dicts';
 
-export default addI18Keysets('yt:yc-column-selector', {en});
+export default addI18Keysets('yt:yc-column-selector', dicts);
