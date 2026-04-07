@@ -1,11 +1,12 @@
 import React from 'react';
 
 import Label from '../../../../components/Label';
+import i18n from './i18n';
 
 export function renderLabel(flag: boolean): React.ReactNode {
     return (
         <Label
-            text={flag ? 'Disabled' : 'Enabled'}
+            text={flag ? i18n('value_disabled') : i18n('value_enabled')}
             theme={flag ? 'danger' : 'success'}
             type="text"
         />

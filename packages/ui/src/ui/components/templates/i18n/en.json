@@ -1,0 +1,4 @@
+{
+    "action_view": "View",
+    "context_cell-tag": "Cell tag: {{cellTag}}"
+}

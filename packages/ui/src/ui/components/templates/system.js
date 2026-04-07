@@ -6,6 +6,7 @@ import Icon from '../../components/Icon/Icon';
 
 import templates from './utils.js';
 import hammer from '../../common/hammer';
+import i18n from './i18n';
 
 const b = block('system');
 
@@ -26,7 +27,7 @@ templates.add('system/chunk-cells', {
         const cellTagIconClassNames = b('master-quorum-cell-icon');
 
         return (
-            <div className={cellTagClassNames} title={`Cell tag: ${cellTag}`}>
+            <div className={cellTagClassNames} title={i18n('context_cell-tag', {cellTag})}>
                 <Icon className={cellTagIconClassNames} face="solid" awesome="tag" />
                 &nbsp;
                 <span>{hammer.format['Hex'](cellTag)}</span>
