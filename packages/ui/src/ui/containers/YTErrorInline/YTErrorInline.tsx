@@ -9,6 +9,7 @@ import ypath from '../../common/thor/ypath';
 import {YTErrorBlockProps} from '../../components/Block/Block';
 import {ClickableText} from '../../components/ClickableText/ClickableText';
 import {showErrorPopup, unescapeSlashX} from '../../utils/utils';
+import i18n from './i18n';
 
 const block = cn('yt-error-inline');
 
@@ -40,7 +41,7 @@ export function YTErrorInline({className, error, message, type}: YTErrorInlinePr
                     }}
                 >
                     {''}
-                    Details
+                    {i18n('action_details')}
                 </ClickableText>
             </Flex>
         </Flex>
