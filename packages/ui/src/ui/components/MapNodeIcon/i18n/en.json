@@ -1,0 +1,8 @@
+{
+  "title_static-table": "Static table",
+  "title_dynamic-table": "Dynamic table",
+  "title_queue-table": "Queue table",
+  "title_queue-consumer": "Queue consumer",
+  "title_queue-producer": "Queue producer",
+  "title_flow": "Flow"
+}

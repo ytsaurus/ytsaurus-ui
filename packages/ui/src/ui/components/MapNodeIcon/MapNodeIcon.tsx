@@ -7,6 +7,7 @@ import ypath from '../../common/thor/ypath';
 import Icon from '../../components/Icon/Icon';
 
 import UIFactory from '../../UIFactory';
+import i18n from './i18n';
 
 import {getIconNameForType} from '../../utils/navigation/path-editor';
 import {isTrashNode} from '../../utils/navigation/isTrashNode';
@@ -37,30 +38,30 @@ export function MapNodeIcon({node}: {node: BaseMapNode}) {
 
     let title = hammer.format['ReadableField'](item.type);
     if (iconType === 'table') {
-        title = 'Static table';
+        title = i18n('title_static-table');
     }
 
     if (iconType === 'table_dynamic') {
         if (item?.sorted) {
-            title = 'Dynamic table';
+            title = i18n('title_dynamic-table');
         } else {
-            title = 'Queue table';
+            title = i18n('title_queue-table');
             icon = <Icon awesome="queue-table" />;
         }
     }
 
     if (item?.treat_as_queue_consumer) {
-        title = 'Queue consumer';
+        title = i18n('title_queue-consumer');
         icon = <GravityIcon data={QueueConsumerIcon} />;
     }
 
     if (item?.treat_as_queue_producer) {
-        title = 'Queue producer';
+        title = i18n('title_queue-producer');
         icon = <GravityIcon data={QueueProducerIcon} />;
     }
 
     if (isPipelineNode(node.$attributes)) {
-        title = 'Flow';
+        title = i18n('title_flow');
         icon = <GravityIcon data={NodePipelineIcon} />;
     }
 
