@@ -9,6 +9,8 @@ import withHandledScrollBar from '../../hocs/components/Modal/withHandledScrollB
 import './Modal.scss';
 import Button, {ButtonProps} from '../Button/Button';
 
+import i18n from './i18n';
+
 const b = block('elements-modal');
 
 interface ModalProps {
@@ -42,7 +44,7 @@ class Modal extends Component<ModalProps> {
         confirmTheme: 'action',
         footer: true,
         size: 'm',
-        confirmText: 'Apply',
+        confirmText: i18n('action_apply'),
     };
 
     componentDidMount() {
@@ -122,8 +124,8 @@ class Modal extends Component<ModalProps> {
             return renderCustomCancel(className);
         } else {
             return (
-                <Button title="Cancel" className={className} onClick={onCancel}>
-                    Cancel
+                <Button title={i18n('action_cancel')} className={className} onClick={onCancel}>
+                    {i18n('action_cancel')}
                 </Button>
             );
         }
