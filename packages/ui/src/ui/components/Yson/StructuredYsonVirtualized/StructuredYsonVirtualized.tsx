@@ -10,6 +10,8 @@ import {DialogWrapper as Dialog} from '../../../components/DialogWrapper/DialogW
 // @ts-ignore
 import unipika from '@gravity-ui/unipika/lib/unipika';
 
+import i18n from './i18n';
+
 import {UnipikaSettings, UnipikaValue} from '../StructuredYson/StructuredYsonTypes';
 import {
     BlockType,
@@ -284,11 +286,17 @@ export default class StructuredYsonVirtualized extends React.PureComponent<Props
                         name: 'buttons',
                         node: (
                             <span className={block('buttons')}>
-                                <Button title="Expand all" onClick={this.onExpandAll}>
+                                <Button
+                                    title={i18n('action_expand-all')}
+                                    onClick={this.onExpandAll}
+                                >
                                     <Icon awesome="arrow-to-bottom" />
                                 </Button>
                                 &nbsp;&nbsp;
-                                <Button onClick={this.onCollapseAll} title="Collapse all">
+                                <Button
+                                    onClick={this.onCollapseAll}
+                                    title={i18n('action_collapse-all')}
+                                >
                                     <Icon awesome="arrow-to-top" />
                                 </Button>
                             </span>
@@ -322,7 +330,7 @@ export default class StructuredYsonVirtualized extends React.PureComponent<Props
                     size="m"
                     type="text"
                     value={this.state.filter}
-                    placeholder="Search..."
+                    placeholder={i18n('placeholder_search')}
                     onChange={this.onFilterChange}
                     autofocus={false}
                     debounce={400}
@@ -332,7 +340,7 @@ export default class StructuredYsonVirtualized extends React.PureComponent<Props
                 <Button
                     className={block('match-btn')}
                     view="flat-secondary"
-                    title="Next"
+                    title={i18n('action_next')}
                     onClick={this.onNextMatch}
                     disabled={!count}
                     pin={'clear-clear'}
@@ -342,14 +350,14 @@ export default class StructuredYsonVirtualized extends React.PureComponent<Props
                 <Button
                     className={block('match-btn')}
                     view="flat-secondary"
-                    title="Back"
+                    title={i18n('action_back')}
                     onClick={this.onPrevMatch}
                     disabled={!count}
                     pin={'brick-brick'}
                 >
                     <Icon awesome="chevron-up" />
                 </Button>
-                <span className={block('match-counter')} title={'Matched rows'}>
+                <span className={block('match-counter')} title={i18n('title_matched-rows')}>
                     {matchPosition} / {count || 0}
                 </span>
             </React.Fragment>
@@ -686,15 +694,15 @@ function FullValueDialog(props: FullValueDialogProps) {
 
     return (
         <Dialog open={true} onClose={onClose}>
-            <Dialog.Header caption={'Full value'} />
+            <Dialog.Header caption={i18n('title_full-value')} />
             <Dialog.Divider />
             <Dialog.Body>
                 <Flex direction="column" gap={2} width="70vw" maxHeight="80vh">
                     <SegmentedRadioGroup
                         className={block('full-value-radio-buttons')}
                         options={[
-                            {value: 'parsed', content: 'Parsed'},
-                            {value: 'raw', content: 'Raw'},
+                            {value: 'parsed', content: i18n('value_parsed')},
+                            {value: 'raw', content: i18n('value_raw')},
                         ]}
                         onUpdate={setType}
                     />
