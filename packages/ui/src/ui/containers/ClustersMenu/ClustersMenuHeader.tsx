@@ -9,6 +9,7 @@ import {updateFilter, updateViewMode} from '../../store/actions/clusters-menu';
 import {HeaderLinks} from '../../containers/ClustersMenu/HeaderLinks';
 import {LINKS_ITEM_CLUSTERS} from '../../containers/ClustersMenu/header-links-items';
 import {RootState} from '../../store/reducers';
+import i18n from './i18n';
 
 import './ClusterMenuHeader.scss';
 
@@ -24,7 +25,7 @@ function ClustersMenuHeader({viewMode, updateViewMode, clusterFilter, updateFilt
                     <div className="elements-filter">
                         <Filter
                             value={clusterFilter}
-                            placeholder="Filter clusters"
+                            placeholder={i18n('field_filter-clusters')}
                             onChange={updateFilter}
                         />
                     </div>
