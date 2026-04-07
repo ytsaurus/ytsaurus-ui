@@ -10,6 +10,8 @@ import Yson, {YsonProps} from '../../components/Yson/Yson';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import {DialogControlProps} from '../../components/Dialog/Dialog.types';
 
+import i18n from './i18n';
+
 export type EditJsonProps = DialogControlProps<
     {value: string | undefined; error?: string},
     {
@@ -86,7 +88,9 @@ export function EditJsonWithPreview({
             {...rest}
             value={valueProp}
             onChange={onTextChange}
-            editorTitle={'Use JSON syntax' + (rest.disabled ? ' (readonly)' : '')}
+            editorTitle={
+                rest.disabled ? i18n('title_json-editor-readonly') : i18n('title_json-editor')
+            }
             editorLang={'json'}
             renderPreview={() => (
                 // This ErrorBoundary catches some unipika errors
@@ -138,7 +142,7 @@ function YsonPreview({
     if (obj === null || obj === undefined) {
         return (
             <React.Fragment>
-                Default value:
+                {i18n('context_default-value')}
                 <Yson value={nullPreview ?? null} folding={folding} settings={settings} />
             </React.Fragment>
         );
