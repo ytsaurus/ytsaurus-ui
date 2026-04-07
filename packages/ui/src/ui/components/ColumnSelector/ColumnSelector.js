@@ -321,7 +321,7 @@ export default class ColumnSelector extends Component {
                 {isFilterable && this.renderSearchBox()}
                 {isHeadless && (
                     <Button {...btnProps} onClick={this._toggleShownItems}>
-                        Selected &nbsp;
+                        {i18n('action_selected')} &nbsp;
                         <span className="elements-secondary-text">
                             {filter_(this.items, (item) => item.checked).length}
                         </span>
@@ -333,12 +333,12 @@ export default class ColumnSelector extends Component {
                         disabled={this.buttonALLisDisabled}
                         onClick={this.selectAllItems}
                     >
-                        Add all
+                        {i18n('action_add-all')}
                     </Button>
                 )}
                 {isSelectable && (
                     <Button {...btnProps} onClick={this.invertItems}>
-                        Invert list
+                        {i18n('action_invert')}
                     </Button>
                 )}
                 {!isSelectable && (
@@ -347,12 +347,12 @@ export default class ColumnSelector extends Component {
                         disabled={this.buttonNONEisDisabled}
                         onClick={this.deselectAllItems}
                     >
-                        Remove all
+                        {i18n('action_remove-all')}
                     </Button>
                 )}
                 {isSortable && (
                     <Button {...btnProps} onClick={this._handleDefaultSort}>
-                        Default sort
+                        {i18n('action_default-sort')}
                     </Button>
                 )}
             </div>

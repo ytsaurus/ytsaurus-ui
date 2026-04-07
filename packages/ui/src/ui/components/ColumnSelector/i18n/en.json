@@ -1,3 +1,8 @@
 {
-  "search": "Search..."
+  "search": "Search...",
+  "action_selected": "Selected",
+  "action_add-all": "Add all",
+  "action_invert": "Invert list",
+  "action_remove-all": "Remove all",
+  "action_default-sort": "Default sort"
 }
