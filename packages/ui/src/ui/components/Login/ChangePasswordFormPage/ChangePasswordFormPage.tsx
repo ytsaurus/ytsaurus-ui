@@ -7,6 +7,7 @@ import {useHistory, useLocation} from 'react-router';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 
 import isEmpty_ from 'lodash/isEmpty';
+import i18n from '../i18n';
 
 const block = cn('login-page');
 
@@ -28,15 +29,15 @@ const validate = ({
 }: Record<keyof ErrorFields, string>): ErrorFields => {
     const result: ErrorFields = {};
     if (currentPassword === '') {
-        result.currentPassword = 'Current password must not be empty';
+        result.currentPassword = i18n('alert_current-password-empty');
     }
 
     if (newPassword === '') {
-        result.newPassword = 'New password must not be empty';
+        result.newPassword = i18n('alert_new-password-empty');
     }
 
     if (newPassword !== confirmPassword) {
-        result.confirmPassword = 'New and confirm password must be equal';
+        result.confirmPassword = i18n('alert_passwords-not-equal');
     }
 
     return result;
@@ -77,7 +78,7 @@ function ChangePasswordForm({theme, cluster}: Props) {
                     wrapApiPromiseByToaster(Promise.resolve(), {
                         skipSuccessToast: false,
                         toasterName: 'change-password-success',
-                        successTitle: 'Password was changed.',
+                        successTitle: i18n('alert_password-changed'),
                     });
                 })
                 .catch((error: any) => {
@@ -93,16 +94,14 @@ function ChangePasswordForm({theme, cluster}: Props) {
 
     return (
         <>
-            <h1 className={block('title')}>Create new password</h1>
-            <p className={block('text')}>
-                Your new password must be different from previous used passwords.
-            </p>
+            <h1 className={block('title')}>{i18n('title_create-new-password')}</h1>
+            <p className={block('text')}>{i18n('context_new-password-text')}</p>
             <form onSubmit={handleFormSubmit}>
                 <TextInput
                     className={block('field', {password: true})}
                     type="password"
                     size="l"
-                    placeholder="Current password"
+                    placeholder={i18n('field_current-password')}
                     name="current-password"
                     value={currentPassword}
                     onUpdate={setCurrentPassword}
@@ -112,7 +111,7 @@ function ChangePasswordForm({theme, cluster}: Props) {
                     className={block('field', {password: true})}
                     type="password"
                     size="l"
-                    placeholder="New password"
+                    placeholder={i18n('field_new-password')}
                     name="new-password"
                     value={newPassword}
                     onUpdate={setNewPassword}
@@ -122,7 +121,7 @@ function ChangePasswordForm({theme, cluster}: Props) {
                     className={block('field', {password: true})}
                     type="password"
                     size="l"
-                    placeholder="Confirm password"
+                    placeholder={i18n('field_confirm-password')}
                     name="confirm-password"
                     value={confirmPassword}
                     onUpdate={setConfirmPassword}
@@ -137,7 +136,7 @@ function ChangePasswordForm({theme, cluster}: Props) {
                     view={theme === 'light' ? 'action' : 'normal-contrast'}
                     loading={loading}
                 >
-                    Reset Password
+                    {i18n('action_reset-password')}
                 </Button>
             </form>
             <div className={block('navigate')}>
@@ -150,7 +149,7 @@ function ChangePasswordForm({theme, cluster}: Props) {
                     onClick={goBack}
                     view="outlined"
                 >
-                    Back
+                    {i18n('action_back')}
                 </Button>
             </div>
         </>
