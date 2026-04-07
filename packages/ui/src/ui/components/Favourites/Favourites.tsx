@@ -8,6 +8,7 @@ import {Button, ButtonProps, DropdownMenu} from '@gravity-ui/uikit';
 
 import Icon from '../Icon/Icon';
 import {Hotkey} from '@ytsaurus/components';
+import i18n from './i18n';
 
 import './Favourites.scss';
 
@@ -81,7 +82,7 @@ export default class Favourites extends Component<Props, State> {
         if (items.length === 0) {
             dropItems.push({
                 action: () => {},
-                text: 'No favourites',
+                text: i18n('title_no-favourites'),
             });
         }
 
@@ -89,7 +90,7 @@ export default class Favourites extends Component<Props, State> {
             view: 'normal',
             size: 'm',
             pin: 'brick-round',
-            title: 'View favourites',
+            title: i18n('action_view-favourites'),
             children: <Icon awesome="angle-down" size={13} />,
         });
 
@@ -126,7 +127,7 @@ export default class Favourites extends Component<Props, State> {
                         selected: isActive,
                         size: 'm',
                         pin: theme === 'clear' ? 'round-brick' : 'round-clear',
-                        title: 'Add to favourites [F]',
+                        title: i18n('action_add-to-favourites'),
                         onClick: this.toggleActive,
                         disabled: toggleDisabled,
                         children: <Icon awesome={isActive ? 'star-alt' : 'star'} size={13} />,
