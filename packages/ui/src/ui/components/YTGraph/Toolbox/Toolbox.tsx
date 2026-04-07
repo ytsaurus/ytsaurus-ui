@@ -6,6 +6,7 @@ import {useGraphEvent} from '@gravity-ui/graph/react';
 import cn from 'bem-cn-lite';
 import './Toolbox.scss';
 import {ZOOM_PADDING} from '../constants';
+import i18n from './i18n';
 
 type Props = {className?: string; graph: Graph};
 const ZOOM_STEP = 0.08;
@@ -26,7 +27,7 @@ export const Toolbox: FC<Props> = ({className, graph}) => {
             className={block(null, className)}
             direction="column"
         >
-            <Tooltip content="Zoom in" placement="right">
+            <Tooltip content={i18n('action_zoom-in')} placement="right">
                 <Button
                     view="raised"
                     onClick={() => {
@@ -37,7 +38,7 @@ export const Toolbox: FC<Props> = ({className, graph}) => {
                     <Icon data={MagnifierPlus} />
                 </Button>
             </Tooltip>
-            <Tooltip content="Fit to viewport" placement="right">
+            <Tooltip content={i18n('action_fit-to-viewport')} placement="right">
                 <Button
                     pin="brick-brick"
                     view="raised"
@@ -48,7 +49,7 @@ export const Toolbox: FC<Props> = ({className, graph}) => {
                     <Icon data={SquareDashed} />
                 </Button>
             </Tooltip>
-            <Tooltip content="Zoom out" placement="right">
+            <Tooltip content={i18n('action_zoom-out')} placement="right">
                 <Button
                     view="raised"
                     onClick={() => {
