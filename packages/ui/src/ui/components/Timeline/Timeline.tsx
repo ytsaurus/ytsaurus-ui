@@ -6,6 +6,8 @@ import {TimelinePicker} from '../common/Timeline/TimelinePicker/TimelinePicker';
 import {TimelineRuler} from './TimelineRuler';
 import {calculateShortcutTime} from '../common/Timeline/util';
 
+import i18n from './i18n';
+
 import './Timeline.scss';
 
 const b = cn('yc-timeline');
@@ -62,22 +64,24 @@ export const timelineDefaultProps = {
     wrapper: TimelineDefaultWrapper,
 };
 
-const SHOW_IN_DEFAULT_SHORTCUTS: Array<Array<TimelineShortcut>> = [
-    [
-        {title: '5 minues', time: '5m'},
-        {title: '30 minues', time: '30m'},
-        {title: '2 hours', time: '2h'},
-        {title: '6 hours', time: '6h'},
-        {title: '12 hours', time: '12h'},
-    ],
-    [
-        {title: '1 days', time: '1d'},
-        {title: '1 week', time: '1w'},
-        {title: '1 month', time: '1mo'},
-        {title: '3 month', time: '3mo'},
-        {title: '1 year', time: '1y'},
-    ],
-];
+function getDefaultShortcuts(): Array<Array<TimelineShortcut>> {
+    return [
+        [
+            {title: i18n('value_5-minutes'), time: '5m'},
+            {title: i18n('value_30-minutes'), time: '30m'},
+            {title: i18n('value_2-hours'), time: '2h'},
+            {title: i18n('value_6-hours'), time: '6h'},
+            {title: i18n('value_12-hours'), time: '12h'},
+        ],
+        [
+            {title: i18n('value_1-day'), time: '1d'},
+            {title: i18n('value_1-week'), time: '1w'},
+            {title: i18n('value_1-month'), time: '1mo'},
+            {title: i18n('value_3-months'), time: '3mo'},
+            {title: i18n('value_1-year'), time: '1y'},
+        ],
+    ];
+}
 
 export class Timeline extends React.Component<TimelineProps> {
     static defaultProps = timelineDefaultProps;
@@ -158,7 +162,7 @@ export class Timeline extends React.Component<TimelineProps> {
                 from={from}
                 to={to}
                 hasDatePicker={hasDatePicker}
-                shortcuts={shortcuts ?? SHOW_IN_DEFAULT_SHORTCUTS}
+                shortcuts={shortcuts ?? getDefaultShortcuts()}
                 shortcut={shortcut}
                 topShortcuts={topShortcuts}
                 onUpdate={this.setTime}
