@@ -6,6 +6,7 @@ import {OutputType} from '@diplodoc/transform/lib/typings';
 
 import {wrapApiPromiseByToaster} from '../../utils/utils';
 import UIFactory from '../../UIFactory';
+import i18n from './i18n';
 
 import './Markdown.scss';
 import '@diplodoc/transform/dist/css/yfm.css';
@@ -39,7 +40,7 @@ export async function transformMarkdown({text, allowHTML}: Props): Promise<Outpu
             {
                 toasterName: 'useMarkdown',
                 skipSuccessToast: true,
-                errorContent: 'Failed to transform markdown text',
+                errorContent: i18n('alert_failed-to-transform'),
             },
         );
         return data as OutputType;
