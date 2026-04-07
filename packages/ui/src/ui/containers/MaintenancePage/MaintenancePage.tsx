@@ -6,6 +6,7 @@ import Button from '../../components/Button/Button';
 import {uiSettings} from '../../config/ui-settings';
 
 import {MaintenanceInfo} from './MaintenanceInfo';
+import i18n from './i18n';
 
 import './MaintenancePage.scss';
 
@@ -54,14 +55,14 @@ export class MaintenancePage extends React.Component<Props> {
                                         view="action"
                                         size="m"
                                     >
-                                        Subscribe to YT announces
+                                        {i18n('action_subscribe-to-yt-announces')}
                                     </Button>
                                 </li>
                             )}
 
                             <li className={b('link')}>
                                 <Button size="m" onClick={onProceed}>
-                                    Proceed to cluster anyway
+                                    {i18n('action_proceed-to-cluster')}
                                 </Button>
                             </li>
                         </ul>

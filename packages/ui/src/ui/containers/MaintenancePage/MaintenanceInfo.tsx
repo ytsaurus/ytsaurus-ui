@@ -9,6 +9,7 @@ import hammer from '@ytsaurus/interface-helpers/lib/hammer';
 import {SubjectCard} from '../../components/SubjectLink/SubjectLink';
 import Icon from '../../components/Icon/Icon';
 import {Linkify} from '../../components/Linkify/Linkify';
+import i18n from './i18n';
 
 import './MaintenanceInfo.scss';
 
@@ -43,11 +44,11 @@ export function MaintenanceInfo({
     const header = React.useMemo(() => {
         switch (type) {
             case 'maintenance':
-                return 'Maintenance is under way';
+                return i18n('alert_maintenance-in-progress');
             case 'issue':
-                return 'Cluster experiences problems';
+                return i18n('alert_cluster-problems');
             default:
-                return 'Oops! Something went wrong';
+                return i18n('alert_something-went-wrong');
         }
     }, [type]);
 
