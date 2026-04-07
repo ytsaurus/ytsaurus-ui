@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {Redirect} from 'react-router';
 import block from 'bem-cn-lite';
+import i18n from './i18n';
 
 const b = block('elements-message');
 
@@ -15,25 +16,17 @@ function BanPage({blocked, banned, cluster}) {
                 {banned && (
                     <div className={b({theme: 'warning'})}>
                         <p className={className}>
-                            Unfortunately, you have been <strong>banned</strong> on this cluster.
+                            {i18n('alert_banned_1')} <strong>{i18n('alert_banned_word')}</strong>{' '}
+                            {i18n('alert_banned_2')}
                         </p>
-                        <p className={className}>
-                            If the problem persists please report it via Bug Reporter.
-                        </p>
+                        <p className={className}>{i18n('alert_banned-report')}</p>
                     </div>
                 )}
                 {blocked && (
                     <div className={b({theme: 'warning'})}>
-                        <p className={className}>
-                            Unfortunately, you have exceeded the limit for the number of concurrent
-                            requests.
-                        </p>
-                        <p className={className}>
-                            Usually this is a transient failure due to load spikes.
-                        </p>
-                        <p className={className}>
-                            Please, try reloading the page in a few minutes or reducing the load.
-                        </p>
+                        <p className={className}>{i18n('alert_blocked')}</p>
+                        <p className={className}>{i18n('alert_blocked-transient')}</p>
+                        <p className={className}>{i18n('alert_blocked-reload')}</p>
                     </div>
                 )}
             </div>
