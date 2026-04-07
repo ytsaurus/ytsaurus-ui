@@ -6,6 +6,7 @@ import Link from '../../components/Link/Link';
 
 import hammer from '../../common/hammer';
 import {showErrorPopup} from '../../utils/utils';
+import i18n from './i18n';
 
 import './utils.scss';
 
@@ -105,7 +106,7 @@ export function printColumnAsError(error) {
     };
     return typeof error === 'object' ? (
         <Link theme="ghost" onClick={showError}>
-            View
+            {i18n('action_view')}
         </Link>
     ) : (
         hammer.format.NO_VALUE
