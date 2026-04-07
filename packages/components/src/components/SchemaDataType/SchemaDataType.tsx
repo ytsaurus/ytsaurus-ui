@@ -3,6 +3,7 @@ import React from 'react';
 import {getSchemaDateType} from './dataTypes';
 import {DataType} from './DataType/DataType';
 import {type Type, parseV3Type} from './dateTypesV3';
+import i18n from './i18n';
 import {toPrimitiveTypesSet} from './primitiveTypes';
 
 export type SchemaDataTypePrimitiveTypes = Set<string>;
@@ -29,7 +30,7 @@ function SchemaDataType({typeV3, primitiveTypes}: SchemaDataTypeProps) {
     return dataTypeProps ? (
         <DataType {...dataTypeProps} />
     ) : (
-        <>There is no type description in the schema</>
+        <>{i18n('alert_no-type-description')}</>
     );
 }
 
