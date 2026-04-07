@@ -1,0 +1,14 @@
+{
+  "value_years": "years",
+  "value_weeks": "weeks",
+  "value_months": "months",
+  "value_days": "days",
+  "value_hours": "hours",
+  "value_minutes": "minutes",
+  "value_seconds": "seconds",
+  "value_milliseconds": "milliseconds",
+  "context_month-note": "1M=30d",
+  "context_examples": "Examples: 1M2d3h, 4h15m",
+  "alert_only-digits-and-latin": "only digits and latin characters are allowed",
+  "alert_wrong-format": "wrong format"
+}
