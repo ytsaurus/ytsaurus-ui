@@ -3,6 +3,7 @@ import {Button, ButtonProps, Icon} from '@gravity-ui/uikit';
 import shevronRightSvg from '@gravity-ui/icons/svgs/chevron-right.svg';
 import doubleShevronRightSvg from '@gravity-ui/icons/svgs/chevrons-right.svg';
 import cn from 'bem-cn-lite';
+import i18n from './i18n';
 import './ExpandButton.scss';
 
 const block = cn('yt-expanded-button');
@@ -28,8 +29,8 @@ export const ExpandButton: FC<Props> = ({
     size,
     qa,
 }) => {
-    const titleExpanded = all ? 'Collapse All' : 'Collapse';
-    const titleCollapsed = all ? 'Expand All' : 'Expand';
+    const titleExpanded = all ? i18n('action_collapse-all') : i18n('action_collapse');
+    const titleCollapsed = all ? i18n('action_expand-all') : i18n('action_expand');
     return (
         <Button
             className={block({inline}, className)}
