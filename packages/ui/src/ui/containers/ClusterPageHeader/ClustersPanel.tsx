@@ -24,6 +24,7 @@ import Icon from '../../components/Icon/Icon';
 import {selectCluster} from '../../store/selectors/global';
 
 import './ClustersPanel.scss';
+import i18n from './i18n';
 
 const block = cn('clusters-panel');
 
@@ -115,7 +116,7 @@ export default function ClustersPanel({className, onSelectCluster}: Props) {
                 <TextInput
                     controlRef={onRef}
                     onKeyDown={handleKey}
-                    placeholder={'Cluster search'}
+                    placeholder={i18n('field_cluster-search')}
                     onUpdate={onChange}
                     value={filter}
                     autoFocus
@@ -123,7 +124,7 @@ export default function ClustersPanel({className, onSelectCluster}: Props) {
             </div>
             <div className={block('groups')}>
                 {isEmpty_(groups) ? (
-                    <div className={block('no-items')}>No matching clusters</div>
+                    <div className={block('no-items')}>{i18n('alert_no-matching-clusters')}</div>
                 ) : (
                     map_(CLUSTER_GROUPS, ({caption}, key) => {
                         if (!groups[key]) {
