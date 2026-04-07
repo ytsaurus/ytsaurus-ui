@@ -7,6 +7,7 @@ import NumberInput, {
     NumberInputWithError,
     NumberInputWithErrorProps,
 } from '../../components/NumberInput/NumberInput';
+import i18n from './i18n';
 
 import './QuotaEditor.scss';
 
@@ -70,7 +71,7 @@ export default class QuotaEditor extends React.Component<QuotaEditorProps> {
                 {renderSourceSuggest && (
                     <div className={block('item')}>
                         <div className={block('item-title')}>
-                            {sourceSuggestTitle || 'Account to distribution'}
+                            {sourceSuggestTitle || i18n('title_account-to-distribution')}
                         </div>
                         {renderSourceSuggest({
                             value: sourceAccount || '',
@@ -79,7 +80,7 @@ export default class QuotaEditor extends React.Component<QuotaEditorProps> {
                         })}
                         <div className={block('free')}>
                             <React.Fragment>
-                                Free to distribute
+                                {i18n('label_free-to-distribute')}
                                 <span className={block('free-value')}>
                                     {' '}
                                     {this.getFreeFormatted()}
@@ -90,7 +91,7 @@ export default class QuotaEditor extends React.Component<QuotaEditorProps> {
                 )}
                 <div className={block('item')}>
                     <div className={block('item-title')}>
-                        {limitInputTitle || 'New quota limit'}
+                        {limitInputTitle || i18n('title_new-quota-limit')}
                     </div>
                     <NumberInputWithError
                         onChange={this.onBytesChange}
@@ -204,12 +205,12 @@ export default class QuotaEditor extends React.Component<QuotaEditorProps> {
         }
 
         if (isNaN(newLimit!)) {
-            return 'wrong format!';
+            return i18n('error_wrong-format');
         }
 
         const {currentAccount} = this.props;
         if (currentAccount === srcAccount) {
-            return 'The same source account';
+            return i18n('error_same-source-account');
         }
 
         if (newLimit <= this.props.prevLimit!) {
@@ -219,7 +220,7 @@ export default class QuotaEditor extends React.Component<QuotaEditorProps> {
         const maxLimit = this.getMaxLimit();
 
         if (srcAccount && (maxLimit === undefined || newLimit > maxLimit)) {
-            return 'New value is too big';
+            return i18n('error_value-too-big');
         }
 
         return undefined;
