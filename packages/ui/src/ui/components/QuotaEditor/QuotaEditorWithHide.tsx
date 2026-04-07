@@ -9,6 +9,7 @@ import {ROOT_ACCOUNT_NAME} from '../../constants/accounts/accounts';
 
 import './QuotaEditorWithHide.scss';
 import QuotaEditor, {QuotaEditorProps} from './QuotaEditor';
+import i18n from './i18n';
 
 const block = cn('yt-quota-editor-with-hide');
 
@@ -63,11 +64,11 @@ export default class QuotaEditorWithHide extends React.Component<Props, State> {
         const {className, limit} = this.props;
         return (
             <div className={block('confirm', className)}>
-                <div className={block('confirm-notice')}>
-                    Do you really want to change the quota limit?
-                </div>
+                <div className={block('confirm-notice')}>{i18n('confirm_change-quota')}</div>
                 <div className={block('confirm-details')}>
-                    The previous value is {this.renderLimit(limit)}, the new value is{' '}
+                    {i18n('confirm_previous-value-prefix')}
+                    {this.renderLimit(limit)}
+                    {i18n('confirm_previous-value-infix')}
                     {this.renderLimit(this.getLimit())}
                 </div>
                 <div className={block('confirm-actions')}>
@@ -77,14 +78,14 @@ export default class QuotaEditorWithHide extends React.Component<Props, State> {
                         onClick={this.onYes}
                         qa="quota-editor-confirmation-yes"
                     >
-                        Yes
+                        {i18n('action_yes')}
                     </Button>
                     <Button
                         className={block('confirm-btn')}
                         view="flat-secondary"
                         onClick={this.onCancel}
                     >
-                        Cancel
+                        {i18n('action_cancel')}
                     </Button>
                 </div>
             </div>
@@ -120,7 +121,7 @@ export default class QuotaEditorWithHide extends React.Component<Props, State> {
                 )}
             >
                 <div className={block('top')}>
-                    Edit Quota limit
+                    {i18n('title_edit-quota-limit')}
                     <ClickableText className={block('hide')} color="secondary" onClick={onHide}>
                         <Icon awesome={'times'} face={'light'} />
                     </ClickableText>
@@ -136,7 +137,7 @@ export default class QuotaEditorWithHide extends React.Component<Props, State> {
                             onClick={this.onSave}
                             qa="quota-editor-save"
                         >
-                            Save
+                            {i18n('action_save')}
                         </Button>
                     </div>
                 </div>

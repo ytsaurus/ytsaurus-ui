@@ -1,0 +1,15 @@
+{
+  "title_account-to-distribution": "Account to distribution",
+  "label_free-to-distribute": "Free to distribute",
+  "title_new-quota-limit": "New quota limit",
+  "error_wrong-format": "wrong format!",
+  "error_same-source-account": "The same source account",
+  "error_value-too-big": "New value is too big",
+  "title_edit-quota-limit": "Edit Quota limit",
+  "action_save": "Save",
+  "action_yes": "Yes",
+  "action_cancel": "Cancel",
+  "confirm_change-quota": "Do you really want to change the quota limit?",
+  "confirm_previous-value-prefix": "The previous value is ",
+  "confirm_previous-value-infix": ", the new value is"
+}
