@@ -5,6 +5,7 @@ import {prettyPrintSafe} from '../../utils/unipika';
 
 import {YTErrorBlockProps} from '../../components/Block/Block';
 import {useErrorYsonSettings} from '../../hooks/useErrorYsonSettings';
+import i18n from './i18n';
 
 export function ErrorToClipboardButton({
     error,
@@ -16,5 +17,12 @@ export function ErrorToClipboardButton({
         return prettyPrintSafe(error, errorSettings);
     }, [error, errorSettings]);
 
-    return <ClipboardButton title="Copy error" view="flat-secondary" text={text} {...rest} />;
+    return (
+        <ClipboardButton
+            title={i18n('action_copy-error')}
+            view="flat-secondary"
+            text={text}
+            {...rest}
+        />
+    );
 }
