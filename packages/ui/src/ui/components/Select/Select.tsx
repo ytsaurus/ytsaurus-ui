@@ -19,6 +19,8 @@ import {VisibleValues} from '../../components/VisibleValues/VisibleValues';
 
 import './Select.scss';
 
+import i18n from './i18n';
+
 const block = cn('yt-select');
 
 export interface YTSelectProps<T extends string = string>
@@ -135,7 +137,7 @@ function renderItemContent(item: Item, useNoValue = false) {
             {icon && <span className={block('item-icon')}>{icon}</span>}
             {empty ? (
                 <Text className={block('empty')} color={'secondary'}>
-                    {useNoValue ? hammer.format.NO_VALUE : 'Empty string'}
+                    {useNoValue ? hammer.format.NO_VALUE : i18n('value_empty-string')}
                 </Text>
             ) : (
                 content
@@ -248,7 +250,7 @@ class CustomSelect extends React.Component<
                 {filter}
                 <span className={block('filter-btn')}>
                     <Button view="flat-secondary" onClick={() => this.props.onUpdate?.([])}>
-                        Clear
+                        {i18n('action_clear')}
                     </Button>
                 </span>
             </div>
