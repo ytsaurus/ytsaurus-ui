@@ -8,6 +8,7 @@ import {
 } from '../../components/YTChartKit';
 
 import formatLib from '../../common/hammer/format';
+import i18n from './i18n';
 
 export interface HistogramChartProps {
     className: string;
@@ -232,10 +233,10 @@ function renderDefaultTooltip({
     const lp = lineOnly ? '' : '~';
     return compact_([
         colValue !== undefined
-            ? `<b>${colValue}</b> partitions contain in range from <b>${colX0}</b> to <b>${colX1}</b> - ${dataName}`
+            ? i18n('tooltip_column', {count: colValue, x0: colX0, x1: colX1, dataName})
             : undefined,
         lineValue !== undefined
-            ? `<b>${lp}${lineValue}</b> of tablets contains <b>${lp}${lineX}</b> or less`
+            ? i18n('tooltip_line', {prefix: lp, value: lineValue, x: lineX})
             : undefined,
     ]).join('<br/>');
 }
