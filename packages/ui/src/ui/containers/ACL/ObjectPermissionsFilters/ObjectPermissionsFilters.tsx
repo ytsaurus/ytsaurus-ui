@@ -17,6 +17,7 @@ import {
 } from '../../../store/selectors/acl-filters';
 import {ACLReduxProps} from '../ACL-connect-helpers';
 import {ColumnGroupsFilter} from '../ColumnGroups/ColumnGroups';
+import i18n from './i18n';
 import './ObjectPermissionsFilters.scss';
 
 const block = cn('object-permissions-filters');
@@ -47,7 +48,7 @@ export default function ObjectPermissionsFilters({
                     node: (
                         <Filter
                             className={block('filter')}
-                            placeholder="Filter by subject"
+                            placeholder={i18n('context_filter-by-subject')}
                             onChange={(value: string) => {
                                 dispatch(
                                     updateAclFilters({
@@ -77,7 +78,7 @@ export default function ObjectPermissionsFilters({
                             <Select
                                 className={block('filter')}
                                 multiple
-                                placeholder={'filter'}
+                                placeholder={i18n('context_filter-placeholder')}
                                 value={selectedPermissons}
                                 items={map_(permissionList, (p) => ({
                                     value: p,
@@ -90,7 +91,7 @@ export default function ObjectPermissionsFilters({
                                         }),
                                     );
                                 }}
-                                label={'Permissions'}
+                                label={i18n('field_permissions')}
                                 maxVisibleValuesTextLength={60}
                                 width="auto"
                             />
@@ -98,7 +99,7 @@ export default function ObjectPermissionsFilters({
                         [AclMode.ROW_GROUPS_PERMISSIONS]: (
                             <Filter
                                 className={block('filter')}
-                                placeholder={'Filter by predicate'}
+                                placeholder={i18n('context_filter-by-predicate')}
                                 onChange={(value) => {
                                     dispatch(
                                         updateAclFilters({

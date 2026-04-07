@@ -1,6 +1,7 @@
 import React from 'react';
 import {TextArea} from '@gravity-ui/uikit';
 import debounce_ from 'lodash/debounce';
+import i18n from './i18n';
 
 export type Props = {
     value?: Array<string>;
@@ -36,7 +37,7 @@ export function AclColumnsControl({value, onChange, disabled}: Props) {
 
     return (
         <TextArea
-            placeholder="Enter one column name per line"
+            placeholder={i18n('context_columns-placeholder')}
             value={editText ?? textValue}
             disabled={disabled}
             onUpdate={(val) => {

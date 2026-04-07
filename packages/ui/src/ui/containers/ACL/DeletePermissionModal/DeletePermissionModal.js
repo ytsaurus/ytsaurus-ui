@@ -11,6 +11,7 @@ import {renderText} from '../../../components/templates/utils';
 
 import hammer from '../../../common/hammer';
 
+import i18n from './i18n';
 import './DeletePermissionModal.scss';
 
 const block = cn('navigation-acl-delete-modal');
@@ -80,9 +81,9 @@ export default class DeletePermissionModal extends Component {
                 onConfirm={this.deleteItem}
                 loading={isPermissionDeleted}
                 visible={visible}
-                confirmText="Delete"
+                confirmText={i18n('action_delete')}
                 onCancel={this.onClose}
-                title="Delete permissions"
+                title={i18n('title_delete-permissions')}
                 onOutsideClick={this.onClose}
                 isConfirmDisabled={this.checkConfirmDisabled}
                 content={
@@ -121,16 +122,16 @@ export default class DeletePermissionModal extends Component {
                         <p className={block('delete', {confirm})}>
                             <Checkbox
                                 size={'l'}
-                                content="Yes, I'm sure"
+                                content={i18n('confirm_yes-im-sure')}
                                 checked={confirm}
                                 onChange={this.toggleConfirm}
                             />
 
-                            <Label theme="danger" text="This action CANNOT be undone" />
+                            <Label theme="danger" text={i18n('alert_cannot-be-undone')} />
                         </p>
 
                         {error && key === lastItemKey && (
-                            <YTErrorBlock message="Could not delete permission" error={error} />
+                            <YTErrorBlock message={i18n('alert_could-not-delete')} error={error} />
                         )}
                     </div>
                 }

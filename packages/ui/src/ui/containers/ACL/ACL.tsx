@@ -24,6 +24,7 @@ import {PreparedRole, isGranted} from '../../utils/acl';
 import {PreparedAclSubject} from '../../utils/acl/acl-types';
 import {ACLReduxProps} from './ACL-connect-helpers';
 import './ACL.scss';
+import i18n from './i18n';
 import {AclActions} from './AclActions/AclActions';
 import {AclColumnsCell} from './AclColumnsCell';
 import {AclModeControl} from './AclModeControl';
@@ -209,7 +210,7 @@ class ACL extends Component<Props> {
                 width: 36,
             } as Column<T>,
             subjects: {
-                name: 'Subjects',
+                name: i18n('field_subjects'),
                 align: 'left',
                 className: block('table-item', {type: 'subjects'}),
                 render({row}) {
@@ -250,7 +251,7 @@ class ACL extends Component<Props> {
                 },
             } as Column<T>,
             permissions: {
-                name: 'Permissions',
+                name: i18n('field_permissions'),
                 align: 'left',
                 className: block('table-item', {type: 'permissions'}),
                 render({row}) {
@@ -272,7 +273,7 @@ class ACL extends Component<Props> {
                 },
             } as Column<T>,
             inheritance_mode: {
-                name: 'Inheritance mode',
+                name: i18n('field_inheritance-mode'),
                 render({row}) {
                     const {inheritance_mode: mode} = row;
                     return mode === undefined
@@ -303,7 +304,7 @@ class ACL extends Component<Props> {
                 },
             } as Column<T>,
             approve_type: {
-                name: 'Type',
+                name: i18n('field_type'),
                 align: 'left',
                 className: block('table-item', {type: 'approve-type'}),
                 render({row}) {
@@ -311,7 +312,7 @@ class ACL extends Component<Props> {
                 },
             } as Column<T>,
             columns: {
-                name: 'Private columns',
+                name: i18n('field_private-columns'),
                 align: 'left',
                 className: block('table-item', {type: 'columns'}),
                 render({row}) {
@@ -319,7 +320,7 @@ class ACL extends Component<Props> {
                 },
             } as Column<T>,
             row_access_predicate: {
-                name: 'Row access predicate',
+                name: i18n('field_row-access-predicate'),
                 align: 'left',
                 className: block('table-item', {type: 'row-access-predicate'}),
                 render({row}) {
@@ -381,7 +382,7 @@ class ACL extends Component<Props> {
                 <ErrorBoundary>
                     <div className={block('approvers')}>
                         <div className="elements-heading elements-heading_size_xs">
-                            Responsibles
+                            {i18n('title_responsibles')}
                         </div>
                         <WithStickyToolbar
                             topMargin="none"
@@ -391,7 +392,7 @@ class ACL extends Component<Props> {
                                 <DataTableYT
                                     data={approversFiltered}
                                     loaded={loaded}
-                                    noItemsText="Thre are no any responsibles"
+                                    noItemsText={i18n('alert_no-responsibles')}
                                     columns={tableColumns}
                                     theme={'yt-borderless'}
                                     rowClassName={this.rowClassNameByFlags}
@@ -414,20 +415,20 @@ class ACL extends Component<Props> {
         const {data, title, noItemsText, extraColumns} = {
             [AclMode.MAIN_PERMISSIONS]: {
                 data: mainPermissions,
-                title: 'Object permissions',
-                noItemsText: 'There are no column permissions',
+                title: i18n('title_object-permissions'),
+                noItemsText: i18n('alert_no-column-permissions'),
                 extraColumns: ['permissions'] as const,
             },
             [AclMode.COLUMN_GROUPS_PERMISSIONS]: {
                 data: columnsPermissions,
-                title: 'Private columns permissions',
-                noItemsText: 'No permissions',
+                title: i18n('title_private-columns-permissions'),
+                noItemsText: i18n('alert_no-permissions'),
                 extraColumns: ['columns'] as const,
             },
             [AclMode.ROW_GROUPS_PERMISSIONS]: {
                 data: rowPermissions,
-                title: 'Private rows permissions',
-                noItemsText: 'No permissions',
+                title: i18n('title_private-rows-permissions'),
+                noItemsText: i18n('alert_no-permissions'),
                 extraColumns: ['row_access_predicate'] as const,
             },
         }[aclMode];
@@ -733,16 +734,16 @@ class ACL extends Component<Props> {
 
         const segments: Array<SegmentControlItem> = compact_([
             allowInheritAcl &&
-                toSegmentItem('Inherit ACL', disableAclInheritance, {
+                toSegmentItem(i18n('field_inherit-acl'), disableAclInheritance, {
                     invertRole: true,
                     envforceValue: inheritAcl,
                 }),
             isIdmAclAvailable() &&
                 allowBossApprovals &&
-                toSegmentItem('Boss approval', bossApproval),
+                toSegmentItem(i18n('field_boss-approval'), bossApproval),
             isIdmAclAvailable() &&
                 allowInheritResponsibles &&
-                toSegmentItem('Inherit responsibles', disableInheritanceResponsible, {
+                toSegmentItem(i18n('field_inherit-responsibles'), disableInheritanceResponsible, {
                     invertRole: true,
                 }),
         ]);
@@ -760,16 +761,16 @@ class ACL extends Component<Props> {
 
         const counters: Array<SegmentControlItem> = {
             [AclMode.MAIN_PERMISSIONS]: [
-                {name: 'Responsibles', value: approversFiltered.length},
-                {name: 'Object permissions', value: mainPermissions.count},
+                {name: i18n('title_responsibles'), value: approversFiltered.length},
+                {name: i18n('title_object-permissions'), value: mainPermissions.count},
             ],
             [AclMode.COLUMN_GROUPS_PERMISSIONS]: [
-                {name: 'Column groups', value: columnGroups.length},
-                {name: 'Column permissions', value: columnsPermissions.count},
+                {name: i18n('title_column-groups'), value: columnGroups.length},
+                {name: i18n('title_column-permissions'), value: columnsPermissions.count},
             ],
             [AclMode.ROW_GROUPS_PERMISSIONS]: [
-                {name: 'Row groups', value: rowGroups?.length ?? 0},
-                {name: 'Row permissions', value: rowPermissions.count},
+                {name: i18n('title_row-groups'), value: rowGroups?.length ?? 0},
+                {name: i18n('title_row-permissions'), value: rowPermissions.count},
             ],
         }[aclMode];
         return (

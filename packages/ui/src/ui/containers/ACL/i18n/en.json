@@ -1,0 +1,22 @@
+{
+  "field_private-columns": "Private columns",
+  "field_type": "Type",
+  "field_subjects": "Subjects",
+  "field_permissions": "Permissions",
+  "field_inheritance-mode": "Inheritance mode",
+  "field_row-access-predicate": "Row access predicate",
+  "field_inherit-acl": "Inherit ACL",
+  "field_boss-approval": "Boss approval",
+  "field_inherit-responsibles": "Inherit responsibles",
+  "title_responsibles": "Responsibles",
+  "title_object-permissions": "Object permissions",
+  "title_private-columns-permissions": "Private columns permissions",
+  "title_private-rows-permissions": "Private rows permissions",
+  "title_column-groups": "Column groups",
+  "title_column-permissions": "Column permissions",
+  "title_row-groups": "Row groups",
+  "title_row-permissions": "Row permissions",
+  "alert_no-responsibles": "There are no responsibles",
+  "alert_no-column-permissions": "There are no column permissions",
+  "alert_no-permissions": "No permissions"
+}

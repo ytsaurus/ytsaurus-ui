@@ -15,6 +15,7 @@ import './RequestPermissions.scss';
 import map_ from 'lodash/map';
 import UIFactory from '../../../UIFactory';
 import hammer from '../../../common/hammer';
+import i18n from './i18n';
 
 import HelpLink from '../../../components/HelpLink/HelpLink';
 import {docsUrl} from '../../../config';
@@ -138,7 +139,7 @@ function RequestPermissions(props: Props) {
         [requestPermissions, idmKind],
     );
 
-    const currentCaption = `Current ${SHORT_TITLE[idmKind] ?? idmKind}`;
+    const currentCaption = i18n('field_current', {item: SHORT_TITLE[idmKind] ?? idmKind});
 
     const {permissionsToRequest: choices} = useAvailablePermissions({idmKind, path});
 
@@ -154,7 +155,7 @@ function RequestPermissions(props: Props) {
         return {
             cluster: {
                 type: 'plain',
-                caption: 'Cluster',
+                caption: i18n('field_cluster'),
                 extras: {
                     className: block('cluster'),
                 },
@@ -168,13 +169,16 @@ function RequestPermissions(props: Props) {
             },
             permissions: {
                 type: 'permissions',
-                caption: 'Permissions',
+                caption: i18n('field_permissions'),
                 required: true,
                 tooltip: (
                     <>
                         {docsUrl(
-                            makeLink(UIFactory.docsUrls['acl:permissions'], 'Permissions types'),
-                            'Permissions types',
+                            makeLink(
+                                UIFactory.docsUrls['acl:permissions'],
+                                i18n('action_permissions-types'),
+                            ),
+                            i18n('action_permissions-types'),
                         )}
                     </>
                 ),
@@ -185,12 +189,12 @@ function RequestPermissions(props: Props) {
             },
             readColumns: {
                 type: 'acl-columns',
-                caption: 'Read columns',
+                caption: i18n('field_read-columns'),
                 required: true,
             },
             readColumnGroup: {
                 type: 'acl-group',
-                caption: 'Read column group',
+                caption: i18n('field_read-column-group'),
                 required: true,
                 extras: {
                     options: columnGroups,
@@ -198,7 +202,7 @@ function RequestPermissions(props: Props) {
             },
             readRowGroup: {
                 type: 'acl-group',
-                caption: 'Read row group',
+                caption: i18n('field_read-row-group'),
                 required: true,
                 extras: {
                     options: rowGroups,
@@ -206,22 +210,22 @@ function RequestPermissions(props: Props) {
             },
             read_row_access_predicate: {
                 type: 'textarea',
-                caption: 'RLS predicate',
+                caption: i18n('field_rls-predicate'),
                 required: true,
                 tooltip: <HelpLink url={UIFactory.docsUrls['acl:row-level-security']} />,
             },
             subjects: {
                 type: 'acl-subjects',
-                caption: 'Subjects',
+                caption: i18n('field_subjects'),
                 required: true,
                 extras: {
-                    placeholder: 'Enter group name, user name or login...',
+                    placeholder: i18n('context_subjects-placeholder'),
                     allowedTypes: ['users', 'groups', 'app'],
                 },
             },
             duration: {
                 type: 'before-date',
-                caption: 'Duration',
+                caption: i18n('field_duration'),
             },
             commentHeader: {
                 type: 'block',
@@ -229,11 +233,9 @@ function RequestPermissions(props: Props) {
                 extras: {
                     children: (
                         <React.Fragment>
-                            <div className={'is-dialog__label'}>Comment</div>
+                            <div className={'is-dialog__label'}>{i18n('field_comment')}</div>
                             <div className={block('comment-notice')}>
-                                Teams and people can be requested through the IDM after the access
-                                group is created. If you have a more complex case please describe it
-                                in the comments.
+                                {i18n('context_comment-notice')}
                             </div>
                         </React.Fragment>
                     ),
@@ -245,7 +247,7 @@ function RequestPermissions(props: Props) {
             },
             inheritance_mode: {
                 type: 'yt-select-single',
-                caption: 'Inheritance mode',
+                caption: i18n('field_inheritance-mode'),
                 extras: {
                     items: map_(INHERITANCE_MODE_TYPES, (value) => ({
                         value,
@@ -258,8 +260,8 @@ function RequestPermissions(props: Props) {
             },
             permissionFlags: {
                 type: 'block',
-                caption: 'Permission flags',
-                extras: {children: 'Not implemented'},
+                caption: i18n('field_permission-flags'),
+                extras: {children: i18n('context_not-implemented')},
             },
         };
     }, [choices, currentCaption, error, idmKind, columnGroups, rowGroups]);
@@ -365,8 +367,7 @@ function RequestPermissions(props: Props) {
                         };
 
                         if (!subjects.length) {
-                            const errorMessage = 'At least one subject should be selected.';
-                            validationError.subjects = errorMessage;
+                            validationError.subjects = i18n('alert_subjects-required');
                         }
 
                         return validationError;

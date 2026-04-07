@@ -24,6 +24,7 @@ import './ManageInheritance.scss';
 import UIFactory from '../../../UIFactory';
 import {ACLReduxProps} from '../ACL-connect-helpers';
 import {ManageInheritanceFieldNames} from '../ManageAcl/ManageAcl';
+import i18n from './i18n';
 
 const block = cn('acl-inheritance');
 
@@ -99,7 +100,7 @@ function ManageInheritance(props: Props) {
                 inheritAcl: {
                     name: 'inheritAcl',
                     type: 'tumbler',
-                    caption: 'Inherit ACL',
+                    caption: i18n('field_inherit-acl'),
                     onChange: (value) => {
                         setHasWarning(!value);
                     },
@@ -111,21 +112,14 @@ function ManageInheritance(props: Props) {
                         children: hasWarning ? (
                             <YTErrorBlock
                                 type={'alert'}
-                                message={
-                                    <>
-                                        Setting <span className={block('flag')}>inherit_acl</span>{' '}
-                                        flag to <span className={block('flag')}>false</span> may
-                                        result in the loss of permissions sufficient to undo this
-                                        operation.{' '}
-                                    </>
-                                }
+                                message={i18n('alert_inherit-acl-warning')}
                             />
                         ) : null,
                     },
                 },
                 comment: {
                     name: 'comment',
-                    caption: 'Comment for IDM',
+                    caption: i18n('field_comment-for-idm'),
                     type: 'textarea',
                 },
             }) as Record<ManageInheritanceFieldNames, DialogField<FormValues>>,
@@ -159,7 +153,7 @@ function ManageInheritance(props: Props) {
                         type: 'block',
                         extras: {
                             children: manageAclError && (
-                                <YTErrorBlock message="Acl update failure" error={manageAclError} />
+                                <YTErrorBlock message={i18n('alert_acl-update-failure')} error={manageAclError} />
                             ),
                         },
                     },
@@ -176,7 +170,7 @@ function ManageInheritance(props: Props) {
         );
     };
 
-    const {editInheritance = 'Edit inheritance'} = buttonsTitle ?? {};
+    const {editInheritance = i18n('action_edit-inheritance')} = buttonsTitle ?? {};
 
     return !dialogFields.length ? null : (
         <ErrorBoundary>

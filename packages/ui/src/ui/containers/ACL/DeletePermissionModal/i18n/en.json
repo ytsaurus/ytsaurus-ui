@@ -1,0 +1,7 @@
+{
+  "action_delete": "Delete",
+  "title_delete-permissions": "Delete permissions",
+  "confirm_yes-im-sure": "Yes, I'm sure",
+  "alert_cannot-be-undone": "This action CANNOT be undone",
+  "alert_could-not-delete": "Could not delete permission"
+}
