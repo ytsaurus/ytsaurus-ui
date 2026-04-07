@@ -2,6 +2,7 @@ import * as React from 'react';
 import {useSelector} from '../../../store/redux-hooks';
 import {Alert} from '@gravity-ui/uikit';
 import {DialogWrapper as Dialog} from '../../../components/DialogWrapper/DialogWrapper';
+import i18n from './i18n';
 import {isCryptoSubtleAvailable} from '../../../utils/sha256';
 import {createPasswordStrategy} from './password-strategies';
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
@@ -36,7 +37,7 @@ const PasswordModal = (props: PasswordModalProps) => {
                     sha256_password: string;
                 }>
                     headerProps={{
-                        title: 'Authentication',
+                        title: i18n('title_authentication'),
                     }}
                     pristineSubmittable
                     modal={false}
@@ -64,7 +65,7 @@ const PasswordModal = (props: PasswordModalProps) => {
                             type: 'block',
                             extras: {
                                 children: isCryptoSubtleAvailable() ? (
-                                    <Alert message="To access tokens management, you need enter your password" />
+                                    <Alert message={i18n('alert_password-required')} />
                                 ) : (
                                     <CryptoSubtleAlert />
                                 ),
@@ -74,7 +75,7 @@ const PasswordModal = (props: PasswordModalProps) => {
                             name: 'password',
                             type: 'text',
                             required: true,
-                            caption: 'Password',
+                            caption: i18n('field_password'),
                             extras: () => ({type: 'password'}),
                             visibilityCondition: {
                                 when: '',
@@ -85,7 +86,7 @@ const PasswordModal = (props: PasswordModalProps) => {
                             name: 'sha256_password',
                             type: 'text',
                             required: true,
-                            caption: 'Password Hash (SHA-256)',
+                            caption: i18n('field_password-hash-sha256'),
                             visibilityCondition: {
                                 when: '',
                                 isActive: () => !isCryptoSubtleAvailable(),
