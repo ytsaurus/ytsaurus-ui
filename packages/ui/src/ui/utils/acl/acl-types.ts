@@ -57,7 +57,7 @@ export interface Role {
     column_group_id?: string;
     row_group_id?: string;
     permissions?: Array<YTPermissionType>;
-    inheritance_mode?: string;
+    inheritance_mode?: InheritanceModeType;
     columns?: Array<string>;
     row_access_predicate?: string;
     inherited?: boolean;
@@ -150,7 +150,7 @@ export interface ACE {
     permissions: Array<YTPermissionType>;
     action: string;
     subjects: Array<string>;
-    inheritance_mode?: string;
+    inheritance_mode?: InheritanceModeType;
     columns?: Array<string>;
     row_access_predicate?: string;
     inherited?: boolean;
@@ -229,8 +229,14 @@ export type TypedAclSubject =
 
 export type InheritedFrom = {kind: IdmKindType; name: string; poolTree?: string};
 
+export type InheritanceModeType =
+    | 'descendants_only'
+    | 'immediate_descendants_only'
+    | 'object_only'
+    | 'object_and_descendants';
+
 export type PreparedAclSubject = TypedAclSubject & {
-    inheritance_mode?: string;
+    inheritance_mode?: InheritanceModeType;
     inherited?: boolean;
     inheritedFrom?: InheritedFrom;
     key?: string;

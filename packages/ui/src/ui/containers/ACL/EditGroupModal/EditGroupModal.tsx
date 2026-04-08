@@ -34,9 +34,7 @@ export function useEditColumnRowGroupModal({groupType}: {groupType: 'column' | '
         addGroup: ({submit}: {submit: (item: Partial<EditGroupFormValues>) => Promise<void>}) => {
             setModalProps({
                 mode: 'Add',
-                title: showColumns
-                    ? i18n('title_add-column-group')
-                    : i18n('title_add-row-group'),
+                title: showColumns ? i18n('title_add-column-group') : i18n('title_add-row-group'),
                 confirmText: i18n('action_add'),
                 disabledFields: ['enabled'],
                 visible: true,
@@ -61,9 +59,7 @@ export function useEditColumnRowGroupModal({groupType}: {groupType: 'column' | '
         }) => {
             setModalProps({
                 mode: 'Edit',
-                title: showColumns
-                    ? i18n('title_edit-column-group')
-                    : i18n('title_edit-row-group'),
+                title: showColumns ? i18n('title_edit-column-group') : i18n('title_edit-row-group'),
                 confirmText: i18n('action_save'),
                 initialData: {...item},
                 disabledFields: [],

@@ -23,7 +23,13 @@ import UIFactory from '../../UIFactory';
 import {AclAction, HasIdmKind} from '../../store/reducers/acl/acl';
 import {isCancelled} from '../../utils/cancel-helper';
 import {RootState} from '../../store/reducers';
-import {IdmKindType, PreparedAclSubject, ResponsibleType, Role} from '../../utils/acl/acl-types';
+import {
+    IdmKindType,
+    InheritanceModeType,
+    PreparedAclSubject,
+    ResponsibleType,
+    Role,
+} from '../../utils/acl/acl-types';
 import {CheckPermissionResult} from '../../../shared/utils/check-permission';
 import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
 
@@ -211,7 +217,7 @@ export type PermissionToRequest = {
     cluster: string;
     permissions: {[x: string]: Array<YTPermissionTypeUI>} | null;
     subjects: Array<ResponsibleType>;
-    inheritance_mode?: string;
+    inheritance_mode?: InheritanceModeType;
     duration?: Date;
     comment?: string;
     permissionFlags?: Record<string, boolean>;

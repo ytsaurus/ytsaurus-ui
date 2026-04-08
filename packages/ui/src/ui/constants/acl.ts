@@ -42,7 +42,7 @@ export const INHERITANCE_MODE_TYPES = {
     OBJECT_AND_DESCENDANTS: 'object_and_descendants',
     DESCENDANTS_ONLY: 'descendants_only',
     IMMEDIATE_DESCENDANTS_ONLY: 'immediate_descendants_only',
-};
+} as const;
 
 const ACCOUNTS_PERMISSION_TYPES = ['administer' as const, 'use' as const];
 

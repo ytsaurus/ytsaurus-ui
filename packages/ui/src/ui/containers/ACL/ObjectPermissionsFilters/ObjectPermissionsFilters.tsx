@@ -2,9 +2,6 @@ import cn from 'bem-cn-lite';
 import map_ from 'lodash/map';
 import React from 'react';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
-
-import format from '../../../common/hammer/format';
-
 import Filter from '../../../components/Filter/Filter';
 import Select from '../../../components/Select/Select';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
@@ -17,6 +14,7 @@ import {
 } from '../../../store/selectors/acl-filters';
 import {ACLReduxProps} from '../ACL-connect-helpers';
 import {ColumnGroupsFilter} from '../ColumnGroups/ColumnGroups';
+import i18nPermissionValues from '../i18n-permission-values';
 import i18n from './i18n';
 import './ObjectPermissionsFilters.scss';
 
@@ -82,7 +80,7 @@ export default function ObjectPermissionsFilters({
                                 value={selectedPermissons}
                                 items={map_(permissionList, (p) => ({
                                     value: p,
-                                    text: format.ReadableField(p),
+                                    text: i18nPermissionValues(`value_${p}`),
                                 }))}
                                 onUpdate={(value: string[]) => {
                                     dispatch(

@@ -120,7 +120,9 @@ export function RowGroups({
     return (
         <ErrorBoundary>
             <div>
-                <div className="elements-heading elements-heading_size_xs">{i18n('title_row-groups')}</div>
+                <div className="elements-heading elements-heading_size_xs">
+                    {i18n('title_row-groups')}
+                </div>
                 <WithStickyToolbar
                     topMargin="none"
                     bottomMargin="regular"

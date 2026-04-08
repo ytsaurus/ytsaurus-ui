@@ -5,23 +5,25 @@ import {compose} from 'redux';
 import {DialogField, FormApi, YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import PermissionsControl from '../RequestPermissions/PermissionsControl/PermissionsControl';
-
 import withVisible, {WithVisibleProps} from '../../../hocs/withVisible';
-
 import {AclMode, INHERITANCE_MODE_TYPES, IdmObjectType} from '../../../constants/acl';
 import {YTError} from '../../../types';
 import './RequestPermissions.scss';
-
 import map_ from 'lodash/map';
 import UIFactory from '../../../UIFactory';
 import hammer from '../../../common/hammer';
 import i18n from './i18n';
-
+import i18nPermissionValues from '../i18n-permission-values';
 import HelpLink from '../../../components/HelpLink/HelpLink';
 import {docsUrl} from '../../../config';
 import {PermissionToRequest} from '../../../store/actions/acl';
 import {YTPermissionTypeUI} from '../../../utils/acl/acl-api';
-import {AclColumnGroup, AclRowGroup, IdmKindType} from '../../../utils/acl/acl-types';
+import {
+    AclColumnGroup,
+    AclRowGroup,
+    IdmKindType,
+    InheritanceModeType,
+} from '../../../utils/acl/acl-types';
 import {makeLink} from '../../../utils/utils';
 import {useAvailablePermissions} from '../hooks/use-available-permissions';
 
@@ -73,16 +75,12 @@ type FormValues = {
         type: 'users' | 'groups' | 'app';
         text?: string;
     }>;
-    inheritance_mode?: string;
+    inheritance_mode?: InheritanceModeType;
     duration?: Date;
     comment?: string;
     readColumnGroup?: string;
     readRowGroup?: string;
 } & Record<`${typeof FLAG_NAME_PREFIX}${string}`, boolean>;
-
-const SHORT_TITLE: Partial<Record<IdmKindType, string>> = {
-    access_control_object: 'ACO',
-};
 
 const COLUMNS_FELDS = new Set<RequestPermissionsFieldsNames>(['readColumns', 'readColumnGroup']);
 const ROWS_FIELDS = new Set<RequestPermissionsFieldsNames>([
@@ -139,7 +137,7 @@ function RequestPermissions(props: Props) {
         [requestPermissions, idmKind],
     );
 
-    const currentCaption = i18n('field_current', {item: SHORT_TITLE[idmKind] ?? idmKind});
+    const currentCaption = i18n(`field_current_${idmKind}`);
 
     const {permissionsToRequest: choices} = useAvailablePermissions({idmKind, path});
 
@@ -251,7 +249,7 @@ function RequestPermissions(props: Props) {
                 extras: {
                     items: map_(INHERITANCE_MODE_TYPES, (value) => ({
                         value,
-                        text: hammer.format['ReadableField'](value),
+                        text: i18nPermissionValues(`inheritance_mode_${value}`),
                     })),
                     hideClear: true,
                     hideFilter: true,

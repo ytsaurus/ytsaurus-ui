@@ -1,19 +1,18 @@
 import {Column} from '@gravity-ui/react-data-table';
 import {ClipboardButton, Flex, Icon, Loader} from '@gravity-ui/uikit';
+import {Tooltip} from '@ytsaurus/components';
 import cn from 'bem-cn-lite';
 import compact_ from 'lodash/compact';
 import React, {Component, Fragment} from 'react';
 import aclInheritedSvg from '../../assets/img/svg/acl-inherited.svg';
 import hammer from '../../common/hammer';
+import {DataTableYT} from '../../components/DataTableYT';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import {ExpandButton} from '../../components/ExpandButton';
 import Label from '../../components/Label';
 import LoadDataHandler from '../../components/LoadDataHandler/LoadDataHandler';
 import {SegmentControl, SegmentControlItem} from '../../components/SegmentControl/SegmentControl';
 import {SubjectCard} from '../../components/SubjectLink/SubjectLink';
-import {renderText} from '../../components/templates/utils';
-import {Tooltip} from '@ytsaurus/components';
-import {DataTableYT} from '../../components/DataTableYT';
 import WithStickyToolbar from '../../components/WithStickyToolbar/WithStickyToolbar';
 import {isIdmAclAvailable} from '../../config';
 import {AclMode, IdmObjectType} from '../../constants/acl';
@@ -24,13 +23,14 @@ import {PreparedRole, isGranted} from '../../utils/acl';
 import {PreparedAclSubject} from '../../utils/acl/acl-types';
 import {ACLReduxProps} from './ACL-connect-helpers';
 import './ACL.scss';
-import i18n from './i18n';
 import {AclActions} from './AclActions/AclActions';
 import {AclColumnsCell} from './AclColumnsCell';
 import {AclModeControl} from './AclModeControl';
 import ApproversFilters from './ApproversFilters/ApproversFilters';
 import ColumnGroups from './ColumnGroups/ColumnGroups';
 import DeletePermissionModal from './DeletePermissionModal/DeletePermissionModal';
+import i18n from './i18n';
+import i18nPermissionValues from './i18n-permission-values';
 import {InheritanceMessage} from './InheritanceMessage/InheritanceMessage';
 import {MyPermissions} from './MyPermissinos/MyPermissions';
 import ObjectPermissionsFilters from './ObjectPermissionsFilters/ObjectPermissionsFilters';
@@ -261,11 +261,13 @@ class ACL extends Component<Props> {
                     return (
                         <div className={block('permissions', {type: row.action})}>
                             <Label className={block('action-label')} theme={theme}>
-                                {action}
+                                {i18nPermissionValues(`action_${action}`)}
                             </Label>
                             <AclColumnsCell
                                 withQoutes
-                                items={row.permissions?.map(hammer.format.Readable)}
+                                items={row.permissions?.map((item) =>
+                                    i18nPermissionValues(`value_${item}`),
+                                )}
                                 expanadable={'expanded' in row}
                             />
                         </div>
@@ -278,7 +280,7 @@ class ACL extends Component<Props> {
                     const {inheritance_mode: mode} = row;
                     return mode === undefined
                         ? hammer.format.NO_VALUE
-                        : renderText(hammer.format['ReadableField'](mode));
+                        : i18nPermissionValues(`inheritance_mode_${mode}`);
                 },
                 align: 'left',
                 className: block('table-item', {type: 'inheritance-mode'}),

@@ -1,15 +1,11 @@
-import React, {Component} from 'react';
+import {Checkbox} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
-
 import indexOf_ from 'lodash/indexOf';
 import isEmpty_ from 'lodash/isEmpty';
 import map_ from 'lodash/map';
-
-import {Checkbox} from '@gravity-ui/uikit';
-
-import format from '../../../../common/hammer/format';
+import React, {Component} from 'react';
+import i18nPermissionValues from '../../../../containers/ACL/i18n-permission-values';
 import {YTPermissionTypeUI} from '../../../../utils/acl/acl-api';
-
 import './PermissionsControl.scss';
 
 const block = cn('acl-permissions-control');
@@ -63,11 +59,17 @@ export default class PermissionsControl extends Component<Props, State> {
         const {value, disabled, disabledChoices} = this.props;
         const itemDisabled = disabled || indexOf_(disabledChoices, index) !== -1;
 
+        const content = permissionsToSet
+            .map((item) => {
+                return i18nPermissionValues(`value_${item}`);
+            })
+            .join('/');
+
         return (
             <Checkbox
                 checked={Boolean(value?.[permissionName])}
                 key={permissionName}
-                content={format.ReadableField(permissionName)}
+                content={content}
                 onChange={() => this.handleCheckboxChange(permissionName, permissionsToSet)}
                 disabled={itemDisabled}
                 className={block('item')}

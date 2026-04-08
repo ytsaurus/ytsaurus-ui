@@ -3,13 +3,11 @@ import cn from 'bem-cn-lite';
 import {Flex, Icon} from '@gravity-ui/uikit';
 import checkSvg from '@gravity-ui/icons/svgs/circle-check.svg';
 import xMarkSvg from '@gravity-ui/icons/svgs/circle-xmark.svg';
-
-import format from '../../../common/hammer/format';
-
 import {ACLReduxProps} from '../ACL-connect-helpers';
 
 import './MyPermissions.scss';
 import {useAvailablePermissions} from '../hooks/use-available-permissions';
+import i18nPermissionValues from '../i18n-permission-values';
 
 const block = cn('yt-my-permissions');
 
@@ -63,7 +61,7 @@ function PermissionsGroup({items}: {items: ACLReduxProps['userPermissions']}) {
                             })}
                             data={action === 'deny' ? xMarkSvg : checkSvg}
                         />
-                        {format.Readable(type)}
+                        {i18nPermissionValues(`value_${type}`)}
                     </Flex>
                 );
             })}
