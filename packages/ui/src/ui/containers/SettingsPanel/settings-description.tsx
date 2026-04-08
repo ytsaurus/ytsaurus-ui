@@ -98,12 +98,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
 
     return compact_([
         makePage(i18n('title_general'), generalIcon, [
-            makeItem(
-                'startPage',
-                i18n('field_start-page'),
-                'top',
-                <StartPageSettingMemo />,
-            ),
+            makeItem('startPage', i18n('field_start-page'), 'top', <StartPageSettingMemo />),
             makeItem(
                 'global::newDashboardPage',
                 i18n('field_new-dashboard-page'),
