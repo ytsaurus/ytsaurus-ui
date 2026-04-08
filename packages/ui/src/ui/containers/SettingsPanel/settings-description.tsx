@@ -97,92 +97,97 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
     const hasQuerySuggestions = Boolean(UIFactory.getInlineSuggestionsApi());
 
     return compact_([
-        makePage('General', generalIcon, [
-            makeItem('startPage', 'Start page', 'top', <StartPageSettingMemo />),
+        makePage(i18n('title_general'), generalIcon, [
+            makeItem(
+                'startPage',
+                i18n('field_start-page'),
+                'top',
+                <StartPageSettingMemo />,
+            ),
             makeItem(
                 'global::newDashboardPage',
-                'New dashboard page',
+                i18n('field_new-dashboard-page'),
                 'top',
                 <BooleanSettingItem
                     settingKey={'global::newDashboardPage'}
-                    description={'Enable new dashboard page'}
+                    description={i18n('context_new-dashboard-page-description')}
                     oneLine
                 />,
             ),
             makeItem(
                 SettingName.GLOBAL.AUTO_REFRESH,
-                'Use auto refresh',
+                i18n('field_auto-refresh'),
                 'top',
                 <SettingsMenuItem
                     settingName={SettingName.GLOBAL.AUTO_REFRESH}
                     settingNS={NAMESPACES.GLOBAL}
-                    annotation="Automatically update pages with highly dynamic content"
+                    annotation={i18n('context_auto-refresh-description')}
                     oneLine={true}
                 />,
             ),
             makeItem(
                 SettingName.MENU.RECENT_CLUSTER_FIRST,
-                'Use recent clusters',
+                i18n('field_recent-clusters'),
                 'top',
                 <SettingsMenuItem
                     settingName={SettingName.MENU.RECENT_CLUSTER_FIRST}
                     settingNS={NAMESPACES.MENU}
-                    annotation={'Recently visited clusters appear at the top of cluster menu.'}
+                    annotation={i18n('context_recent-clusters-description')}
                     oneLine
                 />,
             ),
             makeItem(
                 SettingName.MENU.RECENT_PAGE_FIRST,
-                'Use recent pages',
+                i18n('field_recent-pages'),
                 'top',
                 <SettingsMenuItem
                     settingName={SettingName.MENU.RECENT_PAGE_FIRST}
                     settingNS={NAMESPACES.MENU}
-                    annotation={'Recently visited pages appear at the top of pages menu.'}
+                    annotation={i18n('context_recent-pages-description')}
                     oneLine
                 />,
             ),
         ]),
-        makePage('Appearance', paletteIcon, [
+        makePage(i18n('title_appearance'), paletteIcon, [
             makeItem(
                 SettingName.GLOBAL.THEME,
-                'Theme',
+                i18n('field_theme'),
                 'top',
                 <SettingsMenuRadio
                     settingName={SettingName.GLOBAL.THEME}
                     settingNS={NAMESPACES.GLOBAL}
                     items={[
-                        {value: 'light', text: 'Light'},
-                        {value: 'dark', text: 'Dark'},
-                        {value: 'system', text: 'System'},
+                        {value: 'light', text: i18n('value_theme-light')},
+                        {value: 'dark', text: i18n('value_theme-dark')},
+                        {value: 'system', text: i18n('value_theme-system')},
                     ]}
                 />,
             ),
             makeItem(
                 SettingName.A11Y.USE_SAFE_COLORS,
-                'Contrast',
+                i18n('field_contrast'),
                 'top',
                 <SettingsMenuRadio
                     settingName={SettingName.A11Y.USE_SAFE_COLORS}
                     settingNS={NAMESPACES.A11Y}
                     convertValue={(value) => value === 'true'}
                     items={[
-                        {value: 'false', text: 'Normal'},
-                        {value: 'true', text: 'High'},
+                        {value: 'false', text: i18n('value_contrast-normal')},
+                        {value: 'true', text: i18n('value_contrast-high')},
                     ]}
                 />,
             ),
             {
                 id: 'global::maxContentWidth',
-                title: 'Content width',
+                title: i18n('field_content-width'),
                 align: 'top',
                 content: (
                     <SettingsMenuRadioByKey
                         settingKey="global::maxContentWidth"
                         options={[
-                            {value: 'standard', content: 'Standard'},
-                            {value: 'wide', content: 'Wide'},
-                            {value: 'maximum', content: 'Maximum'},
+                            {value: 'standard', content: i18n('value_width-standard')},
+                            {value: 'wide', content: i18n('value_width-wide')},
+                            {value: 'maximum', content: i18n('value_width-maximum')},
                         ]}
                     />
                 ),
@@ -190,26 +195,23 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
         ]),
         isAdmin &&
             makePage(
-                'Development',
+                i18n('title_development'),
                 closeTagIcon,
                 compact_([
                     makeItem(
                         SettingName.DEVELOPMENT.REGULAR_USER_UI,
-                        "Show regular user's UI",
+                        i18n('field_regular-user-ui'),
                         'top',
                         <SettingsMenuItem
                             settingName={SettingName.DEVELOPMENT.REGULAR_USER_UI}
                             settingNS={NAMESPACES.DEVELOPMENT}
-                            label={"Show regular user's UI"}
-                            annotation={
-                                'There is some difference in UI for development-team and regular users, ' +
-                                'enabling of the option allows to see exactly the same what see a regular user.'
-                            }
+                            label={i18n('field_regular-user-ui')}
+                            annotation={i18n('context_regular-user-ui-description')}
                         />,
                     ),
                     makeItem(
                         'global::lang',
-                        i18n('Language'),
+                        i18n('field_language'),
                         'top',
                         <SettingsMenuRadioByKey
                             settingKey="global::lang"
@@ -221,21 +223,21 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     ),
                     makeItem(
                         'global::development::showAiChat',
-                        'Show AI chat',
+                        i18n('field_ai-chat'),
                         'top',
                         <BooleanSettingItem
                             settingKey="global::development::showAiChat"
-                            description={'Show AI chat button on all pages'}
+                            description={i18n('context_ai-chat-description')}
                             oneLine
                         />,
                     ),
                 ]),
             ),
 
-        makePage('Data', dataIcon, [
+        makePage(i18n('title_data'), dataIcon, [
             makeItem(
                 SettingName.YSON.FORMAT,
-                'Data format',
+                i18n('field_data-format'),
                 'top',
                 <SettingsMenuRadio
                     settingName={SettingName.YSON.FORMAT}
@@ -258,91 +260,74 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
             ),
             makeItem(
                 SettingName.YSON.SHOW_DECODED,
-                'Decode data as UTF8',
+                i18n('field_decode-utf8'),
                 'top',
                 <SettingsMenuItem
                     oneLine={true}
                     settingName={SettingName.YSON.SHOW_DECODED}
                     settingNS={NAMESPACES.YSON}
-                    annotation={
-                        'Attempt to decode UTF-8 strings. Show Unicode symbols upon success and mark ' +
-                        'data as binary otherwise.'
-                    }
-                    annotationHighlight={
-                        'Please note that YSON does not natively support Unicode symbols ' +
-                        '&mdash; therefore you would not be able to copy-paste presented YSON as is.'
-                    }
+                    annotation={i18n('context_decode-utf8-description')}
+                    annotationHighlight={i18n('context_decode-utf8-highlight')}
                 />,
             ),
             makeItem(
                 SettingName.YSON.BINARY_AS_HEX,
-                'Binary as HEX',
+                i18n('field_binary-as-hex'),
                 'top',
                 <SettingsMenuItem
                     settingName={SettingName.YSON.BINARY_AS_HEX}
                     settingNS={NAMESPACES.YSON}
-                    annotation={
-                        'Display binary strings as HEX sequences. Strings that were not decoded as UTF8 are therefore considered binary and ' +
-                        'displayed as HEX sequences.'
-                    }
+                    annotation={i18n('context_binary-as-hex-description')}
                     oneLine
                 />,
             ),
             makeItem(
                 SettingName.YSON.ESCAPE_WHITESPACES,
-                'Escape and highlight',
+                i18n('field_escape-and-highlight'),
                 'top',
                 <SettingsMenuItem
                     settingName={SettingName.YSON.ESCAPE_WHITESPACES}
                     settingNS={NAMESPACES.YSON}
-                    annotation={
-                        `Symbols ${wrapEscapeText('\\n')} and ${wrapEscapeText(
-                            '\\t',
-                        )} will be rendered as escape sequences, whitespaces will be ` +
-                        'highlighted as neccessary. Does not affect Raw JSON format.'
-                    }
-                    annotationHighlight={
-                        'Please note that JSON does not support unescaped control characters ' +
-                        '&mdash; therefore you would not be able to copy-paste presented JSON as is.'
-                    }
+                    annotation={i18n('context_escape-whitespaces-description', {
+                        n: wrapEscapeText('\\n'),
+                        t: wrapEscapeText('\\t'),
+                    })}
+                    annotationHighlight={i18n('context_escape-whitespaces-highlight')}
                     oneLine
                 />,
             ),
             makeItem(
                 SettingName.YSON.COMPACT,
-                'Compact view',
+                i18n('field_compact-view'),
                 'top',
                 <SettingsMenuItem
                     settingName={SettingName.YSON.COMPACT}
                     settingNS={NAMESPACES.YSON}
-                    annotation={
-                        'Single element lists are rendered inline, so are maps with one property. Does ' +
-                        'not affect Raw JSON format.'
-                    }
+                    annotation={i18n('context_compact-view-description')}
                     oneLine
                 />,
             ),
         ]),
-        makePage('System', systemIcon, [
+        makePage(i18n('title_system'), systemIcon, [
             makeItem(
                 SettingName.SYSTEM.MASTERS_HOST_TYPE,
-                'Host type of Masters/Schedulers/Controller',
+                i18n('field_host-type'),
                 'top',
                 <SettingsMenuRadio
-                    description="Select the default view of host to display on in the Masters/Schedulers and Controller agents section."
+                    description={i18n('context_host-type-description')}
                     settingName={SettingName.SYSTEM.MASTERS_HOST_TYPE}
                     settingNS={NAMESPACES.SYSTEM}
                     items={mastersRadioButtonItems}
                 />,
             ),
         ]),
-        makePage('Operation', operationsIcon, [
+        makePage(i18n('title_operation'), operationsIcon, [
             makeItem(
                 SettingName.OPERATIONS.STATISTICS_AGGREGATION_TYPE,
-                "Statistic's type",
+                i18n('field_statistics-type'),
                 'top',
                 <SettingsMenuRadio
-                    description="Select the default type of job aggregation."
+                    description={i18n('context_statistics-type-description')}
                     settingName={SettingName.OPERATIONS.STATISTICS_AGGREGATION_TYPE}
                     settingNS={NAMESPACES.OPERATIONS}
                     items={AGGREGATOR_RADIO_ITEMS}
@@ -350,17 +335,17 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
             ),
         ]),
         makePage(
-            'Navigation',
+            i18n('title_navigation'),
             navigationIcon,
             compact_([
                 clusterNS &&
                     makeItem(
                         SettingName.LOCAL.NAVIGATION_DEFAULT_PATH,
-                        'Default path',
+                        i18n('field_default-path'),
                         'top',
                         <SettingsMenuInput
-                            placeholder="Enter default navigation path..."
-                            description="Cluster specific path that will be opened by default in the the Navigation page."
+                            placeholder={i18n('context_default-path-placeholder')}
+                            description={i18n('context_default-path-description')}
                             validator={navigationPathValidator}
                             settingName={SettingName.LOCAL.NAVIGATION_DEFAULT_PATH}
                             settingNS={clusterNS}
@@ -368,11 +353,11 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                     ),
                 makeItem(
                     SettingName.NAVIGATION.DEFAULT_CHYT_ALIAS,
-                    'Default chyt alias',
+                    i18n('field_default-chyt-alias'),
                     'top',
                     <SettingsMenuInput
-                        placeholder="Enter default chyt alias..."
-                        description="User alias for the YQL Kit default query string in ClickHouse mode."
+                        placeholder={i18n('context_default-chyt-alias-placeholder')}
+                        description={i18n('context_default-chyt-alias-description')}
                         validator={chytAliasValidator}
                         settingName={SettingName.NAVIGATION.DEFAULT_CHYT_ALIAS}
                         settingNS={NAMESPACES.NAVIGATION}
@@ -380,52 +365,46 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 ),
                 makeItem(
                     SettingName.NAVIGATION.USE_SMART_SORT,
-                    'Use smart sort',
+                    i18n('field_smart-sort'),
                     'top',
                     <SettingsMenuItem
                         settingName={SettingName.NAVIGATION.USE_SMART_SORT}
                         settingNS={NAMESPACES.NAVIGATION}
-                        annotation={
-                            'Nodes with names that represent dates will be sorted from newest date to ' +
-                            'oldest, while other nodes will be sorted alphabetically.'
-                        }
+                        annotation={i18n('context_smart-sort-description')}
                         oneLine
                     />,
                 ),
                 makeItem(
                     SettingName.NAVIGATION.GROUP_NODES,
-                    'Group nodes by type',
+                    i18n('field_group-nodes'),
                     'top',
                     <SettingsMenuItem
                         settingName={SettingName.NAVIGATION.GROUP_NODES}
                         settingNS={NAMESPACES.NAVIGATION}
-                        annotation={
-                            'Nodes will be grouped by type and each type will be sorted independently, ' +
-                            'folders first, then tables, then files.'
-                        }
+                        annotation={i18n('context_group-nodes-description')}
                         oneLine
                     />,
                 ),
                 makeItem(
                     SettingName.NAVIGATION.USE_SMART_FILTER,
-                    'Use smart filter',
+                    i18n('field_smart-filter'),
                     'top',
                     <SettingsMenuItem
                         settingName={SettingName.NAVIGATION.USE_SMART_FILTER}
                         settingNS={NAMESPACES.NAVIGATION}
-                        annotation={'Use logical operators in filter like "and" and "or"'}
+                        annotation={i18n('context_smart-filter-description')}
                         oneLine
                     />,
                 ),
                 makeItem(
                     SettingName.NAVIGATION.ENABLE_PATH_AUTO_CORRECTION,
-                    'Path autocorrection',
+                    i18n('field_path-autocorrection'),
                     'top',
                     <SettingsMenuItem
                         settingName={SettingName.NAVIGATION.ENABLE_PATH_AUTO_CORRECTION}
                         settingNS={NAMESPACES.NAVIGATION}
                         annotation={
-                            'Autocorrect erroneous path if possible. ' +
+                            i18n('context_path-autocorrection-description') +
                             docsUrl(
                                 'For details see ' +
                                     `<a class="link link_theme_normal" href="${UIFactory.docsUrls['faq:enablepathautocorrection']}" target="_blank">FAQ</a>` +
@@ -437,33 +416,33 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 ),
             ]),
         ),
-        makePageBySections('Components', componentsIcon, [
+        makePageBySections(i18n('title_components'), componentsIcon, [
             {
-                title: 'General',
+                title: i18n('title_general'),
                 items: [
                     makeItem(
                         SettingName.COMPONENTS.ENABLE_SIDE_BAR,
-                        'Enable side bar',
+                        i18n('field_enable-side-bar'),
                         'top',
                         <SettingsMenuItem
                             settingName={SettingName.COMPONENTS.ENABLE_SIDE_BAR}
                             settingNS={NAMESPACES.COMPONENTS}
-                            annotation="Display node data in the side bar when clicked."
+                            annotation={i18n('context_enable-side-bar-description')}
                             oneLine={true}
                         />,
                     ),
                 ],
             },
             {
-                title: 'Memory popup',
+                title: i18n('title_memory-popup'),
                 items: [
                     makeItem(
                         'global::components::memoryPopupShowAll',
-                        'Show empty categories',
+                        i18n('field_show-empty-categories'),
                         'top',
                         <BooleanSettingItem
                             settingKey="global::components::memoryPopupShowAll"
-                            description="Display all memory categories even with 0B"
+                            description={i18n('context_show-empty-categories-description')}
                             oneLine
                         />,
                     ),
@@ -472,12 +451,12 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
         ]),
 
         makePage(
-            'Table',
+            i18n('title_table'),
             tableIcon,
             compact_([
                 makeItem(
                     SettingName.DEVELOPMENT.YQL_TYPES,
-                    'YQL V3 types',
+                    i18n('field_yql-v3-types'),
                     'top',
                     <SettingsMenuItem
                         settingName={SettingName.DEVELOPMENT.YQL_TYPES}
@@ -488,11 +467,10 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 ),
                 makeItem(
                     SettingName.NAVIGATION.ROWS_PER_TABLE_PAGE,
-                    'Rows per page',
+                    i18n('field_rows-per-page'),
                     'top',
                     <SettingsMenuRadio
-                        description="Select the default number of rows to display on one table page.
-                        The number can be changed for the specific table using table settings button."
+                        description={i18n('context_rows-per-page-description')}
                         settingName={SettingName.NAVIGATION.ROWS_PER_TABLE_PAGE}
                         settingNS={NAMESPACES.NAVIGATION}
                         items={[
@@ -518,11 +496,10 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 ),
                 makeItem(
                     SettingName.NAVIGATION.MAXIMUM_TABLE_STRING_SIZE,
-                    'Cell size limit',
+                    i18n('field_cell-size-limit'),
                     'top',
                     <SettingsMenuRadio
-                        description="Select the default cell size limit for tables.
-                        The cell size limit for the specific table can be changed using table settings button."
+                        description={i18n('context_cell-size-limit-description')}
                         settingName={SettingName.NAVIGATION.MAXIMUM_TABLE_STRING_SIZE}
                         settingNS={NAMESPACES.NAVIGATION}
                         items={cellSizeRadioButtonItems}
@@ -531,12 +508,10 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 ),
                 makeItem(
                     SettingName.NAVIGATION.DEFAULT_TABLE_COLUMN_LIMIT,
-                    'Default column limit',
+                    i18n('field_default-column-limit'),
                     'top',
                     <SettingsMenuRadio
-                        description="Select the default column limit for tables. In other words, how many columns will be shown
-                        when no column has even been hidden using ColumnSelector for the particular table or (if table
-                        similarity is enabled) for the similar table."
+                        description={i18n('context_default-column-limit-description')}
                         settingName={SettingName.NAVIGATION.DEFAULT_TABLE_COLUMN_LIMIT}
                         settingNS={NAMESPACES.NAVIGATION}
                         items={pageSizeRadioButtonItems}
@@ -545,25 +520,21 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
                 ),
                 makeItem(
                     SettingName.NAVIGATION.ENABLE_TABLE_SIMILARITY,
-                    'Guess visible columns',
+                    i18n('field_guess-visible-columns'),
                     'top',
                     <SettingsMenuItem
                         settingName={SettingName.NAVIGATION.ENABLE_TABLE_SIMILARITY}
                         settingNS={NAMESPACES.NAVIGATION}
-                        annotation={
-                            'Use table similarity for guessing visible columns. ' +
-                            'Show same visible columns in table A as in table B if these tables are similar ' +
-                            'and those columns have been previously set as visible for table B.'
-                        }
+                        annotation={i18n('context_guess-visible-columns-description')}
                         oneLine
                     />,
                 ),
                 makeItem(
                     SettingName.NAVIGATION.TABLE_DISPLAY_RAW_STRINGS,
-                    'Allow raw string-values',
+                    i18n('field_raw-strings'),
                     'top',
                     <SettingsMenuItem
-                        annotation="Cells with string values will be displayed without escaping."
+                        annotation={i18n('context_raw-strings-description')}
                         settingName={SettingName.NAVIGATION.TABLE_DISPLAY_RAW_STRINGS}
                         settingNS={NAMESPACES.NAVIGATION}
                         oneLine
@@ -573,49 +544,49 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
         ),
 
         oauthTokenUrl &&
-            makePage('Auth', shieldIcon, [
+            makePage(i18n('title_auth'), shieldIcon, [
                 makeItem(
                     'oauthToken',
-                    'YT OAuth token',
+                    i18n('field_oauth-token'),
                     undefined,
                     <Link url={oauthTokenUrl} target="_blank">
-                        <Button size={'s'}>Show my token</Button>
+                        <Button size={'s'}>{i18n('action_show-token')}</Button>
                     </Link>,
                 ),
             ]),
 
         isVcsVisible &&
             makePage(
-                'VCS',
+                i18n('title_vcs'),
                 LogoGitlabIcon,
                 compact_([
                     makeItem(
                         'addTokenForm',
-                        'Add or replace token',
+                        i18n('action_add-replace-token'),
                         undefined,
                         <AddVcsTokenForm />,
                     ),
                     Boolean(vcsConfig.some((i) => i.hasToken)) &&
                         makeItem(
                             'existingTokenList',
-                            'Existing tokens',
+                            i18n('field_existing-tokens'),
                             undefined,
                             <VcsList config={vcsConfig} />,
                         ),
                 ]),
             ),
 
-        makePageBySections('Editor', PencilToSquareIcon, [
+        makePageBySections(i18n('title_editor'), PencilToSquareIcon, [
             {
-                title: 'Visual settings',
+                title: i18n('title_visual-settings'),
                 items: [
                     makeItem(
                         'global::editor::vimMode',
-                        'Vim mode',
+                        i18n('field_vim-mode'),
                         'top',
                         <BooleanSettingItem
                             settingKey="global::editor::vimMode"
-                            description="Use monaco vim mode"
+                            description={i18n('context_vim-mode-description')}
                             oneLine
                         />,
                     ),
@@ -627,18 +598,33 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
             hasQuerySuggestions,
         }),
         makePage(
-            'About',
+            i18n('title_about'),
             infoIcon,
             compact_([
                 Boolean(cluster) &&
-                    makeItem('httpProxyVersion', 'HTTP proxy version', undefined, httpProxyVersion),
+                    makeItem(
+                        'httpProxyVersion',
+                        i18n('field_http-proxy-version'),
+                        undefined,
+                        httpProxyVersion,
+                    ),
                 Boolean(cluster) &&
-                    makeItem('schedulerVersion', 'Scheduler version', undefined, schedulerVersion),
+                    makeItem(
+                        'schedulerVersion',
+                        i18n('field_scheduler-version'),
+                        undefined,
+                        schedulerVersion,
+                    ),
                 Boolean(cluster) &&
-                    makeItem('masterVersion', 'Master version', undefined, masterVersion),
+                    makeItem(
+                        'masterVersion',
+                        i18n('field_master-version'),
+                        undefined,
+                        masterVersion,
+                    ),
                 makeItem(
                     'interfaceVersion',
-                    'Interface version',
+                    i18n('field_interface-version'),
                     undefined,
                     YT.parameters.interface.version,
                 ),

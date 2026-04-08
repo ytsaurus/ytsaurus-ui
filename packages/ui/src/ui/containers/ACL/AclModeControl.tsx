@@ -1,10 +1,7 @@
 import React from 'react';
-
 import {SegmentedRadioGroup} from '@gravity-ui/uikit';
-
 import {ACL_MODES, AclMode} from '../../constants/acl';
-import format from '../../common/hammer/format';
-
+import i18nPermissionValues from './i18n-permission-values';
 import {ACLReduxProps} from './ACL-connect-helpers';
 
 export function AclModeControl({
@@ -19,7 +16,7 @@ export function AclModeControl({
             const {[value]: counter} = permissionCounters;
             const counterStr = counter >= 0 ? ` ${counter}` : '';
 
-            return {value, content: format.ReadableField(value) + counterStr};
+            return {value, content: i18nPermissionValues(`view_mode_${value}`) + counterStr};
         });
     }, [permissionCounters]);
 

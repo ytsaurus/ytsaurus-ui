@@ -1,6 +1,11 @@
 {
   "field_cluster": "Cluster",
-  "field_current": "Current {item}",
+  "field_current_path": "Current path",
+  "field_current_ui_effective_acl": "Current path",
+  "field_current_account": "Current account",
+  "field_current_pool": "Current pool",
+  "field_current_tablet_cell_bundle": "Current bundle",
+  "field_current_access_control_object": "Current ACO",
   "field_permissions": "Permissions",
   "field_read-columns": "Read columns",
   "field_read-column-group": "Read column group",

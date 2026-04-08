@@ -218,7 +218,10 @@ function ManageAcl(props: Props) {
                         type: 'block',
                         extras: {
                             children: manageAclError && (
-                                <YTErrorBlock message={i18n('alert_acl-update-failure')} error={manageAclError} />
+                                <YTErrorBlock
+                                    message={i18n('alert_acl-update-failure')}
+                                    error={manageAclError}
+                                />
                             ),
                         },
                     },
