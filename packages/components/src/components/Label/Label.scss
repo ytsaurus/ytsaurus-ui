@@ -7,7 +7,7 @@
     $label: &;
 
     font-size: 1em;
-    font-weight: var(--yt-font-weight-bold);
+    font-weight: var(--yt-font-weight-bold, var(--g-text-display-font-weight));
 
     display: inline-block;
 
@@ -19,24 +19,39 @@
     vertical-align: bottom;
 
     &_theme_default {
-        @include label-theme-block(var(--default-text), var(--default-background));
+        @include label-theme-block(
+            var(--default-text, var(--g-color-text-misc-heavy)),
+            var(--default-background, var(--g-color-base-misc-light))
+        );
     }
 
     &_theme_success {
-        @include label-theme-block(var(--success-text), var(--success-background));
+        @include label-theme-block(
+            var(--success-text, var(--g-color-text-positive-heavy)),
+            var(--success-background, var(--g-color-base-positive-light))
+        );
     }
 
     &_theme_warning {
-        @include label-theme-block(var(--warning-text), var(--warning-background));
+        @include label-theme-block(
+            var(--warning-text, var(--g-color-text-warning-heavy)),
+            var(--warning-background, var(--g-color-base-warning-light))
+        );
     }
 
     &_theme_error,
     &_theme_danger {
-        @include label-theme-block(var(--danger-text), var(--danger-background));
+        @include label-theme-block(
+            var(--danger-text, var(--g-color-text-danger-heavy)),
+            var(--danger-background, var(--g-color-base-danger-light))
+        );
     }
 
     &_theme_info {
-        @include label-theme-block(var(--info-text), var(--info-background));
+        @include label-theme-block(
+            var(--info-text, var(--g-color-text-info-heavy)),
+            var(--info-background, var(--g-color-base-info-light))
+        );
     }
 
     &_theme_misc {
@@ -54,23 +69,23 @@
         border: none;
 
         &#{$label}_theme_default {
-            color: var(--default-color);
+            color: var(--default-color, var(--g-color-text-primary));
         }
 
         &#{$label}_theme_success {
-            color: var(--success-color);
+            color: var(--success-color, var(--g-color-text-positive));
         }
 
         &#{$label}_theme_warning {
-            color: var(--warning-color);
+            color: var(--warning-color, var(--g-color-text-warning));
         }
 
         &#{$label}_theme_danger {
-            color: var(--danger-color);
+            color: var(--danger-color, var(--g-color-text-danger));
         }
 
         &#{$label}_theme_info {
-            color: var(--info-color);
+            color: var(--info-color, var(--g-color-text-info));
         }
     }
 
