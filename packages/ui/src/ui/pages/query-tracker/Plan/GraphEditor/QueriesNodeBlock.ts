@@ -228,7 +228,7 @@ export class QueriesCanvasBlock extends YTGraphCanvasBlock<QueriesNodeBlock> {
         const nodeProgress = this.state.meta.nodeProgress;
         if (!nodeProgress || !nodeProgress.total) return undefined;
 
-        return nodeProgress.total + (nodeProgress.aborted || 0);
+        return nodeProgress.total;
     }
 
     private drawJobCounter(mode: ZoomMode) {

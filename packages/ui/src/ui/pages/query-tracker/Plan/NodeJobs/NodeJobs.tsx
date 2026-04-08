@@ -13,6 +13,7 @@ interface NodeJobsProps {
     running?: number;
     failed?: number;
     aborted?: number;
+    pending?: number;
     total?: number;
 }
 
@@ -27,11 +28,7 @@ const getJobsColumns = (): Column<JobRow>[] => [
             return (
                 <div className={block('item')}>
                     <div className={block('item-color', {status: row.status.toLowerCase()})} />
-                    <Text
-                        className={block('item-title')}
-                        color={footer ? 'primary' : 'secondary'}
-                        // weight={footer ? 'medium' : 'regular'}
-                    >
+                    <Text className={block('item-title')} color={footer ? 'primary' : 'secondary'}>
                         {row.status}
                     </Text>
                 </div>
@@ -47,11 +44,12 @@ export default function NodeJobs({
     failed = 0,
     aborted = 0,
     total = 0,
+    pending = 0,
 }: NodeJobsProps) {
     const statuses: JobRow[] = [];
     statuses.push({
         status: i18n('value_pending'),
-        count: total - running - completed - failed - aborted,
+        count: pending,
     });
     statuses.push({status: i18n('value_running'), count: running});
     statuses.push({status: i18n('value_completed'), count: completed});
