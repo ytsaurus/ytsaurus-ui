@@ -56,6 +56,7 @@ test('Navigation/ACL: column_permissions', async ({page}) => {
     await test.step('Add a column for scheduler', async () => {
         await page.getByText('Add columns ACL').click();
         await page.locator('.df-dialog textarea').fill('column1\nКолонка1');
+        await page.waitForLoadState('networkidle');
 
         await page.getByText('Enter user name or login...').click({force: true});
 
