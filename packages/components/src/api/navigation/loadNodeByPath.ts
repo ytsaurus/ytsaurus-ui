@@ -30,6 +30,6 @@ export const loadNodeByPath =
         } else if (isFolderNode(type)) {
             return loadFolderByPath(path, setup, favorites);
         } else {
-            throw new Error("Сan't open this type of node");
+            throw new Error("Can't open this type of node");
         }
     };

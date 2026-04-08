@@ -38,6 +38,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "jest --config ./jest.config.js",
+    "storybook": "storybook dev -p 6006 --no-open",
+    "build:storybook": "storybook build",
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
@@ -55,6 +57,9 @@
     "@gravity-ui/table": "^1.15.2",
     "@gravity-ui/tsconfig": "^1.0.0",
     "@gravity-ui/uikit": "^7.0.0",
+    "@storybook/addon-docs": "^10.3.5",
+    "@storybook/react": "^10.3.5",
+    "@storybook/react-vite": "^10.3.5",
     "@types/jest": "^29.5.5",
     "@types/lodash": "^4.17.24",
     "@types/react": "^18.0.0",
@@ -65,8 +70,11 @@
     "prettier": "^3.7.4",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "storybook": "^10.3.5",
     "ts-jest": "^29.1.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "vite": "^6.4.2",
+    "vite-plugin-svgr": "^5.2.0"
   },
   "dependencies": {
     "@gravity-ui/i18n": "^1.8.0",
@@ -76,6 +84,7 @@
     "@ytsaurus/interface-helpers": "^1.1.1",
     "@ytsaurus/javascript-wrapper": "^0.17.0",
     "axios": "^1.13.6",
+    "bignumber.js": "^9.3.0",
     "bem-cn-lite": "^4.1.0",
     "hotkeys-js": "^3.13.15",
     "lodash": "^4.17.21",
