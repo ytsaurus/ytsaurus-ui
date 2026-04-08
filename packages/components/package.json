@@ -8,7 +8,9 @@
     "url": "https://github.com/ytsaurus/ytsaurus-ui/tree/main/packages/components"
   },
   "files": [
-    "build/esm"
+    "build/esm",
+    "src/styles",
+    "README.ru.md"
   ],
   "main": "./build/esm/index.js",
   "module": "./build/esm/index.js",

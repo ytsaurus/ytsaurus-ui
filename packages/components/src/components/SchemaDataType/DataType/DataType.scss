@@ -9,7 +9,7 @@
             font-size: 0.8em;
             font-weight: 400;
             font-style: italic;
-            color: var(--color-neutral-8);
+            color: var(--color-neutral-8, var(--g-color-text-secondary));
             font-family: sans-serif;
         }
     }
@@ -23,7 +23,7 @@
     &_complex {
         cursor: pointer;
         font-weight: 600;
-        color: var(--color-nav-hover);
+        color: var(--color-nav-hover, var(--g-color-text-link-hover));
     }
 
     &__tag {
