@@ -6,8 +6,8 @@
     overflow: auto;
     border: 1px solid transparent;
     border-radius: 3px;
-    color: var(--error-text, #b90909);
-    background-color: var(--error-background, #fff5f5);
+    color: var(--error-text, var(--g-color-text-primary));
+    background-color: var(--error-background, var(--g-color-base-danger-light));
 
     &__heading {
         font-size: 16px;

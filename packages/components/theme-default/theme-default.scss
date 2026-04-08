@@ -1,0 +1,11 @@
+@use '@gravity-ui/uikit/styles/themes' as g-themes;
+@use '@gravity-ui/uikit/styles/fonts';
+
+.yt-components-root {
+    @include g-themes.g-theme-common;
+    @include g-themes.g-theme-light;
+}
+
+.yt-components-root.yt-components-root_theme_dark {
+    @include g-themes.g-theme-dark;
+}

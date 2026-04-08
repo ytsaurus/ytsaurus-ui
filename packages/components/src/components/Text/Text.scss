@@ -15,11 +15,11 @@
 
     &_color {
         &_secondary {
-            color: var(--secondary-text);
+            color: var(--secondary-text, var(--g-color-text-secondary));
         }
 
         &_success {
-            color: var(--success-text);
+            color: var(--success-text, var(--g-color-text-positive));
         }
 
         &_info {
@@ -27,25 +27,25 @@
         }
 
         &_warning {
-            color: var(--warning-text);
+            color: var(--warning-text, var(--g-color-text-warning-heavy));
         }
 
         &_warning-light {
-            color: var(--warning-color);
+            color: var(--warning-color, var(--g-color-text-warning));
         }
 
         &_danger {
-            color: var(--danger-text);
+            color: var(--danger-text, var(--g-color-text-danger));
         }
     }
 
     &_disabled {
-        color: var(--disabled-link);
+        color: var(--disabled-link, var(--g-color-text-hint));
         cursor: unset;
     }
 
     &_bold {
-        font-weight: var(--yt-font-weight-bold);
+        font-weight: var(--yt-font-weight-bold, var(--g-text-display-font-weight));
     }
 
     &_no-wrap {
@@ -66,7 +66,7 @@
             .escape {
                 word-spacing: 5px;
                 white-space: pre-wrap;
-                background-color: var(--error-background);
+                background-color: var(--error-background, var(--g-color-base-danger-light));
             }
 
             & .string {
