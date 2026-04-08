@@ -1,3 +1,8 @@
+# caRootBundle:
+#   kind: ConfigMap
+#   name: ca-root-bundle
+#   key: ca-certificates.crt
+
 ui:
   replicaCount: 1
   image:
@@ -28,11 +33,6 @@ ui:
       # see https://github.com/ytsaurus/ytsaurus-ui/tree/main/packages/ui#how-to-work-with-the-repo
       secretName: "yt-ui-secret"
       secretKey: "yt-interface-secret.json"
-
-  caCerts:
-    useExtraCerts: false
-    configMapName: ca-certs
-    configMapKey: ca.crt
 
 service:
   type: NodePort
