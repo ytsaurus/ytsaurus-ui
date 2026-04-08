@@ -3,7 +3,7 @@ import {Link as RouterLink} from 'react-router-dom';
 import {Link as CommonLink} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import {makeRoutedURL} from '../../store/window-store';
-import {ClickableText, ClickableTextProps} from '../../components/ClickableText/ClickableText';
+import {ClickableText, ClickableTextProps} from '../ClickableText/ClickableText';
 import {ArrowUpRightFromSquare} from '@gravity-ui/icons';
 import './Link.scss';
 
@@ -18,7 +18,7 @@ const THEME_TO_COLOR: Record<
     ghost: 'secondary',
 };
 
-export interface LinkProps {
+export type LinkProps = {
     url?: string;
     onClick?: (e: React.MouseEvent) => void;
     onMouseUp?: (e: React.MouseEvent) => void;
@@ -31,77 +31,62 @@ export interface LinkProps {
     title?: string;
     routedPreserveLocation?: boolean;
     hasExternalIcon?: boolean;
-}
+};
 
-class Link extends React.Component<LinkProps> {
-    static defaultProps = {
-        target: '_blank',
-        routed: false,
-        theme: 'normal',
-    };
+export const Link = ({
+    url,
+    children,
+    className,
+    target = '_blank',
+    onClick,
+    routed = false,
+    theme = 'normal',
+    title,
+    routedPreserveLocation,
+    hasExternalIcon,
+}: LinkProps) => {
+    const content = (
+        <>
+            {children}
+            {hasExternalIcon && (
+                <span style={{paddingLeft: '2px'}}>
+                    <ArrowUpRightFromSquare className={block('external-icon')} />
+                </span>
+            )}
+        </>
+    );
 
-    render() {
-        const {
-            url,
-            children,
-            className,
-            target,
-            onClick,
-            routed,
-            theme,
-            title,
-            routedPreserveLocation,
-            hasExternalIcon,
-        } = this.props;
-
-        const content = (
-            <>
-                {children}
-                {hasExternalIcon && (
-                    <span style={{paddingLeft: '2px'}}>
-                        <ArrowUpRightFromSquare className={block('external-icon')} />
-                    </span>
-                )}
-            </>
-        );
-
-        const to =
-            !routed || !routedPreserveLocation
-                ? url
-                : () => {
-                      return makeRoutedURL(url || '');
-                  };
-
-        if (routed) {
-            return (
-                <RouterLink
-                    className={gBlock({view: theme}, className)}
-                    onClick={onClick}
-                    to={to || ''}
-                >
-                    {content}
-                </RouterLink>
-            );
-        }
-
-        return !url ? (
+    if (!url) {
+        return (
             <ClickableText className={className} onClick={onClick} color={textColor(theme)}>
                 {content}
             </ClickableText>
-        ) : (
-            <CommonLink
-                className={className}
-                onClick={onClick}
-                target={target}
-                view={theme as Exclude<typeof theme, 'ghost'>}
-                title={title}
-                href={url}
-            >
-                {content}
-            </CommonLink>
         );
     }
-}
+
+    if (routed) {
+        const to = routedPreserveLocation ? () => makeRoutedURL(url) : url;
+
+        return (
+            <RouterLink className={gBlock({view: theme}, className)} onClick={onClick} to={to}>
+                {content}
+            </RouterLink>
+        );
+    }
+
+    return (
+        <CommonLink
+            className={className}
+            onClick={onClick}
+            target={target}
+            view={theme as Exclude<typeof theme, 'ghost'>}
+            title={title}
+            href={url}
+        >
+            {content}
+        </CommonLink>
+    );
+};
 
 function textColor(theme: LinkProps['theme']): ClickableTextProps['color'] {
     const converted = THEME_TO_COLOR[theme as keyof typeof THEME_TO_COLOR];
