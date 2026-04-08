@@ -226,7 +226,11 @@ export default class CommaSeparatedListWithRestCounter extends React.Component<
                 <div className={block('row-counter', {clickable})} onClick={this.onCounterClick}>
                     +{restCounter}
                 </div>
-                <SimpleModal title={i18n('title_all-items')} visible={showDialog} onCancel={this.closeDialog}>
+                <SimpleModal
+                    title={i18n('title_all-items')}
+                    visible={showDialog}
+                    onCancel={this.closeDialog}
+                >
                     {showDialog && this.renderTooltip()}
                 </SimpleModal>
             </Tooltip>

@@ -178,9 +178,9 @@ class YTErrorBlockImpl extends React.Component<YTErrorBlockInternalProps> {
         return (
             <div className={className}>
                 {header ||
-                hammer.format['ReadableField'](
-                    type ? i18n(`value_${type}` as `value_${typeof type}`) : undefined,
-                )}
+                    hammer.format['ReadableField'](
+                        type ? i18n(`value_${type}` as `value_${typeof type}`) : undefined,
+                    )}
             </div>
         );
     }
