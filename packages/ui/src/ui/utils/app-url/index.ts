@@ -66,6 +66,16 @@ export function makeOperationJobsUrl(params: {
     return searchParams.size > 0 ? `${pathname}?${searchParams}` : pathname;
 }
 
+export function makeOperationJobUrl(params: {
+    cluster?: string;
+    operationId: string;
+    jobId: string;
+}): string {
+    const {cluster, operationId, jobId} = params;
+
+    return `/${cluster || YT.cluster}/${Page.JOB}/${operationId}/${jobId}`;
+}
+
 export function makeOperationLogsUrl(params: {cluster?: string; operationId: string}): string {
     const {cluster, operationId} = params;
 
