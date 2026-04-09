@@ -42,11 +42,12 @@ export function makeOperationJobsUrl(params: {
     cluster?: string;
     operationId: string;
     incarnationId?: string;
+    jobId?: string;
     state?: 'all' | 'running' | 'completed' | 'failed' | 'aborted';
 }): string {
-    const {cluster, operationId, incarnationId, state} = params;
+    const {cluster, operationId, incarnationId, jobId, state} = params;
 
-    const baseUrl = `/${cluster || YT.cluster}/${Page.OPERATIONS}/${operationId}/jobs`;
+    const pathname = `/${cluster || YT.cluster}/${Page.OPERATIONS}/${operationId}/jobs`;
 
     const searchParams = new URLSearchParams();
 
@@ -54,11 +55,15 @@ export function makeOperationJobsUrl(params: {
         searchParams.set('incarnation', incarnationId);
     }
 
+    if (jobId) {
+        searchParams.set('jobId', jobId);
+    }
+
     if (state) {
         searchParams.set('state', state);
     }
 
-    return searchParams.size > 0 ? `${baseUrl}?${searchParams}` : baseUrl;
+    return searchParams.size > 0 ? `${pathname}?${searchParams}` : pathname;
 }
 
 export function makeOperationLogsUrl(params: {cluster?: string; operationId: string}): string {
