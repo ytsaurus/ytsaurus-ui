@@ -31,6 +31,9 @@ export type LinkProps = {
     hasExternalIcon?: boolean;
 };
 
+/**
+ * @deprecated Use RoutedLink or RoutedButton container instead.
+ */
 export const Link = ({
     url,
     children,
