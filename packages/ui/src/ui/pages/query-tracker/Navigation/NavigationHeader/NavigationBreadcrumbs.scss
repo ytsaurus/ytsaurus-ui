@@ -1,4 +1,5 @@
 .navigation-header-breadcrumbs {
+    // Increase specificity for overriding EditableBreadcrumbs styles.
     &[class] {
         margin-right: 0;
     }
