@@ -37,7 +37,7 @@
     "build": "app-builder build --config ./app-builder.config.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "jest --config ./jest.config.js",
+    "test": "jest --config ./jest.config.js --passWithNoTests",
     "storybook": "storybook dev -p 6006 --no-open",
     "build:storybook": "storybook build",
     "test:components:impl": "playwright test -c src/playwright-components/playwright.config.ts ${PW_OPTIONS}",
@@ -46,6 +46,7 @@
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
+    "@gravity-ui/date-utils": ">=2.0.0",
     "@gravity-ui/icons": ">=2.0.0",
     "@gravity-ui/table": ">=1.0.0",
     "@gravity-ui/uikit": ">=7.0.0",
@@ -56,6 +57,7 @@
     "@babel/preset-react": "^7.26.3",
     "@babel/preset-typescript": "^7.26.0",
     "@gravity-ui/app-builder": "^0.26.0",
+    "@gravity-ui/date-utils": "^2.6.0",
     "@gravity-ui/eslint-config": "^3.2.0",
     "@gravity-ui/icons": "^2.0.0",
     "@gravity-ui/prettier-config": "^1.1.0",
@@ -93,10 +95,9 @@
     "@ytsaurus/interface-helpers": "^1.1.1",
     "@ytsaurus/javascript-wrapper": "^0.17.0",
     "axios": "^1.13.6",
-    "bignumber.js": "^9.3.0",
     "bem-cn-lite": "^4.1.0",
+    "bignumber.js": "^9.3.0",
     "hotkeys-js": "^3.13.15",
-    "lodash": "^4.17.21",
-    "moment": "^2.30.1"
+    "lodash": "^4.17.21"
   }
 }

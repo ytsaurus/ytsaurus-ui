@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+import {dateTime} from '@gravity-ui/date-utils';
 import cn from 'bem-cn-lite';
 
 import {Icon, Label, LabelProps, Link} from '@gravity-ui/uikit';
@@ -40,7 +40,7 @@ export function makeTTLItems(
         res.push({
             key: 'effective_expiration_time',
             value: withTTL(
-                moment(time.value).format('DD MMM YYYY HH:mm:ss'),
+                dateTime({input: time.value}).format('DD MMM YYYY HH:mm:ss'),
                 showTTLLabel,
                 docsUrls,
             ),
@@ -57,7 +57,7 @@ export function makeTTLItems(
         res.push({
             key: 'expiration_time',
             value: withTTL(
-                moment(expirationTime).format('DD MMM YYYY HH:mm:ss'),
+                dateTime({input: expirationTime}).format('DD MMM YYYY HH:mm:ss'),
                 showTTLLabel,
                 docsUrls,
             ),
