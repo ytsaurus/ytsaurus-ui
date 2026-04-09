@@ -1,6 +1,6 @@
 import hammer from '@ytsaurus/interface-helpers/lib/hammer';
 
-import moment from 'moment';
+import {duration} from '@gravity-ui/date-utils';
 
 import forEach_ from 'lodash/forEach';
 
@@ -153,7 +153,7 @@ format['TimeDuration'] = function (value, settings) {
 
     if (format.validNumber(value)) {
         durationOutput = '';
-        durationHash = moment.duration(value);
+        durationHash = duration(value);
 
         TIME_MEASURES.forEach(function (measure) {
             const measureValue = durationHash[measure]();
