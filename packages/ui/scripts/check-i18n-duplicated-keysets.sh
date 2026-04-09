@@ -1,13 +1,22 @@
 #!/bin/bash
 
-path=$1
+if [ "$1" = "" ]; then
+    (
+        echo "Usage: "
+        echo "    $0 path/to/src"
+    ) >&2
+    exit 1
+fi
+
+extraPath=$1
+
+root=$(dirname $0)/..
 
 tmp=$(mktemp)
 trap 'rm -rf "$tmp"' EXIT
 
-echo "Checking for duplicated keysets..." >&2
 (
-    grep -RE '^export default addI18Keysets\(' "$path" | \
+    grep -RE '^export default addI18Keysets\(' $root/../components/src $extraPath | \
         awk -F ':export default' '{print $2}' | \
         awk -F "," '{print $1}' | \
         sort | uniq -c | grep -vE '^\s+1\s'
