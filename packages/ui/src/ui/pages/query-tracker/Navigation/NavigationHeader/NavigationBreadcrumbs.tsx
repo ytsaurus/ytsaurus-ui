@@ -51,13 +51,13 @@ export const NavigationBreadcrumbs: FC = () => {
                 return;
             }
 
-            const nextPath = normalizePath(newPath);
+            const normalizedNewPath = normalizePath(newPath);
 
-            if (nextPath === path) {
+            if (normalizedNewPath === path) {
                 return;
             }
 
-            dispatch(loadPath(nextPath, clusterConfig));
+            dispatch(loadPath(normalizedNewPath, clusterConfig));
         },
         [clusterConfig, dispatch, path],
     );
