@@ -1,13 +1,11 @@
 import React from 'react';
-import {Link as RouterLink} from 'react-router-dom';
 import {Link as CommonLink} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
-import {makeRoutedURL} from '../../store/window-store';
+import {RoutedLink} from '../../containers/RoutedLink/RoutedLink';
 import {ClickableText, ClickableTextProps} from '../ClickableText/ClickableText';
 import {ArrowUpRightFromSquare} from '@gravity-ui/icons';
 import './Link.scss';
 
-const gBlock = cn('g-link');
 const block = cn('yt-link');
 
 const THEME_TO_COLOR: Record<
@@ -65,12 +63,17 @@ export const Link = ({
     }
 
     if (routed) {
-        const to = routedPreserveLocation ? () => makeRoutedURL(url) : url;
-
         return (
-            <RouterLink className={gBlock({view: theme}, className)} onClick={onClick} to={to}>
+            <RoutedLink
+                className={className}
+                onClick={onClick}
+                view={theme as Exclude<typeof theme, 'ghost'>}
+                title={title}
+                href={url}
+                disablePreserveLocation={!routedPreserveLocation}
+            >
                 {content}
-            </RouterLink>
+            </RoutedLink>
         );
     }
 
