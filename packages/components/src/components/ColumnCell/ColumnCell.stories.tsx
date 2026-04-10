@@ -1,43 +1,17 @@
 import type {ComponentProps} from 'react';
-import type {Decorator, Meta, StoryObj} from '@storybook/react';
+import type {Meta, StoryObj} from '@storybook/react';
 import {fn} from 'storybook/test';
 
-import {YtComponentsConfigProvider} from '../../context';
-import type {UnipikaSettings} from '../../internal/Yson/StructuredYson/StructuredYsonTypes';
 import type {TypeArray} from '../SchemaDataType/dataTypes';
+import {
+    type ColumnCellStoryArgs,
+    ColumnCellStoryDecorator,
+    columnCellStoryBaseArgsForVisual,
+} from './columnCellStorySetup';
 import {ColumnCell} from './ColumnCell';
-
-type StoryUnipikaSettings = Omit<UnipikaSettings, 'validateSrcUrl' | 'normalizeUrl'>;
-
-type ColumnCellStoryArgs = {
-    className?: string;
-    value: unknown;
-    yqlTypes: TypeArray[] | null;
-    ysonSettings: StoryUnipikaSettings;
-    allowRawStrings: boolean | null;
-    rowIndex: number;
-    columnName: string;
-    useYqlTypes?: boolean;
-    onShowPreview: (columnName: string, rowIndex: number, tag?: string) => void | Promise<void>;
-};
-
-const defaultYsonSettings: StoryUnipikaSettings = {
-    format: 'yson',
-    showDecoded: false,
-    compact: true,
-    escapeWhitespace: false,
-    binaryAsHex: true,
-    asHTML: true,
-    treatValAsData: true,
-    indent: 4,
-    break: true,
-    escapeYQLStrings: true,
-    nonBreakingIndent: true,
-};
 
 const meta = {
     title: 'Components/ColumnCell',
-    component: ColumnCell,
     tags: ['autodocs'],
     parameters: {
         layout: 'padded',
@@ -49,31 +23,14 @@ const meta = {
         },
     },
     decorators: [
-        ((Story) => (
-            <YtComponentsConfigProvider logError={() => undefined} unipika={defaultYsonSettings}>
-                <div
-                    style={{
-                        minWidth: 280,
-                        minHeight: 56,
-                        padding: 12,
-                        border: '1px dashed var(--g-color-line-generic, #ddd)',
-                        borderRadius: 8,
-                    }}
-                >
-                    <Story />
-                </div>
-            </YtComponentsConfigProvider>
-        )) as Decorator<ColumnCellStoryArgs>,
+        (Story) => (
+            <ColumnCellStoryDecorator>
+                <Story />
+            </ColumnCellStoryDecorator>
+        ),
     ],
     args: {
-        columnName: 'sample_column',
-        rowIndex: 0,
-        allowRawStrings: false,
-        useYqlTypes: true,
-        ysonSettings: defaultYsonSettings,
-        yqlTypes: [['DataType', 'String']] as TypeArray[],
-        /** YQL row: `[value, indexIntoYqlTypes]`. Use a string, not `["text"]`, for String type (see YqlValue). */
-        value: ['hello', 0] as unknown,
+        ...columnCellStoryBaseArgsForVisual,
         onShowPreview: fn(),
     },
     argTypes: {
@@ -96,18 +53,18 @@ const meta = {
 
 export default meta;
 
-type Story = StoryObj<ColumnCellStoryArgs>;
+type ColumnCellStory = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: ColumnCellStory = {};
 
-export const YqlInt64: Story = {
+export const YqlInt64: ColumnCellStory = {
     args: {
         value: [42, 0] as unknown,
         yqlTypes: [['DataType', 'Int64']] as TypeArray[],
     },
 };
 
-export const YsonNumber: Story = {
+export const YsonNumber: ColumnCellStory = {
     args: {
         yqlTypes: null,
         useYqlTypes: false,
@@ -115,7 +72,7 @@ export const YsonNumber: Story = {
     },
 };
 
-export const IncompleteYson: Story = {
+export const IncompleteYson: ColumnCellStory = {
     args: {
         yqlTypes: null,
         useYqlTypes: false,
@@ -123,7 +80,7 @@ export const IncompleteYson: Story = {
     },
 };
 
-export const RawString: Story = {
+export const RawString: ColumnCellStory = {
     args: {
         yqlTypes: null,
         useYqlTypes: false,
