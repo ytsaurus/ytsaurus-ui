@@ -12,8 +12,10 @@ import {UnipikaSettings, UnipikaValue} from './StructuredYson/StructuredYsonType
 import StructuredYsonVirtualized from './StructuredYsonVirtualized/StructuredYsonVirtualized';
 import type {Settings} from '@gravity-ui/react-data-table';
 
+export type YsonSettings = UnipikaSettings;
+
 export interface YsonProps {
-    settings?: UnipikaSettings;
+    settings?: YsonSettings;
     value: any;
     inline?: boolean;
     folding?: boolean;
