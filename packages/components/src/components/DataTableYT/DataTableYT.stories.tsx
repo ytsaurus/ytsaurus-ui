@@ -1,52 +1,23 @@
 import type {Decorator, Meta, StoryObj} from '@storybook/react';
 import {fn} from 'storybook/test';
 
-import {type Column, DataTableYT, type DataTableYtProps} from './DataTableYT';
+import {DataTableYT, type DataTableYtProps} from './DataTableYT';
+import {
+    type DataTableYTDemoRow,
+    type DataTableYTStoryArgs,
+    THEME_LEGACY,
+    THEME_YANDEX_CLOUD,
+    dataTableYTDemoColumns,
+    dataTableYTStoryDefaultArgs,
+    dataTableYTStoryFrameStyle,
+} from './dataTableYTStorySetup';
 
-const THEME_YANDEX_CLOUD = 'yandex-cloud';
-const THEME_LEGACY = 'legacy';
-
-type DemoRow = {
-    id: string;
-    name: string;
-    value: number;
-};
-
-const demoColumns: Column<DemoRow>[] = [
-    {name: 'id', title: 'ID', width: 100},
-    {name: 'name', title: 'Name'},
-    {
-        name: 'value',
-        title: 'Value',
-        width: 100,
-        align: 'right',
-        render: ({value}) => (
-            <span>{typeof value === 'number' ? value.toLocaleString() : String(value)}</span>
-        ),
-    },
-];
-
-const sampleData: DemoRow[] = [
-    {id: 'row-1', name: 'Alpha', value: 100},
-    {id: 'row-2', name: 'Beta', value: 250},
-    {id: 'row-3', name: 'Gamma', value: 42},
-];
-
-type DataTableYTStoryArgs = {
-    data: DemoRow[];
-    loaded?: boolean;
-    loading?: boolean;
-    useThemeYT: boolean;
-    theme: string;
-    disableRightGap?: boolean;
-    noItemsText?: string;
-    settings: NonNullable<DataTableYtProps<DemoRow>['settings']>;
-    onRowClick?: DataTableYtProps<DemoRow>['onRowClick'];
+type StoryArgs = DataTableYTStoryArgs & {
+    onRowClick?: DataTableYtProps<DataTableYTDemoRow>['onRowClick'];
 };
 
 const meta = {
     title: 'Components/DataTableYT',
-    component: DataTableYT,
     tags: ['autodocs'],
     parameters: {
         layout: 'padded',
@@ -59,23 +30,13 @@ const meta = {
     },
     decorators: [
         ((Story) => (
-            <div style={{maxWidth: 720}}>
+            <div style={dataTableYTStoryFrameStyle}>
                 <Story />
             </div>
-        )) as Decorator<DataTableYTStoryArgs>,
+        )) as Decorator<StoryArgs>,
     ],
     args: {
-        data: sampleData,
-        loaded: true,
-        loading: false,
-        useThemeYT: true,
-        theme: THEME_YANDEX_CLOUD,
-        disableRightGap: false,
-        settings: {
-            displayIndices: false,
-            sortable: true,
-            stripedRows: true,
-        },
+        ...dataTableYTStoryDefaultArgs,
         onRowClick: fn(),
     },
     argTypes: {
@@ -98,9 +59,9 @@ const meta = {
         noItemsText,
         settings,
         onRowClick,
-    }: DataTableYTStoryArgs) => {
+    }: StoryArgs) => {
         const common = {
-            columns: demoColumns,
+            columns: dataTableYTDemoColumns,
             data,
             loaded,
             loading,
@@ -111,16 +72,16 @@ const meta = {
         } as const;
 
         if (useThemeYT) {
-            return <DataTableYT<DemoRow> {...common} useThemeYT />;
+            return <DataTableYT<DataTableYTDemoRow> {...common} useThemeYT />;
         }
 
-        return <DataTableYT<DemoRow> {...common} theme={theme} />;
+        return <DataTableYT<DataTableYTDemoRow> {...common} theme={theme} />;
     },
-} satisfies Meta<DataTableYTStoryArgs>;
+} satisfies Meta<StoryArgs>;
 
 export default meta;
 
-type Story = StoryObj<DataTableYTStoryArgs>;
+type Story = StoryObj<StoryArgs>;
 
 export const Default: Story = {};
 
@@ -128,6 +89,14 @@ export const GravityTheme: Story = {
     args: {
         useThemeYT: false,
         theme: THEME_YANDEX_CLOUD,
+    },
+};
+
+export const GravityLegacyTheme: Story = {
+    name: 'Gravity theme (legacy)',
+    args: {
+        useThemeYT: false,
+        theme: THEME_LEGACY,
     },
 };
 

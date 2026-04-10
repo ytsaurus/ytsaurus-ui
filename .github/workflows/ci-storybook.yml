@@ -165,6 +165,32 @@ jobs:
           with:
             name: report
             path: packages/ui/src/ui/playwright-components/report
+
+    tests-components-package:
+      name: Playwright @ytsaurus/components visual tests
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+          with:
+            fetch-depth: 0
+        - name: Setup Node
+          uses: actions/setup-node@v4
+          with:
+            node-version: "20.x"
+            cache: "npm"
+        - name: Install Packages
+          run: npm ci
+        - name: Run visual tests
+          run: |
+            cd packages/components
+            npm run test:components
+        - name: Create Static Artifact
+          uses: actions/upload-artifact@v4
+          if: always()
+          with:
+            name: report-components-package
+            path: packages/components/src/playwright-components/report
     
     publish-and-comment-tests-report:
       name: Publish report of pw-components tests and create comment
@@ -203,4 +229,42 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             header: Playwright components
             message: ${{ steps.upload_and_prepare.outputs.message }}
-          
+
+    publish-and-comment-components-package-tests-report:
+      name: Publish @ytsaurus/components Playwright report and create comment
+      needs:
+        - tests-components-package
+      if: ${{ always() }}
+      runs-on: ubuntu-latest
+      steps:
+        - name: Download Artifacts
+          uses: actions/download-artifact@v4
+          continue-on-error: true
+          with:
+            name: report-components-package
+            path: ./report-components-package
+        - name: Install AWS CLI
+          uses: unfor19/install-aws-cli-action@v1
+          with:
+            version: 2.22.35
+            arch: amd64
+        - name: Upload and Prepare
+          id: upload_and_prepare_components_package
+          env:
+            AWS_ACCESS_KEY_ID: ${{ secrets.UI_S3_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.UI_S3_SECRET_KEY }}
+          shell: bash
+          run: |
+              aws s3 cp ./report-components-package s3://pw-components-reports/${{ github.event.pull_request.number }}/ytsaurus-components-package --endpoint-url=https://ytsaurus-ui-test-results.s3-private.mds.yandex.net --recursive
+              message="[@ytsaurus/components Playwright visual report](https://ytsaurus-ui-test-results.s3-website.mds.yandex.net/pw-components-reports/${{ github.event.pull_request.number }}/ytsaurus-components-package) is ready.\n"
+
+              echo "message<<EOF" >> $GITHUB_OUTPUT
+              echo -e "$message" >> $GITHUB_OUTPUT
+              echo "EOF" >> $GITHUB_OUTPUT
+        - name: Create Comment
+          uses: marocchino/sticky-pull-request-comment@v2
+          with:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            header: Playwright @ytsaurus/components visual
+            message: ${{ steps.upload_and_prepare_components_package.outputs.message }}
+

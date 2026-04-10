@@ -12,7 +12,6 @@ type HotkeyStoryArgs = {
 
 const meta = {
     title: 'Components/Hotkey',
-    component: Hotkey,
     tags: ['autodocs'],
     parameters: {
         layout: 'centered',

@@ -2,20 +2,13 @@ import type {Meta, StoryObj} from '@storybook/react';
 
 import {YTText} from './Text';
 import type {TextProps} from './Text';
+import {textStoryDefaultArgs} from './textStorySetup';
 
 const meta = {
     title: 'Components/Text',
     component: YTText,
     tags: ['autodocs'],
-    args: {
-        children: 'YTsaurus UI text',
-        color: undefined,
-        bold: false,
-        noWrap: false,
-        ellipsis: false,
-        disabled: false,
-        capitalize: false,
-    },
+    args: textStoryDefaultArgs,
     argTypes: {
         children: {control: 'text'},
         color: {

@@ -1,4 +1,4 @@
-import {FC, useMemo} from 'react';
+import React, {FC, useMemo} from 'react';
 import cn from 'bem-cn-lite';
 import {Button, Icon} from '@gravity-ui/uikit';
 import ArrowUpRightFromSquareIcon from '@gravity-ui/icons/svgs/arrow-up-right-from-square.svg';

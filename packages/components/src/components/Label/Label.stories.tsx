@@ -1,6 +1,6 @@
 import type {Meta, StoryObj} from '@storybook/react';
 
-import {type LabelTheme, Label as YtLabel} from './Label';
+import {type LabelProps, type LabelTheme, Label as YtLabel} from './Label';
 import {LabelOnOff as YtLabelOnOff} from './LabelOnOff';
 
 const meta = {
@@ -35,7 +35,7 @@ const meta = {
         capitalize: {control: 'boolean'},
         hideTitle: {control: 'boolean'},
     },
-} satisfies Meta<typeof YtLabel>;
+} satisfies Meta<LabelProps>;
 
 export default meta;
 

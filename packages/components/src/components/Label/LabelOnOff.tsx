@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {Label} from './Label';
 import {format} from '../../utils/hammer';
 import i18n from './i18n';

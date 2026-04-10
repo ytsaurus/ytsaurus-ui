@@ -5,7 +5,7 @@ import '@gravity-ui/uikit/styles/styles.css';
 import '@gravity-ui/unipika/dist/unipika.css';
 import '@gravity-ui/illustrations/styles/styles.scss';
 
-import '../src/styles/theme-default.scss';
+import '../theme-default/theme-default.scss';
 
 configure({lang: 'en'});
 

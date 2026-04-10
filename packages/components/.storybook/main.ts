@@ -5,17 +5,19 @@ import {fileURLToPath} from 'node:url';
 import type {StorybookConfig} from '@storybook/react-vite';
 import svgr from 'vite-plugin-svgr';
 
-import {sassTildeImporter} from './sass-tilde-importer';
-
 const require = createRequire(import.meta.url);
 const storybookDir = path.dirname(fileURLToPath(import.meta.url));
+const pkgRoot = path.join(storybookDir, '..');
+const nodeModules = path.join(pkgRoot, 'node_modules');
+/** `build:storybook` output; if it exists, Vite must not watch it or dev HMR races with optimizeDeps and chunk URLs 404. */
+const storybookStaticDir = path.join(pkgRoot, 'storybook-static');
 
 /** CJS hammer/format in @ytsaurus/interface-helpers uses require('bignumber.js'); Vite must resolve the bare id for the browser bundle. */
 let bignumberBundleEntry: string;
 try {
     bignumberBundleEntry = require.resolve('bignumber.js');
 } catch {
-    bignumberBundleEntry = path.join(storybookDir, '../node_modules/bignumber.js/bignumber.mjs');
+    bignumberBundleEntry = path.join(nodeModules, 'bignumber.js/bignumber.mjs');
 }
 
 const config: StorybookConfig = {
@@ -28,6 +30,11 @@ const config: StorybookConfig = {
     async viteFinal(viteConfig) {
         const {mergeConfig} = await import('vite');
         return mergeConfig(viteConfig, {
+            server: {
+                watch: {
+                    ignored: [storybookStaticDir, `${storybookStaticDir}/**`],
+                },
+            },
             resolve: {
                 alias: {
                     'bignumber.js': bignumberBundleEntry,
@@ -37,12 +44,16 @@ const config: StorybookConfig = {
                 preprocessorOptions: {
                     scss: {
                         api: 'modern-compiler',
-                        importers: [sassTildeImporter],
+                        loadPaths: [nodeModules],
                     },
                 },
             },
             optimizeDeps: {
-                include: ['bignumber.js'],
+                include: [
+                    'bignumber.js',
+                    // Pre-bundle React entry used by the preview so optimizeDeps does not invalidate mid-session (fixes missing chunk-* under .cache/storybook).
+                    'react/jsx-dev-runtime',
+                ],
             },
             plugins: [
                 // Only real .svg imports from @gravity-ui/icons (not uikit’s svg.js, etc.)
