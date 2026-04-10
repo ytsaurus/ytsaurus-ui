@@ -1,35 +1,19 @@
 import type {Meta, StoryObj} from '@storybook/react';
 
-import type {UnipikaSettings} from '../../internal/Yson/StructuredYson/StructuredYsonTypes';
-import type {UnipikaValueType} from './YqlValue';
 import {YqlValue} from './YqlValue';
+import {
+    type YqlValueStoryArgs,
+    defaultYqlValueStorySettings,
+    yqlValueOptionalDate,
+    yqlValueOptionalDatetime,
+    yqlValueOptionalInterval,
+    yqlValueOptionalTimestamp,
+} from './yqlValueStorySetup';
 
-type StoryUnipikaSettings = Omit<UnipikaSettings, 'validateSrcUrl' | 'normalizeUrl'>;
-
-type DemoArgs = {
-    type: UnipikaValueType;
-    value: unknown;
-    inline: boolean;
-    settings: StoryUnipikaSettings;
-};
-
-const defaultSettings: StoryUnipikaSettings = {
-    format: 'yson',
-    showDecoded: false,
-    compact: true,
-    escapeWhitespace: false,
-    binaryAsHex: true,
-    asHTML: true,
-    treatValAsData: true,
-    indent: 4,
-    break: true,
-    escapeYQLStrings: true,
-    nonBreakingIndent: true,
-};
+type DemoArgs = YqlValueStoryArgs;
 
 const meta: Meta<DemoArgs> = {
     title: 'Components/YqlValue',
-    component: YqlValue,
     tags: ['autodocs'],
     parameters: {
         docs: {
@@ -43,7 +27,7 @@ const meta: Meta<DemoArgs> = {
         type: ['DataType', 'String'],
         value: 'hello',
         inline: false,
-        settings: defaultSettings,
+        settings: defaultYqlValueStorySettings,
     },
     argTypes: {
         type: {
@@ -72,7 +56,7 @@ type Story = StoryObj<DemoArgs>;
 
 export const Default: Story = {};
 
-export const FromReadQueryResult_SearchPhrase: Story = {
+export const fromReadQueryResultSearchPhrase: Story = {
     name: 'From read_query_result (search phrase)',
     args: {
         value: 'sample search phrase movies 2013 watch online',
@@ -87,7 +71,7 @@ export const FromReadQueryResult_SearchPhrase: Story = {
     },
 };
 
-export const FromReadQueryResult_Uint64: Story = {
+export const fromReadQueryResultUint64: Story = {
     name: 'From read_query_result (Uint64)',
     args: {
         value: '45',
@@ -102,7 +86,7 @@ export const FromReadQueryResult_Uint64: Story = {
     },
 };
 
-export const FromReadQueryResult_LongText: Story = {
+export const fromReadQueryResultLongText: Story = {
     name: 'From read_query_result (long text)',
     args: {
         value: 'Long placeholder text for wrapping and Unipika markup: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
@@ -117,16 +101,11 @@ export const FromReadQueryResult_LongText: Story = {
     },
 };
 
-const optionalDate: UnipikaValueType = ['OptionalType', ['DataType', 'Date']];
-const optionalDatetime: UnipikaValueType = ['OptionalType', ['DataType', 'Datetime']];
-const optionalInterval: UnipikaValueType = ['OptionalType', ['DataType', 'Interval']];
-const optionalTimestamp: UnipikaValueType = ['OptionalType', ['DataType', 'Timestamp']];
-
-export const FromReadQueryResult_Date: Story = {
+export const fromReadQueryResultDate: Story = {
     name: 'From read_query_result (Date)',
     args: {
         value: ['19523'],
-        type: optionalDate,
+        type: yqlValueOptionalDate,
     },
     parameters: {
         docs: {
@@ -137,11 +116,11 @@ export const FromReadQueryResult_Date: Story = {
     },
 };
 
-export const FromReadQueryResult_Datetime: Story = {
+export const fromReadQueryResultDatetime: Story = {
     name: 'From read_query_result (Datetime)',
     args: {
         value: ['1686839400'],
-        type: optionalDatetime,
+        type: yqlValueOptionalDatetime,
     },
     parameters: {
         docs: {
@@ -152,11 +131,11 @@ export const FromReadQueryResult_Datetime: Story = {
     },
 };
 
-export const FromReadQueryResult_Interval: Story = {
+export const fromReadQueryResultInterval: Story = {
     name: 'From read_query_result (Interval)',
     args: {
         value: ['93784567890'],
-        type: optionalInterval,
+        type: yqlValueOptionalInterval,
     },
     parameters: {
         docs: {
@@ -167,11 +146,11 @@ export const FromReadQueryResult_Interval: Story = {
     },
 };
 
-export const FromReadQueryResult_Timestamp: Story = {
+export const fromReadQueryResultTimestamp: Story = {
     name: 'From read_query_result (Timestamp)',
     args: {
         value: ['1686839400123456'],
-        type: optionalTimestamp,
+        type: yqlValueOptionalTimestamp,
     },
     parameters: {
         docs: {

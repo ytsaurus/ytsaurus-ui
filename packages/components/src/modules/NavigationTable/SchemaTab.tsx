@@ -1,4 +1,4 @@
-import {FC, useMemo} from 'react';
+import React, {FC, useMemo} from 'react';
 import {Text as GravityText, Icon, TextInput} from '@gravity-ui/uikit';
 import BarsAscendingAlignLeftArrowUpIcon from '@gravity-ui/icons/svgs/bars-ascending-align-left-arrow-up.svg';
 import BarsAscendingAlignLeftArrowDownIcon from '@gravity-ui/icons/svgs/bars-ascending-align-left-arrow-down.svg';

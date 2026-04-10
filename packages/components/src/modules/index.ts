@@ -1,1 +1,7 @@
-export {NavigationTable, type NavigationTableProps, SchemaTab, PreviewTab} from './NavigationTable';
+export {
+    NavigationTable,
+    type NavigationTableInitialTab,
+    type NavigationTableProps,
+    SchemaTab,
+    PreviewTab,
+} from './NavigationTable';

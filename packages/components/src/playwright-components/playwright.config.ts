@@ -7,20 +7,19 @@ import react from '@vitejs/plugin-react';
 import commonjs from 'vite-plugin-commonjs';
 import svgr from 'vite-plugin-svgr';
 
-import {sassTildeImporter} from '../../.storybook/sass-tilde-importer';
-
 const configDir = __dirname;
+const nodeModules = resolve(configDir, '../node_modules');
 
 /** Same resolution as `.storybook/main.ts`: CJS `bignumber.js`, not `.mjs` (avoids `BigNumber.config is not a function` in CT). */
-const require = createRequire(resolve(configDir, '../../package.json'));
+const require = createRequire(resolve(configDir, '../package.json'));
 let bignumberBundleEntry: string;
 try {
     bignumberBundleEntry = require.resolve('bignumber.js');
 } catch {
-    bignumberBundleEntry = resolve(configDir, '../../node_modules/bignumber.js/bignumber.js');
+    bignumberBundleEntry = resolve(nodeModules, 'bignumber.js/bignumber.js');
 }
 
-const pathFromSrc = (p: string) => resolve(configDir, '..', p);
+const pathFromSrc = (p: string) => resolve(configDir, '../src', p);
 
 const reporter: PlaywrightTestConfig['reporter'] = [];
 
@@ -36,6 +35,7 @@ reporter.push(
 );
 
 const config: PlaywrightTestConfig = {
+    tsconfig: '../tsconfig.json',
     outputDir: resolve(configDir, 'test-results'),
     testDir: pathFromSrc('.'),
     testMatch: '*/**/__tests__/*.visual.test.tsx',
@@ -63,7 +63,10 @@ const config: PlaywrightTestConfig = {
                 commonjs(),
                 react({
                     babel: {
-                        presets: ['@babel/preset-typescript', '@babel/preset-react'],
+                        presets: [
+                            '@babel/preset-typescript',
+                            ['@babel/preset-react', {runtime: 'automatic'}],
+                        ],
                     },
                 }),
             ],
@@ -79,7 +82,7 @@ const config: PlaywrightTestConfig = {
                 preprocessorOptions: {
                     scss: {
                         api: 'modern-compiler',
-                        importers: [sassTildeImporter],
+                        loadPaths: [nodeModules],
                     },
                 },
             },
