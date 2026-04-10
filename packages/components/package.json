@@ -40,6 +40,9 @@
     "test": "jest --config ./jest.config.js",
     "storybook": "storybook dev -p 6006 --no-open",
     "build:storybook": "storybook build",
+    "test:components:impl": "playwright test -c src/playwright-components/playwright.config.ts ${PW_OPTIONS}",
+    "test:components": "scripts/docker-run.sh npm run test:components:impl",
+    "test:components:update": "scripts/docker-run.sh npm run test:components:impl -- -u",
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
@@ -50,6 +53,8 @@
     "react-dom": ">=16.8.0"
   },
   "devDependencies": {
+    "@babel/preset-react": "^7.26.3",
+    "@babel/preset-typescript": "^7.26.0",
     "@gravity-ui/app-builder": "^0.26.0",
     "@gravity-ui/eslint-config": "^3.2.0",
     "@gravity-ui/icons": "^2.0.0",
@@ -60,10 +65,13 @@
     "@storybook/addon-docs": "^10.3.5",
     "@storybook/react": "^10.3.5",
     "@storybook/react-vite": "^10.3.5",
+    "@playwright/experimental-ct-react": "1.53.1",
+    "@playwright/test": "1.53.1",
     "@types/jest": "^29.5.5",
     "@types/lodash": "^4.17.24",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "@vitejs/plugin-react": "^4.6.0",
     "eslint": "^8.57.1",
     "jest": "^29.7.0",
     "jest-extended": "^4.0.1",
@@ -74,6 +82,7 @@
     "ts-jest": "^29.1.0",
     "typescript": "^5.0.0",
     "vite": "^6.4.2",
+    "vite-plugin-commonjs": "^0.10.4",
     "vite-plugin-svgr": "^5.2.0"
   },
   "dependencies": {

@@ -1,3 +1,4 @@
+import React from 'react';
 import block from 'bem-cn-lite';
 
 import './Label.scss';
@@ -14,7 +15,7 @@ export type LabelTheme =
     | 'complementary'
     | 'misc';
 
-interface Props {
+export interface LabelProps {
     className?: string;
     theme?: LabelTheme;
     type?: 'block' | 'text';
@@ -32,7 +33,7 @@ export const Label = ({
     className,
     children,
     capitalize,
-}: Props) => {
+}: LabelProps) => {
     return (
         <span
             className={b({theme, type, capitalize}, className)}

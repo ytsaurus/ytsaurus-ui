@@ -18,8 +18,18 @@ const enum TableTab {
     Meta = 'meta',
 }
 
+/** Pick the tab shown on first render (non-null `table` only). */
+export type NavigationTableInitialTab = 'schema' | 'preview' | 'meta';
+
+const TABLE_TAB_FROM_INITIAL: Record<NavigationTableInitialTab, TableTab> = {
+    schema: TableTab.Schema,
+    preview: TableTab.Preview,
+    meta: TableTab.Meta,
+};
+
 export type NavigationTableProps = {
     table: NavigationTableData | null;
+    initialActiveTab?: NavigationTableInitialTab;
     filter?: string;
     onFilterChange?: (value: string) => void;
     onInsertTableSelect?: () => void | Promise<void>;
@@ -43,6 +53,7 @@ export type NavigationTableProps = {
 
 export const NavigationTable: FC<NavigationTableProps> = ({
     table,
+    initialActiveTab,
     filter: controlledFilter,
     onFilterChange: controlledOnFilterChange,
     onInsertTableSelect,
@@ -54,7 +65,9 @@ export const NavigationTable: FC<NavigationTableProps> = ({
     renderMetaTab,
     className,
 }) => {
-    const [activeTab, setActiveTab] = useState(TableTab.Schema);
+    const [activeTab, setActiveTab] = useState<TableTab>(() =>
+        initialActiveTab ? TABLE_TAB_FROM_INITIAL[initialActiveTab] : TableTab.Schema,
+    );
     const [internalFilter, setInternalFilter] = useState('');
     const filter = controlledFilter ?? internalFilter;
     const setFilter = controlledOnFilterChange ?? setInternalFilter;
