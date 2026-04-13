@@ -1,4 +1,5 @@
-import {format, ypath} from '../../../../utils';
+import format from '@ytsaurus/interface-helpers/lib/hammer/format';
+import {ypath} from '../../../../utils';
 import reduce_ from 'lodash/reduce';
 import type {MetaTableAutomaticModeSwitchOnEdit, YtComponentsConfig} from '../../../../context';
 
