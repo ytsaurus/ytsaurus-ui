@@ -14,7 +14,7 @@ import {
     manageTokensRevokeToken,
 } from '../../../store/actions/manage-tokens';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
-import {AuthenticationToken, manageTokensSelector} from '../../../store/selectors/manage-tokens';
+import {AuthenticationToken, selectManageTokens} from '../../../store/selectors/manage-tokens';
 import {selectCurrentUserName} from '../../../store/selectors/global';
 import Icon from '../../../components/Icon/Icon';
 import {YTError} from '../../../../@types/types';
@@ -176,7 +176,7 @@ const AuthenticationTokensSection: FC<{
 }> = ({onSuccessRemove, onClickGenerateTokenButton, passwordSha256 = ''}) => {
     const {getPassword} = useManageTokensPasswordModalContext();
     const dispatch = useDispatch();
-    const tokens = useSelector(manageTokensSelector);
+    const tokens = useSelector(selectManageTokens);
     const user = useSelector(selectCurrentUserName);
 
     const handleClickRemoveToken = React.useCallback(

@@ -8,10 +8,10 @@ export function makeURLSearchParams<T extends object>(params: T, info: LocationP
             if (info[k].options?.serialize) {
                 const tmp = info[k].options?.serialize?.(value);
                 if (tmp !== undefined) {
-                    res.append(k, tmp + '');
+                    res.append(k, String(tmp));
                 }
             } else {
-                res.append(k, value + '');
+                res.append(k, String(value));
             }
         }
         return acc;

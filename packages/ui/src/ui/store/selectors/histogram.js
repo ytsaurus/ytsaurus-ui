@@ -3,14 +3,14 @@ import {createSelector} from 'reselect';
 
 const selectHistogram = (state, props) => props.histogram;
 
-export const selectCreateQuartiles = () =>
+export const selectGetQuartiles = () =>
     createSelector(selectHistogram, (histogram) => hammer.stat.quartiles(histogram.data));
 
-export const selectCreatePDF = () =>
+export const selectGetPDF = () =>
     createSelector(selectHistogram, (histogram) => hammer.stat.pdf(histogram.data));
 
-export const selectCreateECDF = () =>
-    createSelector([selectHistogram, selectCreatePDF()], (histogram, pdf) => {
+export const selectGetECDF = () =>
+    createSelector([selectHistogram, selectGetPDF()], (histogram, pdf) => {
         const ecdf = hammer.stat.ecdf(histogram.data);
 
         // Create fake points
@@ -26,9 +26,9 @@ export const selectCreateECDF = () =>
         return ecdf;
     });
 
-export const selectIsDataGood = () =>
+export const selectGetIsDataGood = () =>
     createSelector(
-        [selectCreatePDF(), selectCreateECDF(), selectCreateQuartiles()],
+        [selectGetPDF(), selectGetECDF(), selectGetQuartiles()],
         (pdfData, ecdfData, quartiles) => {
             if (pdfData.min === pdfData.max) {
                 // All points are the same

@@ -14,7 +14,7 @@ import {
     selectChaosBundlesAccountFilter,
     selectChaosBundlesNameFilter,
     selectChaosBundlesTableMode,
-    selectChaosBundlesTagNodeFilter ,
+    selectChaosBundlesTagNodeFilter,
 } from '../../../store/selectors/chaos_cell_bundles';
 
 const modes: Array<BundlesTableMode> = ['default'];
@@ -24,7 +24,7 @@ const mapStateToProps = (state: RootState) => {
         accountFilter: selectChaosBundlesAccountFilter(state),
         bundlesTableMode: selectChaosBundlesTableMode(state),
         nameFilter: selectChaosBundlesNameFilter(state),
-        tagNodeFilter: selectChaosBundlesTagNodeFilter (state),
+        tagNodeFilter: selectChaosBundlesTagNodeFilter(state),
         modes,
     };
 };

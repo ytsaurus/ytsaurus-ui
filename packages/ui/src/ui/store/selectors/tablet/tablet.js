@@ -31,7 +31,7 @@ export const getPartitions = createSelector(getSortedPartitions, (sortedPartitio
     return [aggregation, ...sortedPartitions];
 });
 
-const getHistograms = createSelector(getRawPartitions, (partitions) =>
+const selectHistograms = createSelector(getRawPartitions, (partitions) =>
     mapValues_(histogramItems, (settings, key) => {
         const partitionsWithoutEden = partitions.slice(1);
 
@@ -46,7 +46,7 @@ const getHistograms = createSelector(getRawPartitions, (partitions) =>
     }),
 );
 
-export const getHistogram = createSelector(
-    [getHistograms, getActiveHistogram],
+export const selectHistogram = createSelector(
+    [selectHistograms, getActiveHistogram],
     (histograms, activeHistogram) => histograms[activeHistogram],
 );

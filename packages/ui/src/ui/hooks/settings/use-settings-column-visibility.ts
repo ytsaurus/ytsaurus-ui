@@ -37,10 +37,8 @@ export function useSettingsVisibleColumns<K extends KeysByType<DescribedSettings
                         if (-1 === kIndex) {
                             newVisibleColumns.push(k as any);
                         }
-                    } else {
-                        if (-1 !== kIndex) {
-                            newVisibleColumns.splice(kIndex, 1);
-                        }
+                    } else if (-1 !== kIndex) {
+                        newVisibleColumns.splice(kIndex, 1);
                     }
                 });
 

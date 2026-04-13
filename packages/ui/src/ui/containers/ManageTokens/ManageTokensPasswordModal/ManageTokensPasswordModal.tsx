@@ -7,7 +7,7 @@ import {createPasswordStrategy} from './password-strategies';
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import {selectCurrentUserName, selectSettingsCluster} from '../../../store/selectors/global';
 import {YTError} from '../../../../@types/types';
-import {isManageTokensInOAuthMode} from '../../../store/selectors/manage-tokens';
+import {selectIsManageTokensInOAuthMode} from '../../../store/selectors/manage-tokens';
 import {CryptoSubtleAlert} from './CryptoSubtleAlert';
 
 interface ManageTokensPasswordModalContextValue {
@@ -131,7 +131,7 @@ class PromiseWaiter<Data> {
 }
 
 export function ManageTokensPasswordModalContextProvider({children}: {children: React.ReactChild}) {
-    const isOAuth = useSelector(isManageTokensInOAuthMode);
+    const isOAuth = useSelector(selectIsManageTokensInOAuthMode);
     const [visible, setVisible] = React.useState(false);
     const p = React.useRef(new PromiseWaiter<string>());
     const value = React.useMemo(() => {

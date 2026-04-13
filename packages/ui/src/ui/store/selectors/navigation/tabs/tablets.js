@@ -102,7 +102,7 @@ export const getTablets = createSelector(getMergedPreparedTablets, (filteredTabl
     return [aggregation, ...filteredTablets];
 });
 
-const getHistograms = createSelector(getRawTablets, (tablets) => {
+const selectHistograms = createSelector(getRawTablets, (tablets) => {
     return mapValues_(histogramItems, (histogramItem, key) => {
         const get = histogramItem.get || tableItems[key].get;
 
@@ -115,8 +115,8 @@ const getHistograms = createSelector(getRawTablets, (tablets) => {
     });
 });
 
-export const getHistogram = createSelector(
-    [getHistograms, getActiveHistogram],
+export const selectHistogram = createSelector(
+    [selectHistograms, getActiveHistogram],
     (histograms, activeHistogram) => histograms[activeHistogram],
 );
 

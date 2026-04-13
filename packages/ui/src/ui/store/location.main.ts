@@ -69,9 +69,9 @@ import {
 import {getSystemPreparedState, systemParams} from '../store/reducers/system/url-mapping';
 import {
     bundlesPrometheusParams,
-    selectTabletsBundlesAclPreparedState,
-    selectTabletsBundlesPreparedState,
-    selectTabletsCellsPreparedState,
+    getTabletsBundlesAclPreparedState,
+    getTabletsBundlesPreparedState,
+    getTabletsCellsPreparedState,
     tabletsAllBundlesParams,
     tabletsBundlesAclParams,
     tabletsBundlesParams,
@@ -83,8 +83,8 @@ import {
     chaosAllBundlesParams,
     chaosBundlesParams,
     chaosCellsParams,
-    selectChaosBundlesPreparedState,
-    selectChaosCellsPreparedState,
+    getChaosBundlesPreparedState,
+    getChaosCellsPreparedState,
 } from './reducers/chaos_cell_bundles/url-mapping';
 import {draftQueryParameters, getDraftQueryParameters} from './reducers/query-tracker/url_mapping';
 
@@ -170,24 +170,24 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
 
     [
         `/*/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.TABLET_CELLS}`,
-        [tabletsTabletCellsParams, selectTabletsCellsPreparedState],
+        [tabletsTabletCellsParams, getTabletsCellsPreparedState],
     ],
 
     [
         `/*/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.ACL}`,
-        [tabletsBundlesAclParams, selectTabletsBundlesAclPreparedState],
+        [tabletsBundlesAclParams, getTabletsBundlesAclPreparedState],
     ],
 
-    [`/*/${Page.TABLET_CELL_BUNDLES}`, [tabletsAllBundlesParams, selectTabletsBundlesPreparedState]],
+    [`/*/${Page.TABLET_CELL_BUNDLES}`, [tabletsAllBundlesParams, getTabletsBundlesPreparedState]],
     [`/*/${Page.TABLET_CELL_BUNDLES}/monitor`, [bundlesPrometheusParams]],
-    [`/*/${Page.TABLET_CELL_BUNDLES}/*`, [tabletsBundlesParams, selectTabletsBundlesPreparedState]],
+    [`/*/${Page.TABLET_CELL_BUNDLES}/*`, [tabletsBundlesParams, getTabletsBundlesPreparedState]],
 
     [
         `/*/${Page.CHAOS_CELL_BUNDLES}/${TabletsTab.CHAOS_CELLS}`,
-        [chaosCellsParams, selectChaosCellsPreparedState],
+        [chaosCellsParams, getChaosCellsPreparedState],
     ],
-    [`/*/${Page.CHAOS_CELL_BUNDLES}`, [chaosAllBundlesParams, selectChaosBundlesPreparedState]],
-    [`/*/${Page.CHAOS_CELL_BUNDLES}/*`, [chaosBundlesParams, selectChaosBundlesPreparedState]],
+    [`/*/${Page.CHAOS_CELL_BUNDLES}`, [chaosAllBundlesParams, getChaosBundlesPreparedState]],
+    [`/*/${Page.CHAOS_CELL_BUNDLES}/*`, [chaosBundlesParams, getChaosBundlesPreparedState]],
     [`/*/${Page.QUERIES}/*`, [draftQueryParameters, getDraftQueryParameters]],
 
     [`/*/${Page.FLOWS}/${FlowTab.GRAPH}`, [flowGraphParams]],
