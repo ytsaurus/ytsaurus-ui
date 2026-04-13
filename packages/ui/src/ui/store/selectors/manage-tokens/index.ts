@@ -10,7 +10,7 @@ export type AuthenticationToken = {
     tokenPrefix?: string;
 };
 
-export const manageTokensSelector = createSelector(
+export const selectManageTokens = createSelector(
     [(state: RootState) => state.manageTokens.tokens?.data],
     (tokens) => {
         if (Array.isArray(tokens)) {
@@ -30,21 +30,21 @@ export const manageTokensSelector = createSelector(
     },
 );
 
-export const isManageTokensModalOpened = (state: RootState) => state.manageTokens.modal.open;
+export const selectIsManageTokensModalOpened = (state: RootState) => state.manageTokens.modal.open;
 
-export const isManageTokensInOAuthMode = createSelector(
+export const selectIsManageTokensInOAuthMode = createSelector(
     [selectAuthWay, selectRequirePasswordInAuthenticationCommands],
     (authWay, requirePasswordInAuthenticationCommands) => {
         return authWay === 'oauth' && !requirePasswordInAuthenticationCommands;
     },
 );
 
-export const getAllowManageTokens = (state: RootState) => {
+export const selectAllowManageTokens = (state: RootState) => {
     const authWay = selectAuthWay(state);
 
     if (authWay === 'passwd') {
         return true;
     }
 
-    return isManageTokensInOAuthMode(state);
+    return selectIsManageTokensInOAuthMode(state);
 };

@@ -24,7 +24,7 @@ import {getPath, getType} from '../../../../store/selectors/navigation';
 
 import {
     getActiveHistogram,
-    getHistogram,
+    selectHistogram,
     getNavigationTabletsLoadingStatus,
     getTablets,
     hasReplicationData,
@@ -656,7 +656,7 @@ const mapStateToProps = (state) => {
         maxByLevel = [getTabletsMax(state)];
     }
 
-    const histogram = getHistogram(state);
+    const histogram = selectHistogram(state);
     const activeHistogram = getActiveHistogram(state);
     const type = getType(state);
     const hasReplication = hasReplicationData(state);
