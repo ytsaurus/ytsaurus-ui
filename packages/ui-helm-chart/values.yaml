@@ -44,7 +44,7 @@ readinessProbe:
 
 nginx:
   useCustomConfig: false
-  # name of config map where custom config for nginx is located 
+  # name of config map where custom config for nginx is located
   configMapName: "custom-nginx-configmap"
   configMapkey: "nginx.conf"
 
@@ -69,15 +69,15 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-
 settings:
+  authCookieDomain: ""
   odinBaseUrl: ""
   directDownload: true
   uploadTableExcelBaseUrl: ""
   exportTableBaseUrl: ""
 
   # see https://github.com/ytsaurus/ytsaurus-ui/blob/main/packages/ui/docs/configuration.md#oauth
-  oauth: 
+  oauth:
     enabled: false
     baseURL: ""
     authPath: ""
@@ -87,7 +87,7 @@ settings:
     clientSecretEnvName: ""
     scope: ""
     buttonLabel: ""
-  
+
 securityContext: {}
 
 resources: {}
