@@ -1,5 +1,4 @@
-import format from '@ytsaurus/interface-helpers/lib/hammer/format';
-import {ypath} from '../../../utils';
+import {format, ypath} from '../../../utils';
 import {Label, LabelOnOff} from '../../Label';
 import {Template} from '../templates/Template';
 import {compression} from './compression';
@@ -7,7 +6,7 @@ import {erasureReplication} from './erasure-replication';
 import {metaTablePresetSize} from './size';
 import {metaTablePresetMain} from './main';
 import {getCommonFields} from './helpers/commonFields';
-import type {YtComponentsConfig} from '../../../context';
+import type {TYComponentsNavigationMetaConfig} from '../../../types';
 
 import i18n from './i18n';
 import {RowsCount} from '../templates/RowsCount/RowsCount';
@@ -91,7 +90,7 @@ export function dynTableInfo(
     attributes: any,
     cluster: string,
     tabletErrorCount: number,
-    config?: Partial<YtComponentsConfig>,
+    config?: Partial<TYComponentsNavigationMetaConfig>,
 ) {
     const [tabletCellBundle, tabletState, inMemoryMode] = ypath.getValues(attributes, [
         '/tablet_cell_bundle',
@@ -162,7 +161,7 @@ export const makeMetaItems = ({
     tabletErrorCount?: number;
     onEditEnableReplicatedTableTracker?: (currentValue?: boolean) => Promise<void>;
     docsUrls?: Record<string, string>;
-    navigationTableConfig?: Partial<YtComponentsConfig>;
+    navigationTableConfig?: Partial<TYComponentsNavigationMetaConfig>;
 }) => {
     const config = navigationTableConfig
         ? {...navigationTableConfig, docsUrls: docsUrls ?? navigationTableConfig.docsUrls}

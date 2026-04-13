@@ -1,7 +1,6 @@
 import map_ from 'lodash/map';
 
-import {ypath} from '../../../utils/ypath';
-import format from '@ytsaurus/interface-helpers/lib/hammer/format';
+import {format, ypath} from '../../../utils';
 import {Template} from '../templates/Template';
 
 import i18n from './i18n';

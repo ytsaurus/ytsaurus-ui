@@ -1,7 +1,7 @@
 import {ypath} from '../../../utils';
 import {Template} from '../templates/Template';
 import {makeTTLItems} from './ttl';
-import {YtComponentsConfig} from '../../../context';
+import type {TYComponentsNavigationMetaConfig} from '../../../types';
 import {MetaTableItem} from '../MetaTable';
 
 const normalizeMetaOperationLinkItems = (
@@ -15,7 +15,7 @@ const normalizeMetaOperationLinkItems = (
 type Props = (
     attributes: any,
     cluster: string,
-    config?: Partial<YtComponentsConfig>,
+    config?: Partial<TYComponentsNavigationMetaConfig>,
 ) => MetaTableItem[];
 
 export const metaTablePresetMain: Props = (attributes, cluster, config = {}) => {

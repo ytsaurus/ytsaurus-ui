@@ -1,7 +1,9 @@
-import format from '@ytsaurus/interface-helpers/lib/hammer/format';
-import {ypath} from '../../../../utils';
+import {format, ypath} from '../../../../utils';
 import reduce_ from 'lodash/reduce';
-import type {MetaTableAutomaticModeSwitchOnEdit, YtComponentsConfig} from '../../../../context';
+import type {
+    MetaTableAutomaticModeSwitchOnEdit,
+    TYComponentsNavigationMetaConfig,
+} from '../../../../types';
 
 export interface MetaTableItem {
     key: string;
@@ -29,7 +31,7 @@ export const getCommonFields = ({
     tableType: string;
     tabletErrorCount: number;
     onEditEnableReplicatedTableTracker?: MetaTableAutomaticModeSwitchOnEdit;
-    config?: Partial<YtComponentsConfig>;
+    config?: Partial<TYComponentsNavigationMetaConfig>;
 }) => {
     const [sorted, chaosCellBundle, enableReplicatedTableTracker] = ypath.getValues(attributes, [
         '/sorted',
