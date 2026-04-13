@@ -10,12 +10,14 @@ import {
 import {selectQueryEngine} from '../../../../store/selectors/query-tracker/query';
 import {getPageSize} from '../../../../store/selectors/navigation/content/table-ts';
 import {setFilter} from '../../../../store/reducers/query-tracker/queryNavigationSlice';
+import {getYsonSettingsDisableDecode} from '../../../../store/selectors/thor/unipika';
 import {useMonaco} from '../../hooks/useMonaco';
 import {createTableSelect} from '../helpers/createTableSelect';
 import {insertTextWhereCursor} from '../helpers/insertTextWhereCursor';
 
 export const NavigationTable: FC = () => {
     const dispatch = useDispatch();
+    const ysonSettings = useSelector(getYsonSettingsDisableDecode);
     const clusterConfig = useSelector(selectNavigationClusterConfig);
     const table = useSelector(selectTableWithFilter);
     const engine = useSelector(selectQueryEngine);
@@ -44,6 +46,7 @@ export const NavigationTable: FC = () => {
             filter={filter}
             onFilterChange={handleFilterChange}
             onInsertTableSelect={handleInsertTableSelect}
+            ysonSettings={ysonSettings}
         />
     );
 };
