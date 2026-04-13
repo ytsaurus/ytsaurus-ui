@@ -1,8 +1,4 @@
-import filter_ from 'lodash/filter';
-import map_ from 'lodash/map';
 import reverse_ from 'lodash/reverse';
-
-import Columns from './columns';
 
 export function parseErrorFromResponse(data) {
     // TODO use JSON.parse when error format is fixed
@@ -34,12 +30,6 @@ export function prepareRows(rowData, reverseRows = false) {
     };
 }
 
-export function getColumnsValues(row, keyColumns) {
-    return (
-        row && map_(keyColumns, (keyColumnName) => row[Columns.escapeSpecialColumn(keyColumnName)])
-    );
-}
-
 export function prepareHeaders(headers) {
     const responseParameters = headers['x-yt-response-parameters'];
 
@@ -54,47 +44,6 @@ export function prepareHeaders(headers) {
     }
 
     return [];
-}
-
-export function getRequestOutputFormat(
-    columns,
-    stringLimit,
-    login,
-    defaultTableColumnLimit,
-    useYqlTypes,
-) {
-    const filteredColumns = filter_(columns, (column) => column.checked || column.keyColumn);
-    const columnNames = map_(filteredColumns, (column) => column.name);
-    const outputFormat = getDefaultRequestOutputFormat({
-        stringLimit,
-        defaultTableColumnLimit,
-        columnNamesLimit: 3000,
-        useYqlTypes,
-    });
-    if (columnNames.length) {
-        outputFormat.$attributes.column_names = columnNames;
-    }
-    return outputFormat;
-}
-
-export function getDefaultRequestOutputFormat({
-    stringLimit,
-    tableColumnLimit = undefined,
-    columnNamesLimit = undefined,
-    useYqlTypes,
-}) {
-    return {
-        /** @type {'web_json'} */
-        $value: 'web_json',
-        $attributes: {
-            field_weight_limit: stringLimit,
-            string_weight_limit: stringLimit ? Math.round(stringLimit / 10) : undefined,
-            max_selected_column_count: tableColumnLimit,
-            max_all_column_names_count: columnNamesLimit,
-            /** @type {'yql' | undefined} */
-            value_format: useYqlTypes ? 'yql' : undefined,
-        },
-    };
 }
 
 export function getParsedError(error) {
