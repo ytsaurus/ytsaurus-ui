@@ -1,6 +1,6 @@
 const BigNumber = require('bignumber.js');
 const _map = require('lodash/map');
-const moment = require('moment');
+const {dateTime} = require('@gravity-ui/date-utils');
 
 const type = require('./type');
 const utils = require('./utils');
@@ -30,10 +30,10 @@ format.validNumber = function (value) {
 
 format.toMoment = function (value) {
     if (format.validNumber(value)) {
-        // Assume unix timestamp
-        return moment.unix(value);
-    } else if (format.validString(value)) {
-        return moment(value);
+        return dateTime({input: value * 1000});
+    }
+    if (format.validString(value)) {
+        return dateTime({input: value});
     }
 };
 
