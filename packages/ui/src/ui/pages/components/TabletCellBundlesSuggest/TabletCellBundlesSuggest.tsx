@@ -5,7 +5,7 @@ import map_ from 'lodash/map';
 import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 
-import {getTabletCellBundlesSuggests} from '../../../store/selectors/suggests';
+import {selectTabletCellBundlesSuggests} from '../../../store/selectors/suggests';
 import {loadUsableTabletCellBundlesSuggests} from '../../../store/actions/suggests';
 import Select from '../../../components/Select/Select';
 
@@ -18,7 +18,7 @@ interface Props
 }
 
 function TabletCellBundlesSuggest(props: Props) {
-    const items = useSelector(getTabletCellBundlesSuggests);
+    const items = useSelector(selectTabletCellBundlesSuggests);
     const dispatch = useDispatch();
     React.useEffect(() => {
         dispatch(loadUsableTabletCellBundlesSuggests());
