@@ -20,9 +20,9 @@ import type {
 } from '../../../store/reducers/chaos_cell_bundles';
 import {
     filterChaosCellsByBundle,
+    prepareHostsFromCells,
     selectChaosBundlesSorted,
     selectChaosCells,
-    prepareHostsFromCells,
 } from '../../../store/selectors/chaos_cell_bundles';
 import {selectCluster} from '../../../store/selectors/global';
 import type {SortState} from '../../../types';

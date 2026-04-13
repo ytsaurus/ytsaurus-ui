@@ -18,7 +18,7 @@ import {importManageTokens} from '../ManageTokens';
 import {ChatToggleFooterButton} from '../AiChat/ChatToggleButton';
 
 import './AppNavigationComponent.scss';
-import {getAllowManageTokens} from '../../store/selectors/manage-tokens';
+import {selectAllowManageTokens} from '../../store/selectors/manage-tokens';
 
 const block = cn('yt-app-navigation');
 
@@ -58,7 +58,7 @@ function AppNavigationComponent({
 
     const [popupVisible, setPopupVisible] = useState(false);
     const settingsCluster = useSelector(selectSettingsCluster);
-    const isManageTokensMenuVisible = useSelector(getAllowManageTokens);
+    const isManageTokensMenuVisible = useSelector(selectAllowManageTokens);
     const history = useHistory();
 
     let showUserIcon = Boolean(currentUser);

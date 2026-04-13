@@ -24,10 +24,10 @@ import {getPath, getType} from '../../../../store/selectors/navigation';
 
 import {
     getActiveHistogram,
-    getHistogram,
     getNavigationTabletsLoadingStatus,
     getTablets,
     hasReplicationData,
+    selectHistogram,
 } from '../../../../store/selectors/navigation/tabs/tablets';
 
 import {NAVIGATION_TABLETS_TABLE_ID} from '../../../../constants/navigation/tabs/tablets';
@@ -656,7 +656,7 @@ const mapStateToProps = (state) => {
         maxByLevel = [getTabletsMax(state)];
     }
 
-    const histogram = getHistogram(state);
+    const histogram = selectHistogram(state);
     const activeHistogram = getActiveHistogram(state);
     const type = getType(state);
     const hasReplication = hasReplicationData(state);

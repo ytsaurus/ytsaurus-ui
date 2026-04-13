@@ -6,11 +6,11 @@ import {createSelector} from 'reselect';
 import {
     getAccountsNS,
     getBundlesNS,
-    selectChaosBundlesNS,
     getChytNS,
     getClusterNS,
     getSchedulingNS,
     makeGetSetting,
+    selectChaosBundlesNS,
 } from '../../store/selectors/settings';
 import {SettingName} from '../../../shared/constants/settings';
 import {getActiveAccount} from '../../store/selectors/accounts/accounts';

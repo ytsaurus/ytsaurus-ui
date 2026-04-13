@@ -30,9 +30,9 @@ import {SortState} from '../../../types';
 import {bundlesTrackVisit} from '../favourites';
 import {
     filterTabletCellsByBundle,
+    prepareHostsFromCells,
     selectTabletsBundlesSorted,
     selectTabletsCells,
-    prepareHostsFromCells,
 } from '../../selectors/tablet_cell_bundles';
 
 import copy from 'copy-to-clipboard';
