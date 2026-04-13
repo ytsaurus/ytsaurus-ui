@@ -33,7 +33,7 @@ export const getBundlesNS = createSelector(getClusterNS, (clusterNS) =>
     createNestedNS('bundles', clusterNS),
 );
 
-export const getChaosBundlesNS = createSelector(getClusterNS, (clusterNS) =>
+export const selectChaosBundlesNS = createSelector(getClusterNS, (clusterNS) =>
     createNestedNS('chaosBundles', clusterNS),
 );
 

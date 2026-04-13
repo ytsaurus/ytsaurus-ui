@@ -20,8 +20,8 @@ import type {
 } from '../../../store/reducers/chaos_cell_bundles';
 import {
     filterChaosCellsByBundle,
-    getChaosBundlesSorted,
-    getChaosCells,
+    selectChaosBundlesSorted,
+    selectChaosCells,
     prepareHostsFromCells,
 } from '../../../store/selectors/chaos_cell_bundles';
 import {selectCluster} from '../../../store/selectors/global';
@@ -117,7 +117,7 @@ export function setChaosActiveBundle(activeBundle: string): ChaosBundlesThunkAct
 export function setChaosFirstBundleAsActive(): ChaosBundlesThunkAction {
     return (dispatch, getState) => {
         const state = getState();
-        const bundles = getChaosBundlesSorted(state);
+        const bundles = selectChaosBundlesSorted(state);
         const [first] = bundles;
         if (!first) {
             return;
@@ -131,7 +131,7 @@ export function setChaosFirstBundleAsActive(): ChaosBundlesThunkAction {
 
 export function copyHostListToClipboard(bundle: string): ChaosBundlesThunkAction {
     return (_dispatch, getState) => {
-        const cells = filterChaosCellsByBundle(bundle, getChaosCells(getState()));
+        const cells = filterChaosCellsByBundle(bundle, selectChaosCells(getState()));
         const hosts = prepareHostsFromCells(cells);
         copy(hosts || '');
     };

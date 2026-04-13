@@ -10,12 +10,12 @@ import {showChaosCellBundleEditor} from '../../../store/actions/chaos_cell_bundl
 import type {RootState} from '../../../store/reducers';
 import {selectCluster} from '../../../store/selectors/global';
 import {
-    getChaosBundlesSortState,
-    getChaosBundlesSorted,
-    getChaosBundlesTableMode,
-    getChaosBundlesTotal,
-    getChaosIsLoaded,
-    getChaosIsLoading,
+    selectChaosBundlesSortState,
+    selectChaosBundlesSorted,
+    selectChaosBundlesTableMode,
+    selectChaosBundlesTotal,
+    selectChaosIsLoaded,
+    selectChaosIsLoading,
 } from '../../../store/selectors/chaos_cell_bundles';
 import {chaosActiveBundleLink} from '../../../utils/components/tablet-cells';
 
@@ -29,14 +29,14 @@ const columns: ComponentProps<typeof BundlesTable>['columns'] = [
 
 const mapStateToProps = (state: RootState) => {
     return {
-        loading: getChaosIsLoading(state),
-        loaded: getChaosIsLoaded(state),
-        data: getChaosBundlesSorted(state),
-        total: getChaosBundlesTotal(state),
-        sortState: getChaosBundlesSortState(state),
+        loading: selectChaosIsLoading(state),
+        loaded: selectChaosIsLoaded(state),
+        data: selectChaosBundlesSorted(state),
+        total: selectChaosBundlesTotal(state),
+        sortState: selectChaosBundlesSortState(state),
         cluster: selectCluster(state),
         allowPerBundleAccounting: false,
-        mode: getChaosBundlesTableMode(state),
+        mode: selectChaosBundlesTableMode(state),
         pathPrefix: '//sys/chaos_cell_bundles/',
         columns,
         activeBundleLink: chaosActiveBundleLink,

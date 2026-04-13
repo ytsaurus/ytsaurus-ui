@@ -16,7 +16,7 @@ import {
     getTabletBundlesWriteableByName,
     getTabletsActiveBundle,
     getTabletsActiveBundleData,
-    getTabletsError,
+    selectTabletsError,
 } from '../../store/selectors/tablet_cell_bundles/index';
 import {YTErrorBlock} from '../../components/Error/Error';
 import Bundles from './bundles/Bundles';
@@ -75,7 +75,7 @@ export default function TabletCellBundles() {
     const match = useRouteMatch();
     const cluster = useSelector(selectCluster);
 
-    const error = useSelector(getTabletsError);
+    const error = useSelector(selectTabletsError);
     const activeBundle = useSelector(getTabletsActiveBundle);
     const {enable_bundle_controller: enableBundleController = false} =
         useSelector(getTabletsActiveBundleData) || ({} as Partial<TabletBundle>);

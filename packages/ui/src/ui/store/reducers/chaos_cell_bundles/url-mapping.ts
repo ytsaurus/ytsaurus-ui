@@ -12,7 +12,7 @@ export const chaosBundlesParams: LocationParameters = {
     },
 };
 
-export function getChaosBundlesPreparedState(
+export function selectChaosBundlesPreparedState(
     state: RootState,
     {query}: {query: RootState},
 ): RootState {
@@ -82,7 +82,7 @@ export const chaosCellsParams = {
     },
 };
 
-export function getChaosCellsPreparedState(
+export function selectChaosCellsPreparedState(
     state: RootState,
     {query}: {query: RootState},
 ): RootState {
