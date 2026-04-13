@@ -1,4 +1,4 @@
-import React, {type CSSProperties} from 'react';
+import {type CSSProperties} from 'react';
 
 import {type Column, type DataTableYtProps} from './DataTableYT';
 

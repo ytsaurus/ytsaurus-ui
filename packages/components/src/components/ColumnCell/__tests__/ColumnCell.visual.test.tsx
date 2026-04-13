@@ -1,23 +1,19 @@
 import {type ComponentProps, type ReactElement} from 'react';
 
-import {YtComponentsConfigProvider} from '../../../context';
 import {test} from '../../../playwright-components/core';
 
 import {ColumnCell} from '../ColumnCell';
-import {
-    columnCellStoryBaseArgsForVisual,
-    columnCellStoryFrameStyle,
-    defaultColumnCellYsonSettings,
-} from '../columnCellStorySetup';
+import {columnCellStoryBaseArgsForVisual, columnCellStoryFrameStyle} from '../columnCellStorySetup';
 
 const noopPreview = () => {};
 
-const columnCellBaseProps = columnCellStoryBaseArgsForVisual as ComponentProps<typeof ColumnCell>;
+const columnCellBaseProps = {
+    ...columnCellStoryBaseArgsForVisual,
+    logError: () => undefined,
+} as unknown as ComponentProps<typeof ColumnCell>;
 
 const columnCellVisualTree = (cell: ReactElement) => (
-    <YtComponentsConfigProvider logError={() => undefined} unipika={defaultColumnCellYsonSettings}>
-        <div style={columnCellStoryFrameStyle}>{cell}</div>
-    </YtComponentsConfigProvider>
+    <div style={columnCellStoryFrameStyle}>{cell}</div>
 );
 
 test('ColumnCell: Default', async ({mount, expectScreenshot}) => {

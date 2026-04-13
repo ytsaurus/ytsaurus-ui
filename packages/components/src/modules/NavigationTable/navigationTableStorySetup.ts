@@ -4,7 +4,7 @@ import type {NavigationTableData} from '../../types';
 
 import type {NavigationTableInitialTab} from './NavigationTable';
 
-/** Provider settings for SchemaTab (`prettyprint` must not get `asHTML: true` from spread). */
+/** Extra provider settings for stories/tests (SchemaTab uses `ysonSettings` from `NavigationTable`). */
 export const navigationTableStoryUnipikaForProvider = {
     showDecoded: true,
     asHTML: false as const,

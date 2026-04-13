@@ -1,9 +1,9 @@
-import React from 'react';
+import {Fragment} from 'react';
 import cn from 'bem-cn-lite';
 import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 
 import {Icon, Tooltip} from '@gravity-ui/uikit';
-import format from '@ytsaurus/interface-helpers/lib/hammer/format';
+import {format} from '../../../../utils';
 
 import './RowsCount.scss';
 
@@ -12,7 +12,7 @@ const block = cn('rows-count');
 export function RowsCount(props: {count: number; isDynamic: boolean}) {
     const {count, isDynamic} = props;
     return (
-        <React.Fragment>
+        <Fragment>
             {isDynamic ? '≈ ' : ''}
             {format['Number'](count)}
             {!isDynamic ? null : (
@@ -32,6 +32,6 @@ export function RowsCount(props: {count: number; isDynamic: boolean}) {
                     </span>
                 </Tooltip>
             )}
-        </React.Fragment>
+        </Fragment>
     );
 }
