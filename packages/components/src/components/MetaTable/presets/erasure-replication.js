@@ -1,4 +1,4 @@
-import {ypath} from '../../../utils/ypath';
+import {ypath} from '../../../utils';
 const ERASURE_DOCS_KEY = 'storage:replication#erasure';
 
 export const erasureReplication = (attributes, options = {}) => {

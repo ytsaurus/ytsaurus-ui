@@ -2,7 +2,7 @@ import {loadStaticTable} from './loadStaticTable';
 import {loadDynamicTableRequest} from './loadDynamicTable';
 import {loadTableAttributes} from './loadTableAttributes';
 import {NavigationTable, NavigationTableSchema} from '../../types/navigation';
-import {ypath} from '../../utils/ypath';
+import {ypath} from '../../utils';
 import {getTableTypeByAttributes} from './helpers/getTableTypeByAttributes';
 import {getRequestOutputFormat} from './helpers/getRequestOutputFormat';
 import {YTApiSetup} from '../rum-wrap-api';

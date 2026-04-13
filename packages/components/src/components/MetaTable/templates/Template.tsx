@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import {Text as GravityText, Icon, Link} from '@gravity-ui/uikit';
 
-import {format as formatUtils} from '../../../utils';
+import formatUtils from '@ytsaurus/interface-helpers/lib/hammer/format';
 import {ClipboardButton} from '../../ClipboardButton';
 
 import {TemplateTime} from './TemplateTime';

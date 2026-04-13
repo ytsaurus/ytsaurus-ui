@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 
 import {Icon, Tooltip} from '@gravity-ui/uikit';
-import {format} from '../../../../utils';
+import format from '@ytsaurus/interface-helpers/lib/hammer/format';
 
 import './RowsCount.scss';
 

@@ -1,4 +1,5 @@
-import {format, ypath} from '../../../utils';
+import format from '@ytsaurus/interface-helpers/lib/hammer/format';
+import {ypath} from '../../../utils';
 import {Label, LabelOnOff} from '../../Label';
 import {Template} from '../templates/Template';
 import {compression} from './compression';

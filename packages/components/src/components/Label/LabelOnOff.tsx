@@ -1,7 +1,5 @@
-import React from 'react';
-
 import {Label} from './Label';
-import {format} from '../../utils/hammer';
+import {format} from '../../utils';
 import i18n from './i18n';
 
 export function LabelOnOff({value, className}: {value?: boolean; className?: string}) {

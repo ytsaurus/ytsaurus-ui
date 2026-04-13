@@ -1,4 +1,5 @@
-import {format, ypath} from '../../../utils';
+import format from '@ytsaurus/interface-helpers/lib/hammer/format';
+import {ypath} from '../../../utils';
 
 export const compression = (attributes) => {
     const [compressionRatio, compressionCodec] = ypath.getValues(attributes, [
