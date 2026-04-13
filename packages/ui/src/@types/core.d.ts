@@ -1,12 +1,10 @@
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export {type AppConfig, type Request, type Response} from '@gravity-ui/expresskit';
 import {type AppContext, type NodeKit} from '@gravity-ui/nodekit';
 import {type MetrikaCounter} from '@gravity-ui/app-layout';
-
 import {type UISettings} from '../../shared/ui-settings';
 import {type ClusterConfig} from '../shared/yt-types';
 import {type DescribedSettings} from '../shared/constants/settings-types';
-
-export {type AppConfig} from '@gravity-ui/nodekit';
-export {type Request, type Response} from '@gravity-ui/expresskit';
 
 export interface YTCoreConfig {
     /**
