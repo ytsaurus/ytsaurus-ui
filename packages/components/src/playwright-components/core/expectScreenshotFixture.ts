@@ -39,14 +39,15 @@ export const expectScreenshotFixture: PlaywrightFixture<ExpectScreenshotFixture>
         const locators = await page.locator('//img').all();
         await Promise.all(
             locators.map((locator) =>
-                locator.evaluate(
-                    (image: HTMLImageElement) =>
-                        image.complete ||
-                        new Promise<void>((resolve) => {
-                            image.addEventListener('load', () => resolve(), {once: true});
-                            image.addEventListener('error', () => resolve(), {once: true});
-                        }),
-                ),
+                locator.evaluate((image: HTMLImageElement) => {
+                    if (image.complete) {
+                        return;
+                    }
+                    return new Promise<void>((resolve) => {
+                        image.addEventListener('load', () => resolve(), {once: true});
+                        image.addEventListener('error', () => resolve(), {once: true});
+                    });
+                }),
             ),
         );
 
