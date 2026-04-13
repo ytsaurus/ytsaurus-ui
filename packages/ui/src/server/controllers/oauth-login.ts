@@ -10,8 +10,8 @@ export function oauthLogin(req: Request, res: Response) {
     res.redirect(getOAuthLoginPath(req, res));
 }
 
-export function oauthLogout(_: Request, res: Response) {
-    removeOAuthCookies(res);
+export function oauthLogout(req: Request, res: Response) {
+    removeOAuthCookies(req, res);
     res.redirect('/');
 }
 
@@ -30,7 +30,7 @@ export async function oauthCallback(req: Request, res: Response) {
     try {
         const tokens = await exchangeOAuthToken(req, code as string);
 
-        saveOAuthTokensInCookies(res, tokens);
+        saveOAuthTokensInCookies(req, res, tokens);
 
         res.redirect(redirectURL);
     } catch (e) {

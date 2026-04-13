@@ -82,6 +82,12 @@ export interface YTCoreConfig {
     };
 
     /**
+     * The setting allows to explicitly set the "Domain" attribute for "Set-Cookie" auth headers.
+     * The option affects auth cookies for oauth and password authorization.
+     */
+    authCookieDomain?: string;
+
+    /**
      * OpenID Connect configuration
      */
     ytOAuthSettings?: {

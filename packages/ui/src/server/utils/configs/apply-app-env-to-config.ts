@@ -36,6 +36,7 @@ function applyAppAuthEnvToConfig(config: Partial<YTCoreConfig>) {
         allowPasswordAuth,
         ytAuthAllowInsecure: Boolean(YT_AUTH_ALLOW_INSECURE),
         ...{appAuthPolicy: allowPasswordAuth ? AuthPolicy.required : AuthPolicy.disabled},
+        authCookieDomain: process.env.AUTH_COOKIE_DOMAIN,
     };
 
     applyMissingFields(config, tmp);

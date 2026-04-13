@@ -2,6 +2,7 @@ import axios from 'axios';
 import type {Request, Response} from 'express';
 import crypto from 'node:crypto';
 import {YT_OAUTH_ACCESS_TOKEN_NAME, YT_OAUTH_REFRESH_TOKEN_NAME} from '../../shared/constants';
+import {makeAuthCookieOptions} from '../utils/cookie';
 
 function getRedirectURL(req: Request) {
     const config = getOAuthSettings(req);
@@ -52,19 +53,27 @@ export async function getOAuthAccessToken(req: Request, res: Response) {
             req,
             req.cookies[YT_OAUTH_REFRESH_TOKEN_NAME] as string,
         );
-        saveOAuthTokensInCookies(res, tokens);
+        saveOAuthTokensInCookies(req, res, tokens);
         return tokens.access_token;
     }
     return undefined;
 }
 
-export function removeOAuthCookies(res: Response) {
-    res.clearCookie(YT_OAUTH_ACCESS_TOKEN_NAME);
-    res.clearCookie(YT_OAUTH_REFRESH_TOKEN_NAME);
+export function removeOAuthCookies(req: Request, res: Response) {
+    const options = makeAuthCookieOptions(req);
+    res.clearCookie(YT_OAUTH_ACCESS_TOKEN_NAME, options);
+    res.clearCookie(YT_OAUTH_REFRESH_TOKEN_NAME, options);
 }
 
-export function saveOAuthTokensInCookies(res: Response, tokens: OAuthAuthorizationTokens) {
+export function saveOAuthTokensInCookies(
+    req: Request,
+    res: Response,
+    tokens: OAuthAuthorizationTokens,
+) {
+    const options = makeAuthCookieOptions(req);
+
     res.cookie(YT_OAUTH_ACCESS_TOKEN_NAME, tokens.access_token, {
+        ...options,
         maxAge: tokens.expires_in * 1000,
         httpOnly: true,
         secure: true,
@@ -72,6 +81,7 @@ export function saveOAuthTokensInCookies(res: Response, tokens: OAuthAuthorizati
 
     if (tokens.refresh_token) {
         res.cookie(YT_OAUTH_REFRESH_TOKEN_NAME, tokens.refresh_token, {
+            ...options,
             maxAge: tokens.refresh_expires_in * 1000,
             httpOnly: true,
             secure: true,

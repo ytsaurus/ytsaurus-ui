@@ -1,12 +1,14 @@
 import {AppConfig} from '@gravity-ui/nodekit';
 import common from '../common';
 
+const {LOCALMODE_EXTERNAL_PROXY} = process.env;
+
 const e2eConfig: Partial<AppConfig> = {
     uiSettings: {
         defaultFontType: 'internal',
         newTableReplicasCount: 1,
         uploadTableMaxSize: 50 * 1024 * 1024,
-        uploadTableUseLocalmode: true,
+        uploadTableUseLocalmode: !LOCALMODE_EXTERNAL_PROXY,
         queryTrackerStage: 'testing',
         directDownload: false,
         docsBaseUrl: 'https://ytsaurus.tech/docs/en',
@@ -66,7 +68,7 @@ const e2eConfig: Partial<AppConfig> = {
             iconbig:
                 'https://yastatic.net/s3/cloud/yt/static/freeze/assets/images/ui-big.44e3fa56.jpg',
         },
-        externalProxy: 'external.proxy.my',
+        externalProxy: LOCALMODE_EXTERNAL_PROXY ?? 'external.proxy.my',
     },
 };
 
