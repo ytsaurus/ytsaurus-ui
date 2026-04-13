@@ -146,6 +146,10 @@ ypath._next = function (path) {
  * @param {Function} [nodeParser] - node parser can do some action to a node and return new node.
  */
 ypath.get = function (node, path, nodeParser) {
+    if (typeof path === 'undefined') {
+        return node;
+    }
+
     if (typeof path !== 'string') {
         throw new YPathError('invalid relative ypath type - expected string');
     }
@@ -188,10 +192,69 @@ ypath.getValue = function (node, path) {
     return yson.value(ypath.get(node, path));
 };
 
+ypath.getAttributes = function (node, path) {
+    return yson.attributes(ypath.get(node, path));
+};
+
 ypath.getValues = function (node, paths) {
     return _map(paths, function (path) {
         return ypath.getValue(node, path);
     });
+};
+
+function convertToBoolean(value) {
+    const unwrapped = yson.value(value);
+    if (unwrapped === undefined) {
+        return undefined;
+    }
+    const t = typeof unwrapped;
+    if (t === 'string' && (unwrapped === 'true' || unwrapped === 'false')) {
+        return unwrapped === 'true';
+    }
+    if (t === 'boolean') {
+        return unwrapped;
+    }
+    throw new Error('convertToBoolean: value cannot be converted to boolean.');
+}
+
+function convertToNumber(value, defaultValue) {
+    if (value === null || value === undefined) {
+        return defaultValue;
+    }
+    const res = Number(value);
+    if (isNaN(res) && defaultValue === undefined) {
+        throw new Error('convertToNumber: value "' + value + '" cannot be converted to number.');
+    }
+    return isNaN(res) ? defaultValue : res;
+}
+
+ypath.getNumberBase = function (node, path, defaultValue) {
+    let value;
+    if (typeof path === 'undefined') {
+        value = node;
+    } else {
+        value = ypath.getValue(node, path);
+    }
+    return convertToNumber(value, defaultValue);
+};
+
+ypath.getNumber = function (node, path, defaultValue) {
+    try {
+        return ypath.getNumberBase(node, path, defaultValue);
+    } catch (e) {
+        const wrapped = new Error(
+            'getNumber: failed to convert field with path: "' + path + '". ' + e.message,
+        );
+        if (e.stack) {
+            wrapped.stack = e.stack;
+        }
+        throw wrapped;
+    }
+};
+
+ypath.getBoolean = function (node, path) {
+    const value = ypath.get(node, path);
+    return convertToBoolean(value);
 };
 
 /**
