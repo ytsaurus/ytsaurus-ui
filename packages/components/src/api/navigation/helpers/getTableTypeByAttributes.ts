@@ -1,4 +1,4 @@
-import {ypath} from '../../../utils/ypath';
+import {ypath} from '../../../utils';
 
 export const getTableTypeByAttributes = (isDynamic: boolean, attributes: any) => {
     if (isDynamic) {

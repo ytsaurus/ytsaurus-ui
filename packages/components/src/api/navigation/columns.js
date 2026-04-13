@@ -6,8 +6,8 @@ import reduce_ from 'lodash/reduce';
 import uniq_ from 'lodash/uniq';
 import union_ from 'lodash/union';
 
-import {hammer, unipika} from '../../utils';
-import ypath from '@ytsaurus/interface-helpers/lib/ypath';
+import hammer from '@ytsaurus/interface-helpers/lib/hammer';
+import {unipika, ypath} from '../../utils';
 import {sortItemsBySchema} from '../../utils/sort-helpers';
 
 const CAPTION_PRINT_SETTINGS = {

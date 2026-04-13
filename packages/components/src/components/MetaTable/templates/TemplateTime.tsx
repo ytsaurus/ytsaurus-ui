@@ -2,7 +2,7 @@ import cn from 'bem-cn-lite';
 
 import {Flex, Text as GravityText} from '@gravity-ui/uikit';
 
-import format from '../../../utils/hammer/format';
+import format from '@ytsaurus/interface-helpers/lib/hammer/format';
 
 const itemBlock = cn('meta-table-item');
 
