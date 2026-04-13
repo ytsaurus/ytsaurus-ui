@@ -1,6 +1,5 @@
 import React, {type CSSProperties} from 'react';
 
-import {YtComponentsConfigProvider} from '../../context';
 import type {UnipikaSettings} from '../../internal/Yson/StructuredYson/StructuredYsonTypes';
 import type {TypeArray} from '../SchemaDataType/dataTypes';
 
@@ -55,12 +54,5 @@ export const columnCellStoryFrameStyle: CSSProperties = {
 };
 
 export function ColumnCellStoryDecorator({children}: {children: React.ReactNode}) {
-    return (
-        <YtComponentsConfigProvider
-            logError={() => undefined}
-            unipika={defaultColumnCellYsonSettings}
-        >
-            <div style={columnCellStoryFrameStyle}>{children}</div>
-        </YtComponentsConfigProvider>
-    );
+    return <div style={columnCellStoryFrameStyle}>{children}</div>;
 }

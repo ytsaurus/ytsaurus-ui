@@ -7,7 +7,7 @@ import {getTableTypeByAttributes} from './helpers/getTableTypeByAttributes';
 import {getRequestOutputFormat} from './helpers/getRequestOutputFormat';
 import {YTApiSetup} from '../rum-wrap-api';
 import {makeMetaItems} from '../../components/MetaTable/presets';
-import type {YtComponentsConfig} from '../../context';
+import type {TYComponentsNavigationMetaConfig} from '../../types';
 
 export const loadTableAttributesByPath = async (
     path: string,
@@ -21,7 +21,7 @@ export const loadTableAttributesByPath = async (
         useYqlTypes?: boolean;
         docsUrls?: Record<string, string>;
         showDecoded?: boolean;
-        navigationTableConfig?: Partial<YtComponentsConfig>;
+        navigationTableConfig?: Partial<TYComponentsNavigationMetaConfig>;
     },
 ): Promise<NavigationTable> => {
     const attributes = await loadTableAttributes(path, setup);
