@@ -6,19 +6,19 @@
     "url": "https://github.com/ytsaurus/ytsaurus-ui/tree/main/packages/interface-helpers"
   },
   "peerDependencies": {
+    "@gravity-ui/date-utils": "^2.6.0",
     "bignumber.js": "^9.0.1",
-    "lodash": "^4.17.15",
-    "moment": "^2.24.0"
+    "lodash": "^4.17.15"
   },
   "private": false,
   "devDependencies": {
+    "@gravity-ui/date-utils": "^2.6.0",
     "@gravity-ui/eslint-config": "^3.2.0",
     "@gravity-ui/prettier-config": "^1.1.0",
     "bignumber.js": "^9.0.1",
     "eslint": "^8.57.1",
     "jest": "^26.6.3",
     "lodash": "^4.17.15",
-    "moment": "^2.24.0",
     "prettier": "^3.7.4"
   },
   "scripts": {

@@ -1,6 +1,18 @@
 const format = require('./format');
 
 describe('format', () => {
+    describe('toMoment', () => {
+        it('parses unix seconds as number', () => {
+            const dt = format.toMoment(1000000000);
+            expect(dt.unix()).toBe(1000000000);
+        });
+
+        it('parses ISO date string', () => {
+            const dt = format.toMoment('2019-06-01T12:00:00.000Z');
+            expect(dt.isValid()).toBe(true);
+        });
+    });
+
     describe('NumberWithSuffix', () => {
         function checkNumberWithSuffix(value, expected) {
             expect(format.NumberWithSuffix(value)).toEqual(expected);
