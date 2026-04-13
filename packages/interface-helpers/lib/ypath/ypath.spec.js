@@ -91,6 +91,33 @@ describe('YPath', () => {
 
             expect(_get(node, '/path/@')).toEqual({});
         });
+
+        it('returns node when path is undefined', () => {
+            const node = {a: 1};
+            expect(_get(node, undefined)).toBe(node);
+        });
+    });
+
+    describe('getAttributes', () => {
+        const _getAttributes = ypath.getAttributes;
+
+        it('Exports', () => {
+            expect(_getAttributes).toBeDefined();
+        });
+
+        it('returns attributes of the node at path', () => {
+            const node = {
+                item: {
+                    $attributes: {type: 'x'},
+                    $value: 'y',
+                },
+            };
+            expect(_getAttributes(node, '/item')).toEqual({type: 'x'});
+        });
+
+        it('returns empty object for missing attributes when path is undefined', () => {
+            expect(_getAttributes({foo: 1}, undefined)).toEqual({});
+        });
     });
 
     describe('contructor', () => {
@@ -342,6 +369,149 @@ describe('YPath', () => {
                         '\\xf0\\xf1\\xf2\\xf3\\xf4\\xf5\\xf6\\xf7\\xf8\\xf9\\xfa\\xfb\\xfc\\xfd\\xfe',
                 );
             });
+        });
+    });
+
+    describe('getValue', () => {
+        it('null is treated as an error if encountered in the middle', () => {
+            const node = {
+                $value: null,
+                $attributes: {
+                    recursive_resource_usage: null,
+                },
+            };
+
+            expect(() => {
+                ypath.getValue(node, '/some_property');
+            }).toThrow(Error);
+
+            expect(() => {
+                ypath.getValue(node, '/@recursive_resource_usage');
+            }).not.toThrow();
+        });
+    });
+
+    describe('getBoolean', () => {
+        it('gets boolean from boolean', () => {
+            const node = {
+                $value: '//home/user/table',
+                $attributes: {
+                    append: true,
+                    teleport: false,
+                },
+            };
+
+            expect(ypath.getBoolean(node, '/@append')).toBe(true);
+            expect(ypath.getBoolean(node, '/@teleport')).toBe(false);
+        });
+
+        it('gets boolean from string', () => {
+            const node = {
+                $value: '//home/user/table',
+                $attributes: {
+                    append: 'true',
+                    teleport: 'false',
+                },
+            };
+
+            expect(ypath.getBoolean(node, '/@append')).toBe(true);
+            expect(ypath.getBoolean(node, '/@teleport')).toBe(false);
+        });
+
+        it('plays well with undefined', () => {
+            const node = {
+                $value: '//home/user/table',
+                $attributes: {
+                    append: undefined,
+                    teleport: undefined,
+                },
+            };
+
+            expect(ypath.getBoolean(node, '/@append')).toBeUndefined();
+            expect(ypath.getBoolean(node, '/@teleport')).toBeUndefined();
+        });
+
+        it('everything else is treated as an error', () => {
+            const node = {
+                $value: '//home/user/table',
+                $attributes: {
+                    append: 'foo',
+                    teleport: 'foo',
+                },
+            };
+
+            expect(() => {
+                ypath.getBoolean(node, '/@append');
+            }).toThrow(Error);
+            expect(() => {
+                ypath.getBoolean(node, '/@teleport');
+            }).toThrow(Error);
+        });
+    });
+
+    describe('convertToNumber', () => {
+        it('converts valid values', () => {
+            expect(ypath.getNumberBase(2, undefined)).toBe(2);
+            expect(ypath.getNumberBase('2', undefined)).toBe(2);
+        });
+
+        it('returns default for null and undefined', () => {
+            expect(ypath.getNumberBase(null, undefined, 5)).toBe(5);
+            expect(ypath.getNumberBase(undefined, undefined, 5)).toBe(5);
+        });
+
+        it('throws when not convertible without default', () => {
+            expect(() => ypath.getNumberBase('asdasd', undefined)).toThrow(
+                'convertToNumber: value "asdasd" cannot be converted to number.',
+            );
+        });
+    });
+
+    describe('getNumberBase', () => {
+        const node = {
+            $value: '/some/value',
+            $attributes: {
+                test_number: 2,
+                test_valid_string: '2',
+                test_invalid_string: 'asdasd',
+                test_undefined: undefined,
+                test_null: null,
+            },
+        };
+
+        it('reads attributes like ypath-base', () => {
+            expect(ypath.getNumberBase(node, '/@test_number')).toBe(2);
+            expect(ypath.getNumberBase(node, '/@test_valid_string')).toBe(2);
+            expect(() => ypath.getNumberBase(node, '/@test_invalid_string')).toThrow(
+                'convertToNumber: value "asdasd" cannot be converted to number.',
+            );
+            expect(ypath.getNumberBase(node, '/@test_undefined')).toBeUndefined();
+            expect(ypath.getNumberBase(node, '/@test_null')).toBeUndefined();
+        });
+
+        it('uses default when provided', () => {
+            expect(ypath.getNumberBase(node, '/@test_invalid_string', 4)).toBe(4);
+            expect(ypath.getNumberBase(node, '/@test_undefined', 4)).toBe(4);
+            expect(ypath.getNumberBase(node, '/@test_null', 4)).toBe(4);
+        });
+
+        it('uses whole node when path is undefined', () => {
+            expect(ypath.getNumberBase(42, undefined)).toBe(42);
+        });
+    });
+
+    describe('getNumber', () => {
+        it('wraps convert errors with path in message', () => {
+            const node = {
+                $attributes: {x: 'nope'},
+            };
+            expect(() => ypath.getNumber(node, '/@x')).toThrow(
+                'getNumber: failed to convert field with path: "/@x". convertToNumber: value "nope" cannot be converted to number.',
+            );
+        });
+
+        it('returns number when valid', () => {
+            expect(ypath.getNumber({$attributes: {n: 7}}, '/@n')).toBe(7);
         });
     });
 });
