@@ -4,7 +4,7 @@ import {TabletErrorsApi, fetchFromTabletErrorsApi} from '../../../../shared/tabl
 import {selectCluster} from '../../../store/selectors/global';
 import {tabletErrorsByBundleActions} from '../../../store/reducers/tablet-errors/tablet-errors-by-bundle';
 import CancelHelper from '../../../utils/cancel-helper';
-import {getTabletErrorsByBundleData} from '../../../store/selectors/tablet-errors/tablet-errors-by-bundle';
+import {selectTabletErrorsByBundleData} from '../../../store/selectors/tablet-errors/tablet-errors-by-bundle';
 
 type AsyncAction<T = Promise<void>> = ThunkAction<T, RootState, unknown, any>;
 
@@ -22,7 +22,7 @@ export function loadTabletErrorsByBundle(
 
         const state = getState();
         const cluster = selectCluster(state);
-        const data = getTabletErrorsByBundleData(state);
+        const data = selectTabletErrorsByBundleData(state);
 
         return fetchFromTabletErrorsApi(
             'tablet_errors_by_bundle',

@@ -2,7 +2,7 @@ import React from 'react';
 import {useSelector} from '../../../store/redux-hooks';
 import {selectCluster} from '../../../store/selectors/global';
 import ypath from '../../../common/thor/ypath';
-import {getTabletsActiveBundleData} from '../../../store/selectors/tablet_cell_bundles';
+import {selectTabletsActiveBundleData} from '../../../store/selectors/tablet_cell_bundles';
 
 import {NoContent} from '../../../components/NoContent';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
@@ -13,7 +13,7 @@ function BundleMonitorTab(props: {
     component: React.ComponentType<{cluster: string; tablet_cell_bundle: string; bundleData: any}>;
 }) {
     const {component: BundleMonitor} = props;
-    const bundleData = useSelector(getTabletsActiveBundleData);
+    const bundleData = useSelector(selectTabletsActiveBundleData);
     const cluster = useSelector(selectCluster);
 
     const tablet_cell_bundle: undefined | string = React.useMemo(() => {

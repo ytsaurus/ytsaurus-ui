@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import {getTabletsActiveBundleData} from '../../../store/selectors/tablet_cell_bundles';
+import {selectTabletsActiveBundleData} from '../../../store/selectors/tablet_cell_bundles';
 import {useSelector} from '../../../store/redux-hooks';
 import {MetaTable, type MetaTableItem} from '@ytsaurus/components';
 import {Progress} from '@gravity-ui/uikit';
@@ -29,7 +29,7 @@ export function BundleBalancerValue(props: {value?: boolean; blocking?: boolean}
 }
 
 export default function BundleGeneralMeta() {
-    const bundleData = useSelector(getTabletsActiveBundleData);
+    const bundleData = useSelector(selectTabletsActiveBundleData);
     const clusterUiConfig = useSelector(selectClusterUiConfig);
     const cluster = useSelector(selectCluster);
     const allowTabletAccounting = useSelector(selectClusterUiConfigEnablePerBundleTabletAccounting);

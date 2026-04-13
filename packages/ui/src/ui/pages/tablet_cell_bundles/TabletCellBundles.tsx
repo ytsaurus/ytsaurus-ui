@@ -13,9 +13,9 @@ import {useDispatch, useSelector} from '../../store/redux-hooks';
 import {fetchChaosBundles} from '../../store/actions/chaos_cell_bundles';
 import {fetchTabletsBundles} from '../../store/actions/tablet_cell_bundles';
 import {
-    getTabletBundlesWriteableByName,
-    getTabletsActiveBundle,
-    getTabletsActiveBundleData,
+    selectTabletBundlesWriteableByName,
+    selectTabletsActiveBundle,
+    selectTabletsActiveBundleData,
     selectTabletsError,
 } from '../../store/selectors/tablet_cell_bundles/index';
 import {YTErrorBlock} from '../../components/Error/Error';
@@ -76,16 +76,16 @@ export default function TabletCellBundles() {
     const cluster = useSelector(selectCluster);
 
     const error = useSelector(selectTabletsError);
-    const activeBundle = useSelector(getTabletsActiveBundle);
+    const activeBundle = useSelector(selectTabletsActiveBundle);
     const {enable_bundle_controller: enableBundleController = false} =
-        useSelector(getTabletsActiveBundleData) || ({} as Partial<TabletBundle>);
+        useSelector(selectTabletsActiveBundleData) || ({} as Partial<TabletBundle>);
     const dispatch = useDispatch();
     const fetchFn = React.useCallback(() => {
         Promise.all([dispatch(fetchChaosBundles()), dispatch(fetchTabletsBundles())]);
     }, [dispatch]);
     useUpdater(fetchFn);
 
-    const writeableByName = useSelector(getTabletBundlesWriteableByName);
+    const writeableByName = useSelector(selectTabletBundlesWriteableByName);
 
     const bundleWritable = writeableByName.get(activeBundle);
 

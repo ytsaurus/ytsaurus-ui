@@ -21,14 +21,14 @@ import {
     setBundleEditorController,
 } from '../../../../store/actions/tablet_cell_bundles/tablet-cell-bundle-editor';
 import {
-    getBundleEditorData,
-    getTabletBundlesWriteableByName,
+    selectBundleEditorData,
+    selectTabletBundlesWriteableByName,
 } from '../../../../store/selectors/tablet_cell_bundles';
 import {
     BundleResourceGuarantee,
     OrchidBundleResource,
 } from '../../../../store/reducers/tablet_cell_bundles';
-import {getTabletCellBundleEditorState} from '../../../../store/selectors/tablet_cell_bundles/tablet-cell-bundle-editor';
+import {selectTabletCellBundleEditorState} from '../../../../store/selectors/tablet_cell_bundles/tablet-cell-bundle-editor';
 
 import {
     bundleEditorDict,
@@ -94,12 +94,12 @@ export function BundleEditorDialog() {
         bundleData,
         data,
         bundleControllerData: orchidData,
-    } = useSelector(getTabletCellBundleEditorState);
+    } = useSelector(selectTabletCellBundleEditorState);
 
     const clusterUiConfig = useSelector(selectClusterUiConfig);
     const queryMemoryLimitIsSupported = useSelector(selectIsQueryMemoryLimitSupported);
 
-    const {defaultConfig: bundleDefaultConfig} = useSelector(getBundleEditorData);
+    const {defaultConfig: bundleDefaultConfig} = useSelector(selectBundleEditorData);
 
     const bundleControllerConfig = bundleData?.bundle_controller_target_config;
     const enableBundleController = bundleData?.enable_bundle_controller || false;
@@ -107,7 +107,7 @@ export function BundleEditorDialog() {
     const {usage: tabletCountUsage} = getResourceData(data, 'tablet_count');
     const {usage: tabletStaticMemoryUsage} = getResourceData(data, 'tablet_static_memory');
 
-    const writeableByName = useSelector(getTabletBundlesWriteableByName);
+    const writeableByName = useSelector(selectTabletBundlesWriteableByName);
     const allowTabletCount = writeableByName.get(bundleName ?? '');
     const allowEdit = useSelector(selectIsAdmin);
 

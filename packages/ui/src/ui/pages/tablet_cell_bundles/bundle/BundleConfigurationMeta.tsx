@@ -10,8 +10,8 @@ import reduce_ from 'lodash/reduce';
 import hammer from '../../../common/hammer';
 
 import {
-    getActiveBundleControllerData,
-    getTabletsActiveBundleData,
+    selectActiveBundleControllerData,
+    selectTabletsActiveBundleData,
 } from '../../../store/selectors/tablet_cell_bundles';
 import {fetchTabletCellBundleEditor} from '../../../store/actions/tablet_cell_bundles/tablet-cell-bundle-editor';
 import {OrchidBundlesData} from '../../../store/reducers/tablet_cell_bundles';
@@ -40,7 +40,7 @@ const DETAILS_KEYS = [
 export function ActiveAccountBundleControllerUpdater() {
     const dispatch = useDispatch();
     const {bundle: activeBundle, enable_bundle_controller} =
-        useSelector(getTabletsActiveBundleData) || {};
+        useSelector(selectTabletsActiveBundleData) || {};
     const fetchFn = React.useCallback(() => {
         if (activeBundle) {
             dispatch(fetchTabletCellBundleEditor(activeBundle));
@@ -106,8 +106,8 @@ export function ActiveAccountBundleControllerUpdater() {
 
 export default function BundleConfigurationMeta() {
     const {bundle_controller_target_config: bundleControllerConfig} =
-        useSelector(getTabletsActiveBundleData) || {};
-    const orchidData = useSelector(getActiveBundleControllerData);
+        useSelector(selectTabletsActiveBundleData) || {};
+    const orchidData = useSelector(selectActiveBundleControllerData);
 
     if (!bundleControllerConfig || !orchidData) {
         return null;
