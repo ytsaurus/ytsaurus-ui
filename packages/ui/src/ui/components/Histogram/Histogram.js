@@ -8,10 +8,10 @@ import keys_ from 'lodash/keys';
 import map_ from 'lodash/map';
 
 import {
-    createGetECDF,
-    createGetIsDataGood,
-    createGetPDF,
-    createGetQuartiles,
+    selectCreateECDF,
+    selectIsDataGood,
+    selectCreatePDF,
+    selectCreateQuartiles,
 } from '../../store/selectors/histogram';
 import HistogramChart from './HistogramChart';
 
@@ -141,10 +141,10 @@ function Histogram(props) {
 
 // https://github.com/reduxjs/reselect#sharing-selectors-with-props-across-multiple-component-instances
 const makeMapStateToProps = () => {
-    const getQuartiles = createGetQuartiles();
-    const getPDF = createGetPDF();
-    const getECDF = createGetECDF();
-    const getIsDataGood = createGetIsDataGood();
+    const getQuartiles = selectCreateQuartiles();
+    const getPDF = selectCreatePDF();
+    const getECDF = selectCreateECDF();
+    const getIsDataGood = selectIsDataGood();
 
     return (state, props) => {
         const quartiles = getQuartiles(state, props);
