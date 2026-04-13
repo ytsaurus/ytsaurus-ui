@@ -6,10 +6,10 @@ import {setChaosActiveBundle, setChaosPartial} from '../../../store/actions/chao
 import type {RootState} from '../../../store/reducers';
 import {selectCluster} from '../../../store/selectors/global';
 import {
-    getChaosCellsSortState,
-    getChaosCellsSorted,
-    getChaosIsLoaded,
-    getChaosIsLoading,
+    selectChaosCellsSortState,
+    selectChaosCellsSorted,
+    selectChaosIsLoaded,
+    selectChaosIsLoading,
 } from '../../../store/selectors/chaos_cell_bundles';
 import {
     chaosActiveBundleLink,
@@ -29,10 +29,10 @@ const columns: ComponentProps<typeof CellsTable>['columns'] = [
 const mapStateToProps = (state: RootState) => {
     return {
         cluster: selectCluster(state),
-        loading: getChaosIsLoading(state),
-        loaded: getChaosIsLoaded(state),
-        data: getChaosCellsSorted(state),
-        sortState: getChaosCellsSortState(state),
+        loading: selectChaosIsLoading(state),
+        loaded: selectChaosIsLoaded(state),
+        data: selectChaosCellsSorted(state),
+        sortState: selectChaosCellsSortState(state),
         columns,
         activeBundleLink: chaosActiveBundleLink,
         attributesPath: chaosAttributesPath,

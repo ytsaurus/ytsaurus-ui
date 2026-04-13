@@ -4,26 +4,26 @@ import CellsTableInstruments from '../../../pages/tablet_cell_bundles/cells/Cell
 import {setChaosPartial} from '../../../store/actions/chaos_cell_bundles';
 import type {RootState} from '../../../store/reducers';
 import {
-    getChaosActiveBundle,
-    getChaosCellsBundleFilter,
-    getChaosCellsBundles,
-    getChaosCellsHostFilter,
-    getChaosCellsHosts,
-    getChaosCellsHostsOfActiveBundle,
-    getChaosCellsIdFilter,
+    selectChaosActiveBundle,
+    selectChaosCellsBundleFilter,
+    selectChaosCellsBundles,
+    selectChaosCellsHostFilter,
+    selectChaosCellsHosts,
+    selectChaosCellsHostsOfActiveBundle,
+    selectChaosCellsIdFilter,
 } from '../../../store/selectors/chaos_cell_bundles';
 
 const mapStateToProps = (state: RootState) => {
     return {
-        activeBundle: getChaosActiveBundle(state),
-        activeBundleHosts: getChaosCellsHostsOfActiveBundle(state),
+        activeBundle: selectChaosActiveBundle(state),
+        activeBundleHosts: selectChaosCellsHostsOfActiveBundle(state),
 
-        idFilter: getChaosCellsIdFilter(state),
-        bundleFilter: getChaosCellsBundleFilter(state),
-        hostFilter: getChaosCellsHostFilter(state),
+        idFilter: selectChaosCellsIdFilter(state),
+        bundleFilter: selectChaosCellsBundleFilter(state),
+        hostFilter: selectChaosCellsHostFilter(state),
 
-        bundles: getChaosCellsBundles(state),
-        hosts: getChaosCellsHosts(state),
+        bundles: selectChaosCellsBundles(state),
+        hosts: selectChaosCellsHosts(state),
     };
 };
 

@@ -6,7 +6,7 @@ import {createSelector} from 'reselect';
 import {
     getAccountsNS,
     getBundlesNS,
-    getChaosBundlesNS,
+    selectChaosBundlesNS,
     getChytNS,
     getClusterNS,
     getSchedulingNS,
@@ -17,7 +17,7 @@ import {getActiveAccount} from '../../store/selectors/accounts/accounts';
 import {getPath} from '../../store/selectors/navigation';
 import {getPool, getTree} from '../../store/selectors/scheduling/scheduling';
 import {getTabletsActiveBundle} from './tablet_cell_bundles';
-import {getChaosActiveBundle} from './chaos_cell_bundles';
+import {selectChaosActiveBundle} from './chaos_cell_bundles';
 import {selectChytCurrentAlias} from './chyt';
 
 //************* Selectors for Accounts *****************
@@ -93,12 +93,12 @@ export const isActiveBundleInFavourites = createSelector(
 // ************ Selectors for Chaos bundles ***********
 
 export const getFavouriteChaosBundles = createSelector(
-    [makeGetSetting, getChaosBundlesNS],
+    [makeGetSetting, selectChaosBundlesNS],
     prepareFavourites,
 );
 
 export const isActiveChaosBundleInFavourites = createSelector(
-    [getChaosActiveBundle, getFavouriteChaosBundles],
+    [selectChaosActiveBundle, getFavouriteChaosBundles],
     prepareIsInFavourites,
 );
 
