@@ -1,4 +1,4 @@
 import {RootState} from '../../reducers';
 
-export const getTabletCellBundlesSuggests = (state: RootState) =>
+export const selectTabletCellBundlesSuggests = (state: RootState) =>
     state.suggests.tabletCellBundles.items;
