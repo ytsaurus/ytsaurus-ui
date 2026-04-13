@@ -15,18 +15,18 @@ import {
     selectClusterUiConfigEnablePerBundleTabletAccounting,
 } from '../../../store/selectors/global';
 import {
-    getTabletBundlesTableMode,
-    getTabletBundlesWriteableByName,
-    getTabletsBundlesSortState,
-    getTabletsBundlesSorted,
-    getTabletsBundlesTotal,
-    getTabletsIsLoaded,
-    getTabletsIsLoading,
+    selectTabletBundlesTableMode,
+    selectTabletBundlesWriteableByName,
+    selectTabletsBundlesSortState,
+    selectTabletsBundlesSorted,
+    selectTabletsBundlesTotal,
+    selectTabletsIsLoaded,
+    selectTabletsIsLoading,
 } from '../../../store/selectors/tablet_cell_bundles';
 import {tabletActiveBundleLink} from '../../../utils/components/tablet-cells';
 import {tabletCellBundleDashboardUrl} from '../../../utils/tablet_cell_bundles';
 
-const calcColumns = createSelector([getTabletBundlesTableMode], (mode: BundlesTableMode) => {
+const calcColumns = createSelector([selectTabletBundlesTableMode], (mode: BundlesTableMode) => {
     const columns: ComponentProps<typeof BundlesTable>['columns'] = ['bundle'];
 
     switch (mode) {
@@ -70,18 +70,18 @@ const calcColumns = createSelector([getTabletBundlesTableMode], (mode: BundlesTa
 
 const mapStateToProps = (state: RootState) => {
     return {
-        loading: getTabletsIsLoading(state),
-        loaded: getTabletsIsLoaded(state),
-        data: getTabletsBundlesSorted(state),
-        total: getTabletsBundlesTotal(state),
-        sortState: getTabletsBundlesSortState(state),
+        loading: selectTabletsIsLoading(state),
+        loaded: selectTabletsIsLoaded(state),
+        data: selectTabletsBundlesSorted(state),
+        total: selectTabletsBundlesTotal(state),
+        sortState: selectTabletsBundlesSortState(state),
         cluster: selectCluster(state),
         allowPerBundleAccounting: selectClusterUiConfigEnablePerBundleTabletAccounting(state),
         pathPrefix: '//sys/tablet_cell_bundles/',
         columns: calcColumns(state),
         activeBundleLink: tabletActiveBundleLink,
         bundleDashboardUrl: tabletCellBundleDashboardUrl,
-        writeableByName: getTabletBundlesWriteableByName(state),
+        writeableByName: selectTabletBundlesWriteableByName(state),
     };
 };
 

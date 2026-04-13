@@ -2,14 +2,14 @@ import React from 'react';
 import {useSelector} from '../../../store/redux-hooks';
 
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
-import {getTabletsActiveBundle} from '../../../store/selectors/tablet_cell_bundles';
+import {selectTabletsActiveBundle} from '../../../store/selectors/tablet_cell_bundles';
 import {selectCluster, selectTheme} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
 import {NoContent} from '../../../components/NoContent';
 
 function BundleStatisticsTab() {
     const cluster = useSelector(selectCluster);
-    const bundle = useSelector(getTabletsActiveBundle);
+    const bundle = useSelector(selectTabletsActiveBundle);
     const theme = useSelector(selectTheme);
 
     if (!bundle) {

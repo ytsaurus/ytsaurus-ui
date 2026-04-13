@@ -25,8 +25,8 @@ import {makeBatchSubRequest, prepareSetCommandForBatch} from '../../../utils/cyp
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {
-    getTabletsBundles,
-    getTabletsDefaultMemoryConfiguration,
+    selectTabletsBundles,
+    selectTabletsDefaultMemoryConfiguration,
 } from '../../../store/selectors/tablet_cell_bundles';
 import {OrchidBundlesData} from '../../../store/reducers/tablet_cell_bundles';
 import {BatchResults, BatchSubRequest} from '../../../../shared/yt-types';
@@ -43,12 +43,12 @@ export function fetchTabletCellBundleEditor(bundleName: string): TabletCellBundl
         const state = getState();
         dispatch({type: TABLETS_BUNDLES_EDITOR_LOAD_REQUREST, data: {bundleName}});
 
-        const bundles = getTabletsBundles(state);
+        const bundles = selectTabletsBundles(state);
         const toEdit = bundles.find(({bundle}) => bundle === bundleName);
         if (!toEdit) {
             return Promise.resolve();
         }
-        const defaultReservedMemoryLimit = getTabletsDefaultMemoryConfiguration(state);
+        const defaultReservedMemoryLimit = selectTabletsDefaultMemoryConfiguration(state);
 
         const requests: Array<BatchSubRequest> = [
             {

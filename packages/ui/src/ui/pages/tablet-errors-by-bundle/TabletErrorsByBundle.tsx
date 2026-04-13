@@ -13,14 +13,14 @@ import {Column} from '@ytsaurus/components';
 import {DataTableYT} from '../../components/DataTableYT';
 import {YTErrorBlock} from '../../components/Error/Error';
 import {
-    getTabletErrorsByBundleData,
-    getTabletErrorsByBundleError,
-    getTabletErrorsByBundleLoaded,
-    getTabletErrorsByBundleLoading,
-    getTabletErrorsByBundleMethodsFilter,
-    getTabletErrorsByBundlePageCount,
-    getTabletErrorsByBundlePageFilter,
-    getTabletErrorsByBundleTimeRangeFilter,
+    selectTabletErrorsByBundleData,
+    selectTabletErrorsByBundleError,
+    selectTabletErrorsByBundleLoaded,
+    selectTabletErrorsByBundleLoading,
+    selectTabletErrorsByBundleMethodsFilter,
+    selectTabletErrorsByBundlePageCount,
+    selectTabletErrorsByBundlePageFilter,
+    selectTabletErrorsByBundleTimeRangeFilter,
 } from '../../store/selectors/tablet-errors/tablet-errors-by-bundle';
 
 import Link from '../../components/Link/Link';
@@ -33,9 +33,9 @@ import {TabletErrorsByBundleToolbar} from './TabletErrorsByBundleToolbar';
 const block = cn('yt-tablet-errors-by-bunlde');
 
 export function TabletErrorsByBundle({bundle}: {bundle: string}) {
-    const loaded = useSelector(getTabletErrorsByBundleLoaded);
-    const loading = useSelector(getTabletErrorsByBundleLoading);
-    const error = useSelector(getTabletErrorsByBundleError);
+    const loaded = useSelector(selectTabletErrorsByBundleLoaded);
+    const loading = useSelector(selectTabletErrorsByBundleLoading);
+    const error = useSelector(selectTabletErrorsByBundleError);
 
     const {data, columns} = useTabletErrorsColumns(loading);
 
@@ -68,11 +68,11 @@ function useTabletErrorsColumns(loading: boolean) {
         errors: data = [],
         presented_methods = [],
         all_methods = [],
-    } = useSelector(getTabletErrorsByBundleData) ?? {};
-    const pageFilter = useSelector(getTabletErrorsByBundlePageFilter);
-    const teMethods = useSelector(getTabletErrorsByBundleMethodsFilter);
-    const teTime = useSelector(getTabletErrorsByBundleTimeRangeFilter);
-    const pageCount = useSelector(getTabletErrorsByBundlePageCount);
+    } = useSelector(selectTabletErrorsByBundleData) ?? {};
+    const pageFilter = useSelector(selectTabletErrorsByBundlePageFilter);
+    const teMethods = useSelector(selectTabletErrorsByBundleMethodsFilter);
+    const teTime = useSelector(selectTabletErrorsByBundleTimeRangeFilter);
+    const pageCount = useSelector(selectTabletErrorsByBundlePageCount);
 
     const columns = React.useMemo(() => {
         const res: Array<Column<TableMethodErrorsCount>> = [
