@@ -78,10 +78,10 @@ export class MetaTable extends Component<MetaTableProps> {
         const {value, key, helpUrl, tooltip, className, qa} = item;
 
         const questionIcon = (
-            <React.Fragment>
+            <Fragment>
                 {' '}
                 <Icon className={itemBlock('help-icon')} data={CircleQuestionIcon} size={14} />
-            </React.Fragment>
+            </Fragment>
         );
         return (
             <Tooltip
