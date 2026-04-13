@@ -1,6 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react';
 
-import {YtComponentsConfigProvider} from '../../context';
 import {YSON_DEFAULT_UNIPIKA_SETTINGS} from '../../internal/Yson';
 import {NavigationTable} from './NavigationTable';
 import {
@@ -8,7 +7,6 @@ import {
     navigationTableSampleTable,
     navigationTableStoryEmptyMessage,
     navigationTableStoryFrameStyle,
-    navigationTableStoryUnipikaForProvider,
     navigationTableVisualCaseOrder,
 } from './navigationTableStorySetup';
 
@@ -18,7 +16,6 @@ type DemoArgs = {
 
 const meta: Meta<DemoArgs> = {
     title: 'Modules/NavigationTable',
-    component: NavigationTable,
     tags: ['autodocs'],
     args: {
         state: 'withData',
@@ -35,18 +32,14 @@ const meta: Meta<DemoArgs> = {
         layout: 'padded',
     },
     render: ({state}: DemoArgs) => (
-        <YtComponentsConfigProvider
-            logError={() => undefined}
-            unipika={navigationTableStoryUnipikaForProvider}
-        >
-            <div style={navigationTableStoryFrameStyle}>
-                <NavigationTable
-                    table={state === 'empty' ? null : navigationTableSampleTable}
-                    emptyMessage={navigationTableStoryEmptyMessage}
-                    ysonSettings={YSON_DEFAULT_UNIPIKA_SETTINGS}
-                />
-            </div>
-        </YtComponentsConfigProvider>
+        <div style={navigationTableStoryFrameStyle}>
+            <NavigationTable
+                table={state === 'empty' ? null : navigationTableSampleTable}
+                emptyMessage={navigationTableStoryEmptyMessage}
+                ysonSettings={YSON_DEFAULT_UNIPIKA_SETTINGS}
+                logError={() => undefined}
+            />
+        </div>
     ),
 };
 

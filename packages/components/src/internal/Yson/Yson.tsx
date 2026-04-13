@@ -2,16 +2,18 @@ import React, {Component} from 'react';
 import block from 'bem-cn-lite';
 import isEqual_ from 'lodash/isEqual';
 import unipika from '../../utils/unipika';
-import {ConfigurableErrorBoundary, useUnipikaSettings} from '../../context';
 import {UnipikaSettings, UnipikaValue} from './StructuredYson/StructuredYsonTypes';
+import type {ErrorBoundaryProps} from '../DefaultErrorBoundary';
+import DefaultErrorBoundary from '../DefaultErrorBoundary/ErrorBoundary';
 
 export interface YsonProps {
-    settings?: UnipikaSettings;
+    settings: UnipikaSettings;
     value: any;
     inline?: boolean;
     folding?: boolean;
     children?: React.ReactNode;
     className?: string;
+    ErrorBoundaryComponent?: React.ComponentType<ErrorBoundaryProps>;
 }
 
 interface State {
@@ -31,16 +33,15 @@ export const YSON_DEFAULT_UNIPIKA_SETTINGS: UnipikaSettings = {
     binaryAsHex: true,
 };
 
-class YsonImpl extends Component<YsonProps, State> {
+export class Yson extends Component<YsonProps, State> {
     static defaultProps = {
         inline: false,
         folding: false,
-        settings: YSON_DEFAULT_UNIPIKA_SETTINGS,
     };
 
     static getDerivedStateFromProps(props: YsonProps, state: State) {
         const {value: prevValue, settings: prevSettings} = state;
-        const {value, settings = {}} = props;
+        const {value, settings} = props;
 
         if (
             prevValue === INITIAL ||
@@ -60,7 +61,7 @@ class YsonImpl extends Component<YsonProps, State> {
                 convertedValue:
                     value === undefined
                         ? ''
-                        : settings!.format === 'raw-json'
+                        : settings.format === 'raw-json'
                           ? unipika.converters.raw(value, settings)
                           : unipika.converters.yson(value, settings),
                 value: value,
@@ -94,7 +95,9 @@ class YsonImpl extends Component<YsonProps, State> {
     }
 
     render() {
-        const {inline, children, className} = this.props;
+        const {inline, children, className, ErrorBoundaryComponent} = this.props;
+        const ConfigurableErrorBoundary = ErrorBoundaryComponent || DefaultErrorBoundary;
+
         const {settings} = this.state;
 
         const classes = block('unipika-wrapper')(
@@ -106,7 +109,7 @@ class YsonImpl extends Component<YsonProps, State> {
 
         return (
             <ConfigurableErrorBoundary>
-                {settings!.asHTML ? (
+                {settings.asHTML ? (
                     <div className={classes} title={this.getFormattedTitle()} dir="auto">
                         <pre
                             className="unipika"
@@ -131,10 +134,4 @@ class YsonImpl extends Component<YsonProps, State> {
             </ConfigurableErrorBoundary>
         );
     }
-}
-
-export function Yson(props: YsonProps) {
-    const fromContext = useUnipikaSettings();
-    const settings = props.settings || fromContext;
-    return <YsonImpl {...props} settings={settings} />;
 }

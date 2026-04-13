@@ -7,16 +7,18 @@ import {Eye} from '@gravity-ui/icons';
 import unipika from '../../utils/unipika';
 import {ClipboardButton} from '../ClipboardButton';
 import {YqlValue} from '../YqlValue';
-import {Yson} from '../../internal/Yson';
+import {YSON_DEFAULT_UNIPIKA_SETTINGS, Yson} from '../../internal/Yson';
 import {Label} from '../Label';
 import {type TypeArray} from '../SchemaDataType/dataTypes';
 import {Tooltip} from '../Tooltip';
 import {UnipikaSettings} from '../../internal/Yson/StructuredYson/StructuredYsonTypes';
-import {type LogErrorFn, useUnipikaSettings, useYtComponentsConfig} from '../../context';
 
 import i18n from './i18n';
 
 import './ColumnCell.scss';
+import {LogErrorFn} from '../../types';
+import type {ErrorBoundaryProps} from '../../internal/DefaultErrorBoundary';
+import DefaultErrorBoundary from '../../internal/DefaultErrorBoundary/ErrorBoundary';
 
 const block = cn('yt-column-cell');
 
@@ -27,9 +29,10 @@ function unquote(v: string) {
 
 type CellValueType =
     | null
+    | number
+    | unknown[]
     | (CellValueData & {
           $incomplete?: boolean;
-          [k: number]: {inc?: boolean};
       });
 
 type CellValueData = {$type: string; $value: string} | {$type?: undefined; $value: unknown};
@@ -45,6 +48,8 @@ type ColumnCellProps = {
     columnName: string;
     onShowPreview: (columnName: string, rowIndex: number, tag?: string) => void | Promise<void>;
     useYqlTypes?: boolean;
+    logError?: LogErrorFn;
+    ErrorBoundaryComponent?: React.ComponentType<ErrorBoundaryProps>;
 };
 
 export function ColumnCell({
@@ -57,28 +62,39 @@ export function ColumnCell({
     columnName,
     onShowPreview,
     useYqlTypes,
+    logError,
+    ErrorBoundaryComponent = DefaultErrorBoundary,
 }: ColumnCellProps) {
-    const {logError} = useYtComponentsConfig();
-    const contextUnipika = useUnipikaSettings();
-    const effectiveYsonSettings = ysonSettings || contextUnipika;
+    const logger = logError ?? console.log;
     const [hovered, setHovered] = useState(false);
     const handleMouseEnter = () => setHovered(true);
     const handleMouseLeave = () => setHovered(false);
 
-    const formatType = yqlTypes && value ? yqlTypes[Number(value[1])] : undefined;
+    const formatType =
+        yqlTypes && value && Array.isArray(value) ? yqlTypes[Number(value[1])] : undefined;
+    const cellUnipikaSettings = ysonSettings ?? YSON_DEFAULT_UNIPIKA_SETTINGS;
 
     const escapedValue =
-        formatType && value
+        formatType && value && Array.isArray(value)
             ? YqlValue.getFormattedValue(value[0], formatType, {
-                  ...effectiveYsonSettings,
+                  ...cellUnipikaSettings,
                   asHTML: false,
               })
-            : unipika.prettyprint(value, {...effectiveYsonSettings, asHTML: false});
+            : unipika.prettyprint(value, {...cellUnipikaSettings, asHTML: false});
     const formattedValue =
-        formatType && value ? (
-            <YqlValue value={value[0]} type={formatType} settings={ysonSettings} />
+        formatType && value && Array.isArray(value) ? (
+            <YqlValue
+                value={value[0]}
+                type={formatType}
+                settings={cellUnipikaSettings}
+                ErrorBoundaryComponent={ErrorBoundaryComponent}
+            />
         ) : (
-            <Yson value={value} settings={ysonSettings} />
+            <Yson
+                value={value}
+                settings={cellUnipikaSettings}
+                ErrorBoundaryComponent={ErrorBoundaryComponent}
+            />
         );
 
     const {tag, isIncompleteTagged, isIncompleteValue} = React.useMemo(() => {
@@ -86,29 +102,39 @@ export function ColumnCell({
         let isIncompleteValue = false;
         let tag: string | undefined;
 
-        if (value && formatType) {
+        if (value && formatType && Array.isArray(value)) {
             const flags: {incomplete: boolean} = {incomplete: false};
 
             const {$tag} = unipika.converters.yql(
                 [value[0], formatType],
-                effectiveYsonSettings,
+                cellUnipikaSettings,
                 flags,
             );
 
             isIncompleteValue = flags.incomplete;
             isIncompleteTagged = flags.incomplete && $tag;
             tag = $tag;
-        } else if (value) {
-            isIncompleteValue = Boolean(value.$incomplete);
+        } else if (value && typeof value === 'object' && !Array.isArray(value)) {
+            isIncompleteValue = Boolean((value as {$incomplete?: boolean}).$incomplete);
         }
 
         return {tag, isIncompleteTagged, isIncompleteValue};
-    }, [value, formatType, effectiveYsonSettings]);
+    }, [value, formatType, cellUnipikaSettings]);
 
-    const valueType = useYqlTypes ? formatType : value?.$type;
-    const rawValue = useYqlTypes ? value?.[0] : value?.$value;
+    const valueType = useYqlTypes
+        ? formatType
+        : value && typeof value === 'object' && !Array.isArray(value)
+          ? (value as {$type?: string}).$type
+          : undefined;
+    const rawValue = useYqlTypes
+        ? Array.isArray(value)
+            ? value[0]
+            : undefined
+        : value && typeof value === 'object' && !Array.isArray(value)
+          ? (value as {$value?: unknown}).$value
+          : undefined;
 
-    const allowRawCopy = typeof rawValue === 'string' && isStringType(valueType, logError);
+    const allowRawCopy = typeof rawValue === 'string' && isStringType(valueType, logger);
     const useRawString = allowRawCopy && allowRawStrings;
     let shiftCopyValue;
     if (allowRawCopy) {
@@ -190,7 +216,7 @@ export function ColumnCell({
     );
 }
 
-function isStringType(type?: string | TypeArray, logError?: LogErrorFn) {
+function isStringType(type: string | TypeArray | undefined, logError: LogErrorFn) {
     if (!type) {
         return false;
     }
@@ -205,7 +231,7 @@ function isStringType(type?: string | TypeArray, logError?: LogErrorFn) {
         const lower = type[1].toLowerCase();
         return lower === 'string' || lower === 'json' || lower === 'utf8';
     } catch (error: any) {
-        logError?.({message: `ColumnCell: unexpected type: '${JSON.stringify(type)}'`}, error);
+        logError({message: `ColumnCell: unexpected type: '${JSON.stringify(type)}'`}, error);
         return false;
     }
 }

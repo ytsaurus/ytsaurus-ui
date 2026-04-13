@@ -1,6 +1,3 @@
-import {type ReactElement} from 'react';
-
-import {YtComponentsConfigProvider} from '../../../context';
 import {YSON_DEFAULT_UNIPIKA_SETTINGS} from '../../../internal/Yson';
 import {test} from '../../../playwright-components/core';
 
@@ -9,31 +6,22 @@ import {
     navigationTableSampleTable,
     navigationTableStoryEmptyMessage,
     navigationTableStoryFrameStyle,
-    navigationTableStoryUnipikaForProvider,
     navigationTableWithDataVisualCases,
 } from '../navigationTableStorySetup';
-
-const navigationTableVisualTree = (node: ReactElement) => (
-    <YtComponentsConfigProvider
-        logError={() => undefined}
-        unipika={navigationTableStoryUnipikaForProvider}
-    >
-        <div style={navigationTableStoryFrameStyle}>{node}</div>
-    </YtComponentsConfigProvider>
-);
 
 test.describe('NavigationTable', () => {
     test.describe.configure({timeout: 60_000});
 
     test('empty', async ({mount, expectScreenshot, page}) => {
         await mount(
-            navigationTableVisualTree(
+            <div style={navigationTableStoryFrameStyle}>
                 <NavigationTable
                     table={null}
                     emptyMessage={navigationTableStoryEmptyMessage}
                     ysonSettings={YSON_DEFAULT_UNIPIKA_SETTINGS}
-                />,
-            ),
+                    logError={() => undefined}
+                />
+            </div>,
             {
                 width: 720,
                 rootStyle: {minHeight: 320},
@@ -46,14 +34,14 @@ test.describe('NavigationTable', () => {
     for (const {testTitle, initialActiveTab} of navigationTableWithDataVisualCases) {
         test(testTitle, async ({mount, expectScreenshot, page}) => {
             await mount(
-                navigationTableVisualTree(
+                <div style={navigationTableStoryFrameStyle}>
                     <NavigationTable
                         table={navigationTableSampleTable}
                         emptyMessage={navigationTableStoryEmptyMessage}
                         ysonSettings={YSON_DEFAULT_UNIPIKA_SETTINGS}
                         initialActiveTab={initialActiveTab}
-                    />,
-                ),
+                    />
+                </div>,
                 {
                     width: 720,
                     rootStyle: {minHeight: 320},
