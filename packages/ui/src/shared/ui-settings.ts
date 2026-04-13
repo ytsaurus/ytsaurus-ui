@@ -13,9 +13,9 @@ export interface UISettings {
     docsBaseUrl?: string;
     jupyterBasePath?: string;
 
-    newTableReplicasCount: number;
+    newTableReplicasCount?: number;
 
-    uploadTableMaxSize: number;
+    uploadTableMaxSize?: number;
     uploadTableUseLocalmode?: boolean;
 
     uploadTableExcelBaseUrl?: string;
@@ -163,7 +163,7 @@ export interface UISettings {
      *   "https:\\/\\/image\\.bank\\.my\\/vegetables\\/"
      * ]
      */
-    reUnipikaAllowTaggedSources: Array<string>;
+    reUnipikaAllowTaggedSources?: Array<string>;
 
     /**
      * Allows to define service for removing 'Referer' header for url-s on a page.

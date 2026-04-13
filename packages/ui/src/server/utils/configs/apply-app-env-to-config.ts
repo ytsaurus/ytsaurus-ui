@@ -3,8 +3,9 @@ import {AppConfig, YTCoreConfig} from '../../../@types/core';
 import {applyMissingFields} from './apply-missing-fields';
 
 function applyEnvToUISettings(config: Partial<YTCoreConfig>) {
+    const {uiSettings = {}} = config;
     if (!config.uiSettings) {
-        Object.assign(config, {uiSettings: {}});
+        Object.assign(config, {uiSettings});
     }
 
     const tmp: Partial<(typeof config)['uiSettings']> = {
@@ -15,7 +16,7 @@ function applyEnvToUISettings(config: Partial<YTCoreConfig>) {
         docsBaseUrl: process.env.YT_DOCS_BASE_URL || 'https://ytsaurus.tech/docs/en',
     };
 
-    applyMissingFields(config.uiSettings, tmp);
+    applyMissingFields(uiSettings, tmp);
 }
 
 function applyEnvToConfig(config: Partial<YTCoreConfig>) {

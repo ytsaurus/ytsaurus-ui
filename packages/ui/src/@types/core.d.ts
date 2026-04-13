@@ -6,7 +6,7 @@ import type {NodeKit} from '@gravity-ui/nodekit';
 
 import {ClusterConfig} from '../shared/yt-types';
 
-import {UISettings} from '../../shared/ui-settings';
+import {UISettings} from '../shared/ui-settings';
 import {DescribedSettings} from '../shared/constants/settings-types';
 
 export interface YTCoreConfig {
