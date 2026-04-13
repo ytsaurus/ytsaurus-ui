@@ -7,11 +7,11 @@ import {
     setBunndleAttributes,
 } from '../../../../store/actions/chaos_cell_bundles/tablet-cell-bundle-editor';
 import type {RootState} from '../../../../store/reducers';
-import {getChaosCellBundleEditorData} from '../../../../store/selectors/chaos_cell_bundles/tablet-cell-bundle-editor';
+import {selectChaosCellBundleEditorData} from '../../../../store/selectors/chaos_cell_bundles/tablet-cell-bundle-editor';
 
 const mapStateToProps = (state: RootState) => {
     return {
-        bundleEditorData: getChaosCellBundleEditorData(state),
+        bundleEditorData: selectChaosCellBundleEditorData(state),
     };
 };
 

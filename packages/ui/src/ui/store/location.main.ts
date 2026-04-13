@@ -83,8 +83,8 @@ import {
     chaosAllBundlesParams,
     chaosBundlesParams,
     chaosCellsParams,
-    getChaosBundlesPreparedState,
-    getChaosCellsPreparedState,
+    selectChaosBundlesPreparedState,
+    selectChaosCellsPreparedState,
 } from './reducers/chaos_cell_bundles/url-mapping';
 import {draftQueryParameters, getDraftQueryParameters} from './reducers/query-tracker/url_mapping';
 
@@ -184,10 +184,10 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
 
     [
         `/*/${Page.CHAOS_CELL_BUNDLES}/${TabletsTab.CHAOS_CELLS}`,
-        [chaosCellsParams, getChaosCellsPreparedState],
+        [chaosCellsParams, selectChaosCellsPreparedState],
     ],
-    [`/*/${Page.CHAOS_CELL_BUNDLES}`, [chaosAllBundlesParams, getChaosBundlesPreparedState]],
-    [`/*/${Page.CHAOS_CELL_BUNDLES}/*`, [chaosBundlesParams, getChaosBundlesPreparedState]],
+    [`/*/${Page.CHAOS_CELL_BUNDLES}`, [chaosAllBundlesParams, selectChaosBundlesPreparedState]],
+    [`/*/${Page.CHAOS_CELL_BUNDLES}/*`, [chaosBundlesParams, selectChaosBundlesPreparedState]],
     [`/*/${Page.QUERIES}/*`, [draftQueryParameters, getDraftQueryParameters]],
 
     [`/*/${Page.FLOWS}/${FlowTab.GRAPH}`, [flowGraphParams]],

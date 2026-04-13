@@ -18,35 +18,36 @@ import {prepareHost} from '../../../utils';
 import {sortArrayBySortState} from '../../../utils/sort-helpers';
 import {sortTableBundles} from '../../../utils/tablet_cell_bundles';
 
-export const getChaosIsLoaded = (state: RootState) => state.chaos_cell_bundles.loaded;
-export const getChaosIsLoading = (state: RootState) => state.chaos_cell_bundles.loading;
-export const getChaosError = (state: RootState) => state.chaos_cell_bundles.error;
+export const selectChaosIsLoaded = (state: RootState) => state.chaos_cell_bundles.loaded;
+export const selectChaosIsLoading = (state: RootState) => state.chaos_cell_bundles.loading;
+export const selectChaosError = (state: RootState) => state.chaos_cell_bundles.error;
 
-export const getChaosBundlesSortState = (state: RootState) => state.chaos_cell_bundles.bundlesSort;
+export const selectChaosBundlesSortState = (state: RootState) =>
+    state.chaos_cell_bundles.bundlesSort;
 
-export const getChaosBundlesNameFilter = (state: RootState) =>
+export const selectChaosBundlesNameFilter = (state: RootState) =>
     state.chaos_cell_bundles.bundlesNameFilter;
-export const getChaosBundlesAccountFilter = (state: RootState) =>
+export const selectChaosBundlesAccountFilter = (state: RootState) =>
     state.chaos_cell_bundles.bundlesAccountFilter;
-export const getChaosBundlesTagNodeFilter = (state: RootState) =>
+export const selectChaosBundlesTagNodeFilter = (state: RootState) =>
     state.chaos_cell_bundles.bundlesTagNodeFilter;
 
-export const getChaosBundles = (state: RootState) => state.chaos_cell_bundles.bundles;
+export const selectChaosBundles = (state: RootState) => state.chaos_cell_bundles.bundles;
 
-export const getChaosActiveBundle = (state: RootState) => state.chaos_cell_bundles.activeBundle;
+export const selectChaosActiveBundle = (state: RootState) => state.chaos_cell_bundles.activeBundle;
 
-export const getChaosBundlesTableMode = (state: RootState) =>
+export const selectChaosBundlesTableMode = (state: RootState) =>
     state.chaos_cell_bundles.bundlesTableMode;
 
-export const getChaosActiveBundleData = createSelector(
-    [getChaosBundles, getChaosActiveBundle],
+export const selectChaosActiveBundleData = createSelector(
+    [selectChaosBundles, selectChaosActiveBundle],
     (bundles, activeBundle) => {
         return find_(bundles, (item) => item.bundle === activeBundle);
     },
 );
 
-export const getChaosBundlesTotal = createSelector(
-    [getChaosBundles],
+export const selectChaosBundlesTotal = createSelector(
+    [selectChaosBundles],
     (bundles): ChaosBundle => aggregateTotal(bundles),
 );
 
@@ -69,12 +70,12 @@ const COLUMNS_SORTABLE_AS_IS = new Set<keyof ChaosBundle>([
     'tablet_static_memory_percentage',
 ]);
 
-export const getChaosBundlesFiltered = createSelector(
+export const selectChaosBundlesFiltered = createSelector(
     [
-        getChaosBundles,
-        getChaosBundlesNameFilter,
-        getChaosBundlesAccountFilter,
-        getChaosBundlesTagNodeFilter,
+        selectChaosBundles,
+        selectChaosBundlesNameFilter,
+        selectChaosBundlesAccountFilter,
+        selectChaosBundlesTagNodeFilter,
     ],
     (bundles, nameFilter, accountFilter, tagNodeFilter) => {
         const predicates: Array<(item: ChaosBundle) => boolean> = [];
@@ -113,8 +114,8 @@ export const getChaosBundlesFiltered = createSelector(
     },
 );
 
-export const getChaosBundlesSorted = createSelector(
-    [getChaosBundlesFiltered, getChaosBundlesSortState],
+export const selectChaosBundlesSorted = createSelector(
+    [selectChaosBundlesFiltered, selectChaosBundlesSortState],
     (bundles, {column, order}) => {
         if (!column || !order) {
             return bundles;
@@ -124,17 +125,18 @@ export const getChaosBundlesSorted = createSelector(
     },
 );
 
-export const getChaosCells = (state: RootState) => state.chaos_cell_bundles.cells;
-export const getChaosCellsSortState = (state: RootState) => state.chaos_cell_bundles.cellsSort;
+export const selectChaosCells = (state: RootState) => state.chaos_cell_bundles.cells;
+export const selectChaosCellsSortState = (state: RootState) => state.chaos_cell_bundles.cellsSort;
 
-export const getChaosCellsIdFilter = (state: RootState) => state.chaos_cell_bundles.cellsIdFilter;
-export const getChaosCellsBundleFilter = (state: RootState) =>
+export const selectChaosCellsIdFilter = (state: RootState) =>
+    state.chaos_cell_bundles.cellsIdFilter;
+export const selectChaosCellsBundleFilter = (state: RootState) =>
     state.chaos_cell_bundles.cellsBundleFilter;
-export const getChaosCellsHostFilter = (state: RootState) =>
+export const selectChaosCellsHostFilter = (state: RootState) =>
     state.chaos_cell_bundles.cellsHostFilter;
 
-export const getChaosCellsOfActiveAccount = createSelector(
-    [getChaosCells, getChaosActiveBundle],
+export const selectChaosCellsOfActiveAccount = createSelector(
+    [selectChaosCells, selectChaosActiveBundle],
     (cells, activeBundle) => {
         if (!activeBundle) {
             return cells;
@@ -146,13 +148,13 @@ export const getChaosCellsOfActiveAccount = createSelector(
     },
 );
 
-export const getChaosCellsFiltered = createSelector(
+export const selectChaosCellsFiltered = createSelector(
     [
-        getChaosCellsOfActiveAccount,
-        getChaosCellsIdFilter,
-        getChaosCellsBundleFilter,
-        getChaosCellsHostFilter,
-        getChaosActiveBundle,
+        selectChaosCellsOfActiveAccount,
+        selectChaosCellsIdFilter,
+        selectChaosCellsBundleFilter,
+        selectChaosCellsHostFilter,
+        selectChaosActiveBundle,
     ],
     (cells, idFilter, bundleFilter, hostFilter) => {
         const predicates: Array<(item: ChaosCell) => boolean> = [];
@@ -185,23 +187,23 @@ export function filterChaosCellsByBundle(bundle: string, cells: Array<ChaosCell>
     return filter_(cells, (item) => item.bundle === bundle);
 }
 
-export const getChaosCellsSorted = createSelector(
-    [getChaosCellsFiltered, getChaosCellsSortState],
+export const selectChaosCellsSorted = createSelector(
+    [selectChaosCellsFiltered, selectChaosCellsSortState],
     (cells, sortState) => {
         return sortArrayBySortState(cells, sortState);
     },
 );
 
-export const getChaosCellsBundles = createSelector([getChaosCells], (cells) => {
+export const selectChaosCellsBundles = createSelector([selectChaosCells], (cells) => {
     return uniq_(map_(cells, 'bundle')).sort();
 });
 
-export const getChaosCellsHosts = createSelector([getChaosCellsOfActiveAccount], (cells) => {
+export const selectChaosCellsHosts = createSelector([selectChaosCellsOfActiveAccount], (cells) => {
     return uniq_(map_(cells, 'peerAddress')).sort();
 });
 
-export const getChaosCellsHostsOfActiveBundle = createSelector(
-    [getChaosActiveBundle, getChaosCellsFiltered],
+export const selectChaosCellsHostsOfActiveBundle = createSelector(
+    [selectChaosActiveBundle, selectChaosCellsFiltered],
     (activeBundle: string, cells: Array<ChaosCell>) => {
         if (!activeBundle) {
             return '';
@@ -222,8 +224,8 @@ export interface ChaosCellBundlesBreadcrumbsItem {
     title?: string;
 }
 
-export const getChaosBreadcrumbItems = createSelector(
-    [selectCluster, getChaosActiveBundle],
+export const selectChaosBreadcrumbItems = createSelector(
+    [selectCluster, selectChaosActiveBundle],
     (cluster, activeBundle): Array<ChaosCellBundlesBreadcrumbsItem> => {
         const res: Array<ChaosCellBundlesBreadcrumbsItem> = [
             {

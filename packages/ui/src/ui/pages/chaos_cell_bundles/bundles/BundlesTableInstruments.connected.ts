@@ -11,20 +11,20 @@ import {
 import type {RootState} from '../../../store/reducers';
 import type {BundlesTableMode} from '../../../store/reducers/chaos_cell_bundles';
 import {
-    getChaosBundlesAccountFilter,
-    getChaosBundlesNameFilter,
-    getChaosBundlesTableMode,
-    getChaosBundlesTagNodeFilter,
+    selectChaosBundlesAccountFilter,
+    selectChaosBundlesNameFilter,
+    selectChaosBundlesTableMode,
+    selectChaosBundlesTagNodeFilter ,
 } from '../../../store/selectors/chaos_cell_bundles';
 
 const modes: Array<BundlesTableMode> = ['default'];
 
 const mapStateToProps = (state: RootState) => {
     return {
-        accountFilter: getChaosBundlesAccountFilter(state),
-        bundlesTableMode: getChaosBundlesTableMode(state),
-        nameFilter: getChaosBundlesNameFilter(state),
-        tagNodeFilter: getChaosBundlesTagNodeFilter(state),
+        accountFilter: selectChaosBundlesAccountFilter(state),
+        bundlesTableMode: selectChaosBundlesTableMode(state),
+        nameFilter: selectChaosBundlesNameFilter(state),
+        tagNodeFilter: selectChaosBundlesTagNodeFilter (state),
         modes,
     };
 };

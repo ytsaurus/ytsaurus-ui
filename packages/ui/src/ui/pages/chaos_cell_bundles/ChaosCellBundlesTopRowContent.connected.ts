@@ -5,9 +5,9 @@ import TabletCellBundlesTopRowContent from '../../pages/tablet_cell_bundles/Tabl
 import {setChaosActiveBundle} from '../../store/actions/chaos_cell_bundles';
 import type {RootState} from '../../store/reducers';
 import {
-    getChaosActiveBundle,
-    getChaosActiveBundleData,
-    getChaosBreadcrumbItems,
+    selectChaosActiveBundle,
+    selectChaosActiveBundleData,
+    selectChaosBreadcrumbItems,
 } from '../../store/selectors/chaos_cell_bundles';
 import {
     getFavouriteChaosBundles,
@@ -16,9 +16,9 @@ import {
 
 const mapStateToProps = (state: RootState) => {
     return {
-        activeBundle: getChaosActiveBundle(state),
-        activeBundleData: getChaosActiveBundleData(state),
-        bcItems: getChaosBreadcrumbItems(state),
+        activeBundle: selectChaosActiveBundle(state),
+        activeBundleData: selectChaosActiveBundleData(state),
+        bcItems: selectChaosBreadcrumbItems(state),
         page: Page.CHAOS_CELL_BUNDLES,
         favourites: getFavouriteChaosBundles(state),
         isActiveBundleInFavourites: isActiveChaosBundleInFavourites(state),
