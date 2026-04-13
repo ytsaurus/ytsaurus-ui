@@ -23,48 +23,49 @@ import {sortArrayBySortState} from '../../../utils/sort-helpers';
 import {sortTableBundles} from '../../../utils/tablet_cell_bundles';
 import {makeComponentsNodesUrl, makeProxyUrl} from '../../../utils/app-url';
 import {
-    getTabletCellBundleControllerInstanceDetailsMap,
-    getTabletCellBundleEditorState,
+    selectTabletCellBundleControllerInstanceDetailsMap,
+    selectTabletCellBundleEditorState,
 } from './tablet-cell-bundle-editor';
 import {BundleControllerInstanceDetails} from '../../../store/reducers/tablet_cell_bundles/tablet-cell-bundle-editor';
 import UIFactory from '../../../UIFactory';
 
-export const getTabletsIsLoaded = (state: RootState) => state.tablet_cell_bundles.loaded;
-export const getTabletsIsLoading = (state: RootState) => state.tablet_cell_bundles.loading;
-export const getTabletsError = (state: RootState) => state.tablet_cell_bundles.error;
+export const selectTabletsIsLoaded = (state: RootState) => state.tablet_cell_bundles.loaded;
+export const selectTabletsIsLoading = (state: RootState) => state.tablet_cell_bundles.loading;
+export const selectTabletsError = (state: RootState) => state.tablet_cell_bundles.error;
 
-export const getTabletsBundlesSortState = (state: RootState) =>
+export const selectTabletsBundlesSortState = (state: RootState) =>
     state.tablet_cell_bundles.bundlesSort;
 
-export const getTabletsBundlesNameFilter = (state: RootState) =>
+export const selectTabletsBundlesNameFilter = (state: RootState) =>
     state.tablet_cell_bundles.bundlesNameFilter;
-export const getTabletsBundlesAccountFilter = (state: RootState) =>
+export const selectTabletsBundlesAccountFilter = (state: RootState) =>
     state.tablet_cell_bundles.bundlesAccountFilter;
-export const getTabletsBundlesTagNodeFilter = (state: RootState) =>
+export const selectTabletsBundlesTagNodeFilter = (state: RootState) =>
     state.tablet_cell_bundles.bundlesTagNodeFilter;
 
-export const getTabletsBundles = (state: RootState) => state.tablet_cell_bundles.bundles;
+export const selectTabletsBundles = (state: RootState) => state.tablet_cell_bundles.bundles;
 
-export const getTabletsActiveBundle = (state: RootState) => state.tablet_cell_bundles.activeBundle;
+export const selectTabletsActiveBundle = (state: RootState) =>
+    state.tablet_cell_bundles.activeBundle;
 
-export const getBundleDefaultConfig = (state: RootState) =>
+export const selectBundleDefaultConfig = (state: RootState) =>
     state.tablet_cell_bundles.bundleDefaultConfig;
 
-export const getTabletBundlesTableMode = (state: RootState) =>
+export const selectTabletBundlesTableMode = (state: RootState) =>
     state.tablet_cell_bundles.bundlesTableMode;
 
-export const getTabletBundlesWriteableByName = (state: RootState) =>
+export const selectTabletBundlesWriteableByName = (state: RootState) =>
     state.tablet_cell_bundles.writableByName;
 
-export const getTabletsActiveBundleData = createSelector(
-    [getTabletsBundles, getTabletsActiveBundle],
+export const selectTabletsActiveBundleData = createSelector(
+    [selectTabletsBundles, selectTabletsActiveBundle],
     (bundles, activeBundle) => {
         return find_(bundles, (item) => item.bundle === activeBundle);
     },
 );
 
-export const getTabletsDefaultMemoryConfiguration = createSelector(
-    [getBundleDefaultConfig, getTabletCellBundleEditorState],
+export const selectTabletsDefaultMemoryConfiguration = createSelector(
+    [selectBundleDefaultConfig, selectTabletCellBundleEditorState],
     (config, editorState) => {
         if (!config) return 0;
         const nodeSizes = config.zone_default.tablet_node_sizes;
@@ -114,8 +115,8 @@ function prepareBundleInstances(
     ];
 }
 
-export const getActiveBundleControllerData = createSelector(
-    [getTabletsActiveBundle, getTabletCellBundleEditorState],
+export const selectActiveBundleControllerData = createSelector(
+    [selectTabletsActiveBundle, selectTabletCellBundleEditorState],
     (activeBundle, {bundleData, bundleControllerData}) => {
         if (activeBundle !== bundleData?.bundle) {
             return undefined;
@@ -125,8 +126,12 @@ export const getActiveBundleControllerData = createSelector(
     },
 );
 
-export const getActiveBundleInstances = createSelector(
-    [getActiveBundleControllerData, selectCluster, getTabletCellBundleControllerInstanceDetailsMap],
+export const selectActiveBundleInstances = createSelector(
+    [
+        selectActiveBundleControllerData,
+        selectCluster,
+        selectTabletCellBundleControllerInstanceDetailsMap,
+    ],
     (bundleControllerData, cluster, instanceDetailsMap) => {
         if (!bundleControllerData) {
             return [];
@@ -142,8 +147,12 @@ export const getActiveBundleInstances = createSelector(
     },
 );
 
-export const getActiveBundleProxies = createSelector(
-    [getActiveBundleControllerData, selectCluster, getTabletCellBundleControllerInstanceDetailsMap],
+export const selectActiveBundleProxies = createSelector(
+    [
+        selectActiveBundleControllerData,
+        selectCluster,
+        selectTabletCellBundleControllerInstanceDetailsMap,
+    ],
     (bundleControllerData, cluster, instanceDetailsMap) => {
         if (!bundleControllerData) {
             return [];
@@ -159,8 +168,8 @@ export const getActiveBundleProxies = createSelector(
     },
 );
 
-export const getBundleEditorData = createSelector(
-    [getTabletCellBundleEditorState, getBundleDefaultConfig],
+export const selectBundleEditorData = createSelector(
+    [selectTabletCellBundleEditorState, selectBundleDefaultConfig],
     (editorState, defaultConfig) => {
         const {bundleData, data} = editorState;
         const {zone} = bundleData || {};
@@ -172,8 +181,8 @@ export const getBundleEditorData = createSelector(
     },
 );
 
-export const getTabletsBundlesTotal = createSelector(
-    [getTabletsBundles],
+export const selectTabletsBundlesTotal = createSelector(
+    [selectTabletsBundles],
     (bundles): TabletBundle => aggregateTotal(bundles),
 );
 
@@ -197,12 +206,12 @@ const COLUMNS_SORTABLE_AS_IS = new Set<keyof TabletBundle>([
     'tablet_static_memory_percentage',
 ]);
 
-export const getTabletsBundlesFiltered = createSelector(
+export const selectTabletsBundlesFiltered = createSelector(
     [
-        getTabletsBundles,
-        getTabletsBundlesNameFilter,
-        getTabletsBundlesAccountFilter,
-        getTabletsBundlesTagNodeFilter,
+        selectTabletsBundles,
+        selectTabletsBundlesNameFilter,
+        selectTabletsBundlesAccountFilter,
+        selectTabletsBundlesTagNodeFilter,
     ],
     (bundles, nameFilter, accountFilter, tagNodeFilter) => {
         const predicates: Array<(item: TabletBundle) => boolean> = [];
@@ -241,8 +250,8 @@ export const getTabletsBundlesFiltered = createSelector(
     },
 );
 
-export const getTabletsBundlesSorted = createSelector(
-    [getTabletsBundlesFiltered, getTabletsBundlesSortState],
+export const selectTabletsBundlesSorted = createSelector(
+    [selectTabletsBundlesFiltered, selectTabletsBundlesSortState],
     (bundles, sortState) => {
         const {column, order} = sortState || {};
         if (!column || !order) {
@@ -253,18 +262,19 @@ export const getTabletsBundlesSorted = createSelector(
     },
 );
 
-export const getTabletsCells = (state: RootState) => state.tablet_cell_bundles.cells;
-export const getTabletsCellsSortState = (state: RootState) => state.tablet_cell_bundles.cellsSort;
+export const selectTabletsCells = (state: RootState) => state.tablet_cell_bundles.cells;
+export const selectTabletsCellsSortState = (state: RootState) =>
+    state.tablet_cell_bundles.cellsSort;
 
-export const getTabletsCellsIdFilter = (state: RootState) =>
+export const selectTabletsCellsIdFilter = (state: RootState) =>
     state.tablet_cell_bundles.cellsIdFilter;
-export const getTabletsCellsBundleFilter = (state: RootState) =>
+export const selectTabletsCellsBundleFilter = (state: RootState) =>
     state.tablet_cell_bundles.cellsBundleFilter;
-export const getTabletsCellsHostFilter = (state: RootState) =>
+export const selectTabletsCellsHostFilter = (state: RootState) =>
     state.tablet_cell_bundles.cellsHostFilter;
 
-export const getTabletCellsOfActiveAccount = createSelector(
-    [getTabletsCells, getTabletsActiveBundle],
+export const selectTabletCellsOfActiveAccount = createSelector(
+    [selectTabletsCells, selectTabletsActiveBundle],
     (cells, activeBundle) => {
         if (!activeBundle) {
             return cells;
@@ -276,13 +286,13 @@ export const getTabletCellsOfActiveAccount = createSelector(
     },
 );
 
-export const getTabletsCellsFiltered = createSelector(
+export const selectTabletsCellsFiltered = createSelector(
     [
-        getTabletCellsOfActiveAccount,
-        getTabletsCellsIdFilter,
-        getTabletsCellsBundleFilter,
-        getTabletsCellsHostFilter,
-        getTabletsActiveBundle,
+        selectTabletCellsOfActiveAccount,
+        selectTabletsCellsIdFilter,
+        selectTabletsCellsBundleFilter,
+        selectTabletsCellsHostFilter,
+        selectTabletsActiveBundle,
     ],
     (cells, idFilter, bundleFilter, hostFilter) => {
         const predicates: Array<(item: TabletCell) => boolean> = [];
@@ -315,23 +325,26 @@ export function filterTabletCellsByBundle(bundle: string, cells: Array<TabletCel
     return filter_(cells, (item) => item.bundle === bundle);
 }
 
-export const getTabletsCellsSorted = createSelector(
-    [getTabletsCellsFiltered, getTabletsCellsSortState],
+export const selectTabletsCellsSorted = createSelector(
+    [selectTabletsCellsFiltered, selectTabletsCellsSortState],
     (cells, sortState) => {
         return sortArrayBySortState(cells, sortState);
     },
 );
 
-export const getTabletsCellsBundles = createSelector([getTabletsCells], (cells) => {
+export const selectTabletsCellsBundles = createSelector([selectTabletsCells], (cells) => {
     return uniq_(map_(cells, 'bundle')).sort();
 });
 
-export const getTabletsCellsHosts = createSelector([getTabletCellsOfActiveAccount], (cells) => {
-    return uniq_(map_(cells, 'peerAddress')).sort();
-});
+export const selectTabletsCellsHosts = createSelector(
+    [selectTabletCellsOfActiveAccount],
+    (cells) => {
+        return uniq_(map_(cells, 'peerAddress')).sort();
+    },
+);
 
-export const getTabletsCellsHostsOfActiveBundle = createSelector(
-    [getTabletsActiveBundle, getTabletsCellsFiltered],
+export const selectTabletsCellsHostsOfActiveBundle = createSelector(
+    [selectTabletsActiveBundle, selectTabletsCellsFiltered],
     (activeBundle: string, cells: Array<TabletCell>) => {
         if (!activeBundle) {
             return '';
@@ -352,8 +365,8 @@ export interface TabletsCellBundlesBreadcrumbsItem {
     title?: string;
 }
 
-export const getTabletsBreadcrumbItems = createSelector(
-    [selectCluster, getTabletsActiveBundleData],
+export const selectTabletsBreadcrumbItems = createSelector(
+    [selectCluster, selectTabletsActiveBundleData],
     (cluster, activeBundleData): Array<TabletsCellBundlesBreadcrumbsItem> => {
         const res: Array<TabletsCellBundlesBreadcrumbsItem> = [
             {

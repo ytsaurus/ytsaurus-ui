@@ -12,7 +12,7 @@ import {
 import {SettingName} from '../../../shared/constants/settings';
 import {reloadSetting, setSetting} from '../../store/actions/settings';
 import {getActiveAccount} from '../../store/selectors/accounts/accounts';
-import {getTabletsActiveBundle} from '../selectors/tablet_cell_bundles';
+import {selectTabletsActiveBundle} from '../selectors/tablet_cell_bundles';
 
 const LAST_VISITED_BUFFER_SIZE = 15;
 
@@ -38,7 +38,7 @@ export function navigationTrackVisit(path) {
 export function bundlesTrackVisit(bundle) {
     return (dispatch, getState) => {
         const state = getState();
-        const activeBundle = getTabletsActiveBundle(state);
+        const activeBundle = selectTabletsActiveBundle(state);
         if (!bundle || bundle === activeBundle) {
             return;
         }

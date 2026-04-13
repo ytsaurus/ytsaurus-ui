@@ -9,10 +9,10 @@ import {
 import type {RootState} from '../../../store/reducers';
 import {selectCluster} from '../../../store/selectors/global';
 import {
-    getTabletsCellsSortState,
-    getTabletsCellsSorted,
-    getTabletsIsLoaded,
-    getTabletsIsLoading,
+    selectTabletsCellsSortState,
+    selectTabletsCellsSorted,
+    selectTabletsIsLoaded,
+    selectTabletsIsLoading,
 } from '../../../store/selectors/tablet_cell_bundles';
 import {
     tabletActiveBundleLink,
@@ -36,10 +36,10 @@ const columns: ComponentProps<typeof CellsTable>['columns'] = [
 const mapStateToProps = (state: RootState) => {
     return {
         cluster: selectCluster(state),
-        loading: getTabletsIsLoading(state),
-        loaded: getTabletsIsLoaded(state),
-        data: getTabletsCellsSorted(state),
-        sortState: getTabletsCellsSortState(state),
+        loading: selectTabletsIsLoading(state),
+        loaded: selectTabletsIsLoaded(state),
+        data: selectTabletsCellsSorted(state),
+        sortState: selectTabletsCellsSortState(state),
         columns,
         activeBundleLink: tabletActiveBundleLink,
         attributesPath: tabletAttributesPath,

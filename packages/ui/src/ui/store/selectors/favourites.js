@@ -16,7 +16,7 @@ import {SettingName} from '../../../shared/constants/settings';
 import {getActiveAccount} from '../../store/selectors/accounts/accounts';
 import {getPath} from '../../store/selectors/navigation';
 import {getPool, getTree} from '../../store/selectors/scheduling/scheduling';
-import {getTabletsActiveBundle} from './tablet_cell_bundles';
+import {selectTabletsActiveBundle} from './tablet_cell_bundles';
 import {selectChaosActiveBundle} from './chaos_cell_bundles';
 import {selectChytCurrentAlias} from './chyt';
 
@@ -86,7 +86,7 @@ export const getFavouriteBundles = createSelector(
 );
 
 export const isActiveBundleInFavourites = createSelector(
-    [getTabletsActiveBundle, getFavouriteBundles],
+    [selectTabletsActiveBundle, getFavouriteBundles],
     prepareIsInFavourites,
 );
 

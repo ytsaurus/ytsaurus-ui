@@ -1,13 +1,13 @@
 import React from 'react';
 import {useSelector} from '../../../store/redux-hooks';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
-import {getTabletsActiveBundle} from '../../../store/selectors/tablet_cell_bundles';
+import {selectTabletsActiveBundle} from '../../../store/selectors/tablet_cell_bundles';
 import {isPoolAclAllowed} from '../../../store/selectors/scheduling/scheduling';
 import {NoContent} from '../../../components/NoContent';
 import {BundleAcl} from '../../../containers/ACL';
 
 export default function BundleAclTab({className}: {className: string}) {
-    const activeBundle = useSelector(getTabletsActiveBundle);
+    const activeBundle = useSelector(selectTabletsActiveBundle);
     const allowAcl = useSelector(isPoolAclAllowed);
     return (
         <ErrorBoundary>

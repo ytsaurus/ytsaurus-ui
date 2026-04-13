@@ -11,20 +11,20 @@ import {
 import type {RootState} from '../../../store/reducers';
 import type {BundlesTableMode} from '../../../store/reducers/tablet_cell_bundles';
 import {
-    getTabletBundlesTableMode,
-    getTabletsBundlesAccountFilter,
-    getTabletsBundlesNameFilter,
-    getTabletsBundlesTagNodeFilter,
+    selectTabletBundlesTableMode,
+    selectTabletsBundlesAccountFilter,
+    selectTabletsBundlesNameFilter,
+    selectTabletsBundlesTagNodeFilter,
 } from '../../../store/selectors/tablet_cell_bundles';
 
 const modes: Array<BundlesTableMode> = ['default', 'tablets', 'tablets_memory'];
 
 const mapStateToProps = (state: RootState) => {
     return {
-        accountFilter: getTabletsBundlesAccountFilter(state),
-        bundlesTableMode: getTabletBundlesTableMode(state),
-        nameFilter: getTabletsBundlesNameFilter(state),
-        tagNodeFilter: getTabletsBundlesTagNodeFilter(state),
+        accountFilter: selectTabletsBundlesAccountFilter(state),
+        bundlesTableMode: selectTabletBundlesTableMode(state),
+        nameFilter: selectTabletsBundlesNameFilter(state),
+        tagNodeFilter: selectTabletsBundlesTagNodeFilter(state),
         modes,
     };
 };

@@ -12,12 +12,12 @@ import {YTTimeline, calcFromTo} from '../../components/Timeline';
 import TextInputWithDebounce from '../../components/TextInputWithDebounce/TextInputWithDebounce';
 
 import {
-    getTabletErrorsByBundleData,
-    getTabletErrorsByBundleMethodsFilter,
-    getTabletErrorsByBundlePageCount,
-    getTabletErrorsByBundlePageFilter,
-    getTabletErrorsByBundleTablePathFilter,
-    getTabletErrorsByBundleTimeRangeFilter,
+    selectTabletErrorsByBundleData,
+    selectTabletErrorsByBundleMethodsFilter,
+    selectTabletErrorsByBundlePageCount,
+    selectTabletErrorsByBundlePageFilter,
+    selectTabletErrorsByBundleTablePathFilter,
+    selectTabletErrorsByBundleTimeRangeFilter,
 } from '../../store/selectors/tablet-errors/tablet-errors-by-bundle';
 import {
     type TabletErrorsByBundleState,
@@ -39,12 +39,12 @@ export function TabletErrorsByBundleToolbar({
 }) {
     const dispatch = useDispatch();
 
-    const {all_methods = []} = useSelector(getTabletErrorsByBundleData) ?? {};
-    const methodsFilter = useSelector(getTabletErrorsByBundleMethodsFilter);
-    const timeRangeFilter = useSelector(getTabletErrorsByBundleTimeRangeFilter);
-    const pageFilter = useSelector(getTabletErrorsByBundlePageFilter);
-    const tablePathFilter = useSelector(getTabletErrorsByBundleTablePathFilter);
-    const pageCount = useSelector(getTabletErrorsByBundlePageCount);
+    const {all_methods = []} = useSelector(selectTabletErrorsByBundleData) ?? {};
+    const methodsFilter = useSelector(selectTabletErrorsByBundleMethodsFilter);
+    const timeRangeFilter = useSelector(selectTabletErrorsByBundleTimeRangeFilter);
+    const pageFilter = useSelector(selectTabletErrorsByBundlePageFilter);
+    const tablePathFilter = useSelector(selectTabletErrorsByBundleTablePathFilter);
+    const pageCount = useSelector(selectTabletErrorsByBundlePageCount);
 
     const {from, to} = useTabletErrorsLoad(bundle, {
         methodsFilter,

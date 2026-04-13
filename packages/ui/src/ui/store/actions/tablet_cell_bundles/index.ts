@@ -30,8 +30,8 @@ import {SortState} from '../../../types';
 import {bundlesTrackVisit} from '../favourites';
 import {
     filterTabletCellsByBundle,
-    getTabletsBundlesSorted,
-    getTabletsCells,
+    selectTabletsBundlesSorted,
+    selectTabletsCells,
     prepareHostsFromCells,
 } from '../../selectors/tablet_cell_bundles';
 
@@ -259,7 +259,7 @@ export function setTabletsActiveBundle(activeBundle: string): TabletsBundlesThun
 export function setTabletsFirstBundleAsActive(): TabletsBundlesThunkAction {
     return (dispatch, getState) => {
         const state = getState();
-        const bundles = getTabletsBundlesSorted(state);
+        const bundles = selectTabletsBundlesSorted(state);
         const [first] = bundles;
         if (!first) {
             return;
@@ -273,7 +273,7 @@ export function setTabletsFirstBundleAsActive(): TabletsBundlesThunkAction {
 
 export function copyHostListToClipboard(bundle: string): TabletsBundlesThunkAction {
     return (_dispatch, getState) => {
-        const cells = filterTabletCellsByBundle(bundle, getTabletsCells(getState()));
+        const cells = filterTabletCellsByBundle(bundle, selectTabletsCells(getState()));
         const hosts = prepareHostsFromCells(cells);
         copy(hosts || '');
     };

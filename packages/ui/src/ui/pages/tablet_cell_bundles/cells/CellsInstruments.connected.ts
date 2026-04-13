@@ -4,26 +4,26 @@ import CellsTableInstruments from '../../../pages/tablet_cell_bundles/cells/Cell
 import {setTabletsPartial} from '../../../store/actions/tablet_cell_bundles';
 import type {RootState} from '../../../store/reducers';
 import {
-    getTabletsActiveBundle,
-    getTabletsCellsBundleFilter,
-    getTabletsCellsBundles,
-    getTabletsCellsHostFilter,
-    getTabletsCellsHosts,
-    getTabletsCellsHostsOfActiveBundle,
-    getTabletsCellsIdFilter,
+    selectTabletsActiveBundle,
+    selectTabletsCellsBundleFilter,
+    selectTabletsCellsBundles,
+    selectTabletsCellsHostFilter,
+    selectTabletsCellsHosts,
+    selectTabletsCellsHostsOfActiveBundle,
+    selectTabletsCellsIdFilter,
 } from '../../../store/selectors/tablet_cell_bundles';
 
 const mapStateToProps = (state: RootState) => {
     return {
-        activeBundle: getTabletsActiveBundle(state),
-        activeBundleHosts: getTabletsCellsHostsOfActiveBundle(state),
+        activeBundle: selectTabletsActiveBundle(state),
+        activeBundleHosts: selectTabletsCellsHostsOfActiveBundle(state),
 
-        idFilter: getTabletsCellsIdFilter(state),
-        bundleFilter: getTabletsCellsBundleFilter(state),
-        hostFilter: getTabletsCellsHostFilter(state),
+        idFilter: selectTabletsCellsIdFilter(state),
+        bundleFilter: selectTabletsCellsBundleFilter(state),
+        hostFilter: selectTabletsCellsHostFilter(state),
 
-        bundles: getTabletsCellsBundles(state),
-        hosts: getTabletsCellsHosts(state),
+        bundles: selectTabletsCellsBundles(state),
+        hosts: selectTabletsCellsHosts(state),
     };
 };
 
