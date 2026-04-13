@@ -17,6 +17,7 @@ import crypto from 'crypto';
 // @ts-ignore
 import ytLib from '@ytsaurus/javascript-wrapper';
 import {getXSRFToken} from '../components/cluster-queries';
+import {makeAuthCookieOptions, replaceDomainForSetCookie} from '../utils/cookie';
 
 const yt = ytLib();
 
@@ -43,6 +44,8 @@ export async function handleLogin(req: Request, res: Response) {
                 responseType: 'stream',
             })
             .then(async (response) => {
+                const {domain} = makeAuthCookieOptions(req);
+
                 const pipedSize = await pipeAxiosResponse(
                     req.ctx,
                     res,
@@ -51,19 +54,24 @@ export async function handleLogin(req: Request, res: Response) {
                     (headers: Record<string, string[]>) => {
                         if (headers['set-cookie']) {
                             headers['set-cookie'] = headers['set-cookie'].reduce<string[]>(
-                                (ret, item) => {
-                                    ret.push(item);
-
+                                (acc, item) => {
                                     if (item.startsWith(YT_CYPRESS_COOKIE_NAME)) {
-                                        ret.push(
-                                            item.replace(
+                                        const newItem = domain
+                                            ? replaceDomainForSetCookie(item, domain)
+                                            : item;
+
+                                        acc.push(newItem);
+                                        acc.push(
+                                            newItem.replace(
                                                 YT_CYPRESS_COOKIE_NAME,
                                                 makeAuthClusterCookieName(ytAuthCluster),
                                             ),
                                         );
+                                    } else {
+                                        acc.push(item);
                                     }
 
-                                    return ret;
+                                    return acc;
                                 },
                                 [],
                             );
