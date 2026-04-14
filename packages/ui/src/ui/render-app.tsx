@@ -23,13 +23,6 @@ import {ErrorYsonSettingsProvider} from './containers/ErrorYsonSettingsProvider/
 
 import UIFactory, {type UIFactory as UIFactoryType, configureUIFactory} from './UIFactory';
 
-const YtComponentsConfigProviderLazy = React.lazy(() =>
-    import(
-        /* webpackChunkName: "yt-components-config" */
-        './containers/YtComponentsConfigProvider'
-    ).then((m) => ({default: m.YtComponentsConfigProvider})),
-);
-
 function AppWithStore({store, history}: ReturnType<typeof createMainEntryStore>) {
     return (
         <Provider store={store}>
@@ -48,9 +41,7 @@ function AppRoot({history}: Pick<ReturnType<typeof createMainEntryStore>, 'histo
     return (
         <ErrorYsonSettingsProvider key={lang}>
             <Suspense fallback={null}>
-                <YtComponentsConfigProviderLazy>
-                    <Router history={history}>{UIFactory.wrapApp(<App />)}</Router>
-                </YtComponentsConfigProviderLazy>
+                <Router history={history}>{UIFactory.wrapApp(<App />)}</Router>
             </Suspense>
         </ErrorYsonSettingsProvider>
     );
