@@ -106,6 +106,10 @@ function getSpecialWaitingStatuses(
     type: string | undefined,
     isGpuOperation: boolean | undefined,
 ): {isWaitingForJobs?: boolean; isWaitingForResources?: boolean} {
+    if (state !== 'running') {
+        return {};
+    }
+
     const fairShareRatio = runtime?.[0]?.progress?.fair_share_ratio as number | undefined;
     const usageRatio = runtime?.[0]?.progress?.usage_ratio as number | undefined;
     const demandRatio = runtime?.[0]?.progress?.demand_ratio as number | undefined;
@@ -222,7 +226,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             | {state: 'unknown'; iconState: 'running'; text: string} =
             isWaitingForJobs || isWaitingForResources
                 ? {state: 'unknown', iconState: 'running', text: 'Running'}
-                : {label: suspended ? 'suspended' : state};
+                : {label};
 
         return (
             <div className={detailBlock('header', 'elements-section')}>
