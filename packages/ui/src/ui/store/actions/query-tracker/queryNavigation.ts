@@ -48,6 +48,7 @@ import {type YTError} from '../../../../@types/types';
 import {setSettingByKey} from '../settings';
 import {setListMode} from '../../reducers/query-tracker/queryListSlice';
 import {toaster} from '../../../utils/toaster';
+import {ytComponentsNavigationMetaConfig} from '../../../components/MetaTable/ytComponentsNavigationMetaConfig';
 
 type AsyncAction = ThunkAction<void, RootState, undefined, Action>;
 
@@ -134,6 +135,7 @@ export const loadTableAttributesByPath =
                 defaultTableColumnLimit,
                 useYqlTypes,
                 showDecoded: ysonSettings.showDecoded,
+                navigationTableConfig: ytComponentsNavigationMetaConfig,
             });
 
             dispatch(setPath(path));
