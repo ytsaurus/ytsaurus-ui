@@ -1,1 +1,0 @@
-export {YtComponentsConfigProvider} from './YtComponentsConfigProvider';
