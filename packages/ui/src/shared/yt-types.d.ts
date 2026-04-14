@@ -116,6 +116,7 @@ export interface ClusterConfig {
      * if defined it will be used instead of `proxy`-field for some direct
      * heavy url/commands like: read_table, write_table, get-job-stderr, ...
      * the field should be used only from browser.
+     * It might be useful to provide `YTCoreConfig.authCookieDomain`.
      */
     externalProxy?: string;
 

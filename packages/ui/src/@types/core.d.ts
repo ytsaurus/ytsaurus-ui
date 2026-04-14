@@ -6,7 +6,7 @@ import type {NodeKit} from '@gravity-ui/nodekit';
 
 import {ClusterConfig} from '../shared/yt-types';
 
-import {UISettings} from '../../shared/ui-settings';
+import {UISettings} from '../shared/ui-settings';
 import {DescribedSettings} from '../shared/constants/settings-types';
 
 export interface YTCoreConfig {
@@ -80,6 +80,12 @@ export interface YTCoreConfig {
         cluster?: string;
         dynamicTablePath: string;
     };
+
+    /**
+     * The setting allows to explicitly set the "Domain" attribute for "Set-Cookie" auth headers.
+     * The option affects auth cookies for oauth and password authorization.
+     */
+    authCookieDomain?: string;
 
     /**
      * OpenID Connect configuration
