@@ -6,7 +6,6 @@ import {getQuerySuggestionsEnabled} from '../../../store/selectors/settings/sett
 import UIFactory from '../../../UIFactory';
 import debounce_ from 'lodash/debounce';
 
-const store = getWindowStore();
 const getSuggestion = (data: {query: string; line: number; column: number; engine: string}) => {
     return UIFactory.getInlineSuggestionsApi()?.getQuerySuggestions(data);
 };
@@ -21,7 +20,7 @@ export const createInlineSuggestions =
         _context: languages.InlineCompletionContext,
         _token: CancellationToken,
     ): Promise<{items: languages.InlineCompletion[]}> => {
-        const state = store.getState();
+        const state = getWindowStore().getState();
         const enabled = getQuerySuggestionsEnabled(state);
 
         if (!enabled) {
