@@ -14,6 +14,8 @@ import {getYsonSettingsDisableDecode} from '../../../../store/selectors/thor/uni
 import {useMonaco} from '../../hooks/useMonaco';
 import {createTableSelect} from '../helpers/createTableSelect';
 import {insertTextWhereCursor} from '../helpers/insertTextWhereCursor';
+import {rumLogError} from '../../../../rum/rum-counter';
+import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 
 export const NavigationTable: FC = () => {
     const dispatch = useDispatch();
@@ -47,6 +49,8 @@ export const NavigationTable: FC = () => {
             onFilterChange={handleFilterChange}
             onInsertTableSelect={handleInsertTableSelect}
             ysonSettings={ysonSettings}
+            logError={rumLogError}
+            ErrorBoundaryComponent={ErrorBoundary}
         />
     );
 };
