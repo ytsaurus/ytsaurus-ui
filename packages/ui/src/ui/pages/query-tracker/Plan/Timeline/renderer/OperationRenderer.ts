@@ -1,6 +1,6 @@
 import {duration as calcDuration} from '../../utils';
 import {AbstractEventRenderer, Hitbox, TimelineEvent} from '@gravity-ui/timeline';
-import {OperationTimeline} from '../utils';
+import type {OperationTimeline} from '../utils';
 import {getCSSPropertyValue} from '../../../../../utils/get-css-color';
 
 const GROUP_HEIGHT = 16;
@@ -9,7 +9,7 @@ const GROUP_BORDER_THICKNESS = 2;
 const TRIANGLE_HEIGHT = 5;
 const TRIANGLE_WIDTH = 10;
 
-const COUNTER_FONT_COLOR = '#111';
+const DEFAULT_DURATION_FONT_COLOR = resolveCssValue('var(--g-color-text-primary)');
 const COUNTER_PADDING = 5;
 const COUNTER_FONT_CENTER_OFFSET = 4;
 const TRACK_HEIGHT = 25;
@@ -32,8 +32,9 @@ function renderEventDuration(
     duration: string,
     x: number,
     y: number,
+    color: string,
 ): void {
-    ctx.fillStyle = resolveCssValue(COUNTER_FONT_COLOR);
+    ctx.fillStyle = color;
     ctx.fillText(duration, x + COUNTER_PADDING, y + COUNTER_FONT_CENTER_OFFSET);
 }
 
@@ -146,7 +147,13 @@ export class OperationRenderer extends AbstractEventRenderer {
             ctx.strokeRect(x0, y0, totalWidth || width, height);
         }
         if (duration) {
-            renderEventDuration(ctx, duration, x0 + Math.max(totalWidth, width), y);
+            renderEventDuration(
+                ctx,
+                duration,
+                x0 + Math.max(totalWidth, width),
+                y,
+                event.durationColor || DEFAULT_DURATION_FONT_COLOR,
+            );
         }
     }
 
