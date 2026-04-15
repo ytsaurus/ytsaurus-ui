@@ -12,6 +12,7 @@ import {useSelector} from '../../../../store/redux-hooks';
 import {getSettingsQueryTrackerGraphAutoCenter} from '../../../../store/selectors/settings/settings-ts';
 import {checkControlCommandKey} from '../../../../utils/keyboard';
 import {openInNewTab} from '../../../../utils/utils';
+import {getOperationPageUrlFromNodeProgress} from '../services/getOperationPageUrlFromNodeProgress';
 import cn from 'bem-cn-lite';
 import './QueriesGraph.scss';
 
@@ -36,12 +37,8 @@ const Graph: FC<Props> = ({processedGraph}) => {
     const {data, isLoading} = useQueriesGraphLayout(processedGraph, scale);
 
     const handleBlockClick = useCallback((node: QueriesNodeBlock, event: Event) => {
-        const remoteId = node.meta.nodeProgress?.remoteId;
-        if (!remoteId) return;
-
-        const [cluster, operationId] = remoteId.split('/');
-        const clusterName = cluster?.split('.')[0] ?? cluster;
-        const url = `/${clusterName}/operations/${encodeURIComponent(operationId ?? '')}`;
+        const url = getOperationPageUrlFromNodeProgress(node.meta.nodeProgress);
+        if (!url) return;
 
         if (checkControlCommandKey(event as MouseEvent)) {
             openInNewTab(url);

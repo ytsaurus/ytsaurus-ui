@@ -24,7 +24,7 @@ export const DetailBlockHeader: FC<Props> = ({
 
     return (
         <Flex gap={2} direction="column">
-            <DetailBlockTitle icon={icon} name={name} id={nodeProgress?.remoteId} />
+            <DetailBlockTitle icon={icon} name={name} nodeProgress={nodeProgress} />
             {showContent && (
                 <>
                     {isTable ? (
