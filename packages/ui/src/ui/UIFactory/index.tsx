@@ -531,9 +531,11 @@ export interface UIFactory {
 
     getAnalyticsService(): AnalyticsService[];
 
-    renderIncarnationsTab(): React.ReactNode;
-
-    renderIncarnationsNextTab(params: {cluster: string; operationId: string}): React.ReactNode;
+    renderIncarnationsTab(params: {
+        cluster: string;
+        operationId: string;
+        showIncarnationsNext: boolean;
+    }): React.ReactNode;
 
     getAiChatMessageComponent(
         message: ChatMessage,

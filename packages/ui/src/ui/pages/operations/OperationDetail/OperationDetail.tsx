@@ -70,7 +70,7 @@ import {
     selectTotalCpuTimeSpent,
     selectTotalJobWallTime,
 } from '../../../store/selectors/operations/statistics-v2';
-import {selectIsIncarnationNextFeatureEnabled} from '../../../store/selectors/settings/settings-development';
+import {selectShowIncarnationsNext} from '../../../store/selectors/settings/operations';
 import {getCurrentCluster} from '../../../store/selectors/thor';
 import {getYsonSettingsDisableDecode} from '../../../store/selectors/thor/unipika';
 import {OperationPool, OperationStates} from '../selectors';
@@ -339,7 +339,6 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             timelineTabVisible,
             operationPerformanceUrlTemplate,
             operationEvents,
-            isIncarnationNextFeatureEnabled,
         } = this.props;
         const path = `/${cluster}/${Page.OPERATIONS}/${operationId}`;
 
@@ -350,11 +349,6 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             [Tab.MONITOR]: {show: monitorTabVisible},
             [Tab.JOBS_TIMELINE]: {show: timelineTabVisible},
             [Tab.INCARNATIONS]: {show: Boolean(operationEvents?.length)},
-            [Tab.INCARNATIONS_NEXT]: {
-                show:
-                    isIncarnationNextFeatureEnabled &&
-                    Boolean(UIFactory.renderIncarnationsNextTab({cluster, operationId})),
-            },
             [Tab.LOGS]: {show: Boolean(UIFactory.renderOperationLogsTab())},
             [Tab.PERFORMANCE]: {
                 show: Boolean(operationPerformanceUrlTemplate),
@@ -404,6 +398,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             jobsMonitorIsSupported,
             monitoringComponent,
             timelineTabVisible,
+            showIncarnationsNext,
         } = this.props;
         const {url, params} = match;
         const {operationId} = params;
@@ -455,11 +450,13 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                     )}
                     <Route
                         path={`${path}/${Tab.INCARNATIONS}`}
-                        render={UIFactory.renderIncarnationsTab}
-                    />
-                    <Route
-                        path={`${path}/${Tab.INCARNATIONS_NEXT}`}
-                        render={() => UIFactory.renderIncarnationsNextTab({cluster, operationId})}
+                        render={() =>
+                            UIFactory.renderIncarnationsTab({
+                                cluster,
+                                operationId,
+                                showIncarnationsNext,
+                            })
+                        }
                     />
                     <Route path={`${path}/${Tab.LOGS}`} render={UIFactory.renderOperationLogsTab} />
                     <Route path={`${path}/:tab`} component={Placeholder} />
@@ -575,7 +572,7 @@ const mapStateToProps = (state: RootState, routerProps: RouteProps) => {
         operationPerformanceUrlTemplate: selectOperationPerformanceUrlTemplate(state),
         operationEvents,
         ysonSettings: getYsonSettingsDisableDecode(state),
-        isIncarnationNextFeatureEnabled: selectIsIncarnationNextFeatureEnabled(state),
+        showIncarnationsNext: selectShowIncarnationsNext(state),
     };
 };
 

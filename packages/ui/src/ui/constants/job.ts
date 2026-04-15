@@ -22,6 +22,6 @@ export const Tab = {
     STATISTICS: 'statistics',
     SPECIFICATION: 'specification',
     LOGS: 'logs',
-};
+} as const;
 
 export const DEFAULT_TAB = Tab.DETAILS;
