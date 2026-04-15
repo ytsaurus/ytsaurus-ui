@@ -51,7 +51,6 @@ interface DevelopmentSettings {
     'global::development::yqlTypes': boolean;
     'global::development::regularUserUI': boolean;
     'global::development::showAiChat': boolean;
-    'global::development::feature::incarnationNext': boolean;
 }
 
 interface MenuSettings {
@@ -106,6 +105,7 @@ interface A11YSettings {
 type OperationsSettings = OperationPresetsSettings & {
     'global::operations::statisticsAggregationType': 'avg' | 'min' | 'max' | 'sum' | 'count';
     'global::operations::statisticsActiveJobTypes': Record<string, string>;
+    'global::operations::showIncarnationsNext': boolean;
 };
 
 export type OperationPresetsSettings = {

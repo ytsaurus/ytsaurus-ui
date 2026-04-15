@@ -20,7 +20,6 @@ export const Tab = {
     MONITOR: 'monitor',
     PERFORMANCE: 'performance',
     INCARNATIONS: 'incarnations',
-    INCARNATIONS_NEXT: 'incarnations_next',
     LOGS: 'logs',
 } as const;
 
