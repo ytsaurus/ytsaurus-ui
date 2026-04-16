@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.9.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.8.0...ui-v3.9.0) (2026-04-16)
+
+
+### Features
+
+* **Navigation/Description:** allow to edit external annotation [YTFRONT-5096] ([d3795b3](https://github.com/ytsaurus/ytsaurus-ui/commit/d3795b3fc1f717243c496ffb60dfb7066ec0e7c1))
+* **Navigation/tablets:** add new columns to tables [YTFRONT-5611] ([3bcb2c6](https://github.com/ytsaurus/ytsaurus-ui/commit/3bcb2c6f289a086f6a51fe340f733db60b5a52af))
+
+
+### Bug Fixes
+
+* **Navigation:** fix table sort for dates [YTFRONT-5406] ([5549f84](https://github.com/ytsaurus/ytsaurus-ui/commit/5549f84db342cb4922eb5cddcc74f4719c3b75b8))
+* **Operation/Details:** show additional state only for running operations [YTFRONT-5709] ([1368881](https://github.com/ytsaurus/ytsaurus-ui/commit/136888105cb94500304e01db3cfbcdb993e6552d))
+* **Queries/Graph:** duration in node popup [YTFRONT-5674] ([f9f1663](https://github.com/ytsaurus/ytsaurus-ui/commit/f9f1663f8a9f683989e885c0db41ebc341c02320))
+* **Queries/Timeline:** colors in dark theme [YTFRONT-5716] ([a37fb1d](https://github.com/ytsaurus/ytsaurus-ui/commit/a37fb1d6e076e0272c52866566f28e934018f2a7))
+* **Queries:** wrong jobs count [YTFRONT-5708] ([fe82410](https://github.com/ytsaurus/ytsaurus-ui/commit/fe82410b526fd13f0d7e77a0c5b5b4ab6ad1980f))
+* **Query/Suggestions:** store variable may be undefined ([35edf38](https://github.com/ytsaurus/ytsaurus-ui/commit/35edf3812eb1d63762c16a3c405723f16eb92e1f))
+
 ## [3.8.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.7.0...ui-v3.8.0) (2026-04-01)
 
 
