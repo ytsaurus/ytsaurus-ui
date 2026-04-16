@@ -2,7 +2,7 @@ import {createSelector} from '@reduxjs/toolkit';
 
 import {RootState} from '../../../store/reducers';
 import {accountsApi} from '../../../store/api/accounts';
-import {getFavouriteAccounts} from '../../../store/selectors/favourites';
+import {selectFavouriteAccounts} from '../../../store/selectors/favourites';
 import {selectCluster} from '../../../store/selectors/global/cluster';
 
 import {createWidgetDataFieldSelector} from './utils';
@@ -22,7 +22,7 @@ const getUsableAccounts = (state: RootState) => {
 };
 
 export const getAccountsList = createSelector(
-    [getFavouriteAccounts, getUsableAccounts, getCustomAccountsList, getAccountsTypeFilter],
+    [selectFavouriteAccounts, getUsableAccounts, getCustomAccountsList, getAccountsTypeFilter],
     (favourite, usable, custom, type) => {
         if (type === 'favourite') {
             return favourite?.length ? favourite.map((item) => item?.path) : [];

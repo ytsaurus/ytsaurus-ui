@@ -13,12 +13,12 @@ import {LinksTab} from '../../../constants/dashboard';
 import {Page} from '../../../constants/index';
 import hammer from '../../../common/hammer';
 import {
-    getFavouriteAccounts,
-    getFavouritePaths,
-    getLastVisitedAccounts,
-    getLastVisitedPaths,
-    getPopularAccounts,
-    getPopularPaths,
+    selectFavouriteAccounts,
+    selectFavouritePaths,
+    selectLastVisitedAccounts,
+    selectLastVisitedPaths,
+    selectPopularAccounts,
+    selectPopularPaths,
 } from '../../../store/selectors/favourites';
 
 import './Links.scss';
@@ -167,12 +167,12 @@ const mapStateToProps = (state) => {
 
     return {
         activeTab,
-        lastVisited: getLastVisitedPaths(state),
-        popular: getPopularPaths(state),
-        favourites: getFavouritePaths(state),
-        lastVisitedAccounts: getLastVisitedAccounts(state),
-        popularAccounts: getPopularAccounts(state),
-        favouriteAccounts: getFavouriteAccounts(state),
+        lastVisited: selectLastVisitedPaths(state),
+        popular: selectPopularPaths(state),
+        favourites: selectFavouritePaths(state),
+        lastVisitedAccounts: selectLastVisitedAccounts(state),
+        popularAccounts: selectPopularAccounts(state),
+        favouriteAccounts: selectFavouriteAccounts(state),
         tabSize: UI_TAB_SIZE,
         cluster: selectCluster(state),
     };

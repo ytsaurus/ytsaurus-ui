@@ -16,7 +16,10 @@ import {
     getTree,
     getTreesSelectItems,
 } from '../../../store/selectors/scheduling/scheduling';
-import {getFavouritePools, isActivePoolInFavourites} from '../../../store/selectors/favourites';
+import {
+    selectFavouritePools,
+    selectIsActivePoolInFavourites,
+} from '../../../store/selectors/favourites';
 import {
     changePool,
     changeTree,
@@ -75,8 +78,8 @@ function SchedulingFavourites() {
     const tree = useSelector(getTree);
     const dispatch = useDispatch();
     const pool = useSelector(getPool);
-    const favouritesPools = useSelector(getFavouritePools);
-    const isActivePool = useSelector(isActivePoolInFavourites);
+    const favouritesPools = useSelector(selectFavouritePools);
+    const isActivePool = useSelector(selectIsActivePoolInFavourites);
 
     const onFavouriteClick = React.useCallback(
         ({path}: {path: string}) => {

@@ -5,7 +5,7 @@ import {usePathsQuery} from '../../../../../../store/api/dashboard2/navigation';
 import {selectCluster} from '../../../../../../store/selectors/global';
 import {getNavigationTypeFilter} from '../../../../../../store/selectors/dashboard2/navigation';
 import {getLastVisited} from '../../../../../../store/selectors/settings';
-import {getFavouritePaths} from '../../../../../../store/selectors/favourites';
+import {selectFavouritePaths} from '../../../../../../store/selectors/favourites';
 
 import {NavigationWidgetProps} from '../types';
 
@@ -14,7 +14,7 @@ export function useNavigationWidget(props: NavigationWidgetProps) {
     const cluster = useSelector(selectCluster);
 
     const lastVisitedPaths = useSelector(getLastVisited);
-    const favouritePaths = useSelector(getFavouritePaths);
+    const favouritePaths = useSelector(selectFavouritePaths);
 
     const {
         data: items,

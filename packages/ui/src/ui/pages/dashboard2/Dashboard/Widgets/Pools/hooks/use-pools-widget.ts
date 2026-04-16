@@ -8,7 +8,7 @@ import includes_ from 'lodash/includes';
 import {RootState} from '../../../../../../store/reducers';
 import {PoolQueryParams} from '../../../../../../store/api/dashboard2/pools/pools';
 import {usePoolsQuery} from '../../../../../../store/api/dashboard2/pools';
-import {getFavouritePools} from '../../../../../../store/selectors/favourites';
+import {selectFavouritePools} from '../../../../../../store/selectors/favourites';
 import {getPoolsTypeFilter} from '../../../../../../store/selectors/dashboard2/pools';
 import {selectCluster} from '../../../../../../store/selectors/global';
 
@@ -20,7 +20,7 @@ export function usePoolsWidget(props: PoolsWidgetProps) {
     const userPools = props.data?.pools as PoolQueryParams[];
     const resourcesColumns = props.data?.columns as string[];
 
-    const favouritePools = useSelector(getFavouritePools);
+    const favouritePools = useSelector(selectFavouritePools);
     const cluster = useSelector(selectCluster);
     const type = useSelector((state: RootState) => getPoolsTypeFilter(state, props.id));
 

@@ -7,7 +7,7 @@ import filter_ from 'lodash/filter';
 
 import {useFetchBatchQuery} from '../../../../store/api/yt';
 import {useUsableAccountsQuery} from '../../../../store/api/accounts';
-import {getFavouriteAccounts} from '../../../../store/selectors/favourites';
+import {selectFavouriteAccounts} from '../../../../store/selectors/favourites';
 import {selectCluster} from '../../../../store/selectors/global';
 
 import {DialogControlProps} from '../../../../components/Dialog/Dialog.types';
@@ -26,7 +26,7 @@ type Props = DialogControlProps<string[]> & {
 export function AccountsMultiple(props: Props) {
     const {value, onChange} = props;
 
-    const favourites = useSelector(getFavouriteAccounts);
+    const favourites = useSelector(selectFavouriteAccounts);
     const cluster = useSelector(selectCluster);
 
     const {data: accounts, isLoading} = useFetchBatchQuery<string>({

@@ -10,7 +10,10 @@ import {
     selectTabletsBreadcrumbItems,
 } from '../../store/selectors/tablet_cell_bundles';
 import {bundlesToggleFavourite} from '../../store/actions/favourites';
-import {getFavouriteBundles, isActiveBundleInFavourites} from '../../store/selectors/favourites';
+import {
+    selectFavouriteBundles,
+    selectIsActiveBundleInFavourites,
+} from '../../store/selectors/favourites';
 
 const mapStateToProps = (state: RootState) => {
     return {
@@ -18,8 +21,8 @@ const mapStateToProps = (state: RootState) => {
         activeBundleData: selectTabletsActiveBundleData(state),
         bcItems: selectTabletsBreadcrumbItems(state),
         page: Page.TABLET_CELL_BUNDLES,
-        favourites: getFavouriteBundles(state),
-        isActiveBundleInFavourites: isActiveBundleInFavourites(state),
+        favourites: selectFavouriteBundles(state),
+        isActiveBundleInFavourites: selectIsActiveBundleInFavourites(state),
     };
 };
 
