@@ -22,83 +22,89 @@ import {selectChytCurrentAlias} from './chyt';
 
 //************* Selectors for Accounts *****************
 
-export const getFavouriteAccounts = createSelector(
+export const selectFavouriteAccounts = createSelector(
     [makeGetSetting, getAccountsNS],
     prepareFavourites,
 );
 
-export const getLastVisitedAccounts = createSelector(
+export const selectLastVisitedAccounts = createSelector(
     [makeGetSetting, getAccountsNS],
     prepareLastVisited,
 );
 
-export const getPopularAccounts = createSelector([getLastVisitedAccounts], preparePopulars);
+export const selectPopularAccounts = createSelector([selectLastVisitedAccounts], preparePopulars);
 
-export const isActiveAcountInFavourites = createSelector(
-    [getActiveAccount, getFavouriteAccounts],
+export const selectIsActiveAccountInFavourites = createSelector(
+    [getActiveAccount, selectFavouriteAccounts],
     prepareIsInFavourites,
 );
 
-export const getFavouriteChyt = createSelector([makeGetSetting, getChytNS], prepareFavourites);
+export const selectFavouriteChyt = createSelector([makeGetSetting, getChytNS], prepareFavourites);
 
-export const getLastVisitedChyt = createSelector([makeGetSetting, getChytNS], prepareLastVisited);
+export const selectLastVisitedChyt = createSelector(
+    [makeGetSetting, getChytNS],
+    prepareLastVisited,
+);
 
-export const getPopularChyt = createSelector([getLastVisitedChyt], preparePopulars);
+export const selectPopularChyt = createSelector([selectLastVisitedChyt], preparePopulars);
 
-export const isActiveCliqueInFavourites = createSelector(
-    [selectChytCurrentAlias, getFavouriteChyt],
+export const selectIsActiveCliqueInFavourites = createSelector(
+    [selectChytCurrentAlias, selectFavouriteChyt],
     prepareIsInFavourites,
 );
 
 //************* Selectors for Navigation *****************
 
-export const getFavouritePaths = createSelector([makeGetSetting, getClusterNS], prepareFavourites);
+export const selectFavouritePaths = createSelector(
+    [makeGetSetting, getClusterNS],
+    prepareFavourites,
+);
 
-export const getLastVisitedPaths = createSelector(
+export const selectLastVisitedPaths = createSelector(
     [makeGetSetting, getClusterNS],
     prepareLastVisited,
 );
 
-export const getPopularPaths = createSelector([getLastVisitedPaths], preparePopulars);
+export const selectPopularPaths = createSelector([selectLastVisitedPaths], preparePopulars);
 
-export const isCurrentPathInFavourites = createSelector(
-    [getPath, getFavouritePaths],
+export const selectIsCurrentPathInFavourites = createSelector(
+    [getPath, selectFavouritePaths],
     prepareIsInFavourites,
 );
 
 //************* Selectors for Scheduling *****************
 
-export const getFavouritePools = createSelector(
+export const selectFavouritePools = createSelector(
     [makeGetSetting, getSchedulingNS],
     prepareFavourites,
 );
 
-export const isActivePoolInFavourites = createSelector(
-    [getPool, getTree, getFavouritePools],
+export const selectIsActivePoolInFavourites = createSelector(
+    [getPool, getTree, selectFavouritePools],
     prepareIsPoolInFavourites,
 );
 
 //************* Selectors for Bundles *****************
 
-export const getFavouriteBundles = createSelector(
+export const selectFavouriteBundles = createSelector(
     [makeGetSetting, getBundlesNS],
     prepareFavourites,
 );
 
-export const isActiveBundleInFavourites = createSelector(
-    [selectTabletsActiveBundle, getFavouriteBundles],
+export const selectIsActiveBundleInFavourites = createSelector(
+    [selectTabletsActiveBundle, selectFavouriteBundles],
     prepareIsInFavourites,
 );
 
 // ************ Selectors for Chaos bundles ***********
 
-export const getFavouriteChaosBundles = createSelector(
+export const selectFavouriteChaosBundles = createSelector(
     [makeGetSetting, selectChaosBundlesNS],
     prepareFavourites,
 );
 
-export const isActiveChaosBundleInFavourites = createSelector(
-    [selectChaosActiveBundle, getFavouriteChaosBundles],
+export const selectIsActiveChaosBundleInFavourites = createSelector(
+    [selectChaosActiveBundle, selectFavouriteChaosBundles],
     prepareIsInFavourites,
 );
 

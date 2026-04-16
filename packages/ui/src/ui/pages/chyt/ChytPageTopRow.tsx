@@ -15,7 +15,10 @@ import Suggest from '../../components/Suggest/Suggest';
 import {Page} from '../../constants';
 import {RowWithName} from '../../containers/AppNavigation/TopRowContent/SectionName';
 import {WaitForDefaultPoolTree} from '../../hooks/global-pool-trees';
-import {getFavouriteChyt, isActiveCliqueInFavourites} from '../../store/selectors/favourites';
+import {
+    selectFavouriteChyt,
+    selectIsActiveCliqueInFavourites,
+} from '../../store/selectors/favourites';
 import {selectChytCurrentAlias} from '../../store/selectors/chyt';
 import {selectCluster} from '../../store/selectors/global';
 import {selectIsAdmin} from '../../store/selectors/global/is-developer';
@@ -44,8 +47,8 @@ export default function ChytPageTopRow() {
 function ChytFavourites() {
     const history = useHistory();
     const cluster = useSelector(selectCluster);
-    const isActiveInFavourites = useSelector(isActiveCliqueInFavourites);
-    const favourites = useSelector(getFavouriteChyt);
+    const isActiveInFavourites = useSelector(selectIsActiveCliqueInFavourites);
+    const favourites = useSelector(selectFavouriteChyt);
     const dispatch = useDispatch();
     const currentClique = useSelector(selectChytCurrentAlias);
 

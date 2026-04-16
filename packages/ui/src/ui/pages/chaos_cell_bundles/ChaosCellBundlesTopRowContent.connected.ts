@@ -10,8 +10,8 @@ import {
     selectChaosBreadcrumbItems,
 } from '../../store/selectors/chaos_cell_bundles';
 import {
-    getFavouriteChaosBundles,
-    isActiveChaosBundleInFavourites,
+    selectFavouriteChaosBundles,
+    selectIsActiveChaosBundleInFavourites,
 } from '../../store/selectors/favourites';
 
 const mapStateToProps = (state: RootState) => {
@@ -20,8 +20,8 @@ const mapStateToProps = (state: RootState) => {
         activeBundleData: selectChaosActiveBundleData(state),
         bcItems: selectChaosBreadcrumbItems(state),
         page: Page.CHAOS_CELL_BUNDLES,
-        favourites: getFavouriteChaosBundles(state),
-        isActiveBundleInFavourites: isActiveChaosBundleInFavourites(state),
+        favourites: selectFavouriteChaosBundles(state),
+        isActiveBundleInFavourites: selectIsActiveChaosBundleInFavourites(state),
     };
 };
 

@@ -17,7 +17,10 @@ import {selectCluster} from '../../../store/selectors/global';
 import {makeRoutedURL} from '../../../store/location';
 import {restoreObject} from '../../../store/actions/navigation/modals/restore-object';
 import {getNavigationDefaultPath} from '../../../store/selectors/settings';
-import {getFavouritePaths, isCurrentPathInFavourites} from '../../../store/selectors/favourites';
+import {
+    selectFavouritePaths,
+    selectIsCurrentPathInFavourites,
+} from '../../../store/selectors/favourites';
 import {
     getActualPath,
     getPath,
@@ -83,9 +86,9 @@ function NavigationTopRowContent() {
 function NavigationFavourites() {
     const dispatch = useDispatch();
 
-    const favourites = useSelector(getFavouritePaths);
+    const favourites = useSelector(selectFavouritePaths);
 
-    const isInFavourites = useSelector(isCurrentPathInFavourites);
+    const isInFavourites = useSelector(selectIsCurrentPathInFavourites);
     const path = useSelector(getPath);
 
     const handleToggle = React.useCallback(() => {

@@ -6,8 +6,8 @@ import {Breadcrumbs} from '@gravity-ui/uikit';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import Favourites, {FavouritesItem} from '../../../components/Favourites/Favourites';
 import {
-    getFavouriteAccounts,
-    isActiveAcountInFavourites,
+    selectFavouriteAccounts,
+    selectIsActiveAccountInFavourites,
 } from '../../../store/selectors/favourites';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {
@@ -54,8 +54,8 @@ function AccountsTopRowContent() {
 }
 
 function AccountsFavourites() {
-    const isActiveInFavourites = useSelector(isActiveAcountInFavourites);
-    const favourites = useSelector(getFavouriteAccounts);
+    const isActiveInFavourites = useSelector(selectIsActiveAccountInFavourites);
+    const favourites = useSelector(selectFavouriteAccounts);
     const dispatch = useDispatch();
     const activeAccount = useSelector(getActiveAccount);
 
