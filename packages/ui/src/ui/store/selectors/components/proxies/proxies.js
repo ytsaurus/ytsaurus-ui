@@ -2,6 +2,7 @@ import compact_ from 'lodash/compact';
 import filter_ from 'lodash/filter';
 import map_ from 'lodash/map';
 import sumBy_ from 'lodash/sumBy';
+import omit_ from 'lodash/omit';
 
 import hammer from '../../../../common/hammer';
 import {concatByAnd} from '../../../../common/hammer/predicate';
@@ -9,8 +10,18 @@ import {createSelector} from 'reselect';
 import {proxiesTableColumnItems} from '../../../../utils/components/proxies/table';
 import {COMPONENTS_PROXIES_TABLE_ID} from '../../../../constants/components/proxies/proxies';
 
-const aggregateItems = (proxies, key) => {
-    const items = hammer.aggregation.countValues(proxies, key);
+const aggregateRoleItems = (proxies) => {
+    const items = hammer.aggregation.countValues(proxies, 'role');
+
+    return map_(items, (count, item) => ({
+        text: item,
+        value: item,
+        count,
+    }));
+};
+
+const aggregateStateItems = (proxies) => {
+    const items = hammer.aggregation.countValues(proxies, 'state');
 
     return map_(items, (count, item) => ({
         text: hammer.format['FirstUppercase'](item),
@@ -67,26 +78,17 @@ function filterProxies(proxies, {hostFilter, stateFilter, roleFilter, bannedFilt
     return predicates.length ? filter_(proxies, concatByAnd(...predicates)) : proxies;
 }
 
-const getAllRoles = createSelector([getProxies], (proxy) => aggregateItems(proxy, 'role'));
+const getAllRoles = createSelector([getProxies], (proxy) => aggregateRoleItems(proxy));
 
-const getVisibleRoles = createSelector(
-    [getProxies, getFiltersObject],
-    function (
-        proxies,
-        {
-            // eslint-disable-next-line no-unused-vars
-            roleFilter,
-            ...rest
-        },
-    ) {
-        const filtered = filterProxies(proxies, rest);
-        return aggregateItems(filtered, 'role');
-    },
-);
+const getVisibleRoles = createSelector([getProxies, getFiltersObject], (proxies, filtersObject) => {
+    const filtered = filterProxies(proxies, omit_(filtersObject, ['roleFilter']));
 
-const getAllStates = createSelector([getProxies], (proxy) => aggregateItems(proxy, 'state'));
+    return aggregateRoleItems(filtered);
+});
 
-const getVisibleStates = createSelector([getProxies], (proxy) => aggregateItems(proxy, 'state'));
+const getAllStates = createSelector([getProxies], (proxy) => aggregateStateItems(proxy));
+
+const getVisibleStates = createSelector([getProxies], (proxy) => aggregateStateItems(proxy));
 
 export const getVisibleProxies = createSelector(
     [getFilteredProxies, getSortState],
