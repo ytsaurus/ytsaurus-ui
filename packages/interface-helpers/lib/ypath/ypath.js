@@ -6,6 +6,7 @@ const _reduce = require('lodash/reduce');
 
 const VALUE_KEY = '$value';
 const ATTRS_KEY = '$attributes';
+
 const yson = {
     value(node) {
         return node?.[VALUE_KEY] !== undefined ? node[VALUE_KEY] : node;
