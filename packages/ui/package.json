@@ -89,6 +89,7 @@
     "qs": "^6.11.2",
     "source-map-support": "0.5.21",
     "type-is": "1.6.18",
+    "utility-types": "^3.11.0",
     "zod": "^3.21.4"
   },
   "devDependencies": {
