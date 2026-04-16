@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.0](https://github.com/ytsaurus/ytsaurus-ui/compare/interface-helpers-v1.1.1...interface-helpers-v1.2.0) (2026-04-16)
+
+
+### Features
+
+* **InterfaceHelpers:** add ui format helpers [YTFRONT-5601] ([eb66bea](https://github.com/ytsaurus/ytsaurus-ui/commit/eb66bea4aa0efa9c6d868b50dcd6e13ac1b3f1eb))
+* **InterfaceHelpers:** ypath getAttributes and undefined path in get [YTFRONT-5601] ([45be0b0](https://github.com/ytsaurus/ytsaurus-ui/commit/45be0b059157778773774d83ceeca371caf8a972))
+
 ## [1.1.1](https://github.com/ytsaurus/ytsaurus-ui/compare/interface-helpers-v1.1.0...interface-helpers-v1.1.1) (2025-12-19)
 
 
