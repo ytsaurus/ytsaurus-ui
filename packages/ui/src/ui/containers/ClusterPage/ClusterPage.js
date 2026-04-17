@@ -49,7 +49,7 @@ import {selectIsExperimentalPagesReady} from '../../store/selectors/global/exper
 import {getClusterConfig} from '../../utils';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
 import {getClusterPagePaneSizes, getStartingPage} from '../../store/selectors/settings';
-import {getSettingNewDashboardPage} from '../../store/selectors/dashboard2/dashboard';
+import {selectSettingNewDashboardPage} from '../../store/selectors/dashboard2/dashboard';
 import SupportedFeaturesUpdater from './SupportedFeaturesUpdater';
 import {useRumMeasureStart, useRumMeasureStop} from '../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../rum/rum-measure-types';
@@ -348,7 +348,7 @@ function mapStateToProps(state) {
         paramsCluster,
         allowChyt: Boolean(selectClusterUiConfig(state).chyt_controller_base_url),
         allowStartPageRedirect: selectIsExperimentalPagesReady(state),
-        isNewDashboardPage: getSettingNewDashboardPage(state),
+        isNewDashboardPage: selectSettingNewDashboardPage(state),
     };
 }
 

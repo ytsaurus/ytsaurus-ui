@@ -14,7 +14,7 @@ import {
     setEdittingConfig,
     toggleEditting,
 } from '../../../store/reducers/dashboard2/dashboard';
-import {getDashboardConfig} from '../../../store/selectors/dashboard2/dashboard';
+import {selectDashboardConfig} from '../../../store/selectors/dashboard2/dashboard';
 
 import {defaultDashboardItems} from '../../../constants/dashboard2';
 import {makeDefaultConfig} from '../../../utils/dashboard2/make-default-config';
@@ -28,7 +28,7 @@ export function editConfig(
         const state = getState();
 
         const edittingConfig = getEdittingConfig(state);
-        const fallbackConfig = getDashboardConfig(state);
+        const fallbackConfig = selectDashboardConfig(state);
         const config = edittingConfig ?? fallbackConfig;
 
         const configItems = [...(config?.items || [])];
@@ -77,7 +77,7 @@ export function copyConfig(cluster: string): ThunkAction<void, RootState, any, a
 export function startEditting(): ThunkAction<void, RootState, any, any> {
     return (dispatch, getState) => {
         const state = getState();
-        const config = getDashboardConfig(state);
+        const config = selectDashboardConfig(state);
 
         dispatch(setEdittingConfig({edittingConfig: config}));
         dispatch(toggleEditting());
