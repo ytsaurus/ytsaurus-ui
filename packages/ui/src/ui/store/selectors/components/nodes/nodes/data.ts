@@ -20,13 +20,13 @@ import {
     getNodeTablesProps,
 } from '../../../../../pages/components/tabs/nodes/tables';
 import {
-    getComponentNodesFilterPredicates,
-    getComponentNodesFilterStatePredicate,
-    getComponentNodesFiltersSetup,
-    getComponentNodesIndexByRack,
-    getComponentNodesIndexByTag,
-    getNodes,
-    getPropertiesRequiredForFilters,
+    selectComponentNodesFilterPredicates,
+    selectComponentNodesFilterStatePredicate,
+    selectComponentNodesFiltersSetup,
+    selectComponentNodesIndexByRack,
+    selectComponentNodesIndexByTag,
+    selectNodes,
+    selectPropertiesRequiredForFilters,
 } from './predicates';
 import {NODE_TYPE, NodeType} from '../../../../../../shared/constants/system';
 
@@ -43,7 +43,7 @@ const selectComponentsNodesNodeTypeRaw = (state: RootState) =>
 const selectCustomColumns = (state: RootState) => getSelectedColumns(state) || defaultColumns;
 
 const selectMediumsPredicates = createSelector(
-    [getComponentNodesFiltersSetup, getMediumListNoCache],
+    [selectComponentNodesFiltersSetup, getMediumListNoCache],
     createMediumsPredicates,
 );
 
@@ -52,15 +52,20 @@ const getPropertiesRequiredForMediums = createSelector(
     (mediumsPredicates) => (mediumsPredicates.length > 0 ? (['IOWeight'] as const) : []),
 );
 
-const selectFilteredByHost = createSelector([getNodes, selectHostFilter], (nodes, hostFilter) => {
-    const hostFilters = hostFilter.split(/\s+/);
-    return filter_(nodes, (node) => {
-        return some_(hostFilters, (hostFilter) => node?.host?.toLowerCase().includes(hostFilter));
-    });
-});
+const selectFilteredByHost = createSelector(
+    [selectNodes, selectHostFilter],
+    (nodes, hostFilter) => {
+        const hostFilters = hostFilter.split(/\s+/);
+        return filter_(nodes, (node) => {
+            return some_(hostFilters, (hostFilter) =>
+                node?.host?.toLowerCase().includes(hostFilter),
+            );
+        });
+    },
+);
 
 const selectFilteredNodes = createSelector(
-    [selectFilteredByHost, getComponentNodesFilterPredicates, selectMediumsPredicates],
+    [selectFilteredByHost, selectComponentNodesFilterPredicates, selectMediumsPredicates],
     (nodes, predicates, mediumsPredicates) => {
         const predicatesArray = predicates.concat(mediumsPredicates);
         if (!predicatesArray.length) {
@@ -112,7 +117,7 @@ const selectPropertiesRequiredForRender = createSelector(
 export const selectRequiredAttributes = createSelector(
     [
         selectPropertiesRequiredForRender,
-        getPropertiesRequiredForFilters,
+        selectPropertiesRequiredForFilters,
         getPropertiesRequiredForMediums,
     ],
     (propertiesRequiredForRender, propertiesRequiredForFilters, propertiesRequiredForMediums) => {
@@ -150,7 +155,7 @@ const selectFetchedRacks = (state: RootState): string[] =>
     state.components.nodes.nodes.filterOptionsRacks;
 
 export const selectComponentNodesTags = createSelector(
-    [selectTagsFromAttributes, selectFetchedTags, getComponentNodesIndexByTag],
+    [selectTagsFromAttributes, selectFetchedTags, selectComponentNodesIndexByTag],
     (useFromAttrs, fetchedTags, nodesByTag) => {
         if (!useFromAttrs) {
             return fetchedTags;
@@ -161,7 +166,7 @@ export const selectComponentNodesTags = createSelector(
 );
 
 export const selectComponentNodesRacks = createSelector(
-    [selectRacksFromAttributes, selectFetchedRacks, getComponentNodesIndexByRack],
+    [selectRacksFromAttributes, selectFetchedRacks, selectComponentNodesIndexByRack],
     (useFromAttrs, fetchedRacks, nodesByRack) => {
         if (!useFromAttrs) {
             return fetchedRacks;
@@ -194,7 +199,7 @@ export const COMPONENTS_AVAILABLE_STATES = [
 ];
 
 export const selectComponentNodesFilterSetupStateValue = createSelector(
-    [getComponentNodesFilterStatePredicate],
+    [selectComponentNodesFilterStatePredicate],
     (predicate) => {
         if (!predicate) {
             return ['all'];

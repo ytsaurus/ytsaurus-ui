@@ -26,12 +26,12 @@ import {isRangeFilterDefined} from '../../../../../utils/components/nodes/setup'
 import {toaster} from '../../../../../utils/toaster';
 import {RootState} from '../../../../reducers';
 
-export const getSetupFiltersRaw = (state: RootState) => state.components.nodes.setup;
+export const selectSetupFiltersRaw = (state: RootState) => state.components.nodes.setup;
 
-export const getNodes = (state: RootState): Array<Node> => state.components.nodes.nodes.nodes;
+export const selectNodes = (state: RootState): Array<Node> => state.components.nodes.nodes.nodes;
 
-export const getComponentNodesFilterStatePredicate = createSelector(
-    [getSetupFiltersRaw],
+export const selectComponentNodesFilterStatePredicate = createSelector(
+    [selectSetupFiltersRaw],
     ({default: {state}}) => {
         if (!state.length || (state.length === 1 && state[0] === 'all')) {
             return undefined;
@@ -73,8 +73,8 @@ export const getComponentNodesFilterStatePredicate = createSelector(
     },
 );
 
-export const getComponentNodesFiltersSetup = createSelector(
-    [getSetupFiltersRaw, getMediumListNoCache],
+export const selectComponentNodesFiltersSetup = createSelector(
+    [selectSetupFiltersRaw, getMediumListNoCache],
     (setup, mediumList) => {
         const mediumDefaults = reduce_(
             mediumList,
@@ -88,7 +88,7 @@ export const getComponentNodesFiltersSetup = createSelector(
     },
 );
 
-export const getComponentNodesIndexByTag = createSelector([getNodes], (nodes) => {
+export const selectComponentNodesIndexByTag = createSelector([selectNodes], (nodes) => {
     const res = reduce_(
         nodes,
         (acc, node) => {
@@ -107,7 +107,7 @@ export const getComponentNodesIndexByTag = createSelector([getNodes], (nodes) =>
     return res;
 });
 
-export const getComponentNodesIndexByRack = createSelector([getNodes], (nodes) => {
+export const selectComponentNodesIndexByRack = createSelector([selectNodes], (nodes) => {
     return reduce_(
         nodes,
         (acc, node) => {
@@ -189,8 +189,8 @@ type Predicates = {
         | ((node: NodeWithProps<P>) => boolean);
 };
 
-const getRackPredicate = createSelector(
-    [getSetupFiltersRaw, getComponentNodesIndexByRack],
+const selectRackPredicate = createSelector(
+    [selectSetupFiltersRaw, selectComponentNodesIndexByRack],
     (setupFilters, nodesByRack) => {
         const {rack} = setupFilters.default;
         if ('string' !== typeof rack && rack.selected?.[0] === UNAWARE) {
@@ -202,12 +202,12 @@ const getRackPredicate = createSelector(
     },
 );
 
-const getFilterPredicatesObject = createSelector(
+const selectFilterPredicatesObject = createSelector(
     [
-        getSetupFiltersRaw,
-        getComponentNodesIndexByTag,
-        getRackPredicate,
-        getComponentNodesFilterStatePredicate,
+        selectSetupFiltersRaw,
+        selectComponentNodesIndexByTag,
+        selectRackPredicate,
+        selectComponentNodesFilterStatePredicate,
     ],
     (setupFilters, nodesByTags, rackPredicate, statePredicate) => {
         const predicates: Predicates = {
@@ -466,8 +466,8 @@ const getFilterPredicatesObject = createSelector(
     },
 );
 
-export const getComponentNodesFiltersCount = createSelector(
-    [getFilterPredicatesObject],
+export const selectComponentNodesFiltersCount = createSelector(
+    [selectFilterPredicatesObject],
     (filters) => {
         return reduce_(
             filters,
@@ -479,15 +479,15 @@ export const getComponentNodesFiltersCount = createSelector(
     },
 );
 
-export const getComponentNodesFilterPredicates = createSelector(
-    [getFilterPredicatesObject],
+export const selectComponentNodesFilterPredicates = createSelector(
+    [selectFilterPredicatesObject],
     (filterPredicatesObject) => {
         return filter_(filterPredicatesObject, (p) => p) as Array<(node: Node) => boolean>;
     },
 );
 
-export const getPropertiesRequiredForFilters = createSelector(
-    [getFilterPredicatesObject],
+export const selectPropertiesRequiredForFilters = createSelector(
+    [selectFilterPredicatesObject],
     (filterPredicatesObject) => {
         const picked = values_(
             pickBy_(

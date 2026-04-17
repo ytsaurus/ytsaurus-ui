@@ -32,7 +32,7 @@ import NodeCard from '../NodeCard/NodeCard';
 import {ComponentsNodeTypeSelector} from '../../../../../pages/system/Nodes/NodeTypeSelector';
 
 import {
-    getComponentNodesFiltersCount,
+    selectComponentNodesFiltersCount,
     selectComponentNodesTableProps,
     selectComponentsNodesNodeTypes,
     selectRequiredAttributes,
@@ -407,7 +407,7 @@ const mapStateToProps = (state: RootState) => {
         nodesTableProps,
         sideBarEnabled,
         nodeTypes: selectComponentsNodesNodeTypes(state),
-        filterCount: getComponentNodesFiltersCount(state),
+        filterCount: selectComponentNodesFiltersCount(state),
     };
 };
 
