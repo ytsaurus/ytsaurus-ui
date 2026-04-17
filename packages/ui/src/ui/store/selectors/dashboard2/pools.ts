@@ -1,6 +1,6 @@
 import {createWidgetDataFieldSelector} from './utils';
 
-export const getPoolsTypeFilter = createWidgetDataFieldSelector<'favourite' | 'custom'>(
+export const selectPoolsTypeFilter = createWidgetDataFieldSelector<'favourite' | 'custom'>(
     'type',
     'favourite',
 );

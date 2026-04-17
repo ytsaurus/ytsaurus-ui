@@ -4,7 +4,7 @@ import {Text} from '@gravity-ui/uikit';
 import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
 import {RootState} from '../../../../../../store/reducers';
-import {getPoolsTypeFilter} from '../../../../../../store/selectors/dashboard2/pools';
+import {selectPoolsTypeFilter} from '../../../../../../store/selectors/dashboard2/pools';
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
 
@@ -60,7 +60,7 @@ export function PoolsWidgetContent(props: PoolsWidgetProps) {
         data: {pools, isLoading, error},
     } = usePoolsWidget(props);
 
-    const type = useSelector((state: RootState) => getPoolsTypeFilter(state, props.id));
+    const type = useSelector((state: RootState) => selectPoolsTypeFilter(state, props.id));
     const itemsName = i18n(`fallback-item_${type || 'default'}`);
 
     return (
