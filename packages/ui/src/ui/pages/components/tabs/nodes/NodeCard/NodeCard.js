@@ -21,7 +21,7 @@ import CollapsibleSection from '../../../../../components/CollapsibleSection/Col
 import {loadNodeAttributes} from '../../../../../store/actions/components/node/node';
 import {getSortedItems} from '../../../../../store/selectors/components/nodes/node-card';
 
-import {nodeSelector} from '../../../../../store/selectors/components/node/node';
+import {selectNode} from '../../../../../store/selectors/components/node/node';
 import {selectCluster, selectCurrentClusterConfig} from '../../../../../store/selectors/global';
 import hammer from '../../../../../common/hammer';
 import NodeCpuAndMemory, {
@@ -333,7 +333,7 @@ class NodeCard extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const {node, loaded, error, errorData} = nodeSelector(state);
+    const {node, loaded, error, errorData} = selectNode(state);
     const cluster = selectCluster(state);
 
     return {

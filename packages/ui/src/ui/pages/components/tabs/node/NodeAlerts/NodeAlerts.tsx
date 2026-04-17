@@ -4,7 +4,7 @@ import map_ from 'lodash/map';
 
 import cn from 'bem-cn-lite';
 
-import {getNodeAlerts} from '../../../../../store/selectors/components/node/node';
+import {selectNodeAlerts} from '../../../../../store/selectors/components/node/node';
 import {useSelector} from '../../../../../store/redux-hooks';
 import {YTAlertBlock} from '../../../../../components/Alert/Alert';
 
@@ -13,7 +13,7 @@ import './NodeAlerts.scss';
 const block = cn('yt-node-alerts');
 
 function NodeAlerts() {
-    const alerts = useSelector(getNodeAlerts);
+    const alerts = useSelector(selectNodeAlerts);
     return (
         <div>
             {map_(alerts, (item, index) => (

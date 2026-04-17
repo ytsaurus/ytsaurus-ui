@@ -7,7 +7,7 @@ import {Progress} from '@gravity-ui/uikit';
 import format from '../../../../../common/hammer/format';
 import {ClipboardButton} from '@ytsaurus/components';
 import {DataTableYT} from '../../../../../components/DataTableYT';
-import {nodeSelector} from '../../../../../store/selectors/components/node/node';
+import {selectNode} from '../../../../../store/selectors/components/node/node';
 import Label from '../../../../../components/Label';
 
 interface LocationInfo {
@@ -105,7 +105,7 @@ const columns: Array<Column<LocationInfo>> = [
 ];
 
 function NodeLocations(): ReturnType<React.VFC> {
-    const {node} = useSelector(nodeSelector);
+    const {node} = useSelector(selectNode);
 
     if (!(node && node.locations.length > 0)) {
         return null;
