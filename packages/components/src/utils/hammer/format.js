@@ -43,6 +43,7 @@ function postformat(value) {
         ['Yamr', 'YaMR'],
         ['Io', 'IO'],
         ['Ssd', 'SSD'],
+        ['nvme', 'NVME'],
         ['hdd', 'HDD'],
         ['Rpc', 'RPC'],
         ['VCPU', 'vCPU'],
