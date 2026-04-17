@@ -14,7 +14,7 @@ import {loadNodeAttributes} from '../../../../store/actions/components/node/node
 import {useUpdater} from '../../../../hooks/use-updater';
 import {makeTabProps} from '../../../../utils';
 import type {RootState} from '../../../../store/reducers';
-import {selectNodeAlertCount, selectNode} from '../../../../store/selectors/components/node/node';
+import {selectNode, selectNodeAlertCount} from '../../../../store/selectors/components/node/node';
 import {selectSortedItems} from '../../../../store/selectors/components/nodes/node-card';
 import NodeMeta from './NodeMeta/NodeMeta';
 
