@@ -7,23 +7,23 @@ import {
     VersionSummaryRow,
 } from '../../../../store/reducers/components/versions/versions_v2';
 
-export const getSummarySortState = (
+export const selectSummarySortState = (
     state: RootState,
 ): undefined | SortState<keyof VersionSummaryItem> =>
     (state.components.versionsV2 as FIX_MY_TYPE).summarySortState;
 
-const getSummary = (state: RootState): Array<VersionSummaryItem> =>
+const selectSummary = (state: RootState): Array<VersionSummaryItem> =>
     state.components.versionsV2.summary;
 
-export const getHideOfflineValue = (state: RootState): boolean =>
+export const selectHideOfflineValue = (state: RootState): boolean =>
     state.components.versionsV2.checkedHideOffline;
 
-function getTotalElementOfSummary(summary: ReturnType<typeof getSummary>) {
+function getTotalElementOfSummary(summary: ReturnType<typeof selectSummary>) {
     return summary[summary.length - 1];
 }
 
-export const getVisibleSummaryItems = createSelector(
-    [getSummary, getHideOfflineValue],
+export const selectVisibleSummaryItems = createSelector(
+    [selectSummary, selectHideOfflineValue],
     (summary = [], checkedHideOffline) => {
         let items = summary;
         if (checkedHideOffline) {
@@ -33,7 +33,7 @@ export const getVisibleSummaryItems = createSelector(
     },
 );
 
-export const getVersions = createSelector([getVisibleSummaryItems], (summary = []) => {
+export const selectVersions = createSelector([selectVisibleSummaryItems], (summary = []) => {
     const versions = [];
     for (const item of summary) {
         if (item) {
@@ -46,8 +46,8 @@ export const getVersions = createSelector([getVisibleSummaryItems], (summary = [
     return versions;
 });
 
-export const getVersionsSummaryData = createSelector(
-    [getSummary, getSummarySortState, getHideOfflineValue],
+export const selectVersionsSummaryData = createSelector(
+    [selectSummary, selectSummarySortState, selectHideOfflineValue],
     (summary = [], sortState, checkedHideOffline) => {
         const error = summary[summary.length - 2];
         const total = getTotalElementOfSummary(summary);

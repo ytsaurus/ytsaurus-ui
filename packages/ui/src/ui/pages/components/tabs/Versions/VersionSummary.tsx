@@ -9,10 +9,10 @@ import {DataTableYT} from '../../../../components/DataTableYT';
 import * as DT100 from '@gravity-ui/react-data-table';
 import DataTable from '@gravity-ui/react-data-table';
 import {
-    getHideOfflineValue,
-    getSummarySortState,
-    getVersions,
-    getVersionsSummaryData,
+    selectHideOfflineValue,
+    selectSummarySortState,
+    selectVersions,
+    selectVersionsSummaryData,
 } from '../../../../store/selectors/components/versions/versions_v2-ts';
 
 import hammer from '../../../../common/hammer';
@@ -338,10 +338,10 @@ const mapStateToProps = (state: RootState) => {
     const {loading, loaded} = state.components.versionsV2;
     const cluster = selectCluster(state);
 
-    const sortState = getSummarySortState(state);
+    const sortState = selectSummarySortState(state);
 
-    const visibleColumns = getVersions(state);
-    const items = getVersionsSummaryData(state);
+    const visibleColumns = selectVersions(state);
+    const items = selectVersionsSummaryData(state);
 
     return {
         loading: loading as boolean,
@@ -349,7 +349,7 @@ const mapStateToProps = (state: RootState) => {
         cluster,
         items,
         sortState,
-        checkedHideOffline: getHideOfflineValue(state),
+        checkedHideOffline: selectHideOfflineValue(state),
         visibleColumns,
     };
 };
