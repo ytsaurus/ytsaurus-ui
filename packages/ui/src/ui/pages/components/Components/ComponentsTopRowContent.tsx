@@ -6,7 +6,7 @@ import {Breadcrumbs} from '@gravity-ui/uikit';
 import {Tab as ComponentsTab} from '../../../constants/components/main';
 import {Page} from '../../../constants/index';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
-import {nodeHostSelector} from '../../../store/selectors/components/node/node';
+import {selectNodeHost} from '../../../store/selectors/components/node/node';
 import {selectCluster} from '../../../store/selectors/global';
 
 import './ComponentsTopRowContent.scss';
@@ -35,7 +35,7 @@ function ComponentsNodeTopRowContent() {
 
 function ComponentsBreadcrumbs() {
     const cluster = useSelector(selectCluster);
-    const nodeHost = useSelector(nodeHostSelector);
+    const nodeHost = useSelector(selectNodeHost);
     const history = useHistory();
     const items = React.useMemo(() => {
         const nodesPageUrl = `/${cluster}/${Page.COMPONENTS}/${ComponentsTab.NODES}`;

@@ -12,7 +12,7 @@ import NodeResources, {
 import NodeStorage, {
     hasStorageMeta,
 } from '../../../../../pages/components/tabs/node/NodeStorage/NodeStorage';
-import {nodeSelector} from '../../../../../store/selectors/components/node/node';
+import {selectNode} from '../../../../../store/selectors/components/node/node';
 
 import './NodeGeneralTab.scss';
 import {YTAlertBlock} from '../../../../../components/Alert/Alert';
@@ -20,7 +20,7 @@ import {YTAlertBlock} from '../../../../../components/Alert/Alert';
 const block = cn('node-general');
 
 function NodeGeneralTab(): ReturnType<React.VFC> {
-    const {node} = useSelector(nodeSelector);
+    const {node} = useSelector(selectNode);
 
     if (!node) {
         return null;

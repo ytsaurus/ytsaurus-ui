@@ -14,7 +14,7 @@ import {loadNodeAttributes} from '../../../../store/actions/components/node/node
 import {useUpdater} from '../../../../hooks/use-updater';
 import {makeTabProps} from '../../../../utils';
 import type {RootState} from '../../../../store/reducers';
-import {getNodeAlertCount, nodeSelector} from '../../../../store/selectors/components/node/node';
+import {selectNodeAlertCount, selectNode} from '../../../../store/selectors/components/node/node';
 import {getSortedItems} from '../../../../store/selectors/components/nodes/node-card';
 import NodeMeta from './NodeMeta/NodeMeta';
 
@@ -35,10 +35,10 @@ export interface NodeDetailsProps extends RouteComponentProps<RouteParams> {}
 function NodePage({match}: NodeDetailsProps): ReturnType<React.VFC> {
     const dispatch = useDispatch();
 
-    const {node, loading, loaded, error, errorData} = useSelector(nodeSelector);
+    const {node, loading, loaded, error, errorData} = useSelector(selectNode);
 
     const host = decodeURIComponent(match.params.host);
-    const alertCount = useSelector(getNodeAlertCount);
+    const alertCount = useSelector(selectNodeAlertCount);
 
     const updateFn = React.useCallback(() => {
         dispatch(loadNodeAttributes(host));
