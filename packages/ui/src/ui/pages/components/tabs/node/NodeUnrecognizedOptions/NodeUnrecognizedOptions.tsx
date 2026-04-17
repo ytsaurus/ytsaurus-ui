@@ -8,8 +8,8 @@ const block = cn('node-unrecognized-options');
 
 import {loadNodeUnrecognizedOptions} from '../../../../../store/actions/components/node/unrecognized-options';
 import {
-    getNodeUnrecognizedOptionsData,
-    getNodeUnrecognizedOptionsError,
+    selectNodeUnrecognizedOptionsData,
+    selectNodeUnrecognizedOptionsError,
 } from '../../../../../store/selectors/components/node/unrecognized-options';
 import {YTErrorBlock} from '../../../../../components/Error/Error';
 import Yson from '../../../../../components/Yson/Yson';
@@ -23,8 +23,8 @@ export function NodeUnrecognizedOptions({host}: {host: string}) {
         dispatch(loadNodeUnrecognizedOptions(host));
     }, [host, dispatch]);
 
-    const data = useSelector(getNodeUnrecognizedOptionsData);
-    const error = useSelector(getNodeUnrecognizedOptionsError);
+    const data = useSelector(selectNodeUnrecognizedOptionsData);
+    const error = useSelector(selectNodeUnrecognizedOptionsError);
 
     const unipikaSettings = useSelector(getNodeUnrecognizedOptionsYsonSettings);
 
