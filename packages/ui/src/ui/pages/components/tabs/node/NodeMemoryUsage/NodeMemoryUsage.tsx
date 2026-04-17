@@ -7,8 +7,8 @@ import NodeBundles from '../../../../../pages/components/tabs/node/NodeBundles/N
 import NodeTables from '../../../../../pages/components/tabs/node/NodeTables/NodeTables';
 import {loadNodeMemoryUsage} from '../../../../../store/actions/components/node/memory';
 import {
-    getNodeMemoryError,
-    getNodeMemoryViewMode,
+    selectNodeMemoryError,
+    selectNodeMemoryViewMode,
 } from '../../../../../store/selectors/components/node/memory';
 import {useUpdater} from '../../../../../hooks/use-updater';
 import {YTErrorBlock} from '../../../../../components/Error/Error';
@@ -26,7 +26,7 @@ interface Props extends RouteComponentProps<RouteParams> {}
 function NodeMemoryUsage({match}: Props): ReturnType<React.VFC> {
     const dispatch = useDispatch();
 
-    const error = useSelector(getNodeMemoryError);
+    const error = useSelector(selectNodeMemoryError);
 
     const host = decodeURIComponent(match.params.host);
 
@@ -36,7 +36,7 @@ function NodeMemoryUsage({match}: Props): ReturnType<React.VFC> {
 
     useUpdater(updateFn, {timeout: 15 * 1000});
 
-    const viewMode = useSelector(getNodeMemoryViewMode);
+    const viewMode = useSelector(selectNodeMemoryViewMode);
 
     return (
         <div className={block()}>

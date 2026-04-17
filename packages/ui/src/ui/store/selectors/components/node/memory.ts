@@ -18,44 +18,46 @@ import {selectCluster} from '../../../../store/selectors/global';
 import {SortState} from '../../../../types';
 import {orderTypeToOldSortState} from '../../../../utils/sort-helpers';
 
-export const nodeMemorySelector = (state: RootState) => state.components.node.memory;
+export const selectNodeMemory = (state: RootState) => state.components.node.memory;
 
-export const getNodeMemoryLoaded = (state: RootState) => state.components.node.memory.loaded;
+export const selectNodeMemoryLoaded = (state: RootState) => state.components.node.memory.loaded;
 
-export const getNodeMemoryLoading = (state: RootState) => state.components.node.memory.loading;
+export const selectNodeMemoryLoading = (state: RootState) => state.components.node.memory.loading;
 
-export const getNodeMemoryError = (state: RootState) => state.components.node.memory.error;
+export const selectNodeMemoryError = (state: RootState) => state.components.node.memory.error;
 
-export const getNodeMemoryViewMode = (state: RootState) => state.components.node.memory.viewMode;
+export const selectNodeMemoryViewMode = (state: RootState) => state.components.node.memory.viewMode;
 
-export const getNodeMemoryFilter = (state: RootState) => state.components.node.memory.filter;
+export const selectNodeMemoryFilter = (state: RootState) => state.components.node.memory.filter;
 
-export const getNodeMemoryStateHost = (state: RootState) => state.components.node.memory.host;
+export const selectNodeMemoryStateHost = (state: RootState) => state.components.node.memory.host;
 
-export const getNodeMemorySortOrder = (state: RootState) => state.components.node.memory.sortOrder;
+export const selectNodeMemorySortOrder = (state: RootState) =>
+    state.components.node.memory.sortOrder;
 
-export const getNodeMemoryCollapsedBundles = (state: RootState) =>
+export const selectNodeMemoryCollapsedBundles = (state: RootState) =>
     state.components.node.memory.collapsedBundles;
 
-const getNodeMemoryUsageTotal = (state: RootState) => state.components.node.memory.memory?.total;
+const selectNodeMemoryUsageTotal = (state: RootState) => state.components.node.memory.memory?.total;
 
-const getNodeMemoryUsageBundles = (state: RootState) =>
+const selectNodeMemoryUsageBundles = (state: RootState) =>
     state.components.node.memory.memory?.bundles;
 
-const getNodeMemoryUsageTables = (state: RootState) => state.components.node.memory.memory?.tables;
+const selectNodeMemoryUsageTables = (state: RootState) =>
+    state.components.node.memory.memory?.tables;
 
-export const getNodeMemoryUsageTablesSortOrder = (state: RootState) =>
+export const selectNodeMemoryUsageTablesSortOrder = (state: RootState) =>
     state.components.node.memory.tablesSortOrder;
 
-export const getNodeMemoryUsageTotalStorePreload = createSelector(
-    [getNodeMemoryUsageTotal],
+export const selectNodeMemoryUsageTotalStorePreload = createSelector(
+    [selectNodeMemoryUsageTotal],
     calculateStorePreload,
 );
 
-export const getNodeMemoryUsageTotalTableStatic = (state: RootState) =>
+export const selectNodeMemoryUsageTotalTableStatic = (state: RootState) =>
     state.components.node.memory.memory?.total.tablet_static;
 
-export const getNodeMemoryUsageTotalRowCache = (state: RootState) =>
+export const selectNodeMemoryUsageTotalRowCache = (state: RootState) =>
     state.components.node.memory.memory?.total.row_cache;
 
 function calculateStorePreload(total?: NodeMemoryUsagePreload) {
@@ -73,8 +75,8 @@ function calculateStorePreload(total?: NodeMemoryUsagePreload) {
     };
 }
 
-export const getNodeMemoryUsageTotalTabletDynamic = createSelector(
-    [getNodeMemoryUsageTotal],
+export const selectNodeMemoryUsageTotalTabletDynamic = createSelector(
+    [selectNodeMemoryUsageTotal],
     (total) => {
         const {active, passive, backing, usage, limit, ...others} = total?.tablet_dynamic || {};
 
@@ -104,8 +106,8 @@ export interface NodeMemoryInfo {
     url: string;
 }
 
-const getNodeMemoryUsageBundlesByName = createSelector(
-    [getNodeMemoryUsageBundles, selectCluster],
+const selectNodeMemoryUsageBundlesByName = createSelector(
+    [selectNodeMemoryUsageBundles, selectCluster],
     (bundles, cluster) => {
         const itemsByName: Record<string, NodeMemoryInfo> = {};
 
@@ -141,8 +143,8 @@ const getNodeMemoryUsageBundlesByName = createSelector(
     },
 );
 
-const getNodeMemoryUsageBundlesTreeRoot = createSelector(
-    [getNodeMemoryUsageBundles, getNodeMemoryUsageBundlesByName, selectCluster],
+const selectNodeMemoryUsageBundlesTreeRoot = createSelector(
+    [selectNodeMemoryUsageBundles, selectNodeMemoryUsageBundlesByName, selectCluster],
     (bundles, bundlesInfo, cluster) => {
         const itemsByName: Record<string, NodeMemoryInfo> = {...bundlesInfo};
 
@@ -172,8 +174,12 @@ const getNodeMemoryUsageBundlesTreeRoot = createSelector(
     },
 );
 
-export const getNodeMemoryUsageBundlesTreeRootFiltered = createSelector(
-    [getNodeMemoryUsageBundlesTreeRoot, getNodeMemoryCollapsedBundles, getNodeMemoryFilter],
+export const selectNodeMemoryUsageBundlesTreeRootFiltered = createSelector(
+    [
+        selectNodeMemoryUsageBundlesTreeRoot,
+        selectNodeMemoryCollapsedBundles,
+        selectNodeMemoryFilter,
+    ],
     (root, collapsedBundles, filter) => {
         const collapsed = new Set(collapsedBundles);
         let res: typeof root = {...root};
@@ -205,8 +211,8 @@ export const getNodeMemoryUsageBundlesTreeRootFiltered = createSelector(
     },
 );
 
-export const getNodeMemoryUsageBundlesItems = createSelector(
-    [getNodeMemoryUsageBundlesTreeRootFiltered, getNodeMemorySortOrder],
+export const selectNodeMemoryUsageBundlesItems = createSelector(
+    [selectNodeMemoryUsageBundlesTreeRootFiltered, selectNodeMemorySortOrder],
     (root, [sortOrder]) => {
         if (!root) {
             return [];
@@ -254,17 +260,17 @@ function sortTreeInPlace(root: TreeNode<NodeMemoryInfo, NodeMemoryInfo>, sortOrd
     }
 }
 
-const allowBundlesForTables = createSelector([getNodeMemoryUsageTables], (tables) => {
+const selectAllowBundlesForTables = createSelector([selectNodeMemoryUsageTables], (tables) => {
     const [first] = toArray_(tables);
     return first?.tablet_cell_bundle !== undefined;
 });
 
-const getNodeMemoryUsageTablesAndBundlesByName = createSelector(
+const selectNodeMemoryUsageTablesAndBundlesByName = createSelector(
     [
-        allowBundlesForTables,
-        getNodeMemoryUsageTables,
+        selectAllowBundlesForTables,
+        selectNodeMemoryUsageTables,
         selectCluster,
-        getNodeMemoryUsageBundlesByName,
+        selectNodeMemoryUsageBundlesByName,
     ],
     (allowBundles, tables, cluster, bundles) => {
         let maxRowCache = 0;
@@ -315,8 +321,8 @@ const getNodeMemoryUsageTablesAndBundlesByName = createSelector(
     },
 );
 
-export const getNodeMemoryUsageTablesTree = createSelector(
-    [getNodeMemoryUsageTablesAndBundlesByName],
+export const selectNodeMemoryUsageTablesTree = createSelector(
+    [selectNodeMemoryUsageTablesAndBundlesByName],
     (tablesAndBundles) => {
         const tree = prepareTree(tablesAndBundles, (item) => item.parent);
 
@@ -324,8 +330,8 @@ export const getNodeMemoryUsageTablesTree = createSelector(
     },
 );
 
-export const getNodeMemoryUsageTablesFiltered = createSelector(
-    [getNodeMemoryUsageTablesTree, getNodeMemoryCollapsedBundles, getNodeMemoryFilter],
+export const selectNodeMemoryUsageTablesFiltered = createSelector(
+    [selectNodeMemoryUsageTablesTree, selectNodeMemoryCollapsedBundles, selectNodeMemoryFilter],
     (root, collapsedBundles, filter) => {
         const collapsed = new Set(collapsedBundles);
         let res: typeof root;
@@ -357,8 +363,8 @@ export const getNodeMemoryUsageTablesFiltered = createSelector(
     },
 );
 
-export const getNodeMemoryUsageTablesItemsSorted = createSelector(
-    [getNodeMemoryUsageTablesFiltered, getNodeMemoryUsageTablesSortOrder],
+export const selectNodeMemoryUsageTablesItemsSorted = createSelector(
+    [selectNodeMemoryUsageTablesFiltered, selectNodeMemoryUsageTablesSortOrder],
     (root, [sortOrder]) => {
         if (sortOrder && root) {
             sortTreeInPlace(root, sortOrder);
