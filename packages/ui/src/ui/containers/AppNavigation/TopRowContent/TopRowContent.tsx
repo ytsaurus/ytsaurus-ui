@@ -3,7 +3,7 @@ import React from 'react';
 import {useSelector} from '../../../store/redux-hooks';
 
 import {selectGlobalLoadState} from '../../../store/selectors/global';
-import {getSettingNewDashboardPage} from '../../../store/selectors/dashboard2/dashboard';
+import {selectSettingNewDashboardPage} from '../../../store/selectors/dashboard2/dashboard';
 
 import {LOADING_STATUS, Page} from '../../../constants/index';
 import {Route, Switch} from 'react-router';
@@ -32,7 +32,7 @@ import {FlowPageTopRowLazy} from '../../../pages/flow/lazy';
 
 export default function TopRowContent() {
     const loadState = useSelector(selectGlobalLoadState);
-    const isNewDashboardPage = useSelector(getSettingNewDashboardPage);
+    const isNewDashboardPage = useSelector(selectSettingNewDashboardPage);
 
     return loadState !== LOADING_STATUS.LOADED ? null : (
         <Switch>

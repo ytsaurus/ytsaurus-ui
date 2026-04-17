@@ -8,7 +8,7 @@ import guid from '../../../common/hammer/guid';
 import {RootState} from '../../../store/reducers';
 import {setSettingByKey} from '../../../store/actions/settings';
 import {selectCluster} from '../../../store/selectors/global';
-import {getDashboardConfig} from '../../../store/selectors/dashboard2/dashboard';
+import {selectDashboardConfig} from '../../../store/selectors/dashboard2/dashboard';
 
 import {dashboardConfig} from '../../../constants/dashboard2';
 
@@ -19,7 +19,7 @@ export function createWidgetDataFieldAction<FieldType>(
         return (dispatch, getState) => {
             const state = getState();
             const cluster = selectCluster(state);
-            const config = getDashboardConfig(state);
+            const config = selectDashboardConfig(state);
 
             const oldItem = config.items.find((item) => item.id === id);
 

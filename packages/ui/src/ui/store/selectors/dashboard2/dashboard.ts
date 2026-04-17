@@ -8,7 +8,7 @@ import {dashboardConfig} from '../../../constants/dashboard2';
 
 import {makeDefaultConfig} from '../../../utils/dashboard2/make-default-config';
 
-export const getDashboardConfig = createSelector(
+export const selectDashboardConfig = createSelector(
     [getSettingsData, selectCluster],
     (data, cluster) => {
         // if user setuped his dashboard on current cluster no need to retrun default values
@@ -23,5 +23,5 @@ export const getDashboardConfig = createSelector(
     },
 );
 
-export const getSettingNewDashboardPage = (state: RootState) =>
+export const selectSettingNewDashboardPage = (state: RootState) =>
     getSettingsData(state)['global::newDashboardPage'];

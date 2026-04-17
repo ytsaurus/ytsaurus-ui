@@ -11,7 +11,7 @@ import {
     getEdittingConfig,
     openSettingsDialog,
 } from '../../../store/reducers/dashboard2/dashboard';
-import {getDashboardConfig} from '../../../store/selectors/dashboard2/dashboard';
+import {selectDashboardConfig} from '../../../store/selectors/dashboard2/dashboard';
 import {selectCluster} from '../../../store/selectors/global';
 import {selectIsAdmin} from '../../../store/selectors/global/is-developer';
 
@@ -29,7 +29,7 @@ export function Dashboard() {
     const dispatch = useDispatch();
 
     const editMode = useSelector(getEditMode);
-    const config = useSelector(getDashboardConfig);
+    const config = useSelector(selectDashboardConfig);
     const edittingConfig = useSelector(getEdittingConfig);
     const cluster = useSelector(selectCluster);
     const isAdmin = useSelector(selectIsAdmin);
