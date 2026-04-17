@@ -1,6 +1,7 @@
 import {RootState} from '../../../reducers';
 
-export const getNodeUnrecognizedOptionsData = (state: RootState) =>
+export const selectNodeUnrecognizedOptionsData = (state: RootState) =>
     state.components.node.unrecognizedOptions.data;
-export const getNodeUnrecognizedOptionsError = (state: RootState) =>
+
+export const selectNodeUnrecognizedOptionsError = (state: RootState) =>
     state.components.node.unrecognizedOptions.error;
