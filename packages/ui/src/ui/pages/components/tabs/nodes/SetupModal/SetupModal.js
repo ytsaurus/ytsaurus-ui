@@ -29,7 +29,7 @@ import {parseBytes} from '../../../../../utils/parse/parse-bytes';
 import {getMediumListNoCache} from '../../../../../store/selectors/thor';
 import TagsFilter from './TagsFilter/TagsFilter';
 import {
-    getComponentNodesFiltersSetup,
+    selectComponentNodesFiltersSetup,
     selectComponentNodesRacks,
     selectComponentNodesTags,
 } from '../../../../../store/selectors/components/nodes/nodes';
@@ -812,7 +812,7 @@ export class SetupModal extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        setup: getComponentNodesFiltersSetup(state),
+        setup: selectComponentNodesFiltersSetup(state),
         mediumList: getMediumListNoCache(state),
         nodeTags: selectComponentNodesTags(state),
         nodeRacks: selectComponentNodesRacks(state),
