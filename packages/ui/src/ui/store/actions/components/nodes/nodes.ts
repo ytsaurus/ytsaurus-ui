@@ -12,8 +12,8 @@ import ypath from '../../../../common/thor/ypath';
 import {setSetting} from '../../../../store/actions/settings';
 import {NAMESPACES, SettingName} from '../../../../../shared/constants/settings';
 import {
-    selectRequiredAttributes,
     selectRacksFromAttributes,
+    selectRequiredAttributes,
     selectTagsFromAttributes,
 } from '../../../../store/selectors/components/nodes/nodes';
 import {getTemplates} from '../../../../store/selectors/settings';
