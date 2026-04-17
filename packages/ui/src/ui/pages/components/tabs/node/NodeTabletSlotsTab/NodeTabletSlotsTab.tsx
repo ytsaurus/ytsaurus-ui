@@ -3,12 +3,12 @@ import React from 'react';
 
 import NodeTabletSlots from '../../../../../pages/components/tabs/node/NodeTabletSlots/NodeTabletSlots';
 import type {RootState} from '../../../../../store/reducers';
-import {getSortedItems} from '../../../../../store/selectors/components/nodes/node-card';
+import {selectSortedItems} from '../../../../../store/selectors/components/nodes/node-card';
 import {selectNode} from '../../../../../store/selectors/components/node/node';
 
 function NodeTabletSlotsTab(): ReturnType<React.VFC> {
     const {node} = useSelector(selectNode);
-    const tabletSlots = useSelector((state: RootState) => node && getSortedItems(state, {node}));
+    const tabletSlots = useSelector((state: RootState) => node && selectSortedItems(state, {node}));
 
     if (!(node && tabletSlots.length > 0)) {
         return null;

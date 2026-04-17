@@ -6,12 +6,13 @@ import type {Node} from '../../../../store/reducers/components/nodes/nodes/node'
 import {nodeTableProps} from '../../../../utils/components/nodes/node';
 import hammer from '../../../../common/hammer';
 
-const getSortState = (state: RootState) => state.tables[COMPONENTS_NODES_NODE_TABLE_ID];
-const getTabletSlots = (_state: RootState, props: {node: Pick<Node, 'tabletSlots'>}) =>
+const selectSortState = (state: RootState) => state.tables[COMPONENTS_NODES_NODE_TABLE_ID];
+
+const selectTabletSlots = (_state: RootState, props: {node: Pick<Node, 'tabletSlots'>}) =>
     props.node.tabletSlots;
 
-export const getSortedItems = createSelector(
-    [getSortState, getTabletSlots],
+export const selectSortedItems = createSelector(
+    [selectSortState, selectTabletSlots],
     (sortState, tabletSlots) =>
         tabletSlots
             ? hammer.utils.sort(tabletSlots.raw, sortState, nodeTableProps.columns.items)
