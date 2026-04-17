@@ -4,7 +4,8 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {type YTErrorRaw} from '../../../@types/types';
 
 import {type YTError} from '../../types';
-import {ypathBase} from '../../common/thor/ypath-base';
+// @ts-expect-error
+import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
 export function forEachYTError<T extends YTErrorRaw>(
     errors: Array<T>,
@@ -56,5 +57,5 @@ export function appendInnerErrors(targetErr: any, innerErr: YTError) {
 }
 
 export function getYtErrorCode(error: YTErrorRaw | unknown): number {
-    return ypathBase.getNumberBase(error, '/code', NaN);
+    return ypath.getNumberBase(error, '/code', NaN);
 }
