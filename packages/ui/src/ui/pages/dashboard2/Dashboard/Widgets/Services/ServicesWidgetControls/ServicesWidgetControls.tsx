@@ -4,7 +4,7 @@ import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 
 import {RootState} from '../../../../../../store/reducers';
 import {setServicesTypeFilter} from '../../../../../../store/actions/dashboard2/services';
-import {getServicesTypeFilter} from '../../../../../../store/selectors/dashboard2/services';
+import {selectServicesTypeFilter} from '../../../../../../store/selectors/dashboard2/services';
 
 import type {ServicesWidgetProps} from '../types';
 
@@ -13,7 +13,7 @@ import i18n from '../i18n';
 export function ServicesWidgetControls(props: ServicesWidgetProps) {
     const dispatch = useDispatch();
 
-    const type = useSelector((state: RootState) => getServicesTypeFilter(state, props.id));
+    const type = useSelector((state: RootState) => selectServicesTypeFilter(state, props.id));
 
     const onUpdate = (value: 'favourite' | 'custom') => {
         dispatch(setServicesTypeFilter(props.id, value));
