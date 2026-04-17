@@ -10,8 +10,8 @@ import format from '../../../../../../common/hammer/format';
 import {RootState} from '../../../../../../store/reducers';
 import {
     type QueryStatusesFilter,
-    getQueryFilterEngine,
-    getQueryFilterState,
+    selectQueryFilterEngine,
+    selectQueryFilterState,
 } from '../../../../../../store/selectors/dashboard2/queries';
 import {
     setQueryEngineFilter,
@@ -55,8 +55,8 @@ export function QueriesWidgetControls(props: QueriesWidgetProps) {
 
     const dispatch = useDispatch();
 
-    const queryState = useSelector((state: RootState) => getQueryFilterState(state, id));
-    const engine = useSelector((state: RootState) => getQueryFilterEngine(state, id));
+    const queryState = useSelector((state: RootState) => selectQueryFilterState(state, id));
+    const engine = useSelector((state: RootState) => selectQueryFilterEngine(state, id));
 
     const onStateUpdate = (value: string[]) => {
         dispatch(setQueryStateFilter(id, value[0]));

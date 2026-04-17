@@ -3,7 +3,7 @@ import {useSelector} from '../../../../../../store/redux-hooks';
 import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
 import {RootState} from '../../../../../../store/reducers';
-import {getQueryFilterState} from '../../../../../../store/selectors/dashboard2/queries';
+import {selectQueryFilterState} from '../../../../../../store/selectors/dashboard2/queries';
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
 import {WidgetText} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetText/WidgetText';
@@ -62,7 +62,7 @@ const columns = [
 export function QueriesWidgetContent(props: QueriesWidgetProps) {
     const {queries, error, isLoading} = useQueriesWidget(props);
 
-    const queryState = useSelector((state: RootState) => getQueryFilterState(state, props.id));
+    const queryState = useSelector((state: RootState) => selectQueryFilterState(state, props.id));
     const itemsName = i18n(`fallback-item_${queryState || 'all'}`);
 
     return (
