@@ -15,7 +15,7 @@ import {useUpdater} from '../../../../hooks/use-updater';
 import {makeTabProps} from '../../../../utils';
 import type {RootState} from '../../../../store/reducers';
 import {selectNodeAlertCount, selectNode} from '../../../../store/selectors/components/node/node';
-import {getSortedItems} from '../../../../store/selectors/components/nodes/node-card';
+import {selectSortedItems} from '../../../../store/selectors/components/nodes/node-card';
 import NodeMeta from './NodeMeta/NodeMeta';
 
 import './NodePage.scss';
@@ -48,7 +48,7 @@ function NodePage({match}: NodeDetailsProps): ReturnType<React.VFC> {
 
     const initialLoading = loading && (!loaded || host !== node?.host);
 
-    const tabletSlots = useSelector((state: RootState) => node && getSortedItems(state, {node}));
+    const tabletSlots = useSelector((state: RootState) => node && selectSortedItems(state, {node}));
 
     const matchUrl = match.url;
     const tabProps = React.useMemo(

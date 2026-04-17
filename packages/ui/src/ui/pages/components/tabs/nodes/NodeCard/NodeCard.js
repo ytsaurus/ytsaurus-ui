@@ -19,7 +19,7 @@ import {Template} from '../../../../../components/MetaTable/templates/Template';
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
 
 import {loadNodeAttributes} from '../../../../../store/actions/components/node/node';
-import {getSortedItems} from '../../../../../store/selectors/components/nodes/node-card';
+import {selectSortedItems} from '../../../../../store/selectors/components/nodes/node-card';
 
 import {selectNode} from '../../../../../store/selectors/components/node/node';
 import {selectCluster, selectCurrentClusterConfig} from '../../../../../store/selectors/global';
@@ -342,7 +342,7 @@ const mapStateToProps = (state) => {
         errorData,
         loaded,
         node,
-        tabletSlots: node && getSortedItems(state, {node}),
+        tabletSlots: node && selectSortedItems(state, {node}),
         clusterConfig: selectCurrentClusterConfig(state),
     };
 };
