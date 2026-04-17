@@ -30,32 +30,37 @@ import {
 } from './predicates';
 import {NODE_TYPE, NodeType} from '../../../../../../shared/constants/system';
 
-const getContentMode = (state: RootState) => state.components.nodes.nodes.contentMode;
-const getHostFilter = (state: RootState) => state.components.nodes.nodes.hostFilter.toLowerCase();
-const getSortState = (state: RootState) => state.tables[COMPONENTS_NODES_TABLE_ID];
-const getComponentsNodesNodeTypeRaw = (state: RootState) => state.components.nodes.nodes.nodeTypes;
+const selectContentMode = (state: RootState) => state.components.nodes.nodes.contentMode;
 
-const getCustomColumns = (state: RootState) => getSelectedColumns(state) || defaultColumns;
+const selectHostFilter = (state: RootState) =>
+    state.components.nodes.nodes.hostFilter.toLowerCase();
 
-const getMediumsPredicates = createSelector(
+const selectSortState = (state: RootState) => state.tables[COMPONENTS_NODES_TABLE_ID];
+
+const selectComponentsNodesNodeTypeRaw = (state: RootState) =>
+    state.components.nodes.nodes.nodeTypes;
+
+const selectCustomColumns = (state: RootState) => getSelectedColumns(state) || defaultColumns;
+
+const selectMediumsPredicates = createSelector(
     [getComponentNodesFiltersSetup, getMediumListNoCache],
     createMediumsPredicates,
 );
 
 const getPropertiesRequiredForMediums = createSelector(
-    [getMediumsPredicates],
+    [selectMediumsPredicates],
     (mediumsPredicates) => (mediumsPredicates.length > 0 ? (['IOWeight'] as const) : []),
 );
 
-const getFilteredByHost = createSelector([getNodes, getHostFilter], (nodes, hostFilter) => {
+const selectFilteredByHost = createSelector([getNodes, selectHostFilter], (nodes, hostFilter) => {
     const hostFilters = hostFilter.split(/\s+/);
     return filter_(nodes, (node) => {
         return some_(hostFilters, (hostFilter) => node?.host?.toLowerCase().includes(hostFilter));
     });
 });
 
-const getFilteredNodes = createSelector(
-    [getFilteredByHost, getComponentNodesFilterPredicates, getMediumsPredicates],
+const selectFilteredNodes = createSelector(
+    [selectFilteredByHost, getComponentNodesFilterPredicates, selectMediumsPredicates],
     (nodes, predicates, mediumsPredicates) => {
         const predicatesArray = predicates.concat(mediumsPredicates);
         if (!predicatesArray.length) {
@@ -69,8 +74,8 @@ const getFilteredNodes = createSelector(
     },
 );
 
-export const getVisibleNodes = createSelector(
-    [getFilteredNodes, getSortState, getMediumListNoCache, selectCluster],
+export const selectVisibleNodes = createSelector(
+    [selectFilteredNodes, selectSortState, getMediumListNoCache, selectCluster],
     (nodes, sortState, mediumList, cluster) => {
         return hammer.utils.sort(
             nodes.map((n) => ({...n, cluster})),
@@ -80,19 +85,19 @@ export const getVisibleNodes = createSelector(
     },
 );
 
-export const getComponentNodesTableProps = createSelector(
+export const selectComponentNodesTableProps = createSelector(
     [getMediumListNoCache],
     getNodeTablesProps,
 );
 
-const getVisibleColumns = createSelector(
-    [getComponentNodesTableProps, getContentMode, getCustomColumns],
+const selectVisibleColumns = createSelector(
+    [selectComponentNodesTableProps, selectContentMode, selectCustomColumns],
     (nodesTableProps, contentMode, customColumns) =>
         contentMode === 'custom' ? customColumns : nodesTableProps.columns.sets[contentMode].items,
 );
 
-const getPropertiesRequiredForRender = createSelector(
-    [getVisibleColumns],
+const selectPropertiesRequiredForRender = createSelector(
+    [selectVisibleColumns],
     (visibleColumns /* : Array<keyof typeof PropertiesByColumn> */) => {
         const requiredProperties = union_(
             ...visibleColumns.map(
@@ -104,9 +109,9 @@ const getPropertiesRequiredForRender = createSelector(
     },
 );
 
-export const getRequiredAttributes = createSelector(
+export const selectRequiredAttributes = createSelector(
     [
-        getPropertiesRequiredForRender,
+        selectPropertiesRequiredForRender,
         getPropertiesRequiredForFilters,
         getPropertiesRequiredForMediums,
     ],
@@ -127,21 +132,25 @@ export const getRequiredAttributes = createSelector(
     },
 );
 
-export const useTagsFromAttributes = createSelector([getRequiredAttributes], (attributes) => {
+export const selectTagsFromAttributes = createSelector([selectRequiredAttributes], (attributes) => {
     return attributes.indexOf('tags') >= 0;
 });
 
-export const useRacksFromAttributes = createSelector([getRequiredAttributes], (attributes) => {
-    return attributes.indexOf('rack') >= 0;
-});
+export const selectRacksFromAttributes = createSelector(
+    [selectRequiredAttributes],
+    (attributes) => {
+        return attributes.indexOf('rack') >= 0;
+    },
+);
 
-const getFetchedTags = (state: RootState): string[] =>
+const selectFetchedTags = (state: RootState): string[] =>
     state.components.nodes.nodes.filterOptionsTags;
-const getFetchedRacks = (state: RootState): string[] =>
+
+const selectFetchedRacks = (state: RootState): string[] =>
     state.components.nodes.nodes.filterOptionsRacks;
 
-export const getComponentNodesTags = createSelector(
-    [useTagsFromAttributes, getFetchedTags, getComponentNodesIndexByTag],
+export const selectComponentNodesTags = createSelector(
+    [selectTagsFromAttributes, selectFetchedTags, getComponentNodesIndexByTag],
     (useFromAttrs, fetchedTags, nodesByTag) => {
         if (!useFromAttrs) {
             return fetchedTags;
@@ -151,8 +160,8 @@ export const getComponentNodesTags = createSelector(
     },
 );
 
-export const getComponentNodesRacks = createSelector(
-    [useRacksFromAttributes, getFetchedRacks, getComponentNodesIndexByRack],
+export const selectComponentNodesRacks = createSelector(
+    [selectRacksFromAttributes, selectFetchedRacks, getComponentNodesIndexByRack],
     (useFromAttrs, fetchedRacks, nodesByRack) => {
         if (!useFromAttrs) {
             return fetchedRacks;
@@ -162,8 +171,8 @@ export const getComponentNodesRacks = createSelector(
     },
 );
 
-export const getComponentsNodesNodeTypes = createSelector(
-    [getComponentsNodesNodeTypeRaw],
+export const selectComponentsNodesNodeTypes = createSelector(
+    [selectComponentsNodesNodeTypeRaw],
     (types) => {
         const res: Array<NodeType> = [...types];
         if (res.length === 0) {
@@ -184,7 +193,7 @@ export const COMPONENTS_AVAILABLE_STATES = [
     'unknown',
 ];
 
-export const getComponentNodesFilterSetupStateValue = createSelector(
+export const selectComponentNodesFilterSetupStateValue = createSelector(
     [getComponentNodesFilterStatePredicate],
     (predicate) => {
         if (!predicate) {

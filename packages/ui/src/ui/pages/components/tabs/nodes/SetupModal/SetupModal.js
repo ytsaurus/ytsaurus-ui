@@ -30,12 +30,12 @@ import {getMediumListNoCache} from '../../../../../store/selectors/thor';
 import TagsFilter from './TagsFilter/TagsFilter';
 import {
     getComponentNodesFiltersSetup,
-    getComponentNodesRacks,
-    getComponentNodesTags,
+    selectComponentNodesRacks,
+    selectComponentNodesTags,
 } from '../../../../../store/selectors/components/nodes/nodes';
 import {
     COMPONENTS_AVAILABLE_STATES,
-    getComponentNodesFilterSetupStateValue,
+    selectComponentNodesFilterSetupStateValue,
 } from '../../../../../store/selectors/components/nodes/nodes/data';
 
 import './SetupModal.scss';
@@ -814,10 +814,10 @@ const mapStateToProps = (state) => {
     return {
         setup: getComponentNodesFiltersSetup(state),
         mediumList: getMediumListNoCache(state),
-        nodeTags: getComponentNodesTags(state),
-        nodeRacks: getComponentNodesRacks(state),
+        nodeTags: selectComponentNodesTags(state),
+        nodeRacks: selectComponentNodesRacks(state),
         nodeStates: COMPONENTS_AVAILABLE_STATES,
-        stateValue: getComponentNodesFilterSetupStateValue(state),
+        stateValue: selectComponentNodesFilterSetupStateValue(state),
     };
 };
 

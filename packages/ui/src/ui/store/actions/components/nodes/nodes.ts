@@ -12,9 +12,9 @@ import ypath from '../../../../common/thor/ypath';
 import {setSetting} from '../../../../store/actions/settings';
 import {NAMESPACES, SettingName} from '../../../../../shared/constants/settings';
 import {
-    getRequiredAttributes,
-    useRacksFromAttributes,
-    useTagsFromAttributes,
+    selectRequiredAttributes,
+    selectRacksFromAttributes,
+    selectTagsFromAttributes,
 } from '../../../../store/selectors/components/nodes/nodes';
 import {getTemplates} from '../../../../store/selectors/settings';
 import type {RootState} from '../../../../store/reducers';
@@ -62,7 +62,7 @@ export function getNodes({
     attributes,
     nodeTypes,
 }: {
-    attributes: ReturnType<typeof getRequiredAttributes>;
+    attributes: ReturnType<typeof selectRequiredAttributes>;
     nodeTypes: Array<NodeType>;
 }): NodesThunkAction {
     return (dispatch) => {
@@ -208,8 +208,8 @@ export function getComponentsNodesFilterOptions(): NodesThunkAction {
         const state = getState();
 
         const attributes = compact_([
-            !useTagsFromAttributes(state) && 'tags',
-            !useRacksFromAttributes(state) && 'rack',
+            !selectTagsFromAttributes(state) && 'tags',
+            !selectRacksFromAttributes(state) && 'rack',
         ]);
 
         if (0 === attributes.length) {
