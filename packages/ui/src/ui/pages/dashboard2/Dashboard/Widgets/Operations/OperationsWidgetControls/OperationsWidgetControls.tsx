@@ -27,7 +27,9 @@ export function OperationsWidgetControls(props: OperationsWidgetProps) {
     const dispatch = useDispatch();
 
     const state = useSelector((state: RootState) => selectOperationsStateFilter(state, id));
-    const authorType = useSelector((state: RootState) => selectOperationsAuthorTypeFilter(state, id));
+    const authorType = useSelector((state: RootState) =>
+        selectOperationsAuthorTypeFilter(state, id),
+    );
 
     const onStateFilterUpdate = (value: string[]) => {
         dispatch(setOperationsStateFilter(id, value[0]));
