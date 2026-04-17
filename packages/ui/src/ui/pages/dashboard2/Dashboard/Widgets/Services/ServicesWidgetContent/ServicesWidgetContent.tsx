@@ -6,7 +6,7 @@ import format from '../../../../../../common/hammer/format';
 
 import {RootState} from '../../../../../../store/reducers';
 import {ServiceInfo} from '../../../../../../store/api/dashboard2/services/services';
-import {getServicesTypeFilter} from '../../../../../../store/selectors/dashboard2/services';
+import {selectServicesTypeFilter} from '../../../../../../store/selectors/dashboard2/services';
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
 import {GeneralCell} from '../../../../../../pages/dashboard2/Dashboard/components/GeneralCell/GeneralCell';
@@ -46,7 +46,7 @@ const columns = [
 export function ServicesWidgetContent(props: ServicesWidgetProps) {
     const {data, error, isLoading} = useServicesWidget(props);
 
-    const type = useSelector((state: RootState) => getServicesTypeFilter(state, props.id));
+    const type = useSelector((state: RootState) => selectServicesTypeFilter(state, props.id));
     const itemsName = i18n(`fallback-item_${type || 'default'}`);
 
     return (

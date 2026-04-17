@@ -1,6 +1,6 @@
 import {createWidgetDataFieldSelector} from './utils';
 
-export const getServicesTypeFilter = createWidgetDataFieldSelector<'favourite' | 'custom'>(
+export const selectServicesTypeFilter = createWidgetDataFieldSelector<'favourite' | 'custom'>(
     'type',
     'favourite',
 );

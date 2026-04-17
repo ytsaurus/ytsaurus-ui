@@ -4,7 +4,7 @@ import {useServicesQuery} from '../../../../../../store/api/dashboard2/services'
 
 import {RootState} from '../../../../../../store/reducers';
 import {selectCluster} from '../../../../../../store/selectors/global';
-import {getServicesTypeFilter} from '../../../../../../store/selectors/dashboard2/services';
+import {selectServicesTypeFilter} from '../../../../../../store/selectors/dashboard2/services';
 import {
     selectFavouriteBundles,
     selectFavouriteChyt,
@@ -17,7 +17,7 @@ export function useServicesWidget(props: ServicesWidgetProps) {
 
     const cluster = useSelector(selectCluster);
 
-    const type = useSelector((state: RootState) => getServicesTypeFilter(state, props.id));
+    const type = useSelector((state: RootState) => selectServicesTypeFilter(state, props.id));
 
     const favouriteBundles = useSelector(selectFavouriteBundles);
     const favouriteCliques = useSelector(selectFavouriteChyt);
