@@ -7,7 +7,7 @@ import {selectCluster} from '../../../store/selectors/global/cluster';
 
 import {createWidgetDataFieldSelector} from './utils';
 
-export const getAccountsTypeFilter = createWidgetDataFieldSelector<
+export const selectAccountsTypeFilter = createWidgetDataFieldSelector<
     'favourite' | 'usable' | 'custom'
 >('type', 'favourite');
 
@@ -27,7 +27,7 @@ export const selectAccountsList = createSelector(
         selectFavouriteAccounts,
         selectUsableAccounts,
         selectCustomAccountsList,
-        getAccountsTypeFilter,
+        selectAccountsTypeFilter,
     ],
     (favourite, usable, custom, type) => {
         if (type === 'favourite') {

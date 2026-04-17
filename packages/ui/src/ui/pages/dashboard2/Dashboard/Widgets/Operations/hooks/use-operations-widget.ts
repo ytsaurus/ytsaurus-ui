@@ -15,7 +15,9 @@ export function useOperationsWidget(props: OperationsWidgetProps) {
     const cluster = useSelector(selectCluster);
 
     const state = useSelector((state: RootState) => selectOperationsStateFilter(state, id));
-    const authorType = useSelector((state: RootState) => selectOperationsAuthorTypeFilter(state, id));
+    const authorType = useSelector((state: RootState) =>
+        selectOperationsAuthorTypeFilter(state, id),
+    );
 
     const authors = data?.authors;
     const pool = data?.pool;

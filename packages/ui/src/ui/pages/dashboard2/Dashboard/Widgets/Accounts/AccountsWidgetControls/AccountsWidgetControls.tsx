@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
 import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 
 import {RootState} from '../../../../../../store/reducers';
-import {getAccountsTypeFilter} from '../../../../../../store/selectors/dashboard2/accounts';
+import {selectAccountsTypeFilter} from '../../../../../../store/selectors/dashboard2/accounts';
 import {setAccountsTypeFilter} from '../../../../../../store/actions/dashboard2/accounts';
 
 import type {AccountsWidgetProps} from '../types';
@@ -13,7 +13,7 @@ import i18n from '../i18n';
 export function AccountsWidgetControls(props: AccountsWidgetProps) {
     const dispatch = useDispatch();
 
-    const type = useSelector((state: RootState) => getAccountsTypeFilter(state, props.id));
+    const type = useSelector((state: RootState) => selectAccountsTypeFilter(state, props.id));
 
     const onUpdate = (value: 'favourite' | 'usable' | 'custom') => {
         dispatch(setAccountsTypeFilter(props.id, value));
