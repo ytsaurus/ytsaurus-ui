@@ -7,7 +7,7 @@ import {NODE_TYPE_ITEMS} from '../../../constants/components/nodes/nodes';
 import {getSystemNodesNodeTypesToLoad} from '../../../store/selectors/system/nodes';
 import {setSysmetNodesNodeType} from '../../../store/actions/system/nodes-ts';
 import {NODE_TYPE, NodeType} from '../../../../shared/constants/system';
-import {getComponentsNodesNodeTypes} from '../../../store/selectors/components/nodes/nodes';
+import {selectComponentsNodesNodeTypes} from '../../../store/selectors/components/nodes/nodes';
 import {componentsNodesSetNodeTypes} from '../../../store/actions/components/nodes/nodes';
 import {updateListWithAll} from '../../../utils';
 
@@ -53,7 +53,7 @@ export function SystemNodeTypeSelector() {
 export function ComponentsNodeTypeSelector({className}: {className?: string}) {
     const dispatch = useDispatch();
 
-    const value = useSelector(getComponentsNodesNodeTypes);
+    const value = useSelector(selectComponentsNodesNodeTypes);
     return (
         <NodeTypeSelector
             className={className}

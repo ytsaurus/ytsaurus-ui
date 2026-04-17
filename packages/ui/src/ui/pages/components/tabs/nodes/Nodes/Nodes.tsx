@@ -33,10 +33,10 @@ import {ComponentsNodeTypeSelector} from '../../../../../pages/system/Nodes/Node
 
 import {
     getComponentNodesFiltersCount,
-    getComponentNodesTableProps,
-    getComponentsNodesNodeTypes,
-    getRequiredAttributes,
-    getVisibleNodes,
+    selectComponentNodesTableProps,
+    selectComponentsNodesNodeTypes,
+    selectRequiredAttributes,
+    selectVisibleNodes,
 } from '../../../../../store/selectors/components/nodes/nodes';
 import {getSelectedColumns} from '../../../../../store/selectors/settings';
 import {getSettingsEnableSideBar} from '../../../../../store/selectors/settings/settings-ts';
@@ -79,8 +79,8 @@ type State = {
 function NodesUpdater() {
     const dispatch = useDispatch();
 
-    const attributes = useSelector(getRequiredAttributes);
-    const nodeTypes = useSelector(getComponentsNodesNodeTypes);
+    const attributes = useSelector(selectRequiredAttributes);
+    const nodeTypes = useSelector(selectComponentsNodesNodeTypes);
 
     const updateFn = React.useCallback(
         (...args: Parameters<typeof getNodes>) => {
@@ -382,11 +382,11 @@ const mapStateToProps = (state: RootState) => {
     const {contentMode, nodes, loading, loaded, error, errorData, hostFilter} =
         state.components.nodes.nodes;
 
-    const visibleNodes = getVisibleNodes(state);
+    const visibleNodes = selectVisibleNodes(state);
     const selectedColumns = getSelectedColumns(state) || defaultColumns;
     const initialLoading = loading && !loaded;
 
-    const nodesTableProps = getComponentNodesTableProps(state);
+    const nodesTableProps = selectComponentNodesTableProps(state);
 
     const sideBarEnabled = getSettingsEnableSideBar(state);
 
@@ -406,7 +406,7 @@ const mapStateToProps = (state: RootState) => {
         initialLoading,
         nodesTableProps,
         sideBarEnabled,
-        nodeTypes: getComponentsNodesNodeTypes(state),
+        nodeTypes: selectComponentsNodesNodeTypes(state),
         filterCount: getComponentNodesFiltersCount(state),
     };
 };
