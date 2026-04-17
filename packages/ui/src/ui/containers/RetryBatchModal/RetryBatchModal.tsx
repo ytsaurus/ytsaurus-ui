@@ -6,7 +6,7 @@ import map_ from 'lodash/map';
 import {Button} from '@gravity-ui/uikit';
 import {DialogWrapper as Dialog} from '../../components/DialogWrapper/DialogWrapper';
 
-import {getExecuteBatchState} from '../../store/selectors/execute-batch';
+import {selectExecuteBatchState} from '../../store/selectors/execute-batch';
 import {ExecuteBatchStateItem} from '../../store/reducers/execute-batch';
 
 import {YTErrorBlock} from '../../components/Error/Error';
@@ -73,7 +73,7 @@ function RetryBatchImpl(props: ExecuteBatchStateItem) {
 const RetryBatch = React.memo(RetryBatchImpl);
 
 function RetryBatchModals() {
-    const state = useSelector(getExecuteBatchState);
+    const state = useSelector(selectExecuteBatchState);
     return (
         <React.Fragment>
             {map_(state, (data, key) => {

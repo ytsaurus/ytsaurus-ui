@@ -14,7 +14,7 @@ import {
     EXECUTE_BATCH_RETRY_SHOW_MODAL,
 } from '../../constants/execute-batch';
 import {rumLogError} from '../../rum/rum-counter';
-import {getExecuteBatchState} from '../selectors/execute-batch';
+import {selectExecuteBatchState} from '../selectors/execute-batch';
 import {CancelTokenSource} from 'axios';
 import {ytApiV3Id} from '../../rum/rum-wrap-api';
 import {BatchResultsItem, BatchSubRequest} from '../../../shared/yt-types';
@@ -192,7 +192,7 @@ export function hideExecuteBatchRetryModal(id: string): ExecuteBatchThunkAction 
 
 export function abortExecuteBatch(id: string): ExecuteBatchThunkAction {
     return (dispatch, getState) => {
-        const {rejectCb, error} = getExecuteBatchState(getState())[id];
+        const {rejectCb, error} = selectExecuteBatchState(getState())[id];
         rejectCb!(error);
         dispatch(hideExecuteBatchRetryModal(id));
     };
@@ -200,7 +200,7 @@ export function abortExecuteBatch(id: string): ExecuteBatchThunkAction {
 
 export function skipExecuteBatch(id: string): ExecuteBatchThunkAction {
     return (dispatch, getState) => {
-        const {resolveCb} = getExecuteBatchState(getState())[id];
+        const {resolveCb} = selectExecuteBatchState(getState())[id];
         resolveCb!([]);
         dispatch(hideExecuteBatchRetryModal(id));
     };
@@ -208,7 +208,7 @@ export function skipExecuteBatch(id: string): ExecuteBatchThunkAction {
 
 export function retryExecuteBatch(id: string): ExecuteBatchThunkAction {
     return (dispatch, getState) => {
-        const item = getExecuteBatchState(getState())[id];
+        const item = selectExecuteBatchState(getState())[id];
         if (!item) {
             rumLogError({
                 message: `executeBatch with retries, store does not contain any elements with id=${id}`,
