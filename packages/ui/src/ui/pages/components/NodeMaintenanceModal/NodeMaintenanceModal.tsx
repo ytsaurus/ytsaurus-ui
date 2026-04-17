@@ -14,8 +14,8 @@ import type {
     NodeResourceLimits,
 } from '../../../store/reducers/components/node-maintenance-modal';
 import {
-    getNodeMaintenanceModalInitialValues,
-    getNodeMaintenanceModalState,
+    selectNodeMaintenanceModalInitialValues,
+    selectNodeMaintenanceModalState,
 } from '../../../store/selectors/components/node-maintenance-modal';
 import {
     applyMaintenance,
@@ -37,8 +37,8 @@ export function NodeMaintenanceModal() {
     const dispatch = useDispatch();
     const [error, setError] = React.useState<YTError | undefined>();
 
-    const initialValues = useSelector(getNodeMaintenanceModalInitialValues);
-    const {address, component, resourceLimits} = useSelector(getNodeMaintenanceModalState);
+    const initialValues = useSelector(selectNodeMaintenanceModalInitialValues);
+    const {address, component, resourceLimits} = useSelector(selectNodeMaintenanceModalState);
 
     const allowedMaintenanceTypes: Array<AddMaintenanceParams['type']> =
         component === 'cluster_node'
