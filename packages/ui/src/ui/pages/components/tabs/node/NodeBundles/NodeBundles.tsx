@@ -8,19 +8,19 @@ import {
     toggleNodeMemoryBundleExpanded,
 } from '../../../../../store/actions/components/node/memory';
 import {
-    getNodeMemoryLoaded,
-    getNodeMemoryLoading,
-    getNodeMemorySortOrder,
-    getNodeMemoryUsageBundlesItems,
+    selectNodeMemoryLoaded,
+    selectNodeMemoryLoading,
+    selectNodeMemorySortOrder,
+    selectNodeMemoryUsageBundlesItems,
 } from '../../../../../store/selectors/components/node/memory';
 import {SortState} from '../../../../../types';
 
 function NodeBundles() {
     const dispatch = useDispatch();
-    const loading = useSelector(getNodeMemoryLoading);
-    const loaded = useSelector(getNodeMemoryLoaded);
-    const items = useSelector(getNodeMemoryUsageBundlesItems);
-    const sortOrder = useSelector(getNodeMemorySortOrder);
+    const loading = useSelector(selectNodeMemoryLoading);
+    const loaded = useSelector(selectNodeMemoryLoaded);
+    const items = useSelector(selectNodeMemoryUsageBundlesItems);
+    const sortOrder = useSelector(selectNodeMemorySortOrder);
 
     const toggleExpandState = React.useCallback((item: (typeof items)[0]) => {
         dispatch(toggleNodeMemoryBundleExpanded(item.name));

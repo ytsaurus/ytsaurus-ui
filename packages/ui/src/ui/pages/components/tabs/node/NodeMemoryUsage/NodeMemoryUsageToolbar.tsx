@@ -4,8 +4,8 @@ import cn from 'bem-cn-lite';
 
 import CustomRadioButton from '../../../../../components/RadioButton/RadioButton';
 import {
-    getNodeMemoryFilter,
-    getNodeMemoryViewMode,
+    selectNodeMemoryFilter,
+    selectNodeMemoryViewMode,
 } from '../../../../../store/selectors/components/node/memory';
 import {setNodeMemoryFilters} from '../../../../../store/actions/components/node/memory';
 import Filter from '../../../../../components/Filter/Filter';
@@ -16,8 +16,8 @@ const block = cn('node-memory-usage-toolbar');
 
 function NodeMemoryUsageToolbar() {
     const dispatch = useDispatch();
-    const viewMode = useSelector(getNodeMemoryViewMode);
-    const filter = useSelector(getNodeMemoryFilter);
+    const viewMode = useSelector(selectNodeMemoryViewMode);
+    const filter = useSelector(selectNodeMemoryFilter);
 
     const handleViewMode = React.useCallback((value: string) => {
         dispatch(

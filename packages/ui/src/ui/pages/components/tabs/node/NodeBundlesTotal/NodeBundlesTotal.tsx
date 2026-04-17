@@ -11,10 +11,10 @@ import format from '../../../../../common/hammer/format';
 import {MetaTable, Tooltip} from '@ytsaurus/components';
 
 import {
-    getNodeMemoryUsageTotalRowCache,
-    getNodeMemoryUsageTotalStorePreload,
-    getNodeMemoryUsageTotalTableStatic,
-    getNodeMemoryUsageTotalTabletDynamic,
+    selectNodeMemoryUsageTotalRowCache,
+    selectNodeMemoryUsageTotalStorePreload,
+    selectNodeMemoryUsageTotalTableStatic,
+    selectNodeMemoryUsageTotalTabletDynamic,
 } from '../../../../../store/selectors/components/node/memory';
 import {
     STACKED_PROGRESS_BAR_COLORS,
@@ -28,10 +28,10 @@ const block = cn('node-bundles-total');
 const progressClass = block('progress');
 
 function NodeBundlesTotal() {
-    const tabletDynamic = useSelector(getNodeMemoryUsageTotalTabletDynamic) || {};
-    const tabletStatic = useSelector(getNodeMemoryUsageTotalTableStatic) || {};
-    const rowCache = useSelector(getNodeMemoryUsageTotalRowCache) || {};
-    const storePreload = useSelector(getNodeMemoryUsageTotalStorePreload);
+    const tabletDynamic = useSelector(selectNodeMemoryUsageTotalTabletDynamic) || {};
+    const tabletStatic = useSelector(selectNodeMemoryUsageTotalTableStatic) || {};
+    const rowCache = useSelector(selectNodeMemoryUsageTotalRowCache) || {};
+    const storePreload = useSelector(selectNodeMemoryUsageTotalStorePreload);
 
     return (
         <div className={block(null, 'elements-section')}>

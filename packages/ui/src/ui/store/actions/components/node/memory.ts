@@ -10,8 +10,8 @@ import type {RootState} from '../../../../store/reducers';
 import type {NodeMemoryLoadAction} from '../../../../store/reducers/components/node/memory';
 import type {MemoryUsage} from '../../../../types/components/node';
 import {
-    getNodeMemoryCollapsedBundles,
-    getNodeMemoryStateHost,
+    selectNodeMemoryCollapsedBundles,
+    selectNodeMemoryStateHost,
 } from '../../../../store/selectors/components/node/memory';
 import {SortState} from '../../../../types';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
@@ -27,7 +27,7 @@ export function loadNodeMemoryUsage(host: string): NodeMemoryThunkAction {
                 path: `//sys/cluster_nodes/${host}/orchid/tablet_slot_manager/memory_usage_statistics`,
             })
             .then((memory: MemoryUsage) => {
-                const stateHost = getNodeMemoryStateHost(getState());
+                const stateHost = selectNodeMemoryStateHost(getState());
                 if (stateHost !== host) {
                     return;
                 }
@@ -38,7 +38,7 @@ export function loadNodeMemoryUsage(host: string): NodeMemoryThunkAction {
                 });
             })
             .catch((error: Error) => {
-                const stateHost = getNodeMemoryStateHost(getState());
+                const stateHost = selectNodeMemoryStateHost(getState());
                 if (stateHost !== host) {
                     return;
                 }
@@ -62,7 +62,7 @@ export function setNodeBundlesSort(sortOrder: Array<SortState>): NodeMemoryThunk
 
 export function toggleNodeMemoryBundleExpanded(name: string): NodeMemoryThunkAction {
     return (dispatch, getState) => {
-        const collapsedBundles = [...getNodeMemoryCollapsedBundles(getState())];
+        const collapsedBundles = [...selectNodeMemoryCollapsedBundles(getState())];
         const index = collapsedBundles.indexOf(name);
         if (index === -1) {
             collapsedBundles.push(name);

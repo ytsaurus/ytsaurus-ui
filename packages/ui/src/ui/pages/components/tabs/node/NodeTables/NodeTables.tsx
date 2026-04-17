@@ -2,10 +2,10 @@ import React from 'react';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 
 import {
-    getNodeMemoryLoaded,
-    getNodeMemoryLoading,
-    getNodeMemoryUsageTablesItemsSorted,
-    getNodeMemoryUsageTablesSortOrder,
+    selectNodeMemoryLoaded,
+    selectNodeMemoryLoading,
+    selectNodeMemoryUsageTablesItemsSorted,
+    selectNodeMemoryUsageTablesSortOrder,
 } from '../../../../../store/selectors/components/node/memory';
 import NodeMemoryDetailsTable from '../NodeMemoryDetailsTable/NodeMemoryDetailsTable';
 import {
@@ -16,10 +16,10 @@ import {SortState} from '../../../../../types';
 
 function NodeTables() {
     const dispatch = useDispatch();
-    const loading = useSelector(getNodeMemoryLoading);
-    const loaded = useSelector(getNodeMemoryLoaded);
-    const items = useSelector(getNodeMemoryUsageTablesItemsSorted);
-    const sortOrder = useSelector(getNodeMemoryUsageTablesSortOrder);
+    const loading = useSelector(selectNodeMemoryLoading);
+    const loaded = useSelector(selectNodeMemoryLoaded);
+    const items = useSelector(selectNodeMemoryUsageTablesItemsSorted);
+    const sortOrder = useSelector(selectNodeMemoryUsageTablesSortOrder);
 
     const handleSort = React.useCallback((sortOrder: Array<SortState>) => {
         dispatch(setNodeMemoryTablesSort(sortOrder));
