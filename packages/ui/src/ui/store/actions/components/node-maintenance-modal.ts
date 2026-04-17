@@ -12,8 +12,8 @@ import {
     NodeResourceLimits,
 } from '../../../store/reducers/components/node-maintenance-modal';
 import {
-    isAllowedMaintenanceApiNodes,
-    isAllowedMaintenanceApiProxies,
+    selectIsAllowedMaintenanceApiNodes,
+    selectIsAllowedMaintenanceApiProxies,
 } from '../../../store/selectors/components/node-maintenance-modal';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {YTApiId, ytApiV3Id, ytApiV4Id} from '../../../rum/rum-wrap-api';
@@ -306,10 +306,10 @@ function isMaintenanceApiAllowedForComponent(
 ) {
     switch (component) {
         case 'cluster_node':
-            return isAllowedMaintenanceApiNodes(state);
+            return selectIsAllowedMaintenanceApiNodes(state);
         case 'http_proxy':
         case 'rpc_proxy':
-            return isAllowedMaintenanceApiProxies(state);
+            return selectIsAllowedMaintenanceApiProxies(state);
         default:
             return false;
     }
