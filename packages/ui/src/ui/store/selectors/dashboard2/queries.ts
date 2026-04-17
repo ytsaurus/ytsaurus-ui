@@ -8,5 +8,6 @@ export type QueryStatusesFilter =
     | 'aborted'
     | undefined;
 
-export const getQueryFilterState = createWidgetDataFieldSelector<QueryStatusesFilter>('state');
-export const getQueryFilterEngine = createWidgetDataFieldSelector<string | undefined>('engine');
+export const selectQueryFilterState = createWidgetDataFieldSelector<QueryStatusesFilter>('state');
+
+export const selectQueryFilterEngine = createWidgetDataFieldSelector<string | undefined>('engine');

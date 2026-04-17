@@ -6,8 +6,8 @@ import map_ from 'lodash/map';
 import {RootState} from '../../../../../../store/reducers';
 import {useListQueries} from '../../../../../../store/api/dashboard2/queries';
 import {
-    getQueryFilterEngine,
-    getQueryFilterState,
+    selectQueryFilterEngine,
+    selectQueryFilterState,
 } from '../../../../../../store/selectors/dashboard2/queries';
 import {selectCluster} from '../../../../../../store/selectors/global';
 
@@ -32,8 +32,8 @@ export function useQueriesWidget(props: QueriesWidgetProps) {
     const limit = data?.limit?.value || 0;
 
     const cluster = useSelector(selectCluster);
-    const queryState = useSelector((state: RootState) => getQueryFilterState(state, widgetId));
-    const engine = useSelector((state: RootState) => getQueryFilterEngine(state, widgetId));
+    const queryState = useSelector((state: RootState) => selectQueryFilterState(state, widgetId));
+    const engine = useSelector((state: RootState) => selectQueryFilterEngine(state, widgetId));
 
     let queryEngine = engine?.toLowerCase();
 
