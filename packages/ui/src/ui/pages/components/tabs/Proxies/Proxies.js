@@ -27,9 +27,9 @@ import {
     resetProxyState,
 } from '../../../../store/actions/components/proxies/proxies';
 import {
-    getRoles,
-    getStates,
-    getVisibleProxies,
+    selectRoles,
+    selectStates,
+    selectVisibleProxies,
 } from '../../../../store/selectors/components/proxies/proxies';
 import {mergeScreen, splitScreen as splitScreenAction} from '../../../../store/actions/global';
 import {proxiesTableColumnItems} from '../../../../utils/components/proxies/table';
@@ -373,9 +373,9 @@ const mapStateToProps = (state) => {
     } = components.proxies.proxies;
     const {splitScreen} = global;
 
-    const visibleProxies = getVisibleProxies(state);
-    const states = getStates(state);
-    const roles = getRoles(state);
+    const visibleProxies = selectVisibleProxies(state);
+    const states = selectStates(state);
+    const roles = selectRoles(state);
     const initialLoading = loading && !loaded;
 
     return {

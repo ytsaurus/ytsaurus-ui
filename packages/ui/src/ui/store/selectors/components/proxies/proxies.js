@@ -46,22 +46,27 @@ const getSelectItems = (allItems, visibleItems, hostFilter, selectFilter) => {
     return [allItemsSection, ...items];
 };
 
-const getProxies = (state) => state.components.proxies.proxies.proxies;
-const getHostFilter = (state) => state.components.proxies.proxies.hostFilter;
-const getStateFilter = (state) => state.components.proxies.proxies.stateFilter;
-const getRoleFilter = (state) => state.components.proxies.proxies.roleFilter;
-const getBannedFilter = (state) => state.components.proxies.proxies.bannedFilter;
-const getSortState = (state) => state.tables[COMPONENTS_PROXIES_TABLE_ID];
+const selectProxies = (state) => state.components.proxies.proxies.proxies;
 
-const getFiltersObject = createSelector(
-    [getHostFilter, getStateFilter, getRoleFilter, getBannedFilter],
+const selectHostFilter = (state) => state.components.proxies.proxies.hostFilter;
+
+const selectStateFilter = (state) => state.components.proxies.proxies.stateFilter;
+
+const selectRoleFilter = (state) => state.components.proxies.proxies.roleFilter;
+
+const selectBannedFilter = (state) => state.components.proxies.proxies.bannedFilter;
+
+const selectSortState = (state) => state.tables[COMPONENTS_PROXIES_TABLE_ID];
+
+const selectFiltersObject = createSelector(
+    [selectHostFilter, selectStateFilter, selectRoleFilter, selectBannedFilter],
     (hostFilter, stateFilter, roleFilter, bannedFilter) => {
         return {hostFilter, stateFilter, roleFilter, bannedFilter};
     },
 );
 
-const getFilteredProxies = createSelector(
-    [getProxies, getFiltersObject],
+const selectFilteredProxies = createSelector(
+    [selectProxies, selectFiltersObject],
     (proxies, filtersObject) => {
         return filterProxies(proxies, filtersObject);
     },
@@ -78,29 +83,32 @@ function filterProxies(proxies, {hostFilter, stateFilter, roleFilter, bannedFilt
     return predicates.length ? filter_(proxies, concatByAnd(...predicates)) : proxies;
 }
 
-const getAllRoles = createSelector([getProxies], (proxy) => aggregateRoleItems(proxy));
+const selectAllRoles = createSelector([selectProxies], (proxy) => aggregateRoleItems(proxy));
 
-const getVisibleRoles = createSelector([getProxies, getFiltersObject], (proxies, filtersObject) => {
-    const filtered = filterProxies(proxies, omit_(filtersObject, ['roleFilter']));
+const selectVisibleRoles = createSelector(
+    [selectProxies, selectFiltersObject],
+    (proxies, filtersObject) => {
+        const filtered = filterProxies(proxies, omit_(filtersObject, ['roleFilter']));
 
-    return aggregateRoleItems(filtered);
-});
+        return aggregateRoleItems(filtered);
+    },
+);
 
-const getAllStates = createSelector([getProxies], (proxy) => aggregateStateItems(proxy));
+const selectAllStates = createSelector([selectProxies], (proxy) => aggregateStateItems(proxy));
 
-const getVisibleStates = createSelector([getProxies], (proxy) => aggregateStateItems(proxy));
+const selectVisibleStates = createSelector([selectProxies], (proxy) => aggregateStateItems(proxy));
 
-export const getVisibleProxies = createSelector(
-    [getFilteredProxies, getSortState],
+export const selectVisibleProxies = createSelector(
+    [selectFilteredProxies, selectSortState],
     (proxies, sortState) => hammer.utils.sort(proxies, sortState, proxiesTableColumnItems),
 );
 
-export const getRoles = createSelector(
-    [getAllRoles, getVisibleRoles, getHostFilter, getStateFilter],
+export const selectRoles = createSelector(
+    [selectAllRoles, selectVisibleRoles, selectHostFilter, selectStateFilter],
     getSelectItems,
 );
 
-export const getStates = createSelector(
-    [getAllStates, getVisibleStates, getHostFilter, getRoleFilter],
+export const selectStates = createSelector(
+    [selectAllStates, selectVisibleStates, selectHostFilter, selectRoleFilter],
     getSelectItems,
 );
