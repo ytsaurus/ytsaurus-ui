@@ -40,7 +40,7 @@ function getSelectItems(
     allItems: ReturnType<typeof aggregateItems>,
     visibleItems: ReturnType<typeof aggregateItems>,
     hostFilter: string,
-    otherFilters: Partial<ReturnType<typeof getFilters>>,
+    otherFilters: Partial<ReturnType<typeof selectFilters>>,
 ) {
     const isAllSelected = isEmpty_(otherFilters);
 
@@ -59,26 +59,33 @@ function getSelectItems(
     return [allItemsSection, ...items];
 }
 
-const getDetails = (state: RootState) => state.components.versionsV2.details;
+const selectDetails = (state: RootState) => state.components.versionsV2.details;
 
-const getHostFilter = (state: RootState) => state.components.versionsV2.hostFilter;
-const getVersionFilter = (state: RootState) => state.components.versionsV2.versionFilter;
-const getTypeFilter = (state: RootState) => state.components.versionsV2.typeFilter;
-const getStateFilter = (state: RootState) => state.components.versionsV2.stateFilter;
-const getBannedFilter = (state: RootState) => state.components.versionsV2.bannedFilter;
+const selectHostFilter = (state: RootState) => state.components.versionsV2.hostFilter;
 
-const getDetailsSortState = (state: RootState) =>
+const selectVersionFilter = (state: RootState) => state.components.versionsV2.versionFilter;
+
+const selectTypeFilter = (state: RootState) => state.components.versionsV2.typeFilter;
+
+const selectStateFilter = (state: RootState) => state.components.versionsV2.stateFilter;
+
+const selectBannedFilter = (state: RootState) => state.components.versionsV2.bannedFilter;
+
+const selectDetailsSortState = (state: RootState) =>
     state.tables[COMPONENTS_VERSIONS_DETAILED_TABLE_ID];
 
-const getFilteredByHost = createSelector([getDetails, getHostFilter], (details, hostFilter) => {
-    if (!hostFilter) {
-        return details;
-    }
-    return filter_(details, ({address}) => address?.toLowerCase().includes(hostFilter));
-});
+const selectFilteredByHost = createSelector(
+    [selectDetails, selectHostFilter],
+    (details, hostFilter) => {
+        if (!hostFilter) {
+            return details;
+        }
+        return filter_(details, ({address}) => address?.toLowerCase().includes(hostFilter));
+    },
+);
 
-const getFilters = createSelector(
-    [getVersionFilter, getTypeFilter, getStateFilter, getBannedFilter],
+const selectFilters = createSelector(
+    [selectVersionFilter, selectTypeFilter, selectStateFilter, selectBannedFilter],
     (version, type, state, banned) => {
         return reduce_(
             {
@@ -104,85 +111,103 @@ const getFilters = createSelector(
     },
 );
 
-const getFiltersSkipVersion = createSelector([getFilters], (filters) => {
+const selectFiltersSkipVersion = createSelector([selectFilters], (filters) => {
     const {version: _x, ...rest} = filters;
     return rest;
 });
 
-const getFiltersSkipType = createSelector([getFilters], (filters) => {
+const selectFiltersSkipType = createSelector([selectFilters], (filters) => {
     const {type: _x, ...rest} = filters;
     return rest;
 });
 
-const getFiltersSkipState = createSelector([getFilters], (filters) => {
+const selectFiltersSkipState = createSelector([selectFilters], (filters) => {
     const {state: _x, ...rest} = filters;
     return rest;
 });
 
-const getFiltersSkipBanned = createSelector([getFilters], (filters) => {
+const selectFiltersSkipBanned = createSelector([selectFilters], (filters) => {
     const {banned: _x, ...rest} = filters;
     return rest;
 });
 
-const getFilteredDetails = createSelector([getFilteredByHost, getFilters], (data, filters) => {
-    return filter_(data, filters) as Array<VersionHostInfo>;
-});
+const selectFilteredDetails = createSelector(
+    [selectFilteredByHost, selectFilters],
+    (data, filters) => {
+        return filter_(data, filters) as Array<VersionHostInfo>;
+    },
+);
 
-export const getVisibleDetails = createSelector(
-    [getFilteredDetails, getDetailsSortState],
+export const selectVisibleDetails = createSelector(
+    [selectFilteredDetails, selectDetailsSortState],
     (details, sortState): typeof details =>
         hammer.utils.sort(details, sortState, detailsTableProps.columns.items),
 );
 
-const getAllVersions = createSelector([getDetails], (versions) =>
+const selectAllVersions = createSelector([selectDetails], (versions) =>
     aggregateItems(versions, 'version'),
 );
-const getAllTypes = createSelector([getDetails], (versions) => aggregateItems(versions, 'type'));
-const getAllStates = createSelector([getDetails], (versions) => aggregateItems(versions, 'state'));
 
-const getAllBanned = createSelector([getDetails], (version) => aggregateItems(version, 'banned'));
+const selectAllTypes = createSelector([selectDetails], (versions) =>
+    aggregateItems(versions, 'type'),
+);
 
-const getVisibleVersions = createSelector(
-    [getFilteredByHost, getFiltersSkipVersion],
+const selectAllStates = createSelector([selectDetails], (versions) =>
+    aggregateItems(versions, 'state'),
+);
+
+const selectAllBanned = createSelector([selectDetails], (version) =>
+    aggregateItems(version, 'banned'),
+);
+
+const selectVisibleVersions = createSelector(
+    [selectFilteredByHost, selectFiltersSkipVersion],
     (data, filters) => {
         const items = filter_(data, filters) as Array<VersionHostInfo>;
         return aggregateItems(items, 'version');
     },
 );
-const getVisibleTypes = createSelector([getFilteredByHost, getFiltersSkipType], (data, filters) => {
-    const items = filter_(data, filters) as Array<VersionHostInfo>;
-    return aggregateItems(items, 'type');
-});
-const getVisibleStates = createSelector(
-    [getFilteredByHost, getFiltersSkipState],
+
+const selectVisibleTypes = createSelector(
+    [selectFilteredByHost, selectFiltersSkipType],
+    (data, filters) => {
+        const items = filter_(data, filters) as Array<VersionHostInfo>;
+        return aggregateItems(items, 'type');
+    },
+);
+
+const selectVisibleStates = createSelector(
+    [selectFilteredByHost, selectFiltersSkipState],
     (data, filters) => {
         const items = filter_(data, filters) as Array<VersionHostInfo>;
         return aggregateItems(items, 'state');
     },
 );
 
-const getVisibleBanned = createSelector(
-    [getFilteredByHost, getFiltersSkipBanned],
+const selectVisibleBanned = createSelector(
+    [selectFilteredByHost, selectFiltersSkipBanned],
     (data, filters) => {
         const items = filter_(data, filters) as Array<VersionHostInfo>;
         return aggregateItems(items, 'banned');
     },
 );
 
-export const getVersionSelectItems = createSelector(
-    [getAllVersions, getVisibleVersions, getHostFilter, getFiltersSkipVersion],
-    getSelectItems,
-);
-export const getTypeSelectItems = createSelector(
-    [getAllTypes, getVisibleTypes, getHostFilter, getFiltersSkipType],
-    getSelectItems,
-);
-export const getStatesSelectItems = createSelector(
-    [getAllStates, getVisibleStates, getHostFilter, getFiltersSkipState],
+export const selectVersionSelectItems = createSelector(
+    [selectAllVersions, selectVisibleVersions, selectHostFilter, selectFiltersSkipVersion],
     getSelectItems,
 );
 
-export const getBannedSelectItems = createSelector(
-    [getAllBanned, getVisibleBanned, getHostFilter, getFiltersSkipBanned],
+export const selectTypeSelectItems = createSelector(
+    [selectAllTypes, selectVisibleTypes, selectHostFilter, selectFiltersSkipType],
+    getSelectItems,
+);
+
+export const selectStatesSelectItems = createSelector(
+    [selectAllStates, selectVisibleStates, selectHostFilter, selectFiltersSkipState],
+    getSelectItems,
+);
+
+export const selectBannedSelectItems = createSelector(
+    [selectAllBanned, selectVisibleBanned, selectHostFilter, selectFiltersSkipBanned],
     getSelectItems,
 );
