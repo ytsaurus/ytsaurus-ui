@@ -7,7 +7,7 @@ import map_ from 'lodash/map';
 
 import Icon from '../../../../../components/Icon/Icon';
 
-import {getPresets} from '../../../../../store/selectors/components/nodes/filters-presets';
+import {selectPresets} from '../../../../../store/selectors/components/nodes/filters-presets';
 import {applyPreset, removePreset} from '../../../../../store/actions/components/nodes/nodes';
 
 import './FiltersPresets.scss';
@@ -80,6 +80,6 @@ class FiltersPresets extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({presets: getPresets(state)});
+const mapStateToProps = (state) => ({presets: selectPresets(state)});
 
 export default connect(mapStateToProps, {applyPreset, removePreset})(FiltersPresets);

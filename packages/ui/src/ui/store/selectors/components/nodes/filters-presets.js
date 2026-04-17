@@ -9,11 +9,11 @@ const getDefaultPreset = () => ({
     isDefault: true,
 });
 
-const getSavedPresets = createSelector(getTemplates, (presets = {}) =>
+const selectSavedPresets = createSelector(getTemplates, (presets = {}) =>
     transform_(presets, (res, data, name) => res.push({name, data, isDefault: false}), []),
 );
 
-export const getPresets = createSelector(
-    [getDefaultPreset, getSavedPresets],
+export const selectPresets = createSelector(
+    [getDefaultPreset, selectSavedPresets],
     (defaultPreset, savedPresets) => [defaultPreset, ...savedPresets],
 );
