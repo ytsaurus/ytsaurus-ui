@@ -9,8 +9,8 @@ import {
     setOperationsStateFilter,
 } from '../../../../../../store/actions/dashboard2/operations';
 import {
-    getOperationsAuthorTypeFilter,
-    getOperationsStateFilter,
+    selectOperationsAuthorTypeFilter,
+    selectOperationsStateFilter,
 } from '../../../../../../store/selectors/dashboard2/operations';
 
 import type {OperationsWidgetProps} from '../types';
@@ -26,8 +26,8 @@ export function OperationsWidgetControls(props: OperationsWidgetProps) {
 
     const dispatch = useDispatch();
 
-    const state = useSelector((state: RootState) => getOperationsStateFilter(state, id));
-    const authorType = useSelector((state: RootState) => getOperationsAuthorTypeFilter(state, id));
+    const state = useSelector((state: RootState) => selectOperationsStateFilter(state, id));
+    const authorType = useSelector((state: RootState) => selectOperationsAuthorTypeFilter(state, id));
 
     const onStateFilterUpdate = (value: string[]) => {
         dispatch(setOperationsStateFilter(id, value[0]));

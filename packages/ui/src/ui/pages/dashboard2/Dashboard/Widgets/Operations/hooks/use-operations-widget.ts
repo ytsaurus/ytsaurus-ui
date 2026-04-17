@@ -3,8 +3,8 @@ import {useSelector} from '../../../../../../store/redux-hooks';
 import {RootState} from '../../../../../../store/reducers';
 import {useOperationsQuery} from '../../../../../../store/api/dashboard2/operations';
 import {
-    getOperationsAuthorTypeFilter,
-    getOperationsStateFilter,
+    selectOperationsAuthorTypeFilter,
+    selectOperationsStateFilter,
 } from '../../../../../../store/selectors/dashboard2/operations';
 import {selectCluster} from '../../../../../../store/selectors/global';
 
@@ -14,8 +14,8 @@ export function useOperationsWidget(props: OperationsWidgetProps) {
     const {id, data} = props;
     const cluster = useSelector(selectCluster);
 
-    const state = useSelector((state: RootState) => getOperationsStateFilter(state, id));
-    const authorType = useSelector((state: RootState) => getOperationsAuthorTypeFilter(state, id));
+    const state = useSelector((state: RootState) => selectOperationsStateFilter(state, id));
+    const authorType = useSelector((state: RootState) => selectOperationsAuthorTypeFilter(state, id));
 
     const authors = data?.authors;
     const pool = data?.pool;
