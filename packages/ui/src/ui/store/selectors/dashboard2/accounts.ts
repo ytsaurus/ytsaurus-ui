@@ -11,18 +11,24 @@ export const getAccountsTypeFilter = createWidgetDataFieldSelector<
     'favourite' | 'usable' | 'custom'
 >('type', 'favourite');
 
-const getCustomAccountsList = (_state: RootState, _widgetId: string, custom: string[]) => custom;
+const selectCustomAccountsList = (_state: RootState, _widgetId: string, custom: string[]) => custom;
 
-const getUsableAccountsImpl = (state: RootState, cluster: string) =>
+const selectUsableAccountsImpl = (state: RootState, cluster: string) =>
     accountsApi.endpoints.usableAccounts.select({cluster})(state)?.data;
 
-const getUsableAccounts = (state: RootState) => {
+const selectUsableAccounts = (state: RootState) => {
     const cluster = selectCluster(state);
-    return getUsableAccountsImpl(state, cluster);
+
+    return selectUsableAccountsImpl(state, cluster);
 };
 
-export const getAccountsList = createSelector(
-    [selectFavouriteAccounts, getUsableAccounts, getCustomAccountsList, getAccountsTypeFilter],
+export const selectAccountsList = createSelector(
+    [
+        selectFavouriteAccounts,
+        selectUsableAccounts,
+        selectCustomAccountsList,
+        getAccountsTypeFilter,
+    ],
     (favourite, usable, custom, type) => {
         if (type === 'favourite') {
             return favourite?.length ? favourite.map((item) => item?.path) : [];

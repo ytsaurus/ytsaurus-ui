@@ -3,7 +3,7 @@ import {useSelector} from '../../../../../../store/redux-hooks';
 import {RootState} from '../../../../../../store/reducers';
 import {useAccountsQuery} from '../../../../../../store/api/dashboard2/accounts';
 import {
-    getAccountsList,
+    selectAccountsList,
     getAccountsTypeFilter,
 } from '../../../../../../store/selectors/dashboard2/accounts';
 import {selectCluster} from '../../../../../../store/selectors/global';
@@ -25,7 +25,7 @@ export function useAccountsWidget(props: AccountsWidgetProps) {
     );
 
     const accountsList = useSelector((state: RootState) =>
-        getAccountsList(state, props.id, data?.accounts || []),
+        selectAccountsList(state, props.id, data?.accounts || []),
     );
 
     const {
