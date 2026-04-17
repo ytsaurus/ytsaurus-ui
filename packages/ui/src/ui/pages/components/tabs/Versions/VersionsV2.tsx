@@ -22,11 +22,11 @@ import format from '../../../../common/hammer/format';
 import {VersionCellWithAction} from '../../../../pages/components/tabs/Versions/VersionCell';
 
 import {
-    getBannedSelectItems,
-    getStatesSelectItems,
-    getTypeSelectItems,
-    getVersionSelectItems,
-    getVisibleDetails,
+    selectBannedSelectItems,
+    selectStatesSelectItems,
+    selectTypeSelectItems,
+    selectVersionSelectItems,
+    selectVisibleDetails,
 } from '../../../../store/selectors/components/versions/versions_v2';
 import {
     changeBannedFilter,
@@ -299,11 +299,11 @@ const mapStateToProps = (state: RootState) => {
         details: allDetails,
     } = state.components.versionsV2;
 
-    const details = getVisibleDetails(state);
-    const versionSelectItems = getVersionSelectItems(state);
-    const typeSelectItems = getTypeSelectItems(state);
-    const stateSelectItems = getStatesSelectItems(state);
-    const bannedSelectItems = getBannedSelectItems(state);
+    const details = selectVisibleDetails(state);
+    const versionSelectItems = selectVersionSelectItems(state);
+    const typeSelectItems = selectTypeSelectItems(state);
+    const stateSelectItems = selectStatesSelectItems(state);
+    const bannedSelectItems = selectBannedSelectItems(state);
 
     const showingItems = details.length;
     const totalItems = allDetails.length;
