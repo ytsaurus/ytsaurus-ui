@@ -19,6 +19,8 @@ import {KeyCode} from '../../constants/index';
 import {getFormat} from '../../store/selectors/settings';
 import {COMMAND} from '../../constants/path-viewer';
 
+import i18n from './i18n';
+
 import './PathViewer.scss';
 
 const block = cn('path-viewer');
@@ -77,7 +79,7 @@ function Overview({className}) {
                     <TextInput
                         hasClear
                         size="m"
-                        placeholder="Enter path..."
+                        placeholder={i18n('field_path')}
                         onUpdate={handlePathChange}
                         onKeyDown={handleApply}
                         value={path}
@@ -88,7 +90,7 @@ function Overview({className}) {
                     <TextInput
                         hasClear
                         size="m"
-                        placeholder="Enter attributes..."
+                        placeholder={i18n('field_attributes')}
                         onUpdate={handleAttributesChange}
                         onKeyDown={handleApply}
                         value={attributes}
@@ -102,7 +104,7 @@ function Overview({className}) {
                         onUpdate={(vals) => handleCommandChange(vals[0])}
                         hideFilter
                         value={[command]}
-                        label="Command:"
+                        label={i18n('field_command')}
                         items={[
                             {
                                 value: COMMAND.GET,
@@ -120,7 +122,7 @@ function Overview({className}) {
                     <TextInput
                         hasClear
                         size="m"
-                        placeholder="Enter max size..."
+                        placeholder={i18n('field_max-size')}
                         onUpdate={handleMaxSizeChange}
                         onKeyDown={handleApply}
                         value={maxSize}
@@ -131,7 +133,7 @@ function Overview({className}) {
             <div className={block('bottom-section')}>
                 <div className={block('checkbox')}>
                     <Checkbox
-                        content="Encode UTF8"
+                        content={i18n('field_encode-utf8')}
                         checked={encodeUTF8}
                         onChange={handleEncodeChange}
                     />
@@ -147,7 +149,7 @@ function Overview({className}) {
 
                 <div className={block('checkbox')}>
                     <Checkbox
-                        content="Annotate with types"
+                        content={i18n('field_annotate-with-types')}
                         checked={annotateWithTypes}
                         onChange={handleAnnotateWithTypesChange}
                     />
