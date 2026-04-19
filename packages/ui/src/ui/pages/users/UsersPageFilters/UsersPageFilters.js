@@ -6,6 +6,8 @@ import {Checkbox} from '@gravity-ui/uikit';
 
 import Filter from '../../../components/Filter/Filter';
 
+import i18n from './i18n';
+
 import {
     setUsersBannedFilter,
     setUsersGroupFilter,
@@ -60,7 +62,7 @@ class UsersPageFilters extends React.Component {
                                 size="m"
                                 type="text"
                                 value={nameFilter}
-                                placeholder="User name filter..."
+                                placeholder={i18n('field_user-name-filter')}
                                 onChange={this.props.setUsersNameFilter}
                             />
                         ),
@@ -75,7 +77,7 @@ class UsersPageFilters extends React.Component {
                                 <GroupSuggest
                                     className={block('group-suggest')}
                                     value={groupFilter ? [groupFilter] : undefined}
-                                    placeholder="Group name filter..."
+                                    placeholder={i18n('field_group-name-filter')}
                                     onChange={(vals) => this.props.setUsersGroupFilter(vals[0])}
                                     disablePortal={false}
                                 />
@@ -91,7 +93,7 @@ class UsersPageFilters extends React.Component {
                             <Checkbox
                                 size="l"
                                 checked={bannedFilter}
-                                content="Banned"
+                                content={i18n('value_banned')}
                                 onChange={this.toggleBannedFilter}
                             />
                         ),

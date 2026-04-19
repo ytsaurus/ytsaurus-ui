@@ -11,6 +11,7 @@ import reduce_ from 'lodash/reduce';
 import {closeUserEditorModal, fetchUsers, saveUserData} from '../../../store/actions/users';
 import {isCryptoSubtleAvailable, sha256} from '../../../utils/sha256';
 import {CryptoSubtleAlert} from '../../../containers/ManageTokens/ManageTokensPasswordModal/CryptoSubtleAlert';
+import i18n from './i18n';
 import {
     selectGlobalGroupAttributesMap,
     selectIsUserManagementEnabled,
@@ -122,7 +123,7 @@ class UsersPageEditor extends React.Component<Props, State> {
             title: string;
             data: ReturnType<typeof UsersPageEditor.prepareGroups>;
         } = {
-            title: 'Current',
+            title: i18n('field_current'),
             data: UsersPageEditor.prepareGroups(groups, groupAttributes),
         };
         return [current].filter(({data}) => data.length);
@@ -242,7 +243,9 @@ class UsersPageEditor extends React.Component<Props, State> {
                 <YTDFDialog<FormValues>
                     className={block(null, className)}
                     headerProps={{
-                        title: this.isNewUser() ? 'Create user' : `User ${username}`,
+                        title: this.isNewUser()
+                            ? i18n('title_create-user')
+                            : i18n('title_user', {username}),
                     }}
                     size={'l'}
                     initialValues={{
@@ -275,7 +278,7 @@ class UsersPageEditor extends React.Component<Props, State> {
                         {
                             type: 'tab-vertical',
                             name: 'general',
-                            title: 'General',
+                            title: i18n('title_general'),
                             fields: [
                                 ...(!isIdmAclAvailable()
                                     ? []
@@ -292,14 +295,14 @@ class UsersPageEditor extends React.Component<Props, State> {
                                               name: 'name',
                                               type: 'text' as const,
                                               required: true,
-                                              caption: 'Name',
+                                              caption: i18n('field_name'),
                                           },
                                       ]
                                     : []),
                                 {
                                     type: 'number',
                                     name: 'request_queue_size_limit',
-                                    caption: 'Request queue size limit',
+                                    caption: i18n('field_request-queue-size-limit'),
                                     extras: {
                                         min: 1,
                                         hidePrettyValue: true,
@@ -308,7 +311,7 @@ class UsersPageEditor extends React.Component<Props, State> {
                                 {
                                     type: 'number',
                                     name: 'read_request_rate_limit',
-                                    caption: 'Read request rate limit',
+                                    caption: i18n('field_read-request-rate-limit'),
                                     extras: {
                                         min: 1,
                                         hidePrettyValue: true,
@@ -317,7 +320,7 @@ class UsersPageEditor extends React.Component<Props, State> {
                                 {
                                     type: 'number',
                                     name: 'write_request_rate_limit',
-                                    caption: 'Write request rate limit',
+                                    caption: i18n('field_write-request-rate-limit'),
                                     extras: {
                                         min: 1,
                                         hidePrettyValue: true,
@@ -332,18 +335,18 @@ class UsersPageEditor extends React.Component<Props, State> {
                                   {
                                       type: 'tab-vertical' as const,
                                       name: 'groups',
-                                      title: 'Groups',
+                                      title: i18n('title_groups'),
                                       fields: [
                                           {
                                               type: 'yt-group' as const,
                                               name: 'newGroups',
-                                              caption: 'Groups',
+                                              caption: i18n('field_groups'),
                                               extras: {
                                                   multiple: true,
                                                   showTags: true,
                                                   disabled: !isIdmAclAvailable(),
                                                   maxVisibleValues: 3,
-                                                  placeholder: 'Enter group name',
+                                                  placeholder: i18n('placeholder_enter-group-name'),
                                               },
                                           },
                                           {
@@ -356,7 +359,7 @@ class UsersPageEditor extends React.Component<Props, State> {
                                           },
                                           {
                                               name: 'comment',
-                                              caption: 'Comment for IDM',
+                                              caption: i18n('field_comment-for-idm'),
                                               type: 'textarea' as const,
                                               extras: {
                                                   disabled: !isIdmAclAvailable(),
@@ -369,17 +372,17 @@ class UsersPageEditor extends React.Component<Props, State> {
                         {
                             type: 'tab-vertical',
                             name: 'ban',
-                            title: 'Ban',
+                            title: i18n('title_ban'),
                             fields: [
                                 {
                                     type: 'tumbler',
                                     name: 'banned',
-                                    caption: 'Ban user',
+                                    caption: i18n('field_ban-user'),
                                 },
                                 {
                                     type: 'textarea',
                                     name: 'ban_message',
-                                    caption: 'Ban message',
+                                    caption: i18n('field_ban-message'),
                                 },
                                 ...errors,
                             ],
@@ -389,7 +392,7 @@ class UsersPageEditor extends React.Component<Props, State> {
                                   {
                                       type: 'tab-vertical' as const,
                                       name: 'password',
-                                      title: 'Password',
+                                      title: i18n('title_password'),
                                       fields: [
                                           {
                                               name: 'crypto-alert',
@@ -403,7 +406,7 @@ class UsersPageEditor extends React.Component<Props, State> {
                                           {
                                               name: 'password',
                                               type: 'text' as const,
-                                              caption: 'New password',
+                                              caption: i18n('field_new-password'),
                                               extras: () => ({type: 'password' as const}),
                                               visibilityCondition: {
                                                   when: '',
@@ -413,7 +416,7 @@ class UsersPageEditor extends React.Component<Props, State> {
                                           {
                                               name: 'passwordConfirm',
                                               type: 'text' as const,
-                                              caption: 'Confirm password',
+                                              caption: i18n('field_confirm-password'),
                                               extras: () => ({type: 'password' as const}),
                                               visibilityCondition: {
                                                   when: '',
@@ -423,7 +426,7 @@ class UsersPageEditor extends React.Component<Props, State> {
                                           {
                                               name: 'sha256_password',
                                               type: 'text' as const,
-                                              caption: 'Password Hash (SHA-256)',
+                                              caption: i18n('field_password-hash-sha256'),
                                               visibilityCondition: {
                                                   when: '',
                                                   isActive: () => !isCryptoSubtleAvailable(),
@@ -444,7 +447,7 @@ class UsersPageEditor extends React.Component<Props, State> {
                             isCryptoSubtleAvailable() &&
                             password.password !== password.passwordConfirm
                         ) {
-                            passwordErrors.password = 'New and confirm password must be equal';
+                            passwordErrors.password = i18n('alert_passwords-not-equal');
                         }
 
                         return {password: passwordErrors};

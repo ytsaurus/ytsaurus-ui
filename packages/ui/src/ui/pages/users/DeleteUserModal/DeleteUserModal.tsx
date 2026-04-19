@@ -8,6 +8,8 @@ import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import {type YTError} from '../../../types';
 import {disableUsersCache} from '../../../utils/users-groups';
 
+import i18n from './i18n';
+
 export const DeleteUserModal: React.FC = () => {
     const dispatch = useDispatch();
     const [error, setError] = React.useState<YTError | undefined>(undefined);
@@ -38,7 +40,7 @@ export const DeleteUserModal: React.FC = () => {
     return (
         <YTDFDialog
             visible={Boolean(usernameToDelete)}
-            headerProps={{title: `Delete user ${usernameToDelete}`}}
+            headerProps={{title: i18n('title_delete-user', {username: usernameToDelete})}}
             pristineSubmittable={true}
             onClose={onClose}
             onAdd={onAdd}
@@ -48,9 +50,7 @@ export const DeleteUserModal: React.FC = () => {
                     type: 'block',
                     extras: {
                         children: (
-                            <Text>
-                                Are you sure you want to delete &quot;{usernameToDelete}&quot;?
-                            </Text>
+                            <Text>{i18n('confirm_delete-user', {username: usernameToDelete})}</Text>
                         ),
                     },
                 },

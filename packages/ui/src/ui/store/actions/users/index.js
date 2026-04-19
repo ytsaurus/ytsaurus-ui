@@ -16,6 +16,7 @@ import {flags} from '../../utils/index';
 import {YTApiId, ytApiV3Id, ytApiV4Id} from '../../rum/rum-wrap-api';
 import UIFactory from '../../UIFactory';
 import {getExternalSystem} from '../../utils/getExternalSystem';
+import i18n from './i18n';
 
 const USER_ATTRIBUTES = [
     'name',
@@ -206,7 +207,7 @@ export function saveUserData({
             )
                 // eslint-disable-next-line no-unused-vars
                 .then(([addRes, removeRes, changePasswordRes, batchRes]) => {
-                    const batchError = getBatchError(batchRes, "Failed to save user's data");
+                    const batchError = getBatchError(batchRes, i18n('alert_save-user-data-error'));
                     if (batchError) {
                         throw batchError;
                     }

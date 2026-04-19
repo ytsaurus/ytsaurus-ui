@@ -1,0 +1,22 @@
+{
+  "field_current": "Current",
+  "title_create-user": "Create user",
+  "title_user": "User {{username}}",
+  "title_general": "General",
+  "title_groups": "Groups",
+  "title_ban": "Ban",
+  "title_password": "Password",
+  "field_name": "Name",
+  "field_request-queue-size-limit": "Request queue size limit",
+  "field_read-request-rate-limit": "Read request rate limit",
+  "field_write-request-rate-limit": "Write request rate limit",
+  "field_groups": "Groups",
+  "placeholder_enter-group-name": "Enter group name",
+  "field_comment-for-idm": "Comment for IDM",
+  "field_ban-user": "Ban user",
+  "field_ban-message": "Ban message",
+  "field_new-password": "New password",
+  "field_confirm-password": "Confirm password",
+  "field_password-hash-sha256": "Password Hash (SHA-256)",
+  "alert_passwords-not-equal": "New and confirm password must be equal"
+}

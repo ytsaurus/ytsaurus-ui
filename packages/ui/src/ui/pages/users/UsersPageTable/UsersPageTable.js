@@ -22,6 +22,8 @@ import {
 } from '../../../store/selectors/users';
 import {UserActions} from '../UserActions/UserActions';
 
+import i18n from './i18n';
+
 import './UsersPageTable.scss';
 
 const block = cn('users-page-table');
@@ -35,14 +37,30 @@ const TABLE_SETTINGS = {
 };
 
 const COLUMN_NAMES = {
-    name: 'Name',
-    banned: 'Banned',
-    member_of: 'Groups',
-    transitiveGroups: 'Transitive groups',
-    request_queue_size_limit: 'Request queue',
-    read_request_rate_limit: 'Read request rate',
-    write_request_rate_limit: 'Write request rate',
-    externalSystem: 'External system',
+    get name() {
+        return i18n('field_name');
+    },
+    get banned() {
+        return i18n('field_banned');
+    },
+    get member_of() {
+        return i18n('field_groups');
+    },
+    get transitiveGroups() {
+        return i18n('field_transitive-groups');
+    },
+    get request_queue_size_limit() {
+        return i18n('field_request-queue');
+    },
+    get read_request_rate_limit() {
+        return i18n('field_read-request-rate');
+    },
+    get write_request_rate_limit() {
+        return i18n('field_write-request-rate');
+    },
+    get externalSystem() {
+        return i18n('field_external-system');
+    },
 
     // pseudo columns
     actions: '',
@@ -121,7 +139,7 @@ class UsersPageTable extends React.Component {
         return (
             <Tooltip content={banMessage}>
                 <div className={block('content', {col})}>
-                    {banned && <span className={block(col)}>B</span>}
+                    {banned && <span className={block(col)}>{i18n('value_banned')}</span>}
                 </div>
             </Tooltip>
         );

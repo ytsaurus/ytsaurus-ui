@@ -50,7 +50,7 @@ export const UserActions: React.FC<UserActionsProps> = ({className, cluster, use
         <div className={b(null, className)}>
             <ChartLink url={UIFactory.makeUrlForUserDashboard(cluster, username)} />
             <Link routed url={userOperationsLink(cluster, username)}>
-                &lt;/&gt;
+                {`</>`}
             </Link>
             <ClickableAttributesButton title={username} path={`//sys/users/${username}`} />
             <Button view="flat-secondary" size="m" onClick={onEditClick}>
