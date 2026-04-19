@@ -31,6 +31,8 @@ import {type RootState} from '../../../store/reducers';
 import {type OrderType} from '../../../utils/sort-helpers';
 import {GroupActions} from '../GroupActions/GroupActions';
 
+import i18n from '../i18n';
+
 const block = cn('groups-page-table');
 
 const TABLE_SETTINGS = {
@@ -41,13 +43,21 @@ const TABLE_SETTINGS = {
     dynamicRender: true,
 } as const;
 
-const COLUMN_NAMES: Record<string, string> = {
-    name: 'Name',
-    externalSystem: 'External system',
-    size: 'Size',
-    responsibles: 'Responsible users',
+const COLUMN_NAMES = {
+    get name() {
+        return i18n('field_name');
+    },
+    get externalSystem() {
+        return i18n('field_external-system');
+    },
+    get size() {
+        return i18n('field_size');
+    },
+    get responsibles() {
+        return i18n('field_responsible-users');
+    },
     actions: '',
-};
+} as Record<string, string>;
 
 interface GroupsPageTableProps extends ConnectedProps<typeof connector> {
     className?: string;

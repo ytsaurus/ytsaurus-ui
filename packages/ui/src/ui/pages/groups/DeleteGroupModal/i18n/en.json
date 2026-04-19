@@ -1,0 +1,4 @@
+{
+  "title_delete-group": "Delete group {{name}}",
+  "confirm_delete-group": "Are you sure you want to delete \"{{name}}\"?"
+}

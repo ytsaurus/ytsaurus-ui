@@ -12,6 +12,8 @@ import {type RootState} from '../../../store/reducers';
 import './GroupsPageFilters.scss';
 import {ShowCreateGroupModalButton} from '../CreateGroupModal/CreateGroupModal';
 
+import i18n from './i18n';
+
 const block = cn('groups-page-filters');
 
 type GroupsPageFiltersProps = {
@@ -37,7 +39,7 @@ class GroupsPageFilters extends React.Component<GroupsPageFiltersProps> {
                                     size="m"
                                     type="text"
                                     value={groupFilter}
-                                    placeholder="Enter group..."
+                                    placeholder={i18n('placeholder_enter-group')}
                                     onChange={this.props.setGroupsNameFilter}
                                 />
                             ),
