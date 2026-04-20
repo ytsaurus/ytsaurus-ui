@@ -2,20 +2,21 @@ import difference_ from 'lodash/difference';
 import forEach_ from 'lodash/forEach';
 import map_ from 'lodash/map';
 
-import {getBatchError} from '../../../shared/utils/error';
+import {getBatchError} from '../../../../shared/utils/error';
+import i18n from './i18n';
 
 import {
     USERS_EDIT_USER,
     USERS_EDIT_USER_DATA_FIELDS,
     USERS_TABLE,
     USERS_TABLE_DATA_FIELDS,
-} from '../../constants/users';
-import {selectCluster} from '../../store/selectors/global';
-import {listAllUsers} from '../../utils/users-groups';
-import {flags} from '../../utils/index';
-import {YTApiId, ytApiV3Id, ytApiV4Id} from '../../rum/rum-wrap-api';
-import UIFactory from '../../UIFactory';
-import {getExternalSystem} from '../../utils/getExternalSystem';
+} from '../../../constants/users';
+import {selectCluster} from '../../../store/selectors/global';
+import {listAllUsers} from '../../../utils/users-groups';
+import {flags} from '../../../utils/index';
+import {YTApiId, ytApiV3Id, ytApiV4Id} from '../../../rum/rum-wrap-api';
+import UIFactory from '../../../UIFactory';
+import {getExternalSystem} from '../../../utils/getExternalSystem';
 
 const USER_ATTRIBUTES = [
     'name',
@@ -206,7 +207,10 @@ export function saveUserData({
             )
                 // eslint-disable-next-line no-unused-vars
                 .then(([addRes, removeRes, changePasswordRes, batchRes]) => {
-                    const batchError = getBatchError(batchRes, "Failed to save user's data");
+                    const batchError = getBatchError(
+                        batchRes,
+                        i18n('context_failed-to-save-user-data'),
+                    );
                     if (batchError) {
                         throw batchError;
                     }

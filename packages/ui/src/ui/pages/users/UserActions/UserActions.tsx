@@ -5,7 +5,7 @@ import ChartLink from '../../../components/ChartLink/ChartLink';
 import Link from '../../../components/Link/Link';
 import Icon from '../../../components/Icon/Icon';
 import Button from '../../../components/Button/Button';
-import {showUserEditorModal} from '../../../store/actions/users';
+import {showUserEditorModal} from '../../../store/actions/users/index';
 import {showUserDeleteModal} from '../../../store/actions/users-typed';
 import {selectIsUserManagementEnabled} from '../../../store/selectors/global';
 import block from 'bem-cn-lite';

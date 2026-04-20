@@ -2,9 +2,10 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import i18n from './i18n';
 import DataTable from '@gravity-ui/react-data-table';
 
-import {fetchUsers, setUsersPageSorting} from '../../../store/actions/users';
+import {fetchUsers, setUsersPageSorting} from '../../../store/actions/users/index';
 import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
 import CommaSeparatedListWithRestCounter from '../../../components/CommaSeparateListWithRestCounter/CommaSeparateListWithRestCounter';
 import {Tooltip} from '@ytsaurus/components';
@@ -35,14 +36,30 @@ const TABLE_SETTINGS = {
 };
 
 const COLUMN_NAMES = {
-    name: 'Name',
-    banned: 'Banned',
-    member_of: 'Groups',
-    transitiveGroups: 'Transitive groups',
-    request_queue_size_limit: 'Request queue',
-    read_request_rate_limit: 'Read request rate',
-    write_request_rate_limit: 'Write request rate',
-    externalSystem: 'External system',
+    get name() {
+        return i18n('field_name');
+    },
+    get banned() {
+        return i18n('field_banned');
+    },
+    get member_of() {
+        return i18n('field_groups');
+    },
+    get transitiveGroups() {
+        return i18n('field_transitive-groups');
+    },
+    get request_queue_size_limit() {
+        return i18n('field_request-queue');
+    },
+    get read_request_rate_limit() {
+        return i18n('field_read-request-rate');
+    },
+    get write_request_rate_limit() {
+        return i18n('field_write-request-rate');
+    },
+    get externalSystem() {
+        return i18n('field_external-system');
+    },
 
     // pseudo columns
     actions: '',
