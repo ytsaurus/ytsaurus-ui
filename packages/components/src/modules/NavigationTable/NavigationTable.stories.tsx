@@ -38,6 +38,7 @@ const meta: Meta<DemoArgs> = {
                 emptyMessage={navigationTableStoryEmptyMessage}
                 ysonSettings={YSON_DEFAULT_UNIPIKA_SETTINGS}
                 logError={() => undefined}
+                onInsertTableSelect={() => undefined}
             />
         </div>
     ),

@@ -15,7 +15,7 @@ const b = cn('navigation-table-preview-tab');
 
 type PreviewTabProps = {
     table: NavigationTableData;
-    onEditorInsert: () => void | Promise<void>;
+    onEditorInsert?: () => void | Promise<void>;
     ysonSettings?: UnipikaSettings;
     primitiveTypes?: SchemaDataTypePrimitiveTypes;
     logError?: LogErrorFn;
@@ -61,10 +61,12 @@ export const PreviewTab: FC<PreviewTabProps> = ({
 
     return (
         <div className={b()}>
-            <Button onClick={() => onEditorInsert()}>
-                <Icon data={ArrowUpRightFromSquareIcon} size={16} />
-                {i18n('action_insert-select')}
-            </Button>
+            {onEditorInsert ? (
+                <Button onClick={() => onEditorInsert()}>
+                    <Icon data={ArrowUpRightFromSquareIcon} size={16} />
+                    {i18n('action_insert-select')}
+                </Button>
+            ) : null}
             <DataTableYT className={b()} columns={columns} data={table.rows} useThemeYT />
         </div>
     );
