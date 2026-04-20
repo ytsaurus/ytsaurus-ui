@@ -1,5 +1,5 @@
 import {produce} from 'immer';
-import {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 import {initialState} from '../../../../../store/reducers/navigation/content/table/table';
 import {updateIfChanged} from '../../../../../utils/utils';
 

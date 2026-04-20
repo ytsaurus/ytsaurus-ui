@@ -5,7 +5,7 @@ import {Template} from '../../../../../../components/MetaTable/templates/Templat
 import {showErrorModal} from '../../../../../../store/actions/actions';
 import {showInputPaths} from '../../../../../../store/actions/operations/jobs';
 import {useDispatch} from '../../../../../../store/redux-hooks';
-import {Job} from '../job-selector';
+import {type Job} from '../job-selector';
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 

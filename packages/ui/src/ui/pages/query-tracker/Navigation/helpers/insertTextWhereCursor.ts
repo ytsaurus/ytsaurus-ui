@@ -1,4 +1,4 @@
-import {Range, editor} from 'monaco-editor';
+import {Range, type editor} from 'monaco-editor';
 
 export const insertTextWhereCursor = (text: string, mEditor?: editor.IStandaloneCodeEditor) => {
     if (!mEditor) return;

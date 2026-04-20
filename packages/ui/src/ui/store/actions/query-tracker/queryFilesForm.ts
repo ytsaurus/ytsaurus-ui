@@ -1,7 +1,7 @@
-import {QueryFile} from './api';
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../reducers';
-import {Action} from 'redux';
+import {type QueryFile} from './api';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../reducers';
+import {type Action} from 'redux';
 import {getQueryFiles} from '../../selectors/query-tracker/query';
 import {updateQueryDraft} from './query';
 import {setDeletedFiles} from '../../reducers/query-tracker/queryFilesFormSlice';

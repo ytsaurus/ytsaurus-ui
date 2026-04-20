@@ -7,7 +7,7 @@ import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import Filter from '../../../components/Filter/Filter';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {getGroupsNameFilter} from '../../../store/selectors/groups';
-import type {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 
 import './GroupsPageFilters.scss';
 import {ShowCreateGroupModalButton} from '../CreateGroupModal/CreateGroupModal';

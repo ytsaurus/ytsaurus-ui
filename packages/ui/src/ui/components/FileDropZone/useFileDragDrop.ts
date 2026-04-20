@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type * as React from 'react';
 import {useCallback, useState} from 'react';
 
 export const useFileDragDrop = (onFile: (files: FileList | null) => void) => {

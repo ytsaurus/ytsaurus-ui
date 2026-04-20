@@ -1,13 +1,13 @@
-import type {AppContext} from '@gravity-ui/nodekit';
+import {type AppContext} from '@gravity-ui/nodekit';
 import crypto from 'crypto';
 import * as os from 'os';
 // @ts-ignore
 import ytLib from '@ytsaurus/javascript-wrapper';
 
-import {FIX_MY_TYPE} from '../../@types/types';
+import {type FIX_MY_TYPE} from '../../@types/types';
 import {USE_SUPRESS_SYNC} from '../../shared/constants';
 import {snakeToCamelObject} from '../../shared/utils/snake-to-camel';
-import {ClusterUiConfig} from '../../shared/yt-types';
+import {type ClusterUiConfig} from '../../shared/yt-types';
 import {getApp} from '../ServerFactory';
 import {createAutoUpdatedCache} from '../utils/auto-updated-cache';
 import {getRobotYTApiSetup} from './requestsSetup';

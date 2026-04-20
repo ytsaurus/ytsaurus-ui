@@ -1,5 +1,5 @@
 import {ROWS_PER_PAGE} from '../../../constants/pagination';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 
 export const selectTabletErrorsByBundleData = (state: RootState) =>
     state.tabletErrors.tabletErrorsByBundle.data;

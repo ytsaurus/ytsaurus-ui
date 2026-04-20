@@ -8,15 +8,15 @@ import {
     DISCOVER_VERSIONS,
 } from '../../../../constants/components/versions/versions_v2';
 import {selectCluster} from '../../../../store/selectors/global';
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../../../store/reducers';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../../../store/reducers';
 import {
-    SummaryItem,
-    VersionHostInfo,
-    VersionSummaryItem,
-    VersionsAction,
+    type SummaryItem,
+    type VersionHostInfo,
+    type VersionSummaryItem,
+    type VersionsAction,
 } from '../../../../store/reducers/components/versions/versions_v2';
-import {SortState} from '../../../../types';
+import {type SortState} from '../../../../types';
 
 export interface DiscoverVersionsData {
     details: Array<VersionHostInfo>;

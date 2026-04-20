@@ -1,8 +1,8 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 import {CHYT_CLIQUE} from '../../../constants/chyt-page';
-import {RootState} from '../../../store/reducers';
-import {ChytCliqueAction} from '../../../store/reducers/chyt/clique';
+import {type RootState} from '../../../store/reducers';
+import {type ChytCliqueAction} from '../../../store/reducers/chyt/clique';
 import {selectCluster} from '../../../store/selectors/global';
 import {selectIsAdmin} from '../../../store/selectors/global/is-developer';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';

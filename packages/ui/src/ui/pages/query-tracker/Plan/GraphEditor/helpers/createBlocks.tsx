@@ -1,12 +1,12 @@
-import {ProcessedGraph} from '../../utils';
+import {type ProcessedGraph} from '../../utils';
 import {ECameraScaleLevel} from '@gravity-ui/graph';
-import {QueriesNodeBlock} from '../QueriesNodeBlock';
-import type {Progress} from '../../models/plan';
+import {type QueriesNodeBlock} from '../QueriesNodeBlock';
+import {type Progress} from '../../models/plan';
 import {OperationType} from '../enums';
 import {iconToBase} from '../../../../../components/YTGraph/utils/iconToBase';
 import {getOperationType} from './getOperationType';
 import {getBlockIcon} from './getBlockIcon';
-import {MultipointConnection} from '../types';
+import {type MultipointConnection} from '../types';
 
 export const BLOCK_SIDE = 180;
 

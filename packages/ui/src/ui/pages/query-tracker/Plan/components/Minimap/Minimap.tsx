@@ -2,10 +2,10 @@ import * as React from 'react';
 
 import {Card} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
-import type {DataSet} from 'vis-data';
-import type {DataSetEdges, Network, Options} from 'vis-network';
+import {type DataSet} from 'vis-data';
+import {type DataSetEdges, type Network, type Options} from 'vis-network';
 
-import {ProcessedNode, getConnectedEdges, getFullEdge} from '../../utils';
+import {type ProcessedNode, getConnectedEdges, getFullEdge} from '../../utils';
 import VisNetwork from '../VisNetwork/VisNetwork';
 
 import './Minimap.scss';

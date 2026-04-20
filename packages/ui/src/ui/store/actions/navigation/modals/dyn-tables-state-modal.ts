@@ -2,21 +2,21 @@ import capitalize_ from 'lodash/capitalize';
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 import {
-    DynTablesStateModalAction,
-    DynTablesStateModalState,
-    TabletStateAction,
-    TabletStateType,
+    type DynTablesStateModalAction,
+    type DynTablesStateModalState,
+    type TabletStateAction,
+    type TabletStateType,
 } from '../../../../store/reducers/navigation/modals/dyn-tables-state-modal';
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {DYN_TABLES_STATE_MODAL_PARTIAL} from '../../../../constants/navigation/modals/dyn-tables-state-modal';
 import {delayed, wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {updateView} from '../index';
 import {DYN_TABLES_ALLOWED_STATES_OF_ACTION} from '../../../selectors/navigation/content/map-node-ts';
 import {executeBatchWithRetries} from '../../execute-batch';
 import {YTApiId} from '../../../../rum/rum-wrap-api';
-import {BatchResultsItem} from '../../../../../shared/yt-types';
+import {type BatchResultsItem} from '../../../../../shared/yt-types';
 
 type DynTablesStateThunkAction = ThunkAction<any, RootState, any, DynTablesStateModalAction>;
 

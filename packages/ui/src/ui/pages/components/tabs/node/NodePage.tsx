@@ -1,5 +1,5 @@
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-import {Redirect, Route, RouteComponentProps, Switch} from 'react-router';
+import {Redirect, Route, type RouteComponentProps, Switch} from 'react-router';
 import React from 'react';
 import cn from 'bem-cn-lite';
 
@@ -13,7 +13,7 @@ import {NodeTab} from '../../../../constants/components/nodes/node';
 import {loadNodeAttributes} from '../../../../store/actions/components/node/node';
 import {useUpdater} from '../../../../hooks/use-updater';
 import {makeTabProps} from '../../../../utils';
-import type {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {selectNode, selectNodeAlertCount} from '../../../../store/selectors/components/node/node';
 import {selectSortedItems} from '../../../../store/selectors/components/nodes/node-card';
 import NodeMeta from './NodeMeta/NodeMeta';

@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {Loader, LoaderProps} from '@gravity-ui/uikit';
+import {Loader, type LoaderProps} from '@gravity-ui/uikit';
 
 import './Loader.scss';
 

@@ -6,10 +6,10 @@ import some_ from 'lodash/some';
 
 import ypath from '../../common/thor/ypath';
 
-import {AccountResourceInfo} from '../../constants/accounts/accounts';
+import {type AccountResourceInfo} from '../../constants/accounts/accounts';
 import {computeProgress, getProgressTheme} from '../../utils/progress';
 import formatLib from '../../common/hammer/format';
-import {FIX_MY_TYPE} from '../../types';
+import {type FIX_MY_TYPE} from '../../types';
 
 export function accountMemoryMediumToFieldName(path: string) {
     return replace_(path, /\//g, '_');

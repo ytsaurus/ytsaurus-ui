@@ -1,6 +1,6 @@
 import {PureComponent} from 'react';
 
-import {TextInputProps, TextInputSize} from '@gravity-ui/uikit';
+import {type TextInputProps, type TextInputSize} from '@gravity-ui/uikit';
 
 export type DatepickerScale = 'day' | 'week' | 'month' | 'quarter' | 'year';
 

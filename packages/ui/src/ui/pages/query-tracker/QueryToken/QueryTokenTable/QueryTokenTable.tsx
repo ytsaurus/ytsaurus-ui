@@ -1,11 +1,11 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Table, useTable} from '@gravity-ui/table';
 import {useSelector} from '../../../../store/redux-hooks';
 import {getQueryTokens} from '../../../../store/selectors/settings/settings-queries';
 import {QueryTokenRemoveButton} from './QueryTokenRemoveButton';
-import type {ColumnDef} from '@gravity-ui/table/tanstack';
+import {type ColumnDef} from '@gravity-ui/table/tanstack';
 import {Button, Flex, Icon, Text, Tooltip} from '@gravity-ui/uikit';
-import {QueryToken} from '../../../../../shared/constants/settings-types';
+import {type QueryToken} from '../../../../../shared/constants/settings-types';
 import i18n from './i18n';
 import cn from 'bem-cn-lite';
 import './QueryTokenTable.scss';

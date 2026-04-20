@@ -3,14 +3,15 @@ import {useSelector} from '../../store/redux-hooks';
 import {getSettingsData} from '../../store/selectors/settings/settings-base';
 import {
     YtComponentsConfigProvider as Provider,
-    YtComponentsConfig,
+    type YtComponentsConfig,
     setLang as setComponentsLang,
 } from '@ytsaurus/components';
-import type {ErrorBoundaryProps as ComponentsErrorBoundaryProps} from '../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary, {
+    type ErrorBoundaryProps as ComponentsErrorBoundaryProps,
+} from '../../components/ErrorBoundary/ErrorBoundary';
 import {makeNavigationLink} from '../../utils/app-url';
 import {getYsonSettingsDisableDecode} from '../../store/selectors/thor/unipika';
 import {docsUrls} from '../../constants/docsUrls';
-import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import AccountLink from '../../pages/accounts/AccountLink';
 import TabletCellBundleLink from '../../pages/tablet_cell_bundles/TabletCellBundleLink';
 import ChaosCellBundleLink from '../../pages/tablet_cell_bundles/ChaosCellBundleLink';

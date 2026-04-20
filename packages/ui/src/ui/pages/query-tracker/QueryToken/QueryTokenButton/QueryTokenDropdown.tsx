@@ -1,4 +1,4 @@
-import React, {FC, useMemo} from 'react';
+import React, {type FC, useMemo} from 'react';
 import {Flex, Icon, Select, Text, Tooltip} from '@gravity-ui/uikit';
 import './QueryTokenDropdown.scss';
 import cn from 'bem-cn-lite';
@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {getQueryTokens} from '../../../../store/selectors/settings/settings-queries';
 import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 import {updateQueryDraft} from '../../../../store/actions/query-tracker/query';
-import {QuerySecret} from '../../../../types/query-tracker/api';
+import {type QuerySecret} from '../../../../types/query-tracker/api';
 import {getCurrentSecretIds} from '../../../../store/selectors/query-tracker/query';
 import i18n from './i18n';
 

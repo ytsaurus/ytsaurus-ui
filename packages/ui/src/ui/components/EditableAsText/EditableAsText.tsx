@@ -5,7 +5,7 @@ import {TextInput} from '@gravity-ui/uikit';
 import Icon from '../Icon/Icon';
 
 import './EditableAsText.scss';
-import Button, {ButtonProps} from '../Button/Button';
+import Button, {type ButtonProps} from '../Button/Button';
 const block = cn('editable-as-text');
 
 export interface EditableAsTextProps {

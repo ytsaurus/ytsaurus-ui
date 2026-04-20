@@ -1,23 +1,23 @@
 import * as React from 'react';
 
-import {yqlModel} from './models/shared';
+import {type yqlModel} from './models/shared';
 import {scaleOrdinal} from 'd3-scale';
 import {select} from 'd3-selection';
 import {arc, pie} from 'd3-shape';
 import isEmpty_ from 'lodash/isEmpty';
-import type {
-    NodeDetails,
-    NodeProgress,
-    NodeStages,
-    NodeState,
-    Plan,
-    Progress,
-    Provider,
+import {
+    type NodeDetails,
+    type NodeProgress,
+    type NodeStages,
+    type NodeState,
+    type Plan,
+    type Progress,
+    type Provider,
 } from './models/plan';
 
-import type {DataSet, Edge, Network, Node} from 'vis-network';
+import {type DataSet, type Edge, type Network, type Node} from 'vis-network';
 
-import type {GraphColors} from './GraphColors';
+import {type GraphColors} from './GraphColors';
 
 import {DateTime} from 'luxon';
 

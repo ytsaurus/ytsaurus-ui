@@ -1,13 +1,13 @@
-import {QueryResultColumn} from '../../../../types/query-tracker/queryResult';
+import {type QueryResultColumn} from '../../../../types/query-tracker/queryResult';
 import qs from 'qs';
 import React, {useMemo, useState} from 'react';
 import {selectCluster} from '../../../../store/selectors/global';
 import {DownloadManager} from '../../../navigation/content/Table/DownloadManager/DownloadManager';
 import {getDownloadQueryResultURL} from '../../../../store/actions/query-tracker/api';
 import {getQueryResult} from '../../../../store/selectors/query-tracker/queryResult';
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-import {FIX_MY_TYPE} from '../../../../../@types/types';
+import {type FIX_MY_TYPE} from '../../../../../@types/types';
 import {getExportTableBaseUrl} from '../../../../config';
 import {downloadFile} from '../../../../store/actions/navigation/content/table/download-manager';
 

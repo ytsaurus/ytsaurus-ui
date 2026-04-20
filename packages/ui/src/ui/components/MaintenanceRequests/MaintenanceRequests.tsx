@@ -1,7 +1,7 @@
 import React from 'react';
 
 import format from '../../common/hammer/format';
-import {MaintenanceRequestInfo} from '../../store/actions/components/node-maintenance-modal';
+import {type MaintenanceRequestInfo} from '../../store/actions/components/node-maintenance-modal';
 import {SubjectCard} from '../../components/SubjectLink/SubjectLink';
 
 import {Bold, WarningLight} from '@ytsaurus/components';

@@ -1,7 +1,7 @@
-import {ThunkAction, UnknownAction} from '@reduxjs/toolkit';
+import {type ThunkAction, type UnknownAction} from '@reduxjs/toolkit';
 import ypath from '../../../../../common/thor/ypath';
 
-import {RootState} from '../../../../reducers';
+import {type RootState} from '../../../../reducers';
 import {getAttributes} from '../../../../selectors/navigation';
 
 import {ytApiV3} from '../../../../../rum/rum-wrap-api';

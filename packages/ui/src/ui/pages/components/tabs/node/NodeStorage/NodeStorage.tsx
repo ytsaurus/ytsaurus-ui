@@ -6,7 +6,7 @@ import transform_ from 'lodash/transform';
 import {Progress} from '@gravity-ui/uikit';
 import {MetaTable} from '@ytsaurus/components';
 
-import type {Node} from '../../../../../store/reducers/components/nodes/nodes/node';
+import {type Node} from '../../../../../store/reducers/components/nodes/nodes/node';
 import hammer from '../../../../../common/hammer';
 
 import './NodeStorage.scss';

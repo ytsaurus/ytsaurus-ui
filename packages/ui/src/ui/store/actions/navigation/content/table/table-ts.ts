@@ -1,12 +1,12 @@
-import {Action} from 'redux';
-import {ThunkAction} from 'redux-thunk';
+import {type Action} from 'redux';
+import {type ThunkAction} from 'redux-thunk';
 
-import {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 import {GET_TABLE_DATA} from '../../../../../constants/navigation/content/table';
 import {getRows, getYqlTypes} from '../../../../../store/selectors/navigation/content/table-ts';
 import {getOffsetValue} from '../../../../../store/selectors/navigation/content/table';
 
-import {ReadTableResult} from './readTable';
+import {type ReadTableResult} from './readTable';
 
 export type InjectCellThunk = ThunkAction<void, RootState, unknown, Action>;
 

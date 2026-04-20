@@ -1,11 +1,11 @@
-import React, {FC, ReactElement} from 'react';
+import React, {type FC, type ReactElement} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {Select} from '@gravity-ui/uikit';
 
-import {ClusterConfig} from '../../../../../shared/yt-types';
+import {type ClusterConfig} from '../../../../../shared/yt-types';
 import {getQueryTrackerInfoClusters} from '../../../../store/selectors/query-tracker/queryAco';
 import {QuerySelector} from '../QuerySelector';
-import {QueryClusterItem, Props as QueryClusterItemProps} from './QueryClusterItem';
+import {QueryClusterItem, type Props as QueryClusterItemProps} from './QueryClusterItem';
 import {YT, isMultiClusterInstallation} from '../../../../config/yt-config';
 import {getClusterLoading, getQueryDraft} from '../../../../store/selectors/query-tracker/query';
 import {getClusterList} from '../../../../store/selectors/slideoutMenu';

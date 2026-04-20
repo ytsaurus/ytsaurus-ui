@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
 import b from 'bem-cn-lite';
 import {Flex, SegmentedRadioGroup, Select} from '@gravity-ui/uikit';
 
-import {RootState} from '../../../../../../store/reducers';
+import {type RootState} from '../../../../../../store/reducers';
 import {
     setOperationsAuthorTypeFilter,
     setOperationsStateFilter,
@@ -13,7 +13,7 @@ import {
     selectOperationsStateFilter,
 } from '../../../../../../store/selectors/dashboard2/operations';
 
-import type {OperationsWidgetProps} from '../types';
+import {type OperationsWidgetProps} from '../types';
 
 import i18n from '../i18n';
 

@@ -1,17 +1,17 @@
-import {YTPermissionType} from '../../../shared/yt-types';
+import {type YTPermissionType} from '../../../shared/yt-types';
 import {
     IdmObjectType,
     REGISTER_QUEUE_CONSUMER,
     REGISTER_QUEUE_CONSUMER_VITAL,
 } from '../../constants/acl';
 import {
-    IdmKindType,
-    InheritanceModeType,
-    InheritedFrom,
-    ResponsibleType,
-    Subject,
+    type IdmKindType,
+    type InheritanceModeType,
+    type InheritedFrom,
+    type ResponsibleType,
+    type Subject,
 } from '../../utils/acl/acl-types';
-import {YTPermissionTypeUI} from './acl-api';
+import {type YTPermissionTypeUI} from './acl-api';
 import {makeRegexpFromSettings} from '../../../shared/utils';
 import {uiSettings} from '../../config/ui-settings';
 

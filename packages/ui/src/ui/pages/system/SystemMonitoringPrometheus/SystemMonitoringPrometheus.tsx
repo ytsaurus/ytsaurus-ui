@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux';
 
 import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 
-import {PrometheusDashboardType} from '../../../../shared/prometheus/types';
+import {type PrometheusDashboardType} from '../../../../shared/prometheus/types';
 
 import format from '../../../common/hammer/format';
 import {PrometheusDashboardLazy} from '../../../containers/PrometheusDashboard/lazy';

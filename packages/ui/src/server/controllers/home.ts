@@ -1,4 +1,4 @@
-import type {Request, Response} from 'express';
+import {type Request, type Response} from 'express';
 import isEmpty_ from 'lodash/isEmpty';
 
 import {getLayoutConfig} from '../components/layout-config';

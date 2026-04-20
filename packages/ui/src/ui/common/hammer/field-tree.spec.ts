@@ -1,6 +1,6 @@
 import {
-    FieldTree,
-    FieldTreePredicate,
+    type FieldTree,
+    type FieldTreePredicate,
     fieldTreeForEach,
     fieldTreeSome,
     filterFieldTree,

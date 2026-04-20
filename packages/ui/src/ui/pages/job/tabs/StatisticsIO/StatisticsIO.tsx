@@ -10,7 +10,7 @@ import {MetaTable} from '@ytsaurus/components';
 import ElementsTableRaw from '../../../../components/ElementsTable/ElementsTable';
 
 import hammer from '../../../../common/hammer';
-import {StatisticsIO as IStatisticsIO} from '../../../../types/operations/job';
+import {type StatisticsIO as IStatisticsIO} from '../../../../types/operations/job';
 import {
     selectAverageGpuMemory,
     selectAverageGpuPower,

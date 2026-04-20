@@ -1,7 +1,7 @@
-import React, {CSSProperties, FC, useMemo, useRef} from 'react';
+import React, {type CSSProperties, type FC, useMemo, useRef} from 'react';
 import './DetailBlock.scss';
 import cn from 'bem-cn-lite';
-import {QueriesNodeBlock} from '../QueriesNodeBlock';
+import {type QueriesNodeBlock} from '../QueriesNodeBlock';
 import OperationNodeInfo from '../../OperationNodeInfo';
 import {hasDetailsInfo, hasJobsInfo, hasStagesInfo} from '../../utils';
 import {DetailBlockHeader} from './DetailBlockHeader';

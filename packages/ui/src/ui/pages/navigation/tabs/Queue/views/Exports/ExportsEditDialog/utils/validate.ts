@@ -1,11 +1,11 @@
 import ypath from '../../../../../../../../common/thor/ypath';
 import {ytApiV3} from '../../../../../../../../rum/rum-wrap-api';
 
-import {BatchApiResults} from '../../../../../../../../store/api/yt/executeBatch';
+import {type BatchApiResults} from '../../../../../../../../store/api/yt/executeBatch';
 
-import {QueueExport} from '../../../../../../../../types/navigation/queue/queue';
+import {type QueueExport} from '../../../../../../../../types/navigation/queue/queue';
 
-import {ExportsFormValues} from '../ExportsEditDialog';
+import {type ExportsFormValues} from '../ExportsEditDialog';
 
 export function validateExportPeriod(period?: {value?: number; error?: string}) {
     return !period?.value || period?.value % 1000 !== 0

@@ -1,11 +1,11 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {DialogError, DialogField, FormApi, YTDFDialog} from '../../../components/Dialog';
+import {DialogError, type DialogField, type FormApi, YTDFDialog} from '../../../components/Dialog';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {getLinkToModalState} from '../../../store/selectors/navigation/modals/link-to-modal';
 import {createLink, hideLinkToModal} from '../../../store/actions/navigation/modals/link-to-modal';
-import {LinkToState} from '../../../store/reducers/navigation/modals/link-to-modal';
+import {type LinkToState} from '../../../store/reducers/navigation/modals/link-to-modal';
 import {ytApiV3} from '../../../rum/rum-wrap-api';
 
 const block = cn('table-sort-modal');

@@ -1,6 +1,6 @@
-import React, {FC, useCallback} from 'react';
+import React, {type FC, useCallback} from 'react';
 import hammer from '../../../common/hammer';
-import NodeQuad, {NodeQuadTheme} from '../NodeQuad/NodeQuad';
+import NodeQuad, {type NodeQuadTheme} from '../NodeQuad/NodeQuad';
 import Icon from '../../../components/Icon/Icon';
 import {useDispatch} from '../../../store/redux-hooks';
 import ReadOnlyIcon from '../../../assets/img/svg/read-only-icon.svg';
@@ -10,10 +10,10 @@ import {Flex, Text} from '@gravity-ui/uikit';
 import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 import {ChangeMaintenanceButton} from './ChangeMaintenanceButton';
 import block from 'bem-cn-lite';
-import {MasterInstance} from '../../../store/selectors/system/masters';
+import {type MasterInstance} from '../../../store/selectors/system/masters';
 import './MasterGroup.scss';
 import {changeMasterMaintenance} from '../../../store/actions/system/masters';
-import {CypressNode} from '../../../../shared/yt-types';
+import {type CypressNode} from '../../../../shared/yt-types';
 
 const b = block('master-group');
 

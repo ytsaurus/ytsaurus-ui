@@ -3,12 +3,12 @@ import values_ from 'lodash/values';
 
 import hammer from '../../common/hammer';
 import {
-    MetricsEntry,
-    MetricsEntryLeaf,
-    MetricsList,
-    Statistic,
-    StatisticTree,
-    StatisticTreeInner,
+    type MetricsEntry,
+    type MetricsEntryLeaf,
+    type MetricsList,
+    type Statistic,
+    type StatisticTree,
+    type StatisticTreeInner,
 } from './types';
 
 const TREE_ROOT_NAME = '<Root>';

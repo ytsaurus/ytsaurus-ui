@@ -1,7 +1,7 @@
 import {batch} from 'react-redux';
 
 import {
-    CellPreviewActionType,
+    type CellPreviewActionType,
     cellPreviewCancelHelper,
     openCellPreview,
 } from '../modals/cell-preview';
@@ -9,7 +9,7 @@ import {isCancelled} from '../../../utils/cancel-helper';
 import {CELL_PREVIEW, PREVIEW_LIMIT} from '../../../constants/modals/cell-preview';
 import {readQueryResults} from './api';
 import {prepareFormattedValue} from '../../../utils/queries/format';
-import {CellDataHandlerQueries} from '../../../types/navigation/table-cell-preview';
+import {type CellDataHandlerQueries} from '../../../types/navigation/table-cell-preview';
 
 export const onCellPreviewQueryResults = (
     queryId: string,

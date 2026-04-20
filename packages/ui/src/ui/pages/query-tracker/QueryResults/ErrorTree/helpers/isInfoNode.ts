@@ -1,4 +1,4 @@
-import {QueryError} from '../../../../../types/query-tracker/api';
+import {type QueryError} from '../../../../../types/query-tracker/api';
 
 const INFO_NODE_SEVERITY = 'Info';
 

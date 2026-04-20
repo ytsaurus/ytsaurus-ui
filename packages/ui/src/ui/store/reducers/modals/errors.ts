@@ -1,6 +1,6 @@
-import {AxiosError} from 'axios';
+import {type AxiosError} from 'axios';
 import {HIDE_ERROR_MODAL, SHOW_ERROR_MODAL} from '../../../constants/modals/errors';
-import {ActionD, YTError} from '../../../types';
+import {type ActionD, type YTError} from '../../../types';
 
 export interface ErrorsState {
     nextErrorId: number;

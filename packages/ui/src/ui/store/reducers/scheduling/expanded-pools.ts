@@ -1,5 +1,5 @@
-import {Action} from 'redux';
-import {ActionD, YTError} from '../../../types';
+import {type Action} from 'redux';
+import {type ActionD, type YTError} from '../../../types';
 import {mergeStateOnClusterChange} from '../utils';
 import {
     SCHEDULING_EXPANDED_POOLS_CANCELLED,
@@ -9,8 +9,11 @@ import {
     SCHEDULING_EXPANDED_POOLS_SUCCESS,
 } from '../../../constants/scheduling';
 import {EMPTY_OBJECT} from '../../../constants/empty';
-import {OperationInfo, PoolInfo} from '../../../store/selectors/scheduling/scheduling-pools';
-import {CypressNode} from '../../../../shared/yt-types';
+import {
+    type OperationInfo,
+    type PoolInfo,
+} from '../../../store/selectors/scheduling/scheduling-pools';
+import {type CypressNode} from '../../../../shared/yt-types';
 
 export type PoolCypressData = CypressNode<Record<string, unknown>, string>;
 

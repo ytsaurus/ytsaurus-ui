@@ -3,17 +3,17 @@ import find_ from 'lodash/find';
 import map_ from 'lodash/map';
 import uniq_ from 'lodash/uniq';
 
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {
     aggregateTotal,
     tabletActiveBundleLink,
     tabletCellBundleRootLink,
 } from '../../../utils/components/tablet-cells';
 import {
-    AllocatedInstancesMap,
-    InProgressInstancesMap,
-    TabletBundle,
-    TabletCell,
+    type AllocatedInstancesMap,
+    type InProgressInstancesMap,
+    type TabletBundle,
+    type TabletCell,
 } from '../../../store/reducers/tablet_cell_bundles';
 import {createSelector} from 'reselect';
 import {concatByAnd} from '../../../common/hammer/predicate';
@@ -26,7 +26,7 @@ import {
     selectTabletCellBundleControllerInstanceDetailsMap,
     selectTabletCellBundleEditorState,
 } from './tablet-cell-bundle-editor';
-import {BundleControllerInstanceDetails} from '../../../store/reducers/tablet_cell_bundles/tablet-cell-bundle-editor';
+import {type BundleControllerInstanceDetails} from '../../../store/reducers/tablet_cell_bundles/tablet-cell-bundle-editor';
 import UIFactory from '../../../UIFactory';
 
 export const selectTabletsIsLoaded = (state: RootState) => state.tablet_cell_bundles.loaded;

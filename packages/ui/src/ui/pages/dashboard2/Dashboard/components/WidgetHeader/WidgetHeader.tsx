@@ -3,7 +3,7 @@ import {Button, Flex, Text} from '@gravity-ui/uikit';
 import {CircleExclamation} from '@gravity-ui/icons';
 
 import Link from '../../../../../components/Link/Link';
-import {YTError} from '../../../../../types';
+import {type YTError} from '../../../../../types';
 import {showErrorModal} from '../../../../../store/actions/modals/errors';
 import {useDispatch} from '../../../../../store/redux-hooks';
 

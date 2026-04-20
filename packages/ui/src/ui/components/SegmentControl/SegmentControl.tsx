@@ -5,7 +5,7 @@ import {Flex, Link} from '@gravity-ui/uikit';
 
 import Icon from '../../components/Icon/Icon';
 import {MetaTable} from '@ytsaurus/components';
-import {PreparedRole} from '../../utils/acl';
+import {type PreparedRole} from '../../utils/acl';
 import i18n from './i18n';
 
 import './SegmentControl.scss';

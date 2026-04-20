@@ -13,7 +13,7 @@ import {
     selectNodeMemorySortOrder,
     selectNodeMemoryUsageBundlesItems,
 } from '../../../../../store/selectors/components/node/memory';
-import {SortState} from '../../../../../types';
+import {type SortState} from '../../../../../types';
 
 function NodeBundles() {
     const dispatch = useDispatch();

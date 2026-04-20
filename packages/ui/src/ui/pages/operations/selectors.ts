@@ -6,10 +6,10 @@ import ypath from '../../common/thor/ypath';
 import hammer from '../../common/hammer';
 import {createSelector} from 'reselect';
 import {remoteInputUrl} from '../../utils/operations/tabs/details/specification/specification';
-import {FIX_MY_TYPE} from '../../types';
-import {RootState} from '../../store/reducers';
-import {JobsState} from '../../store/reducers/operations/jobs/jobs';
-import {CypressNodeRaw} from '../../../shared/yt-types';
+import {type FIX_MY_TYPE} from '../../types';
+import {type RootState} from '../../store/reducers';
+import {type JobsState} from '../../store/reducers/operations/jobs/jobs';
+import {type CypressNodeRaw} from '../../../shared/yt-types';
 
 export interface OperationPool {
     tree: string;

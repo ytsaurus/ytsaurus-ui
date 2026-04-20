@@ -13,7 +13,7 @@ import {
 import {getSchemaStrict} from '../../../../../store/selectors/navigation/tabs/schema';
 import {Secondary} from '@ytsaurus/components';
 import ColumnsPresetButton from './ColumnsPresetButton';
-import {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 import {getConfigData} from '../../../../../config/ui-settings';
 
 ColumnSelectorButton.propTypes = {

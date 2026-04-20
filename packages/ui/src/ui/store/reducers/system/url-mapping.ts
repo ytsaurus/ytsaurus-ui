@@ -1,7 +1,7 @@
 import {produce} from 'immer';
 
 import {updateIfChanged} from '../../../utils/utils';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 
 export const systemParams = {
     nodeType: {

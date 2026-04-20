@@ -1,5 +1,5 @@
-import {AppConfig} from '@gravity-ui/nodekit';
-import type {Response} from 'express';
+import {type AppConfig} from '@gravity-ui/nodekit';
+import {type Response} from 'express';
 import {YT_CYPRESS_COOKIE_NAME} from '../../shared/constants';
 import {getClustersFromConfig} from './utils';
 import {makeAuthClusterCookieName} from '../utils';

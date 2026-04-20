@@ -5,7 +5,7 @@ import {QueriesPoolingContext} from '../../hooks/QueriesPooling/context';
 import {getCurrentQuery} from '../../../../store/selectors/query-tracker/query';
 import {getDefaultQueryACO} from '../../../../store/selectors/query-tracker/queryAco';
 import {isQueryProgress} from '../../utils/query';
-import {QueryItem} from '../../../../types/query-tracker/api';
+import {type QueryItem} from '../../../../types/query-tracker/api';
 import {prepareQueryPlanIds} from '../../../../types/query-tracker/query';
 import {UPDATE_QUERY_ITEM} from '../../../../store/reducers/query-tracker/query-tracker-contants';
 import {updateQueryTabs} from '../../../../store/actions/query-tracker/queryTabs/queryTabs';

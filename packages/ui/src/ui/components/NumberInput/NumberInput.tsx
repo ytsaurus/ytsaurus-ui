@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {TextInput, TextInputProps} from '@gravity-ui/uikit';
+import {TextInput, type TextInputProps} from '@gravity-ui/uikit';
 import {Tooltip} from '@ytsaurus/components';
 
 import hammer from '../../common/hammer';

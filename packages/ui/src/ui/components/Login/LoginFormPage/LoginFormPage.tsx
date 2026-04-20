@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import axios, {AxiosError} from 'axios';
+import axios, {type AxiosError} from 'axios';
 import {Button, Text, TextInput} from '@gravity-ui/uikit';
 import {onSuccessLogin} from '../../../store/actions/global';
 import ytLocalStorage from '../../../utils/yt-local-storage';

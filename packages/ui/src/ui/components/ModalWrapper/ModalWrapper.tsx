@@ -1,6 +1,6 @@
 import React from 'react';
 // eslint-disable-next-line no-restricted-imports
-import {Modal, ModalProps} from '@gravity-ui/uikit';
+import {Modal, type ModalProps} from '@gravity-ui/uikit';
 import {useHotkeysScope} from '../../hooks/use-hotkeysjs-scope';
 
 type ModalWrapperProps = ModalProps & {hotkeyScope?: string};

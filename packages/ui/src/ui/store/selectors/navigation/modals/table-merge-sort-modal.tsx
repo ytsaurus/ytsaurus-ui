@@ -1,6 +1,6 @@
-import {RootState} from '../../../reducers';
+import {type RootState} from '../../../reducers';
 import {createSelector} from 'reselect';
-import {PathAttribute} from '../../../reducers/navigation/modals/tableMergeSortModalSlice';
+import {type PathAttribute} from '../../../reducers/navigation/modals/tableMergeSortModalSlice';
 export const getNavigationTableSortPaths = (state: RootState) =>
     state.navigation.modals.tableMergeSortModal.paths;
 export const getNavigationTableOutputPathAttributes = (state: RootState) =>

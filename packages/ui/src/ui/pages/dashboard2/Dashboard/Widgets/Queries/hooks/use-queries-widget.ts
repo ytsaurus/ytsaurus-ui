@@ -3,7 +3,7 @@ import {useSelector} from '../../../../../../store/redux-hooks';
 
 import map_ from 'lodash/map';
 
-import {RootState} from '../../../../../../store/reducers';
+import {type RootState} from '../../../../../../store/reducers';
 import {useListQueries} from '../../../../../../store/api/dashboard2/queries';
 import {
     selectQueryFilterEngine,
@@ -15,8 +15,8 @@ import {defaultDashboardItems} from '../../../../../../constants/dashboard2';
 import {QUERY_POLLING_INTERVAL} from '../../../../../../constants/queries';
 
 import {QueryEngine} from '../../../../../../../shared/constants/engines';
-import {ListQueriesParams} from '../../../../../../../shared/yt-types';
-import {QueriesWidgetProps} from '../types';
+import {type ListQueriesParams} from '../../../../../../../shared/yt-types';
+import {type QueriesWidgetProps} from '../types';
 
 const mapQueryStateToRequestStates: Record<string, string[]> = {
     running: ['running', 'pending'],

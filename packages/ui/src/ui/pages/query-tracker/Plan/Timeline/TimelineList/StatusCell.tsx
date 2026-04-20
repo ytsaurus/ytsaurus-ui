@@ -1,10 +1,10 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Flex, Text} from '@gravity-ui/uikit';
 import {operationsStateConfig} from '../../utils';
 import cn from 'bem-cn-lite';
 import './StatusCell.scss';
 import {NodeStatusIcon} from './NodeStatusIcon';
-import {RowType} from '../utils';
+import {type RowType} from '../utils';
 
 const block = cn('yt-timeline-status-cell');
 

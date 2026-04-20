@@ -1,4 +1,4 @@
-import React, {Key} from 'react';
+import React, {type Key} from 'react';
 import {useDispatch, useSelector} from '../../store/redux-hooks';
 import {useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
@@ -9,7 +9,7 @@ import {Breadcrumbs, Button, Flex, Text} from '@gravity-ui/uikit';
 
 import {ClipboardButton} from '@ytsaurus/components';
 import {YTDFDialog, makeErrorFields} from '../../components/Dialog';
-import Favourites, {FavouritesItem} from '../../components/Favourites/Favourites';
+import Favourites, {type FavouritesItem} from '../../components/Favourites/Favourites';
 import {EditableBreadcrumbs} from '../../components/EditableBreadcrumbs';
 import Suggest from '../../components/Suggest/Suggest';
 import {Page} from '../../constants';
@@ -25,7 +25,7 @@ import {selectIsAdmin} from '../../store/selectors/global/is-developer';
 import {chytApiAction} from '../../utils/strawberryControllerApi';
 import {chytCliqueCreate} from '../../store/actions/chyt/list';
 import {chytToggleFavourite} from '../../store/actions/favourites';
-import {YTError} from '../../../@types/types';
+import {type YTError} from '../../../@types/types';
 import {ChytCliquePageTab} from '../../constants/chyt-page';
 
 import './ChytPageTopRow.scss';

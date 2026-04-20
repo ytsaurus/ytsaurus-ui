@@ -1,4 +1,4 @@
-import {YTApiIdType} from '../../shared/constants/yt-api-id';
+import {type YTApiIdType} from '../../shared/constants/yt-api-id';
 
 import {ytApiV3Id} from '../rum/rum-wrap-api';
 import {USE_CACHE, USE_MAX_SIZE} from '../../shared/constants/yt-api';

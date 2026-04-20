@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useMemo} from 'react';
+import React, {type FC, useCallback, useMemo} from 'react';
 import cn from 'bem-cn-lite';
 import './VcsItemsList.scss';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';

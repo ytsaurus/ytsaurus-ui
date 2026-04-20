@@ -11,7 +11,7 @@ import infoIcon from '@gravity-ui/icons/svgs/circle-info.svg';
 import cn from 'bem-cn-lite';
 
 import './NodeName.scss';
-import {RowType} from '../../Timeline/utils';
+import {type RowType} from '../../Timeline/utils';
 import {makeNavigationLink} from '../../../../../utils/app-url';
 
 const block = cn('node-name');

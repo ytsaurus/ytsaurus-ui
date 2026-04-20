@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ErrorBoundary, {ErrorBoundaryProps} from '../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary, {type ErrorBoundaryProps} from '../components/ErrorBoundary/ErrorBoundary';
 import Loader from '../components/Loader/Loader';
 
 export default function withLazyLoading<P>(

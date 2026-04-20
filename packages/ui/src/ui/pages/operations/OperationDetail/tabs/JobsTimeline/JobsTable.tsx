@@ -1,9 +1,9 @@
-import React, {FC, useMemo} from 'react';
+import React, {type FC, useMemo} from 'react';
 import {Flex, Icon, Text} from '@gravity-ui/uikit';
 import FileIcon from '@gravity-ui/icons/svgs/file.svg';
 import cn from 'bem-cn-lite';
 import './JobsTable.scss';
-import {TimelineJob} from '../../../../../store/reducers/operations/jobs/jobs-timeline-slice';
+import {type TimelineJob} from '../../../../../store/reducers/operations/jobs/jobs-timeline-slice';
 
 const block = cn('yt-jobs-table');
 

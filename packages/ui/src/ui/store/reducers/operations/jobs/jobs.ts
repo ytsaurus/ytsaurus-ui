@@ -1,7 +1,7 @@
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
-import {Action} from 'redux';
+import {type Action} from 'redux';
 
 import {LOADING_STATUS} from '../../../../constants/index';
 import {
@@ -19,9 +19,13 @@ import {
 } from '../../../../constants/operations/jobs';
 import {GET_OPERATION} from '../../../../constants/operations/detail';
 import {Job} from '../../../../pages/operations/OperationDetail/tabs/Jobs/job-selector';
-import {ActionD, ValueOf, YTError} from '../../../../types';
-import {ClusterConfig, ListJobsItem, ListJobsResponse} from '../../../../../shared/yt-types';
-import {DetailedOperationSelector} from '../../../../pages/operations/selectors';
+import {type ActionD, type ValueOf, type YTError} from '../../../../types';
+import {
+    type ClusterConfig,
+    type ListJobsItem,
+    type ListJobsResponse,
+} from '../../../../../shared/yt-types';
+import {type DetailedOperationSelector} from '../../../../pages/operations/selectors';
 
 export type WithDefaultValue<T> = {
     value: T;

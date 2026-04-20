@@ -1,4 +1,4 @@
-import {UnipikaSettings} from '../components/Yson/StructuredYson/StructuredYsonTypes';
+import {type UnipikaSettings} from '../components/Yson/StructuredYson/StructuredYsonTypes';
 import unipika from '../common/thor/unipika';
 
 export const YSON_AS_TEXT = (): UnipikaSettings => ({

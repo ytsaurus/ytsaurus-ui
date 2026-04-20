@@ -12,7 +12,7 @@ import {
     getObjectPermissionsFilter,
     getObjectSubjectFilter,
 } from '../../../store/selectors/acl-filters';
-import {ACLReduxProps} from '../ACL-connect-helpers';
+import {type ACLReduxProps} from '../ACL-connect-helpers';
 import {ColumnGroupsFilter} from '../ColumnGroups/ColumnGroups';
 import i18nPermissionValues from '../i18n-permission-values';
 import i18n from './i18n';

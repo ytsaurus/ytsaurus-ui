@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {type FC, useState} from 'react';
 import {useDispatch} from '../../../../store/redux-hooks';
 import {fetchAccessLogQtId} from '../../../../store/actions/navigation/tabs/access-log/access-log';
 import {Button, Icon} from '@gravity-ui/uikit';

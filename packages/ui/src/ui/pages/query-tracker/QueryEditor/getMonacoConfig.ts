@@ -1,5 +1,5 @@
-import {QueryEngine} from '../../../../shared/constants/engines';
-import {MonacoEditorConfig} from '../../../components/MonacoEditor';
+import {type QueryEngine} from '../../../../shared/constants/engines';
+import {type MonacoEditorConfig} from '../../../components/MonacoEditor';
 
 export const getMonacoConfig = (engine: QueryEngine): MonacoEditorConfig => {
     return {

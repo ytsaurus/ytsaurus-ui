@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 
 import map_ from 'lodash/map';
 
@@ -9,7 +9,7 @@ import {Progress} from '@gravity-ui/uikit';
 import hammer from '../../../../../common/hammer';
 import {Tooltip} from '@ytsaurus/components';
 import {getSettingsData} from '../../../../../store/selectors/settings/settings-base';
-import {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 
 import './MemoryProgress.scss';
 

@@ -6,7 +6,7 @@ import isEmpty_ from 'lodash/isEmpty';
 
 import Link from '../../../../components/Link/Link';
 import {YTErrorBlock} from '../../../../components/Error/Error';
-import {FormApi, YTDFDialog} from '../../../../components/Dialog';
+import {type FormApi, YTDFDialog} from '../../../../components/Dialog';
 import Button from '../../../../components/Button/Button';
 
 import {selectCurrentUserName} from '../../../../store/selectors/global';
@@ -25,7 +25,7 @@ import {
     getCreatePoolDialogError,
     getCreatePoolDialogFlatTreeItems,
 } from '../../../../store/selectors/scheduling/create-pool-dialog';
-import {FIX_MY_TYPE} from '../../../../types';
+import {type FIX_MY_TYPE} from '../../../../types';
 import {SCHEDULING_CREATE_POOL_CANCELLED} from '../../../../constants/scheduling';
 import {docsUrl, isIdmAclAvailable} from '../../../../config';
 import UIFactory from '../../../../UIFactory';

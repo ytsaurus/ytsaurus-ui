@@ -1,13 +1,13 @@
-import type {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 import {
     QUEUE_PARTITIONS_LOAD_FAILURE,
     QUEUE_PARTITIONS_LOAD_REQUEST,
     QUEUE_PARTITIONS_LOAD_SUCCESS,
 } from '../../../../../constants/navigation/tabs/queue';
 import {YTApiId, ytApiV3Id} from '../../../../../rum/rum-wrap-api';
-import type {RootState} from '../../../../../store/reducers';
-import type {QueuePartitionsAction} from '../../../../../store/reducers/navigation/tabs/queue/partitions';
-import type {YtQueuePartition} from '../../../../../store/reducers/navigation/tabs/queue/types';
+import {type RootState} from '../../../../../store/reducers';
+import {type QueuePartitionsAction} from '../../../../../store/reducers/navigation/tabs/queue/partitions';
+import {type YtQueuePartition} from '../../../../../store/reducers/navigation/tabs/queue/types';
 import {getPath, getTransaction} from '../../../../../store/selectors/navigation';
 import {prepareRequest} from '../../../../../utils/navigation';
 

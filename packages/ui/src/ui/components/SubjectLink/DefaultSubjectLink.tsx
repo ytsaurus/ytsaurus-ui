@@ -8,7 +8,7 @@ import {YT} from '../../config/yt-config';
 import userSvg from '../../assets/img/svg/page-users.svg';
 import groupSvg from '../../assets/img/svg/page-groups.svg';
 
-import type {SubjectCardProps} from './SubjectLink';
+import {type SubjectCardProps} from './SubjectLink';
 export {SubjectCardProps};
 
 import './DefaultSubjectLink.scss';

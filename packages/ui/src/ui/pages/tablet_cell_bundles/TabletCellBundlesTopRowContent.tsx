@@ -4,18 +4,18 @@ import cn from 'bem-cn-lite';
 import {Breadcrumbs} from '@gravity-ui/uikit';
 import {useHistory} from 'react-router';
 
-import Favourites, {FavouritesItem} from '../../components/Favourites/Favourites';
+import Favourites, {type FavouritesItem} from '../../components/Favourites/Favourites';
 import {Page} from '../../constants/index';
 import {TabletsTab} from '../../constants/tablets';
 import {RowWithName} from '../../containers/AppNavigation/TopRowContent/SectionName';
 import {selectCluster, selectClusterUiConfig} from '../../store/selectors/global';
-import type {TabletsCellBundlesBreadcrumbsItem} from '../../store/selectors/tablet_cell_bundles';
-import type {ValueOf} from '../../types';
+import {type TabletsCellBundlesBreadcrumbsItem} from '../../store/selectors/tablet_cell_bundles';
+import {type ValueOf} from '../../types';
 
 import './TabletCellBundlesTopRowContent.scss';
 import {getAppBrowserHistory} from '../../store/window-store';
 import UIFactory from '../../UIFactory';
-import {TabletBundle} from '../../store/reducers/tablet_cell_bundles';
+import {type TabletBundle} from '../../store/reducers/tablet_cell_bundles';
 
 const block = cn('tablet-cell-bundles-top-row-content');
 

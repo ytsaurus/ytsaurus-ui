@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 
 export type PlanView = 'graph' | 'table' | 'timeline';

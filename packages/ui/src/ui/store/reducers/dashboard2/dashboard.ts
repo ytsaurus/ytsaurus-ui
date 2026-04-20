@@ -1,8 +1,8 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {Config, ConfigItem} from '@gravity-ui/dashkit';
+import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {type Config, type ConfigItem} from '@gravity-ui/dashkit';
 
-import {RootState} from '..';
-import {defaultDashboardItems} from '../../../constants/dashboard2';
+import {type RootState} from '..';
+import {type defaultDashboardItems} from '../../../constants/dashboard2';
 import {RESET_STORE_BEFORE_CLUSTER_CHANGE} from '../../../constants/utils';
 import {mergeStateOnClusterChange} from '../utils';
 

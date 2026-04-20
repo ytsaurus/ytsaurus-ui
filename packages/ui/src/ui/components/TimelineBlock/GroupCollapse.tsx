@@ -1,4 +1,4 @@
-import React, {FC, PropsWithChildren} from 'react';
+import React, {type FC, type PropsWithChildren} from 'react';
 import {useToggle} from 'react-use';
 import {Flex, Icon} from '@gravity-ui/uikit';
 import ChevronDownIcon from '@gravity-ui/icons/svgs/chevron-down.svg';

@@ -1,4 +1,4 @@
-import {Position, editor, languages} from 'monaco-editor';
+import {type Position, type editor, languages} from 'monaco-editor';
 import {generateSuggestion} from '../helpers/generateSuggestions';
 import {getRangeToInsertSuggestion} from '../helpers/getRangeToInsertSuggestion';
 

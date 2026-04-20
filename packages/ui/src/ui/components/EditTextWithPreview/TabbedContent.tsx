@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import Button from '../../components/Button/Button';
 
 import './TabbedContent.scss';
-import {DropdownMenu, DropdownMenuItem} from '@gravity-ui/uikit';
+import {DropdownMenu, type DropdownMenuItem} from '@gravity-ui/uikit';
 
 const block = cn('yt-tabbed-content');
 

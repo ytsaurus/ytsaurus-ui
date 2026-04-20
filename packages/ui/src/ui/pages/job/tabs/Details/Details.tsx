@@ -12,9 +12,9 @@ import Events from '../../../../pages/operations/OperationDetail/tabs/details/Ev
 import CollapsibleSection from '../../../../components/CollapsibleSection/CollapsibleSection';
 
 import ypath from '../../../../common/thor/ypath';
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {useSelector} from '../../../../store/redux-hooks';
-import {JobError, JobEvents, JobStatistic} from '../../../../types/operations/job';
+import {type JobError, type JobEvents, type JobStatistic} from '../../../../types/operations/job';
 
 import './Details.scss';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../constants/global';

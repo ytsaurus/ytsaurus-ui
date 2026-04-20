@@ -6,7 +6,7 @@ import {useFetchBatchQuery} from '../../../../store/api/yt';
 
 import {YTApiId} from '../../../../rum/rum-wrap-api';
 
-import {PoolPair} from './PoolsMultiple';
+import {type PoolPair} from './PoolsMultiple';
 import i18n from './i18n';
 
 export function useTrees(value: PoolPair[]) {

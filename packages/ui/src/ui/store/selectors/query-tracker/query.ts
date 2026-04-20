@@ -1,11 +1,11 @@
 import forOwn_ from 'lodash/forOwn';
 import {createSelector} from 'reselect';
-import {RootState} from '../../reducers';
+import {type RootState} from '../../reducers';
 import {QueryStatus} from '../../../types/query-tracker';
 import {
-    DraftQuery,
-    QTRequestOptions,
-    QueryItem,
+    type DraftQuery,
+    type QTRequestOptions,
+    type QueryItem,
     isSingleProgress,
 } from '../../../types/query-tracker/api';
 import {
@@ -13,8 +13,8 @@ import {
     getSettingQueryTrackerYQLAgentStage,
 } from '../settings/settings-ts';
 import {getQueryTrackerStage} from '../../../config';
-import {QTEditorError, isQTEditorError} from '../../../types/query-tracker/editor';
-import {YTError} from '../../../types';
+import {type QTEditorError, isQTEditorError} from '../../../types/query-tracker/editor';
+import {type YTError} from '../../../types';
 import {isYTError} from '../../../../shared/utils';
 import {getQueryResults} from './queryResult';
 import {getDefaultQueryACO, selectIsMultipleAco} from './queryAco';

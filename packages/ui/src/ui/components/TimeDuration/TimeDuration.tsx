@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 
 import {
     NumberInputWithError,
-    NumberInputWithErrorProps,
+    type NumberInputWithErrorProps,
 } from '../../components/NumberInput/NumberInput';
 import {MetaTable, Tooltip} from '@ytsaurus/components';
 import Icon from '../../components/Icon/Icon';

@@ -1,13 +1,13 @@
 import React from 'react';
-import {Action} from 'redux';
+import {type Action} from 'redux';
 
 import forEach_ from 'lodash/forEach';
 import map_ from 'lodash/map';
 import sortBy_ from 'lodash/sortBy';
 import toLower_ from 'lodash/toLower';
 
-import {ThunkAction} from 'redux-thunk';
-import axios, {CancelTokenSource} from 'axios';
+import {type ThunkAction} from 'redux-thunk';
+import axios, {type CancelTokenSource} from 'axios';
 
 import {getBatchError} from '../../../../../shared/utils/error';
 
@@ -19,7 +19,7 @@ import {
     wrapApiPromiseByToaster,
 } from '../../../../utils/utils';
 import {loadPoolTreesIfNotLoaded} from '../../../../store/actions/global';
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 
 import {OperationShortInfo} from '../../../../pages/components/OperationShortInfo/OperationShortInfo';
 import {AppStoreProvider} from '../../../../containers/App/AppStoreProvider';

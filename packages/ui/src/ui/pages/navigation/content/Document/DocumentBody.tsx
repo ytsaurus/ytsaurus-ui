@@ -1,4 +1,4 @@
-import React, {FC, Fragment} from 'react';
+import React, {type FC, Fragment} from 'react';
 import cn from 'bem-cn-lite';
 
 import {Alert, Button, Flex} from '@gravity-ui/uikit';
@@ -8,7 +8,7 @@ import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import {MetaTable} from '@ytsaurus/components';
 import {main} from '../../../../components/MetaTable/presets';
 import Yson from '../../../../components/Yson/Yson';
-import {UnipikaSettings} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
+import {type UnipikaSettings} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 import Icon from '../../../../components/Icon/Icon';
 import {OpenQueryButtons} from '../../../../containers/OpenQueryButtons/OpenQueryButtons';
 

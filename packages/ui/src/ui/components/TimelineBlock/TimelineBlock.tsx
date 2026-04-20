@@ -1,14 +1,14 @@
-import React, {FC, PropsWithChildren, useCallback, useEffect, useRef} from 'react';
+import React, {type FC, type PropsWithChildren, useCallback, useEffect, useRef} from 'react';
 import {
-    MarkerSelectEvent,
-    SelectEvent,
-    Timeline,
-    TimelineEvent,
-    TimelineMarker,
+    type MarkerSelectEvent,
+    type SelectEvent,
+    type Timeline,
+    type TimelineEvent,
+    type TimelineMarker,
 } from '@gravity-ui/timeline';
 import {TimelineCanvas, useTimelineEvent} from '@gravity-ui/timeline/react';
 import {Flex} from '@gravity-ui/uikit';
-import {GroupCollapse, Props as GroupCollapseProps} from './GroupCollapse';
+import {GroupCollapse, type Props as GroupCollapseProps} from './GroupCollapse';
 import {EventPopup} from './EventPopup';
 import cn from 'bem-cn-lite';
 import {VirtualList} from '../List/VirtualList';

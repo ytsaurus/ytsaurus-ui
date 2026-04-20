@@ -11,7 +11,7 @@ import reduce_ from 'lodash/reduce';
 import sum_ from 'lodash/sum';
 
 import {
-    FieldTree,
+    type FieldTree,
     fieldTreeForEach,
     fieldTreeSome,
     filterFieldTree,
@@ -20,8 +20,8 @@ import format from '../../../common/hammer/format';
 
 import ypath from '../../../common/thor/ypath';
 import {STATISTICS_FILTER_ALL_VALUE} from '../../../constants/operations/statistics';
-import {RootState} from '../../../store/reducers';
-import {ValueOf} from '../../../../@types/types';
+import {type RootState} from '../../../store/reducers';
+import {type ValueOf} from '../../../../@types/types';
 import {prepareDataFromGraph} from '../../../utils/operations/tabs/details/tasks';
 
 const selectJobTypeFilter = (state: RootState) => state.operations.statistics.jobTypeFilter;

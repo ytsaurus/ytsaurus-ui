@@ -1,4 +1,4 @@
-import {AppConfig} from '@gravity-ui/nodekit';
+import {type AppConfig} from '@gravity-ui/nodekit';
 import common from '../common';
 
 const e2eConfig: Partial<AppConfig> = {

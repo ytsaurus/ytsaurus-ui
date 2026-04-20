@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import isEmpty_ from 'lodash/isEmpty';
 
-import {ClusterConfig} from '../../../../../../shared/yt-types';
+import {type ClusterConfig} from '../../../../../../shared/yt-types';
 
 import hammer from '../../../../../common/hammer';
 
@@ -17,7 +17,7 @@ import Label from '../../../../../components/Label';
 import Icon from '../../../../../components/Icon/Icon';
 
 import {selectCluster, selectCurrentClusterConfig} from '../../../../../store/selectors/global';
-import {MaintenanceRequestInfo} from '../../../../../store/actions/components/node-maintenance-modal';
+import {type MaintenanceRequestInfo} from '../../../../../store/actions/components/node-maintenance-modal';
 import {useSidePanel} from '../../../../../hooks/use-side-panel';
 
 import './ProxyCard.scss';

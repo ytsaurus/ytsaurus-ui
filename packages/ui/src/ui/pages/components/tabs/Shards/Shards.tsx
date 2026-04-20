@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {ResolveThunks, connect} from 'react-redux';
+import {type ResolveThunks, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
@@ -13,11 +13,11 @@ import Name from './Name';
 import NodeCount from './NodeCount';
 
 import {abortAllRequests, getShards} from '../../../../store/actions/components/shards';
-import type {Shard} from '../../../../store/reducers/components/shards';
+import {type Shard} from '../../../../store/reducers/components/shards';
 
 import './Shards.scss';
 import {selectCluster} from '../../../../store/selectors/global';
-import type {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 
 const block = cn('components-shards');
 

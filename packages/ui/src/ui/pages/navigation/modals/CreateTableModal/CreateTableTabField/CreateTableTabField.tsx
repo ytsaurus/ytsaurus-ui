@@ -11,16 +11,16 @@ import sortBy_ from 'lodash/sortBy';
 
 import {DropdownMenu} from '@gravity-ui/uikit';
 
-import {TabFieldVertical, TabFieldVerticalProps} from '../../../../../components/Dialog';
+import {TabFieldVertical, type TabFieldVerticalProps} from '../../../../../components/Dialog';
 
 import Button from '../../../../../components/Button/Button';
-import Icon, {IconName} from '../../../../../components/Icon/Icon';
+import Icon, {type IconName} from '../../../../../components/Icon/Icon';
 
 import {
     setCreateTableColumnsOrder,
     setCreateTableKeyColumns,
 } from '../../../../../store/actions/navigation/modals/create-table';
-import {ArrayElement} from '../../../../../types';
+import {type ArrayElement} from '../../../../../types';
 import {Tooltip} from '@ytsaurus/components';
 
 import './CreateTableTabField.scss';

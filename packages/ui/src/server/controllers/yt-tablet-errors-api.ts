@@ -2,7 +2,7 @@ import isEmpty_ from 'lodash/isEmpty';
 import axios from 'axios';
 import qs from 'qs';
 
-import type {Request, Response} from 'express';
+import {type Request, type Response} from 'express';
 import {
     ErrorWithCode,
     UNEXPECTED_PIPE_AXIOS_RESPONSE,
@@ -13,8 +13,8 @@ import {getUserTabletErrorApiSetup} from '../components/requestsSetup';
 
 import {
     TABLET_ERRORS_MANAGER_POST_ACTIONS,
-    TabletErrorsApi,
-    TabletErrorsManagerPostActionType,
+    type TabletErrorsApi,
+    type TabletErrorsManagerPostActionType,
 } from '../../shared/tablet-errors-manager';
 import {getPreloadedClusterUiConfig} from '../components/cluster-params';
 

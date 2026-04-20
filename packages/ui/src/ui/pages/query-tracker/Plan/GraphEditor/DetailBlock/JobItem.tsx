@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import './JobItem.scss';
 import cn from 'bem-cn-lite';
 import {Tooltip} from '@gravity-ui/uikit';

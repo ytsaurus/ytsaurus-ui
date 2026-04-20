@@ -1,6 +1,6 @@
 import {HttpResponse, http} from 'msw';
-import {QueriesListResponse} from '../../../../../../types/query-tracker/api';
-import {BatchResultsItem} from '../../../../../../../shared/yt-types';
+import {type QueriesListResponse} from '../../../../../../types/query-tracker/api';
+import {type BatchResultsItem} from '../../../../../../../shared/yt-types';
 import {QueryEngine} from '../../../../../../../shared/constants/engines';
 import {QueryStatus} from '../../../../../../types/query-tracker';
 

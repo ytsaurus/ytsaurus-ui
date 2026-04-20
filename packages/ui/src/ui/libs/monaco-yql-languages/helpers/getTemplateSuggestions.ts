@@ -1,6 +1,6 @@
 import {type IRange, type editor, languages} from 'monaco-editor';
-import {YqlAutocompleteResult} from '@gravity-ui/websql-autocomplete/yql';
-import {ClickHouseAutocompleteResult} from '@gravity-ui/websql-autocomplete/clickhouse';
+import {type YqlAutocompleteResult} from '@gravity-ui/websql-autocomplete/yql';
+import {type ClickHouseAutocompleteResult} from '@gravity-ui/websql-autocomplete/clickhouse';
 import {suggestionIndexToWeight} from './suggestionIndexToWeight';
 
 type Props = (data: {

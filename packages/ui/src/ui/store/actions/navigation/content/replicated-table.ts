@@ -1,4 +1,4 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 import {getMetrics} from '../../../../common/utils/metrics';
 // @ts-expect-error
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
@@ -14,13 +14,13 @@ import {
 } from '../../../../constants/navigation/content/replicated-table';
 import {YTApiId, ytApiV3, ytApiV3Id, ytApiV4Id} from '../../../../rum/rum-wrap-api';
 import {getPath, getTransaction} from '../../../../store/selectors/navigation';
-import type {YTError} from '../../../../types';
+import {type YTError} from '../../../../types';
 import CancelHelper, {isCancelled} from '../../../../utils/cancel-helper';
 import {prepareRequest} from '../../../../utils/navigation';
-import type {RootState} from '../../../reducers';
-import type {
-    ReplicaInfo,
-    ReplicatedTableAction,
+import {type RootState} from '../../../reducers';
+import {
+    type ReplicaInfo,
+    type ReplicatedTableAction,
 } from '../../../reducers/navigation/content/replicated-table';
 
 const requests = new CancelHelper();

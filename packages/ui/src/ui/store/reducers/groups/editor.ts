@@ -1,10 +1,10 @@
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 
 import {GROUP_EDITOR_ACTION, GROUP_EDITOR_ACTION_DATA_FIELDS} from '../../../constants/groups';
-import type {Action} from 'redux';
-import type {ActionD, YTError} from '../../../types';
-import type {PreparedRole} from '../../../utils/acl';
-import type {FlagType} from '../../../utils';
+import {type Action} from 'redux';
+import {type ActionD, type YTError} from '../../../types';
+import {type PreparedRole} from '../../../utils/acl';
+import {type FlagType} from '../../../utils';
 
 type EditorDataType = {
     $attributes?: {

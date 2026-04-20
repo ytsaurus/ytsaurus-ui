@@ -1,11 +1,11 @@
 import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {Text} from '@gravity-ui/uikit';
 import {closeUserDeleteModal, deleteUser} from '../../../store/actions/users-typed';
 import {fetchUsers} from '../../../store/actions/users';
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
-import {YTError} from '../../../types';
+import {type YTError} from '../../../types';
 import {disableUsersCache} from '../../../utils/users-groups';
 
 export const DeleteUserModal: React.FC = () => {

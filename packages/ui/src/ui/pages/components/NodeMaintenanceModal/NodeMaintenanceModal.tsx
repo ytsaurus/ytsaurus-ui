@@ -7,11 +7,11 @@ import reduce_ from 'lodash/reduce';
 
 import format from '../../../common/hammer/format';
 
-import {AddMaintenanceParams} from '../../../../shared/yt-types';
+import {type AddMaintenanceParams} from '../../../../shared/yt-types';
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
-import type {
-    NodeMaintenanceState,
-    NodeResourceLimits,
+import {
+    type NodeMaintenanceState,
+    type NodeResourceLimits,
 } from '../../../store/reducers/components/node-maintenance-modal';
 import {
     selectNodeMaintenanceModalInitialValues,
@@ -21,7 +21,7 @@ import {
     applyMaintenance,
     closeNodeMaintenanceModal,
 } from '../../../store/actions/components/node-maintenance-modal';
-import {YTError} from '../../../../@types/types';
+import {type YTError} from '../../../../@types/types';
 import {Host} from '../../../containers/Host/Host';
 
 import './NodeMaintenanceModal.scss';

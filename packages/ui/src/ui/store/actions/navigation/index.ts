@@ -1,4 +1,4 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
@@ -39,8 +39,11 @@ import {checkPermissions} from '../../../utils/acl/acl-api';
 import {loadTabletErrorsCount} from './tabs/tablet-errors/tablet-errors-background';
 import {getTabs} from '../../../store/selectors/navigation/navigation';
 import UIFactory from '../../../UIFactory';
-import {RootState} from '../../../store/reducers';
-import {NavigationAction, NavigationState} from '../../../store/reducers/navigation/navigation';
+import {type RootState} from '../../../store/reducers';
+import {
+    type NavigationAction,
+    type NavigationState,
+} from '../../../store/reducers/navigation/navigation';
 import {fetchOriginatingQueuePath} from './tabs/queue/exports';
 
 type NavigationThunk<T = void> = ThunkAction<T, RootState, unknown, NavigationAction>;

@@ -8,7 +8,7 @@ import {getPoolPathsByName} from '../../../../../store/actions/scheduling/expand
 import {useFetchBatchQuery} from '../../../../../store/api/yt';
 import {getCurrentPool} from '../../../../../store/selectors/scheduling/scheduling';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
-import {PoolTreeNode} from '../../../../../utils/scheduling/pool-child';
+import {type PoolTreeNode} from '../../../../../utils/scheduling/pool-child';
 
 export function PoolAttributes({className}: {className: string}) {
     const pool = useSelector(getCurrentPool);

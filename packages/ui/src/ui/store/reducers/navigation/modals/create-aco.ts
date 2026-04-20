@@ -1,5 +1,5 @@
 import {CREATE_ACO_MODAL} from '../../../../constants/navigation/modals/index';
-import {ActionD} from '../../../../types';
+import {type ActionD} from '../../../../types';
 
 export interface CreateACOState {
     visible: boolean;

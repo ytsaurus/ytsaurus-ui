@@ -6,7 +6,7 @@ import isEmpty_ from 'lodash/isEmpty';
 
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
 import {NoContent} from '../../../../../components/NoContent';
-import {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 import {
     getIsRoot,
     getPool,
@@ -18,7 +18,7 @@ import {RumMeasureTypes} from '../../../../../rum/rum-measure-types';
 import {useRumMeasureStop} from '../../../../../rum/RumUiContext';
 import {isFinalLoadingStatus} from '../../../../../utils/utils';
 import {getAclLoadState} from '../../../../../store/selectors/acl';
-import {LoadingStatus} from '../../../../../constants';
+import {type LoadingStatus} from '../../../../../constants';
 import {IdmObjectType} from '../../../../../constants/acl';
 import {useAppRumMeasureStart} from '../../../../../rum/rum-app-measures';
 

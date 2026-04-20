@@ -1,6 +1,6 @@
-import React, {FC} from 'react';
-import {Attribute} from '../../../../store/reducers/navigation/modals/tableMergeSortModalSlice';
-import {CompressionCodecs} from '../../../../store/selectors/global/supported-features';
+import React, {type FC} from 'react';
+import {type Attribute} from '../../../../store/reducers/navigation/modals/tableMergeSortModalSlice';
+import {type CompressionCodecs} from '../../../../store/selectors/global/supported-features';
 import SelectWithSubItems from '../SelectWithSubItems/SelectWithSubItems';
 
 import i18n from './i18n';

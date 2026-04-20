@@ -9,8 +9,8 @@ import {
     OPEN_SHARD_NAME_EDITOR,
     SET_SHARD_NAME,
 } from '../../../constants/components/shards';
-import type {ActionD} from '../../../types';
-import type {Action} from 'redux';
+import {type ActionD} from '../../../types';
+import {type Action} from 'redux';
 
 const prepareShards = (shards: RawShard[]): Shard[] => {
     return reduce_(

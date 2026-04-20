@@ -1,39 +1,39 @@
-import React from 'react';
-import type {Reducer} from 'redux';
+import type React from 'react';
+import {type Reducer} from 'redux';
 
-import type {DropdownMenuItem} from '@gravity-ui/uikit';
-import type {SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
+import {type DropdownMenuItem} from '@gravity-ui/uikit';
+import {type SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 
-import type {MetaTableItem} from '@ytsaurus/components';
-import type {LocationParameters, PathParameters} from '../store/location';
-import type {TabletBundle} from '../store/reducers/tablet_cell_bundles';
-import type {ClusterConfig, ClusterUiConfig, FlowWorkerData} from '../../shared/yt-types';
-import type {ClusterAppearance} from '../appearance';
-import type {AppNavigationProps} from '../containers/AppNavigation/AppNavigationPageLayout';
-import type {ExternalSchemaDescription} from '../pages/navigation/tabs/Schema/ExternalDescription/ExternalDescription';
-import type {AclApi} from '../utils/acl/external-acl-api';
-import type {SubjectsControlProps} from '../containers/ACL/SubjectsControl/SubjectsControl';
-import type {SettingsPage} from '../containers/SettingsPanel/settings-description';
-import type {UserSuggestProps} from '../containers/UserSuggest/UserSuggest';
-import type {DocsUrls} from '../constants/docsUrls';
-import type {Props as RoleActionsProps} from '../containers/ACL/RoleActions';
+import {type MetaTableItem} from '@ytsaurus/components';
+import {type LocationParameters, type PathParameters} from '../store/location';
+import {type TabletBundle} from '../store/reducers/tablet_cell_bundles';
+import {type ClusterConfig, type ClusterUiConfig, type FlowWorkerData} from '../../shared/yt-types';
+import {type ClusterAppearance} from '../appearance';
+import {type AppNavigationProps} from '../containers/AppNavigation/AppNavigationPageLayout';
+import {type ExternalSchemaDescription} from '../pages/navigation/tabs/Schema/ExternalDescription/ExternalDescription';
+import {type AclApi} from '../utils/acl/external-acl-api';
+import {type SubjectsControlProps} from '../containers/ACL/SubjectsControl/SubjectsControl';
+import {type SettingsPage} from '../containers/SettingsPanel/settings-description';
+import {type UserSuggestProps} from '../containers/UserSuggest/UserSuggest';
+import {type DocsUrls} from '../constants/docsUrls';
+import {type Props as RoleActionsProps} from '../containers/ACL/RoleActions';
 
-import type {PERMISSIONS_SETTINGS} from '../constants/acl';
-import type {PreparedAclSubject} from '../utils/acl/acl-types';
-import type {PreparedRole} from '../utils/acl';
-import type {UISettingsMonitoring} from '../../shared/ui-settings';
-import type {SubjectCardProps} from '../components/SubjectLink/SubjectLink';
-import type {QueryItem} from '../types/query-tracker/api';
-import type {BaseMapNode} from '../utils/navigation/content/map-nodes/node';
-import type {PreloadErrorType} from '../constants';
-import type {RootState} from '../store/reducers';
-import type {YTError} from '../types';
+import {type PERMISSIONS_SETTINGS} from '../constants/acl';
+import {type PreparedAclSubject} from '../utils/acl/acl-types';
+import {type PreparedRole} from '../utils/acl';
+import {type UISettingsMonitoring} from '../../shared/ui-settings';
+import {type SubjectCardProps} from '../components/SubjectLink/SubjectLink';
+import {type QueryItem} from '../types/query-tracker/api';
+import {type BaseMapNode} from '../utils/navigation/content/map-nodes/node';
+import {type PreloadErrorType} from '../constants';
+import {type RootState} from '../store/reducers';
+import {type YTError} from '../types';
 
-import type {AnalyticsService} from '../common/utils/metrics';
-import type {DetailedOperationSelector} from '../pages/operations/selectors';
-import type {ChatMessage} from '../types/ai-chat';
-import type {JobItem} from '../store/reducers/operations/jobs/jobs-monitor';
-import type {PoolTreeNode} from '../utils/scheduling/pool-child';
+import {type AnalyticsService} from '../common/utils/metrics';
+import {type DetailedOperationSelector} from '../pages/operations/selectors';
+import {type ChatMessage} from '../types/ai-chat';
+import {type JobItem} from '../store/reducers/operations/jobs/jobs-monitor';
+import {type PoolTreeNode} from '../utils/scheduling/pool-child';
 
 type HeaderItemOrPage =
     | {

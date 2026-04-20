@@ -1,5 +1,5 @@
 import React, {memo, useCallback, useEffect, useRef} from 'react';
-import * as monaco from 'monaco-editor';
+import type * as monaco from 'monaco-editor';
 import {useMonaco} from '../../hooks/useMonaco';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {

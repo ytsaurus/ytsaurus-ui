@@ -4,7 +4,7 @@ import some_ from 'lodash/some';
 import {createSelector} from 'reselect';
 
 import ypath from '../../../../common/thor/ypath';
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {calculateLoadingStatus} from '../../../../utils/utils';
 
 export const getNavigationReplicatedTableLoadingStatus = createSelector(

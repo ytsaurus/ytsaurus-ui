@@ -1,7 +1,7 @@
 import React from 'react';
-import Link, {LinkProps} from '../../components/Link/Link';
+import Link, {type LinkProps} from '../../components/Link/Link';
 
-import Icon, {IconProps} from '../Icon/Icon';
+import Icon, {type IconProps} from '../Icon/Icon';
 
 import i18n from './i18n';
 

@@ -1,4 +1,4 @@
-import {FormApi, YTDFDialog, makeErrorFields} from '../../../components/Dialog';
+import {type FormApi, YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import React from 'react';
 import cn from 'bem-cn-lite';
 import {connect} from 'react-redux';
@@ -20,8 +20,8 @@ import {flags} from '../../../utils';
 
 import './UsersPageEditor.scss';
 import {GroupsLoader} from '../../../hooks/global';
-import {RootState} from '../../../store/reducers';
-import {FIX_MY_TYPE, YTError} from '../../../types';
+import {type RootState} from '../../../store/reducers';
+import {type FIX_MY_TYPE, type YTError} from '../../../types';
 import {isIdmAclAvailable} from '../../../config';
 import {createUser} from '../../../store/actions/users-typed';
 import {disableUsersCache} from '../../../utils/users-groups';

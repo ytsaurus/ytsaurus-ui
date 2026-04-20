@@ -1,4 +1,4 @@
-import type {Request, Response} from 'express';
+import {type Request, type Response} from 'express';
 import {getColumnPreset, saveColumnPreset} from '../components/table';
 import {prepareErrorToSend} from '../utils';
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import {Icon} from '@gravity-ui/uikit';
-import DataTable, {Column} from '@gravity-ui/react-data-table';
+import DataTable, {type Column} from '@gravity-ui/react-data-table';
 import DataType from '../DataType/DataType';
-import {DataType as IDataType} from '../../models/dataTypes';
+import {type DataType as IDataType} from '../../models/dataTypes';
 import cn from 'bem-cn-lite';
 
 import sortUpIcon from '@gravity-ui/icons/svgs/bars-ascending-align-left.svg';

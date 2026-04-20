@@ -1,4 +1,4 @@
-import {ServicePair} from './ServicesSelect';
+import {type ServicePair} from './ServicesSelect';
 
 export function useActions(value: ServicePair[], onChange: (v: ServicePair[]) => void) {
     const addPair = () => {

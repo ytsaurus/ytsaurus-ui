@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from 'react';
+import React, {type FC, useCallback} from 'react';
 import {Button, Icon} from '@gravity-ui/uikit';
 import StarIcon from '@gravity-ui/icons/svgs/star.svg';
 import StarFillIcon from '@gravity-ui/icons/svgs/star-fill.svg';

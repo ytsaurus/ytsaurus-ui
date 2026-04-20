@@ -1,15 +1,15 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import block from 'bem-cn-lite';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-import {RootState} from '../../../../store/reducers';
-import {Select, SelectOption} from '@gravity-ui/uikit';
+import {type RootState} from '../../../../store/reducers';
+import {Select, type SelectOption} from '@gravity-ui/uikit';
 import {getQueryResult} from '../../../../store/selectors/query-tracker/queryResult';
 import SimplePagination from '../../../../components/Pagination/SimplePagination';
 import {
     applySettings,
     updateQueryResult,
 } from '../../../../store/actions/query-tracker/queryResult';
-import {QueryResultReadyState} from '../../../../types/query-tracker/queryResult';
+import {type QueryResultReadyState} from '../../../../types/query-tracker/queryResult';
 import './index.scss';
 
 type Props = {

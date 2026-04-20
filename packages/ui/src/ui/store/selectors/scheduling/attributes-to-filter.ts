@@ -2,7 +2,7 @@ import {createSelector} from 'reselect';
 import reduce_ from 'lodash/reduce';
 import forEach_ from 'lodash/forEach';
 
-import {RootState} from '../../reducers';
+import {type RootState} from '../../reducers';
 import {getSchedulingPoolsMapByName} from './scheduling-pools';
 
 export const getSchedulingAbcFilter = (state: RootState) =>

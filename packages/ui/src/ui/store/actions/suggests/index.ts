@@ -1,7 +1,7 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
-import {RootState} from '../../../store/reducers';
-import {TabletCellBundlesSuggestAction} from '../../../store/reducers/suggests/tablet-cell-bundless';
+import {type RootState} from '../../../store/reducers';
+import {type TabletCellBundlesSuggestAction} from '../../../store/reducers/suggests/tablet-cell-bundless';
 import {
     SUGGEST_TABLET_CELL_BUNDLES_ERROR,
     SUGGEST_TABLET_CELL_BUNDLES_REQUEST,

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 import {useSelector} from '../../../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
@@ -11,7 +11,7 @@ import {YTErrorBlock} from '../../../../../../components/Error/Error';
 import Icon from '../../../../../../components/Icon/Icon';
 import {Flex, Switch} from '@gravity-ui/uikit';
 
-import {RootState} from '../../../../../../store/reducers';
+import {type RootState} from '../../../../../../store/reducers';
 import {showEditPoolsWeightsModal} from '../../../../../../store/actions/operations';
 import {selectCluster} from '../../../../../../store/selectors/global';
 import {

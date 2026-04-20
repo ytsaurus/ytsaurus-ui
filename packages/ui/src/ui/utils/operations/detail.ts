@@ -7,8 +7,8 @@ import {ytApiV3} from '../../rum/rum-wrap-api';
 import {PLEASE_PROCEED_TEXT} from '../../utils/actions';
 import {hasTaskHistograms} from './jobs';
 
-import type {DetailedOperationSelector} from '../../pages/operations/selectors';
-import type {IconName} from '../../components/Icon/Icon';
+import {type DetailedOperationSelector} from '../../pages/operations/selectors';
+import {type IconName} from '../../components/Icon/Icon';
 
 export function isTransactionAlive(transactionId?: string): Promise<boolean> {
     if (!isValidTransactionId(transactionId)) {

@@ -1,4 +1,4 @@
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 
 export const selectChytCliqueData = (state: RootState) => state.chyt.clique.data;
 export const selectChytCliqueError = (state: RootState) => state.chyt.clique.error;

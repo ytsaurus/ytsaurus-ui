@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import cn from 'bem-cn-lite';
 
 import NumberInput, {
-    NumberInputProps,
+    type NumberInputProps,
     NumberInputWithError,
-    NumberInputWithErrorProps,
+    type NumberInputWithErrorProps,
 } from '../../NumberInput/NumberInput';
 
 import './BytesControl.scss';

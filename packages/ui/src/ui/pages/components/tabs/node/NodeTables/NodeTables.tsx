@@ -12,7 +12,7 @@ import {
     setNodeMemoryTablesSort,
     toggleNodeMemoryBundleExpanded,
 } from '../../../../../store/actions/components/node/memory';
-import {SortState} from '../../../../../types';
+import {type SortState} from '../../../../../types';
 
 function NodeTables() {
     const dispatch = useDispatch();

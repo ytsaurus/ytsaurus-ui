@@ -1,8 +1,8 @@
 import os from 'os';
-import {AxiosError} from 'axios';
+import {type AxiosError} from 'axios';
 
 import {PROMETHEUS_DASHBOARD_TYPES} from '../../shared/prometheus/dashboard-type';
-import {DashboardInfo, PrometheusDashboardType} from '../../shared/prometheus/types';
+import {type DashboardInfo, type PrometheusDashboardType} from '../../shared/prometheus/types';
 import {getDashboardPath} from '../../shared/prometheus/utils';
 
 import {getApp} from '../ServerFactory';

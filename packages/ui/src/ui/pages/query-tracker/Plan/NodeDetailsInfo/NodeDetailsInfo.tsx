@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {Button, Text} from '@gravity-ui/uikit';
 import {default as Collapse} from '../../../../components/CollapsibleSection/CollapsibleSection';
-import {NodeDetails, Stream} from '../models/plan';
+import {type NodeDetails, type Stream} from '../models/plan';
 import cn from 'bem-cn-lite';
 
 import '../NodeDetailsInfo.scss';

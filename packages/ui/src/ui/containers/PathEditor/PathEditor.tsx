@@ -1,4 +1,10 @@
-import React, {Component, FocusEvent, Key, KeyboardEvent, MouseEvent} from 'react';
+import React, {
+    Component,
+    type FocusEvent,
+    type Key,
+    type KeyboardEvent,
+    type MouseEvent,
+} from 'react';
 import {connect} from 'react-redux';
 import ReactList from 'react-list';
 import block from 'bem-cn-lite';
@@ -25,7 +31,7 @@ import {
     loadSuggestionsList,
     removeActiveRequests,
 } from '../../store/actions/navigation/path-editor/path-editor';
-import {RootState} from '../../store/reducers';
+import {type RootState} from '../../store/reducers';
 import {KeyCode} from '../../constants/index';
 import {UseHotkeysScope} from '../../hooks/use-hotkeysjs-scope';
 import i18n from './i18n';

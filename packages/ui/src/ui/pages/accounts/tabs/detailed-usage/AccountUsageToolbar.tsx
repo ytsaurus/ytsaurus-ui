@@ -1,4 +1,4 @@
-import React, {Key, useCallback, useMemo} from 'react';
+import React, {type Key, useCallback, useMemo} from 'react';
 import {Box, Breadcrumbs} from '@gravity-ui/uikit';
 
 import map_ from 'lodash/map';
@@ -40,8 +40,8 @@ import SimplePagination from '../../../../components/Pagination/SimplePagination
 import Icon from '../../../../components/Icon/Icon';
 import AccountUsageColumnsButton from './AccountUsageColumnsButton';
 import {SubjectCard} from '../../../../components/SubjectLink/SubjectLink';
-import Suggest, {SuggestItem} from '../../../../components/Suggest/Suggest';
-import {Datepicker, DatepickerOutputDates} from '../../../../components/common/Datepicker';
+import Suggest, {type SuggestItem} from '../../../../components/Suggest/Suggest';
+import {Datepicker, type DatepickerOutputDates} from '../../../../components/common/Datepicker';
 import {PathFragment} from '../../../../containers/PathFragment/PathFragment';
 import {useAllUserNamesFiltered} from '../../../../hooks/global';
 import {useUpdater} from '../../../../hooks/use-updater';

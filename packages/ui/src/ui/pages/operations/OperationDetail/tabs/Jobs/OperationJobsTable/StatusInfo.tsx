@@ -1,5 +1,5 @@
-import React, {FC, useRef} from 'react';
-import {RawJob} from '../../../../../../types/operations/job';
+import React, {type FC, useRef} from 'react';
+import {type RawJob} from '../../../../../../types/operations/job';
 import hammer from '../../../../../../common/hammer';
 import {ClipboardButton, Flex, Label, Popup} from '@gravity-ui/uikit';
 import {useToggle} from 'react-use';

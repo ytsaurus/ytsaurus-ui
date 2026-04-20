@@ -1,6 +1,6 @@
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 import {
     EXTRA_JOBS_COUNT,
@@ -23,16 +23,16 @@ import {TYPED_OUTPUT_FORMAT} from '../../../constants/index';
 import {getShowCompetitiveJobs} from '../../../pages/operations/selectors';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {
-    JobsListAction,
-    JobsState,
-    UpdateFilterData,
+    type JobsListAction,
+    type JobsState,
+    type UpdateFilterData,
 } from '../../../store/reducers/operations/jobs/jobs';
-import {OldSortState} from '../../../types';
-import {ListJobsParameters} from '../../../../shared/yt-types';
-import {KeysByType} from '../../../../@types/types';
-import {TablesSortOrderAction} from '../../../store/reducers/tables';
+import {type OldSortState} from '../../../types';
+import {type ListJobsParameters} from '../../../../shared/yt-types';
+import {type KeysByType} from '../../../../@types/types';
+import {type TablesSortOrderAction} from '../../../store/reducers/tables';
 import {selectJobsOperationIncarnationsFilter} from '../../../store/selectors/operations/jobs';
 import {fetchOperationIncarnationAvailableItems} from './jobs-operation-incarnations';
 

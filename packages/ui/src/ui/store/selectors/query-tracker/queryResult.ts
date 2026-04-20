@@ -1,9 +1,9 @@
 import {TABLE_DEFAULTS} from '../../../constants/settings/table';
-import {RootState} from '../../reducers';
+import {type RootState} from '../../reducers';
 import {getSettingsInitialData} from '../../reducers/settings';
 import {
-    QueryResult,
-    QueryResultReadyState,
+    type QueryResult,
+    type QueryResultReadyState,
     QueryResultState,
 } from '../../../types/query-tracker/queryResult';
 

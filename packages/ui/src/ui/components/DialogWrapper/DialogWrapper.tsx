@@ -1,6 +1,6 @@
 import React from 'react';
 // eslint-disable-next-line no-restricted-imports
-import {Dialog, DialogProps} from '@gravity-ui/uikit';
+import {Dialog, type DialogProps} from '@gravity-ui/uikit';
 import {useHotkeysScope} from '../../hooks/use-hotkeysjs-scope';
 
 type DialogWrapperProps = DialogProps & {hotkeyScope?: string};

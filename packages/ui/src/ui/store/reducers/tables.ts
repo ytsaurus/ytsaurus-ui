@@ -15,8 +15,8 @@ import {NAVIGATION_MAP_NODE_TABLE_ID} from '../../constants/navigation';
 import {NAVIGATION_TABLETS_TABLE_ID} from '../../constants/navigation/tabs/tablets';
 import {NAVIGATION_TRANSACTION_MAP_TABLE_ID} from '../../constants/navigation/content/transaction-map';
 import {TABLET_PARTITIONS_TABLE_ID, TABLET_PARTITION_STORES_TABLE_ID} from '../../constants/tablet';
-import {ActionD, OldSortState} from '../../types';
-import type {NodesTableColumnNames} from '../../pages/components/tabs/nodes/tables';
+import {type ActionD, type OldSortState} from '../../types';
+import {type NodesTableColumnNames} from '../../pages/components/tabs/nodes/tables';
 
 const NAME_ASC_SORT_VALUE = {field: 'name', asc: true};
 

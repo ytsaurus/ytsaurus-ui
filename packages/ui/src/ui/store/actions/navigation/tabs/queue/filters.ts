@@ -1,17 +1,17 @@
-import type {ChangeEvent} from 'react';
+import {type ChangeEvent} from 'react';
 
 import {
     QUEUE_CHANGE_PARTITIONS_COLUMNS,
     QUEUE_CHANGE_PERSISTED_STATE,
-    QUEUE_MODE,
-    QUEUE_RATE_MODE,
+    type QUEUE_MODE,
+    type QUEUE_RATE_MODE,
 } from '../../../../../constants/navigation/tabs/queue';
-import type {
-    QueueFiltersAction,
-    QueuePartitionsColumns,
+import {
+    type QueueFiltersAction,
+    type QueuePartitionsColumns,
 } from '../../../../../store/reducers/navigation/tabs/queue/filters';
-import {PartitionColumn} from '../../../../reducers/navigation/tabs/consumer/filters';
-import type {TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
+import {type PartitionColumn} from '../../../../reducers/navigation/tabs/consumer/filters';
+import {type TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
 
 export function changeQueueMode(evt: ChangeEvent<HTMLInputElement>): QueueFiltersAction {
     return {

@@ -1,6 +1,6 @@
 import {makeRoutedURL} from '../../../store/location';
 import {Page} from '../../../../shared/constants/settings';
-import {QueryEngine} from '../../../../shared/constants/engines';
+import {type QueryEngine} from '../../../../shared/constants/engines';
 
 export function createQueryUrl(cluster: string, query_id: string) {
     return makeRoutedURL(`/${cluster}/${Page.QUERIES}${query_id ? `/${query_id}` : ''}`);

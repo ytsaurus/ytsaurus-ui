@@ -2,7 +2,7 @@ import unipika from '../../common/thor/unipika';
 // @ts-ignore
 import ypath from '../../common/thor/ypath';
 
-import {CancelTokenSource} from 'axios';
+import {type CancelTokenSource} from 'axios';
 
 import {Page} from '../../constants/index';
 import {SUPPRESS_REDIRECT} from '../../constants/navigation/modals/delete-object';

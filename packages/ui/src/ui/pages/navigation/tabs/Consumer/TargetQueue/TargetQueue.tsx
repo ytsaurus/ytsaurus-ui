@@ -14,7 +14,7 @@ import Icon from '../../../../../components/Icon/Icon';
 import Link from '../../../../../components/Link/Link';
 import {findCommonPathParent, genNavigationUrl} from '../../../../../utils/navigation/navigation';
 import {ClipboardButton, Tooltip} from '@ytsaurus/components';
-import {Item, SelectSingle} from '../../../../../components/Select/Select';
+import {type Item, SelectSingle} from '../../../../../components/Select/Select';
 import {changeConsumerFilters} from '../../../../../store/actions/navigation/tabs/consumer/filters';
 
 import './TargetQueue.scss';

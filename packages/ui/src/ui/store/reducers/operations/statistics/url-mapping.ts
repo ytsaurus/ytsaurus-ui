@@ -1,9 +1,9 @@
 import {produce} from 'immer';
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 
 import {initialState as statisticsInitialState} from '../../../../store/reducers/operations/statistics/statistics';
 import {updateIfChanged} from '../../../../utils/utils';
-import {LocationParameters} from '../../../../store/location';
+import {type LocationParameters} from '../../../../store/location';
 
 const initialFilter = statisticsInitialState.filterText;
 

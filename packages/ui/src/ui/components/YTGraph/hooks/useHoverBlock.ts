@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {CanvasBlock, Graph, TBlock} from '@gravity-ui/graph';
-import {GraphMouseEvent} from '@gravity-ui/graph/build/graphEvents';
+import {type CanvasBlock, type Graph, type TBlock} from '@gravity-ui/graph';
+import {type GraphMouseEvent} from '@gravity-ui/graph/build/graphEvents';
 
 const TIMEOUT = 300;
 const CLOSE_DELAY = 300;

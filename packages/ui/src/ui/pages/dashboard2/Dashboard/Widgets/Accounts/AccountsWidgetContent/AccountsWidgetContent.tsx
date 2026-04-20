@@ -4,13 +4,13 @@ import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
 import format from '../../../../../../common/hammer/format';
 
-import {AccountInfo} from '../../../../../../store/api/dashboard2/accounts/accounts';
+import {type AccountInfo} from '../../../../../../store/api/dashboard2/accounts/accounts';
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
 import {WidgetText} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetText/WidgetText';
 
 import {useAccountsWidget} from '../hooks/use-accounts-widget';
-import type {AccountsWidgetProps} from '../types';
+import {type AccountsWidgetProps} from '../types';
 
 import i18n from '../i18n';
 

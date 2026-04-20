@@ -3,10 +3,10 @@ import {useSelector} from 'react-redux';
 
 import {WidgetHeader} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetHeader/WidgetHeader';
 import {getMediumList} from '../../../../../../store/selectors/thor';
-import {YTError} from '../../../../../../types';
+import {type YTError} from '../../../../../../types';
 
 import {useAccountsWidget} from '../hooks/use-accounts-widget';
-import type {AccountsWidgetProps} from '../types';
+import {type AccountsWidgetProps} from '../types';
 
 import i18n from '../i18n';
 

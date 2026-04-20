@@ -1,12 +1,12 @@
-import {BaseQueryApi} from '@reduxjs/toolkit/query';
+import {type BaseQueryApi} from '@reduxjs/toolkit/query';
 
-import {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 import {getPath} from '../../../../../store/selectors/navigation';
 import {selectCluster} from '../../../../../store/selectors/global';
 
 import {ytApiV3, ytApiV4} from '../../../../../rum/rum-wrap-api';
 import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
-import {BatchResultsItem} from '../../../../../../shared/yt-types';
+import {type BatchResultsItem} from '../../../../../../shared/yt-types';
 
 type CreateConsumersMutationArgs = {
     consumerPath: string;

@@ -50,7 +50,7 @@ import {
     isAccountsUsageDiffView,
     readableAccountUsageColumnName,
 } from '../../../../store/selectors/accounts/account-usage';
-import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
+import DataTable, {type Column, type Settings} from '@gravity-ui/react-data-table';
 import ArrowUpRightFromSquareIcon from '@gravity-ui/icons/svgs/arrow-up-right-from-square.svg';
 
 import {YTErrorBlock} from '../../../../components/Error/Error';
@@ -67,12 +67,12 @@ import {SubjectCard} from '../../../../components/SubjectLink/SubjectLink';
 import {Secondary, Warning} from '@ytsaurus/components';
 import {DataTableYT} from '../../../../components/DataTableYT';
 import {getIconNameForType} from '../../../../utils/navigation/path-editor';
-import {OrderType} from '../../../../utils/sort-helpers';
+import {type OrderType} from '../../../../utils/sort-helpers';
 import {NoContent} from '../../../../components/NoContent';
 import {
-    AccountUsageDataItem,
-    MediumKeyTemplate,
-    VersionedKeyTemplate,
+    type AccountUsageDataItem,
+    type MediumKeyTemplate,
+    type VersionedKeyTemplate,
 } from '../../../../store/reducers/accounts/usage/account-usage-types';
 import {
     fetchAccountUsageListDiff,
@@ -81,7 +81,7 @@ import {
 import {useUpdater} from '../../../../hooks/use-updater';
 
 import './AccountUsageDetails.scss';
-import {AccountActionsField, AccountRequestData} from './AccountActionsField';
+import {AccountActionsField, type AccountRequestData} from './AccountActionsField';
 import {DetailTableCell} from './DetailTableCell';
 import {Page} from '../../../../constants/index';
 import PathView from '../../../../containers/PathFragment/PathFragment';

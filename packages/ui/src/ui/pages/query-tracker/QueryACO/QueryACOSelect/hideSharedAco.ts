@@ -1,4 +1,4 @@
-import {SelectOption} from '@gravity-ui/uikit/build/esm/components/Select/types';
+import {type SelectOption} from '@gravity-ui/uikit/build/esm/components/Select/types';
 import {SHARED_QUERY_ACO} from '../../../../store/selectors/query-tracker/query';
 
 export function hideSharedAco<T extends string | SelectOption>(aco: T[]): T[] {

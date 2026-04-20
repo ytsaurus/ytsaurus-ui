@@ -1,5 +1,5 @@
-import React, {FC, ReactNode, useMemo} from 'react';
-import {JobEvent} from '../../../../../../store/reducers/operations/jobs/jobs-timeline-slice';
+import React, {type FC, type ReactNode, useMemo} from 'react';
+import {type JobEvent} from '../../../../../../store/reducers/operations/jobs/jobs-timeline-slice';
 import {Table} from '@gravity-ui/uikit';
 import '../mixin/stateMixin.scss';
 import './EventsTable.scss';

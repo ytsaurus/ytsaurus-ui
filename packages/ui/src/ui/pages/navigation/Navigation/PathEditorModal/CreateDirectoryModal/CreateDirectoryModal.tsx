@@ -1,5 +1,5 @@
 import React from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 
 import PathEditorModal from '../PathEditorModal';
 
@@ -11,7 +11,7 @@ import {
 } from '../../../../../store/actions/navigation/modals/create-directory';
 import {closeEditingPopup} from '../../../../../store/actions/navigation/modals/path-editing-popup';
 import {updateView} from '../../../../../store/actions/navigation';
-import {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 import {Checkbox} from '@gravity-ui/uikit';
 
 type State = {

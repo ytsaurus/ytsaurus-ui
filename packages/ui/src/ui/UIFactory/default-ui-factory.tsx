@@ -8,7 +8,7 @@ import {docsUrls} from '../constants/docsUrls';
 import {SchedulingExtraTabs} from '../constants/scheduling';
 
 import {DefaultSubjectLinkLazy} from '../components/SubjectLink/lazy';
-import type {SubjectCardProps} from '../components/SubjectLink/SubjectLink';
+import {type SubjectCardProps} from '../components/SubjectLink/SubjectLink';
 
 import {RoleActionsLazy} from '../containers/ACL';
 import {YTSubjectSuggestLazy} from '../containers/ACL/SubjectsControl/lazy';
@@ -34,7 +34,7 @@ import {NavigationFlowMonitoringPrometheus} from '../pages/navigation/tabs/Flow/
 
 import {defaultAclApi} from '../utils/acl/external-acl-api';
 
-import {UIFactory} from './index';
+import {type UIFactory} from './index';
 
 const experimentalPages: string[] = [];
 

@@ -1,4 +1,4 @@
-import type {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 import {USE_CACHE} from '../../../../shared/constants/yt-api';
 
@@ -32,8 +32,8 @@ import {YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {getJobsMonitoringDescriptors} from '../../../store/actions/operations/jobs-monitor';
 
 import {selectCluster} from '../../../store/selectors/global';
-import type {RootState} from './../../../store/reducers';
-import type {OperationDetailActionType} from '../../reducers/operations/detail';
+import {type RootState} from './../../../store/reducers';
+import {type OperationDetailActionType} from '../../reducers/operations/detail';
 import {JSONSerializer} from '../../../common/yt-api';
 import {toaster} from '../../../utils/toaster';
 

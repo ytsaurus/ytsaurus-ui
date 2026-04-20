@@ -1,11 +1,11 @@
-import {ThunkAction} from 'redux-thunk';
-import {UnknownAction} from '@reduxjs/toolkit';
+import {type ThunkAction} from 'redux-thunk';
+import {type UnknownAction} from '@reduxjs/toolkit';
 
 import CancelHelper, {isCancelled} from '../../../../utils/cancel-helper';
 import {prepareRequest} from '../../../../utils/navigation';
 import {getPath, getTransaction} from '../../../selectors/navigation';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {userAttributesActions} from '../../../../store/reducers/navigation/tabs/user-attributes';
 import {TYPED_OUTPUT_FORMAT} from '../../../../constants';
 

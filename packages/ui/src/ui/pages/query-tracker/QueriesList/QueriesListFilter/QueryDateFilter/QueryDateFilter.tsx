@@ -1,8 +1,8 @@
-import React, {FC, useMemo} from 'react';
+import React, {type FC, useMemo} from 'react';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {getQueriesFilters} from '../../../../../store/selectors/query-tracker/queriesList';
 import {DatePicker} from '@gravity-ui/date-components';
-import {DateTime, dateTimeParse} from '../../../../../utils/date-utils';
+import {type DateTime, dateTimeParse} from '../../../../../utils/date-utils';
 import {Flex} from '@gravity-ui/uikit';
 import {applyFilter} from '../../../../../store/actions/query-tracker/queriesList';
 import i18n from './i18n';

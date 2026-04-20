@@ -1,8 +1,8 @@
-import {VCSSettings} from '../../../shared/ui-settings';
+import {type VCSSettings} from '../../../shared/ui-settings';
 import {GithubApi} from './GithubApi';
 import {GitlabApi} from './GitlabApi';
-import {Request} from '@gravity-ui/expresskit';
-import {AppConfig} from '@gravity-ui/nodekit';
+import {type Request} from '@gravity-ui/expresskit';
+import {type AppConfig} from '@gravity-ui/nodekit';
 import {ErrorWithCode} from '../../utils';
 import ServerFactory from '../../ServerFactory';
 import {VCS_DEFAULT_MAX_FILE_SIZE} from '../../../shared/constants/vcs';

@@ -1,4 +1,4 @@
-import {ValueOf} from '../../@types/types';
+import {type ValueOf} from '../../@types/types';
 
 export type AnnotationVisibilityType = ValueOf<typeof AnnotationVisibility>;
 

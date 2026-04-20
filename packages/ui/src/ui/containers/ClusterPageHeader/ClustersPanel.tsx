@@ -18,7 +18,7 @@ import {useSelector} from '../../store/redux-hooks';
 import {getRecentClustersInfo} from '../../store/selectors/slideoutMenu';
 import {isRecentClustersFirst} from '../../store/selectors/settings';
 import {useClusterColorClassName} from './ClusterColor';
-import {ClusterConfig} from '../../../shared/yt-types';
+import {type ClusterConfig} from '../../../shared/yt-types';
 import Link from '../../components/Link/Link';
 import Icon from '../../components/Icon/Icon';
 import {selectCluster} from '../../store/selectors/global';

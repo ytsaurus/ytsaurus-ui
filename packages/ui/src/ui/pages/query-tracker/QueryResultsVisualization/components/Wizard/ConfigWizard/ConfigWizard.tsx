@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC} from 'react';
+import React, {type ChangeEvent, type FC} from 'react';
 import {Checkbox, Text, TextInput} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
 import {selectChartConfig} from '../../../../../../store/selectors/query-tracker/queryChart';

@@ -1,5 +1,5 @@
 import React, {Fragment, useState} from 'react';
-import {ResolveThunks, connect} from 'react-redux';
+import {type ResolveThunks, connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {TextInput} from '@gravity-ui/uikit';
@@ -13,7 +13,7 @@ import {
     openNameEditor,
     setShardName,
 } from '../../../../store/actions/components/shards';
-import type {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 
 Name.propTypes = {
     // from parent

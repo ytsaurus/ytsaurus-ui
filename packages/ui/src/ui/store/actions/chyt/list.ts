@@ -1,15 +1,15 @@
-import type {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
-import type {RootState} from '../../reducers';
-import type {ChytListAction} from '../../reducers/chyt/list';
+import {type RootState} from '../../reducers';
+import {type ChytListAction} from '../../reducers/chyt/list';
 import {CHYT_LIST} from '../../../constants/chyt-page';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {selectCluster} from '../../../store/selectors/global';
 import {selectIsAdmin} from '../../../store/selectors/global/is-developer';
 import {selectChytListVisibleColumns} from '../../../store/selectors/chyt';
 
-import {StrawberryApi, chytApiAction} from '../../../utils/strawberryControllerApi';
-import {SettingsThunkAction, setSettingByKey} from '../settings';
+import {type StrawberryApi, chytApiAction} from '../../../utils/strawberryControllerApi';
+import {type SettingsThunkAction, setSettingByKey} from '../settings';
 
 type ChytListThunkAction<T> = ThunkAction<Promise<T>, RootState, unknown, ChytListAction>;
 

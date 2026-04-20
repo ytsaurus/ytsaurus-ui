@@ -1,4 +1,4 @@
-import type {Request, Response} from 'express';
+import {type Request, type Response} from 'express';
 // @ts-ignore
 import ytLib from '@ytsaurus/javascript-wrapper';
 
@@ -6,7 +6,7 @@ import {USE_MAX_SIZE} from '../../shared/constants/yt-api';
 
 import {sendAndLogError} from '../utils';
 import {getUserYTApiSetup} from '../components/requestsSetup';
-import {YTError} from '../../@types/types';
+import {type YTError} from '../../@types/types';
 
 const yt = ytLib();
 

@@ -1,12 +1,12 @@
 import React from 'react';
 import b from 'bem-cn-lite';
-import {AxiosError} from 'axios';
+import {type AxiosError} from 'axios';
 import {Table, useTable} from '@gravity-ui/table';
-import {ColumnDef} from '@gravity-ui/table/tanstack';
+import {type ColumnDef} from '@gravity-ui/table/tanstack';
 
 import {YTErrorBlock} from '../../../../../components/Error/Error';
 
-import {YTError} from '../../../../../../@types/types';
+import {type YTError} from '../../../../../../@types/types';
 
 import {WidgetSkeleton} from '../WidgetSkeleton/WidgetSkeleton';
 import {WidgetNoItemsTextFallback} from '../WidgetFallback/WidgetFallback';

@@ -1,9 +1,9 @@
 import {Page} from '../../../shared/constants/settings';
 import {YT} from '../../config/yt-config';
-import type {Tab as NavigationTab} from '../../constants/navigation';
-import {ValueOf} from '../../types';
+import {type Tab as NavigationTab} from '../../constants/navigation';
+import {type ValueOf} from '../../types';
 
-import {TabletErrorsByPathState} from '../../store/reducers/navigation/tabs/tablet-errors/tablet-errors-by-path';
+import {type TabletErrorsByPathState} from '../../store/reducers/navigation/tabs/tablet-errors/tablet-errors-by-path';
 import {getNavigationParams} from '../../store/reducers/navigation/url-mapping';
 import {makeURLSearchParams} from './utils';
 

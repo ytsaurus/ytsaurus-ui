@@ -1,9 +1,9 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {NodeName} from '../../components/NodeName/NodeName';
 import cn from 'bem-cn-lite';
 import './NameCell.scss';
 import {Text} from '@gravity-ui/uikit';
-import {RowType} from '../utils';
+import {type RowType} from '../utils';
 
 const block = cn('yt-timeline-name-cell');
 

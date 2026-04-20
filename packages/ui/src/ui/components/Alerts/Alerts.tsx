@@ -5,12 +5,12 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import CollapsibleSection, {
-    CollapsibleSectionProps,
+    type CollapsibleSectionProps,
 } from '../../components/CollapsibleSection/CollapsibleSection';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import {YTAlertBlock} from '../../components/Alert/Alert';
 import {UI_COLLAPSIBLE_SIZE} from '../../constants/global/index';
-import {YTError} from '../../types/index';
+import {type YTError} from '../../types/index';
 import i18n from './i18n';
 
 const block = cn('yt-alerts');

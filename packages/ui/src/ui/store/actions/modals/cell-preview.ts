@@ -1,8 +1,8 @@
 import CancelHelper from '../../../utils/cancel-helper';
-import {CellPreviewAction, initialState} from '../../reducers/modals/cell-preview';
+import {type CellPreviewAction, initialState} from '../../reducers/modals/cell-preview';
 import {CELL_PREVIEW} from '../../../constants/modals/cell-preview';
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../reducers';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../reducers';
 import {batch} from 'react-redux';
 
 export type CellPreviewActionType<R = unknown> = ThunkAction<R, RootState, any, CellPreviewAction>;

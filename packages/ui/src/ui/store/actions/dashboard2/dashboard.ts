@@ -1,12 +1,12 @@
-import {ThunkAction} from '@reduxjs/toolkit';
-import {ConfigItem, DashKit, DashKitProps} from '@gravity-ui/dashkit';
+import {type ThunkAction} from '@reduxjs/toolkit';
+import {type ConfigItem, DashKit, type DashKitProps} from '@gravity-ui/dashkit';
 
 import find_ from 'lodash/find';
 import remove_ from 'lodash/remove';
 
 import guid from '../../../common/hammer/guid';
 
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {setSettingByKey} from '../../../store/actions/settings';
 import {
     type ItemsTypes,

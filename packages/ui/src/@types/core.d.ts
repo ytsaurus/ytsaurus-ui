@@ -1,13 +1,12 @@
-import {AppConfig, AppContext} from '@gravity-ui/nodekit';
+import {AppConfig, type AppContext, type NodeKit} from '@gravity-ui/nodekit';
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 import {AppConfig, Request, Response} from '@gravity-ui/expresskit';
-import {MetrikaCounter} from '@gravity-ui/app-layout';
-import type {NodeKit} from '@gravity-ui/nodekit';
+import {type MetrikaCounter} from '@gravity-ui/app-layout';
 
-import {ClusterConfig} from '../shared/yt-types';
+import {type ClusterConfig} from '../shared/yt-types';
 
-import {UISettings} from '../../shared/ui-settings';
-import {DescribedSettings} from '../shared/constants/settings-types';
+import {type UISettings} from '../../shared/ui-settings';
+import {type DescribedSettings} from '../shared/constants/settings-types';
 
 export interface YTCoreConfig {
     /**

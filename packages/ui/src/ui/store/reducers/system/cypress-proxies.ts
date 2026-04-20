@@ -1,8 +1,8 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
 
-import {RootState} from '../../../store/reducers';
-import {RoleGroupInfo, SystemNodeCounters} from './proxies';
-import {YTError} from '../../../types';
+import {type RootState} from '../../../store/reducers';
+import {type RoleGroupInfo, type SystemNodeCounters} from './proxies';
+import {type YTError} from '../../../types';
 import {mergeStateOnClusterChange} from '../utils';
 
 export interface CypressProxiesState {

@@ -1,14 +1,14 @@
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../reducers';
-import {Action} from 'redux';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../reducers';
+import {type Action} from 'redux';
 import {
     loadFolderByPath,
     loadTableAttributesByPath as loadTableAttributesByPathFromComponents,
 } from '@ytsaurus/components';
 import {
     BodyType,
-    NavigationNode,
-    NavigationTable,
+    type NavigationNode,
+    type NavigationTable,
     setCluster,
     setError,
     setFilter,
@@ -43,8 +43,8 @@ import {getClusterProxy, selectCurrentUserName} from '../../selectors/global';
 import {getQueryResultGlobalSettings} from '../../selectors/query-tracker/queryResult';
 import {getYsonSettingsDisableDecode} from '../../selectors/thor/unipika';
 import {QueriesListMode} from '../../../types/query-tracker/queryList';
-import type {ClusterConfig} from '../../../../shared/yt-types';
-import {YTError} from '../../../../@types/types';
+import {type ClusterConfig} from '../../../../shared/yt-types';
+import {type YTError} from '../../../../@types/types';
 import {setSettingByKey} from '../settings';
 import {setListMode} from '../../reducers/query-tracker/queryListSlice';
 import {toaster} from '../../../utils/toaster';

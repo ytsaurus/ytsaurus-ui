@@ -1,4 +1,4 @@
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 
 export const getUserAttributes = (state: RootState) =>
     state.navigation.tabs.userAttributes.attributes;

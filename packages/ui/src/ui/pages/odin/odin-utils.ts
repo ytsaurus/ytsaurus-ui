@@ -1,4 +1,4 @@
-import axios, {Canceler} from 'axios';
+import axios, {type Canceler} from 'axios';
 
 import countBy_ from 'lodash/countBy';
 

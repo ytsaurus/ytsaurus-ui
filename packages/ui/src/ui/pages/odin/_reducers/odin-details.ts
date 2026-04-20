@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
-import {FIX_MY_TYPE} from '../../../types';
+import {type FIX_MY_TYPE} from '../../../types';
 import {
     DATE_FORMAT,
     GET_METRIC_DATA,

@@ -1,4 +1,4 @@
-import type {Request, Response} from 'express';
+import {type Request, type Response} from 'express';
 import {getOAuthLogoutPath, isOAuthAllowed, isUserOAuthLogged} from '../components/oauth';
 import {YTAuthLogout, isYtAuthEnabled} from '../components/yt-auth';
 

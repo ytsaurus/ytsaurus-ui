@@ -2,7 +2,7 @@ import React from 'react';
 import {Link as CommonLink} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import {RoutedLink} from '../../containers/RoutedLink/RoutedLink';
-import {ClickableText, ClickableTextProps} from '../ClickableText/ClickableText';
+import {ClickableText, type ClickableTextProps} from '../ClickableText/ClickableText';
 import {ArrowUpRightFromSquare} from '@gravity-ui/icons';
 import './Link.scss';
 

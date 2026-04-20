@@ -1,4 +1,4 @@
-import {ProcessedNode} from '../utils';
+import {type ProcessedNode} from '../utils';
 import {parseTablePath} from './tables';
 import {genNavigationUrl} from '../../../../utils/navigation/navigation';
 import {buildOperationUrl} from '../../QueryResults/helpers/buildOperationUrl';

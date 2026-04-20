@@ -1,4 +1,4 @@
-import type {YTError} from '../../../../../types';
+import {type YTError} from '../../../../../types';
 
 export interface TPerformanceCounters {
     '1m': number;

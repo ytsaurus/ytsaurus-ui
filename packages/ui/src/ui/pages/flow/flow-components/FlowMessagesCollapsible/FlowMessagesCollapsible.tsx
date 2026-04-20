@@ -1,7 +1,7 @@
 import React from 'react';
-import {FlowNodeBase} from '../../../../../shared/yt-types';
+import {type FlowNodeBase} from '../../../../../shared/yt-types';
 import CollapsibleSection, {
-    CollapsibleSectionProps,
+    type CollapsibleSectionProps,
 } from '../../../../components/CollapsibleSection/CollapsibleSection';
 import {FlowMessagesContent} from '../../../../pages/flow/Flow/FlowGraph/renderers/FlowGraphRenderer';
 import i18n from './i18n';

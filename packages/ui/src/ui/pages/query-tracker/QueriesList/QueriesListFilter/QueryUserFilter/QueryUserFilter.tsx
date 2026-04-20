@@ -1,8 +1,8 @@
-import React, {FC, useCallback, useMemo} from 'react';
+import React, {type FC, useCallback, useMemo} from 'react';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {selectAllUserNames, selectCurrentUserName} from '../../../../../store/selectors/global';
 import {useAllUserNamesFiltered} from '../../../../../hooks/global';
-import {Select, SelectOption} from '@gravity-ui/uikit';
+import {Select, type SelectOption} from '@gravity-ui/uikit';
 import {getQueriesFilters} from '../../../../../store/selectors/query-tracker/queriesList';
 import {QueriesListAuthorFilter} from '../../../../../types/query-tracker/queryList';
 import {applyFilter} from '../../../../../store/actions/query-tracker/queriesList';

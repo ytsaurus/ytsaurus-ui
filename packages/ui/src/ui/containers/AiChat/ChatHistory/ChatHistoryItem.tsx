@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Button, Flex, Icon, Text} from '@gravity-ui/uikit';
 import TrashBinIcon from '@gravity-ui/icons/svgs/trash-bin.svg';
 import block from 'bem-cn-lite';

@@ -1,10 +1,10 @@
 import {createSelector} from 'reselect';
-import {QueryEngine} from '../../../../shared/constants/engines';
+import {type QueryEngine} from '../../../../shared/constants/engines';
 import {mergeUiSettings} from '../../../../shared/utils/merge-ui-settings';
-import type {ClusterConfig, ClusterUiConfig} from '../../../../shared/yt-types';
+import {type ClusterConfig, type ClusterUiConfig} from '../../../../shared/yt-types';
 import {getConfigData, uiSettings} from '../../../config/ui-settings';
 import {YT} from '../../../config/yt-config';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {getClusterConfig} from '../../../utils';
 import {selectSpytEnginesInfo} from '../query-tracker/queryTrackerEnginesInfo';
 import {selectIsAdmin} from './is-developer';

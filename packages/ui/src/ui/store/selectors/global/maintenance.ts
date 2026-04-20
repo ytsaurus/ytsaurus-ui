@@ -1,5 +1,5 @@
 import {createSelector} from 'reselect';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 
 const selectOngoingEvents = (state: RootState) => state.global.ongoingEvents;
 

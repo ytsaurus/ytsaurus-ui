@@ -6,7 +6,7 @@ import join_ from 'lodash/join';
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
@@ -20,8 +20,8 @@ import {
     NAVIGATION_ATTRIBUTES_EDITOR_REQUEST,
     NAVIGATION_ATTRIBUTES_EDITOR_SUCCESS,
 } from '../../../../constants/navigation/modals/attributes-editor';
-import {RootState} from '../../../../store/reducers';
-import {NavAttrEditorAction} from '../../../../store/reducers/navigation/modals/attributes-editor';
+import {type RootState} from '../../../../store/reducers';
+import {type NavAttrEditorAction} from '../../../../store/reducers/navigation/modals/attributes-editor';
 import {
     getNavigationAttributesEditorAttributes,
     getNavigationAttributesEditorPath,
@@ -37,7 +37,7 @@ import {makeUiMarker, prepareSetCommandForBatch} from '../../../../utils/cypress
 import {Page} from '../../../../constants';
 import {executeBatchWithRetries} from '../../execute-batch';
 import {YTApiId} from '../../../../rum/rum-wrap-api';
-import {BatchSubRequest} from '../../../../../shared/yt-types';
+import {type BatchSubRequest} from '../../../../../shared/yt-types';
 import {toaster} from '../../../../utils/toaster';
 
 type ActionType<R = any> = ThunkAction<R, RootState, any, NavAttrEditorAction>;

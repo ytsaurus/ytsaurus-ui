@@ -1,11 +1,11 @@
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {injectColumnsFromSchema} from '../../../../utils/navigation/content/table/table-ts';
-import {NavigationTableSchema} from '../../../../store/reducers/query-tracker/queryNavigationSlice';
+import {type NavigationTableSchema} from '../../../../store/reducers/query-tracker/queryNavigationSlice';
 import {JSONSerializer} from '../../../../common/yt-api';
 import {getClusterProxy} from '../../../../store/selectors/global';
-import {ClusterConfig, ReadTableOutputFormat} from '../../../../../shared/yt-types';
+import {type ClusterConfig, type ReadTableOutputFormat} from '../../../../../shared/yt-types';
 import {readStaticTable} from '../../../../store/actions/navigation/content/table/readStaticTable';
-import {ReadTableResult} from '../../../../store/actions/navigation/content/table/readTable';
+import {type ReadTableResult} from '../../../../store/actions/navigation/content/table/readTable';
 
 type LoadStaticTableParams = {
     path: string;

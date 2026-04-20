@@ -4,11 +4,11 @@ import Icon from '../../components/Icon/Icon';
 
 import {ClickableText} from '../../components/ClickableText/ClickableText';
 import Button from '../../components/Button/Button';
-import NumberInput, {NumberInputProps} from '../../components/NumberInput/NumberInput';
+import NumberInput, {type NumberInputProps} from '../../components/NumberInput/NumberInput';
 import {ROOT_ACCOUNT_NAME} from '../../constants/accounts/accounts';
 
 import './QuotaEditorWithHide.scss';
-import QuotaEditor, {QuotaEditorProps} from './QuotaEditor';
+import QuotaEditor, {type QuotaEditorProps} from './QuotaEditor';
 import i18n from './i18n';
 
 const block = cn('yt-quota-editor-with-hide');

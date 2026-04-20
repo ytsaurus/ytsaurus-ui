@@ -2,8 +2,8 @@ import React from 'react';
 import {TABLE_ERASE_MODAL_PARTIAL} from '../../../../constants/navigation/modals/table-erase-modal';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import {RootState} from '../../../reducers';
-import {ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../../reducers';
+import {type ThunkAction} from 'redux-thunk';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {AppStoreProvider} from '../../../../containers/App/AppStoreProvider';
 import {OperationShortInfo} from '../../../../pages/components/OperationShortInfo/OperationShortInfo';

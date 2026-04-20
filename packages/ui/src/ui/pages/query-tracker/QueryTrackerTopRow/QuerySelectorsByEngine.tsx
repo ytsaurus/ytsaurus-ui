@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useMemo} from 'react';
+import React, {type FC, useEffect, useMemo} from 'react';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {QueryCliqueSelector} from './QueryCliqueSelector';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';

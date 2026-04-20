@@ -1,12 +1,12 @@
-import {Action} from 'redux';
+import {type Action} from 'redux';
 
 import {mergeStateOnClusterChange} from '../../../../store/reducers/utils';
 import {
     CHANGE_VERSION_SUMMARY_PARTIAL,
     DISCOVER_VERSIONS,
 } from '../../../../constants/components/versions/versions_v2';
-import {YTError} from '../../../../../@types/types';
-import {ActionD, SortState} from '../../../../types';
+import {type YTError} from '../../../../../@types/types';
+import {type ActionD, type SortState} from '../../../../types';
 
 export type VersionsState = {
     loading: boolean;

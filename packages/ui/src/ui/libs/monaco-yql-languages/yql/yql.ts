@@ -1,4 +1,4 @@
-import type {languages} from '../fillers/monaco-editor-core';
+import {type languages} from '../fillers/monaco-editor-core';
 import {builtinFunctions, keywords, typeKeywords} from './yql.keywords';
 
 export const conf: languages.LanguageConfiguration = {

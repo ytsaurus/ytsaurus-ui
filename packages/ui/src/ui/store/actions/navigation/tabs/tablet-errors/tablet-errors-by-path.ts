@@ -1,10 +1,10 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 import isEqual_ from 'lodash/isEqual';
 import omit_ from 'lodash/omit';
 
-import {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 import {
-    TabletErrorsApi,
+    type TabletErrorsApi,
     fetchFromTabletErrorsApi,
 } from '../../../../../../shared/tablet-errors-manager';
 import {ROWS_PER_PAGE} from '../../../../../constants/pagination';

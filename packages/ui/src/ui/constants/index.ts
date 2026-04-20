@@ -1,4 +1,4 @@
-import {ValueOf} from '../types/index';
+import {type ValueOf} from '../types/index';
 import createActionTypes, {createPrefix} from './utils';
 export {Page} from '../../shared/constants/settings';
 

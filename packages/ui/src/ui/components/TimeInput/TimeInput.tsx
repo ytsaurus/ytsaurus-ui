@@ -1,7 +1,7 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import cn from 'bem-cn-lite';
 
-import {TextInput, TextInputProps} from '@gravity-ui/uikit';
+import {TextInput, type TextInputProps} from '@gravity-ui/uikit';
 
 import hammer from '../../common/hammer';
 import i18n from './i18n';

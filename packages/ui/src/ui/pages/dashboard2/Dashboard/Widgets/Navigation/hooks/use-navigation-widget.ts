@@ -1,13 +1,13 @@
 import {useSelector} from '../../../../../../store/redux-hooks';
 
-import {RootState} from '../../../../../../store/reducers';
+import {type RootState} from '../../../../../../store/reducers';
 import {usePathsQuery} from '../../../../../../store/api/dashboard2/navigation';
 import {selectCluster} from '../../../../../../store/selectors/global';
 import {selectNavigationTypeFilter} from '../../../../../../store/selectors/dashboard2/navigation';
 import {getLastVisited} from '../../../../../../store/selectors/settings';
 import {selectFavouritePaths} from '../../../../../../store/selectors/favourites';
 
-import {NavigationWidgetProps} from '../types';
+import {type NavigationWidgetProps} from '../types';
 
 export function useNavigationWidget(props: NavigationWidgetProps) {
     const type = useSelector((state: RootState) => selectNavigationTypeFilter(state, props.id));

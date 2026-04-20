@@ -13,11 +13,11 @@ import values_ from 'lodash/values';
 // @ts-ignore
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
-import {FIX_MY_TYPE} from '../../../types';
+import {type FIX_MY_TYPE} from '../../../types';
 
 import {flags} from '../../../utils';
 
-import type {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {getConfigData, userSettingsCluster} from '../../../config/ui-settings';
 
 export * from './cluster';

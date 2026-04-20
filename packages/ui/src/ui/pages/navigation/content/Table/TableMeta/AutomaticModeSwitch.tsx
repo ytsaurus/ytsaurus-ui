@@ -3,8 +3,8 @@ import React from 'react';
 import {Switch} from '@gravity-ui/uikit';
 
 import StatusBulb from '../../../../../components/StatusBulb/StatusBulb';
-import {FormApi, YTDFDialog, makeErrorFields} from '../../../../../components/Dialog';
-import {YTError} from '../../../../../types';
+import {type FormApi, YTDFDialog, makeErrorFields} from '../../../../../components/Dialog';
+import {type YTError} from '../../../../../types';
 
 export interface Props {
     value?: boolean;

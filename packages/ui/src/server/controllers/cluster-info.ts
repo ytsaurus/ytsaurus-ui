@@ -1,4 +1,4 @@
-import type {Request, Response} from 'express';
+import {type Request, type Response} from 'express';
 import {getClusterInfo} from '../components/cluster-queries';
 import {sendAndLogError} from '../utils';
 

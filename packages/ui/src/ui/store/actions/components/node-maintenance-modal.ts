@@ -1,15 +1,15 @@
-import type {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 import forEach_ from 'lodash/forEach';
 
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {
     NODE_MAINTENANCE_PARTIAL,
     NODE_MAINTENANCE_RESET,
 } from '../../../constants/components/node-maintenance-modal';
 import {
-    NodeMaintenanceAction,
-    NodeMaintenanceState,
-    NodeResourceLimits,
+    type NodeMaintenanceAction,
+    type NodeMaintenanceState,
+    type NodeResourceLimits,
 } from '../../../store/reducers/components/node-maintenance-modal';
 import {
     selectIsAllowedMaintenanceApiNodes,
@@ -17,7 +17,7 @@ import {
 } from '../../../store/selectors/components/node-maintenance-modal';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {YTApiId, ytApiV3Id, ytApiV4Id} from '../../../rum/rum-wrap-api';
-import {AddMaintenanceParams, BatchSubRequest} from '../../../../shared/yt-types';
+import {type AddMaintenanceParams, type BatchSubRequest} from '../../../../shared/yt-types';
 import {updateComponentsNode} from './nodes/nodes';
 import {selectCurrentUserName} from '../../../store/selectors/global';
 import {prepareSetCommandForBatch} from '../../../utils/cypress-attributes';

@@ -1,6 +1,6 @@
 import {produce} from 'immer';
 import {updateIfChanged} from '../../../utils/utils';
-import {RootState} from '..';
+import {type RootState} from '..';
 
 import {usersTableState} from './table';
 import {parseSortState} from '../../../utils/index';

@@ -1,10 +1,10 @@
-import {YTApiIdType} from '../../../../../shared/constants/yt-api-id';
+import {type YTApiIdType} from '../../../../../shared/constants/yt-api-id';
 import {getBatchError} from '../../../../../shared/utils/error';
-import {BatchParameters, ytApiV3Id} from '../../../../rum/rum-wrap-api';
-import {BatchResultsItem} from '../../../../../shared/yt-types';
-import {WrapApiOptions, wrapApiPromiseByToaster} from '../../../../utils/utils';
-import {YTError} from '../../../../types';
-import {YTEndpointApiArgs} from '../types';
+import {type BatchParameters, ytApiV3Id} from '../../../../rum/rum-wrap-api';
+import {type BatchResultsItem} from '../../../../../shared/yt-types';
+import {type WrapApiOptions, wrapApiPromiseByToaster} from '../../../../utils/utils';
+import {type YTError} from '../../../../types';
+import {type YTEndpointApiArgs} from '../types';
 
 export type BatchApiArgs = YTEndpointApiArgs<BatchParameters> & {
     id: YTApiIdType;

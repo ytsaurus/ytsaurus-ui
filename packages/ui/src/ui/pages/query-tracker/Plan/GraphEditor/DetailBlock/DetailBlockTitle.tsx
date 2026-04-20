@@ -1,5 +1,5 @@
-import React, {FC} from 'react';
-import {QueriesBlockMeta} from '../QueriesNodeBlock';
+import React, {type FC} from 'react';
+import {type QueriesBlockMeta} from '../QueriesNodeBlock';
 import cn from 'bem-cn-lite';
 import './DetailBlockTitle.scss';
 import {Button, Icon} from '@gravity-ui/uikit';

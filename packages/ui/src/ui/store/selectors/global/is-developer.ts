@@ -1,5 +1,5 @@
 import {YT} from '../../../config/yt-config';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {getSettingsData} from '../../../store/selectors/settings/settings-base';
 
 const selectIsDeveloper = (state: RootState): boolean => state?.global?.isDeveloper;

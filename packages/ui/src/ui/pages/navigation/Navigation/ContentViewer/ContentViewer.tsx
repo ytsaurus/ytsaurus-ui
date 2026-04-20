@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import cn from 'bem-cn-lite';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 import {Tab} from '../../../../constants/navigation';

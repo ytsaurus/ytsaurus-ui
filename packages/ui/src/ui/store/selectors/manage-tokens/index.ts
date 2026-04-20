@@ -1,5 +1,5 @@
 import {createSelector} from 'reselect';
-import {RootState} from '../../reducers';
+import {type RootState} from '../../reducers';
 import {selectAuthWay} from '../global';
 import {selectRequirePasswordInAuthenticationCommands} from '../global/supported-features';
 

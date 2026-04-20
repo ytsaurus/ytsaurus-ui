@@ -1,8 +1,14 @@
 import React from 'react';
 import isEmpty_ from 'lodash/isEmpty';
 
-import {ECameraScaleLevel, Graph, GraphState, TBlockId, TConnection} from '@gravity-ui/graph';
-import {GraphMouseEvent} from '@gravity-ui/graph/build/graphEvents';
+import {
+    ECameraScaleLevel,
+    type Graph,
+    GraphState,
+    type TBlockId,
+    type TConnection,
+} from '@gravity-ui/graph';
+import {type GraphMouseEvent} from '@gravity-ui/graph/build/graphEvents';
 import {GraphCanvas, useGraph, useGraphEvent} from '@gravity-ui/graph/react';
 import {useThemeValue} from '@gravity-ui/uikit';
 
@@ -14,7 +20,7 @@ import {useAutoGroups, useCustomGroups} from './hooks/useGroups';
 import {Toolbox} from './Toolbox';
 import {ZOOM_PADDING} from './constants';
 import {getGraphStructureKey} from './helpers/getGraphStructureKey';
-import {YTGraphBlock, YTGraphProps} from './types';
+import {type YTGraphBlock, type YTGraphProps} from './types';
 
 const block = cn('yt-graph');
 const ZOOM_SPEED = 0.5;

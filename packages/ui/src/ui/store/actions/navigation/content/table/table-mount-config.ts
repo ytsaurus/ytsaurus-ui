@@ -2,10 +2,10 @@
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {TABLE_MOUNT_CONFIG} from '../../../../../constants/navigation/content/table';
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 import {YTApiId, ytApiV3Id} from '../../../../../rum/rum-wrap-api';
-import {RootState} from '../../../../../store/reducers';
-import {TableMountConfigAction} from '../../../../../store/reducers/navigation/content/table/table-mount-config';
+import {type RootState} from '../../../../../store/reducers';
+import {type TableMountConfigAction} from '../../../../../store/reducers/navigation/content/table/table-mount-config';
 import {isCancelled} from '../../../../../utils/cancel-helper';
 
 type TableMountConfigThunkAction = ThunkAction<unknown, RootState, unknown, TableMountConfigAction>;

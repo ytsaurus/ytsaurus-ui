@@ -1,6 +1,6 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {Reducer} from 'redux';
-import {GithubRepository, GitlabRepository, VcsConfig} from '../../../../shared/vcs';
+import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {type Reducer} from 'redux';
+import {type GithubRepository, type GitlabRepository, type VcsConfig} from '../../../../shared/vcs';
 import {uiSettings} from '../../../config/ui-settings';
 
 export type DirectoryItem = {

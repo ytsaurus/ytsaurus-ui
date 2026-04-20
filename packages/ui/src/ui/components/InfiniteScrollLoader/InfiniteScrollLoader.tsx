@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useRef} from 'react';
+import React, {type FC, useEffect, useRef} from 'react';
 import {Flex, Loader} from '@gravity-ui/uikit';
 
 type Props = {

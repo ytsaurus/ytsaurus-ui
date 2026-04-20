@@ -4,11 +4,11 @@ import compact_ from 'lodash/compact';
 
 import {concatByAnd} from '../../../common/hammer/predicate';
 
-import {RootState} from '../../../store/reducers';
-import {ChytInfo} from '../../../store/reducers/chyt/list';
-import {SortState} from '../../../types';
+import {type RootState} from '../../../store/reducers';
+import {type ChytInfo} from '../../../store/reducers/chyt/list';
+import {type SortState} from '../../../types';
 import {multiSortBySortStateArray} from '../../../utils/sort-helpers';
-import {StrawberryListAttributes} from '../../../utils/strawberryControllerApi';
+import {type StrawberryListAttributes} from '../../../utils/strawberryControllerApi';
 import {getSettingsData} from '../../../store/selectors/settings/settings-base';
 
 import {defaultColumns} from '../../../constants/chyt';

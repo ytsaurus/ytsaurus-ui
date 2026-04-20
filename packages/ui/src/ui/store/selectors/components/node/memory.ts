@@ -4,18 +4,18 @@ import max_ from 'lodash/max';
 import sum_ from 'lodash/sum';
 import toArray_ from 'lodash/toArray';
 
-import type {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {createSelector} from 'reselect';
-import {NodeMemoryUsagePreload} from '../../../../types/components/node';
+import {type NodeMemoryUsagePreload} from '../../../../types/components/node';
 import {
-    TreeNode,
+    type TreeNode,
     filterTree,
     flattenTree,
     prepareTree,
     sortTree,
 } from '../../../../common/hammer/tree-list';
 import {selectCluster} from '../../../../store/selectors/global';
-import {SortState} from '../../../../types';
+import {type SortState} from '../../../../types';
 import {orderTypeToOldSortState} from '../../../../utils/sort-helpers';
 
 export const selectNodeMemory = (state: RootState) => state.components.node.memory;

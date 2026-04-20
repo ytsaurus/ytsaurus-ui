@@ -1,13 +1,13 @@
 import React from 'react';
 import {
-    FlowComputationDetailsType,
-    FlowComputationPartitionErrorsStatsItem,
+    type FlowComputationDetailsType,
+    type FlowComputationPartitionErrorsStatsItem,
 } from '../../../../../../../shared/yt-types';
 import format from '../../../../../../common/hammer/format';
 import {
     DataTableGravity,
     TableCell,
-    tanstack,
+    type tanstack,
     useTable,
 } from '../../../../../../components/DataTableGravity';
 import i18n from './i18n';

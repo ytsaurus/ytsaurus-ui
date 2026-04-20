@@ -1,5 +1,5 @@
 import {createSelector} from 'reselect';
-import {RootState} from '../reducers';
+import {type RootState} from '../reducers';
 import {ACL_MODES, AclMode} from '../../constants/acl';
 
 export function getExecuteBatchState(state: RootState) {

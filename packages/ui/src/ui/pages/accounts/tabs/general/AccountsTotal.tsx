@@ -9,8 +9,8 @@ import {Progress} from '@gravity-ui/uikit';
 
 import WarningIcon from '../../../../components/WarningIcon/WarningIcon';
 import {
-    ClusterTotalsUsage,
-    NodesData,
+    type ClusterTotalsUsage,
+    type NodesData,
     getDiskSpace,
     getNodesChunksTotals,
 } from '../../../../utils/accounts/accountsTotal';

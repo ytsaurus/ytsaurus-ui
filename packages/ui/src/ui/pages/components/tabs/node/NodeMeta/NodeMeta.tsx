@@ -7,7 +7,7 @@ import map_ from 'lodash/map';
 
 import Label from '../../../../../components/Label';
 import {MetaTable} from '@ytsaurus/components';
-import type {Node} from '../../../../../store/reducers/components/nodes/nodes/node';
+import {type Node} from '../../../../../store/reducers/components/nodes/nodes/node';
 import {selectCurrentClusterConfig} from '../../../../../store/selectors/global';
 import UIFactory from '../../../../../UIFactory';
 import {getNodeMetaItems} from '../../../../../utils/components/nodes/node-meta-items';

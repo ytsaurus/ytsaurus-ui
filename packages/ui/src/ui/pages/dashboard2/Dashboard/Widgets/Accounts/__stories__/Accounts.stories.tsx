@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type {Meta, StoryFn} from '@storybook/react';
+import {type Meta, type StoryFn} from '@storybook/react';
 
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
@@ -12,7 +12,7 @@ import {baseWidgetProps} from '../../../utils/mocks';
 import {AccountsWidgetControls} from '../AccountsWidgetControls/AccountsWidgetControls';
 import {AccountsWidgetContent} from '../AccountsWidgetContent/AccountsWidgetContent';
 import {AccountsWidgetHeader} from '../AccountsWidgetHeader/AccountsWidgetHeader';
-import {AccountsWidgetProps} from '../types';
+import {type AccountsWidgetProps} from '../types';
 
 import {
     accountsHandler,

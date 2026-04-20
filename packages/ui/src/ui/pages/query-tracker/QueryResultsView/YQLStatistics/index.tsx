@@ -2,7 +2,7 @@ import {useSelector} from '../../../../store/redux-hooks';
 import React from 'react';
 
 import {getProgressYQLStatistics} from '../../../../store/selectors/query-tracker/query';
-import {StatisticTable, StatisticTree} from '../../../../components/StatisticTable';
+import {StatisticTable, type StatisticTree} from '../../../../components/StatisticTable';
 
 import './index.scss';
 

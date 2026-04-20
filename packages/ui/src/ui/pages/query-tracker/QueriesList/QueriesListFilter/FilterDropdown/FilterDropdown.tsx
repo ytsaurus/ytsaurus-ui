@@ -1,4 +1,4 @@
-import React, {FC, PropsWithChildren} from 'react';
+import React, {type FC, type PropsWithChildren} from 'react';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {resetFilter} from '../../../../../store/actions/query-tracker/queriesList';
 import '../FilterDropdown.scss';

@@ -1,8 +1,8 @@
 import {createSelector} from 'reselect';
-import {RootState} from '../../reducers';
+import {type RootState} from '../../reducers';
 import {getQueryResultsState} from './queryResult';
 import {getQueryDraft} from './query';
-import {QueryResultReadyState} from '../../../types/query-tracker/queryResult';
+import {type QueryResultReadyState} from '../../../types/query-tracker/queryResult';
 import {NumberTypes} from '../../../types/query-tracker/yqlTypes';
 
 export const selectChartVisualization = (state: RootState) =>

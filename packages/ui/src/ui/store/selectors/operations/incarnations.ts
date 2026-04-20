@@ -1,15 +1,15 @@
 import {createSelector} from '@reduxjs/toolkit';
 
-import {YTError} from '../../../../@types/types';
+import {type YTError} from '../../../../@types/types';
 
-import {IncarnationSwitchReason, OperationEvent} from '../../../../shared/yt-types';
+import {type IncarnationSwitchReason, type OperationEvent} from '../../../../shared/yt-types';
 
 import format from '../../../common/hammer/format';
 
 import {getIdFilter, getIncarnationsList} from '../../../store/reducers/operations/incarnations';
 import {getIncarnations} from '../../../store/api/yt';
-import {OperationSelector, OperationStates} from '../../../pages/operations/selectors';
-import {ViewState} from '../../../components/StatusLabel/StatusLabel';
+import {type OperationSelector, type OperationStates} from '../../../pages/operations/selectors';
+import {type ViewState} from '../../../components/StatusLabel/StatusLabel';
 import {formatInterval} from '../../../components/common/Timeline';
 import {dateTimeParse} from '../../../utils/date-utils';
 

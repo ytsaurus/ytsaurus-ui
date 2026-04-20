@@ -6,7 +6,7 @@ import cn from 'bem-cn-lite';
 import omit_ from 'lodash/omit';
 
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
-import {ColumnInfo} from '../../../../components/ElementsTable/ElementsTableHeader';
+import {type ColumnInfo} from '../../../../components/ElementsTable/ElementsTableHeader';
 import {MetaTable, SchemaDataType} from '@ytsaurus/components';
 import HelpLink from '../../../../components/HelpLink/HelpLink';
 import Link from '../../../../components/Link/Link';
@@ -17,7 +17,7 @@ import ErrorIcon from '../../../../components/ErrorIcon/ErrorIcon';
 import UIFactory from '../../../../UIFactory';
 import {
     ExternalDescription,
-    ExternalSchemaDescription,
+    type ExternalSchemaDescription,
 } from './ExternalDescription/ExternalDescription';
 
 import {
@@ -38,8 +38,8 @@ import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
 import {getAttributesPath, getLoadState} from '../../../../store/selectors/navigation';
 import {isFinalLoadingStatus, wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {docsUrl} from '../../../../config';
-import {YTError} from '../../../../../@types/types';
-import {RootState} from '../../../../store/reducers';
+import {type YTError} from '../../../../../@types/types';
+import {type RootState} from '../../../../store/reducers';
 import {ytApiV3} from '../../../../rum/rum-wrap-api';
 
 const block = cn('navigation-schema');

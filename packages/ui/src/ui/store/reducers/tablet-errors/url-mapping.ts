@@ -1,8 +1,8 @@
 import {produce} from 'immer';
 
-import type {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {initialState} from './tablet-errors-by-bundle';
-import {LocationParameters} from '../../../store/location';
+import {type LocationParameters} from '../../../store/location';
 import {
     makeTimeRangeSerialization,
     parseSerializeArrayString,

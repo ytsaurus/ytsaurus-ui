@@ -1,4 +1,4 @@
-import {LocationParameters} from '../../../store/location';
+import {type LocationParameters} from '../../../store/location';
 import {prometheusDashboardParams} from '../../../store/reducers/prometheusDashboard/url-mapping';
 import {initialState as filtersInitialState} from './filters';
 

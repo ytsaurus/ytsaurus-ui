@@ -36,7 +36,7 @@ import {
     toggleOdinOverviewMetricVisibility,
 } from '../_actions/odin-overview';
 import {
-    OdinOverviewPreset,
+    type OdinOverviewPreset,
     getOdinOverviewClusterMetrics,
     getOdinOverviewData,
     getOdinOverviewHiddenMetrics,
@@ -47,8 +47,8 @@ import {
     getOdinOverviewTimeTo,
     getOdinOverviewVisiblePresets,
 } from '../_selectors/odin-overview';
-import {MetricData, MetricListItem} from '../odin-utils';
-import {OdinOverviewStateDataItem} from '../_reducers/odin-overview';
+import {type MetricData, type MetricListItem} from '../odin-utils';
+import {type OdinOverviewStateDataItem} from '../_reducers/odin-overview';
 import {ClickableText} from '../../../components/ClickableText/ClickableText';
 import Link from '../../../components/Link/Link';
 // @ts-ignore

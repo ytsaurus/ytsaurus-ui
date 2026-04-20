@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Icon, Text} from '@gravity-ui/uikit';
 import FolderIcon from '@gravity-ui/icons/svgs/folder.svg';
 import cn from 'bem-cn-lite';

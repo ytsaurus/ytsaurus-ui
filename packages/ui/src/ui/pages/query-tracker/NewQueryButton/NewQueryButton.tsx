@@ -1,4 +1,4 @@
-import React, {FC, MouseEvent, useState} from 'react';
+import React, {type FC, type MouseEvent, useState} from 'react';
 import {useSelector} from '../../../store/redux-hooks';
 import {Button, Icon} from '@gravity-ui/uikit';
 import Modal from '../../../components/Modal/Modal';

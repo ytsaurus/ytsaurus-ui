@@ -1,5 +1,5 @@
 import hammer from '../hammer';
-import {SettingsProvider} from './settings-remote-provider';
+import {type SettingsProvider} from './settings-remote-provider';
 
 const LOCAL_PATH = 'interface-settings';
 

@@ -1,8 +1,8 @@
 import moment from 'moment';
 import {createSelector} from 'reselect';
 
-import {RootState} from '../../reducers';
-import {Conversation} from '../../../../shared/ai-chat';
+import {type RootState} from '../../reducers';
+import {type Conversation} from '../../../../shared/ai-chat';
 import {uiSettings} from '../../../config/ui-settings';
 
 export const selectAiChatConfigured = () => Boolean(uiSettings.aiChatConfig);

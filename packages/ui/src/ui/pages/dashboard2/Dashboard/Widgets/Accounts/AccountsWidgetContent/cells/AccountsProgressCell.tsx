@@ -4,7 +4,7 @@ import b from 'bem-cn-lite';
 
 import format from '../../../../../../../common/hammer/format';
 
-import {Resource} from '../../../../../../../store/api/dashboard2/accounts/accounts';
+import {type Resource} from '../../../../../../../store/api/dashboard2/accounts/accounts';
 
 import {Tooltip} from '@ytsaurus/components';
 

@@ -1,17 +1,17 @@
-import type {ChangeEvent} from 'react';
+import {type ChangeEvent} from 'react';
 
 import {
     CONSUMER_CHANGE_FILTERS,
-    CONSUMER_MODE,
-    CONSUMER_RATE_MODE,
+    type CONSUMER_MODE,
+    type CONSUMER_RATE_MODE,
 } from '../../../../../constants/navigation/tabs/consumer';
-import type {
-    ConsumerFiltersAction,
-    ConsumerFiltersState,
-    ConsumerPartitionsColumns,
-    PartitionColumn,
+import {
+    type ConsumerFiltersAction,
+    type ConsumerFiltersState,
+    type ConsumerPartitionsColumns,
+    type PartitionColumn,
 } from '../../../../../store/reducers/navigation/tabs/consumer/filters';
-import type {TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
+import {type TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
 
 export function changeConsumerMode(evt: ChangeEvent<HTMLInputElement>): ConsumerFiltersAction {
     return {

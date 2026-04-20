@@ -1,5 +1,5 @@
 import React from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import hammer from '../../../../../common/hammer';
 import {compose} from 'redux';
@@ -41,7 +41,7 @@ import {
 import {getSelectedColumns} from '../../../../../store/selectors/settings';
 import {getSettingsEnableSideBar} from '../../../../../store/selectors/settings/settings-ts';
 import {defaultColumns} from '../../../../../pages/components/tabs/nodes/tables';
-import withVisible, {WithVisibleProps} from '../../../../../hocs/withVisible';
+import withVisible, {type WithVisibleProps} from '../../../../../hocs/withVisible';
 import {useUpdaterWithMemoizedParams} from '../../../../../hooks/use-updater';
 import {isPaneSplit} from '../../../../../utils';
 import {
@@ -50,7 +50,7 @@ import {
     getNodes,
     handleColumnsChange,
 } from '../../../../../store/actions/components/nodes/nodes';
-import type {NodesState} from '../../../../../store/reducers/components/nodes/nodes/nodes';
+import {type NodesState} from '../../../../../store/reducers/components/nodes/nodes/nodes';
 
 import {mergeScreen, splitScreen as splitScreenAction} from '../../../../../store/actions/global';
 import {KeyCode} from '../../../../../constants/index';
@@ -59,7 +59,7 @@ import {
     CONTENT_MODE_ITEMS,
     SPLIT_TYPE,
 } from '../../../../../constants/components/nodes/nodes';
-import {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 
 import {NodeMaintenanceModal} from '../../../NodeMaintenanceModal/NodeMaintenanceModal';
 

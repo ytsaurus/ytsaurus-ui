@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from 'react';
+import React, {type FC, useCallback} from 'react';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import block from 'bem-cn-lite';
 import {
@@ -16,7 +16,7 @@ import {NoContent} from '../../../components/NoContent';
 import {InfiniteScrollLoader} from '../../../components/InfiniteScrollLoader';
 import i18n from './i18n';
 import './ChatHistory.scss';
-import {Conversation} from '../../../../shared/ai-chat';
+import {type Conversation} from '../../../../shared/ai-chat';
 import hammer from '../../../common/hammer';
 import {ChatHistoryItem} from './ChatHistoryItem';
 

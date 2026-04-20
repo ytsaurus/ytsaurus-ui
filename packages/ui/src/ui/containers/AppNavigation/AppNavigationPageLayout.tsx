@@ -1,8 +1,8 @@
 import React from 'react';
-import {AsideFallback, MenuItem, PageLayout} from '@gravity-ui/navigation';
+import {AsideFallback, type MenuItem, PageLayout} from '@gravity-ui/navigation';
 
-import {ClusterConfig} from '../../../shared/yt-types';
-import {AuthWay} from '../../../shared/constants';
+import {type ClusterConfig} from '../../../shared/yt-types';
+import {type AuthWay} from '../../../shared/constants';
 import {ChatSidePanel} from '../AiChat/ChatSidePanel';
 
 export interface AppNavigationProps {

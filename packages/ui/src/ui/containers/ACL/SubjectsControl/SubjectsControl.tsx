@@ -1,6 +1,6 @@
 import React from 'react';
 import UIFactory from '../../../UIFactory';
-import {ResponsibleType} from '../../../utils/acl/acl-types';
+import {type ResponsibleType} from '../../../utils/acl/acl-types';
 
 export type SubjectsControlItemType = 'users' | 'groups' | 'app';
 

@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Button, {ButtonProps} from '../../components/Button/Button';
+import Button, {type ButtonProps} from '../../components/Button/Button';
 import Icon from '../../components/Icon/Icon';
-import {ButtonLinkProps} from '@gravity-ui/uikit';
+import {type ButtonLinkProps} from '@gravity-ui/uikit';
 
 export type AttributesButtonProps = Exclude<ButtonProps, ButtonLinkProps>;
 

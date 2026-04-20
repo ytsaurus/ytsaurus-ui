@@ -6,7 +6,7 @@ import isEqual_ from 'lodash/isEqual';
 
 import {useUsableAccountsQuery} from '../../../store/api/accounts';
 import {
-    ItemsTypes,
+    type ItemsTypes,
     getEditMode,
     getEdittingConfig,
     openSettingsDialog,

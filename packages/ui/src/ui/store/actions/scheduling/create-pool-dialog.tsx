@@ -1,9 +1,9 @@
 import React from 'react';
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../reducers';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../reducers';
 import {
-    CreatePoolDialogAction,
-    CreatePoolDialogState,
+    type CreatePoolDialogAction,
+    type CreatePoolDialogState,
 } from '../../reducers/scheduling/create-pool-dialog';
 import {
     CREATE_POOL_DIALOG_TREE_CREATE_FAILURE,
@@ -14,7 +14,7 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {prepareAbcService} from '../../../utils/scheduling';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {loadSchedulingData} from './scheduling-ts';
-import {FIX_MY_TYPE} from '../../../types';
+import {type FIX_MY_TYPE} from '../../../types';
 import {selectCluster} from '../../selectors/global';
 import {updateAcl} from '../../../utils/acl/acl-api';
 import {IdmObjectType} from '../../../constants/acl';

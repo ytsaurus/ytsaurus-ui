@@ -1,6 +1,6 @@
-import React, {ReactNode, memo, useCallback, useState} from 'react';
+import React, {type ReactNode, memo, useCallback, useState} from 'react';
 import block from 'bem-cn-lite';
-import {QueryItem, isSingleProgress} from '../../../types/query-tracker/api';
+import {type QueryItem, isSingleProgress} from '../../../types/query-tracker/api';
 import {Tab, TabList, TabPanel, TabProvider} from '@gravity-ui/uikit';
 import {QueryMetaInfo} from './QueryMetaRow';
 import QueryMetaTable from '../QueryMetaTable';
@@ -8,12 +8,12 @@ import {QueryResultActions} from './QueryResultActions';
 import {parseResultTabIndex} from './helpers/parseResultTabIndex';
 import {YQLStatisticsTable} from '../QueryResultsView/YQLStatistics';
 import NotRenderUntilFirstVisible from '../NotRenderUntilFirstVisible/NotRenderUntilFirstVisible';
-import {PlanActions, PlanView} from '../Plan/PlanActions';
+import {PlanActions, type PlanView} from '../Plan/PlanActions';
 import {QueryResultContainer} from './QueryResultContainer';
 import {QueryChartTab} from './QueryChartTab';
 import {extractOperationIdToCluster} from './helpers/extractOperationIdToCluster';
 import {
-    QueryResultTab,
+    type QueryResultTab,
     setActiveTab,
     setUserChangeTab,
 } from '../../../store/reducers/query-tracker/queryTabsSlice';
@@ -29,7 +29,7 @@ import {
 } from '../../../store/selectors/query-tracker/queryTabs';
 import Plan from '../Plan/Plan';
 import {preparePlanNode} from '../Plan/services/preparePlanNode';
-import {ProcessedNode} from '../Plan/utils';
+import {type ProcessedNode} from '../Plan/utils';
 const b = block('query-results');
 
 type Props = {

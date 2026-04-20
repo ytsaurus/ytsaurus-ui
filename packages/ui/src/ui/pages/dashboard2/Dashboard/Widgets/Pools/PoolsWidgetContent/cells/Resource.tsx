@@ -6,7 +6,7 @@ import {Tooltip} from '@ytsaurus/components';
 
 import format from '../../../../../../../common/hammer/format';
 
-import type {PoolResource} from '../../types';
+import {type PoolResource} from '../../types';
 
 import './Resource.scss';
 

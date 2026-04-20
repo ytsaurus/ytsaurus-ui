@@ -1,6 +1,6 @@
 import React from 'react';
 import {useSelector} from '../../../store/redux-hooks';
-import {Route, RouteComponentProps, Switch, useHistory} from 'react-router';
+import {Route, type RouteComponentProps, Switch, useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
 import {Breadcrumbs} from '@gravity-ui/uikit';
 import {Tab as ComponentsTab} from '../../../constants/components/main';

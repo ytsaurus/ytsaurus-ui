@@ -1,5 +1,5 @@
 /* eslint-disable valid-jsdoc */
-import moment, {MomentInput, unitOfTime} from 'moment';
+import moment, {type MomentInput, type unitOfTime} from 'moment';
 
 /** @deprecated */
 

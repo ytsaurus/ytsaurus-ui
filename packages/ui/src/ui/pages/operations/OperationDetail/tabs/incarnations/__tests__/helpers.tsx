@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import {useDispatch} from '../../../../../../store/redux-hooks';
 
 import {GET_OPERATION} from '../../../../../../constants/operations/detail';

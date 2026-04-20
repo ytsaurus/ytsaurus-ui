@@ -1,8 +1,8 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import {Box, Breadcrumbs, BreadcrumbsProps} from '@gravity-ui/uikit';
+import {Box, Breadcrumbs, type BreadcrumbsProps} from '@gravity-ui/uikit';
 
-import {EditableAsText, EditableAsTextProps} from '../EditableAsText/EditableAsText';
+import {EditableAsText, type EditableAsTextProps} from '../EditableAsText/EditableAsText';
 
 import './EditableBreadcrumbs.scss';
 

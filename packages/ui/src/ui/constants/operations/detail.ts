@@ -1,4 +1,4 @@
-import {ValueOf} from '../../../@types/types';
+import {type ValueOf} from '../../../@types/types';
 import createActionTypes, {createPrefix} from '../../constants/utils';
 
 const PREFIX = createPrefix('opertaions', 'details');

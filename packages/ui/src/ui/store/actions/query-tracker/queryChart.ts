@@ -1,8 +1,8 @@
 import debounce_ from 'lodash/debounce';
-import {RootState} from '../../reducers';
+import {type RootState} from '../../reducers';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
-import {ThunkAction} from 'redux-thunk';
-import {Action} from 'redux';
+import {type ThunkAction} from 'redux-thunk';
+import {type Action} from 'redux';
 import {
     getCurrentQueryACO,
     getQueryAnnotations,
@@ -11,9 +11,9 @@ import {
 } from '../../selectors/query-tracker/query';
 import {selectCurrentUserName} from '../../selectors/global/username';
 import {
-    Config,
-    FieldKey,
-    VisualizationState,
+    type Config,
+    type FieldKey,
+    type VisualizationState,
     defaultVisualization,
     setConfig,
     setFiled,
@@ -31,11 +31,11 @@ import {
     selectQueryResults,
 } from '../../selectors/query-tracker/queryChart';
 import {getPointValue} from '../../../pages/query-tracker/QueryResultsVisualization/preparers/getPointData';
-import type {ChartAxisType} from '@gravity-ui/chartkit/gravity-charts';
+import {type ChartAxisType} from '@gravity-ui/chartkit/gravity-charts';
 import cloneDeep_ from 'lodash/cloneDeep';
 import {loadQueryResult} from './queryResult';
 import {alterQueryChartConfig} from './api';
-import {AppDispatch} from '../../store.main';
+import {type AppDispatch} from '../../store.main';
 
 const DELAY = 2 * 1000;
 

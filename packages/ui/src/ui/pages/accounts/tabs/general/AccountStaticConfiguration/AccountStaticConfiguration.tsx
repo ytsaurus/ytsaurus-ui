@@ -2,13 +2,13 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {
-    AccountStaticConfigurationItem,
+    type AccountStaticConfigurationItem,
     getActiveAccount,
     getActiveAccountStaticConfiguration,
 } from '../../../../../store/selectors/accounts/accounts-ts';
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
 import {DataTableYT} from '../../../../../components/DataTableYT';
-import {Column} from '@gravity-ui/react-data-table';
+import {type Column} from '@gravity-ui/react-data-table';
 import hammer from '../../../../../common/hammer';
 import {setSettingsAccountsExpandStaticConfiguration} from '../../../../../store/actions/settings/settings';
 

@@ -4,12 +4,12 @@ import CancelHelper from '../../../utils/cancel-helper';
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {selectCurrentClusterConfig} from '../../../store/selectors/global';
-import {RawJob} from '../../../types/operations/job';
-import {RootState} from '../../../store/reducers';
-import {ThunkAction} from 'redux-thunk';
-import {YTError} from '../../../types';
-import {Action} from 'redux';
-import {ClusterConfig} from '../../../../shared/yt-types';
+import {type RawJob} from '../../../types/operations/job';
+import {type RootState} from '../../../store/reducers';
+import {type ThunkAction} from 'redux-thunk';
+import {type YTError} from '../../../types';
+import {type Action} from 'redux';
+import {type ClusterConfig} from '../../../../shared/yt-types';
 
 const requests = new CancelHelper();
 

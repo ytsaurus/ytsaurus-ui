@@ -1,7 +1,7 @@
-import React, {FC, useCallback, useEffect, useMemo} from 'react';
+import React, {type FC, useCallback, useEffect, useMemo} from 'react';
 import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
-import {MarkerSelectEvent, SelectEvent, Timeline} from '@gravity-ui/timeline';
+import {type MarkerSelectEvent, type SelectEvent, Timeline} from '@gravity-ui/timeline';
 import {
     selectActiveIncarnation,
     selectActiveJob,
@@ -10,7 +10,7 @@ import {
     selectSortedJobs,
 } from '../../../../../../store/selectors/operations/jobs-timeline';
 import {
-    Interval,
+    type Interval,
     setInterval,
     setSelectedIncarnation,
     setSelectedJob,
@@ -18,10 +18,10 @@ import {
 import {splitScreen} from '../../../../../../store/actions/global';
 import {EventsSidePanel} from '../EventsSidePanel';
 import {
-    JobLineEvent,
+    type JobLineEvent,
     JobLineRenderer,
 } from '../../../../../../components/TimelineBlock/renderer/JobLineRenderer';
-import {AllocationLineEvent} from '../../../../../../components/TimelineBlock/renderer/AllocationLineRenderer';
+import {type AllocationLineEvent} from '../../../../../../components/TimelineBlock/renderer/AllocationLineRenderer';
 import {EventTimelineTooltipContent} from '../EventsTimeline/EventTimelineTooltipContent';
 import {ROW_HEIGHT} from '../constants';
 import {TimelineBlock} from '../../../../../../components/TimelineBlock/TimelineBlock';
@@ -31,7 +31,7 @@ import {prepareJobEvents} from '../helpers/prepareJobEvents';
 import withSplit from '../../../../../../hocs/withSplit';
 import './OperationTimeline.scss';
 import {createTimelineConfig} from './createTimelineConfig';
-import {IncarnationMarker} from '../../../../../../components/TimelineBlock/renderer/IncarnationMarkerRenderer';
+import {type IncarnationMarker} from '../../../../../../components/TimelineBlock/renderer/IncarnationMarkerRenderer';
 import hammer from '../../../../../../common/hammer';
 import {getJobTrackId} from '../helpers/getJobTrackId';
 

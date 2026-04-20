@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import map_ from 'lodash/map';
 
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 // @ts-ignore
 import unipika from '../../../../../common/thor/unipika';
@@ -18,7 +18,7 @@ import {
     getColumnsPresetHash,
     getIsDynamic,
 } from '../../../../../store/selectors/navigation/content/table-ts';
-import {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 import {YTApiId} from '../../../../../rum/rum-wrap-api';
 import {makeTableRumId} from './table-rum-id';
 import {toaster} from '../../../../../utils/toaster';

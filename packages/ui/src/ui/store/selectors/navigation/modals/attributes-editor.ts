@@ -1,6 +1,6 @@
 import forEach_ from 'lodash/forEach';
 
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {createSelector} from 'reselect';
 import ypath from '../../../../common/thor/ypath';
 

@@ -4,10 +4,14 @@ import filter_ from 'lodash/filter';
 import forEach_ from 'lodash/forEach';
 import map_ from 'lodash/map';
 
-import type {EditableManyListsItemType} from '../../../../components/Dialog';
-import type {ResponsibleType, RoleConverted, Subject} from '../../../../utils/acl/acl-types';
-import type {PreparedRole} from '../../../../utils/acl';
-import {RoleListControlProps} from './RoleListControl';
+import {type EditableManyListsItemType} from '../../../../components/Dialog';
+import {
+    type ResponsibleType,
+    type RoleConverted,
+    type Subject,
+} from '../../../../utils/acl/acl-types';
+import {type PreparedRole} from '../../../../utils/acl';
+import {type RoleListControlProps} from './RoleListControl';
 
 import i18n from './i18n';
 

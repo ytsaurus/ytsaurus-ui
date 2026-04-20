@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect} from 'react';
+import React, {type FC, useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';

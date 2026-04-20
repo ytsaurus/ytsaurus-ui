@@ -1,6 +1,6 @@
 import {useHistory} from 'react-router-dom';
-import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
-import {Location, TransitionPromptHook} from 'history';
+import React, {type FC, useCallback, useEffect, useRef, useState} from 'react';
+import {type Location, type TransitionPromptHook} from 'history';
 import {YTDFDialog} from '../Dialog';
 
 type Props = {

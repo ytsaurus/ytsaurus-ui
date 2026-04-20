@@ -1,9 +1,9 @@
-import {Action, ThunkAction} from '@reduxjs/toolkit';
+import {type Action, type ThunkAction} from '@reduxjs/toolkit';
 import {rootApi} from '../../../../store/api';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
-import type {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {selectExternalDescription} from '../../../../store/selectors/navigation/description';
-import UIFactory, {ExternalAnnotationResponse} from '../../../../UIFactory';
+import UIFactory, {type ExternalAnnotationResponse} from '../../../../UIFactory';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 
 const descriptionQuery = async (args: {cluster: string; path: string}) => {

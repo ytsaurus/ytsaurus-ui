@@ -1,7 +1,7 @@
-import {ThunkAction} from 'redux-thunk';
-import {UnknownAction} from '@reduxjs/toolkit';
+import {type ThunkAction} from 'redux-thunk';
+import {type UnknownAction} from '@reduxjs/toolkit';
 
-import {RootState} from '../../../../reducers';
+import {type RootState} from '../../../../reducers';
 import {updateView} from '../..';
 
 import {wrapApiPromiseByToaster} from '../../../../../utils/utils';

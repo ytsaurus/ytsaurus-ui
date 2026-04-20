@@ -1,4 +1,4 @@
-import type {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 import {
     CONSUMER_PARTITIONS_LOAD_FAILURE,
@@ -6,9 +6,9 @@ import {
     CONSUMER_PARTITIONS_LOAD_SUCCESS,
 } from '../../../../../constants/navigation/tabs/consumer';
 import {YTApiId, ytApiV3Id} from '../../../../../rum/rum-wrap-api';
-import type {RootState} from '../../../../../store/reducers';
-import type {ConsumerPartitionsAction} from '../../../../../store/reducers/navigation/tabs/consumer/partitions';
-import type {YtConsumerPartition} from '../../../../../store/reducers/navigation/tabs/consumer/types';
+import {type RootState} from '../../../../../store/reducers';
+import {type ConsumerPartitionsAction} from '../../../../../store/reducers/navigation/tabs/consumer/partitions';
+import {type YtConsumerPartition} from '../../../../../store/reducers/navigation/tabs/consumer/types';
 import {getPath, getTransaction} from '../../../../../store/selectors/navigation';
 import {prepareRequest} from '../../../../../utils/navigation';
 

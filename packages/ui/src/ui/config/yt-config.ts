@@ -2,7 +2,7 @@ import forEach_ from 'lodash/forEach';
 import reduce_ from 'lodash/reduce';
 
 import {DEFAULT_GROUP} from '../constants/cluster-menu';
-import {ClusterConfig, YTConfig} from '../../shared/yt-types';
+import {type ClusterConfig, type YTConfig} from '../../shared/yt-types';
 
 export const YT = (window as any).YT as YTConfig;
 

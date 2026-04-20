@@ -2,14 +2,14 @@ import React from 'react';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {Flex, Label, Text} from '@gravity-ui/uikit';
 
-import {YTError} from '../../../../../../@types/types';
+import {type YTError} from '../../../../../../@types/types';
 import {Page} from '../../../../../../shared/constants/settings';
 
 import format from '../../../../../common/hammer/format';
 
 import {selectCluster} from '../../../../../store/selectors/global';
 import {selectOperation} from '../../../../../store/selectors/operations/operation';
-import type {Incarnation} from '../../../../../store/selectors/operations/incarnations';
+import {type Incarnation} from '../../../../../store/selectors/operations/incarnations';
 import {showErrorModal} from '../../../../../store/actions/actions';
 
 import {MetaTable} from '@ytsaurus/components';

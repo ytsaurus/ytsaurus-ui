@@ -4,12 +4,12 @@ import {selectCluster} from '../../../store/selectors/global';
 import {getSettingsData} from './settings-base';
 import {getClusterNS, makeGetSetting} from '../../../store/selectors/settings';
 import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
-import {AccountUsageViewType} from '../../../store/reducers/accounts/usage/accounts-usage-filters';
-import {AccountUsageDataItem} from '../../../store/reducers/accounts/usage/account-usage-types';
-import {ActiveJobTypesMap} from '../../../store/actions/settings/settings';
-import {RootState} from '../../../store/reducers';
+import {type AccountUsageViewType} from '../../../store/reducers/accounts/usage/accounts-usage-filters';
+import {type AccountUsageDataItem} from '../../../store/reducers/accounts/usage/account-usage-types';
+import {type ActiveJobTypesMap} from '../../../store/actions/settings/settings';
+import {type RootState} from '../../../store/reducers';
 import {NODE_TYPE} from '../../../../shared/constants/system';
-import {ValueOf} from '../../../types';
+import {type ValueOf} from '../../../types';
 
 export const getSettingsDataRaw = (state: RootState) => state.settings.data;
 

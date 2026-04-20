@@ -1,6 +1,6 @@
 import typeis from 'type-is';
 
-import {AppConfig} from '@gravity-ui/nodekit';
+import {type AppConfig} from '@gravity-ui/nodekit';
 
 const localModeConfig: Partial<AppConfig> = {
     ytAuthAllowInsecure: true,

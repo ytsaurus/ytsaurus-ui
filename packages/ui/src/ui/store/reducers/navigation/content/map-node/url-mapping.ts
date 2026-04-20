@@ -4,7 +4,7 @@ import {initialState as mapNodeInitialState} from '../../../../../store/reducers
 import {NAVIGATION_MAP_NODE_TABLE_ID} from '../../../../../constants/navigation';
 import {initialState as tableSortState} from '../../../../../store/reducers/tables';
 import {parseSortState} from '../../../../../utils';
-import {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 import {updateIfChanged} from '../../../../../utils/utils';
 
 export const mapNodeParams = {

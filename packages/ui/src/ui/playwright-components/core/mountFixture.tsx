@@ -1,5 +1,5 @@
 import React from 'react';
-import type {MountFixture, PlaywrightFixture} from './types';
+import {type MountFixture, type PlaywrightFixture} from './types';
 
 export const mountFixture: PlaywrightFixture<MountFixture> = async ({mount: baseMount}, use) => {
     const mount: MountFixture = async (component, options) => {

@@ -6,7 +6,7 @@ import {
     setBundleQuota,
     setBunndleAttributes,
 } from '../../../../store/actions/chaos_cell_bundles/tablet-cell-bundle-editor';
-import type {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {selectChaosCellBundleEditorData} from '../../../../store/selectors/chaos_cell_bundles/tablet-cell-bundle-editor';
 
 const mapStateToProps = (state: RootState) => {

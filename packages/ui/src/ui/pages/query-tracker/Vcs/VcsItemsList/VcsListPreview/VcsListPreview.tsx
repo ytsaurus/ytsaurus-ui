@@ -1,7 +1,7 @@
-import React, {FC, useRef} from 'react';
+import React, {type FC, useRef} from 'react';
 import MonacoEditor from '../../../../../components/MonacoEditor';
-import * as monaco from 'monaco-editor';
-import {VcsState} from '../../../../../store/reducers/query-tracker/vcsSlice';
+import type * as monaco from 'monaco-editor';
+import {type VcsState} from '../../../../../store/reducers/query-tracker/vcsSlice';
 import './VcsListPreview.scss';
 import cn from 'bem-cn-lite';
 import FileTextIcon from '@gravity-ui/icons/svgs/file-text.svg';

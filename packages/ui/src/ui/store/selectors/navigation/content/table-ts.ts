@@ -4,7 +4,7 @@ import ypath from '../../../../common/thor/ypath';
 
 import {createSelector} from 'reselect';
 
-import type {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {calculateLoadingStatus} from '../../../../utils/utils';
 import {CypressNodeTypes} from '../../../../utils/cypress-attributes';
 import {getAttributes} from '../index';

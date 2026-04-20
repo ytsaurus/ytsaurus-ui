@@ -3,7 +3,7 @@ import React from 'react';
 import format from '../../common/hammer/format';
 
 import {YTChartKitLazy} from '.';
-import {ChartData, PieSeriesData} from '@gravity-ui/chartkit/gravity-charts';
+import {type ChartData, type PieSeriesData} from '@gravity-ui/chartkit/gravity-charts';
 import {useMemoizedArgsWithIncarnaction} from './hack';
 
 type YTChartKitPieProps = {

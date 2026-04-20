@@ -1,4 +1,4 @@
-import {AnalyticsService} from './metrics';
+import {type AnalyticsService} from './metrics';
 import {YT} from '../../config/yt-config';
 
 interface Counter {

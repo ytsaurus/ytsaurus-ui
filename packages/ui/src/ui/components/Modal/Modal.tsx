@@ -7,7 +7,7 @@ import Icon from '../Icon/Icon';
 import withHandledScrollBar from '../../hocs/components/Modal/withHandledScrollBar';
 
 import './Modal.scss';
-import Button, {ButtonProps} from '../Button/Button';
+import Button, {type ButtonProps} from '../Button/Button';
 
 import i18n from './i18n';
 

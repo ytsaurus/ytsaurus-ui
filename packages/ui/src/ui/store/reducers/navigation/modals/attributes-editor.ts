@@ -1,11 +1,11 @@
-import {ActionD, YTError} from '../../../../types';
+import {type ActionD, type YTError} from '../../../../types';
 import {
-    NAVIGATION_ATTRIBUTES_EDITOR_ERROR,
-    NAVIGATION_ATTRIBUTES_EDITOR_PARTIAL,
-    NAVIGATION_ATTRIBUTES_EDITOR_REQUEST,
-    NAVIGATION_ATTRIBUTES_EDITOR_SUCCESS,
+    type NAVIGATION_ATTRIBUTES_EDITOR_ERROR,
+    type NAVIGATION_ATTRIBUTES_EDITOR_PARTIAL,
+    type NAVIGATION_ATTRIBUTES_EDITOR_REQUEST,
+    type NAVIGATION_ATTRIBUTES_EDITOR_SUCCESS,
 } from '../../../../constants/navigation/modals/attributes-editor';
-import {Action} from 'redux';
+import {type Action} from 'redux';
 
 export interface NavAttrEditorState {
     loading: boolean;

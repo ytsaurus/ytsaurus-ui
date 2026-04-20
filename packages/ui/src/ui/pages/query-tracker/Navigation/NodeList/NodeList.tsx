@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useRef, useState} from 'react';
+import React, {type FC, useCallback, useRef, useState} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
     selectLoading,
@@ -21,7 +21,7 @@ import {useMonaco} from '../../hooks/useMonaco';
 import {insertTextWhereCursor} from '../helpers/insertTextWhereCursor';
 import {getQueryEngine, isQueryDraftEditted} from '../../../../store/selectors/query-tracker/query';
 import {makePathByQueryEngine} from '../helpers/makePathByQueryEngine';
-import {QueryEngine} from '../../../../../shared/constants/engines';
+import {type QueryEngine} from '../../../../../shared/constants/engines';
 import {getNavigationUrl} from '../helpers/getNavigationUrl';
 import {createTableSelect} from '../helpers/createTableSelect';
 import {getQueryResultGlobalSettings} from '../../../../store/selectors/query-tracker/queryResult';

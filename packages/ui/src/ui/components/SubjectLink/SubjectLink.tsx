@@ -1,4 +1,4 @@
-import {SubjectGroupType} from '../../utils/acl';
+import {type SubjectGroupType} from '../../utils/acl';
 import UIFactory from '../../UIFactory';
 
 export type SubjectCardProps = {

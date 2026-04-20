@@ -1,5 +1,5 @@
-import {UISettings} from '../ui-settings';
-import {ClusterUiConfig} from '../yt-types';
+import {type UISettings} from '../ui-settings';
+import {type ClusterUiConfig} from '../yt-types';
 
 export function mergeUiSettings({
     uiSettings,

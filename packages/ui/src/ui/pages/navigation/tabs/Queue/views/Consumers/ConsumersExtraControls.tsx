@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button} from '@gravity-ui/uikit';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 import {useDispatch} from '../../../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
@@ -18,7 +18,7 @@ import {
     changeQueueRateMode,
     changeQueueTimeWindow,
 } from '../../../../../../store/actions/navigation/tabs/queue/filters';
-import type {RootState} from '../../../../../../store/reducers';
+import {type RootState} from '../../../../../../store/reducers';
 import {
     getQueueConsumerName,
     getQueueOwner,

@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
-import {Column} from '@gravity-ui/react-data-table';
+import {type Column} from '@gravity-ui/react-data-table';
 
 import CollapsibleSection from '../../../components/CollapsibleSection/CollapsibleSection';
 import {getIsRoot, getTree} from '../../../store/selectors/scheduling/scheduling';
@@ -16,7 +16,7 @@ import {getSettingsSchedulingExpandStaticConfiguration} from '../../../store/sel
 import {setSettingsSchedulingExpandStaticConfiguration} from '../../../store/actions/settings/settings';
 import UIFactory from '../../../UIFactory';
 import {selectCluster} from '../../../store/selectors/global';
-import {ArrayElement} from '../../../types';
+import {type ArrayElement} from '../../../types';
 
 const block = cn('scheduling-static-configuration');
 

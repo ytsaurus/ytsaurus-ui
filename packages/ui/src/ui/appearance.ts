@@ -1,4 +1,4 @@
-import {ClusterTheme} from '../shared/yt-types';
+import {type ClusterTheme} from '../shared/yt-types';
 import {YT} from './config/yt-config';
 import UIFactory from './UIFactory';
 

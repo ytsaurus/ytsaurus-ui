@@ -3,10 +3,10 @@ import {
     NODE_LOAD_REQUEST,
     NODE_LOAD_SUCCESS,
 } from '../../../../constants/components/nodes/node';
-import type {Action} from 'redux';
+import {type Action} from 'redux';
 import {Node} from '../../../../store/reducers/components/nodes/nodes/node';
 import {mergeStateOnClusterChange} from '../../../../store/reducers/utils';
-import type {ActionD, YTError} from '../../../../types';
+import {type ActionD, type YTError} from '../../../../types';
 
 export interface NodeEphemeralState {
     loading: boolean;

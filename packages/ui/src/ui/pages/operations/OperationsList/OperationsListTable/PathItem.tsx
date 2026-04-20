@@ -1,12 +1,12 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import {CypressNodeRaw} from '../../../../../shared/yt-types';
+import {type CypressNodeRaw} from '../../../../../shared/yt-types';
 
 import ypath from '../../../../common/thor/ypath';
 import format from '../../../../common/hammer/format';
 import OperationIOLink, {
-    OperationIOLinkProps,
+    type OperationIOLinkProps,
 } from '../../../../pages/operations/OperationIOLink/OperationIOLink';
 import {isTransactionAlive, isValidTransactionId} from '../../../../utils/operations/detail';
 

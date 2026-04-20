@@ -1,9 +1,9 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {
-    SupportedFeaturesAction,
-    SupportedFeaturesState,
+    type SupportedFeaturesAction,
+    type SupportedFeaturesState,
 } from '../../../store/reducers/global/supported-features';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {ytApiV3} from '../../../rum/rum-wrap-api';

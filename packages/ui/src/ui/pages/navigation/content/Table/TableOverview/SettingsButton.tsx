@@ -1,5 +1,5 @@
-import React, {ComponentProps, VFC} from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import React, {type ComponentProps, type VFC} from 'react';
+import {type ConnectedProps, connect} from 'react-redux';
 import type cn from 'bem-cn-lite';
 import {Checkbox} from '@gravity-ui/uikit';
 
@@ -19,7 +19,7 @@ import {
 import {getCellSize, getPageSize} from '../../../../../store/selectors/navigation/content/table-ts';
 import {getSettingTableDisplayRawStrings} from '../../../../../store/selectors/settings';
 import {setTableDisplayRawStrings} from '../../../../../store/actions/settings/settings';
-import type {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 
 interface Props extends ConnectedProps<typeof connector> {
     block: ReturnType<typeof cn>;

@@ -1,5 +1,5 @@
 import {USE_CACHE, USE_MAX_SIZE} from '../../shared/constants/yt-api';
-import {BatchSubRequest} from '../../shared/yt-types';
+import {type BatchSubRequest} from '../../shared/yt-types';
 
 export function makeGet(
     path: string,

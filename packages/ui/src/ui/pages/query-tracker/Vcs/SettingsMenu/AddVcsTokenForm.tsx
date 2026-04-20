@@ -1,5 +1,5 @@
-import React, {FC, useEffect, useMemo, useState} from 'react';
-import {Item, SelectSingle} from '../../../../components/Select/Select';
+import React, {type FC, useEffect, useMemo, useState} from 'react';
+import {type Item, SelectSingle} from '../../../../components/Select/Select';
 import {Button, TextInput} from '@gravity-ui/uikit';
 import {getVcsTokensAvailability, saveToken} from '../../../../store/actions/query-tracker/vcs';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';

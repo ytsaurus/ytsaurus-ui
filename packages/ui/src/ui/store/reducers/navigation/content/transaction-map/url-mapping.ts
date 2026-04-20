@@ -3,7 +3,7 @@ import {initialState as tableSortState} from '../../../../../store/reducers/tabl
 
 import {NAVIGATION_TRANSACTION_MAP_TABLE_ID} from '../../../../../constants/navigation/content/transaction-map';
 import {parseSortState} from '../../../../../utils';
-import {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 import {produce} from 'immer';
 import {updateIfChanged} from '../../../../../utils/utils';
 

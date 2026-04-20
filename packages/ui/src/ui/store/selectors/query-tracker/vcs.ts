@@ -1,4 +1,4 @@
-import {RootState} from '../../reducers';
+import {type RootState} from '../../reducers';
 import {createSelector} from 'reselect';
 export const selectVcsConfig = (state: RootState) => state.queryTracker.vcs.vcsConfig || [];
 export const selectIsVcsVisible = (state: RootState) =>

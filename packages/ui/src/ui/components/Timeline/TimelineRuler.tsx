@@ -1,10 +1,10 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 
 import {Button} from '@gravity-ui/uikit';
 
 import cn from 'bem-cn-lite';
-import {RangeDateSelection, RangeDateSelectionProps} from '@gravity-ui/date-components';
-import {DateTime, dateTimeParse} from '../../utils/date-utils';
+import {RangeDateSelection, type RangeDateSelectionProps} from '@gravity-ui/date-components';
+import {type DateTime, dateTimeParse} from '../../utils/date-utils';
 
 import i18n from './i18n';
 

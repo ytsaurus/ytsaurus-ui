@@ -1,11 +1,14 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {PrometheusDashboardType, PrometheusWidgetId} from '../../../../shared/prometheus/types';
+import {
+    type PrometheusDashboardType,
+    type PrometheusWidgetId,
+} from '../../../../shared/prometheus/types';
 
 import {prometheusDashboardSlice} from '../../../store/reducers/prometheusDashboard/prometheusDashboard';
 import {usePrometheusDashbordTimeRange} from '../../../store/reducers/prometheusDashboard/prometheusDashboard-hooks';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 
 type PrometheusDashboardContextData = {
     expandedId?: PrometheusWidgetId;

@@ -3,12 +3,12 @@ import {ClipboardButton, Flex, Text} from '@gravity-ui/uikit';
 
 import Link from '../../../../../../components/Link/Link';
 import Icon from '../../../../../../components/Icon/Icon';
-import {Column, Tooltip} from '@ytsaurus/components';
+import {type Column, Tooltip} from '@ytsaurus/components';
 import {DataTableYT} from '../../../../../../components/DataTableYT';
 import {formatTimeDuration} from '../../../../../../components/TimeDuration/TimeDuration';
 
 import hammer from '../../../../../../common/hammer';
-import {QueueExportConfig} from '../../../../../../types/navigation/queue/queue';
+import {type QueueExportConfig} from '../../../../../../types/navigation/queue/queue';
 import {makeNavigationLink} from '../../../../../../utils/app-url';
 
 import {ExportsEdit} from './ExportsEdit/ExportsEdit';

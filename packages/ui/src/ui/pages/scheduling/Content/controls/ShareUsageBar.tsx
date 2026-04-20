@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import format from '../../../../common/hammer/format';
 import {calcProgressProps} from '../../../../utils/utils';
-import {Progress, ProgressProps} from '@gravity-ui/uikit';
+import {Progress, type ProgressProps} from '@gravity-ui/uikit';
 import {Tooltip} from '@ytsaurus/components';
 
 import './ShareUsageBar.scss';

@@ -1,7 +1,7 @@
 import filter_ from 'lodash/filter';
 
 import {createSelector} from 'reselect';
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {calculateLoadingStatus} from '../../../../utils/utils';
 
 const getLocks = (state: RootState) => state.navigation.tabs.locks.locks;

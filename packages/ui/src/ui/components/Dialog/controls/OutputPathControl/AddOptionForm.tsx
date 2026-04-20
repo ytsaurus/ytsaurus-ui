@@ -1,4 +1,4 @@
-import React, {FC, useMemo, useRef} from 'react';
+import React, {type FC, useMemo, useRef} from 'react';
 import {Button, Icon, Popup} from '@gravity-ui/uikit';
 import PlusIcon from '@gravity-ui/icons/svgs/plus.svg';
 import {useToggle} from 'react-use';
@@ -7,8 +7,8 @@ import cn from 'bem-cn-lite';
 import {FormOptionItem} from './FormOptionItem';
 import {getTooltipByType} from './getTooltipByType';
 import {
-    PathAttribute,
-    TableSortMergeModal,
+    type PathAttribute,
+    type TableSortMergeModal,
 } from '../../../../store/reducers/navigation/modals/tableMergeSortModalSlice';
 
 const popup = cn('add-option-form');

@@ -1,5 +1,5 @@
-import type {Request, Response} from 'express';
-import {AppMiddleware} from '@gravity-ui/expresskit';
+import {type Request, type Response} from 'express';
+import {type AppMiddleware} from '@gravity-ui/expresskit';
 import {YT_CYPRESS_COOKIE_NAME, YT_UI_CLUSTER_HEADER_NAME} from '../../shared/constants';
 import {makeAuthClusterCookieName} from '../utils';
 

@@ -1,5 +1,5 @@
 import {LINK_TO_MODAL_PARTIAL} from '../../../../constants/navigation/modals/index';
-import {ActionD} from '../../../../types';
+import {type ActionD} from '../../../../types';
 
 export interface LinkToState {
     visible: boolean;

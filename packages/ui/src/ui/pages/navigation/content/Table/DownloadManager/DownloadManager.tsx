@@ -1,5 +1,5 @@
 import React from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 import unipika from '../../../../../common/thor/unipika';
 import {compose} from 'redux';
 import cn from 'bem-cn-lite';
@@ -29,7 +29,7 @@ import {getRowsPerTablePage, getShowDecoded} from '../../../../../store/selector
 import {getSchema} from '../../../../../store/selectors/navigation/tabs/schema';
 import {getPath, getTransaction} from '../../../../../store/selectors/navigation';
 import {selectCluster, selectCurrentClusterConfig} from '../../../../../store/selectors/global';
-import withVisible, {WithVisibleProps} from '../../../../../hocs/withVisible';
+import withVisible, {type WithVisibleProps} from '../../../../../hocs/withVisible';
 import {
     getAllColumns,
     getOffsetValue,
@@ -44,10 +44,10 @@ import {docsUrl, getExportTableBaseUrl} from '../../../../../config';
 import SeparatorInput, {prepareSeparatorValue} from './SeparatorInput';
 import UIFactory from '../../../../../UIFactory';
 import {makeDirectDownloadPath} from '../../../../../utils/navigation';
-import {RootState} from '../../../../../store/reducers';
-import {FIX_MY_TYPE} from '../../../../../types';
+import {type RootState} from '../../../../../store/reducers';
+import {type FIX_MY_TYPE} from '../../../../../types';
 import {ConfirmButton} from './ConfirmButton';
-import {ThunkDispatch} from 'redux-thunk';
+import {type ThunkDispatch} from 'redux-thunk';
 
 const block = cn('table-download-manager');
 const messageBlock = cn('elements-message');

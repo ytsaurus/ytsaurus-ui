@@ -20,15 +20,15 @@ import {
     RESOURCES_USAGE_PREFIX,
     TOTAL_CHILDREN_RESOURCE_LIMIT,
 } from '../../../constants/accounts';
-import {AccountQuotaParams, setAccountQuota} from '../../../store/actions/accounts/editor-ts';
+import {type AccountQuotaParams, setAccountQuota} from '../../../store/actions/accounts/editor-ts';
 import {
     ACCOUNT_RESOURCE_TYPES_DESCRIPTION,
-    AccountResourceNameType,
+    type AccountResourceNameType,
     ROOT_ACCOUNT_NAME,
 } from '../../../constants/accounts/accounts';
 import {ProgressStackByTreeItem} from '../tabs/general/ProgressStack';
 import {
-    AccountsTree,
+    type AccountsTree,
     getAccountsTree,
     getEditableAccountQuotaSources,
 } from '../../../store/selectors/accounts/accounts-ts';

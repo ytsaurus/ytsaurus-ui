@@ -1,7 +1,7 @@
-import type {Request} from 'express';
+import {type Request} from 'express';
 
-import {YTCoreConfig} from '../../@types/core';
-import {ClusterConfig} from '../../shared/yt-types';
+import {type YTCoreConfig} from '../../@types/core';
+import {type ClusterConfig} from '../../shared/yt-types';
 import {getClusterConfig} from '../components/utils';
 import {getApp} from '../ServerFactory';
 

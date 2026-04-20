@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Button, Flex, Icon, TextArea} from '@gravity-ui/uikit';
 import ArrowUpIcon from '@gravity-ui/icons/svgs/arrow-up.svg';
 import './ChatInput.scss';

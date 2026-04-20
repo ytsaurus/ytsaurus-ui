@@ -1,6 +1,6 @@
 import {HttpResponse, http} from 'msw';
-import {DashboardBundlesResponse} from '../../../../../../store/api/dashboard2/services/services';
-import {BatchResultsItem} from '../../../../../../../shared/yt-types';
+import {type DashboardBundlesResponse} from '../../../../../../store/api/dashboard2/services/services';
+import {type BatchResultsItem} from '../../../../../../../shared/yt-types';
 
 export const bundlesResponse: Array<BatchResultsItem<DashboardBundlesResponse>> = [
     {

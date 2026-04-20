@@ -1,4 +1,4 @@
-import {AppRouteDescription, AppRoutes, AuthPolicy} from '@gravity-ui/expresskit';
+import {type AppRouteDescription, type AppRoutes, AuthPolicy} from '@gravity-ui/expresskit';
 import {clusterParams} from './controllers/cluster-params';
 import {ytTvmApiHandler} from './controllers/yt-api';
 import {handleRemoteCopy} from './controllers/remote-copy';

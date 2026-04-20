@@ -7,7 +7,7 @@ import {ClipboardButton} from '@ytsaurus/components';
 import Filter from '../../../components/Filter/Filter';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import Suggest from '../../../components/Suggest/Suggest';
-import type {TabletsPartialAction} from '../../../store/reducers/tablet_cell_bundles';
+import {type TabletsPartialAction} from '../../../store/reducers/tablet_cell_bundles';
 import clipboardList from '../../../assets/img/svg/icons/clipboard-list.svg';
 
 import './CellsInstruments.scss';

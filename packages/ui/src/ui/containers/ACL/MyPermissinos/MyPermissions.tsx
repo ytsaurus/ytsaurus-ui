@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import {Flex, Icon} from '@gravity-ui/uikit';
 import checkSvg from '@gravity-ui/icons/svgs/circle-check.svg';
 import xMarkSvg from '@gravity-ui/icons/svgs/circle-xmark.svg';
-import {ACLReduxProps} from '../ACL-connect-helpers';
+import {type ACLReduxProps} from '../ACL-connect-helpers';
 
 import './MyPermissions.scss';
 import {useAvailablePermissions} from '../hooks/use-available-permissions';

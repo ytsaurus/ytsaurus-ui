@@ -17,11 +17,11 @@ import {
     getSchedulingTreeMainResource,
 } from '../../../../../store/selectors/scheduling/scheduling';
 import {
-    PoolStaticConfigurationItem,
+    type PoolStaticConfigurationItem,
     getCurrentPoolGuarantees,
 } from '../../../../../store/selectors/scheduling/scheduling-ts';
 import {addProgressStackSpacers} from '../../../../../utils/progress';
-import {PoolData} from '../../../../../utils/scheduling/pool-child';
+import {type PoolData} from '../../../../../utils/scheduling/pool-child';
 import {calcProgressProps2} from '../../../../../utils/utils';
 
 import i18n from './i18n';

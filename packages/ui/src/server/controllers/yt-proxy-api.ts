@@ -2,7 +2,7 @@ import isEmpty_ from 'lodash/isEmpty';
 import axios from 'axios';
 import qs from 'qs';
 
-import type {Request, Response} from 'express';
+import {type Request, type Response} from 'express';
 import {UNEXPECTED_PIPE_AXIOS_RESPONSE, pipeAxiosResponse, sendAndLogError} from '../utils';
 import {getUserYTApiSetup} from '../components/requestsSetup';
 

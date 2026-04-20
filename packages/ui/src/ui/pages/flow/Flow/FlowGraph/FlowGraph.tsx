@@ -1,17 +1,23 @@
-import {ECameraScaleLevel, TAnchor, TBlock, TBlockId, TConnection} from '@gravity-ui/graph';
+import {
+    ECameraScaleLevel,
+    type TAnchor,
+    type TBlock,
+    type TBlockId,
+    type TConnection,
+} from '@gravity-ui/graph';
 import ClockIcon from '@gravity-ui/icons/svgs/clock.svg';
 import FileCodeIcon from '@gravity-ui/icons/svgs/file-code.svg';
 import ReceiptIcon from '@gravity-ui/icons/svgs/receipt.svg';
 import {Flex} from '@gravity-ui/uikit';
-import {SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
+import {type SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 import cn from 'bem-cn-lite';
 import partition_ from 'lodash/partition';
 import React from 'react';
 import {
-    FlowComputationStreamType,
-    FlowComputationType,
-    FlowSink,
-    FlowStream,
+    type FlowComputationStreamType,
+    type FlowComputationType,
+    type FlowSink,
+    type FlowStream,
 } from '../../../../../shared/yt-types';
 import Loader from '../../../../components/Loader/Loader';
 import {NoContent} from '../../../../components/NoContent';
@@ -19,8 +25,8 @@ import Select from '../../../../components/Select/Select';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {
     YTGraph,
-    YTGraphBlock,
-    YTGraphData,
+    type YTGraphBlock,
+    type YTGraphData,
     useConfig,
     useElkLayout,
     useGraphScale,

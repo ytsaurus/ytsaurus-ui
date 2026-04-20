@@ -1,4 +1,4 @@
-import type {Request} from '../../@types/core';
+import {type Request} from '../../@types/core';
 import {mergeUiSettings} from '../../shared/utils/merge-ui-settings';
 import {getPreloadedClusterUiConfig} from '../components/cluster-params';
 import {type UISettingsBaseUrlKeys, getBaseUrlDetails} from '../../shared/utils/base-url';

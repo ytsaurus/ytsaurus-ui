@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import {RadioGroup, RadioGroupProps} from '@gravity-ui/uikit';
+import {RadioGroup, type RadioGroupProps} from '@gravity-ui/uikit';
 
 import './Radiobox.scss';
 

@@ -10,8 +10,8 @@ import format from '../common/hammer/format';
 import unipika from '../common/thor/unipika';
 import qs from 'qs';
 import Cookies from 'js-cookie';
-import type {UnipikaSettings} from '../components/Yson/StructuredYson/StructuredYsonTypes';
-import type {ClusterConfig, YTConfig} from '../../shared/yt-types';
+import {type UnipikaSettings} from '../components/Yson/StructuredYson/StructuredYsonTypes';
+import {type ClusterConfig, type YTConfig} from '../../shared/yt-types';
 import {customEncodeURIComponent} from './url-mapping';
 
 export type FlagType = 'false' | 'FALSE' | false | 'true' | 'TRUE' | true;

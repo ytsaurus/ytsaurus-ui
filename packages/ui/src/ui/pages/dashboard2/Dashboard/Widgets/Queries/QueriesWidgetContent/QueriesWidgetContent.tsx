@@ -2,13 +2,13 @@ import React from 'react';
 import {useSelector} from '../../../../../../store/redux-hooks';
 import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
-import {RootState} from '../../../../../../store/reducers';
+import {type RootState} from '../../../../../../store/reducers';
 import {selectQueryFilterState} from '../../../../../../store/selectors/dashboard2/queries';
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
 import {WidgetText} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetText/WidgetText';
 
-import {QueryStatus} from '../../../../../../types/query-tracker';
+import {type QueryStatus} from '../../../../../../types/query-tracker';
 
 import {General} from './cells/General';
 import {Engine} from './cells/Engine';
@@ -16,7 +16,7 @@ import {Duration} from './cells/Duration';
 import {StartTime} from './cells/StartTime';
 
 import {useQueriesWidget} from '../hooks/use-queries-widget';
-import type {QueriesWidgetProps} from '../types';
+import {type QueriesWidgetProps} from '../types';
 
 import i18n from '../i18n';
 

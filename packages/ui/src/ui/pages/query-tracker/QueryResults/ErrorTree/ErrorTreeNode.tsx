@@ -1,5 +1,5 @@
-import React, {FC, useCallback} from 'react';
-import {ErrorPosition, QueryError} from '../../../../types/query-tracker/api';
+import React, {type FC, useCallback} from 'react';
+import {type ErrorPosition, type QueryError} from '../../../../types/query-tracker/api';
 import {useToggle} from 'react-use';
 import {Button, Icon} from '@gravity-ui/uikit';
 import showParentIcon from '@gravity-ui/icons/svgs/arrow-up.svg';

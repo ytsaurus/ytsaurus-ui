@@ -1,5 +1,5 @@
-import {Action} from 'redux';
-import {ActionD, YTError} from '../../../../types';
+import {type Action} from 'redux';
+import {type ActionD, type YTError} from '../../../../types';
 import {
     LOAD_REPLICAS_CANCELLED,
     LOAD_REPLICAS_FAILURE,

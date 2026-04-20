@@ -1,6 +1,6 @@
 import React from 'react';
 import block from 'bem-cn-lite';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 import {useSelector} from '../../../store/redux-hooks';
 
 import reduce_ from 'lodash/reduce';
@@ -22,7 +22,7 @@ import {
     getActiveAccount,
 } from '../../../store/selectors/accounts/accounts-ts';
 import {getLastVisitedTabs} from '../../../store/selectors/settings';
-import {TabSettings, makeTabProps} from '../../../utils';
+import {type TabSettings, makeTabProps} from '../../../utils';
 
 import AccountsGeneralTab from '../tabs/general/AccountsGeneralTab';
 import AccountStatisticTab from '../tabs/statistic/AccountStatisticTab';
@@ -34,7 +34,7 @@ import {useRumMeasureStop} from '../../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 import {selectCluster} from '../../../store/selectors/global';
 import AccountsUpdater from './AccountsUpdater';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 
 import './Accounts.scss';
 import UIFactory from '../../../UIFactory';

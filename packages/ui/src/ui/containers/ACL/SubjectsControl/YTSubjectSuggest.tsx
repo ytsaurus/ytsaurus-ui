@@ -6,11 +6,11 @@ import {selectAllGroupNames, selectAllUserNames} from '../../../store/selectors/
 import Select from '../../../components/Select/Select';
 import {SubjectNameLazy} from '../../../components/SubjectLink/lazy';
 import {useAllUserNamesFiltered, useGroupsLoaded} from '../../../hooks/global';
-import {SubjectsControlProps} from './SubjectsControl';
+import {type SubjectsControlProps} from './SubjectsControl';
 
 import './YTSubjectSuggest.scss';
 import LabelsGroup from '../../../components/LabelsGroup/LabelsGroup';
-import {ResponsibleType} from '../../../utils/acl/acl-types';
+import {type ResponsibleType} from '../../../utils/acl/acl-types';
 import i18n from './i18n';
 
 const block = cn('yt-subject-suggest');

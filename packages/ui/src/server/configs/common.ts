@@ -1,7 +1,7 @@
 import typeis from 'type-is';
 
 import {AuthPolicy} from '@gravity-ui/expresskit';
-import {AppConfig} from '@gravity-ui/nodekit';
+import {type AppConfig} from '@gravity-ui/nodekit';
 import {applyAppEnvToConfig} from '../utils/configs/apply-app-env-to-config';
 
 const path = require('path');

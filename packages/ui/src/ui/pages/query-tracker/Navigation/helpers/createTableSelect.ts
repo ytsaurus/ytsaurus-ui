@@ -1,9 +1,9 @@
-import {NavigationTableSchema} from '../../../../store/reducers/query-tracker/queryNavigationSlice';
+import {type NavigationTableSchema} from '../../../../store/reducers/query-tracker/queryNavigationSlice';
 import {loadTableAttributes} from '../api/loadTableAttributes';
 import ypath from '../../../../common/thor/ypath';
-import {QueryEngine} from '../../../../../shared/constants/engines';
+import {type QueryEngine} from '../../../../../shared/constants/engines';
 import {makePathByQueryEngine} from './makePathByQueryEngine';
-import {ClusterConfig} from '../../../../../shared/yt-types';
+import {type ClusterConfig} from '../../../../../shared/yt-types';
 
 type Props = {
     clusterConfig: ClusterConfig;

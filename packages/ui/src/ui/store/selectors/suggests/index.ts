@@ -1,4 +1,4 @@
-import {RootState} from '../../reducers';
+import {type RootState} from '../../reducers';
 
 export const selectTabletCellBundlesSuggests = (state: RootState) =>
     state.suggests.tabletCellBundles.items;

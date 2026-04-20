@@ -1,7 +1,7 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Flex, List, Text} from '@gravity-ui/uikit';
-import {UseTimelineDataResult} from '../useTimelineData';
-import {RowType} from '../utils';
+import {type UseTimelineDataResult} from '../useTimelineData';
+import {type RowType} from '../utils';
 import {StatusCell} from './StatusCell';
 import {NameCell} from './NameCell';
 import {ScaleButton} from './ScaleButton';

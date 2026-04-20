@@ -1,4 +1,4 @@
-import React, {FC, useRef} from 'react';
+import React, {type FC, useRef} from 'react';
 import {useSelector} from '../../../../../../store/redux-hooks';
 import {
     selectActiveJob,

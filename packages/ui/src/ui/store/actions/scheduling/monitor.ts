@@ -1,6 +1,6 @@
 import {getSchedulingMonitorChartStates} from '../../selectors/scheduling/monitor';
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../reducers';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../reducers';
 import {SCHEDULING_DATA_PARTITION} from '../../../constants/scheduling';
 
 type SchedulingReducerAction = ThunkAction<any, RootState, any, any>;

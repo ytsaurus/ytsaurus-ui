@@ -1,9 +1,9 @@
-import React, {FC, useMemo} from 'react';
+import React, {type FC, useMemo} from 'react';
 import {
     QueriesListAuthorFilter,
-    QueriesListFilter,
+    type QueriesListFilter,
 } from '../../../../../types/query-tracker/queryList';
-import {ControlGroupOption, SegmentedRadioGroup} from '@gravity-ui/uikit';
+import {type ControlGroupOption, SegmentedRadioGroup} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {getQueriesFilters} from '../../../../../store/selectors/query-tracker/queriesList';
 import {applyFilter} from '../../../../../store/actions/query-tracker/queriesList';

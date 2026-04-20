@@ -1,6 +1,6 @@
 import React from 'react';
 import {compose} from 'redux';
-import axios, {AxiosProgressEvent} from 'axios';
+import axios, {type AxiosProgressEvent} from 'axios';
 import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
@@ -10,15 +10,15 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import format from '../../../../../common/hammer/format';
 
-import withVisible, {WithVisibleProps} from '../../../../../hocs/withVisible';
+import withVisible, {type WithVisibleProps} from '../../../../../hocs/withVisible';
 import Button from '../../../../../components/Button/Button';
 import Icon from '../../../../../components/Icon/Icon';
 import Modal from '../../../../../components/Modal/Modal';
 
 import {getPath} from '../../../../../store/selectors/navigation';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 import {YTErrorBlock} from '../../../../../components/Block/Block';
-import {DialogField, YTDFDialog} from '../../../../../components/Dialog';
+import {type DialogField, YTDFDialog} from '../../../../../components/Dialog';
 
 import hammer from '../../../../../common/hammer';
 
@@ -26,7 +26,7 @@ import './UploadManager.scss';
 import {updateView} from '../../../../../store/actions/navigation';
 import {getSchema} from '../../../../../store/selectors/navigation/tabs/schema';
 import {selectCluster, selectCurrentClusterConfig} from '../../../../../store/selectors/global';
-import {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 import {getXsrfCookieName} from '../../../../../utils';
 import {docsUrl, getConfigUploadTable} from '../../../../../config';
 import HelpLink from '../../../../../components/HelpLink/HelpLink';

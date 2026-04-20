@@ -1,7 +1,7 @@
-import {AxiosProgressEvent} from 'axios';
+import {type AxiosProgressEvent} from 'axios';
 
 import {YT} from '../../config/yt-config';
-import CancelHelper from '../../utils/cancel-helper';
+import type CancelHelper from '../../utils/cancel-helper';
 import {ytApiV3} from '../../rum/rum-wrap-api';
 
 interface StartUploadProps {

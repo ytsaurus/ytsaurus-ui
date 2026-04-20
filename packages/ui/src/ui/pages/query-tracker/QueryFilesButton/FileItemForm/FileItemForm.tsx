@@ -1,10 +1,17 @@
-import React, {ChangeEvent, FC, KeyboardEvent, useCallback, useRef, useState} from 'react';
+import React, {
+    type ChangeEvent,
+    type FC,
+    type KeyboardEvent,
+    useCallback,
+    useRef,
+    useState,
+} from 'react';
 import cn from 'bem-cn-lite';
 import {Button, Icon, TextInput} from '@gravity-ui/uikit';
 import XmarkIcon from '@gravity-ui/icons/svgs/xmark.svg';
 import CheckIcon from '@gravity-ui/icons/svgs/check.svg';
 import './FileItemForm.scss';
-import {QueryFile} from '../../../../types/query-tracker/api';
+import {type QueryFile} from '../../../../types/query-tracker/api';
 
 const block = cn('file-item-form');
 

@@ -7,11 +7,11 @@ import {LOADING_STATUS} from '../../../constants/index';
 
 import {mergeStateOnClusterChange} from '../utils';
 
-import type {OperationAction} from '../../../utils/operations/detail';
-import type {Action} from 'redux';
-import type {DetailedOperationSelector} from '../../../pages/operations/selectors';
-import type {YTError} from './../../../../@types/types';
-import type {ActionD} from './../../../types/index';
+import {type OperationAction} from '../../../utils/operations/detail';
+import {type Action} from 'redux';
+import {type DetailedOperationSelector} from '../../../pages/operations/selectors';
+import {type YTError} from './../../../../@types/types';
+import {type ActionD} from './../../../types/index';
 
 export interface AlertEvent {
     time: unknown;

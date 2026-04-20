@@ -1,11 +1,11 @@
 import {
-    UnipikaList,
-    UnipikaMap,
-    UnipikaMapKey,
-    UnipikaPrimitive,
-    UnipikaSettings,
-    UnipikaString,
-    UnipikaValue,
+    type UnipikaList,
+    type UnipikaMap,
+    type UnipikaMapKey,
+    type UnipikaPrimitive,
+    type UnipikaSettings,
+    type UnipikaString,
+    type UnipikaValue,
 } from './StructuredYsonTypes';
 
 // @ts-ignore

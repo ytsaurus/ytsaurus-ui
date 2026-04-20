@@ -9,7 +9,7 @@ import {MetaTable} from '@ytsaurus/components';
 import Multimeter from '../../../../../components/Multimeter/Multimeter';
 import {SubjectCard} from '../../../../../components/SubjectLink/SubjectLink';
 
-import type {TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
+import {type TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
 import {isNull} from '../../../../../utils';
 import {getTargetQueue} from '../../../../../store/selectors/navigation/tabs/consumer';
 

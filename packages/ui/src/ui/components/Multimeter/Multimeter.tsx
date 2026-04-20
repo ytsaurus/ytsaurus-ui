@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import hummerFormat from '../../common/hammer/format';
-import type {TPerformanceCounters} from '../../store/reducers/navigation/tabs/queue/types';
+import {type TPerformanceCounters} from '../../store/reducers/navigation/tabs/queue/types';
 import BarChart from './BarChart';
 import {MetaTable, Tooltip} from '@ytsaurus/components';
 

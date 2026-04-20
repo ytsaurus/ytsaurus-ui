@@ -1,5 +1,5 @@
-import type {AxiosError} from 'axios';
-import type {Request, Response} from 'express';
+import {type AxiosError} from 'axios';
+import {type Request, type Response} from 'express';
 
 import {getPreloadedClusterParams} from '../components/cluster-params';
 import {sendAndLogError} from '../utils';

@@ -7,7 +7,7 @@ import map_ from 'lodash/map';
 import Link from '../../../components/Link/Link';
 
 import {selectCluster} from '../../../store/selectors/global';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 
 import {formatCounterName} from '../../../utils/index';
 

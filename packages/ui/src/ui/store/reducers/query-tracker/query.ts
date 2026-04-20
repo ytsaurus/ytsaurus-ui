@@ -1,8 +1,8 @@
-import {Action} from 'redux';
+import {type Action} from 'redux';
 
-import {ActionD} from '../../../types';
+import {type ActionD} from '../../../types';
 
-import type {DraftQuery, QueryItem} from '../../../types/query-tracker/api';
+import {type DraftQuery, type QueryItem} from '../../../types/query-tracker/api';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {
     REQUEST_QUERY,
@@ -23,7 +23,7 @@ import {
 } from './query-tracker-contants';
 import {cleanupQueryForDraft} from '../../../types/query-tracker/query';
 import {DEFAULT_QUERY_ACO} from '../../selectors/query-tracker/query';
-import {ChytInfo} from '../chyt/list';
+import {type ChytInfo} from '../chyt/list';
 
 export interface QueryState {
     queryItem?: QueryItem;

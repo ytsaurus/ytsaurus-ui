@@ -1,6 +1,6 @@
-import {ButtonButtonProps} from '@gravity-ui/uikit';
-import Button, {ButtonProps} from '../../../../../components/Button/Button';
-import React, {FC, MouseEvent} from 'react';
+import {type ButtonButtonProps} from '@gravity-ui/uikit';
+import Button, {type ButtonProps} from '../../../../../components/Button/Button';
+import React, {type FC, type MouseEvent} from 'react';
 
 type Props = Omit<Exclude<ButtonProps, ButtonButtonProps>, 'onClick'> & {
     className?: string;

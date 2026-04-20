@@ -4,7 +4,7 @@ import has_ from 'lodash/has';
 import axios from 'axios';
 import qs from 'qs';
 
-import type {Request, Response} from 'express';
+import {type Request, type Response} from 'express';
 import {UNEXPECTED_PIPE_AXIOS_RESPONSE, pipeAxiosResponse, sendAndLogError} from '../utils';
 
 export async function odinProxyApi(req: Request, res: Response) {

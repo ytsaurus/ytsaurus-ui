@@ -20,8 +20,8 @@ import {
     UPDATE_SAVE_FILTER_PRESET_DIALOG,
 } from '../../../../constants/operations';
 import {mergeStateOnClusterChange} from '../../../../store/reducers/utils';
-import type {ActionD, ValueOf} from '../../../../types';
-import {Action} from 'redux';
+import {type ActionD, type ValueOf} from '../../../../types';
+import {type Action} from 'redux';
 
 export interface OperationsListState {
     isLoading: boolean;

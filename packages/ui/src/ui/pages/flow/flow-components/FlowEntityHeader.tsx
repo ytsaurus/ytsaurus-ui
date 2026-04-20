@@ -1,7 +1,7 @@
 import {Flex, Text} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
-import {FlowNodeStatusType, FlowPartitionStateType} from '../../../../shared/yt-types';
+import {type FlowNodeStatusType, type FlowPartitionStateType} from '../../../../shared/yt-types';
 import Loader from '../../../components/Loader/Loader';
 import {FlowPartitionState} from '../../../pages/flow/flow-components/FlowPartitionState/FlowPartitionState';
 import {FlowNodeStatus} from '../../../pages/flow/Flow/FlowGraph/renderers/FlowGraphRenderer';

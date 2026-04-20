@@ -5,9 +5,9 @@ import {
     QUEUE_RATE_MODE,
 } from '../../../../../constants/navigation/tabs/queue';
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';
-import type {ActionD} from '../../../../../types';
-import type {TPerformanceCounters} from './types';
-import {PartitionColumn} from '../consumer/filters';
+import {type ActionD} from '../../../../../types';
+import {type TPerformanceCounters} from './types';
+import {type PartitionColumn} from '../consumer/filters';
 
 export interface QueueFiltersState {
     queueMode: QUEUE_MODE;

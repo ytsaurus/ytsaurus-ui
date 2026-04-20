@@ -1,4 +1,4 @@
-import type {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 import map_ from 'lodash/map';
 import hammer from '../../../common/hammer';
 import {
@@ -8,8 +8,8 @@ import {
     CHAOS_BUNDLES_EDITOR_PARTIAL,
 } from '../../../constants/tablets';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import type {RootState} from '../../../store/reducers';
-import type {ChaosCellBundleEditorAction} from '../../../store/reducers/chaos_cell_bundles/tablet-cell-bundle-editor';
+import {type RootState} from '../../../store/reducers';
+import {type ChaosCellBundleEditorAction} from '../../../store/reducers/chaos_cell_bundles/tablet-cell-bundle-editor';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {prepareSetCommandForBatch} from '../../../utils/cypress-attributes';
 // @ts-ignore

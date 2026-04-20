@@ -1,4 +1,4 @@
-import type {Action} from 'redux';
+import {type Action} from 'redux';
 
 import {
     CHAOS_BUNDLES_ACTIVE_ACCOUNT,
@@ -8,8 +8,8 @@ import {
     CHAOS_BUNDLES_PARTIAL,
 } from '../../../constants/tablets';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
-import {BundleControllerConfig} from '../../../store/reducers/tablet_cell_bundles';
-import type {ActionD, SortState, YTError} from '../../../types';
+import {type BundleControllerConfig} from '../../../store/reducers/tablet_cell_bundles';
+import {type ActionD, type SortState, type YTError} from '../../../types';
 
 export interface ChaosBundlesState {
     loaded: boolean;

@@ -1,6 +1,6 @@
 import {http} from 'msw';
-import {BatchResultsItem} from '../../../../../../../shared/yt-types';
-import {DashboardPoolsResponse} from '../../../../../../store/api/dashboard2/pools/pools';
+import {type BatchResultsItem} from '../../../../../../../shared/yt-types';
+import {type DashboardPoolsResponse} from '../../../../../../store/api/dashboard2/pools/pools';
 
 export const poolsResponse: Array<BatchResultsItem<DashboardPoolsResponse>> = [
     {

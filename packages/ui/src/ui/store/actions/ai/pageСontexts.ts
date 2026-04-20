@@ -1,4 +1,4 @@
-import {RootState} from '../../reducers';
+import {type RootState} from '../../reducers';
 import {getQueryDraft, getQueryEngine} from '../../selectors/query-tracker/query';
 import {AGENT_MAP} from '../../../containers/AiChat/constants';
 import {selectPage} from '../../selectors/global';

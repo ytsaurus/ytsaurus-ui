@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {GithubRepository, VcsApi, VcsRepository} from '../../../shared/vcs';
+import {type GithubRepository, type VcsApi, type VcsRepository} from '../../../shared/vcs';
 import {ErrorWithCode} from '../../utils';
 
 export type GithubNode = {

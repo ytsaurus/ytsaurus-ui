@@ -7,7 +7,7 @@ import {selectCluster} from '../../../../../../../store/selectors/global';
 
 import {GeneralCell} from '../../../../../../../pages/dashboard2/Dashboard/components/GeneralCell/GeneralCell';
 
-import {YTError} from '../../../../../../../types';
+import {type YTError} from '../../../../../../../types';
 
 export function PoolCell({pool, tree, error}: {pool: string; tree: string; error?: YTError}) {
     const cluster = useSelector(selectCluster);

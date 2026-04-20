@@ -1,8 +1,8 @@
 import {produce} from 'immer';
 
-import {LocationParameters} from '../../store/location';
+import {type LocationParameters} from '../../store/location';
 import {updateIfChanged} from '../../utils/utils';
-import {RootState} from '.';
+import {type RootState} from '.';
 
 export const globalParams: LocationParameters = {
     rumdebug: {

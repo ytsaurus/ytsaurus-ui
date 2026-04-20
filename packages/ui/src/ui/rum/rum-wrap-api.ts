@@ -1,36 +1,36 @@
 import reduce_ from 'lodash/reduce';
-import {AxiosProgressEvent, CancelTokenSource} from 'axios';
+import {type AxiosProgressEvent, type CancelTokenSource} from 'axios';
 
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {YT_API_REQUEST_ID_HEADER} from '../../shared/constants';
 import {
-    AlterReplicationCardParams,
-    BatchResultsItem,
-    BatchSubRequest,
-    ExpectedVersion,
-    FlowExecuteCommand,
-    FlowExecuteTypes,
-    GetFlowViewData,
-    GetParams,
-    GetPipelineStateData,
+    type AlterReplicationCardParams,
+    type BatchResultsItem,
+    type BatchSubRequest,
+    type ExpectedVersion,
+    type FlowExecuteCommand,
+    type FlowExecuteTypes,
+    type GetFlowViewData,
+    type GetParams,
+    type GetPipelineStateData,
     /* GetQueryTrackerInfoResponse, */
-    ListJobsParameters,
-    ListJobsResponse,
-    ListOperationEventsParameters,
-    ListOperationEventsResponse,
-    OutputFormat,
-    PathParams,
-    PipelineParams,
-    ReadTableParameters,
-    TableParams,
+    type ListJobsParameters,
+    type ListJobsResponse,
+    type ListOperationEventsParameters,
+    type ListOperationEventsResponse,
+    type OutputFormat,
+    type PathParams,
+    type PipelineParams,
+    type ReadTableParameters,
+    type TableParams,
 } from '../../shared/yt-types';
-import {YTApiId, YTApiIdType} from '../../shared/constants/yt-api-id';
+import {YTApiId, type YTApiIdType} from '../../shared/constants/yt-api-id';
 
 import {rumDebugLog2, rumGetTime, rumSendDelta} from './rum-counter';
-import {RumMeasureTypes} from './rum-measure-types';
-import type {FIX_MY_TYPE, ValueOf} from '../types';
+import {type RumMeasureTypes} from './rum-measure-types';
+import {type FIX_MY_TYPE, type ValueOf} from '../types';
 
 export {YTApiId};
 

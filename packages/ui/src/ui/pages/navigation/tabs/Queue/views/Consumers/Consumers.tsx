@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 import {createSelector} from 'reselect';
-import type {Column, Settings} from '@gravity-ui/react-data-table';
+import {type Column, type Settings} from '@gravity-ui/react-data-table';
 import {Button} from '@gravity-ui/uikit';
 
 import format from '../../../../../../common/hammer/format';
@@ -16,10 +16,10 @@ import {
     multimeter,
     ypath,
 } from '../../../../../../pages/navigation/tabs/Queue/utils/column-builder';
-import type {TPerformanceCounters} from '../../../../../../store/reducers/navigation/tabs/queue/types';
+import {type TPerformanceCounters} from '../../../../../../store/reducers/navigation/tabs/queue/types';
 import {openUnregisterDialog} from '../../../../../../store/reducers/navigation/tabs/queue/consumers';
 import {
-    SelectedConsumer,
+    type SelectedConsumer,
     getConsumers,
     getQueueRateMode,
     getQueueTimeWindow,

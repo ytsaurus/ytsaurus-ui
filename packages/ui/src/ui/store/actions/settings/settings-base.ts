@@ -1,8 +1,8 @@
-import type {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
-import type {RootState} from '../../../store/reducers';
-import type {SettingsAction} from '../../../store/reducers/settings';
-import type {DescribedSettings, SettingKey} from '../../../../shared/constants/settings-types';
+import {type RootState} from '../../../store/reducers';
+import {type SettingsAction} from '../../../store/reducers/settings';
+import {type DescribedSettings, type SettingKey} from '../../../../shared/constants/settings-types';
 
 import {SET_SETTING_VALUE} from '../../../constants/index';
 import {showToasterError} from '../../../utils/utils';

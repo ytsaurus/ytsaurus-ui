@@ -1,4 +1,4 @@
-import {ValueOf} from '../../../@types/types';
+import {type ValueOf} from '../../../@types/types';
 
 export const SCHEDULING_DATA_REQUEST = 'SCHEDULING_DATA_REQUEST';
 export const SCHEDULING_DATA_SUCCESS = 'SCHEDULING_DATA_SUCCESS';

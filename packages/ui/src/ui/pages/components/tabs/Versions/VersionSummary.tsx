@@ -1,12 +1,12 @@
-import React, {CSSProperties} from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import React, {type CSSProperties} from 'react';
+import {type ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import {Button, Checkbox, Flex, Select} from '@gravity-ui/uikit';
 
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {DataTableYT} from '../../../../components/DataTableYT';
-import * as DT100 from '@gravity-ui/react-data-table';
+import type * as DT100 from '@gravity-ui/react-data-table';
 import DataTable from '@gravity-ui/react-data-table';
 import {
     selectHideOfflineValue,
@@ -25,7 +25,7 @@ import {
     changeVersionStateTypeFilters,
     setVersionsSummarySortState,
 } from '../../../../store/actions/components/versions/versions_v2';
-import {VersionSummaryRow} from '../../../../store/reducers/components/versions/versions_v2';
+import {type VersionSummaryRow} from '../../../../store/reducers/components/versions/versions_v2';
 import {selectCluster} from '../../../../store/selectors/global';
 import {formatByParams} from '../../../../../shared/utils/format';
 import UIFactory from '../../../../UIFactory';

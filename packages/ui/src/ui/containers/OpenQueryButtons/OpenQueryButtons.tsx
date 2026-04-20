@@ -14,8 +14,8 @@ import {getPath} from '../../store/selectors/navigation';
 import UIFactory from '../../UIFactory';
 import {useSidePanel} from '../../hooks/use-side-panel';
 import {selectCluster} from '../../store/selectors/global/cluster';
-import {RootState} from '../../store/reducers';
-import {NavigationState} from '../../store/reducers/navigation/navigation';
+import {type RootState} from '../../store/reducers';
+import {type NavigationState} from '../../store/reducers/navigation/navigation';
 import {setNavigationSidePanelMode} from '../../store/actions/navigation';
 import i18n from './i18n';
 

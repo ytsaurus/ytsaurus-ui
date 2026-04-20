@@ -1,9 +1,9 @@
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
-import {YTErrorRaw} from '../../../@types/types';
+import {type YTErrorRaw} from '../../../@types/types';
 
-import type {YTError} from '../../types';
+import {type YTError} from '../../types';
 import {ypathBase} from '../../common/thor/ypath-base';
 
 export function forEachYTError<T extends YTErrorRaw>(

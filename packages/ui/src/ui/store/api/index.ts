@@ -1,5 +1,5 @@
-import {BaseQueryFn, createApi} from '@reduxjs/toolkit/query/react';
-import {YTApiIdType} from '../../../shared/constants/yt-api-id';
+import {type BaseQueryFn, createApi} from '@reduxjs/toolkit/query/react';
+import {type YTApiIdType} from '../../../shared/constants/yt-api-id';
 
 const tagTypes = [] as Array<YTApiIdType | `${YTApiIdType}_${string}`>;
 

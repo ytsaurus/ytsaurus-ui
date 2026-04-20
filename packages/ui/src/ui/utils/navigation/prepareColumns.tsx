@@ -2,12 +2,11 @@ import React from 'react';
 import Yson from '../../components/Yson/Yson';
 import unipika from '../../common/thor/unipika';
 import Icon from '../../components/Icon/Icon';
-import {ColumnCell, SchemaDataType, Tooltip} from '@ytsaurus/components';
+import {ColumnCell, SchemaDataType, Tooltip, type TypeArray} from '@ytsaurus/components';
 
 import map_ from 'lodash/map';
 
-import type {TypeArray} from '@ytsaurus/components';
-import type {YsonSettings} from '../../store/selectors/thor/unipika';
+import {type YsonSettings} from '../../store/selectors/thor/unipika';
 
 export type NameWithSortOrder = {name: string; sortOrder?: string};
 

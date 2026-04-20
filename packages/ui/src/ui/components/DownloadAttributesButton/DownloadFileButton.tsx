@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Button} from '@gravity-ui/uikit';
 import Icon from '../../components/Icon/Icon';
 import i18n from './i18n';

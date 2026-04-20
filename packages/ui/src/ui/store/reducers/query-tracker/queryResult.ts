@@ -1,13 +1,13 @@
-import {ActionD} from '../../../types';
+import {type ActionD} from '../../../types';
 import {TABLE_DEFAULTS} from '../../../constants/settings/table';
 import {getSettingsInitialData} from '../settings';
 
-import type {QueryItem, QueryItemId} from '../../../types/query-tracker/api';
+import {type QueryItem, type QueryItemId} from '../../../types/query-tracker/api';
 import {
-    QueryResult,
-    QueryResultErrorState,
-    QueryResultLoadingState,
-    QueryResultReadyState,
+    type QueryResult,
+    type QueryResultErrorState,
+    type QueryResultLoadingState,
+    type QueryResultReadyState,
     QueryResultState,
     QueryResultsViewMode,
 } from '../../../types/query-tracker/queryResult';

@@ -1,7 +1,6 @@
-import {Reducer, combineReducers} from 'redux';
+import {type Reducer, combineReducers} from 'redux';
 
-import {registerLocationParameters} from '../../store/location';
-import type {PathParameters} from '../../store/location';
+import {type PathParameters, registerLocationParameters} from '../../store/location';
 
 import forEach_ from 'lodash/forEach';
 

@@ -1,4 +1,4 @@
-import type {Request, Response} from 'express';
+import {type Request, type Response} from 'express';
 import {sendAndLogError} from '../utils';
 import transform from '@diplodoc/transform';
 

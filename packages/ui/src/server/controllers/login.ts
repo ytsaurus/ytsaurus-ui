@@ -1,4 +1,4 @@
-import type {Request, Response} from 'express';
+import {type Request, type Response} from 'express';
 import axios from 'axios';
 
 import map_ from 'lodash/map';

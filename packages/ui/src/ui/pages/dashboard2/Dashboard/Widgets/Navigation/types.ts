@@ -1,4 +1,4 @@
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
+import {type PluginWidgetProps} from '@gravity-ui/dashkit';
 
 export type NavigationWidgetData = {
     name?: string;

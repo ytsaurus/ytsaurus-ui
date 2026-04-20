@@ -1,9 +1,9 @@
-import {Action} from 'redux';
-import {YTError} from '../../../../@types/types';
+import {type Action} from 'redux';
+import {type YTError} from '../../../../@types/types';
 import {FETCH_PROXIES} from '../../../constants/system/nodes';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
-import {ActionD} from '../../../types';
-import {NodeEffectiveFlag, NodeEffectiveState, NodeState} from './nodes';
+import {type ActionD} from '../../../types';
+import {type NodeEffectiveFlag, type NodeEffectiveState, type NodeState} from './nodes';
 
 export type SystemNodeCounters = {
     total: number;

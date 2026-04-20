@@ -1,4 +1,4 @@
-import React, {FC, MutableRefObject, useCallback, useEffect, useRef} from 'react';
+import React, {type FC, type MutableRefObject, useCallback, useEffect, useRef} from 'react';
 import cn from 'bem-cn-lite';
 import key from 'hotkeys-js';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';

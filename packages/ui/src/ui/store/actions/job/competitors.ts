@@ -1,13 +1,13 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
-import {CompetitiveJobs, RawJob} from '../../../types/operations/job';
-import {RootState} from '../../../store/reducers';
+import {type CompetitiveJobs, type RawJob} from '../../../types/operations/job';
+import {type RootState} from '../../../store/reducers';
 import CancelHelper from '../../../utils/cancel-helper';
 import * as JOB from '../../../constants/job';
-import {YTError} from '../../../types';
-import {Action} from 'redux';
+import {type YTError} from '../../../types';
+import {type Action} from 'redux';
 import {toaster} from '../../../utils/toaster';
 
 const requests = new CancelHelper();

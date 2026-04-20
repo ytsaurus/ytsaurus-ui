@@ -1,5 +1,8 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {FlowPartitionJobStateType, FlowPartitionStateType} from '../../../../shared/yt-types';
+import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {
+    type FlowPartitionJobStateType,
+    type FlowPartitionStateType,
+} from '../../../../shared/yt-types';
 
 export type FlowFiltersState = {
     pipelinePath: string;

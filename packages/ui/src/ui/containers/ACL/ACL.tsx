@@ -1,4 +1,4 @@
-import {Column} from '@gravity-ui/react-data-table';
+import {type Column} from '@gravity-ui/react-data-table';
 import {ClipboardButton, Flex, Icon, Loader} from '@gravity-ui/uikit';
 import {Tooltip} from '@ytsaurus/components';
 import cn from 'bem-cn-lite';
@@ -11,17 +11,20 @@ import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import {ExpandButton} from '../../components/ExpandButton';
 import Label from '../../components/Label';
 import LoadDataHandler from '../../components/LoadDataHandler/LoadDataHandler';
-import {SegmentControl, SegmentControlItem} from '../../components/SegmentControl/SegmentControl';
+import {
+    SegmentControl,
+    type SegmentControlItem,
+} from '../../components/SegmentControl/SegmentControl';
 import {SubjectCard} from '../../components/SubjectLink/SubjectLink';
 import WithStickyToolbar from '../../components/WithStickyToolbar/WithStickyToolbar';
 import {isIdmAclAvailable} from '../../config';
 import {AclMode, IdmObjectType} from '../../constants/acl';
-import withVisible, {WithVisibleProps} from '../../hocs/withVisible';
-import {ObjectPermissionRowWithExpand, PreparedApprover} from '../../store/selectors/acl';
-import UIFactory, {AclRoleActionsType} from '../../UIFactory';
-import {PreparedRole, isGranted} from '../../utils/acl';
-import {PreparedAclSubject} from '../../utils/acl/acl-types';
-import {ACLReduxProps} from './ACL-connect-helpers';
+import withVisible, {type WithVisibleProps} from '../../hocs/withVisible';
+import {type ObjectPermissionRowWithExpand, type PreparedApprover} from '../../store/selectors/acl';
+import UIFactory, {type AclRoleActionsType} from '../../UIFactory';
+import {type PreparedRole, isGranted} from '../../utils/acl';
+import {type PreparedAclSubject} from '../../utils/acl/acl-types';
+import {type ACLReduxProps} from './ACL-connect-helpers';
 import './ACL.scss';
 import {AclActions} from './AclActions/AclActions';
 import {AclColumnsCell} from './AclColumnsCell';

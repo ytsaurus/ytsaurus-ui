@@ -1,6 +1,6 @@
 import React, {createContext, useContext, useState} from 'react';
 import {
-    SubPage,
+    type SubPage,
     rumDebugLog,
     rumFinalizeSpa,
     rumGetTime,

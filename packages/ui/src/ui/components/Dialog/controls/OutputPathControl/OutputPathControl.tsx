@@ -1,5 +1,5 @@
-import React, {FC, useCallback, useEffect} from 'react';
-import type {ControlStaticApi} from '../../../../components/Dialog';
+import React, {type FC, useCallback, useEffect} from 'react';
+import {type ControlStaticApi} from '../../../../components/Dialog';
 import {TextInput} from '@gravity-ui/uikit';
 import './OutputPathControl.scss';
 import cn from 'bem-cn-lite';
@@ -7,7 +7,7 @@ import {AddOptionForm} from './AddOptionForm';
 import {getNavigationTableOutputPathAttributes} from '../../../../store/selectors/navigation/modals/table-merge-sort-modal';
 import {loadStorageAttributes} from '../../../../store/actions/navigation/modals/table-merge-sort-modal';
 import {
-    Attribute,
+    type Attribute,
     PathAttribute,
     changeAttribute,
     resetAttributes,

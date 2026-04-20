@@ -2,8 +2,8 @@ import React, {Component, Fragment} from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
-import {Hotkey, HotkeyProps, Tooltip, TooltipProps} from '@ytsaurus/components';
-import {Button as ButtonImpl, ButtonProps as ButtonImplProps} from '@gravity-ui/uikit';
+import {Hotkey, type HotkeyProps, Tooltip, type TooltipProps} from '@ytsaurus/components';
+import {Button as ButtonImpl, type ButtonProps as ButtonImplProps} from '@gravity-ui/uikit';
 
 import './Button.scss';
 

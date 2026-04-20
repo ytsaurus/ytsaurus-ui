@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {PrometheusDashboardLazy} from '../../../../../../../containers/PrometheusDashboard/lazy';
-import type {UIFactory} from '../../../../../../../UIFactory';
+import {type UIFactory} from '../../../../../../../UIFactory';
 
 type Props = React.ComponentProps<
     Exclude<ReturnType<UIFactory['getComponentForConsumerMetrics']>, undefined>

@@ -5,8 +5,8 @@ import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSectio
 
 import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
 import {ExpandButton} from '../../../components/ExpandButton';
-import {RoleGroupInfo} from '../../../store/reducers/system/proxies';
-import {MakeUrlParams, RoleGroup, RoleGroupsContainer} from '../ProxiesImpl/RoleGroup';
+import {type RoleGroupInfo} from '../../../store/reducers/system/proxies';
+import {type MakeUrlParams, RoleGroup, RoleGroupsContainer} from '../ProxiesImpl/RoleGroup';
 import {StickyContainer} from '../../../components/StickyContainer/StickyContainer';
 
 export function ProxiesImpl({

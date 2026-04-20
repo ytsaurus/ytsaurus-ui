@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import './AclUpdateMessage.scss';
-import {Subject} from '../../utils/acl/acl-types';
+import {type Subject} from '../../utils/acl/acl-types';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import Link from '../../components/Link/Link';
 import {AclSubject} from '../../components/AclSubject/AclSubject';

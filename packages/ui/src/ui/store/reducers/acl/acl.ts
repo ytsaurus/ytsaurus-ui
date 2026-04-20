@@ -1,6 +1,6 @@
-import {Action} from 'redux';
-import {YTError} from '../../../../@types/types';
-import {CheckPermissionResult} from '../../../../shared/utils/check-permission';
+import {type Action} from 'redux';
+import {type YTError} from '../../../../@types/types';
+import {type CheckPermissionResult} from '../../../../shared/utils/check-permission';
 import {
     DELETE_PERMISSION,
     IdmObjectType,
@@ -9,15 +9,15 @@ import {
     UPDATE_ACL,
 } from '../../../constants/acl';
 import {RESET_STORE_BEFORE_CLUSTER_CHANGE} from '../../../constants/utils';
-import {YTPermissionTypeUI} from '../../../utils/acl/acl-api';
+import {type YTPermissionTypeUI} from '../../../utils/acl/acl-api';
 import {
-    AclColumnGroup,
-    AclRowGroup,
-    IdmKindType,
-    PreparedAclSubject,
+    type AclColumnGroup,
+    type AclRowGroup,
+    type IdmKindType,
+    type PreparedAclSubject,
 } from '../../../utils/acl/acl-types';
-import {ActionD} from '../../../types';
-import {PreparedRole} from '../../../utils/acl';
+import {type ActionD} from '../../../types';
+import {type PreparedRole} from '../../../utils/acl';
 
 export type AclKindState = {
     loading: boolean;

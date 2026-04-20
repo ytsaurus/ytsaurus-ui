@@ -1,4 +1,4 @@
-import {RootState} from '../../../reducers';
+import {type RootState} from '../../../reducers';
 
 export const getAttributesTab = (state: RootState) => state.navigation.tabs.attributes.attributes;
 

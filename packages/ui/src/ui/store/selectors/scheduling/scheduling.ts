@@ -13,12 +13,12 @@ import {childTableItems} from '../../../utils/scheduling/detailsTable';
 
 import {ROOT_POOL_NAME} from '../../../constants/scheduling';
 
-import {OldSortState} from '../../../types';
+import {type OldSortState} from '../../../types';
 
 import {getPools as getPoolsImpl, getSchedulingPoolsMapByName} from './scheduling-pools';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {isAbcPoolName, isTopLevelPool} from '../../../utils/scheduling/pool';
-import {PoolTreeNode} from '../../../utils/scheduling/pool-child';
+import {type PoolTreeNode} from '../../../utils/scheduling/pool-child';
 import {orderTypeToOldSortState} from '../../../utils/sort-helpers';
 import {visitTreeItems} from '../../../utils/utils';
 import {getSchedulingOperationsExpandedPools} from './expanded-pools';

@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
+import React, {type FC, useCallback, useEffect, useRef, useState} from 'react';
 import './Chat.scss';
 import cn from 'bem-cn-lite';
 import {ChatInput} from './ChatInput';

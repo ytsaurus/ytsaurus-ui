@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {QueriesListSidebarToggleButton} from '../QueriesListSidebarToggleButton/QueriesListSidebarToggleButton';
 import {NewQueryButton} from '../NewQueryButton';
 import {Flex} from '@gravity-ui/uikit';

@@ -1,18 +1,18 @@
 import get_ from 'lodash/get';
 
-import type {KeysByDot} from '../../../../../shared/keys-by-dot';
+import {type KeysByDot} from '../../../../../shared/keys-by-dot';
 
 import ypath from '../../../../common/thor/ypath';
 import hammer from '../../../../common/hammer';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type {
-    BundleControllerConfig,
-    BundleDataCenter,
-    BundleDefaultConfigData,
+import {
+    type BundleControllerConfig,
+    type BundleDataCenter,
+    type BundleDefaultConfigData,
 } from '../../../../store/reducers/tablet_cell_bundles';
-import type {BundleParam} from '../../../../pages/tablet_cell_bundles/bundles/BundleEditorDialog/components/BundleParamsList/BundleParamsList';
-import type {BundleEditorDialogFormValues} from '../../../../pages/tablet_cell_bundles/bundles/BundleEditorDialog/BundleEditorDialog';
-import type {FormApi} from '../../../../components/Dialog';
+import {type BundleParam} from '../../../../pages/tablet_cell_bundles/bundles/BundleEditorDialog/components/BundleParamsList/BundleParamsList';
+import {type BundleEditorDialogFormValues} from '../../../../pages/tablet_cell_bundles/bundles/BundleEditorDialog/BundleEditorDialog';
+import {type FormApi} from '../../../../components/Dialog';
 
 type InnerKeys<T> = {[K in keyof T]: Array<keyof T[K]>};
 type FormKeys = InnerKeys<Required<BundleEditorDialogFormValues>>;

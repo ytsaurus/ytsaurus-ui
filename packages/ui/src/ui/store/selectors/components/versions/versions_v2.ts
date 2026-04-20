@@ -8,8 +8,8 @@ import {createSelector} from 'reselect';
 import {detailsTableProps} from '../../../../pages/components/tabs/Versions/tables_v2';
 
 import {COMPONENTS_VERSIONS_DETAILED_TABLE_ID} from '../../../../constants/components/versions/versions_v2';
-import {RootState} from '../../../../store/reducers';
-import {VersionHostInfo} from '../../../../store/reducers/components/versions/versions_v2';
+import {type RootState} from '../../../../store/reducers';
+import {type VersionHostInfo} from '../../../../store/reducers/components/versions/versions_v2';
 
 const aggregateItems = (proxies: Array<VersionHostInfo>, key: keyof VersionHostInfo) => {
     const items = reduce_(

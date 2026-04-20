@@ -1,5 +1,5 @@
-import React, {FC} from 'react';
-import {QueryItem} from '../../../../types/query-tracker/api';
+import React, {type FC} from 'react';
+import {type QueryItem} from '../../../../types/query-tracker/api';
 import {QueryResultsVisualization} from './QueryResultsVisualization';
 
 type Props = {query: QueryItem; resultIndex: number};

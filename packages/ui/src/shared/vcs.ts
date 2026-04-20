@@ -1,5 +1,5 @@
-import {Request, Response} from '@gravity-ui/expresskit';
-import {VCSSettings} from './ui-settings';
+import {type Request, type Response} from '@gravity-ui/expresskit';
+import {type VCSSettings} from './ui-settings';
 
 type Requests = {req: Request; res: Response};
 

@@ -1,13 +1,13 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 import {splitBatchResults} from '../../../../shared/utils/error';
 import {getQueryTrackerCluster} from '../../../config';
 import {extractBatchV4Values} from '../../../utils/utils';
-import {BatchResultsItem, BatchSubRequest} from '../../../../shared/yt-types';
+import {type BatchResultsItem, type BatchSubRequest} from '../../../../shared/yt-types';
 import {YTApiId, ytApiV3, ytApiV4Id} from '../../../rum/rum-wrap-api';
 import ypath from '../../../common/thor/ypath';
 import {getClusterConfigByName, getClusterProxy} from '../../selectors/global';
-import {RootState} from '../../reducers';
+import {type RootState} from '../../reducers';
 import {makeDirectDownloadPath} from '../../../utils/navigation';
 import {UPDATE_QUERIES_LIST} from '../../reducers/query-tracker/query-tracker-contants';
 import {
@@ -15,26 +15,26 @@ import {
     getQueryAnnotations,
     getQueryTrackerRequestOptions,
 } from '../../selectors/query-tracker/query';
-import {AnyAction} from 'redux';
-import {QueryEngine} from '../../../../shared/constants/engines';
+import {type AnyAction} from 'redux';
+import {type QueryEngine} from '../../../../shared/constants/engines';
 import {
     getLastSelectedACONamespaces,
     selectIsMultipleAco,
 } from '../../selectors/query-tracker/queryAco';
 import {setSettingByKey} from '../settings';
-import {CancelTokenSource} from 'axios';
+import {type CancelTokenSource} from 'axios';
 import {JSONSerializer} from '../../../common/yt-api';
 import {createTablePrompt} from '../../../pages/query-tracker/Navigation/helpers/createTableSelect';
 import {getQueryResultGlobalSettings} from '../../selectors/query-tracker/queryResult';
 import {convertSettingsTypes} from '../../../utils/query-tracker/convertSettingsTypes';
-import type {
-    DraftQuery,
-    QueriesListRequestParams,
-    QueriesListResponse,
-    QueryItem,
-    QueryItemId,
-    QueryResult,
-    QueryResultMeta,
+import {
+    type DraftQuery,
+    type QueriesListRequestParams,
+    type QueriesListResponse,
+    type QueryItem,
+    type QueryItemId,
+    type QueryResult,
+    type QueryResultMeta,
 } from '../../../types/query-tracker/api';
 
 export function getQTApiSetup(): {proxy?: string} {

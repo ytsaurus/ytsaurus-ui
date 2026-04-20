@@ -1,6 +1,10 @@
 import ypath from '../../../common/thor/ypath';
-import {MasterAddress, MasterAlert, MasterDataItem} from '../../reducers/system/masters';
-import {RootState} from '../../reducers';
+import {
+    type MasterAddress,
+    type MasterAlert,
+    type MasterDataItem,
+} from '../../reducers/system/masters';
+import {type RootState} from '../../reducers';
 import {getPathByMasterType} from '../../actions/system/masters';
 
 export class MasterInstance {

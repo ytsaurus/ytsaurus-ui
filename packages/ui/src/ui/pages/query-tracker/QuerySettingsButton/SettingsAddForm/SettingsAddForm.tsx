@@ -1,9 +1,9 @@
 import {Button, Icon} from '@gravity-ui/uikit';
-import React, {FC, useCallback, useState} from 'react';
+import React, {type FC, useCallback, useState} from 'react';
 import plusIcon from '@gravity-ui/icons/svgs/plus.svg';
 import {
-    SaveFormData,
-    Props as SettingsItemEditFormProps,
+    type SaveFormData,
+    type Props as SettingsItemEditFormProps,
     SettingsItemForm,
 } from '../SettingsItemForm';
 import './SettingsAddForm.scss';

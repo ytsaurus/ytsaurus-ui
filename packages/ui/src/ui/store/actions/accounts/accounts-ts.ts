@@ -1,7 +1,7 @@
 import map_ from 'lodash/map';
 
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../../store/reducers';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../../store/reducers';
 import {ACCOUNTS_DATA_FIELDS_ACTION} from '../../../constants/accounts';
 import {parseAccountData} from '../../../utils/accounts/accounts-selector';
 

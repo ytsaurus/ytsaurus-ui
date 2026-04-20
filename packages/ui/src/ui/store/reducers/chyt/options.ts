@@ -1,7 +1,7 @@
-import {ActionD, YTError} from '../../../types';
+import {type ActionD, type YTError} from '../../../types';
 import {mergeStateOnClusterChange} from '../utils';
 import {CHYT_OPTIONS} from '../../../constants/chyt-page';
-import {StrawberryDescribeOptionsType} from '../../../utils/strawberryControllerApi';
+import {type StrawberryDescribeOptionsType} from '../../../utils/strawberryControllerApi';
 
 export type ChytCliqueOptionsState = {
     loaded: boolean;

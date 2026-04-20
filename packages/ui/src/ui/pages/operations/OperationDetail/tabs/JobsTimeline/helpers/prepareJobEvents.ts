@@ -1,11 +1,11 @@
-import {JobsTimelineState} from '../../../../../../store/reducers/operations/jobs/jobs-timeline-slice';
+import {type JobsTimelineState} from '../../../../../../store/reducers/operations/jobs/jobs-timeline-slice';
 import {
-    JobLineEvent,
+    type JobLineEvent,
     JobLineRenderer,
 } from '../../../../../../components/TimelineBlock/renderer/JobLineRenderer';
 import {getColorByState} from '../../../../../../components/TimelineBlock/helpers/getColorByState';
 import {
-    AllocationLineEvent,
+    type AllocationLineEvent,
     AllocationLineRenderer,
 } from '../../../../../../components/TimelineBlock/renderer/AllocationLineRenderer';
 import {getTimeLineDisplayMode} from './getTimeLineDisplayMode';

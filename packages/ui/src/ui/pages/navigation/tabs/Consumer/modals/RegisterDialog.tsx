@@ -8,11 +8,11 @@ import {
 import {useRegisterMutation} from '../../../../../store/api/navigation/tabs/consumer/consumer';
 import {selectCluster} from '../../../../../store/selectors/global';
 
-import {FormApi, YTDFDialog, makeErrorFields} from '../../../../../components/Dialog';
+import {type FormApi, YTDFDialog, makeErrorFields} from '../../../../../components/Dialog';
 
 import {makeClusterSelectOptionsSameEnv} from '../../../../../utils/navigation/tabs/make-cluster-select-options-same-env';
 
-import {YTError} from '../../../../../../@types/types';
+import {type YTError} from '../../../../../../@types/types';
 
 type FormValues = {
     queuePath: string;

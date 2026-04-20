@@ -1,6 +1,6 @@
 import getComponentByContentType from './getComponentByContentType';
 import {Tab} from '../../../../../constants/navigation';
-import {YTError} from '../../../../../../@types/types';
+import {type YTError} from '../../../../../../@types/types';
 import ypath from '../../../../../common/thor/ypath';
 import getComponentByMode from './getComponentByMode';
 

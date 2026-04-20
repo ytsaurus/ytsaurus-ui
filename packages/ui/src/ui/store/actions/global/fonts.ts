@@ -1,7 +1,7 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 import FontFaceObserver from 'fontfaceobserver';
 import {selectFontFamilies} from '../../../store/selectors/global/fonts';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 
 // TODO: consider switching back for <link rel="preload"> once it's supported in all major browsers
 export function waitForFontFamily(fontFamily: string) {

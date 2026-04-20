@@ -2,7 +2,7 @@ import React from 'react';
 import {useHistory} from 'react-router';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
-import {Breadcrumbs, Flex, Key, Select} from '@gravity-ui/uikit';
+import {Breadcrumbs, Flex, type Key, Select} from '@gravity-ui/uikit';
 import some_ from 'lodash/some';
 
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';

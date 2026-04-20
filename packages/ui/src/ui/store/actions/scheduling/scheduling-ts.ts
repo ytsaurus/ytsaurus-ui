@@ -7,9 +7,9 @@ import {getBatchError, splitBatchResults} from '../../../../shared/utils/error';
 
 import {
     INTEGRAL_GUARANTEES_PREFIX,
-    InitialPoolResourceInfo,
+    type InitialPoolResourceInfo,
     POOL_RESOURCE_TYPE_TO_ATTRIBUTE,
-    PoolResourceType,
+    type PoolResourceType,
     computePoolPath,
     prepareCurrentTree,
     prepareTrees,
@@ -18,7 +18,7 @@ import {extractBatchV4Values, wrapApiPromiseByToaster} from '../../../utils/util
 import {makeGet, makeList} from '../../../utils/batch';
 import {updateNodeAttributes} from '../../../utils/cypress-attributes';
 
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
@@ -43,8 +43,8 @@ import {loadExpandedPools} from './expanded-pools';
 import {RumWrapper, YTApiId, ytApiV3Id, ytApiV4Id} from '../../../rum/rum-wrap-api';
 import {selectCluster} from '../../../store/selectors/global';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
-import type {RootState} from '../../../store/reducers';
-import type {SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
+import {type RootState} from '../../../store/reducers';
+import {type SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
 import {
     getSchedulingAttributesToFilterParams,
     schedulingOverviewHasFilter,
@@ -52,7 +52,7 @@ import {
 import {USE_CACHE} from '../../../../shared/constants/yt-api';
 import {toaster} from '../../../utils/toaster';
 
-import {PoolTreeNode} from '../../../utils/scheduling/pool-child';
+import {type PoolTreeNode} from '../../../utils/scheduling/pool-child';
 
 type SchedulingThunkAction<T = unknown> = ThunkAction<T, RootState, unknown, SchedulingAction>;
 

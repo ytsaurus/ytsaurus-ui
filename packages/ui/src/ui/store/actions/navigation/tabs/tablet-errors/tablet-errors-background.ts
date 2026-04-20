@@ -1,14 +1,14 @@
-import {CancelTokenSource} from 'axios';
+import {type CancelTokenSource} from 'axios';
 
 import CancelHelper, {isCancelled} from '../../../../../utils/cancel-helper';
 import {getPath} from '../../../../../store/selectors/navigation';
 import {GET_TABLET_ERRORS} from '../../../../../constants/navigation/tabs/tablet-errors';
 import {YTApiId, ytApiV3Id, ytApiV4Id} from '../../../../../rum/rum-wrap-api';
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../../../../store/reducers';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../../../../store/reducers';
 import {
-    NavigationTabletErrorsMode,
-    TabletErrorsAction,
+    type NavigationTabletErrorsMode,
+    type TabletErrorsAction,
 } from '../../../../../store/reducers/navigation/tabs/tablet-errors/tablet-errors-background';
 import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
 

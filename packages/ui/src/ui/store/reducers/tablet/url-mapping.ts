@@ -5,7 +5,7 @@ import {TABLET_PARTITIONS_TABLE_ID} from '../../../constants/tablet';
 import {parseSortState} from '../../../utils';
 import {produce} from 'immer';
 import {updateIfChanged} from '../../../utils/utils';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 
 export const tabletParams = {
     activeHistogram: {

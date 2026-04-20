@@ -1,5 +1,5 @@
 import React from 'react';
-import DataTable, {Column} from '@gravity-ui/react-data-table';
+import DataTable, {type Column} from '@gravity-ui/react-data-table';
 import {Text} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 

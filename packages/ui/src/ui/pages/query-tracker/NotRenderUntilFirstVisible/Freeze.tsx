@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StrictReactNode} from '../QueryResultsView/YQLTable/utils';
+import {type StrictReactNode} from '../QueryResultsView/YQLTable/utils';
 
 interface FreezeProps {
     freeze: boolean;

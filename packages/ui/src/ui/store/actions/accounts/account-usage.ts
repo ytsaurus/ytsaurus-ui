@@ -2,9 +2,9 @@ import isEmpty_ from 'lodash/isEmpty';
 import isEqual_ from 'lodash/isEqual';
 import reduce_ from 'lodash/reduce';
 
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../../store/reducers';
-import {AccountsSnapshotsAction} from '../../reducers/accounts/usage/accounts-usage-snapshots';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../../store/reducers';
+import {type AccountsSnapshotsAction} from '../../reducers/accounts/usage/accounts-usage-snapshots';
 import {
     ACCOUNTS_USAGE_FILTERS_PARTIAL,
     ACCOUNTS_USAGE_LIST_FAILED,
@@ -20,9 +20,9 @@ import {
 import axios from 'axios';
 import {selectCluster} from '../../selectors/global/cluster';
 import {
-    AccountUsageListAction,
-    AccountUsageListDataParams,
-    AccountsUsageDataResponse,
+    type AccountUsageListAction,
+    type AccountUsageListDataParams,
+    type AccountsUsageDataResponse,
 } from '../../reducers/accounts/usage/accounts-usage-list';
 import {
     getAccountUsageCurrentSnapshot,
@@ -39,16 +39,16 @@ import {
 } from '../../selectors/accounts/account-usage';
 import {getActiveAccount} from '../../../store/selectors/accounts/accounts-ts';
 import {getSettingsAccountUsageViewType} from '../../../store/selectors/settings/settings-ts';
-import {SortState} from '../../../types';
+import {type SortState} from '../../../types';
 import {
-    AccountUsageFiltersState,
-    AccountUsageViewType,
-    AccountsUsageFiltersAction,
+    type AccountUsageFiltersState,
+    type AccountUsageViewType,
+    type AccountsUsageFiltersAction,
     PAGE_SIZE,
 } from '../../reducers/accounts/usage/accounts-usage-filters';
 import {
-    AccountUsageTreeAction,
-    AccountUsageTreeData,
+    type AccountUsageTreeAction,
+    type AccountUsageTreeData,
 } from '../../reducers/accounts/usage/accounts-usage-tree';
 import {
     setSettingsAccountUsageColumnsList,
@@ -57,12 +57,12 @@ import {
     setSettingsAccountUsageViewType,
 } from '../settings/settings';
 import {
-    AccountUsageDataItem,
-    AccountUsageDataParams,
+    type AccountUsageDataItem,
+    type AccountUsageDataParams,
 } from '../../reducers/accounts/usage/account-usage-types';
 import {fetchAccountUsageListDiff, fetchAccountUsageTreeDiff} from './account-usage-diff';
 import {updateSortStateArray} from '../../../utils/sort-helpers';
-import {Action} from 'redux';
+import {type Action} from 'redux';
 import {openModal} from '../modals/attributes-modal';
 import {calcAccountsUsageBaseUrl} from './accounts-usage-base-url';
 

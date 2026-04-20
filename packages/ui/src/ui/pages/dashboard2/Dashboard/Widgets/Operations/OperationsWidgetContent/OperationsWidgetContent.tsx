@@ -3,7 +3,7 @@ import b from 'bem-cn-lite';
 import {Text} from '@gravity-ui/uikit';
 import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
-import {OperationProgressInfo} from '../../../../../../store/api/dashboard2/operations/operations';
+import {type OperationProgressInfo} from '../../../../../../store/api/dashboard2/operations/operations';
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
 
@@ -13,7 +13,7 @@ import {StartTime} from './cells/StartTime';
 import {State} from './cells/State';
 
 import {useOperationsWidget} from '../hooks/use-operations-widget';
-import type {OperationsWidgetProps} from '../types';
+import {type OperationsWidgetProps} from '../types';
 
 import i18n from '../i18n';
 

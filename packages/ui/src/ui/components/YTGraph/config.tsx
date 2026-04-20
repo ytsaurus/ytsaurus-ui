@@ -1,16 +1,22 @@
 import React from 'react';
 
-import ELK, {ElkExtendedEdge, ElkNode} from 'elkjs';
-import {CanvasBlock, ECameraScaleLevel, ECanDrag, TBlock, TConnection} from '@gravity-ui/graph';
+import ELK, {type ElkExtendedEdge, type ElkNode} from 'elkjs';
+import {
+    type CanvasBlock,
+    ECameraScaleLevel,
+    ECanDrag,
+    type TBlock,
+    type TConnection,
+} from '@gravity-ui/graph';
 
-import {HookGraphParams, MultipointConnection, useElk} from '@gravity-ui/graph/react';
+import {type HookGraphParams, MultipointConnection, useElk} from '@gravity-ui/graph/react';
 
-import {RecursivePartial} from '@gravity-ui/graph/build/utils/types/helpers';
-import {TGraphColors} from '@gravity-ui/graph/build/graphConfig';
+import {type RecursivePartial} from '@gravity-ui/graph/build/utils/types/helpers';
+import {type TGraphColors} from '@gravity-ui/graph/build/graphConfig';
 
 import {getCssColor} from '../../utils/get-css-color';
 import {useMemoizedIfEqual} from '../../hooks';
-import {YTGraphBlock, YTGraphData} from './types';
+import {type YTGraphBlock, type YTGraphData} from './types';
 import {NoopComponent} from './canvas/NoopComponent';
 
 export const getGraphColors = (): RecursivePartial<TGraphColors> => {

@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 
 import Graph from './Graph';
 import {GraphColorsProvider} from './GraphColors';
-import {ProcessedNode} from './utils';
+import {type ProcessedNode} from './utils';
 
 import {Timeline} from './Timeline';
 import {LargeGraphInfo} from './LargeGraphInfo';
@@ -14,7 +14,7 @@ import {QueriesGraphLazy} from './GraphEditor';
 import {useSelector} from '../../../store/redux-hooks';
 import {getSettingsQueryTrackerNewGraphType} from '../../../store/selectors/settings/settings-ts';
 import {getProcessedGraph} from '../../../store/selectors/query-tracker/queryPlan';
-import type {PlanView} from './PlanActions';
+import {type PlanView} from './PlanActions';
 
 const block = cn('plan');
 

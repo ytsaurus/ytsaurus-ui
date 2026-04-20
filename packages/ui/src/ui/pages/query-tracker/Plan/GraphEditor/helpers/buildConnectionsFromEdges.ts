@@ -1,6 +1,6 @@
-import {DEFAULT_NODE_WIDTH, Edge} from '../../services/layout';
-import {MultipointConnection} from '../types';
-import {TPoint} from '@gravity-ui/graph';
+import {DEFAULT_NODE_WIDTH, type Edge} from '../../services/layout';
+import {type MultipointConnection} from '../types';
+import {type TPoint} from '@gravity-ui/graph';
 
 export const buildConnectionsFromEdges = (
     edges: Edge<string>[],

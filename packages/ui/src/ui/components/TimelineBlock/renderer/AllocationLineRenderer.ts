@@ -1,4 +1,4 @@
-import {AbstractEventRenderer, TimelineEvent} from '@gravity-ui/timeline';
+import {AbstractEventRenderer, type TimelineEvent} from '@gravity-ui/timeline';
 
 export type AllocationLineEvent = TimelineEvent & {
     allocationId: string;

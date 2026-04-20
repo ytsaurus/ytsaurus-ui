@@ -1,6 +1,6 @@
 import {getYtErrorCode} from '../../../../../utils/errors';
-import {YTError} from '../../../../../../@types/types';
-import {UnipikaValue} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
+import {type YTError} from '../../../../../../@types/types';
+import {type UnipikaValue} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 import ypath from '../../../../../common/thor/ypath';
 
 export type ErrorCode = 500 | 901;

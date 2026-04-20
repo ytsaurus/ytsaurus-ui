@@ -1,7 +1,7 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Flex} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
-import {ChatMessage} from '../../../types/ai-chat';
+import {type ChatMessage} from '../../../types/ai-chat';
 import uiFactory from '../../../UIFactory';
 import {getMessageComponentByType} from './getMessageComponentByType';
 import './Message.scss';

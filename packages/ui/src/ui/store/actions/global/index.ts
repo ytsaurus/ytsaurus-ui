@@ -1,4 +1,4 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 import isEmpty_ from 'lodash/isEmpty';
 
@@ -6,7 +6,7 @@ import ypath from '../../../common/thor/ypath';
 
 import {listAllGroups, listAllUsers} from '../../../utils/users-groups';
 import {normalizeResponseWithAttributes} from '../../../utils';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {
     selectBundles,
     selectGlobalAsideHeaderWidth,
@@ -31,7 +31,7 @@ import {getWindowStore} from '../../../store/window-store';
 import {reloadUserSettings} from '../settings';
 import {YT} from '../../../config/yt-config';
 import {getConfigData} from '../../../config/ui-settings';
-import {GloablStateAction} from '../../../store/reducers/global';
+import {type GloablStateAction} from '../../../store/reducers/global';
 import {toaster} from '../../../utils/toaster';
 
 export function setTheme(theme: 'light' | 'dark' | 'system' | 'light-hc' | 'dark-hc') {

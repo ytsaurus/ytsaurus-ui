@@ -3,10 +3,10 @@ import {
     CONSUMER_STATUS_LOAD_REQUEST,
     CONSUMER_STATUS_LOAD_SUCCESS,
 } from '../../../../../constants/navigation/tabs/consumer';
-import type {Action} from 'redux';
+import {type Action} from 'redux';
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';
-import type {ActionD, YTError} from '../../../../../types';
-import {TPerformanceCounters} from '../queue/types';
+import {type ActionD, type YTError} from '../../../../../types';
+import {type TPerformanceCounters} from '../queue/types';
 
 export interface YtConsumerStatus {
     error?: YTError; // may be missing

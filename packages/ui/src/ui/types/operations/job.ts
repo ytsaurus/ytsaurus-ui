@@ -1,5 +1,5 @@
-import {OperationType} from '../../../shared/yt-types';
-import {Acl, YTError} from '../../types';
+import {type OperationType} from '../../../shared/yt-types';
+import {type Acl, type YTError} from '../../types';
 
 export interface RawJobEvent {
     time: string;

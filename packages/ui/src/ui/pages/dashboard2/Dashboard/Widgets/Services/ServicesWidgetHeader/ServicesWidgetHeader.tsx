@@ -3,7 +3,7 @@ import React from 'react';
 import {WidgetHeader} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetHeader/WidgetHeader';
 
 import {useServicesWidget} from '../hooks/use-services-widget';
-import type {ServicesWidgetProps} from '../types';
+import {type ServicesWidgetProps} from '../types';
 
 import i18n from '../i18n';
 

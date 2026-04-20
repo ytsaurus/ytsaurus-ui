@@ -1,11 +1,11 @@
-import {ActionD, YTError} from '../../../../types';
+import {type ActionD, type YTError} from '../../../../types';
 import {
     ACCOUNTS_USAGE_TREE_DIFF_FAILED,
     ACCOUNTS_USAGE_TREE_DIFF_REQUEST,
     ACCOUNTS_USAGE_TREE_DIFF_SUCCESS,
 } from '../../../../constants/accounts/accounts';
-import {AccountUsageListDiffDataParams} from './accounts-usage-list-diff';
-import {AccountUsageData} from './account-usage-types';
+import {type AccountUsageListDiffDataParams} from './accounts-usage-list-diff';
+import {type AccountUsageData} from './account-usage-types';
 
 export interface AccountUsageTreeDiffData {
     loading?: boolean;

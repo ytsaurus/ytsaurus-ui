@@ -5,9 +5,9 @@ import cn from 'bem-cn-lite';
 import {
     Button,
     Select,
-    SelectOption,
-    SelectProps,
-    SelectRenderControlProps,
+    type SelectOption,
+    type SelectProps,
+    type SelectRenderControlProps,
     Text,
     TextInput,
 } from '@gravity-ui/uikit';

@@ -1,5 +1,5 @@
 import React from 'react';
-import {DialogControlProps} from '../../components/Dialog/Dialog.types';
+import {type DialogControlProps} from '../../components/Dialog/Dialog.types';
 import {AccountSuggestImpl} from './AccountsSuggest';
 import {selectCurrentUserName} from '../../store/selectors/global';
 import {useSelector} from '../../store/redux-hooks';

@@ -1,6 +1,10 @@
 import React from 'react';
 
-import {ChartData, LineSeries, TooltipDataChunkBarX} from '@gravity-ui/chartkit/gravity-charts';
+import {
+    type ChartData,
+    type LineSeries,
+    type TooltipDataChunkBarX,
+} from '@gravity-ui/chartkit/gravity-charts';
 
 import format from '../../common/hammer/format';
 import {ColorCircle} from '../../components/ColorCircle/ColorCircle';

@@ -13,18 +13,18 @@ import {createSelector} from 'reselect';
 
 import {UNAWARE} from '../../../../../constants';
 import {
-    FlagState,
-    NodeRange,
-    TagFilter,
+    type FlagState,
+    type NodeRange,
+    type TagFilter,
     groupFilterInitialState,
 } from '../../../../../store/reducers/components/nodes/setup/setup';
 import {MEDIUM_COLS_PREFIX} from '../../../../../constants/components/nodes/nodes';
 import {getMediumListNoCache} from '../../../../../store/selectors/thor';
-import type {ValueOf} from '../../../../../types';
-import {Node} from '../../../../reducers/components/nodes/nodes/node';
+import {type ValueOf} from '../../../../../types';
+import {type Node} from '../../../../reducers/components/nodes/nodes/node';
 import {isRangeFilterDefined} from '../../../../../utils/components/nodes/setup';
 import {toaster} from '../../../../../utils/toaster';
-import {RootState} from '../../../../reducers';
+import {type RootState} from '../../../../reducers';
 
 export const selectSetupFiltersRaw = (state: RootState) => state.components.nodes.setup;
 

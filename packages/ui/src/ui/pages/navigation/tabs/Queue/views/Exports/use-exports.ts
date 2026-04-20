@@ -5,9 +5,9 @@ import {makeGetExportsParams} from '../../../../../../store/api/navigation/tabs/
 
 import {getPath} from '../../../../../../store/selectors/navigation';
 
-import {QueueExport} from '../../../../../../types/navigation/queue/queue';
+import {type QueueExport} from '../../../../../../types/navigation/queue/queue';
 
-import {ExportConfigColumns} from './Exports';
+import {type ExportConfigColumns} from './Exports';
 
 export function useExports() {
     const path = useSelector(getPath);

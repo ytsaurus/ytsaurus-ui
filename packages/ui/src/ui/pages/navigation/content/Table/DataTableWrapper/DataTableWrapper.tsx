@@ -5,7 +5,7 @@ import DataTable from '@gravity-ui/react-data-table';
 
 import {Loader} from '@gravity-ui/uikit';
 
-import type {TypeArray} from '@ytsaurus/components';
+import {type TypeArray} from '@ytsaurus/components';
 import {useResizeEventForTable} from '../../../../../components/UseResizeEventForTable/UseResizeEventForTable';
 
 import {injectTableCellData} from '../../../../../store/actions/navigation/content/table/table-ts';
@@ -14,11 +14,14 @@ import {getSchemaByName} from '../../../../../store/selectors/navigation/tabs/sc
 import {selectPrimitiveTypesMap} from '../../../../../store/selectors/global/supported-features';
 import {getSettingTableDisplayRawStrings} from '../../../../../store/selectors/settings';
 import {shouldUseYqlTypes} from '../../../../../store/selectors/settings/settings-development';
-import {YsonSettings} from '../../../../../store/selectors/thor/unipika';
+import {type YsonSettings} from '../../../../../store/selectors/thor/unipika';
 import {onCellPreview} from '../../../../../store/actions/navigation/modals/cell-preview';
-import {NameWithSortOrder, prepareColumns} from '../../../../../utils/navigation/prepareColumns';
 import {
-    CellDataHandlerNavigation,
+    type NameWithSortOrder,
+    prepareColumns,
+} from '../../../../../utils/navigation/prepareColumns';
+import {
+    type CellDataHandlerNavigation,
     isInlinePreviewAllowed,
     onErrorTableCellPreview,
 } from '../../../../../types/navigation/table-cell-preview';

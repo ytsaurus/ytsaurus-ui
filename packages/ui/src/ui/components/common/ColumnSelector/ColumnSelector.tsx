@@ -1,7 +1,7 @@
 import React from 'react';
 import block from 'bem-cn-lite';
-import {Button, Popup, PopupPlacement} from '@gravity-ui/uikit';
-import {ItemSelector, ItemSelectorProps} from '@gravity-ui/components';
+import {Button, Popup, type PopupPlacement} from '@gravity-ui/uikit';
+import {ItemSelector, type ItemSelectorProps} from '@gravity-ui/components';
 
 import unipika from '../../../common/thor/unipika';
 

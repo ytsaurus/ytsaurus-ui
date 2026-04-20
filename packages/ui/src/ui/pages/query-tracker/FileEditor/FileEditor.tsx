@@ -1,4 +1,4 @@
-import React, {FC, useRef} from 'react';
+import React, {type FC, useRef} from 'react';
 import {setFileEditor} from '../../../store/reducers/query-tracker/queryFilesFormSlice';
 import {selectFileEditorConfig} from '../../../store/selectors/query-tracker/queryFilesForm';
 import {changeQueryFile} from '../../../store/actions/query-tracker/queryFilesForm';
@@ -10,8 +10,8 @@ import LayoutColumnsIcon from '@gravity-ui/icons/svgs/layout-columns.svg';
 import {Button, Icon, Text} from '@gravity-ui/uikit';
 import './FileEditor.scss';
 import cn from 'bem-cn-lite';
-import MonacoEditor, {MonacoEditorConfig} from '../../../components/MonacoEditor';
-import * as monaco from 'monaco-editor';
+import MonacoEditor, {type MonacoEditorConfig} from '../../../components/MonacoEditor';
+import type * as monaco from 'monaco-editor';
 
 const block = cn('file-editor');
 

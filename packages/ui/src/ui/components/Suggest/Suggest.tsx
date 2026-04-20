@@ -7,7 +7,7 @@ import isNumber_ from 'lodash/isNumber';
 import isObject_ from 'lodash/isObject';
 import partition_ from 'lodash/partition';
 
-import {Popup, PopupProps, TextInput, TextInputProps} from '@gravity-ui/uikit';
+import {Popup, type PopupProps, TextInput, type TextInputProps} from '@gravity-ui/uikit';
 
 import templates from '../../components/templates/utils';
 

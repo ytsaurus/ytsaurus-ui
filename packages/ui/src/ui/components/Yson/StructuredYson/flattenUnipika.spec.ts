@@ -1,6 +1,6 @@
 // @ts-ignore
 import unipika from '@gravity-ui/unipika/lib/unipika';
-import {FlattenUnipikaResult, UnipikaFlattenTree, flattenUnipika} from './flattenUnipika';
+import {type FlattenUnipikaResult, type UnipikaFlattenTree, flattenUnipika} from './flattenUnipika';
 
 describe('flattenUnipika', () => {
     describe('YSON', () => {

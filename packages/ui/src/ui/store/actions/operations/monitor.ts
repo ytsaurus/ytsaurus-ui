@@ -1,6 +1,6 @@
 import {OPERATION_DETAIL_PARTIAL} from '../../../constants/operations/detail';
 import {selectOperationMonitorChartStates} from '../../../store/selectors/operations/operation';
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 export function resetOperationmonitorChartStates() {
     return {type: OPERATION_DETAIL_PARTIAL, data: {monitorChartStates: {}}};

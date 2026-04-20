@@ -1,10 +1,10 @@
 import reduce_ from 'lodash/reduce';
 
-import type {
-    AccessLogFieldSelectorType,
-    AccessLogMethodType,
-    AccessLogScopeType,
-    AccessLogUserType,
+import {
+    type AccessLogFieldSelectorType,
+    type AccessLogMethodType,
+    type AccessLogScopeType,
+    type AccessLogUserType,
 } from '../../../store/reducers/navigation/tabs/access-log/access-log-filters';
 
 export function valueToSelection<KeyType extends string, V>(value: Record<KeyType, V>) {

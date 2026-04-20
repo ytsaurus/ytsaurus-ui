@@ -1,9 +1,9 @@
 import {produce} from 'immer';
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import moment, {Moment} from 'moment';
-import {CanceledError} from 'axios';
+import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
+import moment, {type Moment} from 'moment';
+import {type CanceledError} from 'axios';
 
-import {YTError} from '../../../../../../@types/types';
+import {type YTError} from '../../../../../../@types/types';
 
 export interface DownloadItem {
     id: string;

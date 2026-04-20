@@ -1,8 +1,8 @@
-import type {YTError} from '../@types/types';
+import {type YTError} from '../@types/types';
 
-import {RawJob} from '../ytsaurus-ui.ui/types/operations/job';
-import type {DescribedSettings, Stage} from './constants/settings-types';
-import type {UISettings} from './ui-settings';
+import {type RawJob} from '../ytsaurus-ui.ui/types/operations/job';
+import {type DescribedSettings, type Stage} from './constants/settings-types';
+import {type UISettings} from './ui-settings';
 
 export type RawVersion = `${MajorMinorPatch}-${string}` | '';
 

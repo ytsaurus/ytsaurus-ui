@@ -1,8 +1,8 @@
 import React from 'react';
 import {Flex, Text} from '@gravity-ui/uikit';
-import type {Meta, StoryObj} from '@storybook/react';
+import {type Meta, type StoryObj} from '@storybook/react';
 
-import Label, {LabelTheme} from '..';
+import Label, {type LabelTheme} from '..';
 
 const meta: Meta<typeof Label> = {
     title: 'Components/Label',

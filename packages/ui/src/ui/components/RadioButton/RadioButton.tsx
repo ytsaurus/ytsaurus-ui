@@ -3,7 +3,12 @@ import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
 
 import hammer from '../../common/hammer';
-import {Icon, IconData, SegmentedRadioGroup, SegmentedRadioGroupProps} from '@gravity-ui/uikit';
+import {
+    Icon,
+    type IconData,
+    SegmentedRadioGroup,
+    type SegmentedRadioGroupProps,
+} from '@gravity-ui/uikit';
 
 interface Props<T extends string = string> extends SegmentedRadioGroupProps<T> {
     items: Array<ItemType<T>>;

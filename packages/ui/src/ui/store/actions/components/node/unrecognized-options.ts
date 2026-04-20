@@ -1,7 +1,7 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
-import {RootState} from '../../../reducers';
-import {NodeUnrecognizedOptionsAction} from '../../../reducers/components/node/unrecognized-options';
+import {type RootState} from '../../../reducers';
+import {type NodeUnrecognizedOptionsAction} from '../../../reducers/components/node/unrecognized-options';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {NODE_UNRECOGNIEZED_OPTIONS} from '../../../../constants/components/nodes/node';
 import CancelHelper, {isCancelled} from '../../../../utils/cancel-helper';

@@ -1,6 +1,6 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {YTError} from '../../../../../@types/types';
-import {Reducer} from 'redux';
+import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {type YTError} from '../../../../../@types/types';
+import {type Reducer} from 'redux';
 
 type TableSortMergeActionData =
     | Pick<TableSortMergeModal, 'sortVisible' | 'paths'>

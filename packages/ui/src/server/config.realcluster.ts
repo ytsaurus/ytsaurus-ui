@@ -1,5 +1,5 @@
 import reduce_ from 'lodash/reduce';
-import {ClusterConfig, YTConfig} from '../shared/yt-types';
+import {type ClusterConfig, type YTConfig} from '../shared/yt-types';
 import {getApp} from './ServerFactory';
 
 export function getRealClustersConfig(): Pick<YTConfig, 'clusters'> {

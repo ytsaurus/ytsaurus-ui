@@ -3,10 +3,10 @@ import {
     QUEUE_PARTITIONS_LOAD_REQUEST,
     QUEUE_PARTITIONS_LOAD_SUCCESS,
 } from '../../../../../constants/navigation/tabs/queue';
-import type {Action} from 'redux';
+import {type Action} from 'redux';
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';
-import type {ActionD, YTError} from '../../../../../types';
-import type {YtQueuePartition} from './types';
+import {type ActionD, type YTError} from '../../../../../types';
+import {type YtQueuePartition} from './types';
 
 export interface QueuePartitionsState {
     partitionsLoading: boolean;

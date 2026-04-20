@@ -6,8 +6,8 @@ import {useExportMutation} from '../../../../../../../store/api/navigation/tabs/
 
 import Icon from '../../../../../../../components/Icon/Icon';
 import {YTDFDialog, makeErrorFields} from '../../../../../../../components/Dialog';
-import {QueueExportConfig} from '../../../../../../../types/navigation/queue/queue';
-import {YTError} from '../../../../../../../types';
+import {type QueueExportConfig} from '../../../../../../../types/navigation/queue/queue';
+import {type YTError} from '../../../../../../../types';
 
 import {ExportsEditDialog} from '../ExportsEditDialog/ExportsEditDialog';
 

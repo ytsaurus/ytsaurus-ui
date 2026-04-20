@@ -1,7 +1,7 @@
 import React from 'react';
 import {Flex, Icon, Label, Link} from '@gravity-ui/uikit';
 import AbbrSqlIcon from '@gravity-ui/icons/svgs/abbr-sql.svg';
-import type {MetaTableItem, MetaTableOperationLinkParams} from '@ytsaurus/components';
+import {type MetaTableItem, type MetaTableOperationLinkParams} from '@ytsaurus/components';
 import UIFactory from '../../../UIFactory';
 import {isQueryTrackerId} from './helpers/isQueryTrackerId';
 

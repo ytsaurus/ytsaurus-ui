@@ -1,6 +1,6 @@
-import {QueryEngine} from '../../../shared/constants/engines';
-import type {QueriesHistoryCursorDirection} from '../../store/reducers/query-tracker/query-tracker-contants';
-import {QueryStatus} from './index';
+import {type QueryEngine} from '../../../shared/constants/engines';
+import {type QueriesHistoryCursorDirection} from '../../store/reducers/query-tracker/query-tracker-contants';
+import {type QueryStatus} from './index';
 
 export enum QueriesListAuthorFilter {
     All = 'all',

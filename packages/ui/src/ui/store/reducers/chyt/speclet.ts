@@ -1,4 +1,4 @@
-import {ActionD, YTError} from '../../../types';
+import {type ActionD, type YTError} from '../../../types';
 import {mergeStateOnClusterChange} from '../utils';
 import {CHYT_SPECLET} from '../../../constants/chyt-page';
 

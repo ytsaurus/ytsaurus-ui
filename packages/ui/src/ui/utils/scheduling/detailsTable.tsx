@@ -1,8 +1,8 @@
 import moment from 'moment';
 
 import format from '../../common/hammer/format';
-import type {PoolResourceType} from '../../store/selectors/scheduling/scheduling-pools';
-import {SchedulingRowData} from './pool-child';
+import {type PoolResourceType} from '../../store/selectors/scheduling/scheduling-pools';
+import {type SchedulingRowData} from './pool-child';
 
 function prepareDetailedColumn(resource: PoolResourceType) {
     return {

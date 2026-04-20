@@ -12,7 +12,7 @@ import sortBy_ from 'lodash/sortBy';
 import set_ from 'lodash/set';
 
 import Button from '../../../../components/Button/Button';
-import {FormApi, YTDFDialog} from '../../../../components/Dialog';
+import {type FormApi, YTDFDialog} from '../../../../components/Dialog';
 import Icon from '../../../../components/Icon/Icon';
 import Link from '../../../../components/Link/Link';
 
@@ -27,7 +27,7 @@ import {createNewColumn} from '../../../../store/reducers/navigation/modals/crea
 
 import {
     ColumnAggregateTypes as AggrTypes,
-    ColumnAggregateType,
+    type ColumnAggregateType,
     ColumnDataTypes,
     SELECT_EMPTY_VALUE,
 } from '../../../../constants/navigation/modals/create-table';
@@ -38,18 +38,18 @@ import {
 } from '../../../../store/selectors/navigation/modals/create-table';
 import {StorageOptions} from '../../../../utils/cypress-attributes';
 
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {
     selectCompressionCodecs,
     selectErasureCodecs,
     selectPrimitiveTypes,
 } from '../../../../store/selectors/global/supported-features';
-import {SelectWithSubItemsProps} from '../../../../components/Dialog/controls/SelectWithSubItems/SelectWithSubItems';
+import {type SelectWithSubItemsProps} from '../../../../components/Dialog/controls/SelectWithSubItems/SelectWithSubItems';
 import {docsUrl, getNewTableReplicasCount} from '../../../../config';
 
 import './CreateTableModal.scss';
 import {ASCENDING, DESCENDING} from './CreateTableTabField/CreateTableTabField';
-import {FIX_MY_TYPE} from '../../../../types';
+import {type FIX_MY_TYPE} from '../../../../types';
 import UIFactory from '../../../../UIFactory';
 
 const block = cn('create-table-modal');

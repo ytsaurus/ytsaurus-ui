@@ -10,7 +10,7 @@ import {
 import {useUnregisterConsumerMutation} from '../../../../../../store/api/navigation/tabs/queue/queue';
 
 import {YTDFDialog, makeErrorFields} from '../../../../../../components/Dialog';
-import {YTError} from '../../../../../../../@types/types';
+import {type YTError} from '../../../../../../../@types/types';
 
 export function UnregisterConsumerDialog() {
     const dispatch = useDispatch();

@@ -5,10 +5,10 @@ import forEach_ from 'lodash/forEach';
 import map_ from 'lodash/map';
 import sortBy_ from 'lodash/sortBy';
 
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {selectCluster} from './index';
-import {SelectWithSubItemsProps} from '../../../components/Dialog/controls/SelectWithSubItems/SelectWithSubItems';
-import {OperationStatisticInfo} from '../../../store/reducers/global/supported-features';
+import {type SelectWithSubItemsProps} from '../../../components/Dialog/controls/SelectWithSubItems/SelectWithSubItems';
+import {type OperationStatisticInfo} from '../../../store/reducers/global/supported-features';
 
 const selectSupportedFeaturesRaw = (state: RootState) => state.supportedFeatures.features;
 const selectSupportedFeaturesCluster = (state: RootState) =>

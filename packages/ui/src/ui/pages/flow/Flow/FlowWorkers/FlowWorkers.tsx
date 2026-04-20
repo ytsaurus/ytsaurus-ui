@@ -2,13 +2,13 @@ import cn from 'bem-cn-lite';
 import moment from 'moment';
 import React from 'react';
 import {Route, Switch, useRouteMatch} from 'react-router';
-import {FlowWorkerData} from '../../../../../shared/yt-types';
+import {type FlowWorkerData} from '../../../../../shared/yt-types';
 import format from '../../../../common/hammer/format';
 import ClickableAttributesButton from '../../../../components/AttributesButton/ClickableAttributesButton';
 import {
     DataTableGravity,
     TableCell,
-    tanstack,
+    type tanstack,
     useTable,
 } from '../../../../components/DataTableGravity';
 import Link from '../../../../components/Link/Link';

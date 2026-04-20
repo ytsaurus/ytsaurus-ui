@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {TypedUseQueryStateOptions} from '@reduxjs/toolkit/dist/query/react';
+import {type TypedUseQueryStateOptions} from '@reduxjs/toolkit/dist/query/react';
 
 import {
-    BaseQueryFn,
-    MutationDefinition,
-    MutationResultSelectorResult,
-    SubscriptionOptions,
+    type BaseQueryFn,
+    type MutationDefinition,
+    type MutationResultSelectorResult,
+    type SubscriptionOptions,
 } from '@reduxjs/toolkit/query';
 
-import {YTError} from '../../../types';
-import {ApiMethodParams, YTApiSetup} from '../../../rum/rum-wrap-api';
+import {type YTError} from '../../../types';
+import {type ApiMethodParams, type YTApiSetup} from '../../../rum/rum-wrap-api';
 
 // YT API Utility Types
 

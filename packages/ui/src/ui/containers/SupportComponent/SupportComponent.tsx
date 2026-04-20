@@ -1,6 +1,6 @@
 import React from 'react';
 
-import UIFactory from '../../UIFactory';
+import type UIFactory from '../../UIFactory';
 import {uiSettings} from '../../config/ui-settings';
 import {openInNewTab} from '../../utils/utils';
 

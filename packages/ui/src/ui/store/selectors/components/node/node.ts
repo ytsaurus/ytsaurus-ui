@@ -1,4 +1,4 @@
-import type {RootState} from '../../../../store/reducers/index';
+import {type RootState} from '../../../../store/reducers/index';
 
 export const selectNode = (state: RootState) => state.components.node.node;
 

@@ -1,4 +1,4 @@
-import DataTable, {Settings} from '@gravity-ui/react-data-table';
+import DataTable, {type Settings} from '@gravity-ui/react-data-table';
 
 import {HEADER_HEIGHT} from '../../constants';
 import {TOOLBAR_COMPONENT_HEIGHT} from '../WithStickyToolbar/Toolbar/Toolbar';

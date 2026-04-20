@@ -3,13 +3,13 @@ import reduce_ from 'lodash/reduce';
 import sortBy_ from 'lodash/sortBy';
 import values_ from 'lodash/values';
 
-import type {
-    HttpProxiesState,
-    RoleGroupInfo,
-    RoleGroupItemInfo,
-    SystemNodeCounters,
+import {
+    type HttpProxiesState,
+    type RoleGroupInfo,
+    type RoleGroupItemInfo,
+    type SystemNodeCounters,
 } from '../../store/reducers/system/proxies';
-import type {NodeEffectiveState, NodeState} from '../../store/reducers/system/nodes';
+import {type NodeEffectiveState, type NodeState} from '../../store/reducers/system/nodes';
 
 export function extractRoleGroups(proxies: Array<RoleGroupItemInfo>): Array<RoleGroupInfo> {
     const roleGroups = reduce_(

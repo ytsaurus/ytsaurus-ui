@@ -12,9 +12,9 @@ import {getTableType} from '../../../../../store/selectors/navigation/content/ta
 import {getIsDynamic} from '../../../../../store/selectors/navigation/content/table-ts';
 import {getAttributes, getAttributesWithTypes} from '../../../../../store/selectors/navigation';
 import {getTabletErrorsBackgroundCount} from '../../../../../store/selectors/navigation/tabs/tablet-errors-background';
-import {Props as AutomaticModeSwitchProps} from './AutomaticModeSwitch';
+import {type Props as AutomaticModeSwitchProps} from './AutomaticModeSwitch';
 
-import {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 import {selectCluster} from '../../../../../store/selectors/global';
 
 import {UI_COLLAPSIBLE_SIZE} from '../../../../../constants/global';

@@ -1,6 +1,6 @@
 import {GET_TABLET_ERRORS} from '../../../../../constants/navigation/tabs/tablet-errors';
-import {Action} from 'redux';
-import {ActionD, YTError} from '../../../../../types';
+import {type Action} from 'redux';
+import {type ActionD, type YTError} from '../../../../../types';
 
 export interface TabletErrorsState {
     loading: boolean;

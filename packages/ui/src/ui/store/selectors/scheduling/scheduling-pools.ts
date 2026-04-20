@@ -4,7 +4,7 @@ import reduce_ from 'lodash/reduce';
 
 import {createSelector} from 'reselect';
 
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {ROOT_POOL_NAME} from '../../../constants/scheduling';
 import {preparePools} from '../../../utils/scheduling/scheduling';
 import ypath from '../../../common/thor/ypath';

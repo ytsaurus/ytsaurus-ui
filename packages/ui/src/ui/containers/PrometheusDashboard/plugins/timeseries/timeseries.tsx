@@ -4,8 +4,8 @@ import reduce_ from 'lodash/reduce';
 
 import {Flex} from '@gravity-ui/uikit';
 
-import {YTError} from '../../../../../@types/types';
-import {QueryRangeData, TimeseriesTarget} from '../../../../../shared/prometheus/types';
+import {type YTError} from '../../../../../@types/types';
+import {type QueryRangeData, type TimeseriesTarget} from '../../../../../shared/prometheus/types';
 import {KEY_WITH_DOUBLE_CURLY_BRACES, formatByParams} from '../../../../../shared/utils/format';
 
 import format from '../../../../common/hammer/format';
@@ -14,12 +14,12 @@ import {YT} from '../../../../config/yt-config';
 import {IntersectionObserverContainer} from '../../../../components/IntersectionObserverContainer/IntersectionObserverContainer';
 
 import {YTChartKitLazy, getSerieColor} from '../../../../components/YTChartKit';
-import {Yagr, YagrWidgetData} from '@gravity-ui/chartkit/yagr';
+import {type Yagr, type YagrWidgetData} from '@gravity-ui/chartkit/yagr';
 import {InlineError} from '../../../../components/InlineError/InlineError';
 import Loader from '../../../../components/Loader/Loader';
 import {useElementSize} from '../../../../hooks/useResizeObserver';
 
-import {PrometheusPlugins} from '../../PrometheusDashKit';
+import {type PrometheusPlugins} from '../../PrometheusDashKit';
 import {PrometheusWidgetToolbar} from '../../PrometheusWidgetToolbar/PrometheusWidgetToolbar';
 import {usePrometheusDashboardContext} from '../../PrometheusDashboardContext/PrometheusDashboardContext';
 

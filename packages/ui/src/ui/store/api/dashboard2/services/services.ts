@@ -1,5 +1,5 @@
-import {BatchResultsItem} from './../../../../../shared/yt-types.d';
-import {BaseQueryApi} from '@reduxjs/toolkit/query';
+import {type BatchResultsItem} from './../../../../../shared/yt-types.d';
+import {type BaseQueryApi} from '@reduxjs/toolkit/query';
 
 import map_ from 'lodash/map';
 import filter_ from 'lodash/filter';
@@ -8,13 +8,16 @@ import find_ from 'lodash/find';
 import format from '../../../../common/hammer/format';
 import ypath from '../../../../common/thor/ypath';
 
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {selectIsAdmin} from '../../../../store/selectors/global/is-developer';
 
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
-import {StrawberryCliqueHealthType, chytApiAction} from '../../../../utils/strawberryControllerApi';
+import {
+    type StrawberryCliqueHealthType,
+    chytApiAction,
+} from '../../../../utils/strawberryControllerApi';
 import {defaultColumns} from '../../../../constants/chyt';
-import {YTError, YTHealth} from '../../../../types';
+import {type YTError, type YTHealth} from '../../../../types';
 import {Page} from '../../../../../shared/constants/settings';
 import {USE_MAX_SIZE} from '../../../../../shared/constants/yt-api';
 import {pluralize} from '../../../../utils';

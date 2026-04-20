@@ -5,7 +5,7 @@ import filter_ from 'lodash/filter';
 
 import format from '../../../common/hammer/format';
 
-import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
+import DataTable, {type Column, type Settings} from '@gravity-ui/react-data-table';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import Filter from '../../../components/Filter/Filter';
 import Label from '../../../components/Label';
@@ -15,7 +15,10 @@ import WithStickyToolbar, {
 } from '../../../components/WithStickyToolbar/WithStickyToolbar';
 import ChartLink from '../../../components/ChartLink/ChartLink';
 import Icon from '../../../components/Icon/Icon';
-import {AllocatedInstance, InProgressInstance} from '../../../store/reducers/tablet_cell_bundles';
+import {
+    type AllocatedInstance,
+    type InProgressInstance,
+} from '../../../store/reducers/tablet_cell_bundles';
 
 import './CellsBundleController.scss';
 import {lastWord, printUsageLimit} from '../../../utils';

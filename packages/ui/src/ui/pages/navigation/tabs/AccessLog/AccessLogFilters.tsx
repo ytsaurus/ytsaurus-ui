@@ -35,10 +35,10 @@ import {
     setAccessLogFiltersPage,
 } from '../../../../store/actions/navigation/tabs/access-log/access-log';
 import {
-    AccessLogFieldSelectorType,
-    AccessLogMethodType,
-    AccessLogScopeType,
-    AccessLogUserType,
+    type AccessLogFieldSelectorType,
+    type AccessLogMethodType,
+    type AccessLogScopeType,
+    type AccessLogUserType,
     initialState,
 } from '../../../../store/reducers/navigation/tabs/access-log/access-log-filters';
 

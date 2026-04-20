@@ -1,4 +1,4 @@
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 
 export const selectFlowPipelinePath = (state: RootState) => state.flow.filters.pipelinePath;
 export const selectFlowComputationsNameFilter = (state: RootState) =>

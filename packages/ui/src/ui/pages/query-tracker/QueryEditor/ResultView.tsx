@@ -1,5 +1,5 @@
 import React, {memo} from 'react';
-import {QueryItem} from '../../../types/query-tracker/api';
+import {type QueryItem} from '../../../types/query-tracker/api';
 import {QueryResults} from '../QueryResults';
 import {Button, Flex, Icon} from '@gravity-ui/uikit';
 import {ShareButton} from '../QueryResults/ShareButton';
@@ -7,7 +7,7 @@ import {EditQueryACOModal} from '../QueryACO/EditQueryACOModal/EditQueryACOModal
 import SquareIcon from '@gravity-ui/icons/svgs/square.svg';
 import LayoutFooterIcon from '@gravity-ui/icons/svgs/layout-footer.svg';
 import XmarkIcon from '@gravity-ui/icons/svgs/xmark.svg';
-import {ResultMode} from './QueryEditor';
+import {type ResultMode} from './QueryEditor';
 import cn from 'bem-cn-lite';
 import './ResultView.scss';
 

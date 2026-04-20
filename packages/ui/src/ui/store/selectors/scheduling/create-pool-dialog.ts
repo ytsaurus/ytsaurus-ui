@@ -1,6 +1,6 @@
 import forEach_ from 'lodash/forEach';
 
-import {RootState} from '../../reducers';
+import {type RootState} from '../../reducers';
 import {createSelector} from 'reselect';
 
 export const getCreatePoolDialogCurrentTree = (state: RootState) =>

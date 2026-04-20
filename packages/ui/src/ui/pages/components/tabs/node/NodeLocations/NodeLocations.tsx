@@ -1,7 +1,7 @@
 import React from 'react';
 import {useSelector} from '../../../../../store/redux-hooks';
 
-import type {Column} from '@gravity-ui/react-data-table';
+import {type Column} from '@gravity-ui/react-data-table';
 import {Progress} from '@gravity-ui/uikit';
 
 import format from '../../../../../common/hammer/format';

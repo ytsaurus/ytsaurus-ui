@@ -1,7 +1,7 @@
 import cn from 'bem-cn-lite';
 import map_ from 'lodash/map';
 import React, {useState} from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 
 import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
@@ -19,10 +19,10 @@ import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 import {useMemoizedIfEqual, useUpdater} from '../../../hooks';
 import {setSettingsSystemNodesCollapsed} from '../../../store/actions/settings/settings';
 import {loadSystemNodes} from '../../../store/actions/system/nodes';
-import {RoleGroupInfo} from '../../../store/reducers/system/proxies';
+import {type RoleGroupInfo} from '../../../store/reducers/system/proxies';
 
 import {selectCluster} from '../../../store/selectors/global';
-import type {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 
 import {
     getSettingSystemNodesNodeType,
@@ -30,11 +30,11 @@ import {
 } from '../../../store/selectors/settings/settings-ts';
 import {getSystemNodesNodeTypesToLoad} from '../../../store/selectors/system/nodes';
 import {
-    ComponentsNodesLinkParams,
+    type ComponentsNodesLinkParams,
     makeComponentsNodesLink,
 } from '../../../utils/components/nodes/node';
 
-import {MakeUrlParams, RoleGroup, RoleGroupsContainer} from '../ProxiesImpl/RoleGroup';
+import {type MakeUrlParams, RoleGroup, RoleGroupsContainer} from '../ProxiesImpl/RoleGroup';
 
 import {SystemNodeTypeSelector} from './NodeTypeSelector';
 

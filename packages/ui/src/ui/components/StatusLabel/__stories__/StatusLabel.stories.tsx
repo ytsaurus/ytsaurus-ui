@@ -3,7 +3,7 @@ import {type Meta, type StoryObj} from '@storybook/react';
 import {Flex, Text} from '@gravity-ui/uikit';
 
 import StatusLabel, {type StatusLabelProps, type ViewState} from '../StatusLabel';
-import {NavigationFlowState, StatusLabelState} from '../../../types/common/states';
+import {type NavigationFlowState, type StatusLabelState} from '../../../types/common/states';
 
 export default {
     title: 'Components/StatusLabel',

@@ -1,6 +1,6 @@
-import {QueryResult} from './types';
+import {type QueryResult} from './types';
 import {getPointValue} from './getPointData';
-import type {PieSeries} from '@gravity-ui/chartkit/gravity-charts';
+import {type PieSeries} from '@gravity-ui/chartkit/gravity-charts';
 
 export const preparePie = (rows: QueryResult, xKey: string, yKey: string): PieSeries[] => {
     return [

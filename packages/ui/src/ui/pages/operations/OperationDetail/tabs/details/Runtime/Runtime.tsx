@@ -1,5 +1,5 @@
-import React, {Component, FC} from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import React, {Component, type FC} from 'react';
+import {type ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
@@ -13,7 +13,10 @@ import {showEditPoolsWeightsModal} from '../../../../../../store/actions/operati
 import hammer from '../../../../../../common/hammer';
 import {OperationPool} from '../../../../../../components/OperationPool/OperationPool';
 import ypath from '../../../../../../common/thor/ypath';
-import {RuntimeItem, RuntimeProgress} from '../../../../../../store/reducers/operations/detail';
+import {
+    type RuntimeItem,
+    type RuntimeProgress,
+} from '../../../../../../store/reducers/operations/detail';
 import {Flex, Icon, Tooltip} from '@gravity-ui/uikit';
 import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 

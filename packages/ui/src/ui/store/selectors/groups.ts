@@ -9,11 +9,11 @@ import {compareWithUndefined, orderTypeToOrderK} from '../../utils/sort-helpers'
 
 import {concatByAnd} from '../../common/hammer/predicate';
 import hammer from '../../common/hammer';
-import {FlagType, flags} from '../../utils';
-import type {RootState} from '../../store/reducers';
-import type {Group} from '../../store/reducers/groups/table';
+import {type FlagType, flags} from '../../utils';
+import {type RootState} from '../../store/reducers';
+import {type Group} from '../../store/reducers/groups/table';
 import {isIdmAclAvailable} from '../../config';
-import type {PreparedRole} from '../../utils/acl';
+import {type PreparedRole} from '../../utils/acl';
 
 // Table
 

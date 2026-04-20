@@ -1,6 +1,6 @@
-import {YTCoreConfig} from '../../@types/core';
+import {type YTCoreConfig} from '../../@types/core';
 import {Page} from '../../shared/constants/settings';
-import {DescribedSettings} from '../../shared/constants/settings-types';
+import {type DescribedSettings} from '../../shared/constants/settings-types';
 
 const defaultUserSettings: Partial<DescribedSettings> = {
     'global::newDashboardPage': true,

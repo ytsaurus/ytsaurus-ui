@@ -1,13 +1,13 @@
 import some_ from 'lodash/some';
 
-import type {Request, Response} from 'express';
+import {type Request, type Response} from 'express';
 // @ts-ignore
 import ytLib from '@ytsaurus/javascript-wrapper';
 
 import {sendAndLogError} from '../utils';
 
 // @ts-ignore
-import {RemoteCopyParams} from '../../@types/types';
+import {type RemoteCopyParams} from '../../@types/types';
 import {getClustersFromConfig} from '../components/utils';
 
 const yt = ytLib();

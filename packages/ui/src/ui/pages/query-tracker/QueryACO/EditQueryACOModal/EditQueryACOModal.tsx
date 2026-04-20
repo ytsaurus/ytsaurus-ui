@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {type FC, useState} from 'react';
 import {Button, Icon} from '@gravity-ui/uikit';
 import {YTDFDialog, makeErrorFields} from '../../../../components/Dialog';
 import {useQueryACO} from '../useQueryACO';

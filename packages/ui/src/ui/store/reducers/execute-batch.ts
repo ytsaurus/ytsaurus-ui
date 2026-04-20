@@ -1,12 +1,12 @@
-import {YTApiIdType} from '../../../shared/constants/yt-api-id';
+import {type YTApiIdType} from '../../../shared/constants/yt-api-id';
 
-import {ActionD, YTError} from '../../types';
+import {type ActionD, type YTError} from '../../types';
 import {
     EXECUTE_BATCH_RETRY_HIDE_MODAL,
     EXECUTE_BATCH_RETRY_SHOW_MODAL,
 } from '../../constants/execute-batch';
-import {ExecuteBatchOptions} from '../actions/execute-batch';
-import {BatchResultsItem, BatchSubRequest} from '../../../shared/yt-types';
+import {type ExecuteBatchOptions} from '../actions/execute-batch';
+import {type BatchResultsItem, type BatchSubRequest} from '../../../shared/yt-types';
 
 export interface ExecuteBatchStateItem extends HandleExecuteBatchRetryParams {
     id: string;

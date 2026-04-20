@@ -1,7 +1,7 @@
-import React, {ReactElement} from 'react';
-import {Select, SelectProps, TextInput} from '@gravity-ui/uikit';
-import type {Option} from '@gravity-ui/uikit/build/esm/components/Select/tech-components';
-import {SelectOption} from '@gravity-ui/uikit/build/esm/components/Select/types';
+import React, {type ReactElement} from 'react';
+import {Select, type SelectProps, TextInput} from '@gravity-ui/uikit';
+import {type Option} from '@gravity-ui/uikit/build/esm/components/Select/tech-components';
+import {type SelectOption} from '@gravity-ui/uikit/build/esm/components/Select/types';
 import './QuerySelector.scss';
 import cn from 'bem-cn-lite';
 

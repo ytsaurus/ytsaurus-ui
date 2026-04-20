@@ -1,5 +1,5 @@
 import unipika from '../../../../../../common/thor/unipika';
-import {DetailedOperationSelector} from '../../../../selectors';
+import {type DetailedOperationSelector} from '../../../../selectors';
 
 // TODO support getting correct type in UNIPIKA (e.g. account for tagged type)
 export const canRenderAsMap = (value: DetailedOperationSelector['description']) => {

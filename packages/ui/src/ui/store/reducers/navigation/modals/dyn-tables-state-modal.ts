@@ -1,4 +1,4 @@
-import {ActionD} from '../../../../types';
+import {type ActionD} from '../../../../types';
 import {DYN_TABLES_STATE_MODAL_PARTIAL} from '../../../../constants/navigation/modals/dyn-tables-state-modal';
 
 export type TabletStateType = 'mounted' | 'unmounted' | 'frozen' | 'mixed';

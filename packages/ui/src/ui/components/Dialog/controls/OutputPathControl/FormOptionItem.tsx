@@ -1,9 +1,9 @@
-import React, {FC} from 'react';
-import {Checkbox, CheckboxProps, Icon, Tooltip} from '@gravity-ui/uikit';
+import React, {type FC} from 'react';
+import {Checkbox, type CheckboxProps, Icon, Tooltip} from '@gravity-ui/uikit';
 import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 import cn from 'bem-cn-lite';
 import './FormOptionItem.scss';
-import {PathAttribute} from '../../../../store/reducers/navigation/modals/tableMergeSortModalSlice';
+import {type PathAttribute} from '../../../../store/reducers/navigation/modals/tableMergeSortModalSlice';
 
 const block = cn('form-option-item');
 

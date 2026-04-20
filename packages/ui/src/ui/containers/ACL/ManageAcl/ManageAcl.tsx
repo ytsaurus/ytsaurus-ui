@@ -8,27 +8,27 @@ import {Loader} from '@gravity-ui/uikit';
 import {DialogWrapper as CommonDialog} from '../../../components/DialogWrapper/DialogWrapper';
 
 import {
-    DialogField,
-    FormApi,
-    RoleListControlProps,
+    type DialogField,
+    type FormApi,
+    type RoleListControlProps,
     YTDFDialog,
     prepareRoleListValue,
     roleListValueToSubjectList,
 } from '../../../components/Dialog';
 
-import {IdmKindType} from '../../../utils/acl/acl-types';
-import {PreparedRole} from '../../../utils/acl';
-import {YTError} from '../../../types';
+import {type IdmKindType} from '../../../utils/acl/acl-types';
+import {type PreparedRole} from '../../../utils/acl';
+import {type YTError} from '../../../types';
 
 import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
 import {YTErrorBlock} from '../../../components/Error/Error';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import Button from '../../../components/Button/Button';
 
-import withVisible, {WithVisibleProps} from '../../../hocs/withVisible';
+import withVisible, {type WithVisibleProps} from '../../../hocs/withVisible';
 
 import UIFactory from '../../../UIFactory';
-import {ACLReduxProps} from '../ACL-connect-helpers';
+import {type ACLReduxProps} from '../ACL-connect-helpers';
 import i18n from './i18n';
 
 import './ManageAcl.scss';

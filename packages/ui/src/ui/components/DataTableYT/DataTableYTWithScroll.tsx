@@ -1,5 +1,5 @@
 import React from 'react';
-import {DataTableYT, DataTableYtProps} from '@ytsaurus/components';
+import {DataTableYT, type DataTableYtProps} from '@ytsaurus/components';
 import {useScrollableElementContenxt} from '../../hooks/use-scrollable-element';
 
 export function DataTableYTWithScroll<T>({settings, ...props}: DataTableYtProps<T>) {

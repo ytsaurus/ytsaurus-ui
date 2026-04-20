@@ -1,4 +1,4 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 import reduce_ from 'lodash/reduce';
 
@@ -6,9 +6,9 @@ import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
 import ypath from '../../../common/thor/ypath';
 import {FETCH_RPC_PROXIES} from '../../../constants/system/nodes';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {RootState} from '../../../store/reducers';
-import {RoleGroupItemInfo} from '../../../store/reducers/system/proxies';
-import {RpcProxiesAction} from '../../../store/reducers/system/rpc-proxies';
+import {type RootState} from '../../../store/reducers';
+import {type RoleGroupItemInfo} from '../../../store/reducers/system/proxies';
+import {type RpcProxiesAction} from '../../../store/reducers/system/rpc-proxies';
 import {isRetryFutile} from '../../../utils/index';
 import {extractProxyCounters, extractRoleGroups} from '../../../utils/system/proxies';
 import {showErrorPopup} from '../../../utils/utils';

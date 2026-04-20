@@ -1,7 +1,7 @@
 import {JOBS_MONITOR} from '../../../../constants/operations/detail';
-import {Action} from 'redux';
+import {type Action} from 'redux';
 import {mergeStateOnClusterChange} from '../../../../store/reducers/utils';
-import {ActionD, YTError} from '../../../../types';
+import {type ActionD, type YTError} from '../../../../types';
 
 export interface JobItem {
     id: string;

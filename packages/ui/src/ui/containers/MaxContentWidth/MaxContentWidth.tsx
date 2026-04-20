@@ -6,7 +6,7 @@ import {
     selectIsMaxContentWidthEnabled,
     selectMaxContentWidth,
 } from '../../store/selectors/global/max-content-width';
-import {RootState} from '../../store/reducers/index';
+import {type RootState} from '../../store/reducers/index';
 
 import './MaxContentWidth.scss';
 

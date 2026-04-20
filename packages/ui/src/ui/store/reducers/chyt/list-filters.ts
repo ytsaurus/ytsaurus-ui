@@ -1,7 +1,7 @@
 import {CHYT_LIST_FILTERS} from '../../../constants/chyt-page';
-import {ActionD, SortState} from '../../../types';
+import {type ActionD, type SortState} from '../../../types';
 import {replaceEmpty} from '../../../utils/empty';
-import {ChytInfo} from './list';
+import {type ChytInfo} from './list';
 
 export type ChytListFilters = {
     name: string;

@@ -1,4 +1,4 @@
-import axios, {AxiosError, CancelTokenSource} from 'axios';
+import axios, {AxiosError, type CancelTokenSource} from 'axios';
 
 export default class CancelHelper {
     private tokens: Array<CancelTokenSource> = [];

@@ -1,11 +1,11 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
 
-import type {OperationEvent} from '../../../../shared/yt-types';
+import {type OperationEvent} from '../../../../shared/yt-types';
 
 import {listOperationEventsApi} from '../../../store/api/yt';
-import type {Incarnation} from '../../../store/selectors/operations/incarnations';
+import {type Incarnation} from '../../../store/selectors/operations/incarnations';
 
-import {RootState} from '..';
+import {type RootState} from '..';
 
 type IncarnationsState = {
     idFilter?: string;

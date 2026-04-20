@@ -1,4 +1,4 @@
-import React, {ComponentProps} from 'react';
+import React, {type ComponentProps} from 'react';
 
 import map_ from 'lodash/map';
 

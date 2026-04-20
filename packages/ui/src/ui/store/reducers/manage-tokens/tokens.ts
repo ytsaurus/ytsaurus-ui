@@ -1,6 +1,6 @@
-import type {Action} from 'redux';
+import {type Action} from 'redux';
 
-import type {ActionD, YTError} from '../../../types';
+import {type ActionD, type YTError} from '../../../types';
 
 import {MANAGE_TOKENS_LIST} from '../../../constants/manage-tokens';
 

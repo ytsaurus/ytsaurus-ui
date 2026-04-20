@@ -1,8 +1,8 @@
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../../store/reducers';
-import {SettingsAction} from '../../../store/reducers/settings';
-import {SettingNS, getPath} from '../../../../shared/utils/settings';
-import {DescribedSettings, SettingKey} from '../../../../shared/constants/settings-types';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../../store/reducers';
+import {type SettingsAction} from '../../../store/reducers/settings';
+import {type SettingNS, getPath} from '../../../../shared/utils/settings';
+import {type DescribedSettings, type SettingKey} from '../../../../shared/constants/settings-types';
 
 import {
     SET_SETTING_VALUE,

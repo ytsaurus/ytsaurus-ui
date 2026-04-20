@@ -1,4 +1,11 @@
-import React, {ChangeEvent, FC, KeyboardEvent, useCallback, useRef, useState} from 'react';
+import React, {
+    type ChangeEvent,
+    type FC,
+    type KeyboardEvent,
+    useCallback,
+    useRef,
+    useState,
+} from 'react';
 import cn from 'bem-cn-lite';
 import {Button, Icon, TextInput} from '@gravity-ui/uikit';
 import XmarkIcon from '@gravity-ui/icons/svgs/xmark.svg';

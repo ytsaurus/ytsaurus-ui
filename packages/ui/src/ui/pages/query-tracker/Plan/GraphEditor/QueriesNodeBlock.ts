@@ -1,13 +1,13 @@
-import {ECameraScaleLevel} from '@gravity-ui/graph';
+import {type ECameraScaleLevel} from '@gravity-ui/graph';
 
-import {YTGraphBlock, YTGraphCanvasBlock} from '../../../../components/YTGraph';
+import {type YTGraphBlock, YTGraphCanvasBlock} from '../../../../components/YTGraph';
 
-import {type NodeDetails, NodeProgress} from '../models/plan';
-import {OperationSchemas} from '../utils';
+import {type NodeDetails, type NodeProgress} from '../models/plan';
+import {type OperationSchemas} from '../utils';
 import {GRAPH_COLORS} from '../../../../components/YTGraph/constants';
 import {getCssColor} from '../../../../utils/get-css-color';
 import {getBlockTypeByState, isProgressState} from './helpers/getBlockTypeByState';
-import {OperationType} from './enums';
+import {type OperationType} from './enums';
 
 export type QueriesBlockMeta = {
     level: ECameraScaleLevel;

@@ -1,6 +1,6 @@
 import {NotFound} from '@gravity-ui/illustrations';
 import {Button, Flex, Text} from '@gravity-ui/uikit';
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {ClickableText} from '../../../components/ClickableText/ClickableText';
 import Icon from '../../../components/Icon/Icon';
 import {Markdown} from '../../../components/Markdown/Markdown';

@@ -6,8 +6,8 @@ import compact_ from 'lodash/compact';
 import Filter from '../../../components/Filter/Filter';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import BundlesTableModeRadio from '../../../pages/tablet_cell_bundles/bundles/BundlesTableModeRadio';
-import type {setTabletsPartial} from '../../../store/actions/tablet_cell_bundles';
-import type {BundlesTableMode} from '../../../store/reducers/tablet_cell_bundles';
+import {type setTabletsPartial} from '../../../store/actions/tablet_cell_bundles';
+import {type BundlesTableMode} from '../../../store/reducers/tablet_cell_bundles';
 
 import './BundlesTableInstruments.scss';
 

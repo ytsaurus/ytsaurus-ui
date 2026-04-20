@@ -1,4 +1,4 @@
-import type {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 // import ypath from '../../../../common/thor/ypath';
 import {
@@ -7,8 +7,8 @@ import {
     NODE_LOAD_SUCCESS,
 } from '../../../../constants/components/nodes/node';
 import {Node} from '../../../../store/reducers/components/nodes/nodes/node';
-import type {RootState} from '../../../../store/reducers';
-import type {NodeLoadAction} from '../../../../store/reducers/components/node/node';
+import {type RootState} from '../../../../store/reducers';
+import {type NodeLoadAction} from '../../../../store/reducers/components/node/node';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {prepareAttributes} from '../../../../utils/cypress-attributes';
 

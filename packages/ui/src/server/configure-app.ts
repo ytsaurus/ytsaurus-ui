@@ -1,4 +1,4 @@
-import {ExpressKit} from '@gravity-ui/expresskit';
+import {type ExpressKit} from '@gravity-ui/expresskit';
 
 import {rememberApp} from './ServerFactory';
 

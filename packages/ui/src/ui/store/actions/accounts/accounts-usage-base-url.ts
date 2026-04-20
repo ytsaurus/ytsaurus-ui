@@ -1,5 +1,5 @@
 import {getBaseUrlDetails} from '../../../../shared/utils/base-url';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {selectMergedUiSettings} from '../../../store/selectors/global/cluster';
 
 export function calcAccountsUsageBaseUrl(url: string, state: RootState) {

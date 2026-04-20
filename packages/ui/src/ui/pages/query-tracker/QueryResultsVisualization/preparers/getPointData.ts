@@ -1,4 +1,4 @@
-import {Result} from '../../../../types/query-tracker/queryResult';
+import {type Result} from '../../../../types/query-tracker/queryResult';
 import {DateTime64Types, NumberTypes} from '../../../../types/query-tracker/yqlTypes';
 // @ts-ignore
 import {timestamp} from '@gravity-ui/unipika/lib/plugins/yql-timestamp';

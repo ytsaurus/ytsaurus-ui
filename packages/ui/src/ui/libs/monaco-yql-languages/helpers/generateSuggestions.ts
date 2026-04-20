@@ -1,6 +1,9 @@
-import {YqlAutocompleteResult} from '@gravity-ui/websql-autocomplete/yql';
-import {ColumnAliasSuggestion, KeywordSuggestion} from '@gravity-ui/websql-autocomplete/shared';
-import {IRange, languages} from 'monaco-editor';
+import {type YqlAutocompleteResult} from '@gravity-ui/websql-autocomplete/yql';
+import {
+    type ColumnAliasSuggestion,
+    type KeywordSuggestion,
+} from '@gravity-ui/websql-autocomplete/shared';
+import {type IRange, languages} from 'monaco-editor';
 import {suggestionIndexToWeight} from './suggestionIndexToWeight';
 
 export type SuggestionType =

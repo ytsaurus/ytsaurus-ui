@@ -2,12 +2,12 @@ import {MEDIUM_COLS_PREFIX} from '../../../constants/components/nodes/nodes';
 
 import forEach_ from 'lodash/forEach';
 
-import type {Node} from '../../../store/reducers/components/nodes/nodes/node';
-import type {
-    NodeRange,
-    NodesSetupState,
+import {type Node} from '../../../store/reducers/components/nodes/nodes/node';
+import {
+    type NodeRange,
+    type NodesSetupState,
 } from '../../../store/reducers/components/nodes/setup/setup';
-import type {FIX_MY_TYPE} from '../../../types';
+import {type FIX_MY_TYPE} from '../../../types';
 
 const isCorrectRange = (
     node: Node['IOWeight'] = {},

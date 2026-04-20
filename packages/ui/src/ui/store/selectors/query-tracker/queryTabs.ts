@@ -1,4 +1,4 @@
-import {RootState} from '../../reducers';
+import {type RootState} from '../../reducers';
 import {createSelector} from 'reselect';
 import {getQueryId} from './query';
 import {parseResultTabIndex} from '../../../pages/query-tracker/QueryResults/helpers/parseResultTabIndex';

@@ -2,9 +2,9 @@ import React from 'react';
 import block from 'bem-cn-lite';
 
 import hammer from '../../common/hammer';
-import Icon, {IconName} from '../Icon/Icon';
+import Icon, {type IconName} from '../Icon/Icon';
 
-import {NavigationFlowState, StatusLabelState} from '../../types/common/states';
+import {type NavigationFlowState, type StatusLabelState} from '../../types/common/states';
 
 import './StatusLabel.scss';
 

@@ -1,4 +1,4 @@
-import {combineReducers, combineSlices} from '@reduxjs/toolkit';
+import {type combineReducers, combineSlices} from '@reduxjs/toolkit';
 
 import forEach_ from 'lodash/forEach';
 
@@ -33,7 +33,7 @@ import chaos_cell_bundles from './chaos_cell_bundles';
 import chaosCellBundleEditor from './chaos_cell_bundles/tablet-cell-bundle-editor';
 import {manageTokens} from './manage-tokens';
 import executeBatch from '../../store/reducers/execute-batch';
-import UIFactory, {UIFactoryClusterPageInfo} from '../../UIFactory';
+import UIFactory, {type UIFactoryClusterPageInfo} from '../../UIFactory';
 import {registerExtraPage} from '../../pages';
 import {registerLocationParameters} from '../../store/location';
 import {registerHeaderLink} from '../../containers/ClustersMenu/header-links-items';

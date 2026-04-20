@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import find_ from 'lodash/find';
 import map_ from 'lodash/map';
 
-import {DialogError, FormApi, YTDFDialog} from '../../../components/Dialog';
+import {DialogError, type FormApi, YTDFDialog} from '../../../components/Dialog';
 import {
     getRemoteCopyModalPaths,
     getRemoteCopyModalVisible,
@@ -15,9 +15,9 @@ import {
 } from '../../../store/actions/navigation/modals/remote-copy-modal';
 import {selectCluster} from '../../../store/selectors/global';
 import {makeLink} from './CreateTableModal/CreateTableModal';
-import {YTError} from '../../../types';
-import {RemoteCopyParams} from '../../../../@types/types';
-import {AxiosError} from 'axios';
+import {type YTError} from '../../../types';
+import {type RemoteCopyParams} from '../../../../@types/types';
+import {type AxiosError} from 'axios';
 import {docsUrl} from '../../../config';
 import UIFactory from '../../../UIFactory';
 

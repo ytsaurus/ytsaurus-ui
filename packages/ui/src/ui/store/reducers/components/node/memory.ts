@@ -5,8 +5,8 @@ import {
     NODE_MEMORY_PARTIAL,
 } from '../../../../constants/components/nodes/memory';
 import {mergeStateOnClusterChange} from '../../../../store/reducers/utils';
-import type {ActionD, SortState, YTError} from '../../../../types';
-import type {MemoryUsage} from '../../../../types/components/node';
+import {type ActionD, type SortState, type YTError} from '../../../../types';
+import {type MemoryUsage} from '../../../../types/components/node';
 
 interface NodeMemoryEphemeralState {
     loading: boolean;

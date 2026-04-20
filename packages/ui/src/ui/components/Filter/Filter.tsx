@@ -6,7 +6,7 @@ import i18n from './i18n';
 
 import debounce_ from 'lodash/debounce';
 
-import {TextInput, TextInputProps} from '@gravity-ui/uikit';
+import {TextInput, type TextInputProps} from '@gravity-ui/uikit';
 import {Hotkey} from '@ytsaurus/components';
 
 function NumberOrFalse(props: FilterProps, _propName: 'debounce', componentName: string) {

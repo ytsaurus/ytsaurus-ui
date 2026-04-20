@@ -1,5 +1,5 @@
-import {PluginWidgetProps} from '@gravity-ui/dashkit/build/esm';
-import {ColumnSortByInfo} from '../../../../../pages/navigation/modals/TableMergeSortModal/TableSortByControl';
+import {type PluginWidgetProps} from '@gravity-ui/dashkit/build/esm';
+import {type ColumnSortByInfo} from '../../../../../pages/navigation/modals/TableMergeSortModal/TableSortByControl';
 
 export type AccountsWidgetData = {
     accounts?: string[];

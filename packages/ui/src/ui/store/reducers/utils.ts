@@ -1,5 +1,5 @@
 import {RESET_STORE_BEFORE_CLUSTER_CHANGE} from '../../constants/utils';
-import {AnyAction, Reducer} from 'redux';
+import {type AnyAction, type Reducer} from 'redux';
 
 type StrictReducer<S, A> = (s: S, a: A) => S;
 

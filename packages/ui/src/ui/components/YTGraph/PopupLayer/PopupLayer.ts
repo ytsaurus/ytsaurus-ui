@@ -1,4 +1,4 @@
-import {Layer, LayerContext, LayerProps} from '@gravity-ui/graph';
+import {Layer, type LayerContext, type LayerProps} from '@gravity-ui/graph';
 
 export type AreaLayerProps = LayerProps;
 export type AreaLayerContext = LayerContext;

@@ -1,15 +1,15 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 
 import {setSetting, setSettingByKey} from './index';
 
 // @ts-ignore
 import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
-import {AnnotationVisibilityType} from '../../../../shared/constants/settings-ts';
-import {AccountUsageViewType} from '../../../store/reducers/accounts/usage/accounts-usage-filters';
+import {type AnnotationVisibilityType} from '../../../../shared/constants/settings-ts';
+import {type AccountUsageViewType} from '../../../store/reducers/accounts/usage/accounts-usage-filters';
 import {getQueryTokens} from '../../selectors/settings/settings-queries';
-import {QueryToken} from '../../../../shared/constants/settings-types';
+import {type QueryToken} from '../../../../shared/constants/settings-types';
 
 type SettingThunkAction = ThunkAction<any, RootState, any, any>;
 

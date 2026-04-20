@@ -1,5 +1,5 @@
 import {CaretDown, CaretUp, CaretsExpandVertical} from '@gravity-ui/icons';
-import {SortIndicatorProps} from '@gravity-ui/table';
+import {type SortIndicatorProps} from '@gravity-ui/table';
 import {Icon} from '@gravity-ui/uikit';
 import React from 'react';
 import format from '../../common/hammer/format';

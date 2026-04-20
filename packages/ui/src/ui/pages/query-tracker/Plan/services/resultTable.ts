@@ -1,7 +1,7 @@
 import {yqlModel} from '../models/shared';
 
 import {
-    DataType,
+    type DataType,
     getType,
     isEmptyListDataType,
     isListDataType,

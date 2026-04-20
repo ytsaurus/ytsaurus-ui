@@ -1,5 +1,5 @@
 import sortedIndexBy_ from 'lodash/sortedIndexBy';
-import type {ProgressProps, ProgressTheme} from '@gravity-ui/uikit';
+import {type ProgressProps, type ProgressTheme} from '@gravity-ui/uikit';
 
 import format from '../common/hammer/format';
 

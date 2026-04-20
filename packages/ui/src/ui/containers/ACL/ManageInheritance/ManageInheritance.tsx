@@ -7,23 +7,23 @@ import {DialogWrapper as CommonDialog} from '../../../components/DialogWrapper/D
 
 import isEqual_ from 'lodash/isEqual';
 
-import {DialogField, FormApi, YTDFDialog} from '../../../components/Dialog';
+import {type DialogField, type FormApi, YTDFDialog} from '../../../components/Dialog';
 
-import {IdmKindType} from '../../../utils/acl/acl-types';
-import {PreparedRole} from '../../../utils/acl';
-import {YTError} from '../../../types';
+import {type IdmKindType} from '../../../utils/acl/acl-types';
+import {type PreparedRole} from '../../../utils/acl';
+import {type YTError} from '../../../types';
 
 import Button from '../../../components/Button/Button';
 import {YTErrorBlock} from '../../../components/Error/Error';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
 
-import withVisible, {WithVisibleProps} from '../../../hocs/withVisible';
+import withVisible, {type WithVisibleProps} from '../../../hocs/withVisible';
 
 import './ManageInheritance.scss';
 import UIFactory from '../../../UIFactory';
-import {ACLReduxProps} from '../ACL-connect-helpers';
-import {ManageInheritanceFieldNames} from '../ManageAcl/ManageAcl';
+import {type ACLReduxProps} from '../ACL-connect-helpers';
+import {type ManageInheritanceFieldNames} from '../ManageAcl/ManageAcl';
 import i18n from './i18n';
 
 const block = cn('acl-inheritance');

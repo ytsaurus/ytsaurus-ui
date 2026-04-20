@@ -6,7 +6,7 @@ import Filter from '../Filter/Filter';
 import HelpLink from '../HelpLink/HelpLink';
 
 import {ExpandButton} from '../ExpandButton';
-import {TreeState} from './types';
+import {type TreeState} from './types';
 
 const toolbarBlock = cn('elements-toolbar');
 

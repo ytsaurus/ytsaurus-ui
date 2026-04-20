@@ -6,7 +6,7 @@ import {YTErrorBlock} from '../../../../components/Error/Error';
 import Yson from '../../../../components/Yson/Yson';
 import {getNavigationMountConfigYsonSettings} from '../../../../store/selectors/thor/unipika';
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
-import {UnipikaValue} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
+import {type UnipikaValue} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 import {pathToFileName} from '../../helpers/pathToFileName';
 import {getPath} from '../../../../store/selectors/navigation';
 

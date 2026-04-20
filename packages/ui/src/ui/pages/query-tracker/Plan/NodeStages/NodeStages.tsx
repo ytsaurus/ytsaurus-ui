@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import DataTable, {Column} from '@gravity-ui/react-data-table';
-import {NodeState, NodeStages as Stages} from '../models/plan';
+import DataTable, {type Column} from '@gravity-ui/react-data-table';
+import {type NodeState, type NodeStages as Stages} from '../models/plan';
 import cn from 'bem-cn-lite';
 
 import {useSelector} from '../../../../store/redux-hooks';
 import {getQueryItem} from '../../../../store/selectors/query-tracker/query';
-import type {QueryItem} from '../../../../types/query-tracker/api';
+import {type QueryItem} from '../../../../types/query-tracker/api';
 import {isQueryCompleted} from '../../utils/query';
 import {duration, isOperationFinished} from '../utils';
 

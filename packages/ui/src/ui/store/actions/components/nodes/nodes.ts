@@ -3,7 +3,7 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import omit_ from 'lodash/omit';
 import forEach_ from 'lodash/forEach';
 import compact_ from 'lodash/compact';
-import type {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 import {splitBatchResults} from '../../../../../shared/utils/error';
 
@@ -13,17 +13,17 @@ import {setSetting} from '../../../../store/actions/settings';
 import {NAMESPACES, SettingName} from '../../../../../shared/constants/settings';
 import {
     selectRacksFromAttributes,
-    selectRequiredAttributes,
+    type selectRequiredAttributes,
     selectTagsFromAttributes,
 } from '../../../../store/selectors/components/nodes/nodes';
 import {getTemplates} from '../../../../store/selectors/settings';
-import type {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {Node} from '../../../../store/reducers/components/nodes/nodes/node';
-import type {
-    NodesAction,
-    NodesState,
+import {
+    type NodesAction,
+    type NodesState,
 } from '../../../../store/reducers/components/nodes/nodes/nodes';
-import type {NodesSetupState} from '../../../../store/reducers/components/nodes/setup/setup';
+import {type NodesSetupState} from '../../../../store/reducers/components/nodes/setup/setup';
 import {
     APPLY_SETUP,
     CHANGE_CONTENT_MODE,
@@ -36,11 +36,11 @@ import {
 import {USE_CACHE, USE_MAX_SIZE} from '../../../../../shared/constants/yt-api';
 import CancelHelper from '../../../../utils/cancel-helper';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
-import type {ActionD, FIX_MY_TYPE, PartialDeep} from '../../../../types';
+import {type ActionD, type FIX_MY_TYPE, type PartialDeep} from '../../../../types';
 import {prepareAttributes} from '../../../../utils/cypress-attributes';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
-import {NodeType} from '../../../../../shared/constants/system';
-import {BatchSubRequest} from '../../../../../shared/yt-types';
+import {type NodeType} from '../../../../../shared/constants/system';
+import {type BatchSubRequest} from '../../../../../shared/yt-types';
 
 const {COMPONENTS} = NAMESPACES;
 const {TEMPLATES} = SettingName.COMPONENTS;

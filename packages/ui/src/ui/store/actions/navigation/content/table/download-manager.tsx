@@ -1,18 +1,18 @@
 import React from 'react';
-import {ThunkAction} from 'redux-thunk';
-import {UnknownAction} from 'redux';
+import {type ThunkAction} from 'redux-thunk';
+import {type UnknownAction} from 'redux';
 import {Text} from '@gravity-ui/uikit';
 import axios, {AxiosError} from 'axios';
 
 import {DownloadShortInfo} from '../../../../../pages/navigation/content/Table/DownloadManager/DownloadShortInfo/DownloadShortInfo';
 
-import {RootState} from '../../../../reducers';
+import {type RootState} from '../../../../reducers';
 import {downloadManagerActions} from '../../../../reducers/navigation/content/table/download-manager';
 
 import {downloadFileFromResponse} from '../../../../../utils/download-file';
 import {copyFileToClipboard} from '../../../../../utils/copy-file-to-clipboard';
 import {showErrorPopup} from '../../../../../utils/utils';
-import {YTError} from '../../../../../types';
+import {type YTError} from '../../../../../types';
 import {toaster} from '../../../../../utils/toaster';
 import guid from '../../../../../common/hammer/guid';
 

@@ -1,4 +1,4 @@
-import {ActionD, YTError} from '../../../../../types';
+import {type ActionD, type YTError} from '../../../../../types';
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';
 import {
     ACCESS_LOG_FAILURE,
@@ -8,8 +8,8 @@ import {
     ACCESS_LOG_RESET_FILTERS,
     ACCESS_LOG_SUCCESS,
 } from '../../../../../constants/navigation/tabs/access-log';
-import {AccessLogFilterParams} from './access-log-filters';
-import {Action} from 'redux';
+import {type AccessLogFilterParams} from './access-log-filters';
+import {type Action} from 'redux';
 
 export interface AccessLogState extends AccessLogData {
     loading: boolean;

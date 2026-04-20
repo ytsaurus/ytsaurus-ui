@@ -1,23 +1,26 @@
 import concat_ from 'lodash/concat';
 import filter_ from 'lodash/filter';
 
-import {YTApiIdType} from '../../../shared/constants/yt-api-id';
+import {type YTApiIdType} from '../../../shared/constants/yt-api-id';
 import {getBatchError} from '../../../shared/utils/error';
 
 import {getBatchErrorIndices} from '../../utils/utils';
-import {YTError} from '../../types';
-import {ExecuteBatchAction, HandleExecuteBatchRetryParams} from '../reducers/execute-batch';
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../reducers';
+import {type YTError} from '../../types';
+import {
+    type ExecuteBatchAction,
+    type HandleExecuteBatchRetryParams,
+} from '../reducers/execute-batch';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../reducers';
 import {
     EXECUTE_BATCH_RETRY_HIDE_MODAL,
     EXECUTE_BATCH_RETRY_SHOW_MODAL,
 } from '../../constants/execute-batch';
 import {rumLogError} from '../../rum/rum-counter';
 import {selectExecuteBatchState} from '../selectors/execute-batch';
-import {CancelTokenSource} from 'axios';
+import {type CancelTokenSource} from 'axios';
 import {ytApiV3Id} from '../../rum/rum-wrap-api';
-import {BatchResultsItem, BatchSubRequest} from '../../../shared/yt-types';
+import {type BatchResultsItem, type BatchSubRequest} from '../../../shared/yt-types';
 
 const MAX_REQUESTS_COUNT_PER_BATCH = 100;
 

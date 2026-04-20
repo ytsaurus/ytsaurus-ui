@@ -1,19 +1,19 @@
 import React from 'react';
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
-import {RootState} from '../../../../store/reducers';
-import {RemoteCopyModalStateAction} from '../../../../store/reducers/navigation/modals/remote-copy-modal';
+import {type RootState} from '../../../../store/reducers';
+import {type RemoteCopyModalStateAction} from '../../../../store/reducers/navigation/modals/remote-copy-modal';
 import {REMOTE_COPY_MODAL_PARTIAL} from '../../../../constants/navigation/modals';
-import {RemoteCopyParams} from '../../../../../@types/types';
+import {type RemoteCopyParams} from '../../../../../@types/types';
 import axios from 'axios';
 import Link from '../../../../components/Link/Link';
 import {ytApiV3} from '../../../../rum/rum-wrap-api';
 import {showErrorPopup, wrapApiPromiseByToaster} from '../../../../utils/utils';
-import {YTError} from '../../../../types';
-import {WithAttrs} from '../../../../utils/cypress-attributes';
+import {type YTError} from '../../../../types';
+import {type WithAttrs} from '../../../../utils/cypress-attributes';
 import {ClickableText} from '../../../../components/ClickableText/ClickableText';
 import {toaster} from '../../../../utils/toaster';
 

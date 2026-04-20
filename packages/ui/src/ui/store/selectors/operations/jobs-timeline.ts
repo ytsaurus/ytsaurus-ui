@@ -1,4 +1,4 @@
-import {RootState} from '../../reducers';
+import {type RootState} from '../../reducers';
 import {createSelector} from 'reselect';
 
 export const selectJobs = (state: RootState) => state.operations.jobsTimeline.jobs;

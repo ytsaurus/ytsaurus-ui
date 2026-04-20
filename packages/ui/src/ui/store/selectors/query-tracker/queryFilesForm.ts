@@ -1,7 +1,7 @@
-import {RootState} from '../../reducers';
+import {type RootState} from '../../reducers';
 import {createSelector} from 'reselect';
 import {getQueryFiles} from './query';
-import {QueryFile} from '../../../types/query-tracker/api';
+import {type QueryFile} from '../../../types/query-tracker/api';
 
 export const selectAddForm = (state: RootState) => state.queryTracker.queryFilesModal.addForm;
 export const selectFileEditor = (state: RootState) => state.queryTracker.queryFilesModal.fileEditor;

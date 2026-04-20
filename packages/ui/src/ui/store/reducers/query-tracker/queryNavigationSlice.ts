@@ -1,11 +1,11 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import type {
-    NavigationNode,
-    NavigationTable,
-    NavigationTableMeta,
-    NavigationTableSchema,
+import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {
+    type NavigationNode,
+    type NavigationTable,
+    type NavigationTableMeta,
+    type NavigationTableSchema,
 } from '@ytsaurus/components';
-import {YTError} from '../../../../@types/types';
+import {type YTError} from '../../../../@types/types';
 
 export type {NavigationNode, NavigationTable, NavigationTableMeta, NavigationTableSchema};
 

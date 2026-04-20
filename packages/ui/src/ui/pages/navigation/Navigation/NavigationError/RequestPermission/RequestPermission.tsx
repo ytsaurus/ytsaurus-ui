@@ -7,7 +7,7 @@ import {ErrorToClipboardButton} from '../../../../../components/ErrorToClipboard
 import RequestPermissions from '../../../tabs/ACL/RequestPermissions/RequestPermissions';
 
 import {getParentPath} from '../../../../../utils/navigation';
-import {YTError} from '../../../../../../@types/types';
+import {type YTError} from '../../../../../../@types/types';
 
 import {RequestPermissionIsNotAllowed} from './RequestPermissionIsNotAllowed';
 

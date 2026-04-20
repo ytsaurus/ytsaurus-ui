@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {useSelector} from '../../../../../store/redux-hooks';
 import ypath from '../../../../../common/thor/ypath';
 
@@ -10,7 +10,7 @@ import {MetaTable} from '@ytsaurus/components';
 import Yson from '../../../../../components/Yson/Yson';
 import {canRenderAsMap} from './helpers/canRenderAsMap';
 import {getYsonSettingsDisableDecode} from '../../../../../store/selectors/thor/unipika';
-import {DetailedOperationSelector} from '../../../selectors';
+import {type DetailedOperationSelector} from '../../../selectors';
 
 type Props = {
     description: DetailedOperationSelector['description'];

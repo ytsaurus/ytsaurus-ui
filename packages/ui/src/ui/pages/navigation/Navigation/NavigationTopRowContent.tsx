@@ -1,9 +1,9 @@
-import React, {FocusEvent} from 'react';
+import React, {type FocusEvent} from 'react';
 import {useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 
-import {Breadcrumbs, Flex, Key} from '@gravity-ui/uikit';
+import {Breadcrumbs, Flex, type Key} from '@gravity-ui/uikit';
 
 import {getMetrics} from '../../../common/utils/metrics';
 

@@ -2,7 +2,7 @@ import {CircleQuestion} from '@gravity-ui/icons';
 import {Flex, Text} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
-import {FlowComputationDetailsType} from '../../../../../../shared/yt-types';
+import {type FlowComputationDetailsType} from '../../../../../../shared/yt-types';
 import {Tooltip, YTText} from '@ytsaurus/components';
 import {
     FlowComputationPartitionErrors,

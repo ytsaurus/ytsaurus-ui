@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 import {Flex, Icon} from '@gravity-ui/uikit';
@@ -6,7 +6,7 @@ import ArrowRightIcon from '@gravity-ui/icons/svgs/arrow-right.svg';
 
 import compact_ from 'lodash/compact';
 
-import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
+import DataTable, {type Column, type Settings} from '@gravity-ui/react-data-table';
 
 import format from '../../../../common/hammer/format';
 import Label from '../../../../components/Label';
@@ -26,7 +26,7 @@ import {
     getAccessLogPagesCount,
     getAccessLogReady,
 } from '../../../../store/selectors/navigation/tabs/access-log';
-import {AccessLogItem} from '../../../../store/reducers/navigation/tabs/access-log/access-log';
+import {type AccessLogItem} from '../../../../store/reducers/navigation/tabs/access-log/access-log';
 import {selectCluster} from '../../../../store/selectors/global';
 
 import {genNavigationUrl} from '../../../../utils/navigation/navigation';

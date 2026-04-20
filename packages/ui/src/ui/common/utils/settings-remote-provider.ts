@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import {PromiseOrValue} from '../../../@types/types';
+import {type PromiseOrValue} from '../../../@types/types';
 
 type Method = 'get' | 'put' | 'post' | 'delete';
 

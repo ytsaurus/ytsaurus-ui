@@ -1,6 +1,6 @@
-import {YTPermissionTypeUI} from '../utils/acl/acl-api';
+import {type YTPermissionTypeUI} from '../utils/acl/acl-api';
 import createActionTypes, {createPrefix} from '../constants/utils';
-import {IdmKindType} from '../utils/acl/acl-types';
+import {type IdmKindType} from '../utils/acl/acl-types';
 
 const PREFIX = createPrefix('MANAGE_ACL');
 

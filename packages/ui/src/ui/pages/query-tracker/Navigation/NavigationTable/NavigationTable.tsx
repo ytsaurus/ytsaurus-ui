@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from 'react';
+import React, {type FC, useCallback} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {NavigationTable as NavigationTableComponent} from '@ytsaurus/components/modules';
 import {

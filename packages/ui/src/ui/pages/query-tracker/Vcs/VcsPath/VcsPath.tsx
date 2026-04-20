@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useMemo, useState} from 'react';
+import React, {type FC, useCallback, useMemo, useState} from 'react';
 import {Breadcrumbs, Button, Flex, Icon, Loader} from '@gravity-ui/uikit';
 import FolderTreeIcon from '@gravity-ui/icons/svgs/folder-tree.svg';
 import {EditableAsText} from '../../../../components/EditableAsText/EditableAsText';

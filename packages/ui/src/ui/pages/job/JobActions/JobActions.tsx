@@ -8,25 +8,25 @@ import map_ from 'lodash/map';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
-import {ButtonProps, DropdownMenu} from '@gravity-ui/uikit';
+import {type ButtonProps, DropdownMenu} from '@gravity-ui/uikit';
 import {DialogWrapper as Dialog} from '../../../components/DialogWrapper/DialogWrapper';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import PathEditor from '../../../containers/PathEditor/PathEditor';
 import Button from '../../../components/Button/Button';
 import Link from '../../../components/Link/Link';
-import Icon, {IconName} from '../../../components/Icon/Icon';
+import Icon, {type IconName} from '../../../components/Icon/Icon';
 
 import {selectJob, selectJobActions} from '../../../store/selectors/job/detail';
 import {loadJobData} from '../../../store/actions/job/general';
 import {promptAction} from '../../../store/actions/actions';
 import {selectCluster} from '../../../store/selectors/global';
-import {RootState} from '../../../store/reducers';
-import {PreparedJob} from '../../../types/operations/job';
+import {type RootState} from '../../../store/reducers';
+import {type PreparedJob} from '../../../types/operations/job';
 import {showErrorPopup} from '../../../utils/utils';
 import hammer from '../../../common/hammer';
-import {YTError} from '../../../types';
+import {type YTError} from '../../../types';
 import {toaster} from '../../../utils/toaster';
-import {Job} from '../../../pages/operations/OperationDetail/tabs/Jobs/job-selector';
+import {type Job} from '../../../pages/operations/OperationDetail/tabs/Jobs/job-selector';
 
 import './JobActions.scss';
 

@@ -9,7 +9,7 @@ import {
 } from '../../../../store/selectors/accounts/accounts-ts';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
-    AccountsStateDataFields,
+    type AccountsStateDataFields,
     setAccountsStateDataFields,
 } from '../../../../store/actions/accounts/accounts-ts';
 import {Secondary} from '@ytsaurus/components';

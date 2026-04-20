@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Flex, Text} from '@gravity-ui/uikit';
 import i18n from './i18n';
 

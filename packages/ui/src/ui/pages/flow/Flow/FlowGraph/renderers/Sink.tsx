@@ -2,7 +2,7 @@ import React from 'react';
 
 import {Flex} from '@gravity-ui/uikit';
 
-import {FlowGraphBlockItem} from '../FlowGraph';
+import {type FlowGraphBlockItem} from '../FlowGraph';
 import {FlowCaption1, FlowCaption2, FlowIcon, FlowMessages} from './FlowGraphRenderer';
 
 type SinknProps = {

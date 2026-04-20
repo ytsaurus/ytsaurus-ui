@@ -1,5 +1,5 @@
 import {useSelector} from '../../../../store/redux-hooks';
-import {BaseQueryFn, TypedUseMutationResult} from '@reduxjs/toolkit/query/react';
+import {type BaseQueryFn, type TypedUseMutationResult} from '@reduxjs/toolkit/query/react';
 
 import {getUseAutoRefresh} from '../../../../store/selectors/settings/settings-ts';
 import {selectCluster} from '../../../../store/selectors/global';
@@ -7,10 +7,9 @@ import {selectCluster} from '../../../../store/selectors/global';
 import {DEFAULT_UPDATER_TIMEOUT} from '../../../../hooks/use-updater';
 
 import {ytApi} from '../ytApi';
-import type {MutationOptions, OverrideDataType, UseQueryOptions} from '../types';
+import {type MutationOptions, type OverrideDataType, type UseQueryOptions} from '../types';
 
-import {executeBatchV3} from './endpoint';
-import type {BatchApiArgs, BatchApiResults} from './endpoint';
+import {type BatchApiArgs, type BatchApiResults, executeBatchV3} from './endpoint';
 
 const updateExecuteBatch: typeof executeBatchV3 = async (...args) => {
     const res = await executeBatchV3(...args);

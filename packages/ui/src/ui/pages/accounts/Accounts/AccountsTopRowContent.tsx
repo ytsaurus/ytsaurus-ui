@@ -4,7 +4,7 @@ import some_ from 'lodash/some';
 import {Breadcrumbs} from '@gravity-ui/uikit';
 
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
-import Favourites, {FavouritesItem} from '../../../components/Favourites/Favourites';
+import Favourites, {type FavouritesItem} from '../../../components/Favourites/Favourites';
 import {
     selectFavouriteAccounts,
     selectIsActiveAccountInFavourites,

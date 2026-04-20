@@ -3,7 +3,7 @@ import {type Meta, type StoryObj} from '@storybook/react';
 
 import {Button} from '@gravity-ui/uikit';
 
-import {CountsList, CountsListProps} from '../CountsList';
+import {CountsList, type CountsListProps} from '../CountsList';
 
 export default {
     title: 'Components/CountsList',

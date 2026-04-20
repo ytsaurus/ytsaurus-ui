@@ -1,9 +1,9 @@
 import React from 'react';
-import {ClipboardButton, ClipboardButtonProps} from '@gravity-ui/uikit';
+import {ClipboardButton, type ClipboardButtonProps} from '@gravity-ui/uikit';
 
 import {prettyPrintSafe} from '../../utils/unipika';
 
-import {YTErrorBlockProps} from '../../components/Block/Block';
+import {type YTErrorBlockProps} from '../../components/Block/Block';
 import {useErrorYsonSettings} from '../../hooks/useErrorYsonSettings';
 import i18n from './i18n';
 

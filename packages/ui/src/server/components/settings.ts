@@ -1,4 +1,4 @@
-import {AppContext} from '@gravity-ui/nodekit';
+import {type AppContext} from '@gravity-ui/nodekit';
 import {getApp} from '../ServerFactory';
 import {getRobotYTApiSetup} from './requestsSetup';
 

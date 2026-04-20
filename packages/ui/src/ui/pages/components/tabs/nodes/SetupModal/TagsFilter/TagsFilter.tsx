@@ -5,14 +5,14 @@ import reduce_ from 'lodash/reduce';
 
 import {
     FilterWithRegExp,
-    FilterWithRegExpValue,
+    type FilterWithRegExpValue,
 } from '../../../../../../components/FilterWithRegExp';
 import TagSelector from '../../../../../../components/TagSelector/TagSelector';
 
 import './TagsFilter.scss';
 import Button from '../../../../../../components/Button/Button';
 import {DropdownMenu} from '@gravity-ui/uikit';
-import Icon, {IconName} from '../../../../../../components/Icon/Icon';
+import Icon, {type IconName} from '../../../../../../components/Icon/Icon';
 
 const block = cn('tags-filter');
 

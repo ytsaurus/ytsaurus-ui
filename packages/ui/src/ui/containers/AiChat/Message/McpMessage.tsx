@@ -1,4 +1,4 @@
-import React, {FC, PropsWithChildren} from 'react';
+import React, {type FC, type PropsWithChildren} from 'react';
 import {ArrowToggle, ClipboardButton, Flex, Text} from '@gravity-ui/uikit';
 import {useToggle} from 'react-use';
 import cn from 'bem-cn-lite';

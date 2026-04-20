@@ -1,5 +1,5 @@
 import React from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 
 import ClickableAttributesButton from '../../../../../components/AttributesButton/ClickableAttributesButton';
 import Button from '../../../../../components/Button/Button';
@@ -10,7 +10,7 @@ import {selectCluster} from '../../../../../store/selectors/global';
 import {showNodeMaintenance} from '../../../../../store/actions/components/node-maintenance-modal';
 
 import UIFactory from '../../../../../UIFactory';
-import {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 
 export type NodeActionsProps = {node: {host: string}} & ConnectedProps<typeof connector>;
 

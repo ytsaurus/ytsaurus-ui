@@ -8,8 +8,8 @@ import {
     setTabletsFirstBundleAsActive,
     setTabletsPartial,
 } from '../../../store/actions/tablet_cell_bundles';
-import type {RootState} from '../../../store/reducers';
-import type {BundlesTableMode} from '../../../store/reducers/tablet_cell_bundles';
+import {type RootState} from '../../../store/reducers';
+import {type BundlesTableMode} from '../../../store/reducers/tablet_cell_bundles';
 import {
     selectTabletBundlesTableMode,
     selectTabletsBundlesAccountFilter,

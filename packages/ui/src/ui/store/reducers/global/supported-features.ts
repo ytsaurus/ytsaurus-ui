@@ -1,12 +1,12 @@
-import {ActionD, YTError} from '../../../types';
-import {Action} from 'redux';
+import {type ActionD, type YTError} from '../../../types';
+import {type Action} from 'redux';
 import {
     SUPPORTED_FEATURES_FAILURE,
     SUPPORTED_FEATURES_REQUEST,
     SUPPORTED_FEATURES_SUCCESS,
 } from '../../../constants/global';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
-import type {StatisticInfo} from '../../../components/StatisticTable';
+import {type StatisticInfo} from '../../../components/StatisticTable';
 
 export interface SupportedFeaturesState {
     loaded: boolean;

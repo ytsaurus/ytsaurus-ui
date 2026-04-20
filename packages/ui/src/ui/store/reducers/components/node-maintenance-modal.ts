@@ -1,7 +1,7 @@
-import {Action} from 'redux';
+import {type Action} from 'redux';
 
-import {AddMaintenanceParams} from '../../../../shared/yt-types';
-import {ActionD} from '../../../types';
+import {type AddMaintenanceParams} from '../../../../shared/yt-types';
+import {type ActionD} from '../../../types';
 import {
     NODE_MAINTENANCE_PARTIAL,
     NODE_MAINTENANCE_RESET,

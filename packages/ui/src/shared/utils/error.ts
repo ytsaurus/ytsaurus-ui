@@ -1,7 +1,7 @@
 import forEach_ from 'lodash/forEach';
 
-import {YTError} from '../../@types/types';
-import {BatchResultsItem} from '../yt-types';
+import {type YTError} from '../../@types/types';
+import {type BatchResultsItem} from '../yt-types';
 
 export class UIBatchError implements YTError {
     message = '';

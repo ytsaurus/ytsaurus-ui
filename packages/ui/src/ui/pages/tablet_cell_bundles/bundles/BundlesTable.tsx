@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
+import DataTable, {type Column, type Settings} from '@gravity-ui/react-data-table';
 import {HelpMark, Progress} from '@gravity-ui/uikit';
 
 import AccountLink from '../../../pages/accounts/AccountLink';
@@ -18,14 +18,14 @@ import {STICKY_TOOLBAR_BOTTOM} from '../../../components/WithStickyToolbar/WithS
 // @ts-ignore
 import hammer from '@ytsaurus/interface-helpers/lib/hammer';
 import {BundleBalancerValue} from '../../../pages/tablet_cell_bundles/bundle/BundleGeneralMeta';
-import type {TabletBundle} from '../../../store/reducers/tablet_cell_bundles';
-import type {SortState} from '../../../types';
-import type {OrderType} from '../../../utils/sort-helpers';
+import {type TabletBundle} from '../../../store/reducers/tablet_cell_bundles';
+import {type SortState} from '../../../types';
+import {type OrderType} from '../../../utils/sort-helpers';
 import {calcProgressProps} from '../../../utils/utils';
 
 import './BundlesTable.scss';
 import UIFactory from '../../../UIFactory';
-import {ClusterUiConfig} from '../../../../shared/yt-types';
+import {type ClusterUiConfig} from '../../../../shared/yt-types';
 import {WaitForFont} from '../../../containers/WaitForFont/WaitForFont';
 
 const block = cn('bundles-table');

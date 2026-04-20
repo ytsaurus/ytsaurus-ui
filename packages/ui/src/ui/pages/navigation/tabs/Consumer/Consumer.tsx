@@ -1,12 +1,12 @@
-import React, {ComponentType, useEffect} from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import React, {type ComponentType, useEffect} from 'react';
+import {type ConnectedProps, connect} from 'react-redux';
 
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {CONSUMER_MODE} from '../../../../constants/navigation/tabs/consumer';
 import {loadConsumerStatus} from '../../../../store/actions/navigation/tabs/consumer/status';
-import type {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {
     getConsumerMode,
     getOwner,

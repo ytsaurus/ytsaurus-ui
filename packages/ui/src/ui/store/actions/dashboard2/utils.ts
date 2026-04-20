@@ -1,11 +1,11 @@
-import {ThunkAction} from '@reduxjs/toolkit';
+import {type ThunkAction} from '@reduxjs/toolkit';
 
 import filter_ from 'lodash/filter';
 import isEqual_ from 'lodash/isEqual';
 
 import guid from '../../../common/hammer/guid';
 
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {setSettingByKey} from '../../../store/actions/settings';
 import {selectCluster} from '../../../store/selectors/global';
 import {selectDashboardConfig} from '../../../store/selectors/dashboard2/dashboard';

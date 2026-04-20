@@ -1,6 +1,6 @@
 import {useSelector} from '../../../../../../store/redux-hooks';
 
-import {RootState} from '../../../../../../store/reducers';
+import {type RootState} from '../../../../../../store/reducers';
 import {useAccountsQuery} from '../../../../../../store/api/dashboard2/accounts';
 import {
     selectAccountsList,
@@ -10,7 +10,7 @@ import {selectCluster} from '../../../../../../store/selectors/global';
 import {selectIsAdmin} from '../../../../../../store/selectors/global/is-developer';
 import {useUsableAccountsQuery} from '../../../../../../store/api/accounts';
 
-import {AccountsWidgetProps} from '../types';
+import {type AccountsWidgetProps} from '../types';
 
 export function useAccountsWidget(props: AccountsWidgetProps) {
     const {data} = props;

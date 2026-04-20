@@ -3,14 +3,14 @@ import cn from 'bem-cn-lite';
 
 import AccountQuota from '../../../../AccountQuota/AccountQuota';
 import {AccountResourceName} from '../../../../../../constants/accounts/accounts';
-import {RootState} from '../../../../../../store/reducers';
+import {type RootState} from '../../../../../../store/reducers';
 import {
     selectCluster,
     selectClusterUiConfigBundleAccountingHelpLink,
     selectClusterUiConfigEnablePerAccountTabletAccounting,
     selectClusterUiConfigEnablePerBundleTabletAccounting,
 } from '../../../../../../store/selectors/global';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 import {useSelector} from '../../../../../../store/redux-hooks';
 import Link from '../../../../../../components/Link/Link';
 import {Page} from '../../../../../../constants';

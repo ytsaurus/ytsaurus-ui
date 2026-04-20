@@ -2,10 +2,10 @@ import React from 'react';
 import withLazyLoading from '../../hocs/withLazyLoading';
 import {withDelayedMount} from '../../hocs/withDelayedMount';
 
-import type {
-    registerDialogControl as RegisterDialogControlFn,
-    registerDialogTabControl as RegisterDialogTabControlFn,
-    YTDialogType,
+import {
+    type registerDialogControl as RegisterDialogControlFn,
+    type registerDialogTabControl as RegisterDialogTabControlFn,
+    type YTDialogType,
 } from './Dialog';
 
 export type * from './Dialog';
