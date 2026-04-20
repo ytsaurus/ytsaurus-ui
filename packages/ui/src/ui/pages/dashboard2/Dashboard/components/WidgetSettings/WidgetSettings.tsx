@@ -8,11 +8,11 @@ import {
     getSettingsDialogVisibility,
 } from '../../../../../store/reducers/dashboard2/dashboard';
 
-import {FormApi, YTDFDialog} from '../../../../../components/Dialog';
+import {type FormApi, YTDFDialog} from '../../../../../components/Dialog';
 
 import format from '../../../../../common/hammer/format';
 
-import {SettingsValues} from './SettingsValues';
+import {type SettingsValues} from './SettingsValues';
 
 import {useSettingsFields} from './use-settings-fields';
 

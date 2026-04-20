@@ -1,7 +1,11 @@
 import {EventDisplayMode} from '../enums';
 import {convertToRGBA} from '../helpers/convertToRGBA';
 import {getCssColor} from '../../../utils/get-css-color';
-import {AbstractEventRenderer, TimelineEvent, ViewConfiguration} from '@gravity-ui/timeline';
+import {
+    AbstractEventRenderer,
+    type TimelineEvent,
+    type ViewConfiguration,
+} from '@gravity-ui/timeline';
 
 export type JobPhase = {
     phase: string;

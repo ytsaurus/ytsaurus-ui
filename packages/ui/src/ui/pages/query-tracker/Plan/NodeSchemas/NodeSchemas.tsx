@@ -1,11 +1,11 @@
 import React from 'react';
 import {default as Collapse} from '../../../../components/CollapsibleSection/CollapsibleSection';
-import {yqlModel} from '../models/shared';
+import {type yqlModel} from '../models/shared';
 import {SchemaTable} from '../components/SchemaTable/SchemaTable';
 import {getResultType} from '../services/resultTable';
 import cn from 'bem-cn-lite';
 
-import {OperationSchemas} from '../utils';
+import {type OperationSchemas} from '../utils';
 import i18n from './i18n';
 
 import '../NodeSchemas.scss';

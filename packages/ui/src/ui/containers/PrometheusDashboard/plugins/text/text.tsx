@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import {Markdown} from '../../../../components/Markdown/Markdown';
 
-import {PrometheusPlugins} from '../../PrometheusDashKit';
+import {type PrometheusPlugins} from '../../PrometheusDashKit';
 
 import './text.scss';
 

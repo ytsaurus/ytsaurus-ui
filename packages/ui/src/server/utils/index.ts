@@ -6,14 +6,14 @@ import forEach_ from 'lodash/forEach';
 import pick_ from 'lodash/pick';
 import toString_ from 'lodash/toString';
 
-import type {Response} from 'express';
-import {AxiosError, AxiosResponse} from 'axios';
-import {AppContext} from '@gravity-ui/nodekit';
+import {type Response} from 'express';
+import {type AxiosError, type AxiosResponse} from 'axios';
+import {type AppContext} from '@gravity-ui/nodekit';
 import {isYTError} from '../../shared/utils';
 import {getApp} from '../ServerFactory';
 import {YT_CYPRESS_COOKIE_NAME} from '../../shared/constants';
 import {UIBatchError} from '../../shared/utils/error';
-import {YTError} from '../../@types/types';
+import {type YTError} from '../../@types/types';
 
 export function isProductionEnv() {
     return getApp().config.appEnv !== 'development';

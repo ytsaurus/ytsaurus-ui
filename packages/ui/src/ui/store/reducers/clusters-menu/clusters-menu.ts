@@ -1,4 +1,4 @@
-import {Action} from 'redux';
+import {type Action} from 'redux';
 
 import cloneDeep_ from 'lodash/cloneDeep';
 import reduce_ from 'lodash/reduce';
@@ -11,8 +11,8 @@ import {
     FETCH_CLUSTER_VERSIONS,
 } from '../../../constants/index';
 import {YT} from '../../../config/yt-config';
-import {ValueOf} from '../../../../@types/types';
-import {ActionD} from '../../../types';
+import {type ValueOf} from '../../../../@types/types';
+import {type ActionD} from '../../../types';
 
 export type ClustersMenuState = {
     clusters: Record<string, ClusterConfigWithStatus>;

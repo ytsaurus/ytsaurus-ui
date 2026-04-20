@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Message} from '../Message';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {selectConversation} from '../../../store/selectors/ai/chat';

@@ -1,5 +1,5 @@
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../reducers';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../reducers';
 
 import forEach_ from 'lodash/forEach';
 import reduce_ from 'lodash/reduce';
@@ -7,9 +7,9 @@ import reduce_ from 'lodash/reduce';
 import {UIBatchError, splitBatchResults} from '../../../../shared/utils/error';
 
 import {
-    ExpandedPoolInfo,
-    ExpandedPoolsAction,
-    PoolCypressData,
+    type ExpandedPoolInfo,
+    type ExpandedPoolsAction,
+    type PoolCypressData,
 } from '../../reducers/scheduling/expanded-pools';
 
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
@@ -29,12 +29,15 @@ import {
     getSchedulingOperationsExpandedPools,
 } from '../../selectors/scheduling/expanded-pools';
 import {EMPTY_OBJECT} from '../../../constants/empty';
-import {PoolInfo, getSchedulingPoolsMapByName} from '../../selectors/scheduling/scheduling-pools';
-import {BatchSubRequest} from '../../../../shared/yt-types';
-import {SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
+import {
+    type PoolInfo,
+    getSchedulingPoolsMapByName,
+} from '../../selectors/scheduling/scheduling-pools';
+import {type BatchSubRequest} from '../../../../shared/yt-types';
+import {type SchedulingAction} from '../../../store/reducers/scheduling/scheduling';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {flattenAttributes} from '../../../utils/scheduling/scheduling';
-import {PoolTreeNode} from '../../../utils/scheduling/pool-child';
+import {type PoolTreeNode} from '../../../utils/scheduling/pool-child';
 
 import {toaster} from '../../../utils/toaster';
 

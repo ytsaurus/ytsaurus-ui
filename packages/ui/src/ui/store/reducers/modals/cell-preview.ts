@@ -1,4 +1,4 @@
-import type {ActionD, YTError} from '../../../types';
+import {type ActionD, type YTError} from '../../../types';
 import {CELL_PREVIEW} from '../../../constants/modals/cell-preview';
 
 export interface CellPreviewState {

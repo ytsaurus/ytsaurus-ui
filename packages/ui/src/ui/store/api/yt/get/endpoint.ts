@@ -1,7 +1,7 @@
-import {YTApiIdType} from '../../../../../shared/constants/yt-api-id';
-import {GetParams} from '../../../../../shared/yt-types';
+import {type YTApiIdType} from '../../../../../shared/constants/yt-api-id';
+import {type GetParams} from '../../../../../shared/yt-types';
 import {ytApiV4Id} from '../../../../rum/rum-wrap-api';
-import {YTEndpointApiArgs} from '../types';
+import {type YTEndpointApiArgs} from '../types';
 
 export async function get<T>({
     id,

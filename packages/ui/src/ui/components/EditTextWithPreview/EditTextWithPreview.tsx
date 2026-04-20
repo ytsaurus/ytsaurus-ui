@@ -2,15 +2,15 @@ import React, {useRef} from 'react';
 import cn from 'bem-cn-lite';
 import SplitPane from 'react-split-pane';
 
-import {DialogControlProps} from '../Dialog/Dialog.types';
+import {type DialogControlProps} from '../Dialog/Dialog.types';
 import MonacoEditor from '../../components/MonacoEditor';
 import Icon from '../../components/Icon/Icon';
 
 import TabbedContent from './TabbedContent';
 
 import './EditTextWithPreview.scss';
-import {DropdownMenuItem} from '@gravity-ui/uikit';
-import type {editor} from 'monaco-editor';
+import {type DropdownMenuItem} from '@gravity-ui/uikit';
+import {type editor} from 'monaco-editor';
 
 import i18n from './i18n';
 

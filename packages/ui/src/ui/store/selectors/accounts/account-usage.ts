@@ -1,4 +1,4 @@
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {createSelector} from 'reselect';
 import {PAGE_SIZE} from '../../reducers/accounts/usage/accounts-usage-filters';
 import ypath from '../../../common/thor/ypath';
@@ -7,14 +7,14 @@ import filter_ from 'lodash/filter';
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
-import {SortState} from '../../../types';
+import {type SortState} from '../../../types';
 import {
     getSettingsAccountUsageColumnsList,
     getSettingsAccountUsageColumnsListFolders,
     getSettingsAccountUsageColumnsTree,
 } from '../../../store/selectors/settings/settings-ts';
 import format from '../../../common/hammer/format';
-import {AccountUsageDataItem} from '../../../store/reducers/accounts/usage/account-usage-types';
+import {type AccountUsageDataItem} from '../../../store/reducers/accounts/usage/account-usage-types';
 
 const ACCOUNT_USAGE_COLUMN_TITLE: Record<string, string> = {
     approximate_row_count: '~Row count',

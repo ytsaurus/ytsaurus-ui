@@ -1,5 +1,5 @@
-import React, {FC, useMemo} from 'react';
-import {UnipikaSettings} from '../Yson/StructuredYson/StructuredYsonTypes';
+import React, {type FC, useMemo} from 'react';
+import {type UnipikaSettings} from '../Yson/StructuredYson/StructuredYsonTypes';
 import {DownloadFileButton} from './DownloadFileButton';
 import {attributesToString} from './helpers/attributesToString';
 

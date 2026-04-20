@@ -1,5 +1,5 @@
 import {
-    LanguageServiceDefaults,
+    type LanguageServiceDefaults,
     LanguageServiceDefaultsImpl,
     diagnosticDefault,
     modeConfigurationDefault,

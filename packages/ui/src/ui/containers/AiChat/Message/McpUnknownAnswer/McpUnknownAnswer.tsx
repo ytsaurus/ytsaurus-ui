@@ -1,6 +1,6 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Text} from '@gravity-ui/uikit';
-import {UnknownMcpAnswer} from '../../../../types/ai-chat';
+import {type UnknownMcpAnswer} from '../../../../types/ai-chat';
 import {McpMessage} from '../McpMessage';
 import i18n from './i18n';
 

@@ -1,4 +1,4 @@
-import {ValidatorError} from './SettingsItemForm';
+import {type ValidatorError} from './SettingsItemForm';
 import i18n from './helpers/i18n';
 
 export const VALIDATOR_ERRORS_TEXT = {

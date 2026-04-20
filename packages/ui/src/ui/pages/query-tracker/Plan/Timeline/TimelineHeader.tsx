@@ -1,6 +1,6 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Flex, Select, TextInput} from '@gravity-ui/uikit';
-import {NodeState} from '../models/plan';
+import {type NodeState} from '../models/plan';
 import './TimelineHeader.scss';
 import cn from 'bem-cn-lite';
 import {useSelector} from '../../../../store/redux-hooks';

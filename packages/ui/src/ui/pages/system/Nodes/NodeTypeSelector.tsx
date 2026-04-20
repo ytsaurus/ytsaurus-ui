@@ -6,7 +6,7 @@ import {Select} from '@gravity-ui/uikit';
 import {NODE_TYPE_ITEMS} from '../../../constants/components/nodes/nodes';
 import {getSystemNodesNodeTypesToLoad} from '../../../store/selectors/system/nodes';
 import {setSysmetNodesNodeType} from '../../../store/actions/system/nodes-ts';
-import {NODE_TYPE, NodeType} from '../../../../shared/constants/system';
+import {NODE_TYPE, type NodeType} from '../../../../shared/constants/system';
 import {selectComponentsNodesNodeTypes} from '../../../store/selectors/components/nodes/nodes';
 import {componentsNodesSetNodeTypes} from '../../../store/actions/components/nodes/nodes';
 import {updateListWithAll} from '../../../utils';

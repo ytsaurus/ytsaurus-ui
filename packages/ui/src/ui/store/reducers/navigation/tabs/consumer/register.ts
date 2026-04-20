@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 
-import {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';
 
 const initialState = {

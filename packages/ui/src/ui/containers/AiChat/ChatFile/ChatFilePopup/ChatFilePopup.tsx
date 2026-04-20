@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Button, Flex, Icon, Text, Toaster, Tooltip} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';

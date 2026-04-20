@@ -1,13 +1,13 @@
-import {Flex, FlexProps, Text} from '@gravity-ui/uikit';
+import {Flex, type FlexProps, Text} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
-import {YTError} from '../../../../../@types/types';
+import {type YTError} from '../../../../../@types/types';
 import {YTErrorBlock} from '../../../../components/Error/Error';
 import ErrorDetails from '../../../../components/ErrorDetails/ErrorDetails';
 import {ErrorToClipboardButton} from '../../../../components/ErrorToClipboardButton/ErrorToClipboardButton';
 import NavigationDescription from '../../../../pages/navigation/NavigationDescription/NavigationDescription';
 import {getPermissionDeniedError} from '../../../../utils/errors';
-import {ErrorCode, checkErrorForPrettyCodes, getErrorTitle} from './helpers';
+import {type ErrorCode, checkErrorForPrettyCodes, getErrorTitle} from './helpers';
 import {NavigationErrorImage} from './NavigationErrorImage';
 import {RequestPermission} from './RequestPermission';
 

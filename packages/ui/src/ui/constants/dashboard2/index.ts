@@ -1,4 +1,4 @@
-import {DashKitProps} from '@gravity-ui/dashkit';
+import {type DashKitProps} from '@gravity-ui/dashkit';
 
 const navigationLayoutWidth = 16;
 const accountsLayoutWidth = 20;

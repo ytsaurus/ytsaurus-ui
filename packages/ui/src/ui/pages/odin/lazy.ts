@@ -2,7 +2,7 @@ import React from 'react';
 
 import {withDisableMaxContentWidth} from '../../containers/MaxContentWidth';
 import withLazyLoading from '../../hocs/withLazyLoading';
-import {UIFactoryClusterPageInfo, UIFactoryRootPageInfo} from '../../UIFactory';
+import {type UIFactoryClusterPageInfo, type UIFactoryRootPageInfo} from '../../UIFactory';
 import {PageOdin} from '../../icons/PageOdin';
 import {
     getOdinOverviewPreparedState,

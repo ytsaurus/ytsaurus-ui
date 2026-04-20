@@ -1,4 +1,4 @@
-import {YTError} from '../index';
+import {type YTError} from '../index';
 
 export type QTEditorError = YTError<{
     attributes: {

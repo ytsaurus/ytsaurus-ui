@@ -1,4 +1,4 @@
-import {RootState} from '../../reducers';
+import {type RootState} from '../../reducers';
 
 type MonitorChartStuts = {[chartType: string]: boolean};
 

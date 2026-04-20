@@ -5,10 +5,10 @@ import reduce_ from 'lodash/reduce';
 
 import ypath from '../../common/thor/ypath';
 import {ROOT_POOL_NAME} from '../../constants/scheduling';
-import type {OperationInfo, PoolInfo} from '../../store/selectors/scheduling/scheduling-pools';
+import {type OperationInfo, type PoolInfo} from '../../store/selectors/scheduling/scheduling-pools';
 import {attachTreeLeaves, prepareTree} from '../../common/hammer/tree-list';
-import {ValueOf} from '../../types';
-import {PoolData, PoolTreeNode} from './pool-child';
+import {type ValueOf} from '../../types';
+import {type PoolData, type PoolTreeNode} from './pool-child';
 
 function getPool(pools: Array<PoolInfo>, name: string) {
     return find_(pools, (pool) => pool.name === name);

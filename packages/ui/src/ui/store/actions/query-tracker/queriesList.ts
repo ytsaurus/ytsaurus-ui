@@ -1,6 +1,6 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
-import {RootState} from '../../reducers';
+import {type RootState} from '../../reducers';
 import {loadQueriesList} from './api';
 import {
     getQueriesFilters,
@@ -11,8 +11,8 @@ import {
 } from '../../selectors/query-tracker/queriesList';
 import {
     DefaultQueriesListFilter,
-    QueriesListFilter,
-    QueriesListMode,
+    type QueriesListFilter,
+    type QueriesListMode,
 } from '../../../types/query-tracker/queryList';
 import {QueriesHistoryCursorDirection} from '../../reducers/query-tracker/query-tracker-contants';
 import {
@@ -21,7 +21,7 @@ import {
     setLoading,
     updateListState,
 } from '../../reducers/query-tracker/queryListSlice';
-import {QueryItem} from '../../../types/query-tracker/api';
+import {type QueryItem} from '../../../types/query-tracker/api';
 
 type AsyncAction = ThunkAction<any, RootState, any, any>;
 

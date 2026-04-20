@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 import {getBaseUrlDetails} from '../../../../../../shared/utils/base-url';
 import {
@@ -11,15 +11,15 @@ import {
     ACCESS_LOG_RESET_FILTERS,
     ACCESS_LOG_SUCCESS,
 } from '../../../../../constants/navigation/tabs/access-log';
-import {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 import {
-    AccessLogAction,
-    AccessLogAvailableTimeRange,
-    AccessLogData,
+    type AccessLogAction,
+    type AccessLogAvailableTimeRange,
+    type AccessLogData,
 } from '../../../../../store/reducers/navigation/tabs/access-log/access-log';
 import {
-    AccessLogFilterAction,
-    AccessLogFiltersState,
+    type AccessLogFilterAction,
+    type AccessLogFiltersState,
 } from '../../../../../store/reducers/navigation/tabs/access-log/access-log-filters';
 import {selectMergedUiSettings} from '../../../../../store/selectors/global';
 import {

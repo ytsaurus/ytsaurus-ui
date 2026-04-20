@@ -1,4 +1,4 @@
-import {ActionD, YTError} from '../../../../types';
+import {type ActionD, type YTError} from '../../../../types';
 import {REMOTE_COPY_MODAL_PARTIAL} from '../../../../constants/navigation/modals';
 
 export interface RemoteCopyModalState {

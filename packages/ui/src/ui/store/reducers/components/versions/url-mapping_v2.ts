@@ -5,9 +5,9 @@ import {initialState as tableSortState} from '../../../../store/reducers/tables'
 
 import {COMPONENTS_VERSIONS_DETAILED_TABLE_ID} from '../../../../constants/components/versions/versions_v2';
 import {parseSortState} from '../../../../utils';
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {updateIfChanged} from '../../../../utils/utils';
-import {LocationParameters} from '../../../../store/location';
+import {type LocationParameters} from '../../../../store/location';
 
 const initialHost = versionsInitialState.hostFilter;
 const initialVersion = versionsInitialState.versionFilter;

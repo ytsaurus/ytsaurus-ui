@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
-import {Button, DropdownMenu, DropdownMenuItem} from '@gravity-ui/uikit';
+import {Button, DropdownMenu, type DropdownMenuItem} from '@gravity-ui/uikit';
 
 import Icon from '../../../components/Icon/Icon';
 import {selectCluster} from '../../../store/selectors/global';

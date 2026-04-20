@@ -1,21 +1,21 @@
-import type {Request} from 'express';
+import {type Request} from 'express';
 
 // @ts-ignore
 import ytLib from '@ytsaurus/javascript-wrapper';
 const yt = ytLib();
 
 import {
-    DashboardInfo,
-    PluginRendererDataParams,
-    PrometheusDashboardType,
+    type DashboardInfo,
+    type PluginRendererDataParams,
+    type PrometheusDashboardType,
 } from '../../../shared/prometheus/types';
 import {
-    CheckPermissionResult,
+    type CheckPermissionResult,
     makeCheckPermissionBatchSubRequest,
 } from '../../../shared/utils/check-permission';
 
-import {BatchResultsItem, BatchSubRequest} from '../../../shared/yt-types';
-import {YTError} from '../../../@types/types';
+import {type BatchResultsItem, type BatchSubRequest} from '../../../shared/yt-types';
+import {type YTError} from '../../../@types/types';
 import {getXSRFToken} from '../../components/cluster-queries';
 import {formatByParams} from '../../../shared/utils/format';
 import {getUserYTApiSetup} from '../../components/requestsSetup';

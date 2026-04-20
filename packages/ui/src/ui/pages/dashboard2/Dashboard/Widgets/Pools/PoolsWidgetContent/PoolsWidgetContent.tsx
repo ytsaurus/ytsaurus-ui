@@ -3,13 +3,13 @@ import {useSelector} from '../../../../../../store/redux-hooks';
 import {Text} from '@gravity-ui/uikit';
 import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
-import {RootState} from '../../../../../../store/reducers';
+import {type RootState} from '../../../../../../store/reducers';
 import {selectPoolsTypeFilter} from '../../../../../../store/selectors/dashboard2/pools';
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
 
 import {usePoolsWidget} from '../hooks/use-pools-widget';
-import type {Pool, PoolsWidgetProps} from '../types';
+import {type Pool, type PoolsWidgetProps} from '../types';
 
 import {PoolCell} from './cells/Pool';
 import {ResourceCell} from './cells/Resource';

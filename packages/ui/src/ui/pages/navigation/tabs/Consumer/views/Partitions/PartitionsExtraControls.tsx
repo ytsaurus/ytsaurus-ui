@@ -1,5 +1,5 @@
 import React from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import Filter from '../../../../../../components/Filter/Filter';
@@ -12,8 +12,8 @@ import {
     changeConsumerRateMode,
     changeConsumerTimeWindow,
 } from '../../../../../../store/actions/navigation/tabs/consumer/filters';
-import type {RootState} from '../../../../../../store/reducers';
-import type {TPerformanceCounters} from '../../../../../../store/reducers/navigation/tabs/queue/types';
+import {type RootState} from '../../../../../../store/reducers';
+import {type TPerformanceCounters} from '../../../../../../store/reducers/navigation/tabs/queue/types';
 import {
     getConsumerPartitionIndex,
     getConsumerPartitionsColumns,
@@ -25,7 +25,7 @@ import Icon from '../../../../../../components/Icon/Icon';
 import Dropdown from '../../../../../../components/Dropdown/Dropdown';
 
 import './PartitionsExtraControls.scss';
-import {PartitionColumn} from '../../../../../../store/reducers/navigation/tabs/consumer/filters';
+import {type PartitionColumn} from '../../../../../../store/reducers/navigation/tabs/consumer/filters';
 
 const block = cn('consumer-partitions');
 

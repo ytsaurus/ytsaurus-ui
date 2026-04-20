@@ -1,6 +1,6 @@
-import {IRange, editor, languages} from 'monaco-editor';
-import {TableContextSuggestion} from '@gravity-ui/websql-autocomplete/shared';
-import {QueryEngine} from '../../../../shared/constants/engines';
+import {type IRange, type editor, languages} from 'monaco-editor';
+import {type TableContextSuggestion} from '@gravity-ui/websql-autocomplete/shared';
+import {type QueryEngine} from '../../../../shared/constants/engines';
 import {loadTableData} from './loadTableData';
 import {suggestionIndexToWeight} from './suggestionIndexToWeight';
 import {SuggestionsWeight} from './generateSuggestions';

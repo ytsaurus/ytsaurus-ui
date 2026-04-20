@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {Button, Icon, Tooltip} from '@gravity-ui/uikit';
 import AiIcon from '../../../assets/img/svg/icons/ai-chat-icon.svg';

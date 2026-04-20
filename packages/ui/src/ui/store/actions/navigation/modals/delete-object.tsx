@@ -25,15 +25,15 @@ import map_ from 'lodash/map';
 
 import {executeBatchWithRetries} from '../../execute-batch';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
-import type {RootState} from '../../../../store/reducers';
-import type {Dispatch} from 'redux';
-import type {
-    DeleteObjectItem,
-    MulipleInfoItem,
+import {type RootState} from '../../../../store/reducers';
+import {type Dispatch} from 'redux';
+import {
+    type DeleteObjectItem,
+    type MulipleInfoItem,
 } from '../../../../store/reducers/navigation/modals/delete-object';
-import {BatchSubRequest} from '../../../../../shared/yt-types';
-import type {YTError} from '../../../../types';
-import type {AppDispatch} from '../../../store.main';
+import {type BatchSubRequest} from '../../../../../shared/yt-types';
+import {type YTError} from '../../../../types';
+import {type AppDispatch} from '../../../store.main';
 import {toaster} from '../../../../utils/toaster';
 
 function prepareRestorePath(path: string, type: string) {

@@ -7,7 +7,7 @@ import {isCryptoSubtleAvailable} from '../../../utils/sha256';
 import {createPasswordStrategy} from './password-strategies';
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import {selectCurrentUserName, selectSettingsCluster} from '../../../store/selectors/global';
-import {YTError} from '../../../../@types/types';
+import {type YTError} from '../../../../@types/types';
 import {selectIsManageTokensInOAuthMode} from '../../../store/selectors/manage-tokens';
 import {CryptoSubtleAlert} from './CryptoSubtleAlert';
 

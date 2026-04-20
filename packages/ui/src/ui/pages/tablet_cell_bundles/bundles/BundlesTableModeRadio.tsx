@@ -2,8 +2,8 @@ import React from 'react';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 
 import CustomRadioButton from '../../../components/RadioButton/RadioButton';
-import type {setTabletsPartial} from '../../../store/actions/tablet_cell_bundles';
-import type {BundlesTableMode} from '../../../store/reducers/tablet_cell_bundles';
+import {type setTabletsPartial} from '../../../store/actions/tablet_cell_bundles';
+import {type BundlesTableMode} from '../../../store/reducers/tablet_cell_bundles';
 import {selectClusterUiConfigEnablePerBundleTabletAccounting} from '../../../store/selectors/global';
 
 interface Props {

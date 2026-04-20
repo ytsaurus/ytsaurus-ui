@@ -2,7 +2,7 @@ import * as React from 'react';
 import {useDispatch, useSelector} from '../../store/redux-hooks';
 import {getPath} from '../../store/selectors/navigation';
 import {selectCluster} from '../../store/selectors/global';
-import {AxiosError, AxiosProgressEvent, isCancel} from 'axios';
+import {type AxiosError, type AxiosProgressEvent, isCancel} from 'axios';
 import CancelHelper from '../../utils/cancel-helper';
 import {updateView} from '../../store/actions/navigation';
 import hammer from '../../common/hammer';

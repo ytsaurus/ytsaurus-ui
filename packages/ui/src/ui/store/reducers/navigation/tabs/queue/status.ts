@@ -3,10 +3,10 @@ import {
     QUEUE_STATUS_LOAD_REQUEST,
     QUEUE_STATUS_LOAD_SUCCESS,
 } from '../../../../../constants/navigation/tabs/queue';
-import type {Action} from 'redux';
+import {type Action} from 'redux';
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';
-import type {ActionD, YTError} from '../../../../../types';
-import type {YtQueueStatus} from './types';
+import {type ActionD, type YTError} from '../../../../../types';
+import {type YtQueueStatus} from './types';
 
 export interface QueueStatusState {
     statusLoading: boolean;

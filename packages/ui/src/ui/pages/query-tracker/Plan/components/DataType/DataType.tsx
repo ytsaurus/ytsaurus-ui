@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import {
-    DataType as DataTypeType,
-    StructEntry,
+    type DataType as DataTypeType,
+    type StructEntry,
     isComplexDataType,
     isStructDataType,
     isVariantDataType,

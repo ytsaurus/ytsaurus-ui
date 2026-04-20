@@ -2,12 +2,12 @@ import map_ from 'lodash/map';
 
 import ypath from '../../common/thor/ypath';
 import {ROOT_POOL_NAME} from '../../constants/scheduling';
-import {TreeNode} from '../../common/hammer/tree-list';
-import {TreeResources} from '../../store/reducers/scheduling/scheduling';
+import {type TreeNode} from '../../common/hammer/tree-list';
+import {type TreeResources} from '../../store/reducers/scheduling/scheduling';
 import {
-    OperationInfo,
-    PoolInfo,
-    PoolResourceType,
+    type OperationInfo,
+    type PoolInfo,
+    type PoolResourceType,
 } from '../../store/selectors/scheduling/scheduling-pools';
 
 import {appendInnerErrors} from '../../utils/errors';

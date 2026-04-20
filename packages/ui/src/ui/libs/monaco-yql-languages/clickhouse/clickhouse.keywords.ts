@@ -1,5 +1,5 @@
-import {ClickHouseAutocompleteResult} from '@gravity-ui/websql-autocomplete/clickhouse';
-import {IRange, Position, editor, languages} from 'monaco-editor';
+import {type ClickHouseAutocompleteResult} from '@gravity-ui/websql-autocomplete/clickhouse';
+import {type IRange, type Position, type editor, languages} from 'monaco-editor';
 import {generateSuggestion} from '../helpers/generateSuggestions';
 import {getRangeToInsertSuggestion} from '../helpers/getRangeToInsertSuggestion';
 

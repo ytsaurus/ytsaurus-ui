@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
-import {Column} from '@gravity-ui/react-data-table';
+import {type Column} from '@gravity-ui/react-data-table';
 
 import format from '../../../common/hammer/format';
 
@@ -23,7 +23,7 @@ import {
     selectChytListTableSortStateByName,
     selectChytListVisibleColumns,
 } from '../../../store/selectors/chyt';
-import {ChytInfo} from '../../../store/reducers/chyt/list';
+import {type ChytInfo} from '../../../store/reducers/chyt/list';
 import {Page} from '../../../../shared/constants/settings';
 import {CHYT_TABLE_TITLES} from '../../../constants/chyt-page';
 import {OperationPool} from '../../../components/OperationPool/OperationPool';

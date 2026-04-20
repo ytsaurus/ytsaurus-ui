@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import hammer from '../../../../../../common/hammer';
 import './EventTimelineTooltipContentRow.scss';
 import cn from 'bem-cn-lite';

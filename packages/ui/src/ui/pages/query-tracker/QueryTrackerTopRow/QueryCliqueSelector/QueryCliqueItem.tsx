@@ -1,5 +1,5 @@
-import React, {FC} from 'react';
-import {ChytInfo} from '../../../../store/reducers/chyt/list';
+import React, {type FC} from 'react';
+import {type ChytInfo} from '../../../../store/reducers/chyt/list';
 import './QueryCliqueItem.scss';
 import cn from 'bem-cn-lite';
 import {Flex, Label, Text} from '@gravity-ui/uikit';

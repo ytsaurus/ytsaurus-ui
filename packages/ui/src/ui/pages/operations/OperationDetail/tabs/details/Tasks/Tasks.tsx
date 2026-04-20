@@ -1,5 +1,5 @@
 import React from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 import forEach_ from 'lodash/forEach';
 import isEmpty_ from 'lodash/isEmpty';
@@ -18,7 +18,7 @@ import {tasksTablesProps} from '../../../../../../utils/operations/tabs/details/
 import {hasProgressTasks} from '../../../../../../utils/operations/tabs/details/data-flow';
 import ClickableAttributesButton from '../../../../../../components/AttributesButton/ClickableAttributesButton';
 import ExpandIcon from '../../../../../../components/ExpandIcon/ExpandIcon';
-import {RootState} from '../../../../../../store/reducers';
+import {type RootState} from '../../../../../../store/reducers';
 import {selectOperationDetailTasksData} from '../../../../../../store/selectors/operations/statistics-v2';
 
 const block = cn('jobs');

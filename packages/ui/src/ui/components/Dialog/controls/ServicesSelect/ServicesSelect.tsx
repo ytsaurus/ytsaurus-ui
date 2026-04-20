@@ -7,7 +7,7 @@ import map_ from 'lodash/map';
 
 import {selectClusterUiConfig} from '../../../../store/selectors/global';
 
-import {DialogControlProps} from '../../Dialog.types';
+import {type DialogControlProps} from '../../Dialog.types';
 
 import {useBunldesList} from './use-bundles-list';
 import {useCliquesList} from './use-cliques-list';

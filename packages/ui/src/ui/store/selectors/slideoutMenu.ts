@@ -7,8 +7,8 @@ import reduce_ from 'lodash/reduce';
 import sortBy_ from 'lodash/sortBy';
 
 import {createSelector} from 'reselect';
-import {ClusterConfig} from '../../../shared/yt-types';
-import {RootState} from '../reducers';
+import {type ClusterConfig} from '../../../shared/yt-types';
+import {type RootState} from '../reducers';
 import {PAGE_ICONS_BY_ID} from '../../constants/slideoutMenu';
 
 import {

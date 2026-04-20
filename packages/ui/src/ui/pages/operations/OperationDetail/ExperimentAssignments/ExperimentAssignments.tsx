@@ -7,7 +7,7 @@ import map_ from 'lodash/map';
 import ypath from '../../../../common/thor/ypath';
 import {CollapsibleSectionStateLess} from '../../../../components/CollapsibleSection/CollapsibleSection';
 import {
-    OperationExperimentItem,
+    type OperationExperimentItem,
     selectOperationExperimentAssignments,
     selectOperationId,
 } from '../../../../store/selectors/operations/operation';

@@ -1,6 +1,11 @@
 import {escapeChars, formatByParamsQuotedEnv} from '../utils/format';
 
-import {DiscoverValues, PanelType, PrometheusDashboardType, PrometheusWidgetId} from './types';
+import {
+    type DiscoverValues,
+    type PanelType,
+    type PrometheusDashboardType,
+    type PrometheusWidgetId,
+} from './types';
 
 export function getDashboardPath(type: PrometheusDashboardType) {
     return `//sys/interface-monitoring/${type}`;

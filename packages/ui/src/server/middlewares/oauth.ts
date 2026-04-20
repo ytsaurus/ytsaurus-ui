@@ -1,5 +1,5 @@
-import {AppMiddleware} from '@gravity-ui/expresskit';
-import type {Request, Response} from 'express';
+import {type AppMiddleware} from '@gravity-ui/expresskit';
+import {type Request, type Response} from 'express';
 import {getOAuthAccessToken, isOAuthAllowed, isUserOAuthLogged} from '../components/oauth';
 import {YT_UI_CLUSTER_HEADER_NAME} from '../../shared/constants';
 

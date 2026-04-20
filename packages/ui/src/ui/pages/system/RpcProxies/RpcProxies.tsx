@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 
@@ -7,10 +7,10 @@ import {useUpdater} from '../../../hooks/use-updater';
 import {setSettingsSystemRpcProxiesCollapsed} from '../../../store/actions/settings/settings';
 import {loadSystemRPCProxies} from '../../../store/actions/system/rpc-proxies';
 import {selectCluster} from '../../../store/selectors/global';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {getSettingsSystemRpcProxiesCollapsed} from '../../../store/selectors/settings/settings-ts';
 import {useDispatch} from '../../../store/redux-hooks';
-import {MakeUrlParams} from '../ProxiesImpl/RoleGroup';
+import {type MakeUrlParams} from '../ProxiesImpl/RoleGroup';
 import {ProxiesImpl} from '../ProxiesImpl/ProxiesImpl';
 
 type ReduxProps = ConnectedProps<typeof connector>;

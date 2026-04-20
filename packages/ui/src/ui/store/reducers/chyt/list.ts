@@ -1,9 +1,9 @@
-import type {Action} from 'redux';
+import {type Action} from 'redux';
 
-import type {ActionD, YTError} from '../../../types';
+import {type ActionD, type YTError} from '../../../types';
 
 import {CHYT_LIST} from '../../../constants/chyt-page';
-import {StrawberryListResponseItem} from '../../../utils/strawberryControllerApi';
+import {type StrawberryListResponseItem} from '../../../utils/strawberryControllerApi';
 
 import {mergeStateOnClusterChange} from '../utils';
 

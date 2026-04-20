@@ -2,11 +2,11 @@ import React from 'react';
 import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
 import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 
-import {RootState} from '../../../../../../store/reducers';
+import {type RootState} from '../../../../../../store/reducers';
 import {selectNavigationTypeFilter} from '../../../../../../store/selectors/dashboard2/navigation';
 import {setNavigationTypeFilter} from '../../../../../../store/actions/dashboard2/navigation';
 
-import type {NavigationWidgetProps} from '../types';
+import {type NavigationWidgetProps} from '../types';
 
 import i18n from '../i18n';
 

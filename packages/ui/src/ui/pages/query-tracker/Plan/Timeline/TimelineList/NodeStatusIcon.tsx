@@ -1,7 +1,7 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {useGraphColors} from '../../GraphColors';
 import {drawRunningIcon} from '../../utils';
-import {NodeProgress, NodeState} from '../../models/plan';
+import {type NodeProgress, type NodeState} from '../../models/plan';
 
 type Props = {
     state: NodeState | 'NotStarted';

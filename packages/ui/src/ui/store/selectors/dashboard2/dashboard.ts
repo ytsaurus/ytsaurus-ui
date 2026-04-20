@@ -1,6 +1,6 @@
 import {createSelector} from '@reduxjs/toolkit';
 
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {getSettingsData} from '../../../store/selectors/settings/settings-base';
 import {selectCluster} from '../../../store/selectors/global';
 

@@ -1,5 +1,5 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {YTError} from '../../../../types';
+import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {type YTError} from '../../../../types';
 
 export type JobOperationIncarnationsState = {
     loading: boolean;

@@ -1,5 +1,5 @@
 import copy from 'copy-to-clipboard';
-import type {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 import {getBatchError} from '../../../../shared/utils/error';
 
@@ -12,11 +12,11 @@ import {
 } from '../../../constants/tablets';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {bundlesTrackVisit} from '../../../store/actions/favourites';
-import type {RootState} from '../../../store/reducers';
-import type {
-    ChaosBundle,
-    ChaosBundlesAction,
-    ChaosPartialAction,
+import {type RootState} from '../../../store/reducers';
+import {
+    type ChaosBundle,
+    type ChaosBundlesAction,
+    type ChaosPartialAction,
 } from '../../../store/reducers/chaos_cell_bundles';
 import {
     filterChaosCellsByBundle,
@@ -25,7 +25,7 @@ import {
     selectChaosCells,
 } from '../../../store/selectors/chaos_cell_bundles';
 import {selectCluster} from '../../../store/selectors/global';
-import type {SortState} from '../../../types';
+import {type SortState} from '../../../types';
 import {
     prepareBundles,
     prepareTabletCells,
@@ -33,7 +33,7 @@ import {
 } from '../../../utils/components/tablet-cells';
 import {getAppBrowserHistory} from '../../../store/window-store';
 import {USE_MAX_SIZE} from '../../../../shared/constants/yt-api';
-import {BatchSubRequest} from '../../../../shared/yt-types';
+import {type BatchSubRequest} from '../../../../shared/yt-types';
 
 type ChaosBundlesThunkAction = ThunkAction<void, RootState, unknown, ChaosBundlesAction>;
 

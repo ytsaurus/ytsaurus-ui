@@ -1,5 +1,5 @@
-import React, {FC, useEffect} from 'react';
-import {QueryItem} from '../../../types/query-tracker/api';
+import React, {type FC, useEffect} from 'react';
+import {type QueryItem} from '../../../types/query-tracker/api';
 import {useDispatch} from '../../../store/redux-hooks';
 import {loadQueryResult} from '../../../store/actions/query-tracker/queryResult';
 import {QueryResultsView} from '../QueryResultsView';

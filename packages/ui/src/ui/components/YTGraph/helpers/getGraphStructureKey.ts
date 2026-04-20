@@ -1,5 +1,5 @@
-import {TBlock, TConnection} from '@gravity-ui/graph';
-import {YTGraphData} from '../types';
+import {type TBlock, type TConnection} from '@gravity-ui/graph';
+import {type YTGraphData} from '../types';
 
 export function getGraphStructureKey<B extends TBlock, C extends TConnection>(
     data: YTGraphData<B, C>,

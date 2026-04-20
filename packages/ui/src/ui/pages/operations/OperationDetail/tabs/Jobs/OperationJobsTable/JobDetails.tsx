@@ -1,11 +1,11 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {MetaTable, Tooltip} from '@ytsaurus/components';
 import ypath from '../../../../../../common/thor/ypath';
 import hammer from '../../../../../../common/hammer';
 import {Flex, Icon} from '@gravity-ui/uikit';
 import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 import map_ from 'lodash/map';
-import {RawJob} from '../../../../../../types/operations/job';
+import {type RawJob} from '../../../../../../types/operations/job';
 
 type Props = {
     statistics: RawJob['statistics'];

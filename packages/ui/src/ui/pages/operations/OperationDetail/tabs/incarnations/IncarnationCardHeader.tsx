@@ -10,7 +10,7 @@ import Link from '../../../../../components/Link/Link';
 import AttributesButton from '../../../../../components/AttributesButton/AttributesButton';
 
 import {toggleIncarnationInfoDialog} from '../../../../../store/reducers/operations/incarnations';
-import type {Incarnation} from '../../../../../store/selectors/operations/incarnations';
+import {type Incarnation} from '../../../../../store/selectors/operations/incarnations';
 import {selectCluster} from '../../../../../store/selectors/global';
 import {selectOperation} from '../../../../../store/selectors/operations/operation';
 

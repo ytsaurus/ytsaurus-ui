@@ -4,7 +4,7 @@ import {YTErrorBlock} from '../../components/Error/Error';
 import hammer from '../../common/hammer';
 
 import {showErrorPopup} from '../../utils/utils';
-import {YTError} from '../../types';
+import {type YTError} from '../../types';
 import {toaster} from '../../utils/toaster';
 import i18n from './i18n';
 

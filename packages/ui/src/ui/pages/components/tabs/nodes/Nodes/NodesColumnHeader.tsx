@@ -3,12 +3,12 @@ import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 
 import {COMPONENTS_NODES_TABLE_ID} from '../../../../../constants/components/nodes/nodes';
 import ColumnHeader, {
-    ColumnHeaderProps,
-    HasSortColumn,
+    type ColumnHeaderProps,
+    type HasSortColumn,
 } from '../../../../../components/ColumnHeader/ColumnHeader';
 import {toggleColumnSortOrder} from '../../../../../store/actions/tables';
 import {getTables} from '../../../../../store/selectors/tables';
-import {NodesTableColumnNames} from '../../../../../pages/components/tabs/nodes/tables';
+import {type NodesTableColumnNames} from '../../../../../pages/components/tabs/nodes/tables';
 import {oldSortStateToOrderType} from '../../../../../utils/sort-helpers';
 
 export function NodesColumnHeader(

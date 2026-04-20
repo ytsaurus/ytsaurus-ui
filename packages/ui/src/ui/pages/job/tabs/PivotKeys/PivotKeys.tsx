@@ -7,7 +7,7 @@ import ElementsTableRaw from '../../../../components/ElementsTable/ElementsTable
 
 import {abortAndReset, loadJobSpecification} from '../../../../store/actions/job/specification';
 import {selectJobPivotKeysData} from '../../../../store/selectors/job/detail';
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import unipika from '../../../../common/thor/unipika';
 
 const block = cn('job-pivot-keys');

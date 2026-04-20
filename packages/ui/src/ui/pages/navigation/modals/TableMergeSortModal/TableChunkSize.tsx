@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import {DialogControlProps} from '../../../../components/Dialog/Dialog.types';
+import {type DialogControlProps} from '../../../../components/Dialog/Dialog.types';
 import Suggest from '../../../../components/Suggest/Suggest';
 import format from '../../../../common/hammer/format';
 import {parseBytes} from '../../../../utils/parse/parse-bytes';

@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import React, {type ReactNode} from 'react';
 import block from 'bem-cn-lite';
 import {Icon} from '@gravity-ui/uikit';
 

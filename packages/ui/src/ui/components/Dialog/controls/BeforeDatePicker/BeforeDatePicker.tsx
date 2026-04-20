@@ -3,8 +3,8 @@ import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
 
 import {FocusBlurContainer} from '@gravity-ui/dialog-fields';
-import {SegmentedRadioGroup, TextInput, TextInputSize} from '@gravity-ui/uikit';
-import {Datepicker, DatepickerOutputDates} from '../../../../components/common/Datepicker';
+import {SegmentedRadioGroup, TextInput, type TextInputSize} from '@gravity-ui/uikit';
+import {Datepicker, type DatepickerOutputDates} from '../../../../components/common/Datepicker';
 
 import './BeforeDatePicker.scss';
 

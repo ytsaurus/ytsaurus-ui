@@ -1,4 +1,11 @@
-import {CancellationToken, Emitter, IEvent, Position, editor, languages} from 'monaco-editor';
+import {
+    type CancellationToken,
+    Emitter,
+    type IEvent,
+    type Position,
+    type editor,
+    languages,
+} from 'monaco-editor';
 
 interface ILang extends languages.ILanguageExtensionPoint {
     loader: () => Promise<ILangImpl>;

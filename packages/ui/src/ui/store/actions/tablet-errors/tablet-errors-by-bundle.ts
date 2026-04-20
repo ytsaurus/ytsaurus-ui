@@ -1,6 +1,9 @@
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../../store/reducers';
-import {TabletErrorsApi, fetchFromTabletErrorsApi} from '../../../../shared/tablet-errors-manager';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../../store/reducers';
+import {
+    type TabletErrorsApi,
+    fetchFromTabletErrorsApi,
+} from '../../../../shared/tablet-errors-manager';
 import {selectCluster} from '../../../store/selectors/global';
 import {tabletErrorsByBundleActions} from '../../../store/reducers/tablet-errors/tablet-errors-by-bundle';
 import CancelHelper from '../../../utils/cancel-helper';

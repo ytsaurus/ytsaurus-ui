@@ -1,4 +1,4 @@
-import React, {FC, useRef} from 'react';
+import React, {type FC, useRef} from 'react';
 import {Button, Icon} from '@gravity-ui/uikit';
 import PaperclipIcon from '@gravity-ui/icons/svgs/paperclip.svg';
 import {useToggle} from 'react-use';

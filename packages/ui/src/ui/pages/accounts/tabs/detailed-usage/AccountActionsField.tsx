@@ -1,6 +1,6 @@
-import React, {FC, useCallback} from 'react';
+import React, {type FC, useCallback} from 'react';
 import AttributesButton from '../../../../components/AttributesButton/AttributesButton';
-import {AccountUsageDataItem} from '../../../../store/reducers/accounts/usage/account-usage-types';
+import {type AccountUsageDataItem} from '../../../../store/reducers/accounts/usage/account-usage-types';
 
 export type AccountRequestData = {
     cluster: string;

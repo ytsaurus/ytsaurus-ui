@@ -1,7 +1,7 @@
 import {produce} from 'immer';
 import {updateIfChanged} from '../../../utils/utils';
-import {LocationParameters} from '../../location';
-import {RootState} from '../index';
+import {type LocationParameters} from '../../location';
+import {type RootState} from '../index';
 import {initialState as listInitialState} from './queryListSlice';
 import {initialState as navigationInitialState} from './queryNavigationSlice';
 

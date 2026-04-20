@@ -5,7 +5,7 @@ import {selectAllUserNames} from '../../store/selectors/global';
 import Select from '../../components/Select/Select';
 import {SubjectNameLazy} from '../../components/SubjectLink/lazy';
 import {useAllUserNamesFiltered} from '../../hooks/global';
-import {UserSuggestProps} from './UserSuggest';
+import {type UserSuggestProps} from './UserSuggest';
 
 export function YTUserSuggest({className, value, onUpdate, multiple, ...rest}: UserSuggestProps) {
     const userNames = useSelector(selectAllUserNames);

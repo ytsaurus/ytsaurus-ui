@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {type FC, useEffect} from 'react';
 import {useSidePanel} from '../../hooks/use-side-panel';
 import withLazyLoading from '../../hocs/withLazyLoading';
 import {useSelector} from '../../store/redux-hooks';

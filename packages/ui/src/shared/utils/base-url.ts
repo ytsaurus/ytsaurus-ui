@@ -1,7 +1,7 @@
 // @ts-expect-error
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
-import type {KeysByType} from '../../@types/types';
-import type {UISettings, UiConfigBaseUrl} from '../../shared/ui-settings';
+import {type KeysByType} from '../../@types/types';
+import {type UISettings, type UiConfigBaseUrl} from '../../shared/ui-settings';
 
 export type UISettingsBaseUrlKeys = KeysByType<UISettings, UiConfigBaseUrl | undefined>;
 

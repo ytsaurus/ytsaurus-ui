@@ -8,9 +8,18 @@ import moment from 'moment';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
 import {makeDirectDownloadPath} from '../../../../../utils/navigation';
-import {ClusterConfig, ListJobsItem, OperationType} from '../../../../../../shared/yt-types';
-import {YTError} from '../../../../../types';
-import {JobState, JobStatistics, RawJob, RawJobEvent} from '../../../../../types/operations/job';
+import {
+    type ClusterConfig,
+    type ListJobsItem,
+    type OperationType,
+} from '../../../../../../shared/yt-types';
+import {type YTError} from '../../../../../types';
+import {
+    type JobState,
+    type JobStatistics,
+    type RawJob,
+    type RawJobEvent,
+} from '../../../../../types/operations/job';
 
 type JobsData = ListJobsItem | RawJob;
 

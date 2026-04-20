@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 import isEmpty_ from 'lodash/isEmpty';
 
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
@@ -8,11 +8,11 @@ import {loadSystemProxies} from '../../../store/actions/system/proxies';
 import {selectCluster} from '../../../store/selectors/global';
 import {getSettingsSystemHttpProxiesCollapsed} from '../../../store/selectors/settings/settings-ts';
 import {setSettingsSystemHttpProxiesCollapsed} from '../../../store/actions/settings/settings';
-import type {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {useDispatch} from '../../../store/redux-hooks';
 import {useUpdater} from '../../../hooks/use-updater';
 
-import {MakeUrlParams} from '../ProxiesImpl/RoleGroup';
+import {type MakeUrlParams} from '../ProxiesImpl/RoleGroup';
 import {ProxiesImpl} from '../ProxiesImpl/ProxiesImpl';
 
 type ReduxProps = ConnectedProps<typeof connector>;

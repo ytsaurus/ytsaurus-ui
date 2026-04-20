@@ -1,11 +1,11 @@
 import moment from 'moment';
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {produce} from 'immer';
 
 import {initialState as listInitialState} from '../../../../store/reducers/operations/list/list';
 import {updateIfChanged} from '../../../../utils/utils';
-import {LocationParameters} from '../../../../store/location';
-import {FIX_MY_TYPE} from '../../../../types';
+import {type LocationParameters} from '../../../../store/location';
+import {type FIX_MY_TYPE} from '../../../../types';
 
 const {text, user, subject, permissions, pool, state, type, failedJobs} = listInitialState.filters;
 const {

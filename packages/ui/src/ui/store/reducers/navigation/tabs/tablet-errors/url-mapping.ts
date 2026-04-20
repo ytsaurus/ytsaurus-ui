@@ -1,9 +1,9 @@
 import {produce} from 'immer';
 
-import type {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 import {initialState} from '../../../../../store/reducers/navigation/tabs/tablet-errors/tablet-errors-background';
 import {initialState as initialStateByPath} from '../../../../../store/reducers/navigation/tabs/tablet-errors/tablet-errors-by-path';
-import {LocationParameters} from '../../../../../store/location';
+import {type LocationParameters} from '../../../../../store/location';
 import {
     makeTimeRangeSerialization,
     parseSerializeArrayString,

@@ -1,13 +1,13 @@
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import {Action} from 'redux';
-import {YTError} from '../../../types';
+import {type Action} from 'redux';
+import {type YTError} from '../../../types';
 import ypath from '../../../common/thor/ypath';
 import * as JOB from '../../../constants/job';
 import CancelHelper from '../../../utils/cancel-helper';
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../../store/reducers';
-import {JobSpecification} from '../../../types/operations/job';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../../store/reducers';
+import {type JobSpecification} from '../../../types/operations/job';
 
 interface JobSpecRequest {
     type: number;

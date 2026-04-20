@@ -1,8 +1,8 @@
 import React from 'react';
 
-import {IdmKindType} from '../../../utils/acl/acl-types';
+import {type IdmKindType} from '../../../utils/acl/acl-types';
 import UIFactory from '../../../UIFactory';
-import {YTError} from '../../../../@types/types';
+import {type YTError} from '../../../../@types/types';
 
 export function useAvailablePermissions({idmKind, path}: {idmKind: IdmKindType; path: string}) {
     const {permissionsToRequest, permissionTypes, getAvailablePermissions} =

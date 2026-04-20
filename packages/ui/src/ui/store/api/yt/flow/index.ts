@@ -1,5 +1,5 @@
-import {FlowExecuteCommand, FlowExecuteTypes} from '../../../../../shared/yt-types';
-import {OverrideDataType} from '../types';
+import {type FlowExecuteCommand, type FlowExecuteTypes} from '../../../../../shared/yt-types';
+import {type OverrideDataType} from '../types';
 import {useCurrentClusterArgs} from '../use-current-cluster';
 import {ytApi} from '../ytApi';
 import {flowExecute} from './endpoint';

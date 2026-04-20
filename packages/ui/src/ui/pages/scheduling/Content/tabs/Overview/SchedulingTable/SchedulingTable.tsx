@@ -7,18 +7,18 @@ import {DropdownMenu, Flex, Progress, Text} from '@gravity-ui/uikit';
 import format from '../../../../../../common/hammer/format';
 
 import ColumnHeader, {
-    ColumnHeaderProps,
+    type ColumnHeaderProps,
 } from '../../../../../../components/ColumnHeader/ColumnHeader';
 import {
     DataTableGravity,
     TableCell,
     TableSettings,
-    tanstack,
+    type tanstack,
     useTable,
 } from '../../../../../../components/DataTableGravity';
 import {
     FormatNumber,
-    FormatNumberProps,
+    type FormatNumberProps,
 } from '../../../../../../components/FormatNumber/FormatNumber';
 import Label from '../../../../../../components/Label';
 import {MetaTable, Tooltip} from '@ytsaurus/components';
@@ -34,7 +34,7 @@ import {
     getSchedulingTreeMainResource,
 } from '../../../../../../store/selectors/scheduling/scheduling';
 
-import {KeysByType} from '../../../../../../../@types/types';
+import {type KeysByType} from '../../../../../../../@types/types';
 import {formatTimeDuration} from '../../../../../../components/TimeDuration/TimeDuration';
 import {useSettingsColumnSizes} from '../../../../../../hooks/settings/use-settings-column-sizes';
 import {useSettingsVisibleColumns} from '../../../../../../hooks/settings/use-settings-column-visibility';
@@ -50,7 +50,10 @@ import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
 import {getSchedulingOperationRefId} from '../../../../../../store/selectors/scheduling/attributes-to-filter';
 import {getSchedulingOverivewColumns} from '../../../../../../store/selectors/scheduling/overview-columns';
 import {getProgressTheme} from '../../../../../../utils/progress';
-import {SchedulingColumn, childTableItems} from '../../../../../../utils/scheduling/detailsTable';
+import {
+    type SchedulingColumn,
+    childTableItems,
+} from '../../../../../../utils/scheduling/detailsTable';
 import i18n from './i18n';
 import {NameCell} from './NameCell';
 import {PoolAbc} from './PoolAbc';

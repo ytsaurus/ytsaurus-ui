@@ -1,7 +1,7 @@
-import {ReadTableOutputFormat} from '../../../../../../shared/yt-types';
-import type {TypeArray} from '@ytsaurus/components';
-import {UnipikaValue} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
-import {SaveCancellationCb, YTApiSetup} from '../../../../../rum/rum-wrap-api';
+import {type ReadTableOutputFormat} from '../../../../../../shared/yt-types';
+import {type TypeArray} from '@ytsaurus/components';
+import {type UnipikaValue} from '../../../../../components/Yson/StructuredYson/StructuredYsonTypes';
+import {type SaveCancellationCb, type YTApiSetup} from '../../../../../rum/rum-wrap-api';
 
 export const tableReadSetup = {
     transformResponse({

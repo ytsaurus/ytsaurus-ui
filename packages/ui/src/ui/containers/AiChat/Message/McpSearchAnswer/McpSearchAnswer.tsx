@@ -1,7 +1,7 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Flex, Icon, Link, Text} from '@gravity-ui/uikit';
 import ArrowUpRightFromSquareIcon from '@gravity-ui/icons/svgs/arrow-up-right-from-square.svg';
-import {SearchMcpAnswer} from '../../../../types/ai-chat';
+import {type SearchMcpAnswer} from '../../../../types/ai-chat';
 import i18n from './i18n';
 import {McpMessage} from '../McpMessage';
 

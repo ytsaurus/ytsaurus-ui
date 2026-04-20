@@ -1,5 +1,5 @@
-import type {TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
-import type {YTError} from '../../../../../types';
+import {type TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
+import {type YTError} from '../../../../../types';
 
 export interface YtConsumerPartition {
     error?: YTError; // may be missing

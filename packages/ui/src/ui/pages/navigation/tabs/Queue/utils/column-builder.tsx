@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import type {Column} from '@gravity-ui/react-data-table';
+import {type Column} from '@gravity-ui/react-data-table';
 
 import format from '../../../../../common/hammer/format';
 import Label from '../../../../../components/Label';
@@ -8,9 +8,9 @@ import Link from '../../../../../components/Link/Link';
 import Multimeter from '../../../../../components/Multimeter/Multimeter';
 import {SubjectCard} from '../../../../../components/SubjectLink/SubjectLink';
 import WarningIcon from '../../../../../components/WarningIcon/WarningIcon';
-import type {TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
+import {type TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
 import {Host} from '../../../../../containers/Host/Host';
-import type {YTError} from '../../../../../types';
+import {type YTError} from '../../../../../types';
 import {genNavigationUrl} from '../../../../../utils/navigation/navigation';
 import {ClickableText} from '../../../../../components/ClickableText/ClickableText';
 import {showErrorPopup} from '../../../../../utils/utils';

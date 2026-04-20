@@ -1,7 +1,12 @@
-import type {AppBrowserHistory, StoreType} from './store.main';
-import {MakeRotedUrlFnType} from './location';
-import {CombinedSliceReducer, Slice, SliceCaseReducers, SliceSelectors} from '@reduxjs/toolkit';
-import {RootState} from './reducers';
+import {type AppBrowserHistory, type StoreType} from './store.main';
+import {type MakeRotedUrlFnType} from './location';
+import {
+    type CombinedSliceReducer,
+    type Slice,
+    type SliceCaseReducers,
+    type SliceSelectors,
+} from '@reduxjs/toolkit';
+import {type RootState} from './reducers';
 
 export function getWindowStore(): StoreType {
     return (window as any).store;

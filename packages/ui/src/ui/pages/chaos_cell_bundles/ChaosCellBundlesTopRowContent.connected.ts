@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {Page} from '../../constants/index';
 import TabletCellBundlesTopRowContent from '../../pages/tablet_cell_bundles/TabletCellBundlesTopRowContent';
 import {setChaosActiveBundle} from '../../store/actions/chaos_cell_bundles';
-import type {RootState} from '../../store/reducers';
+import {type RootState} from '../../store/reducers';
 import {
     selectChaosActiveBundle,
     selectChaosActiveBundleData,

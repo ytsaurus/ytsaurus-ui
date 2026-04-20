@@ -1,15 +1,15 @@
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../reducers';
-import {Action} from 'redux';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../reducers';
+import {type Action} from 'redux';
 
 import format from '../../../common/hammer/format';
 import {selectOperationId} from '../../selectors/operations/operation';
-import {RawJob} from '../../../types/operations/job';
+import {type RawJob} from '../../../types/operations/job';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {
-    JobsTimelineState,
-    TimelineJob,
+    type JobsTimelineState,
+    type TimelineJob,
     setError,
     setInterval,
     setJobs,

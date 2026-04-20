@@ -1,6 +1,6 @@
 import {selectCluster} from '../../../store/selectors/global/cluster';
 import {useSelector} from '../../../store/redux-hooks';
-import {YTEndpointApiArgs} from './types';
+import {type YTEndpointApiArgs} from './types';
 
 export function useCurrentClusterArgs<T>(args: YTEndpointApiArgs<T>) {
     const cluster = useSelector(selectCluster);

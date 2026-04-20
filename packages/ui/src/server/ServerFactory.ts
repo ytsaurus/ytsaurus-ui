@@ -1,12 +1,12 @@
-import type {Request, Response} from 'express';
-import type {ExpressKit} from '@gravity-ui/expresskit';
+import {type Request, type Response} from 'express';
+import {type ExpressKit} from '@gravity-ui/expresskit';
 import forEach_ from 'lodash/forEach';
 import {YT_LOCAL_CLUSTER_ID} from './constants';
-import {ConfigData} from '../shared/yt-types';
-import renderLayout, {AppLayoutConfig} from './render-layout';
+import {type ConfigData} from '../shared/yt-types';
+import renderLayout, {type AppLayoutConfig} from './render-layout';
 import {isLocalModeByEnvironment} from './utils';
-import {VcsApi} from '../shared/vcs';
-import {CustomVCSType, VCSSettings} from '../shared/ui-settings';
+import {type VcsApi} from '../shared/vcs';
+import {type CustomVCSType, type VCSSettings} from '../shared/ui-settings';
 
 export interface ServerFactory {
     getExtraRootPages(): Array<string>;

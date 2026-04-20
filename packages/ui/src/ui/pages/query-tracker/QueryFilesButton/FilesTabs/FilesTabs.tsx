@@ -1,12 +1,12 @@
-import React, {FC, useMemo, useState} from 'react';
-import {QueryFile} from '../../../../types/query-tracker/api';
+import React, {type FC, useMemo, useState} from 'react';
+import {type QueryFile} from '../../../../types/query-tracker/api';
 import {Tab, TabList, TabPanel, TabProvider} from '@gravity-ui/uikit';
 import {DeletedFileItem} from '../DeletedFileItem';
 import cn from 'bem-cn-lite';
 import './FilesTabs.scss';
 import {FileItem} from '../FileItem';
-import {FileValidator} from '../FileItemForm';
-import {QueryFileEditor} from '../../../../store/reducers/query-tracker/queryFilesFormSlice';
+import {type FileValidator} from '../FileItemForm';
+import {type QueryFileEditor} from '../../../../store/reducers/query-tracker/queryFilesFormSlice';
 import i18n from './i18n';
 
 const block = cn('files-tabs');

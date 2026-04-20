@@ -1,9 +1,9 @@
-import React from 'react';
+import type React from 'react';
 import {
-    ManageAclFieldsNames,
-    ManageInheritanceFieldNames,
+    type ManageAclFieldsNames,
+    type ManageInheritanceFieldNames,
 } from '../../containers/ACL/ManageAcl/ManageAcl';
-import {RequestPermissionsFieldsNames} from '../../containers/ACL/RequestPermissions/RequestPermissions';
+import {type RequestPermissionsFieldsNames} from '../../containers/ACL/RequestPermissions/RequestPermissions';
 import {
     deleteAclItemOrSubjectByIndex,
     getCombinedAcl,
@@ -11,21 +11,21 @@ import {
     updateAclAttributes,
 } from './acl-api';
 import {
-    ACLResponsible,
-    AclColumnGroup,
-    AclRowGroup,
-    Group,
-    GroupACL,
-    IdmKindType,
-    PreparedAclData,
-    PreparedAclSubject,
-    Role,
-    SuccessColumnGroupCreate,
-    SuccessRowGroupCreate,
-    UpdateAclParams,
-    UpdateResponse,
+    type ACLResponsible,
+    type AclColumnGroup,
+    type AclRowGroup,
+    type Group,
+    type GroupACL,
+    type IdmKindType,
+    type PreparedAclData,
+    type PreparedAclSubject,
+    type Role,
+    type SuccessColumnGroupCreate,
+    type SuccessRowGroupCreate,
+    type UpdateAclParams,
+    type UpdateResponse,
 } from './acl-types';
-import type {PreparedApprover} from '../../store/selectors/acl';
+import {type PreparedApprover} from '../../store/selectors/acl';
 
 export interface AclApi {
     isAllowed: boolean;

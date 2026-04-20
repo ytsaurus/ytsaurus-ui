@@ -8,7 +8,7 @@ import {QueryStatusIcon} from '../../../../../../../components/QueryStatus';
 import {GeneralCell} from '../../../../../../../pages/dashboard2/Dashboard/components/GeneralCell/GeneralCell';
 
 import {Page} from '../../../../../../../../shared/constants/settings';
-import {QueryStatus} from '../../../../../../../types/query-tracker';
+import {type QueryStatus} from '../../../../../../../types/query-tracker';
 
 type Props = {
     name: string;

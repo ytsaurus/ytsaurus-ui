@@ -8,7 +8,7 @@ import PathEditor from '../../../../containers/PathEditor/PathEditor';
 import {EditableList} from '@gravity-ui/dialog-fields';
 
 import './EditablePathList.scss';
-import {FIX_MY_TYPE} from '../../../../types';
+import {type FIX_MY_TYPE} from '../../../../types';
 
 const block = cn('editable-path-list');
 

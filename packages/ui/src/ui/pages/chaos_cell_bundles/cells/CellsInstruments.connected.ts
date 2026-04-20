@@ -2,7 +2,7 @@ import {connect} from 'react-redux';
 
 import CellsTableInstruments from '../../../pages/tablet_cell_bundles/cells/CellsInstruments';
 import {setChaosPartial} from '../../../store/actions/chaos_cell_bundles';
-import type {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {
     selectChaosActiveBundle,
     selectChaosCellsBundleFilter,

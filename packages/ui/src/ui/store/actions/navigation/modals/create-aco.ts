@@ -1,7 +1,7 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 import {CREATE_ACO_MODAL} from '../../../../constants/navigation/modals';
-import {CreateACOModalAction} from '../../../../store/reducers/navigation/modals/create-aco';
-import {RootState} from '../../../reducers';
+import {type CreateACOModalAction} from '../../../../store/reducers/navigation/modals/create-aco';
+import {type RootState} from '../../../reducers';
 import {ytApiV3} from '../../../../rum/rum-wrap-api';
 import {updateView} from '../index';
 import {toaster} from '../../../../utils/toaster';

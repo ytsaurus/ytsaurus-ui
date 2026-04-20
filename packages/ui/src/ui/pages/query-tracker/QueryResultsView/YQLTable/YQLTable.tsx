@@ -5,9 +5,14 @@ import {Eye} from '@gravity-ui/icons';
 import {Button, ClipboardButton, Text, Icon as UIKitIcon} from '@gravity-ui/uikit';
 import hammer from '../../../../common/hammer';
 import cn from 'bem-cn-lite';
-import DataTable, {Column, OrderType, Settings, SortOrder} from '@gravity-ui/react-data-table';
+import DataTable, {
+    type Column,
+    type OrderType,
+    type Settings,
+    type SortOrder,
+} from '@gravity-ui/react-data-table';
 import DataTypePopup from '../DataTypePopup/DataTypePopup';
-import {StrictReactNode, hasKey} from './utils';
+import {type StrictReactNode, hasKey} from './utils';
 import {MOVING} from '@gravity-ui/react-data-table/build/esm/lib/constants';
 import {DataTableYT} from '../../../../components/DataTableYT';
 import {ClickableText} from '../../../../components/ClickableText/ClickableText';

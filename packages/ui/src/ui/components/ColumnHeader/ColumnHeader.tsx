@@ -8,8 +8,12 @@ import format from '../../common/hammer/format';
 
 import SortIcon from '../../components/SortIcon/SortIcon';
 
-import {OrderType, calculateNextOrderValue, nextSortOrderValue} from '../../utils/sort-helpers';
-import PageCounter, {PageCounterProps} from '../../components/PageCounter/PageCounter';
+import {
+    type OrderType,
+    calculateNextOrderValue,
+    nextSortOrderValue,
+} from '../../utils/sort-helpers';
+import PageCounter, {type PageCounterProps} from '../../components/PageCounter/PageCounter';
 import Loader from '../../components/Loader/Loader';
 import {rumLogError} from '../../rum/rum-counter';
 

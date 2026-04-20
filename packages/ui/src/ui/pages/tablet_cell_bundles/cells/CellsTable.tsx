@@ -3,23 +3,26 @@ import cn from 'bem-cn-lite';
 
 import capitalize_ from 'lodash/capitalize';
 
-import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
+import DataTable, {type Column, type Settings} from '@gravity-ui/react-data-table';
 
 import ClickableAttributesButton from '../../../components/AttributesButton/ClickableAttributesButton';
 import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 import {DataTableYT} from '../../../components/DataTableYT';
 import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
 import Icon from '../../../components/Icon/Icon';
-import Label, {LabelTheme} from '../../../components/Label';
+import Label, {type LabelTheme} from '../../../components/Label';
 import Link from '../../../components/Link/Link';
 import {STICKY_TOOLBAR_BOTTOM} from '../../../components/WithStickyToolbar/WithStickyToolbar';
 import {Health} from '../../../components/Health/Health';
-import {OrderType} from '../../../utils/sort-helpers';
+import {type OrderType} from '../../../utils/sort-helpers';
 import {Host} from '../../../containers/Host/Host';
 // @ts-ignore
 import hammer from '@ytsaurus/interface-helpers/lib/hammer';
-import type {TabletCell, TabletsPartialAction} from '../../../store/reducers/tablet_cell_bundles';
-import type {SortState} from '../../../types';
+import {
+    type TabletCell,
+    type TabletsPartialAction,
+} from '../../../store/reducers/tablet_cell_bundles';
+import {type SortState} from '../../../types';
 
 import './CellsTable.scss';
 

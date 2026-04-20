@@ -1,9 +1,9 @@
 import compact_ from 'lodash/compact';
 import React from 'react';
 import {
-    RawSerieData,
+    type RawSerieData,
     YTChartKitLazy,
-    YagrWidgetData,
+    type YagrWidgetData,
     getSerieColor,
 } from '../../components/YTChartKit';
 

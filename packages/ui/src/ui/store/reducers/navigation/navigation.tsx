@@ -1,9 +1,9 @@
-import {Action} from 'redux';
+import {type Action} from 'redux';
 
-import {ValueOf, YTError} from '../../../../@types/types';
+import {type ValueOf, type YTError} from '../../../../@types/types';
 
-import {ActionD} from '../../../types';
-import {LOADING_STATUS, LoadingStatus} from '../../../constants/index';
+import {type ActionD} from '../../../types';
+import {LOADING_STATUS, type LoadingStatus} from '../../../constants/index';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 import {
     CLEAR_TRANSACTION,

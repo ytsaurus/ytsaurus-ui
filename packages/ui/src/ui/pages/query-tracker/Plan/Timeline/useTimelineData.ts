@@ -7,9 +7,9 @@ import {
     getQueryStartedAtMillis,
 } from '../../../../store/selectors/query-tracker/queryPlan';
 import {useGraphColors} from '../GraphColors';
-import {NodeState} from '../models/plan';
-import {OperationTimeline, RawAxis, RowType, parseGraph} from './utils';
-import {TimelineAxis} from '@gravity-ui/timeline';
+import {type NodeState} from '../models/plan';
+import {type OperationTimeline, type RawAxis, type RowType, parseGraph} from './utils';
+import {type TimelineAxis} from '@gravity-ui/timeline';
 import {ROW_HEIGHT} from './constants';
 import {OperationRenderer} from './renderer/OperationRenderer';
 

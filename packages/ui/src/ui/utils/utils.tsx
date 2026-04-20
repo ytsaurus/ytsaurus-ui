@@ -1,6 +1,6 @@
 import React from 'react';
-import {AxiosError} from 'axios';
-import {WritableDraft} from 'immer';
+import {type AxiosError} from 'axios';
+import {type WritableDraft} from 'immer';
 
 import forEach_ from 'lodash/forEach';
 import get_ from 'lodash/get';
@@ -11,10 +11,10 @@ import set_ from 'lodash/set';
 
 import {getBatchError} from '../../shared/utils/error';
 
-import {TypedKeys, YTError} from '../types';
-import {Link, ProgressProps, ProgressTheme} from '@gravity-ui/uikit';
+import {type TypedKeys, type YTError} from '../types';
+import {Link, type ProgressProps, type ProgressTheme} from '@gravity-ui/uikit';
 import {
-    ThemeThreshold,
+    type ThemeThreshold,
     addProgressStackSpacers,
     computeProgress,
     defaultThemeThresholds,
@@ -23,10 +23,10 @@ import {
 } from '../utils/progress';
 import hammer from '../common/hammer';
 import {LOADING_STATUS} from '../constants';
-import type {ErrorInfo} from '../store/reducers/modals/errors';
+import {type ErrorInfo} from '../store/reducers/modals/errors';
 import {showErrorModal} from '../store/actions/modals/errors';
-import {LocationParameters} from '../store/location';
-import {BatchResultsItem} from '../../shared/yt-types';
+import {type LocationParameters} from '../store/location';
+import {type BatchResultsItem} from '../../shared/yt-types';
 
 import {isCancelled} from './cancel-helper';
 import {YTErrors} from '../rum/constants';

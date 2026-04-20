@@ -12,9 +12,9 @@ import './ClusterMenuHeader.scss';
 import {DropdownMenu} from '@gravity-ui/uikit';
 import Button from '../../components/Button/Button';
 import Icon from '../../components/Icon/Icon';
-import {ALL_LINKS_ITEMS, HeaderLinkItem} from './header-links-items';
+import {ALL_LINKS_ITEMS, type HeaderLinkItem} from './header-links-items';
 import {wrapApiPromiseByToaster} from '../../utils/utils';
-import {ActionD} from '../../types';
+import {type ActionD} from '../../types';
 import i18n from './i18n';
 
 const b = block('cluster-menu');

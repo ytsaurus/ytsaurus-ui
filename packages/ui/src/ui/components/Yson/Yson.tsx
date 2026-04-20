@@ -7,10 +7,10 @@ import isEqual_ from 'lodash/isEqual';
 import unipika from '../../common/thor/unipika';
 
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
-import {UnipikaSettings, UnipikaValue} from './StructuredYson/StructuredYsonTypes';
+import {type UnipikaSettings, type UnipikaValue} from './StructuredYson/StructuredYsonTypes';
 
 import StructuredYsonVirtualized from './StructuredYsonVirtualized/StructuredYsonVirtualized';
-import type {Settings} from '@gravity-ui/react-data-table';
+import {type Settings} from '@gravity-ui/react-data-table';
 
 export type YsonSettings = UnipikaSettings;
 

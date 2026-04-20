@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type {Request, Response} from 'express';
+import {type Request, type Response} from 'express';
 import crypto from 'node:crypto';
 import {YT_OAUTH_ACCESS_TOKEN_NAME, YT_OAUTH_REFRESH_TOKEN_NAME} from '../../shared/constants';
 

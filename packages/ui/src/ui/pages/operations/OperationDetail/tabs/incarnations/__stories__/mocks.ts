@@ -1,7 +1,7 @@
 import {http} from 'msw';
 import {type Incarnations} from '../../../../../../store/selectors/operations/incarnations';
-import {OperationDetailSuccessActionData} from '../../../../../../store/reducers/operations/detail';
-import {OperationEvent} from '../../../../../../../shared/yt-types';
+import {type OperationDetailSuccessActionData} from '../../../../../../store/reducers/operations/detail';
+import {type OperationEvent} from '../../../../../../../shared/yt-types';
 
 export const operationData: OperationDetailSuccessActionData = {
     operation: {

@@ -3,7 +3,7 @@ import {useDispatch} from '../../../store/redux-hooks';
 import {Text} from '@gravity-ui/uikit';
 import {deleteGroup, fetchGroups} from '../../../store/actions/groups';
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
-import {YTError} from '../../../types';
+import {type YTError} from '../../../types';
 import {disableGroupsCache} from '../../../utils/users-groups';
 
 type DeleteGroupModalProps = {

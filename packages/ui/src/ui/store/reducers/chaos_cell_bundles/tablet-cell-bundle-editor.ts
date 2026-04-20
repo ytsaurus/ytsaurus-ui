@@ -1,6 +1,6 @@
-import {Action} from 'redux';
+import {type Action} from 'redux';
 
-import type {ActionD, YTError} from '../../../types';
+import {type ActionD, type YTError} from '../../../types';
 import {
     CHAOS_BUNDLES_EDITOR_LOAD_FAILURE,
     CHAOS_BUNDLES_EDITOR_LOAD_REQUREST,

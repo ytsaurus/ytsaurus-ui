@@ -1,4 +1,4 @@
-import {RumMeasureStartProps, useRumMeasureStart} from './RumUiContext';
+import {type RumMeasureStartProps, useRumMeasureStart} from './RumUiContext';
 import {useSelector} from 'react-redux';
 import {selectCluster} from '../store/selectors/global';
 

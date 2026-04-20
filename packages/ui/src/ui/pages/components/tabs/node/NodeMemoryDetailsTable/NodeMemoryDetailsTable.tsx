@@ -3,22 +3,22 @@ import cn from 'bem-cn-lite';
 
 import reduce_ from 'lodash/reduce';
 
-import {Column} from '@gravity-ui/react-data-table';
+import {type Column} from '@gravity-ui/react-data-table';
 
-import {FlatItem} from '../../../../../common/hammer/tree-list';
+import {type FlatItem} from '../../../../../common/hammer/tree-list';
 import Link from '../../../../../components/Link/Link';
 import Icon from '../../../../../components/Icon/Icon';
 import Button from '../../../../../components/Button/Button';
 import ColumnHeader from '../../../../../components/ColumnHeader/ColumnHeader';
-import {NodeMemoryInfo} from '../../../../../store/selectors/components/node/memory';
+import {type NodeMemoryInfo} from '../../../../../store/selectors/components/node/memory';
 
 import {
     StorePreload,
     TabletDynamicTotal,
     UsageLimitProgress,
 } from '../NodeBundlesTotal/NodeBundlesTotal';
-import {OrderType} from '../../../../../utils/sort-helpers';
-import {SortState} from '../../../../../types';
+import {type OrderType} from '../../../../../utils/sort-helpers';
+import {type SortState} from '../../../../../types';
 import {DATA_TABLE_YT_SETTINGS, DataTableYT} from '../../../../../components/DataTableYT';
 import {SecondaryBold} from '@ytsaurus/components';
 

@@ -1,10 +1,10 @@
 import React, {useMemo} from 'react';
 import cn from 'bem-cn-lite';
 
-import {Radio, Table, TableColumnConfig} from '@gravity-ui/uikit';
+import {Radio, Table, type TableColumnConfig} from '@gravity-ui/uikit';
 
-import {DialogControlProps} from '../../../../../../components/Dialog/Dialog.types';
-import {BundleResourceGuarantee} from '../../../../../../store/reducers/tablet_cell_bundles';
+import {type DialogControlProps} from '../../../../../../components/Dialog/Dialog.types';
+import {type BundleResourceGuarantee} from '../../../../../../store/reducers/tablet_cell_bundles';
 
 import './BundleTableField.scss';
 

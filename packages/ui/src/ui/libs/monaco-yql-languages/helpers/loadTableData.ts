@@ -1,11 +1,11 @@
 import {getClustersAndPaths} from './getClusterAndPath';
-import {QueryEngine} from '../../../../shared/constants/engines';
+import {type QueryEngine} from '../../../../shared/constants/engines';
 import {YT} from '../../../config/yt-config';
 import ypath from '../../../common/thor/ypath';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {getClusterProxy} from '../../../store/selectors/global';
 import {JSONSerializer} from '../../../common/yt-api';
-import {BatchSubRequest} from '../../../../shared/yt-types';
+import {type BatchSubRequest} from '../../../../shared/yt-types';
 
 export const loadTableData = async (query: string, engine: QueryEngine) => {
     const tablePaths = getClustersAndPaths(query, engine);

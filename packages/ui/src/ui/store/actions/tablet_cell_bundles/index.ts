@@ -1,18 +1,18 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
 // @ts-ignore
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
-import {CheckPermissionResult} from '../../../../shared/utils/check-permission';
+import {type CheckPermissionResult} from '../../../../shared/utils/check-permission';
 import {getBatchError, splitBatchResults} from '../../../../shared/utils/error';
 
-import {RootState} from '../../reducers';
+import {type RootState} from '../../reducers';
 import {
-    TabletBundle,
-    TabletsBundlesAction,
-    TabletsPartialAction,
+    type TabletBundle,
+    type TabletsBundlesAction,
+    type TabletsPartialAction,
 } from '../../reducers/tablet_cell_bundles';
 import {
     TABLETS_BUNDLES_ACTIVE_ACCOUNT,
@@ -26,7 +26,7 @@ import {
     prepareTabletCells,
     tabletActiveBundleLink,
 } from '../../../utils/components/tablet-cells';
-import {SortState} from '../../../types';
+import {type SortState} from '../../../types';
 import {bundlesTrackVisit} from '../favourites';
 import {
     filterTabletCellsByBundle,
@@ -40,7 +40,7 @@ import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {selectCluster, selectCurrentUserName} from '../../selectors/global';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {getAppBrowserHistory} from '../../../store/window-store';
-import {BatchSubRequest} from '../../../../shared/yt-types';
+import {type BatchSubRequest} from '../../../../shared/yt-types';
 import {makeCheckPermissionBatchSubRequestUI} from '../../../utils/acl/acl-api';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {USE_MAX_SIZE} from '../../../../shared/constants/yt-api';

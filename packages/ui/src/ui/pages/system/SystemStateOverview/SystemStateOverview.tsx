@@ -1,13 +1,13 @@
 import block from 'bem-cn-lite';
 import React from 'react';
 
-import {Progress, ProgressProps} from '@gravity-ui/uikit';
-import SystemCounters, {SystemCountersProps} from '../SystemCounters/SystemCounters';
+import {Progress, type ProgressProps} from '@gravity-ui/uikit';
+import SystemCounters, {type SystemCountersProps} from '../SystemCounters/SystemCounters';
 
 import {computeEffectiveStateProgress} from '../../../utils';
 
 import './SystemStateOverview.scss';
-import {SystemStateLabels, Props as SystemStateLabelsProps} from './SystemStateLabels';
+import {SystemStateLabels, type Props as SystemStateLabelsProps} from './SystemStateLabels';
 
 const b = block('system');
 

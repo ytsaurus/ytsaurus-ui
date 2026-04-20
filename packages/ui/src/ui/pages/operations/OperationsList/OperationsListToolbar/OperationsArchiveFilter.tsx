@@ -2,7 +2,7 @@ import React, {useCallback, useState} from 'react';
 import cn from 'bem-cn-lite';
 import {DatePicker} from '@gravity-ui/date-components';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {dateTimeParse} from '../../../../utils/date-utils';
 import {showArchiveOperations, showCurrentOperations} from '../../../../store/actions/operations';
 import {OPERATIONS_DATA_MODE} from '../../../../constants/operations';
@@ -17,7 +17,7 @@ import Modal from '../../../../components/Modal/Modal';
 import CustomRadioButton from '../../../../components/RadioButton/RadioButton';
 import {SelectButton} from '../../../../components/Button/Button';
 import './OperationsArchiveFilter.scss';
-import {ValueOf} from '../../../../../@types/types';
+import {type ValueOf} from '../../../../../@types/types';
 
 const block = cn('operations-list');
 const tbBlock = cn('elements-toolbar');

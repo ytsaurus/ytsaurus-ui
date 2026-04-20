@@ -1,9 +1,9 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import type {FORM_ERROR as FormErrorType} from './index';
+import {type FORM_ERROR as FormErrorType} from './index';
 
-import {FIX_MY_TYPE, YTError} from '../../types';
+import {type FIX_MY_TYPE, type YTError} from '../../types';
 import {YTErrorBlock} from '../../components/Block/Block';
 
 import compact_ from 'lodash/compact';

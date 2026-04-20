@@ -2,14 +2,14 @@ import cn from 'bem-cn-lite';
 import React from 'react';
 
 import {Dialog, Flex, Icon, Text} from '@gravity-ui/uikit';
-import {SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
+import {type SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 
-import {FlowMessageType, FlowNodeStatusType} from '../../../../../../shared/yt-types';
+import {type FlowMessageType, type FlowNodeStatusType} from '../../../../../../shared/yt-types';
 import format from '../../../../../common/hammer/format';
 import {YTErrorBlock} from '../../../../../components/Block/Block';
 import {
     ClickableText,
-    ClickableTextProps,
+    type ClickableTextProps,
 } from '../../../../../components/ClickableText/ClickableText';
 import {ExpandButton} from '../../../../../components/ExpandButton';
 import YTIcon from '../../../../../components/Icon/Icon';

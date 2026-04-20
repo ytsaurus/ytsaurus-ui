@@ -1,4 +1,4 @@
-import {YTError} from '../../@types/types';
+import {type YTError} from '../../@types/types';
 
 export function getYtPageIdParts(url: string): PageId {
     try {

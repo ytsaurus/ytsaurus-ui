@@ -1,4 +1,4 @@
-import {MouseEvent, MouseEventHandler, useCallback} from 'react';
+import {type MouseEvent, type MouseEventHandler, useCallback} from 'react';
 
 const isModifiedEvent = (event: MouseEvent): boolean => {
     return event.metaKey || event.altKey || event.ctrlKey || event.shiftKey;

@@ -1,4 +1,4 @@
-import React, {CSSProperties, Component} from 'react';
+import React, {type CSSProperties, Component} from 'react';
 import PropTypes from 'prop-types';
 import block from 'bem-cn-lite';
 
@@ -11,12 +11,12 @@ import {
     prepareColumnsData,
     prepareGroupCellClassName,
 } from './utils';
-import {OldSortState} from '../../types';
-import {OrderType, oldSortStateToOrderType} from '../../utils/sort-helpers';
+import {type OldSortState} from '../../types';
+import {type OrderType, oldSortStateToOrderType} from '../../utils/sort-helpers';
 import SortIcon from '../../components/SortIcon/SortIcon';
 import {Tooltip} from '@ytsaurus/components';
-import {ToggleColumnSortOrderParams} from '../../store/actions/tables';
-import {RootState} from '../../store/reducers';
+import {type ToggleColumnSortOrderParams} from '../../store/actions/tables';
+import {type RootState} from '../../store/reducers';
 
 const b = block(ELEMENTS_TABLE);
 

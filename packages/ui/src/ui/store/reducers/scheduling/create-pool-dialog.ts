@@ -1,4 +1,4 @@
-import {Action} from 'redux';
+import {type Action} from 'redux';
 import {
     CREATE_POOL_DIALOG_TREE_CREATE_FAILURE,
     CREATE_POOL_DIALOG_TREE_ITEMS_CANCELLED,
@@ -7,7 +7,7 @@ import {
     CREATE_POOL_DIALOG_TREE_ITEMS_REQUEST,
     CREATE_POOL_DIALOG_TREE_ITEMS_SUCCESS,
 } from '../../../constants/scheduling';
-import {ActionD, YTError} from '../../../types';
+import {type ActionD, type YTError} from '../../../types';
 import {mergeStateOnClusterChange} from '../utils';
 
 export interface CreatePoolDialogState {

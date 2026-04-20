@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 import {useSelector} from '../../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
@@ -29,7 +29,7 @@ import {
 import {statisticsTableProps} from '../../../../../utils/operations/tabs/statistics/statisticsTableProps';
 import {makeRadioButtonProps} from '../../../../../utils';
 
-import {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 import {selectOperationDetailsLoadingStatus} from '../../../../../store/selectors/operations/operation';
 import {
     selectOperationStatisticsActiveFilterValues,

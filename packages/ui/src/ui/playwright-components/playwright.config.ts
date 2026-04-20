@@ -1,6 +1,6 @@
 import {resolve} from 'path';
 
-import type {PlaywrightTestConfig} from '@playwright/experimental-ct-react';
+import {type PlaywrightTestConfig} from '@playwright/experimental-ct-react';
 import {defineConfig, devices} from '@playwright/experimental-ct-react';
 import react from '@vitejs/plugin-react';
 import commonjs from 'vite-plugin-commonjs';

@@ -10,7 +10,7 @@ import GearIcon from '@gravity-ui/icons/svgs/gear.svg';
 import BugIcon from '@gravity-ui/icons/svgs/bug.svg';
 import Link from '../../components/Link/Link';
 import unknown from '../../assets/img/user-avatar.svg';
-import {AppNavigationProps} from './AppNavigationPageLayout';
+import {type AppNavigationProps} from './AppNavigationPageLayout';
 import {YT} from '../../config/yt-config';
 import UIFactory from '../../UIFactory';
 import {selectSettingsCluster} from '../../store/selectors/global';

@@ -1,14 +1,14 @@
 import {TOGGLE_COLUMN_SORT_ORDER} from '../../constants/tables';
 import {
-    OrderType,
+    type OrderType,
     calculateNextOrderValue,
     nextSortOrderValue,
     oldSortStateToOrderType,
     orderTypeToOldSortState,
 } from '../../utils/sort-helpers';
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../reducers';
-import {TablesSortOrderAction, TablesSortOrderState} from '../reducers/tables';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../reducers';
+import {type TablesSortOrderAction, type TablesSortOrderState} from '../reducers/tables';
 
 export type ToggleColumnSortOrderParams = {
     columnName: string;

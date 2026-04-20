@@ -1,5 +1,5 @@
 import {YT_LOCAL_CLUSTER_ID} from './constants';
-import {ClusterConfig, YTConfig} from '../shared/yt-types';
+import {type ClusterConfig, type YTConfig} from '../shared/yt-types';
 import {getApp} from './ServerFactory';
 
 const localProxy = process.env.PROXY;

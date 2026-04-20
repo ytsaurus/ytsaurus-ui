@@ -1,5 +1,5 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {RootState} from '../../../../../store/reducers';
+import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {type RootState} from '../../../../../store/reducers';
 
 type ConsumersState = {
     createDialogVisibility: boolean;

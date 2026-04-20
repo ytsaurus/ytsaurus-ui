@@ -5,7 +5,7 @@ import CompactError from '../CompactError/CompactError';
 import {YTErrorInline} from '../../containers/YTErrorInline/YTErrorInline';
 
 import {rumLogError} from '../../rum/rum-counter';
-import {YTError} from '../../../@types/types';
+import {type YTError} from '../../../@types/types';
 
 export type ErrorBoundaryProps = {
     className?: string;

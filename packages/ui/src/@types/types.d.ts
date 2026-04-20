@@ -1,5 +1,9 @@
-import type {YTError, YTErrorBlockTabs, YTErrorKnownAttributes} from '@ytsaurus/components';
-import {AnnotateWithTypes} from '../shared/yt-types';
+import {
+    type YTError,
+    type YTErrorBlockTabs,
+    type YTErrorKnownAttributes,
+} from '@ytsaurus/components';
+import {type AnnotateWithTypes} from '../shared/yt-types';
 
 export type {YTError, YTErrorKnownAttributes, YTErrorBlockTabs};
 

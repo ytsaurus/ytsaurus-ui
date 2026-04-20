@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import cn from 'bem-cn-lite';
 import {ClipboardButton, Flex, Text} from '@gravity-ui/uikit';
 import Link from '../../../../../components/Link/Link';

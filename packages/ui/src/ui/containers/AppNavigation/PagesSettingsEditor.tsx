@@ -15,7 +15,7 @@ import settingsIcon from '../../assets/img/svg/settings-2.svg';
 
 import './PagesSettingsEditor.scss';
 import {getAppBrowserHistory} from '../../store/window-store';
-import {AppNavigationProps} from './AppNavigationPageLayout';
+import {type AppNavigationProps} from './AppNavigationPageLayout';
 import i18n from './i18n';
 
 const block = cn('pages-settings-editor');

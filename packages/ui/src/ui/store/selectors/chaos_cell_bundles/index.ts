@@ -6,8 +6,8 @@ import uniq_ from 'lodash/uniq';
 import {createSelector} from 'reselect';
 
 import {concatByAnd} from '../../../common/hammer/predicate';
-import type {RootState} from '../../../store/reducers';
-import type {ChaosBundle, ChaosCell} from '../../../store/reducers/chaos_cell_bundles';
+import {type RootState} from '../../../store/reducers';
+import {type ChaosBundle, type ChaosCell} from '../../../store/reducers/chaos_cell_bundles';
 import {selectCluster} from '../../../store/selectors/global';
 import {
     aggregateTotal,

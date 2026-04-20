@@ -1,6 +1,6 @@
 import {useContext} from 'react';
 import {MonacoContext} from '../context/MonacoContext';
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import type * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
 export const useMonaco = () => {
     const editors = useContext(MonacoContext);

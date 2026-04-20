@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
+import {type PluginWidgetProps} from '@gravity-ui/dashkit';
 
 // 1 react-grid value ~ 25.3px
 export type LayoutConfig = {

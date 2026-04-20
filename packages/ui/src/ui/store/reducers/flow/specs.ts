@@ -1,6 +1,6 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
 
-import {YTError} from '../../../../@types/types';
+import {type YTError} from '../../../../@types/types';
 
 export type FlowSpecState = {
     loaded: boolean;

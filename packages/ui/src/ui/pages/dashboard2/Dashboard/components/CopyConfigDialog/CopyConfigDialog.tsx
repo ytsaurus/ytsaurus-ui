@@ -10,7 +10,7 @@ import {
 import {copyConfig} from '../../../../../store/actions/dashboard2/dashboard';
 import {selectCluster} from '../../../../../store/selectors/global';
 
-import {FormApi, YTDFDialog} from '../../../../../components/Dialog';
+import {type FormApi, YTDFDialog} from '../../../../../components/Dialog';
 
 import {YT} from '../../../../../config/yt-config';
 

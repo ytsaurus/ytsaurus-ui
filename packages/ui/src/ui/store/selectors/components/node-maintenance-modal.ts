@@ -1,9 +1,9 @@
 import reduce_ from 'lodash/reduce';
 import {createSelector} from 'reselect';
 
-import {RootState} from '../../reducers';
+import {type RootState} from '../../reducers';
 import {selectClusterUiConfig} from '../global';
-import {NodeResourceLimits} from '../../../store/reducers/components/node-maintenance-modal';
+import {type NodeResourceLimits} from '../../../store/reducers/components/node-maintenance-modal';
 
 export const selectNodeMaintenanceModalState = (state: RootState) =>
     state.components.nodeMaintenanceModal;

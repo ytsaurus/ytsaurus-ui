@@ -1,5 +1,5 @@
 import {AuthPolicy} from '@gravity-ui/expresskit';
-import {AppConfig, YTCoreConfig} from '../../../@types/core';
+import {type AppConfig, type YTCoreConfig} from '../../../@types/core';
 import {applyMissingFields} from './apply-missing-fields';
 
 function applyEnvToUISettings(config: Partial<YTCoreConfig>) {

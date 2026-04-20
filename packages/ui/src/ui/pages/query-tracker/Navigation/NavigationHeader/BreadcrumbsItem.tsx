@@ -1,4 +1,4 @@
-import React, {FC, MouseEvent} from 'react';
+import React, {type FC, type MouseEvent} from 'react';
 
 export const BreadcrumbsItem: FC<{
     item: {text: string; href: string};

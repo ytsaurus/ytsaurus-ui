@@ -1,12 +1,12 @@
 import {createQueryUrl} from '../../../pages/query-tracker/utils/navigation';
-import {AnyAction} from 'redux';
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../reducers';
+import {type AnyAction} from 'redux';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../reducers';
 import {selectCluster} from '../../selectors/global';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {
-    DraftQuery,
-    QueryItem,
+    type DraftQuery,
+    type QueryItem,
     abortQuery,
     addACOToLastSelected,
     generateQueryFromTable,
@@ -25,17 +25,17 @@ import {
 } from '../../selectors/query-tracker/query';
 import {getAppBrowserHistory} from '../../window-store';
 import {
-    QueryState,
-    RequestQueryAction,
-    SetDirtySubmit,
-    SetQueryAction,
-    SetQueryCliqueLoading,
-    SetQueryClusterClique,
-    SetQueryClusterLoading,
-    SetQueryErrorLoadAction,
-    SetQueryPatchAction,
-    SetQueryReadyAction,
-    UpdateDraftAction,
+    type QueryState,
+    type RequestQueryAction,
+    type SetDirtySubmit,
+    type SetQueryAction,
+    type SetQueryCliqueLoading,
+    type SetQueryClusterClique,
+    type SetQueryClusterLoading,
+    type SetQueryErrorLoadAction,
+    type SetQueryPatchAction,
+    type SetQueryReadyAction,
+    type UpdateDraftAction,
 } from '../../reducers/query-tracker/query';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {prepareQueryPlanIds} from '../../../types/query-tracker/query';
@@ -63,7 +63,7 @@ import {
     UPDATE_DRAFT,
 } from '../../reducers/query-tracker/query-tracker-contants';
 import {loadVisualization} from './queryChart';
-import {ChytInfo} from '../../reducers/chyt/list';
+import {type ChytInfo} from '../../reducers/chyt/list';
 import {
     getLastUserChoiceQueryChytClique,
     getLastUserChoiceQueryDiscoveryPath,
@@ -74,12 +74,15 @@ import {
 import {getClusterParams, prepareClusterUiConfig} from '../cluster-params';
 import {RumWrapper} from '../../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
-import {ClusterUiConfig} from '../../../../shared/yt-types';
+import {type ClusterUiConfig} from '../../../../shared/yt-types';
 import {setSettingByKey} from '../settings';
 import {selectClusterConfigs} from '../../selectors/query-tracker/queryNavigation';
 import {getQueryResultGlobalSettings} from '../../selectors/query-tracker/queryResult';
 import {createTableSelect} from '../../../pages/query-tracker/Navigation/helpers/createTableSelect';
-import {ResetQueryTabsAction, resetQueryTabs} from '../../reducers/query-tracker/queryTabsSlice';
+import {
+    type ResetQueryTabsAction,
+    resetQueryTabs,
+} from '../../reducers/query-tracker/queryTabsSlice';
 import {updateQueryTabs} from './queryTabs/queryTabs';
 
 type AsyncAction = ThunkAction<void, RootState, unknown, any>;

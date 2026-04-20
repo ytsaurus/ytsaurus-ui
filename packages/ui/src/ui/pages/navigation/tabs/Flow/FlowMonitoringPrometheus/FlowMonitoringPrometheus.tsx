@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {PrometheusDashboardLazy} from '../../../../../containers/PrometheusDashboard/lazy';
-import {NavigationFlowMonitoringProps} from '../../../../../UIFactory';
+import {type NavigationFlowMonitoringProps} from '../../../../../UIFactory';
 
 export function NavigationFlowMonitoringPrometheus({
     attributes: _a,

@@ -21,7 +21,7 @@ import './legacy-styles/legacy.scss';
 import './styles/redefinitions/redefinitions.scss';
 import {ErrorYsonSettingsProvider} from './containers/ErrorYsonSettingsProvider/ErrorYsonSettingsProvider';
 
-import UIFactory, {UIFactory as UIFactoryType, configureUIFactory} from './UIFactory';
+import UIFactory, {type UIFactory as UIFactoryType, configureUIFactory} from './UIFactory';
 
 const YtComponentsConfigProviderLazy = React.lazy(() =>
     import(

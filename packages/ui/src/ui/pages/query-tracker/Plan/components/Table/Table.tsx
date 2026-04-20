@@ -3,7 +3,7 @@ import * as React from 'react';
 import {List} from '../../../../../components/List';
 import {handleRefs} from '../../utils';
 
-import {ColumnType, DataTableProps, SortOrder, SortState} from './types';
+import {type ColumnType, type DataTableProps, type SortOrder, type SortState} from './types';
 import {externalToInternalSortOrder, getSortOrder, internalToExternalSortOrder} from './utils';
 
 import cn from 'bem-cn-lite';

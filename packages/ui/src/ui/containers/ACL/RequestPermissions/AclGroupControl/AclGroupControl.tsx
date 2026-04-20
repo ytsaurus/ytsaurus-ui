@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Select, SelectOption} from '@gravity-ui/uikit';
+import {Select, type SelectOption} from '@gravity-ui/uikit';
 import i18n from './i18n';
 
 export type AclGroupItem = {

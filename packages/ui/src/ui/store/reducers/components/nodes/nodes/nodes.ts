@@ -1,7 +1,7 @@
 import findIndex_ from 'lodash/findIndex';
 import map_ from 'lodash/map';
 
-import type {Action} from 'redux';
+import {type Action} from 'redux';
 
 import {Node} from './node';
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';
@@ -15,12 +15,12 @@ import {
     GET_NODES,
     GET_NODES_FILTER_OPTIONS,
 } from '../../../../../constants/components/nodes/nodes';
-import type {
-    changeContentMode,
-    changeHostFilter,
+import {
+    type changeContentMode,
+    type changeHostFilter,
 } from '../../../../../store/actions/components/nodes/nodes';
-import type {ActionD, ValueOf, YTError} from '../../../../../types';
-import {NODE_TYPE, NodeType} from '../../../../../../shared/constants/system';
+import {type ActionD, type ValueOf, type YTError} from '../../../../../types';
+import {NODE_TYPE, type NodeType} from '../../../../../../shared/constants/system';
 
 export interface NodesEphemeralState {
     loading: boolean;

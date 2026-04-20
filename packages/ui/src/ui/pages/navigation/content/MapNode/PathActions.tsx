@@ -27,8 +27,8 @@ import {showTableEraseModal} from '../../../../store/actions/navigation/modals/t
 import {getSelectedNodes} from '../../../../store/selectors/navigation/content/map-node';
 import {showDynTablesStateModalByPaths} from '../../../../store/actions/navigation/modals/dyn-tables-state-modal';
 import {DYN_TABLES_ALLOWED_ACTIONS_BY_STATE} from '../../../../store/selectors/navigation/content/map-node-ts';
-import {TabletStateType} from '../../../../store/reducers/navigation/modals/dyn-tables-state-modal';
-import {ButtonProps, DropdownMenu, DropdownMenuItem} from '@gravity-ui/uikit';
+import {type TabletStateType} from '../../../../store/reducers/navigation/modals/dyn-tables-state-modal';
+import {type ButtonProps, DropdownMenu, type DropdownMenuItem} from '@gravity-ui/uikit';
 import {showLinkToModal} from '../../../../store/actions/navigation/modals/link-to-modal';
 import {showRemoteCopyModal} from '../../../../store/actions/navigation/modals/remote-copy-modal';
 

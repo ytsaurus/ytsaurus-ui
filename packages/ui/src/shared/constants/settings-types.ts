@@ -1,6 +1,6 @@
-import {DashKitProps} from '@gravity-ui/dashkit';
-import {NodeType} from './system';
-import {QueryEngine} from './engines';
+import {type DashKitProps} from '@gravity-ui/dashkit';
+import {type NodeType} from './system';
+import {type QueryEngine} from './engines';
 
 export type QueryToken = {
     name: string;

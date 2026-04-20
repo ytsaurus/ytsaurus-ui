@@ -10,7 +10,7 @@ import {
     shouldShowDecoded,
     useBinaryAsHex,
 } from '../../store/selectors/settings';
-import type {UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
+import {type UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
 import {prettyPrint} from '../../utils/unipika';
 
 import {getUnipikaSettingsFromConfig} from './unipika-settings';

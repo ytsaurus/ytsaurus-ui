@@ -1,13 +1,13 @@
 import React from 'react';
 
 import {
-    EditableListItemType,
+    type EditableListItemType,
     EditableManyLists,
-    EditableManyListsItemType,
+    type EditableManyListsItemType,
 } from '@gravity-ui/dialog-fields';
 
 import {SubjectCard} from '../../../SubjectLink/SubjectLink';
-import {ResponsibleType, RoleConverted} from '../../../../utils/acl/acl-types';
+import {type ResponsibleType, type RoleConverted} from '../../../../utils/acl/acl-types';
 import SubjectsControl from '../../../../containers/ACL/SubjectsControl/SubjectsControl';
 
 import './RoleListControl.scss';

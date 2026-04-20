@@ -1,5 +1,5 @@
 import React from 'react';
-import {Column} from '@gravity-ui/react-data-table';
+import {type Column} from '@gravity-ui/react-data-table';
 import cn from 'bem-cn-lite';
 
 import format from '../../common/hammer/format';

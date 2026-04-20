@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {Button, Icon, IconData, Popup, Text} from '@gravity-ui/uikit';
+import {Button, Icon, type IconData, Popup, Text} from '@gravity-ui/uikit';
 import closeIcon from '@gravity-ui/icons/svgs/xmark.svg';
 
 import cn from 'bem-cn-lite';

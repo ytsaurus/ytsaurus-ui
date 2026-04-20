@@ -1,13 +1,13 @@
-import React, {FC, useCallback} from 'react';
+import React, {type FC, useCallback} from 'react';
 import {Button, Icon} from '@gravity-ui/uikit';
 import LinkIcon from '@gravity-ui/icons/svgs/link.svg';
 import {AddFileButton} from '../AddFileButton';
 import './ActionsWithAddForm.scss';
 import cn from 'bem-cn-lite';
-import {QueryFile} from '../../../../types/query-tracker/api';
+import {type QueryFile} from '../../../../types/query-tracker/api';
 import FilePlusIcon from '@gravity-ui/icons/svgs/file-plus.svg';
-import {QueryFileAddForm} from '../../../../store/reducers/query-tracker/queryFilesFormSlice';
-import {FileItemForm, FileValidator} from '../FileItemForm';
+import {type QueryFileAddForm} from '../../../../store/reducers/query-tracker/queryFilesFormSlice';
+import {FileItemForm, type FileValidator} from '../FileItemForm';
 import guid from '../../../../common/hammer/guid';
 import i18n from './i18n';
 

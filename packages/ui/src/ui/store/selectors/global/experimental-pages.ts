@@ -1,5 +1,5 @@
 import UIFactory from '../../../UIFactory';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 
 export const selectAllowedExperimentalPages = (state: RootState) =>
     state?.global.allowedExperimentalPages;

@@ -1,4 +1,4 @@
-import type {ConfigData} from '../../shared/yt-types';
+import {type ConfigData} from '../../shared/yt-types';
 
 export function getConfigData(): ConfigData {
     return (window as any).__DATA__;

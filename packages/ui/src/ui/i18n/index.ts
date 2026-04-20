@@ -1,8 +1,8 @@
 import moment from 'moment';
 
-import {I18N, KeyData, KeysData} from '@gravity-ui/i18n';
+import {I18N, type KeyData, type KeysData} from '@gravity-ui/i18n';
 
-import type {AppLang} from '../../shared/constants/settings-types';
+import {type AppLang} from '../../shared/constants/settings-types';
 import {Lang, configure} from './configure';
 
 export const i18n = new I18N({lang: 'en', fallbackLang: 'en'});

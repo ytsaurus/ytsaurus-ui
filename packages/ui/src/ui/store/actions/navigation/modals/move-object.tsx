@@ -16,7 +16,7 @@ import {executeBatchWithRetries} from '../../execute-batch';
 import {YTApiId} from '../../../../rum/rum-wrap-api';
 import {rumLogError} from '../../../../rum/rum-counter';
 import {wrapBatchPromise} from '../../../../utils/utils';
-import {Dispatch} from 'redux';
+import {type Dispatch} from 'redux';
 import {toaster} from '../../../../utils/toaster';
 
 const requests = new CancelHelper();

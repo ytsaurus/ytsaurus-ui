@@ -23,10 +23,10 @@ import {
     getObjectSubjectFilter,
 } from './acl-filters';
 import UIFactory from '../../UIFactory';
-import {RootState} from '../../store/reducers';
-import {IdmKindType, PreparedAclSubject} from '../../utils/acl/acl-types';
-import {YTPermissionTypeUI} from '../../utils/acl/acl-api';
-import {PreparedRole} from '../../utils/acl';
+import {type RootState} from '../../store/reducers';
+import {type IdmKindType, type PreparedAclSubject} from '../../utils/acl/acl-types';
+import {type YTPermissionTypeUI} from '../../utils/acl/acl-api';
+import {type PreparedRole} from '../../utils/acl';
 
 export type PreparedAclSubjectColumn = Omit<PreparedAclSubject, 'type'> & {type: 'columns'};
 

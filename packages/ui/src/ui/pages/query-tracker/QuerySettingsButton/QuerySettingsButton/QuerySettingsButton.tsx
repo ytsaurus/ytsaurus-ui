@@ -4,7 +4,7 @@ import React, {useCallback, useMemo, useRef, useState} from 'react';
 import GearIcon from '@gravity-ui/icons/svgs/gear.svg';
 import GearDotIcon from '@gravity-ui/icons/svgs/gear-dot.svg';
 import {SettingsItem} from '../SettingsItem';
-import {SaveFormData, Props as SettingsItemEditFormProps} from '../SettingsItemForm';
+import {type SaveFormData, type Props as SettingsItemEditFormProps} from '../SettingsItemForm';
 import './QuerySettingsButton.scss';
 import {SettingsAddForm} from '../SettingsAddForm';
 import {PopupWithCloseButton} from '../PopupWithCloseButton';

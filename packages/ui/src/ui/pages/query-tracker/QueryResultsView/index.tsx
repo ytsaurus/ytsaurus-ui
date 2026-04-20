@@ -3,9 +3,9 @@ import {Flex, Loader, Text} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import block from 'bem-cn-lite';
 
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {
-    CellDataHandlerQueries,
+    type CellDataHandlerQueries,
     isInlinePreviewAllowed,
     onErrorTableCellPreview,
 } from '../../../types/navigation/table-cell-preview';
@@ -15,9 +15,9 @@ import {
 } from '../../../store/selectors/query-tracker/queryResult';
 import {YTErrorBlock} from '../../../components/Error/Error';
 import {ResultsTable} from './ResultsTable';
-import {QueryItem} from '../../../types/query-tracker/api';
+import {type QueryItem} from '../../../types/query-tracker/api';
 import {
-    QueryResultReadyState,
+    type QueryResultReadyState,
     QueryResultState,
     QueryResultsViewMode,
 } from '../../../types/query-tracker/queryResult';
@@ -26,13 +26,13 @@ import {ResultPaginator} from './ResultPaginator';
 import NotRenderUntilFirstVisible from '../NotRenderUntilFirstVisible/NotRenderUntilFirstVisible';
 import './index.scss';
 import {onCellPreviewQueryResults} from '../../../store/actions/query-tracker/cellPreview';
-import {ShowPreviewCallback} from './YQLTable/YQLTable';
+import {type ShowPreviewCallback} from './YQLTable/YQLTable';
 import CancelHelper from '../../../utils/cancel-helper';
 import {injectQueryResults} from '../../../store/actions/query-tracker/queryResult';
 import i18n from './i18n';
 import {QueryFullResultList} from './QueryFullResultList';
 import {getQueryEngine} from '../../../store/selectors/query-tracker/query';
-import {QueryEngine} from '../../../../shared/constants/engines';
+import {type QueryEngine} from '../../../../shared/constants/engines';
 
 const b = block('query-result-table');
 

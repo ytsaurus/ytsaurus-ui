@@ -1,4 +1,4 @@
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
+import {type PluginWidgetProps} from '@gravity-ui/dashkit';
 
 type Author = {
     value: string;

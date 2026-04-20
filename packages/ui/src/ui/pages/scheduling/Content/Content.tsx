@@ -25,7 +25,7 @@ import {
     getTree,
     isPoolAclAllowed,
 } from '../../../store/selectors/scheduling/scheduling';
-import {TabSettings, makeTabProps} from '../../../utils';
+import {type TabSettings, makeTabProps} from '../../../utils';
 import {makeSchedulingUrl} from '../../../utils/app-url';
 import './Content.scss';
 import SchedulingExpandedPoolsUpdater from './SchedulingExpandedPoolsUpdater';

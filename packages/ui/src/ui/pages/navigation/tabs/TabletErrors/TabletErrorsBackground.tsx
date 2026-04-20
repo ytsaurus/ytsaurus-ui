@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 import {useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
@@ -24,13 +24,13 @@ import {
     getTabletErrorsReplicationErrors,
 } from '../../../../store/selectors/navigation/tabs/tablet-errors-background';
 import {getReplicatedTableReplicasMap} from '../../../../store/selectors/navigation/content/replicated-table';
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {isFinalLoadingStatus} from '../../../../utils/utils';
-import {YTError} from '../../../../types';
+import {type YTError} from '../../../../types';
 
 import './TabletErrorsBackground.scss';
 

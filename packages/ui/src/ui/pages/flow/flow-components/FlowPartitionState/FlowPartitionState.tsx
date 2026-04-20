@@ -10,7 +10,10 @@ import {
 import {Flex} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
-import {FlowPartitionJobStateType, FlowPartitionStateType} from '../../../../../shared/yt-types';
+import {
+    type FlowPartitionJobStateType,
+    type FlowPartitionStateType,
+} from '../../../../../shared/yt-types';
 import {YTText} from '@ytsaurus/components';
 import './FlowPartitionState.scss';
 

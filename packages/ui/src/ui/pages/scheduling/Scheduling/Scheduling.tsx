@@ -26,7 +26,7 @@ import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 import {getSchedulingIsFinalLoadingState} from '../../../store/selectors/scheduling';
 import SchedulingResources from '../Content/SchedulingResources';
 import {PoolEditorDialog} from './PoolEditorDialog/PoolEditorDialog';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 
 const block = cn('scheduling');
 

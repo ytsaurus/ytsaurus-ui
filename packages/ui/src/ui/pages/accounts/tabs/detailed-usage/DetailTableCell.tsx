@@ -1,6 +1,6 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Flex, Icon, Tooltip} from '@gravity-ui/uikit';
-import {AccountUsageViewType} from '../../../../store/reducers/accounts/usage/accounts-usage-filters';
+import {type AccountUsageViewType} from '../../../../store/reducers/accounts/usage/accounts-usage-filters';
 import cn from 'bem-cn-lite';
 import format from '../../../../common/hammer/format';
 import CircleInfoIcon from '@gravity-ui/icons/svgs/circle-info.svg';

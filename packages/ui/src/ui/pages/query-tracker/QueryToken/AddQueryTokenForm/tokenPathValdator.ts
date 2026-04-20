@@ -1,4 +1,4 @@
-import {QueryToken} from '../../../../../shared/constants/settings-types';
+import {type QueryToken} from '../../../../../shared/constants/settings-types';
 import i18n from './i18n';
 import {YT} from '../../../../config/yt-config';
 import {getClusterProxy} from '../../../../store/selectors/global';

@@ -1,5 +1,5 @@
-import React, {FC} from 'react';
-import {ClusterConfig} from '../../../../../shared/yt-types';
+import React, {type FC} from 'react';
+import {type ClusterConfig} from '../../../../../shared/yt-types';
 import cn from 'bem-cn-lite';
 import './QueryClusterItem.scss';
 import {Text} from '@gravity-ui/uikit';

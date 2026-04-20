@@ -8,13 +8,13 @@ import unipika from '../../../common/thor/unipika';
 import ypath from '../../../common/thor/ypath';
 import {getConfigData} from '../../../config/ui-settings';
 import {Tab} from '../../../constants/navigation/index';
-import type {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {selectCluster} from '../../../store/selectors/global';
 import {getTableMountConfigHasData} from '../../../store/selectors/navigation/content/table-mount-config';
 import {getTabletErrorsBackgroundCount} from '../../../store/selectors/navigation/tabs/tablet-errors-background';
-import type {ValueOf, YTError} from '../../../types';
+import {type ValueOf, type YTError} from '../../../types';
 import UIFactory from '../../../UIFactory';
-import {ParsedPath, prepareNavigationState} from '../../../utils/navigation';
+import {type ParsedPath, prepareNavigationState} from '../../../utils/navigation';
 import {isPipelineNode} from '../../../utils/navigation/isPipelineNode';
 import {getAttributes, getParsedPath, getPath, getTransaction} from './index';
 

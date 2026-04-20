@@ -1,7 +1,7 @@
 import {selectCurrentUserName} from '../../../store/selectors/global';
 import {GLOBAL_PARTIAL} from '../../../constants/global';
 import UIFactory from '../../../UIFactory';
-import {YTThunkAction} from '.';
+import {type YTThunkAction} from '.';
 import {rumLogError} from '../../../rum/rum-counter';
 
 export function loadAllowedExperimentalPages(): YTThunkAction {

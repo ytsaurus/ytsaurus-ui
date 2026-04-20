@@ -1,5 +1,5 @@
-import React, {FC, useMemo} from 'react';
-import {JobLineEvent} from '../../../../../../components/TimelineBlock/renderer/JobLineRenderer';
+import React, {type FC, useMemo} from 'react';
+import {type JobLineEvent} from '../../../../../../components/TimelineBlock/renderer/JobLineRenderer';
 import {Flex, Text} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import './EventTimelineTooltipContent.scss';

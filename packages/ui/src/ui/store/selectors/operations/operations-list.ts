@@ -4,7 +4,7 @@ import reduce_ from 'lodash/reduce';
 import every_ from 'lodash/every';
 import isEqual_ from 'lodash/isEqual';
 
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {calculateLoadingStatus, isFinalLoadingStatus} from '../../../utils/utils';
 import {getSettingsDataRaw} from '../../../store/selectors/settings/settings-ts';
 import {NAMESPACES} from '../../../../shared/constants/settings';
@@ -16,8 +16,8 @@ import {
 import {selectCurrentUserName} from '../global';
 import {selectOperationsListFilters} from '.';
 import {
-    OperationPresetsSettings,
-    OperationsListPreset,
+    type OperationPresetsSettings,
+    type OperationsListPreset,
 } from '../../../../shared/constants/settings-types';
 
 export const selectOperationsListIsFinalState = createSelector(

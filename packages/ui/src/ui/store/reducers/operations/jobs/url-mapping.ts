@@ -3,10 +3,10 @@ import {initialState as jobsIncarnationState} from '../../../../store/reducers/o
 import {initialState as tableSortState} from '../../../../store/reducers/tables';
 import {OPERATION_JOBS_TABLE_ID} from '../../../../constants/operations/jobs';
 import {parseSortState} from '../../../../utils/index';
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {produce} from 'immer';
 import {updateByLocationParams} from '../../../../utils/utils';
-import {LocationParameters} from '../../../../store/location';
+import {type LocationParameters} from '../../../../store/location';
 
 const {
     filterBy,

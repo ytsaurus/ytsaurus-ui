@@ -3,7 +3,7 @@ import React from 'react';
 import {IdmObjectType} from '../../../constants/acl';
 import i18n from './i18n';
 import Link from '../../../components/Link/Link';
-import {InheritedFrom} from '../../../utils/acl/acl-types';
+import {type InheritedFrom} from '../../../utils/acl/acl-types';
 import {makeAccountsUrl, makeNavigationLink, makeSchedulingUrl} from '../../../utils/app-url';
 
 function urlFromData(data?: InheritedFrom) {

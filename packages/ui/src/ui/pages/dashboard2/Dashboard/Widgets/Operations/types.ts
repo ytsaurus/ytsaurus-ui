@@ -1,4 +1,4 @@
-import {PluginWidgetProps} from '@gravity-ui/dashkit/build/esm';
+import {type PluginWidgetProps} from '@gravity-ui/dashkit/build/esm';
 
 export type Author = {
     value: string;

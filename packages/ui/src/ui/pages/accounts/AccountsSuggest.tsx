@@ -5,7 +5,7 @@ import map_ from 'lodash/map';
 
 import cn from 'bem-cn-lite';
 
-import {YTError} from '../../../@types/types';
+import {type YTError} from '../../../@types/types';
 
 import {YTErrorBlock} from '../../components/Error/Error';
 
@@ -16,7 +16,7 @@ import {getAccountNames} from '../../store/selectors/accounts/accounts-ts';
 import './AccountsSuggest.scss';
 import {fetchFullList1M} from '../../utils/users-groups';
 import {USE_CACHE} from '../../../shared/constants/yt-api';
-import {RootState} from '../../store/reducers';
+import {type RootState} from '../../store/reducers';
 import {YTApiId} from '../../rum/rum-wrap-api';
 import {SelectSingle} from '../../components/Select/Select';
 

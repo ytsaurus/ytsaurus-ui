@@ -3,12 +3,12 @@ import cn from 'bem-cn-lite';
 
 import {Progress, TextInput} from '@gravity-ui/uikit';
 
-import {DialogControlProps} from '../../../../../../components/Dialog/Dialog.types';
+import {type DialogControlProps} from '../../../../../../components/Dialog/Dialog.types';
 import {formatValue, parseValue} from '../../../../../../components/NumberInput/NumberInput';
 import {Tooltip} from '@ytsaurus/components';
 
 import {calcProgressProps} from '../../../../../../utils/utils';
-import {ThemeThreshold} from '../../../../../../utils/progress';
+import {type ThemeThreshold} from '../../../../../../utils/progress';
 
 import './BundleInput.scss';
 

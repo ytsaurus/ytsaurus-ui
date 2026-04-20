@@ -1,13 +1,13 @@
 import {DialogWrapper as Dialog} from '../../components/DialogWrapper/DialogWrapper';
 import React from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 
 import {hideErrorModal} from '../../store/actions/modals/errors';
 import {getModalErrors} from '../../store/selectors/modals/errors';
 import {YTAlertBlock} from '../../components/Alert/Alert';
 import {YTErrorBlock} from '../../components/Error/Error';
-import {RootState} from '../../store/reducers';
-import {ErrorInfo} from '../../store/reducers/modals/errors';
+import {type RootState} from '../../store/reducers';
+import {type ErrorInfo} from '../../store/reducers/modals/errors';
 import i18n from './i18n';
 
 interface MEProps {

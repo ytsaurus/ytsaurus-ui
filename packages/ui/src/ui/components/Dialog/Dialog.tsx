@@ -1,4 +1,4 @@
-import React, {ComponentProps} from 'react';
+import React, {type ComponentProps} from 'react';
 import cn from 'bem-cn-lite';
 
 import SubjectsControl from '../../containers/ACL/SubjectsControl/SubjectsControl';
@@ -36,11 +36,11 @@ import {EditJsonWithPreview} from '../EditJsonWithPreview/EditJsonWithPreview';
 import {
     // eslint-disable-next-line no-restricted-imports
     DFDialog,
-    DFDialogField,
-    DFDialogProps,
-    DFDialogTabField,
-    RegisteredDialogField,
-    RegisteredDialogTabField,
+    type DFDialogField,
+    type DFDialogProps,
+    type DFDialogTabField,
+    type RegisteredDialogField,
+    type RegisteredDialogTabField,
     registerDialogControl,
     registerDialogTabControl,
 } from '@gravity-ui/dialog-fields';

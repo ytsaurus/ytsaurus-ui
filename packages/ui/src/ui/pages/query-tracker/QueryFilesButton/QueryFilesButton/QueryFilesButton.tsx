@@ -1,6 +1,6 @@
-import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
+import React, {type FC, useCallback, useEffect, useRef, useState} from 'react';
 import cn from 'bem-cn-lite';
-import {QueryFile} from '../../../../types/query-tracker/api';
+import {type QueryFile} from '../../../../types/query-tracker/api';
 import {Button, Icon, Text} from '@gravity-ui/uikit';
 import clipIcon from '@gravity-ui/icons/svgs/paperclip.svg';
 import {VALIDATOR_ERRORS_TEXT} from '../../QuerySettingsButton/formValidator';
@@ -8,11 +8,11 @@ import './QueryFilesButton.scss';
 import {PopupWithCloseButton} from '../../QuerySettingsButton/PopupWithCloseButton';
 import {ActionsWithAddForm} from '../ActionsWithAddForm';
 import {FilesTabs} from '../FilesTabs';
-import {FileValidator, ValidatorError} from '../FileItemForm/FileItemForm';
+import {type FileValidator, type ValidatorError} from '../FileItemForm/FileItemForm';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
-    QueryFileAddForm,
-    QueryFileEditor,
+    type QueryFileAddForm,
+    type QueryFileEditor,
     setAddForm,
     setFileEditor,
 } from '../../../../store/reducers/query-tracker/queryFilesFormSlice';

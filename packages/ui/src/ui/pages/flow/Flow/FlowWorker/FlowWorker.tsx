@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 import React from 'react';
 import {Route, Switch, useRouteMatch} from 'react-router';
 import {Page} from '../../../../../shared/constants/settings';
-import {FlowWorkerData} from '../../../../../shared/yt-types';
+import {type FlowWorkerData} from '../../../../../shared/yt-types';
 import format from '../../../../common/hammer/format';
 import Label from '../../../../components/Label';
 import Link from '../../../../components/Link/Link';

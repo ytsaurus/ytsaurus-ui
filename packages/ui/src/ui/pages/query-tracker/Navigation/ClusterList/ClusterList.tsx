@@ -1,9 +1,9 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {QueryClusterItem} from '../../QueryTrackerTopRow/QueryClusterSelector/QueryClusterItem';
 import './ClusterList.scss';
 import cn from 'bem-cn-lite';
-import {ClusterConfig} from '../../../../../shared/yt-types';
+import {type ClusterConfig} from '../../../../../shared/yt-types';
 import {setNavigationCluster} from '../../../../store/actions/query-tracker/queryNavigation';
 import {
     selectClustersByFilter,

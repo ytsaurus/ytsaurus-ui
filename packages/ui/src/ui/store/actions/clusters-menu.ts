@@ -8,11 +8,11 @@ import {
 } from '../../constants/index';
 import {fetchClustersAvailability} from '../../pages/odin/odin-utils';
 import {
-    ClustersMenuAction,
-    ClustersMenuState,
+    type ClustersMenuAction,
+    type ClustersMenuState,
 } from '../../store/reducers/clusters-menu/clusters-menu';
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../store/reducers';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../store/reducers';
 
 export function updateViewMode(viewMode: ClustersMenuState['viewMode']) {
     return {type: CLUSTERS_MENU_UPDATE_VIEWMODE, data: viewMode};

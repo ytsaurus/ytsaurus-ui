@@ -1,10 +1,10 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 import {ytApiV4} from '../../../rum/rum-wrap-api';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {
-    FlowSpecState,
+    type FlowSpecState,
     dynamicSpecActions,
     staticSpecActions,
 } from '../../../store/reducers/flow/specs';

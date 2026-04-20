@@ -1,11 +1,11 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {
     DefaultQueriesListFilter,
-    QueriesListCursor,
-    QueriesListFilter,
+    type QueriesListCursor,
+    type QueriesListFilter,
     QueriesListMode,
 } from '../../../types/query-tracker/queryList';
-import type {QueryItem} from '../../../types/query-tracker/api';
+import {type QueryItem} from '../../../types/query-tracker/api';
 import {QueriesHistoryCursorDirection} from './query-tracker-contants';
 
 export type State = 'loading' | 'ready' | 'error';

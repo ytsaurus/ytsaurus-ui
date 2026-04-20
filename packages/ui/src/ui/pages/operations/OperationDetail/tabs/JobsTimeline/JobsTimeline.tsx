@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useRef} from 'react';
+import React, {type FC, useCallback, useRef} from 'react';
 import './JobsTimeline.scss';
 import cn from 'bem-cn-lite';
 import {Alert, Flex, Loader} from '@gravity-ui/uikit';

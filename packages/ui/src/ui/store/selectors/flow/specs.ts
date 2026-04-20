@@ -1,4 +1,4 @@
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 
 export const selectFlowStaticSpecData = (state: RootState) => state.flow.staticSpec.data;
 export const selectFlowStaticSpecPath = (state: RootState) => state.flow.staticSpec.pipeline_path;

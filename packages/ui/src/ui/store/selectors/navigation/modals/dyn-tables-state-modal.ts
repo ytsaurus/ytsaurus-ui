@@ -1,4 +1,4 @@
-import {RootState} from '../../../reducers';
+import {type RootState} from '../../../reducers';
 
 export const getDynTablesStateModalVisible = (state: RootState) =>
     state.navigation.modals.dynTablesStateModal.showModal;

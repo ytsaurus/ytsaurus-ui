@@ -1,7 +1,7 @@
 import React from 'react';
 import block from 'bem-cn-lite';
 import {Icon, Tooltip} from '@gravity-ui/uikit';
-import {QueriesListFilter, QueriesListMode} from '../../../../types/query-tracker/queryList';
+import {type QueriesListFilter, QueriesListMode} from '../../../../types/query-tracker/queryList';
 import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 import FunnelIcon from '@gravity-ui/icons/svgs/funnel.svg';
 

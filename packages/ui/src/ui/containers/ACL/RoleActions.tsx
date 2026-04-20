@@ -4,8 +4,8 @@ import cn from 'bem-cn-lite';
 import {Button} from '@gravity-ui/uikit';
 
 import Icon from '../../components/Icon/Icon';
-import {IdmKindType} from '../../utils/acl/acl-types';
-import {AclRoleActionsType} from '../../UIFactory';
+import {type IdmKindType} from '../../utils/acl/acl-types';
+import {type AclRoleActionsType} from '../../UIFactory';
 
 import './RoleActions.scss';
 

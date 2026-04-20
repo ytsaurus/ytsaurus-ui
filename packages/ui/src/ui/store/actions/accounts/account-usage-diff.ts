@@ -1,12 +1,12 @@
 import isEqual_ from 'lodash/isEqual';
 
 import axios from 'axios';
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../../store/reducers';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../../store/reducers';
 import {
-    AccountUsageListDiffAction,
-    AccountUsageListDiffDataParams,
-    AccountsUsageDiffDataResponse,
+    type AccountUsageListDiffAction,
+    type AccountUsageListDiffDataParams,
+    type AccountsUsageDiffDataResponse,
 } from '../../../store/reducers/accounts/usage/accounts-usage-list-diff';
 import {getFilterParameters, normalizeTimestamp} from './account-usage';
 import {
@@ -25,10 +25,10 @@ import {
     getAccountsUsageDiffToSnapshot,
 } from '../../../store/selectors/accounts/account-usage';
 import {
-    AccountUsageTreeDiffAction,
-    AccountUsageTreeDiffData,
+    type AccountUsageTreeDiffAction,
+    type AccountUsageTreeDiffData,
 } from '../../reducers/accounts/usage/accounts-usage-tree-diff';
-import {AccountUsageData} from '../../reducers/accounts/usage/account-usage-types';
+import {type AccountUsageData} from '../../reducers/accounts/usage/account-usage-types';
 import {calcAccountsUsageBaseUrl} from './accounts-usage-base-url';
 
 type UsageListThunkAction = ThunkAction<any, RootState, any, AccountUsageListDiffAction>;

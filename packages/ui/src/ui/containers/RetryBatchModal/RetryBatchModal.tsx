@@ -7,7 +7,7 @@ import {Button} from '@gravity-ui/uikit';
 import {DialogWrapper as Dialog} from '../../components/DialogWrapper/DialogWrapper';
 
 import {selectExecuteBatchState} from '../../store/selectors/execute-batch';
-import {ExecuteBatchStateItem} from '../../store/reducers/execute-batch';
+import {type ExecuteBatchStateItem} from '../../store/reducers/execute-batch';
 
 import {YTErrorBlock} from '../../components/Error/Error';
 import {rumLogError} from '../../rum/rum-counter';

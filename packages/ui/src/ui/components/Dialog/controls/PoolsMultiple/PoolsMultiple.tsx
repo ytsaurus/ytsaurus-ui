@@ -2,7 +2,7 @@ import React from 'react';
 import {Button, Flex, Select} from '@gravity-ui/uikit';
 import {Plus} from '@gravity-ui/icons';
 
-import {DialogControlProps} from '../../../../components/Dialog/Dialog.types';
+import {type DialogControlProps} from '../../../../components/Dialog/Dialog.types';
 
 import {useTrees} from './use-trees';
 import {usePools} from './use-pools';

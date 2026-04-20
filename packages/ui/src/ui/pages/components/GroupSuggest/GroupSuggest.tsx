@@ -7,15 +7,15 @@ import map_ from 'lodash/map';
 
 import cn from 'bem-cn-lite';
 
-import {SelectProps} from '@gravity-ui/uikit';
+import {type SelectProps} from '@gravity-ui/uikit';
 
-import {EditableList, EditableListItemType} from '../../../components/Dialog';
+import {EditableList, type EditableListItemType} from '../../../components/Dialog';
 
 import {
     selectAllGroupNamesSorted,
     selectAllIdmGroupNamesSorted,
 } from '../../../store/selectors/global';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import Select from '../../../components/Select/Select';
 
 import './GroupSuggest.scss';

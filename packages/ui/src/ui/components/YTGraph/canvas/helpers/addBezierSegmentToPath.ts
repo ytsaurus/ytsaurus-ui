@@ -1,4 +1,4 @@
-import {TPoint} from '@gravity-ui/graph';
+import {type TPoint} from '@gravity-ui/graph';
 import {generateBezierParams} from './generateBezierParams';
 
 export const addBezierSegmentToPath = (path: Path2D, startPoint: TPoint, endPoint: TPoint) => {

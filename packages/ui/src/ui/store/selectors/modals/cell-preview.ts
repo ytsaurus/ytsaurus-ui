@@ -1,4 +1,4 @@
-import type {RootState} from '../../reducers';
+import {type RootState} from '../../reducers';
 
 export const selectCellPreviewVisible = (state: RootState) =>
     state.navigation.modals.cellPreviewModal.visible;

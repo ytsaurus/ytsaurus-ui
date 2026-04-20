@@ -32,7 +32,7 @@ import {selectFontType} from '../../store/selectors/global/fonts';
 import {selectIsAdmin} from '../../store/selectors/global/is-developer';
 import UIFactory from '../../UIFactory';
 
-import {AppThemeFont, AppThemeFontProps} from './AppThemeFont';
+import {AppThemeFont, type AppThemeFontProps} from './AppThemeFont';
 
 import {toaster} from '../../utils/toaster';
 import {updateUiConfigModeCookie} from '../../utils/cookies/ui-config-mode';

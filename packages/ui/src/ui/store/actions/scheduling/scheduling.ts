@@ -1,4 +1,4 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 import isEmpty_ from 'lodash/isEmpty';
 import map_ from 'lodash/map';
@@ -8,22 +8,25 @@ import omit_ from 'lodash/omit';
 import pick_ from 'lodash/pick';
 import pickBy_ from 'lodash/pickBy';
 
-import {BatchSubRequest} from '../../../../shared/yt-types';
+import {type BatchSubRequest} from '../../../../shared/yt-types';
 
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {splitBatchResults} from '../../../../shared/utils/error';
 
 import {getSchedulingNS} from '../../../store/selectors/settings';
 import {toggleFavourite} from '../../../store/actions/favourites';
 import {
-    SchedulingContentMode,
+    type SchedulingContentMode,
     getPools,
     getTree,
 } from '../../../store/selectors/scheduling/scheduling';
-import {SchedulingAction, SchedulingState} from '../../../store/reducers/scheduling/scheduling';
+import {
+    type SchedulingAction,
+    type SchedulingState,
+} from '../../../store/reducers/scheduling/scheduling';
 import {
     POOL_GENERAL_TYPE_TO_ATTRIBUTE,
-    PoolEditorFormValues,
+    type PoolEditorFormValues,
     computePoolPath,
 } from '../../../utils/scheduling/scheduling';
 
@@ -44,8 +47,8 @@ import {loadSchedulingData, setPoolAttributes} from './scheduling-ts';
 
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {YTErrors} from '../../../rum/constants';
-import {PoolTreeNode} from '../../../utils/scheduling/pool-child';
-import {SortState} from '../../../types';
+import {type PoolTreeNode} from '../../../utils/scheduling/pool-child';
+import {type SortState} from '../../../types';
 import {toaster} from '../../../utils/toaster';
 
 const setName = (path: string, newName?: string, prevName?: string) => {

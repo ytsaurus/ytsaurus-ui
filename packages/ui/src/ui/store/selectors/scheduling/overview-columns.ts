@@ -3,7 +3,10 @@ import uniq_ from 'lodash/uniq';
 import compact_ from 'lodash/compact';
 
 import {getSettingsData} from '../../../store/selectors/settings/settings-base';
-import {SchedulingColumn, isSchedulingColumnName} from '../../../utils/scheduling/detailsTable';
+import {
+    type SchedulingColumn,
+    isSchedulingColumnName,
+} from '../../../utils/scheduling/detailsTable';
 
 const DEFAULT_COLUMNS: Array<SchedulingColumn> = [
     'name',

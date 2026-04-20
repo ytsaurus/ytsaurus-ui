@@ -8,7 +8,7 @@ import format from '../../../common/hammer/format';
 import {ExpandButton} from '../../../components/ExpandButton';
 import {GridWithMediaMinWidth} from '../../../containers/GridWithMediaMinWidth/GridWithMediaMinWidth';
 
-import type {RoleGroupInfo} from '../../../store/reducers/system/proxies';
+import {type RoleGroupInfo} from '../../../store/reducers/system/proxies';
 import NodeQuad from '../NodeQuad/NodeQuad';
 import {StatsInfo} from './StatsInfo';
 

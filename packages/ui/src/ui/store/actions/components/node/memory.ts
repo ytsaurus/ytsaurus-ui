@@ -1,4 +1,4 @@
-import type {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 import {
     NODE_MEMORY_LOAD_FAILURE,
@@ -6,14 +6,14 @@ import {
     NODE_MEMORY_LOAD_SUCCESS,
     NODE_MEMORY_PARTIAL,
 } from '../../../../constants/components/nodes/memory';
-import type {RootState} from '../../../../store/reducers';
-import type {NodeMemoryLoadAction} from '../../../../store/reducers/components/node/memory';
-import type {MemoryUsage} from '../../../../types/components/node';
+import {type RootState} from '../../../../store/reducers';
+import {type NodeMemoryLoadAction} from '../../../../store/reducers/components/node/memory';
+import {type MemoryUsage} from '../../../../types/components/node';
 import {
     selectNodeMemoryCollapsedBundles,
     selectNodeMemoryStateHost,
 } from '../../../../store/selectors/components/node/memory';
-import {SortState} from '../../../../types';
+import {type SortState} from '../../../../types';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 
 type NodeMemoryThunkAction = ThunkAction<any, RootState, any, NodeMemoryLoadAction>;

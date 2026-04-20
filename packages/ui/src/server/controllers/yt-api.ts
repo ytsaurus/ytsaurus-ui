@@ -1,5 +1,5 @@
-import axios, {AxiosError} from 'axios';
-import type {Request, Response} from 'express';
+import axios, {type AxiosError} from 'axios';
+import {type Request, type Response} from 'express';
 import qs from 'qs';
 import isEmpty_ from 'lodash/isEmpty';
 // @ts-ignore

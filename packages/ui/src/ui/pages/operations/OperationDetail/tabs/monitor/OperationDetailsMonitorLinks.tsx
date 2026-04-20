@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import type {OperationMonitoringTabProps} from '../../../../../UIFactory';
+import {type OperationMonitoringTabProps} from '../../../../../UIFactory';
 import {uiSettings} from '../../../../../config/ui-settings';
 import Icon from '../../../../../components/Icon/Icon';
 import Link from '../../../../../components/Link/Link';

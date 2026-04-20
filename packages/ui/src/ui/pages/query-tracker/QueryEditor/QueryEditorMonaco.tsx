@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {type FC, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import * as monaco from 'monaco-editor';
 import {useMonaco} from '../hooks/useMonaco';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
@@ -13,7 +13,7 @@ import {
 import {useMonacoQuerySuggestions} from '../querySuggestionsModule/useMonacoQuerySuggestions';
 import {updateQueryDraft} from '../../../store/actions/query-tracker/query';
 import {getHashLineNumber} from './helpers/getHashLineNumber';
-import MonacoEditor, {MonacoEditorConfig} from '../../../components/MonacoEditor';
+import MonacoEditor, {type MonacoEditorConfig} from '../../../components/MonacoEditor';
 import {WaitForFont} from '../../../containers/WaitForFont/WaitForFont';
 import cn from 'bem-cn-lite';
 import {getLanguageByEngine} from './helpers/getLanguageByEngine';

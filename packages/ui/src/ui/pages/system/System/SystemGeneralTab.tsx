@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import Resources from '../Resources/Resources';
 import Masters from '../Masters/Masters';
 import SchedulersAndAgents from '../SchedulersAndAgents/SchedulersAndAgents';

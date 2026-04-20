@@ -1,4 +1,4 @@
-import axios, {AxiosResponse} from 'axios';
+import axios, {type AxiosResponse} from 'axios';
 
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
@@ -20,12 +20,12 @@ import {rumLogError} from '../../rum/rum-counter';
 import {RumWrapper, YTApiId} from '../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../rum/rum-measure-types';
 import {wrapApiPromiseByToaster} from '../../utils/utils';
-import {BatchResultsItem, RawVersion} from '../../../shared/yt-types';
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../store/reducers';
+import {type BatchResultsItem, type RawVersion} from '../../../shared/yt-types';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../store/reducers';
 import {YT} from '../../config/yt-config';
 import {GLOBAL_PARTIAL} from '../../constants/global';
-import {FIX_MY_TYPE, YTError} from '../../../@types/types';
+import {type FIX_MY_TYPE, type YTError} from '../../../@types/types';
 import {initYTApiClusterParams} from '../../common/yt-api';
 import {updateTitle} from './global';
 import {reloadUserSettings} from './settings';

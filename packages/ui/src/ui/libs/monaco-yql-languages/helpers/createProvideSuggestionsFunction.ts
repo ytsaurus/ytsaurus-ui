@@ -1,8 +1,8 @@
-import {CancellationToken, Position, editor, languages} from 'monaco-editor';
-import {Parser, getSuggestions} from './getSuggestions';
+import {type CancellationToken, type Position, type editor, type languages} from 'monaco-editor';
+import {type Parser, getSuggestions} from './getSuggestions';
 import {getRangeToInsertSuggestion} from './getRangeToInsertSuggestion';
 import {getDirectoryContent} from './getDirectoryContent';
-import {QueryEngine} from '../../../../shared/constants/engines';
+import {type QueryEngine} from '../../../../shared/constants/engines';
 import {getColumnSuggestions} from './getColumnSuggestions';
 import {getTemplateSuggestions} from './getTemplateSuggestions';
 

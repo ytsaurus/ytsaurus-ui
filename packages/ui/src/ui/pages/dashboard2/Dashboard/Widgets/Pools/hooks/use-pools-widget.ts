@@ -5,14 +5,14 @@ import map_ from 'lodash/map';
 import zipObject_ from 'lodash/zipObject';
 import includes_ from 'lodash/includes';
 
-import {RootState} from '../../../../../../store/reducers';
-import {PoolQueryParams} from '../../../../../../store/api/dashboard2/pools/pools';
+import {type RootState} from '../../../../../../store/reducers';
+import {type PoolQueryParams} from '../../../../../../store/api/dashboard2/pools/pools';
 import {usePoolsQuery} from '../../../../../../store/api/dashboard2/pools';
 import {selectFavouritePools} from '../../../../../../store/selectors/favourites';
 import {selectPoolsTypeFilter} from '../../../../../../store/selectors/dashboard2/pools';
 import {selectCluster} from '../../../../../../store/selectors/global';
 
-import type {PoolsWidgetProps} from '../types';
+import {type PoolsWidgetProps} from '../types';
 
 const resources = ['cpu', 'memory', 'operations', 'gpu'];
 

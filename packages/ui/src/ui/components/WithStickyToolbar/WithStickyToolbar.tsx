@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import {
     StickyContainer,
-    StickyContainerProps,
+    type StickyContainerProps,
 } from '../../components/StickyContainer/StickyContainer';
 import {STICKY_DOUBLE_TOOLBAR_BOTTOM, STICKY_TOOLBAR_BOTTOM} from '../DataTableYT/constants';
 

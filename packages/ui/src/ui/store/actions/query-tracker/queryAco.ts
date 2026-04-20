@@ -1,14 +1,14 @@
-import {AnyAction} from 'redux';
-import {ThunkAction} from 'redux-thunk';
-import type {AxiosError} from 'axios';
+import {type AnyAction} from 'redux';
+import {type ThunkAction} from 'redux-thunk';
+import {type AxiosError} from 'axios';
 import {YTApiId, ytApiV4Id} from '../../../rum/rum-wrap-api';
 import {
     getEffectiveApiStage,
     getQueryTrackerRequestOptions,
 } from '../../selectors/query-tracker/query';
 import {showErrorPopup} from '../../../utils/utils';
-import {QUERY_ACO_LOADING, QueryACOActions} from '../../reducers/query-tracker/queryAco';
-import {RootState} from '../../reducers';
+import {QUERY_ACO_LOADING, type QueryACOActions} from '../../reducers/query-tracker/queryAco';
+import {type RootState} from '../../reducers';
 import {setSettingByKey} from '../settings';
 import {toaster} from '../../../utils/toaster';
 

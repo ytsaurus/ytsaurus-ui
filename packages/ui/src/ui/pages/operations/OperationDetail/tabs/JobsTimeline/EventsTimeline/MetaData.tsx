@@ -1,6 +1,6 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Flex, Text} from '@gravity-ui/uikit';
-import {JobLineEvent} from '../../../../../../components/TimelineBlock/renderer/JobLineRenderer';
+import {type JobLineEvent} from '../../../../../../components/TimelineBlock/renderer/JobLineRenderer';
 import cn from 'bem-cn-lite';
 import './MetaData.scss';
 import {ClipboardButton} from '@ytsaurus/components';

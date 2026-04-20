@@ -1,4 +1,4 @@
-import React, {FC, PropsWithChildren, useMemo} from 'react';
+import React, {type FC, type PropsWithChildren, useMemo} from 'react';
 import './System.scss';
 import {SystemGeneralTab} from './SystemGeneralTab';
 import UIFactory from '../../../UIFactory';

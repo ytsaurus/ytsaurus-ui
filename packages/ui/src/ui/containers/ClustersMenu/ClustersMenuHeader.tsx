@@ -1,6 +1,6 @@
 import React from 'react';
 import block from 'bem-cn-lite';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 import {LayoutCellsLarge, ListUl} from '@gravity-ui/icons';
 import {Icon, SegmentedRadioGroup} from '@gravity-ui/uikit';
 
@@ -8,7 +8,7 @@ import Filter from '../../components/Filter/Filter';
 import {updateFilter, updateViewMode} from '../../store/actions/clusters-menu';
 import {HeaderLinks} from '../../containers/ClustersMenu/HeaderLinks';
 import {LINKS_ITEM_CLUSTERS} from '../../containers/ClustersMenu/header-links-items';
-import {RootState} from '../../store/reducers';
+import {type RootState} from '../../store/reducers';
 import i18n from './i18n';
 
 import './ClusterMenuHeader.scss';

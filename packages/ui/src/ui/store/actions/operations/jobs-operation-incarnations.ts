@@ -1,12 +1,12 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 import compact_ from 'lodash/compact';
 import uniq_ from 'lodash/uniq';
 
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {jobOperaionIncarnationActions} from '../../../store/reducers/operations/jobs/jobs-operation-incarnations';
 import CancelHelper from '../../../utils/cancel-helper';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {ListJobsResponse} from '../../../../shared/yt-types';
+import {type ListJobsResponse} from '../../../../shared/yt-types';
 import {getJobs} from './jobs';
 
 type OperationIncarnationThunkAction<T = void> = ThunkAction<T, RootState, unknown, any>;

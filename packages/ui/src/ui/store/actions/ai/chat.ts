@@ -1,6 +1,6 @@
-import {ThunkAction} from 'redux-thunk';
-import {Action} from 'redux';
-import {RootState} from '../../reducers';
+import {type ThunkAction} from 'redux-thunk';
+import {type Action} from 'redux';
+import {type RootState} from '../../reducers';
 import {
     selectAiChatModel,
     selectAttachedFiles,
@@ -28,9 +28,9 @@ import {
     setQuestion,
     setSending,
 } from '../../reducers/ai/chatSlice';
-import {ChatError} from '../../../types/ai-chat';
+import {type ChatError} from '../../../types/ai-chat';
 import axios from 'axios';
-import {type Conversation, GetConversationItemsResponse} from '../../../../shared/ai-chat';
+import {type Conversation, type GetConversationItemsResponse} from '../../../../shared/ai-chat';
 import {
     createMcpItem,
     createMessageItem,

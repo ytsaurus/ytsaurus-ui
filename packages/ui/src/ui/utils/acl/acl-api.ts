@@ -6,36 +6,36 @@ import reduce_ from 'lodash/reduce';
 import some_ from 'lodash/some';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import {YTApiIdType} from '../../../shared/constants/yt-api-id';
+import {type YTApiIdType} from '../../../shared/constants/yt-api-id';
 import {
-    CheckPermissionItem,
-    CheckPermissionResult,
+    type CheckPermissionItem,
+    type CheckPermissionResult,
     makeCheckPermissionBatchSubRequest,
 } from '../../../shared/utils/check-permission';
 import {getBatchError, splitBatchResults} from '../../../shared/utils/error';
 import {
-    BatchResultsItem,
-    BatchSubRequest,
-    ExecuteBatchParams,
-    YTPermissionType,
+    type BatchResultsItem,
+    type BatchSubRequest,
+    type ExecuteBatchParams,
+    type YTPermissionType,
 } from '../../../shared/yt-types';
-import {IdmObjectType, REGISTER_QUEUE_CONSUMER_VITAL} from '../../constants/acl';
+import {IdmObjectType, type REGISTER_QUEUE_CONSUMER_VITAL} from '../../constants/acl';
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../rum/rum-wrap-api';
 import UIFactory from '../../UIFactory';
 import {unquote} from '../../utils/string';
 import {YSON_AS_TEXT, prettyPrintSafe} from '../../utils/unipika';
 import {
-    ACE,
-    ACLResponsible,
-    GetAclParams,
-    GetResponsibleParams,
-    IdmKindType,
-    PreparedAclData,
-    PreparedAclSubject,
-    UpdateAclParams,
-    UpdateResponse,
+    type ACE,
+    type ACLResponsible,
+    type GetAclParams,
+    type GetResponsibleParams,
+    type IdmKindType,
+    type PreparedAclData,
+    type PreparedAclSubject,
+    type UpdateAclParams,
+    type UpdateResponse,
 } from './acl-types';
-import {RequestPermissionParams} from './external-acl-api';
+import {type RequestPermissionParams} from './external-acl-api';
 import {convertFromUIPermission, convertToUIPermissions} from './index';
 
 function getInheritAcl(path: string): Promise<ACLResponsible> {

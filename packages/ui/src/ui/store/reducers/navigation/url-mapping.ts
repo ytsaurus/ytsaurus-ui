@@ -39,9 +39,9 @@ import {
     navigationAccessLogParams,
 } from './tabs/access-log/url-mapping';
 import {Tab} from '../../../constants/navigation';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {updateIfChanged} from '../../../utils/utils';
-import {LocationParameters} from '../../../store/location';
+import {type LocationParameters} from '../../../store/location';
 import {
     getNavigationTabletErrorsPreparedState,
     navigationTabletErrorsParams,

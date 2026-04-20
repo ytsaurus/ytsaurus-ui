@@ -1,6 +1,6 @@
-import {ActionD, SortState} from '../../../../types';
+import {type ActionD, type SortState} from '../../../../types';
 import {ACCOUNTS_USAGE_FILTERS_PARTIAL} from '../../../../constants/accounts/accounts';
-import {DatepickerOutputDates} from '../../../../components/common/Datepicker';
+import {type DatepickerOutputDates} from '../../../../components/common/Datepicker';
 
 export const PAGE_SIZE = 100;
 

@@ -1,23 +1,23 @@
 import * as React from 'react';
 
-import {Button, Icon, Popup, PopupProps, Text, useVirtualElementRef} from '@gravity-ui/uikit';
+import {Button, Icon, Popup, type PopupProps, Text, useVirtualElementRef} from '@gravity-ui/uikit';
 import Loader from './components/Loader/Loader';
 
-import {NodeDetails, NodeProgress} from './models/plan';
+import {type NodeDetails, type NodeProgress} from './models/plan';
 import {useUpdate} from 'react-use';
 import ResizeObserver from 'resize-observer-polyfill';
 import {DataSet} from 'vis-data';
-import type {DataSetEdges, Network, Options, Position} from 'vis-network';
+import {type DataSetEdges, type Network, type Options, type Position} from 'vis-network';
 
-import {GraphColors, useGraphColors} from './GraphColors';
+import {type GraphColors, useGraphColors} from './GraphColors';
 import OperationNodeInfo from './OperationNodeInfo';
 import {LegendInfo} from './components/Legend/Legend';
 import {Minimap} from './components/Minimap/Minimap';
 import VisNetwork from './components/VisNetwork/VisNetwork';
 import {
-    OperationSchemas,
-    ProcessedGraph,
-    ProcessedNode,
+    type OperationSchemas,
+    type ProcessedGraph,
+    type ProcessedNode,
     getConnectedEdges,
     getFullEdge,
     nodeHasInfo,

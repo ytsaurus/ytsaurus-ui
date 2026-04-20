@@ -1,9 +1,9 @@
-import React, {FC, useCallback} from 'react';
+import React, {type FC, useCallback} from 'react';
 import cn from 'bem-cn-lite';
 import './DocumentEditModal.scss';
-import {FormApi, YTDFDialog} from '../../../../components/Dialog';
+import {type FormApi, YTDFDialog} from '../../../../components/Dialog';
 import {Text} from '@gravity-ui/uikit';
-import {UnipikaSettings} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
+import {type UnipikaSettings} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 
 type Props = {
     open: boolean;

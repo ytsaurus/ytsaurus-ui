@@ -1,7 +1,7 @@
 import React from 'react';
 
-import {DialogControlProps} from '../Dialog/Dialog.types';
-import {EditTextWithPreview, EditTextWithPreviewProps} from '../EditTextWithPreview';
+import {type DialogControlProps} from '../Dialog/Dialog.types';
+import {EditTextWithPreview, type EditTextWithPreviewProps} from '../EditTextWithPreview';
 import {Markdown} from '../Markdown/Markdown';
 
 import i18n from './i18n';

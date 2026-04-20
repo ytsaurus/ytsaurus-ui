@@ -1,5 +1,5 @@
-import React, {FC} from 'react';
-import {Button, ButtonProps, Icon} from '@gravity-ui/uikit';
+import React, {type FC} from 'react';
+import {Button, type ButtonProps, Icon} from '@gravity-ui/uikit';
 import shevronRightSvg from '@gravity-ui/icons/svgs/chevron-right.svg';
 import doubleShevronRightSvg from '@gravity-ui/icons/svgs/chevrons-right.svg';
 import cn from 'bem-cn-lite';

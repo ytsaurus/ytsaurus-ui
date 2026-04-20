@@ -7,7 +7,7 @@ import {ClickableText} from '../../../../../../components/ClickableText/Clickabl
 import {getMediumList} from '../../../../../../store/selectors/thor';
 
 import hammer from '../../../../../../common/hammer';
-import {RootState} from '../../../../../../store/reducers';
+import {type RootState} from '../../../../../../store/reducers';
 import AccountQuota from '../../../../AccountQuota/AccountQuota';
 import {AccountResourceName} from '../../../../../../constants/accounts/accounts';
 import AccountTransferQuotaMessage from '../AccountTransferQuotaMessage';

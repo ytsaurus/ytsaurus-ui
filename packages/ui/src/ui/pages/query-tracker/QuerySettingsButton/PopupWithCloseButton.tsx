@@ -1,6 +1,6 @@
-import React, {FC, PropsWithChildren} from 'react';
+import React, {type FC, type PropsWithChildren} from 'react';
 import cn from 'bem-cn-lite';
-import {Button, Icon, Popup, PopupProps} from '@gravity-ui/uikit';
+import {Button, Icon, Popup, type PopupProps} from '@gravity-ui/uikit';
 import XmarkIcon from '@gravity-ui/icons/svgs/xmark.svg';
 import './PopupWithCloseButton.scss';
 

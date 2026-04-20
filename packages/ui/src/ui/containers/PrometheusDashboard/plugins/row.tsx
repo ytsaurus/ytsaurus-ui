@@ -1,5 +1,5 @@
 import React from 'react';
-import {PrometheusPlugins} from '../PrometheusDashKit';
+import {type PrometheusPlugins} from '../PrometheusDashKit';
 import {ExpandButton} from '../../../components/ExpandButton';
 import {Secondary} from '@ytsaurus/components';
 import i18n from './i18n';

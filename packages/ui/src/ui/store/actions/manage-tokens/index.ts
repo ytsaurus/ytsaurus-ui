@@ -1,6 +1,6 @@
-import type {ThunkAction} from 'redux-thunk';
-import type {RootState} from '../../reducers';
-import type {ManageTokensListAction} from '../../reducers/manage-tokens/tokens';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../reducers';
+import {type ManageTokensListAction} from '../../reducers/manage-tokens/tokens';
 import {YTApiId, ytApiV4Id} from '../../../rum/rum-wrap-api';
 import {getQueryTrackerCluster} from '../../../config';
 import {getClusterConfigByName, getClusterProxy} from '../../selectors/global';
@@ -9,7 +9,7 @@ import {
     MANAGE_TOKENS_MODALS_CLOSE,
     MANAGE_TOKENS_MODALS_OPEN,
 } from '../../../constants/manage-tokens';
-import {ManageTokensModalAction} from '../../reducers/manage-tokens/modal';
+import {type ManageTokensModalAction} from '../../reducers/manage-tokens/modal';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 
 function getQTApiSetup(): {proxy?: string} {

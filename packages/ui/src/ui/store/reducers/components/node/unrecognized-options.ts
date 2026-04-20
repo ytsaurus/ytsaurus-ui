@@ -1,6 +1,6 @@
-import {YTError} from '../../../../../@types/types';
+import {type YTError} from '../../../../../@types/types';
 import {NODE_UNRECOGNIEZED_OPTIONS} from '../../../../constants/components/nodes/node';
-import {ActionD} from '../../../../types';
+import {type ActionD} from '../../../../types';
 import {mergeStateOnClusterChange} from '../../../../store/reducers/utils';
 
 type NodeUnrecognizedOptionsState = {

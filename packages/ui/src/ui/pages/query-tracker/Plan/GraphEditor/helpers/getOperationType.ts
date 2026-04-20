@@ -1,5 +1,5 @@
 import {OperationType} from '../enums';
-import {ProcessedNode} from '../../utils';
+import {type ProcessedNode} from '../../utils';
 
 export const getOperationType = (
     operationName: string,

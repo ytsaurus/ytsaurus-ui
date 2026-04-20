@@ -12,18 +12,18 @@ import unipika from '@gravity-ui/unipika/lib/unipika';
 
 import i18n from './i18n';
 
-import {UnipikaSettings, UnipikaValue} from '../StructuredYson/StructuredYsonTypes';
+import {type UnipikaSettings, type UnipikaValue} from '../StructuredYson/StructuredYsonTypes';
 import {
-    BlockType,
-    CollapsedState,
-    FlattenUnipikaResult,
-    SearchInfo,
-    UnipikaFlattenTreeItem,
+    type BlockType,
+    type CollapsedState,
+    type FlattenUnipikaResult,
+    type SearchInfo,
+    type UnipikaFlattenTreeItem,
     flattenUnipika,
 } from '../StructuredYson/flattenUnipika';
 import {DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR} from '../../DataTableYT/constants';
 import {DataTableYT} from '../../DataTableYT';
-import * as DT100 from '@gravity-ui/react-data-table';
+import type * as DT100 from '@gravity-ui/react-data-table';
 import WithStickyToolbar from '../../../components/WithStickyToolbar/WithStickyToolbar';
 
 import './StructuredYsonVirtualized.scss';

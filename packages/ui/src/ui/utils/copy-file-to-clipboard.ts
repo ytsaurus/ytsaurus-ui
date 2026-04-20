@@ -1,4 +1,4 @@
-import {AxiosResponse} from 'axios';
+import {type AxiosResponse} from 'axios';
 
 export const copyFileToClipboard = async (response: AxiosResponse): Promise<void> => {
     const contentType = response.headers['content-type'] ?? '';

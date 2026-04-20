@@ -3,9 +3,9 @@ import cn from 'bem-cn-lite';
 
 import hammer from '../../common/hammer';
 import NumberInput, {
-    NumberInputProps,
+    type NumberInputProps,
     NumberInputWithError,
-    NumberInputWithErrorProps,
+    type NumberInputWithErrorProps,
 } from '../../components/NumberInput/NumberInput';
 import i18n from './i18n';
 

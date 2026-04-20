@@ -12,7 +12,7 @@ import {QueryTrackerOpenButton} from '../QueryTrackerOpenButton/QueryTrackerOpen
 import './QueryMetaForm.scss';
 import {QuerySelectorsByEngine} from '../QueryTrackerTopRow/QuerySelectorsByEngine';
 import {Flex} from '@gravity-ui/uikit';
-import {QueryEngine} from '../../../../shared/constants/engines';
+import {type QueryEngine} from '../../../../shared/constants/engines';
 import {QueryClusterSelector} from '../QueryTrackerTopRow/QueryClusterSelector';
 
 const block = cn('query-tracker-meta-form');

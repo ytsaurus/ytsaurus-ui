@@ -1,5 +1,5 @@
 import React from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 import block from 'bem-cn-lite';
 
 import {setAccountAbc} from '../../../../../../utils/accounts/editor';
@@ -13,8 +13,8 @@ import {SuggestParentsForEditableAccount} from '../../../../AccountsSuggest';
 
 import './../Editor.scss';
 import UIFactory from '../../../../../../UIFactory';
-import {RootState} from '../../../../../../store/reducers';
-import {AccountParsedData} from '../../../../../../utils/accounts/accounts-selector';
+import {type RootState} from '../../../../../../store/reducers';
+import {type AccountParsedData} from '../../../../../../utils/accounts/accounts-selector';
 
 const b = block('accounts-editor');
 

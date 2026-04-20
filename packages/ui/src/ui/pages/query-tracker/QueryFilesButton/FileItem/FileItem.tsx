@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {type FC, useState} from 'react';
 import cn from 'bem-cn-lite';
 import './FileItem.scss';
 import {Button, Icon, Text, Tooltip} from '@gravity-ui/uikit';
@@ -7,9 +7,9 @@ import PencilIcon from '@gravity-ui/icons/svgs/pencil.svg';
 import FileIcon from '@gravity-ui/icons/svgs/file.svg';
 import LinkIcon from '@gravity-ui/icons/svgs/link.svg';
 import PencilToSquareIcon from '@gravity-ui/icons/svgs/pencil-to-square.svg';
-import {FileItemForm, FileValidator} from '../FileItemForm';
-import {QueryFile} from '../../../../types/query-tracker/api';
-import {QueryFileEditor} from '../../../../store/reducers/query-tracker/queryFilesFormSlice';
+import {FileItemForm, type FileValidator} from '../FileItemForm';
+import {type QueryFile} from '../../../../types/query-tracker/api';
+import {type QueryFileEditor} from '../../../../store/reducers/query-tracker/queryFilesFormSlice';
 import i18n from './i18n';
 
 const block = cn('file-item');

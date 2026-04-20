@@ -1,4 +1,4 @@
-import {SortOrder, SortOrderShape, SortState} from './types';
+import {type SortOrder, type SortOrderShape, type SortState} from './types';
 
 const emptySortState: SortState = {
     sortOrder: {},

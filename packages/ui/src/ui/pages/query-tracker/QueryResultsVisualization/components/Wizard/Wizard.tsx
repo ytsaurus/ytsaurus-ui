@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useMemo} from 'react';
+import React, {type FC, useEffect, useMemo} from 'react';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {
     selectAvailableFields,
@@ -6,14 +6,14 @@ import {
     selectCurrentChartVisualization,
 } from '../../../../../store/selectors/query-tracker/queryChart';
 import PlusIcon from '@gravity-ui/icons/svgs/plus.svg';
-import {FieldKey} from '../../../../../store/reducers/query-tracker/queryChartSlice';
+import {type FieldKey} from '../../../../../store/reducers/query-tracker/queryChartSlice';
 import {ChartField} from './ChartField';
 import Button from '../../../../../components/Button/Button';
 import {useToggle} from 'react-use';
 import cn from 'bem-cn-lite';
 import {Icon, Select} from '@gravity-ui/uikit';
 import {changeAxisType, changeField} from '../../../../../store/actions/query-tracker/queryChart';
-import type {ChartAxisType} from '@gravity-ui/chartkit/gravity-charts';
+import {type ChartAxisType} from '@gravity-ui/chartkit/gravity-charts';
 import {getAxisNameByType} from '../../helpers/getAxisNameByType';
 import './Wizard.scss';
 import i18n from './i18n';

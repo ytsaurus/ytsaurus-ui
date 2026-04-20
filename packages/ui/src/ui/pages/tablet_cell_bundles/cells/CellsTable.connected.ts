@@ -1,4 +1,4 @@
-import type {ComponentProps} from 'react';
+import {type ComponentProps} from 'react';
 import {connect} from 'react-redux';
 
 import CellsTable from '../../../pages/tablet_cell_bundles/cells/CellsTable';
@@ -6,7 +6,7 @@ import {
     setTabletsActiveBundle,
     setTabletsPartial,
 } from '../../../store/actions/tablet_cell_bundles';
-import type {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {selectCluster} from '../../../store/selectors/global';
 import {
     selectTabletsCellsSortState,

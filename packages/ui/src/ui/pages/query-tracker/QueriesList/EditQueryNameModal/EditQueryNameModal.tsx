@@ -1,9 +1,9 @@
 import React, {useMemo, useState} from 'react';
-import {FormApi, YTDFDialog, makeErrorFields} from '../../../../components/Dialog';
+import {type FormApi, YTDFDialog, makeErrorFields} from '../../../../components/Dialog';
 import Button from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
 
-import type {QueryItem} from '../../../../types/query-tracker/api';
+import {type QueryItem} from '../../../../types/query-tracker/api';
 import {setQueryName} from '../../../../store/actions/query-tracker/api';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {updateQueryInList} from '../../../../store/actions/query-tracker/queriesList';

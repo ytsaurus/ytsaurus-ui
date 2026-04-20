@@ -1,6 +1,6 @@
 import ypath from '../../../../common/thor/ypath';
 
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {createSelector} from 'reselect';
 import {selectCompressionCodecFinder} from '../../../../store/selectors/global/supported-features';
 

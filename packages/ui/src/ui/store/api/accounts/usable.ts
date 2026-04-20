@@ -1,8 +1,8 @@
-import {BaseQueryApi} from '@reduxjs/toolkit/query';
+import {type BaseQueryApi} from '@reduxjs/toolkit/query';
 
 import {getBatchError} from '../../../../shared/utils/error';
 
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {selectCurrentUserName} from '../../../store/selectors/global';
 
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';

@@ -3,10 +3,10 @@ import cn from 'bem-cn-lite';
 import map_ from 'lodash/map';
 import filter_ from 'lodash/filter';
 
-import Select, {YTSelectProps} from '../../../../components/Select/Select';
+import Select, {type YTSelectProps} from '../../../../components/Select/Select';
 
 import './ClusterSelectControl.scss';
-import {ClusterConfig} from '../../../../../shared/yt-types';
+import {type ClusterConfig} from '../../../../../shared/yt-types';
 import {YT} from '../../../../config/yt-config';
 
 import i18n from './i18n';

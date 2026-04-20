@@ -5,7 +5,7 @@ import {ACCOUNTS_TABLE_ID} from '../../../../constants/accounts/accounts';
 import {parseSortState} from '../../../../utils';
 import {initialUsageFiltersState} from '../usage/accounts-usage-filters';
 import {parseSortStateArray, serializeSortStateArray} from '../../../../utils/url-mapping';
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {prometheusDashboardParams} from '../../../../store/reducers/prometheusDashboard/url-mapping';
 import {produce} from 'immer';
 import {updateIfChanged} from '../../../../utils/utils';

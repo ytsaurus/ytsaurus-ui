@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {type FC, useEffect} from 'react';
 import {Select} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {setVisualizationType} from '../../../../../store/reducers/query-tracker/queryChartSlice';

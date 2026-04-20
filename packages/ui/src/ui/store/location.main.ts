@@ -90,7 +90,7 @@ import {draftQueryParameters, getDraftQueryParameters} from './reducers/query-tr
 
 import {chytListParams, getGhytListPreparedState} from './reducers/chyt/url-mapping';
 
-import type {PathParameters} from '../store/location';
+import {type PathParameters} from '../store/location';
 
 import {ChytCliquePageTab} from '../constants/chyt-page';
 

@@ -1,9 +1,9 @@
-import DataTable, {Column, Settings} from '@gravity-ui/react-data-table';
+import DataTable, {type Column, type Settings} from '@gravity-ui/react-data-table';
 import React from 'react';
 import {Text} from '@gravity-ui/uikit';
 import {
-    QueryResultColumn,
-    QueryResultReadyState,
+    type QueryResultColumn,
+    type QueryResultReadyState,
 } from '../../../../types/query-tracker/queryResult';
 import block from 'bem-cn-lite';
 import './index.scss';

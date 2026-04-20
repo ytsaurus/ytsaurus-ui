@@ -1,4 +1,4 @@
-import type {ChytInfo} from '../store/reducers/chyt/list';
+import {type ChytInfo} from '../store/reducers/chyt/list';
 import createActionTypes from './utils';
 
 export const CHYT_LIST = createActionTypes('CHYT_LIST');

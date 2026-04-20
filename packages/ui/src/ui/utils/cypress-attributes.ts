@@ -9,11 +9,11 @@ import partition_ from 'lodash/partition';
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {SELECT_EMPTY_VALUE} from '../constants/navigation/modals/create-table';
-import {SelectWithSubItemsProps} from '../components/Dialog/controls/SelectWithSubItems/SelectWithSubItems';
+import {type SelectWithSubItemsProps} from '../components/Dialog/controls/SelectWithSubItems/SelectWithSubItems';
 import {wrapBatchPromise} from './utils';
 import {YTApiId, ytApiV3Id} from '../rum/rum-wrap-api';
-import {BatchSubRequest, GetParams} from '../../shared/yt-types';
-import {ValueOf} from '../../@types/types';
+import {type BatchSubRequest, type GetParams} from '../../shared/yt-types';
+import {type ValueOf} from '../../@types/types';
 
 export interface WithAttrs<T> {
     $attributes: T;

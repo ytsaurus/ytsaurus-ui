@@ -13,7 +13,7 @@ import axios from 'axios';
 import {USE_MAX_SIZE} from '../../../../../shared/constants/yt-api';
 import ypath from '../../../../common/thor/ypath';
 
-import {DialogControlProps} from '../../../../components/Dialog/Dialog.types';
+import {type DialogControlProps} from '../../../../components/Dialog/Dialog.types';
 import Suggest from '../../../../components/Suggest/Suggest';
 
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';

@@ -1,9 +1,9 @@
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {IRange, Position, editor, languages} from 'monaco-editor';
+import {type IRange, type Position, type editor, languages} from 'monaco-editor';
 import ypath from '../../../common/thor/ypath';
-import {YPathItem} from '../../../pages/query-tracker/Plan/services/tables';
+import {type YPathItem} from '../../../pages/query-tracker/Plan/services/tables';
 import {getPathFromMonacoModel} from './getPathFromMonacoModel';
-import {QueryEngine} from '../../../../shared/constants/engines';
+import {type QueryEngine} from '../../../../shared/constants/engines';
 import {SuggestionsWeight} from './generateSuggestions';
 import {suggestionIndexToWeight} from './suggestionIndexToWeight';
 import {getClusterProxy} from '../../../store/selectors/global';

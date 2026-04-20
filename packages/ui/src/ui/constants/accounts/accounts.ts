@@ -1,5 +1,5 @@
 import createActionTypes, {createPrefix} from './../utils';
-import type {ValueOf} from '../../types';
+import {type ValueOf} from '../../types';
 
 const ACCOUNTS_PREFIX = createPrefix('ACCOUNTS');
 

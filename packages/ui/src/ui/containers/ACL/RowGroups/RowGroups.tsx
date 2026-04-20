@@ -1,5 +1,5 @@
 import {Power} from '@gravity-ui/icons';
-import type {Column} from '@gravity-ui/react-data-table';
+import {type Column} from '@gravity-ui/react-data-table';
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {DataTableYT} from '../../../components/DataTableYT';
@@ -9,8 +9,8 @@ import TextInputWithDebounce from '../../../components/TextInputWithDebounce/Tex
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import WithStickyToolbar from '../../../components/WithStickyToolbar/WithStickyToolbar';
 import UIFactory from '../../../UIFactory';
-import {AclRowGroup} from '../../../utils/acl/acl-types';
-import {ACLReduxProps} from '../ACL-connect-helpers';
+import {type AclRowGroup} from '../../../utils/acl/acl-types';
+import {type ACLReduxProps} from '../ACL-connect-helpers';
 import {useEditColumnRowGroupModal} from '../EditGroupModal/EditGroupModal';
 import './RowGroups.scss';
 import i18n from './i18n';

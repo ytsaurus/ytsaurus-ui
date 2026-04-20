@@ -3,7 +3,7 @@ import findIndex_ from 'lodash/findIndex';
 import reduce_ from 'lodash/reduce';
 import some_ from 'lodash/some';
 
-import {OldSortState, SortState} from '../types';
+import {type OldSortState, type SortState} from '../types';
 
 const ASK_ORDER = 1;
 const DESC_ORDER = -1;

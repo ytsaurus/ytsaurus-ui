@@ -1,13 +1,13 @@
-import React, {VFC} from 'react';
+import React, {type VFC} from 'react';
 import cn from 'bem-cn-lite';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 
-import RadioButton, {ItemType} from '../../components/RadioButton/RadioButton';
+import RadioButton, {type ItemType} from '../../components/RadioButton/RadioButton';
 
 import {setSetting} from '../../store/actions/settings';
 import {makeGetSetting} from '../../store/selectors/settings';
-import type {RootState} from '../../store/reducers';
-import type {FIX_MY_TYPE} from '../../types';
+import {type RootState} from '../../store/reducers';
+import {type FIX_MY_TYPE} from '../../types';
 
 const block = cn('elements-page');
 

@@ -1,15 +1,15 @@
-import {BaseQueryApi} from '@reduxjs/toolkit/query';
+import {type BaseQueryApi} from '@reduxjs/toolkit/query';
 
 import map_ from 'lodash/map';
 import forEach_ from 'lodash/forEach';
 
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 
 import ypath from '../../../../common/thor/ypath';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
-import {NavigationFlowState, StatusLabelState} from '../../../../types/common/states';
-import {YTError} from '../../../../types';
-import {BatchResultsItem, ListOperationsParams} from '../../../../../shared/yt-types';
+import {type NavigationFlowState, type StatusLabelState} from '../../../../types/common/states';
+import {type YTError} from '../../../../types';
+import {type BatchResultsItem, type ListOperationsParams} from '../../../../../shared/yt-types';
 
 type OperationState = StatusLabelState | NavigationFlowState;
 type PoolValue = {tree: string; pool: string};

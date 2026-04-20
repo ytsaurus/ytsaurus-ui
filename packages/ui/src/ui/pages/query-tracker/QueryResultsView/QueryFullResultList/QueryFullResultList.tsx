@@ -1,9 +1,9 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import block from 'bem-cn-lite';
-import {QueryFullResult, QueryResultMeta} from '../../../../types/query-tracker/api';
+import {type QueryFullResult, type QueryResultMeta} from '../../../../types/query-tracker/api';
 import './QueryFullResultList.scss';
 import {QueryFullResultRow} from './QueryFullResultRow';
-import {QueryEngine} from '../../../../../shared/constants/engines';
+import {type QueryEngine} from '../../../../../shared/constants/engines';
 
 type Props = {
     fullResult: Required<QueryResultMeta>['full_result'];

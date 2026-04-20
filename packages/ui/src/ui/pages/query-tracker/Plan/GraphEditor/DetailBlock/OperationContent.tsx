@@ -1,5 +1,5 @@
-import React, {FC} from 'react';
-import {NodeProgress} from '../../models/plan';
+import React, {type FC} from 'react';
+import {type NodeProgress} from '../../models/plan';
 import './OperationContent.scss';
 import {JobItem} from './JobItem';
 import cn from 'bem-cn-lite';

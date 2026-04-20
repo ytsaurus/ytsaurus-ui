@@ -1,4 +1,4 @@
-import React, {FC, useRef} from 'react';
+import React, {type FC, useRef} from 'react';
 import KeyIcon from '@gravity-ui/icons/svgs/key.svg';
 import {Button, Icon} from '@gravity-ui/uikit';
 import {QueryTokenDropdown} from './QueryTokenDropdown';

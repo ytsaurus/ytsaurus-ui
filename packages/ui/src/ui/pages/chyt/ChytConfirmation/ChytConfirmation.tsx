@@ -8,7 +8,7 @@ import format from '../../../common/hammer/format';
 
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import {Bold} from '@ytsaurus/components';
-import {YTError} from '../../../types';
+import {type YTError} from '../../../types';
 import {useDispatch} from '../../../store/redux-hooks';
 import {chytListAction} from '../../../store/actions/chyt/list';
 

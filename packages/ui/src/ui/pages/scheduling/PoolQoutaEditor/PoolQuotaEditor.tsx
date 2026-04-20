@@ -3,10 +3,10 @@ import React from 'react';
 import isEqual_ from 'lodash/isEqual';
 import map_ from 'lodash/map';
 
-import QuotaEditor, {QuotaEditorProps} from '../../../components/QuotaEditor/QuotaEditor';
+import QuotaEditor, {type QuotaEditorProps} from '../../../components/QuotaEditor/QuotaEditor';
 import isEmpty_ from 'lodash/isEmpty';
-import {RootState} from '../../../store/reducers';
-import {ConnectedProps, connect} from 'react-redux';
+import {type RootState} from '../../../store/reducers';
+import {type ConnectedProps, connect} from 'react-redux';
 import {useSelector} from '../../../store/redux-hooks';
 import {getSchedulingPoolsMapByName} from '../../../store/selectors/scheduling/scheduling-pools';
 import {
@@ -14,7 +14,7 @@ import {
     getSchedulingSourcesOfEditItemSkipParent,
 } from '../../../store/selectors/scheduling/scheduling';
 import Select from '../../../components/Select/Select';
-import {PoolResourceType, getPoolResourceInfo} from '../../../utils/scheduling/scheduling';
+import {type PoolResourceType, getPoolResourceInfo} from '../../../utils/scheduling/scheduling';
 
 interface Props {
     resourceType: PoolResourceType;

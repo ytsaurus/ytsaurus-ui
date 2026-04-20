@@ -8,7 +8,7 @@ import {YTErrorBlock} from '../../../components/Error/Error';
 import Icon from '../../../components/Icon/Icon';
 import {YTDFDialog} from '../../../components/Dialog';
 import Yson from '../../../components/Yson/Yson';
-import {UnipikaSettings} from '../../../components/Yson/StructuredYson/StructuredYsonTypes';
+import {type UnipikaSettings} from '../../../components/Yson/StructuredYson/StructuredYsonTypes';
 import {
     linkPoolWithPoolTree,
     makeTabbedDialogFieldsFromDescription,
@@ -25,14 +25,14 @@ import {
 import {getEditJsonYsonSettings} from '../../../store/selectors/thor/unipika';
 import {chytLoadCliqueSpeclet} from '../../../store/actions/chyt/speclet';
 import {chytEditOptions, chytLoadCliqueOptions} from '../../../store/actions/chyt/options';
-import {ChytCliqueOptionsState} from '../../../store/reducers/chyt/options';
+import {type ChytCliqueOptionsState} from '../../../store/reducers/chyt/options';
 import {
     selectChytSpecletData,
     selectChytSpecletDataAlias,
     selectChytSpecletError,
     selectChytSpecletLoaded,
 } from '../../../store/selectors/chyt/speclet';
-import {YTError} from '../../../../@types/types';
+import {type YTError} from '../../../../@types/types';
 import {WaitForDefaultPoolTree} from '../../../hooks/global-pool-trees';
 
 import './ChytPageCliqueSpeclet.scss';

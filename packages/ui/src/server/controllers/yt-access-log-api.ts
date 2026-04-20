@@ -1,7 +1,7 @@
 import axios from 'axios';
 import isEmpty_ from 'lodash/isEmpty';
 import qs from 'qs';
-import type {Request, Response} from '../../@types/core';
+import {type Request, type Response} from '../../@types/core';
 import ServerFactory from '../ServerFactory';
 import {
     ErrorWithCode,

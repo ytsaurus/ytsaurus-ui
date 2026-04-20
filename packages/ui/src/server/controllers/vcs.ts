@@ -1,5 +1,5 @@
-import {AppRouteHandler, Request, Response} from '@gravity-ui/expresskit';
-import {VcsRepository} from '../../shared/vcs';
+import {type AppRouteHandler, type Request, type Response} from '@gravity-ui/expresskit';
+import {type VcsRepository} from '../../shared/vcs';
 import {ErrorWithCode} from '../utils';
 import {VcsFactory} from '../components/vcs';
 import {sendApiError} from '../utils/sendApiError';

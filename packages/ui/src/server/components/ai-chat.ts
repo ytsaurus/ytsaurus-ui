@@ -1,8 +1,8 @@
 import axios from 'axios';
-import {AIChatConfig, GetConversationItemsResponse} from '../../shared/ai-chat';
-import {CreateConversationRequest, SendMessageRequest} from '../types/ai-chat';
+import {type AIChatConfig, type GetConversationItemsResponse} from '../../shared/ai-chat';
+import {type CreateConversationRequest, type SendMessageRequest} from '../types/ai-chat';
 import serverFactory from '../ServerFactory';
-import {Request} from '@gravity-ui/expresskit';
+import {type Request} from '@gravity-ui/expresskit';
 
 const TITLE_CONTEXT_ITEMS_COUNT = 5;
 

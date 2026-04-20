@@ -1,4 +1,4 @@
-import {IRange, Position, editor} from 'monaco-editor';
+import {type IRange, type Position, type editor} from 'monaco-editor';
 
 export const getRangeToInsertSuggestion = (
     model: editor.ITextModel,

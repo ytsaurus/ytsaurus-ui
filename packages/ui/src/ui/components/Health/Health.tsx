@@ -2,11 +2,11 @@ import React from 'react';
 
 import hammer from '../../common/hammer';
 
-import Label, {LabelTheme} from '../../components/Label';
+import Label, {type LabelTheme} from '../../components/Label';
 
-import {YTHealth} from '../../types';
+import {type YTHealth} from '../../types';
 
-import {StrawberryCliqueHealthType} from '../../utils/strawberryControllerApi';
+import {type StrawberryCliqueHealthType} from '../../utils/strawberryControllerApi';
 
 const HEALTH_TO_THEME: {[health: string]: LabelTheme} = {
     good: 'success',

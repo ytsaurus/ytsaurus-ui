@@ -1,7 +1,7 @@
-import {ControlField, DialogField} from './Dialog';
+import {type ControlField, type DialogField} from './Dialog';
 
 import format from '../../common/hammer/format';
-import {UnipikaSettings} from '../Yson/StructuredYson/StructuredYsonTypes';
+import {type UnipikaSettings} from '../Yson/StructuredYson/StructuredYsonTypes';
 
 export type OptionsGroup = {
     title: string;

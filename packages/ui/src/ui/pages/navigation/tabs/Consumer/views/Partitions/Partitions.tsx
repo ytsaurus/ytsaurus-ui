@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 import {useSelector} from '../../../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 import {createSelector} from 'reselect';
-import type {Column, Settings} from '@gravity-ui/react-data-table';
+import {type Column, type Settings} from '@gravity-ui/react-data-table';
 
 import format from '../../../../../../common/hammer/format';
 import {DataTableYT} from '../../../../../../components/DataTableYT';
@@ -17,10 +17,10 @@ import {
     number,
 } from '../../../../../../pages/navigation/tabs/Queue/utils/column-builder';
 import {loadConsumerPartitions} from '../../../../../../store/actions/navigation/tabs/consumer/partitions';
-import type {RootState} from '../../../../../../store/reducers';
-import type {TPerformanceCounters} from '../../../../../../store/reducers/navigation/tabs/queue/types';
+import {type RootState} from '../../../../../../store/reducers';
+import {type TPerformanceCounters} from '../../../../../../store/reducers/navigation/tabs/queue/types';
 import {
-    SelectedPartition,
+    type SelectedPartition,
     getConsumerPartitionsColumns,
     getConsumerRateMode,
     getConsumerTimeWindow,

@@ -1,9 +1,9 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 import {getAclFilterExpandedSubjects} from '../../store/selectors/acl-filters';
 import {ACL_CHANGE_FILTERS} from '../../constants/acl';
 
-import {AclFiltersAction, AclFiltersState} from '../reducers/acl/acl-filters';
-import {RootState} from '../../store/reducers';
+import {type AclFiltersAction, type AclFiltersState} from '../reducers/acl/acl-filters';
+import {type RootState} from '../../store/reducers';
 
 export function changeApproversSubjectFilter({
     approversSubject,

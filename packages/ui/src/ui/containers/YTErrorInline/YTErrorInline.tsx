@@ -3,10 +3,10 @@ import cn from 'bem-cn-lite';
 
 import {Flex, Text} from '@gravity-ui/uikit';
 
-import {YTError} from '../../types';
+import {type YTError} from '../../types';
 
 import ypath from '../../common/thor/ypath';
-import {YTErrorBlockProps} from '../../components/Block/Block';
+import {type YTErrorBlockProps} from '../../components/Block/Block';
 import {ClickableText} from '../../components/ClickableText/ClickableText';
 import {showErrorPopup, unescapeSlashX} from '../../utils/utils';
 import i18n from './i18n';

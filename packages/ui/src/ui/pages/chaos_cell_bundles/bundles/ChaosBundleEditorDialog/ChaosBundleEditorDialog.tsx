@@ -17,13 +17,13 @@ import Tabs from '../../../../components/Tabs/Tabs';
 import {Bold} from '@ytsaurus/components';
 import {AccountsSuggestWithLoading} from '../../../../pages/accounts/AccountsSuggest';
 import {WithHeader} from '../../../../pages/accounts/tabs/general/Editor/content/GeneralContent';
-import type {
-    BundleResourceType,
-    EditBundleParams,
-    setBundleQuota,
-    setBunndleAttributes,
+import {
+    type BundleResourceType,
+    type EditBundleParams,
+    type setBundleQuota,
+    type setBunndleAttributes,
 } from '../../../../store/actions/tablet_cell_bundles/tablet-cell-bundle-editor';
-import {ChaosCellBundleEditorState} from '../../../../store/reducers/chaos_cell_bundles/tablet-cell-bundle-editor';
+import {type ChaosCellBundleEditorState} from '../../../../store/reducers/chaos_cell_bundles/tablet-cell-bundle-editor';
 import {selectIsAdmin} from '../../../../store/selectors/global/is-developer';
 import {calcProgressProps} from '../../../../utils/utils';
 

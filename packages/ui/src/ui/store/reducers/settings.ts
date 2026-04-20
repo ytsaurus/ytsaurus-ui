@@ -1,12 +1,12 @@
-import remoteProvider, {SettingsProvider} from '../../common/utils/settings-remote-provider';
+import remoteProvider, {type SettingsProvider} from '../../common/utils/settings-remote-provider';
 
 import localProvider from '../../common/utils/settings-local-provider';
 
 import {SET_SETTING_VALUE, UNSET_SETTING_VALUE, UPDATE_SETTING_DATA} from '../../constants/index';
 import {getConfigData} from '../../config/ui-settings';
 import {YT} from '../../config/yt-config';
-import {ActionD} from '../../types';
-import {DescribedSettings} from '../../../shared/constants/settings-types';
+import {type ActionD} from '../../types';
+import {type DescribedSettings} from '../../../shared/constants/settings-types';
 
 export interface SettingsState {
     provider: SettingsProvider;

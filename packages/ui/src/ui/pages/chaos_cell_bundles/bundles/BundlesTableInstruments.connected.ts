@@ -8,8 +8,8 @@ import {
     setChaosFirstBundleAsActive,
     setChaosPartial,
 } from '../../../store/actions/chaos_cell_bundles';
-import type {RootState} from '../../../store/reducers';
-import type {BundlesTableMode} from '../../../store/reducers/chaos_cell_bundles';
+import {type RootState} from '../../../store/reducers';
+import {type BundlesTableMode} from '../../../store/reducers/chaos_cell_bundles';
 import {
     selectChaosBundlesAccountFilter,
     selectChaosBundlesNameFilter,

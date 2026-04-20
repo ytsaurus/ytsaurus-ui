@@ -1,7 +1,7 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {produce} from 'immer';
 
-import {YTError} from '../../../../../../@types/types';
+import {type YTError} from '../../../../../../@types/types';
 import {mergeStateOnClusterChange} from '../../../utils';
 
 export interface AttributesState {

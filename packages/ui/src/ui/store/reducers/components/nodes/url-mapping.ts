@@ -13,7 +13,7 @@ import {COMPONENTS_NODES_TABLE_ID} from '../../../../constants/components/nodes/
 import {parseSortState} from '../../../../utils';
 
 import {
-    TagFilter,
+    type TagFilter,
     groupFilterInitialState,
     initialState,
 } from '../../../../store/reducers/components/nodes/setup/setup';
@@ -24,8 +24,8 @@ import {
     parseSerializeString,
     parseSerializeSymbolCreate,
 } from '../../../../utils/parse-serialize';
-import {RootState} from '../../../../store/reducers';
-import {LocationParameters} from '../../../../store/location';
+import {type RootState} from '../../../../store/reducers';
+import {type LocationParameters} from '../../../../store/location';
 
 const {
     from: {value: fromInitialValue},

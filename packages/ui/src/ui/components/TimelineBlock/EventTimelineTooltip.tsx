@@ -1,4 +1,4 @@
-import React, {FC, PropsWithChildren, useRef} from 'react';
+import React, {type FC, type PropsWithChildren, useRef} from 'react';
 import {Popup} from '@gravity-ui/uikit';
 import './EventTimelineTooltip.scss';
 import cn from 'bem-cn-lite';

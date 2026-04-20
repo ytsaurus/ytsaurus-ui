@@ -1,8 +1,8 @@
 import React from 'react';
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import {Dispatch} from 'redux';
+import {type Dispatch} from 'redux';
 
 import Link from '../../../../components/Link/Link';
 
@@ -16,7 +16,7 @@ import {
 } from '../../../../store/actions/navigation/modals/path-editing-popup';
 import {HIDE_ERROR} from '../../../../constants/navigation/modals/path-editing-popup';
 import CancelHelper from '../../../../utils/cancel-helper';
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {toaster} from '../../../../utils/toaster';
 
 const requests = new CancelHelper();

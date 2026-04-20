@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {isAuthorized} from '../utils/authorization';
 import {getUserYTApiSetup} from '../components/requestsSetup';
-import {AppMiddleware} from '@gravity-ui/expresskit';
+import {type AppMiddleware} from '@gravity-ui/expresskit';
 import {getXSRFToken} from '../components/cluster-queries';
 import {sendError} from '../utils';
 

@@ -1,9 +1,9 @@
 import cn from 'bem-cn-lite';
 import moment from 'moment';
 import * as React from 'react';
-import {FC, useMemo, useState} from 'react';
+import {type FC, useMemo, useState} from 'react';
 import {Alert, Button} from '@gravity-ui/uikit';
-import type {FormApi} from '../../../components/Dialog';
+import {type FormApi} from '../../../components/Dialog';
 import truncate_ from 'lodash/truncate';
 import Modal from '../../../components/Modal/Modal';
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
@@ -14,10 +14,10 @@ import {
     manageTokensRevokeToken,
 } from '../../../store/actions/manage-tokens';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
-import {AuthenticationToken, selectManageTokens} from '../../../store/selectors/manage-tokens';
+import {type AuthenticationToken, selectManageTokens} from '../../../store/selectors/manage-tokens';
 import {selectCurrentUserName} from '../../../store/selectors/global';
 import Icon from '../../../components/Icon/Icon';
-import {YTError} from '../../../../@types/types';
+import {type YTError} from '../../../../@types/types';
 import {ClipboardButton} from '@ytsaurus/components';
 import {DataTableYT} from '../../../components/DataTableYT';
 import {

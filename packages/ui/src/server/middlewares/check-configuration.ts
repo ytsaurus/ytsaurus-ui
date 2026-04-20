@@ -1,6 +1,6 @@
-import type {Request, Response} from 'express';
-import {AppMiddleware} from '@gravity-ui/expresskit';
-import {NodeKit} from '@gravity-ui/nodekit';
+import {type Request, type Response} from 'express';
+import {type AppMiddleware} from '@gravity-ui/expresskit';
+import {type NodeKit} from '@gravity-ui/nodekit';
 
 function checkConfigurationMiddleware(errors: Array<string>): AppMiddleware {
     return function checkConfiguration(_req: Request, res: Response) {

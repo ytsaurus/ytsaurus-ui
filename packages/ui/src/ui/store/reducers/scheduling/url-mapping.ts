@@ -9,7 +9,7 @@ import {
 
 import {parseSortStateArray, serializeSortStateArray} from '../../../utils/url-mapping';
 
-import {LocationParameters} from '../../../store/location';
+import {type LocationParameters} from '../../../store/location';
 import {prometheusDashboardParams} from '../prometheusDashboard/url-mapping';
 
 export const schedulingParams = {

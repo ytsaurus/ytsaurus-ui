@@ -1,6 +1,6 @@
-import type {Request} from 'express';
-import {AppMiddleware} from '@gravity-ui/expresskit';
-import {AuthWay} from '../../shared/constants';
+import {type Request} from 'express';
+import {type AppMiddleware} from '@gravity-ui/expresskit';
+import {type AuthWay} from '../../shared/constants';
 import {isUserOAuthLogged} from '../components/oauth';
 
 export function isAuthorized(req: Request) {

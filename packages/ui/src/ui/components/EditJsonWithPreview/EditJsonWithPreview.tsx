@@ -4,11 +4,11 @@ import {Text} from '@gravity-ui/uikit';
 
 import {
     EditTextWithPreview,
-    EditTextWithPreviewProps,
+    type EditTextWithPreviewProps,
 } from '../../components/EditTextWithPreview/EditTextWithPreview';
-import Yson, {YsonProps} from '../../components/Yson/Yson';
+import Yson, {type YsonProps} from '../../components/Yson/Yson';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
-import {DialogControlProps} from '../../components/Dialog/Dialog.types';
+import {type DialogControlProps} from '../../components/Dialog/Dialog.types';
 
 import i18n from './i18n';
 

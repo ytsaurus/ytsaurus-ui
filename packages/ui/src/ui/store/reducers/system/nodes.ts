@@ -1,11 +1,11 @@
-import {Action} from 'redux';
+import {type Action} from 'redux';
 
-import {YTError} from '../../../../@types/types';
-import {CypressNode} from '../../../../shared/yt-types';
+import {type YTError} from '../../../../@types/types';
+import {type CypressNode} from '../../../../shared/yt-types';
 import {SYSTEM_FETCH_NODES} from '../../../constants/index';
-import {ActionD} from '../../../types';
+import {type ActionD} from '../../../types';
 import {mergeStateOnClusterChange} from '../utils';
-import type {HttpProxiesState, RoleGroupInfo} from './proxies';
+import {type HttpProxiesState, type RoleGroupInfo} from './proxies';
 
 export type SystemNodesState = {
     fetching: boolean;

@@ -21,7 +21,7 @@ import ColumnHeader from '../../../../../components/ColumnHeader/ColumnHeader';
 import {YTErrorBlock} from '../../../../../components/Error/Error';
 import {Host} from '../../../../../containers/Host/Host';
 import {DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR_DOUBLE_HEIGHT} from '../../../../../components/DataTableYT/constants';
-import {ClipboardButton, Column} from '@ytsaurus/components';
+import {ClipboardButton, type Column} from '@ytsaurus/components';
 import {DataTableYT} from '../../../../../components/DataTableYT';
 import AttributesButton from '../../../../../components/AttributesButton/AttributesButton';
 import {showErrorPopup} from '../../../../../utils/utils';

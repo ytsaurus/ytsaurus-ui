@@ -1,5 +1,5 @@
-import axios, {AxiosResponse, CancelToken} from 'axios';
-import {YTError} from '../@types/types';
+import axios, {type AxiosResponse, type CancelToken} from 'axios';
+import {type YTError} from '../@types/types';
 
 export const TABLET_ERRORS_MANAGER_POST_ACTIONS = new Set([
     'tablet_errors_by_bundle',

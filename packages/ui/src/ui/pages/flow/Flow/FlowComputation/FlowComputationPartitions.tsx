@@ -1,13 +1,13 @@
 import cn from 'bem-cn-lite';
 import React from 'react';
-import {FlowComputationPartitionType} from '../../../../../shared/yt-types';
+import {type FlowComputationPartitionType} from '../../../../../shared/yt-types';
 import format from '../../../../common/hammer/format';
 import {concatByAnd} from '../../../../common/hammer/predicate';
 import ClickableAttributesButton from '../../../../components/AttributesButton/ClickableAttributesButton';
 import {
     DataTableGravity,
     TableCell,
-    tanstack,
+    type tanstack,
     useTable,
 } from '../../../../components/DataTableGravity';
 import Link from '../../../../components/Link/Link';

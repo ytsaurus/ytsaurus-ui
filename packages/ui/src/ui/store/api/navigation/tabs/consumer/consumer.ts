@@ -1,8 +1,8 @@
-import {BaseQueryApi} from '@reduxjs/toolkit/query';
+import {type BaseQueryApi} from '@reduxjs/toolkit/query';
 
 import {rootApi} from '../../../../../store/api';
 
-import {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 import {getPath} from '../../../../../store/selectors/navigation';
 import {getTargetQueue} from '../../../../../store/selectors/navigation/tabs/consumer';
 import {selectCluster} from '../../../../../store/selectors/global';

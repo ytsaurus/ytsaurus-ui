@@ -1,7 +1,7 @@
-import React, {FC, useCallback} from 'react';
+import React, {type FC, useCallback} from 'react';
 import ClustersPanel, {ClusterGroupItem} from './ClustersPanel';
 import Icon from '../../components/Icon/Icon';
-import {ClusterConfig} from '../../../shared/yt-types';
+import {type ClusterConfig} from '../../../shared/yt-types';
 import cn from 'bem-cn-lite';
 import './ClusterPageHeader.scss';
 import {Popup} from '@gravity-ui/uikit';

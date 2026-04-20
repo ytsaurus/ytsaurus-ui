@@ -4,8 +4,8 @@ import {createColumnHelper} from '@gravity-ui/table/tanstack';
 
 import format from '../../../../../../common/hammer/format';
 
-import {RootState} from '../../../../../../store/reducers';
-import {ServiceInfo} from '../../../../../../store/api/dashboard2/services/services';
+import {type RootState} from '../../../../../../store/reducers';
+import {type ServiceInfo} from '../../../../../../store/api/dashboard2/services/services';
 import {selectServicesTypeFilter} from '../../../../../../store/selectors/dashboard2/services';
 
 import {WidgetTable} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetTable/WidgetTable';
@@ -17,7 +17,7 @@ import {Health} from '../../../../../../components/Health/Health';
 import {Type} from './cells/Type';
 
 import {useServicesWidget} from '../hooks/use-services-widget';
-import type {ServicesWidgetProps} from '../types';
+import {type ServicesWidgetProps} from '../types';
 
 import i18n from '../i18n';
 

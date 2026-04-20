@@ -3,7 +3,7 @@ import block from 'bem-cn-lite';
 import {Button, Icon, Text} from '@gravity-ui/uikit';
 import {useDispatch} from '../../../../store/redux-hooks';
 import format from '../../../../common/hammer/format';
-import {QueryItem} from '../../../../types/query-tracker/api';
+import {type QueryItem} from '../../../../types/query-tracker/api';
 import {QueryDuration} from '../../QueryDuration';
 import stopIcon from '../../../../assets/img/svg/icons/stop-circle.svg';
 

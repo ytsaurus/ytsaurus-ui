@@ -5,9 +5,12 @@ import {isRetryFutile} from '../../../utils/index';
 import {showErrorPopup} from '../../../utils/utils';
 import {selectCluster} from '../../../store/selectors/global';
 import {extractProxyCounters, extractRoleGroups} from '../../../utils/system/proxies';
-import type {HttpProxiesAction, RoleGroupItemInfo} from '../../../store/reducers/system/proxies';
-import {ThunkAction} from 'redux-thunk';
-import type {RootState} from '../../../store/reducers';
+import {
+    type HttpProxiesAction,
+    type RoleGroupItemInfo,
+} from '../../../store/reducers/system/proxies';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../../store/reducers';
 import {FETCH_PROXIES} from '../../../constants/system/nodes';
 import {toaster} from '../../../utils/toaster';
 

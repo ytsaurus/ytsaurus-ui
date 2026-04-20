@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 
 import ColumnsButton from '../../../../../../pages/navigation/tabs/Queue/ColumnsButton/ColumnsButton';
 import {setSettingsNavigationQueuePartitionsVisibility} from '../../../../../../store/actions/settings/settings';
-import type {RootState} from '../../../../../../store/reducers';
+import {type RootState} from '../../../../../../store/reducers';
 import {getSettingsNavigationQueuePartitionsVisibility} from '../../../../../../store/selectors/settings/settings-ts';
 
 const allColumns = [

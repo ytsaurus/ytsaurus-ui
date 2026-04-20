@@ -1,4 +1,4 @@
-import {Action} from 'redux';
+import {type Action} from 'redux';
 
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 import {
@@ -24,9 +24,9 @@ import {
     SCHEDULING_EDIT_POOL_SUCCESS,
     TOGGLE_EDIT_VISIBILITY,
 } from '../../../constants/scheduling';
-import {ActionD, SortState, YTError} from '../../../types';
-import {SchedulingContentMode} from '../../../store/selectors/scheduling/scheduling';
-import {PoolTreeNode} from '../../../utils/scheduling/pool-child';
+import {type ActionD, type SortState, type YTError} from '../../../types';
+import {type SchedulingContentMode} from '../../../store/selectors/scheduling/scheduling';
+import {type PoolTreeNode} from '../../../utils/scheduling/pool-child';
 
 export interface SchedulingEphemeralState {
     loading: boolean;

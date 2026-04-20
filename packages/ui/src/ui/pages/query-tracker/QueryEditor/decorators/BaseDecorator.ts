@@ -1,4 +1,4 @@
-import * as monaco from 'monaco-editor';
+import type * as monaco from 'monaco-editor';
 
 export abstract class BaseDecorator {
     protected editor: monaco.editor.IStandaloneCodeEditor;

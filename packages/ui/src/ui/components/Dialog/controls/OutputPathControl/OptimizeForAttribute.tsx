@@ -1,5 +1,5 @@
-import React, {FC} from 'react';
-import {Attribute} from '../../../../store/reducers/navigation/modals/tableMergeSortModalSlice';
+import React, {type FC} from 'react';
+import {type Attribute} from '../../../../store/reducers/navigation/modals/tableMergeSortModalSlice';
 import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 
 import i18n from './i18n';

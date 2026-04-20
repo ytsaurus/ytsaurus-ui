@@ -1,4 +1,4 @@
-import type {Action} from 'redux';
+import {type Action} from 'redux';
 
 import {
     MANAGE_TOKENS_MODALS_CLOSE,

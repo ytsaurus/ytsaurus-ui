@@ -1,7 +1,7 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Markdown} from '../../../components/Markdown/Markdown';
 import {ClipboardButton, Flex} from '@gravity-ui/uikit';
-import {ChatAnswer} from '../../../types/ai-chat';
+import {type ChatAnswer} from '../../../types/ai-chat';
 import './AnswerBody.scss';
 import cn from 'bem-cn-lite';
 

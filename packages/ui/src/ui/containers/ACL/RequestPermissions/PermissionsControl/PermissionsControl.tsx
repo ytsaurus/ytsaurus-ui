@@ -5,7 +5,7 @@ import isEmpty_ from 'lodash/isEmpty';
 import map_ from 'lodash/map';
 import React, {Component} from 'react';
 import i18nPermissionValues from '../../../../containers/ACL/i18n-permission-values';
-import {YTPermissionTypeUI} from '../../../../utils/acl/acl-api';
+import {type YTPermissionTypeUI} from '../../../../utils/acl/acl-api';
 import './PermissionsControl.scss';
 
 const block = cn('acl-permissions-control');

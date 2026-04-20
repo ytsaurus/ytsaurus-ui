@@ -4,7 +4,10 @@ import ypath from '../../../common/thor/ypath';
 import cn from 'bem-cn-lite';
 
 import OperationWeight from '../../../pages/operations/OperationWeight/OperationWeight';
-import {OperationPool, OperationPoolProps} from '../../../components/OperationPool/OperationPool';
+import {
+    OperationPool,
+    type OperationPoolProps,
+} from '../../../components/OperationPool/OperationPool';
 import CollapsibleList from '../../../components/CollapsibleList/CollapsibleList';
 import Icon from '../../../components/Icon/Icon';
 import Link from '../../../components/Link/Link';

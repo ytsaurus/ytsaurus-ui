@@ -2,8 +2,8 @@ import {
     GET_DOCUMENT,
     SET_DOCUMENT_EDIT_MODE,
 } from '../../../../constants/navigation/content/document';
-import {Action} from 'redux';
-import {ActionD} from '../../../../types';
+import {type Action} from 'redux';
+import {type ActionD} from '../../../../types';
 
 export type NavigationDocumentState = {
     loading: boolean;

@@ -18,11 +18,11 @@ import {flags} from '../../utils/index';
 import {listAllGroups} from '../../utils/users-groups';
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../rum/rum-wrap-api';
 import UIFactory from '../../UIFactory';
-import type {Dispatch} from 'redux';
-import type {Group} from '../../store/reducers/groups/table';
-import type {OrderType} from '../../utils/sort-helpers';
-import type {RootState} from '../../store/reducers';
-import type {GroupSubject, Subject, UserSubject} from '../../utils/acl/acl-types';
+import {type Dispatch} from 'redux';
+import {type Group} from '../../store/reducers/groups/table';
+import {type OrderType} from '../../utils/sort-helpers';
+import {type RootState} from '../../store/reducers';
+import {type GroupSubject, type Subject, type UserSubject} from '../../utils/acl/acl-types';
 import {getExternalSystem} from '../../utils/getExternalSystem';
 
 // Table

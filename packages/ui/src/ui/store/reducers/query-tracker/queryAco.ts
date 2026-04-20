@@ -1,6 +1,6 @@
-import {Action} from 'redux';
-import {ActionD} from '../../../types';
-import {GetQueryTrackerInfoResponse} from '../../../../shared/yt-types';
+import {type Action} from 'redux';
+import {type ActionD} from '../../../types';
+import {type GetQueryTrackerInfoResponse} from '../../../../shared/yt-types';
 import createActionTypes, {createPrefix} from '../../../constants/utils';
 
 const PREFIX = createPrefix('query-tracker/QUERY_ACO');

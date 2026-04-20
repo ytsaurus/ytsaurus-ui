@@ -2,12 +2,12 @@ import map_ from 'lodash/map';
 
 import format from '../../../../common/hammer/format';
 
-import {ListQueriesParams} from '../../../../../shared/yt-types';
+import {type ListQueriesParams} from '../../../../../shared/yt-types';
 import {YTApiId, ytApiV4Id} from '../../../../rum/rum-wrap-api';
 import {durationDates} from '../../../../utils/date';
-import {QueryStatus} from '../../../../types/query-tracker';
-import {QueriesListResponse} from '../../../../types/query-tracker/api';
-import {YTError} from '../../../../types';
+import {type QueryStatus} from '../../../../types/query-tracker';
+import {type QueriesListResponse} from '../../../../types/query-tracker/api';
+import {type YTError} from '../../../../types';
 import {UNKNOWN_ITEM_NAME} from '../../../../constants/dashboard2';
 import {dateTimeParse} from '../../../../utils/date-utils';
 

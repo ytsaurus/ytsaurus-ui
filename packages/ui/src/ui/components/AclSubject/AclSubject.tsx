@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {SubjectCard} from '../../components/SubjectLink/SubjectLink';
-import {Subject} from '../../utils/acl/acl-types';
+import {type Subject} from '../../utils/acl/acl-types';
 
 export type AclSubjectProps = {
     subject: Subject;

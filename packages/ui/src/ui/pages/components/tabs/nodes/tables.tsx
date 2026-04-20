@@ -14,7 +14,7 @@ import {COMPONENTS_NODES_TABLE_ID} from '../../../../constants/components/nodes/
 import {DESC_ASC_UNORDERED, compareArraysBySizeThenByItems} from '../../../../utils/sort-helpers';
 
 import Version from '../../../../pages/components/tabs/nodes/Version';
-import StatusBlock, {StatusBlockTheme} from '../../../../components/StatusBlock/StatusBlock';
+import StatusBlock, {type StatusBlockTheme} from '../../../../components/StatusBlock/StatusBlock';
 import {ClipboardButton} from '@ytsaurus/components';
 import NodeActions from '../../../../pages/components/tabs/nodes/NodeActions/NodeActions';
 import MemoryProgress from '../../../../pages/components/tabs/nodes/MemoryProgress/MemoryProgress';
@@ -22,11 +22,14 @@ import {Host} from '../../../../containers/Host/Host';
 
 import hammer from '../../../../common/hammer';
 import {TABLET_SLOTS, renderLabel} from '../../../../components/templates/components/nodes/nodes';
-import type {Node, TabletSlotState} from '../../../../store/reducers/components/nodes/nodes/node';
-import type {FIX_MY_TYPE} from '../../../../types';
+import {
+    type Node,
+    type TabletSlotState,
+} from '../../../../store/reducers/components/nodes/nodes/node';
+import {type FIX_MY_TYPE} from '../../../../types';
 import {NodeColumnBanned, NodeColumnState} from '../../../../pages/components/tabs/NodeColumns';
 import {NodesColumnHeader} from '../../../../pages/components/tabs/nodes/Nodes/NodesColumnHeader';
-import {ColumnInfo} from '../../../../components/ElementsTable/ElementsTableHeader';
+import {type ColumnInfo} from '../../../../components/ElementsTable/ElementsTableHeader';
 import {progressText} from '../../../../utils/progress';
 
 import './tables.scss';

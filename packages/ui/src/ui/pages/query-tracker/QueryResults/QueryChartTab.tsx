@@ -1,7 +1,7 @@
-import {FC, useEffect} from 'react';
+import {type FC, useEffect} from 'react';
 import {useDispatch} from '../../../store/redux-hooks';
 import UIFactory from '../../../UIFactory';
-import {QueryItem} from '../../../types/query-tracker/api';
+import {type QueryItem} from '../../../types/query-tracker/api';
 import {loadQueryResult} from '../../../store/actions/query-tracker/queryResult';
 
 type Props = {

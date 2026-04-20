@@ -15,7 +15,7 @@ import i18n from './i18n';
 import Toolbar from './Toolbar';
 import {getMinWidth} from './get-min-width';
 import {filterStatisticTree, prepareStatisticTs} from './prepare-statistic.ts';
-import {Statistic, StatisticTree, TreeState} from './types';
+import {type Statistic, type StatisticTree, type TreeState} from './types';
 
 import {formatByUnit} from './utils';
 import './StatisticTable.scss';

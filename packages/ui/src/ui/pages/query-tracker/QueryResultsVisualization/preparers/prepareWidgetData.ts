@@ -1,8 +1,11 @@
-import type {ChartAxis, ChartData} from '@gravity-ui/chartkit/gravity-charts';
-import {QueryResult} from './types';
+import {type ChartAxis, type ChartData} from '@gravity-ui/chartkit/gravity-charts';
+import {type QueryResult} from './types';
 import {ChartType} from '../constants';
 import {preparePie} from './preparePie';
-import {Config, VisualizationState} from '../../../../store/reducers/query-tracker/queryChartSlice';
+import {
+    type Config,
+    type VisualizationState,
+} from '../../../../store/reducers/query-tracker/queryChartSlice';
 import {DateTime64Types, DateTimeTypes} from '../../../../types/query-tracker/yqlTypes';
 import {prepareData} from './prepareData';
 import {getPointValue} from './getPointData';

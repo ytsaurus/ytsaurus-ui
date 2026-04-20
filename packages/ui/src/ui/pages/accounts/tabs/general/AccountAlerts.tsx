@@ -7,7 +7,10 @@ import cn from 'bem-cn-lite';
 import format from '../../../../common/hammer/format';
 
 import {MetaTable} from '@ytsaurus/components';
-import {AccountParsedData, visitResourceFields} from '../../../../utils/accounts/accounts-selector';
+import {
+    type AccountParsedData,
+    visitResourceFields,
+} from '../../../../utils/accounts/accounts-selector';
 import './AccountAlerts.scss';
 
 const block = cn('yt-account-alerts');

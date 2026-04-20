@@ -3,10 +3,10 @@ import {
     CONSUMER_PARTITIONS_LOAD_REQUEST,
     CONSUMER_PARTITIONS_LOAD_SUCCESS,
 } from '../../../../../constants/navigation/tabs/consumer';
-import type {Action} from 'redux';
+import {type Action} from 'redux';
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';
-import type {ActionD, YTError} from '../../../../../types';
-import type {YtConsumerPartition} from './types';
+import {type ActionD, type YTError} from '../../../../../types';
+import {type YtConsumerPartition} from './types';
 
 export interface ConsumerPartitionsState {
     partitionsLoading: boolean;

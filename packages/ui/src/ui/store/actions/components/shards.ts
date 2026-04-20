@@ -8,7 +8,7 @@ import {
     SET_SHARD_NAME,
 } from '../../../constants/components/shards';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import type {AppDispatch} from '../../store.main';
+import {type AppDispatch} from '../../store.main';
 
 const requests = new CancelHelper();
 

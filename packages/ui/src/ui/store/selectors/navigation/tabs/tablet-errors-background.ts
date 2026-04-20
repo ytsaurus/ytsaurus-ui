@@ -1,11 +1,11 @@
 import {createSelector} from 'reselect';
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {calculateLoadingStatus} from '../../../../utils/utils';
 import {getPath} from '../../../../store/selectors/navigation/index';
 
 import reduce_ from 'lodash/reduce';
 
-import {ValueOf, YTError} from '../../../../types';
+import {type ValueOf, type YTError} from '../../../../types';
 import ypath from '../../../../common/thor/ypath';
 
 const getTabletErrorsErrorCount = (state: RootState) =>

@@ -5,8 +5,8 @@ import {
     getColumnGroupSuggestions,
     getColumnLockSuggestions,
 } from '../../../../../store/selectors/navigation/modals/create-table';
-import Suggest, {SuggestItem} from '../../../../../components/Suggest/Suggest';
-import {RootState} from '../../../../../store/reducers';
+import Suggest, {type SuggestItem} from '../../../../../components/Suggest/Suggest';
+import {type RootState} from '../../../../../store/reducers';
 
 interface Props {
     className?: string;

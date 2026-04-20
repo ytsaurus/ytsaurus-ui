@@ -6,22 +6,22 @@ import uniq_ from 'lodash/uniq';
 import {Link, Select} from '@gravity-ui/uikit';
 
 import {
-    CheckPermissionResult,
+    type CheckPermissionResult,
     makeCheckPermissionBatchSubRequest,
 } from '../../../shared/utils/check-permission';
 import {
-    DashboardInfo,
-    PluginRendererDataParams,
-    PrometheusDashboardType,
+    type DashboardInfo,
+    type PluginRendererDataParams,
+    type PrometheusDashboardType,
 } from '../../../shared/prometheus/types';
 import {getDashboardPath, makeDiscoverValuesKey} from '../../../shared/prometheus/utils';
-import {YTError} from '../../../@types/types';
+import {type YTError} from '../../../@types/types';
 
 import {getConfigData} from '../../config/ui-settings';
 import {YTErrorBlock} from '../../components/Block/Block';
 import {StickyContainer} from '../../components/StickyContainer/StickyContainer';
 import {YTTimeline} from '../../components/Timeline';
-import {Toolbar, ToolbarItemToWrap} from '../../components/WithStickyToolbar/Toolbar/Toolbar';
+import {Toolbar, type ToolbarItemToWrap} from '../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {YTErrors} from '../../rum/constants';
 import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
 import {usePrometheusDiscoverValuesQuery} from '../../store/api/prometheus';

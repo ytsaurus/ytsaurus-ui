@@ -1,5 +1,5 @@
 import React from 'react';
-import {NodeProgress} from '../../models/plan';
+import {type NodeProgress} from '../../models/plan';
 import {getCssColor} from '../../../../../utils/get-css-color';
 import CirclePlayIcon from '@gravity-ui/icons/svgs/circle-play.svg';
 import CircleCheckIcon from '@gravity-ui/icons/svgs/circle-check.svg';

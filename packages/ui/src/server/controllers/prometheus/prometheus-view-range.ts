@@ -1,8 +1,8 @@
 import axios from 'axios';
-import type {Request, Response} from 'express';
+import {type Request, type Response} from 'express';
 
 import {replaceExprParams} from '../../../shared/prometheus/utils';
-import {QueryRangeData, QueryRangePostData} from '../../../shared/prometheus/types';
+import {type QueryRangeData, type QueryRangePostData} from '../../../shared/prometheus/types';
 
 import {sendAndLogError} from '../../utils';
 import {fetchDashboardDetails} from './prometheus.utils';

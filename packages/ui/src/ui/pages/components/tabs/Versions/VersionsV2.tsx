@@ -1,5 +1,5 @@
 import React from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 import {useDispatch} from '../../../../store/redux-hooks';
 
 import cn from 'bem-cn-lite';
@@ -39,10 +39,10 @@ import {
 import {DEBOUNCE_TIME} from '../../../../constants/components/versions/versions_v2';
 import {useUpdater} from '../../../../hooks/use-updater';
 import VersionsSummary from './VersionSummary';
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 
 import templates, {ColumnAsTime, printColumnAsError} from '../../../../components/templates/utils';
-import {VersionHostInfo} from '../../../../store/reducers/components/versions/versions_v2';
+import {type VersionHostInfo} from '../../../../store/reducers/components/versions/versions_v2';
 import {ClickableId, NodeColumnBanned, NodeColumnState} from '../NodeColumns';
 import {Host} from '../../../../containers/Host/Host';
 

@@ -1,5 +1,5 @@
 import {ROWS_PER_PAGE} from '../../../../constants/pagination';
-import {RootState} from '../../../../store/reducers/index.main';
+import {type RootState} from '../../../../store/reducers/index.main';
 
 export const getTabletErrorsByPathError = (state: RootState) =>
     state.navigation.tabs.tabletErrorsByPath.error;

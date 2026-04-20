@@ -1,5 +1,5 @@
 import React from 'react';
-import {AxiosError, isAxiosError} from 'axios';
+import {type AxiosError, isAxiosError} from 'axios';
 
 import i18n from './i18n';
 import {Flex} from '@gravity-ui/uikit';
@@ -10,7 +10,7 @@ import unipika from '../../common/thor/unipika';
 
 import map_ from 'lodash/map';
 
-import {YTErrorRaw} from '../../../@types/types';
+import {type YTErrorRaw} from '../../../@types/types';
 
 import Icon from '../Icon/Icon';
 import Tabs from '../../components/Tabs/Tabs';
@@ -20,7 +20,7 @@ import './ErrorDetails.scss';
 import {unescapeSlashX} from '../../utils/utils';
 import FormattedText from '../../components/formatters/FormattedText';
 import {isYTError} from '../../../shared/utils';
-import {UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
+import {type UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
 import {ErrorToClipboardButton} from '../../components/ErrorToClipboardButton/ErrorToClipboardButton';
 
 const b = block('elements-error-details');

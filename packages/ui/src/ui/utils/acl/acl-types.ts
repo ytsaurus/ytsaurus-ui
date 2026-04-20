@@ -1,6 +1,6 @@
-import {YTPermissionType} from '../../../shared/yt-types';
-import {YTPermissionTypeUI} from './acl-api';
-import {PreparedRole, SubjectGroupType} from './index';
+import {type YTPermissionType} from '../../../shared/yt-types';
+import {type YTPermissionTypeUI} from './acl-api';
+import {type PreparedRole, type SubjectGroupType} from './index';
 
 export type IdmKindType =
     | 'ui_effective_acl' // ui specific type, used to read @effective_acl

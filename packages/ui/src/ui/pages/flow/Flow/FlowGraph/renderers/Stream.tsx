@@ -4,7 +4,7 @@ import {Flex, Text} from '@gravity-ui/uikit';
 
 import format from '../../../../../common/hammer/format';
 
-import {FlowGraphBlockItem} from '../FlowGraph';
+import {type FlowGraphBlockItem} from '../FlowGraph';
 
 import {FlowMeta} from './FlowMeta';
 

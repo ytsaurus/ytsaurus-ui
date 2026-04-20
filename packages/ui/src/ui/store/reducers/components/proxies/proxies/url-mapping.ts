@@ -6,8 +6,8 @@ import {initialState as tableSortState} from '../../../../../store/reducers/tabl
 import {COMPONENTS_PROXIES_TABLE_ID} from '../../../../../constants/components/proxies/proxies';
 import {parseSortState} from '../../../../../utils';
 import {updateIfChanged} from '../../../../../utils/utils';
-import {RootState} from '../../../../../store/reducers';
-import {LocationParameters} from '../../../../../store/location';
+import {type RootState} from '../../../../../store/reducers';
+import {type LocationParameters} from '../../../../../store/location';
 
 const initialHostFilter = proxiesInitialState.hostFilter;
 const initialStateFilter = proxiesInitialState.stateFilter;

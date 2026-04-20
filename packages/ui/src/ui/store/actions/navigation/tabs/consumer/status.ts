@@ -1,4 +1,4 @@
-import type {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 import {
     CONSUMER_STATUS_LOAD_FAILURE,
@@ -6,10 +6,10 @@ import {
     CONSUMER_STATUS_LOAD_SUCCESS,
 } from '../../../../../constants/navigation/tabs/consumer';
 import {YTApiId, ytApiV3Id} from '../../../../../rum/rum-wrap-api';
-import type {RootState} from '../../../../../store/reducers';
-import type {ConsumerStatusAction} from '../../../../../store/reducers/navigation/tabs/consumer/status';
+import {type RootState} from '../../../../../store/reducers';
+import {type ConsumerStatusAction} from '../../../../../store/reducers/navigation/tabs/consumer/status';
 import {getPath, getTransaction} from '../../../../../store/selectors/navigation';
-import {ConsumerFiltersAction} from '../../../../../store/reducers/navigation/tabs/consumer/filters';
+import {type ConsumerFiltersAction} from '../../../../../store/reducers/navigation/tabs/consumer/filters';
 import {prepareRequest} from '../../../../../utils/navigation';
 import {
     getConsumerRegisteredQueues,

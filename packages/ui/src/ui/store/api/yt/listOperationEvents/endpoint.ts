@@ -1,6 +1,6 @@
 import {
-    ListOperationEventsParameters,
-    ListOperationEventsResponse,
+    type ListOperationEventsParameters,
+    type ListOperationEventsResponse,
 } from '../../../../../shared/yt-types';
 import {YTApiId, ytApiV4Id} from '../../../../rum/rum-wrap-api';
 

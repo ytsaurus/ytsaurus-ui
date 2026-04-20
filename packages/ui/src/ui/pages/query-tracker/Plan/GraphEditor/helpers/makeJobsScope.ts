@@ -1,5 +1,5 @@
-import {NodeProgress} from '../../models/plan';
-import {Stack} from '@gravity-ui/uikit';
+import {type NodeProgress} from '../../models/plan';
+import {type Stack} from '@gravity-ui/uikit';
 import {STATE_COLOR_MAP} from '../../../../../components/YTGraph/constants';
 
 export const makeJobsScope = (total: number, progress: NodeProgress): Stack[] => {

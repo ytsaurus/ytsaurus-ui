@@ -1,4 +1,4 @@
-import type {Conversation} from '../../shared/ai-chat';
+import {type Conversation} from '../../shared/ai-chat';
 
 export interface CreateConversationRequest {
     model: string;

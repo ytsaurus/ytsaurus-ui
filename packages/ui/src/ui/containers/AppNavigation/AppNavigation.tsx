@@ -19,7 +19,7 @@ import {useClusterFromLocation} from '../../hooks/use-cluster';
 
 import './AppNavigation.scss';
 import UIFactory from '../../UIFactory';
-import {AppNavigationProps} from './AppNavigationPageLayout';
+import {type AppNavigationProps} from './AppNavigationPageLayout';
 import {getSettingNavigationPanelExpanded} from '../../store/selectors/settings';
 import {setSettingNavigationPanelExpanded} from '../../store/actions/settings/settings';
 import {setAsideHeaderWidth} from '../../store/actions/global';

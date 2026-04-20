@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
 
-import {DialogError, DialogField, YTDFDialog} from '../../../../components/Dialog';
+import {DialogError, type DialogField, YTDFDialog} from '../../../../components/Dialog';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
     getNavigationTableAttributesValues,
@@ -21,7 +21,7 @@ import {
 import {selectCurrentUserName} from '../../../../store/selectors/global';
 import {makeLink} from '../CreateTableModal/CreateTableModal';
 import './TableSortModal.scss';
-import {ColumnSortByInfo} from './TableSortByControl';
+import {type ColumnSortByInfo} from './TableSortByControl';
 import {docsUrl} from '../../../../config';
 import UIFactory from '../../../../UIFactory';
 import {WaitForDefaultPoolTree} from '../../../../hooks/global-pool-trees';

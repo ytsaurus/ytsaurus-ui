@@ -1,15 +1,15 @@
 import React from 'react';
 import block from 'bem-cn-lite';
-import {AxiosError} from 'axios';
+import {type AxiosError} from 'axios';
 import cloneDeepWith_ from 'lodash/cloneDeepWith';
 
 import {Button, Flex, Text} from '@gravity-ui/uikit';
 
 import hammer from '../../common/hammer';
 
-import {YTError, YTErrorRaw} from '../../../@types/types';
+import {type YTError, type YTErrorRaw} from '../../../@types/types';
 
-import ErrorDetails, {ErrorDetailsProps} from '../../components/ErrorDetails/ErrorDetails';
+import ErrorDetails, {type ErrorDetailsProps} from '../../components/ErrorDetails/ErrorDetails';
 import HelpLink from '../../components/HelpLink/HelpLink';
 import FormattedText from '../formatters/FormattedText';
 import {rumLogError} from '../../rum/rum-counter';

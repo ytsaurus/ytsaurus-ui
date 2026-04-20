@@ -11,7 +11,7 @@ import Icon from '../../../components/Icon/Icon';
 
 import {selectCluster} from '../../../store/selectors/global';
 import {KeyCode, Page} from '../../../constants/index';
-import {RouteInfo} from '../../../pages/job/Job';
+import {type RouteInfo} from '../../../pages/job/Job';
 
 import './JobBreadcrumbs.scss';
 

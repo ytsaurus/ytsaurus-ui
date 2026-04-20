@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {type FC, useState} from 'react';
 import {QueryEditor} from '../QueryEditor';
 import FlexSplitPane from '../../../components/FlexSplitPane/FlexSplitPane';
 import {FileEditor} from '../FileEditor';

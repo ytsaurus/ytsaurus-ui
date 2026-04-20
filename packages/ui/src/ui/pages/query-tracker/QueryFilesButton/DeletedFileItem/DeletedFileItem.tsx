@@ -1,13 +1,13 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Button, Icon, Text, Tooltip} from '@gravity-ui/uikit';
 import FileIcon from '@gravity-ui/icons/svgs/file.svg';
 import LinkIcon from '@gravity-ui/icons/svgs/link.svg';
 import ArrowRotateRightIcon from '@gravity-ui/icons/svgs/arrow-rotate-right.svg';
 import cn from 'bem-cn-lite';
 import './DeletedFileItem.scss';
-import {QueryFile} from '../../../../types/query-tracker/api';
+import {type QueryFile} from '../../../../types/query-tracker/api';
 import PencilToSquareIcon from '@gravity-ui/icons/svgs/pencil-to-square.svg';
-import {QueryFileEditor} from '../../../../store/reducers/query-tracker/queryFilesFormSlice';
+import {type QueryFileEditor} from '../../../../store/reducers/query-tracker/queryFilesFormSlice';
 import i18n from './i18n';
 
 const block = cn('deleted-file-item');

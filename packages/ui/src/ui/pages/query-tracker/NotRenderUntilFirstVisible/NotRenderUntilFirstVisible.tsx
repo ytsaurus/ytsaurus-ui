@@ -2,7 +2,7 @@ import * as React from 'react';
 import cn from 'bem-cn-lite';
 
 import {Freeze} from './Freeze';
-import {StrictReactNode} from '../QueryResultsView/YQLTable/utils';
+import {type StrictReactNode} from '../QueryResultsView/YQLTable/utils';
 
 const block = cn('not-render-until-first-visible');
 

@@ -7,7 +7,7 @@ import {Checkbox, Flex, Loader} from '@gravity-ui/uikit';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
 
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {
     abortAndReset,
     changeOmitInputTableSpecs,

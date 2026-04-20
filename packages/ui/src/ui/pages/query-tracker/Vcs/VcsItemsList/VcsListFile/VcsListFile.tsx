@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Button, Icon, Text, Tooltip} from '@gravity-ui/uikit';
 import FileTextIcon from '@gravity-ui/icons/svgs/file-text.svg';
 import FilePlusIcon from '@gravity-ui/icons/svgs/file-plus.svg';

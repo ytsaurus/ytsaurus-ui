@@ -1,6 +1,6 @@
-import {CancellationToken, Position, editor, languages} from 'monaco-editor';
+import {type CancellationToken, type Position, type editor, type languages} from 'monaco-editor';
 import {getRangeToInsertSuggestion} from '../../../libs/monaco-yql-languages/helpers/getRangeToInsertSuggestion';
-import {QueryEngine} from '../../../../shared/constants/engines';
+import {type QueryEngine} from '../../../../shared/constants/engines';
 import {getWindowStore} from '../../../store/window-store';
 import {getQuerySuggestionsEnabled} from '../../../store/selectors/settings/settings-queries';
 import UIFactory from '../../../UIFactory';

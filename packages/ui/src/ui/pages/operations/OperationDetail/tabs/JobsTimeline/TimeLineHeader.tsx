@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Button, Flex, Icon, TextInput} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import './TimeLineHeader.scss';
@@ -11,7 +11,7 @@ import {
     setFilter,
     setInterval,
 } from '../../../../../store/reducers/operations/jobs/jobs-timeline-slice';
-import {DateTime, dateTimeParse} from '../../../../../utils/date-utils';
+import {type DateTime, dateTimeParse} from '../../../../../utils/date-utils';
 import {RangeDateSelection} from '@gravity-ui/date-components';
 import ChevronsExpandToLinesIcon from '@gravity-ui/icons/svgs/chevrons-expand-to-lines.svg';
 import {resetInterval} from '../../../../../store/actions/operations/jobs-timeline';

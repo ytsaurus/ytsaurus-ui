@@ -6,10 +6,10 @@ import {
     STATISTICS_FILTER_ALL_VALUE,
     TREE_STATE,
 } from '../../../../constants/operations/statistics';
-import {GET_OPERATION} from '../../../../constants/operations/detail';
+import {type GET_OPERATION} from '../../../../constants/operations/detail';
 import {getSettingsInitialData} from '../../../../store/reducers/settings';
 
-import type {ActionD, ValueOf} from '../../../../types';
+import {type ActionD, type ValueOf} from '../../../../types';
 
 const settings = getSettingsInitialData();
 

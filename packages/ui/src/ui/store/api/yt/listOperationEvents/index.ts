@@ -1,5 +1,5 @@
-import {ListOperationEventsParameters} from '../../../../../shared/yt-types';
-import type {RootState} from '../../../../store/reducers';
+import {type ListOperationEventsParameters} from '../../../../../shared/yt-types';
+import {type RootState} from '../../../../store/reducers';
 import {selectOperation} from '../../../../store/selectors/operations/operation';
 import {ytApi} from '../ytApi';
 import {listOperationEvents} from './endpoint';

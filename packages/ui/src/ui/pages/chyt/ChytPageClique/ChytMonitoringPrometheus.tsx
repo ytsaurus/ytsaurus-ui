@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {PrometheusDashboardLazy} from '../../../containers/PrometheusDashboard/lazy';
-import type {ChytMonitoringProps} from '../../../UIFactory';
+import {type ChytMonitoringProps} from '../../../UIFactory';
 
 export function ChytMonitoringPrometheus({cluster, alias}: ChytMonitoringProps) {
     const params = React.useMemo(() => {

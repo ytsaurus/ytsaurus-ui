@@ -1,13 +1,13 @@
-import axios, {AxiosResponse} from 'axios';
+import axios, {type AxiosResponse} from 'axios';
 
-import type {
-    ChartDataResponse,
-    DiscoverValuesPostData,
-    DiscoverValuesResponse,
-    DiscoverValuesResponseResultsItem,
-    PluginRendererDataParams,
-    PrometheusDashboardType,
-    QueryRangePostData,
+import {
+    type ChartDataResponse,
+    type DiscoverValuesPostData,
+    type DiscoverValuesResponse,
+    type DiscoverValuesResponseResultsItem,
+    type PluginRendererDataParams,
+    type PrometheusDashboardType,
+    type QueryRangePostData,
 } from '../../../../shared/prometheus/types';
 
 export type PrometheusChartParams = {

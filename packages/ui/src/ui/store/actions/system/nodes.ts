@@ -13,21 +13,21 @@ import {isRetryFutile} from '../../../utils/index';
 import {getNodeffectiveState, incrementStateCounter} from '../../../utils/system/proxies';
 import {showErrorPopup} from '../../../utils/utils';
 
-import {ThunkAction} from 'redux-thunk';
-import {NodeType} from '../../../../shared/constants/system';
-import type {BatchSubRequest} from '../../../../shared/yt-types';
-import type {RootState} from '../../../store/reducers';
-import type {
-    NodeEffectiveState,
-    RackInfo,
-    SystemNodeInfo,
-    SystemNodesAction,
-    SystemNodesState,
+import {type ThunkAction} from 'redux-thunk';
+import {type NodeType} from '../../../../shared/constants/system';
+import {type BatchSubRequest} from '../../../../shared/yt-types';
+import {type RootState} from '../../../store/reducers';
+import {
+    type NodeEffectiveState,
+    type RackInfo,
+    type SystemNodeInfo,
+    type SystemNodesAction,
+    type SystemNodesState,
 } from '../../../store/reducers/system/nodes';
-import type {
-    HttpProxiesState,
-    RoleGroupInfo,
-    RoleGroupItemInfo,
+import {
+    type HttpProxiesState,
+    type RoleGroupInfo,
+    type RoleGroupItemInfo,
 } from '../../../store/reducers/system/proxies';
 import {toaster} from '../../../utils/toaster';
 

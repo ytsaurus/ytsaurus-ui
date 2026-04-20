@@ -1,5 +1,5 @@
 import React from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 import block from 'bem-cn-lite';
 import {Link} from 'react-router-dom';
 
@@ -24,8 +24,8 @@ import {CLUSTER_MENU_TABLE_ID} from '../../constants/tables';
 import {getClusterAppearance} from '../../appearance';
 import {YT} from '../../config/yt-config';
 import './ClusterMenuBody.scss';
-import {RootState} from '../../store/reducers';
-import {ClusterConfigWithStatus} from '../../store/reducers/clusters-menu/clusters-menu';
+import {type RootState} from '../../store/reducers';
+import {type ClusterConfigWithStatus} from '../../store/reducers/clusters-menu/clusters-menu';
 import {getAppBrowserHistory} from '../../store/window-store';
 import i18n from './i18n';
 

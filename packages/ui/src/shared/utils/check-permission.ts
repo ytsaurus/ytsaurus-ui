@@ -1,7 +1,7 @@
 import {YT_API_REQUEST_ID_HEADER} from '../constants';
-import {FIX_MY_TYPE} from '../../@types/types';
-import {BatchResultsItem, BatchSubRequest, YTPermissionType} from '../yt-types';
-import {YTApiIdType} from '../constants/yt-api-id';
+import {type FIX_MY_TYPE} from '../../@types/types';
+import {type BatchResultsItem, type BatchSubRequest, type YTPermissionType} from '../yt-types';
+import {type YTApiIdType} from '../constants/yt-api-id';
 
 const yt = require('@ytsaurus/javascript-wrapper')();
 

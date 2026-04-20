@@ -1,4 +1,4 @@
-import {ProcessedNode} from '../../Plan/utils';
+import {type ProcessedNode} from '../../Plan/utils';
 import {buildOperationUrl} from './buildOperationUrl';
 
 export const getOperationUrl = (node: ProcessedNode) => {

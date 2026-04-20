@@ -1,6 +1,6 @@
 import unipika from '../../common/thor/unipika';
-import type {TypeArray} from '@ytsaurus/components';
-import {UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
+import {type TypeArray} from '@ytsaurus/components';
+import {type UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
 
 const defaultSettings: UnipikaSettings = {
     escapeWhitespace: false,

@@ -12,8 +12,8 @@ import {
     selectOperationsPoolTreeSuggestions,
     selectOperationsUserSuggestions,
 } from '../../../../store/selectors/operations';
-import {RootState} from '../../../../store/reducers';
-import {OperationsListFilterName} from '../../../../store/reducers/operations/list/list';
+import {type RootState} from '../../../../store/reducers';
+import {type OperationsListFilterName} from '../../../../store/reducers/operations/list/list';
 import UIFactory from '../../../../UIFactory';
 
 const mapStateToPropsByFilterName = (state: RootState, name: OperationsListFilterName) => {

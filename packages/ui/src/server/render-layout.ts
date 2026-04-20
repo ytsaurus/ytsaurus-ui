@@ -5,7 +5,7 @@ import {
     createYandexMetrikaPlugin,
 } from '@gravity-ui/app-layout';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import {ConfigData} from '../shared/yt-types';
+import {type ConfigData} from '../shared/yt-types';
 
 const manifestPath = path.resolve(__dirname, '../../dist/public/build/assets-manifest.json');
 

@@ -1,4 +1,4 @@
-import type {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 import {
     QUEUE_STATUS_LOAD_FAILURE,
@@ -6,9 +6,9 @@ import {
     QUEUE_STATUS_LOAD_SUCCESS,
 } from '../../../../../constants/navigation/tabs/queue';
 import {YTApiId, ytApiV3Id} from '../../../../../rum/rum-wrap-api';
-import type {RootState} from '../../../../../store/reducers';
-import type {QueueStatusAction} from '../../../../../store/reducers/navigation/tabs/queue/status';
-import type {YtQueueStatus} from '../../../../../store/reducers/navigation/tabs/queue/types';
+import {type RootState} from '../../../../../store/reducers';
+import {type QueueStatusAction} from '../../../../../store/reducers/navigation/tabs/queue/status';
+import {type YtQueueStatus} from '../../../../../store/reducers/navigation/tabs/queue/types';
 import {getPath, getTransaction} from '../../../../../store/selectors/navigation';
 import {prepareRequest} from '../../../../../utils/navigation';
 

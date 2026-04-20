@@ -1,5 +1,5 @@
-import {yqlModel} from './shared';
-import {YQLAPIDefinitions} from './yql';
+import {type yqlModel} from './shared';
+import {type YQLAPIDefinitions} from './yql';
 
 export interface BasicNode {
     id: string;

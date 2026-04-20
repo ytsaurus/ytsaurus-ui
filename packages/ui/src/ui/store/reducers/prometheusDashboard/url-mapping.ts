@@ -1,8 +1,8 @@
 import {produce} from 'immer';
 
-import {LocationParameters} from '../../../store/location';
+import {type LocationParameters} from '../../../store/location';
 import {makeBase64ParseSerialize, makeTimeRangeSerialization} from '../../../utils/parse-serialize';
-import {RootState} from '../../../store/reducers/index.main';
+import {type RootState} from '../../../store/reducers/index.main';
 import {updateByLocationParams} from '../../../utils/utils';
 
 import {initialState} from './prometheusDashboard';

@@ -1,4 +1,4 @@
-import type {Request} from 'express';
+import {type Request} from 'express';
 
 import {ODIN_PAGE_ID} from '../../shared/constants';
 import ServerFactory from '../ServerFactory';

@@ -1,4 +1,4 @@
-import {RootState} from '../reducers';
+import {type RootState} from '../reducers';
 
 export function selectExecuteBatchState(state: RootState) {
     return state.executeBatch;

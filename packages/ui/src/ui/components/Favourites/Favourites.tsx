@@ -4,7 +4,7 @@ import block from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
 
-import {Button, ButtonProps, DropdownMenu} from '@gravity-ui/uikit';
+import {Button, type ButtonProps, DropdownMenu} from '@gravity-ui/uikit';
 
 import Icon from '../Icon/Icon';
 import {Hotkey} from '@ytsaurus/components';

@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import block from 'bem-cn-lite';
 import {Button, Flex, Icon, Link, Text} from '@gravity-ui/uikit';
 import ArrowUpRightFromSquareIcon from '@gravity-ui/icons/svgs/arrow-up-right-from-square.svg';
@@ -8,7 +8,7 @@ import TextIndentIcon from '@gravity-ui/icons/svgs/text-indent.svg';
 import {makePathByQueryEngine} from '../../Navigation/helpers/makePathByQueryEngine';
 import {insertTextWhereCursor} from '../../Navigation/helpers/insertTextWhereCursor';
 import {useMonaco} from '../../hooks/useMonaco';
-import {QueryEngine} from '../../../../../shared/constants/engines';
+import {type QueryEngine} from '../../../../../shared/constants/engines';
 import i18n from './i18n';
 
 type Props = {

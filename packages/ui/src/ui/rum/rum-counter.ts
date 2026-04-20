@@ -1,5 +1,5 @@
-import axios, {AxiosError} from 'axios';
-import {YTErrorRaw} from '../../@types/types';
+import axios, {type AxiosError} from 'axios';
+import {type YTErrorRaw} from '../../@types/types';
 import {isYTError} from '../../shared/utils';
 import {UIBatchError} from '../../shared/utils/error';
 import {YTErrors} from './constants';

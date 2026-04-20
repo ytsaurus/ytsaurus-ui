@@ -1,9 +1,9 @@
-import {BaseQueryApi} from '@reduxjs/toolkit/query';
+import {type BaseQueryApi} from '@reduxjs/toolkit/query';
 
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {selectClusterUiConfig} from '../../../store/selectors/global';
 
-import {StrawberryApiType, chytApiAction} from '../../../utils/strawberryControllerApi';
+import {type StrawberryApiType, chytApiAction} from '../../../utils/strawberryControllerApi';
 
 export function chytFetch(args: Parameters<StrawberryApiType>, api: BaseQueryApi) {
     try {

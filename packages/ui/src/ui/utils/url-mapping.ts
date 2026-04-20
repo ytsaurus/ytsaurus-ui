@@ -2,7 +2,7 @@ import forEach_ from 'lodash/forEach';
 import map_ from 'lodash/map';
 
 import {EMPTY_ARRAY} from '../constants/empty';
-import {SortState} from '../types';
+import {type SortState} from '../types';
 
 const TO_ENCODE: Record<string, string> = {
     '=': encodeURIComponent('='),

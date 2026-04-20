@@ -1,12 +1,12 @@
-import {QueryResult} from './types';
+import {type QueryResult} from './types';
 import {ChartType} from '../constants';
 import {getPointValue} from './getPointData';
-import type {
-    AreaSeries,
-    BarXSeries,
-    BarYSeries,
-    LineSeries,
-    ScatterSeries,
+import {
+    type AreaSeries,
+    type BarXSeries,
+    type BarYSeries,
+    type LineSeries,
+    type ScatterSeries,
 } from '@gravity-ui/chartkit/gravity-charts';
 
 export const prepareData = (

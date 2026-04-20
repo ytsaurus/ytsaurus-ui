@@ -1,5 +1,5 @@
-import type {AIChatConfig} from './ai-chat';
-import {CypressNodeRaw} from './yt-types';
+import {type AIChatConfig} from './ai-chat';
+import {type CypressNodeRaw} from './yt-types';
 
 export type UiConfigBaseUrl = CypressNodeRaw<{testing: boolean; use_cors: boolean}, string>;
 

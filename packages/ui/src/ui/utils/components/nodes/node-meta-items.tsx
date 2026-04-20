@@ -4,9 +4,9 @@ import isEmpty_ from 'lodash/isEmpty';
 import hammer from '../../../common/hammer';
 import Label from '../../../components/Label';
 import {MaintenanceRequests} from '../../../components/MaintenanceRequests/MaintenanceRequests';
-import type {MetaTableItem} from '@ytsaurus/components';
+import {type MetaTableItem} from '@ytsaurus/components';
 import {renderLabel} from '../../../components/templates/components/nodes/nodes';
-import type {Node} from '../../../store/reducers/components/nodes/nodes/node';
+import {type Node} from '../../../store/reducers/components/nodes/nodes/node';
 
 function getStateTheme(state: Node['state']) {
     switch (state) {

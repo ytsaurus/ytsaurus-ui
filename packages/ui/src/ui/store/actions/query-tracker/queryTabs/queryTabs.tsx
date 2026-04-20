@@ -1,10 +1,10 @@
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../../reducers';
-import {Action} from 'redux';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../../reducers';
+import {type Action} from 'redux';
 import {isSingleProgress} from '../api';
 import {
-    QueryResultTab,
-    QueryTab,
+    type QueryResultTab,
+    type QueryTab,
     setActiveTab,
     setTabs,
 } from '../../../reducers/query-tracker/queryTabsSlice';

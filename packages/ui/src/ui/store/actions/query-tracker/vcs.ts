@@ -1,12 +1,12 @@
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../reducers';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../reducers';
 import axios from 'axios';
-import {Action} from 'redux';
+import {type Action} from 'redux';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {
-    DirectoryItem,
-    FileItem,
-    Repositories,
+    type DirectoryItem,
+    type FileItem,
+    type Repositories,
     setBranch,
     setBranches,
     setList,
@@ -26,7 +26,7 @@ import {updateQueryDraft} from './query';
 import guid from '../../../common/hammer/guid';
 import {selectFileEditor} from '../../selectors/query-tracker/queryFilesForm';
 import {setFileEditor} from '../../reducers/query-tracker/queryFilesFormSlice';
-import {VcsRepository} from '../../../../shared/vcs';
+import {type VcsRepository} from '../../../../shared/vcs';
 import {
     getVcsBranch,
     getVcsPath,

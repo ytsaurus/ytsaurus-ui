@@ -4,11 +4,11 @@ import reduce_ from 'lodash/reduce';
 import {createSelector} from 'reselect';
 
 import {formatByParams} from '../../../../shared/utils/format';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import ypath from '../../../common/thor/ypath';
-import {AlertInfo} from '../../../components/AlertEvents/AlertEvents';
+import {type AlertInfo} from '../../../components/AlertEvents/AlertEvents';
 import {calculateLoadingStatus} from '../../../utils/utils';
-import {FIX_MY_TYPE} from '../../../types';
+import {type FIX_MY_TYPE} from '../../../types';
 import {prepareFaqUrl} from '../../../utils/operations/tabs/details/alerts';
 import {selectClusterUiConfig} from '../global';
 

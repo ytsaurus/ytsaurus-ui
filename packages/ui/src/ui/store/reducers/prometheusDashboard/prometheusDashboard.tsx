@@ -1,12 +1,12 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
 
-import type {
-    PrometheusDashboardType,
-    PrometheusWidgetId,
+import {
+    type PrometheusDashboardType,
+    type PrometheusWidgetId,
 } from '../../../../shared/prometheus/types';
 
 import {EMPTY_OBJECT} from '../../../constants/empty';
-import {RootState} from '../../../store/reducers/index.main';
+import {type RootState} from '../../../store/reducers/index.main';
 
 export type PrometheusDashboardState = {
     expandedPanels: Partial<Record<PrometheusDashboardType, PrometheusWidgetId>>;

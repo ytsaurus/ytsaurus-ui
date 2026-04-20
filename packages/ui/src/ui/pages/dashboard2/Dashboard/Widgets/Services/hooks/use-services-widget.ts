@@ -2,7 +2,7 @@ import {useSelector} from '../../../../../../store/redux-hooks';
 
 import {useServicesQuery} from '../../../../../../store/api/dashboard2/services';
 
-import {RootState} from '../../../../../../store/reducers';
+import {type RootState} from '../../../../../../store/reducers';
 import {selectCluster} from '../../../../../../store/selectors/global';
 import {selectServicesTypeFilter} from '../../../../../../store/selectors/dashboard2/services';
 import {
@@ -10,7 +10,7 @@ import {
     selectFavouriteChyt,
 } from '../../../../../../store/selectors/favourites';
 
-import type {ServicesWidgetProps} from '../types';
+import {type ServicesWidgetProps} from '../types';
 
 export function useServicesWidget(props: ServicesWidgetProps) {
     const customItems = props.data?.services;

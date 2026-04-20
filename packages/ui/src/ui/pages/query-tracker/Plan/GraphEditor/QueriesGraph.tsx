@@ -1,8 +1,8 @@
-import React, {FC, useCallback, useState} from 'react';
+import React, {type FC, useCallback, useState} from 'react';
 import {Loader} from '@gravity-ui/uikit';
 import {YTGraph, useConfig, useGraphScale} from '../../../../components/YTGraph';
-import {ProcessedGraph} from '../utils';
-import {QueriesCanvasBlock, QueriesNodeBlock} from './QueriesNodeBlock';
+import {type ProcessedGraph} from '../utils';
+import {QueriesCanvasBlock, type QueriesNodeBlock} from './QueriesNodeBlock';
 import {DetailBlock} from './DetailBlock';
 import {useQueriesGraphLayout} from './helpers/useQueriesGraphLayout';
 import {QueriesNodeConnection} from './QueriesNodeConnection';

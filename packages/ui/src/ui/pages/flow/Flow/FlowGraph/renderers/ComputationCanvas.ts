@@ -1,15 +1,15 @@
 import CpuIcon from '@gravity-ui/icons/svgs/cpu.svg';
 
-import {TAnchor} from '@gravity-ui/graph/build';
+import {type TAnchor} from '@gravity-ui/graph/build';
 
 import format from '../../../../../common/hammer/format';
 import {
     NoopComponent,
     YTGraphCanvasBlock,
-    YTGraphFontSize,
+    type YTGraphFontSize,
 } from '../../../../../components/YTGraph';
 
-import {FlowGraphBlockItem} from '../FlowGraph';
+import {type FlowGraphBlockItem} from '../FlowGraph';
 
 export class ComputationCanvasBlock extends YTGraphCanvasBlock<FlowGraphBlockItem<'computation'>> {
     PADDING = 15;

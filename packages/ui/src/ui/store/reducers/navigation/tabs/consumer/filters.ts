@@ -3,10 +3,10 @@ import {
     CONSUMER_MODE,
     CONSUMER_RATE_MODE,
 } from '../../../../../constants/navigation/tabs/consumer';
-import type {TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
+import {type TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';
-import type {ActionD} from '../../../../../types';
-import {ConsumerQueueInfo} from './status';
+import {type ActionD} from '../../../../../types';
+import {type ConsumerQueueInfo} from './status';
 
 export interface PartitionColumn<Names> {
     name: Names;

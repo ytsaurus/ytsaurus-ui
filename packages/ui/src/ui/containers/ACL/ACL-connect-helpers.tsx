@@ -1,4 +1,4 @@
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 
 import {
     getAllAccessColumnsNames,
@@ -40,8 +40,8 @@ import {
 import {selectCluster} from '../../store/selectors/global';
 import {normalizeIdmParams} from '../../utils/acl';
 import {AclMode, IdmObjectType} from '../../constants/acl';
-import {IdmKindType} from '../../utils/acl/acl-types';
-import {RootState} from '../../store/reducers';
+import {type IdmKindType} from '../../utils/acl/acl-types';
+import {type RootState} from '../../store/reducers';
 import {toggleExpandAclSubject, updateAclFilters} from '../../store/actions/acl-filters';
 
 import ACL from './ACL';

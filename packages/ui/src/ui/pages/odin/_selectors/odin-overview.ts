@@ -3,7 +3,7 @@ import sortBy_ from 'lodash/sortBy';
 
 import {createSelector} from 'reselect';
 import {getSettingOdinOverviewVisiblePresets} from './index';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {makeGetSetting} from '../../../store/selectors/settings';
 import {OdinTab} from '../odin-constants';
 import {ODIN_LAST_VISITED_TAB} from '../odin-settings';

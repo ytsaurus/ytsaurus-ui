@@ -1,4 +1,4 @@
-import type {languages} from 'monaco-editor';
+import {type languages} from 'monaco-editor';
 import {
     constants,
     dataTypeFamiliesCaseInsensitive,

@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useMemo} from 'react';
+import React, {type FC, useCallback, useMemo} from 'react';
 import {Breadcrumbs, Button, Icon} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import FolderTreeIcon from '@gravity-ui/icons/svgs/folder-tree.svg';

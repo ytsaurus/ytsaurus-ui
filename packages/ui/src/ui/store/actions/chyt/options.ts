@@ -1,14 +1,14 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
-import {ChytCliqueOptionsAction} from '../../reducers/chyt/options';
-import {RootState} from '../../reducers';
+import {type ChytCliqueOptionsAction} from '../../reducers/chyt/options';
+import {type RootState} from '../../reducers';
 import {selectCluster} from '../../selectors/global';
 import {selectIsAdmin} from '../../selectors/global/is-developer';
 import {
-    StrawberryListAttributes,
-    StrawberryListResponseItem,
+    type StrawberryListAttributes,
+    type StrawberryListResponseItem,
     chytApiAction,
 } from '../../../utils/strawberryControllerApi';
 import {CHYT_OPTIONS} from '../../../constants/chyt-page';

@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from '../../../../../../store/redux-hooks';
 
-import Select, {YTSelectProps} from '../../../../../../components/Select/Select';
+import Select, {type YTSelectProps} from '../../../../../../components/Select/Select';
 
 import {getFilteredAttributes} from '../../../../selectors';
 import {updateFilteredAttributes} from '../../../../../../store/actions/operations/jobs';

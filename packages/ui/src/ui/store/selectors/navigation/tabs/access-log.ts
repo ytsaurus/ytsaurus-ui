@@ -1,7 +1,7 @@
 import isEmpty_ from 'lodash/isEmpty';
 import isEqual_ from 'lodash/isEqual';
 
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {createSelector} from 'reselect';
 import {selectCluster} from '../../../../store/selectors/global';
 import {getPath} from '../../../../store/selectors/navigation/index';

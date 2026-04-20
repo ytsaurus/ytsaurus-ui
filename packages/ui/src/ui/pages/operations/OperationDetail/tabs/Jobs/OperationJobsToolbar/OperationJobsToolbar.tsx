@@ -15,7 +15,7 @@ import {selectOperationTasksNames} from '../../../../../../store/selectors/opera
 
 import {JobsOperationIncarnationsFilter} from './JobsOperationsIncarnationsFilter';
 import './OperationJobsToolbar.scss';
-import type {RootState} from '../../../../../../store/reducers';
+import {type RootState} from '../../../../../../store/reducers';
 
 const block = cn('operation-detail-jobs');
 const tbBlock = cn('elements-toolbar');

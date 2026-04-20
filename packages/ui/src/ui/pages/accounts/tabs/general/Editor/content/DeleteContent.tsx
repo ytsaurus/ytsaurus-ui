@@ -6,13 +6,13 @@ import {Button} from '@gravity-ui/uikit';
 import {YTErrorBlock} from '../../../../../../components/Block/Block';
 import ConfirmMessage from '../../../../../../pages/accounts/tabs/general/Editor/ConfirmMessage';
 
-import {CypressNode} from '../../../../../../../shared/yt-types';
+import {type CypressNode} from '../../../../../../../shared/yt-types';
 import {closeEditorModal} from '../../../../../../store/actions/accounts/accounts';
 import {useDispatch} from '../../../../../../store/redux-hooks';
-import {YTError} from '../../../../../../types';
+import {type YTError} from '../../../../../../types';
 import {deleteAccount} from '../../../../../../utils/accounts/editor';
 import {toaster} from '../../../../../../utils/toaster';
-import {FieldTree, fieldTreeForEach} from '../../../../../../common/hammer/field-tree';
+import {type FieldTree, fieldTreeForEach} from '../../../../../../common/hammer/field-tree';
 
 import './DeleteContent.scss';
 

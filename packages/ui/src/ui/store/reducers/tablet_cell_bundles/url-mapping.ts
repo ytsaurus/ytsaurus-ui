@@ -1,5 +1,5 @@
 import {initialState} from './index';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {produce} from 'immer';
 import {updateIfChanged} from '../../../utils/utils';
 import {aclFiltersParams, getAclFiltersPreparedState} from '../acl/url-mapping';

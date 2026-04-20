@@ -1,7 +1,7 @@
-import {ErrorPosition, QueryError} from '../../../../types/query-tracker/api';
+import {type ErrorPosition, type QueryError} from '../../../../types/query-tracker/api';
 import {useToggle} from 'react-use';
 import {Text} from '@gravity-ui/uikit';
-import React, {FC, useCallback, useState} from 'react';
+import React, {type FC, useCallback, useState} from 'react';
 import {ErrorTreeNode} from './ErrorTreeNode';
 import {ErrorList} from './ErrorList';
 import cn from 'bem-cn-lite';

@@ -1,8 +1,8 @@
 import cn from 'bem-cn-lite';
 import React from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 
-import {DialogField, FormApi, YTDFDialog} from '../../../../../components/Dialog';
+import {type DialogField, type FormApi, YTDFDialog} from '../../../../../components/Dialog';
 import {closeCreateModal} from '../../../../../store/actions/accounts/editor';
 import {loadEditedAccount} from '../../../../../store/actions/accounts/accounts';
 import {createAccountFromInfo} from '../../../../../utils/accounts/editor';
@@ -12,7 +12,7 @@ import {getActiveAccount} from '../../../../../store/selectors/accounts/accounts
 import {ROOT_ACCOUNT_NAME} from '../../../../../constants/accounts/accounts';
 
 import './AccountCreateDialog.scss';
-import {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 import {isIdmAclAvailable} from '../../../../../config';
 import {isAbcAllowed} from '../../../../../UIFactory';
 

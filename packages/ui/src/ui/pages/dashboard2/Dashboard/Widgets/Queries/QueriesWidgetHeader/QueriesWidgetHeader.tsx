@@ -3,7 +3,7 @@ import React from 'react';
 import {WidgetHeader} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetHeader/WidgetHeader';
 
 import {useQueriesWidget} from '../hooks/use-queries-widget';
-import {QueriesWidgetProps} from '../types';
+import {type QueriesWidgetProps} from '../types';
 
 import i18n from '../i18n';
 

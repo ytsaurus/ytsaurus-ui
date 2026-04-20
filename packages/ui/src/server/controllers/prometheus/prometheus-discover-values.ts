@@ -1,13 +1,13 @@
 import axios, {isAxiosError} from 'axios';
-import type {Request, Response} from 'express';
+import {type Request, type Response} from 'express';
 import uniqWith_ from 'lodash/uniqWith';
 import isEqual_ from 'lodash/isEqual';
 
 import {makeDiscoverValuesKey, replaceExprParams} from '../../../shared/prometheus/utils';
 import {
-    DiscoverValuesPostData,
-    DiscoverValuesResponse,
-    TemplatingListItem,
+    type DiscoverValuesPostData,
+    type DiscoverValuesResponse,
+    type TemplatingListItem,
 } from '../../../shared/prometheus/types';
 
 import {sendAndLogError} from '../../utils';

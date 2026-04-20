@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {GitlabRepository, VcsApi, VcsRepository} from '../../../shared/vcs';
+import {type GitlabRepository, type VcsApi, type VcsRepository} from '../../../shared/vcs';
 import {ErrorWithCode} from '../../utils';
 
 export type GitlabNode = {

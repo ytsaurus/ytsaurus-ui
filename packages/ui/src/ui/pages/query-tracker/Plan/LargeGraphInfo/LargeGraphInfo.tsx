@@ -1,5 +1,5 @@
 import React from 'react';
-import {ProcessedGraph, ProcessedNode, updateProgress} from '../utils';
+import {type ProcessedGraph, type ProcessedNode, updateProgress} from '../utils';
 import {useSelector} from '../../../../store/redux-hooks';
 import {DataSet} from 'vis-data';
 import {useUpdate} from 'react-use';

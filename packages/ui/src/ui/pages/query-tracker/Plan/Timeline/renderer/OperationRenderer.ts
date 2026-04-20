@@ -1,6 +1,6 @@
 import {duration as calcDuration} from '../../utils';
-import {AbstractEventRenderer, Hitbox, TimelineEvent} from '@gravity-ui/timeline';
-import type {OperationTimeline} from '../utils';
+import {AbstractEventRenderer, type Hitbox, type TimelineEvent} from '@gravity-ui/timeline';
+import {type OperationTimeline} from '../utils';
 import {getCSSPropertyValue} from '../../../../../utils/get-css-color';
 
 const GROUP_HEIGHT = 16;

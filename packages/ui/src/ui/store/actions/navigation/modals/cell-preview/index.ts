@@ -1,4 +1,4 @@
-import {CancelTokenSource} from 'axios';
+import {type CancelTokenSource} from 'axios';
 import {batch} from 'react-redux';
 
 import {getPath} from '../../../../selectors/navigation';
@@ -6,7 +6,7 @@ import {getDefaultRequestOutputFormat} from '../../../../../utils/navigation/con
 import {CELL_PREVIEW, PREVIEW_LIMIT} from '../../../../../constants/modals/cell-preview';
 import {isCancelled} from '../../../../../utils/cancel-helper';
 import {
-    CellPreviewActionType,
+    type CellPreviewActionType,
     cellPreviewCancelHelper,
     openCellPreview,
 } from '../../../modals/cell-preview';
@@ -17,7 +17,7 @@ import {getStaticTableCellPath, getStaticTableCliCommand} from './static-table';
 import {isYqlTypesEnabled} from '../../../../selectors/navigation/content/table';
 import {readStaticTable} from '../../content/table/readStaticTable';
 import {readDynamicTable} from '../../content/table/readDynamicTable';
-import {CellDataHandlerNavigation} from '../../../../../types/navigation/table-cell-preview';
+import {type CellDataHandlerNavigation} from '../../../../../types/navigation/table-cell-preview';
 
 const getCellPath = ({
     columnName,

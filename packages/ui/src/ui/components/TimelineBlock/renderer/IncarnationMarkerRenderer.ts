@@ -1,8 +1,8 @@
 import {
     AbstractMarkerRenderer,
-    LabelSize,
-    TimelineMarker,
-    ViewConfiguration,
+    type LabelSize,
+    type TimelineMarker,
+    type ViewConfiguration,
     clamp,
 } from '@gravity-ui/timeline';
 

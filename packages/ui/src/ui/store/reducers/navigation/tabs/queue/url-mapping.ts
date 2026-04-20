@@ -1,6 +1,6 @@
 import {produce} from 'immer';
 
-import type {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 import {initialState} from '../../../../../store/reducers/navigation/tabs/queue/filters';
 import {updateIfChanged} from '../../../../../utils/utils';
 

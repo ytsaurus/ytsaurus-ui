@@ -1,7 +1,7 @@
-import React, {FC, useMemo} from 'react';
+import React, {type FC, useMemo} from 'react';
 import {Flex, Text} from '@gravity-ui/uikit';
 import {OperationContent} from './OperationContent';
-import {QueriesNodeBlock} from '../QueriesNodeBlock';
+import {type QueriesNodeBlock} from '../QueriesNodeBlock';
 import {OperationType} from '../enums';
 import {DetailBlockTitle} from './DetailBlockTitle';
 

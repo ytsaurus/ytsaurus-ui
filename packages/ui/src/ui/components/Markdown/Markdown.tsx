@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import axios from 'axios';
 
-import {OutputType} from '@diplodoc/transform/lib/typings';
+import {type OutputType} from '@diplodoc/transform/lib/typings';
 
 import {wrapApiPromiseByToaster} from '../../utils/utils';
 import UIFactory from '../../UIFactory';

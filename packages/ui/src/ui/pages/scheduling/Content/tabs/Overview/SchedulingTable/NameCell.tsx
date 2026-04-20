@@ -13,12 +13,12 @@ import {
     getCurrentTreeExpandedPools,
 } from '../../../../../../store/selectors/scheduling/scheduling';
 import {getTree} from '../../../../../../store/selectors/scheduling/scheduling-pools';
-import {PoolLeafNode} from '../../../../../../utils/scheduling/pool-child';
+import {type PoolLeafNode} from '../../../../../../utils/scheduling/pool-child';
 import {unquote} from '../../../../../../utils/string';
 import {YSON_AS_TEXT, prettyPrintSafe} from '../../../../../../utils/unipika';
 import './NameCell.scss';
 import PoolTags from './PoolTags';
-import type {RowData} from './SchedulingTable';
+import {type RowData} from './SchedulingTable';
 
 const block = cn('yt-scheduling-name-cell');
 

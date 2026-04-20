@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Flex} from '@gravity-ui/uikit';
 import './SidePanelEmpty.scss';
 import cn from 'bem-cn-lite';

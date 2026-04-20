@@ -1,15 +1,15 @@
 import type * as React from 'react';
 
-import type {MountOptions, MountResult} from '@playwright/experimental-ct-react';
-import type {
-    Locator,
-    Page,
-    PageScreenshotOptions,
-    PlaywrightTestArgs,
-    PlaywrightTestOptions,
-    PlaywrightWorkerArgs,
-    PlaywrightWorkerOptions,
-    TestFixture,
+import {type MountOptions, type MountResult} from '@playwright/experimental-ct-react';
+import {
+    type Locator,
+    type Page,
+    type PageScreenshotOptions,
+    type PlaywrightTestArgs,
+    type PlaywrightTestOptions,
+    type PlaywrightWorkerArgs,
+    type PlaywrightWorkerOptions,
+    type TestFixture,
 } from '@playwright/test';
 
 interface ComponentFixtures {

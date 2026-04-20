@@ -16,7 +16,7 @@ import pageQueries from '../assets/img/svg/page-query-tracker.svg';
 import pageChyt from '../assets/img/svg/page-chyt.svg';
 
 import {Page} from './index';
-import {SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
+import {type SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 
 export const PAGES_WITH_ICONS = [
     {id: Page.ACCOUNTS, icon: accountsIcon},

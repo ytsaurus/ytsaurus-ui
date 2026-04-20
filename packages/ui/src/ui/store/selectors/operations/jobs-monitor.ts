@@ -7,7 +7,7 @@ import min_ from 'lodash/min';
 
 import moment from 'moment';
 import {createSelector} from 'reselect';
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {selectOperationId} from './operation';
 
 export const selectJobsMonitorError = (state: RootState) => state.operations.jobsMonitor.error;

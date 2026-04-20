@@ -1,11 +1,11 @@
 import {colord, extend} from 'colord';
 import mixPlugin from 'colord/plugins/mix';
 import sortBy_ from 'lodash/sortBy';
-import {Progress} from '../models/plan';
+import {type Progress} from '../models/plan';
 
-import {GraphColors} from '../GraphColors';
-import {ProcessedNode} from '../utils';
-import {TimelineEvent} from '@gravity-ui/timeline';
+import {type GraphColors} from '../GraphColors';
+import {type ProcessedNode} from '../utils';
+import {type TimelineEvent} from '@gravity-ui/timeline';
 import {OperationRenderer} from './renderer/OperationRenderer';
 
 const eventStatusToColorName = {

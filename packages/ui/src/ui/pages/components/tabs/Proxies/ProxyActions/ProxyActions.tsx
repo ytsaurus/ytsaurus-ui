@@ -1,5 +1,5 @@
 import React from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 
 import ClickableAttributesButton from '../../../../../components/AttributesButton/ClickableAttributesButton';
 import Button from '../../../../../components/Button/Button';

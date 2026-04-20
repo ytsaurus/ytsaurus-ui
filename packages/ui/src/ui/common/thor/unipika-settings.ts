@@ -1,7 +1,7 @@
 import {createSelector} from 'reselect';
 import {uiSettings} from '../../config/ui-settings';
 import {rumLogError} from '../../rum/rum-counter';
-import {UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
+import {type UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
 
 const makeValidateSrcUrl = createSelector(
     [(_v: {}) => uiSettings.reUnipikaAllowTaggedSources],

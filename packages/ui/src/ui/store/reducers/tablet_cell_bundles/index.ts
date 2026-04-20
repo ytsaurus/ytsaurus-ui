@@ -1,5 +1,5 @@
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
-import {Action} from 'redux';
+import {type Action} from 'redux';
 import {
     TABLETS_BUNDLES_ACTIVE_ACCOUNT,
     TABLETS_BUNDLES_LOAD_FAILURE,
@@ -7,7 +7,7 @@ import {
     TABLETS_BUNDLES_LOAD_SUCCESS,
     TABLETS_BUNDLES_PARTIAL,
 } from '../../../constants/tablets';
-import {ActionD, SortState, YTError} from '../../../types';
+import {type ActionD, type SortState, type YTError} from '../../../types';
 
 export interface TabletsBundlesState {
     loaded: boolean;

@@ -4,7 +4,7 @@ import {Flex, Progress} from '@gravity-ui/uikit';
 
 import format from '../../../../../../../common/hammer/format';
 
-import {OperationProgressInfo} from '../../../../../../../store/api/dashboard2/operations/operations';
+import {type OperationProgressInfo} from '../../../../../../../store/api/dashboard2/operations/operations';
 
 import StatusLabel from '../../../../../../../components/StatusLabel/StatusLabel';
 

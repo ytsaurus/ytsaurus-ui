@@ -1,7 +1,7 @@
 import React from 'react';
 import {useSelector} from '../../../../../../store/redux-hooks';
 import b from 'bem-cn-lite';
-import {AxiosError} from 'axios';
+import {type AxiosError} from 'axios';
 import {Flex} from '@gravity-ui/uikit';
 
 import {selectCluster} from '../../../../../../store/selectors/global';
@@ -14,7 +14,7 @@ import {YTErrorBlock} from '../../../../../../components/Error/Error';
 import Link from '../../../../../../components/Link/Link';
 
 import {Page} from '../../../../../../../shared/constants/settings';
-import {YTError} from '../../../../../../../@types/types';
+import {type YTError} from '../../../../../../../@types/types';
 
 import i18n from '../i18n';
 

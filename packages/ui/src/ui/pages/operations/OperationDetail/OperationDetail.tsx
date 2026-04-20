@@ -1,7 +1,7 @@
 import cn from 'bem-cn-lite';
 import React, {Fragment} from 'react';
-import {ConnectedProps, connect} from 'react-redux';
-import {match as MatchType, Redirect, Route, Switch} from 'react-router';
+import {type ConnectedProps, connect} from 'react-redux';
+import {type match as MatchType, Redirect, Route, Switch} from 'react-router';
 import hammer from '../../../common/hammer';
 import unipika from '../../../common/thor/unipika';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
@@ -34,7 +34,7 @@ import Statistics from './tabs/statistics/Statistics';
 import Placeholder from '../../../pages/components/Placeholder';
 
 import {Page} from '../../../constants/index';
-import {DEFAULT_TAB, OperationTabType, Tab} from '../../../constants/operations/detail';
+import {DEFAULT_TAB, type OperationTabType, Tab} from '../../../constants/operations/detail';
 import {useUpdater} from '../../../hooks/use-updater';
 import {promptAction} from '../../../store/actions/actions';
 import {showEditPoolsWeightsModal} from '../../../store/actions/operations';
@@ -45,7 +45,7 @@ import {
     selectOperationErasedTrees,
     selectOperationPerformanceUrlTemplate,
 } from '../../../store/selectors/operations/operation';
-import {TabSettings, makeTabProps} from '../../../utils';
+import {type TabSettings, makeTabProps} from '../../../utils';
 import {
     getDetailsTabsShowSettings,
     operationMonitoringUrl,
@@ -61,11 +61,11 @@ import UIFactory from '../../../UIFactory';
 import {UI_TAB_SIZE} from '../../../constants/global';
 import {updateListJobsFilter} from '../../../store/actions/operations/jobs';
 import {getOperationEvents, listOperationEventsApi} from '../../../store/api/yt';
-import {RootState} from '../../../store/reducers';
-import {RuntimeItem} from '../../../store/reducers/operations/detail';
+import {type RootState} from '../../../store/reducers';
+import {type RuntimeItem} from '../../../store/reducers/operations/detail';
 import {selectJobsMonitorTabVisible} from '../../../store/selectors/operations/jobs-monitor';
 import {
-    JobState,
+    type JobState,
     selectOperationStatisticsHasData,
     selectTotalCpuTimeSpent,
     selectTotalJobWallTime,
@@ -73,7 +73,7 @@ import {
 import {selectShowIncarnationsNext} from '../../../store/selectors/settings/operations';
 import {getCurrentCluster} from '../../../store/selectors/thor';
 import {getYsonSettingsDisableDecode} from '../../../store/selectors/thor/unipika';
-import {OperationPool, OperationStates} from '../selectors';
+import {type OperationPool, type OperationStates} from '../selectors';
 import './OperationDetail.scss';
 import {JobsTimeline} from './tabs/JobsTimeline';
 import OperationDetailsMonitor from './tabs/monitor/OperationDetailsMonitor';

@@ -5,11 +5,11 @@ import orderBy_ from 'lodash/orderBy';
 import reduce_ from 'lodash/reduce';
 import sortBy_ from 'lodash/sortBy';
 
-import {Action} from 'redux';
+import {type Action} from 'redux';
 import {MasterInstance} from '../../selectors/system/masters';
-import {ActionD} from '../../../types';
-import {YTError} from '../../../../@types/types';
-import {BatchResultsItem} from '../../../../shared/yt-types';
+import {type ActionD} from '../../../types';
+import {type YTError} from '../../../../@types/types';
+import {type BatchResultsItem} from '../../../../shared/yt-types';
 import {
     FETCH_MASTER_CONFIG,
     FETCH_MASTER_DATA,

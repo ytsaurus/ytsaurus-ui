@@ -1,4 +1,4 @@
-import type {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 import forEach_ from 'lodash/forEach';
 import keys_ from 'lodash/keys';
@@ -14,10 +14,10 @@ import {
     TABLETS_BUNDLES_EDITOR_PARTIAL,
 } from '../../../constants/tablets';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import type {RootState} from '../../../store/reducers';
-import type {
-    BundleControllerInstanceDetails,
-    TabletCellBundleEditorAction,
+import {type RootState} from '../../../store/reducers';
+import {
+    type BundleControllerInstanceDetails,
+    type TabletCellBundleEditorAction,
 } from '../../../store/reducers/tablet_cell_bundles/tablet-cell-bundle-editor';
 import {fetchTabletsBundles} from '../../../store/actions/tablet_cell_bundles';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
@@ -28,8 +28,8 @@ import {
     selectTabletsBundles,
     selectTabletsDefaultMemoryConfiguration,
 } from '../../../store/selectors/tablet_cell_bundles';
-import {OrchidBundlesData} from '../../../store/reducers/tablet_cell_bundles';
-import {BatchResults, BatchSubRequest} from '../../../../shared/yt-types';
+import {type OrchidBundlesData} from '../../../store/reducers/tablet_cell_bundles';
+import {type BatchResults, type BatchSubRequest} from '../../../../shared/yt-types';
 
 type TabletCellBundleEditorThunkAction = ThunkAction<
     any,

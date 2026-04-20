@@ -1,5 +1,5 @@
 import {TABLE_ERASE_MODAL_PARTIAL} from '../../../../constants/navigation/modals/table-erase-modal';
-import {ActionD} from '../../../../types';
+import {type ActionD} from '../../../../types';
 
 export interface State {
     visible: boolean;

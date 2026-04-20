@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import isEqual_ from 'lodash/isEqual';
 
-import type {PrometheusDashboardType} from '../../../../shared/prometheus/types';
+import {type PrometheusDashboardType} from '../../../../shared/prometheus/types';
 import {calcFromTo} from '../../../components/Timeline';
 
 import {prometheusDashboardSelectors, prometheusDashboardSlice} from './prometheusDashboard';

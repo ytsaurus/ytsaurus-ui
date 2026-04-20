@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Link, {LinkProps} from '../../../components/Link/Link';
+import Link, {type LinkProps} from '../../../components/Link/Link';
 
 import {Page} from '../../../constants/index';
 

@@ -5,7 +5,7 @@ import Filter from '../../../../../../components/Filter/Filter';
 
 import {updateListJobsFilter} from '../../../../../../store/actions/operations/jobs';
 import {getFilterValue} from '../../../../selectors';
-import type {JobsState} from '../../../../../../store/reducers/operations/jobs/jobs';
+import {type JobsState} from '../../../../../../store/reducers/operations/jobs/jobs';
 
 type StringFilterKeys = {
     [K in keyof JobsState['filters']]: JobsState['filters'][K]['value'] extends string ? K : never;

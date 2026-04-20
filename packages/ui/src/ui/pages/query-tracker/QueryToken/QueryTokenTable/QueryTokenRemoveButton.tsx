@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {type FC, useState} from 'react';
 import {Button, Icon} from '@gravity-ui/uikit';
 import TrashBinIcon from '@gravity-ui/icons/svgs/trash-bin.svg';
 import {useDispatch} from '../../../../store/redux-hooks';

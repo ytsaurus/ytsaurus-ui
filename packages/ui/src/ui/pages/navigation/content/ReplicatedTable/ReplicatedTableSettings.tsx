@@ -5,8 +5,8 @@ import cn from 'bem-cn-lite';
 
 import Button from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
-import {FormApi, YTDFDialog} from '../../../../components/Dialog';
-import {YTError} from '../../../../types';
+import {type FormApi, YTDFDialog} from '../../../../components/Dialog';
+import {type YTError} from '../../../../types';
 import {YTErrorBlock} from '../../../../components/Error/Error';
 
 import './ReplicatedTableSettings.scss';

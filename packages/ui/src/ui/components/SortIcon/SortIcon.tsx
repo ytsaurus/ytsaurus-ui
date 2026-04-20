@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 import format from '../../common/hammer/format';
 import Icon from '../../components/Icon/Icon';
 import {Tooltip} from '@ytsaurus/components';
-import {OrderType, nextSortOrderValue} from '../../utils/sort-helpers';
+import {type OrderType, nextSortOrderValue} from '../../utils/sort-helpers';
 import i18n from './i18n';
 
 import './SortIcon.scss';

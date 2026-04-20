@@ -6,9 +6,9 @@ import isEmpty_ from 'lodash/isEmpty';
 import {Info} from '../../../../components/Info/Info';
 import {BundleParamsList} from './components/BundleParamsList/BundleParamsList';
 import {
-    DialogField,
-    DialogTabField,
-    FormApi,
+    type DialogField,
+    type DialogTabField,
+    type FormApi,
     YTDFDialog,
     makeFormSubmitError,
 } from '../../../../components/Dialog';
@@ -25,8 +25,8 @@ import {
     selectTabletBundlesWriteableByName,
 } from '../../../../store/selectors/tablet_cell_bundles';
 import {
-    BundleResourceGuarantee,
-    OrchidBundleResource,
+    type BundleResourceGuarantee,
+    type OrchidBundleResource,
 } from '../../../../store/reducers/tablet_cell_bundles';
 import {selectTabletCellBundleEditorState} from '../../../../store/selectors/tablet_cell_bundles/tablet-cell-bundle-editor';
 
@@ -46,7 +46,7 @@ import {makeLink} from '../../../../utils/utils';
 import {docsUrl} from '../../../../config';
 
 import './BundleEditorDialog.scss';
-import {Pick2} from '../../../../../@types/types';
+import {type Pick2} from '../../../../../@types/types';
 import {selectIsQueryMemoryLimitSupported} from '../../../../store/selectors/global/supported-features';
 import {validateNumber} from '../../../../common/hammer/validate-number';
 

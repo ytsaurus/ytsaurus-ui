@@ -5,9 +5,9 @@ import {initialState as detailsInitialState} from './odin-details';
 import {initialState as overviewInitialState} from './odin-overview';
 import {DATE_FORMAT} from '../odin-constants';
 import {updateIfChanged} from '../../../utils/utils';
-import {LocationParameters} from '../../../store/location';
-import {FIX_MY_TYPE} from '../../../types';
-import {RootState} from '../../../store/reducers';
+import {type LocationParameters} from '../../../store/location';
+import {type FIX_MY_TYPE} from '../../../types';
+import {type RootState} from '../../../store/reducers';
 
 export const odinParams: LocationParameters = {
     metric: {

@@ -1,10 +1,10 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 import forEach_ from 'lodash/forEach';
 import map_ from 'lodash/map';
 
 import Utils from '../odin-utils';
-import {RootState} from '../../../store/reducers';
-import {OdinOverviewAction, OdinOverviewState} from '../_reducers/odin-overview';
+import {type RootState} from '../../../store/reducers';
+import {type OdinOverviewAction, type OdinOverviewState} from '../_reducers/odin-overview';
 import {
     ODIN_OVERVIEW_CANCELLED,
     ODIN_OVERVIEW_FAILED,

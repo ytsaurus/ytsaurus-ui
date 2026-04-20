@@ -6,9 +6,9 @@ import sortBy_ from 'lodash/sortBy';
 
 import ypath from '../../../../../common/thor/ypath';
 import UIFactory from '../../../../../UIFactory';
-import type {
-    DetailedOperationSelector,
-    OperationPreviewType,
+import {
+    type DetailedOperationSelector,
+    type OperationPreviewType,
 } from '../../../../../pages/operations/selectors';
 import {genNavigationUrl} from '../../../../../utils/navigation/navigation';
 

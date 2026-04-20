@@ -1,6 +1,6 @@
-import axios, {AxiosResponse} from 'axios';
+import axios, {type AxiosResponse} from 'axios';
 import map_ from 'lodash/map';
-import type {Request, Response} from '@gravity-ui/expresskit';
+import {type Request, type Response} from '@gravity-ui/expresskit';
 import {getClustersFromConfig} from '../components/utils';
 import {sendAndLogError, sendError, sendResponse} from '../utils';
 

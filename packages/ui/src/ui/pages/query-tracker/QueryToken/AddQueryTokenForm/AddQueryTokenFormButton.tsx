@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {type FC, useState} from 'react';
 import {Button} from '@gravity-ui/uikit';
 import {AddQueryTokenForm} from './AddQueryTokenForm';
 import i18n from './i18n';

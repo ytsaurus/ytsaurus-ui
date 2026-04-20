@@ -1,7 +1,7 @@
 import React from 'react';
 import b from 'bem-cn-lite';
 import {Flex} from '@gravity-ui/uikit';
-import {PluginWidgetProps} from '@gravity-ui/dashkit';
+import {type PluginWidgetProps} from '@gravity-ui/dashkit';
 
 import './WidgetBase.scss';
 

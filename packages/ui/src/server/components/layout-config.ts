@@ -1,7 +1,7 @@
-import type {Request} from 'express';
-import {YTCoreConfig} from '../../@types/core';
-import {ConfigData, YTConfig} from '../../shared/yt-types';
-import {AppLayoutConfig} from '../render-layout';
+import {type Request} from 'express';
+import {type YTCoreConfig} from '../../@types/core';
+import {type ConfigData, type YTConfig} from '../../shared/yt-types';
+import {type AppLayoutConfig} from '../render-layout';
 import {isUserColumnPresetsEnabled} from '../controllers/table-column-preset';
 import {getInterfaceVersion, isProductionEnv} from '../utils';
 import {getAuthWay} from '../utils/authorization';

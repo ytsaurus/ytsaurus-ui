@@ -1,5 +1,5 @@
 import React from 'react';
-import {Table, TableDataItem, TableProps, withTableSorting} from '@gravity-ui/uikit';
+import {Table, type TableDataItem, type TableProps, withTableSorting} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import './TableWithSorting.scss';
 

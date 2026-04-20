@@ -1,6 +1,6 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {ChatMessage} from '../../../types/ai-chat';
-import {Conversation} from '../../../../shared/ai-chat';
+import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {type ChatMessage} from '../../../types/ai-chat';
+import {type Conversation} from '../../../../shared/ai-chat';
 
 type Pagination = {
     lastId: string | undefined;

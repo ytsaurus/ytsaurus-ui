@@ -3,7 +3,7 @@ import map_ from 'lodash/map';
 import moment from 'moment';
 import {createSelector} from 'reselect';
 
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import Utils, {currentDate} from '../odin-utils';
 import {COLS_NUMBER} from '../odin-constants';
 import {makeGetSetting} from '../../../store/selectors/settings';

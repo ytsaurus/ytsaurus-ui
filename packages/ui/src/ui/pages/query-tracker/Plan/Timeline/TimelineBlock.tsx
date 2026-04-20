@@ -1,9 +1,9 @@
-import React, {CSSProperties, FC} from 'react';
+import React, {type CSSProperties, type FC} from 'react';
 import {RangeDateSelection} from '@gravity-ui/date-components';
 import {TimelineCanvas, useTimelineEvent} from '@gravity-ui/timeline/react';
-import {Timeline} from '@gravity-ui/timeline';
-import {DateTime, dateTimeParse} from '../../../../utils/date-utils';
-import {OperationTimeline} from './utils';
+import {type Timeline} from '@gravity-ui/timeline';
+import {type DateTime, dateTimeParse} from '../../../../utils/date-utils';
+import {type OperationTimeline} from './utils';
 
 type Interval = {from: number; to: number};
 type Props = {

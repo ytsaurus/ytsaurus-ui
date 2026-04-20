@@ -1,4 +1,4 @@
-import axios, {AxiosError} from 'axios';
+import axios, {type AxiosError} from 'axios';
 
 import map_ from 'lodash/map';
 import toString_ from 'lodash/toString';
@@ -6,10 +6,10 @@ import compact_ from 'lodash/compact';
 
 import * as os from 'os';
 
-import type {Request} from 'express';
+import {type Request} from 'express';
 
-import {ClusterConfig} from '../../shared/yt-types';
-import {YTApiUserSetup, getUserYTApiSetup, getYTApiClusterSetup} from './requestsSetup';
+import {type ClusterConfig} from '../../shared/yt-types';
+import {type YTApiUserSetup, getUserYTApiSetup, getYTApiClusterSetup} from './requestsSetup';
 
 const REQUEST_TIMEOUT = 15000;
 

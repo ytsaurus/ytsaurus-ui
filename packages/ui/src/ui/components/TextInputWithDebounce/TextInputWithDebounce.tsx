@@ -1,7 +1,7 @@
 import React from 'react';
 import debounce_ from 'lodash/debounce';
 
-import {TextInput, TextInputProps} from '@gravity-ui/uikit';
+import {TextInput, type TextInputProps} from '@gravity-ui/uikit';
 
 export interface TextInputWithDebounceProps extends TextInputProps {
     debounce?: number;

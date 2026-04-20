@@ -1,4 +1,4 @@
-import {RootState} from '../../reducers';
+import {type RootState} from '../../reducers';
 
 export const selectChytSpecletLoaded = (state: RootState) => state.chyt.speclet.loaded;
 export const selectChytSpecletData = (state: RootState) => state.chyt.speclet.data;

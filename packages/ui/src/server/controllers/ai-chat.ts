@@ -1,10 +1,10 @@
-import {Request, Response} from '@gravity-ui/expresskit';
+import {type Request, type Response} from '@gravity-ui/expresskit';
 import {AiChat} from '../components/ai-chat';
-import {LLMStreamEvent} from '../../shared/ai-chat';
-import {CreateConversationRequest, SendMessageRequest} from '../types/ai-chat';
+import {type LLMStreamEvent} from '../../shared/ai-chat';
+import {type CreateConversationRequest, type SendMessageRequest} from '../types/ai-chat';
 import {ErrorWithCode, pipeAxiosResponse} from '../utils';
 import {sendApiError} from '../utils/sendApiError';
-import {YTCoreConfig} from '../../@types/core';
+import {type YTCoreConfig} from '../../@types/core';
 
 const ERROR_MESSAGE = {
     CONFIG_NOT_SET: 'AI Chat configuration is not set in UI settings',

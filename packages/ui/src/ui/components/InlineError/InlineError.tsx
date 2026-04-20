@@ -1,5 +1,5 @@
 import React from 'react';
-import {YTError} from '../../../@types/types';
+import {type YTError} from '../../../@types/types';
 import {ClickableText} from '../../components/ClickableText/ClickableText';
 import {showErrorPopup} from '../../utils/utils';
 import i18n from './i18n';

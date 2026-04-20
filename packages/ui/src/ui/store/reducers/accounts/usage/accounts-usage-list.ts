@@ -1,10 +1,10 @@
-import {ActionD, YTError} from '../../../../types';
+import {type ActionD, type YTError} from '../../../../types';
 import {
     ACCOUNTS_USAGE_LIST_FAILED,
     ACCOUNTS_USAGE_LIST_REQUEST,
     ACCOUNTS_USAGE_LIST_SUCCESS,
 } from '../../../../constants/accounts/accounts';
-import {AccountUsageData, AccountUsageDataParams} from './account-usage-types';
+import {type AccountUsageData, type AccountUsageDataParams} from './account-usage-types';
 
 export interface AccountUsageListData {
     loading?: boolean;

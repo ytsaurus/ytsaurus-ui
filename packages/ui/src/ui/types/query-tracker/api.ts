@@ -1,9 +1,9 @@
-import type {Plan, Progress} from '../../pages/query-tracker/Plan/models/plan';
-import type {TypeArray} from '@ytsaurus/components';
-import {QueriesHistoryCursorDirection} from '../../store/reducers/query-tracker/query-tracker-contants';
-import {VisualizationState} from '../../store/reducers/query-tracker/queryChartSlice';
-import {YTError} from '../index';
-import {QueryStatus} from './index';
+import {type Plan, type Progress} from '../../pages/query-tracker/Plan/models/plan';
+import {type TypeArray} from '@ytsaurus/components';
+import {type QueriesHistoryCursorDirection} from '../../store/reducers/query-tracker/query-tracker-contants';
+import {type VisualizationState} from '../../store/reducers/query-tracker/queryChartSlice';
+import {type YTError} from '../index';
+import {type QueryStatus} from './index';
 import {QueryEngine} from '../../../shared/constants/engines';
 
 export type QTRequestOptions = {

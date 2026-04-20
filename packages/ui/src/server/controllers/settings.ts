@@ -1,4 +1,4 @@
-import type {Request, Response} from 'express';
+import {type Request, type Response} from 'express';
 import {create, deleteItem, get, getItem, setItem} from '../components/settings';
 import {sendError} from '../utils';
 

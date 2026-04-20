@@ -1,5 +1,5 @@
-import React, {ComponentType} from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import React, {type ComponentType} from 'react';
+import {type ConnectedProps, connect} from 'react-redux';
 import {useDispatch} from '../../../../../store/redux-hooks';
 import {Button} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
@@ -8,7 +8,7 @@ import RadioButton from '../../../../../components/RadioButton/RadioButton';
 import {CONSUMER_MODE} from '../../../../../constants/navigation/tabs/consumer';
 import {changeConsumerMode} from '../../../../../store/actions/navigation/tabs/consumer/filters';
 import {toggleRegisterDialog} from '../../../../../store/reducers/navigation/tabs/consumer/register';
-import type {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 import {getConsumerMode} from '../../../../../store/selectors/navigation/tabs/consumer';
 
 import './Toolbar.scss';

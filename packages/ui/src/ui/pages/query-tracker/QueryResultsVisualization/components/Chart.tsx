@@ -1,7 +1,7 @@
 import React, {forwardRef, useMemo} from 'react';
 import {useSelector} from '../../../../store/redux-hooks';
 
-import {ChartKitRef, YTChartKitLazy} from '../../../../components/YTChartKit';
+import {type ChartKitRef, YTChartKitLazy} from '../../../../components/YTChartKit';
 
 import {prepareWidgetData} from '../preparers/prepareWidgetData';
 import {

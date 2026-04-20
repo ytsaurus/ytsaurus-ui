@@ -1,13 +1,13 @@
-import {ActionD} from '../../../../../types';
+import {type ActionD} from '../../../../../types';
 import {
     ACCESS_LOG_FILTERS,
     ACCESS_LOG_PATH_CHANGED,
     ACCESS_LOG_RESET_FILTERS,
 } from '../../../../../constants/navigation/tabs/access-log';
 import {mergeStateOnClusterChange} from '../../../../../store/reducers/utils';
-import {Action} from 'redux';
+import {type Action} from 'redux';
 import {EMPTY_OBJECT} from '../../../../../constants/empty';
-import {TimeRangeType} from '../../../../../utils/parse-serialize';
+import {type TimeRangeType} from '../../../../../utils/parse-serialize';
 
 export interface AccessLogFiltersState {
     recursive: boolean;

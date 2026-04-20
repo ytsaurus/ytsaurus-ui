@@ -6,15 +6,15 @@ import map_ from 'lodash/map';
 
 import {createSelector} from 'reselect';
 
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {
     ACCOUNT_RESOURCE_TYPES_DESCRIPTION,
     AccountResourceName,
-    AccountResourceNameType,
+    type AccountResourceNameType,
     ROOT_ACCOUNT_NAME,
 } from '../../../constants/accounts/accounts';
 import hammer from '../../../common/hammer';
-import {FIX_MY_TYPE} from '../../../types';
+import {type FIX_MY_TYPE} from '../../../types';
 import {getMediumListNoCache} from '../thor';
 import ypath from '../../../common/thor/ypath';
 

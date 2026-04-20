@@ -1,6 +1,6 @@
 import {createSelector} from 'reselect';
 
-import {RootState} from '../../reducers';
+import {type RootState} from '../../reducers';
 
 export const selectQueryTrackerInfo = (state: RootState) => state.queryTracker.aco.data;
 

@@ -8,14 +8,14 @@ import {
 import {useRegisterConsumerMutation} from '../../../../../../store/api/navigation/tabs/queue/queue';
 import {selectCluster} from '../../../../../../store/selectors/global';
 
-import {FormApi, YTDFDialog, makeErrorFields} from '../../../../../../components/Dialog';
+import {type FormApi, YTDFDialog, makeErrorFields} from '../../../../../../components/Dialog';
 
 import {docsUrl} from '../../../../../../config';
 import UIFactory from '../../../../../../UIFactory';
 import {makeLink} from '../../../../../../utils/utils';
 import {makeClusterSelectOptionsSameEnv} from '../../../../../../utils/navigation/tabs/make-cluster-select-options-same-env';
 
-import {YTError} from '../../../../../../../@types/types';
+import {type YTError} from '../../../../../../../@types/types';
 
 type FormValues = {
     consumerPath: string;

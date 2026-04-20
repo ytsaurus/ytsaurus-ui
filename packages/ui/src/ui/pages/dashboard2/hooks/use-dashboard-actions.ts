@@ -1,5 +1,5 @@
 import {useDispatch} from '../../../store/redux-hooks';
-import {DashKitProps} from '@gravity-ui/dashkit';
+import {type DashKitProps} from '@gravity-ui/dashkit';
 
 import {
     cancelEditting,

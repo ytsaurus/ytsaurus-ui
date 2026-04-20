@@ -1,6 +1,10 @@
 import {expect} from '@playwright/experimental-ct-react';
 
-import type {CaptureScreenshotParams, ExpectScreenshotFixture, PlaywrightFixture} from './types';
+import {
+    type CaptureScreenshotParams,
+    type ExpectScreenshotFixture,
+    type PlaywrightFixture,
+} from './types';
 
 const defaultParams: CaptureScreenshotParams = {
     themes: ['light', 'dark'],

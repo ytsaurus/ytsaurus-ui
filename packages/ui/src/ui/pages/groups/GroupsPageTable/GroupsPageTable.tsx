@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 import DataTable from '@gravity-ui/react-data-table';
 
 import {openAttributesModal} from '../../../store/actions/modals/attributes-modal';
@@ -19,7 +19,7 @@ import {fetchGroups, setGroupsPageSorting, toggleGroupExpand} from '../../../sto
 import {STICKY_TOOLBAR_BOTTOM} from '../../../components/WithStickyToolbar/WithStickyToolbar';
 import GroupEditorDialog from '../../../pages/groups/GroupEditorDialog/GroupEditorDialog';
 import {
-    GroupsTreeNode,
+    type GroupsTreeNode,
     getGroupEditorVisible,
     getGroupsFlattenTree,
     getGroupsSort,
@@ -27,8 +27,8 @@ import {
 } from '../../../store/selectors/groups';
 
 import './GroupsPageTable.scss';
-import type {RootState} from '../../../store/reducers';
-import type {OrderType} from '../../../utils/sort-helpers';
+import {type RootState} from '../../../store/reducers';
+import {type OrderType} from '../../../utils/sort-helpers';
 import {GroupActions} from '../GroupActions/GroupActions';
 
 const block = cn('groups-page-table');

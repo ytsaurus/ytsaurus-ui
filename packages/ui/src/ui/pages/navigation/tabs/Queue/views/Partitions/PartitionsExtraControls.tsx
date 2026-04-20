@@ -1,5 +1,5 @@
 import React from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import {
@@ -17,7 +17,7 @@ import {
     changeQueueTabletCellId,
     changeQueueTimeWindow,
 } from '../../../../../../store/actions/navigation/tabs/queue/filters';
-import type {RootState} from '../../../../../../store/reducers';
+import {type RootState} from '../../../../../../store/reducers';
 import {
     getQueuePartitionIndex,
     getQueuePartitionsColumns,

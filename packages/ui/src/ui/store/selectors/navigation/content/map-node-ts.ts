@@ -1,6 +1,6 @@
 import {
-    TabletStateAction,
-    TabletStateType,
+    type TabletStateAction,
+    type TabletStateType,
 } from '../../../../store/reducers/navigation/modals/dyn-tables-state-modal';
 
 export const DYN_TABLES_ALLOWED_STATES_OF_ACTION: Record<

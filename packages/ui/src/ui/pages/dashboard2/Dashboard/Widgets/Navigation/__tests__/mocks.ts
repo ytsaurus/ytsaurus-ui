@@ -1,6 +1,6 @@
 import {HttpResponse, http} from 'msw';
-import {BatchResultsItem} from '../../../../../../../shared/yt-types';
-import {DashboardNavigationResponse} from '../../../../../../store/api/dashboard2/navigation/paths';
+import {type BatchResultsItem} from '../../../../../../../shared/yt-types';
+import {type DashboardNavigationResponse} from '../../../../../../store/api/dashboard2/navigation/paths';
 
 const pathsResponse: Array<BatchResultsItem<DashboardNavigationResponse>> = [
     {

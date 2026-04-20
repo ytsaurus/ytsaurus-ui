@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 
 import {selectRawStatistic} from '../../../../store/selectors/job/statistics';
 import {selectOperationStatisticsDescription} from '../../../../store/selectors/global/supported-features';
-import {StatisticTable, StatisticTree} from '../../../../components/StatisticTable';
+import {StatisticTable, type StatisticTree} from '../../../../components/StatisticTable';
 import {isDocsAllowed} from '../../../../config';
 import UIFactory from '../../../../UIFactory';
 

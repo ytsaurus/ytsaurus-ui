@@ -1,4 +1,4 @@
-import {PoolPair} from './PoolsMultiple';
+import {type PoolPair} from './PoolsMultiple';
 
 export function useActions(value: PoolPair[], onChange: (v: PoolPair[]) => void) {
     const addPair = () => {

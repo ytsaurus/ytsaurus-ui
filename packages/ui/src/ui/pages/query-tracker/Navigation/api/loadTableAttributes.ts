@@ -2,7 +2,7 @@ import {getBatchError} from '../../../../../shared/utils/error';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {JSONSerializer} from '../../../../common/yt-api';
 import {getClusterProxy} from '../../../../store/selectors/global';
-import {BatchSubRequest, ClusterConfig} from '../../../../../shared/yt-types';
+import {type BatchSubRequest, type ClusterConfig} from '../../../../../shared/yt-types';
 import {toaster} from '../../../../utils/toaster';
 
 export const loadTableAttributes = async (path: string, clusterConfig: ClusterConfig) => {

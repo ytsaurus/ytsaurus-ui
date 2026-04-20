@@ -15,8 +15,8 @@ import map_ from 'lodash/map';
 import some_ from 'lodash/some';
 import sortBy_ from 'lodash/sortBy';
 
-import {RootState} from '../../reducers';
-import {OperationsListFilterValue} from '../../reducers/operations/list/list';
+import {type RootState} from '../../reducers';
+import {type OperationsListFilterValue} from '../../reducers/operations/list/list';
 
 export const selectOperationsListFilters = (state: RootState) => state.operations.list.filters;
 export const selectOperationsPoolFilterData = (state: RootState) =>

@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {type FC, useState} from 'react';
 import cn from 'bem-cn-lite';
 import './SettingsItem.scss';
 import {Button, Icon, Text, Tooltip} from '@gravity-ui/uikit';
@@ -6,8 +6,8 @@ import PencilIcon from '@gravity-ui/icons/svgs/pencil.svg';
 import TrashBinIcon from '@gravity-ui/icons/svgs/trash-bin.svg';
 import GearIcon from '@gravity-ui/icons/svgs/gear.svg';
 import {
-    SaveFormData,
-    Props as SettingsItemEditFormProps,
+    type SaveFormData,
+    type Props as SettingsItemEditFormProps,
     SettingsItemForm,
 } from '../SettingsItemForm';
 import i18n from './i18n';

@@ -1,7 +1,7 @@
 import {Page} from '../../../shared/constants/settings';
 import {YT} from '../../config/yt-config';
 import {Tab as ComponentsTab} from '../../constants/components/main';
-import {FlowTab, FlowTabType} from '../../store/reducers/flow/filters';
+import {FlowTab, type FlowTabType} from '../../store/reducers/flow/filters';
 
 export * from './navigation';
 

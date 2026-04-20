@@ -1,7 +1,7 @@
 import isEmpty_ from 'lodash/isEmpty';
 
-import {QueueExportConfig} from '../../../../../../../../types/navigation/queue/queue';
-import {ExportsFormValues} from '../ExportsEditDialog';
+import {type QueueExportConfig} from '../../../../../../../../types/navigation/queue/queue';
+import {type ExportsFormValues} from '../ExportsEditDialog';
 
 export function prepareInitialValues(
     configs: {[key: string]: QueueExportConfig<number>} | undefined,

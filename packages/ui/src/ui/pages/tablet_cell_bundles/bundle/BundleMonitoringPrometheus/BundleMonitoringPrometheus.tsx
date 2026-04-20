@@ -6,7 +6,7 @@ import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 import {HEADER_HEIGHT} from '../../../../constants';
 import {StickyContainer} from '../../../../components/StickyContainer/StickyContainer';
 import {PrometheusDashboardLazy} from '../../../../containers/PrometheusDashboard/lazy';
-import type {BundleMonitoringProps} from '../../../../UIFactory';
+import {type BundleMonitoringProps} from '../../../../UIFactory';
 import {
     TOOLBAR_COMPONENT_HEIGHT,
     Toolbar,

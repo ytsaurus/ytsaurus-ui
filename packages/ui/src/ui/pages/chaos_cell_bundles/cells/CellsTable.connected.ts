@@ -1,9 +1,9 @@
-import type {ComponentProps} from 'react';
+import {type ComponentProps} from 'react';
 import {connect} from 'react-redux';
 
 import CellsTable from '../../../pages/tablet_cell_bundles/cells/CellsTable';
 import {setChaosActiveBundle, setChaosPartial} from '../../../store/actions/chaos_cell_bundles';
-import type {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {selectCluster} from '../../../store/selectors/global';
 import {
     selectChaosCellsSortState,

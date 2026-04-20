@@ -3,7 +3,7 @@ import {APPLY_SETUP} from '../../../../../constants/components/nodes/nodes';
 import cloneDeep_ from 'lodash/cloneDeep';
 import merge_ from 'lodash/merge';
 
-import type {applyPreset} from '../../../../../store/actions/components/nodes/nodes';
+import {type applyPreset} from '../../../../../store/actions/components/nodes/nodes';
 
 interface RangeBorder {
     value: number | null;

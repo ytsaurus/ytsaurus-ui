@@ -1,4 +1,4 @@
-import {LocationParameters} from '../../store/location';
+import {type LocationParameters} from '../../store/location';
 
 export function makeURLSearchParams<T extends object>(params: T, info: LocationParameters) {
     const res = new URLSearchParams();

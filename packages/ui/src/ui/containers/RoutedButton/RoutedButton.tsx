@@ -1,4 +1,4 @@
-import {Button, ButtonLinkProps} from '@gravity-ui/uikit';
+import {Button, type ButtonLinkProps} from '@gravity-ui/uikit';
 import React, {forwardRef} from 'react';
 import {Link as RouterLink} from 'react-router-dom';
 import {makeRoutedURL} from '../../store/window-store';

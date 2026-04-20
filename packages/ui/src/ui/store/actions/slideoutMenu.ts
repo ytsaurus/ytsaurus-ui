@@ -1,10 +1,10 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 import findIndex_ from 'lodash/findIndex';
 import isEqual_ from 'lodash/isEqual';
 import map_ from 'lodash/map';
 
-import {RootState} from '../reducers';
+import {type RootState} from '../reducers';
 import {
     getSettingsPagesOrder,
     getSettingsPagesPinned,

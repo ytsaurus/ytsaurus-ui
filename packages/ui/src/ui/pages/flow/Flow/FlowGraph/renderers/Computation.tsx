@@ -1,7 +1,7 @@
-import {Flex, Progress, ProgressTheme, Text} from '@gravity-ui/uikit';
+import {Flex, Progress, type ProgressTheme, Text} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
-import {FlowComputationType} from '../../../../../../shared/yt-types';
+import {type FlowComputationType} from '../../../../../../shared/yt-types';
 import format from '../../../../../common/hammer/format';
 import Link from '../../../../../components/Link/Link';
 import {FlowTab} from '../../../../../store/reducers/flow/filters';
@@ -9,7 +9,7 @@ import {useSelector} from '../../../../../store/redux-hooks';
 import {selectFlowPipelinePath} from '../../../../../store/selectors/flow/filters';
 import {makeFlowLink} from '../../../../../utils/app-url';
 import {addProgressStackSpacers} from '../../../../../utils/progress';
-import {FlowGraphBlockItem} from '../FlowGraph';
+import {type FlowGraphBlockItem} from '../FlowGraph';
 import './Computation.scss';
 import {
     FlowCaption1,

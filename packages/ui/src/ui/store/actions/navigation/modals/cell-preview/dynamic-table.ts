@@ -1,4 +1,4 @@
-import type {CellPreviewActionType} from '../../../modals/cell-preview';
+import {type CellPreviewActionType} from '../../../modals/cell-preview';
 import {
     getCurrentRowKey,
     getKeyColumns,

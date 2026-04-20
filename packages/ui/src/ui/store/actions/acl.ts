@@ -1,4 +1,4 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 import flatten_ from 'lodash/flatten';
 import forEach_ from 'lodash/forEach';
@@ -13,24 +13,24 @@ import {
 } from '../../constants/acl';
 import {getTree} from '../../store/selectors/scheduling/scheduling';
 import {
-    YTPermissionTypeUI,
+    type YTPermissionTypeUI,
     checkUserPermissionsUI,
     getAcl,
     getResponsible,
 } from '../../utils/acl/acl-api';
 import {convertFromUIPermissions, prepareAclSubject} from '../../utils/acl';
 import UIFactory from '../../UIFactory';
-import {AclAction, HasIdmKind} from '../../store/reducers/acl/acl';
+import {type AclAction, type HasIdmKind} from '../../store/reducers/acl/acl';
 import {isCancelled} from '../../utils/cancel-helper';
-import {RootState} from '../../store/reducers';
+import {type RootState} from '../../store/reducers';
 import {
-    IdmKindType,
-    InheritanceModeType,
-    PreparedAclSubject,
-    ResponsibleType,
-    Role,
+    type IdmKindType,
+    type InheritanceModeType,
+    type PreparedAclSubject,
+    type ResponsibleType,
+    type Role,
 } from '../../utils/acl/acl-types';
-import {CheckPermissionResult} from '../../../shared/utils/check-permission';
+import {type CheckPermissionResult} from '../../../shared/utils/check-permission';
 import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
 
 type ThunkAclAction<T = unknown> = ThunkAction<T, RootState, unknown, AclAction>;

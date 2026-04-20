@@ -1,12 +1,12 @@
 import {
-    ChatAnswer,
-    ChatMessage,
-    SearchMcpAnswer,
-    SearchMcpResponse,
-    TableSchemaMcpAnswer,
-    UnknownMcpAnswer,
+    type ChatAnswer,
+    type ChatMessage,
+    type SearchMcpAnswer,
+    type SearchMcpResponse,
+    type TableSchemaMcpAnswer,
+    type UnknownMcpAnswer,
 } from '../../../types/ai-chat';
-import {GetConversationItemsResponse, LLMStreamEvent} from '../../../../shared/ai-chat';
+import {type GetConversationItemsResponse, type LLMStreamEvent} from '../../../../shared/ai-chat';
 
 export const parseStreamLine = (line: string): LLMStreamEvent | {text: string} | null => {
     if (!line.startsWith('data: ') || line === 'data: [DONE]') {

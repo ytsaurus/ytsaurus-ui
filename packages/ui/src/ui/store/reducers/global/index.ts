@@ -1,4 +1,4 @@
-import {Action} from 'redux';
+import {type Action} from 'redux';
 
 import filter_ from 'lodash/filter';
 import sortBy_ from 'lodash/sortBy';
@@ -15,10 +15,10 @@ import {
     INC_NAV_BLOCKER_COUNTER,
     INIT_CLUSTER_PARAMS,
     LOADING_STATUS,
-    LoadingStatus,
+    type LoadingStatus,
     MERGE_SCREEN,
     PRELOAD_ERROR,
-    PreloadErrorType,
+    type PreloadErrorType,
     SPLIT_SCREEN,
     UPDATE_CLUSTER,
     UPDATE_TITLE,
@@ -28,10 +28,15 @@ import {EMPTY_OBJECT} from '../../../constants/empty';
 
 import {getClusterConfig} from '../../../utils';
 import {defaultClusterUiConfig} from './cluster-ui-config';
-import {ActionD, YTError} from '../../../types';
-import {AuthWay} from '../../../../shared/constants';
-import {ClusterConfig, ClusterUiConfig, CypressNode, RawVersion} from '../../../../shared/yt-types';
-import {MaintenanceEvent} from '../index.main';
+import {type ActionD, type YTError} from '../../../types';
+import {type AuthWay} from '../../../../shared/constants';
+import {
+    type ClusterConfig,
+    type ClusterUiConfig,
+    type CypressNode,
+    type RawVersion,
+} from '../../../../shared/yt-types';
+import {type MaintenanceEvent} from '../index.main';
 
 export type PoolTree = {
     [K in string]: PoolTree;

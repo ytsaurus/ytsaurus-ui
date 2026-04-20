@@ -1,9 +1,9 @@
 import update_ from 'lodash/update';
 
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {setAccountLimit} from '../../../utils/accounts/editor';
-import {ThunkAction} from 'redux-thunk';
-import {FIX_MY_TYPE} from '../../../types';
+import {type ThunkAction} from 'redux-thunk';
+import {type FIX_MY_TYPE} from '../../../types';
 
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';

@@ -2,10 +2,10 @@ import {JobLineRenderer} from '../../../../../../components/TimelineBlock/render
 import {ROW_HEIGHT} from '../constants';
 import {
     MarkerDeselectionMode,
-    TimeLineConfig,
-    TimelineEvent,
-    TimelineMarker,
-    TimelineSection,
+    type TimeLineConfig,
+    type TimelineEvent,
+    type TimelineMarker,
+    type TimelineSection,
 } from '@gravity-ui/timeline';
 
 export const createTimelineConfig = <

@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Flex, Loader} from '@gravity-ui/uikit';
 
 export const LoadingPlaceholder: FC = () => {

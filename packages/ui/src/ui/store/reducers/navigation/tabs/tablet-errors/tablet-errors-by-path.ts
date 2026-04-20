@@ -1,6 +1,6 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {YTError} from '../../../../../types';
-import {TabletErrorsApi} from '../../../../../../shared/tablet-errors-manager';
+import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {type YTError} from '../../../../../types';
+import {type TabletErrorsApi} from '../../../../../../shared/tablet-errors-manager';
 import {mergeStateOnClusterChange} from '../../../utils';
 
 export type TabletErrorsByPathState = {

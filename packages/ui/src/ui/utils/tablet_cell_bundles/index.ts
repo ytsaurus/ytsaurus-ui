@@ -1,7 +1,7 @@
 import UIFactory from '../../UIFactory';
 import {Page} from '../../constants';
 import {TabletsTab} from '../../constants/tablets';
-import {OrderType, multiSortWithUndefined, orderTypeToOrderK} from '../sort-helpers';
+import {type OrderType, multiSortWithUndefined, orderTypeToOrderK} from '../sort-helpers';
 
 export function tabletCellBundleDashboardUrl(cluster: string, bundle: string) {
     return UIFactory.makeUrlForTabletCellBundleDashboard(cluster, bundle);

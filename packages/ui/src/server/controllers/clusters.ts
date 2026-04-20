@@ -1,4 +1,4 @@
-import type {Request, Response} from 'express';
+import {type Request, type Response} from 'express';
 import {makeAuthClusterCookieName, sendError, sendResponse} from '../utils';
 import {getVersions} from '../components/cluster-queries';
 import {getClustersFromConfig} from '../components/utils';

@@ -1,8 +1,8 @@
-import type {PluginWidgetProps} from '@gravity-ui/dashkit';
+import {type PluginWidgetProps} from '@gravity-ui/dashkit';
 
-import {YTPermissionType} from '../yt-types';
+import {type YTPermissionType} from '../yt-types';
 
-import type {PrometheusDashboardType} from './dashboard-type';
+import {type PrometheusDashboardType} from './dashboard-type';
 export {PrometheusDashboardType};
 
 export type DashboardInfo = {

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import hammer from '../../../../common/hammer';
-import {ResolveThunks, connect} from 'react-redux';
+import {type ResolveThunks, connect} from 'react-redux';
 
 import Button from '../../../../components/Button/Button';
 

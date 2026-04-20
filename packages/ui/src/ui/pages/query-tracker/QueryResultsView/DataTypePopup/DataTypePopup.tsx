@@ -1,12 +1,15 @@
 import React from 'react';
 import {Icon} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
-import {StrictReactNode} from '../YQLTable/utils';
+import {type StrictReactNode} from '../YQLTable/utils';
 import infoIcon from '../../../../assets/img/svg/icons/exclamation-circle.svg';
 
 import './DataTypePopup.scss';
-import {DataTypeComponent as DataType, Tooltip} from '@ytsaurus/components';
-import type {DataType as DataTypeProps} from '@ytsaurus/components';
+import {
+    DataTypeComponent as DataType,
+    type DataType as DataTypeProps,
+    Tooltip,
+} from '@ytsaurus/components';
 
 const block = cn('data-type-popup');
 

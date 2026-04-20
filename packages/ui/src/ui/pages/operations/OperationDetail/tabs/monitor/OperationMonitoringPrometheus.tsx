@@ -6,7 +6,7 @@ import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 
 import {PrometheusDashboardLazy} from '../../../../../containers/PrometheusDashboard/lazy';
 import {Toolbar} from '../../../../../components/WithStickyToolbar/Toolbar/Toolbar';
-import {OperationMonitoringTabProps} from '../../../../../UIFactory';
+import {type OperationMonitoringTabProps} from '../../../../../UIFactory';
 
 export function OperationMonitoringPrometheus({cluster, operation}: OperationMonitoringTabProps) {
     const {pools, startTime, finishTime} = operation;

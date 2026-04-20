@@ -1,6 +1,6 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Flex} from '@gravity-ui/uikit';
-import Label, {LabelTheme} from '../../../components/Label';
+import Label, {type LabelTheme} from '../../../components/Label';
 
 export type Props = {
     labels: {text: string; theme: LabelTheme}[];

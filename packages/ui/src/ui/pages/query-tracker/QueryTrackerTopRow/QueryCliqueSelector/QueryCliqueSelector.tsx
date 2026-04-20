@@ -1,8 +1,8 @@
-import React, {FC, useMemo} from 'react';
+import React, {type FC, useMemo} from 'react';
 import {QueryCliqueItem} from './QueryCliqueItem';
 import {QuerySelector} from '../QuerySelector';
 import {Flex, Select} from '@gravity-ui/uikit';
-import {ChytInfo} from '../../../../store/reducers/chyt/list';
+import {type ChytInfo} from '../../../../store/reducers/chyt/list';
 
 type Props = {
     loading: boolean;

@@ -1,8 +1,8 @@
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
-import {ChytCliqueSpecletAction} from '../../reducers/chyt/speclet';
-import {RootState} from '../../reducers';
+import {type ChytCliqueSpecletAction} from '../../reducers/chyt/speclet';
+import {type RootState} from '../../reducers';
 import {selectCluster} from '../../selectors/global';
 import {selectIsAdmin} from '../../selectors/global/is-developer';
 import {chytApiAction} from '../../../utils/strawberryControllerApi';

@@ -7,9 +7,9 @@ import {
     SET_DOCUMENT_EDIT_MODE,
 } from '../../../../constants/navigation/content/document';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../../reducers';
-import {NavigationDocumentAction} from '../../../reducers/navigation/content/document';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../../reducers';
+import {type NavigationDocumentAction} from '../../../reducers/navigation/content/document';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
 
 const requests = new CancelHelper();

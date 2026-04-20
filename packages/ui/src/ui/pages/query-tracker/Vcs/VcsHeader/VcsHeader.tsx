@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useMemo} from 'react';
+import React, {type FC, useCallback, useEffect, useMemo} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
     selectBranch,

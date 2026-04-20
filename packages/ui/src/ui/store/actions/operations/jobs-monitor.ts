@@ -1,8 +1,8 @@
 import {JOBS_MONITOR} from '../../../constants/operations/detail';
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {RootState} from '../../../store/reducers';
-import {JobsMonitorAction} from '../../../store/reducers/operations/jobs/jobs-monitor';
+import {type RootState} from '../../../store/reducers';
+import {type JobsMonitorAction} from '../../../store/reducers/operations/jobs/jobs-monitor';
 import {selectOperationMonitoredJobCount} from '../../../store/selectors/operations/operation';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 

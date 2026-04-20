@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useState} from 'react';
+import React, {type FC, useCallback, useState} from 'react';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import {Page} from '../../../../shared/constants/settings';
@@ -16,7 +16,7 @@ import {QueryEngineSelector} from './QueryEngineSelector';
 import {QuerySettingsButton} from '../QuerySettingsButton';
 import {QueryFilesButton} from '../QueryFilesButton';
 import {QuerySelectorsByEngine} from './QuerySelectorsByEngine';
-import {QueryEngine} from '../../../../shared/constants/engines';
+import {type QueryEngine} from '../../../../shared/constants/engines';
 import './QueryTrackerTopRow.scss';
 import cn from 'bem-cn-lite';
 import {EditableAsText} from '../../../components/EditableAsText/EditableAsText';

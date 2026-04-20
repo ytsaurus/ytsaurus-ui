@@ -2,9 +2,9 @@ import * as React from 'react';
 
 import {Button, Icon, Text} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
-import type {DataSet} from 'vis-data';
+import {type DataSet} from 'vis-data';
 
-import {ProcessedNode, useOperationNodesStates} from '../../utils';
+import {type ProcessedNode, useOperationNodesStates} from '../../utils';
 
 import infoIcon from '@gravity-ui/icons/svgs/circle-info.svg';
 import closeIcon from '@gravity-ui/icons/svgs/xmark.svg';

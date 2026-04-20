@@ -1,6 +1,6 @@
-import {Table, TableProps, useWindowRowVirtualizer} from '@gravity-ui/table';
-import {Cell, Header} from '@gravity-ui/table/tanstack';
-import {Flex, FlexProps} from '@gravity-ui/uikit';
+import {Table, type TableProps, useWindowRowVirtualizer} from '@gravity-ui/table';
+import {type Cell, type Header} from '@gravity-ui/table/tanstack';
+import {Flex, type FlexProps} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {useScrollMargin} from '../../hooks/use-scroll-margin';

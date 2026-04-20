@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {DashKit, PluginWidgetProps} from '@gravity-ui/dashkit';
+import {DashKit, type PluginWidgetProps} from '@gravity-ui/dashkit';
 
 import {defaultDashboardItems} from '../../../../constants/dashboard2';
 
@@ -24,10 +24,10 @@ import {QueriesWidgetHeader} from '../Widgets/Queries/QueriesWidgetHeader/Querie
 import {ServicesWidgetContent} from '../Widgets/Services/ServicesWidgetContent/ServicesWidgetContent';
 import {ServicesWidgetControls} from '../Widgets/Services/ServicesWidgetControls/ServicesWidgetControls';
 import {ServicesWidgetHeader} from '../Widgets/Services/ServicesWidgetHeader/ServicesWidgetHeader';
-import type {OperationsWidgetProps} from '../Widgets/Operations/types';
-import type {PoolsWidgetProps} from '../Widgets/Pools/types';
-import type {QueriesWidgetProps} from '../Widgets/Queries/types';
-import type {ServicesWidgetProps} from '../Widgets/Services/types';
+import {type OperationsWidgetProps} from '../Widgets/Operations/types';
+import {type PoolsWidgetProps} from '../Widgets/Pools/types';
+import {type QueriesWidgetProps} from '../Widgets/Queries/types';
+import {type ServicesWidgetProps} from '../Widgets/Services/types';
 
 export function registerPlugins() {
     DashKit.setSettings({

@@ -7,12 +7,12 @@ import {createSelector} from 'reselect';
 
 import {concatByAnd} from '../../../../../common/hammer/predicate';
 import {COMPONENTS_NODES_TABLE_ID} from '../../../../../constants/components/nodes/nodes';
-import {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 import {AttributesByProperty} from '../../../../../store/reducers/components/nodes/nodes/node';
 import {selectCluster} from '../../../../../store/selectors/global';
 import {getSelectedColumns} from '../../../../../store/selectors/settings';
 import {getMediumListNoCache} from '../../../../../store/selectors/thor';
-import type {ValueOf} from '../../../../../types';
+import {type ValueOf} from '../../../../../types';
 import {createMediumsPredicates} from '../../../../../utils/components/nodes/setup';
 import {
     PropertiesByColumn,
@@ -28,7 +28,7 @@ import {
     selectNodes,
     selectPropertiesRequiredForFilters,
 } from './predicates';
-import {NODE_TYPE, NodeType} from '../../../../../../shared/constants/system';
+import {NODE_TYPE, type NodeType} from '../../../../../../shared/constants/system';
 
 const selectContentMode = (state: RootState) => state.components.nodes.nodes.contentMode;
 

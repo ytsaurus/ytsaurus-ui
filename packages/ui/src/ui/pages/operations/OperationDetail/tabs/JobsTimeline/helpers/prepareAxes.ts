@@ -1,5 +1,5 @@
-import {TimelineJob} from '../../../../../../store/reducers/operations/jobs/jobs-timeline-slice';
-import {TimelineAxis} from '@gravity-ui/timeline';
+import {type TimelineJob} from '../../../../../../store/reducers/operations/jobs/jobs-timeline-slice';
+import {type TimelineAxis} from '@gravity-ui/timeline';
 import {getJobTrackId} from './getJobTrackId';
 
 export const AXIS_ID = 'main';

@@ -1,7 +1,7 @@
-import React, {FC, useEffect} from 'react';
+import React, {type FC, useEffect} from 'react';
 import throttle_ from 'lodash/throttle';
 import block from 'bem-cn-lite';
-import type {ChartKitRef} from '@gravity-ui/chartkit';
+import {type ChartKitRef} from '@gravity-ui/chartkit';
 import {Chart} from './Chart';
 import useResizeObserver from '../../../../hooks/useResizeObserver';
 import './QueryResultsVisualization.scss';

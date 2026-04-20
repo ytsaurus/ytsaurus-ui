@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import b from 'bem-cn-lite';
-import moment, {Moment} from 'moment';
+import moment, {type Moment} from 'moment';
 import {useSelector} from '../../../../../../store/redux-hooks';
 
 import format from '../../../../../../common/hammer/format';
 import {MetaTable} from '@ytsaurus/components';
 
-import {RootState} from '../../../../../../store/reducers';
+import {type RootState} from '../../../../../../store/reducers';
 import {getDownloadTableInfo} from '../../../../../../store/selectors/navigation/content/download-manager';
 
 const block = b('download-short-info');

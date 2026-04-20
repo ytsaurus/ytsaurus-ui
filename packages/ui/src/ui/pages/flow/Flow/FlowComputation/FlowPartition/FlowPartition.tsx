@@ -1,7 +1,7 @@
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {useRouteMatch} from 'react-router';
-import {FlowPartitionDetailsType} from '../../../../../../shared/yt-types';
+import {type FlowPartitionDetailsType} from '../../../../../../shared/yt-types';
 import format from '../../../../../common/hammer/format';
 import Link from '../../../../../components/Link/Link';
 import {MetaTable} from '@ytsaurus/components';

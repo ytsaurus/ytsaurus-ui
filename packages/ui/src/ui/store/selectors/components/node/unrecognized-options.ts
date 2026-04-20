@@ -1,4 +1,4 @@
-import {RootState} from '../../../reducers';
+import {type RootState} from '../../../reducers';
 
 export const selectNodeUnrecognizedOptionsData = (state: RootState) =>
     state.components.node.unrecognizedOptions.data;

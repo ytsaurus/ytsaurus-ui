@@ -1,4 +1,4 @@
-import {Response} from '@gravity-ui/expresskit';
+import {type Response} from '@gravity-ui/expresskit';
 import axios from 'axios';
 import {ErrorWithCode, sendError} from './index';
 

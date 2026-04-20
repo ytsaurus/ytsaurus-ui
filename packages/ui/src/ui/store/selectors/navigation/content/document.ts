@@ -1,5 +1,5 @@
 import {createSelector} from 'reselect';
-import {RootState} from '../../../reducers';
+import {type RootState} from '../../../reducers';
 import {calculateLoadingStatus} from '../../../../utils/utils';
 
 export const getNavigationDocumentLoadingStatus = createSelector(

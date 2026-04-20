@@ -1,9 +1,16 @@
 import React from 'react';
 
-import {BlockGroups, BlockState, Graph, Group, TBlock, TRect} from '@gravity-ui/graph';
+import {
+    BlockGroups,
+    type BlockState,
+    type Graph,
+    Group,
+    type TBlock,
+    type TRect,
+} from '@gravity-ui/graph';
 
 import {getCssColor} from '../../../utils/get-css-color';
-import {YTGraphBlock, YTGraphGroupProps} from '../types';
+import {type YTGraphBlock, type YTGraphGroupProps} from '../types';
 
 export function useCustomGroups({
     graph,

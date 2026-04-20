@@ -1,4 +1,4 @@
-import {RootState} from '../../../store/reducers';
+import {type RootState} from '../../../store/reducers';
 import {calculateLoadingStatus, isFinalLoadingStatus} from '../../../utils/utils';
 import {createSelector} from 'reselect';
 

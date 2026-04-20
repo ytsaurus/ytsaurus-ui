@@ -7,7 +7,7 @@ import Button from '../../../components/Button/Button';
 
 import {selectCurrentClusterConfig} from '../../../store/selectors/global';
 import {useSelector} from '../../../store/redux-hooks';
-import {ClusterConfig} from '../../../../shared/yt-types';
+import {type ClusterConfig} from '../../../../shared/yt-types';
 import UIFactory from '../../../UIFactory';
 
 import './SystemTopRowContent.scss';

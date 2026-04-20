@@ -7,10 +7,10 @@ import map_ from 'lodash/map';
 import sumBy_ from 'lodash/sumBy';
 import values_ from 'lodash/values';
 
-import {RootState} from '../../reducers';
+import {type RootState} from '../../reducers';
 import {PLEASE_PROCEED_TEXT} from '../../../utils/actions';
-import {JobPipes, PipesIO, StatisticsIO} from '../../../types/operations/job';
-import {Action as JobAction} from '../../../pages/job/JobActions/JobActions';
+import {type JobPipes, type PipesIO, type StatisticsIO} from '../../../types/operations/job';
+import {type Action as JobAction} from '../../../pages/job/JobActions/JobActions';
 
 const prepareStatisticsIO = (obj: PipesIO, type: string, index?: number): StatisticsIO => {
     return {

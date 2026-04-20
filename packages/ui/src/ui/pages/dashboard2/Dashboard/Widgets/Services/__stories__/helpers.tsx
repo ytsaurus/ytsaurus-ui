@@ -6,7 +6,7 @@ import {setSettingByKey} from '../../../../../../store/actions/settings';
 import {ServicesWidgetContent} from '../ServicesWidgetContent/ServicesWidgetContent';
 import {ServicesWidgetControls} from '../ServicesWidgetControls/ServicesWidgetControls';
 import {ServicesWidgetHeader} from '../ServicesWidgetHeader/ServicesWidgetHeader';
-import {ServicesWidgetProps} from '../types';
+import {type ServicesWidgetProps} from '../types';
 
 export function ServicesEmptyWidgetStory() {
     const dispatch = useDispatch();

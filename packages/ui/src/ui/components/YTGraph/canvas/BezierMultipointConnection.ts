@@ -1,5 +1,5 @@
 import {MultipointConnection} from '@gravity-ui/graph/react';
-import {TPoint} from '@gravity-ui/graph';
+import {type TPoint} from '@gravity-ui/graph';
 import {generateBezierParams} from './helpers/generateBezierParams';
 import {createArrowPath} from './helpers/createArrowPath';
 import {addBezierSegmentToPath} from './helpers/addBezierSegmentToPath';

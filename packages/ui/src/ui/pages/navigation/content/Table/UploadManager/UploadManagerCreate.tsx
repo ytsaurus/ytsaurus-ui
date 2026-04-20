@@ -1,14 +1,14 @@
 import React from 'react';
 import {compose} from 'redux';
-import axios, {AxiosProgressEvent} from 'axios';
+import axios, {type AxiosProgressEvent} from 'axios';
 import cn from 'bem-cn-lite';
 
-import withVisible, {WithVisibleProps} from '../../../../../hocs/withVisible';
+import withVisible, {type WithVisibleProps} from '../../../../../hocs/withVisible';
 import Button from '../../../../../components/Button/Button';
 import Modal from '../../../../../components/Modal/Modal';
 
 import {getPath} from '../../../../../store/selectors/navigation';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 import {YTErrorBlock} from '../../../../../components/Block/Block';
 import {YTDFDialog} from '../../../../../components/Dialog';
 import {Alert} from '@gravity-ui/uikit';
@@ -19,7 +19,7 @@ import format from '../../../../../common/hammer/format';
 import './UploadManager.scss';
 import {updateView} from '../../../../../store/actions/navigation';
 import {selectCluster} from '../../../../../store/selectors/global';
-import {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 import {getXsrfCookieName} from '../../../../../utils';
 import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
 import Link from '../../../../../components/Link/Link';

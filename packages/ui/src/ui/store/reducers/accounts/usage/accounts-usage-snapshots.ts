@@ -1,10 +1,10 @@
-import {Action} from 'redux';
+import {type Action} from 'redux';
 import {
     ACCOUNTS_USAGE_SNAPSHOTS_FAILED,
     ACCOUNTS_USAGE_SNAPSHOTS_REQUEST,
     ACCOUNTS_USAGE_SNAPSHOTS_SUCCESS,
 } from '../../../../constants/accounts/accounts';
-import {ActionD, YTError} from '../../../../types';
+import {type ActionD, type YTError} from '../../../../types';
 
 export interface AccountsSnapshotState {
     loaded?: boolean;

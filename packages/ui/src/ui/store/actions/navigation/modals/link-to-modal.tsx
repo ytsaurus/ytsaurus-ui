@@ -1,10 +1,10 @@
 import React from 'react';
-import {ThunkAction} from 'redux-thunk';
+import {type ThunkAction} from 'redux-thunk';
 import {
-    LinkToModalAction,
-    LinkToState,
+    type LinkToModalAction,
+    type LinkToState,
 } from '../../../../store/reducers/navigation/modals/link-to-modal';
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {LINK_TO_MODAL_PARTIAL} from '../../../../constants/navigation/modals';
 import {ytApiV3} from '../../../../rum/rum-wrap-api';
 import {selectCluster} from '../../../../store/selectors/global';

@@ -1,6 +1,6 @@
 import {useSelector} from '../../../../../../store/redux-hooks';
 
-import {RootState} from '../../../../../../store/reducers';
+import {type RootState} from '../../../../../../store/reducers';
 import {useOperationsQuery} from '../../../../../../store/api/dashboard2/operations';
 import {
     selectOperationsAuthorTypeFilter,
@@ -8,7 +8,7 @@ import {
 } from '../../../../../../store/selectors/dashboard2/operations';
 import {selectCluster} from '../../../../../../store/selectors/global';
 
-import {OperationsWidgetProps} from '../types';
+import {type OperationsWidgetProps} from '../types';
 
 export function useOperationsWidget(props: OperationsWidgetProps) {
     const {id, data} = props;

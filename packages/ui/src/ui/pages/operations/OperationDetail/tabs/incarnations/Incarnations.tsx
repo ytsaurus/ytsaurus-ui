@@ -1,13 +1,15 @@
 import React from 'react';
-import {AxiosError} from 'axios';
+import {type AxiosError} from 'axios';
 import {useSelector} from '../../../../../store/redux-hooks';
 import b from 'bem-cn-lite';
 import {Alert, Card, Disclosure, Flex, Loader} from '@gravity-ui/uikit';
 
-import type {YTError} from '../../../../../../@types/types';
+import {type YTError} from '../../../../../../@types/types';
 
-import {selectIncarnationsInfo} from '../../../../../store/selectors/operations/incarnations';
-import type {Incarnations as YTIncarnations} from '../../../../../store/selectors/operations/incarnations';
+import {
+    type Incarnations as YTIncarnations,
+    selectIncarnationsInfo,
+} from '../../../../../store/selectors/operations/incarnations';
 
 import {YTErrorBlock} from '../../../../../components/Error/Error';
 

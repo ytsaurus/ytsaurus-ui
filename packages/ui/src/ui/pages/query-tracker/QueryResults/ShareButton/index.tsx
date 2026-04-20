@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useState} from 'react';
+import React, {type FC, useCallback, useState} from 'react';
 import {Button, DropdownMenu, Icon} from '@gravity-ui/uikit';
 import ArrowShapeTurnUpRightIcon from '@gravity-ui/icons/svgs/arrow-shape-turn-up-right.svg';
 import ChevronUpIcon from '@gravity-ui/icons/svgs/chevron-up.svg';

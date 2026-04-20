@@ -1,4 +1,4 @@
-import {ProgressTheme} from '@gravity-ui/uikit';
+import {type ProgressTheme} from '@gravity-ui/uikit';
 
 import map_ from 'lodash/map';
 
@@ -8,7 +8,7 @@ import {ytApiV3} from '../../../../rum/rum-wrap-api';
 import {parseAccountData} from '../../../../utils/accounts/accounts-selector';
 import {UNKNOWN_ITEM_NAME} from '../../../../constants/dashboard2';
 
-import {YTError} from '../../../../types';
+import {type YTError} from '../../../../types';
 
 type AccountsWidgetArgs = {
     id: string;

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Datepicker, DatepickerProps} from '../../../../components/common/Datepicker';
+import {Datepicker, type DatepickerProps} from '../../../../components/common/Datepicker';
 
 type DatePickerControlProps = Omit<
     DatepickerProps,

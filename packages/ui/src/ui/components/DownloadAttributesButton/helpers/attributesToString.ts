@@ -1,5 +1,5 @@
 import unipika from '../../../common/thor/unipika';
-import {UnipikaSettings} from '../../Yson/StructuredYson/StructuredYsonTypes';
+import {type UnipikaSettings} from '../../Yson/StructuredYson/StructuredYsonTypes';
 
 export const attributesToString = (attributes: unknown, settings: UnipikaSettings) => {
     if (attributes === undefined || !settings) return '';

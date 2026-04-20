@@ -1,10 +1,10 @@
 import {createSelector} from 'reselect';
-import {RootState} from '../../../../store/reducers';
-import {FIX_MY_TYPE, SortState} from '../../../../types';
+import {type RootState} from '../../../../store/reducers';
+import {type FIX_MY_TYPE, type SortState} from '../../../../types';
 import {sortArrayBySortState} from '../../../../utils/sort-helpers';
 import {
-    VersionSummaryItem,
-    VersionSummaryRow,
+    type VersionSummaryItem,
+    type VersionSummaryRow,
 } from '../../../../store/reducers/components/versions/versions_v2';
 
 export const selectSummarySortState = (

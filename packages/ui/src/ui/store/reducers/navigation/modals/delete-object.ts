@@ -1,4 +1,4 @@
-import {Action} from 'redux/dist/redux';
+import {type Action} from 'redux/dist/redux';
 import {
     CLOSE_DELETE_OBJECT_POPUP,
     DELETE_OBJECT,
@@ -6,7 +6,7 @@ import {
     OPEN_DELETE_OBJECT_POPUP,
     TOGGLE_PERMANENTLY_DELETE,
 } from '../../../../constants/navigation/modals/delete-object';
-import type {ActionD, YTError} from '../../../../types';
+import {type ActionD, type YTError} from '../../../../types';
 
 export type DeleteObjectItem = {
     titleUnquoted?: string;

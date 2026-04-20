@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useRef} from 'react';
+import React, {type FC, useCallback, useRef} from 'react';
 import {
     selectChatError,
     selectChatHistoryIsVisible,

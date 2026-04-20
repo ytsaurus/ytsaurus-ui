@@ -10,8 +10,8 @@ import {Flex, Loader} from '@gravity-ui/uikit';
 
 import {abortAndReset, loadJobData} from '../../../store/actions/job/general';
 import {useUpdater} from '../../../hooks/use-updater';
-import {RootState} from '../../../store/reducers';
-import {RouteInfo} from '../../../pages/job/Job';
+import {type RootState} from '../../../store/reducers';
+import {type RouteInfo} from '../../../pages/job/Job';
 
 import './JobDetails.scss';
 

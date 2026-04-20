@@ -1,10 +1,10 @@
-import {ActionD, YTError} from '../../../types';
+import {type ActionD, type YTError} from '../../../types';
 import {
-    SUGGEST_TABLET_CELL_BUNDLES_ERROR,
-    SUGGEST_TABLET_CELL_BUNDLES_REQUEST,
-    SUGGEST_TABLET_CELL_BUNDLES_SUCCESS,
+    type SUGGEST_TABLET_CELL_BUNDLES_ERROR,
+    type SUGGEST_TABLET_CELL_BUNDLES_REQUEST,
+    type SUGGEST_TABLET_CELL_BUNDLES_SUCCESS,
 } from '../../../constants/suggests';
-import {Action} from 'redux';
+import {type Action} from 'redux';
 import {mergeStateOnClusterChange} from '../utils';
 
 export interface State {

@@ -1,5 +1,10 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {HoverEvent, Timeline, TimelineEvent, TimelineMarker} from '@gravity-ui/timeline';
+import {
+    type HoverEvent,
+    type Timeline,
+    type TimelineEvent,
+    type TimelineMarker,
+} from '@gravity-ui/timeline';
 import {useTimelineEvent} from '@gravity-ui/timeline/react';
 import {Popup} from '@gravity-ui/uikit';
 

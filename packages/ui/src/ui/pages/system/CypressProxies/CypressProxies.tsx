@@ -9,13 +9,13 @@ import {loadSystemCypressProxies} from '../../../store/actions/system/cypress-pr
 import {selectCluster} from '../../../store/selectors/global';
 import {getSettingsSystemCypressProxiesCollapsed} from '../../../store/selectors/settings/settings-ts';
 import {useDispatch} from '../../../store/redux-hooks';
-import {MakeUrlParams} from '../ProxiesImpl/RoleGroup';
+import {type MakeUrlParams} from '../ProxiesImpl/RoleGroup';
 import {ProxiesImpl} from '../ProxiesImpl/ProxiesImpl';
 import {
     getCypressProxiesCounters,
     getCypressProxiesRoleGroups,
 } from '../../../store/reducers/system/cypress-proxies';
-import {SystemNodeCounters} from '../../../store/reducers/system/proxies';
+import {type SystemNodeCounters} from '../../../store/reducers/system/proxies';
 
 function CypressProxiesOverview({counters}: {counters: SystemNodeCounters}) {
     return <SystemStateOverview tab="cypress_proxies" counters={counters} />;

@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 import Button from '../Button/Button';
 
 import TextInputWithDebounce, {
-    TextInputWithDebounceProps,
+    type TextInputWithDebounceProps,
 } from '../TextInputWithDebounce/TextInputWithDebounce';
 import i18n from './i18n';
 

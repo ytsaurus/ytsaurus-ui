@@ -1,10 +1,10 @@
 import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
-import {Button, ButtonProps, Icon, Popup} from '@gravity-ui/uikit';
+import {Button, type ButtonProps, Icon, Popup} from '@gravity-ui/uikit';
 
 import noop_ from 'lodash/noop';
-import moment, {MomentInput} from 'moment';
+import moment, {type MomentInput} from 'moment';
 import i18n from '../i18n';
 import {formatInterval, formatTimeCanonical, getTimestampFromDate, humanizeInterval} from '../util';
 

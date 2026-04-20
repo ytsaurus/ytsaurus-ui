@@ -1,4 +1,4 @@
-import {BaseQueryApi} from '@reduxjs/toolkit/query';
+import {type BaseQueryApi} from '@reduxjs/toolkit/query';
 import map_ from 'lodash/map';
 
 import {ytApiV3} from '../../../../rum/rum-wrap-api';

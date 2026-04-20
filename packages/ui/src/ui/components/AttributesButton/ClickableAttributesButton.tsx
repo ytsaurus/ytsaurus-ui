@@ -1,10 +1,10 @@
 import React from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 
 import {openAttributesModal} from '../../store/actions/modals/attributes-modal';
-import {ButtonProps} from '../../components/Button/Button';
+import {type ButtonProps} from '../../components/Button/Button';
 
-import AttributesButton, {AttributesButtonProps} from './AttributesButton';
+import AttributesButton, {type AttributesButtonProps} from './AttributesButton';
 
 import i18n from './i18n';
 

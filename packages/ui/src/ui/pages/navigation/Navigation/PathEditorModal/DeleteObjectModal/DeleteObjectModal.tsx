@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ResolveThunks, connect} from 'react-redux';
+import {type ResolveThunks, connect} from 'react-redux';
 // @ts-expect-error
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import {compose} from 'redux';
@@ -30,8 +30,8 @@ import hammer from '../../../../../common/hammer';
 
 import './DeleteObjectModal.scss';
 import UIFactory from '../../../../../UIFactory';
-import type {RootState} from '../../../../../store/reducers';
-import {DeleteObjectItem} from '../../../../../store/reducers/navigation/modals/delete-object';
+import {type RootState} from '../../../../../store/reducers';
+import {type DeleteObjectItem} from '../../../../../store/reducers/navigation/modals/delete-object';
 
 const block = cn('navigation-delete-object-modal');
 

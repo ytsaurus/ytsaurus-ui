@@ -5,10 +5,10 @@ import {
 } from '../../../constants/modals/attributes-modal';
 import {TYPED_OUTPUT_FORMAT} from '../../../constants';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../reducers';
-import {Action} from 'redux';
-import {ReactNode} from 'react';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../reducers';
+import {type Action} from 'redux';
+import {type ReactNode} from 'react';
 
 type ModalThunkAction = ThunkAction<void, RootState, null, Action>;
 

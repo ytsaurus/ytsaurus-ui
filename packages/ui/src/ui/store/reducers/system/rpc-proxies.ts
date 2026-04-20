@@ -1,8 +1,8 @@
-import {Action} from 'redux';
+import {type Action} from 'redux';
 import {FETCH_RPC_PROXIES} from '../../../constants/system/nodes';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
-import {HttpProxiesState} from './proxies';
-import {ActionD} from '../../../types';
+import {type HttpProxiesState} from './proxies';
+import {type ActionD} from '../../../types';
 
 const initialState: HttpProxiesState = {
     fetching: false,

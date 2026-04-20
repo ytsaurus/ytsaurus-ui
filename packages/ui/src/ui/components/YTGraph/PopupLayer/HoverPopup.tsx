@@ -1,7 +1,7 @@
-import React, {MouseEvent} from 'react';
+import React, {type MouseEvent} from 'react';
 import cn from 'bem-cn-lite';
 
-import {CanvasBlock, Graph, TBlock} from '@gravity-ui/graph';
+import {type CanvasBlock, type Graph, type TBlock} from '@gravity-ui/graph';
 import {Popup} from '@gravity-ui/uikit';
 
 import {useHoverBlock} from '../hooks/useHoverBlock';

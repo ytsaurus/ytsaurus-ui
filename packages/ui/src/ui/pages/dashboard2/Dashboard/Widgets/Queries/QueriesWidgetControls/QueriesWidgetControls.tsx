@@ -7,7 +7,7 @@ import map_ from 'lodash/map';
 
 import format from '../../../../../../common/hammer/format';
 
-import {RootState} from '../../../../../../store/reducers';
+import {type RootState} from '../../../../../../store/reducers';
 import {
     type QueryStatusesFilter,
     selectQueryFilterEngine,
@@ -20,7 +20,7 @@ import {
 
 import {QueryEngine} from '../../../../../../../shared/constants/engines';
 
-import type {QueriesWidgetProps} from '../types';
+import {type QueriesWidgetProps} from '../types';
 
 import './QueriesWidgetControls.scss';
 import i18n from '../i18n';

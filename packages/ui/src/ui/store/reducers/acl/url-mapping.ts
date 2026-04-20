@@ -1,8 +1,8 @@
 import {produce} from 'immer';
-import {RootState} from '..';
+import {type RootState} from '..';
 import {initialState} from './acl-filters';
 import {updateIfChanged} from '../../../utils/utils';
-import {LocationParameters} from '../../../store/location';
+import {type LocationParameters} from '../../../store/location';
 import {parseSerializeArrayString} from '../../../utils/parse-serialize';
 
 export const aclFiltersParams: LocationParameters = {

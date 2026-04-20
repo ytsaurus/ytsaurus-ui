@@ -6,7 +6,7 @@ import map_ from 'lodash/map';
 
 import {utils} from './utils';
 
-import {OldSortState} from '../../types';
+import {type OldSortState} from '../../types';
 
 export type TreeNode<T, L, E = {}, LE = E> = E & {
     name: string;

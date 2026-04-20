@@ -1,7 +1,7 @@
 import isEmpty_ from 'lodash/isEmpty';
 
 import {createSelector} from 'reselect';
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 
 export const getNavigationTableMountConfig = (state: RootState) =>
     state.navigation.content.tableMountConfig;

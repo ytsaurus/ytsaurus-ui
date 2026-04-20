@@ -6,7 +6,7 @@ import isEmpty_ from 'lodash/isEmpty';
 import pick_ from 'lodash/pick';
 import pickBy_ from 'lodash/pickBy';
 
-import {DialogField, FormApi, YTDFDialog} from '../../../../components/Dialog';
+import {type DialogField, type FormApi, YTDFDialog} from '../../../../components/Dialog';
 import {YTErrorBlock} from '../../../../components/Error/Error';
 
 import {closeEditModal, editPool} from '../../../../store/actions/scheduling/scheduling';
@@ -23,7 +23,7 @@ import {
     POOL_GENERAL_TYPE_TO_ATTRIBUTE,
     POOL_INTEGRAL_GUARANTEE_FIELD_TO_ATTR,
     POOL_STRONG_RESOURCE_TYPE_TO_ATTRIBUTE,
-    PoolEditorFormValues,
+    type PoolEditorFormValues,
     getInitialValues,
 } from '../../../../utils/scheduling/scheduling';
 
@@ -32,13 +32,13 @@ import {selectCluster, selectCurrentUserName} from '../../../../store/selectors/
 import {getCurrentTreeGpuLimit} from '../../../../store/selectors/scheduling/scheduling-ts';
 
 import Link from '../../../../components/Link/Link';
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {getSchedulingPoolsMapByName} from '../../../../store/selectors/scheduling/scheduling-pools';
 
 import UIFactory from '../../../../UIFactory';
 import ypath from '../../../../common/thor/ypath';
 import {createQuotaReqTicketUrl} from '../../../../config';
-import {PoolTreeNode} from '../../../../utils/scheduling/pool-child';
+import {type PoolTreeNode} from '../../../../utils/scheduling/pool-child';
 import './PoolEditorDialog.scss';
 
 const block = cn('pool-editor-dialog');

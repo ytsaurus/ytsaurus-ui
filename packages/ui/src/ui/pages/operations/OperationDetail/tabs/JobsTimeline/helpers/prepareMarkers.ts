@@ -1,6 +1,6 @@
-import {TimelineJob} from '../../../../../../store/reducers/operations/jobs/jobs-timeline-slice';
+import {type TimelineJob} from '../../../../../../store/reducers/operations/jobs/jobs-timeline-slice';
 import {
-    IncarnationMarker,
+    type IncarnationMarker,
     IncarnationMarkerRenderer,
 } from '../../../../../../components/TimelineBlock/renderer/IncarnationMarkerRenderer';
 

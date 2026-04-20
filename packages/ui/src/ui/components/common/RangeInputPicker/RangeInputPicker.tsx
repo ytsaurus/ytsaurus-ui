@@ -1,11 +1,11 @@
-import React, {Component, ReactElement} from 'react';
+import React, {Component, type ReactElement} from 'react';
 import block from 'bem-cn-lite';
 
 import Slider, {type SliderProps, type SliderRef} from 'rc-slider';
-import {IconProps, TextInput, TextInputSize} from '@gravity-ui/uikit';
+import {type IconProps, TextInput, type TextInputSize} from '@gravity-ui/uikit';
 import debounce_ from 'lodash/debounce';
 // eslint-disable-next-line lodash/import-scope
-import type {DebouncedFunc} from 'lodash';
+import {type DebouncedFunc} from 'lodash';
 
 import {
     getClosestValue,

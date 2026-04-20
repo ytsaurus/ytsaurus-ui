@@ -15,9 +15,9 @@ import ypath from '../../../common/thor/ypath';
 // @ts-ignore
 import {
     DialogError,
-    DialogField,
-    DialogTabField,
-    FormApi,
+    type DialogField,
+    type DialogTabField,
+    type FormApi,
     YTDFDialog,
 } from '../../../components/Dialog';
 
@@ -46,7 +46,7 @@ import {getPath} from '../../../store/selectors/navigation';
 
 import {
     InMemoryMode,
-    InMemoryModeType,
+    type InMemoryModeType,
     StorageOptions,
     compressionCodecValueFromString,
     compressionCodecValueToString,

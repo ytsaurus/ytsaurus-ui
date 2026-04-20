@@ -3,16 +3,16 @@ import * as React from 'react';
 import {
     type ControlGroupOption,
     SegmentedRadioGroup,
-    SegmentedRadioGroupWidth,
+    type SegmentedRadioGroupWidth,
 } from '@gravity-ui/uikit';
-import {NodeDetails, NodeProgress} from '../models/plan';
+import {type NodeDetails, type NodeProgress} from '../models/plan';
 import cn from 'bem-cn-lite';
 
 import NodeDetailsInfo from '../NodeDetailsInfo';
 import NodeJobs from '../NodeJobs';
 import {NodeSchemas} from '../NodeSchemas';
 import NodeStages from '../NodeStages';
-import {OperationSchemas, hasDetailsInfo, hasJobsInfo, hasStagesInfo} from '../utils';
+import {type OperationSchemas, hasDetailsInfo, hasJobsInfo, hasStagesInfo} from '../utils';
 import i18n from './i18n';
 
 import '../OperationNodeInfo.scss';

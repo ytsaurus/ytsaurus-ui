@@ -1,8 +1,8 @@
 import {GROUPS_TABLE, GROUPS_TABLE_DATA_FIELDS} from '../../../constants/groups';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
-import type {Action} from 'redux';
-import type {ActionD, YTError} from '../../../types';
-import type {OrderType} from '../../../utils/sort-helpers';
+import {type Action} from 'redux';
+import {type ActionD, type YTError} from '../../../types';
+import {type OrderType} from '../../../utils/sort-helpers';
 
 export type Group = {
     name: string;

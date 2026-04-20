@@ -1,9 +1,9 @@
 import React from 'react';
 import {Icon} from '@gravity-ui/uikit';
 import {AccessDenied, NotFound} from '@gravity-ui/illustrations';
-import {SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
+import {type SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
 
-import {ErrorCode} from './helpers';
+import {type ErrorCode} from './helpers';
 
 type Props = {
     type: ErrorCode;

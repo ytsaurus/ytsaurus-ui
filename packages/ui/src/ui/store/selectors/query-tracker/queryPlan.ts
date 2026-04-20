@@ -3,13 +3,13 @@ import reduce_ from 'lodash/reduce';
 import isEmpty_ from 'lodash/isEmpty';
 import {getQuerySingleProgress} from './query';
 import {
-    ProcessedGraph,
-    ProcessedNode,
+    type ProcessedGraph,
+    type ProcessedNode,
     isOperationFinished,
     operationsStateConfig,
     preprocess,
 } from '../../../pages/query-tracker/Plan/utils';
-import type {NodeStages, NodeState} from '../../../pages/query-tracker/Plan/models/plan';
+import {type NodeStages, type NodeState} from '../../../pages/query-tracker/Plan/models/plan';
 
 const LINE_WIDTH = 25;
 

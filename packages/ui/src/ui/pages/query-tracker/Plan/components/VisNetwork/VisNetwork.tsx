@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import cn from 'bem-cn-lite';
-import type {DataSetEdges, DataSetNodes, Network, Options} from 'vis-network';
+import {type DataSetEdges, type DataSetNodes, type Network, type Options} from 'vis-network';
 
 const block = cn('vis-network');
 

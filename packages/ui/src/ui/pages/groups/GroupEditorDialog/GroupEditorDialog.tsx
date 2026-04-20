@@ -1,13 +1,13 @@
 import {
-    EditableManyListsItemType,
-    FormApi,
+    type EditableManyListsItemType,
+    type FormApi,
     YTDFDialog,
     extractChangedSubjects,
     prepareRoleListValue,
 } from '../../../components/Dialog';
 import React from 'react';
 import cn from 'bem-cn-lite';
-import {ConnectedProps, connect} from 'react-redux';
+import {type ConnectedProps, connect} from 'react-redux';
 
 import {closeGroupEditorModal, fetchGroups, saveGroupData} from '../../../store/actions/groups';
 import {
@@ -17,8 +17,8 @@ import {
     getGroupEditorRoles,
     getGroupEditorVisible,
 } from '../../../store/selectors/groups';
-import type {RootState} from '../../../store/reducers';
-import type {ResponsibleType, RoleConverted} from '../../../utils/acl/acl-types';
+import {type RootState} from '../../../store/reducers';
+import {type ResponsibleType, type RoleConverted} from '../../../utils/acl/acl-types';
 import UIFactory from '../../../UIFactory';
 import {disableGroupsCache} from '../../../utils/users-groups';
 

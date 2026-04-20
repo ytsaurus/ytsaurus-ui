@@ -1,3 +1,3 @@
-import {ClusterUiConfig} from '../../../../shared/yt-types';
+import {type ClusterUiConfig} from '../../../../shared/yt-types';
 
 export const defaultClusterUiConfig: Partial<ClusterUiConfig> = {};

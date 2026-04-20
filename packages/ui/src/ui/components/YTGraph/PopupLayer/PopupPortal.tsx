@@ -1,8 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
-import {Graph, TBlock} from '@gravity-ui/graph';
+import {type Graph, type TBlock} from '@gravity-ui/graph';
 import {PopupLayer} from './PopupLayer';
-import {HoverPopup, HoverPopupProps} from './HoverPopup';
+import {HoverPopup, type HoverPopupProps} from './HoverPopup';
 
 export function PopupPortal<B extends TBlock>({
     graph,

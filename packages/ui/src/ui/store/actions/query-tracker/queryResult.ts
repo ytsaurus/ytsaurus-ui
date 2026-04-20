@@ -1,15 +1,15 @@
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../reducers';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../reducers';
 import {
-    QueryItem,
-    QueryResult,
-    QueryResultMeta,
-    QueryResultMetaScheme,
+    type QueryItem,
+    type QueryResult,
+    type QueryResultMeta,
+    type QueryResultMetaScheme,
     getQueryResultMeta,
     getQueryResultMetaList,
     readQueryResults,
 } from './api';
-import {Type, getSchemaDateType, parseV3Type} from '@ytsaurus/components';
+import {type Type, getSchemaDateType, parseV3Type} from '@ytsaurus/components';
 import {
     getQueryResultGlobalSettings,
     getQueryResultSettings,
@@ -17,10 +17,10 @@ import {
 } from '../../selectors/query-tracker/queryResult';
 import {getClusterConfigByName, getClusterProxy} from '../../selectors/global';
 import {
-    QueryResultErrorState,
-    QueryResultReadyState,
+    type QueryResultErrorState,
+    type QueryResultReadyState,
     QueryResultState,
-    Result,
+    type Result,
 } from '../../../types/query-tracker/queryResult';
 import {prepareFormattedValue} from '../../../utils/queries/format';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
@@ -28,7 +28,7 @@ import {selectPrimitiveTypesMap} from '../../selectors/global/supported-features
 import ypath from '../../../common/thor/ypath';
 import forEach_ from 'lodash/forEach';
 import {waitForFontFamilies} from '../global/fonts';
-import {QueryResultsActions} from '../../reducers/query-tracker/queryResult';
+import {type QueryResultsActions} from '../../reducers/query-tracker/queryResult';
 import {
     REQUEST_QUERY_RESULTS,
     SET_QUERY_RESULTS,

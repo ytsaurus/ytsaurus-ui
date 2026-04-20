@@ -4,7 +4,7 @@ import {AnswerBody} from './AnswerBody';
 import {McpSearchAnswer} from './McpSearchAnswer';
 import {McpSchemaAnswer} from './McpSchemaAnswer';
 import {McpUnknownAnswer} from './McpUnknownAnswer';
-import {ChatMessage} from '../../../types/ai-chat';
+import {type ChatMessage} from '../../../types/ai-chat';
 
 export const getMessageComponentByType = (message: ChatMessage, className?: string) => {
     switch (message.type) {

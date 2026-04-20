@@ -1,6 +1,11 @@
 import React from 'react';
 
-import ChartKit, {ChartKitProps, ChartKitRef, ChartKitWidget, settings} from '@gravity-ui/chartkit';
+import ChartKit, {
+    type ChartKitProps,
+    type ChartKitRef,
+    type ChartKitWidget,
+    settings,
+} from '@gravity-ui/chartkit';
 import {YagrPlugin} from '@gravity-ui/chartkit/yagr';
 import {GravityChartsPlugin} from '@gravity-ui/chartkit/gravity-charts';
 

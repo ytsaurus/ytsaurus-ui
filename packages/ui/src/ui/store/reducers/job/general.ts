@@ -1,10 +1,10 @@
 import {prepareJobEvents} from '../../../utils/operations/tabs/details/events/events';
 import {Job} from '../../../pages/operations/OperationDetail/tabs/Jobs/job-selector';
-import {JobEvents, JobStatistic, JobStatistics} from '../../../types/operations/job';
+import {type JobEvents, type JobStatistic, type JobStatistics} from '../../../types/operations/job';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
 import {prepareStatistics} from '../../../utils/job/tabs/statistics';
-import {GeneralActionType} from '../../../store/actions/job/general';
-import {YTError} from '../../../types';
+import {type GeneralActionType} from '../../../store/actions/job/general';
+import {type YTError} from '../../../types';
 import * as JOB from '../../../constants/job';
 
 export interface GeneralState {

@@ -1,11 +1,11 @@
-import React, {ComponentType} from 'react';
-import {ConnectedProps, connect} from 'react-redux';
+import React, {type ComponentType} from 'react';
+import {type ConnectedProps, connect} from 'react-redux';
 import cn from 'bem-cn-lite';
 
 import RadioButton from '../../../../../components/RadioButton/RadioButton';
 import {QUEUE_MODE} from '../../../../../constants/navigation/tabs/queue';
 import {changeQueueMode} from '../../../../../store/actions/navigation/tabs/queue/filters';
-import type {RootState} from '../../../../../store/reducers';
+import {type RootState} from '../../../../../store/reducers';
 import {getQueueMode} from '../../../../../store/selectors/navigation/tabs/queue';
 
 import './Toolbar.scss';

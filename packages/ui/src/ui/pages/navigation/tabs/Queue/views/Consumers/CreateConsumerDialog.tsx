@@ -7,13 +7,13 @@ import {
 } from '../../../../../../store/reducers/navigation/tabs/queue/consumers';
 import {useCreateConsumerMutation} from '../../../../../../store/api/navigation/tabs/queue/queue';
 
-import {FormApi, YTDFDialog, makeErrorFields} from '../../../../../../components/Dialog';
+import {type FormApi, YTDFDialog, makeErrorFields} from '../../../../../../components/Dialog';
 
 import {docsUrl} from '../../../../../../config';
 import UIFactory from '../../../../../../UIFactory';
 import {makeLink} from '../../../../../../utils/utils';
 
-import {YTError} from '../../../../../../../@types/types';
+import {type YTError} from '../../../../../../../@types/types';
 
 import {validateCreateConsumerPath} from './utils';
 

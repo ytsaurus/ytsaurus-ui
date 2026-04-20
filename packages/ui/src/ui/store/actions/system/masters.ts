@@ -15,18 +15,18 @@ import {showErrorPopup} from '../../../utils/utils';
 import {YTErrors} from '../../../rum/constants';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
-import type {AxiosError} from 'axios';
-import type {Dispatch} from 'redux';
-import type {BatchSubRequest} from '../../../../shared/yt-types';
+import {type AxiosError} from 'axios';
+import {type Dispatch} from 'redux';
+import {type BatchSubRequest} from '../../../../shared/yt-types';
 import {
-    MasterAlert,
-    MasterDataItemInfo,
-    MastersConfigResponse,
-    MastersGroup,
-    MastersStateAction,
+    type MasterAlert,
+    type MasterDataItemInfo,
+    type MastersConfigResponse,
+    type MastersGroup,
+    type MastersStateAction,
 } from '../../reducers/system/masters';
-import {ThunkAction} from 'redux-thunk';
-import type {RootState} from '../../reducers';
+import {type ThunkAction} from 'redux-thunk';
+import {type RootState} from '../../reducers';
 import {toaster} from '../../../utils/toaster';
 
 export const FETCH_MASTER_CONFIG = createActionTypes('MASTER_CONFIG');

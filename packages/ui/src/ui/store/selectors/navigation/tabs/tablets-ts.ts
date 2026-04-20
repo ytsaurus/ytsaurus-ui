@@ -7,14 +7,14 @@ import toArray_ from 'lodash/toArray';
 import {createSelector} from 'reselect';
 import {getPreparedDataForColumns, getTabletsMode, getTabletsSortState} from './tablets';
 import {
-    FieldDescr,
-    TreeItem,
-    TreeNode,
+    type FieldDescr,
+    type TreeItem,
+    type TreeNode,
     flattenTree,
     sortTree,
 } from '../../../../common/hammer/tree-list';
-import {OldSortState, TypedKeys} from '../../../../types';
-import {RootState} from '../../../reducers';
+import {type OldSortState, type TypedKeys} from '../../../../types';
+import {type RootState} from '../../../reducers';
 
 export const getTabletsExpandedHosts = (state: RootState): Array<string> =>
     state.navigation.tabs.tablets.expandedHosts;

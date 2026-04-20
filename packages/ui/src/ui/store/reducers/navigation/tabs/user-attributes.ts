@@ -1,5 +1,5 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {YTError} from '../../../../../@types/types';
+import {type PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {type YTError} from '../../../../../@types/types';
 import {mergeStateOnClusterChange} from '../../utils';
 
 export interface UserAttributesState {

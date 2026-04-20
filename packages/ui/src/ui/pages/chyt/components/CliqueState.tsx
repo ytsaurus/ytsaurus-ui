@@ -3,8 +3,8 @@ import React from 'react';
 import format from '../../../common/hammer/format';
 import Label from '../../../components/Label';
 import {
-    StrawberryCliqueHealthType,
-    StrawberryCliqueStateType,
+    type StrawberryCliqueHealthType,
+    type StrawberryCliqueStateType,
 } from '../../../utils/strawberryControllerApi';
 
 const THEME_MAP: Partial<

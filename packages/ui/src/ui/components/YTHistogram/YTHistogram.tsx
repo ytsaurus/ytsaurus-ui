@@ -3,9 +3,9 @@ import cn from 'bem-cn-lite';
 import i18n from './i18n';
 
 import {
-    RawSerieData,
+    type RawSerieData,
     YTChartKitLazy,
-    YagrWidgetData,
+    type YagrWidgetData,
     getSerieColor,
 } from '../../components/YTChartKit';
 import './YTHistogram.scss';

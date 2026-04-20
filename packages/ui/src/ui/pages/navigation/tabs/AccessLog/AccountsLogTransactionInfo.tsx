@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import {ClipboardButton, MetaTable} from '@ytsaurus/components';
 import Yson from '../../../../components/Yson/Yson';
-import {AccessLogTransactionInfo} from '../../../../store/reducers/navigation/tabs/access-log/access-log';
+import {type AccessLogTransactionInfo} from '../../../../store/reducers/navigation/tabs/access-log/access-log';
 
 import './AccountsLogTransactionInfo.scss';
 

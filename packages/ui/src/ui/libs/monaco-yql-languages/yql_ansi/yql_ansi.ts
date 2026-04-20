@@ -1,4 +1,4 @@
-import {Position, editor, languages} from 'monaco-editor';
+import {type Position, type editor, languages} from 'monaco-editor';
 import {getRangeToInsertSuggestion} from '../helpers/getRangeToInsertSuggestion';
 import {generateSuggestion} from '../helpers/generateSuggestions';
 import {builtinFunctions, keywords, typeKeywords} from '../yql/yql.keywords';

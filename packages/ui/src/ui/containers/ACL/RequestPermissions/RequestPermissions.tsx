@@ -1,13 +1,18 @@
-import {Button, ButtonProps} from '@gravity-ui/uikit';
+import {Button, type ButtonProps} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React, {useCallback, useMemo} from 'react';
 import {compose} from 'redux';
-import {DialogField, FormApi, YTDFDialog, makeErrorFields} from '../../../components/Dialog';
+import {
+    type DialogField,
+    type FormApi,
+    YTDFDialog,
+    makeErrorFields,
+} from '../../../components/Dialog';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import PermissionsControl from '../RequestPermissions/PermissionsControl/PermissionsControl';
-import withVisible, {WithVisibleProps} from '../../../hocs/withVisible';
+import withVisible, {type WithVisibleProps} from '../../../hocs/withVisible';
 import {AclMode, INHERITANCE_MODE_TYPES, IdmObjectType} from '../../../constants/acl';
-import {YTError} from '../../../types';
+import {type YTError} from '../../../types';
 import './RequestPermissions.scss';
 import map_ from 'lodash/map';
 import UIFactory from '../../../UIFactory';
@@ -16,13 +21,13 @@ import i18n from './i18n';
 import i18nPermissionValues from '../i18n-permission-values';
 import HelpLink from '../../../components/HelpLink/HelpLink';
 import {docsUrl} from '../../../config';
-import {PermissionToRequest} from '../../../store/actions/acl';
-import {YTPermissionTypeUI} from '../../../utils/acl/acl-api';
+import {type PermissionToRequest} from '../../../store/actions/acl';
+import {type YTPermissionTypeUI} from '../../../utils/acl/acl-api';
 import {
-    AclColumnGroup,
-    AclRowGroup,
-    IdmKindType,
-    InheritanceModeType,
+    type AclColumnGroup,
+    type AclRowGroup,
+    type IdmKindType,
+    type InheritanceModeType,
 } from '../../../utils/acl/acl-types';
 import {makeLink} from '../../../utils/utils';
 import {useAvailablePermissions} from '../hooks/use-available-permissions';

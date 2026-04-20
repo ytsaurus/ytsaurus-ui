@@ -1,7 +1,7 @@
-import {AxiosError} from 'axios';
+import {type AxiosError} from 'axios';
 import {HIDE_ERROR_MODAL, SHOW_ERROR_MODAL} from '../../../constants/modals/errors';
-import {ErrorInfo, ErrorsAction} from '../../../store/reducers/modals/errors';
-import {YTError} from '../../../types';
+import {type ErrorInfo, type ErrorsAction} from '../../../store/reducers/modals/errors';
+import {type YTError} from '../../../types';
 
 export function showErrorModal<T extends {attributes?: object}>(
     error: YTError<T> | AxiosError,

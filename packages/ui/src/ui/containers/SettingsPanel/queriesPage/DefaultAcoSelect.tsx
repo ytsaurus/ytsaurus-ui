@@ -1,9 +1,9 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {
     getQueryTrackerInfo,
     setUserDefaultACO,
 } from '../../../store/actions/query-tracker/queryAco';
-import {Item} from '../../../components/Select/Select';
+import {type Item} from '../../../components/Select/Select';
 import {SettingsMenuSelect} from '../../SettingsMenu/SettingsMenuSelect';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {getDefaultQueryACO} from '../../../store/selectors/query-tracker/queryAco';

@@ -11,9 +11,9 @@ import Statuslabel from '../../../../components/StatusLabel/StatusLabel';
 import Link from '../../../../components/Link/Link';
 
 import ypath from '../../../../common/thor/ypath';
-import {PreparedJob, RawJob} from '../../../../types/operations/job';
+import {type PreparedJob, type RawJob} from '../../../../types/operations/job';
 import hammer from '../../../../common/hammer';
-import {RootState} from '../../../../store/reducers';
+import {type RootState} from '../../../../store/reducers';
 import {selectCluster} from '../../../../store/selectors/global';
 import {loadCompetitors} from '../../../../store/actions/job/competitors';
 import {OPERATION_JOBS_TABLE_ID} from '../../../../constants/operations/jobs';

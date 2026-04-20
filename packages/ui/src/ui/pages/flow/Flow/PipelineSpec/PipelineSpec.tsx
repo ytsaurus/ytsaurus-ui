@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import {Alert, Button, Link} from '@gravity-ui/uikit';
 
-import {YTError} from '../../../../../@types/types';
+import {type YTError} from '../../../../../@types/types';
 
 import {useUpdater} from '../../../../hooks/use-updater';
 
@@ -23,7 +23,7 @@ import {
     selectFlowStaticSpecFirstLoading,
 } from '../../../../store/selectors/flow/specs';
 import {getFlowSpecYsonSettings} from '../../../../store/selectors/thor/unipika';
-import {FlowSpecState} from '../../../../store/reducers/flow/specs';
+import {type FlowSpecState} from '../../../../store/reducers/flow/specs';
 
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
 import Yson from '../../../../components/Yson/Yson';
@@ -31,7 +31,7 @@ import Icon from '../../../../components/Icon/Icon';
 import {YTDFDialog, makeErrorFields} from '../../../../components/Dialog';
 import {YTErrorBlock} from '../../../../components/Block/Block';
 import Loader from '../../../../components/Loader/Loader';
-import {UnipikaSettings} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
+import {type UnipikaSettings} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 import UIFactory from '../../../../UIFactory';
 
 import {pathToFileName} from '../../../navigation/helpers/pathToFileName';

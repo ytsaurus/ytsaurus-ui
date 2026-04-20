@@ -1,5 +1,12 @@
-import {CanvasBlock, ECameraScaleLevel, Graph, TBlock, TConnection, TRect} from '@gravity-ui/graph';
-import {HookGraphParams} from '@gravity-ui/graph/react';
+import {
+    type CanvasBlock,
+    type ECameraScaleLevel,
+    type Graph,
+    type TBlock,
+    type TConnection,
+    type TRect,
+} from '@gravity-ui/graph';
+import {type HookGraphParams} from '@gravity-ui/graph/react';
 
 export type YTGraphGroupProps = {
     /**

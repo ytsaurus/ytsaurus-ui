@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {type FC} from 'react';
 import {Button, Icon, Tooltip} from '@gravity-ui/uikit';
 import AiIcon from '../../../assets/img/svg/icons/ai-chat-icon.svg';
 import i18n from './i18n';

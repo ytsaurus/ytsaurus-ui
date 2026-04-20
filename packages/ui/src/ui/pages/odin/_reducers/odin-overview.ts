@@ -1,5 +1,5 @@
-import {ActionD, YTError} from '../../../types';
-import {AxiosError, Canceler} from 'axios';
+import {type ActionD, type YTError} from '../../../types';
+import {type AxiosError, type Canceler} from 'axios';
 import {
     ODIN_OVERVIEW_CANCELLED,
     ODIN_OVERVIEW_FAILED,
@@ -8,9 +8,9 @@ import {
     ODIN_OVERVIEW_REQUEST,
     ODIN_OVERVIEW_SUCCESS,
 } from '../odin-constants';
-import {Action} from 'redux';
+import {type Action} from 'redux';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
-import {MetricData, MetricListItem} from '../odin-utils';
+import {type MetricData, type MetricListItem} from '../odin-utils';
 
 export interface OdinOverviewState {
     error: YTError | AxiosError | null;

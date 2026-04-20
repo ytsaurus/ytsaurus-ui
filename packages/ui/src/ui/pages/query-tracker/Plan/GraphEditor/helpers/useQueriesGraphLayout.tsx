@@ -1,12 +1,12 @@
 import {useEffect, useMemo, useState} from 'react';
-import {ProcessedGraph} from '../../utils';
-import {ECameraScaleLevel, TPoint} from '@gravity-ui/graph';
-import {QueriesNodeBlock} from '../QueriesNodeBlock';
+import {type ProcessedGraph} from '../../utils';
+import {type ECameraScaleLevel, type TPoint} from '@gravity-ui/graph';
+import {type QueriesNodeBlock} from '../QueriesNodeBlock';
 import {BLOCK_SIDE, createBlocks} from './createBlocks';
-import {Node, layoutGraph} from '../../services/layout';
+import {type Node, layoutGraph} from '../../services/layout';
 import {buildConnectionsFromEdges} from './buildConnectionsFromEdges';
 import {toaster} from '../../../../../utils/toaster';
-import {MultipointConnection} from '../types';
+import {type MultipointConnection} from '../types';
 import {useSelector} from '../../../../../store/redux-hooks';
 import {getQuerySingleProgress} from '../../../../../store/selectors/query-tracker/query';
 

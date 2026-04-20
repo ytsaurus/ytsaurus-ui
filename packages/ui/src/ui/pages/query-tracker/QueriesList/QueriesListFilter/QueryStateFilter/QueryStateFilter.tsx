@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from 'react';
+import React, {type FC, useCallback} from 'react';
 import {Select} from '@gravity-ui/uikit';
 import {QueryStatus} from '../../../../../types/query-tracker';
 import hammer from '../../../../../common/hammer';

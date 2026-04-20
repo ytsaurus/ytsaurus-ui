@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useState} from 'react';
+import React, {type FC, useCallback, useState} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
     getClusterLoading,
@@ -12,7 +12,7 @@ import {
     createQueryFromTablePath,
     updateQueryDraft,
 } from '../../../../store/actions/query-tracker/query';
-import {QueryEngine} from '../../../../../shared/constants/engines';
+import {type QueryEngine} from '../../../../../shared/constants/engines';
 import {ModalWithoutHandledScrollBar as Modal} from '../../../../components/Modal/Modal';
 import RadioButton from '../../../../components/RadioButton/RadioButton';
 import {Select} from '@gravity-ui/uikit';

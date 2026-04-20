@@ -1,6 +1,6 @@
 import {HttpResponse, http} from 'msw';
-import {BatchResultsItem} from '../../../../../../../shared/yt-types';
-import {DashboardOperationsResponse} from '../../../../../../store/api/dashboard2/operations/operations';
+import {type BatchResultsItem} from '../../../../../../../shared/yt-types';
+import {type DashboardOperationsResponse} from '../../../../../../store/api/dashboard2/operations/operations';
 
 export const batchResponse: Array<BatchResultsItem<DashboardOperationsResponse>> = [
     {

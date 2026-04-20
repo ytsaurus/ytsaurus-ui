@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {type FC, useState} from 'react';
 import {TimelineHeader} from './TimelineHeader';
 import {Flex} from '@gravity-ui/uikit';
 import {TimelineList} from './TimelineList';

@@ -6,8 +6,8 @@ import {
     prepareRows,
 } from '../../../../../utils/navigation/content/table/table';
 import {
-    ReadTableParameters,
-    ReadTableResult,
+    type ReadTableParameters,
+    type ReadTableResult,
     tableReadParameters,
     tableReadSetup,
 } from './readTable';

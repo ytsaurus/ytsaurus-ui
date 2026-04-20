@@ -1,4 +1,4 @@
-import type {ActionD, YTError} from '../../../types';
+import {type ActionD, type YTError} from '../../../types';
 import {
     TABLETS_BUNDLES_EDITOR_LOAD_FAILURE,
     TABLETS_BUNDLES_EDITOR_LOAD_REQUREST,
@@ -6,7 +6,7 @@ import {
     TABLETS_BUNDLES_EDITOR_PARTIAL,
 } from '../../../constants/tablets';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
-import {OrchidBundlesData, TabletBundle} from '.';
+import {type OrchidBundlesData, type TabletBundle} from '.';
 
 export interface TabletCellBundleEditorState {
     loading: boolean;

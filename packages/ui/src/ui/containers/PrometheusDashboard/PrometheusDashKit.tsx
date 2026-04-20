@@ -1,14 +1,14 @@
 import React from 'react';
-import {Config, DashKit, Plugin} from '@gravity-ui/dashkit';
+import {type Config, DashKit, type Plugin} from '@gravity-ui/dashkit';
 import cn from 'bem-cn-lite';
 
 import {
-    DashboardInfo,
-    PanelType,
-    PanelTypeSpecificProps,
-    PluginRenderProps,
-    PrometheusDashboardType,
-    WidgetType,
+    type DashboardInfo,
+    type PanelType,
+    type PanelTypeSpecificProps,
+    type PluginRenderProps,
+    type PrometheusDashboardType,
+    type WidgetType,
 } from '../../../shared/prometheus/types';
 import {makePanelId} from '../../../shared/prometheus/utils';
 
@@ -17,7 +17,7 @@ import {renderPluginRow} from './plugins/row';
 import {renderPluginTimeseries} from './plugins/timeseries/timeseries';
 import {usePrometheusDashboardContext} from './PrometheusDashboardContext/PrometheusDashboardContext';
 
-import {PrometheusDashboardProps} from './PrometheusDashboard';
+import {type PrometheusDashboardProps} from './PrometheusDashboard';
 
 import './PrometheusDashKit.scss';
 
