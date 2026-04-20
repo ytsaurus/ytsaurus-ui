@@ -1,0 +1,10 @@
+{
+    "field_name": "Name",
+    "field_banned": "Banned",
+    "field_groups": "Groups",
+    "field_transitive-groups": "Transitive groups",
+    "field_request-queue": "Request queue",
+    "field_read-request-rate": "Read request rate",
+    "field_write-request-rate": "Write request rate",
+    "field_external-system": "External system"
+}

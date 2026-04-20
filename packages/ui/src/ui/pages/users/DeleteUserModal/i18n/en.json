@@ -1,0 +1,4 @@
+{
+    "title_delete-user": "Delete user {{username}}",
+    "confirm_delete-user": "Are you sure you want to delete \"{{username}}\"?"
+}

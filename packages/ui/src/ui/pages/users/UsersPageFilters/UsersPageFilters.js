@@ -3,6 +3,7 @@ import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {Checkbox} from '@gravity-ui/uikit';
+import i18n from './i18n';
 
 import Filter from '../../../components/Filter/Filter';
 
@@ -10,7 +11,7 @@ import {
     setUsersBannedFilter,
     setUsersGroupFilter,
     setUsersNameFilter,
-} from '../../../store/actions/users';
+} from '../../../store/actions/users/index';
 import GroupSuggest from '../../../pages/components/GroupSuggest/GroupSuggest';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {
@@ -60,7 +61,7 @@ class UsersPageFilters extends React.Component {
                                 size="m"
                                 type="text"
                                 value={nameFilter}
-                                placeholder="User name filter..."
+                                placeholder={i18n('field_username-filter')}
                                 onChange={this.props.setUsersNameFilter}
                             />
                         ),
@@ -75,7 +76,7 @@ class UsersPageFilters extends React.Component {
                                 <GroupSuggest
                                     className={block('group-suggest')}
                                     value={groupFilter ? [groupFilter] : undefined}
-                                    placeholder="Group name filter..."
+                                    placeholder={i18n('field_group-filter')}
                                     onChange={(vals) => this.props.setUsersGroupFilter(vals[0])}
                                     disablePortal={false}
                                 />
@@ -91,7 +92,7 @@ class UsersPageFilters extends React.Component {
                             <Checkbox
                                 size="l"
                                 checked={bannedFilter}
-                                content="Banned"
+                                content={i18n('value_banned')}
                                 onChange={this.toggleBannedFilter}
                             />
                         ),

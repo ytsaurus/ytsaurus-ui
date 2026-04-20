@@ -3,6 +3,7 @@ import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {showUserEditorModal} from '../../../store/actions/users';
 import {selectIsUserManagementEnabled} from '../../../store/selectors/global';
+import i18n from './i18n';
 
 export const ShowCreateUserModalButton: React.FC = () => {
     const dispatch = useDispatch();
@@ -15,7 +16,7 @@ export const ShowCreateUserModalButton: React.FC = () => {
     if (isEnabled) {
         return (
             <Button view="action" onClick={onClick}>
-                Create new
+                {i18n('action_create-new')}
             </Button>
         );
     }

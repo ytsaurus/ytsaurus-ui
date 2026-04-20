@@ -1,0 +1,21 @@
+{
+    "title_create-user": "Create user",
+    "title_user": "User {{username}}",
+    "title_general-tab": "General",
+    "title_groups-tab": "Groups",
+    "title_ban-tab": "Ban",
+    "title_password-tab": "Password",
+    "title_current-groups": "Current",
+    "field_name": "Name",
+    "field_request-queue-size-limit": "Request queue size limit",
+    "field_read-request-rate-limit": "Read request rate limit",
+    "field_write-request-rate-limit": "Write request rate limit",
+    "field_groups": "Groups",
+    "field_comment-for-idm": "Comment for IDM",
+    "field_ban-user": "Ban user",
+    "field_ban-message": "Ban message",
+    "field_new-password": "New password",
+    "field_confirm-password": "Confirm password",
+    "field_group-placeholder": "Enter group name",
+    "alert_passwords-not-equal": "New and confirm password must be equal"
+}
