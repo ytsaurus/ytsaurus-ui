@@ -50,7 +50,7 @@ export type NavigationTableProps = {
     }) => React.ReactNode;
     renderPreviewTab?: (props: {
         table: NavigationTableData;
-        onEditorInsert: () => void | Promise<void>;
+        onEditorInsert?: () => void | Promise<void>;
         ysonSettings?: UnipikaSettings;
         primitiveTypes?: SchemaDataTypeProps['primitiveTypes'];
     }) => React.ReactNode;
@@ -100,7 +100,7 @@ export const NavigationTable: FC<NavigationTableProps> = ({
 
     const previewData = {
         table,
-        onEditorInsert: onInsertTableSelect ?? (() => {}),
+        onEditorInsert: onInsertTableSelect,
         ysonSettings,
         primitiveTypes,
     };

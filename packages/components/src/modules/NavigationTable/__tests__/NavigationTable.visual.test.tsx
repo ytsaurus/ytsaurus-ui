@@ -40,6 +40,7 @@ test.describe('NavigationTable', () => {
                         emptyMessage={navigationTableStoryEmptyMessage}
                         ysonSettings={YSON_DEFAULT_UNIPIKA_SETTINGS}
                         initialActiveTab={initialActiveTab}
+                        onInsertTableSelect={() => undefined}
                     />
                 </div>,
                 {
