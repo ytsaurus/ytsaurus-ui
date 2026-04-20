@@ -1,0 +1,9 @@
+{
+    "field_path": "Enter path...",
+    "field_attributes": "Enter attributes...",
+    "field_command": "Command:",
+    "field_max-size": "Enter max size...",
+    "field_encode-utf8": "Encode UTF8",
+    "field_annotate-with-types": "Annotate with types",
+    "field_stringify": "Stringify"
+}
