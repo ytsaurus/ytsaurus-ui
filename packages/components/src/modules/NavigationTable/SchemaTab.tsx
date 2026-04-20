@@ -1,12 +1,12 @@
 import {FC, useMemo} from 'react';
-import {Text as GravityText, Icon, TextInput} from '@gravity-ui/uikit';
+import {Flex, Text as GravityText, Icon, TextInput} from '@gravity-ui/uikit';
 import BarsAscendingAlignLeftArrowUpIcon from '@gravity-ui/icons/svgs/bars-ascending-align-left-arrow-up.svg';
 import BarsAscendingAlignLeftArrowDownIcon from '@gravity-ui/icons/svgs/bars-ascending-align-left-arrow-down.svg';
 import type {NavigationTableSchema} from '../../types';
 import {Column} from '@gravity-ui/react-data-table';
 import unipika from '../../utils/unipika';
 import {DataTableYT} from '../../components';
-import {YSON_DEFAULT_UNIPIKA_SETTINGS} from '../../internal/Yson';
+import {YSON_DEFAULT_UNIPIKA_SETTINGS, Yson} from '../../internal/Yson';
 import type {UnipikaSettings} from '../../internal/Yson/StructuredYson/StructuredYsonTypes';
 import i18n from './i18n';
 
@@ -27,7 +27,7 @@ export const SchemaTab: FC<SchemaTabProps> = ({schema, filter, onFilterChange, y
                 header: 'Name',
                 render: ({row}) => {
                     return (
-                        <>
+                        <Flex alignItems="center" gap={1}>
                             {Boolean(row.sort_order) && (
                                 <Icon
                                     data={
@@ -38,8 +38,12 @@ export const SchemaTab: FC<SchemaTabProps> = ({schema, filter, onFilterChange, y
                                     size={16}
                                 />
                             )}{' '}
-                            {unipika.prettyprint(row.name, {asHTML: false, ...cellUnipikaSettings})}
-                        </>
+                            <Yson
+                                value={unipika.unescapeKeyValue(row.name)}
+                                settings={{...cellUnipikaSettings, asHTML: false}}
+                                inline
+                            />
+                        </Flex>
                     );
                 },
             },
