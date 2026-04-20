@@ -1,7 +1,7 @@
 import Button from '../../../components/Button/Button';
 import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
-import {showUserEditorModal} from '../../../store/actions/users';
+import {showUserEditorModal} from '../../../store/actions/users/index';
 import {selectIsUserManagementEnabled} from '../../../store/selectors/global';
 import i18n from './i18n';
 
