@@ -41,7 +41,10 @@
             ]
         }],
         "object-shorthand": ["error", "always"],
-        "no-useless-rename": "error"
+        "no-useless-rename": "error",
+        "@typescript-eslint/consistent-type-imports": ["error", {
+            "fixStyle": "inline-type-imports"
+        }]
     },
     "env": {
         "jest": true
