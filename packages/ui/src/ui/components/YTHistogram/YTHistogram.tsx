@@ -6,7 +6,7 @@ import {
     type RawSerieData,
     YTChartKitLazy,
     type YagrWidgetData,
-    getSerieColor,
+    useSerieColor, // 1. Меняем импорт на хук
 } from '../../components/YTChartKit';
 import './YTHistogram.scss';
 
@@ -47,13 +47,16 @@ function YTHistogram({
     yFormat = format.Number,
     renderTooltip = renderDefaultTooltip,
 }: YTHistogramProps) {
+    // 2. Инициализируем хук
+    const getSerieColor = useSerieColor();
+
     const yagrData = React.useMemo(() => {
         const {timeline, serieData, step} = genYagrData(data);
         const graphs: Array<RawSerieData> = [
             {
                 type: 'column' as const,
                 data: yLogarithmic ? serieData.map((v) => (v === 0 ? NaN : v)) : (serieData as any),
-                color: getSerieColor(0),
+                color: getSerieColor(0), // Используем функцию из хука
                 formatter: yFormat,
                 ...{
                     renderOptions: {
@@ -110,7 +113,8 @@ function YTHistogram({
             },
         };
         return res;
-    }, [data, xLabel, yLabel, xFormat, yFormat, renderTooltip, yMin, yLogarithmic]);
+        // 3. Добавляем getSerieColor в зависимости, чтобы график реагировал на смену темы
+    }, [data, xLabel, yLabel, xFormat, yFormat, renderTooltip, yMin, yLogarithmic, getSerieColor]);
 
     return (
         <div className={block(null, className)}>

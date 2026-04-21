@@ -11,7 +11,10 @@ import without_ from 'lodash/without';
 
 import ypath from '../../../../../common/thor/ypath';
 import hammer from '../../../../../common/hammer';
-import {STACKED_PROGRESS_BAR_COLORS} from '../../../../../constants/colors';
+
+// 1. Импортируем чистую функцию генерации цвета
+import {generateColor} from '@gravity-ui/uikit';
+
 import {type FIX_MY_TYPE, type YTError} from '../../../../../types/index';
 import {computeProgress, progressText} from '../../../../../utils/progress';
 import {type MaintenanceRequestInfo} from '../../../../../store/actions/components/node-maintenance-modal';
@@ -94,10 +97,25 @@ export class Node {
         };
     }
 
+    // 2. Обновляем метод получения цвета
     static getColor(index: number) {
-        const colors = STACKED_PROGRESS_BAR_COLORS;
+        let theme: 'light' | 'dark' = 'light';
 
-        return colors[index % colors.length];
+        // Так как мы вне React-компонента, пытаемся определить тему из DOM-дерева.
+        // Gravity UI автоматически добавляет класс g-root_theme_dark при темной теме.
+        if (typeof document !== 'undefined') {
+            const isDark =
+                document.body.classList.contains('g-root_theme_dark') ||
+                document.documentElement.classList.contains('g-root_theme_dark') ||
+                document.body.classList.contains('yc-root_theme_dark');
+
+            if (isDark) {
+                theme = 'dark';
+            }
+        }
+
+        const {rgb} = generateColor({seed: String(index), theme});
+        return `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
     }
 
     alertCount?: number;
@@ -127,7 +145,10 @@ export class Node {
     lastSeenTime!: string;
     locations!: FIX_MY_TYPE[];
     memory: FIX_MY_TYPE;
-    memoryData?: Array<{color: string; name: string; value: number}>;
+
+    // 3. Добавляем опциональное поле colorIndex, чтобы в будущем облегчить рефакторинг UI
+    memoryData?: Array<{color: string; name: string; value: number; colorIndex?: number}>;
+
     memoryProgress!: number;
     memoryText!: string;
     memoryTotal!: {usage?: number; limit?: number};
@@ -356,6 +377,8 @@ export class Node {
         memory = map_(memory, (categoryData, index: number) => {
             memoryUsage += categoryData.rawData.used || 0;
             categoryData.color = Node.getColor(index);
+            // 4. Пробрасываем оригинальный индекс, чтобы в будущем перенести покраску в UI-слой
+            categoryData.colorIndex = index;
             return categoryData;
         });
 

@@ -1,4 +1,5 @@
-import {getProgressBarColorByIndex} from '../../constants/colors';
+// 1. Импортируем наш новый хук вместо функции
+import {useProgressBarColor} from '../../constants/colors';
 import React from 'react';
 
 export type ProgressCircleProps = {
@@ -20,6 +21,9 @@ export type Stack = {
 };
 
 export function ProgressCircle({stack: rawStack, gap = 0, size, className}: ProgressCircleProps) {
+    // 2. Инициализируем хук генерации цветов
+    const getProgressBarColor = useProgressBarColor();
+
     const stack = rawStack.filter(({value}) => Math.abs(value) > 0);
     if (!stack.length) {
         return null;
@@ -67,7 +71,8 @@ export function ProgressCircle({stack: rawStack, gap = 0, size, className}: Prog
                             cx="50%"
                             cy="50%"
                             strokeDasharray={storkeDashArrays[index]}
-                            stroke={item.color ?? getProgressBarColorByIndex(index)}
+                            // 3. Используем функцию из хука
+                            stroke={item.color ?? getProgressBarColor(index)}
                             strokeWidth={strokeWidth}
                         />
                     );

@@ -13,7 +13,8 @@ import {YT} from '../../../../config/yt-config';
 
 import {IntersectionObserverContainer} from '../../../../components/IntersectionObserverContainer/IntersectionObserverContainer';
 
-import {YTChartKitLazy, getSerieColor} from '../../../../components/YTChartKit';
+// 1. Заменяем импорт
+import {YTChartKitLazy, useSerieColor} from '../../../../components/YTChartKit';
 import {type Yagr, type YagrWidgetData} from '@gravity-ui/chartkit/yagr';
 import {InlineError} from '../../../../components/InlineError/InlineError';
 import Loader from '../../../../components/Loader/Loader';
@@ -123,6 +124,9 @@ function useLoadQueriesData({
 }: Pick<PrometheusChartProps, 'data' | 'id'> & {pointCount?: number; from?: number; to?: number}) {
     // const [cancelHelper] = React.useState(new CancelHelper());
 
+    // 2. Инициализируем хук генерации цветов на верхнем уровне кастомного хука
+    const getSerieColor = useSerieColor();
+
     const {__ytDashboardType: dashboardType} = params;
 
     const {data, isLoading, error} = usePrometheusFetchQuery({
@@ -186,13 +190,16 @@ function useLoadQueriesData({
                     results,
                     {end, start, step},
                     params,
+                    getSerieColor, // 3. Передаем функцию как аргумент
                 ),
             };
-        }, [data, error, params, targets, title, fieldOverrides, isLoading]);
+            // 4. Обязательно добавляем getSerieColor в зависимости
+        }, [data, error, params, targets, title, fieldOverrides, isLoading, getSerieColor]);
 
     return chartData;
 }
 
+// 5. Расширяем сигнатуру функции для приема метода генерации цвета
 function makeYagrWidgetData(
     {
         title,
@@ -209,6 +216,7 @@ function makeYagrWidgetData(
     results: Array<QueryRangeData>,
     {end, start, step}: {end: number; start: number; step: number},
     params: Record<string, string | number>,
+    getSerieColor: (index: number) => string, // Принимаем функцию
 ): YagrWidgetData {
     const res: YagrWidgetData = {
         data: {graphs: [], timeline: []},
@@ -272,7 +280,7 @@ function makeYagrWidgetData(
                     : undefined,
                 data: new Array(timeline.length),
                 formatter: unit === 'bytes' ? format.Bytes : format.NumberSmart,
-                color: getSerieColor(res.data.graphs.length),
+                color: getSerieColor(res.data.graphs.length), // 6. Вызываем переданную функцию
             };
             if (!graph.name) {
                 const graphIndex = res.data.graphs.length;

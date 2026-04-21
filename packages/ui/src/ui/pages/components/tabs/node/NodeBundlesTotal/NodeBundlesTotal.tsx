@@ -16,10 +16,9 @@ import {
     selectNodeMemoryUsageTotalTableStatic,
     selectNodeMemoryUsageTotalTabletDynamic,
 } from '../../../../../store/selectors/components/node/memory';
-import {
-    STACKED_PROGRESS_BAR_COLORS,
-    getProgressBarColorByIndex,
-} from '../../../../../constants/colors';
+
+// 1. Меняем импорт на наш новый хук
+import {useProgressBarColor} from '../../../../../constants/colors';
 
 import './NodeBundlesTotal.scss';
 
@@ -63,11 +62,13 @@ function NodeBundlesTotal() {
     );
 }
 
-const COLORS: Partial<Record<keyof TabletDynamicTotalProps['data'], string>> = {
-    active: STACKED_PROGRESS_BAR_COLORS[4],
-    backing: STACKED_PROGRESS_BAR_COLORS[7],
-    other: STACKED_PROGRESS_BAR_COLORS[2],
-    passive: STACKED_PROGRESS_BAR_COLORS[0],
+// 2. Вместо хардкода готовых цветов, сохраняем нужные "индексы" (seed),
+// которые в оригинале соответствовали позициям в массиве (4, 7, 2, 0)
+const PREDEFINED_COLOR_INDICES: Partial<Record<keyof TabletDynamicTotalProps['data'], number>> = {
+    active: 4,
+    backing: 7,
+    other: 2,
+    passive: 0,
 };
 
 interface TabletDynamicTotalProps {
@@ -92,6 +93,9 @@ export function TabletDynamicTotal(props: TabletDynamicTotalProps) {
         limitTooltipTitle,
     } = props;
 
+    // 3. Инициализируем хук генерации цветов
+    const getProgressBarColor = useProgressBarColor();
+
     const {stack, text, content} = React.useMemo(() => {
         let usageSum = 0;
         const stack = map_(rest, (value, key) => {
@@ -113,7 +117,16 @@ export function TabletDynamicTotal(props: TabletDynamicTotalProps) {
                 <div className={block('progress-tooltip')}>
                     {map_(stack, (item, index) => {
                         const {key} = item;
-                        item.color = COLORS[key] ?? getProgressBarColorByIndex(index, 8);
+
+                        // 4. Проверяем, есть ли для этого ключа зарезервированный индекс
+                        const predefinedIndex = PREDEFINED_COLOR_INDICES[key];
+
+                        item.color =
+                            predefinedIndex !== undefined
+                                ? // Если есть - используем его со смещением 0 (чтобы получить оригинальный seed = 4, 7 и т.д.)
+                                  getProgressBarColor(predefinedIndex, 0)
+                                : // Если нет - используем фоллбэк из старой логики (index, 8)
+                                  getProgressBarColor(index, 8);
 
                         return (
                             <React.Fragment key={key}>
@@ -140,7 +153,8 @@ export function TabletDynamicTotal(props: TabletDynamicTotalProps) {
                 </div>
             ),
         };
-    }, [props.data]);
+        // 5. Добавляем getProgressBarColor и другие пропсы в зависимости useMemo
+    }, [props.data, hideLimit, limitTooltipTitle, getProgressBarColor]);
 
     return (
         <Tooltip content={content} className={className}>

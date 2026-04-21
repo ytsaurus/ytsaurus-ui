@@ -10,7 +10,8 @@ import {Progress, type ProgressProps} from '@gravity-ui/uikit';
 import {MetaTable, type MetaTableItem, Tooltip} from '@ytsaurus/components';
 import {ColorCircle} from '../../components/ColorCircle/ColorCircle';
 
-import {getProgressBarColorByIndex} from '../../constants/colors';
+// 1. Импортируем наш новый хук вместо старой функции
+import {useProgressBarColor} from '../../constants/colors';
 
 import {type CPULimits, type MemoryLimits} from '../../store/reducers/tablet_cell_bundles';
 
@@ -25,26 +26,47 @@ type ResourceProgress = {
     postfix?: string;
 };
 
-export function BundleMetaResourceProgress(
-    title: string,
-    {data, limit, resourceType, postfix = ''}: ResourceProgress,
-) {
-    const {props, text, commonTooltip} = getProgressData({data, limit, resourceType, postfix});
+// 2. Создаем внутренний React-компонент.
+// Именно здесь мы имеем право использовать хуки.
+function BundleMetaResourceProgressUI(props: ResourceProgress) {
+    const {data, limit, resourceType, postfix = ''} = props;
 
+    // Инициализируем хук генерации цветов
+    const getProgressBarColor = useProgressBarColor();
+
+    // Заворачиваем вычисления в useMemo для оптимизации (чтобы не пересчитывать при ререндерах)
+    const {progressProps, text, commonTooltip} = React.useMemo(() => {
+        return getProgressData(
+            {data, limit, resourceType, postfix},
+            getProgressBarColor, // передаем метод генерации цвета внутрь чистой функции
+        );
+    }, [data, limit, resourceType, postfix, getProgressBarColor]);
+
+    return (
+        <div className={block()}>
+            <Tooltip placement={'bottom'} content={commonTooltip}>
+                <Progress className={block('progress')} {...progressProps} text={text} />
+            </Tooltip>
+        </div>
+    );
+}
+
+// 3. Оригинальная функция-фабрика остается с той же сигнатурой,
+// чтобы не сломать родительский код.
+export function BundleMetaResourceProgress(title: string, params: ResourceProgress) {
     return {
         key: title,
-        value: (
-            <div className={block()}>
-                <Tooltip placement={'bottom'} content={commonTooltip}>
-                    <Progress className={block('progress')} {...props} text={text} />
-                </Tooltip>
-            </div>
-        ),
+        // Отрисовываем наш новый компонент
+        value: <BundleMetaResourceProgressUI {...params} />,
     };
 }
 
-function getProgressData({data, limit, resourceType, postfix}: ResourceProgress) {
-    const props: ProgressProps = {
+// 4. Добавляем функцию getProgressBarColor в аргументы
+function getProgressData(
+    {data, limit, resourceType, postfix}: ResourceProgress,
+    getProgressBarColor: (index: number) => string,
+) {
+    const progressProps: ProgressProps = {
         stack: [],
     };
 
@@ -56,8 +78,10 @@ function getProgressData({data, limit, resourceType, postfix}: ResourceProgress)
 
     forEach_(data, (value, name) => {
         const formattedValue = hammer.format[resourceType](value);
-        const color = getProgressBarColorByIndex(props.stack.length);
 
+        // Используем переданную функцию для получения цвета
+        const color = getProgressBarColor(progressProps.stack.length);
+        console.log(color);
         metaItems.push({
             key: name,
             label: (
@@ -70,7 +94,7 @@ function getProgressData({data, limit, resourceType, postfix}: ResourceProgress)
         });
         const fraction = (Number(value) / max) * 100;
 
-        props.stack.push({
+        progressProps.stack.push({
             color,
             value: fraction,
         });
@@ -78,5 +102,5 @@ function getProgressData({data, limit, resourceType, postfix}: ResourceProgress)
 
     const commonTooltip = <MetaTable items={metaItems} />;
 
-    return {props, text, commonTooltip};
+    return {progressProps, text, commonTooltip};
 }

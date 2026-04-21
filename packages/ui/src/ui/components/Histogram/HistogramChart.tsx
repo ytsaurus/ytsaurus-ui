@@ -4,7 +4,7 @@ import {
     type RawSerieData,
     YTChartKitLazy,
     type YagrWidgetData,
-    getSerieColor,
+    useSerieColor,
 } from '../../components/YTChartKit';
 
 import formatLib from '../../common/hammer/format';
@@ -39,11 +39,17 @@ type X = number;
 type Y = number;
 
 function HistogramChart({className, pdf, ecdf, format, dataName, lineOnly}: HistogramChartProps) {
+    // 2. Инициализируем хук на верхнем уровне компонента
+    const getSerieColor = useSerieColor();
+
     const yagrData = React.useMemo(() => {
         const xFormat = format === 'Bytes' ? formatLib.Bytes : formatLib.Number;
+
+        // 3. Передаем функцию getSerieColor аргументом в хелперы
         const {timeline, graphs, step} = lineOnly
-            ? getLineOnlyData(pdf, ecdf)
-            : getColumnData(pdf, ecdf);
+            ? getLineOnlyData(pdf, ecdf, getSerieColor)
+            : getColumnData(pdf, ecdf, getSerieColor);
+
         const res: YagrWidgetData = {
             data: {
                 timeline,
@@ -110,7 +116,7 @@ function HistogramChart({className, pdf, ecdf, format, dataName, lineOnly}: Hist
             sources: {},
         };
         return res;
-    }, [pdf, ecdf, format, lineOnly]);
+    }, [pdf, ecdf, format, lineOnly, getSerieColor]); // 4. Добавляем getSerieColor в зависимости
 
     return (
         <div className={className}>
@@ -121,9 +127,11 @@ function HistogramChart({className, pdf, ecdf, format, dataName, lineOnly}: Hist
 
 export default React.memo(HistogramChart);
 
+// 5. Добавляем аргумент getSerieColor в сигнатуру функции
 function getColumnData(
     {buckets, min, bucketSize}: PDFData,
     {steps}: ECDFData,
+    getSerieColor: (index: number) => string,
 ): YagrWidgetData['data'] & {step: number} {
     const timeline = [min - 0.1 * bucketSize];
     const data: Array<number> = [undefined!];
@@ -162,12 +170,12 @@ function getColumnData(
             type: 'line' as const,
             data: lineData,
             scale: 'y1',
-            color: getSerieColor(1),
+            color: getSerieColor(1), // Используем переданную функцию
         },
         {
             type: 'column' as const,
             data,
-            color: getSerieColor(0),
+            color: getSerieColor(0), // Используем переданную функцию
             ...{
                 renderOptions: {
                     size: [1],
@@ -183,9 +191,11 @@ function getColumnData(
     };
 }
 
+// 6. Добавляем аргумент getSerieColor и сюда
 function getLineOnlyData(
     {min, buckets, bucketSize}: PDFData,
     {steps}: ECDFData,
+    getSerieColor: (index: number) => string,
 ): ReturnType<typeof getColumnData> {
     const timeline: Array<number> = [min - 0.1 * bucketSize];
     const data: Array<number> = [NaN];
@@ -202,7 +212,7 @@ function getLineOnlyData(
         {
             type: 'line' as const,
             data,
-            color: getSerieColor(1),
+            color: getSerieColor(1), // Используем переданную функцию
         },
     ];
 
