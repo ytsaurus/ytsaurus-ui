@@ -22,6 +22,7 @@ type Props = {
     validator: SettingsItemEditFormProps['validator'];
     canEdit?: SettingsItemEditFormProps['config'];
     canRemove?: boolean;
+    className?: string;
 };
 
 export const SettingsItem: FC<Props> = ({
@@ -32,6 +33,7 @@ export const SettingsItem: FC<Props> = ({
     onDelete,
     validator,
     onChange,
+    className,
 }) => {
     const [edit, setEdit] = useState(false);
     const handleDelete = () => {
@@ -63,7 +65,7 @@ export const SettingsItem: FC<Props> = ({
     }
 
     return (
-        <div className={block()}>
+        <div className={block(null, className)}>
             <div className={block('info')}>
                 <Icon className={block('icon')} data={GearIcon} size={16} />
                 <Text variant="subheader-2" ellipsis>
