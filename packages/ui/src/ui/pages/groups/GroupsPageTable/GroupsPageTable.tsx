@@ -30,6 +30,7 @@ import './GroupsPageTable.scss';
 import {type RootState} from '../../../store/reducers';
 import {type OrderType} from '../../../utils/sort-helpers';
 import {GroupActions} from '../GroupActions/GroupActions';
+import i18n from './i18n';
 
 const block = cn('groups-page-table');
 
@@ -42,10 +43,21 @@ const TABLE_SETTINGS = {
 } as const;
 
 const COLUMN_NAMES: Record<string, string> = {
-    name: 'Name',
-    externalSystem: 'External system',
-    size: 'Size',
-    responsibles: 'Responsible users',
+    get name() {
+        return i18n('field_name');
+    },
+    get externalSystem() {
+        return i18n('field_external-system');
+    },
+    get members() {
+        return i18n('field_members');
+    },
+    get size() {
+        return i18n('field_size');
+    },
+    get responsibles() {
+        return i18n('field_responsible-users');
+    },
     actions: '',
 };
 
