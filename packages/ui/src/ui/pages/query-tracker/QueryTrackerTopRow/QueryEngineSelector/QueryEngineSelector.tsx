@@ -10,7 +10,7 @@ import {
 } from '../../../../store/selectors/query-tracker/query';
 import {
     createQueryFromTablePath,
-    updateQueryDraft,
+    setQueryEngine,
 } from '../../../../store/actions/query-tracker/query';
 import {type QueryEngine} from '../../../../../shared/constants/engines';
 import {ModalWithoutHandledScrollBar as Modal} from '../../../../components/Modal/Modal';
@@ -25,17 +25,37 @@ const block = cn('yt-query-engine-selector');
 type Props = {
     isDesktop?: boolean;
     className?: string;
-    onChange?: (newEngine: QueryEngine) => void;
+    onChange?: (newEngine: QueryEngine) => void | Promise<void>;
+    tableCluster?: string;
+    tablePath?: string;
 };
 
-export const QueryEngineSelector: FC<Props> = ({isDesktop, className, onChange}) => {
+export const QueryEngineSelector: FC<Props> = ({
+    isDesktop,
+    className,
+    onChange,
+    tableCluster,
+    tablePath,
+}) => {
     const dispatch = useDispatch();
     const engine = useSelector(selectQueryEngine);
     const options = useSelector(selectSupportedEnginesOptions);
     const isEdited = useSelector(selectIsQueryDraftEditted);
     const hasLoadedQuery = useSelector(selectHasLoadedQueryItem);
     const loading = useSelector(selectClusterLoading);
-    const {cluster, path} = useSelector(selectQueryGetParams);
+    const {cluster: paramCluster, path: paramPath} = useSelector(selectQueryGetParams);
+
+    const hasFullParams = Boolean(paramCluster && paramPath);
+    const hasFullTableFallback = Boolean(tableCluster && tablePath);
+    let cluster: string | undefined;
+    let path: string | undefined;
+    if (hasFullParams) {
+        cluster = paramCluster;
+        path = paramPath;
+    } else if (hasFullTableFallback) {
+        cluster = tableCluster;
+        path = tablePath;
+    }
 
     const showPrompt = Boolean((isEdited || hasLoadedQuery) && cluster && path);
 
@@ -43,13 +63,13 @@ export const QueryEngineSelector: FC<Props> = ({isDesktop, className, onChange})
     const [selectedEngine, setSelectedEngine] = useState<QueryEngine | undefined>(undefined);
 
     const handleChangeEngine = useCallback(
-        (newEngine: QueryEngine) => {
+        async (newEngine: QueryEngine) => {
             if (cluster && path) {
-                dispatch(createQueryFromTablePath(newEngine, cluster, path));
+                await dispatch(createQueryFromTablePath(newEngine, cluster, path));
             } else {
-                dispatch(updateQueryDraft({engine: newEngine}));
+                dispatch(setQueryEngine(newEngine));
             }
-            onChange?.(newEngine);
+            await onChange?.(newEngine);
         },
         [cluster, dispatch, onChange, path],
     );
@@ -73,9 +93,12 @@ export const QueryEngineSelector: FC<Props> = ({isDesktop, className, onChange})
     }, []);
 
     const handleConfirm = useCallback(() => {
+        const engineToApply = selectedEngine;
         setSelectedEngine(undefined);
-        if (selectedEngine) handleChangeEngine(selectedEngine);
         setModalVisibility(false);
+        if (engineToApply) {
+            handleChangeEngine(engineToApply);
+        }
     }, [selectedEngine, handleChangeEngine]);
 
     return (

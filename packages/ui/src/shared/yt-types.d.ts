@@ -556,8 +556,6 @@ export type YqlEnginesInfo = {
 
 export type SpytEnginesInfo = {
     clusters: string[];
-    default_engine: string;
-    engines: ('livy' | 'connect')[];
     default_settings?: {
         connect?: {
             executor_cores?: number;

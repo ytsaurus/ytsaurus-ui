@@ -47,7 +47,7 @@ export interface DraftQuery {
         discovery_path?: string; // old request type. Deprecated
         discovery_group?: string;
         execution_mode?: 'validate' | 'optimize';
-    } & Record<string, string>;
+    } & Record<string, unknown>;
     error?: unknown;
     access_control_object: string;
     access_control_objects?: string[];

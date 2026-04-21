@@ -21,11 +21,17 @@ type Props = {
     onStartQuery?: (queryId: string) => boolean | void;
     showStatusInTitle?: boolean;
     pathNavigation?: boolean;
+    hideAco?: boolean;
 };
 
 export type ResultMode = 'full' | 'minimized' | 'split';
 
-export const QueryEditor: FC<Props> = ({onStartQuery, showStatusInTitle, pathNavigation}) => {
+export const QueryEditor: FC<Props> = ({
+    onStartQuery,
+    showStatusInTitle,
+    pathNavigation,
+    hideAco,
+}) => {
     const dispatch = useDispatch();
     const query = useCurrentQuery();
     const {isQueryTrackerInfoLoading} = useQueryACO();
@@ -74,7 +80,11 @@ export const QueryEditor: FC<Props> = ({onStartQuery, showStatusInTitle, pathNav
                 getInitialSizes={() => partSizes}
             >
                 {resultViewMode !== 'full' && (
-                    <QueryEditorView onStartQuery={onStartQuery} pathNavigation={pathNavigation} />
+                    <QueryEditorView
+                        onStartQuery={onStartQuery}
+                        pathNavigation={pathNavigation}
+                        hideAco={hideAco}
+                    />
                 )}
 
                 {query?.id && isExecuted && (
@@ -82,6 +92,7 @@ export const QueryEditor: FC<Props> = ({onStartQuery, showStatusInTitle, pathNav
                         query={query}
                         setResultViewMode={setResultViewMode}
                         resultViewMode={resultViewMode}
+                        hideShareButton={hideAco}
                     />
                 )}
             </FlexSplitPane>

@@ -1,15 +1,22 @@
+import {type DraftQuery} from '../../types/query-tracker/api';
+
 export function convertSettingsTypes(
     settings?: Record<string, unknown>,
-): Record<string, string | number | boolean> {
+): Required<DraftQuery>['settings'] {
     if (!settings) {
         return {};
     }
 
-    const converted: Record<string, string | number | boolean> = {};
+    const converted: Record<string, string | number | boolean | Record<string, unknown>> = {};
 
     for (const [key, value] of Object.entries(settings)) {
         if (typeof value === 'number' || typeof value === 'boolean') {
             converted[key] = value;
+            continue;
+        }
+
+        if (typeof value === 'object') {
+            converted[key] = convertSettingsTypes(value as Record<string, unknown>);
             continue;
         }
 

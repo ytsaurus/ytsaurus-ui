@@ -9,6 +9,7 @@ const block = cn('popup-with-close-button');
 type Props = {
     anchorRef: React.RefObject<HTMLElement>;
     open: boolean;
+    showCloseButton?: boolean;
     className?: string;
     placement?: PopupProps['placement'];
     onClose: () => void;
@@ -21,6 +22,7 @@ export const PopupWithCloseButton: FC<PropsWithChildren<Props>> = ({
     children,
     className,
     placement = 'bottom',
+    showCloseButton = true,
 }) => {
     return (
         <Popup
@@ -34,9 +36,11 @@ export const PopupWithCloseButton: FC<PropsWithChildren<Props>> = ({
             }}
             placement={placement}
         >
-            <Button view="flat" className={block('close-button')} onClick={onClose}>
-                <Icon data={XmarkIcon} />
-            </Button>
+            {showCloseButton && (
+                <Button view="flat" className={block('close-button')} onClick={onClose}>
+                    <Icon data={XmarkIcon} />
+                </Button>
+            )}
             {children}
         </Popup>
     );
