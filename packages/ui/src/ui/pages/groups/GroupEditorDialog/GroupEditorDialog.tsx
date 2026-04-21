@@ -9,6 +9,8 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import {type ConnectedProps, connect} from 'react-redux';
 
+import i18n from './i18n';
+
 import {closeGroupEditorModal, fetchGroups, saveGroupData} from '../../../store/actions/groups';
 import {
     getGroupEditorGroupIdm,
@@ -100,7 +102,9 @@ class GroupEditorDialog extends React.Component<GroupsPageTableProps> {
                 pristineSubmittable={false}
                 visible={visible}
                 headerProps={{
-                    title: this.isNewGroup() ? 'Create group' : `Group ${groupName}`,
+                    title: this.isNewGroup()
+                        ? i18n('title_create-group')
+                        : i18n('title_group', {groupName}),
                 }}
                 onClose={closeGroupEditorModal}
                 onAdd={this.onSubmit}
@@ -122,7 +126,7 @@ class GroupEditorDialog extends React.Component<GroupsPageTableProps> {
                         {
                             type: 'tab-vertical' as const,
                             name: 'general',
-                            title: 'General',
+                            title: i18n('title_general'),
                             fields: [
                                 {
                                     name: 'groupName',
@@ -130,14 +134,14 @@ class GroupEditorDialog extends React.Component<GroupsPageTableProps> {
                                         ? ('text' as const)
                                         : ('plain' as const),
                                     required: true,
-                                    caption: 'Group name',
+                                    caption: i18n('field_group-name'),
                                 },
                                 ...(UIFactory.getAclApi().getGroupAcl
                                     ? [
                                           {
                                               name: 'idm',
                                               type: 'plain' as const,
-                                              caption: 'Idm managed',
+                                              caption: i18n('field_idm-managed'),
                                           },
                                       ]
                                     : []),
@@ -145,7 +149,7 @@ class GroupEditorDialog extends React.Component<GroupsPageTableProps> {
                                 {
                                     name: 'size',
                                     type: 'plain' as const,
-                                    caption: 'Size',
+                                    caption: i18n('field_size'),
                                 },
                             ],
                         },
@@ -154,20 +158,20 @@ class GroupEditorDialog extends React.Component<GroupsPageTableProps> {
                                   {
                                       type: 'tab-vertical' as const,
                                       name: 'responsibles',
-                                      title: 'Responsibles',
+                                      title: i18n('title_responsibles'),
                                       fields: [
                                           {
                                               name: 'responsibles',
                                               type: 'acl-roles' as const,
-                                              caption: 'Responsibles',
+                                              caption: i18n('field_responsibles'),
                                               extras: {
-                                                  placeholder: 'Enter login or name',
+                                                  placeholder: i18n('context_enter-login-or-name'),
                                               },
                                           },
                                           {
                                               name: 'responsiblesComment',
                                               type: 'textarea' as const,
-                                              caption: 'Comment for IDM',
+                                              caption: i18n('field_comment-for-idm'),
                                           },
                                       ],
                                   },
@@ -177,14 +181,14 @@ class GroupEditorDialog extends React.Component<GroupsPageTableProps> {
                     {
                         type: 'tab-vertical',
                         name: 'members',
-                        title: 'Members',
+                        title: i18n('title_members'),
                         fields: [
                             {
                                 name: 'members',
                                 type: 'acl-roles',
-                                caption: 'Members',
+                                caption: i18n('field_members'),
                                 extras: {
-                                    placeholder: 'Enter login or name',
+                                    placeholder: i18n('context_enter-login-or-name'),
                                 },
                             },
 
@@ -193,7 +197,7 @@ class GroupEditorDialog extends React.Component<GroupsPageTableProps> {
                                       {
                                           name: 'membersComment',
                                           type: 'textarea' as const,
-                                          caption: 'Comment for IDM',
+                                          caption: i18n('field_comment-for-idm'),
                                       },
                                   ]
                                 : []),

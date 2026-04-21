@@ -5,6 +5,7 @@ import {deleteGroup, fetchGroups} from '../../../store/actions/groups';
 import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
 import {type YTError} from '../../../types';
 import {disableGroupsCache} from '../../../utils/users-groups';
+import i18n from './i18n';
 
 type DeleteGroupModalProps = {
     group: string;
@@ -34,7 +35,7 @@ export const DeleteGroupModal: React.FC<DeleteGroupModalProps> = ({group, onClos
     return (
         <YTDFDialog
             visible={true}
-            headerProps={{title: `Delete group ${group}`}}
+            headerProps={{title: i18n('title_delete-group', {group})}}
             pristineSubmittable={true}
             onClose={onClose}
             onAdd={onAdd}
@@ -43,7 +44,7 @@ export const DeleteGroupModal: React.FC<DeleteGroupModalProps> = ({group, onClos
                     name: 'groupname',
                     type: 'block',
                     extras: {
-                        children: <Text>Are you sure you want to delete &quot;{group}&quot;?</Text>,
+                        children: <Text>{i18n('confirm_delete-group', {group})}</Text>,
                     },
                 },
                 ...makeErrorFields([error]),

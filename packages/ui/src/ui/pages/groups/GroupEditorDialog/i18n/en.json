@@ -1,0 +1,14 @@
+{
+    "title_create-group": "Create group",
+    "title_group": "Group {{groupName}}",
+    "title_general": "General",
+    "field_group-name": "Group name",
+    "field_idm-managed": "Idm managed",
+    "field_size": "Size",
+    "title_responsibles": "Responsibles",
+    "field_responsibles": "Responsibles",
+    "context_enter-login-or-name": "Enter login or name",
+    "field_comment-for-idm": "Comment for IDM",
+    "title_members": "Members",
+    "field_members": "Members"
+}
