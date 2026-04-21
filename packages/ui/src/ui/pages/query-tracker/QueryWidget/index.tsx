@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import cn from 'bem-cn-lite';
 import {Button, Flex} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
@@ -9,6 +9,7 @@ import {QueryEditor} from '../QueryEditor';
 import {QueryMetaForm} from './QueryMetaForm';
 import {QueriesPooling} from '../hooks/QueriesPooling/context';
 import {createQueryFromTablePath} from '../../../store/actions/query-tracker/query';
+import {getQueryTrackerInfo} from '../../../store/actions/query-tracker/queryAco';
 import {QueryEngine} from '../../../../shared/constants/engines';
 
 import './index.scss';
@@ -22,6 +23,10 @@ export default function QueryWidget({onClose}: QueryWidgetProps) {
     const cluster = useSelector(selectCluster);
     const path = useSelector(getPath);
     const stablePath = useRef(path); // save table path after open widget
+
+    useEffect(() => {
+        dispatch(getQueryTrackerInfo());
+    }, [dispatch, cluster]);
 
     const handleClickOnNewQueryButton = () => {
         dispatch(createQueryFromTablePath(QueryEngine.YQL, cluster, stablePath.current));
@@ -45,7 +50,7 @@ export default function QueryWidget({onClose}: QueryWidgetProps) {
                         <Icon awesome="times" size={16} />
                     </Button>
                 </Flex>
-                <QueryEditor pathNavigation={false} />
+                <QueryEditor pathNavigation={false} hideAco />
             </QueriesPooling>
         </div>
     );

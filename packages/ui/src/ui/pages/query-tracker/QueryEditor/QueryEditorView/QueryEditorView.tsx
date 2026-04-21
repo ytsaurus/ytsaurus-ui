@@ -26,6 +26,7 @@ const b = cn('yt-qt-query-editor-view');
 type Props = {
     onStartQuery?: (queryId: string) => boolean | void;
     pathNavigation?: boolean;
+    hideAco?: boolean;
 };
 
 const INACTIVE_CLIQUE_REFRESH_INTERVAL = 5000;
@@ -33,6 +34,7 @@ const INACTIVE_CLIQUE_REFRESH_INTERVAL = 5000;
 export const QueryEditorView = memo<Props>(function QueryEditorView({
     onStartQuery,
     pathNavigation,
+    hideAco,
 }) {
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
     const {setEditor} = useMonaco();
@@ -141,7 +143,7 @@ export const QueryEditorView = memo<Props>(function QueryEditorView({
                                     </Button>
                                 </>
                             ) : null}
-                            {isACOSupported && <QueryACOSelect />}
+                            {isACOSupported && !hideAco && <QueryACOSelect />}
                         </>
                     )}
                 </div>

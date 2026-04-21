@@ -74,7 +74,12 @@ export const selectIsQueryButtonActive = createSelector(
         if (!clique || !cluster) return true;
 
         if (cluster in cliqueMap) {
-            const currentClique = cliqueMap[cluster].chyt.find((i) => i.alias === clique);
+            const chytList = cliqueMap[cluster]?.chyt;
+            if (!chytList) {
+                return false;
+            }
+
+            const currentClique = chytList.find((i) => i.alias === clique);
             if (!currentClique) return false;
 
             return currentClique.state === 'active';

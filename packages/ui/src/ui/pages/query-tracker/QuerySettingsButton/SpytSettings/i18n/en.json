@@ -1,0 +1,3 @@
+{
+  "alert_invalid-spyt-json": "Invalid JSON. Settings must be a JSON object with valid syntax."
+}

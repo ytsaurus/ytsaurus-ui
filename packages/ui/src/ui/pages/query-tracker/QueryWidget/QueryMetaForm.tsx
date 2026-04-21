@@ -1,10 +1,10 @@
 import React, {useCallback} from 'react';
 import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
-import {selectQueryDraft} from '../../../store/selectors/query-tracker/query';
+import {selectQueryDraft, selectQueryEngine} from '../../../store/selectors/query-tracker/query';
 import {QuerySettingsButton} from '../QuerySettingsButton';
 import {QueryFilesButton} from '../QueryFilesButton';
-import {loadTablePromptToQuery, updateQueryDraft} from '../../../store/actions/query-tracker/query';
+import {updateQueryDraft} from '../../../store/actions/query-tracker/query';
 import {NewQueryButton} from '../NewQueryButton';
 import {QueryEngineSelector} from '../QueryTrackerTopRow/QueryEngineSelector';
 import {QueryTrackerOpenButton} from '../QueryTrackerOpenButton/QueryTrackerOpenButton';
@@ -12,8 +12,8 @@ import {QueryTrackerOpenButton} from '../QueryTrackerOpenButton/QueryTrackerOpen
 import './QueryMetaForm.scss';
 import {QuerySelectorsByEngine} from '../QueryTrackerTopRow/QuerySelectorsByEngine';
 import {Flex} from '@gravity-ui/uikit';
-import {type QueryEngine} from '../../../../shared/constants/engines';
 import {QueryClusterSelector} from '../QueryTrackerTopRow/QueryClusterSelector';
+import {type DraftQuery} from '../../../types/query-tracker/api';
 
 const block = cn('query-tracker-meta-form');
 export function QueryMetaForm({
@@ -29,28 +29,22 @@ export function QueryMetaForm({
 }) {
     const dispatch = useDispatch();
     const draft = useSelector(selectQueryDraft);
+    const engine = useSelector(selectQueryEngine);
 
     const onSettingsChange = useCallback(
-        (settings: Record<string, string>) => dispatch(updateQueryDraft({settings})),
+        (settings: DraftQuery['settings']) => dispatch(updateQueryDraft({settings})),
         [dispatch],
-    );
-
-    const handleChangeEngine = useCallback(
-        (newEngine: QueryEngine) => {
-            dispatch(
-                loadTablePromptToQuery(cluster, path, newEngine, {
-                    cluster: draft.settings?.cluster!,
-                }),
-            );
-        },
-        [dispatch, cluster, path, draft.settings],
     );
 
     return (
         <Flex className={block(null, className)} gap={3} justifyContent="space-between" grow={1}>
             <Flex gap={3}>
                 <QueryClusterSelector className={block('cluster')} />
-                <QueryEngineSelector onChange={handleChangeEngine} className={block('engine')} />
+                <QueryEngineSelector
+                    className={block('engine')}
+                    tableCluster={cluster}
+                    tablePath={path}
+                />
                 <QuerySelectorsByEngine />
             </Flex>
 
@@ -58,6 +52,7 @@ export function QueryMetaForm({
                 <QuerySettingsButton
                     popupClassName={block('settings')}
                     settings={draft.settings}
+                    engine={engine}
                     onChange={onSettingsChange}
                 />
                 <QueryFilesButton popupClassName={block('files')} />
