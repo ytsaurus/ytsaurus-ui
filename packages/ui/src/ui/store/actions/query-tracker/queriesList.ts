@@ -3,11 +3,11 @@ import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {type RootState} from '../../reducers';
 import {loadQueriesList} from './api';
 import {
-    getQueriesFilters,
-    getQueriesList,
-    getQueriesListCursorParams,
-    getQueriesListFilterParams,
-    getQueriesListMode,
+    selectQueriesFilters,
+    selectQueriesList,
+    selectQueriesListCursorParams,
+    selectQueriesListFilterParams,
+    selectQueriesListMode,
 } from '../../selectors/query-tracker/queriesList';
 import {
     DefaultQueriesListFilter,
@@ -44,7 +44,7 @@ export const resetQueryList =
 export function requestQueriesList(silent = false): AsyncAction {
     return async (dispatch, getState) => {
         const state = getState();
-        const list = getQueriesList(state);
+        const list = selectQueriesList(state);
 
         if (!silent) {
             dispatch(setLoading(true));
@@ -54,8 +54,8 @@ export function requestQueriesList(silent = false): AsyncAction {
             const result = await wrapApiPromiseByToaster(
                 dispatch(
                     loadQueriesList({
-                        params: getQueriesListFilterParams(state),
-                        cursor: getQueriesListCursorParams(state),
+                        params: selectQueriesListFilterParams(state),
+                        cursor: selectQueriesListCursorParams(state),
                         limit: QUERIES_LIST_LIMIT,
                     }),
                 ),
@@ -93,7 +93,7 @@ export function requestQueriesList(silent = false): AsyncAction {
 export function loadNextQueriesList(direction = QueriesHistoryCursorDirection.PAST): AsyncAction {
     return (dispatch, getState) => {
         const state = getState();
-        const items = getQueriesList(state);
+        const items = selectQueriesList(state);
 
         const isFuture = direction === QueriesHistoryCursorDirection.FUTURE;
         const lastItem = items[isFuture ? 0 : items.length - 1];
@@ -113,8 +113,8 @@ export function loadNextQueriesList(direction = QueriesHistoryCursorDirection.PA
 export function resetFilter(): AsyncAction {
     return (dispatch, getState) => {
         const state = getState();
-        const listMode = getQueriesListMode(state);
-        const currentFilter = getQueriesFilters(state);
+        const listMode = selectQueriesListMode(state);
+        const currentFilter = selectQueriesFilters(state);
 
         dispatch(setFilter({...DefaultQueriesListFilter[listMode], filter: currentFilter.filter}));
         dispatch(requestQueriesList());
@@ -123,7 +123,7 @@ export function resetFilter(): AsyncAction {
 
 export function applyFilter(patch: QueriesListFilter): AsyncAction {
     return (dispatch, getState) => {
-        const filter = getQueriesFilters(getState());
+        const filter = selectQueriesFilters(getState());
 
         dispatch(setFilter({...filter, ...patch}));
         dispatch(resetQueryList(true));
@@ -147,7 +147,7 @@ export function applyListMode(listMode: QueriesListMode): AsyncAction {
 export function updateQueryInList(queryId: string, updates: Partial<QueryItem>): AsyncAction {
     return (dispatch, getState) => {
         const state = getState();
-        const items = getQueriesList(state);
+        const items = selectQueriesList(state);
 
         const updatedItems = items.map((item) =>
             item.id === queryId ? {...item, ...updates} : item,

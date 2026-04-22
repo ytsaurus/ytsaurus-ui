@@ -3,7 +3,7 @@ import {Select} from '@gravity-ui/uikit';
 import {Engines} from '../../../../../types/query-tracker/api';
 import {type QueryEngine, QueryEnginesNames} from '../../../../../../shared/constants/engines';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
-import {getQueriesFilters} from '../../../../../store/selectors/query-tracker/queriesList';
+import {selectQueriesFilters} from '../../../../../store/selectors/query-tracker/queriesList';
 import {applyFilter} from '../../../../../store/actions/query-tracker/queriesList';
 import i18n from './i18n';
 
@@ -24,7 +24,7 @@ const getEnginesList = () => [
 
 export const QueryEngineFilter: FC = () => {
     const dispatch = useDispatch();
-    const {engine} = useSelector(getQueriesFilters);
+    const {engine} = useSelector(selectQueriesFilters);
 
     const onChangeEngineFilter = useCallback(
         (values: string[]) => {

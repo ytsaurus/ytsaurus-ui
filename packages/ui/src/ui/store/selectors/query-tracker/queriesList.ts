@@ -23,20 +23,24 @@ import {
 } from '../../../pages/query-tracker/QueriesList/QueriesHistoryList/columns';
 import {isSupportedTutorials} from './queryAco';
 
-export const getQueriesListState = (state: RootState) => state.queryTracker.list;
+export const selectQueriesListState = (state: RootState) => state.queryTracker.list;
 
-export const isQueriesListLoading = (state: RootState) => state.queryTracker.list.isLoading;
+export const selectIsQueriesListLoading = (state: RootState) => state.queryTracker.list.isLoading;
 
-export const getQueriesList = (state: RootState) => getQueriesListState(state).items;
+export const selectQueriesList = (state: RootState) => selectQueriesListState(state).items;
 
-export const hasQueriesListMore = (state: RootState) => getQueriesListState(state).hasMore;
+export const selectHasQueriesListMore = (state: RootState) =>
+    selectQueriesListState(state).hasMore;
 
-export const getQueriesFilters = (state: RootState) => getQueriesListState(state).filter || {};
-export const getQueriesListMode = (state: RootState) => getQueriesListState(state).listMode;
-export const getQueriesListCursor = (state: RootState) => getQueriesListState(state).cursor;
+export const selectQueriesFilters = (state: RootState) =>
+    selectQueriesListState(state).filter || {};
+export const selectQueriesListMode = (state: RootState) =>
+    selectQueriesListState(state).listMode;
+export const selectQueriesListCursor = (state: RootState) =>
+    selectQueriesListState(state).cursor;
 
-export const getTutorialQueriesList = createSelector(
-    [getQueriesList, isSupportedTutorials],
+export const selectTutorialQueriesList = createSelector(
+    [selectQueriesList, isSupportedTutorials],
     (listItems, supportsTutorials) => {
         return listItems.filter((item) =>
             supportsTutorials ? item?.is_tutorial : item?.annotations?.is_tutorial,
@@ -44,7 +48,7 @@ export const getTutorialQueriesList = createSelector(
     },
 );
 
-export const getQueryListByDate = createSelector([getQueriesList], (listItems) => {
+export const selectQueryListByDate = createSelector([selectQueriesList], (listItems) => {
     return Object.entries(
         groupBy_(listItems, (item) => moment(item.start_time).format('DD MMMM YYYY')),
     ).reduce<(QueryItem | {header: string})[]>((ret, [header, items]) => {
@@ -56,15 +60,15 @@ export const getQueryListByDate = createSelector([getQueriesList], (listItems) =
     }, []);
 });
 
-export const getQueriesListTabs = createSelector([selectIsVcsVisible], (vcsVisible) => {
+export const selectQueriesListTabs = createSelector([selectIsVcsVisible], (vcsVisible) => {
     const queriesListMode = Object.values(QueriesListMode);
     return vcsVisible
         ? queriesListMode
         : queriesListMode.filter((item) => item !== QueriesListMode.VCS);
 });
 
-export const getQueryListColumns = createSelector(
-    [getQueriesFilters, getQueryListHistoryColumns],
+export const selectQueryListColumns = createSelector(
+    [selectQueriesFilters, selectQueryListHistoryColumns],
     (filter, selectedColumns) => {
         const ALL_COLUMN_NAMES = intersectionBy_(AllColumns, MyColumns, 'name').map(
             (item) => item.name,
@@ -90,8 +94,8 @@ export const getQueryListColumns = createSelector(
     },
 );
 
-export const hasCustomHistoryFilters = createSelector(
-    [getQueriesFilters, getSettingsData],
+export const selectHasCustomHistoryFilters = createSelector(
+    [selectQueriesFilters, getSettingsData],
     (filter) => {
         const {from, to, state, user} = filter;
         const defaultFilter = DefaultQueriesListFilter[QueriesListMode.History];
@@ -105,12 +109,12 @@ export const hasCustomHistoryFilters = createSelector(
     },
 );
 
-export const getUncompletedItems = createSelector(getQueriesList, (items) => {
+export const selectUncompletedItems = createSelector(selectQueriesList, (items) => {
     return items.filter(isQueryProgress);
 });
 
-export const getQueriesListCursorParams = (state: RootState) => {
-    const cursor = getQueriesListCursor(state);
+export const selectQueriesListCursorParams = (state: RootState) => {
+    const cursor = selectQueriesListCursor(state);
     if (cursor) {
         return {cursor_time: cursor.cursorTime, cursor_direction: cursor.direction};
     }
@@ -118,10 +122,10 @@ export const getQueriesListCursorParams = (state: RootState) => {
     return undefined;
 };
 
-export function getQueriesListFilterParams(state: RootState): QueriesListParams {
-    const listMode = getQueriesListMode(state);
+export function selectQueriesListFilterParams(state: RootState): QueriesListParams {
+    const listMode = selectQueriesListMode(state);
     const filterParams = {
-        ...getQueriesFilters(state),
+        ...selectQueriesFilters(state),
         ...(QueriesListFilterPresets[listMode] || {}),
     };
     const {is_tutorial, from, to, state: queryState, ...filter} = filterParams;
@@ -155,6 +159,6 @@ export function getQueriesListFilterParams(state: RootState): QueriesListParams 
     return params;
 }
 
-export function getQueryListHistoryColumns(state: RootState) {
+export function selectQueryListHistoryColumns(state: RootState) {
     return getSettingsData(state)['global::queryTracker::history::Columns'];
 }

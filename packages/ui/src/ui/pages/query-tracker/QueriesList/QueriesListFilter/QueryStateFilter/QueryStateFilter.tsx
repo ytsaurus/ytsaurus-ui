@@ -4,7 +4,7 @@ import {QueryStatus} from '../../../../../types/query-tracker';
 import hammer from '../../../../../common/hammer';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {applyFilter} from '../../../../../store/actions/query-tracker/queriesList';
-import {getQueriesFilters} from '../../../../../store/selectors/query-tracker/queriesList';
+import {selectQueriesFilters} from '../../../../../store/selectors/query-tracker/queriesList';
 import i18n from './i18n';
 
 const ALL_STATUS_KEY = '__all';
@@ -23,7 +23,7 @@ const getStatusesList = () => [
 
 export const QueryStateFilter: FC = () => {
     const dispatch = useDispatch();
-    const {state} = useSelector(getQueriesFilters);
+    const {state} = useSelector(selectQueriesFilters);
 
     const onChangeStatusFilter = useCallback(
         (values: string[]) => {

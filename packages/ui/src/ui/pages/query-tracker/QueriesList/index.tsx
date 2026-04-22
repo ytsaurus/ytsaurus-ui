@@ -4,8 +4,8 @@ import {Tab, TabList, TabPanel, TabProvider} from '@gravity-ui/uikit';
 import {QueriesHistoryList} from './QueriesHistoryList';
 
 import {
-    getQueriesListMode,
-    getQueriesListTabs,
+    selectQueriesListMode,
+    selectQueriesListTabs,
 } from '../../../store/selectors/query-tracker/queriesList';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {DefaultQueriesListFilter, QueriesListMode} from '../../../types/query-tracker/queryList';
@@ -51,8 +51,8 @@ const TabContent: Record<QueriesListMode, React.ReactNode> = {
 
 export function QueriesList() {
     const dispatch = useDispatch();
-    const activeTab = useSelector(getQueriesListMode);
-    const tabsList = useSelector(getQueriesListTabs);
+    const activeTab = useSelector(selectQueriesListMode);
+    const tabsList = useSelector(selectQueriesListTabs);
     const isInitializedRef = useRef(false);
 
     useEffect(() => {
