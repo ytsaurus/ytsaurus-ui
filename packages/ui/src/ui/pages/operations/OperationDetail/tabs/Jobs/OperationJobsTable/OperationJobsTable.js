@@ -26,7 +26,7 @@ import {
     hideInputPaths,
     showInputPaths,
 } from '../../../../../../store/actions/operations/jobs';
-import {openAttributesModal} from '../../../../../../store/actions/modals/attributes-modal';
+import {openModal} from '../../../../../../store/actions/modals/attributes-modal';
 import {promptAction, showErrorModal} from '../../../../../../store/actions/actions';
 import {performJobAction} from '../utils';
 import {LOADING_STATUS} from '../../../../../../constants/index';
@@ -39,6 +39,7 @@ import {
 } from '../../../../../../store/selectors/operations/operation';
 import UIFactory from '../../../../../../UIFactory';
 import {StaleJobIcon} from '../StaleJobIcon';
+import {ytApiV3} from '../../../../../../rum/rum-wrap-api';
 
 import JobTemplate from './JobTemplate';
 import './OperationJobsTable.scss';
@@ -68,7 +69,7 @@ class OperationJobsTable extends React.Component {
             }),
         }),
 
-        openAttributesModal: PropTypes.func.isRequired,
+        openModal: PropTypes.func.isRequired,
         showErrorModal: PropTypes.func.isRequired,
         showInputPaths: PropTypes.func.isRequired,
         hideInputPaths: PropTypes.func.isRequired,
@@ -244,7 +245,7 @@ class OperationJobsTable extends React.Component {
     };
 
     renderActions = (item) => {
-        const {openAttributesModal} = this.props;
+        const {openModal} = this.props;
 
         const button = (
             <Button view="flat-secondary" title="Show actions">
@@ -259,11 +260,18 @@ class OperationJobsTable extends React.Component {
         const secondGroup = [
             {
                 text: 'Show attributes',
-                action: () =>
-                    openAttributesModal({
+                action: () => {
+                    const promise = ytApiV3.getJob({
+                        parameters: {
+                            operation_id: this.props.operationId,
+                            job_id: item.id,
+                        },
+                    });
+                    openModal({
                         title: item.id,
-                        attributes: item.attributes,
-                    }),
+                        promise,
+                    });
+                },
             },
         ];
 
@@ -527,6 +535,7 @@ function mapStateToProps(state, props) {
         inputPaths,
         cluster,
         login,
+        operationId,
         collapsibleSize: UI_COLLAPSIBLE_SIZE,
         isLoading: props.isLoading || operationId !== jobsOperationId,
         taskNamesNumber,
@@ -534,7 +543,7 @@ function mapStateToProps(state, props) {
 }
 
 const mapDispatchToProps = {
-    openAttributesModal,
+    openModal,
     showInputPaths,
     hideInputPaths,
     showErrorModal,
