@@ -2,7 +2,10 @@ import React, {type FC, useEffect, useState} from 'react';
 import block from 'bem-cn-lite';
 import {Loader} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
-import {isQueryExecuted, isQueryLoading} from '../../../store/selectors/query-tracker/query';
+import {
+    selectIsQueryExecuted,
+    selectIsQueryLoading,
+} from '../../../store/selectors/query-tracker/query';
 import FlexSplitPane from '../../../components/FlexSplitPane/FlexSplitPane';
 import './QueryEditor.scss';
 import {useCurrentQuery} from '../QueryResults/hooks/useCurrentQuery';
@@ -53,8 +56,8 @@ export const QueryEditor: FC<Props> = ({onStartQuery, showStatusInTitle, pathNav
         setResultViewMode('split');
     }, [query?.id]);
 
-    const isExecuted = useSelector(isQueryExecuted);
-    const isMainQueryLoading = useSelector(isQueryLoading);
+    const isExecuted = useSelector(selectIsQueryExecuted);
+    const isMainQueryLoading = useSelector(selectIsQueryLoading);
     const isLoading = isQueryTrackerInfoLoading || isMainQueryLoading;
 
     return (

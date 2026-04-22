@@ -4,11 +4,11 @@ import {useHistory} from 'react-router';
 import {createQueryUrl} from '../../utils/navigation';
 import {type QueryItem} from '../../../../types/query-tracker/api';
 import {selectCluster} from '../../../../store/selectors/global';
-import {getQuery} from '../../../../store/selectors/query-tracker/query';
+import {selectQuery} from '../../../../store/selectors/query-tracker/query';
 import {selectQueriesListMode} from '../../../../store/selectors/query-tracker/queriesList';
 
 export const useQueryNavigation = (): [QueryItem['id'] | undefined, (id: QueryItem) => void] => {
-    const selectedItem = useSelector(getQuery);
+    const selectedItem = useSelector(selectQuery);
     const cluster = useSelector(selectCluster);
     const listMode = useSelector(selectQueriesListMode);
     const history = useHistory();

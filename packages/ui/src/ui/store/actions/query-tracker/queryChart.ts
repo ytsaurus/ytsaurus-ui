@@ -4,10 +4,10 @@ import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {type ThunkAction} from 'redux-thunk';
 import {type Action} from 'redux';
 import {
-    getCurrentQueryACO,
-    getQueryAnnotations,
-    getQueryDraft,
-    getQueryItem,
+    selectCurrentQueryACO,
+    selectQueryAnnotations,
+    selectQueryDraft,
+    selectQueryItem,
 } from '../../selectors/query-tracker/query';
 import {selectCurrentUserName} from '../../selectors/global/username';
 import {
@@ -45,8 +45,8 @@ const saveChartConfig = (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
 
     const currentUser = selectCurrentUserName(state);
-    const queryItem = getQueryItem(state);
-    const {id} = getQueryDraft(state);
+    const queryItem = selectQueryItem(state);
+    const {id} = selectQueryDraft(state);
 
     if (!queryItem || currentUser !== queryItem.user || !id) {
         return;
@@ -54,8 +54,8 @@ const saveChartConfig = (dispatch: AppDispatch, getState: () => RootState) => {
 
     dispatch(setSaved(false));
 
-    const annotations = getQueryAnnotations(state);
-    const aco = getCurrentQueryACO(state);
+    const annotations = selectQueryAnnotations(state);
+    const aco = selectCurrentQueryACO(state);
     const chartConfig = selectChartVisualization(state);
 
     wrapApiPromiseByToaster(
@@ -183,7 +183,7 @@ const validateChartConfig = (config: any): config is Record<number, Visualizatio
 };
 
 export const loadVisualization = (): AsyncAction => (dispatch, getState) => {
-    const queryItem = getQueryItem(getState());
+    const queryItem = selectQueryItem(getState());
     const chartConfig = queryItem?.annotations?.chartConfig;
 
     dispatch(setResultIndex(0));
@@ -200,7 +200,7 @@ export const changeVisualizationResultIndex =
         const state = getState();
         const visualizations = selectChartVisualization(state);
         const results = selectQueryResults(state);
-        const {id} = getQueryDraft(state);
+        const {id} = selectQueryDraft(state);
 
         dispatch(setLoading(true));
 

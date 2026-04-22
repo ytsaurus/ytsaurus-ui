@@ -7,7 +7,7 @@ import {Button, Text} from '@gravity-ui/uikit';
 import {Legend} from '../components/Legend/Legend';
 import cn from 'bem-cn-lite';
 import './LargeGraphInfo.scss';
-import {getQuerySingleProgress} from '../../../../store/selectors/query-tracker/query';
+import {selectQuerySingleProgress} from '../../../../store/selectors/query-tracker/query';
 import i18n from './i18n';
 
 const block = cn('yt-large-graph-info');
@@ -19,7 +19,7 @@ export function LargeGraphInfo({
     showGraph: React.Dispatch<React.SetStateAction<boolean>>;
     graph: ProcessedGraph;
 }) {
-    const {yql_progress: progress} = useSelector(getQuerySingleProgress);
+    const {yql_progress: progress} = useSelector(selectQuerySingleProgress);
     const [nodes] = React.useState(() => new DataSet<ProcessedNode>());
     const repaint = useUpdate();
 

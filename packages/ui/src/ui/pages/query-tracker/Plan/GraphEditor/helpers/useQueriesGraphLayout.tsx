@@ -8,7 +8,7 @@ import {buildConnectionsFromEdges} from './buildConnectionsFromEdges';
 import {toaster} from '../../../../../utils/toaster';
 import {type MultipointConnection} from '../types';
 import {useSelector} from '../../../../../store/redux-hooks';
-import {getQuerySingleProgress} from '../../../../../store/selectors/query-tracker/query';
+import {selectQuerySingleProgress} from '../../../../../store/selectors/query-tracker/query';
 
 export const useQueriesGraphLayout = (
     progressGraph: ProcessedGraph,
@@ -17,7 +17,7 @@ export const useQueriesGraphLayout = (
     data: {blocks: QueriesNodeBlock[]; connections: MultipointConnection[]};
     isLoading: boolean;
 } => {
-    const {yql_progress: progress} = useSelector(getQuerySingleProgress);
+    const {yql_progress: progress} = useSelector(selectQuerySingleProgress);
 
     const {blocks, connections: initialConnections} = useMemo(
         () => createBlocks(progressGraph, progress, scale),

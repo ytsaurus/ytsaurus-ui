@@ -7,7 +7,7 @@ import {
     selectNavigationPath,
     selectTableWithFilter,
 } from '../../../../store/selectors/query-tracker/queryNavigation';
-import {getQueryEngine} from '../../../../store/selectors/query-tracker/query';
+import {selectQueryEngine} from '../../../../store/selectors/query-tracker/query';
 import {getPageSize} from '../../../../store/selectors/navigation/content/table-ts';
 import {setFilter} from '../../../../store/reducers/query-tracker/queryNavigationSlice';
 import {useMonaco} from '../../hooks/useMonaco';
@@ -18,7 +18,7 @@ export const NavigationTable: FC = () => {
     const dispatch = useDispatch();
     const clusterConfig = useSelector(selectNavigationClusterConfig);
     const table = useSelector(selectTableWithFilter);
-    const engine = useSelector(getQueryEngine);
+    const engine = useSelector(selectQueryEngine);
     const limit = useSelector(getPageSize);
     const path = useSelector(selectNavigationPath);
     const filter = useSelector(selectNavigationFilter);

@@ -1,6 +1,6 @@
 import {type RootState} from '../../reducers';
 import {createSelector} from 'reselect';
-import {getQueryFiles} from './query';
+import {selectQueryFiles} from './query';
 import {type QueryFile} from '../../../types/query-tracker/api';
 
 export const selectAddForm = (state: RootState) => state.queryTracker.queryFilesModal.addForm;
@@ -9,7 +9,7 @@ export const selectDeletedFiles = (state: RootState) =>
     state.queryTracker.queryFilesModal.deletedFiles;
 
 export const selectFileEditorConfig = createSelector(
-    [selectFileEditor, getQueryFiles, selectDeletedFiles],
+    [selectFileEditor, selectQueryFiles, selectDeletedFiles],
     (fileEditor, files, deletedFiles) => {
         const fileArray = fileEditor.fileType === 'file' ? files : deletedFiles;
 
@@ -21,7 +21,7 @@ export const selectFileEditorConfig = createSelector(
 );
 
 export const selectQueryFilesButtonConfig = createSelector(
-    [getQueryFiles, selectDeletedFiles, selectAddForm],
+    [selectQueryFiles, selectDeletedFiles, selectAddForm],
     (files, deletedFiles, addForm) => {
         return {
             files,

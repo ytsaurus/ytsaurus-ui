@@ -5,7 +5,7 @@ import ChevronUpIcon from '@gravity-ui/icons/svgs/chevron-up.svg';
 import ChevronDownIcon from '@gravity-ui/icons/svgs/chevron-down.svg';
 import {
     SHARED_QUERY_ACO,
-    getCurrentQueryACO,
+    selectCurrentQueryACO,
 } from '../../../../store/selectors/query-tracker/query';
 import {toggleShareQuery} from '../../../../store/actions/query-tracker/query';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
@@ -23,7 +23,7 @@ export const ShareButton: FC = () => {
     const [sending, setSending] = useState(false);
     const [open, toggleDropdown] = useToggle(false);
     const showShareButton = useSelector(isSupportedShareQuery);
-    const queryAco = useSelector(getCurrentQueryACO);
+    const queryAco = useSelector(selectCurrentQueryACO);
     const isShared = queryAco.includes(SHARED_QUERY_ACO);
 
     const handleToggleQuery = useCallback(async () => {

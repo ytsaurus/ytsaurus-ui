@@ -4,9 +4,9 @@ import Link from '../../../components/Link/Link';
 import Icon from '../../../components/Icon/Icon';
 import {createNewQueryUrl, createQueryUrl} from '../utils/navigation';
 import {
-    getQuery,
-    getQueryEngine,
-    isQueryDraftEditted,
+    selectIsQueryDraftEditted,
+    selectQuery,
+    selectQueryEngine,
 } from '../../../store/selectors/query-tracker/query';
 import {useSelector} from '../../../store/redux-hooks';
 import i18n from './i18n';
@@ -18,9 +18,9 @@ interface Props {
 }
 
 export function QueryTrackerOpenButton({className, cluster, path}: Props) {
-    const engine = useSelector(getQueryEngine);
-    const isEdited = useSelector(isQueryDraftEditted);
-    const queryId = useSelector(getQuery)?.id;
+    const engine = useSelector(selectQueryEngine);
+    const isEdited = useSelector(selectIsQueryDraftEditted);
+    const queryId = useSelector(selectQuery)?.id;
     let url = '';
     let buttonView: ButtonProps['view'];
     if (queryId && !isEdited) {

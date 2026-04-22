@@ -19,7 +19,10 @@ import {isFolderNode} from '../../../../utils/navigation/isFolderNode';
 import {isTableNode} from '../../../../utils/navigation/isTableNode';
 import {useMonaco} from '../../hooks/useMonaco';
 import {insertTextWhereCursor} from '../helpers/insertTextWhereCursor';
-import {getQueryEngine, isQueryDraftEditted} from '../../../../store/selectors/query-tracker/query';
+import {
+    selectIsQueryDraftEditted,
+    selectQueryEngine,
+} from '../../../../store/selectors/query-tracker/query';
 import {makePathByQueryEngine} from '../helpers/makePathByQueryEngine';
 import {type QueryEngine} from '../../../../../shared/constants/engines';
 import {getNavigationUrl} from '../helpers/getNavigationUrl';
@@ -36,9 +39,9 @@ export const NodeList: FC = () => {
     const newQueryParams = useRef<{path: string; engine: QueryEngine} | null>(null);
     const clusterConfig = useSelector(selectNavigationClusterConfig);
     const nodes = useSelector(selectNodeListByFilter);
-    const engine = useSelector(getQueryEngine);
+    const engine = useSelector(selectQueryEngine);
     const {pageSize} = getQueryResultGlobalSettings();
-    const dirtyQuery = useSelector(isQueryDraftEditted);
+    const dirtyQuery = useSelector(selectIsQueryDraftEditted);
     const loading = useSelector(selectLoading);
     const {getEditor} = useMonaco();
 

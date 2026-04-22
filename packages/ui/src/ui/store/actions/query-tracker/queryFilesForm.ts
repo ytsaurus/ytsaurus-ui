@@ -2,7 +2,7 @@ import {type QueryFile} from './api';
 import {type ThunkAction} from 'redux-thunk';
 import {type RootState} from '../../reducers';
 import {type Action} from 'redux';
-import {getQueryFiles} from '../../selectors/query-tracker/query';
+import {selectQueryFiles} from '../../selectors/query-tracker/query';
 import {updateQueryDraft} from './query';
 import {setDeletedFiles} from '../../reducers/query-tracker/queryFilesFormSlice';
 import {selectDeletedFiles} from '../../selectors/query-tracker/queryFilesForm';
@@ -21,7 +21,7 @@ export const changeQueryFile =
     (file: QueryFile): ThunkAction<void, RootState, undefined, Action> =>
     (dispatch, getState) => {
         const state = getState();
-        const files = getQueryFiles(state);
+        const files = selectQueryFiles(state);
         const index = files.findIndex((f) => f.id === file.id);
         if (index < 0) return;
 
@@ -36,7 +36,7 @@ export const restoreQueryFile =
     (dispatch, getState) => {
         const state = getState();
         const deletedFiles = selectDeletedFiles(state);
-        const files = getQueryFiles(state);
+        const files = selectQueryFiles(state);
 
         const data = findObjectByTitle<QueryFile>(deletedFiles, (file) => file.id === id);
         if (data === null) return;
@@ -61,7 +61,7 @@ export const deleteQueryFile =
     (dispatch, getState) => {
         const state = getState();
         const deletedFiles = selectDeletedFiles(state);
-        const files = getQueryFiles(state);
+        const files = selectQueryFiles(state);
 
         const data = findObjectByTitle<QueryFile>(files, (file) => file.id === id);
         if (data === null) return;

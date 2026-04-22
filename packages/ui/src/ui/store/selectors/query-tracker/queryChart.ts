@@ -1,7 +1,7 @@
 import {createSelector} from 'reselect';
 import {type RootState} from '../../reducers';
 import {getQueryResultsState} from './queryResult';
-import {getQueryDraft} from './query';
+import {selectQueryDraft} from './query';
 import {type QueryResultReadyState} from '../../../types/query-tracker/queryResult';
 import {NumberTypes} from '../../../types/query-tracker/yqlTypes';
 
@@ -19,7 +19,7 @@ export const selectCurrentChartVisualization = createSelector(
 );
 
 export const selectQueryResults = createSelector(
-    [getQueryDraft, getQueryResultsState],
+    [selectQueryDraft, getQueryResultsState],
     ({id}, results) => {
         if (!id || !(id in results)) return [];
 

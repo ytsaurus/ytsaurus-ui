@@ -7,7 +7,10 @@ import {getQueryTrackerInfoClusters} from '../../../../store/selectors/query-tra
 import {QuerySelector} from '../QuerySelector';
 import {QueryClusterItem, type Props as QueryClusterItemProps} from './QueryClusterItem';
 import {YT, isMultiClusterInstallation} from '../../../../config/yt-config';
-import {getClusterLoading, getQueryDraft} from '../../../../store/selectors/query-tracker/query';
+import {
+    selectClusterLoading,
+    selectQueryDraft,
+} from '../../../../store/selectors/query-tracker/query';
 import {getClusterList} from '../../../../store/selectors/slideoutMenu';
 import {setQueryCluster} from '../../../../store/actions/query-tracker/query';
 
@@ -18,9 +21,9 @@ type Props = {
 export const QueryClusterSelector: FC<Props> = ({className}) => {
     const dispatch = useDispatch();
     const infoClusters = useSelector(getQueryTrackerInfoClusters);
-    const loading = useSelector(getClusterLoading);
+    const loading = useSelector(selectClusterLoading);
     const clusters = useSelector(getClusterList);
-    const {settings} = useSelector(getQueryDraft);
+    const {settings} = useSelector(selectQueryDraft);
     const isMultiCluster = isMultiClusterInstallation();
 
     const handleOnChange = (clusterId: string) => {
