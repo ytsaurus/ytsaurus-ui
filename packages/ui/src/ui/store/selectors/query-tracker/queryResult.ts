@@ -7,7 +7,7 @@ import {
     QueryResultState,
 } from '../../../types/query-tracker/queryResult';
 
-export const getQueryResultsState = (state: RootState) => state.queryTracker.results;
+export const selectQueryResultsState = (state: RootState) => state.queryTracker.results;
 
 export const getQueryResultGlobalSettings = (): QueryResultReadyState['settings'] => {
     const settings = getSettingsInitialData();
@@ -25,7 +25,7 @@ export const getQueryResults = (
     state: RootState,
     queryId: string,
 ): Record<number, QueryResult> | undefined => {
-    const res: Record<number, QueryResult> | undefined = getQueryResultsState(state)?.[queryId];
+    const res: Record<number, QueryResult> | undefined = selectQueryResultsState(state)?.[queryId];
     return res;
 };
 
@@ -33,7 +33,7 @@ export const getQueryResult = (
     state: RootState,
     queryId: string,
     index: number,
-): QueryResult | undefined => getQueryResultsState(state)?.[queryId]?.[index];
+): QueryResult | undefined => selectQueryResultsState(state)?.[queryId]?.[index];
 
 export const getQueryReadyResult = (
     state: RootState,
