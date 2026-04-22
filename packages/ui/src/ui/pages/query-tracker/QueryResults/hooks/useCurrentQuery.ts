@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {QueriesPoolingContext} from '../../hooks/QueriesPooling/context';
 
 import {selectCurrentQuery} from '../../../../store/selectors/query-tracker/query';
-import {getDefaultQueryACO} from '../../../../store/selectors/query-tracker/queryAco';
+import {selectDefaultQueryACO} from '../../../../store/selectors/query-tracker/queryAco';
 import {isQueryProgress} from '../../utils/query';
 import {type QueryItem} from '../../../../types/query-tracker/api';
 import {prepareQueryPlanIds} from '../../../../types/query-tracker/query';
@@ -12,7 +12,7 @@ import {updateQueryTabs} from '../../../../store/actions/query-tracker/queryTabs
 
 export function useCurrentQuery() {
     const query = useSelector(selectCurrentQuery);
-    const defaultQueryACO = useSelector(getDefaultQueryACO);
+    const defaultQueryACO = useSelector(selectDefaultQueryACO);
     const pollingContext = useContext(QueriesPoolingContext);
 
     const dispatch = useDispatch();

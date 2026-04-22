@@ -17,7 +17,7 @@ import {type QTEditorError, isQTEditorError} from '../../../types/query-tracker/
 import {type YTError} from '../../../types';
 import {isYTError} from '../../../../shared/utils';
 import {getQueryResults} from './queryResult';
-import {getDefaultQueryACO, selectIsMultipleAco} from './queryAco';
+import {selectDefaultQueryACO, selectIsMultipleAco} from './queryAco';
 import {QueryEngine, QueryEnginesNames} from '../../../../shared/constants/engines';
 import {selectClusterSupportedEngines} from '../global';
 
@@ -184,13 +184,13 @@ const getAco = (
 };
 
 export const selectCurrentQueryACO = (state: RootState) => {
-    const defaultACO = getDefaultQueryACO(state);
+    const defaultACO = selectDefaultQueryACO(state);
 
     return getAco(defaultACO, selectIsMultipleAco(state), state.queryTracker.query?.queryItem);
 };
 
 export const selectCurrentDraftQueryACO = (state: RootState) => {
-    const defaultACO = getDefaultQueryACO(state);
+    const defaultACO = selectDefaultQueryACO(state);
 
     return getAco(defaultACO, selectIsMultipleAco(state), state.queryTracker.query?.draft);
 };

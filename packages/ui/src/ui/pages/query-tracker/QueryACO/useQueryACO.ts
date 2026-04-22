@@ -5,8 +5,8 @@ import {
     selectCurrentQueryACO,
 } from '../../../store/selectors/query-tracker/query';
 import {
-    getQueryACOOptions,
-    isQueryTrackerInfoLoading as isQueryTrackerInfoLoadingSelector,
+    selectIsQueryTrackerInfoLoading,
+    selectQueryACOOptions,
     selectQueryTrackerInfo,
 } from '../../../store/selectors/query-tracker/queryAco';
 import {getQueryTrackerInfo} from '../../../store/actions/query-tracker/queryAco';
@@ -16,8 +16,8 @@ export const useQueryACO = () => {
     const dispatch = useDispatch();
     const currentQueryACO = useSelector(selectCurrentQueryACO);
     const currentDraftQueryACO = useSelector(selectCurrentDraftQueryACO);
-    const selectOptions = useSelector(getQueryACOOptions);
-    const isQueryTrackerInfoLoading = useSelector(isQueryTrackerInfoLoadingSelector);
+    const selectOptions = useSelector(selectQueryACOOptions);
+    const isQueryTrackerInfoLoading = useSelector(selectIsQueryTrackerInfoLoading);
     const trackerInfo = useSelector(selectQueryTrackerInfo);
     const [loading, setLoading] = useState(false);
 

@@ -43,8 +43,8 @@ import {chytApiAction, spytApiAction} from '../../../utils/strawberryControllerA
 import guid from '../../../common/hammer/guid';
 import {getSettingQueryTrackerStage} from '../../selectors/settings/settings-ts';
 import {
-    getDefaultQueryACO,
-    getDefaultYqlVersion,
+    selectDefaultQueryACO,
+    selectDefaultYqlVersion,
     selectIsMultipleAco,
 } from '../../selectors/query-tracker/queryAco';
 import UIFactory from '../../../UIFactory';
@@ -125,7 +125,7 @@ export const setUserLastChoice =
         const lastPath = getLastUserChoiceQueryDiscoveryPath(state);
         const lastClique = getLastUserChoiceQueryChytClique(state);
         const lastVersion = getLastUserChoiceYqlVersion(state);
-        const defaultYqlVersion = getDefaultYqlVersion(state);
+        const defaultYqlVersion = selectDefaultYqlVersion(state);
 
         const newSettings = {...settings};
         if (clearProps) {
@@ -351,7 +351,7 @@ export function loadQuery(
             });
 
             query.files = query.files.map((file) => ({...file, id: guid()}));
-            const defaultQueryACO = getDefaultQueryACO(state);
+            const defaultQueryACO = selectDefaultQueryACO(state);
             const queryItem = prepareQueryPlanIds(query, defaultQueryACO);
 
             if (config?.dontReplaceQueryText) {
@@ -403,7 +403,7 @@ export function createQueryFromTablePath(
 
         try {
             const state = getState();
-            const defaultQueryACO = getDefaultQueryACO(state);
+            const defaultQueryACO = selectDefaultQueryACO(state);
             const draft = await wrapApiPromiseByToaster(
                 generateQueryFromTable(engine, {cluster, path, defaultQueryACO}),
                 {
@@ -447,7 +447,7 @@ export function createEmptyQuery(
     return (dispatch, getState) => {
         const state = getState();
         const lastEngine = getLastUserChoiceQueryEngine(state);
-        const defaultQueryACO = getDefaultQueryACO(state);
+        const defaultQueryACO = selectDefaultQueryACO(state);
 
         const initialEngine = engine || lastEngine || QueryEngine.YQL;
 
@@ -588,7 +588,7 @@ export const toggleShareQuery =
         const query = selectQuery(state);
         if (!query) return;
 
-        const defaultQueryACO = getDefaultQueryACO(state);
+        const defaultQueryACO = selectDefaultQueryACO(state);
         let aco = query.access_control_objects || [defaultQueryACO];
 
         if (aco.includes(SHARED_QUERY_ACO)) {
