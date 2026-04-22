@@ -21,7 +21,7 @@ import {
     setVcsTokensAvailability,
 } from '../../reducers/query-tracker/vcsSlice';
 import {selectVcs, selectVcsConfig} from '../../selectors/query-tracker/vcs';
-import {getQueryFiles} from '../../selectors/query-tracker/query';
+import {selectQueryFiles} from '../../selectors/query-tracker/query';
 import {updateQueryDraft} from './query';
 import guid from '../../../common/hammer/guid';
 import {selectFileEditor} from '../../selectors/query-tracker/queryFilesForm';
@@ -267,7 +267,7 @@ export const addFileToQuery =
         if (item.type !== 'file' || !repository || !branch) return;
 
         const editor = selectFileEditor(state);
-        const files = getQueryFiles(state);
+        const files = selectQueryFiles(state);
         const id = guid();
         dispatch(
             updateQueryDraft({

@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
-import {getQueryDraft} from '../../../store/selectors/query-tracker/query';
+import {selectQueryDraft} from '../../../store/selectors/query-tracker/query';
 import {QuerySettingsButton} from '../QuerySettingsButton';
 import {QueryFilesButton} from '../QueryFilesButton';
 import {loadTablePromptToQuery, updateQueryDraft} from '../../../store/actions/query-tracker/query';
@@ -28,7 +28,7 @@ export function QueryMetaForm({
     onClickOnNewQueryButton: () => void;
 }) {
     const dispatch = useDispatch();
-    const draft = useSelector(getQueryDraft);
+    const draft = useSelector(selectQueryDraft);
 
     const onSettingsChange = useCallback(
         (settings: Record<string, string>) => dispatch(updateQueryDraft({settings})),

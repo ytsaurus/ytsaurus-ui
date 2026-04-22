@@ -5,7 +5,7 @@ import {type NodeState, type NodeStages as Stages} from '../models/plan';
 import cn from 'bem-cn-lite';
 
 import {useSelector} from '../../../../store/redux-hooks';
-import {getQueryItem} from '../../../../store/selectors/query-tracker/query';
+import {selectQueryItem} from '../../../../store/selectors/query-tracker/query';
 import {type QueryItem} from '../../../../types/query-tracker/api';
 import {isQueryCompleted} from '../../utils/query';
 import {duration, isOperationFinished} from '../utils';
@@ -35,7 +35,7 @@ interface NodeStagesProps {
     finishedAt?: string;
 }
 export default function NodeStages({stages = {}, state, finishedAt}: NodeStagesProps) {
-    const query = useSelector(getQueryItem);
+    const query = useSelector(selectQueryItem);
     const data = prepareData(stages, state, finishedAt, query);
     return (
         <div className={block()}>

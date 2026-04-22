@@ -16,7 +16,7 @@ import {
     selectNavigationCluster,
     selectNavigationPath,
 } from '../../../../store/selectors/query-tracker/queryNavigation';
-import {getQueryEngine} from '../../../../store/selectors/query-tracker/query';
+import {selectQueryEngine} from '../../../../store/selectors/query-tracker/query';
 import {makePathByQueryEngine} from '../helpers/makePathByQueryEngine';
 import {insertTextWhereCursor} from '../helpers/insertTextWhereCursor';
 import {useMonaco} from '../../hooks/useMonaco';
@@ -30,7 +30,7 @@ export const HeaderActions: FC = () => {
     const path = useSelector(selectNavigationPath);
     const cluster = useSelector(selectNavigationCluster);
     const favorites = useSelector(selectFavouritePaths);
-    const engine = useSelector(getQueryEngine);
+    const engine = useSelector(selectQueryEngine);
     const {getEditor} = useMonaco();
 
     const isFavorite = favorites.includes(path);

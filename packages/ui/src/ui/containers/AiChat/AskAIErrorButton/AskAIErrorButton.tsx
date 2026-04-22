@@ -5,13 +5,13 @@ import AiIcon from '../../../assets/img/svg/icons/ai-chat-icon.svg';
 import {createConversationWithPrompt} from '../../../store/actions/ai/chat';
 import {selectAiChatConfigured} from '../../../store/selectors/ai/chat';
 import i18n from './i18n';
-import {getQueryEngine} from '../../../store/selectors/query-tracker/query';
+import {selectQueryEngine} from '../../../store/selectors/query-tracker/query';
 import {PROMPT_MAP} from '../constants';
 
 export const AskAIErrorButton: FC = () => {
     const dispatch = useDispatch();
     const isConfigured = useSelector(selectAiChatConfigured);
-    const engine = useSelector(getQueryEngine);
+    const engine = useSelector(selectQueryEngine);
 
     if (!isConfigured) {
         return null;

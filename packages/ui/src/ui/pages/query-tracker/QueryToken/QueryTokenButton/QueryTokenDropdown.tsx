@@ -7,7 +7,7 @@ import {getQueryTokens} from '../../../../store/selectors/settings/settings-quer
 import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 import {updateQueryDraft} from '../../../../store/actions/query-tracker/query';
 import {type QuerySecret} from '../../../../types/query-tracker/api';
-import {getCurrentSecretIds} from '../../../../store/selectors/query-tracker/query';
+import {selectCurrentSecretIds} from '../../../../store/selectors/query-tracker/query';
 import i18n from './i18n';
 
 const block = cn('yt-qt-token-dropdown');
@@ -15,7 +15,7 @@ const block = cn('yt-qt-token-dropdown');
 export const QueryTokenDropdown: FC = () => {
     const dispatch = useDispatch();
     const tokens = useSelector(getQueryTokens);
-    const secretIds = useSelector(getCurrentSecretIds);
+    const secretIds = useSelector(selectCurrentSecretIds);
 
     const options = useMemo(() => {
         return tokens.map((token) => ({

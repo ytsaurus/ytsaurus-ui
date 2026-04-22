@@ -14,8 +14,8 @@ import {
 import {usePreventUnload} from '../../../hooks/use-prevent-unload';
 import {useQueriesListSidebarToggle} from '../hooks/QueriesList';
 import {
-    getDirtySinceLastSubmit,
-    getQueryGetParams,
+    selectDirtySinceLastSubmit,
+    selectQueryGetParams,
 } from '../../../store/selectors/query-tracker/query';
 import {LazyQueriesList} from '../QueriesList/lazy';
 import {useQueryACO} from '../QueryACO/useQueryACO';
@@ -53,7 +53,7 @@ const minSize = 380; // see history list's cells size
 
 function QueryPageDraft() {
     const dispatch = useDispatch();
-    const routeParams = useSelector(getQueryGetParams);
+    const routeParams = useSelector(selectQueryGetParams);
     const cluster = useSelector(selectNavigationCluster);
     const favoriteEngine = useSelector(getLastUserChoiceQueryEngine) ?? QueryEngine.YQL;
 
@@ -113,7 +113,7 @@ function QueryPage(props: Props) {
 export default function QueryTracker({match}: Props) {
     const {isQueriesListSidebarVisible, toggleQueriesListSideBarToggle} =
         useQueriesListSidebarToggle();
-    const isQueryStateDirty = useSelector(getDirtySinceLastSubmit);
+    const isQueryStateDirty = useSelector(selectDirtySinceLastSubmit);
     const fileEditor = useSelector(selectFileEditor);
     usePreventUnload({shouldListen: isQueryStateDirty});
     const [sizes, setSize] = useState(initialSizes);

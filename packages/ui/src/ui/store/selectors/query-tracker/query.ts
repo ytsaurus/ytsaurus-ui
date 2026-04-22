@@ -22,46 +22,50 @@ import {QueryEngine, QueryEnginesNames} from '../../../../shared/constants/engin
 import {selectClusterSupportedEngines} from '../global';
 
 const QT_STAGE = getQueryTrackerStage();
-const getState = (state: RootState) => state.queryTracker.query;
+const selectQueryState = (state: RootState) => state.queryTracker.query;
 
 export const DEFAULT_QUERY_ACO = 'nobody';
 export const SHARED_QUERY_ACO = 'everyone-share';
 
-export const getQuery = (state: RootState) => getState(state).queryItem;
-export const getQueryId = (state: RootState) => getState(state).queryItem?.id;
-export const getQueryAnnotations = (state: RootState) => getState(state).queryItem?.annotations;
-export const getQueryGetParams = (state: RootState) => getState(state).params;
-export const getQueryProgress = (state: RootState) => getQuery(state)?.progress;
+export const selectQuery = (state: RootState) => selectQueryState(state).queryItem;
+export const selectQueryId = (state: RootState) => selectQueryState(state).queryItem?.id;
+export const selectQueryAnnotations = (state: RootState) =>
+    selectQueryState(state).queryItem?.annotations;
+export const selectQueryGetParams = (state: RootState) => selectQueryState(state).params;
+export const selectQueryProgress = (state: RootState) => selectQuery(state)?.progress;
 
-export const getQueryDraft = (state: RootState) => getState(state).draft;
-export const getQueryDraftSettings = (state: RootState) => getState(state).draft.settings || {};
-export const getQueryDraftCluster = (state: RootState) => getQueryDraft(state).settings?.cluster;
+export const selectQueryDraft = (state: RootState) => selectQueryState(state).draft;
+export const selectQueryDraftSettings = (state: RootState) =>
+    selectQueryState(state).draft.settings || {};
+export const selectQueryDraftCluster = (state: RootState) =>
+    selectQueryDraft(state).settings?.cluster;
 
-export const getQueryFiles = (state: RootState) => getState(state).draft.files;
-export const getQuerySecrets = (state: RootState) => getState(state).draft.secrets;
+export const selectQueryFiles = (state: RootState) => selectQueryState(state).draft.files;
+export const selectQuerySecrets = (state: RootState) => selectQueryState(state).draft.secrets;
 
-export const getQueryText = (state: RootState) => getState(state).draft.query;
+export const selectQueryText = (state: RootState) => selectQueryState(state).draft.query;
 
-export const getQueryEngine = (state: RootState) => getState(state).draft.engine;
+export const selectQueryEngine = (state: RootState) => selectQueryState(state).draft.engine;
 
-export const isQueryLoading = (state: RootState) => getState(state).state === 'loading';
+export const selectIsQueryLoading = (state: RootState) =>
+    selectQueryState(state).state === 'loading';
 
-export const getCliqueMap = (state: RootState) => getState(state).cliqueMap;
-export const getCliqueLoading = (state: RootState) => getState(state).cliqueLoading;
-export const getClusterLoading = (state: RootState) => getState(state).clusterLoading;
+export const selectCliqueMap = (state: RootState) => selectQueryState(state).cliqueMap;
+export const selectCliqueLoading = (state: RootState) => selectQueryState(state).cliqueLoading;
+export const selectClusterLoading = (state: RootState) => selectQueryState(state).clusterLoading;
 
-export const getQueryItem = (state: RootState) => getState(state).queryItem;
+export const selectQueryItem = (state: RootState) => selectQueryState(state).queryItem;
 
-export const isQueryExecuted = (state: RootState): boolean => {
-    const queryItem = getQueryItem(state);
+export const selectIsQueryExecuted = (state: RootState): boolean => {
+    const queryItem = selectQueryItem(state);
     // TODO: Use real query's state
     return Boolean(queryItem?.id) && queryItem?.state !== QueryStatus.DRAFT;
 };
 
-export const getCurrentQuery = (state: RootState) => getState(state).queryItem;
+export const selectCurrentQuery = (state: RootState) => selectQueryState(state).queryItem;
 
-export const isQueryButtonActive = createSelector(
-    [getQueryEngine, getQueryDraftSettings, getCliqueMap],
+export const selectIsQueryButtonActive = createSelector(
+    [selectQueryEngine, selectQueryDraftSettings, selectCliqueMap],
     (engine, settings, cliqueMap) => {
         const isChyt = engine === QueryEngine.CHYT;
         if (!isChyt) return true;
@@ -80,8 +84,8 @@ export const isQueryButtonActive = createSelector(
     },
 );
 
-export const shouldPollCliqueWhenInactive = createSelector(
-    [getQueryEngine, getQueryDraftSettings, isQueryButtonActive],
+export const selectShouldPollCliqueWhenInactive = createSelector(
+    [selectQueryEngine, selectQueryDraftSettings, selectIsQueryButtonActive],
     (engine, settings, isRunButtonActive) => {
         return (
             engine === QueryEngine.CHYT &&
@@ -91,16 +95,19 @@ export const shouldPollCliqueWhenInactive = createSelector(
     },
 );
 
-export const isQueryDraftEditted = createSelector([getQuery, getQueryDraft], (query, draft) => {
-    return query?.query !== draft.query;
-});
+export const selectIsQueryDraftEditted = createSelector(
+    [selectQuery, selectQueryDraft],
+    (query, draft) => {
+        return query?.query !== draft.query;
+    },
+);
 
-export const hasLoadedQueryItem = (state: RootState) => {
-    const queryItem = getState(state).queryItem;
+export const selectHasLoadedQueryItem = (state: RootState) => {
+    const queryItem = selectQueryState(state).queryItem;
     return Boolean(queryItem?.id);
 };
 
-export const getSupportedEnginesOptions = createSelector(
+export const selectSupportedEnginesOptions = createSelector(
     [selectClusterSupportedEngines],
     (supportedEngines) => {
         const items = Object.entries(supportedEngines).filter(([_, supported]) => supported);
@@ -115,7 +122,7 @@ export const getSupportedEnginesOptions = createSelector(
     },
 );
 
-export const getQueryTrackerRequestOptions = createSelector(
+export const selectQueryTrackerRequestOptions = createSelector(
     [getSettingQueryTrackerStage, getSettingQueryTrackerYQLAgentStage],
     (stage, yqlAgentStage) => {
         const res: QTRequestOptions = {
@@ -126,7 +133,7 @@ export const getQueryTrackerRequestOptions = createSelector(
     },
 );
 
-export const getQueryEditorErrors = (state: RootState): QTEditorError[] => {
+export const selectQueryEditorErrors = (state: RootState): QTEditorError[] => {
     const res: QTEditorError[] = [];
     const collectQTEditorErrors = (error: YTError<{attributes?: object}>) => {
         if (isQTEditorError(error)) {
@@ -137,11 +144,11 @@ export const getQueryEditorErrors = (state: RootState): QTEditorError[] => {
         }
     };
 
-    const {error, id} = getState(state).draft;
+    const {error, id} = selectQueryState(state).draft;
     if (isYTError(error)) {
         collectQTEditorErrors(error);
     }
-    if (id && !isQueryDraftEditted(state)) {
+    if (id && !selectIsQueryDraftEditted(state)) {
         const results = getQueryResults(state, id);
         if (results) {
             forOwn_(results, (value) => {
@@ -151,7 +158,7 @@ export const getQueryEditorErrors = (state: RootState): QTEditorError[] => {
             });
         }
     }
-    const currentQuery = getCurrentQuery(state);
+    const currentQuery = selectCurrentQuery(state);
     if (currentQuery && currentQuery.error) {
         collectQTEditorErrors(currentQuery.error);
     }
@@ -159,10 +166,10 @@ export const getQueryEditorErrors = (state: RootState): QTEditorError[] => {
     return res;
 };
 
-export const getDirtySinceLastSubmit = (state: RootState) =>
+export const selectDirtySinceLastSubmit = (state: RootState) =>
     state.queryTracker.query.dirtySinceLastSubmit;
 
-export const getEffectiveApiStage = (state: RootState) => {
+export const selectEffectiveApiStage = (state: RootState) => {
     return state.queryTracker?.aco?.data?.query_tracker_stage ?? 'production';
 };
 
@@ -176,31 +183,31 @@ const getAco = (
     return state?.access_control_object ? [state?.access_control_object] : [defaultACO];
 };
 
-export const getCurrentQueryACO = (state: RootState) => {
+export const selectCurrentQueryACO = (state: RootState) => {
     const defaultACO = getDefaultQueryACO(state);
 
     return getAco(defaultACO, selectIsMultipleAco(state), state.queryTracker.query?.queryItem);
 };
 
-export const getCurrentDraftQueryACO = (state: RootState) => {
+export const selectCurrentDraftQueryACO = (state: RootState) => {
     const defaultACO = getDefaultQueryACO(state);
 
     return getAco(defaultACO, selectIsMultipleAco(state), state.queryTracker.query?.draft);
 };
 
-export const getQuerySingleProgress = createSelector([getQueryProgress], (progress) => {
+export const selectQuerySingleProgress = createSelector([selectQueryProgress], (progress) => {
     if (!isSingleProgress(progress)) return {};
     return progress;
 });
 
-export const getProgressYQLStatistics = (state: RootState) => {
-    const progress = getQueryProgress(state);
+export const selectProgressYQLStatistics = (state: RootState) => {
+    const progress = selectQueryProgress(state);
 
     if (!isSingleProgress(progress)) return undefined;
 
     return progress.yql_statistics;
 };
 
-export const getCurrentSecretIds = createSelector([getQuerySecrets], (secrets) => {
+export const selectCurrentSecretIds = createSelector([selectQuerySecrets], (secrets) => {
     return secrets.map((secret) => secret.id);
 });

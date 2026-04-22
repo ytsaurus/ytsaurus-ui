@@ -1,6 +1,6 @@
 import {type RootState} from '../../reducers';
 import {createSelector} from 'reselect';
-import {getQueryId} from './query';
+import {selectQueryId} from './query';
 import {parseResultTabIndex} from '../../../pages/query-tracker/QueryResults/helpers/parseResultTabIndex';
 
 export const selectQueryResultTabs = (state: RootState) => state.queryTracker.tabs.tabs;
@@ -9,7 +9,7 @@ export const selectUserChangedQueryResultTab = (state: RootState) =>
     state.queryTracker.tabs.userChangeTab;
 
 export const selectActiveResultParams = createSelector(
-    [selectActiveQueryResultTab, getQueryId],
+    [selectActiveQueryResultTab, selectQueryId],
     (activeTabId, id) => {
         if (!id || !activeTabId?.includes('result')) return undefined;
 

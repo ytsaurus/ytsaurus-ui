@@ -1,12 +1,12 @@
 import React, {type FC, useCallback, useState} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
-    getClusterLoading,
-    getQueryEngine,
-    getQueryGetParams,
-    getSupportedEnginesOptions,
-    hasLoadedQueryItem,
-    isQueryDraftEditted,
+    selectClusterLoading,
+    selectHasLoadedQueryItem,
+    selectIsQueryDraftEditted,
+    selectQueryEngine,
+    selectQueryGetParams,
+    selectSupportedEnginesOptions,
 } from '../../../../store/selectors/query-tracker/query';
 import {
     createQueryFromTablePath,
@@ -30,12 +30,12 @@ type Props = {
 
 export const QueryEngineSelector: FC<Props> = ({isDesktop, className, onChange}) => {
     const dispatch = useDispatch();
-    const engine = useSelector(getQueryEngine);
-    const options = useSelector(getSupportedEnginesOptions);
-    const isEdited = useSelector(isQueryDraftEditted);
-    const hasLoadedQuery = useSelector(hasLoadedQueryItem);
-    const loading = useSelector(getClusterLoading);
-    const {cluster, path} = useSelector(getQueryGetParams);
+    const engine = useSelector(selectQueryEngine);
+    const options = useSelector(selectSupportedEnginesOptions);
+    const isEdited = useSelector(selectIsQueryDraftEditted);
+    const hasLoadedQuery = useSelector(selectHasLoadedQueryItem);
+    const loading = useSelector(selectClusterLoading);
+    const {cluster, path} = useSelector(selectQueryGetParams);
 
     const showPrompt = Boolean((isEdited || hasLoadedQuery) && cluster && path);
 

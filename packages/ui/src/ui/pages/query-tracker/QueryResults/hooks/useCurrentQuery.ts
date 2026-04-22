@@ -2,7 +2,7 @@ import {useContext, useEffect, useMemo} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {QueriesPoolingContext} from '../../hooks/QueriesPooling/context';
 
-import {getCurrentQuery} from '../../../../store/selectors/query-tracker/query';
+import {selectCurrentQuery} from '../../../../store/selectors/query-tracker/query';
 import {getDefaultQueryACO} from '../../../../store/selectors/query-tracker/queryAco';
 import {isQueryProgress} from '../../utils/query';
 import {type QueryItem} from '../../../../types/query-tracker/api';
@@ -11,7 +11,7 @@ import {UPDATE_QUERY_ITEM} from '../../../../store/reducers/query-tracker/query-
 import {updateQueryTabs} from '../../../../store/actions/query-tracker/queryTabs/queryTabs';
 
 export function useCurrentQuery() {
-    const query = useSelector(getCurrentQuery);
+    const query = useSelector(selectCurrentQuery);
     const defaultQueryACO = useSelector(getDefaultQueryACO);
     const pollingContext = useContext(QueriesPoolingContext);
 

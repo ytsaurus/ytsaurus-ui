@@ -3,12 +3,12 @@ import * as monaco from 'monaco-editor';
 import {useMonaco} from '../hooks/useMonaco';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {
-    getQueryDraftCluster,
-    getQueryEditorErrors,
-    getQueryEngine,
-    getQueryId,
-    getQueryText,
-    isQueryLoading,
+    selectIsQueryLoading,
+    selectQueryDraftCluster,
+    selectQueryEditorErrors,
+    selectQueryEngine,
+    selectQueryId,
+    selectQueryText,
 } from '../../../store/selectors/query-tracker/query';
 import {useMonacoQuerySuggestions} from '../querySuggestionsModule/useMonacoQuerySuggestions';
 import {updateQueryDraft} from '../../../store/actions/query-tracker/query';
@@ -44,12 +44,12 @@ export const QueryEditorMonaco: FC<Props> = ({pathNavigation = true}) => {
     const [changed, setChanged] = useState(false);
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
     const {setEditor} = useMonaco();
-    const id = useSelector(getQueryId);
-    const text = useSelector(getQueryText);
-    const cluster = useSelector(getQueryDraftCluster);
-    const engine = useSelector(getQueryEngine);
-    const editorErrors = useSelector(getQueryEditorErrors);
-    const loading = useSelector(isQueryLoading);
+    const id = useSelector(selectQueryId);
+    const text = useSelector(selectQueryText);
+    const cluster = useSelector(selectQueryDraftCluster);
+    const engine = useSelector(selectQueryEngine);
+    const editorErrors = useSelector(selectQueryEditorErrors);
+    const loading = useSelector(selectIsQueryLoading);
     const dispatch = useDispatch();
 
     const decorators = useRef<Decorators>({

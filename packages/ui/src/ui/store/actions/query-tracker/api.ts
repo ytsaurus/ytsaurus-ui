@@ -11,9 +11,9 @@ import {type RootState} from '../../reducers';
 import {makeDirectDownloadPath} from '../../../utils/navigation';
 import {UPDATE_QUERIES_LIST} from '../../reducers/query-tracker/query-tracker-contants';
 import {
-    getEffectiveApiStage,
-    getQueryAnnotations,
-    getQueryTrackerRequestOptions,
+    selectEffectiveApiStage,
+    selectQueryAnnotations,
+    selectQueryTrackerRequestOptions,
 } from '../../selectors/query-tracker/query';
 import {type AnyAction} from 'redux';
 import {type QueryEngine} from '../../../../shared/constants/engines';
@@ -151,7 +151,7 @@ export function loadQueriesList({
 }: QueriesListRequestParams): ThunkAction<Promise<QueriesListResponse>, RootState, any, any> {
     return async (_dispatch, getState) => {
         const state = getState();
-        const {stage} = getQueryTrackerRequestOptions(state);
+        const {stage} = selectQueryTrackerRequestOptions(state);
         return ytApiV4Id.listQueries(YTApiId.listQueries, {
             parameters: {
                 stage,
@@ -168,7 +168,7 @@ export function loadQueriesList({
 export function getQuery(query_id: string): ThunkAction<Promise<QueryItem>, RootState, any, any> {
     return (_dispatch, getState) => {
         const state = getState();
-        const {stage} = getQueryTrackerRequestOptions(state);
+        const {stage} = selectQueryTrackerRequestOptions(state);
         return ytApiV4Id.getQuery(YTApiId.getQuery, {
             parameters: {stage, ...makeGetQueryParams(query_id)},
             setup: {
@@ -186,7 +186,7 @@ export function startQuery(
     return async (_dispatch, getState) => {
         const state = getState();
         const isMultipleAco = selectIsMultipleAco(state);
-        const {stage, yqlAgentStage} = getQueryTrackerRequestOptions(state);
+        const {stage, yqlAgentStage} = selectQueryTrackerRequestOptions(state);
         const {
             query,
             engine,
@@ -227,7 +227,7 @@ export function abortQuery(params: {
 }): ThunkAction<Promise<void>, RootState, any, any> {
     return async (_dispatch, getState) => {
         const state = getState();
-        const {stage} = getQueryTrackerRequestOptions(state);
+        const {stage} = selectQueryTrackerRequestOptions(state);
         const {query_id, message} = params;
         return ytApiV4Id.abortQuery(YTApiId.abortQuery, {
             parameters: {
@@ -271,7 +271,7 @@ export function readQueryResults(
 ): ThunkAction<Promise<QueryResult>, RootState, any, any> {
     return async (_dispatch, getState) => {
         const state = getState();
-        const {stage} = getQueryTrackerRequestOptions(state);
+        const {stage} = selectQueryTrackerRequestOptions(state);
         const result = (await ytApiV4Id.readQueryResults(YTApiId.readQueryResults, {
             parameters: {
                 stage,
@@ -305,7 +305,7 @@ export function getDownloadQueryResultURL(
 ): ThunkAction<string, RootState, any, any> {
     return (_dispatch, getState) => {
         const state = getState();
-        const {stage} = getQueryTrackerRequestOptions(state);
+        const {stage} = selectQueryTrackerRequestOptions(state);
         const params = new URLSearchParams({
             query_id: queryId,
             result_index: resultIndex.toString(),
@@ -340,7 +340,7 @@ export function requestQueries(
 ): ThunkAction<Promise<QueryItem[]>, RootState, any, any> {
     return async (_dispatch, getState) => {
         const state = getState();
-        const {stage} = getQueryTrackerRequestOptions(state);
+        const {stage} = selectQueryTrackerRequestOptions(state);
         const requests: BatchSubRequest[] = ids.map((query_id) => ({
             command: 'get_query',
             parameters: {stage, ...makeGetQueryParams(query_id)},
@@ -368,7 +368,7 @@ export function getQueryResultMeta(
 ): ThunkAction<Promise<QueryResultMeta>, RootState, any, any> {
     return (_dispatch, getState) => {
         const state = getState();
-        const {stage} = getQueryTrackerRequestOptions(state);
+        const {stage} = selectQueryTrackerRequestOptions(state);
         return ytApiV4Id.getQueryResults(YTApiId.getQueryResults, {
             parameters: {stage, query_id, result_index},
             setup: {
@@ -385,7 +385,7 @@ export function getQueryResultMetaList(
 ): ThunkAction<Promise<BatchResultsItem<QueryResultMeta>[]>, RootState, any, any> {
     return async (_dispatch, getState) => {
         const state = getState();
-        const {stage} = getQueryTrackerRequestOptions(state);
+        const {stage} = selectQueryTrackerRequestOptions(state);
         const requests: BatchSubRequest[] = inds.map((ind) => ({
             command: 'get_query_result',
             parameters: {stage, query_id, result_index: ind},
@@ -407,7 +407,7 @@ export function setQueryName(
 ): ThunkAction<Promise<any>, RootState, any, AnyAction> {
     return async (dispatch, getState) => {
         const state = getState();
-        const {stage} = getQueryTrackerRequestOptions(state);
+        const {stage} = selectQueryTrackerRequestOptions(state);
         await ytApiV4Id.alterQuery(YTApiId.alterQuery, {
             parameters: {
                 stage,
@@ -430,7 +430,7 @@ export function addACOToLastSelected(
     return async (dispatch, getState) => {
         const state = getState();
         const lastSelectedACONamespaces = getLastSelectedACONamespaces(state);
-        const stage = getEffectiveApiStage(state);
+        const stage = selectEffectiveApiStage(state);
 
         await dispatch(
             setSettingByKey(`qt-stage::${stage}::queryTracker::lastSelectedACOs`, [
@@ -453,8 +453,8 @@ export function updateACOQuery({
     return async (dispatch, getState) => {
         const state = getState();
         const isMultipleAco = selectIsMultipleAco(state);
-        const {stage} = getQueryTrackerRequestOptions(state);
-        const annotations = getQueryAnnotations(state);
+        const {stage} = selectQueryTrackerRequestOptions(state);
+        const annotations = selectQueryAnnotations(state);
         const chartConfig = state.queryTracker.queryChart.visualization;
 
         return ytApiV4Id
@@ -492,7 +492,7 @@ export function alterQueryChartConfig({
     return async (_dispatch, getState) => {
         const state = getState();
         const isMultipleAco = selectIsMultipleAco(state);
-        const {stage} = getQueryTrackerRequestOptions(state);
+        const {stage} = selectQueryTrackerRequestOptions(state);
 
         return ytApiV4Id.alterQuery(YTApiId.alterQuery, {
             parameters: {

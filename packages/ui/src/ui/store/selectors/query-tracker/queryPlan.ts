@@ -1,7 +1,7 @@
 import {createSelector} from 'reselect';
 import reduce_ from 'lodash/reduce';
 import isEmpty_ from 'lodash/isEmpty';
-import {getQuerySingleProgress} from './query';
+import {selectQuerySingleProgress} from './query';
 import {
     type ProcessedGraph,
     type ProcessedNode,
@@ -30,7 +30,7 @@ function getLabelWithStage(name: string, stages: NodeStages) {
 }
 
 export const getProcessedGraph = createSelector(
-    [getQuerySingleProgress],
+    [selectQuerySingleProgress],
     (progress): ProcessedGraph | undefined => {
         const plan = progress.yql_plan;
         return plan ? preprocess(plan) : undefined;
@@ -38,7 +38,7 @@ export const getProcessedGraph = createSelector(
 );
 
 export const getNodesWithProgress = createSelector(
-    [getProcessedGraph, getQuerySingleProgress],
+    [getProcessedGraph, selectQuerySingleProgress],
     (graph, progress): ProcessedNode[] => {
         if (!graph) return [];
 
@@ -67,7 +67,7 @@ export const getNodesWithProgress = createSelector(
 );
 
 export const getQueryStartedAtMillis = createSelector(
-    [getQuerySingleProgress],
+    [selectQuerySingleProgress],
     (progress): number => {
         return reduce_(
             progress.yql_progress ?? {},

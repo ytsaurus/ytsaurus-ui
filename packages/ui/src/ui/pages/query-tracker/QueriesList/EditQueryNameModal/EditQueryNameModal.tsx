@@ -7,7 +7,7 @@ import {type QueryItem} from '../../../../types/query-tracker/api';
 import {setQueryName} from '../../../../store/actions/query-tracker/api';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {updateQueryInList} from '../../../../store/actions/query-tracker/queriesList';
-import {getQueryDraft} from '../../../../store/selectors/query-tracker/query';
+import {selectQueryDraft} from '../../../../store/selectors/query-tracker/query';
 import {updateQueryDraft} from '../../../../store/actions/query-tracker/query';
 import i18n from './i18n';
 
@@ -22,7 +22,7 @@ interface FormValues {
 
 export default function EditQueryNameModal({query: {state, annotations, id}, className}: Props) {
     const dispatch = useDispatch();
-    const currentDraft = useSelector(getQueryDraft);
+    const currentDraft = useSelector(selectQueryDraft);
     const [error, setError] = useState<Error | undefined>(undefined);
     const [visible, setVisible] = useState(false);
 

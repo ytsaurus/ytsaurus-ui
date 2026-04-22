@@ -17,11 +17,11 @@ import {
 import {requestQueriesList} from './queriesList';
 import {
     SHARED_QUERY_ACO,
-    getCurrentQuery,
-    getQueryDraft,
-    getQueryDraftSettings,
-    getQueryEngine,
-    getQuery as selectQuery,
+    selectCurrentQuery,
+    selectQuery,
+    selectQueryDraft,
+    selectQueryDraftSettings,
+    selectQueryEngine,
 } from '../../selectors/query-tracker/query';
 import {getAppBrowserHistory} from '../../window-store';
 import {
@@ -108,7 +108,7 @@ const checkCliqueControllerIsSupported =
 export const setCurrentClusterToQuery = (): AsyncAction => async (dispatch, getState) => {
     const state = getState();
     const cluster = selectCluster(state);
-    const {settings, engine} = getQueryDraft(state);
+    const {settings, engine} = selectQueryDraft(state);
 
     if (settings && 'cluster' in settings) return;
 
@@ -120,8 +120,8 @@ export const setUserLastChoice =
     (clearProps?: boolean): AsyncAction =>
     (dispatch, getState) => {
         const state = getState();
-        const {settings} = getQueryDraft(state);
-        const engine = getQueryEngine(state);
+        const {settings} = selectQueryDraft(state);
+        const engine = selectQueryEngine(state);
         const lastPath = getLastUserChoiceQueryDiscoveryPath(state);
         const lastClique = getLastUserChoiceQueryChytClique(state);
         const lastVersion = getLastUserChoiceYqlVersion(state);
@@ -199,7 +199,7 @@ export const loadTablePromptToQuery =
 export const setQueryEngine =
     (engine: QueryEngine): AsyncAction =>
     (dispatch, getState) => {
-        const settings = getQueryDraftSettings(getState());
+        const settings = selectQueryDraftSettings(getState());
 
         const newSettings = {...settings};
         if (engine !== QueryEngine.SPYT) {
@@ -221,7 +221,7 @@ export const setQueryCluster =
     (clusterId: string): AsyncAction =>
     async (dispatch, getState) => {
         const state = getState();
-        const {settings = {}, engine} = getQueryDraft(state);
+        const {settings = {}, engine} = selectQueryDraft(state);
 
         try {
             dispatch({type: SET_QUERY_CLUSTER_LOADING, data: true});
@@ -245,7 +245,7 @@ export const setQueryCluster =
 export const setQueryClique =
     (alias: string): AsyncAction =>
     (dispatch, getState) => {
-        const settings = getQueryDraftSettings(getState());
+        const settings = selectQueryDraftSettings(getState());
 
         const newSettings = {...settings};
         if (!alias && 'clique' in newSettings) {
@@ -262,7 +262,7 @@ export const setQueryClique =
 export const setQueryYqlVersion =
     (version: string): AsyncAction =>
     (dispatch, getState) => {
-        const settings = getQueryDraftSettings(getState());
+        const settings = selectQueryDraftSettings(getState());
 
         dispatch(updateQueryDraft({settings: {...settings, yql_version: version}}));
         dispatch(
@@ -273,7 +273,7 @@ export const setQueryYqlVersion =
 export const setQueryPath =
     (newPath: string): AsyncAction =>
     (dispatch, getState) => {
-        const settings = getQueryDraftSettings(getState());
+        const settings = selectQueryDraftSettings(getState());
         dispatch(updateQueryDraft({settings: {...settings, discovery_group: newPath}}));
         dispatch(
             setSettingByKey(
@@ -477,7 +477,7 @@ export function runQuery(
 ): ThunkAction<any, RootState, any, SetQueryAction | SetDirtySubmit> {
     return async (dispatch, getState) => {
         const state = getState();
-        const query = getQueryDraft(state);
+        const query = selectQueryDraft(state);
 
         const newQuery = {...query};
         if ('access_control_objects' in newQuery) {
@@ -508,7 +508,7 @@ export function runQuery(
 export function abortCurrentQuery(): ThunkAction<any, RootState, any, SetQueryAction> {
     return async (dispatch, getState) => {
         const state = getState();
-        const currentQuery = getCurrentQuery(state);
+        const currentQuery = selectCurrentQuery(state);
         if (currentQuery) {
             await wrapApiPromiseByToaster(dispatch(abortQuery({query_id: currentQuery?.id})), {
                 toasterName: 'abort_query',

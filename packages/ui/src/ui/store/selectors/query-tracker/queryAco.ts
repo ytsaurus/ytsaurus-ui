@@ -3,7 +3,7 @@ import {type SelectOption} from '@gravity-ui/uikit/build/esm/components/Select/t
 import {type RootState} from '../../reducers';
 import {getSettingsData} from '../settings/settings-base';
 import {createSelector} from 'reselect';
-import {DEFAULT_QUERY_ACO, SHARED_QUERY_ACO, getEffectiveApiStage} from './query';
+import {DEFAULT_QUERY_ACO, SHARED_QUERY_ACO, selectEffectiveApiStage} from './query';
 import {selectClusterUiConfig} from '../global';
 import {
     getAvailableYql,
@@ -20,7 +20,7 @@ export const getQueryTrackerInfoClusters = (state: RootState) =>
     state.queryTracker.aco.data.clusters;
 
 export const getLastSelectedACONamespaces = (state: RootState) => {
-    const stage = getEffectiveApiStage(state);
+    const stage = selectEffectiveApiStage(state);
 
     return getSettingsData(state)[`qt-stage::${stage}::queryTracker::lastSelectedACOs`] ?? [];
 };
@@ -67,13 +67,13 @@ export const isSupportedShareQuery = createSelector(
 
 export const getClusterDefaultQueryACO = (state: RootState) => {
     const queryTrackerDefaultACO = selectClusterUiConfig(state)?.query_tracker_default_aco;
-    const stage = getEffectiveApiStage(state);
+    const stage = selectEffectiveApiStage(state);
 
     return (queryTrackerDefaultACO && queryTrackerDefaultACO[stage]) || DEFAULT_QUERY_ACO;
 };
 
 export const getUserDefaultQueryACO = (state: RootState) => {
-    const stage = getEffectiveApiStage(state);
+    const stage = selectEffectiveApiStage(state);
 
     return getSettingsData(state)[`qt-stage::${stage}::queryTracker::defaultACO`];
 };

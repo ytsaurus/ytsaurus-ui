@@ -3,11 +3,11 @@ import type * as monaco from 'monaco-editor';
 import {useMonaco} from '../../hooks/useMonaco';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
-    getQueryDraftCluster,
-    getQueryEngine,
-    getQueryId,
-    isQueryButtonActive,
-    shouldPollCliqueWhenInactive,
+    selectIsQueryButtonActive,
+    selectQueryDraftCluster,
+    selectQueryEngine,
+    selectQueryId,
+    selectShouldPollCliqueWhenInactive,
 } from '../../../../store/selectors/query-tracker/query';
 import {isSupportedQtACO} from '../../../../store/selectors/query-tracker/queryAco';
 import {loadCliqueByCluster, runQuery} from '../../../../store/actions/query-tracker/query';
@@ -36,12 +36,12 @@ export const QueryEditorView = memo<Props>(function QueryEditorView({
 }) {
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
     const {setEditor} = useMonaco();
-    const id = useSelector(getQueryId);
-    const engine = useSelector(getQueryEngine);
-    const queryCluster = useSelector(getQueryDraftCluster);
-    const shouldPollClique = useSelector(shouldPollCliqueWhenInactive);
+    const id = useSelector(selectQueryId);
+    const engine = useSelector(selectQueryEngine);
+    const queryCluster = useSelector(selectQueryDraftCluster);
+    const shouldPollClique = useSelector(selectShouldPollCliqueWhenInactive);
     const isACOSupported = useSelector(isSupportedQtACO);
-    const isRunButtonActive = useSelector(isQueryButtonActive);
+    const isRunButtonActive = useSelector(selectIsQueryButtonActive);
     const dispatch = useDispatch();
 
     const runButtonDisabled = !isRunButtonActive;

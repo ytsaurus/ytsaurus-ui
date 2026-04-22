@@ -1,8 +1,8 @@
 import {useCallback, useState} from 'react';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {
-    getCurrentDraftQueryACO,
-    getCurrentQueryACO,
+    selectCurrentDraftQueryACO,
+    selectCurrentQueryACO,
 } from '../../../store/selectors/query-tracker/query';
 import {
     getQueryACOOptions,
@@ -14,8 +14,8 @@ import {setDraftQueryACO, setQueryACO} from '../../../store/actions/query-tracke
 
 export const useQueryACO = () => {
     const dispatch = useDispatch();
-    const currentQueryACO = useSelector(getCurrentQueryACO);
-    const currentDraftQueryACO = useSelector(getCurrentDraftQueryACO);
+    const currentQueryACO = useSelector(selectCurrentQueryACO);
+    const currentDraftQueryACO = useSelector(selectCurrentDraftQueryACO);
     const selectOptions = useSelector(getQueryACOOptions);
     const isQueryTrackerInfoLoading = useSelector(isQueryTrackerInfoLoadingSelector);
     const trackerInfo = useSelector(selectQueryTrackerInfo);

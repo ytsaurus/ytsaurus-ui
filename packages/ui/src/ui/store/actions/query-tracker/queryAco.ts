@@ -3,8 +3,8 @@ import {type ThunkAction} from 'redux-thunk';
 import {type AxiosError} from 'axios';
 import {YTApiId, ytApiV4Id} from '../../../rum/rum-wrap-api';
 import {
-    getEffectiveApiStage,
-    getQueryTrackerRequestOptions,
+    selectEffectiveApiStage,
+    selectQueryTrackerRequestOptions,
 } from '../../selectors/query-tracker/query';
 import {showErrorPopup} from '../../../utils/utils';
 import {QUERY_ACO_LOADING, type QueryACOActions} from '../../reducers/query-tracker/queryAco';
@@ -22,7 +22,7 @@ export const getQueryTrackerInfo = (): ThunkAction<
 > => {
     return (dispatch, getState) => {
         const state = getState();
-        const {stage} = getQueryTrackerRequestOptions(state);
+        const {stage} = selectQueryTrackerRequestOptions(state);
 
         dispatch({type: QUERY_ACO_LOADING.REQUEST});
 
@@ -80,7 +80,7 @@ export function setUserDefaultACO(
 ): ThunkAction<Promise<any>, RootState, any, AnyAction> {
     return async (dispatch, getState) => {
         const state = getState();
-        const stage = getEffectiveApiStage(state);
+        const stage = selectEffectiveApiStage(state);
 
         await dispatch(setSettingByKey(`qt-stage::${stage}::queryTracker::defaultACO`, aco));
     };

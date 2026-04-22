@@ -36,7 +36,7 @@ import {isTableNode} from '../../../utils/navigation/isTableNode';
 import {isFolderNode} from '../../../utils/navigation/isFolderNode';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {loadCliqueByCluster, loadTablePromptToQuery} from './query';
-import {getQueryDraft} from '../../selectors/query-tracker/query';
+import {selectQueryDraft} from '../../selectors/query-tracker/query';
 import {getDefaultTableColumnLimit} from '../../selectors/settings';
 import {isYqlTypesEnabled} from '../../selectors/navigation/content/table';
 import {getClusterProxy, selectCurrentUserName} from '../../selectors/global';
@@ -246,7 +246,7 @@ export const openPath =
     (path: string, clusterId: string | null): AsyncAction =>
     async (dispatch, getState) => {
         const state = getState();
-        const {settings} = getQueryDraft(state);
+        const {settings} = selectQueryDraft(state);
         const clusters = selectClusterConfigs(state);
         const currentClusterId = clusterId || settings?.cluster;
         if (!currentClusterId) return;

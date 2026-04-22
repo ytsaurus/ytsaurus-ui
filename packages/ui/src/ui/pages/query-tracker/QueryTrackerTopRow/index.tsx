@@ -2,7 +2,7 @@ import React, {type FC, useCallback, useState} from 'react';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import {Page} from '../../../../shared/constants/settings';
-import {getQueryDraft} from '../../../store/selectors/query-tracker/query';
+import {selectQueryDraft} from '../../../store/selectors/query-tracker/query';
 import {
     resetQueryTracker,
     setQueryEngine,
@@ -34,7 +34,7 @@ const block = cn('query-tracker-top-row');
 const QueryTrackerTopRow: FC = () => {
     const dispatch = useDispatch();
     const isDesktop = useIsDesktop();
-    const {id, annotations, settings} = useSelector(getQueryDraft);
+    const {id, annotations, settings} = useSelector(selectQueryDraft);
     const [nameEdit, setNameEdit] = useState(false);
 
     const handleChangeEngine = useCallback(

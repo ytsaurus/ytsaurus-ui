@@ -12,7 +12,7 @@ import {CompletedStates, QueryStatus} from '../../../../types/query-tracker';
 import times_ from 'lodash/times';
 import find_ from 'lodash/find';
 import UIFactory from '../../../../UIFactory';
-import {getQuery} from '../../../selectors/query-tracker/query';
+import {selectQuery} from '../../../selectors/query-tracker/query';
 import {selectUserChangedQueryResultTab} from '../../../selectors/query-tracker/queryTabs';
 import {loadQueryResultsErrors} from '../queryResult';
 import i18n from './i18n';
@@ -21,7 +21,7 @@ type AsyncAction = ThunkAction<void, RootState, undefined, Action>;
 
 export const updateQueryTabs = (): AsyncAction => (dispatch, getState) => {
     const state = getState();
-    const query = getQuery(state);
+    const query = selectQuery(state);
     const userChangeTab = selectUserChangedQueryResultTab(state);
 
     if (!query) {

@@ -31,7 +31,7 @@ import CancelHelper from '../../../utils/cancel-helper';
 import {injectQueryResults} from '../../../store/actions/query-tracker/queryResult';
 import i18n from './i18n';
 import {QueryFullResultList} from './QueryFullResultList';
-import {getQueryEngine} from '../../../store/selectors/query-tracker/query';
+import {selectQueryEngine} from '../../../store/selectors/query-tracker/query';
 import {type QueryEngine} from '../../../../shared/constants/engines';
 
 const b = block('query-result-table');
@@ -93,7 +93,7 @@ export const QueryResultsView = React.memo(
         const {pageSize} = useSelector((state: RootState) =>
             getQueryResultSettings(state, query.id, index),
         );
-        const engine = useSelector(getQueryEngine);
+        const engine = useSelector(selectQueryEngine);
 
         const {onShowPreview} = useShowPreviewHandler({
             queryId: query.id,

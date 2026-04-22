@@ -7,7 +7,7 @@ import './ChartLeftMenu.scss';
 import cn from 'bem-cn-lite';
 import {ChartType} from '../../constants';
 import {ConfigWizard, Wizard} from '../Wizard';
-import {getQueryDraft} from '../../../../../store/selectors/query-tracker/query';
+import {selectQueryDraft} from '../../../../../store/selectors/query-tracker/query';
 import {saveQueryChartConfig} from '../../../../../store/actions/query-tracker/queryChart';
 import i18n from './i18n';
 
@@ -23,7 +23,7 @@ const b = cn('yt-chart-left-menu');
 export const ChartLeftMenu: FC = () => {
     const dispatch = useDispatch();
     const visualization = useSelector(selectCurrentChartVisualization);
-    const {id} = useSelector(getQueryDraft);
+    const {id} = useSelector(selectQueryDraft);
     const {type} = visualization;
 
     useEffect(() => {

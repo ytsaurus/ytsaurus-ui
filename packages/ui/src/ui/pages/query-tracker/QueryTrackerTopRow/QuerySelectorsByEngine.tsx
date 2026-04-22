@@ -3,9 +3,9 @@ import {QueryEngine} from '../../../../shared/constants/engines';
 import {QueryCliqueSelector} from './QueryCliqueSelector';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {
-    getCliqueLoading,
-    getCliqueMap,
-    getQueryDraft,
+    selectCliqueLoading,
+    selectCliqueMap,
+    selectQueryDraft,
 } from '../../../store/selectors/query-tracker/query';
 import {
     loadCliqueByCluster,
@@ -25,9 +25,9 @@ const block = cn('yt-query-selector-by-engine');
 
 export const QuerySelectorsByEngine: FC = () => {
     const dispatch = useDispatch();
-    const cliqueMap = useSelector(getCliqueMap);
-    const cliqueLoading = useSelector(getCliqueLoading);
-    const {settings = {}, engine} = useSelector(getQueryDraft);
+    const cliqueMap = useSelector(selectCliqueMap);
+    const cliqueLoading = useSelector(selectCliqueLoading);
+    const {settings = {}, engine} = useSelector(selectQueryDraft);
     const availableYql = useSelector(getAvailableYql);
     const effectiveYqlVersion = useSelector(getEffectiveYqlVersion);
     const currentCluster = settings?.cluster;
