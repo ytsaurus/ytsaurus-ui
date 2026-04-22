@@ -87,7 +87,9 @@ export const QueryResultDownloadManager = React.memo(function QueryResultDownloa
     className,
 }: Props) {
     const cluster = useSelector(selectCluster);
-    const result = useSelector((state: RootState) => selectQueryResult(state, queryId, resultIndex));
+    const result = useSelector((state: RootState) =>
+        selectQueryResult(state, queryId, resultIndex),
+    );
     const dispatch = useDispatch();
     const startRow = result?.resultReady ? result?.page * result?.settings?.pageSize || 0 : 0;
     const allItems = useMemo(() => {

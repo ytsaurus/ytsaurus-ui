@@ -29,15 +29,12 @@ export const selectIsQueriesListLoading = (state: RootState) => state.queryTrack
 
 export const selectQueriesList = (state: RootState) => selectQueriesListState(state).items;
 
-export const selectHasQueriesListMore = (state: RootState) =>
-    selectQueriesListState(state).hasMore;
+export const selectHasQueriesListMore = (state: RootState) => selectQueriesListState(state).hasMore;
 
 export const selectQueriesFilters = (state: RootState) =>
     selectQueriesListState(state).filter || {};
-export const selectQueriesListMode = (state: RootState) =>
-    selectQueriesListState(state).listMode;
-export const selectQueriesListCursor = (state: RootState) =>
-    selectQueriesListState(state).cursor;
+export const selectQueriesListMode = (state: RootState) => selectQueriesListState(state).listMode;
+export const selectQueriesListCursor = (state: RootState) => selectQueriesListState(state).cursor;
 
 export const selectTutorialQueriesList = createSelector(
     [selectQueriesList, selectIsSupportedTutorials],

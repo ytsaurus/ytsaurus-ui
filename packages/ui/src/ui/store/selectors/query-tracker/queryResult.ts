@@ -47,7 +47,11 @@ export const selectQueryReadyResult = (
     return undefined;
 };
 
-export const selectIsQueryResultReady = (state: RootState, queryId: string, index: number): boolean => {
+export const selectIsQueryResultReady = (
+    state: RootState,
+    queryId: string,
+    index: number,
+): boolean => {
     const result = selectQueryResult(state, queryId, index);
     return Boolean(result?.resultReady);
 };
