@@ -6,11 +6,11 @@ import {
 import {type Item} from '../../../components/Select/Select';
 import {SettingsMenuSelect} from '../../SettingsMenu/SettingsMenuSelect';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
-import {getDefaultQueryACO} from '../../../store/selectors/query-tracker/queryAco';
+import {selectDefaultQueryACO} from '../../../store/selectors/query-tracker/queryAco';
 
 export const DefaultAcoSelect: FC = () => {
     const dispatch = useDispatch();
-    const defaultUserACO = useSelector(getDefaultQueryACO);
+    const defaultUserACO = useSelector(selectDefaultQueryACO);
 
     return (
         <SettingsMenuSelect

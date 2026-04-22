@@ -6,29 +6,29 @@ import {createSelector} from 'reselect';
 import {DEFAULT_QUERY_ACO, SHARED_QUERY_ACO, selectEffectiveApiStage} from './query';
 import {selectClusterUiConfig} from '../global';
 import {
-    getAvailableYql,
-    getDefaultYqlVersion,
+    selectAvailableYql,
+    selectDefaultYqlVersion,
     selectQueryTrackerInfo,
     selectSpytEnginesInfo,
 } from './queryTrackerEnginesInfo';
 
 const selectAcoState = (state: RootState) => state.queryTracker.aco;
 
-export {getAvailableYql, getDefaultYqlVersion, selectQueryTrackerInfo, selectSpytEnginesInfo};
+export {selectAvailableYql, selectDefaultYqlVersion, selectQueryTrackerInfo, selectSpytEnginesInfo};
 
-export const getQueryTrackerInfoClusters = (state: RootState) =>
+export const selectQueryTrackerInfoClusters = (state: RootState) =>
     state.queryTracker.aco.data.clusters;
 
-export const getLastSelectedACONamespaces = (state: RootState) => {
+export const selectLastSelectedACONamespaces = (state: RootState) => {
     const stage = selectEffectiveApiStage(state);
 
     return getSettingsData(state)[`qt-stage::${stage}::queryTracker::lastSelectedACOs`] ?? [];
 };
 
-export const getQueryACOOptions = (state: RootState): SelectOption[] => {
+export const selectQueryACOOptions = (state: RootState): SelectOption[] => {
     const aco = new Set(
         intersection_(
-            getLastSelectedACONamespaces(state),
+            selectLastSelectedACONamespaces(state),
             selectAcoState(state).data.access_control_objects,
         ).concat(selectAcoState(state).data.access_control_objects),
     );
@@ -36,48 +36,48 @@ export const getQueryACOOptions = (state: RootState): SelectOption[] => {
     return [...aco].map((text) => ({value: text, content: text}));
 };
 
-export const isSupportedQtACO = (state: RootState) =>
+export const selectIsSupportedQtACO = (state: RootState) =>
     selectAcoState(state).data.supported_features?.access_control;
 
 export const selectIsMultipleAco = (state: RootState) =>
     Boolean(selectAcoState(state).data.supported_features?.multiple_aco);
 
-export const isSupportedTutorials = (state: RootState) =>
+export const selectIsSupportedTutorials = (state: RootState) =>
     Boolean(selectAcoState(state).data.supported_features?.tutorials);
 
 export const selectAvailableAco = (state: RootState) =>
     selectAcoState(state).data.access_control_objects;
 
-export const isQueryTrackerInfoLoading = (state: RootState) => selectAcoState(state).loading;
+export const selectIsQueryTrackerInfoLoading = (state: RootState) => selectAcoState(state).loading;
 
-const getQueryDraftYqlVersion = (state: RootState) =>
+const selectQueryDraftYqlVersion = (state: RootState) =>
     state.queryTracker.query.draft.settings?.yql_version;
 
-export const getEffectiveYqlVersion = createSelector(
-    [getQueryDraftYqlVersion, getDefaultYqlVersion],
+export const selectEffectiveYqlVersion = createSelector(
+    [selectQueryDraftYqlVersion, selectDefaultYqlVersion],
     (draftVersion, defaultVersion) => draftVersion || defaultVersion,
 );
 
-export const isSupportedShareQuery = createSelector(
+export const selectIsSupportedShareQuery = createSelector(
     [selectIsMultipleAco, selectAvailableAco],
     (isMultipleAco, aco) => {
         return isMultipleAco && aco.includes(SHARED_QUERY_ACO);
     },
 );
 
-export const getClusterDefaultQueryACO = (state: RootState) => {
+export const selectClusterDefaultQueryACO = (state: RootState) => {
     const queryTrackerDefaultACO = selectClusterUiConfig(state)?.query_tracker_default_aco;
     const stage = selectEffectiveApiStage(state);
 
     return (queryTrackerDefaultACO && queryTrackerDefaultACO[stage]) || DEFAULT_QUERY_ACO;
 };
 
-export const getUserDefaultQueryACO = (state: RootState) => {
+export const selectUserDefaultQueryACO = (state: RootState) => {
     const stage = selectEffectiveApiStage(state);
 
     return getSettingsData(state)[`qt-stage::${stage}::queryTracker::defaultACO`];
 };
 
-export const getDefaultQueryACO = (state: RootState) => {
-    return getUserDefaultQueryACO(state) ?? getClusterDefaultQueryACO(state);
+export const selectDefaultQueryACO = (state: RootState) => {
+    return selectUserDefaultQueryACO(state) ?? selectClusterDefaultQueryACO(state);
 };

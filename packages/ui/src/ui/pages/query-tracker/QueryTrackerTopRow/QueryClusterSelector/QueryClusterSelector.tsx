@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {Select} from '@gravity-ui/uikit';
 
 import {type ClusterConfig} from '../../../../../shared/yt-types';
-import {getQueryTrackerInfoClusters} from '../../../../store/selectors/query-tracker/queryAco';
+import {selectQueryTrackerInfoClusters} from '../../../../store/selectors/query-tracker/queryAco';
 import {QuerySelector} from '../QuerySelector';
 import {QueryClusterItem, type Props as QueryClusterItemProps} from './QueryClusterItem';
 import {YT, isMultiClusterInstallation} from '../../../../config/yt-config';
@@ -20,7 +20,7 @@ type Props = {
 
 export const QueryClusterSelector: FC<Props> = ({className}) => {
     const dispatch = useDispatch();
-    const infoClusters = useSelector(getQueryTrackerInfoClusters);
+    const infoClusters = useSelector(selectQueryTrackerInfoClusters);
     const loading = useSelector(selectClusterLoading);
     const clusters = useSelector(getClusterList);
     const {settings} = useSelector(selectQueryDraft);

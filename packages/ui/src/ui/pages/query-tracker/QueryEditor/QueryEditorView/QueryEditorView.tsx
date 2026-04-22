@@ -9,7 +9,7 @@ import {
     selectQueryId,
     selectShouldPollCliqueWhenInactive,
 } from '../../../../store/selectors/query-tracker/query';
-import {isSupportedQtACO} from '../../../../store/selectors/query-tracker/queryAco';
+import {selectIsSupportedQtACO} from '../../../../store/selectors/query-tracker/queryAco';
 import {loadCliqueByCluster, runQuery} from '../../../../store/actions/query-tracker/query';
 import {Button, Flex, Icon, Text} from '@gravity-ui/uikit';
 import playIcon from '../../../../assets/img/svg/play.svg';
@@ -40,7 +40,7 @@ export const QueryEditorView = memo<Props>(function QueryEditorView({
     const engine = useSelector(selectQueryEngine);
     const queryCluster = useSelector(selectQueryDraftCluster);
     const shouldPollClique = useSelector(selectShouldPollCliqueWhenInactive);
-    const isACOSupported = useSelector(isSupportedQtACO);
+    const isACOSupported = useSelector(selectIsSupportedQtACO);
     const isRunButtonActive = useSelector(selectIsQueryButtonActive);
     const dispatch = useDispatch();
 

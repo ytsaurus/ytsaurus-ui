@@ -15,8 +15,8 @@ import {
 } from '../../../store/actions/query-tracker/query';
 import {Select} from '@gravity-ui/uikit';
 import {
-    getAvailableYql,
-    getEffectiveYqlVersion,
+    selectAvailableYql,
+    selectEffectiveYqlVersion,
 } from '../../../store/selectors/query-tracker/queryAco';
 import cn from 'bem-cn-lite';
 import './QuerySelectorsByEngine.scss';
@@ -28,8 +28,8 @@ export const QuerySelectorsByEngine: FC = () => {
     const cliqueMap = useSelector(selectCliqueMap);
     const cliqueLoading = useSelector(selectCliqueLoading);
     const {settings = {}, engine} = useSelector(selectQueryDraft);
-    const availableYql = useSelector(getAvailableYql);
-    const effectiveYqlVersion = useSelector(getEffectiveYqlVersion);
+    const availableYql = useSelector(selectAvailableYql);
+    const effectiveYqlVersion = useSelector(selectEffectiveYqlVersion);
     const currentCluster = settings?.cluster;
 
     const options = useMemo(() => {

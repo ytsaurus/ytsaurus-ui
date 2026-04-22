@@ -18,8 +18,8 @@ import {
 import {type AnyAction} from 'redux';
 import {type QueryEngine} from '../../../../shared/constants/engines';
 import {
-    getLastSelectedACONamespaces,
     selectIsMultipleAco,
+    selectLastSelectedACONamespaces,
 } from '../../selectors/query-tracker/queryAco';
 import {setSettingByKey} from '../settings';
 import {type CancelTokenSource} from 'axios';
@@ -429,7 +429,7 @@ export function addACOToLastSelected(
 ): ThunkAction<Promise<any>, RootState, any, AnyAction> {
     return async (dispatch, getState) => {
         const state = getState();
-        const lastSelectedACONamespaces = getLastSelectedACONamespaces(state);
+        const lastSelectedACONamespaces = selectLastSelectedACONamespaces(state);
         const stage = selectEffectiveApiStage(state);
 
         await dispatch(

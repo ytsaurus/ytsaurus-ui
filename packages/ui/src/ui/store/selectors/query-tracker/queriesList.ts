@@ -21,7 +21,7 @@ import {
     MyColumns,
     NameColumns,
 } from '../../../pages/query-tracker/QueriesList/QueriesHistoryList/columns';
-import {isSupportedTutorials} from './queryAco';
+import {selectIsSupportedTutorials} from './queryAco';
 
 export const selectQueriesListState = (state: RootState) => state.queryTracker.list;
 
@@ -40,7 +40,7 @@ export const selectQueriesListCursor = (state: RootState) =>
     selectQueriesListState(state).cursor;
 
 export const selectTutorialQueriesList = createSelector(
-    [selectQueriesList, isSupportedTutorials],
+    [selectQueriesList, selectIsSupportedTutorials],
     (listItems, supportsTutorials) => {
         return listItems.filter((item) =>
             supportsTutorials ? item?.is_tutorial : item?.annotations?.is_tutorial,
@@ -138,7 +138,7 @@ export function selectQueriesListFilterParams(state: RootState): QueriesListPara
         user = undefined;
     }
 
-    const supportsTutorials = isSupportedTutorials(state);
+    const supportsTutorials = selectIsSupportedTutorials(state);
 
     const params: QueriesListParams = {
         ...filter,

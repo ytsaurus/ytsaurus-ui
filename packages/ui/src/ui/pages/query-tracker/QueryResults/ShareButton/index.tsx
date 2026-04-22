@@ -9,7 +9,7 @@ import {
 } from '../../../../store/selectors/query-tracker/query';
 import {toggleShareQuery} from '../../../../store/actions/query-tracker/query';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-import {isSupportedShareQuery} from '../../../../store/selectors/query-tracker/queryAco';
+import {selectIsSupportedShareQuery} from '../../../../store/selectors/query-tracker/queryAco';
 import {useToggle} from 'react-use';
 import {toaster} from '../../../../utils/toaster';
 import './index.scss';
@@ -22,7 +22,7 @@ export const ShareButton: FC = () => {
     const dispatch = useDispatch();
     const [sending, setSending] = useState(false);
     const [open, toggleDropdown] = useToggle(false);
-    const showShareButton = useSelector(isSupportedShareQuery);
+    const showShareButton = useSelector(selectIsSupportedShareQuery);
     const queryAco = useSelector(selectCurrentQueryACO);
     const isShared = queryAco.includes(SHARED_QUERY_ACO);
 
