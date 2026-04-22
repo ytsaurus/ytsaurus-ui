@@ -48,7 +48,9 @@ function useQueryResultPagination(
         pageSize: 0,
     });
 
-    const result = useSelector((state: RootState) => selectQueryResult(state, queryId, resultIndex));
+    const result = useSelector((state: RootState) =>
+        selectQueryResult(state, queryId, resultIndex),
+    );
 
     useEffect(() => {
         if (result?.resultReady) {
