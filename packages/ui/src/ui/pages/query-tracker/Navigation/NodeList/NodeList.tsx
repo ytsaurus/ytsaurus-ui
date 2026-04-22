@@ -1,7 +1,7 @@
 import React, {type FC, useCallback, useRef, useState} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
-    selectLoading,
+    selectIsQueryNavigationLoading,
     selectNavigationClusterConfig,
     selectNodeListByFilter,
 } from '../../../../store/selectors/query-tracker/queryNavigation';
@@ -42,7 +42,7 @@ export const NodeList: FC = () => {
     const engine = useSelector(selectQueryEngine);
     const {pageSize} = getQueryResultGlobalSettings();
     const dirtyQuery = useSelector(selectIsQueryDraftEditted);
-    const loading = useSelector(selectLoading);
+    const loading = useSelector(selectIsQueryNavigationLoading);
     const {getEditor} = useMonaco();
 
     const handleNodeClick = (path: string, type: string | undefined) => {

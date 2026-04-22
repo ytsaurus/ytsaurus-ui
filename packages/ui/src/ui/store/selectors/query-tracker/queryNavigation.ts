@@ -1,6 +1,6 @@
 import {type RootState} from '../../reducers';
 import {createSelector} from 'reselect';
-import {getClusterList} from '../slideoutMenu';
+import {selectClusterList} from '../slideoutMenu';
 import {type NavigationNode} from '../../reducers/query-tracker/queryNavigationSlice';
 import {makeGetSetting} from '../settings';
 import {createNestedNS} from '../../../../shared/utils/settings';
@@ -8,7 +8,8 @@ import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
 
 export const selectNavigationCluster = (state: RootState) =>
     state.queryTracker.queryNavigation.cluster;
-export const selectLoading = (state: RootState) => state.queryTracker.queryNavigation.loading;
+export const selectIsQueryNavigationLoading = (state: RootState) =>
+    state.queryTracker.queryNavigation.loading;
 export const selectClusterConfigs = (state: RootState) => state.clustersMenu.clusters;
 export const selectNavigationError = (state: RootState) => state.queryTracker.queryNavigation.error;
 
@@ -62,7 +63,7 @@ export const selectTableWithFilter = createSelector(
 );
 
 export const selectClustersByFilter = createSelector(
-    [getClusterList, selectNavigationFilter],
+    [selectClusterList, selectNavigationFilter],
     (clusters, filter) => {
         if (!filter) return clusters;
 

@@ -7,7 +7,7 @@ import {type ClusterConfig} from '../../../../../shared/yt-types';
 import {setNavigationCluster} from '../../../../store/actions/query-tracker/queryNavigation';
 import {
     selectClustersByFilter,
-    selectLoading,
+    selectIsQueryNavigationLoading,
 } from '../../../../store/selectors/query-tracker/queryNavigation';
 import {ItemsList} from '../ItemsList';
 
@@ -15,7 +15,7 @@ const b = cn('navigation-cluster-list');
 
 export const ClusterList: FC = () => {
     const dispatch = useDispatch();
-    const loading = useSelector(selectLoading);
+    const loading = useSelector(selectIsQueryNavigationLoading);
     const clusters = useSelector(selectClustersByFilter);
 
     const handleClusterClick = (cluster: ClusterConfig) => {

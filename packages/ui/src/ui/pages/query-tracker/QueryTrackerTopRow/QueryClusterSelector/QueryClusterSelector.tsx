@@ -11,7 +11,7 @@ import {
     selectClusterLoading,
     selectQueryDraft,
 } from '../../../../store/selectors/query-tracker/query';
-import {getClusterList} from '../../../../store/selectors/slideoutMenu';
+import {selectClusterList} from '../../../../store/selectors/slideoutMenu';
 import {setQueryCluster} from '../../../../store/actions/query-tracker/query';
 
 type Props = {
@@ -22,7 +22,7 @@ export const QueryClusterSelector: FC<Props> = ({className}) => {
     const dispatch = useDispatch();
     const infoClusters = useSelector(selectQueryTrackerInfoClusters);
     const loading = useSelector(selectClusterLoading);
-    const clusters = useSelector(getClusterList);
+    const clusters = useSelector(selectClusterList);
     const {settings} = useSelector(selectQueryDraft);
     const isMultiCluster = isMultiClusterInstallation();
 
