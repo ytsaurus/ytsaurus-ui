@@ -1,6 +1,7 @@
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {type ThunkAction} from 'redux-thunk';
+import {type Action} from 'redux';
 
 import {
     EXTRA_JOBS_COUNT,
@@ -35,6 +36,8 @@ import {type KeysByType} from '../../../../@types/types';
 import {type TablesSortOrderAction} from '../../../store/reducers/tables';
 import {selectJobsOperationIncarnationsFilter} from '../../../store/selectors/operations/jobs';
 import {fetchOperationIncarnationAvailableItems} from './jobs-operation-incarnations';
+import {openModal} from '../modals/attributes-modal';
+import {showToasterError} from '../../../utils/utils';
 
 const requests = new CancelHelper();
 
@@ -79,6 +82,26 @@ export function getJob(): JobsListThunkAction {
                     });
                 }
             });
+    };
+}
+
+export function showJobAttributesModal(
+    operationId: string,
+    jobId: string,
+): ThunkAction<void, RootState, null, Action> {
+    return (dispatch) => {
+        const promise = ytApiV3
+            .getJob({
+                parameters: {
+                    operation_id: operationId,
+                    job_id: jobId,
+                },
+            })
+            .catch((error) => {
+                showToasterError('Get job attributes', error);
+                throw error;
+            });
+        dispatch(openModal({title: jobId, promise}));
     };
 }
 

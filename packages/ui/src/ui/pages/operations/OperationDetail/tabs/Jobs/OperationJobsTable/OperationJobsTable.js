@@ -25,8 +25,8 @@ import {
     getJobs,
     hideInputPaths,
     showInputPaths,
+    showJobAttributesModal,
 } from '../../../../../../store/actions/operations/jobs';
-import {openAttributesModal} from '../../../../../../store/actions/modals/attributes-modal';
 import {promptAction, showErrorModal} from '../../../../../../store/actions/actions';
 import {performJobAction} from '../utils';
 import {LOADING_STATUS} from '../../../../../../constants/index';
@@ -68,7 +68,7 @@ class OperationJobsTable extends React.Component {
             }),
         }),
 
-        openAttributesModal: PropTypes.func.isRequired,
+        showJobAttributesModal: PropTypes.func.isRequired,
         showErrorModal: PropTypes.func.isRequired,
         showInputPaths: PropTypes.func.isRequired,
         hideInputPaths: PropTypes.func.isRequired,
@@ -244,7 +244,7 @@ class OperationJobsTable extends React.Component {
     };
 
     renderActions = (item) => {
-        const {openAttributesModal} = this.props;
+        const {showJobAttributesModal, operationId} = this.props;
 
         const button = (
             <Button view="flat-secondary" title="Show actions">
@@ -259,11 +259,7 @@ class OperationJobsTable extends React.Component {
         const secondGroup = [
             {
                 text: 'Show attributes',
-                action: () =>
-                    openAttributesModal({
-                        title: item.id,
-                        attributes: item.attributes,
-                    }),
+                action: () => showJobAttributesModal(operationId, item.id),
             },
         ];
 
@@ -527,6 +523,7 @@ function mapStateToProps(state, props) {
         inputPaths,
         cluster,
         login,
+        operationId,
         collapsibleSize: UI_COLLAPSIBLE_SIZE,
         isLoading: props.isLoading || operationId !== jobsOperationId,
         taskNamesNumber,
@@ -534,7 +531,7 @@ function mapStateToProps(state, props) {
 }
 
 const mapDispatchToProps = {
-    openAttributesModal,
+    showJobAttributesModal,
     showInputPaths,
     hideInputPaths,
     showErrorModal,
