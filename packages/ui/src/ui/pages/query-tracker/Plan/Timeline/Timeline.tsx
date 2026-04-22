@@ -3,7 +3,7 @@ import {TimelineHeader} from './TimelineHeader';
 import {Flex} from '@gravity-ui/uikit';
 import {TimelineList} from './TimelineList';
 import {useSelector} from '../../../../store/redux-hooks';
-import {getProgressInterval} from '../../../../store/selectors/query-tracker/queryPlan';
+import {selectProgressInterval} from '../../../../store/selectors/query-tracker/queryPlan';
 import {useTimelineData} from './useTimelineData';
 import {useTimeline} from '@gravity-ui/timeline/react';
 import {TimelineBlock} from './TimelineBlock';
@@ -16,7 +16,7 @@ const b = block('yt-plan-timeline');
 type Interval = {from: number; to: number};
 
 export const Timeline: FC = () => {
-    const initialInterval = useSelector(getProgressInterval);
+    const initialInterval = useSelector(selectProgressInterval);
     const [interval, setInterval] = useState(initialInterval);
     const timelineData = useTimelineData();
 

@@ -29,7 +29,7 @@ function getLabelWithStage(name: string, stages: NodeStages) {
     }
 }
 
-export const getProcessedGraph = createSelector(
+export const selectProcessedGraph = createSelector(
     [selectQuerySingleProgress],
     (progress): ProcessedGraph | undefined => {
         const plan = progress.yql_plan;
@@ -37,8 +37,8 @@ export const getProcessedGraph = createSelector(
     },
 );
 
-export const getNodesWithProgress = createSelector(
-    [getProcessedGraph, selectQuerySingleProgress],
+export const selectNodesWithProgress = createSelector(
+    [selectProcessedGraph, selectQuerySingleProgress],
     (graph, progress): ProcessedNode[] => {
         if (!graph) return [];
 
@@ -66,7 +66,7 @@ export const getNodesWithProgress = createSelector(
     },
 );
 
-export const getQueryStartedAtMillis = createSelector(
+export const selectQueryStartedAtMillis = createSelector(
     [selectQuerySingleProgress],
     (progress): number => {
         return reduce_(
@@ -81,7 +81,7 @@ export const getQueryStartedAtMillis = createSelector(
 );
 
 const RESERVE_TO_EVENT = 1_000;
-export const getProgressInterval = createSelector([getNodesWithProgress], (nodes) => {
+export const selectProgressInterval = createSelector([selectNodesWithProgress], (nodes) => {
     if (!nodes.length) return undefined;
 
     return nodes.reduce(
@@ -101,7 +101,7 @@ export const getProgressInterval = createSelector([getNodesWithProgress], (nodes
     );
 });
 
-export const getOperationNodesStates = createSelector([getNodesWithProgress], (nodes) => {
+export const selectOperationNodesStates = createSelector([selectNodesWithProgress], (nodes) => {
     const counts: Partial<Record<NodeState | 'NotStarted', number>> = {};
 
     nodes.forEach((node) => {

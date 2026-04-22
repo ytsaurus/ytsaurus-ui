@@ -4,7 +4,7 @@ import {type NodeState} from '../models/plan';
 import './TimelineHeader.scss';
 import cn from 'bem-cn-lite';
 import {useSelector} from '../../../../store/redux-hooks';
-import {getOperationNodesStates} from '../../../../store/selectors/query-tracker/queryPlan';
+import {selectOperationNodesStates} from '../../../../store/selectors/query-tracker/queryPlan';
 
 const block = cn('yt-timeline-header');
 
@@ -14,7 +14,7 @@ type Props = {
 };
 
 export const TimelineHeader: FC<Props> = ({onStatusChange, onFilterChange}) => {
-    const states = useSelector(getOperationNodesStates);
+    const states = useSelector(selectOperationNodesStates);
 
     const handleStatusChange = (value: string[]) => {
         onStatusChange(value[0] as NodeState | undefined);

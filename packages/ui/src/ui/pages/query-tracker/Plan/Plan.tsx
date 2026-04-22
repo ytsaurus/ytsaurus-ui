@@ -13,7 +13,7 @@ import './Plan.scss';
 import {QueriesGraphLazy} from './GraphEditor';
 import {useSelector} from '../../../store/redux-hooks';
 import {getSettingsQueryTrackerNewGraphType} from '../../../store/selectors/settings/settings-ts';
-import {getProcessedGraph} from '../../../store/selectors/query-tracker/queryPlan';
+import {selectProcessedGraph} from '../../../store/selectors/query-tracker/queryPlan';
 import {type PlanView} from './PlanActions';
 
 const block = cn('plan');
@@ -26,7 +26,7 @@ interface PlanProps {
 }
 
 export default React.memo(function Plan({planView, isActive, className, prepareNode}: PlanProps) {
-    const graph = useSelector(getProcessedGraph);
+    const graph = useSelector(selectProcessedGraph);
     const newGraphType = useSelector(getSettingsQueryTrackerNewGraphType);
 
     const [showLargeGraph, setShowLargeGraph] = React.useState(false);

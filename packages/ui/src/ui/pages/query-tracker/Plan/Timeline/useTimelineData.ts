@@ -3,8 +3,8 @@ import {useThemeValue} from '@gravity-ui/uikit';
 
 import {useSelector} from '../../../../store/redux-hooks';
 import {
-    getNodesWithProgress,
-    getQueryStartedAtMillis,
+    selectNodesWithProgress,
+    selectQueryStartedAtMillis,
 } from '../../../../store/selectors/query-tracker/queryPlan';
 import {useGraphColors} from '../GraphColors';
 import {type NodeState} from '../models/plan';
@@ -36,8 +36,8 @@ export function useTimelineData(): UseTimelineDataResult {
     const theme = useThemeValue();
     const colors = useGraphColors();
 
-    const nodes = useSelector(getNodesWithProgress);
-    const queryStartedAtMillis = useSelector(getQueryStartedAtMillis);
+    const nodes = useSelector(selectNodesWithProgress);
+    const queryStartedAtMillis = useSelector(selectQueryStartedAtMillis);
 
     const [expandedAxesSet, setExpandedAxesSet] = React.useState(new Set<string>());
     const [search, setSearch] = React.useState('');
