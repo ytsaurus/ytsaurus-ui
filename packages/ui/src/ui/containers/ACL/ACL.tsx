@@ -20,7 +20,10 @@ import WithStickyToolbar from '../../components/WithStickyToolbar/WithStickyTool
 import {isIdmAclAvailable} from '../../config';
 import {AclMode, IdmObjectType} from '../../constants/acl';
 import withVisible, {type WithVisibleProps} from '../../hocs/withVisible';
-import {type ObjectPermissionRowWithExpand, type PreparedApprover} from '../../store/selectors/acl/acl';
+import {
+    type ObjectPermissionRowWithExpand,
+    type PreparedApprover,
+} from '../../store/selectors/acl/acl';
 import UIFactory, {type AclRoleActionsType} from '../../UIFactory';
 import {type PreparedRole, isGranted} from '../../utils/acl';
 import {type PreparedAclSubject} from '../../utils/acl/acl-types';
