@@ -9,7 +9,7 @@ import {
 
 export const selectQueryResultsState = (state: RootState) => state.queryTracker.results;
 
-export const getQueryResultGlobalSettings = (): QueryResultReadyState['settings'] => {
+export const selectQueryResultGlobalSettings = (): QueryResultReadyState['settings'] => {
     const settings = getSettingsInitialData();
 
     return {
@@ -21,7 +21,7 @@ export const getQueryResultGlobalSettings = (): QueryResultReadyState['settings'
     };
 };
 
-export const getQueryResults = (
+export const selectQueryResults = (
     state: RootState,
     queryId: string,
 ): Record<number, QueryResult> | undefined => {
@@ -29,42 +29,42 @@ export const getQueryResults = (
     return res;
 };
 
-export const getQueryResult = (
+export const selectQueryResult = (
     state: RootState,
     queryId: string,
     index: number,
 ): QueryResult | undefined => selectQueryResultsState(state)?.[queryId]?.[index];
 
-export const getQueryReadyResult = (
+export const selectQueryReadyResult = (
     state: RootState,
     queryId: string,
     index: number,
 ): QueryResultReadyState | undefined => {
-    const result = getQueryResult(state, queryId, index);
+    const result = selectQueryResult(state, queryId, index);
     if (result?.state === QueryResultState.Ready) {
         return result;
     }
     return undefined;
 };
 
-export const isQueryResultReady = (state: RootState, queryId: string, index: number): boolean => {
-    const result = getQueryResult(state, queryId, index);
+export const selectIsQueryResultReady = (state: RootState, queryId: string, index: number): boolean => {
+    const result = selectQueryResult(state, queryId, index);
     return Boolean(result?.resultReady);
 };
 
-export const hasQueryResult = (state: RootState, queryId: string, index: number) => {
-    return Boolean(getQueryResult(state, queryId, index));
+export const selectHasQueryResult = (state: RootState, queryId: string, index: number) => {
+    return Boolean(selectQueryResult(state, queryId, index));
 };
 
 /* Returns the result's settings or global settings */
-export const getQueryResultSettings = (
+export const selectQueryResultSettings = (
     state: RootState,
     queryId: string,
     index: number,
 ): QueryResultReadyState['settings'] => {
-    const result = getQueryResult(state, queryId, index);
+    const result = selectQueryResult(state, queryId, index);
     if (result?.state === QueryResultState.Ready) {
         return result.settings;
     }
-    return getQueryResultGlobalSettings();
+    return selectQueryResultGlobalSettings();
 };

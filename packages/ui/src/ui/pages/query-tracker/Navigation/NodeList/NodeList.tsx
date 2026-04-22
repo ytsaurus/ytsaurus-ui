@@ -27,7 +27,7 @@ import {makePathByQueryEngine} from '../helpers/makePathByQueryEngine';
 import {type QueryEngine} from '../../../../../shared/constants/engines';
 import {getNavigationUrl} from '../helpers/getNavigationUrl';
 import {createTableSelect} from '../helpers/createTableSelect';
-import {getQueryResultGlobalSettings} from '../../../../store/selectors/query-tracker/queryResult';
+import {selectQueryResultGlobalSettings} from '../../../../store/selectors/query-tracker/queryResult';
 import {NewQueryPromt} from '../../NewQueryButton/NewQueryButton';
 import {ItemsList} from '../ItemsList';
 
@@ -40,7 +40,7 @@ export const NodeList: FC = () => {
     const clusterConfig = useSelector(selectNavigationClusterConfig);
     const nodes = useSelector(selectNodeListByFilter);
     const engine = useSelector(selectQueryEngine);
-    const {pageSize} = getQueryResultGlobalSettings();
+    const {pageSize} = selectQueryResultGlobalSettings();
     const dirtyQuery = useSelector(selectIsQueryDraftEditted);
     const loading = useSelector(selectIsQueryNavigationLoading);
     const {getEditor} = useMonaco();

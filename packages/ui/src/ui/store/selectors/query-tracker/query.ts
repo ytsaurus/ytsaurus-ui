@@ -16,7 +16,7 @@ import {getQueryTrackerStage} from '../../../config';
 import {type QTEditorError, isQTEditorError} from '../../../types/query-tracker/editor';
 import {type YTError} from '../../../types';
 import {isYTError} from '../../../../shared/utils';
-import {getQueryResults} from './queryResult';
+import {selectQueryResults} from './queryResult';
 import {selectDefaultQueryACO, selectIsMultipleAco} from './queryAco';
 import {QueryEngine, QueryEnginesNames} from '../../../../shared/constants/engines';
 import {selectClusterSupportedEngines} from '../global';
@@ -149,7 +149,7 @@ export const selectQueryEditorErrors = (state: RootState): QTEditorError[] => {
         collectQTEditorErrors(error);
     }
     if (id && !selectIsQueryDraftEditted(state)) {
-        const results = getQueryResults(state, id);
+        const results = selectQueryResults(state, id);
         if (results) {
             forOwn_(results, (value) => {
                 if (value.state === 'error' && isYTError(value.error)) {

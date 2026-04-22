@@ -25,7 +25,7 @@ import {setSettingByKey} from '../settings';
 import {type CancelTokenSource} from 'axios';
 import {JSONSerializer} from '../../../common/yt-api';
 import {createTablePrompt} from '../../../pages/query-tracker/Navigation/helpers/createTableSelect';
-import {getQueryResultGlobalSettings} from '../../selectors/query-tracker/queryResult';
+import {selectQueryResultGlobalSettings} from '../../selectors/query-tracker/queryResult';
 import {convertSettingsTypes} from '../../../utils/query-tracker/convertSettingsTypes';
 import {
     type DraftQuery,
@@ -96,7 +96,7 @@ export async function generateQueryFromTable(
     {cluster, path, defaultQueryACO}: {cluster: string; path: string; defaultQueryACO: string},
 ): Promise<DraftQuery | undefined> {
     const selectedCluster = getClusterConfigByName(cluster);
-    const {pageSize} = getQueryResultGlobalSettings();
+    const {pageSize} = selectQueryResultGlobalSettings();
 
     const node = await ytApiV3.get({
         parameters: {

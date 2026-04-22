@@ -3,7 +3,7 @@ import block from 'bem-cn-lite';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {type RootState} from '../../../../store/reducers';
 import {Select, type SelectOption} from '@gravity-ui/uikit';
-import {getQueryResult} from '../../../../store/selectors/query-tracker/queryResult';
+import {selectQueryResult} from '../../../../store/selectors/query-tracker/queryResult';
 import SimplePagination from '../../../../components/Pagination/SimplePagination';
 import {
     applySettings,
@@ -48,7 +48,7 @@ function useQueryResultPagination(
         pageSize: 0,
     });
 
-    const result = useSelector((state: RootState) => getQueryResult(state, queryId, resultIndex));
+    const result = useSelector((state: RootState) => selectQueryResult(state, queryId, resultIndex));
 
     useEffect(() => {
         if (result?.resultReady) {

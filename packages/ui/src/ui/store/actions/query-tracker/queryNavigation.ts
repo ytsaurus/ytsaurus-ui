@@ -40,7 +40,7 @@ import {selectQueryDraft} from '../../selectors/query-tracker/query';
 import {getDefaultTableColumnLimit} from '../../selectors/settings';
 import {isYqlTypesEnabled} from '../../selectors/navigation/content/table';
 import {getClusterProxy, selectCurrentUserName} from '../../selectors/global';
-import {getQueryResultGlobalSettings} from '../../selectors/query-tracker/queryResult';
+import {selectQueryResultGlobalSettings} from '../../selectors/query-tracker/queryResult';
 import {getYsonSettingsDisableDecode} from '../../selectors/thor/unipika';
 import {QueriesListMode} from '../../../types/query-tracker/queryList';
 import {type ClusterConfig} from '../../../../shared/yt-types';
@@ -112,7 +112,7 @@ export const loadTableAttributesByPath =
     async (dispatch, getState) => {
         const state = getState();
         const clusterConfig = selectNavigationClusterConfig(state);
-        const {cellSize, pageSize} = getQueryResultGlobalSettings();
+        const {cellSize, pageSize} = selectQueryResultGlobalSettings();
         const defaultTableColumnLimit = getDefaultTableColumnLimit(state);
         const useYqlTypes = isYqlTypesEnabled(state);
         const login = selectCurrentUserName(state);

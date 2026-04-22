@@ -11,9 +11,9 @@ import {
 } from './api';
 import {type Type, getSchemaDateType, parseV3Type} from '@ytsaurus/components';
 import {
-    getQueryResultGlobalSettings,
-    getQueryResultSettings,
-    hasQueryResult,
+    selectHasQueryResult,
+    selectQueryResultGlobalSettings,
+    selectQueryResultSettings,
 } from '../../selectors/query-tracker/queryResult';
 import {getClusterConfigByName, getClusterProxy} from '../../selectors/global';
 import {
@@ -94,7 +94,7 @@ export function loadQueryResult(
 ): ThunkAction<any, RootState, any, QueryResultsActions> {
     return async (dispatch, getState) => {
         const state = getState();
-        if (hasQueryResult(state, queryId, resultIndex)) {
+        if (selectHasQueryResult(state, queryId, resultIndex)) {
             return;
         }
         try {
@@ -121,7 +121,7 @@ export function loadQueryResult(
                     };
                 }) || [];
 
-            const settings = getQueryResultGlobalSettings();
+            const settings = selectQueryResultGlobalSettings();
             const result = await wrapApiPromiseByToaster(
                 dispatch(
                     readQueryResults(
@@ -219,7 +219,7 @@ export function updateQueryResult(
 ): ThunkAction<any, RootState, any, QueryResultsActions> {
     return async (dispatch, getState) => {
         try {
-            const settings = getQueryResultSettings(getState(), queryId, resultIndex);
+            const settings = selectQueryResultSettings(getState(), queryId, resultIndex);
             dispatch({
                 type: REQUEST_QUERY_RESULTS,
                 data: {queryId, index: resultIndex},
@@ -297,7 +297,7 @@ export function loadQueryResultsErrors(
 
         const inds: number[] = [];
         for (let ind = 0; ind < result_count; ind++) {
-            if (!hasQueryResult(state, query.id, ind)) inds.push(ind);
+            if (!selectHasQueryResult(state, query.id, ind)) inds.push(ind);
         }
 
         if (inds.length === 0) return;

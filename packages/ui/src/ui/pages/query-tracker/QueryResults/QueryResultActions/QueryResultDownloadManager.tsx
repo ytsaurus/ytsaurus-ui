@@ -4,7 +4,7 @@ import React, {useMemo, useState} from 'react';
 import {selectCluster} from '../../../../store/selectors/global';
 import {DownloadManager} from '../../../navigation/content/Table/DownloadManager/DownloadManager';
 import {getDownloadQueryResultURL} from '../../../../store/actions/query-tracker/api';
-import {getQueryResult} from '../../../../store/selectors/query-tracker/queryResult';
+import {selectQueryResult} from '../../../../store/selectors/query-tracker/queryResult';
 import {type RootState} from '../../../../store/reducers';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {type FIX_MY_TYPE} from '../../../../../@types/types';
@@ -87,7 +87,7 @@ export const QueryResultDownloadManager = React.memo(function QueryResultDownloa
     className,
 }: Props) {
     const cluster = useSelector(selectCluster);
-    const result = useSelector((state: RootState) => getQueryResult(state, queryId, resultIndex));
+    const result = useSelector((state: RootState) => selectQueryResult(state, queryId, resultIndex));
     const dispatch = useDispatch();
     const startRow = result?.resultReady ? result?.page * result?.settings?.pageSize || 0 : 0;
     const allItems = useMemo(() => {
