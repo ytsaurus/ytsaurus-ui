@@ -77,7 +77,7 @@ import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 import {type ClusterUiConfig} from '../../../../shared/yt-types';
 import {setSettingByKey} from '../settings';
 import {selectClusterConfigs} from '../../selectors/query-tracker/queryNavigation';
-import {getQueryResultGlobalSettings} from '../../selectors/query-tracker/queryResult';
+import {selectQueryResultGlobalSettings} from '../../selectors/query-tracker/queryResult';
 import {createTableSelect} from '../../../pages/query-tracker/Navigation/helpers/createTableSelect';
 import {
     type ResetQueryTabsAction,
@@ -186,7 +186,7 @@ export const loadTablePromptToQuery =
     ): AsyncAction =>
     async (dispatch, getState) => {
         const state = getState();
-        const {pageSize} = getQueryResultGlobalSettings();
+        const {pageSize} = selectQueryResultGlobalSettings();
         const clusters = selectClusterConfigs(state);
 
         const clusterConfig = clusters[cluster];

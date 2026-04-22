@@ -1,5 +1,5 @@
 import {Button, type ControlGroupOption, Icon, SegmentedRadioGroup} from '@gravity-ui/uikit';
-import {getQueryResult} from '../../../../store/selectors/query-tracker/queryResult';
+import {selectQueryResult} from '../../../../store/selectors/query-tracker/queryResult';
 import block from 'bem-cn-lite';
 import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
@@ -38,7 +38,7 @@ const getModeVariants = (): ControlGroupOption[] => [
 export function QueryResultActions({query, resultIndex}: Props) {
     const dispatch = useDispatch();
     const queryResult = useSelector((state: RootState) =>
-        getQueryResult(state, query.id, resultIndex),
+        selectQueryResult(state, query.id, resultIndex),
     );
 
     const handleTransposedChange = useCallback(() => {

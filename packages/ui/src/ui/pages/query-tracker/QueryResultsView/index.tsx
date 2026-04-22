@@ -10,8 +10,8 @@ import {
     onErrorTableCellPreview,
 } from '../../../types/navigation/table-cell-preview';
 import {
-    getQueryResult,
-    getQueryResultSettings,
+    selectQueryResult,
+    selectQueryResultSettings,
 } from '../../../store/selectors/query-tracker/queryResult';
 import {YTErrorBlock} from '../../../components/Error/Error';
 import {ResultsTable} from './ResultsTable';
@@ -88,10 +88,10 @@ function QueryReadyResultView({
 
 export const QueryResultsView = React.memo(
     function QueryResultsView({query, index}: {query: QueryItem; index: number}) {
-        const result = useSelector((state: RootState) => getQueryResult(state, query.id, index));
+        const result = useSelector((state: RootState) => selectQueryResult(state, query.id, index));
         const page = result?.page;
         const {pageSize} = useSelector((state: RootState) =>
-            getQueryResultSettings(state, query.id, index),
+            selectQueryResultSettings(state, query.id, index),
         );
         const engine = useSelector(selectQueryEngine);
 
