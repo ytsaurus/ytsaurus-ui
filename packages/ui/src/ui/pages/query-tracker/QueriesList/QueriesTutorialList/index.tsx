@@ -7,9 +7,9 @@ import tutorialIcon from '../../../../assets/img/svg/learn.svg';
 import './index.scss';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
-    getTutorialQueriesList,
-    hasQueriesListMore,
-    isQueriesListLoading,
+    selectHasQueriesListMore,
+    selectIsQueriesListLoading,
+    selectTutorialQueriesList,
 } from '../../../../store/selectors/query-tracker/queriesList';
 import {loadNextQueriesList} from '../../../../store/actions/query-tracker/queriesList';
 import {InfiniteScrollLoader} from '../../../../components/InfiniteScrollLoader';
@@ -32,9 +32,9 @@ function renderItem(item: QueryItem) {
 
 export function QueriesTutorialList({className}: {className: string}) {
     const dispatch = useDispatch();
-    const items = useSelector(getTutorialQueriesList);
-    const isLoading = useSelector(isQueriesListLoading);
-    const hasMore = useSelector(hasQueriesListMore);
+    const items = useSelector(selectTutorialQueriesList);
+    const isLoading = useSelector(selectIsQueriesListLoading);
+    const hasMore = useSelector(selectHasQueriesListMore);
 
     const [selectedId, goToQuery] = useQueryNavigation();
 

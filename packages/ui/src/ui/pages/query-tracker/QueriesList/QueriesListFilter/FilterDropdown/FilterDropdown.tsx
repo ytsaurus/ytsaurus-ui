@@ -8,7 +8,7 @@ import TrashBinIcon from '@gravity-ui/icons/svgs/trash-bin.svg';
 import {QueryStateFilter} from '../QueryStateFilter';
 import {QueryUserFilter} from '../QueryUserFilter';
 import {QueryDateFilter} from '../QueryDateFilter';
-import {hasCustomHistoryFilters} from '../../../../../store/selectors/query-tracker/queriesList';
+import {selectHasCustomHistoryFilters} from '../../../../../store/selectors/query-tracker/queriesList';
 import i18n from './i18n';
 
 const block = cn('yt-qt-filter-dropdown');
@@ -24,7 +24,7 @@ const Block: FC<PropsWithChildren<{title: string}>> = ({title, children}) => {
 
 export const FilterDropdown: FC = () => {
     const dispatch = useDispatch();
-    const changed = useSelector(hasCustomHistoryFilters);
+    const changed = useSelector(selectHasCustomHistoryFilters);
 
     const handleResetFilter = React.useCallback(() => {
         dispatch(resetFilter());

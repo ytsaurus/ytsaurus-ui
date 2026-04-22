@@ -5,7 +5,7 @@ import {
 } from '../../../../../types/query-tracker/queryList';
 import {type ControlGroupOption, SegmentedRadioGroup} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
-import {getQueriesFilters} from '../../../../../store/selectors/query-tracker/queriesList';
+import {selectQueriesFilters} from '../../../../../store/selectors/query-tracker/queriesList';
 import {applyFilter} from '../../../../../store/actions/query-tracker/queriesList';
 import {selectCurrentUserName} from '../../../../../store/selectors/global';
 import i18n from './i18n';
@@ -23,7 +23,7 @@ const getAuthorFilter = (): ControlGroupOption[] => [
 
 export const QueryFastUserFilter: FC = () => {
     const dispatch = useDispatch();
-    const {user} = useSelector(getQueriesFilters);
+    const {user} = useSelector(selectQueriesFilters);
     const login = useSelector(selectCurrentUserName);
 
     const handleUserChange = (value: string) => {

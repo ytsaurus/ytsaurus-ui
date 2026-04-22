@@ -1,6 +1,6 @@
 import React, {type FC, useMemo} from 'react';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
-import {getQueriesFilters} from '../../../../../store/selectors/query-tracker/queriesList';
+import {selectQueriesFilters} from '../../../../../store/selectors/query-tracker/queriesList';
 import {DatePicker} from '@gravity-ui/date-components';
 import {type DateTime, dateTimeParse} from '../../../../../utils/date-utils';
 import {Flex} from '@gravity-ui/uikit';
@@ -9,7 +9,7 @@ import i18n from './i18n';
 
 export const QueryDateFilter: FC = () => {
     const dispatch = useDispatch();
-    const {from, to} = useSelector(getQueriesFilters);
+    const {from, to} = useSelector(selectQueriesFilters);
 
     const setFilter = useMemo(
         () => ({

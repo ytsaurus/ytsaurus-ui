@@ -5,12 +5,12 @@ import {createQueryUrl} from '../../utils/navigation';
 import {type QueryItem} from '../../../../types/query-tracker/api';
 import {selectCluster} from '../../../../store/selectors/global';
 import {getQuery} from '../../../../store/selectors/query-tracker/query';
-import {getQueriesListMode} from '../../../../store/selectors/query-tracker/queriesList';
+import {selectQueriesListMode} from '../../../../store/selectors/query-tracker/queriesList';
 
 export const useQueryNavigation = (): [QueryItem['id'] | undefined, (id: QueryItem) => void] => {
     const selectedItem = useSelector(getQuery);
     const cluster = useSelector(selectCluster);
-    const listMode = useSelector(getQueriesListMode);
+    const listMode = useSelector(selectQueriesListMode);
     const history = useHistory();
 
     const goToQuery = useCallback(

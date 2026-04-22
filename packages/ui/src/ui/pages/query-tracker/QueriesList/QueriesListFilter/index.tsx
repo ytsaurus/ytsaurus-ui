@@ -13,10 +13,10 @@ import GearIcon from '@gravity-ui/icons/svgs/gear.svg';
 import ColumnSelector from '../../../../components/ColumnSelector/ColumnSelector';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
-    getQueriesFilters,
-    getQueriesListMode,
-    getQueryListColumns,
-    hasCustomHistoryFilters,
+    selectHasCustomHistoryFilters,
+    selectQueriesFilters,
+    selectQueriesListMode,
+    selectQueryListColumns,
 } from '../../../../store/selectors/query-tracker/queriesList';
 import {applyFilter} from '../../../../store/actions/query-tracker/queriesList';
 import {setSettingByKey} from '../../../../store/actions/settings';
@@ -33,10 +33,10 @@ type QueriesHistoryListFilterProps = {
 
 export function QueriesHistoryListFilter({className}: QueriesHistoryListFilterProps) {
     const dispatch = useDispatch();
-    const filter = useSelector(getQueriesFilters);
-    const filterViewMode = useSelector(getQueriesListMode);
-    const {allowedColumns} = useSelector(getQueryListColumns);
-    const customFilterChanged = useSelector(hasCustomHistoryFilters);
+    const filter = useSelector(selectQueriesFilters);
+    const filterViewMode = useSelector(selectQueriesListMode);
+    const {allowedColumns} = useSelector(selectQueryListColumns);
+    const customFilterChanged = useSelector(selectHasCustomHistoryFilters);
 
     const handleColumnChange = (selectedColumns: {
         items: Array<{checked: boolean; name: string}>;

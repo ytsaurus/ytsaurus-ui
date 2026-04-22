@@ -3,10 +3,10 @@ import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import DataTable, {type Settings} from '@gravity-ui/react-data-table';
 import {type QueryItem} from '../../../../types/query-tracker/api';
 import {
-    getQueryListByDate,
-    getQueryListColumns,
-    hasQueriesListMore,
-    isQueriesListLoading,
+    selectHasQueriesListMore,
+    selectIsQueriesListLoading,
+    selectQueryListByDate,
+    selectQueryListColumns,
 } from '../../../../store/selectors/query-tracker/queriesList';
 import {DataTableYT} from '../../../../components/DataTableYT';
 import {useQueryNavigation} from '../../hooks/Query';
@@ -54,10 +54,10 @@ function QueriesHistoryListUpdater() {
 
 export function QueriesHistoryList() {
     const dispatch = useDispatch();
-    const itemsByDate = useSelector(getQueryListByDate);
-    const isLoading = useSelector(isQueriesListLoading);
-    const {columns} = useSelector(getQueryListColumns);
-    const hasMore = useSelector(hasQueriesListMore);
+    const itemsByDate = useSelector(selectQueryListByDate);
+    const isLoading = useSelector(selectIsQueriesListLoading);
+    const {columns} = useSelector(selectQueryListColumns);
+    const hasMore = useSelector(selectHasQueriesListMore);
     const [selectedId, goToQuery] = useQueryNavigation();
 
     const showPagination = hasMore && itemsByDate.length > 0;
