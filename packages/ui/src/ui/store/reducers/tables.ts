@@ -15,8 +15,9 @@ import {NAVIGATION_MAP_NODE_TABLE_ID} from '../../constants/navigation';
 import {NAVIGATION_TABLETS_TABLE_ID} from '../../constants/navigation/tabs/tablets';
 import {NAVIGATION_TRANSACTION_MAP_TABLE_ID} from '../../constants/navigation/content/transaction-map';
 import {TABLET_PARTITIONS_TABLE_ID, TABLET_PARTITION_STORES_TABLE_ID} from '../../constants/tablet';
+import {NAVIGATION_REPLICATED_TABLE_ID} from '../../constants/navigation/content/replicated-table';
 import {type ActionD, type OldSortState} from '../../types';
-import {type NodesTableColumnNames} from '../../pages/components/tabs/nodes/tables';
+import type {NodesTableColumnNames} from '../../pages/components/tabs/nodes/tables';
 
 const NAME_ASC_SORT_VALUE = {field: 'name', asc: true};
 
@@ -32,7 +33,8 @@ export type TablesSortOrderState = Record<
     | typeof OPERATION_JOBS_TABLE_ID
     | typeof COMPONENTS_VERSIONS_DETAILED_TABLE_ID
     | typeof COMPONENTS_NODES_NODE_TABLE_ID
-    | typeof COMPONENTS_PROXIES_TABLE_ID,
+    | typeof COMPONENTS_PROXIES_TABLE_ID
+    | typeof NAVIGATION_REPLICATED_TABLE_ID,
     OldSortState
 > & {
     [COMPONENTS_NODES_TABLE_ID]: OldSortState<NodesTableColumnNames>;
@@ -60,6 +62,7 @@ export const initialState: TablesSortOrderState = {
     [COMPONENTS_NODES_NODE_TABLE_ID]: {field: 'cell_id', asc: true},
 
     [COMPONENTS_PROXIES_TABLE_ID]: {field: 'host', asc: true},
+    [NAVIGATION_REPLICATED_TABLE_ID]: {field: 'cluster_name', asc: true},
 };
 
 export default (state = initialState, action: TablesSortOrderAction) => {

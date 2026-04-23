@@ -4,7 +4,10 @@ import {useSelector} from '../../../../store/redux-hooks';
 import PropTypes from 'prop-types';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import hammer from '../../../../common/hammer';
+import sortBy_ from 'lodash/sortBy';
 import cn from 'bem-cn-lite';
+
+import ColumnHeader from '../../../../components/ColumnHeader/ColumnHeader';
 
 import {useDisableMaxContentWidth} from '../../../../containers/MaxContentWidth';
 import ClickableAttributesButton from '../../../../components/AttributesButton/ClickableAttributesButton';
@@ -23,10 +26,13 @@ import {
     abortAndReset,
     loadReplicas,
     performReplicaAction,
+    saveReplicatedTableSortState,
     updateEnableReplicatedTableTracker,
 } from '../../../../store/actions/navigation/content/replicated-table';
 import {getAttributes, getPath} from '../../../../store/selectors/navigation';
 import {Page} from '../../../../constants/index';
+
+import {changeColumnSortOrder, toggleColumnSortOrder} from '../../../../store/actions/tables';
 
 import {ReplicatedTableSettingsButton} from './ReplicatedTableSettings';
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
@@ -34,10 +40,12 @@ import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
 import {isFinalLoadingStatus} from '../../../../utils/utils';
 
+import {NAVIGATION_REPLICATED_TABLE_ID} from '../../../../constants/navigation/content/replicated-table';
 import {
     getAllowEnableReplicatedTracker,
     getNavigationReplicatedTableLoadingStatus,
     getReplicatedTableData,
+    getReplicatedTableSortSettings,
 } from '../../../../store/selectors/navigation/content/replicated-table';
 
 import './ReplicatedTable.scss';
@@ -89,31 +97,37 @@ class ReplicatedTable extends Component {
         abortAndReset: PropTypes.func.isRequired,
         performReplicaAction: PropTypes.func.isRequired,
         type: PropTypes.string.isRequired,
+        savedSortState: PropTypes.object,
+        sortState: PropTypes.object,
+        toggleColumnSortOrder: PropTypes.func.isRequired,
+        changeColumnSortOrder: PropTypes.func.isRequired,
+        saveReplicatedTableSortState: PropTypes.func.isRequired,
     };
 
     static tableItems = {
         name: {
             align: 'left',
-            caption: 'Id / Path',
-            sort: false,
+            get(replica) {
+                return ypath.getValue(replica, '');
+            },
         },
         cluster: {
             align: 'left',
-            sort: false,
+            sort: true,
             get(replica) {
                 return ypath.getValue(replica, '/@cluster_name');
             },
         },
         content_type: {
             align: 'left',
-            sort: false,
+            sort: true,
             get(replica) {
                 return ypath.getValue(replica, '/@content_type');
             },
         },
         mode: {
             align: 'left',
-            sort: false,
+            sort: true,
             get(replica) {
                 return ypath.getValue(replica, '/@mode');
             },
@@ -121,24 +135,28 @@ class ReplicatedTable extends Component {
         error_count: {
             align: 'center',
             caption: 'Error count',
+            sort: true,
             get(replica) {
                 return ypath.getValue(replica, '/@error_count');
             },
         },
         errors: {
             align: 'left',
+            sort: true,
             get(replica) {
                 return ypath.getValue(replica, '/@errors');
             },
         },
         replication_lag_time: {
             align: 'right',
+            sort: true,
             get(replica) {
                 return ypath.getValue(replica, '/@replication_lag_time');
             },
         },
         state: {
             align: 'center',
+            sort: true,
             get(replica) {
                 return ypath.getValue(replica, '/@state');
             },
@@ -146,6 +164,7 @@ class ReplicatedTable extends Component {
         automatic_mode_switch: {
             align: 'center',
             caption: 'Replicated table tracker',
+            sort: true,
             get(replica) {
                 const flag = ypath.getValue(replica, '/@replicated_table_tracker_enabled');
                 return flag === 'true' || flag === true;
@@ -238,14 +257,42 @@ class ReplicatedTable extends Component {
             </Tooltip>
         );
     }
-
     componentDidMount() {
         this.props.loadReplicas();
+        this.initializeSortState();
+    }
+
+    initializeSortState() {
+        const {savedSortState, changeColumnSortOrder, sortState} = this.props;
+
+        if (!savedSortState) {
+            return;
+        }
+
+        const savedField = savedSortState.field || '';
+        const savedAsc = Boolean(savedSortState.asc);
+        const currentField = sortState?.field || '';
+        const currentAsc = Boolean(sortState?.asc);
+
+        if (currentField === savedField && currentAsc === savedAsc) {
+            return;
+        }
+
+        changeColumnSortOrder({
+            tableId: NAVIGATION_REPLICATED_TABLE_ID,
+            columnName: savedField,
+            asc: savedAsc,
+        });
     }
 
     componentDidUpdate(prevProps) {
         if (prevProps.path !== this.props.path) {
             this.props.loadReplicas();
+            this.initializeSortState();
+        }
+
+        if (prevProps.sortState !== this.props.sortState) {
+            this.props.saveReplicatedTableSortState(this.props.sortState);
         }
     }
 
@@ -253,8 +300,77 @@ class ReplicatedTable extends Component {
         this.props.abortAndReset();
     }
 
+    getSortedReplicas() {
+        const {replicas, sortState} = this.props;
+
+        if (!sortState || !sortState.field) {
+            return replicas;
+        }
+
+        const {field, asc} = sortState;
+        const getValueByField =
+            field === 'cluster_name' || field === 'replica_path'
+                ? (replica) => ypath.getValue(replica, `/@${field}`)
+                : ReplicatedTable.tableItems[field]?.get;
+
+        if (!getValueByField) {
+            return replicas;
+        }
+
+        const sortedReplicas = sortBy_(replicas, getValueByField);
+
+        return asc ? sortedReplicas : sortedReplicas.reverse();
+    }
+
+    renderNameHeader = () => {
+        const {sortState, toggleColumnSortOrder} = this.props;
+
+        const isSortedByCluster = sortState?.field === 'cluster_name';
+        const isSortedByPath = sortState?.field === 'replica_path';
+        const isSorted = isSortedByCluster || isSortedByPath;
+        const order = sortState?.asc ? 'asc' : 'desc';
+
+        return (
+            <ColumnHeader
+                column={isSortedByPath ? 'replica_path' : 'cluster_name'}
+                order={isSorted ? order : undefined}
+                title="Id / Path"
+                options={[
+                    {
+                        column: 'cluster_name',
+                        title: 'Replica ID',
+                        withUndefined: true,
+                        allowUnordered: true,
+                    },
+                    {
+                        column: 'replica_path',
+                        title: 'Replica Path',
+                        withUndefined: true,
+                        allowUnordered: true,
+                    },
+                ]}
+                onSort={(columnName) => {
+                    toggleColumnSortOrder({
+                        tableId: NAVIGATION_REPLICATED_TABLE_ID,
+                        columnName,
+                        withUndefined: true,
+                        allowUnordered: true,
+                    });
+                }}
+            />
+        );
+    };
+
     get tableSettings() {
         const {loading, loaded, tableMode, enable_replicated_table_tracker} = this.props;
+
+        const items = {
+            ...ReplicatedTable.tableItems,
+            name: {
+                ...ReplicatedTable.tableItems.name,
+                renderHeader: this.renderNameHeader,
+            },
+        };
 
         return {
             css: block(),
@@ -263,8 +379,9 @@ class ReplicatedTable extends Component {
             striped: false,
             itemHeight: 65,
             isLoading: loading && !loaded,
+            tableId: NAVIGATION_REPLICATED_TABLE_ID,
             columns: {
-                items: ReplicatedTable.tableItems,
+                items,
                 sets: tableSets,
                 mode: tableMode,
             },
@@ -286,6 +403,7 @@ class ReplicatedTable extends Component {
             computeKey(item) {
                 return item.$value;
             },
+            onSort: this.handleColumnSort,
         };
     }
 
@@ -340,7 +458,7 @@ class ReplicatedTable extends Component {
     };
 
     render() {
-        const {replicas, type} = this.props;
+        const {type} = this.props;
         const hasActions = type !== CypressNodeTypes.CHAOS_REPLICATED_TABLE;
 
         return (
@@ -359,7 +477,10 @@ class ReplicatedTable extends Component {
                                         itemsToWrap={[{node: <TableActions block={block} />}]}
                                     />
                                 )}
-                                <ElementsTable {...this.tableSettings} items={replicas} />
+                                <ElementsTable
+                                    {...this.tableSettings}
+                                    items={this.getSortedReplicas()}
+                                />
                             </React.Fragment>
                         )}
                     </StickyContainer>
@@ -368,12 +489,13 @@ class ReplicatedTable extends Component {
         );
     }
 }
-
 const mapStateToProps = (state) => {
     const {loading, loaded, error, errorData, replicas} = getReplicatedTableData(state);
     const allowEnableReplicatedTracker = getAllowEnableReplicatedTracker(state);
     const path = getPath(state);
     const attributes = getAttributes(state);
+    const savedSortState = getReplicatedTableSortSettings(state);
+    const sortState = state.tables[NAVIGATION_REPLICATED_TABLE_ID];
 
     const [enable_replicated_table_tracker, type] = ypath.getValues(attributes, [
         '/replicated_table_options/enable_replicated_table_tracker',
@@ -391,6 +513,8 @@ const mapStateToProps = (state) => {
         tableMode: allowEnableReplicatedTracker ? 'with-auto-switch' : 'default',
         enable_replicated_table_tracker,
         type,
+        savedSortState,
+        sortState,
     };
 };
 
@@ -399,6 +523,9 @@ const mapDispatchToProps = {
     abortAndReset,
     performReplicaAction,
     updateEnableReplicatedTableTracker,
+    toggleColumnSortOrder,
+    changeColumnSortOrder,
+    saveReplicatedTableSortState,
 };
 
 const ReplicatedTableConnected = connect(mapStateToProps, mapDispatchToProps)(ReplicatedTable);

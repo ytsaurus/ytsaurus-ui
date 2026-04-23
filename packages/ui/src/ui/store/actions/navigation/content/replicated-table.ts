@@ -22,6 +22,8 @@ import {
     type ReplicaInfo,
     type ReplicatedTableAction,
 } from '../../../reducers/navigation/content/replicated-table';
+import {setSettingByKey} from '../../settings/settings-base';
+import {getReplicatedTableSortSettings} from '../../../selectors/navigation/content/replicated-table';
 
 const requests = new CancelHelper();
 
@@ -166,5 +168,28 @@ export function updateEnableReplicatedTableTracker({
             .then(() => {
                 dispatch(updateView());
             });
+    };
+}
+
+export function saveReplicatedTableSortState(
+    sortState: {field?: string; asc?: boolean} | undefined,
+): ReplicatedTableThunkAction<Promise<void> | void> {
+    return (dispatch, getState) => {
+        const saved = getReplicatedTableSortSettings(getState());
+        const nextField = sortState?.field || '';
+        const nextAsc = Boolean(sortState?.asc);
+        const savedField = saved?.field || '';
+        const savedAsc = Boolean(saved?.asc);
+
+        if (nextField === savedField && nextAsc === savedAsc) {
+            return;
+        }
+
+        return dispatch(
+            setSettingByKey('global::navigation::replicatedTableSortState', {
+                field: nextField,
+                asc: nextAsc,
+            }),
+        );
     };
 }
