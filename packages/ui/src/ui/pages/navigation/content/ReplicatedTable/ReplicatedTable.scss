@@ -12,7 +12,9 @@
             }
 
             &_type_cluster,
+            &_type_content-type,
             &_type_error_count,
+            &_type_errors,
             &_type_replication-lag-time {
                 width: 150px;
             }
@@ -24,10 +26,6 @@
 
             &_type_actions {
                 width: 80px;
-            }
-
-            &_type_errors {
-                width: 150px;
             }
         }
     }

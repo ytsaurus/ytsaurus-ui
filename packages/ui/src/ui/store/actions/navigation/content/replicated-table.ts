@@ -22,6 +22,13 @@ import {
     type ReplicaInfo,
     type ReplicatedTableAction,
 } from '../../../reducers/navigation/content/replicated-table';
+import {setSettingByKey} from '../../settings/settings-base';
+import {getReplicatedTableSortSettings} from '../../../selectors/navigation/content/replicated-table';
+import {
+    nextSortOrderValue,
+    oldSortStateToOrderType,
+    orderTypeToOldSortState,
+} from '../../../../utils/sort-helpers';
 
 const requests = new CancelHelper();
 
@@ -166,5 +173,40 @@ export function updateEnableReplicatedTableTracker({
             .then(() => {
                 dispatch(updateView());
             });
+    };
+}
+
+export function toggleReplicatedTableSortOrder(
+    columnName: string,
+): ReplicatedTableThunkAction<Promise<void> | void> {
+    return (dispatch, getState) => {
+        const current = getReplicatedTableSortSettings(getState());
+        const orderType = current?.field === columnName ? oldSortStateToOrderType(current) : '';
+        const nextOrderType = nextSortOrderValue(orderType);
+        const next = orderTypeToOldSortState(columnName, nextOrderType);
+        return dispatch(saveReplicatedTableSortState(next));
+    };
+}
+
+function saveReplicatedTableSortState(
+    sortState: {field?: string; asc?: boolean} | undefined,
+): ReplicatedTableThunkAction<Promise<void> | void> {
+    return (dispatch, getState) => {
+        const saved = getReplicatedTableSortSettings(getState());
+        const nextField = sortState?.field || '';
+        const nextAsc = Boolean(sortState?.asc);
+        const savedField = saved?.field || '';
+        const savedAsc = Boolean(saved?.asc);
+
+        if (nextField === savedField && nextAsc === savedAsc) {
+            return;
+        }
+
+        dispatch(
+            setSettingByKey('global::navigation::replicatedTableSortState', {
+                field: nextField,
+                asc: nextAsc,
+            }),
+        );
     };
 }
