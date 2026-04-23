@@ -18,7 +18,7 @@ export const tabletsBundlesParams = {
     ...tabletErrorsByBundleParams,
 };
 
-export function getTabletsBundlesPreparedState(
+export function selectTabletsBundlesPreparedState(
     state: RootState,
     {query}: {query: RootState},
 ): RootState {
@@ -89,7 +89,7 @@ export const tabletsTabletCellsParams = {
     },
 };
 
-export function getTabletsCellsPreparedState(
+export function selectTabletsCellsPreparedState(
     state: RootState,
     {query}: {query: RootState},
 ): RootState {
@@ -110,7 +110,7 @@ export const tabletsBundlesAclParams = {
     ...aclFiltersParams,
 };
 
-export function getTabletsBundlesAclPreparedState(
+export function selectTabletsBundlesAclPreparedState(
     prevState: RootState,
     {query}: {query: RootState},
 ): RootState {
