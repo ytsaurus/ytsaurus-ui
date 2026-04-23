@@ -132,7 +132,7 @@ class Navigation extends Component {
             updateView({trackVisit: true});
         }
 
-        if (this.props.parsedPath !== prevProps.parsedPath) {
+        if (this.props.parsedPath !== prevProps.parsedPath || this.props.mode !== prevProps.mode) {
             this.updateTitleWithPath();
         }
     }
@@ -142,8 +142,13 @@ class Navigation extends Component {
     }
 
     updateTitleWithPath() {
-        const {parsedPath, updateTitle} = this.props;
-        updateTitle({path: parsedPath ? parsedPath.getKey() : ''});
+        const {parsedPath, updateTitle, mode, tabs} = this.props;
+        let page = 'Navigation';
+        const tab = mode !== 'content' && tabs.find((tab) => tab.value === mode);
+        if (tab) {
+            page = tab.text || hammer.format['ReadableField'](mode);
+        }
+        updateTitle({path: parsedPath ? parsedPath.getKey() : '', page});
     }
 
     get items() {
