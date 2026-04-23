@@ -80,7 +80,6 @@ export const tableItems = {
         overall: 'sum',
     },
     replication_lag_time: {
-        sort: true,
         align: 'right',
         get caption() {
             return i18n('field_replication-lag');
@@ -88,10 +87,10 @@ export const tableItems = {
         get(tablet) {
             return ypath.getNumberDeprecated(tablet, '/replication_lag_time', undefined);
         },
+        sort: true,
         allowedOrderTypes: DESC_ASC_UNORDERED,
     },
     replication_mode: {
-        sort: true,
         align: 'center',
         get caption() {
             return i18n('field_replication-mode');
@@ -99,6 +98,8 @@ export const tableItems = {
         get(tablet) {
             return ypath.getValue(tablet, '/replication_mode');
         },
+        sort: true,
+        allowedOrderTypes: DESC_ASC_UNORDERED,
     },
     pivot_key: {
         sort: false,
