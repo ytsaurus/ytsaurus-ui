@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.1](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v0.2.0...components-v0.2.1) (2026-04-23)
+
+
+### Bug Fixes
+
+* **Bundles:** progress tooltip in safari [YTFRONT-5514] ([e647681](https://github.com/ytsaurus/ytsaurus-ui/commit/e647681588217a0b1c0b8234b107444c06824270))
+* **System:** 'nvme' word should be in UPPERCASE [YTFRONT-5534] ([18509eb](https://github.com/ytsaurus/ytsaurus-ui/commit/18509eb846cbc1dab3055e270b4ceaebec1cba3c))
+
 ## [0.2.0](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v0.1.0...components-v0.2.0) (2026-04-05)
 
 
