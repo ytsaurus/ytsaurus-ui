@@ -97,7 +97,7 @@ export default class Account {
         };
     }
 
-    getTabletStaticMemoryInfo(recursive = true) {
+    selectTabletstaticMemoryInfo(recursive = true) {
         const src = this.getResourceInfoSource(recursive);
         return {
             committed: src.committedTabletStaticMemory,
