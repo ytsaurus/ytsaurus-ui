@@ -1,6 +1,6 @@
 {
   "name": "@ytsaurus/components",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": false,
   "description": "YTsaurus UI component library: navigation table, data display (Yson, Schema, DataTable), navigation API and shared config",
   "repository": {
