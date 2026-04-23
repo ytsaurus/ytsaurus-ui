@@ -71,21 +71,22 @@ export const tableItems = {
         overall: 'sum',
     },
     replication_lag_time: {
-        sort: true,
         align: 'right',
         caption: 'Replication Lag',
         get(tablet) {
             return ypath.getNumberDeprecated(tablet, '/replication_lag_time', undefined);
         },
+        sort: true,
         allowedOrderTypes: DESC_ASC_UNORDERED,
     },
     replication_mode: {
-        sort: true,
         align: 'center',
         caption: 'Replication Mode',
         get(tablet) {
             return ypath.getValue(tablet, '/replication_mode');
         },
+        sort: true,
+        allowedOrderTypes: DESC_ASC_UNORDERED,
     },
     pivot_key: {
         sort: false,

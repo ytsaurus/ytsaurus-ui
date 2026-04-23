@@ -73,7 +73,7 @@ export interface AccountSelector {
 
     getNodeCountProgressInfo(recursive?: boolean): ProgressInfo;
     getChunkCountProgressInfo(recursive?: boolean): ProgressInfo;
-    selectTabletstaticMemoryInfo(recursive?: boolean): ProgressInfo;
+    selectTabletStaticMemoryInfo(recursive?: boolean): ProgressInfo;
 }
 
 interface ProgressInfo {

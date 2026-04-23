@@ -24,10 +24,10 @@ import {getPath, getType} from '../../../../store/selectors/navigation';
 
 import {
     getActiveHistogram,
-    getNavigationTabletsLoadingStatus,
-    getTablets,
-    hasReplicationData,
     selectHistogram,
+    selectIsReplicationDataExist,
+    selectNavigationTabletsLoadingStatus,
+    selectTablets,
 } from '../../../../store/selectors/navigation/tabs/tablets';
 
 import {NAVIGATION_TABLETS_TABLE_ID} from '../../../../constants/navigation/tabs/tablets';
@@ -56,8 +56,8 @@ import {isFinalLoadingStatus} from '../../../../utils/utils';
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
 import {Host} from '../../../../containers/Host/Host';
 import {
-    getTabletsByName,
-    getTabletsMax,
+    selectTabletsByName,
+    selectTabletsMax,
 } from '../../../../store/selectors/navigation/tabs/tablets-ts';
 import {getProgressBarColorByIndex} from '../../../../constants/colors';
 
@@ -272,6 +272,11 @@ class Tablets extends Component {
         );
     }
 
+    static renderReplicationLag(item, columnName) {
+        const replicationLag = item[columnName];
+        return hammer.format['TimeDuration'](replicationLag);
+    }
+
     static renderReplicationMode(item, columnName) {
         const replicationMode = item[columnName];
         return typeof replicationMode !== 'undefined' ? (
@@ -470,8 +475,8 @@ class Tablets extends Component {
                 dynamic_delete: asNumber,
                 unmerged_row_read_rate: asNumber,
                 merged_row_read_rate: asNumber,
-                replication_lag_time: asNumber,
-                replication_mode: this.renderReplicationMode,
+                replication_lag_time: Tablets.renderReplicationLag,
+                replication_mode: Tablets.renderReplicationMode,
             },
             computeKey(item) {
                 return item.name || item.tablet_id;
@@ -648,18 +653,18 @@ const mapStateToProps = (state) => {
     let tablets;
     let maxByLevel = [];
     if (tabletsMode === 'by_host' || tabletsMode === 'by_cell') {
-        const data = getTabletsByName(state);
+        const data = selectTabletsByName(state);
         tablets = data.items;
         maxByLevel = data.maxByLevel;
     } else {
-        tablets = getTablets(state);
-        maxByLevel = [getTabletsMax(state)];
+        tablets = selectTablets(state);
+        maxByLevel = [selectTabletsMax(state)];
     }
 
     const histogram = selectHistogram(state);
     const activeHistogram = getActiveHistogram(state);
     const type = getType(state);
-    const hasReplication = hasReplicationData(state);
+    const hasReplication = selectIsReplicationDataExist(state);
 
     return {
         loading,
@@ -693,7 +698,7 @@ const mapDispatchToProps = {
 const TabletsConnected = connect(mapStateToProps, mapDispatchToProps)(Tablets);
 
 export default function TabletsWithRum() {
-    const loadState = useSelector(getNavigationTabletsLoadingStatus);
+    const loadState = useSelector(selectNavigationTabletsLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.NAVIGATION_TAB_TABLETS,
