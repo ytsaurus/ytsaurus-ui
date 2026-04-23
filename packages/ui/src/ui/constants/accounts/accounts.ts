@@ -118,7 +118,7 @@ export const ACCOUNT_RESOURCE_TYPES_DESCRIPTION = {
     [AccountResourceName.TABLET_STATIC_MEMORY]: {
         format: 'Bytes' as const,
         getInfo: (account: AccountSelector, recursive?: boolean): AccountResourceInfo => {
-            return account?.getTabletStaticMemoryInfo(recursive) || {};
+            return account?.selectTabletstaticMemoryInfo(recursive) || {};
         },
     },
     [AccountResourceName.MASTER_MEMORY]: {

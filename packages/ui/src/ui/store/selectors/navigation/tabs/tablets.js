@@ -13,13 +13,43 @@ export const getTabletsMode = (state) => state.navigation.tabs.tablets.tabletsMo
 const getRawTablets = (state) => state.navigation.tabs.tablets.tablets;
 const getRawReplicationLagTimes = (state) => state.navigation.tabs.tablets.replicationLagTimes;
 
-const getPreparedReplicationLagTimes = createSelector([getRawReplicationLagTimes], (items) => {
-    const res = prepareDataForColumns(items);
-    return res;
-});
+/** @returns { OldSortState } */
+export const getTabletsSortState = (state) => state.tables[NAVIGATION_TABLETS_TABLE_ID];
+const getTabletsFilter = (state) => state.navigation.tabs.tablets.tabletsFilter;
+export const getActiveHistogram = (state) => state.navigation.tabs.tablets.histogramType;
 
-const getReplicationLagTimesMap = createSelector(
-    [getPreparedReplicationLagTimes],
+const selectSortedReplicationLagTimes = createSelector(
+    [getRawReplicationLagTimes, getTabletsSortState],
+    (rawTablets, sortState) => hammer.utils.sort(rawTablets, sortState, tableItems),
+);
+
+const selectFilteredReplicationLagTimes = createSelector(
+    [selectSortedReplicationLagTimes, getTabletsFilter],
+    (sortedTablets, tabletsFilter) =>
+        hammer.filter.filter({
+            data: sortedTablets,
+            input: tabletsFilter,
+            factors: [
+                function (item) {
+                    return tableItems['replication_lag_time']?.get?.(item);
+                },
+                function (item) {
+                    return tableItems['replication_mode']?.get?.(item);
+                },
+            ],
+        }),
+);
+
+const selectPreparedReplicationLagTimes = createSelector(
+    [selectFilteredReplicationLagTimes],
+    (items) => {
+        const res = prepareDataForColumns(items);
+        return res;
+    },
+);
+
+const selectReplicationLagTimesMap = createSelector(
+    [selectPreparedReplicationLagTimes],
     (replicationLagTimes) => {
         const map = new Map();
         replicationLagTimes.forEach((item) => {
@@ -32,18 +62,13 @@ const getReplicationLagTimesMap = createSelector(
     },
 );
 
-/** @returns { OldSortState } */
-export const getTabletsSortState = (state) => state.tables[NAVIGATION_TABLETS_TABLE_ID];
-const getTabletsFilter = (state) => state.navigation.tabs.tablets.tabletsFilter;
-export const getActiveHistogram = (state) => state.navigation.tabs.tablets.histogramType;
-
-const getSortedTablets = createSelector(
+const selectSortedTablets = createSelector(
     [getRawTablets, getTabletsSortState],
     (rawTablets, sortState) => hammer.utils.sort(rawTablets, sortState, tableItems),
 );
 
-const getFilteredTablets = createSelector(
-    [getSortedTablets, getTabletsFilter],
+const selectFilteredTablets = createSelector(
+    [selectSortedTablets, getTabletsFilter],
     (sortedTablets, tabletsFilter) =>
         hammer.filter.filter({
             data: sortedTablets,
@@ -65,14 +90,14 @@ const getFilteredTablets = createSelector(
         }),
 );
 
-export const getPreparedDataForColumns = createSelector([getFilteredTablets], (items) => {
+export const selectPreparedDataForColumns = createSelector([selectFilteredTablets], (items) => {
     /** @type {Array<TabletInfo>} */
     const res = prepareDataForColumns(items);
     return res;
 });
 
-const getMergedPreparedTablets = createSelector(
-    [getPreparedDataForColumns, getReplicationLagTimesMap],
+const selectMergedPreparedTablets = createSelector(
+    [selectPreparedDataForColumns, selectReplicationLagTimesMap],
     (tablets, replicationLagMap) => {
         return tablets.map((tablet) => {
             const replicationData = replicationLagMap.get(tablet.tablet_id);
@@ -88,16 +113,19 @@ const getMergedPreparedTablets = createSelector(
     },
 );
 
-export const hasReplicationData = createSelector([getMergedPreparedTablets], (tablets) => {
-    if (!tablets || tablets.length === 0) {
-        return false;
-    }
-    return tablets.some(
-        (tablet) => tablet && (tablet.replication_lag_time || Boolean(tablet.replication_mode)),
-    );
-});
+export const selectIsReplicationDataExist = createSelector(
+    [selectMergedPreparedTablets],
+    (tablets) => {
+        if (!tablets || tablets.length === 0) {
+            return false;
+        }
+        return tablets.some(
+            (tablet) => tablet && (tablet.replication_lag_time || Boolean(tablet.replication_mode)),
+        );
+    },
+);
 
-export const getTablets = createSelector(getMergedPreparedTablets, (filteredTablets) => {
+export const selectTablets = createSelector(selectMergedPreparedTablets, (filteredTablets) => {
     const aggregation = prepareAggregation(filteredTablets);
     return [aggregation, ...filteredTablets];
 });
@@ -120,7 +148,7 @@ export const selectHistogram = createSelector(
     (histograms, activeHistogram) => histograms[activeHistogram],
 );
 
-export const getNavigationTabletsLoadingStatus = createSelector(
+export const selectNavigationTabletsLoadingStatus = createSelector(
     [
         (state) => state.navigation.tabs.tablets.loading,
         (state) => state.navigation.tabs.tablets.loaded,

@@ -5,7 +5,7 @@ import reduce_ from 'lodash/reduce';
 import toArray_ from 'lodash/toArray';
 
 import {createSelector} from 'reselect';
-import {getPreparedDataForColumns, getTabletsMode, getTabletsSortState} from './tablets';
+import {getTabletsMode, getTabletsSortState, selectPreparedDataForColumns} from './tablets';
 import {
     type FieldDescr,
     type TreeItem,
@@ -16,7 +16,7 @@ import {
 import {type OldSortState, type TypedKeys} from '../../../../types';
 import {type RootState} from '../../../reducers';
 
-export const getTabletsExpandedHosts = (state: RootState): Array<string> =>
+export const selectTabletsExpandedHosts = (state: RootState): Array<string> =>
     state.navigation.tabs.tablets.expandedHosts;
 
 interface TabletInfo {
@@ -63,7 +63,7 @@ function addHostItem(
     });
 }
 
-export const getTabletsMax = createSelector([getPreparedDataForColumns], (items) => {
+export const selectTabletsMax = createSelector([selectPreparedDataForColumns], (items) => {
     const max = {
         unmerged_row_count: 0,
         uncompressed_data_size: 0,
@@ -78,8 +78,8 @@ export const getTabletsMax = createSelector([getPreparedDataForColumns], (items)
     return max;
 });
 
-const getTabletsByNameRoot = createSelector(
-    [getPreparedDataForColumns, getTabletsSortState, getTabletsMode],
+const selectTabletsByNameRoot = createSelector(
+    [selectPreparedDataForColumns, getTabletsSortState, getTabletsMode],
     (sortedAndFilteredItems, sortState, mode) => {
         const groupByKey = mode === 'by_host' ? 'cell_leader_address' : 'cell_id';
 
@@ -134,8 +134,8 @@ const getTabletsByNameRoot = createSelector(
     },
 );
 
-export const getTabletsByName = createSelector(
-    [getTabletsByNameRoot, getTabletsExpandedHosts],
+export const selectTabletsByName = createSelector(
+    [selectTabletsByNameRoot, selectTabletsExpandedHosts],
     ({root, maxByLevel}, expandedHosts) => {
         const expanded = new Set(expandedHosts);
         const children = map_(root.children, (item) => {

@@ -69,9 +69,9 @@ import {
 import {getSystemPreparedState, systemParams} from '../store/reducers/system/url-mapping';
 import {
     bundlesPrometheusParams,
-    getTabletsBundlesAclPreparedState,
-    getTabletsBundlesPreparedState,
-    getTabletsCellsPreparedState,
+    selectTabletsBundlesAclPreparedState,
+    selectTabletsBundlesPreparedState,
+    selectTabletsCellsPreparedState,
     tabletsAllBundlesParams,
     tabletsBundlesAclParams,
     tabletsBundlesParams,
@@ -170,17 +170,17 @@ export const getMainLocations = (): Array<[string, PathParameters]> => [
 
     [
         `/*/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.TABLET_CELLS}`,
-        [tabletsTabletCellsParams, getTabletsCellsPreparedState],
+        [tabletsTabletCellsParams, selectTabletsCellsPreparedState],
     ],
 
     [
         `/*/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.ACL}`,
-        [tabletsBundlesAclParams, getTabletsBundlesAclPreparedState],
+        [tabletsBundlesAclParams, selectTabletsBundlesAclPreparedState],
     ],
 
-    [`/*/${Page.TABLET_CELL_BUNDLES}`, [tabletsAllBundlesParams, getTabletsBundlesPreparedState]],
+    [`/*/${Page.TABLET_CELL_BUNDLES}`, [tabletsAllBundlesParams, selectTabletsBundlesPreparedState]],
     [`/*/${Page.TABLET_CELL_BUNDLES}/monitor`, [bundlesPrometheusParams]],
-    [`/*/${Page.TABLET_CELL_BUNDLES}/*`, [tabletsBundlesParams, getTabletsBundlesPreparedState]],
+    [`/*/${Page.TABLET_CELL_BUNDLES}/*`, [tabletsBundlesParams, selectTabletsBundlesPreparedState]],
 
     [
         `/*/${Page.CHAOS_CELL_BUNDLES}/${TabletsTab.CHAOS_CELLS}`,
