@@ -4,12 +4,16 @@ import isEmpty_ from 'lodash/isEmpty';
 import map_ from 'lodash/map';
 import some_ from 'lodash/some';
 
+import copyToClipboard from 'copy-to-clipboard';
+import {DropdownMenu, Icon as UIKitIcon} from '@gravity-ui/uikit';
+import {CircleQuestion} from '@gravity-ui/icons';
+
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import block from 'bem-cn-lite';
 
 import Icon from '../../../../components/Icon/Icon';
 import Button from '../../../../components/Button/Button';
-import {ClipboardButton} from '@ytsaurus/components';
+import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 
 import {getPath} from '../../../../store/selectors/navigation';
 import {inTrash} from '../../../../utils/navigation/restore-object';
@@ -24,8 +28,6 @@ import {
     isSelected,
 } from '../../../../store/selectors/navigation/content/map-node';
 import {showNavigationAttributesEditor} from '../../../../store/actions/navigation/modals/attributes-editor';
-import {DropdownMenu} from '@gravity-ui/uikit';
-import copyToClipboard from 'copy-to-clipboard';
 import {
     showTableMergeModal,
     showTableSortModal,
@@ -39,6 +41,8 @@ import './MultipleActions.scss';
 
 const b = block('multiple-actions');
 
+const MAX_ITEMS_PER_REQUEST = 1000;
+
 export default function MultipleActions(props: {className?: string}) {
     const {className} = props;
 
@@ -46,7 +50,7 @@ export default function MultipleActions(props: {className?: string}) {
     const path = useSelector(getPath);
     const isOneSelected = useSelector(isSelected);
     const selectedNodes = useSelector(getSelectedNodes);
-    const isTooLarge = selectedNodes.length > 1000;
+    const isTooLarge = selectedNodes.length > MAX_ITEMS_PER_REQUEST;
 
     const dynTablesActions = useSelector(getSelectedNodesAllowedDynTablesActions);
 
@@ -58,11 +62,11 @@ export default function MultipleActions(props: {className?: string}) {
         dispatch(openDeleteModal(selectedNodes, true));
     }, [dispatch, selectedNodes]);
 
-    const allowModifyActions = !isOneSelected || isTooLarge;
+    const disableActions = !isOneSelected || isTooLarge;
 
     const dropdownButton = useMemo(
-        () => <Button disabled={allowModifyActions}>More actions</Button>,
-        [isOneSelected, isTooLarge],
+        () => <Button disabled={disableActions}>More actions</Button>,
+        [disableActions],
     );
 
     const restoreMoveCopy = useMemo(() => {
@@ -129,7 +133,7 @@ export default function MultipleActions(props: {className?: string}) {
                 },
             },
         ];
-    }, [selectedNodes]);
+    }, [selectedNodes, dispatch]);
 
     const editItem = useMemo(() => {
         return {
@@ -140,7 +144,7 @@ export default function MultipleActions(props: {className?: string}) {
                 dispatch(showNavigationAttributesEditor(paths));
             },
         };
-    }, [selectedNodes]);
+    }, [selectedNodes, dispatch]);
 
     const mergeSortSection = useMemo(() => {
         const allowSortMerge = !some_(selectedNodes, (node) => {
@@ -237,7 +241,7 @@ export default function MultipleActions(props: {className?: string}) {
             transferItem,
             dynTablesSection,
         ].filter((e) => e.length);
-    }, [restoreMoveCopy, editItem, mergeSortSection]);
+    }, [restoreMoveCopy, transferItem, dynTablesSection, editItem, mergeSortSection]);
 
     const onCopyPathClick = React.useCallback(() => {
         const res = map_(selectedNodes, 'path').join('\n');
@@ -250,16 +254,29 @@ export default function MultipleActions(props: {className?: string}) {
 
     return (
         <span className={b(null, className)}>
-            <span className={b('item')}>
-                <Button
-                    title="Delete selected nodes"
-                    disabled={allowModifyActions}
-                    onClick={handleDeleteClick}
+            {isTooLarge && (
+                <Tooltip
+                    className={b('item')}
+                    content={
+                        <span>
+                            It is not allowed to handle more than {MAX_ITEMS_PER_REQUEST} items per
+                            request. Use SHIFT+Click to select ranges.
+                        </span>
+                    }
+                    useFlex
                 >
+                    <span>Too many items selected</span>
+                    &nbsp;
+                    <UIKitIcon data={CircleQuestion} />
+                </Tooltip>
+            )}
+
+            {!isTooLarge && (
+                <Button title="Delete selected nodes" onClick={handleDeleteClick}>
                     <Icon awesome="trash-alt" />
                     &nbsp;Remove selected
                 </Button>
-            </span>
+            )}
 
             <span className={b('item')}>
                 <ClipboardButton
@@ -269,13 +286,11 @@ export default function MultipleActions(props: {className?: string}) {
                 />
             </span>
 
-            <span className={b('item')}>
-                <DropdownMenu
-                    disabled={allowModifyActions}
-                    switcher={dropdownButton}
-                    items={items}
-                />
-            </span>
+            {!disableActions && (
+                <span className={b('item')}>
+                    <DropdownMenu switcher={dropdownButton} items={items} />
+                </span>
+            )}
 
             <span className={b('item')}>
                 <ClickableText onClick={handleClearAll}>Clear all</ClickableText>
