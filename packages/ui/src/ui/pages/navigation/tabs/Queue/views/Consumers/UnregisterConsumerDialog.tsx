@@ -32,7 +32,7 @@ export function UnregisterConsumerDialog() {
                     extras: {
                         children: (
                             <Text variant={'body-2'}>
-                                Are you shure you want to unregister consumer?
+                                Are you sure you want to unregister consumer?
                             </Text>
                         ),
                     },

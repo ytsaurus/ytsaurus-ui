@@ -56,7 +56,7 @@ export function ExportsEdit({
                         extras: {
                             children: (
                                 <Text variant="body-2">
-                                    Are you shure you want to delete {prevConfig.export_name}?
+                                    Are you sure you want to delete {prevConfig.export_name}?
                                 </Text>
                             ),
                         },
