@@ -44,10 +44,6 @@ const ephemeralState = {
 
     nextOffsetValue: null,
     moveBackward: false,
-
-    // yql-kit
-    validColumns: [],
-    queryPreparing: false,
 };
 
 const persistedState = {
