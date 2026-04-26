@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import block from 'bem-cn-lite';
 
-import {ModalWrapper as ModalImpl} from '../ModalWrapper/ModalWrapper';
+import {ModalWrapper} from '../ModalWrapper/ModalWrapper';
 import Icon from '../Icon/Icon';
 
 import withHandledScrollBar from '../../hocs/components/Modal/withHandledScrollBar';
@@ -151,7 +151,7 @@ class Modal extends Component<ModalProps> {
     render() {
         const {visible, onOutsideClick, onTransitionInComplete, size, className} = this.props;
         return (
-            <ModalImpl
+            <ModalWrapper
                 open={visible}
                 onClose={onOutsideClick}
                 onTransitionInComplete={onTransitionInComplete}
@@ -162,7 +162,7 @@ class Modal extends Component<ModalProps> {
                     {this.renderErrors()}
                     {this.renderFooter()}
                 </div>
-            </ModalImpl>
+            </ModalWrapper>
         );
     }
 }
