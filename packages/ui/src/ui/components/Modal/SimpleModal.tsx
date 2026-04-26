@@ -4,7 +4,7 @@ import block from 'bem-cn-lite';
 import Icon from '../Icon/Icon';
 
 import {Button, Loader} from '@gravity-ui/uikit';
-import {ModalWrapper as ModalImpl} from '../ModalWrapper/ModalWrapper';
+import {ModalWrapper} from '../ModalWrapper/ModalWrapper';
 
 import withHandledScrollBar from '../../hocs/components/Modal/withHandledScrollBar';
 
@@ -86,13 +86,13 @@ class SimpleModal extends Component<SimpleModalProps> {
         const {visible, onOutsideClick, size, className, wrapperClassName} = this.props;
         return (
             visible && (
-                <ModalImpl className={className} open={visible} onClose={onOutsideClick}>
+                <ModalWrapper className={className} open={visible} onClose={onOutsideClick}>
                     <div className={b('wrapper', {size}, wrapperClassName)}>
                         {this.renderHeader()}
                         {this.renderContent()}
                         {this.renderFooter()}
                     </div>
-                </ModalImpl>
+                </ModalWrapper>
             )
         );
     }
