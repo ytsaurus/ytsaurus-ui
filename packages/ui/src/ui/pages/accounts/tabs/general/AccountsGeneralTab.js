@@ -752,7 +752,6 @@ class AccountsGeneralTab extends Component {
         return (
             editableAccount.name && (
                 <Modal
-                    onOutsideClick={closeEditorModal}
                     onCancel={closeEditorModal}
                     visible={showEditor}
                     content={<Editor account={editableAccount} />}

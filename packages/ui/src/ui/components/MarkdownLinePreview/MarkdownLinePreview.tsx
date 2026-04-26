@@ -51,7 +51,6 @@ export function MarkdownLinePreview({text, title, className, allowHTML = false}:
                 <Modal
                     visible={visible}
                     title={title}
-                    onOutsideClick={hideModal}
                     onCancel={hideModal}
                     footer={false}
                     content={

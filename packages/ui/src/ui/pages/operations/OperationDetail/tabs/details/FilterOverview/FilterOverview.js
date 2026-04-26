@@ -43,7 +43,6 @@ function FilterOverview({type, filters, typedFilters, visible, handleShow, handl
             </Button>
 
             <Modal
-                onOutsideClick={handleClose}
                 onCancel={handleClose}
                 content={modalContent}
                 visible={visible}

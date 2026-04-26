@@ -19,7 +19,6 @@ export const NewQueryPromt = (props: {
             content={i18n('confirm_new-query')}
             onCancel={props.cancel}
             onConfirm={props.confirm}
-            onOutsideClick={props.cancel}
             visible={props.visible}
         />
     );

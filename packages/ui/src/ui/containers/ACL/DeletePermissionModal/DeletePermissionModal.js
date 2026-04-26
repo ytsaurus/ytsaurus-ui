@@ -84,7 +84,6 @@ export default class DeletePermissionModal extends Component {
                 confirmText={i18n('action_delete')}
                 onCancel={this.onClose}
                 title={i18n('title_delete-permissions')}
-                onOutsideClick={this.onClose}
                 isConfirmDisabled={this.checkConfirmDisabled}
                 content={
                     <div className={block()}>

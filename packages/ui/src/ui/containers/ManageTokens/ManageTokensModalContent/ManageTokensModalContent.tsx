@@ -162,7 +162,6 @@ const RevokeToken = (props: {handleClickRemoveToken: (index: number) => void; in
                 content="Are you sure you want to revoke the token? This action CANNOT be undone."
                 onCancel={handleCancel}
                 onConfirm={handleConfirm}
-                onOutsideClick={handleCancel}
                 visible={visible}
             />
         </>

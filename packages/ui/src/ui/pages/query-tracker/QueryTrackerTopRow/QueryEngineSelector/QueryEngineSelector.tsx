@@ -107,7 +107,6 @@ export const QueryEngineSelector: FC<Props> = ({isDesktop, className, onChange})
                 visible={modalVisibility}
                 onCancel={handleClose}
                 onConfirm={handleConfirm}
-                onOutsideClick={handleClose}
             />
         </>
     );

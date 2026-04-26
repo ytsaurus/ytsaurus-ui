@@ -21,7 +21,6 @@ interface SimpleModalProps {
     onCancel: () => void;
     children?: React.ReactNode;
     footerContent?: React.ReactNode;
-    onOutsideClick?: () => void;
     className?: string;
     wrapperClassName?: string;
 }
@@ -83,10 +82,18 @@ class SimpleModal extends Component<SimpleModalProps> {
     }
 
     render() {
-        const {visible, onOutsideClick, size, className, wrapperClassName} = this.props;
+        const {visible, onCancel, size, className, wrapperClassName} = this.props;
         return (
             visible && (
-                <ModalWrapper className={className} open={visible} onClose={onOutsideClick}>
+                <ModalWrapper
+                    className={className}
+                    open={visible}
+                    onOpenChange={(open) => {
+                        if (!open) {
+                            onCancel();
+                        }
+                    }}
+                >
                     <div className={b('wrapper', {size}, wrapperClassName)}>
                         {this.renderHeader()}
                         {this.renderContent()}
