@@ -30,7 +30,6 @@ interface ModalProps {
     content?: React.ReactNode;
     footer?: boolean;
     footerContent?: React.ReactNode;
-    onOutsideClick?: () => void;
     contentClassName?: string;
     onTransitionInComplete?: () => void;
 }
@@ -149,12 +148,16 @@ class Modal extends Component<ModalProps> {
     }
 
     render() {
-        const {visible, onOutsideClick, onTransitionInComplete, size, className} = this.props;
+        const {visible, onCancel, onTransitionInComplete, size, className} = this.props;
         return (
             <ModalWrapper
                 open={visible}
-                onClose={onOutsideClick}
                 onTransitionInComplete={onTransitionInComplete}
+                onOpenChange={(open) => {
+                    if (!open) {
+                        onCancel();
+                    }
+                }}
             >
                 <div className={b('wrapper', {size}, className)}>
                     {this.renderHeader()}

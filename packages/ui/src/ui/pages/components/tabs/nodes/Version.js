@@ -50,7 +50,7 @@ class Version extends Component {
                 <Link theme="ghost" onClick={handleShow}>
                     View
                 </Link>
-                <SimpleModal visible={visible} onCancel={handleClose} onOutsideClick={handleClose}>
+                <SimpleModal visible={visible} onCancel={handleClose}>
                     <YTErrorBlock error={error} />
                 </SimpleModal>
             </div>

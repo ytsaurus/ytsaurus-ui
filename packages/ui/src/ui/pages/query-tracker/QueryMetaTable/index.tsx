@@ -95,7 +95,6 @@ export default function QueryMetaTable({query, className}: MetaTableProps) {
             <SimpleModal
                 visible={modalOpened}
                 disableBodyScrollLock
-                onOutsideClick={() => setModalOpened(false)}
                 onCancel={() => setModalOpened(false)}
             >
                 {selectedOption && <Yson value={selectedOption} settings={{}}></Yson>}

@@ -95,7 +95,6 @@ class DetailedJobsCounter extends Component {
                 </Link>
                 {this.renderCount(type, primaryValue, secondaryValue)}
                 <Modal
-                    onOutsideClick={handleClose}
                     onCancel={handleClose}
                     content={modalContent}
                     visible={visible}

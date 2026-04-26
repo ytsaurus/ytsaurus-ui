@@ -146,12 +146,7 @@ class ActionModal extends React.Component {
 
         if (status === MODAL_STATES.FAILED) {
             return (
-                <SimpleModal
-                    visible
-                    title={i18n('title_failure')}
-                    onCancel={this.dismissAction}
-                    onOutsideClick={this.dismissAction}
-                >
+                <SimpleModal visible title={i18n('title_failure')} onCancel={this.dismissAction}>
                     <p>{errorMessage}</p>
                     <YTErrorBlock error={error} />
                 </SimpleModal>
@@ -168,7 +163,6 @@ class ActionModal extends React.Component {
                     title={i18n('title_confirmation')}
                     confirmText={i18n('button_confirm')}
                     onCancel={this.dismissAction}
-                    onOutsideClick={this.dismissAction}
                     loading={status === MODAL_STATES.PENDING}
                     onConfirm={this.confirmAction}
                     content={
