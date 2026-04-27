@@ -145,7 +145,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/type-is": "^1.6.3",
     "@vitejs/plugin-react": "^4.6.0",
-    "@ytsaurus/components": "^0.2.1",
+    "@ytsaurus/components": "https://ytsaurus-ui-test-results.s3-website.yandex.net/ytsaurus-components-0.2.1.tgz",
     "bem-cn-lite": "^4.1.0",
     "bignumber.js": "^9.1.2",
     "colord": "^2.9.1",
