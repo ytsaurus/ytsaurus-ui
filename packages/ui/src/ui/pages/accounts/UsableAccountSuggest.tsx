@@ -6,6 +6,7 @@ import {useSelector} from '../../store/redux-hooks';
 import {showErrorPopup} from '../../utils/utils';
 import {YTApiId, ytApiV3Id} from '../../rum/rum-wrap-api';
 import {toaster} from '../../utils/toaster';
+import i18n from './i18n';
 
 export function UsableAccountSuggest(props: DialogControlProps<string | undefined>) {
     const {onChange, placeholder, value} = props;
@@ -22,9 +23,9 @@ export function UsableAccountSuggest(props: DialogControlProps<string | undefine
                 toaster.add({
                     name: 'usable_accounts',
                     theme: 'danger',
-                    title: 'Failed to load usable accounts',
+                    title: i18n('alert_failed-to-load-usable-accounts'),
                     content: e?.message,
-                    actions: [{label: ' Details', onClick: () => showErrorPopup(e)}],
+                    actions: [{label: i18n('action_details'), onClick: () => showErrorPopup(e)}],
                     autoHiding: false,
                 });
             });

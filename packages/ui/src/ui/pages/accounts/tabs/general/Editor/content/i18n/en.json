@@ -1,0 +1,19 @@
+{
+    "field_chunks": "Chunks",
+    "field_nodes": "Nodes",
+    "field_parent": "Parent",
+    "field_abc-service": "ABC Service",
+    "field_abc-service-placeholder": "Select ABC service...",
+    "action_show-all": "Show all",
+    "action_show-defined-only": "Show defined only",
+    "action_delete": "Delete",
+    "alert_delete-success": "Successfully deleted {{name}}",
+    "alert_delete-error": "Failed to delete account: {{name}}",
+    "confirm_resources-in-use": "Please make sure the account is empty. The following resources are still used by the account or its children:",
+    "confirm_delete-account": "Delete account {{name}}",
+    "field_tablets": "Tablets",
+    "field_tablet-static-memory": "Tablet static memory",
+    "context_tablet-accounting-moved": "Tablet resource accounting (tablet count and tablet static memory) has been moved from accounts to ",
+    "action_tablet-cell-bundles": "tablet cell bundles",
+    "action_more-details": "More details"
+}

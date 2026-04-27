@@ -2,6 +2,8 @@ import cn from 'bem-cn-lite';
 import React from 'react';
 import {type ConnectedProps, connect} from 'react-redux';
 
+import i18n from './i18n';
+
 import {type DialogField, type FormApi, YTDFDialog} from '../../../../../components/Dialog';
 import {closeCreateModal} from '../../../../../store/actions/accounts/editor';
 import {loadEditedAccount} from '../../../../../store/actions/accounts/accounts';
@@ -41,7 +43,7 @@ class AccountCreateDialog extends React.Component<ConnectedProps<typeof connecto
                 className={block()}
                 visible={visible}
                 onClose={this.onClose}
-                headerProps={{title: 'Create account'}}
+                headerProps={{title: i18n('title_create-account')}}
                 onAdd={this.onSubmit}
                 pristineSubmittable
                 initialValues={{
@@ -58,14 +60,14 @@ class AccountCreateDialog extends React.Component<ConnectedProps<typeof connecto
                               {
                                   name: 'abcService',
                                   type: 'abc-control',
-                                  caption: 'Service in ABC',
+                                  caption: i18n('field_abc-service'),
                                   required: true,
                                   visibilityCondition: {
                                       when: 'parentAccount',
                                       isActive: isRootAccount,
                                   },
                                   extras: {
-                                      placeholder: 'Enter ABC service name',
+                                      placeholder: i18n('field_abc-service-placeholder'),
                                   },
                               },
                           ]
@@ -73,20 +75,20 @@ class AccountCreateDialog extends React.Component<ConnectedProps<typeof connecto
                     {
                         name: 'account',
                         type: 'text',
-                        caption: 'Account name',
+                        caption: i18n('field_account-name'),
                         required: true,
                         extras: {
-                            placeholder: 'Enter account name',
+                            placeholder: i18n('field_account-name-placeholder'),
                             className: block('name'),
                         },
                     },
                     {
                         name: 'parentAccount',
                         type: 'accountsSuggest',
-                        caption: 'Parent account',
+                        caption: i18n('field_parent-account'),
                         required: true,
                         extras: {
-                            placeholder: 'Enter parent account name',
+                            placeholder: i18n('field_parent-account-placeholder'),
                             allowRootAccount: isAdmin,
                         },
                     },
@@ -95,10 +97,10 @@ class AccountCreateDialog extends React.Component<ConnectedProps<typeof connecto
                               {
                                   name: 'responsibles',
                                   type: 'acl-subjects',
-                                  caption: 'Responsible users',
+                                  caption: i18n('field_responsible-users'),
                                   required: true,
                                   extras: {
-                                      placeholder: 'Enter name or login',
+                                      placeholder: i18n('field_responsible-users-placeholder'),
                                       allowedTypes: ['users'],
                                   },
                               },
@@ -109,7 +111,7 @@ class AccountCreateDialog extends React.Component<ConnectedProps<typeof connecto
                               {
                                   name: 'createHome',
                                   type: 'tumbler' as const,
-                                  caption: 'Create home directory',
+                                  caption: i18n('field_create-home-directory'),
                               },
                           ]
                         : []),

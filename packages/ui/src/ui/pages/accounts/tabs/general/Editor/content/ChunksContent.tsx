@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import AccountQuota from '../../../../AccountQuota/AccountQuota';
 import {AccountResourceName} from '../../../../../../constants/accounts/accounts';
 import AccountTransferQuotaMessage from '../AccountTransferQuotaMessage';
+import i18n from './i18n';
 
 interface Props {
     account: {
@@ -17,7 +18,7 @@ export default class ChunksContent extends Component<Props> {
             <div className="elements-section">
                 <AccountTransferQuotaMessage />
                 <AccountQuota
-                    title={'Chunks'}
+                    title={i18n('field_chunks')}
                     currentAccount={account.name}
                     type={AccountResourceName.CHUNK_COUNT}
                 />

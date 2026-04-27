@@ -10,6 +10,7 @@ import {selectActiveAccount} from '../../../../../store/selectors/accounts/accou
 import {selectCurrentClusterConfig} from '../../../../../store/selectors/global/cluster';
 import {selectIsAdmin} from '../../../../../store/selectors/global/is-developer';
 import UIFactory from '../../../../../UIFactory';
+import i18n from './i18n';
 
 interface Props {
     className?: string;
@@ -35,11 +36,11 @@ function AccountCreate({className}: Props) {
                 <Flex gap={1} alignItems="center">
                     <Button
                         view="action"
-                        title="Create account"
+                        title={i18n('title_create-account')}
                         onClick={() => dispatch(openCreateModal())}
                         disabled={disableCreate}
                     >
-                        Create account
+                        {i18n('title_create-account')}
                     </Button>
                     {disableCreate && Boolean(disableCreateNotice) && <Icon data={CircleInfo} />}
                 </Flex>

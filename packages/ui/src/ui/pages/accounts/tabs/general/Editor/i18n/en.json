@@ -1,0 +1,15 @@
+{
+    "title_create-account": "Create account",
+    "field_abc-service": "Service in ABC",
+    "field_abc-service-placeholder": "Enter ABC service name",
+    "field_account-name": "Account name",
+    "field_account-name-placeholder": "Enter account name",
+    "field_parent-account": "Parent account",
+    "field_parent-account-placeholder": "Enter parent account name",
+    "field_responsible-users": "Responsible users",
+    "field_responsible-users-placeholder": "Enter name or login",
+    "field_create-home-directory": "Create home directory",
+    "confirm_apply-changes": "Apply changes?",
+    "action_yes": "Yes",
+    "action_cancel": "Cancel"
+}

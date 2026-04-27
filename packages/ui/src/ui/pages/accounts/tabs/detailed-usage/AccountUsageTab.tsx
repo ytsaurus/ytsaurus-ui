@@ -12,6 +12,7 @@ import {useSelector} from '../../../../store/redux-hooks';
 import {getAccountUsageViewType} from '../../../../store/selectors/accounts/account-usage';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 import {useDisableMaxContentWidth} from '../../../../containers/MaxContentWidth';
+import i18n from './i18n';
 
 const block = cn('accounts');
 
@@ -24,8 +25,8 @@ function AccountDetailedUsageTab() {
     if (!account) {
         return (
             <NoContent
-                warning={"You don't have any selected accounts\n"}
-                hint={'Please choose one to display charts'}
+                warning={i18n('alert_no-selected-accounts')}
+                hint={i18n('context_choose-account')}
             />
         );
     }
