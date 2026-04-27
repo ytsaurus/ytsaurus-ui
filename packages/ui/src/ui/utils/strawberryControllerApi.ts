@@ -2,6 +2,7 @@ import axios, {type CancelToken} from 'axios';
 import {wrapApiPromiseByToaster} from './utils';
 import {type OptionsGroup} from '../components/Dialog/df-dialog-utils';
 import {QueryEngine} from '../../shared/constants/engines';
+import i18n from './i18n';
 
 export type WithResult<T> = {result: T};
 
@@ -139,7 +140,7 @@ const strawberryApi: StrawberryApiType = (
             skipSuccessToast: !successTitle,
             successTitle,
             skipErrorToast,
-            errorTitle: `'${action}' action failed`,
+            errorTitle: i18n('alert_action-failed', {action}),
         },
     ).then((response) => {
         return response.data;

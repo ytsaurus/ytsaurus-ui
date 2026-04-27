@@ -1,3 +1,5 @@
+import i18n from './i18n';
+
 const tableProps = {
     theme: 'light',
     size: 's',
@@ -23,22 +25,28 @@ const tableProps = {
             name: {
                 sort: false,
                 align: 'left',
-                name: 'name',
+                get caption() {
+                    return i18n('field_name');
+                },
             },
             live_preview: {
                 sort: false,
                 align: 'left',
-                name: 'live_preview',
+                caption: 'Live Preview',
             },
             filters: {
                 sort: false,
                 align: 'left',
-                name: 'filters',
+                get caption() {
+                    return i18n('field_filters');
+                },
             },
             tags: {
                 sort: false,
                 align: 'left',
-                name: 'tags',
+                get caption() {
+                    return i18n('field_tags');
+                },
             },
         },
     },

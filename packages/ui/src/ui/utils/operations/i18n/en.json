@@ -1,0 +1,13 @@
+{
+    "alert_operation-aborted": "Operation was successfully aborted",
+    "confirm_abort-operation": "Operation will be aborted with all running jobs, this will cause losing some jobs' data. Are you sure you want to proceed?",
+    "alert_operation-completed": "Operation was successfully completed",
+    "confirm_complete-operation": "Operation will be immediately completed. Running jobs will be aborted, this will cause losing some jobs' data. Are you sure you want to proceed?",
+    "confirm_resume-operation": "Operation will be resumed.",
+    "alert_operation-resumed": "Operation was successfully resumed",
+    "confirm_suspend-operation": "Operation will be suspended.",
+    "alert_operation-suspended": "Operation was successfully suspended",
+    "field_running-jobs-strategy": "Running jobs strategy",
+    "value_abort-running-jobs": "Abort running jobs",
+    "value_retain-running-jobs": "Retain running jobs"
+}

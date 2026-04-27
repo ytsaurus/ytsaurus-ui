@@ -4,6 +4,7 @@ import {type KeysByDot} from '../../../../../shared/keys-by-dot';
 
 import ypath from '../../../../common/thor/ypath';
 import hammer from '../../../../common/hammer';
+import i18n from './i18n';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {
     type BundleControllerConfig,
@@ -157,13 +158,15 @@ export const createConfigurationList = (
 
 export const createParams = (formatType: 'Bytes' | 'vCores', total: number, used?: number) => {
     const [totalVal, totalPref] = hammer.format[formatType](total).split(' ');
-    const params: BundleParam[] = [{title: 'Total', value: totalVal, postfix: totalPref}];
+    const params: BundleParam[] = [
+        {title: i18n('field_total'), value: totalVal, postfix: totalPref},
+    ];
 
     if (typeof used !== 'undefined') {
         const difference = total - used;
         const [usedVal, usedPref] = hammer.format[formatType](difference).split(' ');
         params.push({
-            title: 'Free',
+            title: i18n('field_free'),
             value: usedVal === hammer.format.NO_VALUE ? '0' : usedVal,
             postfix: usedPref,
             type: difference >= 0 ? 'positive' : 'negative',
@@ -268,11 +271,11 @@ export const simpleBundleValidate = (v?: number | string) => {
     const toNumber = Number(v);
     let error;
     if (!Number.isFinite(toNumber)) {
-        error = 'Incorrect value';
+        error = i18n('alert_incorrect-value');
     }
 
     if (toNumber < 0) {
-        error = 'Must be greater than or equal to zero';
+        error = i18n('alert_must-be-gte-zero');
     }
 
     return error;
@@ -286,11 +289,11 @@ export const instanceCountValidate = ({
         let error: string | undefined;
 
         if (!Number.isFinite(number)) {
-            error = 'Incorrect value';
+            error = i18n('alert_incorrect-value');
         } else if (number < 0) {
-            error = 'Must be greater than or equal to zero';
+            error = i18n('alert_must-be-gte-zero');
         } else if (length > 0 && number % length !== 0) {
-            error = `Must be divisible by ${length}`;
+            error = i18n('alert_must-be-divisible', {length});
         }
 
         return error;

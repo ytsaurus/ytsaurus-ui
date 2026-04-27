@@ -1,32 +1,33 @@
-const completedHintText =
-    'Completed jobs — those which have finished successfully (i.e. consumed entire input and exited with zero exit code). Please note that due to hardware failures some jobs may be run more than once.';
-const abortedHintText =
-    'Aborted jobs — those with soft failure (i.e. resource overdraft or preemption). Please note that some of aborted jobs may be excluded from statistics.';
-const failedHintText =
-    'Failed jobs — those with hard failure (i.e. exited with non-zero exit code). Please note that some of failed jobs may be excluded from statistics.';
-const lostHintText =
-    'Lost jobs — those which have finished successfully but whose results were lost (typically due to hardware failures).';
+import i18n from './i18n';
 
 export const STATISTIC_STATE = {
     completed: {
         sort: false,
         align: 'right',
-        tooltipProps: {placement: 'bottom', content: completedHintText},
+        get tooltipProps() {
+            return {placement: 'bottom', content: i18n('context_completed-hint')};
+        },
     },
     aborted: {
         sort: false,
         align: 'right',
-        tooltipProps: {placement: 'bottom', content: abortedHintText},
+        get tooltipProps() {
+            return {placement: 'bottom', content: i18n('context_aborted-hint')};
+        },
     },
     failed: {
         sort: false,
         align: 'right',
-        tooltipProps: {placement: 'bottom', content: failedHintText},
+        get tooltipProps() {
+            return {placement: 'bottom', content: i18n('context_failed-hint')};
+        },
     },
     lost: {
         sort: false,
         align: 'right',
-        tooltipProps: {placement: 'bottom', content: lostHintText},
+        get tooltipProps() {
+            return {placement: 'bottom', content: i18n('context_lost-hint')};
+        },
     },
 };
 

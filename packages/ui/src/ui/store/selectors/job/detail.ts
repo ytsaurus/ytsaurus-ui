@@ -8,7 +8,7 @@ import sumBy_ from 'lodash/sumBy';
 import values_ from 'lodash/values';
 
 import {type RootState} from '../../reducers';
-import {PLEASE_PROCEED_TEXT} from '../../../utils/actions';
+import {TEXT} from '../../../utils/actions';
 import {type JobPipes, type PipesIO, type StatisticsIO} from '../../../types/operations/job';
 import {type Action as JobAction} from '../../../pages/job/JobActions/JobActions';
 
@@ -136,7 +136,7 @@ export const selectJobActions = createSelector(selectJob, (job) => {
             successMessage: 'Job was successfully aborted. Please wait',
             icon: 'redo',
             message: 'Job will be immediately aborted. Are you sure you want to proceed?',
-            confirmationText: PLEASE_PROCEED_TEXT,
+            confirmationText: TEXT.pleaseProceedText,
         });
 
         actions.push({
@@ -145,7 +145,7 @@ export const selectJobActions = createSelector(selectJob, (job) => {
             successMessage: 'Job was successfully aborted. Please wait',
             icon: 'hand-paper',
             message: 'Job will be immediately interrupted. Are you sure you want to proceed?',
-            confirmationText: PLEASE_PROCEED_TEXT,
+            confirmationText: TEXT.pleaseProceedText,
             optionMessage: 'Interruption timeout',
             optionValue: 10000,
             optionType: 'input',
@@ -169,7 +169,7 @@ export const selectJobActions = createSelector(selectJob, (job) => {
             icon: 'trash-bin',
             message:
                 'Job will be aborted, but considered as completed, output data of job will be lost. Do you want to proceed?',
-            confirmationText: PLEASE_PROCEED_TEXT,
+            confirmationText: TEXT.pleaseProceedText,
         });
     }
 

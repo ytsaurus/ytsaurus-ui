@@ -1,0 +1,12 @@
+{
+    "confirm_please-proceed": "Please proceed, I understand the risks.",
+    "title_success": "Success",
+    "title_failure": "Failure",
+    "title_name-failure": "{{name}} failure",
+    "action_details": "Details",
+    "action_view": "view",
+    "value_all": "All",
+    "value_state": "State: {{state}}",
+    "alert_load-default-pool-tree": "Failed to load {{path}}, 'physical' will be used as default.",
+    "alert_action-failed": "'{{action}}' action failed"
+}
