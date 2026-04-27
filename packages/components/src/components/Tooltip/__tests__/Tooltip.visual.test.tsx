@@ -1,4 +1,4 @@
-import {test} from '../../../playwright-components/core';
+import {test} from '../../../../playwright-components/core';
 
 import {Tooltip} from '../Tooltip';
 
