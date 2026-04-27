@@ -14,6 +14,7 @@ import {
     getDiskSpace,
     getNodesChunksTotals,
 } from '../../../../utils/accounts/accountsTotal';
+import i18n from './i18n';
 
 const b = block('accounts');
 
@@ -68,17 +69,28 @@ export default class AccountsTotal extends Component<Props> {
                 <table>
                     <thead>
                         <tr>
-                            <th className={b('disk-space-medium-type')}>Medium</th>
-                            <th className={b('disk-space-cluster-usage')} title="used/limit">
-                                Cluster Disk Space
+                            <th className={b('disk-space-medium-type')}>{i18n('field_medium')}</th>
+                            <th
+                                className={b('disk-space-cluster-usage')}
+                                title={i18n('context_used-limit')}
+                            >
+                                {i18n('field_cluster-disk-space')}
                             </th>
-                            <th className={b('disk-space-hardware-limit')}>Hardware Limit</th>
+                            <th className={b('disk-space-hardware-limit')}>
+                                {i18n('field_hardware-limit')}
+                            </th>
                             <th className={b('disk-space-label')} />
-                            <th className={b('disk-space-read-throughput')} title="used/limit">
-                                Read Throughput per sec
+                            <th
+                                className={b('disk-space-read-throughput')}
+                                title={i18n('context_used-limit')}
+                            >
+                                {i18n('field_read-throughput')}
                             </th>
-                            <th className={b('disk-space-write-throughput')} title="used/limit">
-                                Write Throughput per sec
+                            <th
+                                className={b('disk-space-write-throughput')}
+                                title={i18n('context_used-limit')}
+                            >
+                                {i18n('field_write-throughput')}
                             </th>
                         </tr>
                     </thead>
@@ -102,7 +114,9 @@ export default class AccountsTotal extends Component<Props> {
                                         </td>
                                         <td className={b('disk-space-label')}>
                                             {item.overcommitted && (
-                                                <WarningIcon hoverContent="Overcommitted" />
+                                                <WarningIcon
+                                                    hoverContent={i18n('value_overcommitted')}
+                                                />
                                             )}
                                         </td>
                                         <td className={b('disk-space-read-throughput')}>

@@ -17,6 +17,7 @@ import {Page} from '../../../../../../constants';
 
 import './TabletsContent.scss';
 import AccountTransferQuotaMessage from '../AccountTransferQuotaMessage';
+import i18n from './i18n';
 
 const block = cn('accounts-editor-tablets');
 
@@ -32,7 +33,7 @@ class TabletsContent extends Component<Props & ConnectedProps<typeof connector>>
 
         return (
             <AccountQuota
-                title={'Tablets'}
+                title={i18n('field_tablets')}
                 type={AccountResourceName.TABLET_COUNT}
                 currentAccount={account.name}
             />
@@ -44,7 +45,7 @@ class TabletsContent extends Component<Props & ConnectedProps<typeof connector>>
 
         return (
             <AccountQuota
-                title={'Tablet static memory'}
+                title={i18n('field_tablet-static-memory')}
                 type={AccountResourceName.TABLET_STATIC_MEMORY}
                 currentAccount={account.name}
             />
@@ -83,16 +84,15 @@ export function TabletAccountingNotice({className}: {className?: string}) {
     return !allowPerTablet ? null : (
         <div className={className}>
             <div className={block('warning')}>
-                Tablet resource accounting (tablet count and tablet static memory) has been moved
-                from accounts to{' '}
+                {i18n('context_tablet-accounting-moved')}
                 <Link url={`/${cluster}/${Page.TABLET_CELL_BUNDLES}`} routed>
-                    tablet cell bundles
+                    {i18n('action_tablet-cell-bundles')}
                 </Link>
                 .
             </div>
             {helpLink && (
                 <div>
-                    <Link url={helpLink}>More details</Link>
+                    <Link url={helpLink}>{i18n('action_more-details')}</Link>
                 </div>
             )}
         </div>

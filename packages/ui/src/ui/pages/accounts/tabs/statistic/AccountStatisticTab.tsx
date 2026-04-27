@@ -8,6 +8,7 @@ import {
     selectActiveAccountSubtreeNames,
 } from '../../../../store/selectors/accounts/accounts';
 import UIFactory from '../../../../UIFactory';
+import i18n from './i18n';
 
 function AccountStatisticTab() {
     const cluster = useSelector(selectCluster);
@@ -16,7 +17,7 @@ function AccountStatisticTab() {
     const theme = useSelector(selectTheme);
 
     if (!account) {
-        return <AccountsNoContent hint="Choose an account to build a forecast" />;
+        return <AccountsNoContent hint={i18n('context_choose-account')} />;
     }
 
     const AccountStatisticsComponent = UIFactory.getStatisticsComponentForAccount()!;

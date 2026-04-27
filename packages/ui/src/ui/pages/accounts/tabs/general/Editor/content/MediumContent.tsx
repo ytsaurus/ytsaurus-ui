@@ -11,6 +11,7 @@ import {type RootState} from '../../../../../../store/reducers';
 import AccountQuota from '../../../../AccountQuota/AccountQuota';
 import {AccountResourceName} from '../../../../../../constants/accounts/accounts';
 import AccountTransferQuotaMessage from '../AccountTransferQuotaMessage';
+import i18n from './i18n';
 
 const block = cn('accounts-medium-content-tab');
 
@@ -64,7 +65,9 @@ class MediumContent extends Component<Props> {
         const {showAllMediums} = this.state;
         let showAllText = '';
         if (rest.length > 0) {
-            showAllText = showAllMediums ? 'Show defined only' : 'Show all';
+            showAllText = showAllMediums
+                ? i18n('action_show-defined-only')
+                : i18n('action_show-all');
         }
         return (
             <div className={block()}>

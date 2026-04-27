@@ -4,6 +4,7 @@ import {type AccountUsageViewType} from '../../../../store/reducers/accounts/usa
 import cn from 'bem-cn-lite';
 import format from '../../../../common/hammer/format';
 import CircleInfoIcon from '@gravity-ui/icons/svgs/circle-info.svg';
+import i18n from './i18n';
 import './DetailTableCell.scss';
 
 const block = cn('detail-table-cell');
@@ -36,7 +37,10 @@ export const DetailTableCell: FC<Props> = ({value, additionalValue, viewType, fo
             </span>
             {Boolean(additionalValue) && (
                 <Tooltip
-                    content={`${formatFn(value)} + ${formatFn(additionalValue)} (versioned)`}
+                    content={i18n('context_versioned-breakdown', {
+                        value: formatFn(value),
+                        additionalValue: formatFn(additionalValue),
+                    })}
                     placement="top"
                 >
                     <div tabIndex={0} className={block('alert-icon')}>

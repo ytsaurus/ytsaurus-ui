@@ -1,6 +1,7 @@
 import React, {type FC, useCallback} from 'react';
 import AttributesButton from '../../../../components/AttributesButton/AttributesButton';
 import {type AccountUsageDataItem} from '../../../../store/reducers/accounts/usage/account-usage-types';
+import i18n from './i18n';
 
 export type AccountRequestData = {
     cluster: string;
@@ -22,7 +23,7 @@ export const AccountActionsField: FC<Props> = ({cluster, row, onAttributeButtonC
         <AttributesButton
             view="flat"
             withTooltip
-            tooltipProps={{placement: 'bottom-end', content: 'Show attributes'}}
+            tooltipProps={{placement: 'bottom-end', content: i18n('context_show-attributes')}}
             onClick={handleOpenAttributeModal}
             size="xs"
         />

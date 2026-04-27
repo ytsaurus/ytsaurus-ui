@@ -29,7 +29,7 @@ export function UpdateAccountsUsageAvailability() {
             {
                 toasterName: 'update-accounts-usage-availability',
                 skipSuccessToast: true,
-                errorContent: i18n('fail-content'),
+                errorContent: i18n('alert_fail-content'),
             },
         );
     }, [isAdmin, cluster, dispatch]);

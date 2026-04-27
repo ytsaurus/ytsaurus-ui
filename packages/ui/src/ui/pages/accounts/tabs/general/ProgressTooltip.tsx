@@ -8,6 +8,8 @@ import cn from 'bem-cn-lite';
 import Icon from '../../../../components/Icon/Icon';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 
+import i18n from './i18n';
+
 import './ProgressTooltip.scss';
 
 const block = cn('yt-progress-tooltip');
@@ -31,9 +33,9 @@ export function ProgressTooltip({info, limit, formatNumber}: Props) {
             <div className={block()}>
                 <ProgressTooltipRow<string>
                     mixin={block('header')}
-                    name="Account name"
-                    committed="Usage"
-                    limit="Limit"
+                    name={i18n('field_account-name')}
+                    committed={i18n('field_usage')}
+                    limit={i18n('field_limit')}
                 />
                 <ProgressTooltipTotalRow mixin={block('total')} {...{info, limit, formatNumber}} />
                 {info.map((i, index) => {
@@ -84,5 +86,10 @@ interface ProgressTooltipTotalRowProps extends Props {
 
 function ProgressTooltipTotalRow({info, limit, mixin, formatNumber}: ProgressTooltipTotalRowProps) {
     const committed = reduce_(info, (acc, item) => acc + item.committed, 0);
-    return <ProgressTooltipRow name="Total" {...{formatNumber, mixin, committed, limit}} />;
+    return (
+        <ProgressTooltipRow
+            name={i18n('field_total')}
+            {...{formatNumber, mixin, committed, limit}}
+        />
+    );
 }

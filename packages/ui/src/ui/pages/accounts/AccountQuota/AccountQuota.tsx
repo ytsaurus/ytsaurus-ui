@@ -33,6 +33,8 @@ import {
     selectEditableAccountQuotaSources,
 } from '../../../store/selectors/accounts/accounts-ts';
 
+import i18n from './i18n';
+
 import './AccountQuota.scss';
 
 const block = cn('account-quota');
@@ -122,7 +124,7 @@ class AccountQuotaEditor extends React.Component<Props & ReduxProps, State> {
                         text: value,
                     };
                 })}
-                placeholder={'Select account...'}
+                placeholder={i18n('field_select-account')}
                 width="max"
             />
         );
@@ -131,7 +133,7 @@ class AccountQuotaEditor extends React.Component<Props & ReduxProps, State> {
     validateAccount = (account?: string) => {
         const {currentAccount} = this.props;
         if (account && account === currentAccount) {
-            return 'The account itself cannot be used';
+            return i18n('alert_account-itself-error');
         }
         return undefined;
     };

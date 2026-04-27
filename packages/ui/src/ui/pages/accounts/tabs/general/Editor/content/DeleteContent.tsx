@@ -14,6 +14,8 @@ import {deleteAccount} from '../../../../../../utils/accounts/editor';
 import {toaster} from '../../../../../../utils/toaster';
 import {type FieldTree, fieldTreeForEach} from '../../../../../../common/hammer/field-tree';
 
+import i18n from './i18n';
+
 import './DeleteContent.scss';
 
 const block = cn('yt-accounts-editor-delete-content');
@@ -42,7 +44,7 @@ export function DeleteContent({account}: Props) {
                 toaster.add({
                     name: 'delete account',
                     theme: 'success',
-                    title: 'Successfully deleted ' + account.name,
+                    title: i18n('alert_delete-success', {name: account.name}),
                 });
             })
             .catch((error: YTError) => {
@@ -80,15 +82,17 @@ export function DeleteContent({account}: Props) {
     return (
         <div className="elements-section">
             {error && (
-                <YTErrorBlock message={'Failed to delete account: ' + account.name} error={error} />
+                <YTErrorBlock
+                    message={i18n('alert_delete-error', {name: account.name})}
+                    error={error}
+                />
             )}
             {showConfirmMessage && (
                 <ConfirmMessage
                     text={
                         hasResourceUsage ? (
                             <>
-                                Please make sure the account is empty. The following resources are
-                                still used by the account or its children:
+                                {i18n('confirm_resources-in-use')}
                                 {recursiveResourceUsageToFree.map((path, index) => {
                                     return (
                                         <div className={block('resource-to-free')} key={index}>
@@ -99,7 +103,7 @@ export function DeleteContent({account}: Props) {
                             </>
                         ) : (
                             <div className="elements-message__paragraph">
-                                Delete account {account.name}
+                                {i18n('confirm_delete-account', {name: account.name})}
                             </div>
                         )
                     }
@@ -111,11 +115,11 @@ export function DeleteContent({account}: Props) {
             <Button
                 size="m"
                 view="outlined-danger"
-                title={'Delete'}
+                title={i18n('action_delete')}
                 onClick={handleButtonClick}
                 disabled={hasResourceUsage}
             >
-                Delete
+                {i18n('action_delete')}
             </Button>
         </div>
     );

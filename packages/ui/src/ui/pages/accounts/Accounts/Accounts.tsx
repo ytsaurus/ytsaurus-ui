@@ -38,6 +38,7 @@ import {type RootState} from '../../../store/reducers';
 
 import './Accounts.scss';
 import UIFactory from '../../../UIFactory';
+import i18n from './i18n';
 import {UI_TAB_SIZE} from '../../../constants/global';
 import {UpdateAccountsUsageAvailability} from '../tabs/detailed-usage/UpdateAccountsUsageAvailability/UpdateAccountsUsageAvailability';
 
@@ -87,8 +88,10 @@ export class Accounts extends React.Component<
         }
 
         const props = makeTabProps(match.url, AccountsTab, showSettings, undefined, {
-            [AccountsTab.USAGE]: 'Detailed usage',
-            [AccountsTab.MONITOR]: monitoringTitle ?? 'Monitoring',
+            [AccountsTab.GENERAL]: i18n('title_general'),
+            [AccountsTab.STATISTICS]: i18n('title_statistics'),
+            [AccountsTab.USAGE]: i18n('title_detailed-usage'),
+            [AccountsTab.MONITOR]: monitoringTitle ?? i18n('title_monitoring'),
         });
 
         const lastTab = lastVisitedTab in AccountsTab ? lastVisitedTab : undefined;

@@ -81,6 +81,7 @@ import {
 import {useUpdater} from '../../../../hooks/use-updater';
 
 import './AccountUsageDetails.scss';
+import i18n from './i18n';
 import {AccountActionsField, type AccountRequestData} from './AccountActionsField';
 import {DetailTableCell} from './DetailTableCell';
 import {Page} from '../../../../constants/index';
@@ -199,7 +200,7 @@ function useColumnsByPreset(mediums: Array<string>) {
             render(item) {
                 const {path} = item.row;
                 if (!path) {
-                    return <Warning>Permission denied</Warning>;
+                    return <Warning>{i18n('alert_permission-denied')}</Warning>;
                 }
 
                 const url = makeRoutedURL(`/${cluster}/${Page.NAVIGATION}?path=${path}`);
@@ -208,7 +209,7 @@ function useColumnsByPreset(mediums: Array<string>) {
                         <span>
                             <PathView path={path} lastFragmentOnly={viewType === 'tree'} />
                         </span>
-                        <Tooltip content="Open original path in Navigation">
+                        <Tooltip content={i18n('context_open-original-path')}>
                             <Button
                                 className={block('link')}
                                 href={url}
@@ -519,17 +520,19 @@ function AccountUsageDetailsDiff({children}: {children: React.ReactNode}) {
     const to = useSelector(getAccountsUsageDiffToSnapshot);
 
     if (!isDiffView) {
-        return <>Unexpected view mode</>;
+        return <>{i18n('alert_unexpected-view-mode')}</>;
     }
 
     if ((!from && !to) || from === to) {
         return (
             <NoContent
-                warning={"You don't have any selected snapshot range"}
+                warning={i18n('alert_no-selected-snapshot-range')}
                 hint={
                     <React.Fragment>
-                        Please select <Secondary>From</Secondary>, <Secondary>To</Secondary>{' '}
-                        snapshots
+                        {i18n('context_select-snapshot-start')}{' '}
+                        <Secondary>{i18n('action_snapshot-from')}</Secondary>,{' '}
+                        <Secondary>{i18n('action_snapshot-to')}</Secondary>{' '}
+                        {i18n('context_select-snapshot-end')}
                     </React.Fragment>
                 }
             />
@@ -618,7 +621,7 @@ function PageCounter() {
 
     return count > 1 ? (
         <Secondary>
-            Page: {Number(value) + 1} / {count}{' '}
+            {i18n('field_page')} {Number(value) + 1} / {count}{' '}
         </Secondary>
     ) : null;
 }

@@ -15,11 +15,12 @@ import {
 import {Secondary} from '@ytsaurus/components';
 import format from '../../../../common/hammer/format';
 import Select from '../../../../components/Select/Select';
+import i18n from './i18n';
 
 function Item({text}: {text: string}) {
     return (
         <React.Fragment>
-            <Secondary>Mode:</Secondary> {text}
+            <Secondary>{i18n('field_mode')}</Secondary> {text}
         </React.Fragment>
     );
 }

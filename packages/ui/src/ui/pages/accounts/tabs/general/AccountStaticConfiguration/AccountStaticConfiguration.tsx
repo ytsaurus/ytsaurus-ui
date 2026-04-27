@@ -15,6 +15,8 @@ import {setSettingsAccountsExpandStaticConfiguration} from '../../../../../store
 import './AccountStaticConfiguration.scss';
 import {getSettingsAccountsExpandStaticConfiguration} from '../../../../../store/selectors/settings/settings-ts';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../../constants/global';
+import i18n from './i18n';
+
 const block = cn('account-static-configuration');
 
 interface Props {
@@ -34,7 +36,9 @@ const columns: Array<Column<AccountStaticConfigurationItem>> = [
     },
     {
         name: 'limit',
-        header: 'Limit',
+        get header() {
+            return i18n('field_limit');
+        },
         sortable: false,
         width: 100,
         accessor: (row) => {
@@ -44,7 +48,9 @@ const columns: Array<Column<AccountStaticConfigurationItem>> = [
     },
     {
         name: 'usage',
-        header: 'Usage',
+        get header() {
+            return i18n('field_usage');
+        },
         sortable: false,
         width: 100,
         accessor: (row) => {
@@ -54,7 +60,9 @@ const columns: Array<Column<AccountStaticConfigurationItem>> = [
     },
     {
         name: 'free',
-        header: 'Free',
+        get header() {
+            return i18n('field_free');
+        },
         sortable: false,
         width: 100,
         accessor: (row) => {
@@ -86,7 +94,7 @@ function AccountStaticConfiguration({className}: Props) {
 
     return (
         <CollapsibleSection
-            name={'Static configuration'}
+            name={i18n('title_static-configuration')}
             className={block(null, className)}
             size={UI_COLLAPSIBLE_SIZE}
             collapsed={!expandState}

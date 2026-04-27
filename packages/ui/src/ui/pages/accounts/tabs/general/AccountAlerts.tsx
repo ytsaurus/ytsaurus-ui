@@ -11,6 +11,7 @@ import {
     type AccountParsedData,
     visitResourceFields,
 } from '../../../../utils/accounts/accounts-selector';
+import i18n from './i18n';
 import './AccountAlerts.scss';
 
 const block = cn('yt-account-alerts');
@@ -30,10 +31,7 @@ function AccountAlerts({account}: Props) {
 
     return (
         <React.Fragment>
-            <div className={block('tooltip-title')}>
-                Limits of the following resources are violated
-                <br /> by the account or its children:
-            </div>
+            <div className={block('tooltip-title')}>{i18n('context_violated-resources-title')}</div>
             <MetaTable
                 items={map_(alerts, (value, path) => {
                     return {
