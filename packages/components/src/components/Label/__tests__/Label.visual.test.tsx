@@ -1,4 +1,4 @@
-import {test} from '../../../playwright-components/core';
+import {test} from '../../../../playwright-components/core';
 
 import {Label} from '../Label';
 import {LabelOnOff} from '../LabelOnOff';

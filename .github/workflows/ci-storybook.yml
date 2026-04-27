@@ -190,7 +190,7 @@ jobs:
           if: always()
           with:
             name: report-components-package
-            path: packages/components/src/playwright-components/report
+            path: packages/components/playwright-components/report
     
     publish-and-comment-tests-report:
       name: Publish report of pw-components tests and create comment
