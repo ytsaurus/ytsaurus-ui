@@ -42,7 +42,7 @@ import {loadUsers} from '../../../../store/actions/accounts/editor';
 import {accountsToggleFavourite} from '../../../../store/actions/favourites';
 import getTableProps from '../../../../utils/accounts/tables';
 import {
-    ACCOUNTS_CONTENT_MODE_ITEMS,
+    getContentModeOptions,
     genRadioButtonVisibleAccounts,
     makeReadableItems,
 } from '../../../../utils/accounts';
@@ -296,7 +296,7 @@ class AccountsGeneralTab extends Component {
                 <div className={b('content-mode', 'elements-toolbar__component')}>
                     <Select
                         value={[activeContentModeFilter]}
-                        options={ACCOUNTS_CONTENT_MODE_ITEMS}
+                        options={getContentModeOptions()}
                         onUpdate={(vals) => this.props.changeContentFilter(vals[0])}
                         label="Mode:"
                         qa="accounts-content-mode"

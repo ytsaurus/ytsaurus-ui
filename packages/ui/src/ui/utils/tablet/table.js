@@ -1,3 +1,5 @@
+import i18n from './i18n';
+
 export const partitionsTableItems = {
     index: {
         sort: true,
@@ -9,6 +11,9 @@ export const partitionsTableItems = {
     },
     state: {
         align: 'center',
+        get caption() {
+            return i18n('field_state');
+        },
         sort(partition) {
             return {
                 normal: 0,
@@ -26,6 +31,9 @@ export const partitionsTableItems = {
     unmerged_row_count: {
         sort: true,
         align: 'right',
+        get caption() {
+            return i18n('field_unmerged-row-count');
+        },
         get(partition) {
             return partition.unmergedRows;
         },
@@ -33,6 +41,9 @@ export const partitionsTableItems = {
     uncompressed_data_size: {
         sort: true,
         align: 'right',
+        get caption() {
+            return i18n('field_uncompressed-data-size');
+        },
         get(partition) {
             return partition.uncompressed;
         },
@@ -40,6 +51,9 @@ export const partitionsTableItems = {
     compressed_data_size: {
         sort: true,
         align: 'right',
+        get caption() {
+            return i18n('field_compressed-data-size');
+        },
         get(partition) {
             return partition.compressed;
         },
@@ -47,6 +61,9 @@ export const partitionsTableItems = {
     store_count: {
         sort: true,
         align: 'right',
+        get caption() {
+            return i18n('field_store-count');
+        },
         get(partition) {
             return partition.storeCount;
         },
@@ -54,6 +71,9 @@ export const partitionsTableItems = {
     sample_key_count: {
         sort: true,
         align: 'right',
+        get caption() {
+            return i18n('field_sample-key-count');
+        },
         get(partition) {
             return partition.sampleKeyCount;
         },
@@ -61,6 +81,9 @@ export const partitionsTableItems = {
     pivot_key: {
         sort: false,
         align: 'left',
+        get caption() {
+            return i18n('field_pivot-key');
+        },
         get(partition) {
             return partition.pivotKey;
         },
@@ -76,6 +99,9 @@ export const storesTableItems = {
     id: {
         align: 'left',
         show: true,
+        get caption() {
+            return i18n('field_id');
+        },
         sort(store) {
             return store.$value;
         },
@@ -87,6 +113,9 @@ export const storesTableItems = {
         align: 'center',
         sort: true,
         show: true,
+        get caption() {
+            return i18n('field_store-state');
+        },
         get(store) {
             return store.storeState;
         },
@@ -95,6 +124,9 @@ export const storesTableItems = {
         align: 'left',
         sort: true,
         show: true,
+        get caption() {
+            return i18n('field_row-count');
+        },
         get(store) {
             return store.rowCount;
         },

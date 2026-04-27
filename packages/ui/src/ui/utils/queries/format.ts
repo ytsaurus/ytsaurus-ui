@@ -1,6 +1,7 @@
 import unipika from '../../common/thor/unipika';
 import {type TypeArray} from '@ytsaurus/components';
 import {type UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
+import i18n from './i18n';
 
 const defaultSettings: UnipikaSettings = {
     escapeWhitespace: false,
@@ -31,7 +32,7 @@ export function convert(
             valueStr = String(value);
         }
         return unipika.format(
-            {$value: `Failed to convert value: ${valueStr}`, $type: 'yql.string'},
+            {$value: i18n('alert_convert-value-error', {valueStr}), $type: 'yql.string'},
             settings,
         );
     }
@@ -51,7 +52,7 @@ export function formatResults(
             valueStr = String(value);
         }
         return unipika.format(
-            {$value: `Failed to format value: ${valueStr}`, $type: 'yql.string'},
+            {$value: i18n('alert_format-value-error', {valueStr}), $type: 'yql.string'},
             settings,
         );
     }
@@ -99,7 +100,9 @@ export function prepareFormattedValue(
         formatValue = $rawValue.length < maxFormattedLength || isMediaTag(fullValue.$tag);
     }
 
-    const $formattedValue = formatValue ? formatResults(convertedValue, settings) : `Escaped value`;
+    const $formattedValue = formatValue
+        ? formatResults(convertedValue, settings)
+        : i18n('value_escaped');
     return {
         ...fullValue,
         $formattedValue,

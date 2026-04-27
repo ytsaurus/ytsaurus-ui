@@ -6,6 +6,7 @@ import some_ from 'lodash/some';
 import sortBy_ from 'lodash/sortBy';
 
 import ypath from '../../../../common/thor/ypath';
+import i18n from './i18n';
 
 function prepareGraphData(operation) {
     if (hasProgressTasks(operation)) {
@@ -104,7 +105,7 @@ export function prepareCompletedUsage(operation) {
 
         if (estimatedInputStatistics) {
             statistics.push({
-                name: 'Estimated input',
+                name: i18n('field_estimated-input'),
                 value: estimatedInputStatistics,
             });
         }

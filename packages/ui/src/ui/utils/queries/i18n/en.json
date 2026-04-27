@@ -1,0 +1,5 @@
+{
+    "alert_convert-value-error": "Failed to convert value: {{valueStr}}",
+    "alert_format-value-error": "Failed to format value: {{valueStr}}",
+    "value_escaped": "Escaped value"
+}

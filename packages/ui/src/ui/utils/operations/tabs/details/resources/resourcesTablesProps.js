@@ -1,4 +1,5 @@
 import {prepareTableColumns} from '../../../../../utils/index';
+import i18n from './i18n';
 
 const METRICS = [
     'row_count',
@@ -38,12 +39,16 @@ export const completedTableProps = {
             compressed_data_size: {
                 sort: false,
                 align: 'right',
-                caption: 'Compressed',
+                get caption() {
+                    return i18n('field_compressed');
+                },
             },
             uncompressed_data_size: {
                 sort: false,
                 align: 'right',
-                caption: 'Uncompressed',
+                get caption() {
+                    return i18n('field_uncompressed');
+                },
             },
             data_weight: {
                 sort: false,
@@ -52,7 +57,9 @@ export const completedTableProps = {
             chunk_count: {
                 sort: false,
                 align: 'right',
-                caption: 'Slices',
+                get caption() {
+                    return i18n('field_slices');
+                },
             },
             actions: {
                 sort: false,
@@ -83,7 +90,9 @@ export const intermediateTableProps = {
             chunk_count: {
                 sort: false,
                 align: 'right',
-                caption: 'Slices',
+                get caption() {
+                    return i18n('field_slices');
+                },
             },
             node_count: {
                 sort: false,

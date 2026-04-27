@@ -1,23 +1,30 @@
 import ypath from '../../../common/thor/ypath';
 import {getStorePreloadValues} from '../../../utils/navigation/tabs/tablets';
 import {DESC_ASC_UNORDERED} from '../../sort-helpers';
+import i18n from './i18n/tables';
 
 export const tableItems = {
     name_tablet_id: {
-        caption: 'Node / Tablet id',
+        get caption() {
+            return i18n('field_node-tablet-id');
+        },
         sort(item) {
             return item.name;
         },
     },
     name_cell_id: {
-        caption: 'Cell id / Tablet id',
+        get caption() {
+            return i18n('field_cell-tablet-id');
+        },
         sort(item) {
             return item.name;
         },
     },
     index: {
         sort: true,
-        caption: 'Tablet index',
+        get caption() {
+            return i18n('field_tablet-index');
+        },
         align: 'left',
         get(tablet) {
             return Number(ypath.getValue(tablet, '/index'));
@@ -33,7 +40,9 @@ export const tableItems = {
     cell_leader_address: {
         sort: true,
         align: 'left',
-        caption: 'Node',
+        get caption() {
+            return i18n('field_node');
+        },
         get(item) {
             return ypath.getValue(item, '/cell_leader_address');
         },
@@ -73,7 +82,9 @@ export const tableItems = {
     replication_lag_time: {
         sort: true,
         align: 'right',
-        caption: 'Replication Lag',
+        get caption() {
+            return i18n('field_replication-lag');
+        },
         get(tablet) {
             return ypath.getNumberDeprecated(tablet, '/replication_lag_time', undefined);
         },
@@ -82,7 +93,9 @@ export const tableItems = {
     replication_mode: {
         sort: true,
         align: 'center',
-        caption: 'Replication Mode',
+        get caption() {
+            return i18n('field_replication-mode');
+        },
         get(tablet) {
             return ypath.getValue(tablet, '/replication_mode');
         },
@@ -90,7 +103,9 @@ export const tableItems = {
     pivot_key: {
         sort: false,
         align: 'left',
-        caption: 'Pivot Key',
+        get caption() {
+            return i18n('field_pivot-key');
+        },
         get(tablet) {
             return ypath.getValue(tablet, '/pivot_key');
         },

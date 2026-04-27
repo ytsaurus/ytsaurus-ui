@@ -3,6 +3,7 @@ import map_ from 'lodash/map';
 import reverse_ from 'lodash/reverse';
 
 import Columns from '../../../../utils/navigation/content/table/columns';
+import i18n from './i18n';
 
 export function parseErrorFromResponse(data) {
     // TODO use JSON.parse when error format is fixed
@@ -102,7 +103,7 @@ export function getParsedError(error) {
     try {
         message = JSON.parse(error).message;
     } catch (err) {
-        message = 'Table reader returned an error';
+        message = i18n('alert_table-reader-error');
     }
 
     return {
