@@ -3,6 +3,7 @@ import moment from 'moment';
 import format from '../../common/hammer/format';
 import {type PoolResourceType} from '../../store/selectors/scheduling/scheduling-pools';
 import {type SchedulingRowData} from './pool-child';
+import i18n from './i18n';
 
 function prepareDetailedColumn(resource: PoolResourceType) {
     return {
@@ -10,7 +11,9 @@ function prepareDetailedColumn(resource: PoolResourceType) {
             return item.resources?.[resource]?.detailed;
         },
         sort: true,
-        caption: 'Abs fair share' + ReadableResource(resource),
+        get caption() {
+            return i18n('field_abs-fair-share') + ReadableResource(resource);
+        },
         align: 'right',
     };
 }
@@ -22,7 +25,9 @@ function prepareLimitColumn(resource: PoolResourceType) {
         },
         sort: true,
         sortWithUndefined: true,
-        caption: 'Limit' + ReadableResource(resource),
+        get caption() {
+            return i18n('field_limit') + ReadableResource(resource);
+        },
         align: 'right',
     };
 }
@@ -33,8 +38,12 @@ function prepareMinResourcesColumn(resource: PoolResourceType) {
             return item.resources?.[resource]?.min;
         },
         sort: true,
-        caption: 'Strong guar.' + ReadableResource(resource),
-        title: 'Strong guarantee',
+        get caption() {
+            return i18n('field_strong-guarantee-short') + ReadableResource(resource);
+        },
+        get title() {
+            return i18n('field_strong-guarantee');
+        },
         align: 'right',
     };
 }
@@ -48,8 +57,12 @@ function prepareAbsGuaranteedColumn(
             return item.resources?.[resource]?.[guaranteeType];
         },
         sort: true,
-        caption: 'Estimated guar.' + ReadableResource(resource),
-        title: 'Estimated guarantee',
+        get caption() {
+            return i18n('field_estimated-guarantee-short') + ReadableResource(resource);
+        },
+        get title() {
+            return i18n('field_estimated-guarantee');
+        },
         align: 'right',
     };
 }
@@ -57,9 +70,9 @@ function prepareAbsGuaranteedColumn(
 function ReadableResource(resource: PoolResourceType) {
     switch (resource) {
         case 'user_memory':
-            return ' RAM';
+            return i18n('value_ram');
         case 'user_slots':
-            return ' Slots';
+            return i18n('value_slots');
         default:
             return ' ' + format.ReadableField(resource);
     }
@@ -71,7 +84,9 @@ function prepareAbsDemandColumn(resource: PoolResourceType) {
             return item.resources?.[resource]?.demand;
         },
         sort: true,
-        caption: 'Abs demand' + ReadableResource(resource),
+        get caption() {
+            return i18n('field_abs-demand') + ReadableResource(resource);
+        },
         align: 'right',
     };
 }
@@ -82,7 +97,9 @@ function prepareAbsUsageColumn(resource: PoolResourceType) {
             return item.resources?.[resource]?.usage;
         },
         sort: true,
-        caption: 'Abs usage' + ReadableResource(resource),
+        get caption() {
+            return i18n('field_abs-usage') + ReadableResource(resource);
+        },
         align: 'right',
     };
 }
@@ -98,7 +115,9 @@ export const childTableItems = {
             }
             return item.name;
         },
-        caption: 'Pool / Operation',
+        get caption() {
+            return i18n('field_pool-operation');
+        },
         align: 'left',
     },
     type: {
@@ -106,7 +125,9 @@ export const childTableItems = {
             const {type, integralType, operationType} = item;
             return type === 'pool' ? integralType : operationType;
         },
-        caption: 'Type',
+        get caption() {
+            return i18n('field_type');
+        },
     },
     user: {
         sort(item: SchedulingRowData) {
@@ -189,7 +210,9 @@ export const childTableItems = {
                 return format.NO_VALUE;
             }
         },
-        caption: 'Usage / Fair share',
+        get caption() {
+            return i18n('field_usage-fair-share');
+        },
         align: 'left',
     },
     dominant_resource: {
@@ -201,8 +224,12 @@ export const childTableItems = {
 
             return dominantResource;
         },
-        caption: 'Dom. res.',
-        title: 'Dominant Resource',
+        get caption() {
+            return i18n('field_dominant-resource-short');
+        },
+        get title() {
+            return i18n('field_dominant-resource');
+        },
         align: 'left',
     },
 
@@ -251,7 +278,9 @@ export const childTableItems = {
         get(item: SchedulingRowData) {
             return [item.operationCount, item.runningOperationCount];
         },
-        caption: 'Operations',
+        get caption() {
+            return i18n('field_operations');
+        },
         sort: true,
         align: 'right',
     },
@@ -278,7 +307,9 @@ export const childTableItems = {
                 item.maxOperationCount,
             )}`;
         },
-        caption: 'Total operations (usage/limit)',
+        get caption() {
+            return i18n('field_total-operations');
+        },
         sort: true,
         align: 'center',
     },
@@ -305,7 +336,9 @@ export const childTableItems = {
                 item.maxRunningOperationCount,
             )}`;
         },
-        caption: 'Running operations (usage/limit)',
+        get caption() {
+            return i18n('field_running-operations');
+        },
         sort: true,
         align: 'center',
     },
@@ -315,7 +348,9 @@ export const childTableItems = {
             const res = item.integralType;
             return res === 'none' ? undefined : res;
         },
-        caption: 'Guarantee type',
+        get caption() {
+            return i18n('field_guarantee-type');
+        },
         sort: true,
         align: 'right',
         sortWithUndefined: true,
@@ -328,7 +363,9 @@ export const childTableItems = {
             const res = item.burstCPU;
             return isNaN(res!) ? undefined : res;
         },
-        caption: 'Burst CPU',
+        get caption() {
+            return i18n('field_burst-cpu');
+        },
         sortWithUndefined: true,
         align: 'right',
     },
@@ -340,7 +377,9 @@ export const childTableItems = {
             const res = item.flowCPU;
             return isNaN(res!) ? undefined : res;
         },
-        caption: 'Flow CPU',
+        get caption() {
+            return i18n('field_flow-cpu');
+        },
         sortWithUndefined: true,
         align: 'right',
     },
@@ -349,7 +388,9 @@ export const childTableItems = {
             const res = item.childrenBurstCPU;
             return !res ? undefined : res;
         },
-        caption: "Children's burst CPU",
+        get caption() {
+            return i18n('field_children-burst-cpu');
+        },
         sort: true,
         sortWithUndefined: true,
         align: 'right',
@@ -359,7 +400,9 @@ export const childTableItems = {
             const res = item.childrenFlowCPU;
             return !res ? undefined : res;
         },
-        caption: "Children's flow CPU",
+        get caption() {
+            return i18n('field_children-flow-cpu');
+        },
         sort: true,
         sortWithUndefined: true,
         align: 'right',
@@ -368,7 +411,9 @@ export const childTableItems = {
         get(item: SchedulingRowData) {
             return item.accumulated;
         },
-        caption: 'Acc ratio volume',
+        get caption() {
+            return i18n('field_acc-ratio-volume');
+        },
         sortWithUndefined: true,
         sort: true,
         align: 'right',
@@ -377,7 +422,9 @@ export const childTableItems = {
         get(item: SchedulingRowData) {
             return item.accumulatedCpu;
         },
-        caption: 'Acc CPU volume',
+        get caption() {
+            return i18n('field_acc-cpu-volume');
+        },
         sort: true,
         align: 'right',
     },
@@ -385,7 +432,9 @@ export const childTableItems = {
         get(item: SchedulingRowData) {
             return item.burstDuration;
         },
-        caption: 'Est burst usage duration ',
+        get caption() {
+            return i18n('field_est-burst-usage-duration');
+        },
         sort: true,
         sortWithUndefined: true,
         align: 'right',

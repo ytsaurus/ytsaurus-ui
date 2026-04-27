@@ -7,6 +7,7 @@ import {MaintenanceRequests} from '../../../components/MaintenanceRequests/Maint
 import {type MetaTableItem} from '@ytsaurus/components';
 import {renderLabel} from '../../../components/templates/components/nodes/nodes';
 import {type Node} from '../../../store/reducers/components/nodes/nodes/node';
+import i18n from './i18n';
 
 function getStateTheme(state: Node['state']) {
     switch (state) {
@@ -73,7 +74,7 @@ export function getNodeMetaItems({
             key: 'banned',
             value: (
                 <Label
-                    text={banMessage || 'True'}
+                    text={banMessage || i18n('value_true')}
                     theme={!banMessage ? 'danger' : 'warning'}
                     type="text"
                 />
@@ -89,7 +90,9 @@ export function getNodeMetaItems({
             key: 'decommissioned',
             value: (
                 <Label
-                    text={decommissionedMessage ? decommissionedMessage : 'Decommissioned'}
+                    text={
+                        decommissionedMessage ? decommissionedMessage : i18n('value_decommissioned')
+                    }
                     theme="default"
                     type="text"
                 />
@@ -98,7 +101,7 @@ export function getNodeMetaItems({
         },
         {
             key: 'full',
-            value: <Label text="Full" theme="danger" type="text" />,
+            value: <Label text={i18n('value_full')} theme="danger" type="text" />,
             visible: Boolean(full),
         },
         {

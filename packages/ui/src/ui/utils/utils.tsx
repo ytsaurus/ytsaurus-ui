@@ -32,6 +32,7 @@ import {isCancelled} from './cancel-helper';
 import {YTErrors} from '../rum/constants';
 import {getWindowStore} from '../store/window-store';
 import {toaster} from './toaster';
+import i18n from './i18n';
 
 const COMMANDS_V4_WITH_VALUE: Record<string, boolean> = {
     get: true,
@@ -146,7 +147,7 @@ export function wrapApiPromiseByToaster<
                 toaster.add({
                     name: options.toasterName,
                     theme: 'success',
-                    title: options.successTitle || 'Success',
+                    title: options.successTitle || i18n('title_success'),
                     content:
                         'function' === typeof successContent ? successContent(res) : successContent,
                     autoHiding: options.autoHide === false ? false : (options.timeout ?? 10000),
@@ -167,7 +168,7 @@ export function wrapApiPromiseByToaster<
                     toaster.add({
                         name: options.toasterName,
                         theme: 'danger',
-                        title: options.errorTitle || 'Failure',
+                        title: options.errorTitle || i18n('title_failure'),
                         content:
                             'function' === typeof errorContent
                                 ? errorContent(error)
@@ -176,7 +177,9 @@ export function wrapApiPromiseByToaster<
                                           [code {code}] {message}
                                       </span>
                                   ),
-                        actions: [{label: ' Details', onClick: () => showErrorPopup(data)}],
+                        actions: [
+                            {label: i18n('action_details'), onClick: () => showErrorPopup(data)},
+                        ],
                         autoHiding: false,
                     });
                 }
@@ -240,13 +243,13 @@ export function showToasterError(name: string, error: any) {
     toaster.add({
         name,
         theme: 'danger',
-        title: `${name} failure`,
+        title: i18n('title_name-failure', {name}),
         content: (
             <span>
                 [code {code}] {message}
             </span>
         ),
-        actions: [{label: ' view', onClick: () => showErrorPopup(data)}],
+        actions: [{label: i18n('action_view'), onClick: () => showErrorPopup(data)}],
     });
     return Promise.reject(error);
 }

@@ -1,3 +1,5 @@
+import i18n from './i18n';
+
 export const proxiesTableColumnItems = {
     host: {
         get(proxy) {
@@ -32,9 +34,13 @@ export const proxiesTableColumnItems = {
             return Boolean(proxy.banned);
         },
         sort: true,
-        caption: 'B',
+        get caption() {
+            return i18n('field_banned-caption');
+        },
         align: 'center',
-        tooltipProps: {placement: 'bottom', content: 'Banned'},
+        get tooltipProps() {
+            return {placement: 'bottom', content: i18n('field_banned')};
+        },
     },
     load_average: {
         get(proxy) {

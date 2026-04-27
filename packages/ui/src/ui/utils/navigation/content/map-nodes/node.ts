@@ -1,6 +1,7 @@
 import unipika from '../../../../common/thor/unipika';
 import ypath from '../../../../common/thor/ypath';
 import {prepareNavigationState} from '../../../../utils/navigation';
+import i18n from './i18n';
 
 export type BaseMapNode = {
     $attributes?: Record<string, unknown>;
@@ -114,7 +115,7 @@ export class Node {
                 '/' + ypath.YPath.escapeSpecialCharacters(this.title),
             );
             this.parsedPathError = {
-                message: `Node name cannot be parsed, try to enable 'Escape and highlight' option in your settings. `,
+                message: i18n('alert_node-name-cannot-be-parsed'),
                 inner_errors: [e],
             };
         }

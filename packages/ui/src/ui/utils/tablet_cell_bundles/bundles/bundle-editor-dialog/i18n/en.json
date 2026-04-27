@@ -1,0 +1,7 @@
+{
+    "field_total": "Total",
+    "field_free": "Free",
+    "alert_incorrect-value": "Incorrect value",
+    "alert_must-be-gte-zero": "Must be greater than or equal to zero",
+    "alert_must-be-divisible": "Must be divisible by {{length}}"
+}

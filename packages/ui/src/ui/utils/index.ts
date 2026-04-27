@@ -5,6 +5,7 @@ import reduce_ from 'lodash/reduce';
 
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
+import i18n from './i18n';
 import {utils as hammerUtils} from '../common/hammer/utils';
 import format from '../common/hammer/format';
 import unipika from '../common/thor/unipika';
@@ -122,7 +123,7 @@ export function computeEffectiveStateProgress(counters): unknown {
         map_(counters.effectiveStates, (count, state) => {
             return {
                 value: total && (count / total) * 100,
-                title: 'State: ' + state,
+                title: i18n('value_state', {state}),
                 theme:
                     {
                         online: 'success',
@@ -198,7 +199,7 @@ export function makeRadioButtonProps(items: string[], allItemValue?: string) {
     });
 
     if (allItemValue !== undefined) {
-        res.splice(0, 0, {value: allItemValue, text: 'All'});
+        res.splice(0, 0, {value: allItemValue, text: i18n('value_all')});
     }
     return res;
 }

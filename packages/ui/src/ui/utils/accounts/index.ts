@@ -4,6 +4,7 @@ import {
     diskSpaceColumnsItems,
 } from '../../utils/accounts/tables';
 import hammer from '../../common/hammer';
+import i18n from './i18n';
 
 import filter_ from 'lodash/filter';
 import forEach_ from 'lodash/forEach';
@@ -89,27 +90,58 @@ export function makeReadableItems(items: Array<string>) {
     });
 }
 
-function genRadioButtonProps(choicesStrs: Array<string>, options = {}) {
-    const items = makeReadableItems(choicesStrs);
-    return {
-        items,
-        ...options,
+export function getContentModeOptions() {
+    const choices = Object.keys(ACCOUNTS_COLUMN_SETS) as Array<keyof typeof ACCOUNTS_COLUMN_SETS>;
+    const contentByKey: Record<keyof typeof ACCOUNTS_COLUMN_SETS, string> = {
+        get default() {
+            return i18n('value_default');
+        },
+        get disk_space() {
+            return i18n('value_disk-space');
+        },
+        get nodes() {
+            return i18n('value_nodes');
+        },
+        get chunks() {
+            return i18n('value_chunks');
+        },
+        get tablets() {
+            return i18n('value_tablets');
+        },
+        get tablets_memory() {
+            return i18n('value_tablets-memory');
+        },
+        get master_memory() {
+            return i18n('value_master-memory');
+        },
+        get master_memory_detailed() {
+            return i18n('value_master-memory-detailed');
+        },
     };
+    return map_(choices, (value) => ({value, content: contentByKey[value]}));
 }
-
-function getContentModeOptions() {
-    const choices = Object.keys(ACCOUNTS_COLUMN_SETS);
-    return map_(choices, (value) => {
-        return {value, content: hammer.format.ReadableField(value)};
-    });
-}
-export const ACCOUNTS_CONTENT_MODE_ITEMS = getContentModeOptions();
 
 export function genRadioButtonVisibleAccounts(allowAll: boolean) {
-    const choices = ['usable', 'favourites'];
+    const choices: Array<'usable' | 'favourites' | 'all'> = ['usable', 'favourites'];
     if (allowAll) {
         choices.splice(0, 0, 'all');
     }
     const name = 'accounts-dashboard-visible';
-    return genRadioButtonProps(choices, {name});
+    const contentByValue: Record<'usable' | 'favourites' | 'all', string> = {
+        get usable() {
+            return i18n('value_usable');
+        },
+        get favourites() {
+            return i18n('value_favourites');
+        },
+        get all() {
+            return i18n('value_all');
+        },
+    };
+    const items = choices.map((value) => ({
+        value,
+        text: contentByValue[value],
+        content: contentByValue[value],
+    }));
+    return {items, name};
 }

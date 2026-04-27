@@ -7,6 +7,7 @@ import ypath from '../../../../common/thor/ypath';
 import hammer from '../../../../common/hammer';
 import {hasProgressTasks} from './data-flow';
 import {prepareTableColumns} from '../../../../utils/index';
+import i18n from './i18n';
 
 function sortCounters(reasonA, reasonB) {
     return hammer.utils.compareVectors(
@@ -163,7 +164,9 @@ function prepareColumns() {
         job_type: {
             sort: false,
             align: 'left',
-            caption: 'Task',
+            get caption() {
+                return i18n('field_task');
+            },
         },
     };
 

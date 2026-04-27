@@ -6,6 +6,7 @@ import {
     type AccessLogScopeType,
     type AccessLogUserType,
 } from '../../../store/reducers/navigation/tabs/access-log/access-log-filters';
+import i18n from './i18n';
 
 export function valueToSelection<KeyType extends string, V>(value: Record<KeyType, V>) {
     return reduce_(
@@ -38,13 +39,33 @@ function selectionToValue<KeyType extends string, EmptyValue>(
 }
 
 export const ACCESS_LOG_FIELD_SELECTOR_ITEMS: Array<{
-    text: string;
+    get text(): string;
     value: AccessLogFieldSelectorType;
 }> = [
-    {text: 'Scope', value: 'scope'},
-    {text: 'User type', value: 'user_type'},
-    {text: 'Method group', value: 'method_group'},
-    {text: 'Transaction info', value: 'transaction_info'},
+    {
+        get text() {
+            return i18n('field_scope');
+        },
+        value: 'scope',
+    },
+    {
+        get text() {
+            return i18n('field_user-type');
+        },
+        value: 'user_type',
+    },
+    {
+        get text() {
+            return i18n('field_method-group');
+        },
+        value: 'method_group',
+    },
+    {
+        get text() {
+            return i18n('field_transaction-info');
+        },
+        value: 'transaction_info',
+    },
 ];
 
 export function accessLogFieldSelectorSelectionToValue<EmptyValue>(
@@ -54,13 +75,43 @@ export function accessLogFieldSelectorSelectionToValue<EmptyValue>(
     return selectionToValue(selection, emptyValue);
 }
 
-export const ACCESS_LOG_METHOD_ITEMS: Array<{text: string; value: AccessLogMethodType}> = [
-    {text: 'Read', value: 'read'},
-    {text: 'Write', value: 'write'},
-    {text: 'Lock', value: 'lock'},
-    {text: 'Link', value: 'link'},
-    {text: 'Copy/Move', value: 'copy_move'},
-    {text: 'Dynamic table commands', value: 'dynamic_table_commands'},
+export const ACCESS_LOG_METHOD_ITEMS: Array<{get text(): string; value: AccessLogMethodType}> = [
+    {
+        get text() {
+            return i18n('value_read');
+        },
+        value: 'read',
+    },
+    {
+        get text() {
+            return i18n('value_write');
+        },
+        value: 'write',
+    },
+    {
+        get text() {
+            return i18n('value_lock');
+        },
+        value: 'lock',
+    },
+    {
+        get text() {
+            return i18n('value_link');
+        },
+        value: 'link',
+    },
+    {
+        get text() {
+            return i18n('value_copy-move');
+        },
+        value: 'copy_move',
+    },
+    {
+        get text() {
+            return i18n('value_dynamic-table-commands');
+        },
+        value: 'dynamic_table_commands',
+    },
 ];
 
 export function accessLogMethodSelectionToValue<EmptyValue>(
@@ -70,10 +121,25 @@ export function accessLogMethodSelectionToValue<EmptyValue>(
     return selectionToValue(selection, emptyValue);
 }
 
-export const ACCESS_LOG_USER_TYPE_ITEMS: Array<{text: string; value: AccessLogUserType}> = [
-    {text: 'Human', value: 'human'},
-    {text: 'Robot', value: 'robot'},
-    {text: 'System', value: 'system'},
+export const ACCESS_LOG_USER_TYPE_ITEMS: Array<{get text(): string; value: AccessLogUserType}> = [
+    {
+        get text() {
+            return i18n('value_human');
+        },
+        value: 'human',
+    },
+    {
+        get text() {
+            return i18n('value_robot');
+        },
+        value: 'robot',
+    },
+    {
+        get text() {
+            return i18n('value_system');
+        },
+        value: 'system',
+    },
 ];
 
 export function accessLogUserTypeSelectionToValue<EmptyValue>(
@@ -83,12 +149,37 @@ export function accessLogUserTypeSelectionToValue<EmptyValue>(
     return selectionToValue(selection, emptyValue);
 }
 
-export const ACCESS_LOG_SCOPE_ITEMS: Array<{text: string; value: AccessLogScopeType}> = [
-    {text: 'Table', value: 'table'},
-    {text: 'Directory', value: 'directory'},
-    {text: 'File', value: 'file'},
-    {text: 'Document', value: 'document'},
-    {text: 'Other', value: 'other'},
+export const ACCESS_LOG_SCOPE_ITEMS: Array<{get text(): string; value: AccessLogScopeType}> = [
+    {
+        get text() {
+            return i18n('value_table');
+        },
+        value: 'table',
+    },
+    {
+        get text() {
+            return i18n('value_directory');
+        },
+        value: 'directory',
+    },
+    {
+        get text() {
+            return i18n('value_file');
+        },
+        value: 'file',
+    },
+    {
+        get text() {
+            return i18n('value_document');
+        },
+        value: 'document',
+    },
+    {
+        get text() {
+            return i18n('value_other');
+        },
+        value: 'other',
+    },
 ];
 
 export function accessLogScopeSelectionToValue<EmptyValue>(
