@@ -1,6 +1,6 @@
 import {type ComponentProps, type ReactElement} from 'react';
 
-import {test} from '../../../playwright-components/core';
+import {test} from '../../../../playwright-components/core';
 
 import {ColumnCell} from '../ColumnCell';
 import {columnCellStoryBaseArgsForVisual, columnCellStoryFrameStyle} from '../columnCellStorySetup';
