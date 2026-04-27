@@ -40,7 +40,7 @@
     "test": "jest --config ./jest.config.js --passWithNoTests",
     "storybook": "storybook dev -p 6006 --no-open",
     "build:storybook": "storybook build",
-    "test:components:impl": "playwright test -c src/playwright-components/playwright.config.ts ${PW_OPTIONS}",
+    "test:components:impl": "playwright test -c playwright-components/playwright.config.ts ${PW_OPTIONS}",
     "test:components": "scripts/docker-run.sh npm run test:components:impl",
     "test:components:update": "scripts/docker-run.sh npm run test:components:impl -- -u",
     "prepublishOnly": "npm run build"

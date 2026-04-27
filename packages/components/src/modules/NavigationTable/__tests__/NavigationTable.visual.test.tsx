@@ -1,5 +1,5 @@
 import {YSON_DEFAULT_UNIPIKA_SETTINGS} from '../../../internal/Yson';
-import {test} from '../../../playwright-components/core';
+import {test} from '../../../../playwright-components/core';
 
 import {NavigationTable} from '../NavigationTable';
 import {

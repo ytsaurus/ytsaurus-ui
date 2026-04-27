@@ -1,6 +1,6 @@
 import {type ReactElement} from 'react';
 
-import {test} from '../../../playwright-components/core';
+import {test} from '../../../../playwright-components/core';
 
 import {
     Bold,
