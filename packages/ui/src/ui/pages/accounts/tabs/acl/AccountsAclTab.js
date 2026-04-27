@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 
 import AccountsNoContent from '../../../../pages/accounts/AccountsNoContent';
 
+import i18n from './i18n';
+
 import {selectActiveAccount} from '../../../../store/selectors/accounts/accounts';
 import {fetchAccounts} from '../../../../store/actions/accounts/accounts';
 import {loadUsers} from '../../../../store/actions/accounts/editor';
@@ -17,7 +19,7 @@ AccountsAclTab.propTypes = {
 function AccountsAclTab(props) {
     const {activeAccount} = props;
     if (!activeAccount) {
-        return <AccountsNoContent hint="Choose an account to display its ACL" />;
+        return <AccountsNoContent hint={i18n('context_choose-account')} />;
     }
 
     return <AccountsAcl path={activeAccount} />;

@@ -7,7 +7,6 @@ import reverse_ from 'lodash/reverse';
 import moment from 'moment';
 import cn from 'bem-cn-lite';
 import {useHistory} from 'react-router';
-import format from '../../../../common/hammer/format';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
     fetchAccountUsage,
@@ -48,6 +47,7 @@ import {useUpdater} from '../../../../hooks/use-updater';
 
 import './AccountUsageToolbar.scss';
 import {makeRoutedURL} from '../../../../store/window-store';
+import i18n from './i18n';
 
 const block = cn('account-usage-toolbar');
 
@@ -160,7 +160,7 @@ function useSnapshotItems() {
                 text: moment(new Date(item * 1000)).format('YYYY-MM-DD HH:mm'),
             };
         });
-        res.splice(0, 0, {value: UNDEFINED_SNAPSHOT, text: 'Latest'});
+        res.splice(0, 0, {value: UNDEFINED_SNAPSHOT, text: i18n('value_latest')});
         return res;
     }, [snapshots]);
 
@@ -185,7 +185,7 @@ function FromSnapshot() {
 
     return (
         <Select
-            placeholder={'Snapthot...'}
+            placeholder={i18n('field_snapshot') + '...'}
             items={items}
             value={[snapshot2string(value)]}
             onUpdate={(vals) => handleChange(vals[0])}
@@ -212,7 +212,7 @@ function ToSnapshot() {
 
     return (
         <Select
-            placeholder={'Snapthot...'}
+            placeholder={i18n('field_snapshot') + '...'}
             items={items}
             value={[snapshot2string(value)]}
             onUpdate={(vals) => handleChange(vals[0])}
@@ -227,9 +227,9 @@ function SnapshotDiffFilter() {
     return (
         <span className={block('snapshots')}>
             <span className={block('spacer')} />
-            <span className={block('snapshot-label')}>From</span>
+            <span className={block('snapshot-label')}>{i18n('action_snapshot-from')}</span>
             <FromSnapshot />
-            <span className={block('snapshot-label')}>To</span>
+            <span className={block('snapshot-label')}>{i18n('action_snapshot-to')}</span>
             <ToSnapshot />
         </span>
     );
@@ -256,9 +256,9 @@ function SnapshotFilter() {
     return (
         <span className={block('snapshots')}>
             <span className={block('spacer')} />
-            <SecondaryBold>Snapshot&nbsp;</SecondaryBold>
+            <SecondaryBold>{i18n('field_snapshot')}&nbsp;</SecondaryBold>
             <Select
-                placeholder={'Snapshot...'}
+                placeholder={i18n('field_snapshot') + '...'}
                 value={[snapshot2string(currentSnapshot)]}
                 items={items}
                 onUpdate={(vals) => handleSnapshotChange(vals[0])}
@@ -284,7 +284,7 @@ function PathFilter() {
         <TextInputWithDebounce
             debounce={500}
             value={filter}
-            placeholder={'Path regexp...'}
+            placeholder={i18n('field_path-regexp')}
             onUpdate={handleChange}
         />
     );
@@ -311,7 +311,7 @@ function OwnerFilter() {
             items={allNames}
             filter={(_items, filter = '') => getFiltered(filter)}
             apply={handleChange}
-            placeholder={'Owner...'}
+            placeholder={i18n('field_owner')}
             renderItem={(item) => (
                 <span className={block('owner-item')}>
                     <SubjectCard name={'string' === typeof item ? item : item.value} noLink />
@@ -347,7 +347,7 @@ function DateRangeFilter() {
                 onUpdate={handleChange}
                 className={block('date-range-control')}
                 onError={() => {}}
-                placeholder={format.Readable(type) + ' range...'}
+                placeholder={i18n(`placeholder_${type}`)}
                 pin="round-brick"
             />
             <DateRangeTypeFilterMemo />
@@ -372,8 +372,18 @@ function DateRangeTypeFilter() {
             value={[value]}
             onUpdate={(vals) => handleChange(vals[0])}
             items={[
-                {value: 'creation_time', text: 'Creation'},
-                {value: 'modification_time', text: 'Modification'},
+                {
+                    value: 'creation_time',
+                    get text() {
+                        return i18n('value_creation');
+                    },
+                },
+                {
+                    value: 'modification_time',
+                    get text() {
+                        return i18n('value_modification');
+                    },
+                },
             ]}
             width={135}
         />
@@ -406,35 +416,53 @@ function PaginationFilter() {
 const VIEW_TYPE_ITEMS = [
     {
         value: 'tree' as const,
-        text: 'Tree',
+        get text() {
+            return i18n('value_view-tree');
+        },
         icon: <Icon awesome={'folder-tree'} face={'solid'} />,
     },
     {
         value: 'list' as const,
-        text: 'List',
+        get text() {
+            return i18n('value_view-list');
+        },
         icon: <Icon awesome={'list'} />,
     },
     {
         value: 'list-plus-folders' as const,
-        text: 'List + folders',
+        get text() {
+            return i18n('value_view-list-plus-folders');
+        },
         icon: <Icon awesome={'folders'} />,
     },
     {
         value: 'tree-diff' as const,
-        text: 'Diff: Tree',
-        content: <DiffTitle title={'Tree'} />,
+        get text() {
+            return i18n('title_diff') + i18n('value_view-tree');
+        },
+        get content() {
+            return <DiffTitle title={i18n('value_view-tree')} />;
+        },
         icon: <Icon awesome={'folder-tree'} face={'solid'} />,
     },
     {
         value: 'list-diff' as const,
-        text: 'Diff: List',
-        content: <DiffTitle title={'List'} />,
+        get text() {
+            return i18n('title_diff') + i18n('value_view-list');
+        },
+        get content() {
+            return <DiffTitle title={i18n('value_view-list')} />;
+        },
         icon: <Icon awesome={'list'} />,
     },
     {
         value: 'list-plus-folders-diff' as const,
-        text: 'Diff: List + folders',
-        content: <DiffTitle title={'List + folders'} />,
+        get text() {
+            return i18n('title_diff') + i18n('value_view-list-plus-folders');
+        },
+        get content() {
+            return <DiffTitle title={i18n('value_view-list-plus-folders')} />;
+        },
         icon: <Icon awesome={'folders'} />,
     },
 ];
@@ -442,7 +470,7 @@ const VIEW_TYPE_ITEMS = [
 function DiffTitle({title}: {title: string}) {
     return (
         <React.Fragment>
-            <Secondary>Diff: </Secondary>
+            <Secondary>{i18n('title_diff')}</Secondary>
             {title}
         </React.Fragment>
     );

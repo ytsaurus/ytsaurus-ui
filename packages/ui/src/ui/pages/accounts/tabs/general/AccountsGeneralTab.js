@@ -42,8 +42,8 @@ import {loadUsers} from '../../../../store/actions/accounts/editor';
 import {accountsToggleFavourite} from '../../../../store/actions/favourites';
 import getTableProps from '../../../../utils/accounts/tables';
 import {
-    getContentModeOptions,
     genRadioButtonVisibleAccounts,
+    getContentModeOptions,
     makeReadableItems,
 } from '../../../../utils/accounts';
 import {getMediumList} from '../../../../store/selectors/thor';
@@ -72,6 +72,7 @@ import {AccountResourceName} from '../../../../constants/accounts/accounts';
 import {ProgressStackByTreeItem} from './ProgressStack';
 
 import './AccountsGeneralTab.scss';
+import i18n from './i18n';
 import {
     selectAccountsColumnFields,
     selectAccountsContentMode,
@@ -144,11 +145,10 @@ function renderNumber(value, isAggregation = false) {
 function VisibilityNotice({mode}) {
     let message = null;
     if (mode === 'usable') {
-        message =
-            'Currently only the accounts for which you have the "Use" permission are displayed';
+        message = i18n('context_usable-accounts');
     }
     if (mode === 'favourites') {
-        message = 'Currently only the accounts that marked as favourite are displayed.';
+        message = i18n('context_favourite-accounts');
     }
 
     return !message ? null : <Warning>{message}</Warning>;
@@ -231,7 +231,7 @@ class AccountsGeneralTab extends Component {
                 {activeAccount ? (
                     <AccountStaticConfiguration />
                 ) : (
-                    <CollapsibleSection name="Media" size={collapsibleSize}>
+                    <CollapsibleSection name={i18n('title_media')} size={collapsibleSize}>
                         {isLoaded && (
                             <AccountsTotal
                                 nodesData={nodesData}
@@ -282,7 +282,7 @@ class AccountsGeneralTab extends Component {
                         size="m"
                         type="text"
                         value={activeNameFilter}
-                        placeholder="Account..."
+                        placeholder={i18n('field_account-filter')}
                         onChange={this.props.changeNameFilter}
                         autofocus={viewContext !== DASHBOARD_VIEW_CONTEXT}
                         qa={'accounts-name-filter'}
@@ -298,7 +298,7 @@ class AccountsGeneralTab extends Component {
                         value={[activeContentModeFilter]}
                         options={getContentModeOptions()}
                         onUpdate={(vals) => this.props.changeContentFilter(vals[0])}
-                        label="Mode:"
+                        label={i18n('field_mode')}
                         qa="accounts-content-mode"
                     />
                 </div>
@@ -310,7 +310,7 @@ class AccountsGeneralTab extends Component {
                             options={makeReadableItems(mediumList)}
                             value={[activeMediumFilter]}
                             onUpdate={(vals) => this.props.changeMediumFilter(vals[0])}
-                            label="Medium:"
+                            label={i18n('field_medium') + ':'}
                         />
                     )}
                 </div>
@@ -368,7 +368,7 @@ class AccountsGeneralTab extends Component {
                                     aggregation: true,
                                 })}
                             >
-                                Aggregation
+                                {i18n('value_aggregation')}
                             </div>
                         </div>
                     );
@@ -673,7 +673,7 @@ class AccountsGeneralTab extends Component {
                     <span>
                         <Button
                             {...commonProps}
-                            title="Edit account"
+                            title={i18n('action_edit-account')}
                             onClick={handleClick}
                             qa={`edit-account-${item.name}`}
                         >

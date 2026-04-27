@@ -1,7 +1,7 @@
 {
   "context_data-weight": "Data weight - логический объем несжатых данных: 8 байт для int64, длина строки для строковых типов и т.д.",
   "context_disk-space": "Disk space - это compressed size, помноженный на replication factor.",
-  "context_medium-disk-space": "{{name}} disk space - это Disk space на медиуме \"{{medium}}\".",
+  "context_medium-disk-space": "{{name}} disk space - это Disk space на носителе \"{{medium}}\".",
   "context_compressed-size": "Compressed size - размер данных после сжатия (без учета репликации).",
   "context_uncompressed-size": "Uncompressed size - размер несжатых данных (без учета репликации)."
 }

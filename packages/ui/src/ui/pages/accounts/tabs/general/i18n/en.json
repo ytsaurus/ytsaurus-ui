@@ -1,0 +1,21 @@
+{
+    "field_medium": "Medium",
+    "field_cluster-disk-space": "Cluster Disk Space",
+    "field_hardware-limit": "Hardware Limit",
+    "field_read-throughput": "Read Throughput per sec",
+    "field_write-throughput": "Write Throughput per sec",
+    "context_used-limit": "used/limit",
+    "value_overcommitted": "Overcommitted",
+    "context_violated-resources-title": "Limits of the following resources are violated by the account or its children:",
+    "context_usable-accounts": "Currently only the accounts for which you have the \"Use\" permission are displayed",
+    "context_favourite-accounts": "Currently only the accounts that marked as favourite are displayed.",
+    "title_media": "Media",
+    "field_account-filter": "Account...",
+    "field_mode": "Mode:",
+    "value_aggregation": "Aggregation",
+    "action_edit-account": "Edit account",
+    "field_account-name": "Account name",
+    "field_usage": "Usage",
+    "field_limit": "Limit",
+    "field_total": "Total"
+}

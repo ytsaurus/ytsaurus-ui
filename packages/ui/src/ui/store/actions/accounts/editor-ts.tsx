@@ -10,6 +10,7 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {RESOURCES_LIMITS_PREFIX} from '../../../constants/accounts';
 import {accountsIncreaseEditCounter, loadEditedAccount} from './accounts';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
+import i18n from './i18n';
 
 export interface AccountQuotaParams {
     limit: number;
@@ -53,7 +54,7 @@ export function setAccountQuota(params: AccountQuotaParams): EditorAction {
         const toasterName = params.account + '_' + params.resourcePath;
         return wrapApiPromiseByToaster(setAccountQuotaImpl(params), {
             toasterName,
-            successContent: 'The quota is updated',
+            successContent: i18n('alert_quota-updated'),
         }).then(() => {
             dispatch(loadEditedAccount(params.account));
             dispatch(accountsIncreaseEditCounter());
