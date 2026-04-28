@@ -10,7 +10,7 @@ import {Progress, type ProgressProps} from '@gravity-ui/uikit';
 import {MetaTable, type MetaTableItem, Tooltip} from '@ytsaurus/components';
 import {ColorCircle} from '../../components/ColorCircle/ColorCircle';
 
-import {getProgressBarColorByIndex} from '../../constants/colors';
+import {getSerieColor} from '../../constants/colors';
 
 import {type CPULimits, type MemoryLimits} from '../../store/reducers/tablet_cell_bundles';
 
@@ -56,7 +56,7 @@ function getProgressData({data, limit, resourceType, postfix}: ResourceProgress)
 
     forEach_(data, (value, name) => {
         const formattedValue = hammer.format[resourceType](value);
-        const color = getProgressBarColorByIndex(props.stack.length);
+        const color = getSerieColor(props.stack.length);
 
         metaItems.push({
             key: name,

@@ -1,11 +1,7 @@
 import compact_ from 'lodash/compact';
 import React from 'react';
-import {
-    type RawSerieData,
-    YTChartKitLazy,
-    type YagrWidgetData,
-    getSerieColor,
-} from '../../components/YTChartKit';
+import {type RawSerieData, YTChartKitLazy, type YagrWidgetData} from '../../components/YTChartKit';
+import {useSerieColor} from '../../hooks/use-serie-color';
 
 import formatLib from '../../common/hammer/format';
 import i18n from './i18n';
@@ -39,11 +35,12 @@ type X = number;
 type Y = number;
 
 function HistogramChart({className, pdf, ecdf, format, dataName, lineOnly}: HistogramChartProps) {
+    const getSerieColor = useSerieColor();
     const yagrData = React.useMemo(() => {
         const xFormat = format === 'Bytes' ? formatLib.Bytes : formatLib.Number;
         const {timeline, graphs, step} = lineOnly
-            ? getLineOnlyData(pdf, ecdf)
-            : getColumnData(pdf, ecdf);
+            ? getLineOnlyData(pdf, ecdf, getSerieColor)
+            : getColumnData(pdf, ecdf, getSerieColor);
         const res: YagrWidgetData = {
             data: {
                 timeline,
@@ -110,7 +107,7 @@ function HistogramChart({className, pdf, ecdf, format, dataName, lineOnly}: Hist
             sources: {},
         };
         return res;
-    }, [pdf, ecdf, format, lineOnly]);
+    }, [pdf, ecdf, format, lineOnly, dataName, getSerieColor]);
 
     return (
         <div className={className}>
@@ -124,6 +121,7 @@ export default React.memo(HistogramChart);
 function getColumnData(
     {buckets, min, bucketSize}: PDFData,
     {steps}: ECDFData,
+    getSerieColor: (index: number) => string,
 ): YagrWidgetData['data'] & {step: number} {
     const timeline = [min - 0.1 * bucketSize];
     const data: Array<number> = [undefined!];
@@ -186,6 +184,7 @@ function getColumnData(
 function getLineOnlyData(
     {min, buckets, bucketSize}: PDFData,
     {steps}: ECDFData,
+    getSerieColor: (index: number) => string,
 ): ReturnType<typeof getColumnData> {
     const timeline: Array<number> = [min - 0.1 * bucketSize];
     const data: Array<number> = [NaN];
