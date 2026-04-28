@@ -6,7 +6,7 @@ import {
     type RawSerieData,
     YTChartKitLazy,
     type YagrWidgetData,
-    getSerieColor,
+    getChartSerieColor,
 } from '../../components/YTChartKit';
 import './YTHistogram.scss';
 
@@ -53,7 +53,7 @@ function YTHistogram({
             {
                 type: 'column' as const,
                 data: yLogarithmic ? serieData.map((v) => (v === 0 ? NaN : v)) : (serieData as any),
-                color: getSerieColor(0),
+                color: getChartSerieColor(0),
                 formatter: yFormat,
                 ...{
                     renderOptions: {

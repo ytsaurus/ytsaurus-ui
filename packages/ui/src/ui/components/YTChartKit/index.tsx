@@ -22,7 +22,7 @@ const COLORS = [
     '#bee9ef',
 ];
 
-export function getSerieColor(serieIndex: number) {
+export function getChartSerieColor(serieIndex: number) {
     return COLORS[serieIndex % COLORS.length];
 }
 

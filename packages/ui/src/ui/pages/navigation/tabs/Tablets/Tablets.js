@@ -59,7 +59,7 @@ import {
     selectTabletsByName,
     selectTabletsMax,
 } from '../../../../store/selectors/navigation/tabs/tablets-ts';
-import {getProgressBarColorByIndex} from '../../../../constants/colors';
+import {useSerieColor} from '../../../../hooks/use-serie-color';
 
 import './Tablets.scss';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../constants/global';
@@ -506,17 +506,7 @@ class Tablets extends Component {
         const text = hammer.format[useBytes ? 'Bytes' : 'Number'](value);
 
         if (level === 1) {
-            return (
-                <Progress
-                    stack={[
-                        {
-                            value: progress,
-                            color: getProgressBarColorByIndex(3),
-                        },
-                    ]}
-                    text={text}
-                />
-            );
+            return <ThemedProgress progress={progress} text={text} colorIndex={3} />;
         }
 
         return <Progress value={progress} text={text} theme={'info'} />;
@@ -694,6 +684,22 @@ const mapDispatchToProps = {
     changeActiveHistogram,
     toggleExpandedHost,
 };
+
+function ThemedProgress({progress, text, colorIndex}) {
+    const getColor = useSerieColor();
+    const color = getColor(colorIndex);
+    return (
+        <Progress
+            stack={[
+                {
+                    value: progress,
+                    color,
+                },
+            ]}
+            text={text}
+        />
+    );
+}
 
 const TabletsConnected = connect(mapStateToProps, mapDispatchToProps)(Tablets);
 

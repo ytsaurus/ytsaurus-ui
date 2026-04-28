@@ -13,7 +13,7 @@ import {YT} from '../../../../config/yt-config';
 
 import {IntersectionObserverContainer} from '../../../../components/IntersectionObserverContainer/IntersectionObserverContainer';
 
-import {YTChartKitLazy, getSerieColor} from '../../../../components/YTChartKit';
+import {YTChartKitLazy, getChartSerieColor} from '../../../../components/YTChartKit';
 import {type Yagr, type YagrWidgetData} from '@gravity-ui/chartkit/yagr';
 import {InlineError} from '../../../../components/InlineError/InlineError';
 import Loader from '../../../../components/Loader/Loader';
@@ -272,7 +272,7 @@ function makeYagrWidgetData(
                     : undefined,
                 data: new Array(timeline.length),
                 formatter: unit === 'bytes' ? format.Bytes : format.NumberSmart,
-                color: getSerieColor(res.data.graphs.length),
+                color: getChartSerieColor(res.data.graphs.length),
             };
             if (!graph.name) {
                 const graphIndex = res.data.graphs.length;
