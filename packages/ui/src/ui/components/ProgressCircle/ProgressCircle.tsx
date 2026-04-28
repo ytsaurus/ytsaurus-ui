@@ -1,4 +1,4 @@
-import {getProgressBarColorByIndex} from '../../constants/colors';
+import {getDefaultSerieColor} from '../../constants/colors';
 import React from 'react';
 
 export type ProgressCircleProps = {
@@ -67,7 +67,7 @@ export function ProgressCircle({stack: rawStack, gap = 0, size, className}: Prog
                             cx="50%"
                             cy="50%"
                             strokeDasharray={storkeDashArrays[index]}
-                            stroke={item.color ?? getProgressBarColorByIndex(index)}
+                            stroke={item.color ?? getDefaultSerieColor(index)}
                             strokeWidth={strokeWidth}
                         />
                     );

@@ -10,7 +10,7 @@ import {Progress, type ProgressProps} from '@gravity-ui/uikit';
 import {MetaTable, type MetaTableItem, Tooltip} from '@ytsaurus/components';
 import {ColorCircle} from '../../components/ColorCircle/ColorCircle';
 
-import {getProgressBarColorByIndex} from '../../constants/colors';
+import {getSerieColor} from '../../constants/colors';
 
 import {type CPULimits, type MemoryLimits} from '../../store/reducers/tablet_cell_bundles';
 
@@ -23,13 +23,22 @@ type ResourceProgress = {
     limit?: number;
     resourceType: 'Number' | 'vCores' | 'Bytes';
     postfix?: string;
+    colorIndex?: number;
+    getColor?: (index: number) => string;
 };
 
 export function BundleMetaResourceProgress(
     title: string,
-    {data, limit, resourceType, postfix = ''}: ResourceProgress,
+    {data, limit, resourceType, postfix = '', colorIndex = 0, getColor}: ResourceProgress,
 ) {
-    const {props, text, commonTooltip} = getProgressData({data, limit, resourceType, postfix});
+    const {props, text, commonTooltip} = getProgressData({
+        data,
+        limit,
+        resourceType,
+        postfix,
+        colorIndex,
+        getColor,
+    });
 
     return {
         key: title,
@@ -43,7 +52,14 @@ export function BundleMetaResourceProgress(
     };
 }
 
-function getProgressData({data, limit, resourceType, postfix}: ResourceProgress) {
+function getProgressData({
+    data,
+    limit,
+    resourceType,
+    postfix,
+    colorIndex = 0,
+    getColor,
+}: ResourceProgress) {
     const props: ProgressProps = {
         stack: [],
     };
@@ -56,7 +72,9 @@ function getProgressData({data, limit, resourceType, postfix}: ResourceProgress)
 
     forEach_(data, (value, name) => {
         const formattedValue = hammer.format[resourceType](value);
-        const color = getProgressBarColorByIndex(props.stack.length);
+        const color = getColor
+            ? getColor(props.stack.length + colorIndex)
+            : getSerieColor(props.stack.length + colorIndex);
 
         metaItems.push({
             key: name,

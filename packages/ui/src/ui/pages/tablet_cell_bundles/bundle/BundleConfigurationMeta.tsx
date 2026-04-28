@@ -18,6 +18,7 @@ import {type OrchidBundlesData} from '../../../store/reducers/tablet_cell_bundle
 import Icon from '../../../components/Icon/Icon';
 import {MetaTable, type MetaTableItem, Tooltip} from '@ytsaurus/components';
 import {BundleMetaResourceProgress} from '../../../components/BundleMetaResourceProgress/BundleMetaResourceProgress';
+import {useSerieColor} from '../../../hooks/use-serie-color';
 import {Health} from '../../../components/Health/Health';
 import {printUsageLimit} from '../../../utils';
 import {useUpdater} from '../../../hooks/use-updater';
@@ -105,6 +106,7 @@ export function ActiveAccountBundleControllerUpdater() {
 }
 
 export default function BundleConfigurationMeta() {
+    const getColor = useSerieColor();
     const {bundle_controller_target_config: bundleControllerConfig} =
         useSelector(selectTabletsActiveBundleData) || {};
     const orchidData = useSelector(selectActiveBundleControllerData);
@@ -151,6 +153,7 @@ export default function BundleConfigurationMeta() {
                 data: bundleControllerConfig.memory_limits,
                 resourceType: 'Bytes',
                 limit: memory,
+                getColor,
             }),
         );
     }
@@ -161,6 +164,8 @@ export default function BundleConfigurationMeta() {
                 data: bundleControllerConfig.cpu_limits,
                 resourceType: 'Number',
                 postfix: 'threads',
+                colorIndex: 4,
+                getColor,
             }),
         );
     }

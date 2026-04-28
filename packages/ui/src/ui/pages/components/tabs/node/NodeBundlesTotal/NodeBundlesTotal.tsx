@@ -16,10 +16,8 @@ import {
     selectNodeMemoryUsageTotalTableStatic,
     selectNodeMemoryUsageTotalTabletDynamic,
 } from '../../../../../store/selectors/components/node/memory';
-import {
-    STACKED_PROGRESS_BAR_COLORS,
-    getProgressBarColorByIndex,
-} from '../../../../../constants/colors';
+import {SERIE_COLORS} from '../../../../../constants/colors';
+import {useSerieColor} from '../../../../../hooks/use-serie-color';
 
 import './NodeBundlesTotal.scss';
 
@@ -64,10 +62,14 @@ function NodeBundlesTotal() {
 }
 
 const COLORS: Partial<Record<keyof TabletDynamicTotalProps['data'], string>> = {
-    active: STACKED_PROGRESS_BAR_COLORS[4],
-    backing: STACKED_PROGRESS_BAR_COLORS[7],
-    other: STACKED_PROGRESS_BAR_COLORS[2],
-    passive: STACKED_PROGRESS_BAR_COLORS[0],
+    // var(--green-color)
+    active: SERIE_COLORS[4],
+    // var(--blue-color)
+    backing: SERIE_COLORS[7],
+    // var(--yellow-color)
+    other: SERIE_COLORS[2],
+    // 'var(--red-color)'
+    passive: SERIE_COLORS[0],
 };
 
 interface TabletDynamicTotalProps {
@@ -85,6 +87,7 @@ interface TabletDynamicTotalProps {
 }
 
 export function TabletDynamicTotal(props: TabletDynamicTotalProps) {
+    const getColor = useSerieColor();
     const {
         className,
         data: {usage, limit, ...rest},
@@ -113,7 +116,7 @@ export function TabletDynamicTotal(props: TabletDynamicTotalProps) {
                 <div className={block('progress-tooltip')}>
                     {map_(stack, (item, index) => {
                         const {key} = item;
-                        item.color = COLORS[key] ?? getProgressBarColorByIndex(index, 8);
+                        item.color = COLORS[key] ?? getColor(index);
 
                         return (
                             <React.Fragment key={key}>
@@ -140,7 +143,7 @@ export function TabletDynamicTotal(props: TabletDynamicTotalProps) {
                 </div>
             ),
         };
-    }, [props.data]);
+    }, [props.data, getColor]);
 
     return (
         <Tooltip content={content} className={className}>

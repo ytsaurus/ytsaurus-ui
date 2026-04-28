@@ -4,7 +4,7 @@ import {
     type RawSerieData,
     YTChartKitLazy,
     type YagrWidgetData,
-    getSerieColor,
+    getChartSerieColor,
 } from '../../components/YTChartKit';
 
 import formatLib from '../../common/hammer/format';
@@ -162,12 +162,12 @@ function getColumnData(
             type: 'line' as const,
             data: lineData,
             scale: 'y1',
-            color: getSerieColor(1),
+            color: getChartSerieColor(1),
         },
         {
             type: 'column' as const,
             data,
-            color: getSerieColor(0),
+            color: getChartSerieColor(0),
             ...{
                 renderOptions: {
                     size: [1],
@@ -202,7 +202,7 @@ function getLineOnlyData(
         {
             type: 'line' as const,
             data,
-            color: getSerieColor(1),
+            color: getChartSerieColor(1),
         },
     ];
 

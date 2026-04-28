@@ -1,9 +1,79 @@
-import {Page, expect, test} from '@playwright/test';
+import {type Page, expect, test} from '@playwright/test';
 import {MOCK_DATE, makeClusterUrl} from '../../../utils';
 import {BasePage} from '../../../widgets/BasePage';
 import {replaceInnerHtml, replaceInnerHtmlForDateTime} from '../../../utils/dom';
 
 const HOST_MASK = 'my-hostname:11111';
+
+// Mock categories for Memory PopUp test
+const MEMORY_STATISTICS_MOCK = (() => {
+    const MIB = 1024 * 1024;
+    const GIB = MIB * 1024;
+    const names = [
+        'alloc_fragmentation',
+        'blob_session',
+        'block_cache',
+        'chaos_replication_incoming',
+        'chaos_replication_outgoing',
+        'chunk_block_meta',
+        'chunk_blocks_ext',
+        'chunk_journal_index',
+        'chunk_meta',
+        'chunk_replica_cache',
+        'footprint',
+        'job_input_block_cache',
+        'job_input_chunk_meta',
+        'logging',
+        'lookup',
+        'lookup_rows_cache',
+        'master_cache',
+        'mixed',
+        'other',
+        'p2p',
+        'pending_disk_read',
+        'pending_disk_write',
+        'profiling',
+        'query',
+        'system_jobs',
+        'tablet_dynamic',
+        'tablet_static',
+        'user_jobs',
+        'versioned_chunk_meta',
+    ];
+    const total = {used: 0, limit: 0};
+    const stats: Record<string, {used: number; limit: number}> = {total};
+
+    names.forEach((name, i) => {
+        // every third value of the mock category is empty
+        const used = i % 3 === 2 ? 0 : (i + 1) * 4 * MIB;
+        const limit = (i + 1) * GIB;
+        stats[name] = {used, limit};
+        total.used += used;
+        total.limit += limit;
+    });
+
+    return stats;
+})();
+
+function patchMemoryStatistics(node: unknown): unknown {
+    if (Array.isArray(node)) {
+        node.forEach(patchMemoryStatistics);
+    } else if (node && typeof node === 'object') {
+        const obj = node as Record<string, unknown>;
+
+        for (const key of Object.keys(obj)) {
+            const value = obj[key] as Record<string, unknown> | null;
+
+            if (key === 'memory' && value && 'total' in value) {
+                obj[key] = MEMORY_STATISTICS_MOCK;
+            } else {
+                patchMemoryStatistics(value);
+            }
+        }
+    }
+
+    return node;
+}
 
 class ComponentsPage extends BasePage {
     async openSecondNode() {
@@ -57,6 +127,19 @@ test('Components - Node - Memory popup', async ({page}) => {
     await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`components/nodes?nodeSort=asc-false,field-user_tags`));
     await page.waitForLoadState('networkidle');
+
+    // Replace memory statistics in YT API responses with a deterministic mock
+    await page.route('**/api/yt/*/api/v3/get**', async (route) => {
+        const response = await route.fetch();
+        const json = await response.json().catch(() => null);
+
+        if (!json) {
+            await route.fulfill({response});
+            return;
+        }
+
+        await route.fulfill({response, json: patchMemoryStatistics(json)});
+    });
 
     await components(page).openSecondNode();
 

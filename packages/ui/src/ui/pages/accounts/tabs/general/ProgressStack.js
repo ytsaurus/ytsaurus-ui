@@ -11,7 +11,7 @@ import hammer from '../../../../common/hammer';
 import Account from '../../../../pages/accounts/selector';
 import {isNull} from '../../../../utils';
 
-import {STACKED_PROGRESS_BAR_COLORS} from '../../../../constants/colors';
+import {getDefaultSerieColor} from '../../../../constants/colors';
 import {getAccountName} from '../../../../store/selectors/accounts/accounts';
 import {ProgressTooltip} from './ProgressTooltip';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
@@ -20,8 +20,6 @@ import {
     AccountResourceName,
 } from '../../../../constants/accounts/accounts';
 import {Tooltip} from '@ytsaurus/components';
-
-const colors = STACKED_PROGRESS_BAR_COLORS;
 
 function prepareProgressStack(treeItem, useChildren, getTreeItemInfoFn) {
     if (!treeItem) {
@@ -44,7 +42,8 @@ function prepareProgressStack(treeItem, useChildren, getTreeItemInfoFn) {
 
     const allLimit = Math.max(recursiveCommitted + recursiveUncommitted, limit);
 
-    let colorIndex = 0;
+    // start colorPallet from green color
+    let colorIndex = 4;
     const progressStack = [];
     const tooltipInfo = [];
 
@@ -69,7 +68,7 @@ function prepareProgressStack(treeItem, useChildren, getTreeItemInfoFn) {
         };
         if (progress > 0) {
             if (useChildren && children.length > 0) {
-                tooltipItem.color = committedEl.color = colors[(4 + colorIndex++) % colors.length];
+                tooltipItem.color = committedEl.color = getDefaultSerieColor(colorIndex++);
             }
             progressStack.push(committedEl, uncommittedEl);
             tooltipInfo.push(tooltipItem);
