@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.10.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.9.0...ui-v3.10.0) (2026-04-29)
+
+
+### Features
+
+* **Queries/Search:** add full search [YTFRONT-5697] ([806b52d](https://github.com/ytsaurus/ytsaurus-ui/commit/806b52d6d13af111b453188cbaebfd4a33f0fa2b))
+
+
+### Bug Fixes
+
+* **Components:** remove role filter text capitalization [YTFRONT-5718] ([e794f63](https://github.com/ytsaurus/ytsaurus-ui/commit/e794f6324e1b00a6576faaff32216e8fd4720000))
+* **Modal,SimpleModal:** do not use deprecated 'onClose', 'onOutsideClick' [YTFRONT-5695] ([a95f480](https://github.com/ytsaurus/ytsaurus-ui/commit/a95f480aafa998525cef9ef7596629df7b71249c))
+* **Navigation/MapNode:** add 'Too many items selected' message [YTFRONT-5739] ([095feaf](https://github.com/ytsaurus/ytsaurus-ui/commit/095feaf75001b92a4e3fa378cadf39aeb953ad19))
+* **Navigation/Queue:** fix a mispring [YTFRONT-5746] ([414c956](https://github.com/ytsaurus/ytsaurus-ui/commit/414c956ec1dade0efec69d154d9b78196b8580db))
+* **Queries/Graph:** wrong cluster in link [YTFRONT-5723] ([e56f1a5](https://github.com/ytsaurus/ytsaurus-ui/commit/e56f1a5cdef86d832c8db15cf45d939932c1aa89))
+* show all attributes of job [YTFRONT-4414] ([492e1fa](https://github.com/ytsaurus/ytsaurus-ui/commit/492e1fa593f2b2718c84b5a86f74148fbf7213dc))
+
 ## [3.9.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.8.0...ui-v3.9.0) (2026-04-16)
 
 
