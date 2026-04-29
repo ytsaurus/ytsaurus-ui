@@ -1,5 +1,5 @@
-import React from 'react';
-import moment from 'moment';
+import {Fragment, type ReactNode} from 'react';
+import {dateTime} from '@gravity-ui/date-utils';
 import cn from 'bem-cn-lite';
 
 import {Icon, Label, LabelProps, Link} from '@gravity-ui/uikit';
@@ -9,7 +9,7 @@ import {ypath} from '../../../utils';
 
 import {MetaTableItem} from '../MetaTable';
 import {Template} from '../templates/Template';
-import type {YtComponentsConfig} from '../../../context';
+import type {TYComponentsNavigationMetaConfig} from '../../../types';
 import {formatTimeDuration} from './helpers/formatTimeDuration';
 
 import './ttl.scss';
@@ -27,7 +27,7 @@ export function makeTTLItems(
         showTTLLabel?: boolean;
         docsUrls?: Record<string, string>;
         cluster?: string;
-        config?: Partial<YtComponentsConfig>;
+        config?: Partial<TYComponentsNavigationMetaConfig>;
     } = {},
 ) {
     const expirationTime = ypath.getValue(attrs, '/expiration_time');
@@ -40,7 +40,7 @@ export function makeTTLItems(
         res.push({
             key: 'effective_expiration_time',
             value: withTTL(
-                moment(time.value).format('DD MMM YYYY HH:mm:ss'),
+                dateTime({input: time.value}).format('DD MMM YYYY HH:mm:ss'),
                 showTTLLabel,
                 docsUrls,
             ),
@@ -57,7 +57,7 @@ export function makeTTLItems(
         res.push({
             key: 'expiration_time',
             value: withTTL(
-                moment(expirationTime).format('DD MMM YYYY HH:mm:ss'),
+                dateTime({input: expirationTime}).format('DD MMM YYYY HH:mm:ss'),
                 showTTLLabel,
                 docsUrls,
             ),
@@ -93,15 +93,11 @@ export function makeTTLItems(
     return res;
 }
 
-function withTTL(
-    children: React.ReactNode,
-    showTTLLabel = false,
-    docsUrls?: Record<string, string>,
-) {
+function withTTL(children: ReactNode, showTTLLabel = false, docsUrls?: Record<string, string>) {
     const ttlDocUrl = docsUrls?.['cypress:ttl'] || '';
 
     return (
-        <React.Fragment>
+        <Fragment>
             {children}{' '}
             {ttlDocUrl && (
                 <Link className={block('ttl-info')} href={ttlDocUrl} view="secondary">
@@ -109,7 +105,7 @@ function withTTL(
                 </Link>
             )}{' '}
             {showTTLLabel && <TTLLabel />}
-        </React.Fragment>
+        </Fragment>
     );
 }
 

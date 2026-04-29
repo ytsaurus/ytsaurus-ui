@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import {Text as GravityText, Icon, Link} from '@gravity-ui/uikit';
 
-import {format as formatUtils} from '../../../utils';
+import {format as hammerFormat} from '../../../utils';
 import {ClipboardButton} from '../../ClipboardButton';
 
 import {TemplateTime} from './TemplateTime';
@@ -26,28 +26,35 @@ export function TemplateId({id}: {id?: string}) {
 
 export function TemplateFormattedValue({
     value,
-    format,
+    format: formatKey,
     settings,
 }: {
     value?: string | number;
     format?: string | ((value: unknown, settings?: Record<string, unknown>) => React.ReactNode);
     settings?: Record<string, unknown>;
 }) {
-    const fmtIsFunc = typeof format === 'function';
-    const fmt = fmtIsFunc ? undefined : (format as string)?.toLowerCase();
+    const fmtIsFunc = typeof formatKey === 'function';
+    const fmtClass = fmtIsFunc ? undefined : (formatKey as string | undefined)?.toLowerCase();
     return (
-        <span className={itemBlock('value', {format: fmt})}>
+        <span className={itemBlock('value', {format: fmtClass})}>
             {fmtIsFunc
-                ? (format as (v: unknown) => React.ReactNode)(value)
-                : formatUtils[format as keyof typeof formatUtils](value, settings)}
+                ? (
+                      formatKey as (
+                          value: unknown,
+                          settings?: Record<string, unknown>,
+                      ) => React.ReactNode
+                  )(value, settings)
+                : formatKey
+                  ? hammerFormat[formatKey as keyof typeof hammerFormat](value, settings)
+                  : null}
         </span>
     );
 }
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 
-export function TemplateReadable({value = formatUtils.NO_VALUE}: {value?: string}) {
-    return <span className={itemBlock('readable')}>{formatUtils['ReadableField'](value)}</span>;
+export function TemplateReadable({value = hammerFormat.NO_VALUE}: {value?: string}) {
+    return <span className={itemBlock('readable')}>{hammerFormat['ReadableField'](value)}</span>;
 }
 
 /* ----------------------------------------------------------------------------------------------------------------- */

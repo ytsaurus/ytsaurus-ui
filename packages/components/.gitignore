@@ -2,6 +2,14 @@
 npm-debug.log
 node_modules
 build
+storybook-static
+
+# Playwright component tests
+.cache
+.cache-docker
+report
+report-docker
+test-results
 
 #personal
 .idea/

@@ -1,3 +1,6 @@
+// Stabilize Date/moment formatting across developer machines and CI.
+process.env.TZ = 'UTC';
+
 module.exports = {
     verbose: true,
     testEnvironment: 'node',

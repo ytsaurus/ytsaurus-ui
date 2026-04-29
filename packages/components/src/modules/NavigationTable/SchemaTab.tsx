@@ -1,22 +1,24 @@
 import {FC, useMemo} from 'react';
-import {Text as GravityText, Icon, TextInput} from '@gravity-ui/uikit';
+import {Flex, Text as GravityText, Icon, TextInput} from '@gravity-ui/uikit';
 import BarsAscendingAlignLeftArrowUpIcon from '@gravity-ui/icons/svgs/bars-ascending-align-left-arrow-up.svg';
 import BarsAscendingAlignLeftArrowDownIcon from '@gravity-ui/icons/svgs/bars-ascending-align-left-arrow-down.svg';
 import type {NavigationTableSchema} from '../../types';
 import {Column} from '@gravity-ui/react-data-table';
 import unipika from '../../utils/unipika';
 import {DataTableYT} from '../../components';
-import {useUnipikaSettings} from '../../context';
+import {YSON_DEFAULT_UNIPIKA_SETTINGS, Yson} from '../../internal/Yson';
+import type {UnipikaSettings} from '../../internal/Yson/StructuredYson/StructuredYsonTypes';
 import i18n from './i18n';
 
 type SchemaTabProps = {
     schema: NavigationTableSchema[];
     filter: string;
     onFilterChange: (value: string) => void;
+    ysonSettings?: UnipikaSettings;
 };
 
-export const SchemaTab: FC<SchemaTabProps> = ({schema, filter, onFilterChange}) => {
-    const unipikaSettings = useUnipikaSettings();
+export const SchemaTab: FC<SchemaTabProps> = ({schema, filter, onFilterChange, ysonSettings}) => {
+    const cellUnipikaSettings = ysonSettings ?? YSON_DEFAULT_UNIPIKA_SETTINGS;
 
     const columns: Column<NavigationTableSchema>[] = useMemo(
         () => [
@@ -25,7 +27,7 @@ export const SchemaTab: FC<SchemaTabProps> = ({schema, filter, onFilterChange}) 
                 header: 'Name',
                 render: ({row}) => {
                     return (
-                        <>
+                        <Flex alignItems="center" gap={1}>
                             {Boolean(row.sort_order) && (
                                 <Icon
                                     data={
@@ -36,8 +38,12 @@ export const SchemaTab: FC<SchemaTabProps> = ({schema, filter, onFilterChange}) 
                                     size={16}
                                 />
                             )}{' '}
-                            {unipika.prettyprint(row.name, {asHTML: false, ...unipikaSettings})}
-                        </>
+                            <Yson
+                                value={unipika.unescapeKeyValue(row.name)}
+                                settings={{...cellUnipikaSettings, asHTML: false}}
+                                inline
+                            />
+                        </Flex>
                     );
                 },
             },
@@ -56,7 +62,7 @@ export const SchemaTab: FC<SchemaTabProps> = ({schema, filter, onFilterChange}) 
                 },
             },
         ],
-        [unipikaSettings],
+        [cellUnipikaSettings],
     );
 
     return (

@@ -61,7 +61,7 @@
     }
 
     &__key {
-        color: var(--secondary-text);
+        color: var(--secondary-text, var(--g-color-text-secondary));
     }
 
     /* templates */

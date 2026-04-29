@@ -2,19 +2,21 @@ import React from 'react';
 import block from 'bem-cn-lite';
 import unipika from '../../utils/unipika';
 
-import {ConfigurableErrorBoundary, useUnipikaSettings} from '../../context';
 import {UnipikaSettings} from '../../internal/Yson/StructuredYson/StructuredYsonTypes';
+import type {ErrorBoundaryProps} from '../../internal/DefaultErrorBoundary';
+import DefaultErrorBoundary from '../../internal/DefaultErrorBoundary/ErrorBoundary';
 
 export type UnipikaValueType = Array<string | UnipikaValueType>;
 
 export type YqlValueProps = {
     value?: unknown;
     type: UnipikaValueType;
-    settings?: UnipikaSettings;
+    settings: UnipikaSettings;
     inline?: boolean;
+    ErrorBoundaryComponent?: React.ComponentType<ErrorBoundaryProps>;
 };
 
-class YqlValueImpl extends React.Component<YqlValueProps> {
+export class YqlValue extends React.Component<YqlValueProps> {
     static getFormattedValue(value: unknown, type: UnipikaValueType, settings?: UnipikaSettings) {
         const yqlValue = [value, type];
 
@@ -24,9 +26,10 @@ class YqlValueImpl extends React.Component<YqlValueProps> {
     }
 
     render() {
-        const {value, type, inline, settings} = this.props;
+        const {value, type, inline, settings, ErrorBoundaryComponent} = this.props;
+        const ConfigurableErrorBoundary = ErrorBoundaryComponent || DefaultErrorBoundary;
 
-        const formattedValue = YqlValueImpl.getFormattedValue(value, type, settings);
+        const formattedValue = YqlValue.getFormattedValue(value, type, settings);
 
         let title;
 
@@ -36,7 +39,7 @@ class YqlValueImpl extends React.Component<YqlValueProps> {
             });
 
             title =
-                settings?.format === 'raw-json'
+                settings.format === 'raw-json'
                     ? unipika.formatRaw(value, titleSettings)
                     : unipika.formatFromYQL(value, titleSettings);
         }
@@ -47,7 +50,7 @@ class YqlValueImpl extends React.Component<YqlValueProps> {
 
         return (
             <ConfigurableErrorBoundary>
-                {settings?.asHTML ? (
+                {settings.asHTML ? (
                     <div className={classes} title={title} dir="auto">
                         <pre
                             className="unipika"
@@ -65,17 +68,3 @@ class YqlValueImpl extends React.Component<YqlValueProps> {
         );
     }
 }
-
-function YqlValueComponent(props: YqlValueProps) {
-    const fromContext = useUnipikaSettings();
-    const settings = props.settings !== undefined ? props.settings : fromContext;
-    return <YqlValueImpl {...props} settings={settings} />;
-}
-
-type YqlValueWithStatic = React.FC<YqlValueProps> & {
-    getFormattedValue: typeof YqlValueImpl.getFormattedValue;
-};
-
-export const YqlValue: YqlValueWithStatic = Object.assign(YqlValueComponent, {
-    getFormattedValue: YqlValueImpl.getFormattedValue,
-});

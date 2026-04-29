@@ -12,7 +12,7 @@
             content: 'optional';
             vertical-align: top;
 
-            color: var(--color-neutral-8);
+            color: var(--color-neutral-8, var(--g-color-text-secondary));
         }
     }
 

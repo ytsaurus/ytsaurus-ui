@@ -1,11 +1,6 @@
 import format from './format';
-import moment from 'moment-timezone';
 
 describe('format.DateTime', () => {
-    beforeEach(() => {
-        moment.tz.setDefault('GMT+0');
-    });
-
     describe('when value is undefined', () => {
         it('should return NO_VALUE', () => {
             const result = format.DateTime(undefined);
@@ -119,7 +114,7 @@ describe('format.DateTime', () => {
         });
 
         it('should handle string date in different format', () => {
-            const result = format.DateTime('2023-09-15 10:30:45');
+            const result = format.DateTime('2023-09-15T10:30:45');
             expect(result).toBe('15 Sep 2023 10:30:45');
         });
     });

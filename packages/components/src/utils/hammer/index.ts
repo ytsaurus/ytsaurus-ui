@@ -1,5 +1,3 @@
-/* eslint-env commonjs */
+import format from '@ytsaurus/interface-helpers/lib/hammer/format';
 
-// @ts-ignore
-export {default as hammer} from '@ytsaurus/interface-helpers/lib/hammer';
-export {default as format} from './format';
+export {format};

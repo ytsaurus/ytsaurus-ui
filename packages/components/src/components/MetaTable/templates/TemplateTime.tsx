@@ -1,8 +1,7 @@
 import cn from 'bem-cn-lite';
 
 import {Flex, Text as GravityText} from '@gravity-ui/uikit';
-
-import format from '../../../utils/hammer/format';
+import {format} from '../../../utils';
 
 const itemBlock = cn('meta-table-item');
 
@@ -53,7 +52,7 @@ export function TemplateTime<T extends ValueFormat = 'DateTime'>({
         );
     }
 
-    const content = format[valueFormat](time, settings);
+    const content = format[valueFormat as keyof typeof format](time, settings);
     return (
         <span className={className} title={content}>
             {content}

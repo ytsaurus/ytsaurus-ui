@@ -2,23 +2,8 @@
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import unipika from './unipika';
 import {appendInnerErrors} from '../../utils/errors';
-import {ypathBase} from './ypath-base';
 
 const yson = unipika.utils.yson;
-
-function convertToBoolean(value?: boolean | string): boolean | undefined {
-    value = yson.value(value);
-
-    const type = unipika.utils.type(value);
-
-    if (type === 'string' && (value === 'true' || value === 'false')) {
-        return value === 'true';
-    } else if (type === 'boolean' || type === 'undefined') {
-        return value as boolean | undefined;
-    } else {
-        throw new Error('thorYPath: value cannot be converted to boolean.');
-    }
-}
 
 /** @deprecated */
 function convertToNumberOld(value: number | string, defaultValue?: number): number | undefined {
@@ -55,23 +40,6 @@ function convertToNumberOld(value: number | string, defaultValue?: number): numb
 
 const thorYPath = {
     ...ypath,
-    ...ypathBase,
-
-    getBoolean(node: unknown, path: string) {
-        const value = thorYPath.get(node, path);
-
-        return convertToBoolean(value);
-    },
-
-    getNumber<T extends number | undefined>(node: any, path: string, defaultValue?: T) {
-        try {
-            return ypathBase.getNumberBase(node, path, defaultValue);
-        } catch (e) {
-            throw appendInnerErrors(e, {
-                message: `getNumber: failed to convert field with path: "${path}".`,
-            });
-        }
-    },
 
     /** @deprecated */
     getNumberDeprecated(node: unknown, path: string, defaultValue?: number) {
@@ -85,7 +53,5 @@ const thorYPath = {
         }
     },
 };
-
-export {convertToNumber} from './ypath-base';
 
 export default thorYPath;

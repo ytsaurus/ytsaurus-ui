@@ -1,5 +1,5 @@
 import {YTApiSetup, ytApiV3} from '../rum-wrap-api';
-import {ypath} from '../../utils/ypath';
+import {ypath} from '../../utils';
 import {NavigationNode} from '../../types/navigation';
 
 export const loadFolderByPath = async (
