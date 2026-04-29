@@ -1,0 +1,12 @@
+.yt-query-spyt-settings {
+    width: 100%;
+
+    &__header {
+        padding-bottom: 12px;
+    }
+
+    &__editor {
+        height: 300px;
+        border: 1px solid var(--dark-divider);
+    }
+}

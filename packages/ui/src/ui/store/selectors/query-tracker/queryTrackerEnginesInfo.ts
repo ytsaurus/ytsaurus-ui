@@ -16,3 +16,19 @@ export const selectDefaultYqlVersion = createSelector([selectQueryTrackerInfo], 
 export const selectSpytEnginesInfo = (state: RootState) => {
     return selectQueryTrackerInfo(state)?.engines_info?.spyt;
 };
+
+const selectQueryTrackerInfoLoaded = (state: RootState) => state.queryTracker.aco.loaded;
+
+export const selectSpytDefaultSettings = createSelector(
+    [
+        (state: RootState) => selectSpytEnginesInfo(state)?.default_settings,
+        selectQueryTrackerInfoLoaded,
+    ],
+    (defaultSettings, loaded) => {
+        if (!loaded || !defaultSettings || !Object.keys(defaultSettings).length) {
+            return {};
+        }
+
+        return defaultSettings;
+    },
+);

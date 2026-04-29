@@ -84,6 +84,7 @@ import {
     resetQueryTabs,
 } from '../../reducers/query-tracker/queryTabsSlice';
 import {updateQueryTabs} from './queryTabs/queryTabs';
+import {selectSpytDefaultSettings} from '../../selectors/query-tracker/queryTrackerEnginesInfo';
 
 type AsyncAction = ThunkAction<void, RootState, unknown, any>;
 
@@ -199,22 +200,16 @@ export const loadTablePromptToQuery =
 export const setQueryEngine =
     (engine: QueryEngine): AsyncAction =>
     (dispatch, getState) => {
-        const settings = selectQueryDraftSettings(getState());
+        const state = getState();
+        const {cluster} = selectQueryDraftSettings(state);
+        const spytDefaultConfig = selectSpytDefaultSettings(state);
 
-        const newSettings = {...settings};
-        if (engine !== QueryEngine.SPYT) {
-            delete newSettings.discovery_group;
+        let newSettings: DraftQuery['settings'] = cluster ? {cluster} : {};
+        if (engine === QueryEngine.SPYT) {
+            newSettings = {...spytDefaultConfig, ...newSettings};
         }
 
-        if (engine !== QueryEngine.CHYT) {
-            delete newSettings.clique;
-        }
-
-        if (engine !== QueryEngine.YQL) {
-            delete newSettings.yql_version;
-        }
-
-        dispatch(updateQueryDraft({settings: newSettings}));
+        dispatch(updateQueryDraft({engine, settings: newSettings}));
     };
 
 export const setQueryCluster =
@@ -380,6 +375,31 @@ export function updateQueryDraft(data: Partial<QueryState['draft']>) {
     return {type: SET_QUERY_PATCH, data};
 }
 
+export const mergeSpytDefaultSettingsIntoDraft = (): AsyncAction => (dispatch, getState) => {
+    const state = getState();
+
+    if (selectQuery(state)?.id) {
+        return;
+    }
+
+    const engine = selectQueryEngine(state);
+    if (engine !== QueryEngine.SPYT) {
+        return;
+    }
+
+    const spytDefaultSettings = selectSpytDefaultSettings(state);
+    if (!Object.keys(spytDefaultSettings).length) {
+        return;
+    }
+
+    const settings = selectQueryDraftSettings(state) ?? {};
+    dispatch(
+        updateQueryDraft({
+            settings: {...spytDefaultSettings, ...settings},
+        }),
+    );
+};
+
 export function createQueryFromTablePath(
     engine: QueryEngine,
     cluster: string,
@@ -427,6 +447,9 @@ export function createQueryFromTablePath(
                         },
                     });
                 }
+                if (engine === QueryEngine.SPYT) {
+                    dispatch(mergeSpytDefaultSettingsIntoDraft());
+                }
             } else {
                 dispatch(createEmptyQuery(engine));
             }
@@ -448,10 +471,12 @@ export function createEmptyQuery(
         const state = getState();
         const lastEngine = getLastUserChoiceQueryEngine(state);
         const defaultQueryACO = selectDefaultQueryACO(state);
+        const defaultSpytSettings = selectSpytDefaultSettings(state);
 
         const initialEngine = engine || lastEngine || QueryEngine.YQL;
+        const isSpyt = initialEngine === QueryEngine.SPYT;
+        const querySettings = {...(isSpyt ? defaultSpytSettings : {}), ...(settings || {})};
 
-        const defaultSettings: DraftQuery['settings'] = {};
         UIFactory.getInlineSuggestionsApi()?.onQueryCreate();
         dispatch({
             type: SET_QUERY,
@@ -461,7 +486,7 @@ export function createEmptyQuery(
                     access_control_objects: [defaultQueryACO],
                     query: query || '',
                     engine: initialEngine,
-                    settings: settings || defaultSettings,
+                    settings: querySettings,
                 } as QueryItem,
             },
         });

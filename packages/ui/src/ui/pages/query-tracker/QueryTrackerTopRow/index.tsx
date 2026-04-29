@@ -5,7 +5,6 @@ import {Page} from '../../../../shared/constants/settings';
 import {selectQueryDraft} from '../../../store/selectors/query-tracker/query';
 import {
     resetQueryTracker,
-    setQueryEngine,
     setUserLastChoice,
     updateQueryDraft,
 } from '../../../store/actions/query-tracker/query';
@@ -24,7 +23,7 @@ import {setSettingByKey} from '../../../store/actions/settings';
 import {useIsDesktop} from '../../../hooks/useIsDesktop';
 import {QueryClusterSelector} from './QueryClusterSelector';
 import {LazyQueryTokenButton} from '../QueryToken/lazy';
-import {setQueryName} from '../../../store/actions/query-tracker/api';
+import {type DraftQuery, setQueryName} from '../../../store/actions/query-tracker/api';
 import {updateQueryInList} from '../../../store/actions/query-tracker/queriesList';
 import i18n from './i18n';
 
@@ -34,12 +33,11 @@ const block = cn('query-tracker-top-row');
 const QueryTrackerTopRow: FC = () => {
     const dispatch = useDispatch();
     const isDesktop = useIsDesktop();
-    const {id, annotations, settings} = useSelector(selectQueryDraft);
+    const {id, annotations, settings, engine} = useSelector(selectQueryDraft);
     const [nameEdit, setNameEdit] = useState(false);
 
     const handleChangeEngine = useCallback(
         (newEngine: QueryEngine) => {
-            dispatch(setQueryEngine(newEngine));
             dispatch(setSettingByKey(`global::queryTracker::lastEngine`, newEngine));
             dispatch(setUserLastChoice());
         },
@@ -69,7 +67,7 @@ const QueryTrackerTopRow: FC = () => {
     );
 
     const handleSettingsChange = useCallback(
-        (newSettings: Record<string, string>) =>
+        (newSettings: DraftQuery['settings']) =>
             dispatch(updateQueryDraft({settings: newSettings})),
         [dispatch],
     );
@@ -104,6 +102,7 @@ const QueryTrackerTopRow: FC = () => {
                         <Flex gap={2}>
                             <QuerySettingsButton
                                 settings={settings}
+                                engine={engine}
                                 onChange={handleSettingsChange}
                             />
                             <QueryFilesButton />
