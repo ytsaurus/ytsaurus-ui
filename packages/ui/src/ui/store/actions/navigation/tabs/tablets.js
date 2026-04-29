@@ -11,7 +11,7 @@ import {
     TOGGLE_HISTOGRAM,
 } from '../../../../constants/navigation/tabs/tablets';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
-import {getTabletsExpandedHosts} from '../../../../store/selectors/navigation/tabs/tablets-ts';
+import {selectTabletsExpandedHosts} from '../../../../store/selectors/navigation/tabs/tablets-ts';
 
 const requests = new CancelHelper();
 
@@ -70,7 +70,7 @@ export function changeTabletsMode(evt) {
 
 export function toggleExpandedHost(name) {
     return (dispatch, getState) => {
-        const expandedHosts = getTabletsExpandedHosts(getState()).slice();
+        const expandedHosts = selectTabletsExpandedHosts(getState()).slice();
         const index = expandedHosts.indexOf(name);
         if (index >= 0) {
             expandedHosts.splice(index, 1);
