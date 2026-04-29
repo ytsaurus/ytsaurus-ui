@@ -1,7 +1,7 @@
 import React from 'react';
 import {Icon} from '@gravity-ui/uikit';
 import {AccessDenied, NotFound} from '@gravity-ui/illustrations';
-import {type SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
+import {type IconData} from '@gravity-ui/uikit';
 
 import {type ErrorCode} from './helpers';
 
@@ -10,7 +10,7 @@ type Props = {
 };
 
 type ImageMap = {
-    [key in ErrorCode]: SVGIconData;
+    [key in ErrorCode]: IconData;
 };
 
 const ErrorImages: ImageMap = {

@@ -1,7 +1,5 @@
 import React, {type ReactElement} from 'react';
-import {Select, type SelectProps, TextInput} from '@gravity-ui/uikit';
-import {type Option} from '@gravity-ui/uikit/build/esm/components/Select/tech-components';
-import {type SelectOption} from '@gravity-ui/uikit/build/esm/components/Select/types';
+import {Select, type SelectOption, type SelectProps, TextInput} from '@gravity-ui/uikit';
 import './QuerySelector.scss';
 import cn from 'bem-cn-lite';
 
@@ -12,7 +10,7 @@ type Props<T> = {
     items: T[];
     value?: string;
     onChange: (value: string) => void;
-    children: (items: T[]) => ReactElement<SelectOption<T>, typeof Option>[];
+    children: (items: T[]) => ReactElement<SelectOption<T>, typeof Select.Option>[];
 } & Omit<SelectProps, 'children' | 'onUpdate' | 'value'>;
 
 export const QuerySelector = <T,>({
