@@ -178,6 +178,7 @@
     "monaco-vim": "^0.4.2",
     "msw": "^2.10.3",
     "msw-storybook-addon": "^2.0.5",
+    "oxlint": "^1.62.0",
     "postcss": "^8.4.29",
     "postcss-scss": "^4.0.7",
     "prop-types": "^15.6.0",
