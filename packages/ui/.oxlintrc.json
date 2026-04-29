@@ -1,0 +1,28 @@
+{
+    "$schema": "./node_modules/oxlint/configuration_schema.json",
+    "plugins": ["import"],
+    "categories": {
+        "correctness": "off",
+        "suspicious": "off",
+        "pedantic": "off",
+        "perf": "off",
+        "style": "off",
+        "restriction": "off",
+        "nursery": "off"
+    },
+    "ignorePatterns": [
+        "**/node_modules/**",
+        "dist/**",
+        "build/**",
+        "src/ui/vendor/**",
+        "src/ui/packages/**"
+    ],
+    "rules": {
+        "import/no-cycle": [
+            "warn",
+            {
+                "ignoreExternal": true
+            }
+        ]
+    }
+}
