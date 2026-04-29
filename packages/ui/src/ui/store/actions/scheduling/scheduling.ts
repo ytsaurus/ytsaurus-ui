@@ -50,6 +50,7 @@ import {YTErrors} from '../../../rum/constants';
 import {type PoolTreeNode} from '../../../utils/scheduling/pool-child';
 import {type SortState} from '../../../types';
 import {toaster} from '../../../utils/toaster';
+import i18n from './i18n';
 
 const setName = (path: string, newName?: string, prevName?: string) => {
     if (prevName === newName) {
@@ -263,7 +264,7 @@ export function editPool(
                     name: 'edit pool',
                     autoHiding: 10000,
                     theme: 'success',
-                    title: `Successfully edited ${pool.name}. Please wait.`,
+                    title: i18n('alert_edit-pool-success', {name: pool.name}),
                 });
 
                 dispatch({type: SCHEDULING_EDIT_POOL_SUCCESS});

@@ -9,6 +9,7 @@ import {useFetchBatchQuery} from '../../../../../store/api/yt';
 import {getCurrentPool} from '../../../../../store/selectors/scheduling/scheduling';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {type PoolTreeNode} from '../../../../../utils/scheduling/pool-child';
+import i18n from './i18n';
 
 export function PoolAttributes({className}: {className: string}) {
     const pool = useSelector(getCurrentPool);
@@ -28,7 +29,7 @@ function PoolAttributesFetched({className, pool}: {className?: string; pool: Poo
 
     const {data, error, isLoading} = useFetchBatchQuery<unknown>({
         id: YTApiId.schedulingPoolAttributes,
-        errorTitle: 'Failed to load pool attributes',
+        errorTitle: i18n('alert_failed-to-load'),
         parameters: {
             requests: [{command: 'get', parameters: {path: res.orchidPath}}],
         },

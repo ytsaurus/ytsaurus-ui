@@ -42,6 +42,7 @@ import {makeRoutedURL} from '../../../store/location';
 import UIFactory from '../../../UIFactory';
 
 import './SchedulingTopRowContent.scss';
+import i18n from './i18n';
 
 const block = cn('scheduling-top-row-content');
 
@@ -118,7 +119,7 @@ function CurrentPoolToClipboardButton() {
             className={block('clipboard')}
             text={currentPool}
             shiftText={currentPoolPath}
-            hoverContent={'Hold SHIFT-key to copy full path'}
+            hoverContent={i18n('context_shift-copy-full-path')}
         />
     );
 }
@@ -202,7 +203,7 @@ function SchedulingPhysicalTree() {
                 options={treeItems}
                 onUpdate={(vals) => onChange(vals[0])}
                 className={block('path-tree')}
-                placeholder="Select tree..."
+                placeholder={i18n('action_select-tree')}
                 width="max"
             />
         </div>

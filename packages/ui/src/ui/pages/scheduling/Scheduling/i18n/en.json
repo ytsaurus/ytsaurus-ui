@@ -1,0 +1,10 @@
+{
+    "context_shift-copy-full-path": "Hold SHIFT-key to copy full path",
+    "action_select-tree": "Select tree...",
+    "title_delete": "Delete",
+    "confirm_delete-pool-prefix": "Are you sure you want to delete the",
+    "confirm_delete-pool-suffix": "pool?",
+    "alert_delete-pool-failure": "Delete pool failure",
+    "action_cancel": "Cancel",
+    "action_delete": "Delete"
+}

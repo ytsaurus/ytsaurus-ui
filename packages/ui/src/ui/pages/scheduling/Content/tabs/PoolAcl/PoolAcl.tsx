@@ -6,6 +6,7 @@ import isEmpty_ from 'lodash/isEmpty';
 
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
 import {NoContent} from '../../../../../components/NoContent';
+import i18n from './i18n';
 import {type RootState} from '../../../../../store/reducers';
 import {
     getIsRoot,
@@ -32,8 +33,8 @@ function PoolAcl() {
     if (isRoot) {
         return (
             <NoContent
-                warning="Visualization is not supported for <Root>."
-                hint=" Please select a specific pool."
+                warning={i18n('alert_root-not-supported')}
+                hint={i18n('context_select-pool')}
             />
         );
     }

@@ -1,0 +1,19 @@
+{
+  "action_create-pool": "Create pool",
+  "title_create-pool": "Create pool",
+  "alert_name-not-unique": "the value must be unique",
+  "field_name": "Name",
+  "field_enter-pool-name": "Enter pool name...",
+  "field_pool-tree": "Pool tree",
+  "context_pool-tree": "Select pool tree where to create new pool.",
+  "action_see": "See",
+  "action_documentation": "Documentations",
+  "context_pool-tree-docs-suffix": "for more details.",
+  "field_select-pool-tree": "Select pool tree...",
+  "field_parent": "Parent",
+  "context_parent": "Select parent pool, defining a place in pool_tree to place a new pool.",
+  "field_select-parent": "Select parent...",
+  "field_responsible-users": "Responsible users",
+  "context_responsible-users": "Choose responsible users who will manage permissions and pool settings.",
+  "field_select-responsible-users": "Select responsible users..."
+}

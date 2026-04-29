@@ -126,8 +126,8 @@ export function SchedulingMeta() {
                     ),
                     visible: capacity >= 0,
                 },
-                {key: i18n('burst'), value: burstUnit, visible: burstUnit.length > 0},
-                {key: i18n('flow'), value: flowUnit, visible: flowUnit.length > 0},
+                {key: 'Burst', value: burstUnit, visible: burstUnit.length > 0},
+                {key: 'Flow', value: flowUnit, visible: flowUnit.length > 0},
             ]);
             res.subTitles.push(i18n('integral-guarantees'));
         }

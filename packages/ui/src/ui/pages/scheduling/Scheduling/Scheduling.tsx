@@ -2,6 +2,8 @@ import React from 'react';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
+import i18n from './i18n';
+
 import keys_ from 'lodash/keys';
 
 import {DialogWrapper as DeleteDialog} from '../../../components/DialogWrapper/DialogWrapper';
@@ -101,19 +103,23 @@ function SchedulingDialogs() {
                     onClose={deleteCloseHandler}
                     hasCloseButton
                 >
-                    <DeleteDialog.Header caption="Delete" />
+                    <DeleteDialog.Header caption={i18n('title_delete')} />
                     <DeleteDialog.Body>
-                        Are you sure you want to delete the <b>{deleteItem?.name}</b> pool?
+                        {i18n('confirm_delete-pool-prefix')} <b>{deleteItem?.name}</b>{' '}
+                        {i18n('confirm_delete-pool-suffix')}
                         {keys_(poolErrorData).length > 0 ? (
-                            <YTErrorBlock message="Delete pool failure" error={poolErrorData} />
+                            <YTErrorBlock
+                                message={i18n('alert_delete-pool-failure')}
+                                error={poolErrorData}
+                            />
                         ) : null}
                     </DeleteDialog.Body>
                     <DeleteDialog.Footer
                         onClickButtonApply={deleteConfirmHandler}
                         onClickButtonCancel={deleteCloseHandler}
                         propsButtonApply={{view: 'flat-danger'}}
-                        textButtonCancel="Cancel"
-                        textButtonApply="Delete"
+                        textButtonCancel={i18n('action_cancel')}
+                        textButtonApply={i18n('action_delete')}
                     />
                 </DeleteDialog>
             )}

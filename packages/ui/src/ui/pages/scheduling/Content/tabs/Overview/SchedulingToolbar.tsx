@@ -1,9 +1,7 @@
-import React from 'react';
 import cn from 'bem-cn-lite';
+import React from 'react';
 
 import {SegmentedRadioGroup, Switch} from '@gravity-ui/uikit';
-
-import format from '../../../../../common/hammer/format';
 
 import {DialogWrapper} from '../../../../../components/DialogWrapper/DialogWrapper';
 import {ExpandButton} from '../../../../../components/ExpandButton';
@@ -14,17 +12,18 @@ import {
     schedulingSetShowAbsResources,
 } from '../../../../../store/actions/scheduling/scheduling';
 import {schedulingSetAbcFilter} from '../../../../../store/actions/scheduling/scheduling-ts';
+import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
+import {getSchedulingAbcFilter} from '../../../../../store/selectors/scheduling/attributes-to-filter';
+import {getExpandedPoolsLoadAll} from '../../../../../store/selectors/scheduling/expanded-pools';
 import {
     SCHEDULING_CONTENT_MODES,
     getSchedulingContentMode,
     getSchedulingShowAbsResources,
 } from '../../../../../store/selectors/scheduling/scheduling';
-import {getSchedulingAbcFilter} from '../../../../../store/selectors/scheduling/attributes-to-filter';
-import {getExpandedPoolsLoadAll} from '../../../../../store/selectors/scheduling/expanded-pools';
-import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 
 import {PoolsSuggest} from '../../../../../pages/scheduling/PoolsSuggest/PoolsSuggest';
 import UIFactory from '../../../../../UIFactory';
+import i18n from './i18n';
 
 import './SchedulingToolbar.scss';
 
@@ -63,7 +62,7 @@ function SchedulingContentMode() {
             onUpdate={(v) => dispatch(schedulingChangeContentMode(v))}
             name="navigation-tablets-mode"
             options={SCHEDULING_CONTENT_MODES.map((value) => {
-                return {value, content: format.ReadableField(value)};
+                return {value, content: i18n(`mode-value_${value}`)};
             })}
         />
     );
@@ -90,11 +89,10 @@ export function SchedulingExpandAll() {
 
     const confirmation = showConfirmation ? (
         <DialogWrapper open={true} onClose={() => {}}>
-            <DialogWrapper.Header caption={'Confirmation of "Expand all"'} />
+            <DialogWrapper.Header caption={i18n('title_expand-all-confirmation')} />
             <DialogWrapper.Body>
-                To display the expanded tree it is required to load all running operations, it might
-                be a reason of less responsiveness UI.
-                <div>Are you sure you want to load all running operations?</div>
+                {i18n('context_expand-all-warning')}
+                <div>{i18n('confirm_expand-all')}</div>
             </DialogWrapper.Body>
             <DialogWrapper.Footer
                 onClickButtonApply={() => {
@@ -102,8 +100,8 @@ export function SchedulingExpandAll() {
                     dispatch(setLoadAllOperations(!loadAll));
                 }}
                 onClickButtonCancel={() => setShowConfirmation(false)}
-                textButtonCancel={'No'}
-                textButtonApply={'Yes, please expand'}
+                textButtonCancel={i18n('action_expand-all-no')}
+                textButtonApply={i18n('action_expand-all-yes')}
             />
         </DialogWrapper>
     ) : null;
@@ -138,7 +136,7 @@ function SchedulingShowAbsResources() {
                 dispatch(schedulingSetShowAbsResources(v));
             }}
         >
-            Show abs. resources
+            {i18n('action_show-abs-resources')}
         </Switch>
     );
 }

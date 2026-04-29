@@ -31,6 +31,7 @@ import './Content.scss';
 import SchedulingExpandedPoolsUpdater from './SchedulingExpandedPoolsUpdater';
 import {PoolAttributes} from './tabs/PoolAttributes/PoolAttributes';
 import UIFactory from '../../../UIFactory';
+import i18n from './i18n';
 
 const block = cn('scheduling-content');
 
@@ -59,7 +60,10 @@ function Content({match, location}: ContentProps) {
         {} as Record<string, TabSettings>,
     );
 
-    const titleDict: Record<string, string> = {};
+    const titleDict: Record<string, string> = {
+        [SchedulingTab.OVERVIEW]: i18n('title_overview'),
+        [SchedulingTab.ATTRIBUTES]: i18n('title_attributes'),
+    };
 
     const aclTab = showSettings[SchedulingTab.ACL];
     aclTab.show = aclTab.show && allowAcl;
