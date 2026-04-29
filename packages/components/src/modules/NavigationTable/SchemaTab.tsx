@@ -36,7 +36,7 @@ export const SchemaTab: FC<SchemaTabProps> = ({schema, filter, onFilterChange}) 
                                     size={16}
                                 />
                             )}{' '}
-                            {unipika.prettyprint(row.name, {asHTML: false, ...unipikaSettings})}
+                            {unipika.prettyprint(row.name, {...unipikaSettings, asHTML: false})}
                         </>
                     );
                 },
