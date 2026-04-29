@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import {type TypedUseQueryStateOptions} from '@reduxjs/toolkit/dist/query/react';
+import {type TypedUseQueryStateOptions} from '@reduxjs/toolkit/query/react';
 
 import {
     type BaseQueryFn,
