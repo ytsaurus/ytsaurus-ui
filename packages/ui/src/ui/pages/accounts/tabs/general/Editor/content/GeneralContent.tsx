@@ -13,6 +13,7 @@ import {SuggestParentsForEditableAccount} from '../../../../AccountsSuggest';
 
 import './../Editor.scss';
 import UIFactory from '../../../../../../UIFactory';
+import i18n from './i18n';
 import {type RootState} from '../../../../../../store/reducers';
 import {type AccountParsedData} from '../../../../../../utils/accounts/accounts-selector';
 
@@ -73,7 +74,7 @@ class GeneralContent extends React.Component<Props> {
     renderParentAccount(value = '') {
         const {isAdmin} = this.props;
         return (
-            <WithHeader header="Parent">
+            <WithHeader header={i18n('field_parent')}>
                 <SuggestParentsForEditableAccount
                     value={value}
                     onChange={this.onParentChange}
@@ -95,11 +96,13 @@ class GeneralContent extends React.Component<Props> {
         const control = UIFactory.renderControlAbcService({
             value: {id, slug},
             onChange: this.onAbcServiceChanged,
-            placeholder: 'Select ABC service...',
+            placeholder: i18n('field_abc-service-placeholder'),
             disabled: !isAdmin,
         });
 
-        return !control ? null : <WithHeader header="ABC Service">{control}</WithHeader>;
+        return !control ? null : (
+            <WithHeader header={i18n('field_abc-service')}>{control}</WithHeader>
+        );
     }
 
     onAbcServiceChanged = async (

@@ -30,7 +30,7 @@ import {
 import {promptAction, showErrorModal} from '../../../../../../store/actions/actions';
 import {performJobAction} from '../utils';
 import {LOADING_STATUS} from '../../../../../../constants/index';
-import {PLEASE_PROCEED_TEXT} from '../../../../../../utils/actions';
+import {TEXT} from '../../../../../../utils/actions';
 import {getShowCompetitiveJobs} from '../../../../../../pages/operations/selectors';
 import {selectJobsOperationId} from '../../../../../../store/selectors/operations/jobs';
 import {
@@ -87,7 +87,7 @@ class OperationJobsTable extends React.Component {
             text: 'Abort',
             message:
                 'Aborting job will cause losing its progress, are you sure you want to proceed?',
-            confirmationText: PLEASE_PROCEED_TEXT,
+            confirmationText: TEXT.pleaseProceedText,
         },
         {
             name: 'abandon',
@@ -97,7 +97,7 @@ class OperationJobsTable extends React.Component {
             text: 'Abandon',
             message:
                 'Abandoning job will cause losing its progress, are you sure you want to proceed?',
-            confirmationText: PLEASE_PROCEED_TEXT,
+            confirmationText: TEXT.pleaseProceedText,
         },
         {
             name: 'input_context',

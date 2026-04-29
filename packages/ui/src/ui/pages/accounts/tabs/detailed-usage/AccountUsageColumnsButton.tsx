@@ -13,6 +13,7 @@ import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import ColumnSelectorModal from '../../../../components/ColumnSelectorModal/ColumnSelectorModal';
 import {setAccountUsageColumns} from '../../../../store/actions/accounts/account-usage';
 import {Secondary} from '@ytsaurus/components';
+import i18n from './i18n';
 
 const AccountUsageColumnsDialogMemo = React.memo(AccountUsageColumnsDialog);
 
@@ -30,7 +31,7 @@ function AccountUsageColumnsButton() {
 
     return (
         <React.Fragment>
-            <Button onClick={toggleVisibility}>Columns</Button>
+            <Button onClick={toggleVisibility}>{i18n('action_columns')}</Button>
             <AccountUsageColumnsDialogMemo visible={visible} onClose={handleClose} />
         </React.Fragment>
     );
@@ -86,7 +87,7 @@ function AccountUsageColumnsDialog({visible, onClose}: DialogProps) {
                     name
                 ) : (
                     <span>
-                        <Secondary>Medium: </Secondary>
+                        <Secondary>{i18n('field_medium')}</Secondary>
                         {readableAccountUsageColumnName(caption)}
                     </span>
                 );

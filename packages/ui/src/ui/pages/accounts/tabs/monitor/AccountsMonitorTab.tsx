@@ -18,7 +18,7 @@ function AccountsMonitorTab(props: {
     const account = useSelector(selectActiveAccount);
 
     if (!account) {
-        return <AccountsNoContent hint={i18n('please-choose-one-to-display')} />;
+        return <AccountsNoContent hint={i18n('alert_please-choose-one-to-display')} />;
     }
 
     return (

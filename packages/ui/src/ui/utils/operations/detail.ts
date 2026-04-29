@@ -4,8 +4,10 @@ import {formatByParams} from '../../../shared/utils/format';
 import ypath from '../../common/thor/ypath';
 import {getMetrics} from '../../common/utils/metrics';
 import {ytApiV3} from '../../rum/rum-wrap-api';
-import {PLEASE_PROCEED_TEXT} from '../../utils/actions';
+import {TEXT} from '../../utils/actions';
 import {hasTaskHistograms} from './jobs';
+
+import i18n from './i18n';
 
 import {type DetailedOperationSelector} from '../../pages/operations/selectors';
 import {type IconName} from '../../components/Icon/Icon';
@@ -103,11 +105,10 @@ export function prepareActions(operation: DetailedOperationSelector) {
         actions.push({
             modalKey: 'abort',
             name: 'abort',
-            successMessage: 'Operation was successfully aborted',
+            successMessage: i18n('alert_operation-aborted'),
             icon: 'stop-circle',
-            message:
-                "Operation will be aborted with all running jobs, this will cause losing some jobs' data. Are you sure you want to proceed?",
-            confirmationText: PLEASE_PROCEED_TEXT,
+            message: i18n('confirm_abort-operation'),
+            confirmationText: TEXT.pleaseProceedText,
         });
     }
 
@@ -115,19 +116,18 @@ export function prepareActions(operation: DetailedOperationSelector) {
         actions.push({
             modalKey: 'complete',
             name: 'complete',
-            successMessage: 'Operation was successfully completed',
+            successMessage: i18n('alert_operation-completed'),
             icon: 'check-circle',
-            message:
-                "Operation will be immediately completed. Running jobs will be aborted, this will cause losing some jobs' data. Are you sure you want to proceed?",
-            confirmationText: PLEASE_PROCEED_TEXT,
+            message: i18n('confirm_complete-operation'),
+            confirmationText: TEXT.pleaseProceedText,
         });
 
         if (suspended) {
             actions.push({
                 modalKey: 'resume',
                 name: 'resume',
-                details: 'Operation will be resumed.',
-                successMessage: 'Operation was successfully resumed',
+                details: i18n('confirm_resume-operation'),
+                successMessage: i18n('alert_operation-resumed'),
                 icon: 'play-circle',
                 theme: 'action',
             });
@@ -135,10 +135,10 @@ export function prepareActions(operation: DetailedOperationSelector) {
             actions.push({
                 modalKey: 'suspend',
                 name: 'suspend',
-                details: 'Operation will be suspended.',
-                successMessage: 'Operation was successfully suspended',
+                details: i18n('confirm_suspend-operation'),
+                successMessage: i18n('alert_operation-suspended'),
                 icon: 'pause-circle',
-                optionMessage: 'Running jobs strategy',
+                optionMessage: i18n('field_running-jobs-strategy'),
                 optionValue: 'abort',
                 optionType: 'radio',
                 options: [
@@ -147,14 +147,14 @@ export function prepareActions(operation: DetailedOperationSelector) {
                             parameters: {abort_running_jobs: true},
                         },
                         value: 'abort',
-                        text: 'Abort running jobs',
+                        text: i18n('value_abort-running-jobs'),
                     },
                     {
                         data: {
                             parameters: {},
                         },
                         value: 'retain',
-                        text: 'Retain running jobs',
+                        text: i18n('value_retain-running-jobs'),
                     },
                 ],
             });

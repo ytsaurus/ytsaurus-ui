@@ -1,5 +1,6 @@
 import {prepareTableColumns} from '../../../../../utils/index';
 import hammer from '../../../../../common/hammer';
+import i18n from './i18n';
 
 export const columns = {
     state: {
@@ -10,10 +11,12 @@ export const columns = {
     },
     phase: {
         align: 'left',
-        caption: 'State : Phase',
+        get caption() {
+            return i18n('field_state-phase');
+        },
         get(event) {
             if (event.state === 'total') {
-                return 'Total';
+                return i18n('value_total');
             }
 
             const formatter = hammer.format['Readable'];

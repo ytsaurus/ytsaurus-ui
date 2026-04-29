@@ -1,0 +1,4 @@
+{
+    "alert_access-denied": "Access denied",
+    "alert_table-reader-error": "Table reader returned an error"
+}

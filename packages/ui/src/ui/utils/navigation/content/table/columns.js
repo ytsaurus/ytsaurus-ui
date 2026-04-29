@@ -6,6 +6,7 @@ import reduce_ from 'lodash/reduce';
 import uniq_ from 'lodash/uniq';
 import union_ from 'lodash/union';
 
+import i18n from './i18n';
 import unipika from '../../../../common/thor/unipika';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import hammer from '../../../../common/hammer';
@@ -186,7 +187,7 @@ export default class Columns {
                 title: Columns.prepareColumnTitle(column),
             },
             keyColumn: isKeyColumn(column),
-            label: 'Access denied',
+            label: i18n('alert_access-denied'),
             checked: false,
             disabled: true,
         }));

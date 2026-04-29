@@ -6,6 +6,8 @@ import map_ from 'lodash/map';
 
 import {createSelector} from 'reselect';
 
+import i18n from './i18n';
+
 import {type RootState} from '../../../store/reducers';
 import {
     ACCOUNT_RESOURCE_TYPES_DESCRIPTION,
@@ -206,7 +208,7 @@ export const selectActiveAccountStaticConfiguration = createSelector(
 
         if (mediumsInfo.length) {
             mediumsInfo.splice(0, 0, {
-                name: 'Media',
+                name: i18n('field_media'),
                 format: 'Number',
             });
         }
@@ -214,12 +216,12 @@ export const selectActiveAccountStaticConfiguration = createSelector(
         const res: Array<AccountStaticConfigurationItem> = [
             ...mediumsInfo,
             ...makeStaticConfigurationItem(
-                'Nodes',
+                i18n('field_nodes'),
                 'Number',
                 item.attributes.getNodeCountProgressInfo(true),
             ),
             ...makeStaticConfigurationItem(
-                'Chunks',
+                i18n('field_chunks'),
                 'Number',
                 item.attributes.getChunkCountProgressInfo(true),
             ),

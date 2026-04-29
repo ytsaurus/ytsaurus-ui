@@ -1,19 +1,26 @@
 import {ACCOUNTS_TABLE_ID} from '../../constants/accounts/accounts';
 import cloneDeep_ from 'lodash/cloneDeep';
 import forEach_ from 'lodash/forEach';
+import i18n from './i18n';
 
 export const columnsItems = {
     name: {
-        caption: 'Name',
+        get caption() {
+            return i18n('field_name');
+        },
         sort(account) {
             return account.name;
         },
         align: 'left',
     },
     alerts: {
-        caption: 'A',
+        get caption() {
+            return i18n('field_alerts');
+        },
         tooltipProps: {
-            content: 'Alerts',
+            get content() {
+                return i18n('context_alerts');
+            },
         },
         sort(item) {
             return item.alertsCount;
@@ -21,7 +28,9 @@ export const columnsItems = {
         align: 'center',
     },
     node_count_default: {
-        caption: 'Nodes',
+        get caption() {
+            return i18n('field_nodes');
+        },
         sort(account) {
             return account.nodeCountProgress;
         },
@@ -29,26 +38,41 @@ export const columnsItems = {
     },
     node_count: {
         group: true,
+        get caption() {
+            return i18n('field_nodes');
+        },
         items: {
             percentage: {
+                get caption() {
+                    return i18n('field_percentage');
+                },
                 sort(account) {
                     return account.nodeCountProgress;
                 },
                 align: 'center',
             },
             usage: {
+                get caption() {
+                    return i18n('field_usage');
+                },
                 sort(account) {
                     return account.totalNodeCount;
                 },
                 align: 'right',
             },
             limit: {
+                get caption() {
+                    return i18n('field_limit');
+                },
                 sort(account) {
                     return account.nodeCountLimit;
                 },
                 align: 'right',
             },
             free: {
+                get caption() {
+                    return i18n('field_free');
+                },
                 sort() {
                     return undefined;
                 },
@@ -58,34 +82,51 @@ export const columnsItems = {
         set: ['percentage', 'usage', 'limit', 'free'],
     },
     chunk_count_default: {
-        caption: 'Chunks',
+        get caption() {
+            return i18n('field_chunks');
+        },
         sort(account) {
             return account.chunkCountProgress;
         },
         align: 'center',
     },
     chunk_count: {
+        get caption() {
+            return i18n('field_chunks');
+        },
         group: true,
         items: {
             percentage: {
+                get caption() {
+                    return i18n('field_percentage');
+                },
                 sort(account) {
                     return account.chunkCountProgress;
                 },
                 align: 'center',
             },
             usage: {
+                get caption() {
+                    return i18n('field_usage');
+                },
                 sort(account) {
                     return account.totalChunkCount;
                 },
                 align: 'right',
             },
             limit: {
+                get caption() {
+                    return i18n('field_limit');
+                },
                 sort(account) {
                     return account.chunkCountLimit;
                 },
                 align: 'right',
             },
             free: {
+                get caption() {
+                    return i18n('field_free');
+                },
                 sort() {
                     return undefined;
                 },
@@ -95,27 +136,42 @@ export const columnsItems = {
         set: ['percentage', 'usage', 'limit', 'free'],
     },
     tablet_count: {
+        get caption() {
+            return i18n('field_tablets');
+        },
         group: true,
         items: {
             percentage: {
+                get caption() {
+                    return i18n('field_percentage');
+                },
                 sort(account) {
                     return account.tabletCountProgress;
                 },
                 align: 'center',
             },
             usage: {
+                get caption() {
+                    return i18n('field_usage');
+                },
                 sort(account) {
                     return account.totalTabletCount;
                 },
                 align: 'right',
             },
             limit: {
+                get caption() {
+                    return i18n('field_limit');
+                },
                 sort(account) {
                     return account.tabletCountLimit;
                 },
                 align: 'right',
             },
             free: {
+                get caption() {
+                    return i18n('field_free');
+                },
                 sort() {
                     return undefined;
                 },
@@ -125,27 +181,42 @@ export const columnsItems = {
         set: ['percentage', 'usage', 'limit', 'free'],
     },
     tablet_static_memory: {
+        get caption() {
+            return i18n('field_tablet-memory');
+        },
         group: true,
         items: {
             percentage: {
+                get caption() {
+                    return i18n('field_percentage');
+                },
                 sort(account) {
                     return account.tabletStaticMemoryProgress;
                 },
                 align: 'center',
             },
             usage: {
+                get caption() {
+                    return i18n('field_usage');
+                },
                 sort(account) {
                     return account.totalTabletStaticMemory;
                 },
                 align: 'right',
             },
             limit: {
+                get caption() {
+                    return i18n('field_limit');
+                },
                 sort(account) {
                     return account.tabletStaticMemoryLimit;
                 },
                 align: 'right',
             },
             free: {
+                get caption() {
+                    return i18n('field_free');
+                },
                 sort() {
                     return undefined;
                 },
@@ -155,27 +226,42 @@ export const columnsItems = {
         set: ['percentage', 'usage', 'limit', 'free'],
     },
     master_memory: {
+        get caption() {
+            return i18n('field_master-memory');
+        },
         group: true,
         items: {
             percentage: {
+                get caption() {
+                    return i18n('field_percentage');
+                },
                 sort(account) {
                     return account.masterMemoryProgress;
                 },
                 align: 'center',
             },
             usage: {
+                get caption() {
+                    return i18n('field_usage');
+                },
                 sort(account) {
                     return account.totalMasterMemory;
                 },
                 align: 'right',
             },
             limit: {
+                get caption() {
+                    return i18n('field_limit');
+                },
                 sort(account) {
                     return account.masterMemoryLimit;
                 },
                 align: 'right',
             },
             free: {
+                get caption() {
+                    return i18n('field_free');
+                },
                 sort() {
                     return undefined;
                 },
@@ -185,33 +271,51 @@ export const columnsItems = {
         set: ['percentage', 'usage', 'limit', 'free'],
     },
     master_memory_detailed: {
+        get caption() {
+            return i18n('field_master-memory-detailed');
+        },
         group: true,
         items: {
             nodes: {
+                get caption() {
+                    return i18n('field_nodes');
+                },
                 sort(account) {
                     return account?.master_memory_detailed?.nodes;
                 },
                 align: 'right',
             },
             chunks: {
+                get caption() {
+                    return i18n('field_chunks');
+                },
                 sort(account) {
                     return account?.master_memory_detailed?.chunks;
                 },
                 align: 'right',
             },
             attributes: {
+                get caption() {
+                    return i18n('field_attributes');
+                },
                 sort(account) {
                     return account?.master_memory_detailed?.attributes;
                 },
                 align: 'right',
             },
             tablets: {
+                get caption() {
+                    return i18n('field_tablets');
+                },
                 sort(account) {
                     return account?.master_memory_detailed?.tablets;
                 },
                 align: 'right',
             },
             schemas: {
+                get caption() {
+                    return i18n('field_schemas');
+                },
                 sort(account) {
                     return account?.master_memory_detailed?.schemas;
                 },
@@ -267,7 +371,9 @@ forEach_(TREE_COLUMN_SETS, ({items}) => {
 export function diskSpaceColumnsItems(mediumType) {
     return {
         disk_space_default: {
-            caption: 'Disk space',
+            get caption() {
+                return i18n('field_disk-space');
+            },
             sort(account) {
                 const data = account.perMedium[mediumType];
 
@@ -276,9 +382,15 @@ export function diskSpaceColumnsItems(mediumType) {
             align: 'center',
         },
         disk_space: {
+            get caption() {
+                return i18n('field_disk-space');
+            },
             group: true,
             items: {
                 percentage: {
+                    get caption() {
+                        return i18n('field_percentage');
+                    },
                     sort(account) {
                         const data = account.perMedium[mediumType];
 
@@ -287,6 +399,9 @@ export function diskSpaceColumnsItems(mediumType) {
                     align: 'center',
                 },
                 usage: {
+                    get caption() {
+                        return i18n('field_usage');
+                    },
                     sort(account) {
                         const data = account.perMedium[mediumType];
 
@@ -295,6 +410,9 @@ export function diskSpaceColumnsItems(mediumType) {
                     align: 'right',
                 },
                 limit: {
+                    get caption() {
+                        return i18n('field_limit');
+                    },
                     sort(account) {
                         const data = account.perMedium[mediumType];
 
@@ -303,6 +421,9 @@ export function diskSpaceColumnsItems(mediumType) {
                     align: 'right',
                 },
                 free: {
+                    get caption() {
+                        return i18n('field_free');
+                    },
                     sort() {
                         return undefined;
                     },

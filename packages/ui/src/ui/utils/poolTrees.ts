@@ -3,6 +3,7 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {YTApiId, ytApiV3Id} from '../rum/rum-wrap-api';
 import {showErrorPopup} from './utils';
 import {toaster} from './toaster';
+import i18n from './i18n';
 
 const SCHEDULER_POOL_TREES = '//sys/scheduler/config/pool_trees_root';
 
@@ -43,11 +44,11 @@ export function loadDefaultPoolTree() {
                 toaster.add({
                     name: 'load-default-pool-tree',
                     theme: 'danger',
-                    title: 'Failed',
-                    content: `Failed to load ${path}, 'physical' will be used as defualt.`,
+                    title: i18n('title_failure'),
+                    content: i18n('alert_load-default-pool-tree', {path}),
                     actions: [
                         {
-                            label: ' Details',
+                            label: i18n('action_details'),
                             onClick: () => showErrorPopup(error),
                         },
                     ],

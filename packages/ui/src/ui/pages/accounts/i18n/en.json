@@ -1,0 +1,5 @@
+{
+    "alert_no-selected-accounts": "You don't have any selected accounts",
+    "alert_failed-to-load-usable-accounts": "Failed to load usable accounts",
+    "action_details": "Details"
+}

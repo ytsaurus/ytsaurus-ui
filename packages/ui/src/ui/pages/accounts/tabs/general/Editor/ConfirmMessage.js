@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 import Message from '../../../../../components/Message/Message';
+import i18n from './i18n';
 
 export default class ConfirmMessage extends Component {
     static propTypes = {
@@ -12,7 +13,9 @@ export default class ConfirmMessage extends Component {
     };
 
     static defaultProps = {
-        confirmQuestion: 'Apply changes?',
+        get confirmQuestion() {
+            return i18n('confirm_apply-changes');
+        },
     };
 
     render() {
@@ -26,7 +29,7 @@ export default class ConfirmMessage extends Component {
                     ...(onApply
                         ? [
                               {
-                                  text: 'Yes',
+                                  text: i18n('action_yes'),
                                   callback: onApply,
                               },
                           ]
@@ -34,7 +37,7 @@ export default class ConfirmMessage extends Component {
                     ...(onCancel
                         ? [
                               {
-                                  text: 'Cancel',
+                                  text: i18n('action_cancel'),
                                   callback: onCancel,
                               },
                           ]
