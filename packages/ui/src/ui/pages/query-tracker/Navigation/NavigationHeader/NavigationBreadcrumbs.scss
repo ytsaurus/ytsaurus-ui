@@ -1,0 +1,11 @@
+.navigation-header-breadcrumbs {
+    // Increase specificity for overriding EditableBreadcrumbs styles.
+    &[class] {
+        margin-right: 0;
+    }
+
+    &__path-editor {
+        flex: 1 1 0;
+        margin-block: -2px;
+    }
+}

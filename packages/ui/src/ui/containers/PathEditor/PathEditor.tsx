@@ -216,7 +216,7 @@ export class PathEditor extends Component<PathEditorProps, PathEditorState> {
     }
 
     handleInputChange = (path: string) => {
-        this.setState({path, selectedIndex: -1, inputChange: true});
+        this.setState({path, selectedIndex: -1, inputChange: true, inputFocus: true});
         this.debounceLoading(path);
     };
 
