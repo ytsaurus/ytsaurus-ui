@@ -11,6 +11,8 @@ import {schedulingLoadFilterAttributes} from '../../../store/actions/scheduling/
 import {ROOT_POOL_NAME} from '../../../constants/scheduling';
 import Suggest from '../../../components/Suggest/Suggest';
 
+import i18n from './i18n';
+
 import './PoolsSuggest.scss';
 
 const block = cn('yt-pools-suggest');
@@ -79,7 +81,7 @@ export function PoolsSuggest({
             filter={getSuggestItems}
             onBlur={handleCancelEdit}
             onFocus={onFocus}
-            placeholder="Select pool..."
+            placeholder={i18n('field_select-pool')}
             onItemClick={(item) => onItemClick('string' === typeof item ? item : item.value)}
             items={poolNames}
         />

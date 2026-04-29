@@ -16,6 +16,7 @@ import {getTree} from '../../../../../../store/selectors/scheduling/scheduling-p
 import {type PoolLeafNode} from '../../../../../../utils/scheduling/pool-child';
 import {unquote} from '../../../../../../utils/string';
 import {YSON_AS_TEXT, prettyPrintSafe} from '../../../../../../utils/unipika';
+import i18n from './i18n';
 import './NameCell.scss';
 import PoolTags from './PoolTags';
 import {type RowData} from './SchedulingTable';
@@ -87,7 +88,7 @@ function renderOperationName({cluster, row}: {cluster: string; row: PoolLeafNode
 
     const fifoIndexNode =
         fifoIndex !== undefined ? (
-            <Tooltip content={`Fifo index: ${fifoIndex}`}>#{fifoIndex}&nbsp;</Tooltip>
+            <Tooltip content={i18n('context_fifo-index', {fifoIndex})}>#{fifoIndex}&nbsp;</Tooltip>
         ) : null;
 
     const hasTitle = Boolean(title);

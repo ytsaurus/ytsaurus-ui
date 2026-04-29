@@ -5,6 +5,8 @@ import map_ from 'lodash/map';
 
 import QuotaEditor, {type QuotaEditorProps} from '../../../components/QuotaEditor/QuotaEditor';
 import isEmpty_ from 'lodash/isEmpty';
+
+import i18n from './i18n';
 import {type RootState} from '../../../store/reducers';
 import {type ConnectedProps, connect} from 'react-redux';
 import {useSelector} from '../../../store/redux-hooks';
@@ -88,8 +90,8 @@ class PoolQuotaEditorControl extends React.Component<Props & ReduxProps> {
                 renderSourceSuggest={(props) => {
                     return <PoolSourceSuggest {...props} skipParent={sourcesSkipParent} />;
                 }}
-                limitInputTitle={limitInputTitle || 'Guaranteed'}
-                sourceSuggestTitle={'Pool for distribution'}
+                limitInputTitle={limitInputTitle || i18n('field_guaranteed')}
+                sourceSuggestTitle={i18n('field_pool-for-distribution')}
                 decimalPlaces={decimalPlaces}
             />
         );
@@ -151,7 +153,7 @@ function PoolSourceSuggest(props: {
             onUpdate={(vals) => onChange(vals[0])}
             items={items}
             disabled={!sources?.length || disabled}
-            placeholder={'Select pool...'}
+            placeholder={i18n('field_select-pool')}
         />
     );
 }

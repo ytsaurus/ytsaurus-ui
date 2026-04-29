@@ -53,6 +53,7 @@ import {USE_CACHE} from '../../../../shared/constants/yt-api';
 import {toaster} from '../../../utils/toaster';
 
 import {type PoolTreeNode} from '../../../utils/scheduling/pool-child';
+import i18n from './i18n';
 
 type SchedulingThunkAction<T = unknown> = ThunkAction<T, RootState, unknown, SchedulingAction>;
 
@@ -193,7 +194,7 @@ export function deletePool(item?: {name: string; parent?: string}): SchedulingTh
                     name: 'delete pool',
                     autoHiding: 10000,
                     theme: 'success',
-                    title: `Successfully deleted ${item.name}. Please wait.`,
+                    title: i18n('alert_delete-pool-success', {name: item.name}),
                 });
 
                 dispatch({type: SCHEDULING_DELETE_POOL_SUCCESS});
@@ -353,7 +354,7 @@ export function schedulingLoadFilterAttributes(
             {
                 skipSuccessToast: true,
                 toasterName: 'schedulingLoadFilterAttributes',
-                errorContent: 'Failed to load attributes required for filtering',
+                errorContent: i18n('alert_filter-attributes-error'),
             },
         ).then((attributesToFilter) => {
             dispatch({

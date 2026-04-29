@@ -1,5 +1,7 @@
 import cn from 'bem-cn-lite';
 import React, {useCallback, useMemo} from 'react';
+
+import i18n from './i18n';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 
 import isEmpty_ from 'lodash/isEmpty';
@@ -50,17 +52,14 @@ function makePermissionWarning(visible: boolean, poolType?: 'root' | 'service' |
 
     if (poolType === 'root' || poolType === 'service') {
         return (
-            <div className={block('permissions-warning')}>
-                This pool is generated automatically and cannot be managed by users.
-            </div>
+            <div className={block('permissions-warning')}>{i18n('alert_auto-generated-pool')}</div>
         );
     }
 
     return (
         <div className={block('permissions-warning')}>
-            You do not have sufficient permissions to modify pool settings. In order to be able to
-            modify pool settings <span className={block('flag')}>inherit_acl</span> flag should be
-            enabled for current pool and you should be responsible for the parent pool.
+            {i18n('alert_no-permissions-prefix')} <span className={block('flag')}>inherit_acl</span>{' '}
+            {i18n('alert_no-permissions-suffix')}
         </div>
     );
 }
@@ -233,29 +232,28 @@ export function PoolEditorDialog() {
                 {
                     type: 'tab-vertical',
                     name: 'general',
-                    title: 'General',
+                    title: i18n('title_general'),
                     fields: [
                         ...transferNotice,
                         {
                             name: 'name',
                             type: 'text',
-                            caption: 'Pool name',
+                            caption: i18n('field_pool-name'),
                             required: true,
                             extras: {
-                                placeholder: 'Enter pool name...',
+                                placeholder: i18n('field_enter-pool-name'),
                             },
                         },
                         {
                             name: 'parent',
                             type: 'yt-select-single',
-                            caption: 'Parent',
-                            tooltip:
-                                'Select parent pool, defining a place in pool_tree to place a new pool.',
+                            caption: i18n('field_parent'),
+                            tooltip: i18n('context_parent'),
                             required: true,
                             extras: {
                                 disabled: true,
                                 items: poolsItems,
-                                placeholder: 'Select pool tree...',
+                                placeholder: i18n('field_select-pool-tree'),
                                 width: 'max',
                             },
                         },
@@ -269,11 +267,11 @@ export function PoolEditorDialog() {
                         {
                             name: 'mode',
                             type: 'yt-select-single',
-                            caption: 'Mode',
+                            caption: i18n('field_mode'),
                             required: true,
                             extras: {
                                 items: modeItems,
-                                placeholder: 'Select mode...',
+                                placeholder: i18n('field_select-mode'),
                                 width: 'max',
                                 hideFilter: true,
                             },
@@ -281,7 +279,7 @@ export function PoolEditorDialog() {
                         {
                             name: 'weight',
                             type: 'number',
-                            caption: 'Weight',
+                            caption: i18n('field_weight'),
                             extras: {
                                 min: Number.MIN_VALUE,
                                 hidePrettyValue: true,
@@ -291,7 +289,7 @@ export function PoolEditorDialog() {
                         {
                             name: 'maxOperationCount',
                             type: 'pool-quota-editor',
-                            caption: 'Max operation count',
+                            caption: i18n('field_max-operation-count'),
                             extras: {
                                 pool: editItem?.name || '',
                                 resourceType: 'maxOperationCount',
@@ -299,13 +297,13 @@ export function PoolEditorDialog() {
                                 min: 0,
                                 max: Infinity,
                                 sourcesSkipParent: true,
-                                limitInputTitle: 'Limit',
+                                limitInputTitle: i18n('field_limit'),
                             },
                         },
                         {
                             name: 'maxRunningOperationCount',
                             type: 'pool-quota-editor',
-                            caption: 'Max running operation count',
+                            caption: i18n('field_max-running-operation-count'),
                             extras: {
                                 pool: editItem?.name || '',
                                 resourceType: 'maxRunningOperationCount',
@@ -314,7 +312,7 @@ export function PoolEditorDialog() {
                                 min: 0,
                                 max: Infinity,
                                 sourcesSkipParent: true,
-                                limitInputTitle: 'Limit',
+                                limitInputTitle: i18n('field_limit'),
                             },
                         },
                         warningField,
@@ -325,7 +323,7 @@ export function PoolEditorDialog() {
                 {
                     type: 'tab-vertical',
                     name: 'resourceGuarantee',
-                    title: 'Strong Guarantee',
+                    title: i18n('title_strong-guarantee'),
                     fields: [
                         ...transferNotice,
                         {
@@ -374,23 +372,23 @@ export function PoolEditorDialog() {
                 {
                     type: 'tab-vertical',
                     name: 'integralGuarantee',
-                    title: 'Integral Guarantee',
+                    title: i18n('title_integral-guarantee'),
                     fields: [
                         ...transferNotice,
                         ...integralTypeNotice,
                         {
                             name: 'guaranteeType',
                             type: 'yt-select-single',
-                            caption: 'Guarantee',
+                            caption: i18n('field_guarantee'),
                             extras: {
-                                placeholder: 'Integral guarantee type...',
+                                placeholder: i18n('field_integral-guarantee-type'),
                                 items: [
                                     {
                                         value: 'none',
-                                        text: 'Descendants only',
+                                        text: i18n('value_descendants-only'),
                                     },
-                                    {value: 'burst', text: 'Burst'},
-                                    {value: 'relaxed', text: 'Relaxed'},
+                                    {value: 'burst', text: i18n('value_burst')},
+                                    {value: 'relaxed', text: i18n('value_relaxed')},
                                 ],
                                 width: 'max',
                             },
@@ -398,7 +396,7 @@ export function PoolEditorDialog() {
                         {
                             name: 'burstCpu',
                             type: 'pool-quota-editor',
-                            caption: 'Burst CPU',
+                            caption: i18n('field_burst-cpu'),
                             extras: {
                                 pool: editItem?.name || '',
                                 resourceType: 'burstCpu',
@@ -411,7 +409,7 @@ export function PoolEditorDialog() {
                                   {
                                       name: 'burstGpu',
                                       type: 'pool-quota-editor' as const,
-                                      caption: 'Burst GPU',
+                                      caption: i18n('field_burst-gpu'),
                                       extras: {
                                           pool: editItem?.name || '',
                                           resourceType: 'burstGpu' as const,
@@ -424,7 +422,7 @@ export function PoolEditorDialog() {
                         {
                             name: 'flowCpu',
                             type: 'pool-quota-editor',
-                            caption: 'Flow CPU',
+                            caption: i18n('field_flow-cpu'),
                             extras: {
                                 pool: editItem?.name || '',
                                 resourceType: 'flowCpu',
@@ -437,7 +435,7 @@ export function PoolEditorDialog() {
                                   {
                                       name: 'flowGpu',
                                       type: 'pool-quota-editor' as const,
-                                      caption: 'Flow GPU',
+                                      caption: i18n('field_flow-gpu'),
                                       extras: {
                                           pool: editItem?.name || '',
                                           resourceType: 'flowGpu' as const,
@@ -455,7 +453,7 @@ export function PoolEditorDialog() {
                 {
                     type: 'tab-vertical',
                     name: 'resourceLimits',
-                    title: 'Resource Limits',
+                    title: i18n('title_resource-limits'),
                     fields: [
                         {
                             name: 'cpu',
@@ -473,7 +471,7 @@ export function PoolEditorDialog() {
                             caption: 'Memory',
                             validator(value?: number) {
                                 if (typeof value !== 'undefined' && isNaN(value)) {
-                                    return 'Incorrect value';
+                                    return i18n('alert_incorrect-value');
                                 }
                                 return undefined;
                             },
@@ -481,7 +479,7 @@ export function PoolEditorDialog() {
                         {
                             name: 'userSlots',
                             type: 'text',
-                            caption: 'User slots',
+                            caption: i18n('field_user-slots'),
                         },
                         warningField,
                         poolErrorDataField,
@@ -491,17 +489,17 @@ export function PoolEditorDialog() {
                 {
                     type: 'tab-vertical',
                     name: 'otherSettings',
-                    title: 'Other settings',
+                    title: i18n('title_other-settings'),
                     fields: [
                         {
                             name: 'forbidImmediateOperations',
                             type: 'tumbler',
-                            caption: 'Forbid immediate operations',
+                            caption: i18n('field_forbid-immediate-operations'),
                         },
                         {
                             name: 'fifoSortParams',
                             type: 'sortable-list',
-                            caption: 'Fifo sort parameters',
+                            caption: i18n('field_fifo-sort-parameters'),
                             extras: {
                                 axis: 'x',
                             },
@@ -509,7 +507,7 @@ export function PoolEditorDialog() {
                         {
                             name: 'createEphemeralSubpools',
                             type: 'tumbler',
-                            caption: 'Create ephemeral subpools',
+                            caption: i18n('field_create-ephemeral-subpools'),
                         },
                         warningField,
                         poolErrorDataField,
@@ -572,8 +570,8 @@ function useChangeIntegralTypeNotice(
             extras: {
                 children: (
                     <div className={block('changeTypeNotice')}>
-                        To change the guarantee type of the pool you have to create a request to{' '}
-                        {url ? <Link url={url}>{queue}</Link> : "the cluster's support team"}
+                        {i18n('context_change-type-notice')}{' '}
+                        {url ? <Link url={url}>{queue}</Link> : i18n('context_support-team')}
                     </div>
                 ),
             },

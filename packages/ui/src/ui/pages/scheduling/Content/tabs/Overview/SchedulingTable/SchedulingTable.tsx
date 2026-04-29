@@ -216,10 +216,9 @@ function makeNumberColumn(
     }: Partial<Pick<FormatNumberProps, 'type' | 'hideApproximateChar'>> = {},
 ) {
     const info = childTableItems[id];
-    const {caption} = {caption: undefined, ...info};
     return {
         id,
-        header: () => <SchedulingColumnHeader column={id} title={caption} />,
+        header: () => <SchedulingColumnHeader column={id} />,
         cell: ({row: {original: item}}: tanstack.CellContext<RowData, unknown>) => {
             let value: number | undefined;
             if ('sort' in info && 'function' === typeof info.sort) {
@@ -242,10 +241,9 @@ function makeReadableFieldColumn(
     options?: {size?: number},
 ) {
     const info = childTableItems[id];
-    const {caption} = {caption: undefined, ...info};
     return {
         id,
-        header: () => <SchedulingColumnHeader column={id} title={caption} />,
+        header: () => <SchedulingColumnHeader column={id} />,
         cell: ({row: {original: item}}: tanstack.CellContext<RowData, unknown>) => {
             let value: string | undefined;
             if ('sort' in info && 'function' === typeof info.sort) {
@@ -289,7 +287,13 @@ function useSchedulingTableColumns() {
             },
             {
                 id: 'weight',
-                header: () => <SchedulingColumnHeader column={'weight'} allowUnordered />,
+                header: () => (
+                    <SchedulingColumnHeader
+                        column={'weight'}
+                        shortTitle={i18n('field_weight')}
+                        allowUnordered
+                    />
+                ),
                 cell: ({row: {original: item}}) => {
                     const {weightEdited = NaN, type, weight} = item;
                     return (
@@ -311,7 +315,11 @@ function useSchedulingTableColumns() {
             {
                 id: 'view_mode',
                 header: () => (
-                    <SchedulingColumnHeader column={'view_mode'} title="Mode" allowUnordered />
+                    <SchedulingColumnHeader
+                        column={'view_mode'}
+                        shortTitle={i18n('field_mode')}
+                        allowUnordered
+                    />
                 ),
                 cell: ({row: {original: item}}) => {
                     const {type, mode} = item;
@@ -332,7 +340,11 @@ function useSchedulingTableColumns() {
             {
                 id: 'owner',
                 header: () => (
-                    <SchedulingColumnHeader column="owner" title="Owner" allowUnordered />
+                    <SchedulingColumnHeader
+                        column="owner"
+                        shortTitle={i18n('field_owner')}
+                        allowUnordered
+                    />
                 ),
                 cell: ({row: {original: item}}) => {
                     const {user} = item;
@@ -357,7 +369,7 @@ function useSchedulingTableColumns() {
                 header: () => (
                     <SchedulingColumnHeader
                         column="fair_share_usage"
-                        title="Usage / Fair share"
+                        shortTitle={i18n('field_usage-fair-share')}
                         allowUnordered
                     />
                 ),
@@ -374,7 +386,8 @@ function useSchedulingTableColumns() {
                 header: () => (
                     <SchedulingColumnHeader
                         column="abs_usage_cpu"
-                        title="Usage"
+                        title={i18n('field_usage')}
+                        shortTitle={i18n('field_usage')}
                         options={[
                             {column: 'abs_usage_cpu' as const, title: 'CPU', allowUnordered: true},
                             {column: 'abs_usage_gpu' as const, title: 'GPU', allowUnordered: true},
@@ -401,7 +414,8 @@ function useSchedulingTableColumns() {
                 header: () => (
                     <SchedulingColumnHeader
                         column="abs_demand_cpu"
-                        title="Demand"
+                        title={i18n('field_demand')}
+                        shortTitle={i18n('field_demand')}
                         options={[
                             {column: 'abs_demand_cpu' as const, title: 'CPU', allowUnordered: true},
                             {column: 'abs_demand_gpu' as const, title: 'GPU', allowUnordered: true},
@@ -428,7 +442,8 @@ function useSchedulingTableColumns() {
                 header: () => (
                     <SchedulingColumnHeader
                         column="abs_effective_guaranteed_cpu"
-                        title="Guarantee"
+                        title={i18n('field_guarantee')}
+                        shortTitle={i18n('field_guarantee')}
                         options={[
                             {
                                 column: 'abs_effective_guaranteed_cpu' as const,
@@ -467,16 +482,17 @@ function useSchedulingTableColumns() {
                 header: () => (
                     <SchedulingColumnHeader
                         column="running_operation_count"
-                        title="Operations"
+                        title={i18n('field_operations')}
+                        shortTitle={i18n('field_operations')}
                         options={[
                             {
                                 column: 'running_operation_count' as const,
-                                title: 'Running',
+                                title: i18n('field_running'),
                                 allowUnordered: true,
                             },
                             {
                                 column: 'max_operation_count' as const,
-                                title: 'Max count',
+                                title: i18n('field_max-count'),
                                 allowUnordered: true,
                             },
                         ]}
@@ -512,7 +528,9 @@ function useSchedulingTableColumns() {
             },
             {
                 id: 'duration',
-                header: () => <SchedulingColumnHeader column="duration" />,
+                header: () => (
+                    <SchedulingColumnHeader column="duration" title={i18n('field_duration')} />
+                ),
                 cell: ({row: {original: item}}) => {
                     const {startTime} = item;
                     return (
@@ -524,7 +542,13 @@ function useSchedulingTableColumns() {
             },
             {
                 id: 'FI',
-                header: () => <SchedulingColumnHeader column="FI" />,
+                header: () => (
+                    <SchedulingColumnHeader
+                        column="FI"
+                        shortTitle="FI"
+                        title={i18n('field_fifo-index')}
+                    />
+                ),
                 cell: ({row: {original: item}}) => {
                     if (item.fifoIndex === undefined || item.type !== 'operation') {
                         return '';
@@ -540,12 +564,21 @@ function useSchedulingTableColumns() {
                     <SchedulingColumnHeader
                         column="operation_count"
                         title={childTableItems.operation_progress.caption}
+                        shortTitle={childTableItems.operation_progress.caption}
                         options={[
-                            {column: 'operation_progress', title: 'Progress', allowUnordered: true},
-                            {column: 'operation_count', title: 'Count', allowUnordered: true},
+                            {
+                                column: 'operation_progress',
+                                title: i18n('field_progress'),
+                                allowUnordered: true,
+                            },
+                            {
+                                column: 'operation_count',
+                                title: i18n('field_count'),
+                                allowUnordered: true,
+                            },
                             {
                                 column: 'max_operation_count',
-                                title: 'Max count',
+                                title: i18n('field_max-count'),
                                 allowUnordered: true,
                             },
                         ]}
@@ -572,17 +605,17 @@ function useSchedulingTableColumns() {
                         options={[
                             {
                                 column: 'running_operation_progress',
-                                title: 'Progress',
+                                title: i18n('field_progress'),
                                 allowUnordered: true,
                             },
                             {
                                 column: 'running_operation_count',
-                                title: 'Count',
+                                title: i18n('field_count'),
                                 allowUnordered: true,
                             },
                             {
                                 column: 'max_running_operation_count',
-                                title: 'Max running',
+                                title: i18n('field_max-running'),
                                 allowUnordered: true,
                             },
                         ]}
@@ -682,7 +715,7 @@ function NameHeader() {
     const loading = useSelector(getSchedulingLoading);
     return (
         <SchedulingColumnHeader
-            title={i18n('pool-operation')}
+            title={i18n('title_pool-operation')}
             column="name"
             loading={loading || expandedeLoading}
             allowUnordered
@@ -753,7 +786,7 @@ type EditedNumberProps = {
 
 function EditedNumber({value, edited, type}: EditedNumberProps) {
     const autocalculated = isNaN(edited!);
-    const content = autocalculated ? 'Automatically calculated' : 'Explicitly defined';
+    const content = autocalculated ? i18n('context_auto-calculated') : i18n('context_explicit');
 
     return (
         <FormatNumber
@@ -790,7 +823,7 @@ function Duration({start}: {start?: string}) {
                 <MetaTable
                     items={[
                         {
-                            key: 'start time',
+                            key: i18n('field_start-time'),
                             value: format.DateTime(from / 1000),
                         },
                     ]}
@@ -814,7 +847,7 @@ function RowActions({item}: {item: RowData}) {
                 switcherWrapperClassName={block('actions')}
                 items={[
                     {
-                        text: 'Attributes',
+                        text: i18n('action_attributes'),
                         action: () => {
                             const exactPath = dispatch(getPoolPathsByName(item.name))?.orchidPath;
                             if (type === 'pool') {
@@ -824,11 +857,11 @@ function RowActions({item}: {item: RowData}) {
                     },
                     {
                         action: () => dispatch(openEditModal(item)),
-                        text: 'Edit',
+                        text: i18n('action_edit'),
                     },
                     {
                         action: () => dispatch(openPoolDeleteModal(item)),
-                        text: 'Delete',
+                        text: i18n('action_delete'),
                         theme: 'danger' as const,
                     },
                 ]}
@@ -857,9 +890,9 @@ function FairShareUsage({item}: {item: RowData}) {
         <ShareUsageBar
             className={block('share-usage')}
             shareValue={fairShareRatio}
-            shareTitle={'Fair share'}
+            shareTitle={i18n('field_fair-share')}
             usageValue={usageRatio}
-            usageTitle={'Usage'}
+            usageTitle={i18n('field_usage')}
             forceTheme={forceTheme}
             title={title}
         />
@@ -884,9 +917,20 @@ function SchedulingColumnHeader(props: ColumnHeaderProps<SchedulingColumn>) {
         }
     }
 
+    const {column, title: titleOverride, shortTitle: shortTitleOverride} = props;
+    const {caption: shortTitle, title} = {
+        title: undefined,
+        ...childTableItems[column],
+    };
+
+    const effectiveTitle = titleOverride ?? title;
+    const effectiveShortTitle = shortTitleOverride ?? shortTitle;
+
     return (
         <ColumnHeader
             {...props}
+            title={effectiveTitle ?? effectiveShortTitle ?? format.ReadableField(column)}
+            shortTitle={effectiveShortTitle}
             order={order}
             {...byOptions}
             onSort={(column, order, {currentOrder}) => {

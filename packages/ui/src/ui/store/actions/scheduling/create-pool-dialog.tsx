@@ -20,6 +20,7 @@ import UIFactory from '../../../UIFactory';
 import {type ResponsibleType} from '../../../utils/acl/acl-types';
 import {prepareAbcService} from '../../../utils/scheduling';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
+import i18n from './i18n';
 import {loadSchedulingData} from './scheduling-ts';
 
 type CreatePoolDialogThunkAction<R = void> = ThunkAction<
@@ -74,8 +75,8 @@ export function createPool({
             }),
             {
                 toasterName: `create_${name}`,
-                successContent: `Successfully created ${name}. Please wait.`,
-                errorContent: `'${name}' pool creation failed`,
+                successContent: i18n('alert_create-pool-success', {name}),
+                errorContent: i18n('alert_create-pool-failure', {name}),
                 timeout: 10000,
             },
         )
@@ -114,19 +115,22 @@ const {url: createUrl, queue} = createAdminReqTicketUrl();
 const CHECK_REDINESS_TIMEOUT = 1500;
 const MAX_POOL_REDINESS_TIMEOUT = 10 * 1000; // the value is provided by @renadeen
 const TIMEOUT_ERROR = {
-    message: (
-        <div>
-            The pool was not appeared in orchidea in 10 seconds.
-            {createUrl ? (
-                <>
-                    Please fill a ticket for <Link url={createUrl}>{queue}</Link>
-                </>
-            ) : (
-                "Please report it to the cluster's support team."
-            )}
-            .
-        </div>
-    ),
+    get message() {
+        return (
+            <div>
+                {i18n('alert_pool-not-appeared')}
+                {createUrl ? (
+                    <>
+                        {i18n('alert_pool-fill-ticket')}
+                        <Link url={createUrl}>{queue}</Link>
+                    </>
+                ) : (
+                    i18n('alert_pool-contact-support')
+                )}
+                .
+            </div>
+        );
+    },
 };
 
 function waitWhilePoolIsReady({name, tree}: {name: string; tree: string}, startedAt = 0) {

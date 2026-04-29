@@ -70,7 +70,7 @@ function prepareAbsGuaranteedColumn(
 function ReadableResource(resource: PoolResourceType) {
     switch (resource) {
         case 'user_memory':
-            return i18n('value_ram');
+            return ' RAM';
         case 'user_slots':
             return i18n('value_slots');
         default:
@@ -133,16 +133,25 @@ export const childTableItems = {
         sort(item: SchedulingRowData) {
             return item.user;
         },
+        get caption() {
+            return i18n('field_user');
+        },
     },
     owner: {
         sort(item: SchedulingRowData) {
             const {type, abc, user} = item;
             return type === 'pool' ? abc?.slug : user;
         },
+        get caption() {
+            return i18n('field_owner');
+        },
     },
     mode: {
         sort(item: SchedulingRowData) {
             return item.mode;
+        },
+        get caption() {
+            return i18n('field_mode');
         },
         align: 'center',
     },
@@ -151,15 +160,24 @@ export const childTableItems = {
             const {type, mode, operationType} = item;
             return type === 'pool' ? mode : operationType;
         },
+        get caption() {
+            return i18n('field_mode');
+        },
     },
     guaranteed: {
         sort(_item: SchedulingRowData) {
             return undefined;
         },
+        get caption() {
+            return i18n('field_guaranteed');
+        },
     },
     FI: {
         sort(item: SchedulingRowData) {
             return item.fifoIndex;
+        },
+        get caption() {
+            return i18n('field_fi');
         },
         align: 'center',
     },
@@ -167,17 +185,26 @@ export const childTableItems = {
         sort(item: SchedulingRowData) {
             return item.weight;
         },
+        get caption() {
+            return i18n('field_weight');
+        },
         align: 'right',
     },
     min_share: {
         sort(item: SchedulingRowData) {
             return item.minShareRatio;
         },
+        get caption() {
+            return i18n('field_min-share');
+        },
         align: 'right',
     },
     max_share: {
         sort(item: SchedulingRowData) {
             return item.maxShareRatio;
+        },
+        get caption() {
+            return i18n('field_max-share');
         },
         align: 'right',
     },
@@ -186,17 +213,26 @@ export const childTableItems = {
             return item.fairShareRatio;
         },
         sort: true,
+        get caption() {
+            return i18n('field_fair-share');
+        },
         align: 'right',
     },
     usage: {
         sort(item: SchedulingRowData) {
             return item.usageRatio;
         },
+        get caption() {
+            return i18n('field_usage');
+        },
         align: 'right',
     },
     demand: {
         sort(item: SchedulingRowData) {
             return item.demandRatio;
+        },
+        get caption() {
+            return i18n('field_demand');
         },
         align: 'right',
     },
@@ -289,6 +325,9 @@ export const childTableItems = {
             return item.operationCount;
         },
         sort: true,
+        get caption() {
+            return i18n('field_operation-count');
+        },
         align: 'right',
     },
     max_operation_count: {
@@ -296,6 +335,9 @@ export const childTableItems = {
             return item.maxOperationCount;
         },
         sort: true,
+        get caption() {
+            return i18n('field_max-operation-count');
+        },
         align: 'right',
     },
     operation_progress: {
@@ -318,6 +360,9 @@ export const childTableItems = {
             return item.runningOperationCount;
         },
         sort: true,
+        get caption() {
+            return i18n('field_running-operation-count');
+        },
         align: 'right',
     },
     max_running_operation_count: {
@@ -325,6 +370,9 @@ export const childTableItems = {
             return item.maxRunningOperationCount;
         },
         sort: true,
+        get caption() {
+            return i18n('field_max-running-operation-count');
+        },
         align: 'right',
     },
     running_operation_progress: {
@@ -363,9 +411,7 @@ export const childTableItems = {
             const res = item.burstCPU;
             return isNaN(res!) ? undefined : res;
         },
-        get caption() {
-            return i18n('field_burst-cpu');
-        },
+        caption: 'Burst CPU',
         sortWithUndefined: true,
         align: 'right',
     },
@@ -377,9 +423,7 @@ export const childTableItems = {
             const res = item.flowCPU;
             return isNaN(res!) ? undefined : res;
         },
-        get caption() {
-            return i18n('field_flow-cpu');
-        },
+        caption: 'Flow CPU',
         sortWithUndefined: true,
         align: 'right',
     },
@@ -455,6 +499,9 @@ export const childTableItems = {
             }
             const startTime = moment(item.startTime).valueOf();
             return Date.now() - startTime;
+        },
+        get caption() {
+            return i18n('field_duration');
         },
     },
 } as const;

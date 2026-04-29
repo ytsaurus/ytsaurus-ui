@@ -27,6 +27,7 @@ import {
 import {type FIX_MY_TYPE} from '../../../../types';
 import UIFactory from '../../../../UIFactory';
 import {type ResponsibleType} from '../../../../utils/acl/acl-types';
+import i18n from './i18n';
 
 const allowRoot = !uiSettings.schedulingDenyRootAsParent;
 
@@ -45,7 +46,7 @@ export default function CreatePoolButton() {
     return (
         <React.Fragment>
             <Button view="action" disabled={!allowRoot && isRoot} onClick={handleShow}>
-                Create pool
+                {i18n('action_create-pool')}
             </Button>
             {visible && <CreatePoolDialog onClose={handleClose} />}
         </React.Fragment>
@@ -123,7 +124,7 @@ function CreatePoolDialog(props: {onClose: () => void}) {
             const {name} = values;
             const res: Partial<Record<keyof FormValues, string>> = {};
             if (-1 !== sortedIndexOf_(sortedFlatTree, name)) {
-                res.name = 'the value must be unique';
+                res.name = i18n('alert_name-not-unique');
             }
             return isEmpty_(res) ? null : res;
         },
@@ -143,7 +144,7 @@ function CreatePoolDialog(props: {onClose: () => void}) {
             visible={true}
             onClose={props.onClose}
             headerProps={{
-                title: 'Create pool',
+                title: i18n('title_create-pool'),
             }}
             onAdd={handleCreateConfirm as FIX_MY_TYPE}
             initialValues={{
@@ -157,10 +158,10 @@ function CreatePoolDialog(props: {onClose: () => void}) {
                 {
                     name: 'name',
                     type: 'text',
-                    caption: 'Name',
+                    caption: i18n('field_name'),
                     required: true,
                     extras: {
-                        placeholder: 'Enter pool name...',
+                        placeholder: i18n('field_enter-pool-name'),
                     },
                     onChange: handleNameChange,
                     touched: Boolean(name),
@@ -168,17 +169,17 @@ function CreatePoolDialog(props: {onClose: () => void}) {
                 {
                     name: 'tree',
                     type: 'yt-select-single',
-                    caption: 'Pool tree',
+                    caption: i18n('field_pool-tree'),
                     tooltip: (
                         <span>
-                            Select pool tree where to create new pool.{' '}
+                            {i18n('context_pool-tree')}{' '}
                             {docsUrl(
                                 <>
-                                    See{' '}
+                                    {i18n('action_see')}{' '}
                                     <Link url={UIFactory.docsUrls['scheduler:scheduler_and_pools']}>
-                                        Documentations
+                                        {i18n('action_documentation')}
                                     </Link>{' '}
-                                    for more details.
+                                    {i18n('context_pool-tree-docs-suffix')}
                                 </>,
                             )}
                         </span>
@@ -187,7 +188,7 @@ function CreatePoolDialog(props: {onClose: () => void}) {
                     extras: {
                         hideFilter: true,
                         items: treeItems,
-                        placeholder: 'Select pool tree...',
+                        placeholder: i18n('field_select-pool-tree'),
                         width: 'max',
                     },
                     onChange: (value: string | Array<string> | undefined) => {
@@ -197,12 +198,11 @@ function CreatePoolDialog(props: {onClose: () => void}) {
                 {
                     name: 'parent',
                     type: 'create-pool-parent',
-                    caption: 'Parent',
-                    tooltip:
-                        'Select parent pool, defining a place in pool_tree to place a new pool.',
+                    caption: i18n('field_parent'),
+                    tooltip: i18n('context_parent'),
                     required: !allowRoot,
                     extras: {
-                        placeholder: 'Select parent...',
+                        placeholder: i18n('field_select-parent'),
                     },
                 },
                 ...(!isIdmAclAvailable()
@@ -211,12 +211,11 @@ function CreatePoolDialog(props: {onClose: () => void}) {
                           {
                               name: 'responsible',
                               type: 'acl-subjects' as const,
-                              caption: 'Responsible users',
-                              tooltip:
-                                  'Choose responsible users who will manage permissions and pool settings.',
+                              caption: i18n('field_responsible-users'),
+                              tooltip: i18n('context_responsible-users'),
                               required: true,
                               extras: {
-                                  placeholder: 'Select responsible users...',
+                                  placeholder: i18n('field_select-responsible-users'),
                               },
                           },
                       ]),

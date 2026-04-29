@@ -2,6 +2,8 @@ import React from 'react';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
+import i18n from './i18n';
+
 import {type Column} from '@gravity-ui/react-data-table';
 
 import CollapsibleSection from '../../../components/CollapsibleSection/CollapsibleSection';
@@ -34,7 +36,7 @@ function SchedulingStaticConfiguration() {
 
     return isRoot ? (
         <CollapsibleSection
-            name={'Static configuration'}
+            name={i18n('title_static-configuration')}
             className={block()}
             onToggle={onToggle}
             collapsed={collapsed}
@@ -66,7 +68,9 @@ function PoolTreeStaticConfiguration() {
         },
         {
             name: 'total',
-            header: 'Total',
+            get header() {
+                return i18n('field_total');
+            },
             sortable: false,
             width: 100,
             render: ({row}) => {
@@ -76,7 +80,9 @@ function PoolTreeStaticConfiguration() {
         },
         {
             name: 'used',
-            header: 'Distributed',
+            get header() {
+                return i18n('field_distributed');
+            },
             sortable: false,
             width: 150,
             render({row}) {
@@ -111,7 +117,9 @@ function PoolTreeStaticConfiguration() {
         },
         {
             name: 'free',
-            header: 'Delta',
+            get header() {
+                return i18n('field_delta');
+            },
             sortable: false,
             width: 150,
             render({row}) {
@@ -124,7 +132,7 @@ function PoolTreeStaticConfiguration() {
                     : UIFactory.renderSchedulingLastDayMaximum({
                           cluster,
                           tree: poolTree,
-                          title: 'Last day max operations',
+                          title: i18n('context_last-day-max-operations'),
                           sensor: lastDayMaxValueSensor,
                           format: (lastDayMaxValue?: number) => {
                               const v =

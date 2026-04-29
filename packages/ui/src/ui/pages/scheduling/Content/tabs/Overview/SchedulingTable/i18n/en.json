@@ -1,3 +1,26 @@
 {
-  "pool-operation": "Pool / Operation"
+  "title_pool-operation": "Pool / Operation",
+  "field_weight": "Weight",
+  "field_mode": "Mode",
+  "field_owner": "Owner",
+  "field_usage-fair-share": "Usage / Fair share",
+  "field_usage": "Usage",
+  "field_demand": "Demand",
+  "field_guarantee": "Guarantee",
+  "field_operations": "Operations",
+  "field_running": "Running",
+  "field_max-count": "Max count",
+  "field_duration": "Duration",
+  "field_fifo-index": "FIFO index",
+  "field_progress": "Progress",
+  "field_count": "Count",
+  "field_max-running": "Max running",
+  "action_attributes": "Attributes",
+  "action_edit": "Edit",
+  "action_delete": "Delete",
+  "context_auto-calculated": "Automatically calculated",
+  "context_explicit": "Explicitly defined",
+  "field_fair-share": "Fair share",
+  "field_start-time": "start time",
+  "context_fifo-index": "Fifo index: {{fifoIndex}}"
 }
