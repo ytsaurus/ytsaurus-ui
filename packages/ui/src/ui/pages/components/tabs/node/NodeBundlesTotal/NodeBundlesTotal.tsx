@@ -17,8 +17,8 @@ import {
     selectNodeMemoryUsageTotalTabletDynamic,
 } from '../../../../../store/selectors/components/node/memory';
 import {
-    STACKED_PROGRESS_BAR_COLORS,
-    getProgressBarColorByIndex,
+    CHART_SERIE_COLORS,
+    getSerieColor,
 } from '../../../../../constants/colors';
 
 import './NodeBundlesTotal.scss';
@@ -64,10 +64,10 @@ function NodeBundlesTotal() {
 }
 
 const COLORS: Partial<Record<keyof TabletDynamicTotalProps['data'], string>> = {
-    active: STACKED_PROGRESS_BAR_COLORS[4],
-    backing: STACKED_PROGRESS_BAR_COLORS[7],
-    other: STACKED_PROGRESS_BAR_COLORS[2],
-    passive: STACKED_PROGRESS_BAR_COLORS[0],
+    active: CHART_SERIE_COLORS[4],
+    backing: CHART_SERIE_COLORS[7],
+    other: CHART_SERIE_COLORS[2],
+    passive: CHART_SERIE_COLORS[0],
 };
 
 interface TabletDynamicTotalProps {
@@ -113,7 +113,7 @@ export function TabletDynamicTotal(props: TabletDynamicTotalProps) {
                 <div className={block('progress-tooltip')}>
                     {map_(stack, (item, index) => {
                         const {key} = item;
-                        item.color = COLORS[key] ?? getProgressBarColorByIndex(index, 8);
+                        item.color = COLORS[key] ?? getSerieColor(index);
 
                         return (
                             <React.Fragment key={key}>

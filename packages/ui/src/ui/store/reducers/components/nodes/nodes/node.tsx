@@ -11,7 +11,7 @@ import without_ from 'lodash/without';
 
 import ypath from '../../../../../common/thor/ypath';
 import hammer from '../../../../../common/hammer';
-import {STACKED_PROGRESS_BAR_COLORS} from '../../../../../constants/colors';
+import {getSerieColor} from '../../../../../constants/colors';
 import {type FIX_MY_TYPE, type YTError} from '../../../../../types/index';
 import {computeProgress, progressText} from '../../../../../utils/progress';
 import {type MaintenanceRequestInfo} from '../../../../../store/actions/components/node-maintenance-modal';
@@ -95,9 +95,7 @@ export class Node {
     }
 
     static getColor(index: number) {
-        const colors = STACKED_PROGRESS_BAR_COLORS;
-
-        return colors[index % colors.length];
+        return getSerieColor(index);
     }
 
     alertCount?: number;
@@ -353,9 +351,11 @@ export class Node {
         memory = sortBy_(memory, 'name');
 
         let memoryUsage = 0;
-        memory = map_(memory, (categoryData, index: number) => {
+        let usedIndex = 0;
+        memory = map_(memory, (categoryData) => {
             memoryUsage += categoryData.rawData.used || 0;
-            categoryData.color = Node.getColor(index);
+            if (categoryData.rawData.used) 
+                categoryData.color = Node.getColor(usedIndex++);
             return categoryData;
         });
 

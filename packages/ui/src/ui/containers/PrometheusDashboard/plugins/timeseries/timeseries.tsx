@@ -13,7 +13,8 @@ import {YT} from '../../../../config/yt-config';
 
 import {IntersectionObserverContainer} from '../../../../components/IntersectionObserverContainer/IntersectionObserverContainer';
 
-import {YTChartKitLazy, getSerieColor} from '../../../../components/YTChartKit';
+import {YTChartKitLazy} from '../../../../components/YTChartKit';
+import {useSerieColor} from '../../../../hooks/use-serie-color';
 import {type Yagr, type YagrWidgetData} from '@gravity-ui/chartkit/yagr';
 import {InlineError} from '../../../../components/InlineError/InlineError';
 import Loader from '../../../../components/Loader/Loader';
@@ -124,6 +125,7 @@ function useLoadQueriesData({
     // const [cancelHelper] = React.useState(new CancelHelper());
 
     const {__ytDashboardType: dashboardType} = params;
+    const getSerieColor = useSerieColor();
 
     const {data, isLoading, error} = usePrometheusFetchQuery({
         cluster: YT.cluster,
@@ -186,9 +188,10 @@ function useLoadQueriesData({
                     results,
                     {end, start, step},
                     params,
+                    getSerieColor,
                 ),
             };
-        }, [data, error, params, targets, title, fieldOverrides, isLoading]);
+        }, [data, error, params, targets, title, fieldOverrides, isLoading, getSerieColor]);
 
     return chartData;
 }
@@ -209,6 +212,7 @@ function makeYagrWidgetData(
     results: Array<QueryRangeData>,
     {end, start, step}: {end: number; start: number; step: number},
     params: Record<string, string | number>,
+    getSerieColor: (index: number) => string,
 ): YagrWidgetData {
     const res: YagrWidgetData = {
         data: {graphs: [], timeline: []},

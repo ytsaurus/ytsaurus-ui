@@ -59,7 +59,7 @@ import {
     getTabletsByName,
     getTabletsMax,
 } from '../../../../store/selectors/navigation/tabs/tablets-ts';
-import {getProgressBarColorByIndex} from '../../../../constants/colors';
+import {getSerieColor} from '../../../../constants/colors';
 
 import './Tablets.scss';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../constants/global';
@@ -506,7 +506,7 @@ class Tablets extends Component {
                     stack={[
                         {
                             value: progress,
-                            color: getProgressBarColorByIndex(3),
+                            color: getSerieColor(3),
                         },
                     ]}
                     text={text}

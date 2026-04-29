@@ -2,12 +2,8 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import i18n from './i18n';
 
-import {
-    type RawSerieData,
-    YTChartKitLazy,
-    type YagrWidgetData,
-    getSerieColor,
-} from '../../components/YTChartKit';
+import {type RawSerieData, YTChartKitLazy, type YagrWidgetData} from '../../components/YTChartKit';
+import {useSerieColor} from '../../hooks/use-serie-color';
 import './YTHistogram.scss';
 
 import format from '../../common/hammer/format';
@@ -47,6 +43,7 @@ function YTHistogram({
     yFormat = format.Number,
     renderTooltip = renderDefaultTooltip,
 }: YTHistogramProps) {
+    const getSerieColor = useSerieColor();
     const yagrData = React.useMemo(() => {
         const {timeline, serieData, step} = genYagrData(data);
         const graphs: Array<RawSerieData> = [
@@ -110,7 +107,7 @@ function YTHistogram({
             },
         };
         return res;
-    }, [data, xLabel, yLabel, xFormat, yFormat, renderTooltip, yMin, yLogarithmic]);
+    }, [data, xLabel, yLabel, xFormat, yFormat, renderTooltip, yMin, yLogarithmic, getSerieColor]);
 
     return (
         <div className={block(null, className)}>
