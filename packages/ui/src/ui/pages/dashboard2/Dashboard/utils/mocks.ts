@@ -1,4 +1,4 @@
-import {type PluginWidgetProps} from '@gravity-ui/dashkit/build/esm';
+import {type PluginWidgetProps} from '@gravity-ui/dashkit';
 
 export const baseWidgetProps: PluginWidgetProps = {
     params: {},

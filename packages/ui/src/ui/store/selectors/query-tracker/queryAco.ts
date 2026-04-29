@@ -1,5 +1,5 @@
 import intersection_ from 'lodash/intersection';
-import {type SelectOption} from '@gravity-ui/uikit/build/esm/components/Select/types';
+import {type SelectOption} from '@gravity-ui/uikit';
 import {type RootState} from '../../reducers';
 import {getSettingsData} from '../settings/settings-base';
 import {createSelector} from 'reselect';

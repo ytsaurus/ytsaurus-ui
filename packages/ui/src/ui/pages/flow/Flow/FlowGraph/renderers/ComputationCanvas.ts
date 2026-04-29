@@ -1,6 +1,6 @@
 import CpuIcon from '@gravity-ui/icons/svgs/cpu.svg';
 
-import {type TAnchor} from '@gravity-ui/graph/build';
+import {type TAnchor} from '@gravity-ui/graph';
 
 import format from '../../../../../common/hammer/format';
 import {

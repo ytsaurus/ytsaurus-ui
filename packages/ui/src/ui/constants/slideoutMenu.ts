@@ -16,7 +16,7 @@ import pageQueries from '../assets/img/svg/page-query-tracker.svg';
 import pageChyt from '../assets/img/svg/page-chyt.svg';
 
 import {Page} from './index';
-import {type SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
+import {type IconData} from '@gravity-ui/uikit';
 
 export const PAGES_WITH_ICONS = [
     {id: Page.ACCOUNTS, icon: accountsIcon},
@@ -47,7 +47,7 @@ export const PAGE_ICONS_BY_ID = PAGES_WITH_ICONS.reduce(
 
 export const emptyPageIcon = pageNoIcon;
 
-export function registerPageIcon(pageId: string, svgIcon: SVGIconData) {
+export function registerPageIcon(pageId: string, svgIcon: IconData) {
     if (PAGE_ICONS_BY_ID[pageId]) {
         throw new Error(`Icon for page '${pageId}' already registered`);
     }

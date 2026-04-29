@@ -1,16 +1,17 @@
 {
   "extends": "../../tsconfig",
   "include": ["**/*", "@types/*"],
-  "exclude": ["../server/*", "../playwright-components/*"],
+  "exclude": ["../server/*", "./playwright-components/*"],
   "compilerOptions": {
     "declaration": true,
     "module": "ESNext",
+    "moduleResolution": "bundler",
     "target": "ES2018",
     "isolatedModules": true,
     "outDir": "../../dist/public/build",
     "baseUrl": ".",
     "paths": {
-      "*": ["../../node_modules/*"]
+      "@gravity-ui/graph/build/*": ["../../node_modules/@gravity-ui/graph/build/*"]
     },
     "jsx": "react",
     "lib": ["ES2022", "DOM", "DOM.Iterable", "WebWorker"]
