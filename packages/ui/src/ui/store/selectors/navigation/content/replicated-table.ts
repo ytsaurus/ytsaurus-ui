@@ -6,6 +6,7 @@ import {createSelector} from 'reselect';
 import ypath from '../../../../common/thor/ypath';
 import {type RootState} from '../../../../store/reducers';
 import {calculateLoadingStatus} from '../../../../utils/utils';
+import {getSettingsData} from '../../settings/settings-base';
 
 export const getNavigationReplicatedTableLoadingStatus = createSelector(
     [
@@ -72,3 +73,17 @@ export const getReplicatedTableReplicasMap = createSelector(
         );
     },
 );
+
+export const getReplicatedTableSortSettings = createSelector([getSettingsData], (data) => {
+    const sortValue = data['global::navigation::replicatedTableSortState'];
+
+    if (!sortValue) {
+        return null;
+    }
+
+    if (typeof sortValue === 'object' && typeof sortValue.field === 'string') {
+        return {field: sortValue.field, asc: Boolean(sortValue.asc)};
+    }
+
+    return null;
+});
