@@ -2,7 +2,7 @@ import {Icon, Spin} from '@gravity-ui/uikit';
 import React from 'react';
 import block from 'bem-cn-lite';
 import hammer from '../../common/hammer';
-import {type SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
+import {type IconData} from '@gravity-ui/uikit';
 import {ProgressStatuses, QueryStatus} from '../../types/query-tracker';
 import CircleExclamationIcon from '@gravity-ui/icons/svgs/circle-exclamation.svg';
 import CircleCheckIcon from '@gravity-ui/icons/svgs/circle-check.svg';
@@ -18,7 +18,7 @@ type Props = {
     className?: string;
 };
 
-const STATUS_ICONS: Partial<Record<QueryStatus, SVGIconData>> = {
+const STATUS_ICONS: Partial<Record<QueryStatus, IconData>> = {
     [QueryStatus.DRAFT]: FileIcon,
     [QueryStatus.FAILED]: CircleExclamationIcon,
     [QueryStatus.ABORTED]: CircleStopIcon,

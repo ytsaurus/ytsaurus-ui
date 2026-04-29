@@ -1,8 +1,7 @@
 import type React from 'react';
 import {type Reducer} from 'redux';
 
-import {type DropdownMenuItem} from '@gravity-ui/uikit';
-import {type SVGIconData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
+import {type DropdownMenuItem, type IconData} from '@gravity-ui/uikit';
 
 import {type MetaTableItem} from '@ytsaurus/components';
 import {type LocationParameters, type PathParameters} from '../store/location';
@@ -61,7 +60,7 @@ export type UIFactoryRootPageInfo = HeaderItemOrPage & {
 export interface UIFactoryClusterPageInfo {
     title: string;
     pageId: string; // also used as urlMatch for <Route path={`/:cluster/${pageId}`} ... />
-    svgIcon?: SVGIconData;
+    svgIcon?: IconData;
     reducers?: Record<string, Reducer<any, any>>;
     reactComponent: React.ComponentType<any>; // used as component for <Route ... component={reactComponent} />
     topRowComponent?: React.ComponentType<any>; // used as component for <Route ... component={topRowComponent} />

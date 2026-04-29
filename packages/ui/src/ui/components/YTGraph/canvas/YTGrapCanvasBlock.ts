@@ -2,7 +2,7 @@ import {CanvasBlock} from '@gravity-ui/graph';
 import {GRAPH_BACKGROUND_COLORS, GRAPH_COLORS} from '../constants';
 import {type YTGraphBlock} from '../types';
 import {svgDataToBase} from '../utils/iconToBase';
-import {type SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
+import {type SVGIconSvgrData} from '../../../types/uikit';
 
 export const DEFAULT_PADDING = 10;
 

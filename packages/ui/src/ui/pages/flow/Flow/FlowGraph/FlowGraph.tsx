@@ -9,7 +9,7 @@ import ClockIcon from '@gravity-ui/icons/svgs/clock.svg';
 import FileCodeIcon from '@gravity-ui/icons/svgs/file-code.svg';
 import ReceiptIcon from '@gravity-ui/icons/svgs/receipt.svg';
 import {Flex} from '@gravity-ui/uikit';
-import {type SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
+import {type SVGIconSvgrData} from '../../../../types/uikit';
 import cn from 'bem-cn-lite';
 import partition_ from 'lodash/partition';
 import React from 'react';

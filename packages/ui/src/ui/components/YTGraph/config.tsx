@@ -7,12 +7,12 @@ import {
     ECanDrag,
     type TBlock,
     type TConnection,
+    type TGraphColors,
 } from '@gravity-ui/graph';
 
 import {type HookGraphParams, MultipointConnection, useElk} from '@gravity-ui/graph/react';
 
 import {type RecursivePartial} from '@gravity-ui/graph/build/utils/types/helpers';
-import {type TGraphColors} from '@gravity-ui/graph/build/graphConfig';
 
 import {getCssColor} from '../../utils/get-css-color';
 import {useMemoizedIfEqual} from '../../hooks';

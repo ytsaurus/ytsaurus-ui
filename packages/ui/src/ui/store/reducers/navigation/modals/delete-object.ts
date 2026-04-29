@@ -1,4 +1,4 @@
-import {type Action} from 'redux/dist/redux';
+import {type Action} from 'redux';
 import {
     CLOSE_DELETE_OBJECT_POPUP,
     DELETE_OBJECT,

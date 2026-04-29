@@ -2,7 +2,7 @@ import cn from 'bem-cn-lite';
 import React from 'react';
 
 import {Dialog, Flex, Icon, Text} from '@gravity-ui/uikit';
-import {type SVGIconSvgrData} from '@gravity-ui/uikit/build/esm/components/Icon/types';
+import {type IconData} from '@gravity-ui/uikit';
 
 import {type FlowMessageType, type FlowNodeStatusType} from '../../../../../../shared/yt-types';
 import format from '../../../../../common/hammer/format';
@@ -21,7 +21,7 @@ import './FlowGraphRenderer.scss';
 
 const block = cn('yt-flow-graph-renderer');
 
-export function FlowIcon({data}: {data?: SVGIconSvgrData}) {
+export function FlowIcon({data}: {data?: IconData}) {
     return !data ? null : (
         <Flex shrink={0}>
             <Icon className={block('icon')} data={data} />
