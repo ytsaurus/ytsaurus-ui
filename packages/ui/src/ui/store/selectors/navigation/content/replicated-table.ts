@@ -8,7 +8,7 @@ import {type RootState} from '../../../../store/reducers';
 import {calculateLoadingStatus} from '../../../../utils/utils';
 import {getSettingsData} from '../../settings/settings-base';
 
-export const getNavigationReplicatedTableLoadingStatus = createSelector(
+export const selectNavigationReplicatedTableLoadingStatus = createSelector(
     [
         (store: RootState) => store.navigation.content.replicatedTable.loading,
         (store: RootState) => store.navigation.content.replicatedTable.loaded,
@@ -25,7 +25,7 @@ export const getReplicatedTableReplicas = (state: RootState) =>
 export const getReplicatedTableData = (state: RootState) =>
     state.navigation.content.replicatedTable;
 
-export const getAllowEnableReplicatedTracker = createSelector(
+export const selectAllowEnableReplicatedTracker = createSelector(
     [getReplicatedTableReplicas],
     (replicas) => {
         return some_(replicas, (item) => {
@@ -34,7 +34,7 @@ export const getAllowEnableReplicatedTracker = createSelector(
     },
 );
 
-export const getReplicatedTableReplicasMap = createSelector(
+export const selectReplicatedTableReplicasMap = createSelector(
     [getReplicatedTableReplicas],
     (replicas) => {
         return reduce_(
@@ -74,7 +74,7 @@ export const getReplicatedTableReplicasMap = createSelector(
     },
 );
 
-export const getReplicatedTableSortSettings = createSelector([getSettingsData], (data) => {
+export const selectReplicatedTableSortSettings = createSelector([getSettingsData], (data) => {
     const sortValue = data['global::navigation::replicatedTableSortState'];
 
     if (sortValue && typeof sortValue === 'object' && typeof sortValue.field === 'string') {

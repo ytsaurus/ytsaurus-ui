@@ -31,7 +31,6 @@ import {
 } from '../../../../store/actions/navigation/content/replicated-table';
 import {getAttributes, getPath} from '../../../../store/selectors/navigation';
 import {Page} from '../../../../constants/index';
-
 import {ReplicatedTableSettingsButton} from './ReplicatedTableSettings';
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
@@ -40,10 +39,10 @@ import {isFinalLoadingStatus} from '../../../../utils/utils';
 import {NAVIGATION_REPLICATED_TABLE_ID} from '../../../../constants/navigation/content/replicated-table';
 
 import {
-    getAllowEnableReplicatedTracker,
-    getNavigationReplicatedTableLoadingStatus,
     getReplicatedTableData,
-    getReplicatedTableSortSettings,
+    selectAllowEnableReplicatedTracker,
+    selectNavigationReplicatedTableLoadingStatus,
+    selectReplicatedTableSortSettings,
 } from '../../../../store/selectors/navigation/content/replicated-table';
 
 import './ReplicatedTable.scss';
@@ -109,6 +108,7 @@ class ReplicatedTable extends Component {
         cluster: {
             align: 'left',
             sort: true,
+            allowUnordered: true,
             get(replica) {
                 return ypath.getValue(replica, '/@cluster_name');
             },
@@ -116,6 +116,7 @@ class ReplicatedTable extends Component {
         content_type: {
             align: 'left',
             sort: true,
+            allowUnordered: true,
             get(replica) {
                 return ypath.getValue(replica, '/@content_type');
             },
@@ -123,6 +124,7 @@ class ReplicatedTable extends Component {
         mode: {
             align: 'left',
             sort: true,
+            allowUnordered: true,
             get(replica) {
                 return ypath.getValue(replica, '/@mode');
             },
@@ -131,6 +133,7 @@ class ReplicatedTable extends Component {
             align: 'center',
             caption: 'Error count',
             sort: true,
+            allowUnordered: true,
             get(replica) {
                 return ypath.getValue(replica, '/@error_count');
             },
@@ -138,6 +141,7 @@ class ReplicatedTable extends Component {
         errors: {
             align: 'left',
             sort: true,
+            allowUnordered: true,
             get(replica) {
                 return ypath.getValue(replica, '/@errors');
             },
@@ -145,6 +149,7 @@ class ReplicatedTable extends Component {
         replication_lag_time: {
             align: 'right',
             sort: true,
+            allowUnordered: true,
             get(replica) {
                 return ypath.getValue(replica, '/@replication_lag_time');
             },
@@ -152,6 +157,7 @@ class ReplicatedTable extends Component {
         state: {
             align: 'center',
             sort: true,
+            allowUnordered: true,
             get(replica) {
                 return ypath.getValue(replica, '/@state');
             },
@@ -160,6 +166,7 @@ class ReplicatedTable extends Component {
             align: 'center',
             caption: 'Replicated table tracker',
             sort: true,
+            allowUnordered: true,
             get(replica) {
                 const flag = ypath.getValue(replica, '/@replicated_table_tracker_enabled');
                 return flag === 'true' || flag === true;
@@ -168,6 +175,7 @@ class ReplicatedTable extends Component {
         actions: {
             align: 'center',
             caption: '',
+            sort: false,
         },
     };
 
@@ -303,18 +311,16 @@ class ReplicatedTable extends Component {
                     {
                         column: 'cluster_name',
                         title: 'Replica ID',
-                        withUndefined: true,
                         allowUnordered: true,
                     },
                     {
                         column: 'replica_path',
                         title: 'Replica Path',
-                        withUndefined: true,
                         allowUnordered: true,
                     },
                 ]}
                 onSort={(columnName) => {
-                    this.props.toggleReplicatedTableSortOrder(columnName);
+                    this.props.toggleReplicatedTableSortOrder(columnName, true, false);
                 }}
             />
         );
@@ -363,7 +369,13 @@ class ReplicatedTable extends Component {
                 return item.$value;
             },
             onSort: (columnName) => {
-                this.props.toggleReplicatedTableSortOrder(columnName);
+                const column = ReplicatedTable.tableItems[columnName];
+
+                this.props.toggleReplicatedTableSortOrder(
+                    columnName,
+                    column?.allowUnordered,
+                    column?.sortWithUndefined,
+                );
             },
         };
     }
@@ -452,10 +464,10 @@ class ReplicatedTable extends Component {
 }
 const mapStateToProps = (state) => {
     const {loading, loaded, error, errorData, replicas} = getReplicatedTableData(state);
-    const allowEnableReplicatedTracker = getAllowEnableReplicatedTracker(state);
+    const allowEnableReplicatedTracker = selectAllowEnableReplicatedTracker(state);
     const path = getPath(state);
     const attributes = getAttributes(state);
-    const sortState = getReplicatedTableSortSettings(state);
+    const sortState = selectReplicatedTableSortSettings(state);
 
     const [enable_replicated_table_tracker, type] = ypath.getValues(attributes, [
         '/replicated_table_options/enable_replicated_table_tracker',
@@ -490,7 +502,7 @@ const ReplicatedTableConnected = connect(mapStateToProps, mapDispatchToProps)(Re
 export default function ReplicatedTableWithRum() {
     useDisableMaxContentWidth();
 
-    const loadState = useSelector(getNavigationReplicatedTableLoadingStatus);
+    const loadState = useSelector(selectNavigationReplicatedTableLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.NAVIGATION_CONTENT_REPLICATED_TABLE,

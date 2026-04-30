@@ -78,7 +78,7 @@ interface NavigationSettings {
     'global::navigation::queueConsumersVisibility': Array<string>;
     'global::navigation::consumerPartitionsVisibility': Array<string>;
 
-    'global::navigation::replicatedTableSortState': {field: string; asc: boolean};
+    'global::navigation::replicatedTableSortState'?: {field: string; asc: boolean};
 }
 
 interface ComponentsSettings {
