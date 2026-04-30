@@ -5,6 +5,18 @@ import {rememberApp} from './ServerFactory';
 export function configureApp(app: ExpressKit) {
     rememberApp(app);
 
+    if (app.config.ytInterfaceSecret) {
+        // Check if file is loadable
+        // eslint-disable-next-line security/detect-non-literal-require
+        require(app.config.ytInterfaceSecret);
+    }
+
+    if (app.config.clustersConfigPath) {
+        // check if file is loadable
+        // eslint-disable-next-line security/detect-non-literal-require
+        require(app.config.clustersConfigPath);
+    }
+
     if (app.config.appDevMode) {
         const sourceMaps = require('source-map-support');
         sourceMaps.install();

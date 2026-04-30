@@ -5,6 +5,7 @@ import {type AppConfig} from '@gravity-ui/nodekit';
 const localModeConfig: Partial<AppConfig> = {
     ytAuthAllowInsecure: true,
 
+    clustersConfigPath: undefined,
     ytInterfaceSecret: undefined,
 
     expressBodyParserJSONConfig: {

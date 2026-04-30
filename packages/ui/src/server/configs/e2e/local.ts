@@ -2,6 +2,9 @@ import {type AppConfig} from '@gravity-ui/nodekit';
 import common from '../common';
 
 const e2eConfig: Partial<AppConfig> = {
+    ytInterfaceSecret: undefined,
+    clustersConfigPath: undefined,
+
     uiSettings: {
         defaultFontType: 'internal',
         newTableReplicasCount: 1,
