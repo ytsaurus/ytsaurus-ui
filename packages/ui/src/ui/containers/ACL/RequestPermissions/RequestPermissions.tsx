@@ -320,9 +320,9 @@ function RequestPermissions(props: Props) {
     }, [availableFields, requestPermissionsFields, aclMode]);
 
     const {
-        editAcl = 'Add ACL',
-        editColumnsAcl = 'Add columns ACL',
-        editRowsAcl = 'Add rows ACL',
+        editAcl = i18n('title_add-acl'),
+        editColumnsAcl = i18n('title_add-columns-acl'),
+        editRowsAcl = i18n('title_add-rows-acl'),
     } = buttonsTitle ?? {};
     let title = editAcl;
     switch (aclMode) {

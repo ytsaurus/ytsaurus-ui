@@ -1,4 +1,7 @@
 {
+  "title_add-acl": "Add ACL",
+  "title_add-columns-acl": "Add columns ACL",
+  "title_add-rows-acl": "Add rows ACL",
   "field_cluster": "Cluster",
   "field_current_path": "Current path",
   "field_current_ui_effective_acl": "Current path",
