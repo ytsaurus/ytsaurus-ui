@@ -23,7 +23,7 @@ import {
     getTabletErrorsLoadingStatus,
     getTabletErrorsReplicationErrors,
 } from '../../../../store/selectors/navigation/tabs/tablet-errors-background';
-import {getReplicatedTableReplicasMap} from '../../../../store/selectors/navigation/content/replicated-table';
+import {selectReplicatedTableReplicasMap} from '../../../../store/selectors/navigation/content/replicated-table';
 import {type RootState} from '../../../../store/reducers';
 
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
@@ -169,7 +169,7 @@ function TabletErrorsHeader({id, cluster}: {id: string; cluster: string}) {
 }
 
 function ReplicaErrorHeader({id}: {id: string}) {
-    const data = useSelector(getReplicatedTableReplicasMap);
+    const data = useSelector(selectReplicatedTableReplicasMap);
     const {[id]: attrs} = data;
 
     if (!attrs) return null;
