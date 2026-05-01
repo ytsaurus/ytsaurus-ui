@@ -3,6 +3,7 @@ import map_ from 'lodash/map';
 import format from '../../../../common/hammer/format';
 
 import {type ListQueriesParams} from '../../../../../shared/yt-types';
+import i18n from './i18n';
 import {YTApiId, ytApiV4Id} from '../../../../rum/rum-wrap-api';
 import {durationDates} from '../../../../utils/date';
 import {type QueryStatus} from '../../../../types/query-tracker';
@@ -35,7 +36,7 @@ export async function fetchQuerieslist({requests}: FetchQueriesArgs) {
         const {results} = response;
 
         let requestedQueriesErrors: YTError | undefined = {
-            message: 'Oops, something went wrong',
+            message: i18n('alert_something-went-wrong'),
             inner_errors: [],
         };
 
@@ -50,7 +51,7 @@ export async function fetchQuerieslist({requests}: FetchQueriesArgs) {
             return map_(item.output.queries, (query) => ({
                 author: query?.user || UNKNOWN_ITEM_NAME,
                 general: {
-                    name: query?.annotations?.title ?? 'No name',
+                    name: query?.annotations?.title ?? i18n('value_no-name'),
                     state: (query?.state || format.NO_VALUE) as QueryStatus,
                     id: query?.id,
                 },

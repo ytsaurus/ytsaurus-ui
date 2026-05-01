@@ -13,7 +13,7 @@ export function NavigationWidgetHeader(props: NavigationWidgetProps) {
     const id = props.id;
     return (
         <WidgetHeader
-            title={name ?? i18n('title')}
+            title={name ?? i18n('title_navigation')}
             isLoading={isLoading}
             count={items?.length}
             page={'NAVIGATION'}

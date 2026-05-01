@@ -20,8 +20,9 @@ import {defaultColumns} from '../../../../constants/chyt';
 import {type YTError, type YTHealth} from '../../../../types';
 import {Page} from '../../../../../shared/constants/settings';
 import {USE_MAX_SIZE} from '../../../../../shared/constants/yt-api';
-import {pluralize} from '../../../../utils';
 import {UNKNOWN_ITEM_NAME} from '../../../../constants/dashboard2';
+
+import i18n from './i18n';
 
 export type ServiceInfo = {
     general: {name: string; url?: string; error?: YTError};
@@ -60,7 +61,7 @@ const bundlesRequests = (items: ServicesItem[]) => [
 ];
 
 function makeServiceConfig(instances: number, memory: string, cpu: string) {
-    let config = '0 instances';
+    let config = i18n('value_instances-zero');
     if (instances !== 0) {
         config = `${instances} x (${memory}, ${cpu})`;
     }
@@ -143,7 +144,7 @@ async function fetchBundles(items: ServicesItem[], cluster: string) {
                         (ypath.getAttributes(cell) as TabletCellInfo)?.tablet_cell_bundle ===
                         items?.[idx]?.item,
                 )?.length || 0;
-            config = `${cellsCount} tablet ${pluralize(cellsCount, 'cell', 'cells')}`;
+            config = i18n('value_tablet-cells', {count: cellsCount});
         }
 
         return {
@@ -187,13 +188,15 @@ async function fetchChyt(items: ServicesItem[], cluster: string, isAdmin: boolea
 
     const cliques: ServiceInfo[] = map_(cliquesResponses, ([alias, item]) => {
         const instances = Number(item?.instance_count || 0);
-        const cpu = `${(item?.total_cpu || 0) / instances} ${item?.total_cpu && item?.total_cpu > 1 ? 'cores' : 'core'}`;
+        const cpu = `${(item?.total_cpu || 0) / instances} ${i18n(
+            item?.total_cpu && item?.total_cpu > 1 ? 'value_cores' : 'value_core',
+        )}`;
         const memory = format.Bytes((item?.total_memory || 0) / instances || format.NO_VALUE);
 
         return {
             type: 'CHYT' as const,
             general: {
-                name: alias || 'unkwnown',
+                name: alias || UNKNOWN_ITEM_NAME,
                 url: makeItemLink('chyt', alias, cluster),
             },
             status: item?.health,
@@ -209,7 +212,7 @@ async function fetchChyt(items: ServicesItem[], cluster: string, isAdmin: boolea
                     name: item.item,
                     error: {
                         code: 500,
-                        message: `Can not find ${item.item} clique on current cluster`,
+                        message: i18n('alert_clique-not-found', {cliqueName: item.item}),
                     },
                 },
                 config: format.NO_VALUE,

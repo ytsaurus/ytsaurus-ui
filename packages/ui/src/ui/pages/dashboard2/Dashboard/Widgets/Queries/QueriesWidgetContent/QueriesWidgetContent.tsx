@@ -16,7 +16,7 @@ import {Duration} from './cells/Duration';
 import {StartTime} from './cells/StartTime';
 
 import {useQueriesWidget} from '../hooks/use-queries-widget';
-import {type QueriesWidgetProps} from '../types';
+import {type QueriesWidgetProps, type QueryEngine} from '../types';
 
 import i18n from '../i18n';
 
@@ -37,25 +37,35 @@ const columnHelper = createColumnHelper<Query>();
 const columns = [
     columnHelper.accessor('general', {
         cell: (general) => <General {...general.getValue()} />,
-        header: () => i18n('field_name'),
+        get header() {
+            return i18n('field_name');
+        },
         maxSize: 150,
     }),
-    columnHelper.accessor('engine', {
+    columnHelper.accessor<'engine', QueryEngine>('engine', {
         cell: (engine) => <Engine engine={engine.getValue()} />,
-        header: () => i18n('field_type'),
+        get header() {
+            return i18n('field_type');
+        },
     }),
     columnHelper.accessor('author', {
         cell: (author) => <WidgetText>{author.getValue()}</WidgetText>,
-        header: () => i18n('field_author'),
+        get header() {
+            return i18n('field_author');
+        },
         maxSize: 150,
     }),
     columnHelper.accessor('duration', {
         cell: (duration) => <Duration duration={duration.getValue()} />,
-        header: () => i18n('field_duration'),
+        get header() {
+            return i18n('field_duration');
+        },
     }),
     columnHelper.accessor('start_time', {
         cell: (startTime) => <StartTime startTime={startTime.getValue()} />,
-        header: () => i18n('field_start-time'),
+        get header() {
+            return i18n('field_start-time');
+        },
     }),
 ];
 

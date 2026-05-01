@@ -15,7 +15,7 @@ export function OperationsWidgetHeader(props: OperationsWidgetProps) {
     const id = props.id;
     return (
         <WidgetHeader
-            title={name ?? i18n('title')}
+            title={name ?? i18n('title_operations')}
             count={operations?.length}
             isLoading={isLoading}
             page={'OPERATIONS'}

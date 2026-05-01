@@ -1,15 +1,13 @@
 import React from 'react';
 
-import format from '../../../../../../../common/hammer/format';
-
 import {WidgetText} from '../../../../../../../pages/dashboard2/Dashboard/components/WidgetText/WidgetText';
+import {type QueryEngine} from '../../types';
+import i18n from '../../i18n';
 
 type Props = {
-    engine: string;
+    engine: QueryEngine;
 };
 
 export function Engine({engine}: Props) {
-    return (
-        <WidgetText color={'secondary'}>{format.ReadableField(engine).toUpperCase()}</WidgetText>
-    );
+    return <WidgetText color={'secondary'}>{i18n(`value_${engine}`)}</WidgetText>;
 }

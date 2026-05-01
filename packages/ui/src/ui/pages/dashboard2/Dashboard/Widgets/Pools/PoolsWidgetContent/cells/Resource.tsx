@@ -6,6 +6,8 @@ import {Tooltip} from '@ytsaurus/components';
 
 import format from '../../../../../../../common/hammer/format';
 
+import i18n from './i18n';
+
 import {type PoolResource} from '../../types';
 
 import './Resource.scss';
@@ -30,8 +32,12 @@ export function ResourceCell(props: Props) {
             className={block()}
             content={
                 <Flex direction={'column'} gap={2}>
-                    <Text>Usage: {usageText}</Text>
-                    <Text>Guarantee: {guaranteeText}</Text>
+                    <Text>
+                        {i18n('context_usage')} {usageText}
+                    </Text>
+                    <Text>
+                        {i18n('context_guarantee')} {guaranteeText}
+                    </Text>
                 </Flex>
             }
         >

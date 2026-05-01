@@ -21,6 +21,8 @@ import {
     selectPopularPaths,
 } from '../../../store/selectors/favourites';
 
+import i18n from './i18n';
+
 import './Links.scss';
 import {genAccountsUrl} from '../../accounts/AccountLink';
 import {selectCluster} from '../../../store/selectors/global';
@@ -28,6 +30,24 @@ import {UI_TAB_SIZE} from '../../../constants/global';
 
 const linksBlock = cn('dashboard-links');
 const listBlock = cn('elements-list');
+
+const TEXT = {
+    get titlePaths() {
+        return i18n('title_paths');
+    },
+    get titleAccounts() {
+        return i18n('title_accounts');
+    },
+    get titleLastVisited() {
+        return i18n('title_last-visited');
+    },
+    get titlePopular() {
+        return i18n('title_popular');
+    },
+    get titleFavourite() {
+        return i18n('title_favourite');
+    },
+};
 
 const FavouriteItemType = PropTypes.shape({
     path: PropTypes.string.isRequired,
@@ -80,7 +100,10 @@ class Links extends Component {
                 </ul>
             ) : (
                 <span className={linksBlock('list', {empty: 'yes'})}>
-                    You have no {hammer.format['ReadableField'](activeTab)} {listName} yet
+                    {i18n('alert_no-items', {
+                        activeTab: hammer.format['ReadableField'](activeTab),
+                        listName,
+                    })}
                 </span>
             );
 
@@ -99,8 +122,8 @@ class Links extends Component {
 
         return (
             <React.Fragment>
-                {paths && this.renderLinks('paths', paths, navigationUrl)}
-                {accounts && this.renderLinks('accounts', accounts, accountsUrl)}
+                {paths && this.renderLinks(TEXT.titlePaths, paths, navigationUrl)}
+                {accounts && this.renderLinks(TEXT.titleAccounts, accounts, accountsUrl)}
             </React.Fragment>
         );
     }
@@ -138,13 +161,13 @@ class Links extends Component {
                 items={[
                     {
                         value: LinksTab.LAST_VISITED,
-                        text: 'Last Visited',
+                        text: TEXT.titleLastVisited,
                         show: true,
                     },
-                    {value: LinksTab.POPULAR, text: 'Popular', show: true},
+                    {value: LinksTab.POPULAR, text: TEXT.titlePopular, show: true},
                     {
                         value: LinksTab.FAVOURITES,
-                        text: 'Favourite',
+                        text: TEXT.titleFavourite,
                         show: true,
                     },
                 ]}

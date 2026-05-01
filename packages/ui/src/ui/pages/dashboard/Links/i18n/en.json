@@ -1,0 +1,8 @@
+{
+    "title_last-visited": "Last Visited",
+    "title_popular": "Popular",
+    "title_favourite": "Favourite",
+    "title_paths": "paths",
+    "title_accounts": "accounts",
+    "alert_no-items": "You have no {{activeTab}} {{listName}} yet"
+}

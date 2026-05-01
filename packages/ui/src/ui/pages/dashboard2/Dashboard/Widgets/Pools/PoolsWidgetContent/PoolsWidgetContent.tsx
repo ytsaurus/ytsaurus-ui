@@ -31,19 +31,19 @@ const columns = [
     columnHelper.accessor('gpu', {
         id: 'gpu',
         cell: (gpu) => <ResourceCell {...gpu.getValue()} type={'gpu'} />,
-        header: () => <Text variant={'subheader-1'}>{i18n('field_gpu')}</Text>,
+        header: () => <Text variant={'subheader-1'}>GPU</Text>,
         minSize: CELL_MIN_SIZE,
     }),
     columnHelper.accessor('cpu', {
         id: 'cpu',
         cell: (cpu) => <ResourceCell {...cpu.getValue()} type={'cpu'} />,
-        header: () => <Text variant={'subheader-1'}>{i18n('field_cpu')}</Text>,
+        header: () => <Text variant={'subheader-1'}>CPU</Text>,
         minSize: CELL_MIN_SIZE,
     }),
     columnHelper.accessor('memory', {
         id: 'memory',
         cell: (memory) => <ResourceCell {...memory.getValue()} type={'memory'} />,
-        header: () => <Text variant={'subheader-1'}>{i18n('field_ram')}</Text>,
+        header: () => <Text variant={'subheader-1'}>RAM</Text>,
         minSize: CELL_MIN_SIZE,
     }),
     columnHelper.accessor('operations', {

@@ -72,14 +72,14 @@ export function QueriesWidgetControls(props: QueriesWidgetProps) {
                 onUpdate={onStateUpdate}
                 options={stateOptions}
                 className={block('select')}
-                label={i18n('label_state')}
+                label={i18n('field_state')}
                 defaultValue={[queryState || '']}
             />
             <Select
                 onUpdate={onEngineUpdate}
                 options={engineOptions}
                 className={block('select')}
-                label={i18n('label_engine')}
+                label={i18n('field_engine')}
                 defaultValue={[engine || '']}
             />
         </Flex>

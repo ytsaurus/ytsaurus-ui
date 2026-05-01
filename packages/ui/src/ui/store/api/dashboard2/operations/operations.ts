@@ -11,6 +11,8 @@ import {type NavigationFlowState, type StatusLabelState} from '../../../../types
 import {type YTError} from '../../../../types';
 import {type BatchResultsItem, type ListOperationsParams} from '../../../../../shared/yt-types';
 
+import i18n from './i18n';
+
 type OperationState = StatusLabelState | NavigationFlowState;
 type PoolValue = {tree: string; pool: string};
 
@@ -215,7 +217,7 @@ export async function fetchOperations(args: OperationsQueryArgs, api: BaseQueryA
         }
 
         let requestedOperationsErrors: YTError | undefined = {
-            message: 'Oops, something went wrong',
+            message: i18n('alert_operations-load-error'),
             inner_errors: [],
         };
 

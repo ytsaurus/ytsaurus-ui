@@ -9,6 +9,8 @@ import {selectCluster} from '../../../../../../../store/selectors/global';
 import {TemplatePools} from '../../../../../../../components/MetaTable/templates/OperationTemplate';
 import Icon from '../../../../../../../components/Icon/Icon';
 
+import i18n from './i18n';
+
 type Props = {
     userPool: {
         user: string;
@@ -25,7 +27,7 @@ export function UserPool(props: Props) {
 
     return (
         <Flex direction={'column'}>
-            <Flex direction={'row'} title={'User'} gap={1} alignItems={'center'}>
+            <Flex direction={'row'} title={i18n('field_user')} gap={1} alignItems={'center'}>
                 <Icon face={'solid'} awesome={'user'} />
                 <WidgetText>{user}</WidgetText>
             </Flex>

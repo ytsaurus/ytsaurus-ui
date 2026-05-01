@@ -14,6 +14,8 @@ import AccountsUpdater from '../../accounts/Accounts/AccountsUpdater';
 import {selectCluster, selectCurrentUserName} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';
 
+import i18n from './i18n';
+
 import './Dashboard.scss';
 
 const block = cn('dashboard');
@@ -51,7 +53,7 @@ function Dashboard({currentAccount, setActiveAccount}) {
             <div className="elements-main-section">
                 <div className={'elements-section'}>
                     <div className={headingBlock({size}, block('links-header'))}>
-                        <span>Links</span>
+                        <span>{i18n('title_links')}</span>
                         <div className={block('idm-roles')}>
                             <MyRolesLink />
                         </div>
@@ -61,13 +63,13 @@ function Dashboard({currentAccount, setActiveAccount}) {
 
                 <div className={'elements-section'}>
                     <div className={headingBlock({size}, block('operations-header'))}>
-                        Operations
+                        {i18n('title_operations')}
                     </div>
                     <Operations viewContext={DASHBOARD_VIEW_CONTEXT} />
                 </div>
 
                 <div className={'elements-section'}>
-                    <div className={headingBlock({size})}>Accounts</div>
+                    <div className={headingBlock({size})}>{i18n('title_accounts')}</div>
                     <AccountsUpdater />
                     <AccountsGeneralTab viewContext={DASHBOARD_VIEW_CONTEXT} />
                 </div>
