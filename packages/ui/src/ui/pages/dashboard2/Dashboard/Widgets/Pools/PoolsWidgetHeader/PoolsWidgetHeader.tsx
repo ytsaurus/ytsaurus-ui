@@ -15,7 +15,7 @@ export function PoolsWidgetHeader(props: PoolsWidgetProps) {
     const id = props.id;
     return (
         <WidgetHeader
-            title={name ?? i18n('title')}
+            title={name ?? i18n('title_pools')}
             count={pools?.length}
             isLoading={isLoading}
             page={'SCHEDULING'}

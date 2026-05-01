@@ -13,7 +13,7 @@ export function ServicesWidgetHeader(props: ServicesWidgetProps) {
     const id = props.id;
     return (
         <WidgetHeader
-            title={name ?? i18n('title')}
+            title={name ?? i18n('title_services-widget')}
             count={data?.length}
             isLoading={isLoading}
             id={id}

@@ -14,3 +14,5 @@ export type QueriesWidgetData = {
 export type QueriesWidgetProps = PluginWidgetProps & {
     data?: QueriesWidgetData;
 };
+
+export type QueryEngine = 'yql' | 'ql' | 'spyt' | 'chyt';

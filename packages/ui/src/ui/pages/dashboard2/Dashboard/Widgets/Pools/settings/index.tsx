@@ -2,10 +2,10 @@ import i18n from '../i18n';
 
 export function usePoolsSettings() {
     const columnsOptions = [
-        {value: 'cpu', content: i18n('field_cpu')},
-        {value: 'memory', content: i18n('field_ram')},
+        {value: 'cpu', content: 'CPU'},
+        {value: 'memory', content: 'RAM'},
         {value: 'operations', content: i18n('field_operations')},
-        {value: 'gpu', content: i18n('field_gpu')},
+        {value: 'gpu', content: 'GPU'},
     ];
 
     return [

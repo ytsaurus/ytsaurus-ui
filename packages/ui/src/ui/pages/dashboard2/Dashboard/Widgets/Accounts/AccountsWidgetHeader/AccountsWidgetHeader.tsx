@@ -43,7 +43,7 @@ export function AccountsWidgetHeader(props: AccountsWidgetProps) {
 
     return (
         <WidgetHeader
-            title={name || i18n('title')}
+            title={name || i18n('field_accounts')}
             count={accounts?.length}
             page={'ACCOUNTS'}
             isLoading={isLoading}
