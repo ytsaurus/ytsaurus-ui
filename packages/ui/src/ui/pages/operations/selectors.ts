@@ -11,18 +11,35 @@ import {type RootState} from '../../store/reducers';
 import {type JobsState} from '../../store/reducers/operations/jobs/jobs';
 import {type CypressNodeRaw} from '../../../shared/yt-types';
 
+export interface OperationPoolResourceLimits {
+    cpu?: number;
+    gpu?: number;
+    memory?: number;
+    user_slots?: number;
+}
+
+export const OPERATION_POOL_RESOURCE_LIMIT_KEYS = ['cpu', 'gpu', 'memory', 'user_slots'] as const;
+
 export interface OperationPool {
     tree: string;
     pool: string;
     isEphemeral: boolean;
+    isLightweight?: boolean;
     slotIndex?: number;
     weight?: number;
+    resourceLimits?: OperationPoolResourceLimits;
 }
 
 type PreparingStates = 'materializing' | 'initializing' | 'preparing' | 'pending';
 type RunningStates = 'running' | 'completing' | 'failing' | 'aborting' | 'reviving';
 
 export type OperationStates = PreparingStates | RunningStates | 'completed' | 'failed' | 'aborted';
+
+export const OPERATION_TERMINAL_STATES: ReadonlySet<OperationStates> = new Set<OperationStates>([
+    'completed',
+    'failed',
+    'aborted',
+]);
 
 export class OperationSelector implements Record<string, any> {
     static PREPARING_STATES = ['materializing', 'initializing', 'preparing', 'pending'] as const;
@@ -80,6 +97,19 @@ export class OperationSelector implements Record<string, any> {
             const isEphemeral = ypath.getValue(treeData, '/running_in_ephemeral_pool') || false;
             const isLightweight = ypath.getValue(treeData, '/running_in_lightweight_pool') || false;
 
+            const rawLimits = schedulingInfo.resource_limits;
+            let resourceLimits: OperationPoolResourceLimits | undefined;
+
+            if (rawLimits && typeof rawLimits === 'object') {
+                resourceLimits = {};
+                for (const key of OPERATION_POOL_RESOURCE_LIMIT_KEYS) {
+                    const value = ypath.getNumber(rawLimits, `/${key}`);
+                    if (value !== undefined) {
+                        resourceLimits[key] = value;
+                    }
+                }
+            }
+
             return {
                 tree,
                 pool,
@@ -87,6 +117,7 @@ export class OperationSelector implements Record<string, any> {
                 isLightweight,
                 slotIndex: poolsIndexes[name],
                 weight: schedulingInfo.weight || 1,
+                resourceLimits,
             };
         });
     }
@@ -137,6 +168,7 @@ export class ListOperationSelector extends OperationSelector {
         this.output = this.computeIOProperties(briefSpec, 'output');
 
         this.computePools(attributes);
+
         if (this.pools.length === 1) {
             this.weight = this.pools[0].weight;
         }
@@ -272,6 +304,7 @@ export class DetailedOperationSelector extends OperationSelector {
             this.jobsProgress = this.completedJobsProgress + this.runningJobsProgress;
 
             this.failedJobs = jobs.failed;
+
             if (fullSpec) {
                 this.totalFailedJobs = ypath.getValue(fullSpec, '/max_failed_job_count');
             }

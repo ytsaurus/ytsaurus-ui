@@ -1,0 +1,15 @@
+{
+  "title_edit-operation-pools": "Edit operation attributs",
+  "label_tree": "Tree",
+  "field_pool": "Pool",
+  "field_weight": "Weight",
+  "field_cpu": "CPU",
+  "field_gpu": "GPU",
+  "field_memory": "Memory",
+  "field_user-slots": "User slots",
+  "validation_incorrect-value": "Incorrect value",
+  "action_save-tab": "Save",
+  "action_close": "Close",
+  "alert_save-success": "Pool tree \"{{tree}}\" updated successfully",
+  "alert_save-failure": "Failed to update pool tree \"{{tree}}\""
+}
