@@ -125,7 +125,10 @@ export default function Table({
                 className: column.key || column.sort ? 'is-key' : undefined,
                 accessor: (cells: Record<string, unknown> = {}) => cells[name],
                 sortable: sortable && Boolean(type.simple),
-                sortAccessor: (cells: Record<string, Node> = {}) => cells[name].$sortValue,
+                sortAccessor: (cells: Record<string, Node> = {}) => {
+                    const cell = cells[name];
+                    return cell?.$sortValue ?? cell?.$value;
+                },
                 render(data) {
                     if (typeof column.render === 'function') {
                         return column.render(data);
@@ -231,7 +234,16 @@ export default function Table({
     ]);
 
     const calculatedStartIndex = (page - 1) * pageSize;
-    const firstRowIndex = sortable ? 1 : (startIndex ?? calculatedStartIndex + 1);
+
+    let firstRowIndex: number;
+    if (startIndex !== undefined) {
+        firstRowIndex = startIndex;
+    } else if (sortable) {
+        firstRowIndex = 1;
+    } else {
+        firstRowIndex = calculatedStartIndex + 1;
+    }
+
     const sortedRows = React.useMemo(() => {
         return getSortedData(rows, columns, sortOrder, firstRowIndex);
     }, [rows, columns, sortOrder, firstRowIndex]);

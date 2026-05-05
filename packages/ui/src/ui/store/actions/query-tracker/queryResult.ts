@@ -58,6 +58,24 @@ export function applySettings(
     };
 }
 
+/** Updates result view settings without refetching rows (e.g. client-side sort). */
+export function patchQueryResultSettings(
+    queryId: QueryItem['id'],
+    resultIndex = 0,
+    settings: Partial<QueryResultReadyState['settings']>,
+): ThunkAction<void, RootState, unknown, QueryResultsActions> {
+    return (dispatch) => {
+        dispatch({
+            type: SET_QUERY_RESULTS_SETTINGS,
+            data: {
+                queryId,
+                index: resultIndex,
+                settings,
+            },
+        });
+    };
+}
+
 async function attachExistenceToFullResult(fullResult: QueryResultMeta['full_result']) {
     if (!fullResult) return undefined;
 
@@ -87,6 +105,8 @@ async function attachExistenceToFullResult(fullResult: QueryResultMeta['full_res
           })
         : {...fullResult, exist: existence[0]};
 }
+
+const QUERY_RESULT_ROWS_LIMIT = 1000;
 
 export function loadQueryResult(
     queryId: QueryItem['id'],
@@ -129,7 +149,7 @@ export function loadQueryResult(
                         result_index: resultIndex,
                         cursor: {
                             start: 0,
-                            end: settings.pageSize,
+                            end: QUERY_RESULT_ROWS_LIMIT,
                         },
                         columns: columns.map(({name}) => name),
                         settings: {cellsSize: settings.cellSize},

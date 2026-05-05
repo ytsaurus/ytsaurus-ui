@@ -46,10 +46,14 @@ const getResultRowsInfo = (result: QueryResultReadyState) => {
 };
 
 function QueryReadyResultView({
+    queryId,
+    resultIndex,
     result,
     engine,
     onShowPreview,
 }: {
+    queryId: string;
+    resultIndex: number;
     result: QueryResultReadyState;
     engine: QueryEngine;
     onShowPreview: ShowPreviewCallback;
@@ -80,7 +84,12 @@ function QueryReadyResultView({
                         {truncated ? ` ${i18n('context_rows-truncated')}` : ''}
                     </Text>
                 </Flex>
-                <ResultsTable result={result} onShowPreview={onShowPreview} />
+                <ResultsTable
+                    queryId={queryId}
+                    resultIndex={resultIndex}
+                    result={result}
+                    onShowPreview={onShowPreview}
+                />
             </NotRenderUntilFirstVisible>
         </>
     );
@@ -113,6 +122,8 @@ export const QueryResultsView = React.memo(
                 {result?.resultReady && (
                     <>
                         <QueryReadyResultView
+                            queryId={query.id}
+                            resultIndex={index}
                             result={result}
                             engine={engine}
                             onShowPreview={onShowPreview}
