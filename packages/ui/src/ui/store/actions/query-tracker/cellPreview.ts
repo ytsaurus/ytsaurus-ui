@@ -35,14 +35,17 @@ export const onCellPreviewQueryResults = (
         try {
             const start = page * pageSize + rowIndex;
             const response = await dispatch(
-                readQueryResults(
-                    queryId,
-                    queryIndex,
-                    {start, end: start + 1},
-                    [columnName],
-                    {cellsSize: PREVIEW_LIMIT, stringLimit: Math.round(PREVIEW_LIMIT / 10)},
+                readQueryResults({
+                    query_id: queryId,
+                    result_index: queryIndex,
+                    cursor: {start, end: start + 1},
+                    columns: [columnName],
+                    settings: {
+                        cellsSize: PREVIEW_LIMIT,
+                        stringLimit: Math.round(PREVIEW_LIMIT / 10),
+                    },
                     cancellation,
-                ),
+                }),
             );
 
             if (dataHandler) {

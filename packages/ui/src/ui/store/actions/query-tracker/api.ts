@@ -260,17 +260,26 @@ const mapQueryRowNames = (rows: QueryResultRows) => {
     return rows.map(replaceRows);
 };
 
-export function readQueryResults(
-    query_id: string,
-    result_index = 0,
-    cursor: {start: number; end: number},
-    columns: string[],
+type ReadQueryResultsProps = {
+    query_id: string;
+    result_index?: number;
+    cursor?: {start: number; end: number};
+    columns: string[];
     settings: {
         cellsSize: number;
         stringLimit?: number;
-    },
-    cancellation?: (token: CancelTokenSource) => void,
-): ThunkAction<Promise<QueryResult>, RootState, any, any> {
+    };
+    cancellation?: (token: CancelTokenSource) => void;
+};
+
+export function readQueryResults({
+    query_id,
+    result_index = 0,
+    cursor,
+    columns,
+    settings,
+    cancellation,
+}: ReadQueryResultsProps): ThunkAction<Promise<QueryResult>, RootState, any, any> {
     return async (_dispatch, getState) => {
         const state = getState();
         const {stage} = selectQueryTrackerRequestOptions(state);
@@ -279,8 +288,12 @@ export function readQueryResults(
                 stage,
                 query_id,
                 result_index,
-                lower_row_index: cursor?.start,
-                upper_row_index: cursor?.end,
+                ...(cursor
+                    ? {
+                          lower_row_index: cursor.start,
+                          upper_row_index: cursor.end,
+                      }
+                    : {}),
                 output_format: {
                     $value: 'web_json',
                     $attributes: {
