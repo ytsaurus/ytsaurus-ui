@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.11.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.10.0...ui-v3.11.0) (2026-05-05)
+
+
+### Features
+
+* **Queries:** new spyt settings [YTFRONT-5378] ([a76ee3d](https://github.com/ytsaurus/ytsaurus-ui/commit/a76ee3da42282b072191e1e711b0d262c26535d3))
+
+
+### Bug Fixes
+
+* **Navigation/tablets:** correcting the sorting and display of fields [YTFRONT-5611] ([6dce89d](https://github.com/ytsaurus/ytsaurus-ui/commit/6dce89d553ace9bd4f9a1d94b066de7b9a774044))
+* **server/configure-app:** check clusterConfigPath,ytInterfaceSecret on start [YTFRONT-5764] ([05c6614](https://github.com/ytsaurus/ytsaurus-ui/commit/05c66146d17e731dcd37aabf4dbf5677df356fb7))
+
 ## [3.10.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.9.0...ui-v3.10.0) (2026-04-29)
 
 
