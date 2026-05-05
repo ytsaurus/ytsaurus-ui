@@ -1,3 +1,5 @@
+import {type SortOrder} from '@gravity-ui/react-data-table';
+
 import {type QueryResultMeta} from './api';
 import {type DataType} from '@ytsaurus/components';
 
@@ -44,6 +46,7 @@ export type QueryResultReadyState = {
         visibleColumns?: string[];
         pageSize: number;
         cellSize: number;
+        sortOrder?: SortOrder | SortOrder[];
     };
     meta: QueryResultMeta;
 };

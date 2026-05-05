@@ -3,13 +3,13 @@ import {useEffect, useMemo, useState} from 'react';
 
 export const useQueryResultTableData = (
     result: QueryResultReadyState,
-): [
-    QueryResultReadyState['results'],
-    QueryResultReadyState['columns'],
-    string[],
-    boolean,
-    number,
-] => {
+): {
+    results: QueryResultReadyState['results'];
+    columns: QueryResultReadyState['columns'];
+    visibleColumns: string[];
+    transposed: boolean;
+    startIndex: number;
+} => {
     const [realResult, setResult] = useState<QueryResultReadyState | undefined>(undefined);
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -31,11 +31,11 @@ export const useQueryResultTableData = (
         return (result.page ? result.page * result.settings.pageSize : 0) + 1;
     }, [result.page, result.settings.pageSize]);
 
-    return [
-        result.results,
-        result.columns,
+    return {
+        results: result.results,
+        columns: result.columns,
         visibleColumns,
-        Boolean(result.settings?.transposed),
+        transposed: Boolean(result.settings?.transposed),
         startIndex,
-    ];
+    };
 };
