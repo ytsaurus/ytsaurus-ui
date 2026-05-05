@@ -17,17 +17,4 @@
         width: 100%;
         z-index: 1;
     }
-
-    &__pagination {
-        position: fixed;
-        right: 20px;
-        bottom: 20px;
-
-        margin-right: 20px;
-        background-color: var(--g-color-base-float);
-        border-radius: 8px;
-        box-shadow: 0 1px 8px var(--g-color-sfx-shadow);
-        padding: 8px;
-        pointer-events: all;
-    }
 }
