@@ -1,7 +1,7 @@
 import type {QueryResultReadyState} from '../../../../../types/query-tracker/queryResult';
 import {useEffect, useMemo, useState} from 'react';
 
-export const useYqlTable = (
+export const useQueryResultTableData = (
     result: QueryResultReadyState,
 ): [
     QueryResultReadyState['results'],

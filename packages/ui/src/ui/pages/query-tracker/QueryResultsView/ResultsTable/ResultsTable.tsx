@@ -4,7 +4,7 @@ import YQLTable, {type ShowPreviewCallback} from '../YQLTable/YQLTable';
 import {formatResults} from '../../../../utils/queries/format';
 import {type QueryResultReadyState} from '../../../../types/query-tracker/queryResult';
 import isEqual_ from 'lodash/isEqual';
-import {useYqlTable} from './hooks/useYqlTable';
+import {useQueryResultTableData} from './hooks/useQueryResultTableData';
 
 const settings = {
     escapeWhitespace: false,
@@ -30,7 +30,8 @@ export const ResultsTable = React.memo(
         result: QueryResultReadyState;
         onShowPreview: ShowPreviewCallback;
     }) {
-        const [results, columns, visibleColumns, transposed, startIndex] = useYqlTable(result);
+        const [results, columns, visibleColumns, transposed, startIndex] =
+            useQueryResultTableData(result);
         return (
             <YQLTable
                 format={formatResults}
