@@ -124,16 +124,16 @@ export function loadQueryResult(
             const settings = selectQueryResultGlobalSettings();
             const result = await wrapApiPromiseByToaster(
                 dispatch(
-                    readQueryResults(
-                        queryId,
-                        resultIndex,
-                        {
+                    readQueryResults({
+                        query_id: queryId,
+                        result_index: resultIndex,
+                        cursor: {
                             start: 0,
                             end: settings.pageSize,
                         },
-                        columns.map(({name}) => name),
-                        {cellsSize: settings.cellSize},
-                    ),
+                        columns: columns.map(({name}) => name),
+                        settings: {cellsSize: settings.cellSize},
+                    }),
                 ),
                 {
                     toasterName: 'load_result',
@@ -231,16 +231,16 @@ export function updateQueryResult(
                 (await dispatch(getQueryResultMeta(queryId, resultIndex)))?.schema.$value ?? [];
             const result = await wrapApiPromiseByToaster(
                 dispatch(
-                    readQueryResults(
-                        queryId,
-                        resultIndex,
-                        {
+                    readQueryResults({
+                        query_id: queryId,
+                        result_index: resultIndex,
+                        cursor: {
                             start: page * settings.pageSize,
                             end: endPage,
                         },
-                        cols.map(({name}) => name),
-                        {cellsSize: settings.cellSize},
-                    ),
+                        columns: cols.map(({name}) => name),
+                        settings: {cellsSize: settings.cellSize},
+                    }),
                 ),
                 {
                     toasterName: `load_result_page_${page}`,
