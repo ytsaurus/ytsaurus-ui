@@ -1,9 +1,10 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React from 'react';
 import {YCLOUD_THEME} from '@gravity-ui/react-data-table/build/esm/lib/constants';
 import YQLTable, {type ShowPreviewCallback} from '../YQLTable/YQLTable';
 import {formatResults} from '../../../../utils/queries/format';
 import {type QueryResultReadyState} from '../../../../types/query-tracker/queryResult';
 import isEqual_ from 'lodash/isEqual';
+import {useYqlTable} from './hooks/useYqlTable';
 
 const settings = {
     escapeWhitespace: false,
@@ -19,45 +20,6 @@ const settings = {
         numberFormatDisableExponential: true,
         numberFormatPrecision: undefined,
     },
-};
-
-const useYqlTable = (
-    result: QueryResultReadyState,
-): [
-    QueryResultReadyState['results'],
-    QueryResultReadyState['columns'],
-    string[],
-    boolean,
-    number,
-] => {
-    const [realResult, setResult] = useState<QueryResultReadyState | undefined>(undefined);
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setResult(result);
-        }, 0);
-        return () => {
-            clearTimeout(timer);
-        };
-    }, [result]);
-
-    const visibleColumns = useMemo(() => {
-        if (result.settings?.visibleColumns) {
-            return result.settings?.visibleColumns;
-        }
-        return result.columns.map(({name}) => name);
-    }, [result.settings?.visibleColumns, realResult]);
-
-    const startIndex = useMemo(() => {
-        return (result.page ? result.page * result.settings.pageSize : 0) + 1;
-    }, [result.page, result.settings.pageSize]);
-
-    return [
-        result.results,
-        result.columns,
-        visibleColumns,
-        Boolean(result.settings?.transposed),
-        startIndex,
-    ];
 };
 
 export const ResultsTable = React.memo(
