@@ -1,5 +1,5 @@
 {
-  "context_rows-info": "Rows {{start}}-{{end}} of {{total}}",
+  "context_rows-info": "Total rows: {{total}}",
   "context_rows-truncated": "(truncated)",
   "action_view-full-result": "View full result"
 }

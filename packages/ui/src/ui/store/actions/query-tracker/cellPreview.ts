@@ -14,11 +14,11 @@ import {type CellDataHandlerQueries} from '../../../types/navigation/table-cell-
 export const onCellPreviewQueryResults = (
     queryId: string,
     queryIndex: number,
-    opts: {columnName: string; rowIndex: number; page: number; pageSize: number},
+    opts: {columnName: string; rowIndex: number},
     dataHandler?: CellDataHandlerQueries,
 ): CellPreviewActionType => {
     return async (dispatch) => {
-        const {columnName, rowIndex, page, pageSize} = opts;
+        const {columnName, rowIndex} = opts;
 
         if (dataHandler) {
             dataHandler.onStartLoading({columnName, rowIndex});
@@ -33,7 +33,7 @@ export const onCellPreviewQueryResults = (
             dataHandler?.saveCancellation ?? cellPreviewCancelHelper.removeAllAndSave;
 
         try {
-            const start = page * pageSize + rowIndex;
+            const start = rowIndex;
             const response = await dispatch(
                 readQueryResults({
                     query_id: queryId,

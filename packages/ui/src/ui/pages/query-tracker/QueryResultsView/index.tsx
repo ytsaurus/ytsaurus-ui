@@ -1,18 +1,10 @@
 import React from 'react';
 import {Flex, Loader, Text} from '@gravity-ui/uikit';
-import {useDispatch, useSelector} from '../../../store/redux-hooks';
+import {useSelector} from '../../../store/redux-hooks';
 import block from 'bem-cn-lite';
 
 import {type RootState} from '../../../store/reducers';
-import {
-    type CellDataHandlerQueries,
-    isInlinePreviewAllowed,
-    onErrorTableCellPreview,
-} from '../../../types/navigation/table-cell-preview';
-import {
-    selectQueryResult,
-    selectQueryResultSettings,
-} from '../../../store/selectors/query-tracker/queryResult';
+import {selectQueryResult} from '../../../store/selectors/query-tracker/queryResult';
 import {YTErrorBlock} from '../../../components/Error/Error';
 import {ResultsTable} from './ResultsTable';
 import {type QueryItem} from '../../../types/query-tracker/api';
@@ -22,28 +14,16 @@ import {
     QueryResultsViewMode,
 } from '../../../types/query-tracker/queryResult';
 import {YQLSchemeTable} from './YQLSchemeTable';
-import {ResultPaginator} from './ResultPaginator';
 import NotRenderUntilFirstVisible from '../NotRenderUntilFirstVisible/NotRenderUntilFirstVisible';
 import './index.scss';
-import {onCellPreviewQueryResults} from '../../../store/actions/query-tracker/cellPreview';
 import {type ShowPreviewCallback} from './YQLTable/YQLTable';
-import CancelHelper from '../../../utils/cancel-helper';
-import {injectQueryResults} from '../../../store/actions/query-tracker/queryResult';
 import i18n from './i18n';
 import {QueryFullResultList} from './QueryFullResultList';
 import {selectQueryEngine} from '../../../store/selectors/query-tracker/query';
 import {type QueryEngine} from '../../../../shared/constants/engines';
+import {useShowPreviewHandler} from './hooks/useShowPreviewHandler';
 
 const b = block('query-result-table');
-
-const getResultRowsInfo = (result: QueryResultReadyState) => {
-    const {row_count: total} = result.meta.data_statistics;
-    const {is_truncated: truncated} = result.meta;
-    const {pageSize} = result.settings;
-    const start = pageSize * result.page + 1;
-    const end = Math.min(pageSize * result.page + pageSize, total);
-    return {start, end, total, truncated};
-};
 
 function QueryReadyResultView({
     queryId,
@@ -59,7 +39,8 @@ function QueryReadyResultView({
     onShowPreview: ShowPreviewCallback;
 }) {
     const mode = result?.settings?.viewMode;
-    const {start, end, total, truncated} = getResultRowsInfo(result);
+    const total = result.meta.data_statistics.row_count;
+    const truncated = result.meta.is_truncated;
     const fullResult = result.meta.full_result;
     return (
         <>
@@ -77,8 +58,6 @@ function QueryReadyResultView({
                 <Flex alignItems="center" className={b('result-info')}>
                     <Text>
                         {i18n('context_rows-info', {
-                            start: String(start),
-                            end: String(end),
                             total: String(total),
                         })}
                         {truncated ? ` ${i18n('context_rows-truncated')}` : ''}
@@ -98,17 +77,11 @@ function QueryReadyResultView({
 export const QueryResultsView = React.memo(
     function QueryResultsView({query, index}: {query: QueryItem; index: number}) {
         const result = useSelector((state: RootState) => selectQueryResult(state, query.id, index));
-        const page = result?.page;
-        const {pageSize} = useSelector((state: RootState) =>
-            selectQueryResultSettings(state, query.id, index),
-        );
         const engine = useSelector(selectQueryEngine);
 
         const {onShowPreview} = useShowPreviewHandler({
             queryId: query.id,
             resultIndex: index,
-            page,
-            pageSize,
         });
 
         return (
@@ -128,13 +101,6 @@ export const QueryResultsView = React.memo(
                             engine={engine}
                             onShowPreview={onShowPreview}
                         />
-                        {result.settings.viewMode === QueryResultsViewMode.Table && (
-                            <ResultPaginator
-                                className={b('pagination')}
-                                queryId={query.id}
-                                resultIndex={index}
-                            />
-                        )}
                     </>
                 )}
                 {result?.state === QueryResultState.Error && <YTErrorBlock error={result.error} />}
@@ -143,80 +109,3 @@ export const QueryResultsView = React.memo(
     },
     (prev, next) => prev.query.id === next.query.id && prev.index === next.index,
 );
-
-function useShowPreviewHandler({
-    queryId,
-    resultIndex,
-    page,
-    pageSize,
-}: {
-    queryId: string;
-    resultIndex: number;
-    page?: number;
-    pageSize: number;
-}) {
-    const dispatch = useDispatch();
-
-    const {dataHandler, onShowPreview} = React.useMemo(() => {
-        const cancelHelper = new CancelHelper();
-
-        const dataHandler = {
-            onStartLoading: () => {},
-            onSuccess: ({columnName, rowIndex, data}) => {
-                dispatch(
-                    injectQueryResults({
-                        queryId,
-                        resultIndex,
-                        columnName,
-                        rowIndex,
-                        data,
-                    }),
-                );
-            },
-            onError: onErrorTableCellPreview,
-
-            cancelHelper,
-            saveCancellation: (token) => {
-                cancelHelper.saveCancelToken(token);
-            },
-            page,
-            pageSize,
-        } as CellDataHandlerQueries & {
-            cancelHelper: CancelHelper;
-            page: number;
-            pageSize: number;
-        };
-
-        const onShowPreview = async (
-            columnName: string,
-            rowIndex: number,
-            tag: string | undefined,
-        ) => {
-            const allowInlinePreview = isInlinePreviewAllowed(tag);
-            const {page, pageSize} = dataHandler;
-            await dispatch(
-                onCellPreviewQueryResults(
-                    queryId,
-                    resultIndex,
-                    {
-                        columnName,
-                        rowIndex,
-                        page,
-                        pageSize,
-                    },
-                    allowInlinePreview ? dataHandler : undefined,
-                ),
-            );
-        };
-
-        return {dataHandler, onShowPreview};
-    }, [queryId, resultIndex, page, pageSize, dispatch]);
-
-    React.useEffect(() => {
-        return () => {
-            dataHandler.cancelHelper.removeAllRequests();
-        };
-    }, [dataHandler]);
-
-    return {onShowPreview};
-}
