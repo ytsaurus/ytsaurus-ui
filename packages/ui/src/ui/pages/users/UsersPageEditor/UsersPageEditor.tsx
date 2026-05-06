@@ -16,7 +16,7 @@ import {
     selectGlobalGroupAttributesMap,
     selectIsUserManagementEnabled,
 } from '../../../store/selectors/global';
-import {getUsersPageEditableUser} from '../../../store/selectors/users';
+import {selectUsersPageEditableUser} from '../../../store/selectors/users';
 import {flags} from '../../../utils';
 
 import './UsersPageEditor.scss';
@@ -491,7 +491,7 @@ class UsersPageEditor extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state: RootState) => {
-    const {showModal, username, data: attrs} = getUsersPageEditableUser(state);
+    const {showModal, username, data: attrs} = selectUsersPageEditableUser(state);
     const data = attrs && username === attrs.name ? attrs : {};
     return {
         showModal,

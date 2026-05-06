@@ -15,9 +15,9 @@ import {
 import GroupSuggest from '../../../pages/components/GroupSuggest/GroupSuggest';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {
-    getUsersBannedFilter,
-    getUsersGroupFilter,
-    getUsersNameFilter,
+    selectUsersBannedFilter,
+    selectUsersGroupFilter,
+    selectUsersNameFilter,
 } from '../../../store/selectors/users';
 import {GroupsLoader} from '../../../hooks/global';
 import {ShowCreateUserModalButton} from '../CreateUserModal/CreateUserModal';
@@ -107,9 +107,9 @@ class UsersPageFilters extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        bannedFilter: getUsersBannedFilter(state),
-        nameFilter: getUsersNameFilter(state),
-        groupFilter: getUsersGroupFilter(state),
+        bannedFilter: selectUsersBannedFilter(state),
+        nameFilter: selectUsersNameFilter(state),
+        groupFilter: selectUsersGroupFilter(state),
     };
 };
 
