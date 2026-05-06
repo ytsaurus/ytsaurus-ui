@@ -158,7 +158,15 @@ function changeUserPassword({username, sha256Password}) {
 
     return Promise.resolve();
 }
-
+/**
+ * @param {object} params
+ * @param {string} params.username
+ * @param {string} params.newName
+ * @param {Record<string, unknown>} params.attributes
+ * @param {string[]} params.groupsToAdd
+ * @param {string[]} params.groupsToRemove
+ * @param {string} [params.sha256Password]
+ */
 export function saveUserData({
     username,
     newName,

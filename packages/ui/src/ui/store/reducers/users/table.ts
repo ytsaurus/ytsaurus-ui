@@ -1,7 +1,38 @@
 import {USERS_TABLE, USERS_TABLE_DATA_FIELDS} from '../../../constants/users';
 import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
+import {type Action} from 'redux';
+import {type ActionD, type YTError} from '../../../types';
+import {type OrderType} from '../../../utils/sort-helpers';
 
-const ephemeralState = {
+export type UsersTableUser = {
+    name: string;
+    banned: boolean;
+    ban_message?: string;
+    member_of: string[];
+    member_of_closure?: string[];
+    transitiveGroups: string[];
+    read_request_rate_limit?: number;
+    request_queue_size_limit?: number;
+    write_request_rate_limit?: number;
+    upravlyator_managed?: unknown;
+    ldap?: unknown;
+    idm: boolean;
+    externalSystem?: string;
+};
+
+type EphemeralStateType = {
+    loaded: boolean;
+    loading: boolean;
+    error: YTError | null;
+    users: UsersTableUser[];
+    /** `order` optional: `setUsersPageSorting` may clear sort without sending `order`. */
+    sort: {
+        column: string;
+        order?: OrderType;
+    };
+};
+
+const ephemeralState: EphemeralStateType = {
     loaded: false,
     loading: false,
     error: null,
@@ -12,19 +43,27 @@ const ephemeralState = {
     },
 };
 
-const persistantState = {
+type PersistantStateType = {
+    bannedFilter: boolean;
+    nameFilter: string;
+    groupFilter: string;
+};
+
+const persistantState: PersistantStateType = {
     bannedFilter: false,
     nameFilter: '',
     groupFilter: '',
 };
 
-export const usersTableState = {
+export type UsersTableStateType = EphemeralStateType & PersistantStateType;
+
+export const usersTableState: UsersTableStateType = {
     ...ephemeralState,
     ...persistantState,
 };
 
-function reducer(state = usersTableState, {type, data}) {
-    switch (type) {
+function reducer(state: UsersTableStateType = usersTableState, action: UsersTableAction) {
+    switch (action.type) {
         case USERS_TABLE.REQUEST: {
             return {...state, loading: true};
         }
@@ -34,21 +73,31 @@ function reducer(state = usersTableState, {type, data}) {
                 loading: false,
                 loaded: true,
                 error: null,
-                ...data,
+                ...action.data,
             };
         }
         case USERS_TABLE.FAILURE: {
-            return {...state, loading: false, loaded: false, error: data};
+            return {...state, loading: false, loaded: false, error: action.data};
         }
         case USERS_TABLE.CANCELLED: {
             return {...state, loading: false, loaded: false, error: null};
         }
         case USERS_TABLE_DATA_FIELDS: {
-            return {...state, ...data};
+            return {...state, ...action.data};
         }
         default:
             return state;
     }
 }
+
+export type UsersTableAction =
+    | Action<typeof USERS_TABLE.REQUEST>
+    | ActionD<typeof USERS_TABLE.SUCCESS, {users: UsersTableUser[]}>
+    | ActionD<typeof USERS_TABLE.FAILURE, YTError>
+    | Action<typeof USERS_TABLE.CANCELLED>
+    | ActionD<
+          typeof USERS_TABLE_DATA_FIELDS,
+          Partial<Pick<UsersTableStateType, 'bannedFilter' | 'nameFilter' | 'groupFilter' | 'sort'>>
+      >;
 
 export default mergeStateOnClusterChange(ephemeralState, persistantState, reducer);
