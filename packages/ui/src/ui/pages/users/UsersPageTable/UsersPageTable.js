@@ -17,9 +17,9 @@ import UsersPageEditor from '../../../pages/users/UsersPageEditor/UsersPageEdito
 import {DeleteUserModal} from '../../../pages/users/DeleteUserModal/DeleteUserModal';
 import {selectCluster} from '../../../store/selectors/global';
 import {
-    getUsersFilteredAndSorted,
-    getUsersPageEditableUser,
-    getUsersTableDataState,
+    selectUsersFilteredAndSorted,
+    selectUsersPageEditableUser,
+    selectUsersTableDataState,
 } from '../../../store/selectors/users';
 import {UserActions} from '../UserActions/UserActions';
 
@@ -270,13 +270,13 @@ class UsersPageTable extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    const {loaded, loading, error, sort} = getUsersTableDataState(state);
-    const {showModal} = getUsersPageEditableUser(state);
+    const {loaded, loading, error, sort} = selectUsersTableDataState(state);
+    const {showModal} = selectUsersPageEditableUser(state);
     return {
         loaded,
         loading,
         error,
-        users: getUsersFilteredAndSorted(state),
+        users: selectUsersFilteredAndSorted(state),
         sort,
         cluster: selectCluster(state),
         showModal,

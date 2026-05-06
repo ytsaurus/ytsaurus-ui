@@ -10,16 +10,16 @@ import {type UsersTableUser} from '../reducers/users/table';
 
 // Table
 
-export const getUsersTableDataState = (state: RootState) => state.users.table;
+export const selectUsersTableDataState = (state: RootState) => state.users.table;
 
-export const getUsers = (state: RootState) => state.users.table.users;
-export const getUsersNameFilter = (state: RootState) => state.users.table.nameFilter;
-export const getUsersGroupFilter = (state: RootState) => state.users.table.groupFilter;
-export const getUsersBannedFilter = (state: RootState) => state.users.table.bannedFilter;
-export const getUsersSort = (state: RootState) => state.users.table.sort;
+export const selectUsers = (state: RootState) => state.users.table.users;
+export const selectUsersNameFilter = (state: RootState) => state.users.table.nameFilter;
+export const selectUsersGroupFilter = (state: RootState) => state.users.table.groupFilter;
+export const selectUsersBannedFilter = (state: RootState) => state.users.table.bannedFilter;
+export const selectUsersSort = (state: RootState) => state.users.table.sort;
 
-export const getUsersFiltered = createSelector(
-    [getUsers, getUsersNameFilter, getUsersGroupFilter, getUsersBannedFilter],
+export const selectUsersFiltered = createSelector(
+    [selectUsers, selectUsersNameFilter, selectUsersGroupFilter, selectUsersBannedFilter],
     (users, nameFilter, groupFilter, bannedFilter) => {
         const predicates: Array<(u: UsersTableUser) => boolean> = [];
         if (nameFilter) {
@@ -45,12 +45,12 @@ export const getUsersFiltered = createSelector(
     },
 );
 
-export const getUsersFilteredAndSorted = createSelector(
-    [getUsersSort, getUsersFiltered],
+export const selectUsersFilteredAndSorted = createSelector(
+    [selectUsersSort, selectUsersFiltered],
     (sortState, users) => {
         return sortArrayBySortState(users, sortState as SortState<keyof UsersTableUser>);
     },
 );
 
 // User editor
-export const getUsersPageEditableUser = (state: RootState) => state.users.editUser;
+export const selectUsersPageEditableUser = (state: RootState) => state.users.editUser;

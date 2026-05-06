@@ -13,9 +13,9 @@ type EditUserEphemeralState = {
     data: Partial<UsersTableUser>;
 };
 
-type EditUserPersistantState = Record<string, unknown>;
+type EditUserPersistentState = Record<string, unknown>;
 
-export type UsersEditUserState = EditUserEphemeralState & EditUserPersistantState;
+export type UsersEditUserState = EditUserEphemeralState & EditUserPersistentState;
 
 const ephemeralState: EditUserEphemeralState = {
     loaded: false,
@@ -26,11 +26,11 @@ const ephemeralState: EditUserEphemeralState = {
     data: {},
 };
 
-const persistantState: EditUserPersistantState = {};
+const persistentState: EditUserPersistentState = {};
 
 export const usersEditUserState: UsersEditUserState = {
     ...ephemeralState,
-    ...persistantState,
+    ...persistentState,
 };
 
 function reducer(
@@ -71,4 +71,4 @@ export type UsersEditUserAction =
     | Action<typeof USERS_EDIT_USER.CANCELLED>
     | ActionD<typeof USERS_EDIT_USER_DATA_FIELDS, Partial<UsersEditUserState>>;
 
-export default mergeStateOnClusterChange(ephemeralState, persistantState, reducer);
+export default mergeStateOnClusterChange(ephemeralState, persistentState, reducer);
