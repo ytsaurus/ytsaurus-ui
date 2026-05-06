@@ -1,9 +1,12 @@
-import createActionTypes, {createPrefix} from '../constants/utils';
+import createActionTypes, {createPrefix} from './utils';
 
 const PREFIX = createPrefix('USERS');
 
-export const USERS_TABLE = createActionTypes(PREFIX + 'USERS_DATA');
-export const USERS_TABLE_DATA_FIELDS = PREFIX + 'USERS_TABLE_DATA_FIELDS';
+const USERS_DATA = `${PREFIX}USERS_DATA` as const;
+const USERS_EDIT_USER_TYPE = `${PREFIX}USERS_EDIT_USER` as const;
 
-export const USERS_EDIT_USER = createActionTypes(PREFIX + 'USERS_EDIT_USER');
-export const USERS_EDIT_USER_DATA_FIELDS = PREFIX + 'USERS_EDIT_USER_DATA_FIELDS';
+export const USERS_TABLE = createActionTypes(USERS_DATA);
+export const USERS_TABLE_DATA_FIELDS = `${PREFIX}USERS_TABLE_DATA_FIELDS` as const;
+
+export const USERS_EDIT_USER = createActionTypes(USERS_EDIT_USER_TYPE);
+export const USERS_EDIT_USER_DATA_FIELDS = `${PREFIX}USERS_EDIT_USER_DATA_FIELDS` as const;
