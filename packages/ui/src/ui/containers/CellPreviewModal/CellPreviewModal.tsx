@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import {useDispatch, useSelector} from '../../store/redux-hooks';
 import {Flex, Text} from '@gravity-ui/uikit';
@@ -15,9 +15,9 @@ import {
 } from '../../store/selectors/modals/cell-preview';
 
 import {ClipboardButton} from '@ytsaurus/components';
-import block from 'bem-cn-lite';
+import cn from 'bem-cn-lite';
 
-import Yson from '../../components/Yson/Yson';
+import {Yson} from '../../components/Yson/Yson';
 import {YTErrorBlock} from '../../components/Error/Error';
 import {type YsonSettings, getPreviewCellYsonSettings} from '../../store/selectors/thor/unipika';
 import {closeCellPreviewAndCancelRequest} from '../../store/actions/modals/cell-preview';
@@ -25,7 +25,7 @@ import {isMediaTag} from '../../utils/yql-types';
 
 import './CellPreviewModal.scss';
 
-const b = block('cell-preview-modal');
+const block = cn('cell-preview-modal');
 
 export const CellPreviewModal: React.FC = () => {
     const dispatch = useDispatch();
@@ -45,11 +45,11 @@ export const CellPreviewModal: React.FC = () => {
             visible={visible}
             loading={loading}
             onCancel={() => dispatch(closeCellPreviewAndCancelRequest())}
-            wrapperClassName={b('wrapper')}
+            wrapperClassName={block('wrapper')}
         >
             <Flex
                 qa="cell-preview-modal-content"
-                className={b('content')}
+                className={block('content')}
                 gap={2}
                 direction="column"
             >
@@ -58,11 +58,11 @@ export const CellPreviewModal: React.FC = () => {
                         {noticeText}
                     </Text>
                     {ytCliDownloadCommand ? (
-                        <code className={b('command-wrapper')}>
-                            <div className={b('command')}>
+                        <code className={block('command-wrapper')}>
+                            <div className={block('command')}>
                                 <div
                                     data-qa="cell-preview-command"
-                                    className={b('command-content')}
+                                    className={block('command-content')}
                                     title={ytCliDownloadCommand}
                                 >
                                     {ytCliDownloadCommand}
@@ -110,6 +110,8 @@ function getUnipikaNodeForYsonPreview(data: PreviewContentProps['data']) {
 function PreviewContent(props: PreviewContentProps) {
     const {data, unipikaSettings} = props;
 
+    const [scrollContainer, setScrollContainer] = useState<HTMLDivElement | null>(null);
+
     if (data?.$type === 'yql.string' || data?.$type === 'yql.json') {
         return <pre className="elements-code">{data?.$value}</pre>;
     }
@@ -119,20 +121,23 @@ function PreviewContent(props: PreviewContentProps) {
     }
 
     return (
-        <Yson
-            className={b('yson-container')}
-            folding={true}
-            value={getUnipikaNodeForYsonPreview(data)}
-            tableSettings={{dynamicRenderScrollParentGetter: undefined}}
-            settings={unipikaSettings}
-            customLayout={({toolbar, content}) => {
-                return (
-                    <>
-                        <div className={b('toolbar')}>{toolbar}</div>
-                        {content}
-                    </>
-                );
-            }}
-        />
+        <div ref={setScrollContainer} className={block('yson-container')}>
+            {scrollContainer && (
+                <Yson
+                    virtualized
+                    value={getUnipikaNodeForYsonPreview(data)}
+                    scrollContainer={scrollContainer}
+                    settings={unipikaSettings}
+                    customLayout={({toolbar, content}) => {
+                        return (
+                            <>
+                                <div className={block('toolbar')}>{toolbar}</div>
+                                {content}
+                            </>
+                        );
+                    }}
+                />
+            )}
+        </div>
     );
 }

@@ -1,11 +1,8 @@
-export enum Lang {
-    Ru = 'ru',
-    En = 'en',
-}
+export type Lang = 'ru' | 'en';
 
-interface Config {
+type Config = {
     lang?: Lang;
-}
+};
 
 type Subscriber = (config: Config) => void;
 

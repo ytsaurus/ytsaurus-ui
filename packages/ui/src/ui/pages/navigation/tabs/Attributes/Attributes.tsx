@@ -4,7 +4,7 @@ import unipika from '../../../../common/thor/unipika';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {Loader} from '@gravity-ui/uikit';
 
-import Yson from '../../../../components/Yson/Yson';
+import {YsonWithScroll} from '../../../../components/Yson/YsonWithScroll';
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
 import {YTErrorBlock} from '../../../../components/Block/Block';
 
@@ -52,10 +52,9 @@ function Attributes() {
     return (
         <Fragment>
             {error != undefined && <YTErrorBlock error={error} />}
-            <Yson
+            <YsonWithScroll
                 settings={settings}
                 value={attributes}
-                folding
                 extraTools={
                     <YsonDownloadButton
                         value={attributes}

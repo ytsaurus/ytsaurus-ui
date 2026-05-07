@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import {useSelector} from '../../../../store/redux-hooks';
 import {getNavigationTableMountConfig} from '../../../../store/selectors/navigation/content/table-mount-config';
 import {YTErrorBlock} from '../../../../components/Error/Error';
-import Yson from '../../../../components/Yson/Yson';
+import {YsonWithScroll} from '../../../../components/Yson/YsonWithScroll';
 import {getNavigationMountConfigYsonSettings} from '../../../../store/selectors/thor/unipika';
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
 import {type UnipikaValue} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
@@ -23,10 +23,9 @@ function TableMountConfig() {
             {error ? (
                 <YTErrorBlock error={error} topMargin={'none'} />
             ) : (
-                <Yson
+                <YsonWithScroll
                     value={data}
                     settings={settings}
-                    folding
                     extraTools={
                         <YsonDownloadButton
                             value={data as UnipikaValue}

@@ -1,5 +1,5 @@
 import React from 'react';
-import Yson from '../../components/Yson/Yson';
+import {Yson} from '../../components/Yson/Yson';
 import unipika from '../../common/thor/unipika';
 import Icon from '../../components/Icon/Icon';
 import {ColumnCell, SchemaDataType, Tooltip, type TypeArray} from '@ytsaurus/components';

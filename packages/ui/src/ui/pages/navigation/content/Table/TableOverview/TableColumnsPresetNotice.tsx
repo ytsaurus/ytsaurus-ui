@@ -10,7 +10,7 @@ import {
     getColumnsPresetHash,
 } from '../../../../../store/selectors/navigation/content/table-ts';
 import {Warning} from '@ytsaurus/components';
-import Yson from '../../../../../components/Yson/Yson';
+import {Yson} from '../../../../../components/Yson/Yson';
 import {YTErrorBlock} from '../../../../../components/Error/Error';
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
 

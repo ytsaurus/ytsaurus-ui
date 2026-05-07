@@ -1,6 +1,5 @@
-import {Page, expect, test} from '@playwright/test';
+import {type Page, expect, test} from '@playwright/test';
 import {E2E_DIR, MOCK_DATE, makeClusterUrl} from '../../../utils';
-//import {replaceInnerHtml} from '../../../utils/dom';
 import {TablePage} from '../../../widgets/TablePage';
 import {navigationPage} from '../../../widgets/NavigationPage';
 import {replaceInnerHtml} from '../../../utils/dom';
@@ -48,8 +47,9 @@ test('StickyToolbar: navigation', async ({page}) => {
         await attrsEl.scrollIntoViewIfNeeded();
         await attrsEl.click();
         await page.mouse.wheel(0, 720);
+        await page.waitForTimeout(1000); // wait for virtualization to settle
         await page.waitForSelector(':text("shard_id")');
-        await replaceInnerHtml(page, {'.structured-yson-virtualized__value': '###'});
+        await replaceInnerHtml(page, {'.g-ru-cell__value': '###'});
 
         await page.waitForLoadState('networkidle');
         await expect(page).toHaveScreenshot();

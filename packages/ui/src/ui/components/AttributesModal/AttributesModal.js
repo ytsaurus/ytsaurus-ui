@@ -7,7 +7,7 @@ import unipika from '../../common/thor/unipika';
 import FormattedText from '../../components/formatters/FormattedText';
 import SimpleModal from '../../components/Modal/SimpleModal';
 import {YTErrorBlock} from '../../components/Error/Error';
-import Yson from '../Yson/Yson';
+import {Yson, YsonSettingsPropTypes} from '../Yson/Yson';
 
 import {closeAttributesModal} from '../../store/actions/modals/attributes-modal';
 import {DownloadFileButton} from '../DownloadAttributesButton';
@@ -27,7 +27,7 @@ export class AttributesModal extends Component {
         error: PropTypes.bool.isRequired,
         errorData: PropTypes.object.isRequired,
         attributes: PropTypes.object.isRequired,
-        ysonSettings: Yson.settingsProps.isRequired,
+        ysonSettings: YsonSettingsPropTypes.isRequired,
 
         closeAttributesModal: PropTypes.func.isRequired,
     };
