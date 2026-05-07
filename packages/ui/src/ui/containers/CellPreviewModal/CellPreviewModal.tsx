@@ -91,6 +91,22 @@ type PreviewContentProps = {
     unipikaSettings: YsonSettings;
 };
 
+function getUnipikaNodeForYsonPreview(data: PreviewContentProps['data']) {
+    if (!data) {
+        return undefined;
+    }
+
+    /**
+     * Root nodes where the tree to render lives under `$value`:
+     * explicit `yql.yson`, or a root without `$type` from the formatting pipeline.
+     */
+    if (data.$type === 'yql.yson' || data.$type === undefined) {
+        return data.$value;
+    }
+
+    return data;
+}
+
 function PreviewContent(props: PreviewContentProps) {
     const {data, unipikaSettings} = props;
 
@@ -106,7 +122,7 @@ function PreviewContent(props: PreviewContentProps) {
         <Yson
             className={b('yson-container')}
             folding={true}
-            value={data?.$value}
+            value={getUnipikaNodeForYsonPreview(data)}
             tableSettings={{dynamicRenderScrollParentGetter: undefined}}
             settings={unipikaSettings}
             customLayout={({toolbar, content}) => {
