@@ -29,7 +29,7 @@ export const NavigationHeader: FC = () => {
         <div className={b()}>
             <div className={b('path-wrap')}>
                 <NavigationBreadcrumbs />
-                <HeaderActions />
+                <HeaderActions className={b('actions')} />
             </div>
             {showFilter && (
                 <TextInput

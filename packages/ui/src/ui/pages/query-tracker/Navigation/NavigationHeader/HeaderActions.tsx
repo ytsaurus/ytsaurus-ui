@@ -25,7 +25,7 @@ import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 
 const b = cn('navigation-header-actions');
 
-export const HeaderActions: FC = () => {
+export const HeaderActions: FC<{className?: string}> = ({className}) => {
     const dispatch = useDispatch();
     const path = useSelector(selectNavigationPath);
     const cluster = useSelector(selectNavigationCluster);
@@ -58,7 +58,7 @@ export const HeaderActions: FC = () => {
     if (!cluster) return null;
 
     return (
-        <div className={b()}>
+        <div className={b(null, className)}>
             <Button view="flat" href={navigationUrl} target="_blank">
                 <Icon data={ArrowUpRightFromSquareIcon} size={16} />
             </Button>

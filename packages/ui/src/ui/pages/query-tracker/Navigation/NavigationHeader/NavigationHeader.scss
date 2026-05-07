@@ -10,8 +10,22 @@
 
     &__path-wrap {
         display: grid;
-        grid-template-columns: var(--cluster-button-width) calc(100% - var(--cluster-button-width) - var(--hader-actions-width) - var(--total-gaps-width)) var(--hader-actions-width);
+        grid-template-columns: auto 1fr auto;
         align-items: center;
         gap: 0 8px;
+
+        & > * {
+            grid-row: 1 / 2;
+        }
+
+        & > [data-edit-mode] {
+            grid-column: 2 / -1;
+            background: var(--g-color-base-background);
+            z-index: 1;
+        }
+    }
+
+    &__actions {
+        grid-column: 3 / 4;
     }
 }
