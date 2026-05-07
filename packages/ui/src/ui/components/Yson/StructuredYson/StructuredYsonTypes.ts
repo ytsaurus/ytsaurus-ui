@@ -28,6 +28,8 @@ export type UnipikaValue = {$incomplete?: boolean} & (
     | UnipikaList
     | UnipikaString
     | UnipikaPrimitive
+    | UnipikaYqlListContainer
+    | UnipikaYqlMapContainer
 );
 
 export interface UnipikaMap extends BaseUnipikaValue {
@@ -65,3 +67,25 @@ export type UnipikaPrimitive = UnipikaType<
     'null' | 'boolean' | 'number' | 'double' | 'int64',
     string | number | boolean | null
 >;
+
+export interface UnipikaYqlListContainer extends BaseUnipikaValue {
+    $type: 'yql.list' | 'yql.stream' | 'yql.tuple' | 'yql.set';
+    $value: Array<UnipikaValue>;
+}
+
+export interface UnipikaYqlMapContainer extends BaseUnipikaValue {
+    $type: 'yql.struct' | 'yql.dict' | 'yql.variant';
+    $value: Array<[UnipikaMapKey, UnipikaValue]>;
+}
+
+export type UnipikaMapLike = UnipikaMap | UnipikaYqlMapContainer;
+
+export type UnipikaListLike = UnipikaList | UnipikaYqlListContainer;
+
+export type UnipikaContainerValue =
+    | UnipikaMap
+    | UnipikaList
+    | UnipikaYqlListContainer
+    | UnipikaYqlMapContainer;
+
+export type UnipikaNonContainerValue = Exclude<UnipikaValue, UnipikaContainerValue>;

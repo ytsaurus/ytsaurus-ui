@@ -1,11 +1,15 @@
 import {
-    type UnipikaList,
+    type UnipikaListLike,
     type UnipikaMap,
     type UnipikaMapKey,
+    type UnipikaMapLike,
+    type UnipikaNonContainerValue,
     type UnipikaPrimitive,
     type UnipikaSettings,
     type UnipikaString,
     type UnipikaValue,
+    type UnipikaYqlListContainer,
+    type UnipikaYqlMapContainer,
 } from './StructuredYsonTypes';
 
 // @ts-ignore
@@ -97,6 +101,35 @@ interface FlatContext {
 
 export type CollapsedState = {[path: string]: boolean};
 
+const YQL_MAP_CONTAINER_TYPES = new Set<UnipikaYqlMapContainer['$type']>([
+    'yql.struct',
+    'yql.dict',
+    'yql.variant',
+]);
+
+const YQL_LIST_CONTAINER_TYPES = new Set<UnipikaYqlListContainer['$type']>([
+    'yql.list',
+    'yql.stream',
+    'yql.tuple',
+    'yql.set',
+]);
+
+function isYqlMapContainer(value: UnipikaValue): value is UnipikaYqlMapContainer {
+    return YQL_MAP_CONTAINER_TYPES.has(value.$type as UnipikaYqlMapContainer['$type']);
+}
+
+function isYqlListContainer(value: UnipikaValue): value is UnipikaYqlListContainer {
+    return YQL_LIST_CONTAINER_TYPES.has(value.$type as UnipikaYqlListContainer['$type']);
+}
+
+function isUnipikaMapLike(value: UnipikaValue): value is UnipikaMapLike {
+    return value.$type === 'map' || isYqlMapContainer(value);
+}
+
+function isUnipikaListLike(value: UnipikaValue): value is UnipikaListLike {
+    return value.$type === 'list' || isYqlListContainer(value);
+}
+
 function isObjectLike(type: BlockType) {
     return type === 'object' || type === 'attributes-value' || type === 'attributes';
 }
@@ -115,7 +148,7 @@ function flattenUnipikaJsonImpl(value: UnipikaValue, level = 0, ctx: FlatContext
     const itemPathIndex = isObjectLike(type) ? beforeAttrs - 1 : ctx.dst.length;
 
     const isCollapsed = isPathCollapsed(ctx);
-    const isContainerType = isValueContainenrType(value);
+    const isContainerType = isValueContainerType(value);
 
     let containerSize = 0;
 
@@ -198,23 +231,16 @@ function handleValueBlock(
     const isValueCollapsed = isContainerType && isPathCollapsed(ctx);
     if (isValueCollapsed) {
         handleCollapsedValue(value, valueLevel, ctx);
+    } else if (isUnipikaMapLike(value)) {
+        handleUnipikaMap(value, valueLevel, ctx);
+        containerSize = value.$value.length;
+    } else if (isUnipikaListLike(value)) {
+        handleUnipikaList(value, valueLevel, ctx);
+        containerSize = value.$value.length;
+    } else if (value.$type === 'string') {
+        handleElement(fromUnipikaString(value, valueLevel), ctx);
     } else {
-        switch (value.$type) {
-            case 'map':
-                handleUnipikaMap(value, valueLevel, ctx);
-                containerSize = value.$value.length;
-                break;
-            case 'list':
-                handleUnipikaList(value, valueLevel, ctx);
-                containerSize = value.$value.length;
-                break;
-            case 'string':
-                handleElement(fromUnipikaString(value, valueLevel), ctx);
-                break;
-            default:
-                handleElement(fromUnipikaPrimitive(value, valueLevel), ctx);
-                break;
-        }
+        handleElement(fromUnipikaPrimitive(value, valueLevel), ctx);
     }
 
     if (isContainerType && hasAttributes) {
@@ -235,7 +261,7 @@ function flattenUnipikaYsonImpl(value: UnipikaValue, level = 0, ctx: FlatContext
     let hasAttributes = false;
     let valueLevel = level;
 
-    const isContainerType = isValueContainenrType(value);
+    const isContainerType = isValueContainerType(value);
     let containerSize = 0;
 
     const isCollapsed = isPathCollapsed(ctx);
@@ -272,18 +298,12 @@ function flattenUnipikaYsonImpl(value: UnipikaValue, level = 0, ctx: FlatContext
 }
 
 function handleCollapsedValue(value: UnipikaValue, level: number, ctx: FlatContext) {
-    switch (value.$type) {
-        case 'map': {
-            handleCollapsedBlock('object', level, ctx);
-            break;
-        }
-        case 'list': {
-            handleCollapsedBlock('array', level, ctx);
-            break;
-        }
-        default: {
-            handleCollapsedBlock('attributes-value', level, ctx);
-        }
+    if (isUnipikaMapLike(value)) {
+        handleCollapsedBlock('object', level, ctx);
+    } else if (isUnipikaListLike(value)) {
+        handleCollapsedBlock('array', level, ctx);
+    } else {
+        handleCollapsedBlock('attributes-value', level, ctx);
     }
 }
 
@@ -312,8 +332,8 @@ function popPath(ctx: FlatContext) {
     }
 }
 
-function isValueContainenrType(value: UnipikaValue) {
-    return value.$type === 'map' || value.$type === 'list';
+function isValueContainerType(value: UnipikaValue) {
+    return isUnipikaMapLike(value) || isUnipikaListLike(value);
 }
 
 function isPathCollapsed(ctx: FlatContext) {
@@ -389,7 +409,7 @@ function getLastAsKey(dst: UnipikaFlattenTree) {
     return item?.key && !item?.close ? item : null;
 }
 
-function handleUnipikaMap(map: UnipikaMap, level: number, ctx: FlatContext) {
+function handleUnipikaMap(map: UnipikaMapLike, level: number, ctx: FlatContext) {
     const info = openBlock('object', level, ctx, map.$value.length);
     handleUnipikaMapImpl(map.$value, level + 1, ctx, info);
     closeBlock('object', level, ctx);
@@ -412,7 +432,7 @@ function handleUnipikaMapImpl(
     }
 }
 
-function handleUnipikaList(value: UnipikaList, level: number, ctx: FlatContext) {
+function handleUnipikaList(value: UnipikaListLike, level: number, ctx: FlatContext) {
     const {$value: items} = value;
     const info = openBlock('array', level, ctx, items.length);
     for (let i = 0; i < items.length; ++i) {
@@ -430,7 +450,10 @@ function fromUnipikaString(value: UnipikaString, level: number): UnipikaFlattenT
     return {level, value: rest};
 }
 
-function fromUnipikaPrimitive(value: UnipikaPrimitive, level: number): UnipikaFlattenTreeItem {
+function fromUnipikaPrimitive(
+    value: UnipikaNonContainerValue,
+    level: number,
+): UnipikaFlattenTreeItem {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {$attributes, ...rest} = value;
     return {level, value: rest};
