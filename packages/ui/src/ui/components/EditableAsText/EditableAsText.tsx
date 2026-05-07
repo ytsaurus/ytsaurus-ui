@@ -119,6 +119,7 @@ export function EditableAsText(props: EditableAsTextProps) {
                         {edit: !disableEdit, controls: Boolean(withControls)},
                         className,
                     )}
+                    data-edit-mode="true"
                 >
                     {renderEditor ? (
                         renderEditor({
