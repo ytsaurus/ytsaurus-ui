@@ -17,14 +17,12 @@ type Props = {
     query: QueryItem;
     resultViewMode: ResultMode;
     setResultViewMode: (v: ResultMode) => void;
-    hideShareButton?: boolean;
 };
 
 export const ResultView = memo<Props>(function ResultView({
     query,
     resultViewMode,
     setResultViewMode,
-    hideShareButton,
 }) {
     return (
         <QueryResults
@@ -34,7 +32,7 @@ export const ResultView = memo<Props>(function ResultView({
             toolbar={
                 <>
                     <Flex gap={2} className={b('results-toolbar-buttons')}>
-                        {!hideShareButton && <ShareButton />}
+                        <ShareButton />
                         <EditQueryACOModal query_id={query.id} />
                     </Flex>
                     {resultViewMode === 'split' ? (

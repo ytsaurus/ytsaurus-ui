@@ -92,7 +92,6 @@ export const QueryEditor: FC<Props> = ({
                         query={query}
                         setResultViewMode={setResultViewMode}
                         resultViewMode={resultViewMode}
-                        hideShareButton={hideAco}
                     />
                 )}
             </FlexSplitPane>
