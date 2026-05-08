@@ -6,6 +6,7 @@ import ChevronDownIcon from '@gravity-ui/icons/svgs/chevron-down.svg';
 import {
     SHARED_QUERY_ACO,
     selectCurrentQueryACO,
+    selectQueryId,
 } from '../../../../store/selectors/query-tracker/query';
 import {toggleShareQuery} from '../../../../store/actions/query-tracker/query';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
@@ -15,6 +16,7 @@ import {toaster} from '../../../../utils/toaster';
 import './index.scss';
 import cn from 'bem-cn-lite';
 import i18n from './i18n';
+import {selectCluster} from '../../../../store/selectors/global/cluster';
 
 const b = cn('query-share-button');
 
@@ -23,6 +25,8 @@ export const ShareButton: FC = () => {
     const [sending, setSending] = useState(false);
     const [open, toggleDropdown] = useToggle(false);
     const showShareButton = useSelector(selectIsSupportedShareQuery);
+    const cluster = useSelector(selectCluster);
+    const queryId = useSelector(selectQueryId);
     const queryAco = useSelector(selectCurrentQueryACO);
     const isShared = queryAco.includes(SHARED_QUERY_ACO);
 
@@ -36,7 +40,10 @@ export const ShareButton: FC = () => {
     }, [dispatch]);
 
     const handleToggleShareQuery = useCallback(async () => {
-        navigator.clipboard.writeText(window.location.href);
+        if (queryId) {
+            const queryUrl = `${window.location.origin}/${cluster}/queries/${queryId}`;
+            navigator.clipboard.writeText(queryUrl);
+        }
         if (!isShared) {
             await handleToggleQuery();
         }
@@ -54,7 +61,7 @@ export const ShareButton: FC = () => {
                 },
             ],
         });
-    }, [handleToggleQuery, isShared]);
+    }, [cluster, handleToggleQuery, isShared, queryId]);
 
     if (!showShareButton) return null;
 
