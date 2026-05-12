@@ -398,4 +398,7 @@ export const defaultUIFactory: UIFactory = {
     getAiChatMessageComponent() {
         return undefined;
     },
+    getExternalAiChatComponent() {
+        return undefined;
+    },
 };
