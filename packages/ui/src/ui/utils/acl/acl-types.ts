@@ -274,4 +274,5 @@ export interface UpdateAclParams {
     version?: string;
     poolTree?: string;
     comment?: string;
+    name: string;
 }
