@@ -34,6 +34,8 @@ import {NavigationFlowMonitoringPrometheus} from '../pages/navigation/tabs/Flow/
 
 import {defaultAclApi} from '../utils/acl/external-acl-api';
 
+import {ChatLazy} from '../containers/AiChat/lazy';
+
 import {type UIFactory} from './index';
 
 const experimentalPages: string[] = [];
@@ -397,5 +399,8 @@ export const defaultUIFactory: UIFactory = {
     },
     getAiChatMessageComponent() {
         return undefined;
+    },
+    getAiChat() {
+        return {Chat: ChatLazy};
     },
 };

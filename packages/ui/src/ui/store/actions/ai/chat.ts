@@ -11,6 +11,7 @@ import {
     selectConversation,
     selectConversationId,
     selectConversations,
+    selectPageContext,
 } from '../../selectors/ai/chat';
 import {
     addAttachedFile,
@@ -39,7 +40,6 @@ import {
     parseConversationItems,
     parseStreamLine,
 } from './helpers';
-import {getContextByPage} from './pageСontexts';
 
 const BASE_PATH = '/api/code-assistant';
 
@@ -154,7 +154,7 @@ export const sendQuestion =
 
         if (!question && !promptId) return;
 
-        const {meta, contextMessages} = getContextByPage(state);
+        const {meta, contextMessages} = selectPageContext(state);
 
         dispatch(setMode('chat'));
         if (question) {

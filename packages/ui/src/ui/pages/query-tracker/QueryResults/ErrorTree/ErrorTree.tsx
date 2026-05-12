@@ -5,7 +5,7 @@ import {useMonaco} from '../../hooks/useMonaco';
 import {Position} from 'monaco-editor';
 import {ClipboardButton} from '@ytsaurus/components';
 import {Flex, Text} from '@gravity-ui/uikit';
-import {AskAIErrorButton} from '../../../../containers/AiChat/AskAIErrorButton';
+import uiFactory from '../../../../UIFactory';
 
 type Props = {
     rootError?: QueryError;
@@ -28,6 +28,8 @@ export const ErrorTree: FC<Props> = ({rootError}) => {
         return JSON.stringify(rootError, null, 4);
     }, [rootError]);
 
+    const AskAiButton = uiFactory.getAiChat().AskAiButton;
+
     if (!rootError) return null;
 
     return (
@@ -42,7 +44,7 @@ export const ErrorTree: FC<Props> = ({rootError}) => {
                         size="l"
                     />
                 </div>
-                <AskAIErrorButton />
+                {AskAiButton ? <AskAiButton type="query-error-tree" /> : null}
             </Flex>
             <ErrorTreeNode error={rootError} onErrorClick={handleErrorClick} expanded />
         </div>

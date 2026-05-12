@@ -198,6 +198,26 @@ export type FlowWorkerMonitorProps = {
     data: FlowWorkerData;
 };
 
+export type AiPageContext = {
+    meta: {agent: string};
+    contextMessages: string[];
+};
+
+export type AskAiButtonProps = {
+    type: string;
+};
+
+export type AiChatProps = {
+    pageContext?: AiPageContext;
+    onClose: () => void;
+    onPasteCode?: (code: string) => void;
+};
+
+export type AiChatIntegration = {
+    Chat: React.ComponentType<AiChatProps>;
+    AskAiButton?: React.ComponentType<AskAiButtonProps>;
+};
+
 export interface UIFactory {
     isAccountCreateDisabled(params: {
         currentAccount: string;
@@ -536,6 +556,8 @@ export interface UIFactory {
         message: ChatMessage,
         className?: string,
     ): React.ReactElement | undefined;
+
+    getAiChat(): AiChatIntegration;
 
     renderOperationLogsTab: () => React.ReactNode;
 
