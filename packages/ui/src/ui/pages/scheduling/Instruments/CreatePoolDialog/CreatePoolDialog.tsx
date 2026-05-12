@@ -1,35 +1,32 @@
-import React, {useCallback, useMemo, useState} from 'react';
-import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-
-import sortedIndexOf_ from 'lodash/sortedIndexOf';
 import isEmpty_ from 'lodash/isEmpty';
-
-import Link from '../../../../components/Link/Link';
-import {YTErrorBlock} from '../../../../components/Error/Error';
-import {type FormApi, YTDFDialog} from '../../../../components/Dialog';
+import sortedIndexOf_ from 'lodash/sortedIndexOf';
+import React, {useCallback, useMemo, useState} from 'react';
 import Button from '../../../../components/Button/Button';
-
+import {type FormApi, YTDFDialog} from '../../../../components/Dialog';
+import {YTErrorBlock} from '../../../../components/Error/Error';
+import Link from '../../../../components/Link/Link';
+import {docsUrl, isIdmAclAvailable} from '../../../../config';
+import {uiSettings} from '../../../../config/ui-settings';
+import {SCHEDULING_CREATE_POOL_CANCELLED} from '../../../../constants/scheduling';
+import {
+    createPool,
+    fetchCreatePoolDialogTreeItems,
+} from '../../../../store/actions/scheduling/create-pool-dialog';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {selectCurrentUserName} from '../../../../store/selectors/global';
+import {
+    getCreatePoolDialogError,
+    getCreatePoolDialogFlatTreeItems,
+} from '../../../../store/selectors/scheduling/create-pool-dialog';
 import {
     getIsRoot,
     getPool,
     getTree,
     getTreesSelectItems,
 } from '../../../../store/selectors/scheduling/scheduling';
-
-import {
-    createPool,
-    fetchCreatePoolDialogTreeItems,
-} from '../../../../store/actions/scheduling/create-pool-dialog';
-import {
-    getCreatePoolDialogError,
-    getCreatePoolDialogFlatTreeItems,
-} from '../../../../store/selectors/scheduling/create-pool-dialog';
 import {type FIX_MY_TYPE} from '../../../../types';
-import {SCHEDULING_CREATE_POOL_CANCELLED} from '../../../../constants/scheduling';
-import {docsUrl, isIdmAclAvailable} from '../../../../config';
 import UIFactory from '../../../../UIFactory';
-import {uiSettings} from '../../../../config/ui-settings';
+import {type ResponsibleType} from '../../../../utils/acl/acl-types';
 
 const allowRoot = !uiSettings.schedulingDenyRootAsParent;
 
@@ -59,7 +56,8 @@ interface FormValues {
     name: string;
     tree: string;
     parent: string;
-    responsible: {value: string; id: string | number; title: string};
+    responsible: Array<ResponsibleType>;
+    abcService: {value: string; id: number; title: string};
 }
 
 function CreatePoolDialog(props: {onClose: () => void}) {
@@ -84,7 +82,7 @@ function CreatePoolDialog(props: {onClose: () => void}) {
     const pool = useSelector(getPool);
 
     const handleCreateConfirm = useCallback(
-        (form: FormApi) => {
+        (form: FormApi<FormValues>) => {
             const {values} = form.getState();
             return dispatch(createPool(values));
         },

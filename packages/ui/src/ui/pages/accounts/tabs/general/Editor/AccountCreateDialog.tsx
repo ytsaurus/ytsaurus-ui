@@ -99,7 +99,7 @@ class AccountCreateDialog extends React.Component<ConnectedProps<typeof connecto
                                   required: true,
                                   extras: {
                                       placeholder: i18n('field_responsible-users-placeholder'),
-                                      allowedTypes: ['users'],
+                                      allowedTypes: ['users', 'groups'],
                                   },
                               },
                           ]
