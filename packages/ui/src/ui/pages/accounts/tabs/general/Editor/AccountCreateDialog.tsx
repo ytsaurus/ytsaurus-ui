@@ -1,20 +1,19 @@
 import cn from 'bem-cn-lite';
 import React from 'react';
-import {ConnectedProps, connect} from 'react-redux';
-
-import {DialogField, FormApi, YTDFDialog} from '../../../../../components/Dialog';
-import {closeCreateModal} from '../../../../../store/actions/accounts/editor';
-import {loadEditedAccount} from '../../../../../store/actions/accounts/accounts';
-import {createAccountFromInfo} from '../../../../../utils/accounts/editor';
-import {selectCluster, selectCurrentUserName} from '../../../../../store/selectors/global';
-import {selectIsAdmin} from '../../../../../store/selectors/global/is-developer';
-import {getActiveAccount} from '../../../../../store/selectors/accounts/accounts';
-import {ROOT_ACCOUNT_NAME} from '../../../../../constants/accounts/accounts';
-
-import './AccountCreateDialog.scss';
-import {RootState} from '../../../../../store/reducers';
+import {type ConnectedProps, connect} from 'react-redux';
+import {type DialogField, type FormApi, YTDFDialog} from '../../../../../components/Dialog';
 import {isIdmAclAvailable} from '../../../../../config';
+import {ROOT_ACCOUNT_NAME} from '../../../../../constants/accounts/accounts';
+import {loadEditedAccount} from '../../../../../store/actions/accounts/accounts';
+import {closeCreateModal} from '../../../../../store/actions/accounts/editor';
+import {createAccountFromInfo} from '../../../../../store/actions/accounts/editor-ts';
+import {type RootState} from '../../../../../store/reducers';
+import {getActiveAccount} from '../../../../../store/selectors/accounts/accounts';
+import {selectCurrentUserName} from '../../../../../store/selectors/global';
+import {selectIsAdmin} from '../../../../../store/selectors/global/is-developer';
 import {isAbcAllowed} from '../../../../../UIFactory';
+import {type ResponsibleType} from '../../../../../utils/acl/acl-types';
+import './AccountCreateDialog.scss';
 
 const block = cn('account-create-dialog');
 
@@ -22,7 +21,7 @@ interface FormValues {
     abcService?: {slug: string; id: number};
     account: string;
     parentAccount: string;
-    responsibles: Array<unknown>;
+    responsibles: Array<ResponsibleType>;
     createHome: boolean;
 }
 
@@ -119,13 +118,13 @@ class AccountCreateDialog extends React.Component<ConnectedProps<typeof connecto
     }
 
     onSubmit = (form: FormApi<FormValues>) => {
-        const {createAccountFromInfo, closeCreateModal, loadEditedAccount, cluster} = this.props;
+        const {createAccountFromInfo, closeCreateModal, loadEditedAccount} = this.props;
         const newAccountInfo = form.getState().values;
         if (!isRootAccount(newAccountInfo.parentAccount)) {
             newAccountInfo.abcService = undefined;
         }
 
-        return createAccountFromInfo(cluster, newAccountInfo).then(() => {
+        return createAccountFromInfo(newAccountInfo).then(() => {
             closeCreateModal();
             const {account} = newAccountInfo;
             loadEditedAccount(account);
@@ -146,7 +145,6 @@ const mapStateToProps = (state: RootState) => {
         activeAccount: getActiveAccount(state),
         visible: editor.createModalVisible,
         newAccountInfo: editor.newAccountInfo as FormValues,
-        cluster: selectCluster(state),
         isAdmin: selectIsAdmin(state),
     };
 };
