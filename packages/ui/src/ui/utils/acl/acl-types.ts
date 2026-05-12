@@ -42,7 +42,7 @@ export interface GetGroupResponse {
 }
 
 export interface UpdateResponse {
-    status: RoleUpdateStatus | Array<RoleUpdateStatus>;
+    status: RoleUpdateStatus | Array<RoleUpdateStatus> | undefined;
 }
 
 export interface RoleUpdateStatus {
