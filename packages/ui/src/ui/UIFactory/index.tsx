@@ -198,6 +198,17 @@ export type FlowWorkerMonitorProps = {
     data: FlowWorkerData;
 };
 
+export type ExternalAiChatProps = {
+    visible: boolean;
+    onClose: () => void;
+    onPasteCode?: (code: string) => void;
+};
+
+export type ExternalAiChatIntegration = {
+    Chat: React.ComponentType<ExternalAiChatProps>;
+    ErrorButton?: React.ComponentType;
+};
+
 export interface UIFactory {
     isAccountCreateDisabled(params: {
         currentAccount: string;
@@ -536,6 +547,8 @@ export interface UIFactory {
         message: ChatMessage,
         className?: string,
     ): React.ReactElement | undefined;
+
+    getExternalAiChat(): ExternalAiChatIntegration | undefined;
 
     renderOperationLogsTab: () => React.ReactNode;
 

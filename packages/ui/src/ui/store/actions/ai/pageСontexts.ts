@@ -1,9 +1,8 @@
 import {type RootState} from '../../reducers';
-import {selectQueryDraft, selectQueryEngine} from '../../selectors/query-tracker/query';
-import {AGENT_MAP} from '../../../containers/AiChat/constants';
+import {selectQueryDraft} from '../../selectors/query-tracker/query';
 import {selectPage} from '../../selectors/global';
 
-const DEFAULT_AGENT = 'qt';
+export const DEFAULT_AGENT = 'qt';
 
 export type PageContext = {
     meta: {agent: string};
@@ -11,9 +10,6 @@ export type PageContext = {
 };
 
 const getQueriesPageContext = (state: RootState): PageContext => {
-    const engine = selectQueryEngine(state);
-    const agent = engine ? AGENT_MAP[engine] : DEFAULT_AGENT;
-
     const draft = selectQueryDraft(state);
     const contextMessages: string[] = [];
 
@@ -28,7 +24,7 @@ const getQueriesPageContext = (state: RootState): PageContext => {
     }
 
     return {
-        meta: {agent},
+        meta: {agent: DEFAULT_AGENT},
         contextMessages,
     };
 };
