@@ -395,6 +395,7 @@ export function updateAcl(
                     version,
                     idmKind,
                     poolTree,
+                    name: path,
                 });
             })
             .then(() => {
