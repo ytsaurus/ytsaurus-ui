@@ -1,6 +1,7 @@
 import React, {type FC, useCallback, useEffect, useRef, useState} from 'react';
 import './Chat.scss';
 import cn from 'bem-cn-lite';
+import {type AiChatProps} from '../../UIFactory';
 import {ChatInput} from './ChatInput';
 import {ChatHeader} from './ChatHeader';
 import {ChatBody} from './ChatBody';
@@ -10,7 +11,7 @@ const SCROLL_THRESHOLD = INPUT_DEFAULT_HEIGHT;
 
 const block = cn('yt-ai-chat');
 
-const Chat: FC = () => {
+const Chat: FC<AiChatProps> = () => {
     const [isScrolledToBottom, setIsScrolledToBottom] = useState(true);
     const [isUserScrolledUp, setIsUserScrolledUp] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);

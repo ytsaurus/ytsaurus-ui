@@ -19,8 +19,6 @@ import {
 } from '../../../store/selectors/query-tracker/query';
 import {LazyQueriesList} from '../QueriesList/lazy';
 import {useQueryACO} from '../QueryACO/useQueryACO';
-import {MonacoContext} from '../context/MonacoContext';
-
 import cn from 'bem-cn-lite';
 
 import './QueryTracker.scss';
@@ -145,24 +143,22 @@ export default function QueryTracker({match}: Props) {
                 <Route exact path={match.path} component={QueryPageDraft} />
                 <Route path={`${match.path}/:queryId`} component={QueryPage} />
             </Switch>
-            <MonacoContext.Provider value={new Map()}>
-                <QueriesPooling>
-                    <FlexSplitPane
-                        className={b('container')}
-                        direction={FlexSplitPane.HORIZONTAL}
-                        onResizeEnd={setSize}
-                        minSize={minSize}
-                        getInitialSizes={getSize}
-                    >
-                        {isQueriesListSidebarVisible ? <LazyQueriesList /> : null}
-                        <QueryEditorSplit
-                            fileEditorFullWidth={fileEditor.isFullWidth}
-                            fileEditorVisible={fileEditor.isOpen}
-                            onStartQuery={goToCreatedQuery}
-                        />
-                    </FlexSplitPane>
-                </QueriesPooling>
-            </MonacoContext.Provider>
+            <QueriesPooling>
+                <FlexSplitPane
+                    className={b('container')}
+                    direction={FlexSplitPane.HORIZONTAL}
+                    onResizeEnd={setSize}
+                    minSize={minSize}
+                    getInitialSizes={getSize}
+                >
+                    {isQueriesListSidebarVisible && <LazyQueriesList />}
+                    <QueryEditorSplit
+                        fileEditorFullWidth={fileEditor.isFullWidth}
+                        fileEditorVisible={fileEditor.isOpen}
+                        onStartQuery={goToCreatedQuery}
+                    />
+                </FlexSplitPane>
+            </QueriesPooling>
             <CellPreviewModal />
             {isQueryStateDirty && (
                 <RedirectConfirmModal
