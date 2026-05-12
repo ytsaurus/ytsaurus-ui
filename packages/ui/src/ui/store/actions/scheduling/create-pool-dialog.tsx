@@ -1,28 +1,28 @@
 import React from 'react';
-import {ThunkAction} from 'redux-thunk';
-import {RootState} from '../../reducers';
-import {
-    CreatePoolDialogAction,
-    CreatePoolDialogState,
-} from '../../reducers/scheduling/create-pool-dialog';
+import {type ThunkAction} from 'redux-thunk';
 import {
     CREATE_POOL_DIALOG_TREE_CREATE_FAILURE,
     CREATE_POOL_DIALOG_TREE_ITEMS_SUCCESS,
 } from '../../../constants/scheduling';
+import {
+    CreatePoolDialogAction,
+    CreatePoolDialogState,
+} from '../../reducers/scheduling/create-pool-dialog';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
+import Link from '../../../components/Link/Link';
+import {createAdminReqTicketUrl} from '../../../config';
+import {IdmObjectType} from '../../../constants/acl';
+import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
+import {updateAcl} from '../../../store/actions/acl';
+import UIFactory from '../../../UIFactory';
+import {type ResponsibleType} from '../../../utils/acl/acl-types';
 import {prepareAbcService} from '../../../utils/scheduling';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
+import {type RootState} from '../../reducers';
 import {loadSchedulingData} from './scheduling-ts';
-import {FIX_MY_TYPE} from '../../../types';
-import {selectCluster} from '../../selectors/global';
-import {updateAcl} from '../../../utils/acl/acl-api';
-import {IdmObjectType} from '../../../constants/acl';
-import Link from '../../../components/Link/Link';
-import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
-import {createAdminReqTicketUrl} from '../../../config';
 
-type CreatePoolDialogThunkAction<R = any> = ThunkAction<
+type CreatePoolDialogThunkAction<R = void> = ThunkAction<
     R,
     RootState,
     unknown,
@@ -42,19 +42,28 @@ export function fetchCreatePoolDialogTreeItems(currentTree: string): CreatePoolD
     };
 }
 
-export function createPool(values: FIX_MY_TYPE): CreatePoolDialogThunkAction {
-    return (dispatch, getState) => {
-        const {abcService} = values;
-        const cluster = selectCluster(getState()) as string;
-
+export function createPool({
+    name,
+    parent,
+    tree,
+    responsible,
+    abcService,
+}: {
+    name: string;
+    parent?: string;
+    tree: string;
+    responsible: Array<ResponsibleType>;
+    abcService: {value: string; title: string; id: number};
+}): CreatePoolDialogThunkAction {
+    return (dispatch) => {
         return wrapApiPromiseByToaster(
             yt.v3.create({
                 type: 'scheduler_pool',
                 attributes: Object.assign(
                     {
-                        name: values.name,
-                        parent_name: values.parent || undefined,
-                        pool_tree: values.tree,
+                        name,
+                        parent_name: parent || undefined,
+                        pool_tree: tree,
                     },
                     !abcService || !abcService.value
                         ? {}
@@ -64,26 +73,30 @@ export function createPool(values: FIX_MY_TYPE): CreatePoolDialogThunkAction {
                 ),
             }),
             {
-                toasterName: `create_${values.name}`,
-                successContent: `Successfully created ${values.name}. Please wait.`,
-                errorContent: `'${values.name}' pool creation failed`,
+                toasterName: `create_${name}`,
+                successContent: `Successfully created ${name}. Please wait.`,
+                errorContent: `'${name}' pool creation failed`,
                 timeout: 10000,
             },
         )
             .then(() => {
-                updateAcl(cluster, values.name, {
-                    idmKind: IdmObjectType.POOL,
-                    poolTree: values.tree,
-                    responsible: values.responsible,
-                });
+                return waitWhilePoolIsReady({name, tree}).then(() => {
+                    if (UIFactory.getAclApi().isAllowed) {
+                        dispatch(
+                            updateAcl({
+                                values: {responsible},
+                                path: name,
+                                idmKind: IdmObjectType.POOL,
+                            }),
+                        );
+                    }
 
-                return waitWhilePoolIsReady(values).then(() => {
                     dispatch(loadSchedulingData());
                 });
             })
             .catch((error) => {
                 if (error?.code === yt.codes.CANCELLED) {
-                    return;
+                    return undefined;
                 }
 
                 dispatch({

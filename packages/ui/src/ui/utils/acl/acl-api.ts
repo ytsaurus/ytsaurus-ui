@@ -62,15 +62,6 @@ export function getAcl({
     return api.getAcl({cluster, path, kind, poolTree, sysPath});
 }
 
-export function updateAcl(cluster: string, path: string, params: UpdateAclParams) {
-    const api = UIFactory.getAclApi();
-    if (!api.isAllowed) {
-        return Promise.resolve();
-    }
-
-    return api.updateAcl(cluster, path, params);
-}
-
 export const getResponsible = async ({
     cluster,
     path,

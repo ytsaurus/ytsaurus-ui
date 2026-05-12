@@ -98,7 +98,7 @@ class AccountCreateDialog extends React.Component<ConnectedProps<typeof connecto
                                   required: true,
                                   extras: {
                                       placeholder: 'Enter name or login',
-                                      allowedTypes: ['users'],
+                                      allowedTypes: ['users', 'groups'],
                                   },
                               },
                           ]

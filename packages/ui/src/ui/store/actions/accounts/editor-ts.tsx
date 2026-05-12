@@ -13,8 +13,8 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {RESOURCES_LIMITS_PREFIX} from '../../../constants/accounts';
 import {ROOT_ACCOUNT_NAME} from '../../../constants/accounts/accounts';
 import {IdmObjectType} from '../../../constants/acl';
-import {selectCluster} from '../../../store/selectors/global';
-import {updateAcl} from '../../../utils/acl/acl-api';
+import {updateAcl} from '../../../store/actions/acl';
+import UIFactory from '../../../UIFactory';
 import {type ResponsibleType} from '../../../utils/acl/acl-types';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {accountsIncreaseEditCounter, loadEditedAccount} from './accounts';
@@ -74,15 +74,27 @@ function setResponsibleUsers(
     accountName: string,
     inheritAcl: boolean,
 ): EditorAction {
-    return (_dispatch, getState) => {
-        const path = accountName;
-        const cluster = selectCluster(getState());
+    return (dispatch) => {
+        if (!UIFactory.getAclApi().isAllowed) {
+            return Promise.resolve();
+        }
 
-        return updateAcl(cluster, path, {
-            idmKind: IdmObjectType.ACCOUNT,
-            responsible: users,
-            inheritAcl,
-        });
+        return Promise.all([
+            dispatch(
+                updateAcl({
+                    path: accountName,
+                    idmKind: IdmObjectType.ACCOUNT,
+                    values: {responsible: users},
+                }),
+            ),
+            dispatch(
+                updateAcl({
+                    path: accountName,
+                    idmKind: IdmObjectType.ACCOUNT,
+                    values: {inheritAcl},
+                }),
+            ),
+        ]);
     };
 }
 
