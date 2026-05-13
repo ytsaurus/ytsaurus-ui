@@ -2,25 +2,25 @@ import {produce} from 'immer';
 import {updateIfChanged} from '../../../utils/utils';
 import {type RootState} from '..';
 
-import {usersTableState} from './table';
+import {usersTableDefaultState} from './table';
 import {parseSortState} from '../../../utils/index';
 
 export const usersPageParams = {
     filter: {
         stateKey: 'users.table.nameFilter',
-        initialState: usersTableState.nameFilter,
+        initialState: usersTableDefaultState.nameFilter,
     },
     group: {
         stateKey: 'users.table.groupFilter',
-        initialState: usersTableState.groupFilter,
+        initialState: usersTableDefaultState.groupFilter,
     },
     banned: {
         stateKey: 'users.table.bannedFilter',
-        initialState: usersTableState.bannedFilter,
+        initialState: usersTableDefaultState.bannedFilter,
     },
     sort: {
         stateKey: 'users.table.sort',
-        initialState: usersTableState.sort,
+        initialState: usersTableDefaultState.sort,
         type: 'object',
         options: {
             parse: parseSortState,
