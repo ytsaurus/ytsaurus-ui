@@ -1,4 +1,4 @@
-import {Page} from '@playwright/test';
+import {type Page} from '@playwright/test';
 import {E2E_DIR_NAME} from '../utils';
 import {replaceInnerHtml} from '../utils/dom';
 import type {ConfigData} from '../../src/shared/yt-types';
@@ -245,17 +245,9 @@ export class BasePage extends HasPage {
     }
 
     async settingsToggleVisibility({waitUntilClosed}: {waitUntilClosed?: boolean} = {}) {
-        await this.page.waitForFunction(() => {
-            const el = document.querySelector<HTMLElement>(
-                '.gn-aside-header__footer [title="Settings"]',
-            );
-            el?.click();
-            return Boolean(el);
-        });
+        await this.page.locator('button.gn-footer-item', {hasText: 'Settings'}).click();
         if (waitUntilClosed) {
-            await this.page.waitForFunction(() => {
-                return !document.querySelector('.settings-panel');
-            });
+            await this.page.locator('.settings-panel').waitFor({state: 'hidden'});
         }
     }
 
