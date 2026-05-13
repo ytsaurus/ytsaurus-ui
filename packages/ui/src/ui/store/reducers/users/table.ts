@@ -32,7 +32,7 @@ type EphemeralStateType = {
     };
 };
 
-const ephemeralState: EphemeralStateType = {
+const ephemeralDefaultState: EphemeralStateType = {
     loaded: false,
     loading: false,
     error: null,
@@ -49,7 +49,7 @@ type PersistentStateType = {
     groupFilter: string;
 };
 
-const persistentState: PersistentStateType = {
+const persistentDefaultState: PersistentStateType = {
     bannedFilter: false,
     nameFilter: '',
     groupFilter: '',
@@ -57,12 +57,12 @@ const persistentState: PersistentStateType = {
 
 export type UsersTableStateType = EphemeralStateType & PersistentStateType;
 
-export const usersTableState: UsersTableStateType = {
-    ...ephemeralState,
-    ...persistentState,
+export const usersTableDefaultState: UsersTableStateType = {
+    ...ephemeralDefaultState,
+    ...persistentDefaultState,
 };
 
-function reducer(state: UsersTableStateType = usersTableState, action: UsersTableAction) {
+function reducer(state: UsersTableStateType = usersTableDefaultState, action: UsersTableAction) {
     switch (action.type) {
         case USERS_TABLE.REQUEST: {
             return {...state, loading: true};
@@ -100,4 +100,4 @@ export type UsersTableAction =
           Partial<Pick<UsersTableStateType, 'bannedFilter' | 'nameFilter' | 'groupFilter' | 'sort'>>
       >;
 
-export default mergeStateOnClusterChange(ephemeralState, persistentState, reducer);
+export default mergeStateOnClusterChange(ephemeralDefaultState, persistentDefaultState, reducer);

@@ -8,8 +8,6 @@ import {sortArrayBySortState} from '../../utils/sort-helpers';
 import {concatByAnd} from '../../common/hammer/predicate';
 import {type UsersTableUser} from '../reducers/users/table';
 
-// Table
-
 export const selectUsersTableDataState = (state: RootState) => state.users.table;
 
 export const selectUsers = (state: RootState) => state.users.table.users;
@@ -52,5 +50,4 @@ export const selectUsersFilteredAndSorted = createSelector(
     },
 );
 
-// User editor
 export const selectUsersPageEditableUser = (state: RootState) => state.users.editUser;
