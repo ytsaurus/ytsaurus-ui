@@ -1,5 +1,25 @@
 # Changelog
 
+## [3.12.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.11.0...ui-v3.12.0) (2026-05-14)
+
+
+### Features
+
+* **Queries/Navigation:** allow to edit navigation path ([5221504](https://github.com/ytsaurus/ytsaurus-ui/commit/5221504cc5700fe32301ecc862e743f4d61b600f))
+* **Queries:** sort result table [YTFRONT-5766] ([b91831c](https://github.com/ytsaurus/ytsaurus-ui/commit/b91831cbd4f0ec98196e416b1e17c1576d237938))
+* update color pallete [YTFRONT-4270] ([4782884](https://github.com/ytsaurus/ytsaurus-ui/commit/4782884c79880a6537945e6c9f5febead945a483))
+
+
+### Bug Fixes
+
+* **ACL/ManageAcl:** add 'name' parameter for updateAcl [YTFRONT-5762] ([7e636f0](https://github.com/ytsaurus/ytsaurus-ui/commit/7e636f05f8f5f8296c08668e1806cdf4e7ff1926))
+* code review ([460dace](https://github.com/ytsaurus/ytsaurus-ui/commit/460daceb620acadf9728656a0b0db19e233d512d))
+* expand the path editor ([0283088](https://github.com/ytsaurus/ytsaurus-ui/commit/0283088f8340c19503ee1bce14e72f4e9fab4ea0))
+* **Navigation/QueryTracker:** always show share button [YTFRONT-5776] ([496267b](https://github.com/ytsaurus/ytsaurus-ui/commit/496267ba34aee07a54530967fe983e6bbad7b0c7))
+* **Navigation/ReplicatedTable:** add sorting in replicated tables and saving state in settings [YTFRONT-5703] ([818040f](https://github.com/ytsaurus/ytsaurus-ui/commit/818040f0adcb1ef23f02cd2ee5d178167d52c623))
+* **Navigation:** cell preview [YTFRONT-5751] ([92fc00f](https://github.com/ytsaurus/ytsaurus-ui/commit/92fc00fc5c976fd584b33b67e8c11cd532c1b362))
+* **PathEditor:** open suggest popup on input change ([51fa332](https://github.com/ytsaurus/ytsaurus-ui/commit/51fa332f5f66b81b38cedb32d0c3f4ebdddb10fa))
+
 ## [3.11.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.10.0...ui-v3.11.0) (2026-05-05)
 
 
