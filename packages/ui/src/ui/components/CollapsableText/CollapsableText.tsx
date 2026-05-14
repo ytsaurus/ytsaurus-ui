@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import Button from '../Button/Button';
 
-import Yson from '../Yson/Yson';
+import {Yson} from '../Yson/Yson';
 
 import i18n from './i18n';
 

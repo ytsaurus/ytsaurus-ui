@@ -14,7 +14,7 @@ import {ExpandButton} from '../../../../components/ExpandButton';
 import ChevronUpIcon from '@gravity-ui/icons/svgs/chevron-up.svg';
 import ChevronDownIcon from '@gravity-ui/icons/svgs/chevron-down.svg';
 import unipika from '../../../../common/thor/unipika';
-import Yson from '../../../../components/Yson/Yson';
+import {Yson} from '../../../../components/Yson/Yson';
 import {ClickableText} from '../../../../components/ClickableText/ClickableText';
 import {isInfoNode} from './helpers/isInfoNode';
 

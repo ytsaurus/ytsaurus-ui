@@ -6,7 +6,7 @@ import {
     selectOperationId,
     selectOperationTypedAttributes,
 } from '../../../../../store/selectors/operations/operation';
-import Yson from '../../../../../components/Yson/Yson';
+import {YsonWithScroll} from '../../../../../components/Yson/YsonWithScroll';
 import {getYsonSettingsDisableDecode} from '../../../../../store/selectors/thor/unipika';
 import {useRumMeasureStop} from '../../../../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../../../../rum/rum-measure-types';
@@ -43,7 +43,7 @@ function OperationAttributes({className}: {className: string}) {
     useOperationAttributesRumMesures();
 
     return (
-        <Yson
+        <YsonWithScroll
             className={className}
             value={typedAttributes}
             settings={settings}
@@ -54,7 +54,6 @@ function OperationAttributes({className}: {className: string}) {
                     name={`operation_attributes_${id}`}
                 />
             }
-            folding
         />
     );
 }

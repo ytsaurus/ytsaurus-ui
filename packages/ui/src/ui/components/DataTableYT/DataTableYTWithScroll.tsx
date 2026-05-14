@@ -1,9 +1,9 @@
 import React from 'react';
 import {DataTableYT, type DataTableYtProps} from '@ytsaurus/components';
-import {useScrollableElementContenxt} from '../../hooks/use-scrollable-element';
+import {useScrollableElementContext} from '../../hooks/use-scrollable-element';
 
 export function DataTableYTWithScroll<T>({settings, ...props}: DataTableYtProps<T>) {
-    const scrollableElement = useScrollableElementContenxt();
+    const scrollableElement = useScrollableElementContext();
 
     const settingsWithScrollableElement = React.useMemo(() => {
         return Boolean(scrollableElement) && settings?.dynamicRender

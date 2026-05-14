@@ -5,7 +5,7 @@ import hammer from '../../../common/hammer';
 import './index.scss';
 import {type QueryItem} from '../../../types/query-tracker/api';
 import {Button} from '@gravity-ui/uikit';
-import Yson from '../../../components/Yson/Yson';
+import {Yson} from '../../../components/Yson/Yson';
 import SimpleModal from '../../../components/Modal/SimpleModal';
 import {ClipboardButton} from '@ytsaurus/components';
 import i18n from './i18n';

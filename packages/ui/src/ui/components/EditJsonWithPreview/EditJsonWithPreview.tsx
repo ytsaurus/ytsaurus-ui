@@ -6,7 +6,7 @@ import {
     EditTextWithPreview,
     type EditTextWithPreviewProps,
 } from '../../components/EditTextWithPreview/EditTextWithPreview';
-import Yson, {type YsonProps} from '../../components/Yson/Yson';
+import {Yson, type YsonProps} from '../../components/Yson/Yson';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import {type DialogControlProps} from '../../components/Dialog/Dialog.types';
 
@@ -17,7 +17,7 @@ export type EditJsonProps = DialogControlProps<
     {
         unipikaSettings?: YsonProps['settings'];
         nullPreview?: any;
-        folding?: boolean;
+        virtualized?: boolean;
     }
 > &
     Omit<
@@ -50,7 +50,7 @@ export function EditJsonWithPreview({
     onChange,
     unipikaSettings,
     nullPreview,
-    folding,
+    virtualized,
     ...rest
 }: EditJsonProps) {
     const {value} = valueProp;
@@ -105,7 +105,7 @@ export function EditJsonWithPreview({
                         nullPreview={nullPreview}
                         settings={unipikaSettings}
                         onError={onError}
-                        folding={folding}
+                        virtualized={virtualized}
                     />
                 </ErrorBoundary>
             )}
@@ -116,13 +116,13 @@ export function EditJsonWithPreview({
 function YsonPreview({
     value: {value, error},
     settings,
-    folding,
+    virtualized,
     onError,
     nullPreview,
 }: {
     value: EditJsonProps['value'];
     settings: YsonProps['settings'];
-    folding: YsonProps['folding'];
+    virtualized: YsonProps['virtualized'];
     onError: (e: any) => void;
     nullPreview: any;
 }) {
@@ -143,10 +143,10 @@ function YsonPreview({
         return (
             <React.Fragment>
                 {i18n('context_default-value')}
-                <Yson value={nullPreview ?? null} folding={folding} settings={settings} />
+                <Yson value={nullPreview ?? null} virtualized={virtualized} settings={settings} />
             </React.Fragment>
         );
     }
 
-    return <Yson value={obj} folding={folding} settings={settings} />;
+    return <Yson value={obj} virtualized={virtualized} settings={settings} />;
 }

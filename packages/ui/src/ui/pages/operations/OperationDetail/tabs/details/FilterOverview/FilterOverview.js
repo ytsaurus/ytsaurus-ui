@@ -8,7 +8,7 @@ import cn from 'bem-cn-lite';
 
 import {Button} from '@gravity-ui/uikit';
 import Modal from '../../../../../../components/Modal/Modal';
-import Yson from '../../../../../../components/Yson/Yson';
+import {Yson, YsonSettingsPropTypes} from '../../../../../../components/Yson/Yson';
 
 import withVisible from '../../../../../../hocs/withVisible';
 
@@ -20,7 +20,7 @@ FilterOverview.propTypes = {
     filters: PropTypes.object.isRequired,
     typedFilters: PropTypes.object.isRequired,
     // from connect
-    settings: Yson.settingsProps.isRequired,
+    settings: YsonSettingsPropTypes.isRequired,
     // from hoc
     visible: PropTypes.bool.isRequired,
     handleShow: PropTypes.func.isRequired,
