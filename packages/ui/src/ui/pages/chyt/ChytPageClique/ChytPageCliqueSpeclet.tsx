@@ -7,7 +7,7 @@ import Button from '../../../components/Button/Button';
 import {YTErrorBlock} from '../../../components/Error/Error';
 import Icon from '../../../components/Icon/Icon';
 import {YTDFDialog} from '../../../components/Dialog';
-import Yson from '../../../components/Yson/Yson';
+import {YsonWithScroll} from '../../../components/Yson/YsonWithScroll';
 import {type UnipikaSettings} from '../../../components/Yson/StructuredYson/StructuredYsonTypes';
 import {
     linkPoolWithPoolTree,
@@ -100,11 +100,10 @@ function ChytSpeclet({alias, unipikaSettings}: {alias?: string; unipikaSettings:
                 <YTErrorBlock className={block('raw-speclet-error')} error={error} bottomMargin />
             )}
             {loaded && (
-                <Yson
+                <YsonWithScroll
                     className={block('raw-speclet')}
                     value={data}
                     settings={unipikaSettings}
-                    folding
                     extraTools={
                         <YsonDownloadButton
                             value={data}

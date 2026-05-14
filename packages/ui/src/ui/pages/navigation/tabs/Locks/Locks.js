@@ -34,7 +34,7 @@ import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
 import {isFinalLoadingStatus} from '../../../../utils/utils';
 
-import Yson from '../../../../components/Yson/Yson';
+import {Yson} from '../../../../components/Yson/Yson';
 import CustomRadioButton from '../../../../components/RadioButton/RadioButton';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';

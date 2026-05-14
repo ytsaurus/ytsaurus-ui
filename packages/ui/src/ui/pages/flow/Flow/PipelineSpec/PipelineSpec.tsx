@@ -26,7 +26,7 @@ import {getFlowSpecYsonSettings} from '../../../../store/selectors/thor/unipika'
 import {type FlowSpecState} from '../../../../store/reducers/flow/specs';
 
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
-import Yson from '../../../../components/Yson/Yson';
+import {YsonWithScroll} from '../../../../components/Yson/YsonWithScroll';
 import Icon from '../../../../components/Icon/Icon';
 import {YTDFDialog, makeErrorFields} from '../../../../components/Dialog';
 import {YTErrorBlock} from '../../../../components/Block/Block';
@@ -58,11 +58,9 @@ function PipelineSpec({path, data, error, name, onSave, allowForce}: PipelineSpe
     return (
         <React.Fragment>
             {Boolean(error) && <YTErrorBlock error={error} />}
-            <Yson
+            <YsonWithScroll
                 value={data}
                 settings={settings}
-                virtualized
-                folding
                 extraTools={
                     <React.Fragment>
                         <YsonDownloadButton

@@ -6,7 +6,7 @@ import {Loader} from '@gravity-ui/uikit';
 
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
-import Yson from '../../../../components/Yson/Yson';
+import {YsonWithScroll} from '../../../../components/Yson/YsonWithScroll';
 
 import {
     abortAndReset,
@@ -53,7 +53,7 @@ function UserAttributes() {
                 {initialLoading ? (
                     <Loader />
                 ) : (
-                    <Yson
+                    <YsonWithScroll
                         value={userAttributes}
                         settings={settings}
                         extraTools={
@@ -63,7 +63,6 @@ function UserAttributes() {
                                 name={`user_attributes_${pathToFileName(path)}`}
                             />
                         }
-                        folding
                     />
                 )}
             </div>

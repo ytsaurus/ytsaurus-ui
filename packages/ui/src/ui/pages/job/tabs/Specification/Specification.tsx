@@ -2,7 +2,7 @@ import React, {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
-import Yson from '../../../../components/Yson/Yson';
+import {YsonWithScroll} from '../../../../components/Yson/YsonWithScroll';
 import {Checkbox, Flex, Loader} from '@gravity-ui/uikit';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
@@ -119,8 +119,7 @@ export default function Specification({className, jobID}: SpecificationProps) {
                         <Loader />
                     ) : (
                         <LoadDataHandler loaded={loaded} error={error} errorData={errorData}>
-                            <Yson
-                                folding={true}
+                            <YsonWithScroll
                                 settings={settings}
                                 value={specification}
                                 extraTools={

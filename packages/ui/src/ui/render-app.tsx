@@ -17,8 +17,11 @@ import App from './containers/App/App';
 import '@gravity-ui/uikit/styles/fonts.css';
 import '@gravity-ui/uikit/styles/styles.css';
 
+import '@gravity-ui/unipika/styles/unipika.scss';
+
 import './legacy-styles/legacy.scss';
 import './styles/redefinitions/redefinitions.scss';
+
 import {ErrorYsonSettingsProvider} from './containers/ErrorYsonSettingsProvider/ErrorYsonSettingsProvider';
 
 import UIFactory, {type UIFactory as UIFactoryType, configureUIFactory} from './UIFactory';

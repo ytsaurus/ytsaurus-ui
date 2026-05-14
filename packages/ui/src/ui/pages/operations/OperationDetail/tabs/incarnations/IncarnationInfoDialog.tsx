@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import b from 'bem-cn-lite';
 
 import {DialogWrapper} from '../../../../../components/DialogWrapper/DialogWrapper';
-import Yson from '../../../../../components/Yson/Yson';
+import {Yson} from '../../../../../components/Yson/Yson';
 
 import {
     getIncarnationInfoDialog,
