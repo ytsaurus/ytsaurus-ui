@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.9.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.9.0...ui-v3.9.1) (2026-05-14)
+
+
+### Bug Fixes
+
+* **ACL/ManageAcl:** add 'name' parameter for updateAcl [YTFRONT-5762] ([58ded6a](https://github.com/ytsaurus/ytsaurus-ui/commit/58ded6a2c14929ea4af73f4bd69b7e5be8c3c75b))
+
 ## [3.9.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.8.0...ui-v3.9.0) (2026-04-16)
 
 
