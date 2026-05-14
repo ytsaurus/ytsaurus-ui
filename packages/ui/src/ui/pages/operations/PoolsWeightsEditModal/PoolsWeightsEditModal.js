@@ -11,7 +11,7 @@ import reduce_ from 'lodash/reduce';
 import {YTErrorBlock} from '../../../components/Error/Error';
 import Modal from '../../../components/Modal/Modal';
 import Link from '../../../components/Link/Link';
-import Yson from '../../../components/Yson/Yson';
+import {Yson} from '../../../components/Yson/Yson';
 import {TextInput} from '@gravity-ui/uikit';
 
 import {hideEditPoolsWeightsModal, setPoolsAndWeights} from '../../../store/actions/operations';

@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useMemo} from 'react';
 import {useDispatch, useSelector} from '../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
-import Yson from '../../components/Yson/Yson';
+import {Yson} from '../../components/Yson/Yson';
 import {Checkbox, Loader, TextInput} from '@gravity-ui/uikit';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import LoadDataHandler from '../../components/LoadDataHandler/LoadDataHandler';

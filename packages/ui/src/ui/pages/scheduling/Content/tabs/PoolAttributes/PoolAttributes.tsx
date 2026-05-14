@@ -2,7 +2,7 @@ import React from 'react';
 
 import {YTErrorBlock} from '../../../../../components/Block/Block';
 import Loader from '../../../../../components/Loader/Loader';
-import Yson from '../../../../../components/Yson/Yson';
+import {YsonWithScroll} from '../../../../../components/Yson/YsonWithScroll';
 import {YTApiId} from '../../../../../rum/rum-wrap-api';
 import {getPoolPathsByName} from '../../../../../store/actions/scheduling/expanded-pools';
 import {useFetchBatchQuery} from '../../../../../store/api/yt';
@@ -38,7 +38,7 @@ function PoolAttributesFetched({className, pool}: {className?: string; pool: Poo
         <div className={className}>
             {isLoading && <Loader />}
             {Boolean(error) && <YTErrorBlock error={error} />}
-            <Yson folding virtualized value={data?.[0]?.output ?? null} />
+            <YsonWithScroll value={data?.[0]?.output ?? null} />
         </div>
     );
 }

@@ -14,7 +14,7 @@ import {
 import {ClickableText} from '../../../../components/ClickableText/ClickableText';
 import {MetaTable} from '@ytsaurus/components';
 import StarTrackLink from '../../../../components/StarTrackLink/StarTrackLink';
-import Yson from '../../../../components/Yson/Yson';
+import {YsonWithScroll} from '../../../../components/Yson/YsonWithScroll';
 import {getOperationExperimentsYsonSettings} from '../../../../store/selectors/thor/unipika';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../constants/global';
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
@@ -106,11 +106,9 @@ function ExperimentAssignmentsItem(props: ItemProps) {
                 ]}
             />
             {effectVisible && (
-                <Yson
+                <YsonWithScroll
                     value={effect}
                     settings={settings}
-                    folding
-                    virtualized
                     extraTools={
                         <YsonDownloadButton
                             value={effect}

@@ -13,7 +13,7 @@ import OffsetSelectorModal from '../../../../pages/navigation/content/Table/Offs
 import TableMeta from '../../../../pages/navigation/content/Table/TableMeta/TableMeta';
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
 import FullScreen from '../../../../components/FullScreen/FullScreen';
-import Yson from '../../../../components/Yson/Yson';
+import {YsonSettingsPropTypes} from '../../../../components/Yson/Yson';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 
 import {OVERVIEW_HEIGHT} from '../../../../constants/navigation/content/table';
@@ -80,7 +80,7 @@ Table.propTypes = {
     isSplit: PropTypes.bool.isRequired,
     isDynamic: PropTypes.bool.isRequired,
     isFullScreen: PropTypes.bool.isRequired,
-    settings: Yson.settingsProps.isRequired,
+    settings: YsonSettingsPropTypes.isRequired,
     isColumnSelectorOpen: PropTypes.bool.isRequired,
     visibleRows: PropTypes.arrayOf(PropTypes.object).isRequired,
 

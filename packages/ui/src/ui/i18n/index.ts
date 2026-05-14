@@ -3,16 +3,18 @@ import moment from 'moment';
 import {I18N, type KeyData, type KeysData} from '@gravity-ui/i18n';
 
 import {type AppLang} from '../../shared/constants/settings-types';
-import {Lang, configure} from './configure';
+import {configure} from './configure';
+import {configure as configureUnipika} from '@gravity-ui/react-unipika/configure';
 
 export const i18n = new I18N({lang: 'en', fallbackLang: 'en'});
 
-configure({lang: Lang.En});
+configure({lang: 'en'});
 ytSetLang('en');
 
 export function ytSetLang(lang: AppLang) {
     i18n.setLang(lang);
-    configure({lang: lang === 'en' ? Lang.En : Lang.Ru});
+    configure({lang});
+    configureUnipika({lang});
 
     moment.updateLocale(lang, {
         week: {

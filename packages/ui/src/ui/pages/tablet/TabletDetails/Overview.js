@@ -17,7 +17,7 @@ import Histogram from '../../../components/Histogram/Histogram';
 import {size} from '../../../components/MetaTable/presets';
 import {YTErrorBlock} from '../../../components/Error/Error';
 import Label from '../../../components/Label';
-import Yson from '../../../components/Yson/Yson';
+import {Yson} from '../../../components/Yson/Yson';
 
 import {histogramItems} from '../../../utils/tablet/tablet';
 import {getActiveHistogram, selectHistogram} from '../../../store/selectors/tablet/tablet';

@@ -15,7 +15,7 @@ import Placeholder from '../../../pages/components/Placeholder';
 import Details from '../../../pages/job/tabs/Details/Details';
 import JobActions from '../JobActions/JobActions';
 import Label from '../../../components/Label';
-import Yson from '../../../components/Yson/Yson';
+import {YsonWithScroll} from '../../../components/Yson/YsonWithScroll';
 import Tabs from '../../../components/Tabs/Tabs';
 
 import {getJobGeneralYsonSettings} from '../../../store/selectors/thor/unipika';
@@ -319,11 +319,10 @@ export default function JobGeneral() {
 
                 <Switch>
                     <Route path={`${path}/${Tab.ATTRIBUTES}`}>
-                        <Yson
+                        <YsonWithScroll
                             className={block('attributes')}
                             value={attributes}
                             settings={settings}
-                            folding
                             extraTools={
                                 <YsonDownloadButton
                                     value={attributes}

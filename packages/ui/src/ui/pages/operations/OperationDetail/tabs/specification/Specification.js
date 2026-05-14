@@ -12,7 +12,7 @@ import cn from 'bem-cn-lite';
 import {CollapsibleSectionStateLess} from '../../../../../components/CollapsibleSection/CollapsibleSection';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
 import HelpLink from '../../../../../components/HelpLink/HelpLink';
-import Yson from '../../../../../components/Yson/Yson';
+import {YsonWithScroll} from '../../../../../components/Yson/YsonWithScroll';
 
 import {
     selectOperationDetailsLoadingStatus,
@@ -87,11 +87,9 @@ function Specification({operation, operationId}) {
                     size={UI_COLLAPSIBLE_SIZE}
                     marginDirection="bottom"
                 >
-                    <Yson
+                    <YsonWithScroll
                         value={providedSpec}
                         settings={unipika.prepareSettings()}
-                        folding
-                        virtualized
                         extraTools={
                             <YsonDownloadButton
                                 value={providedSpec}
@@ -112,11 +110,9 @@ function Specification({operation, operationId}) {
                         size={UI_COLLAPSIBLE_SIZE}
                         marginDirection="bottom"
                     >
-                        <Yson
+                        <YsonWithScroll
                             value={unrecognizedSpec}
                             settings={unipika.prepareSettings()}
-                            folding
-                            virtualized
                             extraTools={
                                 <YsonDownloadButton
                                     value={unrecognizedSpec}
@@ -136,11 +132,9 @@ function Specification({operation, operationId}) {
                         size={UI_COLLAPSIBLE_SIZE}
                         marginDirection="bottom"
                     >
-                        <Yson
+                        <YsonWithScroll
                             value={fullSpec}
                             settings={unipika.prepareSettings()}
-                            folding
-                            virtualized
                             extraTools={
                                 <YsonDownloadButton
                                     value={fullSpec}

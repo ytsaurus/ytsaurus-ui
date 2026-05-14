@@ -20,7 +20,7 @@ import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import {isFinalLoadingStatus} from '../../../../utils/utils';
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
-import Yson from '../../../../components/Yson/Yson';
+import {Yson} from '../../../../components/Yson/Yson';
 
 const block = cn('navigation-transaction');
 
