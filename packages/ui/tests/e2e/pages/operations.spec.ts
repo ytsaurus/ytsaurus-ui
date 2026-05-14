@@ -13,7 +13,7 @@ test('Operation: checking details and attributes encoding errors', async ({page}
 
     // check attributes tab
     await page.locator('.operation-detail__tabs li:has(a:has-text("Attributes"))').click();
-    await page.waitForSelector('.yt-data-table');
+    await page.waitForSelector('.g-ru-table');
 });
 
 const EXPECTED_TITLE =

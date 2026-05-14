@@ -1,18 +1,8 @@
-import {Page} from '@playwright/test';
+import {type Page} from '@playwright/test';
 import {BasePage} from './BasePage';
 import {replaceInnerHtml, replaceInnerHtmlForDateTime} from '../utils/dom';
 
 export class NavigationPage extends BasePage {
-    async replaceAttributes() {
-        await replaceInnerHtml(this.page, {
-            '.structured-yson-virtualized__row_key_id .structured-yson-virtualized__value':
-                '0-00-00000-ffffffff',
-            '.structured-yson-virtualized__row_key_revision .uint64': '1111111111',
-            '.structured-yson-virtualized__row_key_attribute_revision .uint64': '2222222222',
-            '.structured-yson-virtualized__row_key_content_revision .uint64': '2222222222',
-        });
-    }
-
     async replaceMapNodeDateTimes(rowCount: number) {
         await this.page.waitForSelector(
             `tr:nth-child(${rowCount}) .map-node_default__table-item_type_modification-time`,

@@ -47,20 +47,19 @@ test('Job - Details', async ({page}) => {
         await page.click('.tabs :text("Attributes")');
 
         replaceInnerHtml(page, {
-            '.structured-yson-virtualized__row_key_address .structured-yson-virtualized__value':
-                'localhost:XXXXXx',
+            '.g-ru-table__row_key_address .g-ru-cell__value': 'localhost:XXXXXx',
         });
 
         replaceInnerHtmlForIsoDate(page, [
-            '.structured-yson-virtualized__row_key_start_time .structured-yson-virtualized__value',
-            '.structured-yson-virtualized__row_key_finish_time .structured-yson-virtualized__value',
+            '.g-ru-table__row_key_start_time .g-ru-cell__value',
+            '.g-ru-table__row_key_finish_time .g-ru-cell__value',
         ]);
 
         replaceInnerHtmlForId(page, [
-            '.structured-yson-virtualized__row_key_job_id .structured-yson-virtualized__value',
-            '.structured-yson-virtualized__row_key_operation_id .structured-yson-virtualized__value',
-            '.structured-yson-virtualized__row_key_job_competition_id .structured-yson-virtualized__value',
-            '.structured-yson-virtualized__row_key_probing_job_competition_id .structured-yson-virtualized__value',
+            '.g-ru-table__row_key_job_id .g-ru-cell__value',
+            '.g-ru-table__row_key_operation_id .g-ru-cell__value',
+            '.g-ru-table__row_key_job_competition_id .g-ru-cell__value',
+            '.g-ru-table__row_key_probing_job_competition_id .g-ru-cell__value',
         ]);
 
         await expect(page).toHaveScreenshot();
@@ -79,7 +78,7 @@ test('Job - Details', async ({page}) => {
     await test.step('Specification', async () => {
         await page.click('.tabs :text("Specification")');
 
-        await page.waitForSelector('.structured-yson-virtualized__row_key_io_config');
+        await page.waitForSelector('.g-ru-table__row_key_io_config');
 
         await expect(page).toHaveScreenshot();
     });
