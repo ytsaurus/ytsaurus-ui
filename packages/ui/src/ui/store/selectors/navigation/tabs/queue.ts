@@ -23,7 +23,8 @@ export const selectWriteDataWeightRate = (state: RootState) =>
 export const selectWriteRowCountRate = (state: RootState) =>
     state.navigation.tabs.queue.status.statusData?.write_row_count_rate ?? emptyRate;
 
-export const selectStatusError = (state: RootState) => state.navigation.tabs.queue.status.statusError;
+export const selectStatusError = (state: RootState) =>
+    state.navigation.tabs.queue.status.statusError;
 
 export const selectStatusLoading = (state: RootState) =>
     state.navigation.tabs.queue.status.statusLoading;
@@ -51,7 +52,8 @@ export const selectQueueTabletCellId = (state: RootState) =>
 export const selectQueueConsumerName = (state: RootState) =>
     state.navigation.tabs.queue.filters.queueConsumerName;
 
-export const selectQueueOwner = (state: RootState) => state.navigation.tabs.queue.filters.queueOwner;
+export const selectQueueOwner = (state: RootState) =>
+    state.navigation.tabs.queue.filters.queueOwner;
 
 export const selectQueueRateMode = (state: RootState) =>
     state.navigation.tabs.queue.filters.queueRateMode;
@@ -63,7 +65,12 @@ const selectPartitionsData = (state: RootState) =>
     state.navigation.tabs.queue.partitions.partitionsData;
 
 export const selectPartitions = createSelector(
-    [selectQueuePartitionIndex, selectQueueTabletCellHost, selectQueueTabletCellId, selectPartitionsData],
+    [
+        selectQueuePartitionIndex,
+        selectQueueTabletCellHost,
+        selectQueueTabletCellId,
+        selectPartitionsData,
+    ],
     (queuePartitionIndex, queueTabletCellHost, queueTabletCellId, partitionsData) =>
         partitionsData
             ?.map((partition, index) => ({

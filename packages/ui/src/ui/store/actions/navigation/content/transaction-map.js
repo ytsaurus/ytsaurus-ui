@@ -5,7 +5,11 @@ import map_ from 'lodash/map';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import CancelHelper from '../../../../utils/cancel-helper';
 import {prepareRequest} from '../../../../utils/navigation';
-import {selectParsedPath, selectPath, selectTransaction} from '../../../../store/selectors/navigation';
+import {
+    selectParsedPath,
+    selectPath,
+    selectTransaction,
+} from '../../../../store/selectors/navigation';
 import Transaction from '../../../../utils/navigation/content/transaction-map/transaction';
 import {
     CHANGE_FILTER,

@@ -23,9 +23,9 @@ import {
 } from '../../../store/selectors/favourites';
 import {
     selectActualPath,
+    selectIsNavigationFinalLoadState,
     selectPath,
     selectTransaction,
-    selectIsNavigationFinalLoadState,
 } from '../../../store/selectors/navigation';
 import {navigationToggleFavourite} from '../../../store/actions/favourites';
 import {

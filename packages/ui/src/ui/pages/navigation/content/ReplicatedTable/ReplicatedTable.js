@@ -39,9 +39,9 @@ import {isFinalLoadingStatus} from '../../../../utils/utils';
 import {NAVIGATION_REPLICATED_TABLE_ID} from '../../../../constants/navigation/content/replicated-table';
 
 import {
-    selectReplicatedTableData,
     selectAllowEnableReplicatedTracker,
     selectNavigationReplicatedTableLoadingStatus,
+    selectReplicatedTableData,
     selectReplicatedTableSortSettings,
 } from '../../../../store/selectors/navigation/content/replicated-table';
 

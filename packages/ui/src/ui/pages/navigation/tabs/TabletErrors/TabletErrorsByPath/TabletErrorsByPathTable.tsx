@@ -55,7 +55,10 @@ export function TabletErrorsByPathTable({className}: {className?: string}) {
     );
 }
 
-type RowType = Exclude<ReturnType<typeof selectTabletErrorsByPathData>, undefined>['errors'][number];
+type RowType = Exclude<
+    ReturnType<typeof selectTabletErrorsByPathData>,
+    undefined
+>['errors'][number];
 
 function useTableColumnsAndData() {
     const cluster = useSelector(selectCluster);

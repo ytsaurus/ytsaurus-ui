@@ -23,9 +23,9 @@ import {OPEN_MOVE_OBJECT_POPUP} from '../../../../constants/navigation/modals/mo
 import {OPEN_COPY_OBJECT_POPUP} from '../../../../constants/navigation/modals/copy-object';
 import {openEditingPopup} from '../../../../store/actions/navigation/modals/path-editing-popup';
 import {
+    selectIsSelected,
     selectSelectedNodes,
     selectSelectedNodesAllowedDynTablesActions,
-    selectIsSelected,
 } from '../../../../store/selectors/navigation/content/map-node';
 import {showNavigationAttributesEditor} from '../../../../store/actions/navigation/modals/attributes-editor';
 import {

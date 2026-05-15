@@ -31,12 +31,12 @@ import {onTransactionChange, setMode, updateView} from '../../../store/actions/n
 import {
     selectError,
     selectIdmSupport,
+    selectIsNavigationFinalLoadState,
     selectLoadState,
     selectParsedPath,
     selectPath,
     selectTransaction,
     selectType,
-    selectIsNavigationFinalLoadState,
 } from '../../../store/selectors/navigation';
 import {selectEffectiveMode, selectTabs} from '../../../store/selectors/navigation/navigation';
 import {NavigationPermissionsNotice} from './NavigationPermissionsNotice';

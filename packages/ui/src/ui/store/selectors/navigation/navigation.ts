@@ -68,9 +68,12 @@ function prepareBrokenPath(path: string): string {
     });
 }
 
-export const selectNavigationRestorePath = createSelector([selectNavigationPathAttributes], (attrs) => {
-    return ypath.getValue(attrs, '/_restore_path');
-});
+export const selectNavigationRestorePath = createSelector(
+    [selectNavigationPathAttributes],
+    (attrs) => {
+        return ypath.getValue(attrs, '/_restore_path');
+    },
+);
 
 export const selectNavigationOriginatingQueuePath = (state: RootState) =>
     state.navigation.navigation.originatingQueuePath;

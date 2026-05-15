@@ -118,17 +118,23 @@ export const selectIsTableEndReached = createSelector(
     },
 );
 
-export const selectUpperBoundKey = createSelector([selectRows, selectKeyColumns], (rows, keyColumns) => {
-    const row = rows[rows.length - 1];
+export const selectUpperBoundKey = createSelector(
+    [selectRows, selectKeyColumns],
+    (rows, keyColumns) => {
+        const row = rows[rows.length - 1];
 
-    return getColumnsValues(row, keyColumns);
-});
+        return getColumnsValues(row, keyColumns);
+    },
+);
 
-export const selectBottomBoundKey = createSelector([selectRows, selectKeyColumns], (rows, keyColumns) => {
-    const row = rows[0];
+export const selectBottomBoundKey = createSelector(
+    [selectRows, selectKeyColumns],
+    (rows, keyColumns) => {
+        const row = rows[0];
 
-    return getColumnsValues(row, keyColumns);
-});
+        return getColumnsValues(row, keyColumns);
+    },
+);
 
 export const selectCurrentOffsetValues = createSelector(
     [selectColumns, selectBottomBoundKey, selectYqlTypes],
