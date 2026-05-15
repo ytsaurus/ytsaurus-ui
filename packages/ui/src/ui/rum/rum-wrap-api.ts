@@ -171,9 +171,20 @@ export interface BatchParameters {
 
 export type SaveCancellationCb = (cancel: CancelTokenSource) => void;
 
+export type DataType = unknown;
+export type CancellationType = SaveCancellationCb;
+
 export type ApiMethodParameters<PrametersT = unknown> =
     | [ApiMethodParams<PrametersT> | ApiMethodParams<PrametersT>['parameters']]
-    | [ApiMethodParams<PrametersT> | ApiMethodParams<PrametersT>['parameters'], unknown];
+    | [
+          ApiMethodParams<PrametersT> | ApiMethodParams<PrametersT>['parameters'],
+          DataType | CancellationType,
+      ]
+    | [
+          ApiMethodParams<PrametersT> | ApiMethodParams<PrametersT>['parameters'],
+          DataType,
+          CancellationType,
+      ];
 
 export type YTApiSetup = {
     proxy?: string;
@@ -218,15 +229,21 @@ export function injectRequestId<T>(
     id: YTApiIdType,
     args: ApiMethodParameters<T>,
 ): ApiMethodParameters<T> {
-    const [first, ...rest] = args;
+    const [first, dataOrCancellation, cancellationCandidate] = args;
     if (typeof first !== 'object') {
         throw new Error('unexpected behavior');
     }
+    const data = typeof dataOrCancellation === 'function' ? undefined : dataOrCancellation;
+    const cancellation =
+        typeof dataOrCancellation === 'function' ? dataOrCancellation : cancellationCandidate;
+
     const {setup, parameters} = first || ({} as any);
     if (parameters === undefined) {
-        return [{parameters: first, setup: makeSetupWithId(id, undefined)}, ...rest] as any;
+        return [
+            {parameters: first, setup: makeSetupWithId(id, undefined), data, cancellation},
+        ] as any;
     } else {
-        return [{...first, setup: makeSetupWithId(id, setup)}, ...rest] as any;
+        return [{data, cancellation, ...first, setup: makeSetupWithId(id, setup)}] as any;
     }
 }
 
