@@ -11,7 +11,7 @@ import {Tab} from '../../../constants/navigation/index';
 import {type RootState} from '../../../store/reducers';
 import {selectCluster} from '../../../store/selectors/global';
 import {selectTableMountConfigHasData} from '../../../store/selectors/navigation/content/table-mount-config';
-import {getTabletErrorsBackgroundCount} from '../../../store/selectors/navigation/tabs/tablet-errors-background';
+import {selectTabletErrorsBackgroundCount} from '../../../store/selectors/navigation/tabs/tablet-errors-background';
 import {type ValueOf, type YTError} from '../../../types';
 import UIFactory from '../../../UIFactory';
 import {type ParsedPath, prepareNavigationState} from '../../../utils/navigation';
@@ -79,7 +79,7 @@ export const getSupportedTabs = createSelector(
     [
         getNavigationPathAttributes,
         selectTableMountConfigHasData,
-        getTabletErrorsBackgroundCount,
+        selectTabletErrorsBackgroundCount,
         getNavigationOriginatingQueuePath,
         getNavigationAccessLogAvailable,
     ],
@@ -167,7 +167,7 @@ export const getSupportedTabs = createSelector(
 export const getTabs = createSelector(
     [
         getSupportedTabs,
-        getTabletErrorsBackgroundCount,
+        selectTabletErrorsBackgroundCount,
         getAttributes,
         getNavigationOriginatingQueuePath,
         selectCluster,

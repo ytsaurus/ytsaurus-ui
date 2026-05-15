@@ -8,19 +8,19 @@ import reduce_ from 'lodash/reduce';
 import {type ValueOf, type YTError} from '../../../../types';
 import ypath from '../../../../common/thor/ypath';
 
-const getTabletErrorsErrorCount = (state: RootState) =>
+const selectTabletErrorsErrorCount = (state: RootState) =>
     state.navigation.tabs.tabletErrorsBackground.errorsCount;
-const getTabletErrorsErrorCountPath = (state: RootState) =>
+const selectTabletErrorsErrorCountPath = (state: RootState) =>
     state.navigation.tabs.tabletErrorsBackground.errorsCountPath;
-const getTabletErrorsRaw = (state: RootState) =>
+const selectTabletErrorsRaw = (state: RootState) =>
     state.navigation.tabs.tabletErrorsBackground.tabletErrors;
-const getTabletErrorsPathRaw = (state: RootState) =>
+const selectTabletErrorsPathRaw = (state: RootState) =>
     state.navigation.tabs.tabletErrorsBackground.tabletErrorsPath;
 
-export const getTabletErrorsViewMode = (state: RootState) =>
+export const selectTabletErrorsViewMode = (state: RootState) =>
     state.navigation.tabs.tabletErrorsBackground.viewMode;
 
-export const getTabletErrorsLoadingStatus = createSelector(
+export const selectTabletErrorsLoadingStatus = createSelector(
     [
         (state: RootState) => state.navigation.tabs.tabletErrorsBackground.loading,
         (state: RootState) => state.navigation.tabs.tabletErrorsBackground.loaded,
@@ -31,8 +31,8 @@ export const getTabletErrorsLoadingStatus = createSelector(
     },
 );
 
-export const getTabletErrorsBackgroundCount = createSelector(
-    [getPath, getTabletErrorsErrorCountPath, getTabletErrorsErrorCount],
+export const selectTabletErrorsBackgroundCount = createSelector(
+    [getPath, selectTabletErrorsErrorCountPath, selectTabletErrorsErrorCount],
     (path, errorCountPath, errorCount) => {
         if (path !== errorCountPath) {
             return 0;
@@ -42,8 +42,8 @@ export const getTabletErrorsBackgroundCount = createSelector(
     },
 );
 
-export const getTabletErrors = createSelector(
-    [getPath, getTabletErrorsPathRaw, getTabletErrorsRaw],
+export const selectTabletErrors = createSelector(
+    [getPath, selectTabletErrorsPathRaw, selectTabletErrorsRaw],
     (path, errPath, errors) => {
         if (path !== errPath) {
             return undefined;
@@ -53,8 +53,8 @@ export const getTabletErrors = createSelector(
     },
 );
 
-export const getTabletErrorsBackgroundCountNoticeVisbile = createSelector(
-    [getTabletErrorsBackgroundCount, getTabletErrors],
+export const selectTabletErrorsBackgroundCountNoticeVisbile = createSelector(
+    [selectTabletErrorsBackgroundCount, selectTabletErrors],
     (count, data) => {
         const {tablet_errors, replication_errors} = data || {};
         const tabletErrorsCount = calculateSubitemsCount(tablet_errors);
@@ -77,7 +77,7 @@ function calculateSubitemsCount(items?: Record<string, Array<unknown>>) {
 type ReplicaId = string;
 type TabletId = string;
 
-export const getTabletErrorsReplicationErrors = createSelector([getTabletErrors], (data) => {
+export const selectTabletErrorsReplicationErrors = createSelector([selectTabletErrors], (data) => {
     return reduce_(
         data?.replication_errors,
         (acc, errors, replicaId) => {

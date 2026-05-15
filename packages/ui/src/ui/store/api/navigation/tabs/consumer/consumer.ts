@@ -4,7 +4,7 @@ import {rootApi} from '../../../../../store/api';
 
 import {type RootState} from '../../../../../store/reducers';
 import {getPath} from '../../../../../store/selectors/navigation';
-import {getTargetQueue} from '../../../../../store/selectors/navigation/tabs/consumer';
+import {selectTargetQueue} from '../../../../../store/selectors/navigation/tabs/consumer';
 import {selectCluster} from '../../../../../store/selectors/global';
 
 import {ytApiV4} from '../../../../../rum/rum-wrap-api';
@@ -22,7 +22,7 @@ async function register(args: RegisterConsumerArgs, api: BaseQueryApi) {
         const state = api.getState() as RootState;
         const consumerPath = getPath(state);
         const consumerCluster = selectCluster(state);
-        const {vital} = getTargetQueue(state) ?? {vital: false};
+        const {vital} = selectTargetQueue(state) ?? {vital: false};
 
         const response = await wrapApiPromiseByToaster(
             ytApiV4.executeBatch({

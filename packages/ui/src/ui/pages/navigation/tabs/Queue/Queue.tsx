@@ -10,13 +10,13 @@ import {QUEUE_MODE} from '../../../../constants/navigation/tabs/queue';
 import {loadQueueStatus} from '../../../../store/actions/navigation/tabs/queue/status';
 import {type RootState} from '../../../../store/reducers';
 import {
-    getFamily,
-    getPartitionCount,
-    getQueueMode,
-    getQueueStatusDataAlerts,
-    getStatusError,
-    getWriteDataWeightRate,
-    getWriteRowCountRate,
+    selectFamily,
+    selectPartitionCount,
+    selectQueueMode,
+    selectQueueStatusDataAlerts,
+    selectStatusError,
+    selectWriteDataWeightRate,
+    selectWriteRowCountRate,
 } from '../../../../store/selectors/navigation/tabs/queue';
 
 import Meta from './Meta/Meta';
@@ -55,7 +55,7 @@ const Queue: React.VFC<PropsFromRedux> = ({
 
     const {ExtraControls, View} = VIEWS[queueMode] ?? emptyView;
 
-    const items = useSelector(getQueueStatusDataAlerts);
+    const items = useSelector(selectQueueStatusDataAlerts);
 
     if (statusError) {
         return <QueueError error={statusError} topMargin="none" />;
@@ -86,12 +86,12 @@ const Queue: React.VFC<PropsFromRedux> = ({
 
 function mapStateToProps(state: RootState) {
     return {
-        family: getFamily(state),
-        partitionCount: getPartitionCount(state),
-        writeDataWeightRate: getWriteDataWeightRate(state),
-        writeRowCountRate: getWriteRowCountRate(state),
-        queueMode: getQueueMode(state),
-        statusError: getStatusError(state),
+        family: selectFamily(state),
+        partitionCount: selectPartitionCount(state),
+        writeDataWeightRate: selectWriteDataWeightRate(state),
+        writeRowCountRate: selectWriteRowCountRate(state),
+        queueMode: selectQueueMode(state),
+        statusError: selectStatusError(state),
     };
 }
 

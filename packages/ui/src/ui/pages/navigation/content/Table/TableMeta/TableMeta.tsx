@@ -11,7 +11,7 @@ import {RemountAlert} from '../RemountAlert/RemountAlert';
 import {selectTableType} from '../../../../../store/selectors/navigation/content/table';
 import {selectIsDynamic} from '../../../../../store/selectors/navigation/content/table-ts';
 import {getAttributes, getAttributesWithTypes} from '../../../../../store/selectors/navigation';
-import {getTabletErrorsBackgroundCount} from '../../../../../store/selectors/navigation/tabs/tablet-errors-background';
+import {selectTabletErrorsBackgroundCount} from '../../../../../store/selectors/navigation/tabs/tablet-errors-background';
 import {type Props as AutomaticModeSwitchProps} from './AutomaticModeSwitch';
 
 import {type RootState} from '../../../../../store/reducers';
@@ -40,7 +40,7 @@ function TableMeta({
     remountNeeded,
     onEditEnableReplicatedTableTracker,
 }: Props) {
-    const tabletErrorCount = useSelector(getTabletErrorsBackgroundCount);
+    const tabletErrorCount = useSelector(selectTabletErrorsBackgroundCount);
     const cluster = useSelector(selectCluster);
     const navigationTableConfig = useYtComponentsConfig();
 

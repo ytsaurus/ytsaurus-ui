@@ -15,10 +15,10 @@ import {
 import {type RootState} from '../../../../../../store/reducers';
 import {type TPerformanceCounters} from '../../../../../../store/reducers/navigation/tabs/queue/types';
 import {
-    getConsumerPartitionIndex,
-    getConsumerPartitionsColumns,
-    getConsumerRateMode,
-    getConsumerTimeWindow,
+    selectConsumerPartitionIndex,
+    selectConsumerPartitionsColumns,
+    selectConsumerRateMode,
+    selectConsumerTimeWindow,
 } from '../../../../../../store/selectors/navigation/tabs/consumer';
 import Button from '../../../../../../components/Button/Button';
 import Icon from '../../../../../../components/Icon/Icon';
@@ -124,10 +124,10 @@ const PartitionsExtraControls: React.VFC<Props> = ({
 
 function mapStateToProps(state: RootState) {
     return {
-        consumerPartitionIndex: getConsumerPartitionIndex(state),
-        consumerRateMode: getConsumerRateMode(state),
-        consumerTimeWindow: getConsumerTimeWindow(state),
-        partitionsColumns: getConsumerPartitionsColumns(state),
+        consumerPartitionIndex: selectConsumerPartitionIndex(state),
+        consumerRateMode: selectConsumerRateMode(state),
+        consumerTimeWindow: selectConsumerTimeWindow(state),
+        partitionsColumns: selectConsumerPartitionsColumns(state),
     };
 }
 

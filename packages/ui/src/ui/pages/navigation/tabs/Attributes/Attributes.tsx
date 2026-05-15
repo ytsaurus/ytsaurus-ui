@@ -14,8 +14,8 @@ import {
     getLoadState,
 } from '../../../../store/selectors/navigation';
 import {
-    getAttributesLoadingInfo,
-    getAttributesTab,
+    selectAttributesLoadingInfo,
+    selectAttributesTab,
 } from '../../../../store/selectors/navigation/tabs/attributes';
 import {requestAttributes} from '../../../../store/actions/navigation/tabs/attributes/attributes';
 
@@ -33,9 +33,9 @@ const block = b('yt-attributes');
 function Attributes() {
     const dispatch = useDispatch();
 
-    const attributes = useSelector(getAttributesTab);
+    const attributes = useSelector(selectAttributesTab);
     const attributesPath = useSelector(getAttributesPath);
-    const {loading, loaded, error} = useSelector(getAttributesLoadingInfo);
+    const {loading, loaded, error} = useSelector(selectAttributesLoadingInfo);
 
     const settings = unipika.prepareSettings();
 

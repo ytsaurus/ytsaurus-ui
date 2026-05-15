@@ -21,10 +21,10 @@ import {
 } from './ExternalDescription/ExternalDescription';
 
 import {
-    getComputedColumns,
-    getFilteredSchema,
-    getSchema,
-    getSchemaMeta,
+    selectComputedColumns,
+    selectFilteredSchema,
+    selectSchema,
+    selectSchemaMeta,
 } from '../../../../store/selectors/navigation/tabs/schema';
 import {updateSchemaFilter} from '../../../../store/actions/navigation/tabs/schema';
 import {selectCluster} from '../../../../store/selectors/global';
@@ -296,10 +296,10 @@ const mapStateToProps = (state: RootState) => {
 
     const cluster = selectCluster(state);
     const path = getAttributesPath(state);
-    const schema = getSchema(state);
-    const meta = getSchemaMeta(state);
-    const filteredSchema = getFilteredSchema(state);
-    const computedColumns = getComputedColumns(state);
+    const schema = selectSchema(state);
+    const meta = selectSchemaMeta(state);
+    const filteredSchema = selectFilteredSchema(state);
+    const computedColumns = selectComputedColumns(state);
     const primitiveTypes = selectPrimitiveTypesMap(state);
 
     return {column, meta, schema, filteredSchema, computedColumns, cluster, path, primitiveTypes};

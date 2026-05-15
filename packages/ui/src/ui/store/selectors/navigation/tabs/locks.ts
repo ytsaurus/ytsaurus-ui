@@ -4,21 +4,21 @@ import {createSelector} from 'reselect';
 import {type RootState} from '../../../../store/reducers';
 import {calculateLoadingStatus} from '../../../../utils/utils';
 
-const getLocks = (state: RootState) => state.navigation.tabs.locks.locks;
-const getLocksLoading = (state: RootState) => state.navigation.tabs.locks.loading;
-const getLocksLoaded = (state: RootState) => state.navigation.tabs.locks.loaded;
-const getLocksError = (state: RootState) => state.navigation.tabs.locks.error;
-export const getLocksModeFilter = (state: RootState) => state.navigation.tabs.locks.modeFilter;
+const selectLocks = (state: RootState) => state.navigation.tabs.locks.locks;
+const selectLocksLoading = (state: RootState) => state.navigation.tabs.locks.loading;
+const selectLocksLoaded = (state: RootState) => state.navigation.tabs.locks.loaded;
+const selectLocksError = (state: RootState) => state.navigation.tabs.locks.error;
+export const selectLocksModeFilter = (state: RootState) => state.navigation.tabs.locks.modeFilter;
 
-export const getLocksLoadStatus = createSelector(
-    [getLocksLoading, getLocksLoaded, getLocksError],
+export const selectLocksLoadStatus = createSelector(
+    [selectLocksLoading, selectLocksLoaded, selectLocksError],
     (loading, loaded, error) => {
         return calculateLoadingStatus(loading, loaded, error);
     },
 );
 
-export const getLocksFiltered = createSelector(
-    [getLocksModeFilter, getLocks],
+export const selectLocksFiltered = createSelector(
+    [selectLocksModeFilter, selectLocks],
     (modeFilter, items) => {
         if (!modeFilter) {
             return items;

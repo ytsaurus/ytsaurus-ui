@@ -11,7 +11,7 @@ import {SubjectCard} from '../../../../../components/SubjectLink/SubjectLink';
 
 import {type TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
 import {isNull} from '../../../../../utils';
-import {getTargetQueue} from '../../../../../store/selectors/navigation/tabs/consumer';
+import {selectTargetQueue} from '../../../../../store/selectors/navigation/tabs/consumer';
 
 import './Meta.scss';
 
@@ -26,7 +26,7 @@ interface Props {
 }
 
 const Meta: React.FC<Props> = ({owner, partitionCount, readDataWeightRate, readRowCountRate}) => {
-    const {vital} = useSelector(getTargetQueue) ?? {};
+    const {vital} = useSelector(selectTargetQueue) ?? {};
 
     return (
         <ErrorBoundary>

@@ -18,13 +18,13 @@ import {STICKY_DOUBLE_TOOLBAR_BOTTOM} from '../../../../components/WithStickyToo
 import ColumnHeader from '../../../../components/ColumnHeader/ColumnHeader';
 
 import {
-    getAccessLogFilterPagination,
-    getAccessLogItems,
-    getAccessLogLastLoadedFieldSelector,
-    getAccessLogLoaded,
-    getAccessLogLoading,
-    getAccessLogPagesCount,
-    getAccessLogReady,
+    selectAccessLogFilterPagination,
+    selectAccessLogItems,
+    selectAccessLogLastLoadedFieldSelector,
+    selectAccessLogLoaded,
+    selectAccessLogLoading,
+    selectAccessLogPagesCount,
+    selectAccessLogReady,
 } from '../../../../store/selectors/navigation/tabs/access-log';
 import {type AccessLogItem} from '../../../../store/reducers/navigation/tabs/access-log/access-log';
 import {selectCluster} from '../../../../store/selectors/global';
@@ -66,7 +66,7 @@ const PathItem: FC<{
 
 function useColumns() {
     const cluster = useSelector(selectCluster);
-    const fieldSelector = useSelector(getAccessLogLastLoadedFieldSelector);
+    const fieldSelector = useSelector(selectAccessLogLastLoadedFieldSelector);
     const columns: Array<Column<AccessLogItem>> = React.useMemo(() => {
         const res: Array<Column<AccessLogItem>> = compact_([
             {
@@ -167,13 +167,13 @@ function useColumns() {
 }
 
 function AccessLogTable() {
-    const items = useSelector(getAccessLogItems);
+    const items = useSelector(selectAccessLogItems);
     const columns = useColumns();
 
-    const loading = useSelector(getAccessLogLoading);
-    const loaded = useSelector(getAccessLogLoaded);
+    const loading = useSelector(selectAccessLogLoading);
+    const loaded = useSelector(selectAccessLogLoaded);
 
-    const ready = useSelector(getAccessLogReady);
+    const ready = useSelector(selectAccessLogReady);
 
     return ready ? (
         <DataTableYT
@@ -192,9 +192,9 @@ function AccessLogTable() {
 export default React.memo(AccessLogTable);
 
 function DateHeader() {
-    const loading = useSelector(getAccessLogLoading);
-    const {index} = useSelector(getAccessLogFilterPagination);
-    const pageCount = useSelector(getAccessLogPagesCount);
+    const loading = useSelector(selectAccessLogLoading);
+    const {index} = useSelector(selectAccessLogFilterPagination);
+    const pageCount = useSelector(selectAccessLogPagesCount);
 
     return <ColumnHeader column="Date" loading={loading} pageIndex={index} pageCount={pageCount} />;
 }

@@ -9,7 +9,7 @@ import {CONSUMER_MODE} from '../../../../../constants/navigation/tabs/consumer';
 import {changeConsumerMode} from '../../../../../store/actions/navigation/tabs/consumer/filters';
 import {toggleRegisterDialog} from '../../../../../store/reducers/navigation/tabs/consumer/register';
 import {type RootState} from '../../../../../store/reducers';
-import {getConsumerMode} from '../../../../../store/selectors/navigation/tabs/consumer';
+import {selectConsumerMode} from '../../../../../store/selectors/navigation/tabs/consumer';
 
 import './Toolbar.scss';
 
@@ -47,7 +47,7 @@ const Toolbar: React.VFC<Props> = ({extras: Extras, consumerMode, changeConsumer
 
 function mapStateToProps(state: RootState) {
     return {
-        consumerMode: getConsumerMode(state),
+        consumerMode: selectConsumerMode(state),
     };
 }
 

@@ -21,13 +21,13 @@ import {type RootState} from '../../../../../../store/reducers';
 import {type TPerformanceCounters} from '../../../../../../store/reducers/navigation/tabs/queue/types';
 import {
     type SelectedPartition,
-    getPartitions,
-    getPartitionsError,
-    getPartitionsLoaded,
-    getPartitionsLoading,
-    getQueuePartitionsColumns,
-    getQueueRateMode,
-    getQueueTimeWindow,
+    selectPartitions,
+    selectPartitionsError,
+    selectPartitionsLoaded,
+    selectPartitionsLoading,
+    selectQueuePartitionsColumns,
+    selectQueueRateMode,
+    selectQueueTimeWindow,
 } from '../../../../../../store/selectors/navigation/tabs/queue';
 
 import './Partitions.scss';
@@ -45,7 +45,7 @@ const writeRateGetter: Record<QUEUE_RATE_MODE, (row: SelectedPartition) => TPerf
 };
 
 const getColumns = createSelector(
-    [getQueueRateMode, getQueueTimeWindow, getQueuePartitionsColumns],
+    [selectQueueRateMode, selectQueueTimeWindow, selectQueuePartitionsColumns],
     (rateMode, timeWindow, columns): Array<Column<SelectedPartition>> => {
         return columns
             .filter((column) => column.checked)
@@ -115,10 +115,10 @@ const Partitions: React.VFC<PropsFromRedux> = ({
 function mapStateToProps(state: RootState) {
     return {
         columns: getColumns(state),
-        partitions: getPartitions(state),
-        partitionsError: getPartitionsError(state),
-        partitionsLoading: getPartitionsLoading(state),
-        partitionsLoaded: getPartitionsLoaded(state),
+        partitions: selectPartitions(state),
+        partitionsError: selectPartitionsError(state),
+        partitionsLoading: selectPartitionsLoading(state),
+        partitionsLoaded: selectPartitionsLoaded(state),
     };
 }
 

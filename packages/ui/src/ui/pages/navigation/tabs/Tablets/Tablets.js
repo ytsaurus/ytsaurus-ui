@@ -23,7 +23,7 @@ import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStic
 import {getPath, getType} from '../../../../store/selectors/navigation';
 
 import {
-    getActiveHistogram,
+    selectActiveHistogram,
     selectHistogram,
     selectIsReplicationDataExist,
     selectNavigationTabletsLoadingStatus,
@@ -652,7 +652,7 @@ const mapStateToProps = (state) => {
     }
 
     const histogram = selectHistogram(state);
-    const activeHistogram = getActiveHistogram(state);
+    const activeHistogram = selectActiveHistogram(state);
     const type = getType(state);
     const hasReplication = selectIsReplicationDataExist(state);
 

@@ -20,11 +20,11 @@ import {type TPerformanceCounters} from '../../../../../../store/reducers/naviga
 import {openUnregisterDialog} from '../../../../../../store/reducers/navigation/tabs/queue/consumers';
 import {
     type SelectedConsumer,
-    getConsumers,
-    getQueueRateMode,
-    getQueueTimeWindow,
-    getStatusLoaded,
-    getStatusLoading,
+    selectConsumers,
+    selectQueueRateMode,
+    selectQueueTimeWindow,
+    selectStatusLoaded,
+    selectStatusLoading,
 } from '../../../../../../store/selectors/navigation/tabs/queue';
 
 import {CreateConsumerDialog} from './CreateConsumerDialog';
@@ -45,7 +45,7 @@ const readRateGetter: Record<QUEUE_RATE_MODE, (row: SelectedConsumer) => TPerfor
 };
 
 const getColumns = createSelector(
-    [getQueueRateMode, getQueueTimeWindow],
+    [selectQueueRateMode, selectQueueTimeWindow],
     (rateMode, timeWindow): Array<Column<SelectedConsumer>> => [
         ypath<SelectedConsumer>('Consumer', (x) => x.consumer),
         error<SelectedConsumer>('Error', (x) => x.error),
@@ -79,9 +79,9 @@ const settings: Settings = {displayIndices: false};
 
 export default function Consumers() {
     const columns = useSelector(getColumns);
-    const consumers = useSelector(getConsumers);
-    const consumersLoading = useSelector(getStatusLoading);
-    const consumersLoaded = useSelector(getStatusLoaded);
+    const consumers = useSelector(selectConsumers);
+    const consumersLoading = useSelector(selectStatusLoading);
+    const consumersLoaded = useSelector(selectStatusLoaded);
 
     return (
         <>

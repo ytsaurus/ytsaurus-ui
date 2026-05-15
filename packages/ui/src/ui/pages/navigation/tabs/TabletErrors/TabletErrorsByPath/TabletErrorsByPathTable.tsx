@@ -8,13 +8,13 @@ import ypath from '../../../../../common/thor/ypath';
 import {Alert, Button, Flex, Link, Text} from '@gravity-ui/uikit';
 
 import {
-    getTabletErrorCountLimitExceeded,
-    getTabletErrorsByPathData,
-    getTabletErrorsByPathError,
-    getTabletErrorsByPathLoaded,
-    getTabletErrorsByPathLoading,
-    getTabletErrorsByPathPageCount,
-    getTabletErrorsByPathPageFilter,
+    selectTabletErrorCountLimitExceeded,
+    selectTabletErrorsByPathData,
+    selectTabletErrorsByPathError,
+    selectTabletErrorsByPathLoaded,
+    selectTabletErrorsByPathLoading,
+    selectTabletErrorsByPathPageCount,
+    selectTabletErrorsByPathPageFilter,
 } from '../../../../../store/selectors/navigation/tabs/tablet-errors-by-path';
 import {selectCluster} from '../../../../../store/selectors/global';
 import ColumnHeader from '../../../../../components/ColumnHeader/ColumnHeader';
@@ -33,7 +33,7 @@ const countLimitExceededMessage =
 
 export function TabletErrorsByPathTable({className}: {className?: string}) {
     const {columns, data, loading, loaded, countLimitExceeded} = useTableColumnsAndData();
-    const error = useSelector(getTabletErrorsByPathError);
+    const error = useSelector(selectTabletErrorsByPathError);
     return (
         <div className={className}>
             {Boolean(error) && <YTErrorBlock error={error} />}
@@ -55,17 +55,17 @@ export function TabletErrorsByPathTable({className}: {className?: string}) {
     );
 }
 
-type RowType = Exclude<ReturnType<typeof getTabletErrorsByPathData>, undefined>['errors'][number];
+type RowType = Exclude<ReturnType<typeof selectTabletErrorsByPathData>, undefined>['errors'][number];
 
 function useTableColumnsAndData() {
     const cluster = useSelector(selectCluster);
-    const loading = useSelector(getTabletErrorsByPathLoading);
-    const loaded = useSelector(getTabletErrorsByPathLoaded);
-    const page = useSelector(getTabletErrorsByPathPageFilter);
-    const pageCount = useSelector(getTabletErrorsByPathPageCount);
-    const countLimitExceeded = useSelector(getTabletErrorCountLimitExceeded);
+    const loading = useSelector(selectTabletErrorsByPathLoading);
+    const loaded = useSelector(selectTabletErrorsByPathLoaded);
+    const page = useSelector(selectTabletErrorsByPathPageFilter);
+    const pageCount = useSelector(selectTabletErrorsByPathPageCount);
+    const countLimitExceeded = useSelector(selectTabletErrorCountLimitExceeded);
 
-    const {errors = []} = useSelector(getTabletErrorsByPathData) ?? {};
+    const {errors = []} = useSelector(selectTabletErrorsByPathData) ?? {};
     const columns = React.useMemo(() => {
         const res: Array<Column<RowType>> = [
             {

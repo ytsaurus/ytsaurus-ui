@@ -19,12 +19,12 @@ import {
 } from '../../../../../../store/actions/navigation/tabs/queue/filters';
 import {type RootState} from '../../../../../../store/reducers';
 import {
-    getQueuePartitionIndex,
-    getQueuePartitionsColumns,
-    getQueueRateMode,
-    getQueueTabletCellHost,
-    getQueueTabletCellId,
-    getQueueTimeWindow,
+    selectQueuePartitionIndex,
+    selectQueuePartitionsColumns,
+    selectQueueRateMode,
+    selectQueueTabletCellHost,
+    selectQueueTabletCellId,
+    selectQueueTimeWindow,
 } from '../../../../../../store/selectors/navigation/tabs/queue';
 
 import './PartitionsExtraControls.scss';
@@ -96,12 +96,12 @@ const PartitionsExtraControls: React.VFC<Props> = ({
 
 function mapStateToProps(state: RootState) {
     return {
-        queuePartitionIndex: getQueuePartitionIndex(state),
-        queueTabletCellHost: getQueueTabletCellHost(state),
-        queueTabletCellId: getQueueTabletCellId(state),
-        queueRateMode: getQueueRateMode(state),
-        queueTimeWindow: getQueueTimeWindow(state),
-        queuePartitionsColumns: getQueuePartitionsColumns(state),
+        queuePartitionIndex: selectQueuePartitionIndex(state),
+        queueTabletCellHost: selectQueueTabletCellHost(state),
+        queueTabletCellId: selectQueueTabletCellId(state),
+        queueRateMode: selectQueueRateMode(state),
+        queueTimeWindow: selectQueueTimeWindow(state),
+        queuePartitionsColumns: selectQueuePartitionsColumns(state),
     };
 }
 

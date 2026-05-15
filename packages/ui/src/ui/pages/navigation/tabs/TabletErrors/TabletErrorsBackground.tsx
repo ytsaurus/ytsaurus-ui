@@ -19,9 +19,9 @@ import {getPath} from '../../../../store/selectors/navigation';
 import {getEffectiveMode} from '../../../../store/selectors/navigation/navigation';
 import {selectCluster} from '../../../../store/selectors/global';
 import {
-    getTabletErrorsBackgroundCountNoticeVisbile,
-    getTabletErrorsLoadingStatus,
-    getTabletErrorsReplicationErrors,
+    selectTabletErrorsBackgroundCountNoticeVisbile,
+    selectTabletErrorsLoadingStatus,
+    selectTabletErrorsReplicationErrors,
 } from '../../../../store/selectors/navigation/tabs/tablet-errors-background';
 import {selectReplicatedTableReplicasMap} from '../../../../store/selectors/navigation/content/replicated-table';
 import {type RootState} from '../../../../store/reducers';
@@ -89,7 +89,7 @@ const mapStateToProps = (state: RootState) => {
         mode,
         tabletErrors,
         cluster,
-        replicationErrors: getTabletErrorsReplicationErrors(state),
+        replicationErrors: selectTabletErrorsReplicationErrors(state),
     };
 };
 
@@ -102,7 +102,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 const TabletErrorsConnected = connector(TabletErrors);
 
 export default function TabletErrorsWithRum() {
-    const loadState = useSelector(getTabletErrorsLoadingStatus);
+    const loadState = useSelector(selectTabletErrorsLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.NAVIGATION_TAB_TABLET_ERRORS,
@@ -125,7 +125,7 @@ export default function TabletErrorsWithRum() {
 
 interface ReplicationErrorsBlockProps {
     cluster: string;
-    data: ReturnType<typeof getTabletErrorsReplicationErrors>;
+    data: ReturnType<typeof selectTabletErrorsReplicationErrors>;
 }
 
 function ReplicationErrorsBlock({data, cluster}: ReplicationErrorsBlockProps) {
@@ -149,7 +149,7 @@ function ReplicationErrorsBlock({data, cluster}: ReplicationErrorsBlockProps) {
 }
 
 function TabletErrorsCountNotice() {
-    const visible = useSelector(getTabletErrorsBackgroundCountNoticeVisbile);
+    const visible = useSelector(selectTabletErrorsBackgroundCountNoticeVisbile);
     if (!visible) {
         return null;
     }

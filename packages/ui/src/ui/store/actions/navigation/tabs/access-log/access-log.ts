@@ -23,9 +23,9 @@ import {
 } from '../../../../../store/reducers/navigation/tabs/access-log/access-log-filters';
 import {selectMergedUiSettings} from '../../../../../store/selectors/global';
 import {
-    getAccessLogFilterPagination,
-    getAccessLogLastLoadedParams,
-    getAccessLogRequestParams,
+    selectAccessLogFilterPagination,
+    selectAccessLogLastLoadedParams,
+    selectAccessLogRequestParams,
 } from '../../../../../store/selectors/navigation/tabs/access-log';
 import CancelHelper, {isCancelled} from '../../../../../utils/cancel-helper';
 import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
@@ -42,8 +42,8 @@ export function resetPaginationIfNeededAndCheckIfPathChanged(): AccessLogFilters
     return (dispatch, getState) => {
         const state = getState();
 
-        const lastLoadedParams = getAccessLogLastLoadedParams(state);
-        const params = getAccessLogRequestParams(state);
+        const lastLoadedParams = selectAccessLogLastLoadedParams(state);
+        const params = selectAccessLogRequestParams(state);
 
         const result = params.path !== lastLoadedParams.path;
 
@@ -69,7 +69,7 @@ export function fetchAccessLog(): AccessLogThunkAction {
         dispatch({type: ACCESS_LOG_REQUEST, data: pathChanged ? {loaded: false} : {}});
 
         const state = getState();
-        const params = getAccessLogRequestParams(state);
+        const params = selectAccessLogRequestParams(state);
         const {cluster} = params;
 
         dispatch({type: ACCESS_LOG_PARTIAL, data: {params}});
@@ -114,7 +114,7 @@ export function fetchAccessLog(): AccessLogThunkAction {
 
 export const fetchAccessLogQtId = (): AccessLogThunkAction => async (_, getState) => {
     const state = getState();
-    const params = getAccessLogRequestParams(state);
+    const params = selectAccessLogRequestParams(state);
     const {cluster} = params;
 
     const newParams = {...params} as Partial<typeof params>;
@@ -153,7 +153,7 @@ export function setAccessLogFilters(
 
 export function setAccessLogFiltersPage(index: number): AccessLogFiltersThunkAction {
     return (dispatch, getState) => {
-        const {size} = getAccessLogFilterPagination(getState());
+        const {size} = selectAccessLogFilterPagination(getState());
         dispatch({type: ACCESS_LOG_FILTERS, data: {pagination: {index, size}}});
         dispatch(fetchAccessLog());
     };
@@ -161,7 +161,7 @@ export function setAccessLogFiltersPage(index: number): AccessLogFiltersThunkAct
 
 export function accessLogResetFilters(): AccessLogFiltersThunkAction {
     return (dispatch, getState) => {
-        const lastLoadedParams = getAccessLogLastLoadedParams(getState());
+        const lastLoadedParams = selectAccessLogLastLoadedParams(getState());
         if (!lastLoadedParams.path) {
             // skip for initial loading
             return;

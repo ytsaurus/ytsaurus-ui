@@ -2,66 +2,66 @@ import {createSelector} from 'reselect';
 import {type RootState} from '../../../../store/reducers';
 import {emptyRate} from './queue';
 
-export const getConsumerPartitionIndex = (state: RootState) =>
+export const selectConsumerPartitionIndex = (state: RootState) =>
     state.navigation.tabs.consumer.filters.consumerPartitionIndex;
 
-export const getConsumerRateMode = (state: RootState) =>
+export const selectConsumerRateMode = (state: RootState) =>
     state.navigation.tabs.consumer.filters.consumerRateMode;
 
-export const getConsumerPartitionsColumns = (state: RootState) =>
+export const selectConsumerPartitionsColumns = (state: RootState) =>
     state.navigation.tabs.consumer.filters.partitionsColumns;
 
-export const getConsumerTimeWindow = (state: RootState) =>
+export const selectConsumerTimeWindow = (state: RootState) =>
     state.navigation.tabs.consumer.filters.consumerTimeWindow;
 
-export const getTargetQueue = (state: RootState) =>
+export const selectTargetQueue = (state: RootState) =>
     state.navigation.tabs.consumer.filters.targetQueue;
 
-export const getConsumerRegisteredQueues = (state: RootState) =>
+export const selectConsumerRegisteredQueues = (state: RootState) =>
     state.navigation.tabs.consumer.status.consumerData?.registrations;
 
-const getStatusData = (state: RootState) => state.navigation.tabs.consumer.status.consumerData;
+const selectStatusData = (state: RootState) => state.navigation.tabs.consumer.status.consumerData;
 
-const getTargetQueueStatusData = (state: RootState) => {
-    const statusData = getStatusData(state);
-    const {queue = ''} = getTargetQueue(state) ?? {};
+const selectTargetQueueStatusData = (state: RootState) => {
+    const statusData = selectStatusData(state);
+    const {queue = ''} = selectTargetQueue(state) ?? {};
 
     return statusData?.queues?.[queue];
 };
 
-export const getOwner = (state: RootState) => getTargetQueueStatusData(state)?.owner;
+export const selectOwner = (state: RootState) => selectTargetQueueStatusData(state)?.owner;
 
-export const getPartitionCount = (state: RootState) =>
-    getTargetQueueStatusData(state)?.partition_count;
+export const selectPartitionCount = (state: RootState) =>
+    selectTargetQueueStatusData(state)?.partition_count;
 
-export const getReadDataWeightRate = (state: RootState) =>
-    getTargetQueueStatusData(state)?.read_data_weight_rate ?? emptyRate;
+export const selectReadDataWeightRate = (state: RootState) =>
+    selectTargetQueueStatusData(state)?.read_data_weight_rate ?? emptyRate;
 
-export const getReadRowCountRate = (state: RootState) =>
-    getTargetQueueStatusData(state)?.read_row_count_rate ?? emptyRate;
+export const selectReadRowCountRate = (state: RootState) =>
+    selectTargetQueueStatusData(state)?.read_row_count_rate ?? emptyRate;
 
-export const getTargetQueueError = (state: RootState) => {
-    const targetQueueStatusData = getTargetQueueStatusData(state);
+export const selectTargetQueueError = (state: RootState) => {
+    const targetQueueStatusData = selectTargetQueueStatusData(state);
     return targetQueueStatusData?.error;
 };
 
-export const getStatusError = (state: RootState) =>
+export const selectStatusError = (state: RootState) =>
     state.navigation.tabs.consumer.status.statusError;
 
-export const getStatusLoading = (state: RootState) =>
+export const selectStatusLoading = (state: RootState) =>
     state.navigation.tabs.consumer.status.statusLoading;
 
-export const getStatusLoaded = (state: RootState) =>
+export const selectStatusLoaded = (state: RootState) =>
     state.navigation.tabs.consumer.status.statusLoaded;
 
-export const getConsumerMode = (state: RootState) =>
+export const selectConsumerMode = (state: RootState) =>
     state.navigation.tabs.consumer.filters.consumerMode;
 
-const getPartitionsData = (state: RootState) =>
+const selectPartitionsData = (state: RootState) =>
     state.navigation.tabs.consumer.partitions.partitionsData;
 
-export const getPartitions = createSelector(
-    [getConsumerPartitionIndex, getPartitionsData],
+export const selectPartitions = createSelector(
+    [selectConsumerPartitionIndex, selectPartitionsData],
     (consumerPartitionIndex, partitionsData) =>
         partitionsData
             ?.map((partition, index) => ({
@@ -75,13 +75,13 @@ export const getPartitions = createSelector(
             ) ?? [],
 );
 
-export type SelectedPartition = NonNullable<ReturnType<typeof getPartitions>>[0];
+export type SelectedPartition = NonNullable<ReturnType<typeof selectPartitions>>[0];
 
-export const getPartitionsError = (state: RootState) =>
+export const selectPartitionsError = (state: RootState) =>
     state.navigation.tabs.consumer.partitions.partitionsError;
 
-export const getPartitionsLoading = (state: RootState) =>
+export const selectPartitionsLoading = (state: RootState) =>
     state.navigation.tabs.consumer.partitions.partitionsLoading;
 
-export const getPartitionsLoaded = (state: RootState) =>
+export const selectPartitionsLoaded = (state: RootState) =>
     state.navigation.tabs.consumer.partitions.partitionsLoaded;

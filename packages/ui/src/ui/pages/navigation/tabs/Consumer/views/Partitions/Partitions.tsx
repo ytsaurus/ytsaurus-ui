@@ -21,14 +21,14 @@ import {type RootState} from '../../../../../../store/reducers';
 import {type TPerformanceCounters} from '../../../../../../store/reducers/navigation/tabs/queue/types';
 import {
     type SelectedPartition,
-    getConsumerPartitionsColumns,
-    getConsumerRateMode,
-    getConsumerTimeWindow,
-    getPartitions,
-    getPartitionsError,
-    getPartitionsLoaded,
-    getPartitionsLoading,
-    getTargetQueue,
+    selectConsumerPartitionsColumns,
+    selectConsumerRateMode,
+    selectConsumerTimeWindow,
+    selectPartitions,
+    selectPartitionsError,
+    selectPartitionsLoaded,
+    selectPartitionsLoading,
+    selectTargetQueue,
 } from '../../../../../../store/selectors/navigation/tabs/consumer';
 
 import './Partitions.scss';
@@ -46,7 +46,7 @@ const readRateGetter: Record<CONSUMER_RATE_MODE, (row: SelectedPartition) => TPe
     };
 
 const getColumns = createSelector(
-    [getConsumerRateMode, getConsumerTimeWindow, getConsumerPartitionsColumns],
+    [selectConsumerRateMode, selectConsumerTimeWindow, selectConsumerPartitionsColumns],
     (rateMode, timeWindow, columns): Array<Column<SelectedPartition>> => {
         return columns
             .filter((column) => column.checked)
@@ -81,7 +81,7 @@ const Partitions: React.VFC<PropsFromRedux> = ({
     partitionsLoading,
     partitionsLoaded,
 }) => {
-    const {queue} = useSelector(getTargetQueue) ?? {};
+    const {queue} = useSelector(selectTargetQueue) ?? {};
 
     useEffect(() => {
         if (queue) {
@@ -118,10 +118,10 @@ const Partitions: React.VFC<PropsFromRedux> = ({
 function mapStateToProps(state: RootState) {
     return {
         columns: getColumns(state),
-        partitions: getPartitions(state),
-        partitionsError: getPartitionsError(state),
-        partitionsLoading: getPartitionsLoading(state),
-        partitionsLoaded: getPartitionsLoaded(state),
+        partitions: selectPartitions(state),
+        partitionsError: selectPartitionsError(state),
+        partitionsLoading: selectPartitionsLoading(state),
+        partitionsLoaded: selectPartitionsLoaded(state),
     };
 }
 

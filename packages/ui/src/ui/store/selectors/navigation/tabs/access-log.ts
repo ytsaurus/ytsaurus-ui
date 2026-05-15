@@ -7,79 +7,79 @@ import {selectCluster} from '../../../../store/selectors/global';
 import {getPath} from '../../../../store/selectors/navigation/index';
 import {convertTimeToRequestParams} from '../../../../components/common/Timeline';
 
-const getAccessLogFiltersState = (state: RootState) =>
+const selectAccessLogFiltersState = (state: RootState) =>
     state.navigation.tabs.accessLog.accessLogFilters;
 
-export const getAccessLogFilterRecursive = (state: RootState) =>
+export const selectAccessLogFilterRecursive = (state: RootState) =>
     state.navigation.tabs.accessLog.accessLogFilters.recursive;
 
-export const getAccessLogFilterPagination = (state: RootState) =>
+export const selectAccessLogFilterPagination = (state: RootState) =>
     state.navigation.tabs.accessLog.accessLogFilters.pagination;
 
-export const getAccessLogFilterPathRegex = (state: RootState) =>
+export const selectAccessLogFilterPathRegex = (state: RootState) =>
     state.navigation.tabs.accessLog.accessLogFilters.path_regex;
 
-export const getAccessLogFilterUserRegex = (state: RootState) =>
+export const selectAccessLogFilterUserRegex = (state: RootState) =>
     state.navigation.tabs.accessLog.accessLogFilters.user_regex;
 
-export const getAccessLogFilterMethod = (state: RootState) =>
+export const selectAccessLogFilterMethod = (state: RootState) =>
     state.navigation.tabs.accessLog.accessLogFilters.method_group;
 
-export const getAccessLogFilterUserType = (state: RootState) =>
+export const selectAccessLogFilterUserType = (state: RootState) =>
     state.navigation.tabs.accessLog.accessLogFilters.user_type;
 
-export const getAccessLogFilterScope = (state: RootState) =>
+export const selectAccessLogFilterScope = (state: RootState) =>
     state.navigation.tabs.accessLog.accessLogFilters.scope;
 
-export const getAccessLogFilterTime = (state: RootState) =>
+export const selectAccessLogFilterTime = (state: RootState) =>
     state.navigation.tabs.accessLog.accessLogFilters.time;
 
-export const getAccessLogFilterFieldSelector = (state: RootState) =>
+export const selectAccessLogFilterFieldSelector = (state: RootState) =>
     state.navigation.tabs.accessLog.accessLogFilters.field_selector;
 
-export const getAccessLogFilterMetadata = (state: RootState) =>
+export const selectAccessLogFilterMetadata = (state: RootState) =>
     state.navigation.tabs.accessLog.accessLogFilters.metadata;
 
-export const getAccessLogFilterDistinctBy = (state: RootState) =>
+export const selectAccessLogFilterDistinctBy = (state: RootState) =>
     state.navigation.tabs.accessLog.accessLogFilters.distinct_by;
 
-export const getAccessLogLoading = (state: RootState) =>
+export const selectAccessLogLoading = (state: RootState) =>
     state.navigation.tabs.accessLog.accessLog.loading;
 
-export const getAccessLogReady = (state: RootState) =>
+export const selectAccessLogReady = (state: RootState) =>
     state.navigation.tabs.accessLog.accessLog.ready;
 
-export const getAccessLogLoaded = (state: RootState) =>
+export const selectAccessLogLoaded = (state: RootState) =>
     state.navigation.tabs.accessLog.accessLog.loaded;
 
-export const getAccessLogError = (state: RootState) =>
+export const selectAccessLogError = (state: RootState) =>
     state.navigation.tabs.accessLog.accessLog.error;
 
-export const getAccessLogItems = (state: RootState) =>
+export const selectAccessLogItems = (state: RootState) =>
     state.navigation.tabs.accessLog.accessLog.accesses;
 
-export const getAccessLogTotalRowCount = (state: RootState) =>
+export const selectAccessLogTotalRowCount = (state: RootState) =>
     state.navigation.tabs.accessLog.accessLog.total_row_count;
 
-export const getAccessLogAvailableTimeRange = (state: RootState) =>
+export const selectAccessLogAvailableTimeRange = (state: RootState) =>
     state.navigation.tabs.accessLog.accessLog.availableTimeRange;
 
-export const getAccessLogPagesCount = createSelector(
-    [getAccessLogTotalRowCount, (state) => getAccessLogFilterPagination(state).size],
+export const selectAccessLogPagesCount = createSelector(
+    [selectAccessLogTotalRowCount, (state) => selectAccessLogFilterPagination(state).size],
     (totalRowCount, size) => {
         return Math.ceil(totalRowCount / size);
     },
 );
 
-export const getAccessLogLastLoadedParams = (state: RootState) =>
+export const selectAccessLogLastLoadedParams = (state: RootState) =>
     state.navigation.tabs.accessLog.accessLog.params;
 
 function skipEmpty<T>(v: T) {
     return isEmpty_(v) ? undefined : v;
 }
 
-export const getAccessLogRequestParams = createSelector(
-    [selectCluster, getPath, getAccessLogFiltersState],
+export const selectAccessLogRequestParams = createSelector(
+    [selectCluster, getPath, selectAccessLogFiltersState],
     (cluster, path, filters) => {
         const {time, field_selector, method_group, user_type, scope, ...rest} = filters;
 
@@ -98,15 +98,15 @@ export const getAccessLogRequestParams = createSelector(
     },
 );
 
-export const getAccessLogHasChangedFilters = createSelector(
-    [getAccessLogLastLoadedParams, getAccessLogRequestParams],
+export const selectAccessLogHasChangedFilters = createSelector(
+    [selectAccessLogLastLoadedParams, selectAccessLogRequestParams],
     (lastLoaded, current) => {
         return Boolean(lastLoaded.path) && !isEqual_(lastLoaded, current);
     },
 );
 
-export const getAccessLogLastLoadedFieldSelector = createSelector(
-    [getAccessLogLastLoadedParams],
+export const selectAccessLogLastLoadedFieldSelector = createSelector(
+    [selectAccessLogLastLoadedParams],
     (params) => {
         return params.field_selector;
     },

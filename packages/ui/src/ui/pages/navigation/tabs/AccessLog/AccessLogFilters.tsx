@@ -14,20 +14,20 @@ import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar'
 import Select from '../../../../components/Select/Select';
 
 import {
-    getAccessLogAvailableTimeRange,
-    getAccessLogFilterDistinctBy,
-    getAccessLogFilterFieldSelector,
-    getAccessLogFilterMetadata,
-    getAccessLogFilterMethod,
-    getAccessLogFilterPagination,
-    getAccessLogFilterPathRegex,
-    getAccessLogFilterRecursive,
-    getAccessLogFilterScope,
-    getAccessLogFilterTime,
-    getAccessLogFilterUserRegex,
-    getAccessLogFilterUserType,
-    getAccessLogHasChangedFilters,
-    getAccessLogPagesCount,
+    selectAccessLogAvailableTimeRange,
+    selectAccessLogFilterDistinctBy,
+    selectAccessLogFilterFieldSelector,
+    selectAccessLogFilterMetadata,
+    selectAccessLogFilterMethod,
+    selectAccessLogFilterPagination,
+    selectAccessLogFilterPathRegex,
+    selectAccessLogFilterRecursive,
+    selectAccessLogFilterScope,
+    selectAccessLogFilterTime,
+    selectAccessLogFilterUserRegex,
+    selectAccessLogFilterUserType,
+    selectAccessLogHasChangedFilters,
+    selectAccessLogPagesCount,
 } from '../../../../store/selectors/navigation/tabs/access-log';
 import {
     applyAccessLogFilters,
@@ -119,7 +119,7 @@ function AccessLogFilters() {
 
 function AccessLogRecursive() {
     const dispatch = useDispatch();
-    const recursive = useSelector(getAccessLogFilterRecursive);
+    const recursive = useSelector(selectAccessLogFilterRecursive);
 
     return (
         <Checkbox
@@ -135,7 +135,7 @@ function AccessLogRecursive() {
 
 function AccessLogApplyFilters() {
     const dispatch = useDispatch();
-    const hasChanges = useSelector(getAccessLogHasChangedFilters);
+    const hasChanges = useSelector(selectAccessLogHasChangedFilters);
     const handleApply = React.useCallback(() => {
         dispatch(applyAccessLogFilters());
     }, [dispatch]);
@@ -149,8 +149,8 @@ function AccessLogApplyFilters() {
 function AccessLogPagination() {
     const dispatch = useDispatch();
 
-    const {index} = useSelector(getAccessLogFilterPagination);
-    const pageCount = useSelector(getAccessLogPagesCount);
+    const {index} = useSelector(selectAccessLogFilterPagination);
+    const pageCount = useSelector(selectAccessLogPagesCount);
 
     const handleChange = React.useCallback(
         (value: number) => {
@@ -171,7 +171,7 @@ function AccessLogPagination() {
 
 function AccessLogPathRegexp() {
     const dispatch = useDispatch();
-    const filter = useSelector(getAccessLogFilterPathRegex);
+    const filter = useSelector(selectAccessLogFilterPathRegex);
 
     const handleChange = React.useCallback(
         (path_regex: string) => {
@@ -192,7 +192,7 @@ function AccessLogPathRegexp() {
 
 function AccessLogUserRegexp() {
     const dispatch = useDispatch();
-    const filter = useSelector(getAccessLogFilterUserRegex);
+    const filter = useSelector(selectAccessLogFilterUserRegex);
 
     const handleChange = React.useCallback(
         (user_regex: string) => {
@@ -224,7 +224,7 @@ const METADATA_ITEMS = [
 
 function AccessLogMetadata() {
     const dispatch = useDispatch();
-    const value = useSelector(getAccessLogFilterMetadata);
+    const value = useSelector(selectAccessLogFilterMetadata);
     const handleChange = React.useCallback(
         (v: string) => {
             const metadata = v ? v === 'only_attrs' : undefined;
@@ -247,7 +247,7 @@ function AccessLogMetadata() {
 const DISTINCT_BY_ITEMS = [{text: 'By User', value: 'user'}];
 function AccessLogDistictBy() {
     const dispatch = useDispatch();
-    const value = useSelector(getAccessLogFilterDistinctBy);
+    const value = useSelector(selectAccessLogFilterDistinctBy);
     const handleChange = React.useCallback(
         (v: string) => {
             dispatch(setAccessLogFilters({distinct_by: v as 'user'}));
@@ -267,7 +267,7 @@ function AccessLogDistictBy() {
 
 function AccessLogFieldselector() {
     const dispatch = useDispatch();
-    const value = useSelector(getAccessLogFilterFieldSelector);
+    const value = useSelector(selectAccessLogFilterFieldSelector);
 
     const selected = React.useMemo(() => {
         return valueToSelection(value);
@@ -297,7 +297,7 @@ function AccessLogFieldselector() {
 
 function AccessLogMethod() {
     const dispatch = useDispatch();
-    const value = useSelector(getAccessLogFilterMethod);
+    const value = useSelector(selectAccessLogFilterMethod);
 
     const selected = React.useMemo(() => {
         return valueToSelection(value);
@@ -328,7 +328,7 @@ function AccessLogMethod() {
 
 function AccessLogUserTypeFilter() {
     const dispatch = useDispatch();
-    const value = useSelector(getAccessLogFilterUserType);
+    const value = useSelector(selectAccessLogFilterUserType);
 
     const selected = React.useMemo(() => {
         return valueToSelection(value);
@@ -360,7 +360,7 @@ function AccessLogUserTypeFilter() {
 
 function AccessLogScopeFilter() {
     const dispatch = useDispatch();
-    const value = useSelector(getAccessLogFilterScope);
+    const value = useSelector(selectAccessLogFilterScope);
 
     const selected = React.useMemo(() => {
         return valueToSelection(value);
@@ -424,7 +424,7 @@ function AccessLogTimeline() {
         [dispatch],
     );
 
-    const time = useSelector(getAccessLogFilterTime);
+    const time = useSelector(selectAccessLogFilterTime);
     const now = Date.now();
     const {from = now - 24 * 12 * 1000, to = now} = convertTimeToRequestParams(time) || {};
 
@@ -446,7 +446,7 @@ function AccessLogTimeline() {
 }
 
 function AvailableTimeRange() {
-    const {earliest, latest} = useSelector(getAccessLogAvailableTimeRange);
+    const {earliest, latest} = useSelector(selectAccessLogAvailableTimeRange);
     const hidden = earliest === undefined || latest === undefined;
 
     return (

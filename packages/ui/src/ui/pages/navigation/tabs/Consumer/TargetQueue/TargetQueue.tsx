@@ -5,9 +5,9 @@ import reduce_ from 'lodash/reduce';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 
 import {
-    getConsumerRegisteredQueues,
-    getTargetQueue,
-    getTargetQueueError,
+    selectConsumerRegisteredQueues,
+    selectTargetQueue,
+    selectTargetQueueError,
 } from '../../../../../store/selectors/navigation/tabs/consumer';
 import {YTErrorBlock} from '../../../../../components/Block/Block';
 import Icon from '../../../../../components/Icon/Icon';
@@ -22,8 +22,8 @@ import './TargetQueue.scss';
 const block = cn('target-queue');
 
 export default function TargetQueue() {
-    const {queue} = useSelector(getTargetQueue) ?? {};
-    const error = useSelector(getTargetQueueError);
+    const {queue} = useSelector(selectTargetQueue) ?? {};
+    const error = useSelector(selectTargetQueueError);
 
     let clusterQueueUrl;
     if (queue) {
@@ -61,7 +61,7 @@ interface ConsumerQueueSelectorProps {
 
 export function ConsumerQueueSelector({className, children}: ConsumerQueueSelectorProps) {
     const dispatch = useDispatch();
-    const registrations = useSelector(getConsumerRegisteredQueues);
+    const registrations = useSelector(selectConsumerRegisteredQueues);
 
     const handleSelect = (value?: string) => {
         const item = value ? registrations?.find(({queue}) => queue === value) : undefined;
@@ -100,7 +100,7 @@ export function ConsumerQueueSelector({className, children}: ConsumerQueueSelect
         };
     }, [registrations, dispatch]);
 
-    const {queue} = useSelector(getTargetQueue) ?? {};
+    const {queue} = useSelector(selectTargetQueue) ?? {};
 
     return (
         <div className={block('selector', className)}>

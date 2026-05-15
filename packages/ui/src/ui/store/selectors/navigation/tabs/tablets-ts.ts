@@ -5,7 +5,7 @@ import reduce_ from 'lodash/reduce';
 import toArray_ from 'lodash/toArray';
 
 import {createSelector} from 'reselect';
-import {getTabletsMode, getTabletsSortState, selectPreparedDataForColumns} from './tablets';
+import {selectTabletsMode, selectTabletsSortState, selectPreparedDataForColumns} from './tablets';
 import {
     type FieldDescr,
     type TreeItem,
@@ -79,7 +79,7 @@ export const selectTabletsMax = createSelector([selectPreparedDataForColumns], (
 });
 
 const selectTabletsByNameRoot = createSelector(
-    [selectPreparedDataForColumns, getTabletsSortState, getTabletsMode],
+    [selectPreparedDataForColumns, selectTabletsSortState, selectTabletsMode],
     (sortedAndFilteredItems, sortState, mode) => {
         const groupByKey = mode === 'by_host' ? 'cell_leader_address' : 'cell_id';
 
