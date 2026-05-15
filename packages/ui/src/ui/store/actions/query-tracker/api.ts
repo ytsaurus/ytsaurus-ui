@@ -36,6 +36,7 @@ import {
     type QueryResult,
     type QueryResultMeta,
 } from '../../../types/query-tracker/api';
+import {selectAvailableSpytConnect} from '../../selectors/query-tracker/queryTrackerEnginesInfo';
 
 export function getQTApiSetup(): {proxy?: string} {
     const QT_CLUSTER = getQueryTrackerCluster();
@@ -189,6 +190,7 @@ export function startQuery(
         const state = getState();
         const isMultipleAco = selectIsMultipleAco(state);
         const {stage, yqlAgentStage} = selectQueryTrackerRequestOptions(state);
+        const hasSpytConnect = selectAvailableSpytConnect(state);
         const {
             query,
             engine,
@@ -200,7 +202,10 @@ export function startQuery(
             access_control_object,
         } = queryInstance;
 
-        const processedSettings = engine === 'spyt' ? convertSettingsTypes(settings) : settings;
+        const isSpyt = engine === 'spyt';
+
+        const processedSettings =
+            isSpyt && !hasSpytConnect ? convertSettingsTypes(settings) : settings;
 
         return ytApiV4Id.startQuery(YTApiId.startQuery, {
             parameters: {

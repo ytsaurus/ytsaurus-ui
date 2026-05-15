@@ -17,6 +17,10 @@ export const selectSpytEnginesInfo = (state: RootState) => {
     return selectQueryTrackerInfo(state)?.engines_info?.spyt;
 };
 
+export const selectAvailableSpytConnect = (state: RootState) => {
+    return Boolean(selectSpytEnginesInfo(state));
+};
+
 const selectQueryTrackerInfoLoaded = (state: RootState) => state.queryTracker.aco.loaded;
 
 export const selectSpytDefaultSettings = createSelector(
