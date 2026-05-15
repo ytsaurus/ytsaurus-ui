@@ -11,6 +11,8 @@ import {QueryEngine} from '../../../../../shared/constants/engines';
 import {QuerySettings} from '../QuerySettings';
 import {SpytSettings} from '../SpytSettings/SpytSettings';
 import {type DraftQuery} from '../../../../types/query-tracker/api';
+import {useSelector} from '../../../../store/redux-hooks';
+import {selectAvailableSpytConnect} from '../../../../store/selectors/query-tracker/queryTrackerEnginesInfo';
 
 const block = cn('query-settings-popup');
 
@@ -29,6 +31,7 @@ export const QuerySettingsButton: FC<Props> = ({
     popupClassName,
     onChange,
 }) => {
+    const availableSpytConnect = useSelector(selectAvailableSpytConnect);
     const [opened, toggleOpened] = useToggle(false);
     const ref = useRef(null);
 
@@ -41,6 +44,8 @@ export const QuerySettingsButton: FC<Props> = ({
         onChange(newSettings);
         toggleOpened();
     };
+
+    const showJsonSettingsModal = isSpyt && availableSpytConnect;
 
     return (
         <>
@@ -59,7 +64,7 @@ export const QuerySettingsButton: FC<Props> = ({
                 open={opened}
                 className={block(null, popupClassName)}
                 onClose={toggleOpened}
-                showCloseButton={!isSpyt}
+                showCloseButton={!showJsonSettingsModal}
             >
                 <div className={block('header')}>
                     <Text variant="subheader-3">{i18n('title_settings')} </Text>
@@ -69,7 +74,7 @@ export const QuerySettingsButton: FC<Props> = ({
                         </Text>
                     )}
                 </div>
-                {isSpyt ? (
+                {showJsonSettingsModal ? (
                     <SpytSettings
                         settings={settings}
                         onChange={handleSpytChange}

@@ -20,6 +20,7 @@ import {
 } from '../../../store/selectors/query-tracker/queryAco';
 import cn from 'bem-cn-lite';
 import './QuerySelectorsByEngine.scss';
+import {selectAvailableSpytConnect} from '../../../store/selectors/query-tracker/queryTrackerEnginesInfo';
 
 const block = cn('yt-query-selector-by-engine');
 
@@ -30,6 +31,7 @@ export const QuerySelectorsByEngine: FC = () => {
     const {settings = {}, engine} = useSelector(selectQueryDraft);
     const availableYql = useSelector(selectAvailableYql);
     const effectiveYqlVersion = useSelector(selectEffectiveYqlVersion);
+    const hasSpytConnect = useSelector(selectAvailableSpytConnect);
     const currentCluster = settings?.cluster;
 
     const options = useMemo(() => {
@@ -70,6 +72,10 @@ export const QuerySelectorsByEngine: FC = () => {
                 onUpdate={handleYqlVersionChange}
             />
         );
+    }
+
+    if (engine === QueryEngine.SPYT && hasSpytConnect) {
+        return null;
     }
 
     if (engine === QueryEngine.CHYT || engine === QueryEngine.SPYT) {
