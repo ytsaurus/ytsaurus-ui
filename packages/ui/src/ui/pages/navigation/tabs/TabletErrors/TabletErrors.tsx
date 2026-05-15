@@ -7,8 +7,8 @@ import {getConfigData} from '../../../../config/ui-settings';
 import {updateTabletErrorsViewMode} from '../../../../store/actions/navigation/tabs/tablet-errors/tablet-errors-background';
 import {tabletErrorsByPathActions} from '../../../../store/reducers/navigation/tabs/tablet-errors/tablet-errors-by-path';
 import {
-    getTabletErrorsBackgroundCount,
-    getTabletErrorsViewMode,
+    selectTabletErrorsBackgroundCount,
+    selectTabletErrorsViewMode,
 } from '../../../../store/selectors/navigation/tabs/tablet-errors-background';
 
 import TabletErrorsBackground from './TabletErrorsBackground';
@@ -17,8 +17,8 @@ import {TabletErrorsRequest} from './TabletErrorsByPath/TabletErrorsByPath';
 export default function TabletErrors() {
     const dispatch = useDispatch();
 
-    const viewMode = useSelector(getTabletErrorsViewMode);
-    const backgroundErrorCount = useSelector(getTabletErrorsBackgroundCount);
+    const viewMode = useSelector(selectTabletErrorsViewMode);
+    const backgroundErrorCount = useSelector(selectTabletErrorsBackgroundCount);
 
     const allowTabletErrorsAPI = getConfigData().allowTabletErrorsAPI;
 

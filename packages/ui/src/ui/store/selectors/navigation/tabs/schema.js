@@ -13,7 +13,7 @@ const EXCLUDED_COLUMNS = {sort_order: null};
 
 const getColumn = (state) => state.navigation.tabs.schema.column;
 
-export const getSchemaMeta = createSelector([getAttributes], (attributes) => {
+export const selectSchemaMeta = createSelector([getAttributes], (attributes) => {
     const schemaAttributes = ypath.getValue(attributes, '/schema/@');
     const tableAttributes = pick_(attributes, TABLE_ATTRIBUTES_FOR_META);
 
@@ -26,13 +26,13 @@ export const getSchemaMeta = createSelector([getAttributes], (attributes) => {
     return [...tableMeta, ...schemaMeta];
 });
 
-export const getSchema = createSelector([getAttributes], (attributes) => {
+export const selectSchema = createSelector([getAttributes], (attributes) => {
     const schemaValues = ypath.getValue(attributes.schema);
 
     return map_(schemaValues, (item, index) => ({...item, index}));
 });
 
-export const getSchemaByName = createSelector([getSchema], (items) => {
+export const selectSchemaByName = createSelector([selectSchema], (items) => {
     return reduce_(
         items,
         (acc, item) => {
@@ -43,15 +43,15 @@ export const getSchemaByName = createSelector([getSchema], (items) => {
     );
 });
 
-export const getSchemaStrict = createSelector([getAttributes], (attrs) => {
+export const selectSchemaStrict = createSelector([getAttributes], (attrs) => {
     return ypath.getValue(attrs, '/schema/@strict');
 });
 
-export const getFilteredSchema = createSelector([getSchema, getColumn], (data, input) =>
+export const selectFilteredSchema = createSelector([selectSchema, getColumn], (data, input) =>
     hammer.filter.filter({data, input, factors: ['type', 'name']}),
 );
 
-export const getComputedColumns = createSelector([getSchema], (schema) => {
+export const selectComputedColumns = createSelector([selectSchema], (schema) => {
     const items = reduce_(
         schema,
         (res, schemaEntry) => {

@@ -6,7 +6,7 @@ import RadioButton from '../../../../../components/RadioButton/RadioButton';
 import {QUEUE_MODE} from '../../../../../constants/navigation/tabs/queue';
 import {changeQueueMode} from '../../../../../store/actions/navigation/tabs/queue/filters';
 import {type RootState} from '../../../../../store/reducers';
-import {getQueueMode} from '../../../../../store/selectors/navigation/tabs/queue';
+import {selectQueueMode} from '../../../../../store/selectors/navigation/tabs/queue';
 
 import './Toolbar.scss';
 
@@ -46,7 +46,7 @@ const Toolbar: React.VFC<Props> = ({extras: Extras, queueMode, changeQueueMode})
 
 function mapStateToProps(state: RootState) {
     return {
-        queueMode: getQueueMode(state),
+        queueMode: selectQueueMode(state),
     };
 }
 

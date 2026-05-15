@@ -20,10 +20,10 @@ import {
 } from '../../../../../../store/actions/navigation/tabs/queue/filters';
 import {type RootState} from '../../../../../../store/reducers';
 import {
-    getQueueConsumerName,
-    getQueueOwner,
-    getQueueRateMode,
-    getQueueTimeWindow,
+    selectQueueConsumerName,
+    selectQueueOwner,
+    selectQueueRateMode,
+    selectQueueTimeWindow,
 } from '../../../../../../store/selectors/navigation/tabs/queue';
 
 import './ConsumersExtraControls.scss';
@@ -74,10 +74,10 @@ const ConsumersExtraControls: React.VFC<Props> = ({
 
 function mapStateToProps(state: RootState) {
     return {
-        queueConsumerName: getQueueConsumerName(state),
-        queueOwner: getQueueOwner(state),
-        queueRateMode: getQueueRateMode(state),
-        queueTimeWindow: getQueueTimeWindow(state),
+        queueConsumerName: selectQueueConsumerName(state),
+        queueOwner: selectQueueOwner(state),
+        queueRateMode: selectQueueRateMode(state),
+        queueTimeWindow: selectQueueTimeWindow(state),
     };
 }
 

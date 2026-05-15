@@ -14,12 +14,12 @@ import {docsUrl} from '../../../../../config';
 
 import {getPath} from '../../../../../store/selectors/navigation';
 import {
-    getTabletErrorsByPathAllMethods,
-    getTabletErrorsByPathMethodsFilter,
-    getTabletErrorsByPathPageCount,
-    getTabletErrorsByPathPageFilter,
-    getTabletErrorsByPathTabletIdFilter,
-    getTabletErrorsByPathTimeRange,
+    selectTabletErrorsByPathAllMethods,
+    selectTabletErrorsByPathMethodsFilter,
+    selectTabletErrorsByPathPageCount,
+    selectTabletErrorsByPathPageFilter,
+    selectTabletErrorsByPathTabletIdFilter,
+    selectTabletErrorsByPathTimeRange,
 } from '../../../../../store/selectors/navigation/tabs/tablet-errors-by-path';
 import {tabletErrorsByPathActions} from '../../../../../store/reducers/navigation/tabs/tablet-errors/tablet-errors-by-path';
 import {loadTabletErrorsByTablePath} from '../../../../../store/actions/navigation/tabs/tablet-errors/tablet-errors-by-path';
@@ -52,9 +52,9 @@ export function TabletErrorsRequestToolbar({className}: {className: string}) {
         pageFilter,
         methodsFilter,
     } = useTabletErrorFromApiLoad();
-    const pageCount = useSelector(getTabletErrorsByPathPageCount);
+    const pageCount = useSelector(selectTabletErrorsByPathPageCount);
 
-    const allMethods = useSelector(getTabletErrorsByPathAllMethods) ?? [];
+    const allMethods = useSelector(selectTabletErrorsByPathAllMethods) ?? [];
 
     return (
         <div className={className}>
@@ -136,11 +136,11 @@ export function TabletErrorsRequestToolbar({className}: {className: string}) {
 
 function useTabletErrorFromApiLoad() {
     const path = useSelector(getPath);
-    const timeRange = useSelector(getTabletErrorsByPathTimeRange);
-    const methodsFilter = useSelector(getTabletErrorsByPathMethodsFilter);
-    const pageFilter = useSelector(getTabletErrorsByPathPageFilter);
+    const timeRange = useSelector(selectTabletErrorsByPathTimeRange);
+    const methodsFilter = useSelector(selectTabletErrorsByPathMethodsFilter);
+    const pageFilter = useSelector(selectTabletErrorsByPathPageFilter);
     const {id} = useSelector(getNavigationPathAttributes) ?? {};
-    const tabletIdFilter = useSelector(getTabletErrorsByPathTabletIdFilter);
+    const tabletIdFilter = useSelector(selectTabletErrorsByPathTabletIdFilter);
 
     const dispatch = useDispatch();
 

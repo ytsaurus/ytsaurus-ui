@@ -8,12 +8,12 @@ import {CONSUMER_MODE} from '../../../../constants/navigation/tabs/consumer';
 import {loadConsumerStatus} from '../../../../store/actions/navigation/tabs/consumer/status';
 import {type RootState} from '../../../../store/reducers';
 import {
-    getConsumerMode,
-    getOwner,
-    getPartitionCount,
-    getReadDataWeightRate,
-    getReadRowCountRate,
-    getStatusError,
+    selectConsumerMode,
+    selectOwner,
+    selectPartitionCount,
+    selectReadDataWeightRate,
+    selectReadRowCountRate,
+    selectStatusError,
 } from '../../../../store/selectors/navigation/tabs/consumer';
 
 import {QueueError} from '../Queue/QueueError';
@@ -81,12 +81,12 @@ const Consumer: React.VFC<PropsFromRedux> = ({
 
 function mapStateToProps(state: RootState) {
     return {
-        owner: getOwner(state),
-        partitionCount: getPartitionCount(state),
-        readDataWeightRate: getReadDataWeightRate(state),
-        readRowCountRate: getReadRowCountRate(state),
-        consumerMode: getConsumerMode(state),
-        statusError: getStatusError(state),
+        owner: selectOwner(state),
+        partitionCount: selectPartitionCount(state),
+        readDataWeightRate: selectReadDataWeightRate(state),
+        readRowCountRate: selectReadRowCountRate(state),
+        consumerMode: selectConsumerMode(state),
+        statusError: selectStatusError(state),
     };
 }
 

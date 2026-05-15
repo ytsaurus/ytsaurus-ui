@@ -12,8 +12,8 @@ import {getPath, getTransaction} from '../../../../../store/selectors/navigation
 import {type ConsumerFiltersAction} from '../../../../../store/reducers/navigation/tabs/consumer/filters';
 import {prepareRequest} from '../../../../../utils/navigation';
 import {
-    getConsumerRegisteredQueues,
-    getTargetQueue,
+    selectConsumerRegisteredQueues,
+    selectTargetQueue,
 } from '../../../../../store/selectors/navigation/tabs/consumer';
 import {changeConsumerFilters} from './filters';
 
@@ -46,8 +46,8 @@ export function loadConsumerStatus(): ConsumerThunkAction {
                 });
 
                 const state2 = getState();
-                const targetQueue = getTargetQueue(state2);
-                const queues = getConsumerRegisteredQueues(state2);
+                const targetQueue = selectTargetQueue(state2);
+                const queues = selectConsumerRegisteredQueues(state2);
                 if (targetQueue && !queues?.find(({queue}) => targetQueue.queue === queue)) {
                     dispatch(changeConsumerFilters({targetQueue: undefined}));
                 }

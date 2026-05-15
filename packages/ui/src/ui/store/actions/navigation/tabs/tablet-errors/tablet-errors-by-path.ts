@@ -12,8 +12,8 @@ import {selectCluster} from '../../../../../store/selectors/global';
 import {tabletErrorsByPathActions} from '../../../../../store/reducers/navigation/tabs/tablet-errors/tablet-errors-by-path';
 import CancelHelper, {isCancelled} from '../../../../../utils/cancel-helper';
 import {
-    getTabletErrorsByPathData,
-    getTabletErrorsByPathDataParams,
+    selectTabletErrorsByPathData,
+    selectTabletErrorsByPathDataParams,
 } from '../../../../../store/selectors/navigation/tabs/tablet-errors-by-path';
 
 type AsyncAction<T = Promise<void>> = ThunkAction<T, RootState, unknown, any>;
@@ -46,7 +46,7 @@ export function loadTabletErrorsByTablePath(
         const state = getState();
         const cluster = selectCluster(state);
 
-        const prevDataParams = getTabletErrorsByPathDataParams(state);
+        const prevDataParams = selectTabletErrorsByPathDataParams(state);
         if (
             page != 0 &&
             !isEqual_(
@@ -59,7 +59,7 @@ export function loadTabletErrorsByTablePath(
             return Promise.resolve();
         }
 
-        const prevData = getTabletErrorsByPathData(state);
+        const prevData = selectTabletErrorsByPathData(state);
         if (page != 0 && prevData) {
             params.fixed_end_timestamp = prevData.fixed_end_timestamp;
         }

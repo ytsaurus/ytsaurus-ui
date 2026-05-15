@@ -8,18 +8,18 @@ import {NAVIGATION_TABLETS_TABLE_ID} from '../../../../constants/navigation/tabs
 import {prepareAggregation, prepareDataForColumns} from '../../../../utils/navigation/tabs/tablets';
 import {calculateLoadingStatus} from '../../../../utils/utils';
 
-export const getTabletsMode = (state) => state.navigation.tabs.tablets.tabletsMode;
+export const selectTabletsMode = (state) => state.navigation.tabs.tablets.tabletsMode;
 
-const getRawTablets = (state) => state.navigation.tabs.tablets.tablets;
-const getRawReplicationLagTimes = (state) => state.navigation.tabs.tablets.replicationLagTimes;
+const selectRawTablets = (state) => state.navigation.tabs.tablets.tablets;
+const selectRawReplicationLagTimes = (state) => state.navigation.tabs.tablets.replicationLagTimes;
 
 /** @returns { OldSortState } */
-export const getTabletsSortState = (state) => state.tables[NAVIGATION_TABLETS_TABLE_ID];
-const getTabletsFilter = (state) => state.navigation.tabs.tablets.tabletsFilter;
-export const getActiveHistogram = (state) => state.navigation.tabs.tablets.histogramType;
+export const selectTabletsSortState = (state) => state.tables[NAVIGATION_TABLETS_TABLE_ID];
+const selectTabletsFilter = (state) => state.navigation.tabs.tablets.tabletsFilter;
+export const selectActiveHistogram = (state) => state.navigation.tabs.tablets.histogramType;
 
 const selectMergedRawTablets = createSelector(
-    [getRawTablets, getRawReplicationLagTimes],
+    [selectRawTablets, selectRawReplicationLagTimes],
     (rawTablets, rawReplicationLagTimes) => {
         if (!rawReplicationLagTimes || rawReplicationLagTimes.length === 0) {
             return rawTablets;
@@ -56,12 +56,12 @@ const selectMergedRawTablets = createSelector(
 );
 
 const selectSortedTablets = createSelector(
-    [selectMergedRawTablets, getTabletsSortState],
+    [selectMergedRawTablets, selectTabletsSortState],
     (rawTablets, sortState) => hammer.utils.sort(rawTablets, sortState, tableItems),
 );
 
 const selectFilteredTablets = createSelector(
-    [selectSortedTablets, getTabletsFilter],
+    [selectSortedTablets, selectTabletsFilter],
     (sortedTablets, tabletsFilter) =>
         hammer.filter.filter({
             data: sortedTablets,
@@ -96,7 +96,7 @@ export const selectPreparedDataForColumns = createSelector([selectFilteredTablet
 });
 
 export const selectIsReplicationDataExist = createSelector(
-    [getRawReplicationLagTimes],
+    [selectRawReplicationLagTimes],
     (rawReplicationLagTimes) => {
         if (!rawReplicationLagTimes || rawReplicationLagTimes.length === 0) {
             return false;
@@ -115,7 +115,7 @@ export const selectTablets = createSelector(selectPreparedDataForColumns, (filte
     return [aggregation, ...filteredTablets];
 });
 
-const selectHistograms = createSelector(getRawTablets, (tablets) => {
+const selectHistograms = createSelector(selectRawTablets, (tablets) => {
     return mapValues_(histogramItems, (histogramItem, key) => {
         const get = histogramItem.get || tableItems[key].get;
 
@@ -129,7 +129,7 @@ const selectHistograms = createSelector(getRawTablets, (tablets) => {
 });
 
 export const selectHistogram = createSelector(
-    [selectHistograms, getActiveHistogram],
+    [selectHistograms, selectActiveHistogram],
     (histograms, activeHistogram) => histograms[activeHistogram],
 );
 

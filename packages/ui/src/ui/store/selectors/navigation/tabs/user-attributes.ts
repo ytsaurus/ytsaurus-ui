@@ -1,8 +1,8 @@
 import {type RootState} from '../../../../store/reducers';
 
-export const getUserAttributes = (state: RootState) =>
+export const selectUserAttributes = (state: RootState) =>
     state.navigation.tabs.userAttributes.attributes;
-export const getUserAttributesLoadInfo = (state: RootState) => ({
+export const selectUserAttributesLoadInfo = (state: RootState) => ({
     loading: state.navigation.tabs.userAttributes.loading,
     loaded: state.navigation.tabs.userAttributes.loaded,
     error: state.navigation.tabs.userAttributes.error,

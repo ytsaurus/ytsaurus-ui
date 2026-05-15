@@ -25,9 +25,9 @@ import {Page} from '../../../../constants/index';
 import {findClusterConfigByOperationId} from '../../../../utils/clusters';
 
 import {
-    getLocksFiltered,
-    getLocksLoadStatus,
-    getLocksModeFilter,
+    selectLocksFiltered,
+    selectLocksLoadStatus,
+    selectLocksModeFilter,
 } from '../../../../store/selectors/navigation/tabs/locks';
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
@@ -309,8 +309,8 @@ const mapStateToProps = (state) => {
         error,
         errorData,
 
-        modeFilter: getLocksModeFilter(state),
-        locks: getLocksFiltered(state),
+        modeFilter: selectLocksModeFilter(state),
+        locks: selectLocksFiltered(state),
         isPartial,
     };
 };
@@ -323,7 +323,7 @@ const mapDispatchToProps = {
 const LocksConnected = connect(mapStateToProps, mapDispatchToProps)(Locks);
 
 export default function LocksWithRum() {
-    const loadState = useSelector(getLocksLoadStatus);
+    const loadState = useSelector(selectLocksLoadStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.NAVIGATION_TAB_LOCKS,

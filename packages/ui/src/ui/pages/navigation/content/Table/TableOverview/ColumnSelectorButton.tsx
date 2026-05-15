@@ -10,7 +10,7 @@ import {
     selectAllColumns,
     selectVisibleColumns,
 } from '../../../../../store/selectors/navigation/content/table';
-import {getSchemaStrict} from '../../../../../store/selectors/navigation/tabs/schema';
+import {selectSchemaStrict} from '../../../../../store/selectors/navigation/tabs/schema';
 import {Secondary} from '@ytsaurus/components';
 import ColumnsPresetButton from './ColumnsPresetButton';
 import {type RootState} from '../../../../../store/reducers';
@@ -81,7 +81,7 @@ const mapStateToProps = (state: RootState) => {
 
     const visibleColumns = selectVisibleColumns(state);
     const allColumns = selectAllColumns(state);
-    const isStrict = getSchemaStrict(state);
+    const isStrict = selectSchemaStrict(state);
 
     return {visibleColumns, loading, allColumns, isStrict};
 };

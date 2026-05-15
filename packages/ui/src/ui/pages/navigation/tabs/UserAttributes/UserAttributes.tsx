@@ -13,8 +13,8 @@ import {
     requestUserAttributes,
 } from '../../../../store/actions/navigation/tabs/user-attributes';
 import {
-    getUserAttributes,
-    getUserAttributesLoadInfo,
+    selectUserAttributes,
+    selectUserAttributesLoadInfo,
 } from '../../../../store/selectors/navigation/tabs/user-attributes';
 import {getPath} from '../../../../store/selectors/navigation';
 import {getEffectiveMode} from '../../../../store/selectors/navigation/navigation';
@@ -32,10 +32,10 @@ const block = cn('navigation-user-attributes');
 
 function UserAttributes() {
     const dispatch = useDispatch();
-    const {loading, loaded, error} = useSelector(getUserAttributesLoadInfo);
+    const {loading, loaded, error} = useSelector(selectUserAttributesLoadInfo);
     const path = useSelector(getPath);
     const mode = useSelector(getEffectiveMode);
-    const userAttributes = useSelector(getUserAttributes);
+    const userAttributes = useSelector(selectUserAttributes);
     const settings = unipika.prepareSettings();
 
     useEffect(() => {
@@ -72,7 +72,7 @@ function UserAttributes() {
 }
 
 export default function UserAttributesWithRum() {
-    const {loaded, loading, error} = useSelector(getUserAttributesLoadInfo);
+    const {loaded, loading, error} = useSelector(selectUserAttributesLoadInfo);
     const loadState = calculateLoadingStatus(Boolean(loading), Boolean(loaded), error);
 
     useAppRumMeasureStart({

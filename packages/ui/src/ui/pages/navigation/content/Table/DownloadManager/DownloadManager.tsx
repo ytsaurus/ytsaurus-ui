@@ -26,7 +26,7 @@ import Link from '../../../../../components/Link/Link';
 import Tabs from '../../../../../components/Tabs/Tabs';
 
 import {getRowsPerTablePage, getShowDecoded} from '../../../../../store/selectors/settings';
-import {getSchema} from '../../../../../store/selectors/navigation/tabs/schema';
+import {selectSchema} from '../../../../../store/selectors/navigation/tabs/schema';
 import {getPath, getTransaction} from '../../../../../store/selectors/navigation';
 import {selectCluster, selectCurrentClusterConfig} from '../../../../../store/selectors/global';
 import withVisible, {type WithVisibleProps} from '../../../../../hocs/withVisible';
@@ -861,7 +861,7 @@ const mapStateToProps = (state: RootState) => {
     const rowCount = selectRowCount(state);
     const cluster = selectCluster(state);
     const columns: typeof allColumns = selectColumns(state);
-    const schema = getSchema(state);
+    const schema = selectSchema(state);
     const path = getPath(state);
     const {proxy, externalProxy} = selectCurrentClusterConfig(state);
     const transaction_id = getTransaction(state);
