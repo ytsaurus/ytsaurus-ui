@@ -1,6 +1,6 @@
 import {type RootState} from '../../../../store/reducers';
 
-export const getNavigationTableEraseModalVisible = (state: RootState) =>
+export const selectNavigationTableEraseModalVisible = (state: RootState) =>
     state.navigation.modals.tableEraseModal.visible;
-export const getNavigationTableEraseModalPath = (state: RootState) =>
+export const selectNavigationTableEraseModalPath = (state: RootState) =>
     state.navigation.modals.tableEraseModal.path;

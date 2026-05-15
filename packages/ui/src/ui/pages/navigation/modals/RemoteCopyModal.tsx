@@ -6,8 +6,8 @@ import map_ from 'lodash/map';
 
 import {DialogError, type FormApi, YTDFDialog} from '../../../components/Dialog';
 import {
-    getRemoteCopyModalPaths,
-    getRemoteCopyModalVisible,
+    selectRemoteCopyModalPaths,
+    selectRemoteCopyModalVisible,
 } from '../../../store/selectors/navigation/modals/remote-copy-modal';
 import {
     hideRemoteCopyModal,
@@ -27,8 +27,8 @@ type Values = Omit<RemoteCopyParams, 'input_table_paths'> & {
 
 function RemoteCopyModal() {
     const dispatch = useDispatch();
-    const visible = useSelector(getRemoteCopyModalVisible);
-    const paths = useSelector(getRemoteCopyModalPaths);
+    const visible = useSelector(selectRemoteCopyModalVisible);
+    const paths = useSelector(selectRemoteCopyModalPaths);
     const cluster = useSelector(selectCluster);
 
     const [error, setError] = React.useState<YTError | unknown>();

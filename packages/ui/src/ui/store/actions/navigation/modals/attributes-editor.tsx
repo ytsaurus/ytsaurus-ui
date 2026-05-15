@@ -23,9 +23,9 @@ import {
 import {type RootState} from '../../../../store/reducers';
 import {type NavAttrEditorAction} from '../../../../store/reducers/navigation/modals/attributes-editor';
 import {
-    getNavigationAttributesEditorAttributes,
-    getNavigationAttributesEditorPath,
-    getNavigationAttributesEditorStaticTables,
+    selectNavigationAttributesEditorAttributes,
+    selectNavigationAttributesEditorPath,
+    selectNavigationAttributesEditorStaticTables,
 } from '../../../../store/selectors/navigation/modals/attributes-editor';
 import {showErrorPopup, wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {OperationShortInfo} from '../../../../pages/components/OperationShortInfo/OperationShortInfo';
@@ -132,7 +132,7 @@ export function navigationSetNodeAttributes(
     runMerge: boolean,
 ): ActionType<Promise<unknown>> {
     return (dispatch, getState) => {
-        const paths = getNavigationAttributesEditorPath(getState());
+        const paths = selectNavigationAttributesEditorPath(getState());
 
         if (isEmpty_({...generalAttrs, ...storageAttrs})) {
             // eslint-disable-next-line no-console
@@ -147,7 +147,7 @@ export function navigationSetNodeAttributes(
 
         const cluster = selectCluster(getState());
 
-        const attributesMap = getNavigationAttributesEditorAttributes(getState());
+        const attributesMap = selectNavigationAttributesEditorAttributes(getState());
         const {in_memory_mode, tablet_cell_bundle, ...restGeneralAttrs} = generalAttrs;
 
         const requests = reduce_(
@@ -173,7 +173,7 @@ export function navigationSetNodeAttributes(
             [] as Array<BatchSubRequest>,
         );
 
-        const staticTables = getNavigationAttributesEditorStaticTables(getState());
+        const staticTables = selectNavigationAttributesEditorStaticTables(getState());
 
         return executeBatchWithRetries(YTApiId.attributesEditorSet, requests, {
             errorTitle: `Cannot set attributes for ${paths}`,

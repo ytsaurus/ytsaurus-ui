@@ -6,11 +6,11 @@ import map_ from 'lodash/map';
 import {DialogError, type DialogField, YTDFDialog} from '../../../../components/Dialog';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
-    getNavigationTableAttributesValues,
-    getNavigationTableSortError,
-    getNavigationTableSortPaths,
-    getNavigationTableSortSuggestColumns,
-    getNavigationTableSortVisible,
+    selectNavigationTableAttributesValues,
+    selectNavigationTableSortError,
+    selectNavigationTableSortPaths,
+    selectNavigationTableSortSuggestColumns,
+    selectNavigationTableSortVisible,
 } from '../../../../store/selectors/navigation/modals/table-merge-sort-modal';
 import {
     hideTableSortModal,
@@ -30,11 +30,11 @@ const block = cn('table-sort-modal');
 
 export default function TableSortModal() {
     const login = useSelector(selectCurrentUserName);
-    const visible = useSelector(getNavigationTableSortVisible);
-    const paths = useSelector(getNavigationTableSortPaths);
-    const suggestError = useSelector(getNavigationTableSortError);
-    const suggestColumns = useSelector(getNavigationTableSortSuggestColumns);
-    const attributeValues = useSelector(getNavigationTableAttributesValues);
+    const visible = useSelector(selectNavigationTableSortVisible);
+    const paths = useSelector(selectNavigationTableSortPaths);
+    const suggestError = useSelector(selectNavigationTableSortError);
+    const suggestColumns = useSelector(selectNavigationTableSortSuggestColumns);
+    const attributeValues = useSelector(selectNavigationTableAttributesValues);
 
     const [error, setError] = React.useState<any>();
 

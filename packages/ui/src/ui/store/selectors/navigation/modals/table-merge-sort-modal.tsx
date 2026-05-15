@@ -1,12 +1,12 @@
 import {type RootState} from '../../../reducers';
 import {createSelector} from 'reselect';
 import {type PathAttribute} from '../../../reducers/navigation/modals/tableMergeSortModalSlice';
-export const getNavigationTableSortPaths = (state: RootState) =>
+export const selectNavigationTableSortPaths = (state: RootState) =>
     state.navigation.modals.tableMergeSortModal.paths;
-export const getNavigationTableOutputPathAttributes = (state: RootState) =>
+export const selectNavigationTableOutputPathAttributes = (state: RootState) =>
     state.navigation.modals.tableMergeSortModal.outputPathAttributes;
-export const getNavigationTableAttributesValues = createSelector(
-    [getNavigationTableOutputPathAttributes],
+export const selectNavigationTableAttributesValues = createSelector(
+    [selectNavigationTableOutputPathAttributes],
     (outputPathAttributes) => {
         const result: Record<string, string> = {};
         for (const key in outputPathAttributes) {
@@ -17,11 +17,11 @@ export const getNavigationTableAttributesValues = createSelector(
         return result;
     },
 );
-export const getNavigationTableSortError = (state: RootState) =>
+export const selectNavigationTableSortError = (state: RootState) =>
     state.navigation.modals.tableMergeSortModal.error;
-export const getNavigationTableSortVisible = (state: RootState) =>
+export const selectNavigationTableSortVisible = (state: RootState) =>
     state.navigation.modals.tableMergeSortModal.sortVisible;
-export const getNavigationTableMergeVisible = (state: RootState) =>
+export const selectNavigationTableMergeVisible = (state: RootState) =>
     state.navigation.modals.tableMergeSortModal.mergeVisible;
-export const getNavigationTableSortSuggestColumns = (state: RootState) =>
+export const selectNavigationTableSortSuggestColumns = (state: RootState) =>
     state.navigation.modals.tableMergeSortModal.suggestColumns;

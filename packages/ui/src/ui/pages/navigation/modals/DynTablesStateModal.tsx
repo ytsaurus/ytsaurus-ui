@@ -12,9 +12,9 @@ import {
     hideDynTablesStateModal,
 } from '../../../store/actions/navigation/modals/dyn-tables-state-modal';
 import {
-    getDynTablesStateModalAction,
-    getDynTablesStateModalPaths,
-    getDynTablesStateModalVisible,
+    selectDynTablesStateModalAction,
+    selectDynTablesStateModalPaths,
+    selectDynTablesStateModalVisible,
 } from '../../../store/selectors/navigation/modals/dyn-tables-state-modal';
 import {type DynTablesStateModalState} from '../../../store/reducers/navigation/modals/dyn-tables-state-modal';
 import {Warning} from '@ytsaurus/components';
@@ -27,9 +27,9 @@ const block = cn('dyn-tables-state-modal');
 export default function DynTablesStateModal() {
     const dispatch = useDispatch();
 
-    const action = useSelector(getDynTablesStateModalAction);
-    const paths = useSelector(getDynTablesStateModalPaths);
-    const visible = useSelector(getDynTablesStateModalVisible);
+    const action = useSelector(selectDynTablesStateModalAction);
+    const paths = useSelector(selectDynTablesStateModalPaths);
+    const visible = useSelector(selectDynTablesStateModalVisible);
 
     const [error, setError] = React.useState<YTError>();
 
