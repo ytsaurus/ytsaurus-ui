@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.12.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.12.0...ui-v3.12.1) (2026-05-15)
+
+
+### Bug Fixes
+
+* **Navigation/ReplicatedTable:** fix 'Table automatic mode switch' [YTFRONT-5784] ([44e6c66](https://github.com/ytsaurus/ytsaurus-ui/commit/44e6c662db6e623ec6b2c142fd904b1e633bb0a9))
+
 ## [3.12.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.11.0...ui-v3.12.0) (2026-05-14)
 
 
