@@ -27,7 +27,7 @@ import {docsUrl, getConfigUploadTable} from '../../../../../config';
 import HelpLink from '../../../../../components/HelpLink/HelpLink';
 import CancelHelper from '../../../../../utils/cancel-helper';
 import UIFactory from '../../../../../UIFactory';
-import {getSortedNodesNames} from '../../../../../store/selectors/navigation/content/map-node';
+import {selectSortedNodesNames} from '../../../../../store/selectors/navigation/content/map-node';
 import FileUploadProgress from '../../../../../components/FileUploadProgress/FileUploadProgress';
 import FileDropZone from '../../../../../components/FileDropZone/FileDropZone';
 
@@ -448,7 +448,7 @@ const mapStateToProps = (state: RootState) => {
     return {
         path,
         cluster: selectCluster(state),
-        existingNodes: getSortedNodesNames(state),
+        existingNodes: selectSortedNodesNames(state),
     };
 };
 

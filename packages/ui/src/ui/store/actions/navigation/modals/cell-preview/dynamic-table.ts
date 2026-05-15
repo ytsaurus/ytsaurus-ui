@@ -1,8 +1,8 @@
 import {type CellPreviewActionType} from '../../../modals/cell-preview';
 import {
-    getCurrentRowKey,
-    getKeyColumns,
-    getYqlTypes,
+    selectCurrentRowKey,
+    selectKeyColumns,
+    selectYqlTypes,
 } from '../../../../selectors/navigation/content/table-ts';
 import Query from '../../../../../utils/navigation/content/table/query';
 import {getCliCommandResultFormat} from './format';
@@ -17,9 +17,9 @@ export const getDynamicTableCellPath = ({
     rowIndex: number;
 }): CellPreviewActionType<string> => {
     return (_, getState) => {
-        const yqlTypes = getYqlTypes(getState());
-        const key = getCurrentRowKey(getState(), rowIndex);
-        const keyColumns = getKeyColumns(getState());
+        const yqlTypes = selectYqlTypes(getState());
+        const key = selectCurrentRowKey(getState(), rowIndex);
+        const keyColumns = selectKeyColumns(getState());
 
         const offset = Query.prepareKey(key, yqlTypes);
 

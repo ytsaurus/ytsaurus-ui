@@ -42,24 +42,24 @@ import {
     isTableSimilarityEnabled,
 } from '../../../../../store/selectors/settings';
 import {
-    getAllColumns,
-    getNextOffset,
-    getRequestedPageSize,
-    getVisibleColumns,
-    isYqlTypesEnabled,
+    selectAllColumns,
+    selectNextOffset,
+    selectRequestedPageSize,
+    selectVisibleColumns,
+    selectIsYqlTypesEnabled,
 } from '../../../../../store/selectors/navigation/content/table';
 import {
-    getCellSize,
-    getColumns,
-    getColumnsPreset,
-    getDeniedKeyColumns,
-    getIsDynamic,
-    getIsStrict,
-    getKeyColumns,
-    getMoveOffsetBackward,
-    getOmittedColumns,
-    getRows,
-    getTableColumnNamesFromSchema,
+    selectCellSize,
+    selectColumns,
+    selectColumnsPreset,
+    selectDeniedKeyColumns,
+    selectIsDynamic,
+    selectIsStrict,
+    selectKeyColumns,
+    selectMoveOffsetBackward,
+    selectOmittedColumns,
+    selectRows,
+    selectTableColumnNamesFromSchema,
 } from '../../../../../store/selectors/navigation/content/table-ts';
 import {mergeScreen} from '../../../../../store/actions/global';
 import {waitForFontFamilies} from '../../../../../store/actions/global/fonts';
@@ -79,19 +79,19 @@ function loadDynamicTable(requestOutputFormat, state, type, useZeroRangeForPrelo
     const {login} = state.global;
 
     const path = getPath(state);
-    const stringLimit = getCellSize(state);
-    const keyColumns = getKeyColumns(state);
-    const columns = getColumns(state);
+    const stringLimit = selectCellSize(state);
+    const keyColumns = selectKeyColumns(state);
+    const columns = selectColumns(state);
     const attributes = getAttributes(state);
-    const useYqlTypes = isYqlTypesEnabled(state);
-    const moveBackward = getMoveOffsetBackward(state);
+    const useYqlTypes = selectIsYqlTypesEnabled(state);
+    const moveBackward = selectMoveOffsetBackward(state);
     const defaultTableColumnLimit = getDefaultTableColumnLimit(state);
-    const {offsetValue: offset, moveBackward: descending} = getNextOffset(state);
+    const {offsetValue: offset, moveBackward: descending} = selectNextOffset(state);
     const transaction = getTransaction(state);
     const orderBySupported = true;
     const offsetColumns = keyColumns;
 
-    let limit = getRequestedPageSize(state);
+    let limit = selectRequestedPageSize(state);
     if (isEmpty_(offset) && descending) {
         // If we move to the end of the table, we reduce the limit for correctly determining the end of the table
         limit--;
@@ -109,7 +109,7 @@ function loadDynamicTable(requestOutputFormat, state, type, useZeroRangeForPrelo
         );
 
     const cluster = selectCluster(state);
-    const isDynamic = getIsDynamic(state);
+    const isDynamic = selectIsDynamic(state);
     const isSorted = ypath.getValue(attributes, '/sorted');
     const id = makeTableRumId({cluster, isDynamic});
 
@@ -230,9 +230,9 @@ function loadDynamicTable(requestOutputFormat, state, type, useZeroRangeForPrelo
             });
     } else {
         // Get only visible columns for updating data. Get omittedColumns from store.
-        const columns = getVisibleColumns(state);
-        const omittedColumns = getOmittedColumns(state);
-        const deniedKeyColumns = getDeniedKeyColumns(state);
+        const columns = selectVisibleColumns(state);
+        const omittedColumns = selectOmittedColumns(state);
+        const deniedKeyColumns = selectDeniedKeyColumns(state);
         const decodedColumns = decodeNameField(columns);
         const outputFormat = getRequestOutputFormat(
             decodedColumns,
@@ -282,17 +282,17 @@ function loadDynamicTable(requestOutputFormat, state, type, useZeroRangeForPrelo
 
 async function loadStaticTable(requestOutputFormat, state, type, useZeroRangeForPreload) {
     const path = getPath(state);
-    const stringLimit = getCellSize(state);
+    const stringLimit = selectCellSize(state);
     const transaction = getTransaction(state);
-    const moveBackward = getMoveOffsetBackward(state);
-    const requestedPageSize = getRequestedPageSize(state);
+    const moveBackward = selectMoveOffsetBackward(state);
+    const requestedPageSize = selectRequestedPageSize(state);
     const defaultTableColumnLimit = getDefaultTableColumnLimit(state);
 
     const {login} = state.global;
     // Get all columns always and update them then. We can get new columns. The scheme is not always strict
-    const columns = getColumns(state);
-    const offsetValue = getNextOffset(state).offsetValue;
-    const useYqlTypes = isYqlTypesEnabled(state);
+    const columns = selectColumns(state);
+    const offsetValue = selectNextOffset(state).offsetValue;
+    const useYqlTypes = selectIsYqlTypesEnabled(state);
     const decodedColumns = decodeNameField(columns);
     const outputFormat =
         requestOutputFormat ||
@@ -317,7 +317,7 @@ async function loadStaticTable(requestOutputFormat, state, type, useZeroRangeFor
     });
 
     const cluster = selectCluster(state);
-    const isDynamic = getIsDynamic(state);
+    const isDynamic = selectIsDynamic(state);
     const id = makeTableRumId({cluster, isDynamic});
     const apiId = type === LOAD_TYPE.PRELOAD ? YTApiId.tableReadPreload : YTApiId.tableRead;
 
@@ -332,8 +332,8 @@ async function loadStaticTable(requestOutputFormat, state, type, useZeroRangeFor
 }
 
 function loadTableRows(type, state, requestOutputFormat) {
-    const isDynamic = getIsDynamic(state);
-    const isStrict = getIsStrict(state);
+    const isDynamic = selectIsDynamic(state);
+    const isStrict = selectIsStrict(state);
     const useZeroRangeForPreload = isStrict && type === LOAD_TYPE.PRELOAD;
 
     const loadPromise = isDynamic
@@ -341,7 +341,7 @@ function loadTableRows(type, state, requestOutputFormat) {
         : loadStaticTable(requestOutputFormat, state, type, useZeroRangeForPreload);
 
     return loadPromise.then((result) => {
-        const schemaColumns = getTableColumnNamesFromSchema(state);
+        const schemaColumns = selectTableColumnNamesFromSchema(state);
         const {columns, omittedColumns, ...rest} = result;
         return {
             columns: injectColumnsFromSchema(columns, omittedColumns, schemaColumns),
@@ -356,7 +356,7 @@ function loadTableRows(type, state, requestOutputFormat) {
 function restoreColumns(state) {
     const tableSimilarityEnabled = isTableSimilarityEnabled(state);
     const attributes = getAttributes(state);
-    const stringLimit = getCellSize(state);
+    const stringLimit = selectCellSize(state);
 
     const requestOutputFormat = {
         $value: 'web_json',
@@ -391,9 +391,9 @@ export function updateTableData() {
     return (dispatch, getState) => {
         const state = getState();
         const attributes = getAttributes(state);
-        const {offsetValue, moveBackward} = getNextOffset(state);
-        const requestedPageSize = getRequestedPageSize(state);
-        const isDynamic = getIsDynamic(state);
+        const {offsetValue, moveBackward} = selectNextOffset(state);
+        const requestedPageSize = selectRequestedPageSize(state);
+        const isDynamic = selectIsDynamic(state);
 
         dispatch({type: GET_TABLE_DATA.REQUEST});
         requests.removeAllRequests();
@@ -403,7 +403,7 @@ export function updateTableData() {
                 // Scheme is always strict in dynamic tables. No new columns are expected.
                 if (!isDynamic) {
                     // Get current columns for save visible status
-                    const storedColumns = getColumns(state);
+                    const storedColumns = selectColumns(state);
                     const defaultTableColumnLimit = getDefaultTableColumnLimit(state);
                     const preparedColumns = Columns.prepareColumns(
                         attributes,
@@ -426,14 +426,14 @@ export function updateTableData() {
                         //  - add rows from the current page
                         //  - reset offset value
                         newOffsetValue = '';
-                        const previousRows = getRows(state);
+                        const previousRows = selectRows(state);
                         const addRowCount = Math.min(
                             requestedPageSize - rows.length + 1,
                             previousRows.length,
                         );
                         rows = rows.concat(previousRows.slice(1, addRowCount));
                     } else {
-                        const keyColumns = getKeyColumns(state);
+                        const keyColumns = selectKeyColumns(state);
                         newOffsetValue = Query.prepareKey(getColumnsValues(rows[0], keyColumns));
                     }
 
@@ -492,7 +492,7 @@ export function getTableData() {
                 );
 
                 // if we have columns preset -> update checked according to preset
-                const preset = getColumnsPreset(state);
+                const preset = selectColumnsPreset(state);
                 if (preset?.columns) {
                     preparedColumns.forEach((column) => {
                         column.checked = preset?.columns?.includes(column.name);
@@ -574,8 +574,8 @@ export function updateColumns(allColumns) {
     return (dispatch, getState) => {
         const state = getState();
         const attributes = getAttributes(state);
-        const omittedColumns = getOmittedColumns(state);
-        const deniedKeyColumns = getDeniedKeyColumns(state);
+        const omittedColumns = selectOmittedColumns(state);
+        const deniedKeyColumns = selectDeniedKeyColumns(state);
         const columns = filter_(allColumns, (column) => !column.disabled); // remove omitted columns
         const columnsOrder = Columns.getColumnsOrder(columns);
         Columns.storeAllColumns(attributes, columns);
@@ -591,14 +591,14 @@ export function updateColumns(allColumns) {
 
 export function rememberPresetColumnsAsDefault() {
     return (dispatch, getState) => {
-        const allColumns = getAllColumns(getState());
+        const allColumns = selectAllColumns(getState());
         dispatch(updateColumns(allColumns));
     };
 }
 
 export function openTableWithPresetOfColumns() {
     return (dispatch, getState) => {
-        const visibleColumns = getVisibleColumns(getState());
+        const visibleColumns = selectVisibleColumns(getState());
         const cluster = selectCluster(getState());
         saveColumnPreset(map_(visibleColumns, 'name'), cluster).then((hash) => {
             const {href} = window.location;

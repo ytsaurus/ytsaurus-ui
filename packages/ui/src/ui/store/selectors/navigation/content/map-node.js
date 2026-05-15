@@ -25,12 +25,12 @@ import MultipleActions from '../../../../pages/navigation/content/MapNode/Multip
 import {DYN_TABLES_ALLOWED_ACTIONS_BY_STATE} from './map-node-ts';
 import {formatDateForTableSort} from '../../../../utils/format-date-for-table-sort';
 
-export const getFilterState = (state) => state.navigation.content.mapNode.filter;
-export const getMediumType = (state) => state.navigation.content.mapNode.mediumType;
+export const selectFilterState = (state) => state.navigation.content.mapNode.filter;
+export const selectMediumType = (state) => state.navigation.content.mapNode.mediumType;
 
-const getCustomSort = (state) => state.navigation.content.mapNode.customSort;
-const getTableColumns = createSelector(
-    [getCustomSort, getMediumType],
+const selectCustomSort = (state) => state.navigation.content.mapNode.customSort;
+const selectTableColumns = createSelector(
+    [selectCustomSort, selectMediumType],
     (customSort, mediumType) => ({
         chooser: {
             sort: false,
@@ -123,7 +123,7 @@ const getTableColumns = createSelector(
         },
     }),
 );
-export const getPreparedTableColumns = createSelector(getTableColumns, (columns) =>
+export const selectPreparedTableColumns = createSelector(selectTableColumns, (columns) =>
     transform_(
         columns,
         (preparedColumns, column, name) => {
@@ -137,16 +137,16 @@ export const getPreparedTableColumns = createSelector(getTableColumns, (columns)
     ),
 );
 
-export const getContentMode = (state) => state.navigation.content.mapNode.contentMode;
-export const getSelected = (state) => state.navigation.content.mapNode.selected;
-export const getLastSelected = (state) => state.navigation.content.mapNode.lastSelected;
-const getTextFilter = (state) => state.navigation.content.mapNode.filter;
+export const selectContentMode = (state) => state.navigation.content.mapNode.contentMode;
+export const selectSelected = (state) => state.navigation.content.mapNode.selected;
+export const selectLastSelected = (state) => state.navigation.content.mapNode.lastSelected;
+const selectTextFilter = (state) => state.navigation.content.mapNode.filter;
 
-const getSortState = (state) => state.tables[NAVIGATION_MAP_NODE_TABLE_ID];
-export const getNodesData = (state) => state.navigation.content.mapNode.nodesData;
+const selectSortState = (state) => state.tables[NAVIGATION_MAP_NODE_TABLE_ID];
+export const selectNodesData = (state) => state.navigation.content.mapNode.nodesData;
 
-const getNodes = createSelector(
-    [getNodesData, getParsedPath, getTransaction, getContentMode],
+const selectNodes = createSelector(
+    [selectNodesData, getParsedPath, getTransaction, selectContentMode],
     (nodesData, parsedPath, transaction, contentMode) => {
         return map_(
             nodesData,
@@ -160,8 +160,8 @@ const getNodes = createSelector(
     },
 );
 
-export const getFilteredNodes = createSelector(
-    [getNodes, makeGetSetting, getTextFilter],
+export const selectFilteredNodes = createSelector(
+    [selectNodes, makeGetSetting, selectTextFilter],
     (nodes, getSetting, filter) => {
         const useSmartFilter = getSetting('useSmartFilter', NAMESPACES.NAVIGATION);
         if (useSmartFilter) {
@@ -180,8 +180,8 @@ export const getFilteredNodes = createSelector(
     },
 );
 
-export const getSelectedNodes = createSelector(
-    [getSelected, getNodes, makeGetSetting, getSortState, getTableColumns],
+export const selectSelectedNodes = createSelector(
+    [selectSelected, selectNodes, makeGetSetting, selectSortState, selectTableColumns],
     (selected, allNodes, getSetting, sortState, columns) => {
         const nodes = filter_(allNodes, (node) => Boolean(selected[ypath.getValue(node)]));
         const groupNodes = getSetting(SettingName.NAVIGATION.GROUP_NODES, NAMESPACES.NAVIGATION);
@@ -196,7 +196,7 @@ export const getSelectedNodes = createSelector(
     },
 );
 
-export const getSelectedPathMap = createSelector([getSelectedNodes], (nodes) => {
+export const selectSelectedPathMap = createSelector([selectSelectedNodes], (nodes) => {
     return reduce_(
         nodes,
         (acc, {path}) => {
@@ -207,12 +207,12 @@ export const getSelectedPathMap = createSelector([getSelectedNodes], (nodes) => 
     );
 });
 
-export const isSelected = createSelector(getSelected, (selected) => {
+export const selectIsSelected = createSelector(selectSelected, (selected) => {
     return includes_(values_(selected), true);
 });
 
-export const getIsAllSelected = createSelector(
-    [getSelected, getFilteredNodes],
+export const selectIsAllSelected = createSelector(
+    [selectSelected, selectFilteredNodes],
     (selected, allNodes) => {
         const selectedNodes = keys_(selected);
 
@@ -252,8 +252,8 @@ export const TYPE_WEIGHTS = map_(
     return res;
 }, {});
 
-export const getSortedNodes = createSelector(
-    [getFilteredNodes, getSortState, getTableColumns, makeGetSetting],
+export const selectSortedNodes = createSelector(
+    [selectFilteredNodes, selectSortState, selectTableColumns, makeGetSetting],
     (nodes, sortState, columns, getSetting) => {
         const groupNodes = getSetting(SettingName.NAVIGATION.GROUP_NODES, NAMESPACES.NAVIGATION);
         const groupByType = groupNodes && {
@@ -266,11 +266,11 @@ export const getSortedNodes = createSelector(
     },
 );
 
-export const getSortedNodesNames = createSelector([getFilteredNodes], (nodes) => {
+export const selectSortedNodesNames = createSelector([selectFilteredNodes], (nodes) => {
     return nodes.map((node) => node.name);
 });
 
-export const getNodesInfo = createSelector(getSortedNodes, (nodes) => {
+export const selectNodesInfo = createSelector(selectSortedNodes, (nodes) => {
     const sumNodesType = hammer.aggregation.countValues(nodes, 'type');
 
     return map_(Object.entries(sumNodesType), (keyValue) => {
@@ -283,28 +283,28 @@ export const getNodesInfo = createSelector(getSortedNodes, (nodes) => {
     });
 });
 
-export const isRootNode = createSelector(
+export const selectIsRootNode = createSelector(
     getParsedPath,
     (parsedPath) => parsedPath.stringify() === '/',
 );
 
-export const getMapNodeResourcesLoading = (state) =>
+export const selectMapNodeResourcesLoading = (state) =>
     state.navigation.content.mapNode.resourcesLoading;
 
 const DATE_REGEXP = /^\d{4}[-]\d{2}[-]\d{2}(T\d{2}:\d{2}:\d{2})?(\.[a-zA-Z0-9]+)?$/;
-export const shouldApplyCustomSort = createSelector(
-    [getNodes, makeGetSetting, getSortState],
+export const selectShouldApplyCustomSort = createSelector(
+    [selectNodes, makeGetSetting, selectSortState],
     (nodes, getSetting, sortState) =>
         getSetting(SettingName.NAVIGATION.USE_SMART_SORT, NAMESPACES.NAVIGATION) &&
         sortState?.field === 'name' &&
         every_(nodes, (item) => DATE_REGEXP.test(item.name)),
 );
 
-export const getLoadState = (state) => state.navigation.content.mapNode.loadState;
-export const getError = (state) => state.navigation.content.mapNode.error;
+export const selectLoadState = (state) => state.navigation.content.mapNode.loadState;
+export const selectError = (state) => state.navigation.content.mapNode.error;
 
-export const getSelectedIndex = createSelector(
-    [getSortedNodes, getFilterState],
+export const selectSelectedIndex = createSelector(
+    [selectSortedNodes, selectFilterState],
     (nodes, filter) => {
         if (filter) {
             const strictIndex = findIndex_(nodes, ({name}) => name === filter);
@@ -320,7 +320,7 @@ export const getSelectedIndex = createSelector(
     },
 );
 
-export const getSelectedNodesDynTablesStates = createSelector([getSelectedNodes], (nodes) => {
+export const selectSelectedNodesDynTablesStates = createSelector([selectSelectedNodes], (nodes) => {
     const res = reduce_(
         nodes,
         (acc, item) => {
@@ -334,8 +334,8 @@ export const getSelectedNodesDynTablesStates = createSelector([getSelectedNodes]
     return res;
 });
 
-export const getSelectedNodesAllowedDynTablesActions = createSelector(
-    [getSelectedNodesDynTablesStates],
+export const selectSelectedNodesAllowedDynTablesActions = createSelector(
+    [selectSelectedNodesDynTablesStates],
     (dynTablesStates) => {
         const res = reduce_(
             dynTablesStates,

@@ -3,17 +3,17 @@ import isEmpty_ from 'lodash/isEmpty';
 import {createSelector} from 'reselect';
 import {type RootState} from '../../../../store/reducers';
 
-export const getNavigationTableMountConfig = (state: RootState) =>
+export const selectNavigationTableMountConfig = (state: RootState) =>
     state.navigation.content.tableMountConfig;
 
-const getTableMountConfigData = (state: RootState) =>
+const selectTableMountConfigData = (state: RootState) =>
     state.navigation.content.tableMountConfig.data || {};
 
-const getTableMountConfigError = (state: RootState) =>
+const selectTableMountConfigError = (state: RootState) =>
     state.navigation.content.tableMountConfig.error;
 
-export const getTableMountConfigHasData = createSelector(
-    [getTableMountConfigData, getTableMountConfigError],
+export const selectTableMountConfigHasData = createSelector(
+    [selectTableMountConfigData, selectTableMountConfigError],
     (data, error) => {
         return !isEmpty_(data) || !isEmpty_(error);
     },

@@ -6,15 +6,15 @@ import {
     OPEN_OFFSET_SELECTOR_MODAL,
 } from '../../../../../constants/navigation/content/table';
 import {
-    getBottomBoundKey,
-    getOffsetValue,
-    getRowCount,
-    getUpperBoundKey,
+    selectBottomBoundKey,
+    selectOffsetValue,
+    selectRowCount,
+    selectUpperBoundKey,
 } from '../../../../../store/selectors/navigation/content/table';
 import {
-    getIsDynamic,
-    getPageSize,
-    getYqlTypes,
+    selectIsDynamic,
+    selectPageSize,
+    selectYqlTypes,
 } from '../../../../../store/selectors/navigation/content/table-ts';
 
 export function moveOffsetToStart() {
@@ -32,20 +32,20 @@ export function moveOffsetToStart() {
 export function moveOffsetToLeft() {
     return (dispatch, getState) => {
         const state = getState();
-        const yqlTypes = getYqlTypes(state);
-        const isDynamic = getIsDynamic(state);
+        const yqlTypes = selectYqlTypes(state);
+        const isDynamic = selectIsDynamic(state);
 
         if (isDynamic) {
             dispatch({
                 type: MOVE_OFFSET,
                 data: {
-                    offsetValue: Query.prepareKey(getBottomBoundKey(state), yqlTypes),
+                    offsetValue: Query.prepareKey(selectBottomBoundKey(state), yqlTypes),
                     moveBackward: true,
                 },
             });
         } else {
-            const pageSize = getPageSize(state);
-            const offsetValue = getOffsetValue(state);
+            const pageSize = selectPageSize(state);
+            const offsetValue = selectOffsetValue(state);
 
             dispatch({
                 type: MOVE_OFFSET,
@@ -61,20 +61,20 @@ export function moveOffsetToLeft() {
 export function moveOffsetToRight() {
     return (dispatch, getState) => {
         const state = getState();
-        const yqlTypes = getYqlTypes(state);
-        const isDynamic = getIsDynamic(state);
+        const yqlTypes = selectYqlTypes(state);
+        const isDynamic = selectIsDynamic(state);
 
         if (isDynamic) {
             dispatch({
                 type: MOVE_OFFSET,
                 data: {
-                    offsetValue: Query.prepareKey(getUpperBoundKey(state), yqlTypes),
+                    offsetValue: Query.prepareKey(selectUpperBoundKey(state), yqlTypes),
                 },
             });
         } else {
-            const pageSize = getPageSize(state);
-            const offsetValue = getOffsetValue(state);
-            const rowCount = getRowCount(state);
+            const pageSize = selectPageSize(state);
+            const offsetValue = selectOffsetValue(state);
+            const rowCount = selectRowCount(state);
 
             dispatch({
                 type: MOVE_OFFSET,
@@ -90,9 +90,9 @@ export function moveOffsetToRight() {
 export function moveOffsetToEnd() {
     return (dispatch, getState) => {
         const state = getState();
-        const rowCount = getRowCount(state);
-        const isDynamic = getIsDynamic(state);
-        const pageSize = getPageSize(state);
+        const rowCount = selectRowCount(state);
+        const isDynamic = selectIsDynamic(state);
+        const pageSize = selectPageSize(state);
 
         if (isDynamic) {
             dispatch({
@@ -117,7 +117,7 @@ export function moveOffsetToEnd() {
 export function moveOffset(offsetValue) {
     return (dispatch, getState) => {
         const state = getState();
-        const prevOffsetValue = getOffsetValue(state);
+        const prevOffsetValue = selectOffsetValue(state);
 
         if (offsetValue !== prevOffsetValue) {
             dispatch({

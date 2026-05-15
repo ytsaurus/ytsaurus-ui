@@ -28,13 +28,13 @@ import {getPath, getTransaction} from '../../../../store/selectors/navigation';
 import {getNavigationPathAttributes} from '../../../../store/selectors/navigation/navigation';
 import {getMediumList} from '../../../../store/selectors/thor';
 import {
-    getContentMode,
-    getError,
-    getFilterState,
-    getLoadState,
-    getMapNodeResourcesLoading,
-    getMediumType,
-    isRootNode,
+    selectContentMode,
+    selectError,
+    selectFilterState,
+    selectLoadState,
+    selectMapNodeResourcesLoading,
+    selectMediumType,
+    selectIsRootNode,
 } from '../../../../store/selectors/navigation/content/map-node';
 
 import {OPEN_CREATE_DIRECTORY_POPUP} from '../../../../constants/navigation/modals/create-directory';
@@ -156,13 +156,13 @@ function mapStateToProps(state) {
     return {
         path,
         showACOCreateButton: path === '//sys/access_control_object_namespaces/queries',
-        loadState: getLoadState(state),
-        error: getError(state),
-        contentMode: getContentMode(state),
-        filterState: getFilterState(state),
+        loadState: selectLoadState(state),
+        error: selectError(state),
+        contentMode: selectContentMode(state),
+        filterState: selectFilterState(state),
         transaction: getTransaction(state),
         mediumList: getMediumList(state),
-        mediumType: getMediumType(state),
+        mediumType: selectMediumType(state),
         showCreateTableModal: isCreateTableModalVisible(state),
         attributes: getNavigationPathAttributes(state),
         cluster: selectCluster(state),
@@ -183,7 +183,7 @@ const mapDispatchToProps = {
 const MapNodeConnected = connect(mapStateToProps, mapDispatchToProps)(MapNode);
 
 export default function MapNodeWithRum() {
-    const loadState = useSelector(getLoadState);
+    const loadState = useSelector(selectLoadState);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.NAVIGATION_CONTENT_MAP_NODE,
@@ -370,8 +370,8 @@ class MapNodeToolbar extends React.PureComponent {
 
 function ShowResourcesButton() {
     const dispatch = useDispatch();
-    const isRoot = useSelector(isRootNode);
-    const loading = useSelector(getMapNodeResourcesLoading);
+    const isRoot = useSelector(selectIsRootNode);
+    const loading = useSelector(selectMapNodeResourcesLoading);
     return (
         <Button
             size="m"

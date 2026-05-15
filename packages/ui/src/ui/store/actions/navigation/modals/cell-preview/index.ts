@@ -11,10 +11,10 @@ import {
     openCellPreview,
 } from '../../../modals/cell-preview';
 import unipika from '../../../../../common/thor/unipika';
-import {getIsDynamic} from '../../../../selectors/navigation/content/table-ts';
+import {selectIsDynamic} from '../../../../selectors/navigation/content/table-ts';
 import {getDynamicTableCellPath, getDynamicTableCliCommand} from './dynamic-table';
 import {getStaticTableCellPath, getStaticTableCliCommand} from './static-table';
-import {isYqlTypesEnabled} from '../../../../selectors/navigation/content/table';
+import {selectIsYqlTypesEnabled} from '../../../../selectors/navigation/content/table';
 import {readStaticTable} from '../../content/table/readStaticTable';
 import {readDynamicTable} from '../../content/table/readDynamicTable';
 import {type CellDataHandlerNavigation} from '../../../../../types/navigation/table-cell-preview';
@@ -28,7 +28,7 @@ const getCellPath = ({
 }): CellPreviewActionType<string> => {
     return (dispatch, getState) => {
         const path: string = getPath(getState());
-        const isDynamic = getIsDynamic(getState());
+        const isDynamic = selectIsDynamic(getState());
 
         const action = isDynamic ? getDynamicTableCellPath : getStaticTableCellPath;
 
@@ -46,7 +46,7 @@ const getCliCommand = ({
     tag?: string;
 }): CellPreviewActionType<string> => {
     return (_dispatch, getState) => {
-        const isDynamic = getIsDynamic(getState());
+        const isDynamic = selectIsDynamic(getState());
 
         const fn = isDynamic ? getDynamicTableCliCommand : getStaticTableCliCommand;
 
@@ -64,7 +64,7 @@ const loadCellPreview = ({
     cancellation?: (token: CancelTokenSource) => void;
 }): CellPreviewActionType<ReturnType<typeof readDynamicTable>> => {
     return (_dispatch, getState) => {
-        const isDynamic = getIsDynamic(getState());
+        const isDynamic = selectIsDynamic(getState());
 
         const output_format = getDefaultRequestOutputFormat({
             stringLimit: PREVIEW_LIMIT,
@@ -98,7 +98,7 @@ export const onCellPreview = ({
     dataHandler?: CellDataHandlerNavigation;
 }): CellPreviewActionType => {
     return async (dispatch, getState) => {
-        const useYqlTypes = isYqlTypesEnabled(getState());
+        const useYqlTypes = selectIsYqlTypesEnabled(getState());
 
         const cellPath = dispatch(getCellPath({columnName, rowIndex}));
 

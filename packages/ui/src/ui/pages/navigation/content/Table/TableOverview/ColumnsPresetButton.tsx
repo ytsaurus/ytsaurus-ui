@@ -8,7 +8,7 @@ import {
     rememberPresetColumnsAsDefault,
 } from '../../../../../store/actions/navigation/content/table/table';
 import Icon from '../../../../../components/Icon/Icon';
-import {getColumnsPresetHash} from '../../../../../store/selectors/navigation/content/table-ts';
+import {selectColumnsPresetHash} from '../../../../../store/selectors/navigation/content/table-ts';
 
 type Props = Required<Pick<ButtonProps, 'view' | 'disabled'>>;
 
@@ -50,7 +50,7 @@ function SavePresetButton(props: Props) {
 }
 
 function ColumnsPresetButton(props: Props) {
-    const hash = useSelector(getColumnsPresetHash);
+    const hash = useSelector(selectColumnsPresetHash);
 
     return hash ? <SavePresetButton {...props} /> : <SharePresetButton {...props} />;
 }

@@ -31,12 +31,12 @@ import {getPath, getTransaction} from '../../../../../store/selectors/navigation
 import {selectCluster, selectCurrentClusterConfig} from '../../../../../store/selectors/global';
 import withVisible, {type WithVisibleProps} from '../../../../../hocs/withVisible';
 import {
-    getAllColumns,
-    getOffsetValue,
-    getRowCount,
-    getSrcColumns,
+    selectAllColumns,
+    selectOffsetValue,
+    selectRowCount,
+    selectSrcColumns,
 } from '../../../../../store/selectors/navigation/content/table';
-import {getColumns} from '../../../../../store/selectors/navigation/content/table-ts';
+import {selectColumns} from '../../../../../store/selectors/navigation/content/table-ts';
 import {downloadFile} from '../../../../../store/actions/navigation/content/table/download-manager';
 
 import './DownloadManager.scss';
@@ -855,12 +855,12 @@ const mapStateToProps = (state: RootState) => {
 
     const pageSize: number = getRowsPerTablePage(state);
     const showDecoded: boolean = getShowDecoded(state);
-    const offsetValue = getOffsetValue(state);
-    const allColumns: Array<{name: string; checked: boolean}> = getAllColumns(state);
-    const srcColumns = getSrcColumns(state);
-    const rowCount = getRowCount(state);
+    const offsetValue = selectOffsetValue(state);
+    const allColumns: Array<{name: string; checked: boolean}> = selectAllColumns(state);
+    const srcColumns = selectSrcColumns(state);
+    const rowCount = selectRowCount(state);
     const cluster = selectCluster(state);
-    const columns: typeof allColumns = getColumns(state);
+    const columns: typeof allColumns = selectColumns(state);
     const schema = getSchema(state);
     const path = getPath(state);
     const {proxy, externalProxy} = selectCurrentClusterConfig(state);

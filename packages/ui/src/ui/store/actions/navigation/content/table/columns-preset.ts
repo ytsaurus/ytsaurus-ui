@@ -14,9 +14,9 @@ import {
 import {showErrorPopup, wrapApiPromiseByToaster} from '../../../../../utils/utils';
 import {selectCluster} from '../../../../../store/selectors/global';
 import {
-    getColumnsPreset,
-    getColumnsPresetHash,
-    getIsDynamic,
+    selectColumnsPreset,
+    selectColumnsPresetHash,
+    selectIsDynamic,
 } from '../../../../../store/selectors/navigation/content/table-ts';
 import {type RootState} from '../../../../../store/reducers';
 import {YTApiId} from '../../../../../rum/rum-wrap-api';
@@ -32,18 +32,18 @@ const {utf8} = unipika.utils;
 export function loadColumnPresetIfDefined(): ColumnPresetThunkAction {
     return (dispatch, getState) => {
         const state = getState();
-        const hashToLoad = getColumnsPresetHash(state);
+        const hashToLoad = selectColumnsPresetHash(state);
         if (!hashToLoad) {
             return Promise.resolve();
         }
 
-        const {hash} = getColumnsPreset(state);
+        const {hash} = selectColumnsPreset(state);
         if (hashToLoad === hash) {
             return Promise.resolve();
         }
 
         const cluster = selectCluster(state);
-        const isDynamic = getIsDynamic(state);
+        const isDynamic = selectIsDynamic(state);
         const id = makeTableRumId({cluster, isDynamic});
 
         return id
@@ -56,7 +56,7 @@ export function loadColumnPresetIfDefined(): ColumnPresetThunkAction {
                 }),
             )
             .then(({data: {columns, hash}}) => {
-                const presetHash = getColumnsPresetHash(getState());
+                const presetHash = selectColumnsPresetHash(getState());
                 if (presetHash !== hash) {
                     return;
                 }

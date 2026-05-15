@@ -3,12 +3,12 @@ import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 
 import {Checkbox} from '@gravity-ui/uikit';
 
-import {getIsAllSelected} from '../../../../store/selectors/navigation/content/map-node';
+import {selectIsAllSelected} from '../../../../store/selectors/navigation/content/map-node';
 import {selectAll} from '../../../../store/actions/navigation/content/map-node';
 
 export default function Chooser() {
     const dispatch = useDispatch();
-    const isAllSelected = useSelector(getIsAllSelected);
+    const isAllSelected = useSelector(selectIsAllSelected);
     const handleSelectChange = useCallback(() => {
         dispatch(selectAll(isAllSelected));
     }, [dispatch, isAllSelected]);

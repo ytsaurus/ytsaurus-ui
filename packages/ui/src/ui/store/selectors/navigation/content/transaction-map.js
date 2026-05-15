@@ -8,7 +8,7 @@ const getRawTransactions = (state) => state.navigation.content.transactionMap.tr
 const getSortState = (state) => state.tables[NAVIGATION_TRANSACTION_MAP_TABLE_ID];
 const getFilter = (state) => state.navigation.content.transactionMap.filter;
 
-const getFilteredTransactions = createSelector(
+const selectFilteredTransactions = createSelector(
     [getRawTransactions, getFilter],
     (rawTransactions, filter) =>
         hammer.filter.filter({
@@ -18,13 +18,13 @@ const getFilteredTransactions = createSelector(
         }),
 );
 
-export const getTransactions = createSelector(
-    [getFilteredTransactions, getSortState],
+export const selectTransactions = createSelector(
+    [selectFilteredTransactions, getSortState],
     (filteredTransactions, sortState) =>
         hammer.utils.sort(filteredTransactions, sortState, tableItems),
 );
 
-export const getNavigationTransactionMapLoadingStatus = createSelector(
+export const selectNavigationTransactionMapLoadingStatus = createSelector(
     [
         (store) => store.navigation.content.transactionMap.loading,
         (store) => store.navigation.content.transactionMap.loaded,

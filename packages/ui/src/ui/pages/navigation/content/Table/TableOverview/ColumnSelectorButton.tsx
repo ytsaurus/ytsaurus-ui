@@ -7,8 +7,8 @@ import Button from '../../../../../components/Button/Button';
 
 import {openColumnSelectorModal} from '../../../../../store/actions/navigation/content/table/table';
 import {
-    getAllColumns,
-    getVisibleColumns,
+    selectAllColumns,
+    selectVisibleColumns,
 } from '../../../../../store/selectors/navigation/content/table';
 import {getSchemaStrict} from '../../../../../store/selectors/navigation/tabs/schema';
 import {Secondary} from '@ytsaurus/components';
@@ -79,8 +79,8 @@ function ColumnSelectorButton({
 const mapStateToProps = (state: RootState) => {
     const {loading} = state.navigation.content.table;
 
-    const visibleColumns = getVisibleColumns(state);
-    const allColumns = getAllColumns(state);
+    const visibleColumns = selectVisibleColumns(state);
+    const allColumns = selectAllColumns(state);
     const isStrict = getSchemaStrict(state);
 
     return {visibleColumns, loading, allColumns, isStrict};

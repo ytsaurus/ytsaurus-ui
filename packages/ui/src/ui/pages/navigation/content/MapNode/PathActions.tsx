@@ -24,7 +24,7 @@ import {
     showTableSortModal,
 } from '../../../../store/actions/navigation/modals/table-merge-sort-modal';
 import {showTableEraseModal} from '../../../../store/actions/navigation/modals/table-erase-modal';
-import {getSelectedNodes} from '../../../../store/selectors/navigation/content/map-node';
+import {selectSelectedNodes} from '../../../../store/selectors/navigation/content/map-node';
 import {showDynTablesStateModalByPaths} from '../../../../store/actions/navigation/modals/dyn-tables-state-modal';
 import {DYN_TABLES_ALLOWED_ACTIONS_BY_STATE} from '../../../../store/selectors/navigation/content/map-node-ts';
 import {type TabletStateType} from '../../../../store/reducers/navigation/modals/dyn-tables-state-modal';
@@ -157,7 +157,7 @@ function PathActions(props: Props) {
         };
     }, [dispatch, objectPath, item, restorePath]);
 
-    const selectedNodes = useSelector(getSelectedNodes);
+    const selectedNodes = useSelector(selectSelectedNodes);
     if (selectedNodes.length) {
         return null;
     }

@@ -5,9 +5,9 @@ import cn from 'bem-cn-lite';
 import map_ from 'lodash/map';
 
 import {
-    getColumnsPresetColumns,
-    getColumnsPresetError,
-    getColumnsPresetHash,
+    selectColumnsPresetColumns,
+    selectColumnsPresetError,
+    selectColumnsPresetHash,
 } from '../../../../../store/selectors/navigation/content/table-ts';
 import {Warning} from '@ytsaurus/components';
 import Yson from '../../../../../components/Yson/Yson';
@@ -19,9 +19,9 @@ import './TableColumnsPresetNotice.scss';
 const block = cn('table-columns-preset-notice');
 
 function TableColumnsPresetNotice() {
-    const hash = useSelector(getColumnsPresetHash);
-    const columns = useSelector(getColumnsPresetColumns);
-    const error: any = useSelector(getColumnsPresetError);
+    const hash = useSelector(selectColumnsPresetHash);
+    const columns = useSelector(selectColumnsPresetColumns);
+    const error: any = useSelector(selectColumnsPresetError);
 
     if (!hash) {
         return null;

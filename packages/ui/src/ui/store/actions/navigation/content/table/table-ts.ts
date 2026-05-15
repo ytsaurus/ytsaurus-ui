@@ -3,8 +3,8 @@ import {type ThunkAction} from 'redux-thunk';
 
 import {type RootState} from '../../../../../store/reducers';
 import {GET_TABLE_DATA} from '../../../../../constants/navigation/content/table';
-import {getRows, getYqlTypes} from '../../../../../store/selectors/navigation/content/table-ts';
-import {getOffsetValue} from '../../../../../store/selectors/navigation/content/table';
+import {selectRows, selectYqlTypes} from '../../../../../store/selectors/navigation/content/table-ts';
+import {selectOffsetValue} from '../../../../../store/selectors/navigation/content/table';
 
 import {type ReadTableResult} from './readTable';
 
@@ -23,15 +23,15 @@ export function injectTableCellData({
 }): InjectCellThunk {
     return (dispatch, getState) => {
         const state = getState();
-        const currentOffset = getOffsetValue(state);
+        const currentOffset = selectOffsetValue(state);
         if (offsetValue !== currentOffset) {
             return;
         }
 
         const cellData = data.rows[0][columnName];
 
-        const yqlTypes = getYqlTypes(state);
-        const rows = [...getRows(state)];
+        const yqlTypes = selectYqlTypes(state);
+        const rows = [...selectRows(state)];
 
         const rowData = {...rows[rowIndex]};
         Object.assign(rowData, {[columnName]: cellData});

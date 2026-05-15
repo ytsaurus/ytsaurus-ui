@@ -4,11 +4,11 @@ import {connect} from 'react-redux';
 
 import Pagination from '../../../../../components/Pagination/Pagination';
 
-import {getIsDynamic} from '../../../../../store/selectors/navigation/content/table-ts';
+import {selectIsDynamic} from '../../../../../store/selectors/navigation/content/table-ts';
 import {
-    getIsPaginationDisabled,
-    getIsTableEndReached,
-    getOffsetValue,
+    selectIsPaginationDisabled,
+    selectIsTableEndReached,
+    selectOffsetValue,
 } from '../../../../../store/selectors/navigation/content/table';
 import {
     moveOffsetToEnd,
@@ -87,10 +87,10 @@ function Paginator(props) {
 const mapStateToProps = (state) => {
     const {error} = state.navigation.content.table;
 
-    const isPaginationDisabled = getIsPaginationDisabled(state);
-    const isTableEndReached = getIsTableEndReached(state);
-    const offsetValue = getOffsetValue(state);
-    const isDynamic = getIsDynamic(state);
+    const isPaginationDisabled = selectIsPaginationDisabled(state);
+    const isTableEndReached = selectIsTableEndReached(state);
+    const offsetValue = selectOffsetValue(state);
+    const isDynamic = selectIsDynamic(state);
 
     return {
         error,
