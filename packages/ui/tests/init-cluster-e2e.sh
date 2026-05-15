@@ -46,7 +46,6 @@ export E2E_DIR="$(date "+//tmp/e2e.%Y-%m-%d.%H:%M:%S.${E2E_SUFFIX}")"
 echo E2E_DIR=${E2E_DIR} >>./e2e-env.tmp
 
 yt create map_node ${E2E_DIR}
-yt set ${E2E_DIR}/@expiration_timeout 10000
 
 yt remove -f ${E2E_DIR}/root
 yt remove -f ${E2E_DIR}/locked
@@ -66,6 +65,8 @@ yt copy ${E2E_DIR}/file-types ${E2E_DIR}/locked
 
 yt lock --mode snapshot ${E2E_DIR}/locked --tx $(yt start-tx --timeout ${EXPIRATION_TIMEOUT})
 yt lock --mode shared ${E2E_DIR}/locked --tx $(yt start-tx --timeout ${EXPIRATION_TIMEOUT})
+
+yt set ${E2E_DIR}/@expiration_timeout 10000
 
 if [ "false" = "$(yt exists //sys/pool_trees/e2e)" ]; then
     yt create scheduler_pool_tree --attributes '{name=e2e;config={nodes_filter=e2e}}'
