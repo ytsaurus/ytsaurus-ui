@@ -2,6 +2,7 @@ import {expect, test} from '@playwright/test';
 import {E2E_DIR, MOCK_DATE, makeClusterUrl} from '../../../utils';
 import {replaceInnerHtml} from '../../../utils/dom';
 import {table} from '../../../widgets/TablePage';
+import {mockYTApi} from '../../../utils/network';
 
 test('Navigation: table - Content', async ({page}) => {
     await page.clock.install({time: MOCK_DATE});
@@ -68,7 +69,10 @@ test('Navigation: table - Schema', async ({page}) => {
 
 test('Navigation: table - Remount needed', async ({page}) => {
     await page.clock.install({time: MOCK_DATE});
+    await mockYTApi(page, 'navigationAttributes', [{output: {compression_ratio: {$value: "0.5819612345642"}}}]);
+
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/dynamic-table`));
+
     await page.waitForLoadState('networkidle');
 
     page.locator('.data-table_theme_yt-internal').waitFor();

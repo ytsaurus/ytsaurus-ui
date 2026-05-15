@@ -14,6 +14,7 @@
   "license": "ISC",
   "private": true,
   "devDependencies": {
-    "@playwright/test": "1.53.1"
+    "@playwright/test": "1.53.1",
+    "lodash": "^4.18.1"
   }
 }
