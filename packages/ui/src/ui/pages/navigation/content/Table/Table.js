@@ -27,19 +27,19 @@ import {
     updateColumns,
 } from '../../../../store/actions/navigation/content/table/table';
 import {
-    getAllColumns,
-    getOffsetValue,
-    getSrcColumns,
-    getVisibleColumns,
-    getVisibleRows,
-    isYqlTypesEnabled,
+    selectAllColumns,
+    selectOffsetValue,
+    selectSrcColumns,
+    selectVisibleColumns,
+    selectVisibleRows,
+    selectIsYqlTypesEnabled,
 } from '../../../../store/selectors/navigation/content/table';
 import {
-    getColumns,
-    getIsDynamic,
-    getKeyColumns,
-    getNavigationTableLoadingState,
-    getYqlTypes,
+    selectColumns,
+    selectIsDynamic,
+    selectKeyColumns,
+    selectNavigationTableLoadingState,
+    selectYqlTypes,
 } from '../../../../store/selectors/navigation/content/table-ts';
 import {selectCluster} from '../../../../store/selectors/global';
 import {getTableYsonSettings} from '../../../../store/selectors/thor/unipika';
@@ -168,7 +168,7 @@ const renderTable = (props) => {
 
 function Table(props) {
     const {path, getTableData, abortAndReset, isSplit} = props;
-    const isYqlV3Types = useSelector(isYqlTypesEnabled);
+    const isYqlV3Types = useSelector(selectIsYqlTypesEnabled);
 
     useEffect(() => {
         getTableData();
@@ -214,15 +214,15 @@ const mapStateToProps = (state) => {
     const {isSplit} = state.global.splitScreen;
 
     const path = getPath(state);
-    const columns = getColumns(state);
-    const yqlTypes = getYqlTypes(state);
-    const isDynamic = getIsDynamic(state);
-    const keyColumns = getKeyColumns(state);
-    const allColumns = getAllColumns(state);
-    const srcColumns = getSrcColumns(state);
-    const visibleRows = getVisibleRows(state);
-    const offsetValue = getOffsetValue(state);
-    const visibleColumns = getVisibleColumns(state);
+    const columns = selectColumns(state);
+    const yqlTypes = selectYqlTypes(state);
+    const isDynamic = selectIsDynamic(state);
+    const keyColumns = selectKeyColumns(state);
+    const allColumns = selectAllColumns(state);
+    const srcColumns = selectSrcColumns(state);
+    const visibleRows = selectVisibleRows(state);
+    const offsetValue = selectOffsetValue(state);
+    const visibleColumns = selectVisibleColumns(state);
 
     return {
         loading,
@@ -257,8 +257,8 @@ const mapDispatchToProps = {
 const TableConnected = compose(connect(mapStateToProps, mapDispatchToProps))(Table);
 
 export default function TableWithRum() {
-    const loadState = useSelector(getNavigationTableLoadingState);
-    const isDynamic = useSelector(getIsDynamic);
+    const loadState = useSelector(selectNavigationTableLoadingState);
+    const isDynamic = useSelector(selectIsDynamic);
     const cluster = useSelector(selectCluster);
 
     const measureId = makeTableRumId({cluster, isDynamic}).getMeasureId();

@@ -10,11 +10,11 @@ import Icon from '../../../../../components/Icon/Icon';
 import OffsetSelectorButton from '../../../../../pages/navigation/content/Table/TableOverview/OffsetSelectorButton';
 
 import {
-    getOffsetValue,
-    getProgressWidth,
-    getRowCount,
+    selectOffsetValue,
+    selectProgressWidth,
+    selectRowCount,
 } from '../../../../../store/selectors/navigation/content/table';
-import {getIsDynamic} from '../../../../../store/selectors/navigation/content/table-ts';
+import {selectIsDynamic} from '../../../../../store/selectors/navigation/content/table-ts';
 import {moveOffset} from '../../../../../store/actions/navigation/content/table/pagination';
 
 import './TableOverview.scss';
@@ -111,10 +111,10 @@ function TableOverview(props) {
 }
 
 const mapStateToProps = (state) => {
-    const progressWidth = getProgressWidth(state);
-    const offsetValue = getOffsetValue(state);
-    const isDynamic = getIsDynamic(state);
-    const rowCount = getRowCount(state);
+    const progressWidth = selectProgressWidth(state);
+    const offsetValue = selectOffsetValue(state);
+    const isDynamic = selectIsDynamic(state);
+    const rowCount = selectRowCount(state);
 
     return {progressWidth, offsetValue, rowCount, isDynamic};
 };

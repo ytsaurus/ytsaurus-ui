@@ -9,7 +9,7 @@ import {type TypeArray} from '@ytsaurus/components';
 import {useResizeEventForTable} from '../../../../../components/UseResizeEventForTable/UseResizeEventForTable';
 
 import {injectTableCellData} from '../../../../../store/actions/navigation/content/table/table-ts';
-import {getOffsetValue} from '../../../../../store/selectors/navigation/content/table';
+import {selectOffsetValue} from '../../../../../store/selectors/navigation/content/table';
 import {getSchemaByName} from '../../../../../store/selectors/navigation/tabs/schema';
 import {selectPrimitiveTypesMap} from '../../../../../store/selectors/global/supported-features';
 import {getSettingTableDisplayRawStrings} from '../../../../../store/selectors/settings';
@@ -98,7 +98,7 @@ export default function DataTableWrapper(props: DataTableWrapperProps) {
 
 function useShowPrevewHandler() {
     const dispatch = useDispatch();
-    const offsetValue = useSelector(getOffsetValue);
+    const offsetValue = useSelector(selectOffsetValue);
 
     const {dataHandler, onShowPreview} = React.useMemo(() => {
         const cancelHelper = new CancelHelper();

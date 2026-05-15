@@ -38,7 +38,7 @@ import {QueryEngine} from '../../../../shared/constants/engines';
 import {loadCliqueByCluster, loadTablePromptToQuery} from './query';
 import {selectQueryDraft} from '../../selectors/query-tracker/query';
 import {getDefaultTableColumnLimit} from '../../selectors/settings';
-import {isYqlTypesEnabled} from '../../selectors/navigation/content/table';
+import {selectIsYqlTypesEnabled} from '../../selectors/navigation/content/table';
 import {getClusterProxy, selectCurrentUserName} from '../../selectors/global';
 import {selectQueryResultGlobalSettings} from '../../selectors/query-tracker/queryResult';
 import {getYsonSettingsDisableDecode} from '../../selectors/thor/unipika';
@@ -114,7 +114,7 @@ export const loadTableAttributesByPath =
         const clusterConfig = selectNavigationClusterConfig(state);
         const {cellSize, pageSize} = selectQueryResultGlobalSettings();
         const defaultTableColumnLimit = getDefaultTableColumnLimit(state);
-        const useYqlTypes = isYqlTypesEnabled(state);
+        const useYqlTypes = selectIsYqlTypesEnabled(state);
         const login = selectCurrentUserName(state);
         const ysonSettings = getYsonSettingsDisableDecode(state);
 

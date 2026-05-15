@@ -8,8 +8,8 @@ import CollapsibleSection from '../../../../../components/CollapsibleSection/Col
 import {MetaTable, makeMetaItems, useYtComponentsConfig} from '@ytsaurus/components';
 import {RemountAlert} from '../RemountAlert/RemountAlert';
 
-import {getTableType} from '../../../../../store/selectors/navigation/content/table';
-import {getIsDynamic} from '../../../../../store/selectors/navigation/content/table-ts';
+import {selectTableType} from '../../../../../store/selectors/navigation/content/table';
+import {selectIsDynamic} from '../../../../../store/selectors/navigation/content/table-ts';
 import {getAttributes, getAttributesWithTypes} from '../../../../../store/selectors/navigation';
 import {getTabletErrorsBackgroundCount} from '../../../../../store/selectors/navigation/tabs/tablet-errors-background';
 import {type Props as AutomaticModeSwitchProps} from './AutomaticModeSwitch';
@@ -77,8 +77,8 @@ function TableMeta({
 const mapStateToProps = (state: RootState) => {
     const {mediumList} = state.global;
 
-    const isDynamic = getIsDynamic(state);
-    const tableType = getTableType(state);
+    const isDynamic = selectIsDynamic(state);
+    const tableType = selectTableType(state);
     const attributes = getAttributes(state);
     const attributesWithTypes = getAttributesWithTypes(state);
 

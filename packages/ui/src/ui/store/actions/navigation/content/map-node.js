@@ -23,13 +23,13 @@ import {
     UPDATE_RESOURCE_USAGE,
 } from '../../../../constants/navigation';
 import {
-    getFilteredNodes,
-    getLastSelected,
-    getNodesData,
-    getSelected,
-    getSortedNodes,
-    isRootNode,
-    shouldApplyCustomSort,
+    selectFilteredNodes,
+    selectLastSelected,
+    selectNodesData,
+    selectSelected,
+    selectSortedNodes,
+    selectIsRootNode,
+    selectShouldApplyCustomSort,
 } from '../../../../store/selectors/navigation/content/map-node';
 import {selectCluster} from '../../../../store/selectors/global';
 import {getPath, getTransaction} from '../../../../store/selectors/navigation';
@@ -100,7 +100,7 @@ export function fetchNodes() {
                     data,
                 });
 
-                const applyCustomSort = shouldApplyCustomSort(getState());
+                const applyCustomSort = selectShouldApplyCustomSort(getState());
                 dispatch({
                     type: APPLY_CUSTOM_SORT,
                     data: applyCustomSort ? 'date' : '',
@@ -149,10 +149,10 @@ export function updateResourceUsage() {
     return (dispatch, getState) => {
         const state = getState();
 
-        let nodes = getFilteredNodes(state);
+        let nodes = selectFilteredNodes(state);
         nodes = filter_(nodes, (node) => !node.$attributes.recursive_resource_usage);
 
-        if (isRootNode(state) || nodes.length === 0) {
+        if (selectIsRootNode(state) || nodes.length === 0) {
             return;
         }
 
@@ -193,7 +193,7 @@ export function updateResourceUsage() {
 
                 dispatch({
                     type: UPDATE_RESOURCE_USAGE.SUCCESS,
-                    data: map_(getNodesData(state), (nodeData) =>
+                    data: map_(selectNodesData(state), (nodeData) =>
                         updatedNodeData(nodeData, dataMap[nodeData.$value]),
                     ),
                 });
@@ -262,16 +262,16 @@ export function setMediumType(mediumType) {
 export function setSelectedItem(name, shiftKey) {
     return (dispatch, getState) => {
         const state = getState();
-        const selected = {...getSelected(state)};
+        const selected = {...selectSelected(state)};
         if (selected[name] && !shiftKey) {
             delete selected[name];
         } else {
             selected[name] = true;
         }
 
-        const lastSelected = getLastSelected(state);
+        const lastSelected = selectLastSelected(state);
         if (lastSelected && shiftKey) {
-            const nodes = getSortedNodes(state);
+            const nodes = selectSortedNodes(state);
             const lastIndex = findIndex_(nodes, (item) => lastSelected === item.name);
             if (-1 !== lastIndex) {
                 const nameIndex = findIndex_(nodes, (item) => item.name === name);
@@ -298,7 +298,7 @@ export function selectAll(isAllSelected) {
         let selected = {};
 
         if (!isAllSelected) {
-            const allNodes = getFilteredNodes(getState());
+            const allNodes = selectFilteredNodes(getState());
 
             selected = reduce_(
                 allNodes,

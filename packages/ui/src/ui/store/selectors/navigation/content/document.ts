@@ -2,7 +2,7 @@ import {createSelector} from 'reselect';
 import {type RootState} from '../../../reducers';
 import {calculateLoadingStatus} from '../../../../utils/utils';
 
-export const getNavigationDocumentLoadingStatus = createSelector(
+export const selectNavigationDocumentLoadingStatus = createSelector(
     [
         (store: RootState) => store.navigation.content.document.loading,
         (store: RootState) => store.navigation.content.document.loaded,

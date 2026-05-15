@@ -23,9 +23,9 @@ import {OPEN_MOVE_OBJECT_POPUP} from '../../../../constants/navigation/modals/mo
 import {OPEN_COPY_OBJECT_POPUP} from '../../../../constants/navigation/modals/copy-object';
 import {openEditingPopup} from '../../../../store/actions/navigation/modals/path-editing-popup';
 import {
-    getSelectedNodes,
-    getSelectedNodesAllowedDynTablesActions,
-    isSelected,
+    selectSelectedNodes,
+    selectSelectedNodesAllowedDynTablesActions,
+    selectIsSelected,
 } from '../../../../store/selectors/navigation/content/map-node';
 import {showNavigationAttributesEditor} from '../../../../store/actions/navigation/modals/attributes-editor';
 import {
@@ -48,11 +48,11 @@ export default function MultipleActions(props: {className?: string}) {
 
     const dispatch = useDispatch();
     const path = useSelector(getPath);
-    const isOneSelected = useSelector(isSelected);
-    const selectedNodes = useSelector(getSelectedNodes);
+    const isOneSelected = useSelector(selectIsSelected);
+    const selectedNodes = useSelector(selectSelectedNodes);
     const isTooLarge = selectedNodes.length > MAX_ITEMS_PER_REQUEST;
 
-    const dynTablesActions = useSelector(getSelectedNodesAllowedDynTablesActions);
+    const dynTablesActions = useSelector(selectSelectedNodesAllowedDynTablesActions);
 
     const hasRestoreButton = useMemo(() => {
         return !some_(selectedNodes, ({path}) => !inTrash(path));

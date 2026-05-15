@@ -5,7 +5,7 @@ import {getPath} from '../../../../../store/selectors/navigation';
 import {selectCluster} from '../../../../../store/selectors/global';
 import Icon from '../../../../../components/Icon/Icon';
 import {Secondary, Tooltip, Warning} from '@ytsaurus/components';
-import {getNavigationTableDataLensButtonAlerts} from '../../../../../store/selectors/navigation/content/table-ts';
+import {selectNavigationTableDataLensButtonAlerts} from '../../../../../store/selectors/navigation/content/table-ts';
 import {Button} from '@gravity-ui/uikit';
 import Link from '../../../../../components/Link/Link';
 import {getNavigationPathAttributesLoadState} from '../../../../../store/selectors/navigation/navigation';
@@ -19,7 +19,7 @@ export default function DataLensButton({className}: {className: string}) {
     const cluster: string = useSelector(selectCluster);
     const path = useSelector(getPath);
     const {isEmptySchema, enableDynamicStoreRedRequired} = useSelector(
-        getNavigationTableDataLensButtonAlerts,
+        selectNavigationTableDataLensButtonAlerts,
     );
 
     const {datalensBaseUrl, datalensAllowedCluster} = uiSettings;

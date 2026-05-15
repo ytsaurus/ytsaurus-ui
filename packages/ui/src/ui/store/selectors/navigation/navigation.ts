@@ -10,7 +10,7 @@ import {getConfigData} from '../../../config/ui-settings';
 import {Tab} from '../../../constants/navigation/index';
 import {type RootState} from '../../../store/reducers';
 import {selectCluster} from '../../../store/selectors/global';
-import {getTableMountConfigHasData} from '../../../store/selectors/navigation/content/table-mount-config';
+import {selectTableMountConfigHasData} from '../../../store/selectors/navigation/content/table-mount-config';
 import {getTabletErrorsBackgroundCount} from '../../../store/selectors/navigation/tabs/tablet-errors-background';
 import {type ValueOf, type YTError} from '../../../types';
 import UIFactory from '../../../UIFactory';
@@ -78,7 +78,7 @@ export const getNavigationOriginatingQueuePath = (state: RootState) =>
 export const getSupportedTabs = createSelector(
     [
         getNavigationPathAttributes,
-        getTableMountConfigHasData,
+        selectTableMountConfigHasData,
         getTabletErrorsBackgroundCount,
         getNavigationOriginatingQueuePath,
         getNavigationAccessLogAvailable,

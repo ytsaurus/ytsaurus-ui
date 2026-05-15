@@ -40,12 +40,12 @@ import {
 import {useSelector} from '../../../../store/redux-hooks';
 import {getTransaction} from '../../../../store/selectors/navigation';
 import {
-    getContentMode,
-    getLoadState,
-    getPreparedTableColumns,
-    getSelected,
-    getSelectedIndex,
-    getSortedNodes,
+    selectContentMode,
+    selectLoadState,
+    selectPreparedTableColumns,
+    selectSelected,
+    selectSelectedIndex,
+    selectSortedNodes,
 } from '../../../../store/selectors/navigation/content/map-node';
 import {makeFlowLink} from '../../../../utils/app-url';
 import {isLinkToTrashNode} from '../../../../utils/navigation/isLinkToTrashNode';
@@ -392,13 +392,13 @@ class MapNodesTable extends Component {
 
 function mapStateToProps(state) {
     return {
-        loadState: getLoadState(state),
-        columns: getPreparedTableColumns(state),
+        loadState: selectLoadState(state),
+        columns: selectPreparedTableColumns(state),
         transaction: getTransaction(state),
-        contentMode: getContentMode(state),
-        nodes: getSortedNodes(state),
-        selected: getSelected(state),
-        selectedIndex: getSelectedIndex(state),
+        contentMode: selectContentMode(state),
+        nodes: selectSortedNodes(state),
+        selected: selectSelected(state),
+        selectedIndex: selectSelectedIndex(state),
     };
 }
 
@@ -416,8 +416,8 @@ const mapDispatchToProps = {
 const MapNodesTableConnected = connect(mapStateToProps, mapDispatchToProps)(MapNodesTable);
 
 export default function MapNodesTableWithRum() {
-    const loadState = useSelector(getLoadState);
-    const nodes = useSelector(getSortedNodes);
+    const loadState = useSelector(selectLoadState);
+    const nodes = useSelector(selectSortedNodes);
 
     useRumMeasureStop({
         type: RumMeasureTypes.NAVIGATION_CONTENT_MAP_NODE,

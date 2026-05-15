@@ -4,12 +4,12 @@ import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
 import {isFinalLoadingStatus} from '../../../../utils/utils';
-import {getNavigationDocumentLoadingStatus} from '../../../../store/selectors/navigation/content/document';
+import {selectNavigationDocumentLoadingStatus} from '../../../../store/selectors/navigation/content/document';
 import {useSelector} from '../../../../store/redux-hooks';
 import {useDisableMaxContentWidth} from '../../../../containers/MaxContentWidth';
 
 const DocumentWithRum: FC = () => {
-    const loadState = useSelector(getNavigationDocumentLoadingStatus);
+    const loadState = useSelector(selectNavigationDocumentLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.NAVIGATION_CONTENT_DOCUMENT,

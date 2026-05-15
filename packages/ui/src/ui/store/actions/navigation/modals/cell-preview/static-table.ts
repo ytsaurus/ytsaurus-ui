@@ -1,5 +1,5 @@
 import {type CellPreviewActionType} from '../../../modals/cell-preview';
-import {getOffsetValue} from '../../../../selectors/navigation/content/table';
+import {selectOffsetValue} from '../../../../selectors/navigation/content/table';
 import {YSON_AS_TEXT, prettyPrint} from '../../../../../utils/unipika';
 import {getCliCommandResultFormat} from './format';
 
@@ -13,7 +13,7 @@ export const getStaticTableCellPath = ({
     rowIndex: number;
 }): CellPreviewActionType<string> => {
     return (_, getState) => {
-        const offset = getOffsetValue(getState());
+        const offset = selectOffsetValue(getState());
 
         const rowIndex = typeof offset === 'number' ? index + offset : index;
 

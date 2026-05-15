@@ -16,7 +16,7 @@ import {
     changeCellSize,
     changePageSize,
 } from '../../../../../store/actions/navigation/content/table/table';
-import {getCellSize, getPageSize} from '../../../../../store/selectors/navigation/content/table-ts';
+import {selectCellSize, selectPageSize} from '../../../../../store/selectors/navigation/content/table-ts';
 import {getSettingTableDisplayRawStrings} from '../../../../../store/selectors/settings';
 import {setTableDisplayRawStrings} from '../../../../../store/actions/settings/settings';
 import {type RootState} from '../../../../../store/reducers';
@@ -93,8 +93,8 @@ const SettingsButton: VFC<Props> = ({
 
 const mapStateToProps = (state: RootState) => {
     const {isFullScreen} = state.navigation.content.table;
-    const pageSize = getPageSize(state);
-    const cellSize = getCellSize(state);
+    const pageSize = selectPageSize(state);
+    const cellSize = selectCellSize(state);
 
     const allowRawStrings = getSettingTableDisplayRawStrings(state);
 

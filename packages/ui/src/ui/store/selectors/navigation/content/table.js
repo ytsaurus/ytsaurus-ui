@@ -14,27 +14,27 @@ import Columns from '../../../../utils/navigation/content/table/columns';
 import Query from '../../../../utils/navigation/content/table/query';
 import {getColumnsValues} from '../../../../utils/navigation/content/table/table';
 import {
-    getColumns,
-    getColumnsOrder,
-    getColumnsPreset,
-    getColumnsPresetHash,
-    getIsDynamic,
-    getKeyColumns,
-    getLoaded,
-    getLoading,
-    getMoveOffsetBackward,
-    getNextOffsetValue,
-    getOffsetMode,
-    getOffsetString,
-    getOmittedColumns,
-    getPageSize,
-    getRows,
-    getYqlTypes,
+    selectColumns,
+    selectColumnsOrder,
+    selectColumnsPreset,
+    selectColumnsPresetHash,
+    selectIsDynamic,
+    selectKeyColumns,
+    selectLoaded,
+    selectLoading,
+    selectMoveOffsetBackward,
+    selectNextOffsetValue,
+    selectOffsetMode,
+    selectOffsetString,
+    selectOmittedColumns,
+    selectPageSize,
+    selectRows,
+    selectYqlTypes,
 } from './table-ts';
 import {getTableTypeByAttributes} from '../../../../utils/navigation/getTableTypeByAttributes';
 
-export const getVisibleColumns = createSelector(
-    [getColumns, getColumnsOrder, getColumnsPreset, getColumnsPresetHash],
+export const selectVisibleColumns = createSelector(
+    [selectColumns, selectColumnsOrder, selectColumnsPreset, selectColumnsPresetHash],
     (columns, columnsOrder, columnsPreset, columnsPresetHash) => {
         const visibleColumns = filter_(columns, (column) => {
             // use columns preset first
@@ -50,33 +50,33 @@ export const getVisibleColumns = createSelector(
     },
 );
 
-export const getDecodedVisibleColumns = createSelector([getVisibleColumns], (columns) => {
+export const selectDecodedVisibleColumns = createSelector([selectVisibleColumns], (columns) => {
     return columns.map((data) => {
         return {...data, name: unipika.decode(data.name)};
     });
 });
 
-export const getAllColumns = createSelector(
-    [getColumns, getOmittedColumns],
+export const selectAllColumns = createSelector(
+    [selectColumns, selectOmittedColumns],
     (columns, omittedColumns) => concat_(columns, omittedColumns),
 );
 
-export const getSrcColumns = createSelector(
-    [getAttributes, getAllColumns],
+export const selectSrcColumns = createSelector(
+    [getAttributes, selectAllColumns],
     (attributes, allColumns) => Columns.prepareSrcColumns(attributes, allColumns),
 );
 
-export const getTableType = createSelector(
-    [getAttributes, getIsDynamic],
+export const selectTableType = createSelector(
+    [getAttributes, selectIsDynamic],
     (attributes, isDynamic) => {
         return getTableTypeByAttributes(isDynamic, attributes);
     },
 );
 
 // request one more item per page to detect reaching end of the table
-export const getRequestedPageSize = createSelector(getPageSize, (pageSize) => pageSize + 1);
+export const selectRequestedPageSize = createSelector(selectPageSize, (pageSize) => pageSize + 1);
 
-export const getRowCount = createSelector(getAttributes, (attributes) => {
+export const selectRowCount = createSelector(getAttributes, (attributes) => {
     /** @type {number} */
     const res = ypath.getValue(attributes, '/chunk_row_count');
     return res;
@@ -86,15 +86,15 @@ export const getRowCount = createSelector(getAttributes, (attributes) => {
 // This allows to know what the first key of the next page is without
 // actually requesting the next page. This, in turn, allows to a) show pages of
 // not overlapping items and b) have the same item as first item in page and the page offset
-export const getVisibleRows = createSelector(
-    [getRows, getRequestedPageSize, getPageSize],
+export const selectVisibleRows = createSelector(
+    [selectRows, selectRequestedPageSize, selectPageSize],
     (rows, requestedPageSize, pageSize) => {
         return rows.length < requestedPageSize ? rows : rows.slice(0, pageSize);
     },
 );
 
-export const getIsAllKeyColumnsSelected = createSelector(
-    [getKeyColumns, getVisibleColumns],
+export const selectIsAllKeyColumnsSelected = createSelector(
+    [selectKeyColumns, selectVisibleColumns],
     (keyColumns, visibleColumnsItems) => {
         const visibleColumns = map_(visibleColumnsItems, ({name}) => name);
 
@@ -102,8 +102,8 @@ export const getIsAllKeyColumnsSelected = createSelector(
     },
 );
 
-export const getIsPaginationDisabled = createSelector(
-    [getIsDynamic, getIsAllKeyColumnsSelected, getLoading, getLoaded],
+export const selectIsPaginationDisabled = createSelector(
+    [selectIsDynamic, selectIsAllKeyColumnsSelected, selectLoading, selectLoaded],
     (isDynamic, isAllKeyColumnsSelected, loading, loaded) => {
         const initialLoading = loading && !loaded;
 
@@ -111,27 +111,27 @@ export const getIsPaginationDisabled = createSelector(
     },
 );
 
-export const getIsTableEndReached = createSelector(
-    [getRows, getRequestedPageSize],
+export const selectIsTableEndReached = createSelector(
+    [selectRows, selectRequestedPageSize],
     (rows, requestedPageSize) => {
         return rows.length < requestedPageSize;
     },
 );
 
-export const getUpperBoundKey = createSelector([getRows, getKeyColumns], (rows, keyColumns) => {
+export const selectUpperBoundKey = createSelector([selectRows, selectKeyColumns], (rows, keyColumns) => {
     const row = rows[rows.length - 1];
 
     return getColumnsValues(row, keyColumns);
 });
 
-export const getBottomBoundKey = createSelector([getRows, getKeyColumns], (rows, keyColumns) => {
+export const selectBottomBoundKey = createSelector([selectRows, selectKeyColumns], (rows, keyColumns) => {
     const row = rows[0];
 
     return getColumnsValues(row, keyColumns);
 });
 
-export const getCurrentOffsetValues = createSelector(
-    [getColumns, getBottomBoundKey, getYqlTypes],
+export const selectCurrentOffsetValues = createSelector(
+    [selectColumns, selectBottomBoundKey, selectYqlTypes],
     (columns, offsetValues, yqlTypes) => {
         return filter_(columns, (column) => column.keyColumn).map(({name, checked}, index) => {
             return {
@@ -143,14 +143,14 @@ export const getCurrentOffsetValues = createSelector(
     },
 );
 
-export const getOffsetValue = createSelector(
-    [getOffsetString, getOffsetMode],
+export const selectOffsetValue = createSelector(
+    [selectOffsetString, selectOffsetMode],
     (offsetString, offsetMode) => {
         return offsetMode === 'row' ? Number(offsetString) : offsetString;
     },
 );
-export const getNextOffset = createSelector(
-    [getNextOffsetValue, getMoveOffsetBackward, getOffsetMode],
+export const selectNextOffset = createSelector(
+    [selectNextOffsetValue, selectMoveOffsetBackward, selectOffsetMode],
     (offsetValue, moveBackward, offsetMode) => {
         return {
             offsetValue: offsetMode === 'row' ? Number(offsetValue) : offsetValue,
@@ -159,12 +159,12 @@ export const getNextOffset = createSelector(
     },
 );
 
-export const getIsTableSorted = createSelector([getAttributes], (attributes) => {
+export const selectIsTableSorted = createSelector([getAttributes], (attributes) => {
     return ypath.getValue(attributes, '/sorted');
 });
 
-export const getProgressWidth = createSelector(
-    [getOffsetValue, getRowCount],
+export const selectProgressWidth = createSelector(
+    [selectOffsetValue, selectRowCount],
     (currentRow, totalRow) => {
         const percent = Math.round((100 * (currentRow + 1)) / totalRow);
 
@@ -176,7 +176,7 @@ export const getProgressWidth = createSelector(
     },
 );
 
-export const isYqlSchemaExists = createSelector([getAttributes], (attributes) => {
+export const selectIsYqlSchemaExists = createSelector([getAttributes], (attributes) => {
     const schema = ypath.getValue(attributes, '/schema');
     const _readSchema = ypath.getValue(attributes, '/_read_schema');
 
@@ -192,7 +192,7 @@ export const isYqlSchemaExists = createSelector([getAttributes], (attributes) =>
     );
 });
 
-export const isYqlTypesEnabled = createSelector(
+export const selectIsYqlTypesEnabled = createSelector(
     [shouldUseYqlTypes],
     (isSettingEnabled) => isSettingEnabled,
 );

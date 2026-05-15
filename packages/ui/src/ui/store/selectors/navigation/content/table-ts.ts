@@ -13,31 +13,31 @@ import {getColumnsValues} from '../../../../utils/navigation/content/table/table
 import {getSettingsData} from '../../../../store/selectors/settings/settings-base';
 import {TABLE_DEFAULTS} from '../../../../constants/settings/table';
 
-export const getLoaded = (state: RootState) => state.navigation.content.table.loaded;
-export const getLoading = (state: RootState) => state.navigation.content.table.loading;
+export const selectLoaded = (state: RootState) => state.navigation.content.table.loaded;
+export const selectLoading = (state: RootState) => state.navigation.content.table.loading;
 
-export const getRows = (state: RootState) => state.navigation.content.table.rows;
-export const getColumns = (state: RootState) => state.navigation.content.table.columns;
-export const getColumnsOrder = (state: RootState) => state.navigation.content.table.columnsOrder;
-export const getYqlTypes = (state: RootState) => state.navigation.content.table.yqlTypes;
-export const getIsDynamic = (state: RootState) => state.navigation.content.table.isDynamic;
-export const getIsStrict = (state: RootState) => state.navigation.content.table.isStrict;
-export const getOffsetMode = (state: RootState) => state.navigation.content.table.offsetMode;
-export const getOffsetString = (state: RootState) => state.navigation.content.table.offsetValue;
-export const getNextOffsetValue = (state: RootState) =>
+export const selectRows = (state: RootState) => state.navigation.content.table.rows;
+export const selectColumns = (state: RootState) => state.navigation.content.table.columns;
+export const selectColumnsOrder = (state: RootState) => state.navigation.content.table.columnsOrder;
+export const selectYqlTypes = (state: RootState) => state.navigation.content.table.yqlTypes;
+export const selectIsDynamic = (state: RootState) => state.navigation.content.table.isDynamic;
+export const selectIsStrict = (state: RootState) => state.navigation.content.table.isStrict;
+export const selectOffsetMode = (state: RootState) => state.navigation.content.table.offsetMode;
+export const selectOffsetString = (state: RootState) => state.navigation.content.table.offsetValue;
+export const selectNextOffsetValue = (state: RootState) =>
     state.navigation.content.table.nextOffsetValue;
-export const getMoveOffsetBackward = (state: RootState) =>
+export const selectMoveOffsetBackward = (state: RootState) =>
     state.navigation.content.table.moveBackward;
-export const getOmittedColumns = (state: RootState) =>
+export const selectOmittedColumns = (state: RootState) =>
     state.navigation.content.table.omittedColumns;
-export const getDeniedKeyColumns = (state: RootState) =>
+export const selectDeniedKeyColumns = (state: RootState) =>
     state.navigation.content.table.deniedKeyColumns;
 
-const getPageSizeRaw = (state: RootState) => state.navigation.content.table.pageSize;
-const getCellSizeRaw = (state: RootState) => state.navigation.content.table.cellSize;
+const selectPageSizeRaw = (state: RootState) => state.navigation.content.table.pageSize;
+const selectCellSizeRaw = (state: RootState) => state.navigation.content.table.cellSize;
 
-export const getCellSize = createSelector(
-    [getCellSizeRaw, getSettingsData],
+export const selectCellSize = createSelector(
+    [selectCellSizeRaw, getSettingsData],
     (cellSize, settings) => {
         return (
             cellSize ??
@@ -47,8 +47,8 @@ export const getCellSize = createSelector(
     },
 );
 
-export const getPageSize = createSelector(
-    [getPageSizeRaw, getSettingsData],
+export const selectPageSize = createSelector(
+    [selectPageSizeRaw, getSettingsData],
     (pageSize, settings) => {
         return (
             pageSize ??
@@ -58,20 +58,20 @@ export const getPageSize = createSelector(
     },
 );
 
-const getNavigationPathAttributes = (state: RootState) =>
+const selectNavigationPathAttributes = (state: RootState) =>
     state.navigation.navigation.attributes as any;
 
-export const getTableSchema = createSelector([getNavigationPathAttributes], (attributes: any) => {
+export const selectTableSchema = createSelector([selectNavigationPathAttributes], (attributes: any) => {
     const schema = ypath.getValue(attributes, '/schema');
 
     return schema;
 });
 
-export const getTableColumnNamesFromSchema = createSelector([getTableSchema], (schema) => {
+export const selectTableColumnNamesFromSchema = createSelector([selectTableSchema], (schema) => {
     return map_(schema, 'name').sort();
 });
 
-export const getNavigationTableLoadingState = createSelector(
+export const selectNavigationTableLoadingState = createSelector(
     [
         (store: RootState) => store.navigation.content.table.loading,
         (store: RootState) => store.navigation.content.table.loaded,
@@ -82,8 +82,8 @@ export const getNavigationTableLoadingState = createSelector(
     },
 );
 
-export const getNavigationTableDataLensButtonAlerts = createSelector(
-    [getNavigationPathAttributes],
+export const selectNavigationTableDataLensButtonAlerts = createSelector(
+    [selectNavigationPathAttributes],
     (attrs) => {
         const type = ypath.getValue(attrs, '/type');
         if (type !== CypressNodeTypes.TABLE) {
@@ -99,12 +99,12 @@ export const getNavigationTableDataLensButtonAlerts = createSelector(
     },
 );
 
-export const getKeyColumns = createSelector(getAttributes, (attributes) =>
+export const selectKeyColumns = createSelector(getAttributes, (attributes) =>
     Columns.getKeyColumns(attributes),
 );
 
-export const getCurrentRowKey = createSelector(
-    [getRows, getKeyColumns, (_state: RootState, index: number) => index],
+export const selectCurrentRowKey = createSelector(
+    [selectRows, selectKeyColumns, (_state: RootState, index: number) => index],
     (rows, keyColumns, index) => {
         const row = rows[index];
 
@@ -112,10 +112,10 @@ export const getCurrentRowKey = createSelector(
     },
 );
 
-export const getColumnsPresetHash = (state: RootState) =>
+export const selectColumnsPresetHash = (state: RootState) =>
     state.navigation.content.table.columnsPresetHash;
-export const getColumnsPreset = (state: RootState) => state.navigation.content.table.columnsPreset;
-export const getColumnsPresetColumns = (state: RootState): Array<string> | undefined =>
+export const selectColumnsPreset = (state: RootState) => state.navigation.content.table.columnsPreset;
+export const selectColumnsPresetColumns = (state: RootState): Array<string> | undefined =>
     state.navigation.content.table.columnsPreset.columns;
-export const getColumnsPresetError = (state: RootState): Array<string> | undefined =>
+export const selectColumnsPresetError = (state: RootState): Array<string> | undefined =>
     state.navigation.content.table.columnsPreset.error;

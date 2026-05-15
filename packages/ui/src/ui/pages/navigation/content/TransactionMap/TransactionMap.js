@@ -20,8 +20,8 @@ import {
     loadTransactions,
 } from '../../../../store/actions/navigation/content/transaction-map';
 import {
-    getNavigationTransactionMapLoadingStatus,
-    getTransactions,
+    selectNavigationTransactionMapLoadingStatus,
+    selectTransactions,
 } from '../../../../store/selectors/navigation/content/transaction-map';
 import {tableItems} from '../../../../utils/navigation/content/transaction-map/table';
 import {getIconNameForType} from '../../../../utils/navigation/path-editor';
@@ -177,7 +177,7 @@ const mapStateToProps = (state) => {
     const {filter, loading, loaded, error, errorData} = state.navigation.content.transactionMap;
     const path = getPath(state);
     const transaction = getTransaction(state);
-    const transactions = getTransactions(state);
+    const transactions = selectTransactions(state);
 
     return {
         loading,
@@ -199,7 +199,7 @@ const mapDispatchToProps = {
 const TransactionMapConnected = connect(mapStateToProps, mapDispatchToProps)(TransactionMap);
 
 export default function TranscationMapWithRum() {
-    const loadState = useSelector(getNavigationTransactionMapLoadingStatus);
+    const loadState = useSelector(selectNavigationTransactionMapLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.NAVIGATION_CONTENT_TRANSACTION_MAP,

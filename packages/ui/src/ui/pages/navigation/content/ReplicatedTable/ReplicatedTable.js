@@ -39,7 +39,7 @@ import {isFinalLoadingStatus} from '../../../../utils/utils';
 import {NAVIGATION_REPLICATED_TABLE_ID} from '../../../../constants/navigation/content/replicated-table';
 
 import {
-    getReplicatedTableData,
+    selectReplicatedTableData,
     selectAllowEnableReplicatedTracker,
     selectNavigationReplicatedTableLoadingStatus,
     selectReplicatedTableSortSettings,
@@ -463,7 +463,7 @@ class ReplicatedTable extends Component {
     }
 }
 const mapStateToProps = (state) => {
-    const {loading, loaded, error, errorData, replicas} = getReplicatedTableData(state);
+    const {loading, loaded, error, errorData, replicas} = selectReplicatedTableData(state);
     const allowEnableReplicatedTracker = selectAllowEnableReplicatedTracker(state);
     const path = getPath(state);
     const attributes = getAttributes(state);

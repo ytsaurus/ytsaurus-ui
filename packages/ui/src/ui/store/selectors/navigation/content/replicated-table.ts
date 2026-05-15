@@ -19,14 +19,14 @@ export const selectNavigationReplicatedTableLoadingStatus = createSelector(
     },
 );
 
-export const getReplicatedTableReplicas = (state: RootState) =>
+export const selectReplicatedTableReplicas = (state: RootState) =>
     state.navigation.content.replicatedTable.replicas;
 
-export const getReplicatedTableData = (state: RootState) =>
+export const selectReplicatedTableData = (state: RootState) =>
     state.navigation.content.replicatedTable;
 
 export const selectAllowEnableReplicatedTracker = createSelector(
-    [getReplicatedTableReplicas],
+    [selectReplicatedTableReplicas],
     (replicas) => {
         return some_(replicas, (item) => {
             return Boolean(ypath.getValue(item, '/@replicated_table_tracker_enabled'));
@@ -35,7 +35,7 @@ export const selectAllowEnableReplicatedTracker = createSelector(
 );
 
 export const selectReplicatedTableReplicasMap = createSelector(
-    [getReplicatedTableReplicas],
+    [selectReplicatedTableReplicas],
     (replicas) => {
         return reduce_(
             replicas,

@@ -7,8 +7,8 @@ import Button from '../../../../../components/Button/Button';
 
 import {openOffsetSelectorModal} from '../../../../../store/actions/navigation/content/table/pagination';
 import {
-    getAllColumns,
-    getVisibleColumns,
+    selectAllColumns,
+    selectVisibleColumns,
 } from '../../../../../store/selectors/navigation/content/table';
 
 OffsetSelectorButton.propTypes = {
@@ -50,8 +50,8 @@ function OffsetSelectorButton({
 const mapStateToProps = (state) => {
     const {loading} = state.navigation.content.table;
 
-    const visibleColumns = getVisibleColumns(state).filter((column) => column.keyColumn);
-    const allColumns = getAllColumns(state).filter((column) => column.keyColumn);
+    const visibleColumns = selectVisibleColumns(state).filter((column) => column.keyColumn);
+    const allColumns = selectAllColumns(state).filter((column) => column.keyColumn);
 
     return {visibleColumns, loading, allColumns};
 };

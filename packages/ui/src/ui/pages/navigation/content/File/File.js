@@ -17,10 +17,10 @@ import {Button, Loader} from '@gravity-ui/uikit';
 import Link from '../../../../components/Link/Link';
 
 import {
-    getDownloadPath,
-    getIsEmpty,
-    getIsTooBig,
-    getNavigationFileLoadingStatus,
+    selectDownloadPath,
+    selectIsEmpty,
+    selectIsTooBig,
+    selectNavigationFileLoadingStatus,
 } from '../../../../store/selectors/navigation/content/file';
 import {abortAndReset, loadFile} from '../../../../store/actions/navigation/content/file';
 import {getAttributes, getPath} from '../../../../store/selectors/navigation';
@@ -145,10 +145,10 @@ const mapStateToProps = (state) => {
     const {loading, loaded, error, errorData, file} = state.navigation.content.file;
     const {mediumList} = state.global;
 
-    const downloadPath = getDownloadPath(state);
+    const downloadPath = selectDownloadPath(state);
     const attributes = getAttributes(state);
-    const isTooBig = getIsTooBig(state);
-    const isEmpty = getIsEmpty(state);
+    const isTooBig = selectIsTooBig(state);
+    const isEmpty = selectIsEmpty(state);
     const path = getPath(state);
     const mode = getEffectiveMode(state);
 
@@ -177,7 +177,7 @@ const FileConnected = connect(mapStateToProps, mapDispatchToProps)(File);
 export default function FileWithRum() {
     useDisableMaxContentWidth();
 
-    const loadState = useSelector(getNavigationFileLoadingStatus);
+    const loadState = useSelector(selectNavigationFileLoadingStatus);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.NAVIGATION_CONTENT_FILE,

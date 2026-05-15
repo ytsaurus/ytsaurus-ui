@@ -15,8 +15,8 @@ import Modal from '../../../../../components/Modal/Modal';
 import Query from '../../../../../utils/navigation/content/table/query';
 
 import {
-    getCurrentOffsetValues,
-    getIsTableSorted,
+    selectCurrentOffsetValues,
+    selectIsTableSorted,
 } from '../../../../../store/selectors/navigation/content/table';
 import {
     closeOffsetSelectorModal,
@@ -173,8 +173,8 @@ class OffsetSelectorModal extends Component {
 
 const mapStateToProps = (state) => {
     const {isOffsetSelectorOpen} = state.navigation.content.table;
-    const initialItems = getCurrentOffsetValues(state);
-    const isTableSorted = getIsTableSorted(state);
+    const initialItems = selectCurrentOffsetValues(state);
+    const isTableSorted = selectIsTableSorted(state);
 
     return {isOffsetSelectorOpen, initialItems, isTableSorted};
 };

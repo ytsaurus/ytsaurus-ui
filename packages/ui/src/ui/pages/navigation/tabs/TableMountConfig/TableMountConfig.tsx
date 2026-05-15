@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import {useSelector} from '../../../../store/redux-hooks';
-import {getNavigationTableMountConfig} from '../../../../store/selectors/navigation/content/table-mount-config';
+import {selectNavigationTableMountConfig} from '../../../../store/selectors/navigation/content/table-mount-config';
 import {YTErrorBlock} from '../../../../components/Error/Error';
 import Yson from '../../../../components/Yson/Yson';
 import {getNavigationMountConfigYsonSettings} from '../../../../store/selectors/thor/unipika';
@@ -13,7 +13,7 @@ import {getPath} from '../../../../store/selectors/navigation';
 const block = cn('table-mount-config');
 
 function TableMountConfig() {
-    const {data, error} = useSelector(getNavigationTableMountConfig);
+    const {data, error} = useSelector(selectNavigationTableMountConfig);
     const path = useSelector(getPath);
 
     const settings = useSelector(getNavigationMountConfigYsonSettings);
