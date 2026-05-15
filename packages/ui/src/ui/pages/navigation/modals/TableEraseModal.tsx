@@ -8,8 +8,8 @@ import {
     runTableErase,
 } from '../../../store/actions/navigation/modals/table-erase-modal';
 import {
-    getNavigationTableEraseModalPath,
-    getNavigationTableEraseModalVisible,
+    selectNavigationTableEraseModalPath,
+    selectNavigationTableEraseModalVisible,
 } from '../../../store/selectors/navigation/modals/table-erase-modal';
 import {docsUrl} from '../../../config';
 import UIFactory from '../../../UIFactory';
@@ -21,8 +21,8 @@ interface FormValues {
 }
 
 export default function TableEraseModal() {
-    const visible = useSelector(getNavigationTableEraseModalVisible);
-    const path = useSelector(getNavigationTableEraseModalPath);
+    const visible = useSelector(selectNavigationTableEraseModalVisible);
+    const path = useSelector(selectNavigationTableEraseModalPath);
 
     const [error, setError] = React.useState<any>();
 

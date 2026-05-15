@@ -32,9 +32,9 @@ import {
     SELECT_EMPTY_VALUE,
 } from '../../../../constants/navigation/modals/create-table';
 import {
-    getColumnGroupSuggestions,
-    getColumnLockSuggestions,
-    getCreateTableModalState,
+    selectColumnGroupSuggestions,
+    selectColumnLockSuggestions,
+    selectCreateTableModalState,
 } from '../../../../store/selectors/navigation/modals/create-table';
 import {StorageOptions} from '../../../../utils/cypress-attributes';
 
@@ -930,15 +930,15 @@ class CreateTableModalContentImpl extends React.Component<Props> {
 
 const mapStateToProps = (state: RootState) => {
     const {showModal, parentDirectory, columnNameCounters, keyColumns, columnsOrder} =
-        getCreateTableModalState(state);
+        selectCreateTableModalState(state);
 
     const primitiveTypes = selectPrimitiveTypes(state);
 
     return {
         showModal,
         parentDirectory,
-        groupSuggestions: getColumnGroupSuggestions(state),
-        lockSuggestions: getColumnLockSuggestions(state),
+        groupSuggestions: selectColumnGroupSuggestions(state),
+        lockSuggestions: selectColumnLockSuggestions(state),
         columnNameCounters,
 
         keyColumns,

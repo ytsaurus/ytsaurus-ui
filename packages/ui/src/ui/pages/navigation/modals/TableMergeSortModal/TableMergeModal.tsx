@@ -6,11 +6,11 @@ import pickBy_ from 'lodash/pickBy';
 import {DialogError, type FormApi, YTDFDialog} from '../../../../components/Dialog';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {
-    getNavigationTableAttributesValues,
-    getNavigationTableMergeVisible,
-    getNavigationTableSortError,
-    getNavigationTableSortPaths,
-    getNavigationTableSortSuggestColumns,
+    selectNavigationTableAttributesValues,
+    selectNavigationTableMergeVisible,
+    selectNavigationTableSortError,
+    selectNavigationTableSortPaths,
+    selectNavigationTableSortSuggestColumns,
 } from '../../../../store/selectors/navigation/modals/table-merge-sort-modal';
 import {
     hideTableMergeModal,
@@ -27,11 +27,11 @@ import {WaitForDefaultPoolTree} from '../../../../hooks/global-pool-trees';
 
 export default function TableMergeModal() {
     const login = useSelector(selectCurrentUserName);
-    const visible = useSelector(getNavigationTableMergeVisible);
-    const paths = useSelector(getNavigationTableSortPaths);
-    const suggestError = useSelector(getNavigationTableSortError);
-    const suggestColumns = useSelector(getNavigationTableSortSuggestColumns);
-    const attributeValues = useSelector(getNavigationTableAttributesValues);
+    const visible = useSelector(selectNavigationTableMergeVisible);
+    const paths = useSelector(selectNavigationTableSortPaths);
+    const suggestError = useSelector(selectNavigationTableSortError);
+    const suggestColumns = useSelector(selectNavigationTableSortSuggestColumns);
+    const attributeValues = useSelector(selectNavigationTableAttributesValues);
 
     const [error, setError] = React.useState<any>();
 

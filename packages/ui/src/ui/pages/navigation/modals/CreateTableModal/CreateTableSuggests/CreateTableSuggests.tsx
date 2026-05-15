@@ -2,8 +2,8 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import {
-    getColumnGroupSuggestions,
-    getColumnLockSuggestions,
+    selectColumnGroupSuggestions,
+    selectColumnLockSuggestions,
 } from '../../../../../store/selectors/navigation/modals/create-table';
 import Suggest, {type SuggestItem} from '../../../../../components/Suggest/Suggest';
 import {type RootState} from '../../../../../store/reducers';
@@ -51,7 +51,7 @@ class LockSuggest extends React.Component<Props> {
 }
 
 const mapLockStateToProps = (state: RootState) => {
-    const suggestions = getColumnLockSuggestions(state);
+    const suggestions = selectColumnLockSuggestions(state);
 
     return {
         suggestions,
@@ -61,7 +61,7 @@ const mapLockStateToProps = (state: RootState) => {
 export const LockSuggestControl = connect(mapLockStateToProps)(LockSuggest);
 
 const mapGroupStateToProps = (state: RootState) => {
-    const suggestions = getColumnGroupSuggestions(state);
+    const suggestions = selectColumnGroupSuggestions(state);
 
     return {
         suggestions,

@@ -1,8 +1,8 @@
 import {type RootState} from '../../../reducers';
 
-export const getDynTablesStateModalVisible = (state: RootState) =>
+export const selectDynTablesStateModalVisible = (state: RootState) =>
     state.navigation.modals.dynTablesStateModal.showModal;
-export const getDynTablesStateModalPaths = (state: RootState) =>
+export const selectDynTablesStateModalPaths = (state: RootState) =>
     state.navigation.modals.dynTablesStateModal.paths;
-export const getDynTablesStateModalAction = (state: RootState) =>
+export const selectDynTablesStateModalAction = (state: RootState) =>
     state.navigation.modals.dynTablesStateModal.action;

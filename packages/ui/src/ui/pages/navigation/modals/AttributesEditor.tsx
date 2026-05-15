@@ -26,13 +26,13 @@ import {
     useExternalDescriptionQuery,
 } from '../../../store/api/navigation/tabs/description';
 import {
-    getNavigationAttributesEditorAttributes,
-    getNavigationAttributesEditorDynamicTables,
-    getNavigationAttributesEditorError,
-    getNavigationAttributesEditorMapNodes,
-    getNavigationAttributesEditorPath,
-    getNavigationAttributesEditorStaticTables,
-    getNavigationAttributesEditorVisible,
+    selectNavigationAttributesEditorAttributes,
+    selectNavigationAttributesEditorDynamicTables,
+    selectNavigationAttributesEditorError,
+    selectNavigationAttributesEditorMapNodes,
+    selectNavigationAttributesEditorPath,
+    selectNavigationAttributesEditorStaticTables,
+    selectNavigationAttributesEditorVisible,
 } from '../../../store/selectors/navigation/modals/attributes-editor';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {
@@ -94,15 +94,15 @@ interface FormValues {
 
 // eslint-disable-next-line complexity
 function AttributesEditorLoaded() {
-    const paths = useSelector(getNavigationAttributesEditorPath);
-    const attributesMap = useSelector(getNavigationAttributesEditorAttributes);
+    const paths = useSelector(selectNavigationAttributesEditorPath);
+    const attributesMap = useSelector(selectNavigationAttributesEditorAttributes);
 
     const singleMode = !(paths?.length! > 1);
     const attributes = paths?.length === 1 ? attributesMap[paths[0]] : {};
 
     const mediumList = useSelector(getMediumListNoCache);
     const dispatch = useDispatch();
-    const storeError = useSelector(getNavigationAttributesEditorError);
+    const storeError = useSelector(selectNavigationAttributesEditorError);
 
     const [stateError, setErr] = React.useState<any>(undefined);
     const [currentTab, setCurrentTab] = React.useState<string | undefined>();
@@ -113,9 +113,9 @@ function AttributesEditorLoaded() {
         dispatch(hideNavigationAttributesEditor());
     }, [dispatch]);
 
-    const hasMapNodes = useSelector(getNavigationAttributesEditorMapNodes).length > 0;
-    const hasStaticTables = useSelector(getNavigationAttributesEditorStaticTables).length > 0;
-    const hasDynamicTables = useSelector(getNavigationAttributesEditorDynamicTables).length > 0;
+    const hasMapNodes = useSelector(selectNavigationAttributesEditorMapNodes).length > 0;
+    const hasStaticTables = useSelector(selectNavigationAttributesEditorStaticTables).length > 0;
+    const hasDynamicTables = useSelector(selectNavigationAttributesEditorDynamicTables).length > 0;
 
     const hasTables = hasStaticTables || hasDynamicTables || hasMapNodes; // map-node is required for inheritance
     const hasDynTableOrMapNode = hasMapNodes || hasDynamicTables;
@@ -595,8 +595,8 @@ function CreateExternalDescriptionButton() {
 }
 
 export default function AttributesEditor() {
-    const path = useSelector(getNavigationAttributesEditorPath);
-    const visible = useSelector(getNavigationAttributesEditorVisible);
+    const path = useSelector(selectNavigationAttributesEditorPath);
+    const visible = useSelector(selectNavigationAttributesEditorVisible);
 
     if (!path?.length || !visible) {
         return null;

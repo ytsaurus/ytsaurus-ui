@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import {DialogError, type DialogField, type FormApi, YTDFDialog} from '../../../components/Dialog';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
-import {getCreateACOModalState} from '../../../store/selectors/navigation/modals/create-aco-modal';
+import {selectCreateACOModalState} from '../../../store/selectors/navigation/modals/create-aco-modal';
 import {closeCreateACOModal, createACO} from '../../../store/actions/navigation/modals/create-aco';
 
 const block = cn('table-sort-modal');
@@ -16,7 +16,7 @@ type CreateACOFormState = {
 
 export default function CreateACOModal() {
     const [error, setError] = React.useState<any>();
-    const {visible, path, namespace} = useSelector(getCreateACOModalState);
+    const {visible, path, namespace} = useSelector(selectCreateACOModalState);
 
     const dispatch = useDispatch();
 

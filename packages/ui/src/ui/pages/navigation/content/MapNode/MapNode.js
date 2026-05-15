@@ -19,7 +19,7 @@ import Icon from '../../../../components/Icon/Icon';
 import {StickyContainer} from '../../../../components/StickyContainer/StickyContainer';
 import TTLInfo from '../../../../components/TTLInfo/TTLInfo';
 import CreateTableModal from '../../modals/CreateTableModal/CreateTableModal';
-import {isCreateTableModalVisible} from '../../../../store/selectors/navigation/modals/create-table';
+import {selectIsCreateTableModalVisible} from '../../../../store/selectors/navigation/modals/create-table';
 
 import MapNodesTable from './MapNodesTable';
 
@@ -163,7 +163,7 @@ function mapStateToProps(state) {
         transaction: getTransaction(state),
         mediumList: getMediumList(state),
         mediumType: selectMediumType(state),
-        showCreateTableModal: isCreateTableModalVisible(state),
+        showCreateTableModal: selectIsCreateTableModalVisible(state),
         attributes: getNavigationPathAttributes(state),
         cluster: selectCluster(state),
     };

@@ -1,3 +1,3 @@
 import {type RootState} from '../../../../store/reducers';
 
-export const getCreateACOModalState = (state: RootState) => state.navigation.modals.createACOModal;
+export const selectCreateACOModalState = (state: RootState) => state.navigation.modals.createACOModal;

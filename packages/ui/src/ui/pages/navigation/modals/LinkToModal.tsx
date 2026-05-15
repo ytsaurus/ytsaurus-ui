@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import {DialogError, type DialogField, type FormApi, YTDFDialog} from '../../../components/Dialog';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
-import {getLinkToModalState} from '../../../store/selectors/navigation/modals/link-to-modal';
+import {selectLinkToModalState} from '../../../store/selectors/navigation/modals/link-to-modal';
 import {createLink, hideLinkToModal} from '../../../store/actions/navigation/modals/link-to-modal';
 import {type LinkToState} from '../../../store/reducers/navigation/modals/link-to-modal';
 import {ytApiV3} from '../../../rum/rum-wrap-api';
@@ -14,7 +14,7 @@ type LinkToModalState = Pick<LinkToState, 'path' | 'target'>;
 
 export default function LinkToModal() {
     const [error, setError] = React.useState<any>();
-    const {visible, path, target} = useSelector(getLinkToModalState);
+    const {visible, path, target} = useSelector(selectLinkToModalState);
 
     const dispatch = useDispatch();
 

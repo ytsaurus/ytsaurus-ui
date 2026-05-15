@@ -4,15 +4,15 @@ import {type RootState} from '../../../../store/reducers';
 import {createSelector} from 'reselect';
 import {selectCompressionCodecFinder} from '../../../../store/selectors/global/supported-features';
 
-export const getRemoteCopyModalVisible = (state: RootState) =>
+export const selectRemoteCopyModalVisible = (state: RootState) =>
     state.navigation.modals.remoteCopyModal.showModal;
-export const getRemoteCopyModalPaths = (state: RootState) =>
+export const selectRemoteCopyModalPaths = (state: RootState) =>
     state.navigation.modals.remoteCopyModal.paths;
-export const getRemoteCopyAttributesMap = (state: RootState) =>
+export const selectRemoteCopyAttributesMap = (state: RootState) =>
     state.navigation.modals.remoteCopyModal.attributesMap;
 
-export const getRemoteCopyCodecs = createSelector(
-    [getRemoteCopyModalPaths, getRemoteCopyAttributesMap, selectCompressionCodecFinder],
+export const selectRemoteCopyCodecs = createSelector(
+    [selectRemoteCopyModalPaths, selectRemoteCopyAttributesMap, selectCompressionCodecFinder],
     (paths, attributesMap, findCompressionCodec) => {
         for (const path of paths) {
             const map = attributesMap[path];

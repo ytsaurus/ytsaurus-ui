@@ -2,20 +2,20 @@ import map_ from 'lodash/map';
 
 import {createSelector} from 'reselect';
 
-export const getCreateTableModalState = (state) => state.navigation.modals.createTable;
-export const isCreateTableModalVisible = (state) => state.navigation.modals.createTable.showModal;
-export const getCreateTableLockSuggestions = (state) =>
+export const selectCreateTableModalState = (state) => state.navigation.modals.createTable;
+export const selectIsCreateTableModalVisible = (state) => state.navigation.modals.createTable.showModal;
+export const selectCreateTableLockSuggestions = (state) =>
     state.navigation.modals.createTable.columnLockSuggestions;
-export const getCreateTableGroupSuggestions = (state) =>
+export const selectCreateTableGroupSuggestions = (state) =>
     state.navigation.modals.createTable.columnGroupSuggestions;
 
-export const getColumnLockSuggestions = createSelector([getCreateTableLockSuggestions], (locks) => {
+export const selectColumnLockSuggestions = createSelector([selectCreateTableLockSuggestions], (locks) => {
     const res = map_(locks, (item) => item);
     return res;
 });
 
-export const getColumnGroupSuggestions = createSelector(
-    [getCreateTableGroupSuggestions],
+export const selectColumnGroupSuggestions = createSelector(
+    [selectCreateTableGroupSuggestions],
     (groups) => {
         const res = map_(groups, (item) => item);
         return res;

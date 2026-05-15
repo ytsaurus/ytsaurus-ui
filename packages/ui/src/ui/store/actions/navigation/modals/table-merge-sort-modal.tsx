@@ -31,7 +31,7 @@ import {
     changeAttribute,
     setModalPartial,
 } from '../../../reducers/navigation/modals/tableMergeSortModalSlice';
-import {getNavigationTableOutputPathAttributes} from '../../../selectors/navigation/modals/table-merge-sort-modal';
+import {selectNavigationTableOutputPathAttributes} from '../../../selectors/navigation/modals/table-merge-sort-modal';
 
 type TableMergeSortThunkAction<T = void> = ThunkAction<T, RootState, any, Action>;
 
@@ -155,7 +155,7 @@ export const loadStorageAttributes =
     (path: string): TableMergeSortThunkAction =>
     async (dispatch, getState) => {
         const state = getState();
-        const outputPathAttributes = getNavigationTableOutputPathAttributes(state);
+        const outputPathAttributes = selectNavigationTableOutputPathAttributes(state);
 
         const response: Record<PathAttribute, string> = await wrapApiPromiseByToaster(
             ytApiV3Id.get(YTApiId.attributesEditorGetAttrs, {
