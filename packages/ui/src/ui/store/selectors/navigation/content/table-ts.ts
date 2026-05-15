@@ -61,11 +61,14 @@ export const selectPageSize = createSelector(
 const selectNavigationPathAttributes = (state: RootState) =>
     state.navigation.navigation.attributes as any;
 
-export const selectTableSchema = createSelector([selectNavigationPathAttributes], (attributes: any) => {
-    const schema = ypath.getValue(attributes, '/schema');
+export const selectTableSchema = createSelector(
+    [selectNavigationPathAttributes],
+    (attributes: any) => {
+        const schema = ypath.getValue(attributes, '/schema');
 
-    return schema;
-});
+        return schema;
+    },
+);
 
 export const selectTableColumnNamesFromSchema = createSelector([selectTableSchema], (schema) => {
     return map_(schema, 'name').sort();
@@ -114,7 +117,8 @@ export const selectCurrentRowKey = createSelector(
 
 export const selectColumnsPresetHash = (state: RootState) =>
     state.navigation.content.table.columnsPresetHash;
-export const selectColumnsPreset = (state: RootState) => state.navigation.content.table.columnsPreset;
+export const selectColumnsPreset = (state: RootState) =>
+    state.navigation.content.table.columnsPreset;
 export const selectColumnsPresetColumns = (state: RootState): Array<string> | undefined =>
     state.navigation.content.table.columnsPreset.columns;
 export const selectColumnsPresetError = (state: RootState): Array<string> | undefined =>

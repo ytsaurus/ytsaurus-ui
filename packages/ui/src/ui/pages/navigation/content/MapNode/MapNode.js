@@ -31,10 +31,10 @@ import {
     selectContentMode,
     selectError,
     selectFilterState,
+    selectIsRootNode,
     selectLoadState,
     selectMapNodeResourcesLoading,
     selectMediumType,
-    selectIsRootNode,
 } from '../../../../store/selectors/navigation/content/map-node';
 
 import {OPEN_CREATE_DIRECTORY_POPUP} from '../../../../constants/navigation/modals/create-directory';

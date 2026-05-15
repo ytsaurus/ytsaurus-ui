@@ -28,11 +28,11 @@ import {
 } from '../../../../store/actions/navigation/content/table/table';
 import {
     selectAllColumns,
+    selectIsYqlTypesEnabled,
     selectOffsetValue,
     selectSrcColumns,
     selectVisibleColumns,
     selectVisibleRows,
-    selectIsYqlTypesEnabled,
 } from '../../../../store/selectors/navigation/content/table';
 import {
     selectColumns,

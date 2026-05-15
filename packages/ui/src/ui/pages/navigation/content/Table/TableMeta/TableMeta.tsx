@@ -10,7 +10,10 @@ import {RemountAlert} from '../RemountAlert/RemountAlert';
 
 import {selectTableType} from '../../../../../store/selectors/navigation/content/table';
 import {selectIsDynamic} from '../../../../../store/selectors/navigation/content/table-ts';
-import {selectAttributes, selectAttributesWithTypes} from '../../../../../store/selectors/navigation';
+import {
+    selectAttributes,
+    selectAttributesWithTypes,
+} from '../../../../../store/selectors/navigation';
 import {selectTabletErrorsBackgroundCount} from '../../../../../store/selectors/navigation/tabs/tablet-errors-background';
 import {type Props as AutomaticModeSwitchProps} from './AutomaticModeSwitch';
 

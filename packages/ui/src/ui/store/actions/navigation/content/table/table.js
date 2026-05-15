@@ -36,17 +36,21 @@ import {
     getRequestOutputFormat,
 } from '../../../../../utils/navigation/content/table/table';
 
-import {selectAttributes, selectPath, selectTransaction} from '../../../../../store/selectors/navigation';
+import {
+    selectAttributes,
+    selectPath,
+    selectTransaction,
+} from '../../../../../store/selectors/navigation';
 import {
     getDefaultTableColumnLimit,
     isTableSimilarityEnabled,
 } from '../../../../../store/selectors/settings';
 import {
     selectAllColumns,
+    selectIsYqlTypesEnabled,
     selectNextOffset,
     selectRequestedPageSize,
     selectVisibleColumns,
-    selectIsYqlTypesEnabled,
 } from '../../../../../store/selectors/navigation/content/table';
 import {
     selectCellSize,

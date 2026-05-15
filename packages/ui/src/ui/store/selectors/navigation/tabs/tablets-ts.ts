@@ -5,7 +5,7 @@ import reduce_ from 'lodash/reduce';
 import toArray_ from 'lodash/toArray';
 
 import {createSelector} from 'reselect';
-import {selectTabletsMode, selectTabletsSortState, selectPreparedDataForColumns} from './tablets';
+import {selectPreparedDataForColumns, selectTabletsMode, selectTabletsSortState} from './tablets';
 import {
     type FieldDescr,
     type TreeItem,

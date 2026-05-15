@@ -3,7 +3,10 @@ import {type ThunkAction} from 'redux-thunk';
 
 import {type RootState} from '../../../../../store/reducers';
 import {GET_TABLE_DATA} from '../../../../../constants/navigation/content/table';
-import {selectRows, selectYqlTypes} from '../../../../../store/selectors/navigation/content/table-ts';
+import {
+    selectRows,
+    selectYqlTypes,
+} from '../../../../../store/selectors/navigation/content/table-ts';
 import {selectOffsetValue} from '../../../../../store/selectors/navigation/content/table';
 
 import {type ReadTableResult} from './readTable';

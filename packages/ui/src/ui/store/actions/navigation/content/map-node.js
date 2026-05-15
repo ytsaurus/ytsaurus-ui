@@ -24,12 +24,12 @@ import {
 } from '../../../../constants/navigation';
 import {
     selectFilteredNodes,
+    selectIsRootNode,
     selectLastSelected,
     selectNodesData,
     selectSelected,
-    selectSortedNodes,
-    selectIsRootNode,
     selectShouldApplyCustomSort,
+    selectSortedNodes,
 } from '../../../../store/selectors/navigation/content/map-node';
 import {selectCluster} from '../../../../store/selectors/global';
 import {selectPath, selectTransaction} from '../../../../store/selectors/navigation';
