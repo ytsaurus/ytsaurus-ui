@@ -32,7 +32,7 @@ import {
     selectShouldApplyCustomSort,
 } from '../../../../store/selectors/navigation/content/map-node';
 import {selectCluster} from '../../../../store/selectors/global';
-import {getPath, getTransaction} from '../../../../store/selectors/navigation';
+import {selectPath, selectTransaction} from '../../../../store/selectors/navigation';
 import {changeColumnSortOrder} from '../../../../store/actions/tables';
 import {RumWrapper, YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {showErrorPopup} from '../../../../utils/utils';
@@ -87,8 +87,8 @@ function getList(path, transaction, cluster) {
 export function fetchNodes() {
     return (dispatch, getState) => {
         const state = getState();
-        const path = getPath(state);
-        const transaction = getTransaction(state);
+        const path = selectPath(state);
+        const transaction = selectTransaction(state);
         const cluster = selectCluster(state);
 
         dispatch({type: FETCH_NODES.REQUEST});
@@ -236,7 +236,7 @@ export function updateResourceUsage() {
 
 export function setFilter(filter) {
     return (dispatch, getState) => {
-        const path = getPath(getState());
+        const path = selectPath(getState());
 
         dispatch({
             type: SET_TEXT_FILTER,

@@ -8,7 +8,7 @@ import {useSelector} from '../../../../store/redux-hooks';
 import {main} from '../../../../components/MetaTable/presets';
 import {MetaTable} from '@ytsaurus/components';
 
-import {getAttributes, getLoadState} from '../../../../store/selectors/navigation';
+import {selectAttributes, selectLoadState} from '../../../../store/selectors/navigation';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {isFinalLoadingStatus} from '../../../../utils/utils';
@@ -40,7 +40,7 @@ Link.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-    const attributes = getAttributes(state);
+    const attributes = selectAttributes(state);
 
     return {attributes};
 };
@@ -48,7 +48,7 @@ const mapStateToProps = (state) => {
 const LinkConnected = connect(mapStateToProps)(Link);
 
 export default function LinkWithRum() {
-    const loadState = useSelector(getLoadState);
+    const loadState = useSelector(selectLoadState);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.NAVIGATION_CONTENT_LINK,

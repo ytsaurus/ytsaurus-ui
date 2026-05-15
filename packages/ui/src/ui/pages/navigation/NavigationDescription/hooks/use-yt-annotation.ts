@@ -1,11 +1,11 @@
 import {useSelector} from '../../../../store/redux-hooks';
 
-import {getPath} from '../../../../store/selectors/navigation';
+import {selectPath} from '../../../../store/selectors/navigation';
 import {useAnnotationQuery} from '../../../../store/api/navigation/tabs/description';
 import {selectCluster} from '../../../../store/selectors/global';
 
 export function useYTAnnotation() {
-    const path: string = useSelector(getPath);
+    const path: string = useSelector(selectPath);
 
     const cluster = useSelector(selectCluster);
 

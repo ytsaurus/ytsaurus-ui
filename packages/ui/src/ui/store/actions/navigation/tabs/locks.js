@@ -7,7 +7,7 @@ import {splitBatchResults} from '../../../../../shared/utils/error';
 
 import CancelHelper from '../../../../utils/cancel-helper';
 import {prepareRequest} from '../../../../utils/navigation';
-import {getPath, getTransaction} from '../../../../store/selectors/navigation';
+import {selectPath, selectTransaction} from '../../../../store/selectors/navigation';
 import {
     GET_LOCKS,
     IS_PARTIAL,
@@ -76,8 +76,8 @@ function getTransactions(rowLocks) {
 export function getLocks() {
     return (dispatch, getState) => {
         const state = getState();
-        const path = getPath(state);
-        const transaction = getTransaction(state);
+        const path = selectPath(state);
+        const transaction = selectTransaction(state);
 
         dispatch({type: GET_LOCKS.REQUEST});
         requests.removeAllRequests();

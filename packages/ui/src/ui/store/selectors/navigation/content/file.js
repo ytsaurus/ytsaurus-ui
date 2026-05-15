@@ -1,13 +1,13 @@
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import {createSelector} from 'reselect';
-import {getAttributes, getPath} from '../../../../store/selectors/navigation';
+import {selectAttributes, selectPath} from '../../../../store/selectors/navigation';
 import {selectCurrentClusterConfig} from '../../../../store/selectors/global';
 import {MAX_FILE_SIZE} from '../../../../constants/navigation/content/file';
 import {calculateLoadingStatus} from '../../../../utils/utils';
 import {makeDirectDownloadPath} from '../../../../utils/navigation';
 
 export const selectDownloadPath = createSelector(
-    [getPath, selectCurrentClusterConfig],
+    [selectPath, selectCurrentClusterConfig],
     (cypressPath, {id: cluster, proxy, externalProxy}) => {
         const path = makeDirectDownloadPath('read_file', {cluster, proxy, externalProxy});
         const query = [
@@ -20,11 +20,11 @@ export const selectDownloadPath = createSelector(
     },
 );
 
-export const selectIsEmpty = createSelector(getAttributes, (attributes) => {
+export const selectIsEmpty = createSelector(selectAttributes, (attributes) => {
     return ypath.getValue(attributes, '/resource_usage/disk_space') === 0;
 });
 
-export const selectIsTooBig = createSelector(getAttributes, (attributes) => {
+export const selectIsTooBig = createSelector(selectAttributes, (attributes) => {
     return ypath.getValue(attributes, '/uncompressed_data_size') > MAX_FILE_SIZE;
 });
 

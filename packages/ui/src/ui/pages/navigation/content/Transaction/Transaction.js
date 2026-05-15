@@ -14,7 +14,7 @@ import {
     abortTransaction,
     resetStore,
 } from '../../../../store/actions/navigation/content/transaction';
-import {getAttributes, getLoadState} from '../../../../store/selectors/navigation';
+import {selectAttributes, selectLoadState} from '../../../../store/selectors/navigation';
 import withVisible from '../../../../hocs/withVisible';
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
@@ -33,7 +33,7 @@ Transaction.propTypes = {
 
 function Transaction({visible, handleClose, handleShow}) {
     const dispatch = useDispatch();
-    const attributes = useSelector(getAttributes);
+    const attributes = useSelector(selectAttributes);
 
     const [title, startTime, timeout, id] = ypath.getValues(attributes, [
         '/title',
@@ -100,7 +100,7 @@ function Transaction({visible, handleClose, handleShow}) {
 const TransactionConnected = withVisible(Transaction);
 
 export default function TransactionWithRum() {
-    const loadState = useSelector(getLoadState);
+    const loadState = useSelector(selectLoadState);
     useAppRumMeasureStart({
         type: RumMeasureTypes.NAVIGATION_CONTENT_TRANSACTION,
         startDeps: [loadState],

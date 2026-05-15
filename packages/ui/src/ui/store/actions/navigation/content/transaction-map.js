@@ -5,7 +5,7 @@ import map_ from 'lodash/map';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import CancelHelper from '../../../../utils/cancel-helper';
 import {prepareRequest} from '../../../../utils/navigation';
-import {getParsedPath, getPath, getTransaction} from '../../../../store/selectors/navigation';
+import {selectParsedPath, selectPath, selectTransaction} from '../../../../store/selectors/navigation';
 import Transaction from '../../../../utils/navigation/content/transaction-map/transaction';
 import {
     CHANGE_FILTER,
@@ -18,9 +18,9 @@ const requests = new CancelHelper();
 export function loadTransactions() {
     return (dispatch, getState) => {
         const state = getState();
-        const path = getPath(state);
-        const parsedPath = getParsedPath(state);
-        const transaction = getTransaction(state);
+        const path = selectPath(state);
+        const parsedPath = selectParsedPath(state);
+        const transaction = selectTransaction(state);
 
         dispatch({type: LOAD_TRANSACTIONS.REQUEST});
         requests.removeAllRequests();

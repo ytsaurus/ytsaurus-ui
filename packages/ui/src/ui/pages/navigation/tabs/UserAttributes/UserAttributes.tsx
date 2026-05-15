@@ -16,8 +16,8 @@ import {
     selectUserAttributes,
     selectUserAttributesLoadInfo,
 } from '../../../../store/selectors/navigation/tabs/user-attributes';
-import {getPath} from '../../../../store/selectors/navigation';
-import {getEffectiveMode} from '../../../../store/selectors/navigation/navigation';
+import {selectPath} from '../../../../store/selectors/navigation';
+import {selectEffectiveMode} from '../../../../store/selectors/navigation/navigation';
 
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
@@ -33,8 +33,8 @@ const block = cn('navigation-user-attributes');
 function UserAttributes() {
     const dispatch = useDispatch();
     const {loading, loaded, error} = useSelector(selectUserAttributesLoadInfo);
-    const path = useSelector(getPath);
-    const mode = useSelector(getEffectiveMode);
+    const path = useSelector(selectPath);
+    const mode = useSelector(selectEffectiveMode);
     const userAttributes = useSelector(selectUserAttributes);
     const settings = unipika.prepareSettings();
 

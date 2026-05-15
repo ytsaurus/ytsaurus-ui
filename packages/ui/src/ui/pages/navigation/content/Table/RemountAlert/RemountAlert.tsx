@@ -5,7 +5,7 @@ import {Alert, Button} from '@gravity-ui/uikit';
 import ypath from '../../../../../common/thor/ypath';
 
 import {remountTable} from '../../../../../store/actions/navigation/content/table/remount-table';
-import {getAttributesWithTypes} from '../../../../../store/selectors/navigation';
+import {selectAttributesWithTypes} from '../../../../../store/selectors/navigation';
 
 import './RemountAlert.scss';
 
@@ -13,7 +13,7 @@ const block = b('remount-alert');
 
 export function RemountAlert() {
     const dispatch = useDispatch();
-    const attributesWithTypes = useSelector(getAttributesWithTypes);
+    const attributesWithTypes = useSelector(selectAttributesWithTypes);
     const [pending, setPending] = useState(false);
 
     const handleOnRemount = async () => {

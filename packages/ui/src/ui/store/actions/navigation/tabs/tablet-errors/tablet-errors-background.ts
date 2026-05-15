@@ -1,7 +1,7 @@
 import {type CancelTokenSource} from 'axios';
 
 import CancelHelper, {isCancelled} from '../../../../../utils/cancel-helper';
-import {getPath} from '../../../../../store/selectors/navigation';
+import {selectPath} from '../../../../../store/selectors/navigation';
 import {GET_TABLET_ERRORS} from '../../../../../constants/navigation/tabs/tablet-errors';
 import {YTApiId, ytApiV3Id, ytApiV4Id} from '../../../../../rum/rum-wrap-api';
 import {type ThunkAction} from 'redux-thunk';
@@ -22,7 +22,7 @@ type TabletErrorsThunkAction<T = unknown> = ThunkAction<T, RootState, unknown, T
 export function getTabletErrors(): TabletErrorsThunkAction {
     return (dispatch, getState) => {
         const state = getState();
-        const path = getPath(state);
+        const path = selectPath(state);
 
         dispatch({type: GET_TABLET_ERRORS.REQUEST});
 

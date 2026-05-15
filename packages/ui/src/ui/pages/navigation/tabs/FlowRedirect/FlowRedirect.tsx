@@ -1,14 +1,14 @@
 import React from 'react';
 
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-import {getPath} from '../../../../store/selectors/navigation';
+import {selectPath} from '../../../../store/selectors/navigation';
 import {makeFlowLink} from '../../../../utils/app-url';
 import {getAppBrowserHistory} from '../../../../store/window-store';
 import {filtersSlice} from '../../../../store/reducers/flow/filters';
 
 export function FlowRedirect() {
     const dispatch = useDispatch();
-    const path = useSelector(getPath);
+    const path = useSelector(selectPath);
 
     React.useMemo(() => {
         dispatch(filtersSlice.actions.updateFlowFilters({pipelinePath: path}));

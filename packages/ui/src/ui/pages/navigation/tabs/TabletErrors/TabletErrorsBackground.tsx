@@ -15,8 +15,8 @@ import CollapsibleSection from '../../../../components/CollapsibleSection/Collap
 import {Secondary} from '@ytsaurus/components';
 
 import {getTabletErrors} from '../../../../store/actions/navigation/tabs/tablet-errors/tablet-errors-background';
-import {getPath} from '../../../../store/selectors/navigation';
-import {getEffectiveMode} from '../../../../store/selectors/navigation/navigation';
+import {selectPath} from '../../../../store/selectors/navigation';
+import {selectEffectiveMode} from '../../../../store/selectors/navigation/navigation';
 import {selectCluster} from '../../../../store/selectors/global';
 import {
     selectTabletErrorsBackgroundCountNoticeVisbile,
@@ -76,8 +76,8 @@ function TabletErrors(props: ConnectedProps<typeof connector>) {
 
 const mapStateToProps = (state: RootState) => {
     const {loading, loaded, error, tabletErrors} = state.navigation.tabs.tabletErrorsBackground;
-    const path = getPath(state);
-    const mode = getEffectiveMode(state);
+    const path = selectPath(state);
+    const mode = selectEffectiveMode(state);
     const cluster = selectCluster(state);
 
     return {

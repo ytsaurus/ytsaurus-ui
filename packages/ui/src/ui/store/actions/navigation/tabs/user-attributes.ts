@@ -3,7 +3,7 @@ import {type UnknownAction} from '@reduxjs/toolkit';
 
 import CancelHelper, {isCancelled} from '../../../../utils/cancel-helper';
 import {prepareRequest} from '../../../../utils/navigation';
-import {getPath, getTransaction} from '../../../selectors/navigation';
+import {selectPath, selectTransaction} from '../../../selectors/navigation';
 import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {type RootState} from '../../../../store/reducers';
 import {userAttributesActions} from '../../../../store/reducers/navigation/tabs/user-attributes';
@@ -16,8 +16,8 @@ const requests = new CancelHelper();
 export function requestUserAttributes(): AsyncAction<Promise<void>> {
     return async (dispatch, getState) => {
         const state = getState();
-        const path = getPath(state);
-        const transaction = getTransaction(state);
+        const path = selectPath(state);
+        const transaction = selectTransaction(state);
 
         dispatch(userAttributesActions.onRequest());
         requests.removeAllRequests();

@@ -12,7 +12,7 @@ import TextInputWithDebounce from '../../../../../components/TextInputWithDeboun
 
 import {docsUrl} from '../../../../../config';
 
-import {getPath} from '../../../../../store/selectors/navigation';
+import {selectPath} from '../../../../../store/selectors/navigation';
 import {
     selectTabletErrorsByPathAllMethods,
     selectTabletErrorsByPathMethodsFilter,
@@ -23,7 +23,7 @@ import {
 } from '../../../../../store/selectors/navigation/tabs/tablet-errors-by-path';
 import {tabletErrorsByPathActions} from '../../../../../store/reducers/navigation/tabs/tablet-errors/tablet-errors-by-path';
 import {loadTabletErrorsByTablePath} from '../../../../../store/actions/navigation/tabs/tablet-errors/tablet-errors-by-path';
-import {getNavigationPathAttributes} from '../../../../../store/selectors/navigation/navigation';
+import {selectNavigationPathAttributes} from '../../../../../store/selectors/navigation/navigation';
 import UIFactory from '../../../../../UIFactory';
 
 import {TabletErrorsByPathTable} from './TabletErrorsByPathTable';
@@ -135,11 +135,11 @@ export function TabletErrorsRequestToolbar({className}: {className: string}) {
 }
 
 function useTabletErrorFromApiLoad() {
-    const path = useSelector(getPath);
+    const path = useSelector(selectPath);
     const timeRange = useSelector(selectTabletErrorsByPathTimeRange);
     const methodsFilter = useSelector(selectTabletErrorsByPathMethodsFilter);
     const pageFilter = useSelector(selectTabletErrorsByPathPageFilter);
-    const {id} = useSelector(getNavigationPathAttributes) ?? {};
+    const {id} = useSelector(selectNavigationPathAttributes) ?? {};
     const tabletIdFilter = useSelector(selectTabletErrorsByPathTabletIdFilter);
 
     const dispatch = useDispatch();

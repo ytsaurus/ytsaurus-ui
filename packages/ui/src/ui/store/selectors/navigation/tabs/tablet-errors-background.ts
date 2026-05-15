@@ -1,7 +1,7 @@
 import {createSelector} from 'reselect';
 import {type RootState} from '../../../../store/reducers';
 import {calculateLoadingStatus} from '../../../../utils/utils';
-import {getPath} from '../../../../store/selectors/navigation/index';
+import {selectPath} from '../../../../store/selectors/navigation/index';
 
 import reduce_ from 'lodash/reduce';
 
@@ -32,7 +32,7 @@ export const selectTabletErrorsLoadingStatus = createSelector(
 );
 
 export const selectTabletErrorsBackgroundCount = createSelector(
-    [getPath, selectTabletErrorsErrorCountPath, selectTabletErrorsErrorCount],
+    [selectPath, selectTabletErrorsErrorCountPath, selectTabletErrorsErrorCount],
     (path, errorCountPath, errorCount) => {
         if (path !== errorCountPath) {
             return 0;
@@ -43,7 +43,7 @@ export const selectTabletErrorsBackgroundCount = createSelector(
 );
 
 export const selectTabletErrors = createSelector(
-    [getPath, selectTabletErrorsPathRaw, selectTabletErrorsRaw],
+    [selectPath, selectTabletErrorsPathRaw, selectTabletErrorsRaw],
     (path, errPath, errors) => {
         if (path !== errPath) {
             return undefined;

@@ -2,15 +2,15 @@ import React from 'react';
 import {useSelector} from '../../store/redux-hooks';
 
 import {selectCluster} from '../../store/selectors/global';
-import {getPath, getType} from '../../store/selectors/navigation';
-import {getNavigationPathAttributes} from '../../store/selectors/navigation/navigation';
+import {selectPath, selectType} from '../../store/selectors/navigation';
+import {selectNavigationPathAttributes} from '../../store/selectors/navigation/navigation';
 import UIFactory from '../../UIFactory';
 
 function NavigationExtraActions({className}: {className?: string}) {
     const cluster = useSelector(selectCluster);
-    const path = useSelector(getPath);
-    const type = useSelector(getType);
-    const attributes = useSelector(getNavigationPathAttributes);
+    const path = useSelector(selectPath);
+    const type = useSelector(selectType);
+    const attributes = useSelector(selectNavigationPathAttributes);
 
     return (
         <>

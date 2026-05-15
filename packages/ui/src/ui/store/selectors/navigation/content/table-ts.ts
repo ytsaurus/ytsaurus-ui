@@ -7,7 +7,7 @@ import {createSelector} from 'reselect';
 import {type RootState} from '../../../../store/reducers';
 import {calculateLoadingStatus} from '../../../../utils/utils';
 import {CypressNodeTypes} from '../../../../utils/cypress-attributes';
-import {getAttributes} from '../index';
+import {selectAttributes} from '../index';
 import Columns from '../../../../utils/navigation/content/table/columns';
 import {getColumnsValues} from '../../../../utils/navigation/content/table/table';
 import {getSettingsData} from '../../../../store/selectors/settings/settings-base';
@@ -99,7 +99,7 @@ export const selectNavigationTableDataLensButtonAlerts = createSelector(
     },
 );
 
-export const selectKeyColumns = createSelector(getAttributes, (attributes) =>
+export const selectKeyColumns = createSelector(selectAttributes, (attributes) =>
     Columns.getKeyColumns(attributes),
 );
 

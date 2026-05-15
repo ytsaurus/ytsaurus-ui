@@ -15,7 +15,7 @@ import Button from '../../../../../components/Button/Button';
 import Icon from '../../../../../components/Icon/Icon';
 import Modal from '../../../../../components/Modal/Modal';
 
-import {getPath} from '../../../../../store/selectors/navigation';
+import {selectPath} from '../../../../../store/selectors/navigation';
 import {type ConnectedProps, connect} from 'react-redux';
 import {YTErrorBlock} from '../../../../../components/Block/Block';
 import {type DialogField, YTDFDialog} from '../../../../../components/Dialog';
@@ -572,7 +572,7 @@ class UploadManager extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state: RootState) => {
-    const path: string = getPath(state);
+    const path: string = selectPath(state);
     const schema = selectSchema(state);
     const {proxy, externalProxy} = selectCurrentClusterConfig(state);
 

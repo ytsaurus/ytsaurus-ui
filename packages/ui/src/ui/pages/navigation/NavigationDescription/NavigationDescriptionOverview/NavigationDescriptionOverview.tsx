@@ -5,7 +5,7 @@ import {ClipboardButton, Label, MetaTable, Tooltip} from '@ytsaurus/components';
 import YTLink from '../../../../components/Link/Link';
 import {getDescriptionType} from '../../../../store/reducers/navigation/description';
 import {useSelector} from '../../../../store/redux-hooks';
-import {getPath} from '../../../../store/selectors/navigation';
+import {selectPath} from '../../../../store/selectors/navigation';
 import UIFactory from '../../../../UIFactory';
 import {makeNavigationLink} from '../../../../utils/app-url';
 import {EditButtons} from '../EditButtons';
@@ -18,7 +18,7 @@ export function NavigationDescriptionOverview() {
     const {externalAnnotationLink, editable} = useExternalAnnotation();
     const descriptionType = useSelector(getDescriptionType);
 
-    const path = useSelector(getPath);
+    const path = useSelector(selectPath);
     const {path: descriptionPath} = useDescription();
 
     const inheritedPath = path !== descriptionPath ? descriptionPath : undefined;

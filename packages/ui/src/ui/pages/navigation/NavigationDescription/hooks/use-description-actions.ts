@@ -15,7 +15,7 @@ import {
     udpateAnnotationExternal,
     useAnnotationQuery,
 } from '../../../../store/api/navigation/tabs/description';
-import {getPath} from '../../../../store/selectors/navigation';
+import {selectPath} from '../../../../store/selectors/navigation';
 
 import {useUpdateAnnotation} from './use-update-annotaton';
 import {useExternalAnnotation} from './use-external-annotation';
@@ -24,7 +24,7 @@ import {useYTAnnotation} from './use-yt-annotation';
 export function useDescriptionActions() {
     const dispatch = useDispatch();
 
-    const path = useSelector(getPath);
+    const path = useSelector(selectPath);
 
     const cluster = useSelector(selectCluster);
     const edittingAnnotation = useSelector(getEdittingAnnotation);

@@ -42,7 +42,7 @@ import {
 import {getMediumListNoCache} from '../../../store/selectors/thor';
 
 import {selectCluster} from '../../../store/selectors/global';
-import {getPath} from '../../../store/selectors/navigation';
+import {selectPath} from '../../../store/selectors/navigation';
 
 import {
     InMemoryMode,
@@ -566,7 +566,7 @@ function AttributesEditorLoaded() {
 }
 
 function CreateExternalDescriptionButton() {
-    const path = useSelector(getPath);
+    const path = useSelector(selectPath);
     const cluster = useSelector(selectCluster);
 
     const {data: externalDescription} = useExternalDescriptionQuery({cluster, path});

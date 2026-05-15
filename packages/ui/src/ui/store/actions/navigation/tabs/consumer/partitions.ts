@@ -9,7 +9,7 @@ import {YTApiId, ytApiV3Id} from '../../../../../rum/rum-wrap-api';
 import {type RootState} from '../../../../../store/reducers';
 import {type ConsumerPartitionsAction} from '../../../../../store/reducers/navigation/tabs/consumer/partitions';
 import {type YtConsumerPartition} from '../../../../../store/reducers/navigation/tabs/consumer/types';
-import {getPath, getTransaction} from '../../../../../store/selectors/navigation';
+import {selectPath, selectTransaction} from '../../../../../store/selectors/navigation';
 import {prepareRequest} from '../../../../../utils/navigation';
 
 type ConsumerThunkAction = ThunkAction<void, RootState, unknown, ConsumerPartitionsAction>;
@@ -17,8 +17,8 @@ type ConsumerThunkAction = ThunkAction<void, RootState, unknown, ConsumerPartiti
 export function loadConsumerPartitions(queue: string): ConsumerThunkAction {
     return (dispatch, getState) => {
         const state = getState();
-        const path = getPath(state);
-        const transaction = getTransaction(state);
+        const path = selectPath(state);
+        const transaction = selectTransaction(state);
 
         dispatch({type: CONSUMER_PARTITIONS_LOAD_REQUEST});
         return ytApiV3Id

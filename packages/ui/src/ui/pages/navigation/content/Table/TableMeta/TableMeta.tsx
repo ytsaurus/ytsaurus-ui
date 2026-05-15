@@ -10,7 +10,7 @@ import {RemountAlert} from '../RemountAlert/RemountAlert';
 
 import {selectTableType} from '../../../../../store/selectors/navigation/content/table';
 import {selectIsDynamic} from '../../../../../store/selectors/navigation/content/table-ts';
-import {getAttributes, getAttributesWithTypes} from '../../../../../store/selectors/navigation';
+import {selectAttributes, selectAttributesWithTypes} from '../../../../../store/selectors/navigation';
 import {selectTabletErrorsBackgroundCount} from '../../../../../store/selectors/navigation/tabs/tablet-errors-background';
 import {type Props as AutomaticModeSwitchProps} from './AutomaticModeSwitch';
 
@@ -79,8 +79,8 @@ const mapStateToProps = (state: RootState) => {
 
     const isDynamic = selectIsDynamic(state);
     const tableType = selectTableType(state);
-    const attributes = getAttributes(state);
-    const attributesWithTypes = getAttributesWithTypes(state);
+    const attributes = selectAttributes(state);
+    const attributesWithTypes = selectAttributesWithTypes(state);
 
     const remountNeeded =
         Boolean(Number(ypath.getValue(attributesWithTypes, '/remount_needed_tablet_count'))) &&

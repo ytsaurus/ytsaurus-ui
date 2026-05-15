@@ -10,7 +10,7 @@ import {QueryEngine} from '../../../shared/constants/engines';
 import {createQueryFromTablePath} from '../../store/actions/query-tracker/query';
 import {createNewQueryUrl} from '../../pages/query-tracker/utils/navigation';
 import {getNavigationSqlService} from '../../store/selectors/settings/navigation';
-import {getPath} from '../../store/selectors/navigation';
+import {selectPath} from '../../store/selectors/navigation';
 import UIFactory from '../../UIFactory';
 import {useSidePanel} from '../../hooks/use-side-panel';
 import {selectCluster} from '../../store/selectors/global/cluster';
@@ -26,7 +26,7 @@ const b = cn('yt-open-query-buttons');
 function useNavigationSidePanelMode() {
     const dispatch = useDispatch();
 
-    const path: string = useSelector(getPath);
+    const path: string = useSelector(selectPath);
     const cluster = useSelector(selectCluster);
     const panelMode = useSelector((state: RootState) => state.navigation.navigation.sidePanelMode);
 

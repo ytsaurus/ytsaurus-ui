@@ -20,7 +20,7 @@ import Button from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 
-import {getPath, getType} from '../../../../store/selectors/navigation';
+import {selectPath, selectType} from '../../../../store/selectors/navigation';
 
 import {
     selectActiveHistogram,
@@ -639,7 +639,7 @@ class Tablets extends Component {
 const mapStateToProps = (state) => {
     const {loading, loaded, error, errorData, tabletsMode, tabletsFilter, histogramCollapsed} =
         state.navigation.tabs.tablets;
-    const path = getPath(state);
+    const path = selectPath(state);
     let tablets;
     let maxByLevel = [];
     if (tabletsMode === 'by_host' || tabletsMode === 'by_cell') {
@@ -653,7 +653,7 @@ const mapStateToProps = (state) => {
 
     const histogram = selectHistogram(state);
     const activeHistogram = selectActiveHistogram(state);
-    const type = getType(state);
+    const type = selectType(state);
     const hasReplication = selectIsReplicationDataExist(state);
 
     return {

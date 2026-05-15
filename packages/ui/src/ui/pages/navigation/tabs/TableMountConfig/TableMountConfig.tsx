@@ -8,13 +8,13 @@ import {getNavigationMountConfigYsonSettings} from '../../../../store/selectors/
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
 import {type UnipikaValue} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 import {pathToFileName} from '../../helpers/pathToFileName';
-import {getPath} from '../../../../store/selectors/navigation';
+import {selectPath} from '../../../../store/selectors/navigation';
 
 const block = cn('table-mount-config');
 
 function TableMountConfig() {
     const {data, error} = useSelector(selectNavigationTableMountConfig);
-    const path = useSelector(getPath);
+    const path = useSelector(selectPath);
 
     const settings = useSelector(getNavigationMountConfigYsonSettings);
 

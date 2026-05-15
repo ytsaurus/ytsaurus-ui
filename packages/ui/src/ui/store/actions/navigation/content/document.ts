@@ -1,7 +1,7 @@
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import CancelHelper from '../../../../utils/cancel-helper';
-import {getPath} from '../../../selectors/navigation';
+import {selectPath} from '../../../selectors/navigation';
 import {
     GET_DOCUMENT,
     SET_DOCUMENT_EDIT_MODE,
@@ -18,7 +18,7 @@ type DocumentThunkAction = ThunkAction<void, RootState, any, NavigationDocumentA
 
 export const getDocument = (): DocumentThunkAction => (dispatch, getState) => {
     const state = getState();
-    const path = getPath(state) as string;
+    const path = selectPath(state) as string;
 
     dispatch({type: GET_DOCUMENT.REQUEST});
     requests.removeAllRequests();

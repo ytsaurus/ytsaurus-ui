@@ -2,14 +2,14 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import {
-    getNavigationCheckPermissionsError,
-    getNavigationIsAccountUsable,
-    getNavigationIsWritable,
-    getNavigationPathAccount,
+    selectNavigationCheckPermissionsError,
+    selectNavigationIsAccountUsable,
+    selectNavigationIsWritable,
+    selectNavigationPathAccount,
 } from '../../../store/selectors/navigation/navigation';
 import {useSelector} from '../../../store/redux-hooks';
 import {YTErrorBlock} from '../../../components/Block/Block';
-import {getPath} from '../../../store/selectors/navigation';
+import {selectPath} from '../../../store/selectors/navigation';
 import {genAccountsAclLink} from '../../../utils/accounts/accounts';
 import {selectCluster} from '../../../store/selectors/global';
 import Link from '../../../components/Link/Link';
@@ -18,11 +18,11 @@ import './NavigationPermissionsNotice.scss';
 const block = cn('navigation-permissions-notice');
 
 export function NavigationPermissionsNotice() {
-    const path = useSelector(getPath);
-    const isWriteable = useSelector(getNavigationIsWritable);
-    const isAccountUsable = useSelector(getNavigationIsAccountUsable);
-    const checkPermissionsError = useSelector(getNavigationCheckPermissionsError);
-    const account = useSelector(getNavigationPathAccount);
+    const path = useSelector(selectPath);
+    const isWriteable = useSelector(selectNavigationIsWritable);
+    const isAccountUsable = useSelector(selectNavigationIsAccountUsable);
+    const checkPermissionsError = useSelector(selectNavigationCheckPermissionsError);
+    const account = useSelector(selectNavigationPathAccount);
     const cluster = useSelector(selectCluster);
 
     if (checkPermissionsError) {

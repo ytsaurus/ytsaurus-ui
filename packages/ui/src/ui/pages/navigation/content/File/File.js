@@ -23,8 +23,8 @@ import {
     selectNavigationFileLoadingStatus,
 } from '../../../../store/selectors/navigation/content/file';
 import {abortAndReset, loadFile} from '../../../../store/actions/navigation/content/file';
-import {getAttributes, getPath} from '../../../../store/selectors/navigation';
-import {getEffectiveMode} from '../../../../store/selectors/navigation/navigation';
+import {selectAttributes, selectPath} from '../../../../store/selectors/navigation';
+import {selectEffectiveMode} from '../../../../store/selectors/navigation/navigation';
 
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
@@ -146,11 +146,11 @@ const mapStateToProps = (state) => {
     const {mediumList} = state.global;
 
     const downloadPath = selectDownloadPath(state);
-    const attributes = getAttributes(state);
+    const attributes = selectAttributes(state);
     const isTooBig = selectIsTooBig(state);
     const isEmpty = selectIsEmpty(state);
-    const path = getPath(state);
-    const mode = getEffectiveMode(state);
+    const path = selectPath(state);
+    const mode = selectEffectiveMode(state);
 
     return {
         loading,

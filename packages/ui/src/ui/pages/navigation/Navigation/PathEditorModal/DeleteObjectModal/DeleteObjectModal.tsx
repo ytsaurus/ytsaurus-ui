@@ -25,7 +25,7 @@ import {
     togglePermanentlyDelete,
 } from '../../../../../store/actions/navigation/modals/delete-object';
 import withScope from '../../../../../hocs/components/Modal/withScope';
-import {checkIsTrash} from '../../../../../store/selectors/navigation';
+import {selectIsTrashPath} from '../../../../../store/selectors/navigation';
 import hammer from '../../../../../common/hammer';
 
 import './DeleteObjectModal.scss';
@@ -262,7 +262,7 @@ const mapStateToProps = (state: RootState) => {
         multipleInfo,
         multipleMode,
     } = state.navigation.modals.deleteObject;
-    const inTrash = checkIsTrash(state);
+    const inTrash = selectIsTrashPath(state);
 
     return {
         error,

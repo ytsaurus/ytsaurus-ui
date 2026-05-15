@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 
 import {AccessContentAcl, NavigationAcl} from '../../../../containers/ACL';
 import {selectAclLoadState} from '../../../../store/selectors/acl/acl';
-import {getAttributes, getRawPath} from '../../../../store/selectors/navigation';
+import {selectAttributes, selectRawPath} from '../../../../store/selectors/navigation';
 import {IdmObjectType} from '../../../../constants/acl';
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
@@ -45,9 +45,9 @@ const makeComponentWithRum = (idmKind) => {
 
 const makeMapStateToProps = (idmKind) => {
     return (state, props) => {
-        const attributes = getAttributes(state);
+        const attributes = selectAttributes(state);
         let {path} = attributes;
-        if (!path) path = getRawPath(state);
+        if (!path) path = selectRawPath(state);
 
         const isPrincipalACLtab =
             props.mode === 'content' && props.type === 'access_control_object';

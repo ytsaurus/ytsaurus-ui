@@ -4,7 +4,7 @@ import {Button, Flex} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import Icon from '../../../components/Icon/Icon';
 import {selectCluster} from '../../../store/selectors/global';
-import {getPath} from '../../../store/selectors/navigation';
+import {selectPath} from '../../../store/selectors/navigation';
 import {QueryEditor} from '../QueryEditor';
 import {QueryMetaForm} from './QueryMetaForm';
 import {QueriesPooling} from '../hooks/QueriesPooling/context';
@@ -21,7 +21,7 @@ export type QueryWidgetProps = {onClose: () => void};
 export default function QueryWidget({onClose}: QueryWidgetProps) {
     const dispatch = useDispatch();
     const cluster = useSelector(selectCluster);
-    const path = useSelector(getPath);
+    const path = useSelector(selectPath);
     const stablePath = useRef(path); // save table path after open widget
 
     useEffect(() => {

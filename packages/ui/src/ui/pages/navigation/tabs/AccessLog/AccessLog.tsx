@@ -12,11 +12,11 @@ import {
 import AccessLogTable from './AccessLogTable';
 import AccessLogError from './AccessLogError';
 import AccessLogFilters from './AccessLogFilters';
-import {getPath} from '../../../../store/selectors/navigation';
+import {selectPath} from '../../../../store/selectors/navigation';
 
 function AccessLog() {
     const dispatch = useDispatch();
-    const path = useSelector(getPath);
+    const path = useSelector(selectPath);
 
     React.useEffect(() => {
         dispatch(accessLogResetFilters());

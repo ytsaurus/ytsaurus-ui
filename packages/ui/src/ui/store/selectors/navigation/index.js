@@ -5,32 +5,32 @@ import {NAVIGATION_MAP_NODE_TABLE_ID} from '../../../constants/navigation/index'
 import {getNavigationDefaultPath} from '../../../store/selectors/settings';
 import {isFinalLoadingStatus} from '../../../utils/utils';
 
-export const getTransaction = (state) => state.navigation.navigation.transaction;
-export const getAttributes = (state) => state.navigation.navigation.attributes;
-export const getAttributesWithTypes = (state) => state.navigation.navigation.attributesWithTypes;
-export const getLoadState = (state) => state.navigation.navigation.loadState;
-export const getError = (state) => state.navigation.navigation.error;
-export const getRawPath = (state) => state.navigation.navigation.path;
-export const getIdmSupport = (state) => state.navigation.navigation.isIdmSupported;
-export const getSortState = (state) => state.tables[NAVIGATION_MAP_NODE_TABLE_ID];
+export const selectTransaction = (state) => state.navigation.navigation.transaction;
+export const selectAttributes = (state) => state.navigation.navigation.attributes;
+export const selectAttributesWithTypes = (state) => state.navigation.navigation.attributesWithTypes;
+export const selectLoadState = (state) => state.navigation.navigation.loadState;
+export const selectError = (state) => state.navigation.navigation.error;
+export const selectRawPath = (state) => state.navigation.navigation.path;
+export const selectIdmSupport = (state) => state.navigation.navigation.isIdmSupported;
+export const selectSortState = (state) => state.tables[NAVIGATION_MAP_NODE_TABLE_ID];
 
-export const getType = createSelector(getAttributes, (attributes) => attributes?.type);
+export const selectType = createSelector(selectAttributes, (attributes) => attributes?.type);
 
-export const getPath = createSelector(
-    [getRawPath, getNavigationDefaultPath],
+export const selectPath = createSelector(
+    [selectRawPath, getNavigationDefaultPath],
     (rawPath, defaultPath) => rawPath || defaultPath,
 );
 
-export const getAttributesPath = createSelector(
-    [getAttributes, getPath],
+export const selectAttributesPath = createSelector(
+    [selectAttributes, selectPath],
     (attributes, navigationPath) => attributes?.path || navigationPath,
 );
 
-export const isNavigationFinalLoadState = createSelector([getLoadState], (state) => {
+export const selectIsNavigationFinalLoadState = createSelector([selectLoadState], (state) => {
     return isFinalLoadingStatus(state);
 });
 
-export const getParsedPath = createSelector(getPath, (path) => {
+export const selectParsedPath = createSelector(selectPath, (path) => {
     try {
         return ypath.YPath.create(path, 'absolute');
     } catch (ex) {
@@ -38,11 +38,11 @@ export const getParsedPath = createSelector(getPath, (path) => {
         console.error(ex);
     }
 });
-export const getActualPath = createSelector([getPath, getType], (path, type) => {
+export const selectActualPath = createSelector([selectPath, selectType], (path, type) => {
     return type === 'map_node' ? path + '/' : path;
 });
 
-export const checkIsTrash = createSelector(
-    [getPath],
+export const selectIsTrashPath = createSelector(
+    [selectPath],
     (path) => path.startsWith('//tmp/trash') || path.startsWith('//trash'),
 );

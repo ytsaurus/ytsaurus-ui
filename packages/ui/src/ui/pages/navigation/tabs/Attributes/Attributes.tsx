@@ -9,9 +9,9 @@ import {YsonDownloadButton} from '../../../../components/DownloadAttributesButto
 import {YTErrorBlock} from '../../../../components/Block/Block';
 
 import {
-    getAttributesPath,
-    getAttributesWithTypes,
-    getLoadState,
+    selectAttributesPath,
+    selectAttributesWithTypes,
+    selectLoadState,
 } from '../../../../store/selectors/navigation';
 import {
     selectAttributesLoadingInfo,
@@ -34,7 +34,7 @@ function Attributes() {
     const dispatch = useDispatch();
 
     const attributes = useSelector(selectAttributesTab);
-    const attributesPath = useSelector(getAttributesPath);
+    const attributesPath = useSelector(selectAttributesPath);
     const {loading, loaded, error} = useSelector(selectAttributesLoadingInfo);
 
     const settings = unipika.prepareSettings();
@@ -69,8 +69,8 @@ function Attributes() {
 }
 
 export default function AttributesWithRum() {
-    const loadState = useSelector(getLoadState);
-    const attributes = useSelector(getAttributesWithTypes);
+    const loadState = useSelector(selectLoadState);
+    const attributes = useSelector(selectAttributesWithTypes);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.NAVIGATION_TAB_ATTRIBUTES,

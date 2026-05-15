@@ -38,7 +38,7 @@ import {
     showTableSortModal,
 } from '../../../../store/actions/navigation/modals/table-merge-sort-modal';
 import {useSelector} from '../../../../store/redux-hooks';
-import {getTransaction} from '../../../../store/selectors/navigation';
+import {selectTransaction} from '../../../../store/selectors/navigation';
 import {
     selectContentMode,
     selectLoadState,
@@ -394,7 +394,7 @@ function mapStateToProps(state) {
     return {
         loadState: selectLoadState(state),
         columns: selectPreparedTableColumns(state),
-        transaction: getTransaction(state),
+        transaction: selectTransaction(state),
         contentMode: selectContentMode(state),
         nodes: selectSortedNodes(state),
         selected: selectSelected(state),

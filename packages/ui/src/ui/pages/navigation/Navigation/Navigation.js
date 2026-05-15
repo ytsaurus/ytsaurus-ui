@@ -29,16 +29,16 @@ import {LOADING_STATUS} from '../../../constants/index';
 import {onTransactionChange, setMode, updateView} from '../../../store/actions/navigation';
 
 import {
-    getError,
-    getIdmSupport,
-    getLoadState,
-    getParsedPath,
-    getPath,
-    getTransaction,
-    getType,
-    isNavigationFinalLoadState,
+    selectError,
+    selectIdmSupport,
+    selectLoadState,
+    selectParsedPath,
+    selectPath,
+    selectTransaction,
+    selectType,
+    selectIsNavigationFinalLoadState,
 } from '../../../store/selectors/navigation';
-import {getEffectiveMode, getTabs} from '../../../store/selectors/navigation/navigation';
+import {selectEffectiveMode, selectTabs} from '../../../store/selectors/navigation/navigation';
 import {NavigationPermissionsNotice} from './NavigationPermissionsNotice';
 import {useRumMeasureStop} from '../../../rum/RumUiContext';
 import {useAppRumMeasureStart} from '../../../rum/rum-app-measures';
@@ -285,24 +285,24 @@ class Navigation extends Component {
 }
 
 function mapStateToProps(state) {
-    const isFinalState = isNavigationFinalLoadState(state);
-    const loadState = getLoadState(state);
+    const isFinalState = selectIsNavigationFinalLoadState(state);
+    const loadState = selectLoadState(state);
     const hasError = loadState === LOADING_STATUS.ERROR;
     const loaded = loadState === LOADING_STATUS.LOADED;
     return {
-        path: getPath(state),
-        mode: getEffectiveMode(state),
-        type: getType(state),
-        isIdmSupported: getIdmSupport(state),
-        error: getError(state),
+        path: selectPath(state),
+        mode: selectEffectiveMode(state),
+        type: selectType(state),
+        isIdmSupported: selectIdmSupport(state),
+        error: selectError(state),
         hasError,
         loaded,
         loading: !isFinalState,
-        parsedPath: getParsedPath(state),
-        transaction: getTransaction(state),
+        parsedPath: selectParsedPath(state),
+        transaction: selectTransaction(state),
         cluster: selectCluster(state),
         tabSize: UI_TAB_SIZE,
-        tabs: getTabs(state),
+        tabs: selectTabs(state),
     };
 }
 
@@ -319,9 +319,9 @@ const NavigationConnected = connect(mapStateToProps, mapDispatchToProps)(Navigat
 const NavigationWithRumMemo = React.memo(NavigationWithMesure);
 
 function NavigationWithMesure() {
-    const path = useSelector(getPath);
-    const transaction = useSelector(getTransaction);
-    const isFinalState = useSelector(isNavigationFinalLoadState);
+    const path = useSelector(selectPath);
+    const transaction = useSelector(selectTransaction);
+    const isFinalState = useSelector(selectIsNavigationFinalLoadState);
 
     useAppRumMeasureStart({
         type: RumMeasureTypes.NAVIGATION_PRELOAD,
