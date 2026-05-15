@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import ypath from '../../../../../common/thor/ypath';
 
-import {getAttributes} from '../../../../../store/selectors/navigation';
+import {selectAttributes} from '../../../../../store/selectors/navigation';
 
 import ColumnSelectorButton from '../../../../../pages/navigation/content/Table/TableOverview/ColumnSelectorButton';
 import FullScreenButton from '../../../../../pages/navigation/content/Table/TableOverview/FullScreenButton';
@@ -49,7 +49,7 @@ function TableOverview({isFullScreen, allowPagination}) {
 
 const mapStateToProps = (state) => {
     const {isFullScreen} = state.navigation.content.table;
-    const attributes = getAttributes(state);
+    const attributes = selectAttributes(state);
 
     const isUnmounted = ypath.getValue(attributes, '/tablet_state') === 'unmounted';
     const isSorted = ypath.getValue(attributes, '/sorted');

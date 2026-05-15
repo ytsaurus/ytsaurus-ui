@@ -35,7 +35,7 @@ import './Schema.scss';
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
-import {getAttributesPath, getLoadState} from '../../../../store/selectors/navigation';
+import {selectAttributesPath, selectLoadState} from '../../../../store/selectors/navigation';
 import {isFinalLoadingStatus, wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {docsUrl} from '../../../../config';
 import {type YTError} from '../../../../../@types/types';
@@ -295,7 +295,7 @@ const mapStateToProps = (state: RootState) => {
     const {column} = state.navigation.tabs.schema;
 
     const cluster = selectCluster(state);
-    const path = getAttributesPath(state);
+    const path = selectAttributesPath(state);
     const schema = selectSchema(state);
     const meta = selectSchemaMeta(state);
     const filteredSchema = selectFilteredSchema(state);
@@ -312,7 +312,7 @@ const mapDispatchToProps = {
 const SchemaConnected = connect(mapStateToProps, mapDispatchToProps)(Schema);
 
 export default function SchemaWithRum() {
-    const loadState = useSelector(getLoadState);
+    const loadState = useSelector(selectLoadState);
     useAppRumMeasureStart({
         type: RumMeasureTypes.NAVIGATION_TAB_SCHEMA,
         startDeps: [loadState],

@@ -2,7 +2,7 @@ import {type ThunkAction, type UnknownAction} from '@reduxjs/toolkit';
 import ypath from '../../../../../common/thor/ypath';
 
 import {type RootState} from '../../../../reducers';
-import {getAttributes} from '../../../../selectors/navigation';
+import {selectAttributes} from '../../../../selectors/navigation';
 
 import {ytApiV3} from '../../../../../rum/rum-wrap-api';
 import {SET_ORIGINATING_QUEUE_PATH} from '../../../../../constants/navigation';
@@ -11,7 +11,7 @@ type AsyncAction<R = void> = ThunkAction<R, RootState, unknown, UnknownAction>;
 export function fetchOriginatingQueuePath(): AsyncAction {
     return async (dispatch, getState) => {
         const state = getState();
-        const attributes = getAttributes(state);
+        const attributes = selectAttributes(state);
         const queueId = ypath.getValue(
             attributes,
             '/queue_static_export_destination/originating_queue_id',

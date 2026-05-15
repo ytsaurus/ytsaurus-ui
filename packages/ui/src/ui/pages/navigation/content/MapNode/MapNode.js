@@ -24,8 +24,8 @@ import {selectIsCreateTableModalVisible} from '../../../../store/selectors/navig
 import MapNodesTable from './MapNodesTable';
 
 import {openCreateTableModal} from '../../../../store/actions/navigation/modals/create-table';
-import {getPath, getTransaction} from '../../../../store/selectors/navigation';
-import {getNavigationPathAttributes} from '../../../../store/selectors/navigation/navigation';
+import {selectPath, selectTransaction} from '../../../../store/selectors/navigation';
+import {selectNavigationPathAttributes} from '../../../../store/selectors/navigation/navigation';
 import {getMediumList} from '../../../../store/selectors/thor';
 import {
     selectContentMode,
@@ -151,7 +151,7 @@ class MapNode extends Component {
 }
 
 function mapStateToProps(state) {
-    const path = getPath(state);
+    const path = selectPath(state);
 
     return {
         path,
@@ -160,11 +160,11 @@ function mapStateToProps(state) {
         error: selectError(state),
         contentMode: selectContentMode(state),
         filterState: selectFilterState(state),
-        transaction: getTransaction(state),
+        transaction: selectTransaction(state),
         mediumList: getMediumList(state),
         mediumType: selectMediumType(state),
         showCreateTableModal: selectIsCreateTableModalVisible(state),
-        attributes: getNavigationPathAttributes(state),
+        attributes: selectNavigationPathAttributes(state),
         cluster: selectCluster(state),
     };
 }

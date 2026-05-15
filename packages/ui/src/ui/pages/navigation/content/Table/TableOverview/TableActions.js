@@ -10,7 +10,7 @@ import DownloadManager from '../../../../../pages/navigation/content/Table/Downl
 import Button from '../../../../../components/Button/Button';
 
 import {mountUnmountTable} from '../../../../../store/actions/navigation/content/table/table';
-import {getAttributes, getPath} from '../../../../../store/selectors/navigation';
+import {selectAttributes, selectPath} from '../../../../../store/selectors/navigation';
 import withVisible from '../../../../../hocs/withVisible';
 import UploadManager from '../UploadManager/UploadManager';
 import {showDynTablesStateModalByPaths} from '../../../../../store/actions/navigation/modals/dyn-tables-state-modal';
@@ -34,7 +34,7 @@ const propTypes = {
 DynamicActions.propTypes = propTypes;
 function DynamicActions(props) {
     const dispatch = useDispatch();
-    const path = useSelector(getPath);
+    const path = useSelector(selectPath);
 
     const {tabletState} = props;
     const action = tabletState !== 'mounted' ? 'mount' : 'unmount';
@@ -76,7 +76,7 @@ function TableActions(props) {
 
 const mapStateToProps = (state) => {
     const {isDynamic} = state.navigation.content.table;
-    const attributes = getAttributes(state);
+    const attributes = selectAttributes(state);
 
     const tabletState = ypath.getValue(attributes, '/tablet_state');
 

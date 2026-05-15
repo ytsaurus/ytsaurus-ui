@@ -1,7 +1,7 @@
 import {type BaseQueryApi} from '@reduxjs/toolkit/query';
 
 import {type RootState} from '../../../../../store/reducers';
-import {getPath} from '../../../../../store/selectors/navigation';
+import {selectPath} from '../../../../../store/selectors/navigation';
 import {selectCluster} from '../../../../../store/selectors/global';
 
 import {ytApiV3, ytApiV4} from '../../../../../rum/rum-wrap-api';
@@ -26,7 +26,7 @@ export async function createConsumer(args: CreateConsumersMutationArgs, api: Bas
         const {vital, register, consumerPath} = args;
 
         const state = api.getState() as RootState;
-        const queuePath = getPath(state);
+        const queuePath = selectPath(state);
 
         await ytApiV3.create({
             parameters: {
@@ -85,7 +85,7 @@ export async function registerConsumer(args: RegisterConsumersMutationArgs, api:
         const {vital, consumerPath, consumerCluster} = args;
 
         const state = api.getState() as RootState;
-        const queuePath = getPath(state);
+        const queuePath = selectPath(state);
         const queueCluster = selectCluster(state);
 
         const response = await wrapApiPromiseByToaster<
@@ -139,7 +139,7 @@ export async function unregisterConsumer(args: {consumerPath: string}, api: Base
         const {consumerPath} = args;
 
         const state = api.getState() as RootState;
-        const queue_path = getPath(state);
+        const queue_path = selectPath(state);
 
         const response = await wrapApiPromiseByToaster(
             ytApiV4.executeBatch({

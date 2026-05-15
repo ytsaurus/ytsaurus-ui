@@ -2,19 +2,19 @@ import React from 'react';
 import {useSelector} from '../../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
-import {getPath} from '../../../../../store/selectors/navigation';
+import {selectPath} from '../../../../../store/selectors/navigation';
 import ypath from '../../../../../common/thor/ypath';
 
 import './EditTableAction.scss';
 
-import {getNavigationPathAttributes} from '../../../../../store/selectors/navigation/navigation';
+import {selectNavigationPathAttributes} from '../../../../../store/selectors/navigation/navigation';
 import PathActions from '../../MapNode/PathActions';
 
 const block = cn('edit-table-actions');
 
 export default function EditTableActions() {
-    const path = useSelector(getPath);
-    const attributes = useSelector(getNavigationPathAttributes);
+    const path = useSelector(selectPath);
+    const attributes = useSelector(selectNavigationPathAttributes);
 
     return (
         <PathActions

@@ -3,7 +3,7 @@ import {type BaseQueryApi} from '@reduxjs/toolkit/query';
 import {rootApi} from '../../../../../store/api';
 
 import {type RootState} from '../../../../../store/reducers';
-import {getPath} from '../../../../../store/selectors/navigation';
+import {selectPath} from '../../../../../store/selectors/navigation';
 import {selectTargetQueue} from '../../../../../store/selectors/navigation/tabs/consumer';
 import {selectCluster} from '../../../../../store/selectors/global';
 
@@ -20,7 +20,7 @@ async function register(args: RegisterConsumerArgs, api: BaseQueryApi) {
         const {queuePath, queueCluster} = args;
 
         const state = api.getState() as RootState;
-        const consumerPath = getPath(state);
+        const consumerPath = selectPath(state);
         const consumerCluster = selectCluster(state);
         const {vital} = selectTargetQueue(state) ?? {vital: false};
 

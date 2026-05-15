@@ -1,7 +1,7 @@
 import {type CancelTokenSource} from 'axios';
 import {batch} from 'react-redux';
 
-import {getPath} from '../../../../selectors/navigation';
+import {selectPath} from '../../../../selectors/navigation';
 import {getDefaultRequestOutputFormat} from '../../../../../utils/navigation/content/table/table';
 import {CELL_PREVIEW, PREVIEW_LIMIT} from '../../../../../constants/modals/cell-preview';
 import {isCancelled} from '../../../../../utils/cancel-helper';
@@ -27,7 +27,7 @@ const getCellPath = ({
     rowIndex: number;
 }): CellPreviewActionType<string> => {
     return (dispatch, getState) => {
-        const path: string = getPath(getState());
+        const path: string = selectPath(getState());
         const isDynamic = selectIsDynamic(getState());
 
         const action = isDynamic ? getDynamicTableCellPath : getStaticTableCellPath;

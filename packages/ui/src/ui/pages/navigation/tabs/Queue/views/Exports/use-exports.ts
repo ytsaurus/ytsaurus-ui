@@ -3,14 +3,14 @@ import {useSelector} from '../../../../../../store/redux-hooks';
 import {useFetchBatchQuery} from '../../../../../../store/api/yt';
 import {makeGetExportsParams} from '../../../../../../store/api/navigation/tabs/queue/exports';
 
-import {getPath} from '../../../../../../store/selectors/navigation';
+import {selectPath} from '../../../../../../store/selectors/navigation';
 
 import {type QueueExport} from '../../../../../../types/navigation/queue/queue';
 
 import {type ExportConfigColumns} from './Exports';
 
 export function useExports() {
-    const path = useSelector(getPath);
+    const path = useSelector(selectPath);
 
     const {
         data: config,

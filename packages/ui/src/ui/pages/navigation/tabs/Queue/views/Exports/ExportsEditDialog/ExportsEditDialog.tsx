@@ -5,7 +5,7 @@ import {Text} from '@gravity-ui/uikit';
 import {useFetchBatchQuery} from '../../../../../../../store/api/yt';
 import {useExportMutation} from '../../../../../../../store/api/navigation/tabs/queue/queue';
 import {makeGetExportsParams} from '../../../../../../../store/api/navigation/tabs/queue/exports';
-import {getPath} from '../../../../../../../store/selectors/navigation';
+import {selectPath} from '../../../../../../../store/selectors/navigation';
 
 import {type FormApi, YTDFDialog, makeErrorFields} from '../../../../../../../components/Dialog';
 
@@ -83,7 +83,7 @@ const fields = [
 
 export function ExportsEditDialog(props: DialogProps) {
     const {type, prevConfig, visible, onClose} = props;
-    const path = useSelector(getPath);
+    const path = useSelector(selectPath);
 
     const {data: configs} = useFetchBatchQuery<QueueExport<number>>(makeGetExportsParams(path));
     const [update, {isLoading, error}] = useExportMutation();

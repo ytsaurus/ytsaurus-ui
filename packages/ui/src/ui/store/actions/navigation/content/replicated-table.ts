@@ -13,7 +13,7 @@ import {
     LOAD_REPLICAS_SUCCESS,
 } from '../../../../constants/navigation/content/replicated-table';
 import {YTApiId, ytApiV3, ytApiV3Id, ytApiV4Id} from '../../../../rum/rum-wrap-api';
-import {getPath, getTransaction} from '../../../../store/selectors/navigation';
+import {selectPath, selectTransaction} from '../../../../store/selectors/navigation';
 import {type YTError} from '../../../../types';
 import CancelHelper, {isCancelled} from '../../../../utils/cancel-helper';
 import {prepareRequest} from '../../../../utils/navigation';
@@ -42,8 +42,8 @@ type ReplicatedTableThunkAction<T = void> = ThunkAction<
 export function loadReplicas(): ReplicatedTableThunkAction<Promise<void>> {
     return (dispatch, getState) => {
         const state = getState();
-        const path = getPath(state);
-        const transaction = getTransaction(state);
+        const path = selectPath(state);
+        const transaction = selectTransaction(state);
 
         dispatch({type: LOAD_REPLICAS_REQUEST});
         requests.removeAllRequests();

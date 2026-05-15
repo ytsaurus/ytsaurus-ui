@@ -7,7 +7,7 @@ import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
 import Link from '../../../../components/Link/Link';
 
-import {checkIsTrash, getRawPath} from '../../../../store/selectors/navigation';
+import {selectIsTrashPath, selectRawPath} from '../../../../store/selectors/navigation';
 import {showErrorPopup, wrapBatchPromise} from '../../../../utils/utils';
 import {navigateParent, updateView} from '../../../../store/actions/navigation';
 import {decodeEscapedAbsPath, preparePath} from '../../../../utils/navigation';
@@ -51,7 +51,7 @@ export function openDeleteModal(
     multipleMode = false,
 ) {
     return (dispatch: Dispatch, getState: () => RootState) => {
-        const inTrash = checkIsTrash(getState());
+        const inTrash = selectIsTrashPath(getState());
 
         dispatch({
             type: OPEN_DELETE_OBJECT_POPUP,
@@ -299,7 +299,7 @@ export function deleteObject() {
                 dispatch({type: DELETE_OBJECT.SUCCESS});
                 dispatch({type: CLOSE_DELETE_OBJECT_POPUP});
 
-                const currentPath = getRawPath(getState());
+                const currentPath = selectRawPath(getState());
                 const realPathDecoded = decodeEscapedAbsPath(realPath);
 
                 if (currentPath === realPathDecoded) {

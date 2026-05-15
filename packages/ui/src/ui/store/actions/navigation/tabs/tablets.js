@@ -2,7 +2,7 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import CancelHelper from '../../../../utils/cancel-helper';
 import {prepareRequest} from '../../../../utils/navigation';
 import {TYPED_OUTPUT_FORMAT} from '../../../../constants/index';
-import {getPath, getTransaction} from '../../../../store/selectors/navigation';
+import {selectPath, selectTransaction} from '../../../../store/selectors/navigation';
 import {
     CHANGE_ACTIVE_HISTOGRAM,
     CHANGE_TABLETS_MODE,
@@ -18,8 +18,8 @@ const requests = new CancelHelper();
 export function loadTablets() {
     return (dispatch, getState) => {
         const state = getState();
-        const path = getPath(state);
-        const transaction = getTransaction(state);
+        const path = selectPath(state);
+        const transaction = selectTransaction(state);
 
         dispatch({type: GET_TABLETS.REQUEST});
         requests.removeAllRequests();

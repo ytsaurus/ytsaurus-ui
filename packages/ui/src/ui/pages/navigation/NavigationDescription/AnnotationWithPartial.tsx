@@ -7,7 +7,7 @@ import {Markdown} from '../../../components/Markdown/Markdown';
 import {getDescriptionType} from '../../../store/reducers/navigation/description';
 import {useSelector} from '../../../store/redux-hooks';
 import {selectCluster} from '../../../store/selectors/global';
-import {getPath} from '../../../store/selectors/navigation';
+import {selectPath} from '../../../store/selectors/navigation';
 import UIFactory from '../../../UIFactory';
 
 type Props = {
@@ -47,7 +47,7 @@ export const AnnotationWithPartial: FC<Props> = ({annotation, expanded, onToggle
 
 function ExternalAnnotationFallback() {
     const cluster = useSelector(selectCluster);
-    const path = useSelector(getPath);
+    const path = useSelector(selectPath);
 
     const createUrl = UIFactory?.externalAnnotationSetup?.makeCreateUrl?.({cluster, path});
     return (

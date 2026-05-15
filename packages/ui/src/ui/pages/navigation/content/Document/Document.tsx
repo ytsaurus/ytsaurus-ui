@@ -8,8 +8,8 @@ import {
     getDocument,
     saveDocument,
 } from '../../../../store/actions/navigation/content/document';
-import {getAttributes, getPath} from '../../../../store/selectors/navigation';
-import {getEffectiveMode} from '../../../../store/selectors/navigation/navigation';
+import {selectAttributes, selectPath} from '../../../../store/selectors/navigation';
+import {selectEffectiveMode} from '../../../../store/selectors/navigation/navigation';
 import {selectNavigationDocument} from '../../../../store/selectors/navigation/content/document';
 import './Document.scss';
 import DocumentBody from './DocumentBody';
@@ -23,10 +23,10 @@ const Document: FC = () => {
     const dispatch = useDispatch();
     const {loading, loaded, error, errorData, document, editMode} =
         useSelector(selectNavigationDocument);
-    const attributes = useSelector(getAttributes);
-    const path = useSelector(getPath);
+    const attributes = useSelector(selectAttributes);
+    const path = useSelector(selectPath);
     const settings = unipika.prepareSettings();
-    const mode = useSelector(getEffectiveMode);
+    const mode = useSelector(selectEffectiveMode);
     const initialLoading = loading && !loaded;
 
     useEffect(() => {

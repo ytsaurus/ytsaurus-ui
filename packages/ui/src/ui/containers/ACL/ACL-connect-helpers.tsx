@@ -19,7 +19,7 @@ import {
     selectPermissionDeletionError,
 } from '../../store/selectors/acl/acl';
 
-import {getType} from '../../store/selectors/navigation';
+import {selectType} from '../../store/selectors/navigation';
 
 import {
     selectAclCurrentTab,
@@ -90,7 +90,7 @@ const makeAclMapStateToProps = (inputIdmKind: IdmKindType) => {
         const readApprovers = selectNotInheritedReadApprovers(state, idmKind);
         const responsible = selectNotInheritedResponsibles(state, idmKind);
 
-        const nodeType = getType(state);
+        const nodeType = selectType(state);
 
         return {
             cluster: selectCluster(state),

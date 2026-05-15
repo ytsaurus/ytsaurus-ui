@@ -8,7 +8,7 @@ import {
 import {YTApiId, ytApiV3Id} from '../../../../../rum/rum-wrap-api';
 import {type RootState} from '../../../../../store/reducers';
 import {type ConsumerStatusAction} from '../../../../../store/reducers/navigation/tabs/consumer/status';
-import {getPath, getTransaction} from '../../../../../store/selectors/navigation';
+import {selectPath, selectTransaction} from '../../../../../store/selectors/navigation';
 import {type ConsumerFiltersAction} from '../../../../../store/reducers/navigation/tabs/consumer/filters';
 import {prepareRequest} from '../../../../../utils/navigation';
 import {
@@ -27,8 +27,8 @@ type ConsumerThunkAction = ThunkAction<
 export function loadConsumerStatus(): ConsumerThunkAction {
     return (dispatch, getState) => {
         const state = getState();
-        const path = getPath(state);
-        const transaction = getTransaction(state);
+        const path = selectPath(state);
+        const transaction = selectTransaction(state);
 
         dispatch({type: CONSUMER_STATUS_LOAD_REQUEST});
         return ytApiV3Id

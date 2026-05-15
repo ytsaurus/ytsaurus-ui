@@ -27,7 +27,7 @@ import Tabs from '../../../../../components/Tabs/Tabs';
 
 import {getRowsPerTablePage, getShowDecoded} from '../../../../../store/selectors/settings';
 import {selectSchema} from '../../../../../store/selectors/navigation/tabs/schema';
-import {getPath, getTransaction} from '../../../../../store/selectors/navigation';
+import {selectPath, selectTransaction} from '../../../../../store/selectors/navigation';
 import {selectCluster, selectCurrentClusterConfig} from '../../../../../store/selectors/global';
 import withVisible, {type WithVisibleProps} from '../../../../../hocs/withVisible';
 import {
@@ -862,9 +862,9 @@ const mapStateToProps = (state: RootState) => {
     const cluster = selectCluster(state);
     const columns: typeof allColumns = selectColumns(state);
     const schema = selectSchema(state);
-    const path = getPath(state);
+    const path = selectPath(state);
     const {proxy, externalProxy} = selectCurrentClusterConfig(state);
-    const transaction_id = getTransaction(state);
+    const transaction_id = selectTransaction(state);
 
     const isSchematicTable = schema.length > 0;
 

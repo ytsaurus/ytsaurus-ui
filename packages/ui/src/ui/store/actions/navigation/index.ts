@@ -11,7 +11,7 @@ import {RumWrapper, YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 
 import {isPathAutoCorrectionSettingEnabled} from '../../../store/selectors/settings';
-import {getPath, getTransaction} from '../../../store/selectors/navigation';
+import {selectPath, selectTransaction} from '../../../store/selectors/navigation';
 
 import {
     autoCorrectPath,
@@ -37,7 +37,7 @@ import {selectCluster, selectCurrentUserName} from '../../../store/selectors/glo
 import {fetchTableMountConfig} from '../../../store/actions/navigation/content/table/table-mount-config';
 import {checkPermissions} from '../../../utils/acl/acl-api';
 import {loadTabletErrorsCount} from './tabs/tablet-errors/tablet-errors-background';
-import {getTabs} from '../../../store/selectors/navigation/navigation';
+import {selectTabs} from '../../../store/selectors/navigation/navigation';
 import UIFactory from '../../../UIFactory';
 import {type RootState} from '../../../store/reducers';
 import {
@@ -51,8 +51,8 @@ type NavigationThunk<T = void> = ThunkAction<T, RootState, unknown, NavigationAc
 export function updateView(settings: {trackVisit?: boolean} = {}): NavigationThunk {
     return (dispatch, getState) => {
         const state = getState();
-        const currentPath = getPath(state);
-        const transaction = getTransaction(state);
+        const currentPath = selectPath(state);
+        const transaction = selectTransaction(state);
 
         dispatch({type: UPDATE_VIEW.REQUEST});
         // Update path for use default path and auto correct path
@@ -207,7 +207,7 @@ export function updateView(settings: {trackVisit?: boolean} = {}): NavigationThu
 
 export function setMode(mode: NavigationState['mode']): NavigationThunk {
     return (dispatch, getState) => {
-        const [firstTab] = getTabs(getState());
+        const [firstTab] = selectTabs(getState());
 
         dispatch({
             type: SET_MODE,

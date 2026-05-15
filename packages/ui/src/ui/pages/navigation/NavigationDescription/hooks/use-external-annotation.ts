@@ -1,11 +1,11 @@
 import {useSelector} from '../../../../store/redux-hooks';
 
-import {getPath} from '../../../../store/selectors/navigation';
+import {selectPath} from '../../../../store/selectors/navigation';
 import {selectCluster} from '../../../../store/selectors/global';
 import {useExternalDescriptionQuery} from '../../../../store/api/navigation/tabs/description';
 
 export function useExternalAnnotation() {
-    const path: string = useSelector(getPath);
+    const path: string = useSelector(selectPath);
     const cluster = useSelector(selectCluster);
 
     const {data: externalAnnotaionData, isSuccess: isExternalAnnotationSuccess} =

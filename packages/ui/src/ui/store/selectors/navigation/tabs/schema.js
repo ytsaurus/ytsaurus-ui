@@ -6,14 +6,14 @@ import reduce_ from 'lodash/reduce';
 import ypath from '../../../../common/thor/ypath';
 import hammer from '../../../../common/hammer';
 import {createSelector} from 'reselect';
-import {getAttributes} from '../../../../store/selectors/navigation';
+import {selectAttributes} from '../../../../store/selectors/navigation';
 
 const TABLE_ATTRIBUTES_FOR_META = ['schema_mode'];
 const EXCLUDED_COLUMNS = {sort_order: null};
 
-const getColumn = (state) => state.navigation.tabs.schema.column;
+const selectColumn = (state) => state.navigation.tabs.schema.column;
 
-export const selectSchemaMeta = createSelector([getAttributes], (attributes) => {
+export const selectSchemaMeta = createSelector([selectAttributes], (attributes) => {
     const schemaAttributes = ypath.getValue(attributes, '/schema/@');
     const tableAttributes = pick_(attributes, TABLE_ATTRIBUTES_FOR_META);
 
@@ -26,7 +26,7 @@ export const selectSchemaMeta = createSelector([getAttributes], (attributes) => 
     return [...tableMeta, ...schemaMeta];
 });
 
-export const selectSchema = createSelector([getAttributes], (attributes) => {
+export const selectSchema = createSelector([selectAttributes], (attributes) => {
     const schemaValues = ypath.getValue(attributes.schema);
 
     return map_(schemaValues, (item, index) => ({...item, index}));
@@ -43,11 +43,11 @@ export const selectSchemaByName = createSelector([selectSchema], (items) => {
     );
 });
 
-export const selectSchemaStrict = createSelector([getAttributes], (attrs) => {
+export const selectSchemaStrict = createSelector([selectAttributes], (attrs) => {
     return ypath.getValue(attrs, '/schema/@strict');
 });
 
-export const selectFilteredSchema = createSelector([selectSchema, getColumn], (data, input) =>
+export const selectFilteredSchema = createSelector([selectSchema, selectColumn], (data, input) =>
     hammer.filter.filter({data, input, factors: ['type', 'name']}),
 );
 

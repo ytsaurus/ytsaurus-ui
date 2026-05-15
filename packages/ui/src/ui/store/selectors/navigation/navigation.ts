@@ -16,31 +16,31 @@ import {type ValueOf, type YTError} from '../../../types';
 import UIFactory from '../../../UIFactory';
 import {type ParsedPath, prepareNavigationState} from '../../../utils/navigation';
 import {isPipelineNode} from '../../../utils/navigation/isPipelineNode';
-import {getAttributes, getParsedPath, getPath, getTransaction} from './index';
+import {selectAttributes, selectParsedPath, selectPath, selectTransaction} from './index';
 
-export function getNavigationPathAttributesLoadState(state: RootState) {
+export function selectNavigationPathAttributesLoadState(state: RootState) {
     return state.navigation.navigation.loadState;
 }
 
-export const getNavigationPathAttributes = (state: RootState) =>
+export const selectNavigationPathAttributes = (state: RootState) =>
     state.navigation.navigation.attributes as any;
-export const getNavigationIsWritable = (state: RootState) =>
+export const selectNavigationIsWritable = (state: RootState) =>
     state.navigation.navigation.isWriteable as boolean;
-export const getNavigationIsAccountUsable = (state: RootState) =>
+export const selectNavigationIsAccountUsable = (state: RootState) =>
     state.navigation.navigation.isAccountUsable as boolean;
-export const getNavigationCheckPermissionsError = (state: RootState) =>
+export const selectNavigationCheckPermissionsError = (state: RootState) =>
     state.navigation.navigation.checkPermissionsError as YTError | undefined;
-export const getMode = (state: RootState) => state.navigation.navigation.mode;
-export const getNavigationAccessLogAvailable = (state: RootState) =>
+export const selectMode = (state: RootState) => state.navigation.navigation.mode;
+export const selectNavigationAccessLogAvailable = (state: RootState) =>
     state.navigation.navigation.is_access_log_available;
 
-export const getNavigationPathAccount = createSelector(
-    [getNavigationPathAttributes],
+export const selectNavigationPathAccount = createSelector(
+    [selectNavigationPathAttributes],
     (attrs) => attrs.account,
 );
 
-export const getNavigationBreadcrumbs = createSelector(
-    [getPath, getParsedPath, getTransaction],
+export const selectNavigationBreadcrumbs = createSelector(
+    [selectPath, selectParsedPath, selectTransaction],
     (path: string, parsedPath?: ParsedPath, transaction?: string) => {
         if (parsedPath) {
             return map_(parsedPath?.fragments, (item, index) => {
@@ -68,20 +68,20 @@ function prepareBrokenPath(path: string): string {
     });
 }
 
-export const getNavigationRestorePath = createSelector([getNavigationPathAttributes], (attrs) => {
+export const selectNavigationRestorePath = createSelector([selectNavigationPathAttributes], (attrs) => {
     return ypath.getValue(attrs, '/_restore_path');
 });
 
-export const getNavigationOriginatingQueuePath = (state: RootState) =>
+export const selectNavigationOriginatingQueuePath = (state: RootState) =>
     state.navigation.navigation.originatingQueuePath;
 
-export const getSupportedTabs = createSelector(
+export const selectSupportedTabs = createSelector(
     [
-        getNavigationPathAttributes,
+        selectNavigationPathAttributes,
         selectTableMountConfigHasData,
         selectTabletErrorsBackgroundCount,
-        getNavigationOriginatingQueuePath,
-        getNavigationAccessLogAvailable,
+        selectNavigationOriginatingQueuePath,
+        selectNavigationAccessLogAvailable,
     ],
     (
         attributes,
@@ -164,12 +164,12 @@ export const getSupportedTabs = createSelector(
     },
 );
 
-export const getTabs = createSelector(
+export const selectTabs = createSelector(
     [
-        getSupportedTabs,
+        selectSupportedTabs,
         selectTabletErrorsBackgroundCount,
-        getAttributes,
-        getNavigationOriginatingQueuePath,
+        selectAttributes,
+        selectNavigationOriginatingQueuePath,
         selectCluster,
     ],
     (supportedTabs, tabletErrorsCount, attributes, originatingQueuePath, cluster) => {
@@ -381,7 +381,7 @@ export const getTabs = createSelector(
     },
 );
 
-export const getEffectiveMode = createSelector([getMode, getTabs], (mode, tabs) => {
+export const selectEffectiveMode = createSelector([selectMode, selectTabs], (mode, tabs) => {
     const [firstTab] = tabs;
 
     return mode === Tab.AUTO ? firstTab.value : mode;

@@ -7,7 +7,7 @@ import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import unipika from '../../../../common/thor/unipika';
 import {createSelector} from 'reselect';
 
-import {getAttributes} from '../../../../store/selectors/navigation';
+import {selectAttributes} from '../../../../store/selectors/navigation';
 import {shouldUseYqlTypes} from '../../../../store/selectors/settings/settings-development';
 
 import Columns from '../../../../utils/navigation/content/table/columns';
@@ -62,12 +62,12 @@ export const selectAllColumns = createSelector(
 );
 
 export const selectSrcColumns = createSelector(
-    [getAttributes, selectAllColumns],
+    [selectAttributes, selectAllColumns],
     (attributes, allColumns) => Columns.prepareSrcColumns(attributes, allColumns),
 );
 
 export const selectTableType = createSelector(
-    [getAttributes, selectIsDynamic],
+    [selectAttributes, selectIsDynamic],
     (attributes, isDynamic) => {
         return getTableTypeByAttributes(isDynamic, attributes);
     },
@@ -76,7 +76,7 @@ export const selectTableType = createSelector(
 // request one more item per page to detect reaching end of the table
 export const selectRequestedPageSize = createSelector(selectPageSize, (pageSize) => pageSize + 1);
 
-export const selectRowCount = createSelector(getAttributes, (attributes) => {
+export const selectRowCount = createSelector(selectAttributes, (attributes) => {
     /** @type {number} */
     const res = ypath.getValue(attributes, '/chunk_row_count');
     return res;
@@ -159,7 +159,7 @@ export const selectNextOffset = createSelector(
     },
 );
 
-export const selectIsTableSorted = createSelector([getAttributes], (attributes) => {
+export const selectIsTableSorted = createSelector([selectAttributes], (attributes) => {
     return ypath.getValue(attributes, '/sorted');
 });
 
@@ -176,7 +176,7 @@ export const selectProgressWidth = createSelector(
     },
 );
 
-export const selectIsYqlSchemaExists = createSelector([getAttributes], (attributes) => {
+export const selectIsYqlSchemaExists = createSelector([selectAttributes], (attributes) => {
     const schema = ypath.getValue(attributes, '/schema');
     const _readSchema = ypath.getValue(attributes, '/_read_schema');
 

@@ -12,7 +12,7 @@ import {
 import {closeEditingPopup} from '../../../../../store/actions/navigation/modals/path-editing-popup';
 import {updatePath, updateView} from '../../../../../store/actions/navigation';
 import {Checkbox} from '@gravity-ui/uikit';
-import {getPath} from '../../../../../store/selectors/navigation';
+import {selectPath} from '../../../../../store/selectors/navigation';
 
 class MoveObjectModal extends Component {
     static propTypes = {
@@ -145,7 +145,7 @@ class MoveObjectModal extends Component {
 
 const mapStateToProps = (state) => {
     const {navigation} = state;
-    const path = getPath(state);
+    const path = selectPath(state);
     const {
         error,
         errorMessage,

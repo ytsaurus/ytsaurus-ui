@@ -3,13 +3,13 @@ import {useSelector} from '../../../../store/redux-hooks';
 import {YTApiId} from '../../../../rum/rum-wrap-api';
 
 import {useUpdateBatchMutation} from '../../../../store/api/yt';
-import {getPath} from '../../../../store/selectors/navigation';
+import {selectPath} from '../../../../store/selectors/navigation';
 
 import {prepareRequest} from '../../../../utils/navigation';
 
 export function useUpdateAnnotation() {
     const [update, rest] = useUpdateBatchMutation<string>();
-    const path = useSelector(getPath);
+    const path = useSelector(selectPath);
 
     const updateFn = (annotation: string) =>
         update({

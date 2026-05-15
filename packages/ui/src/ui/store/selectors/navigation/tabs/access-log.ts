@@ -4,7 +4,7 @@ import isEqual_ from 'lodash/isEqual';
 import {type RootState} from '../../../../store/reducers';
 import {createSelector} from 'reselect';
 import {selectCluster} from '../../../../store/selectors/global';
-import {getPath} from '../../../../store/selectors/navigation/index';
+import {selectPath} from '../../../../store/selectors/navigation/index';
 import {convertTimeToRequestParams} from '../../../../components/common/Timeline';
 
 const selectAccessLogFiltersState = (state: RootState) =>
@@ -79,7 +79,7 @@ function skipEmpty<T>(v: T) {
 }
 
 export const selectAccessLogRequestParams = createSelector(
-    [selectCluster, getPath, selectAccessLogFiltersState],
+    [selectCluster, selectPath, selectAccessLogFiltersState],
     (cluster, path, filters) => {
         const {time, field_selector, method_group, user_type, scope, ...rest} = filters;
 

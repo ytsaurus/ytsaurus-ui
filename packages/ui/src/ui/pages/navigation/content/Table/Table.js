@@ -17,7 +17,7 @@ import Yson from '../../../../components/Yson/Yson';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 
 import {OVERVIEW_HEIGHT} from '../../../../constants/navigation/content/table';
-import {getPath} from '../../../../store/selectors/navigation';
+import {selectPath} from '../../../../store/selectors/navigation';
 import {HEADER_HEIGHT} from '../../../../constants/index';
 import {
     abortAndReset,
@@ -213,7 +213,7 @@ const mapStateToProps = (state) => {
     const settings = getTableYsonSettings(state);
     const {isSplit} = state.global.splitScreen;
 
-    const path = getPath(state);
+    const path = selectPath(state);
     const columns = selectColumns(state);
     const yqlTypes = selectYqlTypes(state);
     const isDynamic = selectIsDynamic(state);

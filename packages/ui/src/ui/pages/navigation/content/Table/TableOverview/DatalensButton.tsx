@@ -1,23 +1,23 @@
 import React from 'react';
 import {useSelector} from '../../../../../store/redux-hooks';
 
-import {getPath} from '../../../../../store/selectors/navigation';
+import {selectPath} from '../../../../../store/selectors/navigation';
 import {selectCluster} from '../../../../../store/selectors/global';
 import Icon from '../../../../../components/Icon/Icon';
 import {Secondary, Tooltip, Warning} from '@ytsaurus/components';
 import {selectNavigationTableDataLensButtonAlerts} from '../../../../../store/selectors/navigation/content/table-ts';
 import {Button} from '@gravity-ui/uikit';
 import Link from '../../../../../components/Link/Link';
-import {getNavigationPathAttributesLoadState} from '../../../../../store/selectors/navigation/navigation';
+import {selectNavigationPathAttributesLoadState} from '../../../../../store/selectors/navigation/navigation';
 import {LOADING_STATUS} from '../../../../../constants';
 import {docsUrl} from '../../../../../config';
 import {uiSettings} from '../../../../../config/ui-settings';
 import UIFactory from '../../../../../UIFactory';
 
 export default function DataLensButton({className}: {className: string}) {
-    const loaded = useSelector(getNavigationPathAttributesLoadState) === LOADING_STATUS.LOADED;
+    const loaded = useSelector(selectNavigationPathAttributesLoadState) === LOADING_STATUS.LOADED;
     const cluster: string = useSelector(selectCluster);
-    const path = useSelector(getPath);
+    const path = useSelector(selectPath);
     const {isEmptySchema, enableDynamicStoreRedRequired} = useSelector(
         selectNavigationTableDataLensButtonAlerts,
     );

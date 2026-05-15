@@ -14,7 +14,7 @@ import values_ from 'lodash/values';
 
 import ypath from '../../../../common/thor/ypath';
 import hammer from '../../../../common/hammer';
-import {getParsedPath, getTransaction} from '../../../../store/selectors/navigation';
+import {selectParsedPath, selectTransaction} from '../../../../store/selectors/navigation';
 import {makeGetSetting} from '../../../../store/selectors/settings';
 import {NAMESPACES, SettingName} from '../../../../../shared/constants/settings';
 import {ContentMode, NAVIGATION_MAP_NODE_TABLE_ID} from '../../../../constants/navigation';
@@ -146,7 +146,7 @@ const selectSortState = (state) => state.tables[NAVIGATION_MAP_NODE_TABLE_ID];
 export const selectNodesData = (state) => state.navigation.content.mapNode.nodesData;
 
 const selectNodes = createSelector(
-    [selectNodesData, getParsedPath, getTransaction, selectContentMode],
+    [selectNodesData, selectParsedPath, selectTransaction, selectContentMode],
     (nodesData, parsedPath, transaction, contentMode) => {
         return map_(
             nodesData,
@@ -284,7 +284,7 @@ export const selectNodesInfo = createSelector(selectSortedNodes, (nodes) => {
 });
 
 export const selectIsRootNode = createSelector(
-    getParsedPath,
+    selectParsedPath,
     (parsedPath) => parsedPath.stringify() === '/',
 );
 

@@ -25,7 +25,7 @@ import {
 } from '../../../../store/selectors/navigation/content/transaction-map';
 import {tableItems} from '../../../../utils/navigation/content/transaction-map/table';
 import {getIconNameForType} from '../../../../utils/navigation/path-editor';
-import {getPath, getTransaction} from '../../../../store/selectors/navigation';
+import {selectPath, selectTransaction} from '../../../../store/selectors/navigation';
 import {itemNavigationAllowed} from '../../../../pages/navigation/Navigation/ContentViewer/helpers';
 
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
@@ -175,8 +175,8 @@ class TransactionMap extends Component {
 
 const mapStateToProps = (state) => {
     const {filter, loading, loaded, error, errorData} = state.navigation.content.transactionMap;
-    const path = getPath(state);
-    const transaction = getTransaction(state);
+    const path = selectPath(state);
+    const transaction = selectTransaction(state);
     const transactions = selectTransactions(state);
 
     return {

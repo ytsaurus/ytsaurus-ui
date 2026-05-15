@@ -5,14 +5,14 @@ import {updateEnableReplicatedTableTracker} from '../../../../store/actions/navi
 import './ReplicatedTable.scss';
 import TableMeta from '../Table/TableMeta/TableMeta';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-import {getPath} from '../../../../store/selectors/navigation';
-import {getNavigationPathAttributes} from '../../../../store/selectors/navigation/navigation';
+import {selectPath} from '../../../../store/selectors/navigation';
+import {selectNavigationPathAttributes} from '../../../../store/selectors/navigation/navigation';
 
 const block = cn('navigation-replicated-table');
 
 export default function ReplicatedTableMeta() {
-    const path = useSelector(getPath);
-    const {type} = useSelector(getNavigationPathAttributes);
+    const path = useSelector(selectPath);
+    const {type} = useSelector(selectNavigationPathAttributes);
     const dispatch = useDispatch();
 
     const onEdit = (value?: boolean) => {

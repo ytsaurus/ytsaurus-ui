@@ -8,10 +8,10 @@ import {Breadcrumbs, Flex, type Key} from '@gravity-ui/uikit';
 import {getMetrics} from '../../../common/utils/metrics';
 
 import {
-    getMode,
-    getNavigationBreadcrumbs,
-    getNavigationPathAttributes,
-    getNavigationRestorePath,
+    selectMode,
+    selectNavigationBreadcrumbs,
+    selectNavigationPathAttributes,
+    selectNavigationRestorePath,
 } from '../../../store/selectors/navigation/navigation';
 import {selectCluster} from '../../../store/selectors/global';
 import {makeRoutedURL} from '../../../store/location';
@@ -22,10 +22,10 @@ import {
     selectIsCurrentPathInFavourites,
 } from '../../../store/selectors/favourites';
 import {
-    getActualPath,
-    getPath,
-    getTransaction,
-    isNavigationFinalLoadState,
+    selectActualPath,
+    selectPath,
+    selectTransaction,
+    selectIsNavigationFinalLoadState,
 } from '../../../store/selectors/navigation';
 import {navigationToggleFavourite} from '../../../store/actions/favourites';
 import {
@@ -89,7 +89,7 @@ function NavigationFavourites() {
     const favourites = useSelector(selectFavouritePaths);
 
     const isInFavourites = useSelector(selectIsCurrentPathInFavourites);
-    const path = useSelector(getPath);
+    const path = useSelector(selectPath);
 
     const handleToggle = React.useCallback(() => {
         dispatch(navigationToggleFavourite(path));
@@ -114,7 +114,7 @@ function NavigationFavourites() {
 }
 
 function NavigationPathToClipboard() {
-    const path = useSelector(getPath);
+    const path = useSelector(selectPath);
     return (
         <span className={block('to-clipboard')}>
             <ClipboardButton
@@ -154,7 +154,7 @@ function onCopyToClipboard() {
 
 function NavigationPathEditor({hideEditor}: {hideEditor: () => void}) {
     const dispatch = useDispatch();
-    const actualPath = useSelector(getActualPath);
+    const actualPath = useSelector(selectActualPath);
 
     const handleApply = React.useCallback(
         (path: string) => {
@@ -184,8 +184,8 @@ function NavigationPathEditor({hideEditor}: {hideEditor: () => void}) {
 }
 
 function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
-    const bcItems = useSelector(getNavigationBreadcrumbs);
-    const mode = useSelector(getMode);
+    const bcItems = useSelector(selectNavigationBreadcrumbs);
+    const mode = useSelector(selectMode);
     const history = useHistory();
 
     const lastClickWasModified = React.useRef(false);
@@ -220,10 +220,10 @@ function NavigationBreadcrumbs({onEdit}: {onEdit: () => void}) {
         });
     }, [bcItems, mode, onEdit]);
 
-    const loading = !useSelector(isNavigationFinalLoadState);
+    const loading = !useSelector(selectIsNavigationFinalLoadState);
 
-    const path = useSelector(getPath);
-    const {path: target_path} = useSelector(getNavigationPathAttributes);
+    const path = useSelector(selectPath);
+    const {path: target_path} = useSelector(selectNavigationPathAttributes);
     const decodedTargetPath = target_path ? decodeEscapedAbsPath(target_path) : undefined;
 
     const showBeforeEditorContent =
@@ -276,7 +276,7 @@ function Transaction() {
     const dispatch = useDispatch();
 
     const cluster = useSelector(selectCluster);
-    const transaction = useSelector(getTransaction);
+    const transaction = useSelector(selectTransaction);
     const [editMode, setEditMode] = React.useState(false);
 
     const handleClearTransaction = React.useCallback(() => {
@@ -359,8 +359,8 @@ function RefreshButton() {
 
 function RestoreButton() {
     const dispatch = useDispatch();
-    const path = useSelector(getPath);
-    const restorePath = useSelector(getNavigationRestorePath);
+    const path = useSelector(selectPath);
+    const restorePath = useSelector(selectNavigationRestorePath);
 
     const handleRestore = React.useCallback(() => {
         dispatch(restoreObject(path, restorePath));

@@ -8,7 +8,7 @@ import {YTApiId, ytApiV3Id} from '../../../../../rum/rum-wrap-api';
 import {type RootState} from '../../../../../store/reducers';
 import {type QueuePartitionsAction} from '../../../../../store/reducers/navigation/tabs/queue/partitions';
 import {type YtQueuePartition} from '../../../../../store/reducers/navigation/tabs/queue/types';
-import {getPath, getTransaction} from '../../../../../store/selectors/navigation';
+import {selectPath, selectTransaction} from '../../../../../store/selectors/navigation';
 import {prepareRequest} from '../../../../../utils/navigation';
 
 type QueueThunkAction = ThunkAction<void, RootState, unknown, QueuePartitionsAction>;
@@ -16,8 +16,8 @@ type QueueThunkAction = ThunkAction<void, RootState, unknown, QueuePartitionsAct
 export function loadQueuePartitions(): QueueThunkAction {
     return (dispatch, getState) => {
         const state = getState();
-        const path = getPath(state);
-        const transaction = getTransaction(state);
+        const path = selectPath(state);
+        const transaction = selectTransaction(state);
 
         dispatch({type: QUEUE_PARTITIONS_LOAD_REQUEST});
 

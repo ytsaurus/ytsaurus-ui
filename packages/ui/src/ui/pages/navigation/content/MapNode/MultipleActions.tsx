@@ -15,7 +15,7 @@ import Icon from '../../../../components/Icon/Icon';
 import Button from '../../../../components/Button/Button';
 import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 
-import {getPath} from '../../../../store/selectors/navigation';
+import {selectPath} from '../../../../store/selectors/navigation';
 import {inTrash} from '../../../../utils/navigation/restore-object';
 import {restoreObjects} from '../../../../store/actions/navigation/modals/restore-object';
 import {openDeleteModal} from '../../../../store/actions/navigation/modals/delete-object';
@@ -47,7 +47,7 @@ export default function MultipleActions(props: {className?: string}) {
     const {className} = props;
 
     const dispatch = useDispatch();
-    const path = useSelector(getPath);
+    const path = useSelector(selectPath);
     const isOneSelected = useSelector(selectIsSelected);
     const selectedNodes = useSelector(selectSelectedNodes);
     const isTooLarge = selectedNodes.length > MAX_ITEMS_PER_REQUEST;

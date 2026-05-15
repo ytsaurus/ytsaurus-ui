@@ -36,7 +36,7 @@ import {
     getRequestOutputFormat,
 } from '../../../../../utils/navigation/content/table/table';
 
-import {getAttributes, getPath, getTransaction} from '../../../../../store/selectors/navigation';
+import {selectAttributes, selectPath, selectTransaction} from '../../../../../store/selectors/navigation';
 import {
     getDefaultTableColumnLimit,
     isTableSimilarityEnabled,
@@ -78,16 +78,16 @@ const requests = new CancelHelper();
 function loadDynamicTable(requestOutputFormat, state, type, useZeroRangeForPreload) {
     const {login} = state.global;
 
-    const path = getPath(state);
+    const path = selectPath(state);
     const stringLimit = selectCellSize(state);
     const keyColumns = selectKeyColumns(state);
     const columns = selectColumns(state);
-    const attributes = getAttributes(state);
+    const attributes = selectAttributes(state);
     const useYqlTypes = selectIsYqlTypesEnabled(state);
     const moveBackward = selectMoveOffsetBackward(state);
     const defaultTableColumnLimit = getDefaultTableColumnLimit(state);
     const {offsetValue: offset, moveBackward: descending} = selectNextOffset(state);
-    const transaction = getTransaction(state);
+    const transaction = selectTransaction(state);
     const orderBySupported = true;
     const offsetColumns = keyColumns;
 
@@ -281,9 +281,9 @@ function loadDynamicTable(requestOutputFormat, state, type, useZeroRangeForPrelo
 }
 
 async function loadStaticTable(requestOutputFormat, state, type, useZeroRangeForPreload) {
-    const path = getPath(state);
+    const path = selectPath(state);
     const stringLimit = selectCellSize(state);
-    const transaction = getTransaction(state);
+    const transaction = selectTransaction(state);
     const moveBackward = selectMoveOffsetBackward(state);
     const requestedPageSize = selectRequestedPageSize(state);
     const defaultTableColumnLimit = getDefaultTableColumnLimit(state);
@@ -355,7 +355,7 @@ function loadTableRows(type, state, requestOutputFormat) {
 // and restore personalized columns list.
 function restoreColumns(state) {
     const tableSimilarityEnabled = isTableSimilarityEnabled(state);
-    const attributes = getAttributes(state);
+    const attributes = selectAttributes(state);
     const stringLimit = selectCellSize(state);
 
     const requestOutputFormat = {
@@ -390,7 +390,7 @@ function restoreColumns(state) {
 export function updateTableData() {
     return (dispatch, getState) => {
         const state = getState();
-        const attributes = getAttributes(state);
+        const attributes = selectAttributes(state);
         const {offsetValue, moveBackward} = selectNextOffset(state);
         const requestedPageSize = selectRequestedPageSize(state);
         const isDynamic = selectIsDynamic(state);
@@ -467,7 +467,7 @@ export function getTableData() {
     return (dispatch, getState) => {
         const state = getState();
 
-        const attributes = getAttributes(state);
+        const attributes = selectAttributes(state);
 
         return dispatch(loadColumnPresetIfDefined()).then(() => {
             const updateColumns = ({
@@ -573,7 +573,7 @@ export function closeColumnSelectorModal() {
 export function updateColumns(allColumns) {
     return (dispatch, getState) => {
         const state = getState();
-        const attributes = getAttributes(state);
+        const attributes = selectAttributes(state);
         const omittedColumns = selectOmittedColumns(state);
         const deniedKeyColumns = selectDeniedKeyColumns(state);
         const columns = filter_(allColumns, (column) => !column.disabled); // remove omitted columns
@@ -651,7 +651,7 @@ export function handleScreenChanged(isFullScreen) {
 
 export function mountUnmountTable(action) {
     return (dispatch, getState) => {
-        const path = getPath(getState());
+        const path = selectPath(getState());
 
         getMetrics().countEvent('navigation_dynamic_table_action', action);
 

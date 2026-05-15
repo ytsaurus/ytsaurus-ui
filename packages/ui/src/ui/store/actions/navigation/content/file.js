@@ -2,7 +2,7 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import CancelHelper from '../../../../utils/cancel-helper';
 import {prepareRequest} from '../../../../utils/navigation';
-import {getPath, getTransaction} from '../../../../store/selectors/navigation';
+import {selectPath, selectTransaction} from '../../../../store/selectors/navigation';
 import {LOAD_FILE, MAX_FILE_SIZE} from '../../../../constants/navigation/content/file';
 import {ytApiV3} from '../../../../rum/rum-wrap-api';
 
@@ -11,8 +11,8 @@ const requests = new CancelHelper();
 export function loadFile() {
     return (dispatch, getState) => {
         const state = getState();
-        const path = getPath(state);
-        const transaction = getTransaction(state);
+        const path = selectPath(state);
+        const transaction = selectTransaction(state);
 
         dispatch({type: LOAD_FILE.REQUEST});
         requests.removeAllRequests();

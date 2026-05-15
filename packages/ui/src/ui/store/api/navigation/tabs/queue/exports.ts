@@ -6,7 +6,7 @@ import ypath from '../../../../../common/thor/ypath';
 
 import {type RootState} from '../../../../../store/reducers';
 import {batchApi} from '../../../yt';
-import {getAttributes, getPath} from '../../../../../store/selectors/navigation';
+import {selectAttributes, selectPath} from '../../../../../store/selectors/navigation';
 import {selectCluster} from '../../../../../store/selectors/global';
 
 import CancelHelper from '../../../../../utils/cancel-helper';
@@ -62,8 +62,8 @@ async function deleteExtraAttributes(
 export async function exportsMutation(args: ExportsMutationArgs, api: BaseQueryApi) {
     try {
         const state = api.getState() as RootState;
-        const path = getPath(state);
-        const attributes = getAttributes(state);
+        const path = selectPath(state);
+        const attributes = selectAttributes(state);
         const cluster = selectCluster(state);
 
         const {prevConfig, type, newConfig} = args;

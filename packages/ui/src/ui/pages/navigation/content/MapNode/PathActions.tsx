@@ -8,7 +8,7 @@ import Button from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
 
 import {inTrash} from '../../../../utils/navigation/restore-object';
-import {getTransaction} from '../../../../store/selectors/navigation';
+import {selectTransaction} from '../../../../store/selectors/navigation';
 
 import ypath from '../../../../common/thor/ypath';
 import {OPEN_MOVE_OBJECT_POPUP} from '../../../../constants/navigation/modals/move-object';
@@ -54,7 +54,7 @@ function PathActions(props: Props) {
     const objectPath = item.path;
 
     const dispatch = useDispatch();
-    const transaction = useSelector(getTransaction);
+    const transaction = useSelector(selectTransaction);
 
     const restorePath = ypath.getValue(item.$attributes, '/_restore_path');
     const hasRestoreButton = inTrash(item.path);

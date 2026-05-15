@@ -29,7 +29,7 @@ import {
     toggleReplicatedTableSortOrder,
     updateEnableReplicatedTableTracker,
 } from '../../../../store/actions/navigation/content/replicated-table';
-import {getAttributes, getPath} from '../../../../store/selectors/navigation';
+import {selectAttributes, selectPath} from '../../../../store/selectors/navigation';
 import {Page} from '../../../../constants/index';
 import {ReplicatedTableSettingsButton} from './ReplicatedTableSettings';
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
@@ -465,8 +465,8 @@ class ReplicatedTable extends Component {
 const mapStateToProps = (state) => {
     const {loading, loaded, error, errorData, replicas} = selectReplicatedTableData(state);
     const allowEnableReplicatedTracker = selectAllowEnableReplicatedTracker(state);
-    const path = getPath(state);
-    const attributes = getAttributes(state);
+    const path = selectPath(state);
+    const attributes = selectAttributes(state);
     const sortState = selectReplicatedTableSortSettings(state);
 
     const [enable_replicated_table_tracker, type] = ypath.getValues(attributes, [
