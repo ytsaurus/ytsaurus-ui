@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v0.2.1...components-v0.2.2) (2026-05-16)
+
+
+### Bug Fixes
+
+* **Components:** add default theme [YTFRONT-5601] ([45010c4](https://github.com/ytsaurus/ytsaurus-ui/commit/45010c44dbc6dd921de827d9ce6416c7fcaae965))
+
 ## [0.2.1](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v0.2.0...components-v0.2.1) (2026-04-23)
 
 
