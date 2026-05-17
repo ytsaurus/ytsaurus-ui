@@ -199,13 +199,21 @@ function getInitialStateFilterValue<T>(
 ) {
     if (currentState.value !== 'auto') {
         return currentState.value;
-    } else if (operation.failedJobs) {
-        return 'failed';
-    } else if (operation.inIntermediateState()) {
-        return 'running';
-    } else {
-        return operation.successfullyCompleted() ? 'completed' : 'failed';
     }
+
+    if (operation.state === 'aborted') {
+        return 'all';
+    }
+
+    if (operation.inIntermediateState()) {
+        return 'running';
+    }
+
+    if (operation.successfullyCompleted()) {
+        return operation.failedJobs ? 'failed' : 'all';
+    }
+
+    return 'failed';
 }
 
 export default (state = initialState, action: JobsListAction): JobsState => {
