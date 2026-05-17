@@ -347,6 +347,34 @@ export function getFilterValue<K extends keyof JobsState['filters']>(name: K) {
     };
 }
 
+function resolveAutoStateFilter(operation: DetailedOperationSelector): string {
+    if (operation.inIntermediateState()) {
+        return 'running';
+    }
+
+    if (
+        operation.state === 'aborted' ||
+        (operation.successfullyCompleted() && !operation.failedJobs)
+    ) {
+        return 'all';
+    }
+
+    return 'failed';
+}
+
+export const selectStateFilterValue = createSelector(
+    [
+        (state: RootState) => state.operations.jobs.filters.state.value,
+        (state: RootState) => state.operations.detail.operation,
+    ],
+    (stateValue, operation) => {
+        if (stateValue === 'auto' && operation) {
+            return resolveAutoStateFilter(operation);
+        }
+        return stateValue;
+    },
+);
+
 export function getFilteredAttributes(attributeNames: Array<keyof JobsState['filters']>) {
     return (state: RootState) => {
         return attributeNames.filter((name) => getFilterValue(name)(state));

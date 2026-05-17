@@ -17,7 +17,7 @@ import {
     UPDATE_FILTER_COUNTERS,
     UPDATE_OFFSET,
 } from '../../../../constants/operations/jobs';
-import {GET_OPERATION} from '../../../../constants/operations/detail';
+import {type GET_OPERATION} from '../../../../constants/operations/detail';
 import {Job} from '../../../../pages/operations/OperationDetail/tabs/Jobs/job-selector';
 import {type ActionD, type ValueOf, type YTError} from '../../../../types';
 import {
@@ -193,35 +193,8 @@ function prepareJobs({
     });
 }
 
-function getInitialStateFilterValue<T>(
-    currentState: WithDefaultValue<T>,
-    operation: DetailedOperationSelector,
-) {
-    if (currentState.value !== 'auto') {
-        return currentState.value;
-    } else if (operation.failedJobs) {
-        return 'failed';
-    } else if (operation.inIntermediateState()) {
-        return 'running';
-    } else {
-        return operation.successfullyCompleted() ? 'completed' : 'failed';
-    }
-}
-
 export default (state = initialState, action: JobsListAction): JobsState => {
     switch (action.type) {
-        case GET_OPERATION.SUCCESS: {
-            const {operation} = action.data;
-
-            return state.loaded
-                ? state
-                : updateFilter(
-                      state,
-                      'state',
-                      getInitialStateFilterValue(state.filters.state, operation),
-                  );
-        }
-
         case JOB_LIST_UPDATE_FILTER: {
             const {name, value} = action.data;
             return updateFilter({...state, loaded: false}, name, value);
@@ -312,6 +285,7 @@ export default (state = initialState, action: JobsListAction): JobsState => {
             return {
                 ...state,
                 loading: false,
+                loaded: false,
                 error: true,
                 errorData: action.data.error,
             };
