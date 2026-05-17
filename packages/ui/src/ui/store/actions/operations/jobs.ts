@@ -21,7 +21,7 @@ import {OPERATIONS_PAGE} from '../../../constants/operations/list';
 import {selectCurrentClusterConfig} from '../../../store/selectors/global';
 import {TYPED_OUTPUT_FORMAT} from '../../../constants/index';
 
-import {getShowCompetitiveJobs} from '../../../pages/operations/selectors';
+import {getShowCompetitiveJobs, selectStateFilterValue} from '../../../pages/operations/selectors';
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {type RootState} from '../../../store/reducers';
@@ -162,7 +162,7 @@ function getJobsRequestParameters(state: RootState): ListJobsParameters {
         include_runtime: true
         */
         // prepareSortQuery(),
-        ...getJobFilterParameters(filters, sortState),
+        ...getJobFilterParameters(filters, sortState, state),
         ...preparePaginationQuery(pagination),
         operation_incarnation: incarnation || undefined,
     };
@@ -170,10 +170,17 @@ function getJobsRequestParameters(state: RootState): ListJobsParameters {
 
 // Operation Jobs
 
-function getJobFilterParameters(filters: JobsState['filters'], sortState: OldSortState) {
+function getJobFilterParameters(
+    filters: JobsState['filters'],
+    sortState: OldSortState,
+    state: RootState,
+) {
     const filterBy = filters.filterBy.value || filters.filterBy.defaultValue;
+
+    const effectiveState = selectStateFilterValue(state);
+
     return {
-        state: getValueIfNotDefault(filters, 'state'),
+        state: effectiveState === filters.state.defaultValue ? undefined : effectiveState,
         type: getValueIfNotDefault(filters, 'type'),
         address: filterBy === 'address' ? getValueIfNotDefault(filters, 'address') : undefined,
         monitoring_descriptor:
