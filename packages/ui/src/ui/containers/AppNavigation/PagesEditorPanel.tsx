@@ -23,7 +23,7 @@ export function PagesEditorPanel() {
         (data: {oldIndex: number; newIndex: number}) => {
             dispatch(setPagesItemPosition(data));
         },
-        [dispatch, pages],
+        [dispatch],
     );
 
     const handleClick = React.useCallback(

@@ -1,6 +1,5 @@
 import React from 'react';
 import {useSelector} from '../../store/redux-hooks';
-import {type IconProps} from '@gravity-ui/uikit';
 
 import compact_ from 'lodash/compact';
 import filter_ from 'lodash/filter';
@@ -52,6 +51,7 @@ import {
 import {YT} from '../../config/yt-config';
 import Link from '../../components/Link/Link';
 import Button from '../../components/Button/Button';
+import {type SVGIconSvgrData} from '../../types/uikit';
 import {AddVcsTokenForm, VcsList} from '../../pages/query-tracker/Vcs/SettingsMenu';
 import {selectIsVcsVisible, selectVcsConfig} from '../../store/selectors/query-tracker/vcs';
 import {SettingsMenuRadioByKey} from '../SettingsMenu/SettingsMenuSelect';
@@ -62,7 +62,7 @@ import i18n from './i18n';
 
 export interface SettingsPage {
     title: string;
-    icon: IconProps;
+    icon: SVGIconSvgrData;
     sections: Array<SettingsSection>;
 }
 
@@ -630,7 +630,7 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
 
 export function makePage(
     title: string,
-    icon: IconProps | undefined,
+    icon: SVGIconSvgrData | undefined,
     items: Array<SettingsItem>,
 ): SettingsPage {
     return makePageBySections(title, icon, [{title, items}]);
@@ -638,7 +638,7 @@ export function makePage(
 
 export function makePageBySections(
     title: string,
-    icon: IconProps | undefined,
+    icon: SVGIconSvgrData | undefined,
     sections: Array<SettingsSection>,
 ) {
     return {title, icon: icon || generalIcon, sections};

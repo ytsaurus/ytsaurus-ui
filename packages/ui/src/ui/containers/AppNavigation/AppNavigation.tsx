@@ -103,7 +103,7 @@ export default function AppNavigation({children}: ExtProps) {
                 }
             }, 500);
         },
-        [dispatch],
+        [dispatch, className],
     );
 
     const props: AppNavigationProps = {

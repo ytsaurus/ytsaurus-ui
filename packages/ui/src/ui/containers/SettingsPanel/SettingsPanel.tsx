@@ -10,7 +10,7 @@ import './SettingsPanel.scss';
 
 const block = cn('settings-panel');
 
-function iconData(data: any) {
+function iconData<T>(data: T) {
     return {data};
 }
 
