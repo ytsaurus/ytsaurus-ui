@@ -15,7 +15,7 @@ import ClusterIcon from '../../components/ClusterIcon/ClusterIcon';
 import {CLUSTER_GROUPS, CLUSTER_GROUPS_ORDER, DEFAULT_GROUP} from '../../constants/cluster-menu';
 
 import {useSelector} from '../../store/redux-hooks';
-import {getRecentClustersInfo} from '../../store/selectors/slideoutMenu';
+import {selectRecentClustersInfo} from '../../store/selectors/slideoutMenu';
 import {isRecentClustersFirst} from '../../store/selectors/settings';
 import {useClusterColorClassName} from './ClusterColor';
 import {type ClusterConfig} from '../../../shared/yt-types';
@@ -61,7 +61,7 @@ export default function ClustersPanel({className, onSelectCluster}: Props) {
 
     const lowerFilter = filter?.toLowerCase() || '';
 
-    const recentInfo = useSelector(getRecentClustersInfo);
+    const recentInfo = useSelector(selectRecentClustersInfo);
     const showRecent = useSelector(isRecentClustersFirst);
     const groups = React.useMemo(() => {
         const {recent, rest} = recentInfo;

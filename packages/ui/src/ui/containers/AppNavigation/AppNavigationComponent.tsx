@@ -55,7 +55,7 @@ function AppNavigationComponent({
                 visible: settingsVisible,
             },
         ];
-    }, [panelVisible, panelContent, settingsVisible, settingsContent]);
+    }, [panelVisible, panelContent, panelClassName, settingsVisible, settingsContent]);
 
     const [popupVisible, setPopupVisible] = useState(false);
     const settingsCluster = useSelector(selectSettingsCluster);
@@ -141,7 +141,7 @@ function AppNavigationComponent({
                                 onItemClick: () => {
                                     setPopupVisible(!popupVisible);
                                 },
-                                itemWrapper: ({title}: any, makeItem: any) => {
+                                itemWrapper: ({title}, makeItem) => {
                                     return makeItem({
                                         title,
                                         icon: (
