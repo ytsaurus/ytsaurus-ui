@@ -3,7 +3,7 @@ import React from 'react';
 import {type ConnectedProps, connect} from 'react-redux';
 
 import {hideErrorModal} from '../../store/actions/modals/errors';
-import {getModalErrors} from '../../store/selectors/modals/errors';
+import {selectModalErrors} from '../../store/selectors/modals/errors';
 import {YTAlertBlock} from '../../components/Alert/Alert';
 import {YTErrorBlock} from '../../components/Error/Error';
 import {type RootState} from '../../store/reducers';
@@ -63,7 +63,7 @@ class ModalErrors extends React.Component<Props> {
 
 const mapStateToProps = (state: RootState) => {
     return {
-        errors: getModalErrors(state),
+        errors: selectModalErrors(state),
     };
 };
 
