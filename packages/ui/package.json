@@ -93,7 +93,7 @@
     "source-map-support": "0.5.21",
     "type-is": "1.6.18",
     "utility-types": "^3.11.0",
-    "zod": "^3.21.4"
+    "zod": "^4.1.13"
   },
   "devDependencies": {
     "@gravity-ui/app-builder": "^0.26.0",
@@ -107,7 +107,7 @@
     "@gravity-ui/graph": "^1.7.3",
     "@gravity-ui/icons": "^2.0.0",
     "@gravity-ui/illustrations": "^2.1.0",
-    "@gravity-ui/navigation": "^3.7.0",
+    "@gravity-ui/navigation": "^4.0.15",
     "@gravity-ui/prettier-config": "^1.1.0",
     "@gravity-ui/react-data-table": "^2.1.1",
     "@gravity-ui/stylelint-config": "^4.0.1",
