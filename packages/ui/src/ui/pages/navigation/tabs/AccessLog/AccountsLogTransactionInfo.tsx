@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import {ClipboardButton, MetaTable} from '@ytsaurus/components';
-import Yson from '../../../../components/Yson/Yson';
+import {Yson} from '../../../../components/Yson/Yson';
 import {type AccessLogTransactionInfo} from '../../../../store/reducers/navigation/tabs/access-log/access-log';
 
 import './AccountsLogTransactionInfo.scss';

@@ -12,7 +12,7 @@ import {
     selectNodeUnrecognizedOptionsError,
 } from '../../../../../store/selectors/components/node/unrecognized-options';
 import {YTErrorBlock} from '../../../../../components/Error/Error';
-import Yson from '../../../../../components/Yson/Yson';
+import {YsonWithScroll} from '../../../../../components/Yson/YsonWithScroll';
 import {getNodeUnrecognizedOptionsYsonSettings} from '../../../../../store/selectors/thor/unipika';
 import {YsonDownloadButton} from '../../../../../components/DownloadAttributesButton';
 
@@ -31,12 +31,10 @@ export function NodeUnrecognizedOptions({host}: {host: string}) {
     return error ? (
         <YTErrorBlock error={error} />
     ) : (
-        <Yson
+        <YsonWithScroll
             className={block('yson')}
             value={data}
             settings={unipikaSettings}
-            folding
-            virtualized
             extraTools={
                 <YsonDownloadButton
                     value={data}

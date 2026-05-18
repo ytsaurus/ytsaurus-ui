@@ -7,7 +7,7 @@ import map_ from 'lodash/map';
 
 import CollapsableText from '../../../../../components/CollapsableText/CollapsableText';
 import {MetaTable} from '@ytsaurus/components';
-import Yson from '../../../../../components/Yson/Yson';
+import {Yson} from '../../../../../components/Yson/Yson';
 import {canRenderAsMap} from './helpers/canRenderAsMap';
 import {getYsonSettingsDisableDecode} from '../../../../../store/selectors/thor/unipika';
 import {type DetailedOperationSelector} from '../../../selectors';

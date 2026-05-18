@@ -19,7 +19,7 @@ import StatusLabel from '../../../components/StatusLabel/StatusLabel';
 import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
 import Tabs from '../../../components/Tabs/Tabs';
 import {MetaTable, Tooltip} from '@ytsaurus/components';
-import Yson from '../../../components/Yson/Yson';
+import {Yson} from '../../../components/Yson/Yson';
 import OperationProgress from '../OperationProgress/OperationProgress';
 
 import Jobs from './tabs/Jobs/Jobs';

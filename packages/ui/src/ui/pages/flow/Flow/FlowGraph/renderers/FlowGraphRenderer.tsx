@@ -16,7 +16,7 @@ import YTIcon from '../../../../../components/Icon/Icon';
 import Label from '../../../../../components/Label';
 import {Markdown} from '../../../../../components/Markdown/Markdown';
 import {Tooltip, YTText} from '@ytsaurus/components';
-import Yson from '../../../../../components/Yson/Yson';
+import {Yson} from '../../../../../components/Yson/Yson';
 import './FlowGraphRenderer.scss';
 
 const block = cn('yt-flow-graph-renderer');
