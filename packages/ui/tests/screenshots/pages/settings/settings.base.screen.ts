@@ -5,7 +5,7 @@ import {basePage} from '../../../widgets/BasePage';
 test('Settings: checking the functionality of the menu', async ({page}) => {
     await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl('path-viewer'));
-    await page.waitForSelector('.gn-aside-header__footer');
+    await page.locator('button.gn-footer-item', {hasText: 'Settings'}).waitFor({state: 'visible'});
 
     await basePage(page).settingsToggleVisibility();
 

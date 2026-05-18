@@ -20,12 +20,10 @@ export const ChatToggleFooterButton: FC<Props> = ({compact}) => {
         <FooterItem
             key="ai-chat"
             compact={compact}
-            item={{
-                id: 'ai-chat',
-                title: i18n('context_tooltip'),
-                icon: AiIcon,
-                onItemClick: toggle,
-            }}
+            id="ai-chat"
+            title={i18n('context_tooltip')}
+            icon={AiIcon}
+            onItemClick={toggle}
         />
     );
 };

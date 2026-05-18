@@ -24,6 +24,8 @@ module.exports = {
                         'react-is',
                         'redux',
                         'screenfull',
+                        'lodash', 
+                        'tslib',
                     ],
                 },
             ],

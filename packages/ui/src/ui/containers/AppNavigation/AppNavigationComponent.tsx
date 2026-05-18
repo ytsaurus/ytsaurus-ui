@@ -55,7 +55,7 @@ function AppNavigationComponent({
                 visible: settingsVisible,
             },
         ];
-    }, [panelVisible, panelContent, settingsVisible, settingsContent]);
+    }, [panelContent, panelVisible, panelClassName, settingsContent, settingsVisible]);
 
     const [popupVisible, setPopupVisible] = useState(false);
     const settingsCluster = useSelector(selectSettingsCluster);
@@ -101,12 +101,10 @@ function AppNavigationComponent({
                                 <FooterItem
                                     key="support"
                                     compact={compact}
-                                    item={{
-                                        id: 'support',
-                                        title: i18n('action_report-bug'),
-                                        icon: BugIcon,
-                                        onItemClick: onSupportClick,
-                                    }}
+                                    id="support"
+                                    title={i18n('action_report-bug')}
+                                    icon={BugIcon}
+                                    onItemClick={onSupportClick}
                                 />
                                 {supportContent}
                             </React.Fragment>
@@ -120,12 +118,10 @@ function AppNavigationComponent({
                         <FooterItem
                             key="settings"
                             compact={compact}
-                            item={{
-                                id: 'settings',
-                                title: i18n('action_settings'),
-                                onItemClick: toggleSettingsVisible,
-                                icon: GearIcon,
-                            }}
+                            id="settings"
+                            title={i18n('action_settings')}
+                            onItemClick={toggleSettingsVisible}
+                            icon={GearIcon}
                         />,
                     );
                 }
@@ -135,29 +131,31 @@ function AppNavigationComponent({
                         <FooterItem
                             key="user"
                             compact={compact}
-                            item={{
-                                id: 'user',
-                                title: currentUser,
-                                onItemClick: () => {
-                                    setPopupVisible(!popupVisible);
-                                },
-                                itemWrapper: ({title}: any, makeItem: any) => {
-                                    return makeItem({
-                                        title,
-                                        icon: (
-                                            <img
-                                                className={block('user-icon')}
-                                                width={40}
-                                                height={40}
-                                                src={unknown}
-                                            />
-                                        ),
-                                    });
-                                },
+                            id="user"
+                            title={currentUser}
+                            onItemClick={() => {
+                                setPopupVisible(!popupVisible);
+                            }}
+                            itemWrapper={({title}, makeItem) => {
+                                return makeItem({
+                                    title,
+                                    icon: (
+                                        <img
+                                            className={block('user-icon')}
+                                            width={40}
+                                            height={40}
+                                            src={unknown}
+                                        />
+                                    ),
+                                });
                             }}
                             enableTooltip={!popupVisible}
                             popupVisible={popupVisible}
-                            onClosePopup={() => setPopupVisible(false)}
+                            onOpenChangePopup={(open) => {
+                                if (!open) {
+                                    setPopupVisible(false);
+                                }
+                            }}
                             renderPopupContent={() => {
                                 return (
                                     <div className={block('settings-ul')}>
