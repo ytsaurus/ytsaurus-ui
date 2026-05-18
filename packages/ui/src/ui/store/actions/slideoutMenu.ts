@@ -10,7 +10,7 @@ import {
     getSettingsPagesPinned,
 } from '../../store/selectors/settings/settings-ts';
 import {setSettingsPagesOrder, setSettingsPagesPinned} from '../../store/actions/settings/settings';
-import {getPagesOrderedByUser} from '../../store/selectors/slideoutMenu';
+import {selectPagesOrderedByUser} from '../../store/selectors/slideoutMenu';
 import {moveArrayElement, toggleBooleanInPlace} from '../../utils/utils';
 import {rumLogError} from '../../rum/rum-counter';
 import {selectCurrentUserName} from '../selectors/global';
@@ -19,7 +19,7 @@ export function togglePinnedPage(id: string): ThunkAction<any, RootState, any, a
     return (dispatch, getState) => {
         const state = getState();
         const pinned = {...getSettingsPagesPinned(state)};
-        const orderedPages = getPagesOrderedByUser(state);
+        const orderedPages = selectPagesOrderedByUser(state);
 
         const prevOrder = getSettingsPagesOrder(state);
         const newOrder = map_(orderedPages, 'id');
@@ -69,7 +69,7 @@ export function setPagesItemPosition(params: {
         }
 
         const state = getState();
-        const orderedPages = [...getPagesOrderedByUser(state)];
+        const orderedPages = [...selectPagesOrderedByUser(state)];
 
         const [item] = moveArrayElement(orderedPages, oldIndex, newIndex);
         if (!item) {

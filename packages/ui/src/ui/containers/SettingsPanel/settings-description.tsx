@@ -33,7 +33,7 @@ import ypath from '../../common/thor/ypath';
 
 import {AGGREGATOR_RADIO_ITEMS} from '../../constants/operations/statistics';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
-import {getRecentPagesInfo} from '../../store/selectors/slideoutMenu';
+import {selectRecentPagesInfo} from '../../store/selectors/slideoutMenu';
 import {getCurrentClusterNS} from '../../store/selectors/settings/settings-ts';
 import SettingsMenuItem from '../../containers/SettingsMenu/SettingsMenuItem';
 import SettingsMenuRadio from '../../containers/SettingsMenu/SettingsMenuRadio';
@@ -704,7 +704,7 @@ function hashByTitle<T extends {title: string}>(data: Array<T>) {
 }
 
 function StartPageSetting() {
-    const {all} = useSelector(getRecentPagesInfo);
+    const {all} = useSelector(selectRecentPagesInfo);
 
     const pageItems = React.useMemo(() => {
         const headerPages = filter_(all, (page) => Boolean(page.header));
