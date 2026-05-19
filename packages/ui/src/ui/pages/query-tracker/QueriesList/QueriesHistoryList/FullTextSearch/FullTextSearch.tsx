@@ -8,7 +8,6 @@ import {
 } from '../../../../../store/selectors/query-tracker/queriesList';
 import {FullTextSearchItem} from '../FullTextSearchItem';
 import {prepareFullTextSearchItems} from '../helpers/prepareFullTextSearchItems';
-import {useQueryNavigation} from '../../../hooks/Query';
 import {NoContent} from '@ytsaurus/components';
 import block from 'bem-cn-lite';
 import './FullTextSearch.scss';
@@ -22,7 +21,6 @@ export const FullTextSearch: FC = () => {
     const {filter} = useSelector(selectQueriesFilters);
     const items = useSelector(selectQueriesList);
     const isLoading = useSelector(selectIsQueriesListLoading);
-    const [, goToQuery] = useQueryNavigation();
 
     if (isLoading && !items.length) {
         return (
@@ -58,9 +56,6 @@ export const FullTextSearch: FC = () => {
                         maxPreviewLines={MAX_PREVIEW_LINES}
                     />
                 );
-            }}
-            onItemClick={(item) => {
-                goToQuery(item);
             }}
         />
     );

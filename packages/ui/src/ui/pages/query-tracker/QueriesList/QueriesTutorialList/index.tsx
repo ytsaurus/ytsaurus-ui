@@ -2,7 +2,6 @@ import React, {useMemo} from 'react';
 import cn from 'bem-cn-lite';
 import {Icon, List, type ListItemData, Text} from '@gravity-ui/uikit';
 import {type QueryItem} from '../../../../types/query-tracker/api';
-import {useQueryNavigation} from '../../hooks/Query';
 import tutorialIcon from '../../../../assets/img/svg/learn.svg';
 import './index.scss';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
@@ -11,22 +10,29 @@ import {
     selectIsQueriesListLoading,
     selectTutorialQueriesList,
 } from '../../../../store/selectors/query-tracker/queriesList';
+import {selectQuery} from '../../../../store/selectors/query-tracker/query';
 import {loadNextQueriesList} from '../../../../store/actions/query-tracker/queriesList';
 import {InfiniteScrollLoader} from '../../../../components/InfiniteScrollLoader';
 import {QueriesHistoryCursorDirection} from '../../../../store/reducers/query-tracker/query-tracker-contants';
 import i18n from './i18n';
+import {QueryItemLink} from '../QueryItemLink/QueryItemLink';
 
 const itemCn = cn('query-tutorial-item');
 const block = cn('queries-tutorial-list');
 
 function renderItem(item: QueryItem) {
     return (
-        <>
+        <QueryItemLink item={item} className={itemCn('link')}>
             <Icon className={itemCn('icon')} data={tutorialIcon} />
-            <Text className={itemCn('text')} ellipsis title={item?.annotations?.title}>
+            <Text
+                className={itemCn('text')}
+                ellipsis
+                title={item?.annotations?.title}
+                color="primary"
+            >
                 {item?.annotations?.title || i18n('field_no-name')}
             </Text>
-        </>
+        </QueryItemLink>
     );
 }
 
@@ -36,7 +42,7 @@ export function QueriesTutorialList({className}: {className: string}) {
     const isLoading = useSelector(selectIsQueriesListLoading);
     const hasMore = useSelector(selectHasQueriesListMore);
 
-    const [selectedId, goToQuery] = useQueryNavigation();
+    const selectedId = useSelector(selectQuery)?.id;
 
     const showPagination = hasMore && items.length > 0;
 
@@ -75,7 +81,6 @@ export function QueriesTutorialList({className}: {className: string}) {
                 itemClassName={itemCn()}
                 items={isLoading ? [] : items}
                 renderItem={renderItem}
-                onItemClick={goToQuery}
             />
             {showPagination && (
                 <InfiniteScrollLoader

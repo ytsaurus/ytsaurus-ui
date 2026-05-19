@@ -1,0 +1,21 @@
+$item-height: 45px;
+
+.yt-queries-history-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: #{$item-height};
+    border-bottom: 1px solid var(--g-color-line-generic);
+
+    &__date-header {
+        width: 100%;
+        height: #{$item-height};
+        padding: 8px 0;
+        text-align: center;
+        border-bottom: 1px solid var(--g-color-line-generic);
+    }
+
+    &__cell {
+        padding: var(--data-table-cell-vertical-padding) var(--data-table-cell-horizontal-padding);
+    }
+}

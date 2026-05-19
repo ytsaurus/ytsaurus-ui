@@ -1,0 +1,23 @@
+.yt-queries-history-list {
+    display: grid;
+    grid-template-rows: min-content 1fr;
+    height: 100%;
+
+    &__list {
+        height: 100%;
+    }
+
+    &__items {
+        overflow: auto;
+    }
+
+    &__item {
+        cursor: pointer;
+        position: relative;
+        padding: 0;
+
+        &.g-list__item_selected {
+            background-color: var(--dark-background);
+        }
+    }
+}
