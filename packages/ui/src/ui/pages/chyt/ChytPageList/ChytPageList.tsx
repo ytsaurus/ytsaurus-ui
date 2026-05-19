@@ -7,8 +7,8 @@ import WithStickyToolbar from '../../../components/WithStickyToolbar/WithStickyT
 
 import {chytLoadList} from '../../../store/actions/chyt/list';
 
-import ChytPageListToolbar from './ChytPageListToolbar';
-import ChytPageListTable from './ChytPageListTable';
+import ChytPageListToolbar from './ChytPageListToolbar/ChytPageListToolbar';
+import ChytPageListTable from './ChytPageListTable/ChytPageListTable';
 
 export function ChytPageList() {
     const dispatch = useDispatch();

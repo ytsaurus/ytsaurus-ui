@@ -1,0 +1,11 @@
+{
+  "title_chyt-cliques": "CHYT cliques",
+  "action_create-clique": "Create clique",
+  "field_alias-name": "Alias name",
+  "field_instance-count": "Instance count",
+  "field_pool-tree": "Pool tree",
+  "field_pool": "Pool",
+  "field_pool-placeholder": "Pool name...",
+  "context_select-pool-for-start": "Select a pool to start the clique after creation.",
+  "action_start-after-creation": "Start after creation"
+}

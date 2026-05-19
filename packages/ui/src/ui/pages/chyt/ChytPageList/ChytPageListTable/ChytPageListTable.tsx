@@ -1,37 +1,37 @@
 import React from 'react';
-import {useDispatch, useSelector} from '../../../store/redux-hooks';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
 import {type Column} from '@gravity-ui/react-data-table';
 
-import format from '../../../common/hammer/format';
+import format from '../../../../common/hammer/format';
 
-import {DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR} from '../../../components/DataTableYT/constants';
+import {DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR} from '../../../../components/DataTableYT/constants';
 import {ClipboardButton, Secondary, Tooltip} from '@ytsaurus/components';
-import {DataTableYT} from '../../../components/DataTableYT';
-import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
-import Icon from '../../../components/Icon/Icon';
-import Link from '../../../containers/Link/Link';
-import {OperationId} from '../../../components/OperationId/OperationId';
-import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
-import Label from '../../../components/Label';
+import {DataTableYT} from '../../../../components/DataTableYT';
+import ColumnHeader from '../../../../components/ColumnHeader/ColumnHeader';
+import Icon from '../../../../components/Icon/Icon';
+import Link from '../../../../containers/Link/Link';
+import {OperationId} from '../../../../components/OperationId/OperationId';
+import {SubjectCard} from '../../../../components/SubjectLink/SubjectLink';
+import Label from '../../../../components/Label';
 
-import {chytToggleSortState} from '../../../store/actions/chyt/list-fitlers';
-import {selectCluster} from '../../../store/selectors/global';
+import {chytToggleSortState} from '../../../../store/actions/chyt/list-fitlers';
+import {selectCluster} from '../../../../store/selectors/global';
 import {
     selectChytListTableItems,
     selectChytListTableSortStateByName,
     selectChytListVisibleColumns,
-} from '../../../store/selectors/chyt';
-import {type ChytInfo} from '../../../store/reducers/chyt/list';
-import {Page} from '../../../../shared/constants/settings';
-import {CHYT_TABLE_TITLES} from '../helpers/chyt-list-columns';
-import {OperationPool} from '../../../components/OperationPool/OperationPool';
-import {useQueryWidgetSidePanel} from '../../../pages/query-tracker/QueryWidget/side-panel';
+} from '../../../../store/selectors/chyt';
+import {type ChytInfo} from '../../../../store/reducers/chyt/list';
+import {Page} from '../../../../../shared/constants/settings';
+import {CHYT_TABLE_TITLES} from '../../helpers/chyt-list-columns';
+import {OperationPool} from '../../../../components/OperationPool/OperationPool';
+import {useQueryWidgetSidePanel} from '../../../../pages/query-tracker/QueryWidget/side-panel';
 
-import {CliqueState} from '../components/CliqueState';
+import {CliqueState} from '../../components/CliqueState';
 
-import {ChytCliqueActions, useCliqueOnSqlAction} from '../ChytCliqueActions/ChytCliqueActions';
+import {ChytCliqueActions, useCliqueOnSqlAction} from '../../ChytCliqueActions/ChytCliqueActions';
 import './ChytPageListTable.scss';
 
 const block = cn('chyt-page-list-table');
