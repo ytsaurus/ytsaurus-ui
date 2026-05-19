@@ -28,7 +28,7 @@ import {
 import {selectCluster} from '../../../store/selectors/global';
 import {Page} from '../../../../shared/constants/settings';
 
-import {CHYT_TABLE_TITLES} from '../../../constants/chyt-page';
+import {CHYT_TABLE_TITLES} from '../helpers/chyt-list-columns';
 import {CliqueState} from '../components/CliqueState';
 import {ChytCliqueActions, useCliqueOnSqlAction} from '../ChytCliqueActions/ChytCliqueActions';
 import {ChytPageCliqueTabs} from './ChytPageCliqueTabs';
@@ -161,39 +161,48 @@ function ChytCliqueMetaTable() {
 
         return [
             [
-                {key: 'Health', value: <CliqueState state={health} />},
-                {key: 'State', value: <CliqueState state={state} />},
+                {key: CHYT_TABLE_TITLES.health, value: <CliqueState state={health} />},
+                {key: CHYT_TABLE_TITLES.state, value: <CliqueState state={state} />},
                 {
-                    key: 'Pool',
+                    key: CHYT_TABLE_TITLES.pool,
                     value: pool ? (
                         <OperationPool cluster={cluster} pool={{pool, tree: 'physical'}} />
                     ) : (
                         format.NO_VALUE
                     ),
                 },
-                {key: 'Instances', value: format.Number(ctl_attributes?.instance_count)},
-                {key: 'Cores', value: format.Number(ctl_attributes?.total_cpu)},
-                {key: 'Memory', value: format.Bytes(ctl_attributes?.total_memory)},
+                {
+                    key: CHYT_TABLE_TITLES.instance_count,
+                    value: format.Number(ctl_attributes?.instance_count),
+                },
+                {key: CHYT_TABLE_TITLES.total_cpu, value: format.Number(ctl_attributes?.total_cpu)},
+                {
+                    key: CHYT_TABLE_TITLES.total_memory,
+                    value: format.Bytes(ctl_attributes?.total_memory),
+                },
             ],
             [
-                {key: 'Stage', value: stage ? <Label capitalize text={stage} /> : format.NO_VALUE},
+                {
+                    key: CHYT_TABLE_TITLES.stage,
+                    value: stage ? <Label capitalize text={stage} /> : format.NO_VALUE,
+                },
                 {key: 'Incarnation index', value: format.Number(incarnation_index)},
                 {
-                    key: 'Creator',
+                    key: CHYT_TABLE_TITLES.creator,
                     value: creator ? <SubjectCard name={creator} /> : format.NO_VALUE,
                 },
                 {
-                    key: CHYT_TABLE_TITLES['speclet_modification_time'],
+                    key: CHYT_TABLE_TITLES.speclet_modification_time,
                     value: format.DateTime(speclet_modification_time),
                 },
                 {
-                    key: CHYT_TABLE_TITLES['strawberry_state_modification_time'],
+                    key: CHYT_TABLE_TITLES.strawberry_state_modification_time,
                     value: format.DateTime(strawberry_state_modification_time),
                 },
             ],
             [
                 {
-                    key: 'YT operation id',
+                    key: CHYT_TABLE_TITLES.yt_operation_id,
                     value: (
                         <div className={block('operation-id')}>
                             <OperationId id={id} cluster={cluster} />
