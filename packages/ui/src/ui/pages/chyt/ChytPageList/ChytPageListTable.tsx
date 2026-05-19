@@ -25,7 +25,7 @@ import {
 } from '../../../store/selectors/chyt';
 import {type ChytInfo} from '../../../store/reducers/chyt/list';
 import {Page} from '../../../../shared/constants/settings';
-import {CHYT_TABLE_TITLES} from '../../../constants/chyt-page';
+import {CHYT_TABLE_TITLES} from '../helpers/chyt-list-columns';
 import {OperationPool} from '../../../components/OperationPool/OperationPool';
 import {useQueryWidgetSidePanel} from '../../../pages/query-tracker/QueryWidget/side-panel';
 
@@ -278,7 +278,7 @@ function ChytListHeader({
             allowUnordered
             withUndefined={withUndefined}
             column={column}
-            title={CHYT_TABLE_TITLES[column] ?? format.ReadableField(column)}
+            title={CHYT_TABLE_TITLES[column]}
             {...sortState[column]}
             onSort={(col, nextOrder, options) => {
                 dispatch(chytToggleSortState(col, nextOrder, options));

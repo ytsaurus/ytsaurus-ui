@@ -4,8 +4,6 @@ import cn from 'bem-cn-lite';
 
 import {Button, TextInput} from '@gravity-ui/uikit';
 
-import format from '../../../common/hammer/format';
-
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {SelectSingle} from '../../../components/Select/Select';
 import ColumnSelectorModal from '../../../components/ColumnSelectorModal/ColumnSelectorModal';
@@ -23,7 +21,7 @@ import {
 } from '../../../store/selectors/chyt';
 import {type ChytListFilters} from '../../../store/reducers/chyt/list-filters';
 import {chytSetVisibleColumns} from '../../../store/actions/chyt/list';
-import {CHYT_TABLE_TITLES} from '../../../constants/chyt-page';
+import {CHYT_TABLE_TITLES} from '../helpers/chyt-list-columns';
 import Icon from '../../../components/Icon/Icon';
 
 import './ChytPageListToolbar.scss';
@@ -172,7 +170,7 @@ function ChytListColumnsButton() {
             isVisible={visible}
             items={columns.map((i) => {
                 return {
-                    name: CHYT_TABLE_TITLES[i.column] ?? format.ReadableField(i.column),
+                    name: CHYT_TABLE_TITLES[i.column],
                     checked: i.checked,
                     data: {
                         column: i.column,
