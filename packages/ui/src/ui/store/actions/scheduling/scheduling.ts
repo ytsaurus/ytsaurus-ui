@@ -355,10 +355,16 @@ export function togglePoolFavourites(pool: string, tree: string): SchedulingThun
     };
 }
 
-export function schedulingSetSortState(sortState: Array<SortState>): SchedulingAction {
+export function schedulingSetSortState(_sortState: Array<SortState>): SchedulingAction {
     return {
         type: SCHEDULING_DATA_PARTITION,
-        data: {sortState},
+        data: {},
+    };
+}
+
+export function poolNotFound(): SchedulingAction {
+    return {
+        type: 'SCHEDULING_POOL_NOT_FOUND',
     };
 }
 

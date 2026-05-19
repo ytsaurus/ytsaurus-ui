@@ -24,6 +24,7 @@ import {
     getPoolIsEphemeral,
     getTree,
     isPoolAclAllowed,
+    selectSchedulingPoolNotFound,
 } from '../../../store/selectors/scheduling/scheduling';
 import {type TabSettings, makeTabProps} from '../../../utils';
 import {makeSchedulingUrl} from '../../../utils/app-url';
@@ -32,6 +33,7 @@ import SchedulingExpandedPoolsUpdater from './SchedulingExpandedPoolsUpdater';
 import {PoolAttributes} from './tabs/PoolAttributes/PoolAttributes';
 import UIFactory from '../../../UIFactory';
 import i18n from './i18n';
+import {PoolNotFoundError} from './PoolNotFoundError';
 
 const block = cn('scheduling-content');
 
@@ -48,6 +50,7 @@ function Content({match, location}: ContentProps) {
     const isEphemeral = useSelector(getPoolIsEphemeral);
     const isRoot = useSelector(getIsRoot);
     const allowAcl = useSelector(isPoolAclAllowed);
+    const poolNotFound = useSelector(selectSchedulingPoolNotFound);
 
     const localTab: Record<string, string> = {...SchedulingTab};
 
@@ -114,35 +117,47 @@ function Content({match, location}: ContentProps) {
     return (
         <ErrorBoundary>
             <SchedulingExpandedPoolsUpdater />
-            <Tabs
-                {...props}
-                active={DEFAULT_TAB}
-                className={block('tabs')}
-                routed
-                size={UI_TAB_SIZE}
-            />
-            <Switch>
-                <Route path={`${match.path}/${SchedulingTab.OVERVIEW}`} component={Overview} />
-                <Route
-                    path={`${match.path}/${SchedulingTab.ATTRIBUTES}`}
-                    render={() => <PoolAttributes className={block('attributes')} />}
-                />
-                {extraRoutes}
-                {aclTab.show && (
-                    <Route path={`${match.path}/${SchedulingTab.ACL}`} component={PoolAcl} />
-                )}
-                <Route
-                    path={`${match.path}/details`}
-                    render={() => {
-                        return <Redirect to={makeSchedulingUrl({pool, poolTree: tree})} />;
-                    }}
-                />
-                <Route path={`${match.path}/:tab`} component={Placeholder} />
-                <Redirect
-                    from={match.url}
-                    to={{pathname: `${match.url}/${DEFAULT_TAB}`, search: location.search}}
-                />
-            </Switch>
+            {poolNotFound ? (
+                <PoolNotFoundError poolName={pool} />
+            ) : (
+                <>
+                    <Tabs
+                        {...props}
+                        active={DEFAULT_TAB}
+                        className={block('tabs')}
+                        routed
+                        size={UI_TAB_SIZE}
+                    />
+                    <Switch>
+                        <Route
+                            path={`${match.path}/${SchedulingTab.OVERVIEW}`}
+                            component={Overview}
+                        />
+                        <Route
+                            path={`${match.path}/${SchedulingTab.ATTRIBUTES}`}
+                            render={() => <PoolAttributes className={block('attributes')} />}
+                        />
+                        {extraRoutes}
+                        {aclTab.show && (
+                            <Route
+                                path={`${match.path}/${SchedulingTab.ACL}`}
+                                component={PoolAcl}
+                            />
+                        )}
+                        <Route
+                            path={`${match.path}/details`}
+                            render={() => {
+                                return <Redirect to={makeSchedulingUrl({pool, poolTree: tree})} />;
+                            }}
+                        />
+                        <Route path={`${match.path}/:tab`} component={Placeholder} />
+                        <Redirect
+                            from={match.url}
+                            to={{pathname: `${match.url}/${DEFAULT_TAB}`, search: location.search}}
+                        />
+                    </Switch>
+                </>
+            )}
         </ErrorBoundary>
     );
 }

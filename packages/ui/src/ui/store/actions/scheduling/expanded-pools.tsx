@@ -16,13 +16,13 @@ import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {USE_IGNORE_NODE_DOES_NOT_EXIST} from '../../../utils/utils';
 import {makeGet, makeList} from '../../../utils/batch';
 import {
-    CHANGE_POOL,
     ROOT_POOL_NAME,
     SCHEDULING_EXPANDED_POOLS_FAILURE,
     SCHEDULING_EXPANDED_POOLS_PARTITION,
     SCHEDULING_EXPANDED_POOLS_REQUEST,
     SCHEDULING_EXPANDED_POOLS_SUCCESS,
 } from '../../../constants/scheduling';
+import {poolNotFound} from './scheduling';
 import {calculatePoolPath, getPool, getPools, getTree} from '../../selectors/scheduling/scheduling';
 import {
     getExpandedPoolsLoadAll,
@@ -117,7 +117,7 @@ export function loadExpandedPools(tree: string): ExpandedPoolsThunkAction {
             return undefined;
         }
 
-        if (pool === ROOT_POOL_NAME) {
+        if (pool === ROOT_POOL_NAME || !pool) {
             return dispatch(loadExpandedOperationsAndPools(tree));
         } else {
             return ytApiV3Id
@@ -146,12 +146,7 @@ export function loadExpandedPools(tree: string): ExpandedPoolsThunkAction {
                 })
                 .catch((e) => {
                     if (e instanceof EmptyFullPath) {
-                        dispatch({type: CHANGE_POOL, data: {pool: ROOT_POOL_NAME}});
-                        /**
-                         * We don't need to call `dispatch(loadExpandedOperationsAndPools(tree))` after `CHANGE_POOL`.
-                         * The call will be triggered by SchedulingExpandedPoolsUpdater.
-                         */
-                        // dispatch(loadExpandedOperationsAndPools(tree));
+                        dispatch(poolNotFound());
                     } else {
                         toaster.add({
                             name: 'schedulingPoolFullPath',

@@ -15,6 +15,7 @@ import {
     getPool,
     getTree,
     getTreesSelectItems,
+    selectSchedulingPoolNotFound,
 } from '../../../store/selectors/scheduling/scheduling';
 import {
     selectFavouritePools,
@@ -130,6 +131,9 @@ function SchedulingBreadcrumbs() {
     const history = useHistory();
     const tree = useSelector(getTree);
     const cluster = useSelector(selectCluster);
+    const pool = useSelector(getPool);
+    const poolNotFound = useSelector(selectSchedulingPoolNotFound);
+
     const handleChangePool = (name: string | number) => {
         setTimeout(() => {
             dispatch(changePool(name.toString()));
@@ -139,7 +143,9 @@ function SchedulingBreadcrumbs() {
     };
 
     const items = React.useMemo(() => {
-        return ['<Root>', ...bcItems.slice(1)].map((text, index) => {
+        const itemsToShow = poolNotFound && pool !== '' ? [...bcItems, pool] : bcItems;
+
+        return ['<Root>', ...itemsToShow.slice(1)].map((text, index) => {
             const pathname = calcPathname(window.location.pathname, cluster, text);
             return (
                 <Breadcrumbs.Item
@@ -151,7 +157,7 @@ function SchedulingBreadcrumbs() {
                 </Breadcrumbs.Item>
             );
         });
-    }, [bcItems, cluster, tree]);
+    }, [bcItems, cluster, tree, pool, poolNotFound]);
 
     return (
         <EditableBreadcrumbs

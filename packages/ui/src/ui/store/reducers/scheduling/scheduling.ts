@@ -28,6 +28,7 @@ import {type ActionD, type SortState, type YTError} from '../../../types';
 import {type SchedulingContentMode} from '../../../store/selectors/scheduling/scheduling';
 import {type PoolTreeNode} from '../../../utils/scheduling/pool-child';
 
+const SCHEDULING_POOL_NOT_FOUND = 'SCHEDULING_POOL_NOT_FOUND';
 export interface SchedulingEphemeralState {
     loading: boolean;
     loaded: boolean;
@@ -38,6 +39,7 @@ export interface SchedulingEphemeralState {
     poolLoaded: boolean;
     poolError: boolean;
     poolErrorData?: YTError;
+    poolNotFound: boolean;
 
     isNewPools: boolean;
 
@@ -92,6 +94,7 @@ const ephemeralState: SchedulingEphemeralState = {
     poolLoading: false,
     poolLoaded: false,
     poolError: false,
+    poolNotFound: false,
 
     isNewPools: false,
 
@@ -197,7 +200,10 @@ const reducer = (state = initialState, action: SchedulingAction) => {
             return {...state, treeState: action.data.treeState};
 
         case CHANGE_POOL:
-            return {...state, pool: action.data.pool};
+            return {...state, pool: action.data.pool, poolNotFound: false};
+
+        case SCHEDULING_POOL_NOT_FOUND:
+            return {...state, poolNotFound: true};
 
         case CHANGE_CONTENT_MODE:
             return {...state, contentMode: action.data.contentMode};
@@ -250,6 +256,7 @@ export type SchedulingAction =
     | ActionD<
           typeof POOL_TOGGLE_DELETE_VISIBILITY,
           {item: SchedulingState['deleteItem']; visibility: boolean}
-      >;
+      >
+    | Action<typeof SCHEDULING_POOL_NOT_FOUND>;
 
 export default mergeStateOnClusterChange(ephemeralState, persistedState, reducer);
