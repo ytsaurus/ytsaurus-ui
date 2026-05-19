@@ -15,6 +15,7 @@ import {ytApiV4} from '../../../rum/rum-wrap-api';
 import {ChytPageCliqueAcl} from './ChytPageCliqueAcl';
 import {ChytPageCliqueSpeclet} from './ChytPageCliqueSpeclet';
 import {ChytPageCliqueMonitoring} from './ChytPageCliqueMonitoring';
+import i18n from './i18n';
 
 export function ChytPageCliqueTabs({className}: {className?: string}) {
     const match = useRouteMatch();
@@ -65,6 +66,12 @@ export function ChytPageCliqueTabs({className}: {className?: string}) {
                 },
             },
             undefined,
+            {
+                [ChytCliquePageTab.ACL]: i18n('tab-name_acl'),
+                [ChytCliquePageTab.SPECLET]: i18n('tab-name_speclet'),
+                [ChytCliquePageTab.MONITORING]: i18n('tab-name_monitoring'),
+                [ChytCliquePageTab.QUERY_LOGS]: i18n('tab-name_query-logs'),
+            },
         );
     }, [ytCluster, chytAlias, match.url, chytMonitoring]);
 

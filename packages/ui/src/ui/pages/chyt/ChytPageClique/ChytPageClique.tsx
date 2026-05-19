@@ -19,6 +19,7 @@ import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
 import {useQueryWidgetSidePanel} from '../../../pages/query-tracker/QueryWidget/side-panel';
 
 import {chytCliqueLoad, chytResetCurrentClique} from '../../../store/actions/chyt/clique';
+import i18n from './i18n';
 import {
     selectChytCliqueData,
     selectChytCliqueError,
@@ -66,7 +67,7 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
         <div className={block()}>
             <div className={block('header')}>
                 <Text variant="header-1">
-                    CHYT clique{' '}
+                    {i18n('title_chyt-clique')}{' '}
                     <Text variant="header-1" color="secondary">
                         {alias}
                     </Text>
@@ -109,7 +110,7 @@ function ChytCliqueErrors() {
             {error ? <YTErrorBlock className={block('error')} error={error} bottomMargin /> : null}
             {startError ? (
                 <YTErrorBlock
-                    header="Failed to start"
+                    header={i18n('alert_failed-to-start')}
                     className={block('error')}
                     error={{message: startError}}
                     bottomMargin
@@ -117,8 +118,8 @@ function ChytCliqueErrors() {
             ) : null}
             {health_reason ? (
                 <YTErrorBlock
+                    header={i18n('alert_health-reason')}
                     type="alert"
-                    header="Health reason"
                     message={health_reason}
                     bottomMargin
                 />
@@ -161,10 +162,19 @@ function ChytCliqueMetaTable() {
 
         return [
             [
-                {key: CHYT_TABLE_TITLES.health, value: <CliqueState state={health} />},
-                {key: CHYT_TABLE_TITLES.state, value: <CliqueState state={state} />},
                 {
-                    key: CHYT_TABLE_TITLES.pool,
+                    key: 'health',
+                    label: CHYT_TABLE_TITLES.health,
+                    value: <CliqueState state={health} />,
+                },
+                {
+                    key: 'state',
+                    label: CHYT_TABLE_TITLES.state,
+                    value: <CliqueState state={state} />,
+                },
+                {
+                    key: 'pool',
+                    label: CHYT_TABLE_TITLES.pool,
                     value: pool ? (
                         <OperationPool cluster={cluster} pool={{pool, tree: 'physical'}} />
                     ) : (
@@ -172,37 +182,52 @@ function ChytCliqueMetaTable() {
                     ),
                 },
                 {
-                    key: CHYT_TABLE_TITLES.instance_count,
+                    key: 'instance_count',
+                    label: CHYT_TABLE_TITLES.instance_count,
                     value: format.Number(ctl_attributes?.instance_count),
                 },
-                {key: CHYT_TABLE_TITLES.total_cpu, value: format.Number(ctl_attributes?.total_cpu)},
                 {
-                    key: CHYT_TABLE_TITLES.total_memory,
+                    key: 'total_cpu',
+                    label: CHYT_TABLE_TITLES.total_cpu,
+                    value: format.Number(ctl_attributes?.total_cpu),
+                },
+                {
+                    key: 'total_memory',
+                    label: CHYT_TABLE_TITLES.total_memory,
                     value: format.Bytes(ctl_attributes?.total_memory),
                 },
             ],
             [
                 {
-                    key: CHYT_TABLE_TITLES.stage,
+                    key: 'stage',
+                    label: CHYT_TABLE_TITLES.stage,
                     value: stage ? <Label capitalize text={stage} /> : format.NO_VALUE,
                 },
-                {key: 'Incarnation index', value: format.Number(incarnation_index)},
                 {
-                    key: CHYT_TABLE_TITLES.creator,
+                    key: 'incarnation-index',
+                    label: i18n('field_incarnation-index'),
+                    value: format.Number(incarnation_index),
+                },
+                {
+                    key: 'creator',
+                    label: CHYT_TABLE_TITLES.creator,
                     value: creator ? <SubjectCard name={creator} /> : format.NO_VALUE,
                 },
                 {
-                    key: CHYT_TABLE_TITLES.speclet_modification_time,
+                    key: 'spectlet_modification_time',
+                    label: CHYT_TABLE_TITLES.speclet_modification_time,
                     value: format.DateTime(speclet_modification_time),
                 },
                 {
-                    key: CHYT_TABLE_TITLES.strawberry_state_modification_time,
+                    key: 'strawberry_state_modification_time',
+                    label: CHYT_TABLE_TITLES.strawberry_state_modification_time,
                     value: format.DateTime(strawberry_state_modification_time),
                 },
             ],
             [
                 {
-                    key: CHYT_TABLE_TITLES.yt_operation_id,
+                    key: 'yt_operation_id',
+                    label: CHYT_TABLE_TITLES.yt_operation_id,
                     value: (
                         <div className={block('operation-id')}>
                             <OperationId id={id} cluster={cluster} />
@@ -210,21 +235,25 @@ function ChytCliqueMetaTable() {
                     ),
                 },
                 {
-                    key: 'YT operation state',
+                    key: 'yt_operation_state',
+                    label: i18n('field_yt-operation-state'),
                     value: yt_operation?.state
                         ? format.ReadableField(yt_operation?.state)
                         : format.NO_VALUE,
                 },
                 {
-                    key: 'Start time',
+                    key: 'yt_operation_start_time',
+                    label: CHYT_TABLE_TITLES.yt_operation_start_time,
                     value: format.DateTime(start_time),
                 },
                 {
-                    key: 'Finish time',
+                    key: 'yt_operation_finish_time',
+                    label: CHYT_TABLE_TITLES.yt_operation_finish_time,
                     value: format.DateTime(finish_time),
                 },
                 {
-                    key: 'Duration',
+                    key: 'duration',
+                    label: i18n('field_duration'),
                     value: duration ? format.TimeDuration(duration) : format.NO_VALUE,
                 },
             ],

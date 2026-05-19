@@ -14,6 +14,8 @@ import {ChytConfirmation} from '../ChytConfirmation/ChytConfirmation';
 
 import './ChytCliqueActions.scss';
 
+import i18n from './i18n';
+
 const block = cn('chyt-clique-actions');
 
 export function useCliqueOnSqlAction(openWidget: () => void) {
@@ -64,21 +66,21 @@ export function ChytCliqueActions({
 
     const start = {
         icon: <Icon awesome="play-circle" />,
-        text: 'Start',
+        text: i18n('action_start'),
         action: () => {
             setVisibleConirmation('start');
         },
     };
     const stop = {
         icon: <Icon awesome="stop-circle" />,
-        text: 'Stop',
+        text: i18n('action_stop'),
         action: () => {
             setVisibleConirmation('stop');
         },
     };
     const remove = {
         icon: <Icon awesome="trash-alt" />,
-        text: 'Remove',
+        text: i18n('action_remove'),
         action: () => {
             setVisibleConirmation('remove');
         },
@@ -112,7 +114,7 @@ export function ChytCliqueActions({
 
                     <span className={block('item')}>
                         <Button
-                            title="Start"
+                            title={i18n('action_start')}
                             view="outlined"
                             onClick={() => {
                                 start.action();
@@ -124,7 +126,7 @@ export function ChytCliqueActions({
 
                     <span className={block('item')}>
                         <Button
-                            title="Stop"
+                            title={i18n('action_stop')}
                             view="outlined"
                             onClick={() => {
                                 stop.action();
@@ -135,7 +137,7 @@ export function ChytCliqueActions({
                     </span>
 
                     <Button
-                        title="Remove"
+                        title={i18n('action_remove')}
                         view="outlined"
                         onClick={() => {
                             remove.action();

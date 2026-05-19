@@ -1,0 +1,14 @@
+{
+  "tab-name_acl": "ACL",
+  "tab-name_monitoring": "Monitoring",
+  "tab-name_speclet": "Speclet",
+  "tab-name_query-logs": "Query logs",
+  "action_edit-speclet": "Edit speclet",
+  "title_edit-clique": "Edit clique {{alias}}",
+  "title_chyt-clique": "CHYT clique",
+  "alert_failed-to-start": "Failed to start",
+  "alert_health-reason": "Health reason",
+  "field_incarnation-index": "Incarnation index",
+  "field_yt-operation-state": "YT operation state",
+  "field_duration": "Duration"
+}

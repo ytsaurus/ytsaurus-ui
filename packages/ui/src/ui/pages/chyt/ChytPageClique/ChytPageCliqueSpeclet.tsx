@@ -37,6 +37,7 @@ import {WaitForDefaultPoolTree} from '../../../hooks/global-pool-trees';
 
 import './ChytPageCliqueSpeclet.scss';
 import {YsonDownloadButton} from '../../../components/DownloadAttributesButton';
+import i18n from './i18n';
 
 const block = cn('yt-chyt-clique-speclet');
 
@@ -153,12 +154,12 @@ export function ChytSpecletEditButton({
             <Button
                 view={compact ? 'outlined' : undefined}
                 className={className}
-                title={'Edit speclet'}
+                title={i18n('action_edit-speclet')}
                 onClick={() => setVisible(!visible)}
                 disabled={!specletData}
             >
                 <Icon awesome={'pencil'} />
-                {!compact && 'Edit speclet'}
+                {!compact && i18n('action_edit-speclet')}
             </Button>
         </React.Fragment>
     );
@@ -248,7 +249,7 @@ function ChytSpecletEditDialog({
                 fields={fields}
                 initialValues={initialValues}
                 headerProps={{
-                    title: <span>Edit clique {alias}</span>,
+                    title: <span>{i18n('title_edit-clique', {alias})}</span>,
                 }}
             />
         </React.Fragment>

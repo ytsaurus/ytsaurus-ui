@@ -1,40 +1,41 @@
 import React, {type Key} from 'react';
-import {useDispatch, useSelector} from '../../store/redux-hooks';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
 
-import ypath from '../../common/thor/ypath';
+import ypath from '../../../common/thor/ypath';
 
 import {Breadcrumbs, Button, Flex, Text} from '@gravity-ui/uikit';
 
 import {ClipboardButton} from '@ytsaurus/components';
-import {YTDFDialog, makeErrorFields} from '../../containers/Dialog';
-import Favourites, {type FavouritesItem} from '../../components/Favourites/Favourites';
-import {EditableBreadcrumbs} from '../../components/EditableBreadcrumbs';
-import Suggest from '../../components/Suggest/Suggest';
-import {Page} from '../../constants';
-import {RowWithName} from '../../containers/AppNavigation/TopRowContent/SectionName';
-import {WaitForDefaultPoolTree} from '../../hooks/global-pool-trees';
+import {YTDFDialog, makeErrorFields} from '../../../containers/Dialog';
+import Favourites, {type FavouritesItem} from '../../../components/Favourites/Favourites';
+import {EditableBreadcrumbs} from '../../../components/EditableBreadcrumbs';
+import Suggest from '../../../components/Suggest/Suggest';
+import {Page} from '../../../constants';
+import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
+import {WaitForDefaultPoolTree} from '../../../hooks/global-pool-trees';
 import {
     selectFavouriteChyt,
     selectIsActiveCliqueInFavourites,
-} from '../../store/selectors/favourites';
-import {selectChytCurrentAlias} from '../../store/selectors/chyt';
-import {selectCluster} from '../../store/selectors/global';
-import {selectIsAdmin} from '../../store/selectors/global/is-developer';
-import {chytApiAction} from '../../utils/strawberryControllerApi';
-import {chytCliqueCreate} from '../../store/actions/chyt/list';
-import {chytToggleFavourite} from '../../store/actions/favourites';
-import {type YTError} from '../../../@types/types';
-import {ChytCliquePageTab} from '../../constants/chyt-page';
+} from '../../../store/selectors/favourites';
+import {selectChytCurrentAlias} from '../../../store/selectors/chyt';
+import {selectCluster} from '../../../store/selectors/global';
+import {selectIsAdmin} from '../../../store/selectors/global/is-developer';
+import {chytApiAction} from '../../../utils/strawberryControllerApi';
+import {chytCliqueCreate} from '../../../store/actions/chyt/list';
+import {chytToggleFavourite} from '../../../store/actions/favourites';
+import {type YTError} from '../../../../@types/types';
+import {ChytCliquePageTab} from '../../../constants/chyt-page';
 
 import './ChytPageTopRow.scss';
+import i18n from './i18n';
 
 const block = cn('chyt-page-top-row');
 
 export default function ChytPageTopRow() {
     return (
-        <RowWithName page={Page.CHYT} name="CHYT cliques">
+        <RowWithName page={Page.CHYT} name={i18n('title_chyt-cliques')}>
             <ChytFavourites />
             <Flex justifyContent={'space-between'} alignItems={'center'} grow={1}>
                 <ChytBreadcrumbs />
@@ -206,7 +207,7 @@ function CreateChytButton() {
     return (
         <div className={block('create-clique')}>
             <Button view="action" onClick={() => setVisible(!visible)}>
-                Create clique
+                {i18n('action_create-clique')}
             </Button>
             {visible && (
                 <WaitForDefaultPoolTree>
@@ -214,7 +215,7 @@ function CreateChytButton() {
                         <YTDFDialog<FormValues>
                             visible
                             className={block('create-dialog')}
-                            headerProps={{title: 'Create clique'}}
+                            headerProps={{title: i18n('action_create-clique')}}
                             onClose={() => setVisible(false)}
                             onAdd={(form) => {
                                 const {
@@ -241,13 +242,13 @@ function CreateChytButton() {
                                 {
                                     name: 'alias',
                                     type: 'text',
-                                    caption: 'Alias name',
+                                    caption: i18n('field_alias-name'),
                                     required: true,
                                 },
                                 {
                                     name: 'instance_count',
                                     type: 'range-input-picker',
-                                    caption: 'Instance count',
+                                    caption: i18n('field_instance-count'),
                                     extras: {
                                         minValue: 1,
                                         maxValue: 100,
@@ -257,7 +258,7 @@ function CreateChytButton() {
                                 {
                                     name: 'tree',
                                     type: 'pool-tree',
-                                    caption: 'Pool tree',
+                                    caption: i18n('field_pool-tree'),
                                     extras: {
                                         multiple: true,
                                     },
@@ -265,11 +266,11 @@ function CreateChytButton() {
                                 {
                                     name: 'pool',
                                     type: 'pool',
-                                    caption: 'Pool',
+                                    caption: i18n('field_pool'),
                                     extras: ({tree}: FormValues) => {
                                         return {
                                             poolTrees: tree,
-                                            placeholder: 'Pool name...',
+                                            placeholder: i18n('field_pool-placeholder'),
                                             allowEmpty: true,
                                         };
                                     },
@@ -286,7 +287,7 @@ function CreateChytButton() {
                                     extras: {
                                         children: (
                                             <Text color="info-heavy" variant="body-2">
-                                                Select a pool to start the clique after creation.
+                                                {i18n('context_select-pool-for-start')}
                                             </Text>
                                         ),
                                     },
@@ -294,7 +295,7 @@ function CreateChytButton() {
                                 {
                                     name: 'runAfterCreation',
                                     type: 'tumbler',
-                                    caption: 'Start after creation',
+                                    caption: i18n('action_start-after-creation'),
                                     visibilityCondition: {
                                         when: 'pool',
                                         isActive(v) {

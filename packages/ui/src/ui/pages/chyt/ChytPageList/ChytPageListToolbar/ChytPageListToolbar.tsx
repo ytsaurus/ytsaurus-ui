@@ -1,14 +1,14 @@
 import React from 'react';
-import {useDispatch, useSelector} from '../../../store/redux-hooks';
+import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
 import {Button, TextInput} from '@gravity-ui/uikit';
 
-import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
-import {SelectSingle} from '../../../components/Select/Select';
-import ColumnSelectorModal from '../../../components/ColumnSelectorModal/ColumnSelectorModal';
+import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
+import {SelectSingle} from '../../../../components/Select/Select';
+import ColumnSelectorModal from '../../../../components/ColumnSelectorModal/ColumnSelectorModal';
 
-import {chytUpdateListFilters} from '../../../store/actions/chyt/list-fitlers';
+import {chytUpdateListFilters} from '../../../../store/actions/chyt/list-fitlers';
 import {
     selectChytListAvailableCreators,
     selectChytListAvailableHealths,
@@ -18,13 +18,16 @@ import {
     selectChytListFilterCreator,
     selectChytListFilterHealth,
     selectChytListFilterState,
-} from '../../../store/selectors/chyt';
-import {type ChytListFilters} from '../../../store/reducers/chyt/list-filters';
-import {chytSetVisibleColumns} from '../../../store/actions/chyt/list';
-import {CHYT_TABLE_TITLES} from '../helpers/chyt-list-columns';
-import Icon from '../../../components/Icon/Icon';
+} from '../../../../store/selectors/chyt';
+import {type ChytListFilters} from '../../../../store/reducers/chyt/list-filters';
+import {chytSetVisibleColumns} from '../../../../store/actions/chyt/list';
+import {CHYT_TABLE_TITLES} from '../../helpers/chyt-list-columns';
+import Icon from '../../../../components/Icon/Icon';
+import i18nChytValues from '../../i18n-chyt-values';
 
 import './ChytPageListToolbar.scss';
+
+import i18n from './i18n';
 
 const block = cn('chyt-list-toolbar');
 
@@ -77,7 +80,7 @@ function NameIdFilter({onUpdate}: {onUpdate: (value: {name: string}) => void}) {
             onUpdate={(name) => {
                 onUpdate({name});
             }}
-            placeholder="Filter by alias name or id..."
+            placeholder={i18n('field_filter-placeholder')}
         />
     );
 }
@@ -98,7 +101,7 @@ function CreatorFilter({onUpdate}: {onUpdate: (value: {creator?: string}) => voi
     return (
         <SelectSingle
             className={block('select-filter')}
-            label="Creator:"
+            label={i18n('field_creator') + ':'}
             value={value}
             items={items}
             onChange={(creator) => {
@@ -116,7 +119,7 @@ function HealthFilter({onUpdate}: {onUpdate: (value: {health?: string}) => void}
         return choices.map((item) => {
             return {
                 value: item,
-                text: item,
+                text: i18nChytValues(`state-value_${item}`),
             };
         });
     }, [choices]);
@@ -124,7 +127,7 @@ function HealthFilter({onUpdate}: {onUpdate: (value: {health?: string}) => void}
     return (
         <SelectSingle
             className={block('select-filter')}
-            label="Health:"
+            label={i18n('field_health') + ':'}
             value={value}
             items={items}
             onChange={(health) => {
@@ -142,14 +145,14 @@ function StateFilter({onUpdate}: {onUpdate: (value: {state?: string}) => void}) 
         return states.map((item) => {
             return {
                 value: item,
-                text: item,
+                text: i18nChytValues(`state-value_${item}`),
             };
         });
     }, [states]);
     return (
         <SelectSingle
             className={block('select-filter')}
-            label="State:"
+            label={i18n('field_state') + ':'}
             value={value}
             items={items}
             onChange={(state) => {
@@ -192,7 +195,7 @@ function ChytListColumnsButton() {
             {visible && dialog}
             <Button view="outlined" onClick={() => setVisible(true)}>
                 <Icon awesome="layout-columns-3" />
-                Columns
+                {i18n('action_columns')}
             </Button>
         </React.Fragment>
     );
