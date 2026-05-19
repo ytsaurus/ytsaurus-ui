@@ -20,6 +20,7 @@ import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
 import {useQueryWidgetSidePanel} from '../../../pages/query-tracker/QueryWidget/side-panel';
 
 import {chytCliqueLoad, chytResetCurrentClique} from '../../../store/actions/chyt/clique';
+import i18n from './i18n';
 import {
     selectChytCliqueData,
     selectChytCliqueError,
@@ -67,7 +68,7 @@ export function ChytPageClique(props: RouteComponentProps<{alias: string}>) {
         <div className={block()}>
             <div className={block('header')}>
                 <Text variant="header-1">
-                    CHYT clique{' '}
+                    {i18n('title_chyt-clique')}{' '}
                     <Text variant="header-1" color="secondary">
                         {alias}
                     </Text>
@@ -110,7 +111,7 @@ function ChytCliqueErrors() {
             {error ? <YTErrorBlock className={block('error')} error={error} bottomMargin /> : null}
             {startError ? (
                 <YTErrorBlock
-                    header="Failed to start"
+                    header={i18n('alert_failed-to-start')}
                     className={block('error')}
                     error={{message: startError}}
                     bottomMargin
@@ -118,7 +119,7 @@ function ChytCliqueErrors() {
             ) : null}
             {health_reason ? (
                 <YTAlertBlock
-                    header="Health reason"
+                    header={i18n('alert_health-reason')}
                     type="alert"
                     message={health_reason}
                     bottomMargin
@@ -187,7 +188,7 @@ function ChytCliqueMetaTable() {
                     key: CHYT_TABLE_TITLES.stage,
                     value: stage ? <Label capitalize text={stage} /> : format.NO_VALUE,
                 },
-                {key: 'Incarnation index', value: format.Number(incarnation_index)},
+                {key: i18n('field_incarnation-index'), value: format.Number(incarnation_index)},
                 {
                     key: CHYT_TABLE_TITLES.creator,
                     value: creator ? <SubjectCard name={creator} /> : format.NO_VALUE,
@@ -211,21 +212,21 @@ function ChytCliqueMetaTable() {
                     ),
                 },
                 {
-                    key: 'YT operation state',
+                    key: i18n('field_yt-operation-state'),
                     value: yt_operation?.state
                         ? format.ReadableField(yt_operation?.state)
                         : format.NO_VALUE,
                 },
                 {
-                    key: 'Start time',
+                    key: CHYT_TABLE_TITLES.yt_operation_start_time,
                     value: format.DateTime(start_time),
                 },
                 {
-                    key: 'Finish time',
+                    key: CHYT_TABLE_TITLES.yt_operation_finish_time,
                     value: format.DateTime(finish_time),
                 },
                 {
-                    key: 'Duration',
+                    key: i18n('field_duration'),
                     value: duration ? format.TimeDuration(duration) : format.NO_VALUE,
                 },
             ],

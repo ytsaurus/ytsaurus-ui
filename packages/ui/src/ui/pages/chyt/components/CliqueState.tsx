@@ -6,6 +6,7 @@ import {
     type StrawberryCliqueHealthType,
     type StrawberryCliqueStateType,
 } from '../../../utils/strawberryControllerApi';
+import i18nChytValues from '../i18n-chyt-values';
 
 const THEME_MAP: Partial<
     Record<
@@ -28,6 +29,11 @@ export function CliqueState({
     return !state ? (
         format.NO_VALUE
     ) : (
-        <Label text={state} theme={THEME_MAP[state]} hideTitle capitalize />
+        <Label
+            text={i18nChytValues(`state-value_${state}`)}
+            theme={THEME_MAP[state]}
+            hideTitle
+            capitalize
+        />
     );
 }

@@ -1,0 +1,13 @@
+{
+  "confirm_clique": "Are you sure you want to {{action}} the clique {{alias}}?",
+  "title_stop": "Stop clique",
+  "title_remove": "Remove clique",
+  "action_stop": "Stop",
+  "action_remove": "Remove",
+  "title_start": "Start clique",
+  "action_start": "Start",
+  "field_pool": "Pool",
+  "field_untracked": "Untracked",
+  "context_untracked": "YT Operation for a clique in untracked mode is started using the current user's credentials in the user's default pool. Such clique is not tracked by the controller and will not be restarted in case of any failures or speclet updates.",
+  "alert_untracked-discouraged": "Usage of untracked cliques is strictly discouraged."
+}

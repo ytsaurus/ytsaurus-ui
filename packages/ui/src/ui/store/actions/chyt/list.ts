@@ -11,6 +11,8 @@ import {selectChytListVisibleColumns} from '../../../store/selectors/chyt';
 import {type StrawberryApi, chytApiAction} from '../../../utils/strawberryControllerApi';
 import {type SettingsThunkAction, setSettingByKey} from '../settings';
 
+import i18n from './i18n';
+
 type ChytListThunkAction<T> = ThunkAction<Promise<T>, RootState, unknown, ChytListAction>;
 
 const cancelHelper = new CancelHelper();
@@ -105,7 +107,7 @@ export function chytCliqueCreate(params: {
                     ...(pool ? {pool} : undefined),
                 },
             },
-            {isAdmin, successTitle: `${alias} clique created`},
+            {isAdmin, successTitle: i18n('alert_clique-created', {alias})},
         ).finally(() => {
             dispatch(chytLoadList());
         });
