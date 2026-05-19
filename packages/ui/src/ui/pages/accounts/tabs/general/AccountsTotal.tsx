@@ -5,7 +5,7 @@ import block from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
 
-import {Progress} from '@gravity-ui/uikit';
+import {Flex, Progress} from '@gravity-ui/uikit';
 
 import WarningIcon from '../../../../components/WarningIcon/WarningIcon';
 import {
@@ -23,6 +23,7 @@ interface Props {
     clusterTotalsUsage: ClusterTotalsUsage;
     nodesData: NodesData;
     mediumList: string[];
+    systemReservedDiskSpacePerMedium?: Record<string, number>;
 }
 
 export default class AccountsTotal extends Component<Props> {
@@ -32,7 +33,27 @@ export default class AccountsTotal extends Component<Props> {
         clusterTotalsUsage: PropTypes.object,
         nodesData: PropTypes.object,
         mediumList: PropTypes.array,
+        systemReservedDiskSpacePerMedium: PropTypes.object,
     };
+
+    renderTooltipContent(tooltipItems: TooltipInfoItem[]) {
+        const items: MetaTableItem[] = tooltipItems.map((item) => {
+            return {
+                key: item.title || '',
+                label: item.isTotal ? (
+                    <span>{item.title}</span>
+                ) : (
+                    <Flex gap={2} alignItems="center">
+                        <ColorCircle theme={item.theme} color={item.color} />
+                        <span>{item.title}</span>
+                    </Flex>
+                ),
+                value: item.value,
+            };
+        });
+
+        return <MetaTable items={items} />;
+    }
 
     renderNodesChunksTotals() {
         const {clusterTotalsUsage} = this.props;
@@ -61,8 +82,21 @@ export default class AccountsTotal extends Component<Props> {
     }
 
     renderNewTotals() {
-        const {accounts, clusterTotalsUsage, nodesData, mediumList} = this.props;
-        const diskSpace = getDiskSpace(accounts, clusterTotalsUsage, nodesData, mediumList);
+        const {
+            accounts,
+            clusterTotalsUsage,
+            nodesData,
+            mediumList,
+            systemReservedDiskSpacePerMedium,
+        } = this.props;
+
+        const diskSpace = getDiskSpace(
+            accounts,
+            clusterTotalsUsage,
+            nodesData,
+            mediumList,
+            systemReservedDiskSpacePerMedium,
+        );
 
         return (
             <Fragment>
@@ -104,9 +138,8 @@ export default class AccountsTotal extends Component<Props> {
                                         </td>
                                         <td className={b('disk-space-cluster-usage')}>
                                             <Progress
-                                                value={item.clusterUsage.progress}
+                                                stack={item.clusterUsage.stack}
                                                 text={item.clusterUsage.text}
-                                                theme={'success'}
                                             />
                                         </td>
                                         <td className={b('disk-space-hardware-limit')}>

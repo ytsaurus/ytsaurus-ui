@@ -4,7 +4,11 @@ import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
 import hammer from '../../common/hammer';
-import {accountsIoThroughputThresholds} from '../../utils/progress';
+import {
+    accountsIoThroughputThresholds,
+    defaultThemeThresholds,
+    getProgressTheme,
+} from '../../utils/progress';
 import {calcProgressProps} from '../../utils/utils';
 
 const nodesChunksUsageList = ['node_count', 'chunk_count'] as const;
@@ -226,6 +230,7 @@ export function getDiskSpace(
     clusterTotalsUsage: ClusterTotalsUsage,
     nodesData: NodesData,
     mediumList: string[],
+    systemReservedDiskSpacePerMedium: Record<string, number> = {},
 ) {
     const clusterTotalPerMedium = getClusterTotal(
         clusterTotalsUsage,
@@ -233,55 +238,83 @@ export function getDiskSpace(
         mediumList,
     ).perMedium;
 
+    if (!Object.keys(clusterTotalPerMedium).length) {
+        return [];
+    }
+
     const hardwareLimitPerMedium = getHardwareLimit(nodesData, mediumList).perMedium;
     const readThroughput = getReadThroughput(nodesData, mediumList).perMedium;
     const writeThroughput = getWriteThroughput(nodesData, mediumList).perMedium;
 
-    if (clusterTotalPerMedium) {
-        return map_(mediumList, (mediumType) => {
-            const clusterUsage = clusterTotalPerMedium[mediumType].usage;
-            const clusterLimit = clusterTotalPerMedium[mediumType].limit;
-            const hardwareLimit = hardwareLimitPerMedium[mediumType].limit;
-            const overcommitted = hardwareLimit < clusterLimit;
+    const formatBytes = hammer.format['Bytes'];
 
-            const diskReadRate = readThroughput[mediumType].usage;
-            const diskReadCapacity = readThroughput[mediumType].limit;
-            const diskWriteRate = writeThroughput[mediumType].usage;
-            const diskWriteCapacity = writeThroughput[mediumType].limit;
+    return mediumList.map((mediumType) => {
+        const {usage: clusterUsage, limit: clusterLimit} = clusterTotalPerMedium[mediumType];
+        const hardwareLimit = hardwareLimitPerMedium[mediumType].limit;
 
-            return {
-                show: hardwareLimit !== 0,
-                mediumType,
-                clusterUsage: {
-                    text:
-                        hammer.format['Bytes'](clusterUsage) +
-                        ' / ' +
-                        hammer.format['Bytes'](clusterLimit),
-                    progress: (clusterUsage / clusterLimit) * 100,
-                },
-                readThroughput: {
-                    progress: calcProgressProps(
-                        diskReadRate,
-                        diskReadCapacity,
-                        'Bytes',
-                        accountsIoThroughputThresholds,
-                    ),
-                    show: diskReadCapacity > 0,
-                },
-                writeThroughput: {
-                    progress: calcProgressProps(
-                        diskWriteRate,
-                        diskWriteCapacity,
-                        'Bytes',
-                        accountsIoThroughputThresholds,
-                    ),
-                    show: diskWriteCapacity > 0,
-                },
-                hardwareLimit,
-                overcommitted,
-            };
-        });
-    }
+        const {usage: diskReadRate, limit: diskReadCapacity} = readThroughput[mediumType];
+        const {usage: diskWriteRate, limit: diskWriteCapacity} = writeThroughput[mediumType];
+        const systemReserved = systemReservedDiskSpacePerMedium[mediumType] || 0;
+        const hasReserve = systemReserved > 0 && clusterLimit > 0;
 
-    return [];
+        let text = `${formatBytes(clusterUsage)} / ${formatBytes(clusterLimit)}`;
+
+        if (hasReserve) {
+            text = `${formatBytes(systemReserved)} + ${formatBytes(clusterUsage)} / ${formatBytes(clusterLimit)}`;
+        }
+
+        const stack = hasReserve
+            ? [
+                  {
+                      value: (systemReserved / clusterLimit) * 100,
+                      color: 'var(--g-color-base-neutral-medium)',
+                      title: formatBytes(systemReserved),
+                  },
+                  {
+                      value: (clusterUsage / clusterLimit) * 100,
+                      theme: getProgressTheme(
+                          ((clusterUsage + systemReserved) / clusterLimit) * 100,
+                          defaultThemeThresholds,
+                      ),
+                  },
+              ]
+            : [
+                  {
+                      value: (clusterUsage / clusterLimit) * 100,
+                      theme: getProgressTheme(
+                          (clusterUsage / clusterLimit) * 100,
+                          defaultThemeThresholds,
+                      ),
+                  },
+              ];
+
+        return {
+            show: hardwareLimit !== 0,
+            mediumType,
+            clusterUsage: {
+                text,
+                stack,
+            },
+            readThroughput: {
+                progress: calcProgressProps(
+                    diskReadRate,
+                    diskReadCapacity,
+                    'Bytes',
+                    accountsIoThroughputThresholds,
+                ),
+                show: diskReadCapacity > 0,
+            },
+            writeThroughput: {
+                progress: calcProgressProps(
+                    diskWriteRate,
+                    diskWriteCapacity,
+                    'Bytes',
+                    accountsIoThroughputThresholds,
+                ),
+                show: diskWriteCapacity > 0,
+            },
+            hardwareLimit,
+            overcommitted: hardwareLimit + systemReserved < clusterLimit,
+        };
+    });
 }
