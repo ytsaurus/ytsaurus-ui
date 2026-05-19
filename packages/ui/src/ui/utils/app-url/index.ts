@@ -6,5 +6,6 @@ export * from './makeOperationJobsUrl';
 export * from './makeOperationJobUrl';
 export * from './makeOperationLogsUrl';
 export * from './makeProxyUrl';
+export * from './makeQueryUrl';
 export * from './makeSchedulingUrl';
 export * from './navigation';

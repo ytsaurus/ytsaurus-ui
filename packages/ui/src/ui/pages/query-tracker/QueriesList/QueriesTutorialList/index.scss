@@ -9,12 +9,6 @@
         }
     }
 
-     &__loader {
-        display: flex;
-        justify-content: center;
-        margin-top: 20px;
-    }
-
     &__filter {
         padding: 0 12px 8px;
 
@@ -27,6 +21,12 @@
 .query-tutorial-item {
     padding: 0 12px;
     cursor: pointer;
+
+    &__link {
+        display: flex;
+        align-items: center;
+        height: 100%;
+    }
 
     &__icon {
         margin-right: 8px;

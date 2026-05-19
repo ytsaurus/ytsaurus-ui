@@ -1,5 +1,4 @@
 import React from 'react';
-import {type Column} from '@gravity-ui/react-data-table';
 import {type QueryItem} from '../../../../../types/query-tracker/api';
 import {
     QueryHistoryACOCell,
@@ -10,10 +9,7 @@ import {
     QueryHistoryStartedCell,
     QueryHistoryTypeCell,
 } from './ColumnCells';
-import block from 'bem-cn-lite';
 import './ColumnCells.scss';
-
-const columnCells = block('yt-queries-column-cells');
 
 type HeaderTableItem = {header: string};
 export type TableItem = QueryItem | HeaderTableItem;
@@ -22,95 +18,69 @@ export function isHeaderTableItem(b: TableItem): b is HeaderTableItem {
     return (b as HeaderTableItem).header !== undefined;
 }
 
-export const NameColumns: Column<TableItem> = {
-    name: 'Name',
-    align: 'left',
+export type QueryHistoryListColumn = {
+    name: string;
+    baseWidth: number;
+    render: (row: QueryItem) => React.ReactNode;
+};
 
-    className: columnCells('name_row'),
-    render: ({row}) => {
-        if (isHeaderTableItem(row)) {
-            return <div className={columnCells('separator')}>{row.header}</div>;
-        }
+export const NameColumns: QueryHistoryListColumn = {
+    name: 'Name',
+    baseWidth: 100,
+    render: (row) => {
         return <QueryHistoryNameCell row={row} />;
     },
 };
 
-export const ActionColumns: Column<TableItem> = {
+export const ActionColumns: QueryHistoryListColumn = {
     name: ' ',
-    align: 'left',
-    width: 20,
-    className: columnCells('action_row'),
-    render: ({row}) => {
-        if (isHeaderTableItem(row)) {
-            return null;
-        }
+    baseWidth: 20,
+    render: (row) => {
         return <QueryHistoryActionCell row={row} />;
     },
 };
 
-const TypeColumns: Column<TableItem> = {
+const TypeColumns: QueryHistoryListColumn = {
     name: 'Type',
-    align: 'center',
-    width: 60,
-    render: ({row}) => {
-        if (isHeaderTableItem(row)) {
-            return null;
-        }
+    baseWidth: 60,
+    render: (row) => {
         return <QueryHistoryTypeCell row={row} />;
     },
 };
 
-export const DurationColumns: Column<TableItem> = {
+export const DurationColumns: QueryHistoryListColumn = {
     name: 'Duration',
-    align: 'left',
-    width: 100,
-    render: ({row}) => {
-        if (isHeaderTableItem(row)) {
-            return null;
-        }
+    baseWidth: 100,
+    render: (row) => {
         return <QueryHistoryDurationCell row={row} />;
     },
 };
 
-export const StartedColumns: Column<TableItem> = {
+export const StartedColumns: QueryHistoryListColumn = {
     name: 'Started',
-    align: 'left',
-    width: 60,
-    render: ({row}) => {
-        if (isHeaderTableItem(row)) {
-            return null;
-        }
+    baseWidth: 60,
+    render: (row) => {
         return <QueryHistoryStartedCell row={row} />;
     },
 };
 
-export const AuthorColumns: Column<TableItem> = {
+export const AuthorColumns: QueryHistoryListColumn = {
     name: 'Author',
-    align: 'left',
-    width: 120,
-    className: columnCells('author_row'),
-    render: ({row}) => {
-        if (isHeaderTableItem(row)) {
-            return null;
-        }
+    baseWidth: 120,
+    render: (row) => {
         return <QueryHistoryAuthorCell row={row} />;
     },
 };
 
-const ACOColumns: Column<TableItem> = {
+const ACOColumns: QueryHistoryListColumn = {
     name: 'ACO',
-    align: 'left',
-    width: 60,
-    className: columnCells('access_control_object'),
-    render: ({row}) => {
-        if (isHeaderTableItem(row)) {
-            return null;
-        }
+    baseWidth: 60,
+    render: (row) => {
         return <QueryHistoryACOCell row={row} />;
     },
 };
 
-export const MyColumns: Column<TableItem>[] = [
+export const MyColumns: QueryHistoryListColumn[] = [
     NameColumns,
     TypeColumns,
     DurationColumns,
@@ -118,7 +88,7 @@ export const MyColumns: Column<TableItem>[] = [
     ACOColumns,
     ActionColumns,
 ];
-export const AllColumns: Column<TableItem>[] = [
+export const AllColumns: QueryHistoryListColumn[] = [
     NameColumns,
     TypeColumns,
     DurationColumns,

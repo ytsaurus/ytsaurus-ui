@@ -72,7 +72,7 @@ export const QueryHistoryACOCell: FC<CellProps> = ({row}) => {
     const title = row.access_control_objects?.join(', ');
 
     return (
-        <Text variant="body-1" ellipsis title={title}>
+        <Text variant="body-1" color="primary" ellipsis title={title}>
             {title}
         </Text>
     );

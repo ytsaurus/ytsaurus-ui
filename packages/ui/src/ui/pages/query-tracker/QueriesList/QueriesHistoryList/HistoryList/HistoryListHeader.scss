@@ -1,0 +1,11 @@
+.yt-queries-history-list-header {
+    width: 100%;
+    border-bottom: 1px solid var(--g-color-line-generic);
+    color: var(--g-color-text-primary);
+    font-weight: 700;
+
+    &__item {
+        padding: var(--data-table-header-vertical-padding) var(--data-table-cell-horizontal-padding);
+
+    }
+}
