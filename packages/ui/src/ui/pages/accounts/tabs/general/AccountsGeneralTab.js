@@ -46,7 +46,7 @@ import {
     getContentModeOptions,
     makeReadableItems,
 } from '../../../../utils/accounts';
-import {getMediumList} from '../../../../store/selectors/thor';
+import {getMediumList, getSystemReservedDiskSpaceByMedium} from '../../../../store/selectors/thor';
 import {
     changeContentFilter,
     changeMediumFilter,
@@ -223,6 +223,7 @@ class AccountsGeneralTab extends Component {
             mediumList,
             collapsibleSize,
             activeAccount,
+            systemReservedDiskSpacePerMedium,
         } = this.props;
         const isLoaded = wasLoaded && loadNodes && loadTotals;
 
@@ -238,6 +239,7 @@ class AccountsGeneralTab extends Component {
                                 clusterTotalsUsage={clusterTotalsUsage}
                                 accounts={accounts}
                                 mediumList={mediumList}
+                                systemReservedDiskSpacePerMedium={systemReservedDiskSpacePerMedium}
                             />
                         )}
                     </CollapsibleSection>
@@ -806,6 +808,7 @@ const makeMapStateToProps = () => {
 
         return {
             ...accounts,
+            systemReservedDiskSpacePerMedium: getSystemReservedDiskSpaceByMedium(state),
             activeContentModeFilter: selectAccountsContentMode(state),
 
             clusterUiConfig: selectClusterUiConfig(state),

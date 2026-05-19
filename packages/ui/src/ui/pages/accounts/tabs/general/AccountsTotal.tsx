@@ -23,6 +23,7 @@ interface Props {
     clusterTotalsUsage: ClusterTotalsUsage;
     nodesData: NodesData;
     mediumList: string[];
+    systemReservedDiskSpacePerMedium?: Record<string, number>;
 }
 
 export default class AccountsTotal extends Component<Props> {
@@ -32,6 +33,7 @@ export default class AccountsTotal extends Component<Props> {
         clusterTotalsUsage: PropTypes.object,
         nodesData: PropTypes.object,
         mediumList: PropTypes.array,
+        systemReservedDiskSpacePerMedium: PropTypes.object,
     };
 
     renderNodesChunksTotals() {
@@ -61,8 +63,21 @@ export default class AccountsTotal extends Component<Props> {
     }
 
     renderNewTotals() {
-        const {accounts, clusterTotalsUsage, nodesData, mediumList} = this.props;
-        const diskSpace = getDiskSpace(accounts, clusterTotalsUsage, nodesData, mediumList);
+        const {
+            accounts,
+            clusterTotalsUsage,
+            nodesData,
+            mediumList,
+            systemReservedDiskSpacePerMedium,
+        } = this.props;
+
+        const diskSpace = getDiskSpace(
+            accounts,
+            clusterTotalsUsage,
+            nodesData,
+            mediumList,
+            systemReservedDiskSpacePerMedium,
+        );
 
         return (
             <Fragment>
@@ -104,9 +119,8 @@ export default class AccountsTotal extends Component<Props> {
                                         </td>
                                         <td className={b('disk-space-cluster-usage')}>
                                             <Progress
-                                                value={item.clusterUsage.progress}
+                                                stack={item.clusterUsage.stack}
                                                 text={item.clusterUsage.text}
-                                                theme={'success'}
                                             />
                                         </td>
                                         <td className={b('disk-space-hardware-limit')}>

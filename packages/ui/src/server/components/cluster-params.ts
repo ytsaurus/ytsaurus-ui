@@ -113,7 +113,6 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
                 sendStats(error.status, mlSuffix);
                 return Promise.reject(error.data);
             });
-
         const [mediumList, schedulerVersion, uiConfig, uiDevConfig, masterVersion] = await yt.v3
             .executeBatch({
                 setup: {
@@ -140,6 +139,7 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
                             command: 'list',
                             parameters: {
                                 path: '//sys/media',
+                                attributes: ['system_reserved_disk_space'],
                                 ...USE_SUPRESS_SYNC,
                             },
                         },

@@ -81,7 +81,8 @@ export type GlobalState = {
 
     isDeveloper: boolean; // groups of current user
     isWatchmen: boolean;
-    mediumList: Array<string>;
+    mediumList: Array<CypressNode<{system_reserved_disk_space?: number}, string>>;
+    uncommittedDiskSpacePerMedium: Record<string, number>;
     groups?: Array<CypressNode<{upravlyator_managed: boolean}, string>>;
     users?: Array<CypressNode<{upravlyator_managed: boolean}, string>>;
     bundles?: Array<string>;
@@ -353,3 +354,4 @@ export type GloablStateAction =
     | ActionD<typeof SPLIT_SCREEN, GlobalState['splitScreen']>
     | ActionD<typeof GLOBAL_SET_THEME, GlobalState['theme']>
     | ActionD<typeof GLOBAL_PARTIAL, Partial<GlobalState>>;
+
