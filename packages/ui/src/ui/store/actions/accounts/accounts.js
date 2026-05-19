@@ -16,6 +16,7 @@ import {
     CLOSE_EDITOR_MODAL,
     FETCH_ACCOUNTS_NODES,
     FETCH_ACCOUNTS_RESOURCE,
+    FETCH_ACCOUNTS_SYSTEM_RESERVED,
     FETCH_ACCOUNTS_TOTAL_USAGE,
     FETCH_ACCOUNTS_USABLE,
     FILTER_USABLE_ACCOUNTS,
@@ -101,6 +102,12 @@ export function fetchAccounts() {
                     path: '//sys/users/' + userName + '/@usable_accounts',
                 },
             },
+            {
+                command: 'get',
+                parameters: {
+                    path: '//sys/media/default/@system_reserved_disk_space',
+                },
+            },
         ];
 
         const rumId = new RumWrapper(cluster, RumMeasureTypes.ACCOUNTS);
@@ -117,6 +124,7 @@ export function fetchAccounts() {
                     {error: resourceError, output: resources},
                     {error: nodesError, output: nodes},
                     {error: usableAccountsError, output: usableAccounts},
+                    {error: systemReservedError, output: systemReserved},
                 ] = batchData;
                 Promise.resolve(accountsError)
                     .then((e) => {
@@ -178,6 +186,18 @@ export function fetchAccounts() {
                     dispatch({
                         type: FETCH_ACCOUNTS_USABLE.FAILURE,
                         data: {error: usableAccountsError},
+                    });
+                }
+
+                if (!systemReservedError) {
+                    dispatch({
+                        type: FETCH_ACCOUNTS_SYSTEM_RESERVED.SUCCESS,
+                        data: ypath.getValue(systemReserved) || {},
+                    });
+                } else {
+                    dispatch({
+                        type: FETCH_ACCOUNTS_SYSTEM_RESERVED.FAILURE,
+                        data: {error: systemReservedError},
                     });
                 }
             });

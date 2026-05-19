@@ -223,6 +223,7 @@ class AccountsGeneralTab extends Component {
             mediumList,
             collapsibleSize,
             activeAccount,
+            systemReservedDiskSpacePerMedium,
         } = this.props;
         const isLoaded = wasLoaded && loadNodes && loadTotals;
 
@@ -238,6 +239,7 @@ class AccountsGeneralTab extends Component {
                                 clusterTotalsUsage={clusterTotalsUsage}
                                 accounts={accounts}
                                 mediumList={mediumList}
+                                systemReservedDiskSpacePerMedium={systemReservedDiskSpacePerMedium}
                             />
                         )}
                     </CollapsibleSection>
