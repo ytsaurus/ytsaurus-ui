@@ -1,7 +1,7 @@
 {
-    "title_static-configuration": "Static configuration",
-    "field_total": "Total",
-    "field_distributed": "Distributed",
-    "field_delta": "Delta",
-    "context_last-day-max-operations": "Last day max operations"
+  "title_static-configuration": "Static configuration",
+  "field_total": "Total",
+  "field_distributed": "Distributed",
+  "field_delta": "Delta",
+  "context_last-day-max-operations": "Last day max operations"
 }

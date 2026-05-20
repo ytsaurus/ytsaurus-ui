@@ -1,6 +1,6 @@
 {
-    "value_error": "error",
-    "value_alert": "alert",
-    "value_info": "info",
-    "action_details": "Details"
+  "value_error": "error",
+  "value_alert": "alert",
+  "value_info": "info",
+  "action_details": "Details"
 }
