@@ -1,0 +1,21 @@
+{
+  "action_edit-speclet": "Edit speclet",
+  "title_edit-clique": "Edit clique {{alias}}",
+  "title_chyt-clique": "CHYT clique",
+  "alert_failed-to-start": "Failed to start",
+  "alert_health-reason": "Health reason",
+  "field_health": "Health",
+  "field_state": "State",
+  "field_pool": "Pool",
+  "field_instances": "Instances",
+  "field_cores": "Cores",
+  "field_memory": "Memory",
+  "field_stage": "Stage",
+  "field_incarnation-index": "Incarnation index",
+  "field_creator": "Creator",
+  "field_yt-operation-id": "YT operation id",
+  "field_yt-operation-state": "YT operation state",
+  "field_start-time": "Start time",
+  "field_finish-time": "Finish time",
+  "field_duration": "Duration"
+}

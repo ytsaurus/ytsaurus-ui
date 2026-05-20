@@ -1,6 +1,5 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import capitalize_ from 'lodash/capitalize';
 
 import {Text} from '@gravity-ui/uikit';
 
@@ -13,6 +12,8 @@ import {useDispatch} from '../../../store/redux-hooks';
 import {chytListAction} from '../../../store/actions/chyt/list';
 
 import './ChytConfirmation.scss';
+
+import i18n from './i18n';
 
 const block = cn('chyt-confirmation');
 
@@ -66,12 +67,12 @@ function ChytSimpleConfirmation({
             headerProps={{
                 title: (
                     <>
-                        {format.ReadableField(action)} {alias}
+                        {i18n(`title_${action}`)} {alias}
                     </>
                 ),
             }}
             footerProps={{
-                textApply: capitalize_(action),
+                textApply: i18n(`action_${action}`),
             }}
             onAdd={() => {
                 return dispatch(chytListAction('stop', {alias}))
@@ -98,7 +99,7 @@ function ChytSimpleConfirmation({
                     extras: {
                         children: (
                             <>
-                                Are you sure you want to {action} the clique <Bold>{alias}</Bold>?
+                                {i18n('confirm_clique', {action, alias})}
                             </>
                         ),
                     },
@@ -132,12 +133,12 @@ function ChytStartConfirmation({
             headerProps={{
                 title: (
                     <>
-                        Start clique <Bold>{alias}</Bold>
+                        {i18n('title_start')} <Bold>{alias}</Bold>
                     </>
                 ),
             }}
             footerProps={{
-                textApply: 'Start',
+                textApply: i18n('action_start'),
             }}
             onClose={onClose}
             initialValues={{pool}}
@@ -163,7 +164,7 @@ function ChytStartConfirmation({
                 {
                     type: 'plain',
                     name: 'pool',
-                    caption: 'Pool',
+                    caption: i18n('field_pool'),
                     extras: {
                         placeholder: format.NO_VALUE,
                     },
@@ -171,9 +172,8 @@ function ChytStartConfirmation({
                 {
                     type: 'tumbler',
                     name: 'untracked',
-                    tooltip:
-                        "YT Operation for a clique in untracked mode is started using the current user's credentials in the user's default pool. Such clique is not tracked by the controller and will not be restarted in case of any failures or speclet updates.",
-                    caption: 'Untracked',
+                    tooltip: i18n('context_untracked'),
+                    caption: i18n('field_untracked'),
                 },
                 {
                     type: 'block',
@@ -185,7 +185,7 @@ function ChytStartConfirmation({
                     extras: {
                         children: (
                             <Text color="warning" variant="body-2">
-                                {`Usage of untracked cliques is strictly discouraged.`}
+                                {i18n('alert_untracked-discouraged')}
                             </Text>
                         ),
                     },

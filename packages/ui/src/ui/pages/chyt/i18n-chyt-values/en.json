@@ -1,0 +1,12 @@
+{
+  "tab-name_acl": "ACL",
+  "tab-name_speclet": "Speclet",
+  "tab-name_monitoring": "Monitoring",
+  "tab-name_query-logs": "Query logs",
+  "state-value_good": "Good",
+  "state-value_pending": "Pending",
+  "state-value_failed": "Failed",
+  "state-value_active": "Active",
+  "state-value_inactive": "Inactive",
+  "state-value_untracked": "Untracked"
+}
