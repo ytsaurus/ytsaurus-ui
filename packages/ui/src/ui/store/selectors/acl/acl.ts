@@ -47,7 +47,7 @@ function prepareApprovers(
             subjectType: subject.type === 'users' ? ('user' as const) : ('group' as const),
             groupInfo:
                 subject.type === 'groups'
-                    ? {name: subject.group_name, url: subject.url, group: undefined}
+                    ? {name: subject.group_name, url: subject.url, group: subject.group}
                     : undefined,
             action: undefined,
         };
