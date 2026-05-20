@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.12.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.12.1...ui-v3.12.2) (2026-05-20)
+
+
+### Bug Fixes
+
+* **Queries:** settings in spyt connect [YTFRONT-5785] ([ad0ebe5](https://github.com/ytsaurus/ytsaurus-ui/commit/ad0ebe5ef5c5c484ecb1830f129c72fd39880423))
+
 ## [3.12.1](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.12.0...ui-v3.12.1) (2026-05-15)
 
 
