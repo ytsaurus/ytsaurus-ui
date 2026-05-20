@@ -183,6 +183,7 @@ function ChytListColumnsButton() {
                 setVisible(false);
             }}
             onCancel={() => setVisible(false)}
+            itemRenderer={(item) => item.name}
         />
     );
 
