@@ -14,7 +14,7 @@ import {type YTErrorRaw} from '../../../@types/types';
 
 import Icon from '../Icon/Icon';
 import Tabs from '../../components/Tabs/Tabs';
-import Yson from '../../components/Yson/Yson';
+import {Yson} from '../../components/Yson/Yson';
 
 import './ErrorDetails.scss';
 import {unescapeSlashX} from '../../utils/utils';

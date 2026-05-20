@@ -51,7 +51,7 @@ const DocumentEditModal: FC<Props> = ({open, document, settings, onCancel, onSav
                         initialSplitSize: '50%',
                         initialShowPreview: false,
                         unipikaSettings: settings,
-                        folding: true,
+                        virtualized: true,
                     },
                 },
             ]}

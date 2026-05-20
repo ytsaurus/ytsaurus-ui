@@ -26,10 +26,10 @@ test('Navigation - Attributes', async ({page}) => {
 
     await page.waitForSelector(':text("attribute_revision")');
 
-    await page.fill('.structured-yson-virtualized__filter input', 'account');
-    await page.waitForSelector('.structured-yson-virtualized__filtered_highlighted');
+    await page.fill('.g-ru-toolbar__item_name_filter input', 'account');
+    await page.waitForSelector('.g-ru-cell__filtered_highlighted');
     const highLightedText = await page.$eval(
-        '.structured-yson-virtualized__filtered_highlighted',
+        '.g-ru-cell__filtered_highlighted',
         (node) => node.textContent,
     );
     expect(highLightedText).toBe('account');
@@ -247,7 +247,7 @@ test('Navigation - truncated cyrillic table', async ({page}) => {
         await table(page).showCellPreview(1, 3);
 
         const modalContent = await page.waitForSelector(
-            '[data-qa="cell-preview-modal-content"] .data-table__table',
+            '[data-qa="cell-preview-modal-content"] .g-ru-table',
         );
         const text = await modalContent.innerText();
         const result = text.includes('пользователь просит оценить утверждение');

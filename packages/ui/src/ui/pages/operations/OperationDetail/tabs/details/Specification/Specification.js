@@ -12,7 +12,7 @@ import {
     TemplateTransferTask,
 } from '../../../../../../components/MetaTable/templates/OperationTemplate';
 import CollapsibleTable from '../../../../../../components/CollapsibleTable/CollapsibleTable';
-import Yson from '../../../../../../components/Yson/Yson';
+import {Yson} from '../../../../../../components/Yson/Yson';
 
 import {
     inputTableProps,

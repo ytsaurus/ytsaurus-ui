@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 import {TextInput} from '@gravity-ui/uikit';
-import Yson from '../../../../../components/Yson/Yson';
+import {Yson} from '../../../../../components/Yson/Yson';
 import './SeparatorInput.scss';
 
 const block = cn('separator-input');

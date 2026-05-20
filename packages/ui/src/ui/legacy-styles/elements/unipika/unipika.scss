@@ -1,31 +1,40 @@
 @use '../globals';
 @use '../mixins';
 
+// `.unipika-wrapper` is legacy markup still emitted by `@ytsaurus/components` and some project components.
+// Drop it once they all migrate to `@gravity-ui/react-unipika`.
+
 .unipika {
     font-family: var(--g-font-family-monospace);
-
-    &-wrapper & {
-        margin: 0;
-        padding: 0;
-        border: 0;
-    }
-
-    &-wrapper_inline_yes & {
-        @include mixins.ellipsis();
-        display: inline-block;
-        vertical-align: bottom;
-        max-width: 100%;
-    }
 
     .tag_image {
         max-width: 300px;
     }
 }
 
+.unipika-wrapper .unipika,
+.g-ru-react-unipika .unipika {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.unipika-wrapper_inline_yes .unipika,
+.g-ru-react-unipika_inline_yes .unipika {
+    @include mixins.ellipsis();
+    display: inline-block;
+    vertical-align: bottom;
+    max-width: 100%;
+}
+
 .g-link_view_primary .unipika-wrapper .unipika,
 .g-link_view_normal .unipika-wrapper .unipika,
 .g-link_view_primary.unipika-wrapper .unipika,
-.g-link_view_normal.unipika-wrapper .unipika {
+.g-link_view_normal.unipika-wrapper .unipika,
+.g-link_view_primary .g-ru-react-unipika .unipika,
+.g-link_view_normal .g-ru-react-unipika .unipika,
+.g-link_view_primary.g-ru-react-unipika .unipika,
+.g-link_view_normal.g-ru-react-unipika .unipika {
     .string {
         color: var(--primary-link);
 

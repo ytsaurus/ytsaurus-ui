@@ -16,7 +16,7 @@ import {YTErrorBlock} from '../../../../../../components/Error/Error';
 
 import {ClipboardButton, MetaTable, TemplateTime} from '@ytsaurus/components';
 import ChartLink from '../../../../../../components/ChartLink/ChartLink';
-import Yson from '../../../../../../components/Yson/Yson';
+import {Yson} from '../../../../../../components/Yson/Yson';
 import Link from '../../../../../../components/Link/Link';
 import CollapsibleSection from '../../../../../../components/CollapsibleSection/CollapsibleSection';
 
