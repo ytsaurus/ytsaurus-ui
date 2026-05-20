@@ -1,4 +1,4 @@
 {
-    "alert_root-not-supported": "Visualization is not supported for <Root>.",
-    "context_select-pool": "Please select a specific pool."
+  "alert_root-not-supported": "Visualization is not supported for <Root>.",
+  "context_select-pool": "Please select a specific pool."
 }

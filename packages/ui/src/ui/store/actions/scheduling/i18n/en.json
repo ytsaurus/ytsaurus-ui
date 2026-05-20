@@ -1,10 +1,10 @@
 {
-    "alert_create-pool-success": "Successfully created {{name}}. Please wait.",
-    "alert_create-pool-failure": "'{{name}}' pool creation failed",
-    "alert_pool-not-appeared": "The pool was not appeared in orchidea in 10 seconds.",
-    "alert_pool-fill-ticket": "Please fill a ticket for ",
-    "alert_pool-contact-support": "Please report it to the cluster's support team.",
-    "alert_delete-pool-success": "Successfully deleted {{name}}. Please wait.",
-    "alert_filter-attributes-error": "Failed to load attributes required for filtering",
-    "alert_edit-pool-success": "Successfully edited {{name}}. Please wait."
+  "alert_create-pool-success": "Successfully created {{name}}. Please wait.",
+  "alert_create-pool-failure": "'{{name}}' pool creation failed",
+  "alert_pool-not-appeared": "The pool was not appeared in orchidea in 10 seconds.",
+  "alert_pool-fill-ticket": "Please fill a ticket for ",
+  "alert_pool-contact-support": "Please report it to the cluster's support team.",
+  "alert_delete-pool-success": "Successfully deleted {{name}}. Please wait.",
+  "alert_filter-attributes-error": "Failed to load attributes required for filtering",
+  "alert_edit-pool-success": "Successfully edited {{name}}. Please wait."
 }

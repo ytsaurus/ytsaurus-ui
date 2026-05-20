@@ -1,5 +1,5 @@
 {
-    "field_compressed": "Compressed",
-    "field_uncompressed": "Uncompressed",
-    "field_slices": "Slices"
+  "field_compressed": "Compressed",
+  "field_uncompressed": "Uncompressed",
+  "field_slices": "Slices"
 }

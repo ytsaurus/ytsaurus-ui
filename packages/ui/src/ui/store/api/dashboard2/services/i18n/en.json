@@ -1,11 +1,11 @@
 {
-    "value_instances-zero": "0 instances",
-    "value_tablet-cells": {
-        "one": "{{count}} tablet cell",
-        "few": "{{count}} tablet cells",
-        "other": "{{count}} tablet cells"
-    },
-    "value_cores": "cores",
-    "value_core": "core",
-    "alert_clique-not-found": "Cannot find {{cliqueName}} clique on current cluster"
+  "value_instances-zero": "0 instances",
+  "value_tablet-cells": {
+    "one": "{{count}} tablet cell",
+    "few": "{{count}} tablet cells",
+    "other": "{{count}} tablet cells"
+  },
+  "value_cores": "cores",
+  "value_core": "core",
+  "alert_clique-not-found": "Cannot find {{cliqueName}} clique on current cluster"
 }
