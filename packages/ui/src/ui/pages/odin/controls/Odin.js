@@ -35,6 +35,7 @@ import {CreateNotificationButton} from '../../system/System/SystemTopRowContent'
 import {YT} from '../../../config/yt-config';
 import RootPage from '../../../containers/RootPage/RootPage';
 import WithStickyToolbar from '../../../components/WithStickyToolbar/WithStickyToolbar';
+import i18n from './i18n';
 
 import './Odin.scss';
 import {UI_TAB_SIZE} from '../../../constants/global';
@@ -97,7 +98,10 @@ function OdinTabs({cluster}) {
     const match = useRouteMatch();
     const lastVisitedTab = useSelector(getOdinLastVisitedTab);
 
-    const props = makeTabProps(match.url, OdinTab);
+    const props = makeTabProps(match.url, OdinTab, undefined, undefined, {
+        [OdinTab.OVERVIEW]: i18n('tab-name_overview'),
+        [OdinTab.DETAILS]: i18n('tab-name_details'),
+    });
 
     return (
         <React.Fragment>
@@ -146,7 +150,7 @@ function Odin({cluster, clusters}) {
                             className={odinCN('cluster-picker')}
                             value={cluster}
                             onChange={(newValue) => dispatch(setOdinCluster(newValue))}
-                            placeholder={'Enter cluster name'}
+                            placeholder={i18n('field_cluster-placeholder')}
                             clusters={clusters}
                             width="max"
                         />
@@ -159,13 +163,13 @@ function Odin({cluster, clusters}) {
                 {cluster && status === 'unavailable' && (
                     <Message
                         theme="warning"
-                        content={['Odin is not supported on this cluster.', GENERIC_ERROR_MESSAGE]}
+                        content={[i18n('alert_not-supported'), GENERIC_ERROR_MESSAGE]}
                     />
                 )}
                 {cluster && status === 'error' && (
                     <Message
                         theme="error"
-                        content={['Odin could not be reached.', GENERIC_ERROR_MESSAGE]}
+                        content={[i18n('alert_could-not-be-reached'), GENERIC_ERROR_MESSAGE]}
                     />
                 )}
             </div>
@@ -180,7 +184,7 @@ IndependentOdinImpl.propTypes = {
 };
 
 function IndependentOdinImpl({clusters, cluster, name}) {
-    const title = name ? `Odin - ${name}` : 'Odin';
+    const title = name ? i18n('title_odin', {name}) : i18n('title_odin-default');
 
     return (
         <RootPage title={title} currentPathname={`/${ODIN_PAGE_ID}`}>

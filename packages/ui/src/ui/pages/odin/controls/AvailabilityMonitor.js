@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 
 import {COLS_NUMBER, ROWS_NUMBER} from '../odin-constants';
-import hammer from '../../../common/hammer';
+import i18n from './i18n';
+import {metricsStateToText} from './MetricState/MetricState';
 
 const size = 19;
 const pad = 4;
@@ -144,7 +145,7 @@ function update(domData, data, showInfo) {
             const top = row * size + margin.top;
             const left = col * size + size / 2 + margin.left;
             tooltip
-                .text(hammer.format.Readable(d.state, {caps: 'all'}))
+                .text(metricsStateToText(d.state))
                 .style('opacity', 1)
                 .style('pointer-events', 'all')
                 .style('top', top + 'px')
