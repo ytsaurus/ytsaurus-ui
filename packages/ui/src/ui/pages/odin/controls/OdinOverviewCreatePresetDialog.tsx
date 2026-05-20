@@ -4,6 +4,7 @@ import {getOdinOverviewShowCreatePresetDialog} from '../_selectors/odin-overview
 import {YTDFDialog} from '../../../components/Dialog';
 import {odinOverviewAddPreset, odinOverviewShowCreatePresetDialog} from '../_actions/odin-overview';
 import {getSettingOdinOverviewVisiblePresets} from '../_selectors';
+import i18n from './i18n';
 
 export default function OdinOverviewCreatePresetDialog() {
     const dispatch = useDispatch();
@@ -17,7 +18,7 @@ export default function OdinOverviewCreatePresetDialog() {
         (name: string) => {
             for (let i = 0; i < presets.length; ++i) {
                 if (name === presets[i].name) {
-                    return 'The name must be unique';
+                    return i18n('alert_preset-name-must-be-unique');
                 }
             }
             return undefined;
@@ -29,7 +30,7 @@ export default function OdinOverviewCreatePresetDialog() {
         <YTDFDialog
             visible={visible}
             headerProps={{
-                title: 'Create preset',
+                title: i18n('title_create-preset'),
             }}
             onAdd={(form: any) => {
                 const {name, isDefault} = form.getState().values;
@@ -45,14 +46,14 @@ export default function OdinOverviewCreatePresetDialog() {
                 {
                     name: 'name',
                     type: 'text',
-                    caption: 'Preset name',
+                    caption: i18n('field_preset-name'),
                     required: true,
                     validator: validateName,
                 },
                 {
                     name: 'isDefault',
                     type: 'tumbler',
-                    caption: 'Use as default',
+                    caption: i18n('field_use-as-default'),
                 },
             ]}
         />

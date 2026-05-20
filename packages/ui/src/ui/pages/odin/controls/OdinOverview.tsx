@@ -14,8 +14,6 @@ import {DatePicker} from '@gravity-ui/date-components';
 
 import {absolute} from '../../../common/utils/url';
 
-import hammer from '../../../common/hammer';
-
 import {dateTime} from '../../../utils/date-utils';
 
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
@@ -64,6 +62,8 @@ import {ODIN_CELL_SIZE, OdinTab} from '../odin-constants';
 import './OdinOverview.scss';
 import WithStickyToolbar from '../../../components/WithStickyToolbar/WithStickyToolbar';
 import {useUpdater} from '../../../hooks/use-updater';
+import i18n from './i18n';
+import {MetricState} from './MetricState/MetricState';
 
 const block = cn('odin-overview');
 
@@ -128,7 +128,7 @@ function OdinOverviewPresetItem({name, isDefault}: OdinOverviewPreset) {
                 onClick={() => {
                     dispatch(odinOverviewToggleDefaultPreset(name));
                 }}
-                title={isDefault ? 'Unmark as default' : 'Mark as default'}
+                title={isDefault ? i18n('title_unmark-default') : i18n('title_mark-default')}
             >
                 <Icon awesome={'star'} face={isDefault ? 'solid' : 'regular'} />
             </ClickableText>
@@ -142,7 +142,7 @@ function OdinOverviewPresetItem({name, isDefault}: OdinOverviewPreset) {
                     e.stopPropagation();
                     dispatch(odinOverviewSetPresetToRemove(name));
                 }}
-                title={'Remove'}
+                title={i18n('action_remove')}
             >
                 <Icon awesome={'times'} />
             </ClickableText>
@@ -178,23 +178,16 @@ function OdinOverviewRemoveConfirmationDialog() {
                     name: 'text',
                     extras: {
                         children: (
-                            <div>
-                                Are you sure you want to remove
-                                <span className={block('preset-to-remove')}>
-                                    {' '}
-                                    {presetToRemove}{' '}
-                                </span>
-                                preset
-                            </div>
+                            <div>{i18n('confirm_remove-preset', {name: presetToRemove})}</div>
                         ),
                     },
                 },
             ]}
             headerProps={{
-                title: `Remove "${presetToRemove}"`,
+                title: i18n('title_remove-preset', {name: presetToRemove}),
             }}
             footerProps={{
-                textApply: 'Remove',
+                textApply: i18n('action_remove'),
             }}
         />
     );
@@ -300,7 +293,7 @@ function OdinOverview(props: OdinOverviewProps) {
                             }}
                             className={block('navigation-now')}
                         >
-                            Now
+                            {i18n('action_now')}
                         </Button>
 
                         {loading && <Loader />}
@@ -327,7 +320,7 @@ function OdinOverview(props: OdinOverviewProps) {
                                             dispatch(odinOverviewSetAllMetricsVisible(true))
                                         }
                                     >
-                                        Show all
+                                        {i18n('action_show-all')}
                                     </ClickableText>
                                     <span> / </span>
                                     <ClickableText
@@ -336,7 +329,7 @@ function OdinOverview(props: OdinOverviewProps) {
                                             dispatch(odinOverviewSetAllMetricsVisible(false))
                                         }
                                     >
-                                        Hide all
+                                        {i18n('action_hide-all')}
                                     </ClickableText>
                                 </div>
                                 <div className={block('save')}>
@@ -413,7 +406,7 @@ function OdinOverviewTooltip(props: TooltipState & {from: Date}) {
                             state: metricData?.state,
                         })}
                     >
-                        {hammer.format.Readable(metricData?.state)}
+                        <MetricState state={metricData?.state} />
                     </span>
                 </div>
                 {metricName}
@@ -427,7 +420,7 @@ function OdinOverviewDetailsDialog(props: DialogData & {from: Date; onClose: () 
 
     const status = (
         <span className={block('status', {state: metricData.state})}>
-            {hammer.format.Readable(metricData.state)}
+            <MetricState state={metricData.state} />
         </span>
     );
 
@@ -489,7 +482,7 @@ function OverviewRowImpl(props: OverviewRowProps) {
         <React.Fragment>
             <div className={block('graph-cell')}>
                 {hidden ? (
-                    <div className={block('hidden-graph')}>hidden</div>
+                    <div className={block('hidden-graph')}>{i18n('field_hidden')}</div>
                 ) : (
                     <OverviewRowData
                         {...data}
@@ -515,7 +508,9 @@ function OverviewRowImpl(props: OverviewRowProps) {
                 <ClickableText
                     color="secondary"
                     onClick={handleHide}
-                    title={'Click to ' + (hidden ? 'display' : 'hide')}
+                    title={
+                        hidden ? i18n('context_click-to-display') : i18n('context_click-to-hide')
+                    }
                 >
                     <Icon awesome={hidden ? 'eye-slash' : 'eye'} />
                 </ClickableText>
@@ -552,7 +547,7 @@ function OverviewRowError({error, name}: {error: any; name: string}) {
     }, [name]);
     return (
         <div className={'error'}>
-            <ClickableText onClick={handleClick}>Reload. </ClickableText>
+            <ClickableText onClick={handleClick}>{i18n('action_reload')}. </ClickableText>
             {String(error)}
         </div>
     );

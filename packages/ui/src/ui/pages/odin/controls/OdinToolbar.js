@@ -14,6 +14,7 @@ import {getDate, getMetric, getOdinCluster, getStat, getUseCurrentDate} from '..
 import {setDate, setMetric, toggleUseCurrentDate} from '../_actions';
 import Utils from '../odin-utils';
 import hammer from '../../../common/hammer';
+import i18n from './i18n';
 
 const odinCN = block('odin');
 
@@ -52,7 +53,7 @@ function MetricSelector() {
     return (
         <Select
             value={[metric]}
-            label="Check:"
+            label={i18n('value_check')}
             items={metrics}
             onUpdate={(vals) => handleChange(vals[0])}
             showSearch={true}
@@ -71,7 +72,7 @@ function UseCurrentDate() {
     return (
         <Checkbox
             size="l"
-            content="Current date"
+            content={i18n('value_current-date')}
             checked={useCurrentDate}
             onChange={handleChange}
         />
@@ -114,8 +115,11 @@ function Toolbar({className}) {
             <div className={odinCN('toolbar-availability-message', tbBlock('component'))}>
                 <div className="elements-message elements-message_theme_info">
                     <p className="elements-message__paragraph">
-                        We were available from <em>{hammer.format.Percent(stat.from * 100)}</em> to{' '}
-                        <em>{hammer.format.Percent(stat.to * 100)}</em> of time.
+                        {i18n('context_availability-from')}{' '}
+                        <em>{hammer.format.Percent(stat.from * 100)}</em>{' '}
+                        {i18n('context_availability-to')}{' '}
+                        <em>{hammer.format.Percent(stat.to * 100)}</em>{' '}
+                        {i18n('context_availability-time')}
                     </p>
                 </div>
             </div>

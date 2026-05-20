@@ -5,6 +5,7 @@ import map_ from 'lodash/map';
 import Utils from '../odin-utils';
 import {type RootState} from '../../../store/reducers';
 import {type OdinOverviewAction, type OdinOverviewState} from '../_reducers/odin-overview';
+import i18n from '../i18n';
 import {
     ODIN_OVERVIEW_CANCELLED,
     ODIN_OVERVIEW_FAILED,
@@ -30,7 +31,7 @@ import {NAMESPACES} from '../../../../shared/constants/settings';
 import {ODIN_LAST_VISITED_TAB, ODIN_VISIBLE_METRIC_PRESETS, YA_NAMESPACES} from '../odin-settings';
 import {toaster} from '../../../utils/toaster';
 
-type OdinOverviewThunkAction = ThunkAction<any, RootState, any, OdinOverviewAction>;
+type OdinOverviewThunkAction = ThunkAction<unknown, RootState, unknown, OdinOverviewAction>;
 
 function getClusterHelper(gs: () => RootState) {
     return getOdinOverviewDataCluster(gs());
@@ -262,7 +263,7 @@ export function odinOverviewAddPreset(name: string, isDefault: boolean): OdinOve
             const presets = [...getOdinOverviewVisiblePresets(getState())];
             presets.push({
                 name,
-                hiddenMetricNames: map_(toHide, (_, name) => name),
+                hiddenMetricNames: map_(toHide, (_, res) => res),
             });
             return dispatch(setSetting(ODIN_VISIBLE_METRIC_PRESETS, YA_NAMESPACES.ODIN, presets))
                 .then(() => {
@@ -279,10 +280,10 @@ export function odinOverviewAddPreset(name: string, isDefault: boolean): OdinOve
                         autoHiding: false,
                         theme: 'danger',
                         content: message,
-                        title: 'Failed to crete preset',
+                        title: i18n('alert_failed-to-create-preset'),
                         actions: [
                             {
-                                label: ' view',
+                                label: i18n('action_view'),
                                 onClick: () => showErrorPopup(data),
                             },
                         ],
@@ -322,8 +323,8 @@ export function odinOverviewRemovePreset(name: string): OdinOverviewThunkAction 
                     autoHiding: false,
                     theme: 'danger',
                     content: message,
-                    title: 'Failed to delete the preset',
-                    actions: [{label: ' view', onClick: () => showErrorPopup(data)}],
+                    title: i18n('alert_failed-to-delete-preset'),
+                    actions: [{label: i18n('action_view'), onClick: () => showErrorPopup(data)}],
                 });
             });
     };
@@ -353,8 +354,8 @@ export function odinOverviewToggleDefaultPreset(name: string): OdinOverviewThunk
                     autoHiding: false,
                     theme: 'danger',
                     content: message,
-                    title: 'Failed to set the preset as default',
-                    actions: [{label: ' view', onClick: () => showErrorPopup(data)}],
+                    title: i18n('alert_failed-to-set-default-preset'),
+                    actions: [{label: i18n('action_view'), onClick: () => showErrorPopup(data)}],
                 });
             });
         });

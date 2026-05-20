@@ -1,0 +1,7 @@
+{
+  "title_odin": "Odin",
+  "alert_failed-to-create-preset": "Failed to create preset",
+  "alert_failed-to-delete-preset": "Failed to delete the preset",
+  "alert_failed-to-set-default-preset": "Failed to set the preset as default",
+  "action_view": "view"
+}
