@@ -59,7 +59,7 @@ function OdinDetails({cluster}) {
     const dispatch = useDispatch();
     React.useEffect(() => {
         dispatch(setOdinLastVisitedTab(OdinTab.DETAILS));
-    }, []);
+    }, [dispatch]);
     useLoadMetricAvailability(cluster);
 
     return (

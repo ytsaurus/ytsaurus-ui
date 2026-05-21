@@ -48,7 +48,7 @@ export default class Utils {
             });
     }
 
-    static isRequestCanceled(error: any) {
+    static isRequestCanceled(error: unknown) {
         return axios.isCancel(error);
     }
 
@@ -104,9 +104,9 @@ export default class Utils {
         let data: MetricData;
 
         function getPropertyName(i: number) {
-            let property = '00000' + i;
-            property = 'at_' + property.substr(property.length - 5);
-            return property;
+            let res = '00000' + i;
+            res = 'at_' + res.substr(res.length - 5);
+            return res;
         }
 
         for (let i = 0; i < size; i++) {

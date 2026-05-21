@@ -270,6 +270,7 @@ export function odinOverviewAddPreset(name: string, isDefault: boolean): OdinOve
                     if (isDefault) {
                         return dispatch(odinOverviewToggleDefaultPreset(name));
                     }
+                    return undefined;
                 })
                 .catch((error: any) => {
                     const data = error?.response?.data || error;
@@ -370,8 +371,8 @@ export function odinOverviewSelectPreset(name: string): OdinOverviewThunkAction 
         if (preset) {
             const {hiddenMetricNames} = preset;
             const hiddenMetrics: OdinOverviewState['hiddenMetrics'] = {};
-            hiddenMetricNames.forEach((name) => {
-                hiddenMetrics[name] = true;
+            hiddenMetricNames.forEach((item) => {
+                hiddenMetrics[item] = true;
             });
             dispatch({
                 type: ODIN_OVERVIEW_HIDDEN_METRICS,
@@ -379,9 +380,9 @@ export function odinOverviewSelectPreset(name: string): OdinOverviewThunkAction 
             });
 
             const oldHiddenMetrics = getOdinOverviewHiddenMetrics(state);
-            forEach_(oldHiddenMetrics, (_, name) => {
-                if (!hiddenMetrics[name]) {
-                    dispatch(reloadOdinOverviewMetricData(name));
+            forEach_(oldHiddenMetrics, (_, k) => {
+                if (!hiddenMetrics[k]) {
+                    dispatch(reloadOdinOverviewMetricData(k));
                 }
             });
         }

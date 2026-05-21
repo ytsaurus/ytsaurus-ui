@@ -97,7 +97,7 @@ export default function OdinOverviewWithPreset({cluster}: OdinOverviewProps) {
     const dispatch = useDispatch();
     React.useEffect(() => {
         dispatch(setOdinLastVisitedTab(OdinTab.OVERVIEW));
-    }, []);
+    }, [dispatch]);
     return (
         <React.Fragment>
             <OdinOverviewPresets />
@@ -156,12 +156,12 @@ function OdinOverviewRemoveConfirmationDialog() {
 
     const handleClose = React.useCallback(() => {
         dispatch(odinOverviewSetPresetToRemove(undefined));
-    }, []);
+    }, [dispatch]);
 
     const handleAdd = React.useCallback(async () => {
         if (presetToRemove) {
             await dispatch(odinOverviewRemovePreset(presetToRemove));
-            return;
+            return undefined;
         }
         return Promise.resolve();
     }, [presetToRemove, dispatch]);
@@ -472,11 +472,11 @@ function OverviewRowImpl(props: OverviewRowProps) {
     const dispatch = useDispatch();
     const handleNameClick = React.useCallback(() => {
         dispatch(setMetric(item.name));
-    }, [item.name]);
+    }, [item.name, dispatch]);
 
     const handleHide = React.useCallback(() => {
         dispatch(toggleOdinOverviewMetricVisibility(item.name));
-    }, [item.name]);
+    }, [item.name, dispatch]);
 
     return (
         <React.Fragment>
@@ -544,7 +544,7 @@ function OverviewRowError({error, name}: {error: any; name: string}) {
     const dispatch = useDispatch();
     const handleClick = React.useCallback(() => {
         dispatch(reloadOdinOverviewMetricData(name));
-    }, [name]);
+    }, [name, dispatch]);
     return (
         <div className={'error'}>
             <ClickableText onClick={handleClick}>{i18n('action_reload')}. </ClickableText>

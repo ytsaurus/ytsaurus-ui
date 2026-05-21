@@ -25,15 +25,15 @@ function useLoadMetricsList() {
     const cluster = useSelector(getOdinCluster);
 
     useEffect(() => {
-        Utils.listMetrics(cluster).then((metrics) => {
+        Utils.listMetrics(cluster).then((items) => {
             setMetrics(
-                map_(metrics, ({name, display_name: text}) => ({
+                map_(items, ({name, display_name: text}) => ({
                     value: name,
                     text,
                 })),
             );
         });
-    }, []);
+    }, [cluster]);
 
     return metrics;
 }
@@ -42,9 +42,12 @@ function MetricSelector() {
     const metric = useSelector(getMetric);
     const dispatch = useDispatch();
     const metrics = useLoadMetricsList();
-    const handleChange = useCallback((value) => {
-        dispatch(setMetric(value));
-    }, []);
+    const handleChange = useCallback(
+        (value) => {
+            dispatch(setMetric(value));
+        },
+        [dispatch],
+    );
 
     if (metrics.length > 0 && findIndex_(metrics, ({value}) => value === metric) === -1) {
         dispatch(setMetric(metrics[0].value));
@@ -67,7 +70,7 @@ function UseCurrentDate() {
     const dispatch = useDispatch();
     const handleChange = useCallback(() => {
         dispatch(toggleUseCurrentDate());
-    }, []);
+    }, [dispatch]);
 
     return (
         <Checkbox
@@ -82,9 +85,12 @@ function UseCurrentDate() {
 function CustomDate() {
     const date = useSelector(getDate);
     const dispatch = useDispatch();
-    const handleChange = useCallback(({from}) => {
-        dispatch(setDate(from));
-    }, []);
+    const handleChange = useCallback(
+        ({from}) => {
+            dispatch(setDate(from));
+        },
+        [dispatch],
+    );
 
     return (
         <Datepicker

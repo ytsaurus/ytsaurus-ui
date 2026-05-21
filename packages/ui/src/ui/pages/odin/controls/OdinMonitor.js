@@ -21,9 +21,12 @@ function Monitor() {
         return {loading, loaded, error, errorData};
     });
 
-    const handleShowInfo = useCallback((_, hours, minutes) => {
-        dispatch(setShowInfo(hours, minutes));
-    }, []);
+    const handleShowInfo = useCallback(
+        (_, hours, minutes) => {
+            dispatch(setShowInfo(hours, minutes));
+        },
+        [dispatch],
+    );
 
     return (
         <LoadDataHandler {...props}>
