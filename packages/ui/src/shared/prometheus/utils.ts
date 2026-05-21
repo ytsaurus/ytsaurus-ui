@@ -8,7 +8,7 @@ import {
 } from './types';
 
 export function getDashboardPath(type: PrometheusDashboardType) {
-    return `//sys/interface-monitoring/${type}`;
+    return `//sys/interface_monitoring/${type}`;
 }
 
 export function makePanelId(item: {

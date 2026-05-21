@@ -82,11 +82,11 @@ All application files in a resulting docker-image will be placed in /opt/app, so
 }
 ```
 
-- `GRAFANA_BASE_URL` - If defined enables links to specific dashbords when `YTCoreConfig.prometheusBaseUrl` is provided (the value is forwarded to `YTCoreConfig.uiSettings.grafanaBaseUrl`). By default the link is visible for all users, to control the visibility create `//sys/interface-monitoring/allow_grafana_url` node and add `use` permission for specific users/groups.
+- `GRAFANA_BASE_URL` - If defined enables links to specific dashbords when `YTCoreConfig.prometheusBaseUrl` is provided (the value is forwarded to `YTCoreConfig.uiSettings.grafanaBaseUrl`). By default the link is visible for all users, to control the visibility create `//sys/interface_monitoring/allow_grafana_url` node and add `use` permission for specific users/groups.
 
 ### Prometheus dashboards
 
-To activate monitoring ddashboards you have to provide PROMETHEUS_BASE_URL. Additionally you have to provide documents in `//sys/interface-monitoring/` with description of dashboards:
+To activate monitoring ddashboards you have to provide PROMETHEUS_BASE_URL. Additionally you have to provide documents in `//sys/interface_monitoring/` with description of dashboards:
 
 - Account: `master-accounts`
 - Tablet cell bundle: `bundle-ui-cpu`, `bundle-ui-disk`, `bundle-ui-efficiency`, `bundle-ui-lsm`, `bundle-ui-memory`, `bundle-ui-network`, `bundle-ui-resource`, `bundle-ui-rpc-proxy`, `bundle-ui-rpc-proxy-overview`, `bundle-ui-user-load`,

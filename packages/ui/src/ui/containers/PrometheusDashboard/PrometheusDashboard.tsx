@@ -235,7 +235,7 @@ function useGrafanaUrlVisibility() {
         parameters: {
             requests: [
                 makeCheckPermissionBatchSubRequest({
-                    path: '//sys/interface-monitoring/allow_grafana_url',
+                    path: '//sys/interface_monitoring/allow_grafana_url',
                     user,
                     permission: 'use',
                 }),
