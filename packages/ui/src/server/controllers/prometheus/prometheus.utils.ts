@@ -112,7 +112,7 @@ export async function checkDashboardPermissions(
     permissions?.forEach(
         ({cluster: rawCluster = ytAuthCluster, path: rawPath, permission, ignorePaths}) => {
             // chartParams should contain only keys corresponding to items of `templating.list` of a dashboard description
-            // from //sys/interface-monitoring/*, so it is safe to use it for RegExp
+            // from //sys/interface_monitoring/*, so it is safe to use it for RegExp
             // eslint-disable-next-line security/detect-non-literal-regexp
             const keyToRegex = (key: string) => new RegExp(`\\$${key}`, 'g');
 
