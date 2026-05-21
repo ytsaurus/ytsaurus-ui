@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 
 import {COLS_NUMBER, ROWS_NUMBER} from '../odin-constants';
-import i18n from './i18n';
 import {metricsStateToText} from './MetricState/MetricState';
 
 const size = 19;

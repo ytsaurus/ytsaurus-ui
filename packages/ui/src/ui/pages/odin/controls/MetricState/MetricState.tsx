@@ -1,4 +1,4 @@
-import {MetricData} from '../../../../pages/odin/odin-utils';
+import {type MetricData} from '../../../../pages/odin/odin-utils';
 import i18n from './i18n';
 
 export function MetricState({state}: Partial<Pick<MetricData, 'state'>>) {
