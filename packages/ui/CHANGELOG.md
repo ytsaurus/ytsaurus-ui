@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.12.3](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.12.2...ui-v3.12.3) (2026-05-21)
+
+
+### Bug Fixes
+
+* **UI:** data type theme [YTFRONT-5601] ([5f8bb0a](https://github.com/ytsaurus/ytsaurus-ui/commit/5f8bb0a3ecac9effc8547c20e2280aa7af1a5319))
+
 ## [3.12.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.12.1...ui-v3.12.2) (2026-05-20)
 
 
