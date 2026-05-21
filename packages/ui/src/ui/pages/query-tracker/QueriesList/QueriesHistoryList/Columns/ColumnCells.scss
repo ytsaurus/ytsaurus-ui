@@ -7,18 +7,6 @@
         justify-content: flex-start;
     }
 
-    &__name_row {
-        max-width: 100px;
-    }
-
-    &__author_row {
-        max-width: 120px;
-    }
-
-    &__action_row {
-        padding: 0 5px 0 0;
-    }
-
     &__name > &__status-icon {
         min-width: 16px;
         min-height: 16px;
@@ -29,9 +17,5 @@
         overflow: hidden;
         z-index: 1;
         margin: -14px 0;
-    }
-
-    &__separator {
-        text-align: center;
     }
 }
