@@ -15,6 +15,7 @@ export const expectScreenshotFixture: PlaywrightFixture<ExpectScreenshotFixture>
     use,
     testInfo,
 ) => {
+    let counter = 0;
     const expectScreenshot: ExpectScreenshotFixture = async ({
         component,
         nameSuffix,
@@ -28,8 +29,11 @@ export const expectScreenshotFixture: PlaywrightFixture<ExpectScreenshotFixture>
             });
         };
 
+        ++counter;
         const nameScreenshot =
-            testInfo.titlePath.slice(1).join(' ') + (nameSuffix ? ` ${nameSuffix}` : '');
+            testInfo.titlePath.slice(1).join(' ') +
+            (nameSuffix ? ` ${nameSuffix}` : '') +
+            `${counter > 1 ? '-' + counter : ''}`;
 
         const themes = paramsThemes || defaultParams.themes;
 
