@@ -43,7 +43,7 @@ const config: PlaywrightTestConfig = {
         Retry everytime to avoid unccesary flaps
         TODO: try to fix flaps in CI
     */
-    retries: 3,
+    retries: process.env.CI ? 3 : 0,
     /* Opt out of parallel tests on CI. */
     workers: process.env.CI ? 8 : undefined,
     /* Reporter to use. See https://playwright.dev/docs/test-reporters */
