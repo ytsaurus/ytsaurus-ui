@@ -61,6 +61,9 @@ export const getPool = (state: RootState) => state.scheduling.scheduling.pool;
 export const getSchedulingShowAbsResources = (state: RootState) =>
     state.scheduling.scheduling.showAbsResources;
 
+export const selectSchedulingPoolNotFound = (state: RootState) =>
+    state.scheduling.scheduling.poolNotFound;
+
 export const getSchedulingEditItem = (state: RootState) => state.scheduling.scheduling.editItem;
 
 export const getCurrentPool = createSelector([getPool, getPools], (pool, pools) => {

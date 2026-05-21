@@ -1,4 +1,6 @@
 {
   "title_overview": "Overview",
-  "title_attributes": "Attributes"
+  "title_attributes": "Attributes",
+  "pool_not_found": "Pool \"{{poolName}}\" not found",
+  "pool_not_found_hint": "The specified pool \"{{poolName}}\" does not exist. Select a pool from the list or create a new one."
 }

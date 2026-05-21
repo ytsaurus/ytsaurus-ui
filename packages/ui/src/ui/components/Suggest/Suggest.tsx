@@ -67,6 +67,7 @@ export interface SuggestProps {
     };
     items: Array<SuggestItem>;
     maxItems?: number | {totalAmount: number; groupPredicate: () => void};
+    allowArbitraryInput?: boolean;
 
     zIndexGroupLevel?: number;
     onBlur?: () => void;
@@ -255,23 +256,31 @@ export default class Suggest extends Component<SuggestProps, State> {
     }
 
     applyOrClearSuggestion() {
-        const {selectedIndex, items} = this.state;
+        const {selectedIndex, items, text} = this.state;
 
         let item: SuggestItem | undefined;
+        let value: string | undefined;
 
         if (selectedIndex === 0) {
             if (items.length > 0) {
                 item = items[0];
+                value = this.getItemValue(item);
             }
         } else {
             item = items[this.getItemIndex(selectedIndex)];
+            value = this.getItemValue(item);
         }
 
-        if (item) {
-            const value = this.getItemValue(item);
+        if (!value && text && text.trim().length > 0 && this.props.allowArbitraryInput) {
+            value = text.trim();
+        }
+
+        if (value) {
             this.applySuggestion(value);
-            const {onItemClick} = this.props;
-            onItemClick?.(item);
+            if (item) {
+                const {onItemClick} = this.props;
+                onItemClick?.(item);
+            }
         }
     }
 
