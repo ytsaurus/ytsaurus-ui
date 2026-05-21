@@ -1,0 +1,6 @@
+{
+  "context_pool-permissions-warning-prefix": "You do not have sufficient permissions to modify pool settings. In order to be able to modify pool settings",
+  "context_pool-permissions-warning-suffix": "flag should be enabled for current pool and you should be responsible for the parent pool.",
+  "label_inherit-acl-flag": "inherit_acl",
+  "context_auto-managed-pool": "This pool is generated automatically and cannot be managed by users."
+}

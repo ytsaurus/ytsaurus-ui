@@ -1,4 +1,4 @@
-import {Page} from '@playwright/test';
+import {type Page} from '@playwright/test';
 import {E2E_DIR_NAME} from '../utils';
 import {replaceInnerHtml} from '../utils/dom';
 import type {ConfigData} from '../../src/shared/yt-types';

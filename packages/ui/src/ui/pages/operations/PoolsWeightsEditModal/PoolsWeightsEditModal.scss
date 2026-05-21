@@ -1,26 +1,25 @@
 .operation-pools-weights {
-    display: grid;
-    grid-template-columns: 3fr 1fr 1fr;
-    grid-template-rows: 28px;
-    grid-auto-rows: 28px;
-    grid-gap: 20px;
-    align-items: center;
-
-    &__header {
-        color: var(--secondary-text);
+    &__error {
+        margin-top: 16px;
     }
 
     &__title {
-        justify-content: center;
+        width: 100%;
+    }
+
+    &__title-suffix {
+        font-size: var(--g-text-body-2-font-size, 13px);
+        line-height: var(--g-text-body-2-line-height, 18px);
+        font-weight: 400;
+        color: var(--secondary-text);
+    }
+    
+    &__tree-info {
         display: flex;
         align-items: center;
+        justify-content: space-between;
     }
-
-    &__name {
-        padding-bottom: 1em;
-    }
-
-    &__error {
-        margin-top: 20px;
+    &__tree-label {
+        font-weight: 600;
     }
 }

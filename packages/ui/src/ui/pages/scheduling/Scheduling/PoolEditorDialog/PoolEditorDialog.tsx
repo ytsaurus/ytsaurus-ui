@@ -1,7 +1,5 @@
 import cn from 'bem-cn-lite';
 import React, {useCallback, useMemo} from 'react';
-
-import i18n from './i18n';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 
 import isEmpty_ from 'lodash/isEmpty';
@@ -10,6 +8,10 @@ import pickBy_ from 'lodash/pickBy';
 
 import {type DialogField, type FormApi, YTDFDialog} from '../../../../components/Dialog';
 import {YTErrorBlock} from '../../../../components/Error/Error';
+import {
+    AutoManagedPoolWarning,
+    PoolPermissionsWarning,
+} from '../../../../components/PermissionsWarning';
 
 import {closeEditModal, editPool} from '../../../../store/actions/scheduling/scheduling';
 import {
@@ -42,6 +44,8 @@ import ypath from '../../../../common/thor/ypath';
 import {createQuotaReqTicketUrl} from '../../../../config';
 import {type PoolTreeNode} from '../../../../utils/scheduling/pool-child';
 import './PoolEditorDialog.scss';
+import {isPositiveOrZeroNumber} from '../../../../../shared/utils/toolkit';
+import i18n from './i18n';
 
 const block = cn('pool-editor-dialog');
 
@@ -51,17 +55,10 @@ function makePermissionWarning(visible: boolean, poolType?: 'root' | 'service' |
     }
 
     if (poolType === 'root' || poolType === 'service') {
-        return (
-            <div className={block('permissions-warning')}>{i18n('alert_auto-generated-pool')}</div>
-        );
+        return <AutoManagedPoolWarning />;
     }
 
-    return (
-        <div className={block('permissions-warning')}>
-            {i18n('alert_no-permissions-prefix')} <span className={block('flag')}>inherit_acl</span>{' '}
-            {i18n('alert_no-permissions-suffix')}
-        </div>
-    );
+    return <PoolPermissionsWarning />;
 }
 
 function makeError(error: any) {
@@ -183,7 +180,7 @@ export function PoolEditorDialog() {
             .catch((error) => {
                 setCheckPermError(error);
             });
-    }, [pools, tree, editItem?.name, hasWarning, setHasWarning, setCheckPermError]);
+    }, [pools, tree, editItem?.name, hasWarning, setHasWarning, setCheckPermError, user]);
 
     const warningField: DialogField = {
         type: 'block',
@@ -469,10 +466,11 @@ export function PoolEditorDialog() {
                             name: 'memory',
                             type: 'bytes',
                             caption: 'Memory',
-                            validator(value?: number) {
-                                if (typeof value !== 'undefined' && isNaN(value)) {
-                                    return i18n('alert_incorrect-value');
+                            validator: (value: number | undefined) => {
+                                if (value && !isPositiveOrZeroNumber(value)) {
+                                    i18n('alert_incorrect-value');
                                 }
+
                                 return undefined;
                             },
                         },
