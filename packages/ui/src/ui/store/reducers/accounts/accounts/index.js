@@ -12,6 +12,7 @@ import {
     CLOSE_EDITOR_MODAL,
     FETCH_ACCOUNTS_NODES,
     FETCH_ACCOUNTS_RESOURCE,
+    FETCH_ACCOUNTS_SYSTEM_RESERVED,
     FETCH_ACCOUNTS_TOTAL_USAGE,
     FETCH_ACCOUNTS_USABLE,
     FILTER_USABLE_ACCOUNTS,
@@ -49,6 +50,7 @@ const ephemeralState = {
 
     clusterTotalsUsage: {},
     nodesData: {},
+    systemReservedDiskSpacePerMedium: {},
 
     /**
      * The field is used by AccountsUpdater.
@@ -130,6 +132,15 @@ const reducer = (state = initialState, action) => {
 
         case FETCH_ACCOUNTS_NODES.FAILURE:
             return {...state, totalsError: action.data.error};
+
+        case FETCH_ACCOUNTS_SYSTEM_RESERVED.SUCCESS:
+            return {
+                ...state,
+                systemReservedDiskSpacePerMedium: action.data || {},
+            };
+
+        case FETCH_ACCOUNTS_SYSTEM_RESERVED.FAILURE:
+            return {...state, systemReservedDiskSpacePerMedium: {}};
 
         case FETCH_ACCOUNTS_USABLE.SUCCESS:
             return {
