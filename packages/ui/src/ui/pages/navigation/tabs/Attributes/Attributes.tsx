@@ -1,30 +1,31 @@
-import React, {Fragment, useEffect} from 'react';
+import {Loader} from '@gravity-ui/uikit';
 import b from 'bem-cn-lite';
+import React, {useEffect} from 'react';
 import unipika from '../../../../common/thor/unipika';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-import {Loader} from '@gravity-ui/uikit';
 
-import {YsonWithScroll} from '../../../../components/Yson/YsonWithScroll';
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
+import {YsonWithScroll} from '../../../../components/Yson/YsonWithScroll';
 import {YTErrorBlock} from '../../../../containers/Block/Block';
 
+import {requestAttributes} from '../../../../store/actions/navigation/tabs/attributes/attributes';
 import {
     selectAttributesPath,
     selectAttributesWithTypes,
     selectLoadState,
 } from '../../../../store/selectors/navigation';
 import {
-    selectAttributesLoadingInfo,
+    selectAttributesRequestState,
     selectAttributesTab,
 } from '../../../../store/selectors/navigation/tabs/attributes';
-import {requestAttributes} from '../../../../store/actions/navigation/tabs/attributes/attributes';
 
-import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
-import {isFinalLoadingStatus} from '../../../../utils/utils';
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
+import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
+import {isFinalLoadingStatus} from '../../../../utils/utils';
 
 import {pathToFileName} from '../../helpers/pathToFileName';
+import {useRenderRowExtraTools} from './useRenderRowExtraTools';
 
 import './Attributes.scss';
 
@@ -35,23 +36,24 @@ function Attributes() {
 
     const attributes = useSelector(selectAttributesTab);
     const attributesPath = useSelector(selectAttributesPath);
-    const {loading, loaded, error} = useSelector(selectAttributesLoadingInfo);
+    const {loading, error} = useSelector(selectAttributesRequestState);
 
     const settings = unipika.prepareSettings();
 
+    const renderRowExtraTools = useRenderRowExtraTools();
+
     useEffect(() => {
         dispatch(requestAttributes());
-    }, [attributesPath]);
+    }, [dispatch, attributesPath]);
 
-    const initialLoading = !loaded && loading;
-
-    if (initialLoading) {
-        return <Loader className={block({loading: initialLoading})} />;
+    if (loading) {
+        return <Loader className={block({loading})} />;
     }
 
     return (
-        <Fragment>
-            {error != undefined && <YTErrorBlock error={error} />}
+        <>
+            {error && <YTErrorBlock error={error} />}
+
             <YsonWithScroll
                 settings={settings}
                 value={attributes}
@@ -62,8 +64,9 @@ function Attributes() {
                         name={`attributes_${pathToFileName(attributesPath)}`}
                     />
                 }
+                renderRowExtraTools={renderRowExtraTools}
             />
-        </Fragment>
+        </>
     );
 }
 

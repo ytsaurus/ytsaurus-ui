@@ -27,9 +27,9 @@ test('Navigation - Attributes', async ({page}) => {
     await page.waitForSelector(':text("attribute_revision")');
 
     await page.fill('.g-ru-toolbar__item_name_filter input', 'account');
-    await page.waitForSelector('.g-ru-cell__filtered_highlighted');
+    await page.waitForSelector('.g-ru-filtered-text_highlighted');
     const highLightedText = await page.$eval(
-        '.g-ru-cell__filtered_highlighted',
+        '.g-ru-filtered-text_highlighted',
         (node) => node.textContent,
     );
     expect(highLightedText).toBe('account');

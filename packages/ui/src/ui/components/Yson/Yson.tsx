@@ -1,6 +1,7 @@
 import React, {type ReactNode, useMemo} from 'react';
 import PropTypes from 'prop-types';
 
+import type {RenderRowExtraTools} from '@gravity-ui/react-unipika';
 import {ReactUnipika as ReactUnipikaWindowScroll} from '@gravity-ui/react-unipika/window-scroll';
 import {ReactUnipika as ReactUnipikaContainerScroll} from '@gravity-ui/react-unipika/container-scroll';
 
@@ -20,6 +21,7 @@ export type YsonProps = {
     scrollContainer?: Element | null;
     toolbarStickyTop?: number;
     customLayout?: (params: {toolbar: ReactNode; content: ReactNode}) => ReactNode;
+    renderRowExtraTools?: RenderRowExtraTools;
 };
 
 const defaultUnipikaSettings = {
