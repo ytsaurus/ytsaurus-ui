@@ -8,6 +8,7 @@ const meta = {
     tags: ['autodocs'],
     args: {
         text: 'Some text',
+        shiftText: 'Some shift text',
         view: 'outlined',
     },
     argTypes: {
