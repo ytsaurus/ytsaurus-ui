@@ -7,6 +7,7 @@ import {type GraphColors} from '../GraphColors';
 import {type ProcessedNode} from '../utils';
 import {type TimelineEvent} from '@gravity-ui/timeline';
 import {OperationRenderer} from './renderer/OperationRenderer';
+import {parseTablePath} from '../services/tables';
 
 const eventStatusToColorName = {
     NotStarted: 'new',
@@ -172,12 +173,14 @@ export type RowType = Partial<RawAxis> & {
 const getNodeLink = (data?: string) => {
     if (!data) return undefined;
 
-    const cluster = data.match(/^(\w+)(?=\.)/)?.[0];
-    const path = data.match(/`([^`]+)`/)?.[1];
+    const table = parseTablePath(data);
 
-    if (!cluster || !path) return undefined;
+    if (!table?.cluster || !table.path) return undefined;
 
-    return {cluster, path};
+    return {
+        cluster: table.cluster,
+        path: table.path,
+    };
 };
 
 export function parseGraph(data: {
