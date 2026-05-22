@@ -10,8 +10,9 @@ const TRIANGLE_HEIGHT = 5;
 const TRIANGLE_WIDTH = 10;
 
 const DEFAULT_DURATION_FONT_COLOR = resolveCssValue('var(--g-color-text-primary)');
-const COUNTER_PADDING = 5;
-const COUNTER_FONT_CENTER_OFFSET = 4;
+const DURATION_MARGIN = 5;
+const DURATION_FONT_CENTER_OFFSET = 4;
+const DURATION_BACKGROUND_PADDING = 2;
 const TRACK_HEIGHT = 25;
 const SELECTION_OUTLINE_COLOR = '#08F';
 const SELECTION_OUTLINE_THICKNESS = 5;
@@ -33,9 +34,25 @@ function renderEventDuration(
     x: number,
     y: number,
     color: string,
+    backgroundColor?: string,
 ): void {
+    if (backgroundColor) {
+        const textMetrics = ctx.measureText(duration);
+        const baselineY = y + DURATION_FONT_CENTER_OFFSET;
+        const textHeight =
+            textMetrics.actualBoundingBoxAscent + textMetrics.actualBoundingBoxDescent;
+
+        ctx.fillStyle = backgroundColor;
+        ctx.fillRect(
+            x + DURATION_MARGIN - DURATION_BACKGROUND_PADDING,
+            baselineY - textMetrics.actualBoundingBoxAscent,
+            textMetrics.width + DURATION_BACKGROUND_PADDING * 2,
+            textHeight,
+        );
+    }
+
     ctx.fillStyle = color;
-    ctx.fillText(duration, x + COUNTER_PADDING, y + COUNTER_FONT_CENTER_OFFSET);
+    ctx.fillText(duration, x + DURATION_MARGIN, y + DURATION_FONT_CENTER_OFFSET);
 }
 
 function calcDurationFormat(from?: number, to?: number) {
@@ -153,6 +170,7 @@ export class OperationRenderer extends AbstractEventRenderer {
                 x0 + Math.max(totalWidth, width),
                 y,
                 event.durationColor || DEFAULT_DURATION_FONT_COLOR,
+                event.durationBackgroundColor,
             );
         }
     }

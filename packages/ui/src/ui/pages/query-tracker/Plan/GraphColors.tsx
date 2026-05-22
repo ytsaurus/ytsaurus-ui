@@ -67,6 +67,7 @@ export function getGraphColors(container?: HTMLElement | null) {
             link: getColor('--yql-graph-color-text-link'),
             operationCount: getColor('--yql-graph-color-text-operation-count'),
         },
+        graphBackground: getColor('--g-color-base-background'),
     } as const;
 }
 

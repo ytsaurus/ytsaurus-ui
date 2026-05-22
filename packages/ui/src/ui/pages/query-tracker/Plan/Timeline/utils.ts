@@ -25,6 +25,7 @@ export type OperationTimeline = TimelineEvent & {
     borderColor?: string;
     backgroundColor?: string;
     durationColor?: string;
+    durationBackgroundColor?: string;
     name?: string;
     to: number;
     isExpanded: boolean;
@@ -278,6 +279,7 @@ export function parseGraph(data: {
             borderColor: eventBorderColor,
             backgroundColor: eventBackgroundColor,
             durationColor: colors.text.operationCount,
+            durationBackgroundColor: colors.graphBackground,
         }));
         axes.push(current);
     });
@@ -306,6 +308,7 @@ export function parseGraph(data: {
                     },
                     isExpanded: false,
                     durationColor: colors.text.operationCount,
+                    durationBackgroundColor: colors.graphBackground,
                 },
             ],
             node: {
