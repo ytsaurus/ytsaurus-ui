@@ -84,13 +84,27 @@ const RESERVE_TO_EVENT = 1_000;
 export const selectProgressInterval = createSelector([selectNodesWithProgress], (nodes) => {
     if (!nodes.length) return undefined;
 
-    return nodes.reduce(
+    const interval = nodes.reduce(
         (acc, {progress}) => {
-            if (!progress) return acc;
+            if (!progress?.startedAt) return acc;
 
-            const {startedAt, finishedAt} = progress;
-            const from = (startedAt ? new Date(startedAt).getTime() : acc.from) - RESERVE_TO_EVENT;
-            const to = (finishedAt ? new Date(finishedAt).getTime() : acc.to) + RESERVE_TO_EVENT;
+            const stages = progress.stages;
+            const lastStage =
+                stages && Object.keys(stages).length > 0
+                    ? stages[Object.keys(stages).length - 1]
+                    : undefined;
+            const lastStageFinishedAt = lastStage ? Object.values(lastStage)[0] : undefined;
+            const startedAt = new Date(progress.startedAt).getTime();
+            const finishedAt = new Date(
+                progress.finishedAt ?? lastStageFinishedAt ?? Date.now(),
+            ).getTime();
+
+            if (!Number.isFinite(startedAt) || !Number.isFinite(finishedAt)) {
+                return acc;
+            }
+
+            const from = startedAt - RESERVE_TO_EVENT;
+            const to = finishedAt + RESERVE_TO_EVENT;
 
             acc.from = from < acc.from ? from : acc.from;
             acc.to = to > acc.to ? to : acc.to;
@@ -99,6 +113,12 @@ export const selectProgressInterval = createSelector([selectNodesWithProgress], 
         },
         {from: Infinity, to: -Infinity},
     );
+
+    if (!Number.isFinite(interval.from) || !Number.isFinite(interval.to)) {
+        return undefined;
+    }
+
+    return interval;
 });
 
 export const selectOperationNodesStates = createSelector([selectNodesWithProgress], (nodes) => {
