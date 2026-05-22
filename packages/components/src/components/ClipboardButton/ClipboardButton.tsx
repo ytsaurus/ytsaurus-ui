@@ -8,7 +8,6 @@ import {
     CopyToClipboard,
     Icon,
     IconProps,
-    copyTextToClipboard,
 } from '@gravity-ui/uikit';
 import FilesIcon from '@gravity-ui/icons/svgs/files.svg';
 import CheckIcon from '@gravity-ui/icons/svgs/check.svg';
@@ -24,7 +23,7 @@ const block = cn('yt-clipboard-button');
 type ClipboardButtonProps = Omit<ButtonProps, 'onCopy' | 'view'> & {
     view?: ButtonProps['view'] | 'clear';
     className?: string;
-    text?: string | number;
+    text: string | number;
     shiftText?: string;
     buttonText?: string | null;
     title?: string;
@@ -54,6 +53,7 @@ export class ClipboardButton extends Component<ClipboardButtonProps> {
     };
 
     buttonRef = React.createRef<HTMLButtonElement>();
+    shiftKeyPressed = false;
 
     handleHotkey = () => {
         const {current} = this.buttonRef;
@@ -81,24 +81,34 @@ export class ClipboardButton extends Component<ClipboardButtonProps> {
         );
     }
 
-    onClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-        const {text, shiftText, onCopy} = this.props;
-        let resText = text?.toString() || '';
-        if (event?.shiftKey && shiftText) {
+    getTextToCopy = () => {
+        const {text, shiftText} = this.props;
+        let resText = text.toString() || '';
+        if (this.shiftKeyPressed && shiftText) {
             resText = shiftText;
-            copyTextToClipboard(resText);
-        }
-        if ('function' === typeof onCopy) {
-            onCopy(resText);
         }
 
+        return resText;
+    };
+
+    onClickCapture = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+        this.shiftKeyPressed = event.shiftKey;
+    };
+
+    onCopy = (text: string) => {
+        const {onCopy} = this.props;
+        if ('function' === typeof onCopy) {
+            onCopy(text);
+        }
+    };
+
+    onClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
         event.preventDefault();
         event.stopPropagation();
     };
 
     render() {
         const {
-            text,
             buttonText,
             hotkey,
             timeout,
@@ -126,7 +136,11 @@ export class ClipboardButton extends Component<ClipboardButtonProps> {
                 )}
             >
                 <Tooltip content={hoverContent}>
-                    <CopyToClipboard text={text?.toString() || ''} timeout={timeout}>
+                    <CopyToClipboard
+                        text={this.getTextToCopy}
+                        timeout={timeout}
+                        onCopy={this.onCopy}
+                    >
                         {(state) =>
                             buttonText ? (
                                 <Button
@@ -134,6 +148,7 @@ export class ClipboardButton extends Component<ClipboardButtonProps> {
                                     view={buttonView}
                                     ref={this.buttonRef}
                                     onClick={this.onClick}
+                                    onClickCapture={this.onClickCapture}
                                 >
                                     <Icon data={this.iconByState[state]} size={resultIconSize} />
                                     {buttonText}
@@ -144,6 +159,7 @@ export class ClipboardButton extends Component<ClipboardButtonProps> {
                                     view={buttonView}
                                     ref={this.buttonRef}
                                     onClick={this.onClick}
+                                    onClickCapture={this.onClickCapture}
                                 >
                                     <Icon data={this.iconByState[state]} size={resultIconSize} />
                                 </Button>
