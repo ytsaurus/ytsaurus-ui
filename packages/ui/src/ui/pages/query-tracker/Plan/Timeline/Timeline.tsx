@@ -1,4 +1,4 @@
-import React, {type FC, useState} from 'react';
+import React, {type FC, useEffect, useState} from 'react';
 import {TimelineHeader} from './TimelineHeader';
 import {Flex} from '@gravity-ui/uikit';
 import {TimelineList} from './TimelineList';
@@ -15,17 +15,30 @@ const b = block('yt-plan-timeline');
 
 type Interval = {from: number; to: number};
 
+function isValidInterval(interval?: Interval): interval is Interval {
+    return Boolean(interval && Number.isFinite(interval.from) && Number.isFinite(interval.to));
+}
+
 export const Timeline: FC = () => {
     const initialInterval = useSelector(selectProgressInterval);
-    const [interval, setInterval] = useState(initialInterval);
+    const [interval, setInterval] = useState<Interval | undefined>(initialInterval);
     const timelineData = useTimelineData();
 
     const tracksCount = timelineData.tableItems.length;
+    const timelineInterval = isValidInterval(interval) ? interval : undefined;
+
+    useEffect(() => {
+        if (!initialInterval) return;
+
+        setInterval((currentInterval) =>
+            isValidInterval(currentInterval) ? currentInterval : initialInterval,
+        );
+    }, [initialInterval]);
 
     const {timeline} = useTimeline({
         settings: {
-            start: interval?.from || 0,
-            end: interval?.to || 0,
+            start: timelineInterval?.from ?? 0,
+            end: timelineInterval?.to ?? 0,
             axes: timelineData.timelineAxes,
             events: timelineData.timelineEvents,
         },
@@ -52,7 +65,7 @@ export const Timeline: FC = () => {
         }
     };
 
-    if (!interval) return null;
+    if (!timelineInterval) return null;
 
     return (
         <Flex direction="column" gap={2} className={b()}>
@@ -68,7 +81,7 @@ export const Timeline: FC = () => {
                     onScale={handleScale}
                 />
                 <TimelineBlock
-                    interval={interval}
+                    interval={timelineInterval}
                     timeline={timeline}
                     style={{
                         height: `${tracksCount * ROW_HEIGHT + ROW_HEIGHT}px`,
