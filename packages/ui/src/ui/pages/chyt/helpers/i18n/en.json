@@ -1,0 +1,18 @@
+{
+  "field_alias": "CHYT clique alias",
+  "field_pool": "Pool",
+  "field_creator": "Creator",
+  "field_creation_time": "Creation time",
+  "field_health": "Health",
+  "field_health_reason": "Health reason",
+  "field_instance_count": "Instances",
+  "field_speclet_modification_time": "Speclet changed",
+  "field_stage": "Stage",
+  "field_state": "State",
+  "field_strawberry_state_modification_time": "Handled by ctl",
+  "field_total_cpu": "Cores",
+  "field_total_memory": "Memory",
+  "field_yt_operation_id": "YT operation id",
+  "field_yt_operation_finish_time": "Finish time",
+  "field_yt_operation_start_time": "Start time"
+}
