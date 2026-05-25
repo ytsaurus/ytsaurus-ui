@@ -1,7 +1,7 @@
-import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import React, {useCallback, useState} from 'react';
+import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import hammer from '../../../common/hammer';
-import PropTypes from 'prop-types';
+// @ts-ignore
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
 import keys_ from 'lodash/keys';
@@ -16,7 +16,7 @@ import {Template} from '../../../components/MetaTable/templates/Template';
 import Histogram from '../../../components/Histogram/Histogram';
 import {size} from '../../../components/MetaTable/presets';
 import {YTErrorBlock} from '../../../containers/Block/Block';
-import Label from '../../../components/Label';
+import Label, {type LabelTheme} from '../../../components/Label';
 import {Yson} from '../../../components/Yson/Yson';
 
 import {histogramItems} from '../../../utils/tablet/tablet';
@@ -27,8 +27,16 @@ import {Page} from '../../../constants/index';
 import {genTabletCellBundlesCellUrl} from '../../../utils/tablet_cell_bundles';
 import StoresDialog from './StoresDialog';
 import {makeComponentsNodesUrl} from '../../../utils/app-url';
+import {YTErrorRaw} from '../../../../@types/types';
 
-function makeMetaItem(format, data, key, visible) {
+type ReplicationErrors = Record<string, YTErrorRaw>;
+
+function makeMetaItem(
+    format: 'Number',
+    data: Record<string, unknown>,
+    key: string,
+    visible?: boolean,
+) {
     return {
         key,
         value: hammer.format[format](data[key]),
@@ -36,17 +44,11 @@ function makeMetaItem(format, data, key, visible) {
     };
 }
 
-Overview.propTypes = {
-    // from parent
-    id: PropTypes.string.isRequired,
-    block: PropTypes.func.isRequired,
-};
-
-const renderErrorsDialog = (errors, handleClose) => {
+const renderErrorsDialog = (errors: YTErrorRaw[], handleClose: () => void) => {
     const visible = errors.length > 0;
 
     return (
-        <Dialog size="l" open={visible} onClose={handleClose} hasButtonClose autoclosable>
+        <Dialog size="l" open={visible} onClose={handleClose} hasCloseButton>
             <Dialog.Header caption="Tablet errors" />
             <Dialog.Body>
                 {map_(errors, (err, index) => {
@@ -61,11 +63,14 @@ const renderErrorsDialog = (errors, handleClose) => {
     );
 };
 
-const renderReplicationErrorsDialog = (replicationErrors, handleClose) => {
+const renderReplicationErrorsDialog = (
+    replicationErrors: ReplicationErrors,
+    handleClose: () => void,
+) => {
     const visible = keys_(replicationErrors).length > 0;
 
     return (
-        <Dialog size="l" open={visible} onClose={handleClose} hasButtonClose autoclosable>
+        <Dialog size="l" open={visible} onClose={handleClose} hasCloseButton>
             <Dialog.Header caption="Replication errors" />
             <Dialog.Body>
                 {map_(replicationErrors, (err, replica) => {
@@ -81,7 +86,12 @@ const renderReplicationErrorsDialog = (replicationErrors, handleClose) => {
     );
 };
 
-function Overview({id, block}) {
+interface Props {
+    id: string;
+    block: (...args: Array<string | undefined>) => string;
+}
+
+function Overview({id, block}: Props) {
     const dispatch = useDispatch();
     const {
         attributes,
@@ -92,13 +102,13 @@ function Overview({id, block}) {
         replicationErrors,
         pivotKey,
         nextPivotKey,
-        stores,
+        stores = {},
         unorderedDynamicTable,
     } = useSelector((state) => state.tablet.tablet);
 
     const {mediumList, cluster} = useSelector((state) => state.global);
-    const [errors, setErrorsVisibility] = useState([]);
-    const [replicaErrors, setReplicationErrorsVisibility] = useState({});
+    const [errors, setErrorsVisibility] = useState<YTErrorRaw[]>([]);
+    const [replicaErrors, setReplicationErrorsVisibility] = useState<ReplicationErrors>({});
 
     const [cellId, state, index, statistics, performance] = ypath.getValues(attributes, [
         '/cell_id',
@@ -168,7 +178,7 @@ function Overview({id, block}) {
               makeMetaItem('Number', performance, 'merged_row_read_rate', !unorderedDynamicTable),
           ];
 
-    const stateTheme = {
+    const stateThemeMap: Record<string, LabelTheme> = {
         none: 'default',
         unmounted: 'default',
         mounted: 'info',
@@ -178,13 +188,14 @@ function Overview({id, block}) {
         mounting: 'warning',
         unmounting: 'warning',
         mixed: 'danger',
-    }[state];
+    };
+    const stateTheme: LabelTheme | undefined = stateThemeMap[state as string];
 
     const activeHistogram = useSelector(getActiveHistogram);
     const histogram = useSelector(selectHistogram);
 
     const handleHistogramChange = useCallback(
-        (histogram) => dispatch(changeActiveHistogram(histogram)),
+        (histogram: string) => dispatch(changeActiveHistogram(histogram)),
         [dispatch, activeHistogram],
     );
     const handleErrorsClick = useCallback(() => setErrorsVisibility(tabletErrors), [tabletErrors]);
@@ -247,10 +258,10 @@ function Overview({id, block}) {
                                     value: (
                                         <Template.Link
                                             withClipboard
-                                            text={cellLeadingPeer.address}
+                                            text={cellLeadingPeer?.address}
                                             url={makeComponentsNodesUrl({
                                                 cluster,
-                                                host: cellLeadingPeer.address,
+                                                host: cellLeadingPeer?.address,
                                             })}
                                         />
                                     ),

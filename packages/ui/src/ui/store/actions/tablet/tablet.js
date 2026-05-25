@@ -7,8 +7,8 @@ import CancelHelper from '../../../utils/cancel-helper';
 import {GENERIC_ERROR_MESSAGE, TYPED_OUTPUT_FORMAT} from '../../../constants/index';
 import {preparePartitions} from '../../../utils/tablet/tablet';
 import {
-    CHANGE_ACTIVE_HISTOGRAM,
-    CHANGE_CONTENT_MODE,
+    TABLET_CHANGE_ACTIVE_HISTOGRAM,
+    TABLET_CHANGE_CONTENT_MODE,
     LOAD_TABLET_DATA,
 } from '../../../constants/tablet';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
@@ -176,16 +176,16 @@ export function loadTabletData(id) {
     };
 }
 
-export function changeContentMode(contentMode) {
+export function tabletChangeContentMode(contentMode) {
     return {
-        type: CHANGE_CONTENT_MODE,
+        type: TABLET_CHANGE_CONTENT_MODE,
         data: {contentMode},
     };
 }
 
 export function changeActiveHistogram(activeHistogram) {
     return {
-        type: CHANGE_ACTIVE_HISTOGRAM,
+        type: TABLET_CHANGE_ACTIVE_HISTOGRAM,
         data: {activeHistogram},
     };
 }
