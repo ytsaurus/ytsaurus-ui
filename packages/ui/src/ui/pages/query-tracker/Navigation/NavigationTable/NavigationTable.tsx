@@ -5,7 +5,7 @@ import {
     selectNavigationClusterConfig,
     selectNavigationFilter,
     selectNavigationPath,
-    selectTableWithFilter,
+    selectNavigationTable,
 } from '../../../../store/selectors/query-tracker/queryNavigation';
 import {selectQueryEngine} from '../../../../store/selectors/query-tracker/query';
 import {selectPageSize} from '../../../../store/selectors/navigation/content/table-ts';
@@ -21,7 +21,7 @@ export const NavigationTable: FC = () => {
     const dispatch = useDispatch();
     const ysonSettings = useSelector(getYsonSettingsDisableDecode);
     const clusterConfig = useSelector(selectNavigationClusterConfig);
-    const table = useSelector(selectTableWithFilter);
+    const table = useSelector(selectNavigationTable);
     const engine = useSelector(selectQueryEngine);
     const limit = useSelector(selectPageSize);
     const path = useSelector(selectNavigationPath);

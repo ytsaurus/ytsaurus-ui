@@ -48,28 +48,12 @@ export const selectNavigationTable = (state: RootState) => state.queryTracker.qu
 const filterValueInText = (value: string, filter: string) =>
     value.toLowerCase().includes(filter.toLowerCase());
 
-export const selectTableWithFilter = createSelector(
-    [selectNavigationTable, selectNavigationFilter],
-    (table, filter) => {
-        if (!table) return null;
-
-        return {
-            ...table,
-            schema: table.schema.filter(({name, type}) => {
-                return filterValueInText(name, filter) || filterValueInText(type, filter);
-            }),
-        };
-    },
-);
-
-export const selectClustersByFilter = createSelector(
-    [selectClusterList, selectNavigationFilter],
-    (clusters, filter) => {
+export const selectClustersByFilter: (state: RootState) => ReturnType<typeof selectClusterList> =
+    createSelector([selectClusterList, selectNavigationFilter], (clusters, filter) => {
         if (!filter) return clusters;
 
         return clusters.filter(({name}) => filterValueInText(name, filter));
-    },
-);
+    });
 
 export const selectNodeListByFilter = createSelector(
     [selectNavigationNodes, selectNavigationFilter, selectNavigationPath],
