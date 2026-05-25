@@ -1,5 +1,6 @@
 import React from 'react';
 
+import i18n from './i18n';
 import {withDisableMaxContentWidth} from '../../containers/MaxContentWidth';
 import withLazyLoading from '../../hocs/withLazyLoading';
 import {type UIFactoryClusterPageInfo, type UIFactoryRootPageInfo} from '../../UIFactory';
@@ -39,7 +40,7 @@ const OdinTopRowLazy = withLazyLoading(
 );
 
 export const odinPageInfo: UIFactoryClusterPageInfo = {
-    title: 'Odin',
+    title: i18n('title_odin'),
     pageId: ODIN_PAGE_ID,
     svgIcon: PageOdin,
     reactComponent: OdinLazy,
@@ -51,7 +52,7 @@ export const odinPageInfo: UIFactoryClusterPageInfo = {
 };
 
 export const odinRootPageInfo: UIFactoryRootPageInfo = {
-    title: 'Odin',
+    title: i18n('title_odin'),
     pageId: ODIN_PAGE_ID,
     reactComponent: IndependentOdinLazy,
     reducers: {},
