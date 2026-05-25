@@ -11,7 +11,7 @@ import {type RootState} from '../../../../../store/reducers';
 import {AttributesByProperty} from '../../../../../store/reducers/components/nodes/nodes/node';
 import {selectCluster} from '../../../../../store/selectors/global';
 import {selectSelectedColumns} from '../../../../../store/selectors/settings';
-import {getMediumListNoCache} from '../../../../../store/selectors/thor';
+import {selectMediumListNoCache} from '../../../../../store/selectors/thor';
 import {type ValueOf} from '../../../../../types';
 import {createMediumsPredicates} from '../../../../../utils/components/nodes/setup';
 import {

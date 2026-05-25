@@ -53,7 +53,7 @@ const selectYsonSettings = createSelector(
 
 export const selectJobGeneralYsonSettings = createSelector([selectYsonSettings], clone_);
 
-export const selectobSpecificationYsonSettings = createSelector([selectYsonSettings], clone_);
+export const selectJobSpecificationYsonSettings = createSelector([selectYsonSettings], clone_);
 
 export const selectTableYsonSettings = createSelector([selectYsonSettings], clone_);
 
@@ -65,7 +65,10 @@ export const selectNavigationMountConfigYsonSettings = createSelector([selectYso
 
 export const selectEditJsonYsonSettings = createSelector([selectYsonSettings], clone_);
 
-export const selectNodeUnrecognizedOptionsYsonSettings = createSelector([selectYsonSettings], clone_);
+export const selectNodeUnrecognizedOptionsYsonSettings = createSelector(
+    [selectYsonSettings],
+    clone_,
+);
 
 export const selectPreviewCellYsonSettings = createSelector([selectYsonSettings], clone_);
 
@@ -77,4 +80,4 @@ export const selectYsonSettingsDisableDecode = createSelector([selectYsonSetting
     return {...settings, decodeUTF8: false};
 });
 
-export const getYsonSettingsErrorDetails = createSelector([getYsonSettings], clone_);
+export const selectYsonSettingsErrorDetails = createSelector([selectYsonSettings], clone_);
