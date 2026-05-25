@@ -9,7 +9,7 @@ import {Progress} from '@gravity-ui/uikit';
 
 import {YTErrorBlock} from '../../../containers/Block/Block';
 import hammer from '../../../common/hammer';
-import {getMediumList} from '../../../store/selectors/thor';
+import {selectMediumList} from '../../../store/selectors/thor';
 import {loadSystemResources} from '../../../store/actions/system/resources';
 import {useDispatch} from '../../../store/redux-hooks';
 import {useUpdater} from '../../../hooks/use-updater';
@@ -174,7 +174,7 @@ function mapStateToProps(state) {
     return {
         resources,
         nodeAttributes,
-        mediumList: getMediumList(state),
+        mediumList: selectMediumList(state),
     };
 }
 

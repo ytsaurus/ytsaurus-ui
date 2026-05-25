@@ -46,7 +46,7 @@ import {
     getContentModeOptions,
     makeReadableItems,
 } from '../../../../utils/accounts';
-import {getMediumList} from '../../../../store/selectors/thor';
+import {selectMediumList} from '../../../../store/selectors/thor';
 import {
     changeContentFilter,
     changeMediumFilter,
@@ -810,7 +810,7 @@ const makeMapStateToProps = () => {
 
             clusterUiConfig: selectClusterUiConfig(state),
 
-            mediumList: getMediumList(state),
+            mediumList: selectMediumList(state),
             accounts: accounts.accounts,
             contextViewTree,
             nameToAccountMap,

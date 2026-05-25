@@ -1,11 +1,11 @@
 import {useSelector} from '../../../../../../store/redux-hooks';
 
-import {getMediumList} from '../../../../../../store/selectors/thor';
+import {selectMediumList} from '../../../../../../store/selectors/thor';
 
 import i18n from '../i18n';
 
 export function useAccountsSettings() {
-    const mediumList = useSelector(getMediumList);
+    const mediumList = useSelector(selectMediumList);
 
     return [
         {

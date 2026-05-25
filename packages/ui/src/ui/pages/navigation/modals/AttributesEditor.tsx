@@ -39,7 +39,7 @@ import {
     hideNavigationAttributesEditor,
     navigationSetNodeAttributes,
 } from '../../../store/actions/navigation/modals/attributes-editor';
-import {getMediumListNoCache} from '../../../store/selectors/thor';
+import {selectMediumListNoCache} from '../../../store/selectors/thor';
 
 import {selectCluster} from '../../../store/selectors/global';
 import {selectPath} from '../../../store/selectors/navigation';
@@ -100,7 +100,7 @@ function AttributesEditorLoaded() {
     const singleMode = !(paths?.length! > 1);
     const attributes = paths?.length === 1 ? attributesMap[paths[0]] : {};
 
-    const mediumList = useSelector(getMediumListNoCache);
+    const mediumList = useSelector(selectMediumListNoCache);
     const dispatch = useDispatch();
     const storeError = useSelector(selectNavigationAttributesEditorError);
 

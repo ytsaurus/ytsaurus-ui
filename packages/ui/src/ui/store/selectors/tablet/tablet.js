@@ -7,16 +7,16 @@ import {histogramItems} from '../../../utils/tablet/tablet';
 import {partitionsTableItems} from '../../../utils/tablet/table';
 import {TABLET_PARTITIONS_TABLE_ID} from '../../../constants/tablet';
 
-const getRawPartitions = (state) => state.tablet.tablet.partitions;
-const getSortState = (state) => state.tables[TABLET_PARTITIONS_TABLE_ID];
-export const getActiveHistogram = (state) => state.tablet.tablet.activeHistogram;
+const selectRawPartitions = (state) => state.tablet.tablet.partitions;
+const selectSortState = (state) => state.tables[TABLET_PARTITIONS_TABLE_ID];
+export const selectActiveHistogram = (state) => state.tablet.tablet.activeHistogram;
 
-export const getSortedPartitions = createSelector(
-    [getRawPartitions, getSortState],
+export const selectSortedPartitions = createSelector(
+    [selectRawPartitions, selectSortState],
     (partitions, sortState) => hammer.utils.sort(partitions, sortState, partitionsTableItems),
 );
 
-export const getPartitions = createSelector(getSortedPartitions, (sortedPartitions) => {
+export const selectPartitions = createSelector(selectSortedPartitions, (sortedPartitions) => {
     const aggregation = hammer.aggregation.prepare(sortedPartitions, [
         {name: 'stores', type: 'concat-array'},
         {name: 'storeCount', type: 'sum'},
@@ -31,7 +31,7 @@ export const getPartitions = createSelector(getSortedPartitions, (sortedPartitio
     return [aggregation, ...sortedPartitions];
 });
 
-const selectHistograms = createSelector(getRawPartitions, (partitions) =>
+const selectHistograms = createSelector(selectRawPartitions, (partitions) =>
     mapValues_(histogramItems, (settings, key) => {
         const partitionsWithoutEden = partitions.slice(1);
 
@@ -47,6 +47,6 @@ const selectHistograms = createSelector(getRawPartitions, (partitions) =>
 );
 
 export const selectHistogram = createSelector(
-    [selectHistograms, getActiveHistogram],
+    [selectHistograms, selectActiveHistogram],
     (histograms, activeHistogram) => histograms[activeHistogram],
 );

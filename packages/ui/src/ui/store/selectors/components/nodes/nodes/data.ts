@@ -43,7 +43,7 @@ const selectComponentsNodesNodeTypeRaw = (state: RootState) =>
 const selectCustomColumns = (state: RootState) => selectSelectedColumns(state) || defaultColumns;
 
 const selectMediumsPredicates = createSelector(
-    [selectComponentNodesFiltersSetup, getMediumListNoCache],
+    [selectComponentNodesFiltersSetup, selectMediumListNoCache],
     createMediumsPredicates,
 );
 
@@ -80,7 +80,7 @@ const selectFilteredNodes = createSelector(
 );
 
 export const selectVisibleNodes = createSelector(
-    [selectFilteredNodes, selectSortState, getMediumListNoCache, selectCluster],
+    [selectFilteredNodes, selectSortState, selectMediumListNoCache, selectCluster],
     (nodes, sortState, mediumList, cluster) => {
         return hammer.utils.sort(
             nodes.map((n) => ({...n, cluster})),
@@ -91,7 +91,7 @@ export const selectVisibleNodes = createSelector(
 );
 
 export const selectComponentNodesTableProps = createSelector(
-    [getMediumListNoCache],
+    [selectMediumListNoCache],
     getNodeTablesProps,
 );
 

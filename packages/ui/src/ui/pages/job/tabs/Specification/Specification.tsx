@@ -17,7 +17,7 @@ import {
 } from '../../../../store/actions/job/specification';
 
 import './Specification.scss';
-import {getJobSpecificationYsonSettings} from '../../../../store/selectors/thor/unipika';
+import {selectobSpecificationYsonSettings} from '../../../../store/selectors/thor/unipika';
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
 import {selectJob} from '../../../../store/selectors/job/detail';
 
@@ -109,7 +109,7 @@ export default function Specification({className, jobID}: SpecificationProps) {
     }, [dispatch, jobID]);
 
     const initialLoading = loading && !loaded;
-    const settings = useSelector(getJobSpecificationYsonSettings);
+    const settings = useSelector(selectobSpecificationYsonSettings);
 
     return (
         <ErrorBoundary>
