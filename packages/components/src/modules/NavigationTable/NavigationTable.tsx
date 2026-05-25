@@ -137,7 +137,7 @@ export const NavigationTable: FC<NavigationTableProps> = ({
         (renderMetaTab ? (
             renderMetaTab({items: normalizedTable.meta})
         ) : (
-            <MetaTable items={normalizedTable.meta} />
+            <MetaTable className={b('meta')} items={normalizedTable.meta} />
         ));
 
     return (
