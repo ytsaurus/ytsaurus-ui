@@ -1,9 +1,11 @@
 import {expect, test} from '@playwright/test';
-import {CLUSTER_TITLE, E2E_DIR, makeClusterUrl} from '../../utils';
+import {E2E_DIR, makeClusterUrl} from '../../utils';
 import {BasePage} from '../../widgets/BasePage';
 
+const DEFAULT_QUERY_CLUSTER = 'ui';
+
 function replaceNbsps(str: string) {
-    var re = new RegExp(String.fromCharCode(160), 'g');
+    const re = new RegExp(String.fromCharCode(160), 'g');
     return str.replace(re, ' ');
 }
 
@@ -151,7 +153,7 @@ test.describe('@QueryTracker: Suggest scenarios', () => {
     test.beforeEach(async ({page}) => {
         queryTrackerPage = new QueryTrackerPage({page});
         await queryTrackerPage.page.goto(makeClusterUrl('queries'));
-        await queryTrackerPage.selectCluster(CLUSTER_TITLE!);
+        await queryTrackerPage.selectCluster(DEFAULT_QUERY_CLUSTER);
     });
 
     test.describe('Base suggest and cursor position', () => {
