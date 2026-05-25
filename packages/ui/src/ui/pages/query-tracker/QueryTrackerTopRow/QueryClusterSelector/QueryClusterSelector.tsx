@@ -42,11 +42,12 @@ export const QueryClusterSelector: FC<Props> = ({className}) => {
                 }) ?? []
             );
         }
+
         const knownClusters = new Set(infoClusters);
         return clusters.filter((item) => {
             return knownClusters.has(item.id);
         });
-    }, [clusters, infoClusters, YT.isLocalCluster]);
+    }, [clusters, infoClusters]);
 
     if (!isMultiCluster) {
         return null;
@@ -66,6 +67,8 @@ export const QueryClusterSelector: FC<Props> = ({className}) => {
             qa="query-cluster-selector"
             popupWidth={200}
             renderSelectedOption={(option) => {
+                if (!option.children) return <></>;
+
                 const {name} = (option.children as ReactElement<QueryClusterItemProps>).props;
                 return <>{name}</>;
             }}
