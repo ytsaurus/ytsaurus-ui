@@ -11,6 +11,22 @@ export const expectScreenshotFixture: PlaywrightFixture<ExpectScreenshotFixture>
     use,
     testInfo,
 ) => {
+    const applyTheme = async (theme: 'light' | 'dark') => {
+        await page.emulateMedia({colorScheme: theme});
+        await page.evaluate((currentTheme) => {
+            document.body.classList.toggle('theme-light', currentTheme === 'light');
+            document.body.classList.toggle('theme-dark', currentTheme === 'dark');
+
+            document.querySelectorAll('.yt-components-root').forEach((root) => {
+                root.classList.toggle('yt-components-root_theme_dark', currentTheme === 'dark');
+            });
+        }, theme);
+        await page.waitForFunction(
+            (currentTheme) => document.body.classList.contains(`g-root_theme_${currentTheme}`),
+            theme,
+        );
+    };
+
     const expectScreenshot: ExpectScreenshotFixture = async ({
         component,
         nameSuffix,
@@ -41,7 +57,7 @@ export const expectScreenshotFixture: PlaywrightFixture<ExpectScreenshotFixture>
             locators.map((locator) =>
                 locator.evaluate((image: HTMLImageElement) => {
                     if (image.complete) {
-                        return;
+                        return Promise.resolve();
                     }
                     return new Promise<void>((resolve) => {
                         image.addEventListener('load', () => resolve(), {once: true});
@@ -54,8 +70,7 @@ export const expectScreenshotFixture: PlaywrightFixture<ExpectScreenshotFixture>
         await page.waitForFunction(() => document.fonts.ready);
 
         if (themes?.includes('light')) {
-            await page.evaluate(() => document.body.classList.add('theme-light'));
-            await page.emulateMedia({colorScheme: 'light'});
+            await applyTheme('light');
 
             await beforeScreenshot?.();
             expect(await captureScreenshot()).toMatchSnapshot({
@@ -64,8 +79,7 @@ export const expectScreenshotFixture: PlaywrightFixture<ExpectScreenshotFixture>
         }
 
         if (themes?.includes('dark')) {
-            await page.evaluate(() => document.body.classList.add('theme-dark'));
-            await page.emulateMedia({colorScheme: 'dark'});
+            await applyTheme('dark');
 
             await beforeScreenshot?.();
             expect(await captureScreenshot()).toMatchSnapshot({
