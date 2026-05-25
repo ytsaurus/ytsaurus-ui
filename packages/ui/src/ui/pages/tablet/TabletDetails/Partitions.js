@@ -18,7 +18,7 @@ import Label from '../../../components/Label';
 import {StickyContainer} from '../../../components/StickyContainer/StickyContainer';
 
 import {TABLET_PARTITIONS_TABLE_ID} from '../../../constants/tablet';
-import {changeContentMode} from '../../../store/actions/tablet/tablet';
+import {tabletChangeContentMode} from '../../../store/actions/tablet/tablet';
 import {getPartitions} from '../../../store/selectors/tablet/tablet';
 import {partitionsTableItems} from '../../../utils/tablet/table';
 import StoresDialog from './StoresDialog';
@@ -273,7 +273,7 @@ class Partitions extends Component {
 }
 
 const mapDispatchToProps = {
-    changeContentMode,
+    changeContentMode: tabletChangeContentMode,
 };
 
 const mapStateToProps = (state) => {

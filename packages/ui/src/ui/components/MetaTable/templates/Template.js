@@ -97,10 +97,10 @@ function TemplateLink({
     url,
     icon,
     text = '',
-    shiftText = undefined,
+    shiftText = '',
     face,
     withClipboard = false,
-    hoverContent = undefined,
+    hoverContent = '',
 }) {
     return (
         <Fragment>
