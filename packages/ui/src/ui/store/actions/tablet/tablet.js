@@ -3,13 +3,14 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import find_ from 'lodash/find';
 
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
+import i18n from './i18n';
 import CancelHelper from '../../../utils/cancel-helper';
 import {GENERIC_ERROR_MESSAGE, TYPED_OUTPUT_FORMAT} from '../../../constants/index';
 import {preparePartitions} from '../../../utils/tablet/tablet';
 import {
+    LOAD_TABLET_DATA,
     TABLET_CHANGE_ACTIVE_HISTOGRAM,
     TABLET_CHANGE_CONTENT_MODE,
-    LOAD_TABLET_DATA,
 } from '../../../constants/tablet';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 
@@ -58,14 +59,13 @@ function loadPartitions({cellLeadingPeer, tabletPath, unorderedDynamicTable, ...
             })
             .catch((error) => {
                 return Promise.reject({
-                    message:
-                        'Could not load tablet partitions information. ' + GENERIC_ERROR_MESSAGE,
+                    message: i18n('alert_could-not-load-tablet-partitions') + GENERIC_ERROR_MESSAGE,
                     details: error,
                 });
             });
     } else {
         return Promise.reject({
-            message: 'Tablet cell has no leading peer. No information to show.',
+            message: i18n('alert_tablet-cell-no-leading-peer'),
             details: {},
         });
     }
@@ -101,13 +101,13 @@ function loadCellAttributes({id, attributes, tablePath, unorderedDynamicTable}) 
             .catch((error) => {
                 return Promise.reject({
                     message:
-                        "Could not load tablet's tablet cell attributes." + GENERIC_ERROR_MESSAGE,
+                        i18n('alert_could-not-load-tablet-cell-attributes') + GENERIC_ERROR_MESSAGE,
                     details: error,
                 });
             });
     } else {
         return Promise.reject({
-            message: 'Tablet is not mounted. No information to show.',
+            message: i18n('alert_tablet-not-mounted'),
             details: {},
         });
     }
@@ -121,7 +121,7 @@ function loadTableAttributes({id, attributes}) {
         })
         .catch((error) => {
             return Promise.reject({
-                message: "Could not load tablet's table attributes. " + GENERIC_ERROR_MESSAGE,
+                message: i18n('alert_could-not-load-table-attributes') + GENERIC_ERROR_MESSAGE,
                 details: error,
             });
         })
@@ -145,7 +145,7 @@ function loadAttributes(id) {
         })
         .catch((error) => {
             return Promise.reject({
-                message: 'Could not load tablet attributes. ' + GENERIC_ERROR_MESSAGE,
+                message: i18n('alert_could-not-load-tablet-attributes') + GENERIC_ERROR_MESSAGE,
                 details: error,
             });
         });

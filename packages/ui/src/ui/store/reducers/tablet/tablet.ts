@@ -1,12 +1,12 @@
-import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
+import {type Action} from 'redux';
+import {type YTErrorRaw} from '../../../../@types/types';
 import {
+    LOAD_TABLET_DATA,
     TABLET_CHANGE_ACTIVE_HISTOGRAM,
     TABLET_CHANGE_CONTENT_MODE,
-    LOAD_TABLET_DATA,
 } from '../../../constants/tablet';
-import {Action} from 'redux';
-import {ActionD} from 'types';
-import {YTErrorRaw} from '../../../../@types/types';
+import {mergeStateOnClusterChange} from '../../../store/reducers/utils';
+import {type ActionD} from '../../../types';
 
 export type TabletState = {
     loading: boolean;
