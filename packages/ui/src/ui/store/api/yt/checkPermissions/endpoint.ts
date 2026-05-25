@@ -1,4 +1,4 @@
-import {YTError} from '../../../../../@types/types';
+import {type YTError} from '../../../../../@types/types';
 import {type YTApiIdType} from '../../../../../shared/constants/yt-api-id';
 import {type CheckPermissionsParams} from '../../../../../shared/yt-types';
 import {ytApiV3Id} from '../../../../rum/rum-wrap-api';

@@ -14,16 +14,19 @@ import {selectIsDynamic} from '../../../../../store/selectors/navigation/content
 import {
     selectAttributes,
     selectAttributesWithTypes,
+    selectPath,
+    selectTransaction,
 } from '../../../../../store/selectors/navigation';
 import {selectTabletErrorsBackgroundCount} from '../../../../../store/selectors/navigation/tabs/tablet-errors-background';
 import {type Props as AutomaticModeSwitchProps} from './AutomaticModeSwitch';
 
 import {type RootState} from '../../../../../store/reducers';
-import {selectCluster} from '../../../../../store/selectors/global';
+import {selectCluster, selectCurrentUserName} from '../../../../../store/selectors/global';
 
 import {UI_COLLAPSIBLE_SIZE} from '../../../../../constants/global';
 
 import './TableMeta.scss';
+import {useTableAccessMetaItem} from '../table-hooks/useTableAccessMetaItem';
 
 const block = cn('navigation-meta-table');
 
@@ -47,8 +50,14 @@ function TableMeta({
     const tabletErrorCount = useSelector(selectTabletErrorsBackgroundCount);
     const cluster = useSelector(selectCluster);
 
+    const path = useSelector(selectPath);
+    const transaction_id = useSelector(selectTransaction);
+    const user = useSelector(selectCurrentUserName);
+
+    const accessItem = useTableAccessMetaItem({path, transaction_id, user});
+
     const items = useMemo(() => {
-        return makeMetaItems({
+        const res = makeMetaItems({
             cluster,
             attributes,
             tableType,
@@ -58,7 +67,13 @@ function TableMeta({
             onEditEnableReplicatedTableTracker,
             navigationTableConfig: ytComponentsNavigationMetaConfig,
         });
+        if (accessItem) {
+            res[0].push(accessItem);
+        }
+
+        return res;
     }, [
+        accessItem,
         cluster,
         attributes,
         tableType,
