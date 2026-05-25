@@ -34,7 +34,7 @@ const meta: Meta<DemoArgs> = {
     render: ({state}: DemoArgs) => (
         <div style={navigationTableStoryFrameStyle}>
             <NavigationTable
-                table={state === 'empty' ? null : navigationTableSampleTable}
+                table={state === 'empty' ? undefined : navigationTableSampleTable}
                 emptyMessage={navigationTableStoryEmptyMessage}
                 ysonSettings={YSON_DEFAULT_UNIPIKA_SETTINGS}
                 logError={() => undefined}

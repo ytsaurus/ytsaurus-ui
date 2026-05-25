@@ -36,7 +36,7 @@ const TABLE_TAB_FROM_INITIAL: Record<NavigationTableInitialTab, TableTab> = {
 };
 
 export type NavigationTableProps = {
-    table: NavigationTableData | null;
+    table?: NavigationTableData;
     initialActiveTab?: NavigationTableInitialTab;
     filter?: string;
     onFilterChange?: (value: string) => void;
