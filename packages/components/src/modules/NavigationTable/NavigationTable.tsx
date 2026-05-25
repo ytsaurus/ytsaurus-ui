@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useMemo, useState} from 'react';
 import cn from 'bem-cn-lite';
 import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 import {
@@ -15,6 +15,8 @@ import {SchemaTab} from './SchemaTab';
 import {PreviewTab} from './PreviewTab';
 import './NavigationTable.scss';
 import type {ErrorBoundaryProps} from '../../internal/DefaultErrorBoundary';
+import {sortColumnsBySchema} from './helpers/sortColumnsBySchema';
+import {filterSchema} from './helpers/filterSchema';
 
 const b = cn('navigation-table');
 
@@ -83,23 +85,37 @@ export const NavigationTable: FC<NavigationTableProps> = ({
     const filter = controlledFilter ?? internalFilter;
     const setFilter = controlledOnFilterChange ?? setInternalFilter;
 
+    const normalizedTable = useMemo(() => {
+        if (!table) return null;
+
+        return {
+            ...table,
+            columns: sortColumnsBySchema(table.columns, table.schema),
+        };
+    }, [table]);
+
+    const filteredSchema = useMemo(
+        () => (normalizedTable ? filterSchema(normalizedTable.schema, filter) : []),
+        [normalizedTable, filter],
+    );
+
     const handleChangeTab = (id: string) => {
         setActiveTab(id as TableTab);
     };
 
-    if (!table) {
+    if (!normalizedTable) {
         return (
             <div className={b(null, className)}>{emptyMessage ?? i18n('context_empty-data')}</div>
         );
     }
 
-    const schemaData = {schema: table.schema, filter, onFilterChange: setFilter, ysonSettings};
+    const schemaData = {schema: filteredSchema, filter, onFilterChange: setFilter, ysonSettings};
     const schemaContent =
         activeTab === TableTab.Schema &&
         (renderSchemaTab ? renderSchemaTab(schemaData) : <SchemaTab {...schemaData} />);
 
     const previewData = {
-        table,
+        table: normalizedTable,
         onEditorInsert: onInsertTableSelect,
         ysonSettings,
         primitiveTypes,
@@ -118,7 +134,11 @@ export const NavigationTable: FC<NavigationTableProps> = ({
 
     const metaContent =
         activeTab === TableTab.Meta &&
-        (renderMetaTab ? renderMetaTab({items: table.meta}) : <MetaTable items={table.meta} />);
+        (renderMetaTab ? (
+            renderMetaTab({items: normalizedTable.meta})
+        ) : (
+            <MetaTable items={normalizedTable.meta} />
+        ));
 
     return (
         <div className={b(null, className)}>
