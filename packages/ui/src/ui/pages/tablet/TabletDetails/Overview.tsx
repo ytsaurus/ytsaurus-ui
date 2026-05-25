@@ -27,18 +27,35 @@ import {Page} from '../../../constants/index';
 import {genTabletCellBundlesCellUrl} from '../../../utils/tablet_cell_bundles';
 import StoresDialog from './StoresDialog';
 import {makeComponentsNodesUrl} from '../../../utils/app-url';
-import {YTErrorRaw} from '../../../../@types/types';
+import {type YTErrorRaw} from '../../../../@types/types';
+import i18n from './i18n';
 
 type ReplicationErrors = Record<string, YTErrorRaw>;
+
+type TabletMetaKey =
+    | 'overlapping_store_count'
+    | 'preload_completed_store_count'
+    | 'preload_failed_store_count'
+    | 'preload_pending_store_count'
+    | 'partition_count'
+    | 'dynamic_row_read_rate'
+    | 'dynamic_row_lookup_rate'
+    | 'dynamic_row_write_rate'
+    | 'dynamic_row_delete_rate'
+    | 'static_chunk_row_read_rate'
+    | 'static_chunk_row_lookup_rate'
+    | 'unmerged_row_read_rate'
+    | 'merged_row_read_rate';
 
 function makeMetaItem(
     format: 'Number',
     data: Record<string, unknown>,
-    key: string,
+    key: TabletMetaKey,
     visible?: boolean,
 ) {
     return {
         key,
+        label: i18n(`meta_${key}`),
         value: hammer.format[format](data[key]),
         visible,
     };
@@ -49,7 +66,7 @@ const renderErrorsDialog = (errors: YTErrorRaw[], handleClose: () => void) => {
 
     return (
         <Dialog size="l" open={visible} onClose={handleClose} hasCloseButton>
-            <Dialog.Header caption="Tablet errors" />
+            <Dialog.Header caption={i18n('title_tablet-errors')} />
             <Dialog.Body>
                 {map_(errors, (err, index) => {
                     const error = {
@@ -71,14 +88,14 @@ const renderReplicationErrorsDialog = (
 
     return (
         <Dialog size="l" open={visible} onClose={handleClose} hasCloseButton>
-            <Dialog.Header caption="Replication errors" />
+            <Dialog.Header caption={i18n('title_replication-errors')} />
             <Dialog.Body>
                 {map_(replicationErrors, (err, replica) => {
                     const error = {
                         ...err,
                         message: ypath.getValue(err, '/message'),
                     };
-                    const message = `Replica ID: ${replica}`;
+                    const message = i18n('context_replica-id', {replica});
                     return <YTErrorBlock message={message} error={error} key={replica} />;
                 })}
             </Dialog.Body>
@@ -133,6 +150,7 @@ function Overview({id, block}: Props) {
               makeMetaItem('Number', statistics, 'partition_count', !unorderedDynamicTable),
               {
                   key: 'store_count',
+                  label: i18n('meta_store-count'),
                   value: (() => {
                       const disableStoresDialog = statistics.store_count >= 200;
                       return (
@@ -143,14 +161,14 @@ function Overview({id, block}: Props) {
                                       &nbsp;&nbsp;
                                       <Tooltip
                                           disabled={!disableStoresDialog}
-                                          content="Too many stores to show"
+                                          content={i18n('context_too-many-stores')}
                                       >
                                           <Button
                                               disabled={disableStoresDialog}
                                               view="flat-secondary"
                                               onClick={toggleStoresVisibility}
                                           >
-                                              View
+                                              {i18n('action_view')}
                                           </Button>
                                       </Tooltip>
                                   </>
@@ -228,23 +246,25 @@ function Overview({id, block}: Props) {
                             [
                                 {
                                     key: 'id',
+                                    label: i18n('meta_id'),
                                     value: <Template.Id id={id} />,
                                 },
                                 {
                                     key: 'tablet_cell_id',
-                                    label: 'Tablet cell id',
+                                    label: i18n('meta_tablet-cell-id'),
                                     value: (
                                         <Template.Link
                                             withClipboard
                                             text={cellId}
                                             shiftText={tabletPath}
-                                            hoverContent={'Hold SHIFT-key to copy full path'}
+                                            hoverContent={i18n('context_hold-shift-key')}
                                             url={genTabletCellBundlesCellUrl(cellId, cluster)}
                                         />
                                     ),
                                 },
                                 {
                                     key: 'table_path',
+                                    label: i18n('field_table-path'),
                                     value: (
                                         <Template.Link
                                             withClipboard
@@ -255,6 +275,7 @@ function Overview({id, block}: Props) {
                                 },
                                 {
                                     key: 'tablet cell leader node',
+                                    label: i18n('meta_tablet-cell-leader-node'),
                                     value: (
                                         <Template.Link
                                             withClipboard
@@ -269,6 +290,7 @@ function Overview({id, block}: Props) {
                                 },
                                 {
                                     key: 'errors',
+                                    label: i18n('meta_errors'),
                                     value: (
                                         <span>
                                             {hammer.format['Number'](tabletErrors.length)}
@@ -277,7 +299,7 @@ function Overview({id, block}: Props) {
                                                 size="m"
                                                 onClick={handleErrorsClick}
                                             >
-                                                View
+                                                {i18n('action_view')}
                                             </Button>
                                         </span>
                                     ),
@@ -285,6 +307,7 @@ function Overview({id, block}: Props) {
                                 },
                                 {
                                     key: 'replication_errors',
+                                    label: i18n('meta_replication-errors'),
                                     value: (
                                         <span>
                                             {hammer.format['Number'](
@@ -295,7 +318,7 @@ function Overview({id, block}: Props) {
                                                 size="m"
                                                 onClick={handleReplicationErrorsClick}
                                             >
-                                                View
+                                                {i18n('action_view')}
                                             </Button>
                                         </span>
                                     ),
@@ -303,6 +326,7 @@ function Overview({id, block}: Props) {
                                 },
                                 {
                                     key: 'state',
+                                    label: i18n('meta_state'),
                                     value: (
                                         <Label
                                             theme={stateTheme}
@@ -312,10 +336,12 @@ function Overview({id, block}: Props) {
                                 },
                                 {
                                     key: 'index',
+                                    label: i18n('meta_index'),
                                     value: hammer.format['Number'](index),
                                 },
                                 {
                                     key: 'pivot_key',
+                                    label: i18n('meta_pivot-key'),
                                     value: (
                                         <Yson
                                             value={pivotKey}
@@ -329,6 +355,7 @@ function Overview({id, block}: Props) {
                                 },
                                 {
                                     key: 'next_pivot_key',
+                                    label: i18n('meta_next-pivot-key'),
                                     value: (
                                         <Yson
                                             value={nextPivotKey}
@@ -344,11 +371,13 @@ function Overview({id, block}: Props) {
                             [
                                 {
                                     key: 'unmerged_row_count',
+                                    label: i18n('meta_unmerged-row-count'),
                                     value: hammer.format['Number'](unmergedRowCount),
                                     visible: !unorderedDynamicTable,
                                 },
                                 {
                                     key: 'chunks',
+                                    label: i18n('meta_chunks'),
                                     value: hammer.format['Number'](chunkCount),
                                 },
                                 ...size(statistics, mediumList),

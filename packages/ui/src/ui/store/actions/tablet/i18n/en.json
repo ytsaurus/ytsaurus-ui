@@ -1,0 +1,9 @@
+{
+  "alert_failed-to-fetch-stores": "Failed to fetch stores",
+  "alert_could-not-load-tablet-partitions": "Could not load tablet partitions information.",
+  "alert_tablet-cell-no-leading-peer": "Tablet cell has no leading peer. No information to show.",
+  "alert_could-not-load-tablet-cell-attributes": "Could not load tablet's tablet cell attributes.",
+  "alert_tablet-not-mounted": "Tablet is not mounted. No information to show.",
+  "alert_could-not-load-table-attributes": "Could not load tablet's table attributes.",
+  "alert_could-not-load-tablet-attributes": "Could not load tablet attributes."
+}

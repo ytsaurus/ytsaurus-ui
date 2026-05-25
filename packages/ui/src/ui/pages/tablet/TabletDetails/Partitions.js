@@ -23,6 +23,8 @@ import {getPartitions} from '../../../store/selectors/tablet/tablet';
 import {partitionsTableItems} from '../../../utils/tablet/table';
 import StoresDialog from './StoresDialog';
 
+import i18n from './i18n';
+
 const headingBlock = cn('elements-heading');
 
 class Partitions extends Component {
@@ -42,9 +44,9 @@ class Partitions extends Component {
         const index = partitionsTableItems[columnName].get(item);
 
         if (index === -1) {
-            return 'Eden';
+            return i18n('value_eden');
         } else if (index === -2) {
-            return 'Aggregation';
+            return i18n('value_aggregation');
         } else {
             return hammer.format['Number'](index);
         }
@@ -108,7 +110,7 @@ class Partitions extends Component {
             <span>
                 {partitionIndex >= -1 && storeCount > 0 && (
                     <Button view="flat-secondary" size="m" onClick={onClick}>
-                        View
+                        {i18n('action_view')}
                     </Button>
                 )}
                 {hammer.format['Number'](storeCount)}
@@ -232,8 +234,8 @@ class Partitions extends Component {
                     onChange={this.handleModeChange}
                     name="tablet-partitions-content-mode"
                     items={[
-                        {value: 'default', text: 'Default'},
-                        {value: 'keys', text: 'Keys'},
+                        {value: 'default', text: i18n('value_default-mode')},
+                        {value: 'keys', text: i18n('value_keys-mode')},
                     ]}
                 />
             </div>
@@ -245,7 +247,7 @@ class Partitions extends Component {
 
         return (
             <ErrorBoundary>
-                <div className={headingBlock({size: 'm'})}>Partitions</div>
+                <div className={headingBlock({size: 'm'})}>{i18n('title_partitions')}</div>
 
                 <StickyContainer>
                     {({stickyTopClassName}) => (

@@ -3,6 +3,7 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import map_ from 'lodash/map';
 
 import {splitBatchResults} from '../../../../shared/utils/error';
+import i18n from './i18n';
 
 import CancelHelper from '../../../utils/cancel-helper';
 import {TYPED_OUTPUT_FORMAT} from '../../../constants/index';
@@ -35,7 +36,10 @@ export function loadStoresData(storesId, index, unorderedDynamicTable) {
                 parameters: {requests, output_format: TYPED_OUTPUT_FORMAT},
             })
             .then((data) => {
-                const {error, results} = splitBatchResults(data, 'Failed to fetch stores');
+                const {error, results} = splitBatchResults(
+                    data,
+                    i18n('alert_failed-to-fetch-stores'),
+                );
                 if (error) {
                     return Promise.reject(error);
                 }

@@ -17,6 +17,7 @@ import {TABLET_PARTITION_STORES_TABLE_ID} from '../../../constants/tablet';
 import {storesTableItems} from '../../../utils/tablet/table';
 import {getStores} from '../../../store/selectors/tablet/stores';
 
+import i18n from './i18n';
 import './Stores.scss';
 
 const block = cn('tablet-stores');
@@ -107,47 +108,56 @@ class Stores extends Component {
                 items={[
                     {
                         key: 'lock_count',
+                        label: i18n('meta_lock-count'),
                         value: hammer.format['Number'](store.lockCount),
                         visible: dynamicStore,
                     },
                     {
                         key: 'value_count',
+                        label: i18n('meta_value-count'),
                         value: hammer.format['Number'](store.valueCount),
                         visible: dynamicStore,
                     },
                     {
                         key: 'pool_size',
+                        label: i18n('meta_pool-size'),
                         value: hammer.format['Bytes'](store.poolSize),
                         visible: dynamicStore,
                     },
                     {
                         key: 'pool_capacity',
+                        label: i18n('meta_pool-capacity'),
                         value: hammer.format['Bytes'](store.poolCapacity),
                         visible: dynamicStore,
                     },
                     {
                         key: 'flush_state',
+                        label: i18n('meta_flush-state'),
                         value: Stores.renderFlushState(store.flushState),
                         visible: dynamicStore,
                     },
 
                     {
                         key: 'uncompressed_data_size',
+                        label: i18n('meta_uncompressed-data-size'),
                         value: hammer.format['Bytes'](store.uncompressed),
                         visible: persistentStore,
                     },
                     {
                         key: 'compressed_data_size',
+                        label: i18n('meta_compressed-data-size'),
                         value: hammer.format['Bytes'](store.compressed),
                         visible: persistentStore,
                     },
                     {
                         key: 'compaction_state',
+                        label: i18n('meta_compaction-state'),
                         value: Stores.renderFlushState(store.compactionState),
                         visible: persistentStore,
                     },
                     {
                         key: 'preload_state',
+                        label: i18n('meta_preload-state'),
                         value: Stores.renderPreloadState(store.preloadState),
                         visible: persistentStore,
                     },
