@@ -73,7 +73,7 @@ export const SchemaTab: FC<SchemaTabProps> = ({schema, filter, onFilterChange, y
                 onUpdate={onFilterChange}
                 hasClear
             />
-            <DataTableYT data={schema} columns={columns} useThemeYT />
+            <DataTableYT key={filter} data={schema} columns={columns} useThemeYT />
         </>
     );
 };
