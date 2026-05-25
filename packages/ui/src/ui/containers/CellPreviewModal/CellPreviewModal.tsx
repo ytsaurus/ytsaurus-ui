@@ -18,8 +18,8 @@ import {ClipboardButton} from '@ytsaurus/components';
 import cn from 'bem-cn-lite';
 
 import {Yson} from '../../components/Yson/Yson';
-import {YTErrorBlock} from '../../containers/Block/Block';
-import {type YsonSettings, getPreviewCellYsonSettings} from '../../store/selectors/thor/unipika';
+import {YTErrorBlock} from '../../components/Error/Error';
+import {type YsonSettings, selectPreviewCellYsonSettings} from '../../store/selectors/thor/unipika';
 import {closeCellPreviewAndCancelRequest} from '../../store/actions/modals/cell-preview';
 import {isMediaTag} from '../../utils/yql-types';
 
@@ -37,7 +37,7 @@ export const CellPreviewModal: React.FC = () => {
     const noticeText = useSelector(selectCellPreviewNoticeText);
     const error = useSelector(selectErrorPreviewCellPath);
 
-    const unipikaSettings = useSelector(getPreviewCellYsonSettings);
+    const unipikaSettings = useSelector(selectPreviewCellYsonSettings);
 
     return (
         <SimpleModal

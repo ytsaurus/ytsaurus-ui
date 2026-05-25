@@ -42,7 +42,7 @@ import {
     selectYqlTypes,
 } from '../../../../store/selectors/navigation/content/table-ts';
 import {selectCluster} from '../../../../store/selectors/global';
-import {getTableYsonSettings} from '../../../../store/selectors/thor/unipika';
+import {selectTableYsonSettings} from '../../../../store/selectors/thor/unipika';
 import {useRumMeasureStop} from '../../../../rum/RumUiContext';
 import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
 import {isFinalLoadingStatus} from '../../../../utils/utils';
@@ -210,7 +210,7 @@ function Table(props) {
 const mapStateToProps = (state) => {
     const {loading, loaded, error, errorData, isColumnSelectorOpen, isFullScreen} =
         state.navigation.content.table;
-    const settings = getTableYsonSettings(state);
+    const settings = selectTableYsonSettings(state);
     const {isSplit} = state.global.splitScreen;
 
     const path = selectPath(state);
