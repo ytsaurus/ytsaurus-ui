@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.13.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.12.2...ui-v3.13.0) (2026-05-26)
+
+
+### Features
+
+* **PrometheusDashboard:** use //sys/interface_monitoring [YTFRONT-5802] ([96ddd54](https://github.com/ytsaurus/ytsaurus-ui/commit/96ddd547b1f4a6d3022313768739daa9274c3fea))
+
+
+### Bug Fixes
+
+* **Dockerfile:** update nginx/1.30.1 [YTFRONT-5787] ([9eb8033](https://github.com/ytsaurus/ytsaurus-ui/commit/9eb8033bf22628f5263986d1f0d273558d393530))
+* **Queries/Timeline:** add durations background [YTFRONT-5811] ([7f7f10e](https://github.com/ytsaurus/ytsaurus-ui/commit/7f7f10e27bb6de505956e0f89f7469cf69ba7dc8))
+* **Queries/Timeline:** broken links [YTFRONT-5811] ([ed1f5a2](https://github.com/ytsaurus/ytsaurus-ui/commit/ed1f5a2e655ddb01b802e1982888bc60095f2cc6))
+* **Queries/Timeline:** interval problem [YTFRONT-5811] ([68e4afa](https://github.com/ytsaurus/ytsaurus-ui/commit/68e4afa8fe50a3559e4f18026c582e7871cb3964))
+* **UI:** data type theme [YTFRONT-5601] ([5f8bb0a](https://github.com/ytsaurus/ytsaurus-ui/commit/5f8bb0a3ecac9effc8547c20e2280aa7af1a5319))
+
 ## [3.12.2](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.12.1...ui-v3.12.2) (2026-05-20)
 
 
