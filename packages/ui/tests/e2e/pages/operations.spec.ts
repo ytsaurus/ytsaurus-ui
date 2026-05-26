@@ -3,7 +3,7 @@ import {makeClusterUrl} from '../../utils';
 
 test('Operation: checking details and attributes encoding errors', async ({page}) => {
     await page.goto(makeClusterUrl('operations?user=root&state=completed&type=map'));
-    await page.click('.g-link:has-text("YQL operation ( by root)")');
+    await page.click('.g-link:has-text("YQL operation")');
 
     await page.waitForSelector('.operation-details__description');
 
