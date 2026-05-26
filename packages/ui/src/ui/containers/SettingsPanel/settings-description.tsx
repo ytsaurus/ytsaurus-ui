@@ -450,15 +450,10 @@ function useSettings(cluster: string, isAdmin: boolean): Array<SettingsPage> {
             tableIcon,
             compact_([
                 makeItem(
-                    SettingName.DEVELOPMENT.YQL_TYPES,
+                    'global::development::yqlTypes',
                     i18n('field_yql-v3-types'),
                     'top',
-                    <SettingsMenuItem
-                        settingName={SettingName.DEVELOPMENT.YQL_TYPES}
-                        settingNS={NAMESPACES.DEVELOPMENT}
-                        qa="settings_yql-v3-types"
-                        oneLine
-                    />,
+                    <BooleanSettingItem settingKey="global::development::yqlTypes" oneLine />,
                 ),
                 makeItem(
                     SettingName.NAVIGATION.ROWS_PER_TABLE_PAGE,
