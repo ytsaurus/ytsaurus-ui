@@ -8,6 +8,8 @@ import {type YTHealth} from '../../types';
 
 import {type StrawberryCliqueHealthType} from '../../utils/strawberryControllerApi';
 
+import i18n from './i18n';
+
 const HEALTH_TO_THEME: {[health: string]: LabelTheme} = {
     good: 'success',
     initializing: 'warning',
@@ -24,7 +26,7 @@ export function Health(props: {value?: YTHealth | StrawberryCliqueHealthType; cl
         hammer.format.NO_VALUE
     ) : (
         <Label className={className} theme={theme}>
-            {value}
+            {i18n(`value_${value}`)}
         </Label>
     );
 }

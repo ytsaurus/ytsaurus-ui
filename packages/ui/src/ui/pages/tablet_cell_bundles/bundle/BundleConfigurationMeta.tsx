@@ -2,6 +2,8 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 
+import i18n from './i18n';
+
 import entries_ from 'lodash/entries';
 import map_ from 'lodash/map';
 import pick_ from 'lodash/pick';
@@ -77,7 +79,7 @@ export function ActiveAccountBundleControllerUpdater() {
             {
                 toasterName: 'active-bundle-controller-status',
                 skipSuccessToast: true,
-                errorContent: `Cannot load bundle controller details for "${activeBundle}".`,
+                errorContent: i18n('alert_load-bundle-controller-details-error', {bundle: activeBundle}),
             },
         ).catch(() => []);
 
@@ -124,8 +126,8 @@ export default function BundleConfigurationMeta() {
 
         bundleGroup.push(
             getBundleStateField(orchidData),
-            getLimitAllocatedField('Memory allocated/limit', allocMemory, allMemory, 'Bytes'),
-            getLimitAllocatedField('vCPU allocated/limit', allocVCPU, allVCPU, 'vCores'),
+            getLimitAllocatedField(i18n('field_memory-allocated-limit'), allocMemory, allMemory, 'Bytes'),
+            getLimitAllocatedField(i18n('field_vcpu-allocated-limit'), allocVCPU, allVCPU, 'vCores'),
         );
     }
 
@@ -135,7 +137,7 @@ export default function BundleConfigurationMeta() {
             rpc_proxy_resource_guarantee: {memory, vcpu},
         } = bundleControllerConfig;
 
-        bundleGroup.push(getRpcNodeField('RPC proxies', count, memory, vcpu));
+        bundleGroup.push(getRpcNodeField(i18n('field_rpc-proxies'), count, memory, vcpu));
     }
 
     if (typeof bundleControllerConfig.tablet_node_count !== 'undefined') {
@@ -143,13 +145,13 @@ export default function BundleConfigurationMeta() {
             tablet_node_count: count,
             tablet_node_resource_guarantee: {memory, vcpu},
         } = bundleControllerConfig;
-        bundleGroup.push(getRpcNodeField('Tablet nodes', count, memory, vcpu));
+        bundleGroup.push(getRpcNodeField(i18n('field_tablet-nodes'), count, memory, vcpu));
     }
 
     if (bundleControllerConfig.memory_limits) {
         const {memory} = bundleControllerConfig?.tablet_node_resource_guarantee || {};
         bundleGroup.push(
-            BundleMetaResourceProgress('Memory allocation', {
+            BundleMetaResourceProgress(i18n('field_memory-allocation'), {
                 data: bundleControllerConfig.memory_limits,
                 resourceType: 'Bytes',
                 limit: memory,
@@ -160,7 +162,7 @@ export default function BundleConfigurationMeta() {
 
     if (bundleControllerConfig.cpu_limits) {
         bundleGroup.push(
-            BundleMetaResourceProgress('vCPU allocation', {
+            BundleMetaResourceProgress(i18n('field_vcpu-allocation'), {
                 data: bundleControllerConfig.cpu_limits,
                 resourceType: 'Number',
                 postfix: 'threads',
@@ -171,7 +173,7 @@ export default function BundleConfigurationMeta() {
     }
 
     return (
-        <MetaTable className={block()} subTitles={['Bundle configuration']} items={[bundleGroup]} />
+        <MetaTable className={block()} subTitles={[i18n('title_bundle-configuration')]} items={[bundleGroup]} />
     );
 }
 
@@ -228,14 +230,14 @@ function getBundleStateField(orchidData: OrchidBundlesData) {
     const {state: value, detailsEntries} = getBundleStateData(orchidData);
     if (value === 'good') {
         return {
-            key: 'State',
+            key: i18n('field_state'),
             value: <Health className={block('health', {value})} value={value} />,
         };
     }
 
     if (value === 'changing') {
         return {
-            key: 'State',
+            key: i18n('field_state'),
             value: (
                 <Tooltip
                     content={renderDetails(detailsEntries)}
@@ -251,7 +253,7 @@ function getBundleStateField(orchidData: OrchidBundlesData) {
     }
 
     return {
-        key: 'State',
+        key: i18n('field_state'),
         value: (
             <Tooltip
                 content={renderErrors(alerts)}

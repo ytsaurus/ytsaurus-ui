@@ -23,6 +23,7 @@ import {type SortState} from '../../../types';
 import {type OrderType} from '../../../utils/sort-helpers';
 import {calcProgressProps} from '../../../utils/utils';
 
+import i18n from './i18n';
 import './BundlesTable.scss';
 import UIFactory from '../../../UIFactory';
 import {type ClusterUiConfig} from '../../../../shared/yt-types';
@@ -41,26 +42,70 @@ const TABLE_SETTINGS: Settings = {
 };
 
 const COLUMN_TITLE: {[name: string]: string} = {
-    bundle: 'Bundle / Node tag filter',
-    tabletCells: 'Cells',
-    uncompressed: 'Uncompressed size',
-    compressed: 'Compressed size',
-    enable_bundle_controller: 'Bundle controller',
-    changelog_account: 'Changelog and Snapshot account',
-    node_tag_filter: 'Node tag filter',
+    get health() {
+        return i18n('field_health');
+    },
+    get nodes() {
+        return i18n('field_nodes');
+    },
+    get bundle() {
+        return i18n('field_bundle');
+    },
+    get tablets() {
+        return i18n('field_tablets');
+    },
+    get memory() {
+        return i18n('field_memory');
+    },
+    get tabletCells() {
+        return i18n('field_cells');
+    },
+    get uncompressed() {
+        return i18n('field_uncompressed-size');
+    },
+    get compressed() {
+        return i18n('field_compressed-size');
+    },
+    get enable_bundle_controller() {
+        return i18n('field_bundle-controller');
+    },
+    get changelog_account() {
+        return i18n('field_changelog-snapshot-account');
+    },
+    get node_tag_filter() {
+        return i18n('field_node-tag-filter');
+    },
     actions: ' ',
-    tablet_count: 'Usage',
-    tablet_count_limit: 'Limit',
-    tablet_count_free: 'Free',
-    tablet_count_percentage: 'Percentage',
-    tablet_static_memory: 'Usage',
-    tablet_static_memory_limit: 'Limit',
-    tablet_static_memory_free: 'Free',
-    tablet_static_memory_percentage: 'Percentage',
+    get tablet_count() {
+        return i18n('field_usage');
+    },
+    get tablet_count_limit() {
+        return i18n('field_limit');
+    },
+    get tablet_count_free() {
+        return i18n('field_free');
+    },
+    get tablet_count_percentage() {
+        return i18n('field_percentage');
+    },
+    get tablet_static_memory() {
+        return i18n('field_usage');
+    },
+    get tablet_static_memory_limit() {
+        return i18n('field_limit');
+    },
+    get tablet_static_memory_free() {
+        return i18n('field_free');
+    },
+    get tablet_static_memory_percentage() {
+        return i18n('field_percentage');
+    },
 };
 
 const SHORT_TITLE: typeof COLUMN_TITLE = {
-    enable_bundle_controller: 'BC',
+    get enable_bundle_controller() {
+        return i18n('field-short_enable_bundle_controller');
+    },
 };
 
 function CopyHostListAction(props: {
@@ -77,7 +122,11 @@ function CopyHostListAction(props: {
     return (
         <div className={block('actions-copy-hosts')} onClick={handleClick}>
             <Tooltip
-                content={<span className={block('no-wrap')}>Copy hosts to clipboard</span>}
+                content={
+                    <span className={block('no-wrap')}>
+                        {i18n('action_copy-hosts-to-clipboard')}
+                    </span>
+                }
                 placement={'bottom-start'}
             >
                 <ClipboardButton view="flat-secondary" onCopy={handleClick} />
@@ -120,7 +169,7 @@ class BundlesTable extends React.Component<ReduxProps> {
             <div className={block('bundle')}>
                 <div className={block('name', {has_tag})}>
                     {!bundle ? (
-                        'Total'
+                        i18n('value_total')
                     ) : (
                         <Link
                             routed
@@ -186,9 +235,9 @@ class BundlesTable extends React.Component<ReduxProps> {
     renderNodes = (data: {row: TabletBundle}) => {
         const {nodes, node_tag_filter, unique_node_tag, bundle} = data?.row || {};
         if (!unique_node_tag && bundle) {
-            const help_tooltip = `This bundle shares nodes with other bundles having node tag filter
-             "${node_tag_filter}". Actual amount of available resources depends on the number of tablet cells and may
-             be less than displayed in this column.`;
+            const help_tooltip = i18n('context_bundle-shares-nodes', {
+                nodeTagFilter: node_tag_filter,
+            });
             return (
                 <div className={block('nodes')}>
                     <HelpMark

@@ -1,6 +1,8 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
 
+import i18n from './i18n';
+
 import reduce_ from 'lodash/reduce';
 
 import Tabs from '../../components/Tabs/Tabs';
@@ -243,7 +245,7 @@ function ActiveBundleDetails({
                             <div className={b('tabs-edit-btn')}>
                                 <Button className={b('edit-btn')} size={'m'} onClick={showEditor}>
                                     <Icon awesome={'pencil'} />
-                                    Edit Bundle
+                                    {i18n('action_edit-bundle')}
                                 </Button>
                             </div>
                         )}
@@ -260,25 +262,25 @@ function makeAllTabsProps(matchUrl: string, cluster: string) {
     res.items = [
         {
             value: Page.TABLET_CELL_BUNDLES,
-            text: 'Tablet cell bundles',
+            get text() {return i18n('title_tablet-cell-bundles')},
             show: true,
             url: `/${cluster}/${Page.TABLET_CELL_BUNDLES}`,
         },
         {
             value: TabletsTab.TABLET_CELLS,
-            text: 'Tablet cells',
+            get text() {return i18n('title_tablet-cells')},
             show: true,
             url: `/${cluster}/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.TABLET_CELLS}`,
         },
         {
             value: Page.CHAOS_CELL_BUNDLES,
-            text: 'Chaos cell bundles',
+            get text() {return i18n('title_chaos-cell-bundles')},
             show: true,
             url: `/${cluster}/${Page.CHAOS_CELL_BUNDLES}`,
         },
         {
             value: TabletsTab.CHAOS_CELLS,
-            text: 'Chaos cells',
+            get text() {return i18n('title_chaos-cells')},
             show: true,
             url: `/${cluster}/${Page.CHAOS_CELL_BUNDLES}/${TabletsTab.CHAOS_CELLS}`,
         },
@@ -289,7 +291,7 @@ function makeAllTabsProps(matchUrl: string, cluster: string) {
 function TabletsTabsImpl({
     activeBundle,
     showSettings,
-    monitoringTitle = 'Monitoring',
+    monitoringTitle = i18n('title_monitoring'),
 }: {
     activeBundle: string | undefined;
     showSettings: Record<string, TabSettings>;

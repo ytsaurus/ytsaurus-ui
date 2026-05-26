@@ -12,22 +12,23 @@ import {
     Toolbar,
 } from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {usePrometheusDashboardType} from '../../../../store/reducers/prometheusDashboard/prometheusDashboard-hooks';
+import i18n from './i18n';
 
 import './BundleMonitoringPrometheus.scss';
 
 const block = cn('yt-bundle-monitoring-prometheus');
 
 const BUNDLE_DASHBOARDS = {
-    'bundle-ui-user-load': {title: 'User load'},
-    'bundle-ui-resource': {title: 'Resources'},
+    'bundle-ui-user-load': {get title() {return i18n('title_user-load')}},
+    'bundle-ui-resource': {get title() {return i18n('title_resources')}},
     'bundle-ui-cpu': {title: 'CPU'},
-    'bundle-ui-memory': {title: 'Memory'},
-    'bundle-ui-disk': {title: 'Disk'},
+    'bundle-ui-memory': {get title() {return i18n('title_memory')}},
+    'bundle-ui-disk': {get title() {return i18n('title_disk')}},
     'bundle-ui-lsm': {title: 'LSM'},
-    'bundle-ui-network': {title: 'Network'},
-    'bundle-ui-efficiency': {title: 'Efficiency'},
-    'bundle-ui-rpc-proxy-overview': {title: 'Proxy resources'},
-    'bundle-ui-rpc-proxy': {title: 'Proxy details'},
+    'bundle-ui-network': {get title() {return i18n('title_network')}},
+    'bundle-ui-efficiency': {get title() {return i18n('title_efficiency')}},
+    'bundle-ui-rpc-proxy-overview': {get title() {return i18n('title_proxy-resources')}},
+    'bundle-ui-rpc-proxy': {get title() {return i18n('title_proxy-details')}},
 };
 
 const BUNDLE_DASHBOARDS_NAMES = Object.keys(BUNDLE_DASHBOARDS) as Array<

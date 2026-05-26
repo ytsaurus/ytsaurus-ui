@@ -8,6 +8,7 @@ import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import BundlesTableModeRadio from '../../../pages/tablet_cell_bundles/bundles/BundlesTableModeRadio';
 import {type setTabletsPartial} from '../../../store/actions/tablet_cell_bundles';
 import {type BundlesTableMode} from '../../../store/reducers/tablet_cell_bundles';
+import i18n from './i18n';
 
 import './BundlesTableInstruments.scss';
 
@@ -47,7 +48,7 @@ class BundlesTableInstruments extends React.Component<Props & ReduxProps> {
                                 size="m"
                                 type="text"
                                 value={nameFilter}
-                                placeholder="Enter bundle name..."
+                                placeholder={i18n('context_enter-bundle-name')}
                                 onChange={this.props.setTabletsBundlesNameFilter}
                                 onEnterKeyDown={this.onNameEnterKeyDown}
                             />
@@ -65,7 +66,7 @@ class BundlesTableInstruments extends React.Component<Props & ReduxProps> {
                                 size="m"
                                 type="text"
                                 value={accountFilter}
-                                placeholder="Enter changelog or snapshot account..."
+                                placeholder={i18n('context_enter-account')}
                                 onChange={this.props.setTabletsBundlesAccountFilter}
                                 autofocus={false}
                             />
@@ -83,7 +84,7 @@ class BundlesTableInstruments extends React.Component<Props & ReduxProps> {
                                 size="m"
                                 type="text"
                                 value={tagNodeFilter}
-                                placeholder="Enter node tag filter..."
+                                placeholder={i18n('context_enter-node-tag-filter')}
                                 onChange={this.props.setTabletsBundlesTagNodeFilter}
                                 autofocus={false}
                             />

@@ -6,15 +6,17 @@ import {Radio, Table, type TableColumnConfig} from '@gravity-ui/uikit';
 import {type DialogControlProps} from '../../../../../../containers/Dialog/Dialog.types';
 import {type BundleResourceGuarantee} from '../../../../../../store/reducers/tablet_cell_bundles';
 
+import i18n from './i18n';
+
 import './BundleTableField.scss';
 
 const block = cn('bundle-table-field');
 
 const columns: TableColumnConfig<BundleData>[] = [
-    {id: 'type', name: 'Type', width: '25%'},
-    {id: 'memory', name: 'Memory', width: '25%'},
+    {id: 'type', get name() {return i18n('field_type')}, width: '25%'},
+    {id: 'memory', get name() {return i18n('field_memory')}, width: '25%'},
     {id: 'vcpu', name: 'vCPU', width: '25%'},
-    {id: 'net', name: 'Network', width: '25%'},
+    {id: 'net', get name() {return i18n('field_network')}, width: '25%'},
 ];
 
 interface BundleData {

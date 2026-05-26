@@ -9,6 +9,7 @@ import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import Suggest from '../../../components/Suggest/Suggest';
 import {type TabletsPartialAction} from '../../../store/reducers/tablet_cell_bundles';
 import clipboardList from '../../../assets/img/svg/icons/clipboard-list.svg';
+import i18n from './i18n';
 
 import './CellsInstruments.scss';
 
@@ -71,7 +72,7 @@ class CellsTableInstruments extends React.Component<Props & ReduxProps> {
                                 size="m"
                                 type="text"
                                 value={idFilter}
-                                placeholder="Enter cell id..."
+                                placeholder={i18n('field_cell-id-placeholder')}
                                 onChange={this.onIdFilter}
                                 autofocus={false}
                             />
@@ -96,7 +97,7 @@ class CellsTableInstruments extends React.Component<Props & ReduxProps> {
                                           filter={(_items, filter) =>
                                               this.getBundleFilterItems(filter)
                                           }
-                                          placeholder={'Enter bundle name...'}
+                                           placeholder={i18n('field_bundle-placeholder')}
                                           popupClassName={block('suggest-popup')}
                                       />
                                   ),
@@ -120,7 +121,7 @@ class CellsTableInstruments extends React.Component<Props & ReduxProps> {
                                 }
                                 onBlur={this.onHostInputBlur}
                                 filter={(_items, filter = '') => this.getHostFilterItems(filter)}
-                                placeholder={'Enter host...'}
+                                placeholder={i18n('field_host-placeholder')}
                                 autoFocus={false}
                                 popupClassName={block('suggest-popup')}
                             />
@@ -137,7 +138,7 @@ class CellsTableInstruments extends React.Component<Props & ReduxProps> {
                                       <ClipboardButton
                                           text={activeBundleHosts}
                                           icon={clipboardList}
-                                          buttonText="Copy host list"
+                                          buttonText={i18n('action_copy-host-list')}
                                       />
                                   ),
                               },

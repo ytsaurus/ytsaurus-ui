@@ -3,6 +3,8 @@ import cn from 'bem-cn-lite';
 
 import capitalize_ from 'lodash/capitalize';
 
+import i18n from './i18n';
+
 import DataTable, {type Column, type Settings} from '@gravity-ui/react-data-table';
 
 import ClickableAttributesButton from '../../../components/AttributesButton/ClickableAttributesButton';
@@ -51,10 +53,33 @@ const TABLE_SETTINGS: Settings = {
 // }
 
 const COLUMN_TITLE: {[name: string]: string} = {
-    id: 'Cell id',
-    uncompressed: 'Uncompressed size',
-    compressed: 'Compressed size',
-    peerAddress: 'Node',
+    get id() {
+        return i18n('field_cell-id');
+    },
+    get bundle() {
+        return i18n('field_bundle');
+    },
+    get health() {
+        return i18n('field_health');
+    },
+    get tablets() {
+        return i18n('field_tablets');
+    },
+    get memory() {
+        return i18n('field_memory');
+    },
+    get state() {
+        return i18n('field_state');
+    },
+    get uncompressed() {
+        return i18n('field_uncompressed-size');
+    },
+    get compressed() {
+        return i18n('field_compressed-size');
+    },
+    get peerAddress() {
+        return i18n('field_node');
+    },
     actions: ' ',
 };
 
@@ -163,7 +188,7 @@ class CellsTable extends React.Component<Props & ReduxProps> {
         const {id} = data?.row || {};
         return (
             <div className={block('actions')}>
-                <Tooltip placement={['bottom', 'top']} content={'Go to Navigation'}>
+                <Tooltip placement={['bottom', 'top']} content={i18n('action_go-to-navigation')}>
                     <Link
                         className={block('cell-navigation-link')}
                         url={cellNavigationLink(cluster, id)}

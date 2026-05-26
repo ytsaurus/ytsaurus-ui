@@ -20,12 +20,17 @@ import {
 
 import './BundleGeneralMeta.scss';
 import UIFactory from '../../../UIFactory';
+import i18n from './i18n';
 
 const block = cn('bundle-general-meta');
 
 export function BundleBalancerValue(props: {value?: boolean; blocking?: boolean}) {
     const {value = true, blocking} = props;
-    return <span className={block('bb', {success: value, blocking})}>{value ? 'on' : 'off'}</span>;
+    return (
+        <span className={block('bb', {success: value, blocking})}>
+            {value ? i18n('value_on') : i18n('value_off')}
+        </span>
+    );
 }
 
 export default function BundleGeneralMeta() {
@@ -41,54 +46,54 @@ export default function BundleGeneralMeta() {
     const leftGroup: Array<MetaTableItem> = [
         ...(UIFactory.getExtraMetaTableItemsForBundle({bundle: bundleData, clusterUiConfig}) || []),
         {
-            key: 'Health',
+            key: i18n('field_health'),
             value: <Health value={bundleData.health} />,
         },
         {
-            key: 'Tablet cells',
+            key: i18n('field_tablet-cells'),
             value: hammer.format['Number'](bundleData.tabletCells),
         },
         {
-            key: 'Tablets',
+            key: i18n('field_tablets'),
             value: hammer.format['Number'](bundleData.tablets),
             visible: !allowTabletAccounting,
         },
         {
-            key: 'Bundle controller',
+            key: i18n('field_bundle-controller'),
             value: <BundleBalancerValue value={bundleData.enable_bundle_controller} />,
         },
         {
-            key: 'Node tag filter',
+            key: i18n('field_node-tag-filter'),
             value: bundleData.node_tag_filter || hammer.format.NO_VALUE,
         },
     ];
 
     const rightGroup: Array<MetaTableItem> = [
         {
-            key: 'Memory',
+            key: i18n('field_memory'),
             value: hammer.format['Bytes'](bundleData.memory),
             visible: !allowTabletAccounting,
         },
         {
-            key: 'Tablets',
+            key: i18n('field_tablets'),
             value: renderResourceProgress(bundleData, 'tablet_count'),
             visible: allowTabletAccounting,
         },
         {
-            key: 'Tablet static memory',
+            key: i18n('field_tablet-static-memory'),
             value: renderResourceProgress(bundleData, 'tablet_static_memory'),
             visible: allowTabletAccounting,
         },
         {
-            key: 'Uncompressed size',
+            key: i18n('field_uncompressed-size'),
             value: hammer.format['Bytes'](bundleData.uncompressed),
         },
         {
-            key: 'Compressed size',
+            key: i18n('field_compressed-size'),
             value: hammer.format['Bytes'](bundleData.compressed),
         },
         {
-            key: 'Changelog account',
+            key: i18n('field_changelog-account'),
             value: bundleData.changelog_account ? (
                 <AccountLink
                     className={block('account-link')}
@@ -100,7 +105,7 @@ export default function BundleGeneralMeta() {
             ),
         },
         {
-            key: 'Snapshot account',
+            key: i18n('field_snapshot-account'),
             value: bundleData.snapshot_account ? (
                 <AccountLink
                     className={block('account-link')}
@@ -113,7 +118,7 @@ export default function BundleGeneralMeta() {
         },
     ];
 
-    return <MetaTable className={block()} items={[leftGroup, rightGroup]} title={'General'} />;
+    return <MetaTable className={block()} items={[leftGroup, rightGroup]} title={i18n('title_general')} />;
 }
 
 function renderResourceProgress(data: object, resourceName: string) {

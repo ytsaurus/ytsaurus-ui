@@ -46,6 +46,7 @@ import {makeLink} from '../../../../utils/utils';
 import {docsUrl} from '../../../../config';
 
 import './BundleEditorDialog.scss';
+import i18n from './i18n';
 import {type Pick2} from '../../../../../@types/types';
 import {selectIsQueryMemoryLimitSupported} from '../../../../store/selectors/global/supported-features';
 import {validateNumber} from '../../../../common/hammer/validate-number';
@@ -136,7 +137,7 @@ export function BundleEditorDialog() {
 
     const renderGeneralTabs: DialogTabField<DialogField<BundleEditorDialogFormValues>> = {
         name: 'general',
-        title: 'General',
+        title: i18n('title_general'),
         type: 'tab-vertical',
         size: 's',
         fields: [
@@ -146,9 +147,9 @@ export function BundleEditorDialog() {
                       {
                           name: 'abc',
                           type: 'abc-control' as const,
-                          caption: 'ABC Service',
+                          caption: i18n('field_abc-service'),
                           extras: {
-                              placeholder: 'Select ABC service...',
+                              placeholder: i18n('field_abc-service_placeholder'),
                               disabled: !allowEdit,
                           },
                       },
@@ -156,7 +157,7 @@ export function BundleEditorDialog() {
             {
                 name: 'changelog_account',
                 type: 'accounts-suggest-with-loading',
-                caption: 'Changelog account',
+                caption: i18n('field_changelog-account'),
                 extras: {
                     allowRootAccount: true,
                     disabled: !allowEdit,
@@ -165,7 +166,7 @@ export function BundleEditorDialog() {
             {
                 name: 'snapshot_account',
                 type: 'accounts-suggest-with-loading',
-                caption: 'Snapshot account',
+                caption: i18n('field_snapshot-account'),
                 extras: {
                     allowRootAccount: true,
                     disabled: !allowEdit,
@@ -176,7 +177,7 @@ export function BundleEditorDialog() {
 
     const renderResourceTab: DialogTabField<DialogField<BundleEditorDialogFormValues>> = {
         name: 'resources',
-        title: 'Resources',
+        title: i18n('title_resources'),
         type: 'tab-vertical',
         size: 's',
         fields: [
@@ -196,19 +197,19 @@ export function BundleEditorDialog() {
                                 className={block('params')}
                                 params={[
                                     {
-                                        title: 'Memory',
+                                        title: i18n('field_memory'),
                                         value: hammer.format['Bytes'](
                                             orchidData?.resource_quota.memory || '0',
                                         ),
                                     },
                                     {
-                                        title: 'vCPU',
+                                        title: i18n('field_vcpu'),
                                         value: hammer.format['vCores'](
                                             orchidData?.resource_quota.vcpu || '0',
                                         ),
                                     },
                                     {
-                                        title: 'Tablet count',
+                                        title: i18n('field_tablet-count'),
                                         value: hammer.format.Number(
                                             initialValues.resources?.tablet_count,
                                         ),
@@ -225,7 +226,7 @@ export function BundleEditorDialog() {
                       {
                           name: 'tablet_count',
                           type: 'bundle-input',
-                          caption: 'Tablet count',
+                          caption: i18n('field_tablet-count'),
                           extras: {
                               format: 'Number',
                               withoutDetailedBar: true,
@@ -236,11 +237,11 @@ export function BundleEditorDialog() {
                           validator: simpleBundleValidate,
                       } as const,
                   ]),
-            {section: 'RPC proxy'},
+            {section: i18n('section_rpc-proxy')},
             {
                 type: 'bundle-input',
                 name: 'rpc_proxy_count',
-                caption: 'RPC proxy count',
+                caption: i18n('field_rpc-proxy-count'),
                 extras: {
                     format: 'Number',
                     withoutDetailedBar: true,
@@ -252,17 +253,17 @@ export function BundleEditorDialog() {
             {
                 type: 'bundle-table-field',
                 name: 'rpc_proxy_resource_guarantee',
-                caption: 'Instance configuration',
+                caption: i18n('field_instance-configuration'),
                 fullWidth: true,
                 extras: {
                     data: rpcConfigurations,
                 },
             },
-            {section: 'Tablet node'},
+            {section: i18n('section_tablet-node')},
             {
                 type: 'bundle-input',
                 name: 'tablet_node_count',
-                caption: 'Tablet node count',
+                caption: i18n('field_tablet-node-count'),
                 extras: {
                     format: 'Number',
                     withoutDetailedBar: true,
@@ -274,7 +275,7 @@ export function BundleEditorDialog() {
             {
                 type: 'bundle-table-field',
                 name: 'tablet_node_resource_guarantee',
-                caption: 'Instance configuration',
+                caption: i18n('field_instance-configuration'),
                 fullWidth: true,
                 extras(values, {form}) {
                     const onRadioClick = (value: BundleResourceGuarantee) => {
@@ -324,14 +325,14 @@ export function BundleEditorDialog() {
 
     const renderSimpleResourceTab: DialogTabField<DialogField<BundleEditorDialogFormValues>> = {
         name: 'resources',
-        title: 'Resources',
+        title: i18n('title_resources'),
         type: 'tab-vertical',
         size: 's',
         fields: [
             {
                 name: 'tablet_count',
                 type: 'bundle-input',
-                caption: 'Tablet count',
+                caption: i18n('field_tablet-count'),
                 extras: {
                     format: 'Number',
                     withoutDetailedBar: true,
@@ -344,7 +345,7 @@ export function BundleEditorDialog() {
             {
                 name: 'tablet_static_memory',
                 type: 'bundle-input',
-                caption: 'Tablet static memory',
+                caption: i18n('field_tablet-static-memory'),
                 extras: {
                     format: 'Bytes',
                     progress: {
@@ -352,22 +353,14 @@ export function BundleEditorDialog() {
                     },
                 },
                 validator: simpleBundleValidate,
-                tooltip: (
-                    <span>
-                        Tablet static memory limit is based on hardware resources. Do not increase
-                        it unless you fully understand what you are doing. In case of emergency
-                        consider adding new tablet cells to the bundle, consulting with
-                        Components/Nodes page and increasing the limit only when new nodes are added
-                        to the bundle.
-                    </span>
-                ),
+                tooltip: <span>{i18n('context_tablet-static-memory')}</span>,
             },
         ],
     };
 
     const renderMemoryTab: DialogTabField<DialogField<BundleEditorDialogFormValues>> = {
         name: 'memory_limits',
-        title: 'Memory',
+        title: i18n('title_memory'),
         type: 'tab-vertical',
         size: 's',
         visibilityCondition: {
@@ -378,7 +371,7 @@ export function BundleEditorDialog() {
             {
                 name: 'memory_reset',
                 type: 'bundle-title',
-                caption: 'Memory',
+                caption: i18n('title_memory'),
                 touched: true,
                 extras: (allValues, {form}) => {
                     const tablet_node_resource_guarantee =
@@ -424,7 +417,7 @@ export function BundleEditorDialog() {
             {
                 name: 'reserved',
                 type: 'bundle-input',
-                caption: 'Reserved',
+                caption: i18n('field_reserved'),
                 extras: {
                     format: 'Bytes',
                     disabled: true,
@@ -436,7 +429,7 @@ export function BundleEditorDialog() {
             {
                 name: 'tablet_static',
                 type: 'bundle-input',
-                caption: 'Tablet static',
+                caption: i18n('field_tablet-static'),
                 extras: {
                     format: 'Bytes',
                     hasClear: true,
@@ -446,7 +439,7 @@ export function BundleEditorDialog() {
             {
                 name: 'tablet_dynamic',
                 type: 'bundle-input',
-                caption: 'Tablet dynamic',
+                caption: i18n('field_tablet-dynamic'),
                 extras: {
                     format: 'Bytes',
                     hasClear: true,
@@ -456,7 +449,7 @@ export function BundleEditorDialog() {
             {
                 name: 'compressed_block_cache',
                 type: 'bundle-input',
-                caption: 'Compressed block cache',
+                caption: i18n('field_compressed-block-cache'),
                 extras: {
                     format: 'Bytes',
                     hasClear: true,
@@ -466,7 +459,7 @@ export function BundleEditorDialog() {
             {
                 name: 'uncompressed_block_cache',
                 type: 'bundle-input',
-                caption: 'Uncompressed block cache',
+                caption: i18n('field_uncompressed-block-cache'),
                 extras: {
                     format: 'Bytes',
                     hasClear: true,
@@ -476,7 +469,7 @@ export function BundleEditorDialog() {
             {
                 name: 'versioned_chunk_meta',
                 type: 'bundle-input',
-                caption: 'Versioned chunk meta',
+                caption: i18n('field_versioned-chunk-meta'),
                 extras: {
                     format: 'Bytes',
                     hasClear: true,
@@ -486,7 +479,7 @@ export function BundleEditorDialog() {
             {
                 name: 'lookup_row_cache',
                 type: 'bundle-input',
-                caption: 'Lookup row cache',
+                caption: i18n('field_lookup-row-cache'),
                 extras: {
                     format: 'Bytes',
                     hasClear: true,
@@ -496,7 +489,7 @@ export function BundleEditorDialog() {
             {
                 name: 'key_filter_block_cache',
                 type: 'bundle-input',
-                caption: 'Key filter block cache',
+                caption: i18n('field_key-filter-block-cache'),
                 extras: {
                     format: 'Bytes',
                     hasClear: true,
@@ -510,7 +503,7 @@ export function BundleEditorDialog() {
         renderMemoryTab.fields.push({
             name: 'query',
             type: 'bundle-input',
-            caption: 'Query memory limit',
+            caption: i18n('field_query-memory-limit'),
             extras: {
                 format: 'Bytes',
                 hasClear: true,
@@ -521,7 +514,7 @@ export function BundleEditorDialog() {
 
     const renderThreadPoolTab: DialogTabField<DialogField<BundleEditorDialogFormValues>> = {
         name: 'cpu_limits',
-        title: 'Thread pools',
+        title: i18n('title_thread-pools'),
         type: 'tab-vertical',
         size: 's',
         visibilityCondition: {
@@ -532,7 +525,7 @@ export function BundleEditorDialog() {
             {
                 name: 'threadPool_reset',
                 type: 'bundle-title',
-                caption: 'vCPU',
+                caption: i18n('field_vcpu'),
                 extras: (allValues, {form}) => {
                     const tablet_node_resource_guarantee =
                         allValues.resources?.tablet_node_resource_guarantee;
@@ -574,9 +567,9 @@ export function BundleEditorDialog() {
             {
                 name: 'lookup_thread_pool_size',
                 type: 'bundle-input',
-                caption: 'Lookup thread pool size',
+                caption: i18n('field_lookup-thread-pool-size'),
                 extras: {
-                    postfix: 'threads',
+                    postfix: i18n('field_threads'),
                     format: 'Number',
                     hasClear: true,
                 },
@@ -585,9 +578,9 @@ export function BundleEditorDialog() {
             {
                 name: 'query_thread_pool_size',
                 type: 'bundle-input',
-                caption: 'Query thread pool size',
+                caption: i18n('field_query-thread-pool-size'),
                 extras: {
-                    postfix: 'threads',
+                    postfix: i18n('field_threads'),
                     format: 'Number',
                     hasClear: true,
                 },
@@ -596,11 +589,10 @@ export function BundleEditorDialog() {
             {
                 name: 'write_thread_pool_size',
                 type: 'bundle-input',
-                caption: 'Tablet cells per node',
-                warning:
-                    'Changing tablet cell count is discouraged. Do not modify this parameter unless you understand what you are doing',
+                caption: i18n('field_tablet-cells-per-node'),
+                warning: i18n('alert_tablet-cells-discouraged'),
                 extras: {
-                    postfix: 'threads',
+                    postfix: i18n('field_threads'),
                     format: 'Number',
                     hasClear: true,
                 },
@@ -687,7 +679,7 @@ function validateFormValues(
     const tabletNode = resources.tablet_node_resource_guarantee;
     res.memory_limits.memory_reset =
         currentAccLimit > (tabletNode?.memory ?? 0)
-            ? 'The sum of the memory limits exceeds the allowed values'
+            ? i18n('alert_memory-limits-exceeded')
             : undefined;
 
     const {rpc_proxy_count = 0, tablet_node_count = 0} = resources;
@@ -699,7 +691,7 @@ function validateFormValues(
     const violatedResources = [];
 
     if (requiredCpu > quota?.vcpu!) {
-        violatedResources.push(`${hammer.format.Number(requiredCpu / 1000)} cpu required`);
+        violatedResources.push(i18n('alert_cpu-required', {cpu: hammer.format.Number(requiredCpu / 1000)}));
     }
 
     const requiredMemory =
@@ -707,7 +699,7 @@ function validateFormValues(
         (resources.rpc_proxy_resource_guarantee?.memory ?? 0) * rpc_proxy_count;
 
     if (requiredMemory > quota?.memory!) {
-        violatedResources.push(`${hammer.format.Bytes(requiredMemory)} memory requried`);
+        violatedResources.push(i18n('alert_memory-required', {memory: hammer.format.Bytes(requiredMemory)}));
     }
 
     res.resources.info = violatedResources.length ? violatedResources.join(', ') : undefined;
