@@ -5,6 +5,7 @@ import keys_ from 'lodash/keys';
 import map_ from 'lodash/map';
 
 import {getBatchError} from '../../../../shared/utils/error';
+import i18n from './i18n';
 
 import hammer from '../../../common/hammer';
 import {
@@ -86,7 +87,7 @@ export function fetchTabletCellBundleEditor(bundleName: string): TabletCellBundl
                         results[2]?.error?.code === yt.codes.NODE_DOES_NOT_EXIST;
                     const error = getBatchError(
                         bundleControllerIsUnavailable ? [results[0]] : results,
-                        'Failed to get bundle edit data',
+                        i18n('alert_get-bundle-edit-data-error'),
                     );
 
                     if (error) {
@@ -97,7 +98,7 @@ export function fetchTabletCellBundleEditor(bundleName: string): TabletCellBundl
             {
                 toasterName: 'edit-bundle-data',
                 skipSuccessToast: true,
-                errorContent: 'Failed to load bundle details',
+                errorContent: i18n('alert_load-bundle-details-error'),
             },
         )
             .then((results) => {
@@ -160,8 +161,7 @@ export function fetchTabletCellBundleEditor(bundleName: string): TabletCellBundl
                     {
                         toasterName: 'bundle-controller-tablet-static-memory',
                         skipSuccessToast: true,
-                        errorContent:
-                            'BundleController: Cannot load tablet static memory of isntances',
+                        errorContent: i18n('alert_load-tablet-static-memory-error'),
                     },
                 ).then((nodesResults) => {
                     const keys = [
@@ -234,8 +234,8 @@ export function setBundleQuota(params: {
             ),
             {
                 toasterName: `edit_bundle_${bundleName}`,
-                successContent: `Set quota limit for ${resource}`,
-                errorContent: `Cannot set quota limit for ${resource}`,
+                successContent: i18n('alert_set-quota-limit-success', {resource}),
+                errorContent: i18n('alert_set-quota-limit-error', {resource}),
             },
         ).then(() => {
             dispatch(showTabletCellBundleEditor(bundleName));
@@ -262,9 +262,9 @@ export function setBundleEditorController(params: {
             } as any),
             {
                 toasterName: `edit_bundle_${bundleName}`,
-                successContent: `Set bundle edit data`,
+                successContent: i18n('alert_set-bundle-edit-data-success'),
                 batchType: 'v3',
-                errorTitle: 'Failed to set bundle edit data',
+                errorTitle: i18n('alert_set-bundle-edit-data-error'),
             },
         ).then(() => {
             dispatch(fetchTabletsBundles());
@@ -307,9 +307,9 @@ export function setBunndleAttributes(
             } as any),
             {
                 toasterName: `update-bundle_${bundle}`,
-                successContent: `${bundle} successfully updated`,
+                successContent: i18n('alert_bundle-updated-success', {bundle}),
                 batchType: 'v3',
-                errorTitle: 'Failed to edit bundle',
+                errorTitle: i18n('alert_edit-bundle-error'),
             },
         ).then(() => {
             dispatch(showTabletCellBundleEditor(bundle));

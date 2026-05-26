@@ -7,6 +7,7 @@ import {selectTabletsActiveBundleData} from '../../../store/selectors/tablet_cel
 import {NoContent} from '../../../components/NoContent';
 import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 
+import i18n from './i18n';
 import './BundleMonitorTab.scss';
 
 function BundleMonitorTab(props: {
@@ -23,8 +24,8 @@ function BundleMonitorTab(props: {
     if (!tablet_cell_bundle) {
         return (
             <NoContent
-                warning="You don't have any selected bundles"
-                hint="Please choose one to display charts"
+                warning={i18n('alert_no-selected-bundles')}
+                hint={i18n('context_choose-bundle')}
             />
         );
     }

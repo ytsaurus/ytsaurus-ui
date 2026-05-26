@@ -5,6 +5,7 @@ import {selectTabletsActiveBundle} from '../../../store/selectors/tablet_cell_bu
 import {isPoolAclAllowed} from '../../../store/selectors/scheduling/scheduling';
 import {NoContent} from '../../../components/NoContent';
 import {BundleAcl} from '../../../containers/ACL';
+import i18n from './i18n';
 
 export default function BundleAclTab({className}: {className: string}) {
     const activeBundle = useSelector(selectTabletsActiveBundle);
@@ -16,7 +17,7 @@ export default function BundleAclTab({className}: {className: string}) {
             ) : (
                 <NoContent
                     className={className}
-                    warning={"The cluster is not ready to work with bundle's ACL"}
+                    warning={i18n('alert_cluster-not-ready-for-acl')}
                 />
             )}
         </ErrorBoundary>

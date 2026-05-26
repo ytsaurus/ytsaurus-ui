@@ -4,6 +4,7 @@ import cn from 'bem-cn-lite';
 import filter_ from 'lodash/filter';
 
 import format from '../../../common/hammer/format';
+import i18n from './i18n';
 
 import DataTable, {type Column, type Settings} from '@gravity-ui/react-data-table';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
@@ -53,6 +54,9 @@ type ColumnRenderProps<T> = {
 const COLUMNS: Array<Column<RowData>> = [
     {
         name: 'Address',
+        get header() {
+            return i18n('field_address');
+        },
         render: ({row}) => {
             const {url, address} = row;
             return (
@@ -75,13 +79,18 @@ const COLUMNS: Array<Column<RowData>> = [
     },
     {
         name: 'Type',
+        get header() {
+            return i18n('field_type');
+        },
         render: renderType,
         sortable: false,
         width: 200,
     },
     {
         name: 'tablet_static_memory',
-        header: 'Tablet static memory',
+        get header() {
+            return i18n('field_tablet-static-memory');
+        },
         render: ({row}) => {
             const {tablet_static_memory} = row;
             if (!tablet_static_memory) {
@@ -99,6 +108,9 @@ const COLUMNS: Array<Column<RowData>> = [
     },
     {
         name: 'Allocation request',
+        get header() {
+            return i18n('field_allocation-request');
+        },
         render: ({row}) => {
             const {hulkRequestPath} = row;
             if (!hulkRequestPath) {
@@ -128,11 +140,14 @@ const COLUMNS: Array<Column<RowData>> = [
     },
     {
         name: 'Allocation state',
+        get header() {
+            return i18n('field_allocation-state');
+        },
         render: ({row}) => {
             const {allocationState} = row;
             const tooltip =
                 allocationState === 'IN_PROGRESS'
-                    ? 'Please note that allocating new instances on MapReduce clusters can take several hours.'
+                    ? i18n('context_in-progress-allocation')
                     : undefined;
 
             return !allocationState ? (
@@ -180,7 +195,7 @@ function renderDeployUrl(row: RowData) {
     return !deployUrl ? null : (
         <Tooltip
             className={block('link-icon')}
-            content="Deploy"
+            content={i18n('action_deploy')}
             placement={['top-end', 'bottom-end']}
         >
             <ChartLink url={deployUrl} hideIcon>
@@ -198,7 +213,7 @@ function renderNannyUrl(row: RowData) {
     return (
         <Tooltip
             className={block('link-icon')}
-            content="Nanny"
+            content={'Nanny'}
             placement={['top-end', 'bottom-end']}
         >
             <ChartLink url={nannyUrl} hideIcon>
@@ -252,7 +267,7 @@ export function CellsBundleController({items, hideColumns}: CellsBundleControlle
                             size="m"
                             type="text"
                             value={filter}
-                            placeholder="Enter address..."
+                            placeholder={i18n('field_filter-placeholder')}
                             onChange={setFilter}
                             autofocus={false}
                             debounce={400}
@@ -275,7 +290,7 @@ export function CellsBundleController({items, hideColumns}: CellsBundleControlle
                         columns={columns}
                         data={data}
                         settings={TABLE_SETTINGS}
-                        emptyDataMessage="No items to show"
+                        emptyDataMessage={i18n('alert_no-items')}
                     />
                 }
             />

@@ -1,0 +1,14 @@
+{
+  "alert_bundles-load-error": "Tablet cell bundles cannot be loaded",
+  "alert_bundle-permissions-error": "Failed to get bundle permissions",
+  "alert_fetch-write-permissions-title": "Fetch write permissions",
+  "alert_get-bundle-edit-data-error": "Failed to get bundle edit data",
+  "alert_load-bundle-details-error": "Failed to load bundle details",
+  "alert_load-tablet-static-memory-error": "BundleController: Cannot load tablet static memory of instances",
+  "alert_set-quota-limit-success": "Set quota limit for {{resource}}",
+  "alert_set-quota-limit-error": "Cannot set quota limit for {{resource}}",
+  "alert_set-bundle-edit-data-success": "Set bundle edit data",
+  "alert_set-bundle-edit-data-error": "Failed to set bundle edit data",
+  "alert_bundle-updated-success": "{{bundle}} successfully updated",
+  "alert_edit-bundle-error": "Failed to edit bundle"
+}

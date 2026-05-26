@@ -8,6 +8,8 @@ import resetIcon from '../../../../../../assets/img/svg/reset-icon.svg';
 
 import {type DialogControlProps} from '../../../../../../containers/Dialog/Dialog.types';
 
+import i18n from './i18n';
+
 import './BundleTitle.scss';
 
 const block = cn('bundle-title');
@@ -31,7 +33,7 @@ export function BundleTitle({className, params, onReset}: BundleTitleProps) {
             ></BundleParamsList>
             <Button className={block('btn')} onClick={onReset}>
                 <Icon className={block('icon')} data={resetIcon} />
-                Reset to default
+                {i18n('action_reset-to-default')}
             </Button>
         </div>
     );

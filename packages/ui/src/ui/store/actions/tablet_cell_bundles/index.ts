@@ -37,6 +37,7 @@ import {
 
 import copy from 'copy-to-clipboard';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
+import i18n from './i18n';
 import {selectCluster, selectCurrentUserName} from '../../selectors/global';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {getAppBrowserHistory} from '../../../store/window-store';
@@ -120,7 +121,7 @@ export function fetchTabletsBundles(): TabletsBundlesThunkAction {
 
                 const [{output: cells}, {output: bundles}] = rest;
 
-                const error = getBatchError(rest, 'Tablet cell bundles cannot be loaded');
+                const error = getBatchError(rest, i18n('alert_bundles-load-error'));
                 if (error) {
                     throw error;
                 }
@@ -197,7 +198,7 @@ export function fetchWritePermissions(
                 .then((data) => {
                     const {error, outputs} = splitBatchResults<CheckPermissionResult>(
                         data,
-                        'Failed to get bundle permissions',
+                        i18n('alert_bundle-permissions-error'),
                     );
                     const writableByName = reduce_(
                         outputs,
@@ -218,7 +219,7 @@ export function fetchWritePermissions(
             {
                 toasterName: 'bundleWritePermissions',
                 skipSuccessToast: true,
-                errorTitle: 'Fetch write permissions',
+                errorTitle: i18n('alert_fetch-write-permissions-title'),
             },
         );
     };

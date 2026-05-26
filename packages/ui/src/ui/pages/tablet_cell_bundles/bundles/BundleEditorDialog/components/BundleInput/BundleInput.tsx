@@ -11,6 +11,7 @@ import {calcProgressProps} from '../../../../../../utils/utils';
 import {type ThemeThreshold} from '../../../../../../utils/progress';
 
 import './BundleInput.scss';
+import i18n from './i18n';
 
 const block = cn('yt-bundle-input');
 
@@ -20,7 +21,7 @@ function toRawValue(value?: string | number) {
 
 function errorFromValue(value: BundleInputProps['value']) {
     if (Number.isNaN(value)) {
-        return 'wrong format';
+        return i18n('alert_wrong-format');
     }
     return undefined;
 }
@@ -138,7 +139,7 @@ export function BundleInput(props: BundleInputProps) {
             </div>
             {calcProgress && (
                 <div className={block('row')}>
-                    <Tooltip content="Usage">
+                    <Tooltip content={i18n('context_usage')}>
                         <div className={block('left')}>
                             <Progress className={block('progress')} {...calcProgress} />
                         </div>
