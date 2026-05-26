@@ -202,7 +202,7 @@ test('Navigation: yql-v3-types', async ({page}) => {
     await test.step('Diable yql-v3-types', async () => {
         await table(page).settingsToggleVisibility();
         await table(page).settingsShowByName('YQL V3 types');
-        await table(page).setCheckboxValue('settings_yql-v3-types', false);
+        await table(page).setCheckboxValue('global::development::yqlTypes', false);
         await table(page).settingsToggleVisibility();
     });
 

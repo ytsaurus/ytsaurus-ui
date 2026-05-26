@@ -51,7 +51,6 @@ export const SettingName = {
     },
     DEVELOPMENT: {
         REDIRECT_TO_BETA: 'redirectToBetaV2',
-        YQL_TYPES: 'yqlTypes',
         REGULAR_USER_UI: 'regularUserUI',
     },
     MENU: {
