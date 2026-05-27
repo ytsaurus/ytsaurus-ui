@@ -2,7 +2,7 @@ import React, {type ComponentType, useEffect} from 'react';
 import {type ConnectedProps, connect} from 'react-redux';
 import {useSelector} from '../../../../store/redux-hooks';
 
-import {Alerts} from '../../../../components/Alerts/Alerts';
+import {Alerts} from '../../../../containers/Alerts/Alerts';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
