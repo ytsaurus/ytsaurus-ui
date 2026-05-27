@@ -29,6 +29,7 @@ import {makeNavigationLink} from '../../utils/app-url';
 
 import './TabletErrorsByBundle.scss';
 import {TabletErrorsByBundleToolbar} from './TabletErrorsByBundleToolbar';
+import i18n from './i18n';
 
 const block = cn('yt-tablet-errors-by-bunlde');
 
@@ -80,7 +81,7 @@ function useTabletErrorsColumns(loading: boolean) {
                 name: 'path',
                 header: (
                     <ColumnHeader
-                        column="Path"
+                        column={i18n('field_path')}
                         loading={loading}
                         pageIndex={pageFilter}
                         pageCount={pageCount}
@@ -104,7 +105,7 @@ function useTabletErrorsColumns(loading: boolean) {
             },
             {
                 name: 'dataOfLastError',
-                header: <ColumnHeader column="Date of last error" />,
+                header: <ColumnHeader column={i18n('field_date-of-last-error')} />,
                 render({row}) {
                     return moment(row.last_error_timestamp * 1000).format('YYYY-MM-DD HH:mm:ss');
                 },
