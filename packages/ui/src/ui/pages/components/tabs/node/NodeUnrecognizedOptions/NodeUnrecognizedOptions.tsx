@@ -11,7 +11,7 @@ import {
     selectNodeUnrecognizedOptionsData,
     selectNodeUnrecognizedOptionsError,
 } from '../../../../../store/selectors/components/node/unrecognized-options';
-import {YTErrorBlock} from '../../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../../components/Block/Block';
 import {YsonWithScroll} from '../../../../../components/Yson/YsonWithScroll';
 import {getNodeUnrecognizedOptionsYsonSettings} from '../../../../../store/selectors/thor/unipika';
 import {YsonDownloadButton} from '../../../../../components/DownloadAttributesButton';

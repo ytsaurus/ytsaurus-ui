@@ -3,7 +3,7 @@ import sortedIndexOf_ from 'lodash/sortedIndexOf';
 import React, {useCallback, useMemo, useState} from 'react';
 import Button from '../../../../components/Button/Button';
 import {type FormApi, YTDFDialog} from '../../../../components/Dialog';
-import {YTErrorBlock} from '../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../components/Block/Block';
 import Link from '../../../../components/Link/Link';
 import {docsUrl, isIdmAclAvailable} from '../../../../config';
 import {uiSettings} from '../../../../config/ui-settings';

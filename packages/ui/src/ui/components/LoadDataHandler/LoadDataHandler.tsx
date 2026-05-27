@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {YTErrorBlock} from '../../components/Error/Error';
+import {YTErrorBlock} from '../../components/Block/Block';
 import hammer from '../../common/hammer';
 
 import {showErrorPopup} from '../../utils/utils';

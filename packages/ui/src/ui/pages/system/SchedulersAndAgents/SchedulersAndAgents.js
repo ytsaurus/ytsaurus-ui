@@ -17,7 +17,7 @@ import {
     getSystemSchedulersWithState,
 } from '../../../store/selectors/system/schedulers';
 import Scheduler from './Scheduler/Scheduler';
-import {YTAlertBlock} from '../../../components/Alert/Alert';
+import {YTErrorBlock} from '../../../components/Block/Block';
 
 import {loadSchedulersAndAgents} from '../../../store/actions/system';
 
@@ -145,10 +145,10 @@ class SchedulersAndAgents extends Component {
                         size={collapsibleSize}
                     >
                         {map_(alerts.schedulers, (alert) => (
-                            <YTAlertBlock key={alert.attributes.host} error={alert} />
+                            <YTErrorBlock key={alert.attributes.host} type="alert" error={alert} />
                         ))}
                         {map_(alerts.agents, (alert, index) => (
-                            <YTAlertBlock key={index} error={alert} />
+                            <YTErrorBlock key={index} type="alert" error={alert} />
                         ))}
 
                         <div className={b('schedulers-agents')}>

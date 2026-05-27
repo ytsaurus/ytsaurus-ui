@@ -9,7 +9,7 @@ import map_ from 'lodash/map';
 
 import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
 import {Loader} from '@gravity-ui/uikit';
-import {YTErrorBlock} from '../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../components/Block/Block';
 import Link from '../../../../components/Link/Link';
 import CollapsibleSection from '../../../../components/CollapsibleSection/CollapsibleSection';
 import {Secondary} from '@ytsaurus/components';

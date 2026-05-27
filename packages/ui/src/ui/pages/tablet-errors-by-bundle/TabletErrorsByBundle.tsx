@@ -11,7 +11,7 @@ import ColumnHeader from '../../components/ColumnHeader/ColumnHeader';
 import {DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR_DOUBLE_HEIGHT} from '../../components/DataTableYT/constants';
 import {type Column} from '@ytsaurus/components';
 import {DataTableYT} from '../../components/DataTableYT';
-import {YTErrorBlock} from '../../components/Error/Error';
+import {YTErrorBlock} from '../../components/Block/Block';
 import {
     selectTabletErrorsByBundleData,
     selectTabletErrorsByBundleError,

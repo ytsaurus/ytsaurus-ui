@@ -2,7 +2,7 @@ import {Flex, type FlexProps, Text} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {type YTError} from '../../../../../@types/types';
-import {YTErrorBlock} from '../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../components/Block/Block';
 import ErrorDetails from '../../../../components/ErrorDetails/ErrorDetails';
 import {ErrorToClipboardButton} from '../../../../components/ErrorToClipboardButton/ErrorToClipboardButton';
 import NavigationDescription from '../../../../pages/navigation/NavigationDescription/NavigationDescription';

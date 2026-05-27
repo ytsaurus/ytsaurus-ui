@@ -8,7 +8,7 @@ import keys_ from 'lodash/keys';
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
-import {YTErrorBlock} from '../../../components/Error/Error';
+import {YTErrorBlock} from '../../../components/Block/Block';
 import Modal from '../../../components/Modal/Modal';
 import Link from '../../../components/Link/Link';
 import {Yson} from '../../../components/Yson/Yson';

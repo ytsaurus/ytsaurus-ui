@@ -9,8 +9,7 @@ import {Loader, Text} from '@gravity-ui/uikit';
 import format from '../../../common/hammer/format';
 
 import {useUpdater} from '../../../hooks/use-updater';
-import {YTAlertBlock} from '../../../components/Alert/Alert';
-import {YTErrorBlock} from '../../../components/Error/Error';
+import {YTErrorBlock} from '../../../components/Block/Block';
 import Label from '../../../components/Label';
 import {OperationPool} from '../../../components/OperationPool/OperationPool';
 import {MetaTable, type MetaTableItem} from '@ytsaurus/components';
@@ -117,9 +116,9 @@ function ChytCliqueErrors() {
                 />
             ) : null}
             {health_reason ? (
-                <YTAlertBlock
-                    header="Health reason"
+                <YTErrorBlock
                     type="alert"
+                    header="Health reason"
                     message={health_reason}
                     bottomMargin
                 />

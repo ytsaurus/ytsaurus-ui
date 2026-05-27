@@ -18,7 +18,7 @@ import {ClipboardButton} from '@ytsaurus/components';
 import cn from 'bem-cn-lite';
 
 import {Yson} from '../../components/Yson/Yson';
-import {YTErrorBlock} from '../../components/Error/Error';
+import {YTErrorBlock} from '../../components/Block/Block';
 import {type YsonSettings, getPreviewCellYsonSettings} from '../../store/selectors/thor/unipika';
 import {closeCellPreviewAndCancelRequest} from '../../store/actions/modals/cell-preview';
 import {isMediaTag} from '../../utils/yql-types';

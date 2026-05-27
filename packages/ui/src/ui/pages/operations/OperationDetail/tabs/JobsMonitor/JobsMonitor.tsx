@@ -1,7 +1,7 @@
 import React from 'react';
 import {useSelector} from '../../../../../store/redux-hooks';
 
-import {YTErrorBlock} from '../../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../../components/Block/Block';
 import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
 import Loader from '../../../../../components/Loader/Loader';
 import {NoContent} from '../../../../../components/NoContent';

@@ -14,7 +14,7 @@ import {type PreparedRole} from '../../../utils/acl';
 import {type YTError} from '../../../types';
 
 import Button from '../../../components/Button/Button';
-import {YTErrorBlock} from '../../../components/Error/Error';
+import {YTErrorBlock} from '../../../components/Block/Block';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
 

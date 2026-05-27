@@ -4,8 +4,7 @@ import {type ConnectedProps, connect} from 'react-redux';
 
 import {hideErrorModal} from '../../store/actions/modals/errors';
 import {getModalErrors} from '../../store/selectors/modals/errors';
-import {YTAlertBlock} from '../../components/Alert/Alert';
-import {YTErrorBlock} from '../../components/Error/Error';
+import {YTErrorBlock} from '../../components/Block/Block';
 import {type RootState} from '../../store/reducers';
 import {type ErrorInfo} from '../../store/reducers/modals/errors';
 import i18n from './i18n';
@@ -25,14 +24,13 @@ export function ModalError({id, data, hide, children}: MEProps) {
     const {error, hideOopsMsg, type, helpURL, disableLogger, defaultExpandedCount} = data;
 
     const isAlert = type === 'alert';
-    const ErrorComponent = isAlert ? YTAlertBlock : YTErrorBlock;
 
     return (
         <Dialog open={true} onClose={close}>
             <Dialog.Header caption={isAlert ? i18n('title_alert') : i18n('title_error')} />
             <Dialog.Divider />
             <Dialog.Body>
-                <ErrorComponent
+                <YTErrorBlock
                     type={isAlert ? 'alert' : 'error'}
                     message={!hideOopsMsg && i18n('alert_something-went-wrong')}
                     error={error}

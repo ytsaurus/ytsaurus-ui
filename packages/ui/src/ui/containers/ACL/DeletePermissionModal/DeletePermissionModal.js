@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import {Checkbox} from '@gravity-ui/uikit';
 
-import {YTErrorBlock} from '../../../components/Error/Error';
+import {YTErrorBlock} from '../../../components/Block/Block';
 import Label from '../../../components/Label';
 import {MetaTable} from '@ytsaurus/components';
 import Modal from '../../../components/Modal/Modal';
