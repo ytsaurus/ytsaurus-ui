@@ -11,7 +11,7 @@ import {
 } from '@gravity-ui/uikit';
 
 import ModalErrors from '../../containers/ModalErrors/ModalErrors';
-import AttributesModal from '../../components/AttributesModal/AttributesModal';
+import AttributesModal from '../../containers/AttributesModal/AttributesModal';
 import {MaxContentWidth} from '../../containers/MaxContentWidth';
 import {ClustersMenuLazy} from '../../containers/ClustersMenu/lazy';
 import {ClusterPageWrapperLazy} from '../../containers/ClusterPageWrapper/lazy';
