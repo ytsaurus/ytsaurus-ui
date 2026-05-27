@@ -2,6 +2,7 @@ import {type ThunkAction} from 'redux-thunk';
 import {type RootState} from '../../reducers';
 import axios from 'axios';
 import {type Action} from 'redux';
+import {v4 as uuidv4} from 'uuid';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {
     type DirectoryItem,
@@ -23,7 +24,6 @@ import {
 import {selectVcs, selectVcsConfig} from '../../selectors/query-tracker/vcs';
 import {selectQueryFiles} from '../../selectors/query-tracker/query';
 import {updateQueryDraft} from './query';
-import guid from '../../../common/hammer/guid';
 import {selectFileEditor} from '../../selectors/query-tracker/queryFilesForm';
 import {setFileEditor} from '../../reducers/query-tracker/queryFilesFormSlice';
 import {type VcsRepository} from '../../../../shared/vcs';
@@ -268,7 +268,7 @@ export const addFileToQuery =
 
         const editor = selectFileEditor(state);
         const files = selectQueryFiles(state);
-        const id = guid();
+        const id = uuidv4();
         dispatch(
             updateQueryDraft({
                 files: [

@@ -1,12 +1,12 @@
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
+import {v4 as uuidv4} from 'uuid';
 
 import moment from 'moment';
 
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import ypath from '../../../common/thor/ypath';
-import hammer from '../../../common/hammer';
 import {
     APPLY_FILTER_PRESET,
     DEFAULT_PRESET_SETTING,
@@ -305,7 +305,7 @@ function selectActualFilters(state) {
 export function saveFilterPreset(name, isDefault) {
     return (dispatch, getState) => {
         let promise = Promise.resolve();
-        const presetId = hammer.guid();
+        const presetId = uuidv4();
 
         if (isDefault) {
             promise = dispatch(setSetting(DEFAULT_PRESET_SETTING, NAMESPACES.OPERATION, presetId));

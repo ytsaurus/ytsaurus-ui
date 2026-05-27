@@ -1,5 +1,6 @@
 import {type ThunkAction} from 'redux-thunk';
 import {type Action} from 'redux';
+import {v4 as uuidv4} from 'uuid';
 import {type RootState} from '../../reducers';
 import {
     selectAiChatModel,
@@ -127,6 +128,7 @@ export const sendQuestion =
 
             if ('type' in event && event.type === 'response.output_item.done' && event.item) {
                 const messageItem = createMessageItem(event.item, fullText);
+
                 if (messageItem) {
                     dispatch(addConversationItem(messageItem));
                     dispatch(clearCurrentAnswer());
@@ -158,7 +160,7 @@ export const sendQuestion =
         if (question) {
             dispatch(
                 addConversationItem({
-                    id: '',
+                    id: uuidv4(),
                     type: 'question',
                     value: question,
                 }),

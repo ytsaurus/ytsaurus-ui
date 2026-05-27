@@ -1,6 +1,7 @@
 import React, {type FC, useCallback} from 'react';
 import {Button, Icon} from '@gravity-ui/uikit';
 import LinkIcon from '@gravity-ui/icons/svgs/link.svg';
+import {v4 as uuidv4} from 'uuid';
 import {AddFileButton} from '../AddFileButton';
 import './ActionsWithAddForm.scss';
 import cn from 'bem-cn-lite';
@@ -8,7 +9,6 @@ import {type QueryFile} from '../../../../types/query-tracker/api';
 import FilePlusIcon from '@gravity-ui/icons/svgs/file-plus.svg';
 import {type QueryFileAddForm} from '../../../../store/reducers/query-tracker/queryFilesFormSlice';
 import {FileItemForm, type FileValidator} from '../FileItemForm';
-import guid from '../../../../common/hammer/guid';
 import i18n from './i18n';
 
 const block = cn('files-add-form');
@@ -37,7 +37,7 @@ export const ActionsWithAddForm: FC<Props> = ({
 
     const handleLoadFile = useCallback(
         ({name, content}: QueryFile) => {
-            onAddFile({name, content, type: 'raw_inline_data', id: guid()});
+            onAddFile({name, content, type: 'raw_inline_data', id: uuidv4()});
         },
         [onAddFile],
     );
@@ -62,7 +62,7 @@ export const ActionsWithAddForm: FC<Props> = ({
                         name: '',
                         content: '',
                         type: addFormType!,
-                        id: guid(),
+                        id: uuidv4(),
                     }}
                     onCancel={handelCloseForm}
                     onSave={handleAddLinkOrFile}
