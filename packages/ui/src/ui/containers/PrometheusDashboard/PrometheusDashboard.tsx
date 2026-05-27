@@ -18,7 +18,7 @@ import {getDashboardPath, makeDiscoverValuesKey} from '../../../shared/prometheu
 import {type YTError} from '../../../@types/types';
 
 import {getConfigData} from '../../config/ui-settings';
-import {YTErrorBlock} from '../../components/Block/Block';
+import {YTErrorBlock} from '../../containers/Block/Block';
 import {StickyContainer} from '../../components/StickyContainer/StickyContainer';
 import {YTTimeline} from '../../components/Timeline';
 import {Toolbar, type ToolbarItemToWrap} from '../../components/WithStickyToolbar/Toolbar/Toolbar';

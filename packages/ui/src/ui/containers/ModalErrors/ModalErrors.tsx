@@ -4,7 +4,7 @@ import {type ConnectedProps, connect} from 'react-redux';
 
 import {hideErrorModal} from '../../store/actions/modals/errors';
 import {getModalErrors} from '../../store/selectors/modals/errors';
-import {YTErrorBlock} from '../../components/Block/Block';
+import {YTErrorBlock} from '../../containers/Block/Block';
 import {type RootState} from '../../store/reducers';
 import {type ErrorInfo} from '../../store/reducers/modals/errors';
 import i18n from './i18n';

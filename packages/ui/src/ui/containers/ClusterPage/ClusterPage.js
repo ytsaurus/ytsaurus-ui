@@ -32,7 +32,7 @@ import PageTracker from './PageTracker';
 import {PageHeadByCluster} from '../../components/PageHead/PageHead';
 
 import FlexSplitPane from '../../components/FlexSplitPane/FlexSplitPane';
-import {YTErrorBlock} from '../../components/Block/Block';
+import {YTErrorBlock} from '../../containers/Block/Block';
 import {ElementWidthAsCssVariable} from '../../components/ElementWidthAsCssVariable/ElementWidthAsCssVariable';
 import {HandleMaintenance} from '../../containers/MaintenancePage/HandleMaintenance';
 import PreloadError from '../../containers/PreloadError/PreloadError';

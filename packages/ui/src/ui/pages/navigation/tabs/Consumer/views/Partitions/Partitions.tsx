@@ -7,7 +7,7 @@ import {type Column, type Settings} from '@gravity-ui/react-data-table';
 
 import format from '../../../../../../common/hammer/format';
 import {DataTableYT} from '../../../../../../components/DataTableYT';
-import {YTErrorBlock} from '../../../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../../../containers/Block/Block';
 import {NoContent} from '../../../../../../components/NoContent';
 import {CONSUMER_RATE_MODE} from '../../../../../../constants/navigation/tabs/consumer';
 import {

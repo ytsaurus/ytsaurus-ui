@@ -15,7 +15,7 @@ import useResizeObserver from '../../hooks/useResizeObserver';
 import './ChatBody.scss';
 import cn from 'bem-cn-lite';
 import {Flex, Loader} from '@gravity-ui/uikit';
-import {YTErrorBlock} from '../../components/Block/Block';
+import {YTErrorBlock} from '../../containers/Block/Block';
 
 const block = cn('yt-ai-chat-body');
 

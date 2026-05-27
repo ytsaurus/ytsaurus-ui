@@ -26,7 +26,7 @@ import AccountsTotal from './AccountsTotal';
 import CollapsibleSection from '../../../../components/CollapsibleSection/CollapsibleSection';
 import withStickyHead from '../../../../components/ElementsTable/hocs/withStickyHead';
 import withStickyFooter from '../../../../components/ElementsTable/hocs/withStickyFooter';
-import {YTErrorBlock} from '../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../containers/Block/Block';
 import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
 import Filter from '../../../../components/Filter/Filter';
 import AccountLink from '../../AccountLink';

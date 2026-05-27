@@ -15,7 +15,7 @@ import NodeStorage, {
 import {selectNode} from '../../../../../store/selectors/components/node/node';
 
 import './NodeGeneralTab.scss';
-import {YTErrorBlock} from '../../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../../containers/Block/Block';
 
 const block = cn('node-general');
 

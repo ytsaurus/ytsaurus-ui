@@ -17,7 +17,7 @@ import {OperationTimeline} from './OperationTimeline';
 import {useUpdater} from '../../../../../hooks/use-updater';
 import WithStickyToolbar from '../../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {MAX_JOBS_COUNT} from './constants';
-import {YTErrorBlock} from '../../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../../containers/Block/Block';
 import i18n from './i18n';
 
 const block = cn('yt-jobs-timeline');

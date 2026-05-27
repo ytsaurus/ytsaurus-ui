@@ -9,7 +9,7 @@ import pick_ from 'lodash/pick';
 import pickBy_ from 'lodash/pickBy';
 
 import {type DialogField, type FormApi, YTDFDialog} from '../../../../components/Dialog';
-import {YTErrorBlock} from '../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../containers/Block/Block';
 
 import {closeEditModal, editPool} from '../../../../store/actions/scheduling/scheduling';
 import {

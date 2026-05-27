@@ -3,7 +3,7 @@ import {ClipboardButton, type ClipboardButtonProps} from '@gravity-ui/uikit';
 
 import {prettyPrintSafe} from '../../utils/unipika';
 
-import {type YTErrorBlockProps} from '../../components/Block/Block';
+import {type YTErrorBlockProps} from '../../containers/Block/Block';
 import {useErrorYsonSettings} from '../../hooks/useErrorYsonSettings';
 import i18n from './i18n';
 

@@ -13,7 +13,7 @@ import Icon from '../../../../../components/Icon/Icon';
 import Link from '../../../../../components/Link/Link';
 import Label from '../../../../../components/Label';
 import Button from '../../../../../components/Button/Button';
-import {YTErrorBlock} from '../../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../../containers/Block/Block';
 import {Template} from '../../../../../components/MetaTable/templates/Template';
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
 

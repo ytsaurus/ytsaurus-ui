@@ -7,7 +7,7 @@ import forEach_ from 'lodash/forEach';
 
 import {Progress} from '@gravity-ui/uikit';
 
-import {YTErrorBlock} from '../../../components/Block/Block';
+import {YTErrorBlock} from '../../../containers/Block/Block';
 import hammer from '../../../common/hammer';
 import {getMediumList} from '../../../store/selectors/thor';
 import {loadSystemResources} from '../../../store/actions/system/resources';

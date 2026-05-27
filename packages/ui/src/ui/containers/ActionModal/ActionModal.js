@@ -6,7 +6,7 @@ import cn from 'bem-cn-lite';
 import values_ from 'lodash/values';
 
 import Modal from '../../components/Modal/Modal';
-import {YTErrorBlock} from '../../components/Block/Block';
+import {YTErrorBlock} from '../../containers/Block/Block';
 import Radiobox from '../../components/Radiobox/Radiobox';
 import SimpleModal from '../../components/Modal/SimpleModal';
 import TimeInput from '../../components/TimeInput/TimeInput';

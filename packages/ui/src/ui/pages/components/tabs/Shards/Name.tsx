@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import {TextInput} from '@gravity-ui/uikit';
 import Button from '../../../../components/Button/Button';
 import Modal from '../../../../components/Modal/Modal';
-import {YTErrorBlock} from '../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../containers/Block/Block';
 import Icon from '../../../../components/Icon/Icon';
 
 import {

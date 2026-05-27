@@ -7,7 +7,7 @@ import Button from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
 import {type FormApi, YTDFDialog} from '../../../../components/Dialog';
 import {type YTError} from '../../../../types';
-import {YTErrorBlock} from '../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../containers/Block/Block';
 
 import './ReplicatedTableSettings.scss';
 const block = cn('replicated-table-settings');

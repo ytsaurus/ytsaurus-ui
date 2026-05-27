@@ -10,7 +10,7 @@ import {WidgetText} from '../../../../../../pages/dashboard2/Dashboard/component
 import {WidgetNoItemsTextFallback} from '../../../../../../pages/dashboard2/Dashboard/components/WidgetFallback/WidgetFallback';
 
 import {MapNodeIcon} from '../../../../../../components/MapNodeIcon/MapNodeIcon';
-import {YTErrorBlock} from '../../../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../../../containers/Block/Block';
 import Link from '../../../../../../components/Link/Link';
 
 import {Page} from '../../../../../../../shared/constants/settings';

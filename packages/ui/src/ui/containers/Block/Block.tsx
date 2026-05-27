@@ -11,12 +11,12 @@ import {type YTError, type YTErrorRaw} from '../../../@types/types';
 
 import ErrorDetails, {type ErrorDetailsProps} from '../../components/ErrorDetails/ErrorDetails';
 import HelpLink from '../../components/HelpLink/HelpLink';
-import FormattedText from '../formatters/FormattedText';
+import FormattedText from '../../components/formatters/FormattedText';
 import {rumLogError} from '../../rum/rum-counter';
 import {ErrorToClipboardButton} from '../../components/ErrorToClipboardButton/ErrorToClipboardButton';
 import {showErrorPopup} from '../../utils/utils';
 
-import Icon from '../Icon/Icon';
+import Icon from '../../components/Icon/Icon';
 
 import i18n from './i18n';
 

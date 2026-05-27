@@ -9,7 +9,7 @@ import {Loader, Text} from '@gravity-ui/uikit';
 import format from '../../../common/hammer/format';
 
 import {useUpdater} from '../../../hooks/use-updater';
-import {YTErrorBlock} from '../../../components/Block/Block';
+import {YTErrorBlock} from '../../../containers/Block/Block';
 import Label from '../../../components/Label';
 import {OperationPool} from '../../../components/OperationPool/OperationPool';
 import {MetaTable, type MetaTableItem} from '@ytsaurus/components';

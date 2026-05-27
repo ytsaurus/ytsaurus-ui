@@ -4,7 +4,7 @@ import {type AxiosError} from 'axios';
 import {Table, useTable} from '@gravity-ui/table';
 import {type ColumnDef} from '@gravity-ui/table/tanstack';
 
-import {YTErrorBlock} from '../../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../../containers/Block/Block';
 
 import {type YTError} from '../../../../../../@types/types';
 

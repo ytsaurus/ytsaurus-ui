@@ -9,7 +9,7 @@ import Modal from '../../../../../components/Modal/Modal';
 
 import {selectPath} from '../../../../../store/selectors/navigation';
 import {type ConnectedProps, connect} from 'react-redux';
-import {YTErrorBlock} from '../../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../../containers/Block/Block';
 import {YTDFDialog} from '../../../../../components/Dialog';
 import {Alert} from '@gravity-ui/uikit';
 

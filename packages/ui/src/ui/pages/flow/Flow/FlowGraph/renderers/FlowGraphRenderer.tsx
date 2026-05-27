@@ -6,7 +6,7 @@ import {type IconData} from '@gravity-ui/uikit';
 
 import {type FlowMessageType, type FlowNodeStatusType} from '../../../../../../shared/yt-types';
 import format from '../../../../../common/hammer/format';
-import {YTErrorBlock} from '../../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../../containers/Block/Block';
 import {
     ClickableText,
     type ClickableTextProps,

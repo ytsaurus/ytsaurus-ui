@@ -7,7 +7,7 @@ import AlertEvents from '../../../../../../components/AlertEvents/AlertEvents';
 import {Description} from '../../../../../../pages/operations/OperationDetail/tabs/details/Description';
 import CollapsibleSection from '../../../../../../components/CollapsibleSection/CollapsibleSection';
 import Button from '../../../../../../components/Button/Button';
-import {YTErrorBlock} from '../../../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../../../containers/Block/Block';
 import Icon from '../../../../../../components/Icon/Icon';
 import {Flex, Switch} from '@gravity-ui/uikit';
 

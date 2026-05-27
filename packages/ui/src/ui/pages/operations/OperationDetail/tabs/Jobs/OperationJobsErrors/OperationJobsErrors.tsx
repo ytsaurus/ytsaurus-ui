@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 
 import {useSelector} from '../../../../../../store/redux-hooks';
 import {selectJobsErrors} from '../../../../../../store/selectors/operations/jobs';
-import {YTErrorBlock} from '../../../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../../../containers/Block/Block';
 
 import './OperationJobsErrors.scss';
 

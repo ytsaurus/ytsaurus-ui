@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import {Button} from '@gravity-ui/uikit';
 
-import {YTErrorBlock} from '../../../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../../../containers/Block/Block';
 import ConfirmMessage from '../../../../../../pages/accounts/tabs/general/Editor/ConfirmMessage';
 
 import {type CypressNode} from '../../../../../../../shared/yt-types';
