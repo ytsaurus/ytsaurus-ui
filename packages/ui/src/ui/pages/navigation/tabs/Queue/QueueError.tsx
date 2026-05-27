@@ -2,7 +2,7 @@ import React from 'react';
 import {useSelector} from '../../../../store/redux-hooks';
 import moment from 'moment';
 
-import {YTErrorBlock, type YTErrorBlockProps} from '../../../../components/Block/Block';
+import {YTErrorBlock, type YTErrorBlockProps} from '../../../../containers/Block/Block';
 import {Info} from '../../../../components/Info/Info';
 import {getErrorWithCode} from '../../../../utils/errors';
 import {type YTError} from '../../../../types';

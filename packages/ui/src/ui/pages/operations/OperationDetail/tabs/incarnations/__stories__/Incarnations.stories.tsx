@@ -5,7 +5,7 @@ import {Alert} from '@gravity-ui/uikit';
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
-import {YTErrorBlock} from '../../../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../../../containers/Block/Block';
 
 import {IncarnationsCountTemplate} from '../IncarnationsCount';
 import Incarnations, {type IncarnationProps, IncarnationsTemplate} from '../Incarnations';

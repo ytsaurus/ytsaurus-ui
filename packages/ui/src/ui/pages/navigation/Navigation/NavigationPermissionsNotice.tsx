@@ -8,7 +8,7 @@ import {
     selectNavigationPathAccount,
 } from '../../../store/selectors/navigation/navigation';
 import {useSelector} from '../../../store/redux-hooks';
-import {YTErrorBlock} from '../../../components/Block/Block';
+import {YTErrorBlock} from '../../../containers/Block/Block';
 import {selectPath} from '../../../store/selectors/navigation';
 import {genAccountsAclLink} from '../../../utils/accounts/accounts';
 import {selectCluster} from '../../../store/selectors/global';

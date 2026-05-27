@@ -9,7 +9,7 @@ import {
     selectTargetQueue,
     selectTargetQueueError,
 } from '../../../../../store/selectors/navigation/tabs/consumer';
-import {YTErrorBlock} from '../../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../../containers/Block/Block';
 import Icon from '../../../../../components/Icon/Icon';
 import Link from '../../../../../components/Link/Link';
 import {findCommonPathParent, genNavigationUrl} from '../../../../../utils/navigation/navigation';

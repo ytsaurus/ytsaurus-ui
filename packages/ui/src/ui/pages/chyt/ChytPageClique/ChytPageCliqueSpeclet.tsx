@@ -4,7 +4,7 @@ import reduce_ from 'lodash/reduce';
 import cn from 'bem-cn-lite';
 
 import Button from '../../../components/Button/Button';
-import {YTErrorBlock} from '../../../components/Block/Block';
+import {YTErrorBlock} from '../../../containers/Block/Block';
 import Icon from '../../../components/Icon/Icon';
 import {YTDFDialog} from '../../../components/Dialog';
 import {YsonWithScroll} from '../../../components/Yson/YsonWithScroll';

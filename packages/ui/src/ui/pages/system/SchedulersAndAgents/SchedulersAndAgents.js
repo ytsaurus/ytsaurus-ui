@@ -17,7 +17,7 @@ import {
     getSystemSchedulersWithState,
 } from '../../../store/selectors/system/schedulers';
 import Scheduler from './Scheduler/Scheduler';
-import {YTErrorBlock} from '../../../components/Block/Block';
+import {YTErrorBlock} from '../../../containers/Block/Block';
 
 import {loadSchedulersAndAgents} from '../../../store/actions/system';
 

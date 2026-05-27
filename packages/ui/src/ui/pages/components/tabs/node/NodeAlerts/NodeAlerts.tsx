@@ -6,7 +6,7 @@ import cn from 'bem-cn-lite';
 
 import {selectNodeAlerts} from '../../../../../store/selectors/components/node/node';
 import {useSelector} from '../../../../../store/redux-hooks';
-import {YTErrorBlock} from '../../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../../containers/Block/Block';
 
 import './NodeAlerts.scss';
 

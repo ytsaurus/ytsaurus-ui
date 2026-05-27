@@ -6,7 +6,7 @@ import {Flex, Text} from '@gravity-ui/uikit';
 import {type YTError} from '../../types';
 
 import ypath from '../../common/thor/ypath';
-import {type YTErrorBlockProps} from '../../components/Block/Block';
+import {type YTErrorBlockProps} from '../../containers/Block/Block';
 import {ClickableText} from '../../components/ClickableText/ClickableText';
 import {showErrorPopup, unescapeSlashX} from '../../utils/utils';
 import i18n from './i18n';

@@ -10,7 +10,7 @@ import {DialogWrapper as Dialog} from '../../../../components/DialogWrapper/Dial
 import hammer from '../../../../common/hammer';
 import ypath from '../../../../common/thor/ypath';
 import Button from '../../../../components/Button/Button';
-import {YTErrorBlock} from '../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../containers/Block/Block';
 import Icon from '../../../../components/Icon/Icon';
 import QuotaEditorWithHide from '../../../../components/QuotaEditor/QuotaEditorWithHide';
 import Tabs from '../../../../components/Tabs/Tabs';

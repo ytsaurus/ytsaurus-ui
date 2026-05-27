@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {YTErrorBlock} from '../../components/Block/Block';
+import {YTErrorBlock} from '../../containers/Block/Block';
 import CompactError from '../CompactError/CompactError';
 import {YTErrorInline} from '../../containers/YTErrorInline/YTErrorInline';
 

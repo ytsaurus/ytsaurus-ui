@@ -9,7 +9,7 @@ import {DialogWrapper as Dialog} from '../../components/DialogWrapper/DialogWrap
 import {selectExecuteBatchState} from '../../store/selectors/execute-batch';
 import {type ExecuteBatchStateItem} from '../../store/reducers/execute-batch';
 
-import {YTErrorBlock} from '../../components/Block/Block';
+import {YTErrorBlock} from '../../containers/Block/Block';
 import {rumLogError} from '../../rum/rum-counter';
 import {
     abortExecuteBatch,

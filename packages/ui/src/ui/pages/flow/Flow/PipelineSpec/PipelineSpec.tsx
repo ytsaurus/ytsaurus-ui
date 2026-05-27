@@ -29,7 +29,7 @@ import {YsonDownloadButton} from '../../../../components/DownloadAttributesButto
 import {YsonWithScroll} from '../../../../components/Yson/YsonWithScroll';
 import Icon from '../../../../components/Icon/Icon';
 import {YTDFDialog, makeErrorFields} from '../../../../components/Dialog';
-import {YTErrorBlock} from '../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../containers/Block/Block';
 import Loader from '../../../../components/Loader/Loader';
 import {type UnipikaSettings} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 import UIFactory from '../../../../UIFactory';

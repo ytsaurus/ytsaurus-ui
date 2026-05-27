@@ -6,7 +6,7 @@ import {Loader} from '@gravity-ui/uikit';
 
 import {YsonWithScroll} from '../../../../components/Yson/YsonWithScroll';
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
-import {YTErrorBlock} from '../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../containers/Block/Block';
 
 import {
     selectAttributesPath,

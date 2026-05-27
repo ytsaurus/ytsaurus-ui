@@ -8,7 +8,7 @@ import CollapsibleSection, {
     type CollapsibleSectionProps,
 } from '../../components/CollapsibleSection/CollapsibleSection';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
-import {YTErrorBlock} from '../../components/Block/Block';
+import {YTErrorBlock} from '../../containers/Block/Block';
 import {UI_COLLAPSIBLE_SIZE} from '../../constants/global/index';
 import {type YTError} from '../../types/index';
 import i18n from './i18n';

@@ -7,7 +7,7 @@ import {compose} from 'redux';
 import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import PathEditor from '../../../../containers/PathEditor/PathEditor';
 import Modal from '../../../../components/Modal/Modal';
-import {YTErrorBlock} from '../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../containers/Block/Block';
 
 import {hideError, setPath} from '../../../../store/actions/navigation/modals/path-editing-popup';
 import {getOnlyFolders} from '../../../../utils/navigation/path-editing-popup';

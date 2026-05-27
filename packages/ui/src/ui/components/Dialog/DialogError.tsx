@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 import {type FORM_ERROR as FormErrorType} from './index';
 
 import {type FIX_MY_TYPE, type YTError} from '../../types';
-import {YTErrorBlock} from '../../components/Block/Block';
+import {YTErrorBlock} from '../../containers/Block/Block';
 
 import compact_ from 'lodash/compact';
 import map_ from 'lodash/map';

@@ -7,7 +7,7 @@ import cn from 'bem-cn-lite';
 
 import {type YTError} from '../../../@types/types';
 
-import {YTErrorBlock} from '../../components/Block/Block';
+import {YTErrorBlock} from '../../containers/Block/Block';
 
 import {ROOT_ACCOUNT_NAME} from '../../constants/accounts/accounts';
 import {selectEditableAccountParentSuggests} from '../../store/selectors/accounts/accounts';

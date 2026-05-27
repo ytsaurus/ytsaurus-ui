@@ -1,7 +1,7 @@
 import React from 'react';
 import {useSelector} from '../../../../../store/redux-hooks';
 
-import {YTErrorBlock} from '../../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../../containers/Block/Block';
 import {getSchedulingOperationsError} from '../../../../../store/selectors/scheduling/expanded-pools';
 
 function SchedulingOperationsError() {

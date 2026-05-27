@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {YTErrorBlock} from '../../../../../components/Block/Block';
+import {YTErrorBlock} from '../../../../../containers/Block/Block';
 import Loader from '../../../../../components/Loader/Loader';
 import {YsonWithScroll} from '../../../../../components/Yson/YsonWithScroll';
 import {YTApiId} from '../../../../../rum/rum-wrap-api';
