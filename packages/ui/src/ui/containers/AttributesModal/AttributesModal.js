@@ -7,11 +7,11 @@ import unipika from '../../common/thor/unipika';
 import FormattedText from '../../components/formatters/FormattedText';
 import SimpleModal from '../../components/Modal/SimpleModal';
 import {YTErrorBlock} from '../../components/Block/Block';
-import {Yson, YsonSettingsPropTypes} from '../Yson/Yson';
+import {Yson, YsonSettingsPropTypes} from '../../components/Yson/Yson';
 
 import {closeAttributesModal} from '../../store/actions/modals/attributes-modal';
-import {DownloadFileButton} from '../DownloadAttributesButton';
-import {attributesToString} from '../DownloadAttributesButton/helpers/attributesToString';
+import {DownloadFileButton} from '../../components/DownloadAttributesButton';
+import {attributesToString} from '../../components/DownloadAttributesButton/helpers/attributesToString';
 
 import './AttributesModal.scss';
 
