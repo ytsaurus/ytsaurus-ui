@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 
 import {ClipboardButton} from '@ytsaurus/components';
 import SimpleModal from '../../../../components/Modal/SimpleModal';
-import {YTErrorBlock} from '../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../components/Block/Block';
 import Icon from '../../../../components/Icon/Icon';
 import Link from '../../../../components/Link/Link';
 

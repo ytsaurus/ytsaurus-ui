@@ -18,7 +18,7 @@ import {
     selectTabletsActiveBundleData,
     selectTabletsError,
 } from '../../store/selectors/tablet_cell_bundles/index';
-import {YTErrorBlock} from '../../components/Error/Error';
+import {YTErrorBlock} from '../../components/Block/Block';
 import Bundles from './bundles/Bundles';
 
 import './TabletCellBundles.scss';

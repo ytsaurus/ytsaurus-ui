@@ -1,5 +1,5 @@
 import React from 'react';
-import {YTErrorBlock} from '../../../components/Error/Error';
+import {YTErrorBlock} from '../../../components/Block/Block';
 import {AnswerBody} from './AnswerBody';
 import {McpSearchAnswer} from './McpSearchAnswer';
 import {McpSchemaAnswer} from './McpSchemaAnswer';

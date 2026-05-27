@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import moment from 'moment';
 
-import {YTErrorBlock} from '../../../components/Error/Error';
+import {YTErrorBlock} from '../../../components/Block/Block';
 
 import OperationsListTable from './OperationsListTable/OperationsListTable';
 import OperationsListToolbar from './OperationsListToolbar/OperationsListToolbar';

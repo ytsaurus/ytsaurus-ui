@@ -11,7 +11,7 @@ import {
     selectNodeMemoryViewMode,
 } from '../../../../../store/selectors/components/node/memory';
 import {useUpdater} from '../../../../../hooks/use-updater';
-import {YTErrorBlock} from '../../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../../components/Block/Block';
 import NodeBundlesTotal from '../NodeBundlesTotal/NodeBundlesTotal';
 import NodeMemoryUsageToolbar from './NodeMemoryUsageToolbar';
 

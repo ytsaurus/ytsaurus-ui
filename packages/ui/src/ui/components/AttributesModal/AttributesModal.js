@@ -6,7 +6,7 @@ import unipika from '../../common/thor/unipika';
 
 import FormattedText from '../../components/formatters/FormattedText';
 import SimpleModal from '../../components/Modal/SimpleModal';
-import {YTErrorBlock} from '../../components/Error/Error';
+import {YTErrorBlock} from '../../components/Block/Block';
 import {Yson, YsonSettingsPropTypes} from '../Yson/Yson';
 
 import {closeAttributesModal} from '../../store/actions/modals/attributes-modal';

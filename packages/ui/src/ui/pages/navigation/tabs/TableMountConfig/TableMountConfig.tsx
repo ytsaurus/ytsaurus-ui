@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import {useSelector} from '../../../../store/redux-hooks';
 import {selectNavigationTableMountConfig} from '../../../../store/selectors/navigation/content/table-mount-config';
-import {YTErrorBlock} from '../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../components/Block/Block';
 import {YsonWithScroll} from '../../../../components/Yson/YsonWithScroll';
 import {getNavigationMountConfigYsonSettings} from '../../../../store/selectors/thor/unipika';
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';

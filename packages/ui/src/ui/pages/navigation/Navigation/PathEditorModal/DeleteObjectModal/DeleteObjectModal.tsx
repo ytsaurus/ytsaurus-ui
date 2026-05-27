@@ -12,7 +12,7 @@ import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary
 import {MetaTable} from '@ytsaurus/components';
 import HelpLink from '../../../../../components/HelpLink/HelpLink';
 import {Checkbox, Loader} from '@gravity-ui/uikit';
-import {YTErrorBlock} from '../../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../../components/Block/Block';
 import Modal from '../../../../../components/Modal/Modal';
 import Label from '../../../../../components/Label';
 

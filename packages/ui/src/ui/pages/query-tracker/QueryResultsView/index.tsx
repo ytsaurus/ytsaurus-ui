@@ -5,7 +5,7 @@ import block from 'bem-cn-lite';
 
 import {type RootState} from '../../../store/reducers';
 import {selectQueryResult} from '../../../store/selectors/query-tracker/queryResult';
-import {YTErrorBlock} from '../../../components/Error/Error';
+import {YTErrorBlock} from '../../../components/Block/Block';
 import {ResultsTable} from './ResultsTable';
 import {type QueryItem} from '../../../types/query-tracker/api';
 import {

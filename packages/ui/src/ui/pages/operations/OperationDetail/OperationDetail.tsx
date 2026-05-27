@@ -10,7 +10,7 @@ import ypath from '../../../common/thor/ypath';
 
 import {Loader} from '@gravity-ui/uikit';
 import Button from '../../../components/Button/Button';
-import {YTErrorBlock} from '../../../components/Error/Error';
+import {YTErrorBlock} from '../../../components/Block/Block';
 import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
 import Icon from '../../../components/Icon/Icon';
 import {Template} from '../../../components/MetaTable/templates/Template';

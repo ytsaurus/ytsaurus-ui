@@ -4,7 +4,7 @@ import {type OperationMonitoringTabProps} from '../../../../../UIFactory';
 import {uiSettings} from '../../../../../config/ui-settings';
 import Icon from '../../../../../components/Icon/Icon';
 import Link from '../../../../../components/Link/Link';
-import {YTErrorBlock} from '../../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../../components/Block/Block';
 import {MetaTable, type MetaTableItem} from '@ytsaurus/components';
 import {OperationPool} from '../../../../../components/OperationPool/OperationPool';
 import {operationMonitoringUrl} from '../../../../../utils/operations/detail';

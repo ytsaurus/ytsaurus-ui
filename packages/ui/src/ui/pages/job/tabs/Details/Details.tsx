@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import includes_ from 'lodash/includes';
 
-import {YTErrorBlock} from '../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../components/Block/Block';
 import PivotKeys from '../PivotKeys/PivotKeys';
 import Speculative from '../Speculative/Speculative';
 import StatisticsIO from '../StatisticsIO/StatisticsIO';

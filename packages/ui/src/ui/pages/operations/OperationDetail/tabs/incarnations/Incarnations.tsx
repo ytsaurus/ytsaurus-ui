@@ -11,7 +11,7 @@ import {
     selectIncarnationsInfo,
 } from '../../../../../store/selectors/operations/incarnations';
 
-import {YTErrorBlock} from '../../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../../components/Block/Block';
 
 import {IncarnationMeta} from './IncarnationMeta';
 import {IncarnationCardHeader} from './IncarnationCardHeader';

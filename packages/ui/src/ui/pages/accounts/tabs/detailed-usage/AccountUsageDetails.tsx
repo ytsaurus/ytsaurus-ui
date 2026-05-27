@@ -53,7 +53,7 @@ import {
 import DataTable, {type Column, type Settings} from '@gravity-ui/react-data-table';
 import ArrowUpRightFromSquareIcon from '@gravity-ui/icons/svgs/arrow-up-right-from-square.svg';
 
-import {YTErrorBlock} from '../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../components/Block/Block';
 import {
     STICKY_DOUBLE_TOOLBAR_BOTTOM,
     STICKY_TOOLBAR_BOTTOM,

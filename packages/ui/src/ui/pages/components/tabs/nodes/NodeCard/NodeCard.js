@@ -12,9 +12,8 @@ import {Progress} from '@gravity-ui/uikit';
 import Icon from '../../../../../components/Icon/Icon';
 import Link from '../../../../../components/Link/Link';
 import Label from '../../../../../components/Label';
-import {YTAlertBlock} from '../../../../../components/Alert/Alert';
 import Button from '../../../../../components/Button/Button';
-import {YTErrorBlock} from '../../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../../components/Block/Block';
 import {Template} from '../../../../../components/MetaTable/templates/Template';
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
 
@@ -193,7 +192,7 @@ class NodeCard extends Component {
             alerts?.length > 0 && (
                 <CollapsibleSection size="s" name="Alerts" className={block('alerts')} collapsed>
                     {map_(alerts, (alert) => (
-                        <YTAlertBlock key={alert.message} error={alert} />
+                        <YTErrorBlock type="alert" key={alert.message} error={alert} />
                     ))}
                 </CollapsibleSection>
             )

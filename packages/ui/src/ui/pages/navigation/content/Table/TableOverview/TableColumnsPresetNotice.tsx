@@ -11,7 +11,7 @@ import {
 } from '../../../../../store/selectors/navigation/content/table-ts';
 import {Warning} from '@ytsaurus/components';
 import {Yson} from '../../../../../components/Yson/Yson';
-import {YTErrorBlock} from '../../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../../components/Block/Block';
 import CollapsibleSection from '../../../../../components/CollapsibleSection/CollapsibleSection';
 
 import './TableColumnsPresetNotice.scss';

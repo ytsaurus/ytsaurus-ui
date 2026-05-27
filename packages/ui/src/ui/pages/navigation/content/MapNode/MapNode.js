@@ -14,7 +14,7 @@ import RadioButton from '../../../../components/RadioButton/RadioButton';
 import Button from '../../../../components/Button/Button';
 import Filter from '../../../../components/Filter/Filter';
 import {SelectSingle} from '../../../../components/Select/Select';
-import {YTErrorBlock} from '../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../components/Block/Block';
 import Icon from '../../../../components/Icon/Icon';
 import {StickyContainer} from '../../../../components/StickyContainer/StickyContainer';
 import TTLInfo from '../../../../components/TTLInfo/TTLInfo';

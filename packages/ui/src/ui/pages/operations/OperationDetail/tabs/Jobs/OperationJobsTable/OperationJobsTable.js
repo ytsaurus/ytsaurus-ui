@@ -12,7 +12,7 @@ import format from '../../../../../../common/hammer/format';
 import ElementsTable from '../../../../../../components/ElementsTable/ElementsTable';
 import {OPERATION_JOBS_TABLE_ID} from '../../../../../../constants/operations/jobs';
 import SimpleModal from '../../../../../../components/Modal/SimpleModal';
-import {YTErrorBlock} from '../../../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../../../components/Block/Block';
 
 import {ClipboardButton, MetaTable, TemplateTime} from '@ytsaurus/components';
 import ChartLink from '../../../../../../components/ChartLink/ChartLink';

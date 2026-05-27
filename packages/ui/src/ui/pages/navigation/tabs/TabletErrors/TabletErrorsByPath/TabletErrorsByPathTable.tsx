@@ -18,7 +18,7 @@ import {
 } from '../../../../../store/selectors/navigation/tabs/tablet-errors-by-path';
 import {selectCluster} from '../../../../../store/selectors/global';
 import ColumnHeader from '../../../../../components/ColumnHeader/ColumnHeader';
-import {YTErrorBlock} from '../../../../../components/Error/Error';
+import {YTErrorBlock} from '../../../../../components/Block/Block';
 import {Host} from '../../../../../containers/Host/Host';
 import {DATA_TABLE_YT_SETTINGS_UNDER_TOOLBAR_DOUBLE_HEIGHT} from '../../../../../components/DataTableYT/constants';
 import {ClipboardButton, type Column} from '@ytsaurus/components';
