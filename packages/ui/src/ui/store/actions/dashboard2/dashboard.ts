@@ -1,10 +1,9 @@
 import {type ThunkAction} from '@reduxjs/toolkit';
 import {type ConfigItem, DashKit, type DashKitProps} from '@gravity-ui/dashkit';
+import {v4 as uuidv4} from 'uuid';
 
 import find_ from 'lodash/find';
 import remove_ from 'lodash/remove';
-
-import guid from '../../../common/hammer/guid';
 
 import {type RootState} from '../../../store/reducers';
 import {setSettingByKey} from '../../../store/actions/settings';
@@ -88,7 +87,7 @@ export function updateEdittingConfig(
     edittingConfig: DashKitProps['config'],
 ): ThunkAction<void, RootState, any, any> {
     return (dispatch) => {
-        dispatch(setEdittingConfig({edittingConfig: {...edittingConfig, salt: guid()}}));
+        dispatch(setEdittingConfig({edittingConfig: {...edittingConfig, salt: uuidv4()}}));
     };
 }
 

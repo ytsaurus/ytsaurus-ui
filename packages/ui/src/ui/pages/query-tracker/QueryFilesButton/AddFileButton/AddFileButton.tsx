@@ -1,9 +1,9 @@
 import React, {type FC, useRef, useState} from 'react';
 import {Button, Icon} from '@gravity-ui/uikit';
 import FilePlusIcon from '@gravity-ui/icons/svgs/file-plus.svg';
+import {v4 as uuidv4} from 'uuid';
 import {type QueryFile} from '../../../../types/query-tracker/api';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
-import guid from '../../../../common/hammer/guid';
 import i18n from './i18n';
 
 const readFileAsync = async (file: File): Promise<string> => {
@@ -38,7 +38,7 @@ export const AddFileButton: FC<Props> = ({disabled, onLoad}) => {
                 skipSuccessToast: true,
                 errorTitle: i18n('alert_file-load-error'),
             });
-            onLoad({name: uploaded.name, content, type: 'raw_inline_data', id: guid()});
+            onLoad({name: uploaded.name, content, type: 'raw_inline_data', id: uuidv4()});
         } finally {
             setLoading(false);
         }

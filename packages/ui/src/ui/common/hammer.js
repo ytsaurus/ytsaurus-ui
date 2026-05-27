@@ -5,7 +5,6 @@ import hammerExt from '@ytsaurus/interface-helpers/lib/hammer';
 import {countValues, prepare} from './hammer/aggregation';
 import filter from './hammer/filter';
 import format from './hammer/format';
-import guid from './hammer/guid';
 import stat from './hammer/stat';
 import storage from './hammer/storage';
 import {tables} from './hammer/tables';
@@ -17,7 +16,6 @@ const hammer = Object.assign({}, hammerExt, {
     aggregation: {countValues, prepare},
     filter,
     format,
-    guid,
     stat,
     storage,
     tables,

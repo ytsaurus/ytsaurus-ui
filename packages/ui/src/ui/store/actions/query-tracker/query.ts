@@ -1,6 +1,7 @@
 import {createQueryUrl} from '../../../pages/query-tracker/utils/navigation';
 import {type AnyAction} from 'redux';
 import {type ThunkAction} from 'redux-thunk';
+import {v4 as uuidv4} from 'uuid';
 import {type RootState} from '../../reducers';
 import {selectCluster} from '../../selectors/global';
 import {QueryEngine} from '../../../../shared/constants/engines';
@@ -40,7 +41,6 @@ import {
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {prepareQueryPlanIds} from '../../../types/query-tracker/query';
 import {chytApiAction, spytApiAction} from '../../../utils/strawberryControllerApi';
-import guid from '../../../common/hammer/guid';
 import {getSettingQueryTrackerStage} from '../../selectors/settings/settings-ts';
 import {
     selectDefaultQueryACO,
@@ -345,7 +345,7 @@ export function loadQuery(
                 errorTitle: `Failed to load query ${stage ? `[stage: ${stage}]` : ''}`,
             });
 
-            query.files = query.files.map((file) => ({...file, id: guid()}));
+            query.files = query.files.map((file) => ({...file, id: uuidv4()}));
             const defaultQueryACO = selectDefaultQueryACO(state);
             const queryItem = prepareQueryPlanIds(query, defaultQueryACO);
 

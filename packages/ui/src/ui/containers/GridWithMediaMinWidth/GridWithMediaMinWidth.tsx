@@ -1,8 +1,8 @@
 import React from 'react';
 import {useSelector} from '../../store/redux-hooks';
 import cn from 'bem-cn-lite';
+import {v4 as uuidv4} from 'uuid';
 
-import guid from '../../common/hammer/guid';
 import {selectGlobalAsideHeaderWidth} from '../../store/selectors/global';
 
 const block = cn('grid-with-media-min-width');
@@ -29,7 +29,7 @@ export function GridWithMediaMinWidth({
     const asideHeaderWidth = useSelector(selectGlobalAsideHeaderWidth);
 
     const {inlineClassName, inlineStyle} = React.useMemo(() => {
-        const id = block(guid());
+        const id = block(uuidv4());
         const pagePadding = 40 + asideHeaderWidth;
         let res = `.${id} {`;
         res += `\n display: grid;`;

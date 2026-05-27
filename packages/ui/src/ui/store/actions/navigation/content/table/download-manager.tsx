@@ -3,6 +3,7 @@ import {type ThunkAction} from 'redux-thunk';
 import {type UnknownAction} from 'redux';
 import {Text} from '@gravity-ui/uikit';
 import axios, {AxiosError} from 'axios';
+import {v4 as uuidv4} from 'uuid';
 
 import {DownloadShortInfo} from '../../../../../pages/navigation/content/Table/DownloadManager/DownloadShortInfo/DownloadShortInfo';
 
@@ -14,7 +15,6 @@ import {copyFileToClipboard} from '../../../../../utils/copy-file-to-clipboard';
 import {showErrorPopup} from '../../../../../utils/utils';
 import {type YTError} from '../../../../../types';
 import {toaster} from '../../../../../utils/toaster';
-import guid from '../../../../../common/hammer/guid';
 
 const requestDownloadFile = async (url: string) =>
     axios({
@@ -35,7 +35,7 @@ export const downloadFile = (
     filename: string,
     copy?: boolean,
 ): ThunkAction<Promise<void>, RootState, any, UnknownAction> => {
-    const id = guid();
+    const id = uuidv4();
 
     return async (dispatch, _getState) => {
         try {
