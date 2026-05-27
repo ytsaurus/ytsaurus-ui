@@ -26,6 +26,8 @@ import {
 import {loadTabletErrorsByBundle} from '../../store/actions/tablet-errors/tablet-errors-by-bundle';
 import UIFactory from '../../UIFactory';
 
+import i18n from './i18n';
+
 import './TabletErrorsByBundleToolbar.scss';
 
 const block = cn('yt-tablet-errors-by-bundle-toolbar');
@@ -88,7 +90,7 @@ export function TabletErrorsByBundleToolbar({
                         node: (
                             <TextInputWithDebounce
                                 className={block('path-filter')}
-                                placeholder={'Table path...'}
+                                placeholder={i18n('placeholder_table-path')}
                                 value={tablePathFilter}
                                 onUpdate={(value) => {
                                     dispatch(
@@ -104,7 +106,7 @@ export function TabletErrorsByBundleToolbar({
                         node: (
                             <Select
                                 multiple
-                                label="Methods:"
+                                label={i18n('field_methods')}
                                 value={methodsFilter}
                                 items={all_methods.map((value) => {
                                     return {value, text: value};
@@ -116,7 +118,7 @@ export function TabletErrorsByBundleToolbar({
                                         }),
                                     )
                                 }
-                                placeholder="Select..."
+                                placeholder={i18n('placeholder_select')}
                                 hasClear
                                 maxVisibleValuesTextLength={80}
                             />

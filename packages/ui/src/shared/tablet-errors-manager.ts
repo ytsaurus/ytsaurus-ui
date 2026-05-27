@@ -23,12 +23,28 @@ export type TableMethodErrorsCount = {
 };
 
 export type TabletErrorsByBundleResponse = {
-    all_methods: Array<string>;
-    presented_methods: Array<string>;
+    all_methods: Array<AllMethodsValues>;
+    presented_methods: Array<AllMethodsValues>;
     errors: Array<TableMethodErrorsCount>;
     fixed_end_timestamp: unknown;
     total_row_count: number;
 };
+
+export type AllMethodsValues =
+    | 'Lookup'
+    | 'Select'
+    | 'Write'
+    | 'Compaction'
+    | 'Partitioning'
+    | 'Flush'
+    | 'Replication'
+    | 'PullRows'
+    | 'GetTabletInfo'
+    | 'ReadDynamicStore'
+    | 'FetchTabletStores'
+    | 'FetchTableRows'
+    | 'Trim'
+    | 'GetOrderedTabletSafeTrimRowCount';
 
 export type TabletErrorsBaseParams = {
     start_timestamp: number;
