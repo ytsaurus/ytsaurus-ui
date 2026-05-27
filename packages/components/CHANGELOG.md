@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.3](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v0.2.2...components-v0.2.3) (2026-05-27)
+
+
+### Bug Fixes
+
+* **Components:** shift in clipboard button [YTFRONT-5799] ([7838626](https://github.com/ytsaurus/ytsaurus-ui/commit/783862668ad2fdc1b583693be023e79839eb39c8))
+
 ## [0.2.2](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v0.2.1...components-v0.2.2) (2026-05-16)
 
 
