@@ -72,6 +72,7 @@ export interface SuggestProps {
     onBlur?: () => void;
     onFocus?: () => void;
     onKeyDown?: (e: React.KeyboardEvent<HTMLElement>) => void;
+    onEnterKeyDown?: (value: string, e: React.KeyboardEvent<HTMLElement>) => void;
     pin?: TextInputProps['pin'];
     onOpenChange?: (p: {open: boolean}) => void;
     popupClassName?: string;
@@ -196,6 +197,7 @@ export default class Suggest extends Component<SuggestProps, State> {
             evt.preventDefault();
             this.selectPrevSuggestion();
         } else if (key === ENTER) {
+            this.props.onEnterKeyDown?.(this.state.text ?? '', evt);
             this.applyOrClearSuggestion();
         } else if (key === ESCAPE) {
             this.input.current?.blur();
