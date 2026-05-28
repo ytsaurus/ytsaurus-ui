@@ -1,14 +1,13 @@
 import React from 'react';
-import Link, {type LinkProps} from '../../containers/Link/Link';
+import {Link, type LinkProps} from '@gravity-ui/uikit';
 
-import Icon, {type IconProps} from '../Icon/Icon';
+import Icon from '../Icon/Icon';
 
 import i18n from './i18n';
 
 interface Props {
     className?: string;
-    theme?: LinkProps['theme'];
-    face?: IconProps['face'];
+    theme?: 'ghost';
     url?: string;
     title?: string;
     children?: React.ReactNode;
@@ -17,13 +16,13 @@ interface Props {
 }
 
 function ChartLink(props: Props) {
-    const {className, url, title, theme, children, hideIcon, face, wrapContent} = props;
+    const {className, url, title, theme, children, hideIcon, wrapContent} = props;
 
     if (!url) {
         return null;
     }
 
-    const icon = hideIcon ? null : <Icon awesome="chart-bar" face={face} />;
+    const icon = hideIcon ? null : <Icon awesome="chart-bar" />;
     const content = children ? (
         <React.Fragment>
             {icon}
@@ -37,8 +36,8 @@ function ChartLink(props: Props) {
         <Link
             className={className}
             target="_blank"
-            theme={theme}
-            url={url}
+            view={theme as LinkProps['view']}
+            href={url}
             title={title ?? i18n('View')}
         >
             {wrapContent ? wrapContent(content) : content}

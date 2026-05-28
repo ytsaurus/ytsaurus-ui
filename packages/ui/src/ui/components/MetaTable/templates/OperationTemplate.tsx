@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {Link} from '@gravity-ui/uikit';
 import ypath from '../../../common/thor/ypath';
 import cn from 'bem-cn-lite';
 
@@ -10,7 +11,6 @@ import {
 } from '../../../components/OperationPool/OperationPool';
 import CollapsibleList from '../../../components/CollapsibleList/CollapsibleList';
 import Icon from '../../../components/Icon/Icon';
-import Link from '../../../containers/Link/Link';
 
 import {Template} from './Template';
 import {paramsToQuery} from '../../../utils';
@@ -103,7 +103,7 @@ export function TemplateTransferTask({id, url}: TemplateTransferTaskProps) {
     return !url ? (
         id
     ) : (
-        <Link url={url}>
+        <Link href={url} target="_blank">
             {id} <Icon awesome="external-link" />
         </Link>
     );
@@ -179,13 +179,13 @@ function TemplateFile({name, path, originalPath, executable, cluster}: TemplateF
 
     return (
         <li className={itemBlock('file')}>
-            <Link title={path} url={getUrl(path)}>
+            <Link title={path} href={getUrl(path)} target="_blank">
                 {name || originalPath || path}
                 {executable && <Icon awesome="cogs" />}
             </Link>
             &emsp;
             {originalPath && (
-                <Link title={originalPath} url={getUrl(originalPath)}>
+                <Link title={originalPath} href={getUrl(originalPath)} target="_blank">
                     <Icon awesome="folders" />
                 </Link>
             )}
@@ -237,7 +237,7 @@ export function TemplateLivePreivew({path, transaction, cluster}: TemplateLivePr
     const url = genNavigationUrl({cluster, path, transaction});
 
     return (
-        <Link url={url} title="Live preview">
+        <Link href={url} title="Live preview" target="_blank">
             <Icon awesome="play-circle" />
             Live preview
         </Link>
@@ -287,7 +287,7 @@ function TemplateLayerPath({cluster, path: rawPath}: TemplateLayerPathProps) {
 
     return (
         <li className={block('list-item')}>
-            <Link url={getUrl(path)} title={path}>
+            <Link href={getUrl(path)} title={path} target="_blank">
                 {path}
             </Link>
         </li>

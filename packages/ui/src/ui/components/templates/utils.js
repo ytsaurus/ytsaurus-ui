@@ -2,7 +2,7 @@ import React from 'react';
 import unipika from '../../common/thor/unipika';
 import block from 'bem-cn-lite';
 
-import Link from '../../containers/Link/Link';
+import {ClickableText} from '../../components/ClickableText/ClickableText';
 
 import hammer from '../../common/hammer';
 import {showErrorPopup} from '../../utils/utils';
@@ -105,9 +105,9 @@ export function printColumnAsError(error) {
         showErrorPopup(error, {hideOopsMsg: true});
     };
     return typeof error === 'object' ? (
-        <Link theme="ghost" onClick={showError}>
-            {i18n('action_view')}
-        </Link>
+        <ClickableText onClick={showError}>
+            <span style={{color: 'var(--secondary-link)'}}>{i18n('action_view')}</span>
+        </ClickableText>
     ) : (
         hammer.format.NO_VALUE
     );

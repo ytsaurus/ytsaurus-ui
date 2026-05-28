@@ -6,11 +6,11 @@ function StarTrackLink(props: {id: string; emptyContent?: React.ReactNode}) {
     const {id, emptyContent = null, ...rest} = props;
 
     const {trackerBaseUrl} = uiSettings;
-    const url = `${trackerBaseUrl}/${id}`;
-    return !id ? (
+    const url = trackerBaseUrl && id ? `${trackerBaseUrl}/${id}` : undefined;
+    return !url ? (
         <>{emptyContent}</>
     ) : (
-        <Link {...rest} url={trackerBaseUrl ? url : undefined}>
+        <Link {...rest} href={url}>
             {id}
         </Link>
     );
