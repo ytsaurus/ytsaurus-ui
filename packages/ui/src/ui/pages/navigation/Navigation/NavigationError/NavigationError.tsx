@@ -1,17 +1,14 @@
-import {Flex, type FlexProps, Text} from '@gravity-ui/uikit';
+import React from 'react'; 
 import cn from 'bem-cn-lite';
-import React from 'react';
 import {type YTError} from '../../../../../@types/types';
-import {YTErrorBlock} from '../../../../containers/Block/Block';
-import ErrorDetails from '../../../../containers/ErrorDetails/ErrorDetails';
-import {ErrorToClipboardButton} from '../../../../containers/ErrorToClipboardButton/ErrorToClipboardButton';
 import NavigationDescription from '../../../../pages/navigation/NavigationDescription/NavigationDescription';
 import {getPermissionDeniedError} from '../../../../utils/errors';
-import {type ErrorCode, checkErrorForPrettyCodes, getErrorTitle} from './helpers';
-import {NavigationErrorImage} from './NavigationErrorImage';
-import {RequestPermission} from './RequestPermission';
+import {PrettyError} from '../../../../containers/PrettyError';
+import {type ErrorsInfoMap, determineErrorCode} from '../../../../containers/PrettyError/helpers';
 
-import './NavigationError.scss';
+import ypath from '../../../../common/thor/ypath';
+
+import {RequestPermission} from './RequestPermission';
 
 const block = cn('navigation-error');
 
@@ -21,73 +18,48 @@ type Props = {
     cluster: string;
     message: string;
     vertical?: boolean;
+    className?: string;
 };
 
-function PrettyError(props: Props & {code: ErrorCode}) {
-    const {details, path, cluster, code, vertical} = props;
-
-    const error = code === 901 ? getPermissionDeniedError(details)! : details;
-    const title = getErrorTitle({...error, code}, path);
-    const direction: FlexProps['direction'] = vertical ? 'column' : undefined;
-
-    return (
-        <Flex
-            direction={'column'}
-            minHeight={'calc(100vh - 3 * var(--app-header-height) - var(--app-footer-height))'}
-        >
-            {code === 901 && <NavigationDescription className={'error-description'} />}
-            <Flex
-                className={block()}
-                justifyContent="center"
-                alignItems="center"
-                direction={direction}
-                gap={7}
-            >
-                <Flex>
-                    <NavigationErrorImage type={code} />
-                </Flex>
-                <Flex direction={'column'} className={block('info')} gap={3}>
-                    <Text className={block('title')}>{title}</Text>
-                    <ErrorDetails error={details} />
-                    <Flex gap={3} direction={direction}>
-                        {code === 901 ? (
-                            <RequestPermission cluster={cluster} path={path} error={error} />
-                        ) : (
-                            <ErrorToClipboardButton
-                                className={block('copy')}
-                                view="outlined"
-                                error={details}
-                            >
-                                Copy error details
-                            </ErrorToClipboardButton>
-                        )}
-                    </Flex>
-                </Flex>
-            </Flex>
-        </Flex>
-    );
-}
-
-function UnexpectedError(props: Props) {
-    const {details, message} = props;
-
-    return <YTErrorBlock className={block('unexpected-error')} error={details} message={message} />;
-}
+const ErrorsInfo: ErrorsInfoMap = {
+    901: {
+        getTitle: ({username, permissions, path}) => {
+            const permission = permissions?.map((perm) => ypath.getValue(perm)).join(' | ');
+            const permissionsStr = permission ? `"${permission}"` : '';
+            return `User ${username} does not have ${permissionsStr} access to node "${path}"`;
+        },
+    },
+    500: {
+        getTitle: ({path}) => `Path "${path}" does not exist`,
+    },
+};
 
 export function NavigationError(props: Props) {
-    const {details} = props;
+    const {details, path, cluster, vertical, className, message} = props;
 
-    const {has500, has901} = checkErrorForPrettyCodes(details);
-
-    const code = has901 ? 901 : has500 ? 500 : undefined;
+    const errorCode = determineErrorCode(details, ErrorsInfo);
+    const error = errorCode === 901 ? getPermissionDeniedError(details)! : details;
 
     return (
-        <>
-            {code === 500 || code === 901 ? (
-                <PrettyError {...props} code={code} />
-            ) : (
-                <UnexpectedError {...props} />
-            )}
-        </>
+        <div className={block(null, className)}>
+            <PrettyError
+                error={details}
+                errorCode={errorCode}
+                errorsInfo={ErrorsInfo}
+                errorContext={{path}}
+                title={message}
+                vertical={vertical}
+                renderAdditionalContent={() =>
+                    errorCode === 901 ? (
+                        <NavigationDescription className="error-description" />
+                    ) : undefined
+                }
+                renderActions={
+                    errorCode === 901
+                        ? () => <RequestPermission cluster={cluster} path={path} error={error} />
+                        : undefined
+                }
+            />
+        </div>
     );
 }

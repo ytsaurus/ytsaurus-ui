@@ -20,13 +20,7 @@ export const NavigationError: FC = () => {
 
     return (
         <div className={b()}>
-            <PrettyError
-                message={error?.message}
-                details={error}
-                cluster={cluster}
-                path={path}
-                vertical
-            />
+            <PrettyError details={error} cluster={cluster} path={path} vertical />
         </div>
     );
 };

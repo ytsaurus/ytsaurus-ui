@@ -3,12 +3,10 @@ import cn from 'bem-cn-lite';
 import {Flex} from '@gravity-ui/uikit';
 import ypath from '../../../../../common/thor/ypath';
 
-import {ErrorToClipboardButton} from '../../../../../containers/ErrorToClipboardButton/ErrorToClipboardButton';
 import RequestPermissions from '../../../tabs/ACL/RequestPermissions/RequestPermissions';
 
 import {getParentPath} from '../../../../../utils/navigation';
 import {type YTError} from '../../../../../../@types/types';
-
 import {RequestPermissionIsNotAllowed} from './RequestPermissionIsNotAllowed';
 
 import './RequestPermission.scss';
@@ -37,17 +35,12 @@ export function RequestPermission(props: Props) {
             {!isRequestPermissionsForPathAllowed && (
                 <RequestPermissionIsNotAllowed objectType={objectType} />
             )}
-            <Flex direction={'row'} gap={3}>
-                <RequestPermissions
-                    buttonClassName={block('request-permissions-button')}
-                    path={pathForRequest}
-                    cluster={cluster}
-                    buttonProps={{size: 'l', width: 'max'}}
-                />
-                <ErrorToClipboardButton className={block('copy')} view="outlined" error={error}>
-                    Copy error details
-                </ErrorToClipboardButton>
-            </Flex>
+            <RequestPermissions
+                buttonClassName={block('request-permissions-button')}
+                path={pathForRequest}
+                cluster={cluster}
+                buttonProps={{size: 'l', width: 'max'}}
+            />
         </Flex>
     );
 }

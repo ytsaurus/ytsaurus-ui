@@ -29,6 +29,9 @@ import {getSchedulingIsFinalLoadingState} from '../../../store/selectors/schedul
 import SchedulingResources from '../Content/SchedulingResources';
 import {PoolEditorDialog} from './PoolEditorDialog/PoolEditorDialog';
 import {type RootState} from '../../../store/reducers';
+import {getPool, selectSchedulingError} from '../../../store/selectors/scheduling/scheduling';
+import {changePool} from '../../../store/actions/scheduling/scheduling';
+import {SchedulingError} from './SchedulingError';
 
 const block = cn('scheduling');
 
@@ -53,7 +56,11 @@ function Scheduling() {
                 {error && <YTErrorBlock error={error} />}
                 <div className={block('wrapper')}>
                     <SchedulingResources />
-                    <Content {...{className: block('content')}} />
+                    {error ? (
+                        <SchedulingError error={error} poolName={pool} />
+                    ) : (
+                        <Content {...{className: block('content')}} />
+                    )}
                 </div>
                 <SchedulingDialogsMemo />
             </ErrorBoundary>
