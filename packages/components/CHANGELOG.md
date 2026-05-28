@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.4](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v0.2.3...components-v0.2.4) (2026-05-28)
+
+
+### Bug Fixes
+
+* **Components:** dark screenshots problem [YTFRONT-5779] ([f724327](https://github.com/ytsaurus/ytsaurus-ui/commit/f7243276ce0a05c7fc04fd59b6779abf7d2a34d0))
+* **Components:** meta with fixed width [YTFRONT-5744] ([ee93c48](https://github.com/ytsaurus/ytsaurus-ui/commit/ee93c48b9dda3636989f9a6273834ce6803943cb))
+* **Components:** sort review by schema [YTFRONT-5744] ([7dde370](https://github.com/ytsaurus/ytsaurus-ui/commit/7dde3702825fa3c9497133e5cae75e46b316b51f))
+
 ## [0.2.3](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v0.2.2...components-v0.2.3) (2026-05-27)
 
 
