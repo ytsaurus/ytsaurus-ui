@@ -58,6 +58,11 @@ export const getTrees = (state: RootState) => state.scheduling.scheduling.trees;
 
 export const getPool = (state: RootState) => state.scheduling.scheduling.pool;
 
+export const selectSchedulingError = (state: RootState) => {
+    const {error, errorData} = state.scheduling.scheduling;
+    return error ? errorData : undefined;
+};
+
 export const getSchedulingShowAbsResources = (state: RootState) =>
     state.scheduling.scheduling.showAbsResources;
 

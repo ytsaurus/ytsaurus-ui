@@ -15,6 +15,7 @@ import {
     getPool,
     getTree,
     getTreesSelectItems,
+    selectSchedulingError,
 } from '../../../store/selectors/scheduling/scheduling';
 import {
     selectFavouritePools,
@@ -85,8 +86,8 @@ function SchedulingFavourites() {
     const onFavouriteClick = React.useCallback(
         ({path}: {path: string}) => {
             const [, pool, tree] = path.match(/(.+)\[(.+)]/)!;
-            dispatch(changePool(pool));
             dispatch(changeTree(tree));
+            dispatch(changePool(pool));
         },
         [dispatch],
     );
@@ -94,8 +95,6 @@ function SchedulingFavourites() {
         () => dispatch(togglePoolFavourites(pool, tree)),
         [dispatch, pool, tree],
     );
-
-    const currentPool = useSelector(getPool);
 
     return (
         <Favourites
@@ -105,7 +104,7 @@ function SchedulingFavourites() {
             isActive={isActivePool}
             onToggle={onFavouriteToggle}
             onItemClick={onFavouriteClick}
-            toggleDisabled={ROOT_POOL_NAME === currentPool}
+            toggleDisabled={ROOT_POOL_NAME === pool}
         />
     );
 }
@@ -130,20 +129,23 @@ function SchedulingBreadcrumbs() {
     const history = useHistory();
     const tree = useSelector(getTree);
     const cluster = useSelector(selectCluster);
+    const pool = useSelector(getPool);
+
+    const error = useSelector(selectSchedulingError);
+
     const handleChangePool = (name: string | number) => {
-        setTimeout(() => {
-            dispatch(changePool(name.toString()));
-            const pathname = calcPathname(window.location.pathname, cluster, name.toString());
-            history.push(makeRoutedURL(pathname, {tree, filter: ''}));
-        }, 0);
+        dispatch(changePool(name.toString()));
+        const pathname = calcPathname(window.location.pathname, cluster, name.toString());
+        history.push(makeRoutedURL(pathname, {tree, filter: ''}));
     };
 
     const items = React.useMemo(() => {
-        return ['<Root>', ...bcItems.slice(1)].map((text, index) => {
+        const pathList = bcItems.filter((item) => item !== '<Root>');
+        return ['<Root>', ...pathList].map((text, index) => {
             const pathname = calcPathname(window.location.pathname, cluster, text);
             return (
                 <Breadcrumbs.Item
-                    href={makeRoutedURL(pathname, {tree, text, filter: ''})}
+                    href={makeRoutedURL(pathname, {tree, pool: text, filter: ''})}
                     key={`${JSON.stringify({text, index})}`}
                     onClick={(e) => e.preventDefault()}
                 >
@@ -151,14 +153,17 @@ function SchedulingBreadcrumbs() {
                 </Breadcrumbs.Item>
             );
         });
-    }, [bcItems, cluster, tree]);
+    }, [bcItems, cluster, tree, pool, error]);
 
     return (
         <EditableBreadcrumbs
             view={'top-row'}
             onAction={(key: Key) => {
                 const {text: keyText} = JSON.parse(key as string);
-                handleChangePool(keyText);
+                const isErrorPool = keyText === pool && error;
+                if (!isErrorPool) {
+                    handleChangePool(keyText);
+                }
             }}
             className={block('breadcrumbs')}
             showRoot

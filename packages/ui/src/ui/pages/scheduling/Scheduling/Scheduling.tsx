@@ -3,7 +3,6 @@ import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
 import i18n from './i18n';
-
 import keys_ from 'lodash/keys';
 
 import {DialogWrapper as DeleteDialog} from '../../../components/DialogWrapper/DialogWrapper';
@@ -13,7 +12,7 @@ import {YTErrorBlock} from '../../../containers/Block/Block';
 
 import Content from '../Content/Content';
 
-import {SCHEDULING_CREATE_POOL_CANCELLED} from '../../../constants/scheduling';
+import {ROOT_POOL_NAME, SCHEDULING_CREATE_POOL_CANCELLED} from '../../../constants/scheduling';
 import {useUpdater} from '../../../hooks/use-updater';
 
 import {
@@ -38,22 +37,25 @@ const block = cn('scheduling');
 const SchedulingDialogsMemo = React.memo(SchedulingDialogs);
 
 function Scheduling() {
-    const error = useSelector((state: RootState) => {
-        const {error: hasError, errorData} = state.scheduling.scheduling;
-        return hasError ? errorData : undefined;
-    });
+    const error = useSelector(selectSchedulingError);
+    const pool = useSelector(getPool);
     const dispatch = useDispatch();
 
     const updateFn = React.useCallback(() => {
         dispatch(loadSchedulingData());
     }, [dispatch]);
 
+    React.useEffect(() => {
+        if (!pool) {
+            dispatch(changePool(ROOT_POOL_NAME));
+        }
+    }, [pool, dispatch]);
+
     useUpdater(updateFn);
 
     return (
         <div className={block(null, 'elements-main-section')}>
             <ErrorBoundary>
-                {error && <YTErrorBlock error={error} />}
                 <div className={block('wrapper')}>
                     <SchedulingResources />
                     {error ? (

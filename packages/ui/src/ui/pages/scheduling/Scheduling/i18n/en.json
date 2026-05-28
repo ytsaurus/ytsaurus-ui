@@ -6,5 +6,6 @@
   "confirm_delete-pool-suffix": "pool?",
   "alert_delete-pool-failure": "Delete pool failure",
   "action_cancel": "Cancel",
-  "action_delete": "Delete"
+  "action_delete": "Delete",
+  "pool_not_found": "Pool \"{{poolName}}\" not found"
 }

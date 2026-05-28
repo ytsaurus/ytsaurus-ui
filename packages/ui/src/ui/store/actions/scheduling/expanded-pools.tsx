@@ -4,7 +4,7 @@ import {type RootState} from '../../reducers';
 import forEach_ from 'lodash/forEach';
 import reduce_ from 'lodash/reduce';
 
-import {UIBatchError, splitBatchResults} from '../../../../shared/utils/error';
+import {UIBatchError, getBatchError, splitBatchResults} from '../../../../shared/utils/error';
 
 import {
     type ExpandedPoolInfo,
@@ -16,13 +16,13 @@ import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {USE_IGNORE_NODE_DOES_NOT_EXIST} from '../../../utils/utils';
 import {makeGet, makeList} from '../../../utils/batch';
 import {
-    CHANGE_POOL,
     ROOT_POOL_NAME,
     SCHEDULING_EXPANDED_POOLS_FAILURE,
     SCHEDULING_EXPANDED_POOLS_PARTITION,
     SCHEDULING_EXPANDED_POOLS_REQUEST,
     SCHEDULING_EXPANDED_POOLS_SUCCESS,
 } from '../../../constants/scheduling';
+import {schedulingDataFailure} from './scheduling';
 import {calculatePoolPath, getPool, getPools, getTree} from '../../selectors/scheduling/scheduling';
 import {
     getExpandedPoolsLoadAll,
@@ -38,8 +38,6 @@ import {type SchedulingAction} from '../../../store/reducers/scheduling/scheduli
 import CancelHelper, {isCancelled} from '../../../utils/cancel-helper';
 import {flattenAttributes} from '../../../utils/scheduling/scheduling';
 import {type PoolTreeNode} from '../../../utils/scheduling/pool-child';
-
-import {toaster} from '../../../utils/toaster';
 
 type ExpandedPoolsThunkAction = ThunkAction<
     any,
@@ -117,7 +115,7 @@ export function loadExpandedPools(tree: string): ExpandedPoolsThunkAction {
             return undefined;
         }
 
-        if (pool === ROOT_POOL_NAME) {
+        if (pool === ROOT_POOL_NAME || !pool) {
             return dispatch(loadExpandedOperationsAndPools(tree));
         } else {
             return ytApiV3Id
@@ -135,30 +133,26 @@ export function loadExpandedPools(tree: string): ExpandedPoolsThunkAction {
                         ],
                     },
                 )
+                .then((results) => {
+                    const error = getBatchError(results, 'Failed to get scheduling pool');
+                    if (error) {
+                        throw error;
+                    }
+
+                    return results;
+                })
                 .then(([{output}]) => {
                     const {full_path, is_ephemeral} = output ?? {};
-                    if (!full_path) {
-                        throw new EmptyFullPath();
-                    } else {
+
+                    if (full_path) {
                         dispatch(addFullPathToExpandedPoolsNoLoad(tree, full_path, is_ephemeral));
                         dispatch(loadExpandedOperationsAndPools(tree));
+                    } else {
+                        throw new EmptyFullPath();
                     }
                 })
                 .catch((e) => {
-                    if (e instanceof EmptyFullPath) {
-                        dispatch({type: CHANGE_POOL, data: {pool: ROOT_POOL_NAME}});
-                        /**
-                         * We don't need to call `dispatch(loadExpandedOperationsAndPools(tree))` after `CHANGE_POOL`.
-                         * The call will be triggered by SchedulingExpandedPoolsUpdater.
-                         */
-                        // dispatch(loadExpandedOperationsAndPools(tree));
-                    } else {
-                        toaster.add({
-                            name: 'schedulingPoolFullPath',
-                            theme: 'danger',
-                            title: '',
-                        });
-                    }
+                    dispatch(schedulingDataFailure(e));
                 });
         }
     };

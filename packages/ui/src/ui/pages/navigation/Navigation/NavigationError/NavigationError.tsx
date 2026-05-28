@@ -1,4 +1,4 @@
-import React from 'react'; 
+import React from 'react';
 import cn from 'bem-cn-lite';
 import {type YTError} from '../../../../../@types/types';
 import NavigationDescription from '../../../../pages/navigation/NavigationDescription/NavigationDescription';
@@ -16,7 +16,6 @@ type Props = {
     path?: string;
     details: YTError;
     cluster: string;
-    message: string;
     vertical?: boolean;
     className?: string;
 };
@@ -35,7 +34,7 @@ const ErrorsInfo: ErrorsInfoMap = {
 };
 
 export function NavigationError(props: Props) {
-    const {details, path, cluster, vertical, className, message} = props;
+    const {details, path, cluster, vertical, className} = props;
 
     const errorCode = determineErrorCode(details, ErrorsInfo);
     const error = errorCode === 901 ? getPermissionDeniedError(details)! : details;
@@ -47,7 +46,6 @@ export function NavigationError(props: Props) {
                 errorCode={errorCode}
                 errorsInfo={ErrorsInfo}
                 errorContext={{path}}
-                title={message}
                 vertical={vertical}
                 renderAdditionalContent={() =>
                     errorCode === 901 ? (

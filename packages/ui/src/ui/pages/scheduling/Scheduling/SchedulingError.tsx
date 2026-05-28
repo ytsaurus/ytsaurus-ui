@@ -24,7 +24,6 @@ export function SchedulingError({error, poolName, className}: Props) {
             error={error}
             errorsInfo={ErrorsInfo}
             errorContext={{poolName}}
-            title={i18n('pool_not_found', {poolName})}
         />
     );
 }
