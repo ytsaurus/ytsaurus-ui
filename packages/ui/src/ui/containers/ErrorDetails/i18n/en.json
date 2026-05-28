@@ -1,5 +1,6 @@
 {
   "title_tab-details": "Details",
   "title_tab-stderrs": "Stderrs",
-  "title_tab-attributes": "Attributes"
+  "title_tab-attributes": "Attributes",
+  "alert_unexpected-error-format": "Unexpected error format"
 }

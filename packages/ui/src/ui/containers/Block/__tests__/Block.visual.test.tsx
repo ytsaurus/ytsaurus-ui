@@ -18,3 +18,14 @@ test('YTErrorBlock: CompactView', async ({mount, expectScreenshot}) => {
     await mount(<BlockStories.CompactView />);
     await expectScreenshot();
 });
+
+test('YTErrorBlock: UnexpectedErrorFields', async ({mount, expectScreenshot, page}) => {
+    await mount(<BlockStories.UnexpectedErrorFields />);
+    await page.locator('.elements-error-details__error-toggler').click();
+    await expectScreenshot();
+});
+
+test('YTErrorBlock: UnexpectedErrorFields2', async ({mount, expectScreenshot}) => {
+    await mount(<BlockStories.UnexpectedErrorFields2 />);
+    await expectScreenshot();
+});

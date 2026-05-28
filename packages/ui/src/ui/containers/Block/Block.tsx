@@ -8,7 +8,11 @@ import {Button, Flex, Text} from '@gravity-ui/uikit';
 import hammer from '../../common/hammer';
 
 import {type YTError, type YTErrorRaw} from '../../../@types/types';
-import ErrorDetails, {type ErrorDetailsProps} from '../../containers/ErrorDetails/ErrorDetails';
+
+import ErrorDetails, {
+    ErrorDetailsMessage,
+    type ErrorDetailsProps,
+} from '../../containers/ErrorDetails/ErrorDetails';
 import HelpLink from '../../components/HelpLink/HelpLink';
 import FormattedText from '../../components/formatters/FormattedText';
 import {rumLogError} from '../../rum/rum-counter';
@@ -65,10 +69,6 @@ export function YTErrorBlock({error, ...props}: YTErrorBlockProps) {
             return {message: error};
         }
 
-        if (isThereOnlyErrorFieldString(error)) {
-            return {message: error.error};
-        }
-
         if (error instanceof Error) {
             return error;
         }
@@ -81,20 +81,6 @@ export function YTErrorBlock({error, ...props}: YTErrorBlockProps) {
     }, [error]);
 
     return <YTErrorBlockImpl {...props} error={e} />;
-}
-
-function isThereOnlyErrorFieldString(error: YTErrorBlockProps['error']): error is {error: string} {
-    if (!error) {
-        return false;
-    }
-
-    if ('error' in error && typeof error.error === 'string') {
-        const keys = Object.keys(error);
-        if (keys.length === 1) {
-            return true;
-        }
-    }
-    return false;
 }
 
 class YTErrorBlockImpl extends React.Component<YTErrorBlockInternalProps> {
@@ -128,7 +114,8 @@ class YTErrorBlockImpl extends React.Component<YTErrorBlockInternalProps> {
         const {message, error} = this.props;
         return (
             <>
-                {message ?? (error ? ErrorDetails.renderMessage(error as YTErrorRaw) : undefined)}
+                {message ??
+                    (error ? <ErrorDetailsMessage error={error as YTErrorRaw} /> : undefined)}
                 <Button
                     style={{width: 'fit-content'}}
                     view={'outlined'}
