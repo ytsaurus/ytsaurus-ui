@@ -12,7 +12,7 @@ import map_ from 'lodash/map';
 
 import {type YTErrorRaw} from '../../../@types/types';
 
-import Icon from '../Icon/Icon';
+import Icon from '../../components/Icon/Icon';
 import Tabs from '../../components/Tabs/Tabs';
 import {Yson} from '../../components/Yson/Yson';
 

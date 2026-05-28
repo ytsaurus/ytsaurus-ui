@@ -8,8 +8,7 @@ import {Button, Flex, Text} from '@gravity-ui/uikit';
 import hammer from '../../common/hammer';
 
 import {type YTError, type YTErrorRaw} from '../../../@types/types';
-
-import ErrorDetails, {type ErrorDetailsProps} from '../../components/ErrorDetails/ErrorDetails';
+import ErrorDetails, {type ErrorDetailsProps} from '../../containers/ErrorDetails/ErrorDetails';
 import HelpLink from '../../components/HelpLink/HelpLink';
 import FormattedText from '../../components/formatters/FormattedText';
 import {rumLogError} from '../../rum/rum-counter';
