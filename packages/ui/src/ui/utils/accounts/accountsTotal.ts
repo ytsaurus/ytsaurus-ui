@@ -2,6 +2,7 @@ import compact_ from 'lodash/compact';
 import forEach_ from 'lodash/forEach';
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
+import {type Stack} from '@gravity-ui/uikit';
 
 import hammer from '../../common/hammer';
 import {
@@ -10,6 +11,7 @@ import {
     getProgressTheme,
 } from '../../utils/progress';
 import {calcProgressProps} from '../../utils/utils';
+import i18n from './i18n';
 
 const nodesChunksUsageList = ['node_count', 'chunk_count'] as const;
 
@@ -231,6 +233,7 @@ export function getDiskSpace(
     nodesData: NodesData,
     mediumList: string[],
     systemReservedDiskSpacePerMedium: Record<string, number> = {},
+    uncommittedDiskSpacePerMedium: Record<string, number> = {},
 ) {
     const clusterTotalPerMedium = getClusterTotal(
         clusterTotalsUsage,
@@ -247,54 +250,74 @@ export function getDiskSpace(
     const writeThroughput = getWriteThroughput(nodesData, mediumList).perMedium;
 
     const formatBytes = hammer.format['Bytes'];
-
     return mediumList.map((mediumType) => {
         const {usage: clusterUsage, limit: clusterLimit} = clusterTotalPerMedium[mediumType];
         const hardwareLimit = hardwareLimitPerMedium[mediumType].limit;
-
         const {usage: diskReadRate, limit: diskReadCapacity} = readThroughput[mediumType];
         const {usage: diskWriteRate, limit: diskWriteCapacity} = writeThroughput[mediumType];
-        const systemReserved = systemReservedDiskSpacePerMedium[mediumType] || 0;
+
+        const systemReserved = systemReservedDiskSpacePerMedium[mediumType] ?? 0;
+        const uncommitted = uncommittedDiskSpacePerMedium[mediumType] ?? 0;
         const hasReserve = systemReserved > 0 && clusterLimit > 0;
+        const hasUncommitted = uncommitted > 0 && clusterLimit > 0;
 
-        let text = `${formatBytes(clusterUsage)} / ${formatBytes(clusterLimit)}`;
+        const textParts = [formatBytes(clusterUsage)];
+        if (hasReserve) textParts.push(formatBytes(systemReserved));
+        if (hasUncommitted) textParts.push(formatBytes(uncommitted));
+        const text = `${textParts.join(' + ')} / ${formatBytes(clusterLimit)}`;
 
-        if (hasReserve) {
-            text = `${formatBytes(systemReserved)} + ${formatBytes(clusterUsage)} / ${formatBytes(clusterLimit)}`;
+        const totalUsed =
+            clusterUsage + (hasReserve ? systemReserved : 0) + (hasUncommitted ? uncommitted : 0);
+
+        const clusterUsageTheme = getProgressTheme(
+            (totalUsed / clusterLimit) * 100,
+            defaultThemeThresholds,
+        );
+        const clusterUsageInfo = {
+            value: (clusterUsage / clusterLimit) * 100,
+            theme: clusterUsageTheme,
+            title: i18n('tooltip_commited'),
+        };
+
+        const stack: Stack[] = [clusterUsageInfo];
+        const tooltipInfo: Stack[] = [
+            {
+                ...clusterUsageInfo,
+                value: formatBytes(clusterUsage),
+            },
+        ];
+
+        if (hasUncommitted) {
+            const uncommittedInfo = {
+                value: (uncommitted / clusterLimit) * 100,
+                color: 'var(--g-color-base-neutral-heavy)',
+                title: i18n('tooltip_uncommitted'),
+            };
+            stack.push(uncommittedInfo);
+            tooltipInfo.push({
+                ...uncommittedInfo,
+                value: formatBytes(uncommitted),
+            });
         }
 
-        const stack = hasReserve
-            ? [
-                  {
-                      value: (systemReserved / clusterLimit) * 100,
-                      color: 'var(--g-color-base-neutral-medium)',
-                      title: formatBytes(systemReserved),
-                  },
-                  {
-                      value: (clusterUsage / clusterLimit) * 100,
-                      theme: getProgressTheme(
-                          ((clusterUsage + systemReserved) / clusterLimit) * 100,
-                          defaultThemeThresholds,
-                      ),
-                  },
-              ]
-            : [
-                  {
-                      value: (clusterUsage / clusterLimit) * 100,
-                      theme: getProgressTheme(
-                          (clusterUsage / clusterLimit) * 100,
-                          defaultThemeThresholds,
-                      ),
-                  },
-              ];
+        if (hasReserve) {
+            const systemReservedInfo = {
+                value: (systemReserved / clusterLimit) * 100,
+                color: 'var(--g-color-base-info-heavy)',
+                title: i18n('tooltip_system-reserved'),
+            };
+
+            stack.push(systemReservedInfo);
+            tooltipInfo.push({
+                ...systemReservedInfo,
+                value: formatBytes(systemReserved),
+            });
+        }
 
         return {
             show: hardwareLimit !== 0,
             mediumType,
-            clusterUsage: {
-                text,
-                stack,
-            },
+            clusterUsage: {text, stack, tooltipInfo},
             readThroughput: {
                 progress: calcProgressProps(
                     diskReadRate,
@@ -314,7 +337,7 @@ export function getDiskSpace(
                 show: diskWriteCapacity > 0,
             },
             hardwareLimit,
-            overcommitted: hardwareLimit + systemReserved < clusterLimit,
+            overcommitted: hardwareLimit + systemReserved + uncommitted < clusterLimit,
         };
     });
 }

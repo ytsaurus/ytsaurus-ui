@@ -26,6 +26,7 @@ import {
     UPDATE_EDITABLE_ACCOUNT,
 } from '../../../constants/accounts/accounts';
 import {ACCOUNTS_DATA_FIELDS_ACTION} from '../../../constants/accounts';
+import {GLOBAL_PARTIAL} from '../../../constants/global';
 import {USE_CACHE, USE_MAX_SIZE} from '../../../../shared/constants/yt-api';
 import {selectCluster, selectCurrentUserName} from '../../../store/selectors/global';
 import {
@@ -101,6 +102,18 @@ export function fetchAccounts() {
                     path: '//sys/users/' + userName + '/@usable_accounts',
                 },
             },
+            {
+                command: 'get',
+                parameters: {
+                    path: '//sys/accounts/root/@recursive_resource_usage/disk_space_per_medium',
+                },
+            },
+            {
+                command: 'get',
+                parameters: {
+                    path: '//sys/accounts/root/@recursive_committed_resource_usage/disk_space_per_medium',
+                },
+            },
         ];
 
         const rumId = new RumWrapper(cluster, RumMeasureTypes.ACCOUNTS);
@@ -117,6 +130,8 @@ export function fetchAccounts() {
                     {error: resourceError, output: resources},
                     {error: nodesError, output: nodes},
                     {error: usableAccountsError, output: usableAccounts},
+                    {output: recursiveUsage},
+                    {output: recursiveCommittedUsage},
                 ] = batchData;
                 Promise.resolve(accountsError)
                     .then((e) => {
@@ -180,6 +195,18 @@ export function fetchAccounts() {
                         data: {error: usableAccountsError},
                     });
                 }
+
+                const uncommittedDiskSpacePerMedium = {};
+                if (recursiveUsage && recursiveCommittedUsage) {
+                    Object.keys(recursiveUsage).forEach((medium) => {
+                        uncommittedDiskSpacePerMedium[medium] =
+                            (recursiveUsage[medium] ?? 0) - (recursiveCommittedUsage[medium] ?? 0);
+                    });
+                }
+                dispatch({
+                    type: GLOBAL_PARTIAL,
+                    data: {uncommittedDiskSpacePerMedium},
+                });
             });
     };
 }

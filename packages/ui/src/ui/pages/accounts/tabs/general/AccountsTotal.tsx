@@ -5,7 +5,7 @@ import block from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
 
-import {Progress} from '@gravity-ui/uikit';
+import {Progress, type Stack} from '@gravity-ui/uikit';
 
 import WarningIcon from '../../../../components/WarningIcon/WarningIcon';
 import {
@@ -15,6 +15,10 @@ import {
     getNodesChunksTotals,
 } from '../../../../utils/accounts/accountsTotal';
 import i18n from './i18n';
+import {addProgressStackSpacers} from '../../../../utils/progress';
+import {Tooltip} from '@ytsaurus/components';
+import {ColorCircle} from '../../../../components/ColorCircle/ColorCircle';
+import {MetaTable, type MetaTableItem} from '@ytsaurus/components';
 
 const b = block('accounts');
 
@@ -24,6 +28,7 @@ interface Props {
     nodesData: NodesData;
     mediumList: string[];
     systemReservedDiskSpacePerMedium?: Record<string, number>;
+    uncommittedDiskSpacePerMedium?: Record<string, number>;
 }
 
 export default class AccountsTotal extends Component<Props> {
@@ -34,7 +39,25 @@ export default class AccountsTotal extends Component<Props> {
         nodesData: PropTypes.object,
         mediumList: PropTypes.array,
         systemReservedDiskSpacePerMedium: PropTypes.object,
+        uncommittedDiskSpacePerMedium: PropTypes.object,
     };
+
+    renderTooltipContent(tooltipItems: Stack[]) {
+        const items: MetaTableItem[] = tooltipItems.map((item) => {
+            return {
+                key: item.title || '',
+                label: (
+                    <span>
+                        <ColorCircle theme={item.theme} color={item.color} marginRight />
+                        {item.title}
+                    </span>
+                ),
+                value: item.value,
+            };
+        });
+
+        return <MetaTable items={items} />;
+    }
 
     renderNodesChunksTotals() {
         const {clusterTotalsUsage} = this.props;
@@ -69,6 +92,7 @@ export default class AccountsTotal extends Component<Props> {
             nodesData,
             mediumList,
             systemReservedDiskSpacePerMedium,
+            uncommittedDiskSpacePerMedium,
         } = this.props;
 
         const diskSpace = getDiskSpace(
@@ -77,6 +101,7 @@ export default class AccountsTotal extends Component<Props> {
             nodesData,
             mediumList,
             systemReservedDiskSpacePerMedium,
+            uncommittedDiskSpacePerMedium,
         );
 
         return (
@@ -118,10 +143,20 @@ export default class AccountsTotal extends Component<Props> {
                                             {hammer.format['ReadableField'](item.mediumType)}
                                         </td>
                                         <td className={b('disk-space-cluster-usage')}>
-                                            <Progress
-                                                stack={item.clusterUsage.stack}
-                                                text={item.clusterUsage.text}
-                                            />
+                                            <Tooltip
+                                                className={b('disk-space-tooltip')}
+                                                placement={'bottom'}
+                                                content={this.renderTooltipContent(
+                                                    item.clusterUsage.tooltipInfo,
+                                                )}
+                                            >
+                                                <Progress
+                                                    stack={addProgressStackSpacers(
+                                                        item.clusterUsage.stack,
+                                                    )}
+                                                    text={item.clusterUsage.text}
+                                                />
+                                            </Tooltip>
                                         </td>
                                         <td className={b('disk-space-hardware-limit')}>
                                             {hammer.format['Bytes'](item.hardwareLimit)}
