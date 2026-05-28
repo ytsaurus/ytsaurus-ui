@@ -35,11 +35,7 @@ export interface SchedulingEphemeralState {
     errorData?: YTError;
 
     poolLoading: boolean;
-    poolLoaded: boolean;
-    poolError: boolean;
     poolErrorData?: YTError;
-
-    isNewPools: boolean;
 
     schedulerAlerts: Array<YTError>;
     treeResources: TreeResources;
@@ -90,10 +86,6 @@ const ephemeralState: SchedulingEphemeralState = {
     errorData: undefined,
 
     poolLoading: false,
-    poolLoaded: false,
-    poolError: false,
-
-    isNewPools: false,
 
     schedulerAlerts: [],
     treeResources: {},
@@ -133,7 +125,12 @@ export type SchedulingState = typeof initialState;
 const reducer = (state = initialState, action: SchedulingAction) => {
     switch (action.type) {
         case SCHEDULING_DATA_REQUEST:
-            return {...state, loading: true};
+            return {
+                ...state,
+                loading: true,
+                error: false,
+                errorData: undefined,
+            };
 
         case SCHEDULING_DATA_PARTITION:
             return {...state, ...action.data};
@@ -144,7 +141,6 @@ const reducer = (state = initialState, action: SchedulingAction) => {
                 ...action.data,
                 loaded: true,
                 loading: false,
-                error: false,
             };
 
         case SCHEDULING_DATA_FAILURE:
@@ -166,9 +162,8 @@ const reducer = (state = initialState, action: SchedulingAction) => {
         case SCHEDULING_EDIT_POOL_SUCCESS:
             return {
                 ...state,
-                poolLoaded: true,
                 poolLoading: false,
-                poolError: false,
+                poolErrorData: undefined,
             };
 
         case SCHEDULING_DELETE_POOL_FAILURE:
@@ -176,7 +171,6 @@ const reducer = (state = initialState, action: SchedulingAction) => {
             return {
                 ...state,
                 poolLoading: false,
-                poolError: true,
                 poolErrorData: action.data.error,
             };
 
@@ -185,19 +179,28 @@ const reducer = (state = initialState, action: SchedulingAction) => {
             return {
                 ...state,
                 poolLoading: false,
-                poolLoaded: false,
-                poolError: false,
                 poolErrorData: undefined,
             };
 
         case CHANGE_TREE:
-            return {...state, tree: action.data.tree};
+            return {
+                ...state,
+                tree: action.data.tree,
+                error: false,
+                errorData: undefined,
+            };
 
         case CHANGE_TABLE_TREE_STATE:
             return {...state, treeState: action.data.treeState};
 
         case CHANGE_POOL:
-            return {...state, pool: action.data.pool};
+            return {
+                ...state,
+                pool: action.data.pool,
+                poolErrorData: undefined,
+                error: false,
+                errorData: undefined,
+            };
 
         case CHANGE_CONTENT_MODE:
             return {...state, contentMode: action.data.contentMode};

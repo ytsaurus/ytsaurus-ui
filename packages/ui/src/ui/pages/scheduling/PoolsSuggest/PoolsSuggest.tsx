@@ -63,7 +63,9 @@ export function PoolsSuggest({
 
     const onItemClick = React.useCallback(
         (pool: string) => {
-            dispatch(changePool(pool));
+            if (pool !== '') {
+                dispatch(changePool(pool));
+            }
             onCancelEdit();
         },
         [dispatch, onCancelEdit],
@@ -72,6 +74,16 @@ export function PoolsSuggest({
     const onFocus = React.useCallback(() => {
         dispatch(schedulingLoadFilterAttributes(tree));
     }, [dispatch, tree]);
+
+    const onEnterKeyDown = React.useCallback(
+        (value: string) => {
+            if (value && value.trim()) {
+                dispatch(changePool(value));
+                onCancelEdit();
+            }
+        },
+        [dispatch, onCancelEdit],
+    );
 
     return (
         <Suggest
@@ -83,7 +95,9 @@ export function PoolsSuggest({
             onFocus={onFocus}
             placeholder={i18n('field_select-pool')}
             onItemClick={(item) => onItemClick('string' === typeof item ? item : item.value)}
+            apply={(value) => onItemClick(typeof value === 'string' ? value : value.value)}
             items={poolNames}
+            onEnterKeyDown={onEnterKeyDown}
         />
     );
 }

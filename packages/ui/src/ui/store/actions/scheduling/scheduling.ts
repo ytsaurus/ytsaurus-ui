@@ -12,6 +12,7 @@ import {type BatchSubRequest} from '../../../../shared/yt-types';
 
 import {type RootState} from '../../../store/reducers';
 import {splitBatchResults} from '../../../../shared/utils/error';
+import {type YTError} from '../../../../@types/types';
 
 import {selectSchedulingNS} from '../../../store/selectors/settings';
 import {toggleFavourite} from '../../../store/actions/favourites';
@@ -36,6 +37,7 @@ import {
     CHANGE_POOL_CHILDREN_FILTER,
     CHANGE_TABLE_TREE_STATE,
     CHANGE_TREE,
+    SCHEDULING_DATA_FAILURE,
     SCHEDULING_DATA_PARTITION,
     SCHEDULING_EDIT_POOL_CANCELLED,
     SCHEDULING_EDIT_POOL_FAILURE,
@@ -314,6 +316,14 @@ export function closeEditModal({cancelled}: {cancelled?: boolean} = {}): Schedul
 export function changeTree(tree: string): SchedulingThunk<void> {
     return (dispatch) => {
         dispatch({
+            type: SCHEDULING_DATA_PARTITION,
+            data: {
+                error: false,
+                errorData: undefined,
+            },
+        });
+
+        dispatch({
             type: CHANGE_TREE,
             data: {tree},
         });
@@ -366,5 +376,14 @@ export function schedulingSetShowAbsResources(showAbsResources: boolean): Schedu
     return {
         type: SCHEDULING_DATA_PARTITION,
         data: {showAbsResources},
+    };
+}
+
+export function schedulingDataFailure(error: YTError): SchedulingAction {
+    return {
+        type: SCHEDULING_DATA_FAILURE,
+        data: {
+            error,
+        },
     };
 }

@@ -9,7 +9,5 @@ export function FlowError({error}: {error?: YTError}) {
     const path = useSelector(selectFlowPipelinePath);
     const cluster = useSelector(selectCluster);
 
-    return !error ? null : (
-        <NavigationError details={error} path={path} cluster={cluster} message={error.message} />
-    );
+    return !error ? null : <NavigationError details={error} path={path} cluster={cluster} />;
 }

@@ -17,7 +17,7 @@ import {
 } from './helpers';
 import i18n from './i18n';
 
-const block = cn('generic-error-page');
+const block = cn('pretty-error-page');
 
 export type PrettyErrorProps = {
     error: YTError;
@@ -77,8 +77,7 @@ export function PrettyError(props: PrettyErrorProps) {
     const {error, className, errorsInfo, errorContext} = props;
     const code = props.errorCode ?? determineErrorCode(error, errorsInfo);
 
-    const generatedTitle = getErrorTitle(error, code, errorsInfo, errorContext);
-    const finalTitle = generatedTitle || title || 'An unexpected error occurred';
+    const title = getErrorTitle(error, code, errorsInfo, errorContext) || i18n('unexpected-error');
 
     if (code && errorsInfo && errorsInfo[code]) {
         return <PrettyErrorView {...props} code={code} title={title} />;
