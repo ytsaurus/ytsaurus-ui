@@ -70,3 +70,5 @@ export const getErrorsYsonSettings = createSelector([getYsonSettings], clone_);
 export const getYsonSettingsDisableDecode = createSelector([getYsonSettings], (settings) => {
     return {...settings, decodeUTF8: false};
 });
+
+export const getYsonSettingsErrorDetails = createSelector([getYsonSettings], clone_);
