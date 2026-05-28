@@ -8,7 +8,7 @@ import cn from 'bem-cn-lite';
 import map_ from 'lodash/map';
 
 import {MapNodeIcon} from '../../../../../components/MapNodeIcon/MapNodeIcon';
-import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../../containers/ErrorBoundary/ErrorBoundary';
 import {MetaTable} from '@ytsaurus/components';
 import HelpLink from '../../../../../components/HelpLink/HelpLink';
 import {Checkbox, Loader} from '@gravity-ui/uikit';

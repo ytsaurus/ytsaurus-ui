@@ -1,6 +1,6 @@
 import React, {type FC} from 'react';
 import cn from 'bem-cn-lite';
-import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
 import {Tab} from '../../../../constants/navigation';
 import NavigationDescription from '../../NavigationDescription/NavigationDescription';
 import {getComponentByContentType, getComponentByMode} from './helpers';

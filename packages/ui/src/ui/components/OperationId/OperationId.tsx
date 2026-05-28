@@ -2,7 +2,7 @@ import React from 'react';
 
 import {Text} from '@gravity-ui/uikit';
 
-import Link from '../../components/Link/Link';
+import Link from '../../containers/Link/Link';
 import format from '../../common/hammer/format';
 import {Page} from '../../../shared/constants/settings';
 import {ClipboardButton} from '@ytsaurus/components';

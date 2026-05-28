@@ -4,7 +4,7 @@ import filter_ from 'lodash/filter';
 import forEach_ from 'lodash/forEach';
 import map_ from 'lodash/map';
 
-import {type EditableManyListsItemType} from '../../../../components/Dialog';
+import {type EditableManyListsItemType} from '../../../../containers/Dialog';
 import {
     type ResponsibleType,
     type RoleConverted,

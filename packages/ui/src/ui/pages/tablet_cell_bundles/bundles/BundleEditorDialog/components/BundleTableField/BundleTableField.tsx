@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import {Radio, Table, type TableColumnConfig} from '@gravity-ui/uikit';
 
-import {type DialogControlProps} from '../../../../../../components/Dialog/Dialog.types';
+import {type DialogControlProps} from '../../../../../../containers/Dialog/Dialog.types';
 import {type BundleResourceGuarantee} from '../../../../../../store/reducers/tablet_cell_bundles';
 
 import './BundleTableField.scss';

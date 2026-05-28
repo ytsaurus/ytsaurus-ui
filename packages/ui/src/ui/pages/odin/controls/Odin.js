@@ -6,8 +6,8 @@ import block from 'bem-cn-lite';
 import {Redirect, Route, Switch, useRouteMatch} from 'react-router';
 
 import Message from '../../../components/Message/Message';
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
-import ClusterSelectControl from '../../../components/Dialog/controls/ClusterSelectControl/ClusterSelectControl';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
+import ClusterSelectControl from '../../../containers/Dialog/controls/ClusterSelectControl/ClusterSelectControl';
 import {setRootPagesCluster} from '../../../store/actions/global';
 import {selectCluster} from '../../../store/selectors/global';
 import Tabs from '../../../components/Tabs/Tabs';

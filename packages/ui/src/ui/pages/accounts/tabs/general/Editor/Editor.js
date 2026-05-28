@@ -11,7 +11,7 @@ import MediumContent from './content/MediumContent';
 import TabletsContent from './content/TabletsContent';
 import MasterMemoryContent from './content/MasterMemoryContent';
 import {EDITOR_TABS} from '../../../../../constants/accounts/editor';
-import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../../containers/ErrorBoundary/ErrorBoundary';
 
 import './Editor.scss';
 

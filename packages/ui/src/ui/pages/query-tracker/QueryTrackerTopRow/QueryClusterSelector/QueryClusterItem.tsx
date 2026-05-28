@@ -3,7 +3,7 @@ import {type ClusterConfig} from '../../../../../shared/yt-types';
 import cn from 'bem-cn-lite';
 import './QueryClusterItem.scss';
 import {Text} from '@gravity-ui/uikit';
-import ClusterIcon from '../../../../components/ClusterIcon/ClusterIcon';
+import ClusterIcon from '../../../../containers/ClusterIcon/ClusterIcon';
 import {useClusterColorClassName} from '../../../../containers/ClusterPageHeader/ClusterColor';
 
 const block = cn('query-cluster-item');

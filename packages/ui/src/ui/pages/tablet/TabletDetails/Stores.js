@@ -9,8 +9,8 @@ import {Loader} from '@gravity-ui/uikit';
 import {FormattedId} from '../../../components/formatters';
 import {MetaTable} from '@ytsaurus/components';
 import ElementsTable from '../../../components/ElementsTable/ElementsTable';
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
-import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
+import LoadDataHandler from '../../../containers/LoadDataHandler/LoadDataHandler';
 
 import {abortAndReset, loadStoresData} from '../../../store/actions/tablet/stores';
 import {TABLET_PARTITION_STORES_TABLE_ID} from '../../../constants/tablet';

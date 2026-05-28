@@ -9,7 +9,7 @@ import {
 } from '../../../../../../store/reducers/navigation/tabs/queue/consumers';
 import {useUnregisterConsumerMutation} from '../../../../../../store/api/navigation/tabs/queue/queue';
 
-import {YTDFDialog, makeErrorFields} from '../../../../../../components/Dialog';
+import {YTDFDialog, makeErrorFields} from '../../../../../../containers/Dialog';
 import {type YTError} from '../../../../../../../@types/types';
 
 export function UnregisterConsumerDialog() {

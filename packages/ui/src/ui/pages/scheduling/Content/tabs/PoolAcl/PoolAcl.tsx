@@ -4,7 +4,7 @@ import {useSelector} from '../../../../../store/redux-hooks';
 
 import isEmpty_ from 'lodash/isEmpty';
 
-import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../../containers/ErrorBoundary/ErrorBoundary';
 import {NoContent} from '../../../../../components/NoContent';
 import i18n from './i18n';
 import {type RootState} from '../../../../../store/reducers';

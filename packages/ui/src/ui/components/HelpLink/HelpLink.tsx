@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Link from '../../components/Link/Link';
+import Link from '../../containers/Link/Link';
 import cn from 'bem-cn-lite';
 
 import Icon from '../../components/Icon/Icon';

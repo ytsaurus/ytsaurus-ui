@@ -4,7 +4,7 @@ import block from 'bem-cn-lite';
 import qs from 'qs';
 import map_ from 'lodash/map';
 
-import Link from '../../../components/Link/Link';
+import Link from '../../../containers/Link/Link';
 
 import {selectCluster} from '../../../store/selectors/global';
 import {type RootState} from '../../../store/reducers';

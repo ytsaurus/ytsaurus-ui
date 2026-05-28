@@ -13,7 +13,7 @@ import ErrorDetails, {type ErrorDetailsProps} from '../../components/ErrorDetail
 import HelpLink from '../../components/HelpLink/HelpLink';
 import FormattedText from '../../components/formatters/FormattedText';
 import {rumLogError} from '../../rum/rum-counter';
-import {ErrorToClipboardButton} from '../../components/ErrorToClipboardButton/ErrorToClipboardButton';
+import {ErrorToClipboardButton} from '../../containers/ErrorToClipboardButton/ErrorToClipboardButton';
 import {showErrorPopup} from '../../utils/utils';
 
 import Icon from '../../components/Icon/Icon';

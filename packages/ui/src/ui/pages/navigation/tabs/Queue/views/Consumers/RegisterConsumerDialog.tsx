@@ -8,7 +8,7 @@ import {
 import {useRegisterConsumerMutation} from '../../../../../../store/api/navigation/tabs/queue/queue';
 import {selectCluster} from '../../../../../../store/selectors/global';
 
-import {type FormApi, YTDFDialog, makeErrorFields} from '../../../../../../components/Dialog';
+import {type FormApi, YTDFDialog, makeErrorFields} from '../../../../../../containers/Dialog';
 
 import {docsUrl} from '../../../../../../config';
 import UIFactory from '../../../../../../UIFactory';

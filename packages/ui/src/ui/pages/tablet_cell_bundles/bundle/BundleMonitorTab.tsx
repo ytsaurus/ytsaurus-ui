@@ -5,7 +5,7 @@ import ypath from '../../../common/thor/ypath';
 import {selectTabletsActiveBundleData} from '../../../store/selectors/tablet_cell_bundles';
 
 import {NoContent} from '../../../components/NoContent';
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 
 import './BundleMonitorTab.scss';
 

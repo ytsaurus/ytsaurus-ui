@@ -7,7 +7,7 @@ import {DialogWrapper as CommonDialog} from '../../../components/DialogWrapper/D
 
 import isEqual_ from 'lodash/isEqual';
 
-import {type DialogField, type FormApi, YTDFDialog} from '../../../components/Dialog';
+import {type DialogField, type FormApi, YTDFDialog} from '../../../containers/Dialog';
 
 import {type IdmKindType} from '../../../utils/acl/acl-types';
 import {type PreparedRole} from '../../../utils/acl';
@@ -15,8 +15,8 @@ import {type YTError} from '../../../types';
 
 import Button from '../../../components/Button/Button';
 import {YTErrorBlock} from '../../../containers/Block/Block';
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
-import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
+import LoadDataHandler from '../../../containers/LoadDataHandler/LoadDataHandler';
 
 import withVisible, {type WithVisibleProps} from '../../../hocs/withVisible';
 

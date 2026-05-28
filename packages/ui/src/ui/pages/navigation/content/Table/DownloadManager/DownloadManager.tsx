@@ -22,7 +22,7 @@ import Filter from '../../../../../components/Filter/Filter';
 import Button from '../../../../../components/Button/Button';
 import Modal from '../../../../../components/Modal/Modal';
 import Icon from '../../../../../components/Icon/Icon';
-import Link from '../../../../../components/Link/Link';
+import Link from '../../../../../containers/Link/Link';
 import Tabs from '../../../../../components/Tabs/Tabs';
 
 import {getRowsPerTablePage, getShowDecoded} from '../../../../../store/selectors/settings';

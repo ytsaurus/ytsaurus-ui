@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {type DialogControlProps} from '../Dialog/Dialog.types';
+import {type DialogControlProps} from '../../containers/Dialog/Dialog.types';
 import {EditTextWithPreview, type EditTextWithPreviewProps} from '../EditTextWithPreview';
 import {Markdown} from '../Markdown/Markdown';
 

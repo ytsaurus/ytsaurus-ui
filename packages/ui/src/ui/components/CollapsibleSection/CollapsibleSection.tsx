@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import block from 'bem-cn-lite';
 
-import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
 
 import './CollapsibleSection.scss';
 import Icon from '../../components/Icon/Icon';

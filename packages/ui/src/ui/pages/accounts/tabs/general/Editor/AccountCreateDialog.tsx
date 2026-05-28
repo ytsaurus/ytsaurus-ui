@@ -1,7 +1,7 @@
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {type ConnectedProps, connect} from 'react-redux';
-import {type DialogField, type FormApi, YTDFDialog} from '../../../../../components/Dialog';
+import {type DialogField, type FormApi, YTDFDialog} from '../../../../../containers/Dialog';
 import {isIdmAclAvailable} from '../../../../../config';
 import {ROOT_ACCOUNT_NAME} from '../../../../../constants/accounts/accounts';
 import {loadEditedAccount} from '../../../../../store/actions/accounts/accounts';

@@ -19,7 +19,7 @@ import {
     type DialogTabField,
     type FormApi,
     YTDFDialog,
-} from '../../../components/Dialog';
+} from '../../../containers/Dialog';
 
 import {
     invalidateYTAnnotation,

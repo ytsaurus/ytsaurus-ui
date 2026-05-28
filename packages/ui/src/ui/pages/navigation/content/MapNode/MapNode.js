@@ -9,7 +9,7 @@ import map_ from 'lodash/map';
 
 import {getConfigUploadTable} from '../../../../config/index';
 
-import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
 import RadioButton from '../../../../components/RadioButton/RadioButton';
 import Button from '../../../../components/Button/Button';
 import Filter from '../../../../components/Filter/Filter';

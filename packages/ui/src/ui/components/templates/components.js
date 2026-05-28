@@ -9,7 +9,7 @@ import map_ from 'lodash/map';
 
 import {Progress} from '@gravity-ui/uikit';
 
-import Link from '../../components/Link/Link';
+import Link from '../../containers/Link/Link';
 import templates from '../../components/templates/utils.js';
 
 import hammer from '../../common/hammer';

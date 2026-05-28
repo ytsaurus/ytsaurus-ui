@@ -37,7 +37,7 @@ import {
 
 import Favourites from '../../../components/Favourites/Favourites';
 import {ClipboardButton, Escaped, MetaTable, Tooltip} from '@ytsaurus/components';
-import Link from '../../../components/Link/Link';
+import Link from '../../../containers/Link/Link';
 import Editor from '../../../components/Editor/Editor';
 import Button from '../../../components/Button/Button';
 import Icon from '../../../components/Icon/Icon';

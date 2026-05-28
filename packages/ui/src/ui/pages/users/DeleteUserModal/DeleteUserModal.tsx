@@ -4,7 +4,7 @@ import {type RootState} from '../../../store/reducers';
 import {Text} from '@gravity-ui/uikit';
 import {closeUserDeleteModal, deleteUser} from '../../../store/actions/users-typed';
 import {fetchUsers} from '../../../store/actions/users/index';
-import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
+import {YTDFDialog, makeErrorFields} from '../../../containers/Dialog';
 import {type YTError} from '../../../types';
 import {disableUsersCache} from '../../../utils/users-groups';
 import i18n from './i18n';

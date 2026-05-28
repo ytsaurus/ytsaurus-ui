@@ -11,7 +11,7 @@ import {WidgetNoItemsTextFallback} from '../../../../../../pages/dashboard2/Dash
 
 import {MapNodeIcon} from '../../../../../../components/MapNodeIcon/MapNodeIcon';
 import {YTErrorBlock} from '../../../../../../containers/Block/Block';
-import Link from '../../../../../../components/Link/Link';
+import Link from '../../../../../../containers/Link/Link';
 
 import {Page} from '../../../../../../../shared/constants/settings';
 import {type YTError} from '../../../../../../../@types/types';

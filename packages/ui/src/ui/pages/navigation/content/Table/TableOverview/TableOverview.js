@@ -13,7 +13,7 @@ import JupyterButton from '../../../../../pages/navigation/content/Table/TableOv
 import TableActions from '../../../../../pages/navigation/content/Table/TableOverview/TableActions';
 import OffsetInput from '../../../../../pages/navigation/content/Table/TableOverview/OffsetInput';
 import Paginator from '../../../../../pages/navigation/content/Table/TableOverview/Paginator';
-import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../../containers/ErrorBoundary/ErrorBoundary';
 import {OpenQueryButtons} from '../../../../../containers/OpenQueryButtons/OpenQueryButtons';
 
 import './TableOverview.scss';

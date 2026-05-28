@@ -23,7 +23,7 @@ import {
     selectTabletErrorsByBundleTimeRangeFilter,
 } from '../../store/selectors/tablet-errors/tablet-errors-by-bundle';
 
-import Link from '../../components/Link/Link';
+import Link from '../../containers/Link/Link';
 import WithStickyToolbar from '../../components/WithStickyToolbar/WithStickyToolbar';
 import {makeNavigationLink} from '../../utils/app-url';
 

@@ -5,7 +5,7 @@ import {Checkbox} from '@gravity-ui/uikit';
 
 import {docsUrl} from '../../../../../../config';
 import {MetaTable, type MetaTableItem, type MetaTableProps} from '@ytsaurus/components';
-import Link from '../../../../../../components/Link/Link';
+import Link from '../../../../../../containers/Link/Link';
 import Icon from '../../../../../../components/Icon/Icon';
 
 import './JobCounters.scss';

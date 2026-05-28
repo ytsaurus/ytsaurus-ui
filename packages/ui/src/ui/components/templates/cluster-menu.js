@@ -3,7 +3,7 @@ import React from 'react';
 import StatusBulb from '../../components/StatusBulb/StatusBulb';
 import hammer from '../../common/hammer';
 import templates from './utils.js';
-import Link from '../../components/Link/Link';
+import Link from '../../containers/Link/Link';
 import {getClusterAppearance} from '../../appearance';
 
 templates.add('cluster-menu', {

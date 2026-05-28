@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 
 import {Flex} from '@gravity-ui/uikit';
 
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import {isIdmAclAvailable} from '../../../config';
 import {AclMode, IdmObjectType} from '../../../constants/acl';
 import {type IdmKindType} from '../../../utils/acl/acl-types';

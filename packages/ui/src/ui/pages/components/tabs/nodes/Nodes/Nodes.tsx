@@ -20,8 +20,8 @@ import Filter from '../../../../../components/Filter/Filter';
 import Icon from '../../../../../components/Icon/Icon';
 import Loader from '../../../../../components/Loader/Loader';
 
-import LoadDataHandler from '../../../../../components/LoadDataHandler/LoadDataHandler';
-import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
+import LoadDataHandler from '../../../../../containers/LoadDataHandler/LoadDataHandler';
+import ErrorBoundary from '../../../../../containers/ErrorBoundary/ErrorBoundary';
 import WithStickyToolbar from '../../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {Toolbar} from '../../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 

@@ -7,10 +7,10 @@ import React, {Component, Fragment} from 'react';
 import aclInheritedSvg from '../../assets/img/svg/acl-inherited.svg';
 import hammer from '../../common/hammer';
 import {DataTableYT} from '../../components/DataTableYT';
-import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
 import {ExpandButton} from '../../components/ExpandButton';
 import Label from '../../components/Label';
-import LoadDataHandler from '../../components/LoadDataHandler/LoadDataHandler';
+import LoadDataHandler from '../../containers/LoadDataHandler/LoadDataHandler';
 import {
     SegmentControl,
     type SegmentControlItem,

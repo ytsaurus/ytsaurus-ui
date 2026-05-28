@@ -3,7 +3,7 @@ import {type Column} from '@gravity-ui/react-data-table';
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {DataTableYT} from '../../../components/DataTableYT';
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import Icon from '../../../components/Icon/Icon';
 import TextInputWithDebounce from '../../../components/TextInputWithDebounce/TextInputWithDebounce';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';

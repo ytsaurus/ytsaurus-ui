@@ -6,13 +6,13 @@ import cn from 'bem-cn-lite';
 import Button from '../../../components/Button/Button';
 import {YTErrorBlock} from '../../../containers/Block/Block';
 import Icon from '../../../components/Icon/Icon';
-import {YTDFDialog} from '../../../components/Dialog';
+import {YTDFDialog} from '../../../containers/Dialog';
 import {YsonWithScroll} from '../../../components/Yson/YsonWithScroll';
 import {type UnipikaSettings} from '../../../components/Yson/StructuredYson/StructuredYsonTypes';
 import {
     linkPoolWithPoolTree,
     makeTabbedDialogFieldsFromDescription,
-} from '../../../components/Dialog/df-dialog-utils';
+} from '../../../containers/Dialog/df-dialog-utils';
 
 import {useUpdater} from '../../../hooks/use-updater';
 

@@ -48,11 +48,11 @@ import {
 import {type MetricData, type MetricListItem} from '../odin-utils';
 import {type OdinOverviewStateDataItem} from '../_reducers/odin-overview';
 import {ClickableText} from '../../../components/ClickableText/ClickableText';
-import Link from '../../../components/Link/Link';
+import Link from '../../../containers/Link/Link';
 // @ts-ignore
-import {YTDFDialog} from '../../../components/Dialog';
+import {YTDFDialog} from '../../../containers/Dialog';
 
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import {setMetric} from '../_actions';
 import Icon from '../../../components/Icon/Icon';
 import OdinOverviewCreatePresetDialog from './OdinOverviewCreatePresetDialog';

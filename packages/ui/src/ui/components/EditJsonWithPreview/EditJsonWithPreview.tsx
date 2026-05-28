@@ -7,8 +7,8 @@ import {
     type EditTextWithPreviewProps,
 } from '../../components/EditTextWithPreview/EditTextWithPreview';
 import {Yson, type YsonProps} from '../../components/Yson/Yson';
-import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
-import {type DialogControlProps} from '../../components/Dialog/Dialog.types';
+import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
+import {type DialogControlProps} from '../../containers/Dialog/Dialog.types';
 
 import i18n from './i18n';
 

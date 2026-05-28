@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {ReactUnipika as ReactUnipikaWindowScroll} from '@gravity-ui/react-unipika/window-scroll';
 import {ReactUnipika as ReactUnipikaContainerScroll} from '@gravity-ui/react-unipika/container-scroll';
 
-import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
 import {type UnipikaSettings} from './StructuredYson/StructuredYsonTypes';
 
 export type YsonSettings = UnipikaSettings;

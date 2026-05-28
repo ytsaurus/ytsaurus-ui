@@ -7,10 +7,10 @@ import capitalize_ from 'lodash/capitalize';
 import isEmpty_ from 'lodash/isEmpty';
 import map_ from 'lodash/map';
 
-import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
+import LoadDataHandler from '../../../../containers/LoadDataHandler/LoadDataHandler';
 import {Loader} from '@gravity-ui/uikit';
 import {YTErrorBlock} from '../../../../containers/Block/Block';
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 import CollapsibleSection from '../../../../components/CollapsibleSection/CollapsibleSection';
 import {Secondary} from '@ytsaurus/components';
 

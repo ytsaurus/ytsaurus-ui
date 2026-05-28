@@ -11,7 +11,7 @@ import {
 } from '@ytsaurus/components';
 import hammer from '../../../common/hammer';
 import CollapsableText from '../../../components/CollapsableText/CollapsableText';
-import Link from '../../../components/Link/Link';
+import Link from '../../../containers/Link/Link';
 import Icon from '../../../components/Icon/Icon';
 
 export {TemplateId, TemplateFormattedValue, TemplateReadable, TemplateTime};

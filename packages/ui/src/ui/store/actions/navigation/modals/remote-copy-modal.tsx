@@ -9,7 +9,7 @@ import {type RemoteCopyModalStateAction} from '../../../../store/reducers/naviga
 import {REMOTE_COPY_MODAL_PARTIAL} from '../../../../constants/navigation/modals';
 import {type RemoteCopyParams} from '../../../../../@types/types';
 import axios from 'axios';
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 import {ytApiV3} from '../../../../rum/rum-wrap-api';
 import {showErrorPopup, wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {type YTError} from '../../../../types';

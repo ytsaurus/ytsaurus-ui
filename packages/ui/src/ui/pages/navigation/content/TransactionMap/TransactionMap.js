@@ -6,7 +6,7 @@ import hammer from '../../../../common/hammer';
 import cn from 'bem-cn-lite';
 
 import ClickableAttributesButton from '../../../../components/AttributesButton/ClickableAttributesButton';
-import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
+import LoadDataHandler from '../../../../containers/LoadDataHandler/LoadDataHandler';
 import {FormattedText, FormattedTextOrLink} from '../../../../components/formatters';
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import Filter from '../../../../components/Filter/Filter';

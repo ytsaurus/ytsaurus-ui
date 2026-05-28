@@ -6,7 +6,7 @@ import {ArrowUpRightFromSquare} from '@gravity-ui/icons';
 import {Page} from '../../../../../../shared/constants/settings';
 
 import StatusLabel from '../../../../../components/StatusLabel/StatusLabel';
-import Link from '../../../../../components/Link/Link';
+import Link from '../../../../../containers/Link/Link';
 import AttributesButton from '../../../../../components/AttributesButton/AttributesButton';
 
 import {toggleIncarnationInfoDialog} from '../../../../../store/reducers/operations/incarnations';

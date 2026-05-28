@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from '../../components/Link/Link';
+import Link from '../../containers/Link/Link';
 import {useSelector} from '../../store/redux-hooks';
 import {selectCluster} from '../../store/selectors/global';
 import {tabletActiveBundleLink} from '../../utils/components/tablet-cells';

@@ -7,7 +7,7 @@ import {YTErrorBlock} from '../../../../containers/Block/Block';
 import PivotKeys from '../PivotKeys/PivotKeys';
 import Speculative from '../Speculative/Speculative';
 import StatisticsIO from '../StatisticsIO/StatisticsIO';
-import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
 import Events from '../../../../pages/operations/OperationDetail/tabs/details/Events/Events';
 import CollapsibleSection from '../../../../components/CollapsibleSection/CollapsibleSection';
 

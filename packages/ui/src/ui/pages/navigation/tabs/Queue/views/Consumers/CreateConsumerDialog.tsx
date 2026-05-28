@@ -7,7 +7,7 @@ import {
 } from '../../../../../../store/reducers/navigation/tabs/queue/consumers';
 import {useCreateConsumerMutation} from '../../../../../../store/api/navigation/tabs/queue/queue';
 
-import {type FormApi, YTDFDialog, makeErrorFields} from '../../../../../../components/Dialog';
+import {type FormApi, YTDFDialog, makeErrorFields} from '../../../../../../containers/Dialog';
 
 import {docsUrl} from '../../../../../../config';
 import UIFactory from '../../../../../../UIFactory';

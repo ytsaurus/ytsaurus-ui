@@ -8,7 +8,7 @@ import isEmpty_ from 'lodash/isEmpty';
 import pick_ from 'lodash/pick';
 import pickBy_ from 'lodash/pickBy';
 
-import {type DialogField, type FormApi, YTDFDialog} from '../../../../components/Dialog';
+import {type DialogField, type FormApi, YTDFDialog} from '../../../../containers/Dialog';
 import {YTErrorBlock} from '../../../../containers/Block/Block';
 
 import {closeEditModal, editPool} from '../../../../store/actions/scheduling/scheduling';
@@ -33,7 +33,7 @@ import {checkUserPermissionsUI} from '../../../../utils/acl/acl-api';
 import {selectCluster, selectCurrentUserName} from '../../../../store/selectors/global';
 import {getCurrentTreeGpuLimit} from '../../../../store/selectors/scheduling/scheduling-ts';
 
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 import {type RootState} from '../../../../store/reducers';
 import {getSchedulingPoolsMapByName} from '../../../../store/selectors/scheduling/scheduling-pools';
 

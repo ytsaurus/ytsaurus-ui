@@ -7,7 +7,7 @@ import sortBy_ from 'lodash/sortBy';
 
 import {type RootState} from '../../../store/reducers';
 import {selectCluster} from './index';
-import {type SelectWithSubItemsProps} from '../../../components/Dialog/controls/SelectWithSubItems/SelectWithSubItems';
+import {type SelectWithSubItemsProps} from '../../../containers/Dialog/controls/SelectWithSubItems/SelectWithSubItems';
 import {type OperationStatisticInfo} from '../../../store/reducers/global/supported-features';
 
 const selectSupportedFeaturesRaw = (state: RootState) => state.supportedFeatures.features;

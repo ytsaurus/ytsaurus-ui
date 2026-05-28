@@ -11,7 +11,7 @@ import sortBy_ from 'lodash/sortBy';
 
 import {DropdownMenu} from '@gravity-ui/uikit';
 
-import {TabFieldVertical, type TabFieldVerticalProps} from '../../../../../components/Dialog';
+import {TabFieldVertical, type TabFieldVerticalProps} from '../../../../../containers/Dialog';
 
 import Button from '../../../../../components/Button/Button';
 import Icon, {type IconName} from '../../../../../components/Icon/Icon';

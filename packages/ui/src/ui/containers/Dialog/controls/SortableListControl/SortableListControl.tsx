@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
 import './SortableListControl.scss';
-import Icon from '../../../Icon/Icon';
+import Icon from '../../../../components/Icon/Icon';
 
 const block = cn('ic-sortable-list-control');
 

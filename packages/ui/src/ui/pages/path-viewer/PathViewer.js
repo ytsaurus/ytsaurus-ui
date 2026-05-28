@@ -4,8 +4,8 @@ import cn from 'bem-cn-lite';
 
 import {Yson} from '../../components/Yson/Yson';
 import {Checkbox, Loader, TextInput} from '@gravity-ui/uikit';
-import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
-import LoadDataHandler from '../../components/LoadDataHandler/LoadDataHandler';
+import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
+import LoadDataHandler from '../../containers/LoadDataHandler/LoadDataHandler';
 import Select from '../../components/Select/Select';
 import {StickyContainer} from '../../components/StickyContainer/StickyContainer';
 import i18n from './i18n';

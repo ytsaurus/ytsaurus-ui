@@ -3,7 +3,7 @@ import {Route, Switch} from 'react-router';
 
 import {Page} from '../../../shared/constants/settings';
 
-import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
 
 import {ChytPageList} from './ChytPageList/ChytPageList';
 import {ChytPageClique} from './ChytPageClique/ChytPageClique';

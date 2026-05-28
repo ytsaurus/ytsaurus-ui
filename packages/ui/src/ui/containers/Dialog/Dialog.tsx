@@ -9,8 +9,8 @@ import GroupSuggest from '../../pages/components/GroupSuggest/GroupSuggest';
 
 import ClusterSelectControl from './controls/ClusterSelectControl/ClusterSelectControl';
 
-import SortableListControl from '../../components/Dialog/controls/SortableListControl/SortableListControl';
-import BytesControl, {NumberControl} from '../../components/Dialog/controls/BytesControl';
+import SortableListControl from '../../containers/Dialog/controls/SortableListControl/SortableListControl';
+import BytesControl, {NumberControl} from '../../containers/Dialog/controls/BytesControl';
 import RoleListControl from './controls/RoleListControl/RoleListControl';
 import CreateTableTabField from '../../pages/navigation/modals/CreateTableModal/CreateTableTabField/CreateTableTabField';
 import {
@@ -31,8 +31,8 @@ import {PoolTreeSuggestControl} from './controls/PoolTreeSuggestControl/PoolTree
 import {TableSortByControl} from '../../pages/navigation/modals/TableMergeSortModal/TableSortByControl';
 import {TableChunkSize} from '../../pages/navigation/modals/TableMergeSortModal/TableChunkSize';
 import {UsableAccountSuggest} from '../../pages/accounts/UsableAccountSuggest';
-import {EditAnnotationWithPreview} from '../EditAnnotationWithPreview/EditAnnotationWithPreview';
-import {EditJsonWithPreview} from '../EditJsonWithPreview/EditJsonWithPreview';
+import {EditAnnotationWithPreview} from '../../components/EditAnnotationWithPreview/EditAnnotationWithPreview';
+import {EditJsonWithPreview} from '../../components/EditJsonWithPreview/EditJsonWithPreview';
 import {
     // eslint-disable-next-line no-restricted-imports
     DFDialog,

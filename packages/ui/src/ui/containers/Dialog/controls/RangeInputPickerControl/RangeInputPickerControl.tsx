@@ -3,7 +3,7 @@ import React from 'react';
 import {
     RangeInputPicker,
     type RangeInputPickerProps,
-} from '../../../common/RangeInputPicker/RangeInputPicker';
+} from '../../../../components/common/RangeInputPicker/RangeInputPicker';
 
 import './RangeInputPickerControl.scss';
 

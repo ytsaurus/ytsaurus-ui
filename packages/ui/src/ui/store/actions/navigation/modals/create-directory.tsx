@@ -4,7 +4,7 @@ import {type ThunkAction} from 'redux-thunk';
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {type Dispatch} from 'redux';
 
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 
 import {
     CREATE_DIRECTORY,

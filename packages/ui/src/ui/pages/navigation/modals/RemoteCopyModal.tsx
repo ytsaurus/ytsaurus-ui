@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import find_ from 'lodash/find';
 import map_ from 'lodash/map';
 
-import {DialogError, type FormApi, YTDFDialog} from '../../../components/Dialog';
+import {DialogError, type FormApi, YTDFDialog} from '../../../containers/Dialog';
 import {
     selectRemoteCopyModalPaths,
     selectRemoteCopyModalVisible,

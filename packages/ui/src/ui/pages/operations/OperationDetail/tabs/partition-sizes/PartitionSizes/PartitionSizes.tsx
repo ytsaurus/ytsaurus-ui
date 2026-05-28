@@ -6,7 +6,7 @@ import cn from 'bem-cn-lite';
 
 import format from '../../../../../../common/hammer/format';
 
-import ErrorBoundary from '../../../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../../../containers/ErrorBoundary/ErrorBoundary';
 
 import {selectTheme} from '../../../../../../store/selectors/global';
 

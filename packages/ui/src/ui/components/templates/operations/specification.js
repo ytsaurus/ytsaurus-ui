@@ -5,7 +5,7 @@ import {Flex, Text} from '@gravity-ui/uikit';
 import FilterOverview from '../../../pages/operations/OperationDetail/tabs/details/FilterOverview/FilterOverview';
 import {ClipboardButton} from '@ytsaurus/components';
 import Label from '../../../components/Label';
-import Link from '../../../components/Link/Link';
+import Link from '../../../containers/Link/Link';
 import Icon from '../../../components/Icon/Icon';
 
 import {TemplateLivePreivew} from '../../../components/MetaTable/templates/OperationTemplate';

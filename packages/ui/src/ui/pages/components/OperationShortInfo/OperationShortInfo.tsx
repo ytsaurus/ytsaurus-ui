@@ -15,7 +15,7 @@ import format from '../../../common/hammer/format';
 import ypath from '../../../common/thor/ypath';
 import {TYPED_OUTPUT_FORMAT} from '../../../constants';
 import {ClickableText} from '../../../components/ClickableText/ClickableText';
-import Link from '../../../components/Link/Link';
+import Link from '../../../containers/Link/Link';
 
 import './OperationShortInfo.scss';
 

@@ -11,7 +11,7 @@ import ypath from '../../../common/thor/ypath';
 import {Loader} from '@gravity-ui/uikit';
 import Button from '../../../components/Button/Button';
 import {YTErrorBlock} from '../../../containers/Block/Block';
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import Icon from '../../../components/Icon/Icon';
 import {Template} from '../../../components/MetaTable/templates/Template';
 import {TemplatePools} from '../../../components/MetaTable/templates/OperationTemplate';

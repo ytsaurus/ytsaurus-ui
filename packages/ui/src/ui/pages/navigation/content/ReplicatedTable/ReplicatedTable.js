@@ -13,12 +13,12 @@ import {useDisableMaxContentWidth} from '../../../../containers/MaxContentWidth'
 import ClickableAttributesButton from '../../../../components/AttributesButton/ClickableAttributesButton';
 import TableActions from '../../../../pages/navigation/content/Table/TableOverview/TableActions';
 import TableMeta from '../../../../pages/navigation/content/Table/TableMeta/TableMeta';
-import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
+import LoadDataHandler from '../../../../containers/LoadDataHandler/LoadDataHandler';
 import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import StatusBulb from '../../../../components/StatusBulb/StatusBulb';
 import Icon from '../../../../components/Icon/Icon';
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 import {StickyContainer} from '../../../../components/StickyContainer/StickyContainer';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 

@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import React from 'react';
 
 import {addProgressStackSpacers} from '../../../utils/progress';
-import Link from '../../../components/Link/Link';
+import Link from '../../../containers/Link/Link';
 
 import './StatsInfo.scss';
 

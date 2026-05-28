@@ -11,7 +11,7 @@ import {
 } from '../../reducers/scheduling/create-pool-dialog';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
-import Link from '../../../components/Link/Link';
+import Link from '../../../containers/Link/Link';
 import {createAdminReqTicketUrl} from '../../../config';
 import {IdmObjectType} from '../../../constants/acl';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';

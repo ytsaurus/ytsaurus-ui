@@ -3,7 +3,7 @@ import React from 'react';
 import {useRouteMatch} from 'react-router';
 import {type FlowPartitionDetailsType} from '../../../../../../shared/yt-types';
 import format from '../../../../../common/hammer/format';
-import Link from '../../../../../components/Link/Link';
+import Link from '../../../../../containers/Link/Link';
 import {MetaTable} from '@ytsaurus/components';
 import {TemplateId} from '../../../../../components/MetaTable/templates/Template';
 import {FlowEntityTitle} from '../../../../../pages/flow/flow-components/FlowEntityHeader';

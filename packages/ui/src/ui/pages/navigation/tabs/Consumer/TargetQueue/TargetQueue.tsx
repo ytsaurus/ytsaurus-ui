@@ -11,7 +11,7 @@ import {
 } from '../../../../../store/selectors/navigation/tabs/consumer';
 import {YTErrorBlock} from '../../../../../containers/Block/Block';
 import Icon from '../../../../../components/Icon/Icon';
-import Link from '../../../../../components/Link/Link';
+import Link from '../../../../../containers/Link/Link';
 import {findCommonPathParent, genNavigationUrl} from '../../../../../utils/navigation/navigation';
 import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 import {type Item, SelectSingle} from '../../../../../components/Select/Select';

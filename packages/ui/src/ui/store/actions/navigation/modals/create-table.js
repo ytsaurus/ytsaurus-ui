@@ -9,7 +9,7 @@ import {updateView} from '../../../../store/actions/navigation';
 import {CREATE_TABLE_MODAL_DATA_FIELDS} from '../../../../constants/navigation/modals/create-table';
 import {initialState} from '../../../../store/reducers/navigation/modals/create-table';
 import {showErrorPopup} from '../../../../utils/utils';
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 import {genNavigationUrl} from '../../../../utils/navigation/navigation';
 import {selectCluster} from '../../../selectors/global';
 import {toaster} from '../../../../utils/toaster';

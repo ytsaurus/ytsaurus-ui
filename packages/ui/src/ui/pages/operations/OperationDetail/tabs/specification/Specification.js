@@ -10,7 +10,7 @@ import throttle_ from 'lodash/throttle';
 import cn from 'bem-cn-lite';
 
 import {CollapsibleSectionStateLess} from '../../../../../components/CollapsibleSection/CollapsibleSection';
-import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../../containers/ErrorBoundary/ErrorBoundary';
 import HelpLink from '../../../../../components/HelpLink/HelpLink';
 import {YsonWithScroll} from '../../../../../components/Yson/YsonWithScroll';
 

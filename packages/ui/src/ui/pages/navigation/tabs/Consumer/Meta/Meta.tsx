@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import {useSelector} from '../../../../../store/redux-hooks';
 
 import format from '../../../../../common/hammer/format';
-import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../../containers/ErrorBoundary/ErrorBoundary';
 import Label from '../../../../../components/Label';
 import {MetaTable} from '@ytsaurus/components';
 import Multimeter from '../../../../../components/Multimeter/Multimeter';

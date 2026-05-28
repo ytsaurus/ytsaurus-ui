@@ -1,5 +1,5 @@
 import React, {type FC, useCallback, useEffect} from 'react';
-import {type ControlStaticApi} from '../../../../components/Dialog';
+import {type ControlStaticApi} from '../../../../containers/Dialog';
 import {TextInput} from '@gravity-ui/uikit';
 import './OutputPathControl.scss';
 import cn from 'bem-cn-lite';

@@ -2,7 +2,7 @@ import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
-import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
+import LoadDataHandler from '../../../containers/LoadDataHandler/LoadDataHandler';
 import AvailabilityMonitor from './AvailabilityMonitor';
 
 import {getExtendedInfo, getMetricAvailability} from '../_selectors';

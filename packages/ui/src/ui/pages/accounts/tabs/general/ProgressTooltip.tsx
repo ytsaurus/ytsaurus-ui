@@ -6,7 +6,7 @@ import reduce_ from 'lodash/reduce';
 import cn from 'bem-cn-lite';
 
 import Icon from '../../../../components/Icon/Icon';
-import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
 
 import i18n from './i18n';
 

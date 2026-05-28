@@ -8,7 +8,7 @@ import keys_ from 'lodash/keys';
 
 import {DialogWrapper as DeleteDialog} from '../../../components/DialogWrapper/DialogWrapper';
 
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import {YTErrorBlock} from '../../../containers/Block/Block';
 
 import Content from '../Content/Content';

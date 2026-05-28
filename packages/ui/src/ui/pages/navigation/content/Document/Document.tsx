@@ -1,7 +1,7 @@
 import React, {type FC, useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
-import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
+import LoadDataHandler from '../../../../containers/LoadDataHandler/LoadDataHandler';
 import {Loader} from '@gravity-ui/uikit';
 import {
     abortAndReset,

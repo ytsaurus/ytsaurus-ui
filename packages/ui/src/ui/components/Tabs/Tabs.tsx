@@ -4,8 +4,8 @@ import block from 'bem-cn-lite';
 import partition_ from 'lodash/partition';
 
 import {Hotkey, type HotkeyProps} from '@ytsaurus/components';
-import Link from '../Link/Link';
-import Icon from '../Icon/Icon';
+import Link from '../../containers/Link/Link';
+import Icon from '../../components/Icon/Icon';
 
 import action from '../action/action';
 import {makeRoutedURL} from '../../store/location';

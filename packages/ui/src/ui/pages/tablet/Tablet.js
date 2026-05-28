@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Route, Switch, withRouter} from 'react-router';
 
-import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
 import TabletDetails from '../../pages/tablet/TabletDetails/TabletDetails';
 
 Tablet.propTypes = {

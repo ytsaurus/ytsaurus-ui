@@ -31,7 +31,7 @@ import {showErrorPopup, wrapApiPromiseByToaster} from '../../../../utils/utils';
 import {OperationShortInfo} from '../../../../pages/components/OperationShortInfo/OperationShortInfo';
 import {AppStoreProvider} from '../../../../containers/App/AppStoreProvider';
 import {updateView} from '../index';
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 import {selectCluster} from '../../../selectors/global';
 import {makeUiMarker, prepareSetCommandForBatch} from '../../../../utils/cypress-attributes';
 import {Page} from '../../../../constants';

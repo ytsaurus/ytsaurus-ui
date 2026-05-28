@@ -2,7 +2,7 @@ import React, {useCallback} from 'react';
 import {useDispatch} from '../../../store/redux-hooks';
 import {Text} from '@gravity-ui/uikit';
 import {deleteGroup, fetchGroups} from '../../../store/actions/groups';
-import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
+import {YTDFDialog, makeErrorFields} from '../../../containers/Dialog';
 import {type YTError} from '../../../types';
 import {disableGroupsCache} from '../../../utils/users-groups';
 import i18n from './i18n';

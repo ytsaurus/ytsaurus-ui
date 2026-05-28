@@ -6,7 +6,7 @@ import reduce_ from 'lodash/reduce';
 import {type Column} from '@gravity-ui/react-data-table';
 
 import {type FlatItem} from '../../../../../common/hammer/tree-list';
-import Link from '../../../../../components/Link/Link';
+import Link from '../../../../../containers/Link/Link';
 import Icon from '../../../../../components/Icon/Icon';
 import Button from '../../../../../components/Button/Button';
 import ColumnHeader from '../../../../../components/ColumnHeader/ColumnHeader';

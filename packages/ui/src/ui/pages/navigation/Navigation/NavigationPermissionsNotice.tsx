@@ -12,7 +12,7 @@ import {YTErrorBlock} from '../../../containers/Block/Block';
 import {selectPath} from '../../../store/selectors/navigation';
 import {genAccountsAclLink} from '../../../utils/accounts/accounts';
 import {selectCluster} from '../../../store/selectors/global';
-import Link from '../../../components/Link/Link';
+import Link from '../../../containers/Link/Link';
 
 import './NavigationPermissionsNotice.scss';
 const block = cn('navigation-permissions-notice');

@@ -1,6 +1,6 @@
 import axios, {type CancelToken} from 'axios';
 import {wrapApiPromiseByToaster} from './utils';
-import {type OptionsGroup} from '../components/Dialog/df-dialog-utils';
+import {type OptionsGroup} from '../containers/Dialog/df-dialog-utils';
 import {QueryEngine} from '../../shared/constants/engines';
 import i18n from './i18n';
 

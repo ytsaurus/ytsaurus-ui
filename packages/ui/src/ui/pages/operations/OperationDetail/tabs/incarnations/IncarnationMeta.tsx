@@ -13,7 +13,7 @@ import {type Incarnation} from '../../../../../store/selectors/operations/incarn
 import {showErrorModal} from '../../../../../store/actions/actions';
 
 import {MetaTable} from '@ytsaurus/components';
-import YTLink from '../../../../../components/Link/Link';
+import YTLink from '../../../../../containers/Link/Link';
 import {Template} from '../../../../../components/MetaTable/templates/Template';
 
 import i18n from './i18n';

@@ -1,7 +1,7 @@
 import React, {type FC} from 'react';
 import cn from 'bem-cn-lite';
 import {ClipboardButton, Flex, Text} from '@gravity-ui/uikit';
-import Link from '../../../../../components/Link/Link';
+import Link from '../../../../../containers/Link/Link';
 import {genNavigationUrl} from '../../../../../utils/navigation/navigation';
 import {parseTablePath} from '../../services/tables';
 import format from '../../../../../common/hammer/format';

@@ -2,7 +2,7 @@ import {Flex, Text} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
 import {ExpandableCell} from '../../../../../../components/DataTableGravity/ExpandableCell';
-import Link from '../../../../../../components/Link/Link';
+import Link from '../../../../../../containers/Link/Link';
 import {OperationPool} from '../../../../../../components/OperationPool/OperationPool';
 import {Tooltip} from '@ytsaurus/components';
 import {setExpandedPools} from '../../../../../../store/actions/scheduling/expanded-pools';

@@ -1,6 +1,6 @@
 import React, {type FC} from 'react';
 import {type Attribute} from '../../../../store/reducers/navigation/modals/tableMergeSortModalSlice';
-import {SelectSingle} from '../../../Select/Select';
+import {SelectSingle} from '../../../../components/Select/Select';
 
 import i18n from './i18n';
 

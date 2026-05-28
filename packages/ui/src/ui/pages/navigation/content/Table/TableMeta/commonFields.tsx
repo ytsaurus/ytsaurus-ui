@@ -1,6 +1,6 @@
 import React from 'react';
 import ypath from '../../../../../common/thor/ypath';
-import Link from '../../../../../components/Link/Link';
+import Link from '../../../../../containers/Link/Link';
 import AutomaticModeSwitch, {type Props as AutomaticModeSwitchProps} from './AutomaticModeSwitch';
 import reduce_ from 'lodash/reduce';
 import {type MetaTableItem} from '@ytsaurus/components';

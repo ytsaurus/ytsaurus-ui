@@ -5,7 +5,7 @@ import {type ChartKitRef} from '@gravity-ui/chartkit';
 import {Chart} from './Chart';
 import useResizeObserver from '../../../../hooks/useResizeObserver';
 import './QueryResultsVisualization.scss';
-import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
 import {ChartLeftMenu} from './ChartLeftMenu';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {changeVisualizationResultIndex} from '../../../../store/actions/query-tracker/queryChart';

@@ -4,7 +4,7 @@ import {type Column} from '@gravity-ui/react-data-table';
 
 import format from '../../../../../common/hammer/format';
 import Label from '../../../../../components/Label';
-import Link from '../../../../../components/Link/Link';
+import Link from '../../../../../containers/Link/Link';
 import Multimeter from '../../../../../components/Multimeter/Multimeter';
 import {SubjectCard} from '../../../../../components/SubjectLink/SubjectLink';
 import WarningIcon from '../../../../../components/WarningIcon/WarningIcon';

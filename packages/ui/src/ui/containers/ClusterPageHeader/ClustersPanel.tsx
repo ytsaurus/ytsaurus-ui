@@ -11,7 +11,7 @@ import {TextInput} from '@gravity-ui/uikit';
 
 import {getGroupedClusters} from '../../config/yt-config';
 import {getClusterAppearance} from '../../appearance';
-import ClusterIcon from '../../components/ClusterIcon/ClusterIcon';
+import ClusterIcon from '../../containers/ClusterIcon/ClusterIcon';
 import {CLUSTER_GROUPS, CLUSTER_GROUPS_ORDER, DEFAULT_GROUP} from '../../constants/cluster-menu';
 
 import {useSelector} from '../../store/redux-hooks';
@@ -19,7 +19,7 @@ import {getRecentClustersInfo} from '../../store/selectors/slideoutMenu';
 import {isRecentClustersFirst} from '../../store/selectors/settings';
 import {useClusterColorClassName} from './ClusterColor';
 import {type ClusterConfig} from '../../../shared/yt-types';
-import Link from '../../components/Link/Link';
+import Link from '../../containers/Link/Link';
 import Icon from '../../components/Icon/Icon';
 import {selectCluster} from '../../store/selectors/global';
 

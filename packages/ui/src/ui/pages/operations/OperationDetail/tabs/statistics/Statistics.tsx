@@ -5,7 +5,7 @@ import cn from 'bem-cn-lite';
 
 import format from '../../../../../common/hammer/format';
 
-import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../../containers/ErrorBoundary/ErrorBoundary';
 import ElementsTable from '../../../../../components/ElementsTable/ElementsTable';
 import RadioButton from '../../../../../components/RadioButton/RadioButton';
 import HelpLink from '../../../../../components/HelpLink/HelpLink';

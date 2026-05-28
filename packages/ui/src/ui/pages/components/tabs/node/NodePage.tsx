@@ -4,7 +4,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import {ClipboardButton} from '@ytsaurus/components';
-import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
+import LoadDataHandler from '../../../../containers/LoadDataHandler/LoadDataHandler';
 import Tabs from '../../../../components/Tabs/Tabs';
 import Loader from '../../../../components/Loader/Loader';
 import NodeGeneralTab from '../../../../pages/components/tabs/node/NodeGeneralTab/NodeGeneralTab';

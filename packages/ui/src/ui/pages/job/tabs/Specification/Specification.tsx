@@ -4,8 +4,8 @@ import cn from 'bem-cn-lite';
 
 import {YsonWithScroll} from '../../../../components/Yson/YsonWithScroll';
 import {Checkbox, Flex, Loader} from '@gravity-ui/uikit';
-import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
-import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
+import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
+import LoadDataHandler from '../../../../containers/LoadDataHandler/LoadDataHandler';
 
 import {type RootState} from '../../../../store/reducers';
 import {

@@ -3,7 +3,7 @@ import {type AxiosError, isAxiosError} from 'axios';
 
 import i18n from './i18n';
 import {Flex} from '@gravity-ui/uikit';
-import Link from '../../components/Link/Link';
+import Link from '../../containers/Link/Link';
 import block from 'bem-cn-lite';
 import ypath from '../../common/thor/ypath';
 import unipika from '../../common/thor/unipika';
@@ -21,7 +21,7 @@ import {unescapeSlashX} from '../../utils/utils';
 import FormattedText from '../../components/formatters/FormattedText';
 import {isYTError} from '../../../shared/utils';
 import {type UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
-import {ErrorToClipboardButton} from '../../components/ErrorToClipboardButton/ErrorToClipboardButton';
+import {ErrorToClipboardButton} from '../../containers/ErrorToClipboardButton/ErrorToClipboardButton';
 
 const b = block('elements-error-details');
 

@@ -6,7 +6,7 @@ import {type YTConfig} from '../../../../../../shared/yt-types';
 import hammer from '../../../../../common/hammer';
 import {TABLET_SLOTS} from '../../../../../components/templates/components/nodes/nodes';
 import {DataTableYT} from '../../../../../components/DataTableYT';
-import Link from '../../../../../components/Link/Link';
+import Link from '../../../../../containers/Link/Link';
 import StatusBlock from '../../../../../components/StatusBlock/StatusBlock';
 import {genTabletCellBundlesCellUrl} from '../../../../../utils/tablet_cell_bundles';
 

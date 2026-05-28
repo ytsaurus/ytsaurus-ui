@@ -6,7 +6,7 @@ import {Redirect, Route, Switch, useRouteMatch} from 'react-router';
 import {Alert, Flex, Link} from '@gravity-ui/uikit';
 
 import Specification from '../../../pages/job/tabs/Specification/Specification';
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import {Template} from '../../../components/MetaTable/templates/Template';
 import Statistics from '../../../pages/job/tabs/Statistics/Statistics';
 import JobBreadcrumbs from '../JobBreadcrumbs/JobBreadcrumbs';

@@ -4,7 +4,7 @@ import {CircleExclamation} from '@gravity-ui/icons';
 
 import format from '../../../../../common/hammer/format';
 
-import Link from '../../../../../components/Link/Link';
+import Link from '../../../../../containers/Link/Link';
 import {type YTError} from '../../../../../types';
 import {showErrorModal} from '../../../../../store/actions/modals/errors';
 import {useDispatch} from '../../../../../store/redux-hooks';
