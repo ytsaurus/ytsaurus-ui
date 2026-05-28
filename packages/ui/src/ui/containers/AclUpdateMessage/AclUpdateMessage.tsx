@@ -3,8 +3,8 @@ import cn from 'bem-cn-lite';
 
 import './AclUpdateMessage.scss';
 import {type Subject} from '../../utils/acl/acl-types';
-import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
-import Link from '../../components/Link/Link';
+import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
+import Link from '../../containers/Link/Link';
 import {AclSubject} from '../../components/AclSubject/AclSubject';
 import {AppStoreProvider} from '../../containers/App/AppStoreProvider';
 import i18n from './i18n';

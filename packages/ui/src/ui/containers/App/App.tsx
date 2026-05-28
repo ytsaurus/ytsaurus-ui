@@ -16,8 +16,8 @@ import {MaxContentWidth} from '../../containers/MaxContentWidth';
 import {ClustersMenuLazy} from '../../containers/ClustersMenu/lazy';
 import {ClusterPageWrapperLazy} from '../../containers/ClusterPageWrapper/lazy';
 import ActionModal from '../ActionModal/ActionModal';
-import {ChangePasswordFormPage} from '../../components/Login/ChangePasswordFormPage/ChangePasswordFormPage';
-import {LoginFormPage} from '../../components/Login/LoginFormPage/LoginFormPage';
+import {ChangePasswordFormPage} from '../../containers/Login/ChangePasswordFormPage/ChangePasswordFormPage';
+import {LoginFormPage} from '../../containers/Login/LoginFormPage/LoginFormPage';
 
 import {getSettingTheme, shouldUseSafeColors} from '../../store/selectors/settings';
 

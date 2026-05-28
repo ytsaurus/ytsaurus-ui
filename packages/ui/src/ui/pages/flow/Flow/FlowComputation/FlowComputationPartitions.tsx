@@ -10,7 +10,7 @@ import {
     type tanstack,
     useTable,
 } from '../../../../components/DataTableGravity';
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 import Select from '../../../../components/Select/Select';
 import {YTText} from '@ytsaurus/components';
 import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';

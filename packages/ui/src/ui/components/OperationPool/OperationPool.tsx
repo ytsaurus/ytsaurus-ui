@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import Icon from '../../components/Icon/Icon';
-import Link from '../../components/Link/Link';
+import Link from '../../containers/Link/Link';
 import Button from '../../components/Button/Button';
 import {Tooltip} from '@ytsaurus/components';
 

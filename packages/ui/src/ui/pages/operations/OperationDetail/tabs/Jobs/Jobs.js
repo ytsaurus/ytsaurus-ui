@@ -2,8 +2,8 @@ import React from 'react';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 
 import {getJobs} from '../../../../../store/actions/operations/jobs';
-import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
-import LoadDataHandler from '../../../../../components/LoadDataHandler/LoadDataHandler';
+import ErrorBoundary from '../../../../../containers/ErrorBoundary/ErrorBoundary';
+import LoadDataHandler from '../../../../../containers/LoadDataHandler/LoadDataHandler';
 import OperationJobsTable from './OperationJobsTable/OperationJobsTable';
 import OperationJobsToolbar from './OperationJobsToolbar/OperationJobsToolbar';
 

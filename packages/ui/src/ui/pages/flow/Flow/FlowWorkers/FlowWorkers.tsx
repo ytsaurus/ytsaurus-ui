@@ -11,7 +11,7 @@ import {
     type tanstack,
     useTable,
 } from '../../../../components/DataTableGravity';
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 import Loader from '../../../../components/Loader/Loader';
 import {NoWrap} from '@ytsaurus/components';
 import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';

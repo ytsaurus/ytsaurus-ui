@@ -7,7 +7,7 @@ import {Redirect, Route, Switch, withRouter} from 'react-router';
 import {formatByParams} from '../../../../shared/utils/format';
 import Tabs from '../../../components/Tabs/Tabs';
 import Placeholder from '../../../pages/components/Placeholder';
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import {UI_TAB_SIZE} from '../../../constants/global';
 import {
     DEFAULT_TAB,

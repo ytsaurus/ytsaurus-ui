@@ -8,7 +8,7 @@ import {
     getSettingsDialogVisibility,
 } from '../../../../../store/reducers/dashboard2/dashboard';
 
-import {type FormApi, YTDFDialog} from '../../../../../components/Dialog';
+import {type FormApi, YTDFDialog} from '../../../../../containers/Dialog';
 
 import format from '../../../../../common/hammer/format';
 

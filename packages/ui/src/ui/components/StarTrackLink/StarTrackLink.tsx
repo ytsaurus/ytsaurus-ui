@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from '../Link/Link';
+import {Link} from '@gravity-ui/uikit';
 import {uiSettings} from '../../config/ui-settings';
 
 function StarTrackLink(props: {id: string; emptyContent?: React.ReactNode}) {

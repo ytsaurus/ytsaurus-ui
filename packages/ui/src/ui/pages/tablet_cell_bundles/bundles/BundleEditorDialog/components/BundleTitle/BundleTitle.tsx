@@ -6,7 +6,7 @@ import {Button, Icon} from '@gravity-ui/uikit';
 import {type BundleParam, BundleParamsList} from '../BundleParamsList/BundleParamsList';
 import resetIcon from '../../../../../../assets/img/svg/reset-icon.svg';
 
-import {type DialogControlProps} from '../../../../../../components/Dialog/Dialog.types';
+import {type DialogControlProps} from '../../../../../../containers/Dialog/Dialog.types';
 
 import './BundleTitle.scss';
 

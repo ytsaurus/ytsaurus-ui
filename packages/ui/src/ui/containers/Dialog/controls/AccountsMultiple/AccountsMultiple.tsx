@@ -10,7 +10,7 @@ import {useUsableAccountsQuery} from '../../../../store/api/accounts';
 import {selectFavouriteAccounts} from '../../../../store/selectors/favourites';
 import {selectCluster} from '../../../../store/selectors/global';
 
-import {type DialogControlProps} from '../../../../components/Dialog/Dialog.types';
+import {type DialogControlProps} from '../../../../containers/Dialog/Dialog.types';
 
 import ypath from '../../../../common/thor/ypath';
 

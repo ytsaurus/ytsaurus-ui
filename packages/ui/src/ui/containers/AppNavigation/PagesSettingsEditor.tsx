@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import {makeRoutedURL} from '../../store/location';
-import Link from '../../components/Link/Link';
+import Link from '../../containers/Link/Link';
 
 import {useSelector} from '../../store/redux-hooks';
 import {Button, Icon} from '@gravity-ui/uikit';

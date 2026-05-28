@@ -11,7 +11,7 @@ import {ClipboardButton, Secondary, Tooltip} from '@ytsaurus/components';
 import {DataTableYT} from '../../../components/DataTableYT';
 import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
 import Icon from '../../../components/Icon/Icon';
-import Link from '../../../components/Link/Link';
+import Link from '../../../containers/Link/Link';
 import {OperationId} from '../../../components/OperationId/OperationId';
 import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
 import Label from '../../../components/Label';

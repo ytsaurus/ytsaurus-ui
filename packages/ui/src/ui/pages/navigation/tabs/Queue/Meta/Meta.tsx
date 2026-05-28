@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import format from '../../../../../common/hammer/format';
-import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../../containers/ErrorBoundary/ErrorBoundary';
 import {MetaTable} from '@ytsaurus/components';
 import Multimeter from '../../../../../components/Multimeter/Multimeter';
 import {type TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';

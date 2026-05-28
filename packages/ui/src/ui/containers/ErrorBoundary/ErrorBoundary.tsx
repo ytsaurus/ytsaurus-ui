@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import {YTErrorBlock} from '../../containers/Block/Block';
-import CompactError from '../CompactError/CompactError';
+import CompactError from '../../components/CompactError/CompactError';
 import {YTErrorInline} from '../../containers/YTErrorInline/YTErrorInline';
 
 import {rumLogError} from '../../rum/rum-counter';

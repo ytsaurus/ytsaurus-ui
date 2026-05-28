@@ -3,8 +3,8 @@ import {useRouteMatch} from 'react-router';
 import React from 'react';
 import cn from 'bem-cn-lite';
 
-import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+import LoadDataHandler from '../../../containers/LoadDataHandler/LoadDataHandler';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import JobGeneral from '../../../pages/job/JobGeneral/JobGeneral';
 import {Flex, Loader} from '@gravity-ui/uikit';
 

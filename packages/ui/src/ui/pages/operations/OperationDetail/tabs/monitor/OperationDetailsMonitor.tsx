@@ -3,7 +3,7 @@ import {useSelector} from '../../../../../store/redux-hooks';
 
 import {selectOperation} from '../../../../../store/selectors/operations/operation';
 import {selectCluster} from '../../../../../store/selectors/global';
-import ErrorBoundary from '../../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../../containers/ErrorBoundary/ErrorBoundary';
 import {type OperationMonitoringTabProps} from '../../../../../UIFactory';
 
 function OperationDetailsMonitor(props: {

@@ -2,7 +2,7 @@ import React from 'react';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 
 import {MOVE_OBJECT} from '../../../../constants/navigation/modals/move-object';
 import {showErrorInModal} from '../../../../store/actions/navigation/modals/path-editing-popup';

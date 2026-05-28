@@ -1,7 +1,7 @@
 import React from 'react';
 import {useSelector} from '../../../store/redux-hooks';
 
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import {selectTabletsActiveBundle} from '../../../store/selectors/tablet_cell_bundles';
 import {selectCluster, selectTheme} from '../../../store/selectors/global';
 import UIFactory from '../../../UIFactory';

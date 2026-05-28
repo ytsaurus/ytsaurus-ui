@@ -2,7 +2,7 @@
 import React from 'react';
 import hammer from '../../../../common/hammer';
 
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 import StatusBlock from '../../../../components/StatusBlock/StatusBlock';
 
 import {TABLET_SLOTS} from './nodes';

@@ -12,7 +12,7 @@ import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 import {DataTableYT} from '../../../components/DataTableYT';
 import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
 import Icon from '../../../components/Icon/Icon';
-import Link from '../../../components/Link/Link';
+import Link from '../../../containers/Link/Link';
 import {Health} from '../../../components/Health/Health';
 import {STICKY_TOOLBAR_BOTTOM} from '../../../components/WithStickyToolbar/WithStickyToolbar';
 // @ts-ignore

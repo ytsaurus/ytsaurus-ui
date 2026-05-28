@@ -10,7 +10,7 @@ import Modal from '../../../../../components/Modal/Modal';
 import {selectPath} from '../../../../../store/selectors/navigation';
 import {type ConnectedProps, connect} from 'react-redux';
 import {YTErrorBlock} from '../../../../../containers/Block/Block';
-import {YTDFDialog} from '../../../../../components/Dialog';
+import {YTDFDialog} from '../../../../../containers/Dialog';
 import {Alert} from '@gravity-ui/uikit';
 
 import hammer from '../../../../../common/hammer';
@@ -22,7 +22,7 @@ import {selectCluster} from '../../../../../store/selectors/global';
 import {type RootState} from '../../../../../store/reducers';
 import {getXsrfCookieName} from '../../../../../utils';
 import {wrapApiPromiseByToaster} from '../../../../../utils/utils';
-import Link from '../../../../../components/Link/Link';
+import Link from '../../../../../containers/Link/Link';
 import {docsUrl, getConfigUploadTable} from '../../../../../config';
 import HelpLink from '../../../../../components/HelpLink/HelpLink';
 import CancelHelper from '../../../../../utils/cancel-helper';

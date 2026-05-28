@@ -1,7 +1,7 @@
 import React, {type FC, useCallback} from 'react';
 import cn from 'bem-cn-lite';
 import './DocumentEditModal.scss';
-import {type FormApi, YTDFDialog} from '../../../../components/Dialog';
+import {type FormApi, YTDFDialog} from '../../../../containers/Dialog';
 import {Text} from '@gravity-ui/uikit';
 import {type UnipikaSettings} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 

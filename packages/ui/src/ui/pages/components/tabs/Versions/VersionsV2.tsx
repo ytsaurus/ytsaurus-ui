@@ -5,8 +5,8 @@ import {useDispatch} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
 import CollapsibleSection from '../../../../components/CollapsibleSection/CollapsibleSection';
-import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
-import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
+import LoadDataHandler from '../../../../containers/LoadDataHandler/LoadDataHandler';
+import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import TableInfo from '../../../../pages/components/TableInfo/TableInfo';
 import Filter from '../../../../components/Filter/Filter';

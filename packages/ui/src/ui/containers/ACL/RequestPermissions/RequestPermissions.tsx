@@ -7,8 +7,8 @@ import {
     type FormApi,
     YTDFDialog,
     makeErrorFields,
-} from '../../../components/Dialog';
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+} from '../../../containers/Dialog';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import PermissionsControl from '../RequestPermissions/PermissionsControl/PermissionsControl';
 import withVisible, {type WithVisibleProps} from '../../../hocs/withVisible';
 import {AclMode, INHERITANCE_MODE_TYPES, IdmObjectType} from '../../../constants/acl';

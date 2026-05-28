@@ -6,7 +6,7 @@ import {ClipboardButton} from '@ytsaurus/components';
 import SimpleModal from '../../../../components/Modal/SimpleModal';
 import {YTErrorBlock} from '../../../../containers/Block/Block';
 import Icon from '../../../../components/Icon/Icon';
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 
 import withVisible from '../../../../hocs/withVisible';
 

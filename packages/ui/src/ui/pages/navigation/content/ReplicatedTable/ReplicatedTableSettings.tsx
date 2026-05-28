@@ -5,7 +5,7 @@ import cn from 'bem-cn-lite';
 
 import Button from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
-import {type FormApi, YTDFDialog} from '../../../../components/Dialog';
+import {type FormApi, YTDFDialog} from '../../../../containers/Dialog';
 import {type YTError} from '../../../../types';
 import {YTErrorBlock} from '../../../../containers/Block/Block';
 

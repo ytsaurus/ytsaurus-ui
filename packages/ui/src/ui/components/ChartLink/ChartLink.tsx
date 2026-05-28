@@ -1,5 +1,5 @@
 import React from 'react';
-import Link, {type LinkProps} from '../../components/Link/Link';
+import Link, {type LinkProps} from '../../containers/Link/Link';
 
 import Icon, {type IconProps} from '../Icon/Icon';
 

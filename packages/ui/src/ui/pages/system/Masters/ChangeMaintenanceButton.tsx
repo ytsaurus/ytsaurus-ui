@@ -1,7 +1,7 @@
 import React, {type FC, useState} from 'react';
 import {Button, Icon} from '@gravity-ui/uikit';
 import PencilIcon from '@gravity-ui/icons/svgs/pencil.svg';
-import {type FormApi, YTDFDialog, makeErrorFields} from '../../../components/Dialog';
+import {type FormApi, YTDFDialog, makeErrorFields} from '../../../containers/Dialog';
 import {useToggle} from 'react-use';
 
 type Props = {

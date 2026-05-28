@@ -10,10 +10,10 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {type ButtonProps, DropdownMenu} from '@gravity-ui/uikit';
 import {DialogWrapper as Dialog} from '../../../components/DialogWrapper/DialogWrapper';
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import PathEditor from '../../../containers/PathEditor/PathEditor';
 import Button from '../../../components/Button/Button';
-import Link from '../../../components/Link/Link';
+import Link from '../../../containers/Link/Link';
 import Icon, {type IconName} from '../../../components/Icon/Icon';
 
 import {selectJob, selectJobActions} from '../../../store/selectors/job/detail';

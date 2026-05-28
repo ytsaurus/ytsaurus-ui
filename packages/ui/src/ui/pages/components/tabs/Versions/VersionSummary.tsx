@@ -18,7 +18,7 @@ import {
 import hammer from '../../../../common/hammer';
 
 import Icon from '../../../../components/Icon/Icon';
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 import ColumnHeader from '../../../../components/ColumnHeader/ColumnHeader';
 import {
     changeCheckedHideOffline,

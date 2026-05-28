@@ -8,12 +8,12 @@ import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
 import CommaSeparatedListWithRestCounter from '../../../components/CommaSeparateListWithRestCounter/CommaSeparateListWithRestCounter';
 import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
 
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import ExpandIcon from '../../../components/ExpandIcon/ExpandIcon';
 import {Tooltip} from '@ytsaurus/components';
 import {DataTableYT} from '../../../components/DataTableYT';
 
-import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
+import LoadDataHandler from '../../../containers/LoadDataHandler/LoadDataHandler';
 
 import {fetchGroups, setGroupsPageSorting, toggleGroupExpand} from '../../../store/actions/groups';
 import {STICKY_TOOLBAR_BOTTOM} from '../../../components/WithStickyToolbar/WithStickyToolbar';

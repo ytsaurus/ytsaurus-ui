@@ -27,7 +27,7 @@ import CollapsibleSection from '../../../../components/CollapsibleSection/Collap
 import withStickyHead from '../../../../components/ElementsTable/hocs/withStickyHead';
 import withStickyFooter from '../../../../components/ElementsTable/hocs/withStickyFooter';
 import {YTErrorBlock} from '../../../../containers/Block/Block';
-import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
 import Filter from '../../../../components/Filter/Filter';
 import AccountLink from '../../AccountLink';
 import Icon from '../../../../components/Icon/Icon';

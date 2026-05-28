@@ -2,7 +2,7 @@ import React, {useCallback} from 'react';
 import UIFactory from '../../../UIFactory';
 import ClickableAttributesButton from '../../../components/AttributesButton/ClickableAttributesButton';
 import ChartLink from '../../../components/ChartLink/ChartLink';
-import Link from '../../../components/Link/Link';
+import Link from '../../../containers/Link/Link';
 import Icon from '../../../components/Icon/Icon';
 import Button from '../../../components/Button/Button';
 import {showUserEditorModal} from '../../../store/actions/users/index';

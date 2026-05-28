@@ -17,7 +17,7 @@ import {
     MoveObjectModal,
     RestoreObjectModal,
 } from './PathEditorModal';
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import ContentViewer from './ContentViewer/ContentViewer';
 import {checkContentIsSupported} from './ContentViewer/helpers';
 import Tabs from '../../../components/Tabs/Tabs';

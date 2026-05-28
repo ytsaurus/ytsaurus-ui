@@ -1,7 +1,7 @@
 import React, {type ComponentType, useEffect} from 'react';
 import {type ConnectedProps, connect} from 'react-redux';
 
-import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {CONSUMER_MODE} from '../../../../constants/navigation/tabs/consumer';

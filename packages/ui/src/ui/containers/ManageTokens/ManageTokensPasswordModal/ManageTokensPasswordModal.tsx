@@ -5,7 +5,7 @@ import {DialogWrapper as Dialog} from '../../../components/DialogWrapper/DialogW
 import i18n from './i18n';
 import {isCryptoSubtleAvailable} from '../../../utils/sha256';
 import {createPasswordStrategy} from './password-strategies';
-import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
+import {YTDFDialog, makeErrorFields} from '../../../containers/Dialog';
 import {selectCurrentUserName, selectSettingsCluster} from '../../../store/selectors/global';
 import {type YTError} from '../../../../@types/types';
 import {selectIsManageTokensInOAuthMode} from '../../../store/selectors/manage-tokens';

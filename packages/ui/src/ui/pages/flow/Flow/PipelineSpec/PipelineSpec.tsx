@@ -28,7 +28,7 @@ import {type FlowSpecState} from '../../../../store/reducers/flow/specs';
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
 import {YsonWithScroll} from '../../../../components/Yson/YsonWithScroll';
 import Icon from '../../../../components/Icon/Icon';
-import {YTDFDialog, makeErrorFields} from '../../../../components/Dialog';
+import {YTDFDialog, makeErrorFields} from '../../../../containers/Dialog';
 import {YTErrorBlock} from '../../../../containers/Block/Block';
 import Loader from '../../../../components/Loader/Loader';
 import {type UnipikaSettings} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';

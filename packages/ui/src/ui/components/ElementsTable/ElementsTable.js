@@ -15,7 +15,7 @@ import range_ from 'lodash/range';
 
 import ElementsTableRow from './ElementsTableRow';
 import ElementsTableHeader, {sortStateType} from './ElementsTableHeader';
-import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
 
 import {toggleColumnSortOrder} from '../../store/actions/tables';
 import action from '../../components/action/action';

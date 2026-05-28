@@ -9,7 +9,7 @@ import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import {type ColumnInfo} from '../../../../components/ElementsTable/ElementsTableHeader';
 import {MetaTable, SchemaDataType} from '@ytsaurus/components';
 import HelpLink from '../../../../components/HelpLink/HelpLink';
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 import {FormattedText} from '../../../../components/formatters';
 import Filter from '../../../../components/Filter/Filter';
 import Icon from '../../../../components/Icon/Icon';

@@ -8,7 +8,7 @@ import {
 import {useRegisterMutation} from '../../../../../store/api/navigation/tabs/consumer/consumer';
 import {selectCluster} from '../../../../../store/selectors/global';
 
-import {type FormApi, YTDFDialog, makeErrorFields} from '../../../../../components/Dialog';
+import {type FormApi, YTDFDialog, makeErrorFields} from '../../../../../containers/Dialog';
 
 import {makeClusterSelectOptionsSameEnv} from '../../../../../utils/navigation/tabs/make-cluster-select-options-same-env';
 

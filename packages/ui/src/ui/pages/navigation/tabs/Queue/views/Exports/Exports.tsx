@@ -1,7 +1,7 @@
 import React from 'react';
 import {ClipboardButton, Flex, Text} from '@gravity-ui/uikit';
 
-import Link from '../../../../../../components/Link/Link';
+import Link from '../../../../../../containers/Link/Link';
 import Icon from '../../../../../../components/Icon/Icon';
 import {type Column, Tooltip} from '@ytsaurus/components';
 import {DataTableYT} from '../../../../../../components/DataTableYT';

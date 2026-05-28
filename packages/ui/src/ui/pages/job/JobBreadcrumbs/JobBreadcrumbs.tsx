@@ -4,7 +4,7 @@ import {useSelector} from '../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
 import {ClipboardButton} from '@ytsaurus/components';
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import {TextInput} from '@gravity-ui/uikit';
 import Button from '../../../components/Button/Button';
 import Icon from '../../../components/Icon/Icon';

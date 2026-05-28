@@ -4,7 +4,7 @@ import {ThemeProvider} from '@gravity-ui/uikit';
 
 import {Provider} from 'react-redux';
 import {useSelector} from '../../store/redux-hooks';
-import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
 import {getWindowStore} from '../../store/window-store';
 import {selectTheme} from '../../store/selectors/global';
 

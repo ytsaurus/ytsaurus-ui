@@ -7,7 +7,7 @@ import forEach_ from 'lodash/forEach';
 import map_ from 'lodash/map';
 import partition_ from 'lodash/partition';
 
-import Link from '../../components/Link/Link';
+import Link from '../../containers/Link/Link';
 import './ClusterMenuHeader.scss';
 import {DropdownMenu} from '@gravity-ui/uikit';
 import Button from '../../components/Button/Button';

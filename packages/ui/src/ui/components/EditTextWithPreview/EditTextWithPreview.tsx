@@ -2,7 +2,7 @@ import React, {useRef} from 'react';
 import cn from 'bem-cn-lite';
 import SplitPane from 'react-split-pane';
 
-import {type DialogControlProps} from '../Dialog/Dialog.types';
+import {type DialogControlProps} from '../../containers/Dialog/Dialog.types';
 import MonacoEditor from '../../components/MonacoEditor';
 import Icon from '../../components/Icon/Icon';
 

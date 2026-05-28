@@ -3,7 +3,7 @@ import {type ConnectedProps, connect} from 'react-redux';
 import {useSelector} from '../../../../store/redux-hooks';
 
 import {Alerts} from '../../../../containers/Alerts/Alerts';
-import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {QUEUE_MODE} from '../../../../constants/navigation/tabs/queue';

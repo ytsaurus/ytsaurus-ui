@@ -1,7 +1,7 @@
 import React from 'react';
 import {Route, Switch, useRouteMatch} from 'react-router';
 
-import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
 import JobDetails from '../../pages/job/JobDetails/JobDetails';
 
 import './Job.scss';

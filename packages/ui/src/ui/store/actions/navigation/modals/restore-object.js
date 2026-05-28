@@ -9,7 +9,7 @@ import {
 import {findCorrectObjectName} from '../../../../utils/navigation/restore-object';
 import {NetworkCode} from '../../../../constants/navigation/modals/path-editing-popup';
 import {preparePath} from '../../../../utils/navigation';
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 import {showErrorPopup, wrapBatchPromise} from '../../../../utils/utils';
 import {updateView} from '../index';
 import ypath from '../../../../common/thor/ypath';

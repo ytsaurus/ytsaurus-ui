@@ -5,7 +5,7 @@ import {useSelector} from '../../../store/redux-hooks';
 import {useRouteMatch} from 'react-router';
 import {getPagesInfoMapById} from '../../../store/selectors/slideoutMenu';
 
-import Link from '../../../components/Link/Link';
+import Link from '../../../containers/Link/Link';
 import {selectCluster} from '../../../store/selectors/global';
 import {makeRoutedURL} from '../../../store/location';
 import {Page} from '../../../../shared/constants/settings';

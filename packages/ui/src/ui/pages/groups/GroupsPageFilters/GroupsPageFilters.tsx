@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import {connect} from 'react-redux';
 
 import {setGroupsNameFilter} from '../../../store/actions/groups';
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import Filter from '../../../components/Filter/Filter';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import {getGroupsNameFilter} from '../../../store/selectors/groups';

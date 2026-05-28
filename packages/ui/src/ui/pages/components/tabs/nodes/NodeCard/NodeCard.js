@@ -10,7 +10,7 @@ import map_ from 'lodash/map';
 import {Progress} from '@gravity-ui/uikit';
 
 import Icon from '../../../../../components/Icon/Icon';
-import Link from '../../../../../components/Link/Link';
+import Link from '../../../../../containers/Link/Link';
 import Label from '../../../../../components/Label';
 import Button from '../../../../../components/Button/Button';
 import {YTErrorBlock} from '../../../../../containers/Block/Block';

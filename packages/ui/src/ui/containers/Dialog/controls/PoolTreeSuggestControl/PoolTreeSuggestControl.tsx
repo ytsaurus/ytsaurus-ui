@@ -4,7 +4,7 @@ import map_ from 'lodash/map';
 
 import {Select} from '@gravity-ui/uikit';
 
-import {type DialogControlProps} from '../../../../components/Dialog/Dialog.types';
+import {type DialogControlProps} from '../../../../containers/Dialog/Dialog.types';
 import {selectAllPoolTreeNames} from '../../../../store/selectors/global';
 import {usePoolTreesLoaded} from '../../../../hooks/global-pool-trees';
 

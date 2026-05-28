@@ -7,7 +7,7 @@ import {Page} from '../../../../../shared/constants/settings';
 import {type FlowWorkerData} from '../../../../../shared/yt-types';
 import format from '../../../../common/hammer/format';
 import Label from '../../../../components/Label';
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 import Loader from '../../../../components/Loader/Loader';
 import {MetaTable, type MetaTableProps} from '@ytsaurus/components';
 import {TemplateId} from '../../../../components/MetaTable/templates/Template';

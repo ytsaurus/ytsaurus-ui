@@ -9,10 +9,10 @@ import unipika from '../../../../common/thor/unipika';
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import {FormattedLink, FormattedText} from '../../../../components/formatters';
 
-import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
+import LoadDataHandler from '../../../../containers/LoadDataHandler/LoadDataHandler';
 import {MetaTable, TemplateTime, Tooltip} from '@ytsaurus/components';
 import {Loader} from '@gravity-ui/uikit';
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 import {Linkify} from '../../../../components/Linkify/Linkify';
 
 import {MAX_TRANSACTIONS_REQUESTS} from '../../../../constants/navigation/tabs/locks';

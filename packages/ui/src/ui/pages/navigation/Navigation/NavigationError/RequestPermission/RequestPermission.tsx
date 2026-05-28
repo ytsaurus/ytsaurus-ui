@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import {Flex} from '@gravity-ui/uikit';
 import ypath from '../../../../../common/thor/ypath';
 
-import {ErrorToClipboardButton} from '../../../../../components/ErrorToClipboardButton/ErrorToClipboardButton';
+import {ErrorToClipboardButton} from '../../../../../containers/ErrorToClipboardButton/ErrorToClipboardButton';
 import RequestPermissions from '../../../tabs/ACL/RequestPermissions/RequestPermissions';
 
 import {getParentPath} from '../../../../../utils/navigation';

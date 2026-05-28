@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import {Button} from '@gravity-ui/uikit';
 
-import Link from '../../../components/Link/Link';
+import Link from '../../../containers/Link/Link';
 import Modal from '../../../components/Modal/Modal';
 import withVisible, {type WithVisibleProps} from '../../../hocs/withVisible';
 import FileDropZone from '../../../components/FileDropZone/FileDropZone';

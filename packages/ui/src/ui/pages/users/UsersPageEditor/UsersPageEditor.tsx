@@ -1,4 +1,4 @@
-import {type FormApi, YTDFDialog, makeErrorFields} from '../../../components/Dialog';
+import {type FormApi, YTDFDialog, makeErrorFields} from '../../../containers/Dialog';
 import React from 'react';
 import cn from 'bem-cn-lite';
 import {connect} from 'react-redux';

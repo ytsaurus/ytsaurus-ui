@@ -10,7 +10,7 @@ import {selectActiveAccount} from '../../../../store/selectors/accounts/accounts
 
 import {useSelector} from '../../../../store/redux-hooks';
 import {getAccountUsageViewType} from '../../../../store/selectors/accounts/account-usage';
-import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
 import {useDisableMaxContentWidth} from '../../../../containers/MaxContentWidth';
 import i18n from './i18n';
 

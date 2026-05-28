@@ -7,7 +7,7 @@ import Icon from '../../../../../components/Icon/Icon';
 import {Secondary, Tooltip, Warning} from '@ytsaurus/components';
 import {selectNavigationTableDataLensButtonAlerts} from '../../../../../store/selectors/navigation/content/table-ts';
 import {Button} from '@gravity-ui/uikit';
-import Link from '../../../../../components/Link/Link';
+import Link from '../../../../../containers/Link/Link';
 import {selectNavigationPathAttributesLoadState} from '../../../../../store/selectors/navigation/navigation';
 import {LOADING_STATUS} from '../../../../../constants';
 import {docsUrl} from '../../../../../config';

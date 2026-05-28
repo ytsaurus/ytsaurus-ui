@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 
 import Icon from '../Icon/Icon';
 import format from '../../common/hammer/format';
-import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
 import ElementsTableRow from '../ElementsTable/ElementsTable';
 import {ExpandButton} from '../ExpandButton';
 import {selectFontFamilies} from '../../store/selectors/global/fonts';

@@ -8,7 +8,7 @@ import {type RootState} from '../../../../store/reducers';
 import {LINK_TO_MODAL_PARTIAL} from '../../../../constants/navigation/modals';
 import {ytApiV3} from '../../../../rum/rum-wrap-api';
 import {selectCluster} from '../../../../store/selectors/global';
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 import {toaster} from '../../../../utils/toaster';
 
 type LinkToModalThunkAction<R = any> = ThunkAction<R, RootState, unknown, LinkToModalAction>;

@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import {Progress, TextInput} from '@gravity-ui/uikit';
 
-import {type DialogControlProps} from '../../../../../../components/Dialog/Dialog.types';
+import {type DialogControlProps} from '../../../../../../containers/Dialog/Dialog.types';
 import {formatValue, parseValue} from '../../../../../../components/NumberInput/NumberInput';
 import {Tooltip} from '@ytsaurus/components';
 

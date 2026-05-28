@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button, type ButtonProps} from '@gravity-ui/uikit';
-import Link from '../../../components/Link/Link';
+import Link from '../../../containers/Link/Link';
 import Icon from '../../../components/Icon/Icon';
 import {createNewQueryUrl, createQueryUrl} from '../utils/navigation';
 import {

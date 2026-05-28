@@ -1,7 +1,7 @@
 import {useHistory} from 'react-router-dom';
 import React, {type FC, useCallback, useEffect, useRef, useState} from 'react';
 import {type Location, type TransitionPromptHook} from 'history';
-import {YTDFDialog} from '../Dialog';
+import {YTDFDialog} from '../../containers/Dialog';
 
 type Props = {
     title: string;

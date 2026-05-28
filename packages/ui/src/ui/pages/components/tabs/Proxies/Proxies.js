@@ -7,10 +7,10 @@ import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
 import ProxyActions from '../../../../pages/components/tabs/Proxies/ProxyActions/ProxyActions';
-import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
+import LoadDataHandler from '../../../../containers/LoadDataHandler/LoadDataHandler';
 import {ClipboardButton} from '@ytsaurus/components';
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
-import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
 import TableInfo from '../../../../pages/components/TableInfo/TableInfo';
 import Filter from '../../../../components/Filter/Filter';
 import Select from '../../../../components/Select/Select';

@@ -7,7 +7,7 @@ import cn from 'bem-cn-lite';
 import {useSelector} from '../../store/redux-hooks';
 import {type PageInfo, getRecentPagesInfo} from '../../store/selectors/slideoutMenu';
 
-import Link from '../../components/Link/Link';
+import Link from '../../containers/Link/Link';
 import {makeRoutedURL} from '../../store/location';
 import {Icon, List} from '@gravity-ui/uikit';
 import {PAGE_ICONS_BY_ID, emptyPageIcon} from '../../constants/slideoutMenu';

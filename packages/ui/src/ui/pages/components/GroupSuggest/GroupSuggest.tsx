@@ -9,7 +9,7 @@ import cn from 'bem-cn-lite';
 
 import {type SelectProps} from '@gravity-ui/uikit';
 
-import {EditableList, type EditableListItemType} from '../../../components/Dialog';
+import {EditableList, type EditableListItemType} from '../../../containers/Dialog';
 
 import {
     selectAllGroupNamesSorted,

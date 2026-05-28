@@ -1,5 +1,5 @@
 import {type PluginWidgetProps} from '@gravity-ui/dashkit';
-import {type PoolPair} from '../../../../../components/Dialog/controls/PoolsMultiple/PoolsMultiple';
+import {type PoolPair} from '../../../../../containers/Dialog/controls/PoolsMultiple/PoolsMultiple';
 import {type YTError} from '../../../../../types';
 
 export type PoolResource = {

@@ -7,7 +7,7 @@ import cn from 'bem-cn-lite';
 import CollapsibleSection, {
     type CollapsibleSectionProps,
 } from '../../components/CollapsibleSection/CollapsibleSection';
-import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
 import {YTErrorBlock} from '../../containers/Block/Block';
 import {UI_COLLAPSIBLE_SIZE} from '../../constants/global/index';
 import {type YTError} from '../../types/index';

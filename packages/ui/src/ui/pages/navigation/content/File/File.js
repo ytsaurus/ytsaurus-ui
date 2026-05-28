@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
 import {useDisableMaxContentWidth} from '../../../../containers/MaxContentWidth';
-import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
+import LoadDataHandler from '../../../../containers/LoadDataHandler/LoadDataHandler';
 import {MetaTable} from '@ytsaurus/components';
 import {
     compression,
@@ -14,7 +14,7 @@ import {
     size,
 } from '../../../../components/MetaTable/presets';
 import {Button, Loader} from '@gravity-ui/uikit';
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 
 import {
     selectDownloadPath,

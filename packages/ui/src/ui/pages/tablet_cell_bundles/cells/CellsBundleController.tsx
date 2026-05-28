@@ -9,7 +9,7 @@ import DataTable, {type Column, type Settings} from '@gravity-ui/react-data-tabl
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import Filter from '../../../components/Filter/Filter';
 import Label from '../../../components/Label';
-import Link from '../../../components/Link/Link';
+import Link from '../../../containers/Link/Link';
 import WithStickyToolbar, {
     STICKY_TOOLBAR_BOTTOM,
 } from '../../../components/WithStickyToolbar/WithStickyToolbar';

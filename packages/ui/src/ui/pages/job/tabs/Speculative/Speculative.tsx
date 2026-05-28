@@ -3,12 +3,12 @@ import React, {useCallback, useEffect, useMemo} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
-import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
+import LoadDataHandler from '../../../../containers/LoadDataHandler/LoadDataHandler';
 import {ClipboardButton} from '@ytsaurus/components';
 import ElementsTableRaw from '../../../../components/ElementsTable/ElementsTable';
-import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
 import Statuslabel from '../../../../components/StatusLabel/StatusLabel';
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 
 import ypath from '../../../../common/thor/ypath';
 import {type PreparedJob, type RawJob} from '../../../../types/operations/job';

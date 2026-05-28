@@ -11,7 +11,7 @@ import {Button} from '@gravity-ui/uikit';
 
 import ClickableAttributesButton from '../../../components/AttributesButton/ClickableAttributesButton';
 import ElementsTable from '../../../components/ElementsTable/ElementsTable';
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import RadioButton from '../../../components/RadioButton/RadioButton';
 import {FormattedText} from '../../../components/formatters';
 import Label from '../../../components/Label';

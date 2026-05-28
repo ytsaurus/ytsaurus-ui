@@ -5,7 +5,7 @@ import NumberInput, {
     type NumberInputProps,
     NumberInputWithError,
     type NumberInputWithErrorProps,
-} from '../../NumberInput/NumberInput';
+} from '../../../components/NumberInput/NumberInput';
 
 import './BytesControl.scss';
 const block = cn('ic-bytes-control');

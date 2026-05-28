@@ -17,7 +17,7 @@ import {
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import {SubjectCard} from '../../../../components/SubjectLink/SubjectLink';
 import Button from '../../../../components/Button/Button';
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 import Icon from '../../../../components/Icon/Icon';
 import {OperationType} from '../../../../components/OperationType/OperationType';
 

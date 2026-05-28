@@ -10,7 +10,7 @@ import map_ from 'lodash/map';
 import {Button} from '@gravity-ui/uikit';
 import {DialogWrapper as Dialog} from '../../../components/DialogWrapper/DialogWrapper';
 
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import {MetaTable, Tooltip} from '@ytsaurus/components';
 import {Template} from '../../../components/MetaTable/templates/Template';
 import Histogram from '../../../components/Histogram/Histogram';

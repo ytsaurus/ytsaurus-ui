@@ -3,7 +3,7 @@ import {Breadcrumbs} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import React from 'react';
 import ypath from '../../common/thor/ypath';
-import Link from '../../components/Link/Link';
+import Link from '../../containers/Link/Link';
 import {YT} from '../../config/yt-config';
 import {makeNavigationLink} from '../../utils/app-url/navigation';
 import './NavigationBreadcrumbs.scss';

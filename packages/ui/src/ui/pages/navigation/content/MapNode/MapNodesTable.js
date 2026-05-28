@@ -14,7 +14,7 @@ import {
     printColumnAsNumber,
 } from '../../../../components/formatters';
 import Icon from '../../../../components/Icon/Icon';
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 import {MapNodeIcon} from '../../../../components/MapNodeIcon/MapNodeIcon';
 import {Tooltip} from '@ytsaurus/components';
 import TTLInfo from '../../../../components/TTLInfo/TTLInfo';

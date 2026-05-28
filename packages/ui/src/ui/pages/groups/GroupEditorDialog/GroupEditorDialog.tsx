@@ -4,7 +4,7 @@ import {
     YTDFDialog,
     extractChangedSubjects,
     prepareRoleListValue,
-} from '../../../components/Dialog';
+} from '../../../containers/Dialog';
 import React from 'react';
 import cn from 'bem-cn-lite';
 import {type ConnectedProps, connect} from 'react-redux';

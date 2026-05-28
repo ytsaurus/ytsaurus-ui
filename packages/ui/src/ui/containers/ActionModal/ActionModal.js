@@ -10,7 +10,7 @@ import {YTErrorBlock} from '../../containers/Block/Block';
 import Radiobox from '../../components/Radiobox/Radiobox';
 import SimpleModal from '../../components/Modal/SimpleModal';
 import TimeInput from '../../components/TimeInput/TimeInput';
-import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
 
 import {confirmAction, dismissAction} from '../../store/actions/actions';
 import {MODAL_STATES} from '../../constants/actions';

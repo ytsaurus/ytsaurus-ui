@@ -5,7 +5,7 @@ import cn from 'bem-cn-lite';
 import {Breadcrumbs, Flex, type Key, Select} from '@gravity-ui/uikit';
 import some_ from 'lodash/some';
 
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import Favourites from '../../../components/Favourites/Favourites';
 import {PoolsSuggest} from '../PoolsSuggest/PoolsSuggest';

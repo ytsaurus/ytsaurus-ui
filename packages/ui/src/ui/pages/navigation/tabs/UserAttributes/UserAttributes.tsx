@@ -4,7 +4,7 @@ import unipika from '../../../../common/thor/unipika';
 import cn from 'bem-cn-lite';
 import {Loader} from '@gravity-ui/uikit';
 
-import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
+import LoadDataHandler from '../../../../containers/LoadDataHandler/LoadDataHandler';
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
 import {YsonWithScroll} from '../../../../components/Yson/YsonWithScroll';
 

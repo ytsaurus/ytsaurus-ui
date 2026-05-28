@@ -14,15 +14,15 @@ import {
     YTDFDialog,
     prepareRoleListValue,
     roleListValueToSubjectList,
-} from '../../../components/Dialog';
+} from '../../../containers/Dialog';
 
 import {type IdmKindType} from '../../../utils/acl/acl-types';
 import {type PreparedRole} from '../../../utils/acl';
 import {type YTError} from '../../../types';
 
-import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
+import LoadDataHandler from '../../../containers/LoadDataHandler/LoadDataHandler';
 import {YTErrorBlock} from '../../../containers/Block/Block';
-import ErrorBoundary from '../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import Button from '../../../components/Button/Button';
 
 import withVisible, {type WithVisibleProps} from '../../../hocs/withVisible';

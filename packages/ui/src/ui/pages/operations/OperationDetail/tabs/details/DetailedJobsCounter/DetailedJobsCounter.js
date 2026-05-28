@@ -5,7 +5,7 @@ import cn from 'bem-cn-lite';
 import {Flex} from '@gravity-ui/uikit';
 
 import Modal from '../../../../../../components/Modal/Modal';
-import Link from '../../../../../../components/Link/Link';
+import Link from '../../../../../../containers/Link/Link';
 
 import withVisible from '../../../../../../hocs/withVisible';
 import hammer from '../../../../../../common/hammer';

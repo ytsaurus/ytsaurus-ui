@@ -5,8 +5,8 @@ import cn from 'bem-cn-lite';
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
 import {FormattedId} from '../../../../components/formatters';
 
-import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
-import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
+import LoadDataHandler from '../../../../containers/LoadDataHandler/LoadDataHandler';
+import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
 import {Loader} from '@gravity-ui/uikit';
 
 import Name from './Name';

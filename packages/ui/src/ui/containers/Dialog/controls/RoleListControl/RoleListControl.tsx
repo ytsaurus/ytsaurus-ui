@@ -6,7 +6,7 @@ import {
     type EditableManyListsItemType,
 } from '@gravity-ui/dialog-fields';
 
-import {SubjectCard} from '../../../SubjectLink/SubjectLink';
+import {SubjectCard} from '../../../../components/SubjectLink/SubjectLink';
 import {type ResponsibleType, type RoleConverted} from '../../../../utils/acl/acl-types';
 import SubjectsControl from '../../../../containers/ACL/SubjectsControl/SubjectsControl';
 

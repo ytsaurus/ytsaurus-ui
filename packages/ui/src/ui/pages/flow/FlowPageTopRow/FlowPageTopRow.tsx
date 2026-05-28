@@ -4,7 +4,7 @@ import React from 'react';
 import {Page} from '../../../../shared/constants/settings';
 import format from '../../../common/hammer/format';
 import thorYPath from '../../../common/thor/ypath';
-import Link from '../../../components/Link/Link';
+import Link from '../../../containers/Link/Link';
 import {RowWithName} from '../../../containers/AppNavigation/TopRowContent/SectionName';
 import {FlowTab} from '../../../store/reducers/flow/filters';
 import {useSelector} from '../../../store/redux-hooks';

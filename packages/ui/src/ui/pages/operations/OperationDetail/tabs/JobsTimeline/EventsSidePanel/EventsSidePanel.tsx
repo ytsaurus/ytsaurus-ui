@@ -5,7 +5,7 @@ import {
     selectSelectedJob,
 } from '../../../../../../store/selectors/operations/jobs-timeline';
 import {Flex, Text} from '@gravity-ui/uikit';
-import Link from '../../../../../../components/Link/Link';
+import Link from '../../../../../../containers/Link/Link';
 import cn from 'bem-cn-lite';
 import {EventsTable} from './EventsTable';
 import {selectCluster} from '../../../../../../store/selectors/global';

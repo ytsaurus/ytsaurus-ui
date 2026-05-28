@@ -11,7 +11,7 @@ import TableOverview from '../../../../pages/navigation/content/Table/TableOverv
 import ColumnSelectorModal from '../../../../components/ColumnSelectorModal/ColumnSelectorModal';
 import OffsetSelectorModal from '../../../../pages/navigation/content/Table/OffsetSelectorModal/OffsetSelectorModal';
 import TableMeta from '../../../../pages/navigation/content/Table/TableMeta/TableMeta';
-import LoadDataHandler from '../../../../components/LoadDataHandler/LoadDataHandler';
+import LoadDataHandler from '../../../../containers/LoadDataHandler/LoadDataHandler';
 import FullScreen from '../../../../components/FullScreen/FullScreen';
 import {YsonSettingsPropTypes} from '../../../../components/Yson/Yson';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';

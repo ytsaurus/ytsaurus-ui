@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from '../../components/Link/Link';
+import Link from '../../containers/Link/Link';
 import {AccountsTab} from '../../constants/accounts/accounts';
 import {Page} from '../../constants';
 import {useSelector} from '../../store/redux-hooks';

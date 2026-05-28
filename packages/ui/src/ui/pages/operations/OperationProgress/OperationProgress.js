@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
 import {Progress} from '@gravity-ui/uikit';
-import Link from '../../../components/Link/Link';
+import Link from '../../../containers/Link/Link';
 
 import hammer from '../../../common/hammer';
 import StatusLabel from '../../../components/StatusLabel/StatusLabel';

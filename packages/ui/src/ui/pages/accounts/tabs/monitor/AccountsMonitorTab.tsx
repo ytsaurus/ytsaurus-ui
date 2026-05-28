@@ -5,7 +5,7 @@ import AccountsNoContent from '../../AccountsNoContent';
 
 import {selectActiveAccount} from '../../../../store/selectors/accounts/accounts';
 import {selectCluster} from '../../../../store/selectors/global';
-import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
 
 import i18n from './i18n';
 

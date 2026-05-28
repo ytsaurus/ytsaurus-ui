@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import {type OperationMonitoringTabProps} from '../../../../../UIFactory';
 import {uiSettings} from '../../../../../config/ui-settings';
 import Icon from '../../../../../components/Icon/Icon';
-import Link from '../../../../../components/Link/Link';
+import Link from '../../../../../containers/Link/Link';
 import {YTErrorBlock} from '../../../../../containers/Block/Block';
 import {MetaTable, type MetaTableItem} from '@ytsaurus/components';
 import {OperationPool} from '../../../../../components/OperationPool/OperationPool';

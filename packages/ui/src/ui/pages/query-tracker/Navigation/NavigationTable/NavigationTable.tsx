@@ -15,7 +15,7 @@ import {useMonaco} from '../../hooks/useMonaco';
 import {createTableSelect} from '../helpers/createTableSelect';
 import {insertTextWhereCursor} from '../helpers/insertTextWhereCursor';
 import {rumLogError} from '../../../../rum/rum-counter';
-import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
 
 export const NavigationTable: FC = () => {
     const dispatch = useDispatch();

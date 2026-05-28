@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from 'react';
-import {type FormApi, YTDFDialog, makeErrorFields} from '../../../../components/Dialog';
+import {type FormApi, YTDFDialog, makeErrorFields} from '../../../../containers/Dialog';
 import Button from '../../../../components/Button/Button';
 import Icon from '../../../../components/Icon/Icon';
 

@@ -11,7 +11,7 @@ import {DataTableYT} from '../../../components/DataTableYT';
 import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
 import Icon from '../../../components/Icon/Icon';
 import Label, {type LabelTheme} from '../../../components/Label';
-import Link from '../../../components/Link/Link';
+import Link from '../../../containers/Link/Link';
 import {STICKY_TOOLBAR_BOTTOM} from '../../../components/WithStickyToolbar/WithStickyToolbar';
 import {Health} from '../../../components/Health/Health';
 import {type OrderType} from '../../../utils/sort-helpers';

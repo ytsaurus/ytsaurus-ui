@@ -12,7 +12,7 @@ import {
 } from '../../../../../../store/selectors/global';
 import {type ConnectedProps, connect} from 'react-redux';
 import {useSelector} from '../../../../../../store/redux-hooks';
-import Link from '../../../../../../components/Link/Link';
+import Link from '../../../../../../containers/Link/Link';
 import {Page} from '../../../../../../constants';
 
 import './TabletsContent.scss';

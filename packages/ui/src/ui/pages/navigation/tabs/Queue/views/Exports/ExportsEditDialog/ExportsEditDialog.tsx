@@ -7,7 +7,7 @@ import {useExportMutation} from '../../../../../../../store/api/navigation/tabs/
 import {makeGetExportsParams} from '../../../../../../../store/api/navigation/tabs/queue/exports';
 import {selectPath} from '../../../../../../../store/selectors/navigation';
 
-import {type FormApi, YTDFDialog, makeErrorFields} from '../../../../../../../components/Dialog';
+import {type FormApi, YTDFDialog, makeErrorFields} from '../../../../../../../containers/Dialog';
 
 import {
     type QueueExport,

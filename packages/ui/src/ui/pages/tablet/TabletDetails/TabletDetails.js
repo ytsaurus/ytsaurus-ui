@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
-import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
+import LoadDataHandler from '../../../containers/LoadDataHandler/LoadDataHandler';
 import {Loader} from '@gravity-ui/uikit';
 
 import Partitions from './Partitions';

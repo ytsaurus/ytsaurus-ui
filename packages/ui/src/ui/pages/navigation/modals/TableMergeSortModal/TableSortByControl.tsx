@@ -7,7 +7,7 @@ import hammer from '../../../../common/hammer';
 import unipika from '../../../../common/thor/unipika';
 
 import {ColumnSelector} from '../../../../components/common/ColumnSelector';
-import {type DialogControlProps} from '../../../../components/Dialog/Dialog.types';
+import {type DialogControlProps} from '../../../../containers/Dialog/Dialog.types';
 import Icon from '../../../../components/Icon/Icon';
 
 import './TableSortByControl.scss';

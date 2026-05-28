@@ -5,7 +5,7 @@ import moment from 'moment';
 // @ts-expect-error
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 
 import {selectIsTrashPath, selectRawPath} from '../../../../store/selectors/navigation';
 import {showErrorPopup, wrapBatchPromise} from '../../../../utils/utils';

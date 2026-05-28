@@ -5,7 +5,7 @@ import b from 'bem-cn-lite';
 import {useExportMutation} from '../../../../../../../store/api/navigation/tabs/queue/queue';
 
 import Icon from '../../../../../../../components/Icon/Icon';
-import {YTDFDialog, makeErrorFields} from '../../../../../../../components/Dialog';
+import {YTDFDialog, makeErrorFields} from '../../../../../../../containers/Dialog';
 import {type QueueExportConfig} from '../../../../../../../types/navigation/queue/queue';
 import {type YTError} from '../../../../../../../types';
 

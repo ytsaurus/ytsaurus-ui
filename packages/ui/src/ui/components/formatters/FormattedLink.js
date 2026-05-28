@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {withRouter} from 'react-router';
 
 import {computeStateQuery} from '../../utils/index';
-import Link from '../../components/Link/Link';
+import Link from '../../containers/Link/Link';
 import FormattedText from './FormattedText';
 
 function FormattedLink(props) {

@@ -6,7 +6,7 @@ import {Text} from '@gravity-ui/uikit';
 
 import format from '../../../common/hammer/format';
 
-import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
+import {YTDFDialog, makeErrorFields} from '../../../containers/Dialog';
 import {Bold} from '@ytsaurus/components';
 import {type YTError} from '../../../types';
 import {useDispatch} from '../../../store/redux-hooks';

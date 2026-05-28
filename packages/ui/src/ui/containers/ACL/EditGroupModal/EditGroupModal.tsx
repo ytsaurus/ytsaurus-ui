@@ -1,6 +1,6 @@
 import includes_ from 'lodash/includes';
 import React from 'react';
-import {YTDFDialog, makeErrorFields} from '../../../components/Dialog';
+import {YTDFDialog, makeErrorFields} from '../../../containers/Dialog';
 import HelpLink from '../../../components/HelpLink/HelpLink';
 import {useMemoizedIfEqual} from '../../../hooks';
 import UIFactory from '../../../UIFactory';

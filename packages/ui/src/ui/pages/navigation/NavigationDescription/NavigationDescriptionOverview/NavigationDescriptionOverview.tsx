@@ -2,7 +2,7 @@ import {ArrowUpRightFromSquare, CircleQuestion} from '@gravity-ui/icons';
 import {Button, Flex, Icon, Link, Text} from '@gravity-ui/uikit';
 import React from 'react';
 import {ClipboardButton, Label, MetaTable, Tooltip} from '@ytsaurus/components';
-import YTLink from '../../../../components/Link/Link';
+import YTLink from '../../../../containers/Link/Link';
 import {getDescriptionType} from '../../../../store/reducers/navigation/description';
 import {useSelector} from '../../../../store/redux-hooks';
 import {selectPath} from '../../../../store/selectors/navigation';

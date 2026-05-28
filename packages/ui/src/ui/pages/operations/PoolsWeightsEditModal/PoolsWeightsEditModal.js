@@ -10,7 +10,7 @@ import reduce_ from 'lodash/reduce';
 
 import {YTErrorBlock} from '../../../containers/Block/Block';
 import Modal from '../../../components/Modal/Modal';
-import Link from '../../../components/Link/Link';
+import Link from '../../../containers/Link/Link';
 import {Yson} from '../../../components/Yson/Yson';
 import {TextInput} from '@gravity-ui/uikit';
 

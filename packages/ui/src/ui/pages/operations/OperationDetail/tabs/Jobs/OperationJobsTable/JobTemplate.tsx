@@ -1,6 +1,6 @@
 import React from 'react';
 import {Progress} from '@gravity-ui/uikit';
-import Link from '../../../../../../components/Link/Link';
+import Link from '../../../../../../containers/Link/Link';
 import {Template} from '../../../../../../components/MetaTable/templates/Template';
 import {showErrorModal} from '../../../../../../store/actions/actions';
 import {showInputPaths} from '../../../../../../store/actions/operations/jobs';

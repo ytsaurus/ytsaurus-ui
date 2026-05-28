@@ -14,7 +14,7 @@ import {isNull} from '../../../../utils';
 import {getDefaultSerieColor} from '../../../../constants/colors';
 import {getAccountName} from '../../../../store/selectors/accounts/accounts';
 import {ProgressTooltip} from './ProgressTooltip';
-import ErrorBoundary from '../../../../components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
 import {
     ACCOUNT_RESOURCE_TYPES_DESCRIPTION,
     AccountResourceName,

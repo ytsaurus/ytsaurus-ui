@@ -2,7 +2,7 @@ import React from 'react';
 import unipika from '../../common/thor/unipika';
 import block from 'bem-cn-lite';
 
-import Link from '../../components/Link/Link';
+import Link from '../../containers/Link/Link';
 
 import hammer from '../../common/hammer';
 import {showErrorPopup} from '../../utils/utils';

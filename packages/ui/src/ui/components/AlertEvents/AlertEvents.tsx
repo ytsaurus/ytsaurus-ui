@@ -8,7 +8,7 @@ import {Template} from '../../components/MetaTable/templates/Template';
 
 import {ClickableText} from '../../components/ClickableText/ClickableText';
 import Icon from '../../components/Icon/Icon';
-import Link from '../../components/Link/Link';
+import Link from '../../containers/Link/Link';
 import {showErrorPopup} from '../../utils/utils';
 import {compareWithUndefined} from '../../utils/sort-helpers';
 import i18n from './i18n';

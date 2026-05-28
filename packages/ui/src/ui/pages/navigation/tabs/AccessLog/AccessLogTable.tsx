@@ -10,7 +10,7 @@ import DataTable, {type Column, type Settings} from '@gravity-ui/react-data-tabl
 
 import format from '../../../../common/hammer/format';
 import Label from '../../../../components/Label';
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 import {ClipboardButton, Secondary, Tooltip, Warning} from '@ytsaurus/components';
 import {DataTableYT} from '../../../../components/DataTableYT';
 import {SubjectCard} from '../../../../components/SubjectLink/SubjectLink';

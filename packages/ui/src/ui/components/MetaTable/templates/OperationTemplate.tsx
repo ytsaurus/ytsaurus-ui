@@ -10,7 +10,7 @@ import {
 } from '../../../components/OperationPool/OperationPool';
 import CollapsibleList from '../../../components/CollapsibleList/CollapsibleList';
 import Icon from '../../../components/Icon/Icon';
-import Link from '../../../components/Link/Link';
+import Link from '../../../containers/Link/Link';
 
 import {Template} from './Template';
 import {paramsToQuery} from '../../../utils';

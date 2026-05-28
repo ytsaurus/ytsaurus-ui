@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {type DFDialogProps, YTDFDialog, makeFormSubmitError} from '../../../components/Dialog';
+import {type DFDialogProps, YTDFDialog, makeFormSubmitError} from '../../../containers/Dialog';
 
 export type UploadFileManagerFileFormValues = {
     name?: string;

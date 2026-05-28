@@ -10,7 +10,7 @@ import ColumnHeader from '../../../components/ColumnHeader/ColumnHeader';
 import CommaSeparatedListWithRestCounter from '../../../components/CommaSeparateListWithRestCounter/CommaSeparateListWithRestCounter';
 import {Tooltip} from '@ytsaurus/components';
 import {DataTableYT} from '../../../components/DataTableYT';
-import LoadDataHandler from '../../../components/LoadDataHandler/LoadDataHandler';
+import LoadDataHandler from '../../../containers/LoadDataHandler/LoadDataHandler';
 import {SubjectCard} from '../../../components/SubjectLink/SubjectLink';
 import {STICKY_TOOLBAR_BOTTOM} from '../../../components/WithStickyToolbar/WithStickyToolbar';
 import UsersPageEditor from '../../../pages/users/UsersPageEditor/UsersPageEditor';

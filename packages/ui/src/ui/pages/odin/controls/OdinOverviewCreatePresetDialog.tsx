@@ -1,7 +1,7 @@
 import React from 'react';
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {getOdinOverviewShowCreatePresetDialog} from '../_selectors/odin-overview';
-import {YTDFDialog} from '../../../components/Dialog';
+import {YTDFDialog} from '../../../containers/Dialog';
 import {odinOverviewAddPreset, odinOverviewShowCreatePresetDialog} from '../_actions/odin-overview';
 import {getSettingOdinOverviewVisiblePresets} from '../_selectors';
 

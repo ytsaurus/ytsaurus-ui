@@ -9,7 +9,7 @@ import partition_ from 'lodash/partition';
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {SELECT_EMPTY_VALUE} from '../constants/navigation/modals/create-table';
-import {type SelectWithSubItemsProps} from '../components/Dialog/controls/SelectWithSubItems/SelectWithSubItems';
+import {type SelectWithSubItemsProps} from '../containers/Dialog/controls/SelectWithSubItems/SelectWithSubItems';
 import {wrapBatchPromise} from './utils';
 import {YTApiId, ytApiV3Id} from '../rum/rum-wrap-api';
 import {type BatchSubRequest, type GetParams} from '../../shared/yt-types';

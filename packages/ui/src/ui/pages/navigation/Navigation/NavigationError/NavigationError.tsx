@@ -4,7 +4,7 @@ import React from 'react';
 import {type YTError} from '../../../../../@types/types';
 import {YTErrorBlock} from '../../../../containers/Block/Block';
 import ErrorDetails from '../../../../components/ErrorDetails/ErrorDetails';
-import {ErrorToClipboardButton} from '../../../../components/ErrorToClipboardButton/ErrorToClipboardButton';
+import {ErrorToClipboardButton} from '../../../../containers/ErrorToClipboardButton/ErrorToClipboardButton';
 import NavigationDescription from '../../../../pages/navigation/NavigationDescription/NavigationDescription';
 import {getPermissionDeniedError} from '../../../../utils/errors';
 import {type ErrorCode, checkErrorForPrettyCodes, getErrorTitle} from './helpers';

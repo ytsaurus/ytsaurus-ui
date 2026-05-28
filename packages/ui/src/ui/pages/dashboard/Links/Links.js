@@ -6,7 +6,7 @@ import cn from 'bem-cn-lite';
 import map_ from 'lodash/map';
 
 import Tabs from '../../../components/Tabs/Tabs';
-import Link from '../../../components/Link/Link';
+import Link from '../../../containers/Link/Link';
 
 import {changeActiveTab} from '../../../store/actions/dashboard/dashboad';
 import {LinksTab} from '../../../constants/dashboard';

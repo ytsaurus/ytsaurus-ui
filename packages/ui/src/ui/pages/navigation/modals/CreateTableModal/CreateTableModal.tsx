@@ -12,9 +12,9 @@ import sortBy_ from 'lodash/sortBy';
 import set_ from 'lodash/set';
 
 import Button from '../../../../components/Button/Button';
-import {type FormApi, YTDFDialog} from '../../../../components/Dialog';
+import {type FormApi, YTDFDialog} from '../../../../containers/Dialog';
 import Icon from '../../../../components/Icon/Icon';
-import Link from '../../../../components/Link/Link';
+import Link from '../../../../containers/Link/Link';
 
 import {
     closeCreateTableModal,
@@ -44,7 +44,7 @@ import {
     selectErasureCodecs,
     selectPrimitiveTypes,
 } from '../../../../store/selectors/global/supported-features';
-import {type SelectWithSubItemsProps} from '../../../../components/Dialog/controls/SelectWithSubItems/SelectWithSubItems';
+import {type SelectWithSubItemsProps} from '../../../../containers/Dialog/controls/SelectWithSubItems/SelectWithSubItems';
 import {docsUrl, getNewTableReplicasCount} from '../../../../config';
 
 import './CreateTableModal.scss';

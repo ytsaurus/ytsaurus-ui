@@ -8,7 +8,7 @@ import {useDispatch, useSelector} from '../../store/redux-hooks';
 import Logo from '../../assets/img/svg/appLogo.svg';
 import GearIcon from '@gravity-ui/icons/svgs/gear.svg';
 import BugIcon from '@gravity-ui/icons/svgs/bug.svg';
-import Link from '../../components/Link/Link';
+import Link from '../../containers/Link/Link';
 import unknown from '../../assets/img/user-avatar.svg';
 import {type AppNavigationProps} from './AppNavigationPageLayout';
 import {YT} from '../../config/yt-config';

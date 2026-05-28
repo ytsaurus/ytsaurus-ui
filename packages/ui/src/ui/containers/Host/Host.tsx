@@ -3,7 +3,7 @@ import {useSelector} from '../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
 import {selectCluster} from '../../store/selectors/global';
-import Link from '../../components/Link/Link';
+import Link from '../../containers/Link/Link';
 import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 import {uiSettings} from '../../config/ui-settings';
 import {makeRegexpFromSettings} from '../../../shared/utils';
