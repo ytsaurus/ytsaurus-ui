@@ -44,7 +44,6 @@ type YTErrorBlockInternalProps = {
     view?: 'compact';
 
     error?: ErrorDetailsProps['error'];
-    settings?: ErrorDetailsProps['settings'];
 
     header?: React.ReactNode;
     message?: React.ReactNode;
@@ -145,7 +144,7 @@ class YTErrorBlockImpl extends React.Component<YTErrorBlockInternalProps> {
     }
 
     renderBody() {
-        const {view, error, settings, maxCollapsedDepth, defaultExpandedCount} = this.props;
+        const {view, error, maxCollapsedDepth, defaultExpandedCount} = this.props;
         const className = b('body');
 
         return (
@@ -158,7 +157,6 @@ class YTErrorBlockImpl extends React.Component<YTErrorBlockInternalProps> {
                         {error && (
                             <ErrorDetails
                                 error={error}
-                                settings={settings}
                                 maxCollapsedDepth={maxCollapsedDepth}
                                 defaultExpadedCount={defaultExpandedCount}
                             />
