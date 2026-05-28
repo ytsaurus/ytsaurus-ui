@@ -183,3 +183,22 @@ export const CompactView: Story = {
         disableLogger: true,
     },
 };
+
+export const UnexpectedErrorFields: Story = {
+    args: {
+        type: 'error',
+        error: {
+            foo: 'bar',
+            bar: 'foo',
+        } as any,
+        disableLogger: true,
+    },
+};
+
+export const UnexpectedErrorFields2: Story = {
+    args: {
+        type: 'error',
+        error: 'En error as text' as any,
+        disableLogger: true,
+    },
+};

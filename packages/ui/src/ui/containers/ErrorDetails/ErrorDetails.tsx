@@ -6,7 +6,6 @@ import {Flex} from '@gravity-ui/uikit';
 import Link from '../../containers/Link/Link';
 import block from 'bem-cn-lite';
 import ypath from '../../common/thor/ypath';
-import unipika from '../../common/thor/unipika';
 
 import map_ from 'lodash/map';
 
@@ -19,15 +18,15 @@ import {Yson} from '../../components/Yson/Yson';
 import './ErrorDetails.scss';
 import {unescapeSlashX} from '../../utils/utils';
 import FormattedText from '../../components/formatters/FormattedText';
-import {isYTError} from '../../../shared/utils';
 import {type UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
 import {ErrorToClipboardButton} from '../../containers/ErrorToClipboardButton/ErrorToClipboardButton';
+import {getYsonSettingsErrorDetails} from '../../store/selectors/thor/unipika';
+import {useSelector} from '../../store/redux-hooks';
 
 const b = block('elements-error-details');
 
 export type ErrorDetailsProps = {
     error: YTErrorRaw<{attributes?: object}> | AxiosError;
-    settings?: UnipikaSettings;
     maxCollapsedDepth?: number;
     defaultExpadedCount?: number;
 };
@@ -37,7 +36,78 @@ type State = {
     currentTab: 'attributes' | 'details' | 'stderrs';
 };
 
-export default class ErrorDetails extends React.Component<ErrorDetailsProps, State> {
+export default function ErrorDetails({error, ...props}: ErrorDetailsProps) {
+    const unipikaSettings = useSelector(getYsonSettingsErrorDetails);
+
+    const normalizedError = React.useMemo(() => {
+        if (typeof error === 'string') {
+            return {message: error};
+        }
+
+        if (isAxiosError(error)) {
+            return error;
+        }
+
+        const {
+            message,
+            code,
+            inner_errors,
+            attributes,
+            yt_javascript_wrapper,
+            ...unexpectedErrorFields
+        } = error;
+
+        const hasUnexpectedFields = Object.keys(unexpectedErrorFields).length > 0;
+        let attrs = attributes;
+        if (hasUnexpectedFields) {
+            attrs = {unexpectedErrorFields};
+            if (attributes !== undefined) {
+                Object.assign(attrs, {attributes});
+            }
+        }
+
+        return {
+            message,
+            code,
+            inner_errors,
+            yt_javascript_wrapper,
+            ...(attrs ? {attributes: attrs} : {}),
+        };
+    }, [error]);
+
+    return (
+        <ErrorDetailsImpl
+            {...props}
+            error={normalizedError}
+            originalError={error}
+            unipikaSettings={unipikaSettings}
+        />
+    );
+}
+
+export function ErrorDetailsMessage({error}: {error: YTErrorRaw}) {
+    const {message, code} = error;
+
+    const value = ypath.getValue(message);
+    let text = value;
+    if ('string' === typeof text) {
+        const msg = unescapeSlashX(text);
+        text = <FormattedText text={msg} />;
+    }
+    return (
+        <span className={b('message')}>
+            {text ?? i18n('alert_unexpected-error-format')}
+            {code !== undefined && <React.Fragment>[{ypath.getValue(code)}]</React.Fragment>}
+        </span>
+    );
+}
+
+type ErrorDetailsImplProps = ErrorDetailsProps & {originalError: ErrorDetailsProps['error']};
+
+class ErrorDetailsImpl extends React.Component<
+    ErrorDetailsImplProps & {unipikaSettings: UnipikaSettings},
+    State
+> {
     static prepareDefaultTab(props: ErrorDetailsProps) {
         const {attributes} = props.error as YTErrorRaw;
         let details, stderrs;
@@ -55,26 +125,9 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
         }
     }
 
-    static renderMessage(error: YTErrorRaw) {
-        const {message, code} = error;
-
-        const value = ypath.getValue(message);
-        let text = value;
-        if ('string' === typeof text) {
-            const msg = unescapeSlashX(text);
-            text = <FormattedText text={msg} />;
-        }
-        return (
-            <span className={b('message')}>
-                {text}
-                {code !== undefined && <React.Fragment>[{ypath.getValue(code)}]</React.Fragment>}
-            </span>
-        );
-    }
-
     state: State = {
         showDetails: Boolean(this.props.defaultExpadedCount),
-        currentTab: ErrorDetails.prepareDefaultTab(this.props),
+        currentTab: ErrorDetailsImpl.prepareDefaultTab(this.props),
     };
 
     get TABS() {
@@ -122,7 +175,7 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
     }
 
     renderTabs() {
-        const {error} = this.props;
+        const {originalError} = this.props;
         const {currentTab} = this.state;
 
         const items = this.prepareTabs();
@@ -130,7 +183,7 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
         return (
             <div className={b('tabs')}>
                 <Tabs onTabChange={this.changeCurrentTab} active={currentTab} items={items} />
-                <ErrorToClipboardButton size="s" error={error} />
+                <ErrorToClipboardButton size="s" error={originalError} />
             </div>
         );
     }
@@ -138,7 +191,7 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
     renderTabContent() {
         const {currentTab} = this.state;
 
-        const {error, settings} = this.props;
+        const {error, unipikaSettings} = this.props;
         const {attributes} = error as YTErrorRaw;
         let details, stderrs;
         if (attributes) {
@@ -151,7 +204,7 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
         return (
             <div className={className}>
                 {currentTab === 'attributes' && (
-                    <Yson value={attributes} settings={unipika.prepareSettings(settings)} />
+                    <Yson value={attributes} settings={unipikaSettings} />
                 )}
                 {currentTab === 'details' && (
                     <pre className={codeClassName}>{details as React.ReactNode}</pre>
@@ -173,15 +226,15 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
     }
 
     renderInnerErrors() {
-        const {settings, defaultExpadedCount = 0, maxCollapsedDepth = Infinity} = this.props;
+        const {defaultExpadedCount = 0, maxCollapsedDepth = Infinity} = this.props;
 
         const {inner_errors: innerErrors = []} = this.props.error as YTErrorRaw;
         if (isAxiosError<YTErrorRaw>(this.props.error)) {
             const {response} = this.props.error;
-            const innerError = isYTError(response?.data)
-                ? response.data
-                : {attributes: response?.data as YTErrorRaw['attributes'], message: 'Error'};
-            innerErrors.push(innerError);
+            const innerError = response?.data;
+            if (innerError) {
+                innerErrors.push(innerError);
+            }
         }
 
         const allowToShowInnerErrors = this.state.showDetails || maxCollapsedDepth > 0;
@@ -195,7 +248,6 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
                         <ErrorDetails
                             key={index}
                             error={error}
-                            {...{settings}}
                             defaultExpadedCount={defaultExpadedCount ? defaultExpadedCount - 1 : 0}
                             maxCollapsedDepth={
                                 this.state.showDetails ? Infinity : maxCollapsedDepth - 1
@@ -229,14 +281,14 @@ export default class ErrorDetails extends React.Component<ErrorDetailsProps, Sta
                     <Flex direction="column">
                         <Link theme="primary" onClick={this.toggleDetails}>
                             {this.renderToggler()}
-                            {ErrorDetails.renderMessage(this.props.error as YTErrorRaw)}
+                            <ErrorDetailsMessage error={this.props.error as YTErrorRaw} />
                         </Link>
                         <div className={'toggle-subject'}>
                             {showDetails && this.renderDetails()}
                         </div>
                     </Flex>
                 ) : (
-                    ErrorDetails.renderMessage(this.props.error as YTErrorRaw)
+                    <ErrorDetailsMessage error={this.props.error as YTErrorRaw} />
                 )}
             </div>
         );
