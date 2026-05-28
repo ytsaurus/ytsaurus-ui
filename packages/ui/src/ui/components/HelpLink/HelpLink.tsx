@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Link from '../../containers/Link/Link';
+import {Link} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 
 import Icon from '../../components/Icon/Icon';
@@ -22,7 +22,7 @@ interface Props {
 
 function HelpLink({url, text = i18n('value_help')}: Props) {
     return !url ? null : (
-        <Link url={url} target="_blank" title={i18n('title_view-documentation')}>
+        <Link href={url} target="_blank" title={i18n('title_view-documentation')}>
             <Icon awesome="book" />
             {text && <span className={block('text')}>{text}</span>}
         </Link>

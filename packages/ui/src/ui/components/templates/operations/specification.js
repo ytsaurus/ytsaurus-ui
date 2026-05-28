@@ -1,11 +1,10 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import {Flex, Text} from '@gravity-ui/uikit';
+import {Flex, Link, Text} from '@gravity-ui/uikit';
 
 import FilterOverview from '../../../pages/operations/OperationDetail/tabs/details/FilterOverview/FilterOverview';
 import {ClipboardButton} from '@ytsaurus/components';
 import Label from '../../../components/Label';
-import Link from '../../../containers/Link/Link';
 import Icon from '../../../components/Icon/Icon';
 
 import {TemplateLivePreivew} from '../../../components/MetaTable/templates/OperationTemplate';
@@ -43,7 +42,7 @@ templates.add('operations/detail/specification/io', {
                 </Text>
                 {originalPath && (
                     <Text variant="inherit">
-                        <Link title={path} url={url}>
+                        <Link title={path} href={url} target="_blank">
                             <Icon awesome="folders" />
                         </Link>
                     </Text>

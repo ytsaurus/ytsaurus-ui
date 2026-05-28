@@ -1,5 +1,6 @@
 import React from 'react';
 import {type Column} from '@gravity-ui/react-data-table';
+import {Link} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 
 import format from '../../common/hammer/format';
@@ -8,7 +9,6 @@ import {Template} from '../../components/MetaTable/templates/Template';
 
 import {ClickableText} from '../../components/ClickableText/ClickableText';
 import Icon from '../../components/Icon/Icon';
-import Link from '../../containers/Link/Link';
 import {showErrorPopup} from '../../utils/utils';
 import {compareWithUndefined} from '../../utils/sort-helpers';
 import i18n from './i18n';
@@ -37,12 +37,12 @@ const columns: Array<Column<AlertInfo>> = [
             return (
                 <span>
                     {format.Readable(row.type)}
-                    {Boolean(row.url) && (
-                        <Link url={row.url} theme={'secondary'}>
+                    {row.url ? (
+                        <Link href={row.url} target="_blank" view={'secondary'}>
                             &nbsp;
                             <Icon awesome={'question-circle'} />
                         </Link>
-                    )}
+                    ) : null}
                 </span>
             );
         },

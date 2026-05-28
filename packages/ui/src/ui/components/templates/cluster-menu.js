@@ -1,9 +1,9 @@
 import React from 'react';
+import {Link} from '@gravity-ui/uikit';
 
 import StatusBulb from '../../components/StatusBulb/StatusBulb';
 import hammer from '../../common/hammer';
 import templates from './utils.js';
-import Link from '../../containers/Link/Link';
 import {getClusterAppearance} from '../../appearance';
 
 templates.add('cluster-menu', {
@@ -29,7 +29,7 @@ templates.add('cluster-menu', {
     },
     name(item) {
         return (
-            <Link theme="primary" url={'/' + item.id + '/'}>
+            <Link theme="primary" href={'/' + item.id + '/'} target="_blank">
                 {item.name}
             </Link>
         );

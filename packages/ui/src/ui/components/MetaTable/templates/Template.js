@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, {Fragment} from 'react';
 import cn from 'bem-cn-lite';
+import {Link} from '@gravity-ui/uikit';
 
 import {
     ClipboardButton,
@@ -11,8 +12,8 @@ import {
 } from '@ytsaurus/components';
 import hammer from '../../../common/hammer';
 import CollapsableText from '../../../components/CollapsableText/CollapsableText';
-import Link from '../../../containers/Link/Link';
 import Icon from '../../../components/Icon/Icon';
+import {ClickableText} from '../../../components/ClickableText/ClickableText';
 
 export {TemplateId, TemplateFormattedValue, TemplateReadable, TemplateTime};
 
@@ -54,9 +55,9 @@ TemplateCollapsableText.propTypes = {
 
 function TemplateShowError({error, onClick}) {
     return typeof error === 'object' ? (
-        <Link theme="ghost" onClick={onClick}>
-            View
-        </Link>
+        <ClickableText onClick={onClick}>
+            <span style={{color: 'var(--secondary-link)'}}>View</span>
+        </ClickableText>
     ) : (
         hammer.format.NO_VALUE
     );
@@ -72,7 +73,7 @@ TemplateShowError.propTypes = {
 function TemplateDownloadLink({size, url}) {
     return (
         <span className={itemBlock('download-link')}>
-            <Link title="Download" url={url}>
+            <Link title="Download" href={url} target="_blank">
                 <Icon awesome="download" face="solid" />
             </Link>
             &emsp;
@@ -105,7 +106,7 @@ function TemplateLink({
         <Fragment>
             <div className={itemBlock('link', {clickable: withClipboard})}>
                 <span className="elements-ellipsis">
-                    <Link title={url} url={url}>
+                    <Link title={url} href={url} target="_blank">
                         {icon && <Icon awesome={icon} face={face} />}
                         {text}
                     </Link>

@@ -7,9 +7,8 @@ import block from 'bem-cn-lite';
 import keys_ from 'lodash/keys';
 import map_ from 'lodash/map';
 
-import {Progress} from '@gravity-ui/uikit';
+import {Link, Progress} from '@gravity-ui/uikit';
 
-import Link from '../../containers/Link/Link';
 import templates from '../../components/templates/utils.js';
 
 import hammer from '../../common/hammer';
@@ -251,7 +250,7 @@ templates.add('components/tablet-slots', {
         const tabletCellHref = genTabletCellBundlesCellUrl(tabletSlot.cell_id);
 
         return (
-            <Link title={tabletSlot.cell_id} url={tabletCellHref}>
+            <Link title={tabletSlot.cell_id} href={tabletCellHref} target="_blank">
                 {tabletSlot.cell_id}
             </Link>
         );
