@@ -36,5 +36,8 @@
   "alert_account-abc-updated": "{{accountName}}'s ABC Service updated successfully",
   "alert_set-abc-failed": "Failed to set ABC for {{accountName}}",
   "alert_account-home-created": "{{accountName}}'s home directory created successfully",
-  "alert_create-home-failed": "Failed to create home for {{accountName}}"
+  "alert_create-home-failed": "Failed to create home for {{accountName}}",
+  "tooltip_commited": "Commited",
+  "tooltip_system-reserved": "System reserved",
+  "tooltip_uncommitted": "Uncommitted"
 }

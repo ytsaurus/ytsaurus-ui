@@ -15,6 +15,9 @@ import {
     getNodesChunksTotals,
 } from '../../../../utils/accounts/accountsTotal';
 import i18n from './i18n';
+import {Tooltip} from '@ytsaurus/components';
+import {ColorCircle} from '../../../../components/ColorCircle/ColorCircle';
+import {MetaTable, type MetaTableItem} from '@ytsaurus/components';
 
 const b = block('accounts');
 
@@ -24,6 +27,7 @@ interface Props {
     nodesData: NodesData;
     mediumList: string[];
     systemReservedDiskSpacePerMedium?: Record<string, number>;
+    uncommittedDiskSpacePerMedium?: Record<string, number>;
 }
 
 export default class AccountsTotal extends Component<Props> {
@@ -34,6 +38,7 @@ export default class AccountsTotal extends Component<Props> {
         nodesData: PropTypes.object,
         mediumList: PropTypes.array,
         systemReservedDiskSpacePerMedium: PropTypes.object,
+        uncommittedDiskSpacePerMedium: PropTypes.object,
     };
 
     renderTooltipContent(tooltipItems: TooltipInfoItem[]) {
@@ -88,6 +93,7 @@ export default class AccountsTotal extends Component<Props> {
             nodesData,
             mediumList,
             systemReservedDiskSpacePerMedium,
+            uncommittedDiskSpacePerMedium,
         } = this.props;
 
         const diskSpace = getDiskSpace(
@@ -96,6 +102,7 @@ export default class AccountsTotal extends Component<Props> {
             nodesData,
             mediumList,
             systemReservedDiskSpacePerMedium,
+            uncommittedDiskSpacePerMedium,
         );
 
         return (
@@ -137,10 +144,20 @@ export default class AccountsTotal extends Component<Props> {
                                             {hammer.format['ReadableField'](item.mediumType)}
                                         </td>
                                         <td className={b('disk-space-cluster-usage')}>
-                                            <Progress
-                                                stack={item.clusterUsage.stack}
-                                                text={item.clusterUsage.text}
-                                            />
+                                            <Tooltip
+                                                className={b('disk-space-tooltip')}
+                                                placement={'bottom'}
+                                                content={this.renderTooltipContent(
+                                                    item.clusterUsage.tooltipInfo,
+                                                )}
+                                            >
+                                                <Progress
+                                                    stack={addProgressStackSpacers(
+                                                        item.clusterUsage.stack,
+                                                    )}
+                                                    text={item.clusterUsage.text}
+                                                />
+                                            </Tooltip>
                                         </td>
                                         <td className={b('disk-space-hardware-limit')}>
                                             {hammer.format['Bytes'](item.hardwareLimit)}

@@ -213,7 +213,6 @@ function fetchClusterParams(cluster: string, {ctx}: {ctx?: AppContext}) {
             delete masterVersion.error;
             masterVersion.output = '0.0.0-unknown';
         }
-
         const response = {
             mediumList,
             schedulerVersion,

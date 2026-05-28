@@ -35,4 +35,9 @@ export const getSystemReservedDiskSpaceByMedium = createSelector([getMediumItems
     return res;
 });
 
+export const getUncommittedDiskSpaceByMedium = createSelector(
+    [(state) => state.global.uncommittedDiskSpacePerMedium],
+    (data = {}) => data,
+);
+
 export const getCurrentCluster = (state) => state.global.cluster;

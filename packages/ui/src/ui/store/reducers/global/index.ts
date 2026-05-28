@@ -81,8 +81,7 @@ export type GlobalState = {
 
     isDeveloper: boolean; // groups of current user
     isWatchmen: boolean;
-    mediumList: Array<CypressNode<{system_reserved_disk_space?: number}, string>>;
-    uncommittedDiskSpacePerMedium: Record<string, number>;
+    mediumList: Array<string>;
     groups?: Array<CypressNode<{upravlyator_managed: boolean}, string>>;
     users?: Array<CypressNode<{upravlyator_managed: boolean}, string>>;
     bundles?: Array<string>;
@@ -106,6 +105,8 @@ export type GlobalState = {
 
     _ym_debug?: string;
     rumDebug?: string;
+
+    uncommittedDiskSpacePerMedium?: Record<string, number>;
 };
 
 const initialState: GlobalState = {
@@ -165,6 +166,8 @@ const initialState: GlobalState = {
     allowedExperimentalPages: undefined,
 
     enableMaxContentWidth: true,
+
+    uncommittedDiskSpacePerMedium: {},
 };
 
 function updatedTitle(
@@ -354,4 +357,3 @@ export type GloablStateAction =
     | ActionD<typeof SPLIT_SCREEN, GlobalState['splitScreen']>
     | ActionD<typeof GLOBAL_SET_THEME, GlobalState['theme']>
     | ActionD<typeof GLOBAL_PARTIAL, Partial<GlobalState>>;
-
