@@ -20,10 +20,10 @@ import {STICKY_TOOLBAR_BOTTOM} from '../../../components/WithStickyToolbar/WithS
 import GroupEditorDialog from '../../../pages/groups/GroupEditorDialog/GroupEditorDialog';
 import {
     type GroupsTreeNode,
-    getGroupEditorVisible,
-    getGroupsFlattenTree,
-    getGroupsSort,
-    getGroupsTableDataState,
+    selectGroupEditorVisible,
+    selectGroupsFlattenTree,
+    selectGroupsSort,
+    selectGroupsTableDataState,
 } from '../../../store/selectors/groups';
 
 import './GroupsPageTable.scss';
@@ -236,10 +236,10 @@ class GroupsPageTable extends React.Component<GroupsPageTableProps> {
 }
 
 const mapStateToProps = (state: RootState) => {
-    const {loaded, loading, error} = getGroupsTableDataState(state);
-    const groups = getGroupsFlattenTree(state);
-    const sort = getGroupsSort(state);
-    const showEditor = getGroupEditorVisible(state);
+    const {loaded, loading, error} = selectGroupsTableDataState(state);
+    const groups = selectGroupsFlattenTree(state);
+    const sort = selectGroupsSort(state);
+    const showEditor = selectGroupEditorVisible(state);
 
     return {
         loaded,
