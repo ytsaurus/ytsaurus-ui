@@ -17,12 +17,12 @@ import {type PreparedRole} from '../../utils/acl';
 
 // Table
 
-export const getGroupsTableDataState = (state: RootState) => state.groups.table;
+export const selectGroupsTableDataState = (state: RootState) => state.groups.table;
 
-const getGroups = (state: RootState) => state.groups.table.groups;
-export const getGroupsNameFilter = (state: RootState) => state.groups.table.nameFilter;
-export const getGroupsSort = (state: RootState) => state.groups.table.sort;
-export const getGroupsExpanded = (state: RootState) => state.groups.table.expanded;
+const selectGroups = (state: RootState) => state.groups.table.groups;
+export const selectGroupsNameFilter = (state: RootState) => state.groups.table.nameFilter;
+export const selectGroupsSort = (state: RootState) => state.groups.table.sort;
+export const selectGroupsExpanded = (state: RootState) => state.groups.table.expanded;
 
 export type GroupsTreeNode = Group & {
     parent?: string;
@@ -35,7 +35,7 @@ export type GroupsTreeNode = Group & {
 
 type GroupsTree = Record<string, GroupsTreeNode>;
 
-export const getGroupsTree = createSelector([getGroups], (groups) => {
+export const selectGroupsTree = createSelector([selectGroups], (groups) => {
     const res: GroupsTree = groups.reduce((acc: GroupsTree, item) => {
         acc[item.name] = {...item, children: [], leaves: []};
         return acc;
@@ -71,8 +71,8 @@ export const getGroupsTree = createSelector([getGroups], (groups) => {
     return res;
 });
 
-const getGroupsTreeFiltered = createSelector(
-    [getGroupsTree, getGroupsNameFilter],
+const selectGroupsTreeFiltered = createSelector(
+    [selectGroupsTree, selectGroupsNameFilter],
     (tree, nameFilter) => {
         const root = tree[ROOT_GROUP_NAME];
         const predicates = compact_([
@@ -87,8 +87,8 @@ const getGroupsTreeFiltered = createSelector(
     },
 );
 
-const getGroupsTreeFilteredAndExpanded = createSelector(
-    [getGroupsTree, getGroupsTreeFiltered, getGroupsExpanded, getGroupsNameFilter],
+const selectGroupsTreeFilteredAndExpanded = createSelector(
+    [selectGroupsTree, selectGroupsTreeFiltered, selectGroupsExpanded, selectGroupsNameFilter],
     (groupTree, groupsTreeFiltered, expandedByUser, groupNameFilter) => {
         const expandedBySearch: Record<string, boolean> = {};
 
@@ -144,8 +144,8 @@ const GROUP_FIELDS = {
     },
 };
 
-const getGroupsTreeFilteredAndSorted = createSelector(
-    [getGroupsTreeFilteredAndExpanded, getGroupsSort],
+const selectGroupsTreeFilteredAndSorted = createSelector(
+    [selectGroupsTreeFilteredAndExpanded, selectGroupsSort],
     (root, {column, order}) => {
         const {orderK, undefinedOrderK} = orderTypeToOrderK(order);
         const res = hammer.treeList.sortTree(
@@ -161,27 +161,27 @@ const getGroupsTreeFilteredAndSorted = createSelector(
     },
 );
 
-export const getGroupsFlattenTree = createSelector(
-    [getGroupsTreeFilteredAndSorted],
+export const selectGroupsFlattenTree = createSelector(
+    [selectGroupsTreeFilteredAndSorted],
     (root): GroupsTreeNode[] => {
         return hammer.treeList.flattenTree(root);
     },
 );
 
 // Editor
-export const getGroupEditorData = (state: RootState) => state.groups.editor.data;
-export const getGroupEditorVisible = (state: RootState) => state.groups.editor.showModal;
-export const getGroupEditorGroupName = (state: RootState) => state.groups.editor.groupName;
+export const selectGroupEditorData = (state: RootState) => state.groups.editor.data;
+export const selectGroupEditorVisible = (state: RootState) => state.groups.editor.showModal;
+export const selectGroupEditorGroupName = (state: RootState) => state.groups.editor.groupName;
 // eslint-disable-next-line camelcase
-export const getGroupEditorGroupIdm = (state: RootState) =>
+export const selectGroupEditorGroupIdm = (state: RootState) =>
     flags.get(state.groups.editor.data.$attributes?.upravlyator_managed as FlagType);
-const getGroupEditorIdmData = (state: RootState) => state.groups.editor.idmData;
-export const getGroupEditorIdmDataVersion = (state: RootState) =>
+const selectGroupEditorIdmData = (state: RootState) => state.groups.editor.idmData;
+export const selectGroupEditorIdmDataVersion = (state: RootState) =>
     state.groups.editor.idmData.version;
-export const getGroupEditorIdmDataOtherMembers = (state: RootState) =>
+export const selectGroupEditorIdmDataOtherMembers = (state: RootState) =>
     state.groups.editor.idmData.group.other_members;
 
-export const getGroupEditorSubjects = createSelector([getGroupEditorIdmData], (idmData) => {
+export const selectGroupEditorSubjects = createSelector([selectGroupEditorIdmData], (idmData) => {
     const {
         group: {members, responsible},
     } = idmData;
@@ -191,8 +191,8 @@ export const getGroupEditorSubjects = createSelector([getGroupEditorIdmData], (i
     };
 });
 
-export const getGroupEditorRoles = createSelector(
-    [getGroupEditorIdmData, getGroupEditorData],
+export const selectGroupEditorRoles = createSelector(
+    [selectGroupEditorIdmData, selectGroupEditorData],
     (
         idmData,
         data,

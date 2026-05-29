@@ -6,7 +6,7 @@ import {setGroupsNameFilter} from '../../../store/actions/groups';
 import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import Filter from '../../../components/Filter/Filter';
 import {Toolbar} from '../../../components/WithStickyToolbar/Toolbar/Toolbar';
-import {getGroupsNameFilter} from '../../../store/selectors/groups';
+import {selectGroupsNameFilter} from '../../../store/selectors/groups';
 import {type RootState} from '../../../store/reducers';
 
 import './GroupsPageFilters.scss';
@@ -55,7 +55,7 @@ class GroupsPageFilters extends React.Component<GroupsPageFiltersProps> {
 
 const mapStateToProps = (state: RootState) => {
     return {
-        groupFilter: getGroupsNameFilter(state),
+        groupFilter: selectGroupsNameFilter(state),
     };
 };
 
