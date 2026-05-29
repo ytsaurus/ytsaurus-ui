@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {Select} from '@gravity-ui/uikit';
 
 import {NODE_TYPE_ITEMS} from '../../../constants/components/nodes/nodes';
-import {getSystemNodesNodeTypesToLoad} from '../../../store/selectors/system/nodes';
+import {selectSystemNodesNodeTypesToLoad} from '../../../store/selectors/system/nodes';
 import {setSysmetNodesNodeType} from '../../../store/actions/system/nodes-ts';
 import {NODE_TYPE, type NodeType} from '../../../../shared/constants/system';
 import {selectComponentsNodesNodeTypes} from '../../../store/selectors/components/nodes/nodes';
@@ -39,7 +39,7 @@ export function NodeTypeSelector(props: NodeTypeSelectorProps) {
 
 export function SystemNodeTypeSelector() {
     const dispatch = useDispatch();
-    const value = useSelector(getSystemNodesNodeTypesToLoad);
+    const value = useSelector(selectSystemNodesNodeTypesToLoad);
     return (
         <NodeTypeSelector
             value={value}
