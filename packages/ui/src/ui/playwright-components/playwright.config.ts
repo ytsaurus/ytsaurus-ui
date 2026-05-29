@@ -45,7 +45,7 @@ const config: PlaywrightTestConfig = {
     */
     retries: process.env.CI ? 3 : 0,
     /* Opt out of parallel tests on CI. */
-    workers: process.env.CI ? 8 : undefined,
+    workers: process.env.CI ? 4 : undefined,
     /* Reporter to use. See https://playwright.dev/docs/test-reporters */
     reporter,
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
