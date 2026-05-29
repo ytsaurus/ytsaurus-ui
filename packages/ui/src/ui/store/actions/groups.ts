@@ -10,9 +10,9 @@ import {
 } from '../../constants/groups';
 import {selectCluster} from '../../store/selectors/global';
 import {
-    getGroupEditorIdmDataVersion,
-    getGroupEditorSubjects,
-    getGroupsExpanded,
+    selectGroupEditorIdmDataVersion,
+    selectGroupEditorSubjects,
+    selectGroupsExpanded,
 } from '../../store/selectors/groups';
 import {flags} from '../../utils/index';
 import {listAllGroups} from '../../utils/users-groups';
@@ -82,7 +82,7 @@ export function setGroupsPageSorting(column: string, order: OrderType) {
 
 export function toggleGroupExpand(groupName: string, isExpanded: boolean) {
     return (dispatch: Dispatch, getState: () => RootState) => {
-        const expanded = {...getGroupsExpanded(getState())};
+        const expanded = {...selectGroupsExpanded(getState())};
 
         expanded[groupName] = isExpanded;
 
@@ -200,8 +200,8 @@ export function saveGroupData({
 
         if (updateGroup) {
             const state = getState();
-            const {members, responsible} = getGroupEditorSubjects(state);
-            const version = getGroupEditorIdmDataVersion(state);
+            const {members, responsible} = selectGroupEditorSubjects(state);
+            const version = selectGroupEditorIdmDataVersion(state);
             const newMembers = calculateMembers(members, membersToAdd, membersToRemove);
             const newResponsibles = calculateMembers(
                 responsible,
