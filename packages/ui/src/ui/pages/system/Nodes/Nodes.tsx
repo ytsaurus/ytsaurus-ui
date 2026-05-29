@@ -28,7 +28,7 @@ import {
     getSettingSystemNodesNodeType,
     getSettingsSystemNodesCollapsed,
 } from '../../../store/selectors/settings/settings-ts';
-import {getSystemNodesNodeTypesToLoad} from '../../../store/selectors/system/nodes';
+import {selectSystemNodesNodeTypesToLoad} from '../../../store/selectors/system/nodes';
 import {
     type ComponentsNodesLinkParams,
     makeComponentsNodesLink,
@@ -267,7 +267,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 function NodesUpdater() {
     const dispatch = useDispatch();
 
-    const nodeTypes = useSelector(getSystemNodesNodeTypesToLoad);
+    const nodeTypes = useSelector(selectSystemNodesNodeTypesToLoad);
     const params = useMemoizedIfEqual(nodeTypes);
 
     const updateFn = React.useMemo(() => {
