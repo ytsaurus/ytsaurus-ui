@@ -12,8 +12,6 @@ export const selectSystemSchedulerAlerts = (state) =>
     state.system.schedulersAndAgents.schedulerAlerts;
 export const selectSystemAgents = (state) => state.system.schedulersAndAgents.agents;
 export const selectSystemAgentAlerts = (state) => state.system.schedulersAndAgents.agentAlerts;
-export const selectSystemSchedulerAndAgentVisibleHostType = (state) =>
-    state.system.schedulersAndAgents.hostType;
 
 export const selectSystemSchedulersWithState = createSelector(
     [selectSystemSchedulers, getMastersHostType],
