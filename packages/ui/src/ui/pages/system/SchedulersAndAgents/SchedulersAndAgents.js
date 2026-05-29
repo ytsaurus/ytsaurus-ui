@@ -11,10 +11,10 @@ import {CollapsibleSectionStateLess} from '../../../components/CollapsibleSectio
 import {StickyContainer} from '../../../components/StickyContainer/StickyContainer';
 import VisibleHostTypeRadioButton from '../../../pages/system/VisibleHostTypeRadioButton';
 import {
-    getSystemAgentsWithState,
-    getSystemSchedulerAndAgentAlerts,
-    getSystemSchedulerAndAgentCounters,
-    getSystemSchedulersWithState,
+    selectSystemAgentsWithState,
+    selectSystemSchedulerAndAgentAlerts,
+    selectSystemSchedulerAndAgentCounters,
+    selectSystemSchedulersWithState,
 } from '../../../store/selectors/system/schedulers';
 import Scheduler from './Scheduler/Scheduler';
 import {YTAlertBlock} from '../../../components/Alert/Alert';
@@ -174,10 +174,10 @@ class SchedulersAndAgents extends Component {
 
 function mapStateToProps(state) {
     return {
-        schedulers: getSystemSchedulersWithState(state),
-        agents: getSystemAgentsWithState(state),
-        counters: getSystemSchedulerAndAgentCounters(state),
-        alerts: getSystemSchedulerAndAgentAlerts(state),
+        schedulers: selectSystemSchedulersWithState(state),
+        agents: selectSystemAgentsWithState(state),
+        counters: selectSystemSchedulerAndAgentCounters(state),
+        alerts: selectSystemSchedulerAndAgentAlerts(state),
         collapsibleSize: UI_COLLAPSIBLE_SIZE,
         collapsed: getSettingsSystemSchedulersCollapsed(state),
     };

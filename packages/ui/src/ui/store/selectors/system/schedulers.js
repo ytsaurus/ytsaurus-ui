@@ -7,15 +7,16 @@ import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import {VisibleHostType} from '../../../constants/system/masters';
 import {getMastersHostType} from '../../../store/selectors/settings';
 
-export const getSystemSchedulers = (state) => state.system.schedulersAndAgents.schedulers;
-export const getSystemSchedulerAlerts = (state) => state.system.schedulersAndAgents.schedulerAlerts;
-export const getSystemAgents = (state) => state.system.schedulersAndAgents.agents;
-export const getSystemAgentAlerts = (state) => state.system.schedulersAndAgents.agentAlerts;
-export const getSystemSchedulerAndAgentVisibleHostType = (state) =>
+export const selectSystemSchedulers = (state) => state.system.schedulersAndAgents.schedulers;
+export const selectSystemSchedulerAlerts = (state) =>
+    state.system.schedulersAndAgents.schedulerAlerts;
+export const selectSystemAgents = (state) => state.system.schedulersAndAgents.agents;
+export const selectSystemAgentAlerts = (state) => state.system.schedulersAndAgents.agentAlerts;
+export const selectSystemSchedulerAndAgentVisibleHostType = (state) =>
     state.system.schedulersAndAgents.hostType;
 
-export const getSystemSchedulersWithState = createSelector(
-    [getSystemSchedulers, getMastersHostType],
+export const selectSystemSchedulersWithState = createSelector(
+    [selectSystemSchedulers, getMastersHostType],
     (schedulers, hostType) => {
         const path = hostType === VisibleHostType.host ? '' : '/@annotations/physical_host';
         return map_(schedulers, (sheduler) => {
@@ -32,8 +33,8 @@ export const getSystemSchedulersWithState = createSelector(
     },
 );
 
-export const getSystemAgentsWithState = createSelector(
-    [getSystemAgents, getMastersHostType],
+export const selectSystemAgentsWithState = createSelector(
+    [selectSystemAgents, getMastersHostType],
     (agents, hostType) => {
         const path = hostType === VisibleHostType.host ? '' : '/@annotations/physical_host';
         return map_(agents, (agent) => {
@@ -50,8 +51,8 @@ export const getSystemAgentsWithState = createSelector(
     },
 );
 
-export const getSystemSchedulerAndAgentCounters = createSelector(
-    [getSystemSchedulersWithState, getSystemAgentsWithState],
+export const selectSystemSchedulerAndAgentCounters = createSelector(
+    [selectSystemSchedulersWithState, selectSystemAgentsWithState],
     (schedulersWithState, agentsWithState) => {
         return {
             schedulers: extractSchedulersCounters(schedulersWithState),
@@ -60,8 +61,8 @@ export const getSystemSchedulerAndAgentCounters = createSelector(
     },
 );
 
-export const getSystemSchedulerAndAgentAlerts = createSelector(
-    [getSystemSchedulerAlerts, getSystemAgentAlerts],
+export const selectSystemSchedulerAndAgentAlerts = createSelector(
+    [selectSystemSchedulerAlerts, selectSystemAgentAlerts],
     (schedulerAlerts, agentAlerts) => {
         return {
             schedulers: schedulerAlerts,
