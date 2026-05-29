@@ -1,12 +1,12 @@
-import {AppConfig, type AppContext, type NodeKit} from '@gravity-ui/nodekit';
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-import {AppConfig, Request, Response} from '@gravity-ui/expresskit';
+import {type AppContext, type NodeKit} from '@gravity-ui/nodekit';
 import {type MetrikaCounter} from '@gravity-ui/app-layout';
 
-import {type ClusterConfig} from '../shared/yt-types';
-
 import {type UISettings} from '../../shared/ui-settings';
+import {type ClusterConfig} from '../shared/yt-types';
 import {type DescribedSettings} from '../shared/constants/settings-types';
+
+export {type AppConfig} from '@gravity-ui/nodekit';
+export {type Request, type Response} from '@gravity-ui/expresskit';
 
 export interface YTCoreConfig {
     /**
@@ -145,6 +145,14 @@ export interface YTCoreConfig {
     adjustAppConfig?: (nodekit: NodeKit) => void;
 }
 
+interface YTRequestFields {
+    uid?: string;
+    login?: string;
+    ytApiAuthHeaders?: Record<string, string>;
+    tabletErrorApiAuthHeaders?: Record<string, string>;
+    tabletErrorTestingApiAuthHeaders?: Record<string, string>;
+}
+
 declare module '@gravity-ui/nodekit' {
     interface AppConfig extends YTCoreConfig {}
 
@@ -164,28 +172,14 @@ declare module '@gravity-ui/expresskit' {
 declare global {
     namespace Express {
         interface Request {
-            yt: {
-                uid?: string;
-                login?: string;
-                ytApiAuthHeaders?: Record<string, string>;
-                tabletErrorApiAuthHeaders?: Record<string, string>;
-                tabletErrorTestingApiAuthHeaders?: Record<string, string>;
-            };
+            yt: YTRequestFields;
         }
     }
 }
 
 declare module 'express' {
     interface Request {
-        yt: {
-            uid?: string;
-            login?: string;
-            ytApiAuthHeaders?: Record<string, string>;
-            tabletErrorApiAuthHeaders?: Record<string, string>;
-            tabletErrorTestingApiAuthHeaders?: Record<string, string>;
-        };
+        yt: YTRequestFields;
         ctx: AppContext;
     }
 }
-
-export {AppConfig, Request, Response};
