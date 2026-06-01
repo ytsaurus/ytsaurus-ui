@@ -13,11 +13,11 @@ import i18n from './i18n';
 
 import {closeGroupEditorModal, fetchGroups, saveGroupData} from '../../../store/actions/groups';
 import {
-    getGroupEditorGroupIdm,
-    getGroupEditorGroupName,
-    getGroupEditorIdmDataOtherMembers,
-    getGroupEditorRoles,
-    getGroupEditorVisible,
+    selectGroupEditorGroupIdm,
+    selectGroupEditorGroupName,
+    selectGroupEditorIdmDataOtherMembers,
+    selectGroupEditorRoles,
+    selectGroupEditorVisible,
 } from '../../../store/selectors/groups';
 import {type RootState} from '../../../store/reducers';
 import {type ResponsibleType, type RoleConverted} from '../../../utils/acl/acl-types';
@@ -214,12 +214,12 @@ class GroupEditorDialog extends React.Component<GroupsPageTableProps> {
 }
 
 const mapStateToProps = (state: RootState) => {
-    const otherMembers = getGroupEditorIdmDataOtherMembers(state);
-    const {responsible, members} = getGroupEditorRoles(state);
+    const otherMembers = selectGroupEditorIdmDataOtherMembers(state);
+    const {responsible, members} = selectGroupEditorRoles(state);
     return {
-        visible: getGroupEditorVisible(state),
-        groupName: getGroupEditorGroupName(state),
-        idm: getGroupEditorGroupIdm(state),
+        visible: selectGroupEditorVisible(state),
+        groupName: selectGroupEditorGroupName(state),
+        idm: selectGroupEditorGroupIdm(state),
         members,
         responsible,
         otherMembers,
