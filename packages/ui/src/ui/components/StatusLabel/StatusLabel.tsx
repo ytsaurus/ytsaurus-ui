@@ -1,10 +1,11 @@
 import React from 'react';
 import block from 'bem-cn-lite';
 
-import hammer from '../../common/hammer';
 import Icon, {type IconName} from '../Icon/Icon';
 
 import {type NavigationFlowState, type StatusLabelState} from '../../types/common/states';
+
+import i18n from './i18n';
 
 import './StatusLabel.scss';
 
@@ -95,7 +96,7 @@ export default function StatusLabel({
     ) : (
         <span className={b(null, renderPlaque ? b('plaque', mods, className) : b(mods, className))}>
             {!hideIcon && <Icon awesome={icon} size={13} />}
-            <span>{text ?? hammer.format['ReadableField'](label)}</span>
+            <span>{text ?? (!label ? null : i18n(`value_${label}`))}</span>
         </span>
     );
 }
