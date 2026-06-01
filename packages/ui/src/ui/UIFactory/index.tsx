@@ -541,6 +541,8 @@ export interface UIFactory {
         className?: string,
     ): React.ReactElement | undefined;
 
+    getExternalAiChatComponent(): React.ReactNode;
+
     renderOperationLogsTab: () => React.ReactNode;
 
     renderJobLogsTab: () => React.ReactNode;
