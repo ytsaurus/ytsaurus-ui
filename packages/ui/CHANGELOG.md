@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.14.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.13.0...ui-v3.14.0) (2026-06-02)
+
+
+### Features
+
+* **Navigation/Table:** add rls-access meta table item [YTFRONT-5782] ([13d7b3a](https://github.com/ytsaurus/ytsaurus-ui/commit/13d7b3a9d0ee95670faa1b71ca2611bcc73ac91f))
+* **Queries/History:** add ctrl check [YTFRONT-5793] ([bb5d027](https://github.com/ytsaurus/ytsaurus-ui/commit/bb5d027ef647c12877258b3bc740e0a732284462))
+
+
+### Bug Fixes
+
+* **Flow/Messages:** make body of dialog scrollable [YTFRONT-5780] ([84a810f](https://github.com/ytsaurus/ytsaurus-ui/commit/84a810fbc0ff9c3868d11aebf2d5dc75974bc316))
+* **Operations:** fix operation's job showing [YTFRONT-5699] ([a9ffe4e](https://github.com/ytsaurus/ytsaurus-ui/commit/a9ffe4e6c4291fbda1aba46f796ddc16944e8f25))
+* **SegmentedRadioGroupOrSelect:** add new component [YTFRONT-5790] ([eab0716](https://github.com/ytsaurus/ytsaurus-ui/commit/eab0716184cc2d1376a81d2b4d88ed7dab5fbcd1))
+* **YTErrorBlock:** handle properly unexpected error format [YTFRONT-5665] ([bb940ed](https://github.com/ytsaurus/ytsaurus-ui/commit/bb940eddfcb25e2045c631607b20bfc27368bab3))
+
 ## [3.13.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.12.2...ui-v3.13.0) (2026-05-26)
 
 
