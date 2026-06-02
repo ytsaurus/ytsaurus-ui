@@ -34,7 +34,7 @@ export class VcsFactory {
         if (!('vcsSettings' in uiSettings))
             throw new ErrorWithCode(404, 'vcsSettings is not found in UISettings');
 
-        return uiSettings.vcsSettings;
+        return uiSettings.vcsSettings ?? [];
     }
 
     static getVcsSettingById(req: Request, vcsId?: string): VCSSettings {

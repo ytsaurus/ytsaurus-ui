@@ -23,7 +23,39 @@ exports.default = {
 }
 ```
 
-#### UISettings
+### Authentication & Authorization
+
+#### `authCookieDomain`
+
+The option `authCookieDomain` is necessary to use upload files and tables. Example: `authCookieDomain=".ytsaurus.my.domain"`.
+Make sure `ClusterConfig.externalProxy` value is a subdomain for the value.
+
+#### Password
+
+To enable password authentication/authorization you have to provde `YTCoreConfig.allowPasswordAuth = true` value.
+
+#### OAuth
+
+To use oauth authentication, it is necessary to define configurations `ytOAuthSettings`.
+
+`ytOAuthSettings` - OAuth config
+
+An example of configuration:
+
+```js
+ytOAuthSettings: {
+    baseURL: 'http://keycloak.some-domain.com',
+    authPath: 'realms/test-realm/protocol/openid-connect/auth',
+    tokenPath: 'realms/test-realm/protocol/openid-connect/token',
+    logoutPath: 'realms/test-realm/protocol/openid-connect/logout',
+    clientId: 'test-client',
+    clientSecret: process.env.KEYCLOAK_CLIENT_SECRET,
+    scope: 'openid profile',
+    buttonLabel: 'Login via Keycloak', // OPTIONAL. By default equal `Login via SSO`
+}
+```
+
+### UISettings
 
 `uiSettings` object from config is passed to user's browser "as is" and might it be accessed as `window.__DATA__.uiSettings`.
 
@@ -147,27 +179,4 @@ Example of usage:
     },
   },
 };
-```
-
-#### Authentication
-
-### OAuth
-
-To use authentication, it is necessary to define configurations `ytOAuthSettings`.
-
-`ytOAuthSettings` - OAuth config
-
-An example of configuration:
-
-```js
-ytOAuthSettings: {
-    baseURL: 'http://keycloak.some-domain.com',
-    authPath: 'realms/test-realm/protocol/openid-connect/auth',
-    tokenPath: 'realms/test-realm/protocol/openid-connect/token',
-    logoutPath: 'realms/test-realm/protocol/openid-connect/logout',
-    clientId: 'test-client',
-    clientSecret: process.env.KEYCLOAK_CLIENT_SECRET,
-    scope: 'openid profile',
-    buttonLabel: 'Login via Keycloak', // OPTIONAL. By default equal `Login via SSO`
-}
 ```

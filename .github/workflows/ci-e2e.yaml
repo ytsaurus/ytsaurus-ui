@@ -198,8 +198,25 @@ jobs:
     steps:
       - name: Run containers for 'Local'
         run: |
+          export LOCALMODE_EXTERNAL_PROXY=external-proxy.$(hostname)
+          (
+            echo 127.0.0.1 $LOCALMODE_EXTERNAL_PROXY
+            echo ::1 $LOCALMODE_EXTERNAL_PROXY
+          ) >> /etc/hosts
+
           run_local_cluster.sh --stop || true
-          run_local_cluster.sh --cluster-name ui --node-count 2 --ui-skip-pull true --ui-version local --yt-version stable --ui-app-installation e2e  --init-operations-archive --with-auth --run-prometheus
+          run_local_cluster.sh \
+              --cluster-name ui \
+              --node-count 2 \
+              --ui-skip-pull true \
+              --ui-version local \
+              --yt-version stable \
+              --ui-app-installation e2e  \
+              --init-operations-archive \
+              --with-auth \
+              --run-prometheus \
+              --ui-auth-cookie-domain .$(hostname) \
+              --ui-external-proxy $LOCALMODE_EXTERNAL_PROXY
       - name: Checkout
         uses: actions/checkout@v2
         with:
