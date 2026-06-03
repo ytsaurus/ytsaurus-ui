@@ -8,5 +8,10 @@
   "field_incarnation": "Incarnation",
   "field_task-name": "Task name",
   "field_type": "Type",
-  "field_state": "State"
+  "field_state": "State",
+  "value_all": "All",
+  "value_running": "Running",
+  "value_completed": "Completed",
+  "value_failed": "Failed",
+  "value_aborted": "Aborted"
 }
