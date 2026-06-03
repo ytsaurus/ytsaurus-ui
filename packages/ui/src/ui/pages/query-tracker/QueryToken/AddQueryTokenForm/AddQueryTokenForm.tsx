@@ -1,7 +1,7 @@
 import React, {type FC, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import {appendQueryToken} from '../../../../store/actions/settings/settings';
-import {getQueryTokens} from '../../../../store/selectors/settings/settings-queries';
+import {selectQueryTokens} from '../../../../store/selectors/settings/settings-queries';
 import {type FormApi, YTDFDialog, makeErrorFields} from '../../../../containers/Dialog';
 import {type QueryToken} from '../../../../../shared/constants/settings-types';
 import {YT} from '../../../../config/yt-config';
@@ -32,7 +32,7 @@ const clusterOptions = Object.values(YT.clusters)
 
 export const AddQueryTokenForm: FC<Props> = ({visible, onClose}) => {
     const dispatch = useDispatch();
-    const tokens = useSelector(getQueryTokens);
+    const tokens = useSelector(selectQueryTokens);
     const [error, setError] = useState<YTError>();
 
     useEffect(() => {

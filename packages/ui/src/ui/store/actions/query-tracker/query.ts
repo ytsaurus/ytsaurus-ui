@@ -65,10 +65,10 @@ import {
 import {loadVisualization} from './queryChart';
 import {type ChytInfo} from '../../reducers/chyt/list';
 import {
-    getLastUserChoiceQueryChytClique,
-    getLastUserChoiceQueryDiscoveryPath,
-    getLastUserChoiceQueryEngine,
-    getLastUserChoiceYqlVersion,
+    selectLastUserChoiceQueryChytClique,
+    selectLastUserChoiceQueryDiscoveryPath,
+    selectLastUserChoiceQueryEngine,
+    selectLastUserChoiceYqlVersion,
 } from '../../selectors/settings/settings-queries';
 
 import {getClusterParams, prepareClusterUiConfig} from '../cluster-params';
@@ -123,9 +123,9 @@ export const setUserLastChoice =
         const state = getState();
         const {settings} = selectQueryDraft(state);
         const engine = selectQueryEngine(state);
-        const lastPath = getLastUserChoiceQueryDiscoveryPath(state);
-        const lastClique = getLastUserChoiceQueryChytClique(state);
-        const lastVersion = getLastUserChoiceYqlVersion(state);
+        const lastPath = selectLastUserChoiceQueryDiscoveryPath(state);
+        const lastClique = selectLastUserChoiceQueryChytClique(state);
+        const lastVersion = selectLastUserChoiceYqlVersion(state);
         const defaultYqlVersion = selectDefaultYqlVersion(state);
 
         const newSettings = {...settings};
@@ -469,7 +469,7 @@ export function createEmptyQuery(
 ): ThunkAction<any, RootState, any, SetQueryAction | ResetQueryTabsAction> {
     return (dispatch, getState) => {
         const state = getState();
-        const lastEngine = getLastUserChoiceQueryEngine(state);
+        const lastEngine = selectLastUserChoiceQueryEngine(state);
         const defaultQueryACO = selectDefaultQueryACO(state);
         const defaultSpytSettings = selectSpytDefaultSettings(state);
 

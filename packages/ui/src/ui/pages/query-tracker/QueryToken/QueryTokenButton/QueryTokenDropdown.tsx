@@ -3,7 +3,7 @@ import {Flex, Icon, Select, Text, Tooltip} from '@gravity-ui/uikit';
 import './QueryTokenDropdown.scss';
 import cn from 'bem-cn-lite';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
-import {getQueryTokens} from '../../../../store/selectors/settings/settings-queries';
+import {selectQueryTokens} from '../../../../store/selectors/settings/settings-queries';
 import CircleQuestionIcon from '@gravity-ui/icons/svgs/circle-question.svg';
 import {updateQueryDraft} from '../../../../store/actions/query-tracker/query';
 import {type QuerySecret} from '../../../../types/query-tracker/api';
@@ -14,7 +14,7 @@ const block = cn('yt-qt-token-dropdown');
 
 export const QueryTokenDropdown: FC = () => {
     const dispatch = useDispatch();
-    const tokens = useSelector(getQueryTokens);
+    const tokens = useSelector(selectQueryTokens);
     const secretIds = useSelector(selectCurrentSecretIds);
 
     const options = useMemo(() => {

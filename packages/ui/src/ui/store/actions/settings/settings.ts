@@ -8,7 +8,7 @@ import {setSetting, setSettingByKey} from './index';
 import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
 import {type AnnotationVisibilityType} from '../../../../shared/constants/settings-ts';
 import {type AccountUsageViewType} from '../../../store/reducers/accounts/usage/accounts-usage-filters';
-import {getQueryTokens} from '../../selectors/settings/settings-queries';
+import {selectQueryTokens} from '../../selectors/settings/settings-queries';
 import {type QueryToken} from '../../../../shared/constants/settings-types';
 
 type SettingThunkAction = ThunkAction<any, RootState, any, any>;
@@ -240,7 +240,7 @@ export function setSettingSystemNodesNodeType(nodeType: Array<string>): SettingT
 
 export function appendQueryToken(token: QueryToken): SettingThunkAction {
     return async (dispatch, getState) => {
-        const tokens = getQueryTokens(getState());
+        const tokens = selectQueryTokens(getState());
         await dispatch(
             setSettingByKey('global::queryTracker::tokens', [...tokens, token], {silent: true}),
         );
@@ -249,7 +249,7 @@ export function appendQueryToken(token: QueryToken): SettingThunkAction {
 
 export function removeQueryToken(name: string): SettingThunkAction {
     return (dispatch, getState) => {
-        const tokens = getQueryTokens(getState());
+        const tokens = selectQueryTokens(getState());
         const result = tokens.filter((token) => token.name !== name);
         dispatch(setSettingByKey('global::queryTracker::tokens', result));
     };

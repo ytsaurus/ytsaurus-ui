@@ -2,7 +2,7 @@ import {type CancellationToken, type Position, type editor, type languages} from
 import {getRangeToInsertSuggestion} from '../../../libs/monaco-yql-languages/helpers/getRangeToInsertSuggestion';
 import {type QueryEngine} from '../../../../shared/constants/engines';
 import {getWindowStore} from '../../../store/window-store';
-import {getQuerySuggestionsEnabled} from '../../../store/selectors/settings/settings-queries';
+import {selectQuerySuggestionsEnabled} from '../../../store/selectors/settings/settings-queries';
 import UIFactory from '../../../UIFactory';
 import debounce_ from 'lodash/debounce';
 
@@ -21,7 +21,7 @@ export const createInlineSuggestions =
         _token: CancellationToken,
     ): Promise<{items: languages.InlineCompletion[]}> => {
         const state = getWindowStore().getState();
-        const enabled = getQuerySuggestionsEnabled(state);
+        const enabled = selectQuerySuggestionsEnabled(state);
 
         if (!enabled) {
             return {
