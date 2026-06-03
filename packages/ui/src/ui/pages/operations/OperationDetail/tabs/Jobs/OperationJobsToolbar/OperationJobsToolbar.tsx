@@ -73,7 +73,13 @@ export default function OperationJobsToolbar() {
                         <JobsSelectFilter
                             name="state"
                             label={i18n('field_state') + ':'}
-                            states={['all', 'running', 'completed', 'failed', 'aborted']}
+                            states={[
+                                {value: 'all', caption: i18n('value_all')},
+                                {value: 'running', caption: i18n('value_running')},
+                                {value: 'completed', caption: i18n('value_completed')},
+                                {value: 'failed', caption: i18n('value_failed')},
+                                {value: 'aborted', caption: i18n('value_aborted')},
+                            ]}
                             disabled={showCompetitiveJobs}
                             width={200}
                         />

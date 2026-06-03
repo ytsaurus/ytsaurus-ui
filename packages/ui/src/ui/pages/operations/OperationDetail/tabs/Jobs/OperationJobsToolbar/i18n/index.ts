@@ -2,4 +2,4 @@ import {addI18Keysets} from '../../../../../../../i18n';
 
 import dicts from './dicts';
 
-export default addI18Keysets('yt:operations.jobs', dicts);
+export default addI18Keysets('yt:operation-jobs-toolbar', dicts);
