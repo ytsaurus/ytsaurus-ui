@@ -9,7 +9,7 @@ import {QueryWidgetLazy} from '../../pages/query-tracker/QueryWidget/side-panel'
 import {QueryEngine} from '../../../shared/constants/engines';
 import {createQueryFromTablePath} from '../../store/actions/query-tracker/query';
 import {createNewQueryUrl} from '../../pages/query-tracker/utils/navigation';
-import {getNavigationSqlService} from '../../store/selectors/settings/navigation';
+import {selectNavigationSqlService} from '../../store/selectors/settings/navigation';
 import {selectPath} from '../../store/selectors/navigation';
 import UIFactory from '../../UIFactory';
 import {useSidePanel} from '../../hooks/use-side-panel';
@@ -84,7 +84,7 @@ export function OpenQueryButtons({className, autoOpen}: OpenQueryButtonProps) {
     const onOpenYqlKit = React.useCallback(() => setPanelMode('yqlkit'), []);
     const onClose = React.useCallback(() => setPanelMode(undefined), []);
 
-    const {isQtKitEnabled, isYqlKitEnabled} = useSelector(getNavigationSqlService);
+    const {isQtKitEnabled, isYqlKitEnabled} = useSelector(selectNavigationSqlService);
 
     const allowQtAutoOpen = autoOpen && isQtKitEnabled;
 
