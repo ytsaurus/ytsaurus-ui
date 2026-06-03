@@ -340,6 +340,7 @@ function PathActions(props: Props) {
             <DropdownMenu
                 renderSwitcher={(props) => (
                     <Button
+                        qa="path-actions-button"
                         {...props}
                         size={dropDownBtnSize}
                         className={dropDownBtnClassName}

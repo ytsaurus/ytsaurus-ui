@@ -63,6 +63,7 @@ import NavigationExtraActions from '../../../../containers/NavigationExtraAction
 import UIFactory from '../../../../UIFactory';
 import {selectCluster} from '../../../../store/selectors/global';
 import {UploadFileManagerWithClose} from '../../UploadFileManager';
+import {CurrentPathActions} from '../../components/CurrentPathActions/CurrentPathActions';
 
 import './MapNode.scss';
 import {MapNodeUserSettings} from './MapNodeUserSettings';
@@ -355,6 +356,9 @@ class MapNodeToolbar extends React.PureComponent {
                                 </Button>
                             )}
                         />
+                    </div>
+                    <div>
+                        <CurrentPathActions />
                     </div>
                 </div>
                 <div className="nodes-types">
