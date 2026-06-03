@@ -28,10 +28,10 @@ import {selectFileEditor} from '../../selectors/query-tracker/queryFilesForm';
 import {setFileEditor} from '../../reducers/query-tracker/queryFilesFormSlice';
 import {type VcsRepository} from '../../../../shared/vcs';
 import {
-    getVcsBranch,
-    getVcsPath,
-    getVcsRepository,
-    getVcsType,
+    selectVcsBranch,
+    selectVcsPath,
+    selectVcsRepository,
+    selectVcsType,
 } from '../../selectors/settings/settings-vcs';
 import {setSettingByKey} from '../settings';
 
@@ -340,10 +340,10 @@ export const changeCurrentBranch =
 
 export const setLastVcs = (): AsyncAction => async (dispatch, getState) => {
     const state = getState();
-    const type = getVcsType(state);
-    const repository = getVcsRepository(state);
-    const branch = getVcsBranch(state);
-    const path = getVcsPath(state);
+    const type = selectVcsType(state);
+    const repository = selectVcsRepository(state);
+    const branch = selectVcsBranch(state);
+    const path = selectVcsPath(state);
 
     if (!type) return;
     await dispatch(getVcsRepositories(type));
