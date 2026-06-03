@@ -1,7 +1,7 @@
 import React, {type FC} from 'react';
 import {Table, useTable} from '@gravity-ui/table';
 import {useSelector} from '../../../../store/redux-hooks';
-import {getQueryTokens} from '../../../../store/selectors/settings/settings-queries';
+import {selectQueryTokens} from '../../../../store/selectors/settings/settings-queries';
 import {QueryTokenRemoveButton} from './QueryTokenRemoveButton';
 import {type ColumnDef} from '@gravity-ui/table/tanstack';
 import {Button, Flex, Icon, Text, Tooltip} from '@gravity-ui/uikit';
@@ -80,7 +80,7 @@ const columns: ColumnDef<QueryToken>[] = [
 ];
 
 export const QueryTokenTable: FC = () => {
-    const tokens = useSelector(getQueryTokens);
+    const tokens = useSelector(selectQueryTokens);
     const table = useTable({data: tokens, columns});
 
     if (!tokens.length) return null;

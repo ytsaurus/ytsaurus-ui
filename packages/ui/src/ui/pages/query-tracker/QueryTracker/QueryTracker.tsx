@@ -31,7 +31,7 @@ import {setSettingByKey} from '../../../store/actions/settings';
 import {CellPreviewModal} from '../../../containers/CellPreviewModal/CellPreviewModal';
 import {SET_QUERY_PARAMS} from '../../../store/reducers/query-tracker/query-tracker-contants';
 import {RedirectConfirmModal} from '../../../components/RedirectConfirmModal';
-import {getLastUserChoiceQueryEngine} from '../../../store/selectors/settings/settings-queries';
+import {selectLastUserChoiceQueryEngine} from '../../../store/selectors/settings/settings-queries';
 import i18n from './i18n';
 
 const b = cn('query-tracker-page');
@@ -55,7 +55,7 @@ function QueryPageDraft() {
     const dispatch = useDispatch();
     const routeParams = useSelector(selectQueryGetParams);
     const cluster = useSelector(selectNavigationCluster);
-    const favoriteEngine = useSelector(getLastUserChoiceQueryEngine) ?? QueryEngine.YQL;
+    const favoriteEngine = useSelector(selectLastUserChoiceQueryEngine) ?? QueryEngine.YQL;
 
     useEffect(() => {
         const engine =

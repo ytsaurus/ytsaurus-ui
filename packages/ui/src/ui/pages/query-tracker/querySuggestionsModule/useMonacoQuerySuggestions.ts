@@ -1,11 +1,11 @@
 import {useCallback, useEffect} from 'react';
 import * as monaco from 'monaco-editor';
 import {useSelector} from '../../../store/redux-hooks';
-import {getQuerySuggestionsEnabled} from '../../../store/selectors/settings/settings-queries';
+import {selectQuerySuggestionsEnabled} from '../../../store/selectors/settings/settings-queries';
 import UIFactory from '../../../UIFactory';
 
 export const useMonacoQuerySuggestions = (editor?: monaco.editor.IStandaloneCodeEditor) => {
-    const enabled = useSelector(getQuerySuggestionsEnabled);
+    const enabled = useSelector(selectQuerySuggestionsEnabled);
 
     useEffect(() => {
         UIFactory.getInlineSuggestionsApi()?.sendTelemetry(enabled ? 'enabled' : 'disabled');
