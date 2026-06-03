@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import {TextInput} from '@gravity-ui/uikit';
 
 import {setSetting} from '../../store/actions/settings';
-import {makeGetSetting} from '../../store/selectors/settings';
+import {selectGetSetting} from '../../store/selectors/settings';
 
 const block = cn('elements-page');
 
@@ -68,7 +68,7 @@ function SettingsMenuInput({
 }
 
 const mapStateToProps = (state) => {
-    const getSetting = makeGetSetting(state);
+    const getSetting = selectGetSetting(state);
 
     return {
         getSetting,

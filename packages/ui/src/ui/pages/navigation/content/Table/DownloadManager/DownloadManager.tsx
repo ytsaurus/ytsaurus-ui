@@ -25,7 +25,7 @@ import Icon from '../../../../../components/Icon/Icon';
 import Link from '../../../../../containers/Link/Link';
 import Tabs from '../../../../../components/Tabs/Tabs';
 
-import {getRowsPerTablePage, getShowDecoded} from '../../../../../store/selectors/settings';
+import {selectRowsPerTablePage, selectShowDecoded} from '../../../../../store/selectors/settings';
 import {selectSchema} from '../../../../../store/selectors/navigation/tabs/schema';
 import {selectPath, selectTransaction} from '../../../../../store/selectors/navigation';
 import {selectCluster, selectCurrentClusterConfig} from '../../../../../store/selectors/global';
@@ -853,8 +853,8 @@ export class DownloadManager extends React.Component<Props, State> {
 const mapStateToProps = (state: RootState) => {
     const {loading}: {loading: boolean} = state.navigation.content.table;
 
-    const pageSize: number = getRowsPerTablePage(state);
-    const showDecoded: boolean = getShowDecoded(state);
+    const pageSize: number = selectRowsPerTablePage(state);
+    const showDecoded: boolean = selectShowDecoded(state);
     const offsetValue = selectOffsetValue(state);
     const allColumns: Array<{name: string; checked: boolean}> = selectAllColumns(state);
     const srcColumns = selectSrcColumns(state);

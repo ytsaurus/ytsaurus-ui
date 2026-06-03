@@ -20,7 +20,7 @@ import {
     selectCellSize,
     selectPageSize,
 } from '../../../../../store/selectors/navigation/content/table-ts';
-import {getSettingTableDisplayRawStrings} from '../../../../../store/selectors/settings';
+import {selectSettingTableDisplayRawStrings} from '../../../../../store/selectors/settings';
 import {setTableDisplayRawStrings} from '../../../../../store/actions/settings/settings';
 import {type RootState} from '../../../../../store/reducers';
 
@@ -99,7 +99,7 @@ const mapStateToProps = (state: RootState) => {
     const pageSize = selectPageSize(state);
     const cellSize = selectCellSize(state);
 
-    const allowRawStrings = getSettingTableDisplayRawStrings(state);
+    const allowRawStrings = selectSettingTableDisplayRawStrings(state);
 
     return {pageSize, cellSize, isFullScreen, allowRawStrings};
 };

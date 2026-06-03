@@ -16,7 +16,7 @@ import {
 import {selectCluster} from '../../../store/selectors/global';
 import {makeRoutedURL} from '../../../store/location';
 import {restoreObject} from '../../../store/actions/navigation/modals/restore-object';
-import {getNavigationDefaultPath} from '../../../store/selectors/settings';
+import {selectNavigationDefaultPath} from '../../../store/selectors/settings';
 import {
     selectFavouritePaths,
     selectIsCurrentPathInFavourites,
@@ -58,7 +58,7 @@ import './NavigationTopRowContent.scss';
 const block = cn('navigation-top-row-content');
 
 function NavigationTopRowContent() {
-    const defaultPath = useSelector(getNavigationDefaultPath);
+    const defaultPath = useSelector(selectNavigationDefaultPath);
 
     const [editMode, setEditMode] = React.useState(false);
 

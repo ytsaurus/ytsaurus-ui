@@ -6,7 +6,7 @@ import {createSelector} from 'reselect';
 import {type RootState} from '../../../store/reducers';
 import Utils, {currentDate} from '../odin-utils';
 import {COLS_NUMBER} from '../odin-constants';
-import {makeGetSetting} from '../../../store/selectors/settings';
+import {selectGetSetting} from '../../../store/selectors/settings';
 import {ODIN_VISIBLE_METRIC_PRESETS, YA_NAMESPACES} from '../odin-settings';
 import {YT} from '../../../config/yt-config';
 
@@ -63,6 +63,9 @@ function makeClusterNameItems() {
 
 export const ODIN_CLUSTER_NAMES_ITEMS = makeClusterNameItems();
 
-export const getSettingOdinOverviewVisiblePresets = createSelector(makeGetSetting, (getSetting) => {
-    return getSetting(ODIN_VISIBLE_METRIC_PRESETS, YA_NAMESPACES.ODIN) || [];
-});
+export const getSettingOdinOverviewVisiblePresets = createSelector(
+    selectGetSetting,
+    (getSetting) => {
+        return getSetting(ODIN_VISIBLE_METRIC_PRESETS, YA_NAMESPACES.ODIN) || [];
+    },
+);

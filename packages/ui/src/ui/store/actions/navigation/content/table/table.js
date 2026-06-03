@@ -42,8 +42,8 @@ import {
     selectTransaction,
 } from '../../../../../store/selectors/navigation';
 import {
-    getDefaultTableColumnLimit,
-    isTableSimilarityEnabled,
+    selectDefaultTableColumnLimit,
+    selectIsTableSimilarityEnabled,
 } from '../../../../../store/selectors/settings';
 import {
     selectAllColumns,
@@ -89,7 +89,7 @@ function loadDynamicTable(requestOutputFormat, state, type, useZeroRangeForPrelo
     const attributes = selectAttributes(state);
     const useYqlTypes = selectIsYqlTypesEnabled(state);
     const moveBackward = selectMoveOffsetBackward(state);
-    const defaultTableColumnLimit = getDefaultTableColumnLimit(state);
+    const defaultTableColumnLimit = selectDefaultTableColumnLimit(state);
     const {offsetValue: offset, moveBackward: descending} = selectNextOffset(state);
     const transaction = selectTransaction(state);
     const orderBySupported = true;
@@ -290,7 +290,7 @@ async function loadStaticTable(requestOutputFormat, state, type, useZeroRangeFor
     const transaction = selectTransaction(state);
     const moveBackward = selectMoveOffsetBackward(state);
     const requestedPageSize = selectRequestedPageSize(state);
-    const defaultTableColumnLimit = getDefaultTableColumnLimit(state);
+    const defaultTableColumnLimit = selectDefaultTableColumnLimit(state);
 
     const {login} = state.global;
     // Get all columns always and update them then. We can get new columns. The scheme is not always strict
@@ -358,7 +358,7 @@ function loadTableRows(type, state, requestOutputFormat) {
 // Make a table request with page size row range and empty column range to get the list of all columns in table
 // and restore personalized columns list.
 function restoreColumns(state) {
-    const tableSimilarityEnabled = isTableSimilarityEnabled(state);
+    const tableSimilarityEnabled = selectIsTableSimilarityEnabled(state);
     const attributes = selectAttributes(state);
     const stringLimit = selectCellSize(state);
 
@@ -408,7 +408,7 @@ export function updateTableData() {
                 if (!isDynamic) {
                     // Get current columns for save visible status
                     const storedColumns = selectColumns(state);
-                    const defaultTableColumnLimit = getDefaultTableColumnLimit(state);
+                    const defaultTableColumnLimit = selectDefaultTableColumnLimit(state);
                     const preparedColumns = Columns.prepareColumns(
                         attributes,
                         rows,
@@ -482,7 +482,7 @@ export function getTableData() {
                 deniedKeyColumns = [],
             }) => {
                 const state = getState();
-                const defaultTableColumnLimit = getDefaultTableColumnLimit(state);
+                const defaultTableColumnLimit = selectDefaultTableColumnLimit(state);
                 const preparedColumns = Columns.prepareColumns(
                     attributes,
                     rows,

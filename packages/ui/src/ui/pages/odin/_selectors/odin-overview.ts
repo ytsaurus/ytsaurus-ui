@@ -4,7 +4,7 @@ import sortBy_ from 'lodash/sortBy';
 import {createSelector} from 'reselect';
 import {getSettingOdinOverviewVisiblePresets} from './index';
 import {type RootState} from '../../../store/reducers';
-import {makeGetSetting} from '../../../store/selectors/settings';
+import {selectGetSetting} from '../../../store/selectors/settings';
 import {OdinTab} from '../odin-constants';
 import {ODIN_LAST_VISITED_TAB} from '../odin-settings';
 import {NAMESPACES} from '../../../../shared/constants/settings';
@@ -78,6 +78,6 @@ export const getOdinOverviewClusterMetrics = createSelector(
 );
 
 export const getOdinLastVisitedTab = createSelector(
-    makeGetSetting,
+    selectGetSetting,
     (getSetting) => getSetting(ODIN_LAST_VISITED_TAB, NAMESPACES.GLOBAL) || OdinTab.OVERVIEW,
 );

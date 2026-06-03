@@ -2,7 +2,7 @@ import {createSelector} from 'reselect';
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 
 import {NAVIGATION_MAP_NODE_TABLE_ID} from '../../../constants/navigation/index';
-import {getNavigationDefaultPath} from '../../../store/selectors/settings';
+import {selectNavigationDefaultPath} from '../../../store/selectors/settings';
 import {isFinalLoadingStatus} from '../../../utils/utils';
 
 export const selectTransaction = (state) => state.navigation.navigation.transaction;
@@ -17,7 +17,7 @@ export const selectSortState = (state) => state.tables[NAVIGATION_MAP_NODE_TABLE
 export const selectType = createSelector(selectAttributes, (attributes) => attributes?.type);
 
 export const selectPath = createSelector(
-    [selectRawPath, getNavigationDefaultPath],
+    [selectRawPath, selectNavigationDefaultPath],
     (rawPath, defaultPath) => rawPath || defaultPath,
 );
 

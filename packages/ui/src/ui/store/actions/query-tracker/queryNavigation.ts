@@ -37,7 +37,7 @@ import {isFolderNode} from '../../../utils/navigation/isFolderNode';
 import {QueryEngine} from '../../../../shared/constants/engines';
 import {loadCliqueByCluster, loadTablePromptToQuery} from './query';
 import {selectQueryDraft} from '../../selectors/query-tracker/query';
-import {getDefaultTableColumnLimit} from '../../selectors/settings';
+import {selectDefaultTableColumnLimit} from '../../selectors/settings';
 import {selectIsYqlTypesEnabled} from '../../selectors/navigation/content/table';
 import {getClusterProxy, selectCurrentUserName} from '../../selectors/global';
 import {selectQueryResultGlobalSettings} from '../../selectors/query-tracker/queryResult';
@@ -114,7 +114,7 @@ export const loadTableAttributesByPath =
         const state = getState();
         const clusterConfig = selectNavigationClusterConfig(state);
         const {cellSize, pageSize} = selectQueryResultGlobalSettings();
-        const defaultTableColumnLimit = getDefaultTableColumnLimit(state);
+        const defaultTableColumnLimit = selectDefaultTableColumnLimit(state);
         const useYqlTypes = selectIsYqlTypesEnabled(state);
         const login = selectCurrentUserName(state);
         const ysonSettings = getYsonSettingsDisableDecode(state);

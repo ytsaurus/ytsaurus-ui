@@ -2,11 +2,11 @@ import {createSelector} from 'reselect';
 import clone_ from 'lodash/clone';
 
 import {
-    getFormat,
-    getShowDecoded,
-    shouldCompact,
-    shouldEscapeWhitespace,
-    useBinaryAsHex,
+    selectFormat,
+    selectShouldCompact,
+    selectShouldEscapeWhitespace,
+    selectShowDecoded,
+    selectUseBinaryAsHex,
 } from '../../../store/selectors/settings';
 import {getUnipikaSettingsFromConfig} from '../../../common/thor/unipika-settings';
 
@@ -25,7 +25,13 @@ export interface YsonSettings {
  * So, to minimize side-effects each UI-component should use his-own copy of settings-object.
  */
 const getYsonSettings = createSelector(
-    [getFormat, getShowDecoded, shouldCompact, shouldEscapeWhitespace, useBinaryAsHex],
+    [
+        selectFormat,
+        selectShowDecoded,
+        selectShouldCompact,
+        selectShouldEscapeWhitespace,
+        selectUseBinaryAsHex,
+    ],
     (
         format: string,
         showDecoded: boolean,

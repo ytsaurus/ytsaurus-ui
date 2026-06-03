@@ -18,7 +18,7 @@ import {
 import {DEFAULT_PRESET_SETTING} from '../../../../constants/operations';
 import {OPERATIONS_LIST_RUNNING_PRESET} from '../../../../constants/operations/list';
 
-import {makeGetSetting} from '../../../../store/selectors/settings';
+import {selectGetSetting} from '../../../../store/selectors/settings';
 import {
     selectOperationsListActivePresets,
     selectOperationsListFilterPresets,
@@ -184,7 +184,7 @@ class OperationsFilterPresets extends Component {
 function mapStateToProps(state) {
     const {operations} = state;
 
-    const getSetting = makeGetSetting(state);
+    const getSetting = selectGetSetting(state);
     let defaultPreset = getSetting(DEFAULT_PRESET_SETTING, NAMESPACES.OPERATION);
     const presets = selectOperationsListFilterPresets(state);
 

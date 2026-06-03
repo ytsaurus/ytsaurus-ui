@@ -6,7 +6,7 @@ import block from 'bem-cn-lite';
 import {Checkbox, Switch} from '@gravity-ui/uikit';
 
 import {setSetting} from '../../store/actions/settings';
-import {makeGetSetting} from '../../store/selectors/settings';
+import {selectGetSetting} from '../../store/selectors/settings';
 
 import './SettingsMenu.scss';
 
@@ -90,7 +90,7 @@ class SettingsMenuItem extends Component {
 
 function mapStateToProps(state) {
     return {
-        getSetting: makeGetSetting(state),
+        getSetting: selectGetSetting(state),
     };
 }
 

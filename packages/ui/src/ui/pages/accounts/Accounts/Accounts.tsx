@@ -21,7 +21,7 @@ import {
     selectAccountsIsFinalLoadingStatus,
     selectActiveAccount,
 } from '../../../store/selectors/accounts/accounts-ts';
-import {getLastVisitedTabs} from '../../../store/selectors/settings';
+import {selectLastVisitedTabs} from '../../../store/selectors/settings';
 import {type TabSettings, makeTabProps} from '../../../utils';
 
 import AccountsGeneralTab from '../tabs/general/AccountsGeneralTab';
@@ -155,7 +155,7 @@ export class Accounts extends React.Component<
 }
 
 const mapStateToProps = (state: RootState) => {
-    const lastVisitedTabs = getLastVisitedTabs(state);
+    const lastVisitedTabs = selectLastVisitedTabs(state);
 
     return {
         lastVisitedTab: lastVisitedTabs[Page.ACCOUNTS],

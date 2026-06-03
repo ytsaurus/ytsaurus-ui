@@ -5,7 +5,7 @@ import {createSelector} from 'reselect';
 
 import ypath from '@ytsaurus/interface-helpers/lib/ypath';
 import {VisibleHostType} from '../../../constants/system/masters';
-import {getMastersHostType} from '../../../store/selectors/settings';
+import {selectMastersHostType} from '../../../store/selectors/settings';
 
 export const selectSystemSchedulers = (state) => state.system.schedulersAndAgents.schedulers;
 export const selectSystemSchedulerAlerts = (state) =>
@@ -14,7 +14,7 @@ export const selectSystemAgents = (state) => state.system.schedulersAndAgents.ag
 export const selectSystemAgentAlerts = (state) => state.system.schedulersAndAgents.agentAlerts;
 
 export const selectSystemSchedulersWithState = createSelector(
-    [selectSystemSchedulers, getMastersHostType],
+    [selectSystemSchedulers, selectMastersHostType],
     (schedulers, hostType) => {
         const path = hostType === VisibleHostType.host ? '' : '/@annotations/physical_host';
         return map_(schedulers, (sheduler) => {
@@ -32,7 +32,7 @@ export const selectSystemSchedulersWithState = createSelector(
 );
 
 export const selectSystemAgentsWithState = createSelector(
-    [selectSystemAgents, getMastersHostType],
+    [selectSystemAgents, selectMastersHostType],
     (agents, hostType) => {
         const path = hostType === VisibleHostType.host ? '' : '/@annotations/physical_host';
         return map_(agents, (agent) => {

@@ -20,7 +20,7 @@ import {useClusterFromLocation} from '../../hooks/use-cluster';
 import './AppNavigation.scss';
 import UIFactory from '../../UIFactory';
 import {type AppNavigationProps} from './AppNavigationPageLayout';
-import {getSettingNavigationPanelExpanded} from '../../store/selectors/settings';
+import {selectSettingNavigationPanelExpanded} from '../../store/selectors/settings';
 import {setSettingNavigationPanelExpanded} from '../../store/actions/settings/settings';
 import {setAsideHeaderWidth} from '../../store/actions/global';
 import {SettingsPanelLazy} from '../SettingsPanel/lazy';
@@ -86,7 +86,7 @@ export default function AppNavigation({children}: ExtProps) {
 
     const className = block();
 
-    const expanded = useSelector(getSettingNavigationPanelExpanded);
+    const expanded = useSelector(selectSettingNavigationPanelExpanded);
     const onChangeCompact = React.useCallback(
         (newCompact: boolean) => {
             dispatch(setSettingNavigationPanelExpanded(!newCompact));

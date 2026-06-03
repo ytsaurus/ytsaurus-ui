@@ -15,7 +15,7 @@ import values_ from 'lodash/values';
 import ypath from '../../../../common/thor/ypath';
 import hammer from '../../../../common/hammer';
 import {selectParsedPath, selectTransaction} from '../../../../store/selectors/navigation';
-import {makeGetSetting} from '../../../../store/selectors/settings';
+import {selectGetSetting} from '../../../../store/selectors/settings';
 import {NAMESPACES, SettingName} from '../../../../../shared/constants/settings';
 import {ContentMode, NAVIGATION_MAP_NODE_TABLE_ID} from '../../../../constants/navigation';
 import {Node} from '../../../../utils/navigation/content/map-nodes/node';
@@ -161,7 +161,7 @@ const selectNodes = createSelector(
 );
 
 export const selectFilteredNodes = createSelector(
-    [selectNodes, makeGetSetting, selectTextFilter],
+    [selectNodes, selectGetSetting, selectTextFilter],
     (nodes, getSetting, filter) => {
         const useSmartFilter = getSetting('useSmartFilter', NAMESPACES.NAVIGATION);
         if (useSmartFilter) {
@@ -181,7 +181,7 @@ export const selectFilteredNodes = createSelector(
 );
 
 export const selectSelectedNodes = createSelector(
-    [selectSelected, selectNodes, makeGetSetting, selectSortState, selectTableColumns],
+    [selectSelected, selectNodes, selectGetSetting, selectSortState, selectTableColumns],
     (selected, allNodes, getSetting, sortState, columns) => {
         const nodes = filter_(allNodes, (node) => Boolean(selected[ypath.getValue(node)]));
         const groupNodes = getSetting(SettingName.NAVIGATION.GROUP_NODES, NAMESPACES.NAVIGATION);
@@ -253,7 +253,7 @@ export const TYPE_WEIGHTS = map_(
 }, {});
 
 export const selectSortedNodes = createSelector(
-    [selectFilteredNodes, selectSortState, selectTableColumns, makeGetSetting],
+    [selectFilteredNodes, selectSortState, selectTableColumns, selectGetSetting],
     (nodes, sortState, columns, getSetting) => {
         const groupNodes = getSetting(SettingName.NAVIGATION.GROUP_NODES, NAMESPACES.NAVIGATION);
         const groupByType = groupNodes && {
@@ -293,7 +293,7 @@ export const selectMapNodeResourcesLoading = (state) =>
 
 const DATE_REGEXP = /^\d{4}[-]\d{2}[-]\d{2}(T\d{2}:\d{2}:\d{2})?(\.[a-zA-Z0-9]+)?$/;
 export const selectShouldApplyCustomSort = createSelector(
-    [selectNodes, makeGetSetting, selectSortState],
+    [selectNodes, selectGetSetting, selectSortState],
     (nodes, getSetting, sortState) =>
         getSetting(SettingName.NAVIGATION.USE_SMART_SORT, NAMESPACES.NAVIGATION) &&
         sortState?.field === 'name' &&
