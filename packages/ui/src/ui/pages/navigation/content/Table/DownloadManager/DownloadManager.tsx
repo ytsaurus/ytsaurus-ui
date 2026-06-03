@@ -74,7 +74,7 @@ type Props = ReduxProps &
     };
 
 type State = {
-    format: 'dsv' | 'schemaful_dsv' | 'yson' | 'json' | 'excel';
+    format: 'dsv' | 'schemaful_dsv' | 'csv' | 'yson' | 'json' | 'excel';
     visible?: boolean;
     excelExporter: boolean;
     rowsMode: 'range' | 'all';
@@ -99,6 +99,11 @@ type State = {
     selectedColumns?: Props['columns'];
 
     number_precision_mode: 'string' | 'error' | 'lose';
+};
+
+const CSV_SEPARATORS: State['separators'] = {
+    record: '\n',
+    field: ',',
 };
 
 export class DownloadManager extends React.Component<Props, State> {
@@ -185,7 +190,7 @@ export class DownloadManager extends React.Component<Props, State> {
 
         const currentAttributes: Record<string, any> = {};
         const outputFormat = {
-            $value: format,
+            $value: format === 'csv' ? 'schemaful_dsv' : format,
             $attributes: currentAttributes,
         };
 
@@ -197,7 +202,7 @@ export class DownloadManager extends React.Component<Props, State> {
             currentAttributes['format'] = ysonFormat;
         }
 
-        if (format === 'schemaful_dsv') {
+        if (format === 'schemaful_dsv' || format === 'csv') {
             currentAttributes['missing_value_mode'] = schemafulDsvMissingMode;
 
             if (schemafulDsvMissingMode === 'print_sentinel') {
@@ -225,6 +230,9 @@ export class DownloadManager extends React.Component<Props, State> {
             currentAttributes['record_separator'] = collectErrors(
                 prepareSeparatorValue(separators.record),
             );
+        } else if (format === 'csv') {
+            currentAttributes['field_separator'] = CSV_SEPARATORS.field;
+            currentAttributes['record_separator'] = CSV_SEPARATORS.record;
         }
 
         if (format === 'dsv') {
@@ -330,6 +338,16 @@ export class DownloadManager extends React.Component<Props, State> {
                 caption: 'Schemaful DSV',
                 description: [
                     'Tab-separated format with fixed, ordered set of columns.',
+                    'Please note that this format erases type information due to string conversion.',
+                ].join(' '),
+                doc: this.makeDocsUrl('#schemaful_dsv'),
+                show: true,
+            },
+            csv: {
+                name: 'csv' as const,
+                caption: 'CSV',
+                description: [
+                    'Comma-separated format with fixed, ordered set of columns.',
                     'Please note that this format erases type information due to string conversion.',
                 ].join(' '),
                 doc: this.makeDocsUrl('#schemaful_dsv'),
@@ -577,7 +595,7 @@ export class DownloadManager extends React.Component<Props, State> {
         );
     }
 
-    renderSchemafulDsv() {
+    renderSchemafulDsv({fixedSeparators}: {fixedSeparators?: State['separators']} = {}) {
         const {withHeaders, schemafulDsvMissingMode, valueSentinel} = this.state;
 
         return (
@@ -612,28 +630,44 @@ export class DownloadManager extends React.Component<Props, State> {
                 <Checkbox size="l" checked={withHeaders} onChange={this.toggleWithHeaders}>
                     Prepend with column names header
                 </Checkbox>
-                {this.renderSeparatorEditors()}
+                {this.renderSeparatorEditors({fixedSeparators})}
             </div>
         );
     }
 
-    renderSeparatorEditors({showKeyValueSeparator = false} = {}) {
-        const {keyValue, field, record} = this.state.separators;
+    renderSeparatorEditors({
+        showKeyValueSeparator = false,
+        fixedSeparators,
+    }: {showKeyValueSeparator?: boolean; fixedSeparators?: State['separators']} = {}) {
+        const {keyValue, field, record} = {...this.state.separators, ...fixedSeparators};
+
         return (
             <div className={block('dsv-separators')}>
                 {showKeyValueSeparator && (
                     <div className={block('dsv-separators-item')}>
                         <div className={'elements-form__label'}>Key-value separator</div>
-                        <SeparatorInput value={keyValue} onChange={this.setKeyValueSeparator} />
+                        <SeparatorInput
+                            value={keyValue}
+                            onChange={this.setKeyValueSeparator}
+                            disabled={fixedSeparators?.keyValue !== undefined}
+                        />
                     </div>
                 )}
                 <div className={block('dsv-separators-item')}>
                     <div className={'elements-form__label'}>Field separator</div>
-                    <SeparatorInput value={field} onChange={this.setFieldSeparator} />
+                    <SeparatorInput
+                        value={field}
+                        onChange={this.setFieldSeparator}
+                        disabled={fixedSeparators?.field !== undefined}
+                    />
                 </div>
                 <div className={block('dsv-separators-item')}>
                     <div className={'elements-form__label'}>Record separator</div>
-                    <SeparatorInput value={record} onChange={this.setRecordSeparator} />
+                    <SeparatorInput
+                        value={record}
+                        onChange={this.setRecordSeparator}
+                        disabled={fixedSeparators?.record !== undefined}
+                    />
                 </div>
             </div>
         );
@@ -762,6 +796,8 @@ export class DownloadManager extends React.Component<Props, State> {
                             {format === 'dsv' &&
                                 this.renderSeparatorEditors({showKeyValueSeparator: true})}
                             {format === 'schemaful_dsv' && this.renderSchemafulDsv()}
+                            {format === 'csv' &&
+                                this.renderSchemafulDsv({fixedSeparators: CSV_SEPARATORS})}
                             {format === 'json' && this.renderJson()}
                             {format === 'yson' && this.renderYson()}
                             {format === 'excel' && this.renderExcel()}
