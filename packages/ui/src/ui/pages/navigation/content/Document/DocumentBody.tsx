@@ -11,6 +11,7 @@ import {YsonWithScroll} from '../../../../components/Yson/YsonWithScroll';
 import {type UnipikaSettings} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 import Icon from '../../../../components/Icon/Icon';
 import {OpenQueryButtons} from '../../../../containers/OpenQueryButtons/OpenQueryButtons';
+import {CurrentPathActions} from '../../components/CurrentPathActions/CurrentPathActions';
 
 import './DocumentBody.scss';
 
@@ -43,6 +44,7 @@ function DocumentExtraTools({
         <Flex gap={4}>
             {isYqlView && <OpenQueryButtons className={block('yql')} autoOpen={queryAutoOpen} />}
             <EditButton onEditClick={onEditClick} />
+            <CurrentPathActions />
         </Flex>
     );
 }

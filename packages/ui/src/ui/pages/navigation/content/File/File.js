@@ -1,38 +1,35 @@
+import {Button, Flex, Loader} from '@gravity-ui/uikit';
+import {MetaTable} from '@ytsaurus/components';
+import cn from 'bem-cn-lite';
+import PropTypes from 'prop-types';
 import React, {Fragment, useEffect} from 'react';
 import {connect} from 'react-redux';
-import {useSelector} from '../../../../store/redux-hooks';
-import PropTypes from 'prop-types';
-import cn from 'bem-cn-lite';
-
-import {useDisableMaxContentWidth} from '../../../../containers/MaxContentWidth';
-import LoadDataHandler from '../../../../containers/LoadDataHandler/LoadDataHandler';
-import {MetaTable} from '@ytsaurus/components';
 import {
     compression,
     erasureReplication,
     main,
     size,
 } from '../../../../components/MetaTable/presets';
-import {Button, Loader} from '@gravity-ui/uikit';
 import Link from '../../../../containers/Link/Link';
-
+import LoadDataHandler from '../../../../containers/LoadDataHandler/LoadDataHandler';
+import {useDisableMaxContentWidth} from '../../../../containers/MaxContentWidth';
+import NavigationExtraActions from '../../../../containers/NavigationExtraActions/NavigationExtraActions';
+import {useRumMeasureStop} from '../../../../rum/RumUiContext';
+import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
+import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
+import {abortAndReset, loadFile} from '../../../../store/actions/navigation/content/file';
+import {useSelector} from '../../../../store/redux-hooks';
+import {selectAttributes, selectPath} from '../../../../store/selectors/navigation';
 import {
     selectDownloadPath,
     selectIsEmpty,
     selectIsTooBig,
     selectNavigationFileLoadingStatus,
 } from '../../../../store/selectors/navigation/content/file';
-import {abortAndReset, loadFile} from '../../../../store/actions/navigation/content/file';
-import {selectAttributes, selectPath} from '../../../../store/selectors/navigation';
 import {selectEffectiveMode} from '../../../../store/selectors/navigation/navigation';
-
-import {useRumMeasureStop} from '../../../../rum/RumUiContext';
-import {useAppRumMeasureStart} from '../../../../rum/rum-app-measures';
-import {RumMeasureTypes} from '../../../../rum/rum-measure-types';
 import {isFinalLoadingStatus} from '../../../../utils/utils';
-
+import {CurrentPathActions} from '../../components/CurrentPathActions/CurrentPathActions';
 import './File.scss';
-import NavigationExtraActions from '../../../../containers/NavigationExtraActions/NavigationExtraActions';
 
 const block = cn('navigation-file');
 const messageBlock = cn('elements-message');
@@ -52,12 +49,13 @@ const renderMeta = (attributes, mediumList) => {
 
 const renderActions = (downloadPath) => {
     return (
-        <div className={block('actions')}>
-            <Button className={block('download')} href={downloadPath} target="_blank">
+        <Flex className={block('actions')} gap={4}>
+            <Button href={downloadPath} target="_blank">
                 Download
             </Button>
             <NavigationExtraActions />
-        </div>
+            <CurrentPathActions />
+        </Flex>
     );
 };
 

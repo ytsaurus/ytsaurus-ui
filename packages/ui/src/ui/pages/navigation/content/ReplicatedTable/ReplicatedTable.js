@@ -13,6 +13,7 @@ import {useDisableMaxContentWidth} from '../../../../containers/MaxContentWidth'
 import ClickableAttributesButton from '../../../../components/AttributesButton/ClickableAttributesButton';
 import TableActions from '../../../../pages/navigation/content/Table/TableOverview/TableActions';
 import TableMeta from '../../../../pages/navigation/content/Table/TableMeta/TableMeta';
+import {CurrentPathActions} from '../../../../pages/navigation/components/CurrentPathActions/CurrentPathActions';
 import LoadDataHandler from '../../../../containers/LoadDataHandler/LoadDataHandler';
 import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 import ElementsTable from '../../../../components/ElementsTable/ElementsTable';
@@ -447,7 +448,10 @@ class ReplicatedTable extends Component {
                                 {hasActions && (
                                     <Toolbar
                                         className={stickyTopClassName}
-                                        itemsToWrap={[{node: <TableActions block={block} />}]}
+                                        itemsToWrap={[
+                                            {node: <TableActions block={block} />},
+                                            {node: <CurrentPathActions />},
+                                        ]}
                                     />
                                 )}
                                 <ElementsTable

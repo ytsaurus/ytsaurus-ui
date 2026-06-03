@@ -15,9 +15,9 @@ import OffsetInput from '../../../../../pages/navigation/content/Table/TableOver
 import Paginator from '../../../../../pages/navigation/content/Table/TableOverview/Paginator';
 import ErrorBoundary from '../../../../../containers/ErrorBoundary/ErrorBoundary';
 import {OpenQueryButtons} from '../../../../../containers/OpenQueryButtons/OpenQueryButtons';
+import {CurrentPathActions} from '../../../../../pages/navigation/components/CurrentPathActions/CurrentPathActions';
 
 import './TableOverview.scss';
-import EditTableActions from './EditTableActions';
 import DataLensButton from './DatalensButton';
 
 const block = cn('navigation-table-overview');
@@ -41,7 +41,7 @@ function TableOverview({isFullScreen, allowPagination}) {
                 {!isFullScreen && <DataLensButton className={block('datalens')} />}
                 {!isFullScreen && <TableActions block={block} />}
                 <FullScreenButton block={block} />
-                {!isFullScreen && <EditTableActions />}
+                {!isFullScreen && <CurrentPathActions className={block('path-actions')} />}
             </div>
         </ErrorBoundary>
     );
