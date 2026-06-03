@@ -5,7 +5,7 @@ import {type ConnectedProps, connect} from 'react-redux';
 import RadioButton, {type ItemType} from '../../components/RadioButton/RadioButton';
 
 import {setSetting} from '../../store/actions/settings';
-import {makeGetSetting} from '../../store/selectors/settings';
+import {selectGetSetting} from '../../store/selectors/settings';
 import {type RootState} from '../../store/reducers';
 import {type FIX_MY_TYPE} from '../../types';
 
@@ -113,7 +113,7 @@ const SettingsMenuRadio: VFC<Props> = (props) => {
 };
 
 const mapStateToProps = (state: RootState) => {
-    const getSetting = makeGetSetting(state);
+    const getSetting = selectGetSetting(state);
 
     return {
         getSetting,

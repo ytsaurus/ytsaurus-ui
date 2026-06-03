@@ -15,7 +15,7 @@ import Tabs from '../../../components/Tabs/Tabs';
 
 import {PROXY_TYPE} from '../../../constants/components/proxies/proxies';
 import {DEFAULT_TAB, Tab} from '../../../constants/components/main';
-import {getLastVisitedTabs} from '../../../store/selectors/settings';
+import {selectLastVisitedTabs} from '../../../store/selectors/settings';
 import {makeTabProps} from '../../../utils';
 import {Page} from '../../../constants/index';
 
@@ -88,7 +88,7 @@ function RedirectToTabletCells() {
 }
 
 const mapStateToProps = (state) => {
-    const lastVisitedTabs = getLastVisitedTabs(state);
+    const lastVisitedTabs = selectLastVisitedTabs(state);
     return {
         lastVisitedTab: lastVisitedTabs[Page.COMPONENTS],
         tabSize: UI_TAB_SIZE,

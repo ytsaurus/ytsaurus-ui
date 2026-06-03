@@ -38,7 +38,7 @@ import {
     selectRequiredAttributes,
     selectVisibleNodes,
 } from '../../../../../store/selectors/components/nodes/nodes';
-import {getSelectedColumns} from '../../../../../store/selectors/settings';
+import {selectSelectedColumns} from '../../../../../store/selectors/settings';
 import {getSettingsEnableSideBar} from '../../../../../store/selectors/settings/settings-ts';
 import {defaultColumns} from '../../../../../pages/components/tabs/nodes/tables';
 import withVisible, {type WithVisibleProps} from '../../../../../hocs/withVisible';
@@ -383,7 +383,7 @@ const mapStateToProps = (state: RootState) => {
         state.components.nodes.nodes;
 
     const visibleNodes = selectVisibleNodes(state);
-    const selectedColumns = getSelectedColumns(state) || defaultColumns;
+    const selectedColumns = selectSelectedColumns(state) || defaultColumns;
     const initialLoading = loading && !loaded;
 
     const nodesTableProps = selectComponentNodesTableProps(state);

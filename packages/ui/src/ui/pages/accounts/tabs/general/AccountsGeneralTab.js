@@ -18,8 +18,8 @@ import {
 } from '../../../../store/selectors/accounts/dashboard';
 
 import {
-    getAccountsVisibilityMode,
-    getAccountsVisibilityModeOfDashboard,
+    selectAccountsVisibilityMode,
+    selectAccountsVisibilityModeOfDashboard,
 } from '../../../../store/selectors/settings';
 import AccountsTotal from './AccountsTotal';
 
@@ -820,8 +820,8 @@ const makeMapStateToProps = () => {
             activeAccountAggregation: selectActiveAccountAggregationRow(state),
             favouriteAccountsSet,
             dashboardVisibilityMode: isDashboard
-                ? getAccountsVisibilityModeOfDashboard(state)
-                : getAccountsVisibilityMode(state),
+                ? selectAccountsVisibilityModeOfDashboard(state)
+                : selectAccountsVisibilityMode(state),
             abcServiceFilter: selectAccountsAbcServiceIdSlugFilter(state),
             columnFields: selectAccountsColumnFields(state),
 

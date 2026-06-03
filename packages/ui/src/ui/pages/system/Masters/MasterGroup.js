@@ -6,7 +6,7 @@ import block from 'bem-cn-lite';
 import {Flex} from '@gravity-ui/uikit';
 
 import format from '../../../common/hammer/format';
-import {getMastersHostType} from '../../../store/selectors/settings';
+import {selectMastersHostType} from '../../../store/selectors/settings';
 import Icon from '../../../components/Icon/Icon';
 
 import {SwitchLeaderButton} from './SwitchLeader';
@@ -124,7 +124,7 @@ class MasterGroup extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const hostType = getMastersHostType(state);
+    const hostType = selectMastersHostType(state);
     return {hostType};
 };
 

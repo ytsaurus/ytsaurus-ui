@@ -6,7 +6,7 @@ import {setSetting} from '../../store/actions/settings';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
 import RadioButton from '../../components/RadioButton/RadioButton';
 import {mastersRadioButtonItems} from '../../constants/system/masters';
-import {getMastersHostType} from '../../store/selectors/settings';
+import {selectMastersHostType} from '../../store/selectors/settings';
 
 VisibleHostTypeRadioButton.propTypes = {
     hostType: PropTypes.string,
@@ -35,7 +35,7 @@ function VisibleHostTypeRadioButton({hostType, setSetting, className}) {
 
 const mapStateToProps = (state) => {
     return {
-        hostType: getMastersHostType(state),
+        hostType: selectMastersHostType(state),
     };
 };
 

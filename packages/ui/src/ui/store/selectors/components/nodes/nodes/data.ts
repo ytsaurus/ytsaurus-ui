@@ -10,7 +10,7 @@ import {COMPONENTS_NODES_TABLE_ID} from '../../../../../constants/components/nod
 import {type RootState} from '../../../../../store/reducers';
 import {AttributesByProperty} from '../../../../../store/reducers/components/nodes/nodes/node';
 import {selectCluster} from '../../../../../store/selectors/global';
-import {getSelectedColumns} from '../../../../../store/selectors/settings';
+import {selectSelectedColumns} from '../../../../../store/selectors/settings';
 import {getMediumListNoCache} from '../../../../../store/selectors/thor';
 import {type ValueOf} from '../../../../../types';
 import {createMediumsPredicates} from '../../../../../utils/components/nodes/setup';
@@ -40,7 +40,7 @@ const selectSortState = (state: RootState) => state.tables[COMPONENTS_NODES_TABL
 const selectComponentsNodesNodeTypeRaw = (state: RootState) =>
     state.components.nodes.nodes.nodeTypes;
 
-const selectCustomColumns = (state: RootState) => getSelectedColumns(state) || defaultColumns;
+const selectCustomColumns = (state: RootState) => selectSelectedColumns(state) || defaultColumns;
 
 const selectMediumsPredicates = createSelector(
     [selectComponentNodesFiltersSetup, getMediumListNoCache],

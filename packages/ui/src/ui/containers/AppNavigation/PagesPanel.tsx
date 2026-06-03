@@ -11,7 +11,7 @@ import Link from '../../containers/Link/Link';
 import {makeRoutedURL} from '../../store/location';
 import {Icon, List} from '@gravity-ui/uikit';
 import {PAGE_ICONS_BY_ID, emptyPageIcon} from '../../constants/slideoutMenu';
-import {isRecentPagesFirst} from '../../store/selectors/settings';
+import {selectIsRecentPagesFirst} from '../../store/selectors/settings';
 import i18n from './i18n';
 
 import './PagesPanel.scss';
@@ -26,7 +26,7 @@ export default function PagesPanel({
     cluster?: string;
 }) {
     const {all, recent, rest} = useSelector(getRecentPagesInfo);
-    const isRecentFirst = useSelector(isRecentPagesFirst);
+    const isRecentFirst = useSelector(selectIsRecentPagesFirst);
 
     const allFiltered = React.useMemo(() => {
         return sortBy_(

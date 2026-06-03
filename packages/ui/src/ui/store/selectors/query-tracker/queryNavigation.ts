@@ -2,7 +2,7 @@ import {type RootState} from '../../reducers';
 import {createSelector} from 'reselect';
 import {selectClusterList} from '../slideoutMenu';
 import {type NavigationNode} from '../../reducers/query-tracker/queryNavigationSlice';
-import {makeGetSetting} from '../settings';
+import {selectGetSetting} from '../settings';
 import {createNestedNS} from '../../../../shared/utils/settings';
 import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
 
@@ -23,7 +23,7 @@ export const selectNavigationClusterConfig = createSelector(
 );
 
 export const selectFavouritePaths = createSelector(
-    [makeGetSetting, selectNavigationCluster],
+    [selectGetSetting, selectNavigationCluster],
     (getSetting, cluster) => {
         if (!cluster) return [];
         const parentNS = createNestedNS(cluster, NAMESPACES.LOCAL);

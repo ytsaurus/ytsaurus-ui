@@ -4,11 +4,11 @@ import unipikaLib from '@gravity-ui/unipika/lib/unipika';
 import hammer from '../hammer';
 import {getSettingBySelector} from '../utils/redux';
 import {
-    getFormat,
-    shouldCompact,
-    shouldEscapeWhitespace,
-    shouldShowDecoded,
-    useBinaryAsHex,
+    selectFormat,
+    selectShouldCompact,
+    selectShouldEscapeWhitespace,
+    selectShouldShowDecoded,
+    selectUseBinaryAsHex,
 } from '../../store/selectors/settings';
 import {type UnipikaSettings} from '../../components/Yson/StructuredYson/StructuredYsonTypes';
 import {prettyPrint} from '../../utils/unipika';
@@ -27,22 +27,22 @@ unipika.prepareSettings = function (settings: UnipikaSettings) {
     settings = settings || {};
     Object.assign(settings, getUnipikaSettingsFromConfig());
 
-    settings.format = parseSetting(settings, 'format', getSettingBySelector(getFormat));
+    settings.format = parseSetting(settings, 'format', getSettingBySelector(selectFormat));
     settings.showDecoded = parseSetting(
         settings,
         'showDecoded',
-        getSettingBySelector(shouldShowDecoded),
+        getSettingBySelector(selectShouldShowDecoded),
     );
-    settings.compact = parseSetting(settings, 'compact', getSettingBySelector(shouldCompact));
+    settings.compact = parseSetting(settings, 'compact', getSettingBySelector(selectShouldCompact));
     settings.escapeWhitespace = parseSetting(
         settings,
         'escapeWhitespace',
-        getSettingBySelector(shouldEscapeWhitespace),
+        getSettingBySelector(selectShouldEscapeWhitespace),
     );
     settings.binaryAsHex = parseSetting(
         settings,
         'binaryAsHex',
-        getSettingBySelector(useBinaryAsHex),
+        getSettingBySelector(selectUseBinaryAsHex),
     );
 
     settings.asHTML = parseSetting(settings, 'asHTML', true);
@@ -59,7 +59,7 @@ unipika.prettyprint = function (value: unknown, settings: UnipikaSettings) {
 };
 
 unipika.decode = function (str: string) {
-    const showDecoded = getSettingBySelector(shouldShowDecoded);
+    const showDecoded = getSettingBySelector(selectShouldShowDecoded);
     return showDecoded ? utf8.decode(str) : str;
 };
 

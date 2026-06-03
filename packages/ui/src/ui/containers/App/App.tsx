@@ -19,7 +19,7 @@ import ActionModal from '../ActionModal/ActionModal';
 import {ChangePasswordFormPage} from '../../containers/Login/ChangePasswordFormPage/ChangePasswordFormPage';
 import {LoginFormPage} from '../../containers/Login/LoginFormPage/LoginFormPage';
 
-import {getSettingTheme, shouldUseSafeColors} from '../../store/selectors/settings';
+import {selectSettingTheme, selectShouldUseSafeColors} from '../../store/selectors/settings';
 
 import {RumUiProvider} from '../../rum/RumUiContext';
 import AppNavigation from '../AppNavigation/AppNavigation';
@@ -154,8 +154,8 @@ export function ThemeUpdater() {
 }
 
 export function useThemeProviderProperties() {
-    const selectedTheme = useSelector(getSettingTheme);
-    const useContrastTheme: boolean = useSelector(shouldUseSafeColors);
+    const selectedTheme = useSelector(selectSettingTheme);
+    const useContrastTheme: boolean = useSelector(selectShouldUseSafeColors);
     const systemLightTheme = useContrastTheme ? 'light-hc' : 'light';
     const systemDarkTheme = useContrastTheme ? 'dark-hc' : 'dark';
     let theme: AppThemeFontProps['theme'] = selectedTheme;

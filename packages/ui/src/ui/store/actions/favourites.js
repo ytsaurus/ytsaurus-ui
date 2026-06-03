@@ -3,11 +3,11 @@ import {getMetrics} from '../../common/utils/metrics';
 import find_ from 'lodash/find';
 
 import {
-    getAccountsNS,
-    getBundlesNS,
-    getChytNS,
-    getClusterNS,
-    makeGetSetting,
+    selectAccountsNS,
+    selectBundlesNS,
+    selectChytNS,
+    selectClusterNS,
+    selectGetSetting,
 } from '../../store/selectors/settings';
 import {SettingName} from '../../../shared/constants/settings';
 import {reloadSetting, setSetting} from '../../store/actions/settings';
@@ -24,14 +24,14 @@ export function accountsTrackVisit(account) {
             return;
         }
 
-        const parentNS = getAccountsNS(getState());
+        const parentNS = selectAccountsNS(getState());
         return dispatch(trackLastVisited(account, parentNS));
     };
 }
 
 export function navigationTrackVisit(path) {
     return (dispatch, getState) => {
-        const parentNS = getClusterNS(getState());
+        const parentNS = selectClusterNS(getState());
         return dispatch(trackLastVisited(path, parentNS));
     };
 }
@@ -43,7 +43,7 @@ export function bundlesTrackVisit(bundle) {
         if (!bundle || bundle === activeBundle) {
             return;
         }
-        const parentNS = getBundlesNS(state);
+        const parentNS = selectBundlesNS(state);
         return dispatch(trackLastVisited(bundle, parentNS));
     };
 }
@@ -52,7 +52,7 @@ function trackLastVisited(value, parentNS, settingName = SettingName.LOCAL.LAST_
     return (dispatch, getState) => {
         return dispatch(reloadSetting(settingName, parentNS)).then(() => {
             const state = getState();
-            const current = makeGetSetting(state)(settingName, parentNS) || [];
+            const current = selectGetSetting(state)(settingName, parentNS) || [];
             const currentPathItem = {path: value, count: 1};
 
             return dispatch(
@@ -83,7 +83,7 @@ export function accountsToggleFavourite(account) {
     getMetrics().countEvent('accounts_toggle-favourites');
 
     return (dispatch, getState) => {
-        const parentNS = getAccountsNS(getState());
+        const parentNS = selectAccountsNS(getState());
         return dispatch(toggleFavourite(account, parentNS));
     };
 }
@@ -92,7 +92,7 @@ export function chytToggleFavourite(clique) {
     getMetrics().countEvent('chyt_toggle-favourites');
 
     return (dispatch, getState) => {
-        const chytNS = getChytNS(getState());
+        const chytNS = selectChytNS(getState());
         return dispatch(toggleFavourite(clique, chytNS));
     };
 }
@@ -101,7 +101,7 @@ export function navigationToggleFavourite(path) {
     getMetrics().countEvent('navigation_toggle-favourites');
 
     return (dispatch, getState) => {
-        const parentNS = getClusterNS(getState());
+        const parentNS = selectClusterNS(getState());
         return dispatch(toggleFavourite(path, parentNS));
     };
 }
@@ -110,7 +110,7 @@ export function bundlesToggleFavourite(bundle) {
     getMetrics().countEvent('accounts_toggle-favourites');
 
     return (dispatch, getState) => {
-        const parentNS = getBundlesNS(getState());
+        const parentNS = selectBundlesNS(getState());
         return dispatch(toggleFavourite(bundle, parentNS));
     };
 }
@@ -119,7 +119,7 @@ export function toggleFavourite(value, parentNS, settingName = SettingName.LOCAL
     return (dispatch, getState) => {
         return dispatch(reloadSetting(settingName, parentNS)).then(() => {
             const state = getState();
-            const current = [...(makeGetSetting(state)(settingName, parentNS) || [])];
+            const current = [...(selectGetSetting(state)(settingName, parentNS) || [])];
             const currentPathItem = {path: value};
 
             const entry = find_(current, currentPathItem);

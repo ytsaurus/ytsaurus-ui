@@ -16,7 +16,7 @@ import {
     type selectRequiredAttributes,
     selectTagsFromAttributes,
 } from '../../../../store/selectors/components/nodes/nodes';
-import {getTemplates} from '../../../../store/selectors/settings';
+import {selectTemplates} from '../../../../store/selectors/settings';
 import {type RootState} from '../../../../store/reducers';
 import {Node} from '../../../../store/reducers/components/nodes/nodes/node';
 import {
@@ -172,7 +172,7 @@ export function applyPreset(
 export function savePreset(name: string, data: FIX_MY_TYPE): NodesThunkAction {
     return (dispatch, getState) => {
         const state = getState();
-        const prevTemplates = getTemplates(state) || {};
+        const prevTemplates = selectTemplates(state) || {};
         const templates = {
             ...prevTemplates,
             [name]: data,
@@ -185,7 +185,7 @@ export function savePreset(name: string, data: FIX_MY_TYPE): NodesThunkAction {
 export function removePreset(name: string): NodesThunkAction {
     return (dispatch, getState) => {
         const state = getState();
-        const templates = omit_(getTemplates(state), name);
+        const templates = omit_(selectTemplates(state), name);
 
         dispatch(setSetting(TEMPLATES, COMPONENTS, templates));
     };

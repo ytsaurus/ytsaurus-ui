@@ -48,7 +48,7 @@ import {selectClusterUiConfig} from '../../store/selectors/global';
 import {selectIsExperimentalPagesReady} from '../../store/selectors/global/experimental-pages';
 import {getClusterConfig} from '../../utils';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
-import {getClusterPagePaneSizes, getStartingPage} from '../../store/selectors/settings';
+import {selectClusterPagePaneSizes, selectStartingPage} from '../../store/selectors/settings';
 import {selectSettingNewDashboardPage} from '../../store/selectors/dashboard2/dashboard';
 import SupportedFeaturesUpdater from './SupportedFeaturesUpdater';
 import {useRumMeasureStart, useRumMeasureStop} from '../../rum/RumUiContext';
@@ -343,8 +343,8 @@ function mapStateToProps(state) {
         paramsError,
         login,
         splitScreen,
-        clusterPagePaneSizes: getClusterPagePaneSizes(state),
-        startingPage: getStartingPage(state),
+        clusterPagePaneSizes: selectClusterPagePaneSizes(state),
+        startingPage: selectStartingPage(state),
         paramsCluster,
         allowChyt: Boolean(selectClusterUiConfig(state).chyt_controller_base_url),
         allowStartPageRedirect: selectIsExperimentalPagesReady(state),

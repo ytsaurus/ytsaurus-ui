@@ -12,9 +12,9 @@ import {INIT_CLUSTER_PARAMS, PRELOAD_ERROR, UPDATE_CLUSTER} from '../../constant
 import {getXsrfCookieName} from '../../utils';
 import {RESET_STORE_BEFORE_CLUSTER_CHANGE} from '../../constants/utils';
 import {
-    isRecentClustersFirst,
-    isRecentPagesFirst,
-    shouldUsePreserveState,
+    selectIsRecentClustersFirst,
+    selectIsRecentPagesFirst,
+    selectShouldUsePreserveState,
 } from '../../store/selectors/settings';
 import {rumLogError} from '../../rum/rum-counter';
 import {RumWrapper, YTApiId} from '../../rum/rum-wrap-api';
@@ -168,13 +168,13 @@ function initClusterAndUserSettingsAfterClusterChanging(params: {
 
         const state = getState();
 
-        if (isRecentClustersFirst(state)) {
+        if (selectIsRecentClustersFirst(state)) {
             dispatch(splitMenuItemsAction('cluster'));
         } else {
             dispatch(joinMenuItemsAction('clusters'));
         }
 
-        if (isRecentPagesFirst(state)) {
+        if (selectIsRecentPagesFirst(state)) {
             dispatch(splitMenuItemsAction('page'));
         } else {
             dispatch(joinMenuItemsAction('pages'));
@@ -227,7 +227,7 @@ export function updateCluster(cluster: string): GlobalThunkAction {
                     dispatch({
                         type: RESET_STORE_BEFORE_CLUSTER_CHANGE,
                         data: {
-                            shouldUsePreserveState: shouldUsePreserveState(getState()),
+                            shouldUsePreserveState: selectShouldUsePreserveState(getState()),
                         },
                     });
                 }

@@ -17,7 +17,7 @@ import {
     toggleParameters,
 } from '../../store/actions/path-viewer';
 import {KeyCode} from '../../constants/index';
-import {getFormat} from '../../store/selectors/settings';
+import {selectFormat} from '../../store/selectors/settings';
 import {COMMAND} from '../../constants/path-viewer';
 
 import './PathViewer.scss';
@@ -161,7 +161,7 @@ function Overview({className}) {
 export default function PathViewer() {
     const dispatch = useDispatch();
     const {data, loading, error, errorData} = useSelector((state) => state.pathViewer);
-    const format = useSelector(getFormat);
+    const format = useSelector(selectFormat);
     const settings = useMemo(() => ({format}), [format]);
 
     useEffect(() => {

@@ -4,13 +4,13 @@ import sortBy_ from 'lodash/sortBy';
 import {createSelector} from 'reselect';
 
 import {
-    getAccountsNS,
-    getBundlesNS,
-    getChytNS,
-    getClusterNS,
-    getSchedulingNS,
-    makeGetSetting,
+    selectAccountsNS,
+    selectBundlesNS,
     selectChaosBundlesNS,
+    selectChytNS,
+    selectClusterNS,
+    selectGetSetting,
+    selectSchedulingNS,
 } from '../../store/selectors/settings';
 import {SettingName} from '../../../shared/constants/settings';
 import {selectActiveAccount} from '../../store/selectors/accounts/accounts';
@@ -23,12 +23,12 @@ import {selectChytCurrentAlias} from './chyt';
 //************* Selectors for Accounts *****************
 
 export const selectFavouriteAccounts = createSelector(
-    [makeGetSetting, getAccountsNS],
+    [selectGetSetting, selectAccountsNS],
     prepareFavourites,
 );
 
 export const selectLastVisitedAccounts = createSelector(
-    [makeGetSetting, getAccountsNS],
+    [selectGetSetting, selectAccountsNS],
     prepareLastVisited,
 );
 
@@ -39,10 +39,13 @@ export const selectIsActiveAccountInFavourites = createSelector(
     prepareIsInFavourites,
 );
 
-export const selectFavouriteChyt = createSelector([makeGetSetting, getChytNS], prepareFavourites);
+export const selectFavouriteChyt = createSelector(
+    [selectGetSetting, selectChytNS],
+    prepareFavourites,
+);
 
 export const selectLastVisitedChyt = createSelector(
-    [makeGetSetting, getChytNS],
+    [selectGetSetting, selectChytNS],
     prepareLastVisited,
 );
 
@@ -56,12 +59,12 @@ export const selectIsActiveCliqueInFavourites = createSelector(
 //************* Selectors for Navigation *****************
 
 export const selectFavouritePaths = createSelector(
-    [makeGetSetting, getClusterNS],
+    [selectGetSetting, selectClusterNS],
     prepareFavourites,
 );
 
 export const selectLastVisitedPaths = createSelector(
-    [makeGetSetting, getClusterNS],
+    [selectGetSetting, selectClusterNS],
     prepareLastVisited,
 );
 
@@ -75,7 +78,7 @@ export const selectIsCurrentPathInFavourites = createSelector(
 //************* Selectors for Scheduling *****************
 
 export const selectFavouritePools = createSelector(
-    [makeGetSetting, getSchedulingNS],
+    [selectGetSetting, selectSchedulingNS],
     prepareFavourites,
 );
 
@@ -87,7 +90,7 @@ export const selectIsActivePoolInFavourites = createSelector(
 //************* Selectors for Bundles *****************
 
 export const selectFavouriteBundles = createSelector(
-    [makeGetSetting, getBundlesNS],
+    [selectGetSetting, selectBundlesNS],
     prepareFavourites,
 );
 
@@ -99,7 +102,7 @@ export const selectIsActiveBundleInFavourites = createSelector(
 // ************ Selectors for Chaos bundles ***********
 
 export const selectFavouriteChaosBundles = createSelector(
-    [makeGetSetting, selectChaosBundlesNS],
+    [selectGetSetting, selectChaosBundlesNS],
     prepareFavourites,
 );
 

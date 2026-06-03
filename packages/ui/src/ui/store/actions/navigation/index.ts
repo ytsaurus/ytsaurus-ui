@@ -10,7 +10,7 @@ import {navigationTrackVisit} from '../../../store/actions/favourites';
 import {RumWrapper, YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {RumMeasureTypes} from '../../../rum/rum-measure-types';
 
-import {isPathAutoCorrectionSettingEnabled} from '../../../store/selectors/settings';
+import {selectIsPathAutoCorrectionSettingEnabled} from '../../../store/selectors/settings';
 import {selectPath, selectTransaction} from '../../../store/selectors/navigation';
 
 import {
@@ -245,7 +245,7 @@ export function clearTransaction(): NavigationThunk {
 
 export function updatePath(path: string, shouldUpdateContentMode = true): NavigationThunk<string> {
     return (dispatch, getState) => {
-        const autoCorrectionEnabled = isPathAutoCorrectionSettingEnabled(getState());
+        const autoCorrectionEnabled = selectIsPathAutoCorrectionSettingEnabled(getState());
 
         const correctedPath = autoCorrectionEnabled ? autoCorrectPath(path) : path;
 

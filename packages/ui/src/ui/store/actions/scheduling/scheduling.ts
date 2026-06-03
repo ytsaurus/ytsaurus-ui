@@ -13,7 +13,7 @@ import {type BatchSubRequest} from '../../../../shared/yt-types';
 import {type RootState} from '../../../store/reducers';
 import {splitBatchResults} from '../../../../shared/utils/error';
 
-import {getSchedulingNS} from '../../../store/selectors/settings';
+import {selectSchedulingNS} from '../../../store/selectors/settings';
 import {toggleFavourite} from '../../../store/actions/favourites';
 import {
     type SchedulingContentMode,
@@ -350,7 +350,7 @@ export function changePoolChildrenFilter(poolChildrenFilter: string) {
 export function togglePoolFavourites(pool: string, tree: string): SchedulingThunk<void> {
     return (dispatch, getState) => {
         const value = `${pool}[${tree}]`;
-        const parentNS = getSchedulingNS(getState());
+        const parentNS = selectSchedulingNS(getState());
         return dispatch(toggleFavourite(value, parentNS));
     };
 }

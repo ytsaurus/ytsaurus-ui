@@ -12,7 +12,7 @@ import {injectTableCellData} from '../../../../../store/actions/navigation/conte
 import {selectOffsetValue} from '../../../../../store/selectors/navigation/content/table';
 import {selectSchemaByName} from '../../../../../store/selectors/navigation/tabs/schema';
 import {selectPrimitiveTypesMap} from '../../../../../store/selectors/global/supported-features';
-import {getSettingTableDisplayRawStrings} from '../../../../../store/selectors/settings';
+import {selectSettingTableDisplayRawStrings} from '../../../../../store/selectors/settings';
 import {shouldUseYqlTypes} from '../../../../../store/selectors/settings/settings-development';
 import {type YsonSettings} from '../../../../../store/selectors/thor/unipika';
 import {onCellPreview} from '../../../../../store/actions/navigation/modals/cell-preview';
@@ -48,7 +48,7 @@ export type DataTableWrapperProps = {
 };
 
 export default function DataTableWrapper(props: DataTableWrapperProps) {
-    const useRawStrings = useSelector(getSettingTableDisplayRawStrings);
+    const useRawStrings = useSelector(selectSettingTableDisplayRawStrings);
     const useYqlTypes = useSelector(shouldUseYqlTypes);
     const schemaByName = useSelector(selectSchemaByName);
     const primitiveTypes = useSelector(selectPrimitiveTypesMap);

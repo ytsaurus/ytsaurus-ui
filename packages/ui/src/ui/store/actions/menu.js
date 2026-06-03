@@ -11,7 +11,7 @@ import {
 } from '../../store/selectors/slideoutMenu';
 import {getMetrics} from '../../common/utils/metrics';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
-import {getClusterNS, getLastVisitedTabs} from '../../store/selectors/settings';
+import {selectClusterNS, selectLastVisitedTabs} from '../../store/selectors/settings';
 import {getPath} from '../../../shared/utils/settings';
 import {selectCluster, selectCurrentUserName} from '../../store/selectors/global';
 
@@ -88,8 +88,8 @@ export function trackPageVisit(page) {
 export function trackTabVisit(page, tab) {
     return (dispatch, getState) => {
         const state = getState();
-        const clusterNS = getClusterNS(state);
-        const lastVisitedTabs = getLastVisitedTabs(state);
+        const clusterNS = selectClusterNS(state);
+        const lastVisitedTabs = selectLastVisitedTabs(state);
         const newLastVisitedTabs = {...lastVisitedTabs, [page]: tab};
 
         dispatch(setSetting(SettingName.LOCAL.LAST_VISITED_TAB, clusterNS, newLastVisitedTabs));
