@@ -26,5 +26,12 @@
   "field_pool-tree": "Pool tree...",
   "field_filter-pool": "Filter pool...",
   "field_started-by": "Started by...",
-  "field_accessible-for": "Accessible for..."
+  "field_accessible-for": "Accessible for...",
+  "value_read": "Read",
+  "value_manage": "Manage",
+  "value_pending": "Pending",
+  "value_running": "Running",
+  "value_completed": "Completed",
+  "value_failed": "Failed",
+  "value_aborted": "Aborted"
 }
