@@ -1,18 +1,18 @@
 import {createSelector} from 'reselect';
-import {getSettingsData} from './settings-base';
+import {selectSettingsData} from './settings-base';
 
-export const getVcsType = createSelector(getSettingsData, (data) => {
+export const getVcsType = createSelector(selectSettingsData, (data) => {
     return data['global::vcs:type'] || '';
 });
 
-export const getVcsRepository = createSelector(getSettingsData, (data) => {
+export const getVcsRepository = createSelector(selectSettingsData, (data) => {
     return data['global::vcs:repository'] || '';
 });
 
-export const getVcsBranch = createSelector(getSettingsData, (data) => {
+export const getVcsBranch = createSelector(selectSettingsData, (data) => {
     return data['global::vcs:branch'] || '';
 });
 
-export const getVcsPath = createSelector(getSettingsData, (data) => {
+export const getVcsPath = createSelector(selectSettingsData, (data) => {
     return data['global::vcs:path'] || '';
 });

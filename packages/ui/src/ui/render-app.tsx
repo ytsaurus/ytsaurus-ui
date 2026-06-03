@@ -9,7 +9,7 @@ import {useSelector} from './store/redux-hooks';
 
 import {Router} from 'react-router';
 
-import {getSettingsData} from './store/selectors/settings/settings-base';
+import {selectSettingsData} from './store/selectors/settings/settings-base';
 import {createMainEntryStore} from './store/store.main';
 
 import App from './containers/App/App';
@@ -35,7 +35,7 @@ function AppWithStore({store, history}: ReturnType<typeof createMainEntryStore>)
 }
 
 function AppRoot({history}: Pick<ReturnType<typeof createMainEntryStore>, 'history'>) {
-    const lang = useSelector(getSettingsData)['global::lang'] ?? 'en';
+    const lang = useSelector(selectSettingsData)['global::lang'] ?? 'en';
 
     React.useMemo(() => {
         ytSetLang(lang);

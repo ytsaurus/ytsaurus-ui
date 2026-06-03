@@ -9,7 +9,7 @@ import {type ChytInfo} from '../../../store/reducers/chyt/list';
 import {type SortState} from '../../../types';
 import {multiSortBySortStateArray} from '../../../utils/sort-helpers';
 import {type StrawberryListAttributes} from '../../../utils/strawberryControllerApi';
-import {getSettingsData} from '../../../store/selectors/settings/settings-base';
+import {selectSettingsData} from '../../../store/selectors/settings/settings-base';
 
 import {defaultColumns} from '../../../constants/chyt';
 
@@ -59,7 +59,7 @@ export type ChytSelectableColumn = keyof typeof CHYT_LIST_SELECTABLE_COLUMNS;
 type ChytColumnItem = {checked: boolean; column: ChytListColumns};
 
 export const selectChytListColumnsFromSettings = (state: RootState) => {
-    return getSettingsData(state)['global::chyt::list_columns'] ?? defaultColumns;
+    return selectSettingsData(state)['global::chyt::list_columns'] ?? defaultColumns;
 };
 
 export const selectChytListVisibleColumns = createSelector(

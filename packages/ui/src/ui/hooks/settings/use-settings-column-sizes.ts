@@ -4,7 +4,7 @@ import isEqual_ from 'lodash/isEqual';
 import {type KeysByType} from '../../../@types/types';
 import {type DescribedSettings} from '../../../shared/constants/settings-types';
 
-import {getSettingsData} from '../../store/selectors/settings/settings-base';
+import {selectSettingsData} from '../../store/selectors/settings/settings-base';
 import {setSettingByKey} from '../../store/actions/settings';
 import {type RootState} from '../../store/reducers';
 import {useDispatch, useSelector} from '../../store/redux-hooks';
@@ -17,7 +17,7 @@ export function useSettingsColumnSizes<
     K extends KeysByType<DescribedSettings, Record<string, number>>,
 >(key: K, {minWidth = 50, maxWidth = 800}: {minWidth?: number; maxWidth?: number} = {}) {
     const dispatch = useDispatch();
-    const columnSizes = useSelector(getSettingsData)[key] ?? {};
+    const columnSizes = useSelector(selectSettingsData)[key] ?? {};
 
     type UpdateFn = ColumnSizes | ((oldState: ColumnSizes) => ColumnSizes);
 
@@ -27,7 +27,7 @@ export function useSettingsColumnSizes<
         columnSizes,
         setColumnSizes: (updateFn: UpdateFn) => {
             dispatch((_dispatch: unknown, getState: () => RootState) => {
-                const prevColumnSizes = getSettingsData(getState())[key] ?? {};
+                const prevColumnSizes = selectSettingsData(getState())[key] ?? {};
                 const changes = 'function' === typeof updateFn ? updateFn({}) : updateFn;
                 const newValue = {
                     ...prevColumnSizes,

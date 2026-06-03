@@ -8,7 +8,7 @@ import {Progress} from '@gravity-ui/uikit';
 
 import hammer from '../../../../../common/hammer';
 import {Tooltip} from '@ytsaurus/components';
-import {getSettingsData} from '../../../../../store/selectors/settings/settings-base';
+import {selectSettingsData} from '../../../../../store/selectors/settings/settings-base';
 import {type RootState} from '../../../../../store/reducers';
 
 import './MemoryProgress.scss';
@@ -90,7 +90,7 @@ class MemoryProgress extends React.Component<MemoryProgressProps & ReduxProps> {
 
 const mapStateToProps = (state: RootState) => {
     return {
-        showAll: getSettingsData(state)['global::components::memoryPopupShowAll'],
+        showAll: selectSettingsData(state)['global::components::memoryPopupShowAll'],
     };
 };
 

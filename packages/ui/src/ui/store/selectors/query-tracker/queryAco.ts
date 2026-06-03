@@ -1,7 +1,7 @@
 import intersection_ from 'lodash/intersection';
 import {type SelectOption} from '@gravity-ui/uikit';
 import {type RootState} from '../../reducers';
-import {getSettingsData} from '../settings/settings-base';
+import {selectSettingsData} from '../settings/settings-base';
 import {createSelector} from 'reselect';
 import {DEFAULT_QUERY_ACO, SHARED_QUERY_ACO, selectEffectiveApiStage} from './query';
 import {selectClusterUiConfig} from '../global';
@@ -22,7 +22,7 @@ export const selectQueryTrackerInfoClusters = (state: RootState) =>
 export const selectLastSelectedACONamespaces = (state: RootState) => {
     const stage = selectEffectiveApiStage(state);
 
-    return getSettingsData(state)[`qt-stage::${stage}::queryTracker::lastSelectedACOs`] ?? [];
+    return selectSettingsData(state)[`qt-stage::${stage}::queryTracker::lastSelectedACOs`] ?? [];
 };
 
 export const selectQueryACOOptions = (state: RootState): SelectOption[] => {
@@ -80,7 +80,7 @@ export const selectClusterDefaultQueryACO = (state: RootState) => {
 export const selectUserDefaultQueryACO = (state: RootState) => {
     const stage = selectEffectiveApiStage(state);
 
-    return getSettingsData(state)[`qt-stage::${stage}::queryTracker::defaultACO`];
+    return selectSettingsData(state)[`qt-stage::${stage}::queryTracker::defaultACO`];
 };
 
 export const selectDefaultQueryACO = (state: RootState) => {

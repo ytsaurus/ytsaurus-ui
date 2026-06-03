@@ -1,9 +1,9 @@
 import {type RootState} from '../../../store/reducers';
-import {getSettingsData} from '../../../store/selectors/settings/settings-base';
+import {selectSettingsData} from '../../../store/selectors/settings/settings-base';
 
 export const selectIsMaxContentWidthEnabled = (state: RootState) =>
     state.global.enableMaxContentWidth;
 
 export const selectMaxContentWidth = (state: RootState) => {
-    return getSettingsData(state)['global::maxContentWidth'];
+    return selectSettingsData(state)['global::maxContentWidth'];
 };

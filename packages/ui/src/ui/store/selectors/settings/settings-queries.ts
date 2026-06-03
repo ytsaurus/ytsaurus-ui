@@ -1,36 +1,36 @@
 import {createSelector} from 'reselect';
-import {getSettingsData} from './settings-base';
+import {selectSettingsData} from './settings-base';
 import {selectQueryDraft} from '../query-tracker/query';
 
-export const getQuerySuggestionsEnabled = createSelector(getSettingsData, (data) => {
+export const getQuerySuggestionsEnabled = createSelector(selectSettingsData, (data) => {
     return data['global::queryTracker::suggestions'] || false;
 });
 
-export const getLastUserChoiceQueryEngine = createSelector([getSettingsData], (data) => {
+export const getLastUserChoiceQueryEngine = createSelector([selectSettingsData], (data) => {
     return data[`global::queryTracker::lastEngine`];
 });
 
 export const getLastUserChoiceQueryDiscoveryPath = createSelector(
-    [getSettingsData, selectQueryDraft],
+    [selectSettingsData, selectQueryDraft],
     (data, {settings}) => {
         return data[`local::${settings?.cluster}::queryTracker::lastDiscoveryPath`];
     },
 );
 
 export const getLastUserChoiceQueryChytClique = createSelector(
-    [getSettingsData, selectQueryDraft],
+    [selectSettingsData, selectQueryDraft],
     (data, {settings}) => {
         return data[`local::${settings?.cluster}::queryTracker::lastChytClique`];
     },
 );
 
 export const getLastUserChoiceYqlVersion = createSelector(
-    [getSettingsData, selectQueryDraft],
+    [selectSettingsData, selectQueryDraft],
     (data, {settings}) => {
         return data[`local::${settings?.cluster}::queryTracker::lastYqlVersion`];
     },
 );
 
-export const getQueryTokens = createSelector([getSettingsData], (data) => {
+export const getQueryTokens = createSelector([selectSettingsData], (data) => {
     return data['global::queryTracker::tokens'] || [];
 });

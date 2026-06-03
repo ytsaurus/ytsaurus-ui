@@ -1,10 +1,10 @@
 import {createSelector} from 'reselect';
-import {getSettingsData} from './settings-base';
+import {selectSettingsData} from './settings-base';
 
-export const selectShowAiChat = createSelector([getSettingsData], (data) => {
+export const selectShowAiChat = createSelector([selectSettingsData], (data) => {
     return data['global::development::showAiChat'];
 });
 
-export const shouldUseYqlTypes = createSelector([getSettingsData], (data) => {
+export const shouldUseYqlTypes = createSelector([selectSettingsData], (data) => {
     return data['global::development::yqlTypes'];
 });

@@ -2,7 +2,7 @@ import {createSelector} from 'reselect';
 import uniq_ from 'lodash/uniq';
 import compact_ from 'lodash/compact';
 
-import {getSettingsData} from '../../../store/selectors/settings/settings-base';
+import {selectSettingsData} from '../../../store/selectors/settings/settings-base';
 import {
     type SchedulingColumn,
     isSchedulingColumnName,
@@ -22,7 +22,7 @@ const DEFAULT_COLUMNS: Array<SchedulingColumn> = [
     'actions',
 ];
 
-export const getSchedulingOverivewColumns = createSelector([getSettingsData], (data) => {
+export const getSchedulingOverivewColumns = createSelector([selectSettingsData], (data) => {
     const columns = data['global::scheduling::overviewColumns'];
     if (!columns) {
         return [...DEFAULT_COLUMNS];
