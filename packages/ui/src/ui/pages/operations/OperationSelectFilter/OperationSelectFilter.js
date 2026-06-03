@@ -11,6 +11,7 @@ export default class OperationSelectFilter extends Component {
     static propTypes = {
         // from props
         name: PropTypes.string.isRequired,
+        label: PropTypes.string,
         withCounters: PropTypes.bool,
         type: PropTypes.string,
         // from connect
@@ -58,7 +59,7 @@ export default class OperationSelectFilter extends Component {
     onCheckChange = (val) => this.props.updateFilter(this.props.name, val);
 
     render() {
-        const {name, value, type, placeholder, ...props} = this.props;
+        const {name, label, value, type, placeholder, ...props} = this.props;
         const {multiple} = this.props;
 
         const placeHolder = 'function' === typeof placeholder ? placeholder(value) : placeholder;
@@ -68,13 +69,13 @@ export default class OperationSelectFilter extends Component {
         return (
             <Select
                 hideFilter={true}
+                label={label ?? hammer.format['FirstUppercase'](name) + ':'}
                 {...props}
                 placeholder={placeHolder}
                 value={Array.isArray(value) ? value : [value]}
                 type={type}
                 items={this.items}
                 onUpdate={(vals) => onChange(multiple ? vals : vals[0])}
-                label={hammer.format['FirstUppercase'](name) + ':'}
             />
         );
     }

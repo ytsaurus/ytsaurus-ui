@@ -22,6 +22,7 @@ import {
     selectTotalTimeIO,
 } from '../../../../store/selectors/job/detail';
 
+import i18n from './i18n';
 import './StatisticsIO.scss';
 
 const block = cn('job-statistics-io');
@@ -32,19 +33,19 @@ const getTableColumns = () => {
     return {
         items: {
             table: {
-                caption: 'Table',
+                caption: i18n('field_table'),
                 align: 'left',
             },
             busy_time: {
-                caption: 'Busy time',
+                caption: i18n('field_busy-time'),
                 align: 'right',
             },
             bytes: {
-                caption: 'Bytes',
+                caption: i18n('field_bytes'),
                 align: 'right',
             },
             idle_time: {
-                caption: 'Idle time',
+                caption: i18n('field_idle-time'),
                 align: 'right',
             },
         },
@@ -95,27 +96,27 @@ const selectItems = createSelector(
         averageGpuMemory,
     ) =>
         compact_([
-            {key: 'total time waiting to read data', value: hammer.format['TimeDuration'](read)},
-            {key: 'total time waiting to write data', value: hammer.format['TimeDuration'](write)},
+            {key: i18n('field_total-time-read'), value: hammer.format['TimeDuration'](read)},
+            {key: i18n('field_total-time-write'), value: hammer.format['TimeDuration'](write)},
             isFinite_(averageUserCpuTime) && {
-                key: 'average user cpu time per second',
+                key: i18n('field_average-user-cpu-time'),
                 value: hammer.format['Number'](averageUserCpuTime, {digits: 3}),
             },
             isFinite_(averageWaitCpuTime) && {
-                key: 'average wait cpu time per second',
+                key: i18n('field_average-wait-cpu-time'),
                 value: hammer.format['Number'](averageWaitCpuTime, {digits: 3}),
             },
-            {key: 'gpu devices', value: hammer.format['Number'](gpuDevices)},
+            {key: i18n('field_gpu-devices'), value: hammer.format['Number'](gpuDevices)},
             isFinite_(averageGpuUtilization) && {
-                key: 'average gpu utilization',
+                key: i18n('field_average-gpu-utilization'),
                 value: hammer.format['Percent'](averageGpuUtilization * 100),
             },
             isFinite_(averageGpuPower) && {
-                key: 'average gpu power',
+                key: i18n('field_average-gpu-power'),
                 value: hammer.format['Number'](averageGpuPower, {digits: 3}),
             },
             isFinite_(averageGpuMemory) && {
-                key: 'average gpu memory usage',
+                key: i18n('field_average-gpu-memory'),
                 value: hammer.format['Bytes'](averageGpuMemory),
             },
         ]),
@@ -132,7 +133,7 @@ export default function StatisticsIO() {
         <div className={block()}>
             <MetaTable className={block('meta')} items={items} />
 
-            <div className={headingBlock({size: 'm'}, block('heading'))}>Input</div>
+            <div className={headingBlock({size: 'm'}, block('heading'))}>{i18n('title_input')}</div>
             <ElementsTable
                 size="s"
                 theme="light"
@@ -146,7 +147,7 @@ export default function StatisticsIO() {
 
             {output.length > 0 && (
                 <React.Fragment>
-                    <div className={headingBlock({size: 'm'}, block('heading'))}>Output</div>
+                    <div className={headingBlock({size: 'm'}, block('heading'))}>{i18n('title_output')}</div>
                     <ElementsTable
                         size="s"
                         theme="light"

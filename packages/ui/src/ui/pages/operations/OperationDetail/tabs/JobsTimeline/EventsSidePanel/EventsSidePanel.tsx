@@ -13,6 +13,7 @@ import {selectOperationId} from '../../../../../../store/selectors/operations/op
 import './EventsSidePanel.scss';
 import {MetaData} from '../EventsTimeline/MetaData';
 import {SidePanelEmpty} from './SidePanelEmpty';
+import i18n from './i18n';
 
 const block = cn('yt-events-side-panel');
 
@@ -30,7 +31,7 @@ export const EventsSidePanel: FC = () => {
             <Flex alignItems="center" justifyContent="space-between">
                 <Flex alignItems="center" justifyContent="center" gap={1}>
                     <Text variant="subheader-3">
-                        Job id{' '}
+                        {i18n('field_job-id')}{' '}
                         <Link
                             theme="primary"
                             url={`/${cluster}/job/${operationId}/${id}`}

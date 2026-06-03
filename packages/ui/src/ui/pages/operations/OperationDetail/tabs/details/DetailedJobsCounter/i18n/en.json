@@ -1,0 +1,11 @@
+{
+  "action_hide-empty": "Hide empty",
+  "action_help": "Help",
+  "action_view": "View",
+  "alert_no-items": "No items",
+  "title_interrupted": "Interrupted",
+  "title_non-interrupted": "Non interrupted",
+  "title_non-scheduled": "Non scheduled",
+  "title_scheduled": "Scheduled",
+  "title_statistics": "{{type}} statistics: {{caption}}"
+}

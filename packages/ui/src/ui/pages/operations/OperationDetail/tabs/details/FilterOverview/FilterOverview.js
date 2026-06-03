@@ -11,6 +11,7 @@ import Modal from '../../../../../../components/Modal/Modal';
 import {Yson, YsonSettingsPropTypes} from '../../../../../../components/Yson/Yson';
 
 import withVisible from '../../../../../../hocs/withVisible';
+import i18n from './i18n';
 
 const block = cn('specification');
 
@@ -39,14 +40,14 @@ function FilterOverview({type, filters, typedFilters, visible, handleShow, handl
             </span>
 
             <Button view="flat-secondary" size="m" onClick={handleShow}>
-                View
+                {i18n('action_view')}
             </Button>
 
             <Modal
                 onCancel={handleClose}
                 content={modalContent}
                 visible={visible}
-                title="Filters"
+                title={i18n('title_filters')}
                 footer={false}
             />
         </li>

@@ -1,0 +1,6 @@
+{
+  "value_processed-by-jobs": "processed by jobs",
+  "value_teleported": "teleported",
+  "title_data-flow": "Data flow: {{from}} -> {{to}}",
+  "title_uncommitted": "Uncommitted"
+}

@@ -2,6 +2,8 @@ import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 import {v4 as uuidv4} from 'uuid';
 
+import i18n from './i18n';
+
 import moment from 'moment';
 
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
@@ -131,7 +133,7 @@ export function updateOperationsByParams(cluster, parameters) {
                     dispatch({
                         type: UPDATE_OPERATIONS_FAILURE,
                         data: {
-                            message: 'Could not load operations.',
+                            message: i18n('alert_load-operations-error'),
                             details: error,
                         },
                     });

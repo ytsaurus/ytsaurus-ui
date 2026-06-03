@@ -9,6 +9,7 @@ import {abortAndReset, loadJobSpecification} from '../../../../store/actions/job
 import {selectJobPivotKeysData} from '../../../../store/selectors/job/detail';
 import {type RootState} from '../../../../store/reducers';
 import unipika from '../../../../common/thor/unipika';
+import i18n from './i18n';
 
 const block = cn('job-pivot-keys');
 const ElementsTable: any = ElementsTableRaw;
@@ -24,7 +25,9 @@ const getTableColumns = () => {
         items: {
             id: {
                 name: 'id',
-                caption: 'Chunk ID',
+                get caption() {
+                    return i18n('field_chunk-id');
+                },
                 align: 'left',
             },
             from: {

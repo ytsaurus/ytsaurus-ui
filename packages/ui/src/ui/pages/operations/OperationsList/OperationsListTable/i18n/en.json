@@ -1,0 +1,13 @@
+{
+  "action_copy-operation-id": "Copy operation id",
+  "context_duration": "Duration",
+  "action_show-pools-weights": "Show pools and weights",
+  "action_view": "View",
+  "action_edit-pools-weights": "Edit pools and weights",
+  "title_user": "User",
+  "title_pool": "Pool",
+  "title_weight": "Weight",
+  "field_user-pool": "User / Pool",
+  "field_state-progress": "State / Progress",
+  "alert_change-filter-settings": "Please, change your filtering settings to see search results"
+}

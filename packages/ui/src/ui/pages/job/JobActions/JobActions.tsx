@@ -28,6 +28,8 @@ import {type YTError} from '../../../types';
 import {toaster} from '../../../utils/toaster';
 import {type Job} from '../../../pages/operations/OperationDetail/tabs/Jobs/job-selector';
 
+import i18n from './i18n';
+
 import './JobActions.scss';
 
 type ActionName = 'interrupt' | 'abort' | 'abandon';
@@ -152,7 +154,7 @@ const dumpJobContext = (id: string, path: string, cluster: string) => {
                 theme: 'success',
                 autoHiding: false,
                 name: 'dump job context',
-                title: 'Job context has been dumped.',
+                title: i18n('alert_dump-job-context-success'),
                 content: <Link url={`/${cluster}/navigation?path=${path}`}>{path}</Link>,
             });
         })
@@ -161,9 +163,9 @@ const dumpJobContext = (id: string, path: string, cluster: string) => {
                 theme: 'danger',
                 autoHiding: false,
                 name: 'dump job context',
-                title: 'Could not dump job context.',
-                content: err?.message || 'Oops, something went wrong',
-                actions: [{label: ' view', onClick: () => showErrorPopup(err)}],
+                title: i18n('alert_dump-job-context-error'),
+                content: err?.message || i18n('alert_unknown-error'),
+                actions: [{label: i18n('action_view'), onClick: () => showErrorPopup(err)}],
             });
         });
 };
@@ -171,11 +173,7 @@ const dumpJobContext = (id: string, path: string, cluster: string) => {
 function ActionBlock(action: Action) {
     const dispatch = useDispatch();
 
-    const message = action.message || (
-        <span>
-            Are you sure you want to <strong>{action.name}</strong> the job?
-        </span>
-    );
+    const message = action.message || i18n('confirm_job-action', {actionName: action.name});
     const {job} = useSelector((state: RootState) => state.job.general);
     const {id, operationId} = job as PreparedJob;
 
@@ -269,7 +267,7 @@ export default function JobActions({className}: {className?: string}) {
                 <DropdownMenu items={additionalActions} />
 
                 <Dialog size="m" open={jobShellVisible} onClose={closeJobShellModal}>
-                    <Dialog.Header caption="Job shell" />
+                    <Dialog.Header caption={i18n('title_job-shell')} />
                     <Dialog.Body>
                         <div className={block('code')}>
                             <div className={codeBlock({theme: 'default'})}>{jobShellCommand}</div>
@@ -278,15 +276,15 @@ export default function JobActions({className}: {className?: string}) {
                     <Dialog.Footer
                         onClickButtonCancel={closeJobShellModal}
                         onClickButtonApply={onCopyClick}
-                        textButtonCancel="Cancel"
-                        textButtonApply="Copy"
+                        textButtonCancel={i18n('action_cancel')}
+                        textButtonApply={i18n('action_copy')}
                         showError={false}
                         preset="success"
                     />
                 </Dialog>
 
                 <Dialog size="m" open={dumpContextVisible} onClose={closeDumpContextModal}>
-                    <Dialog.Header caption="Dump job context" />
+                    <Dialog.Header caption={i18n('title_dump-job-context')} />
                     <Dialog.Body>
                         <div className={block('dump-context')}>
                             <PathEditor
@@ -299,8 +297,8 @@ export default function JobActions({className}: {className?: string}) {
                     <Dialog.Footer
                         onClickButtonCancel={closeDumpContextModal}
                         onClickButtonApply={onDumpContextConfirm}
-                        textButtonCancel="Cancel"
-                        textButtonApply="Confirm"
+                        textButtonCancel={i18n('action_cancel')}
+                        textButtonApply={i18n('action_confirm')}
                         showError={false}
                         preset="success"
                     />

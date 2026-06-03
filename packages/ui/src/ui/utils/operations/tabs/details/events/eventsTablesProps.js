@@ -5,6 +5,9 @@ import i18n from './i18n';
 export const columns = {
     state: {
         align: 'left',
+        get caption() {
+            return i18n('field_state');
+        },
         get(event) {
             return event.state;
         },
@@ -51,12 +54,18 @@ export const columns = {
     },
     duration: {
         align: 'right',
+        get caption() {
+            return i18n('field_duration');
+        },
         get(event) {
             return event.duration;
         },
     },
     start_time: {
         align: 'left',
+        get caption() {
+            return i18n('field_start-time');
+        },
         get(event) {
             return event.time;
         },

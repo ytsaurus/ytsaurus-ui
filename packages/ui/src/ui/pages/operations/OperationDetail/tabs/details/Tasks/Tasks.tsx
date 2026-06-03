@@ -13,6 +13,7 @@ import hammer from '../../../../../../common/hammer';
 import ypath from '../../../../../../common/thor/ypath';
 
 import './Tasks.scss';
+import i18n from './i18n';
 import DetailedJobsCounter from '../DetailedJobsCounter/DetailedJobsCounter';
 import {tasksTablesProps} from '../../../../../../utils/operations/tabs/details/tasks';
 import {hasProgressTasks} from '../../../../../../utils/operations/tabs/details/data-flow';
@@ -134,7 +135,7 @@ class Tasks extends React.Component<Props, State> {
 
                 return (
                     <DetailedJobsCounter
-                        title={`Aborted statistics: ${item.caption}`}
+                        title={i18n('context_aborted-statistics', {caption: item.caption})}
                         secondaryValue={nonScheduled.total}
                         primaryValue={scheduled.total}
                         type="aborted"
@@ -150,7 +151,7 @@ class Tasks extends React.Component<Props, State> {
 
                 return (
                     <DetailedJobsCounter
-                        title={`Completed statistics: ${item.caption}`}
+                        title={i18n('context_completed-statistics', {caption: item.caption})}
                         secondaryValue={interrupted.total}
                         primaryValue={nonInterrupted.total}
                         type="completed"
@@ -187,14 +188,14 @@ class Tasks extends React.Component<Props, State> {
                                 clickable: Boolean(expandable),
                             })}
                         >
-                            <span title={`Task ${caption}`}>{caption}</span>
+                            <span title={i18n('context_task', {caption})}>{caption}</span>
                             {!isTotal && (
                                 <React.Fragment>
                                     <br />
                                     {typeof item.jobType !== 'undefined' && (
                                         <span
                                             className={'elements-secondary-text'}
-                                            title={`Job type ${jobType}`}
+                                            title={i18n('context_job-type', {jobType})}
                                         >
                                             {jobType}
                                         </span>
@@ -209,7 +210,12 @@ class Tasks extends React.Component<Props, State> {
                 if (!info) {
                     return null;
                 }
-                return <ClickableAttributesButton title={`Tasks: ${caption}`} attributes={info} />;
+                return (
+                    <ClickableAttributesButton
+                        title={i18n('context_tasks-caption', {caption})}
+                        attributes={info}
+                    />
+                );
             },
         };
     }
@@ -247,7 +253,7 @@ class Tasks extends React.Component<Props, State> {
         const {className, jobs, collapsibleSize, collapsed} = this.props;
         return !jobs?.items?.length ? null : (
             <CollapsibleSection
-                name="Tasks"
+                name={i18n('title_tasks')}
                 className={className}
                 size={collapsibleSize}
                 marginDirection="bottom"
@@ -278,6 +284,7 @@ class Tasks extends React.Component<Props, State> {
                         [
                             {
                                 key: 'aborted_jobs_time_ratio',
+                                label: i18n('field_aborted-jobs-time-ratio'),
                                 value: (
                                     <Template.FormattedValue
                                         value={abortedJobsTimeRatio}
@@ -287,6 +294,7 @@ class Tasks extends React.Component<Props, State> {
                             },
                             {
                                 key: 'aborted_jobs_time',
+                                label: i18n('field_aborted-jobs-time'),
                                 value: (
                                     <Template.FormattedValue
                                         value={abortedJobsTime}
@@ -296,6 +304,7 @@ class Tasks extends React.Component<Props, State> {
                             },
                             {
                                 key: 'completed_jobs_time',
+                                label: i18n('field_completed-jobs-time'),
                                 value: (
                                     <Template.FormattedValue
                                         value={completedJobsTime}
@@ -307,6 +316,7 @@ class Tasks extends React.Component<Props, State> {
                         [
                             {
                                 key: 'average_read_data_rate',
+                                label: i18n('field_average-read-data-rate'),
                                 value: (
                                     <Template.FormattedValue
                                         value={averageReadDataRate}
@@ -316,6 +326,7 @@ class Tasks extends React.Component<Props, State> {
                             },
                             {
                                 key: 'average_read_row_rate',
+                                label: i18n('field_average-read-row-rate'),
                                 value: (
                                     <Template.FormattedValue
                                         value={averageReadRowRate}

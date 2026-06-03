@@ -8,6 +8,7 @@ import hammer from '../../../../../../common/hammer';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import i18n from './i18n';
 
 dayjs.extend(relativeTime);
 dayjs.extend(duration);
@@ -71,23 +72,23 @@ export const MetaData: FC<Props> = ({meta, showCopyButton, className}) => {
                 />
             )}
             <MetaItem
-                title="Address"
+                title={i18n('field_address')}
                 value={hammer.format['Address'](meta.address)}
                 showCopy={showCopyButton}
             />
             <MetaItem
-                title="Start"
+                title={i18n('field_start')}
                 value={hammer.format['DateTime'](meta.startTime)}
                 showCopy={showCopyButton}
             />
             <MetaItem
-                title="End"
+                title={i18n('field_end')}
                 value={meta.endTime ? hammer.format['DateTime'](meta.endTime) : '—'}
                 showCopy={showCopyButton}
             />
             {duration && (
                 <MetaItem
-                    title="Duration"
+                    title={i18n('field_duration')}
                     value={hammer.format['TimeDuration'](duration.asMilliseconds())}
                     showCopy={showCopyButton}
                 />

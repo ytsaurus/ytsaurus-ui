@@ -173,6 +173,9 @@ function prepareColumns() {
     forEach_(states, (state) => {
         columns[state] = {
             sort: false,
+            get caption() {
+                return i18n(`field_${state}`);
+            },
             align: 'right',
         };
     });

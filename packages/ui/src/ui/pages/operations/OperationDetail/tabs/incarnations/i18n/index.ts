@@ -1,4 +1,4 @@
-import {addI18Keysets} from '../../../../../../i18n/index';
+import {addI18Keysets} from '../../../../../../i18n';
 
 import dicts from './dicts';
 

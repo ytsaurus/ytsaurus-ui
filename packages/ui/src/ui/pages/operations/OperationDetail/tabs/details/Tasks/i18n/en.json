@@ -1,0 +1,13 @@
+{
+  "title_tasks": "Tasks",
+  "field_aborted-jobs-time-ratio": "Aborted jobs time ratio",
+  "field_aborted-jobs-time": "Aborted jobs time",
+  "field_completed-jobs-time": "Completed jobs time",
+  "field_average-read-data-rate": "Average read data rate",
+  "field_average-read-row-rate": "Average read row rate",
+  "context_aborted-statistics": "Aborted statistics: {{caption}}",
+  "context_completed-statistics": "Completed statistics: {{caption}}",
+  "context_task": "Task {{caption}}",
+  "context_job-type": "Job type {{jobType}}",
+  "context_tasks-caption": "Tasks: {{caption}}"
+}

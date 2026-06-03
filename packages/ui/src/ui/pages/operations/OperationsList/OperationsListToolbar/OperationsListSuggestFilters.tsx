@@ -2,6 +2,8 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 
+import i18n from './i18n';
+
 import OperationSuggestFilter from '../../../../pages/operations/OperationSuggestFilter/OperationSuggestFilter';
 import {updateFilter} from '../../../../store/actions/operations/list';
 import {getActualValue} from '../../../../pages/operations/selectors';
@@ -31,7 +33,7 @@ const mapPoolTreeStateToProps = (state: RootState) => {
     return {
         ...mapStateToPropsByFilterName(state, 'poolTree'),
         states: selectOperationsPoolTreeSuggestions(state),
-        placeholder: 'Pool tree...',
+        placeholder: i18n('field_pool-tree'),
     };
 };
 
@@ -43,7 +45,7 @@ const mapPoolStateToProps = (state: RootState) => {
     return {
         ...mapStateToPropsByFilterName(state, 'pool'),
         states: selectOperationsPoolSuggestions(state),
-        placeholder: 'Filter pool...',
+        placeholder: i18n('field_filter-pool'),
     };
 };
 export const OperationsListPoolSuggestFilter = connect(mapPoolStateToProps, {
@@ -56,7 +58,7 @@ const mapUserStateToProps = (state: RootState) => {
     return {
         ...mapStateToPropsByFilterName(state, 'user'),
         states: selectOperationsUserSuggestions(state),
-        placeholder: fixedStartedByFilter || 'Started by...',
+        placeholder: fixedStartedByFilter || i18n('field_started-by'),
     };
 };
 export const OperationsListUserSuggestFilter = connect(mapUserStateToProps, {
@@ -78,7 +80,7 @@ function OperationsAccessibleForFilterImpl() {
                 },
                 width: 'max',
                 pin: 'round-clear',
-                placeholder: 'Accessible for...',
+                placeholder: i18n('field_accessible-for'),
                 hasClear: true,
             })}
         </div>

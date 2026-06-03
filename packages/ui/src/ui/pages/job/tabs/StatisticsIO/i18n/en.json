@@ -1,0 +1,16 @@
+{
+  "field_table": "Table",
+  "field_busy-time": "Busy time",
+  "field_bytes": "Bytes",
+  "field_idle-time": "Idle time",
+  "field_total-time-read": "total time waiting to read data",
+  "field_total-time-write": "total time waiting to write data",
+  "field_average-user-cpu-time": "average user cpu time per second",
+  "field_average-wait-cpu-time": "average wait cpu time per second",
+  "field_gpu-devices": "gpu devices",
+  "field_average-gpu-utilization": "average gpu utilization",
+  "field_average-gpu-power": "average gpu power",
+  "field_average-gpu-memory": "average gpu memory usage",
+  "title_input": "Input",
+  "title_output": "Output"
+}

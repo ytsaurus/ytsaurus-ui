@@ -41,6 +41,7 @@ import {Host} from '../../../containers/Host/Host';
 import './JobGeneral.scss';
 import {UI_TAB_SIZE} from '../../../constants/global';
 import {YsonDownloadButton} from '../../../components/DownloadAttributesButton';
+import i18n from './i18n';
 
 const block = cn('job-general');
 
@@ -87,11 +88,11 @@ export default function JobGeneral() {
     const logsTab = UIFactory.renderJobLogsTab();
 
     const showSettings: Record<string, TabSettings> = {
-        [Tab.DETAILS]: {show: true},
-        [Tab.ATTRIBUTES]: {show: true},
-        [Tab.STATISTICS]: {show: true},
-        [Tab.SPECIFICATION]: {show: true},
-        [Tab.LOGS]: {show: Boolean(logsTab)},
+        [Tab.DETAILS]: {show: true, title: i18n('tab_details')},
+        [Tab.ATTRIBUTES]: {show: true, title: i18n('tab_attributes')},
+        [Tab.STATISTICS]: {show: true, title: i18n('tab_statistics')},
+        [Tab.SPECIFICATION]: {show: true, title: i18n('tab_specification')},
+        [Tab.LOGS]: {show: Boolean(logsTab), title: i18n('tab_logs')},
     };
     const tabsProps = makeTabProps(path, Tab, showSettings);
 
@@ -105,17 +106,17 @@ export default function JobGeneral() {
             <div className={block(null, 'elements-section')}>
                 <div className={block('header')}>
                     <span className={block('heading')}>
-                        {hammer.format['ReadableField'](type)} job
+                        {hammer.format['ReadableField'](type)} {i18n('title_job')}
                     </span>
                     <Flex alignItems="center" gap={1}>
                         <Statuslabel label={state} renderPlaque />
                         {Boolean(interruption_info) && (
                             <Label theme="warning">
-                                Interrupted (
-                                {hammer.format['ReadableField'](
-                                    interruption_info?.interruption_reason,
-                                )}
-                                )
+                                {i18n('value_interrupted', {
+                                    reason: hammer.format['ReadableField'](
+                                        interruption_info?.interruption_reason,
+                                    ),
+                                })}
                             </Label>
                         )}
                     </Flex>
@@ -125,7 +126,7 @@ export default function JobGeneral() {
                 {isSpeculativeJob && (
                     <Label
                         className={block('speculative-label')}
-                        text="Speculative job"
+                        text={i18n('value_speculative-job')}
                         theme="warning"
                         type="text"
                     />
@@ -136,7 +137,7 @@ export default function JobGeneral() {
                     items={[
                         [
                             {
-                                key: 'operation id',
+                                key: i18n('field_operation-id'),
                                 value: (
                                     <Template.Link
                                         url={operationUrl}
@@ -146,13 +147,13 @@ export default function JobGeneral() {
                                 ),
                             },
                             {
-                                key: 'job id',
+                                key: i18n('field_job-id'),
                                 value: (
                                     <JobBreadcrumbs id={id} className={block('meta-breadcrumbs')} />
                                 ),
                             },
                             {
-                                key: 'host',
+                                key: i18n('field_host'),
                                 value: (
                                     <span className={block('meta-host')}>
                                         <Host address={address!} />
@@ -164,11 +165,11 @@ export default function JobGeneral() {
                                 visible: Boolean(address),
                             },
                             {
-                                key: 'type',
+                                key: i18n('field_type'),
                                 value: <Template.Value value={type} />,
                             },
                             {
-                                key: 'Monitoring descriptor',
+                                key: i18n('field_monitoring-descriptor'),
                                 value: (
                                     <span className={block('meta-host')}>
                                         <Template.Id id={monitoring_descriptor} />
@@ -187,26 +188,26 @@ export default function JobGeneral() {
                                 visible: Boolean(monitoring_descriptor),
                             },
                             {
-                                key: 'Pool tree',
+                                key: i18n('field_pool-tree'),
                                 value: pool_tree,
                                 visible: Boolean(pool_tree),
                             },
                         ],
                         [
                             {
-                                key: 'started',
+                                key: i18n('field_started'),
                                 value: <Template.Time time={startTime} valueFormat="DateTime" />,
                             },
                             {
-                                key: 'finished',
+                                key: i18n('field_finished'),
                                 value: <Template.Time time={finishTime} valueFormat="DateTime" />,
                             },
                             {
-                                key: 'duration',
+                                key: i18n('field_duration'),
                                 value: <Template.Time time={duration} valueFormat="TimeDuration" />,
                             },
                             {
-                                key: 'Stale',
+                                key: i18n('field_stale'),
                                 value: (
                                     <>
                                         {Boolean('is_stale').toString() + ' '}
@@ -225,7 +226,7 @@ export default function JobGeneral() {
                                             window.open(job?.prepareCommandURL('get_job_input'))
                                         }
                                     >
-                                        get_job_input
+                                        {'get_job_input'}
                                     </ClickableText>
                                 ),
                             },
@@ -237,7 +238,7 @@ export default function JobGeneral() {
                                             window.open(job?.prepareCommandURL('get_job_stderr'))
                                         }
                                     >
-                                        get_job_stderr
+                                        {'get_job_stderr'}
                                     </ClickableText>
                                 ),
                             },
@@ -256,7 +257,7 @@ export default function JobGeneral() {
                                                       )
                                                   }
                                               >
-                                                  get_job_fail_context
+                                                  {'get_job_fail_context'}
                                               </ClickableText>
                                           ),
                                       },
@@ -265,7 +266,7 @@ export default function JobGeneral() {
                                 ? []
                                 : [
                                       {
-                                          key: 'Job ssh',
+                                          key: i18n('field_job-ssh'),
                                           value: (
                                               <span className={block('meta-ssh')}>
                                                   <span
@@ -284,7 +285,7 @@ export default function JobGeneral() {
                                       },
                                   ]),
                             {
-                                key: 'Job trace',
+                                key: i18n('field_job-trace'),
                                 value: (
                                     <Link target="_blank" href={traceUrl!}>
                                         {traceTitle}
@@ -303,7 +304,7 @@ export default function JobGeneral() {
                         message={preemptionReason}
                         actions={
                             <ClipboardButton
-                                title="Copy reason"
+                                title={i18n('action_copy-reason')}
                                 view="flat-secondary"
                                 size="s"
                                 text={preemptionReason}

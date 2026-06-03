@@ -1,0 +1,5 @@
+{
+  "field_omit-node-directory": "Omit node directory",
+  "field_omit-input-table-specs": "Omit input table specs",
+  "field_omit-output-table-specs": "Omit output table specs"
+}

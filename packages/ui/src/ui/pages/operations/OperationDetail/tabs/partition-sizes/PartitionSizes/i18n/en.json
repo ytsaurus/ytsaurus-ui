@@ -1,0 +1,5 @@
+{
+  "field_partition-count": "partition count",
+  "field_partition-data-weight": "partition data weight",
+  "context_tooltip": "<b>{{y}}</b> jobs have estimated input job size from {{x0}} to {{x1}}"
+}

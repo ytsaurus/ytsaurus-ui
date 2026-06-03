@@ -36,6 +36,7 @@ import {type RootState} from './../../../store/reducers';
 import {type OperationDetailActionType} from '../../reducers/operations/detail';
 import {JSONSerializer} from '../../../common/yt-api';
 import {toaster} from '../../../utils/toaster';
+import i18n from './i18n';
 
 const operationDetailsRequests = new CancelHelper();
 
@@ -169,16 +170,16 @@ export function getOperation(
                             name: 'get operation',
                             autoHiding: false,
                             theme: 'danger',
-                            title: 'Failed to load operation',
+                            title: i18n('alert_load-operation-error'),
                             content: error.message,
-                            actions: [{label: ' view', onClick: () => showErrorPopup(error)}],
+                            actions: [{label: i18n('action_view'), onClick: () => showErrorPopup(error)}],
                         });
                     }
 
                     dispatch({
                         type: GET_OPERATION.FAILURE,
                         data: {
-                            message: `Error occured when loading operation "${id}"`,
+                            message: i18n('alert_load-operation-message', {id}),
                             details: error,
                         },
                     });
@@ -222,7 +223,7 @@ export function loadOperationPoolTreeConfigs({
                 toasterName: 'operationTreeConfigs',
                 skipSuccessToast: true,
                 batchType: 'v3' as const,
-                errorTitle: 'Failed to load tree limits',
+                errorTitle: i18n('alert_load-tree-limits-error'),
             },
         );
 
@@ -237,7 +238,7 @@ export function loadOperationPoolTreeConfigs({
                 toasterName: 'operationTreeConfigs',
                 skipSuccessToast: true,
                 batchType: 'v3' as const,
-                errorTitle: 'Failed to load tree configs',
+                errorTitle: i18n('alert_load-tree-configs-error'),
             },
         );
 

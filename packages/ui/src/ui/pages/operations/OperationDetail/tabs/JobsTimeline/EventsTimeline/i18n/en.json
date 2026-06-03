@@ -1,0 +1,7 @@
+{
+  "field_address": "Address",
+  "field_start": "Start",
+  "field_end": "End",
+  "field_duration": "Duration",
+  "field_job-id": "Job id {{jobId}}"
+}

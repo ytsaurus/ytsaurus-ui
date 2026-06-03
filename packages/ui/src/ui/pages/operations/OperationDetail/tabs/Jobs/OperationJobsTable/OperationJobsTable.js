@@ -46,6 +46,7 @@ import {UI_COLLAPSIBLE_SIZE} from '../../../../../../constants/global';
 import {JobDetails} from './JobDetails';
 import EllipsisIcon from '@gravity-ui/icons/svgs/ellipsis.svg';
 import {StatusInfo} from './StatusInfo';
+import i18n from './i18n';
 
 const block = cn('operation-detail-jobs');
 
@@ -82,68 +83,92 @@ class OperationJobsTable extends React.Component {
         {
             name: 'abort',
             modalKey: 'job_abort',
-            successMessage: 'Successfully aborted the job.',
-            errorMessage: 'Could not abort the job.',
-            text: 'Abort',
-            message:
-                'Aborting job will cause losing its progress, are you sure you want to proceed?',
+            get successMessage() {
+                return i18n('alert_abort-success');
+            },
+            get errorMessage() {
+                return i18n('alert_abort-error');
+            },
+            get text() {
+                return i18n('action_abort');
+            },
+            get message() {
+                return i18n('confirm_abort-job');
+            },
             confirmationText: TEXT.pleaseProceedText,
         },
         {
             name: 'abandon',
             modalKey: 'job_abandon',
-            successMessage: 'Successfully abandoned the job.',
-            errorMessage: 'Could not abandon the job.',
-            text: 'Abandon',
-            message:
-                'Abandoning job will cause losing its progress, are you sure you want to proceed?',
+            get successMessage() {
+                return i18n('alert_abandon-success');
+            },
+            get errorMessage() {
+                return i18n('alert_abandon-error');
+            },
+            get text() {
+                return i18n('action_abandon');
+            },
+            get message() {
+                return i18n('confirm_abandon-job');
+            },
             confirmationText: TEXT.pleaseProceedText,
         },
         {
             name: 'input_context',
             modalKey: 'job_input_context',
-            message: (
-                <span>
-                    You are about to <strong>dump input context</strong> of the job
-                </span>
-            ),
-            text: 'Dump input context',
+            get message() {
+                return (
+                    <span>
+                        {i18n('context_dump-input-context')}{' '}
+                        <strong>{i18n('context_dump-input-context-label')}</strong>{' '}
+                        {i18n('context_dump-input-context-suffix')}
+                    </span>
+                );
+            },
+            get text() {
+                return i18n('action_dump-input-context');
+            },
             successMessageTemplate: (data) => {
                 const url = `/${this.props.cluster}/navigation?path=${data}`;
                 return (
                     <span>
-                        Successfully dumped the job input context <Link url={url}>here</Link>
+                        {i18n('alert_dump-success')}{' '}
+                        <Link url={url}>{i18n('action_dump-success-here')}</Link>
                     </span>
                 );
             },
-            errorMessage: 'Could not dump the job input context.',
+            get errorMessage() {
+                return i18n('alert_dump-error');
+            },
         },
     ];
 
-    prepareJobAction = ({text, ...settings}) => {
+    prepareJobAction = (actionSettings) => {
         const {login, promptAction} = this.props;
-        const message = settings.message || (
-            <span>
-                You are about to <strong>{settings.name}</strong> a job.
-            </span>
-        );
 
         return {
-            text,
-            action: (params) =>
-                promptAction({
-                    ...settings,
+            get text() {
+                return actionSettings.text;
+            },
+            action: (params) => {
+                const message = actionSettings.message || (
+                    <span>{i18n('context_about-to-job', {name: actionSettings.name})}</span>
+                );
+                return promptAction({
+                    ...actionSettings,
                     message,
                     handler: ({currentOption}) => {
                         const finalParams = {
                             ...params,
-                            name: settings.name,
+                            name: actionSettings.name,
                             currentOption,
                             login,
                         };
                         return performJobAction(finalParams);
                     },
-                }),
+                });
+            },
         };
     };
 
@@ -163,7 +188,12 @@ class OperationJobsTable extends React.Component {
         return (
             <div>
                 <div className={block('id', 'elements-monospace')}>
-                    <ClipboardButton text={id} view="flat-secondary" size="s" title="Copy job id" />
+                    <ClipboardButton
+                        text={id}
+                        view="flat-secondary"
+                        size="s"
+                        title={i18n('action_copy-job-id')}
+                    />
                     <Link
                         className={block('id-job-link')}
                         routed
@@ -180,7 +210,7 @@ class OperationJobsTable extends React.Component {
                             text={host}
                             view="flat-secondary"
                             size="s"
-                            title="Copy host"
+                            title={i18n('action_copy-host')}
                         />
                         {host}
                     </span>
@@ -203,7 +233,9 @@ class OperationJobsTable extends React.Component {
                                 'elements-monospace elements-ellipsis',
                             )}
                         >
-                            Speculative job for {job_competition_id}
+                            {i18n('context_speculative-job', {
+                                jobCompetitionId: job_competition_id,
+                            })}
                         </span>
                     </Fragment>
                 )}
@@ -247,7 +279,7 @@ class OperationJobsTable extends React.Component {
         const {showJobAttributesModal, operationId} = this.props;
 
         const button = (
-            <Button view="flat-secondary" title="Show actions">
+            <Button view="flat-secondary" title={i18n('action_show-actions')}>
                 <Icon data={EllipsisIcon} size={16} />
             </Button>
         );
@@ -258,7 +290,9 @@ class OperationJobsTable extends React.Component {
 
         const secondGroup = [
             {
-                text: 'Show attributes',
+                get text() {
+                    return i18n('action_show-attributes');
+                },
                 action: () => showJobAttributesModal(operationId, item.id),
             },
         ];
@@ -283,25 +317,33 @@ class OperationJobsTable extends React.Component {
                 id_address: {
                     name: 'id_address',
                     align: 'left',
-                    caption: 'Id / Address',
+                    get caption() {
+                        return i18n('field_id-address');
+                    },
                     sort: false,
                 },
                 task_name: {
                     name: 'task_name',
                     align: 'left',
-                    caption: 'Task name',
+                    get caption() {
+                        return i18n('field_task-name');
+                    },
                     sort: true,
                 },
                 start_time: {
                     name: 'start_time',
                     align: 'left',
-                    caption: 'Start time',
+                    get caption() {
+                        return i18n('field_start-time');
+                    },
                     sort: true,
                 },
                 finish_time: {
                     name: 'finish_time',
                     align: 'left',
-                    caption: 'Finish time',
+                    get caption() {
+                        return i18n('field_finish-time');
+                    },
                     sort: true,
                 },
                 duration: {
@@ -311,22 +353,33 @@ class OperationJobsTable extends React.Component {
                     sort: true,
                     name: 'duration',
                     align: 'left',
+                    get caption() {
+                        return i18n('field_duration');
+                    },
                 },
                 error: {
                     name: 'error',
                     align: 'left',
-                    caption: 'Error / Debug',
+                    get caption() {
+                        return i18n('field_error-debug');
+                    },
                     get: (job) => job.error,
                 },
                 type: {
                     name: 'type',
                     align: 'left',
                     sort: true,
+                    get caption() {
+                        return i18n('field_type');
+                    },
                 },
                 progress: {
                     name: 'progress',
                     align: 'left',
                     sort: true,
+                    get caption() {
+                        return i18n('field_progress');
+                    },
                 },
                 actions: {
                     name: 'actions',
@@ -412,7 +465,7 @@ class OperationJobsTable extends React.Component {
     renderFinishTime(item) {
         return item.state === 'running' ? (
             <span className={block('in-progress', 'elements-ellipsis elements-secondary-text')}>
-                In progress...
+                {i18n('value_in-progress')}
             </span>
         ) : (
             <TemplateTime
@@ -454,7 +507,7 @@ class OperationJobsTable extends React.Component {
                 visible
                 onCancel={hideInputPaths}
                 loading={status === LOADING_STATUS.LOADING}
-                title="Input paths"
+                title={i18n('title_input-paths')}
             >
                 {content}
             </SimpleModal>
@@ -476,7 +529,7 @@ class OperationJobsTable extends React.Component {
                     />
                     {competitiveJobs.length > 0 && (
                         <CollapsibleSection
-                            name="All competitive jobs"
+                            name={i18n('title_all-competitive-jobs')}
                             className={block('competitive-jobs')}
                             collapsed={true}
                             size={collapsibleSize}

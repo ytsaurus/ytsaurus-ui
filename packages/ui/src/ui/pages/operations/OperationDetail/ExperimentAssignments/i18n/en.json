@@ -1,0 +1,10 @@
+{
+  "title_experiments": "Experiments",
+  "field_experiment": "Experiment",
+  "field_group": "Group",
+  "field_ticket": "Ticket",
+  "field_dimension": "Dimension",
+  "field_effect": "Effect",
+  "action_hide": "Hide",
+  "action_show": "Show"
+}

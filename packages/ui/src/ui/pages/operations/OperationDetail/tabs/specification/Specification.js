@@ -25,6 +25,7 @@ import {useAppRumMeasureStart} from '../../../../../rum/rum-app-measures';
 
 import './Specification.scss';
 import ExperimentAssignments from '../../ExperimentAssignments/ExperimentAssignments';
+import i18n from './i18n';
 import {docsUrl} from '../../../../../config';
 import UIFactory from '../../../../../UIFactory';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../../constants/global';
@@ -81,7 +82,7 @@ function Specification({operation, operationId}) {
                 )}
 
                 <CollapsibleSectionStateLess
-                    name="Provided specification"
+                    name={i18n('title_provided-specification')}
                     onToggle={onToggleProvided}
                     collapsed={collapsed.provided}
                     size={UI_COLLAPSIBLE_SIZE}
@@ -104,7 +105,7 @@ function Specification({operation, operationId}) {
 
                 {hasUnrecognized && (
                     <CollapsibleSectionStateLess
-                        name="Unrecognized specification"
+                        name={i18n('title_unrecognized-specification')}
                         onToggle={onToggleUnrecognized}
                         collapsed={collapsed.unrecognized}
                         size={UI_COLLAPSIBLE_SIZE}
@@ -126,7 +127,7 @@ function Specification({operation, operationId}) {
 
                 {fullSpec && (
                     <CollapsibleSectionStateLess
-                        name="Resulting specification"
+                        name={i18n('title_resulting-specification')}
                         onToggle={onToggleResulting}
                         collapsed={collapsed.resulting}
                         size={UI_COLLAPSIBLE_SIZE}

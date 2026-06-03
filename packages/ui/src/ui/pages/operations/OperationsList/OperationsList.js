@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import moment from 'moment';
 
+import i18n from './i18n';
+
 import {YTErrorBlock} from '../../../containers/Block/Block';
 
 import OperationsListTable from './OperationsListTable/OperationsListTable';
@@ -97,7 +99,7 @@ class OperationsList extends Component {
             <div className={block()}>
                 <OperationListUpdater timeRange={timeRange} />
                 {inDashboard && (
-                    <div className={cn('elements-heading')({size: 'l'})}>Operations</div>
+                    <div className={cn('elements-heading')({size: 'l'})}>{i18n('title_operations')}</div>
                 )}
                 <OperationsListToolbar>
                     {hasError && this.renderError()}

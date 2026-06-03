@@ -1,4 +1,11 @@
 {
   "field_task": "Task",
-  "field_estimated-input": "Estimated input"
+  "field_estimated-input": "Estimated input",
+  "field_total": "Total",
+  "field_pending": "Pending",
+  "field_running": "Running",
+  "field_completed": "Completed",
+  "field_failed": "Failed",
+  "field_aborted": "Aborted",
+  "field_lost": "Lost"
 }

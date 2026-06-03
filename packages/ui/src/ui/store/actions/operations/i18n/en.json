@@ -1,0 +1,9 @@
+{
+  "alert_load-operations-error": "Could not load operations.",
+  "alert_load-operation-error": "Failed to load operation",
+  "alert_load-operation-message": "Error occurred when loading operation \"{{id}}\"",
+  "action_view": "View",
+  "alert_load-tree-limits-error": "Failed to load tree limits",
+  "alert_load-tree-configs-error": "Failed to load tree configs",
+  "alert_get-job-attributes-error": "Get job attributes"
+}

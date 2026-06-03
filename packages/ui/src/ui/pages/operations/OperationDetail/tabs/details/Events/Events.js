@@ -20,6 +20,8 @@ import {
     getEventsTableProps,
 } from '../../../../../../utils/operations/tabs/details/events/eventsTablesProps';
 
+import i18n from './i18n';
+
 import './Events.scss';
 
 export const eventsProps = PropTypes.array;
@@ -113,7 +115,7 @@ export default class Events extends React.Component {
                 }
                 return (
                     <ClickableAttributesButton
-                        title={'Event attributes'}
+                        title={i18n('title_event-attributes')}
                         attributes={event.attributes}
                     />
                 );
