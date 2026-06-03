@@ -4,7 +4,7 @@ import UIFactory from '../../../UIFactory';
 import {selectIsAdmin} from '../../../store/selectors/global/is-developer';
 import {getSettingsData} from './settings-base';
 
-export const getNavigationSqlService = createSelector(
+export const selectNavigationSqlService = createSelector(
     [getSettingsData, selectIsAdmin],
     (data, isAdmin) => {
         const value = data['global::navigation::sqlService'];
