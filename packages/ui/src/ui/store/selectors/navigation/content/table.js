@@ -8,7 +8,7 @@ import unipika from '../../../../common/thor/unipika';
 import {createSelector} from 'reselect';
 
 import {selectAttributes} from '../../../../store/selectors/navigation';
-import {shouldUseYqlTypes} from '../../../../store/selectors/settings/settings-development';
+import {selectShouldUseYqlTypes} from '../../../../store/selectors/settings/settings-development';
 
 import Columns from '../../../../utils/navigation/content/table/columns';
 import Query from '../../../../utils/navigation/content/table/query';
@@ -199,6 +199,6 @@ export const selectIsYqlSchemaExists = createSelector([selectAttributes], (attri
 });
 
 export const selectIsYqlTypesEnabled = createSelector(
-    [shouldUseYqlTypes],
+    [selectShouldUseYqlTypes],
     (isSettingEnabled) => isSettingEnabled,
 );
