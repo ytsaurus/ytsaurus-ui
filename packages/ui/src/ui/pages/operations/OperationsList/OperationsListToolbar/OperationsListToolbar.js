@@ -102,10 +102,12 @@ class OperationsListToolbar extends React.PureComponent {
                         states={[
                             {
                                 name: 'read',
+                                caption: i18n('value_read'),
                                 show: true,
                             },
                             {
                                 name: 'manage',
+                                caption: i18n('value_manage'),
                                 show: true,
                             },
                         ]}
@@ -122,29 +124,32 @@ class OperationsListToolbar extends React.PureComponent {
                         states={[
                             {
                                 name: 'all',
-                                get caption() {
-                                    return i18n('value_all-states');
-                                },
+                                caption: i18n('value_all-states'),
                                 show: true,
                             },
                             {
                                 name: 'pending',
+                                caption: i18n('value_pending'),
                                 show: true,
                             },
                             {
                                 name: 'running',
+                                caption: i18n('value_running'),
                                 show: true,
                             },
                             {
                                 name: 'completed',
+                                caption: i18n('value_completed'),
                                 show: true,
                             },
                             {
                                 name: 'failed',
+                                caption: i18n('value_failed'),
                                 show: true,
                             },
                             {
                                 name: 'aborted',
+                                caption: i18n('value_aborted'),
                                 show: true,
                             },
                         ]}
