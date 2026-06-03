@@ -5,6 +5,6 @@ export const selectShowAiChat = createSelector([selectSettingsData], (data) => {
     return data['global::development::showAiChat'];
 });
 
-export const shouldUseYqlTypes = createSelector([selectSettingsData], (data) => {
+export const selectShouldUseYqlTypes = createSelector([selectSettingsData], (data) => {
     return data['global::development::yqlTypes'];
 });
