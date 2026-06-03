@@ -9,8 +9,8 @@ import {
     isSingleProgress,
 } from '../../../types/query-tracker/api';
 import {
-    getSettingQueryTrackerStage,
-    getSettingQueryTrackerYQLAgentStage,
+    selectSettingQueryTrackerStage,
+    selectSettingQueryTrackerYQLAgentStage,
 } from '../settings/settings-ts';
 import {getQueryTrackerStage} from '../../../config';
 import {type QTEditorError, isQTEditorError} from '../../../types/query-tracker/editor';
@@ -128,7 +128,7 @@ export const selectSupportedEnginesOptions = createSelector(
 );
 
 export const selectQueryTrackerRequestOptions = createSelector(
-    [getSettingQueryTrackerStage, getSettingQueryTrackerYQLAgentStage],
+    [selectSettingQueryTrackerStage, selectSettingQueryTrackerYQLAgentStage],
     (stage, yqlAgentStage) => {
         const res: QTRequestOptions = {
             stage: stage || QT_STAGE,

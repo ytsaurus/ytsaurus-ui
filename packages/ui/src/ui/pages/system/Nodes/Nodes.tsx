@@ -25,8 +25,8 @@ import {selectCluster} from '../../../store/selectors/global';
 import {type RootState} from '../../../store/reducers';
 
 import {
-    getSettingSystemNodesNodeType,
-    getSettingsSystemNodesCollapsed,
+    selectSettingSystemNodesNodeType,
+    selectSettingsSystemNodesCollapsed,
 } from '../../../store/selectors/settings/settings-ts';
 import {selectSystemNodesNodeTypesToLoad} from '../../../store/selectors/system/nodes';
 import {
@@ -252,8 +252,8 @@ function mapStateToProps(state: RootState) {
         loaded,
         counters,
         overviewCounters,
-        collapsed: getSettingsSystemNodesCollapsed(state),
-        nodeType: getSettingSystemNodesNodeType(state),
+        collapsed: selectSettingsSystemNodesCollapsed(state),
+        nodeType: selectSettingSystemNodesNodeType(state),
         roleGroups,
     };
 }

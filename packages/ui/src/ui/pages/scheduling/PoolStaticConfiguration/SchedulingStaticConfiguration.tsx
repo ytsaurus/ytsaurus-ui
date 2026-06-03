@@ -14,7 +14,7 @@ import {DataTableYT} from '../../../components/DataTableYT';
 import format from '../../../common/hammer/format';
 
 import './SchedulingStaticConfiguration.scss';
-import {getSettingsSchedulingExpandStaticConfiguration} from '../../../store/selectors/settings/settings-ts';
+import {selectSettingsSchedulingExpandStaticConfiguration} from '../../../store/selectors/settings/settings-ts';
 import {setSettingsSchedulingExpandStaticConfiguration} from '../../../store/actions/settings/settings';
 import UIFactory from '../../../UIFactory';
 import {selectCluster} from '../../../store/selectors/global';
@@ -26,7 +26,7 @@ function SchedulingStaticConfiguration() {
     const dispatch = useDispatch();
     const isRoot = useSelector(getIsRoot);
 
-    const collapsed = useSelector(getSettingsSchedulingExpandStaticConfiguration);
+    const collapsed = useSelector(selectSettingsSchedulingExpandStaticConfiguration);
     const onToggle = React.useCallback(
         (value: boolean) => {
             dispatch(setSettingsSchedulingExpandStaticConfiguration(value));

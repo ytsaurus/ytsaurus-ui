@@ -15,7 +15,7 @@ import {
 import isEqual_ from 'lodash/isEqual';
 import '../../libs/monaco-yql-languages/monaco.contribution';
 import './MonacoEditor.scss';
-import {getSettingsEditorVimMode} from '../../store/selectors/settings/settings-ts';
+import {selectSettingsEditorVimMode} from '../../store/selectors/settings/settings-ts';
 
 const block = cn('yt-monaco-editor');
 
@@ -60,7 +60,7 @@ const MonacoEditor: FC<Props> = ({
     onChange,
     editorRef,
 }) => {
-    const vimMode = useSelector(getSettingsEditorVimMode);
+    const vimMode = useSelector(selectSettingsEditorVimMode);
     const theme = useSelector(selectTheme);
     const modelRef = useRef(monaco.editor.createModel(value, language));
     const vimModeRef = useRef<any>();

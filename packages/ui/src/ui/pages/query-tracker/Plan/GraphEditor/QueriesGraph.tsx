@@ -9,7 +9,7 @@ import {QueriesNodeConnection} from './QueriesNodeConnection';
 import {PathPopup} from './DetailBlock/PathPopup';
 import {OperationType} from './enums';
 import {useSelector} from '../../../../store/redux-hooks';
-import {getSettingsQueryTrackerGraphAutoCenter} from '../../../../store/selectors/settings/settings-ts';
+import {selectSettingsQueryTrackerGraphAutoCenter} from '../../../../store/selectors/settings/settings-ts';
 import {checkControlCommandKey} from '../../../../utils/keyboard';
 import {openInNewTab} from '../../../../utils/utils';
 import {getOperationPageUrlFromNodeProgress} from '../services/getOperationPageUrlFromNodeProgress';
@@ -32,7 +32,7 @@ const Graph: FC<Props> = ({processedGraph}) => {
     );
 
     const [loading, setLoading] = useState(true);
-    const autoCenter = useSelector(getSettingsQueryTrackerGraphAutoCenter);
+    const autoCenter = useSelector(selectSettingsQueryTrackerGraphAutoCenter);
 
     const {data, isLoading} = useQueriesGraphLayout(processedGraph, scale);
 

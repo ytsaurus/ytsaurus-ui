@@ -41,7 +41,7 @@ import {
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import {prepareQueryPlanIds} from '../../../types/query-tracker/query';
 import {chytApiAction, spytApiAction} from '../../../utils/strawberryControllerApi';
-import {getSettingQueryTrackerStage} from '../../selectors/settings/settings-ts';
+import {selectSettingQueryTrackerStage} from '../../selectors/settings/settings-ts';
 import {
     selectDefaultQueryACO,
     selectDefaultYqlVersion,
@@ -331,7 +331,7 @@ export function loadQuery(
 > {
     return async (dispatch, getState) => {
         const state = getState();
-        const stage = getSettingQueryTrackerStage(state);
+        const stage = selectSettingQueryTrackerStage(state);
         dispatch({type: REQUEST_QUERY});
         dispatch(resetQueryTabs());
         try {

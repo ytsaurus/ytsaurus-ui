@@ -1,7 +1,7 @@
 import {useSelector} from '../../../../store/redux-hooks';
 import {type BaseQueryFn, type TypedUseMutationResult} from '@reduxjs/toolkit/query/react';
 
-import {getUseAutoRefresh} from '../../../../store/selectors/settings/settings-ts';
+import {selectUseAutoRefresh} from '../../../../store/selectors/settings/settings-ts';
 import {selectCluster} from '../../../../store/selectors/global';
 
 import {DEFAULT_UPDATER_TIMEOUT} from '../../../../hooks/use-updater';
@@ -62,7 +62,7 @@ export function useFetchBatchQuery<T>(
     args: BatchApiArgs,
     options?: UseQueryOptions<BatchQueryResult, BatchApiArgs>,
 ) {
-    const useAutoRefresh = useSelector(getUseAutoRefresh);
+    const useAutoRefresh = useSelector(selectUseAutoRefresh);
     const cluster = useSelector(selectCluster);
 
     const defaultOptions = {

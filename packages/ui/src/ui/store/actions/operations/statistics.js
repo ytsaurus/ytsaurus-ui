@@ -5,7 +5,7 @@ import {
     SET_TREE_STATE,
 } from '../../../constants/operations/statistics';
 import {selectOperation} from '../../../store/selectors/operations/operation';
-import {getSettingOperationStatisticsActiveJobTypes} from '../../../store/selectors/settings/settings-ts';
+import {selectSettingOperationStatisticsActiveJobTypes} from '../../../store/selectors/settings/settings-ts';
 import {setSettingsStatisticsActiveJobTypes} from '../../../store/actions/settings/settings';
 
 export function setTreeState(treeState) {
@@ -38,7 +38,7 @@ export function changeJobType(jobType) {
 
         const state = getState();
         const operationType = selectOperation(state).type;
-        const settingsJobTypes = getSettingOperationStatisticsActiveJobTypes(state);
+        const settingsJobTypes = selectSettingOperationStatisticsActiveJobTypes(state);
 
         if (settingsJobTypes && settingsJobTypes[operationType] !== jobType) {
             dispatch(

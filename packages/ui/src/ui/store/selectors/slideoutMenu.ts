@@ -12,8 +12,8 @@ import {type RootState} from '../reducers';
 import {PAGE_ICONS_BY_ID} from '../../constants/slideoutMenu';
 
 import {
-    getSettingsPagesOrder,
-    getSettingsPagesPinned,
+    selectSettingsPagesOrder,
+    selectSettingsPagesPinned,
 } from '../../store/selectors/settings/settings-ts';
 import {selectClusterUiConfig} from '../../store/selectors/global';
 import {selectIsAdmin} from '../../store/selectors/global/is-developer';
@@ -131,7 +131,7 @@ export const getPagesOrderedByName = createSelector([getRecentPagesInfo], ({all}
 });
 
 export const getPagesOrderedByUser = createSelector(
-    [getPagesOrderedByName, getSettingsPagesOrder, getSettingsPagesPinned],
+    [getPagesOrderedByName, selectSettingsPagesOrder, selectSettingsPagesPinned],
     (pages, order, pinned) => {
         const pagesById = reduce_(
             pages,

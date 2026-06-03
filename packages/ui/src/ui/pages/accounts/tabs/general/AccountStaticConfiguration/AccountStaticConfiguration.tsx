@@ -13,7 +13,7 @@ import hammer from '../../../../../common/hammer';
 import {setSettingsAccountsExpandStaticConfiguration} from '../../../../../store/actions/settings/settings';
 
 import './AccountStaticConfiguration.scss';
-import {getSettingsAccountsExpandStaticConfiguration} from '../../../../../store/selectors/settings/settings-ts';
+import {selectSettingsAccountsExpandStaticConfiguration} from '../../../../../store/selectors/settings/settings-ts';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../../constants/global';
 import i18n from './i18n';
 
@@ -77,7 +77,7 @@ function AccountStaticConfiguration({className}: Props) {
 
     const account = useSelector(selectActiveAccount);
     const items = useSelector(selectActiveAccountStaticConfiguration);
-    const expandState = useSelector(getSettingsAccountsExpandStaticConfiguration);
+    const expandState = useSelector(selectSettingsAccountsExpandStaticConfiguration);
 
     const onToggle = React.useCallback(
         (value: boolean) => {

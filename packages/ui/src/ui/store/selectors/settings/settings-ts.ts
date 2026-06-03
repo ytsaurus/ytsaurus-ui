@@ -11,35 +11,38 @@ import {type RootState} from '../../../store/reducers';
 import {NODE_TYPE} from '../../../../shared/constants/system';
 import {type ValueOf} from '../../../types';
 
-export const getSettingsDataRaw = (state: RootState) => state.settings.data;
+export const selectSettingsDataRaw = (state: RootState) => state.settings.data;
 
-export const getSettingsPagesOrder = createSelector(
+export const selectSettingsPagesOrder = createSelector(
     selectGetSetting,
     (getSetting): Array<string> => {
         return getSetting(SettingName.GLOBAL.PAGES_ORDER, NAMESPACES.GLOBAL) || [];
     },
 );
 
-export const getSettingsPagesPinned = createSelector(
+export const selectSettingsPagesPinned = createSelector(
     selectGetSetting,
     (getSetting): Record<string, boolean> => {
         return getSetting(SettingName.GLOBAL.PAGES_PINNED, NAMESPACES.GLOBAL) || {};
     },
 );
 
-export const getSettingsQueryTrackerNewGraphType = createSelector(selectSettingsData, (data) => {
+export const selectSettingsQueryTrackerNewGraphType = createSelector(selectSettingsData, (data) => {
     return data['global::queryTracker::useNewGraphView'] || false;
 });
 
-export const getSettingsQueryTrackerGraphAutoCenter = createSelector(selectSettingsData, (data) => {
-    return data['global::queryTracker::graphAutoCenter'] || false;
-});
+export const selectSettingsQueryTrackerGraphAutoCenter = createSelector(
+    selectSettingsData,
+    (data) => {
+        return data['global::queryTracker::graphAutoCenter'] || false;
+    },
+);
 
-export const getSettingsEditorVimMode = createSelector(selectSettingsData, (data) => {
+export const selectSettingsEditorVimMode = createSelector(selectSettingsData, (data) => {
     return data['global::editor::vimMode'] || false;
 });
 
-export const getSettingsSchedulingExpandStaticConfiguration = createSelector(
+export const selectSettingsSchedulingExpandStaticConfiguration = createSelector(
     selectGetSetting,
     (getSetting) => {
         return (
@@ -49,7 +52,7 @@ export const getSettingsSchedulingExpandStaticConfiguration = createSelector(
     },
 );
 
-export const getSettingsAccountsExpandStaticConfiguration = createSelector(
+export const selectSettingsAccountsExpandStaticConfiguration = createSelector(
     selectGetSetting,
     (getSetting) => {
         return (
@@ -59,67 +62,73 @@ export const getSettingsAccountsExpandStaticConfiguration = createSelector(
     },
 );
 
-export const getSettingsSystemMastersCollapsed = createSelector(selectGetSetting, (getSetting) => {
-    return getSetting(SettingName.SYSTEM.MASTERS_COLLAPSED, NAMESPACES.SYSTEM);
-});
+export const selectSettingsSystemMastersCollapsed = createSelector(
+    selectGetSetting,
+    (getSetting) => {
+        return getSetting(SettingName.SYSTEM.MASTERS_COLLAPSED, NAMESPACES.SYSTEM);
+    },
+);
 
-export const getSettingsSystemSchedulersCollapsed = createSelector(
+export const selectSettingsSystemSchedulersCollapsed = createSelector(
     selectGetSetting,
     (getSetting) => {
         return getSetting(SettingName.SYSTEM.SCHEDULERS_COLLAPSED, NAMESPACES.SYSTEM);
     },
 );
 
-export const getSettingsSystemChunksCollapsed = createSelector(selectGetSetting, (getSetting) => {
-    return getSetting(SettingName.SYSTEM.CHUNKS_COLLAPSED, NAMESPACES.SYSTEM);
-});
+export const selectSettingsSystemChunksCollapsed = createSelector(
+    selectGetSetting,
+    (getSetting) => {
+        return getSetting(SettingName.SYSTEM.CHUNKS_COLLAPSED, NAMESPACES.SYSTEM);
+    },
+);
 
-export const getSettingsSystemRpcProxiesCollapsed = createSelector(
+export const selectSettingsSystemRpcProxiesCollapsed = createSelector(
     selectGetSetting,
     (getSetting) => {
         return getSetting(SettingName.SYSTEM.RPC_PROXIES_COLLAPSED, NAMESPACES.SYSTEM);
     },
 );
 
-export const getSettingsSystemCypressProxiesCollapsed = createSelector(
+export const selectSettingsSystemCypressProxiesCollapsed = createSelector(
     selectSettingsData,
     (data) => {
         return data['global::system::cypressProxiesCollapsed'] ?? true;
     },
 );
-export const getSettingsSystemHttpProxiesCollapsed = createSelector(
+export const selectSettingsSystemHttpProxiesCollapsed = createSelector(
     selectGetSetting,
     (getSetting) => {
         return getSetting(SettingName.SYSTEM.HTTP_PROXIES_COLLAPSED, NAMESPACES.SYSTEM);
     },
 );
 
-export const getSettingsSystemNodesCollapsed = createSelector(selectGetSetting, (getSetting) => {
+export const selectSettingsSystemNodesCollapsed = createSelector(selectGetSetting, (getSetting) => {
     return getSetting(SettingName.SYSTEM.NODES_COLLAPSED, NAMESPACES.SYSTEM);
 });
 
-export const getSettingsAccountUsageViewType = createSelector(
+export const selectSettingsAccountUsageViewType = createSelector(
     selectGetSetting,
     (getSetting): AccountUsageViewType => {
         return getSetting(SettingName.ACCOUNTS.ACCOUNTS_USAGE_VIEW_TYPE, NAMESPACES.ACCOUNTS);
     },
 );
 
-export const getSettingsAccountUsageColumnsTree = createSelector(
+export const selectSettingsAccountUsageColumnsTree = createSelector(
     selectGetSetting,
     (getSetting): Array<keyof AccountUsageDataItem> => {
         return getSetting(SettingName.ACCOUNTS.ACCOUNTS_USAGE_COLUMNS_TREE, NAMESPACES.ACCOUNTS);
     },
 );
 
-export const getSettingsAccountUsageColumnsList = createSelector(
+export const selectSettingsAccountUsageColumnsList = createSelector(
     selectGetSetting,
     (getSetting): Array<keyof AccountUsageDataItem> => {
         return getSetting(SettingName.ACCOUNTS.ACCOUNTS_USAGE_COLUMNS_LIST, NAMESPACES.ACCOUNTS);
     },
 );
 
-export const getSettingsAccountUsageColumnsListFolders = createSelector(
+export const selectSettingsAccountUsageColumnsListFolders = createSelector(
     selectGetSetting,
     (getSetting): Array<keyof AccountUsageDataItem> => {
         return getSetting(
@@ -129,7 +138,7 @@ export const getSettingsAccountUsageColumnsListFolders = createSelector(
     },
 );
 
-export const getSettingOperationStatisticsActiveJobTypes = createSelector(
+export const selectSettingOperationStatisticsActiveJobTypes = createSelector(
     selectGetSetting,
     (getSetting): ActiveJobTypesMap => {
         return (
@@ -139,32 +148,32 @@ export const getSettingOperationStatisticsActiveJobTypes = createSelector(
     },
 );
 
-export const getSettingsEnableSideBar = createSelector(selectGetSetting, (getSetting) => {
+export const selectSettingsEnableSideBar = createSelector(selectGetSetting, (getSetting) => {
     return getSetting(SettingName.COMPONENTS.ENABLE_SIDE_BAR, NAMESPACES.COMPONENTS) ?? true;
 });
 
 // YTFRONT-3327-column-button
-export const getSettingsNavigationQueuePartitionsVisibility = createSelector(
+export const selectSettingsNavigationQueuePartitionsVisibility = createSelector(
     selectGetSetting,
     (getSetting): Array<string> =>
         getSetting(SettingName.NAVIGATION.QUEUE_PARTITIONS_VISIBILITY, NAMESPACES.NAVIGATION),
 );
 
 // YTFRONT-3327-column-button
-export const getSettingsNavigationQueueConsumersVisibility = createSelector(
+export const selectSettingsNavigationQueueConsumersVisibility = createSelector(
     selectGetSetting,
     (getSetting): Array<string> =>
         getSetting(SettingName.NAVIGATION.QUEUE_CONSUMERS_VISIBILITY, NAMESPACES.NAVIGATION),
 );
 
 // YTFRONT-3327-column-button
-export const getSettingsNavigationConsumerPartitionsVisibility = createSelector(
+export const selectSettingsNavigationConsumerPartitionsVisibility = createSelector(
     selectGetSetting,
     (getSetting): Array<string> =>
         getSetting(SettingName.NAVIGATION.CONSUMER_PARTITIONS_VISIBILITY, NAMESPACES.NAVIGATION),
 );
 
-export const getSettingSystemNodesNodeType = createSelector(
+export const selectSettingSystemNodesNodeType = createSelector(
     selectGetSetting,
     (getSetting): Array<ValueOf<typeof NODE_TYPE>> => {
         const propValue = getSetting(SettingName.SYSTEM.NODES_NODE_TYPE, NAMESPACES.SYSTEM) ?? '';
@@ -187,7 +196,7 @@ export const getSettingSystemNodesNodeType = createSelector(
     },
 );
 
-export const getSettingQueryTrackerStage = createSelector(
+export const selectSettingQueryTrackerStage = createSelector(
     selectGetSetting,
     (getSetting): string | undefined => {
         const res = getSetting(SettingName.QUERY_TRACKER.STAGE, NAMESPACES.QUERY_TRACKER);
@@ -195,7 +204,7 @@ export const getSettingQueryTrackerStage = createSelector(
     },
 );
 
-export const getSettingQueryTrackerYQLAgentStage = createSelector(
+export const selectSettingQueryTrackerYQLAgentStage = createSelector(
     selectGetSetting,
     (getSetting): string | undefined => {
         const res = getSetting(SettingName.QUERY_TRACKER.YQL_AGENT_STAGE, NAMESPACES.QUERY_TRACKER);
@@ -203,11 +212,11 @@ export const getSettingQueryTrackerYQLAgentStage = createSelector(
     },
 );
 
-export const getCurrentClusterNS = createSelector(
+export const selectCurrentClusterNS = createSelector(
     [selectCluster, selectClusterNS],
     (cluster, ns) => {
         return cluster ? ns : undefined;
     },
 );
-export const getUseAutoRefresh = (state: RootState) =>
+export const selectUseAutoRefresh = (state: RootState) =>
     selectSettingsData(state)['global::autoRefresh'];

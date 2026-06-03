@@ -1,7 +1,7 @@
 import {DEFAULT_UPDATER_TIMEOUT} from '../../../../hooks/use-updater';
 import {useSelector} from '../../../../store/redux-hooks';
 import {selectCluster} from '../../../../store/selectors/global/cluster';
-import {getUseAutoRefresh} from '../../../../store/selectors/settings/settings-ts';
+import {selectUseAutoRefresh} from '../../../../store/selectors/settings/settings-ts';
 import {type OverrideDataType} from '../types';
 import {ytApi} from '../ytApi';
 import {get} from './endpoint';
@@ -16,7 +16,7 @@ export const getApi = ytApi.injectEndpoints({
 });
 
 export function useGetQuery<T>(args: Parameters<typeof get>[0]) {
-    const useAutoRefresh = useSelector(getUseAutoRefresh);
+    const useAutoRefresh = useSelector(selectUseAutoRefresh);
     const cluster = useSelector(selectCluster);
 
     const options = {
