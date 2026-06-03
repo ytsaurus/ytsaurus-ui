@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import ColumnsButton from '../../../../../../pages/navigation/tabs/Queue/ColumnsButton/ColumnsButton';
 import {setSettingsNavigationQueuePartitionsVisibility} from '../../../../../../store/actions/settings/settings';
 import {type RootState} from '../../../../../../store/reducers';
-import {getSettingsNavigationQueuePartitionsVisibility} from '../../../../../../store/selectors/settings/settings-ts';
+import {selectSettingsNavigationQueuePartitionsVisibility} from '../../../../../../store/selectors/settings/settings-ts';
 
 const allColumns = [
     {
@@ -56,7 +56,7 @@ const allColumns = [
 function mapStateToProps(state: RootState) {
     return {
         allColumns,
-        selectedColumns: getSettingsNavigationQueuePartitionsVisibility(state),
+        selectedColumns: selectSettingsNavigationQueuePartitionsVisibility(state),
     };
 }
 

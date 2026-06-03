@@ -22,7 +22,7 @@ import {StickyContainer} from '../../../components/StickyContainer/StickyContain
 
 import {SYSTEM_CHUNKS_TABLE_ID} from '../../../constants/tables';
 import {loadChunks} from '../../../store/actions/system/chunks';
-import {getSettingsSystemChunksCollapsed} from '../../../store/selectors/settings/settings-ts';
+import {selectSettingsSystemChunksCollapsed} from '../../../store/selectors/settings/settings-ts';
 import {setSettingsSystemChunksCollapsed} from '../../../store/actions/settings/settings';
 import {useUpdater} from '../../../hooks/use-updater';
 
@@ -269,7 +269,7 @@ function mapStateToProps(state) {
         types,
         sortState: state.tables[SYSTEM_CHUNKS_TABLE_ID],
         collapsibleSize: UI_COLLAPSIBLE_SIZE,
-        collapsed: getSettingsSystemChunksCollapsed(state),
+        collapsed: selectSettingsSystemChunksCollapsed(state),
     };
 }
 

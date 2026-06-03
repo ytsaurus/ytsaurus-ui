@@ -6,8 +6,8 @@ import map_ from 'lodash/map';
 
 import {type RootState} from '../reducers';
 import {
-    getSettingsPagesOrder,
-    getSettingsPagesPinned,
+    selectSettingsPagesOrder,
+    selectSettingsPagesPinned,
 } from '../../store/selectors/settings/settings-ts';
 import {setSettingsPagesOrder, setSettingsPagesPinned} from '../../store/actions/settings/settings';
 import {getPagesOrderedByUser} from '../../store/selectors/slideoutMenu';
@@ -18,10 +18,10 @@ import {selectCurrentUserName} from '../selectors/global';
 export function togglePinnedPage(id: string): ThunkAction<any, RootState, any, any> {
     return (dispatch, getState) => {
         const state = getState();
-        const pinned = {...getSettingsPagesPinned(state)};
+        const pinned = {...selectSettingsPagesPinned(state)};
         const orderedPages = getPagesOrderedByUser(state);
 
-        const prevOrder = getSettingsPagesOrder(state);
+        const prevOrder = selectSettingsPagesOrder(state);
         const newOrder = map_(orderedPages, 'id');
 
         const itemIndex = findIndex_(orderedPages, (item) => item.id === id);
@@ -93,7 +93,7 @@ export function setPagesItemPosition(params: {
         const next = orderedPages[newIndex + 1];
 
         if ((item.pinned && prev && !prev.pinned) || (!item.pinned && next && next.pinned)) {
-            const pinned = {...getSettingsPagesPinned(state)};
+            const pinned = {...selectSettingsPagesPinned(state)};
             toggleBooleanInPlace(item.id, pinned);
             dispatch(setSettingsPagesPinned(pinned));
         }

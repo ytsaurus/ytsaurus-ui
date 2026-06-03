@@ -39,7 +39,7 @@ import {
     selectVisibleNodes,
 } from '../../../../../store/selectors/components/nodes/nodes';
 import {selectSelectedColumns} from '../../../../../store/selectors/settings';
-import {getSettingsEnableSideBar} from '../../../../../store/selectors/settings/settings-ts';
+import {selectSettingsEnableSideBar} from '../../../../../store/selectors/settings/settings-ts';
 import {defaultColumns} from '../../../../../pages/components/tabs/nodes/tables';
 import withVisible, {type WithVisibleProps} from '../../../../../hocs/withVisible';
 import {useUpdaterWithMemoizedParams} from '../../../../../hooks/use-updater';
@@ -388,7 +388,7 @@ const mapStateToProps = (state: RootState) => {
 
     const nodesTableProps = selectComponentNodesTableProps(state);
 
-    const sideBarEnabled = getSettingsEnableSideBar(state);
+    const sideBarEnabled = selectSettingsEnableSideBar(state);
 
     return {
         loading,

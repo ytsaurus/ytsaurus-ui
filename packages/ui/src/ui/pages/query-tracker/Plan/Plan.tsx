@@ -12,7 +12,7 @@ import {LargeGraphInfo} from './LargeGraphInfo';
 import './Plan.scss';
 import {QueriesGraphLazy} from './GraphEditor';
 import {useSelector} from '../../../store/redux-hooks';
-import {getSettingsQueryTrackerNewGraphType} from '../../../store/selectors/settings/settings-ts';
+import {selectSettingsQueryTrackerNewGraphType} from '../../../store/selectors/settings/settings-ts';
 import {selectProcessedGraph} from '../../../store/selectors/query-tracker/queryPlan';
 import {type PlanView} from './PlanActions';
 
@@ -27,7 +27,7 @@ interface PlanProps {
 
 export default React.memo(function Plan({planView, isActive, className, prepareNode}: PlanProps) {
     const graph = useSelector(selectProcessedGraph);
-    const newGraphType = useSelector(getSettingsQueryTrackerNewGraphType);
+    const newGraphType = useSelector(selectSettingsQueryTrackerNewGraphType);
 
     const [showLargeGraph, setShowLargeGraph] = React.useState(false);
     const resultProgressShowMinimap = true; // can be set as user setting in the future

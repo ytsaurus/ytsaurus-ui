@@ -2,7 +2,7 @@ import React from 'react';
 import {useSelector} from '../store/redux-hooks';
 
 import {Updater} from '../utils/hammer/updater';
-import {getUseAutoRefresh} from '../store/selectors/settings/settings-ts';
+import {selectUseAutoRefresh} from '../store/selectors/settings/settings-ts';
 import {useMemoizedIfEqual} from './use-memoized';
 
 export const DEFAULT_UPDATER_TIMEOUT = 30 * 1000;
@@ -35,7 +35,7 @@ export function useUpdater(
         forceAutoRefresh,
     }: UseUpdaterOptions = {},
 ) {
-    const useAutoRefresh = useSelector(getUseAutoRefresh) as boolean;
+    const useAutoRefresh = useSelector(selectUseAutoRefresh) as boolean;
     const optionsRef = React.useRef({skipNextCall: !useAutoRefresh});
 
     const allowAutoRefresh = forceAutoRefresh ?? useAutoRefresh;

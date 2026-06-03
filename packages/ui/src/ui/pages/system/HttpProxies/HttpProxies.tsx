@@ -6,7 +6,7 @@ import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 
 import {loadSystemProxies} from '../../../store/actions/system/proxies';
 import {selectCluster} from '../../../store/selectors/global';
-import {getSettingsSystemHttpProxiesCollapsed} from '../../../store/selectors/settings/settings-ts';
+import {selectSettingsSystemHttpProxiesCollapsed} from '../../../store/selectors/settings/settings-ts';
 import {setSettingsSystemHttpProxiesCollapsed} from '../../../store/actions/settings/settings';
 import {type RootState} from '../../../store/reducers';
 import {useDispatch} from '../../../store/redux-hooks';
@@ -78,7 +78,7 @@ function mapStateToProps(state: RootState) {
         counters,
         roleGroups,
         loaded,
-        collapsed: getSettingsSystemHttpProxiesCollapsed(state),
+        collapsed: selectSettingsSystemHttpProxiesCollapsed(state),
         cluster: selectCluster(state),
     };
 }

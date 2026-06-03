@@ -13,7 +13,7 @@ import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 import MasterGroup from './MasterGroup';
 
 import {loadMasters} from '../../../store/actions/system/masters';
-import {getSettingsSystemMastersCollapsed} from '../../../store/selectors/settings/settings-ts';
+import {selectSettingsSystemMastersCollapsed} from '../../../store/selectors/settings/settings-ts';
 import {setSettingsSystemMastersCollapsed} from '../../../store/actions/settings/settings';
 import {useUpdater} from '../../../hooks/use-updater';
 
@@ -295,7 +295,7 @@ function mapStateToProps(state) {
         counters,
         alerts,
         collapsibleSize: UI_COLLAPSIBLE_SIZE,
-        collapsed: getSettingsSystemMastersCollapsed(state),
+        collapsed: selectSettingsSystemMastersCollapsed(state),
     };
 }
 

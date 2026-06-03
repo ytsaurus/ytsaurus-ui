@@ -6,7 +6,7 @@ import isEqual_ from 'lodash/isEqual';
 
 import {type RootState} from '../../../store/reducers';
 import {calculateLoadingStatus, isFinalLoadingStatus} from '../../../utils/utils';
-import {getSettingsDataRaw} from '../../../store/selectors/settings/settings-ts';
+import {selectSettingsDataRaw} from '../../../store/selectors/settings/settings-ts';
 import {NAMESPACES} from '../../../../shared/constants/settings';
 import {NS_SEPARATOR} from '../../../../shared/utils/settings';
 import {
@@ -68,7 +68,7 @@ function createPreconfiguredPresets(login: string) {
 }
 
 export const selectOperationsListFilterPresets = createSelector(
-    [getSettingsDataRaw, selectCurrentUserName],
+    [selectSettingsDataRaw, selectCurrentUserName],
     (data, login): Record<string, OperationsListPreset> => {
         const collectionKeys: Array<keyof OperationPresetsSettings> = filter_(
             Object.keys(data) as Array<keyof OperationPresetsSettings>,

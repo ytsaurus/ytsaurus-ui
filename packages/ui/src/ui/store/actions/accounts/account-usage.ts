@@ -38,7 +38,7 @@ import {
     getAccountUsageViewType,
 } from '../../selectors/accounts/account-usage';
 import {selectActiveAccount} from '../../../store/selectors/accounts/accounts-ts';
-import {getSettingsAccountUsageViewType} from '../../../store/selectors/settings/settings-ts';
+import {selectSettingsAccountUsageViewType} from '../../../store/selectors/settings/settings-ts';
 import {type SortState} from '../../../types';
 import {
     type AccountUsageFiltersState,
@@ -81,7 +81,7 @@ export function syncAccountsUsageViewTypeWithSettings(): FiltersThunkAction {
         const state = getState();
         const viewType = getAccountUsageViewType(state);
         if (!viewType) {
-            const lastViewType = getSettingsAccountUsageViewType(state);
+            const lastViewType = selectSettingsAccountUsageViewType(state);
             dispatch(setAccountUsageFilters({viewType: lastViewType}));
         } else {
             dispatch(setSettingsAccountUsageViewType(viewType));

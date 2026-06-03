@@ -9,9 +9,9 @@ import reduce_ from 'lodash/reduce';
 
 import {type SortState} from '../../../types';
 import {
-    getSettingsAccountUsageColumnsList,
-    getSettingsAccountUsageColumnsListFolders,
-    getSettingsAccountUsageColumnsTree,
+    selectSettingsAccountUsageColumnsList,
+    selectSettingsAccountUsageColumnsListFolders,
+    selectSettingsAccountUsageColumnsTree,
 } from '../../../store/selectors/settings/settings-ts';
 import format from '../../../common/hammer/format';
 import {type AccountUsageDataItem} from '../../../store/reducers/accounts/usage/account-usage-types';
@@ -292,9 +292,9 @@ function firstNotEmpty<T = keyof AccountUsageDataItem>(a1: Array<T>, a2: Array<T
 const getAccountUsageVisibleColumns = createSelector(
     [
         getAccountUsageViewType,
-        getSettingsAccountUsageColumnsTree,
-        getSettingsAccountUsageColumnsList,
-        getSettingsAccountUsageColumnsListFolders,
+        selectSettingsAccountUsageColumnsTree,
+        selectSettingsAccountUsageColumnsList,
+        selectSettingsAccountUsageColumnsListFolders,
     ],
     (viewType, treeColumns, listColumns, listFoldersColumns) => {
         switch (viewType) {

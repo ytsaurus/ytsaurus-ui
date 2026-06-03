@@ -8,7 +8,7 @@ import {setSettingsSystemRpcProxiesCollapsed} from '../../../store/actions/setti
 import {loadSystemRPCProxies} from '../../../store/actions/system/rpc-proxies';
 import {selectCluster} from '../../../store/selectors/global';
 import {type RootState} from '../../../store/reducers';
-import {getSettingsSystemRpcProxiesCollapsed} from '../../../store/selectors/settings/settings-ts';
+import {selectSettingsSystemRpcProxiesCollapsed} from '../../../store/selectors/settings/settings-ts';
 import {useDispatch} from '../../../store/redux-hooks';
 import {type MakeUrlParams} from '../ProxiesImpl/RoleGroup';
 import {ProxiesImpl} from '../ProxiesImpl/ProxiesImpl';
@@ -71,7 +71,7 @@ function mapStateToProps(state: RootState) {
     return {
         counters,
         roleGroups,
-        collapsed: getSettingsSystemRpcProxiesCollapsed(state),
+        collapsed: selectSettingsSystemRpcProxiesCollapsed(state),
         cluster: selectCluster(state),
     };
 }
