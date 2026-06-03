@@ -10,12 +10,13 @@ export interface Props {
     className?: string;
 
     value?: string;
+    disabled?: boolean;
     placeholder?: string;
     onChange: (v: Props['value']) => void;
 }
 
 export default function SeparatorInput(props: Props) {
-    const {value, onChange, placeholder, className} = props;
+    const {value, onChange, disabled, placeholder, className} = props;
 
     const {value: separator, error} = prepareSeparatorValue(value);
 
@@ -23,7 +24,12 @@ export default function SeparatorInput(props: Props) {
         <>
             <div className={block(null, className)}>
                 <div className={block('item')}>
-                    <TextInput value={value} placeholder={placeholder} onUpdate={onChange} />
+                    <TextInput
+                        value={value}
+                        placeholder={placeholder}
+                        onUpdate={onChange}
+                        disabled={disabled}
+                    />
                 </div>
                 <div className={block('item', {preview: true})}>
                     <Yson
