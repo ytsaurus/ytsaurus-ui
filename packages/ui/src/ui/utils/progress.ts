@@ -67,6 +67,21 @@ export function getProgressTheme(
     return thresholds[index].theme;
 }
 
+const PROGRESS_THEME_TO_COLOR: Partial<Record<ProgressTheme, string>> = {
+    success: 'var(--success-color)',
+    warning: 'var(--warning-color)',
+    danger: 'var(--danger-color)',
+    info: 'var(--info-color)',
+    default: 'var(--default-color)',
+};
+
+export function getProgressThemeColor(theme?: ProgressTheme): string {
+    if (!theme) {
+        return '';
+    }
+    return PROGRESS_THEME_TO_COLOR[theme] || '';
+}
+
 export function addProgressStackSpacers(
     items: Array<{value: number; color?: string; theme?: ProgressProps['theme']}>,
     {
