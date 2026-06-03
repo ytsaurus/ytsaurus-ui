@@ -43,7 +43,7 @@ export function IncarnationMeta(props: Props) {
                     {incarnation.trigger_job_id}
                 </YTLink>
             ),
-            label: i18n('id'),
+            label: i18n('field_id'),
             visible: Boolean(incarnation?.trigger_job_id),
         },
         {
@@ -53,7 +53,7 @@ export function IncarnationMeta(props: Props) {
                     {format.ReadableField(String(switch_info?.abort_reason))}
                 </Label>
             ),
-            label: i18n('abort-reason'),
+            label: i18n('field_abort-reason'),
             visible: Boolean(switch_info?.abort_reason),
         },
         {
@@ -63,7 +63,7 @@ export function IncarnationMeta(props: Props) {
                     {format.ReadableField(String(switch_info?.interruption_reason))}
                 </Label>
             ),
-            label: i18n('interruption-reason'),
+            label: i18n('field_interruption-reason'),
             visible: Boolean(switch_info?.interruption_reason),
         },
         {
@@ -74,17 +74,17 @@ export function IncarnationMeta(props: Props) {
                     onClick={() => dispatch(showErrorModal(switch_info?.trigger_job_error))}
                 />
             ),
-            label: i18n('error'),
+            label: i18n('field_error'),
             visible: Boolean(switch_info?.trigger_job_error),
         },
     ];
 
     return (
         <Flex gap={1} direction={'column'} width={'40%'}>
-            <Text variant={'subheader-2'}>{i18n('trigger-job-info')}</Text>
+            <Text variant={'subheader-2'}>{i18n('title_trigger-job-info')}</Text>
             <MetaTable items={tableItems} />
             {!tableItems.some((item) => item.visible) && (
-                <Text variant={'inherit'}> {i18n('no-info-to-display')}</Text>
+                <Text variant={'inherit'}> {i18n('alert_no-info-to-display')}</Text>
             )}
         </Flex>
     );

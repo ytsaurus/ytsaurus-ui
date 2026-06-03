@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import OperationSuggestFilter from '../../../../../../pages/operations/OperationSuggestFilter/OperationSuggestFilter';
 import {updateListJobsFilter} from '../../../../../../store/actions/operations/jobs';
 import {getActualValue} from '../../../../../../pages/operations/selectors';
+import i18n from './i18n';
 
 function mapStateToProps({operations}, ownProps) {
     const filters = operations.jobs.filters;
@@ -14,7 +15,7 @@ function mapStateToProps({operations}, ownProps) {
         value: getActualValue(value, defaultValue),
         states,
         defaultValue,
-        placeholder: `Filter ${name}...`,
+        placeholder: i18n('placeholder_filter'),
     };
 }
 

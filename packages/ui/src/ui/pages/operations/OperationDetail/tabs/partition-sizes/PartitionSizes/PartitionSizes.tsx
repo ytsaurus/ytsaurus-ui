@@ -4,6 +4,8 @@ import {useSelector} from '../../../../../../store/redux-hooks';
 import ypath from '../../../../../../common/thor/ypath';
 import cn from 'bem-cn-lite';
 
+import i18n from './i18n';
+
 import format from '../../../../../../common/hammer/format';
 
 import ErrorBoundary from '../../../../../../containers/ErrorBoundary/ErrorBoundary';
@@ -58,8 +60,8 @@ class PartitionSizes extends React.Component<ReduxProps, State> {
                     <YTHistogram
                         className={block('charts')}
                         data={data}
-                        yLabel={'partition count'}
-                        xLabel={'partition data weight'}
+                        yLabel={i18n('field_partition-count')}
+                        xLabel={i18n('field_partition-data-weight')}
                         xFormat={this.formatX}
                         yMin={0.5}
                         yLogarithmic
@@ -76,7 +78,7 @@ class PartitionSizes extends React.Component<ReduxProps, State> {
     };
 
     renderTooltip: YTHistogramProps['renderTooltip'] = (y, x0, x1) => {
-        return `<b>${y}</b> jobs have estimated input job size from ${x0} to ${x1}`;
+        return i18n('context_tooltip', {y: String(y), x0: String(x0), x1: String(x1)});
     };
 }
 

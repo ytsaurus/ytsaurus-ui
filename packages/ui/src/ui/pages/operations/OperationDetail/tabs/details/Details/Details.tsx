@@ -33,6 +33,8 @@ import Runtime from '../Runtime/Runtime';
 import Events from '../Events/Events';
 import Tasks from '../Tasks/Tasks';
 
+import i18n from './i18n';
+
 import './Details.scss';
 
 const block = cn('operation-details');
@@ -60,7 +62,7 @@ class Details extends Component<ReduxProps> {
         return (
             Boolean(description) && (
                 <CollapsibleSection
-                    name="Description"
+                    name={i18n('title_description')}
                     className={block('description')}
                     size={collapsibleSize}
                     marginDirection="bottom"
@@ -76,7 +78,7 @@ class Details extends Component<ReduxProps> {
 
         return (
             <CollapsibleSection
-                name="Specification"
+                name={i18n('title_specification')}
                 className={block('specification')}
                 size={collapsibleSize}
                 marginDirection="bottom"
@@ -90,7 +92,7 @@ class Details extends Component<ReduxProps> {
         const {alertEvents, collapsibleSize, isVanillaGpuOperation} = this.props;
         return !alertEvents?.length ? null : (
             <CollapsibleSection
-                name="Alerts"
+                name={i18n('title_alerts')}
                 size={collapsibleSize}
                 marginDirection="bottom"
                 collapsed={isVanillaGpuOperation}
@@ -117,11 +119,11 @@ class Details extends Component<ReduxProps> {
             <Button
                 size="s"
                 onClick={this.handleEditClick}
-                title="Edit pools and weights"
+                title={i18n('context_edit-pools-and-weights')}
                 className={block('edit-button')}
             >
                 <Icon awesome="pencil" />
-                &nbsp;Edit
+                &nbsp;{i18n('action_edit')}
             </Button>
         );
     }
@@ -133,14 +135,14 @@ class Details extends Component<ReduxProps> {
             runtime !== undefined &&
             runtime.length > 0 && (
                 <CollapsibleSection
-                    name="Runtime"
+                    name={i18n('title_runtime')}
                     className={block('runtime')}
                     overview={this.renderRuntimeOverview()}
                     size={collapsibleSize}
                     marginDirection="bottom"
                 >
                     <Flex className={block('runtime-switch')} gap={2}>
-                        Show abs. resources{' '}
+                        {i18n('context_show-abs-resources')}{' '}
                         <Switch
                             checked={this.state.isAbsoluteValue}
                             onUpdate={this.handleSwitchChange}
@@ -176,7 +178,7 @@ class Details extends Component<ReduxProps> {
             resources &&
             operation.type !== 'vanilla' && (
                 <CollapsibleSection
-                    name="Data flow"
+                    name={i18n('title_data-flow')}
                     className={block('resources')}
                     size={collapsibleSize}
                     marginDirection="bottom"
@@ -197,7 +199,7 @@ class Details extends Component<ReduxProps> {
         return (
             events && (
                 <CollapsibleSection
-                    name="Events"
+                    name={i18n('title_events')}
                     className={block('events')}
                     size={collapsibleSize}
                     marginDirection="bottom"

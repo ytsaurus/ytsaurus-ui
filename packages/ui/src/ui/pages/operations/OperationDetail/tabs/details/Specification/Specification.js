@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 
+import i18n from './i18n';
+
 import {MetaTable} from '@ytsaurus/components';
 import {
     TemplateCommand,
@@ -87,12 +89,12 @@ export default class Specification extends Component {
                 className={specificationBlock('meta')}
                 items={[
                     {
-                        key: 'mode',
+                        key: i18n('field_mode'),
                         value: mode,
                         visible: Boolean(mode),
                     },
                     {
-                        key: 'transfer task',
+                        key: i18n('field_transfer-task'),
                         value: <TemplateTransferTask id={id} url={url} />,
                         visible: Boolean(id || url),
                     },
@@ -104,12 +106,12 @@ export default class Specification extends Component {
     renderRemote({cluster, network}) {
         return (
             <div className={specificationBlock('remote')}>
-                <div className={headingBlock({size: 's'})}>Remote</div>
+                <div className={headingBlock({size: 's'})}>{i18n('title_remote')}</div>
 
                 <MetaTable
                     items={[
-                        {key: 'cluster', value: cluster},
-                        {key: 'network', value: network},
+                        {key: i18n('field_cluster'), value: cluster},
+                        {key: i18n('field_network'), value: network},
                     ]}
                 />
             </div>
@@ -123,14 +125,14 @@ export default class Specification extends Component {
         }));
 
         items.push({
-            key: 'command',
+            key: i18n('field_command'),
             value: <TemplateCommand value={command} lineCount={5} />,
             visible: Boolean(command?.length),
         });
 
         return (
             <div className={specificationBlock('started-by')}>
-                <div className={headingBlock({size: 's'})}>Started by</div>
+                <div className={headingBlock({size: 's'})}>{i18n('title_started-by')}</div>
 
                 <MetaTable items={items} />
             </div>
@@ -161,47 +163,47 @@ export default class Specification extends Component {
                 <MetaTable
                     items={[
                         {
-                            key: 'CPU limit',
+                            key: i18n('field_cpu-limit'),
                             value: `${format.NumberSmart(cpu_limit)} CPU`,
                             visible: Boolean(cpu_limit),
                         },
                         {
-                            key: 'GPU limit',
+                            key: i18n('field_gpu-limit'),
                             value: `${format.NumberSmart(gpu_limit)} GPU`,
                             visible: Boolean(gpu_limit),
                         },
                         {
-                            key: 'Memory limit',
+                            key: i18n('field_memory-limit'),
                             value: `${format.Bytes(memory_limit)} RAM`,
                             visible: Boolean(memory_limit),
                         },
                         {
-                            key: 'class name',
+                            key: i18n('field_class-name'),
                             value: className,
                             visible: Boolean(className),
                         },
                         {
-                            key: 'job count',
+                            key: i18n('field_job-count'),
                             value: jobCount,
                             visible: Boolean(jobCount),
                         },
                         {
-                            key: 'environment',
+                            key: i18n('field_environment'),
                             value: <TemplateEnvironment environments={environment} />,
                             visible: environment.length > 0,
                         },
                         {
-                            key: 'files',
+                            key: i18n('field_files'),
                             value: <TemplateFiles files={files} cluster={cluster} />,
                             visible: files.length > 0,
                         },
                         {
-                            key: 'command',
+                            key: i18n('field_command'),
                             value: <TemplateCommand value={command} lineCount={5} />,
                             visible: Boolean(command),
                         },
                         {
-                            key: 'layer paths',
+                            key: i18n('field_layer-paths'),
                             value: <TemplateLayerPaths paths={layerPaths} cluster={cluster} />,
                             visible: Boolean(layerPaths),
                         },
@@ -266,7 +268,7 @@ export default class Specification extends Component {
                 {startedBy && this.renderStartedBy(startedBy)}
 
                 {input?.length > 0 && this.renderIO('input', input, inputTableProps)}
-                {intermediate && this.renderIntermediate(intermediate, 'Intermediate')}
+                {intermediate && this.renderIntermediate(intermediate, i18n('title_intermediate'))}
                 {output?.length > 0 && this.renderIO('output', output, outputTableProps)}
                 {stderr?.length > 0 && this.renderIO('stderr', stderr, stderrTableProps)}
                 {coredumps?.length > 0 && this.renderIO('core', coredumps, stderrTableProps)}

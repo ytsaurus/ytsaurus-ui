@@ -2,6 +2,8 @@ import React, {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
+import i18n from './i18n';
+
 import {YsonWithScroll} from '../../../../components/Yson/YsonWithScroll';
 import {Checkbox, Flex, Loader} from '@gravity-ui/uikit';
 import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
@@ -64,7 +66,7 @@ function Toolbar({jobID}: SpecificationProps) {
             <Checkbox
                 className={block('checkbox')}
                 size="l"
-                content="Omit node directory"
+                content={i18n('field_omit-node-directory')}
                 checked={omitNodeDirectory}
                 onChange={handleNodeDirectoryChange}
             />
@@ -72,7 +74,7 @@ function Toolbar({jobID}: SpecificationProps) {
             <Checkbox
                 className={block('checkbox')}
                 size="l"
-                content="Omit input table specs"
+                content={i18n('field_omit-input-table-specs')}
                 checked={omitInputTableSpecs}
                 onChange={handleInputTableSpecsChange}
             />
@@ -80,7 +82,7 @@ function Toolbar({jobID}: SpecificationProps) {
             <Checkbox
                 className={block('checkbox')}
                 size="l"
-                content="Omit output table specs"
+                content={i18n('field_omit-output-table-specs')}
                 checked={omitOutputTableSpecs}
                 onChange={handleOutputTableSpecsChange}
             />

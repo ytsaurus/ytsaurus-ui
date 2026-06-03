@@ -9,6 +9,7 @@ import {Template} from '../../../../../../components/MetaTable/templates/Templat
 import {TemplateWeight} from '../../../../../../components/MetaTable/templates/OperationTemplate';
 
 import {formatShare} from '../../../../../../utils/operations/tabs/details/runtime';
+import i18n from './i18n';
 import {showEditPoolsWeightsModal} from '../../../../../../store/actions/operations';
 import hammer from '../../../../../../common/hammer';
 import {OperationPool} from '../../../../../../components/OperationPool/OperationPool';
@@ -131,9 +132,10 @@ class Runtime extends Component<Props> {
                             {
                                 key: 'fifo_index',
                                 label: (
-                                    <Tooltip content="Operation's position in the pool's queue. Operations on lower positions will be scheduled sooner.">
+                                    <Tooltip content={i18n('context_fifo-index-tooltip')}>
                                         <Flex alignItems="center" gap={1}>
-                                            FIFO index <Icon data={CircleQuestionIcon} size={16} />
+                                            {i18n('field_fifo-index')}{' '}
+                                            <Icon data={CircleQuestionIcon} size={16} />
                                         </Flex>
                                     </Tooltip>
                                 ),
@@ -188,13 +190,14 @@ class Runtime extends Component<Props> {
                             {
                                 key: 'gang',
                                 label: (
-                                    <Tooltip content="Indicates whether operation's jobs perform a single collective computation and must be scheduled simultaneously.">
+                                    <Tooltip content={i18n('context_gang-tooltip')}>
                                         <Flex alignItems="center" gap={1}>
-                                            Gang <Icon data={CircleQuestionIcon} size={16} />
+                                            {i18n('field_gang')}{' '}
+                                            <Icon data={CircleQuestionIcon} size={16} />
                                         </Flex>
                                     </Tooltip>
                                 ),
-                                value: isGang ? 'True' : 'False',
+                                value: isGang ? i18n('value_true') : i18n('value_false'),
                             },
                             ...(isGang
                                 ? [

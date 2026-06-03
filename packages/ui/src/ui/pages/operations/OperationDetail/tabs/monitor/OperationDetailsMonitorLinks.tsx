@@ -8,6 +8,7 @@ import {YTErrorBlock} from '../../../../../containers/Block/Block';
 import {MetaTable, type MetaTableItem} from '@ytsaurus/components';
 import {OperationPool} from '../../../../../components/OperationPool/OperationPool';
 import {operationMonitoringUrl} from '../../../../../utils/operations/detail';
+import i18n from './i18n';
 
 const block = cn('operation-detail-monitor-links');
 
@@ -17,13 +18,7 @@ function OperationDetailsMonitorLinks(props: OperationMonitoringTabProps) {
     const {operationsMonitoring: {urlTemplate, title} = {}} = uiSettings;
 
     if (!urlTemplate) {
-        return (
-            <YTErrorBlock
-                message={
-                    'Unexpected behavior: uiSettings.operationsMonitoring.urlTemplate is not defined.'
-                }
-            />
-        );
+        return <YTErrorBlock message={i18n('alert_url-template-not-defined')} />;
     }
 
     const items: Array<MetaTableItem> = pools.map(({pool, tree, slotIndex}, index) => {
@@ -41,7 +36,7 @@ function OperationDetailsMonitorLinks(props: OperationMonitoringTabProps) {
                         urlTemplate,
                     })}
                 >
-                    {title ?? 'Monitoring'} <Icon awesome="external-link" />
+                    {title ?? i18n('action_monitoring')} <Icon awesome="external-link" />
                 </Link>
             ),
         };

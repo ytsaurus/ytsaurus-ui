@@ -6,6 +6,7 @@ import cn from 'bem-cn-lite';
 import Icon from '../../../components/Icon/Icon';
 import {Button} from '@gravity-ui/uikit';
 
+import i18n from './i18n';
 import './OperationWeight.scss';
 
 const block = cn('operation-weight');
@@ -24,7 +25,7 @@ export default class OperationWeight extends Component {
                 view="flat-secondary"
                 size="s"
                 className={block('weight-edit')}
-                title="Edit operation weight"
+                title={i18n('action_edit-weight')}
                 onClick={() => onEdit()}
             >
                 <Icon awesome="pencil" />

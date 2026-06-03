@@ -18,12 +18,13 @@ import {type JobError, type JobEvents, type JobStatistic} from '../../../../type
 
 import './Details.scss';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../constants/global';
+import i18n from './i18n';
 
 const block = cn('job-details');
 
 function renderEvents(events: JobEvents, collapsibleSize: 'm' | 'ss') {
     return events ? (
-        <CollapsibleSection name="Events" className={block('events')} size={collapsibleSize}>
+        <CollapsibleSection name={i18n('title_events')} className={block('events')} size={collapsibleSize}>
             <Events events={events} type="phase" />
         </CollapsibleSection>
     ) : null;
@@ -41,7 +42,7 @@ function renderCompetitors(hasCompetitors: boolean, collapsibleSize: 'm' | 'ss')
     return hasCompetitors ? (
         <CollapsibleSection
             collapsed
-            name="Competitive jobs"
+            name={i18n('title_competitive-jobs')}
             className={block('speculative-jobs')}
             size={collapsibleSize}
         >
@@ -56,7 +57,7 @@ function renderStatistics(statistics: JobStatistic, collapsibleSize: 'm' | 'ss')
 
     return hasPipes ? (
         <CollapsibleSection
-            name="Statistics"
+            name={i18n('title_statistics')}
             className={block('statistics')}
             size={collapsibleSize}
         >
@@ -71,7 +72,7 @@ function renderPivotKeys(type: string | undefined, collapsibleSize: 'm' | 'ss') 
     return includes_(correctTypes, type) ? (
         <CollapsibleSection
             collapsed
-            name="Pivot keys"
+            name={i18n('title_pivot-keys')}
             className={block('pivot-keys')}
             size={collapsibleSize}
         >

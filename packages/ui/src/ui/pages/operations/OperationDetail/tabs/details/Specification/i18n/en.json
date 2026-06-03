@@ -1,0 +1,18 @@
+{
+  "title_remote": "Remote",
+  "title_started-by": "Started by",
+  "title_intermediate": "Intermediate",
+  "field_mode": "mode",
+  "field_transfer-task": "transfer task",
+  "field_cluster": "cluster",
+  "field_network": "network",
+  "field_cpu-limit": "CPU limit",
+  "field_gpu-limit": "GPU limit",
+  "field_memory-limit": "Memory limit",
+  "field_class-name": "class name",
+  "field_job-count": "job count",
+  "field_environment": "environment",
+  "field_files": "files",
+  "field_command": "command",
+  "field_layer-paths": "layer paths"
+}

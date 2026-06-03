@@ -42,7 +42,7 @@ export function IncarnationCardHeader(props: Props) {
                     url={`/${cluster}/${Page.OPERATIONS}/${operation.id}/jobs?state=all&incarnation=${incarnation.id}`}
                 >
                     <Flex alignItems={'center'} gap={1}>
-                        {i18n('jobs')}
+                        {i18n('action_jobs')}
                         <ArrowUpRightFromSquare />
                     </Flex>
                 </Link>

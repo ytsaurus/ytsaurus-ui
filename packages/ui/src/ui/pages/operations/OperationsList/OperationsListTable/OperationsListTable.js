@@ -28,6 +28,7 @@ import {
 import {performAction, prepareActions} from '../../../../utils/operations/detail';
 import {promptAction} from '../../../../store/actions/actions';
 import {PathItem} from './PathItem';
+import i18n from './i18n';
 
 import './OperationsListTable.scss';
 
@@ -58,7 +59,7 @@ function renderCopyTitle(item) {
             text={item.$value}
             view="flat-secondary"
             size="s"
-            title={'Copy operation id'}
+            title={i18n('action_copy-operation-id')}
             className={block('item-title-copy')}
         />
     );
@@ -108,7 +109,7 @@ class OperationsListTable extends Component {
                 <div className={block('item-start-time-default')}>
                     {hammer.format['DateTime'](item.startTime)}
                 </div>
-                <div className={block('item-duration')} title="Duration">
+                <div className={block('item-duration')} title={i18n('context_duration')}>
                     {hammer.format['TimeDuration'](item.duration)}
                 </div>
             </div>
@@ -168,18 +169,18 @@ class OperationsListTable extends Component {
                 <Button
                     size="s"
                     view="flat-secondary"
-                    title="Show pools and weights"
+                    title={i18n('action_show-pools-weights')}
                     className={block('view-button')}
                     onClick={() => showEditPoolsWeightsModal(item, false)}
                 >
                     <Icon awesome="eye" />
-                    &nbsp;View
+                    &nbsp;{i18n('action_view')}
                 </Button>
 
                 <Button
                     size="s"
                     view="flat-secondary"
-                    title="Edit pools and weights"
+                    title={i18n('action_edit-pools-weights')}
                     className={block('edit-button')}
                     onClick={() => showEditPoolsWeightsModal(item)}
                 >
@@ -196,10 +197,10 @@ class OperationsListTable extends Component {
 
         return (
             <React.Fragment>
-                <UserPoolItem awesomeIcon={'user'} title={'User'}>
+                <UserPoolItem awesomeIcon={'user'} title={i18n('title_user')}>
                     <SubjectCard name={user} />
                 </UserPoolItem>
-                <UserPoolItem awesomeIcon={'poll-people'} title={'Pool'}>
+                <UserPoolItem awesomeIcon={'poll-people'} title={i18n('title_pool')}>
                     {multiplePools ? (
                         this.renderMultiplePools(item)
                     ) : (
@@ -215,7 +216,7 @@ class OperationsListTable extends Component {
                     )}
                 </UserPoolItem>
                 {!multiplePools && (
-                    <UserPoolItem awesomeIcon={'weight-hanging'} title={'Weight'}>
+                    <UserPoolItem awesomeIcon={'weight-hanging'} title={i18n('title_weight')}>
                         <TemplateWeight
                             onEdit={() => showEditPoolsWeightsModal(item)}
                             operation={item}
@@ -289,11 +290,17 @@ class OperationsListTable extends Component {
             items: {
                 title: {
                     name: 'title',
+                    get caption() {
+                        return i18n('field_title');
+                    },
                     sort: false,
                     align: 'left',
                 },
                 type: {
                     name: 'type',
+                    get caption() {
+                        return i18n('field_type');
+                    },
                     sort: false,
                     align: 'left',
                 },
@@ -310,11 +317,16 @@ class OperationsListTable extends Component {
                 user_pool: {
                     name: 'user_pool',
                     sort: false,
-                    caption: 'User / Pool',
+                    get caption() {
+                        return i18n('field_user-pool');
+                    },
                     align: 'left',
                 },
                 start_time: {
                     name: 'start_time',
+                    get caption() {
+                        return i18n('field_start-time');
+                    },
                     sort: false,
                     align: 'left',
                 },
@@ -322,7 +334,9 @@ class OperationsListTable extends Component {
                     name: 'progress',
                     sort: false,
                     align: 'left',
-                    caption: 'State / Progress',
+                    get caption() {
+                        return i18n('field_state-progress');
+                    },
                 },
                 actions: {
                     name: 'actions',
@@ -347,7 +361,7 @@ class OperationsListTable extends Component {
 
         return (
             <ElementsTable
-                emptyDataDescription="Please, change your filtering settings to see search results"
+                emptyDataDescription={i18n('alert_change-filter-settings')}
                 isLoading={initialLoading}
                 items={operations}
                 {...this.settings}

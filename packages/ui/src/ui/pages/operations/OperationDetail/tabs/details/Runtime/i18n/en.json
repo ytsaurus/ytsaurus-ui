@@ -1,0 +1,8 @@
+{
+  "context_fifo-index-tooltip": "Operation's position in the pool's queue. Operations on lower positions will be scheduled sooner.",
+  "field_fifo-index": "FIFO index",
+  "context_gang-tooltip": "Indicates whether operation's jobs perform a single collective computation and must be scheduled simultaneously.",
+  "field_gang": "Gang",
+  "value_true": "True",
+  "value_false": "False"
+}

@@ -1,13 +1,13 @@
 {
   "alert_no-incarnations": "No incarnations to show",
-  "trigger-job-info": "Trigger job info",
-  "no-info-to-display": "No info to display",
-  "id": "Id",
-  "abort-reason": "Abort reason",
-  "interruption-reason": "Interruption reason",
-  "error": "Error",
-  "all": "All",
+  "alert_no-info-to-display": "No info to display",
+  "title_trigger-job-info": "Trigger job info",
+  "field_id": "Id",
+  "field_abort-reason": "Abort reason",
+  "field_interruption-reason": "Interruption reason",
+  "field_error": "Error",
+  "value_all": "All",
   "placeholder_incarnation-id": "Incarnation id...",
-  "jobs": "Jobs",
-  "incarnation-info": "Incarnation info"
+  "action_jobs": "Jobs",
+  "title_incarnation-info": "Incarnation info"
 }

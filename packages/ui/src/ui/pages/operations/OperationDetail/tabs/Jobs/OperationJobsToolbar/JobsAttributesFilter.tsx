@@ -6,6 +6,7 @@ import Select, {type YTSelectProps} from '../../../../../../components/Select/Se
 import {getFilteredAttributes} from '../../../../selectors';
 import {updateFilteredAttributes} from '../../../../../../store/actions/operations/jobs';
 import {ATTRIBUTE_ITEMS, ATTRIBUTE_ITEM_NAMES} from '../../../../../../store/selectors/operations';
+import i18n from './i18n';
 
 type Props = Omit<
     YTSelectProps,
@@ -26,7 +27,7 @@ function JobsAttributesFilter(props: Props) {
             {...props}
             multiple
             value={attributes}
-            label="Attributes:"
+            label={i18n('field_attributes')}
             filterable
             items={ATTRIBUTE_ITEMS}
             onUpdate={handleChange}

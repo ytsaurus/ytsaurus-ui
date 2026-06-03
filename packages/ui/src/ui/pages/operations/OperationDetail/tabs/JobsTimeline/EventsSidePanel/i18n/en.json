@@ -1,0 +1,7 @@
+{
+  "context_select-job": "Select job for more details",
+  "field_job-id": "Job id",
+  "field_state-phase": "State: Phase",
+  "field_duration": "Duration",
+  "field_start-time": "Start time"
+}

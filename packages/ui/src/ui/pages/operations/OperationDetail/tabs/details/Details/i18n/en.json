@@ -1,0 +1,11 @@
+{
+  "title_description": "Description",
+  "title_specification": "Specification",
+  "title_alerts": "Alerts",
+  "title_runtime": "Runtime",
+  "title_data-flow": "Data flow",
+  "title_events": "Events",
+  "action_edit": "Edit",
+  "context_edit-pools-and-weights": "Edit pools and weights",
+  "context_show-abs-resources": "Show abs. resources"
+}

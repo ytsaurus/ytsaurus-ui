@@ -29,6 +29,8 @@ import YTHistogram, {
     calculateFormatSettings,
 } from '../../../../../../components/YTHistogram/YTHistogram';
 
+import i18n from './i18n';
+
 import './JobSizes.scss';
 
 const block = cn('operation-detail-job-sizes');
@@ -75,7 +77,7 @@ class JobSizes extends React.Component<Props, State> {
                                         onUpdate={this.toggleEstimated}
                                         checked={this.state.showEstimated}
                                     >
-                                        Show estimated
+                                        {i18n('action_show-estimated')}
                                     </Checkbox>
                                 ),
                             },
@@ -112,8 +114,8 @@ class JobSizes extends React.Component<Props, State> {
                 <YTHistogram
                     className={block('charts')}
                     data={data}
-                    yLabel={'job count'}
-                    xLabel={'job input data weight'}
+                    yLabel={i18n('field_job-count')}
+                    xLabel={i18n('field_job-input-data-weight')}
                     xFormat={this.formatX}
                     yMin={0.5}
                     yLogarithmic
@@ -129,7 +131,7 @@ class JobSizes extends React.Component<Props, State> {
     };
 
     renderTooltip: YTHistogramProps['renderTooltip'] = (y, x0, x1) => {
-        return `<b>${y}</b> jobs have estimated input job size from <b>${x0}</b> to <b>${x1}</b>`;
+        return i18n('context_tooltip-jobs-size', {y, x0, x1});
     };
 
     renderPerTaskCharts(tasks: any) {
@@ -141,12 +143,12 @@ class JobSizes extends React.Component<Props, State> {
                     <div className={block('task-cell', {'per-task': true})} key={task_name}>
                         {this.renderChart(
                             input_data_weight_histogram,
-                            `Task "${task_name}" actual data weight`,
+                            i18n('title_task-actual-data-weight', {taskName: task_name}),
                         )}
                         {showEstimated &&
                             this.renderChart(
                                 estimated_input_data_weight_histogram,
-                                `Task "${task_name}" estimated data weight`,
+                                i18n('title_task-estimated-data-weight', {taskName: task_name}),
                             )}
                     </div>
                 );
@@ -159,8 +161,9 @@ class JobSizes extends React.Component<Props, State> {
         const {jobSizeHistogram, estimatedJobSizeHistogram} = this.prepareJobSizes();
         return (
             <div className={block('task-cell')}>
-                {this.renderChart(jobSizeHistogram, 'Input')}
-                {showEstimated && this.renderChart(estimatedJobSizeHistogram, 'Estimated input')}
+                {this.renderChart(jobSizeHistogram, i18n('title_input'))}
+                {showEstimated &&
+                    this.renderChart(estimatedJobSizeHistogram, i18n('title_estimated-input'))}
             </div>
         );
     }

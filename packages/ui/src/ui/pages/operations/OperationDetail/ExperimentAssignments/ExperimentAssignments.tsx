@@ -2,6 +2,8 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 import {useSelector} from '../../../../store/redux-hooks';
 
+import i18n from './i18n';
+
 import map_ from 'lodash/map';
 
 import ypath from '../../../../common/thor/ypath';
@@ -37,7 +39,7 @@ function ExperimentAssignments({className}: {className: string}) {
     return !items?.length ? null : (
         <CollapsibleSectionStateLess
             className={block(null, className)}
-            name="Experiments"
+            name={i18n('title_experiments')}
             onToggle={onToggleCollapse}
             collapsed={collapsed}
             size={UI_COLLAPSIBLE_SIZE}
@@ -75,30 +77,30 @@ function ExperimentAssignmentsItem(props: ItemProps) {
                 items={[
                     [
                         {
-                            key: 'Experiment',
+                            key: i18n('field_experiment'),
                             value: ypath.getValue(data, '/experiment'),
                         },
                         {
-                            key: 'Group',
+                            key: i18n('field_group'),
                             value: ypath.getValue(data, '/group'),
                         },
                     ],
                     [
                         {
-                            key: 'Ticket',
+                            key: i18n('field_ticket'),
                             value: <StarTrackLink id={ypath.getValue(data, '/ticket')} />,
                         },
                         {
-                            key: 'Dimension',
+                            key: i18n('field_dimension'),
                             value: ypath.getValue(data, '/dimension'),
                         },
                     ],
                     [
                         {
-                            key: 'Effect',
+                            key: i18n('field_effect'),
                             value: (
                                 <ClickableText onClick={toggleEffectVisibility}>
-                                    {effectVisible ? 'Hide' : 'Show'}
+                                    {effectVisible ? i18n('action_hide') : i18n('action_show')}
                                 </ClickableText>
                             ),
                         },

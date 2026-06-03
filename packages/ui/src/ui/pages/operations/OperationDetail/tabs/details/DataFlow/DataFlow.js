@@ -17,6 +17,7 @@ import {hasProgressTasks} from '../../../../../../utils/operations/tabs/details/
 import './DataFlow.scss';
 import ClickableAttributesButton from '../../../../../../components/AttributesButton/ClickableAttributesButton';
 import ExpandIcon from '../../../../../../components/ExpandIcon/ExpandIcon';
+import i18n from './i18n';
 const block = cn('resources');
 
 export const resourcesProps = PropTypes.arrayOf(
@@ -56,13 +57,13 @@ function prepareState(allowExpand, resources, expandedTasks) {
                           const {job_data_statistics, teleport_data_statistics} = item;
                           if (job_data_statistics) {
                               acc.push({
-                                  inner: 'processed by jobs',
+                                  inner: i18n('value_processed-by-jobs'),
                                   value: job_data_statistics,
                               });
                           }
                           if (teleport_data_statistics) {
                               acc.push({
-                                  inner: 'teleported',
+                                  inner: i18n('value_teleported'),
                                   value: teleport_data_statistics,
                               });
                           }
@@ -160,7 +161,7 @@ class DataFlow extends React.Component {
                 }
                 return (
                     <ClickableAttributesButton
-                        title={`Data flow: ${from} -> ${to}`}
+                        title={i18n('title_data-flow', {from, to})}
                         attributes={info}
                     />
                 );
@@ -193,7 +194,9 @@ class DataFlow extends React.Component {
 
                 {operation.isRunning() && intermediateResources && (
                     <div className={block('table', 'elements-section')}>
-                        <div className="elements-heading elements-heading_size_s">Uncommitted</div>
+                        <div className="elements-heading elements-heading_size_s">
+                            {i18n('title_uncommitted')}
+                        </div>
 
                         <ElementsTable
                             {...intermediateTableProps}

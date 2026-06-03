@@ -26,6 +26,8 @@ import {
 import Modal from '../../../../components/Modal/Modal';
 import Icon from '../../../../components/Icon/Icon';
 
+import i18n from './i18n';
+
 import './OperationsFilterPresets.scss';
 
 const ELEMENT = 'toolbar-presets';
@@ -104,8 +106,8 @@ class OperationsFilterPresets extends Component {
 
         return (
             <Modal
-                title="Save filter"
-                confirmText="Save"
+                title={i18n('title_save-filter')}
+                confirmText={i18n('action_save')}
                 visible={dialog.isSaving}
                 onCancel={toggleSaveFilterPresetDialog}
                 onConfirm={this.onConfirm}
@@ -116,9 +118,9 @@ class OperationsFilterPresets extends Component {
                             <label
                                 htmlFor={INPUT_ID}
                                 className={block('label')}
-                                title="Filter name"
+                                title={i18n('field_filter-name')}
                             >
-                                Filter name
+                                {i18n('field_filter-name')}
                             </label>
                             <TextInput
                                 id={INPUT_ID}
@@ -132,7 +134,7 @@ class OperationsFilterPresets extends Component {
                                 checked={isPresetDefault}
                                 onChange={(isPresetDefault) => this.setState({isPresetDefault})}
                             >
-                                Default filter
+                                {i18n('field_default-filter')}
                             </Checkbox>
                         </div>
                     </React.Fragment>

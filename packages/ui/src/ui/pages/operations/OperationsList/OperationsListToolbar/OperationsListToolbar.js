@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
 import {StickyContainer} from '../../../../components/StickyContainer/StickyContainer';
 
+import i18n from './i18n';
+
 import map_ from 'lodash/map';
 
 import {selectAllUserNames} from '../../../../store/selectors/global';
@@ -52,7 +54,7 @@ class OperationsListToolbar extends React.PureComponent {
 
     preparePermissionsPlaceholder(permissions) {
         if (permissions.length === 0) {
-            return 'Select...';
+            return i18n('action_select');
         }
 
         const labels = map_(permissions, (permission) => permission[0].toUpperCase());
@@ -94,6 +96,7 @@ class OperationsListToolbar extends React.PureComponent {
                     <OperationsSelectFilter
                         type="check"
                         name="permissions"
+                        label={i18n('field_permissions') + ':'}
                         withCounters={false}
                         placeholder={this.preparePermissionsPlaceholder}
                         states={[
@@ -115,10 +118,13 @@ class OperationsListToolbar extends React.PureComponent {
                 <div className={block('toolbar-state-filter', tbComp)}>
                     <OperationsSelectFilter
                         name="state"
+                        label={i18n('field_state') + ':'}
                         states={[
                             {
                                 name: 'all',
-                                caption: 'All states',
+                                get caption() {
+                                    return i18n('value_all-states');
+                                },
                                 show: true,
                             },
                             {
@@ -149,10 +155,13 @@ class OperationsListToolbar extends React.PureComponent {
                 <div className={block('toolbar-type-filter', tbComp)}>
                     <OperationsSelectFilter
                         name="type"
+                        label={i18n('field_type') + ':'}
                         states={[
                             {
                                 name: 'all',
-                                caption: 'All types',
+                                get caption() {
+                                    return i18n('value_all-types');
+                                },
                                 show: true,
                             },
                             {
@@ -201,7 +210,7 @@ class OperationsListToolbar extends React.PureComponent {
                         selected={failedJobsFilter.value}
                         onClick={() => updateFilter('failedJobs', !failedJobsFilter.value)}
                     >
-                        Only ops with failed jobs:{' '}
+                        {i18n('action_only-ops-with-failed-jobs')}{' '}
                         <span className={block('only-jobs-with-failed-counter')}>
                             {failedJobsFilter.counter}
                         </span>
@@ -210,12 +219,12 @@ class OperationsListToolbar extends React.PureComponent {
 
                 <div className={block('toolbar-save-preset', tbComp)}>
                     <Button
-                        title="Save filter"
+                        title={i18n('title_save-filter')}
                         onClick={toggleSaveFilterPresetDialog}
                         className={block('save-preset')}
                     >
                         <Icon awesome={'save'} face={'regular'} />
-                        &nbsp; Save filter
+                        &nbsp; {i18n('title_save-filter')}
                     </Button>
                 </div>
             </div>
@@ -223,15 +232,7 @@ class OperationsListToolbar extends React.PureComponent {
     }
 
     renderWarning_uiissue_2838() {
-        return (
-            <div className={block('ytfront-2838')}>
-                At the moment there is the unresolved performance issue with getting unfiltered list
-                of operations from archive,
-                <br />
-                as a temporary solution UI adds current username to &quot;Started by&quot; filter if
-                there are no any other filters specified.
-            </div>
-        );
+        return <div className={block('ytfront-2838')}>{i18n('alert_ytfront-2838-warning')}</div>;
     }
 
     render() {

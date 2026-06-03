@@ -1,5 +1,6 @@
 import cn from 'bem-cn-lite';
 import React, {Fragment} from 'react';
+import i18n from './i18n';
 import {type ConnectedProps, connect} from 'react-redux';
 import {type match as MatchType, Redirect, Route, Switch} from 'react-router';
 import hammer from '../../../common/hammer';
@@ -141,18 +142,26 @@ function getSpecialWaitingStatuses(
     }
 }
 
-const waitingForJobsTooltip =
-    'Operation scheduling has started, but not all jobs have been scheduled yet. If the problem persists, contact cluster administrators.';
-const waitingForResourcesTooltip =
-    'Not enough resources to start operation scheduling. This may happen if the pool has too many operations in the queue or too low resource guarantees.';
+const TOOLTIPS = {
+    get waitingForJobs() {
+        return i18n('context_waiting-for-jobs');
+    },
+    get waitingForResources() {
+        return i18n('context_waiting-for-resources');
+    },
+};
 
 function SpecialWaitingStatus({type}: {type: 'jobs' | 'resources'}) {
     return (
-        <Tooltip content={type === 'jobs' ? waitingForJobsTooltip : waitingForResourcesTooltip}>
+        <Tooltip content={type === 'jobs' ? TOOLTIPS.waitingForJobs : TOOLTIPS.waitingForResources}>
             <StatusLabel
                 state={'running'}
                 iconState={'running'}
-                text={`Waiting for ${type}`}
+                text={
+                    type === 'jobs'
+                        ? i18n('value_waiting-for-jobs')
+                        : i18n('value_waiting-for-resources')
+                }
                 renderPlaque
             />
         </Tooltip>
@@ -177,11 +186,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
     renderAction = (action: ReduxProps['actions'][0]) => {
         const {promptAction, operation} = this.props;
 
-        const message = action.message || (
-            <span>
-                Are you sure you want to <strong>{action.name}</strong> the operation?
-            </span>
-        );
+        const message = action.message || i18n('confirm_perform-action', {name: action.name});
         const handler = ({currentOption}: {currentOption?: string}) =>
             performAction({
                 ...action,
@@ -225,13 +230,14 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             | {label: typeof label}
             | {state: 'unknown'; iconState: 'running'; text: string} =
             isWaitingForJobs || isWaitingForResources
-                ? {state: 'unknown', iconState: 'running', text: 'Running'}
+                ? {state: 'unknown', iconState: 'running', text: i18n('value_running')}
                 : {label};
 
         return (
             <div className={detailBlock('header', 'elements-section')}>
                 <div className={detailBlock('header-heading', headingBlock({size: 'l'}))}>
-                    {hammer.format['ReadableField'](type)} operation by <SubjectCard name={user} />
+                    {hammer.format['ReadableField'](type)} {i18n('title_operation-by')}{' '}
+                    <SubjectCard name={user} />
                     &ensp;
                     <StatusLabel {...mainStatusProps} renderPlaque />
                     &ensp;
@@ -256,10 +262,11 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
 
         const items = [
             [
-                {key: 'id', value: <Template.Id id={$value} />},
-                {key: 'user', value: <SubjectCard name={user} />},
+                {key: 'id', label: i18n('field_id'), value: <Template.Id id={$value} />},
+                {key: 'user', label: i18n('field_user'), value: <SubjectCard name={user} />},
                 {
                     key: 'pools',
+                    label: i18n('field_pools'),
                     value: (
                         <TemplatePools
                             onEdit={this.handlePoolsEditClick}
@@ -272,28 +279,33 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                         />
                     ),
                 },
-                {key: 'type', value: <Template.Readable value={type} />},
+                {key: 'type', label: i18n('field_type'), value: <Template.Readable value={type} />},
             ],
             [
                 {
                     key: 'started',
+                    label: i18n('field_started'),
                     value: <Template.Time time={startTime} valueFormat="DateTime" />,
                 },
                 {
                     key: 'finished',
+                    label: i18n('field_finished'),
                     value: <Template.Time time={finishTime} valueFormat="DateTime" />,
                 },
                 {
                     key: 'duration',
+                    label: i18n('field_duration'),
                     value: <Template.Time time={duration} valueFormat="TimeDuration" />,
                 },
                 {
                     key: 'total job wall time',
+                    label: i18n('field_total-job-wall-time'),
                     value: <Template.Time time={totalJobWallTime} valueFormat="TimeDuration" />,
                     visible: !isGpuVanillaOperation,
                 },
                 {
                     key: 'total cpu time spent',
+                    label: i18n('field_total-cpu-time-spent'),
                     value: <Template.Time time={cpuTimeSpent} valueFormat="TimeDuration" />,
                     visible: !isGpuVanillaOperation,
                 },
@@ -347,13 +359,29 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
         const path = `/${cluster}/${Page.OPERATIONS}/${operationId}`;
 
         const showSettings: Record<string, TabSettings> = {
+            [Tab.DETAILS]: {show: true, title: i18n('title_details')},
+            [Tab.ATTRIBUTES]: {show: true, title: i18n('title_attributes')},
+            [Tab.SPECIFICATION]: {show: true, title: i18n('title_specification')},
+            [Tab.JOBS]: {show: true, title: i18n('title_jobs')},
             ...getDetailsTabsShowSettings(operation),
-            [Tab.STATISTICS]: {show: hasStatististicsTab},
-            [Tab.JOBS_MONITOR]: {show: jobsMonitorVisible || activeTab === Tab.JOBS_MONITOR},
-            [Tab.MONITOR]: {show: monitorTabVisible},
-            [Tab.JOBS_TIMELINE]: {show: timelineTabVisible},
-            [Tab.INCARNATIONS]: {show: Boolean(operationEvents?.length)},
-            [Tab.LOGS]: {show: Boolean(UIFactory.renderOperationLogsTab())},
+            [Tab.STATISTICS]: {show: hasStatististicsTab, title: i18n('title_statistics')},
+            [Tab.JOBS_MONITOR]: {
+                show: jobsMonitorVisible || activeTab === Tab.JOBS_MONITOR,
+                title: i18n('title_jobs-monitor'),
+            },
+            [Tab.MONITOR]: {
+                show: monitorTabVisible,
+                title: monitorTabTitle ?? i18n('title_monitoring'),
+            },
+            [Tab.JOBS_TIMELINE]: {show: timelineTabVisible, title: i18n('title_jobs-timeline')},
+            [Tab.INCARNATIONS]: {
+                show: Boolean(operationEvents?.length),
+                title: i18n('title_incarnations'),
+            },
+            [Tab.LOGS]: {
+                show: Boolean(UIFactory.renderOperationLogsTab()),
+                title: i18n('title_logs'),
+            },
             [Tab.PERFORMANCE]: {
                 show: Boolean(operationPerformanceUrlTemplate),
                 external: true,
@@ -377,9 +405,7 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             });
         }
 
-        const props = makeTabProps(path, Tab, showSettings, undefined, {
-            [Tab.MONITOR]: monitorTabTitle ?? 'Monitoring',
-        });
+        const props = makeTabProps(path, Tab, showSettings, undefined);
 
         return (
             <div className={detailBlock('tabs')}>

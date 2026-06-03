@@ -42,7 +42,7 @@ export function IncarnationInfoDialog() {
 
     return (
         <DialogWrapper size={'m'} open={Boolean(data?.visible)} onClose={handleClose}>
-            <DialogWrapper.Header caption={i18n('incarnation-info')} />
+            <DialogWrapper.Header caption={i18n('title_incarnation-info')} />
             <DialogWrapper.Body>
                 <Yson
                     className={block('details')}

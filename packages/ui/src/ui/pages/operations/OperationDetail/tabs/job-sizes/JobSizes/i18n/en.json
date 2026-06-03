@@ -1,0 +1,10 @@
+{
+  "action_show-estimated": "Show estimated",
+  "field_job-count": "job count",
+  "field_job-input-data-weight": "job input data weight",
+  "context_tooltip-jobs-size": "<b>{{y}}</b> jobs have estimated input job size from <b>{{x0}}</b> to <b>{{x1}}</b>",
+  "title_task-actual-data-weight": "Task \"{{taskName}}\" actual data weight",
+  "title_task-estimated-data-weight": "Task \"{{taskName}}\" estimated data weight",
+  "title_input": "Input",
+  "title_estimated-input": "Estimated input"
+}

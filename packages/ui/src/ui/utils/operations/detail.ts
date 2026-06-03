@@ -72,8 +72,8 @@ export function getDetailsTabsShowSettings(operation: unknown) {
     const showPartitionSizes = progress && ypath.getValue(progress, '/partition_size_histogram');
 
     return {
-        job_sizes: {show: Boolean(showJobSizes)},
-        partition_sizes: {show: Boolean(showPartitionSizes)},
+        job_sizes: {show: Boolean(showJobSizes), title: i18n('tab_job-sizes')},
+        partition_sizes: {show: Boolean(showPartitionSizes), title: i18n('tab_partition-sizes')},
     };
 }
 

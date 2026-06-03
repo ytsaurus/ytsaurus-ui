@@ -31,10 +31,16 @@ export const completedTableProps = {
             name: {
                 sort: false,
                 align: 'left',
+                get caption() {
+                    return i18n('field_name');
+                },
             },
             row_count: {
                 sort: false,
                 align: 'right',
+                get caption() {
+                    return i18n('field_rows');
+                },
             },
             compressed_data_size: {
                 sort: false,
@@ -53,6 +59,9 @@ export const completedTableProps = {
             data_weight: {
                 sort: false,
                 align: 'right',
+                get caption() {
+                    return i18n('field_weight');
+                },
             },
             chunk_count: {
                 sort: false,

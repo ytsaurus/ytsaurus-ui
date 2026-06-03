@@ -1,0 +1,12 @@
+{
+  "alert_dump-job-context-success": "Job context has been dumped.",
+  "alert_dump-job-context-error": "Could not dump job context.",
+  "alert_unknown-error": "Oops, something went wrong",
+  "action_view": "view",
+  "confirm_job-action": "Are you sure you want to {{actionName}} the job?",
+  "title_job-shell": "Job shell",
+  "title_dump-job-context": "Dump job context",
+  "action_cancel": "Cancel",
+  "action_copy": "Copy",
+  "action_confirm": "Confirm"
+}

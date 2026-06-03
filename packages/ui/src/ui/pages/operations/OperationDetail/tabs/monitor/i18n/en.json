@@ -1,0 +1,4 @@
+{
+  "alert_url-template-not-defined": "Unexpected behavior: uiSettings.operationsMonitoring.urlTemplate is not defined.",
+  "action_monitoring": "Monitoring"
+}
