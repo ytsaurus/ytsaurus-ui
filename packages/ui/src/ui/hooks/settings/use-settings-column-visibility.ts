@@ -3,7 +3,7 @@ import isEqual_ from 'lodash/isEqual';
 import {type KeysByType} from '../../../@types/types';
 import {type DescribedSettings} from '../../../shared/constants/settings-types';
 
-import {getSettingsData} from '../../store/selectors/settings/settings-base';
+import {selectSettingsData} from '../../store/selectors/settings/settings-base';
 import {setSettingByKey} from '../../store/actions/settings';
 import {type RootState} from '../../store/reducers';
 import {useDispatch, useSelector} from '../../store/redux-hooks';
@@ -16,7 +16,7 @@ export function useSettingsVisibleColumns<K extends KeysByType<DescribedSettings
     key: K,
 ) {
     const dispatch = useDispatch();
-    const visibleColumns = useSelector(getSettingsData)[key] ?? [];
+    const visibleColumns = useSelector(selectSettingsData)[key] ?? [];
 
     return {
         visibleColumns,
@@ -24,7 +24,7 @@ export function useSettingsVisibleColumns<K extends KeysByType<DescribedSettings
             updateFn: ColumnVisibility | ((oldState: ColumnVisibility) => ColumnVisibility),
         ) => {
             dispatch((_dispatch: unknown, getState: () => RootState) => {
-                const prevVisibleColumns = getSettingsData(getState())[key] ?? [];
+                const prevVisibleColumns = selectSettingsData(getState())[key] ?? [];
                 const newVisibility = 'function' === typeof updateFn ? updateFn({}) : updateFn;
 
                 const newVisibleColumns: DescribedSettings[K] = [
@@ -51,7 +51,7 @@ export function useSettingsVisibleColumns<K extends KeysByType<DescribedSettings
             updateFn: ColumnOrder | ((prevOrder: ColumnOrder) => ColumnOrder),
         ) => {
             dispatch((_dispatch: unknown, getState: () => RootState) => {
-                const prevVisibleColumns = getSettingsData(getState())[key] ?? [];
+                const prevVisibleColumns = selectSettingsData(getState())[key] ?? [];
                 const visible = new Set<string>(prevVisibleColumns);
 
                 const newOrder = 'function' === typeof updateFn ? updateFn([]) : updateFn;

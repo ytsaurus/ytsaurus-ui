@@ -1,7 +1,7 @@
 import {createSelector} from 'reselect';
-import {getSettingsData} from '../settings/settings-base';
+import {selectSettingsData} from '../settings/settings-base';
 
 export const selectSettingQueryTrackerQueriesListSidebarVisibilityMode = createSelector(
-    getSettingsData,
+    selectSettingsData,
     (settings) => Boolean(settings['global::queryTracker::queriesListSidebarVisibilityMode']),
 );

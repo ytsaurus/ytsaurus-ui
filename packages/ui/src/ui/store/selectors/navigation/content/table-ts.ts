@@ -10,7 +10,7 @@ import {CypressNodeTypes} from '../../../../utils/cypress-attributes';
 import {selectAttributes} from '../index';
 import Columns from '../../../../utils/navigation/content/table/columns';
 import {getColumnsValues} from '../../../../utils/navigation/content/table/table';
-import {getSettingsData} from '../../../../store/selectors/settings/settings-base';
+import {selectSettingsData} from '../../../../store/selectors/settings/settings-base';
 import {TABLE_DEFAULTS} from '../../../../constants/settings/table';
 
 export const selectLoaded = (state: RootState) => state.navigation.content.table.loaded;
@@ -37,7 +37,7 @@ const selectPageSizeRaw = (state: RootState) => state.navigation.content.table.p
 const selectCellSizeRaw = (state: RootState) => state.navigation.content.table.cellSize;
 
 export const selectCellSize = createSelector(
-    [selectCellSizeRaw, getSettingsData],
+    [selectCellSizeRaw, selectSettingsData],
     (cellSize, settings) => {
         return (
             cellSize ??
@@ -48,7 +48,7 @@ export const selectCellSize = createSelector(
 );
 
 export const selectPageSize = createSelector(
-    [selectPageSizeRaw, getSettingsData],
+    [selectPageSizeRaw, selectSettingsData],
     (pageSize, settings) => {
         return (
             pageSize ??

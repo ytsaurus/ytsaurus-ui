@@ -12,7 +12,7 @@ import SelectFacade, {
     type YTSelectProps,
 } from '../../components/Select/Select';
 import {setSettingByKey} from '../../store/actions/settings';
-import {getSettingsData} from '../../store/selectors/settings/settings-base';
+import {selectSettingsData} from '../../store/selectors/settings/settings-base';
 
 import {SettingsItemLayot, type SettingsItemLayotProps} from './SettingsItemLayout';
 
@@ -67,7 +67,7 @@ export function SettingMenuSelectByKey<K extends KeysByType<DescribedSettings, s
     description,
 }: SettingMenuSelectByKeyProps<K>) {
     const dispatch = useDispatch();
-    const value = useSelector(getSettingsData)[settingKey];
+    const value = useSelector(selectSettingsData)[settingKey];
 
     return (
         <div className={b('settings-item', {select: true})}>
@@ -148,7 +148,7 @@ export function SettingsMenuRadioByKey<K extends KeysByType<DescribedSettings, s
 
 function useSettingByKey<K extends keyof DescribedSettings>(settingKey: K) {
     const dispatch = useDispatch();
-    const value = useSelector(getSettingsData)[settingKey];
+    const value = useSelector(selectSettingsData)[settingKey];
 
     return {
         value,

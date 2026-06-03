@@ -1,9 +1,9 @@
 import {createSelector} from 'reselect';
 
 import {uiSettings} from '../../../config/ui-settings';
-import {getSettingsData} from '../../../store/selectors/settings/settings-base';
+import {selectSettingsData} from '../../../store/selectors/settings/settings-base';
 
-const selectSettingSelectedFontType = createSelector(getSettingsData, (data) => {
+const selectSettingSelectedFontType = createSelector(selectSettingsData, (data) => {
     return data['global::fontType'];
 });
 

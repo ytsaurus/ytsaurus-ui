@@ -9,7 +9,7 @@ import {
     QueriesListFilterPresets,
     QueriesListMode,
 } from '../../../types/query-tracker/queryList';
-import {getSettingsData} from '../settings/settings-base';
+import {selectSettingsData} from '../settings/settings-base';
 import {selectIsVcsVisible} from './vcs';
 import groupBy_ from 'lodash/groupBy';
 import moment from 'moment';
@@ -108,7 +108,7 @@ export const selectQueryListColumns = createSelector(
 );
 
 export const selectHasCustomHistoryFilters = createSelector(
-    [selectQueriesFilters, getSettingsData],
+    [selectQueriesFilters, selectSettingsData],
     (filter) => {
         const {from, to, state, user} = filter;
         const defaultFilter = DefaultQueriesListFilter[QueriesListMode.History];
@@ -175,5 +175,5 @@ export function selectQueriesListFilterParams(state: RootState): QueriesListPara
 }
 
 export function selectQueryListHistoryColumns(state: RootState) {
-    return getSettingsData(state)['global::queryTracker::history::Columns'];
+    return selectSettingsData(state)['global::queryTracker::history::Columns'];
 }

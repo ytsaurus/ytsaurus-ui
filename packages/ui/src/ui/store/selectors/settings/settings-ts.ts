@@ -1,7 +1,7 @@
 import {createSelector} from 'reselect';
 
 import {selectCluster} from '../../../store/selectors/global';
-import {getSettingsData} from './settings-base';
+import {selectSettingsData} from './settings-base';
 import {selectClusterNS, selectGetSetting} from '../../../store/selectors/settings';
 import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
 import {type AccountUsageViewType} from '../../../store/reducers/accounts/usage/accounts-usage-filters';
@@ -27,15 +27,15 @@ export const getSettingsPagesPinned = createSelector(
     },
 );
 
-export const getSettingsQueryTrackerNewGraphType = createSelector(getSettingsData, (data) => {
+export const getSettingsQueryTrackerNewGraphType = createSelector(selectSettingsData, (data) => {
     return data['global::queryTracker::useNewGraphView'] || false;
 });
 
-export const getSettingsQueryTrackerGraphAutoCenter = createSelector(getSettingsData, (data) => {
+export const getSettingsQueryTrackerGraphAutoCenter = createSelector(selectSettingsData, (data) => {
     return data['global::queryTracker::graphAutoCenter'] || false;
 });
 
-export const getSettingsEditorVimMode = createSelector(getSettingsData, (data) => {
+export const getSettingsEditorVimMode = createSelector(selectSettingsData, (data) => {
     return data['global::editor::vimMode'] || false;
 });
 
@@ -81,9 +81,12 @@ export const getSettingsSystemRpcProxiesCollapsed = createSelector(
     },
 );
 
-export const getSettingsSystemCypressProxiesCollapsed = createSelector(getSettingsData, (data) => {
-    return data['global::system::cypressProxiesCollapsed'] ?? true;
-});
+export const getSettingsSystemCypressProxiesCollapsed = createSelector(
+    selectSettingsData,
+    (data) => {
+        return data['global::system::cypressProxiesCollapsed'] ?? true;
+    },
+);
 export const getSettingsSystemHttpProxiesCollapsed = createSelector(
     selectGetSetting,
     (getSetting) => {
@@ -207,4 +210,4 @@ export const getCurrentClusterNS = createSelector(
     },
 );
 export const getUseAutoRefresh = (state: RootState) =>
-    getSettingsData(state)['global::autoRefresh'];
+    selectSettingsData(state)['global::autoRefresh'];

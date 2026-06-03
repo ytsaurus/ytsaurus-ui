@@ -1,6 +1,6 @@
 import {createSelector} from 'reselect';
-import {getSettingsData} from './settings-base';
+import {selectSettingsData} from './settings-base';
 
-export const selectShowIncarnationsNext = createSelector([getSettingsData], (data) => {
+export const selectShowIncarnationsNext = createSelector([selectSettingsData], (data) => {
     return data['global::operations::showIncarnationsNext'] === true;
 });

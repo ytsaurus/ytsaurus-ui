@@ -2,10 +2,10 @@ import {createSelector} from 'reselect';
 
 import UIFactory from '../../../UIFactory';
 import {selectIsAdmin} from '../../../store/selectors/global/is-developer';
-import {getSettingsData} from './settings-base';
+import {selectSettingsData} from './settings-base';
 
 export const selectNavigationSqlService = createSelector(
-    [getSettingsData, selectIsAdmin],
+    [selectSettingsData, selectIsAdmin],
     (data, isAdmin) => {
         const value = data['global::navigation::sqlService'];
         const isQtKitEnabled = value?.length ? -1 !== value.indexOf('qtkit') : isAdmin;

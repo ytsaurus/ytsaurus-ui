@@ -6,7 +6,7 @@ import {Checkbox} from '@gravity-ui/uikit';
 import {type DescribedSettings} from '../../../shared/constants/settings-types';
 import {type KeysByType} from '../../../@types/types';
 
-import {getSettingsData} from '../../store/selectors/settings/settings-base';
+import {selectSettingsData} from '../../store/selectors/settings/settings-base';
 import {setSettingByKey} from '../../store/actions/settings';
 import {SettingsItemLayot, type SettingsItemLayotProps} from './SettingsItemLayout';
 
@@ -17,7 +17,7 @@ export function BooleanSettingItem<T extends KeysByType<DescribedSettings, boole
     ...rest
 }: BooleanSettingItemProps<T>) {
     const dispatch = useDispatch();
-    const {[settingKey]: checked} = useSelector(getSettingsData);
+    const {[settingKey]: checked} = useSelector(selectSettingsData);
 
     return (
         <SettingsItemLayot {...rest}>
