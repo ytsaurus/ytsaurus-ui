@@ -1,5 +1,6 @@
 import {type AppBrowserHistory, type StoreType} from './store.main';
 import {type MakeRotedUrlFnType} from './location';
+import {type Store} from 'redux';
 import {
     type CombinedSliceReducer,
     type Slice,
@@ -7,6 +8,13 @@ import {
     type SliceSelectors,
 } from '@reduxjs/toolkit';
 import {type RootState} from './reducers';
+
+export function setWindowStoreAndHistory(store: Store, appBrowserHistory: AppBrowserHistory) {
+    Object.assign(window, {store, appBrowserHistory});
+    store.subscribe(() => {
+        Object.assign(store, {lastActionTime: Date.now()});
+    });
+}
 
 export function getWindowStore(): StoreType {
     return (window as any).store;

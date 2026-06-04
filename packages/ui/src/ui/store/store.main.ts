@@ -6,6 +6,7 @@ import {createBrowserHistory} from 'history';
 import getLocationMiddleware from '../state-url-mapping';
 import {makeRootReducer} from './reducers/index.main';
 import {rootApi} from './api';
+import {setWindowStoreAndHistory} from './window-store';
 
 export const createMainEntryStore = () => {
     const history = createBrowserHistory();
@@ -24,8 +25,7 @@ export const createMainEntryStore = () => {
     setupListeners(store.dispatch);
 
     listenForHistoryChange(store, history);
-    (window as any).appBrowserHistory = history;
-    (window as any).store = Object.assign(store, {rootReducer, initialState: store.getState()});
+    setWindowStoreAndHistory(store, history);
     return {store, history};
 };
 
