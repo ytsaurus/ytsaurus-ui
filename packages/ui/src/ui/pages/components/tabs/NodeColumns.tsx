@@ -7,6 +7,8 @@ import StatusBlock from '../../../components/StatusBlock/StatusBlock';
 import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 import {ClickableText} from '../../../components/ClickableText/ClickableText';
 
+import i18n from './i18n';
+
 import './NodeColumns.scss';
 
 const block = cn('yt-node-columns');
@@ -30,7 +32,7 @@ export function NodeColumnState({state}: {state: 'online' | 'offline' | string})
 }
 
 export function NodeColumnBanned({banned}: {banned: boolean}) {
-    return banned ? <StatusBlock text="B" theme="banned" /> : format.NO_VALUE;
+    return banned ? <StatusBlock text={i18n('value_banned')} theme="banned" /> : format.NO_VALUE;
 }
 
 export function NodeColumnRole({role}: {role: 'default' | 'control' | 'data'}) {

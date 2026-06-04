@@ -6,6 +6,7 @@ import {type ResolveThunks, connect} from 'react-redux';
 import Button from '../../../../components/Button/Button';
 
 import {openAttributesModal} from '../../../../store/actions/modals/attributes-modal';
+import i18n from './i18n';
 
 NodeCount.propTypes = {
     // from parent
@@ -44,9 +45,9 @@ function NodeCount({id, name, count, className, openAttributesModal}: NodeCountP
                 size="m"
                 view="flat-secondary"
                 onClick={handleClick}
-                title="view account statistics"
+                title={i18n('context_account-statistics')}
             >
-                View
+                {i18n('action_view')}
             </Button>
         </div>
     );

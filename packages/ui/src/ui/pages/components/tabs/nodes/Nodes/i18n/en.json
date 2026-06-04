@@ -1,0 +1,5 @@
+{
+  "action_filter": "Filter {{count}}",
+  "action_columns": "Columns",
+  "field_filter-hosts": "Filter hosts..."
+}

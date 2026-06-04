@@ -1,0 +1,4 @@
+{
+  "alert_unexpected-behavior": "Unexpected behavior",
+  "alert_state-filter-excludes-includes": "Components/Nodes: It is not allowed to have excludes and includes for \"state\" filter at the same time"
+}

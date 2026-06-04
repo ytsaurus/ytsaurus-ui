@@ -19,6 +19,8 @@ import {
 import {SERIE_COLORS} from '../../../../../constants/colors';
 import {useSerieColor} from '../../../../../hooks/use-serie-color';
 
+import i18n from './i18n';
+
 import './NodeBundlesTotal.scss';
 
 const block = cn('node-bundles-total');
@@ -33,7 +35,7 @@ function NodeBundlesTotal() {
 
     return (
         <div className={block(null, 'elements-section')}>
-            <div className={'elements-heading elements-heading_size_xs'}>Total</div>
+            <div className={'elements-heading elements-heading_size_xs'}>{i18n('title_total')}</div>
             <MetaTable
                 items={[
                     {
@@ -128,7 +130,7 @@ export function TabletDynamicTotal(props: TabletDynamicTotalProps) {
                                         height: '1em',
                                     }}
                                 />
-                                <div>{key}</div>
+                                <div>{i18n(`value_${key}`)}</div>
                                 <div>{format.Bytes(props.data[key])}</div>
                             </React.Fragment>
                         );
@@ -214,7 +216,9 @@ export function StorePreload(props: {
                                     })}
                                 />
                                 <div className={block('progress-tooltip-title')}>
-                                    {key === 'allCount' ? 'Total' : key}
+                                    {key === 'allCount'
+                                        ? i18n('title_total')
+                                        : i18n(`value_${key}`)}
                                 </div>
                                 <div>{format.Number(props.data[key])}</div>
                             </React.Fragment>

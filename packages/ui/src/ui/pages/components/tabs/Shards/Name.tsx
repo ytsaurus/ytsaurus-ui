@@ -7,6 +7,7 @@ import Button from '../../../../components/Button/Button';
 import Modal from '../../../../components/Modal/Modal';
 import {YTErrorBlock} from '../../../../containers/Block/Block';
 import Icon from '../../../../components/Icon/Icon';
+import i18n from './i18n';
 
 import {
     closeNameEditor,
@@ -68,7 +69,12 @@ function Name({
     return (
         <div className={className}>
             {initialName}
-            <Button size="m" view="flat-secondary" onClick={handleOpen} title="Edit name">
+            <Button
+                size="m"
+                view="flat-secondary"
+                onClick={handleOpen}
+                title={i18n('action_edit-name')}
+            >
                 <Icon awesome="pencil" />
             </Button>
 
@@ -79,14 +85,14 @@ function Name({
                     onCancel={closeNameEditor}
                     loading={loading}
                     visible={visible}
-                    title="Edit name"
+                    title={i18n('action_edit-name')}
                     content={
                         <Fragment>
                             <TextInput
                                 size="m"
                                 value={name}
                                 onUpdate={changeName}
-                                placeholder="Enter name..."
+                                placeholder={i18n('context_enter-name')}
                             />
                             {error && <YTErrorBlock error={errorData} />}
                         </Fragment>

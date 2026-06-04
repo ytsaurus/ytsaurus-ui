@@ -1,0 +1,12 @@
+{
+  "title_total": "Total",
+  "value_active": "active",
+  "value_backing": "backing",
+  "value_passive": "passive",
+  "value_other": "other",
+  "value_usage": "usage",
+  "value_limit": "limit",
+  "value_completed": "completed",
+  "value_pending": "pending",
+  "value_failed": "failed"
+}

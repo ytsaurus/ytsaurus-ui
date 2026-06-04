@@ -30,6 +30,8 @@ import {selectCluster} from '../../../../store/selectors/global';
 import {formatByParams} from '../../../../../shared/utils/format';
 import UIFactory from '../../../../UIFactory';
 
+import i18n from './i18n';
+
 import './VersionSummary.scss';
 
 const block = cn('versions-summary');
@@ -107,7 +109,7 @@ class VersionsSummary extends React.Component<Props, State> {
             <span
                 className={block('value', {clickable: Boolean(onClick)})}
                 onClick={onClick}
-                title={onClick ? 'Click to set corresponding filter values' : undefined}
+                title={onClick ? i18n('context_click-to-filter') : undefined}
                 data-qa="component-amount"
             >
                 {content}
@@ -146,10 +148,10 @@ class VersionsSummary extends React.Component<Props, State> {
         return (
             <Flex direction="row">
                 <Button view="flat" className={block('filter-button')} onClick={this.handleShowAll}>
-                    Show all
+                    {i18n('action_show-all')}
                 </Button>
                 <Button view="flat" className={block('filter-button')} onClick={this.handleReset}>
-                    Reset
+                    {i18n('action_reset')}
                 </Button>
             </Flex>
         );
@@ -254,7 +256,7 @@ class VersionsSummary extends React.Component<Props, State> {
                 name: 'type',
                 render: this.renderType,
                 sortable: false,
-                header: this.renderHeader('type', 'Components'),
+                header: this.renderHeader('type', i18n('field_components')),
                 customStyle: () =>
                     ({
                         position: 'sticky',
@@ -272,8 +274,8 @@ class VersionsSummary extends React.Component<Props, State> {
             <div className={block()}>
                 <div className={block('header-actions')}>
                     <Checkbox
-                        title={'Hide offline'}
-                        content={'Hide offline'}
+                        title={i18n('action_hide-offline')}
+                        content={i18n('action_hide-offline')}
                         defaultChecked={checkedHideOffline}
                         onUpdate={this.handleHideOffline}
                     />
@@ -287,7 +289,7 @@ class VersionsSummary extends React.Component<Props, State> {
                             (version) => !DEFAULT_VERSIONS.includes(version),
                         )}
                         renderFilter={this.renderSelectFilter}
-                        placeholder="Versions"
+                        placeholder={i18n('field_versions')}
                         multiple
                     />
                     {monitoringLink && (
@@ -296,7 +298,7 @@ class VersionsSummary extends React.Component<Props, State> {
                             target="_blank"
                             className={block('monitoring-link')}
                         >
-                            {monitoringLink.title || 'Monitoring'}{' '}
+                            {monitoringLink.title || i18n('action_monitoring')}{' '}
                             <Icon awesome="external-link" size={14} />
                         </Link>
                     )}

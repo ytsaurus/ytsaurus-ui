@@ -3,6 +3,7 @@ import block from 'bem-cn-lite';
 import {useRouteMatch} from 'react-router';
 
 import hammer from '../../common/hammer';
+import i18n from './i18n';
 
 const b = block('elements-message');
 
@@ -18,8 +19,8 @@ export default function Placeholder() {
         <div className={b({theme: 'warning'})}>
             <p className={b('paragraph')}>
                 {tab
-                    ? `Viewer for tab "${hammer.format['ReadableField'](tab)}" is not implemented.`
-                    : 'Viewer for this tab is not implemented.'}
+                    ? i18n('alert_tab-not-implemented', {tab: hammer.format['ReadableField'](tab)})
+                    : i18n('alert_unknown-tab-not-implemented')}
             </p>
         </div>
     );

@@ -2,9 +2,12 @@ import {initialFiltersState} from '../../../../store/reducers/components/nodes/s
 import {createSelector} from 'reselect';
 import transform_ from 'lodash/transform';
 import {selectTemplates} from '../../../../store/selectors/settings';
+import i18n from './i18n';
 
 const getDefaultPreset = () => ({
-    name: 'All',
+    get name() {
+        return i18n('value_all');
+    },
     data: initialFiltersState,
     isDefault: true,
 });

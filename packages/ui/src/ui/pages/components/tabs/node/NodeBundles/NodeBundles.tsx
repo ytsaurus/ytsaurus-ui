@@ -1,6 +1,8 @@
 import React from 'react';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 
+import i18n from './i18n';
+
 import NodeMemoryDetailsTable from '../NodeMemoryDetailsTable/NodeMemoryDetailsTable';
 
 import {
@@ -37,7 +39,7 @@ function NodeBundles() {
             items={items}
             onSort={handleSort}
             toggleExpand={toggleExpandState}
-            nameColumnTitle={'Bundle / Cell'}
+            nameColumnTitle={i18n('field_bundle-cell')}
             sortState={sortOrder}
         />
     );

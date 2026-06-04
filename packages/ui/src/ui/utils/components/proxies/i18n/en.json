@@ -1,4 +1,11 @@
 {
+  "field_host": "Host",
+  "field_state": "State",
+  "field_role": "Role",
+  "field_version": "Version",
   "field_banned-caption": "B",
-  "field_banned": "Banned"
+  "field_banned": "Banned",
+  "field_load-average": "Load average",
+  "field_updated-at": "Updated at",
+  "field_network-load": "Network load"
 }

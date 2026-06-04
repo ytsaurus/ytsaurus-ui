@@ -41,6 +41,8 @@ import {ClipboardButton, MetaTable} from '@ytsaurus/components';
 import {makeComponentsNodesUrl} from '../../../../../utils/app-url';
 import {getNodeMetaItems} from '../../../../../utils/components/nodes/node-meta-items';
 
+import i18n from './i18n';
+
 import './NodeCard.scss';
 
 const block = cn('node-card');
@@ -125,17 +127,17 @@ class NodeCard extends Component {
                                 </span>
                             ),
                         },
-                        {key: 'location number', value: index + 1},
-                        {key: 'enabled', value: location.enabled.toString()},
-                        {key: 'full', value: location.full.toString()},
-                        {key: 'medium name', value: location.medium_name},
-                        {key: 'sessions', value: location.session_count},
+                        {key: i18n('field_location-number'), value: index + 1},
+                        {key: i18n('field_enabled'), value: location.enabled.toString()},
+                        {key: i18n('field_full'), value: location.full.toString()},
+                        {key: i18n('field_medium-name'), value: location.medium_name},
+                        {key: i18n('field_sessions'), value: location.session_count},
                         {
-                            key: 'chunks',
+                            key: i18n('field_chunks'),
                             value: hammer.format['Number'](location.chunk_count),
                         },
                         {
-                            key: 'used space',
+                            key: i18n('field_used-space'),
                             value: (
                                 <Progress
                                     value={location.locationProgress}
@@ -145,7 +147,7 @@ class NodeCard extends Component {
                             ),
                         },
                         {
-                            key: 'available space',
+                            key: i18n('field_available-space'),
                             value: (
                                 <Template.FormattedValue
                                     value={location.available_space}
@@ -154,7 +156,7 @@ class NodeCard extends Component {
                             ),
                         },
                         {
-                            key: 'watermark space',
+                            key: i18n('field_watermark-space'),
                             value: (
                                 <Template.FormattedValue
                                     value={location.low_watermark_space}
@@ -175,7 +177,7 @@ class NodeCard extends Component {
             locations && (
                 <CollapsibleSection
                     size="s"
-                    name="Locations"
+                    name={i18n('title_locations')}
                     className={block('locations')}
                     collapsed
                 >
@@ -190,7 +192,12 @@ class NodeCard extends Component {
 
         return (
             alerts?.length > 0 && (
-                <CollapsibleSection size="s" name="Alerts" className={block('alerts')} collapsed>
+                <CollapsibleSection
+                    size="s"
+                    name={i18n('title_alerts')}
+                    className={block('alerts')}
+                    collapsed
+                >
                     {map_(alerts, (alert) => (
                         <YTErrorBlock type="alert" key={alert.message} error={alert} />
                     ))}
@@ -204,7 +211,7 @@ class NodeCard extends Component {
 
         return (
             tabletSlots.length > 0 && (
-                <CollapsibleSection size="s" name="Tablet slots" collapsed={false}>
+                <CollapsibleSection size="s" name={i18n('title_tablet-slots')} collapsed={false}>
                     <NodeTabletSlots tabletSlots={tabletSlots} />
                 </CollapsibleSection>
             )
@@ -215,16 +222,16 @@ class NodeCard extends Component {
         const {systemTags, userTags} = this.props.node;
 
         return (
-            <CollapsibleSection size="s" name="Default" className={block('default')}>
+            <CollapsibleSection size="s" name={i18n('title_general')} className={block('default')}>
                 <MetaTable
                     items={[
                         {
-                            key: 'system_tags',
+                            key: i18n('field_system-tags'),
                             value: map_(systemTags, (tag) => <Label key={tag} text={tag} />),
                             visible: systemTags?.length > 0,
                         },
                         {
-                            key: 'user_tags',
+                            key: i18n('field_user-tags'),
                             value: map_(userTags, (tag) => <Label key={tag} text={tag} />),
                             visible: userTags?.length > 0,
                         },
@@ -241,7 +248,12 @@ class NodeCard extends Component {
 
         return (
             hasMeta && (
-                <CollapsibleSection size="s" name="Storage" className={block('storage')} collapsed>
+                <CollapsibleSection
+                    size="s"
+                    name={i18n('title_storage')}
+                    className={block('storage')}
+                    collapsed
+                >
                     <NodeStorage {...node} />
                 </CollapsibleSection>
             )
@@ -256,7 +268,7 @@ class NodeCard extends Component {
             hasMeta && (
                 <CollapsibleSection
                     size="s"
-                    name="CPU and memory"
+                    name={i18n('title_cpu-and-memory')}
                     className={block('cpu')}
                     collapsed
                 >
@@ -274,7 +286,7 @@ class NodeCard extends Component {
             hasMeta && (
                 <CollapsibleSection
                     size="s"
-                    name="Resources"
+                    name={i18n('title_resources')}
                     className={block('resources')}
                     collapsed
                 >
