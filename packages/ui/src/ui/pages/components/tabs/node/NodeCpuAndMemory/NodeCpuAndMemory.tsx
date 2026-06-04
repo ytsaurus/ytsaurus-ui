@@ -5,6 +5,7 @@ import {MetaTable} from '@ytsaurus/components';
 
 import {type Node} from '../../../../../store/reducers/components/nodes/nodes/node';
 import MemoryProgress from '../../nodes/MemoryProgress/MemoryProgress';
+import i18n from './i18n';
 
 interface NodeCpuAndMemoryProps {
     cpuProgress: Node['cpuProgress'];
@@ -26,15 +27,15 @@ function NodeCpuAndMemory({node}: {node: NodeCpuAndMemoryProps}): ReturnType<Rea
         <MetaTable
             items={[
                 {
-                    key: 'cpu',
+                    key: i18n('field_cpu'),
                     value: <Progress value={cpuProgress || 0} text={cpuText} theme="success" />,
                 },
                 {
-                    key: 'memory',
+                    key: i18n('field_memory'),
                     value: <MemoryProgress memoryData={memoryData} memoryText={memoryText} />,
                 },
                 {
-                    key: 'gpu',
+                    key: i18n('field_gpu'),
                     value: (
                         <Progress
                             value={gpu?.progress || 0}
@@ -45,7 +46,7 @@ function NodeCpuAndMemory({node}: {node: NodeCpuAndMemoryProps}): ReturnType<Rea
                     visible: gpu !== undefined,
                 },
                 {
-                    key: 'network',
+                    key: i18n('field_network'),
                     value: (
                         <Progress value={networkProgress || 0} text={networkText} theme="success" />
                     ),

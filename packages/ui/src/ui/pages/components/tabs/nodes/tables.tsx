@@ -32,6 +32,8 @@ import {NodesColumnHeader} from '../../../../pages/components/tabs/nodes/Nodes/N
 import {type ColumnInfo} from '../../../../components/ElementsTable/ElementsTableHeader';
 import {progressText} from '../../../../utils/progress';
 
+import i18n from './i18n';
+
 import './tables.scss';
 
 const block = cn('components-nodes-templates');
@@ -186,6 +188,9 @@ const nodesTableProps = {
     columns: {
         items: {
             host: {
+                get caption() {
+                    return i18n('field_host');
+                },
                 get(node) {
                     return node.host;
                 },
@@ -193,6 +198,9 @@ const nodesTableProps = {
                 align: 'left',
             },
             physical_host: {
+                get caption() {
+                    return i18n('field_physical-host');
+                },
                 get(node) {
                     return node.physicalHost;
                 },
@@ -200,6 +208,9 @@ const nodesTableProps = {
                 align: 'left',
             },
             flavors: {
+                get caption() {
+                    return i18n('field_flavors');
+                },
                 get(node) {
                     return node.flavors;
                 },
@@ -208,6 +219,9 @@ const nodesTableProps = {
                 align: 'left',
             },
             state: {
+                get caption() {
+                    return i18n('field_state');
+                },
                 get(node) {
                     return node.state;
                 },
@@ -215,15 +229,25 @@ const nodesTableProps = {
                 align: 'center',
             },
             data_center: {
+                get caption() {
+                    return i18n('DC');
+                },
                 get(node) {
                     return node.dataCenter;
                 },
                 sort: true,
-                caption: 'DC',
                 align: 'left',
-                tooltipProps: {placement: 'bottom', content: 'Data Center'},
+                tooltipProps: {
+                    placement: 'bottom',
+                    get content() {
+                        return i18n('context_data-center');
+                    },
+                },
             },
             rack: {
+                get caption() {
+                    return i18n('field_rack');
+                },
                 get(node) {
                     return hammer.format['RackToVector'](node.rack);
                 },
@@ -231,6 +255,9 @@ const nodesTableProps = {
                 align: 'left',
             },
             user_tags: {
+                get caption() {
+                    return i18n('field_user-tags');
+                },
                 get(node) {
                     return node.userTags || -1;
                 },
@@ -241,6 +268,9 @@ const nodesTableProps = {
                 align: 'left',
             },
             system_tags: {
+                get caption() {
+                    return i18n('field_system-tags');
+                },
                 get(node) {
                     return node.systemTags || -1;
                 },
@@ -251,13 +281,20 @@ const nodesTableProps = {
                 align: 'left',
             },
             banned: {
+                get caption() {
+                    return i18n('field_banned');
+                },
                 get(item) {
                     return item.banned;
                 },
                 align: 'center',
                 sort: true,
-                caption: 'B',
-                tooltipProps: {placement: 'bottom', content: 'Banned'},
+                tooltipProps: {
+                    placement: 'bottom',
+                    get content() {
+                        return i18n('context_banned');
+                    },
+                },
                 allowedOrderTypes: DESC_ASC_UNORDERED,
             },
             decommissioned: {
@@ -266,10 +303,14 @@ const nodesTableProps = {
                 },
                 align: 'center',
                 sort: true,
-                caption: 'D',
+                get caption() {
+                    return i18n('D');
+                },
                 tooltipProps: {
                     placement: 'bottom',
-                    content: 'Decommissioned',
+                    get content() {
+                        return i18n('context_decommissioned');
+                    },
                 },
                 allowedOrderTypes: DESC_ASC_UNORDERED,
             },
@@ -279,8 +320,15 @@ const nodesTableProps = {
                 },
                 align: 'center',
                 sort: true,
-                caption: 'F',
-                tooltipProps: {placement: 'bottom', content: 'Full'},
+                get caption() {
+                    return i18n('F');
+                },
+                tooltipProps: {
+                    placement: 'bottom',
+                    get content() {
+                        return i18n('context_full');
+                    },
+                },
             },
             alert_count: {
                 get(item) {
@@ -290,10 +338,20 @@ const nodesTableProps = {
                     return item.alertCount;
                 },
                 align: 'center',
-                caption: 'A',
-                tooltipProps: {placement: 'bottom', content: 'Alerts'},
+                get caption() {
+                    return i18n('A');
+                },
+                tooltipProps: {
+                    placement: 'bottom',
+                    get content() {
+                        return i18n('context_alerts');
+                    },
+                },
             },
             scheduler_jobs: {
+                get caption() {
+                    return i18n('field_scheduler-jobs');
+                },
                 get(node) {
                     return node.disableJobs;
                 },
@@ -301,6 +359,9 @@ const nodesTableProps = {
                 align: 'left',
             },
             write_sessions: {
+                get caption() {
+                    return i18n('field_write-sessions');
+                },
                 get(node) {
                     return node.disableWriteSession;
                 },
@@ -308,6 +369,9 @@ const nodesTableProps = {
                 align: 'left',
             },
             tablet_cells: {
+                get caption() {
+                    return i18n('field_tablet-cells');
+                },
                 get(node) {
                     return node.disableTabletCells;
                 },
@@ -315,6 +379,9 @@ const nodesTableProps = {
                 align: 'left',
             },
             version: {
+                get caption() {
+                    return i18n('field_version');
+                },
                 get(node) {
                     return node.version;
                 },
@@ -322,6 +389,9 @@ const nodesTableProps = {
                 align: 'left',
             },
             last_seen: {
+                get caption() {
+                    return i18n('field_last-seen');
+                },
                 get(node) {
                     return node.lastSeenTime;
                 },
@@ -329,6 +399,9 @@ const nodesTableProps = {
                 align: 'left',
             },
             register_time: {
+                get caption() {
+                    return i18n('field_register-time');
+                },
                 get(node) {
                     return node.registerTime;
                 },
@@ -344,23 +417,23 @@ const nodesTableProps = {
                         <NodesColumnHeader
                             align={align}
                             column="space"
-                            title="Space"
+                            title={i18n('field_space')}
                             options={[
                                 {
                                     column: 'space',
-                                    title: 'Progress',
+                                    title: i18n('field_progress'),
                                     withUndefined: true,
                                     allowUnordered: true,
                                 },
                                 {
                                     column: 'space_usage',
-                                    title: 'Usage',
+                                    title: i18n('field_usage'),
                                     withUndefined: true,
                                     allowUnordered: true,
                                 },
                                 {
                                     column: 'space_limit',
-                                    title: 'Limit',
+                                    title: i18n('field_limit'),
                                     withUndefined: true,
                                     allowUnordered: true,
                                 },
@@ -372,6 +445,9 @@ const nodesTableProps = {
                 align: 'center',
             },
             space_limit: {
+                get caption() {
+                    return i18n('field_limit');
+                },
                 get(node) {
                     return node.spaceTotal;
                 },
@@ -380,6 +456,9 @@ const nodesTableProps = {
                 align: 'right',
             },
             space_usage: {
+                get caption() {
+                    return i18n('field_usage');
+                },
                 get(node) {
                     return node.spaceUsed;
                 },
@@ -387,6 +466,9 @@ const nodesTableProps = {
                 hidden: true,
             },
             locations: {
+                get caption() {
+                    return i18n('field_locations');
+                },
                 get(node) {
                     return [
                         node.locations && node.locations.length,
@@ -397,6 +479,9 @@ const nodesTableProps = {
                 align: 'center',
             },
             chunks: {
+                get caption() {
+                    return i18n('field_chunks');
+                },
                 get(node) {
                     return node.chunks;
                 },
@@ -405,6 +490,9 @@ const nodesTableProps = {
                 align: 'left',
             },
             sessions: {
+                get caption() {
+                    return i18n('field_sessions');
+                },
                 get(node) {
                     return node.sessions;
                 },
@@ -426,19 +514,19 @@ const nodesTableProps = {
                             options={[
                                 {
                                     column: 'cpu',
-                                    title: 'Progress',
+                                    title: i18n('field_progress'),
                                     withUndefined: true,
                                     allowUnordered: true,
                                 },
                                 {
                                     column: 'cpu_usage',
-                                    title: 'Usage',
+                                    title: i18n('field_usage'),
                                     withUndefined: true,
                                     allowUnordered: true,
                                 },
                                 {
                                     column: 'cpu_limit',
-                                    title: 'Limit',
+                                    title: i18n('field_limit'),
                                     withUndefined: true,
                                     allowUnordered: true,
                                 },
@@ -476,19 +564,19 @@ const nodesTableProps = {
                             options={[
                                 {
                                     column: 'gpu',
-                                    title: 'Progress',
+                                    title: i18n('field_progress'),
                                     withUndefined: true,
                                     allowUnordered: true,
                                 },
                                 {
                                     column: 'gpu_usage',
-                                    title: 'Usage',
+                                    title: i18n('field_usage'),
                                     withUndefined: true,
                                     allowUnordered: true,
                                 },
                                 {
                                     column: 'gpu_limit',
-                                    title: 'Limit',
+                                    title: i18n('field_limit'),
                                     withUndefined: true,
                                     allowUnordered: true,
                                 },
@@ -522,23 +610,23 @@ const nodesTableProps = {
                         <NodesColumnHeader
                             align={align}
                             column="memory"
-                            title="Memory"
+                            title={i18n('field_memory')}
                             options={[
                                 {
                                     column: 'memory',
-                                    title: 'Progress',
+                                    title: i18n('field_progress'),
                                     withUndefined: true,
                                     allowUnordered: true,
                                 },
                                 {
                                     column: 'memory_usage',
-                                    title: 'Usage',
+                                    title: i18n('field_usage'),
                                     withUndefined: true,
                                     allowUnordered: true,
                                 },
                                 {
                                     column: 'memory_limit',
-                                    title: 'Limit',
+                                    title: i18n('field_limit'),
                                     withUndefined: true,
                                     allowUnordered: true,
                                 },
@@ -563,6 +651,9 @@ const nodesTableProps = {
                 hidden: true,
             },
             memory_total: {
+                get caption() {
+                    return i18n('field_progress');
+                },
                 get(node) {
                     return node.memoryProgress;
                 },
@@ -579,23 +670,23 @@ const nodesTableProps = {
                         <NodesColumnHeader
                             align={align}
                             column="network"
-                            title="Network"
+                            title={i18n('field_network')}
                             options={[
                                 {
                                     column: 'network',
-                                    title: 'Progress',
+                                    title: i18n('field_progress'),
                                     withUndefined: true,
                                     allowUnordered: true,
                                 },
                                 {
                                     column: 'network_usage',
-                                    title: 'Usage',
+                                    title: i18n('field_usage'),
                                     withUndefined: true,
                                     allowUnordered: true,
                                 },
                                 {
                                     column: 'network_limit',
-                                    title: 'Limit',
+                                    title: i18n('field_limit'),
                                     withUndefined: true,
                                     allowUnordered: true,
                                 },
@@ -629,23 +720,23 @@ const nodesTableProps = {
                         <NodesColumnHeader
                             align={align}
                             column="repair_slots"
-                            title="Repair slots"
+                            title={i18n('field_repair-slots')}
                             options={[
                                 {
                                     column: 'repair_slots',
-                                    title: 'Progress',
+                                    title: i18n('field_progress'),
                                     withUndefined: true,
                                     allowUnordered: true,
                                 },
                                 {
                                     column: 'repair_slots_usage',
-                                    title: 'Usage',
+                                    title: i18n('field_usage'),
                                     withUndefined: true,
                                     allowUnordered: true,
                                 },
                                 {
                                     column: 'repair_slots_limit',
-                                    title: 'Limit',
+                                    title: i18n('field_limit'),
                                     withUndefined: true,
                                     allowUnordered: true,
                                 },
@@ -679,22 +770,22 @@ const nodesTableProps = {
                         <NodesColumnHeader
                             align={align}
                             column="removal_slots"
-                            title="Removal slots"
+                            title={i18n('field_removal-slots')}
                             options={[
                                 {
                                     column: 'removal_slots',
-                                    title: 'Progress',
+                                    title: i18n('field_progress'),
                                     withUndefined: true,
                                     allowUnordered: true,
                                 },
                                 {
                                     column: 'removal_slots_usage',
-                                    title: 'Usage',
+                                    title: i18n('field_usage'),
                                     withUndefined: true,
                                 },
                                 {
                                     column: 'removal_slots_limit',
-                                    title: 'Limit',
+                                    title: i18n('field_limit'),
                                     withUndefined: true,
                                 },
                             ]}
@@ -727,21 +818,21 @@ const nodesTableProps = {
                         <NodesColumnHeader
                             align={align}
                             column="replication_slots"
-                            title="Replication slots"
+                            title={i18n('field_replication-slots')}
                             options={[
                                 {
                                     column: 'replication_slots',
-                                    title: 'Progress',
+                                    title: i18n('field_progress'),
                                     withUndefined: true,
                                 },
                                 {
                                     column: 'replication_slots_usage',
-                                    title: 'Usage',
+                                    title: i18n('field_usage'),
                                     withUndefined: true,
                                 },
                                 {
                                     column: 'replication_slots_limit',
-                                    title: 'Limit',
+                                    title: i18n('field_limit'),
                                     withUndefined: true,
                                 },
                             ]}
@@ -774,21 +865,21 @@ const nodesTableProps = {
                         <NodesColumnHeader
                             align={align}
                             column="seal_slots"
-                            title="Seal slots"
+                            title={i18n('field_seal-slots')}
                             options={[
                                 {
                                     column: 'seal_slots',
-                                    title: 'Progress',
+                                    title: i18n('field_progress'),
                                     withUndefined: true,
                                 },
                                 {
                                     column: 'seal_slots_usage',
-                                    title: 'Usage',
+                                    title: i18n('field_usage'),
                                     withUndefined: true,
                                 },
                                 {
                                     column: 'seal_slots_limit',
-                                    title: 'Limit',
+                                    title: i18n('field_limit'),
                                     withUndefined: true,
                                 },
                             ]}
@@ -820,21 +911,21 @@ const nodesTableProps = {
                         <NodesColumnHeader
                             align={align}
                             column="user_slots"
-                            title="User slots"
+                            title={i18n('field_user-slots')}
                             options={[
                                 {
                                     column: 'user_slots',
-                                    title: 'Progress',
+                                    title: i18n('field_progress'),
                                     withUndefined: true,
                                 },
                                 {
                                     column: 'user_slots_usage',
-                                    title: 'Usage',
+                                    title: i18n('field_usage'),
                                     withUndefined: true,
                                 },
                                 {
                                     column: 'user_slots_limit',
-                                    title: 'Limit',
+                                    title: i18n('field_limit'),
                                     withUndefined: true,
                                 },
                             ]}
@@ -859,6 +950,9 @@ const nodesTableProps = {
                 hidden: true,
             },
             tablet_slots: {
+                get caption() {
+                    return i18n('field_tablet-slots');
+                },
                 get(node) {
                     if (node.tabletSlots && node.tabletSlots.raw && node.tabletSlots.raw.length) {
                         return reduce_(
@@ -882,7 +976,10 @@ const nodesTableProps = {
                 },
                 //                sort: true,
                 align: 'center',
-                ...makeCaptionProps('TS None', 'Tablet Slots None'),
+                ...makeCaptionProps(
+                    () => 'TS None',
+                    () => i18n('context_ts-none'),
+                ),
             },
             none_chaos: {
                 get(node) {
@@ -893,7 +990,10 @@ const nodesTableProps = {
                 },
                 //                sort: true,
                 align: 'center',
-                ...makeCaptionProps('CS None', 'Chaos Slots None'),
+                ...makeCaptionProps(
+                    () => 'CS None',
+                    () => i18n('context_cs-none'),
+                ),
             },
             leading: {
                 get(node) {
@@ -903,7 +1003,10 @@ const nodesTableProps = {
                     return node.tabletSlots?.byState?.leading?.length;
                 },
                 align: 'center',
-                ...makeCaptionProps('TS Leading', 'Tablet Slots Leading'),
+                ...makeCaptionProps(
+                    () => 'TS Leading',
+                    () => i18n('context_ts-leading'),
+                ),
             },
             leading_chaos: {
                 get(node) {
@@ -913,7 +1016,10 @@ const nodesTableProps = {
                     return node.chaosSlots?.byState?.leading?.length;
                 },
                 align: 'center',
-                ...makeCaptionProps('CS Leading', 'Chaos Slots Leading'),
+                ...makeCaptionProps(
+                    () => 'CS Leading',
+                    () => i18n('context_cs-leading'),
+                ),
             },
             following: {
                 get(node) {
@@ -923,7 +1029,10 @@ const nodesTableProps = {
                     return node.tabletSlots?.byState?.following?.length;
                 },
                 align: 'center',
-                ...makeCaptionProps('TS Following', 'Tablet Slots Following'),
+                ...makeCaptionProps(
+                    () => 'TS Following',
+                    () => i18n('context_ts-following'),
+                ),
             },
             following_chaos: {
                 get(node) {
@@ -933,7 +1042,10 @@ const nodesTableProps = {
                     return node.chaosSlots?.byState?.following?.length;
                 },
                 align: 'center',
-                ...makeCaptionProps('CS Following', 'Chaos Slots Following'),
+                ...makeCaptionProps(
+                    () => 'CS Following',
+                    () => i18n('context_cs-following'),
+                ),
             },
             follower_recovery: {
                 get(node) {
@@ -943,7 +1055,10 @@ const nodesTableProps = {
                     return node.tabletSlots?.byState.follower_recovery?.length;
                 },
                 align: 'center',
-                ...makeCaptionProps('TS FR', 'Tablet Slots Follower Recovery'),
+                ...makeCaptionProps(
+                    () => 'TS FR',
+                    () => i18n('context_ts-fr'),
+                ),
             },
             follower_recovery_chaos: {
                 get(node) {
@@ -953,7 +1068,10 @@ const nodesTableProps = {
                     return node.chaosSlots?.byState.follower_recovery?.length;
                 },
                 align: 'center',
-                ...makeCaptionProps('CS FR', 'Chaos Slots Follower Recovery'),
+                ...makeCaptionProps(
+                    () => 'CS FR',
+                    () => i18n('context_cs-fr'),
+                ),
             },
             leader_recovery: {
                 get(node) {
@@ -961,7 +1079,10 @@ const nodesTableProps = {
                 },
                 sort: true,
                 align: 'center',
-                ...makeCaptionProps('TS LR', 'Tablet Slots Leader Recovery'),
+                ...makeCaptionProps(
+                    () => 'TS LR',
+                    () => i18n('context_ts-lr'),
+                ),
             },
             leader_recovery_chaos: {
                 get(node) {
@@ -969,7 +1090,10 @@ const nodesTableProps = {
                 },
                 sort: true,
                 align: 'center',
-                ...makeCaptionProps('CS LR', 'Chaos Slots Leader Recovery'),
+                ...makeCaptionProps(
+                    () => 'CS LR',
+                    () => i18n('context_cs-lr'),
+                ),
             },
             stopped: {
                 get(node) {
@@ -979,7 +1103,10 @@ const nodesTableProps = {
                     return node.tabletSlots?.byState.stopped?.length;
                 },
                 align: 'center',
-                ...makeCaptionProps('TS Stopped', 'Tablet Slots Stopped'),
+                ...makeCaptionProps(
+                    () => 'TS Stopped',
+                    () => i18n('context_ts-stopped'),
+                ),
             },
             stopped_chaos: {
                 get(node) {
@@ -989,7 +1116,10 @@ const nodesTableProps = {
                     return node.chaosSlots?.byState.stopped?.length;
                 },
                 align: 'center',
-                ...makeCaptionProps('CS Stopped', 'Chaos Slots Stopped'),
+                ...makeCaptionProps(
+                    () => 'CS Stopped',
+                    () => i18n('context_cs-stopped'),
+                ),
             },
             elections: {
                 get(node) {
@@ -999,7 +1129,10 @@ const nodesTableProps = {
                     return node.tabletSlots?.byState.elections?.length;
                 },
                 align: 'center',
-                ...makeCaptionProps('TS Elections', 'Tablet Slots Elections'),
+                ...makeCaptionProps(
+                    () => 'TS Elections',
+                    () => i18n('context_ts-elections'),
+                ),
             },
             elections_chaos: {
                 get(node) {
@@ -1009,10 +1142,16 @@ const nodesTableProps = {
                     return node.chaosSlots?.byState.elections?.length;
                 },
                 align: 'center',
-                ...makeCaptionProps('CS Elections', 'Chaos Slots Elections'),
+                ...makeCaptionProps(
+                    () => 'CS Elections',
+                    () => i18n('context_cs-elections'),
+                ),
             },
             tablet_memory: {
                 group: true,
+                get caption() {
+                    return i18n('field_tablet-memory');
+                },
                 items: {
                     static: {
                         get(node) {
@@ -1023,21 +1162,21 @@ const nodesTableProps = {
                                 <NodesColumnHeader
                                     column="tablet_memory_static"
                                     align={column.align}
-                                    title="Static memory"
+                                    title={i18n('field_static-memory')}
                                     options={[
                                         {
                                             column: 'tablet_memory_static',
-                                            title: 'Progress',
+                                            title: i18n('field_progress'),
                                             withUndefined: true,
                                         },
                                         {
                                             column: 'tablet_memory_static_usage',
-                                            title: 'Usage',
+                                            title: i18n('field_usage'),
                                             withUndefined: true,
                                         },
                                         {
                                             column: 'tablet_memory_static_limit',
-                                            title: 'Limit',
+                                            title: i18n('field_limit'),
                                             withUndefined: true,
                                         },
                                     ]}
@@ -1070,21 +1209,21 @@ const nodesTableProps = {
                                 <NodesColumnHeader
                                     column="tablet_memory_dynamic"
                                     align={column.align}
-                                    title="Dynamic memory"
+                                    title={i18n('field_dynamic-memory')}
                                     options={[
                                         {
                                             column: 'tablet_memory_dynamic',
-                                            title: 'Progress',
+                                            title: i18n('field_progress'),
                                             withUndefined: true,
                                         },
                                         {
                                             column: 'tablet_memory_dynamic_usage',
-                                            title: 'Usage',
+                                            title: i18n('field_usage'),
                                             withUndefined: true,
                                         },
                                         {
                                             column: 'tablet_memory_dynamic_limit',
-                                            title: 'Limit',
+                                            title: i18n('field_limit'),
                                             withUndefined: true,
                                         },
                                     ]}
@@ -1111,7 +1250,12 @@ const nodesTableProps = {
                 },
                 set: ['static', 'dynamic'],
             },
-            io_weight: ioWeight,
+            io_weight: {
+                ...ioWeight,
+                get caption() {
+                    return i18n('field_io-weight');
+                },
+            },
             actions: {
                 get(node) {
                     return node.host;
@@ -1611,12 +1755,16 @@ export function getNodeTablesProps(mediumList: string[] = []) {
     return res;
 }
 
-function makeCaptionProps(columnName: string, title: string) {
+function makeCaptionProps(getColumnName: () => string, getTitle: () => string) {
     return {
-        caption: columnName,
+        get caption() {
+            return getColumnName();
+        },
         tooltipProps: {
             placement: 'bottom',
-            content: title,
+            get content() {
+                return getTitle();
+            },
         },
     };
 }

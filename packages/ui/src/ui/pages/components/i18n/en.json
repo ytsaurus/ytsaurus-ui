@@ -1,0 +1,4 @@
+{
+  "alert_tab-not-implemented": "Viewer for tab \"{{tab}}\" is not implemented.",
+  "alert_unknown-tab-not-implemented": "Viewer for this tab is not implemented."
+}

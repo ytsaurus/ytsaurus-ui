@@ -27,8 +27,10 @@ $elements-table: '.elements-table';
         align-items: center;
 
         &-item {
-            & + & {
-                margin-left: 20px;
+            margin-left: 20px;
+
+            &:first-child {
+                margin-left: 0;
             }
         }
 
@@ -211,6 +213,7 @@ $elements-table: '.elements-table';
 
     &__custom-column-selector {
         max-height: 60vh;
+        padding: unset;
     }
 
     &__medium-cell {

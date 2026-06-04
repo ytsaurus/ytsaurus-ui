@@ -9,6 +9,7 @@ import {ClipboardButton} from '@ytsaurus/components';
 import {DataTableYT} from '../../../../../components/DataTableYT';
 import {selectNode} from '../../../../../store/selectors/components/node/node';
 import Label from '../../../../../components/Label';
+import i18n from './i18n';
 
 interface LocationInfo {
     enabled?: boolean;
@@ -27,11 +28,13 @@ interface LocationInfo {
 
 const columns: Array<Column<LocationInfo>> = [
     {
-        name: 'Enabled',
+        get name() {
+            return i18n('field_enabled');
+        },
         render({row}) {
             return (
                 <Label theme={row.enabled ? 'success' : 'danger'}>
-                    {row.enabled ? 'Enabled' : 'Disabled'}
+                    {row.enabled ? i18n('value_enabled') : i18n('value_disabled')}
                 </Label>
             );
         },
@@ -50,34 +53,44 @@ const columns: Array<Column<LocationInfo>> = [
         align: 'left',
     },
     {
-        name: 'Full',
+        get name() {
+            return i18n('field_full');
+        },
         render({row}) {
             return Boolean(row.full).toString();
         },
         align: 'center',
     },
     {
-        name: 'Medium name',
+        get name() {
+            return i18n('field_medium-name');
+        },
         render({row}) {
             return row.medium_name;
         },
     },
     {
-        name: 'Sessions',
+        get name() {
+            return i18n('field_sessions');
+        },
         render({row}) {
             return format.Number(row.session_count);
         },
         align: 'right',
     },
     {
-        name: 'Chunks',
+        get name() {
+            return i18n('field_chunks');
+        },
         render({row}) {
             return format.Number(row.chunk_count);
         },
         align: 'right',
     },
     {
-        name: 'Used space',
+        get name() {
+            return i18n('field_used-space');
+        },
         render({row}) {
             return !row.locationProgress ? (
                 format.NO_VALUE
@@ -87,7 +100,9 @@ const columns: Array<Column<LocationInfo>> = [
         },
     },
     {
-        name: 'Available space',
+        get name() {
+            return i18n('field_available-space');
+        },
         render({row}) {
             return format.Bytes(row.available_space);
         },
@@ -95,7 +110,9 @@ const columns: Array<Column<LocationInfo>> = [
         width: 200,
     },
     {
-        name: 'Watermark space',
+        get name() {
+            return i18n('field_watermark-space');
+        },
         render({row}) {
             return format.Bytes(row.low_watermark_space);
         },

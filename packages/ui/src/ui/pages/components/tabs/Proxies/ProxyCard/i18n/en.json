@@ -1,0 +1,11 @@
+{
+  "field_state": "State",
+  "field_role": "Role",
+  "field_banned": "Banned",
+  "value_banned-true": "True",
+  "field_maintenance": "Maintenance",
+  "field_version": "Version",
+  "field_load-average": "Load average",
+  "field_network-load": "Network load",
+  "field_updated-at": "Updated at"
+}

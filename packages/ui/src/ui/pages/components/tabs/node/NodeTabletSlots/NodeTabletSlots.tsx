@@ -9,6 +9,7 @@ import {DataTableYT} from '../../../../../components/DataTableYT';
 import Link from '../../../../../containers/Link/Link';
 import StatusBlock from '../../../../../components/StatusBlock/StatusBlock';
 import {genTabletCellBundlesCellUrl} from '../../../../../utils/tablet_cell_bundles';
+import i18n from './i18n';
 
 const YT = (window as any).YT as YTConfig;
 
@@ -20,7 +21,9 @@ interface TabletSlotsProps {
 
 const columns: Array<Column<TabletSlot>> = [
     {
-        name: 'Cell ID',
+        get name() {
+            return i18n('field_cell-id');
+        },
         render({row}) {
             const url = genTabletCellBundlesCellUrl(row.cell_id, YT.cluster);
 
@@ -34,13 +37,17 @@ const columns: Array<Column<TabletSlot>> = [
         },
     },
     {
-        name: 'Peer ID',
+        get name() {
+            return i18n('field_peer-id');
+        },
         render({row}) {
             return row.peer_id;
         },
     },
     {
-        name: 'State',
+        get name() {
+            return i18n('field_state');
+        },
         render({row}) {
             const {text, theme} = TABLET_SLOTS[row.state as keyof typeof TABLET_SLOTS];
 

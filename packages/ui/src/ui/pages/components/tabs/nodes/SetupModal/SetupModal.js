@@ -38,6 +38,8 @@ import {
     selectComponentNodesFilterSetupStateValue,
 } from '../../../../../store/selectors/components/nodes/nodes/data';
 
+import i18n from './i18n';
+
 import './SetupModal.scss';
 
 const block = cn('nodes-setup-modal');
@@ -271,7 +273,7 @@ export class SetupModal extends Component {
                 onChange={onChange}
                 items={items}
                 allowedModes={modes}
-                selectPlaceholder={'Select tags...'}
+                selectPlaceholder={i18n('context_select-tags')}
             />
         );
     }
@@ -287,7 +289,7 @@ export class SetupModal extends Component {
         return (
             <div className={block('filters-group')}>
                 {this.renderValueFilter({
-                    placeholder: 'From X...',
+                    placeholder: i18n('context_from'),
                     onChange: firstCallback,
                     value: fromFilterValue,
                     invalid: !fromFilterValid,
@@ -295,7 +297,7 @@ export class SetupModal extends Component {
                 })}
 
                 {this.renderValueFilter({
-                    placeholder: 'To Y...',
+                    placeholder: i18n('context_to'),
                     onChange: secondCallback,
                     value: toFilterValue,
                     invalid: !toFilterValid,
@@ -314,7 +316,7 @@ export class SetupModal extends Component {
                     items={this.states}
                     filterable
                     onUpdate={this.handleSelectChange}
-                    placeholder={'Select states...'}
+                    placeholder={i18n('context_select-states')}
                     width="max"
                     maxVisibleValues={5}
                     hideFilter
@@ -359,16 +361,16 @@ export class SetupModal extends Component {
             <MetaTable
                 items={[
                     {
-                        key: 'physical host',
+                        key: i18n('field_physical-host'),
                         value: this.renderTextFilter({
                             value: this.state[section]['physicalHost'],
-                            placeholder: 'Enter physical host address...',
+                            placeholder: i18n('context_enter-physical-host'),
                             onChange: (value) =>
                                 this.handleTextFilterChange(section, 'physicalHost', value),
                         }),
                     },
                     {
-                        key: 'tags',
+                        key: i18n('field_tags'),
                         value: this.renderTagsFilter({
                             items: nodeTags,
                             value: this.state[section]['tag'],
@@ -376,11 +378,11 @@ export class SetupModal extends Component {
                         }),
                     },
                     {
-                        key: 'states',
+                        key: i18n('field_states'),
                         value: this.renderStatesSelect(),
                     },
                     {
-                        key: 'racks',
+                        key: i18n('field_racks'),
                         value: this.renderTagsFilter({
                             items: nodeRacks,
                             value: this.state[section]['rack'],
@@ -390,31 +392,31 @@ export class SetupModal extends Component {
                         }),
                     },
                     {
-                        key: 'banned',
+                        key: i18n('field_banned'),
                         value: this.renderRadioGroup(section, 'banned'),
                     },
                     {
-                        key: 'decommissioned',
+                        key: i18n('field_decommissioned'),
                         value: this.renderRadioGroup(section, 'decommissioned'),
                     },
                     {
-                        key: 'full',
+                        key: i18n('field_full'),
                         value: this.renderRadioGroup(section, 'full'),
                     },
                     {
-                        key: 'alerts',
+                        key: i18n('field_alerts'),
                         value: this.renderRadioGroup(section, 'alertCount'),
                     },
                     {
-                        key: 'scheduler jobs',
+                        key: i18n('field_scheduler-jobs'),
                         value: this.renderRadioGroup(section, 'schedulerJobs'),
                     },
                     {
-                        key: 'write sessions',
+                        key: i18n('field_write-sessions'),
                         value: this.renderRadioGroup(section, 'writeSessions'),
                     },
                     {
-                        key: 'tablet cells',
+                        key: i18n('field_tablet-cells'),
                         value: this.renderRadioGroup(section, 'tabletCells'),
                     },
                 ]}
@@ -431,32 +433,32 @@ export class SetupModal extends Component {
                 <MetaTable
                     items={[
                         {
-                            key: 'sessions',
+                            key: i18n('field_sessions'),
                             value: this.renderFiltersGroup(section, 'sessions', 'Number'),
                         },
                         {
-                            key: 'chunks',
+                            key: i18n('field_chunks'),
                             value: this.renderFiltersGroup(section, 'chunks', 'Number'),
                         },
                     ]}
                 />
 
-                <h4 className={block('heading')}>Space</h4>
+                <h4 className={block('heading')}>{i18n('title_space')}</h4>
 
                 <MetaTable
                     items={[
                         {
-                            key: 'used',
+                            key: i18n('field_used'),
                             value: this.renderFiltersGroup(section, 'spaceUsed'),
                         },
                         {
-                            key: 'total',
+                            key: i18n('field_total'),
                             value: this.renderFiltersGroup(section, 'spaceTotal'),
                         },
                     ]}
                 />
 
-                <h4 className={block('heading')}>IO weight</h4>
+                <h4 className={block('heading')}>{i18n('title_io-weight')}</h4>
 
                 <MetaTable
                     items={map_(mediumList, (medium) => ({
@@ -480,80 +482,80 @@ export class SetupModal extends Component {
                 <MetaTable
                     items={[
                         {
-                            key: 'blob session',
+                            key: i18n('field_blob-session'),
                             value: this.renderFiltersGroup(section, 'blobSession'),
                         },
                         {
-                            key: 'block cache',
+                            key: i18n('field_block-cache'),
                             value: this.renderFiltersGroup(section, 'blockCache'),
                         },
                         {
-                            key: 'chunk block meta',
+                            key: i18n('field_chunk-block-meta'),
                             value: this.renderFiltersGroup(section, 'chunkBlockMeta'),
                         },
                         {
-                            key: 'chunk meta',
+                            key: i18n('field_chunk-meta'),
                             value: this.renderFiltersGroup(section, 'chunkMeta'),
                         },
                         {
-                            key: 'footprint',
+                            key: i18n('field_footprint'),
                             value: this.renderFiltersGroup(section, 'footprint'),
                         },
                         {
-                            key: 'query',
+                            key: i18n('field_query'),
                             value: this.renderFiltersGroup(section, 'query'),
                         },
                         {
-                            key: 'system jobs',
+                            key: i18n('field_system-jobs'),
                             value: this.renderFiltersGroup(section, 'systemJobs'),
                         },
                         {
-                            key: 'versioned chunk meta',
+                            key: i18n('field_versioned-chunk-meta'),
                             value: this.renderFiltersGroup(section, 'versionedChunkMeta'),
                         },
                     ]}
                 />
 
-                <h4 className={block('heading')}>Tablet dynamic</h4>
+                <h4 className={block('heading')}>{i18n('title_tablet-dynamic')}</h4>
 
                 <MetaTable
                     items={[
                         {
-                            key: 'used',
+                            key: i18n('field_used'),
                             value: this.renderFiltersGroup(section, 'tabletDynamicUsed'),
                         },
                         {
-                            key: 'total',
+                            key: i18n('field_total'),
                             value: this.renderFiltersGroup(section, 'tabletDynamicTotal'),
                         },
                     ]}
                 />
 
-                <h4 className={block('heading')}>Tablet static</h4>
+                <h4 className={block('heading')}>{i18n('title_tablet-static')}</h4>
 
                 <MetaTable
                     items={[
                         {
-                            key: 'used',
+                            key: i18n('field_used'),
                             value: this.renderFiltersGroup(section, 'tabletStaticUsed'),
                         },
                         {
-                            key: 'total',
+                            key: i18n('field_total'),
                             value: this.renderFiltersGroup(section, 'tabletStaticTotal'),
                         },
                     ]}
                 />
 
-                <h4 className={block('heading')}>User jobs</h4>
+                <h4 className={block('heading')}>{i18n('title_user-jobs')}</h4>
 
                 <MetaTable
                     items={[
                         {
-                            key: 'used',
+                            key: i18n('field_used'),
                             value: this.renderFiltersGroup(section, 'userJobsUsed'),
                         },
                         {
-                            key: 'total',
+                            key: i18n('field_total'),
                             value: this.renderFiltersGroup(section, 'userJobsTotal'),
                         },
                     ]}
@@ -567,72 +569,72 @@ export class SetupModal extends Component {
 
         return (
             <Fragment>
-                <h4 className={block('heading')}>User slots</h4>
+                <h4 className={block('heading')}>{i18n('title_user-slots')}</h4>
 
                 <MetaTable
                     items={[
                         {
-                            key: 'user slots used',
+                            key: i18n('field_user-slots-used'),
                             value: this.renderFiltersGroup(section, 'userSlotsUsed', 'Number'),
                         },
                         {
-                            key: 'user slots total',
+                            key: i18n('field_user-slots-total'),
                             value: this.renderFiltersGroup(section, 'userSlotsTotal', 'Number'),
                         },
                     ]}
                 />
 
-                <h4 className={block('heading')}>Seal slots</h4>
+                <h4 className={block('heading')}>{i18n('title_seal-slots')}</h4>
 
                 <MetaTable
                     items={[
                         {
-                            key: 'seal slots used',
+                            key: i18n('field_seal-slots-used'),
                             value: this.renderFiltersGroup(section, 'sealSlotsUsed', 'Number'),
                         },
                         {
-                            key: 'seal slots total',
+                            key: i18n('field_seal-slots-total'),
                             value: this.renderFiltersGroup(section, 'sealSlotsTotal', 'Number'),
                         },
                     ]}
                 />
 
-                <h4 className={block('heading')}>Repair slots</h4>
+                <h4 className={block('heading')}>{i18n('title_repair-slots')}</h4>
 
                 <MetaTable
                     items={[
                         {
-                            key: 'repair slots used',
+                            key: i18n('field_repair-slots-used'),
                             value: this.renderFiltersGroup(section, 'repairSlotsUsed', 'Number'),
                         },
                         {
-                            key: 'repair slots total',
+                            key: i18n('field_repair-slots-total'),
                             value: this.renderFiltersGroup(section, 'repairSlotsTotal', 'Number'),
                         },
                     ]}
                 />
 
-                <h4 className={block('heading')}>Removal slots</h4>
+                <h4 className={block('heading')}>{i18n('title_removal-slots')}</h4>
 
                 <MetaTable
                     items={[
                         {
-                            key: 'removal slots used',
+                            key: i18n('field_removal-slots-used'),
                             value: this.renderFiltersGroup(section, 'removalSlotsUsed', 'Number'),
                         },
                         {
-                            key: 'removal slots total',
+                            key: i18n('field_removal-slots-total'),
                             value: this.renderFiltersGroup(section, 'removalSlotsUsed', 'Number'),
                         },
                     ]}
                 />
 
-                <h4 className={block('heading')}>Replication slots</h4>
+                <h4 className={block('heading')}>{i18n('title_replication-slots')}</h4>
 
                 <MetaTable
                     items={[
                         {
-                            key: 'replication slots used',
+                            key: i18n('field_replication-slots-used'),
                             value: this.renderFiltersGroup(
                                 section,
                                 'replicationSlotsUsed',
@@ -640,7 +642,7 @@ export class SetupModal extends Component {
                             ),
                         },
                         {
-                            key: 'replication slots total',
+                            key: i18n('field_replication-slots-total'),
                             value: this.renderFiltersGroup(
                                 section,
                                 'replicationSlotsTotal',
@@ -658,63 +660,63 @@ export class SetupModal extends Component {
 
         return (
             <Fragment>
-                <h4 className={block('heading')}>Tablet slots</h4>
+                <h4 className={block('heading')}>{i18n('title_tablet-slots')}</h4>
 
                 <MetaTable
                     items={[
                         {
-                            key: 'all states',
+                            key: i18n('field_all-states'),
                             value: this.renderFiltersGroup(section, 'all', 'Number'),
                         },
                         {
-                            key: 'none',
+                            key: i18n('field_none'),
                             value: this.renderFiltersGroup(section, 'none', 'Number'),
                         },
                         {
-                            key: 'leading',
+                            key: i18n('field_leading'),
                             value: this.renderFiltersGroup(section, 'leading', 'Number'),
                         },
                         {
-                            key: 'following',
+                            key: i18n('field_following'),
                             value: this.renderFiltersGroup(section, 'following', 'Number'),
                         },
                         {
-                            key: 'Follower Recovery',
+                            key: i18n('field_follower-recovery'),
                             value: this.renderFiltersGroup(section, 'followerRecovery', 'Number'),
                         },
                         {
-                            key: 'Leader Recovery',
+                            key: i18n('field_leader-recovery'),
                             value: this.renderFiltersGroup(section, 'leaderRecovery', 'Number'),
                         },
                         {
-                            key: 'stopped',
+                            key: i18n('field_stopped'),
                             value: this.renderFiltersGroup(section, 'stopped', 'Number'),
                         },
                         {
-                            key: 'elections',
+                            key: i18n('field_elections'),
                             value: this.renderFiltersGroup(section, 'elections', 'Number'),
                         },
                     ]}
                 />
 
-                <h4 className={block('heading')}>Tablet memory</h4>
+                <h4 className={block('heading')}>{i18n('title_tablet-memory')}</h4>
 
                 <MetaTable
                     items={[
                         {
-                            key: 'static used',
+                            key: i18n('field_static-used'),
                             value: this.renderFiltersGroup(section, 'staticUsed'),
                         },
                         {
-                            key: 'static total',
+                            key: i18n('field_static-total'),
                             value: this.renderFiltersGroup(section, 'staticTotal'),
                         },
                         {
-                            key: 'dynamic used',
+                            key: i18n('field_dynamic-used'),
                             value: this.renderFiltersGroup(section, 'dynamicUsed'),
                         },
                         {
-                            key: 'dynamic total',
+                            key: i18n('field_dynamic-total'),
                             value: this.renderFiltersGroup(section, 'dynamicTotal'),
                         },
                     ]}
@@ -728,23 +730,27 @@ export class SetupModal extends Component {
 
         return (
             <div className={block()}>
-                <CollapsibleSection size="s" name="Default" className={block('default')}>
+                <CollapsibleSection
+                    size="s"
+                    name={i18n('title_section-default')}
+                    className={block('default')}
+                >
                     {this.renderDefaultFilters()}
                 </CollapsibleSection>
 
-                <CollapsibleSection size="s" name="Storage">
+                <CollapsibleSection size="s" name={i18n('title_section-storage')}>
                     {this.renderStorageFilters()}
                 </CollapsibleSection>
 
-                <CollapsibleSection size="s" name="CPU and memory">
+                <CollapsibleSection size="s" name={i18n('title_section-cpu-memory')}>
                     {this.renderCpuFilters()}
                 </CollapsibleSection>
 
-                <CollapsibleSection size="s" name="Resources">
+                <CollapsibleSection size="s" name={i18n('title_section-resources')}>
                     {this.renderResourcesFilters()}
                 </CollapsibleSection>
 
-                <CollapsibleSection size="s" name="Tablets">
+                <CollapsibleSection size="s" name={i18n('title_section-tablets')}>
                     {this.renderTabletsFilters()}
                 </CollapsibleSection>
 
@@ -752,17 +758,17 @@ export class SetupModal extends Component {
                     <MetaTable
                         items={[
                             {
-                                key: 'save',
+                                key: i18n('field_save'),
                                 value: this.renderCheckBox(
-                                    'Save as template',
+                                    i18n('action_save-as-template'),
                                     saveAsTemplate,
                                     this.handleTemplateCheckboxChange,
                                 ),
                             },
                             {
-                                key: 'template name',
+                                key: i18n('field_template-name'),
                                 value: this.renderTextFilter({
-                                    placeholder: 'Enter template name...',
+                                    placeholder: i18n('context_enter-template-name'),
                                     onChange: this.handleTemplateNameChange,
                                     value: templateName,
                                     disabled: !saveAsTemplate,
@@ -784,7 +790,7 @@ export class SetupModal extends Component {
         return (
             <Modal
                 size="m"
-                title="Setup"
+                title={i18n('title_setup')}
                 visible={visible}
                 onCancel={handleClose}
                 content={this.renderContent()}

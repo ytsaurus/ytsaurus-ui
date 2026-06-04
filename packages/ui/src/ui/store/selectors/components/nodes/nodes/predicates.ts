@@ -11,6 +11,8 @@ import union_ from 'lodash/union';
 
 import {createSelector} from 'reselect';
 
+import i18n from './i18n';
+
 import {UNAWARE} from '../../../../../constants';
 import {
     type FlagState,
@@ -53,9 +55,8 @@ export const selectComponentNodesFilterStatePredicate = createSelector(
                     name: 'component-nodes-excludes',
                     theme: 'danger',
                     autoHiding: false,
-                    title: 'Unexpected behavior',
-                    content:
-                        'Components/Nodes: It is not allowed to have excludes and includes for "state" filter at the same time',
+                    title: i18n('alert_unexpected-behavior'),
+                    content: i18n('alert_state-filter-excludes-includes'),
                 });
             }
 

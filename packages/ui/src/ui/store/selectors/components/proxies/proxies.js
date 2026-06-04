@@ -5,6 +5,7 @@ import sumBy_ from 'lodash/sumBy';
 import omit_ from 'lodash/omit';
 
 import hammer from '../../../../common/hammer';
+import i18n from './i18n';
 import {concatByAnd} from '../../../../common/hammer/predicate';
 import {createSelector} from 'reselect';
 import {proxiesTableColumnItems} from '../../../../utils/components/proxies/table';
@@ -38,7 +39,9 @@ const getSelectItems = (allItems, visibleItems, hostFilter, selectFilter) => {
     }
 
     const allItemsSection = {
-        text: 'All',
+        get text() {
+            return i18n('value_all');
+        },
         value: 'all',
         count: sumBy_(items, (item) => item.count),
     };

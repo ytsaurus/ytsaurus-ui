@@ -1,0 +1,12 @@
+{
+  "action_copy": "Copy {{columnName}}",
+  "context_ban-proxy": "Ban proxy",
+  "context_unban-proxy": "Unban proxy",
+  "field_filter-hosts": "Filter hosts...",
+  "field_state": "State:",
+  "field_role": "Role:",
+  "field_banned": "Banned:",
+  "value_all": "All",
+  "value_true": "True",
+  "value_false": "False"
+}

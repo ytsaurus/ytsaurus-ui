@@ -63,6 +63,8 @@ import {type RootState} from '../../../../../store/reducers';
 
 import {NodeMaintenanceModal} from '../../../NodeMaintenanceModal/NodeMaintenanceModal';
 
+import i18n from './i18n';
+
 import './Nodes.scss';
 
 const block = cn('components-nodes');
@@ -234,7 +236,7 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
                     hasClear
                     value={hostFilter}
                     onChange={changeHostFilter}
-                    placeholder="Filter hosts..."
+                    placeholder={i18n('field_filter-hosts')}
                     pin={'round-round'}
                 />
 
@@ -244,7 +246,8 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
                     onClick={toggleVisible}
                     selected={isFiltered}
                 >
-                    <Icon awesome="filter" size={13} /> Filter {filterCount}
+                    <Icon awesome="filter" size={13} />{' '}
+                    {i18n('action_filter', {count: filterCount})}
                 </Button>
 
                 <Dropdown
@@ -254,7 +257,7 @@ class Nodes extends React.Component<ReduxProps & WithVisibleProps, State> {
                     button={
                         <Button disabled={contentMode !== CONTENT_MODE.CUSTOM} pin={'round-round'}>
                             <Icon awesome="table" face="light" size={13} />
-                            Columns
+                            {i18n('action_columns')}
                         </Button>
                     }
                     template={

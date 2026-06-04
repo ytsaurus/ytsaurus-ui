@@ -9,6 +9,7 @@ import Icon from '../../../../components/Icon/Icon';
 import Link from '../../../../containers/Link/Link';
 
 import withVisible from '../../../../hocs/withVisible';
+import i18n from './i18n';
 
 const block = cn('elements-column');
 
@@ -35,7 +36,7 @@ class Version extends Component {
                     text={version}
                     view="flat-secondary"
                     size="s"
-                    title={'Copy ' + version}
+                    title={i18n('action_copy', {version})}
                 />
             </div>
         );
@@ -46,9 +47,9 @@ class Version extends Component {
 
         return (
             <div className="elements-monospace elements-ellipsis">
-                <Icon awesome="exclamation-triangle" /> Error &emsp;
+                <Icon awesome="exclamation-triangle" /> {i18n('alert_error')} &emsp;
                 <Link theme="ghost" onClick={handleShow}>
-                    View
+                    {i18n('action_view')}
                 </Link>
                 <SimpleModal visible={visible} onCancel={handleClose}>
                     <YTErrorBlock error={error} />

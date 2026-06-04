@@ -1,0 +1,20 @@
+{
+  "field_system-tags": "system tags",
+  "field_user-tags": "user tags",
+  "field_location-number": "location number",
+  "field_enabled": "enabled",
+  "field_full": "full",
+  "field_medium-name": "medium name",
+  "field_sessions": "sessions",
+  "field_chunks": "chunks",
+  "field_used-space": "used space",
+  "field_available-space": "available space",
+  "field_watermark-space": "watermark space",
+  "title_locations": "Locations",
+  "title_alerts": "Alerts",
+  "title_tablet-slots": "Tablet slots",
+  "title_general": "General",
+  "title_storage": "Storage",
+  "title_cpu-and-memory": "CPU and memory",
+  "title_resources": "Resources"
+}

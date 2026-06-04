@@ -1,0 +1,10 @@
+{
+  "value_default": "Default",
+  "value_storage": "Storage",
+  "value_cpu_and_memory": "CPU and memory",
+  "value_resources": "Resources",
+  "value_tablets": "Tablets",
+  "value_tablet_slots": "Tablet slots",
+  "value_chaos_slots": "Chaos slots",
+  "value_custom": "Custom"
+}

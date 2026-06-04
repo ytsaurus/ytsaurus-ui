@@ -39,6 +39,7 @@ import {YTApiId, ytApiV3Id} from '../../../../rum/rum-wrap-api';
 import {type ActionD, type FIX_MY_TYPE, type PartialDeep} from '../../../../types';
 import {prepareAttributes} from '../../../../utils/cypress-attributes';
 import {wrapApiPromiseByToaster} from '../../../../utils/utils';
+import i18n from './i18n';
 import {type NodeType} from '../../../../../shared/constants/system';
 import {type BatchSubRequest} from '../../../../../shared/yt-types';
 
@@ -227,7 +228,7 @@ export function getComponentsNodesFilterOptions(): NodesThunkAction {
             }),
             {
                 toasterName: 'node filter options',
-                errorTitle: `Failed to load node ${attributes.join(',')}`,
+                errorTitle: i18n('alert_failed-to-load-node', {attributes: attributes.join(',')}),
                 skipSuccessToast: true,
             },
         )
