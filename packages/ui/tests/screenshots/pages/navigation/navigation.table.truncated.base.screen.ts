@@ -2,6 +2,7 @@ import {expect, test} from '@playwright/test';
 import {E2E_DIR, MOCK_DATE, makeClusterUrl} from '../../../utils';
 import {table} from '../../../widgets/TablePage';
 import {replaceInnerHtml} from '../../../utils/dom';
+import {waitForStoreWithoutActions} from '../../../utils/store';
 
 test.use({
     contextOptions: {
@@ -16,6 +17,7 @@ test('Navigation: truncated table - Content', async ({page}) => {
     });
 
     await table(page).waitForTableContent('.navigation-table', 1);
+    await waitForStoreWithoutActions(page);
     await table(page).replaceTableMeta();
 
     await table(page).resizePageForScreenshot();

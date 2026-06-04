@@ -3,13 +3,14 @@ import {E2E_DIR, MOCK_DATE, makeClusterUrl} from '../../../utils';
 import {replaceInnerHtml} from '../../../utils/dom';
 import {table} from '../../../widgets/TablePage';
 import {mockYTApi} from '../../../utils/network';
+import {waitForStoreWithoutActions} from '../../../utils/store';
 
 test('Navigation: table - Content', async ({page}) => {
     await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/static-table`));
-    await page.waitForLoadState('networkidle');
 
     await table(page).waitForTableContent('.navigation-table', 10);
+    await waitForStoreWithoutActions(page);
     await table(page).replaceTableMeta();
 
     await expect(page).toHaveScreenshot();
@@ -58,7 +59,8 @@ test('Navigation: table - Content', async ({page}) => {
 test('Navigation: table - Schema', async ({page}) => {
     await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/dynamic-table&navmode=schema`));
-    await page.waitForLoadState('networkidle');
+
+    await waitForStoreWithoutActions(page);
 
     await table(page).waitForTable('.navigation-schema', 3);
     await table(page).replaceBreadcrumbsTestDir();
@@ -69,21 +71,23 @@ test('Navigation: table - Schema', async ({page}) => {
 
 test('Navigation: table - Remount needed', async ({page}) => {
     await page.clock.install({time: MOCK_DATE});
-    await mockYTApi(page, 'navigationAttributes', [{output: {compression_ratio: {$value: "0.5819612345642"}}}]);
+    await mockYTApi(page, 'navigationAttributes', [
+        {output: {compression_ratio: {$value: '0.5819612345642'}}},
+    ]);
 
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/dynamic-table`));
 
-    await page.waitForLoadState('networkidle');
-
     page.locator('.data-table_theme_yt-internal').waitFor();
-
-    await table(page).replaceBreadcrumbsTestDir();
-    await table(page).replaceTableMeta();
 
     await test.step('Remount alert visible', async () => {
         await page
             .getByText('Some table settings are not applied to tablets')
             .waitFor({state: 'visible'});
+
+        await waitForStoreWithoutActions(page);
+        await table(page).replaceBreadcrumbsTestDir();
+        await table(page).replaceTableMeta();
+
         await expect(page).toHaveScreenshot();
     });
 });
@@ -91,9 +95,9 @@ test('Navigation: table - Remount needed', async ({page}) => {
 test('Navigation: table - Tablets', async ({page}) => {
     await page.clock.install({time: new Date(MOCK_DATE)});
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/dynamic-table&navmode=tablets`));
-    await page.waitForLoadState('networkidle');
 
     await table(page).waitForTable('.navigation-tablets', 2);
+    await waitForStoreWithoutActions(page);
     await table(page).replaceBreadcrumbsTestDir();
 
     page.getByTestId('');
@@ -136,9 +140,9 @@ test('Navigation: table - userColumnPresets', async ({page, context}) => {
 
     await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/static-table`));
-    await page.waitForLoadState('networkidle');
 
     await table(page).waitForTableContent('.navigation-table', 10);
+    await waitForStoreWithoutActions(page);
     await table(page).replaceTableMeta();
 
     await test.step('select only the "key" column', async () => {
@@ -166,6 +170,7 @@ test('Navigation: table - userColumnPresets', async ({page, context}) => {
         await context.waitForEvent('page', {
             predicate: async (page) => {
                 await table(page).waitForTableContent('.navigation-table', 10);
+                await waitForStoreWithoutActions(page);
                 await table(page).replaceTableMeta();
 
                 await page.getByText('key0').waitFor();
@@ -182,8 +187,8 @@ test('Navigation: yql-v3-types', async ({page}) => {
     await page.clock.install({time: MOCK_DATE});
     await page.goto(makeClusterUrl(`navigation?path=${E2E_DIR}/tmp/yql-v3-types-table`));
     await table(page).waitForTableContent('.navigation-table', 5);
-    await page.waitForLoadState('networkidle');
 
+    await waitForStoreWithoutActions(page);
     await table(page).replaceTableMeta();
 
     await test.step('yql-v3-types enabled', async () => {
