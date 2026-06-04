@@ -1,0 +1,4 @@
+{
+  "alert_failed-to-modify": "Failed to modify {{address}}",
+  "alert_cannot-load-node-attributes": "Cannot load node attributes for {{path}}"
+}

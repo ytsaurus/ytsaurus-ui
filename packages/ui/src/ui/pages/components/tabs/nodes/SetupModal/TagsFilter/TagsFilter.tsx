@@ -10,6 +10,7 @@ import {
 import TagSelector from '../../../../../../components/TagSelector/TagSelector';
 
 import './TagsFilter.scss';
+import i18n from './i18n';
 import Button from '../../../../../../components/Button/Button';
 import {DropdownMenu} from '@gravity-ui/uikit';
 import Icon, {type IconName} from '../../../../../../components/Icon/Icon';
@@ -130,7 +131,7 @@ function TagsFilter(props: Props) {
         const itemMode = m!;
         return {
             iconStart: <Icon awesome={ICONS[itemMode]} />,
-            text: itemMode[0].toUpperCase() + itemMode.substring(1),
+            text: i18n(`value_${itemMode}`),
             action: () => handleChange({...value, mode: itemMode}),
         };
     });

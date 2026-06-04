@@ -9,6 +9,7 @@ import {ClickableText} from '../../../../components/ClickableText/ClickableText'
 import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 
 import './VersionCell.scss';
+import i18n from './i18n';
 import {useDispatch} from '../../../../store/redux-hooks';
 import {changeVersionStateTypeFilters} from '../../../../store/actions/components/versions/versions_v2';
 import {uiSettings} from '../../../../config/ui-settings';
@@ -73,10 +74,10 @@ function VersionCell(props: Props) {
                 size="s"
                 hoverContent={
                     <div>
-                        Copy version
+                        {i18n('action_copy-version')}
                         {Boolean(hashPart) && (
                             <div>
-                                <Text color="secondary">Hold SHIFT-key to copy hash</Text>
+                                <Text color="secondary">{i18n('context_shift-copy-hash')}</Text>
                             </div>
                         )}
                     </div>

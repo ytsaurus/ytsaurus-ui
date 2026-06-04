@@ -24,11 +24,19 @@ import {tabletActiveBundleLink} from '../../../utils/components/tablet-cells';
 
 import './Component.scss';
 import {UI_TAB_SIZE} from '../../../constants/global';
+import i18n from './i18n';
 
 const b = block(Page.COMPONENTS);
 
 export function Components({match, lastVisitedTab = DEFAULT_TAB, tabSize, location}) {
-    const props = makeTabProps(match.url, Tab);
+    const props = makeTabProps(match.url, Tab, {
+        [Tab.NODES]: {title: i18n('tab_nodes')},
+        [Tab.HTTP_PROXIES]: {title: i18n('tab_http_proxies')},
+        [Tab.CYPRESS_PROXIES]: {title: i18n('tab_cypress_proxies')},
+        [Tab.RPC_PROXIES]: {title: i18n('tab_rpc_proxies')},
+        [Tab.SHARDS]: {title: i18n('tab_shards')},
+        [Tab.VERSIONS]: {title: i18n('tab_versions')},
+    });
 
     const nodePageMatch = matchPath(location.pathname, {
         path: `${match.path}/${Tab.NODES}/:host`,

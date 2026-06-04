@@ -2,6 +2,9 @@ import i18n from './i18n';
 
 export const proxiesTableColumnItems = {
     host: {
+        get caption() {
+            return i18n('field_host');
+        },
         get(proxy) {
             return proxy.host;
         },
@@ -9,6 +12,9 @@ export const proxiesTableColumnItems = {
         align: 'left',
     },
     state: {
+        get caption() {
+            return i18n('field_state');
+        },
         get(proxy) {
             return proxy.state;
         },
@@ -16,6 +22,9 @@ export const proxiesTableColumnItems = {
         align: 'center',
     },
     role: {
+        get caption() {
+            return i18n('field_role');
+        },
         get(proxy) {
             return proxy.role;
         },
@@ -23,6 +32,9 @@ export const proxiesTableColumnItems = {
         align: 'left',
     },
     version: {
+        get caption() {
+            return i18n('field_version');
+        },
         get(proxy) {
             return proxy.version;
         },
@@ -43,6 +55,9 @@ export const proxiesTableColumnItems = {
         },
     },
     load_average: {
+        get caption() {
+            return i18n('field_load-average');
+        },
         get(proxy) {
             return proxy.loadAverage;
         },
@@ -50,6 +65,9 @@ export const proxiesTableColumnItems = {
         align: 'right',
     },
     updated_at: {
+        get caption() {
+            return i18n('field_updated-at');
+        },
         get(proxy) {
             return proxy.updatedAt;
         },
@@ -57,6 +75,9 @@ export const proxiesTableColumnItems = {
         align: 'right',
     },
     network_load: {
+        get caption() {
+            return i18n('field_network-load');
+        },
         get(proxy) {
             return proxy.networkLoad;
         },

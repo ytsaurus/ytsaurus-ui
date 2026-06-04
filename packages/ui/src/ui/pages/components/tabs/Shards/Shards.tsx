@@ -15,6 +15,8 @@ import NodeCount from './NodeCount';
 import {abortAllRequests, getShards} from '../../../../store/actions/components/shards';
 import {type Shard} from '../../../../store/reducers/components/shards';
 
+import i18n from './i18n';
+
 import './Shards.scss';
 import {selectCluster} from '../../../../store/selectors/global';
 import {type RootState} from '../../../../store/reducers';
@@ -35,7 +37,9 @@ const tableSettings = {
             },
             node_count: {
                 align: 'left',
-                caption: 'Node count',
+                get caption() {
+                    return i18n('field_node-count');
+                },
             },
         },
         sets: {

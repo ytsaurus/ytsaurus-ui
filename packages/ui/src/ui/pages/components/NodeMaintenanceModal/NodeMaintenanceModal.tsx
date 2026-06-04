@@ -23,6 +23,7 @@ import {
 } from '../../../store/actions/components/node-maintenance-modal';
 import {type YTError} from '../../../../@types/types';
 import {Host} from '../../../containers/Host/Host';
+import i18n from './i18n';
 
 import './NodeMaintenanceModal.scss';
 
@@ -60,7 +61,7 @@ export function NodeMaintenanceModal() {
             headerProps={{
                 title: (
                     <>
-                        <Host useText prefix={<>Edit &nbsp;</>} address={address} />
+                        <Host useText prefix={<>{i18n('title_edit')} &nbsp;</>} address={address} />
                     </>
                 ),
             }}
@@ -109,11 +110,10 @@ export function NodeMaintenanceModal() {
             }}
             fields={[
                 ...map_(allowedMaintenanceTypes, (name) => {
-                    const title = name.split('disable_')[1];
                     return {
                         name,
                         type: 'tab' as const,
-                        title: format.ReadableField(title ?? name),
+                        title: i18n(`title_${name}`),
                         fields: [...makeMaintenanceFields(name), ...makeErrorFields([error])],
                     };
                 }),
@@ -123,7 +123,7 @@ export function NodeMaintenanceModal() {
                           {
                               name: 'limits',
                               type: 'tab' as const,
-                              title: 'Limits',
+                              title: i18n('title_limits'),
                               fields: [
                                   makeResourceLimitField('cpu', resourceLimits),
                                   makeResourceLimitField('gpu', resourceLimits),
@@ -146,12 +146,12 @@ export function NodeMaintenanceModal() {
                           {
                               name: 'role',
                               type: 'tab' as const,
-                              title: 'Role',
+                              title: i18n('title_role'),
                               fields: [
                                   {
                                       name: 'role',
                                       type: 'text' as const,
-                                      caption: 'Role',
+                                      caption: i18n('title_role'),
                                   },
                               ],
                           },
@@ -166,13 +166,13 @@ function makeMaintenanceFields(type: AddMaintenanceParams['type'], allowOthers =
         {
             name: 'state',
             type: 'radio' as const,
-            caption: 'State',
+            caption: i18n('field_state'),
             extras: makeRadioExtras(type),
         },
         {
             name: 'comment',
             type: 'textarea' as const,
-            caption: 'Comment',
+            caption: i18n('field_comment'),
             extras: (values: FormValues) => {
                 return values[type]?.state ? {} : {disabled: true};
             },
@@ -182,7 +182,7 @@ function makeMaintenanceFields(type: AddMaintenanceParams['type'], allowOthers =
                   {
                       name: 'otherComments',
                       type: 'textarea' as const,
-                      caption: 'Other users comments',
+                      caption: i18n('field_other-comments'),
                       extras: {
                           disabled: true,
                       },
@@ -194,10 +194,11 @@ function makeMaintenanceFields(type: AddMaintenanceParams['type'], allowOthers =
 
 function makeRadioExtras(type: AddMaintenanceParams['type']) {
     const labels: Partial<Record<typeof type, [string, string]>> = {
-        ban: ['Enabled', 'Banned'],
-        decommission: ['Enabled', 'Decommissioned'],
+        ban: [i18n('value_enabled'), i18n('value_banned')],
+        decommission: [i18n('value_enabled'), i18n('value_decommissioned')],
     };
-    const [activeLabel = 'Enabled', maintenanceLabel = 'Disabled'] = labels[type] ?? [];
+    const [activeLabel = i18n('value_enabled'), maintenanceLabel = i18n('value_disabled')] =
+        labels[type] ?? [];
     return {
         options: [
             {value: '', label: activeLabel},

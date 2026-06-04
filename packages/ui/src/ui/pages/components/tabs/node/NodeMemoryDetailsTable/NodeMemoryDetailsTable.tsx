@@ -22,6 +22,8 @@ import {type SortState} from '../../../../../types';
 import {DATA_TABLE_YT_SETTINGS, DataTableYT} from '../../../../../components/DataTableYT';
 import {SecondaryBold} from '@ytsaurus/components';
 
+import i18n from './i18n';
+
 import './NodeMemoryDetailsTable.scss';
 
 const block = cn('node-memory-details-table');
@@ -123,7 +125,9 @@ function NodeMemoryDetailsTable(props: Props) {
                                     ''
                                 ) : (
                                     <>
-                                        Total <SecondaryBold>{parent}</SecondaryBold> usage
+                                        {i18n('context_total')}{' '}
+                                        <SecondaryBold>{parent}</SecondaryBold>{' '}
+                                        {i18n('context_usage')}
                                     </>
                                 )
                             }

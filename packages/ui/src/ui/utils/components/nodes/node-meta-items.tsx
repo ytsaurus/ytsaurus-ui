@@ -63,15 +63,18 @@ export function getNodeMetaItems({
     return [
         {
             key: 'state',
+            label: i18n('field_state'),
             value: <Label theme={stateTheme} type="text" text={stateText} />,
         },
         {
             key: 'rack',
+            label: i18n('field_rack'),
             value: hammer.format['Address'](rack),
             visible: Boolean(rack),
         },
         {
             key: 'banned',
+            label: i18n('field_banned'),
             value: (
                 <Label
                     text={banMessage || i18n('value_true')}
@@ -83,11 +86,13 @@ export function getNodeMetaItems({
         },
         {
             key: 'maintenance',
+            label: i18n('field_maintenance'),
             value: <MaintenanceRequests requests={maintenanceRequests} />,
             visible: !isEmpty_(maintenanceRequests),
         },
         {
             key: 'decommissioned',
+            label: i18n('field_decommissioned'),
             value: (
                 <Label
                     text={
@@ -101,50 +106,60 @@ export function getNodeMetaItems({
         },
         {
             key: 'full',
+            label: i18n('field_full'),
             value: <Label text={i18n('value_full')} theme="danger" type="text" />,
             visible: Boolean(full),
         },
         {
             key: 'alerts',
+            label: i18n('field_alerts'),
             value: <Label text={alertCount} theme="danger" type="text" />,
             visible: alertCount! > 0,
         },
         {
             key: 'scheduler_jobs',
+            label: i18n('field_scheduler-jobs'),
             value: renderLabel(disableJobs),
         },
         {
             key: 'write_sessions',
+            label: i18n('field_write-sessions'),
             value: renderLabel(disableWriteSession),
         },
         {
             key: 'tablet_cells',
+            label: i18n('field_tablet-cells'),
             value: renderLabel(disableTabletCells),
         },
         {
             key: 'data_center',
+            label: i18n('field_data-center'),
             value: dataCenter?.toUpperCase(),
             visible: Boolean(dataCenter),
         },
         {
             key: 'last_seen',
+            label: i18n('field_last-seen'),
             value: hammer.format['DateTime'](lastSeenTime, {
                 format: 'full',
             }),
         },
         {
             key: 'register_time',
+            label: i18n('field_register-time'),
             value: hammer.format['DateTime'](registerTime, {
                 format: 'full',
             }),
         },
         {
             key: 'version',
+            label: i18n('field_version'),
             value: version,
             visible: Boolean(version),
         },
         {
             key: 'job_proxy_build_version',
+            label: i18n('field_job-proxy-build-version'),
             value: jobProxyBuildVersion,
             visible: Boolean(jobProxyBuildVersion),
         },

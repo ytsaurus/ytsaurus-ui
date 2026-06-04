@@ -47,6 +47,7 @@ import {ClickableId, NodeColumnBanned, NodeColumnState} from '../NodeColumns';
 import {Host} from '../../../../containers/Host/Host';
 
 import {detailsTableProps} from './tables_v2';
+import i18n from './i18n';
 
 import './Versions.scss';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../constants/global';
@@ -96,7 +97,7 @@ class VersionsV2 extends React.Component<ReduxProps> {
                         value={hostFilter}
                         debounce={DEBOUNCE_TIME}
                         onChange={changeHostFilter}
-                        placeholder="Filter host..."
+                        placeholder={i18n('field_filter-host')}
                     />
                 </div>
 
@@ -105,7 +106,7 @@ class VersionsV2 extends React.Component<ReduxProps> {
                         value={[versionFilter]}
                         items={versionSelectItems}
                         onUpdate={(vals) => changeVersionFilter(vals[0])}
-                        label="Version:"
+                        label={i18n('field_version')}
                         width="max"
                         hideFilter
                     />
@@ -116,7 +117,7 @@ class VersionsV2 extends React.Component<ReduxProps> {
                         value={[typeFilter]}
                         items={typeSelectItems}
                         onUpdate={(vals) => changeTypeFilter(vals[0])}
-                        label="Type:"
+                        label={i18n('field_type')}
                         width="max"
                         hideFilter
                     />
@@ -127,7 +128,7 @@ class VersionsV2 extends React.Component<ReduxProps> {
                         value={[stateFilter]}
                         items={stateSelectItems}
                         onUpdate={(vals) => changeStateFilter(vals[0])}
-                        label="State:"
+                        label={i18n('field_state')}
                         width="max"
                         hideFilter
                     />
@@ -138,7 +139,7 @@ class VersionsV2 extends React.Component<ReduxProps> {
                         value={[String(bannedFilter)]}
                         items={this.getBannedItems()}
                         onUpdate={(vals) => this.onBannedChange(vals[0])}
-                        label="Banned:"
+                        label={i18n('field_banned')}
                         width="max"
                         hideFilter
                     />
@@ -249,7 +250,7 @@ class VersionsV2 extends React.Component<ReduxProps> {
                 <LoadDataHandler {...rest} error={Boolean(error)} errorData={error}>
                     <div className={b()}>
                         <CollapsibleSection
-                            name="Summary"
+                            name={i18n('title_summary')}
                             className={b('summary')}
                             collapsed={false}
                             size={UI_COLLAPSIBLE_SIZE}
@@ -261,7 +262,7 @@ class VersionsV2 extends React.Component<ReduxProps> {
                         </CollapsibleSection>
 
                         <CollapsibleSection
-                            name="Details"
+                            name={i18n('title_details')}
                             className={b('details')}
                             collapsed={false}
                             size={UI_COLLAPSIBLE_SIZE}

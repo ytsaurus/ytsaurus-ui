@@ -13,6 +13,7 @@ import {
     toggleNodeMemoryBundleExpanded,
 } from '../../../../../store/actions/components/node/memory';
 import {type SortState} from '../../../../../types';
+import i18n from './i18n';
 
 function NodeTables() {
     const dispatch = useDispatch();
@@ -36,7 +37,7 @@ function NodeTables() {
             loading={loading}
             toggleExpand={toggleExpandState}
             onSort={handleSort}
-            nameColumnTitle={'Bundles / Table'}
+            nameColumnTitle={i18n('field_bundles-table')}
             sortState={sortOrder}
         />
     );

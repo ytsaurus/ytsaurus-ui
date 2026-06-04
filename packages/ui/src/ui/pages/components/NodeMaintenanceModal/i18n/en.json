@@ -1,0 +1,17 @@
+{
+  "title_edit": "Edit",
+  "title_ban": "Ban",
+  "title_disable_scheduler_jobs": "Scheduler jobs",
+  "title_disable_write_sessions": "Write sessions",
+  "title_disable_tablet_cells": "Tablet cells",
+  "title_decommission": "Decommission",
+  "title_limits": "Limits",
+  "title_role": "Role",
+  "field_state": "State",
+  "field_comment": "Comment",
+  "field_other-comments": "Other users comments",
+  "value_enabled": "Enabled",
+  "value_banned": "Banned",
+  "value_decommissioned": "Decommissioned",
+  "value_disabled": "Disabled"
+}

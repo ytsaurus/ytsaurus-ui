@@ -7,6 +7,8 @@ import hammer from '../../../../common/hammer';
 import {createSelector} from 'reselect';
 import {detailsTableProps} from '../../../../pages/components/tabs/Versions/tables_v2';
 
+import i18n from './i18n';
+
 import {COMPONENTS_VERSIONS_DETAILED_TABLE_ID} from '../../../../constants/components/versions/versions_v2';
 import {type RootState} from '../../../../store/reducers';
 import {type VersionHostInfo} from '../../../../store/reducers/components/versions/versions_v2';
@@ -51,7 +53,9 @@ function getSelectItems(
     }
 
     const allItemsSection = {
-        text: 'All',
+        get text() {
+            return i18n('value_all');
+        },
         value: 'all',
         count: sumBy_(items, (item) => item.count),
     };

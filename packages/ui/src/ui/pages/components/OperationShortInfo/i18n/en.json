@@ -1,0 +1,8 @@
+{
+  "field_id": "Id",
+  "field_type": "Type",
+  "field_output": "Output",
+  "field_duration": "Duration",
+  "field_status": "Status",
+  "field_error": "Error"
+}

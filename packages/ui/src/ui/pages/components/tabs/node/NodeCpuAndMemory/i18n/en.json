@@ -1,0 +1,6 @@
+{
+  "field_cpu": "CPU",
+  "field_memory": "Memory",
+  "field_gpu": "GPU",
+  "field_network": "Network"
+}

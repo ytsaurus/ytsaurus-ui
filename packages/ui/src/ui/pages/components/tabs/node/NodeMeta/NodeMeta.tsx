@@ -11,6 +11,7 @@ import {type Node} from '../../../../../store/reducers/components/nodes/nodes/no
 import {selectCurrentClusterConfig} from '../../../../../store/selectors/global';
 import UIFactory from '../../../../../UIFactory';
 import {getNodeMetaItems} from '../../../../../utils/components/nodes/node-meta-items';
+import i18n from './i18n';
 
 import './NodeMeta.scss';
 
@@ -109,11 +110,13 @@ function NodeMeta({
         () => [
             {
                 key: 'tags',
+                label: i18n('field_tags'),
                 value: <Tags items={tags} />,
                 visible: Boolean(tags?.length),
             },
             {
                 key: 'user_tags',
+                label: i18n('field_user-tags'),
                 value: <Tags items={userTags} />,
                 visible: Boolean(userTags?.length),
             },

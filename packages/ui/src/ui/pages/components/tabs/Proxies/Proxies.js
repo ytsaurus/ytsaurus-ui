@@ -44,6 +44,8 @@ import {
 import {NodeColumnBanned, NodeColumnRole, NodeColumnState, NodeColumnText} from '../NodeColumns';
 import {NodeMaintenanceModal} from '../../NodeMaintenanceModal/NodeMaintenanceModal';
 
+import i18n from './i18n';
+
 import './Proxies.scss';
 
 const block = cn('components-proxies');
@@ -121,7 +123,7 @@ export class Proxies extends Component {
                     text={item.host}
                     view="flat-secondary"
                     size="s"
-                    title={'Copy ' + columnName}
+                    title={i18n('action_copy', {columnName})}
                 />
             </div>
         );
@@ -254,7 +256,7 @@ export class Proxies extends Component {
                         value={hostFilter}
                         disabled={initialLoading}
                         onChange={changeHostFilter}
-                        placeholder="Filter hosts..."
+                        placeholder={i18n('field_filter-hosts')}
                     />
                 </div>
 
@@ -264,7 +266,7 @@ export class Proxies extends Component {
                         value={[stateFilter]}
                         disabled={initialLoading}
                         onUpdate={(vals) => changeStateFilter(vals[0])}
-                        label="State:"
+                        label={i18n('field_state')}
                         width="max"
                         hideFilter
                     />
@@ -277,7 +279,7 @@ export class Proxies extends Component {
                             value={[roleFilter]}
                             disabled={initialLoading}
                             onUpdate={(vals) => changeRoleFilter(vals[0])}
-                            label="Role:"
+                            label={i18n('field_role')}
                             width="max"
                         />
                     </div>
@@ -286,11 +288,11 @@ export class Proxies extends Component {
                 {type !== PROXY_TYPE.CYPRESS && (
                     <div className={block('filter')}>
                         <Select
-                            label="Banned:"
+                            label={i18n('field_banned')}
                             items={[
-                                {value: 'all', title: 'All'},
-                                {value: 'true', title: 'True'},
-                                {value: 'false', title: 'False'},
+                                {value: 'all', title: i18n('value_all')},
+                                {value: 'true', title: i18n('value_true')},
+                                {value: 'false', title: i18n('value_false')},
                             ]}
                             value={[String(bannedFilter ?? 'all')]}
                             disabled={initialLoading}

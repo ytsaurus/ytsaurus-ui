@@ -9,6 +9,7 @@ import {useDispatch} from '../../../store/redux-hooks';
 import moment from 'moment';
 import './SwitchLeaderShortInfo.scss';
 import {useUpdater} from '../../../hooks/use-updater';
+import i18n from './i18n';
 
 const block = cn('switch-leader-short-info');
 
@@ -48,16 +49,19 @@ export function SwitchLeaderShortInfo(props: Props) {
             <MetaTable
                 items={[
                     {
-                        key: 'Duration',
+                        key: i18n('field_duration'),
                         value: format.TimeDuration(
                             (finishTime || currentTime).diff(startTime.current),
                         ),
                     },
                     {
-                        key: 'Status',
+                        key: i18n('field_status'),
                         value: (
                             <SwitchLeaderShortInfoStatus
-                                state={finishTime ? 'complete' : 'in progress'}
+                                state={finishTime ? 'complete' : 'in-progress'}
+                                label={
+                                    finishTime ? i18n('value_complete') : i18n('value_in-progress')
+                                }
                             />
                         ),
                     },
@@ -67,6 +71,6 @@ export function SwitchLeaderShortInfo(props: Props) {
     );
 }
 
-function SwitchLeaderShortInfoStatus({state}: {state: string}) {
-    return <span className={block('state', {state})}>{state}</span>;
+function SwitchLeaderShortInfoStatus({state, label}: {state: string; label: string}) {
+    return <span className={block('state', {state})}>{label}</span>;
 }

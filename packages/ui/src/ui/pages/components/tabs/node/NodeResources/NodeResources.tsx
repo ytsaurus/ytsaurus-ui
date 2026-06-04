@@ -5,6 +5,7 @@ import {MetaTable} from '@ytsaurus/components';
 
 import {type Node} from '../../../../../store/reducers/components/nodes/nodes/node';
 import {calcProgressProps} from '../../../../../utils/utils';
+import i18n from './i18n';
 
 interface NodeResourcesProps {
     removalSlots: Node['removalSlots'];
@@ -28,7 +29,8 @@ function NodeResources(node: NodeResourcesProps): ReturnType<React.VFC> {
         <MetaTable
             items={[
                 {
-                    key: 'user slots',
+                    key: 'user-slots',
+                    label: i18n('field_user-slots'),
                     value: (
                         <Progress
                             {...calcProgressProps(node.userSlots.usage, node.userSlots.limits)}
@@ -37,7 +39,8 @@ function NodeResources(node: NodeResourcesProps): ReturnType<React.VFC> {
                     ),
                 },
                 {
-                    key: 'seal slots',
+                    key: 'seal-slots',
+                    label: i18n('field_seal-slots'),
                     value: (
                         <Progress
                             {...calcProgressProps(node.sealSlots.usage, node.sealSlots.limits)}
@@ -46,7 +49,8 @@ function NodeResources(node: NodeResourcesProps): ReturnType<React.VFC> {
                     ),
                 },
                 {
-                    key: 'repair slots',
+                    key: 'repair-slots',
+                    label: i18n('field_repair-slots'),
                     value: (
                         <Progress
                             {...calcProgressProps(node.repairSlots.usage, node.repairSlots.limits)}
@@ -55,7 +59,8 @@ function NodeResources(node: NodeResourcesProps): ReturnType<React.VFC> {
                     ),
                 },
                 {
-                    key: 'removal slots',
+                    key: 'removal-slots',
+                    label: i18n('field_removal-slots'),
                     value: (
                         <Progress
                             {...calcProgressProps(
@@ -67,7 +72,8 @@ function NodeResources(node: NodeResourcesProps): ReturnType<React.VFC> {
                     ),
                 },
                 {
-                    key: 'replication slots',
+                    key: 'replication-slots',
+                    label: i18n('field_replication-slots'),
                     value: (
                         <Progress
                             {...calcProgressProps(
