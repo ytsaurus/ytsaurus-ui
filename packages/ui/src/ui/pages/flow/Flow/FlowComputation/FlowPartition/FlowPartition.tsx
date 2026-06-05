@@ -75,33 +75,39 @@ export function FlowPartitionMeta({
                 [
                     ...getFlowPathMetaItems(path),
                     {
-                        key: i18n('computation-id'),
+                        key: 'computation-id',
+                        label: i18n('computation-id'),
                         value: data?.computation_id,
                         visible: hasData,
                     },
                     {
-                        key: i18n('partition-id'),
+                        key: 'partition-id',
+                        label: i18n('partition-id'),
                         value: <TemplateId id={data?.partition_id ?? partition} />,
                     },
                     {
-                        key: i18n('current-job-id'),
+                        key: 'current-job-id',
+                        label: i18n('current-job-id'),
                         value: <TemplateId id={data?.current_job_id} />,
                         visible: hasData,
                     },
                     {
-                        key: i18n('current-worker-address'),
+                        key: 'current-worker-address',
+                        label: i18n('current-worker-address'),
                         value: data?.current_worker_address,
                         visible: hasData,
                     },
                     {
-                        key: i18n('incarnation-id'),
+                        key: 'incarnation-id',
+                        label: i18n('incarnation-id'),
                         value: <TemplateId id={data?.current_worker_incarnation_id} />,
                         visible: hasData,
                     },
                 ],
                 [
                     {
-                        key: i18n('tracing'),
+                        key: 'tracing',
+                        label: i18n('tracing'),
                         value: (
                             <Link url={data?.tracing_address} hasExternalIcon>
                                 {i18n('tracing')}
@@ -109,22 +115,26 @@ export function FlowPartitionMeta({
                         ),
                     },
                     {
-                        key: i18n('cpu-usage'),
+                        key: 'cpu-usage',
+                        label: i18n('cpu-usage'),
                         value: format.NumberSmart(data?.cpu_usage),
                         visible: hasData,
                     },
                     {
-                        key: i18n('memory-usage'),
+                        key: 'memory-usage',
+                        label: i18n('memory-usage'),
                         value: format.Bytes(data?.memory_usage),
                         visible: hasData,
                     },
                     {
-                        key: i18n('message-per-second'),
+                        key: 'message-per-second',
+                        label: i18n('message-per-second'),
                         value: format.NumberWithSuffix(data?.messages_per_second),
                         visible: hasData,
                     },
                     {
-                        key: i18n('bytes-per-second'),
+                        key: 'bytes-per-second',
+                        label: i18n('bytes-per-second'),
                         value: format.Bytes(data?.bytes_per_second),
                         visible: hasData,
                     },

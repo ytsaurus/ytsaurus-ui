@@ -285,18 +285,21 @@ function FlowWorkerMeta({data}: {data?: FlowWorkerData}) {
         const res: MetaTableProps['items'] = [
             [
                 ...getFlowPathMetaItems(path),
-                {key: i18n('address'), value: data?.address, visible},
+                {key: 'address', label: i18n('address'), value: data?.address, visible},
                 {
-                    key: i18n('worker-incarnation-id'),
+                    key: 'worker-incarnation-id',
+                    label: i18n('worker-incarnation-id'),
                     value: <TemplateId id={data?.incarnation_id} />,
                 },
                 {
-                    key: i18n('worker-groups'),
+                    key: 'worker-groups',
+                    label: i18n('worker-groups'),
                     value: data?.groups.join(',') || format.NO_VALUE,
                     visible,
                 },
                 {
-                    key: i18n('deploy-link'),
+                    key: 'deploy-link',
+                    label: i18n('deploy-link'),
                     value: (
                         <Link url={data?.deploy_address} hasExternalIcon>
                             {i18n('link')}
@@ -305,7 +308,8 @@ function FlowWorkerMeta({data}: {data?: FlowWorkerData}) {
                     visible: visible && Boolean(data?.deploy_address),
                 },
                 {
-                    key: i18n('backtraces'),
+                    key: 'backtraces',
+                    label: i18n('backtraces'),
                     value: (
                         <Link url={data?.backtrace_address} hasExternalIcon>
                             {i18n('link')}
@@ -316,22 +320,26 @@ function FlowWorkerMeta({data}: {data?: FlowWorkerData}) {
             ],
             [
                 {
-                    key: i18n('cpu-usage'),
+                    key: 'cpu-usage',
+                    label: i18n('cpu-usage'),
                     value: format.NumberSmart(data?.cpu_usage),
                     visible,
                 },
                 {
-                    key: i18n('memory-usage'),
+                    key: 'memory-usage',
+                    label: i18n('memory-usage'),
                     value: format.Bytes(data?.memory_usage),
                     visible,
                 },
                 {
-                    key: i18n('message-per-second'),
+                    key: 'message-per-second',
+                    label: i18n('message-per-second'),
                     value: format.NumberWithSuffix(data?.messages_per_second),
                     visible,
                 },
                 {
-                    key: i18n('bytes-per-second'),
+                    key: 'bytes-per-second',
+                    label: i18n('bytes-per-second'),
                     value: format.Bytes(data?.bytes_per_second),
                     visible,
                 },

@@ -823,7 +823,8 @@ function Duration({start}: {start?: string}) {
                 <MetaTable
                     items={[
                         {
-                            key: i18n('field_start-time'),
+                            key: 'start-time',
+                            label: i18n('field_start-time'),
                             value: format.DateTime(from / 1000),
                         },
                     ]}

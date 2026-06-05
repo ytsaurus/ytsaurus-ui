@@ -39,9 +39,8 @@ function NodeStorage(node: NodeStorageProps): ReturnType<React.VFC> {
                 className={block('meta')}
                 items={[
                     {
-                        get key() {
-                            return i18n('field_space');
-                        },
+                        key: 'space',
+                        label: i18n('field_space'),
                         value: (
                             <Progress
                                 value={node.spaceProgress || 0}
@@ -51,15 +50,13 @@ function NodeStorage(node: NodeStorageProps): ReturnType<React.VFC> {
                         ),
                     },
                     {
-                        get key() {
-                            return i18n('field_sessions');
-                        },
+                        key: 'sessions',
+                        label: i18n('field_sessions'),
                         value: hammer.format['Number'](node.sessions),
                     },
                     {
-                        get key() {
-                            return i18n('field_chunks');
-                        },
+                        key: 'chunks',
+                        label: i18n('field_chunks'),
                         value: hammer.format['Number'](node.chunks),
                     },
                 ]}

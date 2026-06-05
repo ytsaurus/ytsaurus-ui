@@ -361,7 +361,8 @@ export class SetupModal extends Component {
             <MetaTable
                 items={[
                     {
-                        key: i18n('field_physical-host'),
+                        key: 'physical-host',
+                        label: i18n('field_physical-host'),
                         value: this.renderTextFilter({
                             value: this.state[section]['physicalHost'],
                             placeholder: i18n('context_enter-physical-host'),
@@ -370,7 +371,8 @@ export class SetupModal extends Component {
                         }),
                     },
                     {
-                        key: i18n('field_tags'),
+                        key: 'tags',
+                        label: i18n('field_tags'),
                         value: this.renderTagsFilter({
                             items: nodeTags,
                             value: this.state[section]['tag'],
@@ -378,11 +380,13 @@ export class SetupModal extends Component {
                         }),
                     },
                     {
-                        key: i18n('field_states'),
+                        key: 'states',
+                        label: i18n('field_states'),
                         value: this.renderStatesSelect(),
                     },
                     {
-                        key: i18n('field_racks'),
+                        key: 'racks',
+                        label: i18n('field_racks'),
                         value: this.renderTagsFilter({
                             items: nodeRacks,
                             value: this.state[section]['rack'],
@@ -392,31 +396,38 @@ export class SetupModal extends Component {
                         }),
                     },
                     {
-                        key: i18n('field_banned'),
+                        key: 'banned',
+                        label: i18n('field_banned'),
                         value: this.renderRadioGroup(section, 'banned'),
                     },
                     {
-                        key: i18n('field_decommissioned'),
+                        key: 'decommissioned',
+                        label: i18n('field_decommissioned'),
                         value: this.renderRadioGroup(section, 'decommissioned'),
                     },
                     {
-                        key: i18n('field_full'),
+                        key: 'full',
+                        label: i18n('field_full'),
                         value: this.renderRadioGroup(section, 'full'),
                     },
                     {
-                        key: i18n('field_alerts'),
+                        key: 'alerts',
+                        label: i18n('field_alerts'),
                         value: this.renderRadioGroup(section, 'alertCount'),
                     },
                     {
-                        key: i18n('field_scheduler-jobs'),
+                        key: 'scheduler-jobs',
+                        label: i18n('field_scheduler-jobs'),
                         value: this.renderRadioGroup(section, 'schedulerJobs'),
                     },
                     {
-                        key: i18n('field_write-sessions'),
+                        key: 'write-sessions',
+                        label: i18n('field_write-sessions'),
                         value: this.renderRadioGroup(section, 'writeSessions'),
                     },
                     {
-                        key: i18n('field_tablet-cells'),
+                        key: 'tablet-cells',
+                        label: i18n('field_tablet-cells'),
                         value: this.renderRadioGroup(section, 'tabletCells'),
                     },
                 ]}
@@ -433,11 +444,13 @@ export class SetupModal extends Component {
                 <MetaTable
                     items={[
                         {
-                            key: i18n('field_sessions'),
+                            key: 'sessions',
+                            label: i18n('field_sessions'),
                             value: this.renderFiltersGroup(section, 'sessions', 'Number'),
                         },
                         {
-                            key: i18n('field_chunks'),
+                            key: 'chunks',
+                            label: i18n('field_chunks'),
                             value: this.renderFiltersGroup(section, 'chunks', 'Number'),
                         },
                     ]}
@@ -448,11 +461,13 @@ export class SetupModal extends Component {
                 <MetaTable
                     items={[
                         {
-                            key: i18n('field_used'),
+                            key: 'used',
+                            label: i18n('field_used'),
                             value: this.renderFiltersGroup(section, 'spaceUsed'),
                         },
                         {
-                            key: i18n('field_total'),
+                            key: 'total',
+                            label: i18n('field_total'),
                             value: this.renderFiltersGroup(section, 'spaceTotal'),
                         },
                     ]}
@@ -482,35 +497,43 @@ export class SetupModal extends Component {
                 <MetaTable
                     items={[
                         {
-                            key: i18n('field_blob-session'),
+                            key: 'blob-session',
+                            label: i18n('field_blob-session'),
                             value: this.renderFiltersGroup(section, 'blobSession'),
                         },
                         {
-                            key: i18n('field_block-cache'),
+                            key: 'block-cache',
+                            label: i18n('field_block-cache'),
                             value: this.renderFiltersGroup(section, 'blockCache'),
                         },
                         {
-                            key: i18n('field_chunk-block-meta'),
+                            key: 'chunk-block-meta',
+                            label: i18n('field_chunk-block-meta'),
                             value: this.renderFiltersGroup(section, 'chunkBlockMeta'),
                         },
                         {
-                            key: i18n('field_chunk-meta'),
+                            key: 'chunk-meta',
+                            label: i18n('field_chunk-meta'),
                             value: this.renderFiltersGroup(section, 'chunkMeta'),
                         },
                         {
-                            key: i18n('field_footprint'),
+                            key: 'footprint',
+                            label: i18n('field_footprint'),
                             value: this.renderFiltersGroup(section, 'footprint'),
                         },
                         {
-                            key: i18n('field_query'),
+                            key: 'query',
+                            label: i18n('field_query'),
                             value: this.renderFiltersGroup(section, 'query'),
                         },
                         {
-                            key: i18n('field_system-jobs'),
+                            key: 'system-jobs',
+                            label: i18n('field_system-jobs'),
                             value: this.renderFiltersGroup(section, 'systemJobs'),
                         },
                         {
-                            key: i18n('field_versioned-chunk-meta'),
+                            key: 'versioned-chunk-meta',
+                            label: i18n('field_versioned-chunk-meta'),
                             value: this.renderFiltersGroup(section, 'versionedChunkMeta'),
                         },
                     ]}
@@ -521,11 +544,13 @@ export class SetupModal extends Component {
                 <MetaTable
                     items={[
                         {
-                            key: i18n('field_used'),
+                            key: 'used',
+                            label: i18n('field_used'),
                             value: this.renderFiltersGroup(section, 'tabletDynamicUsed'),
                         },
                         {
-                            key: i18n('field_total'),
+                            key: 'total',
+                            label: i18n('field_total'),
                             value: this.renderFiltersGroup(section, 'tabletDynamicTotal'),
                         },
                     ]}
@@ -536,11 +561,13 @@ export class SetupModal extends Component {
                 <MetaTable
                     items={[
                         {
-                            key: i18n('field_used'),
+                            key: 'used',
+                            label: i18n('field_used'),
                             value: this.renderFiltersGroup(section, 'tabletStaticUsed'),
                         },
                         {
-                            key: i18n('field_total'),
+                            key: 'total',
+                            label: i18n('field_total'),
                             value: this.renderFiltersGroup(section, 'tabletStaticTotal'),
                         },
                     ]}
@@ -551,11 +578,13 @@ export class SetupModal extends Component {
                 <MetaTable
                     items={[
                         {
-                            key: i18n('field_used'),
+                            key: 'used',
+                            label: i18n('field_used'),
                             value: this.renderFiltersGroup(section, 'userJobsUsed'),
                         },
                         {
-                            key: i18n('field_total'),
+                            key: 'total',
+                            label: i18n('field_total'),
                             value: this.renderFiltersGroup(section, 'userJobsTotal'),
                         },
                     ]}
@@ -574,11 +603,13 @@ export class SetupModal extends Component {
                 <MetaTable
                     items={[
                         {
-                            key: i18n('field_user-slots-used'),
+                            key: 'user-slots-used',
+                            label: i18n('field_user-slots-used'),
                             value: this.renderFiltersGroup(section, 'userSlotsUsed', 'Number'),
                         },
                         {
-                            key: i18n('field_user-slots-total'),
+                            key: 'user-slots-total',
+                            label: i18n('field_user-slots-total'),
                             value: this.renderFiltersGroup(section, 'userSlotsTotal', 'Number'),
                         },
                     ]}
@@ -589,11 +620,13 @@ export class SetupModal extends Component {
                 <MetaTable
                     items={[
                         {
-                            key: i18n('field_seal-slots-used'),
+                            key: 'seal-slots-used',
+                            label: i18n('field_seal-slots-used'),
                             value: this.renderFiltersGroup(section, 'sealSlotsUsed', 'Number'),
                         },
                         {
-                            key: i18n('field_seal-slots-total'),
+                            key: 'seal-slots-total',
+                            label: i18n('field_seal-slots-total'),
                             value: this.renderFiltersGroup(section, 'sealSlotsTotal', 'Number'),
                         },
                     ]}
@@ -604,11 +637,13 @@ export class SetupModal extends Component {
                 <MetaTable
                     items={[
                         {
-                            key: i18n('field_repair-slots-used'),
+                            key: 'repair-slots-used',
+                            label: i18n('field_repair-slots-used'),
                             value: this.renderFiltersGroup(section, 'repairSlotsUsed', 'Number'),
                         },
                         {
-                            key: i18n('field_repair-slots-total'),
+                            key: 'repair-slots-total',
+                            label: i18n('field_repair-slots-total'),
                             value: this.renderFiltersGroup(section, 'repairSlotsTotal', 'Number'),
                         },
                     ]}
@@ -619,11 +654,13 @@ export class SetupModal extends Component {
                 <MetaTable
                     items={[
                         {
-                            key: i18n('field_removal-slots-used'),
+                            key: 'removal-slots-used',
+                            label: i18n('field_removal-slots-used'),
                             value: this.renderFiltersGroup(section, 'removalSlotsUsed', 'Number'),
                         },
                         {
-                            key: i18n('field_removal-slots-total'),
+                            key: 'removal-slots-total',
+                            label: i18n('field_removal-slots-total'),
                             value: this.renderFiltersGroup(section, 'removalSlotsUsed', 'Number'),
                         },
                     ]}
@@ -634,7 +671,8 @@ export class SetupModal extends Component {
                 <MetaTable
                     items={[
                         {
-                            key: i18n('field_replication-slots-used'),
+                            key: 'replication-slots-used',
+                            label: i18n('field_replication-slots-used'),
                             value: this.renderFiltersGroup(
                                 section,
                                 'replicationSlotsUsed',
@@ -642,7 +680,8 @@ export class SetupModal extends Component {
                             ),
                         },
                         {
-                            key: i18n('field_replication-slots-total'),
+                            key: 'replication-slots-total',
+                            label: i18n('field_replication-slots-total'),
                             value: this.renderFiltersGroup(
                                 section,
                                 'replicationSlotsTotal',
@@ -665,35 +704,43 @@ export class SetupModal extends Component {
                 <MetaTable
                     items={[
                         {
-                            key: i18n('field_all-states'),
+                            key: 'all-states',
+                            label: i18n('field_all-states'),
                             value: this.renderFiltersGroup(section, 'all', 'Number'),
                         },
                         {
-                            key: i18n('field_none'),
+                            key: 'none',
+                            label: i18n('field_none'),
                             value: this.renderFiltersGroup(section, 'none', 'Number'),
                         },
                         {
-                            key: i18n('field_leading'),
+                            key: 'leading',
+                            label: i18n('field_leading'),
                             value: this.renderFiltersGroup(section, 'leading', 'Number'),
                         },
                         {
-                            key: i18n('field_following'),
+                            key: 'following',
+                            label: i18n('field_following'),
                             value: this.renderFiltersGroup(section, 'following', 'Number'),
                         },
                         {
-                            key: i18n('field_follower-recovery'),
+                            key: 'follower-recovery',
+                            label: i18n('field_follower-recovery'),
                             value: this.renderFiltersGroup(section, 'followerRecovery', 'Number'),
                         },
                         {
-                            key: i18n('field_leader-recovery'),
+                            key: 'leader-recovery',
+                            label: i18n('field_leader-recovery'),
                             value: this.renderFiltersGroup(section, 'leaderRecovery', 'Number'),
                         },
                         {
-                            key: i18n('field_stopped'),
+                            key: 'stopped',
+                            label: i18n('field_stopped'),
                             value: this.renderFiltersGroup(section, 'stopped', 'Number'),
                         },
                         {
-                            key: i18n('field_elections'),
+                            key: 'elections',
+                            label: i18n('field_elections'),
                             value: this.renderFiltersGroup(section, 'elections', 'Number'),
                         },
                     ]}
@@ -704,19 +751,23 @@ export class SetupModal extends Component {
                 <MetaTable
                     items={[
                         {
-                            key: i18n('field_static-used'),
+                            key: 'static-used',
+                            label: i18n('field_static-used'),
                             value: this.renderFiltersGroup(section, 'staticUsed'),
                         },
                         {
-                            key: i18n('field_static-total'),
+                            key: 'static-total',
+                            label: i18n('field_static-total'),
                             value: this.renderFiltersGroup(section, 'staticTotal'),
                         },
                         {
-                            key: i18n('field_dynamic-used'),
+                            key: 'dynamic-used',
+                            label: i18n('field_dynamic-used'),
                             value: this.renderFiltersGroup(section, 'dynamicUsed'),
                         },
                         {
-                            key: i18n('field_dynamic-total'),
+                            key: 'dynamic-total',
+                            label: i18n('field_dynamic-total'),
                             value: this.renderFiltersGroup(section, 'dynamicTotal'),
                         },
                     ]}
@@ -758,7 +809,8 @@ export class SetupModal extends Component {
                     <MetaTable
                         items={[
                             {
-                                key: i18n('field_save'),
+                                key: 'save',
+                                label: i18n('field_save'),
                                 value: this.renderCheckBox(
                                     i18n('action_save-as-template'),
                                     saveAsTemplate,
@@ -766,7 +818,8 @@ export class SetupModal extends Component {
                                 ),
                             },
                             {
-                                key: i18n('field_template-name'),
+                                key: 'template-name',
+                                label: i18n('field_template-name'),
                                 value: this.renderTextFilter({
                                     placeholder: i18n('context_enter-template-name'),
                                     onChange: this.handleTemplateNameChange,
