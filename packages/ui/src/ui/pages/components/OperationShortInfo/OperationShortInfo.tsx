@@ -70,11 +70,13 @@ export function OperationShortInfo(props: Props) {
             <MetaTable
                 items={[
                     {
-                        key: i18n('field_id'),
+                        key: 'id',
+                        label: i18n('field_id'),
                         value: <Link url={`/${cluster}/operations/${id}`}>{id}</Link>,
                     },
                     {
-                        key: i18n('field_type'),
+                        key: 'type',
+                        label: i18n('field_type'),
                         value: (
                             <span className={block('value')}>
                                 {ypath.getValue(operation, '/type') || type || '...'}
@@ -85,16 +87,19 @@ export function OperationShortInfo(props: Props) {
                         ? []
                         : [
                               {
-                                  key: i18n('field_output'),
+                                  key: 'output',
+                                  label: i18n('field_output'),
                                   value: <span title={output}>{output}</span>,
                               },
                           ]),
                     {
-                        key: i18n('field_duration'),
+                        key: 'duration',
+                        label: i18n('field_duration'),
                         value: format.TimeDuration(diff),
                     },
                     {
-                        key: i18n('field_status'),
+                        key: 'status',
+                        label: i18n('field_status'),
                         value: (
                             <OperationState state={ypath.getValue(operation, '/state') || '...'} />
                         ),
@@ -103,7 +108,8 @@ export function OperationShortInfo(props: Props) {
                         ? []
                         : [
                               {
-                                  key: i18n('field_error'),
+                                  key: 'error',
+                                  label: i18n('field_error'),
                                   value: (
                                       <ClickableText onClick={() => showErrorPopup(error)}>
                                           {ypath.getValue(error, '/message')}

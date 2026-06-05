@@ -107,13 +107,15 @@ export function StatisticName({title, info}: {title: React.ReactNode; info?: Sta
                     <MetaTable
                         items={[
                             {
-                                key: i18n('field_description'),
+                                key: 'description',
+                                label: i18n('field_description'),
                                 value: info.description,
                                 visible: Boolean(info.description),
                                 className: block('description'),
                             },
                             {
-                                key: i18n('field_unit'),
+                                key: 'unit',
+                                label: i18n('field_unit'),
                                 value: info.unit,
                                 visible: Boolean(info.unit),
                             },

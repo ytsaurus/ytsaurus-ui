@@ -1,6 +1,6 @@
 {
   "field_duration": "Duration",
   "field_status": "Status",
-  "value_complete": "complete",
-  "value_in-progress": "in progress"
+  "value_complete": "Complete",
+  "value_in-progress": "In progress"
 }

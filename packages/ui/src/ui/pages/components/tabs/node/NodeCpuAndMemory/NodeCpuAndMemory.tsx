@@ -27,15 +27,18 @@ function NodeCpuAndMemory({node}: {node: NodeCpuAndMemoryProps}): ReturnType<Rea
         <MetaTable
             items={[
                 {
-                    key: i18n('field_cpu'),
+                    key: 'cpu',
+                    label: i18n('field_cpu'),
                     value: <Progress value={cpuProgress || 0} text={cpuText} theme="success" />,
                 },
                 {
-                    key: i18n('field_memory'),
+                    key: 'memory',
+                    label: i18n('field_memory'),
                     value: <MemoryProgress memoryData={memoryData} memoryText={memoryText} />,
                 },
                 {
-                    key: i18n('field_gpu'),
+                    key: 'gpu',
+                    label: i18n('field_gpu'),
                     value: (
                         <Progress
                             value={gpu?.progress || 0}
@@ -46,7 +49,8 @@ function NodeCpuAndMemory({node}: {node: NodeCpuAndMemoryProps}): ReturnType<Rea
                     visible: gpu !== undefined,
                 },
                 {
-                    key: i18n('field_network'),
+                    key: 'network',
+                    label: i18n('field_network'),
                     value: (
                         <Progress value={networkProgress || 0} text={networkText} theme="success" />
                     ),

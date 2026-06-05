@@ -51,7 +51,7 @@ export const tableProps = {
                 align: 'left',
                 sort: true,
                 get caption() {
-                    return i18n('field_version-header');
+                    return i18n('field_version');
                 },
             },
             state: {

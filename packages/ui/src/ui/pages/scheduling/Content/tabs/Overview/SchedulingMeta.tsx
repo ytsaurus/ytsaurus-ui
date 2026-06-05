@@ -51,14 +51,16 @@ export function SchedulingMeta() {
         const res = {
             items: [
                 [
-                    {key: i18n('mode'), value: format.ReadableField(mode)},
-                    {key: i18n('weight'), value: format.Number(weight)},
+                    {key: 'mode', label: i18n('mode'), value: format.ReadableField(mode)},
+                    {key: 'weight', label: i18n('weight'), value: format.Number(weight)},
                     {
-                        key: i18n('operations-running'),
+                        key: 'operations-running',
+                        label: i18n('operations-running'),
                         value: renderOperationsProgress(pool, 'running'),
                     },
                     {
-                        key: i18n('operations'),
+                        key: 'operations',
+                        label: i18n('operations'),
                         value: renderOperationsProgress(pool, 'total'),
                     },
                 ],
@@ -101,9 +103,10 @@ export function SchedulingMeta() {
             };
 
             res.items.push([
-                {key: i18n('guarantee-type'), value: guaranteeType},
+                {key: 'guarantee-type', label: i18n('guarantee-type'), value: guaranteeType},
                 {
-                    key: i18n('capacity'),
+                    key: 'capacity',
+                    label: i18n('capacity'),
                     value: (
                         <Tooltip
                             content={
@@ -189,13 +192,15 @@ function renderProgress(
 
                     <MetaTable
                         items={[
-                            {key: i18n('meta_usage'), value: formatFn(usage)},
+                            {key: 'usage', label: i18n('meta_usage'), value: formatFn(usage)},
                             {
-                                key: i18n('meta_effective-guarantee'),
+                                key: 'effective-guarantee',
+                                label: i18n('meta_effective-guarantee'),
                                 value: formatFn(effectiveGuaranteed),
                             },
                             {
-                                key: i18n('meta_configured-guarantee'),
+                                key: 'configured-guarantee',
+                                label: i18n('meta_configured-guarantee'),
                                 value: min ? formatFn(min) : format.NO_VALUE,
                             },
                         ]}
@@ -259,7 +264,8 @@ function renderOperationsProgress(
                         progressType === 'running'
                             ? [
                                   {
-                                      key: i18n('operations-running-max'),
+                                      key: 'operations-running-max',
+                                      label: i18n('operations-running-max'),
                                       value: maxRunningStr,
                                   },
                                   {
@@ -278,7 +284,8 @@ function renderOperationsProgress(
                               ]
                             : [
                                   {
-                                      key: i18n('operation-count-max'),
+                                      key: 'operation-count-max',
+                                      label: i18n('operation-count-max'),
                                       value: maxCountStr,
                                   },
                                   {
