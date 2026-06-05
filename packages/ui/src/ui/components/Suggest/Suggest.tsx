@@ -37,18 +37,6 @@ interface Item {
     counter?: string | number;
 }
 
-const ESCAPE = 27;
-const ENTER = 13;
-const ARROW_UP = 38;
-const ARROW_DOWN = 40;
-
-/*const TAB = 9;
-const CTRL = 16;
-const ALT = 17;
-const ARROW_LEFT = 37;
-const ARROW_RIGHT = 39;
-const COMMAND = 91;*/
-
 export interface SuggestProps {
     className?: string;
 
@@ -188,18 +176,18 @@ export default class Suggest extends Component<SuggestProps, State> {
     }
 
     onKeyDown(event: React.KeyboardEvent<HTMLElement>) {
-        const key = event.keyCode;
+        const {key, shiftKey} = event;
 
-        if (key === ARROW_DOWN) {
+        if (key === 'ArrowDown' || (key === 'Tab' && !shiftKey)) {
             event.preventDefault();
             this.selectNextSuggestion();
-        } else if (key === ARROW_UP) {
+        } else if (key === 'ArrowUp' || (key === 'Tab' && shiftKey)) {
             event.preventDefault();
             this.selectPrevSuggestion();
-        } else if (key === ENTER) {
+        } else if (key === 'Enter') {
             this.props.onEnterKeyDown?.(this.state.text ?? '', event);
             this.applyOrClearSuggestion();
-        } else if (key === ESCAPE) {
+        } else if (key === 'Escape') {
             this.input.current?.blur();
         }
     }
