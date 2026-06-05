@@ -127,17 +127,35 @@ class NodeCard extends Component {
                                 </span>
                             ),
                         },
-                        {key: i18n('field_location-number'), value: index + 1},
-                        {key: i18n('field_enabled'), value: location.enabled.toString()},
-                        {key: i18n('field_full'), value: location.full.toString()},
-                        {key: i18n('field_medium-name'), value: location.medium_name},
-                        {key: i18n('field_sessions'), value: location.session_count},
                         {
-                            key: i18n('field_chunks'),
+                            key: 'location-number',
+                            label: i18n('field_location-number'),
+                            value: index + 1,
+                        },
+                        {
+                            key: 'enabled',
+                            label: i18n('field_enabled'),
+                            value: location.enabled.toString(),
+                        },
+                        {key: 'full', label: i18n('field_full'), value: location.full.toString()},
+                        {
+                            key: 'medium-name',
+                            label: i18n('field_medium-name'),
+                            value: location.medium_name,
+                        },
+                        {
+                            key: 'sessions',
+                            label: i18n('field_sessions'),
+                            value: location.session_count,
+                        },
+                        {
+                            key: 'chunks',
+                            label: i18n('field_chunks'),
                             value: hammer.format['Number'](location.chunk_count),
                         },
                         {
-                            key: i18n('field_used-space'),
+                            key: 'used-space',
+                            label: i18n('field_used-space'),
                             value: (
                                 <Progress
                                     value={location.locationProgress}
@@ -147,7 +165,8 @@ class NodeCard extends Component {
                             ),
                         },
                         {
-                            key: i18n('field_available-space'),
+                            key: 'available-space',
+                            label: i18n('field_available-space'),
                             value: (
                                 <Template.FormattedValue
                                     value={location.available_space}
@@ -156,7 +175,8 @@ class NodeCard extends Component {
                             ),
                         },
                         {
-                            key: i18n('field_watermark-space'),
+                            key: 'watermark-space',
+                            label: i18n('field_watermark-space'),
                             value: (
                                 <Template.FormattedValue
                                     value={location.low_watermark_space}
@@ -226,12 +246,14 @@ class NodeCard extends Component {
                 <MetaTable
                     items={[
                         {
-                            key: i18n('field_system-tags'),
+                            key: 'system-tags',
+                            label: i18n('field_system-tags'),
                             value: map_(systemTags, (tag) => <Label key={tag} text={tag} />),
                             visible: systemTags?.length > 0,
                         },
                         {
-                            key: i18n('field_user-tags'),
+                            key: 'user-tags',
+                            label: i18n('field_user-tags'),
                             value: map_(userTags, (tag) => <Label key={tag} text={tag} />),
                             visible: userTags?.length > 0,
                         },

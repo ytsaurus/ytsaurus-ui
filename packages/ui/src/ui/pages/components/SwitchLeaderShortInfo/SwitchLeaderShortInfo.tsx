@@ -49,13 +49,15 @@ export function SwitchLeaderShortInfo(props: Props) {
             <MetaTable
                 items={[
                     {
-                        key: i18n('field_duration'),
+                        key: 'duration',
+                        label: i18n('field_duration'),
                         value: format.TimeDuration(
                             (finishTime || currentTime).diff(startTime.current),
                         ),
                     },
                     {
-                        key: i18n('field_status'),
+                        key: 'status',
+                        label: i18n('field_status'),
                         value: (
                             <SwitchLeaderShortInfoStatus
                                 state={finishTime ? 'complete' : 'in-progress'}

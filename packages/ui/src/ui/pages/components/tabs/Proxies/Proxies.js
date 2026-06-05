@@ -266,7 +266,7 @@ export class Proxies extends Component {
                         value={[stateFilter]}
                         disabled={initialLoading}
                         onUpdate={(vals) => changeStateFilter(vals[0])}
-                        label={i18n('field_state')}
+                        label={i18n('field_state') + ':'}
                         width="max"
                         hideFilter
                     />
@@ -279,7 +279,7 @@ export class Proxies extends Component {
                             value={[roleFilter]}
                             disabled={initialLoading}
                             onUpdate={(vals) => changeRoleFilter(vals[0])}
-                            label={i18n('field_role')}
+                            label={i18n('field_role') + ':'}
                             width="max"
                         />
                     </div>
@@ -288,7 +288,7 @@ export class Proxies extends Component {
                 {type !== PROXY_TYPE.CYPRESS && (
                     <div className={block('filter')}>
                         <Select
-                            label={i18n('field_banned')}
+                            label={i18n('field_banned') + ':'}
                             items={[
                                 {value: 'all', title: i18n('value_all')},
                                 {value: 'true', title: i18n('value_true')},

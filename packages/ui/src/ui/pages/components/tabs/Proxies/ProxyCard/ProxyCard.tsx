@@ -103,15 +103,18 @@ export class ProxyCard extends Component<ProxyCardProps> {
             <MetaTable
                 items={[
                     {
-                        key: i18n('field_state'),
+                        key: 'state',
+                        label: i18n('field_state'),
                         value: <NodeColumnState state={state} />,
                     },
                     {
-                        key: i18n('field_role'),
+                        key: 'role',
+                        label: i18n('field_role'),
                         value: <NodeColumnRole role={role} />,
                     },
                     {
-                        key: i18n('field_banned'),
+                        key: 'banned',
+                        label: i18n('field_banned'),
                         value: (
                             <Label
                                 text={banMessage || i18n('value_banned-true')}
@@ -122,26 +125,31 @@ export class ProxyCard extends Component<ProxyCardProps> {
                         visible: Boolean(banned),
                     },
                     {
-                        key: i18n('field_maintenance'),
+                        key: 'maintenance',
+                        label: i18n('field_maintenance'),
                         value: <MaintenanceRequests requests={maintenanceRequests} />,
                         visible: !isEmpty_(maintenanceRequests),
                     },
                     {
-                        key: i18n('field_version'),
+                        key: 'version',
+                        label: i18n('field_version'),
                         value: version,
                     },
                     {
-                        key: i18n('field_load-average'),
+                        key: 'load-average',
+                        label: i18n('field_load-average'),
                         value: loadAverage,
                         visible: Boolean(loadAverage),
                     },
                     {
-                        key: i18n('field_network-load'),
+                        key: 'network-load',
+                        label: i18n('field_network-load'),
                         value: networkLoad,
                         visible: Boolean(networkLoad),
                     },
                     {
-                        key: i18n('field_updated-at'),
+                        key: 'updated-at',
+                        label: i18n('field_updated-at'),
                         value: hammer.format['DateTime'](updatedAt),
                         visible: Boolean(updatedAt),
                     },

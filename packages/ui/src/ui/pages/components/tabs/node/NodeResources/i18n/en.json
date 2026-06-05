@@ -1,7 +1,7 @@
 {
-  "field_user-slots": "user slots",
-  "field_seal-slots": "seal slots",
-  "field_repair-slots": "repair slots",
-  "field_removal-slots": "removal slots",
-  "field_replication-slots": "replication slots"
+  "field_user-slots": "User slots",
+  "field_seal-slots": "Seal slots",
+  "field_repair-slots": "Repair slots",
+  "field_removal-slots": "Removal slots",
+  "field_replication-slots": "Replication slots"
 }

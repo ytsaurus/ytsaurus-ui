@@ -230,7 +230,7 @@ const nodesTableProps = {
             },
             data_center: {
                 get caption() {
-                    return i18n('DC');
+                    return i18n('field_data-center-short');
                 },
                 get(node) {
                     return node.dataCenter;
@@ -240,7 +240,7 @@ const nodesTableProps = {
                 tooltipProps: {
                     placement: 'bottom',
                     get content() {
-                        return i18n('context_data-center');
+                        return i18n('field_data-center');
                     },
                 },
             },
@@ -282,7 +282,7 @@ const nodesTableProps = {
             },
             banned: {
                 get caption() {
-                    return i18n('field_banned');
+                    return i18n('field_banned-short');
                 },
                 get(item) {
                     return item.banned;
@@ -292,7 +292,7 @@ const nodesTableProps = {
                 tooltipProps: {
                     placement: 'bottom',
                     get content() {
-                        return i18n('context_banned');
+                        return i18n('field_banned');
                     },
                 },
                 allowedOrderTypes: DESC_ASC_UNORDERED,
@@ -304,12 +304,12 @@ const nodesTableProps = {
                 align: 'center',
                 sort: true,
                 get caption() {
-                    return i18n('D');
+                    return i18n('field_decommissioned-short');
                 },
                 tooltipProps: {
                     placement: 'bottom',
                     get content() {
-                        return i18n('context_decommissioned');
+                        return i18n('field_decommissioned');
                     },
                 },
                 allowedOrderTypes: DESC_ASC_UNORDERED,
@@ -321,12 +321,12 @@ const nodesTableProps = {
                 align: 'center',
                 sort: true,
                 get caption() {
-                    return i18n('F');
+                    return i18n('field_full-short');
                 },
                 tooltipProps: {
                     placement: 'bottom',
                     get content() {
-                        return i18n('context_full');
+                        return i18n('field_full');
                     },
                 },
             },
@@ -339,12 +339,12 @@ const nodesTableProps = {
                 },
                 align: 'center',
                 get caption() {
-                    return i18n('A');
+                    return i18n('field_alerts-short');
                 },
                 tooltipProps: {
                     placement: 'bottom',
                     get content() {
-                        return i18n('context_alerts');
+                        return i18n('field_alerts');
                     },
                 },
             },

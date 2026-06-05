@@ -106,7 +106,7 @@ class VersionsV2 extends React.Component<ReduxProps> {
                         value={[versionFilter]}
                         items={versionSelectItems}
                         onUpdate={(vals) => changeVersionFilter(vals[0])}
-                        label={i18n('field_version')}
+                        label={i18n('field_version') + ':'}
                         width="max"
                         hideFilter
                     />
@@ -117,7 +117,7 @@ class VersionsV2 extends React.Component<ReduxProps> {
                         value={[typeFilter]}
                         items={typeSelectItems}
                         onUpdate={(vals) => changeTypeFilter(vals[0])}
-                        label={i18n('field_type')}
+                        label={i18n('field_type') + ':'}
                         width="max"
                         hideFilter
                     />
@@ -128,7 +128,7 @@ class VersionsV2 extends React.Component<ReduxProps> {
                         value={[stateFilter]}
                         items={stateSelectItems}
                         onUpdate={(vals) => changeStateFilter(vals[0])}
-                        label={i18n('field_state')}
+                        label={i18n('field_state') + ':'}
                         width="max"
                         hideFilter
                     />
@@ -139,7 +139,7 @@ class VersionsV2 extends React.Component<ReduxProps> {
                         value={[String(bannedFilter)]}
                         items={this.getBannedItems()}
                         onUpdate={(vals) => this.onBannedChange(vals[0])}
-                        label={i18n('field_banned')}
+                        label={i18n('field_banned') + ':'}
                         width="max"
                         hideFilter
                     />
