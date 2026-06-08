@@ -13,10 +13,28 @@ import './BundleTableField.scss';
 const block = cn('bundle-table-field');
 
 const columns: TableColumnConfig<BundleData>[] = [
-    {id: 'type', get name() {return i18n('field_type')}, width: '25%'},
-    {id: 'memory', get name() {return i18n('field_memory')}, width: '25%'},
+    {
+        id: 'type',
+        get name() {
+            return i18n('field_type');
+        },
+        width: '25%',
+    },
+    {
+        id: 'memory',
+        get name() {
+            return i18n('field_memory');
+        },
+        width: '25%',
+    },
     {id: 'vcpu', name: 'vCPU', width: '25%'},
-    {id: 'net', get name() {return i18n('field_network')}, width: '25%'},
+    {
+        id: 'net',
+        get name() {
+            return i18n('field_network');
+        },
+        width: '25%',
+    },
 ];
 
 interface BundleData {

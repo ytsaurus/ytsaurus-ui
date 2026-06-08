@@ -79,7 +79,9 @@ export function ActiveAccountBundleControllerUpdater() {
             {
                 toasterName: 'active-bundle-controller-status',
                 skipSuccessToast: true,
-                errorContent: i18n('alert_load-bundle-controller-details-error', {bundle: activeBundle}),
+                errorContent: i18n('alert_load-bundle-controller-details-error', {
+                    bundle: activeBundle,
+                }),
             },
         ).catch(() => []);
 
@@ -126,8 +128,18 @@ export default function BundleConfigurationMeta() {
 
         bundleGroup.push(
             getBundleStateField(orchidData),
-            getLimitAllocatedField(i18n('field_memory-allocated-limit'), allocMemory, allMemory, 'Bytes'),
-            getLimitAllocatedField(i18n('field_vcpu-allocated-limit'), allocVCPU, allVCPU, 'vCores'),
+            getLimitAllocatedField(
+                i18n('field_memory-allocated-limit'),
+                allocMemory,
+                allMemory,
+                'Bytes',
+            ),
+            getLimitAllocatedField(
+                i18n('field_vcpu-allocated-limit'),
+                allocVCPU,
+                allVCPU,
+                'vCores',
+            ),
         );
     }
 
@@ -173,7 +185,11 @@ export default function BundleConfigurationMeta() {
     }
 
     return (
-        <MetaTable className={block()} subTitles={[i18n('title_bundle-configuration')]} items={[bundleGroup]} />
+        <MetaTable
+            className={block()}
+            subTitles={[i18n('title_bundle-configuration')]}
+            items={[bundleGroup]}
+        />
     );
 }
 
