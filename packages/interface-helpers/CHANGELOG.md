@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/ytsaurus/ytsaurus-ui/compare/interface-helpers-v1.2.0...interface-helpers-v1.3.0) (2026-06-08)
+
+
+### Features
+
+* **interface-helpers:** add export for FormatWithSuffixes [YTFRONT-5831] ([dcff050](https://github.com/ytsaurus/ytsaurus-ui/commit/dcff0505c92afd1cdbbaee8f277cfc1bdbb36c57))
+
 ## [1.2.0](https://github.com/ytsaurus/ytsaurus-ui/compare/interface-helpers-v1.1.1...interface-helpers-v1.2.0) (2026-04-16)
 
 
