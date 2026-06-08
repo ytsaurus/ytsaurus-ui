@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 
 import {useSelector} from '../../../store/redux-hooks';
 import {useRouteMatch} from 'react-router';
-import {getPagesInfoMapById} from '../../../store/selectors/slideoutMenu';
+import {selectPagesInfoMapById} from '../../../store/selectors/slideoutMenu';
 
 import Link from '../../../containers/Link/Link';
 import {selectCluster} from '../../../store/selectors/global';
@@ -29,7 +29,7 @@ const other: Record<string, {name: string}> = {
 
 export function RowWithName({page, name, className, children, showSplitter, urlParams}: Props) {
     const cluster = useSelector(selectCluster);
-    const info = useSelector(getPagesInfoMapById)[page] || other[page];
+    const info = useSelector(selectPagesInfoMapById)[page] || other[page];
     const title = name || info?.name;
     const url = makeRoutedURL(`/${cluster}/${page}`, urlParams);
     return (

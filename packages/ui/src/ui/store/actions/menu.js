@@ -5,9 +5,9 @@ import {mergeScreen, updateTitle} from '../../store/actions/global';
 import {setSetting} from '../../store/actions/settings';
 import {setIsOpen} from '../../store/reducers/ai/chatSlice';
 import {
-    getKnownPages,
-    getRecentClustersInfo,
-    getRecentPagesInfo,
+    selectKnownPages,
+    selectRecentClustersInfo,
+    selectRecentPagesInfo,
 } from '../../store/selectors/slideoutMenu';
 import {getMetrics} from '../../common/utils/metrics';
 import {NAMESPACES, SettingName} from '../../../shared/constants/settings';
@@ -31,8 +31,8 @@ export function splitMenuItemsAction(itemName) {
     const collectionName = itemName + 's';
     return (dispatch, getState) => {
         const state = getState();
-        const clusters = getRecentClustersInfo(state);
-        const pages = getRecentPagesInfo(state);
+        const clusters = selectRecentClustersInfo(state);
+        const pages = selectRecentPagesInfo(state);
         const {
             settings: {data},
         } = getState();
@@ -71,7 +71,7 @@ export function trackPageVisit(page) {
         const state = getState();
         const cluster = selectCluster(state);
         const login = selectCurrentUserName(state);
-        const known = getKnownPages(state);
+        const known = selectKnownPages(state);
         dispatch(trackVisit('page', page));
         dispatch(updateTitle({page: known[page]}));
 

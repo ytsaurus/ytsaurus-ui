@@ -5,7 +5,7 @@ import sortBy_ from 'lodash/sortBy';
 
 import cn from 'bem-cn-lite';
 import {useSelector} from '../../store/redux-hooks';
-import {type PageInfo, getRecentPagesInfo} from '../../store/selectors/slideoutMenu';
+import {type PageInfo, selectRecentPagesInfo} from '../../store/selectors/slideoutMenu';
 
 import Link from '../../containers/Link/Link';
 import {makeRoutedURL} from '../../store/location';
@@ -25,7 +25,7 @@ export default function PagesPanel({
     onItemClick: () => void;
     cluster?: string;
 }) {
-    const {all, recent, rest} = useSelector(getRecentPagesInfo);
+    const {all, recent, rest} = useSelector(selectRecentPagesInfo);
     const isRecentFirst = useSelector(selectIsRecentPagesFirst);
 
     const allFiltered = React.useMemo(() => {

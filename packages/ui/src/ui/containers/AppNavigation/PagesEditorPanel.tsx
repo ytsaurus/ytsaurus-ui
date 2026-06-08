@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import {useDispatch, useSelector} from '../../store/redux-hooks';
-import {type PageInfo, getPagesOrderedByUser} from '../../store/selectors/slideoutMenu';
+import {type PageInfo, selectPagesOrderedByUser} from '../../store/selectors/slideoutMenu';
 import {Icon, List} from '@gravity-ui/uikit';
 import {PAGE_ICONS_BY_ID} from '../../constants/slideoutMenu';
 import {setPagesItemPosition, togglePinnedPage} from '../../store/actions/slideoutMenu';
@@ -15,7 +15,7 @@ import './PagesEditorPanel.scss';
 const block = cn('pages-editor-panel');
 
 export function PagesEditorPanel() {
-    const pages = useSelector(getPagesOrderedByUser);
+    const pages = useSelector(selectPagesOrderedByUser);
 
     const dispatch = useDispatch();
 
