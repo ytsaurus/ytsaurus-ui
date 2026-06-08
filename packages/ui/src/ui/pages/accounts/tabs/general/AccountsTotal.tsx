@@ -14,6 +14,7 @@ import {
     getDiskSpace,
     getNodesChunksTotals,
 } from '../../../../utils/accounts/accountsTotal';
+import {type TooltipInfoItem} from '../../../../utils/diskSpaceProgress';
 import i18n from './i18n';
 import {Tooltip} from '@ytsaurus/components';
 import {ColorCircle} from '../../../../components/ColorCircle/ColorCircle';
@@ -152,9 +153,7 @@ export default class AccountsTotal extends Component<Props> {
                                                 )}
                                             >
                                                 <Progress
-                                                    stack={addProgressStackSpacers(
-                                                        item.clusterUsage.stack,
-                                                    )}
+                                                    stack={item.clusterUsage.stack}
                                                     text={item.clusterUsage.text}
                                                 />
                                             </Tooltip>
