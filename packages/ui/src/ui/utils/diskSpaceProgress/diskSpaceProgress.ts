@@ -64,12 +64,8 @@ export function calculateDiskSpaceProgress(input: DiskSpaceProgressInput): DiskS
     const hasReserve = systemReserved > 0 && total > 0;
     const hasUncommitted = uncommitted > 0 && total > 0;
 
-    const textParts = [formatBytes(used)];
-    if (hasReserve) textParts.push(formatBytes(systemReserved));
-    if (hasUncommitted) textParts.push(formatBytes(uncommitted));
-    const text = `${textParts.join(' + ')} / ${formatBytes(total)}`;
-
     const totalUsed = used + (hasReserve ? systemReserved : 0) + (hasUncommitted ? uncommitted : 0);
+    const text = `${formatBytes(totalUsed)} / ${formatBytes(total)}`;
 
     const clusterUsageTheme = getProgressTheme((totalUsed / total) * 100, defaultThemeThresholds);
     const clusterUsageInfo: Stack = {
@@ -115,13 +111,6 @@ export function calculateDiskSpaceProgress(input: DiskSpaceProgressInput): DiskS
     return {
         text,
         stack,
-        tooltipInfo: [
-            ...tooltipInfo,
-            {
-                value: `${formatBytes(used + (hasUncommitted ? uncommitted : 0) + (hasReserve ? systemReserved : 0))} / ${formatBytes(total)}`,
-                title: i18n('tooltip_total'),
-                isTotal: true,
-            },
-        ],
+        tooltipInfo,
     };
 }
