@@ -5,7 +5,7 @@ import block from 'bem-cn-lite';
 
 import map_ from 'lodash/map';
 
-import {Progress, type Stack} from '@gravity-ui/uikit';
+import {Progress} from '@gravity-ui/uikit';
 
 import WarningIcon from '../../../../components/WarningIcon/WarningIcon';
 import {
@@ -14,6 +14,7 @@ import {
     getDiskSpace,
     getNodesChunksTotals,
 } from '../../../../utils/accounts/accountsTotal';
+import {type TooltipInfoItem} from '../../../../utils/diskSpaceProgress';
 import i18n from './i18n';
 import {addProgressStackSpacers} from '../../../../utils/progress';
 import {Tooltip} from '@ytsaurus/components';
@@ -42,11 +43,13 @@ export default class AccountsTotal extends Component<Props> {
         uncommittedDiskSpacePerMedium: PropTypes.object,
     };
 
-    renderTooltipContent(tooltipItems: Stack[]) {
+    renderTooltipContent(tooltipItems: TooltipInfoItem[]) {
         const items: MetaTableItem[] = tooltipItems.map((item) => {
             return {
                 key: item.title || '',
-                label: (
+                label: item.isTotal ? (
+                    <span>{item.title}</span>
+                ) : (
                     <span>
                         <ColorCircle theme={item.theme} color={item.color} marginRight />
                         {item.title}

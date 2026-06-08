@@ -8,6 +8,7 @@ import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
 import {setSetting} from '../../../store/actions/settings';
 import {accountsTrackVisit} from '../../../store/actions/favourites';
 import {setAccountParent} from '../../../utils/accounts/editor';
+import {calculateAndDispatchUncommittedDiskSpace} from '../../../utils/diskSpaceProgress';
 import {
     ACCOUNTS_TABLE_ID,
     CHANGE_CONTENT_MODE_FILTER,
@@ -196,13 +197,11 @@ export function fetchAccounts() {
                     });
                 }
 
-                const uncommittedDiskSpacePerMedium = {};
-                if (recursiveUsage && recursiveCommittedUsage) {
-                    Object.keys(recursiveUsage).forEach((medium) => {
-                        uncommittedDiskSpacePerMedium[medium] =
-                            (recursiveUsage[medium] ?? 0) - (recursiveCommittedUsage[medium] ?? 0);
-                    });
-                }
+                const uncommittedDiskSpacePerMedium = calculateAndDispatchUncommittedDiskSpace(
+                    recursiveUsage,
+                    recursiveCommittedUsage,
+                );
+
                 dispatch({
                     type: GLOBAL_PARTIAL,
                     data: {uncommittedDiskSpacePerMedium},
