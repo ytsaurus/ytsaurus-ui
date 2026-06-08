@@ -38,11 +38,11 @@ export interface PageInfo {
 
 type RecentPagesInfo = RecentInfo<PageInfo>;
 
-export function getRecentClustersInfo(state: RootState): RecentClustersInfo {
+export function selectRecentClustersInfo(state: RootState): RecentClustersInfo {
     return state.slideoutMenu.clusters;
 }
 
-const getRecentPagesInfoRaw = createSelector(
+const selectRecentPagesInfoRaw = createSelector(
     [
         (state: RootState) => state.slideoutMenu.pages,
         selectIsAdmin,
@@ -76,18 +76,18 @@ const getRecentPagesInfoRaw = createSelector(
     },
 );
 
-export const selectClusterList = createSelector([getRecentClustersInfo], (recentInfo) => {
+export const selectClusterList = createSelector([selectRecentClustersInfo], (recentInfo) => {
     const {recent, rest} = recentInfo;
     return [...recent, ...rest];
 });
 
-const getRecentAllPagesInfoRaw = createSelector(
-    [getRecentPagesInfoRaw],
+const selectRecentAllPagesInfoRaw = createSelector(
+    [selectRecentPagesInfoRaw],
     (pageInfo) => pageInfo.all,
 );
 
-export const getRecentPagesInfo = createSelector(
-    [getRecentPagesInfoRaw],
+export const selectRecentPagesInfo = createSelector(
+    [selectRecentPagesInfoRaw],
     (items): RecentPagesInfo => {
         const {all, ...rest} = items;
 
@@ -100,7 +100,7 @@ export const getRecentPagesInfo = createSelector(
     },
 );
 
-export const getKnownPages = createSelector([getRecentAllPagesInfoRaw], (pages) => {
+export const selectKnownPages = createSelector([selectRecentAllPagesInfoRaw], (pages) => {
     return reduce_(
         pages,
         (acc, page) => {
@@ -111,7 +111,7 @@ export const getKnownPages = createSelector([getRecentAllPagesInfoRaw], (pages) 
     );
 });
 
-export const getPagesInfoMapById = createSelector([getRecentPagesInfo], ({all}) => {
+export const selectPagesInfoMapById = createSelector([selectRecentPagesInfo], ({all}) => {
     const res = reduce_(
         all,
         (acc, item) => {
@@ -123,15 +123,15 @@ export const getPagesInfoMapById = createSelector([getRecentPagesInfo], ({all}) 
     return res;
 });
 
-export const getPagesOrderedByName = createSelector([getRecentPagesInfo], ({all}) => {
+export const selectPagesOrderedByName = createSelector([selectRecentPagesInfo], ({all}) => {
     return sortBy_(
         all.filter((item) => Boolean(PAGE_ICONS_BY_ID[item.id])),
         'name',
     );
 });
 
-export const getPagesOrderedByUser = createSelector(
-    [getPagesOrderedByName, selectSettingsPagesOrder, selectSettingsPagesPinned],
+export const selectPagesOrderedByUser = createSelector(
+    [selectPagesOrderedByName, selectSettingsPagesOrder, selectSettingsPagesPinned],
     (pages, order, pinned) => {
         const pagesById = reduce_(
             pages,
@@ -168,6 +168,9 @@ export const getPagesOrderedByUser = createSelector(
     },
 );
 
-export const getPagesOrderedByUserAndPinned = createSelector([getPagesOrderedByUser], (pages) => {
-    return filter_(pages, 'pinned');
-});
+export const selectPagesOrderedByUserAndPinned = createSelector(
+    [selectPagesOrderedByUser],
+    (pages) => {
+        return filter_(pages, 'pinned');
+    },
+);

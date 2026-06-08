@@ -9,7 +9,7 @@ import {Button, Icon} from '@gravity-ui/uikit';
 
 import PagesPanel from './PagesPanel';
 import {PagesEditorPanel} from './PagesEditorPanel';
-import {getPagesOrderedByUserAndPinned} from '../../store/selectors/slideoutMenu';
+import {selectPagesOrderedByUserAndPinned} from '../../store/selectors/slideoutMenu';
 import {PAGE_ICONS_BY_ID} from '../../constants/slideoutMenu';
 import settingsIcon from '../../assets/img/svg/settings-2.svg';
 
@@ -59,7 +59,7 @@ export function PagesSettingsEditor(props: {
 export function usePagesMenuItems(cluster?: string) {
     const {pathname} = window.location;
 
-    const pages = useSelector(getPagesOrderedByUserAndPinned);
+    const pages = useSelector(selectPagesOrderedByUserAndPinned);
 
     const clusterItems: AppNavigationProps['menuItems'] = React.useMemo(() => {
         return pages.map(({id, name}) => {
