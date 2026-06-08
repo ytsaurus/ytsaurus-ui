@@ -142,6 +142,8 @@ format['Bytes'] = function (value, settings) {
     return formatWithSuffixes({value, digits, NAMES, DIVIDER: 1024});
 };
 
+format['FormatWithSuffixes'] = formatWithSuffixes;
+
 function formatWithSuffixes({value, digits, NAMES, DIVIDER}) {
     const firstSuffix = NAMES[0];
     let len;
