@@ -79,9 +79,22 @@ export type FieldConfig = {
 
 type RefIdValue = string;
 
+export type PrometheusDashboardUnitType =
+    | 'bytes'
+    | 'Bps'
+    | 'count'
+    | 'cps'
+    | 'decbytes'
+    | 'decmbytes'
+    | 'gbytes'
+    | 'iops'
+    | 's';
+
 export type FieldConfigTargetOverrides = {
     matcher: {id: 'byFrameRefID'; options: RefIdValue};
-    properties: Array<{id: string; value: unknown} | {id: 'unit'; value: 'bytes' | unknown}>;
+    properties: Array<
+        {id: string; value: unknown} | {id: 'unit'; value: PrometheusDashboardUnitType | unknown}
+    >;
 };
 
 export type PanelType = DashaboardPanelByType['type'];

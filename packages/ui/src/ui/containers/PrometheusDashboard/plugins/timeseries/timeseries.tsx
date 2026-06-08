@@ -5,7 +5,11 @@ import reduce_ from 'lodash/reduce';
 import {Flex} from '@gravity-ui/uikit';
 
 import {type YTError} from '../../../../../@types/types';
-import {type QueryRangeData, type TimeseriesTarget} from '../../../../../shared/prometheus/types';
+import {
+    type PrometheusDashboardUnitType,
+    type QueryRangeData,
+    type TimeseriesTarget,
+} from '../../../../../shared/prometheus/types';
 import {KEY_WITH_DOUBLE_CURLY_BRACES, formatByParams} from '../../../../../shared/utils/format';
 
 import format from '../../../../common/hammer/format';
@@ -18,13 +22,13 @@ import {type Yagr, type YagrWidgetData} from '@gravity-ui/chartkit/yagr';
 import {InlineError} from '../../../../components/InlineError/InlineError';
 import Loader from '../../../../components/Loader/Loader';
 import {useElementSize} from '../../../../hooks/useResizeObserver';
+import {usePrometheusFetchQuery} from '../../../../store/api/prometheus';
+import {compareWithUndefined} from '../../../../utils/sort-helpers';
 
 import {type PrometheusPlugins} from '../../PrometheusDashKit';
 import {PrometheusWidgetToolbar} from '../../PrometheusWidgetToolbar/PrometheusWidgetToolbar';
 import {usePrometheusDashboardContext} from '../../PrometheusDashboardContext/PrometheusDashboardContext';
-
-import {usePrometheusFetchQuery} from '../../../../store/api/prometheus';
-import {compareWithUndefined} from '../../../../utils/sort-helpers';
+import {getPrometheusFormatter} from '../../utils/prometheus-format';
 
 import './timeseries.scss';
 
@@ -202,7 +206,7 @@ function makeYagrWidgetData(
     }: {
         title: string;
         axisLabel?: string;
-        propertiesByRefId: Record<string, {unit?: 'bytes' | unknown}>;
+        propertiesByRefId: Record<string, {unit?: PrometheusDashboardUnitType | unknown}>;
         showLegend?: boolean;
     },
     targets: Array<TimeseriesTarget>,
@@ -271,7 +275,7 @@ function makeYagrWidgetData(
                       )
                     : undefined,
                 data: new Array(timeline.length),
-                formatter: unit === 'bytes' ? format.Bytes : format.NumberSmart,
+                formatter: getPrometheusFormatter(unit),
                 color: getChartSerieColor(res.data.graphs.length),
             };
             if (!graph.name) {
