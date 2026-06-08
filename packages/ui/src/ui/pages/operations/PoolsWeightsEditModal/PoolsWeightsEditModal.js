@@ -145,7 +145,9 @@ function PoolsWeightsEditModal(props) {
 
     const {loading, error, errorData, visible, editable, hideEditPoolsWeightsModal} = props;
     const title = (
-        <div className={block('title')}>{editable ? i18n('title_edit-pools-and-weights') : i18n('title_view-pools-and-weights')}</div>
+        <div className={block('title')}>
+            {editable ? i18n('title_edit-pools-and-weights') : i18n('title_view-pools-and-weights')}
+        </div>
     );
 
     return (

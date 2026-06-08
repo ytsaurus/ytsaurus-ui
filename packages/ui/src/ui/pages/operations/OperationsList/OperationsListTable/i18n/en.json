@@ -7,7 +7,13 @@
   "title_user": "User",
   "title_pool": "Pool",
   "title_weight": "Weight",
+  "field_title": "Title",
+  "field_type": "Type",
+  "field_user": "User",
+  "field_pool": "Pool",
   "field_user-pool": "User / Pool",
+  "field_start-time": "Start time",
   "field_state-progress": "State / Progress",
+  "confirm_perform-action": "Are you sure you want to {{actionName}} the operation {{operationId}}?",
   "alert_change-filter-settings": "Please, change your filtering settings to see search results"
 }

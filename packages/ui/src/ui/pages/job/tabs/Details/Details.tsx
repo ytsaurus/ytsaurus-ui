@@ -24,7 +24,11 @@ const block = cn('job-details');
 
 function renderEvents(events: JobEvents, collapsibleSize: 'm' | 'ss') {
     return events ? (
-        <CollapsibleSection name={i18n('title_events')} className={block('events')} size={collapsibleSize}>
+        <CollapsibleSection
+            name={i18n('title_events')}
+            className={block('events')}
+            size={collapsibleSize}
+        >
             <Events events={events} type="phase" />
         </CollapsibleSection>
     ) : null;

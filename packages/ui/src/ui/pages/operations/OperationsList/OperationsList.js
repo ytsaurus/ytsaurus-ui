@@ -99,7 +99,9 @@ class OperationsList extends Component {
             <div className={block()}>
                 <OperationListUpdater timeRange={timeRange} />
                 {inDashboard && (
-                    <div className={cn('elements-heading')({size: 'l'})}>{i18n('title_operations')}</div>
+                    <div className={cn('elements-heading')({size: 'l'})}>
+                        {i18n('title_operations')}
+                    </div>
                 )}
                 <OperationsListToolbar>
                     {hasError && this.renderError()}

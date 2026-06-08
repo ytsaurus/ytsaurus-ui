@@ -172,7 +172,9 @@ export function getOperation(
                             theme: 'danger',
                             title: i18n('alert_load-operation-error'),
                             content: error.message,
-                            actions: [{label: i18n('action_view'), onClick: () => showErrorPopup(error)}],
+                            actions: [
+                                {label: i18n('action_view'), onClick: () => showErrorPopup(error)},
+                            ],
                         });
                     }
 
