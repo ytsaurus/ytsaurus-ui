@@ -147,7 +147,9 @@ export default function StatisticsIO() {
 
             {output.length > 0 && (
                 <React.Fragment>
-                    <div className={headingBlock({size: 'm'}, block('heading'))}>{i18n('title_output')}</div>
+                    <div className={headingBlock({size: 'm'}, block('heading'))}>
+                        {i18n('title_output')}
+                    </div>
                     <ElementsTable
                         size="s"
                         theme="light"

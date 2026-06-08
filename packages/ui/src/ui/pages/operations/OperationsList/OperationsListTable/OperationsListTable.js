@@ -238,12 +238,12 @@ class OperationsListTable extends Component {
                 {actions.map((action) => {
                     const {icon, name, $value} = action;
                     const text = hammer.format['Readable'](name);
-                    const message = action.message || (
-                        <span>
-                            Are you sure you want to <strong>{action.name}</strong> the operation{' '}
-                            {$value}?
-                        </span>
-                    );
+                    const message =
+                        action.message ||
+                        i18n('confirm_perform-action', {
+                            actionName: action.name,
+                            operationId: $value,
+                        });
                     const handler = ({currentOption}) =>
                         performAction({
                             ...action,
@@ -306,11 +306,17 @@ class OperationsListTable extends Component {
                 },
                 user: {
                     name: 'user',
+                    get caption() {
+                        return i18n('field_user');
+                    },
                     sort: false,
                     align: 'left',
                 },
                 pool: {
                     name: 'pool',
+                    get caption() {
+                        return i18n('field_pool');
+                    },
                     sort: false,
                     align: 'left',
                 },
