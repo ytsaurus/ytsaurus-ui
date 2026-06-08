@@ -118,7 +118,13 @@ export default function BundleGeneralMeta() {
         },
     ];
 
-    return <MetaTable className={block()} items={[leftGroup, rightGroup]} title={i18n('title_general')} />;
+    return (
+        <MetaTable
+            className={block()}
+            items={[leftGroup, rightGroup]}
+            title={i18n('title_general')}
+        />
+    );
 }
 
 function renderResourceProgress(data: object, resourceName: string) {

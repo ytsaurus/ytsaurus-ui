@@ -262,25 +262,33 @@ function makeAllTabsProps(matchUrl: string, cluster: string) {
     res.items = [
         {
             value: Page.TABLET_CELL_BUNDLES,
-            get text() {return i18n('title_tablet-cell-bundles')},
+            get text() {
+                return i18n('title_tablet-cell-bundles');
+            },
             show: true,
             url: `/${cluster}/${Page.TABLET_CELL_BUNDLES}`,
         },
         {
             value: TabletsTab.TABLET_CELLS,
-            get text() {return i18n('title_tablet-cells')},
+            get text() {
+                return i18n('title_tablet-cells');
+            },
             show: true,
             url: `/${cluster}/${Page.TABLET_CELL_BUNDLES}/${TabletsTab.TABLET_CELLS}`,
         },
         {
             value: Page.CHAOS_CELL_BUNDLES,
-            get text() {return i18n('title_chaos-cell-bundles')},
+            get text() {
+                return i18n('title_chaos-cell-bundles');
+            },
             show: true,
             url: `/${cluster}/${Page.CHAOS_CELL_BUNDLES}`,
         },
         {
             value: TabletsTab.CHAOS_CELLS,
-            get text() {return i18n('title_chaos-cells')},
+            get text() {
+                return i18n('title_chaos-cells');
+            },
             show: true,
             url: `/${cluster}/${Page.CHAOS_CELL_BUNDLES}/${TabletsTab.CHAOS_CELLS}`,
         },

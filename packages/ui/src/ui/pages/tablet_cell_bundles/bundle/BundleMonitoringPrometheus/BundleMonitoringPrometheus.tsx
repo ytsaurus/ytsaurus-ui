@@ -19,16 +19,48 @@ import './BundleMonitoringPrometheus.scss';
 const block = cn('yt-bundle-monitoring-prometheus');
 
 const BUNDLE_DASHBOARDS = {
-    'bundle-ui-user-load': {get title() {return i18n('title_user-load')}},
-    'bundle-ui-resource': {get title() {return i18n('title_resources')}},
+    'bundle-ui-user-load': {
+        get title() {
+            return i18n('title_user-load');
+        },
+    },
+    'bundle-ui-resource': {
+        get title() {
+            return i18n('title_resources');
+        },
+    },
     'bundle-ui-cpu': {title: 'CPU'},
-    'bundle-ui-memory': {get title() {return i18n('title_memory')}},
-    'bundle-ui-disk': {get title() {return i18n('title_disk')}},
+    'bundle-ui-memory': {
+        get title() {
+            return i18n('title_memory');
+        },
+    },
+    'bundle-ui-disk': {
+        get title() {
+            return i18n('title_disk');
+        },
+    },
     'bundle-ui-lsm': {title: 'LSM'},
-    'bundle-ui-network': {get title() {return i18n('title_network')}},
-    'bundle-ui-efficiency': {get title() {return i18n('title_efficiency')}},
-    'bundle-ui-rpc-proxy-overview': {get title() {return i18n('title_proxy-resources')}},
-    'bundle-ui-rpc-proxy': {get title() {return i18n('title_proxy-details')}},
+    'bundle-ui-network': {
+        get title() {
+            return i18n('title_network');
+        },
+    },
+    'bundle-ui-efficiency': {
+        get title() {
+            return i18n('title_efficiency');
+        },
+    },
+    'bundle-ui-rpc-proxy-overview': {
+        get title() {
+            return i18n('title_proxy-resources');
+        },
+    },
+    'bundle-ui-rpc-proxy': {
+        get title() {
+            return i18n('title_proxy-details');
+        },
+    },
 };
 
 const BUNDLE_DASHBOARDS_NAMES = Object.keys(BUNDLE_DASHBOARDS) as Array<

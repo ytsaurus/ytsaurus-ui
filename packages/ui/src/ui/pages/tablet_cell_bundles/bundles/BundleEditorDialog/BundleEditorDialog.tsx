@@ -691,7 +691,9 @@ function validateFormValues(
     const violatedResources = [];
 
     if (requiredCpu > quota?.vcpu!) {
-        violatedResources.push(i18n('alert_cpu-required', {cpu: hammer.format.Number(requiredCpu / 1000)}));
+        violatedResources.push(
+            i18n('alert_cpu-required', {cpu: hammer.format.Number(requiredCpu / 1000)}),
+        );
     }
 
     const requiredMemory =
@@ -699,7 +701,9 @@ function validateFormValues(
         (resources.rpc_proxy_resource_guarantee?.memory ?? 0) * rpc_proxy_count;
 
     if (requiredMemory > quota?.memory!) {
-        violatedResources.push(i18n('alert_memory-required', {memory: hammer.format.Bytes(requiredMemory)}));
+        violatedResources.push(
+            i18n('alert_memory-required', {memory: hammer.format.Bytes(requiredMemory)}),
+        );
     }
 
     res.resources.info = violatedResources.length ? violatedResources.join(', ') : undefined;

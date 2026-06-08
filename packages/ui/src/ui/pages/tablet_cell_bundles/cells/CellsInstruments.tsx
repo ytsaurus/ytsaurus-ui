@@ -97,7 +97,7 @@ class CellsTableInstruments extends React.Component<Props & ReduxProps> {
                                           filter={(_items, filter) =>
                                               this.getBundleFilterItems(filter)
                                           }
-                                           placeholder={i18n('field_bundle-placeholder')}
+                                          placeholder={i18n('field_bundle-placeholder')}
                                           popupClassName={block('suggest-popup')}
                                       />
                                   ),
