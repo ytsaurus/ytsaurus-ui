@@ -66,11 +66,14 @@ export type TimeseriesTarget = {
 
 export type FieldConfig = {
     defaults?: {
-        unit?: 'short';
+        unit?: PrometheusDashboardUnitType;
         custom?: {
             axisLabel?: string;
             hideForm?: {
                 legend: boolean;
+            };
+            stacking?: {
+                mode: 'none' | 'normal';
             };
         };
     };
@@ -93,7 +96,8 @@ export type PrometheusDashboardUnitType =
 export type FieldConfigTargetOverrides = {
     matcher: {id: 'byFrameRefID'; options: RefIdValue};
     properties: Array<
-        {id: string; value: unknown} | {id: 'unit'; value: PrometheusDashboardUnitType | unknown}
+        | {id: 'unit'; value: PrometheusDashboardUnitType}
+        | {id: 'custom.stacking'; value: {mode: 'none' | 'normal'}}
     >;
 };
 

@@ -1,24 +1,22 @@
 import React from 'react';
 import reduce_ from 'lodash/reduce';
+import cloneDeep_ from 'lodash/cloneDeep';
 import {type FieldConfig} from '../../../../../shared/prometheus/types';
 
 export type PrometheusChartFieldConfig = {
     showLegend?: boolean;
     axisLabel?: string;
-    propertiesByRefId: Record<string, PrometheusChartProperties>;
-};
-
-export type PrometheusChartProperties = {
-    unit?: 'bytes' | unknown;
+    propertiesByRefId: Record<string, FieldConfig['defaults']>;
 };
 
 export function usePrometheusChartFieldConfig(
     fieldConfig: FieldConfig,
 ): PrometheusChartFieldConfig {
     const res = React.useMemo(() => {
+        const {defaults} = fieldConfig ?? {};
         return {
-            showLegend: !fieldConfig?.defaults?.custom?.hideForm?.legend,
-            axisLabel: fieldConfig?.defaults?.custom?.axisLabel,
+            showLegend: !defaults?.custom?.hideForm?.legend,
+            axisLabel: defaults?.custom?.axisLabel,
             propertiesByRefId: reduce_(
                 fieldConfig?.overrides,
                 (acc, item) => {
@@ -31,15 +29,28 @@ export function usePrometheusChartFieldConfig(
                     acc[refId] = reduce_(
                         properties,
                         (propsAcc, propItem) => {
-                            propsAcc[propItem.id] = propItem.value;
+                            const dst = propsAcc;
+                            if (!dst.custom) {
+                                dst.custom = {};
+                            }
+                            switch (propItem.id) {
+                                case 'custom.stacking': {
+                                    dst.custom.stacking =
+                                        propItem.value ?? defaults?.custom?.stacking;
+                                    break;
+                                }
+                                case 'unit': {
+                                    dst.unit = propItem.value ?? defaults?.unit;
+                                }
+                            }
                             return propsAcc;
                         },
-                        {} as PrometheusChartProperties,
+                        cloneDeep_(defaults ?? {}),
                     );
 
                     return acc;
                 },
-                {} as Record<string, PrometheusChartProperties>,
+                {} as Record<string, typeof defaults>,
             ),
         };
     }, [fieldConfig]);

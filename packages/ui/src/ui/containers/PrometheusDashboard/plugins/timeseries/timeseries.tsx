@@ -1,14 +1,10 @@
-import React from 'react';
 import cn from 'bem-cn-lite';
+import React from 'react';
 
 import {Flex} from '@gravity-ui/uikit';
 
 import {type YTError} from '../../../../../@types/types';
-import {
-    type PrometheusDashboardUnitType,
-    type QueryRangeData,
-    type TimeseriesTarget,
-} from '../../../../../shared/prometheus/types';
+import {type QueryRangeData, type TimeseriesTarget} from '../../../../../shared/prometheus/types';
 import {KEY_WITH_DOUBLE_CURLY_BRACES, formatByParams} from '../../../../../shared/utils/format';
 
 import format from '../../../../common/hammer/format';
@@ -16,21 +12,20 @@ import {YT} from '../../../../config/yt-config';
 
 import {IntersectionObserverContainer} from '../../../../components/IntersectionObserverContainer/IntersectionObserverContainer';
 
-import {YTChartKitLazy, getChartSerieColor} from '../../../../components/YTChartKit';
 import {type Yagr, type YagrWidgetData} from '@gravity-ui/chartkit/yagr';
 import {InlineError} from '../../../../components/InlineError/InlineError';
 import Loader from '../../../../components/Loader/Loader';
+import {YTChartKitLazy, getChartSerieColor} from '../../../../components/YTChartKit';
 import {useElementSize} from '../../../../hooks/useResizeObserver';
 import {usePrometheusFetchQuery} from '../../../../store/api/prometheus';
 import {compareWithUndefined} from '../../../../utils/sort-helpers';
 
+import {usePrometheusDashboardContext} from '../../PrometheusDashboardContext/PrometheusDashboardContext';
 import {type PrometheusPlugins} from '../../PrometheusDashKit';
 import {PrometheusWidgetToolbar} from '../../PrometheusWidgetToolbar/PrometheusWidgetToolbar';
-import {usePrometheusDashboardContext} from '../../PrometheusDashboardContext/PrometheusDashboardContext';
 import {getPrometheusFormatter} from '../../utils/prometheus-format';
-
+import {type PrometheusChartFieldConfig, usePrometheusChartFieldConfig} from './timeseries-config';
 import './timeseries.scss';
-import {usePrometheusChartFieldConfig} from './timeseries-config';
 
 const block = cn('yt-prometheus-timeseries');
 
@@ -169,23 +164,18 @@ function useLoadQueriesData({
     return chartData;
 }
 
+type YagrWidgetViewParams = PrometheusChartFieldConfig & {
+    title: string;
+};
+
 function makeYagrWidgetData(
-    {
-        title,
-        axisLabel,
-        propertiesByRefId,
-        showLegend,
-    }: {
-        title: string;
-        axisLabel?: string;
-        propertiesByRefId: Record<string, {unit?: PrometheusDashboardUnitType | unknown}>;
-        showLegend?: boolean;
-    },
+    {title, axisLabel, propertiesByRefId, showLegend}: YagrWidgetViewParams,
     targets: Array<TimeseriesTarget>,
     results: Array<QueryRangeData>,
     {end, start, step}: {end: number; start: number; step: number},
     params: Record<string, string | number>,
 ): YagrWidgetData {
+    const scales: YagrWidgetData['libraryConfig']['scales'] = {};
     const res: YagrWidgetData = {
         data: {graphs: [], timeline: []},
         libraryConfig: {
@@ -215,6 +205,7 @@ function makeYagrWidgetData(
                     label: axisLabel,
                 },
             },
+            scales,
             cursor: {sync: 'yt-timeseries-cursor'},
         },
     };
@@ -227,9 +218,11 @@ function makeYagrWidgetData(
 
     const metrics: Array<{metric: Record<string, unknown>; graphIndex: number}> = [];
 
+    let hasStacking = false;
+
     for (let serie = 0; serie < results?.length; ++serie) {
         const {legendFormat, refId} = targets[serie];
-        const {unit} = propertiesByRefId[refId] ?? {};
+        const {unit, custom: {stacking} = {}} = propertiesByRefId[refId] ?? {};
         for (let serie_i = 0; serie_i < (results[serie]?.data?.result?.length ?? 0); ++serie_i) {
             const serie_i_data = results[serie]?.data?.result[serie_i];
             if (!serie_i_data) {
@@ -238,7 +231,11 @@ function makeYagrWidgetData(
 
             const {values = [], metric} = serie_i_data;
 
+            hasStacking = hasStacking || stacking?.mode === 'normal';
+
             const graph: (typeof res)['data']['graphs'][number] = {
+                type: stacking?.mode === 'normal' ? 'area' : undefined,
+                stackGroup: stacking?.mode === 'normal' ? 1 : undefined,
                 name: legendFormat?.length
                     ? formatByParams(
                           legendFormat,
@@ -271,6 +268,10 @@ function makeYagrWidgetData(
                 res.data.graphs.pop();
             }
         }
+    }
+
+    if (hasStacking) {
+        scales.y = {stacking: true};
     }
 
     for (let i = 0; i < metrics.length; ++i) {
