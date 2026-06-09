@@ -1,6 +1,5 @@
 import React from 'react';
 import cn from 'bem-cn-lite';
-import reduce_ from 'lodash/reduce';
 
 import {Flex} from '@gravity-ui/uikit';
 
@@ -31,6 +30,7 @@ import {usePrometheusDashboardContext} from '../../PrometheusDashboardContext/Pr
 import {getPrometheusFormatter} from '../../utils/prometheus-format';
 
 import './timeseries.scss';
+import {usePrometheusChartFieldConfig} from './timeseries-config';
 
 const block = cn('yt-prometheus-timeseries');
 
@@ -140,35 +140,7 @@ function useLoadQueriesData({
         //cancelHelper,
     });
 
-    const fieldOverrides = React.useMemo(() => {
-        return {
-            showLegend: !fieldConfig?.defaults?.custom?.hideForm?.legend,
-            axisLabel: fieldConfig?.defaults?.custom?.axisLabel,
-            propertiesByRefId: reduce_(
-                fieldConfig?.overrides,
-                (acc, item) => {
-                    const {matcher, properties} = item;
-                    if (matcher.id !== 'byFrameRefID') {
-                        return acc;
-                    }
-                    const refId = matcher.options;
-                    // eslint-disable-next-line no-param-reassign
-                    acc[refId] = reduce_(
-                        properties,
-                        (propsAcc, propItem) => {
-                            // eslint-disable-next-line no-param-reassign
-                            propsAcc[propItem.id] = propItem.value;
-                            return propsAcc;
-                        },
-                        {} as {unit: 'bytes' | unknown} & Record<string, unknown>,
-                    );
-
-                    return acc;
-                },
-                {} as Record<string, {unit?: 'bytes' | unknown}>,
-            ),
-        };
-    }, [fieldConfig]);
+    const fieldOverrides = usePrometheusChartFieldConfig(fieldConfig);
 
     const chartData: {data?: YagrWidgetData; error?: YTError; isLoading?: boolean} =
         React.useMemo(() => {
