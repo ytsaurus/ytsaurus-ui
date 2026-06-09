@@ -11,7 +11,7 @@ type Props = {
 
 export const QueryHistoryHeaderRow: FC<Props> = ({header}) => {
     return (
-        <Flex alignItems="center" justifyContent="center" className={b('date-header')}>
+        <Flex alignItems="center" justifyContent="center" className={b()}>
             {header}
         </Flex>
     );
