@@ -88,7 +88,6 @@ test('Operation - Statistics', async ({page}) => {
     await operationsPage(page).waitForFixedBoundingClientRect('.operations', {iterationDelay: 500});
     await operationsPage(page).replaceMetaData();
 
-    await page.waitForLoadState('networkidle');
     await page.mouse.wheel(0, -1000); // scroll back for autofocused offset
     await operationsPage(page).waitForFixedTableColumnWidths('.operation-statistics__table');
 

@@ -36,6 +36,7 @@ import {type RootState} from './../../../store/reducers';
 import {type OperationDetailActionType} from '../../reducers/operations/detail';
 import {JSONSerializer} from '../../../common/yt-api';
 import {toaster} from '../../../utils/toaster';
+import {isFinalState} from '../../../pages/operations/OperationDetail/tabs/JobsTimeline/helpers/isFinalState';
 
 const operationDetailsRequests = new CancelHelper();
 
@@ -74,24 +75,57 @@ function loadIntermediateResourceUsage(
     };
 }
 
+const makeOperationRequest = (parameters: unknown) => {
+    return ytApiV3.getOperation(
+        {
+            parameters,
+            setup: {JSONSerializer},
+        },
+        operationDetailsRequests,
+    );
+};
+
 export function getOperation(
     id: string,
 ): ThunkAction<Promise<void>, RootState, unknown, OperationDetailActionType> {
     return (dispatch, getState) => {
         const isAlias = !isOperationId(id);
 
-        const params = Object.assign(
-            {
-                include_scheduler: true,
-                output_format: TYPED_OUTPUT_FORMAT,
-            },
-            isAlias ? {operation_alias: id} : {operation_id: id},
-        );
-
         dispatch({type: GET_OPERATION.REQUEST, data: {isAlias, id}});
 
-        return ytApiV3
-            .getOperation({parameters: params, setup: {JSONSerializer}}, operationDetailsRequests)
+        const commonOperationProps = {
+            output_format: TYPED_OUTPUT_FORMAT,
+        };
+        const operationRequestProps = isAlias ? {operation_alias: id} : {operation_id: id};
+
+        const fullRequest = (operationId: string | undefined, withScheduler: boolean) =>
+            makeOperationRequest({
+                ...commonOperationProps,
+                include_scheduler: withScheduler,
+                ...(operationId ? {operation_id: operationId} : operationRequestProps),
+            });
+
+        const stateRequest = makeOperationRequest({
+            ...commonOperationProps,
+            ...operationRequestProps,
+            ...(isAlias ? {include_runtime: true} : {}),
+            attributes: ['id', 'state'],
+        });
+
+        const requestPromise = () =>
+            stateRequest.then((lightResponse) => {
+                const operationState = ypath.getValue(lightResponse, '/state');
+                const operationId = ypath.getValue(lightResponse, '/id');
+
+                const needScheduler =
+                    typeof operationState === 'string' && !isFinalState(operationState);
+                return fullRequest(
+                    typeof operationId === 'string' ? operationId : undefined,
+                    needScheduler,
+                );
+            });
+
+        return requestPromise()
             .then(checkUserTransaction)
             .then(([operationAttributes, userTransactionAlive]) => {
                 const preparedAttributes = prepareAttributes(operationAttributes);
