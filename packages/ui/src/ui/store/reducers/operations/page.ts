@@ -1,33 +1,96 @@
+import {type Action} from 'redux';
+
 import {
+    CHECK_OPERATION_PERMISSIONS,
     HIDE_EDIT_WEIGHT_POOL_MODAL,
     OPERATIONS_STATUS,
-    SET_PULLS_AND_WEIGHTS,
+    SET_POOLS_AND_WEIGHTS,
     SHOW_EDIT_WEIGHT_POOL_MODAL,
 } from '../../../constants/operations';
+import {type ActionD, type YTError} from '../../../types';
+import {type OperationPool} from '../../../pages/operations/selectors';
 
-const initialState = {
+type OperationLike = {
+    $value: string;
+    title?: string;
+    state?: string;
+    pools: Array<OperationPool>;
+};
+
+type EditWeightModalState = {
+    loading: boolean;
+    loaded: boolean;
+    error: boolean;
+    errorData?: YTError;
+    editable: boolean;
+    visible: boolean;
+    operation: Partial<OperationLike>;
+    hasWritePermission?: boolean;
+    checkPermError?: YTError;
+    permissionLoading: boolean;
+};
+
+type OperationsPageState = {
+    status: string;
+    error: Record<string, unknown>;
+    editWeightModal: EditWeightModalState;
+};
+
+const initialState: OperationsPageState = {
     status: OPERATIONS_STATUS.LOADING,
     error: {},
     editWeightModal: {
         loading: false,
         loaded: false,
         error: false,
-        errorData: {},
-
+        errorData: undefined,
         editable: true,
         visible: false,
         operation: {},
+        hasWritePermission: undefined,
+        checkPermError: undefined,
+        permissionLoading: false,
     },
 };
 
-export default (state = initialState, action) => {
+type ShowAction = ActionD<
+    typeof SHOW_EDIT_WEIGHT_POOL_MODAL,
+    {operation: Partial<OperationLike>; editable: boolean}
+>;
+type HideAction = Action<typeof HIDE_EDIT_WEIGHT_POOL_MODAL>;
+type SetRequestAction = Action<typeof SET_POOLS_AND_WEIGHTS.REQUEST>;
+type SetSuccessAction = Action<typeof SET_POOLS_AND_WEIGHTS.SUCCESS>;
+type SetCancelledAction = Action<typeof SET_POOLS_AND_WEIGHTS.CANCELLED>;
+type SetFailureAction = ActionD<typeof SET_POOLS_AND_WEIGHTS.FAILURE, {error: YTError}>;
+type CheckRequestAction = Action<typeof CHECK_OPERATION_PERMISSIONS.REQUEST>;
+type CheckSuccessAction = ActionD<
+    typeof CHECK_OPERATION_PERMISSIONS.SUCCESS,
+    {hasWritePermission: boolean}
+>;
+type CheckFailureAction = ActionD<typeof CHECK_OPERATION_PERMISSIONS.FAILURE, {error: YTError}>;
+
+type OperationsPageAction =
+    | ShowAction
+    | HideAction
+    | SetRequestAction
+    | SetSuccessAction
+    | SetCancelledAction
+    | SetFailureAction
+    | CheckRequestAction
+    | CheckSuccessAction
+    | CheckFailureAction;
+
+export function operationsPageReducer(
+    state: OperationsPageState = initialState,
+    action: OperationsPageAction,
+): OperationsPageState {
     switch (action.type) {
         case SHOW_EDIT_WEIGHT_POOL_MODAL: {
             const {operation, editable} = action.data;
             return {
                 ...state,
                 editWeightModal: {
-                    ...state.editWeightModal,
+                    ...initialState.editWeightModal,
                     visible: true,
                     editable,
                     operation,
@@ -38,12 +101,10 @@ export default (state = initialState, action) => {
         case HIDE_EDIT_WEIGHT_POOL_MODAL:
             return {
                 ...state,
-                editWeightModal: {
-                    ...initialState.editWeightModal,
-                },
+                editWeightModal: initialState.editWeightModal,
             };
 
-        case SET_PULLS_AND_WEIGHTS.REQUEST: {
+        case SET_POOLS_AND_WEIGHTS.REQUEST:
             return {
                 ...state,
                 editWeightModal: {
@@ -51,9 +112,8 @@ export default (state = initialState, action) => {
                     loading: true,
                 },
             };
-        }
 
-        case SET_PULLS_AND_WEIGHTS.SUCCESS: {
+        case SET_POOLS_AND_WEIGHTS.SUCCESS:
             return {
                 ...state,
                 editWeightModal: {
@@ -61,28 +121,62 @@ export default (state = initialState, action) => {
                     loading: false,
                     loaded: true,
                     error: false,
+                    errorData: undefined,
                 },
             };
-        }
 
-        case SET_PULLS_AND_WEIGHTS.FAILURE: {
+        case SET_POOLS_AND_WEIGHTS.FAILURE: {
+            const {error} = action.data;
             return {
                 ...state,
                 editWeightModal: {
                     ...state.editWeightModal,
                     loading: false,
                     error: true,
-                    errorData: action.data.error,
+                    errorData: error,
                 },
             };
         }
 
-        case SET_PULLS_AND_WEIGHTS.CANCELLED: {
+        case SET_POOLS_AND_WEIGHTS.CANCELLED:
             return {
                 ...state,
                 editWeightModal: {
                     ...state.editWeightModal,
                     loading: false,
+                },
+            };
+
+        case CHECK_OPERATION_PERMISSIONS.REQUEST:
+            return {
+                ...state,
+                editWeightModal: {
+                    ...state.editWeightModal,
+                    permissionLoading: true,
+                    checkPermError: undefined,
+                },
+            };
+
+        case CHECK_OPERATION_PERMISSIONS.SUCCESS: {
+            const {hasWritePermission} = action.data;
+            return {
+                ...state,
+                editWeightModal: {
+                    ...state.editWeightModal,
+                    permissionLoading: false,
+                    hasWritePermission,
+                },
+            };
+        }
+
+        case CHECK_OPERATION_PERMISSIONS.FAILURE: {
+            const {error} = action.data;
+            return {
+                ...state,
+                editWeightModal: {
+                    ...state.editWeightModal,
+                    permissionLoading: false,
+                    checkPermError: error,
                 },
             };
         }
@@ -90,4 +184,4 @@ export default (state = initialState, action) => {
         default:
             return state;
     }
-};
+}
