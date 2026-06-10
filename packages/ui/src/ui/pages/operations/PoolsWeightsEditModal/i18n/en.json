@@ -1,8 +1,16 @@
 {
-  "title_edit-pools-and-weights": "Edit pools and weights",
-  "title_view-pools-and-weights": "View pools and weights",
-  "action_apply": "Apply",
-  "field_pool": "Pool",
+  "title_edit-operation-pools": "Edit operation attributs",
+  "section_general": "General",
+  "section_resource-limits": "Resource Limits",
   "field_tree": "Tree",
-  "field_weight": "Weight"
+  "field_pool": "Pool",
+  "field_weight": "Weight",
+  "field_cpu": "CPU",
+  "field_gpu": "GPU",
+  "field_memory": "Memory",
+  "field_user-slots": "User slots",
+  "action_save": "Save",
+  "action_close": "Close",
+  "alert_save-success": "Operation attributes \"{{operation}}\" updated successfully",
+  "alert_save-failure": "Failed to update operation attributes \"{{operation}}\""
 }

@@ -5,11 +5,15 @@ import reduce_ from 'lodash/reduce';
 import {getOperation} from '../../../store/actions/operations/detail';
 import {updateOperationsList} from '../../../store/actions/operations/list';
 import {
+    CHECK_OPERATION_PERMISSIONS,
     HIDE_EDIT_WEIGHT_POOL_MODAL,
-    SET_PULLS_AND_WEIGHTS,
+    SET_POOLS_AND_WEIGHTS,
     SHOW_EDIT_WEIGHT_POOL_MODAL,
 } from '../../../constants/operations';
 import {Page} from '../../../constants';
+import hammer from '../../../common/hammer';
+import {checkUserPermissionsUI} from '../../../utils/acl/acl-api';
+import {OPERATION_POOL_RESOURCE_LIMIT_KEYS} from '../../../pages/operations/selectors';
 
 export * from '../../../store/actions/operations/list';
 
@@ -26,7 +30,42 @@ export function hideEditPoolsWeightsModal() {
     };
 }
 
-export function setPoolsAndWeights(operation, pools, weights) {
+export function checkOperationPermissions(operation, user) {
+    return (dispatch) => {
+        const operationValue = operation?.$value;
+        if (!operationValue || !user) {
+            return;
+        }
+
+        dispatch({type: CHECK_OPERATION_PERMISSIONS.REQUEST});
+
+        const hashPrefix = hammer.utils.extractFirstByte(operationValue);
+        const operationPath = `//sys/operations/${hashPrefix}/${operationValue}`;
+
+        checkUserPermissionsUI(operationPath, user, ['manage'])
+            .then((results) => {
+                const hasWritePermission = results.every(({action}) => action === 'allow');
+                dispatch({
+                    type: CHECK_OPERATION_PERMISSIONS.SUCCESS,
+                    data: {hasWritePermission},
+                });
+            })
+            .catch((error) => {
+                dispatch({
+                    type: CHECK_OPERATION_PERMISSIONS.FAILURE,
+                    data: {error},
+                });
+            });
+    };
+}
+
+export function setPoolsAndWeights(
+    operation,
+    pools,
+    weights,
+    resourceLimits,
+    {closeOnSuccess = true} = {},
+) {
     const pathItems = window.location.pathname.split('/');
     const inOperationsList = pathItems.length === 3 && pathItems[2] === Page.OPERATIONS;
     const operationId = operation.$value;
@@ -34,29 +73,62 @@ export function setPoolsAndWeights(operation, pools, weights) {
     const poolTrees = reduce_(
         operation.pools,
         (acc, item) => {
-            const {tree} = item;
-            acc[tree] = item;
+            acc[item.tree] = item;
             return acc;
         },
         {},
     );
 
     return (dispatch) => {
-        dispatch({
-            type: SET_PULLS_AND_WEIGHTS.REQUEST,
-        });
+        dispatch({type: SET_POOLS_AND_WEIGHTS.REQUEST});
 
         const params = reduce_(
             pools,
             (res, pool, tree) => {
-                const old = poolTrees[tree];
-                if (weights[tree] && old.weight !== Number(weights[tree])) {
-                    res[tree] = Object.assign({}, {weight: Number(weights[tree])});
+                const old = poolTrees[tree] || {};
+                const treeParams = {};
+
+                const newWeight = weights[tree];
+                if (newWeight && old.weight !== Number(newWeight)) {
+                    treeParams.weight = Number(newWeight);
                 }
-                if (old.pool !== pools[tree]) {
-                    res[tree] = Object.assign(res[tree] || {}, {
-                        pool: pools[tree],
-                    });
+                if (old.pool !== pool) {
+                    treeParams.pool = pool;
+                }
+                if (resourceLimits?.[tree]) {
+                    const {changed, merged} = reduce_(
+                        OPERATION_POOL_RESOURCE_LIMIT_KEYS,
+                        (acc, key) => {
+                            const newVal = resourceLimits[tree][key];
+                            const oldVal = (old.resourceLimits || {})[key];
+
+                            const isInvalidOrEmpty = newVal === '' || Number.isNaN(Number(newVal));
+
+                            if (newVal !== undefined && !isInvalidOrEmpty) {
+                                acc.merged[key] = Number(newVal);
+                                if (Number(newVal) !== oldVal) {
+                                    acc.changed = true;
+                                }
+                            } else if (
+                                isInvalidOrEmpty &&
+                                oldVal !== null &&
+                                oldVal !== undefined
+                            ) {
+                                acc.merged[key] = null;
+                                acc.changed = true;
+                            }
+                            return acc;
+                        },
+                        {changed: false, merged: {}},
+                    );
+
+                    if (changed) {
+                        treeParams.resource_limits = merged;
+                    }
+                }
+
+                if (Object.keys(treeParams).length > 0) {
+                    res[tree] = treeParams;
                 }
                 return res;
             },
@@ -77,24 +149,21 @@ export function setPoolsAndWeights(operation, pools, weights) {
                     dispatch(getOperation(operationId));
                 }
 
-                dispatch({
-                    type: SET_PULLS_AND_WEIGHTS.SUCCESS,
-                });
-                dispatch({
-                    type: HIDE_EDIT_WEIGHT_POOL_MODAL,
-                });
+                dispatch({type: SET_POOLS_AND_WEIGHTS.SUCCESS});
+                if (closeOnSuccess) {
+                    dispatch({type: HIDE_EDIT_WEIGHT_POOL_MODAL});
+                }
             })
             .catch((error) => {
                 if (error.code === yt.codes.CANCELLED) {
-                    dispatch({
-                        type: SET_PULLS_AND_WEIGHTS.CANCELLED,
-                    });
-                } else {
-                    dispatch({
-                        type: SET_PULLS_AND_WEIGHTS.FAILURE,
-                        data: {error},
-                    });
+                    dispatch({type: SET_POOLS_AND_WEIGHTS.CANCELLED});
+                    return undefined;
                 }
+                dispatch({
+                    type: SET_POOLS_AND_WEIGHTS.FAILURE,
+                    data: {error},
+                });
+                return Promise.reject(error);
             });
     };
 }

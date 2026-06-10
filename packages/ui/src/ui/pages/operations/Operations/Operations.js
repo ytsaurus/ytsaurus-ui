@@ -3,7 +3,7 @@ import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
 import {Route, Switch, withRouter} from 'react-router';
 
-import PoolsWeightsEditModal from '../PoolsWeightsEditModal/PoolsWeightsEditModal';
+import {PoolsWeightsEditModal} from '../PoolsWeightsEditModal/PoolsWeightsEditModal';
 import OperationsList from '../OperationsList/OperationsList';
 import OperationDetail from '../OperationDetail/OperationDetail';
 import {DASHBOARD_VIEW_CONTEXT} from '../../../constants/index';
