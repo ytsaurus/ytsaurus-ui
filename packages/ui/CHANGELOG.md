@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.15.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.14.0...ui-v3.15.0) (2026-06-10)
+
+
+### Features
+
+* **DownloadManager:** add CSV tab [YTFRONT-3983] ([4727540](https://github.com/ytsaurus/ytsaurus-ui/commit/47275403f529cc1ee4b2ce7d952d434052c623f9))
+* **Navigation/Attributes:** view opaque attributes [YTFRONT-2241] ([ce8596a](https://github.com/ytsaurus/ytsaurus-ui/commit/ce8596a24f1c2d4d11a82e28b7addce759b95f86))
+* **Navigation:** add CurrentPathActions [YTFRONT-4037] ([d8acc22](https://github.com/ytsaurus/ytsaurus-ui/commit/d8acc229d2364eeb7b6d43a9ee9f5c44b252d28a))
+
+
+### Bug Fixes
+
+* **Components/Suggest:** handle 'Tab', 'Shift+Tab' [YTFRONT-5823] ([0508ae6](https://github.com/ytsaurus/ytsaurus-ui/commit/0508ae64ab1b108225c74f5e95eef659a3428fb3))
+* **Flow:** fix a misprint [YTFRONT-5826] ([8ef5e88](https://github.com/ytsaurus/ytsaurus-ui/commit/8ef5e88ab1adf0310adc4ff86d018f07d3351c94))
+* **Queries:** minor css fix [YTFRONT-5850] ([bf0e94c](https://github.com/ytsaurus/ytsaurus-ui/commit/bf0e94c82c78c379fdbe115bf327155c78e5f474))
+* **Scheduling:** allow any pool name suggestion [YTFRONT-4228] ([9f115f4](https://github.com/ytsaurus/ytsaurus-ui/commit/9f115f4300520400797ceb1563e862a41fe50fff))
+
 ## [3.14.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.13.0...ui-v3.14.0) (2026-06-02)
 
 
