@@ -1,0 +1,10 @@
+{
+  "value_ONLINE": "ONLINE",
+  "value_OFFLINE": "OFFLINE",
+  "value_BANNED": "BANNED",
+  "value_OTHER": "OTHER",
+  "value_FULL": "FULL",
+  "value_alert": "ALERT",
+  "value_dec": "DEC",
+  "field_total-in-rack": "TOTAL IN RACK"
+}

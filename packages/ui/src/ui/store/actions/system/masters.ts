@@ -4,6 +4,8 @@ import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 import sortBy_ from 'lodash/sortBy';
 
+import i18n from './i18n';
+
 import {getBatchError, splitBatchResults} from '../../../../shared/utils/error';
 
 import ypath from '../../../common/thor/ypath';
@@ -97,20 +99,20 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
 
     const batchError = getBatchError(
         [primaryMasterResult, secondaryMastersResult],
-        "Masters' details cannot be loaded",
+        i18n('alert_failed-to-load-masters-details'),
     );
 
     if (batchError) {
         throw batchError;
     }
 
-    const error = getBatchError([timestampProvidersResult], 'Timestamp providers cannot be loaded');
+    const error = getBatchError([timestampProvidersResult], i18n('alert_failed-to-load-timestamp-providers'));
 
     if (error && timestampProvidersResult.error?.code !== NODE_DOES_NOT_EXIST) {
         throw error;
     }
 
-    const queueAgentsError = getBatchError([queueAgentsResult], 'Queue agents cannot be loaded');
+    const queueAgentsError = getBatchError([queueAgentsResult], i18n('alert_failed-to-load-queue-agents'));
 
     if (queueAgentsError && queueAgentsResult.error?.code !== NODE_DOES_NOT_EXIST) {
         throw queueAgentsError;
@@ -148,7 +150,7 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
     const {
         results: [masterCellId],
         error: primaryMasterCellTagError,
-    } = splitBatchResults(primaryMasterCellTagResponse, 'Failed to get primary master cell_id');
+    } = splitBatchResults(primaryMasterCellTagResponse, i18n('alert_failed-to-get-primary-master-cell-id'));
 
     if (!masterCellId) {
         throw primaryMasterCellTagError;
@@ -393,9 +395,9 @@ export function loadMasters() {
                 name: 'load/system/masters',
                 autoHiding: false,
                 theme: 'danger',
-                content: `[code ${code}] ${message}`,
-                title: 'Could not load Masters',
-                actions: [{label: ' view', onClick: () => showErrorPopup(error as AxiosError)}],
+                content: i18n('alert_load-masters-error-content', {code, message}),
+                title: i18n('title_load-masters-error'),
+                actions: [{label: i18n('action_view'), onClick: () => showErrorPopup(error as AxiosError)}],
             });
 
             if (isRetryFutile((error as {code: number})?.code)) {
@@ -473,7 +475,7 @@ export const changeMasterMaintenance =
             message,
         });
 
-        const error = getBatchError(result, 'Failed to update master maintenance');
+        const error = getBatchError(result, i18n('alert_failed-to-update-master-maintenance'));
         if (error) {
             throw error;
         }

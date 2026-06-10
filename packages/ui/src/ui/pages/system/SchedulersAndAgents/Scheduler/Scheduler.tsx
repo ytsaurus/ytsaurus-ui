@@ -3,6 +3,8 @@ import React, {useCallback} from 'react';
 import hammer from '../../../../common/hammer';
 import block from 'bem-cn-lite';
 
+import i18n from './i18n';
+
 import {ClipboardButton, Tooltip} from '@ytsaurus/components';
 import Icon from '../../../../components/Icon/Icon';
 import NodeQuad from '../../NodeQuad/NodeQuad';
@@ -82,7 +84,7 @@ export default function Scheduler({
                 <ChangeMaintenanceButton
                     className={b('scheduler-host-btn')}
                     path={path}
-                    title={`Edit ${address}`}
+                    title={i18n('title_edit', {address})}
                     host={physicalHost}
                     container={host}
                     maintenance={Boolean(maintenanceMessage)}

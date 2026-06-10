@@ -12,6 +12,7 @@ import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
 import {loadSchedulersAndAgents} from './index';
 import {changeMaintenance} from './masters';
 import {selectCurrentUserName} from '../../selectors/global';
+import i18n from './i18n';
 
 export function getSchedulers() {
     return ytApiV3Id
@@ -53,7 +54,7 @@ function getSchedulersState(hosts) {
     });
 
     return ytApiV3Id.executeBatch(YTApiId.systemSchedulersState, {requests}).then((data) => {
-        const {outputs} = splitBatchResults(data, 'Failed to get scheduler states');
+        const {outputs} = splitBatchResults(data, i18n('alert_failed-to-get-scheduler-states'));
         const alerts = outputs[0];
         const connectedHosts = map_(hosts, (host, index) => {
             return {
@@ -91,7 +92,7 @@ function getAgentsState(hosts) {
     });
 
     return ytApiV3Id.executeBatch(YTApiId.systemCAStates, {requests}).then((data) => {
-        const {outputs} = splitBatchResults(data, 'Failed to get CA states');
+        const {outputs} = splitBatchResults(data, i18n('alert_failed-to-get-ca-states'));
         const agents = map_(hosts, (host, index) => ({
             host,
             connected: outputs[2 * index],
@@ -138,7 +139,7 @@ export const changeSchedulerMaintenance =
             message,
         });
 
-        const error = getBatchError(result, 'Failed to update master maintenance');
+        const error = getBatchError(result, i18n('alert_failed-to-update-master-maintenance'));
         if (error) {
             throw error;
         }
