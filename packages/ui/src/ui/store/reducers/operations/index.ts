@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 
-import page from './page';
+import {operationsPageReducer as page} from './page';
 import detail from './detail';
 import list from './list/list';
 import statistics from './statistics/statistics';
