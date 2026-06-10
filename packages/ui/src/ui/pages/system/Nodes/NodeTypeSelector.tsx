@@ -3,6 +3,8 @@ import {useDispatch, useSelector} from '../../../store/redux-hooks';
 
 import {Select} from '@gravity-ui/uikit';
 
+import i18n from './i18n';
+
 import {NODE_TYPE_ITEMS} from '../../../constants/components/nodes/nodes';
 import {selectSystemNodesNodeTypesToLoad} from '../../../store/selectors/system/nodes';
 import {setSysmetNodesNodeType} from '../../../store/actions/system/nodes-ts';
@@ -32,7 +34,7 @@ export function NodeTypeSelector(props: NodeTypeSelectorProps) {
                 );
                 onUpdate(newValue);
             }}
-            label={'Node type:'}
+            label={i18n('field_node-type')}
         />
     );
 }

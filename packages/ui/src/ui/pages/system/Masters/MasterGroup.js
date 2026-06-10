@@ -9,6 +9,8 @@ import format from '../../../common/hammer/format';
 import {selectMastersHostType} from '../../../store/selectors/settings';
 import Icon from '../../../components/Icon/Icon';
 
+import i18n from './i18n/index-masters';
+
 import {SwitchLeaderButton} from './SwitchLeader';
 import {Instance} from './Instance';
 
@@ -48,7 +50,9 @@ class MasterGroup extends Component {
     renderQuorum() {
         const {quorum, cellTag, cellId, instances} = this.props;
         const status = quorum ? quorum.status : 'unknown';
-        const quorumTitle = quorum && `Leader committed version: ${quorum.leaderCommitedVersion}`;
+        const quorumTitle =
+            quorum &&
+            i18n('context_leader-committed-version', {version: quorum.leaderCommitedVersion});
         const icons = {
             quorum: 'check-circle',
             'weak-quorum': 'exclamation-circle',

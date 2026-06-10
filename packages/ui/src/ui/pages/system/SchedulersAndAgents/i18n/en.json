@@ -1,0 +1,18 @@
+{
+  "title_schedulers-and-agents": "Schedulers and controller agents",
+  "title_schedulers": "Schedulers",
+  "title_controller-agents": "Controller agents",
+  "alert_schedulers-unknown": "Schedulers: unknown",
+  "alert_schedulers-down": "Schedulers: Down",
+  "alert_schedulers-standby": "Schedulers: Standby",
+  "alert_schedulers-n-offline": "Schedulers: {{count}} offline",
+  "alert_schedulers-ok-with-alerts": "Schedulers: OK ({{count}} alerts)",
+  "alert_schedulers-ok": "Schedulers: OK",
+  "alert_agents-unknown": "Controller agents: unknown",
+  "alert_agents-ok-with-alerts": "Controller agents: OK ({{count}} alerts)",
+  "alert_agents-ok": "Controller agents: OK",
+  "alert_agents-prefix": "Controller agents:",
+  "value_connected": "{{count}} connected",
+  "value_disconnected": "{{count}} disconnected",
+  "value_offline": "{{count}} offline"
+}

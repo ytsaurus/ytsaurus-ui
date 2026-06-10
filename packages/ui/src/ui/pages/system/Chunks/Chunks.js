@@ -29,6 +29,7 @@ import {useUpdater} from '../../../hooks/use-updater';
 import './Chunks.scss';
 import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
 import {HEADER_HEIGHT} from '../../../constants';
+import i18n from './i18n';
 
 const b = block('system');
 
@@ -106,19 +107,23 @@ class Chunks extends Component {
 
         const labels = [
             {
-                text: 'Replication',
+                key: 'replication',
+                get name() {return i18n('title_replication')},
                 value: replication,
             },
             {
-                text: 'Sealer',
+                key: 'sealer',
+                get name() {return i18n('title_sealer')},
                 value: sealer,
             },
             {
-                text: 'Refresh',
+                key: 'refresh',
+                get name() {return i18n('title_refresh')},
                 value: refresh,
             },
             {
-                text: 'Requisition Update',
+                key: 'requisition-update',
+                get name() {return i18n('title_requisition-update')},
                 value: requisitionUpdate,
             },
         ];
@@ -128,13 +133,15 @@ class Chunks extends Component {
 
             if (typeof label.value === 'boolean') {
                 theme = label.value ? 'success' : 'danger';
-                text = label.value ? `${label.text} enabled` : `${label.text} disabled`;
+                text = label.value
+                    ? i18n('value_enabled', {name: label.name})
+                    : i18n('value_disabled', {name: label.name});
             } else {
                 theme = 'default';
-                text = `${label.text} unknown`;
+                text = i18n('value_unknown', {name: label.name});
             }
 
-            return <Label key={label.text} theme={theme} text={text} />;
+            return <Label key={label.key} theme={theme} text={text} />;
         });
     }
 
@@ -231,7 +238,7 @@ class Chunks extends Component {
             <StickyContainer>
                 {({stickyTopClassName}) => (
                     <CollapsibleSectionStateLess
-                        name={'Chunks'}
+                        name={i18n('title_chunks')}
                         headingClassName={stickyTopClassName}
                         overview={overview}
                         onToggle={this.onToggle}
