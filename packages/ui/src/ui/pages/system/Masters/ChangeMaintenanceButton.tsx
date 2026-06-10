@@ -3,6 +3,7 @@ import {Button, Icon} from '@gravity-ui/uikit';
 import PencilIcon from '@gravity-ui/icons/svgs/pencil.svg';
 import {type FormApi, YTDFDialog, makeErrorFields} from '../../../containers/Dialog';
 import {useToggle} from 'react-use';
+import i18n from './i18n';
 
 type Props = {
     className?: string;
@@ -72,30 +73,30 @@ export const ChangeMaintenanceButton: FC<Props> = ({
                     {
                         name: 'host',
                         type: 'plain',
-                        caption: 'Host',
+                        caption: i18n('field_host'),
                     },
                     {
                         name: 'container',
                         type: 'plain',
-                        caption: 'Container',
+                        caption: i18n('field_container'),
                     },
                     {
                         name: 'maintenance',
                         type: 'radio',
-                        caption: 'Maintenance',
+                        caption: i18n('field_maintenance'),
                         extras: {
                             options: [
-                                {value: 'enabled', label: 'Enabled'},
-                                {value: 'disabled', label: 'Disabled'},
+                                {value: 'enabled', label: i18n('value_enabled')},
+                                {value: 'disabled', label: i18n('value_disabled')},
                             ],
                         },
                     },
                     {
                         name: 'message',
                         type: 'textarea',
-                        caption: 'Maintenance message',
+                        caption: i18n('field_maintenance-message'),
                         extras: (values: FormData) => ({
-                            placeholder: 'Enter maintenance message',
+                            placeholder: i18n('context_enter-maintenance-message'),
                             disabled: values.maintenance === 'disabled',
                         }),
                     },

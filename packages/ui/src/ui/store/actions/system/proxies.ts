@@ -13,6 +13,7 @@ import {type ThunkAction} from 'redux-thunk';
 import {type RootState} from '../../../store/reducers';
 import {FETCH_PROXIES} from '../../../constants/system/nodes';
 import {toaster} from '../../../utils/toaster';
+import i18n from './i18n';
 
 type ProxiesThunkAction<T = void> = ThunkAction<T, RootState, unknown, HttpProxiesAction>;
 
@@ -63,11 +64,11 @@ export function loadSystemProxies(): ProxiesThunkAction<
                     name: 'load/system/proxies',
                     autoHiding: false,
                     theme: 'danger',
-                    content: `[code ${code}] ${message}`,
-                    title: 'Could not load Proxies',
+                    content: i18n('alert_load-proxies-error-content', {code, message}),
+                    title: i18n('title_load-proxies-error'),
                     actions: [
                         {
-                            label: ' view',
+                            label: i18n('action_view'),
                             onClick: () => showErrorPopup(error),
                         },
                     ],

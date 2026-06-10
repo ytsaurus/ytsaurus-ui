@@ -6,6 +6,7 @@ import Suggest, {type SuggestItem} from '../../../components/Suggest/Suggest';
 import {useFetchBatchQuery} from '../../../store/api/yt';
 import {YTApiId} from '../../../rum/rum-wrap-api';
 import {filterSuggestItems} from './helpers/filterSuggestItems';
+import i18n from './i18n';
 
 export function MasterLocalContainers({
     allValue,
@@ -19,7 +20,7 @@ export function MasterLocalContainers({
     const {data} = useFetchBatchQuery<Array<string>>({
         id: YTApiId.systemClusterMasters,
         parameters: {requests: [{command: 'list', parameters: {path: '//sys/cluster_masters'}}]},
-        errorTitle: 'Failed to load masters',
+        errorTitle: i18n('alert_failed-to-load-masters'),
     });
 
     const items = React.useMemo(() => {
@@ -49,7 +50,7 @@ export function MasterLocalContainers({
 
     return (
         <Flex gap={1} alignItems="center">
-            Container:
+            {i18n('field_container')}:
             <Suggest
                 text={container}
                 items={items}

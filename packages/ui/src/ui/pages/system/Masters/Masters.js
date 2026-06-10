@@ -19,6 +19,7 @@ import {useUpdater} from '../../../hooks/use-updater';
 
 import './Masters.scss';
 import {SystemAlert} from './SystemAlert';
+import i18n from './i18n/index-masters';
 import {UI_COLLAPSIBLE_SIZE} from '../../../constants/global';
 import {StickyContainer} from '../../../components/StickyContainer/StickyContainer';
 
@@ -32,7 +33,7 @@ function computeStateProgress(counters) {
         map_(counters.states, (count, state) => {
             return {
                 value: total && (count / total) * 100,
-                title: 'State: ' + state,
+                title: i18n('title_state', {state}),
                 theme:
                     {
                         quorum: 'success',
@@ -106,7 +107,7 @@ class Masters extends Component {
 
         return fitIntoSection ? (
             <div className={b('all-masters')}>
-                <div className={headingCN}>Primary Masters</div>
+                <div className={headingCN}>{i18n('title_primary-masters')}</div>
                 <MasterGroup
                     className={b('primary-master')}
                     {...primary}
@@ -115,13 +116,13 @@ class Masters extends Component {
                 />
                 {Boolean(secondary?.length) && (
                     <React.Fragment>
-                        <div className={headingCN}>Secondary Masters</div>
+                        <div className={headingCN}>{i18n('title_secondary-masters')}</div>
                         {secondaryGroups}
                     </React.Fragment>
                 )}
                 {Boolean(providers?.instances?.length) && (
                     <React.Fragment>
-                        <div className={headingCN}>Timestamp providers</div>
+                        <div className={headingCN}>{i18n('title_timestamp-providers')}</div>
                         <MasterGroup
                             {...providers}
                             className={b('timestamp-providers')}
@@ -133,7 +134,7 @@ class Masters extends Component {
                 )}
                 {Boolean(discovery?.instances?.length) && (
                     <React.Fragment>
-                        <div className={headingCN}>Discovery servers</div>
+                        <div className={headingCN}>{i18n('title_discovery-servers')}</div>
                         <MasterGroup
                             {...discovery}
                             className={b('discovery-servers')}
@@ -143,14 +144,14 @@ class Masters extends Component {
                 )}
                 {Boolean(queueAgents?.instances?.length) && (
                     <React.Fragment>
-                        <div className={headingCN}>Queue agents</div>
+                        <div className={headingCN}>{i18n('title_queue-agents')}</div>
                         <MasterGroup {...queueAgents} allowService />
                     </React.Fragment>
                 )}
             </div>
         ) : (
             <div>
-                <div className={headingCN}>Primary Masters</div>
+                <div className={headingCN}>{i18n('title_primary-masters')}</div>
                 <MasterGroup
                     className={b('primary-master')}
                     {...primary}
@@ -159,20 +160,20 @@ class Masters extends Component {
                 />
                 {Boolean(secondary?.length) && (
                     <React.Fragment>
-                        <div className={headingCN}>Secondary Masters</div>
+                        <div className={headingCN}>{i18n('title_secondary-masters')}</div>
                         <div className={b('secondary-masters')}>{secondaryGroups}</div>
                     </React.Fragment>
                 )}
                 <div className={b('flex')}>
                     {Boolean(providers?.instances?.length) &&
-                        this.renderSection('providers', 'Timestamp providers', providers, {
+                        this.renderSection('providers', i18n('title_timestamp-providers'), providers, {
                             allowVoting: true,
                             allowService: true,
                         })}
                     {Boolean(discovery?.instances?.length) &&
-                        this.renderSection('discovery', 'Discovery servers', discovery)}
+                        this.renderSection('discovery', i18n('title_discovery-servers'), discovery)}
                     {Boolean(queueAgents?.instances?.length) &&
-                        this.renderSection('queueAgents', 'Queue agents', queueAgents, {
+                        this.renderSection('queueAgents', i18n('title_queue-agents'), queueAgents, {
                             allowService: true,
                         })}
                 </div>
@@ -220,7 +221,7 @@ class Masters extends Component {
         const alertsCount = this.props.alerts.length;
         if (alertsCount > 0) {
             labels.push({
-                text: `${alertsCount} alert${alertsCount > 1 ? 's' : ''}`,
+                text: i18n('alert_alerts', {count: alertsCount}),
                 theme: 'warning',
             });
         }
@@ -254,7 +255,7 @@ class Masters extends Component {
             <StickyContainer>
                 {({stickyTopClassName}) => (
                     <CollapsibleSectionStateLess
-                        name={'Masters'}
+                        name={i18n('title_masters')}
                         className={b({open: !collapsed})}
                         headingClassName={b('heading', stickyTopClassName)}
                         overview={overview}

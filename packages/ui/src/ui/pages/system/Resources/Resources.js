@@ -5,6 +5,8 @@ import block from 'bem-cn-lite';
 
 import forEach_ from 'lodash/forEach';
 
+import i18n from './i18n';
+
 import {Progress} from '@gravity-ui/uikit';
 
 import {YTErrorBlock} from '../../../containers/Block/Block';
@@ -112,7 +114,10 @@ class Resources extends Component {
         return (
             <YTErrorBlock
                 type={fullNodePercentage >= 90 ? 'error' : 'alert'}
-                message={`${fullNodePercentage.toFixed(2)} % (${fullNodeCount}) of nodes are full.`}
+                message={i18n('alert_nodes-full', {
+                    percentage: fullNodePercentage.toFixed(2),
+                    count: fullNodeCount,
+                })}
             />
         );
     }
@@ -144,13 +149,13 @@ class Resources extends Component {
                 <div className={b('resources-meters')}>
                     {showResources && [
                         <div key="resources" className={headingCN}>
-                            Resources
+                            {i18n('title_resources')}
                         </div>,
                         this.renderResources(resources),
                     ]}
                     {showDiskResources && [
                         <div key="disk-resources" className={diskResourcesCN}>
-                            Disk space
+                            {i18n('title_disk-space')}
                         </div>,
                         this.renderResources(diskResources),
                     ]}

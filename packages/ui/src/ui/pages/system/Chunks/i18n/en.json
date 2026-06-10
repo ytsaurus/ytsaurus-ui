@@ -1,0 +1,10 @@
+{
+  "title_chunks": "Chunks",
+  "title_replication": "Replication",
+  "title_sealer": "Sealer",
+  "title_refresh": "Refresh",
+  "title_requisition-update": "Requisition Update",
+  "value_enabled": "{{name}} enabled",
+  "value_disabled": "{{name}} disabled",
+  "value_unknown": "{{name}} unknown"
+}

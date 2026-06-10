@@ -1,0 +1,5 @@
+{
+  "title_resources": "Resources",
+  "title_disk-space": "Disk space",
+  "alert_nodes-full": "{{percentage}} % ({{count}}) of nodes are full."
+}

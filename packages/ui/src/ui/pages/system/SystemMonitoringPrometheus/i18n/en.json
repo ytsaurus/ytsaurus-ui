@@ -1,0 +1,8 @@
+{
+  "field_container": "Container",
+  "alert_failed-to-load-masters": "Failed to load masters",
+  "value_scheduler-internal": "Scheduler internal",
+  "value_cluster-resources": "Cluster resources",
+  "value_master-global": "Master global",
+  "value_master-local": "Master local"
+}

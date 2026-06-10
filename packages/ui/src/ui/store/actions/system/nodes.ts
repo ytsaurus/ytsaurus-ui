@@ -3,6 +3,8 @@ import filter_ from 'lodash/filter';
 import map_ from 'lodash/map';
 import reduce_ from 'lodash/reduce';
 
+import i18n from './i18n';
+
 import {USE_CACHE, USE_MAX_SIZE} from '../../../../shared/constants/yt-api';
 import {splitBatchResults} from '../../../../shared/utils/error';
 import hammer from '../../../common/hammer';
@@ -76,7 +78,7 @@ export function loadSystemNodes(
             .then((data) => {
                 const {error, results} = splitBatchResults<string | Array<SystemNodeInfo>>(
                     data,
-                    'Failed to get system nodes',
+                    i18n('alert_failed-to-get-system-nodes'),
                 );
                 if (error) {
                     throw error;
@@ -119,11 +121,11 @@ export function loadSystemNodes(
                     name: 'load/system/nodes',
                     autoHiding: false,
                     theme: 'danger',
-                    content: `[code ${code}] ${message}`,
-                    title: 'Could not load Nodes',
+                    content: i18n('alert_load-nodes-error-content', {code, message}),
+                    title: i18n('title_load-nodes-error'),
                     actions: [
                         {
-                            label: ' view',
+                            label: i18n('action_view'),
                             onClick: () => showErrorPopup(error),
                         },
                     ],
