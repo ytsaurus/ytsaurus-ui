@@ -19,6 +19,7 @@ import {YTChartKitLazy, getChartSerieColor} from '../../../../components/YTChart
 import {useElementSize} from '../../../../hooks/useResizeObserver';
 import {usePrometheusFetchQuery} from '../../../../store/api/prometheus';
 import {compareWithUndefined} from '../../../../utils/sort-helpers';
+import {rumLogError} from '../../../../rum/rum-counter';
 
 import {usePrometheusDashboardContext} from '../../PrometheusDashboardContext/PrometheusDashboardContext';
 import {type PrometheusPlugins} from '../../PrometheusDashKit';
@@ -26,7 +27,6 @@ import {PrometheusWidgetToolbar} from '../../PrometheusWidgetToolbar/PrometheusW
 import {getPrometheusFormatter} from '../../utils/prometheus-format';
 import {type PrometheusChartFieldConfig, usePrometheusChartFieldConfig} from './timeseries-config';
 import './timeseries.scss';
-import {rumLogError} from 'rum/rum-counter';
 
 const block = cn('yt-prometheus-timeseries');
 
