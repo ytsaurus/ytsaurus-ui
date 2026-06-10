@@ -1,7 +1,10 @@
 import React from 'react';
 import reduce_ from 'lodash/reduce';
 import cloneDeep_ from 'lodash/cloneDeep';
-import {type FieldConfig} from '../../../../../shared/prometheus/types';
+import {
+    type FieldConfig,
+    type FieldConfigTargetOverridesItem,
+} from '../../../../../shared/prometheus/types';
 
 export type PrometheusChartFieldConfig = {
     showLegend?: boolean;
@@ -29,20 +32,7 @@ export function usePrometheusChartFieldConfig(
                     acc[refId] = reduce_(
                         properties,
                         (propsAcc, propItem) => {
-                            const dst = propsAcc;
-                            if (!dst.custom) {
-                                dst.custom = {};
-                            }
-                            switch (propItem.id) {
-                                case 'custom.stacking': {
-                                    dst.custom.stacking =
-                                        propItem.value ?? defaults?.custom?.stacking;
-                                    break;
-                                }
-                                case 'unit': {
-                                    dst.unit = propItem.value ?? defaults?.unit;
-                                }
-                            }
+                            collectItemOevrrides(propsAcc, propItem);
                             return propsAcc;
                         },
                         cloneDeep_(defaults ?? {}),
@@ -56,4 +46,25 @@ export function usePrometheusChartFieldConfig(
     }, [fieldConfig]);
 
     return res;
+}
+
+function collectItemOevrrides(
+    dst: Required<FieldConfig>['defaults'],
+    propItem: FieldConfigTargetOverridesItem,
+) {
+    if (!dst.custom) {
+        // eslint-disable-next-line no-param-reassign
+        dst.custom = {};
+    }
+    switch (propItem.id) {
+        case 'custom.stacking': {
+            // eslint-disable-next-line no-param-reassign
+            dst.custom.stacking = propItem.value ?? dst.custom.stacking;
+            break;
+        }
+        case 'unit': {
+            // eslint-disable-next-line no-param-reassign
+            dst.unit = propItem.value ?? dst?.unit;
+        }
+    }
 }

@@ -95,11 +95,12 @@ export type PrometheusDashboardUnitType =
 
 export type FieldConfigTargetOverrides = {
     matcher: {id: 'byFrameRefID'; options: RefIdValue};
-    properties: Array<
-        | {id: 'unit'; value: PrometheusDashboardUnitType}
-        | {id: 'custom.stacking'; value: {mode: 'none' | 'normal'}}
-    >;
+    properties: Array<FieldConfigTargetOverridesItem>;
 };
+
+export type FieldConfigTargetOverridesItem =
+    | {id: 'unit'; value: PrometheusDashboardUnitType}
+    | {id: 'custom.stacking'; value: {mode: 'none' | 'normal'}};
 
 export type PanelType = DashaboardPanelByType['type'];
 export type PanelProps<K extends PanelType> = Omit<DashaboardPanelByType & {type: K}, 'type'> &
