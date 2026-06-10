@@ -3,6 +3,7 @@ import {FETCH_SCHEDULERS} from '../../../constants/system/schedulers';
 import {isRetryFutile} from '../../../utils/index';
 import {showErrorPopup} from '../../../utils/utils';
 import {toaster} from '../../../utils/toaster';
+import i18n from './i18n';
 
 export function loadSchedulersAndAgents() {
     return (dispatch) => {
@@ -24,7 +25,7 @@ export function loadSchedulersAndAgents() {
                 dispatch({
                     type: FETCH_SCHEDULERS.FAILURE,
                     data: {
-                        message: 'Could not load scheduler and agents.',
+                        message: i18n('alert_failed-to-load-schedulers-and-agents'),
                         error,
                     },
                 });
@@ -36,9 +37,9 @@ export function loadSchedulersAndAgents() {
                     name: 'load/system/schedulersAndAgents',
                     autoHiding: false,
                     theme: 'danger',
-                    content: `[code ${code}] ${message}`,
-                    title: 'Could not load Schedulers and Agents',
-                    actions: [{label: ' view', onClick: () => showErrorPopup(error)}],
+                    content: i18n('alert_load-schedulers-and-agents-error-content', {code, message}),
+                    title: i18n('title_load-schedulers-and-agents-error'),
+                    actions: [{label: i18n('action_view'), onClick: () => showErrorPopup(error)}],
                 });
 
                 if (isRetryFutile(error.code)) {

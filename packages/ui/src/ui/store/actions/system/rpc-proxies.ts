@@ -3,6 +3,7 @@ import {type ThunkAction} from 'redux-thunk';
 import reduce_ from 'lodash/reduce';
 
 import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
+import i18n from './i18n';
 import ypath from '../../../common/thor/ypath';
 import {FETCH_RPC_PROXIES} from '../../../constants/system/nodes';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
@@ -81,11 +82,11 @@ export function loadSystemRPCProxies(): RPCProxiesThunkAction<
                     name: 'load/system/rpc-proxies',
                     autoHiding: false,
                     theme: 'danger',
-                    content: `[code ${code}] ${message}`,
-                    title: 'Could not load RPC-Proxies',
+                    content: i18n('alert_load-rpc-proxies-error-content', {code, message}),
+                    title: i18n('title_load-rpc-proxies-error'),
                     actions: [
                         {
-                            label: ' view',
+                            label: i18n('action_view'),
                             onClick: () => showErrorPopup(error),
                         },
                     ],

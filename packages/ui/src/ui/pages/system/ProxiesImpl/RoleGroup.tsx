@@ -12,6 +12,8 @@ import {type RoleGroupInfo} from '../../../store/reducers/system/proxies';
 import NodeQuad from '../NodeQuad/NodeQuad';
 import {StatsInfo} from './StatsInfo';
 
+import i18n from './i18n';
+
 import './RoleGroup.scss';
 
 const block = cn('yt-role-group');
@@ -109,7 +111,7 @@ export function RoleGroup({data, makeUrl, forceExpand}: Props) {
                                 </Text>
                             </Link>
                         </Flex>
-                        <span>TOTAL IN RACK</span>
+                        <span>{i18n('field_total-in-rack')}</span>
                     </Flex>
                 </div>
                 <div className={block('divider')} />

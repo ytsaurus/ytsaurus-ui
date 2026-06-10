@@ -4,6 +4,7 @@ import format from '../../../common/hammer/format';
 
 import Icon from '../../../components/Icon/Icon';
 import {ClipboardButton, MetaTable, Secondary, Tooltip} from '@ytsaurus/components';
+import i18n from './i18n/index-cell-tag';
 
 export function CellTag({cellTag, className}: {cellTag: number; className: string}) {
     const hexCellTag = format.Hex(cellTag);
@@ -16,7 +17,7 @@ export function CellTag({cellTag, className}: {cellTag: number; className: strin
                 <MetaTable
                     items={[
                         {
-                            key: 'Hexadecimal cell tag',
+                            key: i18n('field_hexadecimal-cell-tag'),
                             value: (
                                 <>
                                     {hexCellTag}{' '}
@@ -27,7 +28,7 @@ export function CellTag({cellTag, className}: {cellTag: number; className: strin
                             ),
                         },
                         {
-                            key: 'Decimal cell tag',
+                            key: i18n('field_decimal-cell-tag'),
                             value: (
                                 <>
                                     {cellTag}{' '}

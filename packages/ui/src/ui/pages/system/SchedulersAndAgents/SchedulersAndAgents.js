@@ -22,6 +22,7 @@ import {YTErrorBlock} from '../../../containers/Block/Block';
 import {loadSchedulersAndAgents} from '../../../store/actions/system';
 
 import prepareTags from './prepareTags';
+import i18n from './i18n';
 
 import './Schedulers.scss';
 import {selectSettingsSystemSchedulersCollapsed} from '../../../store/selectors/settings/settings-ts';
@@ -137,7 +138,7 @@ class SchedulersAndAgents extends Component {
             <StickyContainer>
                 {({stickyTopClassName}) => (
                     <CollapsibleSectionStateLess
-                        name="Schedulers and controller agents"
+                        name={i18n('title_schedulers-and-agents')}
                         headingClassName={stickyTopClassName}
                         overview={this.renderOverview()}
                         collapsed={collapsed}
@@ -153,8 +154,8 @@ class SchedulersAndAgents extends Component {
 
                         <div className={b('schedulers-agents')}>
                             {schedulers.length > 0 &&
-                                this.renderSection('schedulers', 'Schedulers')}
-                            {agents.length > 0 && this.renderSection('agents', 'Controller agents')}
+                                this.renderSection('schedulers', i18n('title_schedulers'))}
+                            {agents.length > 0 && this.renderSection('agents', i18n('title_controller-agents'))}
                         </div>
                     </CollapsibleSectionStateLess>
                 )}

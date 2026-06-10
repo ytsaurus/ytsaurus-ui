@@ -3,6 +3,8 @@ import {type ConnectedProps, connect} from 'react-redux';
 
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
 
+import i18n from './i18n';
+
 import {useUpdater} from '../../../hooks/use-updater';
 import {setSettingsSystemRpcProxiesCollapsed} from '../../../store/actions/settings/settings';
 import {loadSystemRPCProxies} from '../../../store/actions/system/rpc-proxies';
@@ -34,7 +36,7 @@ class RpcProxies extends Component<ReduxProps> {
         return (
             counters.total > 0 && (
                 <ProxiesImpl
-                    name={'RPC Proxies'}
+                    name={i18n('title_rpc-proxies')}
                     overview={overview}
                     onToggleCollapsed={this.onToggle}
                     roleGroups={roleGroups}
