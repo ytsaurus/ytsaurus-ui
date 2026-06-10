@@ -21,5 +21,5 @@ export function getPrometheusFormatter(unit: PrometheusDashboardUnitType | unkno
 function formatGBytes(value: number | string | undefined) {
     const NAMES = [' GiB', ' TiB', ' PiB', ' EiB'];
 
-    return format.FormatWithSuffixes({value, NAMES, DIVIDER: 1024});
+    return format.FormatWithSuffixes({value, NAMES, DIVIDER: 1024, digits: 2});
 }

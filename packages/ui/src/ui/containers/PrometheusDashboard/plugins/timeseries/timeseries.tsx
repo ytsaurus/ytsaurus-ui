@@ -26,6 +26,7 @@ import {PrometheusWidgetToolbar} from '../../PrometheusWidgetToolbar/PrometheusW
 import {getPrometheusFormatter} from '../../utils/prometheus-format';
 import {type PrometheusChartFieldConfig, usePrometheusChartFieldConfig} from './timeseries-config';
 import './timeseries.scss';
+import {rumLogError} from 'rum/rum-counter';
 
 const block = cn('yt-prometheus-timeseries');
 
@@ -219,6 +220,7 @@ function makeYagrWidgetData(
     const metrics: Array<{metric: Record<string, unknown>; graphIndex: number}> = [];
 
     let hasStacking = false;
+    let lastUnit;
 
     for (let serie = 0; serie < results?.length; ++serie) {
         const {legendFormat, refId} = targets[serie];
@@ -233,6 +235,7 @@ function makeYagrWidgetData(
 
             hasStacking = hasStacking || stacking?.mode === 'normal';
 
+            const formatter = getPrometheusFormatter(unit);
             const graph: (typeof res)['data']['graphs'][number] = {
                 type: stacking?.mode === 'normal' ? 'area' : undefined,
                 stackGroup: stacking?.mode === 'normal' ? 1 : undefined,
@@ -244,7 +247,7 @@ function makeYagrWidgetData(
                       )
                     : undefined,
                 data: new Array(timeline.length),
-                formatter: getPrometheusFormatter(unit),
+                formatter,
                 color: getChartSerieColor(res.data.graphs.length),
             };
             if (!graph.name) {
@@ -267,6 +270,19 @@ function makeYagrWidgetData(
             if (i === 0) {
                 res.data.graphs.pop();
             }
+
+            if (lastUnit !== undefined && lastUnit !== unit) {
+                rumLogError(
+                    {message: 'Unexpected behavior: different unit types on the y-axis'},
+                    new Error(`${lastUnit} != ${unit}`),
+                );
+            }
+            lastUnit = unit;
+
+            const yAxis = res.libraryConfig.axes?.y ?? {};
+            yAxis.values = (_, splits) => {
+                return splits.map(formatter);
+            };
         }
     }
 
