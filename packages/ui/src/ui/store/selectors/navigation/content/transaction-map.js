@@ -5,7 +5,7 @@ import {NAVIGATION_TRANSACTION_MAP_TABLE_ID} from '../../../../constants/navigat
 import {calculateLoadingStatus} from '../../../../utils/utils';
 
 const getRawTransactions = (state) => state.navigation.content.transactionMap.transactions;
-const getSortState = (state) => state.tables[NAVIGATION_TRANSACTION_MAP_TABLE_ID];
+const selectSortState = (state) => state.tables[NAVIGATION_TRANSACTION_MAP_TABLE_ID];
 const getFilter = (state) => state.navigation.content.transactionMap.filter;
 
 const selectFilteredTransactions = createSelector(
@@ -19,7 +19,7 @@ const selectFilteredTransactions = createSelector(
 );
 
 export const selectTransactions = createSelector(
-    [selectFilteredTransactions, getSortState],
+    [selectFilteredTransactions, selectSortState],
     (filteredTransactions, sortState) =>
         hammer.utils.sort(filteredTransactions, sortState, tableItems),
 );

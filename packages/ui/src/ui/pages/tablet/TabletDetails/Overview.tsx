@@ -20,7 +20,7 @@ import Label, {type LabelTheme} from '../../../components/Label';
 import {Yson} from '../../../components/Yson/Yson';
 
 import {histogramItems} from '../../../utils/tablet/tablet';
-import {getActiveHistogram, selectHistogram} from '../../../store/selectors/tablet/tablet';
+import {selectActiveHistogram, selectHistogram} from '../../../store/selectors/tablet/tablet';
 import {changeActiveHistogram} from '../../../store/actions/tablet/tablet';
 import {Tab as NavigationTab} from '../../../constants/navigation';
 import {Page} from '../../../constants/index';
@@ -209,7 +209,7 @@ function Overview({id, block}: Props) {
     };
     const stateTheme: LabelTheme | undefined = stateThemeMap[state as string];
 
-    const activeHistogram = useSelector(getActiveHistogram);
+    const activeHistogram = useSelector(selectActiveHistogram);
     const histogram = useSelector(selectHistogram);
 
     const handleHistogramChange = useCallback(

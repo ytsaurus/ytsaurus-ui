@@ -15,7 +15,7 @@ import LoadDataHandler from '../../../containers/LoadDataHandler/LoadDataHandler
 import {abortAndReset, loadStoresData} from '../../../store/actions/tablet/stores';
 import {TABLET_PARTITION_STORES_TABLE_ID} from '../../../constants/tablet';
 import {storesTableItems} from '../../../utils/tablet/table';
-import {getStores} from '../../../store/selectors/tablet/stores';
+import {selectStores} from '../../../store/selectors/tablet/stores';
 
 import i18n from './i18n';
 import './Stores.scss';
@@ -238,7 +238,7 @@ class Stores extends Component {
 
 const mapStateToProps = (state) => {
     const {loading, loaded, error, errorData} = state.tablet.stores;
-    const stores = getStores(state);
+    const stores = selectStores(state);
 
     return {loading, loaded, error, errorData, stores};
 };

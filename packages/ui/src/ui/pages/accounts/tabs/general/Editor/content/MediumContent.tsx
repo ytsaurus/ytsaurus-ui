@@ -4,7 +4,7 @@ import cn from 'bem-cn-lite';
 import partition_ from 'lodash/partition';
 
 import {ClickableText} from '../../../../../../components/ClickableText/ClickableText';
-import {getMediumList} from '../../../../../../store/selectors/thor';
+import {selectMediumList} from '../../../../../../store/selectors/thor';
 
 import hammer from '../../../../../../common/hammer';
 import {type RootState} from '../../../../../../store/reducers';
@@ -85,7 +85,7 @@ class MediumContent extends Component<Props> {
 }
 
 const mapStateToProps = (state: RootState) => ({
-    mediumList: getMediumList(state),
+    mediumList: selectMediumList(state),
 });
 
 export default connect(mapStateToProps)(MediumContent);

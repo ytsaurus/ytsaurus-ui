@@ -15,7 +15,7 @@ import {ClickableText} from '../../../../components/ClickableText/ClickableText'
 import {MetaTable} from '@ytsaurus/components';
 import StarTrackLink from '../../../../components/StarTrackLink/StarTrackLink';
 import {YsonWithScroll} from '../../../../components/Yson/YsonWithScroll';
-import {getOperationExperimentsYsonSettings} from '../../../../store/selectors/thor/unipika';
+import {selectOperationExperimentsYsonSettings} from '../../../../store/selectors/thor/unipika';
 import {UI_COLLAPSIBLE_SIZE} from '../../../../constants/global';
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
 
@@ -62,7 +62,7 @@ function ExperimentAssignmentsItem(props: ItemProps) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {fraction: _fr, ...effect} = ypath.getValue(data, '/effect');
 
-    const settings = useSelector(getOperationExperimentsYsonSettings);
+    const settings = useSelector(selectOperationExperimentsYsonSettings);
 
     const toggleEffectVisibility = React.useCallback(() => {
         setEffectVisibility(!effectVisible);

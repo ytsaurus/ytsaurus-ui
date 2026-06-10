@@ -10,7 +10,7 @@ import {
 import {selectQueryEngine} from '../../../../store/selectors/query-tracker/query';
 import {selectPageSize} from '../../../../store/selectors/navigation/content/table-ts';
 import {setFilter} from '../../../../store/reducers/query-tracker/queryNavigationSlice';
-import {getYsonSettingsDisableDecode} from '../../../../store/selectors/thor/unipika';
+import {selectYsonSettingsDisableDecode} from '../../../../store/selectors/thor/unipika';
 import {useMonaco} from '../../hooks/useMonaco';
 import {createTableSelect} from '../helpers/createTableSelect';
 import {insertTextWhereCursor} from '../helpers/insertTextWhereCursor';
@@ -19,7 +19,7 @@ import ErrorBoundary from '../../../../containers/ErrorBoundary/ErrorBoundary';
 
 export const NavigationTable: FC = () => {
     const dispatch = useDispatch();
-    const ysonSettings = useSelector(getYsonSettingsDisableDecode);
+    const ysonSettings = useSelector(selectYsonSettingsDisableDecode);
     const clusterConfig = useSelector(selectNavigationClusterConfig);
     const table = useSelector(selectNavigationTable);
     const engine = useSelector(selectQueryEngine);
