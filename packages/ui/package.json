@@ -105,7 +105,7 @@
     "@gravity-ui/dashkit": "^9.1.1",
     "@gravity-ui/date-components": "^3.3.2",
     "@gravity-ui/date-utils": "^2.6.0",
-    "@gravity-ui/dialog-fields": "^6.0.6",
+    "@gravity-ui/dialog-fields": "^6.1.0",
     "@gravity-ui/eslint-config": "^3.2.0",
     "@gravity-ui/graph": "^1.7.3",
     "@gravity-ui/icons": "^2.0.0",
