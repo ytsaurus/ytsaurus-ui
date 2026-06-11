@@ -143,6 +143,8 @@ class Resources extends Component {
         const showDiskResources = diskResources.length > 0;
         const diskResourcesCN = b('resources-heading', b('resources-meters-disk'));
 
+        const diskSpaceHeaderColumnCount = Math.max(3, Math.ceil(diskResources.length / 3));
+
         return (
             <div className={b('resources')}>
                 <div className={b('resources-message')}>{this.renderFullNodesMessage()}</div>
@@ -154,7 +156,11 @@ class Resources extends Component {
                         this.renderResources(resources),
                     ]}
                     {showDiskResources && [
-                        <div key="disk-resources" className={diskResourcesCN}>
+                        <div
+                            key="disk-resources"
+                            className={diskResourcesCN}
+                            style={{'--_-disk-space-header-column-count': diskSpaceHeaderColumnCount}}
+                        >
                             {i18n('title_disk-space')}
                         </div>,
                         this.renderResources(diskResources),
