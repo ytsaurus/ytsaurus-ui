@@ -1,6 +1,5 @@
-import React from 'react';
 import cn from 'bem-cn-lite';
-import reduce_ from 'lodash/reduce';
+import React from 'react';
 
 import {Flex} from '@gravity-ui/uikit';
 
@@ -13,20 +12,21 @@ import {YT} from '../../../../config/yt-config';
 
 import {IntersectionObserverContainer} from '../../../../components/IntersectionObserverContainer/IntersectionObserverContainer';
 
-import {YTChartKitLazy, getChartSerieColor} from '../../../../components/YTChartKit';
 import {type Yagr, type YagrWidgetData} from '@gravity-ui/chartkit/yagr';
 import {InlineError} from '../../../../components/InlineError/InlineError';
 import Loader from '../../../../components/Loader/Loader';
+import {YTChartKitLazy, getChartSerieColor} from '../../../../components/YTChartKit';
 import {useElementSize} from '../../../../hooks/useResizeObserver';
-
-import {type PrometheusPlugins} from '../../PrometheusDashKit';
-import {PrometheusWidgetToolbar} from '../../PrometheusWidgetToolbar/PrometheusWidgetToolbar';
-import {usePrometheusDashboardContext} from '../../PrometheusDashboardContext/PrometheusDashboardContext';
-
 import {usePrometheusFetchQuery} from '../../../../store/api/prometheus';
 import {compareWithUndefined} from '../../../../utils/sort-helpers';
 
+import {usePrometheusDashboardContext} from '../../PrometheusDashboardContext/PrometheusDashboardContext';
+import {type PrometheusPlugins} from '../../PrometheusDashKit';
+import {PrometheusWidgetToolbar} from '../../PrometheusWidgetToolbar/PrometheusWidgetToolbar';
+import {getPrometheusFormatter} from '../../utils/prometheus-format';
+import {type PrometheusChartFieldConfig, usePrometheusChartFieldConfig} from './timeseries-config';
 import './timeseries.scss';
+import {rumLogError} from 'rum/rum-counter';
 
 const block = cn('yt-prometheus-timeseries');
 
@@ -136,35 +136,7 @@ function useLoadQueriesData({
         //cancelHelper,
     });
 
-    const fieldOverrides = React.useMemo(() => {
-        return {
-            showLegend: !fieldConfig?.defaults?.custom?.hideForm?.legend,
-            axisLabel: fieldConfig?.defaults?.custom?.axisLabel,
-            propertiesByRefId: reduce_(
-                fieldConfig?.overrides,
-                (acc, item) => {
-                    const {matcher, properties} = item;
-                    if (matcher.id !== 'byFrameRefID') {
-                        return acc;
-                    }
-                    const refId = matcher.options;
-                    // eslint-disable-next-line no-param-reassign
-                    acc[refId] = reduce_(
-                        properties,
-                        (propsAcc, propItem) => {
-                            // eslint-disable-next-line no-param-reassign
-                            propsAcc[propItem.id] = propItem.value;
-                            return propsAcc;
-                        },
-                        {} as {unit: 'bytes' | unknown} & Record<string, unknown>,
-                    );
-
-                    return acc;
-                },
-                {} as Record<string, {unit?: 'bytes' | unknown}>,
-            ),
-        };
-    }, [fieldConfig]);
+    const fieldOverrides = usePrometheusChartFieldConfig(fieldConfig);
 
     const chartData: {data?: YagrWidgetData; error?: YTError; isLoading?: boolean} =
         React.useMemo(() => {
@@ -193,23 +165,18 @@ function useLoadQueriesData({
     return chartData;
 }
 
+type YagrWidgetViewParams = PrometheusChartFieldConfig & {
+    title: string;
+};
+
 function makeYagrWidgetData(
-    {
-        title,
-        axisLabel,
-        propertiesByRefId,
-        showLegend,
-    }: {
-        title: string;
-        axisLabel?: string;
-        propertiesByRefId: Record<string, {unit?: 'bytes' | unknown}>;
-        showLegend?: boolean;
-    },
+    {title, axisLabel, propertiesByRefId, showLegend}: YagrWidgetViewParams,
     targets: Array<TimeseriesTarget>,
     results: Array<QueryRangeData>,
     {end, start, step}: {end: number; start: number; step: number},
     params: Record<string, string | number>,
 ): YagrWidgetData {
+    const scales: YagrWidgetData['libraryConfig']['scales'] = {};
     const res: YagrWidgetData = {
         data: {graphs: [], timeline: []},
         libraryConfig: {
@@ -239,6 +206,7 @@ function makeYagrWidgetData(
                     label: axisLabel,
                 },
             },
+            scales,
             cursor: {sync: 'yt-timeseries-cursor'},
         },
     };
@@ -251,9 +219,12 @@ function makeYagrWidgetData(
 
     const metrics: Array<{metric: Record<string, unknown>; graphIndex: number}> = [];
 
+    let hasStacking = false;
+    let lastUnit;
+
     for (let serie = 0; serie < results?.length; ++serie) {
         const {legendFormat, refId} = targets[serie];
-        const {unit} = propertiesByRefId[refId] ?? {};
+        const {unit, custom: {stacking} = {}} = propertiesByRefId[refId] ?? {};
         for (let serie_i = 0; serie_i < (results[serie]?.data?.result?.length ?? 0); ++serie_i) {
             const serie_i_data = results[serie]?.data?.result[serie_i];
             if (!serie_i_data) {
@@ -262,7 +233,12 @@ function makeYagrWidgetData(
 
             const {values = [], metric} = serie_i_data;
 
+            hasStacking = hasStacking || stacking?.mode === 'normal';
+
+            const formatter = getPrometheusFormatter(unit);
             const graph: (typeof res)['data']['graphs'][number] = {
+                type: stacking?.mode === 'normal' ? 'area' : undefined,
+                stackGroup: stacking?.mode === 'normal' ? 1 : undefined,
                 name: legendFormat?.length
                     ? formatByParams(
                           legendFormat,
@@ -271,7 +247,7 @@ function makeYagrWidgetData(
                       )
                     : undefined,
                 data: new Array(timeline.length),
-                formatter: unit === 'bytes' ? format.Bytes : format.NumberSmart,
+                formatter,
                 color: getChartSerieColor(res.data.graphs.length),
             };
             if (!graph.name) {
@@ -294,7 +270,24 @@ function makeYagrWidgetData(
             if (i === 0) {
                 res.data.graphs.pop();
             }
+
+            if (lastUnit !== undefined && lastUnit !== unit) {
+                rumLogError(
+                    {message: 'Unexpected behavior: different unit types on the y-axis'},
+                    new Error(`${lastUnit} != ${unit}`),
+                );
+            }
+            lastUnit = unit;
+
+            const yAxis = res.libraryConfig.axes?.y ?? {};
+            yAxis.values = (_, splits) => {
+                return splits.map(formatter);
+            };
         }
+    }
+
+    if (hasStacking) {
+        scales.y = {stacking: true};
     }
 
     for (let i = 0; i < metrics.length; ++i) {

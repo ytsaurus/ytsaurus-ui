@@ -38,7 +38,7 @@ export function fetchPrometheusChartData(args: PrometheusChartParams) {
 
         const end = to / 1000;
         const start = from / 1000;
-        const step = Math.max(1, Math.floor((end - start) / Math.max(10, pointCount)));
+        const step = Math.max(30, Math.floor((end - start) / Math.max(10, pointCount)));
 
         const rangeParams = {start, end, step};
 
