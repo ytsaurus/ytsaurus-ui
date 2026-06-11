@@ -97,6 +97,7 @@ export const enum YTApiId {
     nodeAttributes = 'nodeAttributes',
     nodeMemoryUsage = 'nodeMemoryUsage',
     nodeUnrecognizedOptions = 'nodeUnrecognizedOptions',
+    nodeRunningJobs = 'nodeRunningJobs',
 
     schedulingData = 'schedulingData',
     schedulingEditPool = 'schedulingEditPool',
