@@ -165,8 +165,10 @@ export default function JobGeneral() {
                                 visible: Boolean(address),
                             },
                             {
-                                key: i18n('field_type'),
-                                value: <Template.Value value={type} />,
+                                key: 'type',
+                                value: (
+                                    <Template.Value value={hammer.format['ReadableField'](type)} />
+                                ),
                             },
                             {
                                 key: i18n('field_monitoring-descriptor'),
