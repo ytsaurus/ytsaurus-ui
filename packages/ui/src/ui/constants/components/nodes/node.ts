@@ -13,4 +13,5 @@ export const NodeTab = {
     TABLET_SLOTS: 'tablet_slots',
     ALERTS: 'alerts',
     UNRECOGNIZED_OPTIONS: 'unrecognized_options',
+    RUNNING_JOBS: 'running_jobs',
 } as const;
