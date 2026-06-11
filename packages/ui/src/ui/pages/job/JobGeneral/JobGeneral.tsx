@@ -165,7 +165,9 @@ export default function JobGeneral() {
                             },
                             {
                                 key: 'type',
-                                value: <Template.Value value={type} />,
+                                value: (
+                                    <Template.Value value={hammer.format['ReadableField'](type)} />
+                                ),
                             },
                             {
                                 key: 'Monitoring descriptor',
