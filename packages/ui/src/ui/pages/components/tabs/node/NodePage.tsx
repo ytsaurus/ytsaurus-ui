@@ -9,6 +9,7 @@ import Tabs from '../../../../components/Tabs/Tabs';
 import Loader from '../../../../components/Loader/Loader';
 import NodeGeneralTab from '../../../../pages/components/tabs/node/NodeGeneralTab/NodeGeneralTab';
 import NodeMemoryUsage from '../../../../pages/components/tabs/node/NodeMemoryUsage/NodeMemoryUsage';
+import NodeRunningJobsTab from '../../../../pages/components/tabs/node/NodeRunningJobsTab';
 import {NodeTab} from '../../../../constants/components/nodes/node';
 import {loadNodeAttributes} from '../../../../store/actions/components/node/node';
 import {useUpdater} from '../../../../hooks/use-updater';
@@ -51,6 +52,8 @@ function NodePage({match}: NodeDetailsProps): ReturnType<React.VFC> {
     const tabletSlots = useSelector((state: RootState) => node && selectSortedItems(state, {node}));
 
     const matchUrl = match.url;
+    const isExecNode = Boolean(node?.flavors?.includes('exec'));
+
     const tabProps = React.useMemo(
         () =>
             makeTabProps(
@@ -61,14 +64,18 @@ function NodePage({match}: NodeDetailsProps): ReturnType<React.VFC> {
                     [NodeTab.LOCATIONS]: {show: Boolean(node?.locations?.length)},
                     [NodeTab.TABLET_SLOTS]: {show: Boolean(node && tabletSlots.length > 0)},
                     [NodeTab.ALERTS]: {show: Boolean(alertCount), counter: alertCount},
+                    [NodeTab.RUNNING_JOBS]: {
+                        show: isExecNode,
+                    },
                 },
                 null,
                 {
                     [NodeTab.GENERAL]: 'General',
                     [NodeTab.MEMORY_USAGE]: 'Memory usage',
+                    [NodeTab.RUNNING_JOBS]: 'Running Jobs',
                 },
             ),
-        [node, matchUrl, alertCount, tabletSlots],
+        [node, matchUrl, alertCount, tabletSlots, isExecNode],
     );
 
     return (
@@ -117,6 +124,10 @@ function NodePage({match}: NodeDetailsProps): ReturnType<React.VFC> {
                                         render={() => (
                                             <NodeUnrecognizedOptions host={match.params.host} />
                                         )}
+                                    />
+                                    <Route
+                                        path={`${match.path}/${NodeTab.RUNNING_JOBS}`}
+                                        component={NodeRunningJobsTab}
                                     />
                                     <Redirect
                                         from={match.url}
