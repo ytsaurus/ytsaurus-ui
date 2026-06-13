@@ -106,13 +106,19 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
         throw batchError;
     }
 
-    const error = getBatchError([timestampProvidersResult], i18n('alert_failed-to-load-timestamp-providers'));
+    const error = getBatchError(
+        [timestampProvidersResult],
+        i18n('alert_failed-to-load-timestamp-providers'),
+    );
 
     if (error && timestampProvidersResult.error?.code !== NODE_DOES_NOT_EXIST) {
         throw error;
     }
 
-    const queueAgentsError = getBatchError([queueAgentsResult], i18n('alert_failed-to-load-queue-agents'));
+    const queueAgentsError = getBatchError(
+        [queueAgentsResult],
+        i18n('alert_failed-to-load-queue-agents'),
+    );
 
     if (queueAgentsError && queueAgentsResult.error?.code !== NODE_DOES_NOT_EXIST) {
         throw queueAgentsError;
@@ -150,7 +156,10 @@ async function loadMastersConfig(): Promise<[MastersConfigResponse, MasterAlert[
     const {
         results: [masterCellId],
         error: primaryMasterCellTagError,
-    } = splitBatchResults(primaryMasterCellTagResponse, i18n('alert_failed-to-get-primary-master-cell-id'));
+    } = splitBatchResults(
+        primaryMasterCellTagResponse,
+        i18n('alert_failed-to-get-primary-master-cell-id'),
+    );
 
     if (!masterCellId) {
         throw primaryMasterCellTagError;
@@ -397,7 +406,12 @@ export function loadMasters() {
                 theme: 'danger',
                 content: i18n('alert_load-masters-error-content', {code, message}),
                 title: i18n('title_load-masters-error'),
-                actions: [{label: i18n('action_view'), onClick: () => showErrorPopup(error as AxiosError)}],
+                actions: [
+                    {
+                        label: i18n('action_view'),
+                        onClick: () => showErrorPopup(error as AxiosError),
+                    },
+                ],
             });
 
             if (isRetryFutile((error as {code: number})?.code)) {

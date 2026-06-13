@@ -3,6 +3,7 @@ import indexOf_ from 'lodash/indexOf';
 import {getResponsibleUsers} from '../../../../utils/accounts/index';
 import {ACCOUNTS_DATA_FIELDS_ACTION} from '../../../../constants/accounts';
 import {initialState as tableSortState} from '../../tables';
+import i18n from './i18n';
 
 import {
     ACCOUNTS_TABLE_ID,
@@ -141,7 +142,7 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 usableError: action.data.error,
-                usableErrorMessage: 'Could not load usable accounts list. Showing all accounts.',
+                usableErrorMessage: i18n('alert_usable-accounts-load-error'),
             };
 
         case CHANGE_NAME_FILTER: {
