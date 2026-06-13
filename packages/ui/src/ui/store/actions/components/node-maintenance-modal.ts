@@ -2,6 +2,7 @@ import {type ThunkAction} from 'redux-thunk';
 import forEach_ from 'lodash/forEach';
 
 import {type RootState} from '../../../store/reducers';
+import i18n from './node-maintenance-modal/i18n';
 import {
     NODE_MAINTENANCE_PARTIAL,
     NODE_MAINTENANCE_RESET,
@@ -161,7 +162,7 @@ export function applyMaintenance(
             toasterName: 'edit_node_' + address,
             batchType: 'v4',
             skipSuccessToast: true,
-            errorTitle: `Failed to modify ${address}`,
+            errorTitle: i18n('alert_failed-to-modify', {address}),
         })
             .then(reloadNodeData)
             .catch(reloadNodeData);
@@ -247,7 +248,7 @@ export function loadNodeMaintenanceData({
             {
                 toasterName: 'maintenance_attributes_request_' + path,
                 skipSuccessToast: true,
-                errorContent: `Cannot load node attributes for ${path}`,
+                errorContent: i18n('alert_cannot-load-node-attributes', {path}),
             },
         ).then((data: MaintenanceDataResponse) => {
             const maintenance: NodeMaintenanceState['maintenance'] = {};

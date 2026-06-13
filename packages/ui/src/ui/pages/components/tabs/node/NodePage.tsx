@@ -19,6 +19,7 @@ import {selectSortedItems} from '../../../../store/selectors/components/nodes/no
 import NodeMeta from './NodeMeta/NodeMeta';
 
 import './NodePage.scss';
+import i18n from './i18n';
 import NodeAlerts from './NodeAlerts/NodeAlerts';
 import NodeLocations from './NodeLocations/NodeLocations';
 import NodeTabletSlotsTab from './NodeTabletSlotsTab/NodeTabletSlotsTab';
@@ -53,21 +54,29 @@ function NodePage({match}: NodeDetailsProps): ReturnType<React.VFC> {
     const matchUrl = match.url;
     const tabProps = React.useMemo(
         () =>
-            makeTabProps(
-                matchUrl,
-                NodeTab,
-                {
-                    [NodeTab.MEMORY_USAGE]: {show: Boolean(node && tabletSlots.length > 0)},
-                    [NodeTab.LOCATIONS]: {show: Boolean(node?.locations?.length)},
-                    [NodeTab.TABLET_SLOTS]: {show: Boolean(node && tabletSlots.length > 0)},
-                    [NodeTab.ALERTS]: {show: Boolean(alertCount), counter: alertCount},
+            makeTabProps(matchUrl, NodeTab, {
+                [NodeTab.GENERAL]: {title: i18n('title_general')},
+                [NodeTab.MEMORY_USAGE]: {
+                    show: Boolean(node && tabletSlots.length > 0),
+                    title: i18n('title_memory-usage'),
                 },
-                null,
-                {
-                    [NodeTab.GENERAL]: 'General',
-                    [NodeTab.MEMORY_USAGE]: 'Memory usage',
+                [NodeTab.LOCATIONS]: {
+                    show: Boolean(node?.locations?.length),
+                    title: i18n('title_locations'),
                 },
-            ),
+                [NodeTab.TABLET_SLOTS]: {
+                    show: Boolean(node && tabletSlots.length > 0),
+                    title: i18n('title_tablet-slots'),
+                },
+                [NodeTab.ALERTS]: {
+                    show: Boolean(alertCount),
+                    counter: alertCount,
+                    title: i18n('title_alerts'),
+                },
+                [NodeTab.UNRECOGNIZED_OPTIONS]: {
+                    title: i18n('title_unrecognized-options'),
+                },
+            }),
         [node, matchUrl, alertCount, tabletSlots],
     );
 

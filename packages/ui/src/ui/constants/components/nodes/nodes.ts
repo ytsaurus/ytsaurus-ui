@@ -1,7 +1,8 @@
 import values_ from 'lodash/values';
 
 import createActionTypes, {createPrefix} from '../../../constants/utils';
-import {makeRadioButtonProps, makeRadioButtonPropsByKey} from '../../../utils';
+import i18n from './i18n';
+import {makeRadioButtonPropsByKey} from '../../../utils';
 import {Tab} from '../../../constants/components/main';
 import {Page} from '../../../constants/index';
 import {NODE_TYPE} from '../../../../shared/constants/system';
@@ -37,7 +38,14 @@ export const FLAG_STATE = {
 };
 
 export const CONTENT_MODE_OPTIONS = values_(CONTENT_MODE);
-export const CONTENT_MODE_ITEMS = makeRadioButtonProps(CONTENT_MODE_OPTIONS);
+export const CONTENT_MODE_ITEMS = CONTENT_MODE_OPTIONS.map((value) => {
+    return {
+        value,
+        get text() {
+            return i18n(`value_${value}`);
+        },
+    };
+});
 export const POLLING_INTERVAL = 30 * 1000;
 
 export const MEDIUM_COLS_PREFIX = 'medium_';

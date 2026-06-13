@@ -1,0 +1,8 @@
+{
+  "tab_nodes": "Nodes",
+  "tab_http_proxies": "HTTP proxies",
+  "tab_cypress_proxies": "Cypress proxies",
+  "tab_rpc_proxies": "RPC proxies",
+  "tab_shards": "Shards",
+  "tab_versions": "Versions"
+}

@@ -16,6 +16,7 @@ import {selectNode} from '../../../../../store/selectors/components/node/node';
 
 import './NodeGeneralTab.scss';
 import {YTErrorBlock} from '../../../../../containers/Block/Block';
+import i18n from './i18n';
 
 const block = cn('node-general');
 
@@ -27,7 +28,7 @@ function NodeGeneralTab(): ReturnType<React.VFC> {
     }
 
     if (node.state === 'offline') {
-        return <YTErrorBlock type="alert" message="Node is offline" />;
+        return <YTErrorBlock type="alert" message={i18n('alert_node-offline')} />;
     }
 
     return (
@@ -35,7 +36,7 @@ function NodeGeneralTab(): ReturnType<React.VFC> {
             {hasCpuAndMemoryMeta(node) && (
                 <CollapsibleSection
                     size="s"
-                    name="Compute Resources"
+                    name={i18n('title_compute-resources')}
                     className={block('cpu')}
                     collapsed={false}
                 >
@@ -45,7 +46,7 @@ function NodeGeneralTab(): ReturnType<React.VFC> {
             {hasStorageMeta(node) && (
                 <CollapsibleSection
                     size="s"
-                    name="Storage"
+                    name={i18n('title_storage')}
                     className={block('storage')}
                     collapsed={false}
                 >
@@ -55,7 +56,7 @@ function NodeGeneralTab(): ReturnType<React.VFC> {
             {hasResourcesMeta(node) && (
                 <CollapsibleSection
                     size="s"
-                    name="Slot Resources"
+                    name={i18n('title_slot-resources')}
                     className={block('resources')}
                     collapsed={false}
                 >

@@ -5,6 +5,8 @@ import ClickableAttributesButton from '../../../../../components/AttributesButto
 import Button from '../../../../../components/Button/Button';
 import Icon from '../../../../../components/Icon/Icon';
 
+import i18n from '../i18n';
+
 import {PROXY_TYPE} from '../../../../../constants/components/proxies/proxies';
 import {showNodeMaintenance} from '../../../../../store/actions/components/node-maintenance-modal';
 
@@ -21,7 +23,7 @@ class ProxyActions extends React.Component<ReduxProps & Props> {
 
         return {
             placement: 'bottom',
-            content: proxy.banned ? 'Unban proxy' : 'Ban proxy',
+            content: proxy.banned ? i18n('context_unban-proxy') : i18n('context_ban-proxy'),
         };
     }
 

@@ -9,6 +9,7 @@ import {
 } from '../../../../../store/selectors/components/node/memory';
 import {setNodeMemoryFilters} from '../../../../../store/actions/components/node/memory';
 import Filter from '../../../../../components/Filter/Filter';
+import i18n from './i18n';
 
 import './NodeMemoryUsageToolbar.scss';
 
@@ -39,8 +40,8 @@ function NodeMemoryUsageToolbar() {
                     onChange={handleFilter}
                     placeholder={
                         viewMode === 'cells'
-                            ? 'Filter by Bundle, Cell id...'
-                            : 'Filter by Bundle, Path...'
+                            ? i18n('placeholder_filter-cells')
+                            : i18n('placeholder_filter-tables')
                     }
                 />
             </div>
@@ -52,11 +53,15 @@ function NodeMemoryUsageToolbar() {
                 items={[
                     {
                         value: 'tables',
-                        text: 'Tables',
+                        get text() {
+                            return i18n('value_tables');
+                        },
                     },
                     {
                         value: 'cells',
-                        text: 'Bundles and cells',
+                        get text() {
+                            return i18n('value_bundles-and-cells');
+                        },
                     },
                 ]}
             />

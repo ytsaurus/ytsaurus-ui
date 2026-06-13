@@ -6,6 +6,7 @@ import {
 } from '../../../../store/actions/components/versions/versions_v2';
 import {getWindowStore} from '../../../../store/window-store';
 import {showErrorPopup} from '../../../../utils/utils';
+import i18n from './i18n';
 
 export const tableProps = {
     css: 'components-versions',
@@ -39,7 +40,9 @@ export const tableProps = {
                 },
                 align: 'left',
                 sort: true,
-                caption: 'Host',
+                get caption() {
+                    return i18n('field_host');
+                },
             },
             version: {
                 get(item) {
@@ -47,7 +50,9 @@ export const tableProps = {
                 },
                 align: 'left',
                 sort: true,
-                caption: 'Version',
+                get caption() {
+                    return i18n('field_version-header');
+                },
             },
             state: {
                 get(item) {
@@ -55,7 +60,9 @@ export const tableProps = {
                 },
                 align: 'left',
                 sort: true,
-                caption: 'State',
+                get caption() {
+                    return i18n('field_state-header');
+                },
             },
             banned: {
                 get(item) {
@@ -63,8 +70,12 @@ export const tableProps = {
                 },
                 align: 'center',
                 sort: true,
-                caption: 'B',
-                tooltipProps: {placement: 'bottom', content: 'Banned'},
+                get caption() {
+                    return i18n('field_banned-abbr');
+                },
+                get tooltipProps() {
+                    return {placement: 'bottom', content: i18n('context_banned-tooltip')};
+                },
             },
             type: {
                 get(item) {
@@ -72,7 +83,9 @@ export const tableProps = {
                 },
                 align: 'left',
                 sort: true,
-                caption: 'Type',
+                get caption() {
+                    return i18n('field_type-header');
+                },
             },
             error: {
                 get(item) {
@@ -80,7 +93,9 @@ export const tableProps = {
                 },
                 align: 'center',
                 sort: true,
-                caption: 'Error',
+                get caption() {
+                    return i18n('field_error');
+                },
             },
             start_time: {
                 get(item) {
@@ -88,7 +103,9 @@ export const tableProps = {
                 },
                 align: 'right',
                 sort: true,
-                caption: 'Start time',
+                get caption() {
+                    return i18n('field_start-time');
+                },
             },
         },
         sets: {

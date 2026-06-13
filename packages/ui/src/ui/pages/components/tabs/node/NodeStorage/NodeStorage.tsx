@@ -9,6 +9,8 @@ import {MetaTable} from '@ytsaurus/components';
 import {type Node} from '../../../../../store/reducers/components/nodes/nodes/node';
 import hammer from '../../../../../common/hammer';
 
+import i18n from './i18n';
+
 import './NodeStorage.scss';
 
 const block = cn('node-storage');
@@ -38,6 +40,7 @@ function NodeStorage(node: NodeStorageProps): ReturnType<React.VFC> {
                 items={[
                     {
                         key: 'space',
+                        label: i18n('field_space'),
                         value: (
                             <Progress
                                 value={node.spaceProgress || 0}
@@ -48,16 +51,18 @@ function NodeStorage(node: NodeStorageProps): ReturnType<React.VFC> {
                     },
                     {
                         key: 'sessions',
+                        label: i18n('field_sessions'),
                         value: hammer.format['Number'](node.sessions),
                     },
                     {
                         key: 'chunks',
+                        label: i18n('field_chunks'),
                         value: hammer.format['Number'](node.chunks),
                     },
                 ]}
             />
 
-            {ioItems.length > 0 && <h4 className={block('heading')}>IO weight</h4>}
+            {ioItems.length > 0 && <h4 className={block('heading')}>{i18n('title_io-weight')}</h4>}
 
             <MetaTable items={ioItems} />
         </>

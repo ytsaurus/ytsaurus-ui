@@ -1,0 +1,6 @@
+{
+  "alert_node-offline": "Node is offline",
+  "title_compute-resources": "Compute Resources",
+  "title_storage": "Storage",
+  "title_slot-resources": "Slot Resources"
+}

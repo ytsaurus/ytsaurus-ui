@@ -1,0 +1,12 @@
+{
+  "field_enabled": "Enabled",
+  "field_full": "Full",
+  "field_medium-name": "Medium name",
+  "field_sessions": "Sessions",
+  "field_chunks": "Chunks",
+  "field_used-space": "Used space",
+  "field_available-space": "Available space",
+  "field_watermark-space": "Watermark space",
+  "value_enabled": "Enabled",
+  "value_disabled": "Disabled"
+}

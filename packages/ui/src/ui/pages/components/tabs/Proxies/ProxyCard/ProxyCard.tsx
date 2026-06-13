@@ -23,6 +23,7 @@ import {useSidePanel} from '../../../../../hooks/use-side-panel';
 import './ProxyCard.scss';
 import UIFactory from '../../../../../UIFactory';
 import {NodeColumnRole, NodeColumnState} from '../../NodeColumns';
+import i18n from './i18n';
 
 type ProxyProps = {
     banMessage: string;
@@ -103,17 +104,20 @@ export class ProxyCard extends Component<ProxyCardProps> {
                 items={[
                     {
                         key: 'state',
+                        label: i18n('field_state'),
                         value: <NodeColumnState state={state} />,
                     },
                     {
                         key: 'role',
+                        label: i18n('field_role'),
                         value: <NodeColumnRole role={role} />,
                     },
                     {
-                        key: 'Banned',
+                        key: 'banned',
+                        label: i18n('field_banned'),
                         value: (
                             <Label
-                                text={banMessage || 'True'}
+                                text={banMessage || i18n('value_banned-true')}
                                 theme={banMessage ? 'warning' : 'danger'}
                                 type="text"
                             />
@@ -121,26 +125,31 @@ export class ProxyCard extends Component<ProxyCardProps> {
                         visible: Boolean(banned),
                     },
                     {
-                        key: 'Maintenance',
+                        key: 'maintenance',
+                        label: i18n('field_maintenance'),
                         value: <MaintenanceRequests requests={maintenanceRequests} />,
                         visible: !isEmpty_(maintenanceRequests),
                     },
                     {
                         key: 'version',
+                        label: i18n('field_version'),
                         value: version,
                     },
                     {
-                        key: 'load average',
+                        key: 'load-average',
+                        label: i18n('field_load-average'),
                         value: loadAverage,
                         visible: Boolean(loadAverage),
                     },
                     {
-                        key: 'network load',
+                        key: 'network-load',
+                        label: i18n('field_network-load'),
                         value: networkLoad,
                         visible: Boolean(networkLoad),
                     },
                     {
-                        key: 'updated at',
+                        key: 'updated-at',
+                        label: i18n('field_updated-at'),
                         value: hammer.format['DateTime'](updatedAt),
                         visible: Boolean(updatedAt),
                     },
