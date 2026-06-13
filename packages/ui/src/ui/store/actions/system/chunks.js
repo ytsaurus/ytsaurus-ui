@@ -16,37 +16,92 @@ import i18n from './i18n';
 export const FETCH_CHUNKS = createActionTypes('CHUNKS');
 
 const chunkTypes = [
-    {name: 'chunks'},
-    {name: 'foreign_chunks'},
-    {name: 'overreplicated_chunks'},
-    {name: 'underreplicated_chunks'},
+    {
+        name: 'chunks',
+        get caption() {
+            return i18n('field_chunks');
+        },
+    },
+    {
+        name: 'foreign_chunks',
+        get caption() {
+            return i18n('field_foreign');
+        },
+    },
+    {
+        name: 'overreplicated_chunks',
+        get title() {
+            return i18n('field_overreplicated');
+        },
+        get caption() {
+            return i18n('field_overreplicated-short');
+        },
+    },
+    {
+        name: 'underreplicated_chunks',
+        get title() {
+            return i18n('field_underreplicated');
+        },
+        get caption() {
+            return i18n('field_underreplicated-short');
+        },
+    },
     {
         name: 'quorum_missing_chunks',
+        get caption() {
+            return i18n('field_quorum-missing');
+        },
         label(count) {
             return count > 0 && 'danger';
         },
     },
     {
         name: 'data_missing_chunks',
+        get caption() {
+            return i18n('field_data-missing');
+        },
         label(count) {
             return count > 0 && 'warning';
         },
     },
     {
         name: 'parity_missing_chunks',
+        get caption() {
+            return i18n('field_parity-missing');
+        },
         label(count) {
             return count > 0 && 'warning';
         },
     },
-    {name: 'lost_chunks'},
+    {
+        name: 'lost_chunks',
+        get caption() {
+            return i18n('field_lost');
+        },
+        label(count) {
+            return count > 0 && 'danger';
+        },
+    },
     {
         name: 'lost_vital_chunks',
+        get caption() {
+            return i18n('field_lost-vital-short');
+        },
+        get title() {
+            return i18n('field_lost-vital');
+        },
         label(count) {
             return count > 0 && 'danger';
         },
     },
     {
         name: 'unsafely_placed_chunks',
+        get title() {
+            return i18n('field_unsafely-placed');
+        },
+        get caption() {
+            return i18n('field_unsafely-placed-short');
+        },
         label(count) {
             return count > 0 && 'warning';
         },

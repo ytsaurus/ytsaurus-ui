@@ -166,10 +166,15 @@ class Masters extends Component {
                 )}
                 <div className={b('flex')}>
                     {Boolean(providers?.instances?.length) &&
-                        this.renderSection('providers', i18n('title_timestamp-providers'), providers, {
-                            allowVoting: true,
-                            allowService: true,
-                        })}
+                        this.renderSection(
+                            'providers',
+                            i18n('title_timestamp-providers'),
+                            providers,
+                            {
+                                allowVoting: true,
+                                allowService: true,
+                            },
+                        )}
                     {Boolean(discovery?.instances?.length) &&
                         this.renderSection('discovery', i18n('title_discovery-servers'), discovery)}
                     {Boolean(queueAgents?.instances?.length) &&

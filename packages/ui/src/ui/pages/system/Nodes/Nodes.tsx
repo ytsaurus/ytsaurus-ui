@@ -191,7 +191,9 @@ const Nodes = (props: NodesProps) => {
                     warning={
                         !nodeType.length
                             ? undefined
-                            : i18n('alert_no-nodes', {nodeTypes: nodeType.map(format.ReadableField).join(',')})
+                            : i18n('alert_no-nodes', {
+                                  nodeTypes: nodeType.map(format.ReadableField).join(','),
+                              })
                     }
                     hint={i18n('context_select-another-node-type')}
                 />

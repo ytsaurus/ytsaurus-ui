@@ -155,7 +155,8 @@ class SchedulersAndAgents extends Component {
                         <div className={b('schedulers-agents')}>
                             {schedulers.length > 0 &&
                                 this.renderSection('schedulers', i18n('title_schedulers'))}
-                            {agents.length > 0 && this.renderSection('agents', i18n('title_controller-agents'))}
+                            {agents.length > 0 &&
+                                this.renderSection('agents', i18n('title_controller-agents'))}
                         </div>
                     </CollapsibleSectionStateLess>
                 )}
