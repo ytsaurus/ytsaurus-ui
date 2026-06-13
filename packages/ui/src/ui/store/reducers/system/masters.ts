@@ -6,6 +6,7 @@ import reduce_ from 'lodash/reduce';
 import sortBy_ from 'lodash/sortBy';
 
 import {type Action} from 'redux';
+import i18n from './i18n';
 import {MasterInstance} from '../../selectors/system/masters';
 import {type ActionD} from '../../../types';
 import {type YTError} from '../../../../@types/types';
@@ -75,12 +76,20 @@ function extractMasterCounters(
             secondary: secondary.length,
         },
         states: {},
+        titles: {
+            primary: i18n('title_primary'),
+            secondary: i18n('title_secondary'),
+            recovery: i18n('title_recovery'),
+            unavailable: i18n('title_unavailable'),
+        },
     };
 
     incrementStateCounters(counters, primary.quorum.status);
 
     forEach_(secondary, (masters) => {
-        incrementStateCounters(counters, masters.quorum.status);
+        const {status} = masters.quorum;
+        incrementStateCounters(counters, status);
+        counters.titles[status] = i18n(`title_${status}`);
     });
 
     return counters;
@@ -149,8 +158,12 @@ export interface MastersState {
             unavailable: number;
             primary: number;
             secondary: number;
+            quorum?: number;
+            'no-quorum'?: number;
+            'weak-quorum'?: number;
         };
         states: Record<string, number>;
+        titles: Record<string, string>;
     };
     primary: MasterGroupData;
     secondary: Array<MasterGroupData>;
@@ -180,7 +193,7 @@ const initialState: MastersState = {
     mastersDataConfig: undefined,
     masterData: undefined,
 
-    counters: {states: {}},
+    counters: {states: {}, titles: {}},
     primary: {
         instances: [],
         leader: undefined,

@@ -37,7 +37,10 @@ export function loadSchedulersAndAgents() {
                     name: 'load/system/schedulersAndAgents',
                     autoHiding: false,
                     theme: 'danger',
-                    content: i18n('alert_load-schedulers-and-agents-error-content', {code, message}),
+                    content: i18n('alert_load-schedulers-and-agents-error-content', {
+                        code,
+                        message,
+                    }),
                     title: i18n('title_load-schedulers-and-agents-error'),
                     actions: [{label: i18n('action_view'), onClick: () => showErrorPopup(error)}],
                 });

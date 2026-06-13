@@ -26,7 +26,8 @@ export const selectSystemSchedulersWithState = createSelector(
                 physicalHost: ypath.getValue(sheduler.host, '/@annotations/physical_host'),
                 maintenanceMessage: !ypath.getValue(sheduler, '/host/@maintenance')
                     ? undefined
-                    : ypath.getValue(sheduler, '/host/@maintenance_message') || i18n('value_maintenance'),
+                    : ypath.getValue(sheduler, '/host/@maintenance_message') ||
+                      i18n('value_maintenance'),
             };
         });
     },
@@ -44,7 +45,8 @@ export const selectSystemAgentsWithState = createSelector(
                 physicalHost: ypath.getValue(agent.host, '/@annotations/physical_host'),
                 maintenanceMessage: !ypath.getValue(agent, '/host/@maintenance')
                     ? undefined
-                    : ypath.getValue(agent, '/host/@maintenance_message') || i18n('value_maintenance'),
+                    : ypath.getValue(agent, '/host/@maintenance_message') ||
+                      i18n('value_maintenance'),
             };
         });
     },

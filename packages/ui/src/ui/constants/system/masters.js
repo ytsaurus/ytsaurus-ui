@@ -6,6 +6,16 @@ export const VisibleHostType = {
 };
 
 export const mastersRadioButtonItems = [
-    {value: VisibleHostType.host, get text() {return i18n('value_container')}},
-    {value: VisibleHostType.physicalHost, get text() {return i18n('value_host')}},
+    {
+        value: VisibleHostType.host,
+        get text() {
+            return i18n('value_container');
+        },
+    },
+    {
+        value: VisibleHostType.physicalHost,
+        get text() {
+            return i18n('value_host');
+        },
+    },
 ];
