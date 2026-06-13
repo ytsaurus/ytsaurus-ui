@@ -1,5 +1,8 @@
 {
   "field_compressed": "Compressed",
+  "field_name": "Name",
+  "field_rows": "Rows",
+  "field_slices": "Slices",
   "field_uncompressed": "Uncompressed",
-  "field_slices": "Slices"
+  "field_weight": "Weight"
 }

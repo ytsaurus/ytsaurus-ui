@@ -19,6 +19,7 @@ import {Page} from '../../../constants/index';
 
 import './PoolsWeightsEditModal.scss';
 import {selectCluster} from '../../../store/selectors/global';
+import i18n from './i18n';
 
 PoolsWeightsEditModal.propTypes = {
     // from connect
@@ -144,7 +145,9 @@ function PoolsWeightsEditModal(props) {
 
     const {loading, error, errorData, visible, editable, hideEditPoolsWeightsModal} = props;
     const title = (
-        <div className={block('title')}>{editable ? 'Edit' : 'View'} pools and weights</div>
+        <div className={block('title')}>
+            {editable ? i18n('title_edit-pools-and-weights') : i18n('title_view-pools-and-weights')}
+        </div>
     );
 
     return (
@@ -154,7 +157,7 @@ function PoolsWeightsEditModal(props) {
             loading={loading}
             visible={visible}
             footer={editable}
-            confirmText="Apply"
+            confirmText={i18n('action_apply')}
             onConfirm={handleConfirm}
             onCancel={hideEditPoolsWeightsModal}
             isConfirmDisabled={isConfirmDisabled}
@@ -164,9 +167,9 @@ function PoolsWeightsEditModal(props) {
                         <Yson value={operation.title || operation.$value} inline />
                     </div>
                     <div className={block()}>
-                        <div className={block('header')}>Pool</div>
-                        <div className={block('header')}>Tree</div>
-                        <div className={block('header')}>Weight</div>
+                        <div className={block('header')}>{i18n('field_pool')}</div>
+                        <div className={block('header')}>{i18n('field_tree')}</div>
+                        <div className={block('header')}>{i18n('field_weight')}</div>
                         {renderPoolsAndWeights({
                             ...props,
                             pools,

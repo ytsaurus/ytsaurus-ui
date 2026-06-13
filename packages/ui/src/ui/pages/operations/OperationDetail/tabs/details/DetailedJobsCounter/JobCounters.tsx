@@ -7,6 +7,7 @@ import {docsUrl} from '../../../../../../config';
 import {MetaTable, type MetaTableItem, type MetaTableProps} from '@ytsaurus/components';
 import Link from '../../../../../../containers/Link/Link';
 import Icon from '../../../../../../components/Icon/Icon';
+import i18n from './i18n';
 
 import './JobCounters.scss';
 
@@ -28,7 +29,7 @@ export function JobCounters({
             {allowHideEmpty && (
                 <div className={block('filters')}>
                     <Checkbox checked={hideEmpty} onUpdate={setHideEmpty}>
-                        Hide empty
+                        {i18n('action_hide-empty')}
                     </Checkbox>
                 </div>
             )}
@@ -45,7 +46,7 @@ export function JobCounters({
             {docsUrl(
                 <div className="elements-section">
                     <Link url={helpUrl}>
-                        <Icon awesome="book" /> Help
+                        <Icon awesome="book" /> {i18n('action_help')}
                     </Link>
                 </div>,
             )}
@@ -66,7 +67,7 @@ function JobCoutnersSection({name, items}: {name: string; items: MetaTableProps[
         <div className="elements-section">
             <div className="elements-heading elements-heading_size_s">{name}</div>
 
-            {items.length ? <MetaTable items={items} /> : 'No items'}
+            {items.length ? <MetaTable items={items} /> : i18n('alert_no-items')}
         </div>
     );
 }

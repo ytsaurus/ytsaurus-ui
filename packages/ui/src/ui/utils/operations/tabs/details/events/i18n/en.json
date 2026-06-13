@@ -1,4 +1,7 @@
 {
+  "field_duration": "Duration",
+  "field_state": "State",
   "field_state-phase": "State : Phase",
+  "field_start-time": "Start time",
   "value_total": "Total"
 }

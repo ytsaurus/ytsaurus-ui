@@ -21,7 +21,7 @@ export function IncarnationsCount() {
         <IncarnationsCountTemplate
             items={[
                 {
-                    type: i18n('all'),
+                    type: i18n('value_all'),
                     count: count || 0,
                 },
             ]}

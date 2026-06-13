@@ -12,6 +12,7 @@ import hammer from '../../../../../../common/hammer';
 
 import UIFactory from '../../../../../../UIFactory';
 import {JobCounters} from './JobCounters';
+import i18n from './i18n';
 
 const block = cn('operation-jobs-detailed');
 
@@ -33,7 +34,10 @@ class DetailedJobsCounter extends Component {
         return (
             <JobCounters
                 helpUrl={helpUrl}
-                data={{Scheduled: scheduledItems, 'Non scheduled': nonScheduledItems}}
+                data={{
+                    [i18n('title_scheduled')]: scheduledItems,
+                    [i18n('title_non-scheduled')]: nonScheduledItems,
+                }}
                 allowHideEmpty
             />
         );
@@ -55,8 +59,8 @@ class DetailedJobsCounter extends Component {
             <JobCounters
                 helpUrl={helpUrl}
                 data={{
-                    'Non interrupted': nonInterruptedItems,
-                    Interrupted: nonScheduledItems,
+                    [i18n('title_non-interrupted')]: nonInterruptedItems,
+                    [i18n('title_interrupted')]: nonScheduledItems,
                 }}
             />
         );
@@ -85,13 +89,16 @@ class DetailedJobsCounter extends Component {
         const {primaryValue, secondaryValue, handleClose, handleShow, visible, type, item} =
             this.props;
 
-        const title = `${hammer.format['ReadableField'](type)} statistics: ${item.caption}`;
+        const title = i18n('title_statistics', {
+            type: hammer.format['ReadableField'](type),
+            caption: item.caption,
+        });
         const modalContent = this.renderModalContent(type);
 
         return (
             <Flex className={block()} gap={1}>
                 <Link theme="ghost" size="xs" onClick={handleShow}>
-                    View{' '}
+                    {i18n('action_view')}{' '}
                 </Link>
                 {this.renderCount(type, primaryValue, secondaryValue)}
                 <Modal

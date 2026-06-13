@@ -1,7 +1,6 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
 import cn from 'bem-cn-lite';
+import React, {Component} from 'react';
+import {type ConnectedProps, connect} from 'react-redux';
 
 import {Progress} from '@gravity-ui/uikit';
 import Link from '../../../containers/Link/Link';
@@ -9,27 +8,32 @@ import Link from '../../../containers/Link/Link';
 import hammer from '../../../common/hammer';
 import StatusLabel from '../../../components/StatusLabel/StatusLabel';
 
-import './OperationProgress.scss';
+import {type RootState} from '../../../store/reducers';
 import {selectCluster} from '../../../store/selectors/global';
+import {type DetailedOperationSelector} from '../selectors';
+import i18n from './i18n';
+import './OperationProgress.scss';
 
 const block = cn('operation-progress');
 
-class OperationProgress extends Component {
-    static propTypes = {
-        // from parent
-        operation: PropTypes.object.isRequired,
-        type: PropTypes.oneOf(['running', 'failed']),
-        cluster: PropTypes.string.isRequired,
-        showState: PropTypes.bool,
+type CounterState = 'running' | 'completed' | 'failed';
 
-        onLinkClick: PropTypes.func,
-    };
+type OperationProgressProps = {
+    operation: DetailedOperationSelector;
+    type: 'running' | 'failed';
+    showState?: boolean;
 
+    onLinkClick: (state: CounterState) => void;
+};
+
+type ReduxProps = ConnectedProps<typeof connector>;
+
+class OperationProgress extends Component<OperationProgressProps & ReduxProps> {
     static defaultProps = {
-        type: 'running',
+        type: 'running' as const,
     };
 
-    renderCounter(state, count, total) {
+    renderCounter(state: CounterState, count?: number, total?: number) {
         const {cluster, onLinkClick} = this.props;
 
         const className = 'operation-progress__counter';
@@ -41,7 +45,7 @@ class OperationProgress extends Component {
         } = this.props;
         const url = `/${cluster}/operations/${$value}/jobs?state=${state}`;
 
-        const jobsByStateTitle = `View ${state} jobs`;
+        const jobsByStateTitle = i18n('context_view-state-jobs', {state});
 
         return (
             <div className={className}>
@@ -59,7 +63,7 @@ class OperationProgress extends Component {
                                   }
                         }
                     >
-                        {hammer.format['ReadableField'](state)}
+                        {i18n(`state_${state}`)}
                     </Link>
                 </span>
                 <span className={valueClassName}>
@@ -197,10 +201,12 @@ class OperationProgress extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: RootState) => {
     return {
         cluster: selectCluster(state),
     };
 };
 
-export default connect(mapStateToProps)(OperationProgress);
+const connector = connect(mapStateToProps);
+
+export default connector(OperationProgress);

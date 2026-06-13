@@ -8,6 +8,7 @@ import {
     selectJobsOperationIncarnationsFilter,
     selectJobsOperationIncarnationsValues,
 } from '../../../../../../store/selectors/operations/jobs';
+import i18n from './i18n';
 
 import './JobsOperationsIncarnationsFilter.scss';
 
@@ -29,7 +30,7 @@ export function JobsOperationIncarnationsFilter({
         ? null
         : wrap(
               <OperationSelectFilter
-                  name="incarnation"
+                  name={i18n('field_incarnation')}
                   states={values.map((name) => ({name, caption: name}))}
                   disabled={disabled}
                   width={'auto'}

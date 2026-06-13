@@ -17,6 +17,7 @@ import {type RootState} from '../../../../store/reducers';
 import {selectCluster} from '../../../../store/selectors/global';
 import {loadCompetitors} from '../../../../store/actions/job/competitors';
 import {OPERATION_JOBS_TABLE_ID} from '../../../../constants/operations/jobs';
+import i18n from './i18n';
 
 import './Speculative.scss';
 
@@ -43,14 +44,24 @@ function IdAddress({job, operationId}: IdAddressProps) {
     return (
         <div>
             <span className={block('id', 'elements-monospace elements-ellipsis')}>
-                <ClipboardButton text={id} view="flat-secondary" size="s" title="Copy job id" />
+                <ClipboardButton
+                    text={id}
+                    view="flat-secondary"
+                    size="s"
+                    title={i18n('action_copy-job-id')}
+                />
                 <Link routed url={`/${cluster}/job/${operationId}/${id}`} theme={'primary'}>
                     {id}
                 </Link>
             </span>
             <br />
             <span className={block('host', 'elements-monospace elements-ellipsis')}>
-                <ClipboardButton text={host} view="flat-secondary" size="s" title="Copy host" />
+                <ClipboardButton
+                    text={host}
+                    view="flat-secondary"
+                    size="s"
+                    title={i18n('action_copy-host')}
+                />
                 {host}
             </span>
             {isSpeculativeJob && (
@@ -62,7 +73,7 @@ function IdAddress({job, operationId}: IdAddressProps) {
                             'elements-monospace elements-ellipsis',
                         )}
                     >
-                        Speculative job
+                        {i18n('value_speculative-job')}
                     </span>
                 </React.Fragment>
             )}
@@ -76,7 +87,9 @@ const getTableColumns = () => {
             id_address: {
                 name: 'id_address',
                 align: 'left',
-                caption: 'Id / Address',
+                get caption() {
+                    return i18n('field_id-address');
+                },
                 sort: false,
             },
             state: {

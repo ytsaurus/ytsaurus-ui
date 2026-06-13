@@ -11,6 +11,8 @@ import values_ from 'lodash/values';
 
 import moment from 'moment';
 
+import i18n from './i18n';
+
 import {Button} from '@gravity-ui/uikit';
 import Icon from '../../../../components/Icon/Icon';
 import Modal from '../../../../components/Modal/Modal';
@@ -34,21 +36,29 @@ const datePickerProps = {
 
 const radioButtonTypes = {
     custom: {
-        text: 'custom',
+        get text() {
+            return i18n('value_custom');
+        },
         value: 'custom',
     },
     twoHours: {
-        text: 'last 2 hours',
+        get text() {
+            return i18n('value_two-hours');
+        },
         value: 'twoHours',
         hours: 2,
     },
     day: {
-        text: 'last day',
+        get text() {
+            return i18n('value_day');
+        },
         value: 'day',
         hours: 24,
     },
     week: {
-        text: 'last week',
+        get text() {
+            return i18n('value_week');
+        },
         value: 'week',
         hours: 168,
     },
@@ -110,7 +120,7 @@ export default function OperationsArchiveFilter() {
 
     const prepareText = useCallback(() => {
         if (dataMode === OPERATIONS_DATA_MODE.CURRENT) {
-            return 'Current operations';
+            return i18n('title_current-operations');
         } else {
             const format = 'DD-MM-YYYY HH:mm';
             const fromPart = moment(from).format(format);
@@ -143,10 +153,10 @@ export default function OperationsArchiveFilter() {
     return (
         <div className={block('archive-range', tbBlock('component'))}>
             <Modal
-                title="Choose range"
-                size="s"
-                confirmText="Apply"
-                cancelText="Show current"
+                title={i18n('title_choose-range')}
+                size="unset"
+                confirmText={i18n('action_apply')}
+                cancelText={i18n('action_show-current')}
                 cl={formBlock('time-modal')}
                 visible={state.modalVisible}
                 content={
@@ -160,7 +170,7 @@ export default function OperationsArchiveFilter() {
                             />
                         </div>
                         <div>
-                            <div className={formBlock('label')}>From</div>
+                            <div className={formBlock('label')}>{i18n('field_from')}</div>
                             <div className={formBlock('field-group')}>
                                 <span className={formBlock('field')}>
                                     <DatePicker
@@ -173,7 +183,7 @@ export default function OperationsArchiveFilter() {
                                     />
                                 </span>
                             </div>
-                            <div className={formBlock('label')}>To</div>
+                            <div className={formBlock('label')}>{i18n('field_to')}</div>
                             <div className={formBlock('field-group')}>
                                 <span className={formBlock('field')}>
                                     <DatePicker
@@ -190,8 +200,12 @@ export default function OperationsArchiveFilter() {
                     </div>
                 }
                 renderCustomCancel={(className: string | undefined) => (
-                    <Button title="Show current" className={className} onClick={resetTimeRange}>
-                        Show current
+                    <Button
+                        title={i18n('action_show-current')}
+                        className={className}
+                        onClick={resetTimeRange}
+                    >
+                        {i18n('action_show-current')}
                     </Button>
                 )}
                 onCancel={hideModal}

@@ -7,6 +7,7 @@ import cn from 'bem-cn-lite';
 import hammer from '../../../../../../common/hammer';
 import {getPhaseColor} from '../helpers/getPhaseColor';
 import {isFinalState} from '../helpers/isFinalState';
+import i18n from './i18n';
 
 const block = cn('yt-events-table');
 
@@ -68,9 +69,24 @@ export const EventsTable: FC<Props> = ({events}) => {
             className={block()}
             width="max"
             columns={[
-                {id: 'phase', name: 'State: Phase'},
-                {id: 'duration', name: 'Duration'},
-                {id: 'startTime', name: 'Start time'},
+                {
+                    id: 'phase',
+                    get name() {
+                        return i18n('field_state-phase');
+                    },
+                },
+                {
+                    id: 'duration',
+                    get name() {
+                        return i18n('field_duration');
+                    },
+                },
+                {
+                    id: 'startTime',
+                    get name() {
+                        return i18n('field_start-time');
+                    },
+                },
             ]}
             data={data}
         />

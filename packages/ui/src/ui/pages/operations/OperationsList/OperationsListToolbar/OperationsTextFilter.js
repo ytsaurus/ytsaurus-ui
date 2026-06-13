@@ -9,6 +9,7 @@ import Filter from '../../../../components/Filter/Filter';
 import {isGotoEnabled} from '../../../../utils/operations/list';
 import {updateFilter} from '../../../../store/actions/operations';
 import Button from '../../../../components/Button/Button';
+import i18n from './i18n';
 
 const block = cn('operations-list');
 const tbBlock = cn('elements-toolbar');
@@ -70,7 +71,7 @@ class OperationsTextFilter extends Component {
             <div className={block('toolbar-text-filter', tbBlock('component'))}>
                 <Filter
                     key={activePreset}
-                    placeholder="Filter operations..."
+                    placeholder={i18n('field_filter-operations')}
                     size="m"
                     value={this.value}
                     onChange={(newValue) => updateFilter('text', newValue)}
@@ -84,7 +85,7 @@ class OperationsTextFilter extends Component {
                     onClick={() => this.gotoDetails(value)}
                     disabled={!isGotoEnabled(this.value)}
                 >
-                    Go to operation
+                    {i18n('action_goto-operation')}
                 </Button>
             </div>
         );

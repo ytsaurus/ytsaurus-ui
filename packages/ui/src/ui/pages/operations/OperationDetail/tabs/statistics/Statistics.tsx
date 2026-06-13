@@ -45,6 +45,7 @@ import UIFactory from '../../../../../UIFactory';
 import {WaitForFont} from '../../../../../containers/WaitForFont/WaitForFont';
 
 import {OperationStatisticName, OperationStatisticValue} from './OperationStatisticName';
+import i18n from './i18n';
 import './Statistics.scss';
 
 const statisticsBlock = cn('operation-statistics');
@@ -208,13 +209,21 @@ export class Statistics extends Component<Props> {
 
                     <div className={toolbarBlock('component', statisticsBlock('expand-collapse'))}>
                         <span className={statisticsBlock('expand-metrics')}>
-                            <Button size="m" title="Expand All" onClick={this.expandTable}>
+                            <Button
+                                size="m"
+                                title={i18n('action_expand-all')}
+                                onClick={this.expandTable}
+                            >
                                 <Icon awesome="arrow-to-bottom" />
                             </Button>
                         </span>
 
                         <span className={statisticsBlock('collapse-metrics')}>
-                            <Button size="m" title="Collapse All" onClick={this.collapseTable}>
+                            <Button
+                                size="m"
+                                title={i18n('action_collapse-all')}
+                                onClick={this.collapseTable}
+                            >
                                 <Icon awesome="arrow-to-top" />
                             </Button>
                         </span>

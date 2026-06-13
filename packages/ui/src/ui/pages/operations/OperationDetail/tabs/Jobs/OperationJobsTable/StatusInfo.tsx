@@ -5,6 +5,7 @@ import {ClipboardButton, Flex, Label, Popup} from '@gravity-ui/uikit';
 import {useToggle} from 'react-use';
 import './StatusInfo.scss';
 import cn from 'bem-cn-lite';
+import i18n from './i18n';
 
 const block = cn('yt-job-status-info');
 
@@ -27,7 +28,7 @@ export const StatusInfo: FC<Props> = ({state, info}) => {
                 <>
                     <div onMouseEnter={toggleOpen}>
                         <Label theme="warning" ref={anchorRef}>
-                            Interrupted
+                            {i18n('value_interrupted')}
                         </Label>
                     </div>
 
@@ -35,7 +36,7 @@ export const StatusInfo: FC<Props> = ({state, info}) => {
                         <div className={block('popup')} onMouseLeave={toggleOpen}>
                             <div>{reason}</div>
                             <ClipboardButton
-                                title="Copy reason"
+                                title={i18n('action_copy-reason')}
                                 view="flat-secondary"
                                 size="s"
                                 text={reason}

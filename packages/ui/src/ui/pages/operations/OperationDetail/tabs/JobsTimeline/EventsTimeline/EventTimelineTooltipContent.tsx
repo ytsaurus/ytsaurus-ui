@@ -5,6 +5,7 @@ import cn from 'bem-cn-lite';
 import './EventTimelineTooltipContent.scss';
 import {EventTimelineTooltipContentRow} from './EventTimelineTooltipContentRow';
 import {MetaData} from './MetaData';
+import i18n from './i18n';
 
 const block = cn('yt-event-timeline-tooltip-content');
 type Props = {
@@ -48,7 +49,7 @@ export const EventTimelineTooltipContent: FC<Props> = ({event: {parts, jobId, me
 
     return (
         <Flex direction="column" gap={3} className={block()}>
-            <Text variant="subheader-2">Job id {jobId}</Text>
+            <Text variant="subheader-2">{i18n('field_job-id', {jobId})}</Text>
             <MetaData meta={meta} />
             <Flex direction="column" gap={1} className={block('phases')}>
                 {phaseItems}

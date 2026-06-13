@@ -2,6 +2,8 @@ import React from 'react';
 import {useSelector} from '../../../../../../store/redux-hooks';
 import cn from 'bem-cn-lite';
 
+import i18n from './i18n';
+
 import keys_ from 'lodash/keys';
 
 import hammer from '../../../../../../common/hammer';
@@ -51,11 +53,17 @@ export default function OperationJobsToolbar() {
                         <JobsFilterBy />
                     </div>
                     <div className={block('toolbar-filter-by', tbComp)}>
-                        <JobsSelectFilter name={'taskName'} states={allTaskNames} width="max" />
+                        <JobsSelectFilter
+                            name={'taskName'}
+                            label={i18n('field_task-name') + ':'}
+                            states={allTaskNames}
+                            width="max"
+                        />
                     </div>
                     <div className={block('toolbar-state', tbComp)}>
                         <JobsSelectFilter
                             name="type"
+                            label={i18n('field_type') + ':'}
                             statesProvider={extractJobTypes}
                             disabled={showCompetitiveJobs}
                             width={200}
@@ -64,7 +72,14 @@ export default function OperationJobsToolbar() {
                     <div className={block('toolbar-state', tbComp)}>
                         <JobsSelectFilter
                             name="state"
-                            states={['all', 'running', 'completed', 'failed', 'aborted']}
+                            label={i18n('field_state') + ':'}
+                            states={[
+                                {value: 'all', caption: i18n('value_all')},
+                                {value: 'running', caption: i18n('value_running')},
+                                {value: 'completed', caption: i18n('value_completed')},
+                                {value: 'failed', caption: i18n('value_failed')},
+                                {value: 'aborted', caption: i18n('value_aborted')},
+                            ]}
                             disabled={showCompetitiveJobs}
                             width={200}
                         />

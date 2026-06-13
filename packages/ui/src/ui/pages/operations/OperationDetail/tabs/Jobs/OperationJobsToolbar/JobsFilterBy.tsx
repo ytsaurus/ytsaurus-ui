@@ -33,7 +33,7 @@ function JobsFilterBy() {
                     items={map_(['address', 'id', 'monitoring_descriptor'], (value) => {
                         const textMap: Record<string, string> = {
                             address: i18n('value_address'),
-                            id: i18n('value_id'),
+                            id: 'Id',
                             monitoring_descriptor: i18n('value_monitoring-descriptor'),
                         };
                         return {value, text: textMap[value]};

@@ -1,0 +1,6 @@
+{
+  "context_view-state-jobs": "View {{state}} jobs",
+  "state_running": "Running",
+  "state_completed": "Completed",
+  "state_failed": "Failed"
+}

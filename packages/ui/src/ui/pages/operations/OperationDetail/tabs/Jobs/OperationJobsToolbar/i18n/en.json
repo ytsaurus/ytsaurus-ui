@@ -1,7 +1,17 @@
 {
   "value_address": "Address",
-  "value_id": "Id",
   "value_monitoring-descriptor": "Monitoring descriptor",
   "placeholder_filter-id": "Filter id...",
-  "placeholder_filter-monitoring-descriptor": "Filter monitoring descriptor..."
+  "placeholder_filter-monitoring-descriptor": "Filter monitoring descriptor...",
+  "placeholder_filter": "Filter...",
+  "field_attributes": "Attributes:",
+  "field_incarnation": "Incarnation",
+  "field_task-name": "Task name",
+  "field_type": "Type",
+  "field_state": "State",
+  "value_all": "All",
+  "value_running": "Running",
+  "value_completed": "Completed",
+  "value_failed": "Failed",
+  "value_aborted": "Aborted"
 }

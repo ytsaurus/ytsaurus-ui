@@ -6,6 +6,7 @@ import {showErrorModal} from '../../../../../../store/actions/actions';
 import {showInputPaths} from '../../../../../../store/actions/operations/jobs';
 import {useDispatch} from '../../../../../../store/redux-hooks';
 import {type Job} from '../job-selector';
+import i18n from './i18n';
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 
@@ -24,7 +25,7 @@ function JobInputPaths({job}: {job: Job}) {
     const dispatch = useDispatch();
     return (
         <Link theme="ghost" onClick={() => dispatch(showInputPaths(job))}>
-            View
+            {i18n('action_view')}
         </Link>
     );
 }

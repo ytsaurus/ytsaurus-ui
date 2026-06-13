@@ -38,6 +38,7 @@ import {selectJobsOperationIncarnationsFilter} from '../../../store/selectors/op
 import {fetchOperationIncarnationAvailableItems} from './jobs-operation-incarnations';
 import {openModal} from '../modals/attributes-modal';
 import {showToasterError} from '../../../utils/utils';
+import i18n from './i18n';
 
 const requests = new CancelHelper();
 
@@ -98,7 +99,7 @@ export function showJobAttributesModal(
                 },
             })
             .catch((error) => {
-                showToasterError('Get job attributes', error);
+                showToasterError(i18n('alert_get-job-attributes-error'), error);
                 throw error;
             });
         dispatch(openModal({title: jobId, promise}));

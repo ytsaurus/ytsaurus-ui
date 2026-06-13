@@ -3,6 +3,7 @@ import {Button, Flex, Icon, TextInput} from '@gravity-ui/uikit';
 import cn from 'bem-cn-lite';
 import './TimeLineHeader.scss';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
+import i18n from './i18n';
 import {
     selectFilter,
     selectInterval,
@@ -45,7 +46,7 @@ export const TimeLineHeader: FC<Props> = ({className}) => {
         <div className={block(null, className)}>
             <TextInput
                 defaultValue={filter}
-                placeholder="Search by job ID"
+                placeholder={i18n('field_search-by-job-id')}
                 onUpdate={handleFilterChange}
                 hasClear
             />
@@ -54,7 +55,7 @@ export const TimeLineHeader: FC<Props> = ({className}) => {
                     view="outlined"
                     pin="brick-brick"
                     onClick={handleResetInterval}
-                    title="Reset interval"
+                    title={i18n('action_reset-interval')}
                 >
                     <Icon data={ChevronsExpandToLinesIcon} size={16} />
                 </Button>

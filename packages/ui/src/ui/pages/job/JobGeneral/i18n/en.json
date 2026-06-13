@@ -1,0 +1,23 @@
+{
+  "title_job": "job",
+  "value_interrupted": "Interrupted ({{reason}})",
+  "value_speculative-job": "Speculative job",
+  "field_operation-id": "operation id",
+  "field_job-id": "job id",
+  "field_host": "host",
+  "field_type": "type",
+  "field_monitoring-descriptor": "Monitoring descriptor",
+  "field_pool-tree": "Pool tree",
+  "field_started": "started",
+  "field_finished": "finished",
+  "field_duration": "duration",
+  "field_stale": "Stale",
+  "field_job-ssh": "Job ssh",
+  "field_job-trace": "Job trace",
+  "action_copy-reason": "Copy reason",
+  "tab_details": "Details",
+  "tab_attributes": "Attributes",
+  "tab_statistics": "Statistics",
+  "tab_specification": "Specification",
+  "tab_logs": "Logs"
+}

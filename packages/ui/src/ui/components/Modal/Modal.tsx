@@ -18,7 +18,7 @@ interface ModalProps {
     visible?: boolean;
     loading?: boolean;
     title?: string;
-    size?: 's' | 'm' | 'l';
+    size?: 's' | 'm' | 'l' | 'unset';
     borderless?: boolean;
     onConfirm?: () => void;
     isConfirmDisabled?: () => boolean;
