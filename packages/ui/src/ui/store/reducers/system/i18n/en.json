@@ -1,0 +1,9 @@
+{
+  "title_primary": "Primary",
+  "title_secondary": "Secondary",
+  "title_recovery": "Recovery",
+  "title_unavailable": "Unavailable",
+  "title_quorum": "Quorum",
+  "title_weak-quorum": "Weak Quorum",
+  "title_no-quorum": "No Quorum"
+}

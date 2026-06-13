@@ -159,7 +159,9 @@ class Resources extends Component {
                         <div
                             key="disk-resources"
                             className={diskResourcesCN}
-                            style={{'--_-disk-space-header-column-count': diskSpaceHeaderColumnCount}}
+                            style={{
+                                '--_-disk-space-header-column-count': diskSpaceHeaderColumnCount,
+                            }}
                         >
                             {i18n('title_disk-space')}
                         </div>,

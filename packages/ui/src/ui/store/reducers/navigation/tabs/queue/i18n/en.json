@@ -1,0 +1,11 @@
+{
+  "field_error": "Error",
+  "field_host": "Tablet cell host",
+  "field_cell-id": "Tablet cell ID",
+  "field_write-rate": "Write rate",
+  "field_lower-row-idx": "Lower row idx",
+  "field_upper-row-idx": "Upper row idx",
+  "field_available-rows": "Available rows",
+  "field_commit-idle-time": "Commit idle time, ms",
+  "field_last-row-commit-time": "Last row commit time"
+}

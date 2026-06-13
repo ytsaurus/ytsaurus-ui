@@ -2,9 +2,10 @@ import {
     CREATE_TABLE_MODAL_DATA_FIELDS,
     SELECT_EMPTY_VALUE,
 } from '../../../../constants/navigation/modals/create-table';
+import i18n from './i18n';
 
 export function createNewColumn(id, dataType = 'bool') {
-    const name = `Column_${id}`;
+    const name = i18n('value_column-name', {id});
     return {
         id: String(id),
         name,

@@ -36,12 +36,6 @@ const b = block('system');
 const ElementsTable = compose(withStickyHead, withStickyFooter)(ElementsTableBase);
 
 class Chunks extends Component {
-    static _formatChunkName(name) {
-        return hammer.format['ReadableField'](
-            name === 'chunks' ? 'total' : name.substring(0, name.length - '_chunks'.length),
-        );
-    }
-
     static _formatChunkCount(count) {
         return count === 0 ? '' : hammer.format['Number'](count);
     }
@@ -82,7 +76,6 @@ class Chunks extends Component {
                 get(cellData) {
                     return cellData[type.name];
                 },
-                caption: Chunks._formatChunkName(type.name),
                 align: 'right',
                 sort: true,
             };
@@ -94,7 +87,7 @@ class Chunks extends Component {
                 return cellTag === 'total' ? cellTag : Number(cellTag);
             },
             name: 'cell_tag',
-            caption: hammer.format['ReadableField']('cell_tag'),
+            caption: i18n('field_cell-tag'),
             align: 'left',
             sort: true,
         };
@@ -108,22 +101,30 @@ class Chunks extends Component {
         const labels = [
             {
                 key: 'replication',
-                get name() {return i18n('title_replication')},
+                get name() {
+                    return i18n('title_replication');
+                },
                 value: replication,
             },
             {
                 key: 'sealer',
-                get name() {return i18n('title_sealer')},
+                get name() {
+                    return i18n('title_sealer');
+                },
                 value: sealer,
             },
             {
                 key: 'refresh',
-                get name() {return i18n('title_refresh')},
+                get name() {
+                    return i18n('title_refresh');
+                },
                 value: refresh,
             },
             {
                 key: 'requisition-update',
-                get name() {return i18n('title_requisition-update')},
+                get name() {
+                    return i18n('title_requisition-update');
+                },
                 value: requisitionUpdate,
             },
         ];

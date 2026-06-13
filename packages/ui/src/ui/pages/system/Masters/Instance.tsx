@@ -50,7 +50,9 @@ export const Instance: FC<Props> = ({instance, hostType, allowVoting, allowServi
     >['$attributes'];
     const address = hostType === 'host' ? $address : $physicalAddress;
     const maintenance = instance.getMaintenance();
-    const maintenanceMessage = maintenance ? instance.getMaintenanceMessage() || i18n('value_maintenance') : '';
+    const maintenanceMessage = maintenance
+        ? instance.getMaintenanceMessage() || i18n('value_maintenance')
+        : '';
     const {voting} = attributes ?? {};
     // do not use `!voting` cause `voting === undefined` is the same as `voting === true`
     const denyVoting = allowVoting && voting === false;

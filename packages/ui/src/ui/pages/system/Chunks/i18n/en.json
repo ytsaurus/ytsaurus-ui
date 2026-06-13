@@ -3,7 +3,8 @@
   "title_replication": "Replication",
   "title_sealer": "Sealer",
   "title_refresh": "Refresh",
-  "title_requisition-update": "Requisition Update",
+  "title_requisition-update": "Requisition update",
+  "field_cell-tag": "Cell tag",
   "value_enabled": "{{name}} enabled",
   "value_disabled": "{{name}} disabled",
   "value_unknown": "{{name}} unknown"

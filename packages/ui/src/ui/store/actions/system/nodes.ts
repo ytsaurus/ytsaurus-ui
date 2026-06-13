@@ -35,6 +35,18 @@ import {toaster} from '../../../utils/toaster';
 
 type SystemNodesThunkAction<T = void> = ThunkAction<T, RootState, unknown, SystemNodesAction>;
 
+function getNodeTitles(): Record<string, string> {
+    return {
+        decommissioned: i18n('value_decommissioned'),
+        banned: i18n('value_banned'),
+        full: i18n('value_full'),
+        alerts: i18n('value_alerts'),
+        online: i18n('value_online'),
+        offline: i18n('value_offline'),
+        other: i18n('value_other'),
+    };
+}
+
 export function loadSystemNodes(
     nodeTypes: Array<NodeType>,
 ): SystemNodesThunkAction<Promise<undefined | {isRetryFutile?: boolean}>> {
@@ -204,6 +216,7 @@ function extractNodeCounters(racks: Array<RackInfo>) {
             },
             states: {}, // For right side counters
             effectiveStates: {}, // For state progress bar
+            titles: getNodeTitles(),
         } as HttpProxiesState['counters'],
     );
 }
@@ -316,6 +329,7 @@ function rackInfo2roleGroup(data: Array<RackInfo>): Array<RoleGroupInfo> {
                 effectiveStates: {},
                 states: {},
                 flags,
+                titles: getNodeTitles(),
             },
         };
         rack.nodes.forEach((node) => {
