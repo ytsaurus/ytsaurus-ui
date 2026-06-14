@@ -1,0 +1,11 @@
+{
+  "field_job-id": "Job Id",
+  "field_operation-id": "Operation Id",
+  "field_job-type": "Job type",
+  "field_job-phase": "Job phase",
+  "field_start-time": "Start time",
+  "field_vcpu": "vCPU",
+  "field_memory": "Memory",
+  "field_gpu": "GPU",
+  "no-running-jobs": "No running jobs found"
+}
