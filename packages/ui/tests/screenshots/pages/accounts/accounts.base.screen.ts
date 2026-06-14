@@ -1,4 +1,4 @@
-import {Page, expect, test} from '@playwright/test';
+import {type Page, expect, test} from '@playwright/test';
 import {makeClusterUrl} from '../../../utils';
 import {BasePage} from '../../../widgets/BasePage';
 import {replaceInnerHtml, replaceInnerHtmlProgress} from '../../../utils/dom';
@@ -49,6 +49,13 @@ class AccountsPage extends BasePage {
             );
             progress.forEach((item) => {
                 item.style.width = '60%';
+            });
+
+            const progressTextInner = document.querySelectorAll<HTMLDivElement>(
+                '.yt-tooltip .g-progress__text-inner',
+            );
+            progressTextInner.forEach((item) => {
+                item.remove();
             });
         });
     }

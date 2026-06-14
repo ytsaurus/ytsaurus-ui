@@ -6,6 +6,7 @@ import reduce_ from 'lodash/reduce';
 import hammer from '../../common/hammer';
 import {accountsIoThroughputThresholds} from '../../utils/progress';
 import {calcProgressProps} from '../../utils/utils';
+import {calculateDiskSpaceProgress} from '../../utils/diskSpaceProgress';
 
 const nodesChunksUsageList = ['node_count', 'chunk_count'] as const;
 
@@ -226,6 +227,8 @@ export function getDiskSpace(
     clusterTotalsUsage: ClusterTotalsUsage,
     nodesData: NodesData,
     mediumList: string[],
+    systemReservedDiskSpacePerMedium: Record<string, number> = {},
+    uncommittedDiskSpacePerMedium: Record<string, number> = {},
 ) {
     const clusterTotalPerMedium = getClusterTotal(
         clusterTotalsUsage,
@@ -233,55 +236,56 @@ export function getDiskSpace(
         mediumList,
     ).perMedium;
 
+    if (!Object.keys(clusterTotalPerMedium).length) {
+        return [];
+    }
+
     const hardwareLimitPerMedium = getHardwareLimit(nodesData, mediumList).perMedium;
     const readThroughput = getReadThroughput(nodesData, mediumList).perMedium;
     const writeThroughput = getWriteThroughput(nodesData, mediumList).perMedium;
 
-    if (clusterTotalPerMedium) {
-        return map_(mediumList, (mediumType) => {
-            const clusterUsage = clusterTotalPerMedium[mediumType].usage;
-            const clusterLimit = clusterTotalPerMedium[mediumType].limit;
-            const hardwareLimit = hardwareLimitPerMedium[mediumType].limit;
-            const overcommitted = hardwareLimit < clusterLimit;
+    const diskSpace = mediumList.map((mediumType) => {
+        const {usage: clusterUsage, limit: clusterLimit} = clusterTotalPerMedium[mediumType];
+        const hardwareLimit = hardwareLimitPerMedium[mediumType].limit;
+        const {usage: diskReadRate, limit: diskReadCapacity} = readThroughput[mediumType];
+        const {usage: diskWriteRate, limit: diskWriteCapacity} = writeThroughput[mediumType];
 
-            const diskReadRate = readThroughput[mediumType].usage;
-            const diskReadCapacity = readThroughput[mediumType].limit;
-            const diskWriteRate = writeThroughput[mediumType].usage;
-            const diskWriteCapacity = writeThroughput[mediumType].limit;
+        const systemReserved = systemReservedDiskSpacePerMedium[mediumType] ?? 0;
+        const uncommitted = uncommittedDiskSpacePerMedium[mediumType] ?? 0;
 
-            return {
-                show: hardwareLimit !== 0,
-                mediumType,
-                clusterUsage: {
-                    text:
-                        hammer.format['Bytes'](clusterUsage) +
-                        ' / ' +
-                        hammer.format['Bytes'](clusterLimit),
-                    progress: (clusterUsage / clusterLimit) * 100,
-                },
-                readThroughput: {
-                    progress: calcProgressProps(
-                        diskReadRate,
-                        diskReadCapacity,
-                        'Bytes',
-                        accountsIoThroughputThresholds,
-                    ),
-                    show: diskReadCapacity > 0,
-                },
-                writeThroughput: {
-                    progress: calcProgressProps(
-                        diskWriteRate,
-                        diskWriteCapacity,
-                        'Bytes',
-                        accountsIoThroughputThresholds,
-                    ),
-                    show: diskWriteCapacity > 0,
-                },
-                hardwareLimit,
-                overcommitted,
-            };
+        const {text, stack, tooltipInfo} = calculateDiskSpaceProgress({
+            used: clusterUsage,
+            systemReserved,
+            uncommitted,
+            total: clusterLimit,
         });
-    }
 
-    return [];
+        return {
+            show: hardwareLimit !== 0,
+            mediumType,
+            clusterUsage: {text, stack, tooltipInfo},
+            readThroughput: {
+                progress: calcProgressProps(
+                    diskReadRate,
+                    diskReadCapacity,
+                    'Bytes',
+                    accountsIoThroughputThresholds,
+                ),
+                show: diskReadCapacity > 0,
+            },
+            writeThroughput: {
+                progress: calcProgressProps(
+                    diskWriteRate,
+                    diskWriteCapacity,
+                    'Bytes',
+                    accountsIoThroughputThresholds,
+                ),
+                show: diskWriteCapacity > 0,
+            },
+            hardwareLimit,
+            overcommitted: hardwareLimit + systemReserved + uncommitted < clusterLimit,
+        };
+    });
+
+    return diskSpace;
 }

@@ -105,6 +105,8 @@ export type GlobalState = {
 
     _ym_debug?: string;
     rumDebug?: string;
+
+    uncommittedDiskSpacePerMedium?: Record<string, number>;
 };
 
 const initialState: GlobalState = {
@@ -164,6 +166,8 @@ const initialState: GlobalState = {
     allowedExperimentalPages: undefined,
 
     enableMaxContentWidth: true,
+
+    uncommittedDiskSpacePerMedium: {},
 };
 
 function updatedTitle(
