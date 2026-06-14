@@ -42,6 +42,7 @@ import ypath from '../../../../common/thor/ypath';
 import {createQuotaReqTicketUrl} from '../../../../config';
 import {type PoolTreeNode} from '../../../../utils/scheduling/pool-child';
 import './PoolEditorDialog.scss';
+import {validateNumber} from '../../../../common/hammer/validate-number';
 
 const block = cn('pool-editor-dialog');
 
@@ -470,10 +471,10 @@ export function PoolEditorDialog() {
                             type: 'bytes',
                             caption: 'Memory',
                             validator(value?: number) {
-                                if (typeof value !== 'undefined' && isNaN(value)) {
-                                    return i18n('alert_incorrect-value');
+                                if (!value) {
+                                    return undefined;
                                 }
-                                return undefined;
+                                return validateNumber({ge: 0}, value);
                             },
                         },
                         {
