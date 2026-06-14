@@ -4,6 +4,7 @@ import sortBy_ from 'lodash/sortBy';
 import {Flex, Select} from '@gravity-ui/uikit';
 import {useFetchBatchQuery} from '../../../store/api/yt';
 import {YTApiId} from '../../../rum/rum-wrap-api';
+import i18n from './i18n';
 
 export function MasterLocalContainers({
     allValue,
@@ -17,7 +18,7 @@ export function MasterLocalContainers({
     const {data} = useFetchBatchQuery<Array<string>>({
         id: YTApiId.systemClusterMasters,
         parameters: {requests: [{command: 'list', parameters: {path: '//sys/cluster_masters'}}]},
-        errorTitle: 'Failed to load masters',
+        errorTitle: i18n('alert_failed-to-load-masters'),
     });
 
     const options = React.useMemo(() => {
@@ -30,7 +31,7 @@ export function MasterLocalContainers({
 
     return (
         <Flex gap={1} alignItems="center">
-            Container:
+            {i18n('field_container')}:
             <Select
                 options={options}
                 value={[container]}

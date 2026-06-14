@@ -10,6 +10,7 @@ export type SystemNodeCounters = {
     states: Record<NodeState, number>;
     effectiveStates: Partial<Record<NodeEffectiveState, number>>;
     flags: Partial<Record<NodeEffectiveFlag, number>>;
+    titles: Record<string, string>;
 };
 
 export type HttpProxiesState = {
@@ -31,7 +32,7 @@ const initialState: HttpProxiesState = {
     loaded: false,
     error: undefined,
     roleGroups: [],
-    counters: {total: 0, states: {}, effectiveStates: {}, flags: {}},
+    counters: {total: 0, states: {}, effectiveStates: {}, flags: {}, titles: {}},
 };
 
 export type RoleGroupItemInfo = {

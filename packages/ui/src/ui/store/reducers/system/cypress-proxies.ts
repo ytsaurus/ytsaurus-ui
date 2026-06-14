@@ -18,7 +18,7 @@ const initialState: CypressProxiesState = {
     loaded: false,
     error: undefined,
     roleGroups: [],
-    counters: {total: 0, states: {}, effectiveStates: {}, flags: {}},
+    counters: {total: 0, states: {}, effectiveStates: {}, flags: {}, titles: {}},
 };
 
 const cypressProxiesSlice = createSlice({

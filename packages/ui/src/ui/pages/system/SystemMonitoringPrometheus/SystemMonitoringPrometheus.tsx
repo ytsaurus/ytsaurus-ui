@@ -5,8 +5,8 @@ import {SegmentedRadioGroup} from '@gravity-ui/uikit';
 
 import {type PrometheusDashboardType} from '../../../../shared/prometheus/types';
 
-import format from '../../../common/hammer/format';
 import {PrometheusDashboardLazy} from '../../../containers/PrometheusDashboard/lazy';
+import i18n from './i18n';
 import {selectCluster} from '../../../store/selectors/global';
 import {
     usePrometheusDashboardParams,
@@ -14,12 +14,12 @@ import {
 } from '../../../store/reducers/prometheusDashboard/prometheusDashboard-hooks';
 import {useDefaultPoolTree} from '../../../hooks/global-pool-trees';
 
-const SYSTEM_DASHBOARDS: Array<PrometheusDashboardType> = [
+const SYSTEM_DASHBOARDS = [
     'scheduler-internal',
     'cluster-resources',
     'master-global',
     'master-local',
-];
+] as const satisfies Array<PrometheusDashboardType>;
 
 export function SystemMonitoringPrometheus() {
     const {type, setType, params} = useSystemDashboardParameters();
@@ -37,7 +37,7 @@ export function SystemMonitoringPrometheus() {
                                 onUpdate={setType}
                                 options={SYSTEM_DASHBOARDS.map((item) => ({
                                     value: item,
-                                    content: format.ReadableField(item.replace(/-/g, '_')),
+                                    content: i18n(`value_${item}`),
                                 }))}
                             />
                         ),

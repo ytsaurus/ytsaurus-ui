@@ -4,6 +4,7 @@ import {showErrorPopup} from '../../../utils/utils';
 import {YTApiId, ytApiV3Id} from '../../../rum/rum-wrap-api';
 import {USE_SUPRESS_SYNC} from '../../../../shared/constants';
 import {toaster} from '../../../utils/toaster';
+import i18n from './i18n';
 
 export const FETCH_RESOURCES = createActionTypes('RESOURCES');
 export const FETCH_NODE_ATTRS = createActionTypes('NODE_ATTRS');
@@ -71,9 +72,9 @@ export function loadSystemResources() {
                 name: 'load/system/resources',
                 autoHiding: false,
                 theme: 'danger',
-                content: `[code ${code}] ${message}`,
-                title: 'Could not load Resources',
-                actions: [{label: ' view', onClick: () => showErrorPopup(error)}],
+                content: i18n('alert_load-resources-error-content', {code, message}),
+                title: i18n('title_load-resources-error'),
+                actions: [{label: i18n('action_view'), onClick: () => showErrorPopup(error)}],
             });
 
             return {isRetryFutile: isRetryFutile(error.code)};

@@ -3,6 +3,8 @@ import {type Action} from 'redux';
 import filter_ from 'lodash/filter';
 import sortBy_ from 'lodash/sortBy';
 
+import i18n from './i18n';
+
 // @ts-expect-error
 import {LOCATION_POP} from 'redux-location-state/lib/constants';
 
@@ -108,7 +110,9 @@ export type GlobalState = {
 };
 
 const initialState: GlobalState = {
-    title: 'Clusters',
+    get title() {
+        return i18n('title_clusters');
+    },
     cluster: YT.cluster,
     /**
      * If not empty then AppNavigation should display page-items.

@@ -1,5 +1,7 @@
 import isEmpty_ from 'lodash/isEmpty';
 
+import i18n from './i18n';
+
 export default (counters, alerts) => {
     const tags = [];
 
@@ -16,31 +18,31 @@ export default (counters, alerts) => {
     if (isEmpty_(schedulers)) {
         tags.push({
             theme: 'default',
-            label: 'Schedulers: unknown',
+            label: i18n('alert_schedulers-unknown'),
         });
     } else if (schedulers.offline > 0 && schedulers.active === 0) {
         tags.push({
             theme: 'danger',
-            label: 'Schedulers: Down',
+            label: i18n('alert_schedulers-down'),
         });
     } else if (schedulers.offline === 0 && schedulers.active === 0) {
         tags.push({
             theme: 'danger',
-            label: 'Schedulers: Standby',
+            label: i18n('alert_schedulers-standby'),
         });
     } else if (schedulers.active > 0 && schedulers.offline > 0) {
         tags.push({
             theme: 'warning',
-            label: `Schedulers: ${schedulers.offline} offline`,
+            label: i18n('alert_schedulers-n-offline', {count: schedulers.offline}),
         });
     } else {
         const withAlerts = {
             theme: 'warning',
-            label: `Schedulers: OK (${schedulersAlertsLength} alerts)`,
+            label: i18n('alert_schedulers-ok-with-alerts', {count: schedulersAlertsLength}),
         };
         const withoutAlerts = {
             theme: 'success',
-            label: 'Schedulers: OK',
+            label: i18n('alert_schedulers-ok'),
         };
 
         tags.push(schedulersAlertsLength > 0 ? withAlerts : withoutAlerts);
@@ -49,29 +51,29 @@ export default (counters, alerts) => {
     if (isEmpty_(agents)) {
         tags.push({
             theme: 'default',
-            label: 'Controller agents: unknown',
+            label: i18n('alert_agents-unknown'),
         });
     } else if (agents.total === agents.connected) {
         const withAlerts = {
             theme: 'warning',
-            label: `Controller agents: OK (${agentsAlertsLength} alerts)`,
+            label: i18n('alert_agents-ok-with-alerts', {count: agentsAlertsLength}),
         };
         const withoutAlerts = {
             theme: 'success',
-            label: 'Controller agents: OK',
+            label: i18n('alert_agents-ok'),
         };
 
         tags.push(agentsAlertsLength > 0 ? withAlerts : withoutAlerts);
     } else {
-        let label = 'Controller agents:';
+        let label = i18n('alert_agents-prefix');
         if (agents.connected) {
-            label += ` ${agents.connected} connected`;
+            label += ` ${i18n('value_connected', {count: agents.connected})}`;
         }
         if (agents.disconnected) {
-            label += ` ${agents.disconnected} disconnected`;
+            label += ` ${i18n('value_disconnected', {count: agents.disconnected})}`;
         }
         if (agents.offline) {
-            label += ` ${agents.offline} offline`;
+            label += ` ${i18n('value_offline', {count: agents.offline})}`;
         }
 
         tags.push({

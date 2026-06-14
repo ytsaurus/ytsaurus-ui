@@ -1,0 +1,33 @@
+{
+  "field_host": "Host",
+  "field_container": "Container",
+  "field_maintenance": "Maintenance",
+  "value_enabled": "Enabled",
+  "value_disabled": "Disabled",
+  "field_maintenance-message": "Maintenance message",
+  "context_enter-maintenance-message": "Enter maintenance message",
+  "title_masters": "Masters",
+  "title_primary-masters": "Primary masters",
+  "title_secondary-masters": "Secondary masters",
+  "title_timestamp-providers": "Timestamp providers",
+  "title_discovery-servers": "Discovery servers",
+  "title_queue-agents": "Queue agents",
+  "title_state": "State: {{state}}",
+  "alert_alerts": {
+    "one": "{{count}} alert",
+    "other": "{{count}} alerts"
+  },
+  "value_maintenance": "Maintenance",
+  "value_read-only": "Read only",
+  "value_warming-up": "Warming up",
+  "title_edit-address": "Edit {{address}}",
+  "value_nonvoting": "[nonvoting]",
+  "title_switch-leader-for": "Switch leader for {{cellId}}",
+  "field_leading-primary-master": "Leading primary master",
+  "context_new-leading-primary-master": "New leading primary master",
+  "action_switch-leader": "Switch leader",
+  "alert_leader-switch-initiated": "Leader switch initiated",
+  "context_leader-committed-version": "Leader committed version: {{version}}",
+  "field_hexadecimal-cell-tag": "Hexadecimal cell tag",
+  "field_decimal-cell-tag": "Decimal cell tag"
+}

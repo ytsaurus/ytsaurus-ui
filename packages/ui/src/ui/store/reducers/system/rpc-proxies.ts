@@ -9,7 +9,7 @@ const initialState: HttpProxiesState = {
     loaded: false,
     error: undefined,
     roleGroups: [],
-    counters: {total: 0, states: {}, effectiveStates: {}, flags: {}},
+    counters: {total: 0, states: {}, effectiveStates: {}, flags: {}, titles: {}},
 };
 
 function rpcProxies(state = initialState, action: RpcProxiesAction): HttpProxiesState {

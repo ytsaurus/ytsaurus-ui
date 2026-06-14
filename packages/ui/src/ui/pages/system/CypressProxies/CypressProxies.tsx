@@ -2,6 +2,7 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 
 import SystemStateOverview from '../SystemStateOverview/SystemStateOverview';
+import i18n from './i18n';
 
 import {useUpdater} from '../../../hooks/use-updater';
 import {setSettingsSystemCypressProxiesCollapsed} from '../../../store/actions/settings/settings';
@@ -51,7 +52,7 @@ function CypressProxies() {
         <React.Fragment>
             {counters.total > 0 && (
                 <ProxiesImpl
-                    name={'Cypress Proxies'}
+                    name={i18n('title_cypress-proxies')}
                     overview={<CypressProxiesOverview counters={counters} />}
                     onToggleCollapsed={onToggle}
                     roleGroups={roleGroups}

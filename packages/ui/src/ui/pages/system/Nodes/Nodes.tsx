@@ -38,6 +38,8 @@ import {type MakeUrlParams, RoleGroup, RoleGroupsContainer} from '../ProxiesImpl
 
 import {SystemNodeTypeSelector} from './NodeTypeSelector';
 
+import i18n from './i18n';
+
 import './Nodes.scss';
 
 const block = cn('system-nodes');
@@ -189,9 +191,11 @@ const Nodes = (props: NodesProps) => {
                     warning={
                         !nodeType.length
                             ? undefined
-                            : `There are no ${nodeType.map(format.ReadableField).join(',')}`
+                            : i18n('alert_no-nodes', {
+                                  nodeTypes: nodeType.map(format.ReadableField).join(','),
+                              })
                     }
-                    hint={'Try to select another node type'}
+                    hint={i18n('context_select-another-node-type')}
                 />
             );
         }
@@ -226,7 +230,7 @@ const Nodes = (props: NodesProps) => {
                         headingClassName={stickyTopClassName}
                         collapsed={collapsed}
                         onToggle={onToggle}
-                        name={'Nodes'}
+                        name={i18n('title_nodes')}
                         size={UI_COLLAPSIBLE_SIZE}
                     >
                         {renderContent()}

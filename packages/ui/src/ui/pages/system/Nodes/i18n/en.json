@@ -1,0 +1,6 @@
+{
+  "field_node-type": "Node type:",
+  "title_nodes": "Nodes",
+  "alert_no-nodes": "There are no {{nodeTypes}}",
+  "context_select-another-node-type": "Try to select another node type"
+}
