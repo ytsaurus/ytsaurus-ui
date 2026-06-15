@@ -71,7 +71,6 @@ import {
     selectTotalCpuTimeSpent,
     selectTotalJobWallTime,
 } from '../../../store/selectors/operations/statistics-v2';
-import {selectShowIncarnationsNext} from '../../../store/selectors/settings/operations';
 import {getCurrentCluster} from '../../../store/selectors/thor';
 import {getYsonSettingsDisableDecode} from '../../../store/selectors/thor/unipika';
 import {type OperationPool, type OperationStates} from '../selectors';
@@ -428,7 +427,6 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
             jobsMonitorIsSupported,
             monitoringComponent,
             timelineTabVisible,
-            showIncarnationsNext,
         } = this.props;
         const {url, params} = match;
         const {operationId} = params;
@@ -484,7 +482,6 @@ class OperationDetail extends React.Component<ReduxProps & RouteProps> {
                             UIFactory.renderIncarnationsTab({
                                 cluster,
                                 operationId,
-                                showIncarnationsNext,
                             })
                         }
                     />
@@ -602,7 +599,6 @@ const mapStateToProps = (state: RootState, routerProps: RouteProps) => {
         operationPerformanceUrlTemplate: selectOperationPerformanceUrlTemplate(state),
         operationEvents,
         ysonSettings: getYsonSettingsDisableDecode(state),
-        showIncarnationsNext: selectShowIncarnationsNext(state),
     };
 };
 
