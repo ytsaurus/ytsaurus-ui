@@ -1,0 +1,11 @@
+{
+  "value_elections": "elections",
+  "value_follower_recovery": "follower recovery",
+  "value_following": "following",
+  "value_leader_recovery": "leader recovery",
+  "value_leading": "leading",
+  "value_offline": "offline",
+  "value_online": "online",
+  "value_stopped": "stopped",
+  "value_unknown": "unknown"
+}
