@@ -15,6 +15,7 @@ import './MasterGroup.scss';
 import {changeMasterMaintenance} from '../../../store/actions/system/masters';
 import {type CypressNode} from '../../../../shared/yt-types';
 import i18n from './i18n/index-instance';
+import {InstanceState} from './InstanceState/InstanceState';
 
 const b = block('master-group');
 
@@ -74,7 +75,7 @@ export const Instance: FC<Props> = ({instance, hostType, allowVoting, allowServi
                 <NodeQuad theme={theme} />
             </div>
             <div className={b('role')}>
-                <span>{hammer.format['ReadableField'](state ? state : 'unknown')}</span>
+                <InstanceState state={state} />
             </div>
             <div className={b('icon')}>
                 {maintenanceMessage && (

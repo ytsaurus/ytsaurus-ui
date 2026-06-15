@@ -1,0 +1,5 @@
+{
+  "value_quorum": "Quorum",
+  "value_weak-quorum": "Weak quorum",
+  "value_no-quorum": "No quorum"
+}

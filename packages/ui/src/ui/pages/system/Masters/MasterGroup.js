@@ -5,7 +5,6 @@ import block from 'bem-cn-lite';
 
 import {Flex} from '@gravity-ui/uikit';
 
-import format from '../../../common/hammer/format';
 import {selectMastersHostType} from '../../../store/selectors/settings';
 import Icon from '../../../components/Icon/Icon';
 
@@ -13,6 +12,7 @@ import i18n from './i18n/index-masters';
 
 import {SwitchLeaderButton} from './SwitchLeader';
 import {Instance} from './Instance';
+import {QuorumLabel} from './QuorumLabel/QuorumLabel';
 
 import map_ from 'lodash/map';
 import './MasterGroup.scss';
@@ -77,11 +77,7 @@ class MasterGroup extends Component {
                         >
                             <Icon face="solid" awesome={icons[status]} />
                         </div>
-                        <div className={b('quorum-label')}>
-                            {format.Readable(status, {
-                                delimiter: '-',
-                            })}
-                        </div>
+                        <QuorumLabel className={b('quorum-label')} state={status} />
 
                         <div className={b('icon')} title={quorumTitle}>
                             <Icon className={b('icon-glyph')} face="" awesome="code-branch" />
