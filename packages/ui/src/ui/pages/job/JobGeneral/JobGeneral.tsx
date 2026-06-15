@@ -18,7 +18,7 @@ import Label from '../../../components/Label';
 import {YsonWithScroll} from '../../../components/Yson/YsonWithScroll';
 import Tabs from '../../../components/Tabs/Tabs';
 
-import {getJobGeneralYsonSettings} from '../../../store/selectors/thor/unipika';
+import {selectJobGeneralYsonSettings} from '../../../store/selectors/thor/unipika';
 import {DEFAULT_TAB, Tab} from '../../../constants/job';
 import {type RootState} from '../../../store/reducers';
 import {Page} from '../../../constants/index';
@@ -48,7 +48,7 @@ const block = cn('job-general');
 export default function JobGeneral() {
     const cluster = useSelector(selectCluster);
     const match = useRouteMatch<RouteInfo>();
-    const settings = useSelector(getJobGeneralYsonSettings);
+    const settings = useSelector(selectJobGeneralYsonSettings);
     const job = useSelector(selectJob);
     const {loaded} = useSelector((state: RootState) => state.job.general);
 

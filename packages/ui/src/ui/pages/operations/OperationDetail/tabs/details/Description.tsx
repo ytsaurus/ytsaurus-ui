@@ -9,7 +9,7 @@ import CollapsableText from '../../../../../components/CollapsableText/Collapsab
 import {MetaTable} from '@ytsaurus/components';
 import {Yson} from '../../../../../components/Yson/Yson';
 import {canRenderAsMap} from './helpers/canRenderAsMap';
-import {getYsonSettingsDisableDecode} from '../../../../../store/selectors/thor/unipika';
+import {selectYsonSettingsDisableDecode} from '../../../../../store/selectors/thor/unipika';
 import {type DetailedOperationSelector} from '../../../selectors';
 
 type Props = {
@@ -17,7 +17,7 @@ type Props = {
 };
 
 export const Description: FC<Props> = ({description}) => {
-    const settings = useSelector(getYsonSettingsDisableDecode);
+    const settings = useSelector(selectYsonSettingsDisableDecode);
 
     if (canRenderAsMap(description)) {
         const value = ypath.getValue(description);

@@ -4,7 +4,7 @@ import {useSelector} from '../../../../store/redux-hooks';
 import {selectNavigationTableMountConfig} from '../../../../store/selectors/navigation/content/table-mount-config';
 import {YTErrorBlock} from '../../../../containers/Block/Block';
 import {YsonWithScroll} from '../../../../components/Yson/YsonWithScroll';
-import {getNavigationMountConfigYsonSettings} from '../../../../store/selectors/thor/unipika';
+import {selectNavigationMountConfigYsonSettings} from '../../../../store/selectors/thor/unipika';
 import {YsonDownloadButton} from '../../../../components/DownloadAttributesButton';
 import {type UnipikaValue} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
 import {pathToFileName} from '../../helpers/pathToFileName';
@@ -16,7 +16,7 @@ function TableMountConfig() {
     const {data, error} = useSelector(selectNavigationTableMountConfig);
     const path = useSelector(selectPath);
 
-    const settings = useSelector(getNavigationMountConfigYsonSettings);
+    const settings = useSelector(selectNavigationMountConfigYsonSettings);
 
     return (
         <div className={block('table-mount-config')}>

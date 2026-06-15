@@ -7,7 +7,7 @@ import set_ from 'lodash/set';
 
 import {createSelector} from 'reselect';
 import {ACCOUNTS_TABLE_ID, ROOT_ACCOUNT_NAME} from '../../../constants/accounts/accounts';
-import {getTables} from '../../../store/selectors/tables';
+import {selectTables} from '../../../store/selectors/tables';
 import hammer from '../../../common/hammer';
 import ypath from '../../../common/thor/ypath';
 import {
@@ -27,7 +27,7 @@ export const selectUsableAccounts = (state) => state.accounts.accounts.usableAcc
 export const selectAccountsNameFilter = (state) => state.accounts.accounts.activeNameFilter;
 export const selectAccountsAbcServiceIdSlugFilter = (state) =>
     state.accounts.accounts.abcServiceFilter;
-export const selectAccountsSortInfo = (state) => getTables(state)[ACCOUNTS_TABLE_ID];
+export const selectAccountsSortInfo = (state) => selectTables(state)[ACCOUNTS_TABLE_ID];
 
 export const selectEditableAccount = (state) => state.accounts.accounts.editableAccount;
 

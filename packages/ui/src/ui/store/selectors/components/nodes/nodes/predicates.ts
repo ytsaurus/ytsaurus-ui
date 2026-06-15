@@ -19,7 +19,7 @@ import {
     groupFilterInitialState,
 } from '../../../../../store/reducers/components/nodes/setup/setup';
 import {MEDIUM_COLS_PREFIX} from '../../../../../constants/components/nodes/nodes';
-import {getMediumListNoCache} from '../../../../../store/selectors/thor';
+import {selectMediumListNoCache} from '../../../../../store/selectors/thor';
 import {type ValueOf} from '../../../../../types';
 import {type Node} from '../../../../reducers/components/nodes/nodes/node';
 import {isRangeFilterDefined} from '../../../../../utils/components/nodes/setup';
@@ -74,7 +74,7 @@ export const selectComponentNodesFilterStatePredicate = createSelector(
 );
 
 export const selectComponentNodesFiltersSetup = createSelector(
-    [selectSetupFiltersRaw, getMediumListNoCache],
+    [selectSetupFiltersRaw, selectMediumListNoCache],
     (setup, mediumList) => {
         const mediumDefaults = reduce_(
             mediumList,

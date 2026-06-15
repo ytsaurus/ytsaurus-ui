@@ -7,7 +7,7 @@ import {
     selectOperationTypedAttributes,
 } from '../../../../../store/selectors/operations/operation';
 import {YsonWithScroll} from '../../../../../components/Yson/YsonWithScroll';
-import {getYsonSettingsDisableDecode} from '../../../../../store/selectors/thor/unipika';
+import {selectYsonSettingsDisableDecode} from '../../../../../store/selectors/thor/unipika';
 import {useRumMeasureStop} from '../../../../../rum/RumUiContext';
 import {RumMeasureTypes} from '../../../../../rum/rum-measure-types';
 import {isFinalLoadingStatus} from '../../../../../utils/utils';
@@ -37,7 +37,7 @@ function useOperationAttributesRumMesures() {
 
 function OperationAttributes({className}: {className: string}) {
     const typedAttributes = useSelector(selectOperationTypedAttributes);
-    const settings = useSelector(getYsonSettingsDisableDecode);
+    const settings = useSelector(selectYsonSettingsDisableDecode);
     const id = useSelector(selectOperationId);
 
     useOperationAttributesRumMesures();
