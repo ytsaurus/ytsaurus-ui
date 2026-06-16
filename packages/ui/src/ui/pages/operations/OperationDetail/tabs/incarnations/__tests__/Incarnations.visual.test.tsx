@@ -32,8 +32,3 @@ test('Incarnations: Empty', async ({mount, expectScreenshot, router}) => {
     await mount(<IncarnationStories.Empty />);
     await expectScreenshot();
 });
-
-test('Incarnations: WithTelemetryAndAlert', async ({mount, expectScreenshot}) => {
-    await mount(<IncarnationStories.WithTelemetryAndAlert />);
-    await expectScreenshot();
-});

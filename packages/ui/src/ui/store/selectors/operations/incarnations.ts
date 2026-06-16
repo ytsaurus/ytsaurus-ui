@@ -32,8 +32,6 @@ export type Incarnation = {
     interval: string;
 };
 
-export type Incarnations = Array<Incarnation>;
-
 function makeFinishReason(event: OperationEvent, operation: OperationSelector, isLast: boolean) {
     if (
         ['job_aborted', 'job_failed', 'job_interrupted'].includes(
@@ -84,7 +82,7 @@ function makeInterval(startDatetime: string, finishDatetime: string) {
 export const selectIncarnationsInfo = createSelector(
     [selectOperation, getIncarnationsList, getIdFilter, getIncarnations],
     (operation, operationEvents, idFilter, incarnationsReqInfo) => {
-        let incarnations: Incarnations = [];
+        let incarnations: Incarnation[] = [];
 
         const {isLoading, error} = incarnationsReqInfo;
 

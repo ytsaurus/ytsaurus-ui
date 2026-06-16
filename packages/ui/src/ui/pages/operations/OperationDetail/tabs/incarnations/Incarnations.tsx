@@ -7,7 +7,7 @@ import {Alert, Card, Disclosure, Flex, Loader} from '@gravity-ui/uikit';
 import {type YTError} from '../../../../../../@types/types';
 
 import {
-    type Incarnations as YTIncarnations,
+    type Incarnation,
     selectIncarnationsInfo,
 } from '../../../../../store/selectors/operations/incarnations';
 
@@ -26,10 +26,9 @@ import './Incarnations.scss';
 const block = b('incarnations');
 
 export type IncarnationProps = {
-    incarnations: YTIncarnations;
+    incarnations: Incarnation[];
     isLoading: boolean;
     error?: YTError | AxiosError;
-    renderTelemetryInfo?: (incarnationId: string) => React.ReactNode;
     incarnationsCount?: React.ReactNode;
     incarnationsToolbar?: React.ReactNode;
     incarnationsAlert?: React.ReactNode;
@@ -57,7 +56,6 @@ export function IncarnationsTemplate(props: IncarnationProps) {
         incarnationsCount,
         incarnationsToolbar,
         incarnationsAlert,
-        renderTelemetryInfo,
     } = props;
 
     if (error) {
@@ -98,7 +96,6 @@ export function IncarnationsTemplate(props: IncarnationProps) {
                                             className={block('incarnation-info')}
                                         >
                                             <IncarnationMeta incarnation={incarnation} />
-                                            {renderTelemetryInfo?.(incarnation.id)}
                                         </Flex>
                                     </Disclosure>
                                 </Card>

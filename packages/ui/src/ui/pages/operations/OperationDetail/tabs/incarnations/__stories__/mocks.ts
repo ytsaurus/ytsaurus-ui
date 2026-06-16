@@ -1,5 +1,4 @@
 import {http} from 'msw';
-import {type Incarnations} from '../../../../../../store/selectors/operations/incarnations';
 import {type OperationDetailSuccessActionData} from '../../../../../../store/reducers/operations/detail';
 import {type OperationEvent} from '../../../../../../../shared/yt-types';
 
@@ -31,57 +30,6 @@ export const operationData: OperationDetailSuccessActionData = {
         intermediateResources: undefined,
     },
 };
-
-export const mockIncarnations: Incarnations = [
-    {
-        id: 'incarnation-1',
-        interval: '2024-01-15 10:00 — 10:30',
-        switch_info: {
-            trigger_job_id: '55d99491-46b071c4-42e0384-5000ba2',
-            abort_reason: 'allocation_finished',
-            trigger_job_error: {
-                code: 1,
-                message: 'Allocation finished concurrently with settling job',
-                attributes: {
-                    pid: 93709,
-                    tid: 14016941903464638000,
-                    thread: 'Controller:10',
-                    fid: 18445260849922996000,
-                    datetime: '2025-08-12T11:21:54.485092Z',
-                    trace_id: '34f415c8-ef78485c-eeac114a-d4fef217',
-                    span_id: 2252474309918773000,
-                    abort_reason: 'allocation_finished',
-                },
-            },
-        },
-        trigger_job_id: 'job-123',
-        finish_reason: 'Operation completed',
-        finish_status: 'completed',
-        switch_reason: 'job_completed',
-    },
-    {
-        id: 'incarnation-2',
-        interval: '2024-01-15 10:30 — 11:00',
-        switch_info: {
-            reason: 'job_failed',
-            error: 'Memory limit exceeded',
-        },
-        trigger_job_id: 'job-456',
-        finish_reason: 'Job failed',
-        finish_status: 'failed',
-        switch_reason: 'job_failed',
-    },
-    {
-        id: 'incarnation-3',
-        interval: '2024-01-15 11:00 — 11:45',
-        switch_info: {
-            reason: 'system_restart',
-        },
-        finish_reason: 'System',
-        finish_status: 'unknown',
-        switch_reason: 'system_restart',
-    },
-];
 
 const operationEvents: OperationEvent[] = [
     {
