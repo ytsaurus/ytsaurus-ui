@@ -87,7 +87,7 @@ import {DetailTableCell} from './DetailTableCell';
 import {Page} from '../../../../constants/index';
 import PathView from '../../../../containers/PathFragment/PathFragment';
 import {Button, Flex, Icon as GravityIcon, Tooltip} from '@gravity-ui/uikit';
-import {makeRoutedURL} from '../../../../store/window-store';
+import {makeRoutedURL} from '../../../../store/location';
 
 const TABLE_SETTINGS: Settings = {
     displayIndices: false,
