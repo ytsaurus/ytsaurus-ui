@@ -29,7 +29,6 @@ export type IncarnationProps = {
     incarnations: YTIncarnations;
     isLoading: boolean;
     error?: YTError | AxiosError;
-    renderTelemetryInfo?: (incarnationId: string) => React.ReactNode;
     incarnationsCount?: React.ReactNode;
     incarnationsToolbar?: React.ReactNode;
     incarnationsAlert?: React.ReactNode;
@@ -57,7 +56,6 @@ export function IncarnationsTemplate(props: IncarnationProps) {
         incarnationsCount,
         incarnationsToolbar,
         incarnationsAlert,
-        renderTelemetryInfo,
     } = props;
 
     if (error) {
@@ -98,7 +96,6 @@ export function IncarnationsTemplate(props: IncarnationProps) {
                                             className={block('incarnation-info')}
                                         >
                                             <IncarnationMeta incarnation={incarnation} />
-                                            {renderTelemetryInfo?.(incarnation.id)}
                                         </Flex>
                                     </Disclosure>
                                 </Card>

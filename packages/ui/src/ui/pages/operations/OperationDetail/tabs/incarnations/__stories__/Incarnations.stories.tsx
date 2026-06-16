@@ -1,18 +1,12 @@
 import React from 'react';
 import {type Meta, type StoryObj} from '@storybook/react';
-import {Alert} from '@gravity-ui/uikit';
 
 // @ts-expect-error
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
-import {YTErrorBlock} from '../../../../../../containers/Block/Block';
-
-import {IncarnationsCountTemplate} from '../IncarnationsCount';
 import Incarnations, {type IncarnationProps, IncarnationsTemplate} from '../Incarnations';
-import {IncarnationsToolbarTemplate} from '../IncarnationsToolbar';
 import {IncarnationsWithRequests} from '../__tests__/helpers';
 import {
-    mockIncarnations,
     operationEventsHandler,
     operationEventsHandlerError,
     operationEventsHandlerWithLoading,
@@ -36,8 +30,6 @@ export default {
 } as Meta<IncarnationProps>;
 
 type Story = StoryObj<IncarnationProps>;
-
-const incarnationsCount = <IncarnationsCountTemplate items={[{type: 'All', count: 3}]} />;
 
 const BaseComponent = () => <IncarnationsWithRequests component={<Incarnations />} />;
 
@@ -75,21 +67,4 @@ export const Empty: Story = {
             handlers: [operationEventsHandlerError],
         },
     },
-};
-
-export const WithTelemetryAndAlert: Story = {
-    args: {
-        incarnations: mockIncarnations,
-        isLoading: false,
-        error: undefined,
-        renderTelemetryInfo: () => (
-            <YTErrorBlock header={'Some Fail'} message={'Operation failed for some reason'} />
-        ),
-        incarnationsCount,
-        incarnationsToolbar: <IncarnationsToolbarTemplate />,
-        incarnationsAlert: (
-            <Alert title={'You may be forgot to pass some params to enable telemetry'} />
-        ),
-    },
-    render: (args) => <IncarnationsTemplate {...args} />,
 };
