@@ -46,7 +46,7 @@ import {useAllUserNamesFiltered} from '../../../../hooks/global';
 import {useUpdater} from '../../../../hooks/use-updater';
 
 import './AccountUsageToolbar.scss';
-import {makeRoutedURL} from '../../../../store/window-store';
+import {makeRoutedURL} from '../../../../store/location';
 import i18n from './i18n';
 
 const block = cn('account-usage-toolbar');

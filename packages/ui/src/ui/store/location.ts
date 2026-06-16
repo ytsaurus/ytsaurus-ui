@@ -125,5 +125,3 @@ export function makeRoutedURL(url: string, paramOverrides: any = {}, rootState?:
 }
 
 export type MakeRotedUrlFnType = typeof makeRoutedURL;
-
-(window as any).makeRoutedURL = makeRoutedURL;
