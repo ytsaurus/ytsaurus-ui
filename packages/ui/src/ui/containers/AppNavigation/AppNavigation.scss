@@ -18,23 +18,12 @@
         overflow-x: hidden;
     }
 
-    .gn-split-pane {
+    [class*='gn-split-pane'] {
         z-index: var(--aside-header-z-index) !important;
     }
 
-    .gn-aside-header-logo__logo-link {
+    [class*='gn-aside-header-logo__logo-link'] {
         display: flex;
-    }
-
-    .gn-aside-header {
-        &__aside {
-            position: fixed;
-        }
-
-        &__content {
-            padding-left: var(--gn-aside-header-size);
-            width: 100%;
-        }
     }
 }
 
