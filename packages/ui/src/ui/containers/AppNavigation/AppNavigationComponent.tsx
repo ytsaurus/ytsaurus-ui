@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {useHistory} from 'react-router';
 import cn from 'bem-cn-lite';
-import {FooterItem, PageLayoutAside} from '@gravity-ui/navigation';
+import {FooterItem, type MakeItemParams, PageLayoutAside} from '@gravity-ui/navigation';
 import {Menu} from '@gravity-ui/uikit';
 import {useDispatch, useSelector} from '../../store/redux-hooks';
 
@@ -45,17 +45,18 @@ function AppNavigationComponent({
         return [
             {
                 id: 'panel',
-                content: panelContent,
-                visible: panelVisible,
+                children: panelContent,
+                open: panelVisible,
                 className: panelClassName,
             },
             {
                 id: 'settings',
-                content: settingsContent,
-                visible: settingsVisible,
+                children: settingsContent,
+                open: settingsVisible,
+                size: 'auto' as const,
             },
         ];
-    }, [panelVisible, panelContent, settingsVisible, settingsContent]);
+    }, [panelVisible, panelContent, panelClassName, settingsVisible, settingsContent]);
 
     const [popupVisible, setPopupVisible] = useState(false);
     const settingsCluster = useSelector(selectSettingsCluster);
@@ -100,13 +101,11 @@ function AppNavigationComponent({
                             <React.Fragment>
                                 <FooterItem
                                     key="support"
+                                    id="support"
                                     compact={compact}
-                                    item={{
-                                        id: 'support',
-                                        title: i18n('action_report-bug'),
-                                        icon: BugIcon,
-                                        onItemClick: onSupportClick,
-                                    }}
+                                    title={i18n('action_report-bug')}
+                                    icon={BugIcon}
+                                    onItemClick={onSupportClick}
                                 />
                                 {supportContent}
                             </React.Fragment>
@@ -119,13 +118,11 @@ function AppNavigationComponent({
                     footerItems.push(
                         <FooterItem
                             key="settings"
+                            id="settings"
                             compact={compact}
-                            item={{
-                                id: 'settings',
-                                title: i18n('action_settings'),
-                                onItemClick: toggleSettingsVisible,
-                                icon: GearIcon,
-                            }}
+                            title={i18n('action_settings')}
+                            onItemClick={toggleSettingsVisible}
+                            icon={GearIcon}
                         />,
                     );
                 }
@@ -134,30 +131,35 @@ function AppNavigationComponent({
                     footerItems.push(
                         <FooterItem
                             key="user"
+                            id="user"
                             compact={compact}
-                            item={{
-                                id: 'user',
-                                title: currentUser,
-                                onItemClick: () => {
-                                    setPopupVisible(!popupVisible);
-                                },
-                                itemWrapper: ({title}: any, makeItem: any) => {
-                                    return makeItem({
-                                        title,
-                                        icon: (
-                                            <img
-                                                className={block('user-icon')}
-                                                width={40}
-                                                height={40}
-                                                src={unknown}
-                                            />
-                                        ),
-                                    });
-                                },
+                            title={currentUser}
+                            onItemClick={() => {
+                                setPopupVisible(!popupVisible);
+                            }}
+                            itemWrapper={(
+                                makeItemParams: MakeItemParams,
+                                makeItem: (params: MakeItemParams) => React.ReactNode,
+                            ) => {
+                                return makeItem({
+                                    ...makeItemParams,
+                                    icon: (
+                                        <img
+                                            className={block('user-icon')}
+                                            width={40}
+                                            height={40}
+                                            src={unknown}
+                                        />
+                                    ),
+                                });
                             }}
                             enableTooltip={!popupVisible}
                             popupVisible={popupVisible}
-                            onClosePopup={() => setPopupVisible(false)}
+                            onOpenChangePopup={(open) => {
+                                if (!open) {
+                                    setPopupVisible(false);
+                                }
+                            }}
                             renderPopupContent={() => {
                                 return (
                                     <div className={block('settings-ul')}>

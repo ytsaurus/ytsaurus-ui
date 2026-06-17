@@ -59,13 +59,13 @@ export default function AppNavigation({children}: ExtProps) {
 
     const togglePanelVisibility = React.useCallback(() => {
         setSettingsVisible(false);
-        setPanelVisible(!panelVisible);
-    }, [panelVisible]);
+        setPanelVisible((visible) => !visible);
+    }, []);
 
     const toggleSettingsVisible = React.useCallback(() => {
         setPanelVisible(false);
-        setSettingsVisible(!settingsVisible);
-    }, [settingsVisible]);
+        setSettingsVisible((visible) => !visible);
+    }, []);
 
     const menuItems: typeof items = React.useMemo(() => {
         if (!cluster) {
@@ -103,7 +103,7 @@ export default function AppNavigation({children}: ExtProps) {
                 }
             }, 500);
         },
-        [dispatch],
+        [dispatch, className],
     );
 
     const props: AppNavigationProps = {
