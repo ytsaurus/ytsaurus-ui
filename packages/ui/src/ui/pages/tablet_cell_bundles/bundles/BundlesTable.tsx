@@ -108,19 +108,11 @@ const SHORT_TITLE: typeof COLUMN_TITLE = {
     },
 };
 
-function CopyHostListAction(props: {
-    bundle: string;
-    copyHostListToClipboard(bundle: string): void;
-}) {
-    const {bundle, copyHostListToClipboard} = props;
-
-    const handleClick = React.useCallback(
-        () => copyHostListToClipboard(bundle),
-        [bundle, copyHostListToClipboard],
-    );
+function CopyHostListAction(props: {hosts: string}) {
+    const {hosts} = props;
 
     return (
-        <div className={block('actions-copy-hosts')} onClick={handleClick}>
+        <div className={block('actions-copy-hosts')}>
             <Tooltip
                 content={
                     <span className={block('no-wrap')}>
@@ -129,7 +121,7 @@ function CopyHostListAction(props: {
                 }
                 placement={'bottom-start'}
             >
-                <ClipboardButton view="flat-secondary" onCopy={handleClick} />
+                <ClipboardButton view="flat-secondary" text={hosts} />
             </Tooltip>
         </div>
     );
@@ -259,8 +251,8 @@ class BundlesTable extends React.Component<ReduxProps> {
         const {
             allowPerBundleAccounting,
             bundleDashboardUrl,
+            bundleHostsByName,
             cluster,
-            copyHostListToClipboard,
             pathPrefix,
             showCellBundleEditor,
             writeableByName,
@@ -305,11 +297,8 @@ class BundlesTable extends React.Component<ReduxProps> {
                         />
                     </div>
                 )}
-                {nodes && nodes.length > 0 && (
-                    <CopyHostListAction
-                        bundle={bundle}
-                        copyHostListToClipboard={copyHostListToClipboard}
-                    />
+                {nodes && nodes.length > 0 && bundleHostsByName[bundle] && (
+                    <CopyHostListAction hosts={bundleHostsByName[bundle]} />
                 )}
             </div>
         );
@@ -551,8 +540,8 @@ export type ReduxProps = {
     activeBundleLink(cluster: string, bundle: string, enable_bundle_controller?: boolean): string;
     bundleDashboardUrl?(cluster: string, bundle: string): string | undefined;
     writeableByName?: {get: (bundleName: string) => boolean | undefined};
+    bundleHostsByName: Record<string, string>;
 } & {
-    copyHostListToClipboard(bundle: string): void;
     setBundlesSortState(bundlesSort: SortState<keyof TabletBundle>): void;
     setActiveBundle(activeBundle: string): void;
     showCellBundleEditor(bundleName: string): void;

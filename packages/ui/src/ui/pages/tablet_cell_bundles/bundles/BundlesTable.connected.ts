@@ -17,6 +17,7 @@ import {
 import {
     selectTabletBundlesTableMode,
     selectTabletBundlesWriteableByName,
+    selectTabletsBundleHostsByName,
     selectTabletsBundlesSortState,
     selectTabletsBundlesSorted,
     selectTabletsBundlesTotal,
@@ -82,6 +83,7 @@ const mapStateToProps = (state: RootState) => {
         activeBundleLink: tabletActiveBundleLink,
         bundleDashboardUrl: tabletCellBundleDashboardUrl,
         writeableByName: selectTabletBundlesWriteableByName(state),
+        bundleHostsByName: selectTabletsBundleHostsByName(state),
     };
 };
 

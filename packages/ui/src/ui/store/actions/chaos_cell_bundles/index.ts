@@ -1,4 +1,3 @@
-import copy from 'copy-to-clipboard';
 import {type ThunkAction} from 'redux-thunk';
 
 import {getBatchError} from '../../../../shared/utils/error';
@@ -18,12 +17,7 @@ import {
     type ChaosBundlesAction,
     type ChaosPartialAction,
 } from '../../../store/reducers/chaos_cell_bundles';
-import {
-    filterChaosCellsByBundle,
-    prepareHostsFromCells,
-    selectChaosBundlesSorted,
-    selectChaosCells,
-} from '../../../store/selectors/chaos_cell_bundles';
+import {selectChaosBundlesSorted} from '../../../store/selectors/chaos_cell_bundles';
 import {selectCluster} from '../../../store/selectors/global';
 import {type SortState} from '../../../types';
 import {
@@ -126,13 +120,5 @@ export function setChaosFirstBundleAsActive(): ChaosBundlesThunkAction {
         const cluster = selectCluster(state);
         dispatch(setChaosActiveBundle(first.bundle));
         getAppBrowserHistory().push(tabletActiveBundleLink(cluster, first.bundle));
-    };
-}
-
-export function copyHostListToClipboard(bundle: string): ChaosBundlesThunkAction {
-    return (_dispatch, getState) => {
-        const cells = filterChaosCellsByBundle(bundle, selectChaosCells(getState()));
-        const hosts = prepareHostsFromCells(cells);
-        copy(hosts || '');
     };
 }

@@ -5,20 +5,10 @@ import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 import WithStickyToolbar from '../../../components/WithStickyToolbar/WithStickyToolbar';
 import BundlesTable from '../../../pages/tablet_cell_bundles/bundles/BundlesTable.connected';
 import BundlesTableInstruments from '../../../pages/tablet_cell_bundles/bundles/BundlesTableInstruments.connected';
-import {
-    copyHostListToClipboard,
-    setTabletsActiveBundle,
-} from '../../../store/actions/tablet_cell_bundles';
+import {setTabletsActiveBundle} from '../../../store/actions/tablet_cell_bundles';
 
 export default function Bundles() {
     const dispatch = useDispatch();
-
-    const handleCopyHostListToClipboard = React.useCallback(
-        (bundle: string) => {
-            dispatch(copyHostListToClipboard(bundle));
-        },
-        [dispatch],
-    );
 
     React.useEffect(() => {
         dispatch(setTabletsActiveBundle(''));
@@ -29,7 +19,7 @@ export default function Bundles() {
             <WithStickyToolbar
                 hideToolbarShadow
                 toolbar={<BundlesTableInstruments />}
-                content={<BundlesTable copyHostListToClipboard={handleCopyHostListToClipboard} />}
+                content={<BundlesTable />}
             />
         </ErrorBoundary>
     );
