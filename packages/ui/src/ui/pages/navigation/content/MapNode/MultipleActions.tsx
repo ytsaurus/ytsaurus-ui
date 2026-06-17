@@ -4,7 +4,6 @@ import isEmpty_ from 'lodash/isEmpty';
 import map_ from 'lodash/map';
 import some_ from 'lodash/some';
 
-import copyToClipboard from 'copy-to-clipboard';
 import {DropdownMenu, Icon as UIKitIcon} from '@gravity-ui/uikit';
 import {CircleQuestion} from '@gravity-ui/icons';
 
@@ -243,9 +242,8 @@ export default function MultipleActions(props: {className?: string}) {
         ].filter((e) => e.length);
     }, [restoreMoveCopy, transferItem, dynTablesSection, editItem, mergeSortSection]);
 
-    const onCopyPathClick = React.useCallback(() => {
-        const res = map_(selectedNodes, 'path').join('\n');
-        copyToClipboard(res);
+    const selectedNodesPaths = useMemo(() => {
+        return map_(selectedNodes, 'path').join('\n');
     }, [selectedNodes]);
 
     const handleClearAll = React.useCallback(() => {
@@ -280,9 +278,9 @@ export default function MultipleActions(props: {className?: string}) {
 
             <span className={b('item')}>
                 <ClipboardButton
+                    text={selectedNodesPaths}
                     buttonText={'Copy paths'}
                     title="Copy selected paths"
-                    onCopy={onCopyPathClick}
                 />
             </span>
 
