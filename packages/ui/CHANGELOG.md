@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.16.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.15.0...ui-v3.16.0) (2026-06-17)
+
+
+### Features
+
+* **Components/node:** add new tab - table for exe tables [YTFRONT-5037] ([640cea2](https://github.com/ytsaurus/ytsaurus-ui/commit/640cea24a519b9d097cbaa15b7c6121a4191ada1))
+
+
+### Bug Fixes
+
+* **Components/Operations:** redesign of operation's dialog of pools and weight editing [YTFRONT-3779] ([2e5056d](https://github.com/ytsaurus/ytsaurus-ui/commit/2e5056d70cdec8699bfe4eb7fd0c196fe25aa083))
+* **Navigation:** copy selected paths [YTFRONT-5809] ([a0dd387](https://github.com/ytsaurus/ytsaurus-ui/commit/a0dd38759f3b02113ecb09c2061561ae90d9734a))
+
 ## [3.15.0](https://github.com/ytsaurus/ytsaurus-ui/compare/ui-v3.14.0...ui-v3.15.0) (2026-06-10)
 
 
