@@ -10,6 +10,7 @@ import {showChaosCellBundleEditor} from '../../../store/actions/chaos_cell_bundl
 import {type RootState} from '../../../store/reducers';
 import {selectCluster} from '../../../store/selectors/global';
 import {
+    selectChaosBundleHostsByName,
     selectChaosBundlesSortState,
     selectChaosBundlesSorted,
     selectChaosBundlesTableMode,
@@ -41,6 +42,7 @@ const mapStateToProps = (state: RootState) => {
         columns,
         activeBundleLink: chaosActiveBundleLink,
         writeableByName: {get: () => true},
+        bundleHostsByName: selectChaosBundleHostsByName(state),
     };
 };
 

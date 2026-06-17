@@ -17,10 +17,13 @@ import {
 } from '../../../store/reducers/tablet_cell_bundles';
 import {createSelector} from 'reselect';
 import {concatByAnd} from '../../../common/hammer/predicate';
-import {prepareHost} from '../../../utils';
 import {selectCluster} from '../global';
 import {sortArrayBySortState} from '../../../utils/sort-helpers';
-import {sortTableBundles} from '../../../utils/tablet_cell_bundles';
+import {
+    prepareBundleHostsByName,
+    prepareHostsFromCells,
+    sortTableBundles,
+} from '../../../utils/tablet_cell_bundles';
 import {makeComponentsNodesUrl, makeProxyUrl} from '../../../utils/app-url';
 import {
     selectTabletCellBundleControllerInstanceDetailsMap,
@@ -353,11 +356,10 @@ export const selectTabletsCellsHostsOfActiveBundle = createSelector(
     },
 );
 
-export function prepareHostsFromCells(cells: Array<TabletCell>) {
-    return uniq_(map_(cells, ({peerAddress}) => prepareHost(peerAddress)).filter(Boolean))
-        .sort()
-        .join('|');
-}
+export const selectTabletsBundleHostsByName = createSelector(
+    [selectTabletsCells],
+    prepareBundleHostsByName,
+);
 
 export interface TabletsCellBundlesBreadcrumbsItem {
     text: string;

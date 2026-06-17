@@ -28,14 +28,8 @@ import {
 } from '../../../utils/components/tablet-cells';
 import {type SortState} from '../../../types';
 import {bundlesTrackVisit} from '../favourites';
-import {
-    filterTabletCellsByBundle,
-    prepareHostsFromCells,
-    selectTabletsBundlesSorted,
-    selectTabletsCells,
-} from '../../selectors/tablet_cell_bundles';
+import {selectTabletsBundlesSorted} from '../../selectors/tablet_cell_bundles';
 
-import copy from 'copy-to-clipboard';
 import {wrapApiPromiseByToaster} from '../../../utils/utils';
 import i18n from './i18n';
 import {selectCluster, selectCurrentUserName} from '../../selectors/global';
@@ -269,13 +263,5 @@ export function setTabletsFirstBundleAsActive(): TabletsBundlesThunkAction {
         const cluster = selectCluster(state);
         dispatch(setTabletsActiveBundle(first.bundle));
         getAppBrowserHistory().push(tabletActiveBundleLink(cluster, first.bundle));
-    };
-}
-
-export function copyHostListToClipboard(bundle: string): TabletsBundlesThunkAction {
-    return (_dispatch, getState) => {
-        const cells = filterTabletCellsByBundle(bundle, selectTabletsCells(getState()));
-        const hosts = prepareHostsFromCells(cells);
-        copy(hosts || '');
     };
 }

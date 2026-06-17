@@ -3,6 +3,9 @@ import {Page} from '../../constants';
 import {TabletsTab} from '../../constants/tablets';
 import {type OrderType, multiSortWithUndefined, orderTypeToOrderK} from '../sort-helpers';
 
+export {prepareBundleHostsByName, prepareHostsFromCells} from './cell-hosts';
+export type {CellWithBundle} from './cell-hosts';
+
 export function tabletCellBundleDashboardUrl(cluster: string, bundle: string) {
     return UIFactory.makeUrlForTabletCellBundleDashboard(cluster, bundle);
 }

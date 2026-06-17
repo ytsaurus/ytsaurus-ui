@@ -14,9 +14,12 @@ import {
     tabletActiveChaosBundleLink,
     tabletChaosBundleRootLink,
 } from '../../../utils/components/tablet-cells';
-import {prepareHost} from '../../../utils';
 import {sortArrayBySortState} from '../../../utils/sort-helpers';
-import {sortTableBundles} from '../../../utils/tablet_cell_bundles';
+import {
+    prepareBundleHostsByName,
+    prepareHostsFromCells,
+    sortTableBundles,
+} from '../../../utils/tablet_cell_bundles';
 
 export const selectChaosIsLoaded = (state: RootState) => state.chaos_cell_bundles.loaded;
 export const selectChaosIsLoading = (state: RootState) => state.chaos_cell_bundles.loading;
@@ -212,11 +215,10 @@ export const selectChaosCellsHostsOfActiveBundle = createSelector(
     },
 );
 
-export function prepareHostsFromCells(cells: Array<ChaosCell>) {
-    return uniq_(map_(cells, ({peerAddress}) => prepareHost(peerAddress)).filter(Boolean))
-        .sort()
-        .join('|');
-}
+export const selectChaosBundleHostsByName = createSelector(
+    [selectChaosCells],
+    prepareBundleHostsByName,
+);
 
 export interface ChaosCellBundlesBreadcrumbsItem {
     text: string;
