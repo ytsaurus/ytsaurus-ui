@@ -1,4 +1,4 @@
-import {Page} from '@playwright/test';
+import {type Page} from '@playwright/test';
 import {E2E_DIR_NAME} from '../utils';
 import {replaceInnerHtml} from '../utils/dom';
 import type {ConfigData} from '../../src/shared/yt-types';
@@ -169,7 +169,6 @@ export class BasePage extends HasPage {
                     const {children = []} =
                         document.querySelector(`${selector} thead tr:nth-child(1)`) ?? {};
                     return [...children].map((c) => (c as HTMLElement).offsetWidth);
-                    return [];
                 },
                 {selector, dispatchResizeEvent: useResizeEventUnsafe && counter <= 1},
             );
@@ -247,11 +246,12 @@ export class BasePage extends HasPage {
     async settingsToggleVisibility({waitUntilClosed}: {waitUntilClosed?: boolean} = {}) {
         await this.page.waitForFunction(() => {
             const el = document.querySelector<HTMLElement>(
-                '.gn-aside-header__footer [title="Settings"]',
+                '[class*="gn-aside-header__footer"] [title="Settings"]',
             );
             el?.click();
             return Boolean(el);
         });
+
         if (waitUntilClosed) {
             await this.page.waitForFunction(() => {
                 return !document.querySelector('.settings-panel');
