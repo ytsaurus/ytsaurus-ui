@@ -12,18 +12,12 @@ if (debugPort) {
     console.log({debugPort}, '\n');
 }
 
-const useRspack = ['1', 'true'].includes(String(process.env.USE_RSPACK).toLowerCase());
-
 const port = Number(process.env.LOCAL_DEV_PORT);
 
-const rspackConfig: Pick<ServiceConfig['client'], 'bundler' | 'cache' | 'javaScriptLoader'> = {
+const client: ServiceConfig['client'] = {
     bundler: 'rspack',
     javaScriptLoader: 'swc',
     cache: true,
-};
-
-const client: ServiceConfig['client'] = {
-    ...(useRspack ? rspackConfig : {}),
     watchOptions: {
         aggregateTimeout: 1000,
     },
