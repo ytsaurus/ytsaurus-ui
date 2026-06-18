@@ -25,17 +25,17 @@ import {
     type AccountsUsageDataResponse,
 } from '../../reducers/accounts/usage/accounts-usage-list';
 import {
-    getAccountUsageCurrentSnapshot,
-    getAccountUsageDateRangeFilter,
-    getAccountUsageFieldFiltersRequestParameter,
-    getAccountUsageListRequestParams,
-    getAccountUsageOwnerFilter,
-    getAccountUsagePageIndex,
-    getAccountUsagePathFilter,
-    getAccountUsageSortState,
-    getAccountUsageTreePath,
-    getAccountUsageTreeRequestParams,
-    getAccountUsageViewType,
+    selectAccountUsageCurrentSnapshot,
+    selectAccountUsageDateRangeFilter,
+    selectAccountUsageFieldFiltersRequestParameter,
+    selectAccountUsageListRequestParams,
+    selectAccountUsageOwnerFilter,
+    selectAccountUsagePageIndex,
+    selectAccountUsagePathFilter,
+    selectAccountUsageSortState,
+    selectAccountUsageTreePath,
+    selectAccountUsageTreeRequestParams,
+    selectAccountUsageViewType,
 } from '../../selectors/accounts/account-usage';
 import {selectActiveAccount} from '../../../store/selectors/accounts/accounts-ts';
 import {selectSettingsAccountUsageViewType} from '../../../store/selectors/settings/settings-ts';
@@ -79,7 +79,7 @@ export function normalizeTimestamp(timestamp?: unknown): number {
 export function syncAccountsUsageViewTypeWithSettings(): FiltersThunkAction {
     return (dispatch, getState) => {
         const state = getState();
-        const viewType = getAccountUsageViewType(state);
+        const viewType = selectAccountUsageViewType(state);
         if (!viewType) {
             const lastViewType = selectSettingsAccountUsageViewType(state);
             dispatch(setAccountUsageFilters({viewType: lastViewType}));
@@ -124,12 +124,12 @@ type UsageListThunkAction = ThunkAction<any, RootState, any, AccountUsageListAct
 export function getFilterParameters(state: RootState): AccountUsageDataParams {
     const account = selectActiveAccount(state);
     const cluster = selectCluster(state);
-    const sortStates = getAccountUsageSortState(state);
-    const path_regexp = getAccountUsagePathFilter(state);
-    const owner = getAccountUsageOwnerFilter(state);
+    const sortStates = selectAccountUsageSortState(state);
+    const path_regexp = selectAccountUsagePathFilter(state);
+    const owner = selectAccountUsageOwnerFilter(state);
 
-    const field_filters = getAccountUsageFieldFiltersRequestParameter(state);
-    const viewType = getAccountUsageViewType(state);
+    const field_filters = selectAccountUsageFieldFiltersRequestParameter(state);
+    const viewType = selectAccountUsageViewType(state);
 
     const row_filter: AccountUsageListDataParams['row_filter'] = Object.assign(
         {
@@ -155,7 +155,7 @@ export function getFilterParameters(state: RootState): AccountUsageDataParams {
         ),
         row_filter,
         page: {
-            index: getAccountUsagePageIndex(state),
+            index: selectAccountUsagePageIndex(state),
             size: PAGE_SIZE,
         },
     };
@@ -165,7 +165,7 @@ export function fetchAccountUsageList(): UsageListThunkAction {
     return (dispatch, getState) => {
         const state = getState();
 
-        const timestamp = getAccountUsageCurrentSnapshot(state);
+        const timestamp = selectAccountUsageCurrentSnapshot(state);
 
         const params = getFilterParameters(state);
         const requestParams: AccountUsageListDataParams = {
@@ -189,7 +189,7 @@ export function fetchAccountUsageList(): UsageListThunkAction {
                 withCredentials: true,
             })
             .then((response) => {
-                const params = getAccountUsageListRequestParams(getState());
+                const params = selectAccountUsageListRequestParams(getState());
                 if (!isEqual_(params, requestParams)) {
                     return;
                 }
@@ -200,7 +200,7 @@ export function fetchAccountUsageList(): UsageListThunkAction {
                 });
             })
             .catch((error: any) => {
-                const params = getAccountUsageListRequestParams(getState());
+                const params = selectAccountUsageListRequestParams(getState());
                 if (!isEqual_(params, requestParams)) {
                     return;
                 }
@@ -219,7 +219,7 @@ export function fetchAccountUsageTree(): UsageTreeThunkAction {
     return (dispatch, getState) => {
         const state = getState();
 
-        const timestamp = getAccountUsageCurrentSnapshot(state);
+        const timestamp = selectAccountUsageCurrentSnapshot(state);
 
         const params = getFilterParameters(state);
         const requestParams: AccountUsageTreeData['requestParams'] = {
@@ -227,7 +227,7 @@ export function fetchAccountUsageTree(): UsageTreeThunkAction {
             timestamp: normalizeTimestamp(timestamp),
             row_filter: {
                 ...params.row_filter,
-                base_path: getAccountUsageTreePath(state),
+                base_path: selectAccountUsageTreePath(state),
             },
         };
 
@@ -247,7 +247,7 @@ export function fetchAccountUsageTree(): UsageTreeThunkAction {
                 withCredentials: true,
             })
             .then((response) => {
-                const params = getAccountUsageTreeRequestParams(getState());
+                const params = selectAccountUsageTreeRequestParams(getState());
                 if (!isEqual_(params, requestParams)) {
                     return;
                 }
@@ -261,7 +261,7 @@ export function fetchAccountUsageTree(): UsageTreeThunkAction {
                 });
             })
             .catch((error: any) => {
-                const params = getAccountUsageTreeRequestParams(getState());
+                const params = selectAccountUsageTreeRequestParams(getState());
                 if (!isEqual_(params, requestParams)) {
                     return;
                 }
@@ -283,7 +283,7 @@ type FiltersThunkAction = ThunkAction<
 
 export function fetchAccountUsage(): FiltersThunkAction {
     return (dispatch, getState) => {
-        const viewType = getAccountUsageViewType(getState());
+        const viewType = selectAccountUsageViewType(getState());
         switch (viewType) {
             case 'tree':
                 return dispatch(fetchAccountUsageTree());
@@ -301,7 +301,7 @@ export function fetchAccountUsage(): FiltersThunkAction {
 
 export function setAccountUsageSortState(item: SortState, multisort?: boolean): FiltersThunkAction {
     return (dispatch, getState) => {
-        const prevSortState = getAccountUsageSortState(getState());
+        const prevSortState = selectAccountUsageSortState(getState());
         const sortState = updateSortStateArray(prevSortState, item, {multisort});
 
         dispatch({
@@ -331,7 +331,7 @@ export function setAccountUsageDataFilter(
 
         const {dateRangeType, ...rest} = data;
         if (isEmpty_(rest) && dateRangeType) {
-            const {from, to} = getAccountUsageDateRangeFilter(getState());
+            const {from, to} = selectAccountUsageDateRangeFilter(getState());
             if (!from && !to) {
                 return;
             }
@@ -367,7 +367,7 @@ export function setAccountUsageViewType(viewType: AccountUsageViewType): Filters
 
 export function setAccountUsageColumns(columns: Array<string>): FiltersThunkAction {
     return (dispatch, getState) => {
-        const viewType = getAccountUsageViewType(getState());
+        const viewType = selectAccountUsageViewType(getState());
         switch (viewType) {
             case 'list':
             case 'list-diff':
