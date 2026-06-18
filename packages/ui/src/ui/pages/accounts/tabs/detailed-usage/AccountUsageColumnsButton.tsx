@@ -5,9 +5,9 @@ import map_ from 'lodash/map';
 
 import Button from '../../../../components/Button/Button';
 import {
-    getAccountUsageSelectableColumns,
-    getAccountUsageVisibleDataColumns,
     readableAccountUsageColumnName,
+    selectAccountUsageSelectableColumns,
+    selectAccountUsageVisibleDataColumns,
 } from '../../../../store/selectors/accounts/account-usage';
 import {useDispatch, useSelector} from '../../../../store/redux-hooks';
 import ColumnSelectorModal from '../../../../components/ColumnSelectorModal/ColumnSelectorModal';
@@ -44,8 +44,8 @@ interface DialogProps {
 
 function AccountUsageColumnsDialog({visible, onClose}: DialogProps) {
     const dispatch = useDispatch();
-    const visibleColumns = useSelector(getAccountUsageVisibleDataColumns);
-    const availableColumns = useSelector(getAccountUsageSelectableColumns);
+    const visibleColumns = useSelector(selectAccountUsageVisibleDataColumns);
+    const availableColumns = useSelector(selectAccountUsageSelectableColumns);
 
     const handleChange = React.useCallback((newValue: typeof value) => {
         const checked = filter_(newValue, 'checked');

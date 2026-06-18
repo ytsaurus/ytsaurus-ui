@@ -19,19 +19,19 @@ import {selectCluster} from '../../../../store/selectors/global';
 import {Toolbar} from '../../../../components/WithStickyToolbar/Toolbar/Toolbar';
 import Select from '../../../../components/Select/Select';
 import {
-    getAccountUsageCurrentSnapshot,
-    getAccountUsageDateRangeFilter,
-    getAccountUsageDateRangeTypeFilter,
-    getAccountUsageOwnerFilter,
-    getAccountUsagePageCount,
-    getAccountUsagePageIndex,
-    getAccountUsagePathFilter,
-    getAccountUsageSnapshots,
-    getAccountUsageTreeItemsBasePathSplitted,
-    getAccountUsageViewType,
-    getAccountsUsageDiffFromSnapshot,
-    getAccountsUsageDiffToSnapshot,
-    isAccountsUsageDiffView,
+    selectAccountUsageCurrentSnapshot,
+    selectAccountUsageDateRangeFilter,
+    selectAccountUsageDateRangeTypeFilter,
+    selectAccountUsageOwnerFilter,
+    selectAccountUsagePageCount,
+    selectAccountUsagePageIndex,
+    selectAccountUsagePathFilter,
+    selectAccountUsageSnapshots,
+    selectAccountUsageTreeItemsBasePathSplitted,
+    selectAccountUsageViewType,
+    selectAccountsUsageDiffFromSnapshot,
+    selectAccountsUsageDiffToSnapshot,
+    selectIsAccountsUsageDiffView,
 } from '../../../../store/selectors/accounts/account-usage';
 import TextInputWithDebounce from '../../../../components/TextInputWithDebounce/TextInputWithDebounce';
 import {Secondary, SecondaryBold} from '@ytsaurus/components';
@@ -73,8 +73,8 @@ const UsageBreadcrumbsMemo = React.memo(UsageBreadcrumbs);
 const SnapshotDiffFilterMemo = React.memo(SnapshotDiffFilter);
 
 function AccountUsageToolbar() {
-    const viewType = useSelector(getAccountUsageViewType);
-    const isDiffView = useSelector(isAccountsUsageDiffView);
+    const viewType = useSelector(selectAccountUsageViewType);
+    const isDiffView = useSelector(selectIsAccountsUsageDiffView);
 
     return (
         <div>
@@ -151,7 +151,7 @@ function snapshot2string(v?: number) {
 }
 
 function useSnapshotItems() {
-    const snapshots = useSelector(getAccountUsageSnapshots);
+    const snapshots = useSelector(selectAccountUsageSnapshots);
 
     const items = React.useMemo(() => {
         const res = map_(reverse_(snapshots.slice()), (item) => {
@@ -170,7 +170,7 @@ function useSnapshotItems() {
 function FromSnapshot() {
     const dispatch = useDispatch();
     const items = useSnapshotItems();
-    const value = useSelector(getAccountsUsageDiffFromSnapshot);
+    const value = useSelector(selectAccountsUsageDiffFromSnapshot);
 
     const handleChange = React.useCallback(
         (value: string) => {
@@ -197,7 +197,7 @@ function FromSnapshot() {
 function ToSnapshot() {
     const dispatch = useDispatch();
     const items = useSnapshotItems();
-    const value = useSelector(getAccountsUsageDiffToSnapshot);
+    const value = useSelector(selectAccountsUsageDiffToSnapshot);
 
     const handleChange = React.useCallback(
         (value: string) => {
@@ -239,7 +239,7 @@ function SnapshotFilter() {
     const dispatch = useDispatch();
     useFetchSnapshots();
 
-    const currentSnapshot = useSelector(getAccountUsageCurrentSnapshot);
+    const currentSnapshot = useSelector(selectAccountUsageCurrentSnapshot);
     const items = useSnapshotItems();
 
     const handleSnapshotChange = React.useCallback(
@@ -271,7 +271,7 @@ function SnapshotFilter() {
 function PathFilter() {
     const dispatch = useDispatch();
 
-    const filter = useSelector(getAccountUsagePathFilter);
+    const filter = useSelector(selectAccountUsagePathFilter);
 
     const handleChange = React.useCallback(
         (pathFilter: string) => {
@@ -293,7 +293,7 @@ function PathFilter() {
 function OwnerFilter() {
     const dispatch = useDispatch();
 
-    const filter = useSelector(getAccountUsageOwnerFilter);
+    const filter = useSelector(selectAccountUsageOwnerFilter);
 
     const handleChange = React.useCallback(
         (item: SuggestItem) => {
@@ -325,8 +325,8 @@ function OwnerFilter() {
 function DateRangeFilter() {
     const dispatch = useDispatch();
 
-    const {from, to} = useSelector(getAccountUsageDateRangeFilter);
-    const type = useSelector(getAccountUsageDateRangeTypeFilter);
+    const {from, to} = useSelector(selectAccountUsageDateRangeFilter);
+    const type = useSelector(selectAccountUsageDateRangeTypeFilter);
 
     const handleChange = React.useCallback(
         (dateRange: DatepickerOutputDates) => {
@@ -358,7 +358,7 @@ function DateRangeFilter() {
 function DateRangeTypeFilter() {
     const dispatch = useDispatch();
 
-    const value = useSelector(getAccountUsageDateRangeTypeFilter);
+    const value = useSelector(selectAccountUsageDateRangeTypeFilter);
     const handleChange = React.useCallback(
         (dateRangeType: any) => {
             dispatch(setAccountUsageDataFilter({dateRangeType}));
@@ -393,8 +393,8 @@ function DateRangeTypeFilter() {
 function PaginationFilter() {
     const dispatch = useDispatch();
 
-    const value = useSelector(getAccountUsagePageIndex);
-    const pageCount = useSelector(getAccountUsagePageCount);
+    const value = useSelector(selectAccountUsagePageIndex);
+    const pageCount = useSelector(selectAccountUsagePageCount);
 
     const handleChange = React.useCallback(
         (pageIndex: number) => {
@@ -479,7 +479,7 @@ function DiffTitle({title}: {title: string}) {
 function ViewType() {
     const dispatch = useDispatch();
 
-    const value = useSelector(getAccountUsageViewType);
+    const value = useSelector(selectAccountUsageViewType);
     const handleChange = React.useCallback(
         (value: string) => {
             dispatch(setAccountUsageViewType(value as any));
@@ -499,7 +499,7 @@ function ViewType() {
 
 export function UsageBreadcrumbs() {
     const dispatch = useDispatch();
-    const pathArr = useSelector(getAccountUsageTreeItemsBasePathSplitted);
+    const pathArr = useSelector(selectAccountUsageTreeItemsBasePathSplitted);
     const history = useHistory();
     const items = useMemo(() => {
         return map_(pathArr, (item, index) => {

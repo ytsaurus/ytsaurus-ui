@@ -17,38 +17,38 @@ import {
     syncAccountsUsageViewTypeWithSettings,
 } from '../../../../store/actions/accounts/account-usage';
 import {
-    getAccountUsageAvailableColumns,
-    getAccountUsageCurrentSnapshot,
-    getAccountUsageListDiffError,
-    getAccountUsageListDiffItems,
-    getAccountUsageListDiffLoaded,
-    getAccountUsageListDiffLoading,
-    getAccountUsageListDiffMediums,
-    getAccountUsageListError,
-    getAccountUsageListItems,
-    getAccountUsageListLoaded,
-    getAccountUsageListLoading,
-    getAccountUsageListMediums,
-    getAccountUsagePageCount,
-    getAccountUsagePageIndex,
-    getAccountUsageSortStateByColumn,
-    getAccountUsageTreeDiffError,
-    getAccountUsageTreeDiffItems,
-    getAccountUsageTreeDiffLoaded,
-    getAccountUsageTreeDiffLoading,
-    getAccountUsageTreeDiffMediums,
-    getAccountUsageTreeError,
-    getAccountUsageTreeItems,
-    getAccountUsageTreeItemsBasePath,
-    getAccountUsageTreeLoaded,
-    getAccountUsageTreeLoading,
-    getAccountUsageTreeMediums,
-    getAccountUsageViewType,
-    getAccountUsageVisibleDataColumns,
-    getAccountsUsageDiffFromSnapshot,
-    getAccountsUsageDiffToSnapshot,
-    isAccountsUsageDiffView,
     readableAccountUsageColumnName,
+    selectAccountUsageAvailableColumns,
+    selectAccountUsageCurrentSnapshot,
+    selectAccountUsageListDiffError,
+    selectAccountUsageListDiffItems,
+    selectAccountUsageListDiffLoaded,
+    selectAccountUsageListDiffLoading,
+    selectAccountUsageListDiffMediums,
+    selectAccountUsageListError,
+    selectAccountUsageListItems,
+    selectAccountUsageListLoaded,
+    selectAccountUsageListLoading,
+    selectAccountUsageListMediums,
+    selectAccountUsagePageCount,
+    selectAccountUsagePageIndex,
+    selectAccountUsageSortStateByColumn,
+    selectAccountUsageTreeDiffError,
+    selectAccountUsageTreeDiffItems,
+    selectAccountUsageTreeDiffLoaded,
+    selectAccountUsageTreeDiffLoading,
+    selectAccountUsageTreeDiffMediums,
+    selectAccountUsageTreeError,
+    selectAccountUsageTreeItems,
+    selectAccountUsageTreeItemsBasePath,
+    selectAccountUsageTreeLoaded,
+    selectAccountUsageTreeLoading,
+    selectAccountUsageTreeMediums,
+    selectAccountUsageViewType,
+    selectAccountUsageVisibleDataColumns,
+    selectAccountsUsageDiffFromSnapshot,
+    selectAccountsUsageDiffToSnapshot,
+    selectIsAccountsUsageDiffView,
 } from '../../../../store/selectors/accounts/account-usage';
 import DataTable, {type Column, type Settings} from '@gravity-ui/react-data-table';
 import ArrowUpRightFromSquareIcon from '@gravity-ui/icons/svgs/arrow-up-right-from-square.svg';
@@ -113,7 +113,7 @@ const ROW_CLASS_NAME = block('row');
 
 function AccountUsageDetailsHeader(props: {column: keyof AccountUsageDataItem}) {
     const dispatch = useDispatch();
-    const sortOrder = useSelector(getAccountUsageSortStateByColumn);
+    const sortOrder = useSelector(selectAccountUsageSortStateByColumn);
     const {column} = props;
 
     const onSort = React.useCallback(
@@ -157,11 +157,11 @@ const UsageLoaderMemo = React.memo(UsageLoader);
 function useColumnsByPreset(mediums: Array<string>) {
     const dispatch = useDispatch();
 
-    const availableColumns = useSelector(getAccountUsageAvailableColumns);
-    const visibleColumns = useSelector(getAccountUsageVisibleDataColumns);
+    const availableColumns = useSelector(selectAccountUsageAvailableColumns);
+    const visibleColumns = useSelector(selectAccountUsageVisibleDataColumns);
     const cluster = useSelector(selectCluster);
-    const viewType = useSelector(getAccountUsageViewType);
-    const treePath = useSelector(getAccountUsageTreeItemsBasePath);
+    const viewType = useSelector(selectAccountUsageViewType);
+    const treePath = useSelector(selectAccountUsageTreeItemsBasePath);
 
     const handleAttributeButtonClick = useCallback(
         (accountData: AccountRequestData) => {
@@ -380,7 +380,7 @@ const UPDATE_TIMEOUT = 600000;
 
 function AccountUsageDetailsList() {
     const dispatch = useDispatch();
-    const currentSnapshot = useSelector(getAccountUsageCurrentSnapshot);
+    const currentSnapshot = useSelector(selectAccountUsageCurrentSnapshot);
 
     const updateFn = React.useCallback(() => {
         dispatch(fetchAccountUsageList());
@@ -388,12 +388,12 @@ function AccountUsageDetailsList() {
 
     useUpdater(updateFn, {timeout: UPDATE_TIMEOUT, onlyOnce: currentSnapshot !== undefined});
 
-    const items = useSelector(getAccountUsageListItems);
-    const loading = useSelector(getAccountUsageListLoading);
-    const loaded = useSelector(getAccountUsageListLoaded);
-    const error = useSelector(getAccountUsageListError);
+    const items = useSelector(selectAccountUsageListItems);
+    const loading = useSelector(selectAccountUsageListLoading);
+    const loaded = useSelector(selectAccountUsageListLoaded);
+    const error = useSelector(selectAccountUsageListError);
 
-    const mediums = useSelector(getAccountUsageListMediums);
+    const mediums = useSelector(selectAccountUsageListMediums);
     const columns = useColumnsByPreset(mediums);
 
     if (!loading && error) {
@@ -419,12 +419,12 @@ function AccountUsageDetailsListDiff() {
         dispatch(fetchAccountUsageListDiff());
     }, [dispatch]);
 
-    const items = useSelector(getAccountUsageListDiffItems);
-    const loading = useSelector(getAccountUsageListDiffLoading);
-    const loaded = useSelector(getAccountUsageListDiffLoaded);
-    const error = useSelector(getAccountUsageListDiffError);
+    const items = useSelector(selectAccountUsageListDiffItems);
+    const loading = useSelector(selectAccountUsageListDiffLoading);
+    const loaded = useSelector(selectAccountUsageListDiffLoaded);
+    const error = useSelector(selectAccountUsageListDiffError);
 
-    const mediums = useSelector(getAccountUsageListDiffMediums);
+    const mediums = useSelector(selectAccountUsageListDiffMediums);
     const columns = useColumnsByPreset(mediums);
 
     if (!loading && error) {
@@ -446,19 +446,19 @@ function AccountUsageDetailsListDiff() {
 
 function AccountUsageDetailsTree() {
     const dispatch = useDispatch();
-    const currentSnapshot = useSelector(getAccountUsageCurrentSnapshot);
+    const currentSnapshot = useSelector(selectAccountUsageCurrentSnapshot);
     const updateFn = React.useCallback(() => {
         dispatch(fetchAccountUsageTree());
     }, [dispatch]);
 
     useUpdater(updateFn, {timeout: UPDATE_TIMEOUT, onlyOnce: currentSnapshot !== undefined});
 
-    const items = useSelector(getAccountUsageTreeItems);
-    const loading = useSelector(getAccountUsageTreeLoading);
-    const loaded = useSelector(getAccountUsageTreeLoaded);
-    const error = useSelector(getAccountUsageTreeError);
+    const items = useSelector(selectAccountUsageTreeItems);
+    const loading = useSelector(selectAccountUsageTreeLoading);
+    const loaded = useSelector(selectAccountUsageTreeLoaded);
+    const error = useSelector(selectAccountUsageTreeError);
 
-    const mediums = useSelector(getAccountUsageTreeMediums);
+    const mediums = useSelector(selectAccountUsageTreeMediums);
     const columns = useColumnsByPreset(mediums);
 
     if (!loading && error) {
@@ -484,12 +484,12 @@ function AccountUsageDetailsTreeDiff() {
         dispatch(fetchAccountUsageTreeDiff());
     }, [dispatch]);
 
-    const items = useSelector(getAccountUsageTreeDiffItems);
-    const loading = useSelector(getAccountUsageTreeDiffLoading);
-    const loaded = useSelector(getAccountUsageTreeDiffLoaded);
-    const error = useSelector(getAccountUsageTreeDiffError);
+    const items = useSelector(selectAccountUsageTreeDiffItems);
+    const loading = useSelector(selectAccountUsageTreeDiffLoading);
+    const loaded = useSelector(selectAccountUsageTreeDiffLoaded);
+    const error = useSelector(selectAccountUsageTreeDiffError);
 
-    const mediums = useSelector(getAccountUsageTreeDiffMediums);
+    const mediums = useSelector(selectAccountUsageTreeDiffMediums);
     const columns = useColumnsByPreset(mediums);
 
     if (!loading && error) {
@@ -515,9 +515,9 @@ const AccountUsageDetailsTreeMemo = React.memo(AccountUsageDetailsTree);
 const AccountUsageDetailsTreeDiffMemo = React.memo(AccountUsageDetailsTreeDiff);
 
 function AccountUsageDetailsDiff({children}: {children: React.ReactNode}) {
-    const isDiffView = useSelector(isAccountsUsageDiffView);
-    const from = useSelector(getAccountsUsageDiffFromSnapshot);
-    const to = useSelector(getAccountsUsageDiffToSnapshot);
+    const isDiffView = useSelector(selectIsAccountsUsageDiffView);
+    const from = useSelector(selectAccountsUsageDiffFromSnapshot);
+    const to = useSelector(selectAccountsUsageDiffToSnapshot);
 
     if (!isDiffView) {
         return <>{i18n('alert_unexpected-view-mode')}</>;
@@ -546,7 +546,7 @@ const AccountUsageDetailsDiffMemo = React.memo(AccountUsageDetailsDiff);
 
 function AccountUsageDetails() {
     const dispatch = useDispatch();
-    const viewType = useSelector(getAccountUsageViewType);
+    const viewType = useSelector(selectAccountUsageViewType);
 
     React.useEffect(() => {
         dispatch(syncAccountsUsageViewTypeWithSettings());
@@ -578,7 +578,7 @@ const AccountsUsageDetailsListLoaderMemo = React.memo(AccountsUsageDetailsListLo
 const AccountsUsageDetailsTreeLoaderMemo = React.memo(AccountsUsageDetailsTreeLoader);
 
 function UsageLoader() {
-    const viewType = useSelector(getAccountUsageViewType);
+    const viewType = useSelector(selectAccountUsageViewType);
 
     switch (viewType) {
         case 'list':
@@ -596,28 +596,28 @@ function UsageLoader() {
 }
 
 function AccountsUsageDetailsListLoader() {
-    const loading = useSelector(getAccountUsageListLoading);
+    const loading = useSelector(selectAccountUsageListLoading);
     return <Loader visible={loading} />;
 }
 
 function AccountsUsageDetailsTreeLoader() {
-    const loading = useSelector(getAccountUsageTreeLoading);
+    const loading = useSelector(selectAccountUsageTreeLoading);
     return <Loader visible={loading} />;
 }
 
 function AccountsUsageDetailsListDiffLoader() {
-    const loading = useSelector(getAccountUsageListDiffLoading);
+    const loading = useSelector(selectAccountUsageListDiffLoading);
     return <Loader visible={loading} />;
 }
 
 function AccountsUsageDetailsTreeDiffLoader() {
-    const loading = useSelector(getAccountUsageTreeDiffLoading);
+    const loading = useSelector(selectAccountUsageTreeDiffLoading);
     return <Loader visible={loading} />;
 }
 
 function PageCounter() {
-    const value = useSelector(getAccountUsagePageIndex);
-    const count = useSelector(getAccountUsagePageCount);
+    const value = useSelector(selectAccountUsagePageIndex);
+    const count = useSelector(selectAccountUsagePageCount);
 
     return count > 1 ? (
         <Secondary>

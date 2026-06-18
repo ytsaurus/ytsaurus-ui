@@ -18,11 +18,11 @@ import {
     ACCOUNTS_USAGE_TREE_DIFF_SUCCESS,
 } from '../../../constants/accounts/accounts';
 import {
-    getAccountUsageListDiffRequestParams,
-    getAccountUsageTreeDiffRequestParams,
-    getAccountUsageTreePath,
-    getAccountsUsageDiffFromSnapshot,
-    getAccountsUsageDiffToSnapshot,
+    selectAccountUsageListDiffRequestParams,
+    selectAccountUsageTreeDiffRequestParams,
+    selectAccountUsageTreePath,
+    selectAccountsUsageDiffFromSnapshot,
+    selectAccountsUsageDiffToSnapshot,
 } from '../../../store/selectors/accounts/account-usage';
 import {
     type AccountUsageTreeDiffAction,
@@ -34,8 +34,8 @@ import {calcAccountsUsageBaseUrl} from './accounts-usage-base-url';
 type UsageListThunkAction = ThunkAction<any, RootState, any, AccountUsageListDiffAction>;
 
 function getFilterFromToTimestamps(state: RootState) {
-    const from = getAccountsUsageDiffFromSnapshot(state);
-    const to = getAccountsUsageDiffToSnapshot(state);
+    const from = selectAccountsUsageDiffFromSnapshot(state);
+    const to = selectAccountsUsageDiffToSnapshot(state);
     if ((!from && !to) || from === to) {
         return null;
     }
@@ -78,7 +78,7 @@ export function fetchAccountUsageListDiff(): UsageListThunkAction {
                 withCredentials: true,
             })
             .then((response) => {
-                const params = getAccountUsageListDiffRequestParams(getState());
+                const params = selectAccountUsageListDiffRequestParams(getState());
                 if (!isEqual_(params, requestParams)) {
                     return;
                 }
@@ -89,7 +89,7 @@ export function fetchAccountUsageListDiff(): UsageListThunkAction {
                 });
             })
             .catch((error: any) => {
-                const params = getAccountUsageListDiffRequestParams(getState());
+                const params = selectAccountUsageListDiffRequestParams(getState());
                 if (!isEqual_(params, requestParams)) {
                     return;
                 }
@@ -120,7 +120,7 @@ export function fetchAccountUsageTreeDiff(): UsageTreeThunkAction {
             timestamps,
             row_filter: {
                 ...params.row_filter,
-                base_path: getAccountUsageTreePath(state),
+                base_path: selectAccountUsageTreePath(state),
             },
         };
 
@@ -140,7 +140,7 @@ export function fetchAccountUsageTreeDiff(): UsageTreeThunkAction {
                 withCredentials: true,
             })
             .then((response) => {
-                const params = getAccountUsageTreeDiffRequestParams(getState());
+                const params = selectAccountUsageTreeDiffRequestParams(getState());
                 if (!isEqual_(params, requestParams)) {
                     return;
                 }
@@ -154,7 +154,7 @@ export function fetchAccountUsageTreeDiff(): UsageTreeThunkAction {
                 });
             })
             .catch((error: any) => {
-                const params = getAccountUsageTreeDiffRequestParams(getState());
+                const params = selectAccountUsageTreeDiffRequestParams(getState());
                 if (!isEqual_(params, requestParams)) {
                     return;
                 }
