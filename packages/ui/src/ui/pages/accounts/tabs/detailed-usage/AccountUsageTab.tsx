@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'bem-cn-lite';
 
 import AccountUsageToolbar from './AccountUsageToolbar';
-import AccountUsageDetails from './AccountUsageDetails';
+import AccountUsageDetails from './AccountUsageDetails/AccountUsageDetails';
 import WithStickyToolbar from '../../../../components/WithStickyToolbar/WithStickyToolbar';
 
 import {NoContent} from '../../../../components/NoContent';
