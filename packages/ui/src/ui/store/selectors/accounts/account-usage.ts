@@ -41,7 +41,9 @@ export const getAccountUsageSnapshots = (state: RootState) =>
 
 export const getAccountUsageCurrentSnapshot = (state: RootState) =>
     state.accounts.usage.filters.currentSnapshot;
+
 export const getAccountUsageTreePath = (state: RootState) => state.accounts.usage.filters.treePath;
+
 export const getAccountUsageSortState = (state: RootState) =>
     state.accounts.usage.filters.sortState;
 
@@ -49,81 +51,117 @@ export const getAccountUsageViewType = (state: RootState) => state.accounts.usag
 
 export const getAccountUsagePathFilter = (state: RootState) =>
     state.accounts.usage.filters.pathFilter;
+
 export const getAccountUsageOwnerFilter = (state: RootState) =>
     state.accounts.usage.filters.ownerFilter;
+
 export const getAccountUsageDateRangeFilter = (state: RootState) =>
     state.accounts.usage.filters.dateRange;
+
 export const getAccountUsageDateRangeTypeFilter = (state: RootState) =>
     state.accounts.usage.filters.dateRangeType;
+
 export const getAccountsUsageDiffFromSnapshot = (state: RootState) =>
     state.accounts.usage.filters.diffFromSnapshot;
+
 export const getAccountsUsageDiffToSnapshot = (state: RootState) =>
     state.accounts.usage.filters.diffToSnapshot;
+
 const getAccountUsagePageIndexRaw = (state: RootState) => state.accounts.usage.filters.pageIndex;
 
 export const getAccountUsageListRequestParams = (state: RootState) =>
     state.accounts.usage.list.requestParams;
+
 export const getAccountUsageListLoading = (state: RootState) => state.accounts.usage.list.loading;
+
 export const getAccountUsageListLoaded = (state: RootState) => state.accounts.usage.list.loaded;
+
 export const getAccountUsageListError = (state: RootState) => state.accounts.usage.list.error;
+
 export const getAccountUsageListItems = (state: RootState) =>
     state.accounts.usage.list.response?.items || [];
+
 export const getAccountUsageListFields = (state: RootState) =>
     state.accounts.usage.list.response?.fields || [];
+
 export const getAccountUsageListMediums = (state: RootState) =>
     state.accounts.usage.list.response?.mediums || [];
+
 export const getAccountUsageListRowCount = (state: RootState) =>
     state.accounts.usage.list.response?.row_count || 0;
 
 export const getAccountUsageTreeRequestParams = (state: RootState) =>
     state.accounts.usage.tree.requestParams;
+
 export const getAccountUsageTreeLoading = (state: RootState) => state.accounts.usage.tree.loading;
+
 export const getAccountUsageTreeLoaded = (state: RootState) => state.accounts.usage.tree.loaded;
+
 export const getAccountUsageTreeError = (state: RootState) => state.accounts.usage.tree.error;
+
 export const getAccountUsageTreeItems = (state: RootState) =>
     state.accounts.usage.tree.response?.items || [];
+
 export const getAccountUsageTreeFields = (state: RootState) =>
     state.accounts.usage.tree.response?.fields || [];
+
 export const getAccountUsageTreeMediums = (state: RootState) =>
     state.accounts.usage.tree.response?.mediums || [];
+
 export const getAccountUsageTreeRowCount = (state: RootState) =>
     state.accounts.usage.tree.response?.row_count || 0;
+
 export const getAccountUsageTreeItemsBasePath = (state: RootState) =>
     state.accounts.usage.tree.base_path;
 
 export const getAccountUsageListDiffRequestParams = (state: RootState) =>
     state.accounts.usage.listDiff.requestParams;
+
 export const getAccountUsageListDiffLoading = (state: RootState) =>
     state.accounts.usage.listDiff.loading;
+
 export const getAccountUsageListDiffLoaded = (state: RootState) =>
     state.accounts.usage.listDiff.loaded;
+
 export const getAccountUsageListDiffError = (state: RootState) =>
     state.accounts.usage.listDiff.error;
+
 export const getAccountUsageListDiffItems = (state: RootState) =>
     state.accounts.usage.listDiff.response?.items || [];
+
 export const getAccountUsageListDiffFields = (state: RootState) =>
     state.accounts.usage.listDiff.response?.fields || [];
+
 export const getAccountUsageListDiffMediums = (state: RootState) =>
     state.accounts.usage.listDiff.response?.mediums || [];
+
 export const getAccountUsageListDiffRowCount = (state: RootState) =>
     state.accounts.usage.listDiff.response?.row_count || 0;
 
 export const getAccountUsageTreeDiffRequestParams = (state: RootState) =>
     state.accounts.usage.treeDiff.requestParams;
+
 export const getAccountUsageTreeDiffLoading = (state: RootState) =>
     state.accounts.usage.treeDiff.loading;
+
 export const getAccountUsageTreeDiffLoaded = (state: RootState) =>
     state.accounts.usage.treeDiff.loaded;
+
 export const getAccountUsageTreeDiffError = (state: RootState) =>
     state.accounts.usage.treeDiff.error;
+
 export const getAccountUsageTreeDiffItems = (state: RootState) =>
     state.accounts.usage.treeDiff.response?.items || [];
+
 export const getAccountUsageTreeDiffFields = (state: RootState) =>
     state.accounts.usage.treeDiff.response?.fields || [];
+
 export const getAccountUsageTreeDiffMediums = (state: RootState) =>
     state.accounts.usage.treeDiff.response?.mediums || [];
+
 export const getAccountUsageTreeDiffRowCount = (state: RootState) =>
     state.accounts.usage.treeDiff.response?.row_count || 0;
+
 export const getAccountUsageTreeDiffItemsBasePath = (state: RootState) =>
     state.accounts.usage.treeDiff.base_path;
 
@@ -261,6 +299,7 @@ const defaultTreeColumns: Array<keyof AccountUsageDataItem> = [
     'node_count',
     'modification_time',
 ] as any;
+
 const defaultListColumns: Array<keyof AccountUsageDataItem> = [
     'owner',
     'disk_space',
@@ -270,6 +309,7 @@ const defaultListColumns: Array<keyof AccountUsageDataItem> = [
     'chunk_count',
     'modification_time',
 ] as any;
+
 const defaultListFoldersColumns: Array<keyof AccountUsageDataItem> = [
     'owner',
     'disk_space',
