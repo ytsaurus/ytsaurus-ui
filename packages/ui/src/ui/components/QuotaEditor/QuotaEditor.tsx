@@ -71,7 +71,7 @@ export default class QuotaEditor extends React.Component<QuotaEditorProps> {
                 {renderSourceSuggest && (
                     <div className={block('item')}>
                         <div className={block('item-title')}>
-                            {sourceSuggestTitle || i18n('title_account-to-distribution')}
+                            {sourceSuggestTitle || i18n('title_account-for-distribution')}
                         </div>
                         {renderSourceSuggest({
                             value: sourceAccount || '',
