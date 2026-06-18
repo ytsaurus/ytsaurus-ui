@@ -5,8 +5,8 @@ import forEach_ from 'lodash/forEach';
 
 import cn from 'bem-cn-lite';
 
-import format from '../../../../common/hammer/format';
-import {useDispatch, useSelector} from '../../../../store/redux-hooks';
+import format from '../../../../../common/hammer/format';
+import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 
 import {
     fetchAccountUsageList,
@@ -15,7 +15,7 @@ import {
     setAccountUsageDataFilter,
     setAccountUsageSortState,
     syncAccountsUsageViewTypeWithSettings,
-} from '../../../../store/actions/accounts/account-usage';
+} from '../../../../../store/actions/accounts/account-usage';
 import {
     readableAccountUsageColumnName,
     selectAccountUsageAvailableColumns,
@@ -49,45 +49,45 @@ import {
     selectAccountsUsageDiffFromSnapshot,
     selectAccountsUsageDiffToSnapshot,
     selectIsAccountsUsageDiffView,
-} from '../../../../store/selectors/accounts/account-usage';
+} from '../../../../../store/selectors/accounts/account-usage';
 import DataTable, {type Column, type Settings} from '@gravity-ui/react-data-table';
 import ArrowUpRightFromSquareIcon from '@gravity-ui/icons/svgs/arrow-up-right-from-square.svg';
 
-import {YTErrorBlock} from '../../../../containers/Block/Block';
+import {YTErrorBlock} from '../../../../../containers/Block/Block';
 import {
     STICKY_DOUBLE_TOOLBAR_BOTTOM,
     STICKY_TOOLBAR_BOTTOM,
-} from '../../../../components/WithStickyToolbar/WithStickyToolbar';
-import ColumnHeader from '../../../../components/ColumnHeader/ColumnHeader';
-import Icon from '../../../../components/Icon/Icon';
-import {selectCluster} from '../../../../store/selectors/global';
-import Loader from '../../../../components/Loader/Loader';
+} from '../../../../../components/WithStickyToolbar/WithStickyToolbar';
+import ColumnHeader from '../../../../../components/ColumnHeader/ColumnHeader';
+import Icon from '../../../../../components/Icon/Icon';
+import {selectCluster} from '../../../../../store/selectors/global';
+import Loader from '../../../../../components/Loader/Loader';
 
-import {SubjectCard} from '../../../../components/SubjectLink/SubjectLink';
+import {SubjectCard} from '../../../../../components/SubjectLink/SubjectLink';
 import {Secondary, Warning} from '@ytsaurus/components';
-import {DataTableYT} from '../../../../components/DataTableYT';
-import {getIconNameForType} from '../../../../utils/navigation/path-editor';
-import {type OrderType} from '../../../../utils/sort-helpers';
-import {NoContent} from '../../../../components/NoContent';
+import {DataTableYT} from '../../../../../components/DataTableYT';
+import {getIconNameForType} from '../../../../../utils/navigation/path-editor';
+import {type OrderType} from '../../../../../utils/sort-helpers';
+import {NoContent} from '../../../../../components/NoContent';
 import {
     type AccountUsageDataItem,
     type MediumKeyTemplate,
     type VersionedKeyTemplate,
-} from '../../../../store/reducers/accounts/usage/account-usage-types';
+} from '../../../../../store/reducers/accounts/usage/account-usage-types';
 import {
     fetchAccountUsageListDiff,
     fetchAccountUsageTreeDiff,
-} from '../../../../store/actions/accounts/account-usage-diff';
-import {useUpdater} from '../../../../hooks/use-updater';
+} from '../../../../../store/actions/accounts/account-usage-diff';
+import {useUpdater} from '../../../../../hooks/use-updater';
 
 import './AccountUsageDetails.scss';
-import i18n from './i18n';
-import {AccountActionsField, type AccountRequestData} from './AccountActionsField';
-import {DetailTableCell} from './DetailTableCell';
-import {Page} from '../../../../constants/index';
-import PathView from '../../../../containers/PathFragment/PathFragment';
+import i18n from '../i18n';
+import {AccountActionsField, type AccountRequestData} from '../AccountActionsField';
+import {DetailTableCell} from '../DetailTableCell';
+import {Page} from '../../../../../constants/index';
+import PathView from '../../../../../containers/PathFragment/PathFragment';
 import {Button, Flex, Icon as GravityIcon, Tooltip} from '@gravity-ui/uikit';
-import {makeRoutedURL} from '../../../../store/location';
+import {makeRoutedURL} from '../../../../../store/location';
 
 const TABLE_SETTINGS: Settings = {
     displayIndices: false,
