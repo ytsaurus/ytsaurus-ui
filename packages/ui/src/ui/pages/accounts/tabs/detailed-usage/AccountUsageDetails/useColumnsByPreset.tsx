@@ -20,35 +20,38 @@ import {
 import {makeRoutedURL} from '../../../../../store/location';
 import {
     type AccountUsageDataItem,
-    type MediumKeyTemplate,
-    type VersionedKeyTemplate,
+    type AccountUsageMediumKey,
 } from '../../../../../store/reducers/accounts/usage/account-usage-types';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {
     selectAccountUsageAvailableColumns,
-    selectAccountUsageTreeItemsBasePath,
     selectAccountUsageViewType,
     selectAccountUsageVisibleDataColumns,
 } from '../../../../../store/selectors/accounts/account-usage';
 import {selectCluster} from '../../../../../store/selectors/global';
 import {getIconNameForType} from '../../../../../utils/navigation/path-editor';
 
+import {assert} from '../../../../../../shared/utils/toolkit';
 import {AccountActionsField, type AccountRequestData} from '../AccountActionsField';
+import {useGetVersionedFieldValue} from './useGetVersionedFieldValue';
 import {DetailTableCell} from '../DetailTableCell';
 import i18n from '../i18n';
 
 import {Header} from './Header';
 import {PathHeader} from './PathHeader';
-import {block} from './utils';
+import {block, getIconNameForViewType} from './utils';
 
-export const useColumnsByPreset = (mediums: Array<string>) => {
+export const useColumnsByPreset = (mediums: AccountUsageMediumKey[]) => {
     const dispatch = useDispatch();
 
     const availableColumns = useSelector(selectAccountUsageAvailableColumns);
     const visibleColumns = useSelector(selectAccountUsageVisibleDataColumns);
     const cluster = useSelector(selectCluster);
+
     const viewType = useSelector(selectAccountUsageViewType);
-    const treePath = useSelector(selectAccountUsageTreeItemsBasePath);
+    assert(viewType, 'viewType must be defined');
+
+    const getVersionedFieldValue = useGetVersionedFieldValue();
 
     const handleAttributeButtonClick = useCallback(
         (accountData: AccountRequestData) => {
@@ -60,15 +63,11 @@ export const useColumnsByPreset = (mediums: Array<string>) => {
     const columnsByName = useMemo(() => {
         const res: Map<string, Column<AccountUsageDataItem>> = new Map();
 
-        const iconName =
-            viewType === 'tree' || viewType === 'tree-diff'
-                ? ''
-                : viewType === 'list' || viewType === 'list-diff'
-                  ? 'list'
-                  : 'folders';
+        const iconName = getIconNameForViewType(viewType);
+
         res.set('type', {
             name: 'type',
-            header: iconName === '' ? null : <Icon awesome={iconName} />,
+            header: iconName ? <Icon awesome={iconName} /> : null,
             sortable: false,
             render(item) {
                 const {type, path, acl_status} = item.row;
@@ -135,7 +134,7 @@ export const useColumnsByPreset = (mediums: Array<string>) => {
                 return (
                     <DetailTableCell
                         value={item.row.disk_space}
-                        additionalValue={item.row['versioned:disk_space']}
+                        additionalValue={getVersionedFieldValue(item.row, 'disk_space')}
                         viewType={viewType}
                         formatType="bytes"
                     />
@@ -144,6 +143,7 @@ export const useColumnsByPreset = (mediums: Array<string>) => {
             align: 'right',
             width: 120,
         });
+
         res.set('master_memory', {
             name: 'Master mem',
             header: <Header column={'master_memory'} />,
@@ -152,7 +152,7 @@ export const useColumnsByPreset = (mediums: Array<string>) => {
                 return (
                     <DetailTableCell
                         value={item.row.master_memory}
-                        additionalValue={item.row['versioned:master_memory']}
+                        additionalValue={getVersionedFieldValue(item.row, 'master_memory')}
                         viewType={viewType}
                         formatType="bytes"
                     />
@@ -161,6 +161,7 @@ export const useColumnsByPreset = (mediums: Array<string>) => {
             align: 'right',
             width: 120,
         });
+
         res.set('owner', {
             name: 'Owner',
             header: <Header column={'owner'} />,
@@ -172,21 +173,17 @@ export const useColumnsByPreset = (mediums: Array<string>) => {
         });
 
         forEach_(mediums, (medium) => {
-            const name = `medium:${medium}` as MediumKeyTemplate;
-            const versionedName = `versioned:medium:${name}` as VersionedKeyTemplate;
+            const name = `medium:${medium}` as const;
 
             res.set(name, {
                 name,
                 header: <Header column={name} />,
                 sortable: false,
                 render(item) {
-                    const additionalValue =
-                        versionedName in item.row ? Number(item.row[versionedName]) : null;
-
                     return (
                         <DetailTableCell
                             value={Number(item.row[name])}
-                            additionalValue={additionalValue}
+                            additionalValue={getVersionedFieldValue(item.row, name)}
                             viewType={viewType}
                             formatType="bytes"
                         />
@@ -207,13 +204,10 @@ export const useColumnsByPreset = (mediums: Array<string>) => {
                 header: <Header column={field} />,
                 sortable: false,
                 render(item) {
-                    const {[field]: value} = item.row;
-                    const additionalKey = `versioned:${field}` as VersionedKeyTemplate;
-                    const additionalValue =
-                        additionalKey in item.row ? Number(item.row[additionalKey]) : null;
+                    const value = item.row[field];
 
                     if (typeof value === 'boolean') {
-                        return value === undefined ? format.NO_VALUE : capitalize_(String(value));
+                        return capitalize_(String(value));
                     }
                     if (field.endsWith('_time')) {
                         return value === null || value === undefined
@@ -224,7 +218,7 @@ export const useColumnsByPreset = (mediums: Array<string>) => {
                         return (
                             <DetailTableCell
                                 value={Number(value)}
-                                additionalValue={additionalValue}
+                                additionalValue={getVersionedFieldValue(item.row, field)}
                                 viewType={viewType}
                                 formatType="number"
                             />
@@ -237,7 +231,7 @@ export const useColumnsByPreset = (mediums: Array<string>) => {
         });
 
         return res;
-    }, [treePath, viewType, mediums, cluster, availableColumns, dispatch]);
+    }, [viewType, mediums, cluster, availableColumns, getVersionedFieldValue, dispatch]);
 
     return useMemo(() => {
         const res: Array<Column<AccountUsageDataItem>> = [];

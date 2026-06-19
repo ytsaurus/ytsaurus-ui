@@ -14,7 +14,7 @@ import {
     selectSettingsAccountUsageColumnsTree,
 } from '../../../store/selectors/settings/settings-ts';
 import format from '../../../common/hammer/format';
-import {type AccountUsageDataItem} from '../../../store/reducers/accounts/usage/account-usage-types';
+import {type AccountUsageField} from '../../../store/reducers/accounts/usage/account-usage-types';
 
 const ACCOUNT_USAGE_COLUMN_TITLE: Record<string, string> = {
     approximate_row_count: '~Row count',
@@ -169,6 +169,43 @@ export const selectAccountUsageTreeDiffRowCount = (state: RootState) =>
 export const selectAccountUsageTreeDiffItemsBasePath = (state: RootState) =>
     state.accounts.usage.treeDiff.base_path;
 
+export const selectAccountUsageListVersionedFields = (state: RootState) =>
+    state.accounts.usage.list.response?.versioned_fields;
+
+export const selectAccountUsageTreeVersionedFields = (state: RootState) =>
+    state.accounts.usage.tree.response?.versioned_fields;
+
+export const selectAccountUsageListDiffVersionedFields = (state: RootState) =>
+    state.accounts.usage.listDiff.response?.versioned_fields;
+
+export const selectAccountUsageTreeDiffVersionedFields = (state: RootState) =>
+    state.accounts.usage.treeDiff.response?.versioned_fields;
+
+export const selectAccountUsageVersionedFields = createSelector(
+    [
+        selectAccountUsageViewType,
+        selectAccountUsageListVersionedFields,
+        selectAccountUsageTreeVersionedFields,
+        selectAccountUsageListDiffVersionedFields,
+        selectAccountUsageTreeDiffVersionedFields,
+    ],
+    (viewType, listFields, treeFields, listDiffFields, treeDiffFields) => {
+        switch (viewType) {
+            case 'list':
+            case 'list-plus-folders':
+                return listFields;
+            case 'list-diff':
+            case 'list-plus-folders-diff':
+                return listDiffFields;
+            case 'tree':
+                return treeFields;
+            case 'tree-diff':
+                return treeDiffFields;
+        }
+        return undefined;
+    },
+);
+
 export const selectIsAccountsUsageDiffView = createSelector(
     [selectAccountUsageViewType],
     (viewType) => {
@@ -296,7 +333,7 @@ export const selectAccountUsageAvailableColumns = createSelector(
     },
 );
 
-const defaultTreeColumns: Array<keyof AccountUsageDataItem> = [
+const defaultTreeColumns: AccountUsageField[] = [
     'owner',
     'disk_space',
     'medium:default',
@@ -305,9 +342,9 @@ const defaultTreeColumns: Array<keyof AccountUsageDataItem> = [
     'chunk_count',
     'node_count',
     'modification_time',
-] as any;
+];
 
-const defaultListColumns: Array<keyof AccountUsageDataItem> = [
+const defaultListColumns: AccountUsageField[] = [
     'owner',
     'disk_space',
     'medium:default',
@@ -315,9 +352,9 @@ const defaultListColumns: Array<keyof AccountUsageDataItem> = [
     'medium:nvme_blobs',
     'chunk_count',
     'modification_time',
-] as any;
+];
 
-const defaultListFoldersColumns: Array<keyof AccountUsageDataItem> = [
+const defaultListFoldersColumns: AccountUsageField[] = [
     'owner',
     'disk_space',
     'medium:default',
@@ -326,9 +363,9 @@ const defaultListFoldersColumns: Array<keyof AccountUsageDataItem> = [
     'chunk_count',
     'node_count',
     'modification_time',
-] as any;
+];
 
-function firstNotEmpty<T = keyof AccountUsageDataItem>(a1: Array<T>, a2: Array<T>): Array<T> {
+function firstNotEmpty<T = AccountUsageField>(a1: T[], a2: T[]): T[] {
     if (a1?.length) {
         return a1;
     }

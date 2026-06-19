@@ -5,7 +5,7 @@ import {selectSettingsData} from './settings-base';
 import {selectClusterNS, selectGetSetting} from '../../../store/selectors/settings';
 import {NAMESPACES, SettingName} from '../../../../shared/constants/settings';
 import {type AccountUsageViewType} from '../../../store/reducers/accounts/usage/accounts-usage-filters';
-import {type AccountUsageDataItem} from '../../../store/reducers/accounts/usage/account-usage-types';
+import {type AccountUsageField} from '../../../store/reducers/accounts/usage/account-usage-types';
 import {type ActiveJobTypesMap} from '../../../store/actions/settings/settings';
 import {type RootState} from '../../../store/reducers';
 import {NODE_TYPE} from '../../../../shared/constants/system';
@@ -116,21 +116,21 @@ export const selectSettingsAccountUsageViewType = createSelector(
 
 export const selectSettingsAccountUsageColumnsTree = createSelector(
     selectGetSetting,
-    (getSetting): Array<keyof AccountUsageDataItem> => {
+    (getSetting): AccountUsageField[] => {
         return getSetting(SettingName.ACCOUNTS.ACCOUNTS_USAGE_COLUMNS_TREE, NAMESPACES.ACCOUNTS);
     },
 );
 
 export const selectSettingsAccountUsageColumnsList = createSelector(
     selectGetSetting,
-    (getSetting): Array<keyof AccountUsageDataItem> => {
+    (getSetting): AccountUsageField[] => {
         return getSetting(SettingName.ACCOUNTS.ACCOUNTS_USAGE_COLUMNS_LIST, NAMESPACES.ACCOUNTS);
     },
 );
 
 export const selectSettingsAccountUsageColumnsListFolders = createSelector(
     selectGetSetting,
-    (getSetting): Array<keyof AccountUsageDataItem> => {
+    (getSetting): AccountUsageField[] => {
         return getSetting(
             SettingName.ACCOUNTS.ACCOUNTS_USAGE_COLUMNS_LIST_FOLDERS,
             NAMESPACES.ACCOUNTS,

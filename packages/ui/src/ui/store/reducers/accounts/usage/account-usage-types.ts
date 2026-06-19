@@ -1,4 +1,6 @@
-export interface AccountUsageDataParams {
+import {type PickByValue} from 'utility-types';
+
+export type AccountUsageDataParams = {
     cluster: string;
     account: string;
 
@@ -20,26 +22,10 @@ export interface AccountUsageDataParams {
             comparison: '<' | '>' | '==' | '<=' | '>=';
         }>;
     };
-}
+};
 
-export interface AccountUsageData {
-    fields: Array<keyof AccountUsageDataItem>;
-    mediums: Array<keyof AccountUsageDataItem>;
-
-    items: Array<AccountUsageDataItem>;
-    row_count: number;
-}
-
-type MediumKey = 'default' | 'cache' | string;
-
-export type MediumKeyTemplate = `medium:${MediumKey}`;
-export type VersionedKeyTemplate = `versioned:medium:${MediumKey}`;
-
-export type AccountUsageDataItem = {
-    acl_status?: 'deny' | 'allow';
-
+type AccountUsageBaseData = {
     account: string;
-    direct_child_count: number;
     path: string;
     type: string;
     owner: string;
@@ -47,18 +33,59 @@ export type AccountUsageDataItem = {
     modification_time: string;
 
     chunk_count: number;
+    direct_child_count: number;
     disk_space: number;
     master_memory: number;
     node_count: number;
-    tablet_count: 0;
-    tablet_static_memory: 0;
-    'versioned:master_memory': null | number;
-    'versioned:chunk_count': null | number;
-    'versioned:direct_child_count': null | number;
-    'versioned:disk_space': null | number;
-    'versioned:node_count': null | number;
-    'versioned:recursive_versioned_resource_usage': null | number;
-    'versioned:tablet_count': null | number;
-    'versioned:tablet_static_memory': null | number;
-} & Record<`medium:${MediumKey}`, null | number> &
-    Record<`versioned:medium:${MediumKey}`, null | number>;
+    tablet_count: number;
+    tablet_static_memory: number;
+
+    // compressed_data_size: unknown;
+    // data_weight: unknown;
+    // erasure_disk_space: unknown;
+    // recursive_versioned_resource_usage: unknown;
+    // regular_disk_space: unknown;
+    // row_count: unknown;
+    // uncompressed_data_size: unknown;
+};
+
+export type AccountUsageMediumKey = 'default' | 'cache' | string;
+
+type AccountUsageMediumField = `medium:${AccountUsageMediumKey}`;
+
+type AccountUsageMediumData = {
+    [K in AccountUsageMediumField]?: null | number;
+};
+
+export type AccountUsageVersionedKey =
+    | keyof PickByValue<AccountUsageBaseData, number>
+    | keyof AccountUsageMediumData;
+
+export type AccountUsageVersionedField<
+    K extends AccountUsageVersionedKey = AccountUsageVersionedKey,
+> = `versioned:${K}`;
+
+type AccountUsageVersionedData = {
+    [K in AccountUsageVersionedField]?: null | number;
+};
+
+export type AccountUsageDataItem = {
+    acl_status?: 'deny' | 'allow';
+} & AccountUsageBaseData &
+    AccountUsageMediumData &
+    AccountUsageVersionedData;
+
+export type AccountUsageField = keyof AccountUsageBaseData | keyof AccountUsageMediumData;
+
+type AccountUsageVersionedFields = {
+    [K in AccountUsageVersionedKey]: AccountUsageVersionedField<K>;
+};
+
+export type AccountUsageData = {
+    fields: AccountUsageField[];
+    mediums: AccountUsageMediumKey[];
+    versioned_fields?: AccountUsageVersionedFields;
+
+    items: AccountUsageDataItem[];
+    row_count: number;
+};
