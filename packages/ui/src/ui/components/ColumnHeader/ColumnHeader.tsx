@@ -45,20 +45,20 @@ export type HasSortColumn<T> =
           options: Array<ColumnInfo<T>>;
       } & Partial<Record<keyof Omit<ColumnInfo<T>, 'column' | 'title' | 'shortTitle'>, undefined>>);
 
+export type ColumnHeaderOnSort<T extends string = string> = (
+    column: T,
+    nextOrder: OrderType,
+    options: {currentOrder?: OrderType; multisort?: boolean},
+) => void;
+
 export type ColumnHeaderProps<T extends string = string> = PageCounterProps &
     HasSortColumn<T> & {
         className?: string;
         order?: OrderType;
         multisortIndex?: number;
         sortIconSize?: number;
-        onSort?: (
-            column: T,
-            nextOrder: OrderType,
-            options: {currentOrder?: OrderType; multisort?: boolean},
-        ) => void;
-
+        onSort?: ColumnHeaderOnSort<T>;
         loading?: boolean;
-
         align?: 'center' | 'left' | 'right';
     };
 
