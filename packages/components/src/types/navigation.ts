@@ -1,6 +1,6 @@
-import {ReactNode} from 'react';
 import {UnipikaValue} from '../internal/Yson/StructuredYson/StructuredYsonTypes';
 import {TypeArray} from '../components/SchemaDataType';
+import {MetaTableItem} from '../components';
 
 export type NavigationNode = {
     name: string;
@@ -20,12 +20,7 @@ export type NavigationTableSchema = {
     type: string;
 };
 
-export type NavigationTableMeta = {
-    key: string;
-    value: ReactNode;
-    visible?: boolean;
-    label?: string;
-};
+export type NavigationTableMeta = MetaTableItem;
 
 export type NavigationTableData = {
     name: string;

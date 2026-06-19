@@ -1,4 +1,6 @@
 import {ypath} from '../../../utils';
+import i18n from './i18n';
+
 const ERASURE_DOCS_KEY = 'storage:replication#erasure';
 
 export const erasureReplication = (attributes, options = {}) => {
@@ -12,12 +14,14 @@ export const erasureReplication = (attributes, options = {}) => {
     return [
         {
             key: 'erasure codec',
+            label: i18n('field_erasure-codec'),
             value: erasureCodec,
             helpUrl: docsUrls?.[ERASURE_DOCS_KEY],
             visible: erasureCodec !== 'none',
         },
         {
             key: 'replication factor',
+            label: i18n('field_replication-factor'),
             value: replicationFactor,
             visible: !hideReplicationFactor && replicationFactor !== 'none',
         },

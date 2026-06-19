@@ -4,6 +4,7 @@ import type {
     MetaTableAutomaticModeSwitchOnEdit,
     TYComponentsNavigationMetaConfig,
 } from '../../../../types';
+import i18n from '../i18n';
 
 export interface MetaTableItem {
     key: string;
@@ -45,17 +46,18 @@ export const getCommonFields = ({
     const fields = [
         {
             key: 'tableType',
-            label: 'Table type',
+            label: i18n('field_table-type'),
             value: tableType,
         },
         {
             key: 'sorted',
+            label: i18n('field_sorted'),
             value: sorted,
             visible: sorted !== undefined,
         },
         {
             key: 'chaosCellBundle',
-            label: 'Chaos cell bundle',
+            label: i18n('field_chaos-cell-bundle'),
             value: chaosCellBundle ? (
                 ChaosCellBundleLink ? (
                     <ChaosCellBundleLink cluster={cluster} chaosCellBundle={chaosCellBundle} />
@@ -68,7 +70,7 @@ export const getCommonFields = ({
         },
         {
             key: 'automaticModeSwitch',
-            label: 'Table automatic mode switch',
+            label: i18n('field_table-automatic-mode-switch'),
             value: renderAutomaticModeSwitch?.({
                 value: enableReplicatedTableTracker,
                 cluster,

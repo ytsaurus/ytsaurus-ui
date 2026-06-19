@@ -11,6 +11,7 @@ import {MetaTableItem} from '../MetaTable';
 import {Template} from '../templates/Template';
 import type {TYComponentsNavigationMetaConfig} from '../../../types';
 import {formatTimeDuration} from './helpers/formatTimeDuration';
+import i18n from './i18n';
 
 import './ttl.scss';
 
@@ -39,6 +40,7 @@ export function makeTTLItems(
     if (time && time.value !== expirationTime) {
         res.push({
             key: 'effective_expiration_time',
+            label: i18n('field_effective-expiration-time'),
             value: withTTL(
                 dateTime({input: time.value}).format('DD MMM YYYY HH:mm:ss'),
                 showTTLLabel,
@@ -49,6 +51,7 @@ export function makeTTLItems(
         const timePathUrl = config?.navigationLinkTemplate?.({cluster, path: time.path});
         res.push({
             key: 'effective_expiration_time_path',
+            label: i18n('field_effective-expiration-time-path'),
             qa: 'expiration_timeout_path',
             value: timePathUrl ? <Template.Link url={timePathUrl} text={time.path} /> : time.path,
         });
@@ -56,6 +59,7 @@ export function makeTTLItems(
     if (expirationTime) {
         res.push({
             key: 'expiration_time',
+            label: i18n('field_expiration-time'),
             value: withTTL(
                 dateTime({input: expirationTime}).format('DD MMM YYYY HH:mm:ss'),
                 showTTLLabel,
@@ -68,12 +72,14 @@ export function makeTTLItems(
     if (timeout && timeout.value !== expirationTimeout) {
         res.push({
             key: 'effective_expiration_timeout',
+            label: i18n('field_effective-expiration-timeout'),
             value: withTTL(formatTimeDuration(timeout.value), showTTLLabel, docsUrls),
             className,
         });
         const timeoutPathUrl = config?.navigationLinkTemplate?.({cluster, path: timeout.path});
         res.push({
             key: 'effective_expiration_timeout_path',
+            label: i18n('field_effective-expiration-timeout-path'),
             qa: 'expiration_timeout_path',
             value: timeoutPathUrl ? (
                 <Template.Link url={timeoutPathUrl} text={timeout.path} />
@@ -85,6 +91,7 @@ export function makeTTLItems(
     if (expirationTimeout) {
         res.push({
             key: 'expiration_timeout',
+            label: i18n('field_expiration-timeout'),
             value: withTTL(formatTimeDuration(expirationTimeout), showTTLLabel, docsUrls),
             className,
         });

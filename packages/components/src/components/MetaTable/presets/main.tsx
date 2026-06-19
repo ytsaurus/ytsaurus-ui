@@ -3,6 +3,7 @@ import {Template} from '../templates/Template';
 import {makeTTLItems} from './ttl';
 import type {TYComponentsNavigationMetaConfig} from '../../../types';
 import {MetaTableItem} from '../MetaTable';
+import i18n from './i18n';
 
 const normalizeMetaOperationLinkItems = (
     result: MetaTableItem | MetaTableItem[] | null | undefined,
@@ -46,20 +47,24 @@ export const metaTablePresetMain: Props = (attributes, cluster, config = {}) => 
     return [
         {
             key: 'id',
+            label: i18n('field_id'),
             value: <Template.Id id={id} />,
         },
         {
             key: 'owner',
+            label: i18n('field_owner'),
             value: SubjectCard ? <SubjectCard name={owner} /> : owner,
             visible: Boolean(owner),
         },
         {
             key: 'account',
+            label: i18n('field_account'),
             value: AccountLink ? <AccountLink account={account} cluster={cluster} /> : account,
             visible: Boolean(account),
         },
         {
             key: 'creation_time',
+            label: i18n('field_creation-time'),
             value: <Template.Time time={creationTime} valueFormat="DateTime" />,
             visible: Boolean(creationTime),
         },
@@ -71,11 +76,13 @@ export const metaTablePresetMain: Props = (attributes, cluster, config = {}) => 
         }),
         {
             key: 'modification_time',
+            label: i18n('field_modification-time'),
             value: <Template.Time time={modificationTime} valueFormat="DateTime" />,
             visible: Boolean(modificationTime),
         },
         {
             key: 'access_time',
+            label: i18n('field_access-time'),
             value: <Template.Time time={accessTime} valueFormat="DateTime" />,
             visible: Boolean(accessTime),
         },

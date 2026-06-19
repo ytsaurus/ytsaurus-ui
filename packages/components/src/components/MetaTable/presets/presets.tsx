@@ -26,6 +26,7 @@ export function replicatedTableTracker(attributes: any) {
     );
     return {
         key: 'replicated_table_tracker',
+        label: i18n('field_replicated-table-tracker'),
         value: <LabelOnOff value={value} />,
         visible: value !== undefined,
     };
@@ -41,20 +42,20 @@ export function tableSize(attributes: any, isDynamic: boolean, mediumList: strin
     return [
         {
             key: 'rowCount',
-            label: 'Rows',
+            label: i18n('field_rows'),
             value: <RowsCount isDynamic={isDynamic} count={rowCount} />,
             visible: rowCount !== undefined,
         },
         {
             key: 'chunkCount',
-            label: 'Chunks',
+            label: i18n('field_chunks'),
             value: format['Number'](chunkCount),
             visible: chunkCount !== undefined,
         },
         ...metaTablePresetSize(attributes, mediumList),
         {
             key: 'dataWeight',
-            label: 'Data weight',
+            label: i18n('field_data-weight'),
             value: <Template.FormattedValue value={dataWeight} format="Bytes" />,
             tooltip: i18n('context_data-weight'),
             visible: dataWeight !== undefined,
@@ -71,12 +72,12 @@ export function tableStorage(
     return [
         {
             key: 'tableType',
-            label: 'Table type',
+            label: i18n('field_table-type'),
             value: tableType,
         },
         {
             key: 'optimizeFor',
-            label: 'Optimize for',
+            label: i18n('field_optimize-for'),
             value: <Label text={format['ReadableField'](optimizeFor)} theme="info" />,
             visible: optimizeFor !== 'undefined',
         },
@@ -103,7 +104,7 @@ export function dynTableInfo(
     return [
         {
             key: 'tabletCellBundle',
-            label: 'Tablet cell bundle',
+            label: i18n('field_tablet-cell-bundle'),
             value: tabletCellBundle ? (
                 TabletCellBundleLink ? (
                     <TabletCellBundleLink cluster={cluster} tabletCellBundle={tabletCellBundle} />
@@ -116,7 +117,7 @@ export function dynTableInfo(
         },
         {
             key: 'tabletState',
-            label: 'Tablet state',
+            label: i18n('field_tablet-state'),
             value: (
                 <Label
                     theme={tabletState === 'mounted' ? 'info' : 'default'}
@@ -126,7 +127,7 @@ export function dynTableInfo(
         },
         {
             key: 'inMemoryMode',
-            label: 'In memory mode',
+            label: i18n('field_in-memory-mode'),
             value: (
                 <Label
                     theme={inMemoryMode && inMemoryMode !== 'none' ? 'info' : 'default'}
@@ -136,7 +137,7 @@ export function dynTableInfo(
         },
         {
             key: 'tabletErrorCount',
-            label: 'Tablet error count',
+            label: i18n('field_tablet-error-count'),
             value: format['Number'](tabletErrorCount),
         },
     ];

@@ -25,6 +25,7 @@ export function metaTablePresetSize(attributes: unknown, mediumList: Array<strin
 
         return {
             key: medium + '_disk_space',
+            label: i18n('field_medium-disk-space', {name: format.ReadableField(medium)}),
             value: (
                 <Template.FormattedValue
                     value={usageMediumDiskSpace || mediumDiskSpace}
@@ -44,24 +45,27 @@ export function metaTablePresetSize(attributes: unknown, mediumList: Array<strin
     return [
         {
             key: 'uncompressed_data_size',
+            label: i18n('field_uncompressed-size'),
             value: <Template.FormattedValue value={uncompressedDataSize} format="Bytes" />,
             visible: uncompressedDataSize !== undefined,
             tooltip: i18n('context_uncompressed-size'),
         },
         {
             key: 'compressed_data_size',
+            label: i18n('field_compressed-size'),
             value: <Template.FormattedValue value={compressedDataSize} format="Bytes" />,
             visible: compressedDataSize !== undefined,
             tooltip: i18n('context_compressed-size'),
         },
         {
             key: 'primary_medium',
+            label: i18n('field_primary-medium'),
             value: <Template.Readable value={primaryMedium} />,
             visible: primaryMedium !== undefined,
         },
         {
             key: 'disk_space',
-            label: 'Total disk space',
+            label: i18n('field_total-disk-space'),
             value: <Template.FormattedValue value={usageDiskSpace ?? diskSpace} format="Bytes" />,
             visible: usageDiskSpace !== undefined || diskSpace !== undefined,
             tooltip: i18n('context_disk-space'),
