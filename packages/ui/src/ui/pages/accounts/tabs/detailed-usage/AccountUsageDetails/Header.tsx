@@ -1,32 +1,37 @@
 import React, {useCallback} from 'react';
 
-import ColumnHeader from '../../../../../components/ColumnHeader/ColumnHeader';
+import ColumnHeader, {
+    type ColumnHeaderOnSort,
+} from '../../../../../components/ColumnHeader/ColumnHeader';
 import {setAccountUsageSortState} from '../../../../../store/actions/accounts/account-usage';
-import {type AccountUsageDataItem} from '../../../../../store/reducers/accounts/usage/account-usage-types';
+import {type AccountUsageField} from '../../../../../store/reducers/accounts/usage/account-usage-types';
 import {useDispatch, useSelector} from '../../../../../store/redux-hooks';
 import {
     readableAccountUsageColumnName,
     selectAccountUsageSortStateByColumn,
 } from '../../../../../store/selectors/accounts/account-usage';
-import {type OrderType} from '../../../../../utils/sort-helpers';
+
+type OnSort = ColumnHeaderOnSort<AccountUsageField>;
 
 type Props = {
-    column: keyof AccountUsageDataItem;
+    column: AccountUsageField;
 };
 
 export const Header = ({column}: Props) => {
     const dispatch = useDispatch();
 
-    const sortOrder = useSelector(selectAccountUsageSortStateByColumn);
+    const sortState = useSelector(selectAccountUsageSortStateByColumn);
 
-    const onSort = useCallback(
-        (column: string, nextOrder: OrderType, opts: {multisort?: boolean}) => {
-            dispatch(setAccountUsageSortState({column, order: nextOrder}, opts.multisort));
+    const onSort = useCallback<OnSort>(
+        (columnName, nextOrder, options) => {
+            dispatch(
+                setAccountUsageSortState({column: columnName, order: nextOrder}, options.multisort),
+            );
         },
         [dispatch],
     );
 
-    const {order, multisortIndex} = sortOrder[column] || {};
+    const {order, multisortIndex} = sortState[column] || {};
 
     return (
         <ColumnHeader
