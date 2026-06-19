@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import sortBy_ from 'lodash/sortBy';
 
-import {Flex, Select} from '@gravity-ui/uikit';
+import {Flex} from '@gravity-ui/uikit';
+import Suggest, {type SuggestItem} from '../../../components/Suggest/Suggest';
 import {useFetchBatchQuery} from '../../../store/api/yt';
 import {YTApiId} from '../../../rum/rum-wrap-api';
+import {filterSuggestItems} from './helpers/filterSuggestItems';
 
 export function MasterLocalContainers({
     allValue,
@@ -20,23 +22,40 @@ export function MasterLocalContainers({
         errorTitle: 'Failed to load masters',
     });
 
-    const options = React.useMemo(() => {
-        const res = [{value: allValue, content: allValue}];
-        sortBy_(data?.[0]?.output).forEach((i) => {
-            res.push({value: i, content: i});
+    const items = React.useMemo(() => {
+        const res = [allValue];
+        sortBy_(data?.[0]?.output).forEach((item) => {
+            res.push(item);
         });
         return res;
     }, [data, allValue]);
 
+    const applyContainer = useCallback(
+        (item: SuggestItem) => {
+            const value = typeof item === 'string' ? item : item.value;
+            setContainer(value);
+        },
+        [setContainer],
+    );
+
+    const onEnterKeyDown = useCallback(
+        (value: string) => {
+            if (value.trim()) {
+                applyContainer(value);
+            }
+        },
+        [applyContainer],
+    );
+
     return (
         <Flex gap={1} alignItems="center">
             Container:
-            <Select
-                options={options}
-                value={[container]}
-                onUpdate={([v]) => {
-                    setContainer(v);
-                }}
+            <Suggest
+                text={container}
+                items={items}
+                filter={filterSuggestItems}
+                apply={applyContainer}
+                onEnterKeyDown={onEnterKeyDown}
             />
         </Flex>
     );
