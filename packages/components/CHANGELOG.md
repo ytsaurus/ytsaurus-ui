@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.5](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v0.2.4...components-v0.2.5) (2026-06-19)
+
+
+### Bug Fixes
+
+* **ytsaurus/components:** add i18n for MetaTable presets [YTFRONT-5069] ([5367872](https://github.com/ytsaurus/ytsaurus-ui/commit/536787272dd9d14d03e40454ad10abbf2c9dd540))
+
 ## [0.2.4](https://github.com/ytsaurus/ytsaurus-ui/compare/components-v0.2.3...components-v0.2.4) (2026-05-28)
 
 
