@@ -11,6 +11,7 @@ import {useUnregisterConsumerMutation} from '../../../../../../store/api/navigat
 
 import {YTDFDialog, makeErrorFields} from '../../../../../../containers/Dialog';
 import {type YTError} from '../../../../../../../@types/types';
+import i18n from './i18n';
 
 export function UnregisterConsumerDialog() {
     const dispatch = useDispatch();
@@ -24,16 +25,14 @@ export function UnregisterConsumerDialog() {
     return (
         <YTDFDialog
             visible={visible}
-            headerProps={{title: 'Unregister consumer'}}
+            headerProps={{title: i18n('title_unregister-consumer')}}
             fields={[
                 {
                     name: 'delete',
                     type: 'block',
                     extras: {
                         children: (
-                            <Text variant={'body-2'}>
-                                Are you sure you want to unregister consumer?
-                            </Text>
+                            <Text variant={'body-2'}>{i18n('confirm_unregister-consumer')}</Text>
                         ),
                     },
                 },

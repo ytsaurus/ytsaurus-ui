@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
+import i18n from './i18n';
+
 import Pagination from '../../../../../components/Pagination/Pagination';
 
 import {selectIsDynamic} from '../../../../../store/selectors/navigation/content/table-ts';
@@ -40,9 +42,7 @@ Paginator.propTypes = {
 function Paginator(props) {
     const {block, error, isPaginationDisabled, isTableEndReached, offsetValue, isDynamic} = props;
     const {moveOffsetToStart, moveOffsetToLeft, moveOffsetToRight, moveOffsetToEnd} = props;
-    const tooltip = isPaginationDisabled
-        ? 'Select every key column in Column Selector to enable pagination'
-        : undefined;
+    const tooltip = isPaginationDisabled ? i18n('context_pagination-disabled') : undefined;
     // TODO: use when descending sorting will be implemented on backend
 
     return (

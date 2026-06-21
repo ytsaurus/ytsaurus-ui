@@ -39,6 +39,7 @@ import {executeBatchWithRetries} from '../../execute-batch';
 import {YTApiId} from '../../../../rum/rum-wrap-api';
 import {type BatchSubRequest} from '../../../../../shared/yt-types';
 import {toaster} from '../../../../utils/toaster';
+import i18n from './i18n';
 
 type ActionType<R = any> = ThunkAction<R, RootState, any, NavAttrEditorAction>;
 
@@ -73,10 +74,10 @@ export function showNavigationAttributesEditor(paths: Array<string>): ActionType
             };
         });
         return executeBatchWithRetries(YTApiId.attributesEditorGetAttrs, requests, {
-            errorTitle: 'Attributes cannot be loaded',
+            errorTitle: i18n('alert_cannot-load-attributes'),
         })
             .then((results: any) => {
-                const error = getBatchError(results, 'Attributes cannot be loaded');
+                const error = getBatchError(results, i18n('alert_cannot-load-attributes'));
                 if (error) {
                     throw error;
                 }
@@ -102,11 +103,11 @@ export function showNavigationAttributesEditor(paths: Array<string>): ActionType
                 toaster.add({
                     name: 'show_attrs_editor_' + join_(paths),
                     theme: 'danger',
-                    title: 'Attributes cannot be loaded',
+                    title: i18n('alert_cannot-load-attributes'),
                     content: e?.message,
                     actions: [
                         {
-                            label: ' [Details]',
+                            label: ' [' + i18n('action_details') + ']',
                             onClick: () => showErrorPopup(e),
                         },
                     ],
@@ -176,10 +177,13 @@ export function navigationSetNodeAttributes(
         const staticTables = selectNavigationAttributesEditorStaticTables(getState());
 
         return executeBatchWithRetries(YTApiId.attributesEditorSet, requests, {
-            errorTitle: `Cannot set attributes for ${paths}`,
+            errorTitle: i18n('alert_cannot-set-attributes', {paths: String(paths)}),
         })
             .then((res): Promise<unknown> => {
-                const error = getBatchError(res, `Cannot set attributes for ${paths}`);
+                const error = getBatchError(
+                    res,
+                    i18n('alert_cannot-set-attributes', {paths: String(paths)}),
+                );
                 if (error) {
                     dispatch({
                         type: NAVIGATION_ATTRIBUTES_EDITOR_ERROR,
@@ -218,8 +222,8 @@ export function navigationSetNodeAttributes(
                                     </AppStoreProvider>
                                 );
                             },
-                            successTitle: 'Merge operation is started',
-                            errorTitle: 'Merge operation is failed',
+                            successTitle: i18n('alert_merge-started'),
+                            errorTitle: i18n('alert_merge-failed'),
                             autoHide: false,
                         });
                     });
@@ -232,9 +236,12 @@ export function navigationSetNodeAttributes(
                         };
                     });
                     return executeBatchWithRetries(YTApiId.attributesEditorMerge, requests, {
-                        errorTitle: 'Failed to start some operations',
+                        errorTitle: i18n('alert_failed-to-start-operations'),
                     }).then((results: any) => {
-                        const error = getBatchError(results, 'Failed to start some operations');
+                        const error = getBatchError(
+                            results,
+                            i18n('alert_failed-to-start-operations'),
+                        );
                         if (error) {
                             throw error;
                         }
@@ -242,12 +249,15 @@ export function navigationSetNodeAttributes(
                         toaster.add({
                             theme: 'success',
                             name: 'merge_' + staticTables.join(','),
-                            title: `${staticTables.length} operations are started`,
+                            title: i18n('alert_operations-started', {count: staticTables.length}),
                             content: (
                                 <span>
-                                    Please visit
-                                    <Link url={`/${cluster}/operations`}> operations </Link>
-                                    page to see more details
+                                    {i18n('context_visit-operations-page')}
+                                    <Link url={`/${cluster}/operations`}>
+                                        {' '}
+                                        {i18n('action_operations')}{' '}
+                                    </Link>
+                                    {i18n('context_see-details')}
                                 </span>
                             ),
                         });

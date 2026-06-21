@@ -1,0 +1,7 @@
+{
+  "title_meta": "Meta",
+  "field_partition-count": "Partition count",
+  "field_family": "Family",
+  "field_write-row-count-rate": "Rows write rate",
+  "field_write-data-weight-rate": "Data weight write rate"
+}

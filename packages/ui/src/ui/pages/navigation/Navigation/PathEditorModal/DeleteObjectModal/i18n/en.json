@@ -1,0 +1,12 @@
+{
+  "action_delete": "Delete",
+  "action_move-to-trash": "Move to trash",
+  "action_documentation": "Documentation",
+  "alert_cannot-be-undone": "This action CANNOT be undone",
+  "confirm_delete-permanently": "Delete permanently",
+  "field_name": "Name",
+  "field_disk-space": "Disk space",
+  "field_node-count": "Node count",
+  "field_row-count": "Row count",
+  "field_rows": "Rows"
+}

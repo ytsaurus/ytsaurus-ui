@@ -8,6 +8,7 @@ import {changeQueueMode} from '../../../../../store/actions/navigation/tabs/queu
 import {type RootState} from '../../../../../store/reducers';
 import {selectQueueMode} from '../../../../../store/selectors/navigation/tabs/queue';
 
+import i18n from './i18n';
 import './Toolbar.scss';
 
 const block = cn('queue-toolbar');
@@ -19,19 +20,27 @@ interface Props extends PropsFromRedux {
 const tabItems: React.ComponentProps<typeof RadioButton>['items'] = [
     {
         value: QUEUE_MODE.METRICS,
-        text: 'Metrics',
+        get text() {
+            return i18n('value_metrics');
+        },
     },
     {
         value: QUEUE_MODE.PARTITIONS,
-        text: 'Partitions',
+        get text() {
+            return i18n('value_partitions');
+        },
     },
     {
         value: QUEUE_MODE.CONSUMERS,
-        text: 'Consumers',
+        get text() {
+            return i18n('value_consumers');
+        },
     },
     {
         value: QUEUE_MODE.EXPORTS,
-        text: 'Exports',
+        get text() {
+            return i18n('value_exports');
+        },
     },
 ];
 

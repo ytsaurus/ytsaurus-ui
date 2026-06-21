@@ -13,6 +13,8 @@ import {hideError, setPath} from '../../../../store/actions/navigation/modals/pa
 import {getOnlyFolders} from '../../../../utils/navigation/path-editing-popup';
 import withScope from '../../../../hocs/components/Modal/withScope';
 
+import i18n from './i18n';
+
 import './PathEditorModal.scss';
 
 const b = block('path-editor-modal');
@@ -155,7 +157,7 @@ class PathEditorModal extends Component {
                 onConfirm={this.props.onConfirmButtonClick}
                 onCancel={this.props.onCancelButtonClick}
                 isConfirmDisabled={isDisabled}
-                confirmText="Confirm"
+                confirmText={i18n('action_confirm')}
                 loading={inProcess}
                 title={modalTitle}
                 content={content}

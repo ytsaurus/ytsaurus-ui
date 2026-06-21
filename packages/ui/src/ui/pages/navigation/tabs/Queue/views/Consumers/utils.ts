@@ -1,5 +1,6 @@
 import ypath from '../../../../../../common/thor/ypath';
 import {ytApiV3} from '../../../../../../rum/rum-wrap-api';
+import i18n from './i18n';
 
 export async function validateCreateConsumerPath(path: string) {
     try {
@@ -34,20 +35,20 @@ export async function validateCreateConsumerPath(path: string) {
         });
 
         if (ypath.getValue(res[0]?.output, '/type') !== 'map_node') {
-            return 'Parent path should be a directory';
+            return i18n('alert_parent-path-not-directory');
         }
 
         if (path && path.split('/').at(-1)?.length === 0) {
-            return 'Consumer name should not be empty';
+            return i18n('alert_consumer-name-empty');
         }
 
         if (res[2]?.output) {
-            return 'Path should not exist';
+            return i18n('alert_path-already-exists');
         }
 
         return undefined;
     } catch (err) {
         const e = err as Error;
-        return e?.message || 'Unexpected type of error: ' + typeof e;
+        return e?.message || i18n('alert_unexpected-error', {type: typeof e});
     }
 }

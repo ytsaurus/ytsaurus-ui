@@ -8,6 +8,7 @@ import Multimeter from '../../../../../components/Multimeter/Multimeter';
 import {type TPerformanceCounters} from '../../../../../store/reducers/navigation/tabs/queue/types';
 import {isNull} from '../../../../../utils';
 
+import i18n from './i18n';
 import './Meta.scss';
 
 const block = cn('queue-meta');
@@ -27,20 +28,20 @@ const Meta: React.VFC<Props> = ({
 }) => {
     return (
         <ErrorBoundary>
-            <div className="elements-heading elements-heading_size_xs">Meta</div>
+            <div className="elements-heading elements-heading_size_xs">{i18n('title_meta')}</div>
             <MetaTable
                 className={block()}
                 items={[
                     [
                         {
                             key: 'partition-count',
-                            label: 'Partition count',
+                            label: i18n('field_partition-count'),
                             value: partitionCount,
                             visible: !isNull(partitionCount),
                         },
                         {
                             key: 'family',
-                            label: 'Family',
+                            label: i18n('field_family'),
                             value: family,
                             visible: !isNull(family),
                         },
@@ -48,7 +49,7 @@ const Meta: React.VFC<Props> = ({
                     [
                         {
                             key: 'write-row-count-rate',
-                            label: 'Rows write rate',
+                            label: i18n('field_write-row-count-rate'),
                             value: (
                                 <Multimeter
                                     {...writeRowCountRate}
@@ -60,7 +61,7 @@ const Meta: React.VFC<Props> = ({
                         },
                         {
                             key: 'write-data-weight-rate',
-                            label: 'Data weight write rate',
+                            label: i18n('field_write-data-weight-rate'),
                             value: (
                                 <Multimeter
                                     {...writeDataWeightRate}

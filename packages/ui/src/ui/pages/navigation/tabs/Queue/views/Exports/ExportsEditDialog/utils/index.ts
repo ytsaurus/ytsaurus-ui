@@ -1,10 +1,9 @@
-import {outputTableNamePatternTooltip, useUpperBoundForTableNamesTooltip} from './consts';
+import {EXPORTS_EDIT_DIALOG_CONSTS} from './consts';
 import {prepareInitialValues, prepareUpdateValues} from './prepareValues';
 import {validate, validateExportDirectory, validateExportPeriod} from './validate';
 
 export {
-    useUpperBoundForTableNamesTooltip,
-    outputTableNamePatternTooltip,
+    EXPORTS_EDIT_DIALOG_CONSTS,
     validate,
     validateExportDirectory,
     validateExportPeriod,

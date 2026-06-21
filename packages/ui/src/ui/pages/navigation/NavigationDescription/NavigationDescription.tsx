@@ -21,6 +21,7 @@ import {AnnotationWithPartial} from './AnnotationWithPartial';
 import {NavigationDescriptionOverview} from './NavigationDescriptionOverview/NavigationDescriptionOverview';
 
 import useResizeObserver from '../../../hooks/useResizeObserver';
+import i18n from './i18n';
 import './NavigationDescription.scss';
 
 const block = cn('navigation-description');
@@ -57,7 +58,7 @@ function NavigationDescription({className}: Props) {
         <div ref={wrapperRef} className={block(null, className)}>
             <CollapsibleSection
                 className={block('collapsible', {expanded})}
-                name={'Description'}
+                name={i18n('title_description')}
                 collapsed={false}
                 size={UI_COLLAPSIBLE_SIZE}
                 overview={<NavigationDescriptionOverview />}

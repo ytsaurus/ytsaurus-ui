@@ -13,6 +13,7 @@ import {type TPerformanceCounters} from '../../../../../store/reducers/navigatio
 import {isNull} from '../../../../../utils';
 import {selectTargetQueue} from '../../../../../store/selectors/navigation/tabs/consumer';
 
+import i18n from './i18n';
 import './Meta.scss';
 
 const block = cn('consumer-meta');
@@ -32,7 +33,7 @@ const Meta: React.FC<Props> = ({owner, partitionCount, readDataWeightRate, readR
         <ErrorBoundary>
             <div className={block('header')}>
                 <div className={block('header-title', 'elements-heading elements-heading_size_xs')}>
-                    Meta
+                    {i18n('title_meta')}
                 </div>
             </div>
             <MetaTable
@@ -41,7 +42,7 @@ const Meta: React.FC<Props> = ({owner, partitionCount, readDataWeightRate, readR
                     [
                         {
                             key: 'owner',
-                            label: 'Owner',
+                            label: i18n('field_owner'),
                             value: owner && <SubjectCard name={owner} />,
                             visible: !isNull(owner),
                         },
@@ -49,13 +50,18 @@ const Meta: React.FC<Props> = ({owner, partitionCount, readDataWeightRate, readR
                     [
                         {
                             key: 'vital',
-                            label: 'Vital',
-                            value: <Label theme="default" text={vital ? 'True' : 'False'} />,
+                            label: i18n('field_vital'),
+                            value: (
+                                <Label
+                                    theme="default"
+                                    text={vital ? i18n('value_true') : i18n('value_false')}
+                                />
+                            ),
                             visible: !isNull(vital),
                         },
                         {
-                            key: 'partition_count',
-                            label: 'Partition count',
+                            key: 'partition-count',
+                            label: i18n('field_partition-count'),
                             value: partitionCount,
                             visible: !isNull(partitionCount),
                         },
@@ -63,7 +69,7 @@ const Meta: React.FC<Props> = ({owner, partitionCount, readDataWeightRate, readR
                     [
                         {
                             key: 'read-data-weight-rate',
-                            label: 'Data weight read rate',
+                            label: i18n('field_data-weight-read-rate'),
                             value: (
                                 <Multimeter
                                     {...readDataWeightRate}
@@ -75,7 +81,7 @@ const Meta: React.FC<Props> = ({owner, partitionCount, readDataWeightRate, readR
                         },
                         {
                             key: 'read-row-count-rate',
-                            label: 'Rows read rate',
+                            label: i18n('field_rows-read-rate'),
                             value: (
                                 <Multimeter
                                     {...readRowCountRate}

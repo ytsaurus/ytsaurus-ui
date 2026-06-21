@@ -1,0 +1,18 @@
+{
+  "value_rows": "Rows",
+  "value_data-weight": "Data weight",
+  "field_partition-index": "Partition index...",
+  "field_tablet-cell-host": "Tablet cell host...",
+  "field_tablet-cell-id": "Tablet cell ID...",
+  "field_partition-idx": "Partition idx",
+  "field_error": "Error",
+  "field_host": "Tablet cell host",
+  "field_cell-id": "Tablet cell ID",
+  "field_read-rate": "Read rate",
+  "field_write-rate": "Write rate",
+  "field_lower-row-idx": "Lower row idx",
+  "field_upper-row-idx": "Upper row idx",
+  "field_available-rows": "Available rows",
+  "field_commit-idle-time": "Commit idle time, ms",
+  "field_last-row-commit-time": "Last row commit time"
+}

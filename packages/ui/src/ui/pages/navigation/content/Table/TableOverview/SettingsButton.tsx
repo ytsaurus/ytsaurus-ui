@@ -8,6 +8,8 @@ import Dropdown from '../../../../../components/Dropdown/Dropdown';
 import Button from '../../../../../components/Button/Button';
 import Icon from '../../../../../components/Icon/Icon';
 
+import i18n from './i18n';
+
 import {
     cellSizeRadioButtonItems,
     pageSizeRadioButtonItems,
@@ -64,17 +66,17 @@ const SettingsButton: VFC<Props> = ({
             trigger="click"
             className={block('settings')}
             button={
-                <Button size="m" title="settings">
+                <Button size="m" title={i18n('title_settings')}>
                     <Icon awesome="cog" face="solid" />
                 </Button>
             }
             template={
                 <div className={block('settings-modal')}>
-                    <div className="elements-form__label">Rows per page</div>
+                    <div className="elements-form__label">{i18n('field_rows-per-page')}</div>
                     <div className="elements-form__field">
                         <RadioButton {...pageSizeProps} />
                     </div>
-                    <div className="elements-form__label">Cell size limit</div>
+                    <div className="elements-form__label">{i18n('field_cell-size-limit')}</div>
                     <div className="elements-form__field">
                         <RadioButton {...stringLimitProps} />
                     </div>
@@ -85,7 +87,7 @@ const SettingsButton: VFC<Props> = ({
                                 setTableDisplayRawStrings(evt.target.checked);
                             }}
                         >
-                            Allow raw strings
+                            {i18n('action_allow-raw-strings')}
                         </Checkbox>
                     </div>
                 </div>

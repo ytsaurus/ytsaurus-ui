@@ -7,7 +7,7 @@ import {
 } from '../../../../../store/selectors/navigation/content/map-node';
 import {CountsList} from '../../../../../components/CountsList/CountsList';
 
-import MultipleActions from '../MultipleActions';
+import MultipleActions from '../Actions/MultipleActions/MultipleActions';
 
 function NodesTypesContainer() {
     const nodesInfo = useSelector(selectNodesInfo);

@@ -7,6 +7,7 @@ import cn from 'bem-cn-lite';
 import Filter from '../../../../../../components/Filter/Filter';
 import RadioButton from '../../../../../../components/RadioButton/RadioButton';
 import {QUEUE_RATE_MODE} from '../../../../../../constants/navigation/tabs/queue';
+import i18n from './i18n';
 
 import {
     toggleCreateDialog,
@@ -35,11 +36,15 @@ interface Props extends PropsFromRedux {}
 const rateItems: React.ComponentProps<typeof RadioButton>['items'] = [
     {
         value: QUEUE_RATE_MODE.ROWS,
-        text: 'Rows',
+        get text() {
+            return i18n('value_rows');
+        },
     },
     {
         value: QUEUE_RATE_MODE.DATA_WEIGHT,
-        text: 'Data weight',
+        get text() {
+            return i18n('value_data-weight');
+        },
     },
 ];
 
@@ -59,14 +64,14 @@ const ConsumersExtraControls: React.VFC<Props> = ({
                 className={block('filter')}
                 value={queueConsumerName}
                 onChange={changeQueueConsumerName}
-                placeholder="Consumer name..."
+                placeholder={i18n('context_consumer-name-placeholder')}
             />
             <RadioButton value={queueRateMode} onChange={changeQueueRateMode} items={rateItems} />
             <Button view={'outlined'} onClick={openCreateDialog}>
-                Create consumer
+                {i18n('action_create-consumer')}
             </Button>
             <Button view={'outlined'} onClick={openRegisterDialog}>
-                Register consumer
+                {i18n('action_register-consumer')}
             </Button>
         </>
     );

@@ -1,0 +1,15 @@
+{
+  "alert_check-permissions-error": "Check permissions error",
+  "context_cannot-modify": "You cannot modify",
+  "context_no-use-permission": "since you have no permission",
+  "context_to-corresponding-account": "to the corresponding account",
+  "action_edit-metadata": "Edit metadata",
+  "alert_node-type-not-supported": "Viewing node of type {{type}} is not supported in navigator.",
+  "alert_node-attribute-not-supported": "Viewing node attribute {{mode}} is not supported in navigator.",
+  "action_copy-to-clipboard": "Copy to clipboard [Shift+P]",
+  "action_clear-transaction": "Clear transaction",
+  "context_enter-id": "Enter id...",
+  "action_set-transaction": "Set transaction",
+  "action_refresh-page": "Refresh page [Shift+R]",
+  "action_restore": "Restore"
+}

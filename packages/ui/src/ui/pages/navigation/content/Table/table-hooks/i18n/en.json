@@ -1,0 +1,6 @@
+{
+  "alert_failed-to-check-row-level-access": "Failed to check row level access.",
+  "context_row-level-access-limited": "You can see subset of rows according to your subset of permissions.",
+  "field_access": "Access",
+  "value_limited": "Limited"
+}

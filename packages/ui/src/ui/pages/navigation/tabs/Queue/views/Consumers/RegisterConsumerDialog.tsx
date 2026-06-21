@@ -15,6 +15,8 @@ import UIFactory from '../../../../../../UIFactory';
 import {makeLink} from '../../../../../../utils/utils';
 import {makeClusterSelectOptionsSameEnv} from '../../../../../../utils/navigation/tabs/make-cluster-select-options-same-env';
 
+import i18n from './i18n';
+
 import {type YTError} from '../../../../../../../@types/types';
 
 type FormValues = {
@@ -40,16 +42,16 @@ export function RegisterConsumerDialog() {
     return (
         <YTDFDialog
             visible={visible}
-            headerProps={{title: 'Register consumer'}}
+            headerProps={{title: i18n('action_register-consumer')}}
             fields={[
                 {
                     type: 'select' as const,
                     name: 'consumerCluster',
-                    caption: 'Cluster',
+                    caption: i18n('field_cluster'),
                     initialValue: [cluster],
                     extras: {
                         options: clusterControlOptions,
-                        placeholder: 'Cluster',
+                        placeholder: i18n('field_cluster'),
                         width: 'max',
                         filterable: true,
                     },
@@ -57,22 +59,22 @@ export function RegisterConsumerDialog() {
                 {
                     type: 'text' as const,
                     name: 'consumerPath',
-                    caption: 'Path',
+                    caption: i18n('field_path'),
                     required: true,
                     extras: {
-                        placeholder: 'Path to consumer node...',
+                        placeholder: i18n('context_consumer-path-placeholder'),
                     },
                 },
                 {
                     type: 'tumbler' as const,
                     name: 'vital',
-                    caption: 'Vital',
+                    caption: i18n('field_vital'),
                     tooltip: (
                         <div>
                             {docsUrl(
                                 makeLink(
                                     UIFactory.docsUrls['dynamic-tables:queues#creating-a-consumer'],
-                                    'Docs',
+                                    i18n('action_docs'),
                                 ),
                             )}
                         </div>

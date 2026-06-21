@@ -9,9 +9,9 @@ import {
     fetchAccessLog,
 } from '../../../../store/actions/navigation/tabs/access-log/access-log';
 
-import AccessLogTable from './AccessLogTable';
-import AccessLogError from './AccessLogError';
-import AccessLogFilters from './AccessLogFilters';
+import AccessLogTable from './AccessLogTable/AccessLogTable';
+import AccessLogError from './AccessLogError/AccessLogError';
+import AccessLogFilters from './AccessLogFilters/AccessLogFilters';
 import {selectPath} from '../../../../store/selectors/navigation';
 
 function AccessLog() {

@@ -9,6 +9,7 @@ import {type FormApi, YTDFDialog} from '../../../../containers/Dialog';
 import {type YTError} from '../../../../types';
 import {YTErrorBlock} from '../../../../containers/Block/Block';
 
+import i18n from './i18n';
 import './ReplicatedTableSettings.scss';
 const block = cn('replicated-table-settings');
 
@@ -76,7 +77,7 @@ function ReplicatedTableSettingsDialog(props: Props & SettingsProps) {
             onAdd={handleApply}
             onClose={props.onClose}
             headerProps={{
-                title: 'Replica settings',
+                title: i18n('title_replica-settings'),
             }}
             initialValues={{
                 cluster: capitalize_(props.replica_cluster),
@@ -89,45 +90,45 @@ function ReplicatedTableSettingsDialog(props: Props & SettingsProps) {
                 {
                     type: 'plain',
                     name: 'cluster',
-                    caption: 'Replica cluster',
+                    caption: i18n('field_replica-cluster'),
                 },
                 {
                     type: 'plain',
                     name: 'path',
-                    caption: 'Replica path',
+                    caption: i18n('field_replica-path'),
                 },
                 {
                     type: 'radio',
                     name: 'state',
-                    caption: 'State',
+                    caption: i18n('field_state'),
                     extras: {
                         size: 's',
                         options: [
-                            {value: 'enabled', label: 'Enabled'},
-                            {value: 'disabled', label: 'Disabled'},
+                            {value: 'enabled', label: i18n('value_enabled')},
+                            {value: 'disabled', label: i18n('value_disabled')},
                         ],
                     },
                 },
                 {
                     type: 'radio',
                     name: 'mode',
-                    caption: 'Mode',
+                    caption: i18n('field_mode'),
                     extras: {
                         size: 's',
                         options: [
-                            {value: 'async', label: 'Async'},
-                            {value: 'sync', label: 'Sync'},
+                            {value: 'async', label: i18n('value_async')},
+                            {value: 'sync', label: i18n('value_sync')},
                         ],
                     },
                 },
                 {
                     type: 'radio',
                     name: 'auto_replica_tracker',
-                    caption: 'Automatic mode switch',
+                    caption: i18n('field_automatic-mode-switch'),
                     extras: {
                         options: [
-                            {value: 'enabled', label: 'Enabled'},
-                            {value: 'disabled', label: 'Disabled'},
+                            {value: 'enabled', label: i18n('value_enabled')},
+                            {value: 'disabled', label: i18n('value_disabled')},
                         ],
                     },
                 },

@@ -4,6 +4,7 @@ import cn from 'bem-cn-lite';
 import PropTypes from 'prop-types';
 import React, {Fragment, useEffect} from 'react';
 import {connect} from 'react-redux';
+import i18n from './i18n';
 import {
     compression,
     erasureReplication,
@@ -51,7 +52,7 @@ const renderActions = (downloadPath) => {
     return (
         <Flex className={block('actions')} gap={4}>
             <Button href={downloadPath} target="_blank">
-                Download
+                {i18n('action_download')}
             </Button>
             <NavigationExtraActions />
             <CurrentPathActions />
@@ -62,7 +63,7 @@ const renderActions = (downloadPath) => {
 const renderEmptyWarning = () => {
     return (
         <div className={messageBlock({theme: 'warning'})}>
-            <p className={messageBlock('paragraph')}>File is empty.</p>
+            <p className={messageBlock('paragraph')}>{i18n('alert_file-empty')}</p>
         </div>
     );
 };
@@ -71,11 +72,11 @@ const renderTooBigInfo = (downloadPath) => {
     return (
         <div className={messageBlock({theme: 'info'})}>
             <p className={messageBlock('paragraph')}>
-                The file is too big to be fully shown here. You can{' '}
+                {i18n('alert_file-too-big')}{' '}
                 <Link url={downloadPath} target="_blank">
-                    download
+                    {i18n('action_download-link')}
                 </Link>{' '}
-                it.
+                {i18n('alert_file-too-big-suffix')}
             </p>
         </div>
     );

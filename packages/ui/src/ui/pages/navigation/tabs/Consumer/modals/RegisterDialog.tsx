@@ -14,6 +14,8 @@ import {makeClusterSelectOptionsSameEnv} from '../../../../../utils/navigation/t
 
 import {type YTError} from '../../../../../../@types/types';
 
+import i18n from './i18n';
+
 type FormValues = {
     queuePath: string;
     queueCluster: string;
@@ -36,15 +38,15 @@ export function RegisterConsumerDialog() {
     return (
         <YTDFDialog
             visible={visible}
-            headerProps={{title: 'Register consumer to queue'}}
+            headerProps={{title: i18n('title_register-consumer-to-queue')}}
             fields={[
                 {
                     type: 'select' as const,
                     name: 'queueCluster',
-                    caption: 'Cluster',
+                    caption: i18n('field_cluster'),
                     extras: {
                         options: clusterControlOptions,
-                        placeholder: 'Cluster',
+                        placeholder: i18n('field_cluster'),
                         width: 'max',
                         filterable: true,
                     },
@@ -52,10 +54,10 @@ export function RegisterConsumerDialog() {
                 {
                     type: 'text' as const,
                     name: 'queuePath',
-                    caption: 'Path',
+                    caption: i18n('field_path'),
                     required: true,
                     extras: {
-                        placeholder: 'Path to queue...',
+                        placeholder: i18n('field_path-to-queue'),
                     },
                 },
                 ...makeErrorFields([error as YTError]),

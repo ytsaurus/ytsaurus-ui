@@ -1,7 +1,7 @@
 import ypath from '../../../common/thor/ypath';
 import {getStorePreloadValues} from '../../../utils/navigation/tabs/tablets';
 import {DESC_ASC_UNORDERED} from '../../sort-helpers';
-import i18n from './i18n/tables';
+import i18n from './i18n';
 
 export const tableItems = {
     name_tablet_id: {
@@ -36,6 +36,9 @@ export const tableItems = {
         get(tablet) {
             return ypath.getValue(tablet, '/tablet_id');
         },
+        get caption() {
+            return i18n('field_tablet-id');
+        },
     },
     cell_leader_address: {
         sort: true,
@@ -53,12 +56,18 @@ export const tableItems = {
         get(tablet) {
             return ypath.getValue(tablet, '/state');
         },
+        get caption() {
+            return i18n('field_state');
+        },
     },
     cell_id: {
         sort: true,
         align: 'left',
         get(tablet) {
             return ypath.getValue(tablet, '/cell_id');
+        },
+        get caption() {
+            return i18n('field_cell-id');
         },
     },
     error_count: {
@@ -69,6 +78,9 @@ export const tableItems = {
         },
         allowedOrderTypes: DESC_ASC_UNORDERED,
         overall: 'sum',
+        get caption() {
+            return i18n('field_errors');
+        },
     },
     replication_error_count: {
         sort: true,
@@ -78,6 +90,9 @@ export const tableItems = {
         },
         allowedOrderTypes: DESC_ASC_UNORDERED,
         overall: 'sum',
+        get caption() {
+            return i18n('field_replication-errors');
+        },
     },
     replication_lag_time: {
         align: 'right',
@@ -120,6 +135,9 @@ export const tableItems = {
             return Number(ypath.getValue(tablet, '/statistics/chunk_count'));
         },
         allowedOrderTypes: DESC_ASC_UNORDERED,
+        get caption() {
+            return i18n('field_chunks');
+        },
     },
     partition_count: {
         sort: true,
@@ -129,6 +147,9 @@ export const tableItems = {
             return Number(ypath.getValue(tablet, '/statistics/partition_count'));
         },
         allowedOrderTypes: DESC_ASC_UNORDERED,
+        get caption() {
+            return i18n('field_partitions');
+        },
     },
     store_count: {
         sort: true,
@@ -138,6 +159,9 @@ export const tableItems = {
             return Number(ypath.getValue(tablet, '/statistics/store_count'));
         },
         allowedOrderTypes: DESC_ASC_UNORDERED,
+        get caption() {
+            return i18n('field_stores');
+        },
     },
     overlapping_store_count: {
         sort: true,
@@ -147,6 +171,9 @@ export const tableItems = {
             return Number(ypath.getValue(tablet, '/statistics/overlapping_store_count'));
         },
         allowedOrderTypes: DESC_ASC_UNORDERED,
+        get caption() {
+            return i18n('field_overlapping-stores');
+        },
     },
     store_preload: {
         align: 'center',
@@ -175,6 +202,9 @@ export const tableItems = {
             return getStorePreloadValues(tablet);
         },
         allowedOrderTypes: DESC_ASC_UNORDERED,
+        get caption() {
+            return i18n('field_store-preload');
+        },
     },
     // Data
     unmerged_row_count: {
@@ -185,6 +215,9 @@ export const tableItems = {
             return Number(ypath.getValue(tablet, '/statistics/unmerged_row_count'));
         },
         allowedOrderTypes: DESC_ASC_UNORDERED,
+        get caption() {
+            return i18n('field_unmerged-rows');
+        },
     },
     uncompressed_data_size: {
         sort: true,
@@ -194,6 +227,9 @@ export const tableItems = {
             return Number(ypath.getValue(tablet, '/statistics/uncompressed_data_size'));
         },
         allowedOrderTypes: DESC_ASC_UNORDERED,
+        get caption() {
+            return i18n('field_uncompressed-data-size');
+        },
     },
     compressed_data_size: {
         sort: true,
@@ -203,6 +239,9 @@ export const tableItems = {
             return Number(ypath.getValue(tablet, '/statistics/compressed_data_size'));
         },
         allowedOrderTypes: DESC_ASC_UNORDERED,
+        get caption() {
+            return i18n('field_compressed-data-size');
+        },
     },
     disk_space: {
         sort: true,
@@ -212,10 +251,16 @@ export const tableItems = {
             return Number(ypath.getValue(tablet, '/statistics/disk_space'));
         },
         allowedOrderTypes: DESC_ASC_UNORDERED,
+        get caption() {
+            return i18n('field_disk-space');
+        },
     },
     // Performance
     static_chunk: {
         group: true,
+        get caption() {
+            return i18n('field_static-chunk');
+        },
         items: {
             read: {
                 sort: true,
@@ -227,6 +272,9 @@ export const tableItems = {
                     );
                 },
                 allowedOrderTypes: DESC_ASC_UNORDERED,
+                get caption() {
+                    return i18n('field_read');
+                },
             },
             lookup: {
                 sort: true,
@@ -241,12 +289,18 @@ export const tableItems = {
                     );
                 },
                 allowedOrderTypes: DESC_ASC_UNORDERED,
+                get caption() {
+                    return i18n('field_lookup');
+                },
             },
         },
         set: ['read', 'lookup'],
     },
     dynamic: {
         group: true,
+        get caption() {
+            return i18n('field_dynamic');
+        },
         items: {
             read: {
                 sort: true,
@@ -258,6 +312,9 @@ export const tableItems = {
                     );
                 },
                 allowedOrderTypes: DESC_ASC_UNORDERED,
+                get caption() {
+                    return i18n('field_read');
+                },
             },
             lookup: {
                 sort: true,
@@ -269,6 +326,9 @@ export const tableItems = {
                     );
                 },
                 allowedOrderTypes: DESC_ASC_UNORDERED,
+                get caption() {
+                    return i18n('field_lookup');
+                },
             },
             write: {
                 sort: true,
@@ -280,6 +340,9 @@ export const tableItems = {
                     );
                 },
                 allowedOrderTypes: DESC_ASC_UNORDERED,
+                get caption() {
+                    return i18n('field_write');
+                },
             },
             delete: {
                 sort: true,
@@ -291,6 +354,9 @@ export const tableItems = {
                     );
                 },
                 allowedOrderTypes: DESC_ASC_UNORDERED,
+                get caption() {
+                    return i18n('field_delete');
+                },
             },
         },
         set: ['read', 'lookup', 'write', 'delete'],
@@ -303,6 +369,9 @@ export const tableItems = {
             return Number(ypath.getValue(tablet, '/performance_counters/unmerged_row_read_rate'));
         },
         allowedOrderTypes: DESC_ASC_UNORDERED,
+        get caption() {
+            return i18n('field_unmerged-row-read-rate');
+        },
     },
     merged_row_read_rate: {
         sort: true,
@@ -312,6 +381,9 @@ export const tableItems = {
             return Number(ypath.getValue(tablet, '/performance_counters/merged_row_read_rate'));
         },
         allowedOrderTypes: DESC_ASC_UNORDERED,
+        get caption() {
+            return i18n('field_merged-row-read-rate');
+        },
     },
     actions: {
         align: 'right',
@@ -322,32 +394,56 @@ export const tableItems = {
 export const histogramItems = {
     unmerged_row_count: {
         format: 'Number',
+        get title() {
+            return i18n('field_unmerged-rows');
+        },
     },
     uncompressed_data_size: {
         dataName: 'bytes',
         format: 'Bytes',
+        get title() {
+            return i18n('field_uncompressed-data-size');
+        },
     },
     compressed_data_size: {
         dataName: 'bytes',
         format: 'Bytes',
+        get title() {
+            return i18n('field_compressed-data-size');
+        },
     },
     store_count: {
         format: 'Number',
+        get title() {
+            return i18n('field_stores');
+        },
     },
     partition_count: {
         format: 'Number',
+        get title() {
+            return i18n('field_partitions');
+        },
     },
     chunk_count: {
         format: 'Number',
+        get title() {
+            return i18n('field_chunks');
+        },
     },
     overlapping_store_count: {
         format: 'Number',
+        get title() {
+            return i18n('field_overlapping-stores');
+        },
     },
     static_chunk_read: {
         dataName: 'rows/s',
         format: 'Number',
         get(tablet) {
             return tableItems['static_chunk'].items['read'].get(tablet);
+        },
+        get title() {
+            return i18n('field_static-chunk-read');
         },
     },
     static_chunk_lookup: {
@@ -356,20 +452,32 @@ export const histogramItems = {
         get(tablet) {
             return tableItems['static_chunk'].items['lookup'].get(tablet);
         },
+        get title() {
+            return i18n('field_static-chunk-lookup');
+        },
     },
     unmerged_row_read_rate: {
         dataName: 'rows/s',
         format: 'Number',
+        get title() {
+            return i18n('field_unmerged-row-read-rate');
+        },
     },
     merged_row_read_rate: {
         dataName: 'rows/s',
         format: 'Number',
+        get title() {
+            return i18n('field_merged-row-read-rate');
+        },
     },
     dynamic_row_read_rate: {
         dataName: 'rows/s',
         format: 'Number',
         get(tablet) {
             return tableItems['dynamic'].items['read'].get(tablet);
+        },
+        get title() {
+            return i18n('field_dynamic-row-read-rate');
         },
     },
     dynamic_row_lookup_rate: {
@@ -378,6 +486,9 @@ export const histogramItems = {
         get(tablet) {
             return tableItems['dynamic'].items['lookup'].get(tablet);
         },
+        get title() {
+            return i18n('field_dynamic-row-lookup-rate');
+        },
     },
     dynamic_row_write_rate: {
         dataName: 'rows/s',
@@ -385,12 +496,18 @@ export const histogramItems = {
         get(tablet) {
             return tableItems['dynamic'].items['write'].get(tablet);
         },
+        get title() {
+            return i18n('field_dynamic-row-write-rate');
+        },
     },
     dynamic_row_delete_rate: {
         dataName: 'rows/s',
         format: 'Number',
         get(tablet) {
             return tableItems['dynamic'].items['delete'].get(tablet);
+        },
+        get title() {
+            return i18n('field_dynamic-row-delete-rate');
         },
     },
 };

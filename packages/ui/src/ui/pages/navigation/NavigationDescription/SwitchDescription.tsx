@@ -9,6 +9,7 @@ import {
 } from '../../../store/reducers/navigation/description';
 
 import UIFactory from '../../../UIFactory';
+import i18n from './i18n';
 
 export function SwitchDescription() {
     const dispatch = useDispatch();
@@ -28,7 +29,8 @@ export function SwitchDescription() {
                     {
                         value: 'external',
                         content:
-                            UIFactory?.externalAnnotationSetup?.externalServiceName || 'External',
+                            UIFactory?.externalAnnotationSetup?.externalServiceName ||
+                            i18n('value_external'),
                     },
                 ]}
                 value={descriptionType}

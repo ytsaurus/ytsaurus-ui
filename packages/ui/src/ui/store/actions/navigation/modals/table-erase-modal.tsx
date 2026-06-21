@@ -1,5 +1,6 @@
 import React from 'react';
 import {TABLE_ERASE_MODAL_PARTIAL} from '../../../../constants/navigation/modals/table-erase-modal';
+import i18n from './i18n';
 // @ts-ignore
 import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 import {type RootState} from '../../../reducers';
@@ -65,8 +66,8 @@ export function runTableErase({
                         </AppStoreProvider>
                     );
                 },
-                successTitle: 'Erase operation is started',
-                errorTitle: 'Erase operation is failed',
+                successTitle: i18n('alert_erase-started'),
+                errorTitle: i18n('alert_erase-failed'),
                 autoHide: false,
             },
         );

@@ -12,6 +12,7 @@ import CancelHelper from '../../../../utils/cancel-helper';
 
 import map_ from 'lodash/map';
 
+import i18n from './i18n';
 import {executeBatchWithRetries} from '../../execute-batch';
 import {YTApiId} from '../../../../rum/rum-wrap-api';
 import {wrapBatchPromise} from '../../../../utils/utils';
@@ -90,10 +91,10 @@ function copyObjects(
 
         return wrapBatchPromise(
             executeBatchWithRetries(YTApiId.navigationCopy, copyRequests, {
-                errorTitle: 'Failed to copy the object(s)',
+                errorTitle: i18n('alert_failed-to-copy-objects'),
                 saveCancelSourceCb: requests.saveCancelToken,
             }),
-            'Failed to copy the object(s)',
+            i18n('alert_failed-to-copy-objects'),
         )
             .then(() => yt.v3.commitTransaction({transaction_id: id}))
             .catch((err) =>
@@ -131,8 +132,8 @@ export function copyObject(
                     autoHiding: 10000,
                     theme: 'success',
                     title: multipleMode
-                        ? 'Objects were successfully copied'
-                        : 'Object was successfully copied',
+                        ? i18n('title_objects-copied')
+                        : i18n('title_object-copied'),
                     content: <Link url={`navigation?path=${copyingPath}`}>{copyingPath}</Link>,
                 });
             })

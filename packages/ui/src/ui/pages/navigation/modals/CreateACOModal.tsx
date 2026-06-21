@@ -5,6 +5,7 @@ import {DialogError, type DialogField, type FormApi, YTDFDialog} from '../../../
 import {useDispatch, useSelector} from '../../../store/redux-hooks';
 import {selectCreateACOModalState} from '../../../store/selectors/navigation/modals/create-aco-modal';
 import {closeCreateACOModal, createACO} from '../../../store/actions/navigation/modals/create-aco';
+import i18n from './i18n';
 
 const block = cn('table-sort-modal');
 
@@ -53,7 +54,7 @@ export default function CreateACOModal() {
                 className={block()}
                 visible={true}
                 headerProps={{
-                    title: 'Create ACO',
+                    title: i18n('title_create-aco'),
                 }}
                 onAdd={handleAdd}
                 onClose={handleClose}
@@ -65,7 +66,7 @@ export default function CreateACOModal() {
                     {
                         name: 'name',
                         type: 'text',
-                        caption: 'ACO name',
+                        caption: i18n('field_aco-name'),
                         required: true,
                     },
                     ...errorFields,

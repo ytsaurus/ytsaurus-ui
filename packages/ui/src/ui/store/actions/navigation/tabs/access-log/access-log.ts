@@ -1,6 +1,8 @@
 import axios from 'axios';
 import {type ThunkAction} from 'redux-thunk';
 
+import i18n from './i18n';
+
 import {getBaseUrlDetails} from '../../../../../../shared/utils/base-url';
 import {
     ACCESS_LOG_FAILURE,
@@ -129,7 +131,7 @@ export const fetchAccessLogQtId = (): AccessLogThunkAction => async (_, getState
         }),
         {
             toasterName: 'getAccessLogQtId',
-            errorTitle: 'Failed to load access log query id',
+            errorTitle: i18n('alert_failed-to-load-access-log-query-id'),
             skipSuccessToast: true,
         },
     );

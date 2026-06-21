@@ -11,6 +11,8 @@ import {
     selectVisibleColumns,
 } from '../../../../../store/selectors/navigation/content/table';
 
+import i18n from './i18n';
+
 OffsetSelectorButton.propTypes = {
     // from parent
     disabled: PropTypes.bool,
@@ -34,12 +36,12 @@ function OffsetSelectorButton({
         <Button
             size="m"
             disabled={loading || disabled}
-            title="Edit offset"
+            title={i18n('title_edit-offset')}
             onClick={openOffsetSelectorModal}
             pin="round-clear"
         >
             <Icon awesome="key" />
-            &nbsp; Keys &nbsp;
+            &nbsp; {i18n('action_keys')} &nbsp;
             <span className="elements-secondary-text">
                 {visibleColumns.length + '/' + allColumns.length}
             </span>

@@ -16,6 +16,7 @@ import {makeLink} from '../../../../../../utils/utils';
 import {type YTError} from '../../../../../../../@types/types';
 
 import {validateCreateConsumerPath} from './utils';
+import i18n from './i18n';
 
 export type CreateConsumerFormValues = {
     consumerPath: string;
@@ -45,28 +46,28 @@ export function CreateConsumerDialog() {
                 {
                     type: 'path' as const,
                     name: 'consumerPath',
-                    caption: 'Path',
+                    caption: i18n('field_path'),
                     required: true,
                     validator: validateCreateConsumerPath,
                     extras: {
-                        placeholder: 'Path to consumer node...',
+                        placeholder: i18n('context_consumer-path-placeholder'),
                     },
                 },
                 {
                     type: 'tumbler' as const,
                     name: 'register',
-                    caption: 'Register consumer',
+                    caption: i18n('action_register-consumer'),
                 },
                 {
                     type: 'tumbler' as const,
                     name: 'vital',
-                    caption: 'Vital',
+                    caption: i18n('field_vital'),
                     tooltip: (
                         <div>
                             {docsUrl(
                                 makeLink(
                                     UIFactory.docsUrls['dynamic-tables:queues#creating-a-consumer'],
-                                    'Docs',
+                                    i18n('action_docs'),
                                 ),
                             )}
                         </div>
@@ -78,7 +79,7 @@ export function CreateConsumerDialog() {
                 },
                 ...makeErrorFields([error as YTError]),
             ]}
-            headerProps={{title: 'Create consumer'}}
+            headerProps={{title: i18n('action_create-consumer')}}
             size={'m'}
             onAdd={async (form: FormApi<CreateConsumerFormValues>) => {
                 const {values} = form.getState();

@@ -4,7 +4,7 @@ import ypath from '../../../../common/thor/ypath';
 import {useSelector} from '../../../../store/redux-hooks';
 import {selectPath} from '../../../../store/selectors/navigation';
 import {selectNavigationPathAttributes} from '../../../../store/selectors/navigation/navigation';
-import PathActions from '../../content/MapNode/PathActions';
+import PathActions from '../../content/MapNode/Actions/PathActions/PathActions';
 
 const block = cn('current-path-actions');
 

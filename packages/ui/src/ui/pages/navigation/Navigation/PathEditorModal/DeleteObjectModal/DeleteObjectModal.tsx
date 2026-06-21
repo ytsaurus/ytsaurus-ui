@@ -29,6 +29,7 @@ import {selectIsTrashPath} from '../../../../../store/selectors/navigation';
 import hammer from '../../../../../common/hammer';
 
 import './DeleteObjectModal.scss';
+import i18n from './i18n';
 import UIFactory from '../../../../../UIFactory';
 import {type RootState} from '../../../../../store/reducers';
 import {type DeleteObjectItem} from '../../../../../store/reducers/navigation/modals/delete-object';
@@ -106,11 +107,11 @@ export class DeleteObjectModal extends Component<DeleteObjectModalProps> {
                     size="l"
                     disabled={inTrash}
                     checked={permanently}
-                    content="Delete permanently"
+                    content={i18n('confirm_delete-permanently')}
                     onChange={togglePermanentlyDelete}
                 />
 
-                <Label theme="danger" text="This action CANNOT be undone" />
+                <Label theme="danger" text={i18n('alert_cannot-be-undone')} />
             </p>
         );
     }
@@ -124,10 +125,16 @@ export class DeleteObjectModal extends Component<DeleteObjectModalProps> {
                     <div className={block('table')}>
                         <div className={block('table-header')}>
                             <div className={block('preview-icon')} />
-                            <div className={block('preview-name')}>Name</div>
-                            <div className={block('preview-disk-space')}>Disk space</div>
-                            <div className={block('preview-node-count')}>Node count</div>
-                            <div className={block('preview-node-count')}>Row count</div>
+                            <div className={block('preview-name')}>{i18n('field_name')}</div>
+                            <div className={block('preview-disk-space')}>
+                                {i18n('field_disk-space')}
+                            </div>
+                            <div className={block('preview-node-count')}>
+                                {i18n('field_node-count')}
+                            </div>
+                            <div className={block('preview-node-count')}>
+                                {i18n('field_row-count')}
+                            </div>
                         </div>
 
                         {map_(multipleInfo, ({path, resourceUsage}, index) => {
@@ -173,7 +180,8 @@ export class DeleteObjectModal extends Component<DeleteObjectModalProps> {
         const buildItems = () => {
             const items = [
                 {
-                    key: 'Disk space',
+                    key: 'disk-space',
+                    label: i18n('field_disk-space'),
                     value: hammer.format['Bytes'](diskSpace),
                 },
             ];
@@ -181,7 +189,8 @@ export class DeleteObjectModal extends Component<DeleteObjectModalProps> {
             switch (type) {
                 case 'table':
                     items.push({
-                        key: 'Rows',
+                        key: 'rows',
+                        label: i18n('field_rows'),
                         value: unmergedRows
                             ? `≈ ${hammer.format['Number'](unmergedRows)}`
                             : hammer.format['Number'](rows),
@@ -194,7 +203,8 @@ export class DeleteObjectModal extends Component<DeleteObjectModalProps> {
 
                 default:
                     items.push({
-                        key: 'Node count',
+                        key: 'node-count',
+                        label: i18n('field_node-count'),
                         value: hammer.format['Number'](nodeCount),
                     });
 
@@ -225,9 +235,11 @@ export class DeleteObjectModal extends Component<DeleteObjectModalProps> {
         const theme = permanently ? 'outlined-danger' : 'action';
         const helpLinkUrl = UIFactory.docsUrls['common:regular_system_processes'];
         const helpLink =
-            helpLinkUrl !== '' ? <HelpLink text="Documentation" url={helpLinkUrl} /> : null;
-        const title = permanently ? 'Delete' : 'Move to trash';
-        const confirmText = permanently ? 'Delete' : 'Move to trash';
+            helpLinkUrl !== '' ? (
+                <HelpLink text={i18n('action_documentation')} url={helpLinkUrl} />
+            ) : null;
+        const title = permanently ? i18n('action_delete') : i18n('action_move-to-trash');
+        const confirmText = permanently ? i18n('action_delete') : i18n('action_move-to-trash');
 
         return (
             <Modal

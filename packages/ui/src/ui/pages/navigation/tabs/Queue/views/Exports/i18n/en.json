@@ -1,0 +1,10 @@
+{
+  "action_create-export": "Create export",
+  "field_export-name": "Export name",
+  "field_export-directory": "Export directory",
+  "field_export-period": "Export period",
+  "field_export-ttl": "Export TTL",
+  "field_output-table-name-pattern": "Output table name pattern",
+  "field_use-upper-bound-for-table-names": "Use upper bound for table names",
+  "context_ms-suffix": ", ms"
+}

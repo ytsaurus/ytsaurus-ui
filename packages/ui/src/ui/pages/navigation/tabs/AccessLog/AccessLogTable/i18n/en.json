@@ -1,0 +1,16 @@
+{
+  "field_date": "Date",
+  "field_method": "Method",
+  "field_path": "Path",
+  "field_user": "User",
+  "field_type": "Type",
+  "field_scope": "Scope",
+  "field_user-type": "User type",
+  "field_method-group": "Method group",
+  "field_transaction-info-short": "Tx",
+  "field_transaction-info": "Transaction info",
+  "alert_path-hidden": "Path is hidden due to access permission restrictions",
+  "alert_maintenance": "The service is under maintenance. Please try again later.",
+  "context_target-path": "The Target directs to the node/attribute that has been accessed by the link from the Path.",
+  "context_original-path": "The Path has been accessed by the link from the Original."
+}

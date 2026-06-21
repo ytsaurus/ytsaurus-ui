@@ -5,6 +5,8 @@ import yt from '@ytsaurus/javascript-wrapper/lib/yt';
 
 import {getBatchError} from '../../../../shared/utils/error';
 
+import i18n from './i18n';
+
 import {getMetrics} from '../../../common/utils/metrics';
 import {navigationTrackVisit} from '../../../store/actions/favourites';
 import {RumWrapper, YTApiId, ytApiV3, ytApiV3Id} from '../../../rum/rum-wrap-api';
@@ -184,7 +186,7 @@ export function updateView(settings: {trackVisit?: boolean} = {}): NavigationThu
                     });
                 } else {
                     const permissionDeniedError = getPermissionDeniedError(error);
-                    const message = ['Error occurred when loading path.'];
+                    const message = [i18n('alert_load-path-error')];
                     if (!permissionDeniedError) message.push(GENERIC_ERROR_MESSAGE);
 
                     ytApiV3

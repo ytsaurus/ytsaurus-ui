@@ -4,6 +4,7 @@ import './DocumentEditModal.scss';
 import {type FormApi, YTDFDialog} from '../../../../containers/Dialog';
 import {Text} from '@gravity-ui/uikit';
 import {type UnipikaSettings} from '../../../../components/Yson/StructuredYson/StructuredYsonTypes';
+import i18n from './i18n';
 
 type Props = {
     open: boolean;
@@ -33,7 +34,7 @@ const DocumentEditModal: FC<Props> = ({open, document, settings, onCancel, onSav
             headerProps={{
                 title: (
                     <Text variant="header-1" color="secondary">
-                        Edit document
+                        {i18n('title_edit-document')}
                     </Text>
                 ),
             }}

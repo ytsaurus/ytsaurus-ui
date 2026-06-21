@@ -2,4 +2,4 @@ import {addI18Keysets} from '../../../../i18n';
 
 import dicts from './dicts';
 
-export default addI18Keysets('yt:access-log', dicts);
+export default addI18Keysets('yt:navigation-tables-utils', dicts);

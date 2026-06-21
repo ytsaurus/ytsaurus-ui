@@ -8,6 +8,7 @@ import {getErrorWithCode} from '../../../../utils/errors';
 import {type YTError} from '../../../../types';
 
 import {selectNavigationPathAttributes} from '../../../../store/selectors/navigation/navigation';
+import i18n from './i18n';
 
 // https://github.com/ytsaurus/ytsaurus/blob/95acd2c25e8996eccada40d178bfef6784fb3278/yt/yt/client/queue_client/public.h#L18
 const QUEUE_IS_NOT_MAPPED = 3105;
@@ -25,12 +26,7 @@ export function QueueError({error, ...rest}: Omit<YTErrorBlockProps, 'error'> & 
     }, [error, modification_time]);
 
     if (isMappingError) {
-        return (
-            <Info>
-                The node is mapping to a queue agent at the moment, the process may take up to 5
-                minutes.
-            </Info>
-        );
+        return <Info>{i18n('alert_mapping-in-progress')}</Info>;
     }
 
     return <YTErrorBlock error={error} {...rest} />;

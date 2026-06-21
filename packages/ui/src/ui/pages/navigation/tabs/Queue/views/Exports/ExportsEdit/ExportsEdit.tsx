@@ -10,6 +10,7 @@ import {type QueueExportConfig} from '../../../../../../../types/navigation/queu
 import {type YTError} from '../../../../../../../types';
 
 import {ExportsEditDialog} from '../ExportsEditDialog/ExportsEditDialog';
+import i18n from './i18n';
 
 const block = b('exports-edit');
 
@@ -56,7 +57,9 @@ export function ExportsEdit({
                         extras: {
                             children: (
                                 <Text variant="body-2">
-                                    Are you sure you want to delete {prevConfig.export_name}?
+                                    {i18n('confirm_delete-export', {
+                                        exportName: prevConfig.export_name,
+                                    })}
                                 </Text>
                             ),
                         },
@@ -67,7 +70,7 @@ export function ExportsEdit({
                     await update({prevConfig, type: 'delete'}).unwrap();
                 }}
                 headerProps={{
-                    title: 'Delete export',
+                    title: i18n('title_delete-export'),
                 }}
                 onClose={toggleDeleteDialogVisibility}
                 isApplyDisabled={() => {

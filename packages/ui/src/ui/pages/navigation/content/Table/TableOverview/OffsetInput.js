@@ -18,6 +18,7 @@ import {selectIsDynamic} from '../../../../../store/selectors/navigation/content
 import {moveOffset} from '../../../../../store/actions/navigation/content/table/pagination';
 
 import './TableOverview.scss';
+import i18n from './i18n';
 
 TableOverview.propTypes = {
     // from parent
@@ -69,7 +70,7 @@ const renderPlaceholder = (props, handleStartEditing) => {
     return (
         <div className={block('query-current')} onClick={handleStartEditing}>
             <Icon awesome={isDynamic ? 'key' : 'hashtag'} size={13} />
-            {offsetValue || 'No offset'}
+            {offsetValue || i18n('value_no-offset')}
             {!isDynamic && <div className={block('query-progress')} style={{width}} />}
         </div>
     );
@@ -99,11 +100,11 @@ function TableOverview(props) {
                 <Button
                     size="m"
                     view="action"
-                    title="Confirm"
+                    title={i18n('action_confirm')}
                     pin="clear-round"
                     disabled={!editing}
                 >
-                    Confirm
+                    {i18n('action_confirm')}
                 </Button>
             )}
         </div>
